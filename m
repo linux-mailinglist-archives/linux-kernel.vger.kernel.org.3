@@ -2,338 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 659074AF856
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADD64AF85A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:27:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238195AbiBIR03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 12:26:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54750 "EHLO
+        id S238202AbiBIR12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 12:27:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235084AbiBIR0Z (ORCPT
+        with ESMTP id S231446AbiBIR1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 12:26:25 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236AEC05CB87;
-        Wed,  9 Feb 2022 09:26:27 -0800 (PST)
-Received: from [192.168.1.107] ([37.4.249.169]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MuUvS-1o7tQA2dc2-00rZER; Wed, 09 Feb 2022 18:26:16 +0100
-Subject: Re: [PATCH 1/2] ARM: dts: bcm2*: Demux i2c0 with a pinctrl
-To:     Detlev Casanova <detlev.casanova@collabora.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        "maintainer:ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)" 
-        <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITE..." 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "moderated list:ARM AND ARM64 SoC SUB-ARCHITECTURES (COMMON PARTS)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>
-References: <20220209162515.706729-1-detlev.casanova@collabora.com>
- <20220209162515.706729-2-detlev.casanova@collabora.com>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-Autocrypt: addr=stefan.wahren@i2se.com; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tClZlcnNpb246IEdudVBHIHYy
- CgptUUlOQkZ0NmdCTUJFQUN1Yi9wQmV2SHhidkplZnlaRzMySklObW4yYnNFUFgyNVY2ZmVq
- bXlZd21DR0tqRnRMCi9Eb1VNRVZIRHhDSjQ3Qk1YbzM0NGZIVjFDM0FudWRnTjFCZWhMb0J0
- TEh4bW5lQ3pnSDNLY1B0V1c3cHRqNEcKdEp2OUNRRFp5MjdTS29FUHh5YUk4Q0YweWdSeEpj
- NzJNOUk5d21zUFo1YlVIc0x1WVdNcVE3SmNSbVBzNkQ4ZwpCa2srOC95bmdFeU5FeHd4SnBS
- MXlsajVianhXREh5WVF2dUo1THpaS3VPOUxCM2xYVnNjNGJxWEVqYzZWRnVaCkZDQ2svc3lp
- by9ZaHNlOE4rUXN4N01RYWd6NHdLVWtRUWJmWGcxVnFrVG5BaXZYczQyVm5Ja211NWd6SXcv
- MHQKUkp2NTBGUmhIaHhweUtBSThCOG5oTjhRdng3TVZrUGM1dkRmZDN1R1lXNDdKUGhWUUJj
- VXdKd05rLzQ5RjllQQp2ZzJtdE1QRm5GT1JrV1VSdlArRzZGSmZtNitDdk92N1lmUDF1ZXdB
- aTRsbitKTzFnK2dqVklXbC9XSnB5MG5UCmlwZGZlSDlkSGtnU2lmUXVuWWN1Y2lzTXlvUmJG
- OTU1dENna0VZOUVNRWRZMXQ4aUdEaUNnWDZzNTBMSGJpM2sKNDUzdWFjcHhmUVhTYUF3UGtz
- bDhNa0NPc3YyZUVyNElOQ0hZUUR5WmljbEJ1dUNnOEVOYlI2QUdWdFpTUGNRYgplbnpTektS
- Wm9POUNhcUlEK2ZhdkxpQi9kaHptSEErOWJnSWhtWGZ2WFJMRFp6ZThwbzFkeXQzRTFzaFhp
- ZGRaClBBOE51SlZ6RUl0MmxtSTZWOHBaRHBuMjIxcmZLaml2UlFpYW9zNTRUZ1pqak1ZSTdu
- bko3ZTZ4endBUkFRQUIKdENCVGRHVm1ZVzRnVjJGb2NtVnVJRHgzWVdoeVpXNXpkRUJuYlhn
- dWJtVjBQb2tDTndRVEFRZ0FJUVVDWElkYwo0Z0liQXdVTENRZ0hBZ1lWQ0FrS0N3SUVGZ0lE
- QVFJZUFRSVhnQUFLQ1JDVWdld1BFWkR5MjFPVEQvOUdpWkxkCnRSWWNteVJKZ2x0aVFRekFp
- UWRjSUQ3OGxHb1dwL3grci92Y1U2YjZqdVl1ZVR3Z1Iwclc3djdsMklSQnlEN24KSEp4YSt0
- SVNvUVpCZ2hvbE1JZmI5TXRoR09KTENZNzdrL1FoQWhuMzJOR1prZWp3OXR6a3MvNDBtclpT
- VVQ4NApaeWJzUVhyTE0vSFI2VElJL0RlUEIwbktEM0ppcHBzMlVIUUQ5cUQySWpFd1NRUGxI
- akNPckVaaDQ1UFo3bTkrClo5M0x6aVRlc1dabFlRdUxpSndzNHJLcHRIVzFkL3dSZWxzaG1t
- NlFxY0wybDRDL2U0MGVEQjlncTRkU1poOVgKUEVZbGxpeU5RaDdhMkxTZHVtRTFyK2NTd0lq
- RS91ZHRSdmRPOWFLb0psT2JVSzVkTmpTUEg3d0tUYndkWGRZRApHUHdEaFhkNThOQXdyK1BY
- QmxQajB0STFMQ3ErTEJ4ZUt6aFdYK0dWcTlEb2pWanlVREV4Rk5Ga1h1b0M3ZzhtClY5VDB0
- ZUJpdVpSbm91WEt3VjJGcHRaT0hIN0JVRVd0a0t0aGgxZXRmT1dwaWdCemtVN2JQc2ZJWVQr
- cnk5dGIKMW9KK3Y0MVBOYXFaRW1QVXBKeHZmek5UN3Ayd01lRDdaajlmMHJ1YlJQdExBSjJR
- R2pyRkhzdVh3QU9xcHl6ZQoxOEVidHNZazBOMHp1SEVoY2orUEJJQmZoMFlJWWQ1MW9mNkdJ
- aU95UjlxMFhYdHBsVUo3VDIvSDF1UXFrWGxwCitnVzRWa2lmc2NJckl1eWZueFpXMTJlSXZq
- NnlicVdMN2FZS0dZbVQ2aUxDUGJIWXlZY2F5bDRFa0ZjckNGN0UKZTBXVC9zY1ZNaE8vNVgv
- SGFOQTVIQngvcjUycGdMY3Y0aTlNeExRbVUzUmxabUZ1SUZkaGFISmxiaUE4YzNSbApabUZ1
- TG5kaGFISmxia0JwTW5ObExtTnZiVDZKQWpnRUV3RUNBQ0lGQWx0NmdCTUNHd01HQ3drSUJ3
- TUNCaFVJCkFna0tDd1FXQWdNQkFoNEJBaGVBQUFvSkVKU0I3QThSa1BMYmpic1AvamdqYVNz
- NUh0bGtBSXZXUytGcm15N2MKaG5jT0F4TFRWL0Q2UkV3SU95R0poRkt3d29pck55UTJnOXZV
- YTNZQ1lDZjFmSjh3RWhhS09COWQwTHBNUm5MNApkRVQ4ZDgyMzhFL3BLK0hxTktpSXNKaHM2
- SnNLOFpnalZRR3JtbWZua0dyWisxdjBIQnV4ZGljZ0duUC9XdHVBClVsOGw2Mi9BTGJheXlq
- KzYxQ2xyc0V0UklhcU82N0xJWXdQaVBEUkkrWGlNek5pR3pIRi8xUTZHUjAyUkg2YTMKRjg5
- ejhhUHhjSGkxWnZDdDJ5a3o2VUVjaHpQMHI1Z3FGSisvTC9VcHU4ME1YaVk0djVlSWFCNTJn
- VlBnaXlNQQpsTDJkRHMxbUladm5yUkxSWTJ0YjNtQVlOa1Y1QjVJRFQzcGtXeTZrS281T0Nn
- SytZZFlPUjhGTloyb04ydDhPCnJLK1ZudGFLN01NU0tIbG1ZL3NPd3RSbEVoMU9CbXJjQ3dH
- d21wLzA1R2tSNDZmL0lzaFJWZUZPUmF3K0dBcXQKUDIrQ0ZhMkNOQS9JSG5aTm95aWtsRHpQ
- UUhVVUdzck5wcERyaFg5Sm1oQm1nMXYyeXdIMU5YdTFpRGZQMUJBdwpLZ29rdDVmNVVhUkY5
- c0FBNTN2V0V2YlVVTjllZXNGR0x6UFdkSkdRNWhwZC9WSDVJUXk5U0JyaC93SWNla3E1Cm4w
- a042cGJUSHhHRTUyU2kvTVZJa05UdURaM2FwbjJqbERaNHBPdHBCWEkydlAzYlBPK05pcUJa
- anNVM3R4TGkKV2R2MkZqeXp6NlhMUndlV1JZVkw1SGE2TER0eG9yMnZ1NlVQMDdwOXh6MXhS
- WmFPRFczb1lsSEZ6WXBhNFc1ZwpMSGIybEVrSXVVZlNjaWNHYmpqQXRDbFRkR1ZtWVc0Z1Yy
- Rm9jbVZ1SUR4emRHVm1ZVzR1ZDJGb2NtVnVRR2x1CkxYUmxZMmd1WTI5dFBva0NOd1FUQVFn
- QUlRVUNYSWRlaHdJYkF3VUxDUWdIQWdZVkNBa0tDd0lFRmdJREFRSWUKQVFJWGdBQUtDUkNV
- Z2V3UEVaRHkyeUhURC85VUY3UWxEa0d4elE3QWFDSTZOOTVpUWY4LzFvU1VhRE51Mlk2SQpL
- K0R6UXBiMVRiVE9yM1ZKd3dZOGEzT1d6NU5MU09MTVdlVnh0K29zTW1sUUlHdWJEM09EWko4
- aXpQbEcvSnJOCnQ1elNkbU41SUE1ZjNlc1dXUVZLdmdoWkFnVERxZHB2K1pIVzJFbXhuQUox
- dUxGWFhlUWQzVVpjQzVyMy9nL3YKU2FNbzl4ZWszSjVtTnVEbTcxbEVXc0FzL0JBY0ZjK3lu
- TGh4d0JXQld3c3Z3UjhiSHRKNURPTVd2YUt1RHNrcApJR0ZVZS9LYjJCK2pyYXZRM1RuNnMv
- SHFKTTBjZXhTSHo1cGUrMHNHdlArdDlKNzIzNEJGUXdlRkV4cmlleThVCkl4T3I0WEFiYWFi
- U3J5WW5VL3pWSDlVMWkyQUlRWk1XSkFldkN2VmdRL1UrTmVSaFh1ZGU5WVVtRE1EbzJzQjIK
- VkFGRUFxaUYyUVVIUEEybThhN0VPM3lmTDRyTWswaUh6TElLdmg2L3JIOFFDWThpM1h4VE5M
- OWlDTHpCV3UvTgpPbkNBYlMremx2TFphaVNNaDVFZnV4VHR2NFBsVmRFamY2MlArWkhJRDE2
- Z1VEd0VtYXpMQU1yeDY2NmpINWt1ClVDVFZ5bWJMMFR2Qis2TDZBUmw4QU55TTRBRG1rV2tw
- eU0yMmtDdUlTWUFFZlFSM3VXWFo5WWd4YVBNcWJWK3cKQnJoSmc0SGFONkM2eFRxR3YzcjRC
- MmFxYjc3L0NWb1JKMVo5Y3BIQ3dpT3pJYUFtdnl6UFU2TXhDRFhaOEZnWQpsVDR2MjNHNWlt
- SlAyemdYNXMrRjZBQ1VKOVVRUEQwdVRmK0o5RGEycitza2gvc1dPbloreWNvSE5CUXZvY1pF
- Ck5BSFFmN2tDRFFSYmVvQVRBUkFBMkhkMGZzRFZLNzJSTFNESGJ5ME9oZ0RjRGxWQk0yTSto
- WVlwTzNmWDFyKysKc2hpcVBLQ0hWQXNRNWJ4ZTdIbUppbUhhNEtLWXMya3YvbWx0L0NhdUNK
- Ly9wbWN5Y0JNN0d2d25Lem11WHp1QQpHbVZUWkM2V1I1TGtha0ZydEhPelZtc0VHcE52NVJj
- OWw2SFlGcExrYlNrVmk1U1BRWkp5K0VNZ01DRmdqclpmClZGNnlvdHdFMWFmN0hOdE1oTlBh
- TEROMW9VS0Y1aitSeVJnNWl3SnVDRGtuSGp3QlFWNHBndzIvNXZTOEE3WlEKdjJNYlcvVExF
- eXBLWGlmNzhJaGdBelh0RTJYck0xbi9vNlpINzFvUkZGS096NDJsRmR6ZHJTWDBZc3FYZ0hD
- WAo1Z0l0TGZxemoxcHNNYTlvMWVpTlRFbTFkVlFyVHFueXMwbDE4b2FsUk5zd1lsUW1uWUJ3
- cHdDa2FUSExNSHdLCmZHQmJvNWRMUEVzaHRWb3dJNm5zZ3FMVHlRSG1xSFlxVVpZSXBpZ21t
- QzNTd0JXWTFWNmZmVUVta3FwQUFDRW4KTDQvZ1Vnbjd5US81ZDBzZXFuQXEycFNCSE1VVW9D
- Y1R6RVFVV1ZraUR2M1JrN2hURm1oVHNNcTc4eHYyWFJzWApNUjZ5UWhTVFBGWkNZRFVFeEVs
- RXNTbzlGV0hXcjZ6SHlZY2M4cURMRnZHOUZQaG1RdVQyczlCbHg2Z0kzMjNHCm5FcTFsd1dQ
- SlZ6UDRqUWtKS0lBWHdGcHYrVzhDV0xxekRXT3ZkbHJEYVRhVk1zY0ZUZUg1VzZVcHJsNjVq
- cUYKUUdNcGNSR0NzOEdDVVcxM0gwSXlPdFF0d1dYQTRueStTTDgxcHZpQW1hU1hVOGxhS2FS
- dTkxVk9WYUY5ZjRzQQpFUUVBQVlrQ0h3UVlBUUlBQ1FVQ1czcUFFd0liREFBS0NSQ1VnZXdQ
- RVpEeTIrb1hELzljSEhSa0JaT2ZrbVNxCjE0U3Z4MDYyUHRVMEtWNDcwVFNucC9qV29ZSm5L
- SXczRzBtWElSZ3J0SDJkUHdwSWdWanNZeVJTVk1LbVNwdDUKWnJEZjlOdFRiTldnazhWb0xl
- WnpZRW8rSjNvUHFGclRNczNhWVl2N2U0K0pLNjk1WW5tUSttT0Q5bmlhOTE1dApyNUFaajk1
- VWZTVGx5VW15aWMxZDhvdnNmMWZQN1hDVVZSRmNSamZOZkRGMW9ML3BEZ01QNUdaMk93YVRl
- am15CkN1SGpNOElSMUNpYXZCcFlEbUJuVFlrN1B0aHk2YXRXdllsMGZ5L0NxYWpUS3N4Nytw
- OXh6aXU4WmZWWCtpS0IKQ2MrSGUrRURFZEdJRGh2TlovSVFIZk9CMlBVWFdHUytzOUZOVHhy
- L0E2bkxHWG5BOVk2dzkzaVBkWUl3eFM3SwpYTG9LSmVlMTBEamx6c1lzUmZsRk9XMFpPaVNp
- aElDWGlRVjF1cU02dHpGRzlndFJjaXVzNVVBdGhXYU8xT3dVClNDUW1mQ09tNGZ2TUlKSUE5
- cnh0b1M2T3FSUWNpRjNjcm1vMHJKQ3ROMmF3WmZnaThYRWlmN2Q2aGp2MEVLTTkKWFpvaUFa
- WVpEKy9pTG01VGFLV042b0dJdGkwVmpKdjhaWk9aT2ZDYjZ2cUZJa0pXK2FPdTRvclRMRk16
- MjhhbwpVM1F5V3BOQzhGRm1kWXNWdWE4czZnTjFOSWE2eTNxYS9aQjhiQS9pa3k1OUFFejRp
- RElScmdVek1FZzhBazdUCmZtMUtpWWVpVHRCRENvMjVCdlhqYnFzeXhrUUQxbmtSbTZGQVZ6
- RXVPUEllOEp1cVcyeEQ5aXhHWXZqVTVoa1IKZ0pwM2dQNWIrY25HM0xQcXF1UTJFNmdvS1VN
- TEFia0NEUVJiZmw5REFSQUFzRExjYStMbFAydm5mdEVHaHBjQQpCR1ZOUUVGbkdQckNhdVU2
- SGhOODA1V3RQVHRtc1JPdUp6cWdVVDBtcHFXSWZacTZzTXd5dkhLOVRzL0tIM0paClVWYlJD
- M3oyaDNLZmhIL0RhZjk1cGQ2bVBjL2g5dkYvT3kzK2VUV2hnR25QNmNBNWtsUitmTzFXaEc4
- VnJpWHYKck5lUkcyMHN6emplSG9jblNJY1Q1WHVaUjB1REhPaUd4T2l6MXNNUkZUR3h6R095
- MTlSOXJ2dTYzdGlJM2Q3dgpnYzc1T0NBZGtlQi9TZUNFbGFSdzBUZjdMWmJQampzRjI2M0JZ
- bk1mNGtrTkVLdnFXY1UyaWNNcCtxZXpqeW5CCnB2ZXVlMHJDVFFCWUFRbG9GQ1ZUR0hyV1dB
- NkQ0VzVPMkFmSWRJYzF1MUpDWnAyZjVMV1ZvVUZUVklyUW5RUVUKU0hDaWZyOU1aeExUdFBK
- ZFU1Mm9TUHczZGs0aExQOGlKSUx1dnYvYXZhakNzUVlIRXR3WXNiZUZaeGl1TGdscApBN1lj
- Sk5ObXBnQ3BNRDR3VWh2bEN0QUtOQlFXeXIyOTc2OThFUVRuNDZlQmVVNkttMkNpaFhrZ3dD
- eWY4ZXlLCkxFM3NYZXdhcTVrZ1pXdk5xNml1NXFZSVJCOXl3K2NYYzYwZE9aRE9scTkzWDVT
- QVJZemFvZXBrSHo0cmtMa1AKUG8rdENIeUhRUHNHblBYYzlXVDgwREM5Tm5KR2R2VWx5NXJk
- TUk0eHBaeWdlb2tqd293VlFsUFV1Y1M2TXluNwpmOHc4Y2dmQjdDMklBSWNEeDJwUC9IendY
- dmtDT1FOQTdtVjFsTTA4bitnVmtUcnpweGlwNURicTRDSW9ZeDJNCkpaVDhiR1JINlhqY1VE
- S2EwOVFoeVpzQUVRRUFBWWtFUkFRWUFRZ0FEd1VDVzM1ZlF3SWJBZ1VKQThKbkFBSXAKQ1JD
- VWdld1BFWkR5MjhGZElBUVpBUWdBQmdVQ1czNWZRd0FLQ1JCVnhETFBjVk1NamNkc0QvMFJo
- QXN1UVlPeQpyMTNCbDNOaFhrWUFaR3AyWkZER3VrZTdPU2tWOG9qT09UZFR5ei9jT1JHQ2J5
- ZEQrRGd2cUZ5VmRuT1hLZ08wCmxKbUd3ckdlTGRnZ0F2aDBpaHJwNU8wWVVKOWJCU1htR01t
- UVRZSC9BbUxUR2FkYnVqQ1dqNWZGVWtDeXd4aW0KSHV5MFBiMjRwelR2UzUwR1k1WStxSDBG
- SE5haWdka2tpV04zcnVnN0haRXUvQ3lsUFpqT1h6K0QxUVBNckV4dwo3ZC9NS2FiVis5YU5i
- UVlabGRJajk4UXd2VUYxS1N6YThqbFVJdnBoUnEyN0FUOGZER1lHUGZERU1nMmNCT2FlCkty
- N29uUXM0YjdhV082aWZEbHhRVHB6c3pvK0FuODA3Tk1TdFZFRmYrczNBaFZEM2U3bmY4SkJh
- dmJWckFlMGsKb20yNm96elBubnh6K2xxVlZ0dzZVazRYTUl6dGl4L0h3SFl3dUNuY1VYWndL
- MEkzeUFKd2pZd29vck9DaEozUwpFVWJKUVB0R3NneFJERXhWQkZlNk5MUC82MnhQOU82dGFj
- d09kYjBNbVAxYjM5cFJBVEM3YmdkMWxkVUxpNzVaCmxKckowL1NpVkVyb3FOWXk3OXRmbWdB
- WjJVeFptczlTckV5Nm85UVNmc24xYVh2K01QTDlKYUNHbWtQNnpiTFEKTm5kajBKY2FRbmtD
- MHZneWRPMUJtNk11OTZQOXVmbEtaY0FTNndtTE01SWRIT3lqTDg4d0h3anVjakFPQnRjdwpw
- MG9HVG5WT25Sc05ZU084VzhZWi9LZGJ1Nzg1ZGF6TXFKMmlOakFEdUJiZG02TjRqNUVkTW5r
- TG4wQklmUEpwCmRnbTR2bDJVcExqd1JHci9NM3dtbTVwdnMrNnVCN2hrL0ZKaUQvNGxsRU5Q
- NGVNMWg3U200aitWcTZOMSt6VEIKSVhKQWViSXFhc0RwNXlaUzdYcnk0STM2bjg1WEVZZkcw
- MWx0QXlob05WMkRPOFNJUlFwdWkydHErOVJQM1JLMQpKREJ4eEVKWTJFTzVKWjhNeGFQSFEw
- RFQwNWxSRmpLMkFsaGRFSXRqTGpwSjNmVW05c3FMeE1XeHpQNlV6M2lpCjJ1YTR1bnJ0Nk9D
- VHFRd2lqRi8zYlRXaXd2VkFBSG5NRlVpb1hzaEhhb2hWRGNWZm5lSU1mVjBiUUNYWWkzTnAK
- WTB2MFp3Y2lGSCtnU0M3cUQ2WE51aHBWR1NMNElpbGlGeS9TemNhSkV6QUhlTERTaFpQMkNX
- ZG5DNHZnbDM3dApocHg4aDU1WWhKbjZIU3VVelBnaGFLdFZCMmsrajdaZXlaK1NGeHA3SXVi
- SEN3TEhsUWhUNzVSd1EzaUF4S242CjBxajUxY1lUbnF4ZFpYVzZmSDNQa3VNellVNUdwcVIv
- MU9sNWMvd2ZJNmc2QW04eUtXLzBFVUx0K0tuNExGc1MKbTdZM201SDV2MTJVNkpCWXZWK3Ix
- M2paaW9zNEVFREU5M0Q1c05IMk1JeVJ6Q0RxMXpkZHQ0WHV5S0ZqUEtXMQo5aWJaRGZGVjdL
- dUNzdnVMMjNzQmMxc0NNb3ArRTFtVC9ReE9JQTZvRFQxTVFzdHdPVnVReURDdi9PdktTZ2Z6
- CjhGWEdMNkFQY2xqQ3FqOEFKaHhReXN4ZG9pUVA4bS92dStialdHR3Z4dzVzMWxncGlSRFRS
- VVBnY0pKTmFHWTIKVklEclpRaTROU2lOUTBOSWkrZGp1NGZOTW1DcFFxZzh0YkMzY0FhNnl3
- bTZvUUIxU0JobURYMmUxMWdSbGx1SQpPblRHUEUwSFRvM2w3MmxoYmc9PQo9cVpNVgotLS0t
- LUVORCBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCg==
-Message-ID: <1335ae03-705a-7a4a-a9ce-c6c55a2dcf34@i2se.com>
-Date:   Wed, 9 Feb 2022 18:26:15 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 9 Feb 2022 12:27:24 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2045.outbound.protection.outlook.com [40.107.243.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA47AC05CB82;
+        Wed,  9 Feb 2022 09:27:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GHVTCQxgFmIgN9mnumtI3hzQBFzJGMS9mLArE6r6ebXCnFoWa6V426GCK1Jt4yRvDZZGW+PN6RoINDCzkGppbjBeS1Yvz5wmdTIxXw4nBFu0oId5zitNqAFAb/CpKdfCznlQ+aGJs0rXBAJyRd/zhsxUpqfTUvO2oxjM4s0tGaTt4hEeCCPQknffvLGGLNtrju1C3gm/zoE5HsQD+RFJcV5lkE6YVwdHqtkaFG9aLmuPC5DCql+vMQfFdnnzvcB8CCgWuCRFFFSNKFPkxf6AdOJpnopLbFkCLORp2Cmux8TjUBtpMnkrIOQKWuishv/eRy//Z0m+oRu7ZuSswPfYhQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=99aBqc4sxFoYIq6lYZ1HRC8Zdcvnv4fofpHJFaeikRU=;
+ b=K24uQYzDLFiPCOwp+9LRI9HUa9MK5ROvY521F4qZl+VhJAQjr10utTq1w+A+oWb9iwiG6IMvRgtBW7NmXyxF9JJc1yVvgtEcWIyWmycb4DV235uR9KMH3XB7rlDXLz0uMQ81d3mNwl6dHM3bW9cVgfXHizWlBdeEmlfbR1bZWejda2Zzy6FW9ewyGOnvk+1aVIUWlgWOzzG2ceJ4fmy/ban4pjFaDImMBaygEhflWOUjjP3Ot6dBcTGVUnrBKhQK1nASeQWQX6yauK38IG88ojn6iXAqsTVTKdKpAIVIEy52+lLQY7/LYlpa3B6Wzw+9WbgAAEwgADPVnH0/mlLQYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=99aBqc4sxFoYIq6lYZ1HRC8Zdcvnv4fofpHJFaeikRU=;
+ b=JvvVYXNgxbn/g94TYlU8w/ruo4uOua0EQyZxrttF7A6CU7LMHYK+X6a5l8ptOHWaZ2l6VgdxV8W4tntqSSL5QBjdYhzYoZksz+8PlPLn+JtWQWBnglJAfdDkWWC8KBj/ctG1tvxVwgzg7kouUOGhvFaGduABSwvV1mGaWspM5js=
+Received: from BN9PR03CA0363.namprd03.prod.outlook.com (2603:10b6:408:f7::8)
+ by BL1PR12MB5379.namprd12.prod.outlook.com (2603:10b6:208:317::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.17; Wed, 9 Feb
+ 2022 17:27:24 +0000
+Received: from BN8NAM11FT066.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:f7:cafe::38) by BN9PR03CA0363.outlook.office365.com
+ (2603:10b6:408:f7::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12 via Frontend
+ Transport; Wed, 9 Feb 2022 17:27:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT066.mail.protection.outlook.com (10.13.177.138) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4975.11 via Frontend Transport; Wed, 9 Feb 2022 17:27:24 +0000
+Received: from ethanolx7ea3host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 9 Feb
+ 2022 11:27:23 -0600
+From:   Terry Bowman <terry.bowman@amd.com>
+To:     <terry.bowman@amd.com>, <linux@roeck-us.net>,
+        <linux-watchdog@vger.kernel.org>, <jdelvare@suse.com>,
+        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
+        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>
+CC:     <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
+        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
+        <sudheesh.mavila@amd.com>, <Nehal-bakulchandra.Shah@amd.com>,
+        <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
+        <Mario.Limonciello@amd.com>
+Subject: [PATCH v5 0/9] i2c: piix4: Replace cd6h/cd7h port I/O accesses with MMIO accesses
+Date:   Wed, 9 Feb 2022 11:27:08 -0600
+Message-ID: <20220209172717.178813-1-terry.bowman@amd.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20220209162515.706729-2-detlev.casanova@collabora.com>
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Provags-ID: V03:K1:XIB0IOkaThrznSv6OzsH3ICeM5NP/Rcou6qKQ9W3Vb5o4erh69y
- ZE0tHBG1gkIqVKYC2RHF4hSpPxQcjVCI3dqIfrbhMgx7JEb0TZTBu4ZXiwY4PjB7ox4OVQu
- HIwOAU3wWmKTA5Qs/YdirzWhh2REba+5Lp3+94ebQZM+FuiD1VeARjUYLf54AczEPNJxuAO
- dHMTkqgTv+r5BkVhrngeg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wryg9iTgGDs=:jkjRcD/SO8FmS0/S4wml6x
- FbCprup8NHwmX8e92IWe5++/j7KHhyQDUK0+AeR1BurNoqeIGy1nKLDBtn5c+iKzgyHMNt3tj
- 84m8FYKKjvNhvHqnipxtLyg0sNBnZK4aqXswMoZs1C3Xnhj+8XeQJ14iHdjwmHmetCUpsj60c
- 2VS2LwtZ09/uxo93M37MzMOmC/i+iNjTq23ZrSMjlNv4IogY+QJEz0oowRcoFyC0YMAABHCG4
- jeHYZgN6nrS55XToQe0Bf5ACGGLslbBEUNMBgGQsugiCSHPPG0mrZat9HRFPpRuV4qvT4KbLZ
- NyVYlzSQ5o9ar4AWKFwc4iXsfGiZGacMdGxd0i2D1W7FoZHENyx7MahRqfAPU7dT05saOdtiK
- NM3x07GbeTkmZDwO7DJu+8lEMgsAASTUHcrht0bhMQCmq3brl+jU5r6d6Qq+M9Z45TFBOUZs5
- 9HERD7jpc4EPT56Fl7L20uYbboCM7u5G8aZOdY1skSS7RHL4HK/caeamleHsDMbAviCKmYhPJ
- dWwtVfcM88t4XpqyLmKmxPwMqBoPDnOBgivDVA0eACbszE6cRzNuMMeKf1BrB+L3q9hbSQZxu
- /FIiSEJvfOnUi+TGlineh/yNBcXh5clJUUFgO/qjoKBhi86BGHGGUa9hZ2T+rr3aTM7hb7tAa
- FPZvpWcINM+V3zIRtj6FvxA+oLFv/kpQpnrREUPIWg/EMR6sAcBh2ThbxEHTq+za9iKFxVSRQ
- EbE3+YM9UBZrMXJp
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 63f7b26e-6a4b-4ecd-c33e-08d9ebf16fc5
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5379:EE_
+X-Microsoft-Antispam-PRVS: <BL1PR12MB537936C91B15289619691B68832E9@BL1PR12MB5379.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VQ4YkraRF8s38o4TWxLj/oZiFUSMk5h8Mx5sDB7yt7HPamOAbM45petRP3Jh6moE0ZZ9zVLlckzLab5y4c6piktPi/wem20YrM916r/Vcb+gfWeDA6XP2mlcfDjbMi8Uw7rve1Q5c1gc8mhjD35QT345W+Z3CrRqIQHotArLQVCWzyuCn0bdAt54/MHFTx6takJNvvhDR2+3i7aYiBAYKw9lsOn78v7OmG0yBsMU9EGreCeuLCXJ8O91rZSIUVuYUE9Hlhzfg3bqk6a5FVf4UK8rq9Azue1i+jzHTWDdah0qrG1tIZ9z5FfqkcT6JXfjm2r0voo89gPoLl/6ZZ+Jxno2xOv4V11tTZMbv53iG33C4vbi7DJm1GBCGBmJm+alWdR8HWs6UYk93qp/CtcB8oiQVtVMjpuZOfswMAnTJ8Di3+aVK8MirnXTrgT+wyX9fPEsVHWfH7afS6r6P2j0t4HISGY4CdKRvMQpB0n09nOtO8wDg8rIIgcxm6U1DaQ61Nf9QTHuiOX4axV9+C4A5JFEmShpJHpz5iF7azthAfaOjpyF56PHXApnQUbqFVdcUrUdh95m0746taAONGOrcBnCYCmRWokArBJTzWM5tIrwOojxlfOXv7blEyN3aDnT0UKwUod0oSNIxR/2ttNGTeDA+9lrfqoiCfpc7WCZLC9dXl/K2RXXhxHnifcMLtCk4znCO9XfrOZ+CzluHAWLgMrXIIlsutz1jc1yVEGjNBmULOdGMSVkt5WVQyLCUdZMupoYTR/7OSNwBFcmk4IqEfeVsqBCtm75+4BLKAzXJXAjkNx+r5wPTToqgYfcgVHW9MTKUccP4KLk30k+NDNoAw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(40460700003)(426003)(70586007)(8676002)(83380400001)(36756003)(336012)(1076003)(8936002)(70206006)(86362001)(47076005)(4326008)(16526019)(186003)(26005)(36860700001)(2616005)(5660300002)(44832011)(2906002)(508600001)(966005)(316002)(356005)(54906003)(110136005)(7696005)(6666004)(82310400004)(81166007)(32563001)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2022 17:27:24.3888
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 63f7b26e-6a4b-4ecd-c33e-08d9ebf16fc5
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT066.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5379
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Detlev,
+This series changes the piix4_smbus driver's cd6h/cd7h port I/O accesses
+to use MMIO instead. This is necessary because cd6h/cd7h port I/O may be
+disabled on later AMD processors.
 
-Am 09.02.22 um 17:25 schrieb Detlev Casanova:
-> The i2c0 device has 2 different busses controlled by a pinctrl.
-> This commit separates the device node into 2 i2c devices:
->  * pin 0: Base i2c bus
->  * pin 44: DSI i2c bus
->
-> i2c0 is renamed to i2c0if so that device-trees referencing i2c0 don't
-> break and use the i2c0 node defined in i2c0mux node.
->
-> i2c_csi_dsi can be used to control devices via the DSI i2c bus, used for
-> DSI displays.
->
-> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+This series includes patches with MMIO accesses to register
+FCH::PM::DECODEEN. The same register is also accessed by the sp5100_tco
+driver.[1] Synchronization to the MMIO register is required in both
+drivers.
 
-just a note: Uwe sends a similiar approach for the RTC on CM4 [1] which
-hasn't applied yet.
+The first patch creates a macro to request MMIO region using the 'muxed'
+retry logic. This is used in patch 6 to synchronize accesses to EFCH MMIO.
 
-[1] - https://www.spinics.net/lists/arm-kernel/msg944330.html
+The second patch replaces a hardcoded region size with a #define. This is
+to improve maintainability and was requested from v2 review.
 
-> ---
->  arch/arm/boot/dts/bcm2711-rpi-4-b.dts         |  1 +
->  arch/arm/boot/dts/bcm2711.dtsi                |  2 +-
->  arch/arm/boot/dts/bcm2835-rpi.dtsi            |  9 ++++---
->  .../boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi    |  4 +++
->  arch/arm/boot/dts/bcm283x.dtsi                | 26 ++++++++++++++++++-
->  5 files changed, 37 insertions(+), 5 deletions(-)
->  create mode 100644 arch/arm/boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi
->
-> diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-> index 4432412044de..5dcce58817e6 100644
-> --- a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-> +++ b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-> @@ -4,6 +4,7 @@
->  #include "bcm2711-rpi.dtsi"
->  #include "bcm283x-rpi-usb-peripheral.dtsi"
->  #include "bcm283x-rpi-wifi-bt.dtsi"
-> +#include "bcm283x-rpi-i2c0mux_0_44.dtsi"
->  
->  / {
->  	compatible = "raspberrypi,4-model-b", "brcm,bcm2711";
-> diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
-> index 3b60297af7f6..bf6e8251c2c7 100644
-> --- a/arch/arm/boot/dts/bcm2711.dtsi
-> +++ b/arch/arm/boot/dts/bcm2711.dtsi
-> @@ -1037,7 +1037,7 @@ &cma {
->  	alloc-ranges = <0x0 0x00000000 0x40000000>;
->  };
->  
-> -&i2c0 {
-> +&i2c0if {
->  	compatible = "brcm,bcm2711-i2c", "brcm,bcm2835-i2c";
->  	interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
->  };
-> diff --git a/arch/arm/boot/dts/bcm2835-rpi.dtsi b/arch/arm/boot/dts/bcm2835-rpi.dtsi
-> index 87ddcad76083..1e38f9f0e80e 100644
-> --- a/arch/arm/boot/dts/bcm2835-rpi.dtsi
-> +++ b/arch/arm/boot/dts/bcm2835-rpi.dtsi
-> @@ -49,13 +49,16 @@ alt0: alt0 {
->  	};
->  };
->  
-> -&i2c0 {
-> -	pinctrl-names = "default";
-> -	pinctrl-0 = <&i2c0_gpio0>;
-> +&i2c0if {
->  	status = "okay";
->  	clock-frequency = <100000>;
->  };
->  
-> +&i2c0mux {
-> +	pinctrl-0 = <&i2c0_gpio0>;
-> +	status = "okay";
-> +};
-> +
->  &i2c1 {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&i2c1_gpio2>;
-> diff --git a/arch/arm/boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi b/arch/arm/boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi
-> new file mode 100644
-> index 000000000000..119946d878db
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/bcm283x-rpi-i2c0mux_0_44.dtsi
-> @@ -0,0 +1,4 @@
-> +&i2c0mux {
-> +	pinctrl-0 = <&i2c0_gpio0>;
-> +	pinctrl-1 = <&i2c0_gpio44>;
-> +};
-> diff --git a/arch/arm/boot/dts/bcm283x.dtsi b/arch/arm/boot/dts/bcm283x.dtsi
-> index a3e06b680947..06d04cde52b9 100644
-> --- a/arch/arm/boot/dts/bcm283x.dtsi
-> +++ b/arch/arm/boot/dts/bcm283x.dtsi
-> @@ -334,7 +334,7 @@ spi: spi@7e204000 {
->  			status = "disabled";
->  		};
->  
-> -		i2c0: i2c@7e205000 {
-> +		i2c0if: i2c@7e205000 {
->  			compatible = "brcm,bcm2835-i2c";
->  			reg = <0x7e205000 0x200>;
->  			interrupts = <2 21>;
-> @@ -344,6 +344,30 @@ i2c0: i2c@7e205000 {
->  			status = "disabled";
->  		};
->  
-> +		i2c0mux: i2c0mux {
-> +			compatible = "i2c-mux-pinctrl";
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			i2c-parent = <&i2c0if>;
-> +
-> +			pinctrl-names = "i2c0", "i2c_csi_dsi";
-> +
-> +			status = "disabled";
-> +
-> +			i2c0: i2c@0 {
-> +				reg = <0>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +			};
-> +
-> +			i2c_csi_dsi: i2c@1 {
-> +				reg = <1>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +			};
-> +		};
-> +
->  		dpi: dpi@7e208000 {
->  			compatible = "brcm,bcm2835-dpi";
->  			reg = <0x7e208000 0x8c>;
+The third patch moves duplicated region request/release code into
+functions. This locates related code into functions and reduces code line
+count. This will also make adding MMIO support in patch 6 easier.
+
+The fourth patch moves SMBus controller address detection into a function. 
+This is in preparation for adding MMIO region support.
+
+The fifth patch moves EFCH port selection into a function. This is in
+preparation for adding MMIO region support.
+
+The sixth patch adds MMIO support for region requesting/releasing and
+mapping. This is necessary for using MMIO to detect SMBus controller
+address, enable SMBbus controller region, and control the port select.
+
+The seventh patch updates the SMBus controller address detection to support
+using MMIO. This is necessary because the driver accesses register
+FCH::PM::DECODEEN during initialization and only available using MMIO on
+later AMD processors.
+
+The eighth patch updates the SMBus port selection to support MMIO. This is
+required because port selection control resides in the
+FCH::PM::DECODEEN[smbus0sel] and is only accessible using MMIO on later AMD
+processors.
+
+The ninth patch enables the EFCH MMIO functionality added earlier in this
+series. The SMBus controller's PCI revision ID is used to check if EFCH
+MMIO is supported by HW and should be enabled in the driver.
+
+Based on v5.17-rc2.
+
+Testing:
+  Tested on family 19h using:
+    i2cdetect -y 0
+    i2cdetect -y 2
+
+  - Results using v5.16 and this pachset applied. Below
+    shows the devices detected on the busses:
+    
+    # i2cdetect -y 0 
+         0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+    00:                         -- -- -- -- -- -- -- -- 
+    10: 10 11 -- -- -- -- -- -- 18 -- -- -- -- -- -- -- 
+    20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    30: 30 -- -- -- -- 35 36 -- -- -- -- -- -- -- -- -- 
+    40: -- -- -- -- -- -- -- -- -- -- 4a -- -- -- -- -- 
+    50: 50 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    70: -- -- -- 73 -- -- -- --                         
+    # i2cdetect -y 2
+         0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+    00:                         -- -- -- -- -- -- -- -- 
+    10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+    40: -- -- -- -- -- -- -- -- -- -- -- -- 4c -- -- -- 
+    50: -- 51 -- -- 54 -- -- -- -- -- -- -- -- -- -- -- 
+    60: 60 -- -- 63 -- -- 66 -- -- -- -- 6b -- -- 6e -- 
+    70: 70 71 72 73 74 75 -- 77
+
+  Also tested using sp5100_tco submitted series listed below.[1]
+  I applied the sp5100_tco v4 series and ran:
+    cat  >> /dev/watchdog
+
+[1] sp5100_tco v4 patchset can be found here:
+Link: https://lore.kernel.org/linux-watchdog/20220130191225.303115-1-terry.bowman@amd.com/
+
+Changes in v5:
+ - Use request/release helper function for sb800 device in
+   piix4_setup_sb800(). Patch 3. (Jean Delvare)     
+ - Revert 'piix4_smba' variable definition ordering back as it was in
+   piix4_setup_sb800(). Patch 4. (Jean Delvare)
+ - Add newline after piix4_sb800_port_sel(). Patch 5. (Jean Delvare)
+ - Remove unnecessary initialization in piix4_add_adapter(). Patch 6.
+   (Jean Delvare)
+ - Remove unnecessary #define AMD_PCI_SMBUS_REVISION_MMIO. Patch 9.
+   (Jean Delvare)
+ - Add description for 0x51 constant moved in the above item. This is
+   in piix4_sb800_use_mmio(). Patch 9. (Andy Shevchenko)
+ - Rebase to v5.17-rc2. (Andy Shevchenko)
+ - Update patch 9 description. (Terry Bowman)
+ 
+Changes in v4:
+ - Changed request_muxed_mem_region() macro to request_mem_region_muxed()
+   in patch 1. (Andy Shevchenko)
+ - Removed unnecessary newline where possible in calls to
+   request_muxed_region() in patch 2. (Terry Bowman)
+ - Changed piix4_sb800_region_setup() to piix4_sb800_region_request().
+   Patch 3. (Jean Delvare)
+ - Reordered piix4_setup_sb800() local variables from longest name length
+   to shortest name length. Patch 4. (Terry Bowman)
+ - Changed piix4_sb800_region_request() and piix4_sb800_region_release() by
+   adding early return() to remove 'else' improving readability. Patch 6.
+   (Terry Bowman)
+ - Removed iowrite32(ioread32(...), ...). Unnecessary because MMIO is
+   already enabled. (Terry Bowman)
+ - Refactored piix4_sb800_port_sel() to simplify the 'if' statement using
+   temp variable. Patch 8. (Terry Bowman)
+ - Added mmio_cfg.use_mmio assignment in piix4_add_adapter(). This is
+   needed for calls to piix4_sb800_port_sel() after initialization during
+   normal operation. Patch 9. (Terry Bowman)
+ 
+Changes in v3:
+ - Added request_muxed_mem_region() patch (Wolfram, Guenter)
+ - Reduced To/Cc list length. (Andy)
+ 
+Changes in v2:
+ - Split single patch. (Jean Delvare)
+ - Replace constant 2 with SB800_PIIX4_SMB_MAP_SIZE where appropriate.
+   (Jean Delvare)
+ - Shorten SB800_PIIX4_FCH_PM_DECODEEN_MMIO_EN name length to
+   SB800_PIIX4_FCH_PM_DECODEEN_MMIO. (Jean Delvare)
+ - Change AMD_PCI_SMBUS_REVISION_MMIO from 0x59 to 0x51. (Terry Bowman)
+ - Change piix4_sb800_region_setup() to piix4_sb800_region_request().
+   (Jean Delvare)
+ - Change 'SMB' text in  logging to 'SMBus' (Jean Delvare)
+ - Remove unnecessary NULL assignment in piix4_sb800_region_release().
+   (Jean Delvare)
+ - Move 'u8' variable definitions to single line. (Jean Delvare)
+ - Hardcode piix4_setup_sb800_smba() return value to 0 since it is always
+   0. (Jean Delvare)
+
+Terry Bowman (9):
+  kernel/resource: Introduce request_mem_region_muxed()
+  i2c: piix4: Replace hardcoded memory map size with a #define
+  i2c: piix4: Move port I/O region request/release code into functions
+  i2c: piix4: Move SMBus controller base address detect into function
+  i2c: piix4: Move SMBus port selection into function
+  i2c: piix4: Add EFCH MMIO support to region request and release
+  i2c: piix4: Add EFCH MMIO support to SMBus base address detect
+  i2c: piix4: Add EFCH MMIO support for SMBus port select
+  i2c: piix4: Enable EFCH MMIO for Family 17h+
+
+ drivers/i2c/busses/i2c-piix4.c | 213 ++++++++++++++++++++++++++-------
+ include/linux/ioport.h         |   2 +
+ 2 files changed, 169 insertions(+), 46 deletions(-)
+
+-- 
+2.30.2

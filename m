@@ -2,238 +2,398 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3784AEA28
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 07:18:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0283E4AEA33
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 07:22:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233843AbiBIGRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 01:17:34 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35890 "EHLO
+        id S232597AbiBIGSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 01:18:04 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240970AbiBIGLF (ORCPT
+        with ESMTP id S237739AbiBIGPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 01:11:05 -0500
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410B3C1036B8;
-        Tue,  8 Feb 2022 22:09:03 -0800 (PST)
-Received: by mail-pf1-x443.google.com with SMTP id i6so612282pfc.9;
-        Tue, 08 Feb 2022 22:09:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7qu9SXzamv/QkP+1OWSYirJbPVRFGrMjMBWpsyDdk9k=;
-        b=CTcStu2DYq1/LPHmRKZ6GwkibuxZPg6hvbaAf8Ifs/rospQZ3e03hK9Azp7bvenjXP
-         dqtUvM/l0p6FzPaqzBDGH+Fe6KQ5nO45X0xgPQ0edj9m3tTy32tbsi8zG7ukxERyZ1N5
-         OzS8W5OvDHPtEd0SfYQHQpZJYuLbUnU3vPiBv3bbfDa4VVNF8OzU50jGbb2e3Bb9Xw+I
-         hCj1de4hBnrAlbrLBEu6xv/kpPT9H5bdCMzmsLQWrPPCztU6uYaqylozCsGSN29qwnqr
-         iTqzu0ay2lsODaYndYtgnbppCo30bUgPDDYvFwhorV47uGBlq2rKy678YQyjvOWKQoic
-         mCog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7qu9SXzamv/QkP+1OWSYirJbPVRFGrMjMBWpsyDdk9k=;
-        b=QFFTv8X/ZoZ0KBLgrzv3qIppH4ghUKKHqCVSWGLvbkUE/ASBacWB3I8zBJB2+C0qit
-         xETjN00/1WT9jjkeMZSOHHZFthw8ru1LyIynSLrfH8bgNv6vJCMRUKH6Pd5Wv+FC2SiI
-         XoBxsu43A97zsIKDzd2nC3O6Ru7yYkppRxWBlnBvwiKieNGVewxh3LKPa52Vu8sOfckW
-         AHOX5pK8zNJUj4Y9IZ2K6HV6wPC5BjVgYWGAWA26LTn82V0XyGzVECpVJtTlq4VDF1Fl
-         T+OFACg5xkEiM9yvuX5jSNHsjOghuloQKaOE38gEpjioIndS3uZb4+qVRb+vvmlkmyWv
-         NtCQ==
-X-Gm-Message-State: AOAM533u8EWoj3S1XaieVz7gwKdBmfiq4UI2hxxb7PKj2J7K/hDLmuNv
-        vPt1HS5a3w65y3kMFzk2dDk=
-X-Google-Smtp-Source: ABdhPJyam0O1L9PHL4QJzBnA7ZzLLWr0s6N1yboZe3wXkn5GDckeROUhMgGCRGSRTFRE6J0fDFqegQ==
-X-Received: by 2002:a63:5a64:: with SMTP id k36mr698362pgm.408.1644386941495;
-        Tue, 08 Feb 2022 22:09:01 -0800 (PST)
-Received: from localhost ([139.155.25.230])
-        by smtp.gmail.com with ESMTPSA id l13sm12788114pgs.16.2022.02.08.22.09.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 22:09:00 -0800 (PST)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     idosch@idosch.org
-Cc:     nhorman@tuxdriver.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rostedt@goodmis.org, dsahern@kernel.org,
-        Menglong Dong <imagedong@tencent.com>
-Subject: [PATCH v8 net-next] net: drop_monitor: support drop reason
-Date:   Wed,  9 Feb 2022 14:08:38 +0800
-Message-Id: <20220209060838.55513-1-imagedong@tencent.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 9 Feb 2022 01:15:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22DFDF28A20
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 22:15:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5E54B81F17
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 06:15:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B753DC340E7;
+        Wed,  9 Feb 2022 06:15:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644387305;
+        bh=OUPNHBAJBd42EIpzpVtb9lp5kMJbQTw7jGC1FYPoiXk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IGD42/2Jb0d5SZJjI471MYihxC7OM3utb9RbC8h+OjELkaeknbfHc2Ni209paihrU
+         kqLccFEAqqlInc/AHGaZB/ji+CAJKW5R1AfYYfulxbhW0EB1UgHvQNyRJvvoSnOMnt
+         FF0XeD7dfALhqVs7dxTAdJxRU5kFYzW4egFmXBx2hb2/ic6CPPBXF8l7Ts2LsiJAC8
+         tHoWBA2YbqM1HgTkiFhXUbP3apbqStVE8AXtdfqiCcd0nlNwK2qlvLY8d0w5RGcBs3
+         i2KavDo3xNE2NIqWrQT4OVzbfw4Oohgri5kHjPuMGfAWYgQtmpTyqDq0kcLRxeWBSA
+         EDIhrgIdTK8mw==
+Date:   Wed, 9 Feb 2022 07:14:59 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        John Harrison <John.C.Harrison@Intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Thomas =?UTF-8?B?SGVsbHN0csO2bQ==?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 02/18] iosys-map: Add a few more helpers
+Message-ID: <20220209071459.06d4d397@coco.lan>
+In-Reply-To: <20220208104524.2516209-3-lucas.demarchi@intel.com>
+References: <20220208104524.2516209-1-lucas.demarchi@intel.com>
+        <20220208104524.2516209-3-lucas.demarchi@intel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+Em Tue,  8 Feb 2022 02:45:08 -0800
+Lucas De Marchi <lucas.demarchi@intel.com> escreveu:
 
-In the commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()")
-drop reason is introduced to the tracepoint of kfree_skb. Therefore,
-drop_monitor is able to report the drop reason to users by netlink.
+> First the simplest ones:
+>=20
+> 	- iosys_map_memset(): when abstracting system and I/O memory,
+> 	  just like the memcpy() use case, memset() also has dedicated
+> 	  functions to be called for using IO memory.
+> 	- iosys_map_memcpy_from(): we may need to copy data from I/O
+> 	  memory, not only to.
+>=20
+> In certain situations it's useful to be able to read or write to an
+> offset that is calculated by having the memory layout given by a struct
+> declaration. Usually we are going to read/write a u8, u16, u32 or u64.
+>=20
+> As a pre-requisite for the implementation, add iosys_map_memcpy_from()
+> to be the equivalent of iosys_map_memcpy_to(), but in the other
+> direction. Then add 2 pairs of macros:
+>=20
+> 	- iosys_map_rd() / iosys_map_wr()
+> 	- iosys_map_rd_field() / iosys_map_wr_field()
+>=20
+> The first pair takes the C-type and offset to read/write. The second
+> pair uses a struct describing the layout of the mapping in order to
+> calculate the offset and size being read/written.
+>=20
+> We could use readb, readw, readl, readq and the write* counterparts,
+> however due to alignment issues this may not work on all architectures.
+> If alignment needs to be checked to call the right function, it's not
+> possible to decide at compile-time which function to call: so just leave
+> the decision to the memcpy function that will do exactly that.
+>=20
+> Finally, in order to use the above macros with a map derived from
+> another, add another initializer: IOSYS_MAP_INIT_OFFSET().
+>=20
+> v2:
+>   - Rework IOSYS_MAP_INIT_OFFSET() so it doesn't rely on aliasing rules
+>     within the union
+>   - Add offset to both iosys_map_rd_field() and iosys_map_wr_field() to
+>     allow the struct itself to be at an offset from the mapping
+>   - Add documentation to iosys_map_rd_field() with example and expected
+>     memory layout
+>=20
+> Cc: Sumit Semwal <sumit.semwal@linaro.org>
+> Cc: Christian K=C3=B6nig <christian.koenig@amd.com>
+> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
 
-The drop reasons are reported as string to users, which is exactly
-the same as what we do when reporting it to ftrace.
+LGTM.
 
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
-v8:
-- pass drop reason to net_dm_packet_report_size()
-- move drop reason validation to net_dm_packet_trace_kfree_skb_hit()
+Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-v7:
-- take the size of NET_DM_ATTR_REASON into accounting in
-  net_dm_packet_report_size()
-- let compiler define the size of drop_reasons
+Regards,
+Mauro
 
-v6:
-- check the range of drop reason in net_dm_packet_report_fill()
+> ---
+>  include/linux/iosys-map.h | 202 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 202 insertions(+)
+>=20
+> diff --git a/include/linux/iosys-map.h b/include/linux/iosys-map.h
+> index edd730b1e899..c6b223534b21 100644
+> --- a/include/linux/iosys-map.h
+> +++ b/include/linux/iosys-map.h
+> @@ -6,6 +6,7 @@
+>  #ifndef __IOSYS_MAP_H__
+>  #define __IOSYS_MAP_H__
+> =20
+> +#include <linux/kernel.h>
+>  #include <linux/io.h>
+>  #include <linux/string.h>
+> =20
+> @@ -120,6 +121,45 @@ struct iosys_map {
+>  		.is_iomem =3D false,	\
+>  	}
+> =20
+> +/**
+> + * IOSYS_MAP_INIT_OFFSET - Initializes struct iosys_map from another ios=
+ys_map
+> + * @map_:	The dma-buf mapping structure to copy from
+> + * @offset_:	Offset to add to the other mapping
+> + *
+> + * Initializes a new iosys_map struct based on another passed as argumen=
+t. It
+> + * does a shallow copy of the struct so it's possible to update the back=
+ storage
+> + * without changing where the original map points to. It is the equivale=
+nt of
+> + * doing:
+> + *
+> + * .. code-block:: c
+> + *
+> + *	iosys_map map =3D other_map;
+> + *	iosys_map_incr(&map, &offset);
+> + *
+> + * Example usage:
+> + *
+> + * .. code-block:: c
+> + *
+> + *	void foo(struct device *dev, struct iosys_map *base_map)
+> + *	{
+> + *		...
+> + *		struct iosys_map map =3D IOSYS_MAP_INIT_OFFSET(base_map, FIELD_OFFSE=
+T);
+> + *		...
+> + *	}
+> + *
+> + * The advantage of using the initializer over just increasing the offse=
+t with
+> + * iosys_map_incr() like above is that the new map will always point to =
+the
+> + * right place of the buffer during its scope. It reduces the risk of up=
+dating
+> + * the wrong part of the buffer and having no compiler warning about tha=
+t. If
+> + * the assignment to IOSYS_MAP_INIT_OFFSET() is forgotten, the compiler =
+can warn
+> + * about the use of uninitialized variable.
+> + */
+> +#define IOSYS_MAP_INIT_OFFSET(map_, offset_) ({				\
+> +	struct iosys_map copy =3D *map_;					\
+> +	iosys_map_incr(&copy, offset_);					\
+> +	copy;								\
+> +})
+> +
+>  /**
+>   * iosys_map_set_vaddr - Sets a iosys mapping structure to an address in=
+ system memory
+>   * @map:	The iosys_map structure
+> @@ -239,6 +279,26 @@ static inline void iosys_map_memcpy_to(struct iosys_=
+map *dst, size_t dst_offset,
+>  		memcpy(dst->vaddr + dst_offset, src, len);
+>  }
+> =20
+> +/**
+> + * iosys_map_memcpy_from - Memcpy from iosys_map into system memory
+> + * @dst:	Destination in system memory
+> + * @src:	The iosys_map structure
+> + * @src_offset:	The offset from which to copy
+> + * @len:	The number of byte in src
+> + *
+> + * Copies data from a iosys_map with an offset. The dest buffer is in
+> + * system memory. Depending on the mapping location, the helper picks the
+> + * correct method of accessing the memory.
+> + */
+> +static inline void iosys_map_memcpy_from(void *dst, const struct iosys_m=
+ap *src,
+> +					 size_t src_offset, size_t len)
+> +{
+> +	if (src->is_iomem)
+> +		memcpy_fromio(dst, src->vaddr_iomem + src_offset, len);
+> +	else
+> +		memcpy(dst, src->vaddr + src_offset, len);
+> +}
+> +
+>  /**
+>   * iosys_map_incr - Increments the address stored in a iosys mapping
+>   * @map:	The iosys_map structure
+> @@ -255,4 +315,146 @@ static inline void iosys_map_incr(struct iosys_map =
+*map, size_t incr)
+>  		map->vaddr +=3D incr;
+>  }
+> =20
+> +/**
+> + * iosys_map_memset - Memset iosys_map
+> + * @dst:	The iosys_map structure
+> + * @offset:	Offset from dst where to start setting value
+> + * @value:	The value to set
+> + * @len:	The number of bytes to set in dst
+> + *
+> + * Set value in iosys_map. Depending on the buffer's location, the helper
+> + * picks the correct method of accessing the memory.
+> + */
+> +static inline void iosys_map_memset(struct iosys_map *dst, size_t offset,
+> +				    int value, size_t len)
+> +{
+> +	if (dst->is_iomem)
+> +		memset_io(dst->vaddr_iomem + offset, value, len);
+> +	else
+> +		memset(dst->vaddr + offset, value, len);
+> +}
+> +
+> +/**
+> + * iosys_map_rd - Read a C-type value from the iosys_map
+> + *
+> + * @map__:	The iosys_map structure
+> + * @offset__:	The offset from which to read
+> + * @type__:	Type of the value being read
+> + *
+> + * Read a C type value from iosys_map, handling possible un-aligned acce=
+sses to
+> + * the mapping.
+> + *
+> + * Returns:
+> + * The value read from the mapping.
+> + */
+> +#define iosys_map_rd(map__, offset__, type__) ({			\
+> +	type__ val;							\
+> +	iosys_map_memcpy_from(&val, map__, offset__, sizeof(val));	\
+> +	val;								\
+> +})
+> +
+> +/**
+> + * iosys_map_wr - Write a C-type value to the iosys_map
+> + *
+> + * @map__:	The iosys_map structure
+> + * @offset__:	The offset from the mapping to write to
+> + * @type__:	Type of the value being written
+> + * @val__:	Value to write
+> + *
+> + * Write a C-type value to the iosys_map, handling possible un-aligned a=
+ccesses
+> + * to the mapping.
+> + */
+> +#define iosys_map_wr(map__, offset__, type__, val__) ({			\
+> +	type__ val =3D (val__);						\
+> +	iosys_map_memcpy_to(map__, offset__, &val, sizeof(val));	\
+> +})
+> +
+> +/**
+> + * iosys_map_rd_field - Read a member from a struct in the iosys_map
+> + *
+> + * @map__:		The iosys_map structure
+> + * @struct_offset__:	Offset from the beggining of the map, where the str=
+uct
+> + *			is located
+> + * @struct_type__:	The struct describing the layout of the mapping
+> + * @field__:		Member of the struct to read
+> + *
+> + * Read a value from iosys_map considering its layout is described by a =
+C struct
+> + * starting at @struct_offset__. The field offset and size is calculated=
+ and its
+> + * value read handling possible un-aligned memory accesses. For example:=
+ suppose
+> + * there is a @struct foo defined as below and the value ``foo.field2.in=
+ner2``
+> + * needs to be read from the iosys_map:
+> + *
+> + * .. code-block:: c
+> + *
+> + *	struct foo {
+> + *		int field1;
+> + *		struct {
+> + *			int inner1;
+> + *			int inner2;
+> + *		} field2;
+> + *		int field3;
+> + *	} __packed;
+> + *
+> + * This is the expected memory layout of a buffer using iosys_map_rd_fie=
+ld():
+> + *
+> + * +------------------------------+--------------------------+
+> + * | Address                      | Content                  |
+> + * +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
+> + * | buffer + 0000                | start of mmapped buffer  |
+> + * |                              | pointed by iosys_map     |
+> + * +------------------------------+--------------------------+
+> + * | ...                          | ...                      |
+> + * +------------------------------+--------------------------+
+> + * | buffer + ``struct_offset__`` | start of ``struct foo``  |
+> + * +------------------------------+--------------------------+
+> + * | ...                          | ...                      |
+> + * +------------------------------+--------------------------+
+> + * | buffer + wwww                | ``foo.field2.inner2``    |
+> + * +------------------------------+--------------------------+
+> + * | ...                          | ...                      |
+> + * +------------------------------+--------------------------+
+> + * | buffer + yyyy                | end of ``struct foo``    |
+> + * +------------------------------+--------------------------+
+> + * | ...                          | ...                      |
+> + * +------------------------------+--------------------------+
+> + * | buffer + zzzz                | end of mmaped buffer     |
+> + * +------------------------------+--------------------------+
+> + *
+> + * Values automatically calculated by this macro or not needed are denot=
+ed by
+> + * wwww, yyyy and zzzz. This is the code to read that value:
+> + *
+> + * .. code-block:: c
+> + *
+> + *	x =3D iosys_map_rd_field(&map, offset, struct foo, field2.inner2);
+> + *
+> + * Returns:
+> + * The value read from the mapping.
+> + */
+> +#define iosys_map_rd_field(map__, struct_offset__, struct_type__, field_=
+_) ({	\
+> +	struct_type__ *s;							\
+> +	iosys_map_rd(map__, struct_offset__ + offsetof(struct_type__, field__),=
+	\
+> +		     typeof(s->field__));					\
+> +})
+> +
+> +/**
+> + * iosys_map_wr_field - Write to a member of a struct in the iosys_map
+> + *
+> + * @map__:		The iosys_map structure
+> + * @struct_offset__:	Offset from the beggining of the map, where the str=
+uct
+> + *			is located
+> + * @struct_type__:	The struct describing the layout of the mapping
+> + * @field__:		Member of the struct to read
+> + * @val__:		Value to write
+> + *
+> + * Write a value to the iosys_map considering its layout is described by=
+ a C struct
+> + * starting at @struct_offset__. The field offset and size is calculated=
+ and the
+> + * @val__ is written handling possible un-aligned memory accesses. Refer=
+ to
+> + * iosys_map_rd_field() for expected usage and memory layout.
+> + */
+> +#define iosys_map_wr_field(map__, struct_offset__, struct_type__, field_=
+_, val__) ({	\
+> +	struct_type__ *s;								\
+> +	iosys_map_wr(map__, struct_offset__ + offsetof(struct_type__, field__),=
+		\
+> +		     typeof(s->field__), val__);					\
+> +})
+> +
+>  #endif /* __IOSYS_MAP_H__ */
 
-v5:
-- check if drop reason larger than SKB_DROP_REASON_MAX
 
-v4:
-- report drop reasons as string
 
-v3:
-- referring to cb->reason and cb->pc directly in
-  net_dm_packet_report_fill()
-
-v2:
-- get a pointer to struct net_dm_skb_cb instead of local var for
-  each field
----
- include/uapi/linux/net_dropmon.h |  1 +
- net/core/drop_monitor.c          | 41 +++++++++++++++++++++++++++-----
- 2 files changed, 36 insertions(+), 6 deletions(-)
-
-diff --git a/include/uapi/linux/net_dropmon.h b/include/uapi/linux/net_dropmon.h
-index 66048cc5d7b3..1bbea8f0681e 100644
---- a/include/uapi/linux/net_dropmon.h
-+++ b/include/uapi/linux/net_dropmon.h
-@@ -93,6 +93,7 @@ enum net_dm_attr {
- 	NET_DM_ATTR_SW_DROPS,			/* flag */
- 	NET_DM_ATTR_HW_DROPS,			/* flag */
- 	NET_DM_ATTR_FLOW_ACTION_COOKIE,		/* binary */
-+	NET_DM_ATTR_REASON,			/* string */
- 
- 	__NET_DM_ATTR_MAX,
- 	NET_DM_ATTR_MAX = __NET_DM_ATTR_MAX - 1
-diff --git a/net/core/drop_monitor.c b/net/core/drop_monitor.c
-index 7b288a121a41..4641126b8a20 100644
---- a/net/core/drop_monitor.c
-+++ b/net/core/drop_monitor.c
-@@ -48,6 +48,19 @@
- static int trace_state = TRACE_OFF;
- static bool monitor_hw;
- 
-+#undef EM
-+#undef EMe
-+
-+#define EM(a, b)	[a] = #b,
-+#define EMe(a, b)	[a] = #b
-+
-+/* drop_reasons is used to translate 'enum skb_drop_reason' to string,
-+ * which is reported to user space.
-+ */
-+static const char * const drop_reasons[] = {
-+	TRACE_SKB_DROP_REASON
-+};
-+
- /* net_dm_mutex
-  *
-  * An overall lock guarding every operation coming from userspace.
-@@ -126,6 +139,7 @@ struct net_dm_skb_cb {
- 		struct devlink_trap_metadata *hw_metadata;
- 		void *pc;
- 	};
-+	enum skb_drop_reason reason;
- };
- 
- #define NET_DM_SKB_CB(__skb) ((struct net_dm_skb_cb *)&((__skb)->cb[0]))
-@@ -498,6 +512,7 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
- {
- 	ktime_t tstamp = ktime_get_real();
- 	struct per_cpu_dm_data *data;
-+	struct net_dm_skb_cb *cb;
- 	struct sk_buff *nskb;
- 	unsigned long flags;
- 
-@@ -508,7 +523,11 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
- 	if (!nskb)
- 		return;
- 
--	NET_DM_SKB_CB(nskb)->pc = location;
-+	if ((unsigned int)reason >= SKB_DROP_REASON_MAX)
-+		reason = SKB_DROP_REASON_NOT_SPECIFIED;
-+	cb = NET_DM_SKB_CB(nskb);
-+	cb->reason = reason;
-+	cb->pc = location;
- 	/* Override the timestamp because we care about the time when the
- 	 * packet was dropped.
- 	 */
-@@ -553,7 +572,8 @@ static size_t net_dm_in_port_size(void)
- 
- #define NET_DM_MAX_SYMBOL_LEN 40
- 
--static size_t net_dm_packet_report_size(size_t payload_len)
-+static size_t net_dm_packet_report_size(size_t payload_len,
-+					enum skb_drop_reason reason)
- {
- 	size_t size;
- 
-@@ -574,6 +594,8 @@ static size_t net_dm_packet_report_size(size_t payload_len)
- 	       nla_total_size(sizeof(u32)) +
- 	       /* NET_DM_ATTR_PROTO */
- 	       nla_total_size(sizeof(u16)) +
-+	       /* NET_DM_ATTR_REASON */
-+	       nla_total_size(strlen(drop_reasons[reason]) + 1) +
- 	       /* NET_DM_ATTR_PAYLOAD */
- 	       nla_total_size(payload_len);
- }
-@@ -606,7 +628,7 @@ static int net_dm_packet_report_in_port_put(struct sk_buff *msg, int ifindex,
- static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
- 				     size_t payload_len)
- {
--	u64 pc = (u64)(uintptr_t) NET_DM_SKB_CB(skb)->pc;
-+	struct net_dm_skb_cb *cb = NET_DM_SKB_CB(skb);
- 	char buf[NET_DM_MAX_SYMBOL_LEN];
- 	struct nlattr *attr;
- 	void *hdr;
-@@ -620,10 +642,15 @@ static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
- 	if (nla_put_u16(msg, NET_DM_ATTR_ORIGIN, NET_DM_ORIGIN_SW))
- 		goto nla_put_failure;
- 
--	if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, pc, NET_DM_ATTR_PAD))
-+	if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, (u64)(uintptr_t)cb->pc,
-+			      NET_DM_ATTR_PAD))
-+		goto nla_put_failure;
-+
-+	if (nla_put_string(msg, NET_DM_ATTR_REASON,
-+			   drop_reasons[cb->reason]))
- 		goto nla_put_failure;
- 
--	snprintf(buf, sizeof(buf), "%pS", NET_DM_SKB_CB(skb)->pc);
-+	snprintf(buf, sizeof(buf), "%pS", cb->pc);
- 	if (nla_put_string(msg, NET_DM_ATTR_SYMBOL, buf))
- 		goto nla_put_failure;
- 
-@@ -679,7 +706,9 @@ static void net_dm_packet_report(struct sk_buff *skb)
- 	if (net_dm_trunc_len)
- 		payload_len = min_t(size_t, net_dm_trunc_len, payload_len);
- 
--	msg = nlmsg_new(net_dm_packet_report_size(payload_len), GFP_KERNEL);
-+	msg = nlmsg_new(net_dm_packet_report_size(payload_len,
-+						  NET_DM_SKB_CB(skb)->reason),
-+			GFP_KERNEL);
- 	if (!msg)
- 		goto out;
- 
--- 
-2.34.1
-
+Thanks,
+Mauro

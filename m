@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85DF4AE62E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 01:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 969634AE636
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 01:44:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240429AbiBIAnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 19:43:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
+        id S240748AbiBIAod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 19:44:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235164AbiBIAn3 (ORCPT
+        with ESMTP id S231954AbiBIAoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 19:43:29 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E661C061576;
-        Tue,  8 Feb 2022 16:43:29 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id i186so1492955pfe.0;
-        Tue, 08 Feb 2022 16:43:29 -0800 (PST)
+        Tue, 8 Feb 2022 19:44:32 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26858C06157B;
+        Tue,  8 Feb 2022 16:44:32 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id u12so775808plq.10;
+        Tue, 08 Feb 2022 16:44:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=fMOnOpTGKn9/jVrcDzClYggaX4u+eL9NpYQ7bzh9GdY=;
-        b=VhrPBaW9Pd7tSs4NlnRE27lUVYOlLlE6vXz5Tgjv+0TtyrRrh8+9fB/ddGQblRsR3X
-         Pyuovi/mmJE0lZxnk/y4Qdp+sMcVsfqpkbJ2dlLOiWIkRrXVeePBfglBxOEeM0mC7MCH
-         ZQhuKSysbxnPNF7Jdnt5x9cZijs/gw9FqPXWy/uyFzw22fOx73dCciWdd9NT1hhWA6xY
-         aaHh0shXwOHETOlYJSXDqsw0jEpyxNmoKYyAWmsqcz0QhbpUDpWc24kxkNpksKamO13V
-         0bI9S3GcfULUayOPY2ARCDwyaHYqyHzAno9GPxpBdTTSKrx7n019ZSWC7Ok4KJ/p+mIi
-         lPyQ==
+        bh=PhTkr9X2ah1asuD3CJaoPYxIIUBXeUj/IV+DwOdgVXo=;
+        b=Lp9hYtALz3JjG+ygVTjC/6yQYeq6ycUyyf5FSqYciSLle2keOrS7A85VJ1s/QHxqkn
+         DwBpgRFt7BdEq/3FEN27loA0dh7v5uYwnbXf7hEq66NVlQhl9sS9EiuhGNujx4BknmhZ
+         FBrSxOAPmz4QBqVefdhi0x+ji6IU5sBEFN/T0kzpP1yshJyiusF9MsLKLnO40jDT4rn6
+         waVKeEzoBPoiptU0qX2CAFBQN+gYUoTlghBlMvi0Es4xaBeSteZuKxOsJoySQcVXMDYJ
+         3jqm7XaRVTt5HUgYu2zKtNKQsSjSCrAbGoGjikuPBSf0Q6gBpBaCk7SVxXY4uezq13OQ
+         B0vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=fMOnOpTGKn9/jVrcDzClYggaX4u+eL9NpYQ7bzh9GdY=;
-        b=ZwCeAGyHwNdz0xgoYzN6OW1DNFl6GFAniBM1apOPXCag2b+mAQVpt4LexzBmTWmTSm
-         guf9LAKnc0wJmDHNlS8J/C7TgbAEKFc/WDZuJ2PyXVzDy2HJU+0WrE9YucBRsUd5299H
-         tWfwZUa2A4p5L9NsbP0pTjCYzxP7QKPVFQfhWdOAnEdeyH/hgRfmvtMrS73NBKdzmy8l
-         /11EaVSdiyTtvy1DaZVKrQK8PU4cFCJw6yJPbcDFzFzoLiERBM5svlnXdvigROLCu7Eb
-         9RyiEU94BdotJLwvYOL73m84O27SaH+bXw5lAr1ztv8+MGfepopjVyFKanIXMgpUHPPB
-         GGZA==
-X-Gm-Message-State: AOAM530TTchA6w5GybHKEa840QVeVjHiTTjUAYtFCcFN2E8Lf+IQfqyC
-        xxmOsFHJAR0bDJJemKAIk7U=
-X-Google-Smtp-Source: ABdhPJxztLUaN8ctWe7jK8i2Ne76K3cV0pjkNHm76KdEOQhk6tD3/DaipquI7XsjKgga/7Jp9/9BZA==
-X-Received: by 2002:a65:4b8f:: with SMTP id t15mr5718920pgq.140.1644367408679;
-        Tue, 08 Feb 2022 16:43:28 -0800 (PST)
+        bh=PhTkr9X2ah1asuD3CJaoPYxIIUBXeUj/IV+DwOdgVXo=;
+        b=UgNWoTsIRc+zl3MpZz98zVFm6lUbNcu+MGMcoWnHs6OkK1JVwrBKFVAnQSxB4RY2XF
+         RSkDxFRzHsZSAiGznfWMGTyfptVvqs9Jh7AE+0Rrd+nOgAuA0zpBQwZUPU0bkDQ1jOlO
+         XpbizGrmtPfzTXzrJINmRT8ix6KR+SJomM2Hmoz757YUjQEIjYFTPeTcokj2d9KFxaWt
+         hZ045dCVQ5uNvuIQgnqLnvziagT5MwDxsxpi5Pq+zZ1vxxMM/QnYOP/4Ri5ncmADZjkk
+         wpiiv0Wo6gIAQI95yYg0iPaYyBf4cKs/OCQDHJXSv0SSJs/Sk1BiPJPI8oR9R2pDkxq6
+         KG0w==
+X-Gm-Message-State: AOAM530HUK9CNeF2PJVEm8NAGvAyThzzeye/wNnY2s64hUS19aWHLB+J
+        De1uU6eiFkm9JZ79Ff5Z1kg=
+X-Google-Smtp-Source: ABdhPJytSqgPHdkgDrOt40m/jphipT+7Bnqd121V07WmUoJqTHxyqx5C0HU0dq8NUKaJM60Z/onu9Q==
+X-Received: by 2002:a17:902:a58b:: with SMTP id az11mr762807plb.138.1644367471668;
+        Tue, 08 Feb 2022 16:44:31 -0800 (PST)
 Received: from localhost.localdomain (192.243.120.166.16clouds.com. [192.243.120.166])
-        by smtp.gmail.com with ESMTPSA id f22sm17352169pfj.206.2022.02.08.16.43.24
+        by smtp.gmail.com with ESMTPSA id o125sm13339621pfb.116.2022.02.08.16.44.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 16:43:28 -0800 (PST)
+        Tue, 08 Feb 2022 16:44:31 -0800 (PST)
 From:   davidcomponentone@gmail.com
-To:     tyreld@linux.ibm.com
-Cc:     davidcomponentone@gmail.com, mpe@ellerman.id.au,
-        benh@kernel.crashing.org, paulus@samba.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+To:     jikos@kernel.org
+Cc:     davidcomponentone@gmail.com, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
         Yang Guang <yang.guang5@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] scsi: ibmvfc: replace snprintf with sysfs_emit
-Date:   Wed,  9 Feb 2022 08:43:15 +0800
-Message-Id: <b4c150c86f539d3bac3fc8885252adb9f24ee48f.1644286482.git.yang.guang5@zte.com.cn>
+Subject: [PATCH] HID: sony: replace snprintf with sysfs_emit
+Date:   Wed,  9 Feb 2022 08:44:18 +0800
+Message-Id: <2f021167336d2404aaba4c3bd7a075867a6a7e39.1644285940.git.yang.guang5@zte.com.cn>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,17 +73,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 From: Yang Guang <yang.guang5@zte.com.cn>
 
 coccinelle report:
-./drivers/scsi/ibmvscsi/ibmvfc.c:3453:8-16:
+./drivers/hid/hid-sony.c:710:8-16:
 WARNING: use scnprintf or sprintf
-./drivers/scsi/ibmvscsi/ibmvfc.c:3416:8-16:
+./drivers/hid/hid-sony.c:747:8-16:
 WARNING: use scnprintf or sprintf
-./drivers/scsi/ibmvscsi/ibmvfc.c:3436:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/scsi/ibmvscsi/ibmvfc.c:3426:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/scsi/ibmvscsi/ibmvfc.c:3445:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/scsi/ibmvscsi/ibmvfc.c:3406:8-16:
+./drivers/hid/hid-sony.c:759:8-16:
 WARNING: use scnprintf or sprintf
 
 Use sysfs_emit instead of scnprintf or sprintf makes more sense.
@@ -94,85 +86,40 @@ Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
 Signed-off-by: David Yang <davidcomponentone@gmail.com>
 ---
- drivers/scsi/ibmvscsi/ibmvfc.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/hid/hid-sony.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-index d0eab5700dc5..d5a197d17e0a 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc.c
-+++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-@@ -3403,7 +3403,7 @@ static ssize_t ibmvfc_show_host_partition_name(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
+diff --git a/drivers/hid/hid-sony.c b/drivers/hid/hid-sony.c
+index 60ec2b29d54d..94291472b381 100644
+--- a/drivers/hid/hid-sony.c
++++ b/drivers/hid/hid-sony.c
+@@ -707,7 +707,7 @@ static ssize_t ds4_show_poll_interval(struct device *dev,
+ 	struct hid_device *hdev = to_hid_device(dev);
+ 	struct sony_sc *sc = hid_get_drvdata(hdev);
  
--	return snprintf(buf, PAGE_SIZE, "%s\n",
-+	return sysfs_emit(buf, "%s\n",
- 			vhost->login_buf->resp.partition_name);
+-	return snprintf(buf, PAGE_SIZE, "%i\n", sc->ds4_bt_poll_interval);
++	return sysfs_emit(buf, "%i\n", sc->ds4_bt_poll_interval);
  }
  
-@@ -3413,7 +3413,7 @@ static ssize_t ibmvfc_show_host_device_name(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
+ static ssize_t ds4_store_poll_interval(struct device *dev,
+@@ -744,7 +744,7 @@ static ssize_t sony_show_firmware_version(struct device *dev,
+ 	struct hid_device *hdev = to_hid_device(dev);
+ 	struct sony_sc *sc = hid_get_drvdata(hdev);
  
--	return snprintf(buf, PAGE_SIZE, "%s\n",
-+	return sysfs_emit(buf, "%s\n",
- 			vhost->login_buf->resp.device_name);
+-	return snprintf(buf, PAGE_SIZE, "0x%04x\n", sc->fw_version);
++	return sysfs_emit(buf, "0x%04x\n", sc->fw_version);
  }
  
-@@ -3423,7 +3423,7 @@ static ssize_t ibmvfc_show_host_loc_code(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
+ static DEVICE_ATTR(firmware_version, 0444, sony_show_firmware_version, NULL);
+@@ -756,7 +756,7 @@ static ssize_t sony_show_hardware_version(struct device *dev,
+ 	struct hid_device *hdev = to_hid_device(dev);
+ 	struct sony_sc *sc = hid_get_drvdata(hdev);
  
--	return snprintf(buf, PAGE_SIZE, "%s\n",
-+	return sysfs_emit(buf, "%s\n",
- 			vhost->login_buf->resp.port_loc_code);
+-	return snprintf(buf, PAGE_SIZE, "0x%04x\n", sc->hw_version);
++	return sysfs_emit(buf, "0x%04x\n", sc->hw_version);
  }
  
-@@ -3433,7 +3433,7 @@ static ssize_t ibmvfc_show_host_drc_name(struct device *dev,
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
- 
--	return snprintf(buf, PAGE_SIZE, "%s\n",
-+	return sysfs_emit(buf, "%s\n",
- 			vhost->login_buf->resp.drc_name);
- }
- 
-@@ -3442,7 +3442,7 @@ static ssize_t ibmvfc_show_host_npiv_version(struct device *dev,
- {
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
--	return snprintf(buf, PAGE_SIZE, "%d\n", be32_to_cpu(vhost->login_buf->resp.version));
-+	return sysfs_emit(buf, "%d\n", be32_to_cpu(vhost->login_buf->resp.version));
- }
- 
- static ssize_t ibmvfc_show_host_capabilities(struct device *dev,
-@@ -3450,7 +3450,7 @@ static ssize_t ibmvfc_show_host_capabilities(struct device *dev,
- {
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct ibmvfc_host *vhost = shost_priv(shost);
--	return snprintf(buf, PAGE_SIZE, "%llx\n", be64_to_cpu(vhost->login_buf->resp.capabilities));
-+	return sysfs_emit(buf, "%llx\n", be64_to_cpu(vhost->login_buf->resp.capabilities));
- }
- 
- /**
-@@ -3471,7 +3471,7 @@ static ssize_t ibmvfc_show_log_level(struct device *dev,
- 	int len;
- 
- 	spin_lock_irqsave(shost->host_lock, flags);
--	len = snprintf(buf, PAGE_SIZE, "%d\n", vhost->log_level);
-+	len = sysfs_emit(buf, "%d\n", vhost->log_level);
- 	spin_unlock_irqrestore(shost->host_lock, flags);
- 	return len;
- }
-@@ -3509,7 +3509,7 @@ static ssize_t ibmvfc_show_scsi_channels(struct device *dev,
- 	int len;
- 
- 	spin_lock_irqsave(shost->host_lock, flags);
--	len = snprintf(buf, PAGE_SIZE, "%d\n", vhost->client_scsi_channels);
-+	len = sysfs_emit(buf, "%d\n", vhost->client_scsi_channels);
- 	spin_unlock_irqrestore(shost->host_lock, flags);
- 	return len;
- }
+ static DEVICE_ATTR(hardware_version, 0444, sony_show_hardware_version, NULL);
 -- 
 2.30.2
 

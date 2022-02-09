@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8CED4AEB8D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 701044AEB94
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:56:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234997AbiBIHzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 02:55:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
+        id S239916AbiBIH4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 02:56:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231430AbiBIHzJ (ORCPT
+        with ESMTP id S229549AbiBIH4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 02:55:09 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B52C0613CA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 23:55:13 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id n13-20020a056602340d00b006361f2312deso1254543ioz.9
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 23:55:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=UtEHDx2/SDtUWhjFiOkqioSqjTgEfgWZaCkVNfs3Q+A=;
-        b=JvrGdVPA0YYt3K+BNTIYURUf8ZBIHWGnzBjRG0LXnO6U4XSoO3WRsL0v9ZAO4BhJxx
-         ojfhzn4hw/nioa8sPmAuaXoK5RJz8vwBjWrB+ppwTv2WLjug43zj5EWr7tQXy1WMhM7a
-         f/SztByPxEntYKfbTjoAAEqGXyBkqC0Yo0eMg+hk7LW7cxJFougOIij9hMpcRZxX5RUG
-         U0vlSYyMlmdn1b5OMm4X0IKtnJ6CIEQiVAGwva2M6TfmCp6/w9qofyGWwZ4cmxQ0TgmS
-         nB0u2rArFORSSZJ0LlYl5Utwkkpdua2MpkC7qQoOHgI2BRFOWjjxEQdZf8cPVjmU2GX9
-         MJdg==
-X-Gm-Message-State: AOAM531VuK13inC0UKSBoYjLqn+m0yAjpNvG5D0D+0oNS0dl6scFRU3T
-        eLOTh2KdLGfnSdqBfPMZfUuJdg0nYaDQglVms6i69x/9+Vfe
-X-Google-Smtp-Source: ABdhPJxTiND/YMKyiFm0ggyZBFIDxDVQgbKIe1A0qrUTf80Goj1N/PGkmq+Kz1wBKQu3w76vPZ0n7I1tPyBPOGq6MC80jWI0Lvfz
+        Wed, 9 Feb 2022 02:56:33 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278C1C0613CA;
+        Tue,  8 Feb 2022 23:56:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1QlWDn92UQ5AsU9+yqgoQ21HGVUJbCNA19V+fHfieKE=; b=tjV0CgiQGKSmPUvKTFd1KwxTrb
+        cQ2xvuqbUx7Z6ObEOmVImNzBRZdZ0bCfqWuEuzl4nnXqsNQFNMR2e3TjHSjj+uld3eLo+G0NufLTq
+        e7aAXIajAeiHDxOk7uV8sReREWLIg68eoRxowvYIdBwnvDG3N3Bkn6RMDGHKXM+e8/l3gfip08IMW
+        oTXyQFQXMpRaybO9dliKTKPX2hy/VJ9d8ErSpfX7KEz3b/rq0a0ChE0IHH1hMWn2xzaQASt5xTa5w
+        NV8aisWryFAvy2W61auRUHBnurL0mJ40NuaSZj7pNUC542KwSWnBgU9GnER4xGKtPgKFQBUxshmR/
+        Rd+BaKlg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nHhq6-00GYV7-64; Wed, 09 Feb 2022 07:56:34 +0000
+Date:   Tue, 8 Feb 2022 23:56:34 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH REPOST] irq_poll: Add local_bh_disable() in cpu_dead
+ notifier
+Message-ID: <YgNzsnIE9bwQZ1Zg@infradead.org>
+References: <YgJ/XWVxxWDVBBVA@linutronix.de>
 MIME-Version: 1.0
-X-Received: by 2002:a92:3f0f:: with SMTP id m15mr520244ila.112.1644393313139;
- Tue, 08 Feb 2022 23:55:13 -0800 (PST)
-Date:   Tue, 08 Feb 2022 23:55:13 -0800
-In-Reply-To: <20220209074137.linx5qyi43hkclss@riteshh-domain>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004d049f05d7912725@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in jbd2_journal_wait_updates
-From:   syzbot <syzbot+afa2ca5171d93e44b348@syzkaller.appspotmail.com>
-To:     jack@suse.com, jack@suse.cz, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, riteshh@linux.ibm.com,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgJ/XWVxxWDVBBVA@linutronix.de>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Feb 08, 2022 at 03:34:05PM +0100, Sebastian Andrzej Siewior wrote:
+> __raise_softirq_irqoff() adds a bit to the pending sofirq mask and this
+> is it. The softirq won't be handled in a deterministic way but randomly
+> when an interrupt fires and handles the softirq in its irq_exit() routine or
+> if something randomly checks and handles pending softirqs in the call
+> chain before the CPU goes idle.
+> 
+> Add a local_bh_disable/enable() around the IRQ-off section which will
+> handle pending softirqs.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-
-Reported-and-tested-by: syzbot+afa2ca5171d93e44b348@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         54ccc072 jbd2: Remove CONFIG_JBD2_DEBUG to update t_ma..
-git tree:       https://github.com/riteshharjani/linux.git jbd2-kill-t-handle-lock-t2
-kernel config:  https://syzkaller.appspot.com/x/.config?x=266de9da75c71a45
-dashboard link: https://syzkaller.appspot.com/bug?extid=afa2ca5171d93e44b348
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: testing is done by a robot and is best-effort only.
+And I still haven't seen any good explanation of why this is useful.

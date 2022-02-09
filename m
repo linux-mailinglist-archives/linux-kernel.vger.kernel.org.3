@@ -2,132 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1744AF641
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C254AF649
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:16:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236680AbiBIQOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:14:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
+        id S235936AbiBIQQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:16:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236673AbiBIQN5 (ORCPT
+        with ESMTP id S235032AbiBIQQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:13:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A80EC0613C9
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:14:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644423239;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=pY1hMIvILcvQ4iy4cx4rzx5NtHdAQGETHaPrSiHWNSI=;
-        b=KAWEGKJa1PX2+CfetDOHJ0eg12GGWj5DoM/65gF0r8rV4Ro5kuUU1YAVwxSUaAkPXmV3Zx
-        2rQuaEyoiaYnSIsjkFwUKVQcggFLD8mV05UUhnGldsb7RRAuhD13G2/gztvXTnlbzAX4km
-        nTGQHCWgwQ4X9zpZa59cq6lLfNOtXHM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-438-xBvaTn-WO8CV8zoxMFJB7A-1; Wed, 09 Feb 2022 11:13:56 -0500
-X-MC-Unique: xBvaTn-WO8CV8zoxMFJB7A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F10961926DA9;
-        Wed,  9 Feb 2022 16:13:53 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.39.192.212])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5535A7B03A;
-        Wed,  9 Feb 2022 16:13:50 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        =?UTF-8?q?Benoit=20Gr=C3=A9goire?= <benoitg@coeus.ca>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Hui Wang <hui.wang@canonical.com>
-Subject: [PATCH] x86/PCI: revert "Ignore E820 reservations for bridge windows on newer systems"
-Date:   Wed,  9 Feb 2022 17:13:42 +0100
-Message-Id: <20220209161342.91721-1-hdegoede@redhat.com>
+        Wed, 9 Feb 2022 11:16:07 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A422C061355
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:16:08 -0800 (PST)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 219E2F8j030664;
+        Wed, 9 Feb 2022 17:16:03 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=8mP1JA+kYtJJXp87mX1OZ/ktutZUFiIKEFySAs32DOI=;
+ b=52ZVZWH6aOPxeR2BsaQwmcB5mEUYDIoyr1rlMYtAdFim9NXGq8EGHARdeLtl2jlRbLGu
+ TP0rB6EvRSswb9x8eowK5UoJKTxQjAaq8SCAyPlGR1nREEqbm5hFSp8wHFB5NjGZMBQa
+ 0WHoZbKSAqYVhIL+ze2rS3zqlX00YhMGQCyilhLB4bU+TQwZavG2CBQkMAduZy5CWZ29
+ t/5Br7Cwqx+2/UAQRGJV8jABMkK2F0QHDbn7AHFJkVpcJmNGy9KG3Wxi9S752YeLC/QP
+ 410gR63wOwXpuUHlUb1HRtnD9bhWTtdMFQJiOt7KaDMaMS3ODbWylbmT+ppBwjtJVmrS EQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e4f10rp9a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Feb 2022 17:16:03 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9281C10002A;
+        Wed,  9 Feb 2022 17:16:02 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 71FE22291AD;
+        Wed,  9 Feb 2022 17:16:02 +0100 (CET)
+Received: from localhost (10.75.127.44) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 9 Feb 2022 17:16:01
+ +0100
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+To:     <hminas@synopsys.com>, <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>,
+        <fabrice.gasnier@foss.st.com>
+Subject: [PATCH] usb: dwc2: drd: fix soft connect when gadget is unconfigured
+Date:   Wed, 9 Feb 2022 17:15:53 +0100
+Message-ID: <1644423353-17859-1-git-send-email-fabrice.gasnier@foss.st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-09_08,2022-02-09_01,2021-12-02_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 7f7b4236f204 ("x86/PCI: Ignore E820 reservations for bridge windows
-on newer systems") fixes the touchpad not working on laptops like
-the Lenovo IdeaPad 3 15IIL05 and the Lenovo IdeaPad 5 14IIL05, as well as
-fixing thunderbolt hotplug issues on the Lenovo Yoga C940.
+When the gadget driver hasn't been (yet) configured, and the cable is
+connected to a HOST, the SFTDISCON gets cleared unconditionally, so the
+HOST tries to enumerate it.
+At the host side, this can result in a stuck USB port or worse. When
+getting lucky, some dmesg can be observed at the host side:
+ new high-speed USB device number ...
+ device descriptor read/64, error -110
 
-Unfortunately it turns out that this is causing issues with suspend/resume
-on Lenovo ThinkPad X1 Carbon Gen 2 laptops. So, per the no regressions
-policy, rever this. Note I'm looking into another fix for the issues this
-fixed.
+Fix it in drd, by checking the enabled flag before calling
+dwc2_hsotg_core_connect(). It will be called later, once configured,
+by the normal flow:
+- udc_bind_to_driver
+ - usb_gadget_connect
+   - dwc2_hsotg_pullup
+     - dwc2_hsotg_core_connect
 
-Fixes: 7f7b4236f204 ("x86/PCI: Ignore E820 reservations for bridge windows on newer systems")
-BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=2029207
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Fixes: 17f934024e84 ("usb: dwc2: override PHY input signals with usb role switch support")
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 ---
- arch/x86/kernel/resource.c | 23 +----------------------
- 1 file changed, 1 insertion(+), 22 deletions(-)
+ drivers/usb/dwc2/drd.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
-index 9ae64f9af956..9b9fb7882c20 100644
---- a/arch/x86/kernel/resource.c
-+++ b/arch/x86/kernel/resource.c
-@@ -1,5 +1,4 @@
- // SPDX-License-Identifier: GPL-2.0
--#include <linux/dmi.h>
- #include <linux/ioport.h>
- #include <asm/e820/api.h>
- 
-@@ -24,31 +23,11 @@ static void resource_clip(struct resource *res, resource_size_t start,
- 		res->start = end + 1;
- }
- 
--/*
-- * Some BIOS-es contain a bug where they add addresses which map to
-- * system RAM in the PCI host bridge window returned by the ACPI _CRS
-- * method, see commit 4dc2287c1805 ("x86: avoid E820 regions when
-- * allocating address space"). To avoid this Linux by default excludes
-- * E820 reservations when allocating addresses since 2010.
-- * In 2019 some systems have shown-up with E820 reservations which cover
-- * the entire _CRS returned PCI host bridge window, causing all attempts
-- * to assign memory to PCI BARs to fail if Linux uses E820 reservations.
-- *
-- * Ideally Linux would fully stop using E820 reservations, but then
-- * the old systems this was added for will regress.
-- * Instead keep the old behavior for old systems, while ignoring the
-- * E820 reservations for any systems from now on.
-- */
- static void remove_e820_regions(struct resource *avail)
- {
--	int i, year = dmi_get_bios_year();
-+	int i;
- 	struct e820_entry *entry;
- 
--	if (year >= 2018)
--		return;
--
--	pr_info_once("PCI: Removing E820 reservations from host bridge windows\n");
--
- 	for (i = 0; i < e820_table->nr_entries; i++) {
- 		entry = &e820_table->entries[i];
- 
+diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
+index 1b39c47..9b6d44d 100644
+--- a/drivers/usb/dwc2/drd.c
++++ b/drivers/usb/dwc2/drd.c
+@@ -130,8 +130,10 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+ 		already = dwc2_ovr_avalid(hsotg, true);
+ 	} else if (role == USB_ROLE_DEVICE) {
+ 		already = dwc2_ovr_bvalid(hsotg, true);
+-		/* This clear DCTL.SFTDISCON bit */
+-		dwc2_hsotg_core_connect(hsotg);
++		if (hsotg->enabled) {
++			/* This clear DCTL.SFTDISCON bit */
++			dwc2_hsotg_core_connect(hsotg);
++		}
+ 	} else {
+ 		if (dwc2_is_device_mode(hsotg)) {
+ 			if (!dwc2_ovr_bvalid(hsotg, false))
 -- 
-2.33.1
+2.7.4
 

@@ -2,151 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2DC4AF46B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 15:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD57B4AF473
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 15:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235233AbiBIOuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 09:50:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
+        id S235276AbiBIOxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 09:53:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235232AbiBIOuQ (ORCPT
+        with ESMTP id S235264AbiBIOxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 09:50:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7BE87C061355
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 06:50:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644418218;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GCdwEoIBITb866ZII/MklMSrfR+LqGATKN4cy7oWV0k=;
-        b=Tz80JRVgzCJt1iWSVO0+IbvqfpexTrcYTsejKkYlUKToOOunUbAn/WbdvtU0jv+x1AC7mQ
-        JlJkLr/cA5aP1QdpsP+y/MpLUBrSy15Zj8sDVMplJbbY8OtuCOH9XpcCKmFQLxCwMQewpP
-        ifNPczo5aZm/pwGkbw5NCnrMCofW688=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-321-x4R4-UJ4NqaWm-2McJEmKQ-1; Wed, 09 Feb 2022 09:50:17 -0500
-X-MC-Unique: x4R4-UJ4NqaWm-2McJEmKQ-1
-Received: by mail-wm1-f69.google.com with SMTP id 125-20020a1c0283000000b0037bf720e6a8so405842wmc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 06:50:16 -0800 (PST)
+        Wed, 9 Feb 2022 09:53:04 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43B7C0612BE
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 06:53:07 -0800 (PST)
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5AA283F1C6
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:53:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644418385;
+        bh=onzsmpCQRgb85GIJjW98hJcEB7Fnm+j4zs7gFVVnUu8=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
+        b=JaFAH+Mn5pDX92vHW8fwNIhHUnZ9frHiekxLfZ7+BGwjpdNaN08PVcZGP6gpUh9th
+         Zh0N0D3k6Exz5CrVNsTiAoHMz8HZZawZRJs4aRqHKGE1Vuhoos6vEnDU5yhXPLYMQD
+         PJHqba3sxMsKI0AHMFPL45t40iXr3s+zg8NfEot1rX2CNS1gcSZvPo6bHJtULXJGAC
+         73bSv5HoxnxozR7cmvil2d7SStePgdxoKvzErBxZs9pdbkfDCsDse5irtXsBGWcBpO
+         cieY9tbmMhzCCFWmMc7GGATiwkU38gYuSYEnVPJag5zYW7YF+x7efdFCSFA8OuPnzK
+         NkD+cgYo7heig==
+Received: by mail-ej1-f72.google.com with SMTP id l18-20020a1709063d3200b006a93f7d4941so1317557ejf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 06:53:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=GCdwEoIBITb866ZII/MklMSrfR+LqGATKN4cy7oWV0k=;
-        b=nXIuEcL+rqkS0lktvLYHptIdkAdgET5MWTJhzYtsCdjpThP3E6ZygktBdTQoxmmzgz
-         juYuaGzHmzacTF1h49u7yf5xMhLSTxdughFIZPREdvZK/MUZowKv1Xa5JElorY+DZ+jb
-         duxCb//umBgpRDE4hxaHb2Kz7JTQPh18PV+XSLxEwnu4AyTL4J21UXIOhQ8v+bIkrmlX
-         Bv9rycQYKhcF5eJzGfgVViNux4WHem3wAgxV3genzOxEhd36ukbNW8pUOL/xy4E7pLSG
-         SAvjltMEhJ+ZMDEVLQmcJOrovW7B8LnESpajdFulsxfL3YVDMc2zYW3lf1gXA+ASIywi
-         +7QQ==
-X-Gm-Message-State: AOAM532Z1AZ39F7IpEZ1+F0Va/X/U9adPZbZRcwQHy/LgrUDxHGtddLn
-        w4Qn9FbZYSmtA08ugkV0QIVxFwQXVS9n108C/9HTwejemXvrSVY+r2LJbDmHfD6aqaMsR3jlwSJ
-        +77zU/tTulPfId5XZlicRuKBy
-X-Received: by 2002:adf:c74f:: with SMTP id b15mr2468796wrh.307.1644418216019;
-        Wed, 09 Feb 2022 06:50:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzZ+aCmdyVfsqG8nX2yK7Vow4vj4dB6fQbmE3flM8O2RH71KLJgArlRFmLkg6F73kXfRljWzw==
-X-Received: by 2002:adf:c74f:: with SMTP id b15mr2468781wrh.307.1644418215812;
-        Wed, 09 Feb 2022 06:50:15 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id t4sm15470023wro.71.2022.02.09.06.50.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 06:50:15 -0800 (PST)
-Message-ID: <561e1f22-2741-b414-0267-14587d59d5de@redhat.com>
-Date:   Wed, 9 Feb 2022 15:50:13 +0100
+        bh=onzsmpCQRgb85GIJjW98hJcEB7Fnm+j4zs7gFVVnUu8=;
+        b=QdcXjZ11QE5k7AxtUJpQ5wkvXMEf83IJU8xL6r0IYsT4PxsQa3GcYtSQAnRkOS9mYl
+         pOVihC7VsKZNRELFOcWYDBWFhySquKMv5e3rpcweL8M9Vxe4X+M/zSNbaGbmVAUpI7E+
+         A/WB6tpyeNXK5UibW/1FvKUqHXFFHeAu9v8ZiNZtUlwPT9ZgVPkYw0/auNuRH8LxcmPw
+         KSB4oezTVKDynTVlcblkGHUhMnX0V8XmvJ2y8YfudCeAWE3nGe+pZpAK8LqN5YR7cyuQ
+         v84/HxPN7be0q1Z5Q4GVKzM+ANKBkvQKq5VKRIpB5SViU51HaZbxQk8MMGols9/lYh7i
+         +rgA==
+X-Gm-Message-State: AOAM530d0sNC3zjXAh+NYC7JenOPRYBtd/A1oVJQ1C/HBbHPNy7/Ejo1
+        GdENP5BzmrYThrl0Fpjzzjcmn9qaIWLuAw/zp++ve9Pzqe7GuXFJSf+gHrtKsQSfNh2IT2eXo5E
+        ZUm8VzZI7m3Ar0mKgAU9mBTbBi5zr1wCKdd3yFLw8MA==
+X-Received: by 2002:a17:907:1b0f:: with SMTP id mp15mr2283078ejc.493.1644418385015;
+        Wed, 09 Feb 2022 06:53:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwA9pA2uua5qmpzfkk8gPsTc68MfUtN9mYGVJc0g6plaESL7cEnVm/8ZAMV0jkvQ/RQWXCVgg==
+X-Received: by 2002:a17:907:1b0f:: with SMTP id mp15mr2283068ejc.493.1644418384761;
+        Wed, 09 Feb 2022 06:53:04 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id f18sm2839309ejl.12.2022.02.09.06.53.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 06:53:04 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL 1/2] ARM: dts: samsung: dts for v5.18
+Date:   Wed,  9 Feb 2022 15:52:25 +0100
+Message-Id: <20220209145226.184375-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 3/7] drm: Add driver for Solomon SSD130X OLED displays
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-fbdev@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-pwm@vger.kernel.org
-References: <20220209090314.2511959-1-javierm@redhat.com>
- <20220209090314.2511959-4-javierm@redhat.com>
- <YgPE8Z7HxU2wv7J/@sirena.org.uk>
- <d1025530-90e1-fbc5-c06b-f62ed83f2f19@redhat.com>
- <YgPOKf1QcOCtTisx@sirena.org.uk>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <YgPOKf1QcOCtTisx@sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/22 15:22, Mark Brown wrote:
-> On Wed, Feb 09, 2022 at 03:17:06PM +0100, Javier Martinez Canillas wrote:
->> On 2/9/22 14:43, Mark Brown wrote:
-> 
->>> Unless the device supports power being physically omitted regulator
->>> usage should not be optional, it's just more code and a recipie for poor
->>> error handling.
-> 
->> The device has a VCC pin but in most cases this is just connected to a
->> power provided by the board in its pinout header. For example, I've it
->> connected to a rpi4 3.3v pin.
-> 
-> That sounds like a very common configuration.
->
+Hi,
 
-Yep.
- 
->> I guess in that case what we should do then is to just have a regulator
->> fixed as the vbat-supply in the Device Tree, that's regulator-always-on.
-> 
-> Generally I'd suggest labelling things with whatever the supply is
-> called in the board's schematics/documentation, that tends to make
-> things clearer and easier to follow.
-> 
-
-The display controller datasheet and schematics mention VBAT as the power
-supply but the documentation says that it's just connected to VCC and the
-label in the display says VCC.
-
-But I understand why the Device Tree binding and fbdev driver used VBAT
-since that's what the documentation mentions.
-
->> The old ssd1307fb fbdev driver also had this as optional and I wanted to
->> keep the new driver as backward compatible. But I understand now that is
->> not describing the hardware properly by making this regulator optional.
-> 
-> It is depressingly common to see broken code here, unfortunately
-> graphics drivers seem like one of the most common offendors.
-
-I'll include a patch for the existing DT binding and mark the vbat-supply
-property as required. Probably we won't be able to change the fbdev driver
-without causing regressions, and I'm not interested in that driver anyways.
+New platforms and a lot of dtschema cleanups.
 
 Best regards,
---
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+Krzysztof
 
+
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-dt-5.18
+
+for you to fetch changes up to f5b721d2c91144b7c494a05003fc840f1607e876:
+
+  ARM: dts: exynos: use generic node name for LPDDR3 timings in Odroid (2022-02-05 13:04:43 +0100)
+
+----------------------------------------------------------------
+Samsung DTS ARM changes for v5.18
+
+1. Minor improvements and dtschema fixes (node names, properties).
+2. Fix issues pointed out by DT schema checks:
+ - Add necessary clock controller inputs on Exynos5260.
+ - Drop unsupported regulators on Odroid XU.
+ - Add USB DWC3 supplies.
+ - Drop old thermal properties from Exynos4210.
+3. Add support for Samsung Chagall WiFi (Exynos5420, Samsung Galaxy Tab
+   S 10.5", SM-T800 ) and a similar Samsung Klimt WiFi (Samsung Galaxy
+   Tab S 8.4").
+4. Add battery to Samsung P4Nnote (Exynos4412, Samsung Galaxy Note
+   10.1).
+
+----------------------------------------------------------------
+Alim Akhtar (1):
+      ARM: dts: exynos: update dma node name with dtschema
+
+Henrik Grimler (4):
+      dt-bindings: arm: samsung: document Chagall WiFi board binding
+      ARM: dts: exynos: Add support for Samsung Chagall WiFi
+      dt-bindings: arm: samsung: document Klimt WiFi board binding
+      ARM: dts: exynos: Add support for Samsung Klimt WiFi
+
+Krzysztof Kozlowski (16):
+      ARM: dts: exynos: split dmas into array of phandles in Exynos5250
+      ARM: dts: exynos: Align MAX77836 nodes with dtschema on Monk and Rinato
+      ARM: dts: exynos: add necessary clock controller inputs in Exynos5260
+      ARM: dts: exynos: drop unsupported MAX77802 regulators on Odroid XU
+      ARM: dts: exynos: add USB DWC3 supplies to Arndale
+      ARM: dts: exynos: add USB DWC3 supplies to SMDK5250
+      ARM: dts: exynos: add USB DWC3 supplies to Chromebook Snow
+      ARM: dts: exynos: add USB DWC3 supplies to Chromebook Spring
+      ARM: dts: exynos: add USB DWC3 supplies to ArndaleOcta
+      ARM: dts: exynos: add USB DWC3 supplies to Chromebook Peach Pit
+      ARM: dts: exynos: add USB DWC3 supplies to Chromebook Peach Pi
+      ARM: dts: exynos: add USB DWC3 supplies to SMDK5420
+      ARM: dts: exynos: add fake USB DWC3 supplies to SMDK5410
+      ARM: dts: exynos: drop old thermal properties from Exynos4210
+      ARM: dts: exynos: use define for TMU clock on Exynos4412
+      ARM: dts: exynos: use generic node name for LPDDR3 timings in Odroid
+
+Martin Jücker (1):
+      ARM: dts: exynos: add charger and battery to p4note
+
+ .../bindings/arm/samsung/samsung-boards.yaml       |   2 +
+ arch/arm/boot/dts/Makefile                         |   2 +
+ arch/arm/boot/dts/exynos3250-monk.dts              |   2 +-
+ arch/arm/boot/dts/exynos3250-rinato.dts            |   2 +-
+ arch/arm/boot/dts/exynos3250.dtsi                  |   4 +-
+ arch/arm/boot/dts/exynos4.dtsi                     |   6 +-
+ arch/arm/boot/dts/exynos4210-universal_c210.dts    |   2 +-
+ arch/arm/boot/dts/exynos4210.dtsi                  |   2 -
+ arch/arm/boot/dts/exynos4412-p4note.dtsi           |  34 +
+ arch/arm/boot/dts/exynos4412.dtsi                  |   2 +-
+ arch/arm/boot/dts/exynos5250-arndale.dts           |   5 +
+ arch/arm/boot/dts/exynos5250-smdk5250.dts          |   5 +
+ arch/arm/boot/dts/exynos5250-snow-common.dtsi      |   5 +
+ arch/arm/boot/dts/exynos5250-spring.dts            |   5 +
+ arch/arm/boot/dts/exynos5250.dtsi                  |  19 +-
+ arch/arm/boot/dts/exynos5260-xyref5260.dts         |  21 +
+ arch/arm/boot/dts/exynos5260.dtsi                  | 128 ++++
+ arch/arm/boot/dts/exynos5410-odroidxu.dts          |  12 -
+ arch/arm/boot/dts/exynos5410-smdk5410.dts          |  23 +
+ arch/arm/boot/dts/exynos5410.dtsi                  |   4 +-
+ arch/arm/boot/dts/exynos5420-arndale-octa.dts      |  10 +
+ arch/arm/boot/dts/exynos5420-chagall-wifi.dts      |  75 +++
+ .../arm/boot/dts/exynos5420-galaxy-tab-common.dtsi | 691 +++++++++++++++++++++
+ arch/arm/boot/dts/exynos5420-klimt-wifi.dts        |  75 +++
+ arch/arm/boot/dts/exynos5420-peach-pit.dts         |  10 +
+ arch/arm/boot/dts/exynos5420-smdk5420.dts          |  10 +
+ arch/arm/boot/dts/exynos5420.dtsi                  |  10 +-
+ arch/arm/boot/dts/exynos5422-odroid-core.dtsi      |   2 +-
+ arch/arm/boot/dts/exynos5800-peach-pi.dts          |  10 +
+ 29 files changed, 1136 insertions(+), 42 deletions(-)
+ create mode 100644 arch/arm/boot/dts/exynos5420-chagall-wifi.dts
+ create mode 100644 arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi
+ create mode 100644 arch/arm/boot/dts/exynos5420-klimt-wifi.dts

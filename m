@@ -2,86 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6184AF8E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0973F4AF8E2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:01:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238532AbiBISAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 13:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
+        id S238571AbiBISAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 13:00:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232155AbiBISAc (ORCPT
+        with ESMTP id S233629AbiBISAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:00:32 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468E6C0613C9;
-        Wed,  9 Feb 2022 10:00:35 -0800 (PST)
+        Wed, 9 Feb 2022 13:00:49 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CD1C05CB82;
+        Wed,  9 Feb 2022 10:00:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644429635; x=1675965635;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=zo/OsIOkajIY3h3Rm1bLta5Xyt2Nd1Fi9wy9oJvB0kA=;
-  b=Hkz76RubyrY1sKA2z1oO1q38qGmnEnpwkpkjnuwJd7vJCXRMb45AGnth
-   Nop/5OaHB81vCCSDsu7JWOW/geyYdxe9QvtfVsrz9JgeypSQVqE3EfIw/
-   XYSTWhR/wGtAyJGK7ogxL7TtAotFk83rJnPJV54RUA3M0nxQHIiMRJDLl
-   shLGEJBsItERrDSEB8N0X7sUY+DyPUWqFn+l8w81VQz6dLnR5FWjUDFzB
-   CFWNyPck/eFXPpLBysq0YwpZ2PbHdIiA8uVN6AlXlKm9sY+RqRqynZrT2
-   kDJuVC0VtV4P02Bw5wj6oYT40ScUR6RXGFzFBSY3enQ7svgHcTUrHcI+k
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="335693226"
+  t=1644429652; x=1675965652;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Z2zWrH2HkZBNXsLzdL6i8wAQzbfQXjTz9qslPV+fO6Q=;
+  b=hUN6KsgqIQf/JR9uK6MPeieyS2B+5Vra7dwR2fD4J3Dfu1lfWHkak5u9
+   fsDYLgvTRXQAqIEAAHQDdxz1O+FJSsI/LTRf/f+yiLEudeNtxUtHmGgm5
+   ovnrQFbTTDIGxblCX0AZQXmoJy2zdyWoISSlVcBmawgzXiq3mnw7EC2Ga
+   U1fFLvC08of/61t5dRbrXSDcCZ1JPWlazP2KJyTFMg1QBB/vVsRlKpSP2
+   VJvGvLmv2eAi26aCIfIZDubS+AO0RlFJnAV5e0k7NTEB3oTtoeBwIJdQS
+   W+u3ShaqqJKkyyv6gkF3oU4Kwi+K3bIH1Gx3Z6eLoQkX/XbFNkzrzQr4w
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="246865443"
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="335693226"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:00:33 -0800
+   d="scan'208";a="246865443"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:00:36 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="485347306"
-Received: from sanvery-mobl.amr.corp.intel.com (HELO [10.212.232.139]) ([10.212.232.139])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:00:33 -0800
-Message-ID: <95299e90-245b-61c5-8ef0-5e6da3c37c5e@intel.com>
-Date:   Wed, 9 Feb 2022 10:00:30 -0800
+   d="scan'208";a="585657289"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 09 Feb 2022 10:00:34 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 7576E107; Wed,  9 Feb 2022 20:00:49 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Jack Xu <jack.xu@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Zhehui Xiang <zhehui.xiang@intel.com>, qat-linux@intel.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] crypto: qat - don't cast parameter in bit operations
+Date:   Wed,  9 Feb 2022 20:00:47 +0200
+Message-Id: <20220209180047.54829-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <20220130211838.8382-12-rick.p.edgecombe@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH 11/35] x86/mm: Update pte_modify for _PAGE_COW
-In-Reply-To: <20220130211838.8382-12-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,111 +64,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/22 13:18, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> 
-> The read-only and Dirty PTE has been used to indicate copy-on-write pages.
+While in this particular case it would not be a (critical) issue,
+the pattern itself is bad and error prone in case the location
+of the parameter is changed.
 
-Nit: This is another opportunity to use consistent terminology
-     for these Write=0,Dirty=1 PTEs.
+Don't cast parameter to unsigned long pointer in the bit operations.
+Instead copy to a local variable on stack of a proper type and use.
 
-> However, newer x86 processors also regard a read-only and Dirty PTE as a
-> shadow stack page.  In order to separate the two, the software-defined
-> _PAGE_COW is created to replace _PAGE_DIRTY for the copy-on-write case, and
-> pte_*() are updated.
+Fixes: b4b7e67c917f ("crypto: qat - Intel(R) QAT ucode part of fw loader")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/crypto/qat/qat_common/qat_uclo.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-The tense here is weird.  "_PAGE_COW is created" is present tense, but
-it refers to something that happened earlier in the series.
-
-> Pte_modify() changes a PTE to 'newprot', but it doesn't use the pte_*().
-
-I'm not seeing a clear problem statement in there.  It looks something
-like this to me:
-
-	pte_modify() takes a "raw" pgprot_t which was not necessarily
-	created with any of the existing PTE bit helpers.  That means
-	that it can return a pte_t with Write=0,Dirty=1: a shadow stack
-	PTE when it did not intend to create one.
-
-But, this kinda looks like a hack to me.
-
-It all boils down to _PAGE_CHG_MASK.  If pte_modify() can change the
-bit's value, it is not included in _PAGE_CHG_MASK.  But, pte_modify()
-*CAN* change the _PAGE_DIRTY value now.
-
-Another way of saying it is that _PAGE_DIRTY is now a permission bit
-(part-time, at least).
-
-
-> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-> index a4a75e78a934..5c3886f6ccda 100644
-> --- a/arch/x86/include/asm/pgtable.h
-> +++ b/arch/x86/include/asm/pgtable.h
-> @@ -773,6 +773,23 @@ static inline pmd_t pmd_mkinvalid(pmd_t pmd)
->  
->  static inline u64 flip_protnone_guard(u64 oldval, u64 val, u64 mask);
->  
-> +static inline pteval_t fixup_dirty_pte(pteval_t pteval)
-> +{
-> +	pte_t pte = __pte(pteval);
-> +
-> +	/*
-> +	 * Fix up potential shadow stack page flags because the RO, Dirty
-> +	 * PTE is special.
-> +	 */
-> +	if (cpu_feature_enabled(X86_FEATURE_SHSTK)) {
-> +		if (pte_dirty(pte)) {
-> +			pte = pte_mkclean(pte);
-> +			pte = pte_mkdirty(pte);
-> +		}
-> +	}
-> +	return pte_val(pte);
-> +}
-> +
->  static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
->  {
->  	pteval_t val = pte_val(pte), oldval = val;
-> @@ -783,16 +800,36 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
->  	 */
->  	val &= _PAGE_CHG_MASK;
->  	val |= check_pgprot(newprot) & ~_PAGE_CHG_MASK;
-> +	val = fixup_dirty_pte(val);
->  	val = flip_protnone_guard(oldval, val, PTE_PFN_MASK);
->  	return __pte(val);
->  }
-
-Maybe something like this?  We can take _PAGE_DIRTY out of
-_PAGE_CHG_MASK, then the p*_modify() functions look like this:
-
-static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
-{
-        pteval_t val = pte_val(pte), oldval = val;
-+	pte_t pte_result;
-
-        /* Chop off any bits that might change with 'newprot':  */
-        val &= _PAGE_CHG_MASK;
-        val |= check_pgprot(newprot) & ~_PAGE_CHG_MASK;
-        val = flip_protnone_guard(oldval, val, PTE_PFN_MASK);
-
-+       pte_result = __pte(val);
+diff --git a/drivers/crypto/qat/qat_common/qat_uclo.c b/drivers/crypto/qat/qat_common/qat_uclo.c
+index 2026cc6be8f0..6356402a2c9e 100644
+--- a/drivers/crypto/qat/qat_common/qat_uclo.c
++++ b/drivers/crypto/qat/qat_common/qat_uclo.c
+@@ -387,7 +387,9 @@ static int qat_uclo_init_ustore(struct icp_qat_fw_loader_handle *handle,
+ 	page = image->page;
+ 
+ 	for_each_set_bit(ae, &ae_mask, handle->hal_handle->ae_max_num) {
+-		if (!test_bit(ae, (unsigned long *)&uof_image->ae_assigned))
++		unsigned long ae_assigned = uof_image->ae_assigned;
 +
-+	if (pte_dirty(oldval))
-+		pte_result = pte_mkdirty(pte_result));
-+	
-+	return pte_result;
-}
++		if (!test_bit(ae, &ae_assigned))
+ 			continue;
+ 
+ 		if (!test_bit(ae, &cfg_ae_mask))
+@@ -664,8 +666,9 @@ static int qat_uclo_map_ae(struct icp_qat_fw_loader_handle *handle, int max_ae)
+ 			continue;
+ 
+ 		for (i = 0; i < obj_handle->uimage_num; i++) {
+-			if (!test_bit(ae, (unsigned long *)
+-			&obj_handle->ae_uimage[i].img_ptr->ae_assigned))
++			unsigned long ae_assigned = obj_handle->ae_uimage[i].img_ptr->ae_assigned;
++
++			if (!test_bit(ae, &ae_assigned))
+ 				continue;
+ 			mflag = 1;
+ 			if (qat_uclo_init_ae_data(obj_handle, ae, i))
+-- 
+2.34.1
 
-
-This:
-
-1. Makes logical sense: the dirty bit *IS* special in that it has to be
-   logically preserved across permission changes.
-2. Would work with or without shadow stacks.  That exact code would even
-   work on a non-shadow-stack kernel
-3. Doesn't introduce *any* new shadow-stack conditional code; the one
-   already hidden in pte_mkdirty() is sufficient.
-4. Avoids silly things like setting a bit and then immediately clearing
-   it in a "fixup".
-5. Removes the opaque "fixup" abstraction function.
-
-That's way better if I do say so myself.

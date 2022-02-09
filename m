@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D95484AF043
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 12:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 499F74AF044
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 12:57:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbiBIL40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 06:56:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
+        id S231463AbiBIL4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 06:56:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiBILzX (ORCPT
+        with ESMTP id S231520AbiBILzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Feb 2022 06:55:23 -0500
 Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC35E00F7E5;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADAAE00F7E6;
         Wed,  9 Feb 2022 02:53:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
   t=1644404000; x=1675940000;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=oKWHI1/oLjFI5xhSYdvQVsYvHQorhqBTY2LP5gYKBKI=;
-  b=ke7ZYToXpgYuPwWj6roeJa2uRdMExcXlHAmStWEYHz9zSlmg57Albzem
-   d41EmPbhVnspzGFHmtOvr+5NQJqxV9c1ykj2l1s2/b2gSkW7sZs6Ei7sT
-   SDQ2AtNB2emE+SBuiNXK0gwfudsPqeIEdnhcLOBnwmMScYGSbrFxQlSAO
-   k=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Feb 2022 00:56:07 -0800
+  bh=XHx2l/vD4N8IpF3Ze4UT7TCVcgCy1aFIim078qCWG8s=;
+  b=ntPwNDnevlFvSwsJi9AlMBKo59dRRnPVaA2hq4zD3NfB3avkr52is6xD
+   J65GRsdr3uHlo7zapprJVNIgHoJYyxHLkjfmFsD46G4R12g94JV0+tidg
+   UtI4CVB5AZZ5VRnLWQKS9au3swAsdkQMC++y/7tFhwdXfIPYfebNSoV1F
+   E=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Feb 2022 00:56:25 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 00:56:07 -0800
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 00:56:24 -0800
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 9 Feb 2022 00:56:06 -0800
+ 15.2.922.19; Wed, 9 Feb 2022 00:56:23 -0800
 Received: from sbillaka-linux.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 9 Feb 2022 00:56:00 -0800
+ 15.2.922.19; Wed, 9 Feb 2022 00:56:16 -0800
 From:   Sankeerth Billakanti <quic_sbillaka@quicinc.com>
 To:     <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
         <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
@@ -51,9 +51,9 @@ CC:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
         <quic_kalyant@quicinc.com>, <quic_abhinavk@quicinc.com>,
         <quic_khsieh@quicinc.com>, <quic_mkrishn@quicinc.com>,
         <quic_vproddut@quicinc.com>
-Subject: [PATCH v3 2/4] arm64: dts: qcom: sc7280: Add support for eDP panel on CRD
-Date:   Wed, 9 Feb 2022 14:25:30 +0530
-Message-ID: <1644396932-17932-3-git-send-email-quic_sbillaka@quicinc.com>
+Subject: [PATCH v3 4/4] drm/msm/dp: Add driver support to utilize drm panel
+Date:   Wed, 9 Feb 2022 14:25:32 +0530
+Message-ID: <1644396932-17932-5-git-send-email-quic_sbillaka@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1644396932-17932-1-git-send-email-quic_sbillaka@quicinc.com>
 References: <1644396932-17932-1-git-send-email-quic_sbillaka@quicinc.com>
@@ -72,194 +72,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the eDP display panel support without HPD on sc7280 platform.
+Add support in the DP driver to utilize the custom eDP panels
+from drm/panels.
+
+An eDP panel is always connected to the platform. So, the eDP
+connector can be reported as always connected. The display mode
+will be sourced from the panel. The panel mode will be set after
+the link training is completed.
 
 Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
 ---
 
 Changes in v3:
-  - Sort the nodes alphabetically
-  - Use - instead of _ as node names
-  - Place the backlight and panel nodes under root
-  - Change the name of edp_out to mdss_edp_out
-  - Change the names of regulator nodes
-  - Delete unused properties in the board file
+  None
 
+ drivers/gpu/drm/msm/dp/dp_display.c |  8 ++++++
+ drivers/gpu/drm/msm/dp/dp_drm.c     | 54 +++++++++++++++++++++++++++++++++----
+ drivers/gpu/drm/msm/dp/dp_parser.h  |  3 +++
+ 3 files changed, 60 insertions(+), 5 deletions(-)
 
-Changes in v2:
-  - Sort node references alphabetically
-  - Improve readability
-  - Move the pwm pinctrl to pwm node
-  - Move the regulators to root
-  - Define backlight power
-  - Remove dummy regulator node
-  - Cleanup pinctrl definitions
-
- arch/arm64/boot/dts/qcom/sc7280-crd.dts | 122 ++++++++++++++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sc7280.dtsi    |   2 +-
- 2 files changed, 123 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-index e2efbdd..2a490a0 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-@@ -21,6 +21,59 @@
- 	chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index 7cc4d21..410fda4 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -1513,6 +1513,10 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
+ 		return -EINVAL;
+ 	}
+ 
++	/* handle eDP on */
++	if (dp->connector_type == DRM_MODE_CONNECTOR_eDP)
++		dp_hpd_plug_handle(dp_display, 0);
 +
-+	backlight_3v3_regulator: backlight-3v3-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "backlight_3v3_regulator";
+ 	mutex_lock(&dp_display->event_mutex);
+ 
+ 	/* stop sentinel checking */
+@@ -1577,6 +1581,10 @@ int msm_dp_display_disable(struct msm_dp *dp, struct drm_encoder *encoder)
+ 
+ 	dp_display = container_of(dp, struct dp_display_private, dp_display);
+ 
++	/* handle edp off */
++	if (dp->connector_type == DRM_MODE_CONNECTOR_eDP)
++		dp_hpd_unplug_handle(dp_display, 0);
 +
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
+ 	mutex_lock(&dp_display->event_mutex);
+ 
+ 	/* stop sentinel checking */
+diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
+index d4d360d..12fa8c1 100644
+--- a/drivers/gpu/drm/msm/dp/dp_drm.c
++++ b/drivers/gpu/drm/msm/dp/dp_drm.c
+@@ -39,6 +39,10 @@ static enum drm_connector_status dp_connector_detect(struct drm_connector *conn,
+ 
+ 	dp = to_dp_connector(conn)->dp_display;
+ 
++	/* eDP is always  connected */
++	if (dp->connector_type == DRM_MODE_CONNECTOR_eDP)
++		return connector_status_connected;
 +
-+		gpio = <&pm8350c_gpios 7 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
+ 	DRM_DEBUG_DP("is_connected = %s\n",
+ 		(dp->is_connected) ? "true" : "false");
+ 
+@@ -123,6 +127,35 @@ static enum drm_mode_status dp_connector_mode_valid(
+ 	return dp_display_validate_mode(dp_disp, mode->clock);
+ }
+ 
++static int edp_connector_get_modes(struct drm_connector *connector)
++{
++	struct msm_dp *dp;
 +
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&edp_bl_power>;
-+	};
++	if (!connector)
++		return 0;
 +
-+	edp_3v3_regulator: edp-3v3-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "edp_3v3_regulator";
++	dp = to_dp_connector(connector)->dp_display;
 +
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
++	return drm_bridge_get_modes(dp->panel_bridge, connector);
++}
 +
-+		gpio = <&tlmm 80 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
++static enum drm_mode_status edp_connector_mode_valid(
++		struct drm_connector *connector,
++		struct drm_display_mode *mode)
++{
++	struct msm_dp *dp;
 +
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&edp_panel_power>;
-+	};
++	if (!connector)
++		return 0;
 +
-+	edp_backlight: edp-backlight {
-+		compatible = "pwm-backlight";
++	dp = to_dp_connector(connector)->dp_display;
 +
-+		power-supply = <&backlight_3v3_regulator>;
-+		pwms = <&pm8350c_pwm 3 65535>;
-+	};
++	if (mode->clock > EDP_MAX_PIXEL_CLK_KHZ)
++		return MODE_BAD;
 +
-+	edp_panel: edp-panel {
-+		compatible = "sharp,lq140m1jw46";
++	return MODE_OK;
++}
 +
-+		power-supply = <&edp_3v3_regulator>;
-+		backlight = <&edp_backlight>;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			port@0 {
-+				reg = <0>;
-+				edp_panel_in: endpoint {
-+					remote-endpoint = <&edp_out>;
-+				};
-+			};
-+		};
-+	};
+ static const struct drm_connector_funcs dp_connector_funcs = {
+ 	.detect = dp_connector_detect,
+ 	.fill_modes = drm_helper_probe_single_connector_modes,
+@@ -137,6 +170,12 @@ static const struct drm_connector_helper_funcs dp_connector_helper_funcs = {
+ 	.mode_valid = dp_connector_mode_valid,
  };
  
- &apps_rsc {
-@@ -76,6 +129,44 @@ ap_ts_pen_1v8: &i2c13 {
- 	};
- };
++static const struct drm_connector_helper_funcs edp_connector_helper_funcs = {
++	.get_modes = edp_connector_get_modes,
++	.mode_valid = edp_connector_mode_valid,
++
++};
++
+ /* connector initialization */
+ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
+ {
+@@ -160,12 +199,17 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
+ 	if (ret)
+ 		return ERR_PTR(ret);
  
-+&mdss {
-+	status = "okay";
-+};
-+
-+&mdss_dp {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&dp_hot_plug_det>;
-+	data-lanes = <0 1>;
-+	vdda-1p2-supply = <&vreg_l6b_1p2>;
-+	vdda-0p9-supply = <&vreg_l1b_0p8>;
-+};
-+
-+&mdss_edp {
-+	status = "okay";
-+
-+	vdda-1p2-supply = <&vreg_l6b_1p2>;
-+	vdda-0p9-supply = <&vreg_l10c_0p8>;
-+	/delete-property/ pinctrl-names;
-+	/delete-property/ pinctrl-0;
-+};
-+
-+&mdss_edp_out {
-+	remote-endpoint = <&edp_panel_in>;
-+};
-+
-+&mdss_edp_phy {
-+	status = "okay";
-+
-+	vdda-1p2-supply = <&vreg_l6b_1p2>;
-+	vdda-0p9-supply = <&vreg_l10c_0p8>;
-+};
-+
-+&mdss_mdp {
-+	status = "okay";
-+};
-+
- &nvme_3v3_regulator {
- 	gpio = <&tlmm 51 GPIO_ACTIVE_HIGH>;
- };
-@@ -84,7 +175,38 @@ ap_ts_pen_1v8: &i2c13 {
- 	pins = "gpio51";
- };
+-	drm_connector_helper_add(connector, &dp_connector_helper_funcs);
++	if (dp_display->connector_type == DRM_MODE_CONNECTOR_eDP) {
++		drm_connector_helper_add(connector,
++				&edp_connector_helper_funcs);
++	} else {
++		drm_connector_helper_add(connector, &dp_connector_helper_funcs);
  
-+&pm8350c_gpios {
-+	edp_bl_power: edp-bl-power {
-+		pins = "gpio7";
-+		function = "normal";
-+		qcom,drive-strength = <PMIC_GPIO_STRENGTH_LOW>;
-+		bias-disable;
-+		output-low;
-+	};
-+
-+	edp_bl_pwm: edp-bl-pwm {
-+		pins = "gpio8";
-+		function = "func1";
-+		qcom,drive-strength = <PMIC_GPIO_STRENGTH_LOW>;
-+		bias-disable;
-+		output-low;
-+	};
-+};
-+
-+&pm8350c_pwm {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&edp_bl_pwm>;
-+};
-+
- &tlmm {
-+	edp_panel_power: edp-panel-power {
-+		pins = "gpio80";
-+		function = "gpio";
-+		bias-pull-down;
-+	};
-+
- 	tp_int_odl: tp-int-odl {
- 		pins = "gpio7";
- 		function = "gpio";
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 3572399..eca403a 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -3066,7 +3066,7 @@
+-	/*
+-	 * Enable HPD to let hpd event is handled when cable is connected.
+-	 */
+-	connector->polled = DRM_CONNECTOR_POLL_HPD;
++		/*
++		 * Enable HPD to let hpd event is handled when cable is connected.
++		 */
++		connector->polled = DRM_CONNECTOR_POLL_HPD;
++	}
  
- 					port@1 {
- 						reg = <1>;
--						edp_out: endpoint { };
-+						mdss_edp_out: endpoint { };
- 					};
- 				};
+ 	drm_connector_attach_encoder(connector, dp_display->encoder);
  
+diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h b/drivers/gpu/drm/msm/dp/dp_parser.h
+index 3172da0..58c4f27 100644
+--- a/drivers/gpu/drm/msm/dp/dp_parser.h
++++ b/drivers/gpu/drm/msm/dp/dp_parser.h
+@@ -17,6 +17,9 @@
+ #define DP_MAX_PIXEL_CLK_KHZ	675000
+ #define DP_MAX_NUM_DP_LANES	4
+ 
++/* Maximum validated clock */
++#define EDP_MAX_PIXEL_CLK_KHZ	285550
++
+ enum dp_pm_type {
+ 	DP_CORE_PM,
+ 	DP_CTRL_PM,
 -- 
 2.7.4
 

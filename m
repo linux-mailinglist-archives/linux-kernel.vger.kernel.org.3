@@ -2,55 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02CF74AF7F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:19:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3914AF7F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238025AbiBIRTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 12:19:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49438 "EHLO
+        id S238075AbiBIRUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 12:20:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbiBIRTF (ORCPT
+        with ESMTP id S237948AbiBIRUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 12:19:05 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85969C0613C9;
-        Wed,  9 Feb 2022 09:19:08 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id 151A11F45BD6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644427147;
-        bh=EmS/W1EI/bFaHyrZs8Qcocq8P6UYCEQANTMzviQjeMM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Da36hj26GW19pbpEb9hY62xmjG4MGPXiVIkPvXs6PGiRcBL8jkbG+xHa61ieuNlGq
-         UH5Z2kVCPXBLCKVaEYscBHQEVk6RGqYtLrcJQMIzk67Fe9zU6/a/sH+4aXGsezWiDm
-         sbRymvOUJHcr+tJ8UXpcSKboskGy8QmiRNByqVHWgJN66n01esVPJIo91hNJSiao5i
-         ioJdHWS/eHR0OOr7ffjFmoc/kt8DrVEhfC0ialSxKgqUVGeU1GnVatx5GycJoL+K3J
-         dzMNSZT5Z2tAxNzpCP4j2A/KxFyZxLqPLPWhB8PxBDTWlw3Gprgku2oYif/FNFKjaT
-         Q0DRZYBsWla6A==
-Message-ID: <2126f6c0-fd6e-1f8e-b450-837270d03d31@collabora.com>
-Date:   Wed, 9 Feb 2022 14:18:59 -0300
+        Wed, 9 Feb 2022 12:20:42 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0169C05CB82
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 09:20:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=x1X3FTuSVUcFvgRZ0OU8phylFC2Mu51rICaELBAjm9k=; b=kpRt0GF2c01nPJfTN5hfVoqK1R
+        IQ2StJwlrC3g4xcNYFTjF2XLMmHUCXHDVV5JCibebqwQvrz7/2P/nV6SlQAm+fbYEECtKh/4ftbTm
+        KZgGNdDNhG6laaLnsHIHjqVvVDlZs+JaRDZeZCd7yVfFGLCin+4UqeQyJhPXP9zxdeXh7joOmwsFc
+        5CpibkVYtSTU99xuFU8trIxlV1OV2Clvrdg0VUivrxjgDXE259W1j6RGDYUAAamWfM65/Ha+kRt8n
+        cPvY28SC3+SvLwFBLFulW91g7+JKmcAoio/JV16w0IQgoX5zFcM1utlVR3P51ZyNQir2clgJV38Wm
+        nl8nSjTg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nHqdh-008EMU-Af; Wed, 09 Feb 2022 17:20:21 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8474430022C;
+        Wed,  9 Feb 2022 18:20:18 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6C2C5201BECDB; Wed,  9 Feb 2022 18:20:18 +0100 (CET)
+Date:   Wed, 9 Feb 2022 18:20:18 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Nayak, K Prateek" <KPrateek.Nayak@amd.com>
+Cc:     "aubrey.li@linux.intel.com" <aubrey.li@linux.intel.com>,
+        "efault@gmx.de" <efault@gmx.de>,
+        "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mgorman@techsingularity.net" <mgorman@techsingularity.net>,
+        "mingo@kernel.org" <mingo@kernel.org>,
+        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
+        "srikar@linux.vnet.ibm.com" <srikar@linux.vnet.ibm.com>,
+        "valentin.schneider@arm.com" <valentin.schneider@arm.com>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>
+Subject: Re: [PATCH] sched/fair: Consider cpu affinity when allowing NUMA
+ imbalance in find_idlest_group
+Message-ID: <YgP30sLEQfYPsMZE@hirez.programming.kicks-ass.net>
+References: <20220207155921.21321-1-kprateek.nayak@amd.com>
+ <20220209104625.GM23216@worktop.programming.kicks-ass.net>
+ <MW2PR12MB237955DEA3F949359A96E031982E9@MW2PR12MB2379.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 3/3] spi: amd: Add support for version AMDI0062
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Sanjay R Mehta <sanju.mehta@amd.com>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-References: <20220209165733.43134-1-andrealmeid@collabora.com>
- <20220209165733.43134-4-andrealmeid@collabora.com>
- <YgP2fIbASQym9sUP@sirena.org.uk>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
-In-Reply-To: <YgP2fIbASQym9sUP@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MW2PR12MB237955DEA3F949359A96E031982E9@MW2PR12MB2379.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,22 +69,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Às 14:14 de 09/02/22, Mark Brown escreveu:
-> On Wed, Feb 09, 2022 at 01:57:33PM -0300, André Almeida wrote:
-> 
->> @@ -190,6 +237,9 @@ static inline int amd_spi_fifo_xfer(struct amd_spi *amd_spi,
->>  	message->actual_length = tx_len + rx_len + 1;
->>  	/* complete the transaction */
->>  	message->status = 0;
->> +
->> +	if (amd_spi->version == AMD_SPI_V2)
->> +		amd_spi_clear_chip(amd_spi, message->spi->chip_select);
->>  	spi_finalize_current_message(master);
->>  
->>  	return 0;
-> 
-> Why is this one not a switch statement - what happens with v3?
+On Wed, Feb 09, 2022 at 03:14:32PM +0000, Nayak, K Prateek wrote:
+> [AMD Official Use Only]
 
-A switch statement should work as well, but currently v1 does nothing
-and there's no v3 for now. I think we can change for a switch if v3
-requires to do something here as well.
+I think you need to invest in a new mail setup.
+
+> > Where does this affinity come from?
+> 
+> The affinity comes from limiting the process to a certain subset of
+> available cpus by modifying the cpus_ptr member of task_struck
+> via taskset or numactl.
+
+That's obviously not an answer. Why is that done?

@@ -2,77 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA92B4AF10B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 548BA4AF111
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbiBIMJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 07:09:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48092 "EHLO
+        id S230245AbiBIMKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 07:10:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233096AbiBIMGg (ORCPT
+        with ESMTP id S232600AbiBIMIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 07:06:36 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2013EC03C1B6;
-        Wed,  9 Feb 2022 03:06:32 -0800 (PST)
-Received: from [192.168.88.87] (unknown [36.68.63.145])
-        by gnuweeb.org (Postfix) with ESMTPSA id 3CFF57E254;
-        Wed,  9 Feb 2022 11:06:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1644404791;
-        bh=CMIyqS9DnDZDs9eLANac+euir/RYD6fyCVyaDWjZp/w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QA2XpAp7H5Eh/37AmSmulLKjlB59txXBn0mTK/RATT1dH06TPnEMzMQOe2+F9c4G2
-         B+KmB/XL6d9hvIXa+s/wWu8+6GmV3kDVuyqAt4xt3vY2CdLzxrWa8RKY5wE3Yi23nm
-         jySsr8e7vwiEY9nZBpt19UV2Iewcd72Md132dwo7A4M2F1IPO3eX2AIRviYoY5pA+Y
-         OOq+DeYmmmRmikP1WpmurdJndxYpAJcuOriLZtv8yKpHveTWnv9kdOIfYCxq//ecDu
-         IbsdF8d/MChqxI7Pw30+jJgS/6o5k0od2kifbR3AsNC0ZkTogetMdVxHzcKNFUS2np
-         zbygG0YMGzOUg==
-Message-ID: <ff729ee0-fbc0-bb6f-d638-cc33dd4734a6@gnuweeb.org>
-Date:   Wed, 9 Feb 2022 18:06:15 +0700
+        Wed, 9 Feb 2022 07:08:50 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA08AC1038F9
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 03:08:28 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 642871EC054C;
+        Wed,  9 Feb 2022 12:08:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1644404903;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=pVcoJQ/L7RiOQPedz5rtS/XCcY9bKSouDnzYyJVnx+g=;
+        b=KakI3FTHRBi2wWdT4ywv0hUY8EiMiVB6Y8Z44UN5uLAKa2ObPNrrX4+GOEQLtxUVxC2Pqc
+        eoVf447+EME7R4flp+4zN6lXlRJWUHY6DWd1RzJECk4bm1XTLakHIJIUPZA3l6AHTwwoBP
+        r8dle9NOW6IMap175a8HVjm2/gU1TgQ=
+Date:   Wed, 9 Feb 2022 12:08:18 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 00/29] TDX Guest: TDX core support
+Message-ID: <YgOgog9Pb886lfsv@zn.tnic>
+References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
+ <20220209235613.652f5720cd196331d7a220ec@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] io_uring: Fix uninitialized use of ret in
- io_eventfd_register()
-Content-Language: en-US
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, axboe@kernel.dk
-Cc:     asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220209102637.34088-1-jiapeng.chong@linux.alibaba.com>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <20220209102637.34088-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220209235613.652f5720cd196331d7a220ec@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/22 5:26 PM, Jiapeng Chong wrote:
-> In some scenarios, ret is not assigned in the whole process, so it
-> needs to be initialized at the beginning.
-> 
-> Clean up the following clang warning:
-> 
-> fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence
-> this warning.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
+On Wed, Feb 09, 2022 at 11:56:13PM +1300, Kai Huang wrote:
+> TDX host support basically does detection of SEAM, TDX KeyIDs, P-SEAMLDR and
+> initialize the TDX module, so likely TDX host support will introduce couple of
+> new files to do above things respectively,
 
-This is already fixed in commit
-4c65723081332607ca331072b0f8a90189e2e447 ("io_uring: Fix use of uninitialized ret in io_eventfd_register()")
+Why a couple of new files? How much code is that?
 
-https://lore.kernel.org/all/20220207162410.1013466-1-nathan@kernel.org/T/
+> and the majority of the code could be self-contained under some
+> directory (currently under arch/x86/kernel/cpu/tdx/, but can be
+> changed of course). Could we have some suggestions on how to organize?
 
-https://github.com/torvalds/linux/commit/4c65723081332607ca331072b0f8a90189e2e447.patch
+So we slowly try to move stuff away from arch/x86/kernel/ as that is a
+dumping ground for everything and everything there is "kernel" so that
+part of the path is kinda redundant.
+
+That's why, for example, we stuck the entry code under arch/x86/entry/.
+
+I'm thinking long term we probably should stick all confidentail
+computing stuff under its own folder:
+
+arch/x86/coco/
+
+for example. The "coco" being COnfidential COmputing, for lack of a
+better idea.
+
+And there you'll have
+
+arch/x86/coco/tdx and
+arch/x86/coco/sev
+
+where to we'll start migrating the AMD stuff eventually too.
+
+Methinks.
 
 -- 
-Ammar Faizi
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,46 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AAC14AE936
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 06:28:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 815744AE93B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 06:28:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233479AbiBIFYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 00:24:34 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:45674 "EHLO
+        id S229778AbiBIFYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 00:24:20 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232786AbiBIFSp (ORCPT
+        with ESMTP id S233544AbiBIFU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 00:18:45 -0500
-X-Greylist: delayed 10646 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 21:18:48 PST
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202FFC03FEEE
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 21:18:47 -0800 (PST)
-Received: (Authenticated sender: joao@overdrivepizza.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 5123B1C0002;
-        Wed,  9 Feb 2022 05:18:44 +0000 (UTC)
+        Wed, 9 Feb 2022 00:20:28 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E437FC0612BF;
+        Tue,  8 Feb 2022 21:20:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 41A14CE13BA;
+        Wed,  9 Feb 2022 05:20:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8859CC340F6;
+        Wed,  9 Feb 2022 05:20:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644384028;
+        bh=l7UnrMd1qWPYoE6yezCxaKmMzhHLhzW30Wngdzs2KoI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=L81/cIVv4Wmc7hR0YxCSx/8nSPC/v3ElD+6SxW6rn7fdZxj5wTJ8ep/3ty65l4VC8
+         HqtA8eN8AVJ1e5FrqKoj5FFrh76ajoEYTXQG80chykcXGrFSaAIPC159qbmHWPi5zd
+         O+ah3SiSUXpjNuub7hltvRuKNVWnbARsimVDnYhyqpnB4j/A7Yv2I/NlCm4pM1Qs6v
+         x4/WOZrZl7EeJmuqFz+swUjWIDZkQGj2f443sBQgFtbq8oLwz1+zgBOjIak/XW/gMb
+         pSdkJ/Xw0XdfuWoXkFMoEyUVY0tOG/Ie1FpVq4CixOp9wRcIIsupE9tGTWrw+BdpYT
+         WBnl3+MXLfYFg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 75EDEE6D447;
+        Wed,  9 Feb 2022 05:20:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Date:   Tue, 08 Feb 2022 21:18:44 -0800
-From:   Joao Moreira <joao@overdrivepizza.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        hjl.tools@gmail.com, jpoimboe@redhat.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        ndesaulniers@google.com, samitolvanen@google.com,
-        llvm@lists.linux.dev
-Subject: Re: [RFC][PATCH 6/6] objtool: Add IBT validation / fixups
-In-Reply-To: <202202082003.FA77867@keescook>
-References: <20211122170301.764232470@infradead.org>
- <20211122170805.338489412@infradead.org>
- <6ebb0ab131c522f20c094294d49091fc@overdrivepizza.com>
- <202202081541.900F9E1B@keescook>
- <ad6c2633f39e39583bc5c5eaf7ccbe52@overdrivepizza.com>
- <202202082003.FA77867@keescook>
-Message-ID: <9ea50c51ee8db366430c9dc697a83923@overdrivepizza.com>
-X-Sender: joao@overdrivepizza.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] net: ethernet: litex: Add the dependency on HAS_IOMEM
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164438402847.12376.5907633854409051279.git-patchwork-notify@kernel.org>
+Date:   Wed, 09 Feb 2022 05:20:28 +0000
+References: <20220208013308.6563-1-cai.huoqing@linux.dev>
+In-Reply-To: <20220208013308.6563-1-cai.huoqing@linux.dev>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     davem@davemloft.net, kuba@kernel.org, kgugala@antmicro.com,
+        mholenko@antmicro.com, gsomlo@gmail.com, joel@jms.id.au,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,20 +58,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Ah, excellent, thanks for the pointers. There's also this in the works:
-> https://reviews.llvm.org/D119296 (a new CFI mode, designed to play nice
-> to objtool, IBT, etc.)
+Hello:
 
-Oh, great! Thanks for pointing it out. I guess I saw something with a 
-similar name before ;) 
-https://www.blackhat.com/docs/asia-17/materials/asia-17-Moreira-Drop-The-Rop-Fine-Grained-Control-Flow-Integrity-For-The-Linux-Kernel.pdf
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Jokes aside (and perhaps questions more targeted to Sami), from a 
-diagonal look it seems that this follows the good old tag approach 
-proposed by PaX/grsecurity, right? If this is the case, should I assume 
-it could also benefit from features like -mibt-seal? Also are you 
-considering that perhaps we can use alternatives to flip different CFI 
-instrumentation as suggested by PeterZ in another thread?
+On Tue,  8 Feb 2022 09:33:08 +0800 you wrote:
+> The LiteX driver uses devm io funtion API which
+> needs HAS_IOMEM enabled, so add the dependency on HAS_IOMEM.
+> 
+> Fixes: ee7da21ac4c3 ("net: Add driver for LiteX's LiteETH network interface")
+> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+> ---
+>  drivers/net/ethernet/litex/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Tks,
-Joao
+Here is the summary with links:
+  - [v2] net: ethernet: litex: Add the dependency on HAS_IOMEM
+    https://git.kernel.org/netdev/net/c/2427f03fb42f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

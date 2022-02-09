@@ -2,60 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1C94AF01B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 12:50:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 022844AF01C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 12:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbiBILuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 06:50:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
+        id S231177AbiBILuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 06:50:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiBILuR (ORCPT
+        with ESMTP id S231158AbiBILuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 06:50:17 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A309E01C885;
-        Wed,  9 Feb 2022 02:40:53 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id r64-20020a17090a43c600b001b8854e682eso1873363pjg.0;
-        Wed, 09 Feb 2022 02:40:53 -0800 (PST)
+        Wed, 9 Feb 2022 06:50:21 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69896E01C887;
+        Wed,  9 Feb 2022 02:40:55 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id x15so1101692pfr.5;
+        Wed, 09 Feb 2022 02:40:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=F4dvlEAApq4sbNi12hDnWabgWkGNsJts8xnpPYqukvU=;
-        b=UXGDXsRlds35agIJYEneaEhMi0hvXSjblyL2c7Q0UBkC0yZVKHqdxrIVLozRIiOBJh
-         8xR1PvUU0j1jXV5ubvhkLpdkSKoiSsP1pjwv8nFnCzPB2z9ZqfVqAbnglkFrNhxMZuUC
-         ayHIyEBZNZP6s7WaW2T4Ksl9D5x4rLY6Zn3t8TWbWb6Ux97ATYmgEd9ydcTcukEdKUOW
-         KEwvl0x6bFw2X4d8Ls9es/JIwvzFQTnA1UDQHuRzwBZV4H/qrAPQYAi9JGo+aautVcr6
-         gGaC0qxdMTbeaOxGPO85HiwhfMaBHrQF8eOnt/hrNTvp+kVv/A5FWHQzPWtSDkvXtMvg
-         9OjA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :in-reply-to:references;
+        bh=PBYp/H546dN40WXOvI+fy6E8A6zPMNF3D1e5BSqN7l4=;
+        b=F62m2g8Rv3hBwIiOmWgTSg4T/GdV1Wp1QpLnfjoATaz38K4nJej0dxqCU5qystxEux
+         APui8N2j6fVVTTzY7AAMjKDKlqTSUV9TML8GBXFfhPfQqAUB+E2DENV8bvBCSPzpbkEm
+         fKTWi7X8FUacjgdbNpLIMLY357TNcjpTOlH0CB8KquEpcn3KxLeOsc35XY/bOTdrzfb2
+         UfOLWegR7o44zEzvstdq8BwrLWqV/fBVRJk/AH4PCCPfTCabkzBJBLQYMdULwy09mnBn
+         tmi1uQceNy6avVyFq3f/ts6CMfPi3IInUg2+SaX26ZWunMis1jw9T63iKKWPGdJbJ4xC
+         lDbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=F4dvlEAApq4sbNi12hDnWabgWkGNsJts8xnpPYqukvU=;
-        b=ykURN8qmOzeiwll+ihIdn7QnOczkx2ctKP3nBtPXkLD1g+l/gW1LYxHROLRf9IQC7u
-         90w2ROQOJv9L7mvH79Yrly2xk1uKafiWv3QC3/X8gQu1MoxcXfn7AoaSjpY5CG4ZKX8V
-         HsJknqXBUgK4M30Ocw8GchFs/LIfAn7cQ0iC7coBPy2QoVnrPnNhVACnyBcXXK0NRBzC
-         lUGt11eovtlFjxTvp2CHFec3BVLXXM9BU65azOCnrgfjeHEyjyT+yiP4aT0yBqCkYgj4
-         MxkK3bIUMG23ijBml3ANqf0JSVlbG5uVPwQ4WSECcFwqInODC2ky5WFgJH/9nb9FlhCd
-         n7Wg==
-X-Gm-Message-State: AOAM530MrLPmyQQtj5pNjwPrzjFwzwohBKI6Fq3N2O9ULWO+l0sx9ZRb
-        BNiSgWEGs0ZIrOPhrc9VfE4=
-X-Google-Smtp-Source: ABdhPJwrmxUIij4bx8V1Fn58ivpmEEghm+3Hhi0wmRYMhN+PA/z942ewyGvb7a+r+hZcZI57RbZb7g==
-X-Received: by 2002:a17:90b:3cf:: with SMTP id go15mr1773859pjb.223.1644403252689;
-        Wed, 09 Feb 2022 02:40:52 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:in-reply-to:references;
+        bh=PBYp/H546dN40WXOvI+fy6E8A6zPMNF3D1e5BSqN7l4=;
+        b=3f0/LT+VLOHGIvguOqCuBc5K5hPBUjVsMGrC2N2K7FvUXvW2llV2aO9OjNJ7wRfbzD
+         qc0gKiq6vffQvo5peFqg7hMvq7a10KlX19rV9S4PgVOte6aNiwII3lo7kKjqm4sgeZKJ
+         OFSLfAYhbWWbBXwFdfI3zJ6FYwByxoCh8etJINQdBJNRuBHioSDR7U77CHDahuUiO+ok
+         1gQxRJ57R4Mf0ooVaVRXPADN9YqJJVfJSswBLYplcsSWtTOT00MceCTUCvcoAUJ4VK/v
+         2zqHps8QRlH5BJqT9XNGI4fLqTzyOugCA99AqHrvdpBC5Pitya+vj6EiRceHlPuelilP
+         f1vg==
+X-Gm-Message-State: AOAM531NQAagZ9av9t4zh6+/HIeS5Ju5clLbwpR1ulWgPX2K+sBKh7gr
+        EzYiUNgz4eSvWb8hHnB8Wkc=
+X-Google-Smtp-Source: ABdhPJxcUnKyFvTQrMSYNHr2dJaQXQjIbwpZ6tXLMV4qIBH46R27V2AlbzO30Lf1ALajsqOs6ceEPQ==
+X-Received: by 2002:aa7:938c:: with SMTP id t12mr1605861pfe.51.1644403254963;
+        Wed, 09 Feb 2022 02:40:54 -0800 (PST)
 Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id m23sm18223272pff.201.2022.02.09.02.40.50
+        by smtp.googlemail.com with ESMTPSA id m23sm18223272pff.201.2022.02.09.02.40.52
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 09 Feb 2022 02:40:52 -0800 (PST)
+        Wed, 09 Feb 2022 02:40:54 -0800 (PST)
 From:   Tony Huang <tonyhuang.sunplus@gmail.com>
 To:     ulf.hansson@linaro.org, robh+dt@kernel.org, lhjeff911@gmail.com,
         linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
         p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
         tony.huang@sunplus.com, wells.lu@sunplus.com, lh.kuo@sunplus.com
 Cc:     Tony Huang <tonyhuang.sunplus@gmail.com>
-Subject: [PATCH v3 0/2] Add mmc driver for Sunplus SP7021 SOC
-Date:   Wed,  9 Feb 2022 18:41:05 +0800
-Message-Id: <cover.1644398657.git.tonyhuang.sunplus@gmail.com>
+Subject: [PATCH v3 1/2] dt-binding: mmc: Add mmc yaml file for Sunplus SP7021
+Date:   Wed,  9 Feb 2022 18:41:06 +0800
+Message-Id: <f8b89f9981e17c023ce530afedb1f2b599edec0f.1644398657.git.tonyhuang.sunplus@gmail.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <cover.1644398657.git.tonyhuang.sunplus@gmail.com>
+References: <cover.1644398657.git.tonyhuang.sunplus@gmail.com>
+In-Reply-To: <cover.1644398657.git.tonyhuang.sunplus@gmail.com>
+References: <cover.1644398657.git.tonyhuang.sunplus@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -66,29 +72,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a patch series for mmc driver for Sunplus SP7021 SOC.
+Add mmc yaml file for Sunplus SP7021
 
-Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
-many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
-etc.) into a single chip. It is designed for industrial control.
+Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
+---
+Changes in v3:
+ - combine sdcard and eMMC into one driver.
 
-Refer to:
-https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
-https://tibbo.com/store/plus1.html
-
-Tony Huang (2):
-  dt-binding: mmc: Add mmc yaml file for Sunplus SP7021
-  mmc: Add mmc driver for Sunplus SP7021
-
- .../devicetree/bindings/mmc/sunplus-mmc.yaml       |   76 +
- MAINTAINERS                                        |    7 +
- drivers/mmc/host/Kconfig                           |    9 +
- drivers/mmc/host/Makefile                          |    1 +
- drivers/mmc/host/sunplus_mmc.c                     | 2168 ++++++++++++++++++++
- 5 files changed, 2261 insertions(+)
+ .../devicetree/bindings/mmc/sunplus-mmc.yaml       | 76 ++++++++++++++++++++++
+ MAINTAINERS                                        |  6 ++
+ 2 files changed, 82 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/mmc/sunplus-mmc.yaml
- create mode 100644 drivers/mmc/host/sunplus_mmc.c
 
+diff --git a/Documentation/devicetree/bindings/mmc/sunplus-mmc.yaml b/Documentation/devicetree/bindings/mmc/sunplus-mmc.yaml
+new file mode 100644
+index 0000000..8f44d13
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mmc/sunplus-mmc.yaml
+@@ -0,0 +1,76 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) Sunplus Ltd. Co. 2021
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mmc/sunplus-mmc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: sunplus MMC controller
++
++allOf:
++  - $ref: "mmc-controller.yaml"
++
++maintainers:
++  - Tony Huang <tonyhuang.sunplus@gmail.com>
++  - Li-hao Kuo <lhjeff911@gmail.com>
++
++properties:
++  compatible:
++    enum:
++      - sunplus,sp7021-emmc
++      - sunplus,sp7021-sdhci
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    minItems: 1
++
++  resets:
++    maxItems: 1
++
++  max-frequency: true
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - resets
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    mmc0: mmc@9c003b00 {
++        compatible = "sunplus,sp7021-emmc";
++        reg = <0x9c003b00 0x180>;
++        interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&clkc 0x4e>;
++        resets = <&rstc 0x3e>;
++        bus-width = <8>;
++        max-frequency = <52000000>;
++        non-removable;
++        disable-wp;
++        cap-mmc-highspeed;
++        mmc-ddr-3_3v;
++        no-sdio;
++        no-sd;
++    };
++
++    mmc1: mmc@9c003e80 {
++       compatible = "sunplus,sp7021-sdhci";
++       reg = <0x9c003e80 0x280>;
++       interrupts = <21 IRQ_TYPE_LEVEL_HIGH>;
++       clocks = <&clkc 0x4f>;
++       resets = <&rstc 0x3f>;
++       pinctrl-names = "default";
++       pinctrl-0 = <&mmc1_mux &mmc1_mux_cd>;
++       max-frequency = <52000000>;
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fb18ce7..cb46a55 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18242,6 +18242,12 @@ L:	netdev@vger.kernel.org
+ S:	Maintained
+ F:	drivers/net/ethernet/dlink/sundance.c
+ 
++SUNPLUS MMC DRIVER
++M:	Tony Huang <tonyhuang.sunplus@gmail.com>
++M:	Li-hao Kuo <lhjeff911@gmail.com>
++S:	Maintained
++F:	Documentation/devicetree/bindings/mmc/sunplu-mmc.yaml
++
+ SUPERH
+ M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+ M:	Rich Felker <dalias@libc.org>
 -- 
 2.7.4
 

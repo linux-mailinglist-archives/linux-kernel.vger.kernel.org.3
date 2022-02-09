@@ -2,76 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 315074AFFFF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:18:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D71DA4AFFFE
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235210AbiBIWRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 17:17:05 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:42976 "EHLO
+        id S235222AbiBIWRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 17:17:21 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:43406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235171AbiBIWRD (ORCPT
+        with ESMTP id S235224AbiBIWRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 17:17:03 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C3AC0045D0
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:17:04 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id t4-20020a17090a510400b001b8c4a6cd5dso3670452pjh.5
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 14:17:04 -0800 (PST)
+        Wed, 9 Feb 2022 17:17:18 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5E4C1DC2D4
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:17:20 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id h8so3677826lfj.10
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 14:17:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZpHy7NFzc6I5AYN1nAZFZJcd/w7v2r3d8w4j/LB1fQU=;
-        b=CIxIzFcc6hF3+u6EF0NlZaCg27NvGxJj5+ZLhbj/2/rfUalPsatjOPifGFVaye6I8F
-         WAsrKZlJRKIeSZtCnoam7nR8t2pVXo237g5J0ic3NsAemxazV0TjoMhrPsbNd/SbomKf
-         rqJ/ZzlYFGCwo+O6SCWcAEzvmjRiRd65XrL7g=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=T9akMQGOGv0TdBQ+Zhymh6XiC98Y7uCuYr8S0QfufYw=;
+        b=So89NUtFvR12bmWOhO2nI5d8soc5b89oiH6ChTJGXB7g1HWfnQxgnN07opHsWJJbDY
+         +YcN7dVNKQiiXNQNyqF64SdA5fDsk/RHoHiSAtN+aD7T/RpjjWAAiezNp03ig23l4YWi
+         dXoxKgcP5yNxjFunr8JDwDmPnZjzNobzJ90mlchJ+akOWikw7A7mYM62pzQEW1PD10sx
+         /j5luWQKYxjGaxpaAxFNNnfI7KLJbBkjz3c1dA/Y4YO+OqpZCSSAWBwhv48NUUCq24bu
+         yWq3UtqIkCiHf3ONkQQuUSth6JYjyjgwM7f9sur8i6IjrY6uyLYA4JYlB2zGUH0fMNVK
+         o3cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZpHy7NFzc6I5AYN1nAZFZJcd/w7v2r3d8w4j/LB1fQU=;
-        b=IrzPW5BEmYtkGp/oDVP/i0obE52KxInqtWkqKpVQ8cM1d3YKvZCtmn96cQgsg53P79
-         StNSIxGr02C0NaDvkEiGMACyFoYqcAtTc56IdipbMbNATWmJqfILfq3ZuiZhVL2VRNjd
-         W0myKVnza1dB68kRyIn8Y2X2p2YfdqqP0i6cLfapkFirFC1wU3708gt2xSHEXLoLuyHO
-         0xbP6A3vcjNFW4iYjc5p1tcEZlZQal0DBJSD5lva88AFKaojxvtLyF7+TUsDsQYGPDnI
-         bnWEwbrEKuZerMwAqPRnrb9xLQJ4GIAoWTMSxqJhsjlK/B72nnS4RFfwSCXLLmjq6Z5t
-         0Nyw==
-X-Gm-Message-State: AOAM5307147gEiLvKrWm8upZlSo2FvH8hwETcetg36lgKneva9uBa9bG
-        2rB/FJOx28640Y7/QcXq49AVV1efKVdEQA==
-X-Google-Smtp-Source: ABdhPJziH9GmwZnHk78uUQtkOvDrptkApFHkf4J/JQsHINiGZsSnEai7aa3TIHg9TKyZjhyYUSUC5Q==
-X-Received: by 2002:a17:90a:e557:: with SMTP id ei23mr5029645pjb.149.1644445023613;
-        Wed, 09 Feb 2022 14:17:03 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:76d3:cb1:9cf9:95c0])
-        by smtp.gmail.com with UTF8SMTPSA id j8sm22134103pfc.48.2022.02.09.14.17.02
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=T9akMQGOGv0TdBQ+Zhymh6XiC98Y7uCuYr8S0QfufYw=;
+        b=B/4Y7XWoC0eqsb5sWDlkV7RMyVeJPc7J7TH4KoYhTjUObdw2nYxKJBZ2Gcs3Tk/r/R
+         wqqT7DOdraYC8RMviCMIXmy1ceNS6P4rGqtR3Rrt6Tp3+TZ7qejIdR/md2aBIMbmQPbG
+         0N5mMvY4OvIXg8VtdSht5lb8KoKZBWbesumrujj9/shGutVm53HOzijaxK8JoP0syfOO
+         eNnHk5Iejhme4NK1ZzNkOFNOrgXRuALHfrS8rqZbA/YpEKrkoe4A4nVLdZfsCR7mN3EZ
+         OVbAcMHxg6bQYu+TPkold88gfGVQ0NBHT7JP0mYmjjo5lu9ZROGSLDdF0XTbSQQNg9ug
+         sUag==
+X-Gm-Message-State: AOAM533IzxT1b44G74R7DUGLGI5L6BmcTruJ4NMmPrfc38fTdil8kI0n
+        Ib3L4K9lQOGUtZJXd3acpAh+gQ==
+X-Google-Smtp-Source: ABdhPJxW/IKBuQbesqGO3kgP8T+UCOU7nfSM5QCDmtANUvL9RHgmlLxrVB+EsyElYkDADCFQXe+zNw==
+X-Received: by 2002:a05:6512:1502:: with SMTP id bq2mr3004500lfb.551.1644445038733;
+        Wed, 09 Feb 2022 14:17:18 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id k21sm2527309lfg.252.2022.02.09.14.17.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 14:17:03 -0800 (PST)
-Date:   Wed, 9 Feb 2022 14:17:00 -0800
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
-        viresh.kumar@linaro.org, rafael@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com, dietmar.eggemann@arm.com,
-        Pierre.Gondois@arm.com, Douglas Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
- cpufreq_cooling and devfreq_cooling
-Message-ID: <YgQ9XLcto9v0fyTf@google.com>
-References: <20220207073036.14901-1-lukasz.luba@arm.com>
- <20220207073036.14901-2-lukasz.luba@arm.com>
- <YgG+TmLrCSXX4Bvt@google.com>
- <4a7d4e94-1461-5bac-5798-29998af9793a@arm.com>
- <YgKnnFl7Gp8AS30X@google.com>
- <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com>
+        Wed, 09 Feb 2022 14:17:18 -0800 (PST)
+Message-ID: <6ea0e85e-1ade-f102-86c2-4b71dbc24285@linaro.org>
+Date:   Thu, 10 Feb 2022 01:17:17 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e4532f65-7f8a-7e89-97c1-85cc61462040@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: gpu: drm: msm: use div64_u64() instead of do_div()
+Content-Language: en-GB
+To:     Qing Wang <wangqing@vivo.com>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <1644395837-3845-1-git-send-email-wangqing@vivo.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1644395837-3845-1-git-send-email-wangqing@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,155 +76,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 11:16:36AM +0000, Lukasz Luba wrote:
+On 09/02/2022 11:37, Qing Wang wrote:
+> From: Wang Qing <wangqing@vivo.com>
 > 
+> do_div() does a 64-by-32 division.
+> When the divisor is u64, do_div() truncates it to 32 bits, this means it
+> can test non-zero and be truncated to zero for division.
 > 
-> On 2/8/22 5:25 PM, Matthias Kaehlcke wrote:
-> > On Tue, Feb 08, 2022 at 09:32:28AM +0000, Lukasz Luba wrote:
-> > > 
-> > > 
-> > > On 2/8/22 12:50 AM, Matthias Kaehlcke wrote:
-> > > > On Mon, Feb 07, 2022 at 07:30:35AM +0000, Lukasz Luba wrote:
-> > > > > The Energy Model supports power values either in Watts or in some abstract
-> > > > > scale. When the 2nd option is in use, the thermal governor IPA should not
-> > > > > be allowed to operate, since the relation between cooling devices is not
-> > > > > properly defined. Thus, it might be possible that big GPU has lower power
-> > > > > values in abstract scale than a Little CPU. To mitigate a misbehaviour
-> > > > > of the thermal control algorithm, simply not register a cooling device
-> > > > > capable of working with IPA.
-> > > > 
-> > > > Ugh, this would break thermal throttling for existing devices that are
-> > > > currently supported in the upstream kernel.
-> > > 
-> > > Could you point me to those devices? I cannot find them in the mainline
-> > > DT. There are no GPU devices which register Energy Model (EM) in
-> > > upstream, neither using DT (which would be power in mW) nor explicitly
-> > > providing EM get_power() callback. The EM is needed to have IPA.
-> > > 
-> > > Please clarify which existing devices are going to be broken with this
-> > > change.
-> > 
-> > I was thinking about arch/arm64/boot/dts/qcom/sc7180-trogdor-*, and
-> > potentially other SC7180 boards that use IPA for the CPU thermal
-> > zones.
-> > 
-> > Initially SC7180 used an abstract scale for the CPU energy model,
-> > however I realized your change doesn't actually impact SC7180 CPUs
-> > for two reasons:
-> > 
-> > 1. The energy model of the CPUs is registered through
-> > 
-> >    cpufreq_register_em_with_opp
-> >      dev_pm_opp_of_register_em
-> >        em_dev_register_perf_domain
-> > 
-> > em_dev_register_perf_domain() is called with 'milliwatts = true',
-> > regardless of the potentially abstract scale, so IPA would not be
-> > disabled with your change.
+> fix do_div.cocci warning:
+> do_div() does a 64-by-32 division, please consider using div64_u64 instead.
 > 
-> That good registration.
-> 
-> > 
-> > 2. There is a patch from Doug that adjusted the dynamic power
-> > coefficients of the CPUs to be closer to reality:
-> > 
-> > commit 82ea7d411d43f60dce878252558e926f957109f0
-> > Author: Douglas Anderson <dianders@chromium.org>
-> > Date:   Thu Sep 2 14:51:37 2021 -0700
-> > 
-> >      arm64: dts: qcom: sc7180: Base dynamic CPU power coefficients in reality
-> 
-> Thanks for the link to the commit. I'll have a look. It's good that it
-> doesn't break this board.
-> 
-> > 
-> > > > Wasn't the conclusion that it is the responsability of the device tree
-> > > > owners to ensure that cooling devices with different scales aren't used
-> > > > in the same thermal zone?
-> > > 
-> > > It's based on assumption that someone has DT and control. There was also
-> > > implicit assumption that IPA would work properly on such platform - but
-> > > it won't.
-> > > 
-> > > 1. You cannot have 2 thermal zones: one with CPUs and other with GPU
-> > > only and both working with two instances of IPA.
-> > 
-> > It's not clear to me why such a configuration wouldn't work. Is it also a
-> > problem to have multiple CPU thermal zones (one for each core) that use
-> > multiple instances of IPA? SC7180 has separate thermal zones for each core
-> > (or thermal sensor), Chrome OS uses IPA for CPU thermal throttling.
-> 
-> Unfortunately, the control mechanism is not working best in such setup.
-> Main idea of IPA is to find 'best' OPP for a cooling device, e.g.
-> one in the middle of a freq table. Worst scenario is when we change
-> our decision between lowest and highest OPP, in short periods.
-> It's burning too much power at highest freq, then we throttle too much,
-> then we unthrottle because temp is dropping by some 'good enough' value.
-> This situation can happen due to a few reasons:
-> 1. Power values from EM are not reflecting reality, e.g. scaled too much
-> 2. We don't have proper information about CPU load and frequencies used
-> 3. PID coefficients are not properly set
-> 4. board has small physical thermal sink potential but silicon if 'hot'
-> 5. the workload is too dynamic
-> 6. there is another power hungry device (GPU, DSP, ISP) which is outside
->    of our control loop, e.g. is controlled in other thermal zone and has
->    impact on our temp sensor value
+> Signed-off-by: Wang Qing <wangqing@vivo.com>
 
-Thanks for the details!
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-> Proper setup and tuning of IPA could bring quite good benefit, because
-> it could pick the 'best at that moment' OPPs for the devices, instead
-> of throttling too hard and then unthrottling. Unfortunately, it's
-> tricky and needs time (experiments, understanding the system).
-
-On some sc7180 ChromeOS boards we observed a behavior as you describe,
-we mitigated it by tuning the device 'sustainable-power' device tree
-property and the trip point temperatures.
-
-> We have been trying to easy this entry barrier for developers. Very good
-> results brings the optimization of the PID coefficients. The automated
-> mechanism would figure out best values for the given board based on the
-> tests run. It's under review now, there are also shared results [1][2].
-> It would solve a some of the issues with complex tuning.
-
-Good to know, thanks for the pointer!
-
-> I was going to give it a try for my old experiments with the bogoWatts
-> devices, but I don't expect that this is a silver bullet. Regarding
-> the 'two thermal zones with IPA issues' I'm prity sure it won't help.
+> ---
+>   drivers/gpu/drm/msm/msm_gpu.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> > 
-> > > 2. The abstract power scale doesn't guaranty anything about power values
-> > > and IPA was simply designed with milli-Watts in mind. So even working
-> > > on CPUs only using bogoWatts, is not what we could guaranty in IPA.
-> > 
-> > That's bad news for SoCs that are configured with bogoWatt values, from
-> > past discussions I had the impression that this is unfortunately not
-> > uncommon.
-> > 
-> > > It's ugly to have the abstract scales in the first place, but that's
-> > > unfortunately what we currently have for at least some cooling devices.
-> > 
-> > > A few questions:
-> > > 
-> > > Do you use 'we' as Chrome engineers?
-> > 
-> > I was referring to the kernel, in particular QCOM SC7180.
-> 
-> Thanks for sharing the name.
-> 
-> > 
-> > > Could you point me to those devices please?
-> > 
-> > arch/arm64/boot/dts/qcom/sc7180-trogdor-*
-> > 
-> > Though as per above they shouldn't be impacted by your change, since the
-> > CPUs always pretend to use milli-Watts.
-> > 
-> > [skipped some questions/answers since sc7180 isn't actually impacted by
-> >   the change]
-> 
-> Thank you Matthias. I will investigate your setup to get better
-> understanding.
+> diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
+> index 2c1049c..aa4617b
+> --- a/drivers/gpu/drm/msm/msm_gpu.c
+> +++ b/drivers/gpu/drm/msm/msm_gpu.c
+> @@ -648,7 +648,7 @@ static void retire_submit(struct msm_gpu *gpu, struct msm_ringbuffer *ring,
+>   	/* Calculate the clock frequency from the number of CP cycles */
+>   	if (elapsed) {
+>   		clock = (stats->cpcycles_end - stats->cpcycles_start) * 1000;
+> -		do_div(clock, elapsed);
+> +		div64_u64(clock, elapsed);
+>   	}
+>   
+>   	trace_msm_gpu_submit_retired(submit, elapsed, clock,
 
-Thanks!
+
+-- 
+With best wishes
+Dmitry

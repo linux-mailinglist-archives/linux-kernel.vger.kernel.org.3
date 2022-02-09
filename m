@@ -2,195 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9254AF8A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:41:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5C94AF893
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiBIRkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 12:40:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
+        id S238356AbiBIRfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 12:35:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238284AbiBIRkt (ORCPT
+        with ESMTP id S234972AbiBIRfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 12:40:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D04C0613C9
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 09:40:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8CA3B82322
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 17:40:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF287C340E7;
-        Wed,  9 Feb 2022 17:40:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644428449;
-        bh=AlopD8g/IxO/TUJsCJ2/uUlPLB4X9pN9HSSfhXOXIRI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bLoJxufYJICvZfk36laW9vZUmtzElmgSphRskprZx4SqZTlfShVvcpL7IIUBBO2EU
-         mL03JFh7fRXaEyEHon3W0bd2sGklgjmpNCmaltRoctiUYSEqL8Oc77DdcD7of9u20a
-         yJxgmhv/pGBtACLDPa7dX8R3hwSKH5I42phpvCuiYmzX6zVXpqBOsPA2siFwhK9B6s
-         PBs03GZuSs1ek+L7eDIkcW0jooUANG1eD29PiQBpTLrY/SPjRough0oNINJIBdjPKc
-         87HzNRut3b1UfSaW4GaA8Sc7AlZplas396NUVtOOsu0twHaljRFUCM0Ydv1DNftfIH
-         c+WPnWPNnxOnA==
-Date:   Thu, 10 Feb 2022 01:32:59 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Changbin Du <changbin.du@gmail.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] riscv: fix oops caused by irq on/off tracer
-Message-ID: <YgP6y99LWFSoxjHg@xhacker>
-References: <20220129004226.32868-1-changbin.du@gmail.com>
- <YgAEb425uqy5/dw1@xhacker>
- <20220207123850.l4r5qjswaegwisbx@mail.google.com>
- <YgE7XRE/Uc6gTCWd@xhacker>
- <20220208003502.62gi5xhyg6bk2t2h@mail.google.com>
+        Wed, 9 Feb 2022 12:35:05 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74348C0613C9;
+        Wed,  9 Feb 2022 09:35:07 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id i17so5561764lfg.11;
+        Wed, 09 Feb 2022 09:35:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=8NIjqqLl8Q8d9yGDh9LTnBdmuxZgRMGqN0071eUrnzg=;
+        b=bgJPEUrvi/HTcJB2kr8J3TQqHRG6Xl82Im5VYrsuLLpEjt3Fyvx66kc7NebndQEIuZ
+         a4nNGkJWiwFRfgfTKzasa2Qb7cW+Sbi1iZNyynsWjfgpoKl3sSyCOPC4FPPou0VD6PES
+         e0R1D6ufDztwl74jVU24v8KI4H52gBaHBAqWfHMCTMfqyjVw9qEJDvFU7/Ndnvu14wHa
+         BZgr/fmERCdAfHHiXtQMS7+/7ZA+/F+hr748c0+XSk+k/hsLuz6mXibDQFJha29KZkzb
+         0ar42ni1u2Z4enA7Tr/ulznj9Fxz85LLkgjYRATISjB2wb7o7vdbYX71vvp0MKb4EJBh
+         cn7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=8NIjqqLl8Q8d9yGDh9LTnBdmuxZgRMGqN0071eUrnzg=;
+        b=LGYV10doOeEzL92YrF8plEZ9Yc5xYMR0CEH4gyQ8zDgKt+LfxqwvdqJZYrPoWLtMxR
+         I+v0lYzjaNBP6BbHn82dERfGrc0WyN66lfn5RA0cfekArqc5aW01lvyRLG3rJ9XEgHsz
+         3xuL5hFScNU/Ln/p0tgjRZoHiZ3/LN+mcgZHBHhJFPZp7qcH3jfw8x6uLySyeUJPDmyZ
+         2vusvRg/8xm2+8GXN6ELEQXwJQ77Lafj5Bq1obflL995rJ/Xd8cpQ9NquZcT/Ikt3gqK
+         ghs0WVkMjjoF/c9dZbLMY+5gPA7fbv4LPnjimhcu37EKw+jMC56rLIEeV1jBsTuTI/F3
+         lUjA==
+X-Gm-Message-State: AOAM533C60WAew1s4UGdUGqqooE1erPqgtmz4JOdNnvZFwzsS5rAwiTM
+        Q4Vma4jpYRTcwC6B2Vgu8dpoOb1epufH8Q==
+X-Google-Smtp-Source: ABdhPJwE5Y+59qnObPBcVWqGD0RYLvE4fzpJxuV4YvPqdSwZMNvhqL65ykklDYjFLEOMG0iUKrsyDA==
+X-Received: by 2002:ac2:598e:: with SMTP id w14mr2271364lfn.218.1644428105714;
+        Wed, 09 Feb 2022 09:35:05 -0800 (PST)
+Received: from orome ([193.209.96.43])
+        by smtp.gmail.com with ESMTPSA id w11sm2451132lfr.201.2022.02.09.09.35.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 09:35:04 -0800 (PST)
+Date:   Wed, 9 Feb 2022 18:35:01 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Kartik <kkartik@nvidia.com>
+Cc:     linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jonathanh@nvidia.com, digetx@gmail.com, smangipudi@nvidia.com,
+        pshete@nvidia.com
+Subject: Re: [PATCH] soc/tegra: fuse: update nvmem cell list
+Message-ID: <YgP7RRy/PTuXZlw8@orome>
+References: <1638791565-3137-1-git-send-email-kkartik@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="wlDecwlbAShuVnde"
 Content-Disposition: inline
-In-Reply-To: <20220208003502.62gi5xhyg6bk2t2h@mail.google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1638791565-3137-1-git-send-email-kkartik@nvidia.com>
+User-Agent: Mutt/2.1.5 (31b18ae9) (2021-12-30)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 08:35:02AM +0800, Changbin Du wrote:
-> On Mon, Feb 07, 2022 at 11:31:41PM +0800, Jisheng Zhang wrote:
-> > On Mon, Feb 07, 2022 at 08:38:50PM +0800, ChangbinCONFIG_IRQSOFF_TRACER Du wrote:
-> > > On Mon, Feb 07, 2022 at 01:25:03AM +0800, Jisheng Zhang wrote:
-> > > > On Sat, Jan 29, 2022 at 08:42:26AM +0800, Changbin Du wrote:
-> > > > > The trace_hardirqs_on/off requires at least two parent call frames.
-> > > > > If not, the code generated by CALLER_ADDR1 (aka. ftrace_return_address(1))
-> > > > > could trigger memory access fault.
-> > > > > 
-> > > > > [    0.039615][    T0] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000f8
-> > > > > [    0.041925][    T0] Oops [#1]
-> > > > > [    0.042063][    T0] Modules linked in:
-> > > > > [    0.042864][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1-00233-g9a20c48d1ed2 #29
-> > > > > [    0.043568][    T0] Hardware name: riscv-virtio,qemu (DT)
-> > > > > [    0.044343][    T0] epc : trace_hardirqs_on+0x56/0xe2
-> > > > > [    0.044601][    T0]  ra : restore_all+0x12/0x6e
-> > > > > [    0.044721][    T0] epc : ffffffff80126a5c ra : ffffffff80003b94 sp : ffffffff81403db0
-> > > > > [    0.044801][    T0]  gp : ffffffff8163acd8 tp : ffffffff81414880 t0 : 0000000000000020
-> > > > > [    0.044882][    T0]  t1 : 0098968000000000 t2 : 0000000000000000 s0 : ffffffff81403de0
-> > > > > [    0.044967][    T0]  s1 : 0000000000000000 a0 : 0000000000000001 a1 : 0000000000000100
-> > > > > [    0.045046][    T0]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
-> > > > > [    0.045124][    T0]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000054494d45
-> > > > > [    0.045210][    T0]  s2 : ffffffff80003b94 s3 : ffffffff81a8f1b0 s4 : ffffffff80e27b50
-> > > > > [    0.045289][    T0]  s5 : ffffffff81414880 s6 : ffffffff8160fa00 s7 : 00000000800120e8
-> > > > > [    0.045389][    T0]  s8 : 0000000080013100 s9 : 000000000000007f s10: 0000000000000000
-> > > > > [    0.045474][    T0]  s11: 0000000000000000 t3 : 7fffffffffffffff t4 : 0000000000000000
-> > > > > [    0.045548][    T0]  t5 : 0000000000000000 t6 : ffffffff814aa368
-> > > > > [    0.045620][    T0] status: 0000000200000100 badaddr: 00000000000000f8 cause: 000000000000000d
-> > > > > [    0.046402][    T0] [<ffffffff80003b94>] restore_all+0x12/0x6e
-> > > > > 
-> > > > 
-> > > > Hi Changbin,
-> > > > 
-> > > > Could you please provide the reproduce steps? It looks a bit
-> > > > interesting.
-> > > >
-> > > Just enable CONFIG_IRQSOFF_TRACER and rebuild kernel with llvm. Then boot the
-> > > new kernel.
-> > 
-> > Thanks for the information. I tried IRQSOFF_TRACER with gcc+binutils,
-> > can't reproduce the issue. I forget to try clang+llvm. From another side
-> > The fact that gcc+bintuils can't reproduce it means this is a clang+llvm
-> > speicial case, no?
-> The behaviour of GCC is a bit different, please refer to another disccusion:
-> https://lore.kernel.org/lkml/C2470F2D-9E45-49D7-A03B-E6A7BB4B9738@jrtc27.com/T/
-> 
-> But I suppose it still has similar issue. Make sure FRAME_POINTER is enabled
-> also.
-> 
 
-Hi Changbin,
+--wlDecwlbAShuVnde
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I read the code and find that current riscv frame records during
-exception isn't as completed as other architectures. riscv only
-records frames from the ret_from_exception(). If we add completed
-frame records as other arch do, then the issue you saw can also
-be fixed at the same time.
+On Mon, Dec 06, 2021 at 05:22:45PM +0530, Kartik wrote:
+> From: kartik <kkartik@nvidia.com>
+>=20
+> Update tegra_fuse_cells with below entries:
+>  - gcplex-config-fuse:
+>      Configuration bits for GPU, used to enable/disable write protected
+>      region used for storing GPU firmware.
+>  - pdi0:
+>      Unique per chip public identifier.
+>  - pdi1:
+>      Unique per chip public identifier.
+>=20
+> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
+> Signed-off-by: kartik <kkartik@nvidia.com>
+> ---
+>  drivers/soc/tegra/fuse/fuse-tegra.c | 20 +++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
 
-However, I'm not sure what's the best choice now.
+Applied, thanks.
 
-A simple demo to this incomplete frames:
-add dump_stack() in any ISR, then
+Thierry
 
-in riscv:
-[    2.961294] Call Trace:
-[    2.961460] [<ffffffff8000485e>] dump_backtrace+0x1c/0x24
-[    2.961823] [<ffffffff805ed980>] show_stack+0x2c/0x38
-[    2.962153] [<ffffffff805f292e>] dump_stack_lvl+0x40/0x58
-[    2.962483] [<ffffffff805f295a>] dump_stack+0x14/0x1c
-[    2.962792] [<ffffffff805f31a0>] serial8250_interrupt+0x20/0x82
-[    2.963139] [<ffffffff80053032>] __handle_irq_event_percpu+0x4c/0x106
-[    2.963526] [<ffffffff80053170>] handle_irq_event+0x38/0x80
-[    2.963856] [<ffffffff80056a32>] handle_fasteoi_irq+0x96/0x188
-[    2.964198] [<ffffffff800526ce>] generic_handle_domain_irq+0x28/0x3a
-[    2.964567] [<ffffffff802f0ae4>] plic_handle_irq+0x88/0xec
-[    2.964896] [<ffffffff800526ce>] generic_handle_domain_irq+0x28/0x3a
-[    2.965264] [<ffffffff802f08e4>] riscv_intc_irq+0x34/0x5c
-[    2.965584] [<ffffffff805f6dc8>] generic_handle_arch_irq+0x4a/0x74
-[    2.966068] [<ffffffff80002fe8>] ret_from_exception+0x0/0xc
+--wlDecwlbAShuVnde
+Content-Type: application/pgp-signature; name="signature.asc"
 
-in x86:
-[    1.191274] Call Trace:
-[    1.192223]  <IRQ>
-[    1.192758]  dump_stack_lvl+0x45/0x59
-[    1.192982]  serial8250_interrupt+0x24/0x88
-[    1.193105]  __handle_irq_event_percpu+0x66/0x1b0
-[    1.193239]  handle_irq_event+0x34/0x70
-[    1.193345]  handle_edge_irq+0x85/0x1e0
-[    1.193455]  __common_interrupt+0x38/0x90
-[    1.193573]  common_interrupt+0x73/0x90
-[    1.193809]  </IRQ>
-[    1.193889]  <TASK>
-[    1.193956]  asm_common_interrupt+0x1b/0x40
-[    1.194318] RIP: 0010:_raw_spin_unlock_irqrestore+0x1b/0x40
-[    1.194566] Code: 24 be 01 02 00 00 e9 54 20 bf ff 0f 1f 40 00 0f 1f
-44 00 00 f7 c6 00f
-[    1.195137] RSP: 0000:ffff888000243b68 EFLAGS: 00000246
-[    1.195314] RAX: 0000000000000000 RBX: ffffffff82025840 RCX:
-0000000000000000
-[    1.195482] RDX: 0000000000000001 RSI: 0000000000000000 RDI:
-0000000000000001
-[    1.195645] RBP: 0000000000000202 R08: ffffffffffffffff R09:
-0000000000000000
-[    1.195808] R10: 00000000000000eb R11: 0000000000000000 R12:
-0000000000000000
-[    1.195972] R13: 0000000000000040 R14: 0000000000000000 R15:
-ffff888000c39000
-[    1.196245]  ? _raw_spin_unlock_irqrestore+0x15/0x40
-[    1.196373]  serial8250_do_startup+0x42d/0x600
-[    1.196502]  uart_port_startup+0x11b/0x270
-[    1.196619]  uart_port_activate+0x3f/0x60
-[    1.196729]  tty_port_open+0x7e/0xd0
-[    1.196835]  ? _raw_spin_unlock+0x12/0x30
-[    1.196942]  uart_open+0x1a/0x30
-[    1.197036]  tty_open+0x153/0x7c0
-[    1.197144]  chrdev_open+0xbf/0x230
-[    1.197253]  ? cdev_device_add+0x90/0x90
-[    1.197359]  do_dentry_open+0x13c/0x360
-[    1.197470]  path_openat+0xb0c/0xe00
-[    1.197577]  ? update_load_avg+0x5f/0x640
-[    1.197691]  ? finish_task_switch.isra.0+0xac/0x240
-[    1.197821]  do_filp_open+0xb2/0x150
-[    1.197935]  ? preempt_schedule_thunk+0x16/0x18
-[    1.198049]  ? preempt_schedule_common+0x90/0xd0
-[    1.198167]  ? preempt_schedule_thunk+0x16/0x18
-[    1.198291]  file_open_name+0xf1/0x1b0
-[    1.198397]  filp_open+0x2c/0x50
-[    1.198495]  console_on_rootfs+0x19/0x52
-[    1.198648]  kernel_init_freeable+0x19a/0x1c7
-[    1.198765]  ? rest_init+0xc0/0xc0
-[    1.198867]  kernel_init+0x16/0x110
-[    1.198965]  ret_from_fork+0x1f/0x30
-[    1.199131]  </TASK>
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmID+0MACgkQ3SOs138+
+s6FazA/+N8CLS2hBOqfp79hXy4cX5pQLIfdyWqOXE+8QAMy9+PMKYpPUFXqOFIGp
+7FVv1ymK5dmjp4NgNhDxiVUZEllhFmtNX8Is8P9S5HgQnOg6oT5AiWs9jvt1tB62
+NlhcpWc9vaiDDFLl3kEyfQIz9tCDkq2KU/yH0TrlPQ2jzGtT4D8WspMdtZrHIL24
+yIrZAXjooimuNTDgf7+pRBQMwpY7m+F/+IO+xtdU2vQzoNeGHaXm5pcn2xEyAGCm
+Hi51o+2+kuEBcr0DH3tSSJmxVgn0KVxZ/IsZ59FmKsoOwr/5OXf0EQRo2lPT4F1X
+rY15hESZSM4TDdS6QKtGZHfJ5tZzMFI5dEUkV1QjZsDQQnpCH5DChzOfnfwcKGG1
+NvHQ8rwkULn5WDfSBwFy5UWXah0kJDQ/9ocI3Fo0I0g5YeL1nmfEFN6IlY61sQbQ
+Cyu9OvyUeurOyRBqwyU9PVlDAdAvKHV4XHQdoDLirdk3AYocJPZGONzMc4wLm86O
+BkzhiFAjg5W5oRX3PehmkwyzGHiHXb62YB87k7jo/wBymIKp5azQ70rd/fNYjcCm
+go6BJ5N1c9OjCRC3/K3otGTaa8V/H5rUtHBEv+QtZpjEaj6WFcMtb9BClljtFUb5
+UX7YMMGox3lxmtUPc/enBEiUmw+gLfbpaC4+UAZwTMNxli6jhcE=
+=0yLe
+-----END PGP SIGNATURE-----
+
+--wlDecwlbAShuVnde--

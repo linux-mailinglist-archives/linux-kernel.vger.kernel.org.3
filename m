@@ -2,62 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C824AF59B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F399F4AF5A6
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:44:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236230AbiBIPnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:43:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
+        id S234711AbiBIPoN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 9 Feb 2022 10:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236209AbiBIPm5 (ORCPT
+        with ESMTP id S232680AbiBIPoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:42:57 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5309C05CB8A;
-        Wed,  9 Feb 2022 07:42:56 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 7205821106;
-        Wed,  9 Feb 2022 15:42:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1644421375; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cPanT84froBQDy0fnPPljPjc/sJJc6UFVNaQtZQNyJo=;
-        b=SdlN6/o0bkHJLdF7/rqstxANEqRu2FGQdADvtFm36FXgWN7qy8cv5E9FmMIqemtYqj5JCx
-        jcFKtYvkxRDAXyWddaU5BJQjRCKUXa8uB96+IfTENqG3s4IjsNq2JfIo9n1aVAoh4vUxkN
-        ye8z9cU4lRKUrZHOL79VeCmsS2uUcBg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1644421375;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cPanT84froBQDy0fnPPljPjc/sJJc6UFVNaQtZQNyJo=;
-        b=0X+aVbHtAO76L1P2h7Y2RgH4e7i5tXnnZmX6Tcr6MKy1WuACuL/CGsKG7z3DXWtcr4kHZJ
-        FFE4oGuZFBJRVUCA==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 5BFF8A3B88;
-        Wed,  9 Feb 2022 15:42:55 +0000 (UTC)
-Date:   Wed, 9 Feb 2022 16:42:55 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-cc:     Luis Chamberlain <mcgrof@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "kgdb-bugreport@lists.sourceforge.net" 
-        <kgdb-bugreport@lists.sourceforge.net>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v2 0/5] Allocate module text and data separately
-In-Reply-To: <cover.1643282353.git.christophe.leroy@csgroup.eu>
-Message-ID: <alpine.LSU.2.21.2202091639491.32090@pobox.suse.cz>
-References: <cover.1643282353.git.christophe.leroy@csgroup.eu>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Wed, 9 Feb 2022 10:44:10 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD40C05CB8F;
+        Wed,  9 Feb 2022 07:44:13 -0800 (PST)
+Date:   Wed, 09 Feb 2022 15:44:02 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 0/3] Clock fixes for Ingenic SoCs
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <EPN17R.TB21BVY3XDUH1@crapouillou.net>
+In-Reply-To: <20220208010048.211691-1-aidanmacdonald.0x0@gmail.com>
+References: <20220208010048.211691-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,42 +36,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Jan 2022, Christophe Leroy wrote:
+Hi Aidan,
 
-> This series allow architectures to request having modules data in
-> vmalloc area instead of module area.
+Le mar., févr. 8 2022 at 01:00:45 +0000, Aidan MacDonald 
+<aidanmacdonald.0x0@gmail.com> a écrit :
+> I ran across a problem trying to get Linux running on an Ingenic 
+> X1000 SoC:
+> since the memory clock isn't referenced by any driver, it appears 
+> unused and
+> gets disabled automatically. After that, the system hangs on any RAM 
+> access.
 > 
-> This is required on powerpc book3s/32 in order to set data non
-> executable, because it is not possible to set executability on page
-> basis, this is done per 256 Mbytes segments. The module area has exec
-> right, vmalloc area has noexec. Without this change module data
-> remains executable regardless of CONFIG_STRICT_MODULES_RWX.
+> There is a hack in board-ingenic.c to forcibly enable the CPU clock, 
+> but this
+> is insufficient for the X1000 since the memory clock has its own gate 
+> and mux
+> that isn't tied to the CPU.
 > 
-> This can also be useful on other powerpc/32 in order to maximize the
-> chance of code being close enough to kernel core to avoid branch
-> trampolines.
+> This patch series fixes the bug by adding CLK_IS_CRITICAL flags to 
+> important
+> clocks, which seems to be the approach used in many other SoC clock 
+> drivers.
 > 
-> Changes in v2:
-> - Dropped first two patches which are not necessary. They may be added back later as a follow-up series.
-> - Fixed the printks in GDB
-> 
-> Christophe Leroy (5):
->   modules: Always have struct mod_tree_root
->   modules: Prepare for handling several RB trees
->   modules: Introduce data_layout
->   modules: Add CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
->   powerpc: Select ARCH_WANTS_MODULES_DATA_IN_VMALLOC on book3s/32 and
->     8xx
-> 
->  arch/Kconfig                |   6 ++
->  arch/powerpc/Kconfig        |   1 +
->  include/linux/module.h      |   8 ++
->  kernel/debug/kdb/kdb_main.c |  10 +-
->  kernel/module.c             | 193 +++++++++++++++++++++++++-----------
->  5 files changed, 156 insertions(+), 62 deletions(-)
+> It's my first time submitting patches to the kernel so let me know if 
+> I
+> messed anything up.
 
-Looks good to me apart from the typo I mentioned at v1. I will review 
-again once it is rebased on Aaron's patch set.
+You did everything good.
 
-Regards,
-Miroslav
+I think the CI20 suffered from the same problem, it would only boot as 
+long as the "clk_ignore_unused" flag was added on the command line. I 
+will need to try it there to see if it improved the situation.
+
+I tested the patchset on JZ4770 and it works fine. So:
+
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+
+@Stephen: I don't see any changes pending on board-ingenic.c so it 
+should be safe for you to also take [PATCH 3/3] in the clk tree.
+
+Cheers,
+-Paul
+
+> Aidan MacDonald (3):
+>   clk: ingenic: Allow specifying common clock flags
+>   clk: ingenic: Mark critical clocks in Ingenic SoCs
+>   mips: ingenic: Do not manually reference the CPU clock
+> 
+>  arch/mips/generic/board-ingenic.c | 26 --------------------------
+>  drivers/clk/ingenic/cgu.c         |  2 +-
+>  drivers/clk/ingenic/cgu.h         |  3 +++
+>  drivers/clk/ingenic/jz4725b-cgu.c |  2 ++
+>  drivers/clk/ingenic/jz4740-cgu.c  |  2 ++
+>  drivers/clk/ingenic/jz4760-cgu.c  |  2 ++
+>  drivers/clk/ingenic/jz4770-cgu.c  |  1 +
+>  drivers/clk/ingenic/jz4780-cgu.c  |  3 +++
+>  drivers/clk/ingenic/x1000-cgu.c   |  3 +++
+>  drivers/clk/ingenic/x1830-cgu.c   |  3 +++
+>  10 files changed, 20 insertions(+), 27 deletions(-)
+> 
+> --
+> 2.34.1
+> 
+
+

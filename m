@@ -2,111 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E859A4AFFB7
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C7F4AFFBB
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:00:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234613AbiBIWAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 17:00:10 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34182 "EHLO
+        id S234526AbiBIWAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 17:00:06 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:56346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234491AbiBIV7x (ORCPT
+        with ESMTP id S234604AbiBIV7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 16:59:53 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6EA1E00D131;
-        Wed,  9 Feb 2022 13:59:55 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A2A001F391;
-        Wed,  9 Feb 2022 21:59:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644443994; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j+pQpKmfzlL4KZk9ukchLsiAEhY7uRcrMQ98+/U4mU0=;
-        b=eKSAQfQCWZPpF8fWc7728iUVKDG/8xR98p8nDijBvNvt52pynaLXqeR6sY965pMDlBeCSh
-        y47AGd3E19xzvuYK3hmsDY2vyt8q82lsVhZ1yLRek+hq1U7Q9GqSagKaUoKQprx2Og5o1X
-        P0UXuWCIwOPdupwNPVBjFWKy+D0lNzA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644443994;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j+pQpKmfzlL4KZk9ukchLsiAEhY7uRcrMQ98+/U4mU0=;
-        b=aTjHNUkIup75+LiMJuwnyqbqEqC8SAf4w30ZJjgGNhYFY3PSAwLywS8ZNNRUw+IYYeC5oZ
-        OoIds/Y2hxOgKbCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 31A2113A91;
-        Wed,  9 Feb 2022 21:59:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id UF+yN1g5BGKWMQAAMHmgww
-        (envelope-from <neilb@suse.de>); Wed, 09 Feb 2022 21:59:52 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 9 Feb 2022 16:59:49 -0500
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0027CE00E157;
+        Wed,  9 Feb 2022 13:59:51 -0800 (PST)
+Received: by mail-oo1-f46.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso4124641ooi.1;
+        Wed, 09 Feb 2022 13:59:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=u827RA9/WHR5oLSZNgb5BTUDsvTIJNZRmS5owm7+iFs=;
+        b=iwMv3KGkQRv5XATsbjxmLfUeRzSawTMwYZXooyAr0EBnvmhUR5aOZHzB/tgBhXNKnh
+         oqfGELyCeCmD74dc9II7tiRyAZwbLT3aiXphej/PkC1cExKB1CWe4LurpO7LO8gW8Rlt
+         wfGOW0PAbkC4pEEMJ4JSKBm3eAEu2tc7UtA7yiLTRozbLvYF4GE7qiL57kkVXQfhrdxX
+         QRBhjBehFn0oRDcSA+0IIBNDuwJnIQSL5Mh+IKcYoyvJ5pc9LkkV2xko+X7EPchOld3P
+         bGzPIfmGfJbNsK0kykk3IFc544UHXtpXqhv4Ak9h6ul3X7ix337++UYMuXsjIKtKxwRv
+         8aYg==
+X-Gm-Message-State: AOAM533e55QUGfvCZgRU7GNnGJ6/nOkspVsn6cNW3cPAYvb1yKEyKIo9
+        IirjzfHnS390s1BQP1Bkfg==
+X-Google-Smtp-Source: ABdhPJxqRkhn4+EXnsCWMdYQUrm/jUlU7DunZkBrIBbZkSlIKO9WsiQsab0sCGbmFU0xQ0+seXnuHA==
+X-Received: by 2002:a05:6870:91c1:: with SMTP id c1mr1626155oaf.121.1644443991316;
+        Wed, 09 Feb 2022 13:59:51 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id m14sm7856006ooj.22.2022.02.09.13.59.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 13:59:50 -0800 (PST)
+Received: (nullmailer pid 1002954 invoked by uid 1000);
+        Wed, 09 Feb 2022 21:59:49 -0000
+Date:   Wed, 9 Feb 2022 15:59:49 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Denis Ciocca <denis.ciocca@st.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2 2/3] dt-bindings: iio: st: Add Silan SC7A20
+ accelerometer
+Message-ID: <YgQ5VaW1QqrxFfiL@robh.at.kernel.org>
+References: <20220202235049.8051-1-samuel@sholland.org>
+ <20220202235049.8051-3-samuel@sholland.org>
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Ian Kent" <raven@themaw.net>
-Cc:     autofs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [ANNOUNCE] autofs 5.1.8 release
-In-reply-to: <b54fb31652a4ba76b39db66b8ae795ee3af6f025.camel@themaw.net>
-References: <b54fb31652a4ba76b39db66b8ae795ee3af6f025.camel@themaw.net>
-Date:   Thu, 10 Feb 2022 08:59:48 +1100
-Message-id: <164444398868.27779.4643380819577932837@noble.neil.brown.name>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202235049.8051-3-samuel@sholland.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 19 Oct 2021, Ian Kent wrote:
-> Hi all,
->=20
-> It's time for a release, autofs-5.1.8.
->=20
-...
-> - also require TCP_REQUESTED when setting NFS port.
+On Wed, 02 Feb 2022 17:50:47 -0600, Samuel Holland wrote:
+> This chip is not an ST part, but it appears to be register-compatible
+> with the LIS2DH, so it can use the same binding.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> 
+> Changes in v2:
+>  - Move the new compatible to its own section
+> 
+>  Documentation/devicetree/bindings/iio/st,st-sensors.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
 
-Unfortunately that last patch is buggy.  TCP_REQUESTED is masked out in
-the caller.
-
-Maybe the following is best.
-
-NeilBrown
-
-From: NeilBrown <neilb@suse.de>
-Subject: [PATCH] Test TCP request correctly in nfs_get_info()
-
-The TCP_REQUESTED flag is masked out by the caller, so it never gets to
-nfs_get_info().
-We can test if TCP was requested by examining the 'proto' parameter.
-
-Signed-off-by: NeilBrown <neilb@suse.de>
-
-diff --git a/modules/replicated.c b/modules/replicated.c
-index 09075dd0c1b4..3ac7ee432e73 100644
---- a/modules/replicated.c
-+++ b/modules/replicated.c
-@@ -291,7 +291,7 @@ static unsigned int get_nfs_info(unsigned logopt, struct =
-host *host,
-=20
- 	rpc_info->proto =3D proto;
- 	if (port < 0) {
--		if ((version & NFS4_REQUESTED) && (version & TCP_REQUESTED))
-+		if ((version & NFS4_REQUESTED) && (proto =3D=3D IPPROTO_TCP))
- 			rpc_info->port =3D NFS_PORT;
- 		else
- 			port =3D 0;
-
+Acked-by: Rob Herring <robh@kernel.org>

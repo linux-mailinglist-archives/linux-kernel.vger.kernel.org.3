@@ -2,72 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E35F4AE604
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 01:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C27554AE609
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 01:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239890AbiBIA1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 19:27:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37212 "EHLO
+        id S239976AbiBIAaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 19:30:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237906AbiBIA1c (ORCPT
+        with ESMTP id S231912AbiBIAaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 19:27:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A148BC061576;
-        Tue,  8 Feb 2022 16:27:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D46461827;
-        Wed,  9 Feb 2022 00:27:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64535C004E1;
-        Wed,  9 Feb 2022 00:27:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644366450;
-        bh=DOgHT7IypYPcEzB2cyqFOeqBxjv+zi17vi6+cGA2ltE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Nqd41M3obBvnPKwbaBCPjq91MTVykmhnHBw7axREl7vJFMenD/ol0SXTUODmtB2Uj
-         DK4FGG7sGbKCAn1coIkQmufTBBJBMQcTBRmCj50sYqeFyHhq4fnXQHS1Ai4p/SEdSu
-         hb6c49gjGv0r6DtOkOpxTKQMtImOevWD/GRxSTs6v/Ofiq9YfpShRvAGzLzmOuQEtp
-         IMtTx4dZJzFr4D/AWZR33DQciXT1xXBbZgiWXPRvsjzLZkXbPyaN9KH/7B7s/Oyej9
-         JB50IJsuZ40RaCKMxvNo7BIWAu+Bjf5AkNQNep34s+ElaHsoR+QllQuwPn40dWOleW
-         rhYEmEWf+8BsA==
-Date:   Tue, 8 Feb 2022 16:27:29 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Yajun Deng <yajun.deng@linux.dev>
-Cc:     davem@davemloft.net, rostedt@goodmis.org, mingo@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] net: dev: introduce netdev_drop_inc()
-Message-ID: <20220208162729.41b62ae7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220208064318.1075849-1-yajun.deng@linux.dev>
-References: <20220208064318.1075849-1-yajun.deng@linux.dev>
+        Tue, 8 Feb 2022 19:30:07 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E98CC06157B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 16:30:06 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id z13so1375780pfa.3
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 16:30:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0/g46XYpdY+83L4Nhq5fUK5DmKHZmZsCeq+A2IUv7aw=;
+        b=E/jx1S3/PFTXHZRylu69yTSRn8YTQ0PkaCRbn39F3+KAS1DSAX3C2O/WQjfRGj1HPh
+         arlyqsg2NtmZcg859X1cSmIUbKBBsZR7362pjWhOXloDdle7pw/GtPoxGXI75yVpOkcO
+         KG8I7vklsmfDzC+KKeOx4l2MntOna5PUwizngsWFX3+82Ozjviu5BQhLaLDgWiLwsTrF
+         GMZmvS5lqb6021b9DprdPMWYgAVuXNQ2KVlKh/bBWkkikau8KjB8nMX8K6Iqe6W65Au8
+         29FAamrwrU3AjkDpyZrS4xxliNErLptk+7ekvauMGR45F0wrYJmnnY15Ye+QVku9DzPp
+         ZbIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0/g46XYpdY+83L4Nhq5fUK5DmKHZmZsCeq+A2IUv7aw=;
+        b=NhTW16wD95MPI7rp401nnuVE6iM/TuSsgLdKJ9mJFw/UY7TR19l3S8GJVeT38ZSYch
+         q/YWZADMgvCnMRJdoOuPr+F1GtIHTh94yiDeCDVD4XN9WIIqq8XSu5nV/cAep4ApaXbj
+         ca806VY0Y4n0jf68FlwTlPy3oyqU4sn09JD4LOqUJ9S5uqKWUjttZ+JlFHAKI5GWXEwQ
+         LtNxU7QUiU9Mb/rFNj8S9Z0bbNJ2mY0A809efrdlc3xuESdXaGIBhGgd1vF+js73XTlM
+         d9zHCqbWXsy90TmfBmazPgvcBm4CVjIxRPpSDq14NekmSnG/Dlsoi4Xx7ojX2mDWY3A3
+         zj1g==
+X-Gm-Message-State: AOAM530iuVTv4nDKOyIr3oW2eV5vbrT2URJnY4OBkt5x2kgIkheh1HhD
+        C6IyknK4MTOv5mfpEmSF5f6tbA==
+X-Google-Smtp-Source: ABdhPJyyHkWQ9J1fF0gJ63uF+8ojHUZgEEO0HMj5VMdg1+GS49MI/QdjLdYIdi3X9v/mLKNy9Qce4w==
+X-Received: by 2002:a63:8041:: with SMTP id j62mr5488060pgd.605.1644366604726;
+        Tue, 08 Feb 2022 16:30:04 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id l12sm3841830pjq.57.2022.02.08.16.30.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 16:30:04 -0800 (PST)
+Date:   Wed, 9 Feb 2022 00:29:57 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, kevin.tian@intel.com,
+        tglx@linutronix.de, John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tony Lindgren <tony@atomide.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] KVM: Rename and move CPUHP_AP_KVM_STARTING to
+ ONLINE section
+Message-ID: <YgMLBYl7P1jFA2xe@google.com>
+References: <20220118064430.3882337-1-chao.gao@intel.com>
+ <20220118064430.3882337-4-chao.gao@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220118064430.3882337-4-chao.gao@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  8 Feb 2022 14:43:18 +0800 Yajun Deng wrote:
-> We will use 'sudo perf record -g -a -e skb:kfree_skb' command to trace
-> the dropped packets when dropped increase in the output of ifconfig.
-> But there are two cases, one is only called kfree_skb(), another is
-> increasing the dropped and called kfree_skb(). The latter is what
-> we need. So we need to separate these two cases.
-> 
-> From the other side, the dropped packet came from the core network and
-> the driver, we also need to separate these two cases.
-> 
-> Add netdev_drop_inc() and add a tracepoint for the core network dropped
-> packets. use 'sudo perf record -g -a -e net:netdev_drop' and 'sudo perf
->  script' will recored the dropped packets by the core network.
-> 
-> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+On Tue, Jan 18, 2022, Chao Gao wrote:
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 148f7169b431..528741601122 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -4856,13 +4856,25 @@ static void hardware_enable_nolock(void *junk)
+>  	}
+>  }
+>  
+> -static int kvm_starting_cpu(unsigned int cpu)
+> +static int kvm_online_cpu(unsigned int cpu)
+>  {
+> +	int ret = 0;
+> +
+>  	raw_spin_lock(&kvm_count_lock);
+> -	if (kvm_usage_count)
+> +	/*
+> +	 * Abort the CPU online process if hardware virtualization cannot
+> +	 * be enabled. Otherwise running VMs would encounter unrecoverable
+> +	 * errors when scheduled to this CPU.
+> +	 */
+> +	if (kvm_usage_count) {
 
-Have you seen the work that's being done around kfree_skb_reason()?
+
+>  		hardware_enable_nolock(NULL);
+> +		if (atomic_read(&hardware_enable_failed)) {
+
+This needs:
+
+		atomic_set(&hardware_enable_failed, 0);
+
+otherwise failure to online one CPU will prevent onlining other non-broken CPUs.
+It's probably worth adding a WARN_ON_ONCE above this too, e.g.
+
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 70e034cbe813..b25a00c76b3a 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -4863,8 +4863,11 @@ static int kvm_online_cpu(unsigned int cpu)
+         * errors when scheduled to this CPU.
+         */
+        if (kvm_usage_count) {
++               WARN_ON_ONCE(atomic_read(&hardware_enable_failed));
++
+                hardware_enable_nolock(NULL);
+                if (atomic_read(&hardware_enable_failed)) {
++                       atomic_set(&hardware_enable_failed, 0);
+                        ret = -EIO;
+                        pr_warn("kvm: abort onlining CPU%d", cpu);
+                }
+
+
+> +			ret = -EIO;
+> +			pr_warn("kvm: abort onlining CPU%d", cpu);
+
+This is somewhat redundant with the pr_info() message in hardware_enable_nolock().
+What about adding the below as a prep patch?  I think/hope it would be obvious to
+the user/admin that onlining the CPU failed?  E.g. this for the output
+
+  kvm: enabling virtualization on CPU2 failed during hardware_enable_all()
+
+From: Sean Christopherson <seanjc@google.com>
+Date: Tue, 8 Feb 2022 13:26:19 -0800
+Subject: [PATCH] KVM: Provide more information in kernel log if hardware
+ enabling fails
+
+Provide the name of the calling function to hardware_enable_nolock() and
+include it in the error message to provide additional information on
+exactly what path failed.
+
+Opportunistically bump the pr_info() to pr_warn(), failure to enable
+virtualization support is warn-worthy as _something_ is wrong with the
+system.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ virt/kvm/kvm_main.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index be614a6325e4..23481fd746aa 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -4833,7 +4833,7 @@ static struct miscdevice kvm_dev = {
+ 	&kvm_chardev_ops,
+ };
+
+-static void hardware_enable_nolock(void *junk)
++static void hardware_enable_nolock(void *caller_name)
+ {
+ 	int cpu = raw_smp_processor_id();
+ 	int r;
+@@ -4848,7 +4848,8 @@ static void hardware_enable_nolock(void *junk)
+ 	if (r) {
+ 		cpumask_clear_cpu(cpu, cpus_hardware_enabled);
+ 		atomic_inc(&hardware_enable_failed);
+-		pr_info("kvm: enabling virtualization on CPU%d failed\n", cpu);
++		pr_warn("kvm: enabling virtualization on CPU%d failed during %s()\n",
++			cpu, (const char *)caller_name);
+ 	}
+ }
+
+@@ -4856,7 +4857,7 @@ static int kvm_starting_cpu(unsigned int cpu)
+ {
+ 	raw_spin_lock(&kvm_count_lock);
+ 	if (kvm_usage_count)
+-		hardware_enable_nolock(NULL);
++		hardware_enable_nolock((void *)__func__);
+ 	raw_spin_unlock(&kvm_count_lock);
+ 	return 0;
+ }
+@@ -4905,7 +4906,7 @@ static int hardware_enable_all(void)
+ 	kvm_usage_count++;
+ 	if (kvm_usage_count == 1) {
+ 		atomic_set(&hardware_enable_failed, 0);
+-		on_each_cpu(hardware_enable_nolock, NULL, 1);
++		on_each_cpu(hardware_enable_nolock, (void *)__func__, 1);
+
+ 		if (atomic_read(&hardware_enable_failed)) {
+ 			hardware_disable_all_nolock();
+@@ -5530,7 +5531,7 @@ static void kvm_resume(void)
+ #ifdef CONFIG_LOCKDEP
+ 		WARN_ON(lockdep_is_held(&kvm_count_lock));
+ #endif
+-		hardware_enable_nolock(NULL);
++		hardware_enable_nolock((void *)__func__);
+ 	}
+ }
+
+
+base-commit: 357ef9d9c0728bc2bbb9810c662263bba6b8dbc7
+--
+

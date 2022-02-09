@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 810DA4AF5FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0D74AF601
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236470AbiBIQD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:03:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
+        id S236496AbiBIQFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:05:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236460AbiBIQD0 (ORCPT
+        with ESMTP id S233209AbiBIQFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:03:26 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDAEC0613C9
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:03:30 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id o25so1971284qkj.7
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 08:03:30 -0800 (PST)
+        Wed, 9 Feb 2022 11:05:14 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00208C0613C9;
+        Wed,  9 Feb 2022 08:05:16 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id p63so3691307iod.11;
+        Wed, 09 Feb 2022 08:05:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=038Kq4HxYFM+fA4AaZi4fyE5bdjjt0bTEZgQgtvXcxo=;
-        b=abEhuyEoXj5fzKmch4cBB4p3U6tsw6pjAuCUQYzYkQ4U/RdCJVAXg6H3jCOjXD+6h0
-         mdayPkSRqrhmkOg54UpFoWXpXkxc8f55dlaV1DgPoEEhH9z8oBDdJXeyOoi66+QAkMGI
-         AX/99n+lZ6nYtC9WKiFmeqvnxVPBuG6xgyq667hYGdVlT3URrW/AMlMc/Vvdeb+j4QFX
-         S6Zggl1gO5lINVk1SqgS9uUPfP+VMXj47O3Zkikw8LUFptMbIjlpGzVWCLnwPpFxSfm2
-         94e67x1TsADR5GSl2mfbsZhRvuW7fSGtVdXeeimB+F7jChUg3NuubDS+qgkJbcucnyZt
-         7iuQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1c/6l8Fp4RH5VPtrTh9qUA2jV+GD+5aUHsSlil0jKiA=;
+        b=RmxhaIRcr+PwhQu4PtzxQSrXEXKyLT5HnRTvT+BDinZcRUK81PdCfNC5t6nFX3qr8C
+         Lx3xEBUqecDkV+MHfhMouucqPtzvKsqRnTMjcLCscQ/AIZ/mJU7+rhkbWhYZ/lj4tYnW
+         QYtMP3fkC+vmqjRkdOsy57ykqyLVa/lgWcocGwOQuILqJPTpx+EDRPFvzPuqoRTZcuyW
+         8fRfsulDLSGHmU5/W3PnfzJ4xwp0k7hudmLhAUYDhDj9cKhHqy5aZqKJgMTQggp00/UF
+         ZMn5HZiBEiW4ihI7aq5Bjf3cqAIy3usaOLTfTkdxEGUg5QoadOQ4b851sQIDXzicxctu
+         NVZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=038Kq4HxYFM+fA4AaZi4fyE5bdjjt0bTEZgQgtvXcxo=;
-        b=T142dqg8pB/t+eFuchsqf2c4dBfZozq4ZMH/emrs9ozHzf9UCYb/gEDA/4ATz++anR
-         /K05UBluos8/rJezmAt6KI+CmpO1ZDqjLLcKa71oMjUtYxF8Nf4zYwSW+b30Qb4INgyF
-         IBD6UlMW//anYmSFP3yAizdvQ/iYgfvP4EYPsZcHv1E1pbplTkpTj0+hQdiLfTvRTlPp
-         0CsYNrQwgwK/DO58U5mN6y7obG0TPhFrcetBJh8ZwSTvJi3HbLjxkngQ1CNF1QUzf/eI
-         Dh4zJDkc/KkHpK/NfX/V8GOkQsN0+I9deifTUrjZnFfPHiTPOuBtJnjjmHzO/5qeXmrW
-         4hKg==
-X-Gm-Message-State: AOAM531r7bnSucqRlMDqTq+ofYyY8Q2nchkCJ95LVXi/f0saQd6XQFkd
-        ccCkkcSeLTUqfOqpMCQhItEWCQ==
-X-Google-Smtp-Source: ABdhPJx2JVEbpZB2x+O1x3TuEv2vgIEl5U5HQXJalRC5/IJOEZUcM0zOngvhe9acRuJ6uEJQCjhLZg==
-X-Received: by 2002:a05:620a:22d4:: with SMTP id o20mr1514481qki.90.1644422609083;
-        Wed, 09 Feb 2022 08:03:29 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id o1sm9318353qkp.49.2022.02.09.08.03.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 08:03:28 -0800 (PST)
-Date:   Wed, 9 Feb 2022 08:03:26 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the akpm-current
- tree
-In-Reply-To: <20220209170245.08968c92@canb.auug.org.au>
-Message-ID: <d2701072-99e6-762b-bc80-64bda193c792@google.com>
-References: <20220209170245.08968c92@canb.auug.org.au>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1c/6l8Fp4RH5VPtrTh9qUA2jV+GD+5aUHsSlil0jKiA=;
+        b=aiBA2I+9qD0vN/pbi0BQhfY4sUeiiHVDmNJqNHuL+p0OhKEJrr9MX3yBP5k+oRDvz7
+         4OWessttlzo9IYYB0jbxUpzDKaLg69zBOHc+eq1Au1X2nXXza4o1Uls/YyYNdr3OgIHQ
+         BAqjjmUs6rw0iMYAiw8wRtdnXKDeS2Nq6VeDx+mLsXLm7EAAgkMlsrzUMCeFIdqpYNQ6
+         p8f3qPdgLxcpVPfz/yFjGp36DTuFY3Fdy/+VtV+aYO1NqLUJ96nm1soxXO+/b/+Rw3oI
+         fyFARwhEJ6iTlig+BxtZeqi85M4neHowZcrbze3WjV52AEmdxCOM96TMvo3kFhPRbG0w
+         +qTQ==
+X-Gm-Message-State: AOAM533KOSVvbJRuQ/TEsukbW6xLkOxGwlitznMN6BAbPn7x+5mgHUtF
+        y3lzehCcSMyHQMhZiNIQ0mymTI4taFWFBEkg+Pk=
+X-Google-Smtp-Source: ABdhPJzwUJh9RJL8FHv95KrO3ujW9aTtOQ3nrC3twvNd8fY/dXsrOtRrHd9PRm6dTN9PV+G+Q3G0ZbIpyQe+F3zYpnE=
+X-Received: by 2002:a05:6638:2606:: with SMTP id m6mr1297132jat.93.1644422716327;
+ Wed, 09 Feb 2022 08:05:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+References: <20220202135333.190761-1-jolsa@kernel.org> <20220202135333.190761-3-jolsa@kernel.org>
+ <CAEf4Bzbrj01RJq7ArAo-kX-+8rPx9j5OH1OvGHxVJxiq8rn3FA@mail.gmail.com> <YgPXVXJnPKQ7lOi9@krava>
+In-Reply-To: <YgPXVXJnPKQ7lOi9@krava>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 9 Feb 2022 08:05:05 -0800
+Message-ID: <CAEf4BzYxtoE8Gu62oNSdVxvsv2K_5CPSdGS3Qd0Jgaegvw7sfw@mail.gmail.com>
+Subject: Re: [PATCH 2/8] bpf: Add bpf_get_func_ip kprobe helper for fprobe link
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,26 +75,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Feb 2022, Stephen Rothwell wrote:
+On Wed, Feb 9, 2022 at 7:01 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> On Mon, Feb 07, 2022 at 10:59:18AM -0800, Andrii Nakryiko wrote:
+> > On Wed, Feb 2, 2022 at 5:53 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > >
+> > > Adding support to call get_func_ip_fprobe helper from kprobe
+> > > programs attached by fprobe link.
+> > >
+> > > Also adding support to inline it, because it's single load
+> > > instruction.
+> > >
+> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > ---
+> > >  kernel/bpf/verifier.c    | 19 ++++++++++++++++++-
+> > >  kernel/trace/bpf_trace.c | 16 +++++++++++++++-
+> > >  2 files changed, 33 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > index 1ae41d0cf96c..a745ded00635 100644
+> > > --- a/kernel/bpf/verifier.c
+> > > +++ b/kernel/bpf/verifier.c
+> > > @@ -13625,7 +13625,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+> > >                         continue;
+> > >                 }
+> > >
+> > > -               /* Implement bpf_get_func_ip inline. */
+> > > +               /* Implement tracing bpf_get_func_ip inline. */
+> > >                 if (prog_type == BPF_PROG_TYPE_TRACING &&
+> > >                     insn->imm == BPF_FUNC_get_func_ip) {
+> > >                         /* Load IP address from ctx - 16 */
+> > > @@ -13640,6 +13640,23 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+> > >                         continue;
+> > >                 }
+> > >
+> > > +               /* Implement kprobe/fprobe bpf_get_func_ip inline. */
+> > > +               if (prog_type == BPF_PROG_TYPE_KPROBE &&
+> > > +                   eatype == BPF_TRACE_FPROBE &&
+> > > +                   insn->imm == BPF_FUNC_get_func_ip) {
+> > > +                       /* Load IP address from ctx (struct pt_regs) ip */
+> > > +                       insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
+> > > +                                                 offsetof(struct pt_regs, ip));
+> >
+> > Isn't this architecture-specific? I'm starting to dislike this
+>
+> ugh, it is.. I'm not sure we want #ifdef CONFIG_X86 in here,
+> or some arch_* specific function?
 
-> Hi all,
-> 
-> After merging the akpm-current tree, today's linux-next build (htmldocs)
-> produced these warnings:
-> 
-> include/linux/mm_types.h:272: warning: Function parameter or member '__filler' not described in 'folio'
-> include/linux/mm_types.h:272: warning: Function parameter or member 'mlock_count' not described in 'folio'
-> 
-> Introduced by commit
-> 
->   60a5c5ab0ba7 ("mm/munlock: maintain page->mlock_count while unevictable")
 
-Thank you for including the patches and reporting this, Stephen.
-Is this a warning you can live with for a week or two?
+So not inlining it isn't even considered? this function will be called
+once or at most a few times per BPF program invocation. Anyone calling
+it in a tight loop is going to use it very-very suboptimally (and even
+then useful program logic will dominate). There is no point in
+inlining it.
 
-I've never tried generating htmldocs (I'm tempted just to replace a few
-"/**"s by "/*"s!), and I'm fairly sure Matthew will have strong feelings
-about how this new union (or not) will be better foliated - me messing
-around with doc output here is unlikely to be helpful at this moment.
-
-Hugh
+>
+> jirka
+>
+> > inlining whole more and more. It's just a complication in verifier
+> > without clear real-world benefits. We are clearly prematurely
+> > optimizing here. In practice you'll just call bpf_get_func_ip() once
+> > and that's it. Function call overhead will be negligible compare to
+> > other *userful* work you'll be doing in your BPF program.
+> >
+> >
+> > > +
+> > > +                       new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, 1);
+> > > +                       if (!new_prog)
+> > > +                               return -ENOMEM;
+> > > +
+> > > +                       env->prog = prog = new_prog;
+> > > +                       insn      = new_prog->insnsi + i + delta;
+> > > +                       continue;
+> > > +               }
+> > > +
+> > >  patch_call_imm:
+> > >                 fn = env->ops->get_func_proto(insn->imm, env->prog);
+> > >                 /* all functions that have prototype and verifier allowed
+> > > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > > index a2024ba32a20..28e59e31e3db 100644
+> > > --- a/kernel/trace/bpf_trace.c
+> > > +++ b/kernel/trace/bpf_trace.c
+> > > @@ -1036,6 +1036,19 @@ static const struct bpf_func_proto bpf_get_func_ip_proto_kprobe = {
+> > >         .arg1_type      = ARG_PTR_TO_CTX,
+> > >  };
+> > >
+> > > +BPF_CALL_1(bpf_get_func_ip_fprobe, struct pt_regs *, regs)
+> > > +{
+> > > +       /* This helper call is inlined by verifier. */
+> > > +       return regs->ip;
+> > > +}
+> > > +
+> > > +static const struct bpf_func_proto bpf_get_func_ip_proto_fprobe = {
+> > > +       .func           = bpf_get_func_ip_fprobe,
+> > > +       .gpl_only       = false,
+> > > +       .ret_type       = RET_INTEGER,
+> > > +       .arg1_type      = ARG_PTR_TO_CTX,
+> > > +};
+> > > +
+> > >  BPF_CALL_1(bpf_get_attach_cookie_trace, void *, ctx)
+> > >  {
+> > >         struct bpf_trace_run_ctx *run_ctx;
+> > > @@ -1279,7 +1292,8 @@ kprobe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+> > >                 return &bpf_override_return_proto;
+> > >  #endif
+> > >         case BPF_FUNC_get_func_ip:
+> > > -               return &bpf_get_func_ip_proto_kprobe;
+> > > +               return prog->expected_attach_type == BPF_TRACE_FPROBE ?
+> > > +                       &bpf_get_func_ip_proto_fprobe : &bpf_get_func_ip_proto_kprobe;
+> > >         case BPF_FUNC_get_attach_cookie:
+> > >                 return &bpf_get_attach_cookie_proto_trace;
+> > >         default:
+> > > --
+> > > 2.34.1
+> > >

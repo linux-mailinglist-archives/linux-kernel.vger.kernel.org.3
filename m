@@ -2,129 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 114CC4AF6B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:30:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B57874AF6B6
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:31:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237006AbiBIQa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:30:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
+        id S237017AbiBIQag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:30:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236981AbiBIQa0 (ORCPT
+        with ESMTP id S234493AbiBIQaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:30:26 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AD4C0612BE;
-        Wed,  9 Feb 2022 08:30:29 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id f17so5077864wrx.1;
-        Wed, 09 Feb 2022 08:30:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TCekoNAsz0CKcPwcVF/KWz963J+qSXSU1YJ6x+zUwaM=;
-        b=qh+PJYTJ5oyXPzeL3E+0rzGxo+DHUp8jHmCfBnUKrl6PG9xlEQ25rYzA2jk1QPOukq
-         +I+EibDd6oMU7hK4k+RRuf0eTvc5gEPc0G+8oVZHX1caq94TIhDCviljMlnXB1QJuN0c
-         0aYxJVQly/6XnjB3b9u9OlOw0lOBhQnpL4unuv0Z394CNxDTt1DXm1IycCS+tcwVTtFu
-         UApfxpTYtTmbLPHYngbjvg1g3RTL8G0jeK+IInbnUIPf56JY7DVOZH04ZuWOgDQ/vkiD
-         MVM4x49Rcc5JDhMqdvwcC3iJhA+B3CmXPLxfgzJ1qHY2858YRx8AnACnUtL4ZsH65rw+
-         PD8w==
+        Wed, 9 Feb 2022 11:30:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5423AC0612BE
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:30:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644424237;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1bQbhgSAF2lPgwQubVMn3pqKT77IeuZyyfYEoagC560=;
+        b=iFYedRAzoilrSJsFl7p+/4Hv9u+1VZWNdGh+g7ONc1pl3cL2CrBMv3u4J1hfNHYDSPytvo
+        CTgG4Ed5rba9yqZGlVLyb6bQEfMkjQ0FnaYIqyCxot2srMMqtsryaeHbqPjE5HubrvreQS
+        5ED77XOCOaDZmWjkD7v5MBAKKZ27XrA=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-634-4N8etcSkMhaMEU0fMxACyQ-1; Wed, 09 Feb 2022 11:30:36 -0500
+X-MC-Unique: 4N8etcSkMhaMEU0fMxACyQ-1
+Received: by mail-qk1-f198.google.com with SMTP id bl5-20020a05620a1a8500b005088d061be4so1740391qkb.21
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 08:30:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TCekoNAsz0CKcPwcVF/KWz963J+qSXSU1YJ6x+zUwaM=;
-        b=NoSSFCw/olXR2C45lciqO6Hc9YEwNlyA/+YzKbXjdi5i9UxkUsR9mSuAdv4tseB0E5
-         Bq7IbOIB0TnM8UHMUS+DplyB7amN+92W4uMDzEGPyOTnHpzI4N6brg78niAtwv4UGLgG
-         nvCkchQJLeqSt18gQbmCmeGAIix2XVBNqV1bhaRDc3fK4vuDi+GOm/89Bh/yhDhMsXFM
-         LpIFeH+Z2iMB1W5YSt2OlW9blvyIPU6MwtOw8SHtPh37HVM8ySP/D2TJKDhtE8swoa/O
-         1sPNvGReevL4iLpCpDPHvygfhKFWxBvkRKw+NXLzNg+R6Dln6weRUNRUlE2ZYnDLX+NB
-         twSQ==
-X-Gm-Message-State: AOAM531QvuXvAdPFmL3pkOfNJtEpuliz4TO3s4lBFe6hgospQAdD4JyF
-        HtlUslvej2tQq50UMW7Vvd8=
-X-Google-Smtp-Source: ABdhPJxWLblgDOqQhOcUPkMpyv6/T7RSuVsXksjpUA3MctF2Nhiv8NtQEHbPtDFW2x4ojiq8ZRbr8g==
-X-Received: by 2002:adf:dd50:: with SMTP id u16mr2776373wrm.696.1644424228349;
-        Wed, 09 Feb 2022 08:30:28 -0800 (PST)
-Received: from leap.localnet (host-95-245-2-16.retail.telecomitalia.it. [95.245.2.16])
-        by smtp.gmail.com with ESMTPSA id p7sm5228901wmq.20.2022.02.09.08.30.26
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1bQbhgSAF2lPgwQubVMn3pqKT77IeuZyyfYEoagC560=;
+        b=pGYgDxJn7PL5UniHyoWjDPp1qeZk+v+hOsICuYVfRm6yQvyLkt/6g1bWwyjN3CWPb6
+         zqo1U/g4wYXVi6ZJGOjDlTSewYYXzlx4jGJ1SRhIInRzmTaK+kR9DjiOS1n6NGCx3oxM
+         pOMflhawRAOfcWomcedmsQYiFWKHdOkjlp2DD2b3A7vE1mR693yS3gApuRBNf4M8v58T
+         I/8/rD82fKR0t8MtyUSOubnu39YYxnji35qkTbOz315WI8y99w0mR72sMHkwqWbtkuXw
+         ZRLo/KnakgdzcLZsSBKwQzuAe609+aoL+q53oeNGAqvXWfnlOaGgGKrMgk8niS1fRvOV
+         tb4w==
+X-Gm-Message-State: AOAM531eE/LH+UxcR7XobZGjNNlSIslpITBNAl9eJbgEuTfjeh4X2QVn
+        WNAIXNbzPlSjcxtUu54asSATDBd8JQdTrbIXsXnFpWwHgU8VwJmE0htRmPVN259HGZvtKQ2NCwy
+        VCq6ASsEsISLjOtFJ7Cwa3Qpu
+X-Received: by 2002:a37:4648:: with SMTP id t69mr1512061qka.702.1644424235750;
+        Wed, 09 Feb 2022 08:30:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwnwrxGYEFisJG8vsAxtzWQegq11Myco9LBMvHqdQZ4x/6E6Yb1DWf2feI7/8QDUXQ7/ItaQg==
+X-Received: by 2002:a37:4648:: with SMTP id t69mr1512046qka.702.1644424235520;
+        Wed, 09 Feb 2022 08:30:35 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id m4sm8323725qka.111.2022.02.09.08.30.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 08:30:27 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com
-Subject: Re: [PATCH] usb: core: Unregister device on component_add() failure
-Date:   Wed, 09 Feb 2022 17:30:24 +0100
-Message-ID: <2094517.irdbgypaU6@leap>
-In-Reply-To: <YgPI6RQd/9I4/51p@kuha.fi.intel.com>
-References: <20220208170048.24718-1-fmdefrancesco@gmail.com> <YgPI6RQd/9I4/51p@kuha.fi.intel.com>
+        Wed, 09 Feb 2022 08:30:34 -0800 (PST)
+From:   trix@redhat.com
+To:     lhjeff911@gmail.com, broonie@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: [PATCH] spi: initialize ret variable
+Date:   Wed,  9 Feb 2022 08:30:29 -0800
+Message-Id: <20220209163029.2299009-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On mercoled? 9 febbraio 2022 15:00:09 CET Heikki Krogerus wrote:
-> On Tue, Feb 08, 2022 at 06:00:48PM +0100, Fabio M. De Francesco wrote:
-> > Commit 8c67d06f3fd9 ("usb: Link the ports to the connectors they are
-> > attached to") creates a link to the USB Type-C connector for every new
-> > port that is added when possible. If component_add() fails,
-> > usb_hub_create_port_device() prints a warning but does not unregister
-> > the device and does not return errors to the callers.
-> > 
-> > Syzbot reported a "WARNING in component_del()".
-> > 
-> > Fix this issue in usb_hub_create_port_device by calling device_unregister()
-> > and returning the errors from component_add().
-> > 
-> > Reported-by: syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com
-> > Fixes: 8c67d06f3fd9 ("usb: Link the ports to the connectors they are attached to")
-> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> > ---
-> >  drivers/usb/core/port.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> > [...]
-> >
-> You didn't remove the peer links. Either remove them here separately,
-> or alternatively you can also just shuffle the code so that you only
-> create those links after the component_add() call:
->
-> [...]
-> 
+From: Tom Rix <trix@redhat.com>
 
-Hello Heikki,
+Clang build fails with
+spi-sunplus-sp7021.c:405:2: error: variable 'ret' is used
+  uninitialized whenever switch default is taken
+        default:
+        ^~~~~~~
 
-Thanks for your review and suggestion. I think that I'll use the second of the
-two possible solutions (shuffle the code).
+Restore initializing ret.
 
-I had to spend some time to understand the code of usb_hub_create_port_device(),
-component_add() and component_del(). Unfortunately, the USB core is very far from
-the usual things I look at or care of. Therefore I missed that find_and_link_peer()
-does some work that must be either unwound or simply postponed. I agree with you 
-that the latter is the best solution.
+Fixes: 47e8fe57a66f ("spi: Modify irq request position and modify parameters")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/spi/spi-sunplus-sp7021.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I need some minutes to submit v2.
-
-Again, thanks,
-
-Fabio
-
-> thanks,
-> 
-> -- 
-> heikki
-> 
-
-
-
+diff --git a/drivers/spi/spi-sunplus-sp7021.c b/drivers/spi/spi-sunplus-sp7021.c
+index ba5ed9f7277a3..fc61578ce5c47 100644
+--- a/drivers/spi/spi-sunplus-sp7021.c
++++ b/drivers/spi/spi-sunplus-sp7021.c
+@@ -375,7 +375,7 @@ static int sp7021_spi_slave_transfer_one(struct spi_controller *ctlr, struct spi
+ {
+ 	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
+ 	struct device *dev = pspim->dev;
+-	int mode, ret;
++	int mode, ret = 0;
+ 
+ 	mode = SP7021_SPI_IDLE;
+ 	if (xfer->tx_buf && xfer->rx_buf) {
+-- 
+2.26.3
 

@@ -2,99 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A92F74AFE98
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 21:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA944AFE9F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 21:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232031AbiBIUhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 15:37:52 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47280 "EHLO
+        id S232129AbiBIUih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 15:38:37 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231993AbiBIUhk (ORCPT
+        with ESMTP id S232022AbiBIUig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 15:37:40 -0500
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028CCE00E598;
-        Wed,  9 Feb 2022 12:37:42 -0800 (PST)
-Received: by mail-oo1-f52.google.com with SMTP id o128-20020a4a4486000000b003181707ed40so3826860ooa.11;
-        Wed, 09 Feb 2022 12:37:42 -0800 (PST)
+        Wed, 9 Feb 2022 15:38:36 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876B5E00FA58
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 12:38:38 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id 9so3536270pfx.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 12:38:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3CCwZDVWnTz0k1KLIvecC5nUo5ERwSy7pI4Pplg9Wl8=;
+        b=euriZtsupOGjw8a7umqT2cBDmUzLH4VaDyzNGSo3vCdzBeVAEQwlwdsjpyhTvCDcnf
+         JyhDahslFehlYA6KhhswwXeyV06XZ1Z8AvIonnkIK4H89xRvmsGGZiV1RknHadkxAAFH
+         Lo23ARtbPshgAgbZ5Q1oDW9X0gpXcf/+JtqBpbJzJDh7xsrzE7Rl0UC3UZ0WH3z5Q/rk
+         GiDZZt1HKmY1lDcSkVAj1sQxF1wd2env4RoJJ5jTxGBZgj1Y0vxX8w/VdAOUPY+wEXB6
+         J2A21hXcM7EQu/d2RTLnOSzRpHUpRIA6NGtm2pJzx+J9VwH6n9hZgi2Ku8P6GVrgdLb5
+         Xxqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9vvNKi/Wm0VLtELILJszjggawGQx7UYnFBx5UN6T3jA=;
-        b=kdxheazUUYXTTKFRyvaq8o0hgUZBOFjzBeooUFeu7iz+aDJZ7W+HN6X8P0XxGmDO/q
-         QaJUbx6EWfIwRj0aMsCHEAx2qGXH5+231/8q9eEvBZtC96klTkX50limU252QZRzF2g7
-         525rCOVuFTO0i+nAQm6gI6vt/ufUeMG4kYdc8XQrZyseA8MUItr2xA5aLwPVV1ZhFUoZ
-         Rfibypr48UjKJ/xqRyHG77zl+e9fUtYISsVNVpmhGfkl1Y5/4xycQcpEpXTpTqN+xpmB
-         EBNkhK3o7KV8FLBhn2YMIbYMWAxAbE3msTtNCC+B/xtNpYAVa/L0yEqitu4IZ03c0FOL
-         ELrA==
-X-Gm-Message-State: AOAM532WYaz0A3+hhlxjlciGrxNn3MTpop/v/w6l+c9kXfS6ZBrvO5dO
-        /N0Y+l66G6aSHyADrU15QwqGAuh7LA==
-X-Google-Smtp-Source: ABdhPJzDNBwd/NZ7M3FaqezQTKEcdU8xCVOg4y//z9QAs0xMXOadIO7noGIod4pEwfE0Iw17L6nY9w==
-X-Received: by 2002:a05:6870:c7ae:: with SMTP id dy46mr1533523oab.309.1644439062215;
-        Wed, 09 Feb 2022 12:37:42 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id c32sm7310728otu.15.2022.02.09.12.37.40
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3CCwZDVWnTz0k1KLIvecC5nUo5ERwSy7pI4Pplg9Wl8=;
+        b=y6AXEDyMHve2Db1cIEEpcQayrZoH0peYiYEBWRjQvAFl50Iu5kd2h9Yk4rOeMdc2GF
+         SZujbnxj1+p62yrv1cHvIQXgZ3InIEwX2ABRjtkFvVJtZV+uzZKHavCWhea9BII80bq8
+         gavrCe1TBPfniucHaGcZfW9yNRFMM6e+kOkpSVF8PkSF7eJEnHVJphBUQnn6Hw0bGHiw
+         Faf8BXwxRccXFwdBMjRp5Ez6YRCNpv47p1l853/9g7XDuWJDtS+zgwZG95BSjnXL+izK
+         ei6iWbumwx8zDR8S+x2lBD/8AxQjfW1O5mJvmQN0vFhl9LHiS6CSVMDE8FjtD6fqN+Bh
+         Bkaw==
+X-Gm-Message-State: AOAM531Jhpi+ZRwAh61gM8Tjeh8QvRFJ9MYjU+fPfZm0OKqWyEk1OgEw
+        qRvDjCsbaAY/Xi73dnVd4Ukf8w==
+X-Google-Smtp-Source: ABdhPJyZl9J2c7WQrcgVt2vZAMPqb1B2hJwEtuDLTLIv0TWjgnD8a+scZYKTNFnmpQ1YT7P8fEtFnA==
+X-Received: by 2002:a63:89:: with SMTP id 131mr3348551pga.253.1644439117946;
+        Wed, 09 Feb 2022 12:38:37 -0800 (PST)
+Received: from kalash.aristanetworks.com (d64-180-125-150.bchsia.telus.net. [64.180.125.150])
+        by smtp.googlemail.com with ESMTPSA id v123sm3722386pfb.12.2022.02.09.12.38.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 12:37:41 -0800 (PST)
-Received: (nullmailer pid 863156 invoked by uid 1000);
-        Wed, 09 Feb 2022 20:37:40 -0000
-Date:   Wed, 9 Feb 2022 14:37:40 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        srv_heupstream@mediatek.com,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tomasz Figa <tfiga@google.com>, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        linux-mediatek@lists.infradead.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        Irui Wang <irui.wang@mediatek.com>,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        George Sun <george.sun@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: Re: [PATCH v2, 3/7] dt-bindings: media: mtk-vcodec: Adds decoder
- dt-bindings for mt8195
-Message-ID: <YgQmFEhdM20Zr9NJ@robh.at.kernel.org>
-References: <20220128035440.24533-1-yunfei.dong@mediatek.com>
- <20220128035440.24533-4-yunfei.dong@mediatek.com>
+        Wed, 09 Feb 2022 12:38:36 -0800 (PST)
+From:   Kalash Nainwal <kalash@arista.com>
+To:     netdev@vger.kernel.org
+Cc:     fruggeri@arista.com, kalash@arista.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] Generate netlink notification when default IPv6 route preference changes
+Date:   Wed,  9 Feb 2022 12:38:18 -0800
+Message-Id: <20220209203818.11351-1-kalash@arista.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128035440.24533-4-yunfei.dong@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Jan 2022 11:54:36 +0800, Yunfei Dong wrote:
-> Adds decoder dt-bindings for mt8195.
-> 
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> Reviewed-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> ---
->  .../bindings/media/mediatek,vcodec-subdev-decoder.yaml           | 1 +
->  1 file changed, 1 insertion(+)
-> 
+ Generate RTM_NEWROUTE netlink notification when the route preference
+ changes on an existing kernel generated default route in response to
+ RA messages. Currently netlink notifications are generated only when
+ this route is added or deleted but not when the route preference
+ changes, which can cause userspace routing application state to go
+ out of sync with kernel.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Kalash Nainwal <kalash@arista.com>
+---
+ net/ipv6/ndisc.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/net/ipv6/ndisc.c b/net/ipv6/ndisc.c
+index f03b597e4121..fd14f5b1c767 100644
+--- a/net/ipv6/ndisc.c
++++ b/net/ipv6/ndisc.c
+@@ -1337,8 +1337,12 @@ static void ndisc_router_discovery(struct sk_buff *skb)
+ 			return;
+ 		}
+ 		neigh->flags |= NTF_ROUTER;
+-	} else if (rt) {
++	} else if (rt && IPV6_EXTRACT_PREF(rt->fib6_flags) != pref) {
++		struct nl_info nlinfo = {
++			.nl_net = net,
++		};
+ 		rt->fib6_flags = (rt->fib6_flags & ~RTF_PREF_MASK) | RTF_PREF(pref);
++		inet6_rt_notify(RTM_NEWROUTE, rt, &nlinfo, NLM_F_CREATE);
+ 	}
+ 
+ 	if (rt)
+-- 
+2.30.1 (Apple Git-130)
+

@@ -2,126 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94CED4AF6BF
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B614AF6C3
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:33:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237026AbiBIQbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:31:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
+        id S237053AbiBIQcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:32:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237020AbiBIQbc (ORCPT
+        with ESMTP id S237020AbiBIQcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:31:32 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F79C0612BE
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:31:35 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id u12so2645680plq.10
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 08:31:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=f18zhjNA/1oePndK5dfsZn2r6JnfT2DoIKaTV1UU+J0=;
-        b=2sVnnSBwxhgFlh+U1Zk8St2FmWoyRonVGWeOy1DyA+M6q+sqWhARdchnOEZsUycKeP
-         DxgI6Qfy795n43SEMakuXQYcficNKrhTiHeciPFcQNdKYQDWU/nWWsDbQ3I6ftPlwGZ1
-         HtZNSwk6kKpsllijI+8Yj9WxngExCltZghVwIsHlvKo8Oo6m8f8dypsDcIK2ovGB9rwf
-         EkSvwhjoQ6bU01UYIUSGQdKc/S8PxfT/rp+nVVAVCxssTahcbN6AXnb/kobXDibDmIaU
-         jV1kHAmmjV9iwGyAh+qdGPyfI0lGjMx3Tu6J51htzyd6WFLOq8ZUBF2IJqxRHG1apwSk
-         Wh8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=f18zhjNA/1oePndK5dfsZn2r6JnfT2DoIKaTV1UU+J0=;
-        b=baonj0ZvFb5WtBYPMgx+wzxQKtVTYFGKkFblBys9gOhyy1FUV4MnKPRAall37q5o8W
-         f3M1yDEY+bcdWz/SSVbaKGSp6WPMI1p70ZJbsV6WNhC+fR77+Jy0+j+2+9BKEunDbVmr
-         vMhwi9x2BQQkEcHAFNbSlAYfZjSRjOp/+/Z6woo+/HqkFN8LOzeObUA0tImSHFKvKwD5
-         yexvJd7BLCYQ6DA6onS6C+v4X/RgsS1+8cop9u9oXu3KMLtmjqqLL99zxkXj33GX7v2N
-         YV9PR5dNQuUjox2rkzxFCWSWcudzzve6s3aEb4lSw4NQ+g8NbKAuoGiFG6JNVT9GpZty
-         ILuQ==
-X-Gm-Message-State: AOAM531vENaZJ1iGkOIL67z/WrJ3Bw0R/SFBbVAK1cbvPsW8wFNYu7iW
-        bY3QPrRbBPFxhLDzNH5hjnC2ozWhYgoCKJoHKTtS6A==
-X-Google-Smtp-Source: ABdhPJxF3yvL4j70OAESSKqp6CPknT56/uTzkqGgr/AJaHoa1k+VCeL/+SKVyl5kGWq2ZEIsoTRHHdMfo+wouOVXPlg=
-X-Received: by 2002:a17:903:1210:: with SMTP id l16mr2952959plh.63.1644424295180;
- Wed, 09 Feb 2022 08:31:35 -0800 (PST)
-MIME-Version: 1.0
-References: <20210421055047.22858-1-ms@dev.tdt.de> <CAJ+vNU1=4sDmGXEzPwp0SCq4_p0J-odw-GLM=Qyi7zQnVHwQRA@mail.gmail.com>
- <YfspazpWoKuHEwPU@lunn.ch> <CAJ+vNU2v9WD2kzB9uTD5j6DqnBBKhv-XOttKLoZ-VzkwdzwjXw@mail.gmail.com>
- <YfwEvgerYddIUp1V@lunn.ch> <CAJ+vNU1qY1VJgw1QRsbmED6-TLQP2wwxSYb+bXfqZ3wiObLgHg@mail.gmail.com>
- <YfxtglvVDx2JJM9w@lunn.ch> <CAJ+vNU1td9aizbws-uZ-p-fEzsD8rJVS-mZn4TT2YFn9PY2n_w@mail.gmail.com>
- <Yf2usAHGZSUDvLln@lunn.ch>
-In-Reply-To: <Yf2usAHGZSUDvLln@lunn.ch>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Wed, 9 Feb 2022 08:31:23 -0800
-Message-ID: <CAJ+vNU3EY0qp-6oQ6Bjd4mZCKv9AeqiaJp=FSrN84P=8atKLrw@mail.gmail.com>
-Subject: Re: [PATCH net v3] net: phy: intel-xway: enable integrated led functions
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Martin Schiller <ms@dev.tdt.de>, Hauke Mehrtens <hauke@hauke-m.de>,
-        martin.blumenstingl@googlemail.com,
-        Florian Fainelli <f.fainelli@gmail.com>, hkallweit1@gmail.com,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        David Miller <davem@davemloft.net>, kuba@kernel.org,
-        netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 9 Feb 2022 11:32:06 -0500
+Received: from fwd1.porkbun.com (fwd1.porkbun.com [52.10.174.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19209C0613C9;
+        Wed,  9 Feb 2022 08:32:10 -0800 (PST)
+Received: by fwd1.porkbun.com (Postfix, from userid 497)
+        id 274F2419C6; Wed,  9 Feb 2022 16:32:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ansari.sh;
+        s=default; t=1644424329;
+        bh=BB63Yk6PU0uzJW9hg1lkMTJtA+olmom/DTUrgtp9UJg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=HhgmD688bBdGMNu0q7R44cHzsgbmgQ+LZ4wx+FVsq0T7bHHcymMdd08zt/4+ZJKQW
+         Ajbmsrv+GXrWwAzJ9DtuutGLg7fG4m32KMql4B7XOQ0ca4ndVr7oFv1quqY3XvoYzX
+         KEVWmEFAcsBtyxLRlv8gJz89KrEVsbwT6NSoT9v0=
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
+Received: from webmail.porkbun.com (unknown [35.86.129.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: rayyan@ansari.sh)
+        by fwd1.porkbun.com (Postfix) with ESMTPSA id 9C9D342CD1;
+        Wed,  9 Feb 2022 16:31:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ansari.sh;
+        s=default; t=1644424310;
+        bh=BB63Yk6PU0uzJW9hg1lkMTJtA+olmom/DTUrgtp9UJg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=OJP8/Up+Q3+FI2y122Fa4EYtLZ4Ym0VZJ6NEZ0Sr+rCVwxZdaHlP4csqqp30lVkBk
+         //nDTRyu1jyIkWKDT93RmcOEY3RAkPTshrZuEju9vhQYmDr8JAet2yZtpnt+YW+F3b
+         88Hj+K6ncGfOq8T+6m0xlZYLb8fnSd86ZTM/r6kQ=
+MIME-Version: 1.0
+Date:   Wed, 09 Feb 2022 16:31:49 +0000
+From:   Rayyan Ansari <rayyan@ansari.sh>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: qcom: pm8226: Add VADC node
+In-Reply-To: <20220207174933.20909-1-rayyan@ansari.sh>
+References: <20220207174933.20909-1-rayyan@ansari.sh>
+User-Agent: Roundcube Webmail/1.4.11
+Message-ID: <506ae7e105b6f4f88e13e226aee060ea@ansari.sh>
+X-Sender: rayyan@ansari.sh
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 4, 2022 at 2:54 PM Andrew Lunn <andrew@lunn.ch> wrote:
->
-> > The PHY_INTERRFACE_MODE_NA is a neat trick that I will remember but it
-> > would only help with the rgmii delay issue and not the LED issue (this
-> > patch). The GPY111 has some really nasty errata that is going to cause
-> > me to have a very hackish work-around anyway and I will be disabling
-> > the PHY driver to stay out of the way of that workaround
->
-> Well, ideally we want the workaround for the erratas in the kernel
-> drivers. In the long run, you will get less surprises if you add what
-> you need to Linux, not hide stuff away in the bootloader.
+On 2022-02-07 17:49, Rayyan Ansari wrote:
+> Add a node for the voltage ADC (VADC) found in PM8226.
+> 
+> Signed-off-by: Rayyan Ansari <rayyan@ansari.sh>
+> ---
+>  arch/arm/boot/dts/qcom-pm8226.dtsi | 33 ++++++++++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-pm8226.dtsi
+> b/arch/arm/boot/dts/qcom-pm8226.dtsi
+> index b3d0f7b5874d..a651b4c941b8 100644
+> --- a/arch/arm/boot/dts/qcom-pm8226.dtsi
+> +++ b/arch/arm/boot/dts/qcom-pm8226.dtsi
+> @@ -40,6 +40,39 @@ smbb: charger@1000 {
+>  			chg_otg: otg-vbus { };
+>  		};
+> 
+> +		pm8226_vadc: adc@3100 {
+> +			compatible = "qcom,spmi-vadc";
+> +			reg = <0x3100>;
+> +			interrupts = <0x0 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			#io-channel-cells = <1>;
+> +
+> +			adc-chan@7 {
+> +				reg = <VADC_VSYS>;
+> +				qcom,pre-scaling = <1 3>;
+> +				label = "vph_pwr";
+> +			};
+> +			adc-chan@8 {
+> +				reg = <VADC_DIE_TEMP>;
+> +				label = "die_temp";
+> +			};
+> +			adc-chan@9 {
+> +				reg = <VADC_REF_625MV>;
+> +				label = "ref_625mv";
+> +			};
+> +			adc-chan@a {
+> +				reg = <VADC_REF_1250MV>;
+> +				label = "ref_1250mv";
+> +			};
+> +			adc-chan@e {
+> +				reg = <VADC_GND_REF>;
+> +			};
+> +			adc-chan@f {
+> +				reg = <VADC_VDD_VADC>;
+> +			};
+> +		};
+> +
+>  		pm8226_mpps: mpps@a000 {
+>  			compatible = "qcom,pm8226-mpp", "qcom,spmi-mpp";
+>  			reg = <0xa000>;
 
-Andrew,
-
-I agree it is best to get workarounds for errata in the kernel where
-possible but this one is going to be a mess. There are 3 errata for
-this part and 2 of them require a toggle of the reset pin as a work
-around. Even if the mii bus can export a function for the phy to call
-to toggle reset in my case one of my boards has 2 of these PHY's (1 on
-a RGMII MAC and 1 on a SGMII MAC) on different MDIO busses that share
-a reset pin so if I trigger a reset I have to re-configure the other
-phy as well.
-
-The errata can be summarized as:
-- 1 out of 100 boots or cable plug events RGMII GbE link will end up
-going down and up 3 to 4 times then resort to a 100m link; workaround
-has been found to require a pin level reset
-- 1 out of 100 boots or cable plug events (varies per board) SGMII
-will fail link between the MAC and PHY; workaround has been found to
-require a pin level reset
-- occasionally the phy will come up with a high bit error rate between
-the MAC and PHY; workaround has been found to require a soft reset or
-ANEG restart
-
->
-> > As far as changing a driver to force a LED configuration with no dt
-> > binding input (like this patch does) it feels wrong for exactly the
-> > same reason - LED configuration for this PHY can be done via
-> > pin-strapping and this driver now undoes that with this patch.
->
-> Is it possible to read the pin strapping pins? If we know it has been
-> pin strapped, then a patch to detect this and not change the LED
-> configuration seems very likely to be accepted.
->
-
-No, you can read the current LED configuration but you don't know if
-it was set via strapping or boot firmware.
-
-Best regards,
-
-Tim
+Ignore this patch, I forgot to include a header.

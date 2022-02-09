@@ -2,157 +2,545 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A624AE723
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B02C4AE724
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:45:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244101AbiBICnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 21:43:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57596 "EHLO
+        id S243657AbiBICnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 21:43:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239658AbiBIBmP (ORCPT
+        with ESMTP id S243461AbiBIBnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 20:42:15 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1ACFC06157B;
-        Tue,  8 Feb 2022 17:42:11 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JtjJ51574z9sWd;
-        Wed,  9 Feb 2022 09:40:37 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Feb 2022 09:42:08 +0800
-Message-ID: <248bf5e4-f171-0f18-90ec-f4be886cb35e@huawei.com>
-Date:   Wed, 9 Feb 2022 09:42:08 +0800
+        Tue, 8 Feb 2022 20:43:43 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE50C06157B;
+        Tue,  8 Feb 2022 17:43:41 -0800 (PST)
+X-UUID: ca3f01c7b1b3463c80ad74e064e8e44c-20220209
+X-UUID: ca3f01c7b1b3463c80ad74e064e8e44c-20220209
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <chun-jie.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1304108168; Wed, 09 Feb 2022 09:43:39 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 9 Feb 2022 09:43:38 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 9 Feb 2022 09:43:37 +0800
+Message-ID: <4369b3857e7c77d48e3489ff8e3ee9fccbb56b5a.camel@mediatek.com>
+Subject: Re: [v1 02/16] clk: mediatek: Add dt-bindings of MT8186 clocks
+From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 9 Feb 2022 09:43:37 +0800
+In-Reply-To: <YetPbU52JT6A8CKW@robh.at.kernel.org>
+References: <20220110134416.5191-1-chun-jie.chen@mediatek.com>
+         <20220110134416.5191-3-chun-jie.chen@mediatek.com>
+         <YetPbU52JT6A8CKW@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: Problem with commit ccf11dbaa07b ("evm: Fix memleak in
- init_desc")
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>
-CC:     Roberto Sassu <roberto.sassu@huawei.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        wangweiyang <wangweiyang2@huawei.com>,
-        "xiujianfeng@huawei.com" <xiujianfeng@huawei.com>
-References: <e852660c-17fa-cd75-e361-45dd77b8884d@huawei.com>
- <ec4348e54b39811b727a29f3c23972eab616dcd3.camel@linux.ibm.com>
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-In-Reply-To: <ec4348e54b39811b727a29f3c23972eab616dcd3.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500024.china.huawei.com (7.185.36.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/2/8 23:20, Mimi Zohar wrote:
-> On Tue, 2022-02-08 at 16:53 +0800, Guozihua (Scott) wrote:
->> Hi Mimi,
->>
->> I found an issue with commit ccf11dbaa07b ("evm: Fix memleak in init_desc").
->>
->> This commit tries to free variable "tmp_tfm" if something went wrong
->> after the "alloc" label in function init_desc, which would potentially
->> cause a user-after-free issue
->>
->> The codes are as follows:
->>
->>     1 static struct shash_desc *init_desc(char type, uint8_t hash_algo)
->>     2 {
->>     3 	long rc;
->>     4 	const char *algo;
->>     5 	struct crypto_shash **tfm, *tmp_tfm = NULL;
->>     6 	struct shash_desc *desc;
->>     7
->>     8 	if (type == EVM_XATTR_HMAC) {
->>     9 		if (!(evm_initialized & EVM_INIT_HMAC)) {
->>    10 			pr_err_once("HMAC key is not set\n");
->>    11 			return ERR_PTR(-ENOKEY);
->>    12 		}
->>    13 		tfm = &hmac_tfm;
->>    14 		algo = evm_hmac;
->>    15 	} else {
->>    16 		if (hash_algo >= HASH_ALGO__LAST)
->>    17 			return ERR_PTR(-EINVAL);
->>    18
->>    19 		tfm = &evm_tfm[hash_algo];
->>    20 		algo = hash_algo_name[hash_algo];
->>    21 	}
->>    22
->>    23 	if (*tfm)
->>    24 		goto alloc;
->>    25 	mutex_lock(&mutex);
->>    26 	if (*tfm)
->>    27 		goto unlock;
->>    28
->>    29 	tmp_tfm = crypto_alloc_shash(algo, 0, CRYPTO_NOLOAD);
->>    30 	if (IS_ERR(tmp_tfm)) {
->>    31 		pr_err("Can not allocate %s (reason: %ld)\n", algo,
->>    32 		       PTR_ERR(tmp_tfm));
->>    33 		mutex_unlock(&mutex);
->>    34 		return ERR_CAST(tmp_tfm);
->>    35 	}
->>    36 	if (type == EVM_XATTR_HMAC) {
->>    37 		rc = crypto_shash_setkey(tmp_tfm, evmkey, evmkey_len);
->>    38 		if (rc) {
->>    39 			crypto_free_shash(tmp_tfm);
->>    40 			⋅mutex_unlock(&mutex);
->>    41 			return ERR_PTR(rc);
->>    42 		}
->>    43 	}
->>    44 	*tfm = tmp_tfm;
->>    45 unlock:
->>    46 	mutex_unlock(&mutex);
->>    47 alloc:
->>    48 	desc = kmalloc(sizeof(*desc) + crypto_shash_descsize(*tfm),
->>    49 			GFP_KERNEL);
->>    50 	if (!desc) {
->>    51 		crypto_free_shash(tmp_tfm);
->>    52 		return ERR_PTR(-ENOMEM);
->>    53 	}
->>    54
->>    55 	desc->tfm = *tfm;
->>    56
->>    57 	rc = crypto_shash_init(desc);
->>    58 	if (rc) {
->>    59 		crypto_free_shash(tmp_tfm);
->>    60 		kfree(desc);
->>    61 		return ERR_PTR(rc);
->>    62 	}
->>    63 	return desc;
->>    64 }
->>
->> As we can see, variable *tfm points to one of the two global variable
->> hmac_tfm or evm_tfm[hash_algo]. tmp_tfm is used as an intermediate
->> variable for initializing these global variables. Freeing tmp_tfm after
->> line 44 would invalidate these global variables and potentially cause a
->> user-after-free issue.
->>
->> I think this commit should be reverted.
->>
->> Reference: commit 843385694721 ("evm: Fix a small race in init_desc()")
+On Fri, 2022-01-21 at 18:27 -0600, Rob Herring wrote:
+> On Mon, Jan 10, 2022 at 09:44:02PM +0800, Chun-Jie Chen wrote:
+> > Add MT8186 clock dt-bindings, includes topckgen, apmixedsys,
+> > infracfg_ao, mcusys and subsystem clocks.
+> > 
+> > Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
+> > ---
+> >  include/dt-bindings/clock/mt8186-clk.h | 445
+> > +++++++++++++++++++++++++
+> >  1 file changed, 445 insertions(+)
+> >  create mode 100644 include/dt-bindings/clock/mt8186-clk.h
 > 
-> Why this one, as opposed to commit ccf11dbaa07b ("evm: Fix memleak in
-> init_desc")?
+> As mentioned, squash with patch 1.
 > 
 
-Hi Mimi,
+I will squash the patch with patch 1.
 
-I mean commit ccf11dbaa07b ("evm: Fix memleak in init_desc") should be 
-reverted. commit 843385694721 ("evm: Fix a small race in init_desc()") 
-is just for reference.
+> > 
+> > diff --git a/include/dt-bindings/clock/mt8186-clk.h b/include/dt-
+> > bindings/clock/mt8186-clk.h
+> > new file mode 100644
+> > index 000000000000..6a291750cea4
+> > --- /dev/null
+> > +++ b/include/dt-bindings/clock/mt8186-clk.h
+> > @@ -0,0 +1,445 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> 
+> Dual license please.
+> 
 
--- 
-Best
-GUO Zihua
+I will change to dual license in next patch.
+
+Thanks!
+Best Regards,
+Chun-Jie
+
+> > +/*
+> > + * Copyright (c) 2022 MediaTek Inc.
+> > + * Author: Chun-Jie Chen <chun-jie.chen@mediatek.com>
+> > + */
+> > +
+> > +#ifndef _DT_BINDINGS_CLK_MT8186_H
+> > +#define _DT_BINDINGS_CLK_MT8186_H
+> > +
+> > +/* MCUSYS */
+> > +
+> > +#define CLK_MCU_ARMPLL_LL_SEL		0
+> > +#define CLK_MCU_ARMPLL_BL_SEL		1
+> > +#define CLK_MCU_ARMPLL_BUS_SEL		2
+> > +#define CLK_MCU_NR_CLK			3
+> > +
+> > +/* TOPCKGEN */
+> > +
+> > +#define CLK_TOP_AXI			0
+> > +#define CLK_TOP_SCP			1
+> > +#define CLK_TOP_MFG			2
+> > +#define CLK_TOP_CAMTG			3
+> > +#define CLK_TOP_CAMTG1			4
+> > +#define CLK_TOP_CAMTG2			5
+> > +#define CLK_TOP_CAMTG3			6
+> > +#define CLK_TOP_CAMTG4			7
+> > +#define CLK_TOP_CAMTG5			8
+> > +#define CLK_TOP_CAMTG6			9
+> > +#define CLK_TOP_UART			10
+> > +#define CLK_TOP_SPI			11
+> > +#define CLK_TOP_MSDC50_0_HCLK		12
+> > +#define CLK_TOP_MSDC50_0		13
+> > +#define CLK_TOP_MSDC30_1		14
+> > +#define CLK_TOP_AUDIO			15
+> > +#define CLK_TOP_AUD_INTBUS		16
+> > +#define CLK_TOP_AUD_1			17
+> > +#define CLK_TOP_AUD_2			18
+> > +#define CLK_TOP_AUD_ENGEN1		19
+> > +#define CLK_TOP_AUD_ENGEN2		20
+> > +#define CLK_TOP_DISP_PWM		21
+> > +#define CLK_TOP_SSPM			22
+> > +#define CLK_TOP_DXCC			23
+> > +#define CLK_TOP_USB_TOP			24
+> > +#define CLK_TOP_SRCK			25
+> > +#define CLK_TOP_SPM			26
+> > +#define CLK_TOP_I2C			27
+> > +#define CLK_TOP_PWM			28
+> > +#define CLK_TOP_SENINF			29
+> > +#define CLK_TOP_SENINF1			30
+> > +#define CLK_TOP_SENINF2			31
+> > +#define CLK_TOP_SENINF3			32
+> > +#define CLK_TOP_AES_MSDCFDE		33
+> > +#define CLK_TOP_PWRAP_ULPOSC		34
+> > +#define CLK_TOP_CAMTM			35
+> > +#define CLK_TOP_VENC			36
+> > +#define CLK_TOP_CAM			37
+> > +#define CLK_TOP_IMG1			38
+> > +#define CLK_TOP_IPE			39
+> > +#define CLK_TOP_DPMAIF			40
+> > +#define CLK_TOP_VDEC			41
+> > +#define CLK_TOP_DISP			42
+> > +#define CLK_TOP_MDP			43
+> > +#define CLK_TOP_AUDIO_H			44
+> > +#define CLK_TOP_UFS			45
+> > +#define CLK_TOP_AES_FDE			46
+> > +#define CLK_TOP_AUDIODSP		47
+> > +#define CLK_TOP_DVFSRC			48
+> > +#define CLK_TOP_DSI_OCC			49
+> > +#define CLK_TOP_SPMI_MST		50
+> > +#define CLK_TOP_SPINOR			51
+> > +#define CLK_TOP_NNA			52
+> > +#define CLK_TOP_NNA1			53
+> > +#define CLK_TOP_NNA2			54
+> > +#define CLK_TOP_SSUSB_XHCI		55
+> > +#define CLK_TOP_SSUSB_TOP_1P		56
+> > +#define CLK_TOP_SSUSB_XHCI_1P		57
+> > +#define CLK_TOP_WPE			58
+> > +#define CLK_TOP_DPI			59
+> > +#define CLK_TOP_U3_OCC_250M		60
+> > +#define CLK_TOP_U3_OCC_500M		61
+> > +#define CLK_TOP_ADSP_BUS		62
+> > +#define CLK_TOP_APLL_I2S0_MCK_SEL	63
+> > +#define CLK_TOP_APLL_I2S1_MCK_SEL	64
+> > +#define CLK_TOP_APLL_I2S2_MCK_SEL	65
+> > +#define CLK_TOP_APLL_I2S4_MCK_SEL	66
+> > +#define CLK_TOP_APLL_TDMOUT_MCK_SEL	67
+> > +#define CLK_TOP_MAINPLL_D2		68
+> > +#define CLK_TOP_MAINPLL_D2_D2		69
+> > +#define CLK_TOP_MAINPLL_D2_D4		70
+> > +#define CLK_TOP_MAINPLL_D2_D16		71
+> > +#define CLK_TOP_MAINPLL_D3		72
+> > +#define CLK_TOP_MAINPLL_D3_D2		73
+> > +#define CLK_TOP_MAINPLL_D3_D4		74
+> > +#define CLK_TOP_MAINPLL_D5		75
+> > +#define CLK_TOP_MAINPLL_D5_D2		76
+> > +#define CLK_TOP_MAINPLL_D5_D4		77
+> > +#define CLK_TOP_MAINPLL_D7		78
+> > +#define CLK_TOP_MAINPLL_D7_D2		79
+> > +#define CLK_TOP_MAINPLL_D7_D4		80
+> > +#define CLK_TOP_UNIVPLL			81
+> > +#define CLK_TOP_UNIVPLL_D2		82
+> > +#define CLK_TOP_UNIVPLL_D2_D2		83
+> > +#define CLK_TOP_UNIVPLL_D2_D4		84
+> > +#define CLK_TOP_UNIVPLL_D3		85
+> > +#define CLK_TOP_UNIVPLL_D3_D2		86
+> > +#define CLK_TOP_UNIVPLL_D3_D4		87
+> > +#define CLK_TOP_UNIVPLL_D3_D8		88
+> > +#define CLK_TOP_UNIVPLL_D3_D32		89
+> > +#define CLK_TOP_UNIVPLL_D5		90
+> > +#define CLK_TOP_UNIVPLL_D5_D2		91
+> > +#define CLK_TOP_UNIVPLL_D5_D4		92
+> > +#define CLK_TOP_UNIVPLL_D7		93
+> > +#define CLK_TOP_UNIVPLL_192M		94
+> > +#define CLK_TOP_UNIVPLL_192M_D4		95
+> > +#define CLK_TOP_UNIVPLL_192M_D8		96
+> > +#define CLK_TOP_UNIVPLL_192M_D16	97
+> > +#define CLK_TOP_UNIVPLL_192M_D32	98
+> > +#define CLK_TOP_APLL1_D2		99
+> > +#define CLK_TOP_APLL1_D4		100
+> > +#define CLK_TOP_APLL1_D8		101
+> > +#define CLK_TOP_APLL2_D2		102
+> > +#define CLK_TOP_APLL2_D4		103
+> > +#define CLK_TOP_APLL2_D8		104
+> > +#define CLK_TOP_MMPLL_D2		105
+> > +#define CLK_TOP_TVDPLL_D2		106
+> > +#define CLK_TOP_TVDPLL_D4		107
+> > +#define CLK_TOP_TVDPLL_D8		108
+> > +#define CLK_TOP_TVDPLL_D16		109
+> > +#define CLK_TOP_TVDPLL_D32		110
+> > +#define CLK_TOP_MSDCPLL_D2		111
+> > +#define CLK_TOP_ULPOSC1			112
+> > +#define CLK_TOP_ULPOSC1_D2		113
+> > +#define CLK_TOP_ULPOSC1_D4		114
+> > +#define CLK_TOP_ULPOSC1_D8		115
+> > +#define CLK_TOP_ULPOSC1_D10		116
+> > +#define CLK_TOP_ULPOSC1_D16		117
+> > +#define CLK_TOP_ULPOSC1_D32		118
+> > +#define CLK_TOP_ADSPPLL_D2		119
+> > +#define CLK_TOP_ADSPPLL_D4		120
+> > +#define CLK_TOP_ADSPPLL_D8		121
+> > +#define CLK_TOP_NNAPLL_D2		122
+> > +#define CLK_TOP_NNAPLL_D4		123
+> > +#define CLK_TOP_NNAPLL_D8		124
+> > +#define CLK_TOP_NNA2PLL_D2		125
+> > +#define CLK_TOP_NNA2PLL_D4		126
+> > +#define CLK_TOP_NNA2PLL_D8		127
+> > +#define CLK_TOP_F_BIST2FPC		128
+> > +#define CLK_TOP_466M_FMEM		129
+> > +#define CLK_TOP_MPLL			130
+> > +#define CLK_TOP_APLL12_CK_DIV0		131
+> > +#define CLK_TOP_APLL12_CK_DIV1		132
+> > +#define CLK_TOP_APLL12_CK_DIV2		133
+> > +#define CLK_TOP_APLL12_CK_DIV4		134
+> > +#define CLK_TOP_APLL12_CK_DIV_TDMOUT_M	135
+> > +#define CLK_TOP_NR_CLK			136
+> > +
+> > +/* INFRACFG_AO */
+> > +
+> > +#define CLK_INFRA_AO_PMIC_TMR		0
+> > +#define CLK_INFRA_AO_PMIC_AP		1
+> > +#define CLK_INFRA_AO_PMIC_MD		2
+> > +#define CLK_INFRA_AO_PMIC_CONN		3
+> > +#define CLK_INFRA_AO_SCP_CORE		4
+> > +#define CLK_INFRA_AO_SEJ		5
+> > +#define CLK_INFRA_AO_APXGPT		6
+> > +#define CLK_INFRA_AO_ICUSB		7
+> > +#define CLK_INFRA_AO_GCE		8
+> > +#define CLK_INFRA_AO_THERM		9
+> > +#define CLK_INFRA_AO_I2C_AP		10
+> > +#define CLK_INFRA_AO_I2C_CCU		11
+> > +#define CLK_INFRA_AO_I2C_SSPM		12
+> > +#define CLK_INFRA_AO_I2C_RSV		13
+> > +#define CLK_INFRA_AO_PWM_HCLK		14
+> > +#define CLK_INFRA_AO_PWM1		15
+> > +#define CLK_INFRA_AO_PWM2		16
+> > +#define CLK_INFRA_AO_PWM3		17
+> > +#define CLK_INFRA_AO_PWM4		18
+> > +#define CLK_INFRA_AO_PWM5		19
+> > +#define CLK_INFRA_AO_PWM		20
+> > +#define CLK_INFRA_AO_UART0		21
+> > +#define CLK_INFRA_AO_UART1		22
+> > +#define CLK_INFRA_AO_UART2		23
+> > +#define CLK_INFRA_AO_GCE_26M		24
+> > +#define CLK_INFRA_AO_CQ_DMA_FPC		25
+> > +#define CLK_INFRA_AO_BTIF		26
+> > +#define CLK_INFRA_AO_SPI0		27
+> > +#define CLK_INFRA_AO_MSDC0		28
+> > +#define CLK_INFRA_AO_MSDCFDE		29
+> > +#define CLK_INFRA_AO_MSDC1		30
+> > +#define CLK_INFRA_AO_DVFSRC		31
+> > +#define CLK_INFRA_AO_GCPU		32
+> > +#define CLK_INFRA_AO_TRNG		33
+> > +#define CLK_INFRA_AO_AUXADC		34
+> > +#define CLK_INFRA_AO_CPUM		35
+> > +#define CLK_INFRA_AO_CCIF1_AP		36
+> > +#define CLK_INFRA_AO_CCIF1_MD		37
+> > +#define CLK_INFRA_AO_AUXADC_MD		38
+> > +#define CLK_INFRA_AO_AP_DMA		39
+> > +#define CLK_INFRA_AO_XIU		40
+> > +#define CLK_INFRA_AO_DEVICE_APC		41
+> > +#define CLK_INFRA_AO_CCIF_AP		42
+> > +#define CLK_INFRA_AO_DEBUGTOP		43
+> > +#define CLK_INFRA_AO_AUDIO		44
+> > +#define CLK_INFRA_AO_CCIF_MD		45
+> > +#define CLK_INFRA_AO_DXCC_SEC_CORE	46
+> > +#define CLK_INFRA_AO_DXCC_AO		47
+> > +#define CLK_INFRA_AO_IMP_IIC		48
+> > +#define CLK_INFRA_AO_DRAMC_F26M		49
+> > +#define CLK_INFRA_AO_RG_PWM_FBCLK6	50
+> > +#define CLK_INFRA_AO_SSUSB_TOP_HCLK	51
+> > +#define CLK_INFRA_AO_DISP_PWM		52
+> > +#define CLK_INFRA_AO_CLDMA_BCLK		53
+> > +#define CLK_INFRA_AO_AUDIO_26M_BCLK	54
+> > +#define CLK_INFRA_AO_SSUSB_TOP_P1_HCLK	55
+> > +#define CLK_INFRA_AO_SPI1		56
+> > +#define CLK_INFRA_AO_I2C4		57
+> > +#define CLK_INFRA_AO_MODEM_TEMP_SHARE	58
+> > +#define CLK_INFRA_AO_SPI2		59
+> > +#define CLK_INFRA_AO_SPI3		60
+> > +#define CLK_INFRA_AO_SSUSB_TOP_REF	61
+> > +#define CLK_INFRA_AO_SSUSB_TOP_XHCI	62
+> > +#define CLK_INFRA_AO_SSUSB_TOP_P1_REF	63
+> > +#define CLK_INFRA_AO_SSUSB_TOP_P1_XHCI	64
+> > +#define CLK_INFRA_AO_SSPM		65
+> > +#define CLK_INFRA_AO_SSUSB_TOP_P1_SYS	66
+> > +#define CLK_INFRA_AO_I2C5		67
+> > +#define CLK_INFRA_AO_I2C5_ARBITER	68
+> > +#define CLK_INFRA_AO_I2C5_IMM		69
+> > +#define CLK_INFRA_AO_I2C1_ARBITER	70
+> > +#define CLK_INFRA_AO_I2C1_IMM		71
+> > +#define CLK_INFRA_AO_I2C2_ARBITER	72
+> > +#define CLK_INFRA_AO_I2C2_IMM		73
+> > +#define CLK_INFRA_AO_SPI4		74
+> > +#define CLK_INFRA_AO_SPI5		75
+> > +#define CLK_INFRA_AO_CQ_DMA		76
+> > +#define CLK_INFRA_AO_BIST2FPC		77
+> > +#define CLK_INFRA_AO_MSDC0_SELF		78
+> > +#define CLK_INFRA_AO_SPINOR		79
+> > +#define CLK_INFRA_AO_SSPM_26M_SELF	80
+> > +#define CLK_INFRA_AO_SSPM_32K_SELF	81
+> > +#define CLK_INFRA_AO_I2C6		82
+> > +#define CLK_INFRA_AO_AP_MSDC0		83
+> > +#define CLK_INFRA_AO_MD_MSDC0		84
+> > +#define CLK_INFRA_AO_MSDC0_SRC		85
+> > +#define CLK_INFRA_AO_MSDC1_SRC		86
+> > +#define CLK_INFRA_AO_SEJ_F13M		87
+> > +#define CLK_INFRA_AO_AES_TOP0_BCLK	88
+> > +#define CLK_INFRA_AO_MCU_PM_BCLK	89
+> > +#define CLK_INFRA_AO_CCIF2_AP		90
+> > +#define CLK_INFRA_AO_CCIF2_MD		91
+> > +#define CLK_INFRA_AO_CCIF3_AP		92
+> > +#define CLK_INFRA_AO_CCIF3_MD		93
+> > +#define CLK_INFRA_AO_FADSP_26M		94
+> > +#define CLK_INFRA_AO_FADSP_32K		95
+> > +#define CLK_INFRA_AO_CCIF4_AP		96
+> > +#define CLK_INFRA_AO_CCIF4_MD		97
+> > +#define CLK_INFRA_AO_FADSP		98
+> > +#define CLK_INFRA_AO_FLASHIF_133M	99
+> > +#define CLK_INFRA_AO_FLASHIF_66M	100
+> > +#define CLK_INFRA_AO_NR_CLK		101
+> > +
+> > +/* APMIXEDSYS */
+> > +
+> > +#define CLK_APMIXED_ARMPLL_LL		0
+> > +#define CLK_APMIXED_ARMPLL_BL		1
+> > +#define CLK_APMIXED_CCIPLL		2
+> > +#define CLK_APMIXED_MAINPLL		3
+> > +#define CLK_APMIXED_UNIV2PLL		4
+> > +#define CLK_APMIXED_MSDCPLL		5
+> > +#define CLK_APMIXED_MMPLL		6
+> > +#define CLK_APMIXED_NNAPLL		7
+> > +#define CLK_APMIXED_NNA2PLL		8
+> > +#define CLK_APMIXED_ADSPPLL		9
+> > +#define CLK_APMIXED_MFGPLL		10
+> > +#define CLK_APMIXED_TVDPLL		11
+> > +#define CLK_APMIXED_APLL1		12
+> > +#define CLK_APMIXED_APLL2		13
+> > +#define CLK_APMIXED_NR_CLK		14
+> > +
+> > +/* IMP_IIC_WRAP */
+> > +
+> > +#define CLK_IMP_IIC_WRAP_AP_CLOCK_I2C0	0
+> > +#define CLK_IMP_IIC_WRAP_AP_CLOCK_I2C1	1
+> > +#define CLK_IMP_IIC_WRAP_AP_CLOCK_I2C2	2
+> > +#define CLK_IMP_IIC_WRAP_AP_CLOCK_I2C3	3
+> > +#define CLK_IMP_IIC_WRAP_AP_CLOCK_I2C4	4
+> > +#define CLK_IMP_IIC_WRAP_AP_CLOCK_I2C5	5
+> > +#define CLK_IMP_IIC_WRAP_AP_CLOCK_I2C6	6
+> > +#define CLK_IMP_IIC_WRAP_AP_CLOCK_I2C7	7
+> > +#define CLK_IMP_IIC_WRAP_AP_CLOCK_I2C8	8
+> > +#define CLK_IMP_IIC_WRAP_AP_CLOCK_I2C9	9
+> > +#define CLK_IMP_IIC_WRAP_NR_CLK		10
+> > +
+> > +/* MFGCFG */
+> > +
+> > +#define CLK_MFG_BG3D			0
+> > +#define CLK_MFG_NR_CLK			1
+> > +
+> > +/* MMSYS */
+> > +
+> > +#define CLK_MM_DISP_MUTEX0		0
+> > +#define CLK_MM_APB_MM_BUS		1
+> > +#define CLK_MM_DISP_OVL0		2
+> > +#define CLK_MM_DISP_RDMA0		3
+> > +#define CLK_MM_DISP_OVL0_2L		4
+> > +#define CLK_MM_DISP_WDMA0		5
+> > +#define CLK_MM_DISP_RSZ0		6
+> > +#define CLK_MM_DISP_AAL0		7
+> > +#define CLK_MM_DISP_CCORR0		8
+> > +#define CLK_MM_DISP_COLOR0		9
+> > +#define CLK_MM_SMI_INFRA		10
+> > +#define CLK_MM_DISP_DSC_WRAP0		11
+> > +#define CLK_MM_DISP_GAMMA0		12
+> > +#define CLK_MM_DISP_POSTMASK0		13
+> > +#define CLK_MM_DISP_DITHER0		14
+> > +#define CLK_MM_SMI_COMMON		15
+> > +#define CLK_MM_DSI0			16
+> > +#define CLK_MM_DISP_FAKE_ENG0		17
+> > +#define CLK_MM_DISP_FAKE_ENG1		18
+> > +#define CLK_MM_SMI_GALS			19
+> > +#define CLK_MM_SMI_IOMMU		20
+> > +#define CLK_MM_DISP_RDMA1		21
+> > +#define CLK_MM_DISP_DPI			22
+> > +#define CLK_MM_DSI0_DSI_CK_DOMAIN	23
+> > +#define CLK_MM_DISP_26M			24
+> > +#define CLK_MM_NR_CLK			25
+> > +
+> > +/* WPESYS */
+> > +
+> > +#define CLK_WPE_CK_EN			0
+> > +#define CLK_WPE_SMI_LARB8_CK_EN		1
+> > +#define CLK_WPE_SYS_EVENT_TX_CK_EN	2
+> > +#define CLK_WPE_SMI_LARB8_PCLK_EN	3
+> > +#define CLK_WPE_NR_CLK			4
+> > +
+> > +/* IMGSYS1 */
+> > +
+> > +#define CLK_IMG1_LARB9_IMG1		0
+> > +#define CLK_IMG1_LARB10_IMG1		1
+> > +#define CLK_IMG1_DIP			2
+> > +#define CLK_IMG1_GALS_IMG1		3
+> > +#define CLK_IMG1_NR_CLK			4
+> > +
+> > +/* IMGSYS2 */
+> > +
+> > +#define CLK_IMG2_LARB9_IMG2		0
+> > +#define CLK_IMG2_LARB10_IMG2		1
+> > +#define CLK_IMG2_MFB			2
+> > +#define CLK_IMG2_WPE			3
+> > +#define CLK_IMG2_MSS			4
+> > +#define CLK_IMG2_GALS_IMG2		5
+> > +#define CLK_IMG2_NR_CLK			6
+> > +
+> > +/* VDECSYS */
+> > +
+> > +#define CLK_VDEC_LARB1_CKEN		0
+> > +#define CLK_VDEC_LAT_CKEN		1
+> > +#define CLK_VDEC_LAT_ACTIVE		2
+> > +#define CLK_VDEC_LAT_CKEN_ENG		3
+> > +#define CLK_VDEC_MINI_MDP_CKEN_CFG_RG	4
+> > +#define CLK_VDEC_CKEN			5
+> > +#define CLK_VDEC_ACTIVE			6
+> > +#define CLK_VDEC_CKEN_ENG		7
+> > +#define CLK_VDEC_NR_CLK			8
+> > +
+> > +/* VENCSYS */
+> > +
+> > +#define CLK_VENC_CKE0_LARB		0
+> > +#define CLK_VENC_CKE1_VENC		1
+> > +#define CLK_VENC_CKE2_JPGENC		2
+> > +#define CLK_VENC_CKE5_GALS		3
+> > +#define CLK_VENC_NR_CLK			4
+> > +
+> > +/* CAMSYS */
+> > +
+> > +#define CLK_CAM_LARB13			0
+> > +#define CLK_CAM_DFP_VAD			1
+> > +#define CLK_CAM_LARB14			2
+> > +#define CLK_CAM				3
+> > +#define CLK_CAMTG			4
+> > +#define CLK_CAM_SENINF			5
+> > +#define CLK_CAMSV1			6
+> > +#define CLK_CAMSV2			7
+> > +#define CLK_CAMSV3			8
+> > +#define CLK_CAM_CCU0			9
+> > +#define CLK_CAM_CCU1			10
+> > +#define CLK_CAM_MRAW0			11
+> > +#define CLK_CAM_FAKE_ENG		12
+> > +#define CLK_CAM_CCU_GALS		13
+> > +#define CLK_CAM2MM_GALS			14
+> > +#define CLK_CAM_NR_CLK			15
+> > +
+> > +/* CAMSYS_RAWA */
+> > +
+> > +#define CLK_CAM_RAWA_LARBX_RAWA		0
+> > +#define CLK_CAM_RAWA			1
+> > +#define CLK_CAM_RAWA_CAMTG_RAWA		2
+> > +#define CLK_CAM_RAWA_NR_CLK		3
+> > +
+> > +/* CAMSYS_RAWB */
+> > +
+> > +#define CLK_CAM_RAWB_LARBX_RAWB		0
+> > +#define CLK_CAM_RAWB			1
+> > +#define CLK_CAM_RAWB_CAMTG_RAWB		2
+> > +#define CLK_CAM_RAWB_NR_CLK		3
+> > +
+> > +/* MDPSYS */
+> > +
+> > +#define CLK_MDP_RDMA0			0
+> > +#define CLK_MDP_TDSHP0			1
+> > +#define CLK_MDP_IMG_DL_ASYNC0		2
+> > +#define CLK_MDP_IMG_DL_ASYNC1		3
+> > +#define CLK_MDP_DISP_RDMA		4
+> > +#define CLK_MDP_HMS			5
+> > +#define CLK_MDP_SMI0			6
+> > +#define CLK_MDP_APB_BUS			7
+> > +#define CLK_MDP_WROT0			8
+> > +#define CLK_MDP_RSZ0			9
+> > +#define CLK_MDP_HDR0			10
+> > +#define CLK_MDP_MUTEX0			11
+> > +#define CLK_MDP_WROT1			12
+> > +#define CLK_MDP_RSZ1			13
+> > +#define CLK_MDP_FAKE_ENG0		14
+> > +#define CLK_MDP_AAL0			15
+> > +#define CLK_MDP_DISP_WDMA		16
+> > +#define CLK_MDP_COLOR			17
+> > +#define CLK_MDP_IMG_DL_ASYNC2		18
+> > +#define CLK_MDP_IMG_DL_RELAY0_ASYNC0	19
+> > +#define CLK_MDP_IMG_DL_RELAY1_ASYNC1	20
+> > +#define CLK_MDP_IMG_DL_RELAY2_ASYNC2	21
+> > +#define CLK_MDP_NR_CLK			22
+> > +
+> > +/* IPESYS */
+> > +
+> > +#define CLK_IPE_LARB19			0
+> > +#define CLK_IPE_LARB20			1
+> > +#define CLK_IPE_SMI_SUBCOM		2
+> > +#define CLK_IPE_FD			3
+> > +#define CLK_IPE_FE			4
+> > +#define CLK_IPE_RSC			5
+> > +#define CLK_IPE_DPE			6
+> > +#define CLK_IPE_GALS_IPE		7
+> > +#define CLK_IPE_NR_CLK			8
+> > +
+> > +#endif /* _DT_BINDINGS_CLK_MT8186_H */
+> > -- 
+> > 2.18.0
+> > 
+> > 
+

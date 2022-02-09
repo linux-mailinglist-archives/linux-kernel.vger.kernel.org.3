@@ -2,82 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ADAE4AFEFB
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 22:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CBFF4AFF12
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 22:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232890AbiBIVIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 16:08:18 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33416 "EHLO
+        id S233057AbiBIVPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 16:15:40 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:40912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232842AbiBIVIO (ORCPT
+        with ESMTP id S232999AbiBIVPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 16:08:14 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3AFC03C1B8;
-        Wed,  9 Feb 2022 13:08:16 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id e8so2770283ilm.13;
-        Wed, 09 Feb 2022 13:08:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VsilYW3DDh1toEVnhvN/0AB1n2KJSIEgQPDPpYS3ogg=;
-        b=lTCxyXVlpMZ7ZhnHlr0IFLmVb5WhXpMalHcioq+FeyOlAMckPjGFTC1N9qKM+0tJeQ
-         32xDRJmJn7C5ngTBYjkBu8ftFMiW8Jw7c3Xsbu/QtV8XG5pYYNdqTE5nl+KqN0QL/8pO
-         e602NNbmMWqt8hrx6QN2kpl+T4Nxun0BDnG28QRongQ/QyKL85nOQ6JhHB99N9pu81t5
-         vn4jeiRC4jJcX3/IcdKIHvKYS/ws+oug+cT5YiVk9GYasw3I5OsTeemgLi7nObhhipmG
-         AERACopq8wGlgJevfITcbiBtBg+qh4G70NATunGDSCdqrhcEecvYgJyaPxQLH5vw3tg6
-         1jUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VsilYW3DDh1toEVnhvN/0AB1n2KJSIEgQPDPpYS3ogg=;
-        b=lSv2DG3+KmIMjhGdnLbo0E+voxH4LrnZx7+2GURuz/zywuIdkpFHR2FvPyyKxFH6qJ
-         PAc36qROoAKmsOCqywxUBiuUhp7ewh4Rkpq2ba1cnpe/0hHgFulSv+dqcNK3dH8EXIJ3
-         0iOf9yHasSWvnd9xU8V0FPRk41S4xBJP4toPD2WS/v7pF/DNxlT/B20PQEOwZytfwODJ
-         eujk94lngGcu4jqSd/UQcwwwSScgiriZet99dai+E5uroS02p5J+vlsazFgxl/WYiy3o
-         oZiwrgFOo6lYK4M4aK6MPSBF+q0eL5nlRSUF/w+07iKYSEDnP33U7A4N4N0b31kw2X2e
-         mElQ==
-X-Gm-Message-State: AOAM532ovB7LzJ06XeCbt7YoSJc8b1ZClOhWTK9wJJO/vE6t9YhZcgW/
-        0V4QyUFcLPkil/Ap4jC5a9AYbz+LudqAZOFEAVc=
-X-Google-Smtp-Source: ABdhPJwJrGQcC++AJxv7m7KPpMf0I6w86y2CQ/5IPmwRw3aecp3EqZ/n1Wd6sld664BgP/YVhBpLla98iuTmQWAaq9o=
-X-Received: by 2002:a05:6e02:1ba2:: with SMTP id n2mr2240764ili.5.1644440895628;
- Wed, 09 Feb 2022 13:08:15 -0800 (PST)
+        Wed, 9 Feb 2022 16:15:39 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44272C1DC161
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 13:15:41 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 045251F391;
+        Wed,  9 Feb 2022 21:15:40 +0000 (UTC)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 48ABB13638;
+        Wed,  9 Feb 2022 21:15:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Q+/QAfkuBGJyIwAAMHmgww
+        (envelope-from <dave@stgolabs.net>); Wed, 09 Feb 2022 21:15:37 +0000
+Date:   Wed, 9 Feb 2022 13:08:24 -0800
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH REPOST] locking/local_lock: Make the empty local_lock_*()
+ function a macro.
+Message-ID: <20220209210824.wwsq63z4o6a6ei7a@offworld>
+References: <YgKjciR60fZft2l4@linutronix.de>
 MIME-Version: 1.0
-References: <20220201185054.1041917-1-german.gomez@arm.com>
- <CANiq72nb_M3PJLG=mFfQVgAd4fbkL=OhGKS_uQHNf8Jbef3hag@mail.gmail.com> <4632061c-ec87-c4d2-3387-fcfdccf1da6e@arm.com>
-In-Reply-To: <4632061c-ec87-c4d2-3387-fcfdccf1da6e@arm.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 9 Feb 2022 22:08:04 +0100
-Message-ID: <CANiq72muQyY_TkXdZEo=Ca3j16A8qATpOTSCB1WcOJZeeStPgg@mail.gmail.com>
-Subject: Re: [PATCH] perf symbols: Remove demangle-rust files as superfluous
-To:     German Gomez <german.gomez@arm.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <YgKjciR60fZft2l4@linutronix.de>
+User-Agent: NeoMutt/20211029
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 9:55 PM German Gomez <german.gomez@arm.com> wrote:
+On Tue, 08 Feb 2022, Sebastian Andrzej Siewior wrote:
+
+>It has been said that local_lock() does not add any overhead compared to
+>preempt_disable() in a !LOCKDEP configuration. A micro benchmark showed
+>an unexpected result which can be reduced to the fact that local_lock()
+>was not entirely optimized away.
+>In the !LOCKDEP configuration local_lock_acquire() is an empty static
+>inline function. On x86 the this_cpu_ptr() argument of that function is
+>fully evaluated leading to an additional mov+add instructions which are
+>not needed and not used.
 >
-> Yes, I should've added these tags from the start. Sorry Eduard-Mihai.
+>Replace the static inline function with a macro. The typecheck() macro
+>ensures that the argument is of proper type while the resulting
+>disassembly shows no traces of this_cpu_ptr().
+>
+>Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+>Reviewed-by: Waiman Long <longman@redhat.com>
 
-No worries. Also my apologies: I noticed you dropped the patch looking
-at the archive after sending this, but I haven't got the other emails
-in the thread (yet?).
-
-Cheers,
-Miguel
+Reviewed-by: Davidlohr Bueso <dbueso@suse.de>

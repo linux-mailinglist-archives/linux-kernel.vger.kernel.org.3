@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF63D4AF589
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07DB54AF58D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236111AbiBIPjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:39:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
+        id S236136AbiBIPlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 10:41:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236113AbiBIPjl (ORCPT
+        with ESMTP id S236177AbiBIPk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:39:41 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB5BC05CB82;
-        Wed,  9 Feb 2022 07:39:42 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 219Ekbp6013360;
-        Wed, 9 Feb 2022 15:39:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type :
- content-transfer-encoding; s=corp-2021-07-09;
- bh=863BwFAgoaC2JnBu4gSCW8/vsPzH4hffHnxl4KQnG5E=;
- b=ulW27q099SdFZlEV6lHLwhyiNq9smYnMasmA3+z9M9H9KcbO0s4lc6Z7HS2DCD51scfm
- FqiAzIXQksxvvgw4GhAYCW65NS3wL+RLlAU3NsYHRrdofP1ojcq5kaaBmLH6fK9vWrQz
- iMRHOhqjy46WsWFi9zkDJrjf2PWZu9JyzNYJh10rPSIYn9116cs+yN6eMN1JFOWmDcjT
- AcmXM9/Y5Sni6ckpPg8/d3GGcC6yl34imk1Z5XqmpLnsX7TdmLAIaDFpu9JLfOovHcYd
- B190j+kcngWpbuSmUGY++CxKAeRafjGWuRFYUDs34fDv//cq2f+mcigtMA3enGgeUCV9 zQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e368tx6an-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Feb 2022 15:39:38 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 219FHdmB175021;
-        Wed, 9 Feb 2022 15:39:37 GMT
-Received: from lab02.no.oracle.com (lab02.no.oracle.com [10.172.144.56])
-        by aserp3020.oracle.com with ESMTP id 3e1h28dqgf-1;
-        Wed, 09 Feb 2022 15:39:37 +0000
-From:   =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH for-rc v2] IB/cma: Allow XRG INI QPs to set their local ACK timeout
-Date:   Wed,  9 Feb 2022 16:39:35 +0100
-Message-Id: <1644421175-31943-1-git-send-email-haakon.bugge@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
+        Wed, 9 Feb 2022 10:40:58 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2144AC0613CA;
+        Wed,  9 Feb 2022 07:40:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644421259; x=1675957259;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ybIpsMmv2oQsujciJTHbw6FLtIsdAI/tnWcB5Lvr0nM=;
+  b=Bio9/O6aEtJH15JzT6gNHEb+eI0GM8j4b1gPHk2gBAzSvAp4k8OVRniS
+   OnY9O+UV9+A5kXCj6RCUKx39J8uH3+JRMAerq+sVT83Mcc0obtXweEqBw
+   scCb0TmnP8EJN1lE073hvI4yCafe7c3+GbNO5S1pkyaf9h8LJRbJGMENk
+   fLhkDrdI3OF8VG/MgJJwy2CCi4/5dhWFxo+e2GO4mA71KpRmlzkYQ3MEa
+   GGEtgNBaJeVLGQnL+iGx1oKzKcUQlLNiARSYE2vS/KGUG6Wc/iitk6J3a
+   cHrfZb961p452lrubEeuMhMtfnaAfnuXK8yxApT+4lOL1pZMzLg8YU+RM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="248988099"
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="248988099"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 07:40:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="500003852"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 09 Feb 2022 07:40:53 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nHp5Q-0001ym-K7; Wed, 09 Feb 2022 15:40:52 +0000
+Date:   Wed, 9 Feb 2022 23:40:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [ambarus:spi-nor/next 9/9] drivers/mtd/spi-nor/macronix.c:20:
+ warning: This comment starts with '/**', but isn't a kernel-doc comment.
+ Refer Documentation/doc-guide/kernel-doc.rst
+Message-ID: <202202092342.YwAYnHF4-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10252 signatures=673431
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 bulkscore=0
- phishscore=0 malwarescore=0 mlxlogscore=999 adultscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202090087
-X-Proofpoint-ORIG-GUID: ASi-MLhSNGP42rhxbelcYXs2Zm2jYl3u
-X-Proofpoint-GUID: ASi-MLhSNGP42rhxbelcYXs2Zm2jYl3u
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,33 +63,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-XRC INI QPs should be able to adjust their local ACK timeout.
+tree:   https://github.com/ambarus/linux-0day spi-nor/next
+head:   89a4d99e9d41b68d34943980943207b58c433256
+commit: 89a4d99e9d41b68d34943980943207b58c433256 [9/9] mtd: spi-nor: macronix: Add support for mx66lm1g45g
+config: i386-randconfig-a003 (https://download.01.org/0day-ci/archive/20220209/202202092342.YwAYnHF4-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/ambarus/linux-0day/commit/89a4d99e9d41b68d34943980943207b58c433256
+        git remote add ambarus https://github.com/ambarus/linux-0day
+        git fetch --no-tags ambarus spi-nor/next
+        git checkout 89a4d99e9d41b68d34943980943207b58c433256
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/mtd/spi-nor/
 
-Fixes: 2c1619edef61 ("IB/cma: Define option to set ack timeout and pack tos_set")
-Signed-off-by: Håkon Bugge <haakon.bugge@oracle.com>
-Suggested-by: Avneesh Pant <avneesh.pant@oracle.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/mtd/spi-nor/macronix.c:20: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Macronix SPI NOR flash operations.
+
+
+vim +20 drivers/mtd/spi-nor/macronix.c
+
+    18	
+    19	/**
+  > 20	 * Macronix SPI NOR flash operations.
+    21	 */
+    22	#define SPI_NOR_MX_READ_CR2_OP(ndummy, buf, ndata)			\
+    23		SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_READ_CR2, 0),		\
+    24			   SPI_MEM_OP_ADDR(4, SPINOR_REG_CR2_MODE_ADDR, 0),	\
+    25			   SPI_MEM_OP_DUMMY(ndummy, 0),				\
+    26			   SPI_MEM_OP_DATA_IN(ndata, buf, 0))
+    27	
 
 ---
-
-v1 -> v2:
-   * Removed WARN_ON as suggested by Leon
----
- drivers/infiniband/core/cma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
-index 0f5f0d7..7adacd1 100644
---- a/drivers/infiniband/core/cma.c
-+++ b/drivers/infiniband/core/cma.c
-@@ -2811,7 +2811,7 @@ int rdma_set_ack_timeout(struct rdma_cm_id *id, u8 timeout)
- {
- 	struct rdma_id_private *id_priv;
- 
--	if (id->qp_type != IB_QPT_RC)
-+	if (id->qp_type != IB_QPT_RC && id->qp_type != IB_QPT_XRC_INI)
- 		return -EINVAL;
- 
- 	id_priv = container_of(id, struct rdma_id_private, id);
--- 
-1.8.3.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

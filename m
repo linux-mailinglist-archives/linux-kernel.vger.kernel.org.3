@@ -2,81 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 311C14AEB21
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D284AEAB7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238066AbiBIHeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 02:34:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34038 "EHLO
+        id S235734AbiBIHEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 02:04:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237816AbiBIHeJ (ORCPT
+        with ESMTP id S235596AbiBIHEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 02:34:09 -0500
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E51C0613CB;
-        Tue,  8 Feb 2022 23:34:12 -0800 (PST)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 1B7D620277D;
-        Wed,  9 Feb 2022 08:34:11 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id D7838201071;
-        Wed,  9 Feb 2022 08:34:10 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 65205183AD0B;
-        Wed,  9 Feb 2022 15:34:09 +0800 (+08)
-From:   Richard Zhu <hongxing.zhu@nxp.com>
-To:     l.stach@pengutronix.de, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, shawnguo@kernel.org
-Cc:     hongxing.zhu@nxp.com, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com
-Subject: [RFC 2/2] PCI: imx6: Enable imx6qp pcie power management support
-Date:   Wed,  9 Feb 2022 15:02:36 +0800
-Message-Id: <1644390156-5940-2-git-send-email-hongxing.zhu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1644390156-5940-1-git-send-email-hongxing.zhu@nxp.com>
-References: <1644390156-5940-1-git-send-email-hongxing.zhu@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 9 Feb 2022 02:04:10 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE184C0613CB;
+        Tue,  8 Feb 2022 23:04:13 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8AF6A1F390;
+        Wed,  9 Feb 2022 07:04:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644390252; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I1UxFXVDdtsCDjZgHFf5AxR7egC3Pit8xnNYveVWhAc=;
+        b=j+9Jdm6onqPTFjKCVI/vgmxCixrmBCPIPSs9hcZJ6QhQyR2P2njU8D4k7eh+89C8Pm/AbO
+        yXN75K04SjBYTM7YPgq4xjd1Apn/J9pdlCslZ6oqIFXDF6GkxP4OQFbUoSQiE3D/pVFvst
+        iDB+sBufU64r0Ek4BR/FB4Aqrwfq9xc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644390252;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I1UxFXVDdtsCDjZgHFf5AxR7egC3Pit8xnNYveVWhAc=;
+        b=Jp+95xuu4T8ipI1FBSyp5W5LN9QQESji3skTAg1hN2dQc6d2qagkl1dRhZu0585/ic2+eI
+        faQEpSFsGgRBuXCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0149913487;
+        Wed,  9 Feb 2022 07:04:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FNi2OWtnA2L0fQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Wed, 09 Feb 2022 07:04:11 +0000
+Date:   Wed, 9 Feb 2022 08:04:10 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Terry Bowman <Terry.Bowman@amd.com>
+Cc:     linux@roeck-us.net, linux-watchdog@vger.kernel.org,
+        linux-i2c@vger.kernel.org, wsa@kernel.org,
+        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
+        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
+        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
+        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
+        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
+Subject: Re: [PATCH v4 0/9] i2c: piix4: Replace cd6h/cd7h port I/O accesses
+ with MMIO accesses
+Message-ID: <20220209080410.1e7dddd9@endymion.delvare>
+In-Reply-To: <27e60021-30cb-3b1c-f429-2618bf891e5e@amd.com>
+References: <20220130184130.176646-1-terry.bowman@amd.com>
+        <20220208181114.180a99ba@endymion.delvare>
+        <4ae57999-0f23-7578-008d-2009bc36d46b@amd.com>
+        <20220208224653.6a62ba22@endymion.delvare>
+        <27e60021-30cb-3b1c-f429-2618bf891e5e@amd.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-i.MX6QP PCIe supports the RESET logic, thus it can support
-the L2 exit by the reset mechanism.
-Enable the i.MX6QP PCIe suspend/resume operations support.
+On Tue, 8 Feb 2022 17:03:09 -0600, Terry Bowman wrote:
+> On 2/8/22 15:46, Jean Delvare wrote:
+> > If so, while there's indeed nothing to be done for the most recent
+> > systems where only MMIO access is possible, you may still need to
+> > enable MMIO access through legacy I/O if you try to use MMIO on
+> > chipsets where both are possible. I'm not sure what exactly where you
+> > set the limit. In the last patch you say that 0x51 is the first
+> > revision of the family 17h CPUs, but is family 17h the first where MMIO
+> > is available, or the first where legacy I/O isn't?
+>
+> Family 17h, SMBus PCI ID >= 0x51 is the first where cd6h/cd7h port I/O is disabled. 
+> If SMBus PCI ID < 0x51 then cd6h/cd7h port I/O is used. 
 
-Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
----
- drivers/pci/controller/dwc/pci-imx6.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+OK, we are safe then :-)
 
-diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-index 784801f2f9e6..62262483470a 100644
---- a/drivers/pci/controller/dwc/pci-imx6.c
-+++ b/drivers/pci/controller/dwc/pci-imx6.c
-@@ -995,6 +995,7 @@ static void imx6_pcie_pm_turnoff(struct imx6_pcie *imx6_pcie)
- 	/* Others poke directly at IOMUXC registers */
- 	switch (imx6_pcie->drvdata->variant) {
- 	case IMX6SX:
-+	case IMX6QP:
- 		regmap_update_bits(imx6_pcie->iomuxc_gpr, IOMUXC_GPR12,
- 				IMX6SX_GPR12_PCIE_PM_TURN_OFF,
- 				IMX6SX_GPR12_PCIE_PM_TURN_OFF);
-@@ -1307,7 +1308,8 @@ static const struct imx6_pcie_drvdata drvdata[] = {
- 	[IMX6QP] = {
- 		.variant = IMX6QP,
- 		.flags = IMX6_PCIE_FLAG_IMX6_PHY |
--			 IMX6_PCIE_FLAG_IMX6_SPEED_CHANGE,
-+			 IMX6_PCIE_FLAG_IMX6_SPEED_CHANGE |
-+			 IMX6_PCIE_FLAG_SUPPORTS_SUSPEND,
- 		.dbi_length = 0x200,
- 	},
- 	[IMX7D] = {
 -- 
-2.25.1
-
+Jean Delvare
+SUSE L3 Support

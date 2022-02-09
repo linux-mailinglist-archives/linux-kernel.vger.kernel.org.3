@@ -2,147 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE45D4B0165
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 00:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66AEE4B0167
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 00:38:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbiBIXhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 18:37:34 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49302 "EHLO
+        id S231434AbiBIXid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 18:38:33 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbiBIXh3 (ORCPT
+        with ESMTP id S231149AbiBIXiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 18:37:29 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CDAE053733;
-        Wed,  9 Feb 2022 15:37:30 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id fy20so11293682ejc.0;
-        Wed, 09 Feb 2022 15:37:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=5kaUwuqIGj0ojEY7kPnRejH2UYzI/SB/FogOwRyp+Ho=;
-        b=VZmjjhFtkYFT0IBAeyge4aSOGp+VmKZLadIKkutYStfpbL4u5wkZ2aqJA44LaD+Pw0
-         yh2qNKvkj0sDhnG56xYMRbnkbLQkk6zUFVjViRGMQmUY+v2WhMrEC8ZVa1fO8KR5LmmD
-         978OJyklk5H4HSl0zmK1M8CWkN+7/qs+57uZI0geiw4fQvonyXp5w56Nc/MiQ336ZOKf
-         jkpdwEY1J8MkU8UwVpu6AvqPszIfaZS611DYLDEejkP487q24C83reHtf2hn9sSXp1VH
-         WY90S2gXRmyBqylrLUFKYkerWA/oL0UZt8tm1pEb6Erqv7DtaIY0vW1uihk/4TtaXuK1
-         ERHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=5kaUwuqIGj0ojEY7kPnRejH2UYzI/SB/FogOwRyp+Ho=;
-        b=0BgyvF05A8c3g4Sh5hbrAlVyqRGaEU1Ia4gVEqzTa7eDxL93ZGfwJWcVWkdj8x2RKi
-         JMC2Yb98zqL/tTyAIQQvfP+/QBYbpA0zlGEdXapiVhOg809/DbtornJurxnw5HWsYOFG
-         1WTTTlKYSsC70wJNLshc9Z5yaQLLskvChd/y+5Nme5r/4QlLmNfLWj0i2mdRJCLhqKcq
-         xPMzNv0i6P/DglrPV6i/n4YEfPK8T1W8NT8fWYmCLpDyPz9EVm+Qh+0rfYwz4obUqGTT
-         oQCdnHMivXAYzK2beC8viIDApyjUFvGThjVMAhaYtO5G0jtCYqbNmbLk3tncX5iKCxSg
-         1NNQ==
-X-Gm-Message-State: AOAM531ZvK6zQqbrH223+Y35zVue0zNIBYZG+XbFtUbyRt0J1Xhqb4cB
-        N5UqY1ymqxgcefZ1E7Le/WA=
-X-Google-Smtp-Source: ABdhPJxQsHHLXQBSb3idLFqni/LQQQUhHNhAtw/fi4ys+azzvFiVE/1CQd7ocFAKt5W64Owy2tVrEw==
-X-Received: by 2002:a17:907:e86:: with SMTP id ho6mr4113841ejc.61.1644449849556;
-        Wed, 09 Feb 2022 15:37:29 -0800 (PST)
-Received: from localhost (92.40.202.147.threembb.co.uk. [92.40.202.147])
-        by smtp.gmail.com with ESMTPSA id qw28sm5283992ejb.0.2022.02.09.15.37.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 15:37:29 -0800 (PST)
-Date:   Wed, 9 Feb 2022 23:38:01 +0000
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] Clock fixes for Ingenic SoCs
-Message-ID: <YgRQWfUmdXZU606t@localhost>
-References: <20220208010048.211691-1-aidanmacdonald.0x0@gmail.com>
- <EPN17R.TB21BVY3XDUH1@crapouillou.net>
+        Wed, 9 Feb 2022 18:38:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F41E02E500;
+        Wed,  9 Feb 2022 15:38:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B73E616B7;
+        Wed,  9 Feb 2022 23:38:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5AA8C340E7;
+        Wed,  9 Feb 2022 23:38:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644449894;
+        bh=KFa4++TEaAXLAeJN/VQvwvpnzo4zYedWhTuwEdr/RBg=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=LKykyeSv7GnzxiJou5lpGzYV3DCEIbYLSKi37Nj0oF8LSdWvhvx6GpMG6xjxU43SF
+         LygnFVjUlrY/Svo4iTz/gLAkHA3vSQv0bDcFUuw/RGWEgn5c2BPkvN9lHzcYcBrYwI
+         G4uISAsfpbjzxcDgZv9kX3598i6879SKnqnIuRj43L+pBfmTQ7RBRRYTD2SiCmttRi
+         oxPWxjWK+6EcHDeNtsmzTUObwhvfJUK6Ew1YV4JipsD9zRyAlvggvUfsP8HVPcCVNf
+         TrzehjBljVulydJUJzAqO2Bh4jpH675Ye9NiJWvPz0EMMRGBANNMrQXP67WLviCWns
+         FSvRoAmtapdhA==
+Date:   Thu, 10 Feb 2022 00:38:11 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     paulmck@kernel.org
+Cc:     kernel-team@fb.com, linux-kernel@vger.kernel.org,
+        quic_mojha@quicinc.com, rcu@vger.kernel.org, rostedt@goodmis.org,
+        tj@kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH rcu 3/3] rcu: Allow expedited RCU grace periods on
+ incoming CPUs
+Message-ID: <20220209233811.GC557593@lothringen>
+Reply-To: 20220204225507.4193113-3-paulmck@kernel.org
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <EPN17R.TB21BVY3XDUH1@crapouillou.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 03:44:02PM +0000, Paul Cercueil wrote:
-> Hi Aidan,
+On Fri, Feb 04, 2022 at 02:55:07PM -0800, Paul E. McKenney wrote:
+> Although it is usually safe to invoke synchronize_rcu_expedited() from a
+> preemption-enabled CPU-hotplug notifier, if it is invoked from a notifier
+> between CPUHP_AP_RCUTREE_ONLINE and CPUHP_AP_ACTIVE, its attempts to
+> invoke a workqueue handler will hang due to RCU waiting on a CPU that
+> the scheduler is not paying attention to.  This commit therefore expands
+> use of the existing workqueue-independent synchronize_rcu_expedited()
+> from early boot to also include CPUs that are being hotplugged.
 > 
-> Le mar., févr. 8 2022 at 01:00:45 +0000, Aidan MacDonald 
-> <aidanmacdonald.0x0@gmail.com> a écrit :
-> > I ran across a problem trying to get Linux running on an Ingenic 
-> > X1000 SoC:
-> > since the memory clock isn't referenced by any driver, it appears 
-> > unused and
-> > gets disabled automatically. After that, the system hangs on any RAM 
-> > access.
-> > 
-> > There is a hack in board-ingenic.c to forcibly enable the CPU clock, 
-> > but this
-> > is insufficient for the X1000 since the memory clock has its own gate 
-> > and mux
-> > that isn't tied to the CPU.
-> > 
-> > This patch series fixes the bug by adding CLK_IS_CRITICAL flags to 
-> > important
-> > clocks, which seems to be the approach used in many other SoC clock 
-> > drivers.
-> > 
-> > It's my first time submitting patches to the kernel so let me know if 
-> > I
-> > messed anything up.
-> 
-> You did everything good.
-> 
-> I think the CI20 suffered from the same problem, it would only boot as 
-> long as the "clk_ignore_unused" flag was added on the command line. I 
-> will need to try it there to see if it improved the situation.
-> 
-> I tested the patchset on JZ4770 and it works fine. So:
-> 
-> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-> 
-> @Stephen: I don't see any changes pending on board-ingenic.c so it 
-> should be safe for you to also take [PATCH 3/3] in the clk tree.
-> 
-> Cheers,
-> -Paul
+> Link: https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
+> Reported-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> Cc: Tejun Heo <tj@kernel.org>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-Thanks Paul. I've just sent two other small fixes which are basically
-independent of this series, if you want to test them at the same time.
-One is for the TCU driver and the other is for the pinctrl driver.
+I'm surprised by this scheduler behaviour.
 
-Regards,
-Aidan
+Since sched_cpu_activate() hasn't been called yet,
+rq->balance_callback = balance_push_callback. As a result, balance_push() should
+be called at the end of schedule() when the workqueue is picked as the next task.
+Then eventually the workqueue should be immediately preempted by the stop task to
+be migrated elsewhere.
 
-> 
-> > Aidan MacDonald (3):
-> >   clk: ingenic: Allow specifying common clock flags
-> >   clk: ingenic: Mark critical clocks in Ingenic SoCs
-> >   mips: ingenic: Do not manually reference the CPU clock
-> > 
-> >  arch/mips/generic/board-ingenic.c | 26 --------------------------
-> >  drivers/clk/ingenic/cgu.c         |  2 +-
-> >  drivers/clk/ingenic/cgu.h         |  3 +++
-> >  drivers/clk/ingenic/jz4725b-cgu.c |  2 ++
-> >  drivers/clk/ingenic/jz4740-cgu.c  |  2 ++
-> >  drivers/clk/ingenic/jz4760-cgu.c  |  2 ++
-> >  drivers/clk/ingenic/jz4770-cgu.c  |  1 +
-> >  drivers/clk/ingenic/jz4780-cgu.c  |  3 +++
-> >  drivers/clk/ingenic/x1000-cgu.c   |  3 +++
-> >  drivers/clk/ingenic/x1830-cgu.c   |  3 +++
-> >  10 files changed, 20 insertions(+), 27 deletions(-)
-> > 
-> > --
-> > 2.34.1
-> > 
-> 
-> 
+So I must be missing something. For the fun, I booted the following and it
+didn't produce any issue:
+
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 80faf2273ce9..b1e74a508881 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -4234,6 +4234,8 @@ int rcutree_online_cpu(unsigned int cpu)
+ 
+ 	// Stop-machine done, so allow nohz_full to disable tick.
+ 	tick_dep_clear(TICK_DEP_BIT_RCU);
++	if (cpu != 0)
++		synchronize_rcu_expedited();
+ 	return 0;
+ }
+ 

@@ -2,98 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C08C4AF41A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 15:29:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A239B4AF416
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 15:29:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233642AbiBIO3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 09:29:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
+        id S235015AbiBIO3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 09:29:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233010AbiBIO32 (ORCPT
+        with ESMTP id S233010AbiBIO3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 09:29:28 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA70C06157B;
-        Wed,  9 Feb 2022 06:29:30 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 219ET5t3033107;
-        Wed, 9 Feb 2022 08:29:05 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1644416945;
-        bh=INMBu7PPL0wGBid1gx4F4e097L/7OHc2MPdshLnO7UU=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=CvnIYOKF4pXBywPyb3NY8+8oqz4Mccnm9sEvHExMjItbQuDBLnlF9eusuvMDfWRFu
-         B4z0pcIHac/n9WKeQljUoMt0r3eczMv56NY6FyIs8I2tiAfq7OdmKZl+ru6uzTCnkY
-         iDwct/95X0/8RKEtvG/nP1cMbPvNLniOXwW7z/8E=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 219ET5x0043742
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 9 Feb 2022 08:29:05 -0600
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 9
- Feb 2022 08:29:04 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 9 Feb 2022 08:29:04 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 219ET41V095968;
-        Wed, 9 Feb 2022 08:29:04 -0600
-Date:   Wed, 9 Feb 2022 08:29:04 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <broonie@kernel.org>, <mhocko@suse.cz>, <sfr@canb.auug.org.au>,
-        <linux-next@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <mm-commits@vger.kernel.org>, Roger Quadros <rogerq@kernel.org>,
-        <linux-mtd@lists.infradead.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>
-Subject: Re: mmotm 2022-02-08-15-31 uploaded (drivers/mtd/nand/raw/Kconfig)
-Message-ID: <20220209142904.ye22csd2zh5vynik@stack>
-References: <20220208233156.E2CA6C004E1@smtp.kernel.org>
- <b18fc937-9cc2-bb7b-fb58-3ba2555371c7@infradead.org>
- <20220209090300.43241711@xps13>
- <20220209135439.qcyge32xinvazn43@chewer>
- <20220209150703.253b16bd@xps13>
+        Wed, 9 Feb 2022 09:29:08 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50538C06157B
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 06:29:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=eIF08KcMpl5r29rPiQe9+6ZkSSpvO+hinKiqWMtDBSw=; b=oj44LeKt1qxycyFeTCQRMXiQqd
+        4VhwfEU3oOTLW+gPnSCXOuyJT4uiRmzCJo6lHaioJ88h04fktbf61OSYQeO9gafWkZNshRMa9/eSl
+        0ImOQoptpWW/k8aD8/4EaWgAZNUjL7ooSRDHy7vkBtjGzqLxp+cKz6paZQsNqL5Khem5GftWcXbNw
+        EgTpQiFfeOGaJAUiNVcklqkzxhb/U/2BWNaXERwgF4cX1Yev583OCBmcZaKH0xMT/lCb5UjMTCTUp
+        snHr5CedN/FAthzUI+5fvM+/cf3nPSR75ZWYYOD2Zo7Yq0LKYHjVL/WvVDb0SNQfz9ENetNZjUyN6
+        eBXAL6tA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nHny1-007w0y-Cn; Wed, 09 Feb 2022 14:29:09 +0000
+Date:   Wed, 9 Feb 2022 14:29:09 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mauricio Faria de Oliveira <mfo@canonical.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 51/75] mm/rmap: Convert try_to_unmap() to take a folio
+Message-ID: <YgPPtW9V3opFHMwx@casper.infradead.org>
+References: <20220204195852.1751729-1-willy@infradead.org>
+ <20220204195852.1751729-52-willy@infradead.org>
+ <CAO9xwp2+3Sh-X8xcukLxp5NE3pLWTx=KqVhivDB33W1Xci7uHQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220209150703.253b16bd@xps13>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAO9xwp2+3Sh-X8xcukLxp5NE3pLWTx=KqVhivDB33W1Xci7uHQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15:07-20220209, Miquel Raynal wrote:
-Hi Miquel,
-
-> > > Maybe we should have added K3 people in Cc but their MAINTAINERS entry
-> > > is incomplete so get_maintainers.pl did not immediately found them.  
-> > 
-> > What are we missing there?
+On Wed, Feb 09, 2022 at 11:24:34AM -0300, Mauricio Faria de Oliveira wrote:
+> Hi Andrew and Matthew,
 > 
-> Actually nothing is missing, I overlooked the file name. I touched
-> arch/arm64/Kconfig.platforms in my patch and of course
-> get_maintainers.pl didn't look at the symbol owners. I should have
-> checked that myself manually in the first place.
+> On Fri, Feb 4, 2022 at 5:00 PM Matthew Wilcox (Oracle)
+> <willy@infradead.org> wrote:
+> >
+> > Change both callers and the worker function try_to_unmap_one().
+> ...
+> > diff --git a/mm/rmap.c b/mm/rmap.c
+> ...
+> > @@ -1598,8 +1602,8 @@ static bool try_to_unmap_one(struct page *page, struct vm_area_struct *vma,
+> >                         }
+> >
+> >                         /* MADV_FREE page check */
+> > -                       if (!PageSwapBacked(page)) {
+> > -                               if (!PageDirty(page)) {
+> > +                       if (!folio_test_swapbacked(folio)) {
+> > +                               if (!folio_test_dirty(folio)) {
+> >                                         /* Invalidate as we cleared the pte */
+> >                                         mmu_notifier_invalidate_range(mm,
+> >                                                 address, address + PAGE_SIZE);
+> > @@ -1608,11 +1612,11 @@ static bool try_to_unmap_one(struct page *page, struct vm_area_struct *vma,
+> >                                 }
+> >
+> >                                 /*
+> > -                                * If the page was redirtied, it cannot be
+> > +                                * If the folio was redirtied, it cannot be
+> >                                  * discarded. Remap the page to page table.
+> >                                  */
+> >                                 set_pte_at(mm, address, pvmw.pte, pteval);
+> > -                               SetPageSwapBacked(page);
+> > +                               folio_set_swapbacked(folio);
+> >                                 ret = false;
+> >                                 page_vma_mapped_walk_done(&pvmw);
+> >                                 break;
+> ...
+> 
+> This conflicts with patch [1], currently in mmotm, and I'll send
+> another version anyway.
+> Should that patch be on top of these folio changes, or the other way around?
 
-Sure. thanks for cross checking.
+Andrew and I need to resolve conflicts between this series and other
+patches in his tree.  You don't need to worry about this.
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+> The latter would help w/ the stable backports that don't have folios
+> yet, but I can
+> send backports there as well; not a problem.
+> 
+> Thanks,
+> 
+> [1] https://lkml.kernel.org/r/20220131230255.789059-1-mfo@canonical.com
+> [PATCH v3] mm: fix race between MADV_FREE reclaim and blkdev direct IO read
+> 
+> -- 
+> Mauricio Faria de Oliveira
+> 

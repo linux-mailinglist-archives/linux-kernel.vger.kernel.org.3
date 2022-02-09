@@ -2,104 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7554B4AEA8A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 07:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9CDA4AEA81
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 07:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbiBIGoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 01:44:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
+        id S233569AbiBIGnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 01:43:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233686AbiBIGnu (ORCPT
+        with ESMTP id S232761AbiBIGnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 01:43:50 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C4BC03E900;
-        Tue,  8 Feb 2022 22:43:54 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2196RJtj008756;
-        Wed, 9 Feb 2022 06:43:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=pkrY0pIOU2e93AxmO7zanzB1euNrDknGvvrsBpHJO6Y=;
- b=T8dw8w7HtkntGTnxbtcLu/39GaMLA1MZD8zOczzniKYiVM1R3SpqZGm7WlVVX5X4SLsV
- 5qOIHB1QsvMih+jkrIe6hmYy9Vr1tiINIXlr1Sna1yFupQDBZ75xLKv4nUrT9j1XqN3D
- aPKKiQx6nVVd/c4tajBHlEmzg/oXBtQk5S2cta06URAxhfCNV2/7+jrp1WWXB6cVOU17
- qeulsU4ytT5ae26uNIUafgz5U01PPNShXOMq9o8zkcYlWV71hFsfRCyr/LA8/NObtB06
- qs1P5Pxk5ChGJiUuAYJNuUGpO10QJkMbXAqbbw8AR/rfP91efauS6rjK2dSGDud3LQIA dQ== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e48c10eta-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Feb 2022 06:43:44 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2196Stgs021263;
-        Wed, 9 Feb 2022 06:43:42 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04fra.de.ibm.com with ESMTP id 3e2ygq9ba3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Feb 2022 06:43:42 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2196hdsa46924138
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Feb 2022 06:43:39 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AAEB0AE04D;
-        Wed,  9 Feb 2022 06:43:39 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 39324AE056;
-        Wed,  9 Feb 2022 06:43:39 +0000 (GMT)
-Received: from localhost (unknown [9.43.124.244])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  9 Feb 2022 06:43:38 +0000 (GMT)
-Date:   Wed, 9 Feb 2022 12:13:38 +0530
-From:   Ritesh Harjani <riteshh@linux.ibm.com>
-To:     syzbot <syzbot+afa2ca5171d93e44b348@syzkaller.appspotmail.com>
-Cc:     jack@suse.com, jack@suse.cz, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
-Subject: Re: [syzbot] KASAN: use-after-free Read in jbd2_journal_wait_updates
-Message-ID: <20220209064338.vjhlaaav5dqb2hah@riteshh-domain>
-References: <00000000000040c94205d78125af@google.com>
- <00000000000040b9d905d78e23ee@google.com>
+        Wed, 9 Feb 2022 01:43:42 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DDEC0401C7;
+        Tue,  8 Feb 2022 22:43:46 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id u6so2276156lfm.10;
+        Tue, 08 Feb 2022 22:43:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=pAAzM9YEmsN6BS7NBJa5z8OM37Zy1PTMVGmhl1fo81w=;
+        b=FlVvYLWZE91QEPrPjnkeKbrPdSH+5IeJN/XcHoBhkj2vD8EH3wR/24NglxFpdb+eTM
+         +Odo2S8UX7+C1f+j+JnNN86RN0MrROOerK5spsgTF6441CEsncZo/EiJgLd0UrXyq4ew
+         qHQXBblQ10ly18eF9co0j+Qc2WNfBqX5upTijJ/pjxqLnI8t+ay/agCNONO08mJ5AA1F
+         0ITPdrQi+oJsoFHrbIY0yP36MjyXKjJalN84O6oJ72h0/6YvgWje0y4XPRZiDWDr5CDT
+         n5JCD0U1OKqfyDCf0nIdC1BI7qsCi7MOC0jApbRuMropCtd+nHE/kgkqk9z586rPkztl
+         FYLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pAAzM9YEmsN6BS7NBJa5z8OM37Zy1PTMVGmhl1fo81w=;
+        b=4J2o/wuZ3ZQn0gX1G8vxcly/RJJ04IULveF2oUi6s904Rdv2l0RuKSEVer3DbcVXPB
+         DKmOd/MpbEpR5T7uEo+T+HS6iHZ2F0xe0afrqF04UXpDPijGR6pSnzD9GGsk+46BJp1h
+         bbooWN/flwAcmF7YdbIwvncQBsFX+xaIxUnuJqA8o4z47OKOPo0XacX9LLJCxFK2qMiR
+         YjaNV/mr0jLuOCxDkOFr/Lcr/OxOEzD0jrsBuTWcmcnX3jBLR+Xo8L9qWuD+q/EU+UtF
+         HdmHRJQMoXHFSDysW4WVlbJjGHRGfdLFYvE8YWrrz+DKavER1CHmI4N2woQqBO0JZA8c
+         PAXg==
+X-Gm-Message-State: AOAM532hYOySh1LlGWvsXEs/cEH2IYboDCuNimrzb5I5ktnU8/gMdXL3
+        nIQPv1w6y3B1u0Y73GDYBoM=
+X-Google-Smtp-Source: ABdhPJypQnDZgbJ8Curzq6PkvfxuGqIegGNX0qm0cm40T1ctE7nHCinC134HL2iJXR+3MIPZGN5BQw==
+X-Received: by 2002:a05:6512:b11:: with SMTP id w17mr590074lfu.381.1644389024921;
+        Tue, 08 Feb 2022 22:43:44 -0800 (PST)
+Received: from grain.localdomain ([5.18.251.97])
+        by smtp.gmail.com with ESMTPSA id e13sm2328340ljj.85.2022.02.08.22.43.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 22:43:43 -0800 (PST)
+Received: by grain.localdomain (Postfix, from userid 1000)
+        id 349FD5A0020; Wed,  9 Feb 2022 09:43:43 +0300 (MSK)
+Date:   Wed, 9 Feb 2022 09:43:43 +0300
+From:   Cyrill Gorcunov <gorcunov@gmail.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "Lutomirski, Andy" <luto@kernel.org>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "adrian@lisas.de" <adrian@lisas.de>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "avagin@gmail.com" <avagin@gmail.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "Dave.Martin@arm.com" <Dave.Martin@arm.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        alexander.mikhalitsyn@virtuozzo.com
+Subject: Re: [PATCH 00/35] Shadow stacks for userspace
+Message-ID: <YgNin5wkSaixCwdx@grain>
+References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
+ <YgAWVSGQg8FPCeba@kernel.org>
+ <YgDIIpCm3UITk896@lisas.de>
+ <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
+ <YgI1A0CtfmT7GMIp@kernel.org>
+ <YgI37n+3JfLSNQCQ@grain>
+ <357664de-b089-4617-99d1-de5098953c80@www.fastmail.com>
+ <YgKiKEcsNt7mpMHN@grain>
+ <8e36f20723ca175db49ed3cc73e42e8aa28d2615.camel@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <00000000000040b9d905d78e23ee@google.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Frvx_ob8aDwvqi30tsfaj1ukMDePQumB
-X-Proofpoint-ORIG-GUID: Frvx_ob8aDwvqi30tsfaj1ukMDePQumB
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-09_03,2022-02-07_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=714
- malwarescore=0 spamscore=0 bulkscore=0 clxscore=1011 adultscore=0
- phishscore=0 mlxscore=0 suspectscore=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2202090046
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <8e36f20723ca175db49ed3cc73e42e8aa28d2615.camel@intel.com>
+User-Agent: Mutt/2.0.7 (2021-05-04)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/08 08:19PM, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
->
-> HEAD commit:    ef6b35306dd8 Add linux-next specific files for 20220204
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1390be28700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=e0431e0b00810b4f
-> dashboard link: https://syzkaller.appspot.com/bug?extid=afa2ca5171d93e44b348
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=133db2b4700000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17beb4a4700000
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+afa2ca5171d93e44b348@syzkaller.appspotmail.com
->
+On Wed, Feb 09, 2022 at 02:18:42AM +0000, Edgecombe, Rick P wrote:
+...
+> 
+> Still wrapping my head around the CRIU save and restore steps, but
+> another general approach might be to give ptrace the ability to
+> temporarily pause/resume/set CET enablement and SSP for a stopped
+> thread. Then injected code doesn't need to jump through any hoops or
+> possibly run into road blocks. I'm not sure how much this opens things
+> up if the thread has to be stopped...
+> 
+> Cyrill, could it fit into the CRIU pause and resume flow? What action
+> causes the final resuming of execution of the restored process for
+> checkpointing and for restore? Wondering if we could somehow make CET
+> re-enable exactly then.
+> 
+> And I guess this also needs a way to create shadow stack allocations at
+> a specific address to match where they were in the dumped process. That
+> is missing in this series.
 
-#syz test: https://github.com/riteshharjani/linux.git jbd2-kill-t-handle-lock
+Thanks Rick! This sounds like an option. I need a couple of days to refresh
+my memory about criu internals. Let me CC a few current active criu developers
+(CC list is already big enough though:), maybe this will speedup the procedure.

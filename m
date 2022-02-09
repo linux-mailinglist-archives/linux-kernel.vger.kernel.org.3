@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C714AEF2E
+	by mail.lfdr.de (Postfix) with ESMTP id 00B674AEF2D
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:22:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234449AbiBIKVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 05:21:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
+        id S233978AbiBIKU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 05:20:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234345AbiBIKVY (ORCPT
+        with ESMTP id S234372AbiBIKUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 05:21:24 -0500
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDFCE08E798
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 02:15:51 -0800 (PST)
+        Wed, 9 Feb 2022 05:20:52 -0500
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BAFE08E7A5
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 02:15:52 -0800 (PST)
 Received: from localhost.localdomain ([81.221.85.15]) by mrelay.perfora.net
- (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MMX5X-1nZgaN0dVf-00JeSf;
- Wed, 09 Feb 2022 11:01:44 +0100
+ (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1Mo7aJ-1o5OpV4Ayh-00pZP3;
+ Wed, 09 Feb 2022 11:01:47 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marek Vasut <marek.vasut@gmail.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Adam Ford <aford173@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        Arnd Bergmann <arnd@arndb.de>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Enric Balletbo i Serra <enric.balletbo@collabora.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Krzysztof Kozlowski <krzk@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
         Olof Johansson <olof@lixom.net>,
         Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 07/12] arm64: defconfig: enable imx8m pcie phy driver
-Date:   Wed,  9 Feb 2022 11:00:50 +0100
-Message-Id: <20220209100055.181389-8-marcel@ziswiler.com>
+Subject: [PATCH v5 08/12] arm64: defconfig: build imx-sdma as a module
+Date:   Wed,  9 Feb 2022 11:00:51 +0100
+Message-Id: <20220209100055.181389-9-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220209100055.181389-1-marcel@ziswiler.com>
 References: <20220209100055.181389-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:b8SxDQe9Yb+nS3ipl49PK5HYshZb8p5+G1Rd2UQm9N7ousmmQ2g
- LRG+Upfp1tpC3xqPuysmqDGep2HL1khFHOCJHbIplt9mKpKOOygNFfFelL1Chqa5HawjDzh
- 1zV6N+2J6ZK3NqxLy0sBQkwZkg0tN/0bCBaAkCiiYjvO0SZbW9ozndIzlW/e9l0q3byMGoZ
- iXP4DdpiKmaWAQfoVPVyQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:hBcK5ZOCS4k=:hq0GLYH8hEm4hucAtivki7
- PE6YnXKhaAG9BaHC7OG93baGW0Pa2Wo6eWMVfuAqv9Z7ocWRMV/qLNwSmDCybE2OLcCNOs61A
- BBUlwxhl+BZv7jcLLQOS0crOJ597Wh0qWyRq8JbYI67VEqFHFDK/bjmZbuSmuPKFbtYUjrbZO
- +puGt9xnSYKWHEGMqn/FDPmfOWmVlXO/qFJ7DLzvcrsuooznXh+bo7ICeFvGoJOUpskt2lDyw
- b5i5mFphva+OUEfyYyNLNEYz9HWByBt2R9DZFuHmbJX/m6y3e8lC8LzYIVXNc8G1BvyVbo/08
- r2Ec/o6YUnBbvebFhQrSOJtKPPp8047dvXvgzLYVKpTdaGthSg2mHkYi3BSrfVrSqrndGLQHz
- 59VT4RNmyjIA9CUMZ775+3QwCtCPWy2WzcWidVfhSLmXNvGHhFCyvBm5IFS3Pz2aWXlJSkBk0
- SwyiNUOBHsh9DW7oDOfQQJHlu+1KYxJDYSsfIuXScLebskfuCzKBhub/xNzr7Uoiwa1cJJA3S
- EZEzOzFGyVWPUc8chsRKsQuEg1VV1DBqhXTUiU+30z/7MUn6LQ7EQ9CgRGBMox2QjIZ3njMfI
- 5sttxDrBiR0T+7eVkqDaSg7YJMRA0NgX4dJfZppurlw8j91RE1hSDxmZcP2CigjzoWV9kOim8
- 4NnnUFmecq5tPtzMkUBkMlfBqEK06QrK+/DbIcdVql6Eroepy+5jY/U1d2+wuwQnBhldqKDrF
- ld4l7ALV4Fc8reNeszR3ViucebvPTY+kqbEreEeHA0hrnZixg54oHHF3TNUabRu80pGdIdeGp
- aoHI1Kr/af7eN2FgBOxLGJP363p6A==
+X-Provags-ID: V03:K1:9ic7kC5N62T8D1ZciNvAZsix7jrQDa/+Ubin8FoE6e6lzPJTQYi
+ xHFFIHaf8K3ror8peOpJ0pATgs1ykurnFftdKY7MMgJIV/Wy5er+f4eVcIP53eT1dUgYN2J
+ hQPx5VxpBzVPic2hV/FTwVnriWbaeU3mRVNgG2yXzqUVKBrY8YUNBFDeYDUj/58L6WOGCCM
+ X/7JF2YMuQXIWQoXgRfQQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:hBlAXPDCYFw=:1rnBOLGEQgLf4UnMS4KU8f
+ 7i3Hng/0qk4pwVXhQBcEa+Ghf8HJs3OoybxEYmvBNRZ4mUBseIk+NZMGcSdA1vUQBKj9cqEhI
+ 8cjzWChMzr5vFItx9tZwrQXODmZdHck/XpYH/IOZzYQ1y2BrMqed5dOsyuRFHAbbI9WgVmkVx
+ 4N5z6xolj4grQVH5/bQafnnpq9IUnHQYKVNGCy9af2FUN7rNbZb+IgeLfmj3pdazUP3Iblbej
+ ZkY7bxqkYOrLrSU5XKcL/maAczO2LodkOQYUeOT3xzs7ftETG9JYszmM8UdQDbUqUZpWqYIQ7
+ /JcieSSY5lj+Wc8QAqqN0de8BimYjDg2eZ3jhN6DCVRRYl213A/BN0pSdgDRV9YkYxys8z7KP
+ n/9Pa0NrwF7jk1FvMrYmlW/ve4Aua2yNKFHUJ/uh2Njjg7RmuNFoanjS5NXvMCfyrwRJF79U9
+ 0lx7oLm61/V6mn4GKZAO3GoXE4vyIvd+n+O2oNFmL3bpraDrLytGvL2Qpc4snDHZFGgdq8UA9
+ Xz4HV0Wk+ZOVjh2q28Vo2gP7WW0fhiMdHrobouhXd4Ap3C685ixzj3Eu/VRhNtomX4gD9vg0e
+ D7aC+D4BHJRONVUvIRrrtIXV+XSJuRSYo+I/66py0ewGciCmUkFfQy94XmK2Xs1PFeJPkR6Ku
+ dSE0fCvQtr2v+kiIry6lnkWI4g1Yq5izaRtU+F3gjADHsSTcoLuuMdCc0V4F+fVeeAmeHtVoG
+ +YJYz5xfEK5ftIzbsoe7p1W6KWfsbeG1CYndfM15w8CWTsoQ6ZVkUORL8yvTp4PQ3k8gZDbcW
+ gFu9JfEtNXgJM7yufoAbQP7oS4eDg==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,33 +69,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-This enables the i.MX 8M PCIe PHY driver (CONFIG_PHY_FSL_IMX8M_PCIE)
-required for PCIe functionality.
+This avoids firmware load error and sysfs fallback reported as follows:
+
+[    0.199448] imx-sdma 302c0000.dma-controller: Direct firmware load
+ for imx/sdma/sdma-imx7d.bin failed with error -2
+[    0.199487] imx-sdma 302c0000.dma-controller: Falling back to sysfs
+ fallback for: imx/sdma/sdma-imx7d.bin
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
 ---
 
-(no changes since v3)
+(no changes since v2)
 
-Changes in v3:
-- New patch enabling imx8m pcie phy driver in arm64 defconfig.
+Changes in v2:
+- A similar change got accepted for imx_v6_v7_defconfig. Further
+  discussion may be found in [1].
+[1] https://lore.kernel.org/lkml/20210920144938.314588-6-marcel@ziswiler.com/
 
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/configs/defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 444fec9ec73a..0fed8477e72e 100644
+index 0fed8477e72e..27afe24a025a 100644
 --- a/arch/arm64/configs/defconfig
 +++ b/arch/arm64/configs/defconfig
-@@ -1121,6 +1121,7 @@ CONFIG_RESET_TI_SCI=y
- CONFIG_PHY_XGENE=y
- CONFIG_PHY_SUN4I_USB=y
- CONFIG_PHY_MIXEL_MIPI_DPHY=m
-+CONFIG_PHY_FSL_IMX8M_PCIE=y
- CONFIG_PHY_HI6220_USB=y
- CONFIG_PHY_HISTB_COMBPHY=y
- CONFIG_PHY_HISI_INNO_USB2=y
+@@ -928,7 +928,7 @@ CONFIG_DMADEVICES=y
+ CONFIG_DMA_BCM2835=y
+ CONFIG_DMA_SUN6I=m
+ CONFIG_FSL_EDMA=y
+-CONFIG_IMX_SDMA=y
++CONFIG_IMX_SDMA=m
+ CONFIG_K3_DMA=y
+ CONFIG_MV_XOR=y
+ CONFIG_MV_XOR_V2=y
 -- 
 2.33.1
 

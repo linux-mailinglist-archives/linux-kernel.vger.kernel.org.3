@@ -2,74 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CF44AF8B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DDE14AF8BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238423AbiBIRsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 12:48:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
+        id S238437AbiBIRs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 12:48:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235315AbiBIRsE (ORCPT
+        with ESMTP id S238428AbiBIRsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 12:48:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C23CC05CB86
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 09:48:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 111CAB8235A
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 17:48:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 253B8C340E7;
-        Wed,  9 Feb 2022 17:48:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644428884;
-        bh=bpT3sFMSFETjSP2Uvo1MS9Tcu2WoLqbpVCyvJuiqgrI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b+O3331ajEY5sc8sm0FVWfEU16lYfcmYbeIsGY8+EZoR769V1RsSHbgK4UaIf6Jg0
-         L6Qky+61iosP/oVMkg3SA+j1qF2XRYrlZrCDyGG75N/HwSWqy0bBM5bLGbuMBLWHJn
-         a3bosujBVq6qRiqBqF/8hxz5TWv6yFsNLGOcDoFdJuyRPGurD3NG7dcyw9rrSfXbar
-         4rEkCTWW5ZjbXNPMAp7ieUNr0VvkAbHmBecG5RFu/r0Tqd7CTNBGo/HrWIGogBvv9V
-         oPv4u+vjyn9zv0hPYdSqcpyVMEjPCPRlBbMKnWXBlcQsvs/kr7PZGlpX8EHTNwYy4r
-         5g1KHjlfc33RA==
-Date:   Wed, 9 Feb 2022 18:48:01 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, ardb@kernel.org,
-        bp@alien8.de, catalin.marinas@arm.com, dave.hansen@linux.intel.com,
-        james.morse@arm.com, joey.gouly@arm.com, juri.lelli@redhat.com,
-        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, tglx@linutronix.de,
-        valentin.schneider@arm.com, will@kernel.org
-Subject: Re: [PATCH v3 5/7] sched/preempt: add PREEMPT_DYNAMIC using static
- keys
-Message-ID: <20220209174801.GA547263@lothringen>
-References: <20220209153535.818830-1-mark.rutland@arm.com>
- <20220209153535.818830-6-mark.rutland@arm.com>
+        Wed, 9 Feb 2022 12:48:25 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045BCC05CB82
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 09:48:28 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id c8-20020a17090a674800b001b91184b732so3391864pjm.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 09:48:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=F4NxIfE5pVavXfL1FvTbYlzlRXtKoW9v/Q8Zml6o1ow=;
+        b=FnHlQw2mxdJHKxT0xdfJqo6x7F6mCMHP+mESAoq+Oa4dV2IB/I7ZUOQUZOw1FLno89
+         9Dtdwba6ioD6tXAJAYWwXkBX5VQzA3nUPQnzMnFepNLmIiAGtgwsXirfDwNZiURC4XBE
+         NaZF0Np4P5GAp4XynEqfImAOUC551BywtCm6Jb1/Bt5Ih6EtrI/9w0B+3lfcEYt5liFI
+         wSMzY2wax+3G7vSc5A9QHVyf2tJU/Y8gqKtTWHfB2+InN/Giab3C36UCc39UBn3W6+ga
+         +A/1CwVifby6nYBItpT9UhgoZmHIru6GUGmnFB40CGSnCwzPzfoO1Jw0MLf9fN7Vi2Nl
+         hmRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=F4NxIfE5pVavXfL1FvTbYlzlRXtKoW9v/Q8Zml6o1ow=;
+        b=pdw4YiLhh/vd476+vl45SksoUvTkwJH7F+BwmChROz6g9yxjgrTKM+66F4JUNBxWEQ
+         ts9J3Oe9bYFD61Y8WzqVCz7HC5xF/W9XQ1zs4+yGV5GUKOY3BC9ygMrh1V+LW2yLEh8W
+         /qygn3iFDkng/LfhDOfbC0GhX7mXfjl85yz0Es2FMlCMlC7NvHs1AIdHhQlQvCAUFCp9
+         9Bkj4/l/4Jr5Cnfbhp4DMIGmp30EqcdaAzdu5IQHqWDmee+wZdCQ6jQQPPF0RyO3Xjyd
+         czv5MImxaatJjnql0gelLibTRjTmUN6WslILZp9d7nqFWLQEEuRskitwqFNosEHvvQAC
+         HI5A==
+X-Gm-Message-State: AOAM531Wp1Ax+J+bkcjtrsk/26po7qQdhzXCnAzjZexwv+aHApGyQOFY
+        pwLLoqcKr8Ub9sCNtG8d9HY=
+X-Google-Smtp-Source: ABdhPJwnlnoPjrXv/TYJhYQI1J991VOpPfXmw8K6wxRRZH6kwpEpihX53uyGeXjWIgW3By2YdnafPQ==
+X-Received: by 2002:a17:903:2083:: with SMTP id d3mr3235951plc.174.1644428907530;
+        Wed, 09 Feb 2022 09:48:27 -0800 (PST)
+Received: from localhost.localdomain ([103.81.93.149])
+        by smtp.gmail.com with ESMTPSA id mw14sm7462786pjb.6.2022.02.09.09.48.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 09:48:27 -0800 (PST)
+From:   Vihas Makwana <makvihas@gmail.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>,
+        Martin Kaiser <martin@kaiser.cx>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Vihas Makwana <makvihas@gmail.com>
+Subject: [PATCH] staging: r8188eu: keep the success path and error path separate
+Date:   Wed,  9 Feb 2022 23:18:19 +0530
+Message-Id: <20220209174819.5068-1-makvihas@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209153535.818830-6-mark.rutland@arm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 03:35:33PM +0000, Mark Rutland wrote:
-> +config HAVE_PREEMPT_DYNAMIC_KEY
-> +	bool
-> +	depends on JUMP_LABEL
+Keep the success path and error path separate in rtw_usb_if1_init() and
+drop the "status" variable.
+Also, remove do-nothing gotos.
 
-This should probably be:
+Signed-off-by: Vihas Makwana <makvihas@gmail.com>
+---
+ drivers/staging/r8188eu/os_dep/usb_intf.c | 29 ++++++++++-------------
+ 1 file changed, 12 insertions(+), 17 deletions(-)
 
-     depends on HAVE_ARCH_JUMP_LABEL && CC_HAS_ASM_GOTO
-     select JUMP_LABEL
+diff --git a/drivers/staging/r8188eu/os_dep/usb_intf.c b/drivers/staging/r8188eu/os_dep/usb_intf.c
+index 10c33e2ae..4ddf3a95a 100644
+--- a/drivers/staging/r8188eu/os_dep/usb_intf.c
++++ b/drivers/staging/r8188eu/os_dep/usb_intf.c
+@@ -336,13 +336,13 @@ static struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
+ {
+ 	struct adapter *padapter = NULL;
+ 	struct net_device *pnetdev = NULL;
+-	int status = _FAIL;
+ 	struct io_priv *piopriv;
+ 	struct intf_hdl *pintf;
+ 
+ 	padapter = vzalloc(sizeof(*padapter));
+ 	if (!padapter)
+-		goto exit;
++		return NULL;
++
+ 	padapter->dvobj = dvobj;
+ 	dvobj->if1 = padapter;
+ 
+@@ -421,25 +421,20 @@ static struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
+ 		, padapter->hw_init_completed
+ 	);
+ 
+-	status = _SUCCESS;
++	return padapter;
+ 
+ free_drv_sw:
+-	if (status != _SUCCESS) {
+-		rtw_cancel_all_timer(padapter);
+-		rtw_free_drv_sw(padapter);
+-	}
++	rtw_cancel_all_timer(padapter);
++	rtw_free_drv_sw(padapter);
+ handle_dualmac:
+-	if (status != _SUCCESS)
+-		rtw_handle_dualmac(padapter, 0);
++	rtw_handle_dualmac(padapter, 0);
+ free_adapter:
+-	if (status != _SUCCESS) {
+-		if (pnetdev)
+-			rtw_free_netdev(pnetdev);
+-		else if (padapter)
+-			vfree(padapter);
+-		padapter = NULL;
+-	}
+-exit:
++	if (pnetdev)
++		rtw_free_netdev(pnetdev);
++	else if (padapter)
++		vfree(padapter);
++	padapter = NULL;
++
+ 	return padapter;
+ }
+ 
+-- 
+2.30.2
 
-Otherwise you may run into trouble if CONFIG_JUMP_LABEL is initially n.
-
-Thanks.

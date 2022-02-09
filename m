@@ -2,100 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA674AE865
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 05:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4305C4AE7D5
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 04:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346773AbiBIEIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 23:08:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42184 "EHLO
+        id S1345124AbiBIDRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 22:17:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346056AbiBIDVf (ORCPT
+        with ESMTP id S1346424AbiBIDQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 22:21:35 -0500
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2795C0613CA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 19:21:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1644376894; x=1675912894;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bG51Nl2Ql0sNOokMZGbhgn1+otGBW36quGu5gynwTYs=;
-  b=pJ/AVO/jZ37DxoL3gu+katg9SRYl4oOfnnt1fcZUj94eqi5FrfxHj8CD
-   Y4CRwnYdDM0HqdF3e82EXAA1lHcCtNDpVcpAn66S81QdQlbXfUFzdR/oT
-   wGnx1qUDMfcM5X7RhrjG2O3EBDTjmJm/6gYmyNnVIGqcEyHp8b3sKXj0C
-   iY/lcUr840O1T1wZYG2E1ewzQdhTdY9kSSZ57y4JWNcok5BmuEapqosIs
-   x6X0B5lltBpNzFAbQRSAY5qqI3aunFptbrJb5uoc0xSsjNGV14me9yYz7
-   ntOMmhSvZVXhK9Kz2RD5cOokAeUr98uKg3Apa9amyb7ZKGn+2O/NyYKmH
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.88,354,1635177600"; 
-   d="scan'208";a="191410509"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 09 Feb 2022 11:16:32 +0800
-IronPort-SDR: 0NBaSTkFiR128NFAM9Qr9udOCjHmnlxfqd8m0bOnDarQpry0bcGR3jWENdNDlj+pZHchYzxNLT
- qcCTKz8+MRGiv9sybNWL5qDCF7UeK9VSKaoIZg6uPYLRGjzYV73HbIJ8LalE6qvJ8Xw3lIqmId
- U7vyw4hU/6WtP4t/aGwYGM03o/3aL4khpZnUilRypFq1M1VMv6fcipwteCVmCy/k5jJfi19729
- Jrxxa03u9PLSrjSkfZCp4hKxj9pvnEpNnqHT9R2NDXLOcrwj/phh8xCZDiyg7/yj8bAkKsVgjJ
- TddBbsoxvwQwM/PGIMEDJiaG
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 18:49:31 -0800
-IronPort-SDR: PIe0AhBgnhKf3PvlLXRN/UDPqy1V1qkLAtNGaLWrGtcriMX0+yYK0tQ6UKWwDxmpzuiKZZLtqJ
- vo2VPUpv0c5aTr36Aj5ynVJziJPHeIF0Y3e2UBXfOF1Se0JAmQWRI1IdfNyU7eCH2uT32THXpG
- BS5A8mImR0bo8X74roiFC29cRi3bsaB6grSlgar0LGZxyc0ETXGTv6q5WuqNIuT+p1aJb3nnVn
- XO12TSqAc+LQ3Ee+cPrJNo/fDcbn9MFLIZY+cr1TxYsipuUo9QmU8nCGOdFmKXOzt62AAZMbjc
- jcg=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 19:16:32 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JtlQl5zsLz1SVp3
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 19:16:31 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1644376591; x=1646968592; bh=bG51Nl2Ql0sNOokMZGbhgn1+otGBW36quGu
-        5gynwTYs=; b=m3VC1PkiFVw9+a+cl8Pi88PT/aN/rN+M5jTPRrlPzqSu/NYiSoi
-        x1u6Bf8v0MhjmzI75pNzZo0PehdxR06PfiUJmcYap7M0pXDYkUFXqVeHW02xo03p
-        47z4nQUO1/qkpwnK6iFRpk8D4ueFt3MF3tdqPfw5rx4JCefQp22/Ru3kiLmPfqGe
-        jMMo1e+bS5FeQNxvHyjRJY5FaD3djeM7+n6eCUwMTY7dxTim/0di7QKkYGZX/eBc
-        0kHO0XFTj6elfZMls6Er8bDNyXTHs7+U8G7kdc7A2O3ArkMRTaHn+e/k9qT4fGYk
-        HHcbW21/0zuEwzg6jjm7JWo1kNrHCQIPZWQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id B0xoiKnsJ3pG for <linux-kernel@vger.kernel.org>;
-        Tue,  8 Feb 2022 19:16:31 -0800 (PST)
-Received: from [10.225.54.48] (unknown [10.225.54.48])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JtlQj448cz1Rwrw;
-        Tue,  8 Feb 2022 19:16:29 -0800 (PST)
-Message-ID: <0093948e-a408-61dd-3b51-524b6d112e35@opensource.wdc.com>
-Date:   Wed, 9 Feb 2022 12:16:27 +0900
+        Tue, 8 Feb 2022 22:16:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7CA5FC0613CC
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 19:16:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644376618;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4KguVXJBsbOFpLwfjfe5WokTE0k6qOeZu3h5xh8SaKs=;
+        b=bnv8IALQ8X+/6aXf97S4/lpZuhqF9a5fxBYUL84mAoE2aNMP2bOBoKcppuwrfPgi5eo01G
+        szIEqFNfso0q1TosHLF0gd/EW5Lr6Gmmh3ojLlnGCLA7M+bfZaIUh5qa1is8wBmG4FGJq2
+        fg48LRrIXS6oS2nCiISbgalMHYHw7Eo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-149-mfr6iKPnOOirDDrfV4yHKA-1; Tue, 08 Feb 2022 22:16:55 -0500
+X-MC-Unique: mfr6iKPnOOirDDrfV4yHKA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 882401091DA1;
+        Wed,  9 Feb 2022 03:16:53 +0000 (UTC)
+Received: from localhost (ovpn-12-114.pek2.redhat.com [10.72.12.114])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7C176610A6;
+        Wed,  9 Feb 2022 03:16:51 +0000 (UTC)
+Date:   Wed, 9 Feb 2022 11:16:48 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Huang Shijie <shijie@os.amperecomputing.com>,
+        Kazuhito Hagio <k-hagio-ab@nec.com>,
+        Lianbo Jiang <lijiang@redhat.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, vgoyal@redhat.com,
+        dyoung@redhat.com, corbet@lwn.net, kexec@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, zwang@amperecomputing.com,
+        patches@amperecomputing.com, darren@os.amperecomputing.com
+Subject: Re: [PATCH] arm64: crash_core: Export MODULES, VMALLOC, and VMEMMAP
+ ranges
+Message-ID: <YgMyIOZ+USwLKCQI@MiWiFi-R3L-srv>
+References: <20220209092642.9181-1-shijie@os.amperecomputing.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH] scsi: csiostor: replace snprintf with sysfs_emit
-Content-Language: en-US
-To:     Joe Perches <joe@perches.com>, davidcomponentone@gmail.com,
-        jejb@linux.ibm.com
-Cc:     martin.petersen@oracle.com, bvanassche@acm.org,
-        yang.guang5@zte.com.cn, jiapeng.chong@linux.alibaba.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>
-References: <d711ec5a5f416204079155666d2de49d43070897.1644287527.git.yang.guang5@zte.com.cn>
- <148a5448-71f1-4f39-834b-eb9283de0bfb@opensource.wdc.com>
- <f4b63b5a4177e38dd80f102f87bbec3ea77d9fe8.camel@perches.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <f4b63b5a4177e38dd80f102f87bbec3ea77d9fe8.camel@perches.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209092642.9181-1-shijie@os.amperecomputing.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,54 +66,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/02/09 12:12, Joe Perches wrote:
-> On Wed, 2022-02-09 at 11:36 +0900, Damien Le Moal wrote:
->> On 2/9/22 09:40, davidcomponentone@gmail.com wrote:
->>> From: Yang Guang <yang.guang5@zte.com.cn>
->>>
->>> coccinelle report:
->>> ./drivers/scsi/csiostor/csio_scsi.c:1433:8-16:
->>> WARNING: use scnprintf or sprintf
->>> ./drivers/scsi/csiostor/csio_scsi.c:1369:9-17:
->>> WARNING: use scnprintf or sprintf
->>> ./drivers/scsi/csiostor/csio_scsi.c:1479:8-16:
->>> WARNING: use scnprintf or sprintf
->>>
->>> Use sysfs_emit instead of scnprintf or sprintf makes more sense.
-> []
->>> diff --git a/drivers/scsi/csiostor/csio_scsi.c b/drivers/scsi/csiostor/csio_scsi.c
-> []
->>> @@ -1366,9 +1366,9 @@ csio_show_hw_state(struct device *dev,
->>>  	struct csio_hw *hw = csio_lnode_to_hw(ln);
->>>  
->>>  	if (csio_is_hw_ready(hw))
->>> -		return snprintf(buf, PAGE_SIZE, "ready\n");
->>> +		return sysfs_emit(buf, "ready\n");
->>>  	else
->>> -		return snprintf(buf, PAGE_SIZE, "not ready\n");
->>> +		return sysfs_emit(buf, "not ready\n");
->>
->> While at it, you could remove the useless "else" above.
+On 02/09/22 at 09:26am, Huang Shijie wrote:
+> The following interrelated ranges are needed by the kdump crash tool:
+> 	MODULES_VADDR ~ MODULES_END,
+> 	VMALLOC_START ~ VMALLOC_END,
+> 	VMEMMAP_START ~ VMEMMAP_END
 > 
-> Or not.  It's fine as is.  It's just a style preference.
+> Since these values change from time to time, it is preferable to export
+> them via vmcoreinfo than to change the crash's code frequently.
 
-It is. I dislike the useless line of code in this case :)
+Add Kazu and Lianbo to CC since they take care of Crash utility now,
+please check if this is necessary for Crash.
 
 > 
-> Another style option would be to use a ?: like any of
+> Signed-off-by: Huang Shijie <shijie@os.amperecomputing.com>
+> ---
+>  Documentation/admin-guide/kdump/vmcoreinfo.rst | 8 ++++++++
+>  arch/arm64/kernel/crash_core.c                 | 6 ++++++
+>  2 files changed, 14 insertions(+)
 > 
-> 	return sysfs_emit(buf, "%sready\n", csio_is_hw_ready(hw) ? "" : "not ");
-> or
-> 	return sysfs_emit(buf, "%s\n", csio_is_hw_ready(hw) ? "ready" : "not ready");
-> or
-> 	return sysfs_emit(buf, csio_is_hw_ready(hw) ? "ready\n" : "not ready\n");
+> diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+> index 3861a25faae1..a339af45a22e 100644
+> --- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
+> +++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+> @@ -494,6 +494,14 @@ architecture which is used to lookup the page-tables for the Virtual
+>  addresses in the higher VA range (refer to ARMv8 ARM document for
+>  more details).
+>  
+> +MODULES_VADDR|MODULES_END|VMALLOC_START|VMALLOC_END|VMEMMAP_START|VMEMMAP_END
+> +-------------
+> +
+> +Used to get the correct ranges:
+> +	MODULES_VADDR ~ MODULES_END-1 : Kernel module space.
+> +	VMALLOC_START ~ VMALLOC_END-1 : vmalloc() / ioremap() space.
+> +	VMEMMAP_START ~ VMEMMAP_END-1 : vmemmap region, used for struct page array.
+> +
+>  arm
+>  ===
+>  
+> diff --git a/arch/arm64/kernel/crash_core.c b/arch/arm64/kernel/crash_core.c
+> index 314391a156ee..2b65aae332ce 100644
+> --- a/arch/arm64/kernel/crash_core.c
+> +++ b/arch/arm64/kernel/crash_core.c
+> @@ -20,6 +20,12 @@ void arch_crash_save_vmcoreinfo(void)
+>  {
+>  	VMCOREINFO_NUMBER(VA_BITS);
+>  	/* Please note VMCOREINFO_NUMBER() uses "%d", not "%x" */
+> +	vmcoreinfo_append_str("NUMBER(MODULES_VADDR)=0x%lx\n", MODULES_VADDR);
+> +	vmcoreinfo_append_str("NUMBER(MODULES_END)=0x%lx\n", MODULES_END);
+> +	vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n", VMALLOC_START);
+> +	vmcoreinfo_append_str("NUMBER(VMALLOC_END)=0x%lx\n", VMALLOC_END);
+> +	vmcoreinfo_append_str("NUMBER(VMEMMAP_START)=0x%lx\n", VMEMMAP_START);
+> +	vmcoreinfo_append_str("NUMBER(VMEMMAP_END)=0x%lx\n", VMEMMAP_END);
+>  	vmcoreinfo_append_str("NUMBER(kimage_voffset)=0x%llx\n",
+>  						kimage_voffset);
+>  	vmcoreinfo_append_str("NUMBER(PHYS_OFFSET)=0x%llx\n",
+> -- 
+> 2.30.2
+> 
 
-That is nice and can make that
-	
-	return sysfs_emit(buf, "%sready\n", csio_is_hw_ready(hw) ? "" : "not ");
-
-too :)
-
--- 
-Damien Le Moal
-Western Digital Research

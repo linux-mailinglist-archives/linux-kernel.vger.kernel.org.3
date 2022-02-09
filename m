@@ -2,95 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7DE4AEF6B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A1F4AEE22
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbiBIKif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 05:38:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48068 "EHLO
+        id S233182AbiBIJi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 04:38:59 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiBIKi1 (ORCPT
+        with ESMTP id S238860AbiBIJdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 05:38:27 -0500
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9D9E14863A;
-        Wed,  9 Feb 2022 02:25:56 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 38A962B00247;
-        Wed,  9 Feb 2022 04:25:18 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 09 Feb 2022 04:25:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=x4Xau9jrPr3sDVwybOpIK/b9w4fMNltmY/7C4T
-        ItDic=; b=J4B8JsReMPvjhSXfJVGjFz1AaL/WkJPBJnXV+IttUCvxfZEXOsLIcR
-        jbU49jDoqI5qC85ZyeMsi/RQEQNuUOZkyOTvi7CCEJzUvMpPSu+oT12/xdch0j+a
-        0aDepsdqsrCJUMAXHUyMQ5UoecX5dD93CrMdUlmCplh3JBLMmrwSqjBVFG5nhJsu
-        sQkZEJ2XfG8UgOzF99+bN0VNjWksVUp5f4dbEm3raaRRKudNsHcCgxc+ix7vhWpD
-        qGjTwlbcqu2Mpdx9Eb5KbhDbM2oTh/s9MUV6dqcpMnrq5AGkQMADkbpWak2CmsKB
-        oUdbTOibrIh7X0k4DlRWCHkL3YCRLqBQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=x4Xau9jrPr3sDVwyb
-        OpIK/b9w4fMNltmY/7C4TItDic=; b=YBcYshvng8UgNDtkcDFi0gpR67pJXdhD3
-        le2+tW7W6J3jDXB/GjgRPoqFAw80xZzA9+YgnKg0Hw7jxm7aI4atOXcyV1bmF3eJ
-        VMv0M1Fkr+ygHvAy4elQ70dwhHVfuoQy5AsMsGxR8RANab+EEPPcXMricE4bW4lC
-        VXzGULhdWA96v4R5tep28Do34IPooDWBJ2J3L7DocsvcT9XOFryPQ06IaUSh+uah
-        U/Ww9w/WwH5Xrc41K5/48gSnBQKNyHlx5UeRGVsftEctPPV+ybccHk9YKeyAz+4B
-        A+lUhSOo2tVqfj/cDlwvey8/3qS80l3aPilI2bsnsvDoNtOuI9ehg==
-X-ME-Sender: <xms:fYgDYuSG2RqsldPgJ8LAjOrkhoQxqXzx06MQLRu8sgovF10__slpXw>
-    <xme:fYgDYjxj9TdYQhpZeCNzJhSntJmG9dzGx2VYUCjUHMl7AzlCss-ytS4jYlKhmCxvR
-    -STOyMZa1lKlYUhNpU>
-X-ME-Received: <xmr:fYgDYr2AU8Ufb6MESoMg1Lt6KB9wI4zbi_01BjSwMPojsGGwpdFi7v9BnkkALSLJbNHv9S3aT5-p4rE931PZTp6wtCikXL40Qswwu0w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheelgddtfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
-    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
-    igihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:fYgDYqAKV-PJdzNcm1mBn9QCSBqB4ztAGmpuX1LBDxETJVyqtP303g>
-    <xmx:fYgDYngKX8f1JKy5qX_NEPQMTKkatiFk-1oD9mg_yra1eQsFvSFHsw>
-    <xmx:fYgDYmrhZX7QMu8idRpw_Ybfymhf4uejz3yT8gv7EaH19Wcwqv9PtQ>
-    <xmx:fYgDYgZvlvKSi7np5DClAmFgvYoXiKxz8lxmzIT0ivVVPtFWrw77I3TCbPs>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 9 Feb 2022 04:25:16 -0500 (EST)
-Date:   Wed, 9 Feb 2022 10:25:15 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 31/66] media: sun6i-csi: Rename sun6i_video to
- sun6i_csi_capture
-Message-ID: <20220209092515.nyalysvt2v5ult5k@houat>
-References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-32-paul.kocialkowski@bootlin.com>
+        Wed, 9 Feb 2022 04:33:46 -0500
+Received: from out199-12.us.a.mail.aliyun.com (out199-12.us.a.mail.aliyun.com [47.90.199.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99731E011158
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 01:33:39 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=kanie@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V4-ipji_1644398801;
+Received: from 30.178.82.5(mailfrom:kanie@linux.alibaba.com fp:SMTPD_---0V4-ipji_1644398801)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 09 Feb 2022 17:26:42 +0800
+Message-ID: <e9f8c595-c133-54f4-1167-31f4a8a6e52e@linux.alibaba.com>
+Date:   Wed, 9 Feb 2022 17:26:41 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7cbfwnza7b5aieih"
-Content-Disposition: inline
-In-Reply-To: <20220205185429.2278860-32-paul.kocialkowski@bootlin.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH] uio: Replace mutex info_lock with percpu_ref to improve
+ performance
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     gregkh@linuxfoundation.org, xiaoguang.wang@linux.alibaba.com,
+        xlpang@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org
+References: <1644304760-11862-1-git-send-email-kanie@linux.alibaba.com>
+ <YgNv9folAsgtGl5Z@infradead.org>
+From:   Guixin Liu <kanie@linux.alibaba.com>
+In-Reply-To: <YgNv9folAsgtGl5Z@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -98,31 +47,305 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---7cbfwnza7b5aieih
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sat, Feb 05, 2022 at 07:53:54PM +0100, Paul Kocialkowski wrote:
-> In an effort to distinguish between the core csi engine (to be
-> represented as the bridge) and the dma engine (the capture video
-> device), rename the video component to capture, with the appropriate
-> prefix. No functional change intended.
->=20
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Reviewed-by: Maxime Ripard <maxime@cerno.tech>
-
-Maxime
-
---7cbfwnza7b5aieih
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgOIewAKCRDj7w1vZxhR
-xftKAP4miEyof8oD/yvVrwqUj4Zww2YXKzBE0vFPaaycjTBX0QD/QIF3PwzdOeVr
-DGLkjg4EMpcEbPj9fHzxVuaaXf0xugo=
-=5ZtM
------END PGP SIGNATURE-----
-
---7cbfwnza7b5aieih--
+在 2022/2/9 15:40, Christoph Hellwig 写道:
+> On Tue, Feb 08, 2022 at 03:19:20PM +0800, Guixin Liu wrote:
+>> This patch includes a modification to repace mutex info_lock with
+>> percpu_ref, in order to improve uio performance.
+> What performance critical use case do you have for uio?  Everyone really
+> should be using vfio these days due to the large amount of shortcomings
+> in the uio interface.
+We use uio because the tcmu and tcmu-runner use uio，and in fact tcmu is 
+not a real hardware.
+>
+>> Reviewed-by: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+>> Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
+>> ---
+>>   drivers/uio/uio.c          | 95 ++++++++++++++++++++++++++++++++++------------
+>>   include/linux/uio_driver.h |  5 ++-
+>>   2 files changed, 75 insertions(+), 25 deletions(-)
+>>
+>> diff --git a/drivers/uio/uio.c b/drivers/uio/uio.c
+>> index 43afbb7..0cc0655 100644
+>> --- a/drivers/uio/uio.c
+>> +++ b/drivers/uio/uio.c
+>> @@ -24,6 +24,8 @@
+>>   #include <linux/kobject.h>
+>>   #include <linux/cdev.h>
+>>   #include <linux/uio_driver.h>
+>> +#include <linux/completion.h>
+>> +#include <linux/percpu-refcount.h>
+>>   
+>>   #define UIO_MAX_DEVICES		(1U << MINORBITS)
+>>   
+>> @@ -218,7 +220,9 @@ static ssize_t name_show(struct device *dev,
+>>   	struct uio_device *idev = dev_get_drvdata(dev);
+>>   	int ret;
+>>   
+>> -	mutex_lock(&idev->info_lock);
+>> +	if (!percpu_ref_tryget_live(&idev->info_ref))
+>> +		return -EINVAL;
+>> +
+>>   	if (!idev->info) {
+>>   		ret = -EINVAL;
+>>   		dev_err(dev, "the device has been unregistered\n");
+>> @@ -228,7 +232,7 @@ static ssize_t name_show(struct device *dev,
+>>   	ret = sprintf(buf, "%s\n", idev->info->name);
+>>   
+>>   out:
+>> -	mutex_unlock(&idev->info_lock);
+>> +	percpu_ref_put(&idev->info_ref);
+>>   	return ret;
+>>   }
+>>   static DEVICE_ATTR_RO(name);
+>> @@ -239,7 +243,9 @@ static ssize_t version_show(struct device *dev,
+>>   	struct uio_device *idev = dev_get_drvdata(dev);
+>>   	int ret;
+>>   
+>> -	mutex_lock(&idev->info_lock);
+>> +	if (!percpu_ref_tryget_live(&idev->info_ref))
+>> +		return -EINVAL;
+>> +
+>>   	if (!idev->info) {
+>>   		ret = -EINVAL;
+>>   		dev_err(dev, "the device has been unregistered\n");
+>> @@ -249,7 +255,7 @@ static ssize_t version_show(struct device *dev,
+>>   	ret = sprintf(buf, "%s\n", idev->info->version);
+>>   
+>>   out:
+>> -	mutex_unlock(&idev->info_lock);
+>> +	percpu_ref_put(&idev->info_ref);
+>>   	return ret;
+>>   }
+>>   static DEVICE_ATTR_RO(version);
+>> @@ -489,16 +495,20 @@ static int uio_open(struct inode *inode, struct file *filep)
+>>   	listener->event_count = atomic_read(&idev->event);
+>>   	filep->private_data = listener;
+>>   
+>> -	mutex_lock(&idev->info_lock);
+>> +	if (!percpu_ref_tryget_live(&idev->info_ref)) {
+>> +		ret = -EINVAL;
+>> +		goto err_infoopen;
+>> +	}
+>> +
+>>   	if (!idev->info) {
+>> -		mutex_unlock(&idev->info_lock);
+>> +		percpu_ref_put(&idev->info_ref);
+>>   		ret = -EINVAL;
+>>   		goto err_infoopen;
+>>   	}
+>>   
+>>   	if (idev->info->open)
+>>   		ret = idev->info->open(idev->info, inode);
+>> -	mutex_unlock(&idev->info_lock);
+>> +	percpu_ref_put(&idev->info_ref);
+>>   	if (ret)
+>>   		goto err_infoopen;
+>>   
+>> @@ -531,10 +541,12 @@ static int uio_release(struct inode *inode, struct file *filep)
+>>   	struct uio_listener *listener = filep->private_data;
+>>   	struct uio_device *idev = listener->dev;
+>>   
+>> -	mutex_lock(&idev->info_lock);
+>> +	if (!percpu_ref_tryget_live(&idev->info_ref))
+>> +		return -EINVAL;
+>> +
+>>   	if (idev->info && idev->info->release)
+>>   		ret = idev->info->release(idev->info, inode);
+>> -	mutex_unlock(&idev->info_lock);
+>> +	percpu_ref_put(&idev->info_ref);
+>>   
+>>   	module_put(idev->owner);
+>>   	kfree(listener);
+>> @@ -548,10 +560,12 @@ static __poll_t uio_poll(struct file *filep, poll_table *wait)
+>>   	struct uio_device *idev = listener->dev;
+>>   	__poll_t ret = 0;
+>>   
+>> -	mutex_lock(&idev->info_lock);
+>> +	if (!percpu_ref_tryget_live(&idev->info_ref))
+>> +		return -EINVAL;
+>> +
+>>   	if (!idev->info || !idev->info->irq)
+>>   		ret = -EIO;
+>> -	mutex_unlock(&idev->info_lock);
+>> +	percpu_ref_put(&idev->info_ref);
+>>   
+>>   	if (ret)
+>>   		return ret;
+>> @@ -577,13 +591,17 @@ static ssize_t uio_read(struct file *filep, char __user *buf,
+>>   	add_wait_queue(&idev->wait, &wait);
+>>   
+>>   	do {
+>> -		mutex_lock(&idev->info_lock);
+>> +		if (!percpu_ref_tryget_live(&idev->info_ref)) {
+>> +			retval = -EINVAL;
+>> +			break;
+>> +		}
+>> +
+>>   		if (!idev->info || !idev->info->irq) {
+>>   			retval = -EIO;
+>> -			mutex_unlock(&idev->info_lock);
+>> +			percpu_ref_put(&idev->info_ref);
+>>   			break;
+>>   		}
+>> -		mutex_unlock(&idev->info_lock);
+>> +		percpu_ref_put(&idev->info_ref);
+>>   
+>>   		set_current_state(TASK_INTERRUPTIBLE);
+>>   
+>> @@ -631,7 +649,9 @@ static ssize_t uio_write(struct file *filep, const char __user *buf,
+>>   	if (copy_from_user(&irq_on, buf, count))
+>>   		return -EFAULT;
+>>   
+>> -	mutex_lock(&idev->info_lock);
+>> +	if (!percpu_ref_tryget_live(&idev->info_ref))
+>> +		return -EINVAL;
+>> +
+>>   	if (!idev->info) {
+>>   		retval = -EINVAL;
+>>   		goto out;
+>> @@ -650,7 +670,7 @@ static ssize_t uio_write(struct file *filep, const char __user *buf,
+>>   	retval = idev->info->irqcontrol(idev->info, irq_on);
+>>   
+>>   out:
+>> -	mutex_unlock(&idev->info_lock);
+>> +	percpu_ref_put(&idev->info_ref);
+>>   	return retval ? retval : sizeof(s32);
+>>   }
+>>   
+>> @@ -675,7 +695,9 @@ static vm_fault_t uio_vma_fault(struct vm_fault *vmf)
+>>   	vm_fault_t ret = 0;
+>>   	int mi;
+>>   
+>> -	mutex_lock(&idev->info_lock);
+>> +	if (!percpu_ref_tryget_live(&idev->info_ref))
+>> +		return -EINVAL;
+>> +
+>>   	if (!idev->info) {
+>>   		ret = VM_FAULT_SIGBUS;
+>>   		goto out;
+>> @@ -702,8 +724,7 @@ static vm_fault_t uio_vma_fault(struct vm_fault *vmf)
+>>   	vmf->page = page;
+>>   
+>>   out:
+>> -	mutex_unlock(&idev->info_lock);
+>> -
+>> +	percpu_ref_put(&idev->info_ref);
+>>   	return ret;
+>>   }
+>>   
+>> @@ -772,7 +793,9 @@ static int uio_mmap(struct file *filep, struct vm_area_struct *vma)
+>>   
+>>   	vma->vm_private_data = idev;
+>>   
+>> -	mutex_lock(&idev->info_lock);
+>> +	if (!percpu_ref_tryget_live(&idev->info_ref))
+>> +		return -EINVAL;
+>> +
+>>   	if (!idev->info) {
+>>   		ret = -EINVAL;
+>>   		goto out;
+>> @@ -811,7 +834,7 @@ static int uio_mmap(struct file *filep, struct vm_area_struct *vma)
+>>   	}
+>>   
+>>    out:
+>> -	mutex_unlock(&idev->info_lock);
+>> +	percpu_ref_put(&idev->info_ref);
+>>   	return ret;
+>>   }
+>>   
+>> @@ -907,6 +930,13 @@ static void uio_device_release(struct device *dev)
+>>   	kfree(idev);
+>>   }
+>>   
+>> +static void uio_info_free(struct percpu_ref *ref)
+>> +{
+>> +	struct uio_device *idev = container_of(ref, struct uio_device, info_ref);
+>> +
+>> +	complete(&idev->free_done);
+>> +}
+>> +
+>>   /**
+>>    * __uio_register_device - register a new userspace IO device
+>>    * @owner:	module that creates the new device
+>> @@ -937,10 +967,17 @@ int __uio_register_device(struct module *owner,
+>>   
+>>   	idev->owner = owner;
+>>   	idev->info = info;
+>> -	mutex_init(&idev->info_lock);
+>>   	init_waitqueue_head(&idev->wait);
+>>   	atomic_set(&idev->event, 0);
+>>   
+>> +	ret = percpu_ref_init(&idev->info_ref, uio_info_free, 0, GFP_KERNEL);
+>> +	if (ret) {
+>> +		 pr_err("percpu_ref init failed!\n");
+>> +		 return ret;
+>> +	}
+>> +	init_completion(&idev->confirm_done);
+>> +	init_completion(&idev->free_done);
+>> +
+>>   	ret = uio_get_minor(idev);
+>>   	if (ret) {
+>>   		kfree(idev);
+>> @@ -1036,6 +1073,13 @@ int __devm_uio_register_device(struct module *owner,
+>>   }
+>>   EXPORT_SYMBOL_GPL(__devm_uio_register_device);
+>>   
+>> +static void uio_confirm_info(struct percpu_ref *ref)
+>> +{
+>> +	struct uio_device *idev = container_of(ref, struct uio_device, info_ref);
+>> +
+>> +	complete(&idev->confirm_done);
+>> +}
+>> +
+>>   /**
+>>    * uio_unregister_device - unregister a industrial IO device
+>>    * @info:	UIO device capabilities
+>> @@ -1052,14 +1096,17 @@ void uio_unregister_device(struct uio_info *info)
+>>   	idev = info->uio_dev;
+>>   	minor = idev->minor;
+>>   
+>> -	mutex_lock(&idev->info_lock);
+>> +	percpu_ref_kill_and_confirm(&idev->info_ref, uio_confirm_info);
+>> +	wait_for_completion(&idev->confirm_done);
+>> +	wait_for_completion(&idev->free_done);
+>> +
+>> +	/* now, we can set info to NULL */
+>>   	uio_dev_del_attributes(idev);
+>>   
+>>   	if (info->irq && info->irq != UIO_IRQ_CUSTOM)
+>>   		free_irq(info->irq, idev);
+>>   
+>>   	idev->info = NULL;
+>> -	mutex_unlock(&idev->info_lock);
+>>   
+>>   	wake_up_interruptible(&idev->wait);
+>>   	kill_fasync(&idev->async_queue, SIGIO, POLL_HUP);
+>> diff --git a/include/linux/uio_driver.h b/include/linux/uio_driver.h
+>> index 47c5962..6d3d87f 100644
+>> --- a/include/linux/uio_driver.h
+>> +++ b/include/linux/uio_driver.h
+>> @@ -16,6 +16,7 @@
+>>   #include <linux/device.h>
+>>   #include <linux/fs.h>
+>>   #include <linux/interrupt.h>
+>> +#include <linux/percpu-refcount.h>
+>>   
+>>   struct module;
+>>   struct uio_map;
+>> @@ -74,9 +75,11 @@ struct uio_device {
+>>   	struct fasync_struct    *async_queue;
+>>   	wait_queue_head_t       wait;
+>>   	struct uio_info         *info;
+>> -	struct mutex		info_lock;
+>>   	struct kobject          *map_dir;
+>>   	struct kobject          *portio_dir;
+>> +	struct percpu_ref       info_ref;
+>> +	struct completion       confirm_done;
+>> +	struct completion       free_done;
+>>   };
+>>   
+>>   /**
+>> -- 
+>> 1.8.3.1
+>>
+> ---end quoted text---

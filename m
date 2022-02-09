@@ -2,229 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA5E4AE93D
+	by mail.lfdr.de (Postfix) with ESMTP id B89284AE93E
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 06:28:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbiBIFXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 00:23:55 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36534 "EHLO
+        id S230329AbiBIFYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 00:24:12 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:40408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346582AbiBIFKy (ORCPT
+        with ESMTP id S240304AbiBIFPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 00:10:54 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2066.outbound.protection.outlook.com [40.107.92.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983A7C03C1A8
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 21:10:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FGSu01VSUxaqt2c5VuHAZZ2gLskFbUgkJb8rBsl0HA8Ku6LPeaTtBceKmA0/fY/h1xT5Dansl4uW9y8+iuCWP07GkKu8yNxOifkV63h+t8PZgZP5Zo9fOVH6RVLPOjRSP+hhgSEA75hwAGjxEDEMz6Mo/r3DJKnyrCYBGCIDfOYqJ3WM0O2bP4o7f9oCImS0EIiqlNGH72HUUzZ0QeC1iUoemfiCWnoE/7vYwc+PFAdrfqO8pQcwiqnJq/9yLJ6T3iy9yjG0oH95/8Zl3qs7J3yd0Bmu7DWh7i/ijXyKy+j6dUJFct0pY5PmLLax1/L0WpDGn0GiZqt3xbRdBQOL/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gx7kSopMV/YWrma+nnxxpYE8KM9JyHUvVZeWiwZ/VQg=;
- b=OjZ8MpRhVg9s2ffWXcohmFBGouLklB5+UJ58Nuh9qWSPntzI2FKw84scLf6mYYk7XYrPSBpWM41l7dW/t0t/X6pXilkMHpsxVr1G2W2CEfXYjag40XYsOMmxSoAaRdm5ZXkNpanEnwgru7WsvQMeMWAZOoGudlem2ZrnEa4rMhKuiCPy/NYPqUssscfLdlhRHhcvXL5eLxPICVIq3RSk+/50Z6zn27VuRaTUrlGrIi+KC+i5xM54uVIXPJNelmiBEHLJm7CI1svPVBaIMC7xkxFSjqis9/Tk0XZJFufdFeQSJydMz7RcPSY1euV7d6fPckzwP4l9jrSRK8kZnXXlyQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gx7kSopMV/YWrma+nnxxpYE8KM9JyHUvVZeWiwZ/VQg=;
- b=dGHNbq8WRxNF+iaZQ525BGP+243jrFfxCdFNKbSYXGQJwIR5XsFvuo+xwlm3ntoY8l46ho656JpqdmtIkuiVFMNnHZTSOo+pRk70m+KYPtMZ9Baxp2WuMn8S9fUgyX93Uiq6DvMOIEQQtFloAcCoWgL+OoKwnIA8NLBXtHRfRgc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MW2PR12MB2379.namprd12.prod.outlook.com (2603:10b6:907:9::24)
- by MN2PR12MB4407.namprd12.prod.outlook.com (2603:10b6:208:260::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Wed, 9 Feb
- 2022 05:10:36 +0000
-Received: from MW2PR12MB2379.namprd12.prod.outlook.com
- ([fe80::c90d:9f80:a049:b432]) by MW2PR12MB2379.namprd12.prod.outlook.com
- ([fe80::c90d:9f80:a049:b432%2]) with mapi id 15.20.4951.019; Wed, 9 Feb 2022
- 05:10:36 +0000
-Message-ID: <9ab0a2c2-7dee-40b0-edd0-56a5b1915745@amd.com>
-Date:   Wed, 9 Feb 2022 10:40:15 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 2/2] sched/fair: Adjust the allowed NUMA imbalance when
- SD_NUMA spans multiple LLCs
-Content-Language: en-US
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Gautham Shenoy <gautham.shenoy@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220208094334.16379-1-mgorman@techsingularity.net>
- <20220208094334.16379-3-mgorman@techsingularity.net>
-From:   K Prateek Nayak <kprateek.nayak@amd.com>
-In-Reply-To: <20220208094334.16379-3-mgorman@techsingularity.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0154.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:26::9) To MW2PR12MB2379.namprd12.prod.outlook.com
- (2603:10b6:907:9::24)
+        Wed, 9 Feb 2022 00:15:22 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B247C03BFD8
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 21:15:18 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id r131so700150wma.1
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 21:15:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=R83kg3J8lh5wnpwznu/c6c1j21tsi5+UW4ZNVbTpfkQ=;
+        b=cQLt8iTabwlg2Ev6+vNAfrfaVsetuJTsCIXfsbWxN2KJQ58d0KT0yZirQMTcbt0NXE
+         LOfXB+yowzcYh6fsRbs+oRvGDrIyudB2kSF8OJDHN3A6K3ERrtV52t9beearu5kOexbl
+         R/AilxUl1TEcYp7coPdkyR+2dFjXdBhU/4jKHmOAsBkBREdBpjS7BJ5H1/TM7y8VY1k+
+         geFLbW0Sot0MDg/GGIDq4Uc5Phh2KwSsIUry0D33+azOc/I+Dh+yY82X10zhxY91RO0J
+         QSagJNSO2WAfgnvRxfYUQ3nOofM6gq8dOXjEYfRV99IN5qHnqkdG+8+9UZC7Qp+gs90d
+         G67g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R83kg3J8lh5wnpwznu/c6c1j21tsi5+UW4ZNVbTpfkQ=;
+        b=JZ5R/tVQ4aBqqxJT143XdZsbpx97fkGP+fYCnyAlAtOI1s8AmzdVpuKqWw+x3uutyA
+         Hj/c+0BIZtirbXFg0fjS63fTwPysPTM30+13akfc1HzvPXjWexkU91/2tvYhmR0trEFs
+         I/X4ob9JGuOqWQ1aVsNEMRkrc8DiiuSfgR2Es0pB9EqbV7gKIbNE+/4L9IHfZ9TN9q2t
+         hLzR6eW8gbr5PnpxCGpL/kPa3gKTv6u8/978Zv7FaboPCdE5iYTdBJog9NOM+xaVo61y
+         CUTxXrc2BzhLkPdHeRDbxb29rb1552uP5r1uYe+FdDGKuLEgxzh/Xpus73Y6W3WPfhmw
+         /tgg==
+X-Gm-Message-State: AOAM531sTAGqEtW1XFE7r9JXXG01mZkJB8vityzDsEK+lSh4Aa4yygce
+        D5E+hxUZdr9oSknSbpNv4BgC8KO8pnwETVDjc1UOWQ==
+X-Google-Smtp-Source: ABdhPJxxJAmtus+XKgjkisjrqjjLqRFgSAIDZ/p0j1uNWEJQORypvJKDSShWADJ4LEAWxrxvnzgCy6iYR0zK2J9eq8E=
+X-Received: by 2002:a05:600c:4185:: with SMTP id p5mr467679wmh.61.1644383716505;
+ Tue, 08 Feb 2022 21:15:16 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 55b13c87-170d-480d-dd92-08d9eb8a8128
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4407:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB440794D34E6B16B28E4E34C2982E9@MN2PR12MB4407.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: j3w+pnFR8sml3PtAFWFT0AaUnJdNks/ttmpXKypAEjhNd2HiDxNZzgwmC24K3+2sDzJnmCYbP/cLTbDHxOkWIPc8hqG36PPTwEZ5UZlhBOIGfM9FmYHotHpviGJeLQBoGvrdIl+/xh9PmxB+HhQ5PpZDke8nW5+58nKid2GMdDgkEgHJY58f8w8KeyuExXWkE31k2d28lDr+CHw4D9REy/tywg2gtv1s1S7cbJsONGYZobq9oXrwa23fpLar1TJDSuO6sLFyXz+VCQdwvYJK2DGbTEYg0YOEO4HvGVHrvXwt9qYEMgVIxMINg0SLqtDNU4GgNDk7d4NPRaYvB09Zq3vWkr6hN3QbISct4mdFxzDxfAkZYHoAbiTctk6cAUTjKxBDSBDRJEMvDAy77G74PEdeso/9KbkXaAUdYJaPOGlzfHrrPdhGJSiOBPdDDo5m/pwtn5sJteaN5C1wLL3FVMsPLKQF1v+sku6jJYXxDLkkcB8YWbpjeiCmb8IDgEGV1KnJYE9JWFjkNb0Zilv4GAWlIiVMBWvVkvct7WO5LOX5T01eGaWSfmXHIM9xKIpKuW24QNIggFAtwrx8gQ0eiJz6gUmrhKnF/ITAfDdesfZ1gDdWbMDnbM/F87lJ1+n8yGxJL9GTFF0Yn5eMa6QAVqSic8nqbXULwesJiGiLr87xD8alFbLOnVnmUD+wa56uy4HTDbo5dttrbgGhZsyNJfI+slhATSpD/i8q5/Fp4U8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB2379.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(36756003)(6512007)(2616005)(54906003)(316002)(6666004)(6506007)(53546011)(6486002)(31686004)(6916009)(508600001)(8676002)(5660300002)(31696002)(86362001)(66476007)(66556008)(66946007)(186003)(26005)(4326008)(7416002)(2906002)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VFk5ZXJQTzVURTZ6blN3NFN6QTdwRW1rbDNHVVdOVndmTkx1VExXdlBPZXFC?=
- =?utf-8?B?czdsT3JzWFdpeTdWak5MKzJMZ0V0eFpLcGRLWnR4OHhaekpoMFd1RTlpR20v?=
- =?utf-8?B?OHplcFMrMHJ1T0x6MmdzOEI2L0pMR1p4UDd1Mjc5eGxUSU9xK2ZNTDA5Znkv?=
- =?utf-8?B?UEZPWWdMbkQzcGxQSXRkaVJjWGYxZlFWcUlqc1hGTkZPcXc5Uy8vaGo3TE5S?=
- =?utf-8?B?Wk1FcnhOUDg5S05reDNhWmovZUd3bVVCZWpDSm1JVWJzOGc3RGx6ckVHeHky?=
- =?utf-8?B?bXd0UUg1VHlham1TU3A4cGlyVlN1VjRuby9sV2Q4QlkwRGl0V2hPSWJISXZt?=
- =?utf-8?B?U3VDd1pRQ2g5dHdpS2lBRmFieWVKT01CYkhucTkxUVpVY2xHaFBSZ3Z2MFNS?=
- =?utf-8?B?VFQ0Vjg4bXRWR0w3VDhuNk5sbVpEbEIrcUVqTzlodTV2YVh0R1hVVlNJN0RJ?=
- =?utf-8?B?eUZOTFkwbG0zTEp5QWRINjByQWwrdDNPTkd1Q09wd2dTWGxsdERLL1hmN1NR?=
- =?utf-8?B?R1Z3MVJXQzRESUNCSm52cnV5ZFpMK0FsMm5KdDBYczVZZ1VZMVNrMW1veTNo?=
- =?utf-8?B?Z25aQjlsalEyeVVyZm95OThiM0EzempMOFQ5OU9sdjJ4NVVoQ2RFbzNNVzFk?=
- =?utf-8?B?MjZZeVZnc3VpcG56WG9YTjBJYnU0MnFoTk4ybEVnUDRXQXJncUxGaUV6YjNF?=
- =?utf-8?B?dWJ5S1FYNW9QdC9EMXNGV3JBR1c1UC9JeUU0SDFuVm1OVDZXZjZ0aUo3eEoy?=
- =?utf-8?B?ZlRYb1ozYjhhWHNLTzZrUy9MQnZGUzdhWElPN0JhUENFbkxpcmdNYVQ4MUN5?=
- =?utf-8?B?c3dTckJLcVdrejY3c3Qrak5zdFNvODFLNFhaU3FoRkJvc3dkNWlZWkcxYzha?=
- =?utf-8?B?VXA0TGFUOVZuaGtSV1pHbVI3MU5yUnJHeG1ZbXN1a1NaZHNTcFk5S3puaGZN?=
- =?utf-8?B?Nmtjc2FJSFBra014R2hsVHFpN0o2OUZRMnB0SmtwdmlQRUFiTWRSNm4zS2gy?=
- =?utf-8?B?OHJpQlcvNGltckhaaGRXVm9TZWMrU3c3OVFDQlZzcWJmNzh1MjhWUjNzMHFO?=
- =?utf-8?B?Znp2dDMwWElmUEg0R0QyVTJ0U1hod21NRGpaL1ByM3ZvS1huUG93VW02V0dG?=
- =?utf-8?B?TVh3eE1KWDhxTCtFeWppNTd0RzZtNlBiSnFzdVE1SFRJenJwWEFianlHdlc3?=
- =?utf-8?B?cDFKZGlXbmRFdkFEUTh1SFFDK3pHZXo0SzZUdW1zMkJaTjFMODE2UGFYSWdp?=
- =?utf-8?B?ZGRMRkRqOVpPTENFc0lRSThMSW81TXhFeHJZTjZwVEtoUlBIalB3M3lUZTY0?=
- =?utf-8?B?aFZWWlBvL3NKTWZiMlMwbnZVVE9jVG5aOTNpTWZ5MFpvU0ZHK1FIVHl6dXky?=
- =?utf-8?B?M2pySTNKdzFHcDJoZjRXdFBKbEw2ZzEvcFlBUU5xcUliRC9acnZ6VFFoM3d5?=
- =?utf-8?B?SDR6ZXlwMmxjckdlSFo4RlZoN2xtQzhhNmtrR0ZRaDVXcU9tTVVDeGkwWlIx?=
- =?utf-8?B?M2p5VDZSclJ6cncxdm42RC9PLytuUnJJTkY3ckhCMkdzOUVEbHNsbEFKaVRO?=
- =?utf-8?B?WEs2RlQ0Q21TczN1Ky95QmNVNTEzNVZaQm5vckxqUG9KWEwwYk82NWRQV3A1?=
- =?utf-8?B?T2pQdmg2UWgwcHppNnZIaEl5c2xmOVJaMlBoY2Q3Z1JpbWlqOTdnL2xGbDRM?=
- =?utf-8?B?ZFQrNWhRZDUxdlIxdk5WOE9JcWVaL3BNSSs4MGxQaE1TT0JDQUhBSjNaNDNh?=
- =?utf-8?B?UU9vZVdYRUlJK01aOFFWSWhrZ2loYXhoZkNPZFYyUTRTb29GeXVrRXhPM1Y0?=
- =?utf-8?B?UVNPV0tYMFE3NkVQUEV6cGg0bCtwZ1V5blpKdTRKSXZxZ0R3QkhJeEtQb003?=
- =?utf-8?B?NHNtb1B3T3kxUUhCcEh6VkdRMExrc3dDeEcyMWhMWlNyRmdZOVY2dlFiRWVH?=
- =?utf-8?B?bURMemk1bFpKa0pEQTBrQ1c4Z2VlVG4rWHJBMHdWeWZQNDdLaHpYeU5KeU5z?=
- =?utf-8?B?RElCZUpkbDlNKzhNMmQyMVJJMjFXb2hHUUcwS3RCUkltcmJhR3JoWlpNa2Ey?=
- =?utf-8?B?U2FsT0FzNzRtZ2cxYjhabDJoZXBaNHlNcjNIYktlRG9iL3RvVnpOWFc0T09x?=
- =?utf-8?B?VE8zZllwTUdIRWxPVjBPSFBmZkNYZkt6VThrOVNPdVd5MmFFSHF5QnU3MUwy?=
- =?utf-8?Q?qlJzFenodxCO2X0/c6WPPfc=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 55b13c87-170d-480d-dd92-08d9eb8a8128
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB2379.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2022 05:10:35.9588
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KnQDJakgeuCExc+ku1rQVNStIduKy7P/oE4mq3V16mXCGXgun2T+cSHsDNogZQDiX1s745Yr3ns65FfV3l5evA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4407
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220126114452.692512-1-apatel@ventanamicro.com>
+ <20220126114452.692512-2-apatel@ventanamicro.com> <CAJF2gTSwzx-yC=WvFixT96=q+M0KPzaZH5PpgGKVWg42M4GBNw@mail.gmail.com>
+In-Reply-To: <CAJF2gTSwzx-yC=WvFixT96=q+M0KPzaZH5PpgGKVWg42M4GBNw@mail.gmail.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Wed, 9 Feb 2022 10:45:05 +0530
+Message-ID: <CAAhSdy0DcB2+vJSEBd5apQhzjFBz9haNTVqqTeX92+hYVyhB2A@mail.gmail.com>
+Subject: Re: [PATCH v10 1/8] RISC-V: Enable CPU_IDLE drivers
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Sandeep Tripathy <milun.tripathy@gmail.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Liush <liush@allwinnertech.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kvm-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Mel,
-
-On 2/8/2022 3:13 PM, Mel Gorman wrote:
-[..snip..]
-> On a Zen3 machine running STREAM parallelised with OMP to have on instance
-> per LLC the results and without binding, the results are
+On Tue, Feb 8, 2022 at 11:46 AM Guo Ren <guoren@kernel.org> wrote:
 >
->                             5.17.0-rc0             5.17.0-rc0
->                                vanilla       sched-numaimb-v6
-> MB/sec copy-16    162596.94 (   0.00%)   580559.74 ( 257.05%)
-> MB/sec scale-16   136901.28 (   0.00%)   374450.52 ( 173.52%)
-> MB/sec add-16     157300.70 (   0.00%)   564113.76 ( 258.62%)
-> MB/sec triad-16   151446.88 (   0.00%)   564304.24 ( 272.61%)
+> Reviewed-by: Guo Ren <guoren@kernel.org>
+>
+> small questions:
+>
+> On Wed, Jan 26, 2022 at 7:46 PM Anup Patel <apatel@ventanamicro.com> wrote:
+> >
+> > From: Anup Patel <anup.patel@wdc.com>
+> >
+> > We force select CPU_PM and provide asm/cpuidle.h so that we can
+> > use CPU IDLE drivers for Linux RISC-V kernel.
+> >
+> > Signed-off-by: Anup Patel <anup.patel@wdc.com>
+> > Signed-off-by: Anup Patel <apatel@vetanamicro.com>
+> > ---
+> >  arch/riscv/Kconfig                |  7 +++++++
+> >  arch/riscv/configs/defconfig      |  1 +
+> >  arch/riscv/configs/rv32_defconfig |  1 +
+> >  arch/riscv/include/asm/cpuidle.h  | 24 ++++++++++++++++++++++++
+> >  arch/riscv/kernel/process.c       |  3 ++-
+> >  5 files changed, 35 insertions(+), 1 deletion(-)
+> >  create mode 100644 arch/riscv/include/asm/cpuidle.h
+> >
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index 5adcbd9b5e88..76976d12b463 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -46,6 +46,7 @@ config RISCV
+> >         select CLONE_BACKWARDS
+> >         select CLINT_TIMER if !MMU
+> >         select COMMON_CLK
+> > +       select CPU_PM if CPU_IDLE
+> >         select EDAC_SUPPORT
+> >         select GENERIC_ARCH_TOPOLOGY if SMP
+> >         select GENERIC_ATOMIC64 if !64BIT
+> > @@ -547,4 +548,10 @@ source "kernel/power/Kconfig"
+> >
+> >  endmenu
+> >
+> > +menu "CPU Power Management"
+> > +
+> > +source "drivers/cpuidle/Kconfig"
+> > +
+> > +endmenu
+> > +
+> >  source "arch/riscv/kvm/Kconfig"
+> > diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
+> > index f120fcc43d0a..a5e0482a4969 100644
+> > --- a/arch/riscv/configs/defconfig
+> > +++ b/arch/riscv/configs/defconfig
+> > @@ -20,6 +20,7 @@ CONFIG_SOC_SIFIVE=y
+> >  CONFIG_SOC_VIRT=y
+> >  CONFIG_SMP=y
+> >  CONFIG_HOTPLUG_CPU=y
+> > +CONFIG_CPU_IDLE=y
+> >  CONFIG_VIRTUALIZATION=y
+> >  CONFIG_KVM=m
+> >  CONFIG_JUMP_LABEL=y
+> > diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_defconfig
+> > index 8b56a7f1eb06..d1b87db54d68 100644
+> > --- a/arch/riscv/configs/rv32_defconfig
+> > +++ b/arch/riscv/configs/rv32_defconfig
+> > @@ -20,6 +20,7 @@ CONFIG_SOC_VIRT=y
+> >  CONFIG_ARCH_RV32I=y
+> >  CONFIG_SMP=y
+> >  CONFIG_HOTPLUG_CPU=y
+> > +CONFIG_CPU_IDLE=y
+> >  CONFIG_VIRTUALIZATION=y
+> >  CONFIG_KVM=m
+> >  CONFIG_JUMP_LABEL=y
+> > diff --git a/arch/riscv/include/asm/cpuidle.h b/arch/riscv/include/asm/cpuidle.h
+> > new file mode 100644
+> > index 000000000000..71fdc607d4bc
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/cpuidle.h
+> > @@ -0,0 +1,24 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (C) 2021 Allwinner Ltd
+> > + * Copyright (C) 2021 Western Digital Corporation or its affiliates.
+> > + */
+> > +
+> > +#ifndef _ASM_RISCV_CPUIDLE_H
+> > +#define _ASM_RISCV_CPUIDLE_H
+> > +
+> > +#include <asm/barrier.h>
+> > +#include <asm/processor.h>
+> > +
+> > +static inline void cpu_do_idle(void)
+> > +{
+> > +       /*
+> > +        * Add mb() here to ensure that all
+> > +        * IO/MEM accesses are completed prior
+> > +        * to entering WFI.
+> > +        */
+> > +       mb();
+> I think it's a separate fixup.
 
-I was able to test STREAM without binding on different
-NPS configurations of two socket Zen3 machine.
+This one is tricky to move as separate fixup because there
+is no cpu_do_idle() until this patch adds it.
 
-The results look good:
+If we deliberately have a separate patch for "mb()" then it
+will be only fixing cpu_do_idle() function added by previous
+patch in the same series.
 
-sched-tip 	- 5.17.0-rc1 tip sched/core
-mel-v6 		- 5.17.0-rc1 tip sched/core + this patch
+Regards,
+Anup
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Stream with 16 threads.
-built with -DSTREAM_ARRAY_SIZE=128000000, -DNTIMES=10
-Zen3, 64C128T per socket, 2 sockets,
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-NPS1
-
-Test:                sched-tip                  mel-v6
- Copy:   114470.18 (0.00 pct)    152806.94 (33.49 pct)
-Scale:   111575.12 (0.00 pct)    189784.57 (70.09 pct)
-  Add:   125436.15 (0.00 pct)    213371.05 (70.10 pct)
-Triad:   123068.86 (0.00 pct)    209809.11 (70.48 pct)
-
-NPS2
-
-Test:               sched-tip                   mel-v6
- Copy:   57936.28 (0.00 pct)     155038.70 (167.60 pct)
-Scale:   55599.30 (0.00 pct)     192601.59 (246.41 pct)
-  Add:   63096.96 (0.00 pct)     211462.58 (235.13 pct)
-Triad:   61983.39 (0.00 pct)     208909.34 (237.04 pct)
-
-NPS4
-
-Test:               sched-tip                   mel-v6
- Copy:   43946.42 (0.00 pct)     119583.69 (172.11 pct)
-Scale:   33750.96 (0.00 pct)     180130.83 (433.70 pct)
-  Add:   39109.72 (0.00 pct)     170296.68 (335.43 pct)
-Triad:   36598.88 (0.00 pct)     169953.47 (364.36 pct)
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Stream with 16 threads.
-built with -DSTREAM_ARRAY_SIZE=128000000, -DNTIMES=100
-Zen3, 64C128T per socket, 2 sockets,
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-NPS1
-
-Test:               sched-tip                   mel-v6
- Copy:   132402.79 (0.00 pct)    225587.85 (70.37 pct)
-Scale:   126923.02 (0.00 pct)    214363.58 (68.89 pct)
-  Add:   145596.55 (0.00 pct)    260901.92 (79.19 pct)
-Triad:   143092.91 (0.00 pct)    249081.79 (74.06 pct)
-
-NPS 2
-
-Test:               sched-tip                   mel-v6
- Copy:   107386.27 (0.00 pct)    227623.31 (111.96 pct)
-Scale:   100941.44 (0.00 pct)    218116.63 (116.08 pct)
-  Add:   115854.52 (0.00 pct)    272756.95 (135.43 pct)
-Triad:   113369.96 (0.00 pct)    260235.32 (129.54 pct)
-
-NPS4
-
-Test:               sched-tip                   mel-v6
- Copy:   91083.07 (0.00 pct)     247163.90 (171.36 pct)
-Scale:   90352.54 (0.00 pct)     223914.31 (147.82 pct)
-  Add:   101973.98 (0.00 pct)    272842.42 (167.56 pct)
-Triad:   99773.65 (0.00 pct)     258904.54 (159.49 pct)
-
-
-There is a significant improvement throughout the board
-with v6 outperforming tip/sched/core in every case!
-
-Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
-
---
-Thanks and Regards
-Prateek
-
+>
+> > +       wait_for_interrupt();
+> > +}
+> > +
+> > +#endif
+> > diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+> > index 03ac3aa611f5..504b496787aa 100644
+> > --- a/arch/riscv/kernel/process.c
+> > +++ b/arch/riscv/kernel/process.c
+> > @@ -23,6 +23,7 @@
+> >  #include <asm/string.h>
+> >  #include <asm/switch_to.h>
+> >  #include <asm/thread_info.h>
+> > +#include <asm/cpuidle.h>
+> >
+> >  register unsigned long gp_in_global __asm__("gp");
+> >
+> > @@ -37,7 +38,7 @@ extern asmlinkage void ret_from_kernel_thread(void);
+> >
+> >  void arch_cpu_idle(void)
+> >  {
+> maybe below is enough.
+> + mb();
+>    wait_for_interrupt();
+>
+> > -       wait_for_interrupt();
+> > +       cpu_do_idle();
+>
+>
+> >         raw_local_irq_enable();
+> >  }
+> >
+> > --
+> > 2.25.1
+> >
+> >
+> > --
+> > kvm-riscv mailing list
+> > kvm-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/kvm-riscv
+>
+>
+>
+> --
+> Best Regards
+>  Guo Ren
+>
+> ML: https://lore.kernel.org/linux-csky/

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFC24AF6DD
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE354AF6E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237242AbiBIQhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:37:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
+        id S237223AbiBIQhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:37:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237205AbiBIQhb (ORCPT
+        with ESMTP id S237257AbiBIQhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:37:31 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A653FC061355
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:37:34 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id n23so5272267pfo.1
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 08:37:34 -0800 (PST)
+        Wed, 9 Feb 2022 11:37:35 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C77C05CB96
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:37:38 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id i186so5321793pfe.0
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 08:37:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hs9DY75/VY6KIjzo1a64wWbEFVmS6NW//YA6Jf9CUb4=;
-        b=L7NbQPE0syDYGE1ddofCCp1z+t90MeErgcI/4BbheKn89HzKUitNQ5QSSSJO4DHe51
-         piFRwUAm4OH3rcmCpE8Zg665LX1GuxSqbhEQVp5vKXC+ijsK4nSHWLCI/71xSUzWT6p1
-         DBUzn7sBfmaZLL75vKUt4p5gXd9+ixDfLBSs1Id88GVQKCMMioMxr8eQQrSZuwJNywcg
-         K7mUfTaHL2tSXLDNoTpsTjSTxMW7B7yZYeONmjWKnW3oZDNDFN+hcW4zxrebck/O5Hqb
-         CmaXPo0vt9mXGaQaCdTthcmg8GcT56QqWfP/fTf5StZ31TDQ9C8y2iNxz6oSOweFM6Fs
-         pGjw==
+        bh=mG3qP+QrOSaboEBGdq6nQWobBpgHojm9ly6BViVKhnI=;
+        b=iGmaY8/LbHXSahcXRwibEhuKkjW3drpXi2oD9PnOA1sTwJIq0H3HyYB9SQkBujf34I
+         DjvD0PtveUK2q0S2uwwc2NbvRmZTdHdEeH6Wugelfd1pjVDxjZdQK8NPnGFtbrS46aXH
+         V754YgJ/3MP1GMhidVa9nFdEAezjpbIdqC4SucMqI3v0/ptAfng5bpf2zf9cj8Nw0agS
+         GMDxdS0PmfV5i1DCxmFBOjcTKrHkQJca10HyDQDnK9dQ6rFnWme4lMtdcPChbFemwmxf
+         n8l2w51Bps+9CEKZtIf/JvhmKtMt/hPBcTaqM1KyoRpb0FQlraLyBz7nOdYRLyEFiXAv
+         hj7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hs9DY75/VY6KIjzo1a64wWbEFVmS6NW//YA6Jf9CUb4=;
-        b=uwAiR379D1bDAot0c/I5zmP1e3FX8XmJR8WyS9tnunYK0QhrV2hNMbknQ3YsvQUhXl
-         qv/WcQSVSyFuN76ID4DSMkM357eJh09R8Pzic6Ro1gE8sf1LNIisXOKMbxfJEIKpr433
-         k4pYMQ7PvRkcwihOa2/dFEDdrcz/PMx65eTTUGxUueLHKydymTRtHlk/Uh/SSlv/7WsS
-         UGa04vsFuwDmjLNIEOzVxRpqkbXgScnJYwmY3kMFlyEYLAfyYor2mJ+A9rWOMg/+mwCv
-         rHMAbPf6wSdBx5COkUBzp3+wVqJ/cyhu3o+4/dyfdlVN4okGzlQEjc+pswTXX5cuBiBu
-         DcDg==
-X-Gm-Message-State: AOAM533JZAVvf6KmV28ezy1BG8WCXPqjjQoKqUBFpHNEZIMYnDR+3d7j
-        ZoaNbCZbI75y20DtptCNziQ=
-X-Google-Smtp-Source: ABdhPJxbcKappCAHTfHoKEJ/GFWu323ixU8DxvXUynUmEGcR/PzlHcfMhmJ6pzCtPMf088I7eMxfSQ==
-X-Received: by 2002:a05:6a00:1382:: with SMTP id t2mr3211098pfg.31.1644424654196;
-        Wed, 09 Feb 2022 08:37:34 -0800 (PST)
+        bh=mG3qP+QrOSaboEBGdq6nQWobBpgHojm9ly6BViVKhnI=;
+        b=oKR7okNE+ggDOQU0fKJNdkkUDUksQ5Y+cyZjVEzIKIfxE08SYRBW4F/+qEwvgdRl60
+         sLBsOawbzKZQ3BlvAYhV8GqOSlBFAS1tup4pRFLLENHY57CfpbIjs877eb+CDTIlhB2X
+         WgR0lzlu+1Z7WVpMd1AGbxEzhXLBR68SupQ7HKwXv5qRG2Q98o6JqWq9bY6IuG9TcAKE
+         FG0jOAGtOnXLI8SC14w9V1H88LiCgqw7gaeuF2JkhyJCfo9XS8Y6QHK5f91nI8stmNrb
+         Icx19QqYDtZdHGVROv7Bw2kbeSkJ6V4o/WnztILDjGTLZEbRIBcw4lV0ef70ZXlEOtc+
+         M39A==
+X-Gm-Message-State: AOAM533GNcCUxSFM5VakKE32tDtmFZW2JBHhwqZWodwbxEmrTsbMNIcc
+        ONVC2F7HkqZdkWm94rLTLak=
+X-Google-Smtp-Source: ABdhPJxC2Lph/4BCmF1vTLO7c0xSu3cjJFT78SsazSwJuS6z7T6gYsvRk0BbPcls5rNtFb1swvQKOA==
+X-Received: by 2002:a05:6a00:88e:: with SMTP id q14mr3094913pfj.47.1644424658229;
+        Wed, 09 Feb 2022 08:37:38 -0800 (PST)
 Received: from localhost.localdomain ([122.164.186.156])
-        by smtp.googlemail.com with ESMTPSA id kb18sm7840199pjb.30.2022.02.09.08.37.30
+        by smtp.googlemail.com with ESMTPSA id kb18sm7840199pjb.30.2022.02.09.08.37.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 08:37:33 -0800 (PST)
+        Wed, 09 Feb 2022 08:37:37 -0800 (PST)
 From:   Abdun Nihaal <abdun.nihaal@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         straube.linux@gmail.com, martin@kaiser.cx,
         linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
         Abdun Nihaal <abdun.nihaal@gmail.com>
-Subject: [PATCH 3/9] staging: r8188eu: remove empty function rtw_mfree_mlme_priv_lock
-Date:   Wed,  9 Feb 2022 22:06:01 +0530
-Message-Id: <8b6d750b049f875370996258aedaf89cf0f198d4.1644422181.git.abdun.nihaal@gmail.com>
+Subject: [PATCH 4/9] staging: r8188eu: remove empty function _InitOperationMode
+Date:   Wed,  9 Feb 2022 22:06:02 +0530
+Message-Id: <07083cbb8b09957d2fcf9e5b70e0fd832ce53f35.1644422181.git.abdun.nihaal@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1644422181.git.abdun.nihaal@gmail.com>
 References: <cover.1644422181.git.abdun.nihaal@gmail.com>
@@ -72,37 +72,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The definition of function rtw_mfree_mlme_priv_lock is empty. Remove it.
+The definition of function _InitOperationMode is empty. Remove it.
 
 Signed-off-by: Abdun Nihaal <abdun.nihaal@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_mlme.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/staging/r8188eu/hal/usb_halinit.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-index e1e358c94ea4..0abad3c78f82 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-@@ -85,10 +85,6 @@ int _rtw_init_mlme_priv(struct adapter *padapter)
- 	return res;
+diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
+index 659e0f26db29..66e90c6928ca 100644
+--- a/drivers/staging/r8188eu/hal/usb_halinit.c
++++ b/drivers/staging/r8188eu/hal/usb_halinit.c
+@@ -449,10 +449,6 @@ static void InitUsbAggregationSetting(struct adapter *Adapter)
+ 	usb_AggSettingRxUpdate(Adapter);
  }
  
--static void rtw_mfree_mlme_priv_lock(struct mlme_priv *pmlmepriv)
+-static void _InitOperationMode(struct adapter *Adapter)
 -{
 -}
 -
- static void rtw_free_mlme_ie_data(u8 **ppie, u32 *plen)
+ static void _InitBeaconParameters(struct adapter *Adapter)
  {
- 	kfree(*ppie);
-@@ -118,8 +114,6 @@ void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
- 	rtw_free_mlme_priv_ie_data(pmlmepriv);
+ 	struct hal_data_8188e *haldata = &Adapter->haldata;
+@@ -635,7 +631,6 @@ u32 rtl8188eu_hal_init(struct adapter *Adapter)
+ 	_InitEDCA(Adapter);
+ 	_InitRetryFunction(Adapter);
+ 	InitUsbAggregationSetting(Adapter);
+-	_InitOperationMode(Adapter);/* todo */
+ 	_InitBeaconParameters(Adapter);
  
- 	if (pmlmepriv) {
--		rtw_mfree_mlme_priv_lock(pmlmepriv);
--
- 		vfree(pmlmepriv->free_bss_buf);
- 	}
- 
+ 	/*  */
 -- 
 2.34.1
 

@@ -2,114 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C144AF5A4
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 624494AF800
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236234AbiBIPnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:43:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
+        id S238124AbiBIRYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 12:24:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234255AbiBIPnc (ORCPT
+        with ESMTP id S231791AbiBIRYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:43:32 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9FBC0613CA;
-        Wed,  9 Feb 2022 07:43:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644421415; x=1675957415;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tT0ubbIOHy9IAuW3heCg9dBzqzLkwpWxBVD1B0pmpaQ=;
-  b=BimlXhnafmYZeRAnxWg3H1QUHe49YZWZ8WVj4XUYNhYY0TMlC8la1XUk
-   EewQqP+pJxFgBS8Mt+wQ6JbKaxIZgn2wZVKzFuOTKDIz0X0EDAbZq9qSu
-   Yt4kqx0515UDxcZkouXQn3giJq8Ny1aSsN0wDEw/71tRVY3kVXpRPAYCp
-   6Uz8HdT6h/9aNGBSKueBm/VrTd2xrlhwQpCGQc/Lx+7SejZnx8xXLLWlZ
-   Etb5ibPRyOscZV65RYrdKqTKyYpppmQwn/ewLLUIA+nTCHVWoCuNpSScz
-   +NiygLpxxOEr26fa8E/6F3xoYeuRuAMWomxroLWiiE+bbrDSQDzZd54t8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="249435521"
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="249435521"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 07:43:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="541143751"
-Received: from chenyu-dev.sh.intel.com ([10.239.158.61])
-  by orsmga008.jf.intel.com with ESMTP; 09 Feb 2022 07:43:28 -0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     intel-wired-lan@lists.osuosl.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Todd Brandt <todd.e.brandt@intel.com>,
-        Len Brown <len.brown@intel.com>, Chen Yu <yu.c.chen@intel.com>
-Subject: [PATCH] e1000e: Print PHY register address when MDI read/write fails
-Date:   Thu, 10 Feb 2022 07:43:02 +0800
-Message-Id: <20220209234302.50833-1-yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 9 Feb 2022 12:24:37 -0500
+X-Greylist: delayed 1281 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 09:24:40 PST
+Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.48.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D6FC0613C9
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 09:24:40 -0800 (PST)
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id 021F2400DDCB2
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 11:03:19 -0600 (CST)
+Received: from gator4132.hostgator.com ([192.185.4.144])
+        by cmsmtp with SMTP
+        id HqLGndAeFRnrrHqLGn4EOx; Wed, 09 Feb 2022 11:01:18 -0600
+X-Authority-Reason: nr=8
+Received: from host-95-232-30-176.retail.telecomitalia.it ([95.232.30.176]:59302 helo=[10.0.0.45])
+        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <bristot@kernel.org>)
+        id 1nHqLF-001DpH-7N; Wed, 09 Feb 2022 11:01:17 -0600
+Message-ID: <055fcdfe-3e18-0bdc-817a-a51049978803@kernel.org>
+Date:   Wed, 9 Feb 2022 18:01:13 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] watchdog: Improve watchdog_dev function documentation
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <274cc9a2b34c7ffd042170fe2f8a5e55e22766b8.1644396833.git.bristot@redhat.com>
+ <ec5cc9e3-88d4-cc54-0490-7da87b65193b@infradead.org>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <ec5cc9e3-88d4-cc54-0490-7da87b65193b@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - kernel.org
+X-BWhitelist: no
+X-Source-IP: 95.232.30.176
+X-Source-L: No
+X-Exim-ID: 1nHqLF-001DpH-7N
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: host-95-232-30-176.retail.telecomitalia.it ([10.0.0.45]) [95.232.30.176]:59302
+X-Source-Auth: kernel@bristot.me
+X-Email-Count: 3
+X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
+X-Local-Domain: no
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is occasional suspend error from e1000e which blocks the
-system from further suspending:
-[   20.078957] PM: pci_pm_suspend(): e1000e_pm_suspend+0x0/0x780 [e1000e] returns -2
-[   20.078970] PM: dpm_run_callback(): pci_pm_suspend+0x0/0x170 returns -2
-[   20.078974] e1000e 0000:00:1f.6: PM: pci_pm_suspend+0x0/0x170 returned -2 after 371012 usecs
-[   20.078978] e1000e 0000:00:1f.6: PM: failed to suspend async: error -2
-According to the code flow, this might be caused by broken MDI read/write to PHY registers.
-However currently the code does not tell us which register is broken. Thus enhance the debug
-information to print the offender PHY register for easier debugging.
+On 2/9/22 17:51, Randy Dunlap wrote:
+> Hi Daniel,
+> 
+> On 2/9/22 01:08, Daniel Bristot de Oliveira wrote:
+>> Adjust function comments to the kernel doc format. It
+>> also adjusts some variable names and adds return values.
+>>
+>> No functional change.
+> After applying the patch, I still see 3 warnings:
+> 
+> watchdog_dev.c:1127: warning: No description found for return value of 'watchdog_dev_register'
+> watchdog_dev.c:1169: warning: No description found for return value of 'watchdog_set_last_hw_keepalive'
+> watchdog_dev.c:1197: warning: No description found for return value of 'watchdog_dev_init'
+> 
+> 
+> Ah, I see. The format for function Return in kernel-doc is:
+> 
+>  * Return: func return info here
+> 
 
-Reported-by: Todd Brandt <todd.e.brandt@intel.com>
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
----
- drivers/net/ethernet/intel/e1000e/phy.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Ack, I will fix that.
 
-diff --git a/drivers/net/ethernet/intel/e1000e/phy.c b/drivers/net/ethernet/intel/e1000e/phy.c
-index 0f0efee5fc8e..fd07c3679bb1 100644
---- a/drivers/net/ethernet/intel/e1000e/phy.c
-+++ b/drivers/net/ethernet/intel/e1000e/phy.c
-@@ -146,11 +146,11 @@ s32 e1000e_read_phy_reg_mdic(struct e1000_hw *hw, u32 offset, u16 *data)
- 			break;
- 	}
- 	if (!(mdic & E1000_MDIC_READY)) {
--		e_dbg("MDI Read did not complete\n");
-+		e_dbg("MDI Read PHY Reg Address %d did not complete\n", offset);
- 		return -E1000_ERR_PHY;
- 	}
- 	if (mdic & E1000_MDIC_ERROR) {
--		e_dbg("MDI Error\n");
-+		e_dbg("MDI Read PHY Reg Address %d Error\n", offset);
- 		return -E1000_ERR_PHY;
- 	}
- 	if (((mdic & E1000_MDIC_REG_MASK) >> E1000_MDIC_REG_SHIFT) != offset) {
-@@ -210,11 +210,11 @@ s32 e1000e_write_phy_reg_mdic(struct e1000_hw *hw, u32 offset, u16 data)
- 			break;
- 	}
- 	if (!(mdic & E1000_MDIC_READY)) {
--		e_dbg("MDI Write did not complete\n");
-+		e_dbg("MDI Write PHY Reg Address %d did not complete\n", offset);
- 		return -E1000_ERR_PHY;
- 	}
- 	if (mdic & E1000_MDIC_ERROR) {
--		e_dbg("MDI Error\n");
-+		e_dbg("MDI Write PHY Red Address %d Error\n", offset);
- 		return -E1000_ERR_PHY;
- 	}
- 	if (((mdic & E1000_MDIC_REG_MASK) >> E1000_MDIC_REG_SHIFT) != offset) {
--- 
-2.25.1
-
+Thanks, Randy!
+-- Daniel

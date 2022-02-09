@@ -2,114 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F17F74AF8CD
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8424E4AF8D2
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:55:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238489AbiBIRxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 12:53:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49542 "EHLO
+        id S238508AbiBIRyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 12:54:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235315AbiBIRw7 (ORCPT
+        with ESMTP id S238497AbiBIRyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 12:52:59 -0500
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C4EC0613C9;
-        Wed,  9 Feb 2022 09:53:02 -0800 (PST)
-Received: by mail-oi1-f173.google.com with SMTP id q8so3265095oiw.7;
-        Wed, 09 Feb 2022 09:53:02 -0800 (PST)
+        Wed, 9 Feb 2022 12:54:40 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A581DC05CB82
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 09:54:43 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id w20so2844523plq.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 09:54:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=bn+NqQc+WkBL0eCTGvSDZFvqDNmAbZwHfh1WyoVIqEU=;
+        b=gDzGvDYK+kanW1ZjdlzJIIEDIOwcDawCy2/WkAvLy+okpF1wNXDa6i2bZo/mYN0yKl
+         M5ofOfdjO8Zlz/FGkjY8tI9264lB59SUqwDecmo037jiNWuD7yV3+HyGvNqwV+YUv1CQ
+         IEjipzEqzwTiYLOSJzKFRJrGEfAMC/H3Pg77gMNkdPN9y4qlO5U5nOU/w8vY13caF7WY
+         v+VVu0DHZjZCxM9zhvhqhxB7jiU8Z7/e9TwkESuCrdgQGH/vkvA7Kv1bc+dWKYTuctmc
+         RV8Ebzs/wibJzv/LKWZwTjEnWPi1DuTxW3OuAT7VLQ1toSc+6gROC0oD/hjzfjjSFKeh
+         BD9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jjLEFWIWQKYzTsSeUGIWjYdkxGer3/xMi2PwBJGGpJ0=;
-        b=SLKaBSRvaV5hmebcXedl+ZsEaDXOi1qN5Yq6SVlVAfaOAnzZ/KwpDGH++IDmV87won
-         eJveOMgN2eMfmeJDvmwFIocPzvGCTioE2Hx3VmAXgCDrxEqkvjs6AT5muKTHQMT7/P6p
-         ZOj64ExFaBOD9F2mggJkRhbSvvxI6CPEEEXBMC0DCymeKQmucD6wX/ZOxE5CgsQUWxA/
-         UR8XPk/8opoZGFIzJIOScHmbHQOROJVPrBgr/utsv2KgIAbiYM6TRJOMycFHETJ5suS0
-         t65RT/S0b82s4rtHNU5IlTPqNkLUCZlztn+p3QAO5DlCv8TNSJQQH4+6eRNAypfJWVDo
-         1O1g==
-X-Gm-Message-State: AOAM530bZOPGFAWJDCL9hVw045PVI47ExnKDTc1SjDYH9tDnRwRM2C25
-        OGz1q4uZLVNP/v9V0f/jJVz/EPimGw==
-X-Google-Smtp-Source: ABdhPJyYraVR9hcwF5D1ZdgFnfaKFpusUnkRjrgrPoeG09rhPI5ujkyyR5lkg6pf8bCg0abLwyG8DQ==
-X-Received: by 2002:a05:6808:2196:: with SMTP id be22mr1460341oib.210.1644429181680;
-        Wed, 09 Feb 2022 09:53:01 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id n13sm7669693ooj.34.2022.02.09.09.53.00
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=bn+NqQc+WkBL0eCTGvSDZFvqDNmAbZwHfh1WyoVIqEU=;
+        b=mAbdamYfxKdWX9ePnvj0DM7c4Pns/ldl/la4zelP8wrh+oT1SLLYXxiLVrdNYPQIhp
+         V7wsB4s2vnXlIi5MaD03Kgyl9c7+HcdwUsf5y+NZmLoFcKxKjs3KKx4/BK+FAXx+m01e
+         Ul1aGLnUEs+ba//og9vHQq9HFEOu2nyR3zz0S5GeMGFPQ56JfolMgzQtbkS5kG2WzEdr
+         RN/Z9TgM7mjXx5+DhE2VfpYkCqxtPuS4mTw3oH182mJbL8IycoxRA4nOYqEC85/v4zA0
+         jw3fzOcOfBxhnscMCvlm1gm/gdKYIEMXjamOKznwhKZv60yx7Rsfs3VlpUidCHpDqTq8
+         PflA==
+X-Gm-Message-State: AOAM531wTYaRAW3Nucs7s8UUfUxt24w7RbApPpxzI+fWLH/Rp9d0ddLH
+        6YMMAGJyy/QQHmx5fc2kaAKcZQ==
+X-Google-Smtp-Source: ABdhPJykGUyrR/mKjFE3vXyI8yjLyylaCf25jTwCP3hhwtnACLmb9FM8ZJUGa2VrGt/lbOLtgaRmnw==
+X-Received: by 2002:a17:90b:1e50:: with SMTP id pi16mr4732745pjb.16.1644429282853;
+        Wed, 09 Feb 2022 09:54:42 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h6sm20257216pfc.35.2022.02.09.09.54.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 09:53:00 -0800 (PST)
-Received: (nullmailer pid 587746 invoked by uid 1000);
-        Wed, 09 Feb 2022 17:52:59 -0000
-Date:   Wed, 9 Feb 2022 11:52:59 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Alex Bee <knaerzche@gmail.com>, Liang Chen <cl@rock-chips.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Subject: Re: [PATCH v5 1/5] dt-bindings: gpu: mali-bifrost: describe clocks
- for the rk356x gpu
-Message-ID: <YgP/e29ZPgBW/c05@robh.at.kernel.org>
-References: <20220209085110.3588035-1-michael.riesch@wolfvision.net>
- <20220209085110.3588035-2-michael.riesch@wolfvision.net>
+        Wed, 09 Feb 2022 09:54:42 -0800 (PST)
+Date:   Wed, 9 Feb 2022 17:54:38 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org,
+        mlevitsk@redhat.com, pbonzini@redhat.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        peterz@infradead.org, hpa@zytor.com, jon.grimm@amd.com,
+        wei.huang2@amd.com, terry.bowman@amd.com
+Subject: Re: [PATCH v5] KVM: SVM: Allow AVIC support on system w/ physical
+ APIC ID > 255
+Message-ID: <YgP/3u2UjqzG4C/M@google.com>
+References: <20220209152038.12303-1-suravee.suthikulpanit@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220209085110.3588035-2-michael.riesch@wolfvision.net>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220209152038.12303-1-suravee.suthikulpanit@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 09:51:06AM +0100, Michael Riesch wrote:
-> From: Alex Bee <knaerzche@gmail.com>
-> 
-> The Bifrost GPU in Rockchip RK356x SoCs has a core and a bus clock.
-> Reflect this in the SoC specific part of the binding.
-> 
-> Signed-off-by: Alex Bee <knaerzche@gmail.com>
-> [move the changes to the SoC section]
-> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+On Wed, Feb 09, 2022, Suravee Suthikulpanit wrote:
+> AVIC physical APIC ID table entry contains host physical
+> APIC ID field, which is used by the hardware to keep track of where
+> each vCPU is running. Originally, this field is 8-bit when AVIC was
+> introduced.
+>
+> The AMD64 Architecture Programmer’s Manual Volume 2 revision 3.38
+> specify the physical APIC ID table entry bit [11:8] as reserved
+> for older generation of AVIC hardware.
+
+I'd prefer to explicitly call out that older versions of the APM were buggy, it's
+easy to overlook the importance of the "revision 3.38" blurb.
+
+> For newer hardware, this field is used to specify host physical APIC ID
+> larger than 255.
+
+For all intents and purposed the field was _architecturally_ always 12 bits, the
+APM just did a poor job of documenting that the number of bits that are actually
+consumed by the CPU is model specific behavior.
+
+> Unfortunately, there is no CPUID bit to help determine if AVIC hardware
+> can support 12-bit host physical APIC ID. For older system, since
+> the reserved bits [11:8] is documented as should be zero, it should be safe
+
+Please don't hedge, "it should be safe" implies we aren't confident about writing
+zeroes, but KVM already writes zeroes to the reserved bits.  The changelog could
+instead call out that KVM trusts hardware to (a) not generate bogus x2APIC IDs and
+(b) to always support at least 8 bits.
+
+> to increase the host physical ID mask to 12 bits and clear the field
+> when programing new physical APIC ID.
+
+E.g.
+
+  Expand KVM's mask for the AVIC host physical ID to the full 12 bits defined
+  by the architecture.  The number of bits consumed by hardware is model
+  specific, e.g. early CPUs ignored bits 11:8, but there is no way for KVM
+  to enumerate the "true" size.  So, KVM must allow using all bits, else it
+  risks rejecting completely legal x2APIC IDs on newer CPUs.
+ 
+  This means KVM relies on hardware to not assign x2APIC IDs that exceed the
+  "true" width of the field, but presmuably hardware is smart enough to tie
+  the width to the max x2APIC ID.  KVM also relies on hardware to support at
+  least 8 bits, as the legacy xAPIC ID is writable by software.  But, those
+  assumptions are unavoidable due to the lack of any way to enumerate the
+  "true" width.
+
+  Note, older versions of the APM state that bits 11:8 are reserved for
+  legacy xAPIC, but consumed for x2APIC.  Revision 3.38 corrected this to
+  state that bits 11:8 are "should be zero" on older hardware.
+
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Cc: Maxim Levitsky <mlevitsk@redhat.com>
+
+Cc: stable@vger.kernel.org
+Fixes: 44a95dae1d22 ("KVM: x86: Detect and Initialize AVIC support")
+
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 > ---
->  .../devicetree/bindings/gpu/arm,mali-bifrost.yaml | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
+>  arch/x86/kvm/svm/avic.c | 8 ++------
+>  arch/x86/kvm/svm/svm.h  | 2 +-
+>  2 files changed, 3 insertions(+), 7 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
-> index 63a08f3f321d..21409c8d3813 100644
-> --- a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
-> +++ b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
-> @@ -159,6 +159,21 @@ allOf:
->          power-domains:
->            maxItems: 1
->          sram-supply: false
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: rockchip,rk3568-mali
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 2
-> +        clock-names:
-> +          items:
-> +           - const: core
-> +           - const: bus
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index 90364d02f22a..54ad98731181 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/amd-iommu.h>
+>  #include <linux/kvm_host.h>
+>  
+> +#include <asm/apic.h>
 
-Please don't invent new names. We already have 'gpu' and 'bus' defined. 
-'core' and 'gpu' sound like the same thing to me, and the h/w doesn't 
-have different clocks from vendor to vendor.
+Unnecessary new include.
 
-Rob
+With the above addressed,
+
+Reviewed-by: Sean Christopherson <seanjc@google.com>

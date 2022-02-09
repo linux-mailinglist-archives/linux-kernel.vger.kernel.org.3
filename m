@@ -2,38 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5DA74AE885
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 05:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C544AE86E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 05:12:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347787AbiBIEN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 23:13:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47656 "EHLO
+        id S1346794AbiBIEKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 23:10:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347380AbiBIDn7 (ORCPT
+        with ESMTP id S1346363AbiBID0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 22:43:59 -0500
-X-Greylist: delayed 540 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 19:34:47 PST
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD07C0401C6;
-        Tue,  8 Feb 2022 19:34:47 -0800 (PST)
+        Tue, 8 Feb 2022 22:26:16 -0500
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CC8C061576;
+        Tue,  8 Feb 2022 19:26:15 -0800 (PST)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1644377146;
+        t=1644377174;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=83BegJX/huvgt+XIVpOJvjJ7YdqmGJGb2aCYCp0Ow7Q=;
-        b=wltvPx+CnJG10maR4ffbxORT5+0NpeVCUfXYk5bMhU3Gq+FtZURQieE8KBPUjH3qH7eKMQ
-        MtjsDNJbb4TTLjcu/8NQvUNg2EjhwWQjICv11KjcUuvoIN/+wQuWUO1u9iwu7G6AU2899l
-        Tk3CIl8OuyBjrrrTMpR4z8c9ez7Brxs=
+        bh=sbQcEhH/CPDuLNqbvluz1NLTZubPsF28DulkteTgQ3g=;
+        b=m6UhLUtsi6j4grN0hoHwGZ6RJTBzyq5F0J2uRUbOhflEXosCmXvMZZRrFZNIUXrMMJWoVn
+        jx9q+abuwzk85dzMXzAHUoll5UZkmerqGqjKD5ZgRa7LpBk/CBwcdVfh2VmE/QHilXASn3
+        LZkuNxrewuE/r/4BU+Y/GZfaSmLvJu0=
 From:   Cai Huoqing <cai.huoqing@linux.dev>
 To:     cai.huoqing@linux.dev
-Cc:     Selvin Xavier <selvin.xavier@broadcom.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] RDMA/bnxt_re: Make use of the helper macro LIST_HEAD()
-Date:   Wed,  9 Feb 2022 11:25:18 +0800
-Message-Id: <20220209032518.37960-1-cai.huoqing@linux.dev>
+Cc:     Nilesh Javali <njavali@marvell.com>,
+        Manish Rangankar <mrangankar@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: bnx2i: Make use of the helper macro LIST_HEAD()
+Date:   Wed,  9 Feb 2022 11:25:46 +0800
+Message-Id: <20220209032547.38075-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
@@ -53,22 +55,22 @@ Replace "struct list_head head = LIST_HEAD_INIT(head)" with
 
 Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
 ---
- drivers/infiniband/hw/bnxt_re/main.c | 2 +-
+ drivers/scsi/bnx2i/bnx2i_init.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/hw/bnxt_re/main.c b/drivers/infiniband/hw/bnxt_re/main.c
-index 3d6834d3d4fb..8ceb07883d8e 100644
---- a/drivers/infiniband/hw/bnxt_re/main.c
-+++ b/drivers/infiniband/hw/bnxt_re/main.c
-@@ -74,7 +74,7 @@ MODULE_DESCRIPTION(BNXT_RE_DESC " Driver");
- MODULE_LICENSE("Dual BSD/GPL");
+diff --git a/drivers/scsi/bnx2i/bnx2i_init.c b/drivers/scsi/bnx2i/bnx2i_init.c
+index 2b3f0c10478e..40561fc2823d 100644
+--- a/drivers/scsi/bnx2i/bnx2i_init.c
++++ b/drivers/scsi/bnx2i/bnx2i_init.c
+@@ -16,7 +16,7 @@
  
- /* globals */
--static struct list_head bnxt_re_dev_list = LIST_HEAD_INIT(bnxt_re_dev_list);
-+static LIST_HEAD(bnxt_re_dev_list);
- /* Mutex to protect the list of bnxt_re devices added */
- static DEFINE_MUTEX(bnxt_re_dev_lock);
- static struct workqueue_struct *bnxt_re_wq;
+ #include "bnx2i.h"
+ 
+-static struct list_head adapter_list = LIST_HEAD_INIT(adapter_list);
++static LIST_HEAD(adapter_list);
+ static u32 adapter_count;
+ 
+ #define DRV_MODULE_NAME		"bnx2i"
 -- 
 2.25.1
 

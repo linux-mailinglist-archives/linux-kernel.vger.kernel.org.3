@@ -2,69 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BA34AF354
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD394AF358
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234496AbiBINxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 08:53:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
+        id S233739AbiBINyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 08:54:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234202AbiBINxy (ORCPT
+        with ESMTP id S234605AbiBINy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 08:53:54 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194F8C0613C9
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 05:53:55 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id D733867373; Wed,  9 Feb 2022 14:53:51 +0100 (CET)
-Date:   Wed, 9 Feb 2022 14:53:51 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>, nouveau@lists.freedesktop.org,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>
-Subject: Re: [PATCH 7/8] mm: remove the extra ZONE_DEVICE struct page
- refcount
-Message-ID: <20220209135351.GA20631@lst.de>
-References: <20220207063249.1833066-1-hch@lst.de> <20220207063249.1833066-8-hch@lst.de> <CAPcyv4h_axDTmkZ35KFfCdzMoOp8V3dc6btYGq6gCj1OmLXM=g@mail.gmail.com> <20220209062345.GB7739@lst.de> <20220209122956.GI49147@ziepe.ca>
+        Wed, 9 Feb 2022 08:54:27 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8770DC050CC8;
+        Wed,  9 Feb 2022 05:54:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Dx/PKWpzQCecS5LJJThre2isPFS/IqAyk2Jvk4HRdb0=; b=Vgmk0z0l+9jPpsmVtPt3YDGe09
+        g870jZd2okb+F2agLNYbzeYNb+Ogu/LxP0STrp3BYie9juwJlk9zrTCTZ1U9cmf5R4frDqu8tcLb0
+        bWMz5gMmpe8zxJEkgcHYNJYI0GPXCSNu+PttpvvBngJzV9EVgx+zWJEIUFvmMV6Dvmzw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nHnQN-00582r-Ve; Wed, 09 Feb 2022 14:54:23 +0100
+Date:   Wed, 9 Feb 2022 14:54:23 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, davem@davemloft.net, kuba@kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH net-next] net: lan966x: Fix when CONFIG_IPV6 is not set
+Message-ID: <YgPHjxpo0N4ND1ch@lunn.ch>
+References: <20220209101823.1270489-1-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220209122956.GI49147@ziepe.ca>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220209101823.1270489-1-horatiu.vultur@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 08:29:56AM -0400, Jason Gunthorpe wrote:
-> It is nice, but the other series are still impacted by the fsdax mess
-> - they still stuff pages into ptes without proper refcounts and have
-> to carry nonsense to dance around this problem.
+On Wed, Feb 09, 2022 at 11:18:23AM +0100, Horatiu Vultur wrote:
+> When CONFIG_IPV6 is not set, then the compilation of the lan966x driver
+> fails with the following error:
 > 
-> I certainly would be unhappy if the amd driver, for instance, gained
-> the fsdax problem as well and started pushing 4k pages into PMDs.
+> drivers/net/ethernet/microchip/lan966x/lan966x_main.c:444: undefined
+> reference to `ipv6_mc_check_mld'
+> 
+> The fix consists in adding #ifdef around this code.
 
-As said before: I think this all needs to be fixed.  But I'd rather
-fix it gradually and I think this series is a nice step forward.
-After that we can look at the pte mappings.
+It might be better to add a stub function for when IPv6 is
+disabled. We try to avoid #if in C code.
+
+	  Andrew

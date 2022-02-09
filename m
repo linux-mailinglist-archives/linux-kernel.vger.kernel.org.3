@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5DE84AF7D7
+	by mail.lfdr.de (Postfix) with ESMTP id 154654AF7D5
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237991AbiBIRIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 12:08:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
+        id S237853AbiBIRI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 12:08:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237880AbiBIRIW (ORCPT
+        with ESMTP id S237879AbiBIRIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Feb 2022 12:08:22 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C04C1C05CB86
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 09:08:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3AF2DC05CB87
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 09:08:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644426502;
+        s=mimecast20190719; t=1644426503;
         h=from:from:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=r4quz3tPWUdip3lwPOa/W+iK+tMqBKwZVegMeFozMhI=;
-        b=V6mRsyKR41Pp8hWHa6dqsWtr+ETrCus8m7iG40/JX8I8a3XToeIWsnqodLKF0xpB6HKlXH
-        mBpbY1NM8lnaGiTYURYH8Okq411FZx2URK6uZgFOVTBkBe5krva8Q36nerVjyp3lfk7KyL
-        n1XoX40vXEtER44EgEVmTfa61EebUmc=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=7x5zYig7PVcv0wtCDoN3cLooQwpWC51uI2dgVOT1jmc=;
+        b=WEH/Bty+l4EeoItHBeZ/68W7dEUIa8mkbBCk4Ayb6TNB9YkmxInBHdLi2q6F+fJPyz5y33
+        SecsdWDWHtuBx+92RTxRsO2pyYP9gxV+ZQYm0OxeR1gqez9dTO5GvwIjHTwV0Yjrsfyw3c
+        asKHh5llvT8iyRs+myCQWL+FveiiSbA=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-177-QY8JJD2SPcmqIqL9X7xwqw-1; Wed, 09 Feb 2022 12:08:21 -0500
-X-MC-Unique: QY8JJD2SPcmqIqL9X7xwqw-1
-Received: by mail-wr1-f70.google.com with SMTP id j8-20020adfc688000000b001e3322ced69so1343455wrg.13
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 09:08:21 -0800 (PST)
+ us-mta-3-dvt1wpDRMdaFvSW0Qen8qA-1; Wed, 09 Feb 2022 12:08:22 -0500
+X-MC-Unique: dvt1wpDRMdaFvSW0Qen8qA-1
+Received: by mail-wr1-f72.google.com with SMTP id g17-20020adfa591000000b001da86c91c22so1356822wrc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 09:08:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:reply-to:mime-version:content-transfer-encoding;
-        bh=r4quz3tPWUdip3lwPOa/W+iK+tMqBKwZVegMeFozMhI=;
-        b=yC++TbvXhghmHY2nUpWwlON5daLRXIcWnsMGeUNPnx62U6AWtilBGNB1lmvwUMweY3
-         VYQJlqoGCOhVnC1SzUzGWlquRVBX9R1LIsyHU8xR+5jBxxx9JMlPtf8Vyz9hryB4CxUD
-         FNPd3nxKmUoXILOoUuMQIxnJSH7D8IF8ekplZuPnhQPS3uo4roRGxoMBxiarobsmJoxH
-         LaXiocJGRuYWraA6e0o2x4rVLDWTltiQnxM8rTTlgGIoXUgjeo8OaTDXbVntu9RoRv2i
-         W8b9GICKK1Iagg3CAo1zZfmH7JyYru/ZZ8PN9GORYJwx8bej9uTsM4UhZby06fC3dMk0
-         NEFQ==
-X-Gm-Message-State: AOAM530kx8qwiCM+7Zd5As3okebk51Kc3RC2M5+/ga9oxkMXqiRHLVX3
-        K2s9onC44+8Vq6bsODlkTr4Hl02I0vHbOtcdyMteB0lHi0kZU7bTtjrKyPF3RYSkSJ5DrcY5fqS
-        P5V0BoLjQtjDY0cj6Ty5U2xA=
-X-Received: by 2002:adf:f008:: with SMTP id j8mr2794702wro.704.1644426498338;
+        bh=7x5zYig7PVcv0wtCDoN3cLooQwpWC51uI2dgVOT1jmc=;
+        b=XAbjlwimw/JkRKi/yIBYho0XLL+ZBnDZRhMNmz5ReOJ4AVpZrt80GbgsntPaqGHiYm
+         iTIsrXJ45ldEPz5knv6ujrUNZYJJ7b7JzGMf63rjdWzDMWvlFQ2qKTFh/9OpP3gHrv4c
+         E0juJOKRmOYgwKMBPyCigAWho/TzSiTMgwRZp5T3ewBktxvgrOEbIMXUXoiM3/VaQDVt
+         bLMSeno7gkU96bKY62Z0YJRDzm4TseSyFL5WT2HDW7yTL56auvRWUMgFk12cshIEo4gQ
+         R1sAdbpe++DXPetmS6P8QE8ABbv1bIP8o8dwtZkyAqzHyf0t5rXG7B2dZCxZKgAmt1F6
+         IRcA==
+X-Gm-Message-State: AOAM533VjHKYRv0DYQZOoignDhlx2LvozPxbEztrc6IBnMf2AT3Ql97D
+        q9TSXIGaZvQ9mhc79V0wamqzhJDVaAgnAnMYy+TrasXSoedESrf/DzuXbgW1vgNYsmrnbiRNgxt
+        POlN4QDZdjqpFcn2RaxO52u8=
+X-Received: by 2002:a05:600c:301:: with SMTP id q1mr2861039wmd.129.1644426499250;
+        Wed, 09 Feb 2022 09:08:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwV7GXeeSC/liqjsp2wkFZ6klpsI3nml2FQxFGkLUgATVaqMLB9YpdZCXFp9IbdrclFocpJvg==
+X-Received: by 2002:a05:600c:301:: with SMTP id q1mr2861001wmd.129.1644426498878;
         Wed, 09 Feb 2022 09:08:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz5gytMu3GOhsA9bzdPry4lqSE+8dFmYxGPTABtJzWKqWKFbzrssSYk+fcqtLckf6ci4kw/KA==
-X-Received: by 2002:adf:f008:: with SMTP id j8mr2794648wro.704.1644426497718;
-        Wed, 09 Feb 2022 09:08:17 -0800 (PST)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id az2sm3074811wmb.2.2022.02.09.09.08.16
+        by smtp.gmail.com with ESMTPSA id b16sm6168930wrj.26.2022.02.09.09.08.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 09:08:17 -0800 (PST)
+        Wed, 09 Feb 2022 09:08:18 -0800 (PST)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     mcgrof@kernel.org
 Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
@@ -64,9 +64,9 @@ Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
         ghalat@redhat.com, allen.lkml@gmail.com, void@manifault.com,
         joe@perches.com, christophe.leroy@csgroup.eu, msuchanek@suse.de,
         oleksandr@natalenko.name
-Subject: [PATCH v5 09/13] module: Move kallsyms support into a separate file
-Date:   Wed,  9 Feb 2022 17:08:10 +0000
-Message-Id: <20220209170814.3268487-3-atomlin@redhat.com>
+Subject: [PATCH v5 10/13] module: Move procfs support into a separate file
+Date:   Wed,  9 Feb 2022 17:08:11 +0000
+Message-Id: <20220209170814.3268487-4-atomlin@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220209170814.3268487-1-atomlin@redhat.com>
 References: <20220209170814.3268487-1-atomlin@redhat.com>
@@ -85,1149 +85,359 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 No functional change.
 
-This patch migrates kallsyms code out of core module
-code kernel/module/kallsyms.c
+This patch migrates code that allows one to generate a
+list of loaded/or linked modules via /proc when procfs
+support is enabled into kernel/module/procfs.c.
 
 Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
  kernel/module/Makefile   |   1 +
- kernel/module/internal.h |  27 ++
- kernel/module/kallsyms.c | 502 +++++++++++++++++++++++++++++++++++++
- kernel/module/main.c     | 518 +--------------------------------------
- 4 files changed, 534 insertions(+), 514 deletions(-)
- create mode 100644 kernel/module/kallsyms.c
+ kernel/module/internal.h |   1 +
+ kernel/module/main.c     | 131 +-----------------------------------
+ kernel/module/procfs.c   | 142 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 145 insertions(+), 130 deletions(-)
+ create mode 100644 kernel/module/procfs.c
 
 diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index 62c9fc91d411..868b13c06920 100644
+index 868b13c06920..c6be08060252 100644
 --- a/kernel/module/Makefile
 +++ b/kernel/module/Makefile
-@@ -12,4 +12,5 @@ obj-$(CONFIG_LIVEPATCH) += livepatch.o
- obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
+@@ -13,4 +13,5 @@ obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
  obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
  obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
-+obj-$(CONFIG_KALLSYMS) += kallsyms.o
+ obj-$(CONFIG_KALLSYMS) += kallsyms.o
++obj-$(CONFIG_PROC_FS) += procfs.o
  endif
 diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 33d7befd0602..7973666452c3 100644
+index 7973666452c3..b67ce836746a 100644
 --- a/kernel/module/internal.h
 +++ b/kernel/module/internal.h
-@@ -69,6 +69,11 @@ struct load_info {
- };
- 
- int mod_verify_sig(const void *mod, struct load_info *info);
-+struct module *find_module_all(const char *name, size_t len, bool even_unformed);
-+unsigned long kernel_symbol_value(const struct kernel_symbol *sym);
-+int cmp_name(const void *name, const void *sym);
-+long get_offset(struct module *mod, unsigned int *size, Elf_Shdr *sechdr,
-+		       unsigned int section);
+@@ -74,6 +74,7 @@ unsigned long kernel_symbol_value(const struct kernel_symbol *sym);
+ int cmp_name(const void *name, const void *sym);
+ long get_offset(struct module *mod, unsigned int *size, Elf_Shdr *sechdr,
+ 		       unsigned int section);
++char *module_flags(struct module *mod, char *buf);
  
  #ifdef CONFIG_LIVEPATCH
  int copy_module_elf(struct module *mod, struct load_info *info);
-@@ -178,3 +183,25 @@ void kmemleak_load_module(const struct module *mod, const struct load_info *info
- static inline void __maybe_unused kmemleak_load_module(const struct module *mod,
- 						       const struct load_info *info) { }
- #endif /* CONFIG_DEBUG_KMEMLEAK */
-+
-+#ifdef CONFIG_KALLSYMS
-+#ifdef CONFIG_STACKTRACE_BUILD_ID
-+void init_build_id(struct module *mod, const struct load_info *info);
-+#else /* !CONFIG_STACKTRACE_BUILD_ID */
-+static inline void init_build_id(struct module *mod, const struct load_info *info) { }
-+
-+#endif
-+void layout_symtab(struct module *mod, struct load_info *info);
-+void add_kallsyms(struct module *mod, const struct load_info *info);
-+bool sect_empty(const Elf_Shdr *sect);
-+const char *find_kallsyms_symbol(struct module *mod, unsigned long addr,
-+					unsigned long *size, unsigned long *offset);
-+#else /* !CONFIG_KALLSYMS */
-+static inline void layout_symtab(struct module *mod, struct load_info *info) { }
-+static inline void add_kallsyms(struct module *mod, const struct load_info *info) { }
-+static inline char *find_kallsyms_symbol(struct module *mod, unsigned long addr,
-+					 unsigned long *size, unsigned long *offset)
-+{
-+	return NULL;
-+}
-+#endif /* CONFIG_KALLSYMS */
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 378dd7fd1b6a..ff39c556bdf8 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -22,7 +22,6 @@
+ #include <linux/slab.h>
+ #include <linux/vmalloc.h>
+ #include <linux/elf.h>
+-#include <linux/proc_fs.h>
+ #include <linux/seq_file.h>
+ #include <linux/syscalls.h>
+ #include <linux/fcntl.h>
+@@ -811,31 +810,6 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
+ 	return ret;
+ }
+ 
+-static inline void print_unload_info(struct seq_file *m, struct module *mod)
+-{
+-	struct module_use *use;
+-	int printed_something = 0;
+-
+-	seq_printf(m, " %i ", module_refcount(mod));
+-
+-	/*
+-	 * Always include a trailing , so userspace can differentiate
+-	 * between this and the old multi-field proc format.
+-	 */
+-	list_for_each_entry(use, &mod->source_list, source_list) {
+-		printed_something = 1;
+-		seq_printf(m, "%s,", use->source->name);
+-	}
+-
+-	if (mod->init != NULL && mod->exit == NULL) {
+-		printed_something = 1;
+-		seq_puts(m, "[permanent],");
+-	}
+-
+-	if (!printed_something)
+-		seq_puts(m, "-");
+-}
+-
+ void __symbol_put(const char *symbol)
+ {
+ 	struct find_symbol_arg fsa = {
+@@ -925,12 +899,6 @@ void module_put(struct module *module)
+ EXPORT_SYMBOL(module_put);
+ 
+ #else /* !CONFIG_MODULE_UNLOAD */
+-static inline void print_unload_info(struct seq_file *m, struct module *mod)
+-{
+-	/* We don't know the usage count, or what modules are using. */
+-	seq_puts(m, " - -");
+-}
+-
+ static inline void module_unload_free(struct module *mod)
+ {
+ }
+@@ -3601,7 +3569,7 @@ static void cfi_cleanup(struct module *mod)
+ }
+ 
+ /* Keep in sync with MODULE_FLAGS_BUF_SIZE !!! */
+-static char *module_flags(struct module *mod, char *buf)
++char *module_flags(struct module *mod, char *buf)
+ {
+ 	int bx = 0;
+ 
+@@ -3624,103 +3592,6 @@ static char *module_flags(struct module *mod, char *buf)
+ 	return buf;
+ }
+ 
+-#ifdef CONFIG_PROC_FS
+-/* Called by the /proc file system to return a list of modules. */
+-static void *m_start(struct seq_file *m, loff_t *pos)
+-{
+-	mutex_lock(&module_mutex);
+-	return seq_list_start(&modules, *pos);
+-}
+-
+-static void *m_next(struct seq_file *m, void *p, loff_t *pos)
+-{
+-	return seq_list_next(p, &modules, pos);
+-}
+-
+-static void m_stop(struct seq_file *m, void *p)
+-{
+-	mutex_unlock(&module_mutex);
+-}
+-
+-static int m_show(struct seq_file *m, void *p)
+-{
+-	struct module *mod = list_entry(p, struct module, list);
+-	char buf[MODULE_FLAGS_BUF_SIZE];
+-	void *value;
+-
+-	/* We always ignore unformed modules. */
+-	if (mod->state == MODULE_STATE_UNFORMED)
+-		return 0;
+-
+-	seq_printf(m, "%s %u",
+-		   mod->name, mod->init_layout.size + mod->core_layout.size);
+-	print_unload_info(m, mod);
+-
+-	/* Informative for users. */
+-	seq_printf(m, " %s",
+-		   mod->state == MODULE_STATE_GOING ? "Unloading" :
+-		   mod->state == MODULE_STATE_COMING ? "Loading" :
+-		   "Live");
+-	/* Used by oprofile and other similar tools. */
+-	value = m->private ? NULL : mod->core_layout.base;
+-	seq_printf(m, " 0x%px", value);
+-
+-	/* Taints info */
+-	if (mod->taints)
+-		seq_printf(m, " %s", module_flags(mod, buf));
+-
+-	seq_puts(m, "\n");
+-	return 0;
+-}
+-
+-/*
+- * Format: modulename size refcount deps address
+- *
+- * Where refcount is a number or -, and deps is a comma-separated list
+- * of depends or -.
+- */
+-static const struct seq_operations modules_op = {
+-	.start	= m_start,
+-	.next	= m_next,
+-	.stop	= m_stop,
+-	.show	= m_show
+-};
+-
+-/*
+- * This also sets the "private" pointer to non-NULL if the
+- * kernel pointers should be hidden (so you can just test
+- * "m->private" to see if you should keep the values private).
+- *
+- * We use the same logic as for /proc/kallsyms.
+- */
+-static int modules_open(struct inode *inode, struct file *file)
+-{
+-	int err = seq_open(file, &modules_op);
+-
+-	if (!err) {
+-		struct seq_file *m = file->private_data;
+-		m->private = kallsyms_show_value(file->f_cred) ? NULL : (void *)8ul;
+-	}
+-
+-	return err;
+-}
+-
+-static const struct proc_ops modules_proc_ops = {
+-	.proc_flags	= PROC_ENTRY_PERMANENT,
+-	.proc_open	= modules_open,
+-	.proc_read	= seq_read,
+-	.proc_lseek	= seq_lseek,
+-	.proc_release	= seq_release,
+-};
+-
+-static int __init proc_modules_init(void)
+-{
+-	proc_create("modules", 0, NULL, &modules_proc_ops);
+-	return 0;
+-}
+-module_init(proc_modules_init);
+-#endif
+-
+ /* Given an address, look for it in the module exception tables. */
+ const struct exception_table_entry *search_module_extables(unsigned long addr)
+ {
+diff --git a/kernel/module/procfs.c b/kernel/module/procfs.c
 new file mode 100644
-index 000000000000..ed28f6310701
+index 000000000000..d706a798b52e
 --- /dev/null
-+++ b/kernel/module/kallsyms.c
-@@ -0,0 +1,502 @@
++++ b/kernel/module/procfs.c
+@@ -0,0 +1,142 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * Module kallsyms support
++ * Module proc support
 + *
-+ * Copyright (C) 2010 Rusty Russell
++ * Copyright (C) 2008 Alexey Dobriyan
 + */
 +
 +#include <linux/module.h>
 +#include <linux/kallsyms.h>
-+#include <linux/buildid.h>
-+#include <linux/bsearch.h>
++#include <linux/mutex.h>
++#include <linux/seq_file.h>
++#include <linux/proc_fs.h>
 +#include "internal.h"
 +
-+/* Lookup exported symbol in given range of kernel_symbols */
-+static const struct kernel_symbol *lookup_exported_symbol(const char *name,
-+							  const struct kernel_symbol *start,
-+							  const struct kernel_symbol *stop)
++#ifdef CONFIG_MODULE_UNLOAD
++static inline void print_unload_info(struct seq_file *m, struct module *mod)
 +{
-+	return bsearch(name, start, stop - start,
-+			sizeof(struct kernel_symbol), cmp_name);
-+}
++	struct module_use *use;
++	int printed_something = 0;
 +
-+static int is_exported(const char *name, unsigned long value,
-+		       const struct module *mod)
-+{
-+	const struct kernel_symbol *ks;
-+
-+	if (!mod)
-+		ks = lookup_exported_symbol(name, __start___ksymtab, __stop___ksymtab);
-+	else
-+		ks = lookup_exported_symbol(name, mod->syms, mod->syms + mod->num_syms);
-+
-+	return ks != NULL && kernel_symbol_value(ks) == value;
-+}
-+
-+/* As per nm */
-+static char elf_type(const Elf_Sym *sym, const struct load_info *info)
-+{
-+	const Elf_Shdr *sechdrs = info->sechdrs;
-+
-+	if (ELF_ST_BIND(sym->st_info) == STB_WEAK) {
-+		if (ELF_ST_TYPE(sym->st_info) == STT_OBJECT)
-+			return 'v';
-+		else
-+			return 'w';
-+	}
-+	if (sym->st_shndx == SHN_UNDEF)
-+		return 'U';
-+	if (sym->st_shndx == SHN_ABS || sym->st_shndx == info->index.pcpu)
-+		return 'a';
-+	if (sym->st_shndx >= SHN_LORESERVE)
-+		return '?';
-+	if (sechdrs[sym->st_shndx].sh_flags & SHF_EXECINSTR)
-+		return 't';
-+	if (sechdrs[sym->st_shndx].sh_flags & SHF_ALLOC
-+	    && sechdrs[sym->st_shndx].sh_type != SHT_NOBITS) {
-+		if (!(sechdrs[sym->st_shndx].sh_flags & SHF_WRITE))
-+			return 'r';
-+		else if (sechdrs[sym->st_shndx].sh_flags & ARCH_SHF_SMALL)
-+			return 'g';
-+		else
-+			return 'd';
-+	}
-+	if (sechdrs[sym->st_shndx].sh_type == SHT_NOBITS) {
-+		if (sechdrs[sym->st_shndx].sh_flags & ARCH_SHF_SMALL)
-+			return 's';
-+		else
-+			return 'b';
-+	}
-+	if (strstarts(info->secstrings + sechdrs[sym->st_shndx].sh_name,
-+		      ".debug")) {
-+		return 'n';
-+	}
-+	return '?';
-+}
-+
-+static bool is_core_symbol(const Elf_Sym *src, const Elf_Shdr *sechdrs,
-+			unsigned int shnum, unsigned int pcpundx)
-+{
-+	const Elf_Shdr *sec;
-+
-+	if (src->st_shndx == SHN_UNDEF
-+	    || src->st_shndx >= shnum
-+	    || !src->st_name)
-+		return false;
-+
-+#ifdef CONFIG_KALLSYMS_ALL
-+	if (src->st_shndx == pcpundx)
-+		return true;
-+#endif
-+
-+	sec = sechdrs + src->st_shndx;
-+	if (!(sec->sh_flags & SHF_ALLOC)
-+#ifndef CONFIG_KALLSYMS_ALL
-+	    || !(sec->sh_flags & SHF_EXECINSTR)
-+#endif
-+	    || (sec->sh_entsize & INIT_OFFSET_MASK))
-+		return false;
-+
-+	return true;
-+}
-+
-+/*
-+ * We only allocate and copy the strings needed by the parts of symtab
-+ * we keep.  This is simple, but has the effect of making multiple
-+ * copies of duplicates.  We could be more sophisticated, see
-+ * linux-kernel thread starting with
-+ * <73defb5e4bca04a6431392cc341112b1@localhost>.
-+ */
-+void layout_symtab(struct module *mod, struct load_info *info)
-+{
-+	Elf_Shdr *symsect = info->sechdrs + info->index.sym;
-+	Elf_Shdr *strsect = info->sechdrs + info->index.str;
-+	const Elf_Sym *src;
-+	unsigned int i, nsrc, ndst, strtab_size = 0;
-+
-+	/* Put symbol section at end of init part of module. */
-+	symsect->sh_flags |= SHF_ALLOC;
-+	symsect->sh_entsize = get_offset(mod, &mod->init_layout.size, symsect,
-+					 info->index.sym) | INIT_OFFSET_MASK;
-+	pr_debug("\t%s\n", info->secstrings + symsect->sh_name);
-+
-+	src = (void *)info->hdr + symsect->sh_offset;
-+	nsrc = symsect->sh_size / sizeof(*src);
-+
-+	/* Compute total space required for the core symbols' strtab. */
-+	for (ndst = i = 0; i < nsrc; i++) {
-+		if (i == 0 || is_livepatch_module(mod) ||
-+		    is_core_symbol(src+i, info->sechdrs, info->hdr->e_shnum,
-+				   info->index.pcpu)) {
-+			strtab_size += strlen(&info->strtab[src[i].st_name])+1;
-+			ndst++;
-+		}
-+	}
-+
-+	/* Append room for core symbols at end of core part. */
-+	info->symoffs = ALIGN(mod->core_layout.size, symsect->sh_addralign ?: 1);
-+	info->stroffs = mod->core_layout.size = info->symoffs + ndst * sizeof(Elf_Sym);
-+	mod->core_layout.size += strtab_size;
-+	info->core_typeoffs = mod->core_layout.size;
-+	mod->core_layout.size += ndst * sizeof(char);
-+	mod->core_layout.size = debug_align(mod->core_layout.size);
-+
-+	/* Put string table section at end of init part of module. */
-+	strsect->sh_flags |= SHF_ALLOC;
-+	strsect->sh_entsize = get_offset(mod, &mod->init_layout.size, strsect,
-+					 info->index.str) | INIT_OFFSET_MASK;
-+	pr_debug("\t%s\n", info->secstrings + strsect->sh_name);
-+
-+	/* We'll tack temporary mod_kallsyms on the end. */
-+	mod->init_layout.size = ALIGN(mod->init_layout.size,
-+				      __alignof__(struct mod_kallsyms));
-+	info->mod_kallsyms_init_off = mod->init_layout.size;
-+	mod->init_layout.size += sizeof(struct mod_kallsyms);
-+	info->init_typeoffs = mod->init_layout.size;
-+	mod->init_layout.size += nsrc * sizeof(char);
-+	mod->init_layout.size = debug_align(mod->init_layout.size);
-+}
-+
-+/*
-+ * We use the full symtab and strtab which layout_symtab arranged to
-+ * be appended to the init section.  Later we switch to the cut-down
-+ * core-only ones.
-+ */
-+void add_kallsyms(struct module *mod, const struct load_info *info)
-+{
-+	unsigned int i, ndst;
-+	const Elf_Sym *src;
-+	Elf_Sym *dst;
-+	char *s;
-+	Elf_Shdr *symsec = &info->sechdrs[info->index.sym];
-+
-+	/* Set up to point into init section. */
-+	mod->kallsyms = mod->init_layout.base + info->mod_kallsyms_init_off;
-+
-+	mod->kallsyms->symtab = (void *)symsec->sh_addr;
-+	mod->kallsyms->num_symtab = symsec->sh_size / sizeof(Elf_Sym);
-+	/* Make sure we get permanent strtab: don't use info->strtab. */
-+	mod->kallsyms->strtab = (void *)info->sechdrs[info->index.str].sh_addr;
-+	mod->kallsyms->typetab = mod->init_layout.base + info->init_typeoffs;
++	seq_printf(m, " %i ", module_refcount(mod));
 +
 +	/*
-+	 * Now populate the cut down core kallsyms for after init
-+	 * and set types up while we still have access to sections.
++	 * Always include a trailing , so userspace can differentiate
++	 * between this and the old multi-field proc format.
 +	 */
-+	mod->core_kallsyms.symtab = dst = mod->core_layout.base + info->symoffs;
-+	mod->core_kallsyms.strtab = s = mod->core_layout.base + info->stroffs;
-+	mod->core_kallsyms.typetab = mod->core_layout.base + info->core_typeoffs;
-+	src = mod->kallsyms->symtab;
-+	for (ndst = i = 0; i < mod->kallsyms->num_symtab; i++) {
-+		mod->kallsyms->typetab[i] = elf_type(src + i, info);
-+		if (i == 0 || is_livepatch_module(mod) ||
-+		    is_core_symbol(src+i, info->sechdrs, info->hdr->e_shnum,
-+				   info->index.pcpu)) {
-+			mod->core_kallsyms.typetab[ndst] =
-+			    mod->kallsyms->typetab[i];
-+			dst[ndst] = src[i];
-+			dst[ndst++].st_name = s - mod->core_kallsyms.strtab;
-+			s += strscpy(s, &mod->kallsyms->strtab[src[i].st_name],
-+				     KSYM_NAME_LEN) + 1;
-+		}
-+	}
-+	mod->core_kallsyms.num_symtab = ndst;
-+}
-+
-+inline bool sect_empty(const Elf_Shdr *sect)
-+{
-+	return !(sect->sh_flags & SHF_ALLOC) || sect->sh_size == 0;
-+}
-+
-+#ifdef CONFIG_STACKTRACE_BUILD_ID
-+void init_build_id(struct module *mod, const struct load_info *info)
-+{
-+	const Elf_Shdr *sechdr;
-+	unsigned int i;
-+
-+	for (i = 0; i < info->hdr->e_shnum; i++) {
-+		sechdr = &info->sechdrs[i];
-+		if (!sect_empty(sechdr) && sechdr->sh_type == SHT_NOTE &&
-+		    !build_id_parse_buf((void *)sechdr->sh_addr, mod->build_id,
-+					sechdr->sh_size))
-+			break;
-+	}
-+}
-+#endif
-+
-+/*
-+ * This ignores the intensely annoying "mapping symbols" found
-+ * in ARM ELF files: $a, $t and $d.
-+ */
-+static inline int is_arm_mapping_symbol(const char *str)
-+{
-+	if (str[0] == '.' && str[1] == 'L')
-+		return true;
-+	return str[0] == '$' && strchr("axtd", str[1])
-+	       && (str[2] == '\0' || str[2] == '.');
-+}
-+
-+static const char *kallsyms_symbol_name(struct mod_kallsyms *kallsyms, unsigned int symnum)
-+{
-+	return kallsyms->strtab + kallsyms->symtab[symnum].st_name;
-+}
-+
-+/*
-+ * Given a module and address, find the corresponding symbol and return its name
-+ * while providing its size and offset if needed.
-+ */
-+const char *find_kallsyms_symbol(struct module *mod,
-+					unsigned long addr,
-+					unsigned long *size,
-+					unsigned long *offset)
-+{
-+	unsigned int i, best = 0;
-+	unsigned long nextval, bestval;
-+	struct mod_kallsyms *kallsyms = rcu_dereference_sched(mod->kallsyms);
-+
-+	/* At worse, next value is at end of module */
-+	if (within_module_init(addr, mod))
-+		nextval = (unsigned long)mod->init_layout.base+mod->init_layout.text_size;
-+	else
-+		nextval = (unsigned long)mod->core_layout.base+mod->core_layout.text_size;
-+
-+	bestval = kallsyms_symbol_value(&kallsyms->symtab[best]);
-+
-+	/*
-+	 * Scan for closest preceding symbol, and next symbol. (ELF
-+	 * starts real symbols at 1).
-+	 */
-+	for (i = 1; i < kallsyms->num_symtab; i++) {
-+		const Elf_Sym *sym = &kallsyms->symtab[i];
-+		unsigned long thisval = kallsyms_symbol_value(sym);
-+
-+		if (sym->st_shndx == SHN_UNDEF)
-+			continue;
-+
-+		/*
-+		 * We ignore unnamed symbols: they're uninformative
-+		 * and inserted at a whim.
-+		 */
-+		if (*kallsyms_symbol_name(kallsyms, i) == '\0'
-+		    || is_arm_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
-+			continue;
-+
-+		if (thisval <= addr && thisval > bestval) {
-+			best = i;
-+			bestval = thisval;
-+		}
-+		if (thisval > addr && thisval < nextval)
-+			nextval = thisval;
++	list_for_each_entry(use, &mod->source_list, source_list) {
++		printed_something = 1;
++		seq_printf(m, "%s,", use->source->name);
 +	}
 +
-+	if (!best)
-+		return NULL;
++	if (mod->init != NULL && mod->exit == NULL) {
++		printed_something = 1;
++		seq_puts(m, "[permanent],");
++	}
 +
-+	if (size)
-+		*size = nextval - bestval;
-+	if (offset)
-+		*offset = addr - bestval;
++	if (!printed_something)
++		seq_puts(m, "-");
++}
++#else /* !CONFIG_MODULE_UNLOAD */
++static inline void print_unload_info(struct seq_file *m, struct module *mod)
++{
++	/* We don't know the usage count, or what modules are using. */
++	seq_puts(m, " - -");
++}
++#endif /* CONFIG_MODULE_UNLOAD */
 +
-+	return kallsyms_symbol_name(kallsyms, best);
++/* Called by the /proc file system to return a list of modules. */
++static void *m_start(struct seq_file *m, loff_t *pos)
++{
++	mutex_lock(&module_mutex);
++	return seq_list_start(&modules, *pos);
 +}
 +
-+void * __weak dereference_module_function_descriptor(struct module *mod,
-+						     void *ptr)
++static void *m_next(struct seq_file *m, void *p, loff_t *pos)
 +{
-+	return ptr;
++	return seq_list_next(p, &modules, pos);
 +}
 +
-+/*
-+ * For kallsyms to ask for address resolution.  NULL means not found.  Careful
-+ * not to lock to avoid deadlock on oopses, simply disable preemption.
-+ */
-+const char *module_address_lookup(unsigned long addr,
-+			    unsigned long *size,
-+			    unsigned long *offset,
-+			    char **modname,
-+			    const unsigned char **modbuildid,
-+			    char *namebuf)
++static void m_stop(struct seq_file *m, void *p)
 +{
-+	const char *ret = NULL;
-+	struct module *mod;
-+
-+	preempt_disable();
-+	mod = __module_address(addr);
-+	if (mod) {
-+		if (modname)
-+			*modname = mod->name;
-+		if (modbuildid) {
-+#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-+			*modbuildid = mod->build_id;
-+#else
-+			*modbuildid = NULL;
-+#endif
-+		}
-+
-+		ret = find_kallsyms_symbol(mod, addr, size, offset);
-+	}
-+	/* Make a copy in here where it's safe */
-+	if (ret) {
-+		strncpy(namebuf, ret, KSYM_NAME_LEN - 1);
-+		ret = namebuf;
-+	}
-+	preempt_enable();
-+
-+	return ret;
++	mutex_unlock(&module_mutex);
 +}
 +
-+int lookup_module_symbol_name(unsigned long addr, char *symname)
++static int m_show(struct seq_file *m, void *p)
 +{
-+	struct module *mod;
++	struct module *mod = list_entry(p, struct module, list);
++	char buf[MODULE_FLAGS_BUF_SIZE];
++	void *value;
 +
-+	preempt_disable();
-+	list_for_each_entry_rcu(mod, &modules, list) {
-+		if (mod->state == MODULE_STATE_UNFORMED)
-+			continue;
-+		if (within_module(addr, mod)) {
-+			const char *sym;
++	/* We always ignore unformed modules. */
++	if (mod->state == MODULE_STATE_UNFORMED)
++		return 0;
 +
-+			sym = find_kallsyms_symbol(mod, addr, NULL, NULL);
-+			if (!sym)
-+				goto out;
++	seq_printf(m, "%s %u",
++		   mod->name, mod->init_layout.size + mod->core_layout.size);
++	print_unload_info(m, mod);
 +
-+			strscpy(symname, sym, KSYM_NAME_LEN);
-+			preempt_enable();
-+			return 0;
-+		}
-+	}
-+out:
-+	preempt_enable();
-+	return -ERANGE;
-+}
++	/* Informative for users. */
++	seq_printf(m, " %s",
++		   mod->state == MODULE_STATE_GOING ? "Unloading" :
++		   mod->state == MODULE_STATE_COMING ? "Loading" :
++		   "Live");
++	/* Used by oprofile and other similar tools. */
++	value = m->private ? NULL : mod->core_layout.base;
++	seq_printf(m, " 0x%px", value);
 +
-+int lookup_module_symbol_attrs(unsigned long addr, unsigned long *size,
-+			unsigned long *offset, char *modname, char *name)
-+{
-+	struct module *mod;
++	/* Taints info */
++	if (mod->taints)
++		seq_printf(m, " %s", module_flags(mod, buf));
 +
-+	preempt_disable();
-+	list_for_each_entry_rcu(mod, &modules, list) {
-+		if (mod->state == MODULE_STATE_UNFORMED)
-+			continue;
-+		if (within_module(addr, mod)) {
-+			const char *sym;
-+
-+			sym = find_kallsyms_symbol(mod, addr, size, offset);
-+			if (!sym)
-+				goto out;
-+			if (modname)
-+				strscpy(modname, mod->name, MODULE_NAME_LEN);
-+			if (name)
-+				strscpy(name, sym, KSYM_NAME_LEN);
-+			preempt_enable();
-+			return 0;
-+		}
-+	}
-+out:
-+	preempt_enable();
-+	return -ERANGE;
-+}
-+
-+int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
-+			char *name, char *module_name, int *exported)
-+{
-+	struct module *mod;
-+
-+	preempt_disable();
-+	list_for_each_entry_rcu(mod, &modules, list) {
-+		struct mod_kallsyms *kallsyms;
-+
-+		if (mod->state == MODULE_STATE_UNFORMED)
-+			continue;
-+		kallsyms = rcu_dereference_sched(mod->kallsyms);
-+		if (symnum < kallsyms->num_symtab) {
-+			const Elf_Sym *sym = &kallsyms->symtab[symnum];
-+
-+			*value = kallsyms_symbol_value(sym);
-+			*type = kallsyms->typetab[symnum];
-+			strscpy(name, kallsyms_symbol_name(kallsyms, symnum), KSYM_NAME_LEN);
-+			strscpy(module_name, mod->name, MODULE_NAME_LEN);
-+			*exported = is_exported(name, *value, mod);
-+			preempt_enable();
-+			return 0;
-+		}
-+		symnum -= kallsyms->num_symtab;
-+	}
-+	preempt_enable();
-+	return -ERANGE;
-+}
-+
-+/* Given a module and name of symbol, find and return the symbol's value */
-+static unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name)
-+{
-+	unsigned int i;
-+	struct mod_kallsyms *kallsyms = rcu_dereference_sched(mod->kallsyms);
-+
-+	for (i = 0; i < kallsyms->num_symtab; i++) {
-+		const Elf_Sym *sym = &kallsyms->symtab[i];
-+
-+		if (strcmp(name, kallsyms_symbol_name(kallsyms, i)) == 0 &&
-+		    sym->st_shndx != SHN_UNDEF)
-+			return kallsyms_symbol_value(sym);
-+	}
++	seq_puts(m, "\n");
 +	return 0;
 +}
 +
-+/* Look for this name: can be of form module:name. */
-+unsigned long module_kallsyms_lookup_name(const char *name)
-+{
-+	struct module *mod;
-+	char *colon;
-+	unsigned long ret = 0;
++/*
++ * Format: modulename size refcount deps address
++ *
++ * Where refcount is a number or -, and deps is a comma-separated list
++ * of depends or -.
++ */
++static const struct seq_operations modules_op = {
++	.start	= m_start,
++	.next	= m_next,
++	.stop	= m_stop,
++	.show	= m_show
++};
 +
-+	/* Don't lock: we're in enough trouble already. */
-+	preempt_disable();
-+	if ((colon = strnchr(name, MODULE_NAME_LEN, ':')) != NULL) {
-+		if ((mod = find_module_all(name, colon - name, false)) != NULL)
-+			ret = find_kallsyms_symbol_value(mod, colon+1);
-+	} else {
-+		list_for_each_entry_rcu(mod, &modules, list) {
-+			if (mod->state == MODULE_STATE_UNFORMED)
-+				continue;
-+			if ((ret = find_kallsyms_symbol_value(mod, name)) != 0)
-+				break;
-+		}
++/*
++ * This also sets the "private" pointer to non-NULL if the
++ * kernel pointers should be hidden (so you can just test
++ * "m->private" to see if you should keep the values private).
++ *
++ * We use the same logic as for /proc/kallsyms.
++ */
++static int modules_open(struct inode *inode, struct file *file)
++{
++	int err = seq_open(file, &modules_op);
++
++	if (!err) {
++		struct seq_file *m = file->private_data;
++
++		m->private = kallsyms_show_value(file->f_cred) ? NULL : (void *)8ul;
 +	}
-+	preempt_enable();
-+	return ret;
++
++	return err;
 +}
 +
-+#ifdef CONFIG_LIVEPATCH
-+int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
-+					     struct module *, unsigned long),
-+				   void *data)
++static const struct proc_ops modules_proc_ops = {
++	.proc_flags	= PROC_ENTRY_PERMANENT,
++	.proc_open	= modules_open,
++	.proc_read	= seq_read,
++	.proc_lseek	= seq_lseek,
++	.proc_release	= seq_release,
++};
++
++static int __init proc_modules_init(void)
 +{
-+	struct module *mod;
-+	unsigned int i;
-+	int ret = 0;
-+
-+	mutex_lock(&module_mutex);
-+	list_for_each_entry(mod, &modules, list) {
-+		/* We hold module_mutex: no need for rcu_dereference_sched */
-+		struct mod_kallsyms *kallsyms = mod->kallsyms;
-+
-+		if (mod->state == MODULE_STATE_UNFORMED)
-+			continue;
-+		for (i = 0; i < kallsyms->num_symtab; i++) {
-+			const Elf_Sym *sym = &kallsyms->symtab[i];
-+
-+			if (sym->st_shndx == SHN_UNDEF)
-+				continue;
-+
-+			ret = fn(data, kallsyms_symbol_name(kallsyms, i),
-+				 mod, kallsyms_symbol_value(sym));
-+			if (ret != 0)
-+				goto out;
-+		}
-+	}
-+out:
-+	mutex_unlock(&module_mutex);
-+	return ret;
++	proc_create("modules", 0, NULL, &modules_proc_ops);
++	return 0;
 +}
-+#endif /* CONFIG_LIVEPATCH */
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index c9931479e2eb..378dd7fd1b6a 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -285,7 +285,7 @@ static bool check_exported_symbol(const struct symsearch *syms,
- 	return true;
- }
- 
--static unsigned long kernel_symbol_value(const struct kernel_symbol *sym)
-+unsigned long kernel_symbol_value(const struct kernel_symbol *sym)
- {
- #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
- 	return (unsigned long)offset_to_ptr(&sym->value_offset);
-@@ -314,7 +314,7 @@ static const char *kernel_symbol_namespace(const struct kernel_symbol *sym)
- #endif
- }
- 
--static int cmp_name(const void *name, const void *sym)
-+int cmp_name(const void *name, const void *sym)
- {
- 	return strcmp(name, kernel_symbol_name(sym));
- }
-@@ -384,7 +384,7 @@ static bool find_symbol(struct find_symbol_arg *fsa)
-  * Search for module by name: must hold module_mutex (or preempt disabled
-  * for read-only access).
-  */
--static struct module *find_module_all(const char *name, size_t len,
-+struct module *find_module_all(const char *name, size_t len,
- 				      bool even_unformed)
- {
- 	struct module *mod;
-@@ -1291,13 +1291,6 @@ resolve_symbol_wait(struct module *mod,
- 	return ksym;
- }
- 
--#ifdef CONFIG_KALLSYMS
--static inline bool sect_empty(const Elf_Shdr *sect)
--{
--	return !(sect->sh_flags & SHF_ALLOC) || sect->sh_size == 0;
--}
--#endif
--
- /*
-  * /sys/module/foo/sections stuff
-  * J. Corbet <corbet@lwn.net>
-@@ -2061,7 +2054,7 @@ unsigned int __weak arch_mod_section_prepend(struct module *mod,
- }
- 
- /* Update size with this section: return offset. */
--static long get_offset(struct module *mod, unsigned int *size,
-+long get_offset(struct module *mod, unsigned int *size,
- 		       Elf_Shdr *sechdr, unsigned int section)
- {
- 	long ret;
-@@ -2263,228 +2256,6 @@ static void free_modinfo(struct module *mod)
- 	}
- }
- 
--#ifdef CONFIG_KALLSYMS
--
--/* Lookup exported symbol in given range of kernel_symbols */
--static const struct kernel_symbol *lookup_exported_symbol(const char *name,
--							  const struct kernel_symbol *start,
--							  const struct kernel_symbol *stop)
--{
--	return bsearch(name, start, stop - start,
--			sizeof(struct kernel_symbol), cmp_name);
--}
--
--static int is_exported(const char *name, unsigned long value,
--		       const struct module *mod)
--{
--	const struct kernel_symbol *ks;
--	if (!mod)
--		ks = lookup_exported_symbol(name, __start___ksymtab, __stop___ksymtab);
--	else
--		ks = lookup_exported_symbol(name, mod->syms, mod->syms + mod->num_syms);
--
--	return ks != NULL && kernel_symbol_value(ks) == value;
--}
--
--/* As per nm */
--static char elf_type(const Elf_Sym *sym, const struct load_info *info)
--{
--	const Elf_Shdr *sechdrs = info->sechdrs;
--
--	if (ELF_ST_BIND(sym->st_info) == STB_WEAK) {
--		if (ELF_ST_TYPE(sym->st_info) == STT_OBJECT)
--			return 'v';
--		else
--			return 'w';
--	}
--	if (sym->st_shndx == SHN_UNDEF)
--		return 'U';
--	if (sym->st_shndx == SHN_ABS || sym->st_shndx == info->index.pcpu)
--		return 'a';
--	if (sym->st_shndx >= SHN_LORESERVE)
--		return '?';
--	if (sechdrs[sym->st_shndx].sh_flags & SHF_EXECINSTR)
--		return 't';
--	if (sechdrs[sym->st_shndx].sh_flags & SHF_ALLOC
--	    && sechdrs[sym->st_shndx].sh_type != SHT_NOBITS) {
--		if (!(sechdrs[sym->st_shndx].sh_flags & SHF_WRITE))
--			return 'r';
--		else if (sechdrs[sym->st_shndx].sh_flags & ARCH_SHF_SMALL)
--			return 'g';
--		else
--			return 'd';
--	}
--	if (sechdrs[sym->st_shndx].sh_type == SHT_NOBITS) {
--		if (sechdrs[sym->st_shndx].sh_flags & ARCH_SHF_SMALL)
--			return 's';
--		else
--			return 'b';
--	}
--	if (strstarts(info->secstrings + sechdrs[sym->st_shndx].sh_name,
--		      ".debug")) {
--		return 'n';
--	}
--	return '?';
--}
--
--static bool is_core_symbol(const Elf_Sym *src, const Elf_Shdr *sechdrs,
--			unsigned int shnum, unsigned int pcpundx)
--{
--	const Elf_Shdr *sec;
--
--	if (src->st_shndx == SHN_UNDEF
--	    || src->st_shndx >= shnum
--	    || !src->st_name)
--		return false;
--
--#ifdef CONFIG_KALLSYMS_ALL
--	if (src->st_shndx == pcpundx)
--		return true;
--#endif
--
--	sec = sechdrs + src->st_shndx;
--	if (!(sec->sh_flags & SHF_ALLOC)
--#ifndef CONFIG_KALLSYMS_ALL
--	    || !(sec->sh_flags & SHF_EXECINSTR)
--#endif
--	    || (sec->sh_entsize & INIT_OFFSET_MASK))
--		return false;
--
--	return true;
--}
--
--/*
-- * We only allocate and copy the strings needed by the parts of symtab
-- * we keep.  This is simple, but has the effect of making multiple
-- * copies of duplicates.  We could be more sophisticated, see
-- * linux-kernel thread starting with
-- * <73defb5e4bca04a6431392cc341112b1@localhost>.
-- */
--static void layout_symtab(struct module *mod, struct load_info *info)
--{
--	Elf_Shdr *symsect = info->sechdrs + info->index.sym;
--	Elf_Shdr *strsect = info->sechdrs + info->index.str;
--	const Elf_Sym *src;
--	unsigned int i, nsrc, ndst, strtab_size = 0;
--
--	/* Put symbol section at end of init part of module. */
--	symsect->sh_flags |= SHF_ALLOC;
--	symsect->sh_entsize = get_offset(mod, &mod->init_layout.size, symsect,
--					 info->index.sym) | INIT_OFFSET_MASK;
--	pr_debug("\t%s\n", info->secstrings + symsect->sh_name);
--
--	src = (void *)info->hdr + symsect->sh_offset;
--	nsrc = symsect->sh_size / sizeof(*src);
--
--	/* Compute total space required for the core symbols' strtab. */
--	for (ndst = i = 0; i < nsrc; i++) {
--		if (i == 0 || is_livepatch_module(mod) ||
--		    is_core_symbol(src+i, info->sechdrs, info->hdr->e_shnum,
--				   info->index.pcpu)) {
--			strtab_size += strlen(&info->strtab[src[i].st_name])+1;
--			ndst++;
--		}
--	}
--
--	/* Append room for core symbols at end of core part. */
--	info->symoffs = ALIGN(mod->core_layout.size, symsect->sh_addralign ?: 1);
--	info->stroffs = mod->core_layout.size = info->symoffs + ndst * sizeof(Elf_Sym);
--	mod->core_layout.size += strtab_size;
--	info->core_typeoffs = mod->core_layout.size;
--	mod->core_layout.size += ndst * sizeof(char);
--	mod->core_layout.size = debug_align(mod->core_layout.size);
--
--	/* Put string table section at end of init part of module. */
--	strsect->sh_flags |= SHF_ALLOC;
--	strsect->sh_entsize = get_offset(mod, &mod->init_layout.size, strsect,
--					 info->index.str) | INIT_OFFSET_MASK;
--	pr_debug("\t%s\n", info->secstrings + strsect->sh_name);
--
--	/* We'll tack temporary mod_kallsyms on the end. */
--	mod->init_layout.size = ALIGN(mod->init_layout.size,
--				      __alignof__(struct mod_kallsyms));
--	info->mod_kallsyms_init_off = mod->init_layout.size;
--	mod->init_layout.size += sizeof(struct mod_kallsyms);
--	info->init_typeoffs = mod->init_layout.size;
--	mod->init_layout.size += nsrc * sizeof(char);
--	mod->init_layout.size = debug_align(mod->init_layout.size);
--}
--
--/*
-- * We use the full symtab and strtab which layout_symtab arranged to
-- * be appended to the init section.  Later we switch to the cut-down
-- * core-only ones.
-- */
--static void add_kallsyms(struct module *mod, const struct load_info *info)
--{
--	unsigned int i, ndst;
--	const Elf_Sym *src;
--	Elf_Sym *dst;
--	char *s;
--	Elf_Shdr *symsec = &info->sechdrs[info->index.sym];
--
--	/* Set up to point into init section. */
--	mod->kallsyms = mod->init_layout.base + info->mod_kallsyms_init_off;
--
--	mod->kallsyms->symtab = (void *)symsec->sh_addr;
--	mod->kallsyms->num_symtab = symsec->sh_size / sizeof(Elf_Sym);
--	/* Make sure we get permanent strtab: don't use info->strtab. */
--	mod->kallsyms->strtab = (void *)info->sechdrs[info->index.str].sh_addr;
--	mod->kallsyms->typetab = mod->init_layout.base + info->init_typeoffs;
--
--	/*
--	 * Now populate the cut down core kallsyms for after init
--	 * and set types up while we still have access to sections.
--	 */
--	mod->core_kallsyms.symtab = dst = mod->core_layout.base + info->symoffs;
--	mod->core_kallsyms.strtab = s = mod->core_layout.base + info->stroffs;
--	mod->core_kallsyms.typetab = mod->core_layout.base + info->core_typeoffs;
--	src = mod->kallsyms->symtab;
--	for (ndst = i = 0; i < mod->kallsyms->num_symtab; i++) {
--		mod->kallsyms->typetab[i] = elf_type(src + i, info);
--		if (i == 0 || is_livepatch_module(mod) ||
--		    is_core_symbol(src+i, info->sechdrs, info->hdr->e_shnum,
--				   info->index.pcpu)) {
--			mod->core_kallsyms.typetab[ndst] =
--			    mod->kallsyms->typetab[i];
--			dst[ndst] = src[i];
--			dst[ndst++].st_name = s - mod->core_kallsyms.strtab;
--			s += strlcpy(s, &mod->kallsyms->strtab[src[i].st_name],
--				     KSYM_NAME_LEN) + 1;
--		}
--	}
--	mod->core_kallsyms.num_symtab = ndst;
--}
--#else
--static inline void layout_symtab(struct module *mod, struct load_info *info)
--{
--}
--
--static void add_kallsyms(struct module *mod, const struct load_info *info)
--{
--}
--#endif /* CONFIG_KALLSYMS */
--
--#if IS_ENABLED(CONFIG_KALLSYMS) && IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
--static void init_build_id(struct module *mod, const struct load_info *info)
--{
--	const Elf_Shdr *sechdr;
--	unsigned int i;
--
--	for (i = 0; i < info->hdr->e_shnum; i++) {
--		sechdr = &info->sechdrs[i];
--		if (!sect_empty(sechdr) && sechdr->sh_type == SHT_NOTE &&
--		    !build_id_parse_buf((void *)sechdr->sh_addr, mod->build_id,
--					sechdr->sh_size))
--			break;
--	}
--}
--#else
--static void init_build_id(struct module *mod, const struct load_info *info)
--{
--}
--#endif
--
- static void dynamic_debug_setup(struct module *mod, struct _ddebug *debug, unsigned int num)
- {
- 	if (!debug)
-@@ -3795,287 +3566,6 @@ static inline int within(unsigned long addr, void *start, unsigned long size)
- 	return ((void *)addr >= start && (void *)addr < start + size);
- }
- 
--#ifdef CONFIG_KALLSYMS
--/*
-- * This ignores the intensely annoying "mapping symbols" found
-- * in ARM ELF files: $a, $t and $d.
-- */
--static inline int is_arm_mapping_symbol(const char *str)
--{
--	if (str[0] == '.' && str[1] == 'L')
--		return true;
--	return str[0] == '$' && strchr("axtd", str[1])
--	       && (str[2] == '\0' || str[2] == '.');
--}
--
--static const char *kallsyms_symbol_name(struct mod_kallsyms *kallsyms, unsigned int symnum)
--{
--	return kallsyms->strtab + kallsyms->symtab[symnum].st_name;
--}
--
--/*
-- * Given a module and address, find the corresponding symbol and return its name
-- * while providing its size and offset if needed.
-- */
--static const char *find_kallsyms_symbol(struct module *mod,
--					unsigned long addr,
--					unsigned long *size,
--					unsigned long *offset)
--{
--	unsigned int i, best = 0;
--	unsigned long nextval, bestval;
--	struct mod_kallsyms *kallsyms = rcu_dereference_sched(mod->kallsyms);
--
--	/* At worse, next value is at end of module */
--	if (within_module_init(addr, mod))
--		nextval = (unsigned long)mod->init_layout.base+mod->init_layout.text_size;
--	else
--		nextval = (unsigned long)mod->core_layout.base+mod->core_layout.text_size;
--
--	bestval = kallsyms_symbol_value(&kallsyms->symtab[best]);
--
--	/*
--	 * Scan for closest preceding symbol, and next symbol. (ELF
--	 * starts real symbols at 1).
--	 */
--	for (i = 1; i < kallsyms->num_symtab; i++) {
--		const Elf_Sym *sym = &kallsyms->symtab[i];
--		unsigned long thisval = kallsyms_symbol_value(sym);
--
--		if (sym->st_shndx == SHN_UNDEF)
--			continue;
--
--		/*
--		 * We ignore unnamed symbols: they're uninformative
--		 * and inserted at a whim.
--		 */
--		if (*kallsyms_symbol_name(kallsyms, i) == '\0'
--		    || is_arm_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
--			continue;
--
--		if (thisval <= addr && thisval > bestval) {
--			best = i;
--			bestval = thisval;
--		}
--		if (thisval > addr && thisval < nextval)
--			nextval = thisval;
--	}
--
--	if (!best)
--		return NULL;
--
--	if (size)
--		*size = nextval - bestval;
--	if (offset)
--		*offset = addr - bestval;
--
--	return kallsyms_symbol_name(kallsyms, best);
--}
--
--void * __weak dereference_module_function_descriptor(struct module *mod,
--						     void *ptr)
--{
--	return ptr;
--}
--
--/*
-- * For kallsyms to ask for address resolution.  NULL means not found.  Careful
-- * not to lock to avoid deadlock on oopses, simply disable preemption.
-- */
--const char *module_address_lookup(unsigned long addr,
--			    unsigned long *size,
--			    unsigned long *offset,
--			    char **modname,
--			    const unsigned char **modbuildid,
--			    char *namebuf)
--{
--	const char *ret = NULL;
--	struct module *mod;
--
--	preempt_disable();
--	mod = __module_address(addr);
--	if (mod) {
--		if (modname)
--			*modname = mod->name;
--		if (modbuildid) {
--#if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
--			*modbuildid = mod->build_id;
--#else
--			*modbuildid = NULL;
--#endif
--		}
--
--		ret = find_kallsyms_symbol(mod, addr, size, offset);
--	}
--	/* Make a copy in here where it's safe */
--	if (ret) {
--		strncpy(namebuf, ret, KSYM_NAME_LEN - 1);
--		ret = namebuf;
--	}
--	preempt_enable();
--
--	return ret;
--}
--
--int lookup_module_symbol_name(unsigned long addr, char *symname)
--{
--	struct module *mod;
--
--	preempt_disable();
--	list_for_each_entry_rcu(mod, &modules, list) {
--		if (mod->state == MODULE_STATE_UNFORMED)
--			continue;
--		if (within_module(addr, mod)) {
--			const char *sym;
--
--			sym = find_kallsyms_symbol(mod, addr, NULL, NULL);
--			if (!sym)
--				goto out;
--
--			strlcpy(symname, sym, KSYM_NAME_LEN);
--			preempt_enable();
--			return 0;
--		}
--	}
--out:
--	preempt_enable();
--	return -ERANGE;
--}
--
--int lookup_module_symbol_attrs(unsigned long addr, unsigned long *size,
--			unsigned long *offset, char *modname, char *name)
--{
--	struct module *mod;
--
--	preempt_disable();
--	list_for_each_entry_rcu(mod, &modules, list) {
--		if (mod->state == MODULE_STATE_UNFORMED)
--			continue;
--		if (within_module(addr, mod)) {
--			const char *sym;
--
--			sym = find_kallsyms_symbol(mod, addr, size, offset);
--			if (!sym)
--				goto out;
--			if (modname)
--				strlcpy(modname, mod->name, MODULE_NAME_LEN);
--			if (name)
--				strlcpy(name, sym, KSYM_NAME_LEN);
--			preempt_enable();
--			return 0;
--		}
--	}
--out:
--	preempt_enable();
--	return -ERANGE;
--}
--
--int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
--			char *name, char *module_name, int *exported)
--{
--	struct module *mod;
--
--	preempt_disable();
--	list_for_each_entry_rcu(mod, &modules, list) {
--		struct mod_kallsyms *kallsyms;
--
--		if (mod->state == MODULE_STATE_UNFORMED)
--			continue;
--		kallsyms = rcu_dereference_sched(mod->kallsyms);
--		if (symnum < kallsyms->num_symtab) {
--			const Elf_Sym *sym = &kallsyms->symtab[symnum];
--
--			*value = kallsyms_symbol_value(sym);
--			*type = kallsyms->typetab[symnum];
--			strlcpy(name, kallsyms_symbol_name(kallsyms, symnum), KSYM_NAME_LEN);
--			strlcpy(module_name, mod->name, MODULE_NAME_LEN);
--			*exported = is_exported(name, *value, mod);
--			preempt_enable();
--			return 0;
--		}
--		symnum -= kallsyms->num_symtab;
--	}
--	preempt_enable();
--	return -ERANGE;
--}
--
--/* Given a module and name of symbol, find and return the symbol's value */
--static unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name)
--{
--	unsigned int i;
--	struct mod_kallsyms *kallsyms = rcu_dereference_sched(mod->kallsyms);
--
--	for (i = 0; i < kallsyms->num_symtab; i++) {
--		const Elf_Sym *sym = &kallsyms->symtab[i];
--
--		if (strcmp(name, kallsyms_symbol_name(kallsyms, i)) == 0 &&
--		    sym->st_shndx != SHN_UNDEF)
--			return kallsyms_symbol_value(sym);
--	}
--	return 0;
--}
--
--/* Look for this name: can be of form module:name. */
--unsigned long module_kallsyms_lookup_name(const char *name)
--{
--	struct module *mod;
--	char *colon;
--	unsigned long ret = 0;
--
--	/* Don't lock: we're in enough trouble already. */
--	preempt_disable();
--	if ((colon = strnchr(name, MODULE_NAME_LEN, ':')) != NULL) {
--		if ((mod = find_module_all(name, colon - name, false)) != NULL)
--			ret = find_kallsyms_symbol_value(mod, colon+1);
--	} else {
--		list_for_each_entry_rcu(mod, &modules, list) {
--			if (mod->state == MODULE_STATE_UNFORMED)
--				continue;
--			if ((ret = find_kallsyms_symbol_value(mod, name)) != 0)
--				break;
--		}
--	}
--	preempt_enable();
--	return ret;
--}
--
--#ifdef CONFIG_LIVEPATCH
--int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
--					     struct module *, unsigned long),
--				   void *data)
--{
--	struct module *mod;
--	unsigned int i;
--	int ret = 0;
--
--	mutex_lock(&module_mutex);
--	list_for_each_entry(mod, &modules, list) {
--		/* We hold module_mutex: no need for rcu_dereference_sched */
--		struct mod_kallsyms *kallsyms = mod->kallsyms;
--
--		if (mod->state == MODULE_STATE_UNFORMED)
--			continue;
--		for (i = 0; i < kallsyms->num_symtab; i++) {
--			const Elf_Sym *sym = &kallsyms->symtab[i];
--
--			if (sym->st_shndx == SHN_UNDEF)
--				continue;
--
--			ret = fn(data, kallsyms_symbol_name(kallsyms, i),
--				 mod, kallsyms_symbol_value(sym));
--			if (ret != 0)
--				goto out;
--
--			cond_resched();
--		}
--	}
--out:
--	mutex_unlock(&module_mutex);
--	return ret;
--}
--#endif /* CONFIG_LIVEPATCH */
--#endif /* CONFIG_KALLSYMS */
--
- static void cfi_init(struct module *mod)
- {
- #ifdef CONFIG_CFI_CLANG
++module_init(proc_modules_init);
 -- 
 2.34.1
 

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FE14AF690
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:26:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 455324AF693
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236966AbiBIQ0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:26:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
+        id S236934AbiBIQ0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236853AbiBIQ0Q (ORCPT
+        with ESMTP id S236859AbiBIQ0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 9 Feb 2022 11:26:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4033C061355;
-        Wed,  9 Feb 2022 08:26:19 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29BFEC05CB87;
+        Wed,  9 Feb 2022 08:26:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76EDF6184A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8E5961881;
         Wed,  9 Feb 2022 16:26:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA65DC340EF;
-        Wed,  9 Feb 2022 16:26:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CE0BC340FA;
+        Wed,  9 Feb 2022 16:26:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644423978;
-        bh=cs00MVgpXDQgdlwEEoboPGvlbWWnFiL2BYOY+lnD89Q=;
+        s=k20201202; t=1644423979;
+        bh=FMZwl2x1x4kUwATGFjH+jJWY/tUg+gF8fFqxjWMZ+II=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G0IrH+7AYPbkmnL7ei33L1Wk1Kv/4QwD6z0Vk+wIetaIo96RqYxz97A8X56+dXdoI
-         t4vx6Z96LAd3XMFi8PcZsKAAELhVnByjTSDjoH3yx5Y/s5una8Pb5yFLXIwaD1J2Ew
-         LE6jVKyoR+EDZak4I1Tr/5LFBNCOUxuYRrnAnQmCWIdWFjKF5y0btyA+CtFmcEVI55
-         ejd0yp1KCse0OZNeMWCXznG8Te5ODWiPlv7xTHl/XzuvKKjfPhYlE5AjUpo77guc+V
-         gguCJFV/DUqW9MfH2GTpmhRIy+NwKBzhs/TVcc4SOwSZIUKb4WYbKejv/c+CEm3Aes
-         BxgtuxhwPH0PQ==
+        b=GDSOrpJ/EcrzUKRgKaDvG2yrWW6qqBcR06vO52WdUQfW+mbB8Clsfjk2IgGNUvM2m
+         n3X6/EE1q99pF10VnxsD27CMEid0pJyNaLQmvuNaVx7r1fqpQyZu1Styu0LAEYWInf
+         lO54cDAdwc+Sy8bpV8hMPfgUHkpRbsb8w9W3vMPJza0gdO44djn7lz/kMvaTrVLrEJ
+         5+ak0l32gkkWA3yKSj1ZZXv2MlYMChuyrSJg8zq4sDDiDE54/tC3zvQ46+gRl51vPv
+         oTreBj3GeX6Ux9arkZFQeKwogA+OAfP2hEW7k0IX+i2EUYnFhfpTd0I4OM8WJIRf+d
+         cw1nil3JwTV1w==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1nHpnN-006fgT-1b; Wed, 09 Feb 2022 16:26:17 +0000
+        id 1nHpnN-006fgT-9d; Wed, 09 Feb 2022 16:26:17 +0000
 From:   Marc Zyngier <maz@kernel.org>
 To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
@@ -53,9 +53,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         Emil Renner Berthing <kernel@esmil.dk>,
         kernel-team@android.com
-Subject: [PATCH 04/10] irqchip/lpc32xx: Switch to dynamic chip name output
-Date:   Wed,  9 Feb 2022 16:26:01 +0000
-Message-Id: <20220209162607.1118325-5-maz@kernel.org>
+Subject: [PATCH 05/10] irqchip/mvebu-pic: Switch to dynamic chip name output
+Date:   Wed,  9 Feb 2022 16:26:02 +0000
+Message-Id: <20220209162607.1118325-6-maz@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220209162607.1118325-1-maz@kernel.org>
 References: <20220209162607.1118325-1-maz@kernel.org>
@@ -75,101 +75,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of overriding the name field with the device name, use
-the relevant callback. This allows us to make the irq_chip structure
-const.
+Instead of overriding the name field, track the corresponding device
+and use the relevant callback to output its name.
+
+This allows us to make the irq_chip structure const.
 
 Signed-off-by: Marc Zyngier <maz@kernel.org>
 ---
- drivers/irqchip/irq-lpc32xx.c | 34 ++++++++++++++++++++++------------
- 1 file changed, 22 insertions(+), 12 deletions(-)
+ drivers/irqchip/irq-mvebu-pic.c | 28 ++++++++++++++++++----------
+ 1 file changed, 18 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/irqchip/irq-lpc32xx.c b/drivers/irqchip/irq-lpc32xx.c
-index a29357f39450..4d70a857133f 100644
---- a/drivers/irqchip/irq-lpc32xx.c
-+++ b/drivers/irqchip/irq-lpc32xx.c
-@@ -11,6 +11,7 @@
- #include <linux/of_address.h>
+diff --git a/drivers/irqchip/irq-mvebu-pic.c b/drivers/irqchip/irq-mvebu-pic.c
+index 870f9866b8da..ef3d3646ccc2 100644
+--- a/drivers/irqchip/irq-mvebu-pic.c
++++ b/drivers/irqchip/irq-mvebu-pic.c
+@@ -18,6 +18,7 @@
+ #include <linux/module.h>
  #include <linux/of_irq.h>
- #include <linux/of_platform.h>
+ #include <linux/platform_device.h>
 +#include <linux/seq_file.h>
- #include <linux/slab.h>
- #include <asm/exception.h>
  
-@@ -25,8 +26,8 @@
- 
- struct lpc32xx_irq_chip {
+ #define PIC_CAUSE	       0x0
+ #define PIC_MASK	       0x4
+@@ -29,7 +30,7 @@ struct mvebu_pic {
  	void __iomem *base;
-+	phys_addr_t addr;
+ 	u32 parent_irq;
  	struct irq_domain *domain;
--	struct irq_chip chip;
+-	struct irq_chip irq_chip;
++	struct platform_device *pdev;
  };
  
- static struct lpc32xx_irq_chip *lpc32xx_mic_irqc;
-@@ -118,6 +119,24 @@ static int lpc32xx_irq_set_type(struct irq_data *d, unsigned int type)
- 	return 0;
+ static void mvebu_pic_reset(struct mvebu_pic *pic)
+@@ -66,6 +67,20 @@ static void mvebu_pic_unmask_irq(struct irq_data *d)
+ 	writel(reg, pic->base + PIC_MASK);
  }
  
-+static void lpc32xx_irq_print_chip(struct irq_data *d, struct seq_file *p)
++static void mvebu_pic_print_chip(struct irq_data *d, struct seq_file *p)
 +{
-+	struct lpc32xx_irq_chip *ic = irq_data_get_irq_chip_data(d);
++	struct mvebu_pic *pic = irq_data_get_irq_chip_data(d);
 +
-+	if (ic == lpc32xx_mic_irqc)
-+		seq_printf(p, "%08x.mic", ic->addr);
-+	else
-+		seq_printf(p, "%08x.sic", ic->addr);
++	seq_printf(p, dev_name(&pic->pdev->dev));
 +}
 +
-+static const struct irq_chip lpc32xx_chip = {
-+	.irq_ack	= lpc32xx_irq_ack,
-+	.irq_mask	= lpc32xx_irq_mask,
-+	.irq_unmask	= lpc32xx_irq_unmask,
-+	.irq_set_type	= lpc32xx_irq_set_type,
-+	.irq_print_chip	= lpc32xx_irq_print_chip,
++static const struct irq_chip mvebu_pic_chip = {
++	.irq_mask	= mvebu_pic_mask_irq,
++	.irq_unmask	= mvebu_pic_unmask_irq,
++	.irq_eoi	= mvebu_pic_eoi_irq,
++	.irq_print_chip	= mvebu_pic_print_chip,
 +};
 +
- static void __exception_irq_entry lpc32xx_handle_irq(struct pt_regs *regs)
+ static int mvebu_pic_irq_map(struct irq_domain *domain, unsigned int virq,
+ 			     irq_hw_number_t hwirq)
  {
- 	struct lpc32xx_irq_chip *ic = lpc32xx_mic_irqc;
-@@ -153,7 +172,7 @@ static int lpc32xx_irq_domain_map(struct irq_domain *id, unsigned int virq,
- 	struct lpc32xx_irq_chip *ic = id->host_data;
+@@ -73,8 +88,7 @@ static int mvebu_pic_irq_map(struct irq_domain *domain, unsigned int virq,
  
- 	irq_set_chip_data(virq, ic);
--	irq_set_chip_and_handler(virq, &ic->chip, handle_level_irq);
-+	irq_set_chip_and_handler(virq, &lpc32xx_chip, handle_level_irq);
+ 	irq_set_percpu_devid(virq);
+ 	irq_set_chip_data(virq, pic);
+-	irq_set_chip_and_handler(virq, &pic->irq_chip,
+-				 handle_percpu_devid_irq);
++	irq_set_chip_and_handler(virq, &mvebu_pic_chip, handle_percpu_devid_irq);
  	irq_set_status_flags(virq, IRQ_LEVEL);
- 	irq_set_noprobe(virq);
+ 	irq_set_probe(virq);
  
-@@ -183,6 +202,7 @@ static int __init lpc32xx_of_ic_init(struct device_node *node,
- 	if (!irqc)
+@@ -120,22 +134,16 @@ static int mvebu_pic_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *node = pdev->dev.of_node;
+ 	struct mvebu_pic *pic;
+-	struct irq_chip *irq_chip;
+ 
+ 	pic = devm_kzalloc(&pdev->dev, sizeof(struct mvebu_pic), GFP_KERNEL);
+ 	if (!pic)
  		return -ENOMEM;
  
-+	irqc->addr = addr;
- 	irqc->base = of_iomap(node, 0);
- 	if (!irqc->base) {
- 		pr_err("%pOF: unable to map registers\n", node);
-@@ -190,21 +210,11 @@ static int __init lpc32xx_of_ic_init(struct device_node *node,
- 		return -EINVAL;
- 	}
++	pic->pdev = pdev;
+ 	pic->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(pic->base))
+ 		return PTR_ERR(pic->base);
  
--	irqc->chip.irq_ack = lpc32xx_irq_ack;
--	irqc->chip.irq_mask = lpc32xx_irq_mask;
--	irqc->chip.irq_unmask = lpc32xx_irq_unmask;
--	irqc->chip.irq_set_type = lpc32xx_irq_set_type;
--	if (is_mic)
--		irqc->chip.name = kasprintf(GFP_KERNEL, "%08x.mic", addr);
--	else
--		irqc->chip.name = kasprintf(GFP_KERNEL, "%08x.sic", addr);
+-	irq_chip = &pic->irq_chip;
+-	irq_chip->name = dev_name(&pdev->dev);
+-	irq_chip->irq_mask = mvebu_pic_mask_irq;
+-	irq_chip->irq_unmask = mvebu_pic_unmask_irq;
+-	irq_chip->irq_eoi = mvebu_pic_eoi_irq;
 -
- 	irqc->domain = irq_domain_add_linear(node, NR_LPC32XX_IC_IRQS,
- 					     &lpc32xx_irq_domain_ops, irqc);
- 	if (!irqc->domain) {
- 		pr_err("unable to add irq domain\n");
- 		iounmap(irqc->base);
--		kfree(irqc->chip.name);
- 		kfree(irqc);
- 		return -ENODEV;
- 	}
+ 	pic->parent_irq = irq_of_parse_and_map(node, 0);
+ 	if (pic->parent_irq <= 0) {
+ 		dev_err(&pdev->dev, "Failed to parse parent interrupt\n");
 -- 
 2.30.2
 

@@ -2,100 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3DD4AF49B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC614AF498
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235427AbiBIPBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:01:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
+        id S235412AbiBIPBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 10:01:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235413AbiBIPBk (ORCPT
+        with ESMTP id S235398AbiBIPBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:01:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07C53C061355
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 07:01:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644418901;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=yOENEFAxeV6WDUDDmj8Y/MC+cvCFTJP4OBxZd3XquaY=;
-        b=F+TEaLQaLfLqilmyfIX1yjaWOgSwSDMcSVKR1JI9Sib/eFpzBxKIfpGYOWjmwRXEVHoEia
-        ALEl2kuASuFp++7UqhmXoLOGG43sCCW1nKA7OMwh3ooViI+KUJYU+/86F4gQhLQ2RMhbHe
-        5CEZP5wcz3kerad/gweX33eibRaduqU=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-83-BgK3Oxj_OrO2MXQbZgQ_Qg-1; Wed, 09 Feb 2022 10:01:40 -0500
-X-MC-Unique: BgK3Oxj_OrO2MXQbZgQ_Qg-1
-Received: by mail-qv1-f72.google.com with SMTP id cg14-20020a05621413ce00b0042c2706a4beso1739435qvb.23
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 07:01:40 -0800 (PST)
+        Wed, 9 Feb 2022 10:01:35 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A36C05CB82;
+        Wed,  9 Feb 2022 07:01:38 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id co28so5736401edb.1;
+        Wed, 09 Feb 2022 07:01:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=59r6R8CamhNOPJf3ecn98Vx3RC5ol7vbLhaSn6mMvIo=;
+        b=pDois4WM2LuDFwB6uV9Teb2Kp/HL9tcYymFG1NtByoNhF1AsQVwIw9j1rpCJx0qnhd
+         E/I14wGx5viSrfhS/qVQbf4T4PiJY3TR1XMxgbfCUcNQBWLOqMIEiCVA+1pJu5d2AZCd
+         Mz1f2fmrcyfB5wqDJmsdTBN6voCGrhsLcB2o0+i8l+Rlj+AtcYxRNrZMU8lBeIdkmDt9
+         q3RHuVwna+u89qpLbMlS4ItLIOjldB1NkFOdJlIRMh6e43uJS61zSFgE9HwFDQbt92c8
+         PoFHmTJFj9P2LRJ1RPbODqPWcQrUr8G0DMWc2R0c5fUIElzFBztk/GqXLenIRFYXnzud
+         MZGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yOENEFAxeV6WDUDDmj8Y/MC+cvCFTJP4OBxZd3XquaY=;
-        b=2H6/jqEwxQ9r+3aha0s+VERTS8eEk01c0rl+5TpAq0AMtxWxePRjNX3fpY9sIh9I3x
-         qocCQtc3+i80eXDnJgeeU3V3gXPTUY8MfXlkSWxYQZ7F7Th+P9lmONagLKUNENhubW56
-         Yvq2k9Eg4IdJTo5awoCGyUxvL/79gn6f/E1t9VJAeo1paWEZxoFRvBXM8lZDmQpoNC12
-         TWEI6j5J9hJNPP/BJdIVP/WCSFSNMvGzEZhQG4UREBzh4kgJGkSn9Ub0n4Mix3ppbJrW
-         HJldcNov4M6GY+sKU/BwS4ltxupGym98pU5osaLNSz5O5eisDAShfSwjtuOmiN3EDhjQ
-         mxRg==
-X-Gm-Message-State: AOAM532XMz31IxynmAmknYP7Dm3LHJNJOjw1xye3ugQY+fFibvGbD7m+
-        0JXXAQagPUQ/Usd03OCjGZZTUgt/Y9DQY60vcplSiVpMiBHkvCSmksFgwwZJrHg1ZlCHO9Py/dh
-        OrWf4qG7qdRzz4vHapB1mRsrg
-X-Received: by 2002:a05:622a:14d2:: with SMTP id u18mr1562517qtx.615.1644418898987;
-        Wed, 09 Feb 2022 07:01:38 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzcj4EjGhN8CzP3asDDyVKZTAdwOuO5eNnV9Dsmlc5T8QSbtReodIbPMN5JR/u4AgiHxsMgYg==
-X-Received: by 2002:a05:622a:14d2:: with SMTP id u18mr1562499qtx.615.1644418898824;
-        Wed, 09 Feb 2022 07:01:38 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id g21sm9338111qtb.70.2022.02.09.07.01.36
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=59r6R8CamhNOPJf3ecn98Vx3RC5ol7vbLhaSn6mMvIo=;
+        b=3KKx+fHwTnGQtJOlKifp7Y9suqpmFQyuIZ70wzzEwFBG4208OZTCzF2feNXx/lz7wR
+         /GN60sAwmNDZfGcfEHUWnc9rVUgeyKNSM13uwTCGwjRoVCSurqR5Wz13futrdjQFfmAq
+         xLAvNV/teIzHFx/xG9YPEJY0FJwVQjTuUR1cNRACNc6KC92dBCY7GFw8kCEym3lWhC99
+         Ga2x7s5k0BSek0z3Ickx0lfsmjPtum9IgkGWQp1tr2XQvvj03YHmEdqFYVW5eMyxueqX
+         vpnLApJf0/AcPFWrxfrrBFNTo8ZA3/uA2B5PFXyQW72xiSKHYqAFjW+3xZvUkXaadOAM
+         3yqw==
+X-Gm-Message-State: AOAM533iNWSMBKjJQtrNpp5BmGxaeI3aG74cdlxmhtUrLk1WUAd5lJD+
+        thMZE9JhFdgKAgZk2Fqaf4Y=
+X-Google-Smtp-Source: ABdhPJwXAxrfPJb44M4LeeNM483CiJ585siYPRo0OVr63jw5Iuz0JGdpxelD3ErnrC2t6yDfzUCDPg==
+X-Received: by 2002:aa7:d84e:: with SMTP id f14mr2884470eds.46.1644418896457;
+        Wed, 09 Feb 2022 07:01:36 -0800 (PST)
+Received: from krava ([2a00:102a:5010:3235:47fb:6193:ef68:761d])
+        by smtp.gmail.com with ESMTPSA id gu2sm6024567ejb.221.2022.02.09.07.01.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 07:01:37 -0800 (PST)
-From:   trix@redhat.com
-To:     perex@perex.cz, tiwai@suse.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] ALSA: cleanup double word in comment
-Date:   Wed,  9 Feb 2022 07:01:33 -0800
-Message-Id: <20220209150133.2291856-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Wed, 09 Feb 2022 07:01:36 -0800 (PST)
+Date:   Wed, 9 Feb 2022 16:01:33 +0100
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Changbin Du <changbin.du@gmail.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf trace: Avoid early exit due SIGCHLD from
+ non-workload processes
+Message-ID: <YgPXTe7LlTfh+z4S@krava>
+References: <20220208140725.3947-1-changbin.du@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220208140725.3947-1-changbin.du@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+On Tue, Feb 08, 2022 at 10:07:25PM +0800, Changbin Du wrote:
+> The function trace__symbols_init() runs "perf-read-vdso32" and that ends up
+> with a SIGCHLD delivered to 'perf'. And this SIGCHLD make perf exit early.
+> 
+> 'perf trace' should exit only if the SIGCHLD is from our workload process.
+> So let's use sigaction() instead of signal() to match such condition.
+> 
+> Signed-off-by: Changbin Du <changbin.du@gmail.com>
 
-Remove the second 'device'.
+good idea, I tested with the reproducer for:
+  f06a82f9d31a perf trace: Avoid early exit due to running SIGCHLD handler before it makes sense to
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- include/sound/hda_verbs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+and it's working properly
 
-diff --git a/include/sound/hda_verbs.h b/include/sound/hda_verbs.h
-index e36b77531c5c3..006d358acce25 100644
---- a/include/sound/hda_verbs.h
-+++ b/include/sound/hda_verbs.h
-@@ -461,7 +461,7 @@ enum {
- #define AC_DE_ELDV			(1<<1)
- #define AC_DE_IA			(1<<2)
- 
--/* device device types (0x0-0xf) */
-+/* device types (0x0-0xf) */
- enum {
- 	AC_JACK_LINE_OUT,
- 	AC_JACK_SPEAKER,
--- 
-2.26.3
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
+thanks,
+jirka
+
+> ---
+>  tools/perf/builtin-trace.c | 21 ++++++++++++++++-----
+>  1 file changed, 16 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+> index 32844d8a0ea5..d03556c14b0a 100644
+> --- a/tools/perf/builtin-trace.c
+> +++ b/tools/perf/builtin-trace.c
+> @@ -1536,13 +1536,20 @@ static size_t trace__fprintf_tstamp(struct trace *trace, u64 tstamp, FILE *fp)
+>  	return fprintf(fp, "         ? ");
+>  }
+>  
+> +static pid_t workload_pid = -1;
+>  static bool done = false;
+>  static bool interrupted = false;
+>  
+> -static void sig_handler(int sig)
+> +static void sighandler_interrupt(int sig __maybe_unused)
+>  {
+> -	done = true;
+> -	interrupted = sig == SIGINT;
+> +	done = interrupted = true;
+> +}
+> +
+> +static void sighandler_chld(int sig __maybe_unused, siginfo_t *info,
+> +			    void *context __maybe_unused)
+> +{
+> +	if (info->si_pid == workload_pid)
+> +		done = true;
+>  }
+>  
+>  static size_t trace__fprintf_comm_tid(struct trace *trace, struct thread *thread, FILE *fp)
+> @@ -3938,7 +3945,6 @@ static int trace__run(struct trace *trace, int argc, const char **argv)
+>  	bool draining = false;
+>  
+>  	trace->live = true;
+> -	signal(SIGCHLD, sig_handler);
+>  
+>  	if (!trace->raw_augmented_syscalls) {
+>  		if (trace->trace_syscalls && trace__add_syscall_newtp(trace))
+> @@ -4018,6 +4024,7 @@ static int trace__run(struct trace *trace, int argc, const char **argv)
+>  			fprintf(trace->output, "Couldn't run the workload!\n");
+>  			goto out_delete_evlist;
+>  		}
+> +		workload_pid = evlist->workload.pid;
+>  	}
+>  
+>  	err = evlist__open(evlist);
+> @@ -4887,10 +4894,14 @@ int cmd_trace(int argc, const char **argv)
+>  	const char * const trace_subcommands[] = { "record", NULL };
+>  	int err = -1;
+>  	char bf[BUFSIZ];
+> +	struct sigaction sigchld_act = { 0 };
+>  
+>  	signal(SIGSEGV, sighandler_dump_stack);
+>  	signal(SIGFPE, sighandler_dump_stack);
+> -	signal(SIGINT, sig_handler);
+> +	signal(SIGINT, sighandler_interrupt);
+> +	sigchld_act.sa_flags = SA_SIGINFO;
+> +	sigchld_act.sa_sigaction = sighandler_chld;
+> +	sigaction(SIGCHLD, &sigchld_act, NULL);
+>  
+>  	trace.evlist = evlist__new();
+>  	trace.sctbl = syscalltbl__new();
+> -- 
+> 2.25.1
+> 

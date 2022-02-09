@@ -2,113 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2434AF1A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5898A4AF1AE
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233360AbiBIMa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 07:30:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54510 "EHLO
+        id S233100AbiBIMbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 07:31:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233344AbiBIM37 (ORCPT
+        with ESMTP id S229701AbiBIMba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 07:29:59 -0500
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27124C03C19D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 04:29:59 -0800 (PST)
-Received: by mail-qv1-xf33.google.com with SMTP id c14so1563294qvl.12
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 04:29:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JpFYQSMAVe6I09BHQOjAX13imKhzUaXlc2+fdsD9V6E=;
-        b=Z4Eu786ojGcRgS8Eos4sLr66z2Uqqmgi/bDj6/Y33EEsvVWVKeCNJioyDR9vfy9xaY
-         yz3EOxCOZS/4g/fgKsh1/TNwzJVTuJBYxARJaHsw7OoHQBYA7L/O3QtbTl8+Tpf3u32c
-         Go3MoLTkH16938QXNFcpZV2qsCQ+/yOIxJO8+ooqAbmuC9zUdvg0Bg4KHC7DQZrRu5Pr
-         MEV4AdWysZ66pZX4YRzJgy6PJ/mfwT6AapS6FtqHr95tVUvZ/ng6ysJBJp+d6N+bSxfV
-         V5qGUskZ4AiQdRAYVMO4Llk3dzOmsNqH1liuPvseANE5HTBFUWXt5H7TVNAa03BHV8C3
-         wh9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JpFYQSMAVe6I09BHQOjAX13imKhzUaXlc2+fdsD9V6E=;
-        b=RdmNsiN6JsPDsyZtaBR6Y3PdJ8GDVkn1j02tA0/azUO71Y/q1JISVbsKplBqhK1tw7
-         6sdPMc65Lgn3hDE9bC4KA5VD9Su+nXn8MuxpYn7ok4RpQqXs42gIXSav+vK3QDAlwZNI
-         czPSZFfD56rqT97lIGMOxqBe/6TkzQlzqg4954nIcj68l/m+GuKiyzgLwH6kRVgpKDUm
-         K1dk/TKM8duaswlWiaYGpQidmeXy9tjHpdLL3QVZOo+cPI0td1o2rHYVqU5ET5LHfgj7
-         xzdazcIZ4fJN/izq62zVZmXJxIcbqhbCRLGp5tU2yGOMxKSa85x2LvPDNSW2YIGTuWjl
-         1a9w==
-X-Gm-Message-State: AOAM530HtjBwgLdpVCF+v/5yU+iOEP7a89zdBE2SlokyUuzo9rzgFYUh
-        43tjbbEe6YsBT/7S/ia7vZ/fpg==
-X-Google-Smtp-Source: ABdhPJwf9mdnK2ldlbFJ89Gp7ICZZlJoeyugDA0YNF0idT1dfs12KR4knXDFD3wj+Sh7mIvt9ShqvQ==
-X-Received: by 2002:a05:6214:21ac:: with SMTP id t12mr1263884qvc.123.1644409797997;
-        Wed, 09 Feb 2022 04:29:57 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id w13sm8052274qkb.106.2022.02.09.04.29.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 04:29:57 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nHm6e-001DJi-6l; Wed, 09 Feb 2022 08:29:56 -0400
-Date:   Wed, 9 Feb 2022 08:29:56 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>, nouveau@lists.freedesktop.org,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux MM <linux-mm@kvack.org>
-Subject: Re: [PATCH 7/8] mm: remove the extra ZONE_DEVICE struct page refcount
-Message-ID: <20220209122956.GI49147@ziepe.ca>
-References: <20220207063249.1833066-1-hch@lst.de>
- <20220207063249.1833066-8-hch@lst.de>
- <CAPcyv4h_axDTmkZ35KFfCdzMoOp8V3dc6btYGq6gCj1OmLXM=g@mail.gmail.com>
- <20220209062345.GB7739@lst.de>
+        Wed, 9 Feb 2022 07:31:30 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAB8C0613CA;
+        Wed,  9 Feb 2022 04:31:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644409893; x=1675945893;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=soo0nB22WJPviBpDRfEsLQcVnBjoM627TI0/ktDLbTA=;
+  b=DIJvvN1fahCLSOlJKbUbt7CYREFfjB8FFrh0GhrgYu3pS0H0AntDOr/n
+   UJKll2uyur+6Fp2DMwjiTCT55WJ+/Xa7Hd6W8dr7ICJLaG8A7ctGNOSg/
+   3CeHCkZd/E+d2L0VCBK9Nm96juLZvKpPIMeSw1I3g57PDAA52OO4McLpF
+   owT/Dcg353xM+perKlvEoBpGUMOp8s2+0MO+U4YT+dZAhNpNLYXAPpX7b
+   s74rukMfa+Oeq90J0v1c3UjAPBkv6qisqyn5CNXlCZg4hSv6KRpOYAcT9
+   vHFrpTgL3fEXH1OcU7CPb/4Sbzo+F5ZX9IL4OwsramGMyfAR8q/QTLiOe
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="248026147"
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="248026147"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 04:31:33 -0800
+X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
+   d="scan'208";a="622261908"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 04:31:30 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nHm7E-002bvg-8W;
+        Wed, 09 Feb 2022 14:30:32 +0200
+Date:   Wed, 9 Feb 2022 14:30:32 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v2 1/6] device property: Helper to match multiple
+ connections
+Message-ID: <YgOz6K55Oi2Si4pU@smile.fi.intel.com>
+References: <20220208031944.3444-1-bjorn.andersson@linaro.org>
+ <20220208031944.3444-2-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220209062345.GB7739@lst.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220208031944.3444-2-bjorn.andersson@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 07:23:45AM +0100, Christoph Hellwig wrote:
-> On Tue, Feb 08, 2022 at 07:30:11PM -0800, Dan Williams wrote:
-> > Interesting. I had expected that to really fix the refcount problem
-> > that fs/dax.c would need to start taking real page references as pages
-> > were added to a mapping, just like page cache.
+On Mon, Feb 07, 2022 at 07:19:39PM -0800, Bjorn Andersson wrote:
+> In some cases multiple connections with the same connection id
+> needs to be resolved from a fwnode graph.
 > 
-> I think we should do that eventually.  But I think this series that
-> just attacks the device private type and extends to the device coherent
-> and p2p enhacements is a good first step to stop the proliferation of
-> the one off refcount and to allow to deal with the fsdax pages in another
-> more focuessed series.
+> One such example is when separate hardware is used for performing muxing
+> and/or orientation switching of the SuperSpeed and SBU lines in a USB-C
 
-It is nice, but the other series are still impacted by the fsdax mess
-- they still stuff pages into ptes without proper refcounts and have
-to carry nonsense to dance around this problem.
+USB Type-C ?
 
-I certainly would be unhappy if the amd driver, for instance, gained
-the fsdax problem as well and started pushing 4k pages into PMDs.
+> connector. In this case the connector needs to belong to a graph with
+> multiple matching remote endpoints, and the TypeC controller needs to be
 
-Jason
+Type-C ?
+
+> able to resolve them both.
+> 
+> Add a new API that allows this kind of lookup.
+> 
+> Given that the match() callback returns an opaque reference to something
+> provided by the client it's not possible for the implementation to
+> release the returned object and as such it's not possible to handle
+> errors, which in turn means that it's not possible to query the number
+> of elements or dynamically grow the results array. It's however expected
+> that the number of matches will be reasonably low and that the worst
+> case is known by the caller before hand.
+
+...
+
+> +	fwnode_graph_for_each_endpoint(fwnode, ep) {
+> +		if (count >= matches_len) {
+> +			fwnode_handle_put(ep);
+> +			return count;
+> +		}
+> +
+> +		node = fwnode_graph_get_remote_port_parent(ep);
+> +		if (!fwnode_device_is_available(node)) {
+> +			fwnode_handle_put(node);
+> +			continue;
+> +		}
+> +
+> +		ret = match(node, con_id, data);
+> +		fwnode_handle_put(node);
+
+> +
+
+Redundant blank line (it seems the current style w/o this).
+Ditto for the below function.
+
+> +		if (ret)
+> +			matches[count++] = ret;
+> +	}
+
+...
+
+> +/**
+> + * fwnode_connection_find_matches - Find connections from a device node
+> + * @fwnode: Device node with the connection
+> + * @con_id: Identifier for the connection
+> + * @data: Data for the match function
+> + * @match: Function to check and convert the connection description
+> + * @matches: Array of pointers to fill with matches
+> + * @matches_len: Length of @matches
+> + *
+> + * Find up to @matches_len connections with unique identifier @con_id between
+> + * @fwnode and other device nodes. @match will be used to convert the
+> + * connection description to data the caller is expecting to be returned
+> + * through the @matches array.
+> + *
+> + * Return: Number of matches resolved, of negative errno.
+
+s/of/or/ ?
+
+> + */
+> +int fwnode_connection_find_matches(struct fwnode_handle *fwnode,
+> +				   const char *con_id, void *data,
+> +				   devcon_match_fn_t match,
+> +				   void **matches, unsigned int matches_len)
+> +{
+> +	unsigned int count;
+> +
+> +	if (!fwnode || !match || !matches)
+
+!matches case may be still useful to get the count and allocate memory by
+caller. Please, consider this case.
+
+> +		return -EINVAL;
+> +
+> +	count = fwnode_graph_devcon_matches(fwnode, con_id, data, match,
+> +					    matches, matches_len);
+> +
+> +	return count + fwnode_devcon_matches(fwnode, con_id, data, match,
+> +					     matches + count,
+> +					     matches_len - count);
+
+I haven't found any explanation what the difference between two counts. Also
+can you define two count variables with distinct names and do something like
+
+	count_A = ...
+
+	matches += count;
+	matches_len -= count;
+
+	count_B = ...
+
+	return count_A + count_B;
+
+?
+
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

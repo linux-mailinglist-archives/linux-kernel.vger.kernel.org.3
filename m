@@ -1,75 +1,60 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00FB74AFD13
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 20:16:10 +0100 (CET)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 685094AFD4E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 20:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbiBITOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 14:14:45 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38800 "EHLO
+        id S234411AbiBIT1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 14:27:01 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbiBITOn (ORCPT
+        with ESMTP id S234937AbiBIT01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 14:14:43 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F458C02B650
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 11:14:37 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id x193so3593297oix.0
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 11:14:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=i83UrggLqqR8sfxQp+IQdzECOxPCCxqxbgAjSDGHq/Y=;
-        b=n/sSem6NYUo+UdF/1GntVWuR1kT+0OyWraS+6jrUlMW2hux65KDqnHZrEiPE7QEJiF
-         2nftYFoT7AtMqZ+Lsom7cvyvd5bVPwga1sPkB8lAFJ3iSBOB5T7INgDuYFizA0BpSCJO
-         QHtOevRx7L/UmSgNQ4GhitW6+QAx5PAxidzf6PKNPcP4j5ajzKcS7J+/6i/jrZAenNpc
-         4wtyAbAFWqfV0ahtL76JY/9PSGTNOYHroN4nJ42A2O2yOv/sxRkDDNdoWg0ka2etLVNi
-         51OEU7usFE2QMy5FRy+c2EF/dqy4CNz5AAsRY80iCisWg1OTs4YBHrnNqUcmPgzgiJU8
-         yJ1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=i83UrggLqqR8sfxQp+IQdzECOxPCCxqxbgAjSDGHq/Y=;
-        b=y+ApBx84Yj4s+8tgFzmK0XBtmfLp8Kk24W5hAmrgT178Ze+zgS3yQ6xkauSKt79+IL
-         NTC6PgpQjVmlBWgZKTA3t2fL1+/FhXBhMJl53xyK2Rjf89z6KrP+ilp+gh7m/KXz9qVQ
-         IqWaDh0U49WQkXehE1eg3yNHwxP3M6jUDwAA8yDB8f2jCQYkWhGbvqHhJJlED337rO41
-         e6FMh8USYm/OOkEMK+d+VU/EIQMMm4WG5kKUI6ZlprLP15yTXB5YZCikwRds5TkoM1g/
-         2beGtVVS9vjzAH2uU7UvzFslpGlSiu36+iOz7siE7ccoamlDaG5WqkSFArbND7GDcoct
-         Jdtg==
-X-Gm-Message-State: AOAM531K/ns5AZriFdkfi2fuxpkg24WaGL1xZ2fUSUw99r/9TfCm+VsJ
-        BCKdQHu8qwql+BDWcccBSLY0aw==
-X-Google-Smtp-Source: ABdhPJzNqLMqK731CrdUn6LdyrYJwYcsrQuDHu/wYHmXgCn+SMhJhaGK1IYh4ATk0fCF1/NvdkNh/Q==
-X-Received: by 2002:aca:ab0d:: with SMTP id u13mr2058811oie.138.1644434066754;
-        Wed, 09 Feb 2022 11:14:26 -0800 (PST)
-Received: from [192.168.11.51] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
-        by smtp.gmail.com with ESMTPSA id a15sm7127523oil.13.2022.02.09.11.14.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 11:14:26 -0800 (PST)
-Message-ID: <72fa3837-1792-9a45-c1c2-7863d3381c31@kali.org>
-Date:   Wed, 9 Feb 2022 13:14:24 -0600
+        Wed, 9 Feb 2022 14:26:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35263C02B5D3;
+        Wed,  9 Feb 2022 11:19:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6589EB82392;
+        Wed,  9 Feb 2022 19:15:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FC67C340E7;
+        Wed,  9 Feb 2022 19:15:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644434147;
+        bh=CDJT6ceF+7GANApPV9fPTE87Zdt/GRsTa1rFq3MjZzs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ocb3OFJWEvHrWBYxPLvEt6LTrer1WhdiSHYMhOk9g+h3UyttZch3F3GgjYinhXZ4g
+         TLaj96hj6tNC4QEcq3MxrgLxzKOtLugJJCH3UTj7LBtqZ+MfdzUtmJf3TY+34ZlA+g
+         EEP7nQqsGGBwxMBRMHu4ntbhALx/Jth2rs7Nhp6A=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: [PATCH 5.15 0/5] 5.15.23-rc1 review
+Date:   Wed,  9 Feb 2022 20:14:25 +0100
+Message-Id: <20220209191249.980911721@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [v1 2/2] clk: qcom: dispcc: Update gdsc flag for display GDSC
-Content-Language: en-US
-To:     Taniya Das <tdas@codeaurora.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220209172513.17873-1-tdas@codeaurora.org>
- <20220209172513.17873-2-tdas@codeaurora.org>
-From:   Steev Klimaszewski <steev@kali.org>
-In-Reply-To: <20220209172513.17873-2-tdas@codeaurora.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.23-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.15.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.15.23-rc1
+X-KernelTest-Deadline: 2022-02-11T19:12+00:00
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,63 +62,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Taniya,
+This is the start of the stable review cycle for the 5.15.23 release.
+There are 5 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-On 2/9/22 11:25 AM, Taniya Das wrote:
-> Update the mdss gdsc flag for SC7180/SC7280/SM8150/SM8250
-> to not program the transition delay.
->
-> Fixes: dd3d06622138 ("clk: qcom: Add display clock controller driver for SC7180")
-> Fixes: 1a00c962f9cd ("clk: qcom: Add display clock controller driver for SC7280")
-> Fixes: 80a18f4a8567 ("clk: qcom: Add display clock controller driver for SM8150 and SM8250")
-> Signed-off-by: Taniya Das <tdas@codeaurora.org>
-> ---
->   drivers/clk/qcom/dispcc-sc7180.c | 2 +-
->   drivers/clk/qcom/dispcc-sc7280.c | 2 +-
->   drivers/clk/qcom/dispcc-sm8250.c | 2 +-
->   3 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/clk/qcom/dispcc-sc7180.c b/drivers/clk/qcom/dispcc-sc7180.c
-> index 538e4963c915..c203888ab2ca 100644
-> --- a/drivers/clk/qcom/dispcc-sc7180.c
-> +++ b/drivers/clk/qcom/dispcc-sc7180.c
-> @@ -629,7 +629,7 @@ static struct gdsc mdss_gdsc = {
->   		.name = "mdss_gdsc",
->   	},
->   	.pwrsts = PWRSTS_OFF_ON,
-> -	.flags = HW_CTRL,
-> +	.flags = HW_CTRL |  DEFAULT_TRANSITION_DELAY,
->   };
-There's an extra space after the |
->   static struct gdsc *disp_cc_sc7180_gdscs[] = {
-> diff --git a/drivers/clk/qcom/dispcc-sc7280.c b/drivers/clk/qcom/dispcc-sc7280.c
-> index 4ef4ae231794..8e1a2d4a8120 100644
-> --- a/drivers/clk/qcom/dispcc-sc7280.c
-> +++ b/drivers/clk/qcom/dispcc-sc7280.c
-> @@ -791,7 +791,7 @@ static struct gdsc disp_cc_mdss_core_gdsc = {
->   		.name = "disp_cc_mdss_core_gdsc",
->   	},
->   	.pwrsts = PWRSTS_OFF_ON,
-> -	.flags = HW_CTRL | RETAIN_FF_ENABLE,
-> +	.flags = HW_CTRL | RETAIN_FF_ENABLE | DEFAULT_TRANSITION_DELAY,
->   };
->
->   static struct clk_regmap *disp_cc_sc7280_clocks[] = {
-> diff --git a/drivers/clk/qcom/dispcc-sm8250.c b/drivers/clk/qcom/dispcc-sm8250.c
-> index 566fdfa0a15b..4d64d499a285 100644
-> --- a/drivers/clk/qcom/dispcc-sm8250.c
-> +++ b/drivers/clk/qcom/dispcc-sm8250.c
-> @@ -1130,7 +1130,7 @@ static struct gdsc mdss_gdsc = {
->   		.name = "mdss_gdsc",
->   	},
->   	.pwrsts = PWRSTS_OFF_ON,
-> -	.flags = HW_CTRL,
-> +	.flags = HW_CTRL | DEFAULT_TRANSITION_DELAY,
->   	.supply = "mmcx",
->   };
->
-> --
-> Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
-> of the Code Aurora Forum, hosted by the  Linux Foundation.
->
--- steev
+Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
+Anything received after that time might be too late.
+
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.23-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+and the diffstat can be found below.
+
+thanks,
+
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.15.23-rc1
+
+Herbert Xu <herbert@gondor.apana.org.au>
+    crypto: api - Move cryptomgr soft dependency into algapi
+
+Namjae Jeon <linkinjeon@kernel.org>
+    ksmbd: fix SMB 3.11 posix extension mount failure
+
+Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+    KVM: s390: Return error on SIDA memop on normal guest
+
+Anshuman Khandual <anshuman.khandual@arm.com>
+    arm64: Add Cortex-A510 CPU part definition
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    moxart: fix potential use-after-free on remove path
+
+
+-------------
+
+Diffstat:
+
+ Makefile                         | 4 ++--
+ arch/arm64/include/asm/cputype.h | 2 ++
+ arch/s390/kvm/kvm-s390.c         | 2 ++
+ crypto/algapi.c                  | 1 +
+ crypto/api.c                     | 1 -
+ drivers/mmc/host/moxart-mmc.c    | 2 +-
+ fs/ksmbd/smb2pdu.c               | 2 +-
+ 7 files changed, 9 insertions(+), 5 deletions(-)
+
+

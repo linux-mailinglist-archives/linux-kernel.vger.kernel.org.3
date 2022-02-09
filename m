@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0564AEC73
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 09:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC474AEC7A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 09:33:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241313AbiBIIbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 03:31:47 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38870 "EHLO
+        id S241530AbiBIIcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 03:32:16 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241300AbiBIIbm (ORCPT
+        with ESMTP id S241439AbiBIIcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 03:31:42 -0500
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1984FC05CBB6;
-        Wed,  9 Feb 2022 00:31:42 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id C2BB6C000B;
-        Wed,  9 Feb 2022 08:31:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644395501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yn/tDzsvR67+hM5dhzHnFqmkUv46YSHjaLURannh73M=;
-        b=FFM4bbu7zjLpioUf4sgYhH0feSKroqMddbwES59Cisxhrz0HVINB0uo61wvlbEntoL1fAv
-        ThQ3oxeJfm3wLHvj2sj3Vfei6jWTHvpl7YhGeRA3PQ1cmz7B8BkusoYFpHsruNLXdZeYPi
-        BD9u0h+IlvLHyQ2bNT9ZL3jn4MeYfxarLDO4NLEvc7rElndZJeibGD6ndrXy2MZh8Mo7PY
-        5NiTTFntZBtfsC9R9ecmh7oBVWvFzhBZ+IofbDj187bkHYaNzSzEYCaPucut0ksMIeVP7g
-        /zaFKi2rzeOV563L65rzt/9Ds+R8TLOwwagbpN98b3RB+N9m9QSowZh/v3S6rw==
-Date:   Wed, 9 Feb 2022 09:31:38 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Sean Nyekjaer <sean@geanix.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Boris Brezillon <bbrezillon@kernel.org>
-Cc:     stable@vger.kernel.org,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mtd: rawnand: protect access to rawnand devices
- while in suspend
-Message-ID: <20220209093138.4104a874@xps13>
-In-Reply-To: <20220207153940.710464-1-miquel.raynal@bootlin.com>
-References: <20220131215138.2013649-1-sean@geanix.com>
-        <20220207153940.710464-1-miquel.raynal@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 9 Feb 2022 03:32:08 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA34CC05CBBE
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 00:32:11 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nHiON-0007nf-Pu; Wed, 09 Feb 2022 09:31:59 +0100
+Received: from pengutronix.de (unknown [195.138.59.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D988B2EF8B;
+        Wed,  9 Feb 2022 08:31:58 +0000 (UTC)
+Date:   Wed, 9 Feb 2022 09:31:55 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Srinivas Neeli <sneeli@xilinx.com>
+Cc:     "wg@grandegger.com" <wg@grandegger.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        Michal Simek <michals@xilinx.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Appana Durga Kedareswara Rao <appanad@xilinx.com>,
+        Srinivas Goud <sgoud@xilinx.com>, git <git@xilinx.com>
+Subject: Re: [PATCH] can: xilinx_can: Add check for NAPI Poll function
+Message-ID: <20220209083155.xma5m7tayy2atyoo@pengutronix.de>
+References: <20220208162053.39896-1-srinivas.neeli@xilinx.com>
+ <20220209074930.azbn26glrxukg4sr@pengutronix.de>
+ <DM6PR02MB53861A46A48B4689F668BEE9AF2E9@DM6PR02MB5386.namprd02.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ghoqq6pqwpgc7xyw"
+Content-Disposition: inline
+In-Reply-To: <DM6PR02MB53861A46A48B4689F668BEE9AF2E9@DM6PR02MB5386.namprd02.prod.outlook.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,27 +64,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-miquel.raynal@bootlin.com wrote on Mon,  7 Feb 2022 16:39:40 +0100:
+--ghoqq6pqwpgc7xyw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> On Mon, 2022-01-31 at 21:51:38 UTC, Sean Nyekjaer wrote:
-> > Prevent rawnend access while in a suspended state.
+On 09.02.2022 08:29:55, Srinivas Neeli wrote:
+> > On 08.02.2022 21:50:53, Srinivas Neeli wrote:
+> > > Add check for NAPI poll function to avoid enabling interrupts with out
+> > > completing the NAPI call.
 > >=20
-> > Commit 013e6292aaf5 ("mtd: rawnand: Simplify the locking") allows the
-> > rawnand layer to return errors rather than waiting in a blocking wait.
-> >=20
-> > Tested on a iMX6ULL.
-> >=20
-> > Fixes: 013e6292aaf5 ("mtd: rawnand: Simplify the locking")
-> > Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-> > Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com> =20
+> > Thanks for the patch. Does this fix a bug? If so, please add a Fixes:
+> > tag that lists the patch that introduced that bug.
 >=20
-> Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git =
-nand/next, thanks.
+> It is not a bug. I am adding additional safety check( Validating the
+> return value of "napi_complete_done" call).
 
-Dropped because of the kdoc warning/stable style issues. I will soon
-apply the v4 instead.
+Thanks for your feedback. Should this go into can or can-next?
 
-Thanks,
-Miqu=C3=A8l
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--ghoqq6pqwpgc7xyw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIDe/gACgkQrX5LkNig
+011/twf9GGBR2QEXqjnEmw/xzHM60lmxr6bpT4M7YV7fCn4qqpSmKiNJvO8CbePC
+Zyv7vyArUWuFtHsCOn4tEQeUr++ssJ82IPKWYBoO/AnNuU/XBid0J7n5cQP/B/ke
+AQiGc9kPruEo5hI/yHXQEcWuehl40v9Xu7rEf7Mik/LaWc34ELzbTavxKEgVzyeY
+BYKWU0J/yzgBPRzMAU49gS1Eb9+QYfT2KxjlVEcplbnhrAg6qHxGPGDKZNpxO6q+
+JQIZXzTUnDAjkDGC0D7/rP4Z0l5yxhs2wedwMyEEZ9HPIUnJRbMIT0xe9WFdAxpw
+3UUl4Jk056IshF5rZ6mRfqSSTm+jxg==
+=1RHL
+-----END PGP SIGNATURE-----
+
+--ghoqq6pqwpgc7xyw--

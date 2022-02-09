@@ -2,117 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F664AEEC6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C59184AEF5D
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 11:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbiBIJ7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 04:59:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
+        id S230023AbiBIKhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 05:37:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbiBIJ7J (ORCPT
+        with ESMTP id S229454AbiBIKhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 04:59:09 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83BBE0E08B2;
-        Wed,  9 Feb 2022 01:58:59 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id k1so3029578wrd.8;
-        Wed, 09 Feb 2022 01:58:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=GiYVCUQVn5qABu6+pjE+wg7nbhOtHAJxVjxeBiLpFuw=;
-        b=EV1xAbPdepQ15yM2hA6yek1hBdtQohPZpV9fqvFAKFPPoiBAlgjtzuxfIUfqVlWDzI
-         KEh6coDvA/0rk4oKm7WB9HIqoqCxrI1vy0hhiaRjXPgtiejifUuaN9ub9kHfxmBTrdFn
-         8fBo0ATtRRrj4fFNH/hv/6T+/zNjlNjbNVvlVhWnAXH9HpnXyPjDWTFMO4fB0ZY4P1Iy
-         KSlQ86ZhzOJKjEGfvNT/BjtPpAB44xw+fdMqgFGNCTdXEJh0P74rxvo26QOqfe8y8j/N
-         b6NWKm9xpQHpqj1Fv5WgmtWy9QeT0k74yuyXI9Obl35ugaMHUtItXKjCnbfxCUF/2VRf
-         rquQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=GiYVCUQVn5qABu6+pjE+wg7nbhOtHAJxVjxeBiLpFuw=;
-        b=ibFkpyBvr8VQTQ4llFr+wBR+gJMoF8bNXb8esyjrU1B7DvVKPn/IrdwGjgpkZT2LHZ
-         0xevLnq403LdBvGHarmi/baL/QQtwkIGkrxLk9PcZ2JQ6eDMSwVMzUgMXxTMfBWsyoHz
-         uRRILvLmSElREj3QDuwLJnWhggiG63Ladv5danQhR+nQFyWhEiYszoPYMzMf2BXbPDxl
-         Q6hK/0zb+9luVkoii4XMR324sCkJgTzl2bLxrV0upkjUAorcBcsbH0M7n9f167eZ//ol
-         yntbPy6XDKZ5/GbYBIiIUHUh0B3ceb2ow11f7My0uUMnciQKBfK1rc+cKx9LqCwClmgm
-         nL1g==
-X-Gm-Message-State: AOAM531ONbITidI+oUlrdmh5u6FZ3D8EDPaja2ajYUMMpiOrSPRxdSE3
-        9T+kd1F7iZQdKUt4FhSZzjY=
-X-Google-Smtp-Source: ABdhPJxKVmt8Fb9dGTQOC6VyFXJBFG+zDKJ6r9SV9rgxspR0+tytOz8xGOtGCs8IXIOnFlblx4k9Cw==
-X-Received: by 2002:a05:6000:1846:: with SMTP id c6mr1392952wri.683.1644400647938;
-        Wed, 09 Feb 2022 01:57:27 -0800 (PST)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id w6sm13674911wrp.51.2022.02.09.01.57.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 01:57:27 -0800 (PST)
-Date:   Wed, 9 Feb 2022 10:57:24 +0100
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     gilad@benyossef.com, herbert@gondor.apana.org.au
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [BUG] crypto: ccree: driver does not handle case where cryptlen =
- authsize =0
-Message-ID: <YgOQBNIdf0UnSH+M@Red>
+        Wed, 9 Feb 2022 05:37:05 -0500
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E12E145D95;
+        Wed,  9 Feb 2022 02:25:16 -0800 (PST)
+Received: from localhost.localdomain ([81.221.85.15]) by mrelay.perfora.net
+ (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MHWaj-1nUgCn0LWT-00DTV1;
+ Wed, 09 Feb 2022 11:01:20 +0100
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Marek Vasut <marek.vasut@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Adam Ford <aford173@gmail.com>,
+        Alex Marginean <alexandru.marginean@nxp.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Marek Vasut <marex@denx.de>, Martin KaFai Lau <kafai@fb.com>,
+        Mathew McBride <matt@traverse.com.au>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        =?UTF-8?q?Oliver=20St=C3=A4bler?= <oliver.staebler@bytesatwork.ch>,
+        Olof Johansson <olof@lixom.net>, Peng Fan <peng.fan@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Will Deacon <will@kernel.org>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v5 00/12] arm64: prepare and add verdin imx8m mini support
+Date:   Wed,  9 Feb 2022 11:00:43 +0100
+Message-Id: <20220209100055.181389-1-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:n05M3tQke/wbx4BwulLlNYpxM+07HAnqQEgr8qhk4VBVHXDvK3+
+ ujPIaviFQhKTCKCTKjOymaFZY2V/iwpSOPXVVeFgh6ASzWghhJgy+Sf6K9yHSIGj3j4wlDf
+ j6ge4cTaAo2GCSInY/Abk0+HXZ14M4jmQDsUoW3XteLL02c1AKepeB3JFDHIZxJKXivnAKV
+ k6xKqc+zr2d3n2JnR66Eg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:OBqy+dPAZuI=:2jNPH3Z+AeOAxPZsedu41j
+ +gFV4XPNlbepYdV91tio2hDKY8O70Rxrvg8WgGqRlOCjiszn+394bWRhPO1Owvk0Ygw8Jnd0q
+ kXWW93HRZePsb7S6yrXkARgz2t75+Z1yUJHhKtsof7cICrWaxlGhiRIGxR6ylpHNRS85OKogl
+ +zEjO7iV+0ut7mkounj6yALv2ONLc6jIsUfR9LuPPJEOmnqz6QxZ106zBrf1j5rtdjgcVfHvy
+ sHYL0AEMGTX1dO51Rvg5JXyxXVlbJN9xPrYo8+ON8Fbrd2Imq6pUB9MKmudxTm8mX/EaIWl7g
+ 3VvMjt2tQflZqmCuY5QzGH4qMg9PP+jNPRoSX8/oeo3u7kP5sPPScxRdksxSPpeuzvhzSbhfM
+ nWUDQ9hvqaXF1OIUbqndrBKGgpcEgiaFqxiUp3qTN3O3tj2RoyKH+p1xbn9f3WYyxgr3X4M2F
+ LMUrln6xbC9Uytsc/PjuNM51rPzFZR5vYOgUVu4XsBJ3Gv4utHAqsPtXhcdmt7rPwrT5eeDYv
+ ktih+6EuKlbYB7Kg3jY2ewqkKJLjMzqGpDbigFSBInjmC97ZNDcDfRL5mDHZUtH8YN6aS1wT1
+ mgdi3QNBtFkOS3Et30Sz1Bbt0pgbWw7+NeAsEaQj1bvH5RkDPUXWM3inXIIq8TtJlKKW+DiVc
+ ZS+7aZ85msB9qJYjG4hVXOuQqxhFTWrPA9fb6xnKbRzYhrFwXrebCDcqD/WAu52gJU4Q=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Booting a salvator X with CRYPTO_MANAGER_EXTRA_TESTS lead to:
-[   37.510039] ------------[ cut here ]------------
-[   37.514712] WARNING: CPU: 7 PID: 616 at /home/clabbe/linux-next/kernel/dma/mapping.c:200 __dma_map_sg_attrs+0xb8/0x108
-[   37.525444] Modules linked in: des_generic ofb snd_soc_hdmi_codec dw_hdmi_cec dw_hdmi_i2s_audio rcar_du_drm rcar_lvds crct10dif_ce snd_soc_audio_graph_card simple_bridge snd_soc_simple_card_utils rcar_dw_hdmi dw_hdmi drm_cma_helper cec rcar_csi2 rcar_fdp1 v4l2_mem2mem vsp1 rcar_cmm videobuf2_vmalloc rcar_fcp renesas_usb3 snd_soc_rcar rcar_vin v4l2_fwnode v4l2_async videobuf2_dma_contig videobuf2_memops videobuf2_v4l2 videobuf2_common videodev pwm_rcar mc snd_soc_ak4613 max9611 ccree(+) renesas_usbhs phy_rcar_gen3_usb3 libdes usb_dmac gpio_bd9571mwv at24 display_connector drm_kms_helper pwm_bl drm ecb xts cts essiv cmac xcbc ccm
-[   37.581446] CPU: 7 PID: 616 Comm: cryptomgr_test Tainted: G        W         5.17.0-rc3-next-20220207-00110-g41bd5fbfc1e4 #5
-[   37.592672] Hardware name: Renesas Salvator-X board based on r8a77950 (DT)
-[   37.599555] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   37.606526] pc : __dma_map_sg_attrs+0xb8/0x108
-[   37.610978] lr : __dma_map_sg_attrs+0x48/0x108
-[   37.615430] sp : ffff80000c1632a0
-[   37.618749] x29: ffff80000c1632a0 x28: ffff0004c2997c00 x27: ffff0004c2997e20
-[   37.625909] x26: 0000000000000000 x25: 0000000000000008 x24: 0000000000000000
-[   37.633068] x23: 0000000000000000 x22: ffff0004cc777840 x21: 0000000000000000
-[   37.640226] x20: 0000000000000000 x19: ffff0004c164c010 x18: ffff80000b3a72f0
-[   37.647385] x17: 0000000000000000 x16: 0000000000000072 x15: 0000000000000010
-[   37.654544] x14: 001fffffffffffff x13: 000000006894887f x12: 818235788794af1b
-[   37.661703] x11: 00000000000ef000 x10: ffff0004c164c518 x9 : ffff800009aa6a38
-[   37.668862] x8 : ffff80000b2759d8 x7 : ffff80000c1633a0 x6 : 0000000000000000
-[   37.676021] x5 : ffff800009aa6a38 x4 : 0000000000000000 x3 : 0000000000000000
-[   37.683179] x2 : 74374306a1f1c500 x1 : 0000000000000000 x0 : 0000000000000000
-[   37.690338] Call trace:
-[   37.692789]  __dma_map_sg_attrs+0xb8/0x108
-[   37.696894]  dma_map_sg_attrs+0x10/0x28
-[   37.700739]  cc_map_sg+0x64/0xf8 [ccree]
-[   37.704711]  cc_map_aead_request+0x158/0x920 [ccree]
-[   37.709703]  cc_proc_aead+0x148/0xeb8 [ccree]
-[   37.714087]  cc_aead_encrypt+0x44/0x68 [ccree]
-[   37.718557]  crypto_aead_encrypt+0x44/0x78
-[   37.722669]  test_aead_vec_cfg+0x244/0x900
-[   37.726779]  test_aead_vec+0x8c/0x190
-[   37.730450]  test_aead+0x78/0xe0
-[   37.733687]  alg_test_aead+0xa4/0x3e0
-[   37.737358]  alg_test.part.29+0xb4/0x398
-[   37.741289]  alg_test+0x48/0x78
-[   37.744439]  cryptomgr_test+0x48/0x50
-[   37.748109]  kthread+0x11c/0x128
-[   37.751347]  ret_from_fork+0x10/0x20
-[   37.754939] irq event stamp: 119412
-[   37.758431] hardirqs last  enabled at (119411): [<ffff800009188a54>] _raw_spin_unlock_irqrestore+0x8c/0x90
-[   37.768105] hardirqs last disabled at (119412): [<ffff800009179e20>] el1_dbg+0x28/0x90
-[   37.776040] softirqs last  enabled at (119376): [<ffff80000125ac20>] cc_send_request+0xa0/0x208 [ccree]
-[   37.785462] softirqs last disabled at (119374): [<ffff80000125abf4>] cc_send_request+0x74/0x208 [ccree]
-[   37.794883] ---[ end trace 0000000000000000 ]---#
 
-When cryptlen and authsize are both 0, the driver try to map a 0 size buffer which display this warning.
+Fix strange hex notation and gpio-hog example, rebuild default
+configuration, enable various relevant configuration options mainly to
+be built as modules, add toradex,verdin-imx8mm et al. to dt-bindings and
+finally, add initial support for Verdin iMX8M Mini.
 
-Regards
+Changes in v5:
+- Add Rob's ack.
+- Remove invalid wifi-host property.
+- Remove rpmsg_reserved from the NXP vendor BSP not applicable upstream.
+- Remove 2nd cs-gpio only going to an N/A component.
+- Remove spi-num-chipselects as it is implicit by cs-gpios.
+- Remove vbus-wakeup-supply not being a valid property.
+- Fix picophy,dc-vol-level-adjust and picophy,pre-emp-curr-control which
+  upstream are rather called samsung,picophy-dc-vol-level-adjust resp.
+  samsung,picophy-pre-emp-curr-control.
+Thanks, Fabio for reviewing and pointing those out!
+
+Changes in v4:
+- Re-base on top of Shawn's for-next branch.
+- Fix gpio-line-names taking V1.1 re-design into account.
+- Fix wrong SODIMM pin number.
+- Drop 2nd SPI CAN instance being N/A in all SKUs.
+
+Changes in v3:
+- Add Krzysztof's reviewed-by tag.
+- New separate patch only for re-ordering as suggested by Krzysztof.
+- Not dropping CONFIG_SECCOMP=y, CONFIG_SLIMBUS=m, CONFIG_INTERCONNECT=y
+  and CONFIG_CONFIGFS_FS=y as requested by Krzysztof.
+- New patch enabling imx8m pcie phy driver in arm64 defconfig.
+- Rebase on top of shawnguo's for-next.
+- Drop [PATCH v2 02/11] ("dt-bindings: gpio: fix gpio-hog example") as
+  it already got applied by Bart.
+- Remove the 'pm-ignore-notify' property analogous to commit aafac22d6b23
+  ("arm64: dts: imx8mm/n: Remove the 'pm-ignore-notify' property").
+- Now with PCIe support finally having landed in -next enable it as well.
+- Add Krzysztof's acked-by tag.
+
+Changes in v2:
+- Add Laurent's reviewed-by tag.
+- New patch following full defconfig analysis as requested by Krzysztof.
+- Done full defconfig analysis as requested by Krzysztof.
+- Add Song's acked-by tag.
+- A similar change got accepted for imx_v6_v7_defconfig. Further
+  discussion may be found in [1].
+[1] https://lore.kernel.org/lkml/20210920144938.314588-6-marcel@ziswiler.com/
+- Explain why enabling it may be a good idea as requested by Krzysztof.
+- Explain why enabling these may make sense and squash them relevant
+  changes as requested by Krzysztof.
+- Add Rob's acked-by tag.
+- Fix Colibri vs. Verdin copy/paste mistake. Thanks to Francesco Dolcini
+  <francesco.dolcini@toradex.com> for pointing that out to me.
+- Remove bootargs which will be filled in by the bootloader as requested
+  by Krzysztof.
+- Remove the previously #ifdefed-out spi-nor as requested by Krzysztof.
+- Fix capitalisation in cover-letter.
+
+Marcel Ziswiler (12):
+  arm64: dts: imx8mm: fix strange hex notation
+  arm64: defconfig: enable taskstats configuration
+  arm64: defconfig: enable pcieaer configuration
+  arm64: defconfig: re-order default configuration
+  arm64: defconfig: rebuild default configuration
+  arm64: defconfig: enable bpf/cgroup firewalling
+  arm64: defconfig: enable imx8m pcie phy driver
+  arm64: defconfig: build imx-sdma as a module
+  arm64: defconfig: build r8169 as a module
+  arm64: defconfig: enable verdin-imx8mm relevant drivers as modules
+  dt-bindings: arm: fsl: add toradex,verdin-imx8mm et al.
+  arm64: dts: freescale: add initial support for verdin imx8m mini
+
+ .../devicetree/bindings/arm/fsl.yaml          |   21 +
+ arch/arm64/boot/dts/freescale/Makefile        |    4 +
+ .../arm64/boot/dts/freescale/imx8mm-pinfunc.h |    6 +-
+ .../dts/freescale/imx8mm-verdin-dahlia.dtsi   |  150 ++
+ .../boot/dts/freescale/imx8mm-verdin-dev.dtsi |   67 +
+ .../imx8mm-verdin-nonwifi-dahlia.dts          |   18 +
+ .../freescale/imx8mm-verdin-nonwifi-dev.dts   |   18 +
+ .../dts/freescale/imx8mm-verdin-nonwifi.dtsi  |   75 +
+ .../freescale/imx8mm-verdin-wifi-dahlia.dts   |   18 +
+ .../dts/freescale/imx8mm-verdin-wifi-dev.dts  |   18 +
+ .../dts/freescale/imx8mm-verdin-wifi.dtsi     |   94 ++
+ .../boot/dts/freescale/imx8mm-verdin.dtsi     | 1264 +++++++++++++++++
+ arch/arm64/configs/defconfig                  |  126 +-
+ 13 files changed, 1811 insertions(+), 68 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-dahlia.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-dev.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dahlia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dev.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dahlia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dev.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
+
+-- 
+2.33.1
+

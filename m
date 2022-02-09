@@ -2,63 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C254AF649
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:16:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D1D4AF652
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:16:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235936AbiBIQQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:16:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
+        id S236046AbiBIQQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:16:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235032AbiBIQQH (ORCPT
+        with ESMTP id S235032AbiBIQQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:16:07 -0500
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A422C061355
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:16:08 -0800 (PST)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 219E2F8j030664;
-        Wed, 9 Feb 2022 17:16:03 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=selector1;
- bh=8mP1JA+kYtJJXp87mX1OZ/ktutZUFiIKEFySAs32DOI=;
- b=52ZVZWH6aOPxeR2BsaQwmcB5mEUYDIoyr1rlMYtAdFim9NXGq8EGHARdeLtl2jlRbLGu
- TP0rB6EvRSswb9x8eowK5UoJKTxQjAaq8SCAyPlGR1nREEqbm5hFSp8wHFB5NjGZMBQa
- 0WHoZbKSAqYVhIL+ze2rS3zqlX00YhMGQCyilhLB4bU+TQwZavG2CBQkMAduZy5CWZ29
- t/5Br7Cwqx+2/UAQRGJV8jABMkK2F0QHDbn7AHFJkVpcJmNGy9KG3Wxi9S752YeLC/QP
- 410gR63wOwXpuUHlUb1HRtnD9bhWTtdMFQJiOt7KaDMaMS3ODbWylbmT+ppBwjtJVmrS EQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e4f10rp9a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Feb 2022 17:16:03 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9281C10002A;
-        Wed,  9 Feb 2022 17:16:02 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 71FE22291AD;
-        Wed,  9 Feb 2022 17:16:02 +0100 (CET)
-Received: from localhost (10.75.127.44) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 9 Feb 2022 17:16:01
- +0100
-From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To:     <hminas@synopsys.com>, <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>,
-        <fabrice.gasnier@foss.st.com>
-Subject: [PATCH] usb: dwc2: drd: fix soft connect when gadget is unconfigured
-Date:   Wed, 9 Feb 2022 17:15:53 +0100
-Message-ID: <1644423353-17859-1-git-send-email-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 9 Feb 2022 11:16:34 -0500
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55D6C061355;
+        Wed,  9 Feb 2022 08:16:33 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 55B10580226;
+        Wed,  9 Feb 2022 11:16:30 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 09 Feb 2022 11:16:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=7l18+A7I5YFiWg0p9PkixroHILub5lbAvAQ1vB
+        vv8Uo=; b=rh+9welRULADuU5aha4PERLHpZl33qUtqdALGbaIP9mTI7TQ+eo8eF
+        miWZrMZWid0JtfWMhZnN3RKLIG7f/sr/Aw3ZOLT8j4IKQaLwkZUltNyd9t0jLqst
+        RhIu4E+0UuNVUesjkZ4RdIpUZjawkPxBD1Cq6EUj/6wGEmVDxaWyPTNQrhIWazXf
+        WRSAHVDwNHtAxHKV3gfmUnPgSFVCkeICEsWIVoObWoHVVosfy8MXOMR19flkMeJp
+        km2whvXTtCq1pTkDOoBsgJLbX9y+zIdxlPonWhukmPgDV5hNbkAdrCd+HpE9JUrE
+        qJET5/PXv8fqUlnYrrINFuMbC+O9dQRQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=7l18+A7I5YFiWg0p9
+        PkixroHILub5lbAvAQ1vBvv8Uo=; b=PGbURF4biYbiO947WTkEUQIeX3jvMdjNj
+        /jzJB7fDQjxR0WXxEQu/HiuSAABW3cUWDzqlaO8vlpEXYI/qzCO33UICgcxQqFIk
+        EQT3sXIxs0Rmu+mU3KPqHDffdN+iCIW9dMcq+C7fn6BDdYZ79wzqOqRt4WX/Tn3V
+        V668KLc85EI6F+u/VYDLOqDxUagunIevcgUhctm8g6ONKNHklxRUqx2nT2KPA3iL
+        haYn+s9vE08e15Jo5W++qmVxzK3h73QplcQaPj5jy0cja15g+GC0PtMB1/63ZlWW
+        Fq8GxrI4VAlZI5zXdeB8CLjMANA2IvCrNaynH8f7unmL1de5k38DQ==
+X-ME-Sender: <xms:3OgDYmdX27H2h5ghkvtFjpHAZ7gWDF6rE9Ll52vJc-4eIFw9TwmSHw>
+    <xme:3OgDYgPd1PfzEPNQh6NZ-_1xB3Da4mYgn-H2w9iI7ipXMzTIvHVOSJWkLMcnSEAae
+    nhsOSbBOzq7N_lp2m4>
+X-ME-Received: <xmr:3OgDYngkVxRM-FSts7H4_hrit6sngi7Hurq09b7trt8gsQE3eyjI7RIR6oQedvm9zWKo6vwKyA7K-Iwrhgg5sacNpMkuPrlV9Jh2uCE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheelgdekgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeduvdduhfekkeehgffftefflefgffdtheffudffgeevteffheeuiedvvdejvdfg
+    veenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    igihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:3OgDYj_DYec5cHAi3Wdn2ZHQQzI5iNB0huioEgm5IF7M2Dtevq8NOg>
+    <xmx:3OgDYiuAYjbFD3bYKwQEFs5V3dO06aM-7XZNdQkbnsQ-2VQCNWnH_Q>
+    <xmx:3OgDYqHQoZl3it15r0dfFwQ4DpqH9SrjWLVtb3VoqF1aMgOYreLP6A>
+    <xmx:3ugDYqRDRAjYxWoFVyh9pE0ilLGHWnKsGK0ixsTX6FX3vdmbdpclRg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 9 Feb 2022 11:16:27 -0500 (EST)
+Date:   Wed, 9 Feb 2022 17:16:24 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Sui Jingfeng <15330273260@189.cn>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
+ controller
+Message-ID: <20220209161624.42ijbnhanaaari46@houat>
+References: <20220203082546.3099-1-15330273260@189.cn>
+ <20220203082546.3099-2-15330273260@189.cn>
+ <20220203085851.yqstkfgt4dz7rcnw@houat>
+ <11ac5696-29e3-fefa-31c0-b7b86c88bbdc@189.cn>
+ <20220209084908.kub4bs64rzhvpvon@houat>
+ <84bfb2fc-595c-3bae-e8a0-c19ccbcfcfd8@189.cn>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-09_08,2022-02-09_01,2021-12-02_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uxe4dlurlg6xpvsg"
+Content-Disposition: inline
+In-Reply-To: <84bfb2fc-595c-3bae-e8a0-c19ccbcfcfd8@189.cn>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,45 +103,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the gadget driver hasn't been (yet) configured, and the cable is
-connected to a HOST, the SFTDISCON gets cleared unconditionally, so the
-HOST tries to enumerate it.
-At the host side, this can result in a stuck USB port or worse. When
-getting lucky, some dmesg can be observed at the host side:
- new high-speed USB device number ...
- device descriptor read/64, error -110
 
-Fix it in drd, by checking the enabled flag before calling
-dwc2_hsotg_core_connect(). It will be called later, once configured,
-by the normal flow:
-- udc_bind_to_driver
- - usb_gadget_connect
-   - dwc2_hsotg_pullup
-     - dwc2_hsotg_core_connect
+--uxe4dlurlg6xpvsg
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 17f934024e84 ("usb: dwc2: override PHY input signals with usb role switch support")
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
----
- drivers/usb/dwc2/drd.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+On Wed, Feb 09, 2022 at 10:38:41PM +0800, Sui Jingfeng wrote:
+> On 2022/2/9 16:49, Maxime Ripard wrote:
+> > On Fri, Feb 04, 2022 at 12:04:19AM +0800, Sui Jingfeng wrote:
+> > > > > +/* Get the simple EDID data from the device tree
+> > > > > + * the length must be EDID_LENGTH, since it is simple.
+> > > > > + *
+> > > > > + * @np: device node contain edid data
+> > > > > + * @edid_data: where the edid data to store to
+> > > > > + */
+> > > > > +static bool lsdc_get_edid_from_dtb(struct device_node *np,
+> > > > > +				   unsigned char *edid_data)
+> > > > > +{
+> > > > > +	int length;
+> > > > > +	const void *prop;
+> > > > > +
+> > > > > +	if (np =3D=3D NULL)
+> > > > > +		return false;
+> > > > > +
+> > > > > +	prop =3D of_get_property(np, "edid", &length);
+> > > > > +	if (prop && (length =3D=3D EDID_LENGTH)) {
+> > > > > +		memcpy(edid_data, prop, EDID_LENGTH);
+> > > > > +		return true;
+> > > > > +	}
+> > > > > +
+> > > > > +	return false;
+> > > > > +}
+> > > > You don't have a device tree binding for that driver, this is somet=
+hing
+> > > > that is required. And it's not clear to me why you'd want EDID in t=
+he
+> > > > DTB?
+> > > 1) It is left to the end user of this driver.
+> > >=20
+> > > The downstream motherboard maker may use a dpi(XRGB888) or LVDS panel
+> > > which don't have DDC support either, doing this way allow them put a
+> > > EDID property into the dc device node in the DTS. Then the entire sys=
+tem works.
+> > > Note those panel usually support only one display mode.
+> > I guess it depends on what we mean exactly by the user, but the DTB
+> > usually isn't under the (end) user control. And the drm.edid_firmware is
+> > here already to address exactly this issue.
+> >=20
+> > On the other end, if the board has a static panel without any DDC lines,
+> > then just put the timings in the device tree, there's no need for an
+> > EDID blob.
+>=20
+> Loongson have a long history of using PMON firmware, The PMON firmware
+> support flush the dtb into the the firmware before grub loading the kerne=
+l.
+> You press 'c' key, then the PMON will give you a shell. it is much like a
+> UEFI shell. Suppose foo.dtb is what you want to pass to the vmlinuz.
+> Then type the follow single command can flush the dtb into the PMON firmw=
+are.
+>=20
+> |load_dtb /dev/fs/fat@usb0/foo.dtb|
+>=20
+> For our PMON firmware, it**is**  totally under developer/pc board maker's=
+ control.
+> You can flush whatever dtb every time you bootup until you satisfied.
+> It(the pmon firmware) is designed to let downstream motherboard maker and=
+/or
+> customers to play easily.
+>=20
+> Support of reading EDID from the dtb is really a feature which downstream
+> motherboard maker or customer wanted. They sometimes using eDP also whose
+> resolution is not 1024x768. This is out of control for a graphic driver
+> developer like me.
 
-diff --git a/drivers/usb/dwc2/drd.c b/drivers/usb/dwc2/drd.c
-index 1b39c47..9b6d44d 100644
---- a/drivers/usb/dwc2/drd.c
-+++ b/drivers/usb/dwc2/drd.c
-@@ -130,8 +130,10 @@ static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
- 		already = dwc2_ovr_avalid(hsotg, true);
- 	} else if (role == USB_ROLE_DEVICE) {
- 		already = dwc2_ovr_bvalid(hsotg, true);
--		/* This clear DCTL.SFTDISCON bit */
--		dwc2_hsotg_core_connect(hsotg);
-+		if (hsotg->enabled) {
-+			/* This clear DCTL.SFTDISCON bit */
-+			dwc2_hsotg_core_connect(hsotg);
-+		}
- 	} else {
- 		if (dwc2_is_device_mode(hsotg)) {
- 			if (!dwc2_ovr_bvalid(hsotg, false))
--- 
-2.7.4
+And, to reinstate, we already have a mechanism to set an EDID, and if it
+wasn't an option, the DT is not the place to store an EDID blob.
 
+> And drm.edid_firmware have only a few limited resolution which is weak.
+
+You're wrong. There's no limitation, it's just as limited as your
+solution. You put the same thing, you get the same thing out of it. The
+only difference is where the data are coming from.
+
+> I will consider to adding drm.edid_firmware support, thanks.
+
+It just works if you use drm_get_edid.
+
+> > > 2) That is for the display controller in ls2k1000 SoC.
+> > >=20
+> > > Currently, the upstream kernel still don't have GPIO, PWM and I2C dri=
+ver support
+> > > for LS2K1000 SoC.
+> > >=20
+> > > How dose you read EDID from the monitor without a I2C driver?
+> > >=20
+> > > without reading EDID the device tree support, the screen just black,
+> > > the lsdc driver just stall.=A0With reading EDID from device tree supp=
+ort
+> > > we do not need=A0a i2c driver to light up the monitor.
+> > >=20
+> > > This make lsdc drm driver work on various ls2k1000 development board
+> > > before I2C driver and GPIO driver and PWM backlight driver is upstrea=
+m.
+> > >=20
+> > > I have many local private dts with the bindings,=A0those local change=
+ just can not
+> > > upstream at this time, below is an example.
+> > >=20
+> > > The device tree is a platform description language. It's there to let
+> > > the OS know what the hardware is, but the state of hardware support in
+> > > the said OS isn't a parameter we have to take into account for a new
+> > > binding.
+> > >=20
+> > > If you don't have any DDC support at the moment, use the firmware
+> > > mechanism above, or add fixed modes using drm_add_modes_noedid in the
+> > > driver, and leave the DT out of it. Once you'll gain support for the
+> > > EDID readout in the driver, then it'll just work and you won't need to
+> > > change the DT again.
+> > >=20
+> The resolution will be 1024x768, it will also add a lot modes which may
+> not supported by the specific panel. Take 1024x600 as an example,
+> Both drm_add_modes_noedid() and firmware mechanism above will fail.
+>=20
+> Because the user supply EDID only and manufacturer of some strange panel
+> supply EDID only.
+
+It's fairly easy to address: if the panel has some EDID, make the driver
+able to read it; if it doesn't, describe the mode in the DT.
+
+And if you want to be nice to your users, the firmware can even patch
+the DT at boot time to add the necessary bits based on whatever info it
+has, it doesn't have to be static.
+
+Maxime
+
+--uxe4dlurlg6xpvsg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgPo2AAKCRDj7w1vZxhR
+xX2hAQCFBpPUVg+YWCWprMYUwKiTpfSb5woXiIamuO1Ug9hNpgEA+0eOM+pFy8/c
+z2yBO3amcIMYaRuP2KhGeztwlJyv1Qc=
+=fsrj
+-----END PGP SIGNATURE-----
+
+--uxe4dlurlg6xpvsg--

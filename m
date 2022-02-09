@@ -2,82 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3726E4AE744
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3682C4AE733
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 03:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234452AbiBICqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 21:46:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
+        id S234889AbiBICm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 21:42:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244305AbiBICGV (ORCPT
+        with ESMTP id S241649AbiBICiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 21:06:21 -0500
-Received: from relay.hostedemail.com (relay.hostedemail.com [64.99.140.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363EAC06157B
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 18:06:20 -0800 (PST)
-Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay08.hostedemail.com (Postfix) with ESMTP id DEAAE20F12;
-        Wed,  9 Feb 2022 02:06:18 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf10.hostedemail.com (Postfix) with ESMTPA id BEC4042;
-        Wed,  9 Feb 2022 02:06:16 +0000 (UTC)
-Message-ID: <40357c19f7cddcba1b7ef748a07ca9bb6320d823.camel@perches.com>
-Subject: Re: [PATCH] scsi: ibmvfc: replace snprintf with sysfs_emit
-From:   Joe Perches <joe@perches.com>
-To:     davidcomponentone@gmail.com, tyreld@linux.ibm.com
-Cc:     mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Yang Guang <yang.guang5@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Date:   Tue, 08 Feb 2022 18:06:16 -0800
-In-Reply-To: <b4c150c86f539d3bac3fc8885252adb9f24ee48f.1644286482.git.yang.guang5@zte.com.cn>
-References: <b4c150c86f539d3bac3fc8885252adb9f24ee48f.1644286482.git.yang.guang5@zte.com.cn>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: BEC4042
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Stat-Signature: h7dkrnjg4zurbfdrpr6cuuyjaef7g58a
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/GCkXaG8SQhB17CmOLPHUSi45bg1t5q1M=
-X-HE-Tag: 1644372376-298488
+        Tue, 8 Feb 2022 21:38:14 -0500
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2160C061355;
+        Tue,  8 Feb 2022 18:38:13 -0800 (PST)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 680191A0FF0;
+        Wed,  9 Feb 2022 03:38:12 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 2FDD51A0FEB;
+        Wed,  9 Feb 2022 03:38:12 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id C9A77183AC99;
+        Wed,  9 Feb 2022 10:38:10 +0800 (+08)
+From:   Richard Zhu <hongxing.zhu@nxp.com>
+To:     bhelgaas@google.com, shawnguo@kernel.org, l.stach@pengutronix.de
+Cc:     hongxing.zhu@nxp.com, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, linux-imx@nxp.com
+Subject: [PATCH v2] arm64: dts: imx8mq-evk: Add second PCIe port support
+Date:   Wed,  9 Feb 2022 10:06:48 +0800
+Message-Id: <1644372408-5485-1-git-send-email-hongxing.zhu@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-02-09 at 08:43 +0800, davidcomponentone@gmail.com wrote:
-> From: Yang Guang <yang.guang5@zte.com.cn>
-[]
-> diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-[]
-> @@ -3403,7 +3403,7 @@ static ssize_t ibmvfc_show_host_partition_name(struct device *dev,
->  	struct Scsi_Host *shost = class_to_shost(dev);
->  	struct ibmvfc_host *vhost = shost_priv(shost);
->  
-> -	return snprintf(buf, PAGE_SIZE, "%s\n",
-> +	return sysfs_emit(buf, "%s\n",
->  			vhost->login_buf->resp.partition_name);
+Enable the second PCIe port support on i.MX8MQ EVK board.
 
-Rewrap please
+Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/imx8mq-evk.dts | 38 ++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-	return sysfs_emit(buf, "%s\n", vhost->login_buf->resp.partition_name);
-
->  }
->  
-> @@ -3413,7 +3413,7 @@ static ssize_t ibmvfc_show_host_device_name(struct device *dev,
->  	struct Scsi_Host *shost = class_to_shost(dev);
->  	struct ibmvfc_host *vhost = shost_priv(shost);
->  
-> -	return snprintf(buf, PAGE_SIZE, "%s\n",
-> +	return sysfs_emit(buf, "%s\n",
->  			vhost->login_buf->resp.device_name);
-
-etc...
-
+diff --git a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
+index a1b7582f3ecf..06f6e44da4d4 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
+@@ -27,6 +27,17 @@ pcie0_refclk: pcie0-refclk {
+ 		clock-frequency = <100000000>;
+ 	};
+ 
++	reg_pcie1: regulator-pcie {
++		compatible = "regulator-fixed";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_pcie1_reg>;
++		regulator-name = "MPCIE_3V3";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		gpio = <&gpio5 10 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++	};
++
+ 	reg_usdhc2_vmmc: regulator-vsd-3v3 {
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_reg_usdhc2>;
+@@ -327,6 +338,20 @@ &pcie0 {
+ 	status = "okay";
+ };
+ 
++&pcie1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_pcie1>;
++	reset-gpio = <&gpio5 12 GPIO_ACTIVE_LOW>;
++	clocks = <&clk IMX8MQ_CLK_PCIE2_ROOT>,
++		 <&clk IMX8MQ_CLK_PCIE2_AUX>,
++		 <&clk IMX8MQ_CLK_PCIE2_PHY>,
++		 <&pcie0_refclk>;
++	clock-names = "pcie", "pcie_aux", "pcie_phy", "pcie_bus";
++	vpcie-supply = <&reg_pcie1>;
++	vph-supply = <&vgen5_reg>;
++	status = "okay";
++};
++
+ &pgc_gpu {
+ 	power-supply = <&sw1a_reg>;
+ };
+@@ -482,6 +507,19 @@ MX8MQ_IOMUXC_UART4_RXD_GPIO5_IO28		0x16
+ 		>;
+ 	};
+ 
++	pinctrl_pcie1: pcie1grp {
++		fsl,pins = <
++			MX8MQ_IOMUXC_I2C4_SDA_PCIE2_CLKREQ_B		0x76
++			MX8MQ_IOMUXC_ECSPI2_MISO_GPIO5_IO12		0x16
++		>;
++	};
++
++	pinctrl_pcie1_reg: pcie1reggrp {
++		fsl,pins = <
++			MX8MQ_IOMUXC_ECSPI2_SCLK_GPIO5_IO10		0x16
++		>;
++	};
++
+ 	pinctrl_qspi: qspigrp {
+ 		fsl,pins = <
+ 			MX8MQ_IOMUXC_NAND_ALE_QSPI_A_SCLK	0x82
+-- 
+2.25.1
 

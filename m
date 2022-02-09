@@ -2,194 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F69C4AF77A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C144AF5A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237819AbiBIRBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 12:01:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
+        id S236234AbiBIPnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 10:43:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237698AbiBIRA5 (ORCPT
+        with ESMTP id S234255AbiBIPnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 12:00:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 425C6C05CB82
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 09:01:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644426059;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=N3kTVV9G0T5QAqpQwcJtBoAGDXQI3g2qBn7ZlIGXs3M=;
-        b=D9W9Va7zK5jx/3PY5cSFgu+yVaN5KzV/ZgMfGfIVSNLZtCegJ58ijGgsuIp+DzdQz9V0NP
-        N73k9VHz/QigSp6h0CG+u014/Vt8xqcb/34mfUewdTioqk01EkhHWHxyw4+K6zpkYHMOlL
-        5VTCidfKgyxm7TRjdG82ljjBEn0opsY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-304-d-POX9QgMvCtU3wFX26-Cw-1; Wed, 09 Feb 2022 12:00:57 -0500
-X-MC-Unique: d-POX9QgMvCtU3wFX26-Cw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2269818397D4;
-        Wed,  9 Feb 2022 17:00:56 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 998C5708F1;
-        Wed,  9 Feb 2022 17:00:55 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com,
-        seanjc@google.com
-Subject: [PATCH 12/12] KVM: x86: do not unload MMU roots on all role changes
-Date:   Wed,  9 Feb 2022 12:00:20 -0500
-Message-Id: <20220209170020.1775368-13-pbonzini@redhat.com>
-In-Reply-To: <20220209170020.1775368-1-pbonzini@redhat.com>
-References: <20220209170020.1775368-1-pbonzini@redhat.com>
+        Wed, 9 Feb 2022 10:43:32 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9FBC0613CA;
+        Wed,  9 Feb 2022 07:43:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644421415; x=1675957415;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tT0ubbIOHy9IAuW3heCg9dBzqzLkwpWxBVD1B0pmpaQ=;
+  b=BimlXhnafmYZeRAnxWg3H1QUHe49YZWZ8WVj4XUYNhYY0TMlC8la1XUk
+   EewQqP+pJxFgBS8Mt+wQ6JbKaxIZgn2wZVKzFuOTKDIz0X0EDAbZq9qSu
+   Yt4kqx0515UDxcZkouXQn3giJq8Ny1aSsN0wDEw/71tRVY3kVXpRPAYCp
+   6Uz8HdT6h/9aNGBSKueBm/VrTd2xrlhwQpCGQc/Lx+7SejZnx8xXLLWlZ
+   Etb5ibPRyOscZV65RYrdKqTKyYpppmQwn/ewLLUIA+nTCHVWoCuNpSScz
+   +NiygLpxxOEr26fa8E/6F3xoYeuRuAMWomxroLWiiE+bbrDSQDzZd54t8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="249435521"
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="249435521"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 07:43:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
+   d="scan'208";a="541143751"
+Received: from chenyu-dev.sh.intel.com ([10.239.158.61])
+  by orsmga008.jf.intel.com with ESMTP; 09 Feb 2022 07:43:28 -0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     intel-wired-lan@lists.osuosl.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Todd Brandt <todd.e.brandt@intel.com>,
+        Len Brown <len.brown@intel.com>, Chen Yu <yu.c.chen@intel.com>
+Subject: [PATCH] e1000e: Print PHY register address when MDI read/write fails
+Date:   Thu, 10 Feb 2022 07:43:02 +0800
+Message-Id: <20220209234302.50833-1-yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kvm_mmu_reset_context is called on all role changes and right now it
-calls kvm_mmu_unload.  With the legacy MMU this is a relatively cheap
-operation; the previous PGDs remains in the hash table and is picked
-up immediately on the next page fault.  With the TDP MMU, however, the
-roots are thrown away for good and a full rebuild of the page tables is
-necessary, which is many times more expensive.
+There is occasional suspend error from e1000e which blocks the
+system from further suspending:
+[   20.078957] PM: pci_pm_suspend(): e1000e_pm_suspend+0x0/0x780 [e1000e] returns -2
+[   20.078970] PM: dpm_run_callback(): pci_pm_suspend+0x0/0x170 returns -2
+[   20.078974] e1000e 0000:00:1f.6: PM: pci_pm_suspend+0x0/0x170 returned -2 after 371012 usecs
+[   20.078978] e1000e 0000:00:1f.6: PM: failed to suspend async: error -2
+According to the code flow, this might be caused by broken MDI read/write to PHY registers.
+However currently the code does not tell us which register is broken. Thus enhance the debug
+information to print the offender PHY register for easier debugging.
 
-Fortunately, throwing away the roots is not necessary except when
-the manual says a TLB flush is required:
-
-- changing CR0.PG from 1 to 0 (because it flushes the TLB according to
-  the x86 architecture specification)
-
-- changing CPUID (which changes the interpretation of page tables in
-  ways not reflected by the role).
-
-- changing CR4.SMEP from 0 to 1 (not doing so actually breaks access.c!)
-
-Except for these cases, once the MMU has updated the CPU/MMU roles
-and metadata it is enough to force-reload the current value of CR3.
-KVM will look up the cached roots for an entry with the right role and
-PGD, and only if the cache misses a new root will be created.
-
-Measuring with vmexit.flat from kvm-unit-tests shows the following
-improvement:
-
-             TDP         legacy       shadow
-   before    46754       5096         5150
-   after     4879        4875         5006
-
-which is for very small page tables.  The impact is however much larger
-when running as an L1 hypervisor, because the new page tables cause
-extra work for L0 to shadow them.
-
-Reported-by: Brad Spengler <spender@grsecurity.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Reported-by: Todd Brandt <todd.e.brandt@intel.com>
+Signed-off-by: Chen Yu <yu.c.chen@intel.com>
 ---
- arch/x86/kvm/mmu/mmu.c |  7 ++++---
- arch/x86/kvm/x86.c     | 27 ++++++++++++++++++---------
- 2 files changed, 22 insertions(+), 12 deletions(-)
+ drivers/net/ethernet/intel/e1000e/phy.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 38b40ddcaad7..dbd4e98ba426 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -5020,8 +5020,8 @@ EXPORT_SYMBOL_GPL(kvm_init_mmu);
- void kvm_mmu_after_set_cpuid(struct kvm_vcpu *vcpu)
- {
- 	/*
--	 * Invalidate all MMU roles to force them to reinitialize as CPUID
--	 * information is factored into reserved bit calculations.
-+	 * Invalidate all MMU roles and roots to force them to reinitialize,
-+	 * as CPUID information is factored into reserved bit calculations.
- 	 *
- 	 * Correctly handling multiple vCPU models with respect to paging and
- 	 * physical address properties) in a single VM would require tracking
-@@ -5034,6 +5034,7 @@ void kvm_mmu_after_set_cpuid(struct kvm_vcpu *vcpu)
- 	vcpu->arch.root_mmu.mmu_role.ext.valid = 0;
- 	vcpu->arch.guest_mmu.mmu_role.ext.valid = 0;
- 	vcpu->arch.nested_mmu.mmu_role.ext.valid = 0;
-+	kvm_mmu_unload(vcpu);
- 	kvm_mmu_reset_context(vcpu);
- 
- 	/*
-@@ -5045,8 +5046,8 @@ void kvm_mmu_after_set_cpuid(struct kvm_vcpu *vcpu)
- 
- void kvm_mmu_reset_context(struct kvm_vcpu *vcpu)
- {
--	kvm_mmu_unload(vcpu);
- 	kvm_init_mmu(vcpu);
-+	kvm_mmu_new_pgd(vcpu, vcpu->arch.cr3);
- }
- EXPORT_SYMBOL_GPL(kvm_mmu_reset_context);
- 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 0d3646535cc5..97c4f5fc291f 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -873,8 +873,12 @@ void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned lon
- 		kvm_async_pf_hash_reset(vcpu);
+diff --git a/drivers/net/ethernet/intel/e1000e/phy.c b/drivers/net/ethernet/intel/e1000e/phy.c
+index 0f0efee5fc8e..fd07c3679bb1 100644
+--- a/drivers/net/ethernet/intel/e1000e/phy.c
++++ b/drivers/net/ethernet/intel/e1000e/phy.c
+@@ -146,11 +146,11 @@ s32 e1000e_read_phy_reg_mdic(struct e1000_hw *hw, u32 offset, u16 *data)
+ 			break;
  	}
- 
--	if ((cr0 ^ old_cr0) & KVM_MMU_CR0_ROLE_BITS)
-+	if ((cr0 ^ old_cr0) & KVM_MMU_CR0_ROLE_BITS) {
-+		/* Flush the TLB if CR0 is changed 1 -> 0.  */
-+		if ((old_cr0 & X86_CR0_PG) && !(cr0 & X86_CR0_PG))
-+			kvm_mmu_unload(vcpu);
- 		kvm_mmu_reset_context(vcpu);
-+	}
- 
- 	if (((cr0 ^ old_cr0) & X86_CR0_CD) &&
- 	    kvm_arch_has_noncoherent_dma(vcpu->kvm) &&
-@@ -1067,15 +1071,18 @@ void kvm_post_set_cr4(struct kvm_vcpu *vcpu, unsigned long old_cr4, unsigned lon
- 	 * free them all.  KVM_REQ_MMU_RELOAD is fit for the both cases; it
- 	 * is slow, but changing CR4.PCIDE is a rare case.
- 	 *
--	 * If CR4.PGE is changed, the guest TLB must be flushed.
-+	 * Setting SMEP also needs to flush the TLB, in addition to resetting
-+	 * the MMU.
- 	 *
--	 * Note: resetting MMU is a superset of KVM_REQ_MMU_RELOAD and
--	 * KVM_REQ_MMU_RELOAD is a superset of KVM_REQ_TLB_FLUSH_GUEST, hence
--	 * the usage of "else if".
-+	 * If CR4.PGE is changed, the guest TLB must be flushed.  Because
-+	 * the shadow MMU ignores global pages, this bit is not part of
-+	 * KVM_MMU_CR4_ROLE_BITS.
- 	 */
--	if ((cr4 ^ old_cr4) & KVM_MMU_CR4_ROLE_BITS)
-+	if ((cr4 ^ old_cr4) & KVM_MMU_CR4_ROLE_BITS) {
- 		kvm_mmu_reset_context(vcpu);
--	else if ((cr4 ^ old_cr4) & X86_CR4_PCIDE)
-+		if ((cr4 & X86_CR4_SMEP) && !(old_cr4 & X86_CR4_SMEP))
-+			kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
-+	} else if ((cr4 ^ old_cr4) & X86_CR4_PCIDE)
- 		kvm_make_request(KVM_REQ_MMU_RELOAD, vcpu);
- 	else if ((cr4 ^ old_cr4) & X86_CR4_PGE)
- 		kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
-@@ -11329,8 +11336,10 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
- 	 * paging related bits are ignored if paging is disabled, i.e. CR0.WP,
- 	 * CR4, and EFER changes are all irrelevant if CR0.PG was '0'.
- 	 */
--	if (old_cr0 & X86_CR0_PG)
--		kvm_mmu_reset_context(vcpu);
-+	if (old_cr0 & X86_CR0_PG) {
-+		kvm_mmu_unload(vcpu);
-+		kvm_init_mmu(vcpu);
-+	}
- 
- 	/*
- 	 * Intel's SDM states that all TLB entries are flushed on INIT.  AMD's
+ 	if (!(mdic & E1000_MDIC_READY)) {
+-		e_dbg("MDI Read did not complete\n");
++		e_dbg("MDI Read PHY Reg Address %d did not complete\n", offset);
+ 		return -E1000_ERR_PHY;
+ 	}
+ 	if (mdic & E1000_MDIC_ERROR) {
+-		e_dbg("MDI Error\n");
++		e_dbg("MDI Read PHY Reg Address %d Error\n", offset);
+ 		return -E1000_ERR_PHY;
+ 	}
+ 	if (((mdic & E1000_MDIC_REG_MASK) >> E1000_MDIC_REG_SHIFT) != offset) {
+@@ -210,11 +210,11 @@ s32 e1000e_write_phy_reg_mdic(struct e1000_hw *hw, u32 offset, u16 data)
+ 			break;
+ 	}
+ 	if (!(mdic & E1000_MDIC_READY)) {
+-		e_dbg("MDI Write did not complete\n");
++		e_dbg("MDI Write PHY Reg Address %d did not complete\n", offset);
+ 		return -E1000_ERR_PHY;
+ 	}
+ 	if (mdic & E1000_MDIC_ERROR) {
+-		e_dbg("MDI Error\n");
++		e_dbg("MDI Write PHY Red Address %d Error\n", offset);
+ 		return -E1000_ERR_PHY;
+ 	}
+ 	if (((mdic & E1000_MDIC_REG_MASK) >> E1000_MDIC_REG_SHIFT) != offset) {
 -- 
-2.31.1
+2.25.1
 

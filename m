@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DDF4AEB69
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:49:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E64F24AEB08
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239284AbiBIHtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 02:49:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
+        id S237574AbiBIHaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 02:30:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238992AbiBIHs5 (ORCPT
+        with ESMTP id S229925AbiBIHaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 02:48:57 -0500
-X-Greylist: delayed 1206 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 23:48:56 PST
-Received: from mail1.wrs.com (unknown-3-146.windriver.com [147.11.3.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1BAC0613CA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 23:48:56 -0800 (PST)
-Received: from mail.windriver.com (mail.wrs.com [147.11.1.11])
-        by mail1.wrs.com (8.15.2/8.15.2) with ESMTPS id 2197SOgk009635
-        (version=TLSv1.1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Tue, 8 Feb 2022 23:28:24 -0800
-Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.corp.ad.wrs.com [147.11.82.252])
-        by mail.windriver.com (8.15.2/8.15.2) with ESMTPS id 2197SNeJ005157
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 8 Feb 2022 23:28:23 -0800 (PST)
-Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Tue, 8 Feb 2022 23:28:23 -0800
-Received: from pek-lpd-ccm2.wrs.com (128.224.179.210) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
- 15.1.2242.12 via Frontend Transport; Tue, 8 Feb 2022 23:28:20 -0800
-From:   Dongyang Wang <dongyang.wang@windriver.com>
-To:     <manfred@colorfullife.com>
-CC:     <akpm@linux-foundation.org>, <christian.brauner@ubuntu.com>,
-        <dave@stgolabs.net>, <dongyang.wang@windriver.com>,
-        <ebiederm@xmission.com>, <legion@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <varad.gautam@suse.com>
-Subject: Re: [PATCH] To fix the below failure of handling page fault caused by the invalid input from user.
-Date:   Wed, 9 Feb 2022 15:28:20 +0800
-Message-ID: <20220209072820.18238-1-dongyang.wang@windriver.com>
-X-Mailer: git-send-email 2.26.1
-In-Reply-To: <56982041-c7ac-fc68-f5df-12a11d351ed6@colorfullife.com>
-References: <56982041-c7ac-fc68-f5df-12a11d351ed6@colorfullife.com>
+        Wed, 9 Feb 2022 02:30:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E57C0613CB
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 23:30:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09565B81F16
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 07:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFA90C340E7;
+        Wed,  9 Feb 2022 07:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644391819;
+        bh=RXiGHfQUfMek72sc59qczlVrxf0dk4OSwG3q/IG71Lc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XdEBxd+8pVtQF637wjQxd60R9OhkV54fjWDkcCpX+dc89WHuWTFOqS54GH1NJ2VLr
+         P3cIkSzymv0FP0LuZenf+WaZwdDRSYsSgrSYSkOZtdTDEyZfwvXL5x1lUWqrnOegyF
+         +DlcdKMRbha3KJLOEu4Ki2LNL9YOOmuKLLnb2Mil9gn571DDx9bFOET1Hhtd/q06dk
+         Ii9T0hC4luctD3upyI5fVQNouyE5o2Bmza5h0xWB1DZvj6nvAuCrlfhdxN0hTdfQSt
+         jhJwFdAt39XcjWREh37ZC4ETNNwjYid9TDJX9JS2nQDy1ZWgu01Sb5PXjLsJ7exmer
+         LeWjI05R+wS3w==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Karolina Drobnik <karolinadrobnik@gmail.com>, linux-mm@kvack.org
+Cc:     Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org
+Subject: Re: [PATCH v2 00/16] Introduce memblock simulator
+Date:   Wed,  9 Feb 2022 09:30:13 +0200
+Message-Id: <164439164219.933239.11298672957013820702.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1643796665.git.karolinadrobnik@gmail.com>
+References: <cover.1643796665.git.karolinadrobnik@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_FAIL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,63 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Manfred, 
+On Wed, 2 Feb 2022 12:02:59 +0100, Karolina Drobnik wrote:
+> Memblock is a boot time memory allocator, which allows managing memory
+> regions before the actual memory management is initialized. Because it is
+> used so early during the booting process, testing and debugging it is
+> difficult. As memblock has few kernel dependencies, it is possible to
+> simulate its runtime behaviour in userspace after stubbing a couple of
+> structs and functions.
+> 
+> [...]
 
-I'm sorry for the late reply (we have a Chinese Lunar New Year).
+Applied, thanks!
 
->>> On 1/26/22 03:42, Andrew Morton wrote:
->>>> On Tue, 18 Jan 2022 17:19:52 +0800 Dongyang Wang <dongyang.wang@windriver.com> wrote:
->>>>
->>>>> [786058.308965] Unable to handle kernel paging request at virtual address 01000004
->>>>> [786058.316286] pgd = 38a99693
->>>>> [786058.319080] [01000004] *pgd=07800003, *pmd=00000000
->>>>> [786058.324056] Internal error: Oops: 206 [#1] PREEMPT SMP ARM
->>>>> [786058.324100] CPU:  PID: Comm:  Tainted: G         C
->>>>> [786058.324102] Hardware name:
->>>>> [786058.324114] PC is at __copy_to_user_std+0x4c/0x3c4
->>>>> [786058.324120] LR is at store_msg+0xc0/0xe8
->>>>> [786058.324124] pc : [<c0c0587c>]    lr : [<c0871d04>]    psr: 20010013
->>>>> [786058.324126] sp : c3503ec4  ip : 00000000  fp : b4c9a660
->>>>> [786058.324129] r10: c4228dc0  r9 : c3502000  r8 : 00000ffc
->>>>> [786058.324132] r7 : 01000000  r6 : 546d3f8b  r5 : b4911690  r4 : 00000ffc
->>>>> [786058.324134] r3 : 00000000  r2 : 00000f7c  r1 : 01000004  r0 : b4911690
->>>>> [786058.324139] Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment user
->>>>> [786058.324142] Control: 30c5387d  Table: 0edc2040  DAC: 55555555
->>>>> [786058.324145] Process  (pid: , stack limit = 0x25018bdf)
->>> Why is process and pid: empty? Is this some kind of kernel process calling?
->> The pid is 8369, it's a userspace app.
->>
->>>>> [786058.324148] Stack: (0xc3503ec4 to 0xc3504000)
->>>>> [786058.324153] 3ec0:          b4911690 546d3f8b 01000000 00000ffc b4911690 00000ffc 00000000
->>>>> [786058.324157] 3ee0: 00000ffc c0871d04 546d4f73 c3407801 c3503f28 c3407800 00000000 b49106a8
->>>>> [786058.324161] 3f00: c4228dc0 c087abd4 00000002 b49106a8 617b9d03 00000000 00000000 c121d508
->>>>> [786058.324165] 3f20: 00000000 bf06a1a8 d1b634cc 16b26e77 c5af5280 00000100 00000200 db806540
->>>>> [786058.324170] 3f40: 00000001 c121d508 00000008 0000005c 00000000 00010008 b49106a8 c0601208
->>>>> [786058.324173] 3f60: c3502000 00000040 b4c9a660 c087b474 c3503f78 c121d508 617b9d03 00000000
->>>>> [786058.324177] 3f80: 2303d6cc 00000115 c0601208 c121d508 b4c9a660 b4c9a660 00000001 b49106a8
->>>>> [786058.324181] 3fa0: 00000115 c06011dc b4c9a660 00000001 0000005c b49106a8 00010008 00000000
->>>>> [786058.324185] 3fc0: b4c9a660 00000001 b49106a8 00000115 00000000 b4c9b400 00000000 b4c9a660
->>>>> [786058.324189] 3fe0: 00000115 b4c9a650 b6b253bd b6b254b6 800d0030 0000005c 00000000 00000000
->>>>> [786058.324201] [<c0c0587c>] (__copy_to_user_std) from [<c0871d04>] (store_msg+0xc0/0xe8)
->
->I would search here: __copy_to_user_std should fail if the address is 
->invalid.
->
->For whatever reasons, it produces a page fault.
+[01/16] tools: Move gfp.h and slab.h from radix-tree to lib
+        commit: 5a198c3f9b0bf67ede95c1c065b8584b55f3f87a
+[02/16] tools/include: Add phys_addr_t to types.h
+        commit: 4c12918f1086a824082a95f633f501c20ced63a4
+[03/16] tools/include: Add _RET_IP_ and math definitions to kernel.h
+        commit: 826c23e10ee43cc2e65203403e4b606de6388a1f
+[04/16] tools/include: Update atomic definitions
+        commit: 24af9a87ae817400feca949dd4bc94b5779e7481
+[05/16] tools/include: Add mm.h file
+        commit: bad5c52beb213369fa218c88bf2a84e36cf099d9
+[06/16] tools/include: Add cache.h stub
+        commit: f181e1e4009b5a4d52ac7a0870bfa4cb608da71d
+[07/16] tools/include: Add io.h stub
+        commit: e4e9850709f98c6880e289dd6c364ef08a856dea
+[08/16] tools/include: Add pfn.h stub
+        commit: e97362caf658718a63ff08fd557299c583b1f953
+[09/16] tools/include: Add debugfs.h stub
+        commit: ab1f3ebd520caae193725043c70f5762f197241f
+[10/16] memblock tests: Add skeleton of the memblock simulator
+        commit: 46ad27eef5220e3cda0fe263e8a9f785896f7aec
+[11/16] memblock tests: Add memblock reset function
+        commit: d047055e609e23190c4d46899816dc32a6cc297b
+[12/16] memblock tests: Add memblock_add tests
+        commit: c294f4708f0116a0e5a9695a471a0cafd05d2899
+[13/16] memblock tests: Add memblock_reserve tests
+        commit: 7ee605ba936534c001c2b4b0b6f5f925d86fef6b
+[14/16] memblock tests: Add memblock_remove tests
+        commit: ed7b7402f9c9f37fd29267ee3c9a6a3eca8871c0
+[15/16] memblock tests: Add memblock_add_node test
+        commit: be95b2fb44340a00065f3153d75ab6c797c23740
+[16/16] memblock tests: Add memblock_free tests
+        commit: 5b3408a4e5ff7609cc5b06da255b973ca0ab66d1
 
-Totally agree with you. 
-
->First: Is this reproducible? Does it fail immediately if you pass an 
->invalid value to mq_timedreceive()?
-
-This crash info is from another team. It can't be reproduced until now.
-Yesterday, I changed the 'u_msg_ptr' and 'msg_ptr->m_ts' to a wrong value, but don't cause crash. 
-I will watch this part. 
-
->https://elixir.bootlin.com/linux/v4.18.20/source/arch/arm/include/asm/uaccess.h#L464
->
->It seems ARM has special optimizations (CONFIG_UACCESS_WITH_MEMCPY), and 
->I cannot see if this is MMU or NO_MMU
-
-This is MMU. 
+Best regards,
+-- 
+Sincerely yours,
+Mike.
 

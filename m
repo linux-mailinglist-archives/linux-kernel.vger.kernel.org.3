@@ -2,71 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7607F4AF0ED
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A5224AF0FD
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232371AbiBIMIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 07:08:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
+        id S232492AbiBIMJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 07:09:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbiBIMGF (ORCPT
+        with ESMTP id S233392AbiBIMGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 07:06:05 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378BAC050CD3;
-        Wed,  9 Feb 2022 03:27:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1644406056; x=1675942056;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NGSesQuO1TkFrdjGkmTfRB4zx9VGkoV76GOJi87bu3w=;
-  b=SbMdbxq3z6EL8Tk3Xe/a7bv0Q372DpLAi1gmqjbTAGmRgi132iw14nWb
-   SJFiNI/BE0km24lK8O1ZjbAUXiDauQx4nNndLBJddpIlUZC0dE8N1Bb4m
-   t48l8Zrt0nxLnFdkqAVp7Zz4wIFjSJo+e/A5/PsSX+4GWgFQej6+OS2OP
-   je3etDl3QL4VNsZxzHI51vALJ7hVLA8Ac8J218Uujo73ZOefEK8DiF4AC
-   2nFaW8bCJc4o0Yg1Skm91JxYRdP0jkYw9yOJhAkV6fYgOAYK7PjHcbjhZ
-   ltiHB9mK6t1SiN2Q0jbze9+ifNX0DcqYR7EQtvoisJOgOTrDhPvwVWxoN
-   Q==;
-IronPort-SDR: WNfa+KzMaWtRn8hVQr/2q7GiBtU5X1zazxQ0MAgYKPWi68L6mUnGLSM61ZDRp7ddv0kVtvAq1H
- A6bQSD5u8GP4UtrUzfRcUAzjTxILBu1TtZTlfOBWF0XwXFqubJ9ZsNhRdDCpj6so7nemB24YuM
- NWpsXkqF6zDDOtML6JgTGfMDCQHi6Zh7JGOXVhN8zcEDm1jdgAsjmOApLs6j157lf9H0gRpkQz
- xP18rQvCOsgFF8qABQmT4dlNt3YJRZzkTKsA1ZVi0iTCYWehdn/E7QoRUiWSUvCxXZtMUQ+0JV
- QGAY4omMKXNCDVDyy3WGjYLv
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="148122096"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Feb 2022 04:27:34 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 9 Feb 2022 04:27:34 -0700
-Received: from CHE-LT-I21427LX.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 9 Feb 2022 04:27:29 -0700
-Message-ID: <2762670649daca77a367aaee44b6669142ce0f6d.camel@microchip.com>
-Subject: Re: [PATCH v8 net-next 03/10] net: phy: Add support for LAN937x T1
- phy driver
-From:   Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     <netdev@vger.kernel.org>, <olteanv@gmail.com>,
-        <robh+dt@kernel.org>, <UNGLinuxDriver@microchip.com>,
-        <woojung.huh@microchip.com>, <hkallweit1@gmail.com>,
-        <linux@armlinux.org.uk>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <vivien.didelot@gmail.com>,
-        <f.fainelli@gmail.com>, <devicetree@vger.kernel.org>
-Date:   Wed, 9 Feb 2022 16:57:27 +0530
-In-Reply-To: <YgJre2C9jpfMCXSZ@lunn.ch>
-References: <20220207172204.589190-1-prasanna.vengateshan@microchip.com>
-         <20220207172204.589190-4-prasanna.vengateshan@microchip.com>
-         <YgJre2C9jpfMCXSZ@lunn.ch>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.0-1 
+        Wed, 9 Feb 2022 07:06:46 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C95E016459;
+        Wed,  9 Feb 2022 03:12:24 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Jtxy26drJz9sYG;
+        Wed,  9 Feb 2022 19:10:50 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by canpemm500010.china.huawei.com
+ (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 9 Feb
+ 2022 19:12:22 +0800
+From:   Ye Bin <yebin10@huawei.com>
+To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
+        <lczerner@redhat.com>, Ye Bin <yebin10@huawei.com>
+Subject: [PATCH -next] ext4:fix file system corrupted when rmdir non empty directory with IO error
+Date:   Wed, 9 Feb 2022 19:28:19 +0800
+Message-ID: <20220209112819.3072220-1-yebin10@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,40 +47,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-02-08 at 14:09 +0100, Andrew Lunn wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the
-> content is safe
-> 
-> On Mon, Feb 07, 2022 at 10:51:57PM +0530, Prasanna Vengateshan wrote:
-> > Added support for Microchip LAN937x T1 phy driver. The sequence of
-> > initialization is used commonly for both LAN87xx and LAN937x
-> > drivers. The new initialization sequence is an improvement to
-> > existing LAN87xx and it is shared with LAN937x.
-> > 
-> > Also relevant comments are added in the existing code and existing
-> > soft-reset customized code has been replaced with
-> > genphy_soft_reset().
-> > 
-> > access_ereg_clr_poll_timeout() API is introduced for polling phy
-> > bank write and this is linked with PHYACC_ATTR_MODE_POLL.
-> > 
-> > Finally introduced function table for LAN937X_T1_PHY_ID along with
-> > microchip_t1_phy_driver struct.
-> 
-> Hi Prasanna
-> 
-> That is a lot of changes in one patch.
-> 
-> I would suggest you make this a patch series of its own. It should be
-> independent of the switch changes. And then you can break this patch
-> up into a number of smaller patches.
-> 
-> Thanks
->         Andrew
+We inject IO error when rmdir non empty direcory, then got issue as follows:
+step1: mkfs.ext4 -F /dev/sda
+step2: mount /dev/sda  test
+step3: cd test
+step4: mkdir -p 1/2
+step5: rmdir 1
+	[  110.920551] ext4_empty_dir: inject fault
+	[  110.921926] EXT4-fs warning (device sda): ext4_rmdir:3113: inode #12:
+	comm rmdir: empty directory '1' has too many links (3)
+step6: cd ..
+step7: umount test
+step8: fsck.ext4 -f /dev/sda
+	e2fsck 1.42.9 (28-Dec-2013)
+	Pass 1: Checking inodes, blocks, and sizes
+	Pass 2: Checking directory structure
+	Entry '..' in .../??? (13) has deleted/unused inode 12.  Clear<y>? yes
+	Pass 3: Checking directory connectivity
+	Unconnected directory inode 13 (...)
+	Connect to /lost+found<y>? yes
+	Pass 4: Checking reference counts
+	Inode 13 ref count is 3, should be 2.  Fix<y>? yes
+	Pass 5: Checking group summary information
 
-Sure, i will submit as a seperate patch series and i will remove from this
-patch. Thanks.
+	/dev/sda: ***** FILE SYSTEM WAS MODIFIED *****
+	/dev/sda: 12/131072 files (0.0% non-contiguous), 26157/524288 blocks
 
-Prasanna V
+ext4_rmdir
+	if (!ext4_empty_dir(inode))
+		goto end_rmdir;
+ext4_empty_dir
+	bh = ext4_read_dirblock(inode, 0, DIRENT_HTREE);
+	if (IS_ERR(bh))
+		return true;
+Now if read directory block failed, 'ext4_empty_dir' will return true, assume
+directory is empty. Obviously, it will lead to above issue.
+To solve this issue, if read directory block failed 'ext4_empty_dir' just
+return false. To avoid making things worse when file system is already
+corrupted, 'ext4_empty_dir' also return false.
 
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ fs/ext4/inline.c |  9 ++++-----
+ fs/ext4/namei.c  | 10 +++++-----
+ 2 files changed, 9 insertions(+), 10 deletions(-)
+
+diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
+index e42941803605..9c076262770d 100644
+--- a/fs/ext4/inline.c
++++ b/fs/ext4/inline.c
+@@ -1783,19 +1783,20 @@ bool empty_inline_dir(struct inode *dir, int *has_inline_data)
+ 	void *inline_pos;
+ 	unsigned int offset;
+ 	struct ext4_dir_entry_2 *de;
+-	bool ret = true;
++	bool ret = false;
+ 
+ 	err = ext4_get_inode_loc(dir, &iloc);
+ 	if (err) {
+ 		EXT4_ERROR_INODE_ERR(dir, -err,
+ 				     "error %d getting inode %lu block",
+ 				     err, dir->i_ino);
+-		return true;
++		return false;
+ 	}
+ 
+ 	down_read(&EXT4_I(dir)->xattr_sem);
+ 	if (!ext4_has_inline_data(dir)) {
+ 		*has_inline_data = 0;
++		ret = true;
+ 		goto out;
+ 	}
+ 
+@@ -1804,7 +1805,6 @@ bool empty_inline_dir(struct inode *dir, int *has_inline_data)
+ 		ext4_warning(dir->i_sb,
+ 			     "bad inline directory (dir #%lu) - no `..'",
+ 			     dir->i_ino);
+-		ret = true;
+ 		goto out;
+ 	}
+ 
+@@ -1823,16 +1823,15 @@ bool empty_inline_dir(struct inode *dir, int *has_inline_data)
+ 				     dir->i_ino, le32_to_cpu(de->inode),
+ 				     le16_to_cpu(de->rec_len), de->name_len,
+ 				     inline_size);
+-			ret = true;
+ 			goto out;
+ 		}
+ 		if (le32_to_cpu(de->inode)) {
+-			ret = false;
+ 			goto out;
+ 		}
+ 		offset += ext4_rec_len_from_disk(de->rec_len, inline_size);
+ 	}
+ 
++	ret = true;
+ out:
+ 	up_read(&EXT4_I(dir)->xattr_sem);
+ 	brelse(iloc.bh);
+diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
+index 8cf0a924a49b..39e223f7bf64 100644
+--- a/fs/ext4/namei.c
++++ b/fs/ext4/namei.c
+@@ -2997,14 +2997,14 @@ bool ext4_empty_dir(struct inode *inode)
+ 	if (inode->i_size < ext4_dir_rec_len(1, NULL) +
+ 					ext4_dir_rec_len(2, NULL)) {
+ 		EXT4_ERROR_INODE(inode, "invalid size");
+-		return true;
++		return false;
+ 	}
+ 	/* The first directory block must not be a hole,
+ 	 * so treat it as DIRENT_HTREE
+ 	 */
+ 	bh = ext4_read_dirblock(inode, 0, DIRENT_HTREE);
+ 	if (IS_ERR(bh))
+-		return true;
++		return false;
+ 
+ 	de = (struct ext4_dir_entry_2 *) bh->b_data;
+ 	if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data, bh->b_size,
+@@ -3012,7 +3012,7 @@ bool ext4_empty_dir(struct inode *inode)
+ 	    le32_to_cpu(de->inode) != inode->i_ino || strcmp(".", de->name)) {
+ 		ext4_warning_inode(inode, "directory missing '.'");
+ 		brelse(bh);
+-		return true;
++		return false;
+ 	}
+ 	offset = ext4_rec_len_from_disk(de->rec_len, sb->s_blocksize);
+ 	de = ext4_next_entry(de, sb->s_blocksize);
+@@ -3021,7 +3021,7 @@ bool ext4_empty_dir(struct inode *inode)
+ 	    le32_to_cpu(de->inode) == 0 || strcmp("..", de->name)) {
+ 		ext4_warning_inode(inode, "directory missing '..'");
+ 		brelse(bh);
+-		return true;
++		return false;
+ 	}
+ 	offset += ext4_rec_len_from_disk(de->rec_len, sb->s_blocksize);
+ 	while (offset < inode->i_size) {
+@@ -3035,7 +3035,7 @@ bool ext4_empty_dir(struct inode *inode)
+ 				continue;
+ 			}
+ 			if (IS_ERR(bh))
+-				return true;
++				return false;
+ 		}
+ 		de = (struct ext4_dir_entry_2 *) (bh->b_data +
+ 					(offset & (sb->s_blocksize - 1)));
+-- 
+2.31.1
 

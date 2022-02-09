@@ -2,112 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FED4AF370
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A15454AF373
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234602AbiBIN4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 08:56:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
+        id S234581AbiBIN7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 08:59:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234583AbiBIN4h (ORCPT
+        with ESMTP id S233068AbiBIN7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 08:56:37 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76BCC05CB8F
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 05:56:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644415000; x=1675951000;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xBjttyyMrZXC5nplVL/cvGF1ir/hZw4ovvvgsddLC8c=;
-  b=TWzrxNwBItv0MOyW/dxUEuuRpMn79gtnEChEWXoHl17ooT6vlzZTfUT7
-   L+todNecLU6lpnPXpGBLnjeGhysODDdtO93e+JrWjE/u2U6ga6iiVl8No
-   e0y1c3Dw7SmTpIQEF5UQ+yOItVjKDZZrZAcrXBgTZ+NsIuy/fnqwqoLqq
-   ItbyVqwiIPOIZpsKRuGQJTduI3u39CO2T5iKfSg9aXwtJmVc1iWtNu04z
-   m28qQBEjVJ0Km+XJ3T/mdJby+r/hhKTzCKP8lb4Xfopd0e2gVg5dqWRYT
-   pFJ1I1evpph+mDxRR+sAzC9lZcHnZqASgA7kmzdT4dfx3e56YcNs4FKrm
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="248967106"
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="248967106"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 05:56:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="678596354"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 09 Feb 2022 05:56:36 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 09 Feb 2022 15:56:36 +0200
-Date:   Wed, 9 Feb 2022 15:56:36 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     syzbot <syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com>,
-        andriy.shevchenko@linux.intel.com, dri-devel@lists.freedesktop.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        rafael.j.wysocki@intel.com, rafael@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in component_del
-Message-ID: <YgPIFEJydBdOh/U5@kuha.fi.intel.com>
-References: <00000000000016f4ae05d5cec832@google.com>
- <000000000000a17f2305d77f4cb7@google.com>
- <YgPEtCGDlSrqa1fK@kuha.fi.intel.com>
- <250ce1c2-95bf-3067-7bd6-5655038c5e69@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <250ce1c2-95bf-3067-7bd6-5655038c5e69@gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 9 Feb 2022 08:59:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38E5C0613CA;
+        Wed,  9 Feb 2022 05:59:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76692B8219F;
+        Wed,  9 Feb 2022 13:59:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 034D7C340E7;
+        Wed,  9 Feb 2022 13:58:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644415140;
+        bh=sJkQVUoc2/03uklegtN+hrM5vjJewF0M3/NXHviuqmI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Syopwlp82ic3kwAeQKy+qsXtcjV8W7MVG1MoDIUwjD9l4ipwGR1thrRH76v2t3DE3
+         6Z3Mr2rq0Kg3XdjDREmcsVIkNuHWmCHGUBTFb1BWSOyGqk5LoLvSIrza/Kq3mMakMl
+         WekrQxHSZCE9djwbXJRdWXxREfy3kx2zDAe5DD/ThK3U7aiuPVdDpp7KgXN03um03J
+         e0VzTpw4dFMAe+KKz8eJ5P1/+ETGqKGhfscu/ZIQs2hikZWsDIcjB7g8h8uDY+4DH1
+         Hb0dYfn4Gy6L+USOaej9IOTfdqAZXkHUXphgbO80wBBFEPsDQYK6zF4dFBMYz5RARO
+         qXjAAQzl/QKaw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nHnUn-006dYK-Um; Wed, 09 Feb 2022 13:58:58 +0000
+Date:   Wed, 09 Feb 2022 13:58:57 +0000
+Message-ID: <874k585efy.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Birger Koblitz <mail@birger-koblitz.de>,
+        Bert Vermeulen <bert@biot.com>,
+        John Crispin <john@phrozen.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/3] Per-parent domains for realtek-rtl IRQ driver
+In-Reply-To: <cover.1644165421.git.sander@svanheule.net>
+References: <cover.1644165421.git.sander@svanheule.net>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sander@svanheule.net, robh+dt@kernel.org, devicetree@vger.kernel.org, tglx@linutronix.de, mail@birger-koblitz.de, bert@biot.com, john@phrozen.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 04:51:44PM +0300, Pavel Skripkin wrote:
-> Hi Heikki,
+On Sun, 06 Feb 2022 16:41:50 +0000,
+Sander Vanheule <sander@svanheule.net> wrote:
 > 
-> On 2/9/22 16:42, Heikki Krogerus wrote:
-> > On Tue, Feb 08, 2022 at 02:37:10AM -0800, syzbot wrote:
-> > > syzbot has bisected this issue to:
-> > > 
-> > > commit 8c67d06f3fd9639c44d8147483fb1c132d71388f
-> > > Author: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > Date:   Thu Dec 23 08:23:49 2021 +0000
-> > > 
-> > >     usb: Link the ports to the connectors they are attached to
-> > > 
-> > > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14063168700000
-> > > start commit:   555f3d7be91a Merge tag '5.17-rc3-ksmbd-server-fixes' of gi..
-> > > git tree:       upstream
-> > > final oops:     https://syzkaller.appspot.com/x/report.txt?x=16063168700000
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=12063168700000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=266de9da75c71a45
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=60df062e1c41940cae0f
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15880d84700000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14de0c77b00000
-> > > 
-> > > Reported-by: syzbot+60df062e1c41940cae0f@syzkaller.appspotmail.com
-> > > Fixes: 8c67d06f3fd9 ("usb: Link the ports to the connectors they are attached to")
-> > > 
-> > > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> > 
-> > I'm guessing the component_add() is failing in this case. So I guess
-> > we need to consider the component_add() failures fatal in
-> > drivers/usb/core/port.c, which is a bit of a bummer. I'll send the
-> > fix.
-> > 
+> The original implementation for this interrupt controller/router used
+> an interrupt-map parser to determine which parent interrupts were
+> present. However, this controller is not transparent, so a list of
+> parent interrupts seems more appropriate, while also getting rid of the
+> assumed routing to parent interrupts.
 > 
-> Seems something similar to your approach is already posted
-> 
-> https://lore.kernel.org/linux-usb/20220208170048.24718-1-fmdefrancesco@gmail.com/
+> Additionally, N real cascaded interrupts are implemented, instead of
+> handling all input interrupts with one cascaded interrupt. Otherwise it
+> is possible that the priority of the parent interrupts is not respected.
 
-Ah, thanks! That one seems to leave the peer links, so it's broken...
+Just to be clear: this means that although you allow the new driver to
+somehow still work with the old DT, the opposite (old kernel, new DT)
+will probably fail horribly.
 
-Br,
+Is everyone comfortable with that?
+
+	M.
 
 -- 
-heikki
+Without deviation from the norm, progress is not possible.

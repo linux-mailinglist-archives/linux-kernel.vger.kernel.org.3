@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075704B00C3
+	by mail.lfdr.de (Postfix) with ESMTP id A4B464B00C5
 	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:56:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236613AbiBIW4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 17:56:11 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34634 "EHLO
+        id S236689AbiBIW4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 17:56:20 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236601AbiBIWz6 (ORCPT
+        with ESMTP id S236608AbiBIWz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 17:55:58 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F086EE02DFE0
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:56:00 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id a39so6124087pfx.7
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 14:56:00 -0800 (PST)
+        Wed, 9 Feb 2022 17:55:59 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33694E04FF04
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:56:02 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id x4so244561plb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 14:56:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TjRtwSXYHT5J47hsI/ryAldat2t/W6F5BVRXjX1zG4I=;
-        b=S8ayzEPzEtYa8moDFXfC5C9hlSd1+d4HElt98EDjUdrQMY0x4pTh4BvrRDMu8WeILJ
-         vZz83GHpbzw6tUXghx4cgWIaPd6aikMYFxi4VCyv7EMDMGRYQ6wn42T5FvPAzovqqrGy
-         t0aogamTN1jwHzFYYZ/jziSyd5gC6MFv1lCPI=
+        bh=OD3ScagW/UVEvAgXcoCt88MegSsPUonQOP/whnuiG6c=;
+        b=IdqQVxvkIDlWqFoR5ZkdpFlMKtj+Rwf9Ot9GDH2GxmjZ5Lt8AtA5Z5hsfTb/QXFmGm
+         X5Fk4Mi8YKk4mpkvl9DPcDgkofoO7HgW8+JxfmhuA1Z02HU0/DGFIHTYu8s/p+vGuXYq
+         OqObv8659R8SbEDzlNM4BHGOjPxoU3PsDeoAQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TjRtwSXYHT5J47hsI/ryAldat2t/W6F5BVRXjX1zG4I=;
-        b=iGVUv0CSAhlR0ZtNtepCG7fuHyiODAWbgvioaYgwayepHLfAh5MmqOnglgv+MHtFnj
-         aRkpo4M75JZhY21VU90ymth4NB9aFzoTqQv6do8XBD6UtQzvCMbXN4YILGhyULYEh4h+
-         xXSUX2REWZ0CJpMEx+8luRBXxnKoRORou92eDR2gkcKU9MDRdvT7b5BjwrL5WlAEqNwf
-         Qd+iLm79S5G574PiNg9rfc0l1lZc26djwSd/wFA4mGPHPJTQzsw769IOoCvzVVn1W6P3
-         APEeduN0oujnGFFeshRHgdwLl5YiSHKY4qr1yt0xNu7jgiSX/dMLK4v+IJyvqep/5pnE
-         yH4w==
-X-Gm-Message-State: AOAM530C1EMan3L2WrjlHbsneIw8EPnM6/ZPZ4QZCvonvievP8C8SxFj
-        /yTaPooYlqQiHvnjCojg8HepUw==
-X-Google-Smtp-Source: ABdhPJzlczzJXAoqqeQHVXEAH4hmaGVofYXiSwhhxdBTObEOFkBGFBVJuyiqJZbOB7T6gNYpWdA61Q==
-X-Received: by 2002:a05:6a00:1789:: with SMTP id s9mr4614478pfg.71.1644447360427;
-        Wed, 09 Feb 2022 14:56:00 -0800 (PST)
+        bh=OD3ScagW/UVEvAgXcoCt88MegSsPUonQOP/whnuiG6c=;
+        b=Mt+ctkj+9JuDT4QabMMBxy2GT8GzRdn/fcWZcDVBt3816QF3aevazeTXnDs1FOENt5
+         JhwOle6ROGjy2Z6u/hKu+8XyNjs0AA0WNALWzIOlCrDhISq3y8tmvuOG0dGsixaj7Ucw
+         MnQV/irk/slm7e46AyDMMxVuIDGzrNXQ55m+0eNxNlxK+/bp1r0UPyQWX87gDCNLvFcF
+         LdwXDCU7XG0FNxMIeqliMIqByDzlweqcUulDJNTBbV2Fp4eC5zDNLh+wz1gYEY6jbjOF
+         PaNO8KTGtTcu6cimQcd98FIYdI4AurZtXvfUfxLnOQq6pWruRYr0Mt6sYW/1b8DVKzx8
+         dHkg==
+X-Gm-Message-State: AOAM5328q+wkr+PAI88JP7V4MNDJJHBpsv3iVqjk9KyAj75H4pga2KCi
+        uNxhnsPwM2G81Pq+pQxEprSgsw==
+X-Google-Smtp-Source: ABdhPJy/n7z7OnxkklzAPapMuR6v5FKtUfoFTwrSu2jJqxkQSYKA6+VsygyAUOuGgNnuZMn/TUwwoA==
+X-Received: by 2002:a17:903:41c6:: with SMTP id u6mr4349471ple.74.1644447361711;
+        Wed, 09 Feb 2022 14:56:01 -0800 (PST)
 Received: from smtp.gmail.com ([2620:15c:202:201:5193:6865:e38e:3a5b])
-        by smtp.gmail.com with ESMTPSA id b1sm5982015pgb.66.2022.02.09.14.55.59
+        by smtp.gmail.com with ESMTPSA id b1sm5982015pgb.66.2022.02.09.14.56.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 14:56:00 -0800 (PST)
+        Wed, 09 Feb 2022 14:56:01 -0800 (PST)
 From:   Stephen Boyd <swboyd@chromium.org>
 To:     benjamin.tissoires@redhat.com,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
@@ -53,9 +53,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
         "Sean O'Brien" <seobrien@chromium.org>,
         Douglas Anderson <dianders@chromium.org>,
         Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
-Subject: [PATCH v2 2/5] Input: Extract ChromeOS vivaldi physmap show function
-Date:   Wed,  9 Feb 2022 14:55:53 -0800
-Message-Id: <20220209225556.3992827-3-swboyd@chromium.org>
+Subject: [PATCH v2 3/5] HID: Extract vivaldi hid feature mapping for use in hid-hammer
+Date:   Wed,  9 Feb 2022 14:55:54 -0800
+Message-Id: <20220209225556.3992827-4-swboyd@chromium.org>
 X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
 In-Reply-To: <20220209225556.3992827-1-swboyd@chromium.org>
 References: <20220209225556.3992827-1-swboyd@chromium.org>
@@ -63,7 +63,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,25 +71,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's introduce a common library file for the physmap show function
-duplicated between three different keyboard drivers. This largely copies
-the code from cros_ec_keyb.c which has the most recent version of the
-show function, while using the vivaldi_data struct from the hid-vivaldi
-driver. This saves a small amount of space in an allyesconfig build.
-
-$ ./scripts/bloat-o-meter vmlinux.before vmlinux.after
-
-add/remove: 3/0 grow/shrink: 2/3 up/down: 412/-720 (-308)
-Function                                     old     new   delta
-vivaldi_function_row_physmap_show              -     292    +292
-_sub_I_65535_1                           1057564 1057616     +52
-_sub_D_65535_0                           1057564 1057616     +52
-e843419@49f2_00062737_9b04                     -       8      +8
-e843419@20f6_0002a34d_35bc                     -       8      +8
-atkbd_parse_fwnode_data                      480     472      -8
-atkbd_do_show_function_row_physmap           316      76    -240
-function_row_physmap_show                    620     148    -472
-Total: Before=285581925, After=285581617, chg -0.00%
+We need to support parsing the HID device in both the vivaldi and the
+hammer drivers so that we can properly expose the function row physmap
+to userspace when a hammer device uses a vivaldi keyboard layout for the
+function row keys. Extract the feature mapping logic from the vivaldi
+driver into an hid specific vivaldi library so we can use it from both
+HID drivers.
 
 Cc: Jiri Kosina <jikos@kernel.org>
 Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
@@ -98,376 +85,269 @@ Cc: Douglas Anderson <dianders@chromium.org>
 Cc: Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
 Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 ---
- drivers/hid/Kconfig                   |  1 +
- drivers/hid/hid-vivaldi.c             | 27 +++++--------------
- drivers/input/Kconfig                 |  7 +++++
- drivers/input/Makefile                |  1 +
- drivers/input/keyboard/Kconfig        |  2 ++
- drivers/input/keyboard/atkbd.c        | 22 +++++----------
- drivers/input/keyboard/cros_ec_keyb.c | 30 +++++++--------------
- drivers/input/vivaldi-keymap.c        | 39 +++++++++++++++++++++++++++
- include/linux/input/vivaldi-keymap.h  | 28 +++++++++++++++++++
- 9 files changed, 101 insertions(+), 56 deletions(-)
- create mode 100644 drivers/input/vivaldi-keymap.c
- create mode 100644 include/linux/input/vivaldi-keymap.h
+ drivers/hid/Kconfig                  |  9 +++
+ drivers/hid/Makefile                 |  1 +
+ drivers/hid/hid-vivaldi-common.c     | 97 ++++++++++++++++++++++++++++
+ drivers/hid/hid-vivaldi.c            | 69 +-------------------
+ include/linux/input/vivaldi-keymap.h |  9 +++
+ 5 files changed, 118 insertions(+), 67 deletions(-)
+ create mode 100644 drivers/hid/hid-vivaldi-common.c
 
 diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index f5544157576c..5569a2029dab 100644
+index 5569a2029dab..ea8fa71c9e9c 100644
 --- a/drivers/hid/Kconfig
 +++ b/drivers/hid/Kconfig
-@@ -411,6 +411,7 @@ config HID_GOOGLE_HAMMER
+@@ -403,14 +403,23 @@ config HOLTEK_FF
+ 	  Say Y here if you have a Holtek On Line Grip based game controller
+ 	  and want to have force feedback support for it.
+ 
++config HID_VIVALDI_COMMON
++	tristate
++	help
++	  ChromeOS Vivaldi HID parsing support library. This is a hidden
++	  option so that drivers can use common code to parse the HID
++	  descriptors for vivaldi function row keymap.
++
+ config HID_GOOGLE_HAMMER
+ 	tristate "Google Hammer Keyboard"
++	select HID_VIVALDI_COMMON
+ 	depends on USB_HID && LEDS_CLASS && CROS_EC
+ 	help
+ 	Say Y here if you have a Google Hammer device.
  
  config HID_VIVALDI
  	tristate "Vivaldi Keyboard"
-+	select INPUT_VIVALDIFMAP
++	select HID_VIVALDI_COMMON
+ 	select INPUT_VIVALDIFMAP
  	depends on HID
  	help
- 	  Say Y here if you want to enable support for Vivaldi keyboards.
-diff --git a/drivers/hid/hid-vivaldi.c b/drivers/hid/hid-vivaldi.c
-index efa6140915f4..78ae3725bc89 100644
---- a/drivers/hid/hid-vivaldi.c
-+++ b/drivers/hid/hid-vivaldi.c
-@@ -8,37 +8,22 @@
- 
- #include <linux/device.h>
- #include <linux/hid.h>
-+#include <linux/input/vivaldi-keymap.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/sysfs.h>
- 
--#define MIN_FN_ROW_KEY	1
--#define MAX_FN_ROW_KEY	24
- #define HID_VD_FN_ROW_PHYSMAP 0x00000001
- #define HID_USAGE_FN_ROW_PHYSMAP (HID_UP_GOOGLEVENDOR | HID_VD_FN_ROW_PHYSMAP)
- 
--struct vivaldi_data {
--	u32 function_row_physmap[MAX_FN_ROW_KEY - MIN_FN_ROW_KEY + 1];
--	int max_function_row_key;
--};
--
- static ssize_t function_row_physmap_show(struct device *dev,
- 					 struct device_attribute *attr,
- 					 char *buf)
- {
- 	struct hid_device *hdev = to_hid_device(dev);
- 	struct vivaldi_data *drvdata = hid_get_drvdata(hdev);
--	ssize_t size = 0;
--	int i;
--
--	if (!drvdata->max_function_row_key)
--		return 0;
- 
--	for (i = 0; i < drvdata->max_function_row_key; i++)
--		size += sprintf(buf + size, "%02X ",
--				drvdata->function_row_physmap[i]);
--	size += sprintf(buf + size, "\n");
--	return size;
-+	return vivaldi_function_row_physmap_show(drvdata, buf);
- }
- 
- static DEVICE_ATTR_RO(function_row_physmap);
-@@ -86,10 +71,10 @@ static void vivaldi_feature_mapping(struct hid_device *hdev,
- 		return;
- 
- 	fn_key = (usage->hid & HID_USAGE);
--	if (fn_key < MIN_FN_ROW_KEY || fn_key > MAX_FN_ROW_KEY)
-+	if (fn_key < VIVALDI_MIN_FN_ROW_KEY || fn_key > VIVALDI_MAX_FN_ROW_KEY)
- 		return;
--	if (fn_key > drvdata->max_function_row_key)
--		drvdata->max_function_row_key = fn_key;
-+	if (fn_key > drvdata->num_function_row_keys)
-+		drvdata->num_function_row_keys = fn_key;
- 
- 	report_data = buf = hid_alloc_report_buf(report, GFP_KERNEL);
- 	if (!report_data)
-@@ -134,7 +119,7 @@ static void vivaldi_feature_mapping(struct hid_device *hdev,
- 		goto out;
- 	}
- 
--	drvdata->function_row_physmap[fn_key - MIN_FN_ROW_KEY] =
-+	drvdata->function_row_physmap[fn_key - VIVALDI_MIN_FN_ROW_KEY] =
- 	    field->value[usage->usage_index];
- 
- out:
-diff --git a/drivers/input/Kconfig b/drivers/input/Kconfig
-index 5baebf62df33..e2752f7364bc 100644
---- a/drivers/input/Kconfig
-+++ b/drivers/input/Kconfig
-@@ -77,6 +77,13 @@ config INPUT_MATRIXKMAP
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called matrix-keymap.
- 
-+config INPUT_VIVALDIFMAP
-+	tristate
-+	help
-+	  ChromeOS Vivaldi keymap support library. This is a hidden
-+	  option so that drivers can use common code to parse and
-+	  expose the vivaldi function row keymap.
-+
- comment "Userland interfaces"
- 
- config INPUT_MOUSEDEV
-diff --git a/drivers/input/Makefile b/drivers/input/Makefile
-index 037cc595106c..ba320cc99393 100644
---- a/drivers/input/Makefile
-+++ b/drivers/input/Makefile
-@@ -12,6 +12,7 @@ input-core-y += touchscreen.o
- obj-$(CONFIG_INPUT_FF_MEMLESS)	+= ff-memless.o
- obj-$(CONFIG_INPUT_SPARSEKMAP)	+= sparse-keymap.o
- obj-$(CONFIG_INPUT_MATRIXKMAP)	+= matrix-keymap.o
-+obj-$(CONFIG_INPUT_VIVALDIFMAP)	+= vivaldi-keymap.o
- 
- obj-$(CONFIG_INPUT_LEDS)	+= input-leds.o
- obj-$(CONFIG_INPUT_MOUSEDEV)	+= mousedev.o
-diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
-index 0c607da9ee10..8b4477e54a01 100644
---- a/drivers/input/keyboard/Kconfig
-+++ b/drivers/input/keyboard/Kconfig
-@@ -103,6 +103,7 @@ config KEYBOARD_ATKBD
- 	select SERIO_LIBPS2
- 	select SERIO_I8042 if ARCH_MIGHT_HAVE_PC_SERIO
- 	select SERIO_GSCPS2 if GSC
-+	select INPUT_VIVALDIFMAP
- 	help
- 	  Say Y here if you want to use a standard AT or PS/2 keyboard. Usually
- 	  you'll need this, unless you have a different type keyboard (USB, ADB
-@@ -749,6 +750,7 @@ config KEYBOARD_XTKBD
- config KEYBOARD_CROS_EC
- 	tristate "ChromeOS EC keyboard"
- 	select INPUT_MATRIXKMAP
-+	select INPUT_VIVALDIFMAP
- 	depends on CROS_EC
- 	help
- 	  Say Y here to enable the matrix keyboard used by ChromeOS devices
-diff --git a/drivers/input/keyboard/atkbd.c b/drivers/input/keyboard/atkbd.c
-index 721cde982637..aa539076c121 100644
---- a/drivers/input/keyboard/atkbd.c
-+++ b/drivers/input/keyboard/atkbd.c
-@@ -19,6 +19,7 @@
- #include <linux/interrupt.h>
- #include <linux/init.h>
- #include <linux/input.h>
-+#include <linux/input/vivaldi-keymap.h>
- #include <linux/serio.h>
- #include <linux/workqueue.h>
- #include <linux/libps2.h>
-@@ -237,8 +238,7 @@ struct atkbd {
- 	/* Serializes reconnect(), attr->set() and event work */
- 	struct mutex mutex;
- 
--	u16 function_row_physmap[MAX_FUNCTION_ROW_KEYS];
--	int num_function_row_keys;
-+	struct vivaldi_data vdata;
- };
- 
- /*
-@@ -308,17 +308,9 @@ static struct attribute *atkbd_attributes[] = {
- 
- static ssize_t atkbd_show_function_row_physmap(struct atkbd *atkbd, char *buf)
- {
--	ssize_t size = 0;
--	int i;
--
--	if (!atkbd->num_function_row_keys)
--		return 0;
-+	const struct vivaldi_data *data = &atkbd->vdata;
- 
--	for (i = 0; i < atkbd->num_function_row_keys; i++)
--		size += scnprintf(buf + size, PAGE_SIZE - size, "%02X ",
--				  atkbd->function_row_physmap[i]);
--	size += scnprintf(buf + size, PAGE_SIZE - size, "\n");
--	return size;
-+	return vivaldi_function_row_physmap_show(data, buf);
- }
- 
- static umode_t atkbd_attr_is_visible(struct kobject *kobj,
-@@ -329,7 +321,7 @@ static umode_t atkbd_attr_is_visible(struct kobject *kobj,
- 	struct atkbd *atkbd = serio_get_drvdata(serio);
- 
- 	if (attr == &atkbd_attr_function_row_physmap.attr &&
--	    !atkbd->num_function_row_keys)
-+	    !atkbd->vdata.num_function_row_keys)
- 		return 0;
- 
- 	return attr->mode;
-@@ -1210,9 +1202,9 @@ static void atkbd_parse_fwnode_data(struct serio *serio)
- 	if (n > 0 && n <= MAX_FUNCTION_ROW_KEYS &&
- 	    !device_property_read_u32_array(dev, "function-row-physmap",
- 					    physmap, n)) {
--		atkbd->num_function_row_keys = n;
-+		atkbd->vdata.num_function_row_keys = n;
- 		for (i = 0; i < n; i++)
--			atkbd->function_row_physmap[i] = physmap[i];
-+			atkbd->vdata.function_row_physmap[i] = physmap[i];
- 		dev_dbg(dev, "FW reported %d function-row key locations\n", n);
- 	}
- }
-diff --git a/drivers/input/keyboard/cros_ec_keyb.c b/drivers/input/keyboard/cros_ec_keyb.c
-index fc02c540636e..ef0f767353fb 100644
---- a/drivers/input/keyboard/cros_ec_keyb.c
-+++ b/drivers/input/keyboard/cros_ec_keyb.c
-@@ -15,6 +15,7 @@
- #include <linux/bitops.h>
- #include <linux/i2c.h>
- #include <linux/input.h>
-+#include <linux/input/vivaldi-keymap.h>
- #include <linux/interrupt.h>
- #include <linux/kernel.h>
- #include <linux/notifier.h>
-@@ -44,9 +45,7 @@
-  * @idev: The input device for the matrix keys.
-  * @bs_idev: The input device for non-matrix buttons and switches (or NULL).
-  * @notifier: interrupt event notifier for transport devices
-- * @function_row_physmap: An array of the encoded rows/columns for the top
-- *                        row function keys, in an order from left to right
-- * @num_function_row_keys: The number of top row keys in a custom keyboard
-+ * @vdata: vivaldi function row data
-  */
- struct cros_ec_keyb {
- 	unsigned int rows;
-@@ -64,8 +63,7 @@ struct cros_ec_keyb {
- 	struct input_dev *bs_idev;
- 	struct notifier_block notifier;
- 
--	u16 function_row_physmap[MAX_NUM_TOP_ROW_KEYS];
--	size_t num_function_row_keys;
-+	struct vivaldi_data vdata;
- };
- 
- /**
-@@ -591,10 +589,10 @@ static int cros_ec_keyb_register_matrix(struct cros_ec_keyb *ckdev)
- 	ckdev->idev = idev;
- 	cros_ec_keyb_compute_valid_keys(ckdev);
- 
--	physmap = ckdev->function_row_physmap;
-+	physmap = ckdev->vdata.function_row_physmap;
- 	of_property_for_each_u32(dev->of_node, "function-row-physmap",
- 				 prop, p, key_pos) {
--		if (ckdev->num_function_row_keys == MAX_NUM_TOP_ROW_KEYS) {
-+		if (ckdev->vdata.num_function_row_keys == MAX_NUM_TOP_ROW_KEYS) {
- 			dev_warn(dev, "Only support up to %d top row keys\n",
- 				 MAX_NUM_TOP_ROW_KEYS);
- 			break;
-@@ -603,7 +601,7 @@ static int cros_ec_keyb_register_matrix(struct cros_ec_keyb *ckdev)
- 		col = KEY_COL(key_pos);
- 		*physmap = MATRIX_SCAN_CODE(row, col, ckdev->row_shift);
- 		physmap++;
--		ckdev->num_function_row_keys++;
-+		ckdev->vdata.num_function_row_keys++;
- 	}
- 
- 	err = input_register_device(ckdev->idev);
-@@ -619,18 +617,10 @@ static ssize_t function_row_physmap_show(struct device *dev,
- 					 struct device_attribute *attr,
- 					 char *buf)
- {
--	ssize_t size = 0;
--	int i;
--	struct cros_ec_keyb *ckdev = dev_get_drvdata(dev);
--	u16 *physmap = ckdev->function_row_physmap;
--
--	for (i = 0; i < ckdev->num_function_row_keys; i++)
--		size += scnprintf(buf + size, PAGE_SIZE - size,
--				  "%s%02X", size ? " " : "", physmap[i]);
--	if (size)
--		size += scnprintf(buf + size, PAGE_SIZE - size, "\n");
-+	const struct cros_ec_keyb *ckdev = dev_get_drvdata(dev);
-+	const struct vivaldi_data *data = &ckdev->vdata;
- 
--	return size;
-+	return vivaldi_function_row_physmap_show(data, buf);
- }
- 
- static DEVICE_ATTR_RO(function_row_physmap);
-@@ -648,7 +638,7 @@ static umode_t cros_ec_keyb_attr_is_visible(struct kobject *kobj,
- 	struct cros_ec_keyb *ckdev = dev_get_drvdata(dev);
- 
- 	if (attr == &dev_attr_function_row_physmap.attr &&
--	    !ckdev->num_function_row_keys)
-+	    !ckdev->vdata.num_function_row_keys)
- 		return 0;
- 
- 	return attr->mode;
-diff --git a/drivers/input/vivaldi-keymap.c b/drivers/input/vivaldi-keymap.c
+diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+index 6d3e630e81af..469a6159ebae 100644
+--- a/drivers/hid/Makefile
++++ b/drivers/hid/Makefile
+@@ -50,6 +50,7 @@ obj-$(CONFIG_HID_FT260)		+= hid-ft260.o
+ obj-$(CONFIG_HID_GEMBIRD)	+= hid-gembird.o
+ obj-$(CONFIG_HID_GFRM)		+= hid-gfrm.o
+ obj-$(CONFIG_HID_GLORIOUS)  += hid-glorious.o
++obj-$(CONFIG_HID_VIVALDI_COMMON) += hid-vivaldi-common.o
+ obj-$(CONFIG_HID_GOOGLE_HAMMER)	+= hid-google-hammer.o
+ obj-$(CONFIG_HID_VIVALDI)	+= hid-vivaldi.o
+ obj-$(CONFIG_HID_GT683R)	+= hid-gt683r.o
+diff --git a/drivers/hid/hid-vivaldi-common.c b/drivers/hid/hid-vivaldi-common.c
 new file mode 100644
-index 000000000000..da6dc4070216
+index 000000000000..c00f11e6530f
 --- /dev/null
-+++ b/drivers/input/vivaldi-keymap.c
-@@ -0,0 +1,39 @@
++++ b/drivers/hid/hid-vivaldi-common.c
+@@ -0,0 +1,97 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Helpers for ChromeOS Vivaldi keyboard function row mapping
++ * Helpers for ChromeOS HID Vivaldi keyboards
 + *
 + * Copyright (C) 2022 Google, Inc
 + */
 +
 +#include <linux/export.h>
++#include <linux/hid.h>
 +#include <linux/input/vivaldi-keymap.h>
 +#include <linux/kernel.h>
 +#include <linux/module.h>
 +#include <linux/types.h>
 +
++#define HID_VD_FN_ROW_PHYSMAP 0x00000001
++#define HID_USAGE_FN_ROW_PHYSMAP (HID_UP_GOOGLEVENDOR | HID_VD_FN_ROW_PHYSMAP)
++
 +/**
-+ * vivaldi_function_row_physmap_show - Print vivaldi function row physmap attribute
++ * vivaldi_hid_feature_mapping - Fill out vivaldi keymap data exposed via HID
 + * @data: The vivaldi function keymap
-+ * @buf: Buffer to print the function row phsymap to
++ * @hdev: HID device to parse
++ * @field: HID field to parse
++ * @usage: HID usage to parse
 + */
-+ssize_t vivaldi_function_row_physmap_show(const struct vivaldi_data *data,
-+					  char *buf)
++void vivaldi_hid_feature_mapping(struct vivaldi_data *data,
++				 struct hid_device *hdev,
++				 struct hid_field *field,
++				 struct hid_usage *usage)
 +{
-+	ssize_t size = 0;
-+	int i;
-+	const u16 *physmap = data->function_row_physmap;
++	struct hid_report *report = field->report;
++	int fn_key;
++	int ret;
++	u32 report_len;
++	u8 *report_data, *buf;
 +
-+	if (!data->num_function_row_keys)
-+		return 0;
++	if (field->logical != HID_USAGE_FN_ROW_PHYSMAP ||
++	    (usage->hid & HID_USAGE_PAGE) != HID_UP_ORDINAL)
++		return;
 +
-+	for (i = 0; i < data->num_function_row_keys; i++)
-+		size += scnprintf(buf + size, PAGE_SIZE - size,
-+				  "%s%02X", size ? " " : "", physmap[i]);
-+	if (size)
-+		size += scnprintf(buf + size, PAGE_SIZE - size, "\n");
++	fn_key = (usage->hid & HID_USAGE);
++	if (fn_key < VIVALDI_MIN_FN_ROW_KEY || fn_key > VIVALDI_MAX_FN_ROW_KEY)
++		return;
++	if (fn_key > data->num_function_row_keys)
++		data->num_function_row_keys = fn_key;
 +
-+	return size;
++	report_data = buf = hid_alloc_report_buf(report, GFP_KERNEL);
++	if (!report_data)
++		return;
++
++	report_len = hid_report_len(report);
++	if (!report->id) {
++		/*
++		 * hid_hw_raw_request() will stuff report ID (which will be 0)
++		 * into the first byte of the buffer even for unnumbered
++		 * reports, so we need to account for this to avoid getting
++		 * -EOVERFLOW in return.
++		 * Note that hid_alloc_report_buf() adds 7 bytes to the size
++		 * so we can safely say that we have space for an extra byte.
++		 */
++		report_len++;
++	}
++
++	ret = hid_hw_raw_request(hdev, report->id, report_data,
++				 report_len, HID_FEATURE_REPORT,
++				 HID_REQ_GET_REPORT);
++	if (ret < 0) {
++		dev_warn(&hdev->dev, "failed to fetch feature %d\n",
++			 field->report->id);
++		goto out;
++	}
++
++	if (!report->id) {
++		/*
++		 * Undo the damage from hid_hw_raw_request() for unnumbered
++		 * reports.
++		 */
++		report_data++;
++		report_len--;
++	}
++
++	ret = hid_report_raw_event(hdev, HID_FEATURE_REPORT, report_data,
++				   report_len, 0);
++	if (ret) {
++		dev_warn(&hdev->dev, "failed to report feature %d\n",
++			 field->report->id);
++		goto out;
++	}
++
++	data->function_row_physmap[fn_key - VIVALDI_MIN_FN_ROW_KEY] =
++	    field->value[usage->usage_index];
++
++out:
++	kfree(buf);
 +}
-+EXPORT_SYMBOL_GPL(vivaldi_function_row_physmap_show);
++EXPORT_SYMBOL_GPL(vivaldi_hid_feature_mapping);
 +
 +MODULE_LICENSE("GPL");
+diff --git a/drivers/hid/hid-vivaldi.c b/drivers/hid/hid-vivaldi.c
+index 78ae3725bc89..361ba6200387 100644
+--- a/drivers/hid/hid-vivaldi.c
++++ b/drivers/hid/hid-vivaldi.c
+@@ -13,9 +13,6 @@
+ #include <linux/module.h>
+ #include <linux/sysfs.h>
+ 
+-#define HID_VD_FN_ROW_PHYSMAP 0x00000001
+-#define HID_USAGE_FN_ROW_PHYSMAP (HID_UP_GOOGLEVENDOR | HID_VD_FN_ROW_PHYSMAP)
+-
+ static ssize_t function_row_physmap_show(struct device *dev,
+ 					 struct device_attribute *attr,
+ 					 char *buf)
+@@ -60,70 +57,8 @@ static void vivaldi_feature_mapping(struct hid_device *hdev,
+ 				    struct hid_usage *usage)
+ {
+ 	struct vivaldi_data *drvdata = hid_get_drvdata(hdev);
+-	struct hid_report *report = field->report;
+-	int fn_key;
+-	int ret;
+-	u32 report_len;
+-	u8 *report_data, *buf;
+-
+-	if (field->logical != HID_USAGE_FN_ROW_PHYSMAP ||
+-	    (usage->hid & HID_USAGE_PAGE) != HID_UP_ORDINAL)
+-		return;
+-
+-	fn_key = (usage->hid & HID_USAGE);
+-	if (fn_key < VIVALDI_MIN_FN_ROW_KEY || fn_key > VIVALDI_MAX_FN_ROW_KEY)
+-		return;
+-	if (fn_key > drvdata->num_function_row_keys)
+-		drvdata->num_function_row_keys = fn_key;
+-
+-	report_data = buf = hid_alloc_report_buf(report, GFP_KERNEL);
+-	if (!report_data)
+-		return;
+-
+-	report_len = hid_report_len(report);
+-	if (!report->id) {
+-		/*
+-		 * hid_hw_raw_request() will stuff report ID (which will be 0)
+-		 * into the first byte of the buffer even for unnumbered
+-		 * reports, so we need to account for this to avoid getting
+-		 * -EOVERFLOW in return.
+-		 * Note that hid_alloc_report_buf() adds 7 bytes to the size
+-		 * so we can safely say that we have space for an extra byte.
+-		 */
+-		report_len++;
+-	}
+-
+-	ret = hid_hw_raw_request(hdev, report->id, report_data,
+-				 report_len, HID_FEATURE_REPORT,
+-				 HID_REQ_GET_REPORT);
+-	if (ret < 0) {
+-		dev_warn(&hdev->dev, "failed to fetch feature %d\n",
+-			 field->report->id);
+-		goto out;
+-	}
+-
+-	if (!report->id) {
+-		/*
+-		 * Undo the damage from hid_hw_raw_request() for unnumbered
+-		 * reports.
+-		 */
+-		report_data++;
+-		report_len--;
+-	}
+-
+-	ret = hid_report_raw_event(hdev, HID_FEATURE_REPORT, report_data,
+-				   report_len, 0);
+-	if (ret) {
+-		dev_warn(&hdev->dev, "failed to report feature %d\n",
+-			 field->report->id);
+-		goto out;
+-	}
+-
+-	drvdata->function_row_physmap[fn_key - VIVALDI_MIN_FN_ROW_KEY] =
+-	    field->value[usage->usage_index];
+-
+-out:
+-	kfree(buf);
++
++	vivaldi_hid_feature_mapping(drvdata, hdev, field, usage);
+ }
+ 
+ static int vivaldi_input_configured(struct hid_device *hdev,
 diff --git a/include/linux/input/vivaldi-keymap.h b/include/linux/input/vivaldi-keymap.h
-new file mode 100644
-index 000000000000..4023b65e1649
---- /dev/null
+index 4023b65e1649..7cf5bc650fed 100644
+--- a/include/linux/input/vivaldi-keymap.h
 +++ b/include/linux/input/vivaldi-keymap.h
-@@ -0,0 +1,28 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _VIVALDI_KEYMAP_H
-+#define _VIVALDI_KEYMAP_H
+@@ -4,6 +4,10 @@
+ 
+ #include <linux/types.h>
+ 
++struct hid_device;
++struct hid_field;
++struct hid_usage;
 +
-+#include <linux/types.h>
+ #define VIVALDI_MIN_FN_ROW_KEY	1
+ #define VIVALDI_MAX_FN_ROW_KEY	24
+ 
+@@ -25,4 +29,9 @@ struct vivaldi_data {
+ ssize_t vivaldi_function_row_physmap_show(const struct vivaldi_data *data,
+ 					  char *buf);
+ 
++void vivaldi_hid_feature_mapping(struct vivaldi_data *data,
++				 struct hid_device *hdev,
++				 struct hid_field *field,
++				 struct hid_usage *usage);
 +
-+#define VIVALDI_MIN_FN_ROW_KEY	1
-+#define VIVALDI_MAX_FN_ROW_KEY	24
-+
-+/**
-+ * struct vivaldi_data - Function row keymap data for ChromeOS vivaldi keyboards
-+ * @function_row_physmap: An array of the encoded rows/columns for the top
-+ *                        row function keys, in an order from left to right
-+ * @num_function_row_keys: The number of top row keys in a custom keyboard
-+ *
-+ * This structure is supposed to be used by ChromeOS keyboards using
-+ * the vivaldi keyboard function row design.
-+ */
-+struct vivaldi_data {
-+	u16 function_row_physmap[VIVALDI_MAX_FN_ROW_KEY - VIVALDI_MIN_FN_ROW_KEY + 1];
-+	int num_function_row_keys;
-+};
-+
-+
-+ssize_t vivaldi_function_row_physmap_show(const struct vivaldi_data *data,
-+					  char *buf);
-+
-+#endif /* _VIVALDI_KEYMAP_H */
+ #endif /* _VIVALDI_KEYMAP_H */
 -- 
 https://chromeos.dev
 

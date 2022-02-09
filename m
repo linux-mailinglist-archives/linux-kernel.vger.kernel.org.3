@@ -2,101 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 580B04AF61E
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7034AF626
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236622AbiBIQKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:10:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
+        id S236633AbiBIQKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236616AbiBIQKP (ORCPT
+        with ESMTP id S231793AbiBIQKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:10:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10FFC05CB87;
-        Wed,  9 Feb 2022 08:10:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6026A61727;
-        Wed,  9 Feb 2022 16:10:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 388CCC340ED;
-        Wed,  9 Feb 2022 16:10:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644423017;
-        bh=0ViYHYGupp0RVHwWiup4TjHH132SXczPULdGlmJS4Sk=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Pdie2qDQcx/nuhGYnF+wph5D3XjR0Tnjb9L+uB/2bd/qP86rzAlZ82l8L1AY/DKlq
-         p4LZFO6bs/a3nO2T+Tpd1Ecltklu8c0R0iAS+j6FoQaZw/qSqaUp80YhDL7eIHJksF
-         mxdXmSvKIk/SkAR6kP5YRaOfz/m6/6yltTyxl/+5o7PkJxfegbEwFB0NsB5qeMKAyu
-         +NJp30CtYoPOBqiU/Uh0KV59kuir4eInH4MEtTizRvTl8qgE2gG0Op+OjhEWBsjxvM
-         PrLHGR+Rwb8QmTWZa+fzrgbRHyoWrpnY+baRwa+cfHvo32pNJXy5Ypn04PgbcygSkT
-         lNxSb4XtBNDBg==
-From:   Mark Brown <broonie@kernel.org>
-To:     robh+dt@kernel.org, Jayesh Choudhary <j-choudhary@ti.com>
-Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        peter.ujfalusi@gmail.com, linux-kernel@vger.kernel.org,
-        lgirdwood@gmail.com, krzysztof.kozlowski@canonical.com
-In-Reply-To: <20220209063008.2928-1-j-choudhary@ti.com>
-References: <20220209063008.2928-1-j-choudhary@ti.com>
-Subject: Re: [PATCH v6] ASoC: dt-bindings: davinci-mcasp: convert McASP bindings to yaml schema
-Message-Id: <164442301594.4135858.14145086977040876727.b4-ty@kernel.org>
-Date:   Wed, 09 Feb 2022 16:10:15 +0000
+        Wed, 9 Feb 2022 11:10:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 32A06C05CB87
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:10:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644423048;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mFGitWE2+XjLxofbVGLQx4GJSy8OuJZkaSySeP1Crog=;
+        b=IFxn8zoj2KqZFXDKt3Aco+x7SJHWtYMeeibidLMBx6J9kwATDjY2fmf0Aru4vGCTVxu5G9
+        4SwRHW8wsXnDtYvQhjs3QbNR2WCoY37C6XUV6htGqA7VIG2mK7kkSC3y6VyyWga6jp3Cce
+        1gkfedDebcqRmPVwieCsVNk5apCoUa0=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-F1gGqbQtMrOpzMjk-eaMsg-1; Wed, 09 Feb 2022 11:10:47 -0500
+X-MC-Unique: F1gGqbQtMrOpzMjk-eaMsg-1
+Received: by mail-wr1-f69.google.com with SMTP id g17-20020adfa591000000b001da86c91c22so1294786wrc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 08:10:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mFGitWE2+XjLxofbVGLQx4GJSy8OuJZkaSySeP1Crog=;
+        b=GTN7nmoZeGv79eGYEj5VyAbW3ZtdSbt9RiHyM5LpBK8jkQ9WZJY2icBvPZSn8aYbXt
+         IyBmOKWEZF33Gync3BreiB7fhNYb6366KTk/e8ZlwkBEKcrc/7yIjThB4Zg9jgo/SsUv
+         KfYrRu32ZrqbMKAm48UwKphRc/AC5J+ZHgfbe4ouuLE7WjDBHepfi0yjsMUqo/Vr3x8F
+         0HBYMSSmPyhoRULb6KUjFfxCvB4XU53EQXQC9O4CUeVa5pJ1xo0hbav+AYZTiz5YYtHp
+         +5zbqQtsFiIQMXT2d8qopl8gMH2PWPt35UvzvvKHo9QFy5hU32B2oEoUfXz0Su2SJ2sL
+         Vmmw==
+X-Gm-Message-State: AOAM531UmTkonvtQghOpJwbUeZ/fFwEV/JvU9jNawDEah4ZLyjn2zv1q
+        thCsF+vvBXIoL99RKt0jcgAaNU75HHqWuqVLXTWWCuZewPQRym6gqjBgGe4PjSfYtGKhNmMGVSu
+        zpBAk1Q9yOQOu6TVunNkceC85
+X-Received: by 2002:a05:600c:3641:: with SMTP id y1mr3214210wmq.44.1644423044643;
+        Wed, 09 Feb 2022 08:10:44 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw3zGpKODhlGXZHF/WUPS4W/m1RBSXDfqzPUnuyKsIXdGF/OBtwjUhqThnva+EpdQTtV3YvBQ==
+X-Received: by 2002:a05:600c:3641:: with SMTP id y1mr3214181wmq.44.1644423044396;
+        Wed, 09 Feb 2022 08:10:44 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id c18sm6654588wro.81.2022.02.09.08.10.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 08:10:44 -0800 (PST)
+Message-ID: <ee81dc1f-2a45-9113-f1fb-47ef226a0da5@redhat.com>
+Date:   Wed, 9 Feb 2022 17:10:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 5/7] (WIP) drm/solomon: Add SSD130X OLED displays SPI
+ support
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Maxime Ripard <maxime@cerno.tech>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>
+References: <20220209090314.2511959-1-javierm@redhat.com>
+ <20220209091204.2513437-1-javierm@redhat.com>
+ <CAMuHMdWSDBjpYJv6JtgvyaKiFKh_eqbvH78TR6VBtpDeFJvqFQ@mail.gmail.com>
+ <e6efb2fd-300e-5282-1f2e-a68130d0b45a@redhat.com>
+ <YgPbleB+LAQ5ZXyB@smile.fi.intel.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <YgPbleB+LAQ5ZXyB@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Feb 2022 12:00:08 +0530, Jayesh Choudhary wrote:
-> Convert the bindings for McASP controllers for TI SoCs from txt
-> to YAML schema.
+On 2/9/22 16:19, Andy Shevchenko wrote:
+> On Wed, Feb 09, 2022 at 02:04:17PM +0100, Javier Martinez Canillas wrote:
+>> On 2/9/22 13:25, Geert Uytterhoeven wrote:
+>>> On Wed, Feb 9, 2022 at 10:12 AM Javier Martinez Canillas
+>>> <javierm@redhat.com> wrote:
 > 
-> Adds additional properties 'clocks', 'clock-names', 'power-domains',
-> '#sound-dai-cells' and 'port' which were missing from the txt file.
-> Removes properties 'sram-size-playback' and 'sram-size-capture'
-> since they are not used.
-> Adds 'dmas' and 'dma-names' in the example which were missing from
-> the txt file.
-> Changes 'interrupts' and 'interrupt-names' from optional to
-> required properties.
-> Changes 'op-modes', 'serial-dir' to optional properties as they are
-> not needed if the McASP is used only as GPIO.
-> Changes 'tdm-slots' to required property only for I2S operation mode.
+>> Yes, I know. Didn't feel like it, because the patch is a WIP anyways
+>> (I haven't tested it but was included just for illustration purposes).
+>>
+>> If someone confirms that works then I will include a proper DT binding
+>> in the next revision.
 > 
-> [...]
+> In a few weeks I hope I can do this.
+>
 
-Applied to
+Thanks, there's no rush. I just included this for your convenience because you
+mentioned that have an display with a SPI interface.
+ 
+> But you know Linux is almost always broken (*) on the certain embedded device
+> if nobody keep an eye each rc cycle. It might take time to return it in shape
+> first.
+> 
+> *) Speaking out of my own experience with device(s) that I possess.
+> 
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+Unfortunately that's my experience too. I'll keep this patch in the series and
+marked as RFC. But in v4 will extend the DT binding to mention the SPI devices.
 
-Thanks!
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
-[1/1] ASoC: dt-bindings: davinci-mcasp: convert McASP bindings to yaml schema
-      commit: 8be90641a0bbd9a3606547aa6a0f70b020e74c8f
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark

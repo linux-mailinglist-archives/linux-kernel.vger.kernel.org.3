@@ -2,46 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1A94AEAA4
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 07:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 521484AEAA7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 07:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235274AbiBIGxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 01:53:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
+        id S235414AbiBIGyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 01:54:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiBIGxv (ORCPT
+        with ESMTP id S235333AbiBIGya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 01:53:51 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64E1C05CB81
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 22:53:53 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1644389631;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=pUlfTRQkrTdTQFBKHqDRrCVlXpII0vP2L2obohCfw1o=;
-        b=KS5D3kMy2jy60z6MS+GNQCgowsvHdb2pMuA/hNuwvbeJuI0PaK1fHQcATmDtYJvCrwVPdN
-        0GKbm3QiiKjUgdx/M0lJlcRcCFxmZcKKjNMYPwLhUMvLLNGB9II1ZG1CLeSQete0Qw7YFE
-        Fy/dccLiu4yT+06N70lvVn3J2uwLVDc=
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     cai.huoqing@linux.dev
-Cc:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org
-Subject: [PATCH] drm/nouveau: Remove the unused header file nvif/list.h
-Date:   Wed,  9 Feb 2022 14:53:19 +0800
-Message-Id: <20220209065322.43938-1-cai.huoqing@linux.dev>
+        Wed, 9 Feb 2022 01:54:30 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64457C05CB85;
+        Tue,  8 Feb 2022 22:54:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644389673; x=1675925673;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qo/ffmlCcS58q+JxMXvgEK1N8bRkvNy+6yQLFamMA5w=;
+  b=CrHvT1ojVzpW6VeWWD1POrMlDgvn5Ua+lY6EoJ4UZgtYKL/HzVu3cvit
+   snjChFD72OK+19oPHEUpymYWFhnP5oKUbFTnmKq8xTn54ctJ9Hl11TVzD
+   pYx0E5EbyJ1NUkqCdoU8nvaiNRB6DyMyBbqbhTQ4WkG7jN9ecr1YT8MB6
+   ckzbvwH9GPOxYB+e1uhfqG6EBRTjAXCgwpQaHi5nCY9swqmw1fICtwJaO
+   QAITgjs6t5dQF63g7+UdplN1e6dZM77u5ndv+tS5JfDQG4yaS6pnkcOtc
+   PlF09vw6a2YS59I5R+bl1gMAXLtfUaKK28Zcsk2VVFXdJznq8GdTZCMNK
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="247971746"
+X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
+   d="scan'208";a="247971746"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2022 22:54:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,354,1635231600"; 
+   d="scan'208";a="568138924"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 08 Feb 2022 22:54:30 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nHgs1-0001Mp-Vh; Wed, 09 Feb 2022 06:54:29 +0000
+Date:   Wed, 9 Feb 2022 14:53:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Potin Lai <potin.lai@quantatw.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Patrick Williams <patrick@stwcx.xyz>,
+        Potin Lai <potin.lai@quantatw.com>
+Subject: Re: [PATCH v2 1/2] usb: typec: tcpm: add interface for passing
+ supported_pd_rev from tcpc_dev
+Message-ID: <202202091453.L5BVOjcx-lkp@intel.com>
+References: <20220208112226.9108-2-potin.lai@quantatw.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220208112226.9108-2-potin.lai@quantatw.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,374 +69,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The nouveau driver depends on include/linux/list.h instead of
-nvif/list.h, so remove the obstacle-nvif/list.h.
+Hi Potin,
 
-Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on v5.17-rc3 next-20220208]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Potin-Lai/usb-typec-tcpm-add-interface-for-passing-supported_pd_rev-from-tcpc_dev/20220208-202246
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: arm64-randconfig-s031-20220208 (https://download.01.org/0day-ci/archive/20220209/202202091453.L5BVOjcx-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/322696594704fa918e63d1c80fa6d346a02e9a28
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Potin-Lai/usb-typec-tcpm-add-interface-for-passing-supported_pd_rev-from-tcpc_dev/20220208-202246
+        git checkout 322696594704fa918e63d1c80fa6d346a02e9a28
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/usb/typec/tcpm/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/usb/typec/tcpm/tcpm.c:581:16: sparse: sparse: incompatible types in comparison expression (different signedness):
+>> drivers/usb/typec/tcpm/tcpm.c:581:16: sparse:    unsigned int *
+>> drivers/usb/typec/tcpm/tcpm.c:581:16: sparse:    int *
+
+vim +581 drivers/usb/typec/tcpm/tcpm.c
+
+   573	
+   574	static u32 tcpm_pd_supported_rev(struct tcpm_port *port)
+   575	{
+   576		u32 rev = PD_MAX_REV;
+   577	
+   578		if (port->tcpc->supported_pd_rev)
+   579			rev = port->tcpc->supported_pd_rev(port->tcpc);
+   580	
+ > 581		return min(rev, PD_MAX_REV);
+   582	}
+   583	
+
 ---
- drivers/gpu/drm/nouveau/include/nvif/list.h | 353 --------------------
- 1 file changed, 353 deletions(-)
- delete mode 100644 drivers/gpu/drm/nouveau/include/nvif/list.h
-
-diff --git a/drivers/gpu/drm/nouveau/include/nvif/list.h b/drivers/gpu/drm/nouveau/include/nvif/list.h
-deleted file mode 100644
-index 8af5d144ecb0..000000000000
---- a/drivers/gpu/drm/nouveau/include/nvif/list.h
-+++ /dev/null
-@@ -1,353 +0,0 @@
--/*
-- * Copyright © 2010 Intel Corporation
-- * Copyright © 2010 Francisco Jerez <currojerez@riseup.net>
-- *
-- * Permission is hereby granted, free of charge, to any person obtaining a
-- * copy of this software and associated documentation files (the "Software"),
-- * to deal in the Software without restriction, including without limitation
-- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
-- * and/or sell copies of the Software, and to permit persons to whom the
-- * Software is furnished to do so, subject to the following conditions:
-- *
-- * The above copyright notice and this permission notice (including the next
-- * paragraph) shall be included in all copies or substantial portions of the
-- * Software.
-- *
-- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-- * IN THE SOFTWARE.
-- *
-- */
--
--/* Modified by Ben Skeggs <bskeggs@redhat.com> to match kernel list APIs */
--
--#ifndef _XORG_LIST_H_
--#define _XORG_LIST_H_
--
--/**
-- * @file Classic doubly-link circular list implementation.
-- * For real usage examples of the linked list, see the file test/list.c
-- *
-- * Example:
-- * We need to keep a list of struct foo in the parent struct bar, i.e. what
-- * we want is something like this.
-- *
-- *     struct bar {
-- *          ...
-- *          struct foo *list_of_foos; -----> struct foo {}, struct foo {}, struct foo{}
-- *          ...
-- *     }
-- *
-- * We need one list head in bar and a list element in all list_of_foos (both are of
-- * data type 'struct list_head').
-- *
-- *     struct bar {
-- *          ...
-- *          struct list_head list_of_foos;
-- *          ...
-- *     }
-- *
-- *     struct foo {
-- *          ...
-- *          struct list_head entry;
-- *          ...
-- *     }
-- *
-- * Now we initialize the list head:
-- *
-- *     struct bar bar;
-- *     ...
-- *     INIT_LIST_HEAD(&bar.list_of_foos);
-- *
-- * Then we create the first element and add it to this list:
-- *
-- *     struct foo *foo = malloc(...);
-- *     ....
-- *     list_add(&foo->entry, &bar.list_of_foos);
-- *
-- * Repeat the above for each element you want to add to the list. Deleting
-- * works with the element itself.
-- *      list_del(&foo->entry);
-- *      free(foo);
-- *
-- * Note: calling list_del(&bar.list_of_foos) will set bar.list_of_foos to an empty
-- * list again.
-- *
-- * Looping through the list requires a 'struct foo' as iterator and the
-- * name of the field the subnodes use.
-- *
-- * struct foo *iterator;
-- * list_for_each_entry(iterator, &bar.list_of_foos, entry) {
-- *      if (iterator->something == ...)
-- *             ...
-- * }
-- *
-- * Note: You must not call list_del() on the iterator if you continue the
-- * loop. You need to run the safe for-each loop instead:
-- *
-- * struct foo *iterator, *next;
-- * list_for_each_entry_safe(iterator, next, &bar.list_of_foos, entry) {
-- *      if (...)
-- *              list_del(&iterator->entry);
-- * }
-- *
-- */
--
--/**
-- * The linkage struct for list nodes. This struct must be part of your
-- * to-be-linked struct. struct list_head is required for both the head of the
-- * list and for each list node.
-- *
-- * Position and name of the struct list_head field is irrelevant.
-- * There are no requirements that elements of a list are of the same type.
-- * There are no requirements for a list head, any struct list_head can be a list
-- * head.
-- */
--struct list_head {
--    struct list_head *next, *prev;
--};
--
--/**
-- * Initialize the list as an empty list.
-- *
-- * Example:
-- * INIT_LIST_HEAD(&bar->list_of_foos);
-- *
-- * @param The list to initialized.
-- */
--#define LIST_HEAD_INIT(name) { &(name), &(name) }
--
--#define LIST_HEAD(name) \
--	struct list_head name = LIST_HEAD_INIT(name)
--
--static inline void
--INIT_LIST_HEAD(struct list_head *list)
--{
--    list->next = list->prev = list;
--}
--
--static inline void
--__list_add(struct list_head *entry,
--                struct list_head *prev, struct list_head *next)
--{
--    next->prev = entry;
--    entry->next = next;
--    entry->prev = prev;
--    prev->next = entry;
--}
--
--/**
-- * Insert a new element after the given list head. The new element does not
-- * need to be initialised as empty list.
-- * The list changes from:
-- *      head → some element → ...
-- * to
-- *      head → new element → older element → ...
-- *
-- * Example:
-- * struct foo *newfoo = malloc(...);
-- * list_add(&newfoo->entry, &bar->list_of_foos);
-- *
-- * @param entry The new element to prepend to the list.
-- * @param head The existing list.
-- */
--static inline void
--list_add(struct list_head *entry, struct list_head *head)
--{
--    __list_add(entry, head, head->next);
--}
--
--/**
-- * Append a new element to the end of the list given with this list head.
-- *
-- * The list changes from:
-- *      head → some element → ... → lastelement
-- * to
-- *      head → some element → ... → lastelement → new element
-- *
-- * Example:
-- * struct foo *newfoo = malloc(...);
-- * list_add_tail(&newfoo->entry, &bar->list_of_foos);
-- *
-- * @param entry The new element to prepend to the list.
-- * @param head The existing list.
-- */
--static inline void
--list_add_tail(struct list_head *entry, struct list_head *head)
--{
--    __list_add(entry, head->prev, head);
--}
--
--static inline void
--__list_del(struct list_head *prev, struct list_head *next)
--{
--    next->prev = prev;
--    prev->next = next;
--}
--
--/**
-- * Remove the element from the list it is in. Using this function will reset
-- * the pointers to/from this element so it is removed from the list. It does
-- * NOT free the element itself or manipulate it otherwise.
-- *
-- * Using list_del on a pure list head (like in the example at the top of
-- * this file) will NOT remove the first element from
-- * the list but rather reset the list as empty list.
-- *
-- * Example:
-- * list_del(&foo->entry);
-- *
-- * @param entry The element to remove.
-- */
--static inline void
--list_del(struct list_head *entry)
--{
--    __list_del(entry->prev, entry->next);
--}
--
--static inline void
--list_del_init(struct list_head *entry)
--{
--    __list_del(entry->prev, entry->next);
--    INIT_LIST_HEAD(entry);
--}
--
--static inline void list_move_tail(struct list_head *list,
--				  struct list_head *head)
--{
--	__list_del(list->prev, list->next);
--	list_add_tail(list, head);
--}
--
--/**
-- * Check if the list is empty.
-- *
-- * Example:
-- * list_empty(&bar->list_of_foos);
-- *
-- * @return True if the list contains one or more elements or False otherwise.
-- */
--static inline bool
--list_empty(struct list_head *head)
--{
--    return head->next == head;
--}
--
--/**
-- * Returns a pointer to the container of this list element.
-- *
-- * Example:
-- * struct foo* f;
-- * f = container_of(&foo->entry, struct foo, entry);
-- * assert(f == foo);
-- *
-- * @param ptr Pointer to the struct list_head.
-- * @param type Data type of the list element.
-- * @param member Member name of the struct list_head field in the list element.
-- * @return A pointer to the data struct containing the list head.
-- */
--#ifndef container_of
--#define container_of(ptr, type, member) \
--    (type *)((char *)(ptr) - (char *) &((type *)0)->member)
--#endif
--
--/**
-- * Alias of container_of
-- */
--#define list_entry(ptr, type, member) \
--    container_of(ptr, type, member)
--
--/**
-- * Retrieve the first list entry for the given list pointer.
-- *
-- * Example:
-- * struct foo *first;
-- * first = list_first_entry(&bar->list_of_foos, struct foo, list_of_foos);
-- *
-- * @param ptr The list head
-- * @param type Data type of the list element to retrieve
-- * @param member Member name of the struct list_head field in the list element.
-- * @return A pointer to the first list element.
-- */
--#define list_first_entry(ptr, type, member) \
--    list_entry((ptr)->next, type, member)
--
--/**
-- * Retrieve the last list entry for the given listpointer.
-- *
-- * Example:
-- * struct foo *first;
-- * first = list_last_entry(&bar->list_of_foos, struct foo, list_of_foos);
-- *
-- * @param ptr The list head
-- * @param type Data type of the list element to retrieve
-- * @param member Member name of the struct list_head field in the list element.
-- * @return A pointer to the last list element.
-- */
--#define list_last_entry(ptr, type, member) \
--    list_entry((ptr)->prev, type, member)
--
--#define __container_of(ptr, sample, member)				\
--    (void *)container_of((ptr), typeof(*(sample)), member)
--
--/**
-- * Loop through the list given by head and set pos to struct in the list.
-- *
-- * Example:
-- * struct foo *iterator;
-- * list_for_each_entry(iterator, &bar->list_of_foos, entry) {
-- *      [modify iterator]
-- * }
-- *
-- * This macro is not safe for node deletion. Use list_for_each_entry_safe
-- * instead.
-- *
-- * @param pos Iterator variable of the type of the list elements.
-- * @param head List head
-- * @param member Member name of the struct list_head in the list elements.
-- *
-- */
--#define list_for_each_entry(pos, head, member)				\
--    for (pos = __container_of((head)->next, pos, member);		\
--	 &pos->member != (head);					\
--	 pos = __container_of(pos->member.next, pos, member))
--
--/**
-- * Loop through the list, keeping a backup pointer to the element. This
-- * macro allows for the deletion of a list element while looping through the
-- * list.
-- *
-- * See list_for_each_entry for more details.
-- */
--#define list_for_each_entry_safe(pos, tmp, head, member)		\
--    for (pos = __container_of((head)->next, pos, member),		\
--	 tmp = __container_of(pos->member.next, pos, member);		\
--	 &pos->member != (head);					\
--	 pos = tmp, tmp = __container_of(pos->member.next, tmp, member))
--
--
--#define list_for_each_entry_reverse(pos, head, member)			\
--	for (pos = __container_of((head)->prev, pos, member);		\
--	     &pos->member != (head);					\
--	     pos = __container_of(pos->member.prev, pos, member))
--
--#define list_for_each_entry_continue(pos, head, member)			\
--	for (pos = __container_of(pos->member.next, pos, member);	\
--	     &pos->member != (head);					\
--	     pos = __container_of(pos->member.next, pos, member))
--
--#define list_for_each_entry_continue_reverse(pos, head, member)		\
--	for (pos = __container_of(pos->member.prev, pos, member);	\
--	     &pos->member != (head);					\
--	     pos = __container_of(pos->member.prev, pos, member))
--
--#define list_for_each_entry_from(pos, head, member)			\
--	for (;								\
--	     &pos->member != (head);					\
--	     pos = __container_of(pos->member.next, pos, member))
--
--#endif
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

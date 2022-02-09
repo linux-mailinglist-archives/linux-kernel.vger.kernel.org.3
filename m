@@ -2,189 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44ED94AE5DE
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 01:22:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2291E4AE5F0
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 01:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239733AbiBIAWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 19:22:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
+        id S233549AbiBIAYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 19:24:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232503AbiBIAWA (ORCPT
+        with ESMTP id S229956AbiBIAYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 19:22:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B244C06173B;
-        Tue,  8 Feb 2022 16:21:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32F3CB81DE5;
-        Wed,  9 Feb 2022 00:21:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98217C340E9;
-        Wed,  9 Feb 2022 00:21:56 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="p/hetZUs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644366114;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yQ6XCjuca0gHb7IBipxgluRZP1vfq7sfS5zZ7CqHC/s=;
-        b=p/hetZUsL9e76SV3kMlSI2VpzN0erhuP92iqR9yXPnrvx2x0RG7JrIX1Rs6gkbcYJiqlAM
-        8gF0fjyMmI7+c6CGSB/l808Kgo41F4GiIQAfI9gGf7dkIxBEJTxb5CSxFluv2TvnA7Sur9
-        IMevYjvhDYjl48EYIglQlny2LDnRlGE=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 18372bd8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 9 Feb 2022 00:21:54 +0000 (UTC)
-Received: by mail-yb1-f175.google.com with SMTP id 192so1294115ybd.10;
-        Tue, 08 Feb 2022 16:21:53 -0800 (PST)
-X-Gm-Message-State: AOAM5324ggbddFFZa8irGOdWmMyZRZgRYWmR4/yY2revh6uBSYq0YHHz
-        ztkw9ItN0OEUmo9CD0V8nDw22rTdfyRAYBvFA9o=
-X-Google-Smtp-Source: ABdhPJzraCsmgLP4WkQbzGDkTSOQxlGEk2SgcBEXq47jtgUlBENHIhD13qTDRNWnUM4VrzVTpg4amIwIRIGnyJoPcFU=
-X-Received: by 2002:a25:42:: with SMTP id 63mr5594754yba.245.1644366112938;
- Tue, 08 Feb 2022 16:21:52 -0800 (PST)
+        Tue, 8 Feb 2022 19:24:06 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E73C06173B
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 16:24:04 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id t14-20020a17090a3e4e00b001b8f6032d96so623724pjm.2
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 16:24:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=DYNXR2DtuxF1ISLzpPLoyEyGiOJ7sBlng/Jv7KiUcBE=;
+        b=VxlJfskh25n9CGF6UK57dB54CJXlDoep5C3N0smYrTdby67X/6qk5Sk7HFgMDS+nGY
+         AzoiVQXLD0zX8n/JzPWPnuoJP4lce+qxe7/XN61DoUql4/ek5ls0IMNRKeE94m0bm/gY
+         cfT5FrbMtbIqBaACvO397ODwQRm/U6DIWtJ6dhWxc0WDClqqFyqNLeTFfHsevZWbE5q3
+         cwzPNdId6TH00LMJppPQxBnP9hhTWODlnfeYkG/m3Ojtz4sIieW0oyczghQl9ZkyeB1T
+         cdpt7CxfDkihd9SNrVTXaJx8ESUyXBr7GN+fbte3Yb50ycgG7mu3UVHP/0wuM8FLqbbg
+         LlGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=DYNXR2DtuxF1ISLzpPLoyEyGiOJ7sBlng/Jv7KiUcBE=;
+        b=qYu6TWFZ3DS4k2Gs9Rs6hU72clnH/X3e0bQVl5DXvT45GUTUjzIPoNYzE8D9tF4L0n
+         ZUmu08tkhRGK8tzldO7Zyp/ZHR2hpHQRy7hpKFe/Ep9XFe7O2I1+mW9wPWkMpDAUtraz
+         6nQnZVdfKiKl2oMl7nUnGXW+LWgnLkJiCY824OQal2S35DLaQB5RrNHSC6mYpbQqR7Ib
+         bFERu0mK5QvqVpvGaZRzquoneI8B9ZJui2+pfDlbgUdDvzje2YzSSXfvCsTCahGkAuzj
+         QzzopVgKC//4pbPbHWMi9S9veBMcS7VKS587CaCcRBzaf3iAt0x2PindKPwAgCLs/UZH
+         1nuQ==
+X-Gm-Message-State: AOAM530nvwPY/jn37dHwM6ol/Tfupv9Ze3/46qw3Vp98T80fNpInmFWN
+        miupWDQupSH3k4vqB/8E32CpBg/7+SXM5ulgXukFEPVnFE5h5A==
+X-Google-Smtp-Source: ABdhPJxzWI7eHHDKAtjNbbB172grlY3cvC/rvaFNoMxSL6UiTPyvmxeEjwk9Pe8+ZkIlAhoSvpkKXJCpcc8WB5HAMV0=
+X-Received: by 2002:a17:90a:5303:: with SMTP id x3mr64365pjh.64.1644366243349;
+ Tue, 08 Feb 2022 16:24:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20220208155335.378318-1-Jason@zx2c4.com> <20220208155335.378318-7-Jason@zx2c4.com>
- <YgL/JN+ObjfhEedk@sol.localdomain>
-In-Reply-To: <YgL/JN+ObjfhEedk@sol.localdomain>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 9 Feb 2022 01:21:42 +0100
-X-Gmail-Original-Message-ID: <CAHmME9qd0WPqyOqwcsRX+bZzimMj1ZvCGKskGca7Z_Fi9QCYow@mail.gmail.com>
-Message-ID: <CAHmME9qd0WPqyOqwcsRX+bZzimMj1ZvCGKskGca7Z_Fi9QCYow@mail.gmail.com>
-Subject: Re: [PATCH v1 6/7] random: use simpler fast key erasure flow on
- per-cpu keys
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+References: <20220202020103.2149130-1-rajatja@google.com>
+In-Reply-To: <20220202020103.2149130-1-rajatja@google.com>
+From:   Rajat Jain <rajatja@google.com>
+Date:   Tue, 8 Feb 2022 16:23:27 -0800
+Message-ID: <CACK8Z6GmC7O3__RKwSEOQQ5Pde6h-LRz_5d+--V=CuB76cpe+w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] PCI: Allow internal devices to be marked as untrusted
+To:     Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Eric,
+Hello Folks,
 
-Thanks a bunch for the review.
 
-On Wed, Feb 9, 2022 at 12:39 AM Eric Biggers <ebiggers@kernel.org> wrote:
-> Previously, the extracted entropy was being XOR'ed into the ChaCha key.  Now the
-> key is just being overwritten.  This is the approach we should be aiming for,
-> but I'm concerned about the fact that add_interrupt_randomness() still sometimes
-> adds entropy to the ChaCha key directly without mixing it into the entropy pool.
-> That happens via crng_fast_load() when crng_init == 0.  This new approach will
-> destroy any entropy that was present in the key only.
+On Tue, Feb 1, 2022 at 6:01 PM Rajat Jain <rajatja@google.com> wrote:
 >
-> The right fix, IMO, would be to always send entropy through the entropy pool.
-> Until that is done, though, I'm not sure it's a good idea to overwrite the key
-> like this.
-
-I agree with this in principle, and I've been trying to think of a
-good way to do it, but it's a bit hard to do, because of the workqueue
-deferred dumping. I'll try to see if I can figure out something there.
-In practice, it's not _such_ a big deal, as it's "only" 64 credit-bits
-of entropy we're talking about. A sort of hacky but maybe a
-satisfactory solution would be to hash the base_crng key into the
-pool, once, just at the transition point. I'll think a bit more on it.
-
+> Today the pci_dev->untrusted is set for any devices sitting downstream
+> an external facing port (determined via "ExternalFacingPort" or the
+> "external-facing" properties).
 >
-> Unrelated: this function could use some comments that explain what is going on.
-
-Will do.
-
+> However, currently there is no way for internal devices to be marked as
+> untrusted.
 >
-> > +/*
-> > + * The general form here is based on a "fast key erasure RNG" from:
-> > + * https://blog.cr.yp.to/20170723-random.html
-> > + */
-> > +static void crng_fast_key_erasure(u8 key[CHACHA_KEY_SIZE],
-> > +                               u32 chacha_state[CHACHA_STATE_WORDS],
-> > +                               u8 random_data[32], size_t random_data_len)
+> There are use-cases though, where a platform would like to treat an
+> internal device as untrusted (perhaps because it runs untrusted firmware
+> or offers an attack surface by handling untrusted network data etc).
 >
-> Given that random_data is variable-length it should be a 'u8 *'.
+> Introduce a new "UntrustedDevice" property that can be used by the
+> firmware to mark any device as untrusted.
 
-I'll do that and mention the size aspect in the comment on top.
+Just to unite the threads (from
+https://www.spinics.net/lists/linux-pci/msg120221.html). I did reach
+out to Microsoft but they haven't acknowledged my email. I also pinged
+them again yesterday, but I suspect I may not be able to break the
+ice. So this patch may be ready to go in my opinion.
+
+I don't see any outstanding comments on this patch, but please let me
+know if you have any comments.
+
+Thanks & Best Regards,
+
+Rajat
+
 
 >
-> Also, the above comment could use some more explanation.  I.e. what does this
-> function actually *do*.  (I understand it, but a comment will really help any
-> future readers...)
-
-Will do.
-
+> Signed-off-by: Rajat Jain <rajatja@google.com>
+> ---
+> v2: * Also use the same property for device tree based systems.
+>     * Add documentation (next patch)
 >
-> > + /*
-> > + * This function returns a ChaCha block that you may use for generating
+>  drivers/pci/of.c       | 2 ++
+>  drivers/pci/pci-acpi.c | 1 +
+>  drivers/pci/pci.c      | 9 +++++++++
+>  drivers/pci/pci.h      | 2 ++
+>  4 files changed, 14 insertions(+)
 >
-> ChaCha state, not ChaCha block.
-
-Thanks.
-
+> diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+> index cb2e8351c2cc..e8b804664b69 100644
+> --- a/drivers/pci/of.c
+> +++ b/drivers/pci/of.c
+> @@ -24,6 +24,8 @@ void pci_set_of_node(struct pci_dev *dev)
+>                                                     dev->devfn);
+>         if (dev->dev.of_node)
+>                 dev->dev.fwnode = &dev->dev.of_node->fwnode;
+> +
+> +       pci_set_untrusted(dev);
+>  }
 >
-> > + * random data. It also returns up to 32 bytes on its own of random data
-> > + * that may be used.
-> > +*/
-> > +static void crng_make_state(u32 chacha_state[CHACHA_STATE_WORDS],
-> > +                         u8 random_data[32], size_t random_data_len)
+>  void pci_release_of_node(struct pci_dev *dev)
+> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+> index a42dbf448860..2bffbd5c6114 100644
+> --- a/drivers/pci/pci-acpi.c
+> +++ b/drivers/pci/pci-acpi.c
+> @@ -1356,6 +1356,7 @@ void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
 >
-> Likewise, it's weird having random_data be declared as length 32 when it's
-> actually variable-length.
-
-Will fix.
-
-> > +     /* For the fast path, we check this unlocked first. */
-> > +     if (unlikely(!crng_ready())) {
-> > +             bool not_ready;
-> > +
-> > +             spin_lock_irqsave(&base_crng.lock, flags);
-> > +             /* Now that we're locked, re-check. */
-> > +             not_ready = !crng_ready();
-> > +             if (not_ready)
-> > +                     crng_fast_key_erasure(base_crng.key, chacha_state,
-> > +                                           random_data, random_data_len);
-> > +             spin_unlock_irqrestore(&base_crng.lock, flags);
-> > +             if (!not_ready)
-> > +                     return;
-> > +     }
+>         pci_acpi_optimize_delay(pci_dev, adev->handle);
+>         pci_acpi_set_external_facing(pci_dev);
+> +       pci_set_untrusted(pci_dev);
+>         pci_acpi_add_edr_notifier(pci_dev);
 >
-> Isn't the '!not_ready' check above backwards?  And in case case, doubly-inverted
-> logic like that should be avoided.
-
-You're right; it's all screwed up. I'll call it "ready" like it should
-be and fix the logic on that last if statement. Thank you for pointing
-this one out.
-
+>         pci_acpi_add_pm_notifier(adev, pci_dev);
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 9ecce435fb3f..41e887c27004 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -6869,3 +6869,12 @@ static int __init pci_realloc_setup_params(void)
+>         return 0;
+>  }
+>  pure_initcall(pci_realloc_setup_params);
+> +
+> +void pci_set_untrusted(struct pci_dev *pdev)
+> +{
+> +       u8 val;
+> +
+> +       if (!device_property_read_u8(&pdev->dev, "UntrustedDevice", &val)
+> +           && val)
+> +               pdev->untrusted = 1;
+> +}
+> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> index 3d60cabde1a1..6c273ce5e0ba 100644
+> --- a/drivers/pci/pci.h
+> +++ b/drivers/pci/pci.h
+> @@ -761,4 +761,6 @@ static inline pci_power_t mid_pci_get_power_state(struct pci_dev *pdev)
+>  }
+>  #endif
 >
-> And again, a few more comments please :-)
-
-I'll pepper it up.
-
+> +void pci_set_untrusted(struct pci_dev *pdev);
+> +
+>  #endif /* DRIVERS_PCI_H */
+> --
+> 2.35.0.rc2.247.g8bbb082509-goog
 >
-> >  struct batched_entropy {
-> >       union {
-> > -             u64 entropy_u64[CHACHA_BLOCK_SIZE / sizeof(u64)];
-> > -             u32 entropy_u32[CHACHA_BLOCK_SIZE / sizeof(u32)];
-> > +             u64 entropy_u64[CHACHA_BLOCK_SIZE * 3 / (2 * sizeof(u64))];
-> > +             u32 entropy_u32[CHACHA_BLOCK_SIZE * 3 / (2 * sizeof(u32))];
-> >       };
->
-> The above numbers could use an explanation.
-
-It's 32 bytes from fast key erasure + one full chacha block. I'll
-leave a big comment there explaining this.
-
-> There's also a comment at the top of the file that still claims that
-> get_random_int() et al. don't implement backtracking protection.  That needs to
-> be updated.
-
-Will do. Saw this too after submitting.
-
-Thanks again for your review!
-
-Jason

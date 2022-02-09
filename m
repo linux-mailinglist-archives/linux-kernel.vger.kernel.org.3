@@ -2,62 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD394AF358
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7424AF3A7
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 15:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233739AbiBINyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 08:54:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
+        id S234756AbiBIOHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 09:07:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234605AbiBINy1 (ORCPT
+        with ESMTP id S230004AbiBIOHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 08:54:27 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8770DC050CC8;
-        Wed,  9 Feb 2022 05:54:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Dx/PKWpzQCecS5LJJThre2isPFS/IqAyk2Jvk4HRdb0=; b=Vgmk0z0l+9jPpsmVtPt3YDGe09
-        g870jZd2okb+F2agLNYbzeYNb+Ogu/LxP0STrp3BYie9juwJlk9zrTCTZ1U9cmf5R4frDqu8tcLb0
-        bWMz5gMmpe8zxJEkgcHYNJYI0GPXCSNu+PttpvvBngJzV9EVgx+zWJEIUFvmMV6Dvmzw=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nHnQN-00582r-Ve; Wed, 09 Feb 2022 14:54:23 +0100
-Date:   Wed, 9 Feb 2022 14:54:23 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, davem@davemloft.net, kuba@kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH net-next] net: lan966x: Fix when CONFIG_IPV6 is not set
-Message-ID: <YgPHjxpo0N4ND1ch@lunn.ch>
-References: <20220209101823.1270489-1-horatiu.vultur@microchip.com>
+        Wed, 9 Feb 2022 09:07:12 -0500
+X-Greylist: delayed 706 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 06:07:15 PST
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2FBC061355;
+        Wed,  9 Feb 2022 06:07:14 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 219Dsdrd023902;
+        Wed, 9 Feb 2022 07:54:39 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1644414879;
+        bh=uXWud1+qmR023V5cJfdeKbgOBMmLlhDqz1glFdO81RI=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=fnQb9WXfzGF4ifc7OYteA3tqAaA7MlJz9S20N3yTGpEihr8ol8C/th/8s+gtavoR/
+         bGgT6E2WOjmEfnSOfhABzRUbpKHSHDz+yqL8tniHbS+VZ8rg6WRH01bf9AXIWl7AU0
+         xb7GTyzTmw3R2qqiIaGgQ00ssV4ca7wb7VLyRsP4=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 219DsdEI044066
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 9 Feb 2022 07:54:39 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 9
+ Feb 2022 07:54:39 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 9 Feb 2022 07:54:39 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 219DsdfJ013530;
+        Wed, 9 Feb 2022 07:54:39 -0600
+Date:   Wed, 9 Feb 2022 07:54:39 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <broonie@kernel.org>, <mhocko@suse.cz>, <sfr@canb.auug.org.au>,
+        <linux-next@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <mm-commits@vger.kernel.org>, Roger Quadros <rogerq@kernel.org>,
+        <linux-mtd@lists.infradead.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>
+Subject: Re: mmotm 2022-02-08-15-31 uploaded (drivers/mtd/nand/raw/Kconfig)
+Message-ID: <20220209135439.qcyge32xinvazn43@chewer>
+References: <20220208233156.E2CA6C004E1@smtp.kernel.org>
+ <b18fc937-9cc2-bb7b-fb58-3ba2555371c7@infradead.org>
+ <20220209090300.43241711@xps13>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220209101823.1270489-1-horatiu.vultur@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220209090300.43241711@xps13>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 11:18:23AM +0100, Horatiu Vultur wrote:
-> When CONFIG_IPV6 is not set, then the compilation of the lan966x driver
-> fails with the following error:
+On 09:03-20220209, Miquel Raynal wrote:
+> Hi Randy,
 > 
-> drivers/net/ethernet/microchip/lan966x/lan966x_main.c:444: undefined
-> reference to `ipv6_mc_check_mld'
+> rdunlap@infradead.org wrote on Tue, 8 Feb 2022 22:30:23 -0800:
 > 
-> The fix consists in adding #ifdef around this code.
+> > On 2/8/22 15:31, Andrew Morton wrote:
+> > > The mm-of-the-moment snapshot 2022-02-08-15-31 has been uploaded to
+> > > 
+> > >    https://www.ozlabs.org/~akpm/mmotm/
+> > > 
+> > > mmotm-readme.txt says
+> > > 
+> > > README for mm-of-the-moment:
+> > > 
+> > > https://www.ozlabs.org/~akpm/mmotm/
+> > > 
+> > > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> > > more than once a week.
+> > > 
+> > > You will need quilt to apply these patches to the latest Linus release (5.x
+> > > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> > > https://ozlabs.org/~akpm/mmotm/series
+> > > 
+> > > The file broken-out.tar.gz contains two datestamp files: .DATE and
+> > > .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+> > > followed by the base kernel version against which this patch series is to
+> > > be applied.  
+> > 
+> > on i386:
+> > 
+> > WARNING: unmet direct dependencies detected for OMAP_GPMC
+> >   Depends on [n]: MEMORY [=y] && OF_ADDRESS [=n]
+> >   Selected by [y]:
+> >   - MTD_NAND_OMAP2 [=y] && MTD [=y] && MTD_RAW_NAND [=y] && (ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST [=y]) && HAS_IOMEM [=y]
+> > 
+> > 
+> > Full randconfig file is attached.
+> 
+> + Uwe, + K3 people + Krzysztof
 
-It might be better to add a stub function for when IPv6 is
-disabled. We try to avoid #if in C code.
+Thanks for looping me in.
 
-	  Andrew
+> 
+> Uwe already raised the issue, and this was proposed:
+> 
+> https://lore.kernel.org/linux-mtd/20220127105652.1063624-1-miquel.raynal@bootlin.com/T/
+
+I will respond to the patch.
+
+> 
+> Maybe we should have added K3 people in Cc but their MAINTAINERS entry
+> is incomplete so get_maintainers.pl did not immediately found them.
+
+What are we missing there?
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

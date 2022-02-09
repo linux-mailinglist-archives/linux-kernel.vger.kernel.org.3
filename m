@@ -2,45 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B205A4AEE69
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:50:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B84534AEDB3
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbiBIJtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 04:49:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
+        id S234670AbiBIJKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 04:10:39 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:51216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiBIJth (ORCPT
+        with ESMTP id S232848AbiBIJKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 04:49:37 -0500
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEBFE01A2E8;
-        Wed,  9 Feb 2022 01:49:27 -0800 (PST)
-Received: from [192.168.0.2] (ip5f5aee30.dynamic.kabel-deutschland.de [95.90.238.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+        Wed, 9 Feb 2022 04:10:34 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6A9E03CD97
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 01:10:29 -0800 (PST)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id D9D6561EA1923;
-        Wed,  9 Feb 2022 10:06:28 +0100 (CET)
-Message-ID: <f790f9aa-fcb7-d163-9c1c-9eb107d4b1bd@molgen.mpg.de>
-Date:   Wed, 9 Feb 2022 10:06:28 +0100
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C33B43FE41
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 09:07:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644397645;
+        bh=ukUcgEqDwtgLJM31dxy+4xX8XcrHusscNiWdsQHxisk=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=K5BTAT9OZLppVVCleY3m6YFExMG/1aHjtHlvFl6kP1Sj+PaqFB0ZtzT1fpw+hRQMn
+         ndf3GkG/gGNXF68LMwhBzdDpwtAD1q0SVe/Cca30JjXc/d/nK73IbX6vDxqSRciDU+
+         u6Zzy5MY9l8O/gtD8WniCBw/tS7LwYm0tjGQbMhK5DlJxx/Xj4z5y9tiMrKqPHkbj2
+         Y6DAVLON6CXL0CovoPGt7vlro8Y+oiUITb4EwOx/UGf5Qpu7U0831WHVB5yARYTUwa
+         bG3C+I9zyk8zzRuWt0WivLDc5nBLZWo3M4wQA6DPKqdIkTp//dszxfd6VPDWnEwgfy
+         IgG1KN3VBTxRQ==
+Received: by mail-ej1-f69.google.com with SMTP id z26-20020a1709067e5a00b006cbe0628826so885597ejr.10
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 01:07:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ukUcgEqDwtgLJM31dxy+4xX8XcrHusscNiWdsQHxisk=;
+        b=Ofd5NptPTtzUKEGlBd4jcPq61DTncworZ0PnBWbTCi3tjUH8IMy1tS85ez4jYrEwkV
+         /FfSgtwwixmPbYOGGn8+MP8TrheBFsWrj5rA1+Y/GLsE2uNC6k67yjlVxoF2sVS7oFut
+         AJzuVAWlB3kqNqT4o8x/PJiQ9VC0ZybIWCfNJTurTr6dCeom7Fp0fxyxl7zzMsJkD3PJ
+         00JTJ3nLe2cCqh4RPeMgH7INXng7SeDVu+40puC8RehBLfBF26/uL8r99+84TB4sXXjP
+         YLxfRPMGN9gG8+o39v9dHd+Zk1TqKJs7X4TAN4HyczEL0PnJngex8sFh/tuRCnZcilbt
+         uuzQ==
+X-Gm-Message-State: AOAM530uFCKVpI4UxaxLyVkrE0+dhThpMSKBKbn6FbKUBpw9JRns6mIn
+        TcCdr342hFVjAYlNVwaZbzcOp9oTtuQ9mvS2LgI4F1g4jTuC0PiY7guKaBUQc/hy37uVLwbc0fK
+        i+DgzTiuVhSkIt2gyj+BGbjhmYn6ChtuE+/xr27noPA==
+X-Received: by 2002:a17:907:948c:: with SMTP id dm12mr1116265ejc.770.1644397643747;
+        Wed, 09 Feb 2022 01:07:23 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy9uxWgVcPknk7fehf+KnxlsIBkuqa3Vzp0iYYmlZOw5P2qEBJnVCBCmibBMCkfMCTZST/mHg==
+X-Received: by 2002:a17:907:948c:: with SMTP id dm12mr1116243ejc.770.1644397643507;
+        Wed, 09 Feb 2022 01:07:23 -0800 (PST)
+Received: from [192.168.0.94] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id j20sm262008ejo.27.2022.02.09.01.07.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 01:07:23 -0800 (PST)
+Message-ID: <1196e292-23ea-78e5-7d72-38586f65e26e@canonical.com>
+Date:   Wed, 9 Feb 2022 10:07:22 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2] media: aspeed: Use full swing as JFIF to fix incorrect
- color
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3] dt-bindings: timer: Convert faraday,fttmr010 to yaml
 Content-Language: en-US
-To:     Jammy Huang <jammy_huang@aspeedtech.com>
-References: <20220209084225.4456-1-jammy_huang@aspeedtech.com>
-Cc:     eajames@linux.ibm.com, mchehab@kernel.org, joel@jms.id.au,
-        andrew@aj.id.au, linux-media@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20220209084225.4456-1-jammy_huang@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Corentin Labbe <clabbe@baylibre.com>, daniel.lezcano@linaro.org,
+        robh+dt@kernel.org, tglx@linutronix.de
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220209090058.1472964-1-clabbe@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220209090058.1472964-1-clabbe@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,84 +83,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Jammy,
+On 09/02/2022 10:00, Corentin Labbe wrote:
+> Converts timer/faraday,fttmr010.txt to yaml.
 
+s/Converts/Convert/
 
-Am 09.02.22 um 09:42 schrieb Jammy Huang:
-> Current settings for video capture rgb-2-yuv is BT.601(studio swing),
-> but JFIF uses BT.601(full swing) to deocde. This mismatch will lead
-> to incorrect color. For example, input RGB value, (0, 0, 255), will
-> become (16, 16, 235) after jpg decoded.
 > 
-> Add an enum, aspeed_video_capture_format, to define VR008[7:6]
-> capture format and correct default settings for video capture to fix
-> the problem.
-
-Maybe quote the datasheet:
-
-VR008[7:6] will decide the data format for video capture:
-00: CCIR601 studio swing compliant YUV format
-01: CCIR601 full swing compliant YUV format
-10: RGB format
-11: Gray color mode
-
-> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 > ---
-> v2:
->   - update subject from 'media: aspeed: Fix-incorrect-color' to
->     'media: aspeed: Use full swing as JFIF to fix incorrect'
->   - update commit message
->   - add enum, aspeed_video_capture_format, to define VR008[7:6]
-> ---
->   drivers/media/platform/aspeed-video.c | 14 +++++++++++---
->   1 file changed, 11 insertions(+), 3 deletions(-)
+> Changes since v1:
+> - added moxart example
+> - relaxed some contraints as driver only support one clock and one
+>   interrupt (as used by moxa,moxart-timer)
+> Changes since v2:
+> - increased max size of interrupts
+> - fixed all issues reported by Rob https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20220126160021.3537591-1-clabbe@baylibre.com
 > 
-> diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-> index eb9c17ac0e14..5bcf60b4628b 100644
-> --- a/drivers/media/platform/aspeed-video.c
-> +++ b/drivers/media/platform/aspeed-video.c
-> @@ -86,8 +86,6 @@
->   #define  VE_CTRL_SOURCE			BIT(2)
->   #define  VE_CTRL_INT_DE			BIT(4)
->   #define  VE_CTRL_DIRECT_FETCH		BIT(5)
-> -#define  VE_CTRL_YUV			BIT(6)
-> -#define  VE_CTRL_RGB			BIT(7)
->   #define  VE_CTRL_CAPTURE_FMT		GENMASK(7, 6)
->   #define  VE_CTRL_AUTO_OR_CURSOR		BIT(8)
->   #define  VE_CTRL_CLK_INVERSE		BIT(11)
-> @@ -202,6 +200,15 @@ enum {
->   	VIDEO_CLOCKS_ON,
->   };
->   
-> +// for VE_CTRL_CAPTURE_FMT
-> +enum aspeed_video_capture_format {
-> +	VIDEO_CAP_FMT_YUV_STUDIO = 0,
+> All aspeed-bmc-vegman*dts are expected to fail and will be fixed via:
+> https://patchwork.ozlabs.org/project/linux-aspeed/patch/20220127141604.1163-1-a.kartashev@yadro.com/
+> 
 
-Maybe also append `_SWING`?
+(...)
 
-> +	VIDEO_CAP_FMT_YUV_FULL,
-> +	VIDEO_CAP_FMT_RGB,
-> +	VIDEO_CAP_FMT_GRAY,
-> +	VIDEO_CAP_FMT_MAX
-> +};
 > +
->   struct aspeed_video_addr {
->   	unsigned int size;
->   	dma_addr_t dma;
-> @@ -1089,7 +1096,8 @@ static void aspeed_video_init_regs(struct aspeed_video *video)
->   	u32 comp_ctrl = VE_COMP_CTRL_RSVD |
->   		FIELD_PREP(VE_COMP_CTRL_DCT_LUM, video->jpeg_quality) |
->   		FIELD_PREP(VE_COMP_CTRL_DCT_CHR, video->jpeg_quality | 0x10);
-> -	u32 ctrl = VE_CTRL_AUTO_OR_CURSOR;
-> +	u32 ctrl = VE_CTRL_AUTO_OR_CURSOR |
-> +		FIELD_PREP(VE_CTRL_CAPTURE_FMT, VIDEO_CAP_FMT_YUV_FULL);
->   	u32 seq_ctrl = video->jpeg_mode;
->   
->   	if (video->frame_rate)
+> +  syscon:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: true
+> +
+This should be false (and was false in your v1).
 
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-
-
-Kind regards,
-
-Paul
+Best regards,
+Krzysztof

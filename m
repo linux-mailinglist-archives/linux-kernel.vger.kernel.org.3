@@ -2,102 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 548AA4AF75D
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C404AF759
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237614AbiBIQ6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:58:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
+        id S237626AbiBIQ6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:58:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237572AbiBIQ5y (ORCPT
+        with ESMTP id S237605AbiBIQ6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:57:54 -0500
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6F6C05CB86;
-        Wed,  9 Feb 2022 08:57:57 -0800 (PST)
-Received: by mail-qt1-x843.google.com with SMTP id s1so2317798qtw.9;
-        Wed, 09 Feb 2022 08:57:57 -0800 (PST)
+        Wed, 9 Feb 2022 11:58:06 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059BEC05CB87;
+        Wed,  9 Feb 2022 08:58:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=c8ITlZ0TIJQYeuae8LzwclVS/gPvsuuD8tI1DH//ZB0=;
-        b=Alj2+fWNY3w/xeBfw85sJE1/xxD0ShOPbSBvLdKBwssQQsn0birtT5YpUpPp62/q+l
-         PTUpJ0ZQ1uHP87p3d9T/d9M5Q5vwW7sarhGKiaREvbGURzo4mZaWUx7BNsSDumcLfqKv
-         WzzSzvl7PymNUz6YlyRWx1uOQ2Oz6mecincQhr/0uocFitMryIEtHsrSwCUBNx3dFBk9
-         vh5Rn1ZV0Sy1LNax+QkgzRY2v5vHE+TXczdfIfiwxNJkSi2OTgEvuBn6KnnTCbjn7Anf
-         MhCCHghukYiJxUMI/0aIMbGGN0nA89YZiXQuS1fEEKoW+9/qj9d7mwh2/ThmJaR6rUMb
-         tPng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=c8ITlZ0TIJQYeuae8LzwclVS/gPvsuuD8tI1DH//ZB0=;
-        b=NFwU0xHifaPENHCIQdjQr87rH4pstEEoRV6LBLLFOh1mU3+KYSivb3rwAuzU6oC6Pr
-         e8wSqCLYPJzhaYUCJBDMPZIoO+SgKs4MBb5zitxUhUGZmPZf5XPBeC4OUBQdPTfhQPHI
-         x22JEZXO1mlZFSALCmgSQsLKSMRAtmE/T0LsxFRBtev3rlUbS51PvoNRvmxNWJLJa6qI
-         OnRAg/ovwcFDpbK6YYXwU/x0MOA3JhMtNFR1ylDTEBHEnJzJOaFE+lFcn6P3xdbXNVOP
-         EXh2d7QD2Aw3h6i5TqZRmIaz3ipGaJHG43wbSy8A3p3ZvjoJ6EBpktu3nT52gEV+zBfZ
-         ENzw==
-X-Gm-Message-State: AOAM530wIi3I3LhVV3nDo7ELqD69fNv2KaeiilraT87+z5Zh0nMhThNe
-        SGxTryg0UKo9n0I6Frkuz9o=
-X-Google-Smtp-Source: ABdhPJwB5PRL11twhgVtT0TwmaAdjTIgn1YAjllT+KDbjpY+nLqyxDe2O1PYeY4gdan0ISECuelYdw==
-X-Received: by 2002:ac8:7cab:: with SMTP id z11mr2004416qtv.384.1644425876371;
-        Wed, 09 Feb 2022 08:57:56 -0800 (PST)
-Received: from lumia-dev.localdomain. (pool-96-225-98-253.nwrknj.fios.verizon.net. [96.225.98.253])
-        by smtp.googlemail.com with ESMTPSA id z19sm9629019qtj.77.2022.02.09.08.57.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 08:57:55 -0800 (PST)
-From:   Jack Matthews <jm5112356@gmail.com>
-Cc:     jm5112356@gmail.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ARM: dts: qcom: pm8226: add node for RTC
-Date:   Wed,  9 Feb 2022 16:57:41 +0000
-Message-Id: <20220209165742.652890-1-jm5112356@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220209052929.651881-1-jm5112356@gmail.com>
-References: <20220209052929.651881-1-jm5112356@gmail.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644425890; x=1675961890;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QoxB7339BnBkugvaYIedB66T9O8oyGrxlDFYROzaZRk=;
+  b=rjJLLrpB9Gnq8IzsA+WruPIGHdYtEE4IaZHEEq9jnIdoIhJKnUK1cVV+
+   /RpCnLX7qYzRrX2KeF4mFxiqfvXz8E83ETXJxVZG63Tuf2SxR05nHtZbE
+   nID/zrSVW2qZ1r8BKhwfnjYOYdrGbmfXClyQKUpOlN5Lpj0yXfaEZCoUK
+   c=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Feb 2022 08:58:09 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 08:58:09 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 9 Feb 2022 08:58:09 -0800
+Received: from lsbug.qualcomm.com (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 9 Feb 2022
+ 08:58:07 -0800
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     Theodore Ts'o <tytso@mit.edu>
+CC:     Jan Kara <jack@suse.com>, "Paul E. McKenney" <paulmck@kernel.org>,
+        "Neeraj Upadhyay" <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        <linux-ext4@vger.kernel.org>, <rcu@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Qian Cai <quic_qiancai@quicinc.com>
+Subject: [RFC PATCH] jbd2: avoid __GFP_ZERO with SLAB_TYPESAFE_BY_RCU
+Date:   Wed, 9 Feb 2022 11:57:42 -0500
+Message-ID: <20220209165742.5659-1-quic_qiancai@quicinc.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a node for PM8226's real time clock.
+Since the linux-next commit 120aa5e57479 (mm: Check for
+SLAB_TYPESAFE_BY_RCU and __GFP_ZERO slab allocation), we will get a
+boot warning. Avoid it by calling synchronize_rcu() before the zeroing.
 
-Signed-off-by: Jack Matthews <jm5112356@gmail.com>
+Signed-off-by: Qian Cai <quic_qiancai@quicinc.com>
 ---
- arch/arm/boot/dts/qcom-pm8226.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+ fs/jbd2/journal.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-pm8226.dtsi b/arch/arm/boot/dts/qcom-pm8226.dtsi
-index 872724490a5d..8ee628ce88a9 100644
---- a/arch/arm/boot/dts/qcom-pm8226.dtsi
-+++ b/arch/arm/boot/dts/qcom-pm8226.dtsi
-@@ -73,6 +73,13 @@ adc-chan@f {
- 			};
- 		};
+diff --git a/fs/jbd2/journal.c b/fs/jbd2/journal.c
+index c2cf74b01ddb..323112de5921 100644
+--- a/fs/jbd2/journal.c
++++ b/fs/jbd2/journal.c
+@@ -2861,15 +2861,18 @@ static struct journal_head *journal_alloc_journal_head(void)
+ #ifdef CONFIG_JBD2_DEBUG
+ 	atomic_inc(&nr_journal_heads);
+ #endif
+-	ret = kmem_cache_zalloc(jbd2_journal_head_cache, GFP_NOFS);
++	ret = kmem_cache_alloc(jbd2_journal_head_cache, GFP_NOFS);
+ 	if (!ret) {
+ 		jbd_debug(1, "out of memory for journal_head\n");
+ 		pr_notice_ratelimited("ENOMEM in %s, retrying.\n", __func__);
+-		ret = kmem_cache_zalloc(jbd2_journal_head_cache,
++		ret = kmem_cache_alloc(jbd2_journal_head_cache,
+ 				GFP_NOFS | __GFP_NOFAIL);
+ 	}
+-	if (ret)
++	if (ret) {
++		synchronize_rcu();
++		memset(ret, 0, sizeof(*ret));
+ 		spin_lock_init(&ret->b_state_lock);
++	}
+ 	return ret;
+ }
  
-+		rtc@6000 {
-+			compatible = "qcom,pm8941-rtc";
-+			reg = <0x6000>, <0x6100>;
-+			reg-names = "rtc", "alarm";
-+			interrupts = <0x0 0x61 0x1 IRQ_TYPE_EDGE_RISING>;
-+		};
-+
- 		pm8226_mpps: mpps@a000 {
- 			compatible = "qcom,pm8226-mpp", "qcom,spmi-mpp";
- 			reg = <0xa000>;
 -- 
-2.25.1
+2.30.2
 

@@ -2,253 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3594AEA31
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 07:21:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D682F4AE961
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 06:38:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232711AbiBIGR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 01:17:58 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35886 "EHLO
+        id S232850AbiBIFfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 00:35:01 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243063AbiBIGLy (ORCPT
+        with ESMTP id S240029AbiBIF2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 01:11:54 -0500
-X-Greylist: delayed 1846 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 22:11:03 PST
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C9FE00E16F;
-        Tue,  8 Feb 2022 22:11:01 -0800 (PST)
-Received: from relay12.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::232])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 4895AC439F;
-        Wed,  9 Feb 2022 05:28:24 +0000 (UTC)
-Received: (Authenticated sender: frank@zago.net)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id C4DA0200002;
-        Wed,  9 Feb 2022 05:28:19 +0000 (UTC)
-From:   frank zago <frank@zago.net>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        frank zago <frank@zago.net>
-Subject: [PATCH] HID: Add support for Mega World controller force feedback
-Date:   Tue,  8 Feb 2022 23:28:07 -0600
-Message-Id: <20220209052807.138007-1-frank@zago.net>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 9 Feb 2022 00:28:17 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9E1C034022
+        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 21:28:21 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id f2-20020a17090a4a8200b001b7dac53bd6so1008393pjh.4
+        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 21:28:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=rZmcqq9wo8YnIT5ye21K0NZ6qO5uZQZ73lL6JC7iEz8=;
+        b=V7pZi17UGh4z8xKEPrH1tHrUFmHaRAzvYAScVj9FqCzqJOPH1qxNvmVXTqmdmhDDja
+         fSevxqTLIKSXGes2Bc2yGMwmn7vJl0vbrogVI02WbymmV4+O5pyInoUXAt1zZDRNXNhD
+         z6epdNN7gu63acsXSIVLG/J0gBfUtBORK47KpxZN4ke2d9mQz/PmlvDccsPtR38X39Oq
+         6y1+YimogJQnshvrmsxFNBfNa0FWZbz4Fd+udxylcO1TK9rUtlqZbPfVTmUqk2FT8fE7
+         cC6zbqItrZi9fJeEySh/9QX8B+0DK8T/atnxM8CIqEO0AOqaa7lheUgGtPCgA2g42FVt
+         AYyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=rZmcqq9wo8YnIT5ye21K0NZ6qO5uZQZ73lL6JC7iEz8=;
+        b=dqquowZpt4TiZeowBJSEbpaY3Eg2+zCfAEAEki9XqVjracLHQAmtDanyYYhBDUvdKH
+         GJYVPGMbr/8N8ER94+wj3a0n8mCb95poL+oDErO6PNjdETa8F1BoeeK8YNd3DMvuP9uE
+         DSdW7rwzhzCrCeHaDG8hsWy0dg3ZYSq6laJ7xZYUqLKMuWUKHl/nnR4DpyTM8bdvi28S
+         oHzY6V57L5odoK3vdE5U5cZxoUF2DnefywExuc5EDYSL2bP1+ZiVaRnRWgDnbbZTQWRy
+         ACXRB9mXRtuOGTIQwcqaWyjCBVQXH/KAQ4te42Hw6J75WnYb06QRgTnx2D3aWJ4Jh3AY
+         a0wg==
+X-Gm-Message-State: AOAM530qOwGEoT/SrjHu4GZkxobPcTvyCzbQ1i0Hryyk+D9+6bAFvVSW
+        6OgLmG+oFPFZZPPjiFEJtOZQtIoHEPbuLg==
+X-Google-Smtp-Source: ABdhPJwyIfZyzDHRcKT+rTPIrUjaIig807SEciA4VZqtAc+0hggnYq8ijl+rHM47O4N+sK6xME3dZVt5hj3+aA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a17:903:24d:: with SMTP id
+ j13mr545456plh.54.1644384500567; Tue, 08 Feb 2022 21:28:20 -0800 (PST)
+Date:   Wed,  9 Feb 2022 13:28:11 +0800
+Message-Id: <20220209052813.854014-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
+Subject: [PATCH v3 1/3] list: test: Add test for list_del_init_careful()
+From:   David Gow <davidgow@google.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for one of the several Mega World USB game
-controller with integrated force feedback. It is a HID based
-memory-less game controller, with a weak motor on the left, and a
-strong one on the right.
+The list_del_init_careful() function was added[1] after the list KUnit
+test. Add a very basic test to cover it.
 
-Signed-off-by: frank zago <frank@zago.net>
+Note that this test only covers the single-threaded behaviour (which
+matches list_del_init()), as is already the case with the test for
+list_empty_careful().
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c6fe44d96fc1536af5b11cd859686453d1b7bfd1
+
+Signed-off-by: David Gow <davidgow@google.com>
 ---
- drivers/hid/Kconfig         |  14 ++++
- drivers/hid/Makefile        |   1 +
- drivers/hid/hid-ids.h       |   3 +
- drivers/hid/hid-megaworld.c | 136 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 154 insertions(+)
- create mode 100644 drivers/hid/hid-megaworld.c
 
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index f5544157576c..2344830d3680 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -684,6 +684,20 @@ config HID_MAYFLASH
- 	Say Y here if you have HJZ Mayflash PS3 game controller adapters
- 	and want to enable force feedback support.
+Changes since v2:
+https://lore.kernel.org/linux-kselftest/20220208040122.695258-1-davidgow@google.com/
+- Fix the test calling list_del_init() instead of
+  list_del_init_careful()
+- Improve the comment noting we only test single-threaded behaviour.
+
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20220205061539.273330-1-davidgow@google.com/
+- Patch 1/3 unchanged
+---
+ lib/list-test.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/lib/list-test.c b/lib/list-test.c
+index ee09505df16f..f82a3c7788b8 100644
+--- a/lib/list-test.c
++++ b/lib/list-test.c
+@@ -161,6 +161,25 @@ static void list_test_list_del_init(struct kunit *test)
+ 	KUNIT_EXPECT_TRUE(test, list_empty_careful(&a));
+ }
  
-+config HID_MEGAWORLD
-+	tristate "Mega World based game controller support"
-+	depends on HID
-+	help
-+	  Say Y here if you have a Mega World based game controller.
-+
-+config MEGAWORLD_FF
-+	bool "Mega World based game controller force feedback support"
-+	depends on HID_MEGAWORLD
-+	select INPUT_FF_MEMLESS
-+	help
-+	  Say Y here if you have a Mega World based game controller and want
-+	  to have force feedback support for it.
-+
- config HID_REDRAGON
- 	tristate "Redragon keyboards"
- 	depends on HID
-diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-index 6d3e630e81af..4f333881560e 100644
---- a/drivers/hid/Makefile
-+++ b/drivers/hid/Makefile
-@@ -76,6 +76,7 @@ obj-$(CONFIG_HID_MAGICMOUSE)	+= hid-magicmouse.o
- obj-$(CONFIG_HID_MALTRON)	+= hid-maltron.o
- obj-$(CONFIG_HID_MCP2221)	+= hid-mcp2221.o
- obj-$(CONFIG_HID_MAYFLASH)	+= hid-mf.o
-+obj-$(CONFIG_HID_MEGAWORLD)	+= hid-megaworld.o
- obj-$(CONFIG_HID_MICROSOFT)	+= hid-microsoft.o
- obj-$(CONFIG_HID_MONTEREY)	+= hid-monterey.o
- obj-$(CONFIG_HID_MULTITOUCH)	+= hid-multitouch.o
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 85975031389b..2588d933c2b5 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -860,6 +860,9 @@
- #define USB_VENDOR_ID_MCS		0x16d0
- #define USB_DEVICE_ID_MCS_GAMEPADBLOCK	0x0bcc
- 
-+#define USB_VENDOR_MEGAWORLD		0x07b5
-+#define USB_DEVICE_ID_MEGAWORLD_GAMEPAD	0x0312
-+
- #define USB_VENDOR_ID_MGE		0x0463
- #define USB_DEVICE_ID_MGE_UPS		0xffff
- #define USB_DEVICE_ID_MGE_UPS1		0x0001
-diff --git a/drivers/hid/hid-megaworld.c b/drivers/hid/hid-megaworld.c
-new file mode 100644
-index 000000000000..3ac247d7bd54
---- /dev/null
-+++ b/drivers/hid/hid-megaworld.c
-@@ -0,0 +1,136 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Vibration support for Mega World controllers
-+ *
-+ * Copyright 2022 Frank Zago
-+ *
-+ * Derived from hid-zpff.c:
-+ *   Copyright (c) 2005, 2006 Anssi Hannula <anssi.hannula@gmail.com>
-+ */
-+
-+#include <linux/hid.h>
-+#include <linux/input.h>
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+
-+#include "hid-ids.h"
-+
-+#ifdef CONFIG_MEGAWORLD_FF
-+
-+struct mwctrl_device {
-+	struct hid_report *report;
-+	s32 *weak;
-+	s32 *strong;
-+};
-+
-+static int mwctrl_play(struct input_dev *dev, void *data,
-+		       struct ff_effect *effect)
++static void list_test_list_del_init_careful(struct kunit *test)
 +{
-+	struct hid_device *hid = input_get_drvdata(dev);
-+	struct mwctrl_device *mwctrl = data;
++	/* NOTE: This test only checks the behaviour of this function in
++	 * isolation. It does not verify memory model guarantees. */
++	struct list_head a, b;
++	LIST_HEAD(list);
 +
-+	*mwctrl->strong = effect->u.rumble.strong_magnitude >> 8;
-+	*mwctrl->weak = effect->u.rumble.weak_magnitude >> 8;
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
 +
-+	hid_hw_request(hid, mwctrl->report, HID_REQ_SET_REPORT);
++	/* before: [list] -> a -> b */
++	list_del_init_careful(&a);
++	/* after: [list] -> b, a initialised */
 +
-+	return 0;
++	KUNIT_EXPECT_PTR_EQ(test, list.next, &b);
++	KUNIT_EXPECT_PTR_EQ(test, b.prev, &list);
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&a));
 +}
 +
-+static int mwctrl_init(struct hid_device *hid)
-+{
-+	struct mwctrl_device *mwctrl;
-+	struct hid_report *report;
-+	struct hid_input *hidinput;
-+	struct input_dev *dev;
-+	int i, error;
-+
-+	if (list_empty(&hid->inputs)) {
-+		hid_err(hid, "no inputs found\n");
-+		return -ENODEV;
-+	}
-+	hidinput = list_entry(hid->inputs.next, struct hid_input, list);
-+	dev = hidinput->input;
-+
-+	for (i = 0; i < 4; i++) {
-+		report = hid_validate_values(hid, HID_OUTPUT_REPORT, 0, i, 1);
-+		if (!report)
-+			return -ENODEV;
-+	}
-+
-+	mwctrl = kzalloc(sizeof(struct mwctrl_device), GFP_KERNEL);
-+	if (!mwctrl)
-+		return -ENOMEM;
-+
-+	set_bit(FF_RUMBLE, dev->ffbit);
-+
-+	error = input_ff_create_memless(dev, mwctrl, mwctrl_play);
-+	if (error) {
-+		kfree(mwctrl);
-+		return error;
-+	}
-+
-+	mwctrl->report = report;
-+
-+	/* Field 0 is always 2, and field 1 is always 0. The original
-+	 * windows driver has a 5 bytes command, where the 5th byte is
-+	 * a repeat of the 3rd byte, however the device has only 4
-+	 * fields. It could be a bug in the driver, or there is a
-+	 * different device that needs it.
-+	 */
-+	report->field[0]->value[0] = 0x02;
-+
-+	mwctrl->strong = &report->field[2]->value[0];
-+	mwctrl->weak = &report->field[3]->value[0];
-+
-+	return 0;
-+}
-+
-+#else
-+
-+static int mwctrl_init(struct hid_device *hid)
-+{
-+	return 0;
-+}
-+
-+#endif
-+
-+static int mwctrl_probe(struct hid_device *hdev, const struct hid_device_id *id)
-+{
-+	int ret;
-+
-+	ret = hid_parse(hdev);
-+	if (ret) {
-+		hid_err(hdev, "parse failed\n");
-+		return ret;
-+	}
-+
-+	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT & ~HID_CONNECT_FF);
-+	if (ret) {
-+		hid_err(hdev, "hw start failed\n");
-+		return ret;
-+	}
-+
-+	ret = mwctrl_init(hdev);
-+	if (ret)
-+		hid_hw_stop(hdev);
-+
-+	return ret;
-+}
-+
-+static const struct hid_device_id mwctrl_devices[] = {
-+	{ HID_USB_DEVICE(USB_VENDOR_MEGAWORLD,
-+			 USB_DEVICE_ID_MEGAWORLD_GAMEPAD) },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(hid, mwctrl_devices);
-+
-+static struct hid_driver mwctrl_driver = {
-+	.name = "megaworld",
-+	.id_table = mwctrl_devices,
-+	.probe = mwctrl_probe,
-+};
-+
-+module_hid_driver(mwctrl_driver);
-+
-+MODULE_LICENSE("GPL");
+ static void list_test_list_move(struct kunit *test)
+ {
+ 	struct list_head a, b;
+@@ -707,6 +726,7 @@ static struct kunit_case list_test_cases[] = {
+ 	KUNIT_CASE(list_test_list_replace_init),
+ 	KUNIT_CASE(list_test_list_swap),
+ 	KUNIT_CASE(list_test_list_del_init),
++	KUNIT_CASE(list_test_list_del_init_careful),
+ 	KUNIT_CASE(list_test_list_move),
+ 	KUNIT_CASE(list_test_list_move_tail),
+ 	KUNIT_CASE(list_test_list_bulk_move_tail),
 -- 
-2.32.0
+2.35.0.263.gb82422642f-goog
 

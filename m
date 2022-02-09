@@ -2,121 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E32804AFFD6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E28E4AFFDC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 23:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234913AbiBIWDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 17:03:36 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:48280 "EHLO
+        id S234920AbiBIWEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 17:04:16 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:51340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234866AbiBIWDW (ORCPT
+        with ESMTP id S234966AbiBIWEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 17:03:22 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95135DF498A3
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:03:24 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id u6so6858580lfc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 14:03:24 -0800 (PST)
+        Wed, 9 Feb 2022 17:04:12 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD80BE010DBE
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 14:04:10 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id t14-20020a17090a3e4e00b001b8f6032d96so3669488pjm.2
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 14:04:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=m/jM298Q2lilwuRAcB9szC9CfZcuho3/psKjLfOmipk=;
-        b=TBVPofOcDZHSNsfDSrK9N25wXlUqmiOwgAkzkjmAX7pRNqnzIlCv+Yazw38kCracB1
-         PfVDsmtnw7AZxa6Rvn5RueZwpXPFbDHYD7wl8veFe5kS1uzo3pW+Q54NcX6wK7F4ifN9
-         kCIpFQOmGPlWeI+F+Daz9XRNW0Np/b/ccFxBcKS7/6U+f2704dO9X6NRZidd5HhbDpDO
-         jDr5wylLX3hFKJ2e6jweRbE0x4iGflbnv4rwQe6jxf7pTSNFufATUiEHoKNdn4H37ZiU
-         l2QWN6u7oLNWiu3x7fhNSVxYWqN2s67IOWxnFQ+cHgpG4/KqiJottk6xQuvfFpjx+4zG
-         p3KA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xNzkFtkEdwS4V5xuimABsw6tYvmcHWMu0L6uE58HPK4=;
+        b=kyxSH/1s4tYkpnIvrk1pCVVHvuka0Iv2uFFyhp9uZb0aans0RzfOy3BkDicIzvpIK2
+         JZ+AInXaf/dEUAOlK2atr40Ts389WYvQGH1Iw96AZ1SFqT1j4ADLygKvmII//Yw6WSq0
+         1ZztH/K36DxhmzhYbKgN7gkepOJvdyMan3uZz8JP3RBDwsE3mZ3ABC+VnPzYAI08zOkn
+         JX6p7qgUTG4FbF0Q/KazCCYn0vfox4zeNuxNgGWuoQJp0sXTZmeP6Wj4GZXH8yRWt5bP
+         7j8sps3kN/wCna3m6wFG2i5r2m9G2x5j8DF1WZrhxmKarKilBeUF8EVrQGaqOa90iawA
+         HXCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=m/jM298Q2lilwuRAcB9szC9CfZcuho3/psKjLfOmipk=;
-        b=VZTFXm6pXH/DhAkxbnyJL0eJQFfr/ar/ZENSkqJEAe/PtQvegYynfNmct0Ex2c/r8B
-         j/T0RK1xWroYKLD09pZECs3hO9wDHM4CmbhuIt0AwwqugifIFyUZw1isaCu/VskyIUx0
-         dUTG7Jn3tiLbgy3ZViKFGdgbrZQYD73kCLx4lTLtg/LS/tnf83EShwVApR6hJszOd4ac
-         bhAaq0ZciJbORbcJYL0hZB/Ms+n+tXwieWrNvqQxZ002x/twRZdT9eYDOrKN64O5Q9XV
-         re9CCifhYsUeZaqBvPfQr01ImXfGc7nLut8P7m5uJ6+2AYEBC/3nXdHKcP0UML/BD7Zr
-         DnbQ==
-X-Gm-Message-State: AOAM530q8ostBEzF0KtZCki8AiVJPO2Y4HPapxW7ywdf4nau4FvoPLzc
-        nw6owFJdjR0C0gNjqYMFW2+t8w==
-X-Google-Smtp-Source: ABdhPJxwEImBidIbwgxkjiktuZ2LvjO6+doHOTUKPtcJPGxnGqzJVQKkxUsjyj77e/ZRZY8CKdu1Dg==
-X-Received: by 2002:a05:6512:3a93:: with SMTP id q19mr3041722lfu.487.1644444202900;
-        Wed, 09 Feb 2022 14:03:22 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id a27sm2541809lfg.140.2022.02.09.14.03.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 14:03:22 -0800 (PST)
-Message-ID: <32259670-1261-a305-2bcb-57ebde792f24@linaro.org>
-Date:   Thu, 10 Feb 2022 01:03:21 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xNzkFtkEdwS4V5xuimABsw6tYvmcHWMu0L6uE58HPK4=;
+        b=DqclZDT9MxmcgItKQJFbd4ovMX+lfQaMFhT+YhuAivTKN8k2xnKEZLwY6bY2TucK6L
+         sOLiOhI66DTq4WC2ieAFzm+PR7ue8eXnKJ96pe22jjMNKGRGRwbgH1b685oGBD1yAMdU
+         9AFjgloFt6f3Ocs8RMopmdGu4O2IPG7rJyBxsdLYrsUNos8Vh0Ezd3hyH4/FN+uiZPE4
+         hH0HlTxAdV4K605DwH/yLkSz4Ir/pr0nZnDp2PXE3PKXW6UvWPyOvA7x0PsKIV+XVbsV
+         mSrJAtsECrn9bUxg7VSpooZFVTb612uY18MW+FPa6s+0QXwA2JEKYTsImUAFeJwpuWfR
+         o6tg==
+X-Gm-Message-State: AOAM533ZYwJv5/abP3AEkui6fA/sl2KagrfIxGSHDp3J7nMXINe2oZVI
+        Nhd+ayZIVDHeoHN5zgtO9VjIawkA8oFg3pc4kOgqXA==
+X-Google-Smtp-Source: ABdhPJzKcnRRg0t0lBD/tELh3a75+sefe9RuAfwBe6PnjfwaIkNK+e/1Tl5ywaXWSkPidjxFSWHXiHZ7scaZX+zDe+s=
+X-Received: by 2002:a17:90a:5303:: with SMTP id x3mr5254322pjh.64.1644444249918;
+ Wed, 09 Feb 2022 14:04:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2 2/2] drm/msm/hdmi: Remove spurious IRQF_ONESHOT flag
-Content-Language: en-GB
-To:     Daniel Thompson <daniel.thompson@linaro.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220201174734.196718-1-daniel.thompson@linaro.org>
- <20220201174734.196718-3-daniel.thompson@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220201174734.196718-3-daniel.thompson@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220202020103.2149130-1-rajatja@google.com> <CAJZ5v0gngVxoe88rNAXXK_F34rHAKuxokiuZ6kpg6FhbnyMn0Q@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gngVxoe88rNAXXK_F34rHAKuxokiuZ6kpg6FhbnyMn0Q@mail.gmail.com>
+From:   Rajat Jain <rajatja@google.com>
+Date:   Wed, 9 Feb 2022 14:03:34 -0800
+Message-ID: <CACK8Z6FuOeVwxh=Psn2HnG_HemndSLV9yq4xyX=JS2HkyaQ+fA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] PCI: Allow internal devices to be marked as untrusted
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Len Brown <lenb@kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/02/2022 20:47, Daniel Thompson wrote:
-> Quoting the header comments, IRQF_ONESHOT is "Used by threaded interrupts
-> which need to keep the irq line disabled until the threaded handler has
-> been run.". When applied to an interrupt that doesn't request a threaded
-> irq then IRQF_ONESHOT has a lesser known (undocumented?) side effect,
-> which it to disable the forced threading of irqs. For "normal" kernels
-> if there is no thread_fn then IRQF_ONESHOT is a nop.
-> 
-> In this case disabling forced threading is not appropriate because the
-> driver calls wake_up_all() (via msm_hdmi_i2c_irq) and also directly uses
-> the regular spinlock API for locking (in msm_hdmi_hdcp_irq() ). Neither
-> of these APIs can be called from no-thread interrupt handlers on
-> PREEMPT_RT systems.
-> 
-> Fix this by removing IRQF_ONESHOT.
-> 
-> Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
+Hello,
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+On Wed, Feb 9, 2022 at 11:11 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Wed, Feb 2, 2022 at 3:01 AM Rajat Jain <rajatja@google.com> wrote:
+> >
+> > Today the pci_dev->untrusted is set for any devices sitting downstream
+> > an external facing port (determined via "ExternalFacingPort" or the
+> > "external-facing" properties).
+> >
+> > However, currently there is no way for internal devices to be marked as
+> > untrusted.
+> >
+> > There are use-cases though, where a platform would like to treat an
+> > internal device as untrusted (perhaps because it runs untrusted firmware
+> > or offers an attack surface by handling untrusted network data etc).
+> >
+> > Introduce a new "UntrustedDevice" property that can be used by the
+> > firmware to mark any device as untrusted.
+> >
+> > Signed-off-by: Rajat Jain <rajatja@google.com>
+> > ---
+> > v2: * Also use the same property for device tree based systems.
+> >     * Add documentation (next patch)
+> >
+> >  drivers/pci/of.c       | 2 ++
+> >  drivers/pci/pci-acpi.c | 1 +
+> >  drivers/pci/pci.c      | 9 +++++++++
+> >  drivers/pci/pci.h      | 2 ++
+> >  4 files changed, 14 insertions(+)
+> >
+> > diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+> > index cb2e8351c2cc..e8b804664b69 100644
+> > --- a/drivers/pci/of.c
+> > +++ b/drivers/pci/of.c
+> > @@ -24,6 +24,8 @@ void pci_set_of_node(struct pci_dev *dev)
+> >                                                     dev->devfn);
+> >         if (dev->dev.of_node)
+> >                 dev->dev.fwnode = &dev->dev.of_node->fwnode;
+> > +
+> > +       pci_set_untrusted(dev);
+> >  }
+> >
+> >  void pci_release_of_node(struct pci_dev *dev)
+> > diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+> > index a42dbf448860..2bffbd5c6114 100644
+> > --- a/drivers/pci/pci-acpi.c
+> > +++ b/drivers/pci/pci-acpi.c
+> > @@ -1356,6 +1356,7 @@ void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
+> >
+> >         pci_acpi_optimize_delay(pci_dev, adev->handle);
+> >         pci_acpi_set_external_facing(pci_dev);
+> > +       pci_set_untrusted(pci_dev);
+> >         pci_acpi_add_edr_notifier(pci_dev);
+> >
+> >         pci_acpi_add_pm_notifier(adev, pci_dev);
+> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > index 9ecce435fb3f..41e887c27004 100644
+> > --- a/drivers/pci/pci.c
+> > +++ b/drivers/pci/pci.c
+> > @@ -6869,3 +6869,12 @@ static int __init pci_realloc_setup_params(void)
+> >         return 0;
+> >  }
+> >  pure_initcall(pci_realloc_setup_params);
+> > +
+> > +void pci_set_untrusted(struct pci_dev *pdev)
+> > +{
+> > +       u8 val;
+> > +
+> > +       if (!device_property_read_u8(&pdev->dev, "UntrustedDevice", &val)
+> > +           && val)
+> > +               pdev->untrusted = 1;
+>
+> I'm not sure why you ignore val = 0.  Is it not a valid value?
 
-> ---
->   drivers/gpu/drm/msm/hdmi/hdmi.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/hdmi/hdmi.c b/drivers/gpu/drm/msm/hdmi/hdmi.c
-> index 719720709e9e7..e167817b42958 100644
-> --- a/drivers/gpu/drm/msm/hdmi/hdmi.c
-> +++ b/drivers/gpu/drm/msm/hdmi/hdmi.c
-> @@ -306,7 +306,7 @@ int msm_hdmi_modeset_init(struct hdmi *hdmi,
->   	}
->   
->   	ret = devm_request_irq(&pdev->dev, hdmi->irq,
-> -			msm_hdmi_irq, IRQF_TRIGGER_HIGH | IRQF_ONESHOT,
-> +			msm_hdmi_irq, IRQF_TRIGGER_HIGH,
->   			"hdmi_isr", hdmi);
->   	if (ret < 0) {
->   		DRM_DEV_ERROR(dev->dev, "failed to request IRQ%u: %d\n",
+I'm following the other similar properties that Bjorn mentioned. The
+pdev->untrusted is already initialized to 0 so it wouldn't matter.
 
+>
+> The property is not particularly well defined here.  It is not clear
+> from its name that it only applies to PCI devices and how.
+>
+> AFAICS, the "untrusted" bit affected by it is only used by the ATS
+> code and in one PCH ACS quirk, but I'm not sure if this is all you
+> have in mind.
 
--- 
-With best wishes
-Dmitry
+I hope my other response addressed this one.
+
+Thanks & Best Regards,
+
+Rajat
+
+>
+> > +}
+> > diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> > index 3d60cabde1a1..6c273ce5e0ba 100644
+> > --- a/drivers/pci/pci.h
+> > +++ b/drivers/pci/pci.h
+> > @@ -761,4 +761,6 @@ static inline pci_power_t mid_pci_get_power_state(struct pci_dev *pdev)
+> >  }
+> >  #endif
+> >
+> > +void pci_set_untrusted(struct pci_dev *pdev);
+> > +
+> >  #endif /* DRIVERS_PCI_H */
+> > --
+> > 2.35.0.rc2.247.g8bbb082509-goog
+> >

@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40EF84AF15A
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D12034AF161
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:23:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232963AbiBIMWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 07:22:17 -0500
+        id S229714AbiBIMWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 07:22:35 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233161AbiBIMVv (ORCPT
+        with ESMTP id S232977AbiBIMWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 07:21:51 -0500
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AB7C03BFDD;
-        Wed,  9 Feb 2022 04:19:13 -0800 (PST)
-Received: by mail-vk1-f170.google.com with SMTP id b2so1054269vkl.1;
-        Wed, 09 Feb 2022 04:19:13 -0800 (PST)
+        Wed, 9 Feb 2022 07:22:17 -0500
+Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF66C050CD6;
+        Wed,  9 Feb 2022 04:21:20 -0800 (PST)
+Received: by mail-vk1-f175.google.com with SMTP id n14so1041071vkk.6;
+        Wed, 09 Feb 2022 04:21:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gm3cukjz1mz6yI7/iDNj2u6cqTBPO6YHmLIpXAkxQ1U=;
-        b=EFxrvIqYtJbPBxeheCqBayPErekNhlAdJ5gR44vBOXfELJPNREL8+mehhiS9aTpSFK
-         70qbZWQuWXW6au82vdh+CO2VUspt4QE/SsPFP9oq1hQvfo26fkNC1G6w7ColvQpOR96j
-         Wh8CdFERppWyldr7sgZdWpz3bgJ2/wc1ozywlQuRPj4BGpaZNwIxlRGL9g8LWH40Apsc
-         bRtQ7Y/bHhl/72LdTpfLbbkStIJxhJyhQjgGhwDDlxfoEbYQExaYC0H5lSd/DldWc04/
-         FQIXGhkZ243WMp8/9AG3YMCvneJFJOsdOZDJrPnUhd/pfzl2vId917GyZZqYvcDZudI/
-         stjg==
-X-Gm-Message-State: AOAM532Qc7m8YwajsgIiiFoU7G3Cp60ZsOp3AwU825oEILqJa1JigngC
-        wOmnHwzneGE+SF31MuKWaEfyTMRPtWKUig==
-X-Google-Smtp-Source: ABdhPJyOwP07a6rwLpDizJUhCR3UH6FuGZnQxyNuvk7/+RVtD7/gjatbx0ryvy4oHhV8hMcq0D98Dg==
-X-Received: by 2002:a05:6122:886:: with SMTP id 6mr664626vkf.37.1644409152985;
-        Wed, 09 Feb 2022 04:19:12 -0800 (PST)
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com. [209.85.217.50])
-        by smtp.gmail.com with ESMTPSA id l187sm3294991vke.6.2022.02.09.04.19.12
+        bh=Qpoc5vmMmNDH+SrdCpaRcSXbVfsZOqQW8hec7Ijd/W8=;
+        b=ArD4G//zP3yLwuMGcWoJ2B3IVTAR8qSew1W2MVeIxkwE+hWsLncpqv87lPNyYy+Wcz
+         P8fma/r/mGhnh0lagdPEeBorD5nGn+D5Oc94NLH3rF/+rp2SVj3PoTwOJuxRV5mqvJ0U
+         SBIJRDCSwDmo0+4Rqw8KHj/aGiRxC5vB6y/1Pn8zbm1PDW98ZqOQ/1BTxEfGuM1L92IK
+         MmRE8aCUj9WyJ/Yrqd+/xPxLagy7Af1MXR+2LJ8vxhMTMadHYNCREBHu8gOPRBbBDvV5
+         fh4zZdNmmyTcaM9PkqmX/Q1w0+eBmyMGgffmynR06VnJw2dpM/AqvYNATsTluuNUuKYi
+         ksJA==
+X-Gm-Message-State: AOAM5316/DP3e8Yck+xnsgA2Gcr/OgC/+Pfp78XU9lCVFQYxfSc9yVZK
+        oVmV+XxN+c8vDOBE7orSGrbD5VAumbeLAw==
+X-Google-Smtp-Source: ABdhPJzA8Nb5Ynlu3dxmAEFYqo4HjgeFecHCEbGvMRuN2IdMaKoLz/CP4fa2jkVRTUw+wuBwx+sDBQ==
+X-Received: by 2002:a1f:e745:: with SMTP id e66mr693844vkh.24.1644409279633;
+        Wed, 09 Feb 2022 04:21:19 -0800 (PST)
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com. [209.85.217.47])
+        by smtp.gmail.com with ESMTPSA id r14sm1517652vke.20.2022.02.09.04.21.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 04:19:12 -0800 (PST)
-Received: by mail-vs1-f50.google.com with SMTP id b2so2300398vso.9;
-        Wed, 09 Feb 2022 04:19:12 -0800 (PST)
-X-Received: by 2002:a67:c198:: with SMTP id h24mr600764vsj.5.1644409151869;
- Wed, 09 Feb 2022 04:19:11 -0800 (PST)
+        Wed, 09 Feb 2022 04:21:19 -0800 (PST)
+Received: by mail-vs1-f47.google.com with SMTP id j26so881462vso.12;
+        Wed, 09 Feb 2022 04:21:19 -0800 (PST)
+X-Received: by 2002:a67:a401:: with SMTP id n1mr553685vse.38.1644409278954;
+ Wed, 09 Feb 2022 04:21:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20220209090314.2511959-1-javierm@redhat.com>
-In-Reply-To: <20220209090314.2511959-1-javierm@redhat.com>
+References: <20220209090314.2511959-1-javierm@redhat.com> <20220209090314.2511959-5-javierm@redhat.com>
+In-Reply-To: <20220209090314.2511959-5-javierm@redhat.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 9 Feb 2022 13:19:00 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVs750iE=kP1vabwgsGOb8sHc8aC5k=HwCU32CURnYktw@mail.gmail.com>
-Message-ID: <CAMuHMdVs750iE=kP1vabwgsGOb8sHc8aC5k=HwCU32CURnYktw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/7] drm: Add driver for Solomon SSD130X OLED displays
+Date:   Wed, 9 Feb 2022 13:21:07 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXOfz94gD+SpGRS7HazxA_PN3n2D=Q04CPm-eEMb_CkEw@mail.gmail.com>
+Message-ID: <CAMuHMdXOfz94gD+SpGRS7HazxA_PN3n2D=Q04CPm-eEMb_CkEw@mail.gmail.com>
+Subject: Re: [PATCH v3 4/7] drm/solomon: Add SSD130X OLED displays I2C support
 To:     Javier Martinez Canillas <javierm@redhat.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -60,19 +60,7 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Sam Ravnborg <sam@ravnborg.org>,
         DRI Development <dri-devel@lists.freedesktop.org>,
         Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>
+        David Airlie <airlied@linux.ie>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -88,23 +76,39 @@ Hi Javier,
 
 On Wed, Feb 9, 2022 at 10:03 AM Javier Martinez Canillas
 <javierm@redhat.com> wrote:
-> This patch series adds a DRM driver for the Solomon OLED SSD1305, SSD1306,
-> SSD1307 and SSD1309 displays. It is a port of the ssd1307fb fbdev driver.
+> The ssd130x driver only provides the core support for these devices but it
+> does not have any bus transport logic. Add a driver to interface over I2C.
+>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
-[...]
+Thanks for your patch!
 
-> - Fix a bug when doing partial updates (Geert Uytterhoeven)
+> --- /dev/null
+> +++ b/drivers/gpu/drm/solomon/ssd130x-i2c.c
 
-Thanks, the text console is now more or less working as expected.
-There is still an issue with the cursor, though.
-After doing "echo hello > /dev/tty0", the text appears, but the cursor
-is gone. "clear > /dev/tty0" brings it back.
+> +static const struct of_device_id ssd130x_of_match[] = {
+> +       {
+> +               .compatible = "solomon,ssd1305fb-i2c",
+> +               .data = (void *)&ssd130x_ssd1305_deviceinfo,
 
-The execution time of "time ls" has improved. It now takes 1.21s
-(0.86s with ssd1306fb).
+The casts are not needed.
 
-The logo is not shown, even when I create a 16-color or 224-color
-version of the small monochrome logo I'm using.
+> +       },
+> +       {
+> +               .compatible = "solomon,ssd1306fb-i2c",
+> +               .data = (void *)&ssd130x_ssd1306_deviceinfo,
+> +       },
+> +       {
+> +               .compatible = "solomon,ssd1307fb-i2c",
+> +               .data = (void *)&ssd130x_ssd1307_deviceinfo,
+> +       },
+> +       {
+> +               .compatible = "solomon,ssd1309fb-i2c",
+> +               .data = (void *)&ssd130x_ssd1309_deviceinfo,
+> +       },
+> +       { /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, ssd130x_of_match);
 
 Gr{oetje,eeting}s,
 

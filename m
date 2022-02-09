@@ -2,140 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1598D4AF680
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:25:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8316D4AF6A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236815AbiBIQZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:25:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55532 "EHLO
+        id S236985AbiBIQ1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:27:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236801AbiBIQZZ (ORCPT
+        with ESMTP id S236894AbiBIQ00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:25:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D01DFC061355
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:25:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644423927;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U2UGaBijIxRE44n1fVKzxpivW+ch5MCUy66hzNFFtU0=;
-        b=BaJVB3ftuc/TeDVEkToLkkpich0l4/qIaPtESys2SG6JZru5lVOwmMHn5WU3W9LGptjvMl
-        0Se+70TsVpY6obWxJ4ec0qYiGbZf6nXc8A1EE5D+30IH+MAIf2IzhKtLUGVfiTPKFIKyfE
-        HTiZFeEqeyNGoOlsOrxR8tXXkXnRl8w=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-110-3I4lEYmZMP6JoO_1rqQMAw-1; Wed, 09 Feb 2022 11:25:23 -0500
-X-MC-Unique: 3I4lEYmZMP6JoO_1rqQMAw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 9 Feb 2022 11:26:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850EDC05CB8E;
+        Wed,  9 Feb 2022 08:26:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C2C7D814264;
-        Wed,  9 Feb 2022 16:25:21 +0000 (UTC)
-Received: from [10.22.18.180] (unknown [10.22.18.180])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AB8277D3CC;
-        Wed,  9 Feb 2022 16:25:20 +0000 (UTC)
-Message-ID: <c99b49a3-263a-f0b4-de3c-3271153a5208@redhat.com>
-Date:   Wed, 9 Feb 2022 11:25:20 -0500
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A7ABB822D1;
+        Wed,  9 Feb 2022 16:26:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DE65C340EE;
+        Wed,  9 Feb 2022 16:26:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644423978;
+        bh=MRbUczyI2MxyyUekUmARNowdQaSt4+OAXAfxdGF+cjw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cZWJh6dWKuwLXww8rTdHjvBoqL6fV44lWmMne0IA4lJ9ivhcV761mwmhF2zJeG3h+
+         aCa9LVm1bc1N1QtoSbRIvj8cBmI6KGARumsTJogeiLuU3Kkc2wthaoCIp/M/SSDJUi
+         svmEVR0mpCvx9ukLWZY468fX54ZGuXIRRPtKQ/QYFP6AmUhf8curB/pW2sbAHkVl3C
+         76Cgmw5jZy6WZPN0sdn3iN0YLm6EIJUVOMyUv7589U8Uw1yQmsIzbvxtmseZl0oi5I
+         XoBu+UeQOZNJdTBjd/Y/OaJN0QR7vVI//e4IrMYY5ErWLoF0OIKPz5EidhgBBakjdK
+         iGiBfFigYhU/w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nHpnL-006fgT-Sd; Wed, 09 Feb 2022 16:26:15 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        kernel-team@android.com
+Subject: [PATCH 00/10] irqchip: Prevent drivers abusing irq_chip::name
+Date:   Wed,  9 Feb 2022 16:25:57 +0000
+Message-Id: <20220209162607.1118325-1-maz@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] copy_process(): Move fd_install() out of sighand->siglock
- critical section
-Content-Language: en-US
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Alexey Gladkov <legion@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org
-References: <20220208163912.1084752-1-longman@redhat.com>
- <YgKziblMKsmHkP4f@zeniv-ca.linux.org.uk>
- <bd83aca3-059f-92dd-e094-b27f51f9481a@redhat.com>
- <YgK/fdYWi0wWysci@zeniv-ca.linux.org.uk>
- <874k59f2ad.fsf@email.froward.int.ebiederm.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <874k59f2ad.fsf@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, matthias.bgg@gmail.com, grygorii.strashko@ti.com, ssantosh@kernel.org, khilman@kernel.org, tony@atomide.com, tglx@linutronix.de, vz@mleia.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, kernel@esmil.dk, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/8/22 16:59, Eric W. Biederman wrote:
-> Al Viro <viro@zeniv.linux.org.uk> writes:
->
->> On Tue, Feb 08, 2022 at 01:51:35PM -0500, Waiman Long wrote:
->>> On 2/8/22 13:16, Al Viro wrote:
->>>> On Tue, Feb 08, 2022 at 11:39:12AM -0500, Waiman Long wrote:
->>>>
->>>>> One way to solve this problem is to move the fd_install() call out of
->>>>> the sighand->siglock critical section.
->>>>>
->>>>> Before commit 6fd2fe494b17 ("copy_process(): don't use ksys_close()
->>>>> on cleanups"), the pidfd installation was done without holding both
->>>>> the task_list lock and the sighand->siglock. Obviously, holding these
->>>>> two locks are not really needed to protect the fd_install() call.
->>>>> So move the fd_install() call down to after the releases of both locks.
->>>> 	Umm... That assumes we can delay it that far.  IOW, that nothing
->>>> relies upon having pidfd observable in /proc/*/fd as soon as the child
->>>> becomes visible there in the first place.
->>>>
->>>> 	What warranties are expected from CLONE_PIDFD wrt observation of
->>>> child's descriptor table?
->>>>
->>> I think the fd_install() call can be moved after the release of
->>> sighand->siglock but before the release the tasklist_lock. Will that be good
->>> enough?
->> Looks like it should, but I'd rather hear from the CLONE_PIDFD authors first...
->> Christian, could you comment on that?
-> The tasklist_lock and the siglock provide no protection against
-> being looked up in proc.
->
-> The proc filesystem looks up process information with things only
-> protected by the rcu_read_lock().  Which means that the process
-> will be visible through proc after "attach_pid(p, PIDTYPE_PID".
->
-> The fd is being installed in the fdtable of the parent process,
-> and the siglock and tasklist_lock are held to protect the child.
->
->
-> Further fd_install is exposing the fd to userspace where it can be used
-> by the process_madvise and the process_mrelease system calls, from
-> anything that shares the fdtable of the parent thread.  Which means it
-> needs to be guaranteed that kernel_clone will call wake_up_process
-> before it is safe to call fd_install.
->
->
-> So it appears to me that moving fd_install earlier fundamentally unsafe,
-> and the locks are meaningless from an fd_install perspective.
->
-> Which means it should be perfectly fine to move the fd_install outside
-> of the tasklist_lock and the outside siglock.
->
->
-> I don't see how we could support the fd appearing in the fdtable sooner
-> which seems to make the question moot as to weather userspace in some
-> odd corner case expects the fd to appear in the fdtable sooner.
->
-> So I say move fd_install down with proc_fork_connector and friends.
+Another common abuse in irqchip drivers (and derivatives) is to place
+a string representing the underlying device in the irq_chip::name
+field that gets displayed in /proc/interrupts while this should only
+be an indication of the "type" of interrupt controller.
 
-Right. Keeping fd_install() inside of tasklist_lock may also be 
-problematic as a read lock can be taken at interrupt context which may 
-cause similar lockdep splat. So I am keep this patch as is.
+Not only this is pretty pointless (with hierarchical domains, you only
+see the top chip), but it also gets in the way of making the irq_chip
+structure const. For debug, we have a whole infrastructure that does
+everything you can imagine (and stuff you don't want to).
 
-Cheers,
-Longman
+We can't remove this name as it is visible from userspace and there is
+a whole collection of CI scripts that parse /proc/interrupts for good
+(and mostly bad) reasons. The solution is to use the irq_print_chip()
+callback and to let it output whatever string is necessary.
+
+Having done that, we can cleanup a few irqchip drivers and make their
+irq_chip structure const (which requires touching a handful of core
+functions). Whilst we're at it, we do the same for a couple of gpio
+drivers.
+
+This series relies on the one posted at [1].
+
+Thanks,
+
+	M.
+
+[1] https://lore.kernel.org/r/20220201120310.878267-1-maz@kernel.org
+
+Marc Zyngier (10):
+  irqdomain: Let irq_domain_set_{info,hwirq_and_chip} take a const
+    irq_chip
+  genirq: Allow irq_chip registration functions to take a const irq_chip
+  irqchip/gic: Switch to dynamic chip name output
+  irqchip/lpc32xx: Switch to dynamic chip name output
+  irqchip/mvebu-pic: Switch to dynamic chip name output
+  irqchip/ts4800: Switch to dynamic chip name output
+  irqchip/versatile-fpga: Switch to dynamic chip name output
+  gpio: mt7621: Switch to dynamic chip name output
+  gpio: omap: Switch to dynamic chip name output
+  pinctrl: starfive: Switch to dynamic chip name output
+
+ drivers/gpio/gpio-mt7621.c             |  12 ++-
+ drivers/gpio/gpio-omap.c               |  28 ++++---
+ drivers/irqchip/irq-ftintc010.c        |   1 -
+ drivers/irqchip/irq-gic.c              | 102 +++++++++++++------------
+ drivers/irqchip/irq-lpc32xx.c          |  34 ++++++---
+ drivers/irqchip/irq-mvebu-pic.c        |  28 ++++---
+ drivers/irqchip/irq-ts4800.c           |  25 ++++--
+ drivers/irqchip/irq-versatile-fpga.c   |  46 ++++++-----
+ drivers/pinctrl/pinctrl-starfive.c     |  11 ++-
+ include/linux/irq.h                    |   7 +-
+ include/linux/irqchip/versatile-fpga.h |  14 ----
+ include/linux/irqdomain.h              |   5 +-
+ kernel/irq/chip.c                      |   9 +--
+ kernel/irq/irqdomain.c                 |   7 +-
+ 14 files changed, 189 insertions(+), 140 deletions(-)
+ delete mode 100644 include/linux/irqchip/versatile-fpga.h
+
+-- 
+2.30.2
 

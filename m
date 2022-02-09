@@ -2,196 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E270B4AEB60
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4753A4AEB72
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 08:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236134AbiBIHpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 02:45:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42204 "EHLO
+        id S239451AbiBIHtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 02:49:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbiBIHp3 (ORCPT
+        with ESMTP id S230479AbiBIHtV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 02:45:29 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0C1C0613CA
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 23:45:32 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id o19so3460173ybc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 23:45:32 -0800 (PST)
+        Wed, 9 Feb 2022 02:49:21 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B92C05CB82;
+        Tue,  8 Feb 2022 23:49:24 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id s7so3391123edd.3;
+        Tue, 08 Feb 2022 23:49:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rZt97/8ROY3+UKnKOkybgWpfp57iv+flrkhWaztw2B4=;
-        b=hjNPEUw9OlUPIk2B4S7HhB3hqe9U9AT7bF0Q+ofYKz+gn7Tit4EYniAacYbI8Ut2DR
-         sImSygPZsw2DdMFe6k/h3puZokb+ORZ/tqEi/CO2VbqgO7ZI4sa9YhKqKgeo5M6HzPCk
-         1hBQBzkRbptsJjjpKnecf9nOiDO0mP2eQMZ3VoHmrbfD+b47MiHA246ZqOnFS2Uk4Coc
-         l4amT4j7IO2ciSvjaSLS6qzWp2xzxvsf0qFFWuHepJGrt0wiq0F8fdTuGhKeNx2YcxBU
-         2DfUuPmKQjorZC0cZDfWjOV+yj1U5RrMmOD/JFmKV6JBRfCzPnjTAY9xXB/8HokbQILO
-         1Nmg==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LUzGldKtZC3jOl6Fq1nfXnQKprYL3pMs6oURDAZ0EmE=;
+        b=KOvrX9K5oGQAb0XaO6VlNj0WKjC9bavJrqO6YBN2wMeYSLTNMMq4OUNbxxQtCKhHDd
+         iu25luITlcqZYE2ZMl8jsIxUQcGUjf1t8MvTEu7cO0V8NYRhxcGzsEpD1e6wWB6KCcEH
+         0rpvH33A61Wk0zcJSRuAlliDXLG6zwTrSJx00FL4JwfzkkJ/qHVrYtTj2wAsdgoV7TMB
+         hwCCfDzPd1GoWbg0oaynvhMWtw4g/aAxwnqQBwBsnpb/TEI5Xq9aU0rd7fKr1uiirDCK
+         jCmdSG28ZM5umxg0NiSDA5adQqe+DSKSQyEyk5V5cf7WFwgJa3VnWxM/pbluedefgbiC
+         W5bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rZt97/8ROY3+UKnKOkybgWpfp57iv+flrkhWaztw2B4=;
-        b=eg8a7xk8fnANcNwV/Yoo0VhQizspKA0LQmdYxBkRgZ+Pj3QEId+I3KslqwMBESmPgk
-         4/OdLJUM05E7R/VkP3LMlJprU7BuRLRKYFbXMQSOJB+5mnDLIT/J8KPpTVF+jdU/B0N4
-         UxFJ6sju9W67S1URAI0daWVG+E4GT+qastktmmv114DOTkRrP5S5H8TlpooGDTNqikfa
-         ew7WcaCh+PwU95iOpUjSs/2BGkEkowa/isg8PXUU4IAWfXuKig0YQnfkMe3ICGwhLixY
-         6y2mtg8qrEgoN/mh5lRzducTRpE9p1myYM01TzfEWy5d7MsYjkxBHVF3GuA6A6PXmUgb
-         e9TA==
-X-Gm-Message-State: AOAM532zzHMl4RqECcg5hboI1vjhjZizhbpNGHBi+gszE6gwJjWu8MVh
-        92T677KW7aFLUjj6Sa3NmikXLg+m3S8PkvpntEkn3Q==
-X-Google-Smtp-Source: ABdhPJxnnpaw8noZfnF3Z83h+7aPBZguIP6vpvycsBalPzDcqBtgoaWBC8+48r0zPplursG/0OyeH/mYz65iclJX4Ww=
-X-Received: by 2002:a25:c983:: with SMTP id z125mr1039624ybf.132.1644392731988;
- Tue, 08 Feb 2022 23:45:31 -0800 (PST)
-MIME-Version: 1.0
-References: <20211101031651.75851-1-songmuchun@bytedance.com>
- <CAMZfGtUeL45=WG3ceaZ_tALMGZTLtuD9jbfKEzeQv270OnaLYQ@mail.gmail.com>
- <35c5217d-eb8f-6f70-544a-a3e8bd009a46@oracle.com> <CAMZfGtW=e___8kpe1B5a1rK+SV63bP_Nwucj89QKaX4ZOMUpaw@mail.gmail.com>
- <CAMZfGtV0JKcjVL0qGoYCQJ-LsXdng7Z2UjBym5hf_WM0LcYi=Q@mail.gmail.com>
- <20211123190952.7d1e0cac2d72acacd2df016c@linux-foundation.org> <CAMZfGtW+DoKp_gCcPSy33Urc86A58rRp8HJ+-GOuW9vFP-BwxQ@mail.gmail.com>
-In-Reply-To: <CAMZfGtW+DoKp_gCcPSy33Urc86A58rRp8HJ+-GOuW9vFP-BwxQ@mail.gmail.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Wed, 9 Feb 2022 15:44:54 +0800
-Message-ID: <CAMZfGtV-ODDGQ6dUuo_eSEDn2kDSiUjNDc=nyFwoRRSxNLsTeg@mail.gmail.com>
-Subject: Re: [PATCH v7 0/5] Free the 2nd vmemmap page associated with each
- HugeTLB page
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Oscar Salvador <osalvador@suse.de>,
-        David Hildenbrand <david@redhat.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Fam Zheng <fam.zheng@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=LUzGldKtZC3jOl6Fq1nfXnQKprYL3pMs6oURDAZ0EmE=;
+        b=J0bGm3fy/VYmJmJkGCQkJw7L0RWdN1ILbL+ckl8ITbxNQzHYD7V026yhSyuE2pMyhx
+         YaJE+lXoiWgCGE80rohhOVnYlD5yqJ9htRJsOhqzk3S147IsU6Gubps6fMprY4w9C1X3
+         kAOuuHy3NEifsdK9xj/N/COA7JIBez/Yn/BIVSUn0A46EkoNfDjOTwJ80l2HqGUCwmTF
+         dUr5poTBICneOCtVIyTqpnh5RLDQpBZpw2pQ7Bc+no8VzsfkAak/oQPyGNqP/D3pMgIX
+         bsRol9mMN1afjFYSxEF22C+MTKyLmQPQTjQHWcoA3zTvtmWZRpTui1W6k8Tz4zFJIerD
+         gbdA==
+X-Gm-Message-State: AOAM533ZhWdb+M6NmHMLjgi2v70qkkr91M45GcqAfNcAt95eRdtTxXZ8
+        XkOaCrVb23w59BLzw73LAx4=
+X-Google-Smtp-Source: ABdhPJy7j/jOKxsaAV2/AtzcWda7tM3HPoh6bV/FquZcserdfo9YfUiMeSpCU161wWXwVjfQXLLUEA==
+X-Received: by 2002:a05:6402:51cd:: with SMTP id r13mr1079014edd.381.1644392962839;
+        Tue, 08 Feb 2022 23:49:22 -0800 (PST)
+Received: from dumbo ([185.220.101.84])
+        by smtp.gmail.com with ESMTPSA id l1sm5690964ejb.81.2022.02.08.23.49.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 23:49:22 -0800 (PST)
+Sender: Domenico Andreoli <domenico.andreoli.it@gmail.com>
+Received: from cavok by dumbo with local (Exim 4.94.2)
+        (envelope-from <cavok@dumbo>)
+        id 1nHhj6-0002av-MX; Wed, 09 Feb 2022 08:49:20 +0100
+Date:   Wed, 9 Feb 2022 08:49:20 +0100
+From:   Domenico Andreoli <domenico.andreoli@linux.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Tong Zhang <ztong0001@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        David Airlie <airlied@linux.ie>,
+        Andrew Morton <akpm@linux-foundation.org>, amir73il@gmail.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, bcrl@kvack.org,
+        benh@kernel.crashing.org, clemens@ladisch.de, crope@iki.fi,
+        dgilbert@interlog.com, Greg KH <gregkh@linuxfoundation.org>,
+        jack@suse.cz, jani.nikula@intel.com, jani.nikula@linux.intel.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>, jlbec@evilplan.org,
+        john.ogness@linutronix.de, joonas.lahtinen@linux.intel.com,
+        Joseph Qi <joseph.qi@linux.alibaba.com>, julia.lawall@inria.fr,
+        Kees Cook <keescook@chromium.org>, kernel@tuxforce.de,
         Linux Memory Management List <linux-mm@kvack.org>,
-        "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
-        Barry Song <21cnbao@gmail.com>,
-        "Bodeddula, Balasubramaniam" <bodeddub@amazon.com>,
-        Jue Wang <juew@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        mark@fasheh.com, "Martin K. Petersen" <martin.petersen@oracle.com>,
+        mm-commits@vger.kernel.org, nixiaoming@huawei.com,
+        penguin-kernel@i-love.sakura.ne.jp, peterz@infradead.org,
+        phil@philpotter.co.uk, pjt@google.com, pmladek@suse.com,
+        rafael@kernel.org, rodrigo.vivi@intel.com, rostedt@goodmis.org,
+        senozhatsky@chromium.org, sre@kernel.org, steve@sk2.org,
+        surenb@google.com, torvalds@linux-foundation.org, tytso@mit.edu,
+        Al Viro <viro@zeniv.linux.org.uk>, wangqing@vivo.com,
+        Iurii Zaikin <yzaikin@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev
+Subject: [PATCH v2] Fix regression due to "fs: move binfmt_misc sysctl to its
+ own file"
+Message-ID: <YgNyAC8VMeuOD/uQ@dumbo>
+References: <20220121221021.60533b009c357d660791476e@linux-foundation.org>
+ <20220122061228.nmuo75sDn%akpm@linux-foundation.org>
+ <YgEeQNdgBuHRyEWl@dumbo>
+ <YgGTSR628xhRvCjB@bombadil.infradead.org>
+ <CAA5qM4BGmrkwatyO_h3F=ErDZ9t5swuttbt6NkQU-1KDGDiD4g@mail.gmail.com>
+ <YgKmaggsipzzCGCg@bombadil.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgKmaggsipzzCGCg@bombadil.infradead.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_BL_SPAMCOP_NET,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 4:04 PM Muchun Song <songmuchun@bytedance.com> wrote:
->
-> On Wed, Nov 24, 2021 at 11:09 AM Andrew Morton
-> <akpm@linux-foundation.org> wrote:
-> >
-> > On Mon, 22 Nov 2021 12:21:32 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
-> >
-> > > On Wed, Nov 10, 2021 at 2:18 PM Muchun Song <songmuchun@bytedance.com> wrote:
-> > > >
-> > > > On Tue, Nov 9, 2021 at 3:33 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
-> > > > >
-> > > > > On 11/8/21 12:16 AM, Muchun Song wrote:
-> > > > > > On Mon, Nov 1, 2021 at 11:22 AM Muchun Song <songmuchun@bytedance.com> wrote:
-> > > > > >>
-> > > > > >> This series can minimize the overhead of struct page for 2MB HugeTLB pages
-> > > > > >> significantly. It further reduces the overhead of struct page by 12.5% for
-> > > > > >> a 2MB HugeTLB compared to the previous approach, which means 2GB per 1TB
-> > > > > >> HugeTLB. It is a nice gain. Comments and reviews are welcome. Thanks.
-> > > > > >>
-> > > > > >
-> > > > > > Hi,
-> > > > > >
-> > > > > > Ping guys. Does anyone have any comments or suggestions
-> > > > > > on this series?
-> > > > > >
-> > > > > > Thanks.
-> > > > > >
-> > > > >
-> > > > > I did look over the series earlier.  I have no issue with the hugetlb and
-> > > > > vmemmap modifications as they are enhancements to the existing
-> > > > > optimizations.  My primary concern is the (small) increased overhead
-> > > > > for the helpers as outlined in your cover letter.  Since these helpers
-> > > > > are not limited to hugetlb and used throughout the kernel, I would
-> > > > > really like to get comments from others with a better understanding of
-> > > > > the potential impact.
-> > > >
-> > > > Thanks Mike. I'd like to hear others' comments about this as well.
-> > > > From my point of view, maybe the (small) overhead is acceptable
-> > > > since it only affects the head page, however Matthew Wilcox's folio
-> > > > series could reduce this situation as well.
-> >
-> > I think Mike was inviting you to run some tests to quantify the
-> > overhead ;)
->
-> Hi Andrew,
->
-> Sorry for the late reply.
->
-> Specific overhead figures are already in the cover letter. Also,
-> I did some other tests, e.g. kernel compilation, sysbench. I didn't
-> see any regressions.
+Commit 3ba442d5331f did not go unnoticed, binfmt-support stopped to
+work on my Debian system since v5.17-rc2 (did not check with -rc1).
 
-The overhead is introduced by page_fixed_fake_head() which
-has an "if" statement and an access to a possible cold cache line.
-I think the main overhead is from the latter. However, probabilistically,
-only 1/64 of the pages need to do the latter.  And
-page_fixed_fake_head() is already simple (I mean the overhead
-is small enough) and many performance bottlenecks in mm are
-not in compound_head().  This also matches the tests I did.
-I didn't see any regressions after enabling this feature.
+The existance of the /proc/sys/fs/binfmt_misc is a precondition for
+attempting to mount the binfmt_misc fs, which in turn triggers the
+autoload of the binfmt_misc module. Without it, no module is loaded
+and no binfmt is available at boot.
 
-I knew Mike's concern is the increased overhead to use cases
-beyond HugeTLB. If we really want to avoid the access to
-a possible cold cache line, we can introduce a new page
-flag like PG_hugetlb and test if it is set in the page->flags,
-if so, then return the read head page struct. Then
-page_fixed_fake_head() looks like below.
+Building as built-in or manually loading the module and mounting the fs
+works fine, it's therefore only a matter of interaction with user-space.
+I could try to improve the Debian systemd configuration but I can't
+say anything about the other distributions.
 
-static __always_inline const struct page *page_fixed_fake_head(const
-struct page *page)
-{
-        if (!hugetlb_free_vmemmap_enabled())
-                return page;
+This patch restores a working system right after boot.
 
-        if (test_bit(PG_hugetlb, &page->flags)) {
-                unsigned long head = READ_ONCE(page[1].compound_head);
+v2:
+- move creation of fs/binfmt_misc to fs/file_table.c
+- use IS_ENABLED() to conditionally create it
 
-                if (likely(head & 1))
-                        return (const struct page *)(head - 1);
-        }
-        return page;
-}
+Fixes: 3ba442d5331f ("fs: move binfmt_misc sysctl to its own file")
+Signed-off-by: Domenico Andreoli <domenico.andreoli@linux.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Amir Goldstein <amir73il@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Antti Palosaari <crope@iki.fi>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Benjamin LaHaise <bcrl@kvack.org>
+Cc: Clemens Ladisch <clemens@ladisch.de>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Douglas Gilbert <dgilbert@interlog.com>
+Cc: Eric Biederman <ebiederm@xmission.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Iurii Zaikin <yzaikin@google.com>
+Cc: James E.J. Bottomley <jejb@linux.ibm.com>
+Cc: Jan Kara <jack@suse.cz>
+Cc: Jani Nikula <jani.nikula@intel.com>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Joel Becker <jlbec@evilplan.org>
+Cc: John Ogness <john.ogness@linutronix.de>
+Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc: Joseph Qi <joseph.qi@linux.alibaba.com>
+Cc: Julia Lawall <julia.lawall@inria.fr>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Lukas Middendorf <kernel@tuxforce.de>
+Cc: Mark Fasheh <mark@fasheh.com>
+Cc: Martin K. Petersen <martin.petersen@oracle.com>
+Cc: Paul Turner <pjt@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: Phillip Potter <phil@philpotter.co.uk>
+Cc: Qing Wang <wangqing@vivo.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: Sebastian Reichel <sre@kernel.org>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: Stephen Kitt <steve@sk2.org>
+Cc: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc: "Theodore Ts'o" <tytso@mit.edu>
+Cc: Xiaoming Ni <nixiaoming@huawei.com>
 
-But I don't think it's worth doing this.
+---
+ fs/binfmt_misc.c |    6 +-----
+ fs/file_table.c  |    2 ++
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-Hi Mike and Andrew,
-
-Since these helpers are not limited to hugetlb and used throughout the
-kernel, I would really like to get comments from others with a better
-understanding of the potential impact. Do you have any appropriate
-reviewers to invite?
-
-Thanks.
->
-> >
-> > > Ping guys.
-> > >
-> > > Hi Andrew,
-> > >
-> > > Do you have any suggestions on this series to move it on?
-> > >
-> >
-> > I tossed it in there for some testing but yes please, additional
-> > reviewing?
->
-> It's already been in the next-tree (also in our ByteDance servers)
-> for several months, and I didn't receive any negative feedback.
->
-> Do you think it is ready for 5.17?
->
-> Thanks.
+Index: b/fs/binfmt_misc.c
+===================================================================
+--- a/fs/binfmt_misc.c
++++ b/fs/binfmt_misc.c
+@@ -817,20 +817,16 @@ static struct file_system_type bm_fs_typ
+ };
+ MODULE_ALIAS_FS("binfmt_misc");
+ 
+-static struct ctl_table_header *binfmt_misc_header;
+-
+ static int __init init_misc_binfmt(void)
+ {
+ 	int err = register_filesystem(&bm_fs_type);
+ 	if (!err)
+ 		insert_binfmt(&misc_format);
+-	binfmt_misc_header = register_sysctl_mount_point("fs/binfmt_misc");
+-	return 0;
++	return err;
+ }
+ 
+ static void __exit exit_misc_binfmt(void)
+ {
+-	unregister_sysctl_table(binfmt_misc_header);
+ 	unregister_binfmt(&misc_format);
+ 	unregister_filesystem(&bm_fs_type);
+ }
+Index: b/fs/file_table.c
+===================================================================
+--- a/fs/file_table.c
++++ b/fs/file_table.c
+@@ -119,6 +119,8 @@ static struct ctl_table fs_stat_sysctls[
+ static int __init init_fs_stat_sysctls(void)
+ {
+ 	register_sysctl_init("fs", fs_stat_sysctls);
++	if (IS_ENABLED(CONFIG_BINFMT_MISC))
++		register_sysctl_mount_point("fs/binfmt_misc");
+ 	return 0;
+ }
+ fs_initcall(init_fs_stat_sysctls);

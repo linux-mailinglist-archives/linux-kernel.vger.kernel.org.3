@@ -2,103 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C664AFC18
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:55:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DEFD4AFC22
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237937AbiBISyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 13:54:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
+        id S235839AbiBISyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 13:54:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233064AbiBISyH (ORCPT
+        with ESMTP id S241079AbiBISyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:54:07 -0500
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E4AC1038C5;
-        Wed,  9 Feb 2022 10:49:37 -0800 (PST)
-Received: by mail-ot1-f52.google.com with SMTP id x52-20020a05683040b400b0059ea92202daso2160759ott.7;
-        Wed, 09 Feb 2022 10:49:37 -0800 (PST)
+        Wed, 9 Feb 2022 13:54:38 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF1CC1DC14A
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 10:50:34 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id m7so2981126pjk.0
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 10:50:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=kx4teeGsTxdOC1Dg3+JbRhwrBSaO2guC2PPNniJkznY=;
+        b=FgRJxSt2dxBWmhNeNCqHb64siqU8YTgLxiXBg8B5pSiKwRSRHGyHX/ccEP5CrFKzYh
+         rsWW570rsB9ApA3pHSbQ4/byjfSLPqU/PPCfVPVusMyAo6/XGnkjFSvNl8XL/p9aygl9
+         7m46PGz7pY1YpUAPV5D+qJrRhk9RbWFX6PSCg2tYHnn35oua2xK8XeZCyMjaapbotcDX
+         Tg0zNuJoPk9ZTt9IsW7CVct+yHWw/NOSVVGVd7k5fsbVK9I/On+qNZPTvDHlw1/ibSBU
+         cGyVcivuEBwE+zfTUllitg3BhN3LrqGOI1j7fvUwnPfHIAToMcrbJufzxBsQyDW3s+Rv
+         q/TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ol4BsW1oMUlKiUOMTOMJiIWnj4Q1uMf6kno3XDyNZOA=;
-        b=Ka/4XpFyOPmdDzlfOTzVtYFK53wKBbUuR6/GGWMIMHjsGXCVwnt5EoVsvUotxRJpbx
-         aq7jxihI5N+ULRufX+7lNK6wjarzlY5tF2Y4KVJphg+cnIa1TDlZhlHw5W0Gca232ueO
-         33M9YREy0AP3Kex7XL084NrCFDl3wwZ6we6CLVsGe/LpbvIKSYqhgJI/tENhQUHicr/K
-         nQgXOWUqh5f04PAHWsW42DZUpknCpT5CMwJNGUj0/S0duxzXIMh3I8IfF8UmWlWXx1Vf
-         2L4tNOuQRRQkkQeZmfqrKMP7WdDbbvEckYJDwaZvk3u2p4RTb2HEGG+VuD8eB7I2zOMH
-         qUWA==
-X-Gm-Message-State: AOAM531WQA7fIgCmDh/5hhJN/LMZ+whGiBCUXB/UECZYy+CeacXEjxGi
-        qBcs54FjCe2tVYH5Rmu8omhwD/2vfg==
-X-Google-Smtp-Source: ABdhPJz+VCZspSXacvPHH6CrC/kxILESQsbekO37HlQjWHQZMcp1DTf1NUx7uszKx75y4LZYh2dHRQ==
-X-Received: by 2002:a9d:6d85:: with SMTP id x5mr1497301otp.302.1644432576631;
-        Wed, 09 Feb 2022 10:49:36 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id b7sm7024971ooq.30.2022.02.09.10.49.35
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=kx4teeGsTxdOC1Dg3+JbRhwrBSaO2guC2PPNniJkznY=;
+        b=7y5ySFY0mw1vgAamKnraE1HHMiDcZ92GKxKlYzSW3uAd6i7uF6RZHVYtOgbqyMQx60
+         drzBYydedJwtCAGFeyuPIuKUXbnhf6srN3uyLGtc3llI7qNveOGMuEB/KlY2xqKZFzr3
+         sIUbyPgDMsobApXw83KqWpWtNTLpzcYV8WXzoao1qqctthSnZnnBweh4kme603yJLIt+
+         201VV+DQ+U+uRJLavQcPjREWQz2Fa0J2cXglWHkEKV59rHuWe+/F125A3k876CG3xwmb
+         lIzke6qiV8nOr6nlhYRjyPES5ymIgkiYCQ/W9osCpbTuqVUBZOnGN3ueTdSvLHAia6xV
+         ysvg==
+X-Gm-Message-State: AOAM533U3vkFyiMNZfEvcnnblM/LEPTTLNM5u7RGQHrL/e26au8/DqeL
+        RLyuiXA0JWLHjhyUGowfNk4NZf8vSNj7NQ==
+X-Google-Smtp-Source: ABdhPJx1b8RaBZmJ8u/66Dq6vtiJ5PkfUlU00AExJreoN16rQPc3KIHbej3FxXuRDHSOR0GObcJGdw==
+X-Received: by 2002:a17:903:2283:: with SMTP id b3mr3471150plh.0.1644432633928;
+        Wed, 09 Feb 2022 10:50:33 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k13sm22025862pfc.176.2022.02.09.10.50.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 10:49:35 -0800 (PST)
-Received: (nullmailer pid 679557 invoked by uid 1000);
-        Wed, 09 Feb 2022 18:49:34 -0000
-Date:   Wed, 9 Feb 2022 12:49:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Satya Priya <quic_c_skakit@quicinc.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        swboyd@chromium.org, Das Srinagesh <gurus@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, quic_subbaram@quicinc.com,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>, quic_jprakash@quicinc.com,
-        linux-kernel@vger.kernel.org, quic_collinsd@quicinc.com,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH V5 1/6] dt-bindings: regulator: Add pm8008 regulator
- bindings
-Message-ID: <YgQMvrgA+gz/YtOU@robh.at.kernel.org>
-References: <1644331940-18986-1-git-send-email-quic_c_skakit@quicinc.com>
- <1644331940-18986-2-git-send-email-quic_c_skakit@quicinc.com>
+        Wed, 09 Feb 2022 10:50:33 -0800 (PST)
+Date:   Wed, 9 Feb 2022 18:50:29 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zhenzhong Duan <zhenzhong.duan@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org
+Subject: Re: [PATCH] KVM: x86: Fix emulation in writing cr8
+Message-ID: <YgQM9Y1AewuYFVzL@google.com>
+References: <20220209062428.332295-1-zhenzhong.duan@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1644331940-18986-2-git-send-email-quic_c_skakit@quicinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220209062428.332295-1-zhenzhong.duan@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 08 Feb 2022 20:22:15 +0530, Satya Priya wrote:
-> Add bindings for pm8008 pmic regulators.
+On Wed, Feb 09, 2022, Zhenzhong Duan wrote:
+> In emulation of writing to cr8, one of the lowest four bits in TPR[3:0]
+> is kept.
 > 
-> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
-> ---
-> Changes in V2:
->  - Moved this patch before "mfd: pm8008: Add pm8008 regulator node" to
->    resolve dtschema errors. Removed regulator-min-microvolt and
->    regulator-max-microvolt properties.
+> According to Intel SDM 10.8.6.1(baremetal scenario):
+> "APIC.TPR[bits 7:4] = CR8[bits 3:0], APIC.TPR[bits 3:0] = 0";
 > 
-> Changes in V3:
->  - As per Rob's comments added standard unit suffix for mindropout property,
->    added blank lines where required and added description for reg property.
+> and SDM 28.3(use TPR shadow):
+> "MOV to CR8. The instruction stores bits 3:0 of its source operand into
+> bits 7:4 of VTPR; the remainder of VTPR (bits 3:0 and bits 31:8) are
+> cleared.";
 > 
-> Changes in V4:
->  - Changed compatible string to "com,pm8008-regulators"
->  - Moved "regulator-min-dropout-voltage-microvolt" to regulator.yaml as
->    separate patch.
-> 
-> Changes in V5:
->  - Removed the separate compatible for pm8008 regulator driver.
->  - Moved the supply nodes to chip level.
->  - Removed min-dropout property.
-> 
->  .../bindings/regulator/qcom,pm8008-regulator.yaml  | 31 ++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/qcom,pm8008-regulator.yaml
-> 
+> so in KVM emulated scenario, clear TPR[3:0] to make a consistent behavior
+> as in other scenarios.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+AMD's APM agrees:
+
+  Task Priority Sub-class (TPS)—Bits 3 : 0. The TPS field indicates the current
+  sub-priority to be used when arbitrating lowest-priority messages. This field
+  is written with zero when TPR is written using the architectural CR8 register.
+
+> This doesn't impact evaluation and delivery of pending virtual interrupts
+> because processor does not use the processor-priority sub-class to
+> determine which interrupts to delivery and which to inhibit.
+
+I believe hardware uses it to arbitrate lowest priority interrupts, but KVM just
+does a round-robin style delivery.
+
+> Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
+
+Probably worth:
+
+  Fixes: b93463aa59d6 ("KVM: Accelerated apic support")
+
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+
+> ---
+>  arch/x86/kvm/lapic.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index d7e6fde82d25..306025db9959 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -2242,10 +2242,7 @@ void kvm_set_lapic_tscdeadline_msr(struct kvm_vcpu *vcpu, u64 data)
+>  
+>  void kvm_lapic_set_tpr(struct kvm_vcpu *vcpu, unsigned long cr8)
+>  {
+> -	struct kvm_lapic *apic = vcpu->arch.apic;
+> -
+> -	apic_set_tpr(apic, ((cr8 & 0x0f) << 4)
+> -		     | (kvm_lapic_get_reg(apic, APIC_TASKPRI) & 4));
+> +	apic_set_tpr(vcpu->arch.apic, (cr8 & 0x0f) << 4);
+
+This appears to have been deliberate, but I've no idea what on earth it was
+trying to do.  Preserving only bit 2 is super weird.
+
+Author: Avi Kivity <avi@qumranet.com>
+Date:   Thu Oct 25 16:52:32 2007 +0200
+
+    KVM: Accelerated apic support
+
+    This adds a mechanism for exposing the virtual apic tpr to the guest, and a
+    protocol for letting the guest update the tpr without causing a vmexit if
+    conditions allow (e.g. there is no interrupt pending with a higher priority
+    than the new tpr).
+
+    Signed-off-by: Avi Kivity <avi@qumranet.com>
+
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 50c3f3a8dd3d..e7513bb98af1 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -815,7 +815,8 @@ void kvm_lapic_set_tpr(struct kvm_vcpu *vcpu, unsigned long cr8)
+
+        if (!apic)
+                return;
+-       apic_set_tpr(apic, ((cr8 & 0x0f) << 4));
++       apic_set_tpr(apic, ((cr8 & 0x0f) << 4)
++                    | (apic_get_reg(apic, APIC_TASKPRI) & 4));
+ }
+
+

@@ -2,86 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A31AD4AF677
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A67FA4AF67C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:25:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236683AbiBIQWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:22:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
+        id S236769AbiBIQZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:25:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233355AbiBIQWP (ORCPT
+        with ESMTP id S236165AbiBIQZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:22:15 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F616C0613C9;
-        Wed,  9 Feb 2022 08:22:18 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 0F3E23201ECF;
-        Wed,  9 Feb 2022 11:22:16 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Wed, 09 Feb 2022 11:22:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=AyPVdM+Px9t0COZXk
-        bffbEcG7jUs+g3bmwqXA+leG10=; b=RSpuffbPXoR40AZ9ceUtgeB07rV769Ft8
-        eHwplwAELAmGPI15+xH8oXg872HcUkZdopoCy2IQ8baGRf69RivslgmlNforS3L6
-        B3n2jpYNmpHgrxK/4eZ9wBObzLS8h8o+6V2+00WAv/lmKEXoX/5w/NQwgA2tYdn8
-        M4kIn4FSiH7iEYnq0RkW7Von6lrqxTOjbpS/I4t9UE4hG/Zh8K9Qaq6FUept3goZ
-        jAJ14d7C8VFOJl4vQ9oNvogbGJ8lcE31SXR8y9Za/TFvu5CJb3wt7GtSFRdSk4Ex
-        iJlIBkdfs3NLgNcaEXynXA5cVgMu1eO0WCWadlCjuTrfHg5w6Ms5g==
-X-ME-Sender: <xms:OOoDYqzZM_z5xmPGTflqWjqlekVYHSwJMdTqkO3tXfEuKIylbV1W4g>
-    <xme:OOoDYmRSKhJC4L8of_iHkgrIfMOJj4FRGqYvrb6-ySblUI1t2zlMrcQL5BJ_-SgSe
-    rtEHFYBt0Aq0tw>
-X-ME-Received: <xmr:OOoDYsVEm2W8jivujWQChCTM6AbYvRQ2j8hgaoe2-Vq6_vMta_LdLeDtbAyljbDJVqe4rlaOUx6jtoRXUBVnOSM6vEgclw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheelgdekiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcuufgt
-    hhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvg
-    hrnheptdffkeekfeduffevgeeujeffjefhtefgueeugfevtdeiheduueeukefhudehleet
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepihguoh
-    hstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:OOoDYgiyZEP5DXZAvv6IctTCf1j8vnyPZXzEYN3P2iYjEj4H57POQg>
-    <xmx:OOoDYsDBdnXgFUvc7bHk_u-1PBl2vGjDBGMKRLL8WKNy1B2B_xbhzg>
-    <xmx:OOoDYhKbiVPgxqc4mZH7LgdLb560mxDdeh7zkkaiq8aEyWJTptYrsQ>
-    <xmx:OOoDYu0BOz6YJnd58Pgxahnk9QrOMzQkW-RhrYTBfzmdZ-Wsa36p-w>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 9 Feb 2022 11:22:15 -0500 (EST)
-Date:   Wed, 9 Feb 2022 18:22:11 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     menglong8.dong@gmail.com
-Cc:     nhorman@tuxdriver.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rostedt@goodmis.org, dsahern@kernel.org,
-        Menglong Dong <imagedong@tencent.com>
-Subject: Re: [PATCH v8 net-next] net: drop_monitor: support drop reason
-Message-ID: <YgPqM3PgIThH7iZy@shredder>
-References: <20220209060838.55513-1-imagedong@tencent.com>
+        Wed, 9 Feb 2022 11:25:12 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D37AC061355
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:25:15 -0800 (PST)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2D2FA3F1F0
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 16:25:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644423911;
+        bh=/xekYk/q8PDd5X+mZnZ/+eb+Bf0iUFVR8K4RtVmP8o4=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=U+gjmSlolYuUisQo0EDYIhK5RHaPwDdDvXikHufLFgBTfai88FvWmsUUsnmhJkFXu
+         R1eAHAPiBgJByKS9ryg1Awn2zOSnG+ECzbMxHsjEbDAvJlm+CN5MDCa0+xQyFzlcnK
+         uemSpDXlqnZJGjXjw//W36FVYRMPGixvZM/TSPmvlnVpw6dfdyU1X6SoE7Zs4H2wfz
+         QtPpJgZTmot60G5y3+dbxJFnmRkLEIHcqv567Vg1P8CVsx+m/almcfdvbZiEnedGiP
+         /sMcrk9f2Rxi/jHF2XaEnCp5+9RvlC2ht1p1/BSYnPt3GbXXK6ce1c+OiInk3wEqVy
+         KXIJ5qCGMXjUQ==
+Received: by mail-ej1-f71.google.com with SMTP id 13-20020a170906328d00b006982d0888a4so1415357ejw.9
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 08:25:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/xekYk/q8PDd5X+mZnZ/+eb+Bf0iUFVR8K4RtVmP8o4=;
+        b=3lGRXbCo+SJYl8dcSFaYgQsnyQ/YiEsyadhh/VMByIfC4wj0KP6iELlqgLhFPN1ejA
+         0JYL0Yx4h3h0BqR0VdbLUrb7Tot35+ZN6yNASgHaNRnUvhy66epbwy89+TNe2x47xRLt
+         CJhuVG57J8twANyUskPlmOHmtV+Id5AxGfMjxdYeklCCgKz3b8tNRhXU2HUesLgVzKAT
+         nTgkKpnF66BVkFnLNmI7t9yxJJGkEL9pvMsnvZ7jR6koyswTKdsqEq1trvK6Wm2pTwtp
+         BqpHS+h3Ys+xWfj3FtRPn80uW0Otte2hQtnt0Rz9YSc5jKSxcsycVdna8P2pxLvadwuS
+         r3Ow==
+X-Gm-Message-State: AOAM532tL69mrk3Fkw3KO3kC8rhoeCYNxmCDMZ7gqJLrsdPcos8qEPPf
+        qrjHZrcBt3xlAHmrW5sMSM10MVvvz6vMETBu4oIwHt11de3dVWjGwINEWnEJx7oz0wdcOwl669I
+        CYlEbGndOSq7zJyu9iwV/JeOeLKJL8Cdi3SO/DciEOQ==
+X-Received: by 2002:a17:907:a409:: with SMTP id sg9mr2642421ejc.219.1644423910884;
+        Wed, 09 Feb 2022 08:25:10 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzKvtjCZePVTEi6+XanNHWx67xsb5RlaQqVAD+8Rt87SKNwj0aCwZWrYYo6ZHiUBiw21MJl1A==
+X-Received: by 2002:a17:907:a409:: with SMTP id sg9mr2642412ejc.219.1644423910718;
+        Wed, 09 Feb 2022 08:25:10 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id d23sm6687575edv.79.2022.02.09.08.25.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 08:25:10 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rt-users@vger.kernel.org, joseph.salisbury@canonical.com
+Subject: [PATCH] selftests/ftrace: Do not trace do_softirq because of PREEMPT_RT
+Date:   Wed,  9 Feb 2022 17:24:30 +0100
+Message-Id: <20220209162430.286578-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209060838.55513-1-imagedong@tencent.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 02:08:38PM +0800, menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
-> 
-> In the commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()")
-> drop reason is introduced to the tracepoint of kfree_skb. Therefore,
-> drop_monitor is able to report the drop reason to users by netlink.
-> 
-> The drop reasons are reported as string to users, which is exactly
-> the same as what we do when reporting it to ftrace.
-> 
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+The PREEMPT_RT patchset does not use soft IRQs thus trying to filter for
+do_softirq fails for such kernel:
 
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+  echo do_softirq
+  ftracetest: 81: echo: echo: I/O error
+
+Choose some other externally visible function for the test.
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+---
+
+I understand that the failure does not exist on mainline kernel (only
+with PREEMPT_RT patchset) but the change does not harm it.
+
+If it is not suitable alone, please consider it for RT patchset.
+---
+ .../selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc      | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+index e96e279e0533..1d0c7601865f 100644
+--- a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
++++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+@@ -19,7 +19,7 @@ fail() { # mesg
+ 
+ FILTER=set_ftrace_filter
+ FUNC1="schedule"
+-FUNC2="do_softirq"
++FUNC2="_printk"
+ 
+ ALL_FUNCS="#### all functions enabled ####"
+ 
+-- 
+2.32.0
+

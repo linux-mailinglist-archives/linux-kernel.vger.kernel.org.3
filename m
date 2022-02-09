@@ -2,116 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC9404AF413
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 15:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C08C4AF41A
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 15:29:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235009AbiBIO2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 09:28:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
+        id S233642AbiBIO3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 09:29:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233010AbiBIO2s (ORCPT
+        with ESMTP id S233010AbiBIO32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 09:28:48 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DFBC06157B;
-        Wed,  9 Feb 2022 06:28:51 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 24D3A210DC;
-        Wed,  9 Feb 2022 14:28:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1644416930; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=io62y92hn/uGoChit59qxAIh63DflnbWE34GvXvv5WY=;
-        b=m5fq8AmYqQxnyQ62G7Dp1kUk7FtBRK69c8z6rNt9+uPZS2rBP6DX20dtihKPnvBQSLcNF/
-        g1j4JPAAY9iR6VDbGiQwNODXMAgLfBTFPJ250ZX4oPUSGnBFvCRl4MJzVAONr8sfVkCWU0
-        8NvP/aDKNFAWaYra6jtzeg1IdGrbcck=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1644416930;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=io62y92hn/uGoChit59qxAIh63DflnbWE34GvXvv5WY=;
-        b=ECcpj/mg9vk6A2nU6+Lnt4PKQmtb4U1qjpc83XWVJpXbAYfBwiJMxU3WFeff9fmmwgMh8Y
-        c6GNrA3cOXHTWLBw==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id CB46EA3B8D;
-        Wed,  9 Feb 2022 14:28:49 +0000 (UTC)
-Date:   Wed, 9 Feb 2022 15:28:49 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Aaron Tomlin <atomlin@redhat.com>
-cc:     mcgrof@kernel.org, cl@linux.com, pmladek@suse.com,
-        akpm@linux-foundation.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, atomlin@atomlin.com,
-        ghalat@redhat.com, allen.lkml@gmail.com, void@manifault.com,
-        joe@perches.com
-Subject: Re: [RFC PATCH v4 07/13] module: Move extra signature support out
- of core code
-In-Reply-To: <20220130213214.1042497-8-atomlin@redhat.com>
-Message-ID: <alpine.LSU.2.21.2202091526260.32090@pobox.suse.cz>
-References: <20220130213214.1042497-1-atomlin@redhat.com> <20220130213214.1042497-8-atomlin@redhat.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Wed, 9 Feb 2022 09:29:28 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA70C06157B;
+        Wed,  9 Feb 2022 06:29:30 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 219ET5t3033107;
+        Wed, 9 Feb 2022 08:29:05 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1644416945;
+        bh=INMBu7PPL0wGBid1gx4F4e097L/7OHc2MPdshLnO7UU=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=CvnIYOKF4pXBywPyb3NY8+8oqz4Mccnm9sEvHExMjItbQuDBLnlF9eusuvMDfWRFu
+         B4z0pcIHac/n9WKeQljUoMt0r3eczMv56NY6FyIs8I2tiAfq7OdmKZl+ru6uzTCnkY
+         iDwct/95X0/8RKEtvG/nP1cMbPvNLniOXwW7z/8E=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 219ET5x0043742
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 9 Feb 2022 08:29:05 -0600
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 9
+ Feb 2022 08:29:04 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 9 Feb 2022 08:29:04 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 219ET41V095968;
+        Wed, 9 Feb 2022 08:29:04 -0600
+Date:   Wed, 9 Feb 2022 08:29:04 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <broonie@kernel.org>, <mhocko@suse.cz>, <sfr@canb.auug.org.au>,
+        <linux-next@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <mm-commits@vger.kernel.org>, Roger Quadros <rogerq@kernel.org>,
+        <linux-mtd@lists.infradead.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>
+Subject: Re: mmotm 2022-02-08-15-31 uploaded (drivers/mtd/nand/raw/Kconfig)
+Message-ID: <20220209142904.ye22csd2zh5vynik@stack>
+References: <20220208233156.E2CA6C004E1@smtp.kernel.org>
+ <b18fc937-9cc2-bb7b-fb58-3ba2555371c7@infradead.org>
+ <20220209090300.43241711@xps13>
+ <20220209135439.qcyge32xinvazn43@chewer>
+ <20220209150703.253b16bd@xps13>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220209150703.253b16bd@xps13>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 520c0f4bb968..15ba2ebbca3e 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -720,8 +720,8 @@ static inline bool set_livepatch_module(struct module *mod)
->  	return false;
->  }
->  
-> -bool is_module_sig_enforced(void);
-> -void set_module_sig_enforced(void);
-> +extern bool is_module_sig_enforced(void);
-> +extern void set_module_sig_enforced(void);
+On 15:07-20220209, Miquel Raynal wrote:
+Hi Miquel,
 
-Please, drop these extern modifiers in front of function declarations. 
-They are unnecessary. It applies to different patches of the set as well.
-  
->  #else /* !CONFIG_MODULES... */
->  
-> @@ -911,6 +911,7 @@ static inline bool module_sig_ok(struct module *module)
->  {
->  	return true;
->  }
-> +#define sig_enforce false
->  #endif	/* CONFIG_MODULE_SIG */
->  
->  int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
-> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-> index de28d6bb7b5b..2ec2a1d9dd9f 100644
-> --- a/kernel/module/internal.h
-> +++ b/kernel/module/internal.h
-> @@ -114,3 +114,12 @@ static struct module *mod_find(unsigned long addr)
->  	return NULL;
->  }
->  #endif /* CONFIG_MODULES_TREE_LOOKUP */
-> +
-> +#ifdef CONFIG_MODULE_SIG
-> +extern int module_sig_check(struct load_info *info, int flags);
-> +#else /* !CONFIG_MODULE_SIG */
-> +static int module_sig_check(struct load_info *info, int flags)
-> +{
-> +	return 0;
-> +}
+> > > Maybe we should have added K3 people in Cc but their MAINTAINERS entry
+> > > is incomplete so get_maintainers.pl did not immediately found them.  
+> > 
+> > What are we missing there?
+> 
+> Actually nothing is missing, I overlooked the file name. I touched
+> arch/arm64/Kconfig.platforms in my patch and of course
+> get_maintainers.pl didn't look at the symbol owners. I should have
+> checked that myself manually in the first place.
 
-I think it should be 
+Sure. thanks for cross checking.
 
-static inline int module_sig_check(struct load_info *info, int flags)
-
-Thanks,
-Miroslav
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

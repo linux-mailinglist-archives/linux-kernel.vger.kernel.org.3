@@ -2,66 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 385D64AE7A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 04:11:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B86434AE761
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 04:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbiBIDDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 8 Feb 2022 22:03:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
+        id S243349AbiBIDCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 8 Feb 2022 22:02:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359741AbiBICvY (ORCPT
+        with ESMTP id S1359829AbiBICy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 8 Feb 2022 21:51:24 -0500
-Received: from sender4-pp-o95.zoho.com (sender4-pp-o95.zoho.com [136.143.188.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8564FC061353;
-        Tue,  8 Feb 2022 18:49:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1644374988; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=kuc48FrmESli2C1YS1GIML8e/BiSZ1QUz6jM8pkp7jrwAJGCnyyuD6sk9VJbXqEGhLsoiP9hYR5Ss7qefk3Jsfx1U2GkAtyJblpFluLAaAmTb57NIw5tTAQVQJa5HXsjp8PQNG/GhXKBkO0fuuAL8hodq+7yvwmjWl2BlC+DW7s=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1644374988; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=vrVxNXPVZAa+lXLCCCN4URRsfh4Y8/D9V9GK7c6ZZTk=; 
-        b=MX+8QGo4TtIyCMkQIDpke3lQ5ZcCPqd4Vra3eCxiFC16qOoXPEbytkg3vP6mbg7hGfmFV98aOthpKjcwAZbKmqRAQer/svRaHPcAywSzcmhdtRf60lKogGErTWVXWy04LECDRH8AdITOqy/A+ehOYJ43x1VTtqxMnkgrBgSTwVk=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=zohomail.com;
-        spf=pass  smtp.mailfrom=lchen.firstlove@zohomail.com;
-        dmarc=pass header.from=<lchen.firstlove@zohomail.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1644374988;
-        s=zm2020; d=zohomail.com; i=lchen.firstlove@zohomail.com;
-        h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=vrVxNXPVZAa+lXLCCCN4URRsfh4Y8/D9V9GK7c6ZZTk=;
-        b=ECI5TwhrZ2bgVU78QKRoEhZhTH/ivzDLZgAn8f96sgD3FzdzAp5Ho2l8HcxuX8t2
-        uC4EHjIJjivwcqDWwyoaxxMoQ0etm4RQewoRwk/507q1RPfuJ8db0a58u4e4+EEcF5s
-        qBe9FLwNt5VxSqYhmqzN8/vKnEm9RL8azn5dei6A=
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1644374986511392.386513141631; Tue, 8 Feb 2022 18:49:46 -0800 (PST)
-Received: from  [40.115.208.189] by mail.zoho.com
-        with HTTP;Tue, 8 Feb 2022 18:49:46 -0800 (PST)
-Date:   Tue, 08 Feb 2022 21:49:46 -0500
-From:   Li Chen <lchen.firstlove@zohomail.com>
-To:     "Bjorn Helgaas" <helgaas@kernel.org>
-Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Kishon Vijay Abraham I" <kishon@ti.com>,
-        "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?=22Krzysztof_Wilczy=C5=84ski=22?= <kw@linux.com>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        "linux-pci" <linux-pci@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>
-Message-ID: <17edc630ef0.11d8ab06115620.4524266185949873552@zohomail.com>
-In-Reply-To: <20220208152106.GA476995@bhelgaas>
-References: <20220208152106.GA476995@bhelgaas>
-Subject: [PATCH V7] misc: pci_endpoint_test: simplify endpoint test read and
- write operations
+        Tue, 8 Feb 2022 21:54:56 -0500
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AA7C061353;
+        Tue,  8 Feb 2022 18:54:54 -0800 (PST)
+Received: by mail-ej1-x641.google.com with SMTP id fy20so3402180ejc.0;
+        Tue, 08 Feb 2022 18:54:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bqtTdK0TT1VP41J1UOPy1VjbkVSMizRyRzOZ6tCheig=;
+        b=YGMb3cSiC+KMDWUz6c19IGO3meyMeEvPpvT5otEh9gmMcxTJI0mXLKFss01Z5RXhcb
+         gQpLjvm4ww5pDScz7YMNV/tsQkwmLNJ0b2dNAwE8CfqBuhXmA/OBl9i6GMT91S/hduRD
+         JWyuxGCRc4b7ujDPDaYTySxMbw4pL3zyKnbt2cLP7PVdwL1IHkk+BZpKlKfeHfveeOEn
+         JMn5QFN0rb0txSwO16ec2rKdR6IYKjSX3G2gCh+3CiqnIp3prs9qPqlcA/MFWucIP5X6
+         pULY1pPvrJ+rX2pSOKm0Goxo2SrEmuYdJmrUXhd1E1Pal4bW3EOJQIMmkdSRAKWLuEHi
+         uwWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bqtTdK0TT1VP41J1UOPy1VjbkVSMizRyRzOZ6tCheig=;
+        b=DeEAoOzqJH9Iz4jE3bRnGNBslgSlkkCg8ketD5CahPPqbvGtuT2cOa4Xy40QPVzr7E
+         gXQshJCt704F3xioUDleWnybMMGMBXFgbEuEJmpMEOenFadPOWdLYUdPW/N3jEfUnUm4
+         mv3xnCsHs/mTK5RARLK0/bB3PJ6fuDMe3TZ/hElnP626LLzpnH6xg0YEyH8Uim+Wk4GP
+         jn9y5vc05h4vvJIfuSnJzWiHzqIaLQIWTMiknri7Bkabwn/qBXQs4QcEm+P6aSnLxvJq
+         pz7dqeeCvQa45O0OEc4Pz4FQ41nZu/UEfdQmFuw4hthUDXEk5h4lb612r6XVk7drkVed
+         ypZQ==
+X-Gm-Message-State: AOAM530hcfjBt7O7343MCQ1kCICMSuEs2fSXTlCshCVSdY2y/GWmeEwR
+        3ebQhhitB8GZ99Dp/OMf2KtRhrROu0r1+NGyjIM=
+X-Google-Smtp-Source: ABdhPJx/sXJPPMltCJF9E0Vjqb/4igaQXZtp/9XYDrYiYKZHe+ter1DfujLLeM1I3woh5KWwCIMlYTNyQ2WZs6gIco4=
+X-Received: by 2002:a17:906:b819:: with SMTP id dv25mr100613ejb.689.1644375293354;
+ Tue, 08 Feb 2022 18:54:53 -0800 (PST)
 MIME-Version: 1.0
+References: <20220208072836.3540192-1-imagedong@tencent.com>
+ <20220208072836.3540192-3-imagedong@tencent.com> <YgKFHyQphAwMgsEY@shredder>
+In-Reply-To: <YgKFHyQphAwMgsEY@shredder>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Wed, 9 Feb 2022 10:49:59 +0800
+Message-ID: <CADxym3aPfdM2ZFN8KnM3wXqXQ7FXZqUKNpVWzEDaxjRMWM9hYA@mail.gmail.com>
+Subject: Re: [PATCH v7 net-next 2/2] net: drop_monitor: support drop reason
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
+        Neil Horman <nhorman@tuxdriver.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Menglong Dong <imagedong@tencent.com>,
+        David Ahern <dsahern@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,352 +72,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Chen <lchen@ambarella.com>
+On Tue, Feb 8, 2022 at 10:58 PM Ido Schimmel <idosch@idosch.org> wrote:
+>
+> On Tue, Feb 08, 2022 at 03:28:36PM +0800, menglong8.dong@gmail.com wrote:
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > In the commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()")
+> > drop reason is introduced to the tracepoint of kfree_skb. Therefore,
+> > drop_monitor is able to report the drop reason to users by netlink.
+> >
+> > The drop reasons are reported as string to users, which is exactly
+> > the same as what we do when reporting it to ftrace.
+> >
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > ---
+> > v7:
+> > - take the size of NET_DM_ATTR_REASON into accounting in
+> >   net_dm_packet_report_size()
+> > - let compiler define the size of drop_reasons
+> >
+> > v6:
+> > - check the range of drop reason in net_dm_packet_report_fill()
+> >
+> > v5:
+> > - check if drop reason larger than SKB_DROP_REASON_MAX
+> >
+> > v4:
+> > - report drop reasons as string
+> >
+> > v3:
+> > - referring to cb->reason and cb->pc directly in
+> >   net_dm_packet_report_fill()
+> >
+> > v2:
+> > - get a pointer to struct net_dm_skb_cb instead of local var for
+> >   each field
+> > ---
+> >  include/uapi/linux/net_dropmon.h |  1 +
+> >  net/core/drop_monitor.c          | 34 ++++++++++++++++++++++++++++----
+> >  2 files changed, 31 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/include/uapi/linux/net_dropmon.h b/include/uapi/linux/net_dropmon.h
+> > index 66048cc5d7b3..1bbea8f0681e 100644
+> > --- a/include/uapi/linux/net_dropmon.h
+> > +++ b/include/uapi/linux/net_dropmon.h
+> > @@ -93,6 +93,7 @@ enum net_dm_attr {
+> >       NET_DM_ATTR_SW_DROPS,                   /* flag */
+> >       NET_DM_ATTR_HW_DROPS,                   /* flag */
+> >       NET_DM_ATTR_FLOW_ACTION_COOKIE,         /* binary */
+> > +     NET_DM_ATTR_REASON,                     /* string */
+> >
+> >       __NET_DM_ATTR_MAX,
+> >       NET_DM_ATTR_MAX = __NET_DM_ATTR_MAX - 1
+> > diff --git a/net/core/drop_monitor.c b/net/core/drop_monitor.c
+> > index 7b288a121a41..28c55d605566 100644
+> > --- a/net/core/drop_monitor.c
+> > +++ b/net/core/drop_monitor.c
+> > @@ -48,6 +48,19 @@
+> >  static int trace_state = TRACE_OFF;
+> >  static bool monitor_hw;
+> >
+> > +#undef EM
+> > +#undef EMe
+> > +
+> > +#define EM(a, b)     [a] = #b,
+> > +#define EMe(a, b)    [a] = #b
+> > +
+> > +/* drop_reasons is used to translate 'enum skb_drop_reason' to string,
+> > + * which is reported to user space.
+> > + */
+> > +static const char * const drop_reasons[] = {
+> > +     TRACE_SKB_DROP_REASON
+> > +};
+> > +
+> >  /* net_dm_mutex
+> >   *
+> >   * An overall lock guarding every operation coming from userspace.
+> > @@ -126,6 +139,7 @@ struct net_dm_skb_cb {
+> >               struct devlink_trap_metadata *hw_metadata;
+> >               void *pc;
+> >       };
+> > +     enum skb_drop_reason reason;
+> >  };
+> >
+> >  #define NET_DM_SKB_CB(__skb) ((struct net_dm_skb_cb *)&((__skb)->cb[0]))
+> > @@ -498,6 +512,7 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
+> >  {
+> >       ktime_t tstamp = ktime_get_real();
+> >       struct per_cpu_dm_data *data;
+> > +     struct net_dm_skb_cb *cb;
+> >       struct sk_buff *nskb;
+> >       unsigned long flags;
+> >
+> > @@ -508,7 +523,9 @@ static void net_dm_packet_trace_kfree_skb_hit(void *ignore,
+> >       if (!nskb)
+> >               return;
+> >
+> > -     NET_DM_SKB_CB(nskb)->pc = location;
+> > +     cb = NET_DM_SKB_CB(nskb);
+> > +     cb->reason = reason;
+> > +     cb->pc = location;
+> >       /* Override the timestamp because we care about the time when the
+> >        * packet was dropped.
+> >        */
+> > @@ -574,6 +591,8 @@ static size_t net_dm_packet_report_size(size_t payload_len)
+> >              nla_total_size(sizeof(u32)) +
+> >              /* NET_DM_ATTR_PROTO */
+> >              nla_total_size(sizeof(u16)) +
+> > +            /* NET_DM_ATTR_REASON */
+> > +            nla_total_size(SKB_DR_MAX_LEN + 1) +
+>
+> Nothing ensures that the reason is not longer than this length and
+> nothing ensures that this assumption remains valid as more reasons are
+> added.
+>
+> I think "SKB_DR_MAX_LEN" can be removed completely. Pass "reason" to
+> this function and do "strlen(drop_reasons[reason]) + 1". Any reason it
+> can't work?
 
-Introduce pci_endpoint_epf_transfer_data to simplify
-read and write operations.
+Yeah, it can work. But it feels a little weird to pass this param to
+net_dm_packet_report_size(). I'll give it a try.
 
-Signed-off-by: Li Chen <lchen@ambarella.com>
----
-Changes in V2:
-fix WARNING: line length of 108 exceeds 100 columns
-#128: FILE: drivers/misc/pci_endpoint_test.c:243:
-Changes in V3:
-This patch context doesn't change but resend with my Zoho mail account in that previous
-company mail will contain un-removeable proprietary messages.
-Changes in V4:
-Add "From:" to the first line of the message body.
-Changes in V5:
-tabify file
-replace enum EPF_WRITE/EPF_READ with WRITE/READ from linux/kernel.h
-get_random_bytes only when WRITE.
-Changes in V6:
-remove useless "Date:" and "Subject:" in message body, only preserve "From:" tag. 
-Changes in V7:
-use /* */ comments to match the prevailing kernel comment style
-capitalize "RC" and "EP" since they're not real words.
-remove tabify in that the original code have no style issue if tab is 8-width.
+>
+> >              /* NET_DM_ATTR_PAYLOAD */
+> >              nla_total_size(payload_len);
+> >  }
+> > @@ -606,8 +625,9 @@ static int net_dm_packet_report_in_port_put(struct sk_buff *msg, int ifindex,
+> >  static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
+> >                                    size_t payload_len)
+> >  {
+> > -     u64 pc = (u64)(uintptr_t) NET_DM_SKB_CB(skb)->pc;
+> > +     struct net_dm_skb_cb *cb = NET_DM_SKB_CB(skb);
+> >       char buf[NET_DM_MAX_SYMBOL_LEN];
+> > +     unsigned int reason;
+> >       struct nlattr *attr;
+> >       void *hdr;
+> >       int rc;
+> > @@ -620,10 +640,16 @@ static int net_dm_packet_report_fill(struct sk_buff *msg, struct sk_buff *skb,
+> >       if (nla_put_u16(msg, NET_DM_ATTR_ORIGIN, NET_DM_ORIGIN_SW))
+> >               goto nla_put_failure;
+> >
+> > -     if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, pc, NET_DM_ATTR_PAD))
+> > +     if (nla_put_u64_64bit(msg, NET_DM_ATTR_PC, (u64)(uintptr_t)cb->pc,
+> > +                           NET_DM_ATTR_PAD))
+> > +             goto nla_put_failure;
+> > +
+> > +     reason = (unsigned int)cb->reason;
+> > +     if (reason < SKB_DROP_REASON_MAX &&
+>
+> In which cases can this happen? Might be better to perform this
+> validation in net_dm_packet_trace_kfree_skb_hit() and set "cb->reason"
+> to "SKB_DROP_REASON_NOT_SPECIFIED" in this case. That way we don't need
+> to perform the validation in later code paths
 
- drivers/misc/pci_endpoint_test.c | 286 ++++++++++++-------------------
- 1 file changed, 106 insertions(+), 180 deletions(-)
+Logically speaking, this shouldn't happen, as the reason is always be
+'enum skb_drop_reason'. I added this part out of misunderstanding
+your previous reply, and now I'm not sure if we should keep this.
 
-diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
-index 8f786a225dcf8..30adf0e4c36a0 100644
---- a/drivers/misc/pci_endpoint_test.c
-+++ b/drivers/misc/pci_endpoint_test.c
-@@ -12,6 +12,7 @@
- #include <linux/io.h>
- #include <linux/interrupt.h>
- #include <linux/irq.h>
-+#include <linux/kernel.h>
- #include <linux/miscdevice.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
-@@ -142,6 +143,109 @@ static inline u32 pci_endpoint_test_bar_readl(struct pci_endpoint_test *test,
- {
- 	return readl(test->bar[bar] + offset);
- }
-+static bool pci_endpoint_test_transfer_data(struct pci_endpoint_test *test,
-+				unsigned long arg, const int operation)
-+{
-+	struct pci_endpoint_test_xfer_param param;
-+	bool ret = false;
-+	u32 flags = 0;
-+	bool use_dma;
-+	void *addr;
-+	dma_addr_t phys_addr;
-+	struct pci_dev *pdev = test->pdev;
-+	struct device *dev = &pdev->dev;
-+	void *orig_addr;
-+	dma_addr_t orig_phys_addr;
-+	size_t offset;
-+	size_t alignment = test->alignment;
-+	int irq_type = test->irq_type;
-+	size_t size;
-+	int err;
-+
-+	err = copy_from_user(&param, (void __user *)arg, sizeof(param));
-+	if (err != 0) {
-+		dev_err(dev, "Failed to get transfer param\n");
-+		return false;
-+	}
-+
-+	size = param.size;
-+	if (size > SIZE_MAX - alignment)
-+		goto err;
-+
-+	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
-+	if (use_dma)
-+		flags |= FLAG_USE_DMA;
-+
-+	if (irq_type < IRQ_TYPE_LEGACY || irq_type > IRQ_TYPE_MSIX) {
-+		dev_err(dev, "Invalid IRQ type option\n");
-+		goto err;
-+	}
-+
-+	orig_addr = kzalloc(size + alignment, GFP_KERNEL);
-+	if (!orig_addr)
-+		goto err;
-+
-+	if (operation == WRITE)
-+		get_random_bytes(orig_addr, size + alignment);
-+
-+	orig_phys_addr = dma_map_single(dev, orig_addr, size + alignment,
-+					operation == WRITE ? DMA_TO_DEVICE : DMA_FROM_DEVICE);
-+	if (dma_mapping_error(dev, orig_phys_addr)) {
-+		dev_err(dev, "failed to map source buffer address\n");
-+		goto err_phys_addr;
-+	}
-+
-+	if (alignment && !IS_ALIGNED(orig_phys_addr, alignment)) {
-+		phys_addr = PTR_ALIGN(orig_phys_addr, alignment);
-+		offset = phys_addr - orig_phys_addr;
-+		addr = orig_addr + offset;
-+	} else {
-+		phys_addr = orig_phys_addr;
-+		addr = orig_addr;
-+	}
-+
-+	if (operation == WRITE) {
-+
-+		pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_CHECKSUM,
-+				 crc32_le(~0, addr, size));
-+
-+		pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_LOWER_SRC_ADDR,
-+								lower_32_bits(phys_addr));
-+		pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_UPPER_SRC_ADDR,
-+								upper_32_bits(phys_addr));
-+	} else {
-+		pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_LOWER_DST_ADDR,
-+								lower_32_bits(phys_addr));
-+		pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_UPPER_DST_ADDR,
-+								upper_32_bits(phys_addr));
-+	}
-+
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_SIZE, size);
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_FLAGS, flags);
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_TYPE, irq_type);
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_NUMBER, 1);
-+
-+	/* if we ask RC to write to EP, then EP should do read operation, and vice versa. */
-+	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_COMMAND,
-+				 operation == WRITE ? COMMAND_READ : COMMAND_WRITE);
-+
-+	wait_for_completion(&test->irq_raised);
-+
-+	dma_unmap_single(dev, orig_phys_addr, size + alignment,
-+					 operation == WRITE ? DMA_TO_DEVICE : DMA_FROM_DEVICE);
-+
-+	if (operation == WRITE)
-+		ret = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_STATUS) & STATUS_READ_SUCCESS;
-+	else
-+		ret = crc32_le(~0, addr, size) ==
-+			pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_CHECKSUM);
-+
-+err_phys_addr:
-+	kfree(orig_addr);
-+
-+err:
-+	return ret;
-+}
- 
- static inline void pci_endpoint_test_bar_writel(struct pci_endpoint_test *test,
- 						int bar, u32 offset, u32 value)
-@@ -473,191 +577,13 @@ static bool pci_endpoint_test_copy(struct pci_endpoint_test *test,
- static bool pci_endpoint_test_write(struct pci_endpoint_test *test,
- 				    unsigned long arg)
- {
--	struct pci_endpoint_test_xfer_param param;
--	bool ret = false;
--	u32 flags = 0;
--	bool use_dma;
--	u32 reg;
--	void *addr;
--	dma_addr_t phys_addr;
--	struct pci_dev *pdev = test->pdev;
--	struct device *dev = &pdev->dev;
--	void *orig_addr;
--	dma_addr_t orig_phys_addr;
--	size_t offset;
--	size_t alignment = test->alignment;
--	int irq_type = test->irq_type;
--	size_t size;
--	u32 crc32;
--	int err;
--
--	err = copy_from_user(&param, (void __user *)arg, sizeof(param));
--	if (err != 0) {
--		dev_err(dev, "Failed to get transfer param\n");
--		return false;
--	}
--
--	size = param.size;
--	if (size > SIZE_MAX - alignment)
--		goto err;
--
--	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
--	if (use_dma)
--		flags |= FLAG_USE_DMA;
--
--	if (irq_type < IRQ_TYPE_LEGACY || irq_type > IRQ_TYPE_MSIX) {
--		dev_err(dev, "Invalid IRQ type option\n");
--		goto err;
--	}
--
--	orig_addr = kzalloc(size + alignment, GFP_KERNEL);
--	if (!orig_addr) {
--		dev_err(dev, "Failed to allocate address\n");
--		ret = false;
--		goto err;
--	}
--
--	get_random_bytes(orig_addr, size + alignment);
--
--	orig_phys_addr = dma_map_single(dev, orig_addr, size + alignment,
--					DMA_TO_DEVICE);
--	if (dma_mapping_error(dev, orig_phys_addr)) {
--		dev_err(dev, "failed to map source buffer address\n");
--		ret = false;
--		goto err_phys_addr;
--	}
--
--	if (alignment && !IS_ALIGNED(orig_phys_addr, alignment)) {
--		phys_addr =  PTR_ALIGN(orig_phys_addr, alignment);
--		offset = phys_addr - orig_phys_addr;
--		addr = orig_addr + offset;
--	} else {
--		phys_addr = orig_phys_addr;
--		addr = orig_addr;
--	}
--
--	crc32 = crc32_le(~0, addr, size);
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_CHECKSUM,
--				 crc32);
--
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_LOWER_SRC_ADDR,
--				 lower_32_bits(phys_addr));
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_UPPER_SRC_ADDR,
--				 upper_32_bits(phys_addr));
--
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_SIZE, size);
--
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_FLAGS, flags);
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_TYPE, irq_type);
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_NUMBER, 1);
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_COMMAND,
--				 COMMAND_READ);
--
--	wait_for_completion(&test->irq_raised);
--
--	reg = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_STATUS);
--	if (reg & STATUS_READ_SUCCESS)
--		ret = true;
--
--	dma_unmap_single(dev, orig_phys_addr, size + alignment,
--			 DMA_TO_DEVICE);
--
--err_phys_addr:
--	kfree(orig_addr);
--
--err:
--	return ret;
-+	return pci_endpoint_test_transfer_data(test, arg, WRITE);
- }
- 
- static bool pci_endpoint_test_read(struct pci_endpoint_test *test,
- 				   unsigned long arg)
- {
--	struct pci_endpoint_test_xfer_param param;
--	bool ret = false;
--	u32 flags = 0;
--	bool use_dma;
--	size_t size;
--	void *addr;
--	dma_addr_t phys_addr;
--	struct pci_dev *pdev = test->pdev;
--	struct device *dev = &pdev->dev;
--	void *orig_addr;
--	dma_addr_t orig_phys_addr;
--	size_t offset;
--	size_t alignment = test->alignment;
--	int irq_type = test->irq_type;
--	u32 crc32;
--	int err;
--
--	err = copy_from_user(&param, (void __user *)arg, sizeof(param));
--	if (err) {
--		dev_err(dev, "Failed to get transfer param\n");
--		return false;
--	}
--
--	size = param.size;
--	if (size > SIZE_MAX - alignment)
--		goto err;
--
--	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
--	if (use_dma)
--		flags |= FLAG_USE_DMA;
--
--	if (irq_type < IRQ_TYPE_LEGACY || irq_type > IRQ_TYPE_MSIX) {
--		dev_err(dev, "Invalid IRQ type option\n");
--		goto err;
--	}
--
--	orig_addr = kzalloc(size + alignment, GFP_KERNEL);
--	if (!orig_addr) {
--		dev_err(dev, "Failed to allocate destination address\n");
--		ret = false;
--		goto err;
--	}
--
--	orig_phys_addr = dma_map_single(dev, orig_addr, size + alignment,
--					DMA_FROM_DEVICE);
--	if (dma_mapping_error(dev, orig_phys_addr)) {
--		dev_err(dev, "failed to map source buffer address\n");
--		ret = false;
--		goto err_phys_addr;
--	}
--
--	if (alignment && !IS_ALIGNED(orig_phys_addr, alignment)) {
--		phys_addr = PTR_ALIGN(orig_phys_addr, alignment);
--		offset = phys_addr - orig_phys_addr;
--		addr = orig_addr + offset;
--	} else {
--		phys_addr = orig_phys_addr;
--		addr = orig_addr;
--	}
--
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_LOWER_DST_ADDR,
--				 lower_32_bits(phys_addr));
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_UPPER_DST_ADDR,
--				 upper_32_bits(phys_addr));
--
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_SIZE, size);
--
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_FLAGS, flags);
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_TYPE, irq_type);
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_NUMBER, 1);
--	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_COMMAND,
--				 COMMAND_WRITE);
--
--	wait_for_completion(&test->irq_raised);
--
--	dma_unmap_single(dev, orig_phys_addr, size + alignment,
--			 DMA_FROM_DEVICE);
--
--	crc32 = crc32_le(~0, addr, size);
--	if (crc32 == pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_CHECKSUM))
--		ret = true;
--
--err_phys_addr:
--	kfree(orig_addr);
--err:
--	return ret;
-+	return pci_endpoint_test_transfer_data(test, arg, READ);
- }
- 
- static bool pci_endpoint_test_clear_irq(struct pci_endpoint_test *test)
--- 
-2.34.1
+For security considering, let's keep it for the moment, and I'll move it
+to net_dm_packet_trace_kfree_skb_hit()
 
+Thanks!
+Menglong Dong
 
+>
+> > +         nla_put_string(msg, NET_DM_ATTR_REASON, drop_reasons[reason]))
+> >               goto nla_put_failure;
+> >
+> > -     snprintf(buf, sizeof(buf), "%pS", NET_DM_SKB_CB(skb)->pc);
+> > +     snprintf(buf, sizeof(buf), "%pS", cb->pc);
+> >       if (nla_put_string(msg, NET_DM_ATTR_SYMBOL, buf))
+> >               goto nla_put_failure;
+> >
+> > --
+> > 2.34.1
+> >

@@ -2,106 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3677A4B0124
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 00:22:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC244B0134
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 00:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiBIXVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 18:21:37 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46494 "EHLO
+        id S229668AbiBIX2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 18:28:08 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:44550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiBIXV0 (ORCPT
+        with ESMTP id S229591AbiBIX2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 18:21:26 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DACE05ADCE
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 15:21:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644448883; x=1675984883;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Purxvy8vA6GA+gDSQ2rJk+wzjHjdsMrMrTSJsxNEzAM=;
-  b=eHlIYscvj+OWo2SxystnMc337bB6rczYBlmvj2ODA3GeCftE0fWJ50zo
-   7ccwB7ohNkYpOYRLAFvWN9V99+mjdCBvXm3wDpmElQKTXoLFELfk7R789
-   EKDh/l9jDTXsFEnsspo8J+oDjKA/IT2nVEp53/DZk9JImxFc0Jfy6Oqsp
-   8X4VmEpw2oAka8/Vnkv6QrXaMUajeVipfCLL1eB9jtBzcqhqjjOTX6MlY
-   ah4QvMKuTOqG8/wpV51gl2x+iNVGRg6HJPXo1vnoEQAPKG+4Cgo3geWJf
-   Jjn/dkBXVrSjG5j6LJKqhletcz96eJJJE22UxKEQ+kxDrIkp6bO08IfzV
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="232929601"
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="232929601"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 15:21:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="773679447"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 09 Feb 2022 15:21:15 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 1A7CC107; Thu, 10 Feb 2022 01:21:30 +0200 (EET)
-Date:   Thu, 10 Feb 2022 02:21:29 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 23/29] x86/tdx: Add helper to convert memory between
- shared and private
-Message-ID: <20220209232129.puktrgtvpovunexc@black.fi.intel.com>
-References: <20220124150215.36893-1-kirill.shutemov@linux.intel.com>
- <20220124150215.36893-24-kirill.shutemov@linux.intel.com>
- <YgJePUqMEzHNqrsR@zn.tnic>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgJePUqMEzHNqrsR@zn.tnic>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 9 Feb 2022 18:28:03 -0500
+X-Greylist: delayed 304 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 15:27:58 PST
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A1D9E057C0C
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 15:27:57 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.88,356,1635174000"; 
+   d="scan'208";a="110784889"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 10 Feb 2022 08:22:44 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 592F84004CFB;
+        Thu, 10 Feb 2022 08:22:42 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-renesas-soc@vger.kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] i2c: riic: Simplify reset handling
+Date:   Wed,  9 Feb 2022 23:22:32 +0000
+Message-Id: <20220209232232.18461-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 01:12:45PM +0100, Borislav Petkov wrote:
-> On Mon, Jan 24, 2022 at 06:02:09PM +0300, Kirill A. Shutemov wrote:
-> > +	if (ret)
-> > +		ret = -EIO;
-> > +
-> > +	if (ret || !enc)
-> 
-> Is the second case here after the "||" the conversion-to-shared where it
-> only needs to notify with MapGPA and return?
+Read reset phandle as optional instead of exclusive so that all the DT's
+passing the reset phandle can be used to assert/deassert the reset line.
+With this change we don't have to differentiate the RZ/G2L SoC.
 
-Right. Memory accepting is required on the way to private.
+With the above changes we no longer need the "renesas,riic-r9a07g044"
+compatible string, so drop it from riic_i2c_dt_ids[]. No changes are
+required to the r9a07g044.dtsi as we already have "renesas,riic-rz" as a
+fallback compatible string.
 
-I will rewrite and comment this code to make it more readable.
+While at it, check the return code of reset_control_deassert() as it might
+fail and also add a devres action to assert the reset line.
 
-> > +		return ret;
-> > +
-> > +	/*
-> > +	 * For shared->private conversion, accept the page using
-> > +	 * TDX_ACCEPT_PAGE TDX module call.
-> > +	 */
-> > +	while (start < end) {
-> > +		/* Try 2M page accept first if possible */
-> > +		if (!(start & ~PMD_MASK) && end - start >= PMD_SIZE &&
-> > +		    !tdx_accept_page(start, PG_LEVEL_2M)) {
-> 
-> What happens here if the module doesn't accept the page? No error
-> reporting, no error handling, no warning, nada?
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/i2c/busses/i2c-riic.c | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
 
-If it fails we fallback to 4k accept below.
-
-We only report error if 4k accept fails.
-
+diff --git a/drivers/i2c/busses/i2c-riic.c b/drivers/i2c/busses/i2c-riic.c
+index 8dfd27dc6149..cded77e06670 100644
+--- a/drivers/i2c/busses/i2c-riic.c
++++ b/drivers/i2c/busses/i2c-riic.c
+@@ -88,11 +88,6 @@
+ 
+ #define RIIC_INIT_MSG	-1
+ 
+-enum riic_type {
+-	RIIC_RZ_A,
+-	RIIC_RZ_G2L,
+-};
+-
+ struct riic_dev {
+ 	void __iomem *base;
+ 	u8 *buf;
+@@ -396,6 +391,11 @@ static struct riic_irq_desc riic_irqs[] = {
+ 	{ .res_num = 5, .isr = riic_tend_isr, .name = "riic-nack" },
+ };
+ 
++static void riic_reset_control_assert(void *data)
++{
++	reset_control_assert(data);
++}
++
+ static int riic_i2c_probe(struct platform_device *pdev)
+ {
+ 	struct riic_dev *riic;
+@@ -404,7 +404,6 @@ static int riic_i2c_probe(struct platform_device *pdev)
+ 	struct i2c_timings i2c_t;
+ 	struct reset_control *rstc;
+ 	int i, ret;
+-	enum riic_type type;
+ 
+ 	riic = devm_kzalloc(&pdev->dev, sizeof(*riic), GFP_KERNEL);
+ 	if (!riic)
+@@ -421,16 +420,18 @@ static int riic_i2c_probe(struct platform_device *pdev)
+ 		return PTR_ERR(riic->clk);
+ 	}
+ 
+-	type = (enum riic_type)of_device_get_match_data(&pdev->dev);
+-	if (type == RIIC_RZ_G2L) {
+-		rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+-		if (IS_ERR(rstc)) {
+-			dev_err(&pdev->dev, "Error: missing reset ctrl\n");
+-			return PTR_ERR(rstc);
+-		}
++	rstc = devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
++	if (IS_ERR(rstc))
++		return dev_err_probe(&pdev->dev, PTR_ERR(rstc),
++				     "Error: missing reset ctrl\n");
+ 
+-		reset_control_deassert(rstc);
+-	}
++	ret = reset_control_deassert(rstc);
++	if (ret)
++		return ret;
++
++	ret = devm_add_action_or_reset(&pdev->dev, riic_reset_control_assert, rstc);
++	if (ret)
++		return ret;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(riic_irqs); i++) {
+ 		ret = platform_get_irq(pdev, riic_irqs[i].res_num);
+@@ -492,8 +493,7 @@ static int riic_i2c_remove(struct platform_device *pdev)
+ }
+ 
+ static const struct of_device_id riic_i2c_dt_ids[] = {
+-	{ .compatible = "renesas,riic-r9a07g044", .data = (void *)RIIC_RZ_G2L },
+-	{ .compatible = "renesas,riic-rz", .data = (void *)RIIC_RZ_A },
++	{ .compatible = "renesas,riic-rz", },
+ 	{ /* Sentinel */ },
+ };
+ 
 -- 
- Kirill A. Shutemov
+2.17.1
+

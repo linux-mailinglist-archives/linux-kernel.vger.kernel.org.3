@@ -2,66 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 191234AED63
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 09:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8BE4AED70
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 10:02:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236094AbiBII4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 03:56:42 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:58296 "EHLO
+        id S239975AbiBIJCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 04:02:03 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbiBII4h (ORCPT
+        with ESMTP id S241264AbiBIJBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 03:56:37 -0500
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE4BC10369B
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 00:56:34 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id o12so1064628qke.5
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 00:56:34 -0800 (PST)
+        Wed, 9 Feb 2022 04:01:52 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A665E015664;
+        Wed,  9 Feb 2022 01:01:50 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id z13so3183304pfa.3;
+        Wed, 09 Feb 2022 01:01:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=ZXandK+emcY9j+lknNJmYnpgD6ghtFPnYBrNZbHY5Mk=;
-        b=pIAfjdpVAhfLDWMrG4eyoRHalCKigC93SJzURinIMyuKtXebHbo7CQ5M/uqpuv1J2V
-         QMd85G/uFjj48hBFlU6EGtDybguIz8IafdQ1KfyR/IPR0u5rQEuh1BCY6yJrS3USlGDe
-         dxJcqhVN1HxJtQZJpDDSjrNOOFUPZ6OAS4NV2gR8U8Q/Dg+gJ03ORViNPjfE+Z+xIRqQ
-         siXr2oq+ciC9vl6wnFH5pWQ+ePwHS0TUw/BSXULl7L+SUY44qdWamtwEp62swhiI3zHj
-         iwcsu7OTnxx/cEY35qriy/isQjN+gFruCE68vX5NKBFddRfwnLur0qyomobmrLEhsKum
-         SqsQ==
+        bh=VH+A8xJEaUloO4mKzD8JGvj5AR88+tYefIL2An16MRk=;
+        b=WozUnmY9CDhyCgkAKyKhJYFx0T2j9sVRi5iXjd73tjpqESfHLQDC6z7Xv8t5gF7COQ
+         fZ/s8/Ltziy/6orG6v/wRObTsbiBW3xK6Rva0y4e1nHx8z5ruj4nqiptU/gBJLPHj25g
+         QPwVB93bhVwblFCisEsDkn6zLFKtH9g5yCcTjt324u0IlsNV+1I3A8IF3URtz0IetoJh
+         B3SsSKp5l67CZZzp/ZeQ4iPeDJx2Epi2VfdJBD5o5z+HD9QhJmdPMeK7IvgkIIdEbBkC
+         2Nj55aOsYN1wOlh3/7typty1qWFPvoDKEf2jcDeDpdTapkmkWUhXzMwxrUIpZXbAFV2q
+         Kbew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
          :content-transfer-encoding;
-        bh=ZXandK+emcY9j+lknNJmYnpgD6ghtFPnYBrNZbHY5Mk=;
-        b=UjQDO6Y8AGYwDZzUqf7/PPDk4WNXp0oprsZn5Tf57cZbSPZIRw9K5Mpg2dwo/MUbWs
-         xpStaAZA0yNxxzO2RZyv8WBH7UvT9My+TThd8Me+e2fMFoZZXyZJX3NAD4MCjldPCqPN
-         hl0bV9vTF6N2rAviVi+RT70Iq6HRz6xcmf38we/9skNMr0BnAZOEVYFjUh0W1O5EvBXS
-         +dCOYOaoJoa9F/exCQiThlpZbVxckUm534eBiGOMMAiQgytJd0e4I7WHXvahi49rjQDv
-         3wQlA0IIJeuEPZKTgNM0vwTNGYiXaCBQr1+etzgI6VAkNV51YDuE8cWXrMYCg1V7x6w0
-         kcdg==
-X-Gm-Message-State: AOAM5334+Swv/53oUhd5H/jWiYp/ggBqkaymWmNuPyG3AF/gD4rapOcO
-        Xbta5NL+BcuBlHfW8zr2XbM=
-X-Google-Smtp-Source: ABdhPJyqcybfIkYqyHz+e3zwbI+JWbs8XjkGw/GjKf5GoLAsKQqh1ZSUguwnesxj8TLFIR9i7InrEg==
-X-Received: by 2002:a05:620a:16d3:: with SMTP id a19mr516513qkn.107.1644396971097;
-        Wed, 09 Feb 2022 00:56:11 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id k6sm8763048qko.68.2022.02.09.00.56.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 00:56:10 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: deng.changcheng@zte.com.cn
-To:     fweisbec@gmail.com
-Cc:     tglx@linutronix.de, mingo@kernel.org, linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] tick/sched: use min() to make code cleaner
-Date:   Wed,  9 Feb 2022 08:56:04 +0000
-Message-Id: <20220209085604.1561628-1-deng.changcheng@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        bh=VH+A8xJEaUloO4mKzD8JGvj5AR88+tYefIL2An16MRk=;
+        b=u2hvm+uVptqL5cl7IJXhnXr+kO/rLJHjWy6Me24APlyi45saWiCDfBCiE/KGj3hdLT
+         c8s2QGs8pXkqpP0EzIhHgH2DtCMOmMubzIRYp46RmMyofMymKzmHO9S+X4F0AZEtqdzk
+         Rgg10dwLjfxnAdInsX0M7iXyNNmykbWcg/2mwRLabXTkTS5aqWu9tPHmWF/5n1s9P3zm
+         vjqok3XiuZL27oUCmsiNFv66uNDX4HqMszyMYNsbrdh+GwbLI4XzaCH3c83kdPsXEPvd
+         T/ZW1gD+FsiWxdXnpCwvzQq3eA8DTpPeorUWRfvpeDwr6/CFMZLAbenDigDhkXA1Hl6z
+         +r4g==
+X-Gm-Message-State: AOAM531vd4o8To47ne/3wAY8Z5AGSFfEzW/W/sah+78Pq+C5PytPfBLx
+        YfvCMCvXK7f4eC6SD0CtCMg=
+X-Google-Smtp-Source: ABdhPJxxXvWNoMxfn7e3rxqaz81krZRXdIaswiGkABfOo7ZtIW61n31Ohr57+0oAIESF347QNNoVrw==
+X-Received: by 2002:a63:8849:: with SMTP id l70mr1056522pgd.437.1644397225928;
+        Wed, 09 Feb 2022 01:00:25 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id mu13sm6107068pjb.28.2022.02.09.01.00.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 01:00:25 -0800 (PST)
+Message-ID: <7de112b2-e6d1-1f9d-a040-1c4cfee40b22@gmail.com>
+Date:   Wed, 9 Feb 2022 17:00:16 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/6] KVM: x86/pmu: Refactoring find_arch_event() to
+ pmc_perf_hw_id()
+Content-Language: en-US
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
+References: <20211130074221.93635-1-likexu@tencent.com>
+ <20211130074221.93635-3-likexu@tencent.com>
+ <CALMp9eQG7eqq+u3igApsRDV=tt0LdjZzmD_dC8zw=gt=f5NjSA@mail.gmail.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <CALMp9eQG7eqq+u3igApsRDV=tt0LdjZzmD_dC8zw=gt=f5NjSA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,29 +83,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Changcheng Deng <deng.changcheng@zte.com.cn>
+On 5/2/2022 9:55 am, Jim Mattson wrote:
+>> +static unsigned int amd_pmc_perf_hw_id(struct kvm_pmc *pmc)
+>>   {
+>> +       u8 event_select = pmc->eventsel & ARCH_PERFMON_EVENTSEL_EVENT;
+> On AMD, the event select is 12 bits.
 
-Use min() in order to make code cleaner.
+Out of your carefulness, we already know this fact.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
----
- kernel/time/tick-sched.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This function to get the perf_hw_id by the last 16 bits still works because we 
+currently
+do not have a 12-bits-select event defined in the amd_event_mapping[]. The 
+12-bits-select
+events (if any) will be programed in the type of PERF_TYPE_RAW.
 
-diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-index c89f50a7e690..31064f85a9fd 100644
---- a/kernel/time/tick-sched.c
-+++ b/kernel/time/tick-sched.c
-@@ -822,7 +822,7 @@ static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
- 		next_tmr = get_next_timer_interrupt(basejiff, basemono);
- 		ts->next_timer = next_tmr;
- 		/* Take the next rcu event into account */
--		next_tick = next_rcu < next_tmr ? next_rcu : next_tmr;
-+		next_tick = min(next_rcu, next_tmr);
- 	}
- 
- 	/*
--- 
-2.25.1
+IMO, a minor patch that renames some AMD variables and updates the relevant comments
+to avoid misunderstandings is quite acceptable.
 
+Thanks,
+Like Xu

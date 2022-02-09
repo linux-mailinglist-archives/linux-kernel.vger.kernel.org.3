@@ -2,121 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D12034AF161
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:23:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A704AF170
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:24:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiBIMWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 07:22:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
+        id S232593AbiBIMX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 07:23:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232977AbiBIMWR (ORCPT
+        with ESMTP id S231591AbiBIMXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 07:22:17 -0500
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF66C050CD6;
-        Wed,  9 Feb 2022 04:21:20 -0800 (PST)
-Received: by mail-vk1-f175.google.com with SMTP id n14so1041071vkk.6;
-        Wed, 09 Feb 2022 04:21:20 -0800 (PST)
+        Wed, 9 Feb 2022 07:23:24 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F1FC05CBB4;
+        Wed,  9 Feb 2022 04:23:26 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id k17so2098539plk.0;
+        Wed, 09 Feb 2022 04:23:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PaNAnkJHSrjZ0Ymtt0aSkScJLuMHMgg0pqapqtDp4Dg=;
+        b=kG2jKtGn8FULF5Ds5XfJZeSjKGW8Z8VsxO88USCD/ONYRvH1ZbCv1iMkOxl1JMSf8+
+         eheKtiPIHZsWTNp3HZ21/r/rjz3rQbSWpwXeHM9DNwCNmzVpWkhUySynBc/IKb4XyIoM
+         08SUYZ+uS4lmGwcnmBPZIByJ5c9MwXzg3b/UVBRT9m+3qnWRAeSXVFCcbGOGh4b3s69x
+         mPmGSShDHb9qmiD3OpblYzRIj5dZYn/mW4GGBp9VaIvQ8iCHks9MVNAUwJ12yt5o8D+F
+         sJc80rONtY8+GYo3q3BQPp+cSBsR4WhMTrzuOaLZFzME/o92PFFpl9e/0BH6QF2XJUDx
+         s7QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Qpoc5vmMmNDH+SrdCpaRcSXbVfsZOqQW8hec7Ijd/W8=;
-        b=ArD4G//zP3yLwuMGcWoJ2B3IVTAR8qSew1W2MVeIxkwE+hWsLncpqv87lPNyYy+Wcz
-         P8fma/r/mGhnh0lagdPEeBorD5nGn+D5Oc94NLH3rF/+rp2SVj3PoTwOJuxRV5mqvJ0U
-         SBIJRDCSwDmo0+4Rqw8KHj/aGiRxC5vB6y/1Pn8zbm1PDW98ZqOQ/1BTxEfGuM1L92IK
-         MmRE8aCUj9WyJ/Yrqd+/xPxLagy7Af1MXR+2LJ8vxhMTMadHYNCREBHu8gOPRBbBDvV5
-         fh4zZdNmmyTcaM9PkqmX/Q1w0+eBmyMGgffmynR06VnJw2dpM/AqvYNATsTluuNUuKYi
-         ksJA==
-X-Gm-Message-State: AOAM5316/DP3e8Yck+xnsgA2Gcr/OgC/+Pfp78XU9lCVFQYxfSc9yVZK
-        oVmV+XxN+c8vDOBE7orSGrbD5VAumbeLAw==
-X-Google-Smtp-Source: ABdhPJzA8Nb5Ynlu3dxmAEFYqo4HjgeFecHCEbGvMRuN2IdMaKoLz/CP4fa2jkVRTUw+wuBwx+sDBQ==
-X-Received: by 2002:a1f:e745:: with SMTP id e66mr693844vkh.24.1644409279633;
-        Wed, 09 Feb 2022 04:21:19 -0800 (PST)
-Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com. [209.85.217.47])
-        by smtp.gmail.com with ESMTPSA id r14sm1517652vke.20.2022.02.09.04.21.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 04:21:19 -0800 (PST)
-Received: by mail-vs1-f47.google.com with SMTP id j26so881462vso.12;
-        Wed, 09 Feb 2022 04:21:19 -0800 (PST)
-X-Received: by 2002:a67:a401:: with SMTP id n1mr553685vse.38.1644409278954;
- Wed, 09 Feb 2022 04:21:18 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PaNAnkJHSrjZ0Ymtt0aSkScJLuMHMgg0pqapqtDp4Dg=;
+        b=yaOttJbPXxBud1O2f0Ks3zpPY3HzVh5wjDbcL3/EsY+P54uNOw5xpE43uDyp7VnaU9
+         Ha9Uvo5VELjWGXSdPGJTNFLHJdTvmuoZWM77qN7SwyscGT9sScDf7FHGVW8CKI98X0o3
+         USJ9QTxdz0hr07ZT8uikcmXnjPNREvMojV+FtRDLE6MvgyfWcbqLlbfwcWVhtn8UKsmF
+         s+769Bqca+2dx3rW3iR8V+c2HYC4vcPsWb+NUiTIHQ9/7AigRqJTFWEKg7I1zS4zBqno
+         xyJ/li6tkhkSmuf4uz8YXVe++bD7IawWH04X9dSv12Whk8MYL7vJdl5d69RzGPeQps3j
+         n/AA==
+X-Gm-Message-State: AOAM531ojUMMYJivvYRjDyH5uqW+6XwQ9VjdTcuH76yGN5eGb2oRv8ah
+        W++sDUqjFwn+aCHLUMPQHY8=
+X-Google-Smtp-Source: ABdhPJy3B8Zxcj0qnCCCdhXCsjncbSBovC/HETIu1yprqv435k5YpCYPC9/wJY8qtxvGP2tJK79sSA==
+X-Received: by 2002:a17:90b:1e42:: with SMTP id pi2mr2281656pjb.176.1644409405570;
+        Wed, 09 Feb 2022 04:23:25 -0800 (PST)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:a:9d5c:32bf:5c81:da87])
+        by smtp.gmail.com with ESMTPSA id lb3sm6300990pjb.47.2022.02.09.04.23.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 04:23:25 -0800 (PST)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, hch@infradead.org,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        michael.h.kelley@microsoft.com
+Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        iommu@lists.linux-foundation.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vkuznets@redhat.com,
+        brijesh.singh@amd.com, konrad.wilk@oracle.com, hch@lst.de,
+        parri.andrea@gmail.com, thomas.lendacky@amd.com
+Subject: [PATCH V2 0/2] x86/hyperv/Swiotlb: Add swiotlb_set_alloc_from_low_pages() switch function.
+Date:   Wed,  9 Feb 2022 07:23:00 -0500
+Message-Id: <20220209122302.213882-1-ltykernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220209090314.2511959-1-javierm@redhat.com> <20220209090314.2511959-5-javierm@redhat.com>
-In-Reply-To: <20220209090314.2511959-5-javierm@redhat.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 9 Feb 2022 13:21:07 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXOfz94gD+SpGRS7HazxA_PN3n2D=Q04CPm-eEMb_CkEw@mail.gmail.com>
-Message-ID: <CAMuHMdXOfz94gD+SpGRS7HazxA_PN3n2D=Q04CPm-eEMb_CkEw@mail.gmail.com>
-Subject: Re: [PATCH v3 4/7] drm/solomon: Add SSD130X OLED displays I2C support
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
+From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-On Wed, Feb 9, 2022 at 10:03 AM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
-> The ssd130x driver only provides the core support for these devices but it
-> does not have any bus transport logic. Add a driver to interface over I2C.
->
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Hyper-V Isolation VM may fail to allocate swiotlb bounce buffer due
+to there is no enough contiguous memory from 0 to 4G in some cases.
+Current swiotlb code allocates bounce buffer in the low end memory.
+This patchset adds a new function swiotlb_set_alloc_from_low_pages()
+to control swiotlb bounce buffer from low pages or no limitation.
+Devices in Hyper-V Isolation VM may use memory above 4G as DMA memory
+and switch swiotlb allocation in order to avoid no enough contiguous
+memory in low pages.
 
-Thanks for your patch!
+Tianyu Lan (2):
+  Swiotlb: Add swiotlb_alloc_from_low_pages switch
+  x86/hyperv: Make swiotlb bounce buffer allocation not just from low
+    pages
 
-> --- /dev/null
-> +++ b/drivers/gpu/drm/solomon/ssd130x-i2c.c
+ arch/x86/kernel/cpu/mshyperv.c |  1 +
+ include/linux/swiotlb.h        |  1 +
+ kernel/dma/swiotlb.c           | 18 ++++++++++++++++--
+ 3 files changed, 18 insertions(+), 2 deletions(-)
 
-> +static const struct of_device_id ssd130x_of_match[] = {
-> +       {
-> +               .compatible = "solomon,ssd1305fb-i2c",
-> +               .data = (void *)&ssd130x_ssd1305_deviceinfo,
+-- 
+2.25.1
 
-The casts are not needed.
-
-> +       },
-> +       {
-> +               .compatible = "solomon,ssd1306fb-i2c",
-> +               .data = (void *)&ssd130x_ssd1306_deviceinfo,
-> +       },
-> +       {
-> +               .compatible = "solomon,ssd1307fb-i2c",
-> +               .data = (void *)&ssd130x_ssd1307_deviceinfo,
-> +       },
-> +       {
-> +               .compatible = "solomon,ssd1309fb-i2c",
-> +               .data = (void *)&ssd130x_ssd1309_deviceinfo,
-> +       },
-> +       { /* sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, ssd130x_of_match);
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

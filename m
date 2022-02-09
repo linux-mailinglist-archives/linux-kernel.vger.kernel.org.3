@@ -2,104 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3700E4AF6EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4BE4AF6F3
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237298AbiBIQiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:38:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
+        id S237339AbiBIQjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:39:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237225AbiBIQiU (ORCPT
+        with ESMTP id S234543AbiBIQjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:38:20 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72223C05CB86;
-        Wed,  9 Feb 2022 08:38:23 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id o5so2252614qvm.3;
-        Wed, 09 Feb 2022 08:38:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UiDGjAXge98sndCi//gMspGlqK9CQ0rnW1ogp58x2ps=;
-        b=L1pMsspBH0+fY9TcP+mb/z6ZEcA+7PIKwqG39N0YxdzIsvrcZseths0aZYOKQFkr1j
-         jRB3Q0GUDIUV8DiSZQNeqJG4ddEkddGBW8z/0McwrDwhIqDgih8Gv7pOH5QWVQkI/Jjm
-         CowY5ksaFVghP+u2nt2CtBZJRmGjIpfJaUXGIBIl0UAuQUq0yfP6mzGu1TiTelKE3bzq
-         bH3XZPxUWq4eCF05CCdPKgykTteAsqWlJRmgHAnTCtqRGVUQNdYrzOn+6Wrv5QTZaelt
-         Vc2eucNmiowalOng2Ixxh7MXuCBAj7aMOa1sVTzcZSQepMxxKrwjKCACrqLsnYj0jrGT
-         evrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UiDGjAXge98sndCi//gMspGlqK9CQ0rnW1ogp58x2ps=;
-        b=d1Jis4MmOux1y50DfYLB42PPoAN2LFEmxZG6RsG15sniOMk13Arbt6rRwWDHiPpOkk
-         RO1MuIPZxCxum6IoQ+47GkIX6gI6bBt1NNgUHlpjkZakClhJg41jfV/WvELf+zSmZmdm
-         wQIKr7t/6UAAQZO4PuuXmTWheLmNDay7vrumg6WBuiiqkBACUMtnn1r6RtjykkBG1sTb
-         nPcRPFBTccbP/wF1oyxa6Bj8JOpukoZbcKEjkMkAATyctB4vfwMiPR8paGYDN4Rkiztk
-         gnLo0ioq2Tr5o7Q1xmJwOj4dpoc/FIspc4APNZ1M95XELaqIXCSrmfTazcy3OB0K+ApR
-         9lwg==
-X-Gm-Message-State: AOAM533fWDAh9PBwu4/Z24Fw7ZWxv7pjItFrQiUCqS1VtAMdH+8/kxLR
-        dj+SmM2imgxiVKJkFv1hyh8=
-X-Google-Smtp-Source: ABdhPJwsX0Xi32lBOFhWLJxQrAM1pKPkOdKAQbS+/Ckq/iDNb9C1DsvDa69Nkuq5BlJyRv4A6h3azA==
-X-Received: by 2002:a05:6214:5298:: with SMTP id kj24mr2126321qvb.67.1644424702660;
-        Wed, 09 Feb 2022 08:38:22 -0800 (PST)
-Received: from shaak (modemcable055.92-163-184.mc.videotron.ca. [184.163.92.55])
-        by smtp.gmail.com with ESMTPSA id w5sm8623401qko.34.2022.02.09.08.38.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 08:38:21 -0800 (PST)
-Date:   Wed, 9 Feb 2022 11:38:20 -0500
-From:   Liam Beguin <liambeguin@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v14 09/11] iio: afe: rescale: add temperature transducers
-Message-ID: <YgPt/Hut4T4C86fX@shaak>
-References: <20220208020441.3081162-1-liambeguin@gmail.com>
- <20220208020441.3081162-10-liambeguin@gmail.com>
- <CAHp75Vf+FkofvC3_jvNadGed+eH7mQvVYXTOiWKCzwinJ3-2-w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vf+FkofvC3_jvNadGed+eH7mQvVYXTOiWKCzwinJ3-2-w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 9 Feb 2022 11:39:53 -0500
+Received: from fwd1.porkbun.com (fwd1.porkbun.com [52.10.174.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8457C0612BE;
+        Wed,  9 Feb 2022 08:39:56 -0800 (PST)
+Received: by fwd1.porkbun.com (Postfix, from userid 497)
+        id 78B7C429CD; Wed,  9 Feb 2022 16:39:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ansari.sh;
+        s=default; t=1644424796;
+        bh=ooNj/8suxQGCS+iG0qUYChLq9ehXfq6KW/VZ9iEQVtM=;
+        h=From:To:Cc:Subject:Date;
+        b=m2Mzvb3yBRtES/mr4zsa1QF5lj5mhZS1V0C6oe92XDpcv5MPqBz/vU8gOtlrbORKR
+         Tt0RqZoBdYPdmZsDUpBxIPYrE5UnfhCnMpsu6k89T+MgqUrwY6FVkrIoJVnMoPveiy
+         8vYKvLi8nSFutE0FplWcPfZ3ZRuUbp7VUV9dmiNM=
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
+Received: from rayyan-pc.. (unknown [90.242.138.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: rayyan@ansari.sh)
+        by fwd1.porkbun.com (Postfix) with ESMTPSA id B8E4D41C54;
+        Wed,  9 Feb 2022 16:39:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ansari.sh;
+        s=default; t=1644424781;
+        bh=ooNj/8suxQGCS+iG0qUYChLq9ehXfq6KW/VZ9iEQVtM=;
+        h=From:To:Cc:Subject:Date;
+        b=ZM0LJZsYefdS00PyYlDAREOJZ+oo2lgbvjHxMsfx6vGyauOZP0s8MW22WeUp9KIBg
+         WPohoiTLEsz9SvHvTuB24ydfECHae4XNrRHeJsHRTEYFIdZRWdQ1M+5X0num9UF2ap
+         7u+fgkXSA0MqW4/hGjzKg4plnyZ1S8+ZMuGshFsg=
+From:   Rayyan Ansari <rayyan@ansari.sh>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Rayyan Ansari <rayyan@ansari.sh>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] ARM: dts: qcom: pm8226: Add VADC node
+Date:   Wed,  9 Feb 2022 16:38:40 +0000
+Message-Id: <20220209163841.7360-1-rayyan@ansari.sh>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+Add a node for the voltage ADC (VADC) found in PM8226.
 
-On Tue, Feb 08, 2022 at 03:46:27PM +0200, Andy Shevchenko wrote:
-> On Tue, Feb 8, 2022 at 4:04 AM Liam Beguin <liambeguin@gmail.com> wrote:
-> >
-> > A temperature transducer is a device that converts a thermal quantity
-> > into any other physical quantity. This patch adds support for
-> > temperature to voltage (like the LTC2997) and temperature to current
-> > (like the AD590) linear transducers.
-> > In both cases these are assumed to be connected to a voltage ADC.
-> 
-> ...
-> 
-> > +       rescale->offset = div_s64((s64)offset * rescale->denominator,
-> > +                                 rescale->numerator);
-> 
-> Wonder if we can use mult_frac() here. Would it require 64-bit division?
+Signed-off-by: Rayyan Ansari <rayyan@ansari.sh>
+---
+ arch/arm/boot/dts/qcom-pm8226.dtsi | 34 ++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-Same here, I'd rather keep it as is, especially if you plan on adding
-helpers later on for struct u32_fract.
+diff --git a/arch/arm/boot/dts/qcom-pm8226.dtsi b/arch/arm/boot/dts/qcom-pm8226.dtsi
+index b3d0f7b5874d..5e07f34e4ec4 100644
+--- a/arch/arm/boot/dts/qcom-pm8226.dtsi
++++ b/arch/arm/boot/dts/qcom-pm8226.dtsi
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: BSD-3-Clause
+ #include <dt-bindings/interrupt-controller/irq.h>
+ #include <dt-bindings/spmi/spmi.h>
++#include <dt-bindings/iio/qcom,spmi-vadc.h>
+ 
+ &spmi_bus {
+ 	pm8226_0: pm8226@0 {
+@@ -40,6 +41,39 @@ smbb: charger@1000 {
+ 			chg_otg: otg-vbus { };
+ 		};
+ 
++		pm8226_vadc: adc@3100 {
++			compatible = "qcom,spmi-vadc";
++			reg = <0x3100>;
++			interrupts = <0x0 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			#io-channel-cells = <1>;
++
++			adc-chan@7 {
++				reg = <VADC_VSYS>;
++				qcom,pre-scaling = <1 3>;
++				label = "vph_pwr";
++			};
++			adc-chan@8 {
++				reg = <VADC_DIE_TEMP>;
++				label = "die_temp";
++			};
++			adc-chan@9 {
++				reg = <VADC_REF_625MV>;
++				label = "ref_625mv";
++			};
++			adc-chan@a {
++				reg = <VADC_REF_1250MV>;
++				label = "ref_1250mv";
++			};
++			adc-chan@e {
++				reg = <VADC_GND_REF>;
++			};
++			adc-chan@f {
++				reg = <VADC_VDD_VADC>;
++			};
++		};
++
+ 		pm8226_mpps: mpps@a000 {
+ 			compatible = "qcom,pm8226-mpp", "qcom,spmi-mpp";
+ 			reg = <0xa000>;
+-- 
+2.34.1
 
-Cheers,
-Liam
-
-> -- 
-> With Best Regards,
-> Andy Shevchenko

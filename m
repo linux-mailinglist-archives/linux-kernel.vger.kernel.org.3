@@ -2,156 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4514AE979
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 06:49:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC91F4AE988
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 06:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233488AbiBIFoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 00:44:08 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33860 "EHLO
+        id S232422AbiBIFt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 00:49:56 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:43316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbiBIFlp (ORCPT
+        with ESMTP id S235750AbiBIFqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 00:41:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F259C014F3A
-        for <linux-kernel@vger.kernel.org>; Tue,  8 Feb 2022 21:41:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644385306;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dKphUtpJBcvwT3GQrOXUSizk13uf7SY936QiEWqygaM=;
-        b=EgTu6ccsPCajOBanUuLxfanQfSm23XXiwCC02KSsX4fdfSyS1LWbg/GTczfvNRRiTGgjR/
-        Raa17/GMogTTECH80vt9+qXjXoL34rnVJ0Xk7P8EYL8SnoqEIP3Az+YyV0NT09yLNEjxGm
-        y1RnGFNU3/mmB9Hlhqo92zjfIQb84/Y=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-477-3W5504vUO86dgbhPEe0bSA-1; Wed, 09 Feb 2022 00:41:45 -0500
-X-MC-Unique: 3W5504vUO86dgbhPEe0bSA-1
-Received: by mail-pj1-f72.google.com with SMTP id y10-20020a17090a134a00b001b8b7e5983bso1023452pjf.6
-        for <linux-kernel@vger.kernel.org>; Tue, 08 Feb 2022 21:41:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dKphUtpJBcvwT3GQrOXUSizk13uf7SY936QiEWqygaM=;
-        b=HHmw6WtZaRmGTnDYuhx7e2VhdSl/hJLlm4H9UQcyD91R9/dDZ9Cx5VGcVNGWRgKPrb
-         ddifZWk+0SVKaJJbTroecWndTIkgGtiduku7xXtR4IihBOQVwu6jRm3llZT0TbjDkfs6
-         r2IgXbs4o6/BmNa+Np5VxRpQlD0QI4T4lNXb60EJYxlVOVVBsIrK+SrMWXIAH5Kvb9iS
-         mk8XtK/LwjdrLq4XvXz8fjscn+/YD2b0gPOzEoRHkllSHIQ6EA25Jyzlmub3Lj/eVtvW
-         Q2mMI/deAT9bC0zKSAzMLP/HQg9eXhZ1qIxj8GhNfT7YB2g36a5kzCFKgam7cGvXV/zZ
-         nMOw==
-X-Gm-Message-State: AOAM5327N0pH3jGx+atppjIWCo4cYY6naGJcQuRh8LzBNrMcDubkhAFU
-        5QXMQuqfD12/Z1iqEBaOv4eS34EzztRynPAyKRxnPSTggXkfesAAdqlIsLkAjnJyqIoIbdMAEji
-        5c2OA/WvaVSYpTEf0VHBWQmgj
-X-Received: by 2002:a17:90b:3850:: with SMTP id nl16mr1622598pjb.131.1644385304513;
-        Tue, 08 Feb 2022 21:41:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzay6oWtdjb4LB2F6BtE6XSszk1Azb7VpPnr9e4Xq6zAtP7GUe68A2SMWO42AYmL05pn3TfJw==
-X-Received: by 2002:a17:90b:3850:: with SMTP id nl16mr1622583pjb.131.1644385304257;
-        Tue, 08 Feb 2022 21:41:44 -0800 (PST)
-Received: from [10.72.12.214] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id z13sm18336691pfj.23.2022.02.08.21.41.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Feb 2022 21:41:43 -0800 (PST)
-Message-ID: <3ab523ac-0ab5-5011-5328-e119840e1c07@redhat.com>
-Date:   Wed, 9 Feb 2022 13:41:37 +0800
+        Wed, 9 Feb 2022 00:46:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FEBC014F33;
+        Tue,  8 Feb 2022 21:46:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A58FBB81F05;
+        Wed,  9 Feb 2022 05:46:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D27C340E7;
+        Wed,  9 Feb 2022 05:46:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644385575;
+        bh=xeDBNZYR9J+WeepIKweiSZOd1OmCFh+pFONtZBwNIT8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ancuSAY1zveE5nsDSQILyOVKs49gc4vvtk31JkI59m1/K7qdMGrBRPEU+X3e6rJW4
+         hrRM/cY96PZgoT0uDzltCk+ex5v/p1nqIFEyRBsMlVuEwDSjDmlyJzYaj+O/NkpSLu
+         mRdoGOFJ/SjWi8+MITvRM/qb5k9kSLKHzDJTXYfY=
+Date:   Wed, 9 Feb 2022 06:46:12 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rajat Jain <rajatja@google.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: Re: [PATCH v2 1/2] PCI: Allow internal devices to be marked as
+ untrusted
+Message-ID: <YgNVJKy0s8MGBRoa@kroah.com>
+References: <20220202020103.2149130-1-rajatja@google.com>
+ <CACK8Z6GmC7O3__RKwSEOQQ5Pde6h-LRz_5d+--V=CuB76cpe+w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [RFC PATCH 0/5] TUN/VirtioNet USO features support.
-Content-Language: en-US
-To:     Andrew Melnichenko <andrew@daynix.com>,
-        Yuri Benditovich <yuri.benditovich@daynix.com>
-Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Yan Vugenfirer <yan@daynix.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>
-References: <20220125084702.3636253-1-andrew@daynix.com>
- <1643183537.4001389-1-xuanzhuo@linux.alibaba.com>
- <CAOEp5OcwLiLZuVOAxx+pt6uztP-cGTgqsUSQj7N7HKTZgmyN3w@mail.gmail.com>
- <CABcq3pE43rYojwUCAmpW-FKv5=ABcS47B944Y-3kDqr-PeqLwQ@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <CABcq3pE43rYojwUCAmpW-FKv5=ABcS47B944Y-3kDqr-PeqLwQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACK8Z6GmC7O3__RKwSEOQQ5Pde6h-LRz_5d+--V=CuB76cpe+w@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 08, 2022 at 04:23:27PM -0800, Rajat Jain wrote:
+> Hello Folks,
+> 
+> 
+> On Tue, Feb 1, 2022 at 6:01 PM Rajat Jain <rajatja@google.com> wrote:
+> >
+> > Today the pci_dev->untrusted is set for any devices sitting downstream
+> > an external facing port (determined via "ExternalFacingPort" or the
+> > "external-facing" properties).
+> >
+> > However, currently there is no way for internal devices to be marked as
+> > untrusted.
+> >
+> > There are use-cases though, where a platform would like to treat an
+> > internal device as untrusted (perhaps because it runs untrusted firmware
+> > or offers an attack surface by handling untrusted network data etc).
+> >
+> > Introduce a new "UntrustedDevice" property that can be used by the
+> > firmware to mark any device as untrusted.
+> 
+> Just to unite the threads (from
+> https://www.spinics.net/lists/linux-pci/msg120221.html). I did reach
+> out to Microsoft but they haven't acknowledged my email. I also pinged
+> them again yesterday, but I suspect I may not be able to break the
+> ice. So this patch may be ready to go in my opinion.
+> 
+> I don't see any outstanding comments on this patch, but please let me
+> know if you have any comments.
+> 
+> Thanks & Best Regards,
+> 
+> Rajat
+> 
+> 
+> >
+> > Signed-off-by: Rajat Jain <rajatja@google.com>
+> > ---
+> > v2: * Also use the same property for device tree based systems.
+> >     * Add documentation (next patch)
+> >
+> >  drivers/pci/of.c       | 2 ++
+> >  drivers/pci/pci-acpi.c | 1 +
+> >  drivers/pci/pci.c      | 9 +++++++++
+> >  drivers/pci/pci.h      | 2 ++
+> >  4 files changed, 14 insertions(+)
+> >
+> > diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+> > index cb2e8351c2cc..e8b804664b69 100644
+> > --- a/drivers/pci/of.c
+> > +++ b/drivers/pci/of.c
+> > @@ -24,6 +24,8 @@ void pci_set_of_node(struct pci_dev *dev)
+> >                                                     dev->devfn);
+> >         if (dev->dev.of_node)
+> >                 dev->dev.fwnode = &dev->dev.of_node->fwnode;
+> > +
+> > +       pci_set_untrusted(dev);
+> >  }
+> >
+> >  void pci_release_of_node(struct pci_dev *dev)
+> > diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+> > index a42dbf448860..2bffbd5c6114 100644
+> > --- a/drivers/pci/pci-acpi.c
+> > +++ b/drivers/pci/pci-acpi.c
+> > @@ -1356,6 +1356,7 @@ void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
+> >
+> >         pci_acpi_optimize_delay(pci_dev, adev->handle);
+> >         pci_acpi_set_external_facing(pci_dev);
+> > +       pci_set_untrusted(pci_dev);
+> >         pci_acpi_add_edr_notifier(pci_dev);
+> >
+> >         pci_acpi_add_pm_notifier(adev, pci_dev);
+> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> > index 9ecce435fb3f..41e887c27004 100644
+> > --- a/drivers/pci/pci.c
+> > +++ b/drivers/pci/pci.c
+> > @@ -6869,3 +6869,12 @@ static int __init pci_realloc_setup_params(void)
+> >         return 0;
+> >  }
+> >  pure_initcall(pci_realloc_setup_params);
+> > +
+> > +void pci_set_untrusted(struct pci_dev *pdev)
+> > +{
+> > +       u8 val;
+> > +
+> > +       if (!device_property_read_u8(&pdev->dev, "UntrustedDevice", &val)
 
-在 2022/2/8 下午9:09, Andrew Melnichenko 写道:
-> Hi people,
-> Can you please review this series?
+Please no, "Untrusted" does not really convey much, if anything here.
+You are taking an odd in-kernel-value and making it a user api.
 
+Where is this "trust" defined?  Who defines it?  What policy does the
+kernel impose on it?
 
-Are there any performance number to demonstrate the difference?
+By putting this value in a firmware requirement like this, it better be
+documented VERY VERY well.
 
-Thanks
+thanks,
 
-
->
-> On Wed, Jan 26, 2022 at 10:32 AM Yuri Benditovich
-> <yuri.benditovich@daynix.com> wrote:
->> On Wed, Jan 26, 2022 at 9:54 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
->>> On Tue, 25 Jan 2022 10:46:57 +0200, Andrew Melnychenko <andrew@daynix.com> wrote:
->>>> Added new offloads for TUN devices TUN_F_USO4 and TUN_F_USO6.
->>>> Technically they enable NETIF_F_GSO_UDP_L4
->>>> (and only if USO4 & USO6 are set simultaneously).
->>>> It allows to transmission of large UDP packets.
->>>>
->>>> Different features USO4 and USO6 are required for qemu where Windows guests can
->>>> enable disable USO receives for IPv4 and IPv6 separately.
->>>> On the other side, Linux can't really differentiate USO4 and USO6, for now.
->>>> For now, to enable USO for TUN it requires enabling USO4 and USO6 together.
->>>> In the future, there would be a mechanism to control UDP_L4 GSO separately.
->>>>
->>>> Test it WIP Qemu https://github.com/daynix/qemu/tree/Dev_USOv2
->>>>
->>>> New types for VirtioNet already on mailing:
->>>> https://lists.oasis-open.org/archives/virtio-comment/202110/msg00010.html
->>> Seems like this hasn't been upvoted yet.
->>>
->>>          https://github.com/oasis-tcs/virtio-spec#use-of-github-issues
->> Yes, correct. This is a reason why this series of patches is RFC.
->>
->>> Thanks.
->>>
->>>> Also, there is a known issue with transmitting packages between two guests.
->>>> Without hacks with skb's GSO - packages are still segmented on the host's postrouting.
->>>>
->>>> Andrew Melnychenko (5):
->>>>    uapi/linux/if_tun.h: Added new ioctl for tun/tap.
->>>>    driver/net/tun: Added features for USO.
->>>>    uapi/linux/virtio_net.h: Added USO types.
->>>>    linux/virtio_net.h: Added Support for GSO_UDP_L4 offload.
->>>>    drivers/net/virtio_net.c: Added USO support.
->>>>
->>>>   drivers/net/tap.c               | 18 ++++++++++++++++--
->>>>   drivers/net/tun.c               | 15 ++++++++++++++-
->>>>   drivers/net/virtio_net.c        | 22 ++++++++++++++++++----
->>>>   include/linux/virtio_net.h      | 11 +++++++++++
->>>>   include/uapi/linux/if_tun.h     |  3 +++
->>>>   include/uapi/linux/virtio_net.h |  4 ++++
->>>>   6 files changed, 66 insertions(+), 7 deletions(-)
->>>>
->>>> --
->>>> 2.34.1
->>>>
->>>> _______________________________________________
->>>> Virtualization mailing list
->>>> Virtualization@lists.linux-foundation.org
->>>> https://lists.linuxfoundation.org/mailman/listinfo/virtualization
-
+greg k-h

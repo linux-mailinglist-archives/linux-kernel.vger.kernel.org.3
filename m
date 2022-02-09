@@ -2,255 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D714AFF57
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 22:42:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD4C4AFF5F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 22:46:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233625AbiBIVlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 16:41:45 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52030 "EHLO
+        id S233715AbiBIVqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 16:46:07 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:57954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233627AbiBIVll (ORCPT
+        with ESMTP id S233627AbiBIVqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 16:41:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F7D1DD94E68
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 13:41:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644442902;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vnKaJ3fYeFxAypTgfkLzFAKETIOGKeliSE47QqKxh2M=;
-        b=I7zcBZ11yet4j91X0OvgspsezIIZ7u5UNpnIjyJntp266UY3QD78LAlbn2fkevgDEoEqyo
-        IG2ldO0C9OmVnm3bjuwTxHg0tMv7joY/GiKvM5xrCSbqVDAz4GznPaYOEbobA41DuDlGHQ
-        4v6M5bmaMF5CbR1MO4gue+2maXECCgI=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-283-vibPio9HOsmuHmCiOVXAmg-1; Wed, 09 Feb 2022 16:41:41 -0500
-X-MC-Unique: vibPio9HOsmuHmCiOVXAmg-1
-Received: by mail-io1-f69.google.com with SMTP id h1-20020a056602008100b0061152382337so2662003iob.18
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 13:41:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=vnKaJ3fYeFxAypTgfkLzFAKETIOGKeliSE47QqKxh2M=;
-        b=pQPVJvjQkjjFE1gi+MS7H0+h63ZS7Gva+1hHvsgULa1rVQ+gTxYqTY3NIYDKYzqBwI
-         fzRaI4PNNk+2cp6UMT1Lu4uTyFGbP3XbwOevdkU/8JLQP3xSlCkIosJklode4suF/p03
-         oqsENECnxQgTnPbDX1ZAHKiGZImcoQW4CAAH5lbV17b7XbwgACLieYgNXUxW4tR96C4A
-         6Xgqa6AEj5k9HFnU3FJwZ9cL+KjbwQT0kNFTdlwEu/htMS7jCiH3EkYB6tBEtb6pLqnu
-         C9SsjZMw9keRkNP9DLXKKzU2UoueHO9wi1npFU9PUtY8vZDlCqLn1QE5T0DapFck7GMp
-         Ns8w==
-X-Gm-Message-State: AOAM533z8XytEFGg+WchASYik1tjDFw5uVKTfv+hi6mXaKfqg7a2y45O
-        GgPjm3PeLpSufe186b6PRxQYqDry9tArcwLyWi9hOGuGMffXu4tN4VdFGOMZ/4cX5aDFWbwgVJ0
-        5YWgXlz7lLGJ9OnSSoiaFVzyc
-X-Received: by 2002:a5d:9151:: with SMTP id y17mr2084031ioq.38.1644442901150;
-        Wed, 09 Feb 2022 13:41:41 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzvob5cspw1EkMKIhhQ6npdyq3pXbPN3p0dVlPXKwvxH2DJtktWfnTq/mijkoSW585QW8ijsQ==
-X-Received: by 2002:a5d:9151:: with SMTP id y17mr2084013ioq.38.1644442900953;
-        Wed, 09 Feb 2022 13:41:40 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id a6sm10552396iow.22.2022.02.09.13.41.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 13:41:40 -0800 (PST)
-Date:   Wed, 9 Feb 2022 14:41:37 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-Cc:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <jgg@nvidia.com>,
-        <cohuck@redhat.com>, <mgurtovoy@nvidia.com>, <yishaih@nvidia.com>,
-        <linuxarm@huawei.com>, <liulongfang@huawei.com>,
-        <prime.zeng@hisilicon.com>, <jonathan.cameron@huawei.com>,
-        <wangzhou1@hisilicon.com>
-Subject: Re: [RFC v4 5/8] hisi_acc_vfio_pci: Restrict access to VF dev BAR2
- migration region
-Message-ID: <20220209144137.3770d914.alex.williamson@redhat.com>
-In-Reply-To: <20220208133425.1096-6-shameerali.kolothum.thodi@huawei.com>
-References: <20220208133425.1096-1-shameerali.kolothum.thodi@huawei.com>
-        <20220208133425.1096-6-shameerali.kolothum.thodi@huawei.com>
-Organization: Red Hat
+        Wed, 9 Feb 2022 16:46:04 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 245AFC03BFF4
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 13:46:06 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2D59ED1;
+        Wed,  9 Feb 2022 13:46:05 -0800 (PST)
+Received: from [10.57.70.89] (unknown [10.57.70.89])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B1F5E3F73B;
+        Wed,  9 Feb 2022 13:46:02 -0800 (PST)
+Message-ID: <9d0d5c82-f609-576f-b1ed-d4c2b4f2340e@arm.com>
+Date:   Wed, 9 Feb 2022 21:45:54 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v1 1/1] perf/smmuv3: Don't cast parameter in bit
+ operations
+Content-Language: en-GB
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Mark Rutland <mark.rutland@arm.com>
+References: <20220209184758.56578-1-andriy.shevchenko@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220209184758.56578-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Feb 2022 13:34:22 +0000
-Shameer Kolothum <shameerali.kolothum.thodi@huawei.com> wrote:
+On 2022-02-09 18:47, Andy Shevchenko wrote:
+> While in this particular case it would not be a (critical) issue,
+> the pattern itself is bad and error prone in case somebody blindly
+> copies to their code.
+> 
+> Don't cast parameter to unsigned long pointer in the bit operations.
+> Instead copy to a local variable on stack of a proper type and use.
 
-> HiSilicon ACC VF device BAR2 region consists of both functional
-> register space and migration control register space. From a
-> security point of view, it's not advisable to export the migration
-> control region to Guest.
+Seems reasonable, in fact in my build it appears to save a spill and 
+reload from the stack so the code actually gets a teeny bit better. Not 
+sure a cleanup warrants a "Fixes" tag, but either way,
+
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+
+> Note, new compilers might warn on this line for potential outbound access.
 > 
-> Hence, override the ioctl/read/write/mmap methods to hide the
-> migration region and limit the access only to the functional register
-> space.
-> 
-> Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+> Fixes: 7d839b4b9e00 ("perf/smmuv3: Add arm64 smmuv3 pmu driver")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  drivers/vfio/pci/hisi_acc_vfio_pci.c | 122 ++++++++++++++++++++++++++-
->  1 file changed, 118 insertions(+), 4 deletions(-)
+>   drivers/perf/arm_smmuv3_pmu.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/vfio/pci/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisi_acc_vfio_pci.c
-> index 8b59e628110e..563ed2cc861f 100644
-> --- a/drivers/vfio/pci/hisi_acc_vfio_pci.c
-> +++ b/drivers/vfio/pci/hisi_acc_vfio_pci.c
-> @@ -13,6 +13,120 @@
->  #include <linux/vfio.h>
->  #include <linux/vfio_pci_core.h>
->  
-> +static int hisi_acc_pci_rw_access_check(struct vfio_device *core_vdev,
-> +					size_t count, loff_t *ppos,
-> +					size_t *new_count)
-> +{
-> +	unsigned int index = VFIO_PCI_OFFSET_TO_INDEX(*ppos);
-> +	struct vfio_pci_core_device *vdev =
-> +		container_of(core_vdev, struct vfio_pci_core_device, vdev);
-> +
-> +	if (index == VFIO_PCI_BAR2_REGION_INDEX) {
-> +		loff_t pos = *ppos & VFIO_PCI_OFFSET_MASK;
-> +		resource_size_t end = pci_resource_len(vdev->pdev, index) / 2;
-
-Be careful here, there are nested assignment use cases.  This can only
-survive one level of assignment before we've restricted more than we
-intended.  If migration support is dependent on PF access, can we use
-that to determine when to when to expose only half the BAR and when to
-expose the full BAR?
-
-We should also follow the mlx5 lead to use a vendor sub-directory below
-drivers/vfio/pci/  Thanks,
-
-Alex
-
-> +
-> +		/* Check if access is for migration control region */
-> +		if (pos >= end)
-> +			return -EINVAL;
-> +
-> +		*new_count = min(count, (size_t)(end - pos));
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int hisi_acc_vfio_pci_mmap(struct vfio_device *core_vdev,
-> +				  struct vm_area_struct *vma)
-> +{
-> +	struct vfio_pci_core_device *vdev =
-> +		container_of(core_vdev, struct vfio_pci_core_device, vdev);
-> +	unsigned int index;
-> +
-> +	index = vma->vm_pgoff >> (VFIO_PCI_OFFSET_SHIFT - PAGE_SHIFT);
-> +	if (index == VFIO_PCI_BAR2_REGION_INDEX) {
-> +		u64 req_len, pgoff, req_start;
-> +		resource_size_t end = pci_resource_len(vdev->pdev, index) / 2;
-> +
-> +		req_len = vma->vm_end - vma->vm_start;
-> +		pgoff = vma->vm_pgoff &
-> +			((1U << (VFIO_PCI_OFFSET_SHIFT - PAGE_SHIFT)) - 1);
-> +		req_start = pgoff << PAGE_SHIFT;
-> +
-> +		if (req_start + req_len > end)
-> +			return -EINVAL;
-> +	}
-> +
-> +	return vfio_pci_core_mmap(core_vdev, vma);
-> +}
-> +
-> +static ssize_t hisi_acc_vfio_pci_write(struct vfio_device *core_vdev,
-> +				       const char __user *buf, size_t count,
-> +				       loff_t *ppos)
-> +{
-> +	size_t new_count = count;
-> +	int ret;
-> +
-> +	ret = hisi_acc_pci_rw_access_check(core_vdev, count, ppos, &new_count);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return vfio_pci_core_write(core_vdev, buf, new_count, ppos);
-> +}
-> +
-> +static ssize_t hisi_acc_vfio_pci_read(struct vfio_device *core_vdev,
-> +				      char __user *buf, size_t count,
-> +				      loff_t *ppos)
-> +{
-> +	size_t new_count = count;
-> +	int ret;
-> +
-> +	ret = hisi_acc_pci_rw_access_check(core_vdev, count, ppos, &new_count);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return vfio_pci_core_read(core_vdev, buf, new_count, ppos);
-> +}
-> +
-> +static long hisi_acc_vfio_pci_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
-> +				    unsigned long arg)
-> +{
-> +	struct vfio_pci_core_device *vdev =
-> +		container_of(core_vdev, struct vfio_pci_core_device, vdev);
-> +
-> +	if (cmd == VFIO_DEVICE_GET_REGION_INFO) {
-> +		struct pci_dev *pdev = vdev->pdev;
-> +		struct vfio_region_info info;
-> +		unsigned long minsz;
-> +
-> +		minsz = offsetofend(struct vfio_region_info, offset);
-> +
-> +		if (copy_from_user(&info, (void __user *)arg, minsz))
-> +			return -EFAULT;
-> +
-> +		if (info.argsz < minsz)
-> +			return -EINVAL;
-> +
-> +		if (info.index == VFIO_PCI_BAR2_REGION_INDEX) {
-> +			info.offset = VFIO_PCI_INDEX_TO_OFFSET(info.index);
-> +
-> +			/*
-> +			 * ACC VF dev BAR2 region consists of both functional
-> +			 * register space and migration control register space.
-> +			 * Report only the functional region to Guest.
-> +			 */
-> +			info.size = pci_resource_len(pdev, info.index) / 2;
-> +
-> +			info.flags = VFIO_REGION_INFO_FLAG_READ |
-> +					VFIO_REGION_INFO_FLAG_WRITE |
-> +					VFIO_REGION_INFO_FLAG_MMAP;
-> +
-> +			return copy_to_user((void __user *)arg, &info, minsz) ?
-> +					    -EFAULT : 0;
-> +		}
-> +	}
-> +	return vfio_pci_core_ioctl(core_vdev, cmd, arg);
-> +}
-> +
->  static int hisi_acc_vfio_pci_open_device(struct vfio_device *core_vdev)
->  {
->  	struct vfio_pci_core_device *vdev =
-> @@ -32,10 +146,10 @@ static const struct vfio_device_ops hisi_acc_vfio_pci_ops = {
->  	.name = "hisi-acc-vfio-pci",
->  	.open_device = hisi_acc_vfio_pci_open_device,
->  	.close_device = vfio_pci_core_close_device,
-> -	.ioctl = vfio_pci_core_ioctl,
-> -	.read = vfio_pci_core_read,
-> -	.write = vfio_pci_core_write,
-> -	.mmap = vfio_pci_core_mmap,
-> +	.ioctl = hisi_acc_vfio_pci_ioctl,
-> +	.read = hisi_acc_vfio_pci_read,
-> +	.write = hisi_acc_vfio_pci_write,
-> +	.mmap = hisi_acc_vfio_pci_mmap,
->  	.request = vfio_pci_core_request,
->  	.match = vfio_pci_core_match,
->  };
-
+> diff --git a/drivers/perf/arm_smmuv3_pmu.c b/drivers/perf/arm_smmuv3_pmu.c
+> index c49108a72865..00d4c45a8017 100644
+> --- a/drivers/perf/arm_smmuv3_pmu.c
+> +++ b/drivers/perf/arm_smmuv3_pmu.c
+> @@ -654,6 +654,7 @@ static int smmu_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
+>   static irqreturn_t smmu_pmu_handle_irq(int irq_num, void *data)
+>   {
+>   	struct smmu_pmu *smmu_pmu = data;
+> +	DECLARE_BITMAP(ovs, BITS_PER_TYPE(u64));
+>   	u64 ovsr;
+>   	unsigned int idx;
+>   
+> @@ -663,7 +664,8 @@ static irqreturn_t smmu_pmu_handle_irq(int irq_num, void *data)
+>   
+>   	writeq(ovsr, smmu_pmu->reloc_base + SMMU_PMCG_OVSCLR0);
+>   
+> -	for_each_set_bit(idx, (unsigned long *)&ovsr, smmu_pmu->num_counters) {
+> +	bitmap_from_u64(ovs, ovsr);
+> +	for_each_set_bit(idx, ovs, smmu_pmu->num_counters) {
+>   		struct perf_event *event = smmu_pmu->events[idx];
+>   		struct hw_perf_event *hwc;
+>   

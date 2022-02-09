@@ -2,129 +2,468 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD0B4AF72F
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7FE4AF69C
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237474AbiBIQts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:49:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
+        id S236969AbiBIQ10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237463AbiBIQtq (ORCPT
+        with ESMTP id S236976AbiBIQ0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:49:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48514C05CB86;
-        Wed,  9 Feb 2022 08:49:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E768EB82333;
-        Wed,  9 Feb 2022 16:49:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C070C340E7;
-        Wed,  9 Feb 2022 16:49:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644425386;
-        bh=kBxIrNEuH/U8BJq5dfqutQsGqFRhrpCG3nnGR2AIM4w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ks/NQFSVNzFY0yg/OWrI+1vCiJNuu5llOzoRFBjysiaU2c0/pP2yJe4zjapUVXvJm
-         QVtaDB5VIvIF92xWq3NDKuN5JtGF07n26Mp8AJ6RayGrQtt4x/lMhTUNgh3bRc3E+j
-         Nwt3EMQrf7CNuBVMmw5DUFlMtOUfEP0QdlJVeRDPQkp15+c8mznEbQR1tP4oJXNN2N
-         iPKjMkDzGAzZinVZ0SySl0S3b2CP0Usqodi51RN8C1mrgoRFKF783hgyWFjToFpCQX
-         mkGRwSnez+ipuOJkhLHgxL7hyaWxv5RO6iFztLmcNfIvcHdUH1RrJn0L07haOk/ZRX
-         zc3WEIChpELbQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nHpnO-006fgT-OB; Wed, 09 Feb 2022 16:26:18 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        kernel-team@android.com
-Subject: [PATCH 10/10] pinctrl: starfive: Switch to dynamic chip name output
-Date:   Wed,  9 Feb 2022 16:26:07 +0000
-Message-Id: <20220209162607.1118325-11-maz@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220209162607.1118325-1-maz@kernel.org>
-References: <20220209162607.1118325-1-maz@kernel.org>
+        Wed, 9 Feb 2022 11:26:55 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9DFC05CB90
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:26:54 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id v13-20020a17090ac90d00b001b87bc106bdso5601870pjt.4
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 08:26:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OICp1HRczZzYOkc4wKUE1yhT6mvj2zAlw95OIF05MXg=;
+        b=4Vdl3xZpfYBUxqUCysoimWFjvBPNCUQL7lgN0dQPuT3n31n6jz/IHzqnAyVfmX3ygo
+         ryS0wlZqrXTwjTs/wvdSdboznwDexfxViPmqyu4jtvmL8tFQOrckTbzjNCE4osu/WDuz
+         Xhf7wBL0WJNCNnjWZMZ99AymjSc1A65fHD6nOxIe7hxh5pfSsk2txWt+IDeNLjP9knCD
+         KI2M7b5oU66ndrke1RWrrRcMgpSUhS3eqMhS4b1w8390/xjOdig40Q4t7T8EivaYT2WZ
+         SsPTpbcfqJqpbOZ1QwoAJSx+y0nUnCE4A+ZSODy3Zj+3hXzx+eWjHQpB/5rqkavG5zBN
+         rzQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OICp1HRczZzYOkc4wKUE1yhT6mvj2zAlw95OIF05MXg=;
+        b=lZab0ae5hSw7Nz0NG+hzOos415ZviJiy3Lu+KkYFHvTC19MhjdrmG2ofJpLPVor1IU
+         IHlCoMvW9vvMLcuFZf6k/a2yYg+XtBo2erKbSe3o9MIm+OXSh4VI+Fug2b+1rZ0CyS/4
+         NZVlwwjWZge69RjZL5MkVizEEmg2qrBGybCXB+tImtsExRZJleKSNzt/rw729uURjkmU
+         rjRIV303SFav04iSiYq3RQj7j30UMXry8ZE5hwMG/oFjPjUAAqo1+fyCOuI9EkDyay3c
+         s1B3Tf+xTws/vAgNglh21MBskRp9Dr9kfKklTwTHRHaq3wwp8KrwW3qJXD+kWtPJ9c5u
+         qFxw==
+X-Gm-Message-State: AOAM532TxH/w7MOnWzf8mTpsd6wdGsad5of2jLYUhQVXIKKpjy3W3nvZ
+        lkf1izz3KrJbWXKhlfeA4yvm/5v5X0aY3HtZr9AlKw==
+X-Google-Smtp-Source: ABdhPJzrtLR9qU2+zlBusWYhBUolzrRbT6Vyuvr3sPn1I+jDO/rkU0A9BDoZHK+wxpyvvC3ToUijdFpTPHDbG+9+0Sc=
+X-Received: by 2002:a17:90b:3ece:: with SMTP id rm14mr3391273pjb.220.1644424014258;
+ Wed, 09 Feb 2022 08:26:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, matthias.bgg@gmail.com, grygorii.strashko@ti.com, ssantosh@kernel.org, khilman@kernel.org, tony@atomide.com, tglx@linutronix.de, vz@mleia.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, kernel@esmil.dk, kernel-team@android.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220201071952.900068-1-ira.weiny@intel.com> <20220201071952.900068-4-ira.weiny@intel.com>
+ <CAPcyv4hYAgyf-WcArGvbWHAJgc5+p=OO_6ah_dXJhNM5cXcVTw@mail.gmail.com> <20220209101320.00000473@Huawei.com>
+In-Reply-To: <20220209101320.00000473@Huawei.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Wed, 9 Feb 2022 08:26:43 -0800
+Message-ID: <CAPcyv4g2nNHKPuYVOEH3TbJtCiB1rkRNCVbfDWHnWkotvTAcJg@mail.gmail.com>
+Subject: Re: [PATCH V6 03/10] PCI/DOE: Add Data Object Exchange Aux Driver
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     "Weiny, Ira" <ira.weiny@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-cxl@vger.kernel.org, Linux PCI <linux-pci@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of overloading the name field, use the relevant callback to
-output the device name.
+On Wed, Feb 9, 2022 at 2:13 AM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
+[..]
+> > > + *
+> > > + * @doe_dev: The DOE Auxiliary device being driven
+> > > + * @abort_c: Completion used for initial abort handling
+> > > + * @irq: Interrupt used for signaling DOE ready or abort
+> > > + * @irq_name: Name used to identify the irq for a particular DOE
+> > > + * @prots: Array of identifiers for protocols supported
+> >
+> > "prot" already has a meaning in the kernel, just spell out
+> > "protocols". This also looks like something that can be allocated
+> > inline rather than out of line i.e.:
+> >
+> > struct pci_doe {
+> > ...
+> >     int nr_protocols
+> >     struct pci_doe_protocol protocols[];
+> > }
+> >
+> > ...and then use struct_size() to allocate it.
+>
+> Can't do that. The size isn't known when we first start using
+> this structure - We need to use it to query what protocols are
+> supported.  It's initially set to 1 to cover the discovery
+> protocol and then we realloc to expand it as we discover more
+> protocols.
 
-Signed-off-by: Marc Zyngier <maz@kernel.org>
----
- drivers/pinctrl/pinctrl-starfive.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+Ok.
 
-diff --git a/drivers/pinctrl/pinctrl-starfive.c b/drivers/pinctrl/pinctrl-starfive.c
-index 5be9866c2b3c..f29d9ccf858b 100644
---- a/drivers/pinctrl/pinctrl-starfive.c
-+++ b/drivers/pinctrl/pinctrl-starfive.c
-@@ -15,6 +15,7 @@
- #include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/reset.h>
-+#include <linux/seq_file.h>
- #include <linux/spinlock.h>
- 
- #include <linux/pinctrl/pinctrl.h>
-@@ -1163,12 +1164,20 @@ static int starfive_irq_set_type(struct irq_data *d, unsigned int trigger)
- 	return 0;
- }
- 
-+static void starfive_irq_print_chip(struct irq_data *d, struct seq_file *p)
-+{
-+	struct starfive_pinctrl *sfp = starfive_from_irq_data(d);
-+
-+	seq_printf(p, sfp->gc.label);
-+}
-+
- static struct irq_chip starfive_irq_chip = {
- 	.irq_ack = starfive_irq_ack,
- 	.irq_mask = starfive_irq_mask,
- 	.irq_mask_ack = starfive_irq_mask_ack,
- 	.irq_unmask = starfive_irq_unmask,
- 	.irq_set_type = starfive_irq_set_type,
-+	.irq_print_chip = starfive_irq_print_chip,
- 	.flags = IRQCHIP_SET_TYPE_MASKED,
- };
- 
-@@ -1307,8 +1316,6 @@ static int starfive_probe(struct platform_device *pdev)
- 	sfp->gc.base = -1;
- 	sfp->gc.ngpio = NR_GPIOS;
- 
--	starfive_irq_chip.name = sfp->gc.label;
--
- 	sfp->gc.irq.chip = &starfive_irq_chip;
- 	sfp->gc.irq.parent_handler = starfive_gpio_irq_handler;
- 	sfp->gc.irq.num_parents = 1;
--- 
-2.30.2
+>
+> >
+> > > + * @num_prots: Size of prots array
+> > > + * @cur_task: Current task the state machine is working on
+> > > + * @wq: Wait queue to wait on if a query is in progress
+> > > + * @state_lock: Protect the state of cur_task, abort, and dead
+> > > + * @statemachine: Work item for the DOE state machine
+> > > + * @state: Current state of this DOE
+> > > + * @timeout_jiffies: 1 second after GO set
+> > > + * @busy_retries: Count of retry attempts
+> > > + * @abort: Request a manual abort (e.g. on init)
+> > > + * @dead: Used to mark a DOE for which an ABORT has timed out. Further messages
+> > > + *        will immediately be aborted with error
+> > > + */
+> > > +struct pci_doe {
+> > > +       struct pci_doe_dev *doe_dev;
+> > > +       struct completion abort_c;
+> > > +       int irq;
+> > > +       char *irq_name;
+> > > +       struct pci_doe_protocol *prots;
+> > > +       int num_prots;
+> > > +
+> > > +       struct pci_doe_task *cur_task;
+> > > +       wait_queue_head_t wq;
+> > > +       struct mutex state_lock;
+> > > +       struct delayed_work statemachine;
+> > > +       enum pci_doe_state state;
+> > > +       unsigned long timeout_jiffies;
+> > > +       unsigned int busy_retries;
+> > > +       unsigned int abort:1;
+> > > +       unsigned int dead:1;
+> > > +};
+> > > +
+> > > +static irqreturn_t pci_doe_irq(int irq, void *data)
+> > > +{
+> > > +       struct pci_doe *doe = data;
+> > > +       struct pci_dev *pdev = doe->doe_dev->pdev;
+> > > +       int offset = doe->doe_dev->cap_offset;
+> > > +       u32 val;
+> > > +
+> > > +       pci_read_config_dword(pdev, offset + PCI_DOE_STATUS, &val);
+> > > +
+> > > +       /* Leave the error case to be handled outside IRQ */
+> > > +       if (FIELD_GET(PCI_DOE_STATUS_ERROR, val)) {
+> > > +               mod_delayed_work(system_wq, &doe->statemachine, 0);
+> > > +               return IRQ_HANDLED;
+> > > +       }
+> > > +
+> > > +       if (FIELD_GET(PCI_DOE_STATUS_INT_STATUS, val)) {
+> > > +               pci_write_config_dword(pdev, offset + PCI_DOE_STATUS,
+> > > +                                       PCI_DOE_STATUS_INT_STATUS);
+> > > +               mod_delayed_work(system_wq, &doe->statemachine, 0);
+> > > +               return IRQ_HANDLED;
+> > > +       }
+> > > +
+> > > +       return IRQ_NONE;
+> > > +}
+> > > +
+> > > +/*
+> > > + * Only call when safe to directly access the DOE, either because no tasks yet
+> > > + * queued, or called from doe_statemachine_work() which has exclusive access to
+> > > + * the DOE config space.
+> >
+> > It doesn't have exclusive access unless the patch to lock out
+> > userspace config writes are revived. Instead, I like Bjorn's idea of
+> > tracking and warning / tainting, but not blocking conflicting
+> > userspace access to sensitive configuration registers.
+> >
+> > Yes, it was somewhat of a throw-away comment from Bjorn in that
+> > thread, "(and IMO should taint the kernel)", but DOE can do so much
+> > subtle damage (compliance test modes, link-encryption / disruption,
+> > vendor private who-knows-what...) that I think it behooves us as
+> > kernel developers to know when we are debugging system behavior that
+> > may be the result of non-kernel mitigated DOE access. The proposal is
+> > that when kernel lockdown is not enabled, use the approach from the
+> > exclusive config access patch [2] to trap, warn (once per device?),
+> > and taint when userspace writes to DOE registers that have been
+> > claimed by the kernel. This lets strict environments use
+> > kernel-lockdown to block userspace DOE access altogether, in
+> > non-strict environment it discourages userspace from clobbering DOE
+> > driver state, and it allows a warn-free path if userspace takes the
+> > step of at least unbinding the kernel DOE driver before running
+> > userspace DOE cycles.
+> >
+> > [1]: https://lore.kernel.org/r/20211203235617.GA3036259@bhelgaas
+> > [2]: https://lore.kernel.org/all/161663543465.1867664.5674061943008380442.stgit@dwillia2-desk3.amr.corp.intel.com/
+>
+> Good info. I'd missed some of the subtle parts of that discussion.
+>
+> >
+> > > + */
+> > > +static void pci_doe_abort_start(struct pci_doe *doe)
+> > > +{
+> > > +       struct pci_dev *pdev = doe->doe_dev->pdev;
+> > > +       int offset = doe->doe_dev->cap_offset;
+> > > +       u32 val;
+> > > +
+> > > +       val = PCI_DOE_CTRL_ABORT;
+> > > +       if (doe->irq)
+> > > +               val |= PCI_DOE_CTRL_INT_EN;
+> > > +       pci_write_config_dword(pdev, offset + PCI_DOE_CTRL, val);
+> > > +
+> > > +       doe->timeout_jiffies = jiffies + HZ;
+> > > +       schedule_delayed_work(&doe->statemachine, HZ);
+> >
+> > Given the spec timeout is 1 second and the device clock might be
+> > slightly off from the host clock how about make this a more generous
+> > 1.5 or 2 seconds?
+>
+> Makes sense. Though if a clock is bad enough we need 2 seconds that
+> is pretty awful! :)
 
+Perhaps, though DOE is not a fast path, and block I/O defaults to a 30
+second timeout, so I don't think anyone would blink at a 2 seconds for
+DOE.
+
+>
+> >
+> > > +}
+> > > +
+> > > +static int pci_doe_send_req(struct pci_doe *doe, struct pci_doe_exchange *ex)
+> >
+> > The relationship between tasks, requests, responses, and exchanges is
+> > not immediately clear to me. For example, can this helper be renamed
+> > in terms of its relationship to a task? A theory of operation document
+> > would help, but it seems there is also room for the implementation to
+> > be more self documenting.
+>
+> Not totally sure what such naming would be.
+>
+> A task is the management wrapper around an exchange which is a request
+> + response pair.  In the sense you queue a task which will carry out
+> and exchange by sending a request and receiving a response.
+>
+> Could rename this pci_doe_start_exchange() but that then obscures
+> that we mean send the request to the hardware and removes the resemblance
+> to what I recall the specification uses.
+
+I'm not a big fan of copying spec names *if* Linux has a more
+idiomatic name for the concept. I am mainly reviewing this from the
+perspective that 'struct bio' and 'struct request' naming /
+organization is idiomatic for Linux driver transaction flows. Up to
+this point in the review I was mapping tasks to bios and exchanges to
+requests but then the usage of "req" in this function name threw off
+my ontology. At a minimum a decoder ring style comment, like your
+reply, about the relationship between these terms would help avoid
+this exercise again.
+
+> > > +       case DOE_WAIT_ABORT:
+> > > +       case DOE_WAIT_ABORT_ON_ERR:
+> > > +               pci_read_config_dword(pdev, offset + PCI_DOE_STATUS, &val);
+> > > +
+> > > +               if (!FIELD_GET(PCI_DOE_STATUS_ERROR, val) &&
+> > > +                   !FIELD_GET(PCI_DOE_STATUS_BUSY, val)) {
+> > > +                       /* Back to normal state - carry on */
+> > > +                       mutex_lock(&doe->state_lock);
+> > > +                       doe->cur_task = NULL;
+> > > +                       mutex_unlock(&doe->state_lock);
+> > > +                       wake_up_interruptible(&doe->wq);
+> > > +
+> > > +                       /*
+> > > +                        * For deliberately triggered abort, someone is
+> > > +                        * waiting.
+> > > +                        */
+> > > +                       if (doe->state == DOE_WAIT_ABORT)
+> > > +                               complete(&doe->abort_c);
+> >
+> > Why is a completion and waitqueue needed? I.e. a waiter could simply
+> > look for an abort completion flag to be set instead.
+>
+> You mean use the main completion (the one for the non abort case)
+> and a flag?
+>
+> Or a wait_event() with appropriate check?
+>
+> Could do that but I'm not sure I understand why we care either way?
+
+Just reduction in machinery that needs to be maintained /
+comprehended. 2 wait primitives when one will do will always be a
+tempting cleanup target.
+
+[..]
+> > > +/**
+> > > + * pci_doe_exchange_sync() - Send a request, then wait for and receive a
+> > > + *                          response
+> > > + * @doe_dev: DOE mailbox state structure
+> > > + * @ex: Description of the buffers and Vendor ID + type used in this
+> > > + *      request/response pair
+> > > + *
+> > > + * Excess data will be discarded.
+> > > + *
+> > > + * RETURNS: payload in bytes on success, < 0 on error
+> > > + */
+> > > +int pci_doe_exchange_sync(struct pci_doe_dev *doe_dev,
+> > > +                         struct pci_doe_exchange *ex)
+> > > +{
+> > > +       struct pci_doe *doe = dev_get_drvdata(&doe_dev->adev.dev);
+> > > +       struct pci_doe_task task;
+> > > +       DECLARE_COMPLETION_ONSTACK(c);
+> > > +
+> > > +       if (!doe)
+> > > +               return -EAGAIN;
+> > > +
+> > > +       /* DOE requests must be a whole number of DW */
+> > > +       if (ex->request_pl_sz % sizeof(u32))
+> > > +               return -EINVAL;
+> > > +
+> > > +       task.ex = ex;
+> > > +       task.cb = pci_doe_task_complete;
+> > > +       task.private = &c;
+> > > +
+> > > +again:
+> > > +       mutex_lock(&doe->state_lock);
+> > > +       if (doe->cur_task) {
+> > > +               mutex_unlock(&doe->state_lock);
+> > > +               wait_event_interruptible(doe->wq, doe->cur_task == NULL);
+> > > +               goto again;
+> > > +       }
+> > > +
+> > > +       if (doe->dead) {
+> > > +               mutex_unlock(&doe->state_lock);
+> > > +               return -EIO;
+> > > +       }
+> > > +       doe->cur_task = &task;
+> > > +       schedule_delayed_work(&doe->statemachine, 0);
+> > > +       mutex_unlock(&doe->state_lock);
+> > > +
+> > > +       wait_for_completion(&c);
+> >
+> > I would expect that the caller of this routine would want to specify
+> > the task and end_task() callback and use that as the completion
+> > signal. It may also want "no wait" behavior where it is prepared for
+> > the DOE result to come back sometime later. With that change the
+> > exchange fields can move into the task directly.
+>
+> This is the simple synchronous wrapper around an async core.
+> If we want an async path at somepoint in the future where we have
+> someone using it then sure, we can have an async version that
+> takes the callback.
+
+It just seems an unnecessary hunk of code for the core to carry when
+it's trivial for a client of the core to do:
+
+task->private = &completion;
+task->end_task = complete_completion;
+submit_task()
+wait_for_completion(&completion);
+
+> > > +       return task.rv;
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(pci_doe_exchange_sync);
+> > > +
+> > > +/**
+> > > + * pci_doe_supports_prot() - Return if the DOE instance supports the given
+> > > + *                          protocol
+> > > + * @pdev: Device on which to find the DOE instance
+> > > + * @vid: Protocol Vendor ID
+> > > + * @type: protocol type
+> > > + *
+> > > + * This device can then be passed to pci_doe_exchange_sync() to execute a
+> > > + * mailbox exchange through that DOE mailbox.
+> > > + *
+> > > + * RETURNS: True if the DOE device supports the protocol specified
+> > > + */
+> > > +bool pci_doe_supports_prot(struct pci_doe_dev *doe_dev, u16 vid, u8 type)
+> > > +{
+> > > +       struct pci_doe *doe = dev_get_drvdata(&doe_dev->adev.dev);
+> > > +       int i;
+> > > +
+> > > +       if (!doe)
+> > > +               return false;
+> > > +
+> > > +       for (i = 0; i < doe->num_prots; i++)
+> > > +               if ((doe->prots[i].vid == vid) &&
+> > > +                   (doe->prots[i].type == type))
+> > > +                       return true;
+> > > +
+> > > +       return false;
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(pci_doe_supports_prot);
+> > > +
+> > > +static int pci_doe_discovery(struct pci_doe *doe, u8 *index, u16 *vid,
+> > > +                            u8 *protocol)
+> > > +{
+> > > +       u32 request_pl = FIELD_PREP(PCI_DOE_DATA_OBJECT_DISC_REQ_3_INDEX,
+> > > +                                   *index);
+> > > +       u32 response_pl;
+> > > +       struct pci_doe_exchange ex = {
+> > > +               .prot.vid = PCI_VENDOR_ID_PCI_SIG,
+> > > +               .prot.type = PCI_DOE_PROTOCOL_DISCOVERY,
+> > > +               .request_pl = &request_pl,
+> > > +               .request_pl_sz = sizeof(request_pl),
+> > > +               .response_pl = &response_pl,
+> > > +               .response_pl_sz = sizeof(response_pl),
+> > > +       };
+> > > +       int ret;
+> > > +
+> > > +       ret = pci_doe_exchange_sync(doe->doe_dev, &ex);
+> > > +       if (ret < 0)
+> > > +               return ret;
+> > > +
+> > > +       if (ret != sizeof(response_pl))
+> > > +               return -EIO;
+> > > +
+> > > +       *vid = FIELD_GET(PCI_DOE_DATA_OBJECT_DISC_RSP_3_VID, response_pl);
+> > > +       *protocol = FIELD_GET(PCI_DOE_DATA_OBJECT_DISC_RSP_3_PROTOCOL,
+> > > +                             response_pl);
+> > > +       *index = FIELD_GET(PCI_DOE_DATA_OBJECT_DISC_RSP_3_NEXT_INDEX,
+> > > +                          response_pl);
+> > > +
+> > > +       return 0;
+> > > +}
+> > > +
+> > > +static int pci_doe_cache_protocols(struct pci_doe *doe)
+> > > +{
+> > > +       u8 index = 0;
+> > > +       int num_prots;
+> > > +       int rc;
+> > > +
+> > > +       /* Discovery protocol must always be supported and must report itself */
+> > > +       num_prots = 1;
+> > > +       doe->prots = devm_kcalloc(&doe->doe_dev->adev.dev, num_prots,
+> > > +                                 sizeof(*doe->prots), GFP_KERNEL);
+> > > +       if (doe->prots == NULL)
+> > > +               return -ENOMEM;
+> > > +
+> > > +       do {
+> > > +               struct pci_doe_protocol *prot;
+> > > +
+> > > +               prot = &doe->prots[num_prots - 1];
+> > > +               rc = pci_doe_discovery(doe, &index, &prot->vid, &prot->type);
+> > > +               if (rc)
+> > > +                       return rc;
+> > > +
+> > > +               if (index) {
+> > > +                       struct pci_doe_protocol *prot_new;
+> > > +
+> > > +                       num_prots++;
+> > > +                       prot_new = devm_krealloc(&doe->doe_dev->adev.dev,
+> > > +                                                doe->prots,
+> > > +                                                sizeof(*doe->prots) *
+> > > +                                                       num_prots,
+> > > +                                                GFP_KERNEL);
+> > > +                       if (prot_new == NULL)
+> > > +                               return -ENOMEM;
+> > > +                       doe->prots = prot_new;
+> > > +               }
+> > > +       } while (index);
+> > > +
+> > > +       doe->num_prots = num_prots;
+> > > +       return 0;
+> > > +}
+> > > +
+> > > +static int pci_doe_abort(struct pci_doe *doe)
+> > > +{
+> > > +       reinit_completion(&doe->abort_c);
+> > > +       mutex_lock(&doe->state_lock);
+> > > +       doe->abort = true;
+> >
+> > Why not a flags field where atomic bitops can be used without need for a mutex.
+>
+> I'll go the other way, why bother with atomics when this isn't a high performance
+> path or something expected to happen often?
+
+It obfuscates what the lock is protecting if it's used for state
+management and atomic flag management, but I am not holding the pen
+here, so I can let this arbitrary trade-off go.

@@ -2,117 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B553A4AF5E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:59:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE604AF5EC
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236414AbiBIP7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:59:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        id S236420AbiBIQAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:00:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236404AbiBIP7t (ORCPT
+        with ESMTP id S233972AbiBIQAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:59:49 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FE9C05CB82
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 07:59:52 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id q7so4781566wrc.13
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 07:59:52 -0800 (PST)
+        Wed, 9 Feb 2022 11:00:37 -0500
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC8CC0613CA
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:00:40 -0800 (PST)
+Received: by mail-oo1-xc2f.google.com with SMTP id o192-20020a4a2cc9000000b00300af40d795so2890122ooo.13
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 08:00:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Wf8pBHPnIbwBS8l1ga7IlePPb2NVs+dEhjuVljUBPL0=;
-        b=uoZQFZFTh4MWC1dtmAROvUGhJHmAVYXfRYOAWo8gKyK62YWvPbxBb/FtR7u0hgWHM+
-         pIHKzcAPIBus0KV7+mL3D5j14qeOkWhNlhbJ27iaSBhTl/LjI4HHKacQLeaP0W27kYi4
-         S3IY7DwzPAuE8oLpegUUjChlpPOLw2uSQqJ+5BKLAuffbk7cd8egzMzWrTEY9KtgoRa8
-         lhCJFlR9ZXDT3UoxC0gXTD0HcsmKfyMcum4z3NXlytG7Avl6gstXNUE/R3zGzn6Ti6rI
-         nfSuSby+RBkqpUK/2NHWt/I4qhdA9CqPByEjJEcUJtu45v7exquNrCxUmMMhRNRl4LwZ
-         9QKA==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=1YePSlQ5EwpZBNMyDNsyYlHPfN4e3TfbrJwBxdB39JQ=;
+        b=NgnKy7LBcwpLnybKELxuQOm1oeOGsUO/FUJ2vhXTYjCSE/ojTU1W+yJxBMOxEk0Py6
+         kzBhjAxpRUrCyR3qZw5Rskh7lLELlRoYCGuZjsQ3ZRNf6dJMI9eEjc+1b5cKOuI6L7M+
+         VhxnUyw0s4+r8ucHBuUSYau3tai3DNdOWxFhY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Wf8pBHPnIbwBS8l1ga7IlePPb2NVs+dEhjuVljUBPL0=;
-        b=Mr26fAmEOSXWiq5foEZxFlLd7wTav0dFYxwvQjcOb20M7DCSDS9lyf4lmmAVfm4YQJ
-         +jaDUQd7GmB4v8UMllnrJ1GwGU5iMI9Oe9kTLkjx9onMjVox8gbU2zAPoqFiYgsn4Fje
-         R7IpTZQvWTruue9gYZXb4ouYloHwjsWBtbSgi4L7MjCwT6f2g70v0V+/eEO3p6tn4tOV
-         pMismlmk8d6t3A6vNTL3Vwex7GdXQS0kfavK7N4+HTfaAH/FzajS1pbUA53KrMrrdGpO
-         2ra0H3THPChKWIlnHPni4UINJDFbDQVDfsXFzZqWtS7jYJHcCAZhPjiXPiW/U/ueBgIm
-         kbkw==
-X-Gm-Message-State: AOAM530TGibC2yZfVLsW2o0iY4T35Hu4Te6z1dIo0RA/3RuiSCMWDl2i
-        YO5FxLIyK3FOCqqJrUJQJSrhtg==
-X-Google-Smtp-Source: ABdhPJzrsU/yGaq1wonWpTsPZOGFI2x3Kw84cs8UYaEe/84fhhkIxX9wA9KdK4C49JCW0SYDnFQlaw==
-X-Received: by 2002:a05:6000:1548:: with SMTP id 8mr2519928wry.504.1644422390765;
-        Wed, 09 Feb 2022 07:59:50 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id g22sm5098170wmh.7.2022.02.09.07.59.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 07:59:50 -0800 (PST)
-Date:   Wed, 9 Feb 2022 15:59:48 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org, Stable <stable@vger.kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        Johannes Thumshirn <jth@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        cluster-devel@redhat.com,
-        syzbot+0ed9f769264276638893@syzkaller.appspotmail.com
-Subject: Re: [PATCH 1/1] Revert "iomap: fall back to buffered writes for
- invalidation failures"
-Message-ID: <YgPk9HhIeFM43b/a@google.com>
-References: <20220209085243.3136536-1-lee.jones@linaro.org>
- <20220209150904.GA22025@lst.de>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1YePSlQ5EwpZBNMyDNsyYlHPfN4e3TfbrJwBxdB39JQ=;
+        b=u7HjD+nIT85Ljqe4QBWos/WEw+hTlO0IdrPXX1UrX5LsXZL5x/F/eDAcsTzGplq11B
+         M8vwenGDErUU6jTiAdV2IE427TolI9veG8vpwxCCTashDHu6AZgaZj/rizzjXstBvmbo
+         AHpRU72VEw9SClY1eihIwZuAgr5canbdpo8aZErAljgLUtwELyMtMGkkinkki/+rdgqj
+         wBOXuRpIDSyX9kQdzjFUldddbi3VLbx1baJMz1wrK5K1qdDb+R2gyZ16QkJXRYC+wUPj
+         wmiDmcWTsEXly4Ig6vgEQImPMqZbc61hB95tE0ZDB9KO+Z1Y9b1FOtXlN9USCpBQzQSB
+         RTIQ==
+X-Gm-Message-State: AOAM533Rm5jkD0oYpld+Z+4aen7ISjCoQFwDCEavuGCKwZ6MSpxBrDqw
+        /9ST6LFYYJePgq0+DYQMEsv+1w==
+X-Google-Smtp-Source: ABdhPJw6jBlqUuKldGND4hrHbvy0UVWDs4h1q2Fee93ioDMqgj7258+KfYdD+dLRrUBZnnn3P410ZQ==
+X-Received: by 2002:a4a:9723:: with SMTP id u32mr1116247ooi.5.1644422439602;
+        Wed, 09 Feb 2022 08:00:39 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id t13sm1613361oai.37.2022.02.09.08.00.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 08:00:39 -0800 (PST)
+Subject: Re: [PATCH] usbip: vudc: Make use of the helper macro LIST_HEAD()
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220209032813.38703-1-cai.huoqing@linux.dev>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <8c8bcf5b-bbda-55e0-6a61-35bfafbafb78@linuxfoundation.org>
+Date:   Wed, 9 Feb 2022 09:00:37 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220209150904.GA22025@lst.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220209032813.38703-1-cai.huoqing@linux.dev>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 09 Feb 2022, Christoph Hellwig wrote:
-
-> On Wed, Feb 09, 2022 at 08:52:43AM +0000, Lee Jones wrote:
-> > This reverts commit 60263d5889e6dc5987dc51b801be4955ff2e4aa7.
-> > 
-> > Reverting since this commit opens a potential avenue for abuse.
-> > 
-> > The C-reproducer and more information can be found at the link below.
-> > 
-> > With this patch applied, I can no longer get the repro to trigger.
+On 2/8/22 8:28 PM, Cai Huoqing wrote:
+> Replace "struct list_head head = LIST_HEAD_INIT(head)" with
+> "LIST_HEAD(head)" to simplify the code.
 > 
-> Well, maybe you should actually debug and try to understand what is
-> going on before blindly reverting random commits.
+> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+> ---
+>   drivers/usb/usbip/vudc_main.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/usbip/vudc_main.c b/drivers/usb/usbip/vudc_main.c
+> index 678faa82598c..d43252b77efd 100644
+> --- a/drivers/usb/usbip/vudc_main.c
+> +++ b/drivers/usb/usbip/vudc_main.c
+> @@ -26,7 +26,7 @@ static struct platform_driver vudc_driver = {
+>   	},
+>   };
+>   
+> -static struct list_head vudc_devices = LIST_HEAD_INIT(vudc_devices);
+> +static LIST_HEAD(vudc_devices);
+>   
+>   static int __init init(void)
+>   {
+> 
 
-That is not a reasonable suggestion.
+Explain why this change simplifies the code and also add a comment
+above LIST_HEAD
 
-Requesting that someone becomes an area expert on a huge and complex
-subject such as file systems (various) in order to fix your broken
-code is not rational.
+LIST_HEAD_INIT clearly states what it does, as a result it is easier
+to understand the code.
 
-If you'd like to use the PoC provided as a basis to test your own
-solution, then go right ahead.  However, as it stands this API should
-be considered to contain security risk and should be patched as
-quickly as can be mustered.  Reversion of the offending commit seems
-to be the fastest method to achieve that currently.
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+thanks,
+-- Shuah

@@ -2,64 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 951BB4AF4D6
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2037F4AF60E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235579AbiBIPLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:11:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
+        id S236558AbiBIQHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:07:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235574AbiBIPLr (ORCPT
+        with ESMTP id S236511AbiBIQHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:11:47 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80738C05CB88;
-        Wed,  9 Feb 2022 07:11:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=sGidQ70jxppwHimjiaAK9w5gUO8AIcFSX8ATxwQ5gjw=; b=h63TVA61xOdlt+ZkUCgWDN41SG
-        mhja0Jl7mGe+5fDX4rV45c1b++WTwQw8NycQ1NTg81dWpPBw7zptAhoD2CoInrGq8NLnaH0qmwrDB
-        HIn7i0efHOkNE6lR0O0xtyiDRs+jA6f1u8+3mSU4JtnamD9FKfQUP45LqPi9uJBTdie3hFh+WTMnA
-        xluBAlDg5YANeyIvmNbaSIvJdF8nlTQrKwZT2TlFjelbcRdishBwxZVhhJxDKOwx+Q4jeU+2Nhf8H
-        B9bebnrW0EajEjnL8ABAIYpfSlgYfKgQ3zZvaYXjuWCkt8zhP1JG9KiB62Yds26BLcLjJaauyDhNA
-        3yHcP6dA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nHod9-000WYS-46; Wed, 09 Feb 2022 15:11:39 +0000
-Date:   Wed, 9 Feb 2022 07:11:39 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     agk@redhat.com, snitzer@redhat.com, dm-devel@redhat.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com, Barry Song <song.bao.hua@hisilicon.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH] dm io: Drop the obsolete and incorrect doc for dm_io()
-Message-ID: <YgPZqyMVQGpShohN@infradead.org>
-References: <20220207090620.21207-1-song.bao.hua@hisilicon.com>
+        Wed, 9 Feb 2022 11:07:21 -0500
+X-Greylist: delayed 3905 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 08:07:22 PST
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B6CC0613C9;
+        Wed,  9 Feb 2022 08:07:22 -0800 (PST)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 219EELie022353;
+        Wed, 9 Feb 2022 10:01:32 -0500
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3e46jbtae8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Feb 2022 10:01:32 -0500
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 219F1VUx056491
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 9 Feb 2022 10:01:31 -0500
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 9 Feb 2022
+ 10:01:30 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 9 Feb 2022 10:01:30 -0500
+Received: from localhost.localdomain ([10.48.65.12])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 219F1BGV030677;
+        Wed, 9 Feb 2022 10:01:14 -0500
+From:   <alexandru.tachici@analog.com>
+To:     <o.rempel@pengutronix.de>
+CC:     <alexandru.tachici@analog.com>, <andrew@lunn.ch>,
+        <davem@davemloft.net>, <devicetree@vger.kernel.org>,
+        <hkallweit1@gmail.com>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux@armlinux.org.uk>,
+        <netdev@vger.kernel.org>, <robh+dt@kernel.org>
+Subject: Re: [PATCH v4 4/7] net: phy: Add 10BASE-T1L support in phy-c45
+Date:   Wed, 9 Feb 2022 17:12:20 +0200
+Message-ID: <20220209151220.15154-1-alexandru.tachici@analog.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220207092753.GC23727@pengutronix.de>
+References: <20220207092753.GC23727@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207090620.21207-1-song.bao.hua@hisilicon.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: ecP3ea8MbRQPPDOZEkuMGLmXug0406tG
+X-Proofpoint-GUID: ecP3ea8MbRQPPDOZEkuMGLmXug0406tG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-09_08,2022-02-09_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=793
+ priorityscore=1501 adultscore=0 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 impostorscore=0 bulkscore=0 clxscore=1011 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202090085
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 05:06:20PM +0800, Barry Song wrote:
-> Commit 7eaceaccab5f ("block: remove per-queue plugging") dropped
-> unplug_delay() and blk_unplug(). And the current code has no
-> fundamental difference between sync_io() and async_io() except
-> sync_io() uses sync_io_complete() as the notify.fn and explicitly
-> calls wait_for_completion_io() to sync. The comment isn't valid
-> any more.
+> On Sat, Dec 11, 2021 at 10:07:49PM +0100, Andrew Lunn wrote:
+> > > +		ret = phy_read_mmd(phydev, MDIO_MMD_PMAPMD, MDIO_PMA_EXTABLE);
+> > > +		if (ret < 0)
+> > > +			return ret;
+> > > +
+> > > +		if (ret & MDIO_PMA_EXTABLE_BT1)
+> > 
+> > 
+> > This pattern of reading the MDIO_PMA_EXTABLE register and then looking
+> > for bit MDIO_PMA_EXTABLE_BT1 happens a lot. It is not something which
+> > is expected to change is it? So i wounder if it should be read once
+> > and stored away?
+> 
+> What is the state of this patches? Will you be able to make requested
+> changes and send new version?
 
-Looks good:
+I will come back with a V5 where I will add the requested changes.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Regards,
+Alexandru

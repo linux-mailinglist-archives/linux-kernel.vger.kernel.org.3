@@ -2,211 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29DFA4AFBA8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 203844AFBA0
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 19:48:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240770AbiBISsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 13:48:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
+        id S240866AbiBISrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 13:47:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241575AbiBISqv (ORCPT
+        with ESMTP id S240825AbiBISpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:46:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0546C0DE7E2;
-        Wed,  9 Feb 2022 10:44:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D0AB6B82215;
-        Wed,  9 Feb 2022 18:44:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E2E4C340E9;
-        Wed,  9 Feb 2022 18:44:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644432246;
-        bh=P3udYnsCbEskvoh3uxv97i0MEqlxnGDxof8wHmeN2IQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QfSOom6qSQhY3i1meRvKZ9A3SiClfINGPQGLPOcRF6IwPCQQ1a4GD28kC7EUJQBUd
-         li1yvMqizp0FlYJD1jqEG+uvfkRxrmQzRdemRyKBqCaIdT3vn3sbberQMaTMC+sC4f
-         VYfhhH8uguiIUf2ovBMb7HPZ2D9kBFv7XEXeSbpY/KCsLSA06VcUCC7MafqjFZ43OC
-         d23WWt963PN9fgetshU0lPNOD6jgE8z6csGzQ28N5mYzpWxJwFuY8DEQpl0yysbNug
-         NRou00vV8t5tpqaNnT/QRwZb8JPwJtDddLYhpUKVmYXCxWC9AQD5T4xRjJHqErY1P+
-         evTYOzMmzSCBA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Igor Pylypiv <ipylypiv@google.com>,
-        Changyuan Lyu <changyuanl@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Tejun Heo <tj@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, akpm@linux-foundation.org,
-        linux@rasmusvillemoes.dk, linux-modules@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 15/15] Revert "module, async: async_synchronize_full() on module init iff async is used"
-Date:   Wed,  9 Feb 2022 13:43:01 -0500
-Message-Id: <20220209184305.47983-15-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220209184305.47983-1-sashal@kernel.org>
-References: <20220209184305.47983-1-sashal@kernel.org>
+        Wed, 9 Feb 2022 13:45:54 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B368C03F938;
+        Wed,  9 Feb 2022 10:43:27 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id i21so4332857pfd.13;
+        Wed, 09 Feb 2022 10:43:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=++8mApk7RkWt9IYMQQmWE9VHiPI6DBwLCpnWFPssygI=;
+        b=qGy++wR4TC8B3MD+skcOoU0Rz0NlIDn//t1PfiTRzziEWiC1QzxRUkyF3jiknY45eG
+         MVQ1DwUkKDi3GRrni4fQawxf3YkxOlRs64seslgvIUD3L0SeJOyAGvrCse0s5u6wfwL6
+         oG5fIm+bBQ4JYQC80X97WqYBXewbVESuOD3ySzW1MD9KHJQ71miaauYI01NuBqL8sX0w
+         AOM9pD6xeYX5HlmeErEWysd++M+ebcvTQJnfVFrBc13ZBRbCGljmQth2gKDJaW9rOyLd
+         jN8qOtjLjM/3TQ2yST8qk0H34cgEevysDmnCEi2YjnKnvn9lQWK/Uq/Zd9lConzXy+oo
+         /cSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=++8mApk7RkWt9IYMQQmWE9VHiPI6DBwLCpnWFPssygI=;
+        b=NahHbVmPIsJL4R7rcRWaf2Mce3piCOgOs/P6uNW088XRkYc4uvhccdQXpSsNajrtRy
+         5ROjxyfuQcx8Ww7iHOWFEtvyfeTbLtdt10bTG9SW7ErwDSOSTkvameW7V9UtzWyOth4x
+         FXcy29OI2naOiSCmxmouh4XuOgQoaHH7M8GywnPBO+pRYUI5Q0wbSV37wDECEYd/sPc4
+         xh3BBqhcX3e8CdmOZPmAfHTe1hnPzI5nAstXmUoUjyTUglF4XEFAVqYeILFjsULe9QE/
+         zoqAYjUrtsU34KaY7etvj7A2oFi/Q7kEj25ADxbz8Ex7G5/lKToJC4TgCKk/4I0Y/OJl
+         cv6w==
+X-Gm-Message-State: AOAM533nkqijhXfn4m3cKwN5GDOOfGrYZDqnyRSIfJKUckaVU2Gl8boO
+        99PrysjkJxpVeFpB8liA4VicweWJV5gWMC4IGZ0nJ2r0K7GgOR4s
+X-Google-Smtp-Source: ABdhPJzoiadJc5PSqYDMUBE96R7/2wNLf+6aj2O+i3AwgRvSjPRvqapEiu8YingYuFXFOgzq0w+N7jlBAFrrthRVY2A=
+X-Received: by 2002:a63:6c01:: with SMTP id h1mr2996139pgc.118.1644432206694;
+ Wed, 09 Feb 2022 10:43:26 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20211228072645.32341-1-luizluca@gmail.com> <Ydx4+o5TsWZkZd45@robh.at.kernel.org>
+ <CAJq09z4G40ttsTHXtOywjyusNLSjt_BQ9D78PhwSodJr=4p6OA@mail.gmail.com>
+ <CAL_JsqJ4SsEzZz=JfFMDDUMXEDfybMZw4BVDcj1MoapM+8jQwg@mail.gmail.com>
+ <87zgn0gf3k.fsf@bang-olufsen.dk> <YgP7jgswRQ+GR4P2@lunn.ch>
+In-Reply-To: <YgP7jgswRQ+GR4P2@lunn.ch>
+From:   Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Date:   Wed, 9 Feb 2022 15:43:15 -0300
+Message-ID: <CAJq09z49EEMxtBTs9q0sg3nn0VrSi0M=DkQTJ_n=QmgTr1aonw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: net: dsa: realtek-smi: convert to YAML schema
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     =?UTF-8?Q?Alvin_=C5=A0ipraga?= <ALSI@bang-olufsen.dk>,
+        Rob Herring <robh@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Igor Pylypiv <ipylypiv@google.com>
+> > However, the linux driver today does not care about any of these
+> > interruptions but INT_TYPE_LINK_STATUS. So it simply multiplex only
+> > this the interruption to each port, in a n-cell map (n being number of
+> > ports).
+> > I don't know what to describe here as device-tree should be something
+> > independent of a particular OS or driver.
+>
+> You shouldn't need to know what Linux does to figure this out.
 
-[ Upstream commit 67d6212afda218d564890d1674bab28e8612170f ]
+The Linux driver is masquerading all those interruptions into a single
+"link status changed". If interrupts property is about what the HW
+sends to us, it is a single pin.
 
-This reverts commit 774a1221e862b343388347bac9b318767336b20b.
+  interrupt-controller:
+   type: object
+   description: |
+     This defines an interrupt controller with an IRQ line (typically
+     a GPIO) that will demultiplex and handle the interrupt from the single
+     interrupt line coming out of one of the Realtek switch chips. It most
+     importantly provides link up/down interrupts to the PHY blocks inside
+     the ASIC.
 
-We need to finish all async code before the module init sequence is
-done.  In the reverted commit the PF_USED_ASYNC flag was added to mark a
-thread that called async_schedule().  Then the PF_USED_ASYNC flag was
-used to determine whether or not async_synchronize_full() needs to be
-invoked.  This works when modprobe thread is calling async_schedule(),
-but it does not work if module dispatches init code to a worker thread
-which then calls async_schedule().
+   properties:
 
-For example, PCI driver probing is invoked from a worker thread based on
-a node where device is attached:
+     interrupt-controller: true
 
-	if (cpu < nr_cpu_ids)
-		error = work_on_cpu(cpu, local_pci_probe, &ddi);
-	else
-		error = local_pci_probe(&ddi);
+     interrupts:
+       maxItems: 1
+       description:
+         A single IRQ line from the switch, either active LOW or HIGH
 
-We end up in a situation where a worker thread gets the PF_USED_ASYNC
-flag set instead of the modprobe thread.  As a result,
-async_synchronize_full() is not invoked and modprobe completes without
-waiting for the async code to finish.
+     '#address-cells':
+       const: 0
 
-The issue was discovered while loading the pm80xx driver:
-(scsi_mod.scan=async)
+     '#interrupt-cells':
+       const: 1
 
-modprobe pm80xx                      worker
-...
-  do_init_module()
-  ...
-    pci_call_probe()
-      work_on_cpu(local_pci_probe)
-                                     local_pci_probe()
-                                       pm8001_pci_probe()
-                                         scsi_scan_host()
-                                           async_schedule()
-                                           worker->flags |= PF_USED_ASYNC;
-                                     ...
-      < return from worker >
-  ...
-  if (current->flags & PF_USED_ASYNC) <--- false
-  	async_synchronize_full();
+   required:
+     - interrupt-controller
+     - '#address-cells'
+     - '#interrupt-cells'
 
-Commit 21c3c5d28007 ("block: don't request module during elevator init")
-fixed the deadlock issue which the reverted commit 774a1221e862
-("module, async: async_synchronize_full() on module init iff async is
-used") tried to fix.
+Now as it is also an interrupt-controller, shouldn't I document what it emits?
+I've just sent the new version and we can discuss it there.
 
-Since commit 0fdff3ec6d87 ("async, kmod: warn on synchronous
-request_module() from async workers") synchronous module loading from
-async is not allowed.
+> >  - one interrupt for the switch
+> >  - the switch is an interrupt-controller
+> >  - ... and is the interrupt-parent for the phy nodes.
+>
+> This pattern is pretty common for DSA switches, which have internal
+> PHYs. You can see this in the mv88e6xxx binding for example.
 
-Given that the original deadlock issue is fixed and it is no longer
-allowed to call synchronous request_module() from async we can remove
-PF_USED_ASYNC flag to make module init consistently invoke
-async_synchronize_full() unless async module probe is requested.
+The issue is that those similar devices are still not in yaml format.
 
-Signed-off-by: Igor Pylypiv <ipylypiv@google.com>
-Reviewed-by: Changyuan Lyu <changyuanl@google.com>
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-Acked-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/linux/sched.h |  1 -
- kernel/async.c        |  3 ---
- kernel/module.c       | 25 +++++--------------------
- 3 files changed, 5 insertions(+), 24 deletions(-)
-
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index afee5d5eb9458..b341471de9d60 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1454,7 +1454,6 @@ extern struct pid *cad_pid;
- #define PF_MEMALLOC		0x00000800	/* Allocating memory */
- #define PF_NPROC_EXCEEDED	0x00001000	/* set_user() noticed that RLIMIT_NPROC was exceeded */
- #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
--#define PF_USED_ASYNC		0x00004000	/* Used async_schedule*(), used by module init */
- #define PF_NOFREEZE		0x00008000	/* This thread should not be frozen */
- #define PF_FROZEN		0x00010000	/* Frozen for system suspend */
- #define PF_KSWAPD		0x00020000	/* I am kswapd */
-diff --git a/kernel/async.c b/kernel/async.c
-index 4f9c1d6140168..74660f611b97d 100644
---- a/kernel/async.c
-+++ b/kernel/async.c
-@@ -205,9 +205,6 @@ async_cookie_t async_schedule_node_domain(async_func_t func, void *data,
- 	atomic_inc(&entry_count);
- 	spin_unlock_irqrestore(&async_lock, flags);
- 
--	/* mark that this task has queued an async job, used by module init */
--	current->flags |= PF_USED_ASYNC;
--
- 	/* schedule for execution */
- 	queue_work_node(node, system_unbound_wq, &entry->work);
- 
-diff --git a/kernel/module.c b/kernel/module.c
-index 59d487b8d8dad..e7656cf1652c9 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -3711,12 +3711,6 @@ static noinline int do_init_module(struct module *mod)
- 	}
- 	freeinit->module_init = mod->init_layout.base;
- 
--	/*
--	 * We want to find out whether @mod uses async during init.  Clear
--	 * PF_USED_ASYNC.  async_schedule*() will set it.
--	 */
--	current->flags &= ~PF_USED_ASYNC;
--
- 	do_mod_ctors(mod);
- 	/* Start the module */
- 	if (mod->init != NULL)
-@@ -3742,22 +3736,13 @@ static noinline int do_init_module(struct module *mod)
- 
- 	/*
- 	 * We need to finish all async code before the module init sequence
--	 * is done.  This has potential to deadlock.  For example, a newly
--	 * detected block device can trigger request_module() of the
--	 * default iosched from async probing task.  Once userland helper
--	 * reaches here, async_synchronize_full() will wait on the async
--	 * task waiting on request_module() and deadlock.
--	 *
--	 * This deadlock is avoided by perfomring async_synchronize_full()
--	 * iff module init queued any async jobs.  This isn't a full
--	 * solution as it will deadlock the same if module loading from
--	 * async jobs nests more than once; however, due to the various
--	 * constraints, this hack seems to be the best option for now.
--	 * Please refer to the following thread for details.
-+	 * is done. This has potential to deadlock if synchronous module
-+	 * loading is requested from async (which is not allowed!).
- 	 *
--	 * http://thread.gmane.org/gmane.linux.kernel/1420814
-+	 * See commit 0fdff3ec6d87 ("async, kmod: warn on synchronous
-+	 * request_module() from async workers") for more details.
- 	 */
--	if (!mod->async_probe_requested && (current->flags & PF_USED_ASYNC))
-+	if (!mod->async_probe_requested)
- 		async_synchronize_full();
- 
- 	ftrace_free_mem(mod, mod->init_layout.base, mod->init_layout.base +
--- 
-2.34.1
-
+>       Andrew

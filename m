@@ -2,72 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6B84AF256
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF974AF25E
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233913AbiBINGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 08:06:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
+        id S233878AbiBINIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 08:08:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233911AbiBINGV (ORCPT
+        with ESMTP id S230079AbiBINId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 08:06:21 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3517C05CB97;
-        Wed,  9 Feb 2022 05:06:20 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id i17so4001712lfg.11;
-        Wed, 09 Feb 2022 05:06:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:organization:content-transfer-encoding;
-        bh=inCVYeDu1fAept4QEpKoCkDC4Yb03qxpv1FlXIUns7I=;
-        b=M6fijd92xKG7v+VrkmSvHMaDtbq/nAz0qMuwwXeK3zx2d2oUzm88mnnwcn7kLCBmZ9
-         ZS8tlRUaikG/pKqHaot+sA8vRCtwngbdlwqkfqEjGwau30qHA0DW2AUL4mh8hk0PP38J
-         t67jVBU0dJ1T4IMpd7SNXWDoB7VX5qY3wl9lkJwHXjudfQzWWxxRN+x/1mYqt/Qm9GbS
-         S24lporKHPffI8akVjpH/Jk4YUWJegACOLhwi+6x9IQloBf4w1ono9to+Zvt1GRfkM/A
-         0w4fRqNBMzUV8cP8Owr7iKyovAx9+0PmIfPqyFNFf/pFEhRXGlVjoe3SDij4ikyzHnkT
-         z68Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:organization:content-transfer-encoding;
-        bh=inCVYeDu1fAept4QEpKoCkDC4Yb03qxpv1FlXIUns7I=;
-        b=QXT3JkDEhIlIePNdhpbx1nNa5DVpKsWTLpJzniBrXezegkrPoKwpUOUZ0/Hvm/M2ti
-         nGFw94Dx2Js4NyGy5co/GaGSqGLMAL1bsBwbl2jvEbuBdxhIeG/j3EIEAxhzo7Tth3ND
-         K7608a9ILpsX0nEBd8N1A7imQi4x+5sXOS7kqjtHgmTLrn4/nFb7VD7ak6BmpeO1Rvd3
-         h4Ezy/+6S5CR0kCFI9C+aPAO1YGHsKyLqzQN7338tyrXOfXOnKrv6zTuIyiHBQ08clzh
-         h+cmvA7OlSgLgxAEBfICJMjqTGngwYyroNsWMSZeSZMqffC74RSiMurBv3y+sFnHf6L7
-         JbvA==
-X-Gm-Message-State: AOAM532Y1YlQ8gkJSgTeY4opgdnz2hxD5/0e9Q+zMLf6Hx1+COHa9JNL
-        ED/jptbIEJU4lG47taFzw8E=
-X-Google-Smtp-Source: ABdhPJxArIjJy06rYv/F/8Maxi6QhxTI2ECVBt8J3IcsCVrOM+EO1KUfCDbLSNfVTmC5MwuPOKsgzw==
-X-Received: by 2002:a05:6512:1597:: with SMTP id bp23mr1660573lfb.347.1644411979092;
-        Wed, 09 Feb 2022 05:06:19 -0800 (PST)
-Received: from wse-c0127.beijerelectronics.com ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id k3sm2352608lfo.127.2022.02.09.05.06.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 05:06:18 -0800 (PST)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Hans Schultz <schultz.hans+lkml@gmail.com>,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        bridge@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 5/5] net: bridge: Refactor bridge port in locked mode to use jump labels
-Date:   Wed,  9 Feb 2022 14:05:37 +0100
-Message-Id: <20220209130538.533699-6-schultz.hans+netdev@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220209130538.533699-1-schultz.hans+netdev@gmail.com>
-References: <20220209130538.533699-1-schultz.hans+netdev@gmail.com>
+        Wed, 9 Feb 2022 08:08:33 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FA4C0613CA;
+        Wed,  9 Feb 2022 05:08:36 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2199vsnq037855;
+        Wed, 9 Feb 2022 13:08:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=UU8UqiHmi6ItiCpNpt8DM5A8CsIqnrkZ3J1VevlE4fU=;
+ b=RTWtID9udjgLoqUvn27yIKOa6Tj2t9i3TADJu/BRw8gekczTOV+LadE3Zhg3YEg2yQuU
+ tO4iKsspedNI/H+p/u1x0OfTnxjKVaaN4aA0iGIOTZ808R5kXhLDDBN9j4pt7d/apaXf
+ iGH0wtimPXU0BiuQ9r1kYbpg6k0iBuBo490wUk1WUNFP8nUCU6ED7Bisaw5vnUlabydi
+ nPa6jVjIAAthuxMW3t9yqKG3bB5iPvz8kA+gYDwCs2tDRwPQFIV8EZetZmOo+mZ+lvVR
+ 7xygMSN9GVFvz4l8UScT99rIfHKewlfHTwWytSA4bVzrZoQOrxkQHJEJ91J4wy+ONoby Lg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e3wmkdbcr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Feb 2022 13:08:34 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 219CCnIs039187;
+        Wed, 9 Feb 2022 13:08:34 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e3wmkdbc9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Feb 2022 13:08:33 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 219D3J6B010500;
+        Wed, 9 Feb 2022 13:08:32 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3e1gv9f3pt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Feb 2022 13:08:32 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 219D8QfR26280284
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 9 Feb 2022 13:08:26 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B764BA4055;
+        Wed,  9 Feb 2022 13:08:26 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2AE66A4059;
+        Wed,  9 Feb 2022 13:08:26 +0000 (GMT)
+Received: from [9.171.57.239] (unknown [9.171.57.239])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  9 Feb 2022 13:08:26 +0000 (GMT)
+Message-ID: <0527baa0-c136-662d-a493-aa5ba423c22e@linux.ibm.com>
+Date:   Wed, 9 Feb 2022 14:08:25 +0100
 MIME-Version: 1.0
-Organization: Westermo Network Technologies AB
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 05/11] KVM: s390: Add optional storage key checking to
+ MEMOP IOCTL
+Content-Language: en-US
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+References: <20220207165930.1608621-1-scgl@linux.ibm.com>
+ <20220207165930.1608621-6-scgl@linux.ibm.com>
+ <48d1678f-746c-dab6-5ec3-56397277f752@linux.ibm.com>
+ <71f07914-d0b2-e98b-22b2-bc05f04df2da@linux.ibm.com>
+ <6ea27647-fbbe-3962-03a0-8ca5340fc7fd@linux.ibm.com>
+ <8d502356c3a624847c0dd2fe5d5f60e72923a141.camel@linux.ibm.com>
+ <3ec91f7a-10ca-b984-d852-1327f965b1e8@linux.ibm.com>
+ <83408abf-86fe-20b0-564c-8cf840757e76@linux.ibm.com>
+ <ef35d70a-c0dc-e5ae-8182-79847085d593@linux.ibm.com>
+ <1eb6ae828fd02340ff30bfab6a949fff90e85d3b.camel@linux.ibm.com>
+ <61d9aa7b-4474-fce9-4884-275d1f6dee99@linux.ibm.com>
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+In-Reply-To: <61d9aa7b-4474-fce9-4884-275d1f6dee99@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: CfWBcYgfOQ0D1zXA_8td3ffdR9wIqMjN
+X-Proofpoint-ORIG-GUID: VMwvWggJaA1V3fZ_fSuAPGJCCDlg9sB1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-09_07,2022-02-09_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ impostorscore=0 malwarescore=0 bulkscore=0 clxscore=1015 mlxscore=0
+ priorityscore=1501 phishscore=0 suspectscore=0 lowpriorityscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202090076
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,97 +113,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans Schultz <schultz.hans+lkml@gmail.com>
+On 2/9/22 13:11, Christian Borntraeger wrote:
+> 
+> 
+> Am 09.02.22 um 12:04 schrieb Janis Schoetterl-Glausch:
+>> On Wed, 2022-02-09 at 11:48 +0100, Christian Borntraeger wrote:
+>>>
+>>> Am 09.02.22 um 11:39 schrieb Janis Schoetterl-Glausch:
+>>>> On 2/9/22 11:08, Christian Borntraeger wrote:
+>>>>>
+>>>>> Am 09.02.22 um 11:01 schrieb Janis Schoetterl-Glausch:
+>>>>>> On Wed, 2022-02-09 at 10:08 +0100, Christian Borntraeger wrote:
+>>>>>>> Am 09.02.22 um 09:49 schrieb Janis Schoetterl-Glausch:
+>>>>>>>> On 2/9/22 08:34, Christian Borntraeger wrote:
+>>>>>>>>> Am 07.02.22 um 17:59 schrieb Janis Schoetterl-Glausch:
+>>>>>>>>>> User space needs a mechanism to perform key checked accesses when
+>>>>>>>>>> emulating instructions.
+>>>>>>>>>>
+>>>>>>>>>> The key can be passed as an additional argument.
+>>>>>>>>>> Having an additional argument is flexible, as user space can
+>>>>>>>>>> pass the guest PSW's key, in order to make an access the same way the
+>>>>>>>>>> CPU would, or pass another key if necessary.
+>>>>>>>>>>
+>>>>>>>>>> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+>>>>>>>>>> Acked-by: Janosch Frank <frankja@linux.ibm.com>
+>>>>>>>>>> Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+>>>>>>>>>> ---
+>>>>>>>>>>       arch/s390/kvm/kvm-s390.c | 49 +++++++++++++++++++++++++++++++---------
+>>>>>>>>>>       include/uapi/linux/kvm.h |  8 +++++--
+>>>>>>>>>>       2 files changed, 44 insertions(+), 13 deletions(-)
+>>>>>>>>>>
+>>>>>>>>>> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+>>>>>>>>>> index cf347e1a4f17..71e61fb3f0d9 100644
+>>>>>>>>>> --- a/arch/s390/kvm/kvm-s390.c
+>>>>>>>>>> +++ b/arch/s390/kvm/kvm-s390.c
+>>>>>>>>>> @@ -32,6 +32,7 @@
+>>>>>>>>>>       #include <linux/sched/signal.h>
+>>>>>>>>>>       #include <linux/string.h>
+>>>>>>>>>>       #include <linux/pgtable.h>
+>>>>>>>>>> +#include <linux/bitfield.h>
+>>>>>>>>>>         #include <asm/asm-offsets.h>
+>>>>>>>>>>       #include <asm/lowcore.h>
+>>>>>>>>>> @@ -2359,6 +2360,11 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
+>>>>>>>>>>           return r;
+>>>>>>>>>>       }
+>>>>>>>>>>       +static bool access_key_invalid(u8 access_key)
+>>>>>>>>>> +{
+>>>>>>>>>> +    return access_key > 0xf;
+>>>>>>>>>> +}
+>>>>>>>>>> +
+>>>>>>>>>>       long kvm_arch_vm_ioctl(struct file *filp,
+>>>>>>>>>>                      unsigned int ioctl, unsigned long arg)
+>>>>>>>>>>       {
+>>>>>>>>>> @@ -4687,34 +4693,54 @@ static long kvm_s390_guest_mem_op(struct kvm_vcpu *vcpu,
+>>>>>>>>>>                         struct kvm_s390_mem_op *mop)
+>>>>>>>>>>       {
+>>>>>>>>>>           void __user *uaddr = (void __user *)mop->buf;
+>>>>>>>>>> +    u8 access_key = 0, ar = 0;
+>>>>>>>>>>           void *tmpbuf = NULL;
+>>>>>>>>>> +    bool check_reserved;
+>>>>>>>>>>           int r = 0;
+>>>>>>>>>>           const u64 supported_flags = KVM_S390_MEMOP_F_INJECT_EXCEPTION
+>>>>>>>>>> -                    | KVM_S390_MEMOP_F_CHECK_ONLY;
+>>>>>>>>>> +                    | KVM_S390_MEMOP_F_CHECK_ONLY
+>>>>>>>>>> +                    | KVM_S390_MEMOP_F_SKEY_PROTECTION;
+>>>>>>>>>>       -    if (mop->flags & ~supported_flags || mop->ar >= NUM_ACRS || !mop->size)
+>>>>>>>>>> +    if (mop->flags & ~supported_flags || !mop->size)
+>>>>>>>>>>               return -EINVAL;
+>>>>>>>>>> -
+>>>>>>>>>>           if (mop->size > MEM_OP_MAX_SIZE)
+>>>>>>>>>>               return -E2BIG;
+>>>>>>>>>> -
+>>>>>>>>>>           if (kvm_s390_pv_cpu_is_protected(vcpu))
+>>>>>>>>>>               return -EINVAL;
+>>>>>>>>>> -
+>>>>>>>>>>           if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
+>>>>>>>>>>               tmpbuf = vmalloc(mop->size);
+>>>>>>>>>>               if (!tmpbuf)
+>>>>>>>>>>                   return -ENOMEM;
+>>>>>>>>>>           }
+>>>>>>>>>> +    ar = mop->ar;
+>>>>>>>>>> +    mop->ar = 0;
+>>>>>>>>>
+>>>>>>>>> Why this assignment to 0?
+>>>>>>>>
+>>>>>>>> It's so the check of reserved below works like that, they're all part of the anonymous union.
+>>>>>>>
+>>>>>>> Ah, I see. This is ugly :-)
+>>>>>>
+>>>>>> Yes :)
+>>>>>>>>>> +    if (ar >= NUM_ACRS)
+>>>>>>>>>> +        return -EINVAL;
+>>>>>>>>>> +    if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
+>>>>>>>>>> +        access_key = mop->key;
+>>>>>>>>>> +        mop->key = 0;
+>>>>>>>>>
+>>>>>>>>> and this? I think we can leave mop unchanged.
+>>>>>>>>>
+>>>>>>>>> In fact, why do we add the ar and access_key variable?
+>>>>>>>>> This breaks the check from above (if (mop->flags & ~supported_flags || mop->ar >= NUM_ACRS || !mop->size))  into two checks
+>>>>>>>>> and it will create a memleak for tmpbuf.
+>>>>>>>>
+>>>>>>>> I can move the allocation down, goto out or get rid of the reserved check and keep everything as before.
+>>>>>>>> First is simpler, but second makes handling that case more explicit and might help in the future.
+>>>>>>>
+>>>>>>> Maybe add a reserved_02 field in the anon struct and check this for being zero and get rid of the local variables?
+>>>>>>
+>>>>>> I think that would require us adding new fields in the struct by putting them in a union with reserved_02 and so on,
+>>>>>> which could get rather messy.
+>>>>>
+>>>>> I think it is fine to rename reserved_02. Maybe rename that to dont_use_02 ?
+>>>>
+>>>> I don't know what kind of stability guarantees we give here, since it can only happen when recompiling with
+>>>> a new header. dont_use is a lot better than reserved here, after all we tell user space to set
+>>>> reserved bytes to 0, using reserved_02 to do that would be quite handy and therefore likely.
+>>>>
+>>>> The question is also what semantic we want for the check.
+>>>> The way it works right now, user space also needs to set unused fields to 0, e.g. key if the flag is not set.
+>>>> At least this is the case for the vm memop, the vcpu memop cannot do that because of backward compatibility.
+>>>
+>>> As an alternative just remove the check for reserved == 0 and do that later on as an add-on patch?
+>>
+>> That would kinda defeat the purpose of the check, since misbehaving user space programs would
+>> get an error then but not now.
+> 
+> 
+> As a matter of fact, we do not check today. What about the following.
 
-As the locked mode feature is in the hot path of the bridge modules
-reception of packets, it needs to be refactored to use jump labels
-for optimization.
+We don't do it for the vcpu memop, but since we're newly introducing the vm memop we are free to decide what we want.
+It's purely about future proofing, e.g. we would have had the possibility to add the key checking feature without a flag,
+if the existing memop did the check. Committing ourselves to always adding a flag is fine by me, but I don't like the
+previous state of affairs, where user space should set reserved bytes to 0 but it's not enforced.
 
-Signed-off-by: Hans Schultz <schultz.hans+lkml@gmail.com>
-Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
----
- net/bridge/br_input.c   | 22 ++++++++++++++++++----
- net/bridge/br_netlink.c |  6 ++++++
- net/bridge/br_private.h |  2 ++
- 3 files changed, 26 insertions(+), 4 deletions(-)
+> 1. remove the checkreserved logic. its too complicated
+> 2. do not check for reserved to be zero
+> 4. state that the reserved fields are ignored without the appropriate flag
+> 5. add the necessary flag as comment to the fields
+> 6. check for unkmown flags and bail out
 
-diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
-index 469e3adbce07..6fc428d6bac5 100644
---- a/net/bridge/br_input.c
-+++ b/net/bridge/br_input.c
-@@ -23,6 +23,18 @@
- #include "br_private.h"
- #include "br_private_tunnel.h"
- 
-+static struct static_key_false br_input_locked_port_feature;
-+
-+void br_input_locked_port_add(void)
-+{
-+	static_branch_inc(&br_input_locked_port_feature);
-+}
-+
-+void br_input_locked_port_remove(void)
-+{
-+	static_branch_dec(&br_input_locked_port_feature);
-+}
-+
- static int
- br_netif_receive_skb(struct net *net, struct sock *sk, struct sk_buff *skb)
- {
-@@ -91,10 +103,12 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
- 				&state, &vlan))
- 		goto out;
- 
--	if (p->flags & BR_PORT_LOCKED) {
--		fdb_entry = br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
--		if (!(fdb_entry && fdb_entry->dst == p))
--			goto drop;
-+	if (static_branch_unlikely(&br_input_locked_port_feature)) {
-+		if (p->flags & BR_PORT_LOCKED) {
-+			fdb_entry = br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
-+			if (!(fdb_entry && fdb_entry->dst == p))
-+				goto drop;
-+		}
- 	}
- 
- 	nbp_switchdev_frame_mark(p, skb);
-diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
-index 7d4432ca9a20..e3dbe9fed75c 100644
---- a/net/bridge/br_netlink.c
-+++ b/net/bridge/br_netlink.c
-@@ -860,6 +860,7 @@ static int br_set_port_state(struct net_bridge_port *p, u8 state)
- static void br_set_port_flag(struct net_bridge_port *p, struct nlattr *tb[],
- 			     int attrtype, unsigned long mask)
- {
-+	bool locked = p->flags & BR_PORT_LOCKED;
- 	if (!tb[attrtype])
- 		return;
- 
-@@ -867,6 +868,11 @@ static void br_set_port_flag(struct net_bridge_port *p, struct nlattr *tb[],
- 		p->flags |= mask;
- 	else
- 		p->flags &= ~mask;
-+
-+	if ((p->flags & BR_PORT_LOCKED) && !locked)
-+		br_input_locked_port_add();
-+	if (!(p->flags & BR_PORT_LOCKED) && locked)
-+		br_input_locked_port_remove();
- }
- 
- /* Process bridge protocol info on port */
-diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
-index 2661dda1a92b..0ec3ef897978 100644
---- a/net/bridge/br_private.h
-+++ b/net/bridge/br_private.h
-@@ -832,6 +832,8 @@ void br_manage_promisc(struct net_bridge *br);
- int nbp_backup_change(struct net_bridge_port *p, struct net_device *backup_dev);
- 
- /* br_input.c */
-+void br_input_locked_port_add(void);
-+void br_input_locked_port_remove(void);
- int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb);
- rx_handler_func_t *br_get_rx_handler(const struct net_device *dev);
- 
--- 
-2.30.2
+I'll implement this, except maybe 5, since the documentation covers that and the availability of the flags themselves
+is conditional on other factors.
 

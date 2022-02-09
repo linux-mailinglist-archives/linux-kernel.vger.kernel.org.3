@@ -2,132 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BFD74B015F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 00:35:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE45D4B0165
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 00:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbiBIXeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 18:34:22 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:41306 "EHLO
+        id S230358AbiBIXhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 18:37:34 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiBIXeV (ORCPT
+        with ESMTP id S230270AbiBIXh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 18:34:21 -0500
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648A9E0513A3
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 15:34:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1644449657; x=1675985657;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wZrslbFYkv3CyGGamhytlpz6Yr8LDwi9Rm0AXijDQb4=;
-  b=ICkRgmbDE8eie9qaE9JMbLwluzvvRtmqK7fNc3kYeYFh8WlQjIaMs3rZ
-   sqfe9o6xjxxRPVuQDiSb1prC7q/fpfYe0v0s1YZBZlwje2K0aXGQSmaaN
-   eAfhGV/L9BWrXANBmU18NqvUCYacInQEOucAepp6pnCwHQlQzDGwsFIrv
-   45oXresT2dwfX08Hyex7uNyouEC8xj8NoA4ARS5AUVztOw3McF4OQfgFR
-   2c2qAfe1Dr7pW2PXshqXTRJFANWloe//SorvKg4NNljiCak82HvfKUKCk
-   TyhKm6/WsJgZlY+gBZ0Vn2j9O46Oc7G3f+dDrP7EsInqAMuJ7JN1kim3f
-   A==;
-X-IronPort-AV: E=Sophos;i="5.88,357,1635177600"; 
-   d="scan'208";a="193527946"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 10 Feb 2022 07:34:16 +0800
-IronPort-SDR: kbYSCy04nexhCG0+HcuXJsfEXSiXISohhrPsGwFQIepwReuhrRdhByjsCEScv19VY14BMS2ozS
- nskMWmnDguJaIApIfPYmsjM8sOXoVXPFHbWylfcSgpukBwCLzsZfNzInngtMD9qJoS4bbZ4F0R
- S7LfIpWKQm+wrBCIUUA7coSIsSQJAug+xoLKJOxmNto019O6Ryp4VkNfF3dfmBXsTLY0f0KA1F
- Gz7kGwZZoPD/Tec9Q4zvdeG6N8rTAcKmXKMvbtV8xE8E+wWIOXyi/OWBlyEzFZUCarEhQ2jnV1
- e9V4oBOIJQ4tU4USTPcbvnf/
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 15:06:03 -0800
-IronPort-SDR: GUFMuxE4YxqZStea8Gd7cRTZe1v/F41997KIXs9DBGtuFT3yVR88HEiJwsffoY/A0IWCdYT3Rb
- PBYE7+yKKiMdsOWbDcpBS8gpApm/voKoRZI/8O7WflN0IKBlMrg3h8rT8oMyE0tA7BVd153xyv
- lTIZyzQalyzUNP2zJGjB5ckWN+lAKCSYLFBFnYsDVIEQf3F8No3IBonodLmOMqu8OZsieRvTPj
- 9601gsse+ISLsNMGWys6f+373TxFbuiUbtW2hajO5ARBAMi/m50F66rGn+j0ECwvBqn9YsOjkI
- ZmE=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 15:34:16 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4JvGRq0jK7z1SVp0
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 15:34:15 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1644449654; x=1647041655; bh=wZrslbFYkv3CyGGamhytlpz6Yr8LDwi9Rm0
-        AXijDQb4=; b=rY4QPwrmYLoClTrUYzD8WuYDziIlCcL6Qzh5ga47J96D7bW4E/E
-        uHo++jFo6pqRH0sTzoWjUfUUk/ow5pJHZOyWwMVXULqMuxcfICk8Yo89YSe7D+iB
-        +ontFRWvUlgQq4THEU13EmoaCgwdmu1YHTMk1HyPnx/gKekkiBX9effBrmJ5YUCi
-        c5uvREH2oErUrFBawLLvCuKimGJC4FbWfO/ZR4PPw97caXSoPU7UpKLGv+HYcd3a
-        NJ1/hDNXM8+c5QlbbK/Es1DOzdVJi+hl5FLjwBxNZcpCEMynr/L/aecvCVN1+ICy
-        PIBYtp9ikIPo/w8nmKt1QNXdRAwxBRI2ZPg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id WJA2CkFVA3DL for <linux-kernel@vger.kernel.org>;
-        Wed,  9 Feb 2022 15:34:14 -0800 (PST)
-Received: from [10.225.163.67] (unknown [10.225.163.67])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4JvGRn5J7Bz1Rwrw;
-        Wed,  9 Feb 2022 15:34:13 -0800 (PST)
-Message-ID: <fb3e9786-87e9-6346-cf84-2617adfa5b8d@opensource.wdc.com>
-Date:   Thu, 10 Feb 2022 08:34:12 +0900
+        Wed, 9 Feb 2022 18:37:29 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CDAE053733;
+        Wed,  9 Feb 2022 15:37:30 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id fy20so11293682ejc.0;
+        Wed, 09 Feb 2022 15:37:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=5kaUwuqIGj0ojEY7kPnRejH2UYzI/SB/FogOwRyp+Ho=;
+        b=VZmjjhFtkYFT0IBAeyge4aSOGp+VmKZLadIKkutYStfpbL4u5wkZ2aqJA44LaD+Pw0
+         yh2qNKvkj0sDhnG56xYMRbnkbLQkk6zUFVjViRGMQmUY+v2WhMrEC8ZVa1fO8KR5LmmD
+         978OJyklk5H4HSl0zmK1M8CWkN+7/qs+57uZI0geiw4fQvonyXp5w56Nc/MiQ336ZOKf
+         jkpdwEY1J8MkU8UwVpu6AvqPszIfaZS611DYLDEejkP487q24C83reHtf2hn9sSXp1VH
+         WY90S2gXRmyBqylrLUFKYkerWA/oL0UZt8tm1pEb6Erqv7DtaIY0vW1uihk/4TtaXuK1
+         ERHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=5kaUwuqIGj0ojEY7kPnRejH2UYzI/SB/FogOwRyp+Ho=;
+        b=0BgyvF05A8c3g4Sh5hbrAlVyqRGaEU1Ia4gVEqzTa7eDxL93ZGfwJWcVWkdj8x2RKi
+         JMC2Yb98zqL/tTyAIQQvfP+/QBYbpA0zlGEdXapiVhOg809/DbtornJurxnw5HWsYOFG
+         1WTTTlKYSsC70wJNLshc9Z5yaQLLskvChd/y+5Nme5r/4QlLmNfLWj0i2mdRJCLhqKcq
+         xPMzNv0i6P/DglrPV6i/n4YEfPK8T1W8NT8fWYmCLpDyPz9EVm+Qh+0rfYwz4obUqGTT
+         oQCdnHMivXAYzK2beC8viIDApyjUFvGThjVMAhaYtO5G0jtCYqbNmbLk3tncX5iKCxSg
+         1NNQ==
+X-Gm-Message-State: AOAM531ZvK6zQqbrH223+Y35zVue0zNIBYZG+XbFtUbyRt0J1Xhqb4cB
+        N5UqY1ymqxgcefZ1E7Le/WA=
+X-Google-Smtp-Source: ABdhPJxQsHHLXQBSb3idLFqni/LQQQUhHNhAtw/fi4ys+azzvFiVE/1CQd7ocFAKt5W64Owy2tVrEw==
+X-Received: by 2002:a17:907:e86:: with SMTP id ho6mr4113841ejc.61.1644449849556;
+        Wed, 09 Feb 2022 15:37:29 -0800 (PST)
+Received: from localhost (92.40.202.147.threembb.co.uk. [92.40.202.147])
+        by smtp.gmail.com with ESMTPSA id qw28sm5283992ejb.0.2022.02.09.15.37.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 15:37:29 -0800 (PST)
+Date:   Wed, 9 Feb 2022 23:38:01 +0000
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] Clock fixes for Ingenic SoCs
+Message-ID: <YgRQWfUmdXZU606t@localhost>
+References: <20220208010048.211691-1-aidanmacdonald.0x0@gmail.com>
+ <EPN17R.TB21BVY3XDUH1@crapouillou.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] pinctrl: k210: Fix bias-pull-up
-Content-Language: en-US
-To:     Sean Anderson <seanga2@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <20220209182822.640905-1-seanga2@gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220209182822.640905-1-seanga2@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <EPN17R.TB21BVY3XDUH1@crapouillou.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/10/22 03:28, Sean Anderson wrote:
-> Using bias-pull-up would actually cause the pin to have its pull-down
-> enabled. Fix this.
+On Wed, Feb 09, 2022 at 03:44:02PM +0000, Paul Cercueil wrote:
+> Hi Aidan,
 > 
-> Signed-off-by: Sean Anderson <seanga2@gmail.com>
-> ---
+> Le mar., févr. 8 2022 at 01:00:45 +0000, Aidan MacDonald 
+> <aidanmacdonald.0x0@gmail.com> a écrit :
+> > I ran across a problem trying to get Linux running on an Ingenic 
+> > X1000 SoC:
+> > since the memory clock isn't referenced by any driver, it appears 
+> > unused and
+> > gets disabled automatically. After that, the system hangs on any RAM 
+> > access.
+> > 
+> > There is a hack in board-ingenic.c to forcibly enable the CPU clock, 
+> > but this
+> > is insufficient for the X1000 since the memory clock has its own gate 
+> > and mux
+> > that isn't tied to the CPU.
+> > 
+> > This patch series fixes the bug by adding CLK_IS_CRITICAL flags to 
+> > important
+> > clocks, which seems to be the approach used in many other SoC clock 
+> > drivers.
+> > 
+> > It's my first time submitting patches to the kernel so let me know if 
+> > I
+> > messed anything up.
 > 
->  drivers/pinctrl/pinctrl-k210.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> You did everything good.
 > 
-> diff --git a/drivers/pinctrl/pinctrl-k210.c b/drivers/pinctrl/pinctrl-k210.c
-> index 49e32684dbb2..1ad61b32ec88 100644
-> --- a/drivers/pinctrl/pinctrl-k210.c
-> +++ b/drivers/pinctrl/pinctrl-k210.c
-> @@ -527,7 +527,7 @@ static int k210_pinconf_set_param(struct pinctrl_dev *pctldev,
->  	case PIN_CONFIG_BIAS_PULL_UP:
->  		if (!arg)
->  			return -EINVAL;
-> -		val |= K210_PC_PD;
-> +		val |= K210_PC_PU;
->  		break;
->  	case PIN_CONFIG_DRIVE_STRENGTH:
->  		arg *= 1000;
+> I think the CI20 suffered from the same problem, it would only boot as 
+> long as the "clk_ignore_unused" flag was added on the command line. I 
+> will need to try it there to see if it improved the situation.
+> 
+> I tested the patchset on JZ4770 and it works fine. So:
+> 
+> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+> 
+> @Stephen: I don't see any changes pending on board-ingenic.c so it 
+> should be safe for you to also take [PATCH 3/3] in the clk tree.
+> 
+> Cheers,
+> -Paul
 
-Ooops... My bad :)
+Thanks Paul. I've just sent two other small fixes which are basically
+independent of this series, if you want to test them at the same time.
+One is for the TCU driver and the other is for the pinctrl driver.
 
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Regards,
+Aidan
 
--- 
-Damien Le Moal
-Western Digital Research
+> 
+> > Aidan MacDonald (3):
+> >   clk: ingenic: Allow specifying common clock flags
+> >   clk: ingenic: Mark critical clocks in Ingenic SoCs
+> >   mips: ingenic: Do not manually reference the CPU clock
+> > 
+> >  arch/mips/generic/board-ingenic.c | 26 --------------------------
+> >  drivers/clk/ingenic/cgu.c         |  2 +-
+> >  drivers/clk/ingenic/cgu.h         |  3 +++
+> >  drivers/clk/ingenic/jz4725b-cgu.c |  2 ++
+> >  drivers/clk/ingenic/jz4740-cgu.c  |  2 ++
+> >  drivers/clk/ingenic/jz4760-cgu.c  |  2 ++
+> >  drivers/clk/ingenic/jz4770-cgu.c  |  1 +
+> >  drivers/clk/ingenic/jz4780-cgu.c  |  3 +++
+> >  drivers/clk/ingenic/x1000-cgu.c   |  3 +++
+> >  drivers/clk/ingenic/x1830-cgu.c   |  3 +++
+> >  10 files changed, 20 insertions(+), 27 deletions(-)
+> > 
+> > --
+> > 2.34.1
+> > 
+> 
+> 

@@ -2,104 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6EB4AF8B8
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:49:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDA44AF8D6
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 18:57:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbiBIRt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 12:49:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
+        id S238515AbiBIR5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 12:57:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238478AbiBIRtO (ORCPT
+        with ESMTP id S232353AbiBIR5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 12:49:14 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BE6C05CB82
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 09:49:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644428957; x=1675964957;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UOUACCmc6ZSeIBWc/lGIpGPqTjbY/sikTiknQS2V6T8=;
-  b=EAIJ7FCsLtxW9chPLH774Djbn6aXhDhtnQV5o3xqS73CBNi0QIrNjYvt
-   wD+x9V62xhFa9Zz0u6WRSgAHBdVPVLV6fCBhSLgTq8mUeCxcrmU8vOU7p
-   zfC/VQdWQjO+oGFzfjAyfVZnjqXp2MfiPZY5EItsTJlbS0AD8v4RbwWCh
-   5EvcbE2fCjZUbbZmhe0U8/T3FER1+y0FGpNFErdsai1cuKcB9iha2Kc32
-   x6fx6hAuQ7hRUIeX1FRLgUNZlES73GmgUeXwOVv1ZI7hg+ChOPeMqi1i3
-   uxcVWArNFQe3JAgrMZCFt3H1O7PLc20V73l5eRK+Us28PxVTyjHCeMIV6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10252"; a="249034334"
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="249034334"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 09:49:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="633310153"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 09 Feb 2022 09:49:13 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 9BD17107; Wed,  9 Feb 2022 19:49:28 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Joerg Roedel <jroedel@suse.de>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] iommu/vt-d: Don't cast parameter in for_each_set_bit()
-Date:   Wed,  9 Feb 2022 19:49:13 +0200
-Message-Id: <20220209174913.4319-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 9 Feb 2022 12:57:11 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB61C0613C9;
+        Wed,  9 Feb 2022 09:57:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5C00ECE2253;
+        Wed,  9 Feb 2022 17:57:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DBE7C340E9;
+        Wed,  9 Feb 2022 17:57:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644429430;
+        bh=iOxYp/R4z6NyCd4CMctrHVzFrNaRVI37GlqDqEU6psI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gQbP413M18GeHBjrV/vjinZHhOzGZMJZ6pHXdH/yNQLJ675oDAEskxhGDuqhftcSS
+         ROlfUZvpjGqjojoJZ85WrCEardNq5D3mMhQDJSzsLO1gH1+Wf8mm4XI2O446r8TmJl
+         uTBLjK2DBH8l0wSBzm8XNFzRDlFIW4YFeOSonQd9RxpoFxLHMq3iNCEekd6J/xzAwB
+         eecKsemaKrIU95miFZupeAkvItH4v/aoCPxU8wzm2KE3aSUHFi6XdYdUWEoZHdKSJC
+         9AMzp8Qcth27749Vdhr8WxgRuyf185fo3c2F+5lD16DF8uIIykAxbJMpzFLQgBOC0h
+         bmTTmkqZ4HYWA==
+Date:   Thu, 10 Feb 2022 01:49:19 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, wefu@redhat.com, liush@allwinnertech.com,
+        guoren@kernel.org, atishp@atishpatra.org, anup@brainfault.org,
+        drew@beagleboard.org, hch@lst.de, arnd@arndb.de, wens@csie.org,
+        maxime@cerno.tech, gfavor@ventanamicro.com,
+        andrea.mondelli@huawei.com, behrensj@mit.edu, xinhaoqu@huawei.com,
+        huffman@cadence.com, mick@ics.forth.gr,
+        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
+        rtrauben@gmail.com, samuel@sholland.org, cmuellner@linux.com,
+        philipp.tomsich@vrull.eu
+Subject: Re: [PATCH v6 00/14] riscv: support for Svpbmt and D1 memory types
+Message-ID: <YgP+n5OMhQPSbICV@xhacker>
+References: <20220209123800.269774-1-heiko@sntech.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220209123800.269774-1-heiko@sntech.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While in this particular case it would not be a (critical) issue,
-the pattern itself is bad and error prone in case the location
-of the parameter is changed.
+On Wed, Feb 09, 2022 at 01:37:46PM +0100, Heiko Stuebner wrote:
+> Svpbmt is an extension defining "Supervisor-mode: page-based memory types"
+> for things like non-cacheable pages or I/O memory pages.
+> 
+> 
+> So this is my 2nd try at implementing Svpbmt (and the diverging D1 memory
+> types) using the alternatives framework.
+> 
+> This includes a number of changes to the alternatives mechanism itself.
+> The biggest one being the move to a more central location, as I expect
+> in the future, nearly every chip needing some sort of patching, be it
+> either for erratas or for optional features (svpbmt or others).
+> 
+> The dt-binding for svpbmt itself is of course not finished and is still
+> using the binding introduced in previous versions, as where to put
+> a svpbmt-property in the devicetree is still under dicussion.
+> Atish seems to be working on a framework for extensions [0],
+> 
+> The series also introduces support for the memory types of the D1
+> which are implemented differently to svpbmt. But when patching anyway
+> it's pretty clean to add the D1 variant via ALTERNATIVE_2 to the same
+> location.
+> 
+> The only slightly bigger difference is that the "normal" type is not 0
+> as with svpbmt, so kernel patches for this PMA type need to be applied
+> even before the MMU is brought up, so the series introduces a separate
+> stage for that.
+> 
+> 
+> In theory this series is 3 parts:
+> - sbi cache-flush / null-ptr
+> - alternatives improvements
+> - svpbmt+d1
+> 
+> So expecially patches from the first 2 areas could be applied when
+> deemed ready, I just thought to keep it together to show-case where
+> the end-goal is and not requiring jumping between different series.
+> 
+> 
+> The sbi cache-flush patch is based on Atish's sparse-hartid patch [1],
+> as it touches a similar area in mm/cacheflush.c
+> 
+> 
+> I picked the recipient list from the previous version, hopefully
+> I didn't forget anybody.
+> 
+> changes in v6:
+> - rebase onto 5.17-rc1
+> - handle sbi null-ptr differently
+> - improve commit messages
+> - use riscv,mmu as property name
+> 
+> changes in v5:
+> - move to use alternatives for runtime-patching
 
-Don't cast parameter to unsigned long pointer in for_each_set_bit().
-Instead copy to a local variable on stack of a proper type and use.
+Hi,
 
-Fixes: 6ee1b77ba3ac ("iommu/vt-d: Add svm/sva invalidate function")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/iommu/intel/iommu.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+another choice is using static key mechanism. Pros: no need to coding
+in asm, all in c.
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 92fea3fbbb11..777e81b8f4f5 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -4973,6 +4973,7 @@ intel_iommu_sva_invalidate(struct iommu_domain *domain, struct device *dev,
- 	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
- 	struct device_domain_info *info;
- 	struct intel_iommu *iommu;
-+	unsigned long cache_bits;
- 	unsigned long flags;
- 	int cache_type;
- 	u8 bus, devfn;
-@@ -5008,9 +5009,8 @@ intel_iommu_sva_invalidate(struct iommu_domain *domain, struct device *dev,
- 		size = to_vtd_size(inv_info->granu.addr_info.granule_size,
- 				   inv_info->granu.addr_info.nb_granules);
- 
--	for_each_set_bit(cache_type,
--			 (unsigned long *)&inv_info->cache,
--			 IOMMU_CACHE_INV_TYPE_NR) {
-+	cache_bits = inv_info->cache;
-+	for_each_set_bit(cache_type, &cache_bits, IOMMU_CACHE_INV_TYPE_NR) {
- 		int granu = 0;
- 		u64 pasid = 0;
- 		u64 addr = 0;
--- 
-2.34.1
+To support new arch features, I see other arch sometimes use static
+key, sometimes use alternative mechanism, so one question here would
+be which mechanism is better? Any guide?
 
+Thanks in advance

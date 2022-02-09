@@ -2,425 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B9E4AF0DA
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 820324AF0F4
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 13:08:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232426AbiBIMHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 07:07:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48350 "EHLO
+        id S232463AbiBIMI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 07:08:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233404AbiBIMGq (ORCPT
+        with ESMTP id S232767AbiBIMGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 07:06:46 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61244C002B6B;
-        Wed,  9 Feb 2022 03:13:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1644405213; x=1675941213;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=cDeQgr2ogo8tqM5eSkBYC7/5rkWjSBPNwqdv0MknXp4=;
-  b=ME+wKUDWvkhmNEQLcGy0q2X0D/AJJBPk2Upnz0OvcgpL5d1F56frvqAm
-   w1A6e+/6j0/7rYfpWKG8SsXL2ZESiZupXpCnoTIgtwanmDx43pe6tqpAy
-   FGtPkhynHkv5QjQxOU+kA3TzuvG9Z5GnkJFjGsS/cHAalNisYOA2WlAz5
-   GFZVgskXLR6dRuKYUGzPpgrrdv+9h9bU7ePy8FyCqzD52lhEKMw9wjFJ2
-   CSa16f9oKlcQp1cWyf+dUIhQl5qJqjhWcDSir5Mx1jA4uOMHqz1y8MjW2
-   JST7G/ZzE+RrRPAlf0SSguCQMDAfvlIpxHl7eauppdAX3cznoJgcJfg+M
-   g==;
-IronPort-SDR: XSsehNH7tQ7xcooHmgVw3Pz/yZb/J8/C5Rfr9+nEE6W6uXwjzaeoyG14NR3Hffsdv9fOJ2FUF4
- 6J8+Z+VFuDlrI0sHuifS6KuQbOOVQXkgTl/D5A4yCvM1C7ReQkkmc6gQu3/oFSyF/b/JE7CJrs
- vHCjbR5vKnd+5MaUMxVxp8568WPx8OJHLyHCAAGBuymwgRiKcTg4XsJEmzz1z8NixKMwVOVT2E
- Oec/NT8OHG86NmuX6O/GpHZ+RNPDjBYLSoht1kPv6/9om+cUgGeKqHbjHzt35ueJjZyQSnM5mI
- OOuae8XfaX2CM8TU1Ax9OLmU
-X-IronPort-AV: E=Sophos;i="5.88,355,1635231600"; 
-   d="scan'208";a="152974488"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Feb 2022 04:13:31 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 9 Feb 2022 04:13:31 -0700
-Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 9 Feb 2022 04:13:26 -0700
-From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-To:     <arnd@arndb.de>, <alexandre.belloni@bootlin.com>, <olof@lixom.net>,
-        <soc@kernel.org>, <robh+dt@kernel.org>,
-        <nicolas.ferre@microchip.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <Kavyasree.Kotagiri@microchip.com>,
-        <Manohar.Puri@microchip.com>
-Subject: [PATCH v4] ARM: dts: add DT for lan966 SoC and 2-port board pcb8291
-Date:   Wed, 9 Feb 2022 16:43:18 +0530
-Message-ID: <20220209111318.21112-1-kavyasree.kotagiri@microchip.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 9 Feb 2022 07:06:10 -0500
+Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30058.outbound.protection.outlook.com [40.107.3.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F0BC0219F3;
+        Wed,  9 Feb 2022 03:14:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nn/JInRXaTLrd8SyDEayG0cMttSDzCqWCnst4rWKIjCI1wNLFb5wQlwx4XiLBhglopgSAjEd+hSaMeig1/fY/P082yhkhAERrPXxCTdl2yg+CSjUgK8dpnSYTrDJc7FCez8ezUPmbYlMLkVP5hDm1HX8thPl35e45ioH7NzogAKEJc+zaZH3/jht4CV7FRdzVv9NrYK3fxF6E+G7SZ0lbJslgvmmL3387l4KrlCYOkXT5XkZ9gLTovXSHeTarAakzA31UWE2lQPB/EX5Y+1+npcQ5SHWqlg8ngR2b9Jw652+DZ0DZSbCmpu2gkoSwVmDv/GqmGSHpuj7x2+yQhnxQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=naluj9FFpJHEWOBQAX3vq6zKXscC1l5iYw/TjPDg2wE=;
+ b=dyUkTknLPoDS0j5vhOp4aCoZz8cya03EbVd58RcrvjMb6Jfvm/wXc97aoSND5md2mMCkeY3GTjYK0IYHBiQSUUT1kQG3RdMeItDLozegbCbfGANqwJ9uwzfvroqTVPI4HECfspCd0dVxoNO4DiHNvQyNiNVQxgaPr0ifjIj+dSOojxD98jv7KuXwfyKv7kSExYWWf7ceQAY4H1arzuHhsMWueELIaNaFefgzEYNfcbDkr9pfpONJad81IJxrO9lIJUDJk1dNz0v9pQ29EiP2OIo9IRhP+Riwrhv9xAH03ib0JUGbTN7yd0VB6sgumyGcrqEP3W38gWaM5cfFPryyXg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=naluj9FFpJHEWOBQAX3vq6zKXscC1l5iYw/TjPDg2wE=;
+ b=ZRPlbUZFIrfj34Eww8PRwSEFaFGRSzgpc9KG85mLA9JRscLBaMt5wc8CmfopsU2TABawViHHKefRwGvhgduy5mNT1Yr7TIFPZCrhadHNcRwbAALUtD3fwO7xMgujJUtNSQjC04bNU1fE2VTwKRgs4UFsla1WRjWh3b+rh0aHXJw=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by AM0PR04MB6579.eurprd04.prod.outlook.com (2603:10a6:208:17a::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Wed, 9 Feb
+ 2022 11:14:47 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::95cf:8c40:b887:a7b9]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::95cf:8c40:b887:a7b9%4]) with mapi id 15.20.4951.019; Wed, 9 Feb 2022
+ 11:14:47 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Qing Wang <wangqing@vivo.com>
+CC:     Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] net: dsa: ocelot: use div64_u64() instead of do_div()
+Thread-Topic: [PATCH] net: dsa: ocelot: use div64_u64() instead of do_div()
+Thread-Index: AQHYHZCIgJv9QyxGa0GdYVat4ijKrKyLEV2A
+Date:   Wed, 9 Feb 2022 11:14:47 +0000
+Message-ID: <20220209111447.qbugjb5kr3jlhz5i@skbuf>
+References: <1644395942-4186-1-git-send-email-wangqing@vivo.com>
+In-Reply-To: <1644395942-4186-1-git-send-email-wangqing@vivo.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8136f86d-ffab-47a6-372b-08d9ebbd6239
+x-ms-traffictypediagnostic: AM0PR04MB6579:EE_
+x-microsoft-antispam-prvs: <AM0PR04MB657924B75F0900C84285E0E4E02E9@AM0PR04MB6579.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5797;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: WiQR/mBUU9/HV+DhJkBJA5s3+ZdQCwxa8uDZLH/M0mgEON3sos1pdyCRhPh/cHmzjqVNhvXjJqemp6XSsbEKZeZGlROolhYj4VPvKo56V8kFJaggN2SsKv2ytfTOm7j04miLNvfNM59dyczXRk/pZETzER4VSh+lMAD5ce+lxfeBltGZJSRA2sZK0ZYljDoFG3tB6K3XuhLrINTotDwzl2rnPDUPoywSmKhSnA79rOadKol3MVpEHYQsu7tD6iPHdjUDRh7VJ0PwbxeVwUifVbmJnSlX0NWTL9MZsrnC4W8CtCsT8S4SKPcdEHcTSAbtwic2/f7xS0a8XfWrIjEfopGDdDDDrJfgJCR1BuTiwMikSAd8q68HkKlZcynD40BWB36yiAsSKBx/TkRwYz71lrB+K/c3S3kNip7rHPN77mHKsOm73gSwukkOQ7B15N8UVSoGYuug5DX6Hduoyga3io8AA5K3YXYlhZg8pt+o2fwWc1pXEKcHhoniFp7ltDAaKOeAMLUSJ2Rk2BIVMZqaPO/WGeH/LpaUQjjJXdVh63DdAsqaklJB0FKgkaw0kVn4hY7Ngf5Pt8iYJJouI7ym3khcbpna5pS8VKNcEKPWLgmPYnvp07mWYGL05oJKhVTPrPCtGKqRIV4X67QKu2/VevdW0Seg7fztFaBPI18ClQ6eH+Sm9fM94TvxomWTMufgBzLvFp3imKBWhI1nInU4hA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(508600001)(26005)(83380400001)(6512007)(9686003)(1076003)(186003)(71200400001)(54906003)(6916009)(6506007)(6486002)(316002)(76116006)(44832011)(66556008)(66476007)(66446008)(64756008)(8936002)(8676002)(7416002)(4326008)(5660300002)(66946007)(33716001)(2906002)(86362001)(122000001)(38100700002)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/pLkYotQYeh/399mu6ZOtfHw0xMLQIYH/r+rgRtbzYozlHMjas4M/zHeX3Pq?=
+ =?us-ascii?Q?Ditpa4fPIb1x550TMm0kuLFWDRt7Q0zj9ZmKKyk8AfqmI29iQ9eE85jI7qTC?=
+ =?us-ascii?Q?B49anMN8zSfKm/15lIT8hjgHVVY7DSPcaamKvTNdVIM6DNIh/vK3fPbVPU52?=
+ =?us-ascii?Q?y+T0QbSEoRdhm1UeSmQjZJ/pbrEr9aVGzxI2RzUKh/tTOQIuzIrp/Yh7M8TT?=
+ =?us-ascii?Q?AC6KBWNsGwp1spUfmR5avOMynrq3BX7Qx2CxIqlfEePR0PV9XQ0IM9tlF+UN?=
+ =?us-ascii?Q?I85fIbyiAH8L6UsrFxhB6iavHnhsT/+M39RKXSEasXMtg6IA6wc/FE3NU8LG?=
+ =?us-ascii?Q?Ehizs6XKV+N0fFMtke1XNl3LH+uPhAWCpsF6A7Ec/SDQkWb4YPTLBB23GNWS?=
+ =?us-ascii?Q?33p2BiXG7inDqFkQ8a0hBOs687sWhpOcYnB+7Tl6Cfl13BRO6syH7dkCNgVn?=
+ =?us-ascii?Q?HrPGl9ahWBeeGcjucuHQmkkAyqY6AyZ61tYdN1qL0nRIIuVhNhJzrZs7WWHp?=
+ =?us-ascii?Q?Be3+5PhwvhppzLMCqVWsbhVPpe9vbLeC0Xesr6mHjZ9TiKSWVA/DqMcTr0oz?=
+ =?us-ascii?Q?+bUwJ3NmMjl/VhCnIklosvSCB2knOD7A8zHwOIduofimcNr/Os8pcqPYUIet?=
+ =?us-ascii?Q?VQwC3bPSIn+YtAxDILasnmcj1FU6XsWq4lK624oIUr6a1aAPR0EFNbRo2anH?=
+ =?us-ascii?Q?Q7CCnKuKgISeprqt14Y7JyGWwuwIMuNicF2yft4g1KDbs0Kwipqo0R2Ilrhe?=
+ =?us-ascii?Q?z3Vt5VKhRwCwb2lvlijSrJ0dZI/4zwSYu+sFSe9LE8GhrTMCl32rANii5CG4?=
+ =?us-ascii?Q?uulX6R+L1nPeG7b7qAeoD++kNSvfaeKDPgu6JO9O14Vz/atQseHS03x0cQrm?=
+ =?us-ascii?Q?QpLHHy/57LmpQPAfevWbY7eVCTS2Cw5lf/GwFJLZnGZvMvPciFwV8KIqH987?=
+ =?us-ascii?Q?CkqSBsHFC9Os6K7OijwapNbeuImbbFACXD0SnuYGTW3BLup7BLsM6w7RP1Zu?=
+ =?us-ascii?Q?X8TQdKpg27k0jOALnd3jjocGcwAWY8iOY7styhAHFss50fgx/FHCJ/dRGohH?=
+ =?us-ascii?Q?+jzoxWflzpxdr8w0mwQkzDwPopFbxdMZzikWDILw1WRXTNDJgGswAO0AQ3pq?=
+ =?us-ascii?Q?cwqNMk7BTzcogrVd8x7adMmaBT5Xyb1vyrSoc2oYlbjLtryWfKzzzFnHxdb+?=
+ =?us-ascii?Q?2pqrOzXOMVxYy9TbcwTXbL23gA+StLKHiMouc2s5RS020zBwowsM60ULZqAE?=
+ =?us-ascii?Q?1RR3wn669AWcAqwAjx2+0QUC52qTOsUHZ9DF/9XqMa6x9XO3rJ7YVgMQ6i7d?=
+ =?us-ascii?Q?P/q6rS67bKqUsKprPTrO8aoZ5OkwNZJfIP4FiIir11c22Y1B6bA974G6mfSd?=
+ =?us-ascii?Q?ksEuR1jsdBo/SHIXDTF9rUNpjXtIX2keRjHsdIDhfEw38/o6RoGe7CEhV/yX?=
+ =?us-ascii?Q?0QrMoR2gJej3bY2owah6+ss8FtGaCXTauXvHSewFSEw97XeZdPoCI+6FQO3Y?=
+ =?us-ascii?Q?ta/nAJM2RfCOeUDe3DnxPn7P//I4hvbuYHzHkkocXM1N8cJ+6g9uS3/XM/N6?=
+ =?us-ascii?Q?PROsomHDTqcMSlXZzLBllnKA/nBqRA9u20CNO5w4+RskFqbgeN6wRdydbT/B?=
+ =?us-ascii?Q?ZTfOBBwpV88ih+25tbtbQMM=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <5E3C1EBB177A694C8E14E5EC82437F18@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8136f86d-ffab-47a6-372b-08d9ebbd6239
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2022 11:14:47.7961
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: l/FZtgAbxWmW7hpP2Lf5FJNrf1YT/+Hqbi2be3PRrb7RQy+WOUBCkQTUnASJ25eOBmuGqPob1DGheEYENS3peA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6579
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds basic DT for Microchip lan966x SoC and associated board
-pcb8291(2-port EVB). Adds peripherals required to allow booting: Interrupt
-Controller, Clock, Generic ARMv7 Timers, Synopsys Timer, Flexcoms, GPIOs.
-Also adds other peripherals like crypto(AES/SHA), DMA, Watchdog Timer, TRNG
-and MCAN0.
+Hi Wang,
 
-Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
----
-v3 -> v4:
-- Removed character 'x' from compatible string.
-- Removed memory node as handled by bootloader.
-- Renamed flexcom3 usart0 to usart3
-- Added /chosen and /aliases nodes in dts file.
+On Wed, Feb 09, 2022 at 12:39:02AM -0800, Qing Wang wrote:
+> From: Wang Qing <wangqing@vivo.com>
+>=20
+> do_div() does a 64-by-32 division.
+> When the divisor is u64, do_div() truncates it to 32 bits, this means it
+> can test non-zero and be truncated to zero for division.
+>=20
+> fix do_div.cocci warning:
+> do_div() does a 64-by-32 division, please consider using div64_u64 instea=
+d.
+>=20
+> Signed-off-by: Wang Qing <wangqing@vivo.com>
+> ---
+>  drivers/net/dsa/ocelot/felix_vsc9959.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/dsa/ocelot/felix_vsc9959.c b/drivers/net/dsa/oce=
+lot/felix_vsc9959.c
+> index bf8d382..5c2482f
+> --- a/drivers/net/dsa/ocelot/felix_vsc9959.c
+> +++ b/drivers/net/dsa/ocelot/felix_vsc9959.c
+> @@ -1178,7 +1178,7 @@ static void vsc9959_new_base_time(struct ocelot *oc=
+elot, ktime_t base_time,
+>  	if (base_time < current_time) {
+>  		u64 nr_of_cycles =3D current_time - base_time;
+> =20
+> -		do_div(nr_of_cycles, cycle_time);
+> +		div64_u64(nr_of_cycles, cycle_time);
+>  		new_base_time +=3D cycle_time * (nr_of_cycles + 1);
+>  	}
+> =20
+> --=20
+> 2.7.4
+>
 
-v2 -> v3:
-- Enabling trng in dtsi itself.
-- Removed "status=okay" dma0.
-- Add gpio pin settings for can0(missed adding this in previous version)
+I would prefer that you teach your scripts that, if a range check exists
+for the divisor prior to the division, it gets taken into consideration.
 
-v1 -> v2:
-- Moved flx3 usart0 node to dtsi file.
-- Removed status="okay" for dma0 to maintain consistency across nodes
-  (which means enabling dma0 by default)
+vsc9959_qos_port_tas_set:
 
- arch/arm/boot/dts/Makefile            |   2 +
- arch/arm/boot/dts/lan966x.dtsi        | 237 ++++++++++++++++++++++++++
- arch/arm/boot/dts/lan966x_pcb8291.dts |  61 +++++++
- 3 files changed, 300 insertions(+)
- create mode 100644 arch/arm/boot/dts/lan966x.dtsi
- create mode 100644 arch/arm/boot/dts/lan966x_pcb8291.dts
+	if (taprio->cycle_time > NSEC_PER_SEC ||
+	    taprio->cycle_time_extension >=3D NSEC_PER_SEC)
+		return -EINVAL;
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 235ad559acb2..2040a990f08c 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -735,6 +735,8 @@ dtb-$(CONFIG_SOC_IMX7D) += \
- dtb-$(CONFIG_SOC_IMX7ULP) += \
- 	imx7ulp-com.dtb \
- 	imx7ulp-evk.dtb
-+dtb-$(CONFIG_SOC_LAN966) += \
-+	lan966x_pcb8291.dtb
- dtb-$(CONFIG_SOC_LS1021A) += \
- 	ls1021a-moxa-uc-8410a.dtb \
- 	ls1021a-qds.dtb \
-diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-new file mode 100644
-index 000000000000..91ee9e0684f4
---- /dev/null
-+++ b/arch/arm/boot/dts/lan966x.dtsi
-@@ -0,0 +1,237 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * lan966x.dtsi - Device Tree Include file for Microchip LAN966 family SoC
-+ *
-+ * Copyright (C) 2021 Microchip Technology, Inc. and its subsidiaries
-+ *
-+ * Author: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-+ *
-+ */
-+
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/mfd/atmel-flexcom.h>
-+#include <dt-bindings/dma/at91.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/clock/microchip,lan966x.h>
-+
-+/ {
-+	model = "Microchip LAN966 family SoC";
-+	compatible = "microchip,lan966";
-+	interrupt-parent = <&gic>;
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a7";
-+			clock-frequency = <600000000>;
-+			reg = <0x0>;
-+		};
-+	};
-+
-+	clocks {
-+		sys_clk: sys_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <162500000>;
-+		};
-+
-+		cpu_clk: cpu_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <600000000>;
-+		};
-+
-+		ddr_clk: ddr_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <300000000>;
-+		};
-+
-+		nic_clk: nic_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <200000000>;
-+		};
-+	};
-+
-+	clks: clock-controller@e00c00a8 {
-+		compatible = "microchip,lan966x-gck";
-+		#clock-cells = <1>;
-+		clocks = <&cpu_clk>, <&ddr_clk>, <&sys_clk>;
-+		clock-names = "cpu", "ddr", "sys";
-+		reg = <0xe00c00a8 0x38>;
-+	};
-+
-+	timer {
-+		compatible = "arm,armv7-timer";
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
-+		clock-frequency = <37500000>;
-+		arm,cpu-registers-not-fw-configured;
-+	};
-+
-+	soc {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		flx0: flexcom@e0040000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0040000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM0>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0040000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		flx1: flexcom@e0044000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0044000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM1>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0044000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		trng: trng@e0048000 {
-+			compatible = "atmel,at91sam9g45-trng";
-+			reg = <0xe0048000 0x100>;
-+			clocks = <&nic_clk>;
-+		};
-+
-+		aes: aes@e004c000 {
-+			compatible = "atmel,at91sam9g46-aes";
-+			reg = <0xe004c000 0x100>;
-+			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&dma0 AT91_XDMAC_DT_PERID(13)>,
-+			       <&dma0 AT91_XDMAC_DT_PERID(12)>;
-+			dma-names = "rx", "tx";
-+			clocks = <&nic_clk>;
-+			clock-names = "aes_clk";
-+		};
-+
-+		flx2: flexcom@e0060000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0060000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM2>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0060000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		flx3: flexcom@e0064000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0064000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM3>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0064000 0x800>;
-+			status = "disabled";
-+
-+			usart3: serial@200 {
-+				compatible = "atmel,at91sam9260-usart";
-+				reg = <0x200 0x200>;
-+				interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&nic_clk>;
-+				clock-names = "usart";
-+				atmel,fifo-size = <32>;
-+				status = "disabled";
-+			};
-+		};
-+
-+		dma0: dma-controller@e0068000 {
-+			compatible = "microchip,sama7g5-dma";
-+			reg = <0xe0068000 0x1000>;
-+			interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
-+			#dma-cells = <1>;
-+			clocks = <&nic_clk>;
-+			clock-names = "dma_clk";
-+		};
-+
-+		sha: sha@e006c000 {
-+			compatible = "atmel,at91sam9g46-sha";
-+			reg = <0xe006c000 0xec>;
-+			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&dma0 AT91_XDMAC_DT_PERID(14)>;
-+			dma-names = "tx";
-+			clocks = <&nic_clk>;
-+			clock-names = "sha_clk";
-+		};
-+
-+		flx4: flexcom@e0070000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0070000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM4>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0070000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		timer0: timer@e008c000 {
-+			compatible = "snps,dw-apb-timer";
-+			reg = <0xe008c000 0x400>;
-+			clocks = <&nic_clk>;
-+			clock-names = "timer";
-+			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-+		};
-+
-+		watchdog: watchdog@e0090000 {
-+			compatible = "snps,dw-wdt";
-+			reg = <0xe0090000 0x1000>;
-+			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&nic_clk>;
-+		};
-+
-+		can0: can@e081c000 {
-+			compatible = "bosch,m_can";
-+			reg = <0xe081c000 0xfc>, <0x00100000 0x4000>;
-+			reg-names = "m_can", "message_ram";
-+			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "int0", "int1";
-+			clocks = <&clks GCK_ID_MCAN0>, <&clks GCK_ID_MCAN0>;
-+			clock-names = "hclk", "cclk";
-+			assigned-clocks = <&clks GCK_ID_MCAN0>;
-+			assigned-clock-rates = <40000000>;
-+			bosch,mram-cfg = <0x0 0 0 64 0 0 32 32>;
-+			status = "disabled";
-+		};
-+
-+		gpio: pinctrl@e2004064 {
-+			compatible = "microchip,lan966x-pinctrl";
-+			reg = <0xe2004064 0xb4>,
-+			    <0xe2010024 0x138>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			gpio-ranges = <&gpio 0 0 78>;
-+			interrupt-controller;
-+			interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gic: interrupt-controller@e8c11000 {
-+			compatible = "arm,gic-400", "arm,cortex-a7-gic";
-+			#interrupt-cells = <3>;
-+			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-controller;
-+			reg = <0xe8c11000 0x1000>,
-+			      <0xe8c12000 0x2000>,
-+			      <0xe8c14000 0x2000>,
-+			      <0xe8c16000 0x2000>;
-+		};
-+	};
-+};
-diff --git a/arch/arm/boot/dts/lan966x_pcb8291.dts b/arch/arm/boot/dts/lan966x_pcb8291.dts
-new file mode 100644
-index 000000000000..ccec4177990b
---- /dev/null
-+++ b/arch/arm/boot/dts/lan966x_pcb8291.dts
-@@ -0,0 +1,61 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * lan966x_pcb8291.dts - Device Tree file for PCB8291
-+ */
-+/dts-v1/;
-+#include "lan966x.dtsi"
-+
-+/ {
-+	model = "Microchip EVB - LAN9662";
-+	compatible = "microchip,lan9662-pcb8291", "microchip,lan9662", "microchip,lan966";
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	aliases {
-+		serial0 = &usart3;
-+	};
-+};
-+
-+&gpio {
-+	fc_shrd7_pins: fc_shrd7-pins {
-+		pins = "GPIO_49";
-+		function = "fc_shrd7";
-+	};
-+
-+	fc_shrd8_pins: fc_shrd8-pins {
-+		pins = "GPIO_54";
-+		function = "fc_shrd8";
-+	};
-+
-+	fc3_b_pins: fcb3-spi-pins {
-+		/* SCK, RXD, TXD */
-+		pins = "GPIO_51", "GPIO_52", "GPIO_53";
-+		function = "fc3_b";
-+	};
-+
-+	can0_b_pins:  can0_b_pins {
-+		/* RX, TX */
-+		pins = "GPIO_35", "GPIO_36";
-+		function = "can0_b";
-+	};
-+};
-+
-+&can0 {
-+	pinctrl-0 = <&can0_b_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
-+&flx3 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
-+	status = "okay";
-+
-+	usart3: serial@200 {
-+		pinctrl-0 = <&fc3_b_pins>, <&fc_shrd7_pins>, <&fc_shrd8_pins>;
-+		pinctrl-names = "default";
-+		status = "okay";
-+	};
-+};
-+
--- 
-2.17.1
+	vsc9959_new_base_time(ocelot, taprio->base_time,
+			      taprio->cycle_time, &base_ts);
 
+vsc9959_psfp_sgi_set:
+
+	if (sgi->cycletime < VSC9959_PSFP_GATE_CYCLETIME_MIN ||
+	    sgi->cycletime > NSEC_PER_SEC)
+		return -EINVAL;
+
+	vsc9959_new_base_time(ocelot, sgi->basetime, sgi->cycletime, &base_ts);
+
+So all callers provide a cycle_time argument that is smaller than
+NSEC_PER_SEC (1000000000L =3D 0x3B9ACA00 =3D> fits on 32 bits).=

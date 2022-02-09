@@ -2,71 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4941E4AF342
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:51:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 304A84AF35F
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233783AbiBINu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 08:50:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45070 "EHLO
+        id S232776AbiBINyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 08:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231434AbiBINun (ORCPT
+        with ESMTP id S229626AbiBINyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 08:50:43 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D3CC0613CA
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 05:50:44 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id f17so5278084edd.2
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 05:50:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=u4O6YDr2GYnMJAOGS//qz1G+lQenlLtONaljw5Vbcrs=;
-        b=g/8I6ANlQ79U7OmGnRYKcAZc5kJddRllSYK6UXSq769HHqQnEsj2LcnDYJJcczRN9M
-         WX/aUtVY7UWRqsmHyRubX2dCoWtWFd9HJMD8479oN3nU8aeu1UfKUULj1l5DeUbVnj+R
-         GhwcLYI/jVNSrv6iaCDoGonoPkjT4ekMp5TucgRYp7avkDbmCDvPF5YfsfX5TeQ19AdK
-         me9T30g8Z4AarJ7zrkIqoQ6kA5za/c9rCBWxdtBT2Vkmf+p6kG5D2NN57Q3IDQSvzbRZ
-         50KZNxHaFhwPIiXPGttI0oTyk6qGNI6EwqILbA63iQBXS0Dl25u+H70OfMWZAzlBLlHe
-         EH0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=u4O6YDr2GYnMJAOGS//qz1G+lQenlLtONaljw5Vbcrs=;
-        b=adQjS0GioVXKvpMo2DZK217f0rgf6Gcajk5toCspnbRlBqy0Y49F4N0nfqym83QP/T
-         LPoGl48vl0AcQHy4JZth9h/NorUxKCzkKmyaHVmK2Hxt564N59PuG7OTA6xSK3xJ6z1J
-         eZdM5/juAfEsE1ieLa0ilCRJk73CBC8AAyLS98hZjr/uD9kyl5CFdlKaLRi7Hb+Vkwvi
-         aTDtLPS7tzM1EE8mblNOaaxyMTiJJTzSgi+2tWqJd7mps4q/kRLf/SiNi/DeJo6qHzO/
-         QcqD6b/gjhsJ+ckMekVniOekN6W9sB4Ubz3QUPECcBiYY8w5IyPAIyKSvDiUgm4zb3JZ
-         9SCQ==
-X-Gm-Message-State: AOAM533tJl3WvJtBYsbUSeKu2Z+BlR3WH68OCgdrKvj7PlmB8Zs56nNe
-        jAoZqhEp31HEq6psAO3p7P+Q5q3w4rlofpzOqCYphw==
-X-Google-Smtp-Source: ABdhPJyjynC2UlXBbSUdn7lYTwhCn0Y0guBYR9VrT7x0IbCfp9Oo0aHUIXx/PVv7rk5pc6AxpqjBR3GdXRo/PAkcQpA=
-X-Received: by 2002:aa7:df1a:: with SMTP id c26mr2599205edy.416.1644414643289;
- Wed, 09 Feb 2022 05:50:43 -0800 (PST)
-MIME-Version: 1.0
-References: <CAK8P3a22ntk5fTuk6xjh1pyS-eVbGo7zDQSVkn2VG1xgp01D9g@mail.gmail.com>
- <20220117132757.1881981-1-arnd@kernel.org>
-In-Reply-To: <20220117132757.1881981-1-arnd@kernel.org>
-From:   Michal Simek <monstr@monstr.eu>
-Date:   Wed, 9 Feb 2022 14:50:32 +0100
-Message-ID: <CAHTX3dKyAha8_nu=7e413pKr+SAaPBLp9=FTdQ=GZNdjQHW+zA@mail.gmail.com>
-Subject: Re: [PATCH] microblaze: remove CONFIG_SET_FS
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>, ebiederm@xmission.com,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 9 Feb 2022 08:54:12 -0500
+X-Greylist: delayed 154 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 05:54:14 PST
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94840C05CB88;
+        Wed,  9 Feb 2022 05:54:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1644414674;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=jA//raiEAQNJt49nn2RrsPVb29dWMlgBK10K+Ak3DxA=;
+    b=d6KPdwgPmdMsAhpKpVRJBy9e3u6cVVqGChNYv8v37GPaAuHoW0wuePBR6cxqAFQtss
+    Hpfeh+ldKDl3hY0b/kv8GvRNxH1/qtc43nMm5wPj3UjMlOhsy0C5B6fKM6acZ/trBjp3
+    dSapsDtabozCAsXYnzxXoiQ5ZNNA2xBamzAYiqQ1KS4ApYZ4SGikXKYhpaS5Wj+F/vDX
+    owxbDn2SbWxIECVdvKaYCYkbXKxz9cOf++A8DMOK7i5v2PA0m1pnyjtEV0LphhjOmJYZ
+    iVZGOTa/v19A6oYrJygxt2qlOIeAkrkzmV59thD6IgmgNOJIQYHnfida6KmKn3o7LOgm
+    jKvQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3iMYawg=="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.39.0 DYNA|AUTH)
+    with ESMTPSA id L29417y19DpCguK
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Wed, 9 Feb 2022 14:51:12 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v13 0/9] MIPS: JZ4780 and CI20 HDMI
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <9ZC17R.T1L0TBAW7MJA3@crapouillou.net>
+Date:   Wed, 9 Feb 2022 14:51:12 +0100
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Message-Id: <4294A500-52EB-4319-9B89-F9DAC48EBF03@goldelico.com>
+References: <cover.1643819482.git.hns@goldelico.com>
+ <9ZC17R.T1L0TBAW7MJA3@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,30 +86,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+Paul,
 
-po 17. 1. 2022 v 14:28 odes=C3=ADlatel Arnd Bergmann <arnd@kernel.org> naps=
-al:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> I picked microblaze as one of the architectures that still
-> use set_fs() and converted it not to.
+> Am 09.02.2022 um 12:52 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+> Hi Nikolaus,
+>=20
+> I tried applying patches 1-2, but they don't apply cleanly on top of =
+drm-misc/drm-misc-next.
 
-Can you please update the commit message because what is above is not
-the right one?
+Ok I had rebased to linux-next some days ago and it appears that patch =
+1/9 has now arrived in drm-misc/drm-misc-next.
+So we can drop 1/9.
 
-I can't see any issue with the patch when I run it on real HW.
-Tested-by: Michal Simek <michal.simek@xilinx.com>
+>=20
+> Could you rebase on top of that tree?
 
-Christoph: Is there any recommended test suite which I should run?
+Sure.
 
-Thanks,
-Michal
+Unfortunatley my v14 breaks the display again. It is not much fun to =
+develop on top of such a moving target...
+So I have to find out first what was broken this time before I can send =
+out a new version.
 
---=20
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
+BR,
+Nikolaus=

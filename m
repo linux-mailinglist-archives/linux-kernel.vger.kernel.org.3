@@ -2,97 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 332FA4AF293
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:23:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 173F84AF299
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 14:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbiBINXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 08:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
+        id S232216AbiBINYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 08:24:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiBINXH (ORCPT
+        with ESMTP id S229549AbiBINYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 08:23:07 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4848CC0613C9;
-        Wed,  9 Feb 2022 05:23:07 -0800 (PST)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 219Cu4du012771;
-        Wed, 9 Feb 2022 13:23:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type :
- content-transfer-encoding; s=corp-2021-07-09;
- bh=S4YYOkQ4fl0IMwCXm+ixjvF26D+n6s3iBtWeasMFIC8=;
- b=EDFPXeMJua5blaJgbeMbkRYd59PVcBWlMWJTvLMPiBLJRt0IYrRwhTx+3+hm5MJYqDYP
- t7LFwsNDfqF82Ve7uMYI5yOlpLWdvm44NISb7pQGUv79FNAiyiXywKG9HKgmuJoQmNzl
- 6x0p0lju/+w6rjYQHc335u6lKjXgp3/ZUs1T5pR8RjtqX2gdxRow6lOJdJAkHqB/fz3L
- tefP+4sdzPXlMmQeKR890mm1MCKWcw4Karuy0Lo9LuPKWLeMV9lD41tfJB8qV9SsDs/R
- 2utYp7IUAoaZAVxWBt87Lqyi+9YSVgtZWTA5TwFAwUopYdHLBk7L5uFpZIVguKT+kkeB kQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e3fpgmq9u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 09 Feb 2022 13:23:04 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 219DLrqH040268;
-        Wed, 9 Feb 2022 13:23:03 GMT
-Received: from lab02.no.oracle.com (lab02.no.oracle.com [10.172.144.56])
-        by userp3030.oracle.com with ESMTP id 3e1ec2gjex-1;
-        Wed, 09 Feb 2022 13:23:02 +0000
-From:   =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH for-rc] IB/cma: Allow XRG INI QPs to set their local ACK timeout
-Date:   Wed,  9 Feb 2022 14:23:00 +0100
-Message-Id: <1644412980-28424-1-git-send-email-haakon.bugge@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
+        Wed, 9 Feb 2022 08:24:20 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1A6C0613CA;
+        Wed,  9 Feb 2022 05:24:22 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 219DOE9a021345;
+        Wed, 9 Feb 2022 07:24:14 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1644413054;
+        bh=IPZn5s6h06YQJiWN8ESgTEq+LTBA3K3eNtW4abfS4ZU=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=liRLtWTqQF/0tBWIiJjrukiVL9oylZBM8U//c9DpGlWmYUWpn1ha6pCCVOcqCo6LQ
+         5JiUAZGLop/WEVzvljDynBEGovN3voVVr70pVAqXHxmL4MroktVBFhp3o0rbdUIZ4m
+         EJE+snAUZ1D3Hp98dafdJDo5nfuShar/f9VqUefA=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 219DOEUh078755
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 9 Feb 2022 07:24:14 -0600
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 9
+ Feb 2022 07:24:13 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 9 Feb 2022 07:24:13 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 219DODAY100226;
+        Wed, 9 Feb 2022 07:24:13 -0600
+Date:   Wed, 9 Feb 2022 07:24:13 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Hari Nagalla <hnagalla@ti.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <vigneshr@ti.com>, <robh+dt@kernel.org>
+Subject: Re: [PATCH] arm64: dts: ti: k3-am64: Add ESM0 to device memory map
+Message-ID: <20220209132413.u5staibdmxegrxul@outfit>
+References: <20220208182119.24707-1-hnagalla@ti.com>
+ <20220209003519.clokfvln7m2deewi@buddhism>
+ <c29de523-021a-d139-17ca-3ba8884e50ce@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10252 signatures=673431
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 suspectscore=0
- mlxlogscore=999 mlxscore=0 adultscore=0 malwarescore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202090078
-X-Proofpoint-GUID: 5943nysLV3fRhnn84zxkIHNi3HbfHIVC
-X-Proofpoint-ORIG-GUID: 5943nysLV3fRhnn84zxkIHNi3HbfHIVC
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <c29de523-021a-d139-17ca-3ba8884e50ce@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-XRC INI QPs should be able to adjust their local ACK timeout.
+On 19:18-20220208, Hari Nagalla wrote:
+> On 2/8/22 18:35, Nishanth Menon wrote:
+> > > AM64x SoCs have two ESM modules, with one in MAIN voltage domain and the
+> > > other in MCU voltage domain. The error output from Main ESM module can
+> > > be routed to the MCU ESM module. The error output of MCU ESM can be
+> > > configured to reset the device.
+> > So what happens to the window for MCU ESM - Is that already open?
+> > 
+> Yes, the cbass mcu window already opens MCU ESM address space.
 
-Fixes: 2c1619edef61 ("IB/cma: Define option to set ack timeout and pack tos_set")
-Signed-off-by: Håkon Bugge <haakon.bugge@oracle.com>
-Suggested-by: Avneesh Pant <avneesh.pant@oracle.com>
+Please add that in the comments to making sure there is no confusion.
 
----
+> 
+> I will loop in LAKML as well..
 
-To avoid excessive discussions around the *if (WARN_ON( ...*
-construct, just saying that it has been sanctioned by Jason here:
-
-https://lore.kernel.org/linux-rdma/20210413135120.GT7405@nvidia.com/
----
- drivers/infiniband/core/cma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
-index 0f5f0d7..006ea9c 100644
---- a/drivers/infiniband/core/cma.c
-+++ b/drivers/infiniband/core/cma.c
-@@ -2811,7 +2811,7 @@ int rdma_set_ack_timeout(struct rdma_cm_id *id, u8 timeout)
- {
- 	struct rdma_id_private *id_priv;
- 
--	if (id->qp_type != IB_QPT_RC)
-+	if (WARN_ON(id->qp_type != IB_QPT_RC && id->qp_type != IB_QPT_XRC_INI))
- 		return -EINVAL;
- 
- 	id_priv = container_of(id, struct rdma_id_private, id);
+Thanks.
 -- 
-1.8.3.1
-
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

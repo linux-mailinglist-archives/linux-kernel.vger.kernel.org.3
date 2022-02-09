@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F7E4AF018
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 12:50:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1C94AF01B
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 12:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbiBILtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 06:49:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
+        id S231153AbiBILuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 06:50:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiBILtl (ORCPT
+        with ESMTP id S229703AbiBILuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 06:49:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075ADE02F561;
-        Wed,  9 Feb 2022 02:40:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B92E3B81FFC;
-        Wed,  9 Feb 2022 10:40:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46CE2C340E7;
-        Wed,  9 Feb 2022 10:40:26 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="TqiZKN/E"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644403224;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zh5HpvjKWOfnveAnt+GML5+YDo8XUouZTQHIes+rbNs=;
-        b=TqiZKN/EQoQ7X90ygxp2u7YhkBGRfTTJER1FxG8wEnjP1Du853iJEIQ2sBfuxiW21eNhzD
-        9nG/wj6QbQHQ5IKbtXlRB9jYWibjFOu0al2lggrVDQ/2fwvFSlEPVA1ZQLIjSuOwE7oGsh
-        eRMn5WXnE3kOuanMQ5h7lTtgUD2TdB4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0aab5556 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 9 Feb 2022 10:40:24 +0000 (UTC)
-Received: by mail-yb1-f169.google.com with SMTP id m6so4543942ybc.9;
-        Wed, 09 Feb 2022 02:40:23 -0800 (PST)
-X-Gm-Message-State: AOAM5308qwPVKp7oR9blfDanbJ448xzQWxAj/frowEAD3uxBB3RVPBQu
-        h0++nSu7TUJGe1qUi8WwfPpEu5OEDU6PDsWMmek=
-X-Google-Smtp-Source: ABdhPJzGiryrzES33UPJu6XIQhFG6lg5JyIl+5a1pqI90VUc7HNl3tTdbtmDEiR+5ntmatn5L2oGOoZw90B1NDpWoRQ=
-X-Received: by 2002:a25:ba49:: with SMTP id z9mr1432385ybj.32.1644403222965;
- Wed, 09 Feb 2022 02:40:22 -0800 (PST)
-MIME-Version: 1.0
-References: <20220209011919.493762-1-Jason@zx2c4.com> <20220209011919.493762-6-Jason@zx2c4.com>
- <YgN7OKSJRNZNxuGm@owl.dominikbrodowski.net>
-In-Reply-To: <YgN7OKSJRNZNxuGm@owl.dominikbrodowski.net>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 9 Feb 2022 11:40:12 +0100
-X-Gmail-Original-Message-ID: <CAHmME9oZ2xLT-vX=7H0U8uBO4Z=pcMcu-CY-B=TpTdGWHp0pJA@mail.gmail.com>
-Message-ID: <CAHmME9oZ2xLT-vX=7H0U8uBO4Z=pcMcu-CY-B=TpTdGWHp0pJA@mail.gmail.com>
-Subject: Re: [PATCH v2 5/9] random: do not xor RDRAND when writing into /dev/random
-To:     Dominik Brodowski <linux@dominikbrodowski.net>
-Cc:     Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Biggers <ebiggers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Wed, 9 Feb 2022 06:50:17 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A309E01C885;
+        Wed,  9 Feb 2022 02:40:53 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id r64-20020a17090a43c600b001b8854e682eso1873363pjg.0;
+        Wed, 09 Feb 2022 02:40:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=F4dvlEAApq4sbNi12hDnWabgWkGNsJts8xnpPYqukvU=;
+        b=UXGDXsRlds35agIJYEneaEhMi0hvXSjblyL2c7Q0UBkC0yZVKHqdxrIVLozRIiOBJh
+         8xR1PvUU0j1jXV5ubvhkLpdkSKoiSsP1pjwv8nFnCzPB2z9ZqfVqAbnglkFrNhxMZuUC
+         ayHIyEBZNZP6s7WaW2T4Ksl9D5x4rLY6Zn3t8TWbWb6Ux97ATYmgEd9ydcTcukEdKUOW
+         KEwvl0x6bFw2X4d8Ls9es/JIwvzFQTnA1UDQHuRzwBZV4H/qrAPQYAi9JGo+aautVcr6
+         gGaC0qxdMTbeaOxGPO85HiwhfMaBHrQF8eOnt/hrNTvp+kVv/A5FWHQzPWtSDkvXtMvg
+         9OjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=F4dvlEAApq4sbNi12hDnWabgWkGNsJts8xnpPYqukvU=;
+        b=ykURN8qmOzeiwll+ihIdn7QnOczkx2ctKP3nBtPXkLD1g+l/gW1LYxHROLRf9IQC7u
+         90w2ROQOJv9L7mvH79Yrly2xk1uKafiWv3QC3/X8gQu1MoxcXfn7AoaSjpY5CG4ZKX8V
+         HsJknqXBUgK4M30Ocw8GchFs/LIfAn7cQ0iC7coBPy2QoVnrPnNhVACnyBcXXK0NRBzC
+         lUGt11eovtlFjxTvp2CHFec3BVLXXM9BU65azOCnrgfjeHEyjyT+yiP4aT0yBqCkYgj4
+         MxkK3bIUMG23ijBml3ANqf0JSVlbG5uVPwQ4WSECcFwqInODC2ky5WFgJH/9nb9FlhCd
+         n7Wg==
+X-Gm-Message-State: AOAM530MrLPmyQQtj5pNjwPrzjFwzwohBKI6Fq3N2O9ULWO+l0sx9ZRb
+        BNiSgWEGs0ZIrOPhrc9VfE4=
+X-Google-Smtp-Source: ABdhPJwrmxUIij4bx8V1Fn58ivpmEEghm+3Hhi0wmRYMhN+PA/z942ewyGvb7a+r+hZcZI57RbZb7g==
+X-Received: by 2002:a17:90b:3cf:: with SMTP id go15mr1773859pjb.223.1644403252689;
+        Wed, 09 Feb 2022 02:40:52 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id m23sm18223272pff.201.2022.02.09.02.40.50
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 09 Feb 2022 02:40:52 -0800 (PST)
+From:   Tony Huang <tonyhuang.sunplus@gmail.com>
+To:     ulf.hansson@linaro.org, robh+dt@kernel.org, lhjeff911@gmail.com,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        tony.huang@sunplus.com, wells.lu@sunplus.com, lh.kuo@sunplus.com
+Cc:     Tony Huang <tonyhuang.sunplus@gmail.com>
+Subject: [PATCH v3 0/2] Add mmc driver for Sunplus SP7021 SOC
+Date:   Wed,  9 Feb 2022 18:41:05 +0800
+Message-Id: <cover.1644398657.git.tonyhuang.sunplus@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,17 +66,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 9:31 AM Dominik Brodowski
-<linux@dominikbrodowski.net> wrote:
-> Looks good generally, just one unrelated change slipped in:
->
-> >               bytes = min(count, sizeof(buf));
-> > -             if (copy_from_user(&buf, p, bytes))
-> > +             if (copy_from_user(buf, p, bytes))
-> >                       return -EFAULT;
+This is a patch series for mmc driver for Sunplus SP7021 SOC.
 
-I'll often fix up very minor adjacent code style things. In this case,
-`buf` is an array, so the code is equivalent, but I prefer the latter,
-which is mostly what's used throughout the driver.
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
 
-Jason
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
+
+Tony Huang (2):
+  dt-binding: mmc: Add mmc yaml file for Sunplus SP7021
+  mmc: Add mmc driver for Sunplus SP7021
+
+ .../devicetree/bindings/mmc/sunplus-mmc.yaml       |   76 +
+ MAINTAINERS                                        |    7 +
+ drivers/mmc/host/Kconfig                           |    9 +
+ drivers/mmc/host/Makefile                          |    1 +
+ drivers/mmc/host/sunplus_mmc.c                     | 2168 ++++++++++++++++++++
+ 5 files changed, 2261 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mmc/sunplus-mmc.yaml
+ create mode 100644 drivers/mmc/host/sunplus_mmc.c
+
+-- 
+2.7.4
+

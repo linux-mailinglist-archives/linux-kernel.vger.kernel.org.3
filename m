@@ -2,118 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4B64AF587
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD684AF584
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 16:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236106AbiBIPjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 10:39:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53856 "EHLO
+        id S236078AbiBIPjL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 9 Feb 2022 10:39:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235864AbiBIPjJ (ORCPT
+        with ESMTP id S236077AbiBIPjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 10:39:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44804C05CB86;
-        Wed,  9 Feb 2022 07:39:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D289A61668;
-        Wed,  9 Feb 2022 15:39:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45C5AC36AE3;
-        Wed,  9 Feb 2022 15:39:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644421151;
-        bh=Dt/0zvIMo6USyC1wtMp2YLZZQY4k2sJ437QqqRW8tyk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=EKm1b0r5/QpGDqtupZOkYHbnvqcPqrPGA3zbEJhi5DxcXhWqMV2kDPjcwdSK3LLO8
-         eJ1mmOy1WFJYlufnvl8lZ05G9wtvDYqRj+Q57W/LHrcKew0qnrUQj1nxK/ZIgpKDZg
-         8Ypt1+1T/vYMCtkjqB1o4cTdTnW69MgameeY4z840Z4+ID9jvVc5H8zpy+5OIugyz6
-         vzJC4DKG4liEKJ5zsWFOxLmwcbxnNjX0VmCdbV3e1Z92yhRsyuEnSbJ9zsAVEdCKMy
-         XqsQU3JRnMTeoPe5I5ZJnkOGot6WJG0jiGYPbaUTOceg9PHIJKjM2btbXCc9cKBXs0
-         iJJiHBfLPfE0g==
-Received: by mail-ed1-f46.google.com with SMTP id cf2so5853985edb.9;
-        Wed, 09 Feb 2022 07:39:11 -0800 (PST)
-X-Gm-Message-State: AOAM5302WaRpQK/iOwI3G2oBWwsQ9k15BZnb3fp0o2ZaHPsNw8o5O2mK
-        FXigpSadshjm/vxEhMKeIREhLGzAlCDVLlohcA==
-X-Google-Smtp-Source: ABdhPJx+fr9fqoaO70e2OTG9XC57XY16GD5sYWt0hhPHAgnNaxh7uHZG12kKxpJrkEa5Xt3/3Q9Jg5mxXBjEM7bVXMs=
-X-Received: by 2002:a05:6402:1e8b:: with SMTP id f11mr3208189edf.322.1644421149527;
- Wed, 09 Feb 2022 07:39:09 -0800 (PST)
+        Wed, 9 Feb 2022 10:39:05 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF794C0612BE
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 07:39:07 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-266-CLFZHHFuMYWxCblHNniABg-1; Wed, 09 Feb 2022 15:39:04 +0000
+X-MC-Unique: CLFZHHFuMYWxCblHNniABg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Wed, 9 Feb 2022 15:39:02 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Wed, 9 Feb 2022 15:39:02 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Aditya Garg' <gargaditya08@live.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        "joeyli.kernel@gmail.com" <joeyli.kernel@gmail.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "eric.snowberg@oracle.com" <eric.snowberg@oracle.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "jlee@suse.com" <jlee@suse.com>,
+        "James.Bottomley@hansenpartnership.com" 
+        <James.Bottomley@HansenPartnership.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "mic@digikod.net" <mic@digikod.net>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>
+Subject: RE: [PATCH] efi: Do not import certificates from UEFI Secure Boot for
+ T2 Macs
+Thread-Topic: [PATCH] efi: Do not import certificates from UEFI Secure Boot
+ for T2 Macs
+Thread-Index: AQHYHcE4Urimp9LpDkeI7ezkgv1YDayLWeDg
+Date:   Wed, 9 Feb 2022 15:39:02 +0000
+Message-ID: <755cffe1dfaf43ea87cfeea124160fe0@AcuMS.aculab.com>
+References: <9D0C961D-9999-4C41-A44B-22FEAF0DAB7F@live.com>
+In-Reply-To: <9D0C961D-9999-4C41-A44B-22FEAF0DAB7F@live.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20220209081025.2178435-1-o.rempel@pengutronix.de>
- <20220209081025.2178435-3-o.rempel@pengutronix.de> <1644420908.431570.391820.nullmailer@robh.at.kernel.org>
-In-Reply-To: <1644420908.431570.391820.nullmailer@robh.at.kernel.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 9 Feb 2022 09:38:57 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL1AAMq4u3Ruj2d5AUe-JnP8FDp8bUE0KcY_8fusxC9dg@mail.gmail.com>
-Message-ID: <CAL_JsqL1AAMq4u3Ruj2d5AUe-JnP8FDp8bUE0KcY_8fusxC9dg@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 2/2] dt-bindings: net: add schema for
- Microchip/SMSC LAN95xx USB Ethernet controllers
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     netdev <netdev@vger.kernel.org>, devicetree@vger.kernel.org,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 9:35 AM Rob Herring <robh@kernel.org> wrote:
->
-> On Wed, 09 Feb 2022 09:10:25 +0100, Oleksij Rempel wrote:
-> > Create initial schema for Microchip/SMSC LAN95xx USB Ethernet controllers and
-> > import all currently supported USB IDs form drivers/net/usb/smsc95xx.c
-> >
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > ---
-> >  .../bindings/net/microchip,lan95xx.yaml       | 80 +++++++++++++++++++
-> >  1 file changed, 80 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
-> >
->
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
->
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
->
-> Full log is available here: https://patchwork.ozlabs.org/patch/1590223
->
->
-> smsc@2: $nodename:0: 'smsc@2' does not match '^ethernet(@.*)?$'
->         arch/arm/boot/dts/tegra30-ouya.dt.yaml
->
-> usbether@1: $nodename:0: 'usbether@1' does not match '^ethernet(@.*)?$'
->         arch/arm64/boot/dts/broadcom/bcm2837-rpi-3-b.dt.yaml
->         arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dt.yaml
->         arch/arm/boot/dts/bcm2835-rpi-b.dt.yaml
->         arch/arm/boot/dts/bcm2835-rpi-b-plus.dt.yaml
->         arch/arm/boot/dts/bcm2835-rpi-b-rev2.dt.yaml
->         arch/arm/boot/dts/bcm2836-rpi-2-b.dt.yaml
->         arch/arm/boot/dts/bcm2837-rpi-3-b.dt.yaml
->         arch/arm/boot/dts/omap3-beagle-xm-ab.dt.yaml
->         arch/arm/boot/dts/omap3-beagle-xm.dt.yaml
->         arch/arm/boot/dts/omap4-panda-a4.dt.yaml
->         arch/arm/boot/dts/omap4-panda.dt.yaml
->         arch/arm/boot/dts/omap4-panda-es.dt.yaml
->
-> usbether@3: $nodename:0: 'usbether@3' does not match '^ethernet(@.*)?$'
->         arch/arm/boot/dts/omap5-uevm.dt.yaml
+From: Aditya Garg
+> Sent: 09 February 2022 14:28
+> 
+> On T2 Macs, the secure boot is handled by the T2 Chip. If enabled, only
+> macOS and Windows are allowed to boot on these machines. Thus we need to
+> disable secure boot for Linux. If we boot into Linux after disabling
+> secure boot, if CONFIG_LOAD_UEFI_KEYS is enabled, EFI Runtime services
+> fail to start, with the following logs in dmesg
+> 
+..
+> +static const struct dmi_system_id uefi_apple_ignore[] = {
+> +	{
+> +		 .matches = {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro15,1"),
+> +		},
 
-So this binding is already in use, but was undocumented? Or did you
-forget to remove the .txt file? The commit message should highlight
-all this.
+I think I'd use:
+#define xxx(vendor, product) \
+		 .matches = {
+			DMI_MATCH(DMI_BOARD_VENDOR, vendor), \
+			DMI_MATCH(DMI_PRODUCT_NAME, product), \
+		}
+somewhere with a suitable name (bikeshed blue) to reduce
+the code size of this table.
 
-(I don't expect you to fix all these warnings, I was just surprised to
-see them given this is an 'initial schema'.)
+	David
 
-Rob
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

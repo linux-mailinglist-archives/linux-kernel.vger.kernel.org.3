@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8EE24AF659
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 955954AF662
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 17:18:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236739AbiBIQS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 11:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
+        id S236711AbiBIQSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 11:18:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236490AbiBIQSA (ORCPT
+        with ESMTP id S236673AbiBIQSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 11:18:00 -0500
+        Wed, 9 Feb 2022 11:18:08 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40EFC05CB95
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:18:02 -0800 (PST)
-Date:   Wed, 09 Feb 2022 16:18:00 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60458C05CB98
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 08:18:03 -0800 (PST)
+Date:   Wed, 09 Feb 2022 16:18:01 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644423481;
+        s=2020; t=1644423482;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QzFjmjmxe8Nd/RfQt5SciQe4zR5L0wLeEFsLkBZnnUg=;
-        b=oCyTBvBBR7FqUiGVnd/jGco0KxQeS/aRX6K1oaNgCz8xabwdTnSHxmo7y30hxDUT5iJgBB
-        pg11NyHB0fLhleWZX2NdoOHgQOiA3oiTNLySBzqqP9B+Y0RRRP/f6QibUKGR/GdzFnkjyE
-        X4NsJnOhNiqbw5kTvSy4d55lePPqH2eUi9ahP9InlGJn00Yx/YxC7G2tfMl3HbGtw7IE85
-        aW5pM/6zg2cMosldHznAjA1C7iwhysQ+C9YrjnDJDjAqlRtpjGtHj457fCWlOTuJ12OlQz
-        lYF4IB89/aL5KFjaDTgotLWKqRxFwDLe+gUFN7eWJBjENrLDdL7pdHAK2/BBHA==
+        bh=Hfuuq327J/t23hwIsWuFw4G1RD978pqM5j+Rd/fe28E=;
+        b=3S6XpcZGHVz7IElwfa0yqHkwPaDLkWKLtUJ9fh+l2T8revXlkXf12bVVObwW4rGbZJkdUQ
+        LxzkmXrT6cUvLSuEkIN+qo1W42KySymVMg3zP/CXCrSWleYXgvW1d/qtP2neKqe44/Evw8
+        NHo3panZVhdwwjTkeDvHXL8kXfH9qL1z8a8EoXEI8mQLEVXKqqSC3KBQsIHMjNpVNqoP02
+        /EJDgFV8D+CxJNGaZ2PngpEEFTVczNJ7ufGnztVc0LK8B21eY72AHNbygSbZGDz7vBDrl6
+        eFfxObwNTF9pwRGL4SmZYeH5hPxLtM5y9jP8Dlt0oKBwqNwzxQB7Vj36/MjZpw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644423481;
+        s=2020e; t=1644423482;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QzFjmjmxe8Nd/RfQt5SciQe4zR5L0wLeEFsLkBZnnUg=;
-        b=Lly6GTIyCU1MkNENvLdCLZkeQO/YoorhGMIUOFMekpKOww9nxq3hWw+YYnj/oadrqfYxnf
-        rlsboQNw1zVpEpCw==
+        bh=Hfuuq327J/t23hwIsWuFw4G1RD978pqM5j+Rd/fe28E=;
+        b=1IycszLzgvS1IrkjbJTjFT+CN7pEqJp8ISTaNcHvDzgFfsvUW1H2VAFws/91FrB/rQiI8g
+        pRPmcMvJZ9sM96Cg==
 From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/gic: Move PM device over to irq domain
+Subject: [irqchip: irq/irqchip-next] genirq: Allow the PM device to originate
+ from irq domain
 Cc:     Marc Zyngier <maz@kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
+        Tony Lindgren <tony@atomide.com>,
         Bartosz Golaszewski <brgl@bgdev.pl>, tglx@linutronix.de
-In-Reply-To: <20220201120310.878267-3-maz@kernel.org>
-References: <20220201120310.878267-3-maz@kernel.org>
+In-Reply-To: <20220201120310.878267-2-maz@kernel.org>
+References: <20220201120310.878267-2-maz@kernel.org>
 MIME-Version: 1.0
-Message-ID: <164442348025.16921.15496974487364454668.tip-bot2@tip-bot2>
+Message-ID: <164442348103.16921.9094020077297342205.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,74 +69,120 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     e95f3efdeb499accf2b05333a1eac7862f5a10f6
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/e95f3efdeb499accf2b05333a1eac7862f5a10f6
+Commit-ID:     1f8863bfb5ca500ea1c7669b16b1931ba27fce20
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/1f8863bfb5ca500ea1c7669b16b1931ba27fce20
 Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Tue, 01 Feb 2022 12:03:00 
+AuthorDate:    Tue, 01 Feb 2022 12:02:59 
 Committer:     Marc Zyngier <maz@kernel.org>
 CommitterDate: Wed, 09 Feb 2022 13:35:56 
 
-irqchip/gic: Move PM device over to irq domain
+genirq: Allow the PM device to originate from irq domain
 
-Move the reference to the GIC device over to the irq domain.
-This allows for some localised cleanup.
+As a preparation to moving the reference to the device used for
+runtime power management, add a new 'dev' field to the irqdomain
+structure for that exact purpose.
+
+The irq_chip_pm_{get,put}() helpers are made aware of the dual
+location via a new private helper.
+
+No functional change intended.
 
 Signed-off-by: Marc Zyngier <maz@kernel.org>
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: Tony Lindgren <tony@atomide.com>
 Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Link: https://lore.kernel.org/r/20220201120310.878267-3-maz@kernel.org
+Link: https://lore.kernel.org/r/20220201120310.878267-2-maz@kernel.org
 ---
- drivers/irqchip/irq-gic.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ include/linux/irqdomain.h | 10 ++++++++++
+ kernel/irq/chip.c         | 23 ++++++++++++++++++-----
+ 2 files changed, 28 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/irqchip/irq-gic.c b/drivers/irqchip/irq-gic.c
-index b8bb46c..fb741b4 100644
---- a/drivers/irqchip/irq-gic.c
-+++ b/drivers/irqchip/irq-gic.c
-@@ -1127,13 +1127,12 @@ static const struct irq_domain_ops gic_irq_domain_ops = {
- 	.unmap = gic_irq_domain_unmap,
- };
+diff --git a/include/linux/irqdomain.h b/include/linux/irqdomain.h
+index d476405..be25a33 100644
+--- a/include/linux/irqdomain.h
++++ b/include/linux/irqdomain.h
+@@ -151,6 +151,8 @@ struct irq_domain_chip_generic;
+  * @gc: Pointer to a list of generic chips. There is a helper function for
+  *      setting up one or more generic chips for interrupt controllers
+  *      drivers using the generic chip library which uses this pointer.
++ * @dev: Pointer to a device that the domain represent, and that will be
++ *       used for power management purposes.
+  * @parent: Pointer to parent irq_domain to support hierarchy irq_domains
+  *
+  * Revmap data, used internally by irq_domain
+@@ -171,6 +173,7 @@ struct irq_domain {
+ 	struct fwnode_handle *fwnode;
+ 	enum irq_domain_bus_token bus_token;
+ 	struct irq_domain_chip_generic *gc;
++	struct device *dev;
+ #ifdef	CONFIG_IRQ_DOMAIN_HIERARCHY
+ 	struct irq_domain *parent;
+ #endif
+@@ -226,6 +229,13 @@ static inline struct device_node *irq_domain_get_of_node(struct irq_domain *d)
+ 	return to_of_node(d->fwnode);
+ }
  
--static void gic_init_chip(struct gic_chip_data *gic, struct device *dev,
--			  const char *name, bool use_eoimode1)
-+static void gic_init_chip(struct gic_chip_data *gic, const char *name,
-+			  bool use_eoimode1)
- {
- 	/* Initialize irq_chip */
- 	gic->chip = gic_chip;
- 	gic->chip.name = name;
--	gic->chip.parent_device = dev;
- 
- 	if (use_eoimode1) {
- 		gic->chip.irq_mask = gic_eoimode1_mask_irq;
-@@ -1268,10 +1267,10 @@ static int __init __gic_init_bases(struct gic_chip_data *gic,
- 
- 	if (static_branch_likely(&supports_deactivate_key) && gic == &gic_data[0]) {
- 		name = kasprintf(GFP_KERNEL, "GICv2");
--		gic_init_chip(gic, NULL, name, true);
-+		gic_init_chip(gic, name, true);
- 	} else {
- 		name = kasprintf(GFP_KERNEL, "GIC-%d", (int)(gic-&gic_data[0]));
--		gic_init_chip(gic, NULL, name, false);
-+		gic_init_chip(gic, name, false);
- 	}
- 
- 	ret = gic_init_bases(gic, handle);
-@@ -1460,7 +1459,7 @@ int gic_of_init_child(struct device *dev, struct gic_chip_data **gic, int irq)
- 	if (!*gic)
- 		return -ENOMEM;
- 
--	gic_init_chip(*gic, dev, dev->of_node->name, false);
-+	gic_init_chip(*gic, dev->of_node->name, false);
- 
- 	ret = gic_of_setup(*gic, dev->of_node);
- 	if (ret)
-@@ -1472,6 +1471,7 @@ int gic_of_init_child(struct device *dev, struct gic_chip_data **gic, int irq)
- 		return ret;
- 	}
- 
-+	irq_domain_set_pm_device((*gic)->domain, dev);
- 	irq_set_chained_handler_and_data(irq, gic_handle_cascade_irq, *gic);
- 
++static inline void irq_domain_set_pm_device(struct irq_domain *d,
++					    struct device *dev)
++{
++	if (d)
++		d->dev = dev;
++}
++
+ #ifdef CONFIG_IRQ_DOMAIN
+ struct fwnode_handle *__irq_domain_alloc_fwnode(unsigned int type, int id,
+ 						const char *name, phys_addr_t *pa);
+diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+index c093246..a2a12cd 100644
+--- a/kernel/irq/chip.c
++++ b/kernel/irq/chip.c
+@@ -1558,6 +1558,17 @@ int irq_chip_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
  	return 0;
+ }
+ 
++static struct device *irq_get_parent_device(struct irq_data *data)
++{
++	if (data->chip->parent_device)
++		return data->chip->parent_device;
++
++	if (data->domain)
++		return data->domain->dev;
++
++	return NULL;
++}
++
+ /**
+  * irq_chip_pm_get - Enable power for an IRQ chip
+  * @data:	Pointer to interrupt specific data
+@@ -1567,12 +1578,13 @@ int irq_chip_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+  */
+ int irq_chip_pm_get(struct irq_data *data)
+ {
++	struct device *dev = irq_get_parent_device(data);
+ 	int retval;
+ 
+-	if (IS_ENABLED(CONFIG_PM) && data->chip->parent_device) {
+-		retval = pm_runtime_get_sync(data->chip->parent_device);
++	if (IS_ENABLED(CONFIG_PM) && dev) {
++		retval = pm_runtime_get_sync(dev);
+ 		if (retval < 0) {
+-			pm_runtime_put_noidle(data->chip->parent_device);
++			pm_runtime_put_noidle(dev);
+ 			return retval;
+ 		}
+ 	}
+@@ -1590,10 +1602,11 @@ int irq_chip_pm_get(struct irq_data *data)
+  */
+ int irq_chip_pm_put(struct irq_data *data)
+ {
++	struct device *dev = irq_get_parent_device(data);
+ 	int retval = 0;
+ 
+-	if (IS_ENABLED(CONFIG_PM) && data->chip->parent_device)
+-		retval = pm_runtime_put(data->chip->parent_device);
++	if (IS_ENABLED(CONFIG_PM) && dev)
++		retval = pm_runtime_put(dev);
+ 
+ 	return (retval < 0) ? retval : 0;
+ }

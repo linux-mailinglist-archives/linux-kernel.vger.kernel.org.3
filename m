@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B09944AFF69
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 22:48:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C15C34AFF71
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 22:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233845AbiBIVsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 16:48:00 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59714 "EHLO
+        id S233900AbiBIVvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 16:51:17 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233832AbiBIVr5 (ORCPT
+        with ESMTP id S233860AbiBIVvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 16:47:57 -0500
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D135DF28AD4;
-        Wed,  9 Feb 2022 13:47:59 -0800 (PST)
-Received: by mail-oi1-f178.google.com with SMTP id ay7so3946947oib.8;
-        Wed, 09 Feb 2022 13:47:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kGhpnlTbtjYsSq5zazJhFiflsCrF3KnRdsz6OiouwQI=;
-        b=qamdzFMud5U9X6Dh77p2qVmFHBbrbG/ER9S6KqlKMHeR0MNqurKVMROqexQf+kgO/c
-         yAvim34/YW2Ufteo5NjJWe+l7+duN3Y/FBpjOdsQHgqqIIh7PtLgHZmsj+5Wiuz8bvyK
-         2xH1ElYu8L7ZOtO9eXE3O28sgfceL4SfDqNb2QHSZMEbw7xoTemWKymTs3QxOwllKHlu
-         zTQ4z2qbMAJGdcBiPca1pTwszQx0keIfg6CKPATfT+0qzdz9+QGMNF7kODc0jy2peSLb
-         /tRuyg+2H3nM61d8PrYrtZh29O770O1KecqNJXQg+2Y9RHrdVxbyKy7egXPxb667LW9K
-         rpdA==
-X-Gm-Message-State: AOAM531DLmSSGYfft3JP46BoAXYOUumN4c5RrU+8qq7Wo5Pk+FrmKsgY
-        nDxasUlz4cW6jy5pLyz5tw==
-X-Google-Smtp-Source: ABdhPJwR4IULQkZYDWpmYiVNM6/vuOdPEw5tt9Mv3+Z+92V+CtzPO1gVjBgSpEoPjs579T2nPQK4Mw==
-X-Received: by 2002:a05:6808:1304:: with SMTP id y4mr2082906oiv.29.1644443278920;
-        Wed, 09 Feb 2022 13:47:58 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bc36sm7314731oob.45.2022.02.09.13.47.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 13:47:58 -0800 (PST)
-Received: (nullmailer pid 981849 invoked by uid 1000);
-        Wed, 09 Feb 2022 21:47:57 -0000
-Date:   Wed, 9 Feb 2022 15:47:57 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     linux-arm-kernel@lists.infradead.org, kuba@kernel.org,
-        robh+dt@kernel.org, linus.walleij@linaro.org,
-        netdev@vger.kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        ulli.kroll@googlemail.com
-Subject: Re: [PATCH v2] dt-bindings: net: convert net/cortina,gemini-ethernet
- to yaml
-Message-ID: <YgQ2jTOI96In6tAs@robh.at.kernel.org>
-References: <20220201144940.2488782-1-clabbe@baylibre.com>
+        Wed, 9 Feb 2022 16:51:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFA5AC0DE7EB
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 13:51:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644443472;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=cf340JweVJoiHiod04EEzHBmoPbI4MxHx4i63YpUZFY=;
+        b=Zswuk+1N9iTARC4111gxyfy2N/MgIgaB4kFHtjC79CFzzrFvADsJdxv30bH1iq2hYDkxXe
+        fGO3XYhxeynfLBmonofDtdY5o1S/F+XLjOXHKFi2oC/3P+IaYjXxIPZ1MagCMYvMfLwKw+
+        xKK4CKwtmtTS6cS7GdbaE+PLNjdl0QM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-264-CpgCBT5vNK2JIAd4BOXBlA-1; Wed, 09 Feb 2022 16:51:07 -0500
+X-MC-Unique: CpgCBT5vNK2JIAd4BOXBlA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 28E00100C665;
+        Wed,  9 Feb 2022 21:51:06 +0000 (UTC)
+Received: from madcap2.tricolour.com (unknown [10.22.48.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 891964CEC7;
+        Wed,  9 Feb 2022 21:50:07 +0000 (UTC)
+From:   Richard Guy Briggs <rgb@redhat.com>
+To:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Richard Guy Briggs <rgb@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Arnd Bergmann <arnd@kernel.org>, stable@vger.kernel.org,
+        Jeff Mahoney <jeffm@suse.com>
+Subject: [PATCH v1] audit: fix illegal pointer dereference for openat2
+Date:   Wed,  9 Feb 2022 16:50:04 -0500
+Message-Id: <a112a586b0a7e6a1a2364a284fb50cf8fcbf7351.1644442795.git.rgb@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220201144940.2488782-1-clabbe@baylibre.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,19 +65,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 01 Feb 2022 14:49:40 +0000, Corentin Labbe wrote:
-> Converts net/cortina,gemini-ethernet.txt to yaml
-> This permits to detect some missing properties like interrupts
-> 
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
-> Change since v1:
-> - fixed report done by Rob's bot
->  .../bindings/net/cortina,gemini-ethernet.txt  |  92 ------------
->  .../bindings/net/cortina,gemini-ethernet.yaml | 137 ++++++++++++++++++
->  2 files changed, 137 insertions(+), 92 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/net/cortina,gemini-ethernet.txt
->  create mode 100644 Documentation/devicetree/bindings/net/cortina,gemini-ethernet.yaml
-> 
+The user pointer was being illegally dereferenced directly to get the
+open_how flags data in audit_match_perm.  Use the previously saved flags
+data elsewhere in the context instead.
 
-Applied, thanks!
+Coverage is provided by the audit-testsuite syscalls_file test case.
+
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/c96031b4-b76d-d82c-e232-1cccbbf71946@suse.com
+Fixes: 1c30e3af8a79 ("audit: add support for the openat2 syscall")
+Reported-by: Jeff Mahoney <jeffm@suse.com>
+Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+---
+ kernel/auditsc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index fce5d43a933f..81ab510a7be4 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -185,7 +185,7 @@ static int audit_match_perm(struct audit_context *ctx, int mask)
+ 	case AUDITSC_EXECVE:
+ 		return mask & AUDIT_PERM_EXEC;
+ 	case AUDITSC_OPENAT2:
+-		return mask & ACC_MODE((u32)((struct open_how *)ctx->argv[2])->flags);
++		return mask & ACC_MODE((u32)(ctx->openat2.flags));
+ 	default:
+ 		return 0;
+ 	}
+-- 
+2.27.0
+

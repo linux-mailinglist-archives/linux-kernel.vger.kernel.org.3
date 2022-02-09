@@ -2,167 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5E504AED3B
-	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 09:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF2D4AED30
+	for <lists+linux-kernel@lfdr.de>; Wed,  9 Feb 2022 09:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237590AbiBIIwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 03:52:44 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:41804 "EHLO
+        id S242147AbiBIIxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 03:53:15 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:44320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236821AbiBIIw3 (ORCPT
+        with ESMTP id S240205AbiBIIxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 03:52:29 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2061b.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e1a::61b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE78EDF28B10;
-        Wed,  9 Feb 2022 00:52:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MO2Q209pIFmhRiuiFo9sLdgktjT/CkrpRyplQ9H7xBy83IPJ5jcmqxonId7X9T5wZ9UtBbzH8h+tAB1pNwUfNY0qJz4rlEwPhxYCQxh+fLW4D//VImw4024B1ahu1/LrOSxbQMVHjwW0wKFtt7q3rEXe/4zxcjzPVY22C+s2vJjYI+mA2hxXkM6FA3SEosOgV0HbpEXTjJVgTLJCG82LCcM4ahzVFGoeKyDxxYbEflwg/V1ccmf/Un1VhBzgTq7bYclDQNd0dC41bljNGZ2COx9VUqfBGEQkD0NzJuNnQhJ46MeJ24heQx4oOefgI705di6YbgixwcDd/SyX45NeeA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=maYIBthui/wiXVu7QZ+ik0rjmMzwVfPApPwcKGj9fFM=;
- b=e50P5U9wiM3P61yO8JApRYc/1q4Qs0XCvP5EUoqAP9lzemLyQCT7uaMlBYAVoXMGjDxtkletJD9L1MmZ8YSg0Wvmnnuu6aBFt22wk5e7Pvr6kIRcZw/U9slTcr1y7waBALkrVEGdlZi7ZQZ7OoMyp3oXVsEsmvo/+g3SSXJuIGxHkIA6vRfMHBxKSoVq6Rr4dtigv7NU3MZqD1V+CLHIjW3jcUYINh0CC/Rihx2DpBbM8flmDtSEa4RFemr3Ay9Lm/pbQLbiijq4aYr7dDmEdylizbPycqqBfrO5VFLcZSkRUFZ/ZA5scP7nkEQo59vsSyIJ39+2tvLoBb3s69tNaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=maYIBthui/wiXVu7QZ+ik0rjmMzwVfPApPwcKGj9fFM=;
- b=cqogZLP6FU8J74kZJ38aEFDdPuGVIBASVnA2PE/KYjxwR1m4Lvrm0po7UfrutCdsmOTH+TD2tkaNHhOdiyIN6EWOSai2C5+GcuOKYdX9JVkhqsEvbDS/NcP/2hMPSiuM6AkMVpzTW8Cb5yP6gKGR97BHgO77bgTNN9jAAN4rJfo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from HE1PR0802MB2426.eurprd08.prod.outlook.com (2603:10a6:3:e1::23)
- by VI1PR08MB2927.eurprd08.prod.outlook.com (2603:10a6:802:21::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Wed, 9 Feb
- 2022 08:51:32 +0000
-Received: from HE1PR0802MB2426.eurprd08.prod.outlook.com
- ([fe80::e14f:197:5001:4c56]) by HE1PR0802MB2426.eurprd08.prod.outlook.com
- ([fe80::e14f:197:5001:4c56%3]) with mapi id 15.20.4951.019; Wed, 9 Feb 2022
- 08:51:32 +0000
-From:   Michael Riesch <michael.riesch@wolfvision.net>
-To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Alex Bee <knaerzche@gmail.com>, Liang Chen <cl@rock-chips.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Subject: [PATCH v5 5/5] arm64: dts: rockchip: enable the gpu on rk3568-evb1-v10
-Date:   Wed,  9 Feb 2022 09:51:10 +0100
-Message-Id: <20220209085110.3588035-6-michael.riesch@wolfvision.net>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220209085110.3588035-1-michael.riesch@wolfvision.net>
-References: <20220209085110.3588035-1-michael.riesch@wolfvision.net>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: ZR0P278CA0072.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:21::23) To HE1PR0802MB2426.eurprd08.prod.outlook.com
- (2603:10a6:3:e1::23)
+        Wed, 9 Feb 2022 03:53:08 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637D6C001F74;
+        Wed,  9 Feb 2022 00:53:04 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id v186so4015881ybg.1;
+        Wed, 09 Feb 2022 00:53:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=MDqRZpl2ZNEFfuQ7yfffHKzYxQqjEhCxkRDN1Sj78Ps=;
+        b=cbvyMiumfUXld/I/wxT1ueBd+qe8ToUeMv+ZNjiz7lR7v45FcEsPwEffVyuIq0tT82
+         PO6gTRk+UUrwcDPOCiOQhELlf1CnTZCFML/ogntfu//Gj1rn1Hw8xbZBBZhawqz4lRe0
+         fPEysu5H9/OMFsXJKwv532eD3Uorplm+HlN6ZkMInTqFv4N/oWjXR00xkrQlz755VqnQ
+         +9RwPvWz/ZE4p6iRjyGaHBGHNrvOHPePG4LjAMBboBIkdfYOujRcAJJvZzAwZCPQQk8h
+         sOCD0qAzLgG9OL4GxQFtmEsV0D53zPkAt9zuig+6maCHTtG1S5YcQDydcvzuigrdT8A4
+         uI5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=MDqRZpl2ZNEFfuQ7yfffHKzYxQqjEhCxkRDN1Sj78Ps=;
+        b=762+I3SVgnRA1ziX0Qehppenf6aypn6bAuM+b2ivqHrsW/b1tX9yQ3jhsYk8HuIxQ0
+         iIwtyCruJ5yM0kavIPqUxW4J8zqEfc43ZpkCLFh+JAWcVg3Endidy030Qb4m17cUiUze
+         5MlmUdnf3+v9mh8n9tsQnDB5P3nZXNNLy0Tb0wdVbYeRz9hekzMS1KZ6Sa0O/GUf1xeJ
+         X4pd2v4YbF/qC7kYxW6JPxvBFK36knfUqf3FCajXJYNDKRUovuOSe5NG4rdulm94dTKZ
+         vyUT1XvY/U0Oi94ehMszEmiHgqZLg+uC/0omtihR7u07uNO+dWbOWNi0Ime9q9be+vHI
+         SFgQ==
+X-Gm-Message-State: AOAM533A5ACSn616GZtEDHSGmP3OtFV3tpRNEhChXsD6asyT6NSh3rzC
+        eaEdTNhnvBxe8XjjbsneiQgDo2FOIMXsAKTd1G0=
+X-Google-Smtp-Source: ABdhPJwTGByfa1hFDqkwYNeN4BOxA4JwlpvSmwyJQEuJ0ZwibgZOGsyGmRE+oHqgcMNxRgJbh40DHCBik+tp6+3Rk9s=
+X-Received: by 2002:a81:fd3:: with SMTP id 202mr1099770ywp.78.1644396779698;
+ Wed, 09 Feb 2022 00:52:59 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6ccc77f1-d17a-4e81-11da-08d9eba95e9f
-X-MS-TrafficTypeDiagnostic: VI1PR08MB2927:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR08MB29273E16A2B3C5CDD5B88AB1F22E9@VI1PR08MB2927.eurprd08.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:983;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vRpoZ6AvuZrCSk57BZ7G4HsDvvfjVXISebMsup5l1cECRlKMxS84xwZkI++vRuP3zeuVhV9SD0fsGJ58wH3rtszpl6uua8e19zu8oK5/GgxQuPE5AgI66Rx2XchbJqs5TnclD7JOqZprommm3D9V2nF0yukyUeVoOUud8mX1p03T2jxR9GQBhzJbrK2F9PiPgtP3fMYjel+qKZvB6TdpHLVjiSdk0OOzVmd7n2I4pnklp3gBnPtBGvKo+A/JMxrBjwTrT6ZTGynuEiggd/gcZ5DlGsL4qpmsOFyZ5HGRffkR/8NRfB+AU6AiO/ycScGXN23j/cga6sdglOBVN1tlEzbz8C/EFm0gaLEQ6vjFFoy1Q8lKxCBrzfk4/DcA3QBbeQivGZsUZI2elHkHOOi5iIVlVaaUQ8iFnp1tDFGSM1O9l/ObxplQb4D1GRqGz29HWpstxiUFAagwWtajmuxG9mSGjL6vj1Agv5nrszFrHkupVDh34VFFVAIb4C4Ybze7xiCctp2Bv9sVIPnBIzoxL94Rh/weqnIxhsgCTfQ/BnvMybV0j/WRbB3D7k5bRhMcc/9CNsf3LyBzEAEWlxgyKrzNwNCu/88J8OhDu2iYa+d++HnMzhLvQBYwDONSpS1qAvx5kMRKs49MBiTcThbw8w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0802MB2426.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(66556008)(186003)(4326008)(316002)(66476007)(36756003)(6666004)(4744005)(44832011)(8676002)(66946007)(7416002)(5660300002)(52116002)(6506007)(86362001)(2616005)(1076003)(8936002)(6486002)(508600001)(38100700002)(2906002)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sfrW9RsnCDNfJ5liVBbxWzmG22DkKU0+mYVvwu4LrSqmjLsvTdF/WXpxBcJU?=
- =?us-ascii?Q?GILcWCbGjSSRcYB0Y81BWRA15CQjf6hK49mfTRbJf1TCrSfZHyEbBX7Dk4FJ?=
- =?us-ascii?Q?kedwHo6kMm1WBNMKpUuGW/w/lT6aWWmF1vbSc5oVAeVCxib6GpT3Aq4ztsll?=
- =?us-ascii?Q?sSi00JVRgcmk5ep7tyi83zyf9BV2WzGm+oyrzZ1E+WhKwdmhCsIgWVMmvB+Q?=
- =?us-ascii?Q?BKDviZ/XCK3F6LxoUjAjFzpFlP/j5M4a7NhSdG3w9K5QvQZTfwHX4/fN3+Jt?=
- =?us-ascii?Q?ozyaiCtdKntgdFrfrIW5N2JSn+yY3BJzitA+MJYbXHs8QAEfQG76k9NLcMbB?=
- =?us-ascii?Q?W9CcpvB5H9CWvi+aH6XM4DNotsj0XNN5myLHvQa5k0deZ6apAsvx+ga+eb5n?=
- =?us-ascii?Q?AQVJW+hDe2gZLf6FYmxfZ6F/RtEnSvNVK3IhJ3GQCVTnwPYs0HTzxr65/Tob?=
- =?us-ascii?Q?GaXqt4AcZwrGTneQyhscMTCqYHnWaCPNwIKLBPsKCuX1VRSGys50gj8+8UhQ?=
- =?us-ascii?Q?/0+y4mFdAfQO5ufIYrqNvXDXPBXIFqclTqzTKQb77Z8A5vH/4DtZ1yBan1nK?=
- =?us-ascii?Q?GjARvbXOqEOIa3+L8JWB+l0r0VKdP2I3mM2NgbQsAUdVfiafN4BjGPQ+3v3p?=
- =?us-ascii?Q?BG2Z5mvhgZWUDD2TMlkS8VaNahhMuQBWrOTG3BAAYBVvWY8Z6YrWwkGrYQmm?=
- =?us-ascii?Q?RzS9XuiO3yFRX9jm0oquuj+crjbsUkQU/uVr7oCMeKN6Z9ZMdD/TUCoHWBI2?=
- =?us-ascii?Q?Bd4yePnxM6Hxf0DgfaH2j4Hf6w8MLik96IyubrK/lfhPx0IYZkF9RIiiYjVg?=
- =?us-ascii?Q?FzuYpvf6aS4VXquZ9O1SMX8wxKZLAA+F7ovQELiBJIdnJHUj5X+3tYEOcsto?=
- =?us-ascii?Q?UfXoc75I1ZItOPw2RNZvbftGa5k/MP02V9lvLE+kSzKYILoRRPvbcxfUBkWf?=
- =?us-ascii?Q?yHWOO1hdx1VwzQr9fIl7ER15ezO34lG7sbG2DmQ+G3W20uosRE1v6DWNJOAE?=
- =?us-ascii?Q?ppSBkaN+BM8bcA0XbNCHNkIJFQUwH33BIwhdjI67p8hgKf8NXldLR/4N6Ubk?=
- =?us-ascii?Q?1Cp1FOBcy1O8hKTG5pyMbbI4ohhVXP0+Xyy6JzvljR1A0a/ZC2jiZiEWxJZe?=
- =?us-ascii?Q?zdM0QO65xRDKeWntTh7Acz97Bz0Gj/Adn5jXAsE0SQcSixtthqbyOOy67bqf?=
- =?us-ascii?Q?Ny7tpTCX4OuIoFo2vN3B0QBJen4KT16Ape/fAIOnDY8lAw7GdXCLgDu3SWk1?=
- =?us-ascii?Q?fxOetEVzGNBQgp8xUu3dSeNlbf503Vu1cdRtbPKaUQvNPrEcU3vw2Wdeo6JC?=
- =?us-ascii?Q?dHIgC8bzvriGgkBR1oDjNnflOfnfvJoHkwrPvHRBs8+e1cLI16EelKtdi3nV?=
- =?us-ascii?Q?bStskdjP9GqQUPtVb3RjZEOoUqY3/LdtNg0+LE91wu5ZzgeKYFVIP1ntEE4k?=
- =?us-ascii?Q?goSVxA2fHkrZVc/moqEhtEYiIsBOwaAdcUiYB9hdornNtZWjOZZimwO6ZMow?=
- =?us-ascii?Q?uQVH2ZvJ6l4bcz3H2ZP4Vg+V5v1u73uyh3zg69ax31ch77OWQlgsPVI6G0RJ?=
- =?us-ascii?Q?tasX/pENrhR6DucEV+B7PZ6LhGiFXo9KNHlULJmtHO4ugQ4gQ7jYBfzGrK54?=
- =?us-ascii?Q?/HpPIqmz+VQCbkpP2tgvPRbffwSW8jclDzBJBKqiCIdJ6hnZlFmFsT2g2Mgn?=
- =?us-ascii?Q?2/vYtiG75Gi4nxMHm70bX1Awj1t7k1meyb50DXu890qv7mic4mlHd0jKaS6A?=
- =?us-ascii?Q?Zy59+64VyHnylvjKr7vd0zE7gnJxK8c=3D?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ccc77f1-d17a-4e81-11da-08d9eba95e9f
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0802MB2426.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2022 08:51:32.1150
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bQlxx6788TYuWwX+axpHoYLvnUeuDAznXk4PPXNdxtzRicbWiLaU0V4MCGFXpr4vxtyUKZtzz/TJUMJcl27/OCKVRamSOkO8ctcolhTABMM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR08MB2927
+References: <20220126195043.28376-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <PH7PR19MB5562AC3C5E7BBB7730086CC1A02E9@PH7PR19MB5562.namprd19.prod.outlook.com>
+In-Reply-To: <PH7PR19MB5562AC3C5E7BBB7730086CC1A02E9@PH7PR19MB5562.namprd19.prod.outlook.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 9 Feb 2022 08:52:33 +0000
+Message-ID: <CA+V-a8tEwOR-r=+KDe2DhpTMwhXPTgbZYgOWepST3mnhBL_Hag@mail.gmail.com>
+Subject: Re: [EXT] [RFC PATCH 0/5] PCIe EPF support for internal DMAC handling
+ and driver update for R-Car PCIe EP to support DMAC
+To:     Li Chen <lchen@ambarella.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Rob Herring <robh@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the GPU core on the Rockchip RK3568 EVB1.
+Hi Chen-san,
 
-Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
----
- arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+On Wed, Feb 9, 2022 at 4:48 AM Li Chen <lchen@ambarella.com> wrote:
+>
+> Hi Prabhakar,
+>
+> > [0] https://urldefense.com/v3/__https://www.spinics.net/lists/linux-
+> > pci/msg92385.html__;!!PeEy7nZLVv0!yP0WqYs165riCjWRhZprjgMVVLfQLtkkPfv_
+> > R7XCoqkqgMsOyor90EZp0YAdxu0$
+>
+> Can your streaming DMA test case(-d) pass if you use EP's internal DMAC i=
+nstead of external DMAC?
+>
+Sorry I don't quite get you here.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts b/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
-index d8a4f7a9f562..39c495ff0157 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
-@@ -140,6 +140,11 @@ &gmac1m1_rgmii_clk
- 	status = "okay";
- };
- 
-+&gpu {
-+	mali-supply = <&vdd_gpu>;
-+	status = "okay";
-+};
-+
- &i2c0 {
- 	status = "okay";
- 
-@@ -462,6 +467,12 @@ &sdmmc0 {
- 	status = "okay";
- };
- 
-+&tsadc {
-+	rockchip,hw-tshut-mode = <1>;
-+	rockchip,hw-tshut-polarity = <0>;
-+	status = "okay";
-+};
-+
- &uart2 {
- 	status = "okay";
- };
--- 
-2.30.2
+This patch series adds support for EP to transfer using internal DMAC
+as no external DMAC is supported, so when "-d" option is passed and if
+EP has registered it has internal dmac it will use the same and run
+the pcitest.
 
+Cheers,
+Prabhakar
+
+> Regards,
+> Li
+>
+> **********************************************************************
+> This email and attachments contain Ambarella Proprietary and/or Confident=
+ial Information and is intended solely for the use of the individual(s) to =
+whom it is addressed. Any unauthorized review, use, disclosure, distribute,=
+ copy, or print is prohibited. If you are not an intended recipient, please=
+ contact the sender by reply email and destroy all copies of the original m=
+essage. Thank you.

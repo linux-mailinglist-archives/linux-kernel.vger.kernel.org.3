@@ -2,136 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CAF64B087E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:35:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 301104B088D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237566AbiBJIdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 03:33:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36260 "EHLO
+        id S237643AbiBJIhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 03:37:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237561AbiBJIdk (ORCPT
+        with ESMTP id S236714AbiBJIhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 03:33:40 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE782E98;
-        Thu, 10 Feb 2022 00:33:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1644482018; x=1676018018;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LzOxzSeQrSKYMob1v9yP9wi1VnFt4rvaqvnm3nMKecY=;
-  b=CVZ74q2gc2O8MoOdLW2QdbXZIeyzkgalIv1YxyT9pLXesCgTo1jYEMSa
-   /hdaSWXvL1Ui0qPO3MZsd2tdvfUAqtjN29PLOk+pBXwILHzz2e8vDXOHX
-   NmLy1qJl2H0rxVv4olBTLFxywXRmbSor6Y20LJad7MlnHQ3cjTYj/MCZn
-   /X598aY+97xpItjEg71PkAcPkkbkc5bqrh8o3PkMItvxrIG6UHy1LujAt
-   8oOYOSpuC2486kQbrGYtuJENPX4s0KJLfA2mAgNvLrYpwEoUJ6L4vhPE9
-   sTz7smbxGEufVvXr5pvNxFCsCeATvliPFlcsKoeABvpTnZpYYSMp3L3Mx
-   Q==;
-IronPort-SDR: N93H+dZ4I9GuDMVEQt638SoceWSMWlGupYrkEB2K/o2uVwTPRZlp3lDxCofP6CQ3sgxJmASdPo
- smAxgZVtZCf8Dul7D6Gwm8su9Gzj0wJPtDC4A3FRadgIbREO8Wzphj8e66Pjhkb/RYVnAb3PeG
- DG+Y0K+9Gu49E2xmAhoMN87jztzpJzmkop+vbgBLSoBfcJSZv4qu3d3iB9UUJDk1s589yUSbhe
- KBrDvN8x/MQDRM2eh/ttLeYaqpK55ABi7Ayd6aaxaf04Hmv8l4lB+pGCIeaXSrmO3TsGTlRm2/
- 7lSEA3qhmM4XkUBCSYoisobW
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="161755490"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Feb 2022 01:33:38 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 10 Feb 2022 01:33:37 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Thu, 10 Feb 2022 01:33:37 -0700
-Date:   Thu, 10 Feb 2022 09:36:12 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     Andrew Lunn <andrew@lunn.ch>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <UNGLinuxDriver@microchip.com>,
-        <davem@davemloft.net>, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH net-next] net: lan966x: Fix when CONFIG_IPV6 is not set
-Message-ID: <20220210083612.4mszzwgcrvmn67rn@soft-dev3-1.localhost>
-References: <20220209101823.1270489-1-horatiu.vultur@microchip.com>
- <YgPHjxpo0N4ND1ch@lunn.ch>
- <20220209180620.3699bf25@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        Thu, 10 Feb 2022 03:37:20 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9A9220;
+        Thu, 10 Feb 2022 00:37:22 -0800 (PST)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21A78EhR010092;
+        Thu, 10 Feb 2022 09:37:08 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=3njkypwCgEdpulBU+yKQseTenS3B0YILK+Hoj11QnzQ=;
+ b=dKwTI6Z7NhOsjb294Isce7jwYUwafrcRAReIAP1VTSa+0UxlGb13JDWWcDX1qvsI9buY
+ azC3VtUyvS3BC6JLB8/qUL/Jp0SbkMuzCmWOLpm3AemnHb8jk0k6Jk1T5TsheQXtsBbm
+ 373czMyU3KhgNG/FjXAaSLd984PbANbvylzrJWi4ARDkwah77WGhrbDBg+/UrXgigTkw
+ CRpy1hvR7KYXeAUiyLgqMRdhmIdYsq/EArnqHqi2U73sdHjITaPsTLXnUm5fS2gtC7DM
+ KJpcKroj/FfpCzbzrEQaRhqmxHIkesJ8E7CWAXlyRdli7x/fkfN2OUzwgNGpWjNDbOy/ eQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e4x268h2j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Feb 2022 09:37:07 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 806FE10002A;
+        Thu, 10 Feb 2022 09:37:07 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 799712138E0;
+        Thu, 10 Feb 2022 09:37:07 +0100 (CET)
+Received: from [10.201.21.201] (10.75.127.46) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 10 Feb
+ 2022 09:37:06 +0100
+Message-ID: <746858c4-09bb-7a95-a9c4-a5d2267ef8b9@foss.st.com>
+Date:   Thu, 10 Feb 2022 09:37:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20220209180620.3699bf25@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 06/12] ARM: dts: sti: update stih418-b2199 following
+ stih407-family DT update
+Content-Language: en-US
+To:     Alain Volmat <avolmat@me.com>, <patrice.chotard@st.com>,
+        <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20211202075105.195664-1-avolmat@me.com>
+ <20211202075105.195664-7-avolmat@me.com>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <20211202075105.195664-7-avolmat@me.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-10_03,2022-02-09_01,2021-12-02_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 02/09/2022 18:06, Jakub Kicinski wrote:
+Hi Alain
 
-Hi Andrew, Jakub
+On 12/2/21 08:50, Alain Volmat wrote:
+> Put of the miphy28lp_phy node out of the soc section following similar
+> update within stih407-family.dtsi file update.
 > 
-> On Wed, 9 Feb 2022 14:54:23 +0100 Andrew Lunn wrote:
-> > On Wed, Feb 09, 2022 at 11:18:23AM +0100, Horatiu Vultur wrote:
-> > > When CONFIG_IPV6 is not set, then the compilation of the lan966x driver
+> Signed-off-by: Alain Volmat <avolmat@me.com>
+> ---
+>  arch/arm/boot/dts/stih418-b2199.dts | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
 > 
-> compilation or linking?
+> diff --git a/arch/arm/boot/dts/stih418-b2199.dts b/arch/arm/boot/dts/stih418-b2199.dts
+> index b66e2b29edea..d21bcc7c1271 100644
+> --- a/arch/arm/boot/dts/stih418-b2199.dts
+> +++ b/arch/arm/boot/dts/stih418-b2199.dts
+> @@ -37,6 +37,17 @@ green {
+>  		};
+>  	};
+>  
+> +	miphy28lp_phy: miphy28lp {
+> +
+> +		phy_port0: port@9b22000 {
+> +			st,osc-rdy;
+> +		};
+> +
+> +		phy_port1: port@9b2a000 {
+> +			st,osc-force-ext;
+> +		};
+> +	};
+> +
+>  	soc {
+>  		sbc_serial0: serial@9530000 {
+>  			status = "okay";
+> @@ -84,17 +95,6 @@ mmc0: sdhci@9060000 {
+>  			non-removable;
+>  		};
+>  
+> -		miphy28lp_phy: miphy28lp@0 {
+> -
+> -			phy_port0: port@9b22000 {
+> -				st,osc-rdy;
+> -			};
+> -
+> -			phy_port1: port@9b2a000 {
+> -				st,osc-force-ext;
+> -			};
+> -		};
+> -
+>  		st_dwc3: dwc3@8f94000 {
+>  			status = "okay";
+>  		};
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
-It is a linking error. I will fix in the next version
-
-> 
-> > > fails with the following error:
-> > >
-> > > drivers/net/ethernet/microchip/lan966x/lan966x_main.c:444: undefined
-> > > reference to `ipv6_mc_check_mld'
-> > >
-> > > The fix consists in adding #ifdef around this code.
-> >
-> > It might be better to add a stub function for when IPv6 is
-> > disabled. We try to avoid #if in C code.
-
-What do you think if I do something like this in the lan966x_main.h
-
----
-#if IS_ENABLED(CONFIG_IPV6)
-static inline bool lan966x_hw_offload_ipv6(struct sk_buff *skb)
-{
-	if (skb->protocol == htons(ETH_P_IPV6) &&
-	    ipv6_addr_is_multicast(&ipv6_hdr(skb)->daddr) &&
-	    !ipv6_mc_check_mld(skb))
-		return false;
-
-	return true;
-}
-#else
-static inline bool lan966x_hw_offload_ipv6(struct sk_buff *skb)
-{
-	return false;
-}
-#endif
----
-
-And then in lan966x_main.c just call this function.
-
-> 
-> If it's linking we can do:
-> 
->         if (IS_ENABLED(CONFIG_IPV6) &&
->             skb->protocol == htons(ETH_P_IPV6) &&
->             ipv6_addr_is_multicast(&ipv6_hdr(skb)->daddr) &&
->             !ipv6_mc_check_mld(skb))
->                 return false;
-> 
-> But beware that IPV6 can be a module, you may need a Kconfig dependency.
-
-I was also looking at other drivers on how they use 'ipv6_mc_check_mld'.
-Then I have seen that drivers/net/amt.c and net/bridge/br_multicast.c
-they wrap this function with #if.
-But then there is net/batman-adv/multicast.c which doesn't do that and
-it can compile and link without CONFIG_IPV6 and I just don't see how
-that is working.
-
--- 
-/Horatiu
+Thanks
+Patrice

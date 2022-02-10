@@ -2,106 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB384B1243
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24DEC4B1246
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243964AbiBJQCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 11:02:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58092 "EHLO
+        id S243969AbiBJQDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 11:03:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232046AbiBJQCg (ORCPT
+        with ESMTP id S236363AbiBJQDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 11:02:36 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71FAE5D;
-        Thu, 10 Feb 2022 08:02:36 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id v12so10477670wrv.2;
-        Thu, 10 Feb 2022 08:02:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7PANtWWD2Kt+GHWBLiAh9yfO08n/yT3I6/7j/Llw5GY=;
-        b=Sgv0zC2zExaw9LYXehvrYYdC/OOpMR5IrFatO33Oasgf1h5l58VJ3uOMAJfOY1Nv5Q
-         z+28+gAXeP/TlTW6jiepnXBJF5Cg4M35/34HKFymhthSXR2PLB7/BM6C95xpfVmEaJ4U
-         KRz7+PDBxl8dDNl/qz3n7cg6TZ7qL0iAbbe7rJo1Vip7aLy9pQDFLxulaMRlwSXY15us
-         41yC6LBJlH26b+roAzbg4sw9eWhSCSJ64LqhoV402SWMJLokFrkvlhdwipcK4Ij945/H
-         Nhq2RF1P4RumSGwnkAZ+5Xsq6FwSUga4fcqT9fNmatTIvW/U/sO5pM3Mj8Jh40vtRyO5
-         5rOQ==
+        Thu, 10 Feb 2022 11:03:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07DA5C30
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:03:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644508983;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XqMRSNji5KHFwBXLfzLcneZQrTGS+nQUHDyGuzlvgWY=;
+        b=BFuhfulCHcpRU67OqFIboJWlAsdzPOuzMfZZIa9rqcLfucp2I3vnGWR03cOxLnluh6Q8FY
+        Rjk1ogBJdOKd325kpnd+Tj5ffRLdO9YkfsS4CRXUEe8VYyZEeqG/WhWR38HM0zuHCupYq5
+        YTJQzOgkrj0PEtSO8vxOVHFxLkT4qZs=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-608-oTQBKrW0O760B8uZFkdXvQ-1; Thu, 10 Feb 2022 11:02:59 -0500
+X-MC-Unique: oTQBKrW0O760B8uZFkdXvQ-1
+Received: by mail-qt1-f200.google.com with SMTP id s1-20020ac85ec1000000b002cf7c93d56dso4656627qtx.21
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:02:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7PANtWWD2Kt+GHWBLiAh9yfO08n/yT3I6/7j/Llw5GY=;
-        b=UYkp9nl9dQCpBVFfN4Ynhw3ckyhAgPrKkONsE3Wl2OBh3GTBCWlIjpvKED3qbyg9Yg
-         qLmaMBkpP7dTz/MMlKk0/kAX5aJcPkmh/cbzE8Webb9+vLE8ApCJzzZS+ZPM2gwTJGWJ
-         KhKCJY253RK+d9dKlneYLpJLMy5nxeqV2AVIGu7brO91WgNcF5p1rreTLYgROvPnKF0Q
-         1xMlBXCPYt0UDphQP+4ZtxWW7FcKY59EoN3EcXXTOtNUTET3eC6VqB07+PktBQLP6K9a
-         NwmIWFasGX1UlBhfl27k/BknofI+YYdihgIrzOWh1gUd3Zzm8K+CMKJK2eZdiJRTcZuQ
-         3afQ==
-X-Gm-Message-State: AOAM531tbIfjk+lrSzW8J+7O30zw8+pW49J3OwtOjQ4G0VL5mr7YKqJV
-        MjAoeqHP+DGBEdWDjJUpIdw=
-X-Google-Smtp-Source: ABdhPJwf67uwAasYWAYx5+iqoyLyRlZqlOiOqrCNtgT6F7SiBcNbSXGcixBRB5ZGLLerGBstYrsBOg==
-X-Received: by 2002:a5d:4448:: with SMTP id x8mr6850908wrr.529.1644508955188;
-        Thu, 10 Feb 2022 08:02:35 -0800 (PST)
-Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
-        by smtp.gmail.com with ESMTPSA id v9sm7818807wrw.84.2022.02.10.08.02.34
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=XqMRSNji5KHFwBXLfzLcneZQrTGS+nQUHDyGuzlvgWY=;
+        b=mz5tue9G9VCEpVr7brvnSWTlUQHvyPgHSjMb6U9ggWFywa0pLiSeDmNPuuQ3kv3Duf
+         3VWAVTdOOzEaAbLNUHeAQ9gXQQWqj+hMQ68J2q5TKhBpZmCGjeZFPHO9n/6teQ5cbFQT
+         Z4Jsn4NdYxjXvM3DVnsjElv4KYRRRHB+2spvUJpauEisXMhOKnjMZEe0j7NUatcpueEl
+         jy0MmpxGjatMh8IovIXvwrBASiOkLFxO5r30uPthfdOJRxhoF99DgGQ2O9cbJcuHVpwt
+         xkAh4QAblf9oFT4FPHJ6d0w7V5jkgVH2yXaoJOVHqrEHCSl8djUj2o5GxkDNVl9ZaZDv
+         7Lfg==
+X-Gm-Message-State: AOAM531EOztzy9CR/g0W7uQ6qsnDw3eiq+8u9Yy49+pOypzIyy+mkiqj
+        7WoZQIWLAuxjt9IvQof4kG9ilRh8hqixMuflw/oMQTU2agbW0uDdxFBLfyodzAptB/9QTA/wjPC
+        hfZrX3Z61M3v8veuCgMTiyev+
+X-Received: by 2002:ac8:470b:: with SMTP id f11mr5264434qtp.428.1644508979077;
+        Thu, 10 Feb 2022 08:02:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwJZidFHgX2qaFuNO4wwwWXQrdPSZ6BLsKxCMwzMjl3VQN+p8ixuoDBh/MeuJVBmzm2X+Enig==
+X-Received: by 2002:ac8:470b:: with SMTP id f11mr5264402qtp.428.1644508978832;
+        Thu, 10 Feb 2022 08:02:58 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-96-254.dyn.eolo.it. [146.241.96.254])
+        by smtp.gmail.com with ESMTPSA id p15sm11231377qtk.56.2022.02.10.08.02.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 08:02:34 -0800 (PST)
-Date:   Thu, 10 Feb 2022 16:02:32 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 0/3] 5.10.100-rc1 review
-Message-ID: <YgU3GBD+FoVrk9Im@debian>
-References: <20220209191248.892853405@linuxfoundation.org>
+        Thu, 10 Feb 2022 08:02:58 -0800 (PST)
+Message-ID: <d5dd3f10c144f7150ec508fa8e6d7a78ceabfc10.camel@redhat.com>
+Subject: Re: [PATCH] net: fix wrong network header length
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     "lina.wang" <lina.wang@mediatek.com>,
+        Maciej =?UTF-8?Q?=C5=BBenczykowski?= <maze@google.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Linux NetDev <netdev@vger.kernel.org>,
+        Kernel hackers <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Willem Bruijn <willemb@google.com>,
+        Eric Dumazet <edumazet@google.com>, zhuoliang@mediatek.com,
+        chao.song@mediatek.com
+Date:   Thu, 10 Feb 2022 17:02:53 +0100
+In-Reply-To: <5ca86c46109794a627e6e2a62b140963217984a0.camel@mediatek.com>
+References: <20220208025511.1019-1-lina.wang@mediatek.com>
+         <0300acca47b10384e6181516f32caddda043f3e4.camel@redhat.com>
+         <CANP3RGe8ko=18F2cr0_hVMKw99nhTyOCf4Rd_=SMiwBtQ7AmrQ@mail.gmail.com>
+         <a62abfeb0c06bf8be7f4fa271e2bcdef9d86c550.camel@redhat.com>
+         <5ca86c46109794a627e6e2a62b140963217984a0.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209191248.892853405@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Wed, Feb 09, 2022 at 08:14:18PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.100 release.
-> There are 3 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, 2022-02-09 at 18:25 +0800, lina.wang wrote:
+> We use NETIF_F_GRO_FRAGLIST not for forwarding scenary, just for
+> software udp gro. 
 > 
-> Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
-> Anything received after that time might be too late.
+I'm wondering why don't you simply enable UDP_GRO on the relevant
+socket? 
 
-Build test:
-mips (gcc version 11.2.1 20220121): 63 configs -> no new failure
-arm (gcc version 11.2.1 20220121): 105 configs -> no new failure
-arm64 (gcc version 11.2.1 20220121): 3 configs -> no failure
-x86_64 (gcc version 11.2.1 20220121): 4 configs -> no failure
+> Whatever NETIF_F_GRO_FRAGLIST or NETIF_F_GRO_FWD,
+> skb_segment_list should not have bugs.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
+The bug is arguably in bpf_skb_proto_6_to_4(), even if fixing it in
+skb_segment_list() is possibly easier.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/734
-[2]. https://openqa.qa.codethink.co.uk/tests/738
+> We modify skb_segment_list, not in epbf. One point is traversing the
+> segments costly, another is what @Maciej said, *other* helper may have
+> the same problem. In skb_segment_list, it calls
+> skb_headers_offset_update to update different headroom, which implys
+> header maybe different.
 
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index 75dfbde8d2e6..f15bbb7449ce 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
+> @@ -3682,6 +3682,7 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
+>  	struct sk_buff *tail = NULL;
+>  	struct sk_buff *nskb, *tmp;
+>  	int err;
+> +	unsigned int len_diff = 0;
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Mintor nit: please respect the reverse x-mas tree order.
 
---
-Regards
-Sudip
+>  
+>  	skb_push(skb, -skb_network_offset(skb) + offset);
+
+> @@ -3721,9 +3722,11 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
+>  		skb_push(nskb, -skb_network_offset(nskb) + offset);
+>  
+>  		skb_release_head_state(nskb);
+> +		len_diff = skb_network_header_len(nskb) - skb_network_header_len(skb);
+>  		 __copy_skb_header(nskb, skb);
+>  
+>  		skb_headers_offset_update(nskb, skb_headroom(nskb) - skb_headroom(skb));
+> +		nskb->transport_header += len_diff;
+
+This does not look correct ?!? the network hdr position for nskb will
+still be uncorrect?!? and even the mac hdr likely?!? possibly you need
+to change the offset in skb_headers_offset_update().
+
+Paolo
 

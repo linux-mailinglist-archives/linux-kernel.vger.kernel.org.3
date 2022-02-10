@@ -2,96 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A31F4B0E1E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8ACF4B0E1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241957AbiBJNHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 08:07:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43558 "EHLO
+        id S241991AbiBJNIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 08:08:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233456AbiBJNHs (ORCPT
+        with ESMTP id S241981AbiBJNIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 08:07:48 -0500
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD56C1A7;
-        Thu, 10 Feb 2022 05:07:49 -0800 (PST)
-Received: by mail-vk1-f181.google.com with SMTP id b2so3026779vkl.1;
-        Thu, 10 Feb 2022 05:07:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9xSDkfGA7Gbw9lubbu8lfvfHIM/jNHECsHfMyY0SuGE=;
-        b=bO6RaScuERw3GXVA1DRl1JfheXTC9eP+i0yiS4PhaE58qtBR/633FNWC10gxVpRfaL
-         hz+srg73qHj43kG+d73xS9Hz6mQDPmjqoxjfChXrp0YgEJn6R4Ba9PqDqUpZwyBsROyZ
-         PED5b8G4G2OMfvc70Q3B40VkLXNKg7dzMCP2Avv5ObYJUJBtb1m27VbzUrvNiE7+scn1
-         AL5BahMBzw0fxL2v9nkD/nM3BTO7yuBMR2BGEdk4YqdT+3Q+yLTBFgSwZZUBhI56UwRP
-         jMzOdNGDp/zoRELmzIHZxj9aArCUH2mMFjYx0nZYWQB/8gdJMxcq3x8co5neVEC9O+Eq
-         xmzQ==
-X-Gm-Message-State: AOAM530eqhXHZMhigdTH5Tgx98OXm9vNQE96GRvh6N4yllSs2CoAgZZQ
-        IGsAfDf5CIdZcNFXRKBhRpAbab+4AS2Phg==
-X-Google-Smtp-Source: ABdhPJzsuCoIpxIyzoLNmr4cvl9yb0J3mW4bbHtKwyfaLdkjoo0STed/5HGv4Mfp8fADBo4HBC+ZAw==
-X-Received: by 2002:a05:6122:588:: with SMTP id i8mr2560846vko.41.1644498468895;
-        Thu, 10 Feb 2022 05:07:48 -0800 (PST)
-Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com. [209.85.217.47])
-        by smtp.gmail.com with ESMTPSA id g27sm1394621vkd.17.2022.02.10.05.07.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 05:07:48 -0800 (PST)
-Received: by mail-vs1-f47.google.com with SMTP id z62so4070774vsz.2;
-        Thu, 10 Feb 2022 05:07:48 -0800 (PST)
-X-Received: by 2002:a05:6102:34d9:: with SMTP id a25mr2360386vst.68.1644498468038;
- Thu, 10 Feb 2022 05:07:48 -0800 (PST)
+        Thu, 10 Feb 2022 08:08:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D0E100C;
+        Thu, 10 Feb 2022 05:08:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85D7EB8253B;
+        Thu, 10 Feb 2022 13:08:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B86A5C004E1;
+        Thu, 10 Feb 2022 13:08:07 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="RJoxP0PP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644498486;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bkaw0l3Ywep/OB57H4YCme/aIlYJcfsB7nVqGUEOgiI=;
+        b=RJoxP0PPmm/m6DG9yiZhyP4Eh/6pb7XuA3ktb2pXp/H4g8+Ln/YydrLApT1dZtxrv3hUp6
+        AouOjIVrFITLCpVqdB0oEV0duBs5UFAln3QjHRkIhuP9CwER4bl6aBAVB4n9/e8YONoUj5
+        4QV1lI+ua/X0SdgDM5CHdJrMiKXpdmo=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 510bfb41 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 10 Feb 2022 13:08:06 +0000 (UTC)
+Received: by mail-yb1-f175.google.com with SMTP id 192so15104497ybd.10;
+        Thu, 10 Feb 2022 05:08:06 -0800 (PST)
+X-Gm-Message-State: AOAM533DY8pobG6cVvIAvSFnIkuEZ7onu21W63diWPEgok/QxFKTscJ9
+        JE2lQRJ5xPQgJcAqkLVsDdhBgNRnIYFTLqsjjsg=
+X-Google-Smtp-Source: ABdhPJz4Ks7mDkABlaZrmo/gd+Wnl8zGCt7KD+1b6opcrWmfO2dRwHCdTmFrL4oxjQGz+IU6NT9sDv3EAZphGY6MBh4=
+X-Received: by 2002:a81:c646:: with SMTP id q6mr6959997ywj.485.1644498485708;
+ Thu, 10 Feb 2022 05:08:05 -0800 (PST)
 MIME-Version: 1.0
-References: <20220130143333.552646-1-laurent@vivier.eu> <20220130143333.552646-3-laurent@vivier.eu>
-In-Reply-To: <20220130143333.552646-3-laurent@vivier.eu>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 10 Feb 2022 14:07:37 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVX_DTZDTad9iU2DkTT_KTyducGJWtisj8wpTOzWdZMgg@mail.gmail.com>
-Message-ID: <CAMuHMdVX_DTZDTad9iU2DkTT_KTyducGJWtisj8wpTOzWdZMgg@mail.gmail.com>
-Subject: Re: [PATCH v14 2/5] tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
-To:     Laurent Vivier <laurent@vivier.eu>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        stable <stable@vger.kernel.org>
+References: <YgQOgqWr0nwqZCh6@owl.dominikbrodowski.net> <CAHmME9pZB1fWf2nZNwTHw07hrnxZYYymA0_Dy=jauDt9TbF69A@mail.gmail.com>
+ <YgSmDtA2hlrDBmrH@owl.dominikbrodowski.net>
+In-Reply-To: <YgSmDtA2hlrDBmrH@owl.dominikbrodowski.net>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Thu, 10 Feb 2022 14:07:54 +0100
+X-Gmail-Original-Message-ID: <CAHmME9q-BAsOwfTKH4bqvnrJww_L-Y_owZP7-yzDcxGt9zEd5Q@mail.gmail.com>
+Message-ID: <CAHmME9q-BAsOwfTKH4bqvnrJww_L-Y_owZP7-yzDcxGt9zEd5Q@mail.gmail.com>
+Subject: Re: [PATCH] random: fix locking for crng_init in crng_reseed()
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 3:33 PM Laurent Vivier <laurent@vivier.eu> wrote:
-> Revert
-> commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
->
-> and define gf_ioread32()/gf_iowrite32() to be able to use accessors
-> defined by the architecture.
->
-> Cc: stable@vger.kernel.org # v5.11+
-> Fixes: da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
-> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+Hi Dominik,
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Thanks, I see your point. I'll do it the way you suggested (which as
+you pointed out goes away anyway right after).
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Jason

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A254B1A0A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:05:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1DB4B1A11
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346032AbiBKAEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:04:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35270 "EHLO
+        id S1346049AbiBKAG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:06:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242517AbiBKAEl (ORCPT
+        with ESMTP id S235345AbiBKAGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:04:41 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A6F26CD
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:04:41 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id n6so6797750qvk.13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:04:41 -0800 (PST)
+        Thu, 10 Feb 2022 19:06:55 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DAE26DF;
+        Thu, 10 Feb 2022 16:06:55 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id bs32so6716113qkb.1;
+        Thu, 10 Feb 2022 16:06:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=4Pnr1geQeZZNYUvmzTdrAcaSDDBHcWYiYOpV2+IuXsY=;
-        b=igNyfPN7wFlEB1yG0Q94kr/PxThWMFSj7uV6Xa4lsNO8Eodt/gd8/VSAkzJPPNNLqD
-         qQwMyH8ytBWbsWit97TH9K8POhN09okti3ZyrqvzyHsbekkA+9K/sE9UpcWfflBJ6IX+
-         rhewR0hrCY8scmAiE3GTbwcTImsKu8PHITWAJ8KcJjCbRrQVFfaIPsg5CJBI+XMVT1T2
-         Mpfbx/rAP4rZXHBa7IM2cBBntYJ+Tq2sImYYlI9cqsl2/gWObSkvu8rlLJoLDx7IJcj1
-         jCx2oUFhq59q3xZWxiZBd6OlaPcAu9p4kvX0V3N74k5jHjhmq4ZfoiAb7ipvUDuOUeOL
-         9MJw==
+        bh=kIxNsx5t66aCekxGiYnzItzLDmvgCurjGzLHlKM8kmo=;
+        b=kUPI1caTAiBqAVK3q8DnKRacUz2Uib6Hme9P7gr7i8kQ+e8TDEJqGlFb9zgPToD7X4
+         N+9XO0XYP2mYbZz74uZ8ryyWvq1dnX9hrT17tCXcrSr4PANCJ/G0mRpk/gSmP6hwaIA4
+         tSW8lv3cVv4eh0Fc3r/J6QFoUcItqKb2tIQyxE/nf7iYijX6DS2RQXFJKqGgFPMhUCS9
+         Dqf5xuMhdzQRvnaBkiEGdwqac4utkIFoMdIFFiXveNwGxaUBDmRdbQNyiyVPpzaVTcFz
+         igRbWOfbP9PGIw7H/TiCmFN2ibo8AOWyYEUvfZNJ2d6hoCz97qFC1FNpcapXfbvgCC0D
+         Dc2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4Pnr1geQeZZNYUvmzTdrAcaSDDBHcWYiYOpV2+IuXsY=;
-        b=UU6GMNB0fsGJrG3DfVheY67iM57aasdZCTqsTCSs5wrXVFYICw/TLQLnD9tN8YnGS6
-         gI76ub3oSZ1shTs4MUftCP/ZyU8pv96I1mltbJNexVTgogFQCHDDXjIqffeKDhHAuXGc
-         MNHY4d1nYp243k8Vp5iEYL5A2rCh04kUXN3AAEn2rfUWNLi/EN+lt6/RGJRQFWxfnmDS
-         nG9RI/fBHDagAY4+vFETd7PBAWMyVB8934dRIBRPM5WzSFXSETKf6cNDbz5nqQ8UTUVY
-         SqZJDFj+R8LXa9mOSXt/OR1qSIXrjUHU8uraOlX0fLUpmqGEl3KgVg9HDcNawpr7+IiT
-         x8dQ==
-X-Gm-Message-State: AOAM533wGaB+ZxL0iXl4l6FPXwCKDM0J0CbF35eSwO7p+RhU+kCvIN9w
-        QAJHsxwxcuVH5cYPPWzJN9ljTBMJryNVeQ==
-X-Google-Smtp-Source: ABdhPJyfV3TF5HzHznBEsBWEauR+HTDxani3jRA7hek8YabMaXIpvx3P8mEI1Y1Wy7MVJOQjILfz9w==
-X-Received: by 2002:a05:6214:2306:: with SMTP id gc6mr6804104qvb.45.1644537881043;
-        Thu, 10 Feb 2022 16:04:41 -0800 (PST)
+        bh=kIxNsx5t66aCekxGiYnzItzLDmvgCurjGzLHlKM8kmo=;
+        b=dZFBvUyx6I6yu5x9KI7cykgRPP61BtCZRsR3c72lrQqqd+vAXXKoPSXWqH2eRXrwxF
+         bZZYjQQk1Fe1jxukTgyoWiPlBNvdVijIzhiCro4Wl5AHAbhxvaHsRYUv1ljd1w+DAJ4O
+         HgWCTyYLBp+AlQZkfUpA4pHSJI/XXHi9RGWeXqkkGsBKdP4GCgqw4wkowqqO+H3SSiii
+         kEqxsTKBnfR8MokBcSQaY5/Akp5xc80KFbhWmVcMiH/wF8v6ZRQ16pgVtgZGuC2YWdTq
+         MYXSLXND5qqDrrJKGKibQPD2qqOMweDCvDtMmBDJFZJW0EczRbjJRrhdM7xQHss8zjuj
+         T8Dg==
+X-Gm-Message-State: AOAM531HrHekkONxkoVwTEqPrMDcw05AbZB0UDkV+KncAouDGc/dWoWc
+        1yOxuJwSIH+Ypqd7fBB8DSY=
+X-Google-Smtp-Source: ABdhPJwXNB8AH9WzcydC3nOV4kHShzA6P4syYry2xqBz+Iro1F4pn0IXPMbEY20Ct9c0HLCgx/xhIg==
+X-Received: by 2002:a37:851:: with SMTP id 78mr5100598qki.617.1644538014344;
+        Thu, 10 Feb 2022 16:06:54 -0800 (PST)
 Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id 195sm10710640qkf.30.2022.02.10.16.04.40
+        by smtp.gmail.com with ESMTPSA id v5sm11133965qkp.70.2022.02.10.16.06.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 16:04:40 -0800 (PST)
+        Thu, 10 Feb 2022 16:06:53 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -62,12 +62,16 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 33/49] perf: replace bitmap_weight with bitmap_weight_eq for ThunderX2
-Date:   Thu, 10 Feb 2022 14:49:17 -0800
-Message-Id: <20220210224933.379149-34-yury.norov@gmail.com>
+        linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-staging@lists.linux.dev
+Subject: [PATCH 34/49] media: tegra-video: replace bitmap_weight with bitmap_weight_le
+Date:   Thu, 10 Feb 2022 14:49:18 -0800
+Message-Id: <20220210224933.379149-35-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220210224933.379149-1-yury.norov@gmail.com>
 References: <20220210224933.379149-1-yury.norov@gmail.com>
@@ -83,31 +87,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tx2_uncore_event_start() calls bitmap_weight() to compare the weight
+tegra_channel_enum_format() calls bitmap_weight() to compare the weight
 of bitmap with a given number. We can do it more efficiently with
-bitmap_weight_eq because conditional bitmap_weight may stop traversing
+bitmap_weight_le() because conditional bitmap_weight may stop traversing
 the bitmap earlier, as soon as condition is (or can't be) met.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- drivers/perf/thunderx2_pmu.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/staging/media/tegra-video/vi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/perf/thunderx2_pmu.c b/drivers/perf/thunderx2_pmu.c
-index 1edb9c03704f..97d5b39778fa 100644
---- a/drivers/perf/thunderx2_pmu.c
-+++ b/drivers/perf/thunderx2_pmu.c
-@@ -623,8 +623,8 @@ static void tx2_uncore_event_start(struct perf_event *event, int flags)
- 		return;
+diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+index d1f43f465c22..4e79a80e9307 100644
+--- a/drivers/staging/media/tegra-video/vi.c
++++ b/drivers/staging/media/tegra-video/vi.c
+@@ -436,7 +436,7 @@ static int tegra_channel_enum_format(struct file *file, void *fh,
+ 	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
+ 		fmts_bitmap = chan->fmts_bitmap;
  
- 	/* Start timer for first event */
--	if (bitmap_weight(tx2_pmu->active_counters,
--				tx2_pmu->max_counters) == 1) {
-+	if (bitmap_weight_eq(tx2_pmu->active_counters,
-+				tx2_pmu->max_counters, 1)) {
- 		hrtimer_start(&tx2_pmu->hrtimer,
- 			ns_to_ktime(tx2_pmu->hrtimer_interval),
- 			HRTIMER_MODE_REL_PINNED);
+-	if (f->index >= bitmap_weight(fmts_bitmap, MAX_FORMAT_NUM))
++	if (bitmap_weight_le(fmts_bitmap, MAX_FORMAT_NUM, f->index))
+ 		return -EINVAL;
+ 
+ 	for (i = 0; i < f->index + 1; i++, index++)
 -- 
 2.32.0
 

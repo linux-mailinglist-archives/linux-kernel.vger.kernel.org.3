@@ -2,166 +2,592 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02EFA4B03DE
+	by mail.lfdr.de (Postfix) with ESMTP id F3ED44B03E1
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 04:25:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbiBJDXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 22:23:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53146 "EHLO
+        id S232599AbiBJDYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 22:24:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbiBJDXV (ORCPT
+        with ESMTP id S230140AbiBJDY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 22:23:21 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80080.outbound.protection.outlook.com [40.107.8.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC02B205F1;
-        Wed,  9 Feb 2022 19:23:22 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kEEzecCPzK0aW7LJbyMzogbHpD9uXGFOOopAmyp5w8nQeZ8fHOktRN655SOyPfAxC6zDtO47LxvLKL7Jw3NT0V6VmCSspctH9lipac3dQog//3cgcwXnklat4PtMbSbJ2li0RBl9M870bnsV3Pg27Jw0rKKP0xBEGOX+D6aTCmF7akIaBpKiwXjL8ZKLzRljBYoor6tMqEI2HHyMmnSG4qmBzJmmEdLOrQ5sdlM6kZqBBbYYJQMsx3D+TCs4EJr3mzBlR90mK1XpeoQVGAE/g2PIE0z73Anpe2GMpSIiQjctOmt/xZXfRV+ayaz1L465KSzBYfL4kV0v8ATPwic86w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VZJDqwbh9xEz5WV+xH5ExmdHy1BUQrl4lNGW/o+xkwQ=;
- b=PD5Sat4A5Sa4wt+VXzzZktwlwxpCisec1tf+zgwhk+OEpWx0wWhly6k0eS/XsWmW18NpSaB494R/XDNl6bCJaoWyMfin8X5rQ3m92wXkruoEQqB4SACMVvz2xA4PKr8OBGLCRfzTLUmWSPlSJxSzBG98kLsgVVQvpAESfNvKj8fGpoW5PyvCxxcRvsfKsZR0WFeG8XgLXXc0IwwHs7xLpURECy4zjlxokfQuZn1FpwUGCdngIHp2iPLVz+U46x+yn6WaYXiIV1fWGfOHIm4tlv97lY269QiF3LS0XzIpyKeouJ++Ze4iFxC/qhDu5ooysaIjESIx4Md8gnqVdIj7MQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VZJDqwbh9xEz5WV+xH5ExmdHy1BUQrl4lNGW/o+xkwQ=;
- b=GXb7TOUKTGRkQLOijKaiaoBJH6SXqOemtnNOvk26Lt5/ik68/SpPcoGyB7WMX+rLF69OkwFsnQwWSxlxv+RwnyULVwHJ3k1cOFxJ05xVkSlHwXblI38M7hMbDYqowNUYlX4GNO/3MFNiR2Beew9xb8kUlBhUonNCxd9NoSvA5fM=
-Received: from AS8PR04MB8676.eurprd04.prod.outlook.com (2603:10a6:20b:42b::10)
- by AM6PR04MB4054.eurprd04.prod.outlook.com (2603:10a6:209:49::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Thu, 10 Feb
- 2022 03:23:20 +0000
-Received: from AS8PR04MB8676.eurprd04.prod.outlook.com
- ([fe80::3d1c:b479:1c58:199]) by AS8PR04MB8676.eurprd04.prod.outlook.com
- ([fe80::3d1c:b479:1c58:199%4]) with mapi id 15.20.4975.011; Thu, 10 Feb 2022
- 03:23:20 +0000
-From:   Hongxing Zhu <hongxing.zhu@nxp.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [RFC 2/2] PCI: imx6: Enable imx6qp pcie power management support
-Thread-Topic: [RFC 2/2] PCI: imx6: Enable imx6qp pcie power management support
-Thread-Index: AQHYHYduLICm7+FWyEagAyZved6iF6yLWpYAgACtzBA=
-Date:   Thu, 10 Feb 2022 03:23:19 +0000
-Message-ID: <AS8PR04MB867616CDC587BB93772AC8588C2F9@AS8PR04MB8676.eurprd04.prod.outlook.com>
-References: <1644390156-5940-2-git-send-email-hongxing.zhu@nxp.com>
- <20220209153636.GA557361@bhelgaas>
-In-Reply-To: <20220209153636.GA557361@bhelgaas>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3b83b76f-28bc-4580-fb83-08d9ec44afc5
-x-ms-traffictypediagnostic: AM6PR04MB4054:EE_
-x-microsoft-antispam-prvs: <AM6PR04MB40544384176E43FBBFB13D258C2F9@AM6PR04MB4054.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zOIzOqU2Xs3l0CZfpjbNQbzJzqpr3X7yQrlff2H5cxb9MF6O1ODVAgvBY3Dw//s6geXlOJhIoklHBErHvEuB+NS6lVsNNAdPfPKfH9etBduA9VlMjPZowkPgEi5LLs5VBoS+U5qtJud+7zfSq2Wbx1TweRAS1qUZJSwGofNNZRSzixXV23oRlVIa9sG/oxKfGhVAQXcmXjsVPTLb05FlxU2O3f4WjtiANrZBOlZKRkfLck46v3rKGbueKAhJNeuFuEfms46l17jYEXcSt5JsHU5lghjAiCMzna2NBPljLc7f4VbMzU0yoXdRfGc22LI85671lOY5aE6OLCxcW5A6MbdZmG+6qY4v353CE18T7n5YfXkSWzhzD2Hn8CxMsY7Ym+iskPAuc03WMQuhJD5QJcqXcXr26Z5UBnvKbFQO9tDVPUJ25O6FkZoYpRUVJVyUSZ/VZwXgnwCI0V5ChEvmJop+uzQIoFHorAekyL9XASMHmLN/6TNazguNeR9cKFuiOJn3kPSnZDQaDne2lAdD7QxzeDGoXg2zpZKx1oGQLSu2CWhW856BaEAuX8cljmYcySvTe0ghCZZao6idvwlGKcdX6Rb4cZbDI+0B+xci0y5ZbfJEpeOCvHEEFe9HH4TJjp7fbeASCPmMh0jPY+sljRf4xm0tsUDCYGYgiuxMuZw8WqdKRYRdKctERErDpvT3jSeRQS+3UBJGhAvrp3NQlxMKuFdwDUV3S6AlqGce+R4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8676.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8936002)(44832011)(6506007)(38100700002)(2906002)(508600001)(38070700005)(66946007)(76116006)(66556008)(66476007)(66446008)(122000001)(4326008)(64756008)(8676002)(33656002)(86362001)(52536014)(5660300002)(6916009)(316002)(54906003)(7696005)(83380400001)(26005)(186003)(53546011)(55016003)(9686003)(71200400001)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?NXdDZXN4VkhNUEFwSU1YWVpxcHpBRXQvY0I1dWZ0VG9XMEczeFdlSE1tY3V3?=
- =?gb2312?B?YTJxMDdBR0I3RmlqWWh2QlZYWUhxTTBFSU9kdGhIVXVrdTJWdXhtOENlSzZE?=
- =?gb2312?B?WnV3MmwrUTNBVitLZ1hIR1ZIQ0cwZzY4bDY4aUpNenhMWHBGbDlrZnUvN0M2?=
- =?gb2312?B?Ykt6cU5uS29Tb1JzcGpPZG9CMlI2ZVJzYS9zdnZRd29kVHZsRVBVUEVicGNo?=
- =?gb2312?B?N3V2VVozTXcwdWlaSktWeDVqQXBHQVM5OUVnNk1wRm5XQmc0bGExVUNrR1o1?=
- =?gb2312?B?ZWJWTnV3TXMyTzN5ajlUSU53cm5adlV6UDNJQjNqRXhuRVdkbTFuaUVJR2JS?=
- =?gb2312?B?RDRyWXRUSVp5bjIzbURpMDEwYjhoM1I3d1BKNDI5aXR6U3lMUjZReWZra0ZO?=
- =?gb2312?B?N3U4V3lSMVRoOHhnZkNaUWhNRzUxUC9jMGpIUDFlM0ZPdEtzSTh5b2J5dGF2?=
- =?gb2312?B?WU9nLytxdDRsdFNFakxhejdpZUQrMEVVdWRYQWVBQjUzcWZ6bUwycGRkdUlW?=
- =?gb2312?B?ci9RNC9mM3NzZmlUeTg0cStkUHFmMldYUXhEYTRJK0hPVTQveEFySHZsMGY1?=
- =?gb2312?B?ZUNZd0lVc09qb0tTRXpmWExUejkzOXM0aFJSQzNyNnpkSWk0U3Y0WGF4eE1l?=
- =?gb2312?B?cit4RHJUM2JhT2IvbEJyNm1iRklia09iSm1TY3pVWENPdXBVaG52akUraG9y?=
- =?gb2312?B?WEZ1ZXY5M0RFMmcxSmhwMXdZb3FZM3VNT2JsVFJ0OVd6TFc2S3NiUVo0N0Vu?=
- =?gb2312?B?d1F6NitZZEVQK1hQaUpaTWFCRTZSVEROeVc2SVM4dXV3NkJRMFpXSGdMaFZC?=
- =?gb2312?B?cVQ1ZE4xTXZqUmtvUDVVem1ZeUFzckJCTGFDUEJPRXdRNUw4bFBsY0F0ZmJs?=
- =?gb2312?B?ZGdZOFdKZHZOOHE2dEZTZEplNjFsbk10ZFVja081VUh0RmYxU1JhdEpKL1d0?=
- =?gb2312?B?eE1RQXc4T1BUczFyd1BQb0NwLzFuK25XZ3JLKzI1Wi9ZWjhLRWVGVW0yRm41?=
- =?gb2312?B?TmtpS2dHRExlYXNDNS9QTFo3ZTZNTjJFVXZuUUg5czhTL2l0cEltTVVmRTNz?=
- =?gb2312?B?VEZPYlk3ZU9uR00xMlFJaWgyNlpOdEhLN0NJcFplc3VWRFpJcWZjVjNDZHhR?=
- =?gb2312?B?eWl3eG9LYUdKdkxBK3dOb2FnL1M3Q2MvSm5jV3ZaYWlFaTlrQWxCbHA1MFhC?=
- =?gb2312?B?dnJNaUJxWmJXZ2ZNOGhjbGFrSk10MHp4ck1iaVlxKzNtelkvRStHY2RLZEU1?=
- =?gb2312?B?U1dIWjFEdFRWSERWZ2ZhN1lES0xYWmMyL291VGtnSE05RG5IYVRhSG1FYy9a?=
- =?gb2312?B?dkFyRHBoU2ZXSmo4dkZieU5zN0xzUHRiZGtaTWgzTE00aHQ0R1hvVm81Yk9p?=
- =?gb2312?B?NkNIQnJ0YjhsNExMQlFLUjkyRjdFelYxTVRLaGJrREU4aFBLYkFWaks2S3NR?=
- =?gb2312?B?bEVjTTdHOXhKM09VMTl3MnRZWVlFTEwwK0NMMjk0WVkxSENRTEhZSmUwNlcw?=
- =?gb2312?B?RXhqL0ZTUkhsVE9RNHU3VmRvWTFrb0FONk1VOU1UL0dyQTBHWU5RbFhKZlFK?=
- =?gb2312?B?dFNmYWJBSGVwK3lwVWFSVE0xdDhDUjhxa2MrTGZFbXRJM3dMMldPNEN3dnhF?=
- =?gb2312?B?aCtkVTRIOGNvNDM2b3ZGQXNGaVg4VklZdVZhenRrYnVSYWdhc3ZQYmk1THRw?=
- =?gb2312?B?RTgzTEVyQllJM0FaQXZKcnVaRnprWDJDWUVPNjJJdWtESjlpdElETVh4Y2gy?=
- =?gb2312?B?MEZjS1RCS1dUd3o0d25yTHVaMi92WURlTk1XcU5maU9wZlh5YmI2TVFPV1Rs?=
- =?gb2312?B?M2JHV2V0MUVzUlg5Y0dBMGsxQW5rQTZLNk93YWlNVVVhNU1PUCtBeWlOVTNN?=
- =?gb2312?B?YmdLMDhiM2ZnY0dPYW9VRm8rK2lLWlpKaG9RVGFHMU1ydFhEeVNyMkJtQktK?=
- =?gb2312?B?dVozRkFSbmhIbGtWS0F6QUFlR2ZCb0t0OVhlamFpRUlJZ0hlRFRicWR1R0JY?=
- =?gb2312?B?UThVZVFxQlNCTHdYOHAwb0Y3M3FtQUtwb0QvTXg4djdkc0Zka3VJaXlSVVhH?=
- =?gb2312?B?OE93K1JOWHg4U1ZTckpsUXhHKzVJTXA0OU5SdWx0Vkc4RjN5TnJtMWlFVzhp?=
- =?gb2312?B?eXNOOEhFRDNJUFlVbDlYT0JUSmUyVFhEcmY5d0x6YmpkU1p3dFBHWWZxRzQw?=
- =?gb2312?B?Mmc9PQ==?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Wed, 9 Feb 2022 22:24:27 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264841EAE2;
+        Wed,  9 Feb 2022 19:24:29 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BAE6121100;
+        Thu, 10 Feb 2022 03:24:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644463467; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xwqKw/x7M7OBcPmkuJ2rpe3zrxSATDoZ5IdU4ehVYHQ=;
+        b=RKh1X/1fvVK0TdOjwh3Y5kGcg6ZZZovFUrcRfGuoDTMz6vGQQdTYQuFVy80O+HmZ+cro1K
+        Jm1BXdHFYtPM8nDSIntxOajLEJRT5rcf4sZzWrjO2AkmhysJiAGCzbm+VmOYY435K3X94I
+        yKOIWch7O1m2jOjDdRX9TjGOFYalfJg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644463467;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xwqKw/x7M7OBcPmkuJ2rpe3zrxSATDoZ5IdU4ehVYHQ=;
+        b=DAkw0YYoO4GkxdPbXWZPLbQKRn/JDU8x5+Jf57ZJ0Ypc4t7M1Gh72wsMaz84uR1Q58zj5N
+        7w3oWA7dUfeoilCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8092C13AF0;
+        Thu, 10 Feb 2022 03:24:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id v49LD2iFBGKgFAAAMHmgww
+        (envelope-from <neilb@suse.de>); Thu, 10 Feb 2022 03:24:24 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8676.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b83b76f-28bc-4580-fb83-08d9ec44afc5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2022 03:23:19.9304
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: DfqiFHHuPDdNwm8/A9CuHF2MH6MyD4gNfS7sQIq4XyJ1ZD34i5RYFa22rDrlpVktjA1uZjT4lmvlal9syRc8NQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4054
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Trond Myklebust" <trond.myklebust@hammerspace.com>,
+        "Anna Schumaker" <anna.schumaker@netapp.com>,
+        "Chuck Lever" <chuck.lever@oracle.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Mark Hemment" <markhemm@googlemail.com>,
+        "Christoph Hellwig" <hch@infradead.org>,
+        "David Howells" <dhowells@redhat.com>
+Cc:     linux-nfs@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 01/21 -  revised] MM: create new mm/swap.h header file.
+In-reply-to: <164420916109.29374.8959231877111146366.stgit@noble.brown>
+References: <164420889455.29374.17958998143835612560.stgit@noble.brown>,
+ <164420916109.29374.8959231877111146366.stgit@noble.brown>
+Date:   Thu, 10 Feb 2022 14:24:21 +1100
+Message-id: <164446346124.27779.17090116810760017647@noble.neil.brown.name>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBCam9ybiBIZWxnYWFzIDxoZWxn
-YWFzQGtlcm5lbC5vcmc+DQo+IFNlbnQ6IDIwMjLE6jLUwjnI1SAyMzozNw0KPiBUbzogSG9uZ3hp
-bmcgWmh1IDxob25neGluZy56aHVAbnhwLmNvbT4NCj4gQ2M6IGwuc3RhY2hAcGVuZ3V0cm9uaXgu
-ZGU7IGJoZWxnYWFzQGdvb2dsZS5jb207DQo+IGxvcmVuem8ucGllcmFsaXNpQGFybS5jb207IHNo
-YXduZ3VvQGtlcm5lbC5vcmc7IGxpbnV4LXBjaUB2Z2VyLmtlcm5lbC5vcmc7DQo+IGxpbnV4LWFy
-bS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9y
-ZzsNCj4ga2VybmVsQHBlbmd1dHJvbml4LmRlOyBkbC1saW51eC1pbXggPGxpbnV4LWlteEBueHAu
-Y29tPg0KPiBTdWJqZWN0OiBSZTogW1JGQyAyLzJdIFBDSTogaW14NjogRW5hYmxlIGlteDZxcCBw
-Y2llIHBvd2VyIG1hbmFnZW1lbnQNCj4gc3VwcG9ydA0KPiANCj4gSW4gc3ViamVjdCwgcy9wY2ll
-L1BDSWUvIG9yIHJlbW92ZSBpdCBhbHRvZ2V0aGVyLCBzaW5jZSBJIGRvbid0IHRoaW5rIGl0IGFk
-ZHMNCj4gdXNlZnVsIGluZm9ybWF0aW9uLg0KPiANCj4gT24gV2VkLCBGZWIgMDksIDIwMjIgYXQg
-MDM6MDI6MzZQTSArMDgwMCwgUmljaGFyZCBaaHUgd3JvdGU6DQo+ID4gaS5NWDZRUCBQQ0llIHN1
-cHBvcnRzIHRoZSBSRVNFVCBsb2dpYywgdGh1cyBpdCBjYW4gc3VwcG9ydCB0aGUgTDIgZXhpdA0K
-PiA+IGJ5IHRoZSByZXNldCBtZWNoYW5pc20uDQo+ID4gRW5hYmxlIHRoZSBpLk1YNlFQIFBDSWUg
-c3VzcGVuZC9yZXN1bWUgb3BlcmF0aW9ucyBzdXBwb3J0Lg0KPiANCj4gQWRkIGJsYW5rIGxpbmUg
-YmV0d2VlbiBwYXJhZ3JhcGhzIG9yIHJld3JhcCBpbnRvIGEgc2luZ2xlIHBhcmFncmFwaC4NCkdv
-dCB0aGF0LCB0aGFua3MuDQoNCj4gDQo+IFJld3JhcCB0byBmaWxsIDc1IGNvbHVtbnMuDQpPa2F5
-LCB3b3VsZCBiZSBjaGFuZ2VkLg0KDQo+IA0KPiBXaGF0IGRvZXMgIkwyIGV4aXQgYnkgcmVzZXQg
-bWVjaGFuaXNtIiBtZWFuPyAgSXMgdGhpcyBhbiBpLk1YNi1zcGVjaWZpYw0KPiB0aGluZz8gIElm
-IG5vdCwgY2FuIHlvdSBwb2ludCBtZSB0byB0aGUgcmVsZXZhbnQgcGFydCBvZiB0aGUgUENJZSBz
-cGVjPw0KTm8sIGl0J3Mgbm90IGkuTVg2IHNwZWNpZmljIHRoaW5nLiBpLk1YNlEvREwgZG9lc24n
-dCBoYXZlIHRoZSBzZWxmLXJlc2V0IG1lY2hhbmlzbS4NClRodXMsIGl0IGNhbid0IHJlc2V0IGl0
-c2VsZiB0byBhbiBpbml0aWFsaXplZCBzdGF0IHdoZW4gbGluayBleGl0IGZyb20gdGhlIEwyDQpv
-ciBMMyBzdGF0cy4NCmkuTVg2UVAgUENJZSBoYXMgdGhlIHNlbGYtcmVzZXQgbWVjaGFuaXNtLCBh
-bmQgaXQgY2FuIHJlc2V0IGl0c2VsZiB3aGVuIGxpbmsNCmV4aXQgZnJvbSBMMiBvciBMMyBzdGF0
-cy4NClRoZSBjb21taXQgZGVzY3JpcHRpb24gbWlnaHQgbm90IGFjY3VyYXRlLg0KSG93IGFib3V0
-IGNoYW5nZSB0aGVtIHRvICJpLk1YNlFQIFBDSWUgc3VwcG9ydHMgdGhlIFJFU0VUIGxvZ2ljLCB0
-aHVzIGl0IGNhbg0KIHJlc2V0IGl0c2VsZiB0byB0aGUgaW5pdGlhbGl6ZWQgc3RhdCB3aGVuIGV4
-aXQgZnJvbSBMMiBvciBMMyBzdGF0cy4iDQoNCkJlc3QgUmVnYXJkcw0KUmljaGFyZCBaaHUNCj4g
-DQo+IEJqb3JuDQo=
+
+Many functions declared in include/linux/swap.h are only used within mm/
+
+Create a new "mm/swap.h" and move some of these declarations there.
+Remove the redundant 'extern' from the function declarations.
+
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: NeilBrown <neilb@suse.de>
+---
+
+Added missing include in mm/huge_memory.c
+
+ include/linux/swap.h | 121 ----------------------------------------
+ mm/huge_memory.c     |   1 +
+ mm/madvise.c         |   1 +
+ mm/memcontrol.c      |   1 +
+ mm/memory.c          |   1 +
+ mm/mincore.c         |   1 +
+ mm/page_alloc.c      |   1 +
+ mm/page_io.c         |   1 +
+ mm/shmem.c           |   1 +
+ mm/swap.h            | 129 +++++++++++++++++++++++++++++++++++++++++++
+ mm/swap_state.c      |   1 +
+ mm/swapfile.c        |   1 +
+ mm/util.c            |   1 +
+ mm/vmscan.c          |   1 +
+ mm/zswap.c           |   2 +
+ 15 files changed, 143 insertions(+), 121 deletions(-)
+ create mode 100644 mm/swap.h
+
+diff --git a/include/linux/swap.h b/include/linux/swap.h
+index 1d38d9475c4d..3f54a8941c9d 100644
+--- a/include/linux/swap.h
++++ b/include/linux/swap.h
+@@ -419,62 +419,19 @@ extern void kswapd_stop(int nid);
+=20
+ #ifdef CONFIG_SWAP
+=20
+-#include <linux/blk_types.h> /* for bio_end_io_t */
+-
+-/* linux/mm/page_io.c */
+-extern int swap_readpage(struct page *page, bool do_poll);
+-extern int swap_writepage(struct page *page, struct writeback_control *wbc);
+-extern void end_swap_bio_write(struct bio *bio);
+-extern int __swap_writepage(struct page *page, struct writeback_control *wbc,
+-	bio_end_io_t end_write_func);
+ extern int swap_set_page_dirty(struct page *page);
+-
+ int add_swap_extent(struct swap_info_struct *sis, unsigned long start_page,
+ 		unsigned long nr_pages, sector_t start_block);
+ int generic_swapfile_activate(struct swap_info_struct *, struct file *,
+ 		sector_t *);
+=20
+-/* linux/mm/swap_state.c */
+-/* One swap address space for each 64M swap space */
+-#define SWAP_ADDRESS_SPACE_SHIFT	14
+-#define SWAP_ADDRESS_SPACE_PAGES	(1 << SWAP_ADDRESS_SPACE_SHIFT)
+-extern struct address_space *swapper_spaces[];
+-#define swap_address_space(entry)			    \
+-	(&swapper_spaces[swp_type(entry)][swp_offset(entry) \
+-		>> SWAP_ADDRESS_SPACE_SHIFT])
+ static inline unsigned long total_swapcache_pages(void)
+ {
+ 	return global_node_page_state(NR_SWAPCACHE);
+ }
+=20
+-extern void show_swap_cache_info(void);
+-extern int add_to_swap(struct page *page);
+-extern void *get_shadow_from_swap_cache(swp_entry_t entry);
+-extern int add_to_swap_cache(struct page *page, swp_entry_t entry,
+-			gfp_t gfp, void **shadowp);
+-extern void __delete_from_swap_cache(struct page *page,
+-			swp_entry_t entry, void *shadow);
+-extern void delete_from_swap_cache(struct page *);
+-extern void clear_shadow_from_swap_cache(int type, unsigned long begin,
+-				unsigned long end);
+-extern void free_swap_cache(struct page *);
+ extern void free_page_and_swap_cache(struct page *);
+ extern void free_pages_and_swap_cache(struct page **, int);
+-extern struct page *lookup_swap_cache(swp_entry_t entry,
+-				      struct vm_area_struct *vma,
+-				      unsigned long addr);
+-struct page *find_get_incore_page(struct address_space *mapping, pgoff_t ind=
+ex);
+-extern struct page *read_swap_cache_async(swp_entry_t, gfp_t,
+-			struct vm_area_struct *vma, unsigned long addr,
+-			bool do_poll);
+-extern struct page *__read_swap_cache_async(swp_entry_t, gfp_t,
+-			struct vm_area_struct *vma, unsigned long addr,
+-			bool *new_page_allocated);
+-extern struct page *swap_cluster_readahead(swp_entry_t entry, gfp_t flag,
+-				struct vm_fault *vmf);
+-extern struct page *swapin_readahead(swp_entry_t entry, gfp_t flag,
+-				struct vm_fault *vmf);
+-
+ /* linux/mm/swapfile.c */
+ extern atomic_long_t nr_swap_pages;
+ extern long total_swap_pages;
+@@ -528,12 +485,6 @@ static inline void put_swap_device(struct swap_info_stru=
+ct *si)
+ }
+=20
+ #else /* CONFIG_SWAP */
+-
+-static inline int swap_readpage(struct page *page, bool do_poll)
+-{
+-	return 0;
+-}
+-
+ static inline struct swap_info_struct *swp_swap_info(swp_entry_t entry)
+ {
+ 	return NULL;
+@@ -548,11 +499,6 @@ static inline void put_swap_device(struct swap_info_stru=
+ct *si)
+ {
+ }
+=20
+-static inline struct address_space *swap_address_space(swp_entry_t entry)
+-{
+-	return NULL;
+-}
+-
+ #define get_nr_swap_pages()			0L
+ #define total_swap_pages			0L
+ #define total_swapcache_pages()			0UL
+@@ -567,14 +513,6 @@ static inline struct address_space *swap_address_space(s=
+wp_entry_t entry)
+ #define free_pages_and_swap_cache(pages, nr) \
+ 	release_pages((pages), (nr));
+=20
+-static inline void free_swap_cache(struct page *page)
+-{
+-}
+-
+-static inline void show_swap_cache_info(void)
+-{
+-}
+-
+ /* used to sanity check ptes in zap_pte_range when CONFIG_SWAP=3D0 */
+ #define free_swap_and_cache(e) is_pfn_swap_entry(e)
+=20
+@@ -600,65 +538,6 @@ static inline void put_swap_page(struct page *page, swp_=
+entry_t swp)
+ {
+ }
+=20
+-static inline struct page *swap_cluster_readahead(swp_entry_t entry,
+-				gfp_t gfp_mask, struct vm_fault *vmf)
+-{
+-	return NULL;
+-}
+-
+-static inline struct page *swapin_readahead(swp_entry_t swp, gfp_t gfp_mask,
+-			struct vm_fault *vmf)
+-{
+-	return NULL;
+-}
+-
+-static inline int swap_writepage(struct page *p, struct writeback_control *w=
+bc)
+-{
+-	return 0;
+-}
+-
+-static inline struct page *lookup_swap_cache(swp_entry_t swp,
+-					     struct vm_area_struct *vma,
+-					     unsigned long addr)
+-{
+-	return NULL;
+-}
+-
+-static inline
+-struct page *find_get_incore_page(struct address_space *mapping, pgoff_t ind=
+ex)
+-{
+-	return find_get_page(mapping, index);
+-}
+-
+-static inline int add_to_swap(struct page *page)
+-{
+-	return 0;
+-}
+-
+-static inline void *get_shadow_from_swap_cache(swp_entry_t entry)
+-{
+-	return NULL;
+-}
+-
+-static inline int add_to_swap_cache(struct page *page, swp_entry_t entry,
+-					gfp_t gfp_mask, void **shadowp)
+-{
+-	return -1;
+-}
+-
+-static inline void __delete_from_swap_cache(struct page *page,
+-					swp_entry_t entry, void *shadow)
+-{
+-}
+-
+-static inline void delete_from_swap_cache(struct page *page)
+-{
+-}
+-
+-static inline void clear_shadow_from_swap_cache(int type, unsigned long begi=
+n,
+-				unsigned long end)
+-{
+-}
+=20
+ static inline int page_swapcount(struct page *page)
+ {
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 406a3c28c026..dae090f09038 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -38,6 +38,7 @@
+ #include <asm/tlb.h>
+ #include <asm/pgalloc.h>
+ #include "internal.h"
++#include "swap.h"
+=20
+ /*
+  * By default, transparent hugepage support is disabled in order to avoid
+diff --git a/mm/madvise.c b/mm/madvise.c
+index 5604064df464..1ee4b7583379 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -35,6 +35,7 @@
+ #include <asm/tlb.h>
+=20
+ #include "internal.h"
++#include "swap.h"
+=20
+ struct madvise_walk_private {
+ 	struct mmu_gather *tlb;
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 09d342c7cbd0..9b7c8181a207 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -66,6 +66,7 @@
+ #include <net/sock.h>
+ #include <net/ip.h>
+ #include "slab.h"
++#include "swap.h"
+=20
+ #include <linux/uaccess.h>
+=20
+diff --git a/mm/memory.c b/mm/memory.c
+index c125c4969913..d25372340107 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -86,6 +86,7 @@
+=20
+ #include "pgalloc-track.h"
+ #include "internal.h"
++#include "swap.h"
+=20
+ #if defined(LAST_CPUPID_NOT_IN_PAGE_FLAGS) && !defined(CONFIG_COMPILE_TEST)
+ #warning Unfortunate NUMA and NUMA Balancing config, growing page-frame for =
+last_cpupid.
+diff --git a/mm/mincore.c b/mm/mincore.c
+index 9122676b54d6..f4f627325e12 100644
+--- a/mm/mincore.c
++++ b/mm/mincore.c
+@@ -20,6 +20,7 @@
+ #include <linux/pgtable.h>
+=20
+ #include <linux/uaccess.h>
++#include "swap.h"
+=20
+ static int mincore_hugetlb(pte_t *pte, unsigned long hmask, unsigned long ad=
+dr,
+ 			unsigned long end, struct mm_walk *walk)
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 3589febc6d31..221aa3c10b78 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -81,6 +81,7 @@
+ #include "internal.h"
+ #include "shuffle.h"
+ #include "page_reporting.h"
++#include "swap.h"
+=20
+ /* Free Page Internal flags: for internal, non-pcp variants of free_pages().=
+ */
+ typedef int __bitwise fpi_t;
+diff --git a/mm/page_io.c b/mm/page_io.c
+index 0bf8e40f4e57..f8c26092e869 100644
+--- a/mm/page_io.c
++++ b/mm/page_io.c
+@@ -26,6 +26,7 @@
+ #include <linux/uio.h>
+ #include <linux/sched/task.h>
+ #include <linux/delayacct.h>
++#include "swap.h"
+=20
+ void end_swap_bio_write(struct bio *bio)
+ {
+diff --git a/mm/shmem.c b/mm/shmem.c
+index a09b29ec2b45..c8b8819fe2e6 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -38,6 +38,7 @@
+ #include <linux/hugetlb.h>
+ #include <linux/fs_parser.h>
+ #include <linux/swapfile.h>
++#include "swap.h"
+=20
+ static struct vfsmount *shm_mnt;
+=20
+diff --git a/mm/swap.h b/mm/swap.h
+new file mode 100644
+index 000000000000..13e72a5023aa
+--- /dev/null
++++ b/mm/swap.h
+@@ -0,0 +1,129 @@
++
++#ifdef CONFIG_SWAP
++#include <linux/blk_types.h> /* for bio_end_io_t */
++
++/* linux/mm/page_io.c */
++int swap_readpage(struct page *page, bool do_poll);
++int swap_writepage(struct page *page, struct writeback_control *wbc);
++void end_swap_bio_write(struct bio *bio);
++int __swap_writepage(struct page *page, struct writeback_control *wbc,
++		     bio_end_io_t end_write_func);
++
++/* linux/mm/swap_state.c */
++/* One swap address space for each 64M swap space */
++#define SWAP_ADDRESS_SPACE_SHIFT	14
++#define SWAP_ADDRESS_SPACE_PAGES	(1 << SWAP_ADDRESS_SPACE_SHIFT)
++extern struct address_space *swapper_spaces[];
++#define swap_address_space(entry)			    \
++	(&swapper_spaces[swp_type(entry)][swp_offset(entry) \
++		>> SWAP_ADDRESS_SPACE_SHIFT])
++
++void show_swap_cache_info(void);
++int add_to_swap(struct page *page);
++void *get_shadow_from_swap_cache(swp_entry_t entry);
++int add_to_swap_cache(struct page *page, swp_entry_t entry,
++		      gfp_t gfp, void **shadowp);
++void __delete_from_swap_cache(struct page *page,
++			      swp_entry_t entry, void *shadow);
++void delete_from_swap_cache(struct page *);
++void clear_shadow_from_swap_cache(int type, unsigned long begin,
++				  unsigned long end);
++void free_swap_cache(struct page *);
++struct page *lookup_swap_cache(swp_entry_t entry,
++			       struct vm_area_struct *vma,
++			       unsigned long addr);
++struct page *find_get_incore_page(struct address_space *mapping, pgoff_t ind=
+ex);
++
++struct page *read_swap_cache_async(swp_entry_t, gfp_t,
++				   struct vm_area_struct *vma,
++				   unsigned long addr,
++				   bool do_poll);
++struct page *__read_swap_cache_async(swp_entry_t, gfp_t,
++				     struct vm_area_struct *vma,
++				     unsigned long addr,
++				     bool *new_page_allocated);
++struct page *swap_cluster_readahead(swp_entry_t entry, gfp_t flag,
++				    struct vm_fault *vmf);
++struct page *swapin_readahead(swp_entry_t entry, gfp_t flag,
++			      struct vm_fault *vmf);
++
++#else /* CONFIG_SWAP */
++static inline int swap_readpage(struct page *page, bool do_poll)
++{
++	return 0;
++}
++
++static inline struct address_space *swap_address_space(swp_entry_t entry)
++{
++	return NULL;
++}
++
++static inline void free_swap_cache(struct page *page)
++{
++}
++
++static inline void show_swap_cache_info(void)
++{
++}
++
++static inline struct page *swap_cluster_readahead(swp_entry_t entry,
++				gfp_t gfp_mask, struct vm_fault *vmf)
++{
++	return NULL;
++}
++
++static inline struct page *swapin_readahead(swp_entry_t swp, gfp_t gfp_mask,
++			struct vm_fault *vmf)
++{
++	return NULL;
++}
++
++static inline int swap_writepage(struct page *p, struct writeback_control *w=
+bc)
++{
++	return 0;
++}
++
++static inline struct page *lookup_swap_cache(swp_entry_t swp,
++					     struct vm_area_struct *vma,
++					     unsigned long addr)
++{
++	return NULL;
++}
++
++static inline
++struct page *find_get_incore_page(struct address_space *mapping, pgoff_t ind=
+ex)
++{
++	return find_get_page(mapping, index);
++}
++
++static inline int add_to_swap(struct page *page)
++{
++	return 0;
++}
++
++static inline void *get_shadow_from_swap_cache(swp_entry_t entry)
++{
++	return NULL;
++}
++
++static inline int add_to_swap_cache(struct page *page, swp_entry_t entry,
++					gfp_t gfp_mask, void **shadowp)
++{
++	return -1;
++}
++
++static inline void __delete_from_swap_cache(struct page *page,
++					swp_entry_t entry, void *shadow)
++{
++}
++
++static inline void delete_from_swap_cache(struct page *page)
++{
++}
++
++static inline void clear_shadow_from_swap_cache(int type, unsigned long begi=
+n,
++				unsigned long end)
++{
++}
++
++#endif /* CONFIG_SWAP */
+diff --git a/mm/swap_state.c b/mm/swap_state.c
+index 8d4104242100..bb38453425c7 100644
+--- a/mm/swap_state.c
++++ b/mm/swap_state.c
+@@ -23,6 +23,7 @@
+ #include <linux/huge_mm.h>
+ #include <linux/shmem_fs.h>
+ #include "internal.h"
++#include "swap.h"
+=20
+ /*
+  * swapper_space is a fiction, retained to simplify the path through
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index bf0df7aa7158..71c7a31dd291 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -44,6 +44,7 @@
+ #include <asm/tlbflush.h>
+ #include <linux/swapops.h>
+ #include <linux/swap_cgroup.h>
++#include "swap.h"
+=20
+ static bool swap_count_continued(struct swap_info_struct *, pgoff_t,
+ 				 unsigned char);
+diff --git a/mm/util.c b/mm/util.c
+index 7e43369064c8..619697e3d935 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -27,6 +27,7 @@
+ #include <linux/uaccess.h>
+=20
+ #include "internal.h"
++#include "swap.h"
+=20
+ /**
+  * kfree_const - conditionally free memory
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 090bfb605ecf..5c734ffc6057 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -58,6 +58,7 @@
+ #include <linux/balloon_compaction.h>
+=20
+ #include "internal.h"
++#include "swap.h"
+=20
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/vmscan.h>
+diff --git a/mm/zswap.c b/mm/zswap.c
+index cdf6950fcb2e..9192dc5f678f 100644
+--- a/mm/zswap.c
++++ b/mm/zswap.c
+@@ -36,6 +36,8 @@
+ #include <linux/pagemap.h>
+ #include <linux/workqueue.h>
+=20
++#include "swap.h"
++
+ /*********************************
+ * statistics
+ **********************************/
+--=20
+2.35.1
+

@@ -2,170 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CEC24B1585
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C53614B1584
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:49:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235593AbiBJSrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 13:47:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36670 "EHLO
+        id S1343559AbiBJSsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 13:48:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiBJSrj (ORCPT
+        with ESMTP id S1343550AbiBJSsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 13:47:39 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2097.outbound.protection.outlook.com [40.107.96.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4436283;
-        Thu, 10 Feb 2022 10:47:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CQeFapmDDhKt17JYfcjkoBsr9xQ6uq3sEGXYcMBrXEyHeuBDkAULecR1iU07JFeGEzWgoVGpRTLuZbWv0Z9L3SbD1tuhBLv0ELC46PV3AMwzQbgXlux8TULSMtRX66q7zIlUl00AxHmqLjiInqX9eyldcwAXtwLp1QhlICvj1RDDdhAOjI28e48BccCu5iVNd7uUzPIyOY/OvUjxiwrJjCkLb59z98v3HDKvz8uK3ISdS0QM9/Xlov9GyeEJIvGTypYKMtCnl85YnH3S0PI/xWk+VTGca9cY5tPFp4ipHVKf8GFjOU38E38qtFU5dtYyTsQjJ2tnxQjxNSt/X4K3tA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UjRSQVwame1TweewDzMbgPwRJQIow7rVAEHj+KOLjTM=;
- b=m3yC5kze8aLmn3bkU8b8O9pRtbzI+//yoo6Wtl/cOYhYEaV12tPoVtGbPvl7T57Z3sGvQutfUIOOv0jPbF7rulwkqhXOVczc+EMQh14tSVL63IHcfifjT3cwfrValMfKZujSFNOjBAUx/S0Hf1CgMJrGkWsO9uz1xYiFtZ/QevbStKl9PXPDiFViO4H4uaqkYUgJoFqamB2BRSnTVc5hqH0EPgrpd3xqqVvReWUwYLwxbFgcISKS1fwyBV06i/1vX1jeBV5Yq9tX6tB/0dIBHi1lZ9DNXGyHnAcg07yiIH7SbLe/MFlN90HKocIrYNijFmxtCM0+HUFbc9hrfFmfYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Thu, 10 Feb 2022 13:48:05 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459E8F28
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:48:06 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id u16so6141303pfg.3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:48:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UjRSQVwame1TweewDzMbgPwRJQIow7rVAEHj+KOLjTM=;
- b=N2+JTfm0l7gx0FY+XeHg5PRRfgrK8qRz2v1P9ss8tovxVrneaBWf5t/H2b2vumSjGsewOzU/nXcUuxHqVNOVe80xGFaDJGljSrnIQE5YQBreO23fcI8TUa02WYepmNsIarB/DnqL/Y1/AJ+bqkY9yNO4Av6yW+rm+AK6Dh66jqs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DM6PR13MB3924.namprd13.prod.outlook.com (2603:10b6:5:28f::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.6; Thu, 10 Feb
- 2022 18:47:37 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::7037:b9dc:923c:c20d]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::7037:b9dc:923c:c20d%7]) with mapi id 15.20.4975.014; Thu, 10 Feb 2022
- 18:47:37 +0000
-Date:   Thu, 10 Feb 2022 19:47:31 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        John Hurley <john.hurley@netronome.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        oss-drivers@corigine.com, netdev@vger.kernel.org
-Subject: Re: [PATCH] nfp: flower: Fix a potential theorical leak in
- nfp_tunnel_add_shared_mac()
-Message-ID: <YgVdw1Ic7iEmvqx1@corigine.com>
-References: <49e30a009f6fc56cfb76eb2c922740ac64c7767d.1644433109.git.christophe.jaillet@wanadoo.fr>
- <YgUNdJgC9dNJN82P@corigine.com>
- <80a6083b-97ac-e24d-7791-1b5bdb318da5@wanadoo.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <80a6083b-97ac-e24d-7791-1b5bdb318da5@wanadoo.fr>
-X-ClientProxiedBy: AM0PR10CA0063.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:15::16) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VsLbb6fw09jdueYA3hgQp5c4zAw8XroJudfdKUin7Pk=;
+        b=A8nvS+811owjf+WxW8Y85nR1hJR7SCEE+KgU8+3UxXLVggL/+xneQ3xxsdomZFPAXG
+         OaZZns42B0hs+2AsdSfvl8hZUQmWzBzWaH+qByMuY7ubAhFgdcv1EROA3CJCgEy/N22l
+         qmKSV+hHkJbd7bT6MgvX7/y2JnhJOHkdFr/61DANa7QNv4LT4OZu2oaxNjPV1Lga/EOK
+         x2OpCvmMg468WnKAGYiPbFU1VuRr0K8cuufsAJcAQy0IEiH7azT/CN/3npSBGlK6TsiP
+         rDNUBNMI0KBHn/4JWMEqwhUKIGMF3KH+fTYbZc6Wt/kmUsDuNzJoEeiaBD0Q7Euky40n
+         KPng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VsLbb6fw09jdueYA3hgQp5c4zAw8XroJudfdKUin7Pk=;
+        b=Ho7b8S0AGYB56AYf8aqAhVyhjhDDhoNc0R6sH4pVNSeuK/wlfs15lgsNQVPcrJtd3h
+         WysuqtiBbTocNXk9dLpCrC0PTSsNMa1ethE6m4Uuvn1fYQjVbth7uqZ0cexHfOtDv4at
+         bGoEEXrspIVP8jsmmwPya4HXV+Zxv9eZWzEbjEF9sFbUqtC1hXC/5W9m3Y5IlN/axLDS
+         KNBrjCGULJJ7EdguEFKt38CG4pae5acLwI9rDuFS1CB6Jp4lxdXNIei2YV8Mf4EZdMX4
+         n7+R6W5anu22jv5JCrBxjEX2upZLpkXBnTpRbn1d9KZRPb9RfW2/Uq5trvvmJd9Hpk5r
+         3GVQ==
+X-Gm-Message-State: AOAM531D0uT6kDxljrHKAvNvjMf3TjHxSLVC9SJwJt8hK2Zx6RIPKocW
+        lzKTG8j6VU4GLVhnKILAv8427Q==
+X-Google-Smtp-Source: ABdhPJyAcsZT8dibcimAmFBciTXwwwCwtwpwFfr1/pJSIRwcJLfqtsWO+mS9FQ3RSw4EpD30XVcViw==
+X-Received: by 2002:a63:6ac3:: with SMTP id f186mr7163744pgc.81.1644518885741;
+        Thu, 10 Feb 2022 10:48:05 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id oa10sm964695pjb.54.2022.02.10.10.48.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 10:48:04 -0800 (PST)
+Date:   Thu, 10 Feb 2022 11:48:02 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Puranjay Mohan <p-mohan@ti.com>
+Cc:     puranjay12@gmail.com, kishon@ti.com, vigneshr@ti.com,
+        s-anna@ti.com, bjorn.andersson@linaro.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 1/2] remoteproc: Introduce deny_sysfs_ops flag
+Message-ID: <20220210184802.GB3603040@p14s>
+References: <20220209090342.13220-1-p-mohan@ti.com>
+ <20220209090342.13220-2-p-mohan@ti.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: db213b95-ba39-4080-cbc0-08d9ecc5cec8
-X-MS-TrafficTypeDiagnostic: DM6PR13MB3924:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR13MB3924AABD120E723AAE918E18E82F9@DM6PR13MB3924.namprd13.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: N56ZszKZ7MJELzbbh+yNLG1SNb0ZbYoNWAe29ZV4i/zd0fEgP6SsjUBjYig0ZCcM4m9WKpuv9PeWzShYmKO1/lKqU+OT8cxW5mYUT6zhoE4G7oiHeLWbrkQs0GS/bV+Ohp3XchqEwTbW63k8m6sFxSIg1VKEPktXVrFcosqYRWCYra0o4hMX9oQUtDw1XbzPbWyRuWLgBpFaD8YtVHgB9qzj8PhT1dBt1UEL4jYL9NgLVijJL/JnTPX4zHBzvwPCv3rFYX5JAnyLisELfAre3SVvnzxQIvJbhM9tVomIWoHdxxCy7Z+gFSyHyCfHEiJt6/Oob9M+xuB3O9/tYT5qAzPwLDxhmLxoQ56RMCzWNAyXA2grm/G18VomYEIWtBTQgka7wk021yv2kYPHoyToFq99uImNPmdCiSbyH8cw6/Wh07mABR9MeQy0plvmysH5RnE2gICiwE/eSJCkhE+fCzrVCMv7yawlhOA8bETEpvEKyAOZ8ktrs2KbvSVpg/Pt1iRHTD5m0ZYis9q8nsah1ymzz2GEVXN9vzbe10YqH5w59X24Xi/t2Cr0ha3ZgfWErV1hnQin3ultse7wAlTpPLVbxyrQsqO9DW2WPTdhcEHC6N9N8OyR8vBi+ozS0ULwAYZ3f/m2rC1C0TZ0sRUAd/BsAnqAc84m1TQxpQdoBZb5iJQ3z3gDePPAu0Y8HbAWi2UuAL2LrqseytCQGa67eg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(346002)(136003)(396003)(39840400004)(376002)(6916009)(8936002)(54906003)(66556008)(4326008)(8676002)(66476007)(186003)(66946007)(86362001)(316002)(38100700002)(52116002)(6506007)(2616005)(6512007)(36756003)(6486002)(508600001)(83380400001)(66574015)(44832011)(2906002)(5660300002)(6666004)(21314003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Zkl2ZFhFcWVZOFBvYjFmMnFBZGNzSGxtR2RkbWFBWHFTbjlWUVppWGREZm55?=
- =?utf-8?B?R0luendTU1A5V243WXp3K1U0bm1UNnJTU2s0SE9mZ2cvaWJlTWlXN3cyVXB3?=
- =?utf-8?B?ZnNWWWw0SjVEc216bkYzaVBTM1Zicml4a0lxbHdkb2MvaG5BQjlKODYyemlo?=
- =?utf-8?B?Q2ZPUmQzZkR0a3JjZFdVUlhBeWNDVzJyandsUDZyT1dqZGR1NUgzcTJjWGhX?=
- =?utf-8?B?aXcyQWoyMnVSUXhRVnc3SGF1OXBoUWl4dFRSenpZa2UrSWozZHNDdjFxenZz?=
- =?utf-8?B?NWFCN1FERkFJejBRbDg5aVRjQjdUSy8vdXplUjRRSUlTNVZJTWEwWmdpU1pH?=
- =?utf-8?B?cnBTeE5oRTV0aHlWNUttVzZEeWd6cmkvTkZYWkxEclJHd0tHYmhIYnV5T3ZY?=
- =?utf-8?B?NHBFMlBwdjhWREhvaGU0dUtRc3hmdG1JVmRXVVdNeTlBMXRxRE5rL2xLM0Rx?=
- =?utf-8?B?NWtlVXdzeU03UmFPV0YzN011ZnpYbktRUUsxSE5GN0Y4RHZLTVZHd0gzdmRM?=
- =?utf-8?B?WW55UkYvdDlPK3htaWNwaHlrZzNudjI3aHFKbHo0ck50OE1LTUZOMWVDV1BZ?=
- =?utf-8?B?Q2haNS85ejlCbWk0b2d4cmJnMGZYMEpISG1Nb1Q1dlRzS2dndW5QNXd1UkNU?=
- =?utf-8?B?YXhiOEI3S0N4aFM0ZlpGS0V4b25xUlIvWHVnUkRzTUlmb25aMnUycUx5WUFj?=
- =?utf-8?B?MWhzdUJiWWRWNzVrdjN6MktKNXZGWTlxSU80dlVPdG14Mm94YVB0OEpBRHh5?=
- =?utf-8?B?V1llV0VvU1JtV0FQQVlTQjFoWXhJcENkR0ozaVczbDZZcWNSM1RSaHdSMGRI?=
- =?utf-8?B?cStsTGxXOHlwS2o4aFpjczlTeUNaSWNaU2cxMDlFdG5UUGlrbXUxS2Y5WWd0?=
- =?utf-8?B?Q1JxaHpWOEZzRVNPQ3oxRmRYdmZPdVhiLzJQcU9scTZmUWlUUWI0NUlSWXM4?=
- =?utf-8?B?VkhTd0R6RmpYKytsV1MxTTYzWHliclZkaFUvVEZPWDNtVXVaOTNjb2cwbFhZ?=
- =?utf-8?B?WlZPTkdiUk9aU0s3MWlDakY3ajVnZWVZcGg0MmVnMHhLYTlQYnBGY1QveVhz?=
- =?utf-8?B?TDJLaW4xQk53Mms2eEx5bHBpM1ZkNXFaK2d6ZUZ6ZGJlbkxNdll2VEg4cDF4?=
- =?utf-8?B?V1BKTTFsbmJFdmY0WlhETlFJWVBDTDhRWWd6NXFFSlBHQnhzV0pVb0tkNGtG?=
- =?utf-8?B?NElxdVdLY3V6NWQrQ3JoUkRUV2NUbEhjZTJpeThLaTVHeXdmM2gxdi8xWE5q?=
- =?utf-8?B?ZWZ0cWQwVWxIUld2T2t4amhYaVRkcVBPMWRLUlZmaE91aGpwU2gzeURnNHVa?=
- =?utf-8?B?NWJPdDEzZS9la1lmZWFvQmtJSEkzQWZDWGpxU1FxSU1uOHk0M1VTZmM2WXY3?=
- =?utf-8?B?L2NmZHJkb0VPT1BlejRqNzg4cWRGL2U1a21zS2hEVlo5T2RBZHFPdkUwNG9i?=
- =?utf-8?B?U3pzZVNsdmdMVk1HWTZGWHZPNEpvcnFqVEZnV1BpUjIyckFVRC9WNVhuTmFr?=
- =?utf-8?B?Tk95Nk5IdzJvYUtxK3dnNzdORWtpUVg2cnp2YlNaWXJYQVdVU3M0UHdsY0FZ?=
- =?utf-8?B?cnlldHM4M0lrVy9wTjdSSTVLU3IwcEJiRVZZYWswNWZhZ2NXRHBNSGlMMzBK?=
- =?utf-8?B?dFlVc1doT0VmendLQjJGNGZqOGFXeU0yU2o3YW54M2ZidXJrK1Zia0RoQS9C?=
- =?utf-8?B?OUtrc0NBaGZxOEoyUzY1WHd6SWRjU25KZnRKRVFNcGR6OU9KMDY2MjZ5bFN6?=
- =?utf-8?B?d3ZDbVpaa1FJZTE3NTVvQmVpZlFvaTl1MXRDYjVRZU0wY3JMc1pUTjVNQ0xq?=
- =?utf-8?B?MGFnS2Vsd3E2cGVDNlhtVS9uN0J1SDNIUmk4TXRVbjBuTVZJVUt2UHM0dmN2?=
- =?utf-8?B?Vjg1RFdiS1ZYU016N2ZuUVc3TURGN2xRNWJrbGN6NDN0bGt5aTgvYU8xSmNp?=
- =?utf-8?B?Wm5tYlAxWlV6ZzFZWmtsSmVMYlpMYjZ2ekJzQkhISmNLWGNCN2ZOVnN3U0x3?=
- =?utf-8?B?b2ZCTWh1d0twWEpsZUlqa1c1WmFLMlI3TmJON2hPRmhSUE9ZN3Z0OTRkbERO?=
- =?utf-8?B?ckVWanQwRkIwYVMwTzdUajdkeUJzS0lFVmJ3djdZNUhKSGJhZElWWWF2ZFNm?=
- =?utf-8?B?UFdpQS9qdC9kWVNIdzJscUxLSU1FVEJHV2ZGWktxSlZtVXdTakVaODdFbzE5?=
- =?utf-8?B?MlRHVS9kTXhtYTh5cGFaYk5VUWJDdVYrblphN3JnQjlMaWpOTUpHVnVINC9w?=
- =?utf-8?B?VXJGRGRPRzVCV2p2UzdKN3hycjRtSGEwVjZlSktycUNFekl0T0RsOWNmVlJw?=
- =?utf-8?B?Q1pDTVd3dWVKWS9Bb3FLRFJibEU5bUdRSmlSeitPeHFkT0E4VUQ0dz09?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: db213b95-ba39-4080-cbc0-08d9ecc5cec8
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 18:47:37.4426
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M/lNSEfSe7MSKPM5WAUBQfBp+x1CBVJ/3+FPr8KPBFKgbdql+00d5YSQRslTHKdRkFQI/3Jshtf7CtKs8PxVwLSfybL0Kj1G0HpStiecxfQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB3924
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209090342.13220-2-p-mohan@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 07:39:29PM +0100, Christophe JAILLET wrote:
-> Le 10/02/2022 à 14:04, Simon Horman a écrit :
-> > Hi Christophe,
-> > 
-> > On Wed, Feb 09, 2022 at 07:58:47PM +0100, Christophe JAILLET wrote:
-> > > ida_simple_get() returns an id between min (0) and max (NFP_MAX_MAC_INDEX)
-> > > inclusive.
-> > > So NFP_MAX_MAC_INDEX (0xff) is a valid id
-> > > 
-> > > In order for the error handling path to work correctly, the 'invalid'
-> > > value for 'ida_idx' should not be in the 0..NFP_MAX_MAC_INDEX range,
-> > > inclusive.
-> > > 
-> > > So set it to -1.
-> > > 
-> > > While at it, use ida_alloc_xxx()/ida_free() instead to
-> > > ida_simple_get()/ida_simple_remove().
-> > > The latter is deprecated and more verbose.
-> > > 
-> > > Fixes: 20cce8865098 ("nfp: flower: enable MAC address sharing for offloadable devs")
-> > > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> > 
-> > Thanks for your patch.
-> > 
-> > I agree that it is indeed a problem and your fix looks good.
-> > I would, however, prefer if the patch was split into two:
-> > 
-> > 1. Bug fix
-> > 2. ida_alloc_xxx()/ida_free() cleanup
-> 
-> I'll send a v2.
-> 
-> I added it because some other maintainers have asked for it in other similar
-> patches. Everyone's taste is different :).
+Hi Puranjay,
 
-Thanks, much appreciated.
+On Wed, Feb 09, 2022 at 02:33:41PM +0530, Puranjay Mohan wrote:
+> The remoteproc framework provides sysfs interfaces for changing
+> the firmware name and for starting/stopping a remote processor
+> through the sysfs files 'state' and 'firmware'. The 'recovery'
+> sysfs file can also be used similarly to control the error recovery
+> state machine of a remoteproc. These interfaces are currently
+> allowed irrespective of how the remoteprocs were booted (like
+> remoteproc self auto-boot, remoteproc client-driven boot etc).
+> These interfaces can adversely affect a remoteproc and its clients
+> especially when a remoteproc is being controlled by a remoteproc
+> client driver(s). Also, not all remoteproc drivers may want to
+> support the sysfs interfaces by default.
+> 
+> Add support to deny the sysfs state/firmware/recovery change by
+> introducing a state flag 'deny_sysfs_ops' that the individual
+> remoteproc drivers can set based on their usage needs. The default
+> behavior is to allow the sysfs operations as before.
+> 
+> Implement attribute_group->is_visible() to hide the sysfs
+> state/firmware/recovery entries when deny_sysfs_ops flag is set.
+> 
+> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> ---
+> Changes in v3->v4:
+> Use mode = 0444 in rproc_is_visible() to make the sysfs entries
+> read-only when the deny_sysfs_ops flag is set.
+> ---
+>  drivers/remoteproc/remoteproc_sysfs.c | 18 +++++++++++++++++-
+>  include/linux/remoteproc.h            |  2 ++
+>  2 files changed, 19 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
+> index ea8b89f97d7b..da2d0eecfa44 100644
+> --- a/drivers/remoteproc/remoteproc_sysfs.c
+> +++ b/drivers/remoteproc/remoteproc_sysfs.c
+> @@ -230,6 +230,21 @@ static ssize_t name_show(struct device *dev, struct device_attribute *attr,
+>  }
+>  static DEVICE_ATTR_RO(name);
+>  
+> +static umode_t rproc_is_visible(struct kobject *kobj, struct attribute *attr,
+> +				int n)
+> +{
+> +	struct device *dev = kobj_to_dev(kobj);
+> +	struct rproc *rproc = to_rproc(dev);
+> +	umode_t mode = attr->mode;
+> +
+> +	if (rproc->deny_sysfs_ops && (attr == &dev_attr_recovery.attr ||
+> +				      attr == &dev_attr_firmware.attr ||
+> +				      attr == &dev_attr_state.attr))
+
+I was wondering if we should also add coredump to this group to make it an all
+or nothing option (name is already read only).
+
+> +		mode = 0444;
+
+Much better.
+
+> +
+> +	return mode;
+> +}
+> +
+>  static struct attribute *rproc_attrs[] = {
+>  	&dev_attr_coredump.attr,
+>  	&dev_attr_recovery.attr,
+> @@ -240,7 +255,8 @@ static struct attribute *rproc_attrs[] = {
+>  };
+>  
+>  static const struct attribute_group rproc_devgroup = {
+> -	.attrs = rproc_attrs
+> +	.attrs = rproc_attrs,
+> +	.is_visible = rproc_is_visible,
+>  };
+>  
+>  static const struct attribute_group *rproc_devgroups[] = {
+> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> index e0600e1e5c17..3849c66ce38f 100644
+> --- a/include/linux/remoteproc.h
+> +++ b/include/linux/remoteproc.h
+> @@ -523,6 +523,7 @@ struct rproc_dump_segment {
+>   * @table_sz: size of @cached_table
+>   * @has_iommu: flag to indicate if remote processor is behind an MMU
+>   * @auto_boot: flag to indicate if remote processor should be auto-started
+> + * @deny_sysfs_ops: flag to not permit sysfs operations on state, firmware and recovery
+>   * @dump_segments: list of segments in the firmware
+>   * @nb_vdev: number of vdev currently handled by rproc
+>   * @elf_class: firmware ELF class
+> @@ -562,6 +563,7 @@ struct rproc {
+>  	size_t table_sz;
+>  	bool has_iommu;
+>  	bool auto_boot;
+> +	bool deny_sysfs_ops;
+
+Wouldn't "sysfs_read_only" make more sense?
+
+
+With or without the above and for this set:
+
+Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+
+>  	struct list_head dump_segments;
+>  	int nb_vdev;
+>  	u8 elf_class;
+> -- 
+> 2.17.1
+> 

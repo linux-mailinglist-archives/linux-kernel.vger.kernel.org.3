@@ -2,139 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAAD74B03D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 04:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D834B03AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 04:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232375AbiBJDRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 22:17:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50106 "EHLO
+        id S231899AbiBJDDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 22:03:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiBJDRI (ORCPT
+        with ESMTP id S231714AbiBJDDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 22:17:08 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AE61EAEB;
-        Wed,  9 Feb 2022 19:17:10 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21A0MxVH013360;
-        Thu, 10 Feb 2022 00:34:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-type : mime-version;
- s=corp-2021-07-09; bh=Ek930C7I5E0EEhHKn/ITKWb6173HgY68jvVvULLROuo=;
- b=xba+qFDgCiB76kXZJkDPRRj5cqiEwiK5h4ZXbQhJ2vlBL1kQsK5jOPehQ3sAfTx+c3uk
- HPgW2VMJG4ZGu/GRcJdechEsVhzM5fT604DhTrXW9GD4Ywg05DEIvRqAlIxuu/GA0NpC
- B4KD/EWxE1NeR0d+JhcgiJcpCwqCd+jOauiVEsVf1xssiYWuPwJPREUT6zDbrqL5Tqs9
- 4SgYNadcww7ZonoMmkKUgYd31GdCYWYSV1/9hGFB8SAPlC5LOQfq03w0mXfmDWNjMBnD
- fpFDKtPtdfsMFaJlxtP/PxY5lrRlrCRLcA4dyUU5zRatLYUeO6CHfiP5Zkv4xvMK13JM ZQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e368tydgw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Feb 2022 00:34:05 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21A0Fqjp108705;
-        Thu, 10 Feb 2022 00:34:03 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2174.outbound.protection.outlook.com [104.47.57.174])
-        by userp3030.oracle.com with ESMTP id 3e1ec3p5n6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Feb 2022 00:34:03 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kjwGlB+YyuuDGYRAVX6UDCyt3YKx8Xa8KcZbM09CotsmT1StHtcVL/CqxlP+vju2c5I5+wjipmRgpI9gr8PfczcvcWkpzH8oMA5wiJZncW0+GsCxOaS2dXgCX2Y3A74s6zlPKiZEMwxQSeIlwJNLwjEGrNDmE8rtxnu3TrQEPNA+fsZ0hcQnFyk/VBc68keQbr3ZhFU3LHY6E2sRUS/tOGVzL+muloPfOi6e7lDLCyayJr93/suUdb0Y7NWBAnEn5Ezdng8HSfGn6bR23JzGxjKzHjxP/tC1henyta/jyFzGnLJRVStPDDvXrnKuASQ8rXK65YfvulITDINr+KUmlQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ek930C7I5E0EEhHKn/ITKWb6173HgY68jvVvULLROuo=;
- b=NzTPYkam2kAIHlhx4hz8tVA4NzdSsdFJlbHiZ7a8fznj3yUsZXvZ/UAM+VX1lVMep6JprONlGVAGpxCmUw6llTUBcSWaf1t1HH7l9LQD3mgyvjStF7vOagLg4nGltAZ3eVyE7lsypDcuQ5u+lpgxVv4L3tD/0lmyD8SKD6DUN6P32an5z6wzKVm8B5yHFzfHgnVdUgbOlxCatqm77dqv7a713uUtN8HGvsCMQgNDJ/KQQzDFpvNAWE1T0hHSjuqQ18/0MCXqrGlnkPjQrjUsj5eVEFDWZ0+g87hAFIwN6vWsA+Ii+hkY2b/AEiat5bc180uh1aMjm8WDxQ45M8unvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ek930C7I5E0EEhHKn/ITKWb6173HgY68jvVvULLROuo=;
- b=qwCrdKTs5iVFCQsm0pbYloniyVPxkwNZVhaE1Gv0E6sTuFgXZA6k4kmrCFNeB7z+26i0P5leSow5/bRoWJ2XHjChBgTQWjTNpfNLtAhQKAnKAbDSnpH1CYJvuf5BQYJssVKc/WGILtTykNna334/UQCkXWYg1YoJxCCH9FgIEzY=
-Received: from PH0PR10MB4472.namprd10.prod.outlook.com (2603:10b6:510:30::13)
- by SN6PR10MB3039.namprd10.prod.outlook.com (2603:10b6:805:d9::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.17; Thu, 10 Feb
- 2022 00:34:02 +0000
-Received: from PH0PR10MB4472.namprd10.prod.outlook.com
- ([fe80::94eb:56d8:7cd8:ca76]) by PH0PR10MB4472.namprd10.prod.outlook.com
- ([fe80::94eb:56d8:7cd8:ca76%5]) with mapi id 15.20.4951.019; Thu, 10 Feb 2022
- 00:34:01 +0000
-From:   Victor Erminpour <victor.erminpour@oracle.com>
-To:     mustafa.ismail@intel.com
-Cc:     shiraz.saleem@intel.com, jgg@ziepe.ca, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, trivial@kernel.org,
-        victor.erminpour@oracle.com
-Subject: [PATCH] RDMA/irdma: Fix GCC 12 warning
-Date:   Wed,  9 Feb 2022 16:33:55 -0800
-Message-Id: <1644453235-1437-1-git-send-email-victor.erminpour@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR05CA0188.namprd05.prod.outlook.com
- (2603:10b6:a03:330::13) To PH0PR10MB4472.namprd10.prod.outlook.com
- (2603:10b6:510:30::13)
+        Wed, 9 Feb 2022 22:03:32 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169CC205E2
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 19:03:32 -0800 (PST)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220210030329epoutp01f1424845ea7fcab3ea076f92c83399c7~STaquBfW01332913329epoutp01F
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:03:29 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220210030329epoutp01f1424845ea7fcab3ea076f92c83399c7~STaquBfW01332913329epoutp01F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1644462209;
+        bh=DH/9O9Z3dgVORgHIkvNXQao8lX5dwnmxxo735+xdAJ4=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=ov5Qqkg/FTScjjVPa5pXpZDNBRBw8QzfwgdDsAisd0Q3TE++P2/TSkzelzA/v1hzO
+         3up+TgtnXBcvtJG1U3L3eRZ92ohhEZ3WblylwkXy4R2G9TPP5u833lrMNSn/pXccaU
+         afB3/RtrvPco4cSPF3IplQOv/lAkDP4I0SbMXkq8=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20220210030328epcas5p1d655714fe4992ce9e9d394d5e88b971d~STaqUO3t61634516345epcas5p1Y;
+        Thu, 10 Feb 2022 03:03:28 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.175]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4JvM5859gFz4x9Q0; Thu, 10 Feb
+        2022 03:03:24 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        EB.AD.46822.16F74026; Thu, 10 Feb 2022 11:58:41 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220210030323epcas5p4b0ab5b5e019e1357b9315d8930545c70~STalgV8DD0184701847epcas5p4Z;
+        Thu, 10 Feb 2022 03:03:23 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220210030323epsmtrp2980841b1eaf0891b7c74ada517572882~STalfX-h82167621676epsmtrp2R;
+        Thu, 10 Feb 2022 03:03:23 +0000 (GMT)
+X-AuditID: b6c32a4a-de5ff7000000b6e6-86-62047f614ce1
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        4D.45.29871.B7084026; Thu, 10 Feb 2022 12:03:23 +0900 (KST)
+Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220210030321epsmtip1ba39a81695498362e6b20216d337b822~STai85god1858118581epsmtip1R;
+        Thu, 10 Feb 2022 03:03:20 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@canonical.com>,
+        "'Inki Dae'" <inki.dae@samsung.com>,
+        "'Joonyoung Shim'" <jy0922.shim@samsung.com>,
+        "'Seung-Woo Kim'" <sw0312.kim@samsung.com>,
+        "'Kyungmin Park'" <kyungmin.park@samsung.com>,
+        "'David Airlie'" <airlied@linux.ie>,
+        "'Daniel Vetter'" <daniel@ffwll.ch>,
+        "'Rob Herring'" <robh+dt@kernel.org>,
+        "'Kishon Vijay Abraham I'" <kishon@ti.com>,
+        "'Vinod Koul'" <vkoul@kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>
+Cc:     "'Marek Szyprowski'" <m.szyprowski@samsung.com>,
+        "'Sylwester Nawrocki'" <snawrocki@kernel.org>,
+        <stable@vger.kernel.org>
+In-Reply-To: <20220208171823.226211-2-krzysztof.kozlowski@canonical.com>
+Subject: RE: [PATCH 01/10] ARM: dts: exynos: add missing HDMI supplies on
+ SMDK5250
+Date:   Thu, 10 Feb 2022 08:33:18 +0530
+Message-ID: <000001d81e2a$c37c90d0$4a75b270$@samsung.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 40c05896-1006-444c-ac91-08d9ec2d08df
-X-MS-TrafficTypeDiagnostic: SN6PR10MB3039:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR10MB303945934E5B8A12C1323610FD2F9@SN6PR10MB3039.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1824;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: N10n4j78sojey67qlXzzRsbwaS3m9w5fCpzEBz18yAKn3SHuoDmkKDL9H8GpCHeAfD2qtaxCf0UymYk/ojPYUR4gCFGmMYDwcrHAJWbOq08Utfc74kM/7FGDwPuiL29CVrCpztyDgwDqYeA/ppaHWpt07qVDY2gtzoa9UIjzTNIoBcdZvRiES2NINeqJxd2hAg2OOjF+Irpq873N71ap8jDA+L2wa9qZyOWAjSzwOn/uoZKXf0Hk/G7SG4zUj5MgYSMpTaydVRnLdqp39+Ux5OcNxpO39tl4fgIHme+fqKIRv2fjMqLegmbBH1PND3347m+e/bLyys24bORASSkwQ6Oh2EzhhyRKWAc2ymh7w9FOzUcZNtmSFuNE3EjD0TfdvEA7O1psblMG2NWjRMs7iusR9lPatR/n0ts+i6dq6Oe5BvAyZiTjshyO8mFySX1ofBoKnpoX8htyKAkX50RbA+sYPbiSsj4MW+NANSAMbKIiDRnaN8LqjhTUB1gzTw6qklxYPNgt71PxiEY6qTki20vJWpOigUuammeiWWEIcSV3lSDEZS6aifMNIC6/JPJnf2SxeUrSRZHjAwxksMuvHdWzVdxAvZIePSNUlclOOLKjOTBDoCOkc1zsagdXo9K7MFBWXXF2NaMPFpOKUL0l+/m+8l8kXZ46HH3np0SoJxDsRB4Uy7FSvLQGkUr2OOxPlDCAL7F02Gg4w6mIdWIA3A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4472.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6916009)(38350700002)(186003)(316002)(6666004)(6506007)(6512007)(508600001)(86362001)(6486002)(26005)(107886003)(52116002)(4326008)(38100700002)(66476007)(5660300002)(2906002)(44832011)(66556008)(66946007)(83380400001)(36756003)(8936002)(2616005)(8676002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kuYKAcj8vcblJBwWpegnXpNdpVd71j/B84OMeW5Q2ku2Y/a3xGAKumvu33zL?=
- =?us-ascii?Q?MO4qjEwCgDwG6nJsJSZLnc9UuShjMPc++m6O9ayvBoydB7dbK7ovsGSjKhPz?=
- =?us-ascii?Q?VuB5fAk8C6BDfwLPJiZwBvlIWbmlaEknXFUlUcmpOyjx2UcIag8BTE5rpWJu?=
- =?us-ascii?Q?HbcRAu5tEemGGilvVAxp/RthtElCxDFPmOUf+FPDb47j4Vz3UEUvAdYbFQNn?=
- =?us-ascii?Q?f2VnUBknIbjg0IG0VbxELJRvyH2W8wYSydSoA+fsmtuLktWj1nRBphbnmTvU?=
- =?us-ascii?Q?CvHiRbgeSPc06d0mVE4UYuNG2kr0aNLML9zHO1dFkGidGrh3zZEuHo/xVk/F?=
- =?us-ascii?Q?b6O/8QIzK24a6B3JVh3gQDiHM5GwPhTH7LxbZMxemRlYJfZs4+xQcc7cRDoy?=
- =?us-ascii?Q?7mRk1RhXVb+CPCNSCm5F+c0fmcl8VcsdivujbnV3pGfSBbztVvTuw8AB0tGz?=
- =?us-ascii?Q?tp6cXNx4YkaLpBfQDFz15ZA+DZThib0xOzJe+v728rvO8d/6TmrxIgy8c4c4?=
- =?us-ascii?Q?Moxwj6S8wZ3u33MftayEM2BfghQxMNB3Vwdf7B4YdzwEjL+/P0lvgn8AJAjk?=
- =?us-ascii?Q?68w8L8Agiqrb/E2VHaVBHBIb3j/j05DeYWeW05mTarzOkMScYKBOKOm7M46u?=
- =?us-ascii?Q?oRjE8O6tBioscKDhivUm2Ss7CGPNxJl6Y4YDnc7f7PgJTTM0swPYjRyrujqa?=
- =?us-ascii?Q?vOK8YFlsNvA+Fo2El+WmhWj6Zpz6P5ufHquEyUxfO73uTWEecsdFB0eEklHm?=
- =?us-ascii?Q?11q0Bb8Tkd7KP0Ng/I0hjO22EGu+H/R3yoHi5f2hvXOM1L/Lm6jcHhgHWh5s?=
- =?us-ascii?Q?8eLN78NAhz+wvHrqaltdCkBPPOdCcMQ2M0ejr+AJfvvwHtN3murvZTYLztwH?=
- =?us-ascii?Q?8HeUz/XREHKnWC62T0C5sBvIgbT18zerJqBv3E0JGCKu309Jp/KdvsdFygwV?=
- =?us-ascii?Q?TmDncLHNMjwUoEIUtxqqNTW1MkPWHuvyhWFxXtIjrcI3pqY31XaOGhIaxpmR?=
- =?us-ascii?Q?2LxPMg/tPqqY0NG64MMt6rM6fNTvH+xd47snMY2TzwcDIvXNdkGWwT0hbNx2?=
- =?us-ascii?Q?CB6zpuliDVkO3GK+ACAeQRgmlc9KPqPDq5k2RrsguTyk1pftQ7ZVZQlUJ3hd?=
- =?us-ascii?Q?tMhpT4aiCD8cEbf3Zp/Y7A5m3foa0sZwPzUwcGOYaqAABiI7lslQqVyMyS89?=
- =?us-ascii?Q?f5Jd5EoPH+Mu5S2PPmEJNfdmt95wJr+m5ysrWMyqbmqd+r79zCLC5+BJ1LPc?=
- =?us-ascii?Q?DnmcXzttitoVrRKTMTQsbwTza+ezFyJ+Eyiz8XZewU/eR9NZOijn+Rci7nIZ?=
- =?us-ascii?Q?kmj3NEy+vLFb5tCEaHAUplwpDy74ZTr0qm7EY2jVmvIiN+Hj65hrioHg6tt8?=
- =?us-ascii?Q?bi/1qiAXv+s9s2d0pSDlceL0aScqaofZx5VKZgDuVpRpqMICklpMNJ/yrEQ+?=
- =?us-ascii?Q?tRuvPAmr9JzfzuU9S2VMG34P3IZNVSuguysde/vBUkYqnhsSxUcEjCWevzAe?=
- =?us-ascii?Q?pN9g6UcNr+7s1iCP+k50xJEm8MVEguSvHuPeBUMLM1zt8bgLWauWcCP7tmC5?=
- =?us-ascii?Q?NlTihy8XVl/JS18cv1zbqrO2MzJmWSxxQMM14xDaIyTUqTJBc7+AO0nH88bL?=
- =?us-ascii?Q?5KIJrGaEOf39wsezSYerj1LsiOIXeXwSS8qfffSYwdxbpt+wZTiBGuiQRZ/V?=
- =?us-ascii?Q?DQKzMg=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 40c05896-1006-444c-ac91-08d9ec2d08df
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4472.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 00:34:01.7915
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yGn668fCro5kRF15GMUrrsDLHCZyrp0e8s1fZWiKXKgfDidHF0sIZZkLapsRuWfRKYHWSw9aKaOmSvGU1R/AT2ZTEuJW/jicDlWkJ/8D0ng=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB3039
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10253 signatures=673431
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 suspectscore=0
- mlxlogscore=999 mlxscore=0 adultscore=0 malwarescore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202100000
-X-Proofpoint-ORIG-GUID: 1fCCKkKfLWSK3EHIMbaFj8ybzvZ6U1h9
-X-Proofpoint-GUID: 1fCCKkKfLWSK3EHIMbaFj8ybzvZ6U1h9
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQKO+pA4e/0lxhjrdKzLnJfOvLS5zwM3Y7bXAnFVvMKq8RoccA==
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA01TfUxTVxzN7Xt9bc2qzwLhDjYHbyMGMz6KwC5TcAIhb+ucTJaNGRL2pG+l
+        o7RNXxFmnIAIm2CFKonaMCTATOicH0BAcDSOFTtgc5IVYwzMQoFZAXVDUMIca3m48d+553fO
+        Pb/f/RBjsj+IILFaa2QNWkZDEevwjh/DN0cwxfi+aPPcZmS60S9Ayx1mDJ213xAi5/xDAp24
+        W4Oje78P4ejm5DECXZ59KkC/HJ4RoVb3LSH6rbuOQDXWBRyd/tUmQN/ZR0WovMcuQl9OejDU
+        cHkcoNMnPQTqGvkJe8uPtpSYCLpnoQGnW61HCbpzwSWk71Y5BHRbczF9vN0KaMftTgE917op
+        XbI3b3suyyhZQwirzdEp1VpVIqXIyE7JjouPlkfIE9AbVIiWyWcTqdR30yPS1BrvVFTIfkZT
+        4KXSGY6jopK2G3QFRjYkV8cZEylWr9ToY/WRHJPPFWhVkVrW+KY8Ojomziv8JC93+kgTrh/d
+        UDQzMI2VgBFpJZCIIRkLH1Y8wivBOrGMvArgz4MzgF/8BaDtwrCIXywAWNV3T/Dccuvb5tVC
+        D4BPOuxCX0FGegAsvSr3YYKMgFeaKgifyJ+sEkLX9SbCV8DIQ3DE04D5sISkYZd52msWi/3I
+        D2BPi8pH42QYHBywAh8tJRPgiak0Hy0lN8L+MxM4v8srsHO2DuP7CYGLk+dWWvAnk2H/WNlq
+        UiD09NlX+oRktQRODSwRvCEVDrUt4jz2g/cd7SIeB8G5Bz2ELxeSefBY91aePgi/qb++Kt8B
+        rznrcJ8EI8Phxe4oPmo9NC1NCHinFH5VIePVYbDswfCqMxiaq6qEPKahdfkaXgNCLWsGs6wZ
+        zLJmAMv/YQ0At4IXWT2Xr2K5OH2Mli3877ZzdPmtYOXFb3nnChhzPYrsBQIx6AVQjFH+0oFi
+        bJ9MqmQ+P8AadNmGAg3L9YI472GbsaCAHJ33y2iN2fLYhOjY+Pj42ISt8XIqUDqousTISBVj
+        ZPNYVs8anvsEYklQieCLFzxjdyp2KBptBUNlw+q3Z7edJ5+VHD4763CaNzz+OuZmGDcjcX+2
+        t6W2zXRcnJKRZLE5azQ/BFucH2eeedxeHZOZVFQ4yAbcydpZPuJGrvmu8qyY0W15benGLv1U
+        1Ljj09q59zeaZUdKbMr7aZ1P9LUUnjGzO1SR0lgkaspW6Kcn+r/fHeCW/v3Pe+Ol9Ecdyvn6
+        4cqipD7uVPihMdaQnvyau2sPdm6/bPZA5p7k0IlLVveEcFSEKxQZF1uOPnOtzwqCu56edDER
+        jaT6z+o+Efyw7BRnK6xH2M5K08thic1LjtfVYQepikDnptI+46vndy3m2G9PBaReIJaDX6Jw
+        LpeRb8EMHPMvUOFwhnoEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrPIsWRmVeSWpSXmKPExsWy7bCSnG51A0uSwbdj8ha9504yWfzfNpHZ
+        Yv6Rc6wWV76+Z7OYdH8Ci8WLexdZLC487WGz2Pj2B5PF2aY37BabHl9jtbi8aw6bxYRV31gs
+        Zpzfx2Sx9shddovWvUfYLdqfvmS2WLDxEaPFjMkv2Sx23jnB7CDsMauhl81j77cFLB6bVnWy
+        eWz/9oDV4373cSaPzUvqPfq2rGL0OH5jO5PH501yAZxRXDYpqTmZZalF+nYJXBmvWxazFNzl
+        r3hz6jVzA+Md3i5GTg4JAROJa6uXsIPYQgK7GSWWdbhDxKUlrm+cwA5hC0us/PccyOYCqnnO
+        KHH+7VawBJuArsSOxW1sIAkRgZmsEgu2T2MBSTALNDBK7PijDtFxlVHi8/pFrCAJTgEPiZ0T
+        XwPZHBzCAkESE/aZgIRZBFQlTp9axQgS5hWwlJj0zA0kzCsgKHFy5hMWkDCzgJ5E20ZGiOny
+        EtvfzmGGuE1B4ufTZWDDRQScJE4+bGaDqBGXeHn0CPsERuFZSCbNQpg0C8mkWUg6FjCyrGKU
+        TC0ozk3PLTYsMMxLLdcrTswtLs1L10vOz93ECI5zLc0djNtXfdA7xMjEwXiIUYKDWUmE91Q9
+        c5IQb0piZVVqUX58UWlOavEhRmkOFiVx3gtdJ+OFBNITS1KzU1MLUotgskwcnFINTKs5p2Qf
+        i67jqQ+a1L5X/6Kt/A8T9+xb21Ssr5Z9mONTya2ktIl7pcje+0EsbnesiwrmzuNwaPDayKpZ
+        HhIblp3wyOO63fTdf/h3H78mctmjpu+a5B6Lrq87vum/W8y+aIae2CRFKYm7L0OElbZxfL86
+        nalzJqvlyxTPsKTM3xs2Jj99WxPPzfyBf5Jg4YaVW4TlF70VCuJdnCYf76S18byf2ediG36t
+        +DufeYRnP48OEu1LfWVrfzv9xqv/2tbykhvqNLNucBy0ef3Qv1VE6ODFJ1+/HDUKdJo4Q3v1
+        H1fRs6v+rFf02nnwoo4mt+5TieR+W8XZ/WEJ7jnxXryKMVHvp83RXDT33dHpzq0rlFiKMxIN
+        tZiLihMBcwE9RGIDAAA=
+X-CMS-MailID: 20220210030323epcas5p4b0ab5b5e019e1357b9315d8930545c70
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220208171919epcas5p16d7ac6985aff7887acc40ab759bcc155
+References: <20220208171823.226211-1-krzysztof.kozlowski@canonical.com>
+        <CGME20220208171919epcas5p16d7ac6985aff7887acc40ab759bcc155@epcas5p1.samsung.com>
+        <20220208171823.226211-2-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -142,53 +136,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building with automatic stack variable initialization, GCC 12
-complains about variables defined outside of switch case statements.
-Move the variable into the case that uses it, which silences the warning:
 
-./drivers/infiniband/hw/irdma/hw.c:270:47: error: statement will never be executed [-Werror=switch-unreachable]
-  270 |                         struct irdma_cm_node *cm_node;
-      |
 
-./drivers/infiniband/hw/irdma/utils.c:1215:50: error: statement will never be executed [-Werror=switch-unreachable]
-  1215 |                         struct irdma_gen_ae_info ae_info;
-       |
+>-----Original Message-----
+>From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@canonical.com]
+>Sent: Tuesday, February 8, 2022 10:48 PM
+>To: Inki Dae <inki.dae@samsung.com>; Joonyoung Shim
+><jy0922.shim@samsung.com>; Seung-Woo Kim
+><sw0312.kim@samsung.com>; Kyungmin Park
+><kyungmin.park@samsung.com>; David Airlie <airlied@linux.ie>; Daniel
+>Vetter <daniel@ffwll.ch>; Rob Herring <robh+dt@kernel.org>; Krzysztof
+>Kozlowski <krzysztof.kozlowski@canonical.com>; Alim Akhtar
+><alim.akhtar@samsung.com>; Kishon Vijay Abraham I <kishon@ti.com>;
+>Vinod Koul <vkoul@kernel.org>; dri-devel@lists.freedesktop.org;
+>devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+>samsung-soc@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
+>phy@lists.infradead.org
+>Cc: Marek Szyprowski <m.szyprowski@samsung.com>; Sylwester Nawrocki
+><snawrocki@kernel.org>; stable@vger.kernel.org
+>Subject: [PATCH 01/10] ARM: dts: exynos: add missing HDMI supplies on
+>SMDK5250
+>
+>Add required VDD supplies to HDMI block on SMDK5250.  Without them, the
+>HDMI driver won't probe.  Because of lack of schematics, use same supplies
+as
+>on Arndale 5250 board (voltage matches).
+>
+>Cc: <stable@vger.kernel.org> # v3.15+
+>Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>---
+> arch/arm/boot/dts/exynos5250-smdk5250.dts | 3 +++
+> 1 file changed, 3 insertions(+)
+>
+>diff --git a/arch/arm/boot/dts/exynos5250-smdk5250.dts
+>b/arch/arm/boot/dts/exynos5250-smdk5250.dts
+>index 65d2474f83eb..21fbbf3d8684 100644
+>--- a/arch/arm/boot/dts/exynos5250-smdk5250.dts
+>+++ b/arch/arm/boot/dts/exynos5250-smdk5250.dts
+>@@ -118,6 +118,9 @@ &hdmi {
+> 	status = "okay";
+> 	ddc = <&i2c_2>;
+> 	hpd-gpios = <&gpx3 7 GPIO_ACTIVE_HIGH>;
+>+	vdd-supply = <&ldo8_reg>;
+>+	vdd_osc-supply = <&ldo10_reg>;
+>+	vdd_pll-supply = <&ldo8_reg>;
+> };
 
-Signed-off-by: Victor Erminpour <victor.erminpour@oracle.com>
----
- drivers/infiniband/hw/irdma/hw.c    | 2 +-
- drivers/infiniband/hw/irdma/utils.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Cross checked with SMDK schematic, looks correct.
 
-diff --git a/drivers/infiniband/hw/irdma/hw.c b/drivers/infiniband/hw/irdma/hw.c
-index 89234d04cc65..a41a3b128d0d 100644
---- a/drivers/infiniband/hw/irdma/hw.c
-+++ b/drivers/infiniband/hw/irdma/hw.c
-@@ -267,8 +267,8 @@ static void irdma_process_aeq(struct irdma_pci_f *rf)
- 		}
- 
- 		switch (info->ae_id) {
--			struct irdma_cm_node *cm_node;
- 		case IRDMA_AE_LLP_CONNECTION_ESTABLISHED:
-+			struct irdma_cm_node *cm_node;
- 			cm_node = iwqp->cm_node;
- 			if (cm_node->accept_pend) {
- 				atomic_dec(&cm_node->listener->pend_accepts_cnt);
-diff --git a/drivers/infiniband/hw/irdma/utils.c b/drivers/infiniband/hw/irdma/utils.c
-index 398736d8c78a..16b65a6c7db1 100644
---- a/drivers/infiniband/hw/irdma/utils.c
-+++ b/drivers/infiniband/hw/irdma/utils.c
-@@ -1212,12 +1212,12 @@ enum irdma_status_code irdma_hw_modify_qp(struct irdma_device *iwdev,
- 			return status;
- 
- 		switch (m_info->next_iwarp_state) {
--			struct irdma_gen_ae_info ae_info;
- 
- 		case IRDMA_QP_STATE_RTS:
- 		case IRDMA_QP_STATE_IDLE:
- 		case IRDMA_QP_STATE_TERMINATE:
- 		case IRDMA_QP_STATE_CLOSING:
-+			struct irdma_gen_ae_info ae_info;
- 			if (info->curr_iwarp_state == IRDMA_QP_STATE_IDLE)
- 				irdma_send_reset(iwqp->cm_node);
- 			else
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+
+>
+> &i2c_0 {
+>--
+>2.32.0
+
+

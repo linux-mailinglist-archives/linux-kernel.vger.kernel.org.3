@@ -2,122 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7594B0980
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7EB4B0981
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238688AbiBJJa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:30:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51508 "EHLO
+        id S238552AbiBJJaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:30:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238790AbiBJJaL (ORCPT
+        with ESMTP id S238786AbiBJJaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 10 Feb 2022 04:30:11 -0500
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893A710DF
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:29:51 -0800 (PST)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 21A9LU10015199;
-        Thu, 10 Feb 2022 17:21:30 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 10 Feb
- 2022 17:29:43 +0800
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
-        <andrew@aj.id.au>, <linux-media@vger.kernel.org>,
-        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-CC:     Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: [PATCH v3] media: aspeed: Use full swing as JFIF to fix incorrect color
-Date:   Thu, 10 Feb 2022 17:29:45 +0800
-Message-ID: <20220210092945.5027-1-jammy_huang@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608532193;
+        Thu, 10 Feb 2022 01:29:56 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21A9S8on025662;
+        Thu, 10 Feb 2022 09:29:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=SpAvOlbMczGLsykgOFpdpnqDTDEFsbtMWrbhYBJOwbk=;
+ b=P+aX6FIyOH0QzsZ6M9kk5zOm8FnKabzNHeSz6w08hC8tH07I3/PLpG3DorpJLGQympnk
+ pDBGD/nslEmgDoX0tvnE9hJ2VqaRT8BqFIrbKvCMxDxIkWyoMWgaMjz62lW0CUjtY91x
+ RPht+InZ7wBkHfjT8I1dMWerM7lzVysffUAJQU8CZltHC4vZgPeXKSaNtKqcxxEfbtSM
+ WRD9fIvf8rnCrNJCj5wBGWqPpnQ25fWQaQDDpc2mzhdoUPvnlaEfguXtxLi7eTcgmtBw
+ Z2+cUF4CHwV5o55+n0VmNR9oWKmzh6yryNGtT5eNQzZJEAZbIJcQs3NADx3zIoFE4qUz lg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e503q81aj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Feb 2022 09:29:54 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21A9TVsF004992;
+        Thu, 10 Feb 2022 09:29:53 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e503q81a3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Feb 2022 09:29:53 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21A9FNBb025591;
+        Thu, 10 Feb 2022 09:29:51 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3e1gv9vcah-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Feb 2022 09:29:51 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21A9Tkh645941232
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Feb 2022 09:29:46 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0F0E452059;
+        Thu, 10 Feb 2022 09:29:46 +0000 (GMT)
+Received: from [9.171.15.77] (unknown [9.171.15.77])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 682A652052;
+        Thu, 10 Feb 2022 09:29:45 +0000 (GMT)
+Message-ID: <c5d8e633-c0cd-91d4-723b-abf26c01fd6d@linux.ibm.com>
+Date:   Thu, 10 Feb 2022 10:29:45 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 21A9LU10015199
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 05/10] KVM: s390: Add optional storage key checking to
+ MEMOP IOCTL
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+References: <20220209170422.1910690-1-scgl@linux.ibm.com>
+ <20220209170422.1910690-6-scgl@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20220209170422.1910690-6-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: T2VL2Xs_s-0Pv3_lWWG9rh739H5qLs8C
+X-Proofpoint-ORIG-GUID: fW0DijVORjjbzCpT-Kk64pLj41SWqXle
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-10_03,2022-02-09_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ mlxlogscore=999 priorityscore=1501 bulkscore=0 adultscore=0 clxscore=1015
+ impostorscore=0 lowpriorityscore=0 suspectscore=0 mlxscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202100049
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current settings for video capture rgb-2-yuv is BT.601(studio swing),
-but JFIF uses BT.601(full swing) to deocde. This mismatch will lead
-to incorrect color. For example, input RGB value, (0, 0, 255), will
-become (16, 16, 235) after jpg decoded.
+Am 09.02.22 um 18:04 schrieb Janis Schoetterl-Glausch:
+> User space needs a mechanism to perform key checked accesses when
+> emulating instructions.
+> 
+> The key can be passed as an additional argument.
+> Having an additional argument is flexible, as user space can
+> pass the guest PSW's key, in order to make an access the same way the
+> CPU would, or pass another key if necessary.
+> 
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> Acked-by: Janosch Frank <frankja@linux.ibm.com>
+> Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
 
-Add an enum, aspeed_video_capture_format, to define VR008[7:6]
-capture format and correct default settings for video capture to fix
-the problem.
+Claudio, Janosch, can you confirm that this is still valid?
 
-VR008[7:6] decides the data format for video capture as below:
-* 00: CCIR601 studio swing compliant YUV format
-* 01: CCIR601 full swing compliant YUV format
-* 10: RGB format
-* 11: Gray color mode
 
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
----
-v3:
- - update commit message
- - update enum's naming to append '_SWING'
-v2:
- - update subject from 'media: aspeed: Fix-incorrect-color' to
-   'media: aspeed: Use full swing as JFIF to fix incorrect'
- - update commit message
- - add enum, aspeed_video_capture_format, to define VR008[7:6]
----
- drivers/media/platform/aspeed-video.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
 
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index eb9c17ac0e14..ee702f9b708b 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -86,8 +86,6 @@
- #define  VE_CTRL_SOURCE			BIT(2)
- #define  VE_CTRL_INT_DE			BIT(4)
- #define  VE_CTRL_DIRECT_FETCH		BIT(5)
--#define  VE_CTRL_YUV			BIT(6)
--#define  VE_CTRL_RGB			BIT(7)
- #define  VE_CTRL_CAPTURE_FMT		GENMASK(7, 6)
- #define  VE_CTRL_AUTO_OR_CURSOR		BIT(8)
- #define  VE_CTRL_CLK_INVERSE		BIT(11)
-@@ -202,6 +200,15 @@ enum {
- 	VIDEO_CLOCKS_ON,
- };
- 
-+// for VE_CTRL_CAPTURE_FMT
-+enum aspeed_video_capture_format {
-+	VIDEO_CAP_FMT_YUV_STUDIO_SWING = 0,
-+	VIDEO_CAP_FMT_YUV_FULL_SWING,
-+	VIDEO_CAP_FMT_RGB,
-+	VIDEO_CAP_FMT_GRAY,
-+	VIDEO_CAP_FMT_MAX
-+};
-+
- struct aspeed_video_addr {
- 	unsigned int size;
- 	dma_addr_t dma;
-@@ -1089,7 +1096,8 @@ static void aspeed_video_init_regs(struct aspeed_video *video)
- 	u32 comp_ctrl = VE_COMP_CTRL_RSVD |
- 		FIELD_PREP(VE_COMP_CTRL_DCT_LUM, video->jpeg_quality) |
- 		FIELD_PREP(VE_COMP_CTRL_DCT_CHR, video->jpeg_quality | 0x10);
--	u32 ctrl = VE_CTRL_AUTO_OR_CURSOR;
-+	u32 ctrl = VE_CTRL_AUTO_OR_CURSOR |
-+		FIELD_PREP(VE_CTRL_CAPTURE_FMT, VIDEO_CAP_FMT_YUV_FULL_SWING);
- 	u32 seq_ctrl = video->jpeg_mode;
- 
- 	if (video->frame_rate)
--- 
-2.25.1
+minor thing below
+> ---
+>   arch/s390/kvm/kvm-s390.c | 30 ++++++++++++++++++++----------
+>   include/uapi/linux/kvm.h |  6 +++++-
+>   2 files changed, 25 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index cf347e1a4f17..85763ec7bc60 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -32,6 +32,7 @@
+>   #include <linux/sched/signal.h>
+>   #include <linux/string.h>
+>   #include <linux/pgtable.h>
+> +#include <linux/bitfield.h>
 
+do we still need that after the changes?
+
+>   
+>   #include <asm/asm-offsets.h>
+>   #include <asm/lowcore.h>
+> @@ -2359,6 +2360,11 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
+>   	return r;
+>   }
+>   
+> +static bool access_key_invalid(u8 access_key)
+> +{
+> +	return access_key > 0xf;
+> +}
+> +
+>   long kvm_arch_vm_ioctl(struct file *filp,
+>   		       unsigned int ioctl, unsigned long arg)
+>   {
+> @@ -4690,17 +4696,19 @@ static long kvm_s390_guest_mem_op(struct kvm_vcpu *vcpu,
+>   	void *tmpbuf = NULL;
+>   	int r = 0;
+>   	const u64 supported_flags = KVM_S390_MEMOP_F_INJECT_EXCEPTION
+> -				    | KVM_S390_MEMOP_F_CHECK_ONLY;
+> +				    | KVM_S390_MEMOP_F_CHECK_ONLY
+> +				    | KVM_S390_MEMOP_F_SKEY_PROTECTION;
+>   
+>   	if (mop->flags & ~supported_flags || mop->ar >= NUM_ACRS || !mop->size)
+>   		return -EINVAL;
+> -
+>   	if (mop->size > MEM_OP_MAX_SIZE)
+>   		return -E2BIG;
+> -
+>   	if (kvm_s390_pv_cpu_is_protected(vcpu))
+>   		return -EINVAL;
+> -
+> +	if (mop->flags & KVM_S390_MEMOP_F_SKEY_PROTECTION) {
+> +		if (access_key_invalid(mop->key))
+> +			return -EINVAL;
+> +	}
+>   	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
+>   		tmpbuf = vmalloc(mop->size);
+>   		if (!tmpbuf)
+> @@ -4710,11 +4718,12 @@ static long kvm_s390_guest_mem_op(struct kvm_vcpu *vcpu,
+>   	switch (mop->op) {
+>   	case KVM_S390_MEMOP_LOGICAL_READ:
+>   		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
+> -			r = check_gva_range(vcpu, mop->gaddr, mop->ar,
+> -					    mop->size, GACC_FETCH, 0);
+> +			r = check_gva_range(vcpu, mop->gaddr, mop->ar, mop->size,
+> +					    GACC_FETCH, mop->key);
+>   			break;
+>   		}
+> -		r = read_guest(vcpu, mop->gaddr, mop->ar, tmpbuf, mop->size);
+> +		r = read_guest_with_key(vcpu, mop->gaddr, mop->ar, tmpbuf,
+> +					mop->size, mop->key);
+>   		if (r == 0) {
+>   			if (copy_to_user(uaddr, tmpbuf, mop->size))
+>   				r = -EFAULT;
+> @@ -4722,15 +4731,16 @@ static long kvm_s390_guest_mem_op(struct kvm_vcpu *vcpu,
+>   		break;
+>   	case KVM_S390_MEMOP_LOGICAL_WRITE:
+>   		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
+> -			r = check_gva_range(vcpu, mop->gaddr, mop->ar,
+> -					    mop->size, GACC_STORE, 0);
+> +			r = check_gva_range(vcpu, mop->gaddr, mop->ar, mop->size,
+> +					    GACC_STORE, mop->key);
+>   			break;
+>   		}
+>   		if (copy_from_user(tmpbuf, uaddr, mop->size)) {
+>   			r = -EFAULT;
+>   			break;
+>   		}
+> -		r = write_guest(vcpu, mop->gaddr, mop->ar, tmpbuf, mop->size);
+> +		r = write_guest_with_key(vcpu, mop->gaddr, mop->ar, tmpbuf,
+> +					 mop->size, mop->key);
+>   		break;
+>   	}
+>   
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index b46bcdb0cab1..44558cf4c52e 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -562,7 +562,10 @@ struct kvm_s390_mem_op {
+>   	__u32 op;		/* type of operation */
+>   	__u64 buf;		/* buffer in userspace */
+>   	union {
+> -		__u8 ar;	/* the access register number */
+> +		struct {
+> +			__u8 ar;	/* the access register number */
+> +			__u8 key;	/* access key, ignored if flag unset */
+> +		};
+>   		__u32 sida_offset; /* offset into the sida */
+>   		__u8 reserved[32]; /* should be set to 0 */
+>   	};
+> @@ -575,6 +578,7 @@ struct kvm_s390_mem_op {
+>   /* flags for kvm_s390_mem_op->flags */
+>   #define KVM_S390_MEMOP_F_CHECK_ONLY		(1ULL << 0)
+>   #define KVM_S390_MEMOP_F_INJECT_EXCEPTION	(1ULL << 1)
+> +#define KVM_S390_MEMOP_F_SKEY_PROTECTION	(1ULL << 2)
+>   
+>   /* for KVM_INTERRUPT */
+>   struct kvm_interrupt {

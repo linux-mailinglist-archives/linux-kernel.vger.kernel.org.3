@@ -2,112 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5E44B085B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C29614B0854
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:32:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237476AbiBJIcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 03:32:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33226 "EHLO
+        id S237505AbiBJIcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 03:32:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237452AbiBJIcE (ORCPT
+        with ESMTP id S233095AbiBJIcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 03:32:04 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2090.outbound.protection.outlook.com [40.107.255.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E6B2186;
-        Thu, 10 Feb 2022 00:32:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q6G4BQ0SxrfTiML10Qt/j2jBVjtIVrBUoELNFGMU0IzyHzkp1/I0RwaMYGZFl2j/bI7/B8UUw66ZUtmC/8Km5n61uJLYp6Exo/LBY6/mekDezgNjiKmzZVfbKmG4OcZJsi6zuoTXxjOcVBH1PM2nE37TL3oKUYNgih2GGaaw4npMDsc2Z96C2X2KaEUORKP96okM+9QjDL6vdt65JsnM1Dhnp0ZuyFvjXxPfpnvgAeNwefKvVE1vy0wxVYD5KsLYVDsGRC2zP7Hvk8SmayjBBpgmVW65LAgJAhbo4WOVQsEKNOGhtMxyNiAm0S3nKPkPKtJE4yhwwC2AgROdZo86Bw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xx7AjB8df2EdWjgzfAyEDJ0FFVJsR0GJohlThzhTZE8=;
- b=IZBXqCUxnRhx+HVZYBAQyW2MOxuC9Muuca58KxUEyibKQqoeu+mETvKVNuyQk7ZJ9XlsODtvrbcVdnbyTpIpNWNdrkBVDlfBZhvsDeC6sL3ejrzUzG0nXbi3oWPaoy4diGmFtcIUpIpCpOiYwcaSEXwNlWXTzcK2N/WsHoan9xAANNAvisP/9M2G2P+sVmQI/dT+G9y2g2w2xpmrRm1wVRdOHsnQ8TIcuC9v6TDYZZTMn7qh2SbbdnQPH7YC0dr5dzzyQP5fMoAe5rqUrnIaWrW5ERjMOJTcNIOoiWPaclQSuy1TgTbIbwxeNaUxUKhpnpnfNFVdTDObAGcxJ9F2PQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xx7AjB8df2EdWjgzfAyEDJ0FFVJsR0GJohlThzhTZE8=;
- b=UEdEyZsVbr8qCzqrw/ja2F6UxxlHBXHmj1UqpDPa1wVIb3TSHymm42KBN87x3p5nfMBzd0qmRnZfeKofXV3JA9/vswqijV8Vq4FEoDK3Al1A7qI/zBwnhOPNFgoch+CYZiZsZ6aYsDGc0Ca8labumQ2UJ/q3JC963ytIYlLn/Ow=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com (2603:1096:100:37::17)
- by PSAPR06MB4005.apcprd06.prod.outlook.com (2603:1096:301:3a::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Thu, 10 Feb
- 2022 08:32:03 +0000
-Received: from SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::80b4:e787:47a9:41bb]) by SL2PR06MB3082.apcprd06.prod.outlook.com
- ([fe80::80b4:e787:47a9:41bb%4]) with mapi id 15.20.4975.011; Thu, 10 Feb 2022
- 08:32:03 +0000
-From:   Qing Wang <wangqing@vivo.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wang Qing <wangqing@vivo.com>
-Subject: [PATCH] media: si21xx: use time_after_eq() instead of jiffies judgment
-Date:   Thu, 10 Feb 2022 00:31:57 -0800
-Message-Id: <1644481917-14908-1-git-send-email-wangqing@vivo.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR02CA0154.apcprd02.prod.outlook.com
- (2603:1096:201:1f::14) To SL2PR06MB3082.apcprd06.prod.outlook.com
- (2603:1096:100:37::17)
+        Thu, 10 Feb 2022 03:32:24 -0500
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C19C21A7;
+        Thu, 10 Feb 2022 00:32:18 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id 7B0702B000CD;
+        Thu, 10 Feb 2022 03:32:14 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 10 Feb 2022 03:32:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=C/eXBq+gZ62G9kCMbvxgHoY4HT9QFjd3I7LMc4
+        VqqdY=; b=ituAnSye7hGbmYW3uz3PGJC/qkvsI6a0H7OYi91PGWs9Ry6Qj2o6+7
+        psPYX0O2MqlDtPKNXTiRKevzPRkk4l0CIRT3qkbgki6IkAW+hRpR2Opm+yzVXSaD
+        uOJFMlzi6xI2S8OIriSyt+RK5x7bZRBbNVLpyLyr5O4Moo/JFi0KPeFd3Z2geDS8
+        /u4s9cJIsI/1fLMJOlg9FesN0+5VSGp5+ARJJRKvZiZJ1+15zTay28R8aAu3eRkd
+        O9UFCfxlzEDrf6PF8ynXjSxV4wSwTUEmA/h154NtuXdun+KiCAjrTWUzE5PTum5V
+        NtGpKWRWr1/ozBFPIRUhHJQ29QUgy26A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=C/eXBq+gZ62G9kCMb
+        vxgHoY4HT9QFjd3I7LMc4VqqdY=; b=OlRhPlrktWnn293Ix4vniS4/TLrLc8A9e
+        zftKBpJXIKOiwP4FIvhRs7i960W1CnbFhPTrRUpcMbi2KiMCdSKr851NzmpalL0N
+        oDUu6lLMjDQ5kN6awAKk+AqjIKq6tHdVeyW9IkHiwgCoFMH5ciIwryXV1mkRpjGb
+        mrtioo5DaxLttoviThNTvUY42WxOlAMnMJ+vJkdnslgU06nlW3SBbTg2P3VuoArZ
+        F9wMdcXEw1M1NzgddGF1fuo5T1XEKKCCdiDoUkPJtEm/bVucC8xXQUhMiVrqvnXw
+        lhdRHvRLnjv40vrcRxbufaHFlABeZyrl49qsN6x1hVDy0zmOeAUcA==
+X-ME-Sender: <xms:jM0EYk1qx-1espsy7K0VZIF62yd7Em3ylB3xSK4ORcYGZfAQGsM3qw>
+    <xme:jM0EYvGMW3SOp_Jd_d_Mau5ua01fK_Dnr_BON3ijKKpfDxbZY8P77M5gWIdM2xyaS
+    4qxS-9SfqTNNU36VZM>
+X-ME-Received: <xmr:jM0EYs7gJ6_UeLuTxMeB_ukS3Jdo2H50RxgWlwg3a5tIUuXnP9jl7i14niIVdl9ksuvtmQSPvz7xMTmGLGz6hjmpgFIHFQs1d9qpmpI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddriedtgdduudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:jM0EYt03v46yxj4pMbCbQ2-2VwqTMarEfzts0AZ1o8mvPQ8jnEqP6A>
+    <xmx:jM0EYnEbm_Ww5VF2fUbKnSDH_U-52OqCSWUqelDYYn76dAsjSH1Esg>
+    <xmx:jM0EYm_RxLik0gCOuGd1caX0waikq_oeNaM_y9tgvpxlyDgd8qp5LQ>
+    <xmx:js0EYoLBi4qU5l70RxzFJfsXtDvMU8D5FsJavd0OxYmqJU4lyn39smTPvtU>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 10 Feb 2022 03:32:11 -0500 (EST)
+Date:   Thu, 10 Feb 2022 09:32:09 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>
+Subject: Re: [PATCH v2 0/4] drm/tiny: Add driver for Solomon SSD1307 OLED
+ displays
+Message-ID: <20220210083209.c7r32rn2s22342ov@houat>
+References: <20220204134347.1187749-1-javierm@redhat.com>
+ <CAMuHMdVTVX7LFay-rfv=oW96dMA24duMUVGRE62jQSNkrKtyMg@mail.gmail.com>
+ <f178de92-7cb1-dcc5-1f60-9ccfc56bc0a4@redhat.com>
+ <YgPF1cBMsd9973Dx@smile.fi.intel.com>
+ <CAMuHMdXQdL_Do8Hjay1egfmd9H05R7BjNeKfLGq67mU4bQNVZA@mail.gmail.com>
+ <f58b2608-0d51-3209-ae11-18bdac19dd66@redhat.com>
+ <YgPef3s5+AMqWpSH@smile.fi.intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d5f0c18c-3013-48bd-2dab-08d9ec6fd078
-X-MS-TrafficTypeDiagnostic: PSAPR06MB4005:EE_
-X-Microsoft-Antispam-PRVS: <PSAPR06MB400560C23456AD855CEDF2AFBD2F9@PSAPR06MB4005.apcprd06.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:231;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KgP0oiLqqGfN5JIgmYpBtfJB6XM1M33xTwsWzuDL/j1uDcqyg1nkLY9rcrasalaocxHls27D31QPFDbKScBeyrN5TpT0jVyZQlaYvInQ2EM2Y3b0+cv2guRdOKkl7AD173OfCt2hRnFCTPTMHYO5YNkIUmhl98uQdSjnsma5clPTdI1GnH8xBSUMCaNgvrzOv3/2dc1F3i/1xWIVXdgBWwTi3B1rPozCgkzdE3bLt2Rsf2vpfLCJFhusm65XAd/lwIHkdRG9WUGKyy1ghICCtGRl9cAo//9Z05qy4KPrq1TjH9IwlgDNoHJoMW0rdwr/J+YX8gxIvPbpXSlB/v9Flunuj/az/4zKaIKnH7erCJOZqhIO58vuOUOLMg7VhhUSthGHF493nzZWDZBds+SgQiqtSqTGpbxKjgTBqpIlvjd7U3KxeX5Ev7oE4JsdJuZ5T2UtYA/8AF/XqIAORUFf3QGdTrOltUK/HFvRV16uHZH8/z1SIaF/qYwruJgnhhfwNCbZTNuh7xJ3avpA610OB80/9AzF9tI0Zn+3XGkIWtY3jAlTC7Yk46+PQ4XLqf0YjjfCc0H1tdy9zM3LqzniSR8duYjKJYUQ/WF2Lz2yC/+vWoQ9RsxUOADNMzOhfjUXCjssjfuJZz4ZQ2o+ezHYNQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3082.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(508600001)(86362001)(316002)(6486002)(186003)(2616005)(66476007)(26005)(83380400001)(107886003)(38350700002)(66556008)(52116002)(8936002)(38100700002)(6666004)(6512007)(6506007)(2906002)(8676002)(4744005)(5660300002)(66946007)(4326008)(21314003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: UZiBrcTEuMW2egFIajzPXLFTEa5T/jh05GdEo2Kr9cMtHSGQncrzgV7AmLIWN8Iuk+sS4Qs/njRWQ38XRJm+qZXrFibJUIk0U1hUfZiL1lSTFnp/jre4ZFBxEyToFSuDH5wB9YtAAks1B1wJRXFeh9MAz/VE2k+a2PyL3bz36ogkRlFxh7AGV05S00IBpu5Xp03E5269sQxIvJa3CBiDMcHzZLUS+iBD7VsBvmS5Z1Z9XHtXywTYALLaKm4PbUuj3MnYdnufIkJOlm3nbJS7Pj52zsWoI7m4vsedCxIILGkiU9vNa6OPq2WB8XbZHGFvrosBn0rhB6bXJyWE/gsBarRhcUwKf2LtEwCCEhJczGYWw+zshJR/4VUqIudG0SrtWz93z2iNxSWCy1SkJj3fP+LA5Gvlzmb+bHqDiileTARpPmoT5Luo39GA/7BvxEYk
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d5f0c18c-3013-48bd-2dab-08d9ec6fd078
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3082.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 08:32:03.4728
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ryirJbSuJkC58PpzTI7LZfNsBCCJ182rSzUIusns9AVkmEX5QgUzbYWW1OpaFP7op63Bfm323glEwZuPSdfstg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4005
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yujxwkbg7rlinnus"
+Content-Disposition: inline
+In-Reply-To: <YgPef3s5+AMqWpSH@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Qing <wangqing@vivo.com>
 
-It is better to use time_xxx() directly instead of jiffies judgment
-for understanding.
+--yujxwkbg7rlinnus
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Wang Qing <wangqing@vivo.com>
----
- drivers/media/dvb-frontends/si21xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Feb 09, 2022 at 05:32:15PM +0200, Andy Shevchenko wrote:
+> On Wed, Feb 09, 2022 at 03:42:16PM +0100, Javier Martinez Canillas wrote:
+> > On 2/9/22 15:27, Geert Uytterhoeven wrote:
+>=20
+> ...
+>=20
+> > Now, this is a reason why I mentioned that the old fbdev driver shouldn=
+'t
+> > be removed yet.
+>=20
+> I agree on this conclusion.
+>=20
+> I think based on the fbtft resurrection discussion I can send a new versi=
+on
+> to unorphan it, route via fbdev, and leave under staging, so it will be a
+> compromise between all stakeholders.
 
-diff --git a/drivers/media/dvb-frontends/si21xx.c b/drivers/media/dvb-frontends/si21xx.c
-index 001b235..1c6cf76
---- a/drivers/media/dvb-frontends/si21xx.c
-+++ b/drivers/media/dvb-frontends/si21xx.c
-@@ -336,7 +336,7 @@ static int si21xx_wait_diseqc_idle(struct si21xx_state *state, int timeout)
- 	dprintk("%s\n", __func__);
- 
- 	while ((si21_readreg(state, LNB_CTRL_REG_1) & 0x8) == 8) {
--		if (jiffies - start > timeout) {
-+		if (time_after(jiffies, start + timeout)) {
- 			dprintk("%s: timeout!!\n", __func__);
- 			return -ETIMEDOUT;
- 		}
--- 
-2.7.4
+The DT bindings still don't belong anywhere in the main tree.
 
+Maxime
+
+--yujxwkbg7rlinnus
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgTNiQAKCRDj7w1vZxhR
+xWgfAP9c/WNFJ2bN5djje6UoeI3NdmGyqQqkH/nOSnKreJjVggEAlkkecUX+M/D1
+o4NAxYKHGIWb/kzHxeNo7yoVXMbVaw4=
+=H8/+
+-----END PGP SIGNATURE-----
+
+--yujxwkbg7rlinnus--

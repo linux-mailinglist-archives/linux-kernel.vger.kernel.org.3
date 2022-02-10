@@ -2,210 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99154B12D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9785B4B12E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:37:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244225AbiBJQeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 11:34:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45082 "EHLO
+        id S244301AbiBJQgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 11:36:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244226AbiBJQeM (ORCPT
+        with ESMTP id S244280AbiBJQgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 11:34:12 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8BC137
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:34:12 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id i5so6514453oih.1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:34:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1YIKfZRvYANp4LD1zrAyetEyh6SC9UJR3WpF2jixnhg=;
-        b=QgRqq58HV2n/SVh/S+GojRQwp60yhgmzNVespq1oanW9kzraUwCgjC4+ZFEJR4gQJy
-         i979etkuGy2UFJEo/siSvS/BXyO9SFMEZ45Tf+XbKJnVxiGj3Qh6jK3idttylvt5v5s7
-         MlYJ+zOrJ1m60zunhVDxmFVnl0w6qfdw4ILoqFM3hCS5Ht5UvP6ohgC5w/8OQwD2K89K
-         Sm6gN5ylb1yMCHVHeUnpxqKzP+X63Xi2DsAkCxsoWDut7m7VZV9VdL7gvD4j4tVo4r/o
-         K15CjByQaDypgGLhdmDIYwnXkGpzq0aJ9IF83sZ+4sgd9Ntp+5PG00ng40v3gvnUn9ot
-         B50Q==
+        Thu, 10 Feb 2022 11:36:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F330EC51
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:36:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644511011;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/fQVdIUzzjQxIpql8Jx49HwHgnVddQNgjxM6PvOna24=;
+        b=ZjyXNwg2MHqj5kpWkrnWtCyeqPfHQGeAhnWtxoNHhIssL+tmQf5lqN6fBdsQe46vezovJQ
+        Y5v4QeEAOTAyYK/7ACste6wWD4H2On2iwKzv+g2QhJFG8q8KmBXbzFYaY5+pUNTQQpW7fK
+        KG9CON76oOxtWXg8NqZpz7xSHpOT4SE=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-528-fLBn2L1nMLS1956ogk2WMA-1; Thu, 10 Feb 2022 11:36:49 -0500
+X-MC-Unique: fLBn2L1nMLS1956ogk2WMA-1
+Received: by mail-ed1-f70.google.com with SMTP id ee7-20020a056402290700b0040f680071c9so3630117edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:36:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1YIKfZRvYANp4LD1zrAyetEyh6SC9UJR3WpF2jixnhg=;
-        b=xdKVAxWQMfHJ1qd8qwHrG/F49CIV9OXQ++fw5umEehxMu3Gr/ts1OE4QHwC+AmwJnE
-         N4pWdb7L7bm8zMfidIaGXTAN56MgKUJxzntAzscxBnOTnzTdOeZ1SRSdpUmQzGnteTuD
-         w+Nm71VgSDuf2jbmzsoSz8sfNyMPARrsBHfW8anWGB7B7oHo3vbEzzfg8GqAbM+Adjpe
-         7ckFyv+VeecW06+n2ycbFqJ6XJTuUAVXdSYBT2DAZiZ+zPaeQKLvorIyHcE3eboxnDvK
-         p025ekRT/y4VNTXbwC2cS2uvQitHTPSwtMH0++Nvkd3ebb4g50/r/EU+h/TxCVx5turX
-         K/Gw==
-X-Gm-Message-State: AOAM532LcKKeCVIEnGdnfxnezfMEyxaBT6dnO2W0DgzH8JElyRLyfgVQ
-        pnLYaUOxXZjpvP80Rqrt2goHDhGSBSr0PUtcgrVC2A==
-X-Google-Smtp-Source: ABdhPJx7abYE/RroOoR0sLulQr5fjSEGOEijinAhYH+lTFflLmjkOsn4a+lpmfnsUCsnDv/JuMsyF5hE63B3TCtMUdw=
-X-Received: by 2002:a05:6808:21a5:: with SMTP id be37mr1396341oib.339.1644510852049;
- Thu, 10 Feb 2022 08:34:12 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/fQVdIUzzjQxIpql8Jx49HwHgnVddQNgjxM6PvOna24=;
+        b=F/Awrq8d6Aja42Ah/SMJQtuofwJuYDXAkKCUrC46lrEJoPHCFxVz9hA+GcvK8KXYwA
+         DpfmPc1/vC/pIqdA8w+pH6SpgRywOQZh+IaoWd8Y8+wKiRX6CzoUt7BmaMs+VUmqJc6O
+         FOshJu0RkfVpW0wd+1pDqYWU8lGRRB43+LiMNSR9WDzdVDgIM4c1SWRqNPO8Yf/iDbO3
+         n/myRgrWDQrv4EVv4/j5NdjQYvMqmgXMIC7In5bpI3EgfMeaZwHHIKhSH1PtMZDknbt5
+         68wB5K+b3FUXr6eUyHy4xpr1VTnZUfKKp2sgjw+a0sz9Ssr6bXyFOkMN2fXA6xgv4Wcf
+         ISnA==
+X-Gm-Message-State: AOAM531dXM0pPH3ENcm7E87pBhjCKdUDWEOXvmD2jjxKsVGzzs/Xruze
+        3vPAeE6YCVImnRxAxAUQHb3BdC3g0CYxWiS6Rj6+ztV7/+4aWqEJ9CPt5CdEKYRkpvU0dpaD9jy
+        s2ViYffetc2k4AYUeAMK09GOn
+X-Received: by 2002:a17:907:7244:: with SMTP id ds4mr7265202ejc.726.1644511008400;
+        Thu, 10 Feb 2022 08:36:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw6CN/+k3HOwVp0gN4FoNF8oTtdpf2diiDEjSfqTdMHbRz9eh1mpO7OJBm9xmaOP360bR4laQ==
+X-Received: by 2002:a17:907:7244:: with SMTP id ds4mr7265187ejc.726.1644511008170;
+        Thu, 10 Feb 2022 08:36:48 -0800 (PST)
+Received: from [192.168.10.118] ([93.56.170.240])
+        by smtp.googlemail.com with ESMTPSA id cz12sm4919434edb.30.2022.02.10.08.36.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 08:36:47 -0800 (PST)
+Message-ID: <d24f6c79-070a-846d-276f-9ab15d8fda3b@redhat.com>
+Date:   Thu, 10 Feb 2022 17:35:23 +0100
 MIME-Version: 1.0
-References: <20220117085307.93030-1-likexu@tencent.com> <20220117085307.93030-3-likexu@tencent.com>
- <20220202144308.GB20638@worktop.programming.kicks-ass.net>
- <CALMp9eRBOmwz=mspp0m5Q093K3rMUeAsF3vEL39MGV5Br9wEQQ@mail.gmail.com>
- <YgO/3usazae9rCEh@hirez.programming.kicks-ass.net> <69c0fc41-a5bd-fea9-43f6-4724368baf66@intel.com>
- <CALMp9eS=1U7T39L-vL_cTXTNN2Li8epjtAPoP_+Hwefe9d+teQ@mail.gmail.com>
- <67a731dd-53ba-0eb8-377f-9707e5c9be1b@intel.com> <CABOYuvbPL0DeEgV4gsC+v786xfBAo3T6+7XQr7cVVzbaoFoEAg@mail.gmail.com>
- <7b5012d8-6ae1-7cde-a381-e82685dfed4f@linux.intel.com>
-In-Reply-To: <7b5012d8-6ae1-7cde-a381-e82685dfed4f@linux.intel.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Thu, 10 Feb 2022 08:34:01 -0800
-Message-ID: <CALMp9eTOaWxQPfdwMSAn-OYAHKPLcuCyse7BpsSOM35vg5d0Jg@mail.gmail.com>
-Subject: Re: [PATCH kvm/queue v2 2/3] perf: x86/core: Add interface to query
- perfmon_event_map[] directly
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     David Dunn <daviddunn@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH MANUALSEL 5.4 2/2] KVM: nVMX: WARN on any attempt to
+ allocate shadow VMCS for vmcs02
+Content-Language: en-US
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, kvm@vger.kernel.org
+References: <20220209185733.49157-1-sashal@kernel.org>
+ <20220209185733.49157-2-sashal@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220209185733.49157-2-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 7:34 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
->
->
->
-> On 2/9/2022 2:24 PM, David Dunn wrote:
-> > Dave,
-> >
-> > In my opinion, the right policy depends on what the host owner and
-> > guest owner are trying to achieve.
-> >
-> > If the PMU is being used to locate places where performance could be
-> > improved in the system, there are two sub scenarios:
-> >     - The host and guest are owned by same entity that is optimizing
-> > overall system.  In this case, the guest doesn't need PMU access and
-> > better information is provided by profiling the entire system from the
-> > host.
-> >     - The host and guest are owned by different entities.  In this
-> > case, profiling from the host can identify perf issues in the guest.
-> > But what action can be taken?  The host entity must communicate issues
-> > back to the guest owner through some sort of out-of-band information
-> > channel.  On the other hand, preempting the host PMU to give the guest
-> > a fully functional PMU serves this use case well.
-> >
-> > TDX and SGX (outside of debug mode) strongly assume different
-> > entities.  And Intel is doing this to reduce insight of the host into
-> > guest operations.  So in my opinion, preemption makes sense.
-> >
-> > There are also scenarios where the host owner is trying to identify
-> > systemwide impacts of guest actions.  For example, detecting memory
-> > bandwidth consumption or split locks.  In this case, host control
-> > without preemption is necessary.
-> >
-> > To address these various scenarios, it seems like the host needs to be
-> > able to have policy control on whether it is willing to have the PMU
-> > preempted by the guest.
-> >
-> > But I don't see what scenario is well served by the current situation
-> > in KVM.  Currently the guest will either be told it has no PMU (which
-> > is fine) or that it has full control of a PMU.  If the guest is told
-> > it has full control of the PMU, it actually doesn't.  But instead of
-> > losing counters on well defined events (from the guest perspective),
-> > they simply stop counting depending on what the host is doing with the
-> > PMU.
->
-> For the current perf subsystem, a PMU should be shared among different
-> users via the multiplexing mechanism if the resource is limited. No one
-> has full control of a PMU for lifetime. A user can only have the PMU in
-> its given period. I think the user can understand how long it runs via
-> total_time_enabled and total_time_running.
+On 2/9/22 19:57, Sasha Levin wrote:
+> From: Sean Christopherson <seanjc@google.com>
+> 
+> [ Upstream commit d6e656cd266cdcc95abd372c7faef05bee271d1a ]
+> 
+> WARN if KVM attempts to allocate a shadow VMCS for vmcs02.  KVM emulates
+> VMCS shadowing but doesn't virtualize it, i.e. KVM should never allocate
+> a "real" shadow VMCS for L2.
+> 
+> The previous code WARNed but continued anyway with the allocation,
+> presumably in an attempt to avoid NULL pointer dereference.
+> However, alloc_vmcs (and hence alloc_shadow_vmcs) can fail, and
+> indeed the sole caller does:
+> 
+> 	if (enable_shadow_vmcs && !alloc_shadow_vmcs(vcpu))
+> 		goto out_shadow_vmcs;
+> 
+> which makes it not a useful attempt.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Message-Id: <20220125220527.2093146-1-seanjc@google.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>   arch/x86/kvm/vmx/nested.c | 22 ++++++++++++----------
+>   1 file changed, 12 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index 3041015b05f71..44e11f6db3efe 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -4360,18 +4360,20 @@ static struct vmcs *alloc_shadow_vmcs(struct kvm_vcpu *vcpu)
+>   	struct loaded_vmcs *loaded_vmcs = vmx->loaded_vmcs;
+>   
+>   	/*
+> -	 * We should allocate a shadow vmcs for vmcs01 only when L1
+> -	 * executes VMXON and free it when L1 executes VMXOFF.
+> -	 * As it is invalid to execute VMXON twice, we shouldn't reach
+> -	 * here when vmcs01 already have an allocated shadow vmcs.
+> +	 * KVM allocates a shadow VMCS only when L1 executes VMXON and frees it
+> +	 * when L1 executes VMXOFF or the vCPU is forced out of nested
+> +	 * operation.  VMXON faults if the CPU is already post-VMXON, so it
+> +	 * should be impossible to already have an allocated shadow VMCS.  KVM
+> +	 * doesn't support virtualization of VMCS shadowing, so vmcs01 should
+> +	 * always be the loaded VMCS.
+>   	 */
+> -	WARN_ON(loaded_vmcs == &vmx->vmcs01 && loaded_vmcs->shadow_vmcs);
+> +	if (WARN_ON(loaded_vmcs != &vmx->vmcs01 || loaded_vmcs->shadow_vmcs))
+> +		return loaded_vmcs->shadow_vmcs;
+> +
+> +	loaded_vmcs->shadow_vmcs = alloc_vmcs(true);
+> +	if (loaded_vmcs->shadow_vmcs)
+> +		vmcs_clear(loaded_vmcs->shadow_vmcs);
+>   
+> -	if (!loaded_vmcs->shadow_vmcs) {
+> -		loaded_vmcs->shadow_vmcs = alloc_vmcs(true);
+> -		if (loaded_vmcs->shadow_vmcs)
+> -			vmcs_clear(loaded_vmcs->shadow_vmcs);
+> -	}
+>   	return loaded_vmcs->shadow_vmcs;
+>   }
+>   
 
-For most clients, yes. For kvm, no. KVM currently tosses
-total_time_enabled and total_time_running in the bitbucket. It could
-extrapolate, but that would result in loss of precision. Some guest
-uses of the PMU would not be able to cope (e.g.
-https://github.com/rr-debugger/rr).
+NACK
 
-> For a guest, it should rely on the host to tell whether the PMU resource
-> is available. But unfortunately, I don't think we have such a
-> notification mechanism in KVM. The guest has the wrong impression that
-> the guest can have full control of the PMU.
-
-That is the only impression that the architectural specification
-allows the guest to have. On Intel, we can mask off individual fixed
-counters, and we can reduce the number of GP counters, but AMD offers
-us no such freedom. Whatever resources we advertise to the guest must
-be available for its use whenever it wants. Otherwise, PMU
-virtualization is simply broken.
-
-> In my opinion, we should add the notification mechanism in KVM. When the
-> PMU resource is limited, the guest can know whether it's multiplexing or
-> can choose to reschedule the event.
-
-That sounds like a paravirtual perf mechanism, rather than PMU
-virtualization. Are you suggesting that we not try to virtualize the
-PMU? Unfortunately, PMU virtualization is what we have customers
-clamoring for. No one is interested in a paravirtual perf mechanism.
-For example, when will VTune in the guest know how to use your
-proposed paravirtual interface?
-
-> But seems the notification mechanism may not work for TDX case?
-> >
-> > On the other hand, if we flip it around the semantics are more clear.
-> > A guest will be told it has no PMU (which is fine) or that it has full
-> > control of the PMU.  If the guest is told that it has full control of
-> > the PMU, it does.  And the host (which is the thing that granted the
-> > full PMU to the guest) knows that events inside the guest are not
-> > being measured.  This results in all entities seeing something that
-> > can be reasoned about from their perspective.
-> >
->
-> I assume that this is for the TDX case (where the notification mechanism
->   doesn't work). The host still control all the PMU resources. The TDX
-> guest is treated as a super-user who can 'own' a PMU. The admin in the
-> host can configure/change the owned PMUs of the TDX. Personally, I think
-> it makes sense. But please keep in mind that the counters are not
-> identical. There are some special events that can only run on a specific
-> counter. If the special counter is assigned to TDX, other entities can
-> never run some events. We should let other entities know if it happens.
-> Or we should never let non-host entities own the special counter.
-
-Right; the counters are not fungible. Ideally, when the guest requests
-a particular counter, that is the counter it gets. If it is given a
-different counter, the counter it is given must provide the same
-behavior as the requested counter for the event in question.
-
->
-> Thanks,
-> Kan
->
-> > Thanks,
-> >
-> > Dave Dunn
-> >
-> > On Wed, Feb 9, 2022 at 10:57 AM Dave Hansen <dave.hansen@intel.com> wrote:
-> >
-> >>> I was referring to gaps in the collection of data that the host perf
-> >>> subsystem doesn't know about if ATTRIBUTES.PERFMON is set for a TDX
-> >>> guest. This can potentially be a problem if someone is trying to
-> >>> measure events per unit of time.
-> >>
-> >> Ahh, that makes sense.
-> >>
-> >> Does SGX cause problem for these people?  It can create some of the same
-> >> collection gaps:
-> >>
-> >>          performance monitoring activities are suppressed when entering
-> >>          an opt-out (of performance monitoring) enclave.

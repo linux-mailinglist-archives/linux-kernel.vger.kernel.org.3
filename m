@@ -2,111 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36FD4B09AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B434B09B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:40:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238820AbiBJJio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:38:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57870 "EHLO
+        id S238843AbiBJJju convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Feb 2022 04:39:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238772AbiBJJin (ORCPT
+        with ESMTP id S238786AbiBJJjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:38:43 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F33F220;
-        Thu, 10 Feb 2022 01:38:45 -0800 (PST)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0760193;
-        Thu, 10 Feb 2022 10:38:40 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644485921;
-        bh=lF+r6UQCxoqWroIZy8/2n+0n/A+ghFkPyKqL+rYmqL4=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=nIsX+aUCZpg42I5BMkVxnW3NzL+xrWrld4vcDWTJYe3M+saH5lhg4RYD8ixO0PhPA
-         zxdQVr58HRIFIJHw95qKt91z0GBERL0glsPJI1b995rxII2iZqNx7dpRJ9nzd8mLw2
-         z7fyydxbZPRtyb6Bua6g3icy28+AMgfCMXKh9Yv4=
-Content-Type: text/plain; charset="utf-8"
+        Thu, 10 Feb 2022 04:39:48 -0500
+X-Greylist: delayed 102 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 01:39:49 PST
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88AA220;
+        Thu, 10 Feb 2022 01:39:48 -0800 (PST)
+Received: from mail-wm1-f45.google.com ([209.85.128.45]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M3Eqr-1nJSJC0kQ9-003h6D; Thu, 10 Feb 2022 10:39:47 +0100
+Received: by mail-wm1-f45.google.com with SMTP id i19so1652570wmq.5;
+        Thu, 10 Feb 2022 01:39:47 -0800 (PST)
+X-Gm-Message-State: AOAM531cb0eqtPrq/hCj9B/hPBhQNdci/UadveB7HA3H/hnCgUdoURyD
+        GycahrxyX7E3dkwlbQAmsYFFmtQe7P7Nov0WHIk=
+X-Google-Smtp-Source: ABdhPJzUBE9AmHKtA86Xv3LRiM760+wqDeJhZfBxDNdjYz5WjMMMxnuXS2W7stLYFq1NMZvK6WNceMm+VXnOfCsZ8qY=
+X-Received: by 2002:a05:600c:1f06:: with SMTP id bd6mr1419523wmb.98.1644485986746;
+ Thu, 10 Feb 2022 01:39:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1644481960-15049-1-git-send-email-wangqing@vivo.com>
-References: <1644481960-15049-1-git-send-email-wangqing@vivo.com>
-Subject: Re: [PATCH] media: wl128x: use time_after_eq() instead of jiffies judgment
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     Wang Qing <wangqing@vivo.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Qing Wang <wangqing@vivo.com>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Date:   Thu, 10 Feb 2022 09:38:38 +0000
-Message-ID: <164448591856.3354066.6123333934504651771@Monstersaurus>
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220210021129.3386083-1-masahiroy@kernel.org> <20220210021129.3386083-3-masahiroy@kernel.org>
+In-Reply-To: <20220210021129.3386083-3-masahiroy@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 10 Feb 2022 10:39:31 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1qbAXeKuuswuCSmMqC8k4wC-uQZqjiSd8WsFuqM906MA@mail.gmail.com>
+Message-ID: <CAK8P3a1qbAXeKuuswuCSmMqC8k4wC-uQZqjiSd8WsFuqM906MA@mail.gmail.com>
+Subject: Re: [PATCH 2/6] shmbuf.h: add asm/shmbuf.h to UAPI compile-test coverage
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:jyMslo3fNya4WydPD3YHn1XYJyEHge1unk7I3p/UHh5+V+hBae5
+ wgwCe5jLJ7oH/GBSFMm+AzIAUuyxeWRUzleqR1Kg4VjxdY+wUtO2cBkAWo80I7QcJR0QdGC
+ SSd23Vwu7H9HxnW/jJg5UFRzKhoTzz9XFoJLe1u8gcCE3xFYjAY9CpYgp88mhorTOTzoOgt
+ C9plEZhksApmrn2eQq4nw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qkRBoUw9+k8=:lXxLoYCwEmC9akTlT8jJQI
+ 6kbqoGW9UuaUcSJ1ZBgsrj8IPjccg4OIYivU0eoXpC7uAzD+JtBooH1dxwvvUuaof27+GU8Y+
+ 6LgmrIXEVHL7B7rmhM+AHKQVhFtaor6+NLv9FFVKOBJnuj8DqfvZQnv9XXR2SSlZegoqK7YrP
+ /gHmqkNruerBOpcrU0GWwvBfqMjydhwiT7ImPkmcU8E8A9zSPJnuZXOE3T4KDUR4z7M/T8Etj
+ nU4Nhn5kPWo4Ea87WOVjRnG7KQvevb8xS9Uy8YgHJrcmGJE9MSEkp4GPGCH1r48+cO4CPSCB2
+ OVJrNoaBdZBjlX/r4IqO2WO9cZgiHLLJV7wNcOukIaxTISzF29vTvq6PVZCqgBurxWbk2w1MH
+ 0HtDCM5j/INvXcnlL663pl5mTD83RZNSZlMBk/xj7A6sUqRbY4EibnVCBXZAI/0Mr1hc3PlE/
+ m56xyLVy36Gz42Kf2qZY9wyXp7EUw/HheO2JvckLkm1BTT9QhF85BUfezhmGlqHFXU3U/jcCj
+ CMSzU7vBA2pRSpsA7XRMluWEpVU8ZWU6X2l3koizq7OZ5wSf2kcRoJThd9tuILN8OPhPv05GY
+ V8BIe5KgdDpz100hFhtOnejFtUYaYj19GyHrzBddHTvmajCQeqH8GyjNyupFfMZg3+x7RrU0n
+ TR9qFV6tQXktJLcrSrswbQTU1t+gFLqmdN0iiwXSx8B2gSyErTiHpII7BKvm/Biif511qU6z1
+ rR0OBWlvI4GY55v2t5sCYm0FOtOXqV5j3GVr++TuPZkteqBeKLOGSdkE0LUv8E0fJT5hcbd6V
+ imjiOhtcrki+7JriX/1dlX488JJ2humobMlx0Ww+tCMCgDdMjU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-All of these patches you've just sent say "Use time_after_eq()" in the
-subject, but I haven't yet seen a usage of that.
-
-Could you make your patch subject reflective of the true changes in each
-patch please?
-
-Batching them in a series as suggested by Joe would be helpful too.
-
-Quoting Qing Wang (2022-02-10 08:32:39)
-> From: Wang Qing <wangqing@vivo.com>
->=20
-> It is better to use time_xxx() directly instead of jiffies judgment
-> for understanding.
->=20
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> ---
->  drivers/media/radio/wl128x/fmdrv_common.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/media/radio/wl128x/fmdrv_common.c b/drivers/media/ra=
-dio/wl128x/fmdrv_common.c
-> index 6142484d..a599d08
-> --- a/drivers/media/radio/wl128x/fmdrv_common.c
-> +++ b/drivers/media/radio/wl128x/fmdrv_common.c
-> @@ -23,6 +23,7 @@
->  #include <linux/firmware.h>
->  #include <linux/module.h>
->  #include <linux/nospec.h>
-> +#include <linux/jiffies.h>
-> =20
->  #include "fmdrv.h"
->  #include "fmdrv_v4l2.h"
-> @@ -342,7 +343,7 @@ static void send_tasklet(struct tasklet_struct *t)
->                 return;
-> =20
->         /* Check, is there any timeout happened to last transmitted packe=
-t */
-> -       if ((jiffies - fmdev->last_tx_jiffies) > FM_DRV_TX_TIMEOUT) {
-> +       if (time_after(jiffies, fmdev->last_tx_jiffies + FM_DRV_TX_TIMEOU=
-T)) {
-
-It looks like there are specific macros for working with jiffies too.
-
-Should this be=20
-              time_is_after_jiffies(fmdev->last_tx_jiffies + FM_DRV_TX_TIME=
-OUT) {
-
-Although that is in fact 2 characters longer ;-S
-
-
---
-Kieran
-
-
->                 fmerr("TX timeout occurred\n");
->                 atomic_set(&fmdev->tx_cnt, 1);
->         }
-> --=20
-> 2.7.4
+On Thu, Feb 10, 2022 at 3:11 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
+> asm/shmbuf.h is currently excluded from the UAPI compile-test because of
+> the errors like follows:
+>
+>     HDRTEST usr/include/asm/shmbuf.h
+>   In file included from ./usr/include/asm/shmbuf.h:6,
+>                    from <command-line>:
+>   ./usr/include/asm-generic/shmbuf.h:26:33: error: field ‘shm_perm’ has incomplete type
+>      26 |         struct ipc64_perm       shm_perm;       /* operation perms */
+>         |                                 ^~~~~~~~
+>   ./usr/include/asm-generic/shmbuf.h:27:9: error: unknown type name ‘size_t’
+>      27 |         size_t                  shm_segsz;      /* size of segment (bytes) */
+>         |         ^~~~~~
+>   ./usr/include/asm-generic/shmbuf.h:40:9: error: unknown type name ‘__kernel_pid_t’
+>      40 |         __kernel_pid_t          shm_cpid;       /* pid of creator */
+>         |         ^~~~~~~~~~~~~~
+>   ./usr/include/asm-generic/shmbuf.h:41:9: error: unknown type name ‘__kernel_pid_t’
+>      41 |         __kernel_pid_t          shm_lpid;       /* pid of last operator */
+>         |         ^~~~~~~~~~~~~~
+>
+> The errors can be fixed by replacing size_t with __kernel_size_t and by
+> including proper headers.
+>
+> Then, remove the no-header-test entry from user/include/Makefile.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>

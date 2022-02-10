@@ -2,126 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4544B12E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:37:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 544D14B12DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244322AbiBJQgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 11:36:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47116 "EHLO
+        id S244265AbiBJQgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 11:36:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244267AbiBJQgw (ORCPT
+        with ESMTP id S244254AbiBJQgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 11:36:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C34C0128
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:36:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644511011;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UqSpSbLAke/1OnLd6EmGmfWxLdKIpRgwdlPw5Vgh4vE=;
-        b=ElqIO/0CrkZOnKLP5RogCOAFlI0RNnAcQzDSQVdzxPHP1EMij87lrqHrY9qsmN6gROnogG
-        HLp03RliVOm79dnCEHFa03G/9MERhPX6+PoqPZ6tZ0y/jb45YYMwufr5SLuH7efJq3NwQL
-        /fzF+SLVz9rCKnnuIWoQ6l2Nbr12IkA=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-530-cM05wTXPPzG5aQg6ZNmeNQ-1; Thu, 10 Feb 2022 11:36:50 -0500
-X-MC-Unique: cM05wTXPPzG5aQg6ZNmeNQ-1
-Received: by mail-ed1-f70.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso3641278edt.20
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:36:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UqSpSbLAke/1OnLd6EmGmfWxLdKIpRgwdlPw5Vgh4vE=;
-        b=c65ocYu88A6LKjP57HDEVgna8bINb9KudcYPiMYgF7uuX3XMBAbYYR5CzgG1+28zHZ
-         PDevz0RBtwOe6Vh1J727yqME8mIFFp5To3ubfdXR+jOQJGDnxdTwrspiUp+mGc/n7suI
-         I7fe/sjGsRJacQ9WEwfHdjPUZeiobFUGP8Qw0VOp072GQ07Iep1SioBKiaIUe4xLoNZk
-         +xzivWaUoMFaB0NECQq9v4nn53loCA3Bi06EzX32npNZUUHLgu0xkmUGdtYXWUILLfc7
-         xT1H2lv6P84OVs/gtGtUNdk/Jprc/DTN+XbgNad5kpG032AR/71ronZyAKz5AiMr249L
-         YHig==
-X-Gm-Message-State: AOAM5300q2q3ukBE/LIhiYtsLVsVwZ4ieBX/8iD9ZR7aywPmIYdYDQoP
-        zlH3auRDaurIrAiPCcxMthztuYczyxWqP9I+tq0T4HKRMdEMuNXytXfMPC2Zxg6tdhSXrHUhLth
-        +RmfH1R7h4kkh9Mct6LQCsZxc
-X-Received: by 2002:a17:907:c01a:: with SMTP id ss26mr7188161ejc.734.1644511008858;
-        Thu, 10 Feb 2022 08:36:48 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxsICHo+zXE5V4n/hNFUlselQb7/jJjtRQ0Tylf3AFGMRI+O1AdLAbOvro//iFc+e5nfma5eg==
-X-Received: by 2002:a17:907:c01a:: with SMTP id ss26mr7188140ejc.734.1644511008634;
-        Thu, 10 Feb 2022 08:36:48 -0800 (PST)
-Received: from [192.168.10.118] ([93.56.170.240])
-        by smtp.googlemail.com with ESMTPSA id m25sm7118243edr.104.2022.02.10.08.36.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 08:36:47 -0800 (PST)
-Message-ID: <d1d25157-6511-a37d-0e19-2ef8335a7882@redhat.com>
-Date:   Thu, 10 Feb 2022 17:35:56 +0100
+        Thu, 10 Feb 2022 11:36:06 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E0F1A8;
+        Thu, 10 Feb 2022 08:36:07 -0800 (PST)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21AAJL0J008359;
+        Thu, 10 Feb 2022 08:36:04 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=+YXeHLopDlrVI9hkQTBypubMSt1yVf2ZrvrNt0+T0pc=;
+ b=WQ1/S+3WfAQz19ta23v1dpXtwFOslCeIlCjDyynztfW32Io1qrDo+eCg5tJwLilsFVdT
+ zBl0q3r+y+kPeoIpM4HcbwkwOI+9+r3pEsxwHTtj3RXHF4SUD2ZWa+SehXoONQ+hPVFH
+ OVogL1e161aujkvbTaL5hdl7XE+eXQ+QbmR623Y09YUjLAhq7XdDft8zJd96b+lrfUe0
+ W8ERQ29pxYUHqA/FT3oH+leN9nlsn4FPrL5jhCydBTg75orSMIZTMDq6KLwDsC87qvNl
+ Qt+gQnIohFr1rUGBh9RbcbEjAvnN449fshRHGDhX11nhW3+Hey8hyHZ42zqtFmDaWwFC PA== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3e50uc9mga-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Thu, 10 Feb 2022 08:36:04 -0800
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 10 Feb
+ 2022 08:36:02 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Thu, 10 Feb 2022 08:36:02 -0800
+Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
+        by maili.marvell.com (Postfix) with ESMTP id 097D73F706B;
+        Thu, 10 Feb 2022 08:35:58 -0800 (PST)
+From:   Hariprasad Kelam <hkelam@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <kuba@kernel.org>, <davem@davemloft.net>, <sgoutham@marvell.com>,
+        <lcherian@marvell.com>, <gakula@marvell.com>, <jerinj@marvell.com>,
+        <sbhatta@marvell.com>, <hkelam@marvell.com>
+Subject: [net-next PATCH] octeontx2-af: fix array bound error
+Date:   Thu, 10 Feb 2022 22:05:57 +0530
+Message-ID: <20220210163557.7256-1-hkelam@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH MANUALSEL 5.4 1/2] KVM: nVMX: eVMCS: Filter out
- VM_EXIT_SAVE_VMX_PREEMPTION_TIMER
-Content-Language: en-US
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, kvm@vger.kernel.org
-References: <20220209185733.49157-1-sashal@kernel.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220209185733.49157-1-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-GUID: 1xIyoBmz22_zbQOTThAQXlOzR5aC6Bye
+X-Proofpoint-ORIG-GUID: 1xIyoBmz22_zbQOTThAQXlOzR5aC6Bye
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-10_07,2022-02-09_01,2021-12-02_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/22 19:57, Sasha Levin wrote:
-> From: Vitaly Kuznetsov <vkuznets@redhat.com>
-> 
-> [ Upstream commit 7a601e2cf61558dfd534a9ecaad09f5853ad8204 ]
+This patch fixes below error by using proper data type.
 
-Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+drivers/net/ethernet/marvell/octeontx2/af/rpm.c: In function
+'rpm_cfg_pfc_quanta_thresh':
+include/linux/find.h:40:23: error: array subscript 'long unsigned
+int[0]' is partly outside array bounds of 'u16[1]' {aka 'short unsigned
+int[1]'} [-Werror=array-bounds]
+   40 |                 val = *addr & GENMASK(size - 1, offset);
 
-Paolo
+Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
+---
+ drivers/net/ethernet/marvell/octeontx2/af/rpm.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> Enlightened VMCS v1 doesn't have VMX_PREEMPTION_TIMER_VALUE field,
-> PIN_BASED_VMX_PREEMPTION_TIMER is also filtered out already so it makes
-> sense to filter out VM_EXIT_SAVE_VMX_PREEMPTION_TIMER too.
-> 
-> Note, none of the currently existing Windows/Hyper-V versions are known
-> to enable 'save VMX-preemption timer value' when eVMCS is in use, the
-> change is aimed at making the filtering future proof.
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> Message-Id: <20220112170134.1904308-3-vkuznets@redhat.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->   arch/x86/kvm/vmx/evmcs.h | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
-> index 07ebf6882a458..632bed227152e 100644
-> --- a/arch/x86/kvm/vmx/evmcs.h
-> +++ b/arch/x86/kvm/vmx/evmcs.h
-> @@ -58,7 +58,9 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
->   	 SECONDARY_EXEC_SHADOW_VMCS |					\
->   	 SECONDARY_EXEC_TSC_SCALING |					\
->   	 SECONDARY_EXEC_PAUSE_LOOP_EXITING)
-> -#define EVMCS1_UNSUPPORTED_VMEXIT_CTRL (VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL)
-> +#define EVMCS1_UNSUPPORTED_VMEXIT_CTRL					\
-> +	(VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL |				\
-> +	 VM_EXIT_SAVE_VMX_PREEMPTION_TIMER)
->   #define EVMCS1_UNSUPPORTED_VMENTRY_CTRL (VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL)
->   #define EVMCS1_UNSUPPORTED_VMFUNC (VMX_VMFUNC_EPTP_SWITCHING)
->   
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rpm.c b/drivers/net/ethernet/marvell/octeontx2/af/rpm.c
+index d7a8aad46e12..47e83d7a5804 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rpm.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rpm.c
+@@ -141,14 +141,15 @@ int rpm_lmac_get_pause_frm_status(void *rpmd, int lmac_id,
+ 	return 0;
+ }
+ 
+-static void rpm_cfg_pfc_quanta_thresh(rpm_t *rpm, int lmac_id, u16 pfc_en,
++static void rpm_cfg_pfc_quanta_thresh(rpm_t *rpm, int lmac_id,
++				      unsigned long pfc_en,
+ 				      bool enable)
+ {
+ 	u64 quanta_offset = 0, quanta_thresh = 0, cfg;
+ 	int i, shift;
+ 
+ 	/* Set pause time and interval */
+-	for_each_set_bit(i, (unsigned long *)&pfc_en, 16) {
++	for_each_set_bit(i, &pfc_en, 16) {
+ 		switch (i) {
+ 		case 0:
+ 		case 1:
+-- 
+2.17.1
 

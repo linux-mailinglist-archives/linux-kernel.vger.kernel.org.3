@@ -2,85 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE824B143C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:30:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E37F44B1441
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239986AbiBJRaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 12:30:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42008 "EHLO
+        id S241610AbiBJRbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 12:31:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiBJRad (ORCPT
+        with ESMTP id S229794AbiBJRbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 12:30:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6554E260F
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:30:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644514232;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ipC35w792dvxJk0OyBY7gcESXN0lGemMDfsvs+ruGts=;
-        b=PgZS2bo76IOXJ8difk7giJt3uSk9LdmCy/+A1RhRkA0wsWyfdEFOSsQELauOYjNIkLQw21
-        0YJSzDEukXbzrNYb08R1z/GVH/lODYZtfyN32ZV5fx6aAAkLOG50rSqQ1+WThqWKJdnJvr
-        su56TS3SvDetOAMbKPTCyKbLQU5b8VQ=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-221-3ug5Tgv3P82XFatp9croVg-1; Thu, 10 Feb 2022 12:30:31 -0500
-X-MC-Unique: 3ug5Tgv3P82XFatp9croVg-1
-Received: by mail-ej1-f72.google.com with SMTP id v2-20020a170906292200b006a94a27f903so3077355ejd.8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:30:31 -0800 (PST)
+        Thu, 10 Feb 2022 12:31:05 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901A22647;
+        Thu, 10 Feb 2022 09:31:06 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id e7so12967909ejn.13;
+        Thu, 10 Feb 2022 09:31:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3xFsM0nPuhSGSTkyLUY3o2cz0yH3ogdvJBOAYbLu1Hk=;
+        b=NFIqILJvmbmsmCjc0R4PAAQddul5/KzW7LG+BLzvj0/dNZC+u98M4M+qdq+pUjpJ0b
+         Oleu3IvMbux2SiwuAWOR1U9+OsImEvzVVlmPi7m2AlkbsoVc17iLL2VeR4OGeHSauJ3Z
+         /rqv2WzSu8jI0yXOQWXzGDWEiuw19JQe8GtErQMfpZj3RHdSpjzhDZFqd0ZGjC+vzxif
+         RyiMmWlwfe82G51A598rtuz61GRA4dKTTyPOKB9+Vj8byqr+b46L+PNIuHY82wlmKQGr
+         Dqd+YsQKZRXvgSeDj27Y1rWXcEygIphIXIO233dTjpulEvX72YGnb0homEo3zfQeUyMn
+         cerw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ipC35w792dvxJk0OyBY7gcESXN0lGemMDfsvs+ruGts=;
-        b=q5AsAtkO5e0W3sQ9nQRcSSGSgq+3RMc9ztlWdY6fFUmt0KpayVbIeT1orYhMm5ek3k
-         gq70KrBmRjFFNl5GbVl7E1cTUoNgOrYmrhnlhmXacJKwZrMit1UpcIiIS2Qxb47+gjJs
-         c1ZCJwoZixIrCs/WkFHX2Ol52oDw/KyaaSBCi6Mwepb96NTuCHKla8cqNpK6nqGC5vFV
-         x/Ms5W0wJL6AiQRz9iBT1/xCsMbpg0ioYjYwxb4x49hp94SncruM499E0g6Osk9n9czc
-         wlG4l2dod+8oJNJWLMkc9oz+NmqyyOBPBLITJUElY1xos9dfbEnzPtRx7CXhJtJ/yblP
-         n34A==
-X-Gm-Message-State: AOAM5312Lt6mMY7J/A2sXcHQF4wsBJOUY704S9/1D29JU59l9kFKV4mU
-        IAaSr9REbIQVIfvuJokGZIYGOhCJQ4fV1rtSQp1gESOWTl8IiuynQnFF7I8s1NlYC9yK8Nj0Wp/
-        cmSoPdkKwqQj4qUMZitILajPn
-X-Received: by 2002:a05:6402:2708:: with SMTP id y8mr9445645edd.409.1644514229899;
-        Thu, 10 Feb 2022 09:30:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw+5gAesk8y5CJUhwsjQvRSPjVku04l37Bvzlnqcvt9dX9PJwsr+KeQ7sLPZ30dz1n51krz+w==
-X-Received: by 2002:a05:6402:2708:: with SMTP id y8mr9445622edd.409.1644514229627;
-        Thu, 10 Feb 2022 09:30:29 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id yz13sm5164078ejb.209.2022.02.10.09.30.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 09:30:28 -0800 (PST)
-Message-ID: <344042cf-099e-5e26-026a-c42d0825488e@redhat.com>
-Date:   Thu, 10 Feb 2022 18:30:19 +0100
+        bh=3xFsM0nPuhSGSTkyLUY3o2cz0yH3ogdvJBOAYbLu1Hk=;
+        b=SUuxlvnB9MjtMd4szmNey5R8LloXo6YL7VYLMB/Mn9kGt3vWPFpFdYSozWuqd5uYb2
+         XOxjp6PVwnov/icsVnhsP0V8OkaSQKlroyQM/x/ngIVAb7tc/lwg41zQPbCOad8bjP+p
+         IUXwsG2sZ2R+9zNKz5FssOPHXAlp/NDlRt/S5mkdqo+FDiCaG+Z3zjEPqlZPhQRZVChA
+         niZc6MgbnSfwK2fIAF3/zx0tEKGumKvMhLef0SMdUTzHelXgMuwoS+uiXrAGXJNZjVVo
+         7SpsNuz+KALKSP+eYxkwuACdpdmjseg8p/eM8/lzMf51FvmBeYgbSMZepOz+VzbD9let
+         no2Q==
+X-Gm-Message-State: AOAM531pZkoQgeKkKP4njZld5O3jSkepzwQVNx2sNRo+IusxfOVU2D6D
+        GThVKCpgxcCBT4ZZayhtPdY=
+X-Google-Smtp-Source: ABdhPJzW89YoTkdkUobSkVso7mwzeF8VsYtPcaPJp9tjMWbNziQCLa1dhnHIn3Q/S1wWdTW8tG6m3g==
+X-Received: by 2002:a17:907:f9c:: with SMTP id kb28mr7048664ejc.213.1644514265037;
+        Thu, 10 Feb 2022 09:31:05 -0800 (PST)
+Received: from fedora.robimarko.hr (dh207-99-63.xnet.hr. [88.207.99.63])
+        by smtp.googlemail.com with ESMTPSA id m4sm2206551ejl.45.2022.02.10.09.31.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 09:31:04 -0800 (PST)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, absahu@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Dirk Buchwalder <buchwalder@posteo.de>,
+        Robert Marko <robimarko@gmail.com>
+Subject: [PATCH] clk: qcom: ipq8074: Use floor ops for SDCC1 clock
+Date:   Thu, 10 Feb 2022 18:31:00 +0100
+Message-Id: <20220210173100.505128-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 00/23] KVM: MMU: MMU role refactoring
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     David Matlack <dmatlack@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-References: <20220204115718.14934-1-pbonzini@redhat.com>
- <YgGmgMMR0dBmjW86@google.com> <YgGq31edopd6RMts@google.com>
- <CALzav=d05sMd=ARkV+GMf9SkxKcg9c9n5ttb274M2fZrP27PDA@mail.gmail.com>
- <YgRmXDn7b8GQ+VzX@google.com>
- <40930834-8f54-4701-d3ec-f8287bc1333f@redhat.com>
- <YgVDfG1DvUdXnd2n@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YgVDfG1DvUdXnd2n@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,28 +71,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/10/22 17:55, Sean Christopherson wrote:
->> 	union kvm_mmu_page_role root_role;
->> 	union kvm_mmu_paging_mode cpu_mode;
->
-> I'd prefer to not use "paging mode", the SDM uses that terminology to refer to
-> the four paging modes.  My expectation given the name is that the union would
-> track only CR0.PG, EFER.LME, CR4.PAE, and CR4.PSE[*].
+From: Dirk Buchwalder <buchwalder@posteo.de>
 
-Yeah, I had started with kvm_mmu_paging_flags, but cpu_flags was an even 
-worse method than kvm_mmu_paging_mode.
+Use floor ops on SDCC1 APPS clock in order to round down selected clock
+frequency and avoid overclocking SD/eMMC cards.
 
-Anyway, now that I have done _some_ replacement, it's a matter of sed -i 
-on the patch files once you or someone else come up with a good moniker.
+For example, currently HS200 cards were failling tuning as they were
+actually being clocked at 384MHz instead of 192MHz.
+This caused some boards to disable 1.8V I/O and force the eMMC into the
+standard HS mode (50MHz) and that appeared to work despite the eMMC being
+overclocked to 96Mhz in that case.
 
-I take it that "root_role" passed your filter successfully.
+There was a previous commit to use floor ops on SDCC clocks, but it looks
+to have only covered SDCC2 clock.
 
-Paolo
+Fixes: 9607f6224b39 ("clk: qcom: ipq8074: add PCIE, USB and SDCC clocks")
 
-> I'm out of ideas at the moment, I'll keep chewing on this while reviewing...
-> 
-> [*] Someone at Intel rewrote the SDM and eliminated Mode B, a.k.a. PSE 36-bit
-> physical paging, it's now just part of "32-bit paging".  But 5-level paging is
-> considered it's own paging mode?!?!  Lame.  I guess they really want to have
-> exactly four paging modes...
+Signed-off-by: Dirk Buchwalder <buchwalder@posteo.de>
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+ drivers/clk/qcom/gcc-ipq8074.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
+index 1e493f19fa44..c24e33321f72 100644
+--- a/drivers/clk/qcom/gcc-ipq8074.c
++++ b/drivers/clk/qcom/gcc-ipq8074.c
+@@ -1074,7 +1074,7 @@ static struct clk_rcg2 sdcc1_apps_clk_src = {
+ 		.name = "sdcc1_apps_clk_src",
+ 		.parent_names = gcc_xo_gpll0_gpll2_gpll0_out_main_div2,
+ 		.num_parents = 4,
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_floor_ops,
+ 	},
+ };
+ 
+-- 
+2.35.1
 

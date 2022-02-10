@@ -2,89 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B27CD4B09E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:50:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27AB14B09F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239013AbiBJJs5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Feb 2022 04:48:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36390 "EHLO
+        id S238983AbiBJJtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:49:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239025AbiBJJss (ORCPT
+        with ESMTP id S239045AbiBJJtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:48:48 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC204138
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:48:48 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-48-zq-35qpQOqaQZ_cZnG8zjw-1; Thu, 10 Feb 2022 09:48:45 +0000
-X-MC-Unique: zq-35qpQOqaQZ_cZnG8zjw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 10 Feb 2022 09:48:44 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 10 Feb 2022 09:48:44 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     =?iso-8859-1?Q?=27Uwe_Kleine-K=F6nig=27?= 
-        <u.kleine-koenig@pengutronix.de>, Qing Wang <wangqing@vivo.com>
-CC:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] pwm: use div64_u64() instead of do_div()
-Thread-Topic: [PATCH] pwm: use div64_u64() instead of do_div()
-Thread-Index: AQHYHclpMmDYeR7Hx0KRNkbIRj4HSKyMibOg
-Date:   Thu, 10 Feb 2022 09:48:44 +0000
-Message-ID: <9273cd6497354dd882faf55b194ff590@AcuMS.aculab.com>
-References: <1644395998-4397-1-git-send-email-wangqing@vivo.com>
- <20220209152609.gqeivcehkuzgz3sk@pengutronix.de>
-In-Reply-To: <20220209152609.gqeivcehkuzgz3sk@pengutronix.de>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 10 Feb 2022 04:49:06 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB666BEF;
+        Thu, 10 Feb 2022 01:49:02 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id q7so8398993wrc.13;
+        Thu, 10 Feb 2022 01:49:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fBJtKcMcmZW3d1ZPmF8edX1mvxTQJq2besnPp14ia5M=;
+        b=cpBWfnfF0O/nqwqnGqlQCLy7oQbPyZxV9HvKc2RhN6EwvGtr9rBI2EQ8Gl49d6AK8I
+         ngS87oN23MIu3/nt5aFJrlKXZARfn47qyRow4o535W1LlhbwhLHTBpjk9Lcf/pxViWYJ
+         Mu8YlJCUyyaYLBGV2tGUyZQ27dUOAYxDaDom8nDbbVYrI0ck1r5kdA39rjMy3KBbddBV
+         F1Q9iVY2dPRie2dExOOE2KNUjb1994G6XHv+pmFSqBemiLYv/SbYdooBEnikyC9swxhk
+         ZDfyp7Ze+h5zKxUHw7ZY8fztcHDwEbuV1Xs2uxVhNgahNrGm6wcksRFYdISOk+Rll04R
+         EEnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fBJtKcMcmZW3d1ZPmF8edX1mvxTQJq2besnPp14ia5M=;
+        b=5iORSsUmUQ2WgCQzETrTLFJxd/S5zRUxHDd6Yw0BgGCWR2/GIcaHsl1umt/nMUmAMA
+         3pmdEZvi1Wd74oZMTFxhR1Qulr4qBZgQy3jUHhYnH+3seisfZ9k2PwWmm7n+jBHRxFTF
+         zvGq6c3v4ZjOHs/TSaTlYO6UppYRCD7AJWpvNKZBnGrz8oiC7YoSxzXLSNGATyhKBCYa
+         rlGn6jBoQl+jF66JxHqQdAppl26xJRWO+ZdkAfawPG0r6uIxMTYTi7R2FO3UnKXLphSf
+         Im9u6p+RWTdWiGJZ9klBndRyOH5iY98xggqnCaHdZdpY0fMVYwDDlcXqLabTshW+Q6g0
+         KVvw==
+X-Gm-Message-State: AOAM531J6a0doG/RnzbA/qbN5+65lEDBQ8MuTtEYfB3Vb7Jht8eGbu+Z
+        QGKm2VZDSHIowftLUbh2dhi9C02eJO8=
+X-Google-Smtp-Source: ABdhPJz1VCYhQsQTa9UPD5KfY24dvxGmN1T/pbCtpTvCDc2zMutDOos22+B22MoRRgabZn0jY2Zyrw==
+X-Received: by 2002:adf:f981:: with SMTP id f1mr5622867wrr.651.1644486541117;
+        Thu, 10 Feb 2022 01:49:01 -0800 (PST)
+Received: from localhost.localdomain (198.red-81-44-130.dynamicip.rima-tde.net. [81.44.130.198])
+        by smtp.gmail.com with ESMTPSA id j6sm6636601wrt.70.2022.02.10.01.48.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 01:49:00 -0800 (PST)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     linux-clk@vger.kernel.org
+Cc:     john@phrozen.org, linux-staging@lists.linux.dev,
+        gregkh@linuxfoundation.org, neil@brown.name,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        sboyd@kernel.org
+Subject: [PATCH v9 0/2] clk: ralink: make system controller a reset provider
+Date:   Thu, 10 Feb 2022 10:48:57 +0100
+Message-Id: <20220210094859.927868-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König
-> Sent: 09 February 2022 15:26
-...
-> > -	do_div(cycles, period_ns);
-> > +	div64_u64(cycles, period_ns);
-> 
-> This is wrong, div64_u64() has a different calling convention than do_div().
-> 
-> The issue however is real. Please add
+Hi all,
 
-Not really although I can't see a check I'd assume that period_ns
-is expected to be much less than a second - so well under 32 bits
-There is certainly a general expectation that multiplying by
-other 'largish' values won't exceed 64 bits.
+This patch series add minimal change to provide mt7621 resets properly
+defining them in the 'mediatek,mt7621-sysc' node which is the system
+controller of the SoC and is already providing clocks to the rest of
+the world.
 
-Plausible the pwm 'period' should actually be a u32.
-But then care would be needed to ensure the multiplies have
-64bit results.
+There is shared architecture code for all ralink platforms in 'reset.c'
+file located in 'arch/mips/ralink' but the correct thing to do to align
+hardware with software seems to define and add related reset code to the
+already mainlined clock driver.
 
-	David
+After this changes, we can get rid of the useless reset controller node
+in the device tree and use system controller node instead where the property
+'#reset-cells' has been added. Binding documentation for this nodeq has
+been updated with the new property accordly.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+This series also provide a bindings include header where all related
+reset bits for the MT7621 SoC are defined.
+
+Also, please take a look to this review [0] to understand better motivation
+for this series.
+
+These remaining two are expected to go through the staging tree since there
+was a dts file conflict and dependencies with driver code.
+
+Changes in v9:
+ - Drop already applied patchs in staging-tree 1, 4 of previous version of the series.
+ - Collect Stephen Boys Acked-by for remaining patches.
+ - Collect Philipp Zabel Reviewed-by for reset changes in driver code.
+
+Changes in v8:
+ - PATCH 3/4: with .of_xlate set, the driver needs to check whether id < nr_resets
+   on its own.
+
+Changes in v7:
+ - PATCH 3/4: make use of '.of_xlate' callback as per Philipp v6 review.
+
+Changes in v6:
+ - Rebased on the top of last changes of staging-testing to properly
+   update dtsi file (PATCH 4/4).
+ - Send a copy of this to reset provider maintainer Philipp as per Stephen's sugestion
+   to get changes added through the clk tree (Philipp, thanks in advance for reviewing
+   this).
+
+Changes in v5:
+ - Move platform driver init process into 'arch_initcall' to be sure the
+   rest of the world can get the resets available when needed (since PCIe
+   controller driver has been moved from staging into 'drivers/pci/controller'
+   is probed earlier and reset was not available so it was returning 
+   -EPROBE_DEFER on firt try. Moving into 'arch_initcall' avoids the 'a bit
+   anoying' PCI first failed log trace.
+
+Changes in v4:
+ - I sent wrong patch 3 accidentaly so now include the good version, sorry.
+
+Changes in v3:
+ - Collect Rob's Acked-by for patches 1 and 2. 
+ - Rebase on the top of staging-next since there were already many
+   changes there and PATCH 4 of the series didn't apply cleanly.
+
+Changes in v2:
+ - Address review comments of Dan Carpenter [1]:
+ - Avoid 'inline' in function definition.
+ - Return proper error codes (-EINVAL) instead of '-1'.
+ - Make use of 'devm_kzalloc' instead of 'kzalloc'.
+
+[0]: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20210926145931.14603-3-sergio.paracuellos@gmail.com/
+
+Best regards,
+   Sergio Paracuellos
+
+Sergio Paracuellos (2):
+  dt-bindings: clock: mediatek,mt7621-sysc: add '#reset-cells' property
+  clk: ralink: make system controller node a reset provider
+
+ .../bindings/clock/mediatek,mt7621-sysc.yaml  | 12 +++
+ drivers/clk/ralink/clk-mt7621.c               | 92 ++++++++++++++++++-
+ 2 files changed, 103 insertions(+), 1 deletion(-)
+
+-- 
+2.25.1
 

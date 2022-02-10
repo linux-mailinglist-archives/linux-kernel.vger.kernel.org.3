@@ -2,116 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B794B1664
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 20:36:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 927604B1667
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 20:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344028AbiBJTfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 14:35:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44336 "EHLO
+        id S1344033AbiBJTfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 14:35:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243590AbiBJTfK (ORCPT
+        with ESMTP id S242374AbiBJTfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 14:35:10 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8E7D62;
-        Thu, 10 Feb 2022 11:35:10 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21AJYxi7056840;
-        Thu, 10 Feb 2022 13:34:59 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1644521699;
-        bh=/bJ9iS5dwRmi3cHk4NArM1//+U9uqS5txh7CfIsrBUk=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=slO7lGXd+EMThj4PR2jsTrB2byPNkJgf6+5JQpgzVMeYZqWTWJ7cMDjzSUEXQtFj3
-         V8B+R06c3AV39wMEvdFlBED5YcuMeufp3yzeoxoIcDVcOTm0T5gcujyeT7fkwNnGno
-         4FVpqU0wg3KXGpuPRn3/RKENIM5lPRlrb+DE0sCw=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21AJYxpL110267
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 10 Feb 2022 13:34:59 -0600
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 10
- Feb 2022 13:34:59 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 10 Feb 2022 13:34:59 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21AJYxmX064678;
-        Thu, 10 Feb 2022 13:34:59 -0600
-Date:   Thu, 10 Feb 2022 13:34:59 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Marc Zyngier <maz@kernel.org>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/5] arm64: dts: ti: Introduce base support for AM62x SoC
-Message-ID: <20220210193459.nl6baranvmqs46bi@coastal>
-References: <20220208131827.1430086-1-vigneshr@ti.com>
- <20220208131827.1430086-5-vigneshr@ti.com>
- <bc6cb6e1adcf6860a595b71246778733@kernel.org>
+        Thu, 10 Feb 2022 14:35:44 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F859E61
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 11:35:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=sm+e1eXnxMV9mmXhJaaWMCKB3nawohVI61dfIEdJPQ4=; b=wYcsSEvm9pVoVb47G8HPuCHrqn
+        f8ezR3VKR3Dl+FM87qHJ66CPVSg0HUX4TmblczryfOeTFipVoBhNqjlw7Jk2xSOSu3OICmz6jTiCr
+        aaV/St6BfrBDbdyhM/8PyDj+Y3Dy3/lNE/t6go6UmR1LWQVM1ArXbpFIdKW9RndHV9xn7vYwdBEMF
+        sZK8wVXGvMSi8Wd39tLHKGrRwm+XkWy2uL5R0Ib92NEgEay/nRpr7k9zXPFsBNaoB/2q3lsPHs5AZ
+        6iuGMsIN4Tl09RduDCj+rvhzxvm/O2uvRMdgqaNTlQAlljtVctrLdxPTMduNgixNdMMcq10IurUsi
+        v+4nbjHg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nIFDY-009hbc-RP; Thu, 10 Feb 2022 19:35:00 +0000
+Date:   Thu, 10 Feb 2022 19:35:00 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Colin Cross <ccross@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>, brauner@kernel.org,
+        legion@kernel.org, ran.xiaokai@zte.com.cn, sashal@kernel.org,
+        Chris Hyser <chris.hyser@oracle.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Peter Collingbourne <pcc@google.com>, caoxiaofeng@yulong.com,
+        David Hildenbrand <david@redhat.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel-team <kernel-team@android.com>,
+        syzbot+aa7b3d4b35f9dc46a366@syzkaller.appspotmail.com
+Subject: Re: [PATCH v2 1/1] mm: fix use-after-free when anon vma name is used
+ after vma is freed
+Message-ID: <YgVo5HrAhoeoix7a@casper.infradead.org>
+References: <20220210043215.42794-1-surenb@google.com>
+ <YgUHzSqltDp2dr70@dhcp22.suse.cz>
+ <CAJuCfpGkW7MoWW=E1tqEib24M3JjxDKF_zgmMnvWo8wJP6cy2g@mail.gmail.com>
+ <YgUu0prRt3iu1Cpy@casper.infradead.org>
+ <CAJuCfpHPZNbK2rd95pZAWr0d3vACGzHdiAFv=bM-G8nC+YdYwg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bc6cb6e1adcf6860a595b71246778733@kernel.org>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAJuCfpHPZNbK2rd95pZAWr0d3vACGzHdiAFv=bM-G8nC+YdYwg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19:10-20220209, Marc Zyngier wrote:
-[...]
-
-> > +&cbass_main {
-> > +	gic500: interrupt-controller@1800000 {
-> > +		compatible = "arm,gic-v3";
-> > +		#address-cells = <2>;
-> > +		#size-cells = <2>;
-> > +		ranges;
-> > +		#interrupt-cells = <3>;
-> > +		interrupt-controller;
-> > +		reg = <0x00 0x01800000 0x00 0x10000>,	/* GICD */
-> > +		      <0x00 0x01880000 0x00 0xC0000>;	/* GICR */
+On Thu, Feb 10, 2022 at 08:00:15AM -0800, Suren Baghdasaryan wrote:
+> On Thu, Feb 10, 2022 at 7:27 AM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > On Thu, Feb 10, 2022 at 07:18:24AM -0800, Suren Baghdasaryan wrote:
+> > > On Thu, Feb 10, 2022 at 4:40 AM 'Michal Hocko' via kernel-team
+> > > <kernel-team@android.com> wrote:
+> > > >
+> > > > On Wed 09-02-22 20:32:15, Suren Baghdasaryan wrote:
+> > > > > When adjacent vmas are being merged it can result in the vma that was
+> > > > > originally passed to madvise_update_vma being destroyed. In the current
+> > > > > implementation, the name parameter passed to madvise_update_vma points
+> > > > > directly to vma->anon_name->name and it is used after the call to
+> > > > > vma_merge. In the cases when vma_merge merges the original vma and
+> > > > > destroys it, this will result in use-after-free bug as shown below:
+> > > > >
+> > > > > madvise_vma_behavior << passes vma->anon_name->name as name param
+> > > > >   madvise_update_vma(name)
+> > > > >     vma_merge
+> > > > >       __vma_adjust
+> > > > >         vm_area_free <-- frees the vma
+> > > > >     replace_vma_anon_name(name) <-- UAF
+> > > > >
+> > > > > Fix this by raising the name refcount and stabilizing it. Introduce
+> > > > > vma_anon_name_{get/put} API for this purpose.
+> > > >
+> > > > What is the reason that madvise_update_vma uses the naked name rather
+> > > > than the encapsulated anon_vma_name? This really just begs for problems.
+> > >
+> > > The reason for that is the second place it's being used from the prctl syscall:
+> > >
+> > > prctl_set_vma
+> > >   madvise_set_anon_name
+> > >     madvise_vma_anon_name
+> > >       madvise_update_vma
+> > >
+> > > In that case the name parameter is not part of any anon_vma_name
+> > > struct and therefore is stable. I can add a comment to
+> > > madvise_update_vma indicating that the name parameter has to be stable
+> > > if that helps.
+> >
+> > Seems to me it'd simplify things if replace_vma_anon_name() and
+> > madvise_vma_anon_name() took a struct anon_vma_name instead of
+> > a bare char *.  You could construct it in madvise_set_anon_name().
 > 
-> Usual rant: you are missing the GICC, GICH and GICV regions
-> that are implemented by the CPU. Cortex-A53 implements them
-> (they are not optional), so please describe them.
-> 
+> Ok, this can be done. However I don't think changing
+> replace_vma_anon_name() to accept a struct anon_vma_name would be a
+> good idea. Reader might think that the object being passed will become
+> the vma->anon_name of the vma, while in reality that's not the case.
 
+Why woud we not want that to be the case?  It's a refcounted name.
+I don't see why it shouldn't be shared between multiple VMAs that
+have the same name?
 
--ECONFUSED. TRM for GIC500 refers to just GICD, GICR and ITS range[1].
-
-Same thing is indicated by Generic Interrupt Controller Architecture
-Specification[2] See table 1-1 (page 23).
-
-I think you are expecting GICV3's backward compatibility mode (Table 1-2
-in page 24), But in K3 architecture, are_option meant for backward
-compatibility is set to true (aka no backward compatibility). I think
-this did popup sometime back as well (first k3 SoC)[3]. I think the more
-clearer description is available in [4].
-
-I believe the argumentation that GICC/H/V is mandatory for A53 if GIC500
-is used is not accurate. Please correct me if I am mistaken.
-
-
-[1] https://developer.arm.com/documentation/ddi0516/e/programmers-model/the-gic-500-register-map?lang=en
-[2] https://developer.arm.com/documentation/ihi0069/d
-[3] https://patchwork.kernel.org/project/linux-arm-kernel/patch/20180607233853.p7iw7nlxxuyi66og@kahuna/
-[4] https://developer.arm.com/documentation/ddi0516/e/functional-description/operation/backwards-compatibility?lang=en
-
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

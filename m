@@ -2,57 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE1A4B13DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 548064B13E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:09:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245037AbiBJRHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 12:07:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48472 "EHLO
+        id S245045AbiBJRJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 12:09:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243863AbiBJRHD (ORCPT
+        with ESMTP id S237394AbiBJRJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 12:07:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6F3C11;
-        Thu, 10 Feb 2022 09:07:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3643161DC5;
-        Thu, 10 Feb 2022 17:07:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03BBCC004E1;
-        Thu, 10 Feb 2022 17:07:02 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="SGKYtxBy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644512821;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zg8dxELJUl/Pi5dSp3oSZ4elwXDb0hD3UlkIY9ZZZBo=;
-        b=SGKYtxByGMCpJ/0pgoMDrJY7x/osvTNCs1erdcQIcBRMee8CheOSZOtBvo+ItasSUMN13r
-        YgDLUx6Xq0zPhU3ivZTfHoYUDnNt3Bc2aLrEBFfEjwRLxJfYiGQQBs6h8WFLL8aAD7Fo93
-        vsTpag1f3cxVKCx5lWnP3UArtUdNWIU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0a1707bb (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 10 Feb 2022 17:07:01 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux-spdx@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: [PATCH v3] random: add proper SPDX header
-Date:   Thu, 10 Feb 2022 18:06:51 +0100
-Message-Id: <20220210170651.163974-1-Jason@zx2c4.com>
-In-Reply-To: <CAHmME9q5uExD5bUdPscZn6mKQYnf80YPq=KqCk8XYuH1uXpS6Q@mail.gmail.com>
-References: <CAHmME9q5uExD5bUdPscZn6mKQYnf80YPq=KqCk8XYuH1uXpS6Q@mail.gmail.com>
+        Thu, 10 Feb 2022 12:09:46 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A66E6A;
+        Thu, 10 Feb 2022 09:09:46 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id m11so11969767edi.13;
+        Thu, 10 Feb 2022 09:09:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6KO1EHZt76GuJ09+7lD/Q77CRRrPRaK9iQ8TqtMouCs=;
+        b=oE0UWN3i1TkNvMqRFkDLcjavtpSFD1eDEkeFDT4QLUJRC9sc94G+UoYYpZ8WZBZN02
+         9w1bjMoaj4w3ErLUogI86cN813NKNnm5zTxx2NDpe0IOpVftdwCZTA4tl+87sxtB5qg7
+         9F7t+AgNZayB2UOsgR5c9UfnoeanY5vOoC4JxdeNeSP/w584iFgzZvjL3LxWRzwhvirY
+         amdO9wYhDmTv8oXSBPehyhvPJF7ZMOMCb4DA4JIO5xSuGg7ccx8J57opZFRZ8RXBAr32
+         6YwSFyhGYjdarzx8bEcsroRMCgBImWfhVRAvasNn6Bf7QHrmq3nrUfCLZjFpHDu1wZOC
+         YrDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6KO1EHZt76GuJ09+7lD/Q77CRRrPRaK9iQ8TqtMouCs=;
+        b=bHwIbdRyfrdJ4PEfcL9+LenSsjDGvSy34DWMruwhgwrHC8DK6YUNZcpEMRM0IDKK4I
+         ZERdIdVuqxP3JD6se471g/DjYqpkEW/9XjC5mq7z/Qwd74I0sfcKjTugMP8xAlPJU1fn
+         lfmTaZSzKsMd5bwIXHCkD8mZq9Hsbn2afjYrmsabYZs+0zJIRgk5JCvzWpvj+eWBAkzB
+         gKDsFEoDeBm+H/+vhRTExnsqVO1Kn8hH+Efie0Y16gabeAN3HXEwoL7cGdx931lnOuY/
+         qSl7in4Tk2D6v1htL8lKV9Br1vLdwBirXRCWTvPKb0BK11qLCJvkIpfJMnq4qIDRWCUI
+         dviA==
+X-Gm-Message-State: AOAM532c7XrfIvdFX16kcTWtYx+SBI+AplnAh32Xw7GUTMbcvi2HwyYD
+        JRW0d2ZN8uwi2vNzzkvAlco=
+X-Google-Smtp-Source: ABdhPJwbe+YniUx44ThriVsops7IHX9fxPYlLtd68unikrqu6n215gfZVJHNWsldYo+g+aBnZotxKA==
+X-Received: by 2002:a05:6402:190f:: with SMTP id e15mr9479055edz.195.1644512985120;
+        Thu, 10 Feb 2022 09:09:45 -0800 (PST)
+Received: from skbuf ([188.27.184.105])
+        by smtp.gmail.com with ESMTPSA id qx22sm6215632ejb.135.2022.02.10.09.09.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 09:09:44 -0800 (PST)
+Date:   Thu, 10 Feb 2022 19:09:43 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 3/5] net: dsa: Add support for offloaded
+ locked port flag
+Message-ID: <20220210170943.tvmnru5byx5jbqkz@skbuf>
+References: <20220209130538.533699-1-schultz.hans+netdev@gmail.com>
+ <20220209130538.533699-4-schultz.hans+netdev@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209130538.533699-4-schultz.hans+netdev@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,76 +76,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the current license into the SPDX notation of "(GPL-2.0 OR
-BSD-3-Clause)". This infers GPL-2.0 from the text "ALTERNATIVELY, this
-product may be distributed under the terms of the GNU General Public
-License, in which case the provisions of the GPL are required INSTEAD OF
-the above restrictions" and it infers BSD-3-Clause from the verbatim
-BSD 3 clause license in the file.
+Hello,
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-Changes v2->v3:
-- GPL-2.0-or-later is now a vanilla GPL-2.0.
-- Remove non-license changes.
+Next time you send a patch version, if you're going to copy me on a
+patch, can you please copy me on all of them? I have a problem with not
+receiving emails in real time from netdev@vger.kernel.org, and
+refreshing patchwork to see if anything has been said on the other
+patches is pretty out of hand. I don't have enough information to
+comment just on the DSA bits.
 
- drivers/char/random.c | 37 +------------------------------------
- 1 file changed, 1 insertion(+), 36 deletions(-)
+Thanks.
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 324574b03120..ea4a89129865 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1,44 +1,9 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
- /*
-- * random.c -- A strong random number generator
-- *
-  * Copyright (C) 2017-2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-- *
-  * Copyright Matt Mackall <mpm@selenic.com>, 2003, 2004, 2005
-- *
-  * Copyright Theodore Ts'o, 1994, 1995, 1996, 1997, 1998, 1999.  All
-  * rights reserved.
-- *
-- * Redistribution and use in source and binary forms, with or without
-- * modification, are permitted provided that the following conditions
-- * are met:
-- * 1. Redistributions of source code must retain the above copyright
-- *    notice, and the entire permission notice in its entirety,
-- *    including the disclaimer of warranties.
-- * 2. Redistributions in binary form must reproduce the above copyright
-- *    notice, this list of conditions and the following disclaimer in the
-- *    documentation and/or other materials provided with the distribution.
-- * 3. The name of the author may not be used to endorse or promote
-- *    products derived from this software without specific prior
-- *    written permission.
-- *
-- * ALTERNATIVELY, this product may be distributed under the terms of
-- * the GNU General Public License, in which case the provisions of the GPL are
-- * required INSTEAD OF the above restrictions.  (This clause is
-- * necessary due to a potential bad interaction between the GPL and
-- * the restrictions contained in a BSD-style copyright.)
-- *
-- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
-- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
-- * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
-- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
-- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
-- * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
-- * DAMAGE.
-  */
- 
- /*
--- 
-2.35.0
-
+On Wed, Feb 09, 2022 at 02:05:35PM +0100, Hans Schultz wrote:
+> Among the switchcores that support this feature is the Marvell
+> mv88e6xxx family.
+> 
+> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
+> ---
+>  net/dsa/port.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/dsa/port.c b/net/dsa/port.c
+> index bd78192e0e47..01ed22ed74a1 100644
+> --- a/net/dsa/port.c
+> +++ b/net/dsa/port.c
+> @@ -176,7 +176,7 @@ static int dsa_port_inherit_brport_flags(struct dsa_port *dp,
+>  					 struct netlink_ext_ack *extack)
+>  {
+>  	const unsigned long mask = BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD |
+> -				   BR_BCAST_FLOOD;
+> +				   BR_BCAST_FLOOD | BR_PORT_LOCKED;
+>  	struct net_device *brport_dev = dsa_port_to_bridge_port(dp);
+>  	int flag, err;
+>  
+> @@ -200,7 +200,7 @@ static void dsa_port_clear_brport_flags(struct dsa_port *dp)
+>  {
+>  	const unsigned long val = BR_FLOOD | BR_MCAST_FLOOD | BR_BCAST_FLOOD;
+>  	const unsigned long mask = BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD |
+> -				   BR_BCAST_FLOOD;
+> +				   BR_BCAST_FLOOD | BR_PORT_LOCKED;
+>  	int flag, err;
+>  
+>  	for_each_set_bit(flag, &mask, 32) {
+> -- 
+> 2.30.2
+> 

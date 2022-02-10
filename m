@@ -2,62 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55B354B186D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0654B1870
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345084AbiBJWmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 17:42:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59958 "EHLO
+        id S1345117AbiBJWmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 17:42:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345032AbiBJWmh (ORCPT
+        with ESMTP id S1345093AbiBJWmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:42:37 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B85026D4;
-        Thu, 10 Feb 2022 14:42:37 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 850A11F467B4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644532956;
-        bh=bedGo7xcKtSpxhKnR+SjKvtdtKnjMdpeXSz+eoAK79g=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=aDieopZ85m1PLSn0SM2YpgfuPUXWCpFgbf7eegoSQGvbnj+qcVoxsqfwwBj4UXKV/
-         jTdy+wGP3V7ojgOOycAjGc1E6awJpB6rzm7pQa7EYynzk7PEvKmqTkDgDT8u4eCgqe
-         3YsWQD1/WOUATmWAjME6u18BS7fjFCnSc72kYytUr2+ojQGKihgGQIskMrmsSMS+yt
-         +S1AIAkeIGpGksvE/hK7vtZpX4EtXB7RNcE21sNUe/MTfrlQ8nAYlNxn4PRrvkuyFV
-         iM5m5OtbVY1vxEiBsgKJ78oHImNSpr8f+ZgTg4ZOysKrNMFHi68rxaEcsOk5oBkPMJ
-         gBdQRwAH2Q7eQ==
-Message-ID: <81619c13-41e6-3aab-4cf7-9b6d5a11e05c@collabora.com>
-Date:   Fri, 11 Feb 2022 03:41:54 +0500
+        Thu, 10 Feb 2022 17:42:47 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAFF26D4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:42:46 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id p19so19776756ybc.6
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:42:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OjreJ4Dbxm2NwQlgnQYlRNvrqvyn6H+tQ+K3U0g0mFI=;
+        b=LX8u+w3RqcntgJCHyFMV4Fre+NntXNFQQlBWBGTBu67MgFdVmMjY4UPqS9LePVWP9q
+         ++KmXmIcvng+CQaKcXpdHGPKgfZw95uSBgxJbFskcujzYu3MN57xy/TWm4L28xAomOPi
+         e39N5a0TeU8SvKhzNwQFOmjJdb3DcmqQhtL2I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OjreJ4Dbxm2NwQlgnQYlRNvrqvyn6H+tQ+K3U0g0mFI=;
+        b=YBimH/p0owvdLk+smNRYSOAbftfzCSjP9IMbY9tOoHj7bOHS5LGJ8AADeLuSpNMDul
+         LD6ORqHiGTMbhGXORCa+ya2UEd7QSC6LXiEE+I6CK6ETHxJIWe5fJH0C2jP/i5b0mqeP
+         1BBsbjU+vy/VF0Nqt9OuAwWiqKUyd1t3Tjde7zM2sh7C8iB5LVW5MV75ZffrRJP+4rk3
+         9ZRiK17r8zla86K83HhxDE2Jn2PbOEWXcsUpRafBniiYvwRZVmvDtAcbXJmZYUKqfday
+         BIc7JQN+srDLrJKfQ61+8s2TzJVgCmKyNCTptDh21E+Ons63a7FupeW+5a8+DL8w0i9Z
+         98aw==
+X-Gm-Message-State: AOAM530ioV6EMc3lzh1Q1FBqaPbCBgrbdueLDvXFfj5wfVoCoYIZ4vMP
+        o5ZBnWdMaTorTRWcW3T5i2KHTFZClsshT2arp+o6
+X-Google-Smtp-Source: ABdhPJyR8oYWkiUH8cQr2NFW+hlos0Nq2+W+WHKskklGcfGFhys92e0ats7QSYkRoCXeYmJAm9nXLikQIY28et3jaCs=
+X-Received: by 2002:a81:e241:: with SMTP id z1mr9683966ywl.62.1644532966055;
+ Thu, 10 Feb 2022 14:42:46 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     usama.anjum@collabora.com, kernel@collabora.com,
-        kernelci@groups.io, "kernelci.org bot" <bot@kernelci.org>
-Subject: Re: [PATCH 1/2] selftests: x86: allow expansion of $(CC)
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "open list:INTEL SGX" <linux-sgx@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220210190642.1477814-1-usama.anjum@collabora.com>
- <20220210190642.1477814-2-usama.anjum@collabora.com>
- <a34f2fc8-f4aa-fef4-d1dd-f3fdb5114f72@linuxfoundation.org>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <a34f2fc8-f4aa-fef4-d1dd-f3fdb5114f72@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220209123800.269774-1-heiko@sntech.de> <20220209123800.269774-9-heiko@sntech.de>
+In-Reply-To: <20220209123800.269774-9-heiko@sntech.de>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Thu, 10 Feb 2022 14:42:35 -0800
+Message-ID: <CAOnJCULe_5v6cb_JcoPKf-UD3bVze1U=jaYeLTsMu7pFigde+A@mail.gmail.com>
+Subject: Re: [PATCH v6 08/14] riscv: move boot alternatives to a slightly
+ earlier position
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Wei Fu <wefu@redhat.com>,
+        liush <liush@allwinnertech.com>, Guo Ren <guoren@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Drew Fustini <drew@beagleboard.org>,
+        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Greg Favor <gfavor@ventanamicro.com>,
+        Andrea Mondelli <andrea.mondelli@huawei.com>,
+        Jonathan Behrens <behrensj@mit.edu>,
+        Xinhaoqu <xinhaoqu@huawei.com>,
+        Bill Huffman <huffman@cadence.com>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Allen Baum <allen.baum@esperantotech.com>,
+        Josh Scheid <jscheid@ventanamicro.com>,
+        Richard Trauben <rtrauben@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Christoph Muellner <cmuellner@linux.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,71 +86,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/11/22 1:51 AM, Shuah Khan wrote:
-> On 2/10/22 12:06 PM, Muhammad Usama Anjum wrote:
->> CC can have multiple sub-strings like "ccache gcc". Erorr pops up if
->> it is treated as single string and double quote are used around it.
->> This can be fixed by removing the quotes and not treating CC a single
->> string.
->>
->> Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture
->> detection")
->> Reported-by: "kernelci.org bot" <bot@kernelci.org>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->>   tools/testing/selftests/x86/check_cc.sh | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/x86/check_cc.sh
->> b/tools/testing/selftests/x86/check_cc.sh
->> index 3e2089c8cf549..aff2c15018b53 100755
->> --- a/tools/testing/selftests/x86/check_cc.sh
->> +++ b/tools/testing/selftests/x86/check_cc.sh
->> @@ -7,7 +7,7 @@ CC="$1"
->>   TESTPROG="$2"
->>   shift 2
->>   -if "$CC" -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
->> +if $CC -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
->>       echo 1
->>   else
->>       echo 0
->>
-> 
-> The intent is testing if $CC is set. Does this change work when
-> $CC is not set?
-> 
-Yeah, it works. I've added a debug variable inside sgx/Makefile and it
-is detecting empty argument correctly as well.
+On Wed, Feb 9, 2022 at 4:39 AM Heiko Stuebner <heiko@sntech.de> wrote:
+>
+> Move the application of boot alternatives to soc_early_init().
+> This allows to catch more generic cases of code needing patches
+> than doing it in smp_prepare_boot_cpu() and also makes it actually
+> work if CONFIG_SMP is disabled for whatever reason.
+>
+> The position is chosen mainly as it is before the actual soc early
+> init runs but also already allows accessing the devicetree
+> via fdt_* functions.
+>
+> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> ---
+>  arch/riscv/kernel/head.S    | 2 ++
+>  arch/riscv/kernel/smpboot.c | 2 --
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+> index 2363b43312fc..0e1bb97f9749 100644
+> --- a/arch/riscv/kernel/head.S
+> +++ b/arch/riscv/kernel/head.S
+> @@ -10,6 +10,7 @@
+>  #include <asm/thread_info.h>
+>  #include <asm/page.h>
+>  #include <asm/pgtable.h>
+> +#include <asm/alternative.h>
+>  #include <asm/csr.h>
+>  #include <asm/cpu_ops_sbi.h>
+>  #include <asm/hwcap.h>
+> @@ -341,6 +342,7 @@ clear_bss_done:
+>         call kasan_early_init
+>  #endif
+>         /* Start the kernel */
+> +       call apply_boot_alternatives
+
+Do you really need this early ?
+if non-smp configuration is the only option, Can you do it in
+setup_arch() after riscv_fill_hwcap() is called ?
+
+By doing that, we can unify the cpu feature probing and you don't need
+a separate DT parsing just for svpbmt.
+
+>         call soc_early_init
+>         tail start_kernel
+>
+> diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+> index a6d13dca1403..f1e4948a4b52 100644
+> --- a/arch/riscv/kernel/smpboot.c
+> +++ b/arch/riscv/kernel/smpboot.c
+> @@ -32,7 +32,6 @@
+>  #include <asm/sections.h>
+>  #include <asm/sbi.h>
+>  #include <asm/smp.h>
+> -#include <asm/alternative.h>
+>
+>  #include "head.h"
+>
+> @@ -41,7 +40,6 @@ static DECLARE_COMPLETION(cpu_running);
+>  void __init smp_prepare_boot_cpu(void)
+>  {
+>         init_cpu_topology();
+> -       apply_boot_alternatives();
+>  }
+>
+>  void __init smp_prepare_cpus(unsigned int max_cpus)
+> --
+> 2.30.2
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
 
---- a/tools/testing/selftests/sgx/Makefile
-+++ b/tools/testing/selftests/sgx/Makefile
-@@ -6,7 +6,7 @@ include ../lib.mk
 
- CAN_BUILD_X86_64 := $(shell ../x86/check_cc.sh "$(CC)" \
-                            ../x86/trivial_64bit_program.c)
--
-+$(info $$CAN_BUILD_X86_64 is [${CAN_BUILD_X86_64}])
-
-
-Wrong examples:
-➜  sgx (next-20220210_) ✗ make CC=""
-$CAN_BUILD_X86_64 is [0]
-➜  sgx (next-20220210_) ✗ make CC="cache gcc"
-$CAN_BUILD_X86_64 is [0]
-
-Correct examples:
-➜  sgx (next-20220210_) ✗ make CC=gcc
-$CAN_BUILD_X86_64 is [1]
-➜  sgx (next-20220210_) ✗ make
-$CAN_BUILD_X86_64 is [1]
-➜  sgx (next-20220210_) ✗ make CC="ccache gcc"
-$CAN_BUILD_X86_64 is [1]
-➜  sgx (next-20220210_) ✗ make CC="gcc"
-$CAN_BUILD_X86_64 is [1]
-➜  sgx (next-20220210_) ✗ make CC="clang"
-$CAN_BUILD_X86_64 is [1]
-➜  sgx (next-20220210_) ✗ make CC="ccache clang"
-$CAN_BUILD_X86_64 is [1]
-
-
+-- 
+Regards,
+Atish

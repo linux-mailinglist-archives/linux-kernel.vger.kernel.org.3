@@ -2,79 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F194B0BC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:04:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0972A4B0BC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:05:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240519AbiBJLEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 06:04:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39758 "EHLO
+        id S240534AbiBJLEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 06:04:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240506AbiBJLEc (ORCPT
+        with ESMTP id S240506AbiBJLEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 06:04:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84B77100B
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:04:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644491072;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=912gx4l8B914qXTe9ZjzFhB65u3s+B2paBTlsF2z1ag=;
-        b=PVoQUHDVPug+U+m9s0XrwBsqSDLvSe3xXSH7R7NTNs61r936T79OocwcFXuybkhFCwT+Kj
-        KJpsDz2jzBkwceDIv8ADX0UT2PfaXUhnhVXzH3fDum6N6SjI0Sz7VRDy3+AMp/ZpGpfS1P
-        7+9XCH0kOPfEZWMJ81fZ56UOjPxgcQo=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-658-SJc_f_JOPV2D4ByfYMOccA-1; Thu, 10 Feb 2022 06:04:31 -0500
-X-MC-Unique: SJc_f_JOPV2D4ByfYMOccA-1
-Received: by mail-wr1-f71.google.com with SMTP id h24-20020adfaa98000000b001e33eb81e71so2348904wrc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:04:31 -0800 (PST)
+        Thu, 10 Feb 2022 06:04:50 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0EB1013
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:04:52 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id y18so1497606plb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:04:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xcIDnjucqFHIEtuPRiIEpKJm0pddeuEQPSaD1O2v22M=;
+        b=ihVbyoUymsepvGgJYqBznYehBeetS7pn0LICLU5Pr8mSStejBRoZKpR9KS6bN50o7q
+         3XIsIwNrfVe9xH4ZOZonSVmd9sXmxv2sSkXQYksmteB01XkwRpLNi0YAZQ3NSvGhDazG
+         i712L6DXIPmfbOqGrM7yZdzS3mgMDH9zATdJ2KYpJtX8DSCb0WjiP/BZJhJGlrYohmQp
+         CU8tVxIgpHLgYtCK5hi7Pu41fMSI1niRxCVlD41sC046joWTzgn5L3yiVtTdTftdergt
+         wkoJ9ewCIL0xDTD8cXgzjsVawFflWLvhIRT1AliSdwqryc+sZBiFbyWACS8pnSQ5uLGA
+         glYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=912gx4l8B914qXTe9ZjzFhB65u3s+B2paBTlsF2z1ag=;
-        b=FE8O/7SS01JW3HH3yVHwj0aWVdnItAlEKSE5k9tmcPtPHmjl/wSf5BUNVrPJu4KoyR
-         MrIqSEPLt2OHrKTy2bvhWGVLeyx2TcG0vRLiZpRDyPZXrAqcdRaOjKKVrD7D3z0o/BHb
-         /t0j/uMEyVuye48zWf8hQvPTpCzQzdFnPvslotyMgh9m+a6pRtN1DHk/Rj+o3n2L7t37
-         8vS42vCyzVENo3kPdq5ywM2ee2riTyLO5q/0F9MKz+6sWfpBcf8u5fcoYeN7bJstK6dP
-         +ExQy/RCASk8tERaiV9fLs7s03F3f2rO0qnfvlRiz3/JUYTRqQeCAKtwT5At+42PuKyW
-         JiRA==
-X-Gm-Message-State: AOAM532l2/9E8nQn5bkirVCWyLbrPu8kdWmvPE5f7RmiRF3d3ljIPgpr
-        4acFsfiLx20pNCFxNnjB+1jXcJGBxdKQXLzBgdPm05w1oBpxInfgAeqTLOGZaRTQPNkjLjA6CG+
-        5Gi0YToCKCCkUiQkG7HtztlJm
-X-Received: by 2002:a5d:6090:: with SMTP id w16mr5795775wrt.250.1644491070277;
-        Thu, 10 Feb 2022 03:04:30 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxJBi0FaA2kpZ+9gAipQwSIBhfk2Tp8z4y5Nuyr3Qb6xYWh/85bR+5Pqm58wNckCW5VmxgUvw==
-X-Received: by 2002:a5d:6090:: with SMTP id w16mr5795750wrt.250.1644491070061;
-        Thu, 10 Feb 2022 03:04:30 -0800 (PST)
-Received: from ?IPv6:2a0c:5a80:1204:1500:37e7:8150:d9df:36f? ([2a0c:5a80:1204:1500:37e7:8150:d9df:36f])
-        by smtp.gmail.com with ESMTPSA id g9sm19432968wri.95.2022.02.10.03.04.29
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xcIDnjucqFHIEtuPRiIEpKJm0pddeuEQPSaD1O2v22M=;
+        b=tJnSawHT0mAnERmyXu1CGUUJ8m+SBty332ghQYOkT2s3ypLdka8HFGy5roYCnCFAGu
+         Wnz5AcfqWWkGE9EK44jBNDvEpgYaqnzcj2NTx9xEaQjHZFM3tAbczF9uBPWPhs/1Buc0
+         Sh20XwnOUsbNqQrUiGCvsf+m9ISBkXZ3L0Wgj1LCOdcyXu/ypKhsd//YeanL7g+Nd0r0
+         XK5RJknWScc7DyJkmXzIB2WBApjVmPk1PhKH5rhf3fTBJ03C35Iy74QJYkOoyz6bgcg+
+         J0LrXrtejw86tTUJs2x7Yc4zQxjxMgONRVFD4JIENu7LjS5/Lhg89kkm3xK6WuN/pZYx
+         bmNQ==
+X-Gm-Message-State: AOAM532Z+1hee+XfyNhyvxSymg2RZDA7nT79g+lg5j/G5ERpoUjyOETk
+        5B0rtEuENDTfqMuNhT67apIl
+X-Google-Smtp-Source: ABdhPJwJhEmm7+OcWCeh1ubNuw99YIEtnig+7YCj2REhxeHzMIT+RE9fylR/O6SVNKk7nrpJgMdJIg==
+X-Received: by 2002:a17:90a:e7ca:: with SMTP id kb10mr2229659pjb.38.1644491091970;
+        Thu, 10 Feb 2022 03:04:51 -0800 (PST)
+Received: from thinkpad ([27.111.75.88])
+        by smtp.gmail.com with ESMTPSA id 3sm1814409pjk.29.2022.02.10.03.04.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 03:04:29 -0800 (PST)
-Message-ID: <41e393e3eb7d2909130906954309acfe980238db.camel@redhat.com>
-Subject: Re: [PATCH 0/2] mm/page_alloc: Remote per-cpu lists drain support
-From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
-To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        akpm@linux-foundation.org, mtosatti <mtosatti@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        frederic@kernel.org, tglx@linutronix.de, mtosatti@redhat.com,
-        mgorman@suse.de, linux-rt-users@vger.kernel.org, vbabka@suse.cz,
-        cl@linux.com, paulmck@kernel.org, willy@infradead.org
-Date:   Thu, 10 Feb 2022 12:04:28 +0100
-In-Reply-To: <8cf34eed-be5a-1aae-0523-c2de9e087cb6@huawei.com>
-References: <20220208100750.1189808-1-nsaenzju@redhat.com>
-         <8cf34eed-be5a-1aae-0523-c2de9e087cb6@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        Thu, 10 Feb 2022 03:04:51 -0800 (PST)
+Date:   Thu, 10 Feb 2022 16:34:46 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Xiaowei Bao <xiaowei.bao@nxp.com>,
+        Om Prakash Singh <omp@nvidia.com>,
+        Vidya Sagar <vidyas@nvidia.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] PCI: designware-ep: Fix the access to DBI/iATU
+ registers before enabling controller
+Message-ID: <20220210110446.GD69529@thinkpad>
+References: <1630473361-27198-1-git-send-email-hayashi.kunihiko@socionext.com>
+ <1630473361-27198-3-git-send-email-hayashi.kunihiko@socionext.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1630473361-27198-3-git-send-email-hayashi.kunihiko@socionext.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,16 +81,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-02-10 at 18:59 +0800, Xiongfeng Wang wrote:
-> Hi Nicolas,
+On Wed, Sep 01, 2021 at 02:16:01PM +0900, Kunihiko Hayashi wrote:
+> The driver using core_init_notifier, e.g. pcie-tegra194.c, runs according
+> to the following sequence:
 > 
-> I found there are several 'lru_add_drain_per_cpu()' worker thread on the
-> NOHZ_FULL CPUs. I am just wondering do you have plan to add support for remote
-> per-cpu LRU pagevec drain ?
+>     probe()
+>         dw_pcie_ep_init()
+> 
+>     bind()
+>         dw_pcie_ep_start()
+>             enable_irq()
+> 
+>     (interrupt occurred)
+>     handler()
+>         [enable controller]
+>         dw_pcie_ep_init_complete()
+>         dw_pcie_ep_init_notify()
+> 
+> After receiving an interrupt from RC, the handler enables the controller
+> and the controller registers can be accessed.
+> So accessing the registers should do in dw_pcie_ep_init_complete().
+> 
+> Currently dw_pcie_ep_init() has functions dw_iatu_detect() and
+> dw_pcie_ep_find_capability() that include accesses to DWC registers.
+> As a result, accessing the registers before enabling the controller,
+> the access will fail.
+> 
+> The function dw_pcie_ep_init() shouldn't have any access to DWC registers
+> if the controller is enabled after calling bind(). This moves access codes
+> to DBI/iATU registers and depending variables from dw_pcie_ep_init() to
+> dw_pcie_ep_init_complete().
+> 
+> Cc: Xiaowei Bao <xiaowei.bao@nxp.com>
+> Cc: Vidya Sagar <vidyas@nvidia.com>
+> Fixes: 6bfc9c3a2c70 ("PCI: designware-ep: Move the function of getting MSI capability forward")
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> Acked-by: Om Prakash Singh <omp@nvidia.com>
+> Reviewed-by: Vidya Sagar <vidyas@nvidia.com>
+> ---
+>  drivers/pci/controller/dwc/pcie-designware-ep.c | 81 +++++++++++++------------
+>  1 file changed, 41 insertions(+), 40 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> index 998b698..00ce83c 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
 
-Yes, this is something we've been meaning to fix too. But haven't started
-looking into it yet (maybe Marcelo can contradict me here).
+[...]
 
-Regards,
-Nicolas
+>  int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+>  {
+>  	int ret;
+> -	void *addr;
+> -	u8 func_no;
+>  	struct resource *res;
+>  	struct pci_epc *epc;
+>  	struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
+> @@ -683,7 +721,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+>  	struct platform_device *pdev = to_platform_device(dev);
+>  	struct device_node *np = dev->of_node;
+>  	const struct pci_epc_features *epc_features;
+> -	struct dw_pcie_ep_func *ep_func;
+>  
+>  	INIT_LIST_HEAD(&ep->func_list);
+>  
+> @@ -705,8 +742,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+>  		}
+>  	}
+>  
+> -	dw_pcie_iatu_detect(pci);
+> -
+>  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "addr_space");
+>  	if (!res)
+>  		return -EINVAL;
+> @@ -714,26 +749,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+>  	ep->phys_base = res->start;
+>  	ep->addr_size = resource_size(res);
+>  
+> -	ep->ib_window_map = devm_kcalloc(dev,
+> -					 BITS_TO_LONGS(pci->num_ib_windows),
+> -					 sizeof(long),
+> -					 GFP_KERNEL);
+> -	if (!ep->ib_window_map)
+> -		return -ENOMEM;
+> -
+> -	ep->ob_window_map = devm_kcalloc(dev,
+> -					 BITS_TO_LONGS(pci->num_ob_windows),
+> -					 sizeof(long),
+> -					 GFP_KERNEL);
+> -	if (!ep->ob_window_map)
+> -		return -ENOMEM;
+> -
+> -	addr = devm_kcalloc(dev, pci->num_ob_windows, sizeof(phys_addr_t),
+> -			    GFP_KERNEL);
+> -	if (!addr)
+> -		return -ENOMEM;
+> -	ep->outbound_addr = addr;
+> -
+>  	if (pci->link_gen < 1)
+>  		pci->link_gen = of_pci_get_max_link_speed(np);
+>  
+> @@ -750,20 +765,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+>  	if (ret < 0)
+>  		epc->max_functions = 1;
+>  
+> -	for (func_no = 0; func_no < epc->max_functions; func_no++) {
+> -		ep_func = devm_kzalloc(dev, sizeof(*ep_func), GFP_KERNEL);
+> -		if (!ep_func)
+> -			return -ENOMEM;
+> -
+> -		ep_func->func_no = func_no;
+> -		ep_func->msi_cap = dw_pcie_ep_find_capability(ep, func_no,
+> -							      PCI_CAP_ID_MSI);
+> -		ep_func->msix_cap = dw_pcie_ep_find_capability(ep, func_no,
+> -							       PCI_CAP_ID_MSIX);
+> -
+> -		list_add_tail(&ep_func->list, &ep->func_list);
+> -	}
+> -
+>  	if (ep->ops->ep_init)
+>  		ep->ops->ep_init(ep);
 
+You also need to move ep_init() as it can have DBI access too.
+
+Thanks,
+Mani
+
+>  
+> -- 
+> 2.7.4
+> 

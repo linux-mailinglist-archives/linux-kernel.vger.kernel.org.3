@@ -2,119 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924C04B09D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE894B09DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238980AbiBJJqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:46:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35356 "EHLO
+        id S239031AbiBJJss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:48:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238777AbiBJJqs (ORCPT
+        with ESMTP id S239027AbiBJJsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:46:48 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C191B9;
-        Thu, 10 Feb 2022 01:46:44 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id a25so7114240lji.9;
-        Thu, 10 Feb 2022 01:46:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=bzXIWUuEbkmSgm24Zd3fx9RlrQU/IKnMPvoFEkNX03M=;
-        b=OxYqw+gZKLJQeJz3jFBGsCM1bhqj9nnq4eWKG2MhTkrs849X2MlNousMPwkTVvS398
-         12kY9Z2eAnQ4DT7b6poT0X+Y7N1MMYFdCOQ5PlnZXA4xWBIhOUMw3I+iOol58CoDIIP3
-         j+Q33e1tx8AbnCQYOtVOHWU8W5kpmUHSJTamY1sLO30dmL4hBaA9fw045CH6OgJMcPoE
-         icUYJe2sr+0CR3sqC7WIRn7L3mtMIK14JlAvvI5tNWFDSMGZZZgpyxr75YCSFGX6Hru0
-         Q3c5mqT2Vg0Rbf9OtyF+UGq6TDhxBX+YUWDBTzS7OqUDGwUuqxV8rwwRRuslNEYw4uPf
-         LcuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=bzXIWUuEbkmSgm24Zd3fx9RlrQU/IKnMPvoFEkNX03M=;
-        b=03p8x4AgOP/1ptWP1ro1xzBKwYMZZoqMWywRAe8ATP05xM+rJkdO51mIxA8tBl77iT
-         aAx2uiJuzrIzzqQvMXSbeXty9pWy7ulBO8zmCnVTCm3CPghuFMO1B7mqVBYgQ/b4cIo9
-         E8Ho4ceSRlPf7XZWcw6goh6SZYcP6pejhXt+w0tcXwuRemnlkCNKzN6tag34lUx6JCkn
-         9jxaHfn0O2ub95HQ9gE+/ml5p3srwEZz764MQfiLHq24q6y58IrqUKOmHbmRaXFw7NKd
-         PtE5E/pucp5taylZPTLqkdwLC/3uxvtLsvXYLsYGRHc4UyTQH0/cSOLIlaZ4KkApOtTY
-         TY/w==
-X-Gm-Message-State: AOAM533qVyHdO3KzZOPNWKipGAghgZG/ef7t1qAdvmbTS+74Fr39XpXg
-        LytjMQ4sRZVZSJRM0oG1oNBAS8cGxKMzqw==
-X-Google-Smtp-Source: ABdhPJxMqskafQcsNnZ1THj9gslNIOUlvh9+XXDJ4CYcBrRSTLRMZIxqhHO+SAv1yJ3S0bFfEK4QcQ==
-X-Received: by 2002:a2e:8756:: with SMTP id q22mr4236837ljj.93.1644486402772;
-        Thu, 10 Feb 2022 01:46:42 -0800 (PST)
-Received: from [192.168.1.103] ([31.173.82.75])
-        by smtp.gmail.com with ESMTPSA id i8sm2744520lfj.226.2022.02.10.01.46.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 01:46:42 -0800 (PST)
-Subject: Re: [PATCH 2/3] i2c: sh_mobile: Use platform_get_irq_optional() to
- get the interrupt
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>
-References: <20211218165258.16716-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211218165258.16716-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdUg3=q7gyaVHP0XcYUOo3PQUUv8Hc8wp5faVQ+bTBpg4A@mail.gmail.com>
- <042a2183-3f04-088c-1861-656de870337d@gmail.com>
- <CAK8P3a3owi7YWmq-tckD-C7NK5HaX+swGNW-QBkWQuQgVsVWrA@mail.gmail.com>
- <d74ab454-9337-d168-9b21-842569431b4a@gmail.com>
- <CAK8P3a20mwJXN4Mb063zQG+HAevj_Odpj58EzPHkX-p6pbtnGA@mail.gmail.com>
- <7c47ce67-88ee-9cba-3356-a530b0d3e657@gmail.com>
- <CAMuHMdXEXjsea1DmebALTNwAQnJeJt4qV_0xkQ-5_OWx7ziF1g@mail.gmail.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <aae11858-9a63-c5ad-21c2-910a7f87160f@gmail.com>
-Date:   Thu, 10 Feb 2022 12:46:40 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 10 Feb 2022 04:48:45 -0500
+Received: from mickerik.phytec.de (mickerik.phytec.de [195.145.39.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26628138
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:48:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; d=phytec.de; s=a4; c=relaxed/simple;
+        q=dns/txt; i=@phytec.de; t=1644486523; x=1647078523;
+        h=From:Sender:Reply-To:Subject:Date:Message-Id:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=F7rkKagQJXYHpGW0Cswqt02zkInNBCau3cLLv2x4iGE=;
+        b=qjDX5pwL2cUshiK9roLKnDxFhbBnPLxCDNF9sAVSPegmj0A3roW0f8J3dnqKhWwi
+        iswrwqP+A8NoO/k7Qhkz69QgA2PXSwJ5NooURZSJGablqJD+WGOEkehc71kKHrk5
+        J3R8m041H8cZrjJUQnPtcBRlodXFaqxwg3skwYd1jeU=;
+X-AuditID: c39127d2-9112070000002a63-db-6204df7befae
+Received: from idefix.phytec.de (Unknown_Domain [172.16.0.10])
+        by mickerik.phytec.de (PHYTEC Mail Gateway) with SMTP id D7.36.10851.B7FD4026; Thu, 10 Feb 2022 10:48:43 +0100 (CET)
+Received: from augenblix2.phytec.de ([172.16.0.56])
+          by idefix.phytec.de (IBM Domino Release 9.0.1FP7)
+          with ESMTP id 2022021010484333-259562 ;
+          Thu, 10 Feb 2022 10:48:43 +0100 
+From:   Yunus Bas <y.bas@phytec.de>
+To:     dmitry.torokhov@gmail.com, yuehaibing@huawei.com,
+        linux-input@vger.kernel.org
+Cc:     u.kleine-koenig@pengutronix.de, linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND v2] Input: tsc200x-core - Add axis inversion and swapping support
+Date:   Thu, 10 Feb 2022 10:48:43 +0100
+Message-Id: <20220210094843.1889881-1-y.bas@phytec.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdXEXjsea1DmebALTNwAQnJeJt4qV_0xkQ-5_OWx7ziF1g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MIMETrack: Itemize by SMTP Server on Idefix/Phytec(Release 9.0.1FP7|August  17, 2016) at
+ 10.02.2022 10:48:43,
+        Serialize by Router on Idefix/Phytec(Release 9.0.1FP7|August  17, 2016) at
+ 10.02.2022 10:48:43
+X-TNEFEvaluated: 1
+Content-Transfer-Encoding: quoted-printable
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOLMWRmVeSWpSXmKPExsWyRoCBS7f6PkuSwa6nGhaHF71gtLj56Rur
+        xeVdc9gsbk+czGhx5+tzFgdWj52z7rJ7tBx5y+rR/9fA4/MmuQCWKC6blNSczLLUIn27BK6M
+        E0/3sBWcE6548/4ZcwPjYYEuRk4OCQETibk79jN3MXJxCAlsZZTY8es6E4RznlFi467j7CBV
+        bAKKEudvv2UFsUUEAiUO9vcA2RwczAIOEi195SBhYYEIiSMblzCC2CwCqhKH+neClfMKmEk8
+        O/WSCWKZvMTMS9/ZIeKCEidnPmEB2SUhcIVR4sDsj2wQRUISpxefZQaxmQW0JZYtfM08gZFv
+        FpKeWUhSCxiZVjEK5WYmZ6cWZWbrFWRUlqQm66WkbmIEBt7hieqXdjD2zfE4xMjEwXiIUYKD
+        WUmE91Q9c5IQb0piZVVqUX58UWlOavEhRmkOFiVx3vs9TIlCAumJJanZqakFqUUwWSYOTqkG
+        Ri3vh1qzUxi4ntabSXOu8/ffNMGkRuREXs+Zb4VmDUkfJy6dEN2WZPHuSojcFUXla8Zv80z2
+        TnH/JX6LV/D7mdi3n0MiPqpM0/qxTffUhiDt9OJqIbUMPY5tj+KOzXE5tSIq8phTfIZ7ouq/
+        yTM7M39YVd1IvHuk7K1P+emj2Qce7CvaWbtrixJLcUaioRZzUXEiAMR0ATIqAgAA
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/10/22 12:32 PM, Geert Uytterhoeven wrote:
+Since Commit ed7c9870c9bc ("Input: of=5Ftouchscreen - add support for
+inverted / swapped axes"), the of=5Ftouchscreen interface supports axis
+inverting and swapping through Devicetree properties. Make use of this
+feature.
 
-[...]
+Signed-off-by: Yunus Bas <y.bas@phytec.de>
+---
+Changes in v2:
+- Added additional properties to documentation
+---
+ .../devicetree/bindings/input/touchscreen/ti,tsc2005.yaml  | 3 +++
+ drivers/input/touchscreen/tsc200x-core.c                   | 7 ++++---
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
->>>>> I had another look at this after you asked about it on IRC. I don't
->>>>> know much SH assembly, but I suspect IRQ 0 has not been delivered
->>
->>    Neither do I, sigh...
->>    I do know the instuctions are 16-bit and so there are no immediate
->> opperands... :-)
-> 
-> There is byte immediate data (TIL).
+diff --git a/Documentation/devicetree/bindings/input/touchscreen/ti,tsc2005=
+.yaml b/Documentation/devicetree/bindings/input/touchscreen/ti,tsc2005.yaml
+index 938aab016cc2..166a254c8472 100644
+--- a/Documentation/devicetree/bindings/input/touchscreen/ti,tsc2005.yaml
++++ b/Documentation/devicetree/bindings/input/touchscreen/ti,tsc2005.yaml
+@@ -54,6 +54,9 @@ properties:
+   touchscreen-max-pressure: true
+   touchscreen-size-x: true
+   touchscreen-size-y: true
++  touchscreen-inverted-x: true
++  touchscreen-inverted-y: true
++  touchscreen-swapped-x-y: true
+=20
+ allOf:
+   - $ref: touchscreen.yaml#
+diff --git a/drivers/input/touchscreen/tsc200x-core.c b/drivers/input/touch=
+screen/tsc200x-core.c
+index 27810f6c69f6..72c7258b93a5 100644
+--- a/drivers/input/touchscreen/tsc200x-core.c
++++ b/drivers/input/touchscreen/tsc200x-core.c
+@@ -88,6 +88,8 @@ struct tsc200x {
+ 	int                     in=5Fz1;
+ 	int			in=5Fz2;
+=20
++	struct touchscreen=5Fproperties prop;
++
+ 	spinlock=5Ft		lock;
+ 	struct timer=5Flist	penup=5Ftimer;
+=20
+@@ -113,8 +115,7 @@ static void tsc200x=5Fupdate=5Fpen=5Fstate(struct tsc20=
+0x *ts,
+ 				     int x, int y, int pressure)
+ {
+ 	if (pressure) {
+-		input=5Freport=5Fabs(ts->idev, ABS=5FX, x);
+-		input=5Freport=5Fabs(ts->idev, ABS=5FY, y);
++		touchscreen=5Freport=5Fpos(ts->idev, &ts->prop, x, y, false);
+ 		input=5Freport=5Fabs(ts->idev, ABS=5FPRESSURE, pressure);
+ 		if (!ts->pen=5Fdown) {
+ 			input=5Freport=5Fkey(ts->idev, BTN=5FTOUCH, !!pressure);
+@@ -533,7 +534,7 @@ int tsc200x=5Fprobe(struct device *dev, int irq, const =
+struct input=5Fid *tsc=5Fid,
+ 	input=5Fset=5Fabs=5Fparams(input=5Fdev, ABS=5FPRESSURE,
+ 			     0, MAX=5F12BIT, TSC200X=5FDEF=5FP=5FFUZZ, 0);
+=20
+-	touchscreen=5Fparse=5Fproperties(input=5Fdev, false, NULL);
++	touchscreen=5Fparse=5Fproperties(input=5Fdev, false, &ts->prop);
+=20
+ 	/* Ensure the touchscreen is off */
+ 	tsc200x=5Fstop=5Fscan(ts);
+--=20
+2.25.1
 
-    Yeah, I figured. :-)
-
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-
-MBR, Sergey

@@ -2,129 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92CEB4B1935
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D34C4B193E
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345529AbiBJXOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 18:14:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33754 "EHLO
+        id S1345553AbiBJXPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 18:15:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243041AbiBJXOY (ORCPT
+        with ESMTP id S1344689AbiBJXPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 18:14:24 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3549E5F44
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:14:24 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id h7-20020a17090a648700b001b927560c2bso5915637pjj.1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:14:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zVPS2ok9/nx7180z6dx4Z4VBr5ge+N4XNxLNYfv1b4E=;
-        b=VyyafF8z0UHAylczbPUn4iflRukwWBbb+WUXy47xyXqkhIbDPqr8QWGmQRK08hrtkt
-         IUUtWOTxMrtxTQUmV5kZYgN3t5yJfO7EHgX1B94/+OGtyIuYZf67FGfL78/A1VRN1qcR
-         yZHUxbG//rJmxAlIy7hmpGz03vxelXwsVQjC0dYELgXlme1cj3t4zxZ+Lt5i3/buYshI
-         +C49g6w39oWHqkT88ERKBpyaHXMiJ7pIKTD7TDNl2iFt4ZRdymGwPi8c3Vn1JgLkNuU9
-         663OJuen9xmZPOyn+rAyIydumJ/0FtLmSD9sd9DH8klMuOW6aTJEkunzim8z31w/hhgh
-         5aBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zVPS2ok9/nx7180z6dx4Z4VBr5ge+N4XNxLNYfv1b4E=;
-        b=kDkee7lcQdbgYvY52KvRpE5EfGhAgt1TIX9kDshR3o+4aY/bHrYi/caHH/eEPx/sOp
-         +MuJRTSVB9HRpHrsD+FQqvezS9JjEhV7Pp5U2wlwcdNsc72WO/9kT8OM1EDRlnAZGZXa
-         w4pdPbCSGGluy50MTTwOOvQt0DxO/Yg6fBVEDKSMG/M0PNK2Ml1KgPPQHPxzPIO0Uz/m
-         DA/AbslJFJc0yJ1svHvoyzzSGLOHV6OfXZw01he79jsMAnaNtz1OjMFf8SrmqELxmhEF
-         nwoUzcJkiZxbEINRsdFuMdveBLXTn9wadtCUg4QeteQIe62DTR3taA1No6XN6jqyG01I
-         o8vw==
-X-Gm-Message-State: AOAM532icZsE0Ql7VoUy8bLzZABt9xoeiDNG4Sg0AuYML/tjYxWVgLpR
-        dad4wmYrHcOceFFqxJ0Fc8+dTg==
-X-Google-Smtp-Source: ABdhPJw188UyNNoqFlMqDgKpm7hdg8bXICpgwoP46Vv6pmyTqCweCur2W7sJkfRIks5cXCOoPrUP5Q==
-X-Received: by 2002:a17:902:f789:: with SMTP id q9mr9618229pln.135.1644534863552;
-        Thu, 10 Feb 2022 15:14:23 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id k16sm24789705pfu.140.2022.02.10.15.14.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 15:14:22 -0800 (PST)
-Date:   Thu, 10 Feb 2022 23:14:19 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com
-Subject: Re: [PATCH 03/12] KVM: x86: do not deliver asynchronous page faults
- if CR0.PG=0
-Message-ID: <YgWcS/0naKPdAn2E@google.com>
-References: <20220209170020.1775368-1-pbonzini@redhat.com>
- <20220209170020.1775368-4-pbonzini@redhat.com>
- <YgWbgfSrzAhd97LG@google.com>
+        Thu, 10 Feb 2022 18:15:15 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CCFE5F44
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:15:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644534916; x=1676070916;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Lh6tjCWAtV9Sv/IHSE2GQfvx+Z+uUWNu3HE21O/Ggpo=;
+  b=YyDEIyPfT4zHrvVlbpaR7QvU7mc4TuNTKlSowSHhVwCmaRIdUlgc2Zr0
+   ++MwaAoBo8K7hfzloEoSS9t65xhxavULJDl8tkR100g02KQNThqoGSKsp
+   10JoINDPEMqboDh1+4c/SfvmEXBCOFpq0mf/unfCJ8nKtobbkUayCVQQv
+   veT9mB17LdSopOzz4B39GCG/mJdFW+4iugn4G1LCUedymC0dwgucE0nDA
+   7xChMYrhmgYMezZsqfdhP1S/1/UoVeOyGHnPraNRZ1WDVUmmMtQN1oGFc
+   662juvD5MuKrv1Bmue2pnHTB3CedoZKnZWC9erOCnkafa3sVOqhiFbreX
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="336037762"
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="336037762"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 15:15:16 -0800
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="633862803"
+Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 15:15:15 -0800
+Date:   Thu, 10 Feb 2022 15:15:10 -0800
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        iommu@lists.linux-foundation.org, x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+Message-ID: <YgWcfhbu3o5C6jQT@otcwcpicx3.sc.intel.com>
+References: <20220207230254.3342514-1-fenghua.yu@intel.com>
+ <20220207230254.3342514-6-fenghua.yu@intel.com>
+ <20220209191614.5a3b42d4@jacob-builder>
+ <20220210104904.6c6131f2@jacob-builder>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YgWbgfSrzAhd97LG@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220210104904.6c6131f2@jacob-builder>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022, Sean Christopherson wrote:
-> On Wed, Feb 09, 2022, Paolo Bonzini wrote:
-> > Enabling async page faults is nonsensical if paging is disabled, but
-> > it is allowed because CR0.PG=0 does not clear the async page fault
-> > MSR.  Just ignore them and only use the artificial halt state,
-> > similar to what happens in guest mode if async #PF vmexits are disabled.
+On Thu, Feb 10, 2022 at 10:49:04AM -0800, Jacob Pan wrote:
+> 
+> On Wed, 9 Feb 2022 19:16:14 -0800, Jacob Pan
+> <jacob.jun.pan@linux.intel.com> wrote:
+> 
+> > Hi Fenghua,
 > > 
-> > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> > ---
-> >  arch/x86/kvm/x86.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > On Mon,  7 Feb 2022 15:02:48 -0800, Fenghua Yu <fenghua.yu@intel.com>
+> > wrote:
 > > 
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 5e1298aef9e2..98aca0f2af12 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -12272,7 +12272,9 @@ static inline bool apf_pageready_slot_free(struct kvm_vcpu *vcpu)
-> >  
-> >  static bool kvm_can_deliver_async_pf(struct kvm_vcpu *vcpu)
-> >  {
-> > -	if (!vcpu->arch.apf.delivery_as_pf_vmexit && is_guest_mode(vcpu))
-> > +	if (is_guest_mode(vcpu)
-> > +	    ? !vcpu->arch.apf.delivery_as_pf_vmexit
-> > +	    : !is_cr0_pg(vcpu->arch.mmu))
+> > > @@ -1047,8 +1040,6 @@ struct iommu_sva *intel_svm_bind(struct device
+> > > *dev, struct mm_struct *mm, void }
+> > >  
+> > >  	sva = intel_svm_bind_mm(iommu, dev, mm, flags);
+> > > -	if (IS_ERR_OR_NULL(sva))
+> > > -		intel_svm_free_pasid(mm);  
+> > If bind fails, the PASID has no IOMMU nor CPU context. It should be safe
+> > to free here.
+> > 
+> Actually, here we cannot tell if the bind is the first of the mm so I think
+> this is fine.
 > 
-> As suggested in the previous patch, is_paging(vcpu).
-> 
-> I find a more tradition if-elif marginally easier to understand the implication
-> that CR0.PG is L2's CR0 and thus irrelevant if is_guest_mode()==true.  Not a big
-> deal though.
-> 
-> 	if (is_guest_mode(vcpu)) {
-> 		if (!vcpu->arch.apf.delivery_as_pf_vmexit)
-> 			return false;
-> 	} else if (!is_paging(vcpu)) {
-> 		return false;
-> 	}
+> Reviewed-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
 
-Alternatively, what about reordering and refactoring to yield:
+Thank you very much for your review, Jacob!
 
-	if (kvm_pv_async_pf_enabled(vcpu))
-		return false;
-
-	if (vcpu->arch.apf.send_user_only &&
-	    static_call(kvm_x86_get_cpl)(vcpu) == 0)
-		return false;
-
-	/* L1 CR0.PG=1 is guaranteed if the vCPU is in guest mode (L2). */
-	if (is_guest_mode(vcpu)
-		return !vcpu->arch.apf.delivery_as_pf_vmexit;
-
-	return is_cr0_pg(vcpu->arch.mmu);
-
-There isn't any need to "batch" the if statements.
+-Fenghua

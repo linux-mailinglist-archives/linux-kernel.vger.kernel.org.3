@@ -2,139 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63CED4B1212
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:51:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8294B1217
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:53:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243793AbiBJPul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 10:50:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40814 "EHLO
+        id S243808AbiBJPxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 10:53:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243795AbiBJPuk (ORCPT
+        with ESMTP id S236180AbiBJPxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 10:50:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F38DBBB
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 07:50:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 070ABB825F3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:50:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 401A7C004E1;
-        Thu, 10 Feb 2022 15:50:37 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Ho1WIj4O"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644508236;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K/RHUZEvXyNjDfIiWAS3xY4kT8bsmMQ7c0HlOTCYWeI=;
-        b=Ho1WIj4OHG0dirWre1KLLILAvtnshu3XT9qiMDU4UXNdSthwjONxnAX67BYlCBmUBRLccb
-        MikCmeGOQYrt46bokX4oE9w41sbQMTjZYP+zRWy6gODf1ZuWUItswIKGGsfE7CZzxl6Lu/
-        zmIUBVjbFETs6c8Z22GR3f+YGcDWKFQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8e7b944a (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 10 Feb 2022 15:50:35 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: [PATCH 3/3] random: add proper SPDX header
-Date:   Thu, 10 Feb 2022 16:50:12 +0100
-Message-Id: <20220210155012.136485-4-Jason@zx2c4.com>
-In-Reply-To: <20220210155012.136485-1-Jason@zx2c4.com>
-References: <20220210155012.136485-1-Jason@zx2c4.com>
+        Thu, 10 Feb 2022 10:53:01 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C080FC24
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 07:53:00 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id x3so2177249pll.3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 07:53:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0aRk2HscakizWLCqrQ5CB9tK40FZrYvTnEVJfReiNFY=;
+        b=cpP2LFQ2eDQJe1EcaNgZ1viwdC1hsSCsiX89PLoiweg3TfX7WlC3XJrAXXye7iSxfK
+         DZUODoJBTptRW8uP3q03n32z5WbCGSPy2vcAXI2pj6jgniJH+7RL2EEfNNkorwwdJoov
+         p1absB5z4ZacBDKRjCGZEwtE90JG0qMJBt1YnOg5KMgjG8wnh4BrDhAZp/3ZhLWex9xB
+         OVQQRLubLo79JrW1ihdgN/sYDdQ66R08TGoE8jU/IT7NHuDTBelht/k9p8laqHVBGahW
+         HU57kCTbXYB41R+bE+SK7Slk/74xGa8RtIiGKY2fNOeJO+/V40FfKo/k8vxPwi8ChtyN
+         EHaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0aRk2HscakizWLCqrQ5CB9tK40FZrYvTnEVJfReiNFY=;
+        b=CtknlDgkz5L+AC8flXG8YEs7le4J4zxLIyy/G8RuaLK7mpiS2+sy88VbZ00lATZlP6
+         Bc5oBsJZoXq22ZPKlA5kB376t44wrxuGUroVsz4IiebcLCufweWCoqA+i3PqBNI4xCGW
+         FHKiAbl/TPwS7BI/JeznO8OhrBOhaWQXivYl5ilfwtoU7ZKPKOXpTOMe818hmLhDPSIQ
+         5KKzQ66fwSoQbTah76g60zxPWgxWzXS6WHmAYrApuweZTg0aZ2LsncVWq5m2GEZKxD30
+         o8d9vAQgECV/+OeBw7b1EPmpAfBhMGBgd98i4RGHlIX4bN9FU+p4ydXLtwOCMjRDdJqs
+         ip+g==
+X-Gm-Message-State: AOAM533DbPrdKHu8Mt0/LJibKXqgXeohqfPVx1epsl4leHxlm2rH2VFa
+        eVTYU93+H2h05b2U5MX/N0o66ohFJykqTL9vSpH61Q==
+X-Google-Smtp-Source: ABdhPJzhIDlgg0ODPB8qVf1n8qI/DXWoH8jwpmcTEd2zXyfLZPFCTLNFEyefMem1sfonuxQSxIruS4cSPxJgSyBcG/o=
+X-Received: by 2002:a17:903:32cb:: with SMTP id i11mr7831244plr.118.1644508380054;
+ Thu, 10 Feb 2022 07:53:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20210421055047.22858-1-ms@dev.tdt.de> <CAJ+vNU1=4sDmGXEzPwp0SCq4_p0J-odw-GLM=Qyi7zQnVHwQRA@mail.gmail.com>
+ <YfspazpWoKuHEwPU@lunn.ch> <CAJ+vNU2v9WD2kzB9uTD5j6DqnBBKhv-XOttKLoZ-VzkwdzwjXw@mail.gmail.com>
+ <YfwEvgerYddIUp1V@lunn.ch> <CAJ+vNU1qY1VJgw1QRsbmED6-TLQP2wwxSYb+bXfqZ3wiObLgHg@mail.gmail.com>
+ <YfxtglvVDx2JJM9w@lunn.ch> <CAJ+vNU1td9aizbws-uZ-p-fEzsD8rJVS-mZn4TT2YFn9PY2n_w@mail.gmail.com>
+ <Yf2usAHGZSUDvLln@lunn.ch> <CAJ+vNU3EY0qp-6oQ6Bjd4mZCKv9AeqiaJp=FSrN84P=8atKLrw@mail.gmail.com>
+ <YgRWl5ykcjPW0xvx@lunn.ch>
+In-Reply-To: <YgRWl5ykcjPW0xvx@lunn.ch>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Thu, 10 Feb 2022 07:52:49 -0800
+Message-ID: <CAJ+vNU1kmxgFjX2HeTok-6FcnCAApvzszhh2dbNnDgFD7ZsAiQ@mail.gmail.com>
+Subject: Re: [PATCH net v3] net: phy: intel-xway: enable integrated led functions
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Martin Schiller <ms@dev.tdt.de>, Hauke Mehrtens <hauke@hauke-m.de>,
+        martin.blumenstingl@googlemail.com,
+        Florian Fainelli <f.fainelli@gmail.com>, hkallweit1@gmail.com,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        David Miller <davem@davemloft.net>, kuba@kernel.org,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Somehow this file missed the SPDXification efforts several years ago.
+On Wed, Feb 9, 2022 at 4:04 PM Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> > The errata can be summarized as:
+> > - 1 out of 100 boots or cable plug events RGMII GbE link will end up
+> > going down and up 3 to 4 times then resort to a 100m link; workaround
+> > has been found to require a pin level reset
+>
+> So that sounds like it is downshifting because it thinks there is a
+> broken pair. Can you disable downshift? Problem is, that might just
+> result in link down.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c  | 40 ++--------------------------------------
- include/linux/random.h |  5 -----
- 2 files changed, 2 insertions(+), 43 deletions(-)
+Its a bad situation. The actual errata is that the device latches into
+a bad state where there is some noise on an ADC or something like that
+that cause a high packet error rate. The firmware baked into the PHY
+has a detection mechanism looking at these errors (SSD errors) and if
+there are enough of them it takes the link down and up again and if
+that doesn't resolve in 3 times it shifts down to 100mbs. They call
+this 'ADS' or 'auto-down-speed' and you can disable it but it would
+just result in leaving your bad gbe link up. It's unclear yet if it's
+better to just detect the ADS event and reset or to disable ADS and
+look for the SSD errors myself (which I can do).
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 30a3c0717e3e..77131f7b0f06 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1,44 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0
- /*
-- * random.c -- A strong random number generator
-- *
-  * Copyright (C) 2017-2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-- *
-  * Copyright Matt Mackall <mpm@selenic.com>, 2003, 2004, 2005
-- *
-- * Copyright Theodore Ts'o, 1994, 1995, 1996, 1997, 1998, 1999.  All
-- * rights reserved.
-- *
-- * Redistribution and use in source and binary forms, with or without
-- * modification, are permitted provided that the following conditions
-- * are met:
-- * 1. Redistributions of source code must retain the above copyright
-- *    notice, and the entire permission notice in its entirety,
-- *    including the disclaimer of warranties.
-- * 2. Redistributions in binary form must reproduce the above copyright
-- *    notice, this list of conditions and the following disclaimer in the
-- *    documentation and/or other materials provided with the distribution.
-- * 3. The name of the author may not be used to endorse or promote
-- *    products derived from this software without specific prior
-- *    written permission.
-- *
-- * ALTERNATIVELY, this product may be distributed under the terms of
-- * the GNU General Public License, in which case the provisions of the GPL are
-- * required INSTEAD OF the above restrictions.  (This clause is
-- * necessary due to a potential bad interaction between the GPL and
-- * the restrictions contained in a BSD-style copyright.)
-- *
-- * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
-- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
-- * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
-- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
-- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
-- * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
-- * DAMAGE.
-+ * Copyright Theodore Ts'o, 1994, 1995, 1996, 1997, 1998, 1999.  All rights reserved.
-  */
- 
- /*
-diff --git a/include/linux/random.h b/include/linux/random.h
-index e92efb39779c..1a6861aa1277 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -1,9 +1,4 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * include/linux/random.h
-- *
-- * Include file for the random number generator.
-- */
- #ifndef _LINUX_RANDOM_H
- #define _LINUX_RANDOM_H
- 
--- 
-2.35.0
+>
+> > - 1 out of 100 boots or cable plug events (varies per board) SGMII
+> > will fail link between the MAC and PHY; workaround has been found to
+> > require a pin level reset
+>
+> I don't suppose there is a register to restart SGMII sync?  Sometimes
+> there is.
 
+Not that I see but I haven't really investigated too much into
+mitigating that issue yet. The errata for that issue says you need to
+assert reset but then it also says it can occur on a cable plug event
+which makes me think an MDI ANEG restart may be sufficient.
+
+>
+> Anyway, shared reset makes this messy, as you said. Unfortunate
+> design. But i don't see how you can work around this in the
+> bootloader, especially the cable plug events.
+>
+
+Ya, in hindsight the shared reset was a really bad idea, of course the
+last PHY we used on this particular board for years before the supply
+chain crashed didn't have any issues like this.
+
+I agree that I can't do anything in boot firmware. I was planning on
+having some static code that registered a PHY fixup to get a call when
+these PHYs were detected and I could then kick off a polling thread to
+watch for errors and trigger a reset. The reset could have knowledge
+of the PHY devices that called the fixup handler so that I can at
+least setup each PHY again.
+
+Regardless of how I go about this the end result may be unreliable
+networking for up to a couple of minutes after board power-up or cable
+plug event.
+
+Best Regards,
+
+Tim

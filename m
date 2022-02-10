@@ -2,123 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4ED4B034D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:24:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 654FC4B0352
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiBJCYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 21:24:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41492 "EHLO
+        id S229925AbiBJCZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 21:25:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiBJCYq (ORCPT
+        with ESMTP id S229469AbiBJCZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 21:24:46 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88B922BCA;
-        Wed,  9 Feb 2022 18:24:48 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id ki18-20020a17090ae91200b001b8be87e9abso786203pjb.1;
-        Wed, 09 Feb 2022 18:24:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=ZKkwPB7d2E+cRBeGnkjKgyuuzM5ZC8AZavMGZ2zAswg=;
-        b=iWAAk2fNZw0x3C8UqaDT08HyUBFC+pgvVZcTKKQpyZCsrizpLqNb45mGqj8QsZPA39
-         KBOkW7pOwEu65gvJI+OjHiLKnSPln+rn6/iH18XQP/WVgN0r5l4zuWFbJ9578w6/r72U
-         0SWVC6cHmFrESwb41Us/Wp/5pvcYea2M80k/P9DsSXxzp1P4gyTEfvdQtvuezVNxA4pd
-         yJ3C853JCG2qce2RszqDvGVQNDNg4ojlX39T1BlLByICybK3NmwrXr2LpOMGDnR4mnpX
-         KoTOUpUc9tgd5YzR2mnBG5BU4TGylmSaqBOmx3wOKLzepVER2PvTM3RrqAgdiKclwjom
-         5mmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=ZKkwPB7d2E+cRBeGnkjKgyuuzM5ZC8AZavMGZ2zAswg=;
-        b=il8rJw5EJz2TujoUMPPcAgu9xs08uKDmlxIeYDrH7RdJXukoqEvNg3hidh4xO5ATnc
-         wPJ/5D8dRIiVIksjxHsyMG2UDDYry/HCY4jjZvm+ypAECBNEenb4+Yl35uKdjqOTX0r8
-         sJyjmqqTix0TNORUOFHW8+hUxWG80Ox5lIGvKicUdZZDataKe4e/ha/VpTBWIdAWvCcH
-         74f1ph1uqZRgac8OXmB8/7b6YEAAhxG/2jsuu4MjNKQgeFmO04AIJZuZckfOe8XP+Vza
-         1CWJLDD3LrJrycKjuwDp1Vh4KU+tdP9oECYzSCaelC/zpmQMCN0tEk4r7fxTh2w8pXCt
-         BVnw==
-X-Gm-Message-State: AOAM530M1teUQ828tAU47S/oeY2/s1ZOwro3WB9eXHPiZ3oBPt/Y4fCI
-        Xzgt6Cj1cjjEAEhKo1O+GTg8Tc4kpxOf/w==
-X-Google-Smtp-Source: ABdhPJyhQavYI41EZRXm8E4eRovxLSlJHYVyFDzZM9SFcCvP0M5SWGde1YUFIAn0mNAO3vOFTDKogw==
-X-Received: by 2002:a17:90b:4ad1:: with SMTP id mh17mr378365pjb.246.1644459887700;
-        Wed, 09 Feb 2022 18:24:47 -0800 (PST)
-Received: from [10.199.0.6] ([85.203.23.185])
-        by smtp.gmail.com with ESMTPSA id s84sm15477935pgs.77.2022.02.09.18.24.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 18:24:47 -0800 (PST)
-Subject: Re: [BUG] usb: typec: ucsi: possible deadlock in ucsi_pr_swap() and
- ucsi_handle_connector_change()
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, kyletso@google.com,
-        jackp@codeaurora.org, andy.shevchenko@gmail.com,
-        unixbhaskar@gmail.com, subbaram@codeaurora.org,
-        mrana@codeaurora.org,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <037de7ac-e210-bdf5-ec7a-8c0c88a0be20@gmail.com>
- <YgPQB9BYJcDzbd02@kuha.fi.intel.com>
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-Message-ID: <43d6c3b5-17e6-63a8-21fa-3ff9f478ada7@gmail.com>
-Date:   Thu, 10 Feb 2022 10:24:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Wed, 9 Feb 2022 21:25:16 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7904822BCC;
+        Wed,  9 Feb 2022 18:25:17 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvLF41rmvz4xcZ;
+        Thu, 10 Feb 2022 13:25:12 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1644459913;
+        bh=D+DjfAKMXi5ZeAZiu2dE72zIwqk88EIi86SvqawOGw8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=W6Jfedq8r5SZVRHpVoRk67DH9Fa4nwuN+h8A1CELYz+0QVAC3tkLYyU5TXBoMDeSp
+         Qq/fmHvAUqxqUD+YWrgyrh7efCTRwvnor+ttJm1UnVe+WzNsWxc/ROZh2vy+S4JJjM
+         MGassANnWlFmf46Radn9zbrtPz8Clj3JVspbLDzcAx7jaQ/NoJJBtiHadI3MqKOhuG
+         RpbnkMwhiOfA4JMfRw2LDREKmeJBzZGfoEcPSDJmr6gb8G5nS67NADQ/AFFE3SCZmc
+         dSe7z1XcfT7xUMF4aAtVuuFHvFAFy3c8phrhPtjBahCF20z3kcbtWUy2j5xDUWgtJb
+         hcBrWEoIkaeAg==
+Date:   Thu, 10 Feb 2022 13:25:06 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>, Guenter Roeck <linux@roeck-us.net>
+Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: linux-next: manual merge of the spi tree with the hwmon-staging
+ tree
+Message-ID: <20220210132506.051144fb@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <YgPQB9BYJcDzbd02@kuha.fi.intel.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/pZxQmqOA4f0WuT9GPIXjHtV";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/pZxQmqOA4f0WuT9GPIXjHtV
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+Today's linux-next merge of the spi tree got a conflict in:
+
+  drivers/hwmon/adt7310.c
+
+between commits:
+
+  9c950b125f78 ("hwmon: (adt7x10) Remove empty driver removal callback")
+
+from the hwmon-staging tree and commit:
+
+  a0386bba7093 ("spi: make remove callback a void function")
+
+from the spi tree.
+
+I fixed it up (I just used the former version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 
-On 2022/2/9 22:30, Heikki Krogerus wrote:
-> On Wed, Feb 09, 2022 at 11:50:57AM +0800, Jia-Ju Bai wrote:
->> Hello,
->>
->> My static analysis tool reports a possible deadlock in the ucsi driver in
->> Linux 5.16:
->>
->> ucsi_pr_swap()
->>    mutex_lock(&con->lock); --> Line 962 (Lock A)
->>    wait_for_completion_timeout(&con->complete, ...) --> Line 981 (Wait X)
->>
->> ucsi_handle_connector_change()
->>    mutex_lock(&con->lock); --> Line 763 (Lock A)
->>    complete(&con->complete); --> Line 782 (Wake X)
->>    complete(&con->complete); --> Line 807 (Wake X)
->>
->> When ucsi_pr_swap() is executed, "Wait X" is performed by holding "Lock A".
->> If ucsi_handle_connector_change() is executed at this time, "Wake X" cannot
->> be performed to wake up "Wait X" in ucsi_handle_connector_change(), because
->> "Lock A" has been already held by ucsi_handle_connector_change(), causing a
->> possible deadlock.
->> I find that "Wait X" is performed with a timeout, to relieve the possible
->> deadlock; but I think this timeout can cause inefficient execution.
->>
->> I am not quite sure whether this possible problem is real.
->> Any feedback would be appreciated, thanks :)
-> This is probable a regression from commit ad74b8649bea ("usb: typec:
-> ucsi: Preliminary support for alternate modes"). Can you test does
-> this patch fix the issue (attached)?
 
-Hi Heikki,
+--=20
+Cheers,
+Stephen Rothwell
 
-Thanks for the reply and patch.
-After the patch is used, my tool does not report this deadlock in the 
-ucsi driver.
-Thus, I think this patch should be okay to fix the deadlock :)
+--Sig_/pZxQmqOA4f0WuT9GPIXjHtV
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
-Best wishes,
-Jia-Ju Bai
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIEd4IACgkQAVBC80lX
+0Gz+XggAhrfUjMFc0bg3rXBvjg7x8CqRjr9IVh5JO3IPPsRGZfcxAa1XsVoZ22IA
+Pepvi5L47TFuxW/SQF5g3IlV4fzM5URGcrBpkV6K1qUwIpU3glXGmny9qlp4YPy1
+tSy4MfoiAi4oWx5e9h19saPvyXGNbDMy5v9viEsbTnhmxhDlnScXqRxGB9daRj+X
+mhdZ2uncZoliWF9cJMl1/O6laPISMD2rZrslPZu4oLBemZP4GFF5ii7bDSr4fXUH
+fB14dlJuB4jHjJ9pCSYPGff34st1vAHti0zA2TX1ztA0FVMGOM+jKyDlLF5y5DmA
+n8h7q/t62gQnlRF3tWRJcW4r4zrNYg==
+=SiyM
+-----END PGP SIGNATURE-----
+
+--Sig_/pZxQmqOA4f0WuT9GPIXjHtV--

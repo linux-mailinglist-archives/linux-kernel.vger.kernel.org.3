@@ -2,160 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900DD4B07B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6769D4B07AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:01:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236853AbiBJH7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 02:59:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43794 "EHLO
+        id S236876AbiBJH7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 02:59:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235869AbiBJH7h (ORCPT
+        with ESMTP id S236852AbiBJH7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 02:59:37 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7A51089
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 23:59:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644479979; x=1676015979;
-  h=message-id:date:subject:references:to:cc:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Y+Yor8Yo55cJRS6BjiQH11/0uCI/NT7r+VFuQvMiMxk=;
-  b=HdVwvFIg9aja29pSMF4rUYzVcX+cowh5wQNIhPjYnJ6DOmDcMR7vbUx1
-   miUdGc9gaxjAc/1Cr2yrtl92kQ1zS6TZle7BIyuKqJXBZKM7s75XD6nOy
-   hy25QYl2hAa6FaYvJRsMkJYebUDPXYWZD6orwIzgZUotIyN3yx9grTYc3
-   skxX/hwQ0ifWPXi5UZ3lv0JjIVK8pNQNvBlMfwKYje91L5URaycfS7WyG
-   ERbx/6dJtr6p1ySEvIgQvBegwxs5NIEHpBGV5eBqNXYxqv6T7KzTM4LGV
-   4kFzITh71n1jf51rzYnPThzbNTo6r0FWnEhxt0XMB42ziKhIBrzHEDGIF
+        Thu, 10 Feb 2022 02:59:39 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E075F1089;
+        Wed,  9 Feb 2022 23:59:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1644479980; x=1676015980;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=dIDWWOnTSfIsDa8xEZiyPWlT3o/TEV22gf7gMJhNquw=;
+  b=LocJE8kW2M9fWHcDQ+mkhqJisKt2x2Hdob8SQ5Tw316BCo2MDRye56to
+   bDL4OVK5Oa/SDtObBXXqgBN1pCyFS79I5M1TQhOfM06cghxUPbhlm14zI
+   KNDSuKGU3zK73z1ftA9DFpWpwevJxdeZCEg6OSeyo63KCn1QHCnf6Xi6z
+   Ka8tfeX/59JUrS6ZvkwdabRdBZaE8xTcgfGkbN+SpK67LRmMTSwc/M7xL
+   l5pkUz2NK2xYdCO3M7gPEEARkIen4LeHzVeaJnPUXBH+aZI0UgbZiQQQK
+   jt+kAYT9bTEd/2HOBnUr8SfLLlY2QxNbqgXhYfN4BdDY4R+ouMVYwnDQb
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="310174928"
+IronPort-SDR: ez5kcHOEppF1XpoRKqTmC4REmPo6gqQpAEvYutQ6WwK6nAG/sYNQunr+M9Ymy0zdl7zcDboUhM
+ Z8lAKvM/p3A0EUWGITzbSwFgMZnMByfzFcpOYyVx3Ika7izmegmpdAWs9AIK8VELiVZIK5TLQX
+ IJB0qUFgOn1dsCWDjXSyfNGIj13Fz87kXthsPdUGfLq6e5Jte0OgznldhOphpumGbkZjOqlKpo
+ 4E2aOuzxeUm7gvFB8Smn9+t1/ZLlIo/TLRJqGOXFd5wZOvqppb7EnqB1aJkBrx3Kt0kJxUcbKR
+ 9+ZLmIhFiGk4r54lMNpx/k8i
 X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="310174928"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 23:59:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="622586107"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by FMSMGA003.fm.intel.com with ESMTP; 09 Feb 2022 23:59:38 -0800
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+   d="scan'208";a="145502994"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Feb 2022 00:59:39 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 9 Feb 2022 23:59:38 -0800
-Received: from orsmsx604.amr.corp.intel.com (10.22.229.17) by
- ORSMSX607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 9 Feb 2022 23:59:37 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Wed, 9 Feb 2022 23:59:37 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Wed, 9 Feb 2022 23:59:37 -0800
+ 15.1.2375.17; Thu, 10 Feb 2022 00:59:39 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Thu, 10 Feb 2022 00:59:39 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PSZmmmfaE80StmQZ96OB5dohGKpA1lAZBOvVrJRO+jihXzLe61QgFaHEJoS13aq0F70JrpnxDqldFVP70VVtTf02FihOyOGq4P80tRFIwsWM7B7/VvZxq/2nVYtd+OyPKzmannRJlLzJbtzgOaegwUqiVIDI57bXU74X7QLf2YBDvXMUOihqYpletGQZXmhJAfL5FfL1AN7rbMFvha29DVjiQDWvX0aLRDVsVeQAW0YMqcELgcKPkSueFgKBNDOkHF2UPRsHCWgJv3yxuaT4mzzedCeu/XMKkz/L992uOImtEyOSa/7RA1jG0K1tBEebxAxIvMaySu9i3k9Hkh5eEQ==
+ b=khREwMLInTF0xNSMzpyRlfXqj/mcdXD112kmOsmLP1OCffs+gDlwdKrym/3UsznTUmgUq2RfRC/DIYlHSfoXbZS1tb6NMW8lDXabC2aXN0ZLiJ5P5nAgQojKCaxheKBfZtcYqqAqFyh+KNxF7b3X4OpXkWJNfIkAh/xUxtX0qu34VQHLeDpz4yDM0f3ka5VVNIV+FtPyxkvtiL1omugIHJ1ksxIqxQ+0V0uu8rGhUs/tWASIXtZJJfX/0rbqscKMye6jDHOC6EQYr/tTRVMKTu3k8/8INRC9OiDWnFWpSVZwE3iMs1MfSuk8jwk7zJ7x+TgV/EY76/zOeP4EdGEnPA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+k0ro3BJdXTRq2qwDYX2cXpLqZDDJh+/4RPaFHpLbNY=;
- b=Y0rnajiykghx8ZN0OQk7Zlr9NkAMy5djgfyO1aHzn8MtchLhZG5ooqLhG4/7aC7fn/C/Wvj1gCKjaqlILknkARQcDsxL/yNfv+9JPuAki/k12AoA2+1NarG4cGx8DqvLemrXAE5/x8lLUkbXIXcJlgbGgUOyYqEDcgyQIsoDPoDxqqN0o4CVc8YemUVXxzZCyyNyGyCJR9zjEnuVk4/yohchAfT5zp7sI2sBCBnFavfG7hjL3Wi3cy9DYFpFpB7PKL8/EQMF3vs+SjoLwJCevpi7RdUIVWKVzysSFJzkJ5ZWram6U1Yh7RMEnN9vCqjPXT/rrUTltdqg8dfbm0ZhVA==
+ bh=dIDWWOnTSfIsDa8xEZiyPWlT3o/TEV22gf7gMJhNquw=;
+ b=kGapj1o2bbJ0U2yLnoA4oOk6+YWI8QFwD23sMiKKZ93xSxTFCxEOcy0wqz8h5iMg/wIfbzNo6aIjMkBpBPHbtiJ9ufJmZtgA1sSYjGjy9f7AMPOlUMM0WGv2j45Dz+QNe+ZpArHiS3TBsMfpZk+Wl9WLATD288NELBz+eciQSK3OdyZ/ntMMqdmCCyHKodw4blZSCuOHTkmQ1KLtGszYuHXzKCrBTxPasfb+dGlhxCjDAOXclEWPeBqGEYgF9pDRoc01w654A5A/K5bNg+Ke6NZCsSmSigiMD//FbbzlCx8ZtynVami2jCwETsEkNejY8zpqCwRjlDpFWtCbSHimWg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ0PR11MB5598.namprd11.prod.outlook.com (2603:10b6:a03:304::12)
- by DM6PR11MB3867.namprd11.prod.outlook.com (2603:10b6:5:4::27) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4951.14; Thu, 10 Feb 2022 07:59:35 +0000
-Received: from SJ0PR11MB5598.namprd11.prod.outlook.com
- ([fe80::c4a2:d11d:cb7b:dc8d]) by SJ0PR11MB5598.namprd11.prod.outlook.com
- ([fe80::c4a2:d11d:cb7b:dc8d%7]) with mapi id 15.20.4951.019; Thu, 10 Feb 2022
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dIDWWOnTSfIsDa8xEZiyPWlT3o/TEV22gf7gMJhNquw=;
+ b=q8xMT792cm7CKofAMFP9q3/leVyeXXz/ckkxj2c3XG6g1FC5YYHIynAVlHh4fVqg/n95lQIGAh1597BudI86OpWcWiRskosgy0yyBmI6c1z8AqDcoVUXNu1dqs7kOTyzhZfTa5y5VOv7f9jsssr0g6QMgy/0KCWkAFivTcybEIs=
+Received: from SA2PR11MB4874.namprd11.prod.outlook.com (2603:10b6:806:f9::23)
+ by MWHPR11MB1807.namprd11.prod.outlook.com (2603:10b6:300:112::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.18; Thu, 10 Feb
+ 2022 07:59:36 +0000
+Received: from SA2PR11MB4874.namprd11.prod.outlook.com
+ ([fe80::49cd:dd25:384:e918]) by SA2PR11MB4874.namprd11.prod.outlook.com
+ ([fe80::49cd:dd25:384:e918%5]) with mapi id 15.20.4975.011; Thu, 10 Feb 2022
  07:59:35 +0000
-Message-ID: <0e8851a1-e3bc-b8ed-6e48-02215edb2f6c@intel.com>
-Date:   Thu, 10 Feb 2022 15:59:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.1
-Subject: [oracle-dtrace:v2/5.17-rc2 8/10] fs/eventpoll.c:1224:3: warning:
- Assignment of function parameter has no effect outside the function. Did you
- forget dereferencing it? [uselessAssignmentPtrArg]
-References: <202202060630.0kkTUrko-lkp@intel.com>
+From:   <Tudor.Ambarus@microchip.com>
+To:     <Kavyasree.Kotagiri@microchip.com>, <Nicolas.Ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <Ludovic.Desroches@microchip.com>,
+        <robh+dt@kernel.org>, <lee.jones@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <UNGLinuxDriver@microchip.com>, <Manohar.Puri@microchip.com>
+Subject: Re: [PATCH 2/2] mfd: atmel-flexcom: Add support for lan966 flexcom
+ shared configurations
+Thread-Topic: [PATCH 2/2] mfd: atmel-flexcom: Add support for lan966 flexcom
+ shared configurations
+Thread-Index: AQHYHlQk4PtwvZJB5UakqiQAvCx1NQ==
+Date:   Thu, 10 Feb 2022 07:59:35 +0000
+Message-ID: <e5533bed-79ab-7d72-b0e2-47b038bdbbeb@microchip.com>
+References: <20220210074546.30669-1-kavyasree.kotagiri@microchip.com>
+ <20220210074546.30669-3-kavyasree.kotagiri@microchip.com>
+In-Reply-To: <20220210074546.30669-3-kavyasree.kotagiri@microchip.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Nick Alcock <nick.alcock@oracle.com>
-CC:     <kbuild-all@lists.01.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-From:   kernel test robot <yujie.liu@intel.com>
-In-Reply-To: <202202060630.0kkTUrko-lkp@intel.com>
-X-Forwarded-Message-Id: <202202060630.0kkTUrko-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: HK2PR02CA0209.apcprd02.prod.outlook.com
- (2603:1096:201:20::21) To SJ0PR11MB5598.namprd11.prod.outlook.com
- (2603:10b6:a03:304::12)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 123d8368-9103-449a-285c-08d9ec6b4792
+x-ms-traffictypediagnostic: MWHPR11MB1807:EE_
+x-microsoft-antispam-prvs: <MWHPR11MB1807DD60AE79FF149C09029EF02F9@MWHPR11MB1807.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2512;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5ZLZOYcBb+/d5J9MTBkdoVQI60CyhHpACzMfapwFpiy2D1YdDBK8afDo6JgKlJlO14rjzBliavZNYBr8db57obC4QGqpiG6fphCE85QtncYSklueGlSGcdZmdaJKmlO/n2KKL7EEABW5HSsR78AiNjXURJQDJcihX/P+5cngvfx+ee9c8Ee4zr6QEURHQjCwIsSc783EFLOK/xaIEyYhDuthEUs/BLOxTktqWpO5IUDgP7ajdDYWez6iMpGB0AlxRZrjcaKd8FoTGleFW6GR/3nYFdxDqLBlb8OeB1MYx9IMaz1oxStPVT63/Ka/RCO1CqNDg4uEEQgtv8PM0rgQlTjKStfOIOMLG6KlZf2amcr1sx18Qh4ZJkS37EM/HBpvTBOReUQXwWL5lS/Lo/bm5vfMzw9XQ+6rKuJVorsF7JqMiTdBvYBu3i/vgZMuv3Mtr0hTX3Bj5OoOI3W0HSEDCrALKXR1AICJYjCdzHfgSGKFEy0nwWXBC6/3OHEIQhIUNae+zGCtLU/+ngaTk4j6tB4T2iCT1efWonc2tbTslEgahjmjuLC5jsvekLB6SDrOsqpQr5GppL140Y4kPdJHxOi+QrAsOKrO3T/gVjM67jJaJ246dE1cdLUgU5Movt0rJiPsgQEfaEEUYQGGLuPTNGTyZaRLSyT2Hc+GW5+bLMbaJP3y60zbL4kubg+RA6WEgzGDDIxziRon+ad42bgUg4fpUHUedY3EJKbgmCea4yFQK5zKkJ5IqKeRUrZYLdPUuiLp69N7irqu2A13Adp7loq1Hn1uJXsDPqDSw64H+8jYOhrUB0NZxMDV4lh72SMmXz/kcF8q+BuXfxra9Lce/T9iAIO/GpB/1T8FJtFWOyA=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB4874.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(4326008)(86362001)(316002)(6506007)(2906002)(31696002)(6486002)(966005)(38070700005)(53546011)(110136005)(6512007)(54906003)(38100700002)(64756008)(66446008)(66476007)(83380400001)(66946007)(31686004)(122000001)(107886003)(76116006)(71200400001)(5660300002)(66556008)(91956017)(36756003)(8936002)(186003)(2616005)(26005)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZmN3NkFWemNESE1rOUllQytBS2VsK0lWTWFCUFZPTi9vNWc4dmp0dTMzanJZ?=
+ =?utf-8?B?TGcxK3hPZEg3WTRvekZLQzNPUHdMT0ZlVllrRTd0THhISmdqRjY3SFdOTnJ5?=
+ =?utf-8?B?dXE1YkdBWEpseVZ3WG9GNURNdXZFMU5pRXoxajhwbTNYL2d6bDk3N2IyS3lw?=
+ =?utf-8?B?alZ0TGw0VndCSXN3UTZsSCt3bzh0WEVpS1M0dlhoYyt6czN5dis0WEwyUXlK?=
+ =?utf-8?B?NUs5a3ZEVTQxSFlOUEVpTngrbXZacXd1LzRFQ3FOS29oelFGUDl2cjNmRnRK?=
+ =?utf-8?B?WmRBcUxFRFgxNm9iUG83ekhRL00rdGw4ZXlaMDNwalo0Mml0bXhaQWlnS3Ex?=
+ =?utf-8?B?VDlyN3ZtVlp0NjdRSzF6UytOSzdSeURpbFZ0WXkwcTR5VHdMMHBNVDU1WmNj?=
+ =?utf-8?B?QytqQjNqUnpPcHc5eUUwUURXMmRDNThwN3M1cCt1QTJXM09qemRNdDlMYkJB?=
+ =?utf-8?B?ejRIcmo2eGRrcmFFTUhjV1I5Yk1reTAyN0VGbkdhK1NrZUptODY0dkI4TG1p?=
+ =?utf-8?B?eXphcWpvQ2E0MWxRWEUrVW5mK0FFTGpMMmVrUXlWS1VacGczNlQ4REp5Z1Ba?=
+ =?utf-8?B?eFNQWGVyeGxwT3IzQnQycS92L1Zpcno4VW9xVjdkU3ZFMTE5cDJweWlqV0g2?=
+ =?utf-8?B?NTJ6MjNpdjh2WU43blIrZG1DMFB6TC9JcFZ3cUJJYTFEUmM4Szd3WWJsaHNE?=
+ =?utf-8?B?aHlNMHRMbjJKanN5dTJYSi9TWUdLMnZpMTdjc2o4ZW5kbGZJUEVJdU84ZUhC?=
+ =?utf-8?B?MTVjZzNJaVAxYzdWcWN4dSsvclNSR0xjdWlkWFZhRittS0dkL2c5WVFhTEZv?=
+ =?utf-8?B?TVJkd0hqNmVwRDlYWldFZGtNYmlXN1g1SmoyWExUd2lvZnI3cU9OYmh6dVNH?=
+ =?utf-8?B?NXZiTnNaKzljRkFicWhtQkdmTGk0WGdlMmJKV2VrZ3Jma1BIT0tWOTJFRUFP?=
+ =?utf-8?B?VmdLa1kvQU1SaFNmTXdabXJESTRnb2xpTm1rS000OWtoYVFmcXRCbVd3a2FL?=
+ =?utf-8?B?L2h2RTRXR1JlU0lMc1RiWEcwYkRBMjJTL0duN2h3TzkzT2VZNzdycmxRZlhY?=
+ =?utf-8?B?TXlrNnNzWUNTcEF4eG56WGh3QlBPaTJyMkIxcVBaVWtPZXVjdkN6cXdPOThX?=
+ =?utf-8?B?dGRFR1FlOE1RdXJTSVZiVElkRW9IZDNCTlIrcTFIa1h2em1STVY1T2dLRHVZ?=
+ =?utf-8?B?QmFOUDlxNTJITVRmcXBNWjd6OHlhNm9zTjl0TGdtQTZtZ3BtbXZmTHZmUHNE?=
+ =?utf-8?B?QW11MjVmY3Q4amVTNTlqWTZsaFdjMEgwbStqUXZuTHljSVFMNDNNb05xNU51?=
+ =?utf-8?B?ZzBuWU9vYW45MmJCYkl4Z0prZllJSysvVmlCU2lPOGNFSFdhc3c2T2xrQnZy?=
+ =?utf-8?B?RzBCOHBvY01WTWhnendzcTJ1Y3liSUdVdE9lclI1aFRWQzVuZFdQOHJvYWlv?=
+ =?utf-8?B?M3hsK2FqQzlMdHNXZHRUb0RQZGdvSlpqMmIzM0JScW9CVk1vTjRWd1o0a29z?=
+ =?utf-8?B?d040MTg1clNYOFNrZWgraDM4dTFPUXJTTjFjK2p2aUlMbTNmV0JyeVRySkR1?=
+ =?utf-8?B?UHNzZDVjMFFHZVhFdXBIbVArcVBsTzdrTnZ4SWNDTHB0K1hWTEZYb3JWSFF6?=
+ =?utf-8?B?VXZ3WEtveGxvZGxQNGplVVA1bDJXcDFreGx1dXh6QTBQdUxrZkt3UHlMdFJG?=
+ =?utf-8?B?SHY5OExYb0xoQjVFWDZkTW0zYzd3NkNFZVJ0ZzUzRDlFM2ZCMnlDL2NwYlZG?=
+ =?utf-8?B?WEJEL29LZXVkVytRZUkrbVZWaUNENGxremhEU0dIRUNHSlpVVVlCZ2c4TDdZ?=
+ =?utf-8?B?cGpMYmVERUxQa05hZzk0bEJwZmVCZXdWZXRVbzZLR2ZVbE5JSVc5bXZBajZH?=
+ =?utf-8?B?TDFnNzF1cHBOQldzNTY1VDdXVmZESDd3dUpseTgvcFBUYUpnQUtnNFZXcWh3?=
+ =?utf-8?B?WFRqOWtFa2hDQmtGbm1MVS9QYWd3dHU3RmFDWFRtU1lESERvUTZlYlNQRk1j?=
+ =?utf-8?B?djNteC92U3A4aTNlY1czaUVvT3JxZVpTVUVveUdJellWRjU3L3Q2NGF3cVE1?=
+ =?utf-8?B?d0RLWjJIRjR0OXJ1a3BPRW5RWXdoQ3pQdXRseEQvMDJINytTdWVwNFlveko4?=
+ =?utf-8?B?M2NBSGI2bjlibkljNkpnNkpjc09RQkYzSDdkVDJ3cUVnQkgrV1QvbTdFd0l1?=
+ =?utf-8?B?a2t0T3Q0SnNTeXpydkd2QTN3QlNSNEJ5cmVaSjgzdm55ZEpoMVMwclRnUFhs?=
+ =?utf-8?B?eTJXQktwbytuQWxHMXpVb2VyZDJRPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3FF9749DBBC3FE448D572971122812CC@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: eb3ba719-3037-4470-b2fc-08d9ec6b477f
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3867:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR11MB386741F97E4EEC05AA1DD8EEFB2F9@DM6PR11MB3867.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3276;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: x/qirGHsFiBkGMGgpXNj3qFe6EXmOQoirGTGpxPl9dSZYzxAUp7rujNbI3BGys3IQ+jWjPy4xwA5uy5DrGAWUnsNpsTq/BnX2a2Ar8MkkCQ4UPlEFl3whnlMfwynySCHIEOkWLGoGNatFolc22NwbbIYrDQqeIj94JPq8a/U22IOuQfjBdhty1rtRanM/mSlG0sBbaS2kXgNDQ02/CuzzfUJEAwd4l2asfDdRwuZoI2ysK7l3wAX1vMX9oodPwG5uJrSRW8pRUdidRqMr2KGtKaanGTe0bFY8WFlwm2cdzU3HbuqT86I6b1exgEdRcU58NIx+Hgy4irBiWpllZqBseBdbPti2MsO0quAecGLIs0sa3+dM/BdlsgO/SOaBLD0aJzq2a5lVmr6e9Oaqa3Pk+UDxsKpdfOpVIDhaZL6heBZLdXB5Ar50k3S6oH7chdZQfj1H4lnuX47KGm+jI7RErA/Amk0D7TFUglckqXLz3luW805WUry+0NpWnAowYXzFjRvArvnQx2fpSwBGt4vEZzc0niiRhlhw+7ySrC8FLJGmgaGqZfCMDRkn/9Llj9QFhwigUfgubw6zC8+oVUJFCnmxT3Q7Cv3c5RbJW3/UkReVfyOt9a1bP3PwSWOXz3bp9YzkDQ6tDDd16sH0OUcS7CHdp4d65zMBOKZWZ7/QyhVnREAfbLaOHOg7UsG9XWiTBwkAniEyMSxw9maH8WPLHm3rl/FRZJR70l4zC8/5ybzJEeNs3x8RUpy5rgHu6wPLtk6ZQBCez4OAaG1tdZL12jSN+p8sRBBdPeONDIr7JmxH80Jb92MgJuwP3GmB+7hAnN0tWA/3jJ37OJ5ZkKQTf2Ow2NlX97PHqaccPN/mhM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5598.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66574015)(6916009)(508600001)(2906002)(30864003)(31686004)(966005)(6486002)(2616005)(82960400001)(4001150100001)(186003)(6506007)(5660300002)(86362001)(6512007)(38100700002)(26005)(66476007)(4326008)(6666004)(8676002)(66556008)(66946007)(83380400001)(8936002)(316002)(31696002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VjdreEduRXFsNVdTUTBUOXhLTS9qcTVSR3JkMFVOOG4wWWhsM3BnUm9xTllJ?=
- =?utf-8?B?WkgzdWtPR1hwQUNFd0YvYnFaT2dIOXkraWdwT09HUy82WGxqMXBvYndYR21i?=
- =?utf-8?B?a3BSUThxVlMzMGFra29UbExXMHRUbmhuM3VRMWE5UU04RnFCeVpEWVhMYTFU?=
- =?utf-8?B?UWMzZnFMYnYzdzR3MVpRNnNVYzVvdkVoSmFPNHNiRCtnUlZMVFJTOTNRemZM?=
- =?utf-8?B?Zmg0elg4VU1DbU5lazI2ZVcwRXo5U0VhTWpJc0E4TldBVERUaTFRNmF6N01L?=
- =?utf-8?B?NU1nQmMvQWIrdUVNMnFGNFpBVW40Y21oZEJrMDdMR1J5aUZ6MVJQK2FwR0F1?=
- =?utf-8?B?c2NOV1RtOXhrZ3ZiVURBS2N5MGV2cUIvaXE0VGVndG1SOTlCaVhGWTYxK1Y3?=
- =?utf-8?B?Vjg2Wk93MEFkYXNZdzM3ZSthbFU2YTZnYVBHUDgxZWZvK0NBY3ZNTStlaGw5?=
- =?utf-8?B?VlF3L1lDRitIamMwRzR2WHo1d1Z2TkxuL3JCRnJSTHIzbExEdU1GQ3VRUXBH?=
- =?utf-8?B?NVpmM0FDakZnZjM3aFJXT0N2TGRnN3dET1dsdlVtTFF4eHdTL1JCdWt4eFVT?=
- =?utf-8?B?R0hiK1QxOEppZ0kwUkNzTjhqcUZqck5hclUvQWQ5Z0lteHRtcFVITjlFYVpz?=
- =?utf-8?B?bHpYaXRhb2IrbFlqaXRkNXRrTFhiWkVXV0xXQlFuaWhHMStzZnpCQVZNQWFx?=
- =?utf-8?B?alArWDVBeklEdUN2eGUyeGE2TG9waE14OHYxTi9ZbjhsTFJlalpQelplNHpS?=
- =?utf-8?B?MllRNUZUWm4wYTBjYzQ1RmxYZVZKQlJwZWZ4bko2N0ZjUXhLVWs4aHBESnpG?=
- =?utf-8?B?SmEyTHo1eVJQTmk4K3dhSWJBMmlVeXdCYVQ3YzdlN1VNNGFwcTBEYVRzczl0?=
- =?utf-8?B?VlN0RVFQRjFKS2UwZk1ocVpkMHlHK0dvTUg2MGlBMVVnUEo5UVBpTmhVSU5H?=
- =?utf-8?B?ZDB0SFdDOWw1ZklqRkd6RzNKU1p6dTBDRVhjTkVtR2YxeXYzZkRBeGRhOHBx?=
- =?utf-8?B?aWM0NlgzQ2FGSjlvSGdZcDN1Qko4eVEvRzQ0N3lNdDlPMHBuR21KSzVsU0Vo?=
- =?utf-8?B?T2pMWU92T1dGNTNDTEUvRUhkU3M3c3hWYWljR0d4dTY2K3Y3bXluRHVrSHg4?=
- =?utf-8?B?dTdNdmJEUjdDalpOVG00dy80cHoxdkN3VndtNDdIcDdBellJWTRxSU4zVk0r?=
- =?utf-8?B?VXNkSnd3allabFdJWFlCZ01CR1RSWmVMb3Q2U3VwS1EvTE9DL0RlMXdxQklX?=
- =?utf-8?B?dVpkdEZKT1V0YjgzMlVHY2JidnR6WTM1Wk1RYXFoMzh0dTFTbzh5R2Z1RTdx?=
- =?utf-8?B?a3lPUFJIdGpwK0Z0U01MN1BLTmlEYTRFemxqTHgyZXlxZ28zTmd5N2JRN0Nj?=
- =?utf-8?B?QVB4Rm5JaGo2YUVULzkrQlNLdzByVVVvWUZ5KzNDYUtac2JHbDZVS3ltNkxj?=
- =?utf-8?B?dGt4eDRTNHhzL0NyNXRHR0JhSldXVWJlNGsvdWcyQ0REUm4rNDArVXEwNjBP?=
- =?utf-8?B?K1N6eU51OUUrYkI4azBtald5Z2dSRmZ5Smw5OE1NMWI4cDlZSWRvenh3SWRG?=
- =?utf-8?B?Mnl5WHNzMUtLRDQvYUNzdVpqQlNFakUvSjVHcHlxS3lwbE1BN3FNVjdMOEVq?=
- =?utf-8?B?RklSeTJSTjUzWjZyelZvem5NNU5GQ2Q1MzA5QlVRM3dkT09ySk0vK2RCOFhk?=
- =?utf-8?B?dEpuTHlTc256Zm8rMk5mQVVPRDVmK3M2Y3NnU3ByanVMd0NUU0tCYmZjS0hU?=
- =?utf-8?B?UVg4OFZKSGx5cmVSVnZKMzdZQXZlVU4vOGo4ejdmYml0M2JDcFRWdE9KOFdt?=
- =?utf-8?B?Ty9vdzFBd1dkOHY0TkZHZUQvTmZDTVZyTkZtOHdvcm5VYis3dWliZWtsZHFw?=
- =?utf-8?B?SnYvQnlPdFl0TC9yQ2tHV2tYbTEvNm9DNWdIMFJ0QnpsRWJsN0hDSDdFbU1S?=
- =?utf-8?B?Z25sKzVGek15cUJQUGZKR1JDRGx0ZThOTkYzYlJaSzd0TmhJZUp1alk4QWN5?=
- =?utf-8?B?djc3T2F0dXZ6aGt0eHJka2NFQnQ1ZG5XaUprSGxJSGcvS0VreWliNUhnSDE0?=
- =?utf-8?B?TlZlYmJ2UmVJemNOYktFSnNJY2pCUThjdXU0KzN1Y3MwYndBbm1XczlneWlM?=
- =?utf-8?B?amVLR053eUg1dDVEaUpjWlBBUzVUVEV4dFV5SWdNTmF2dHlzdzdQaEpGVmY5?=
- =?utf-8?Q?m1XCRqI3IPDbCb2XnxEN8U4=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb3ba719-3037-4470-b2fc-08d9ec6b477f
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5598.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 07:59:35.8435
+X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB4874.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 123d8368-9103-449a-285c-08d9ec6b4792
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2022 07:59:35.4333
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UnREByC5OxebNWMDYoe6r+oQXO/RthCM2+lgrBZstG0qRcvpmLjP0pDJR/2wOjj/UzND45s7cK9ZNf4/PuhWTQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3867
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fM7KHtxJ2X+a4QmAXyRM7dFVJWG2bg/XR7efN77TJol6V98JrsGwa4xgXJlfDjd6xWDFvXo/aWPRwykkciP3Cqya/z8e2CYN51k6qbLm7+8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1807
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -163,151 +168,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/oracle/dtrace-linux-kernel v2/5.17-rc2
-head:   47946e7b2e2319f39cbb7f8aaa294298c2dec5b4
-commit: 16ad67b61ac4f3dd93b3fa6875a011fff7b88500 [8/10] waitfd: new syscall implementing waitpid() over fds
-compiler: or1k-linux-gcc (GCC) 11.2.0
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-cppcheck possible warnings: (new ones prefixed by >>, may not be real problems)
-
- >> fs/eventpoll.c:1224:3: warning: Assignment of function parameter has no effect outside the function. Did you forget dereferencing it? [uselessAssignmentPtrArg]
-      key = (void *)epi->fixed_event;
-      ^
-
-vim +1224 fs/eventpoll.c
-
-a218cc4914209a Roman Penyaev      2019-03-07  1118
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1119  /*
-7699acd1341c63 Davide Libenzi     2007-05-10  1120   * This is the callback that is passed to the wait queue wakeup
-bf6a41db7726e6 Daniel Baluta      2011-01-30  1121   * mechanism. It is called by the stored file descriptors when they
-7699acd1341c63 Davide Libenzi     2007-05-10  1122   * have events to report.
-a218cc4914209a Roman Penyaev      2019-03-07  1123   *
-a6c67fee9cf095 Randy Dunlap       2021-03-01  1124   * This callback takes a read lock in order not to contend with concurrent
-a6c67fee9cf095 Randy Dunlap       2021-03-01  1125   * events from another file descriptor, thus all modifications to ->rdllist
-a218cc4914209a Roman Penyaev      2019-03-07  1126   * or ->ovflist are lockless.  Read lock is paired with the write lock from
-a218cc4914209a Roman Penyaev      2019-03-07  1127   * ep_scan_ready_list(), which stops all list modifications and guarantees
-a218cc4914209a Roman Penyaev      2019-03-07  1128   * that lists state is seen correctly.
-a218cc4914209a Roman Penyaev      2019-03-07  1129   *
-a218cc4914209a Roman Penyaev      2019-03-07  1130   * Another thing worth to mention is that ep_poll_callback() can be called
-a218cc4914209a Roman Penyaev      2019-03-07  1131   * concurrently for the same @epi from different CPUs if poll table was inited
-a218cc4914209a Roman Penyaev      2019-03-07  1132   * with several wait queues entries.  Plural wakeup from different CPUs of a
-a218cc4914209a Roman Penyaev      2019-03-07  1133   * single wait queue is serialized by wq.lock, but the case when multiple wait
-a218cc4914209a Roman Penyaev      2019-03-07  1134   * queues are used should be detected accordingly.  This is detected using
-a218cc4914209a Roman Penyaev      2019-03-07  1135   * cmpxchg() operation.
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1136   */
-ac6424b981bce1 Ingo Molnar        2017-06-20  1137  static int ep_poll_callback(wait_queue_entry_t *wait, unsigned mode, int sync, void *key)
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1138  {
-7699acd1341c63 Davide Libenzi     2007-05-10  1139  	int pwake = 0;
-7699acd1341c63 Davide Libenzi     2007-05-10  1140  	struct epitem *epi = ep_item_from_wait(wait);
-7699acd1341c63 Davide Libenzi     2007-05-10  1141  	struct eventpoll *ep = epi->ep;
-3ad6f93e98d6df Al Viro            2017-07-03  1142  	__poll_t pollflags = key_to_poll(key);
-a218cc4914209a Roman Penyaev      2019-03-07  1143  	unsigned long flags;
-df0108c5da561c Jason Baron        2016-01-20  1144  	int ewake = 0;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1145
-a218cc4914209a Roman Penyaev      2019-03-07  1146  	read_lock_irqsave(&ep->lock, flags);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1147
-bf3b9f6372c45b Sridhar Samudrala  2017-03-24  1148  	ep_set_busy_poll_napi_id(epi);
-bf3b9f6372c45b Sridhar Samudrala  2017-03-24  1149
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1150  	/*
-7699acd1341c63 Davide Libenzi     2007-05-10  1151  	 * If the event mask does not contain any poll(2) event, we consider the
-7699acd1341c63 Davide Libenzi     2007-05-10  1152  	 * descriptor to be disabled. This condition is likely the effect of the
-7699acd1341c63 Davide Libenzi     2007-05-10  1153  	 * EPOLLONESHOT bit that disables the descriptor when an event is received,
-7699acd1341c63 Davide Libenzi     2007-05-10  1154  	 * until the next EPOLL_CTL_MOD will be issued.
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1155  	 */
-7699acd1341c63 Davide Libenzi     2007-05-10  1156  	if (!(epi->event.events & ~EP_PRIVATE_BITS))
-d47de16c722196 Davide Libenzi     2007-05-15  1157  		goto out_unlock;
-d47de16c722196 Davide Libenzi     2007-05-15  1158
-2dfa4eeab0fc7e Davide Libenzi     2009-03-31  1159  	/*
-2dfa4eeab0fc7e Davide Libenzi     2009-03-31  1160  	 * Check the events coming with the callback. At this stage, not
-2dfa4eeab0fc7e Davide Libenzi     2009-03-31  1161  	 * every device reports the events in the "key" parameter of the
-2dfa4eeab0fc7e Davide Libenzi     2009-03-31  1162  	 * callback. We need to be able to handle both cases here, hence the
-2dfa4eeab0fc7e Davide Libenzi     2009-03-31  1163  	 * test for "key" != NULL before the event match test.
-2dfa4eeab0fc7e Davide Libenzi     2009-03-31  1164  	 */
-3ad6f93e98d6df Al Viro            2017-07-03  1165  	if (pollflags && !(pollflags & epi->event.events))
-2dfa4eeab0fc7e Davide Libenzi     2009-03-31  1166  		goto out_unlock;
-2dfa4eeab0fc7e Davide Libenzi     2009-03-31  1167
-d47de16c722196 Davide Libenzi     2007-05-15  1168  	/*
-bf6a41db7726e6 Daniel Baluta      2011-01-30  1169  	 * If we are transferring events to userspace, we can hold no locks
-d47de16c722196 Davide Libenzi     2007-05-15  1170  	 * (because we're accessing user memory, and because of linux f_op->poll()
-bf6a41db7726e6 Daniel Baluta      2011-01-30  1171  	 * semantics). All the events that happen during that period of time are
-d47de16c722196 Davide Libenzi     2007-05-15  1172  	 * chained in ep->ovflist and requeued later on.
-d47de16c722196 Davide Libenzi     2007-05-15  1173  	 */
-c5a282e9635e9c Davidlohr Bueso    2019-01-03  1174  	if (READ_ONCE(ep->ovflist) != EP_UNACTIVE_PTR) {
-0c54a6a44bf3d4 Khazhismel Kumykov 2020-05-07  1175  		if (chain_epi_lockless(epi))
-c3e320b61581ef Roman Penyaev      2019-03-07  1176  			ep_pm_stay_awake_rcu(epi);
-0c54a6a44bf3d4 Khazhismel Kumykov 2020-05-07  1177  	} else if (!ep_is_linked(epi)) {
-0c54a6a44bf3d4 Khazhismel Kumykov 2020-05-07  1178  		/* In the usual case, add event to ready list. */
-0c54a6a44bf3d4 Khazhismel Kumykov 2020-05-07  1179  		if (list_add_tail_lockless(&epi->rdllink, &ep->rdllist))
-eea1d585917c53 Eric Wong          2013-04-30  1180  			ep_pm_stay_awake_rcu(epi);
-4d7e30d98939a0 Arve Hjønnevåg     2012-05-01  1181  	}
-7699acd1341c63 Davide Libenzi     2007-05-10  1182
-7699acd1341c63 Davide Libenzi     2007-05-10  1183  	/*
-7699acd1341c63 Davide Libenzi     2007-05-10  1184  	 * Wake up ( if active ) both the eventpoll wait list and the ->poll()
-7699acd1341c63 Davide Libenzi     2007-05-10  1185  	 * wait list.
-7699acd1341c63 Davide Libenzi     2007-05-10  1186  	 */
-df0108c5da561c Jason Baron        2016-01-20  1187  	if (waitqueue_active(&ep->wq)) {
-b6a515c8a0f6c2 Jason Baron        2016-02-05  1188  		if ((epi->event.events & EPOLLEXCLUSIVE) &&
-3ad6f93e98d6df Al Viro            2017-07-03  1189  					!(pollflags & POLLFREE)) {
-3ad6f93e98d6df Al Viro            2017-07-03  1190  			switch (pollflags & EPOLLINOUT_BITS) {
-a9a08845e9acbd Linus Torvalds     2018-02-11  1191  			case EPOLLIN:
-a9a08845e9acbd Linus Torvalds     2018-02-11  1192  				if (epi->event.events & EPOLLIN)
-b6a515c8a0f6c2 Jason Baron        2016-02-05  1193  					ewake = 1;
-b6a515c8a0f6c2 Jason Baron        2016-02-05  1194  				break;
-a9a08845e9acbd Linus Torvalds     2018-02-11  1195  			case EPOLLOUT:
-a9a08845e9acbd Linus Torvalds     2018-02-11  1196  				if (epi->event.events & EPOLLOUT)
-b6a515c8a0f6c2 Jason Baron        2016-02-05  1197  					ewake = 1;
-b6a515c8a0f6c2 Jason Baron        2016-02-05  1198  				break;
-b6a515c8a0f6c2 Jason Baron        2016-02-05  1199  			case 0:
-df0108c5da561c Jason Baron        2016-01-20  1200  				ewake = 1;
-b6a515c8a0f6c2 Jason Baron        2016-02-05  1201  				break;
-b6a515c8a0f6c2 Jason Baron        2016-02-05  1202  			}
-b6a515c8a0f6c2 Jason Baron        2016-02-05  1203  		}
-a218cc4914209a Roman Penyaev      2019-03-07  1204  		wake_up(&ep->wq);
-df0108c5da561c Jason Baron        2016-01-20  1205  	}
-7699acd1341c63 Davide Libenzi     2007-05-10  1206  	if (waitqueue_active(&ep->poll_wait))
-7699acd1341c63 Davide Libenzi     2007-05-10  1207  		pwake++;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1208
-d47de16c722196 Davide Libenzi     2007-05-15  1209  out_unlock:
-a218cc4914209a Roman Penyaev      2019-03-07  1210  	read_unlock_irqrestore(&ep->lock, flags);
-7699acd1341c63 Davide Libenzi     2007-05-10  1211
-7699acd1341c63 Davide Libenzi     2007-05-10  1212  	/* We have to call this outside the lock */
-7699acd1341c63 Davide Libenzi     2007-05-10  1213  	if (pwake)
-efcdd350d1f8a9 Jason Baron        2020-04-06  1214  		ep_poll_safewake(ep, epi);
-7699acd1341c63 Davide Libenzi     2007-05-10  1215
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1216  	if (!(epi->event.events & EPOLLEXCLUSIVE))
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1217  		ewake = 1;
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1218
-16ad67b61ac4f3 Nick Alcock        2018-11-14  1219  	/*
-16ad67b61ac4f3 Nick Alcock        2018-11-14  1220  	 * If this fd type has a hardwired event which should override the key
-16ad67b61ac4f3 Nick Alcock        2018-11-14  1221  	 * (e.g. if it is waiting on a non-file waitqueue), jam it in here.
-16ad67b61ac4f3 Nick Alcock        2018-11-14  1222  	 */
-16ad67b61ac4f3 Nick Alcock        2018-11-14  1223  	if (epi->fixed_event)
-16ad67b61ac4f3 Nick Alcock        2018-11-14 @1224  		key = (void *)epi->fixed_event;
-16ad67b61ac4f3 Nick Alcock        2018-11-14  1225
-3ad6f93e98d6df Al Viro            2017-07-03  1226  	if (pollflags & POLLFREE) {
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1227  		/*
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1228  		 * If we race with ep_remove_wait_queue() it can miss
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1229  		 * ->whead = NULL and do another remove_wait_queue() after
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1230  		 * us, so we can't use __remove_wait_queue().
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1231  		 */
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1232  		list_del_init(&wait->entry);
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1233  		/*
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1234  		 * ->whead != NULL protects us from the race with ep_free()
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1235  		 * or ep_remove(), ep_remove_wait_queue() takes whead->lock
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1236  		 * held by the caller. Once we nullify it, nothing protects
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1237  		 * ep/epi or even wait.
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1238  		 */
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1239  		smp_store_release(&ep_pwq_from_wait(wait)->whead, NULL);
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1240  	}
-df0108c5da561c Jason Baron        2016-01-20  1241
-138e4ad67afd5c Oleg Nesterov      2017-09-01  1242  	return ewake;
-7699acd1341c63 Davide Libenzi     2007-05-10  1243  }
-^1da177e4c3f41 Linus Torvalds     2005-04-16  1244
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+T24gMi8xMC8yMiAwOTo0NSwgS2F2eWFzcmVlIEtvdGFnaXJpIHdyb3RlOg0KPiBFWFRFUk5BTCBF
+TUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSBr
+bm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IEVhY2ggZmxleGNvbSBvZiBMQU45NjYgU29D
+IGhhcyAyIGNoaXAgc2VsZWN0cy4gRm9yIGVhY2ggY2hpcA0KPiBzZWxlY3Qgb2YgZWFjaCBmbGV4
+Y29tIHRoZXJlIGlzIGEgY29uZmlndXJhdGlvbiByZWdpc3Rlcg0KPiBGTEVYQ09NX1NIQVJFRFsw
+LTRdOlNTX01BU0tbMC0xXS4gVGhlIHdpZHRoIG9mIGNvbmZpZ3VyYXRpb24NCj4gcmVnaXN0ZXIg
+aXMgMjEgYmVjYXVzZSB0aGVyZSBhcmUgMjEgc2hhcmVkIHBpbnMgb24gZWFjaCBvZg0KPiB3aGlj
+aCB0aGUgY2hpcCBzZWxlY3QgY2FuIGJlIG1hcHBlZC4gRWFjaCBiaXQgb2YgdGhlIHJlZ2lzdGVy
+DQo+IHJlcHJlc2VudHMgYSBkaWZmZXJlbnQgRkxFWENPTV9TSEFSRUQgcGluLg0KPiANCj4gU2ln
+bmVkLW9mZi1ieTogS2F2eWFzcmVlIEtvdGFnaXJpIDxrYXZ5YXNyZWUua290YWdpcmlAbWljcm9j
+aGlwLmNvbT4NCj4gLS0tDQo+ICBkcml2ZXJzL21mZC9hdG1lbC1mbGV4Y29tLmMgfCA0OSArKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ICAxIGZpbGUgY2hhbmdlZCwgNDkg
+aW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWZkL2F0bWVsLWZsZXhj
+b20uYyBiL2RyaXZlcnMvbWZkL2F0bWVsLWZsZXhjb20uYw0KPiBpbmRleCA1NTllYjRkMzUyYjYu
+LmI4ZmM0NzZlNDExZCAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9tZmQvYXRtZWwtZmxleGNvbS5j
+DQo+ICsrKyBiL2RyaXZlcnMvbWZkL2F0bWVsLWZsZXhjb20uYw0KPiBAQCAtMjcsNiArMjcsMTIg
+QEANCj4gICNkZWZpbmUgRkxFWF9NUl9PUE1PREVfTUFTSyAgICAoMHgzIDw8IEZMRVhfTVJfT1BN
+T0RFX09GRlNFVCkNCj4gICNkZWZpbmUgRkxFWF9NUl9PUE1PREUob3Btb2RlKSAoKChvcG1vZGUp
+IDw8IEZMRVhfTVJfT1BNT0RFX09GRlNFVCkgJiAgXA0KPiAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICBGTEVYX01SX09QTU9ERV9NQVNLKQ0KPiArI2lmZGVmIENPTkZJR19TT0NfTEFO
+OTY2DQo+ICsvKiBMQU45NjYgcmVnaXN0ZXIgb2Zmc2V0cyAqLw0KPiArI2RlZmluZSBGTEVYX1NI
+UkRfU1NfTUFTS18wIDB4MA0KPiArI2RlZmluZSBGTEVYX1NIUkRfU1NfTUFTS18xIDB4NA0KPiAr
+I2RlZmluZSBGTEVYX1NIUkRfTUFTSyAgICAgIDB4MUZGRkZGDQo+ICsjZW5kaWYNCj4gDQo+ICBz
+dHJ1Y3QgYXRtZWxfZmxleGNvbSB7DQo+ICAgICAgICAgdm9pZCBfX2lvbWVtICpiYXNlOw0KPiBA
+QCAtMzksNiArNDUsMTAgQEAgc3RhdGljIGludCBhdG1lbF9mbGV4Y29tX3Byb2JlKHN0cnVjdCBw
+bGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ICAgICAgICAgc3RydWN0IGRldmljZV9ub2RlICpucCA9
+IHBkZXYtPmRldi5vZl9ub2RlOw0KPiAgICAgICAgIHN0cnVjdCByZXNvdXJjZSAqcmVzOw0KPiAg
+ICAgICAgIHN0cnVjdCBhdG1lbF9mbGV4Y29tICpkZGF0YTsNCj4gKyNpZmRlZiBDT05GSUdfU09D
+X0xBTjk2Ng0KPiArICAgICAgIHUzMiBsYW45NjZ4X3NzX3BpbiwgbGFuOTY2eF9jcywgdmFsOw0K
+PiArICAgICAgIHZvaWQgX19pb21lbSAqc2hhcmVkX2Jhc2U7DQo+ICsjZW5kaWYNCj4gICAgICAg
+ICBpbnQgZXJyOw0KPiANCj4gICAgICAgICBkZGF0YSA9IGRldm1fa3phbGxvYygmcGRldi0+ZGV2
+LCBzaXplb2YoKmRkYXRhKSwgR0ZQX0tFUk5FTCk7DQo+IEBAIC03Niw2ICs4Niw0NSBAQCBzdGF0
+aWMgaW50IGF0bWVsX2ZsZXhjb21fcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikN
+Cj4gICAgICAgICAgKi8NCj4gICAgICAgICB3cml0ZWwoRkxFWF9NUl9PUE1PREUoZGRhdGEtPm9w
+bW9kZSksIGRkYXRhLT5iYXNlICsgRkxFWF9NUik7DQo+IA0KPiArI2lmZGVmIENPTkZJR19TT0Nf
+TEFOOTY2DQoNCnRoaXMgbWF5IGJlIGJldHRlciBoYW5kbGVkIHZpYSBhIGRlZGljYXRlZCBjb21w
+YXRpYmxlIHRvIHdoaWNoIHlvdQ0KYXNzb2NpYXRlIGEgY2FwYWJpbGl0aWVzIHN0cnVjdHVyZSBh
+bmQgdXNlIHRoZSBjYXBzIHRvIGF2b2lkIGlmZGVmZXJ5DQp0aHJvdWdob3V0IHRoZSBjb2RlLg0K
+DQpDaGVlcnMsDQp0YQ0KDQo+ICsgICAgICAgLyoNCj4gKyAgICAgICAgKiBGbGV4Y29tIFNoYXJl
+ZCBSZWdpc3RlciBDb25maWd1cmF0aW9uczoNCj4gKyAgICAgICAgKiBJbiBvcmRlciB0byBtYXAg
+Y2hpcCBzZWxlY3QgaW5kZXggWCBvZiBGbGV4Y29tIFkgdG8gRkxFWENPTV9TSEFSRUQgWiwNCj4g
+KyAgICAgICAgKiB3cml0ZSAwIHRvIGJpdCBpbmRleCBaIG9mIEZMRVhDT01fU0hBUkVEW1ldOlNT
+X01BU0tbWF0uDQo+ICsgICAgICAgICovDQo+ICsgICAgICAgaWYgKG9mX3Byb3BlcnR5X3JlYWRf
+Ym9vbChucCwgImxhbjk2NngtZmx4LXNoYXJlZC1jZmciKSkgew0KPiArICAgICAgICAgICAgICAg
+LyogU2hhcmVkIHBpbiAqLw0KPiArICAgICAgICAgICAgICAgZXJyID0gb2ZfcHJvcGVydHlfcmVh
+ZF91MzIobnAsICJsYW45NjZ4LXNzLXBpbiIsICZsYW45NjZ4X3NzX3Bpbik7DQo+ICsgICAgICAg
+ICAgICAgICBpZiAoZXJyKQ0KPiArICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4gZXJyOw0K
+PiArDQo+ICsgICAgICAgICAgICAgICBpZiAobGFuOTY2eF9zc19waW4gPiAyMCkNCj4gKyAgICAg
+ICAgICAgICAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7DQo+ICsNCj4gKyAgICAgICAgICAgICAg
+IC8qIGNoaXAtc2VsZWN0ICovDQo+ICsgICAgICAgICAgICAgICBlcnIgPSBvZl9wcm9wZXJ0eV9y
+ZWFkX3UzMihucCwgImxhbjk2NngtY3MiLCAmbGFuOTY2eF9jcyk7DQo+ICsgICAgICAgICAgICAg
+ICBpZiAoZXJyKQ0KPiArICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4gZXJyOw0KPiArDQo+
+ICsgICAgICAgICAgICAgICBpZiAobGFuOTY2eF9jcyA+IDEpDQo+ICsgICAgICAgICAgICAgICAg
+ICAgICAgIHJldHVybiAtRUlOVkFMOw0KPiArDQo+ICsgICAgICAgICAgICAgICBzaGFyZWRfYmFz
+ZSA9IGRldm1faW9yZW1hcF9yZXNvdXJjZSgmcGRldi0+ZGV2LA0KPiArICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIHBsYXRmb3JtX2dldF9yZXNvdXJjZShwZGV2LCBJT1JFU09VUkNFX01F
+TSwgMSkpOw0KPiArICAgICAgICAgICAgICAgaWYgKElTX0VSUihzaGFyZWRfYmFzZSkpIHsNCj4g
+KyAgICAgICAgICAgICAgICAgICAgICAgZGV2X2RiZygmcGRldi0+ZGV2LCAiTm8gRmxleGNvbSBz
+aGFyZWQgcmVnaXN0ZXIgY29uZmlnXG4iKTsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgcmV0
+dXJuIFBUUl9FUlIoc2hhcmVkX2Jhc2UpOw0KPiArICAgICAgICAgICAgICAgfQ0KPiArDQo+ICsg
+ICAgICAgICAgICAgICB2YWwgPSB+KDEgPDwgbGFuOTY2eF9zc19waW4pICYgRkxFWF9TSFJEX01B
+U0s7DQo+ICsNCj4gKyAgICAgICAgICAgICAgIGlmIChsYW45NjZ4X2NzID09IDApDQo+ICsgICAg
+ICAgICAgICAgICAgICAgICAgIHdyaXRlbCh2YWwsIHNoYXJlZF9iYXNlICsgRkxFWF9TSFJEX1NT
+X01BU0tfMCk7DQo+ICsgICAgICAgICAgICAgICBlbHNlDQo+ICsgICAgICAgICAgICAgICAgICAg
+ICAgIHdyaXRlbCh2YWwsIHNoYXJlZF9iYXNlICsgRkxFWF9TSFJEX1NTX01BU0tfMSk7DQo+ICsg
+ICAgICAgfQ0KPiArI2VuZGlmDQo+ICsNCj4gICAgICAgICBjbGtfZGlzYWJsZV91bnByZXBhcmUo
+ZGRhdGEtPmNsayk7DQo+IA0KPiAgICAgICAgIHJldHVybiBkZXZtX29mX3BsYXRmb3JtX3BvcHVs
+YXRlKCZwZGV2LT5kZXYpOw0KPiAtLQ0KPiAyLjE3LjENCj4gDQo+IA0KPiBfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXw0KPiBsaW51eC1hcm0ta2VybmVsIG1h
+aWxpbmcgbGlzdA0KPiBsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmcNCj4gaHR0
+cDovL2xpc3RzLmluZnJhZGVhZC5vcmcvbWFpbG1hbi9saXN0aW5mby9saW51eC1hcm0ta2VybmVs
+DQoNCg==

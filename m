@@ -2,123 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50EA14B10B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:46:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1B04B10BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:46:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243123AbiBJOp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:45:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55500 "EHLO
+        id S243131AbiBJOqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:46:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235171AbiBJOp6 (ORCPT
+        with ESMTP id S235171AbiBJOqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:45:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35238C4D
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:45:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644504358;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M8Xicx5cO6JYsvcdxnszvP7E4kb3rIjZyILIbpstvnc=;
-        b=CYrJsiEOXqga3cBQBRFxT2N2Wqqsg5FoD+HC0hAxm0ekLIJjG7pcg/UyImjKXkGgKrrAHp
-        Vi+vau1LVwil6L1CQmothOvp6OsPZrce1RkMUvvMAFvguQX75CXbA8tA4r+aamQcLntvtb
-        FCpeB8pXWYRz92sWReBCz0h5XJLpa+w=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-621-rij9qp0uOAu9OosIsM93HQ-1; Thu, 10 Feb 2022 09:45:57 -0500
-X-MC-Unique: rij9qp0uOAu9OosIsM93HQ-1
-Received: by mail-lj1-f199.google.com with SMTP id m13-20020a2e97cd000000b0023e09d49ce4so2673282ljj.6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:45:57 -0800 (PST)
+        Thu, 10 Feb 2022 09:46:32 -0500
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADD9C4C;
+        Thu, 10 Feb 2022 06:46:32 -0800 (PST)
+Received: by mail-pf1-f179.google.com with SMTP id l19so4817657pfu.2;
+        Thu, 10 Feb 2022 06:46:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=M8Xicx5cO6JYsvcdxnszvP7E4kb3rIjZyILIbpstvnc=;
-        b=W8S3q5OkUs5ILa8dRNdfOS+kE+WOBx/1fdKN1rlZedBN6ntDSflKsT66LKdhu6Hjpo
-         5zHzX5ikaxL8LAz7DMmlRgjjGBggIwLAFDdgSnp0r4JJdKPiIE+xEUNFnZmz2G9vTb9t
-         ZWj5JkdPKQ8hjNurF2ss+YG2vcwPkvFbtnEFnbn5ROnDKr1byzNC4Gr/SHfN2V6diXNJ
-         rxBL4Up01RfATw/C1ASCcE3YUvYAFIP1UNC/uufBrwG002KrMPvDDSko0HYUZrqH1iAH
-         gQPMqU+yR8///IEB6S40DrHTTRf2kFizRkoOaTn4C1Uv+SjcUyKCjMJbhb9/Hg5ZvYNe
-         IOqg==
-X-Gm-Message-State: AOAM53253GBorLtOtX0BGX82T7xTaZfOYYck00cZQ1q9eRs3jN+B0qnS
-        H6ez8QE8omIqVW6q1i/O1Xcptv97pfh/+qdu6UhRI+t3DIYQjUT6JqxN7LVzcLumhxwgYh9Tgkk
-        RchVE3v0QfuYFBwt3Q116ARG15HhUWmfHE41Qn4Q=
-X-Received: by 2002:a05:6512:3f84:: with SMTP id x4mr4204730lfa.484.1644504355578;
-        Thu, 10 Feb 2022 06:45:55 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwC9RjysectHKxeUKPhvllfxiSlrCWq8mr3WeL2XaNx5vQvpP7mOwVzJtA4X3KJF4uBtDLcN6dn9phCAV4+rt4=
-X-Received: by 2002:a05:6512:3f84:: with SMTP id x4mr4204722lfa.484.1644504355403;
- Thu, 10 Feb 2022 06:45:55 -0800 (PST)
+        bh=HCmIvMlR/ZlfeXsNsYCs46xpUmqAdMgLfmRLO/lpunQ=;
+        b=ISydJ1XSlj2gVHwlamSHZw4AVh+wBfRtNP9uBhN15Hh97PhAbupc3RavH8zhC2V5F8
+         i0kQDeKDVE7mMd4/enNsio0rqYOY0sERUulpKY99rTlogDEP8HqNTddnKf7Jbg0NgFvi
+         rD2E0f4WIVfmU1FeaFCF9SsNk24OD+mnWfvNfTWMJLOmahBF5dBDGQqDOoxx1/hajSOh
+         ioyHNoVR0Nfme4z/vVM4LYuZs8kfSI229n+jhj9s6rimg0N7nzfPwl9SKsEMUIk7yh++
+         R5nZU5i5obC4bDOk8CnruPKghtFuSXZ5t/5JawHJKGVSYpIw1PBVCq8QwUOAA5einY/0
+         0S4A==
+X-Gm-Message-State: AOAM531n+e31GcZOI/HdDSPQZPE/avUkL0pJUksL6fj1mHqXf8nny4+P
+        k2uYokXnPXfrfD5iC9HOjv3egUeuiRshhcVktVI=
+X-Google-Smtp-Source: ABdhPJzB/awCQxjhxJpQKAIcXS73LtyrxfoD04nH0F56ARwV+mk/TmnMPhasUcggGx2xt4MJflyugG5AHyM2Pi11s0U=
+X-Received: by 2002:a05:6a00:22c9:: with SMTP id f9mr7766834pfj.79.1644504392469;
+ Thu, 10 Feb 2022 06:46:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20220209170358.3266629-1-atomlin@redhat.com> <20220209170358.3266629-2-atomlin@redhat.com>
- <a22eb1b0-3fb5-a70e-cf6f-022571538efb@csgroup.eu>
-In-Reply-To: <a22eb1b0-3fb5-a70e-cf6f-022571538efb@csgroup.eu>
-From:   Aaron Tomlin <atomlin@redhat.com>
-Date:   Thu, 10 Feb 2022 14:45:44 +0000
-Message-ID: <CANfR36jh3yg9nqXkpCUWPeHV+sSD6yne9j1=uA5vyUpYOC8t9g@mail.gmail.com>
-Subject: Re: [PATCH v5 01/13] module: Move all into module/
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "cl@linux.com" <cl@linux.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "ghalat@redhat.com" <ghalat@redhat.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "void@manifault.com" <void@manifault.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
+References: <20220209162607.1118325-1-maz@kernel.org> <20220209162607.1118325-11-maz@kernel.org>
+ <CANBLGcwKeLn7Q1Ra8pCw=cXy=kJeEFRmBjOxjds10+k70LvzXA@mail.gmail.com>
+ <87zgmz3xbf.wl-maz@kernel.org> <CANBLGcwwrqkYS2cxX5dYAaoWdj5pRp9c+qBDAMb3=0D5oBD+Zg@mail.gmail.com>
+ <87v8xm4zkm.wl-maz@kernel.org> <CANBLGcyvMVdTnndMSWDFnN6207Nareps=AdzVvt0OaMdeAXEHg@mail.gmail.com>
+ <87tud64yqa.wl-maz@kernel.org> <CANBLGcxg0qKWw4aifr+dHWge1aXE66e4wZzDwwpJjSad3xaeTQ@mail.gmail.com>
+ <87pmnu4wpt.wl-maz@kernel.org>
+In-Reply-To: <87pmnu4wpt.wl-maz@kernel.org>
+From:   Emil Renner Berthing <kernel@esmil.dk>
+Date:   Thu, 10 Feb 2022 15:46:21 +0100
+Message-ID: <CANBLGcwMmK+caG03B9NXGDvqyyijKLcOj90A3_+AN09iRzbeNw@mail.gmail.com>
+Subject: Re: [PATCH 10/10] pinctrl: starfive: Switch to dynamic chip name output
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-02-10 11:11 +0000, Christophe Leroy wrote:
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 3e461db9cd91..7e6232bd15f5 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -13001,7 +13001,7 @@ L:    linux-kernel@vger.kernel.org
-> >   S:    Maintained
-> >   T:    git git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
-> >   F:    include/linux/module.h
-> > -F:    kernel/module.c
-> > +F:    kernel/module/main.c
+On Thu, 10 Feb 2022 at 15:34, Marc Zyngier <maz@kernel.org> wrote:
 >
-> Shouldn't it be the entire directory ?
-
-Firstly, thank you for your feedback Christophe.
-
-Indeed it should. Moving forward: kernel/module/*
-
-> > @@ -44,6 +44,7 @@ static inline int module_decompress(struct load_info *info,
-> >   {
-> >       return -EOPNOTSUPP;
-> >   }
-> > +
+> [resending, as I managed to royally screw up my initial email]
 >
-> This new line should be in patch 3 instead.
+> On Thu, 10 Feb 2022 14:14:19 +0000,
+> Emil Renner Berthing <kernel@esmil.dk> wrote:
+> >
+> > On Thu, 10 Feb 2022 at 14:50, Marc Zyngier <maz@kernel.org> wrote:
+> > > On Thu, 10 Feb 2022 13:44:12 +0000,
+> > > Emil Renner Berthing <kernel@esmil.dk> wrote:
+> > > >
+> > > > Gotcha. The SoC has been out in very few numbers for less than a year
+> > > > and the driver only entered mainline in 5.17-rc1, so I doubt anyone
+> > > > has had time to write scripts that check for this, but I'll let it be
+> > > > up to you.
+> > >
+> > > Ah, I should have checked that. In which case, would you be OK if I
+> > > simply pushed the removal of this label as a fix for 5.17, and just
+> > > have it to say "Star5 GPIO", for example, without any indication of
+> > > the device (which appears in debugfs anyway as part of the irqdomain)?
+> >
+> > I'm fine with it although I'd prefer "StarFive GPIO". I haven't seen
+> > star5 used anywhere.
+>
+> Fair enough.
+>
+> > But shouldn't changes like this normally go through Linus Walleij's
+> > tree?
+>
+> Either way, I don't mind. For the record, see below what I'm
+> suggesting we take in before 5.17-final.
 
-Fair enough. Given that the purpose of this particular patch is a simple
-migration, style violations e.g. "Please use a blank line after
-function/struct/union/enum declarations", can be resolved at a later stage.
+Looks good to me. I don't mind which tree it goes through, just wanted
+to make sure everyone's happy.
 
-
-Kind regards,
-
--- 
-Aaron Tomlin
-
+> Linus?
+>
+> Thanks,
+>
+>         M.
+>
+> From a84b83c32048de2ba72e5d05645eabc95ffabe49 Mon Sep 17 00:00:00 2001
+> From: Marc Zyngier <maz@kernel.org>
+> Date: Thu, 10 Feb 2022 14:13:36 +0000
+> Subject: [PATCH] pinctrl: starfive: Use a static name for the GPIO irq_chip
+>
+> Drop the device name used for the GPIO irq_chip and replace it
+> with something static. The information is still available from
+> debugfs and carried as part of the irqdomain.
+>
+> Suggested-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> ---
+>  drivers/pinctrl/pinctrl-starfive.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/pinctrl/pinctrl-starfive.c b/drivers/pinctrl/pinctrl-starfive.c
+> index 0b912152a405..266da41a6162 100644
+> --- a/drivers/pinctrl/pinctrl-starfive.c
+> +++ b/drivers/pinctrl/pinctrl-starfive.c
+> @@ -1164,6 +1164,7 @@ static int starfive_irq_set_type(struct irq_data *d, unsigned int trigger)
+>  }
+>
+>  static struct irq_chip starfive_irq_chip = {
+> +       .name = "StarFive GPIO",
+>         .irq_ack = starfive_irq_ack,
+>         .irq_mask = starfive_irq_mask,
+>         .irq_mask_ack = starfive_irq_mask_ack,
+> @@ -1308,7 +1309,6 @@ static int starfive_probe(struct platform_device *pdev)
+>         sfp->gc.ngpio = NR_GPIOS;
+>
+>         starfive_irq_chip.parent_device = dev;
+> -       starfive_irq_chip.name = sfp->gc.label;
+>
+>         sfp->gc.irq.chip = &starfive_irq_chip;
+>         sfp->gc.irq.parent_handler = starfive_gpio_irq_handler;
+> --
+> 2.34.1
+>
+>
+> --
+> Without deviation from the norm, progress is not possible.
+>
+> --
+> Without deviation from the norm, progress is not possible.

@@ -2,186 +2,443 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89AA34B17BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E404B17D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:49:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344761AbiBJVkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 16:40:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51530 "EHLO
+        id S1344762AbiBJVtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 16:49:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344740AbiBJVki (ORCPT
+        with ESMTP id S240940AbiBJVtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 16:40:38 -0500
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D612710
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:40:39 -0800 (PST)
-Received: by mail-oo1-xc34.google.com with SMTP id t75-20020a4a3e4e000000b002e9c0821d78so8084192oot.4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:40:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=saY5DtvepsvwegCELkFkB7RgpB9RohGc6lIP30RliiM=;
-        b=46zfGr3Kc5ND2ogjveHMMDJajmm20RjiQ5jLchAHKSOeQKPxbVdIY+oOIVYm/iux6G
-         ZW7C8F9MHh0yrmBybRjiWtF0Xu0TFxrjlGVldYLEb13JSmAp10UwNlCF/RQs3NzeLRRw
-         2fy36iHMRabUOaLns1XyogS6wb2Zks+GqSdmRph/bI6MJPxl0saHoEkNH7YyzZQ4fId2
-         +pOuGvF2Q4fzB5TYRyebqrzn4PKDTXp8IVhCjORaAesIgT4iGxFQTo0yXwp2hn40ig2y
-         16NA6FAr6bH+/4dUQKItEPAZiRomvHhNA/crV+uSdzIGkPshdjxQ0yAaA8xLgSiwIjNe
-         ZXOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=saY5DtvepsvwegCELkFkB7RgpB9RohGc6lIP30RliiM=;
-        b=tGnJrwyXRieBjVK7IyuHrUKJ9pgPdxKgn+6AL0VB8TI/5svTp3JZjhCHmUhrET5+1e
-         926P2hqqPAJNGcTLCNFDAfNH9UpNvzOycNzFj2JEKwfwWPkz0jhd8JvA+AmOjKKrx63o
-         Gy0fQzjmXmV+//KN9QAuQKsDdrE2AQsk98VOoUr65g9EEAJbhnbarpG/X7LXoPoBIk4K
-         fZqlq8nXj54Lqoo0+OvKefMJLe8xrA8MAka+mm6jGwRJoVVQ6FhRyZhA8Pm6CNg6aVMZ
-         aJ3j8Ljvx6EAB7GgJC9DIQXOUYeceH3MKAMcbCBZ9APfFxPgoX2o72sWn9Qi3gkVcvCe
-         WChw==
-X-Gm-Message-State: AOAM533ecttCTSJHWLM6LMegE849Yry154+M4E8PvMnLiED+6QKncVi/
-        dQOVgfyhMjosa4GrlMVGcbx+L2RJRcOAMHbf
-X-Google-Smtp-Source: ABdhPJwjL2U7/u0jBP7WaACxI4KC0/AXyKMGE0aYyO5DPcLm++C2In2k7oqNhs9hXD+RC9AH2QAtbA==
-X-Received: by 2002:a05:6870:e3c6:: with SMTP id y6mr1357918oad.200.1644529238281;
-        Thu, 10 Feb 2022 13:40:38 -0800 (PST)
-Received: from rivos-atish.. (adsl-70-228-75-190.dsl.akrnoh.ameritech.net. [70.228.75.190])
-        by smtp.gmail.com with ESMTPSA id u5sm8700000ooo.46.2022.02.10.13.40.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 13:40:37 -0800 (PST)
-From:   Atish Patra <atishp@rivosinc.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Atish Patra <atishp@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        devicetree@vger.kernel.org, Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-riscv@lists.infradead.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH v2 6/6] RISC-V: Improve /proc/cpuinfo output for ISA extensions
-Date:   Thu, 10 Feb 2022 13:40:18 -0800
-Message-Id: <20220210214018.55739-7-atishp@rivosinc.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220210214018.55739-1-atishp@rivosinc.com>
-References: <20220210214018.55739-1-atishp@rivosinc.com>
+        Thu, 10 Feb 2022 16:49:15 -0500
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2062.outbound.protection.outlook.com [40.107.20.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18890E6B;
+        Thu, 10 Feb 2022 13:49:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=K23MVWvuNhpnSIgGQ+eyiHLsbBNf1md1bUqpntuJwrYSj1dc7Xid2WQ9sHu+IX4GgOrTtrOikQhG4/xQoE6RjgPdUQBLqpkWOvtp6oXFc6KIiaUq5/J0ykq5SYSVAs1Ya6I49cI0c72wlYHyHWzHmiZh7GWhbh22CkL7LOW5WmdJsLyAyQmv4D9ANrP+mPwo+9339Wp029lw46YtA4cwORudAcFn7yiw9AdGW05dxKY4g9DItE8LhIU/6kP3rIw0exFc7Jl1iPKCniyhn2gu15KqeqQs5kVS4xPhujG1HV6wncoB5k9KBTGOBQSqPNOyDMF3OUuyzDInFjj7C2lKJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LQEHHaTX7I5SgolIYjQ0ynAKoPAUpZ5ydbdrsoKeVw4=;
+ b=NPTtjJ4InK5Ybn0Aa0iBWgSiELMPyMEdxhidUxWudV4ir9abvDHOugoK6ISygQfCqz67l4YRxL7sRK5GYtupVjVNCpy57pUFS/OEXTVvApu/u/q3A/H0yH7jN/A2fWNxO3CMuyveo9w8MvSWg8u90q8QVLy+Cq8rWSH5P46PYMr6Z0Ry3qnStae/ceTAtRRwxXOSu5xOmqF9t4IXgFbIO9HKJOeJXXrAb+qrIBF1Zas+PPTPA0FJjfas2zaCjOWqEz2R8eYwy1v2ji300U7hggLCIFLpsklA3wn6Zd/1j7QUzsRq7TFGp6kVdDvxiVY10LUMpHOoOJDMCk3qpO1zuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LQEHHaTX7I5SgolIYjQ0ynAKoPAUpZ5ydbdrsoKeVw4=;
+ b=YG+8Bhmjdj+9qawGDighP2MAJ/tF79T2+rrzWLOvUbS0/HV6twRXgjgHPLm34x898/jz/tR1gKkJ2jp36ZyQnWDcZAtqL9heyUPC1GVTDEboXri8YpfwoGVtHHQrFUOoEOw5M+niyqP0kNnyf66lMwpSVc8qYIgG9XmZ8f1gF4U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB4679.eurprd04.prod.outlook.com (2603:10a6:20b:15::32)
+ by DB7PR04MB4172.eurprd04.prod.outlook.com (2603:10a6:5:1d::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Thu, 10 Feb
+ 2022 21:49:10 +0000
+Received: from AM6PR04MB4679.eurprd04.prod.outlook.com
+ ([fe80::28f3:36a7:fc3c:b9aa]) by AM6PR04MB4679.eurprd04.prod.outlook.com
+ ([fe80::28f3:36a7:fc3c:b9aa%5]) with mapi id 15.20.4975.011; Thu, 10 Feb 2022
+ 21:49:10 +0000
+Date:   Thu, 10 Feb 2022 23:49:07 +0200
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Jacky Bai <ping.bai@nxp.com>
+Subject: Re: [RESEND v4 02/10] arm64: dts: freescale: Add the top level dtsi
+ support for imx8dxl
+Message-ID: <YgWIU4JznR1twQCa@abelvesa>
+References: <1639680494-23183-1-git-send-email-abel.vesa@nxp.com>
+ <1639680494-23183-3-git-send-email-abel.vesa@nxp.com>
+ <20220126122748.GP4686@dragon>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126122748.GP4686@dragon>
+X-ClientProxiedBy: VI1PR02CA0055.eurprd02.prod.outlook.com
+ (2603:10a6:802:14::26) To AM6PR04MB4679.eurprd04.prod.outlook.com
+ (2603:10a6:20b:15::32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a254c922-3192-4b8f-5fc9-08d9ecdf2b54
+X-MS-TrafficTypeDiagnostic: DB7PR04MB4172:EE_
+X-Microsoft-Antispam-PRVS: <DB7PR04MB4172793D799FDF8AD221A87EF62F9@DB7PR04MB4172.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2150;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YMXVm8huquwwer9EE+nEuZ52RO7ssYCRKjSBOKofoo7a1x5XOGz0MuiFmZA5AuOcQLK/y/No9jp/HPSBFFuTzV+BAvBUZebUvLhxOmv+GrTo6G9TOJX64VuUXUfKG/sLi5tvKx4heUJGDIoBA+Qm5EAt+zefkFtMPB0qlcAduiQwhAwPt+DDAk21Eg6ARmFW389MA+vOdAs5gaRelYeycjEDYHT6acgr9hONXaMCgM/7h+64d74UXtt3QqQVrTCLUTwVQ2dYRixIu/mEHOBkEZ5AsycGy1Cz0lZuX72CJiiz+oFb5/uDN8syQWvpktHGkfdU7YdL/Anw7M09YJpzDbyZ7ftAs49csMJcuJB3Z6Su2BAVPUjwLB6xbZNqNBhPussDUk0GUX6uOXO9iO6JwFAv9dYWx6KjcXKRoD6XSN/wfea4jc42mkhryy4MGqnz3TwLkaIBi+pIVmk+dYPbichlo4YlRvcmBGkJ2bEiVebW5ByLtduVNq2cpQJKOwncOBCBt/DpScGJoFks7vk2l4NXhFL0h3VWaf2LBeyJBA6nzoSvwTWiMz9xgrf2h7BVPGiyoVRIoaYJMBTPMch51i/0nnYVNkSJRJgqZuR7MRBV6xzKa1/SonXa5zCNV1/32FlrfBkLHSXV6LAEhVAurO6cy6aAJoWefm+6g5QGlYRxbFoAfA7zWFXXLJT7PCl5UKqqIhGUuJc/BCZkSKhETjL4RQV67ebPF1zRCtAbFJY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4679.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(33716001)(6916009)(54906003)(508600001)(9686003)(6486002)(6512007)(6666004)(6506007)(53546011)(52116002)(316002)(7416002)(38100700002)(26005)(186003)(8936002)(5660300002)(2906002)(66946007)(66476007)(4326008)(86362001)(66556008)(44832011)(8676002)(38350700002)(83380400001)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?e8eSHCKVV/67KFUw563JUHUw6jcuIGQKNcNE7I1rpf2eggBKKPCHHejVayqz?=
+ =?us-ascii?Q?2gM5uh8Ub8ophZ7mu4/Uf7D0P3musFIV+VZVsmzb8hlLJFS0203XA0aVVxRW?=
+ =?us-ascii?Q?P6atRv2OCCTaY1OjdJwWmwqQedgUMArs+4msNjgNfTFhGUoDGCRXcocILGsZ?=
+ =?us-ascii?Q?Ac13F5nRpEgf5Q0q0LEkosrrPLUrzbV23s9Q0P/Chexsu4/i3dYlU4AqOSXL?=
+ =?us-ascii?Q?AIuLJ/d3m0tgtwnpn1LtJkEXUlnP4t/MKyvk3ssgE+HKYgvhErASzl4Ibhq2?=
+ =?us-ascii?Q?t3rw5RVQGITMlocJ3YB1iukeyOOYYwDu0iJ2H9qv7Of1+dnrX1zc2eVQBKgE?=
+ =?us-ascii?Q?Vx/uAp160lc43DXZ/olCz0CIVP2iTil00twQ/12KGcCr0QyEZt6GhBrqqknw?=
+ =?us-ascii?Q?WA1zKsxPJ3UAkaPehraE/NuQjELbC/yQQ1L0bYoDXvCFL03MMYXdfX306jcf?=
+ =?us-ascii?Q?e+f6G/cUgBQGmeSNfaD7BGPLNL2KYIqXc9qFdkQBkFFPiT+tmO/3xbOM04zj?=
+ =?us-ascii?Q?gCULj2xsH2dTyTUNS+mpcjYL50deeZPZSsTwSeDNi5QlB9elLxsweDN5GzEP?=
+ =?us-ascii?Q?Xf1QbTUd0aFun8AgoNnjY2POp1G3CvN6Qo8OYYqZ+dZ1I/sqJyVuY+MFL1tI?=
+ =?us-ascii?Q?8iDheNHxLPQsGRdmtqVud1TjN4gFH9+091ULzGkwSYQaYMqCpcY3okFD0Ilr?=
+ =?us-ascii?Q?5LBBCSUdbh/j/8s1A9a/52eEUh0JYiZ/Estqqml3tBR+xiKVSPU9ftcGGn2t?=
+ =?us-ascii?Q?cMeN6RyL4HD3y4c/WoAu1cbj+JQgG2yO5qw540obysP9nwA5VSDKB2lsWWaO?=
+ =?us-ascii?Q?0DF/+frjDBhtpS3oZRe62GrxoXMjDq2zVsznMmaeDrXMMqzuid9R4TxTAFNQ?=
+ =?us-ascii?Q?BerKlIeJGemSthUa6W2zhMfKgmqnzH8I4BMJk4I1XytD9VYjPBoAlnncaQh5?=
+ =?us-ascii?Q?6j1fWXTbjN98txye7AMY48GW1KOA5OgFCyRqJYiqZlZMo7hvZPdNeJ3Wcu25?=
+ =?us-ascii?Q?NK3lvM68fti+0SfZxdToCmA5IDyIihuPzodd+xDIFOjVHB/nJnq89ukLSUl8?=
+ =?us-ascii?Q?525FyT3CqoO2gtXXT34lV1M+Hog7C/Zr8Vjk8x0YUSCNi5TcMqZZ16sMr2Cd?=
+ =?us-ascii?Q?X6c73EmjhLq6zauqUypfs2ErdPyt0KWE8hCzQGWgmwPp9AuY64v/gXFK7UW1?=
+ =?us-ascii?Q?TQdVyKJuJwqdWomloLIKOAhsuK7rG75/PT5Vwla535+Xxmu1Jz0rtnieeZEr?=
+ =?us-ascii?Q?C1M6zHcQXDyD4sOgnjnhPV5FmK9dwQGgLDizIdYbQi06kCcoC9vCMweSDbw2?=
+ =?us-ascii?Q?FawHSacX1Gx/faojdqYEeNPi8q41G9CdvTB5j4vW4Tm95ZoJJGqSbgngGOBD?=
+ =?us-ascii?Q?Mwx1fQwCpoEp7Je3aeLeus/zuIf0vQfBGUunQEu1MXxsWuCduDFPW03JrBOr?=
+ =?us-ascii?Q?W78mP4T7T5E4CSxEIlNHItMNsU4lQm1PwYGA34qu6fyU1VDtBi3UzYwC8Iz9?=
+ =?us-ascii?Q?NdWCi64U2rlOec05dJ10HWoXXvkKWilfb0Xw6Ank7EeBQp9ugQEuzXC+U7OS?=
+ =?us-ascii?Q?3PSk2QrZE0cR9ocswh1QAIXG73J79dgecizGgYDTQ66FW8oaPPXIClA5b7cU?=
+ =?us-ascii?Q?wQIhg8p4wmqMqyhf6jSd1gc=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a254c922-3192-4b8f-5fc9-08d9ecdf2b54
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4679.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 21:49:10.0635
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UT5Bcq4n7STvj+GFlYo/PL4z2TY0fILvFTrgd7BSQzgioliMmE+xC4vQX/ZrLJLaIPompZPSA7MU7mVwQeWCzg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4172
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the /proc/cpuinfo outputs the entire riscv,isa string which
-is not ideal when we have multiple ISA extensions present in the ISA
-string. Some of them may not be enabled in kernel as well.
+On 22-01-26 20:27:49, Shawn Guo wrote:
+> On Thu, Dec 16, 2021 at 08:48:06PM +0200, Abel Vesa wrote:
+> > From: Jacky Bai <ping.bai@nxp.com>
+> > 
+> > The i.MX8DXL is a device targeting the automotive and industrial
+> > market segments. The flexibility of the architecture allows for
+> > use in a wide variety of general embedded applications. The chip
+> > is designed to achieve both high performance and low power consumption.
+> > The chip relies on the power efficient dual (2x) Cortex-A35 cluster.
+> > 
+> > Add the reserved memory node property for dsp reserved memory,
+> > the wakeup-irq property for SCU node, the imx ion, the rpmsg and the
+> 
+> Not sure what "ion" is.
+> 
 
-Parse only the enabled ISA extension and print them in a separate row.
+Nevermind, the commit message was not updated after the imx ion was
+dropped from NXP's internal tree. I'll update the commit message in the
+next version.
 
-Signed-off-by: Atish Patra <atishp@rivosinc.com>
----
- arch/riscv/include/asm/hwcap.h |  7 ++++++
- arch/riscv/kernel/cpu.c        | 44 ++++++++++++++++++++++++++++++++--
- 2 files changed, 49 insertions(+), 2 deletions(-)
+> > cm4 rproc support.
+> > 
+> > Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+> > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> > ---
+> >  arch/arm64/boot/dts/freescale/imx8dxl.dtsi | 245 +++++++++++++++++++++
+> >  1 file changed, 245 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl.dtsi
+> > 
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8dxl.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl.dtsi
+> > new file mode 100644
+> > index 000000000000..f16f88882c39
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/freescale/imx8dxl.dtsi
+> > @@ -0,0 +1,245 @@
+> > +// SPDX-License-Identifier: GPL-2.0+
+> > +/*
+> > + * Copyright 2019-2021 NXP
+> > + */
+> > +
+> > +#include <dt-bindings/clock/imx8-clock.h>
+> > +#include <dt-bindings/firmware/imx/rsrc.h>
+> > +#include <dt-bindings/gpio/gpio.h>
+> > +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +#include <dt-bindings/input/input.h>
+> > +#include <dt-bindings/pinctrl/pads-imx8dxl.h>
+> > +#include <dt-bindings/thermal/thermal.h>
+> > +
+> > +/ {
+> > +	interrupt-parent = <&gic>;
+> > +	#address-cells = <2>;
+> > +	#size-cells = <2>;
+> > +
+> > +	aliases {
+> > +		ethernet0 = &fec1;
+> > +		ethernet1 = &eqos;
+> > +		gpio0 = &lsio_gpio0;
+> > +		gpio1 = &lsio_gpio1;
+> > +		gpio2 = &lsio_gpio2;
+> > +		gpio3 = &lsio_gpio3;
+> > +		gpio4 = &lsio_gpio4;
+> > +		gpio5 = &lsio_gpio5;
+> > +		gpio6 = &lsio_gpio6;
+> > +		gpio7 = &lsio_gpio7;
+> > +		i2c2 = &i2c2;
+> > +		i2c3 = &i2c3;
+> > +		mmc0 = &usdhc1;
+> > +		mmc1 = &usdhc2;
+> > +		mu1 = &lsio_mu1;
+> > +		serial0 = &lpuart0;
+> > +		serial1 = &lpuart1;
+> > +		serial2 = &lpuart2;
+> > +		serial3 = &lpuart3;
+> > +	};
+> > +
+> > +	cpus: cpus {
+> > +		#address-cells = <2>;
+> > +		#size-cells = <0>;
+> > +
+> > +		/* We have 1 clusters with 2 Cortex-A35 cores */
+> 
+> s/clusters/cluster
+> 
 
-diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-index 170bd80da520..691fc9c8099b 100644
---- a/arch/riscv/include/asm/hwcap.h
-+++ b/arch/riscv/include/asm/hwcap.h
-@@ -54,6 +54,13 @@ enum riscv_isa_ext_id {
- 	RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
- };
- 
-+struct riscv_isa_ext_data {
-+	/* Name of the extension displayed to userspace via /proc/cpuinfo */
-+	char uprop[RISCV_ISA_EXT_NAME_LEN_MAX];
-+	/* The logical ISA extension ID */
-+	unsigned int isa_ext_id;
-+};
-+
- unsigned long riscv_isa_extension_base(const unsigned long *isa_bitmap);
- 
- #define riscv_isa_extension_mask(ext) BIT_MASK(RISCV_ISA_EXT_##ext)
-diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-index ad0a7e9f828b..ced7e5be8641 100644
---- a/arch/riscv/kernel/cpu.c
-+++ b/arch/riscv/kernel/cpu.c
-@@ -6,6 +6,7 @@
- #include <linux/init.h>
- #include <linux/seq_file.h>
- #include <linux/of.h>
-+#include <asm/hwcap.h>
- #include <asm/smp.h>
- #include <asm/pgtable.h>
- 
-@@ -63,12 +64,50 @@ int riscv_of_parent_hartid(struct device_node *node)
- }
- 
- #ifdef CONFIG_PROC_FS
-+#define __RISCV_ISA_EXT_DATA(UPROP, EXTID) \
-+	{							\
-+		.uprop = #UPROP,				\
-+		.isa_ext_id = EXTID,				\
-+	}
-+
-+static struct riscv_isa_ext_data isa_ext_arr[] = {
-+	__RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
-+};
-+
-+static void print_isa_ext(struct seq_file *f)
-+{
-+	struct riscv_isa_ext_data *edata;
-+	int i = 0, arr_sz;
-+
-+	arr_sz = ARRAY_SIZE(isa_ext_arr) - 1;
-+
-+	/* No extension support available */
-+	if (arr_sz <= 0)
-+		return;
-+
-+	seq_puts(f, "isa-ext\t\t: ");
-+	for (i = 0; i <= arr_sz; i++) {
-+		edata = &isa_ext_arr[i];
-+		if (!__riscv_isa_extension_available(NULL, edata->isa_ext_id))
-+			continue;
-+		seq_printf(f, "%s ", edata->uprop);
-+	}
-+	seq_puts(f, "\n");
-+}
- 
- static void print_isa(struct seq_file *f, const char *isa)
- {
--	/* Print the entire ISA as it is */
-+	char *ext_start;
-+	int isa_len = strlen(isa);
-+	int base_isa_len = isa_len;
-+
-+	ext_start = strnchr(isa, isa_len, '_');
-+	if (ext_start)
-+		base_isa_len = isa_len - strlen(ext_start);
-+
-+	/* Print only the base ISA as it is */
- 	seq_puts(f, "isa\t\t: ");
--	seq_write(f, isa, strlen(isa));
-+	seq_write(f, isa, base_isa_len);
- 	seq_puts(f, "\n");
- }
- 
-@@ -115,6 +154,7 @@ static int c_show(struct seq_file *m, void *v)
- 	seq_printf(m, "hart\t\t: %lu\n", cpuid_to_hartid_map(cpu_id));
- 	if (!of_property_read_string(node, "riscv,isa", &isa))
- 		print_isa(m, isa);
-+	print_isa_ext(m);
- 	print_mmu(m);
- 	if (!of_property_read_string(node, "compatible", &compat)
- 	    && strcmp(compat, "riscv"))
--- 
-2.30.2
+Fixed in the next version.
 
+> > +		A35_0: cpu@0 {
+> > +			device_type = "cpu";
+> > +			compatible = "arm,cortex-a35";
+> > +			reg = <0x0 0x0>;
+> > +			enable-method = "psci";
+> > +			next-level-cache = <&A35_L2>;
+> > +			clocks = <&clk IMX_SC_R_A35 IMX_SC_PM_CLK_CPU>;
+> > +			#cooling-cells = <2>;
+> > +			operating-points-v2 = <&a35_opp_table>;
+> > +		};
+> > +
+> > +		A35_1: cpu@1 {
+> > +			device_type = "cpu";
+> > +			compatible = "arm,cortex-a35";
+> > +			reg = <0x0 0x1>;
+> > +			enable-method = "psci";
+> > +			next-level-cache = <&A35_L2>;
+> > +			clocks = <&clk IMX_SC_R_A35 IMX_SC_PM_CLK_CPU>;
+> > +			#cooling-cells = <2>;
+> > +			operating-points-v2 = <&a35_opp_table>;
+> > +		};
+> > +
+> > +		A35_L2: l2-cache0 {
+> > +			compatible = "cache";
+> > +		};
+> > +	};
+> > +
+> > +	a35_opp_table: opp-table {
+> > +		compatible = "operating-points-v2";
+> > +		opp-shared;
+> > +
+> > +		opp-900000000 {
+> > +			opp-hz = /bits/ 64 <900000000>;
+> > +			opp-microvolt = <1000000>;
+> > +			clock-latency-ns = <150000>;
+> > +		};
+> > +
+> > +		opp-1200000000 {
+> > +			opp-hz = /bits/ 64 <1200000000>;
+> > +			opp-microvolt = <1100000>;
+> > +			clock-latency-ns = <150000>;
+> > +			opp-suspend;
+> > +		};
+> > +	};
+> > +
+> > +	reserved-memory {
+> > +		#address-cells = <2>;
+> > +		#size-cells = <2>;
+> > +		ranges;
+> > +
+> > +		dsp_reserved: dsp@92400000 {
+> > +			reg = <0 0x92400000 0 0x2000000>;
+> > +			no-map;
+> > +		};
+> > +	};
+> > +
+> > +	gic: interrupt-controller@51a00000 {
+> > +		compatible = "arm,gic-v3";
+> > +		reg = <0x0 0x51a00000 0 0x10000>, /* GIC Dist */
+> > +		      <0x0 0x51b00000 0 0xc0000>; /* GICR (RD_base + SGI_base) */
+> > +		#interrupt-cells = <3>;
+> > +		interrupt-controller;
+> > +		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+> > +	};
+> > +
+> > +	pmu {
+> > +		compatible = "arm,armv8-pmuv3";
+> > +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> > +	};
+> > +
+> > +	psci {
+> > +		compatible = "arm,psci-1.0";
+> > +		method = "smc";
+> > +	};
+> > +
+> > +	scu {
+> > +		compatible = "fsl,imx-scu";
+> > +		mbox-names = "tx0",
+> > +			     "rx0",
+> > +			     "gip3";
+> > +		mboxes = <&lsio_mu1 0 0
+> > +			  &lsio_mu1 1 0
+> > +			  &lsio_mu1 3 3>;
+> > +
+> > +		pd: imx8dxl-pd {
+> > +			compatible = "fsl,imx8dxl-scu-pd", "fsl,scu-pd";
+> > +			#power-domain-cells = <1>;
+> > +		};
+> > +
+> > +		clk: clock-controller {
+> > +			compatible = "fsl,imx8dxl-clk", "fsl,scu-clk";
+> > +			#clock-cells = <2>;
+> > +			clocks = <&xtal32k &xtal24m>;
+> > +			clock-names = "xtal_32KHz", "xtal_24Mhz";
+> > +		};
+> > +
+> > +		iomuxc: pinctrl {
+> > +			compatible = "fsl,imx8dxl-iomuxc";
+> > +		};
+> > +
+> > +		ocotp: imx8qx-ocotp {
+> > +			compatible = "fsl,imx8dxl-scu-ocotp", "fsl,imx8qxp-scu-ocotp";
+> > +			#address-cells = <1>;
+> > +			#size-cells = <1>;
+> > +
+> > +			fec_mac0: mac@2c4 {
+> > +				reg = <0x2c4 6>;
+> > +			};
+> > +
+> > +			fec_mac1: mac@2c6 {
+> > +				reg = <0x2c6 6>;
+> > +			};
+> > +		};
+> > +
+> > +		watchdog {
+> > +			compatible = "fsl,imx-sc-wdt";
+> > +			timeout-sec = <60>;
+> > +		};
+> > +
+> > +		tsens: thermal-sensor {
+> > +			compatible = "fsl,imx-sc-thermal";
+> > +			#thermal-sensor-cells = <1>;
+> > +		};
+> > +	};
+> > +
+> > +	timer {
+> > +		compatible = "arm,armv8-timer";
+> > +		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>, /* Physical Secure */
+> > +			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>, /* Physical Non-Secure */
+> > +			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>, /* Virtual */
+> > +			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>; /* Hypervisor */
+> > +	};
+> > +
+> > +	thermal_zones: thermal-zones {
+> > +		cpu-thermal0 {
+> > +			polling-delay-passive = <250>;
+> > +			polling-delay = <2000>;
+> > +			thermal-sensors = <&tsens IMX_SC_R_SYSTEM>;
+> > +
+> > +			trips {
+> > +				cpu_alert0: trip0 {
+> > +					temperature = <107000>;
+> > +					hysteresis = <2000>;
+> > +					type = "passive";
+> > +				};
+> 
+> Have a newline between nodes.
+> 
+
+Fixed in the next version.
+
+> > +				cpu_crit0: trip1 {
+> > +					temperature = <127000>;
+> > +					hysteresis = <2000>;
+> > +					type = "critical";
+> > +				};
+> > +			};
+> > +			cooling-maps {
+> > +				map0 {
+> > +					trip = <&cpu_alert0>;
+> > +					cooling-device =
+> > +					<&A35_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> > +					<&A35_1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> > +				};
+> > +			};
+> > +		};
+> > +	};
+> > +
+> > +	clk_dummy: clock-dummy {
+> > +		compatible = "fixed-clock";
+> > +		#clock-cells = <0>;
+> > +		clock-frequency = <0>;
+> > +		clock-output-names = "clk_dummy";
+> > +	};
+> 
+> Why do we need this?
+> 
+
+
+The following comment is found in imx8dxl-ss-conn.dtsi:
+
+/*
+ * usbotg1 and usbotg2 share one clcok
+ * scfw disable clock access and keep it always on
+ * in case other core (M4) use one of these.
+ */
+
+So I guess it is basically a hack to allow both usbotg instances
+to have a shared clock, while the clock is handled by the
+SCU.
+
+Also, the venndor tree seems to be making use of this dummy clock
+in a lot of dts nodes. Even on QXP and QM.
+
+> Shawn
+> 
+> > +
+> > +	xtal32k: clock-xtal32k {
+> > +		compatible = "fixed-clock";
+> > +		#clock-cells = <0>;
+> > +		clock-frequency = <32768>;
+> > +		clock-output-names = "xtal_32KHz";
+> > +	};
+> > +
+> > +	xtal24m: clock-xtal24m {
+> > +		compatible = "fixed-clock";
+> > +		#clock-cells = <0>;
+> > +		clock-frequency = <24000000>;
+> > +		clock-output-names = "xtal_24MHz";
+> > +	};
+> > +
+> > +	sc_pwrkey: sc-powerkey {
+> > +		compatible = "fsl,imx8-pwrkey";
+> > +		linux,keycode = <KEY_POWER>;
+> > +		wakeup-source;
+> > +	};
+> > +
+> > +	/* sorted in register address */
+> > +	#include "imx8-ss-adma.dtsi"
+> > +	#include "imx8-ss-conn.dtsi"
+> > +	#include "imx8-ss-ddr.dtsi"
+> > +	#include "imx8-ss-lsio.dtsi"
+> > +};
+> > +
+> > +#include "imx8dxl-ss-adma.dtsi"
+> > +#include "imx8dxl-ss-conn.dtsi"
+> > +#include "imx8dxl-ss-lsio.dtsi"
+> > +#include "imx8dxl-ss-ddr.dtsi"
+> > -- 
+> > 2.31.1
+> >

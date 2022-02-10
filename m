@@ -2,228 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AA24B0A78
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 872714B0A83
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239551AbiBJKU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 05:20:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39582 "EHLO
+        id S239576AbiBJK0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 05:26:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239433AbiBJKU4 (ORCPT
+        with ESMTP id S238573AbiBJK0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 05:20:56 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BB3B88;
-        Thu, 10 Feb 2022 02:20:56 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 886E65C00E5;
-        Thu, 10 Feb 2022 05:20:54 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 10 Feb 2022 05:20:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=HxZ0IRRgHJ9M+edFd
-        /uChpMWKuc/uyIm4Qwe86ghBaQ=; b=YpgAO98pauEPZcjNOoITdgX8mZWyvSVKN
-        aaQ1jEXcc8/8FZVCEdIxgRen43i8vPpq/vq17hMiEkjQ3WAt8Tauy9z5LNEaCLBH
-        TTWEFZPDhVKb/cC+Jwu2I9yDhCaA8ebeeLdwTI5oF5zEhaaQJqxZmeFrT0A/445N
-        M0ZMtI2q6f88n5yTbpQVSNZVdEB6KgttihpX8B+gWQZYfBLV5y9Ye26Ajria4+jJ
-        KJnTDKT8u6D1ReeOKBeDI+m+tysQBGQmsJQK4UAsm90fa4nTwCqTpICOatvtmCON
-        rRvem3rUWsM8/Ds3+NC0bpSJeev+6lM1XwLJgHYSCjHAgKbh7geng==
-X-ME-Sender: <xms:BecEYrjylSb1dzgy-2v0Iz514pqq3-nEwqBaJ3Z3j630Ww1Y90JjwA>
-    <xme:BecEYoDEf7_bQIZjoigfvoFXKvuxfzJdo7C32no61_ANuSWOcv7F3pysOSXfl5HE9
-    Qf3ihtr-GdQGNQ>
-X-ME-Received: <xmr:BecEYrECUnFAV1B6ZRWg6V77dlgezxLR5clUs7UtYgDykRuqLOdWZfBrZDvOxjuK3WpRWiyyZziVJBDkDuLRtrWniPl0ug>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddriedugddufecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtrodttddtvdenucfhrhhomhepkfguohcuufgt
-    hhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvg
-    hrnhepgfejvefhvdegiedukeetudevgeeujeefffeffeetkeekueeuheejudeltdejuedu
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepihguoh
-    hstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:BecEYoSXZSxNuEwA3yN7Jq1t6sTHX9XpUHJHnyC8aaKQByn1spUhrQ>
-    <xmx:BecEYozfVY-FC4c5BVv_ee9AFukGJN24hZiMrqw1_sJc4CvFqs94NA>
-    <xmx:BecEYu6SXizFA8bKHP_gzY9CrY2vSdBMcFR5NEo6pjDrdXJGL_LpOQ>
-    <xmx:BucEYrxuY5vScmJWvTk1a_kjAzumUIH5squwNeLU1lH_phqzLMRaIw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 10 Feb 2022 05:20:52 -0500 (EST)
-Date:   Thu, 10 Feb 2022 12:20:49 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Nikolay Aleksandrov <razor@blackwall.org>
-Cc:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org
-Subject: Re: [PATCH net-next v2 1/5] net: bridge: Add support for bridge port
- in locked mode
-Message-ID: <YgTnAcfTfeyQOQCf@shredder>
-References: <20220209130538.533699-1-schultz.hans+netdev@gmail.com>
- <20220209130538.533699-2-schultz.hans+netdev@gmail.com>
- <c821f05b-94e1-cf48-f2a6-40a689678c2b@blackwall.org>
+        Thu, 10 Feb 2022 05:26:12 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7FEB92;
+        Thu, 10 Feb 2022 02:26:14 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id 9so6529788pfx.12;
+        Thu, 10 Feb 2022 02:26:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S3brhBb+bSmy7kWwrAStLjrdT1gd/LIODsFcqQLD4DQ=;
+        b=ThVMKztpRfKTy8XRFBBwfFFDavDQ1+6xwPwMrm1vPQRijO2IjB9rpgJn//wqkf1mjS
+         /JxYjQtcEbVGSfB/6vJlq4LhNEoTx6P32HyiCg0FaGyRSWdc48KPQewzRcGu2IUxdVZy
+         lShqP7Z7wY/ZYVOi4nMq7WTWJhMR26QoXBigUhKjIV0epqTjwnu6xkLWwuSDa/She12S
+         EDqTrUMpVykaH0vLzwOcqF0URLSFAW5WhqpC/uFo1bxO5xoAm2ZTz2RKFrMSmnCiRSVl
+         RBWfkvSMP2c8NmOdSsliBI4e4kylMZMnMbv9pcjLwm61KuonJNNYHdlnTXV+GobvYt9q
+         2pXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S3brhBb+bSmy7kWwrAStLjrdT1gd/LIODsFcqQLD4DQ=;
+        b=jjCEjPZEZSNzeLJdyYYMW9na5XtjfAASYsDj9skkBDroyJPNo0SkTgddhHpi4B5nTK
+         c0sZiwU2i8rHcUfQXpAo4K4gVmTCiSOcJCSLlAFfjUo3rRpK5b497y4zKOtVYGM7TVHB
+         hrV3StLs3JwJXSd5gZ0c1NyPwn3mmpeSNkbYw89a17AxXwRGnSdqRjsrzHziIcWp8yHd
+         1OVf/2vsCvrXSG9npzcDofmVQcVV5MV+1OWXsKSEq3Z7ccwQaop4RphFR8yq8sdv575r
+         /3/ai0zD8wBX6WPf4xy+LgbN115Bd0Z+91U02AyneTSU/ILm3Bm1NgAWNInv6qN0q5/P
+         lpsw==
+X-Gm-Message-State: AOAM5324RNV1YrbWAvqVfeb/zMbOu3QGmQOCf4oLqY4By5vGEGbhJ70l
+        AsO4xask2THBj9Squ/tfr6Rw8qmXB4jkkGTOlKg=
+X-Google-Smtp-Source: ABdhPJwuxHSAEKlJLK7gS3sI6+I73ZHYogHHWMo136AeW6Lyw4akalgxs0AUePN0kRApMjNCmONxPA==
+X-Received: by 2002:a63:982:: with SMTP id 124mr5724006pgj.438.1644488773695;
+        Thu, 10 Feb 2022 02:26:13 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id w2sm6916757pfb.139.2022.02.10.02.26.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 02:26:13 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86/pmu: Distinguish EVENTSEL bitmasks for uniform event creation and filtering
+Date:   Thu, 10 Feb 2022 18:26:03 +0800
+Message-Id: <20220210102603.42764-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c821f05b-94e1-cf48-f2a6-40a689678c2b@blackwall.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 10:30:01AM +0200, Nikolay Aleksandrov wrote:
-> On 09/02/2022 15:05, Hans Schultz wrote:
-> > In a 802.1X scenario, clients connected to a bridge port shall not
-> > be allowed to have traffic forwarded until fully authenticated.
-> > A static fdb entry of the clients MAC address for the bridge port
-> > unlocks the client and allows bidirectional communication.
-> > 
-> > This scenario is facilitated with setting the bridge port in locked
-> > mode, which is also supported by various switchcore chipsets.
-> > 
-> > Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
-> > ---
-> 
-> Hi,
-> I'm writing from my private email because for some reason I'm not receiving the full
-> patch-set in my nvidia mail, a few comments below..
-> 
-> >  include/linux/if_bridge.h    |  1 +
-> >  include/uapi/linux/if_link.h |  1 +
-> >  net/bridge/br_input.c        | 10 +++++++++-
-> >  net/bridge/br_netlink.c      |  6 +++++-
-> >  4 files changed, 16 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/include/linux/if_bridge.h b/include/linux/if_bridge.h
-> > index 509e18c7e740..3aae023a9353 100644
-> > --- a/include/linux/if_bridge.h
-> > +++ b/include/linux/if_bridge.h
-> > @@ -58,6 +58,7 @@ struct br_ip_list {
-> >  #define BR_MRP_LOST_CONT	BIT(18)
-> >  #define BR_MRP_LOST_IN_CONT	BIT(19)
-> >  #define BR_TX_FWD_OFFLOAD	BIT(20)
-> > +#define BR_PORT_LOCKED		BIT(21)
-> >  
-> >  #define BR_DEFAULT_AGEING_TIME	(300 * HZ)
-> >  
-> > diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
-> > index 6218f93f5c1a..a45cc0a1f415 100644
-> > --- a/include/uapi/linux/if_link.h
-> > +++ b/include/uapi/linux/if_link.h
-> > @@ -537,6 +537,7 @@ enum {
-> >  	IFLA_BRPORT_MRP_IN_OPEN,
-> >  	IFLA_BRPORT_MCAST_EHT_HOSTS_LIMIT,
-> >  	IFLA_BRPORT_MCAST_EHT_HOSTS_CNT,
-> > +	IFLA_BRPORT_LOCKED,
-> >  	__IFLA_BRPORT_MAX
-> >  };
-> >  #define IFLA_BRPORT_MAX (__IFLA_BRPORT_MAX - 1)
-> > diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
-> > index b50382f957c1..469e3adbce07 100644
-> > --- a/net/bridge/br_input.c
-> > +++ b/net/bridge/br_input.c
-> > @@ -69,6 +69,7 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
-> >  	struct net_bridge_port *p = br_port_get_rcu(skb->dev);
-> >  	enum br_pkt_type pkt_type = BR_PKT_UNICAST;
-> >  	struct net_bridge_fdb_entry *dst = NULL;
-> > +	struct net_bridge_fdb_entry *fdb_entry;
-> 
-> move fdb_entry below to where it is used
-> 
-> >  	struct net_bridge_mcast_port *pmctx;
-> >  	struct net_bridge_mdb_entry *mdst;
-> >  	bool local_rcv, mcast_hit = false;
-> > @@ -81,6 +82,8 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
-> >  	if (!p || p->state == BR_STATE_DISABLED)
-> >  		goto drop;
-> >  
-> > +	br = p->br;
-> > +
-> 
-> please drop the extra new line
-> 
-> >  	brmctx = &p->br->multicast_ctx;
-> >  	pmctx = &p->multicast_ctx;
-> >  	state = p->state;
-> > @@ -88,10 +91,15 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
-> >  				&state, &vlan))
-> >  		goto out;
-> >  
-> > +	if (p->flags & BR_PORT_LOCKED) {
-> 
-> fdb_entry should be defined in this scope only, and please rename it to something
-> like fdb_src or just "src" as we already have "dst".
-> 
-> > +		fdb_entry = br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
-> > +		if (!(fdb_entry && fdb_entry->dst == p))
-> 
-> if (!fdb_entry || READ_ONCE(fdb_entry->dst) != p
+From: Like Xu <likexu@tencent.com>
 
-I think we should also check that entry does not have 'BR_FDB_LOCAL'
-set. These entries point at the bridge ports themselves, but do not
-actually represent hosts behind the ports. Since they are automatically
-populated, a malicious host can craft packets with SMAC of the bridge
-port and bypass the check.
+The current usage of EVENTSEL_* macro is a mess in the KVM context. Partly
+because we have a conceptual ambiguity when choosing to create a RAW or
+HARDWARE event: when bits other than HARDWARE_EVENT_MASK are set,
+the pmc_reprogram_counter() will use the RAW type.
 
-Assuming the above is true (didn't test), would be good to add a test
-case for it in the selftest.
+By introducing the new macro AMD64_EXTRA_EVENTSEL_EVENT to simplify,
+the following three issues can be addressed in one go:
 
-> 
-> > +			goto drop;
-> > +	}
-> > +
-> >  	nbp_switchdev_frame_mark(p, skb);
-> >  
-> >  	/* insert into forwarding database after filtering to avoid spoofing */
-> > -	br = p->br;
-> >  	if (p->flags & BR_LEARNING)
-> >  		br_fdb_update(br, p, eth_hdr(skb)->h_source, vid, 0);
-> >  
-> > diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
-> > index 2ff83d84230d..7d4432ca9a20 100644
-> > --- a/net/bridge/br_netlink.c
-> > +++ b/net/bridge/br_netlink.c
-> > @@ -184,6 +184,7 @@ static inline size_t br_port_info_size(void)
-> >  		+ nla_total_size(1)	/* IFLA_BRPORT_VLAN_TUNNEL */
-> >  		+ nla_total_size(1)	/* IFLA_BRPORT_NEIGH_SUPPRESS */
-> >  		+ nla_total_size(1)	/* IFLA_BRPORT_ISOLATED */
-> > +		+ nla_total_size(1)	/* IFLA_BRPORT_LOCKED */
-> >  		+ nla_total_size(sizeof(struct ifla_bridge_id))	/* IFLA_BRPORT_ROOT_ID */
-> >  		+ nla_total_size(sizeof(struct ifla_bridge_id))	/* IFLA_BRPORT_BRIDGE_ID */
-> >  		+ nla_total_size(sizeof(u16))	/* IFLA_BRPORT_DESIGNATED_PORT */
-> > @@ -269,7 +270,8 @@ static int br_port_fill_attrs(struct sk_buff *skb,
-> >  							  BR_MRP_LOST_CONT)) ||
-> >  	    nla_put_u8(skb, IFLA_BRPORT_MRP_IN_OPEN,
-> >  		       !!(p->flags & BR_MRP_LOST_IN_CONT)) ||
-> > -	    nla_put_u8(skb, IFLA_BRPORT_ISOLATED, !!(p->flags & BR_ISOLATED)))
-> > +	    nla_put_u8(skb, IFLA_BRPORT_ISOLATED, !!(p->flags & BR_ISOLATED)) ||
-> > +	    nla_put_u8(skb, IFLA_BRPORT_LOCKED, !!(p->flags & BR_PORT_LOCKED)))
-> >  		return -EMSGSIZE;
-> >  
-> >  	timerval = br_timer_value(&p->message_age_timer);
-> > @@ -827,6 +829,7 @@ static const struct nla_policy br_port_policy[IFLA_BRPORT_MAX + 1] = {
-> >  	[IFLA_BRPORT_GROUP_FWD_MASK] = { .type = NLA_U16 },
-> >  	[IFLA_BRPORT_NEIGH_SUPPRESS] = { .type = NLA_U8 },
-> >  	[IFLA_BRPORT_ISOLATED]	= { .type = NLA_U8 },
-> > +	[IFLA_BRPORT_LOCKED] = { .type = NLA_U8 },
-> >  	[IFLA_BRPORT_BACKUP_PORT] = { .type = NLA_U32 },
-> >  	[IFLA_BRPORT_MCAST_EHT_HOSTS_LIMIT] = { .type = NLA_U32 },
-> >  };
-> > @@ -893,6 +896,7 @@ static int br_setport(struct net_bridge_port *p, struct nlattr *tb[],
-> >  	br_set_port_flag(p, tb, IFLA_BRPORT_VLAN_TUNNEL, BR_VLAN_TUNNEL);
-> >  	br_set_port_flag(p, tb, IFLA_BRPORT_NEIGH_SUPPRESS, BR_NEIGH_SUPPRESS);
-> >  	br_set_port_flag(p, tb, IFLA_BRPORT_ISOLATED, BR_ISOLATED);
-> > +	br_set_port_flag(p, tb, IFLA_BRPORT_LOCKED, BR_PORT_LOCKED);
-> >  
-> >  	changed_mask = old_flags ^ p->flags;
-> >  
-> 
-> Thanks,
->  Nik
+- the 12 selection bits are used as comparison keys for allow or deny;
+- NON_HARDWARE_EVENT_MASK is only used to determine if a HARDWARE
+  event is programmed or not, a 12-bit selected event will be a RAW event;
+  (jmattson helped report this issue)
+- by reusing AMD64_RAW_EVENT_MASK, the extra 4 selection bits (if set) are
+  passed to the perf correctly and not filtered out by X86_RAW_EVENT_MASK;.
+
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+ arch/x86/include/asm/perf_event.h |  3 ++-
+ arch/x86/kvm/pmu.c                | 11 ++++-------
+ arch/x86/kvm/pmu.h                |  6 ++++++
+ 3 files changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+index 8fc1b5003713..bd068fd19043 100644
+--- a/arch/x86/include/asm/perf_event.h
++++ b/arch/x86/include/asm/perf_event.h
+@@ -43,8 +43,9 @@
+ #define AMD64_EVENTSEL_INT_CORE_SEL_MASK		\
+ 	(0xFULL << AMD64_EVENTSEL_INT_CORE_SEL_SHIFT)
+ 
++#define AMD64_EXTRA_EVENTSEL_EVENT				(0x0FULL << 32)
+ #define AMD64_EVENTSEL_EVENT	\
+-	(ARCH_PERFMON_EVENTSEL_EVENT | (0x0FULL << 32))
++	(ARCH_PERFMON_EVENTSEL_EVENT | AMD64_EXTRA_EVENTSEL_EVENT)
+ #define INTEL_ARCH_EVENT_MASK	\
+ 	(ARCH_PERFMON_EVENTSEL_UMASK | ARCH_PERFMON_EVENTSEL_EVENT)
+ 
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index 2c98f3ee8df4..99426a8d7f18 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -198,7 +198,8 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
+ 
+ 	filter = srcu_dereference(kvm->arch.pmu_event_filter, &kvm->srcu);
+ 	if (filter) {
+-		__u64 key = eventsel & AMD64_RAW_EVENT_MASK_NB;
++		__u64 key = eventsel & (INTEL_ARCH_EVENT_MASK |
++					AMD64_EXTRA_EVENTSEL_EVENT);
+ 
+ 		if (bsearch(&key, filter->events, filter->nevents,
+ 			    sizeof(__u64), cmp_u64))
+@@ -209,18 +210,14 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
+ 	if (!allow_event)
+ 		return;
+ 
+-	if (!(eventsel & (ARCH_PERFMON_EVENTSEL_EDGE |
+-			  ARCH_PERFMON_EVENTSEL_INV |
+-			  ARCH_PERFMON_EVENTSEL_CMASK |
+-			  HSW_IN_TX |
+-			  HSW_IN_TX_CHECKPOINTED))) {
++	if (!(eventsel & NON_HARDWARE_EVENT_MASK)) {
+ 		config = kvm_x86_ops.pmu_ops->pmc_perf_hw_id(pmc);
+ 		if (config != PERF_COUNT_HW_MAX)
+ 			type = PERF_TYPE_HARDWARE;
+ 	}
+ 
+ 	if (type == PERF_TYPE_RAW)
+-		config = eventsel & X86_RAW_EVENT_MASK;
++		config = eventsel & AMD64_RAW_EVENT_MASK;
+ 
+ 	if (pmc->current_config == eventsel && pmc_resume_counter(pmc))
+ 		return;
+diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+index 7a7b8d5b775e..48d867e250bc 100644
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@ -17,6 +17,12 @@
+ 
+ #define MAX_FIXED_COUNTERS	3
+ 
++#define KVM_ARCH_PERFMON_EVENTSEL_IGNORE \
++	(ARCH_PERFMON_EVENTSEL_ANY | ARCH_PERFMON_EVENTSEL_PIN_CONTROL)
++
++#define NON_HARDWARE_EVENT_MASK	(AMD64_EXTRA_EVENTSEL_EVENT | \
++	 (X86_ALL_EVENT_FLAGS & ~KVM_ARCH_PERFMON_EVENTSEL_IGNORE))
++
+ struct kvm_event_hw_type_mapping {
+ 	u8 eventsel;
+ 	u8 unit_mask;
+-- 
+2.35.0
+

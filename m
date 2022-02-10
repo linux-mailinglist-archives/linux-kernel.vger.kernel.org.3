@@ -2,54 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F3614B0BEF
+	by mail.lfdr.de (Postfix) with ESMTP id F40B14B0BF0
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240608AbiBJLKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 06:10:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43624 "EHLO
+        id S240625AbiBJLKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 06:10:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240599AbiBJLJ6 (ORCPT
+        with ESMTP id S240595AbiBJLJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 10 Feb 2022 06:09:58 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B1D128
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CCEB7A
         for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:09:59 -0800 (PST)
-Date:   Thu, 10 Feb 2022 11:09:56 -0000
+Date:   Thu, 10 Feb 2022 11:09:57 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644491397;
+        s=2020; t=1644491398;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KoxvSvnhBNxmfm9wViQ+nmVvSqCzOf5DxlgMFg3IMCU=;
-        b=gGHEouClfDeVTX2Akg1c9lsSrgGZHNv3pIHJxWfrSH9foSohqWi7I7iHhGCNA6j3k0Jrh1
-        764uUjrsqbTkPYAzIocw+BkIVLjgKAZjnMv0yXo9g2vN0h8UeoprsFimTncWknyWAUpaz+
-        YU3FupnWrVJw/EizWwkMe2itnLBHC3bUreY5puK523BG94v6b7gAPt0d3glMAL+Npxt+8J
-        yuh+Vud+Q6VPtAOqZzQpKNf3l4gsqGzoSyGZ+03Z5F5CZ7a7ptLdPK+AOl1MHrDJDVPG3C
-        PWED/sP0+VjTUxXItR2R5H2DnG7kGx1C0XsEHpkBXoVgwKVLDNEbkMROpoPIJg==
+        bh=OoKkTHXvZMCEcPIsvt7kDL8Zz6f2kdswwx5gjobHScE=;
+        b=a4tlYvIBClmphotD0qn8zMtKdU8yZ+l5OQ+PmOeCa3IQzr+CCPflGlGFcxB/A1JCzscsMQ
+        y2Wts0opsdrvMA85KKIOTgOBvBJbyiRGJYac98m9gJfuONOEsuXYFtu8iQe/XLYkuqCAhe
+        aqKVuWDaKjCS8Lt6KWkyTIZVs4MJD5KS1nQ/gTuL5+GRoHfyIinq+INE3uvpIuJbhMD5E+
+        Dd4qioo5d970tCuUUSXbV8kBQooWIxvTXRTO0IVPwhrBrSRYRO02oJBGKTGkxeWfTjGbzU
+        iwSpOsifA7GMYtyh95HQVml6/BY8u2+BUSo3p0zE8xiVhsTf/N2o8CPyGpV7mw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644491397;
+        s=2020e; t=1644491398;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KoxvSvnhBNxmfm9wViQ+nmVvSqCzOf5DxlgMFg3IMCU=;
-        b=+hcfXYm0vd1tQ6sSDmg0Kn/8nF+E6FdllGOSLsoBOcUw+opqzX77dBhc7uP/TofvdwJdBf
-        Ejb7PuoyHoUo05Bg==
+        bh=OoKkTHXvZMCEcPIsvt7kDL8Zz6f2kdswwx5gjobHScE=;
+        b=99X9qjuOghypfzJjR1naE5WkhUbypWACkQifKEjxLYEf9t3zIcGSTv6PuGbOpRspevuMIW
+        Dr6l3H8m/6D66dAQ==
 From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] genirq: Kill irq_chip::parent_device
-Cc:     Marc Zyngier <maz@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        tglx@linutronix.de
-In-Reply-To: <20220201120310.878267-13-maz@kernel.org>
-References: <20220201120310.878267-13-maz@kernel.org>
+Subject: [irqchip: irq/irqchip-next] pinctrl: starfive: Move PM device over to
+ irq domain
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, tglx@linutronix.de
+In-Reply-To: <20220201120310.878267-12-maz@kernel.org>
+References: <20220201120310.878267-12-maz@kernel.org>
 MIME-Version: 1.0
-Message-ID: <164449139615.16921.13885708159426012054.tip-bot2@tip-bot2>
+Message-ID: <164449139716.16921.10672369683936005266.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,57 +68,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     beb0622138cd2848dec06b0651a988c39d099574
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/beb0622138cd2848dec06b0651a988c39d099574
+Commit-ID:     0d872ed9e2148a8ba29de5a71c352fa54abf8e5e
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/0d872ed9e2148a8ba29de5a71c352fa54abf8e5e
 Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Tue, 01 Feb 2022 12:03:10 
+AuthorDate:    Tue, 01 Feb 2022 12:03:09 
 Committer:     Marc Zyngier <maz@kernel.org>
 CommitterDate: Thu, 10 Feb 2022 11:07:04 
 
-genirq: Kill irq_chip::parent_device
+pinctrl: starfive: Move PM device over to irq domain
 
-Now that noone is using irq_chip::parent_device in the tree, get
-rid of it.
+Move the reference to the device over to the irq domain.
 
 Signed-off-by: Marc Zyngier <maz@kernel.org>
+Reviewed-by: Emil Renner Berthing <kernel@esmil.dk>
 Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Link: https://lore.kernel.org/r/20220201120310.878267-13-maz@kernel.org
+Link: https://lore.kernel.org/r/20220201120310.878267-12-maz@kernel.org
 ---
- include/linux/irq.h | 2 --
- kernel/irq/chip.c   | 3 ---
- 2 files changed, 5 deletions(-)
+ drivers/pinctrl/pinctrl-starfive.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/irq.h b/include/linux/irq.h
-index 848e1e1..2cb2e2a 100644
---- a/include/linux/irq.h
-+++ b/include/linux/irq.h
-@@ -456,7 +456,6 @@ static inline irq_hw_number_t irqd_to_hwirq(struct irq_data *d)
- /**
-  * struct irq_chip - hardware interrupt chip descriptor
-  *
-- * @parent_device:	pointer to parent device for irqchip
-  * @name:		name for /proc/interrupts
-  * @irq_startup:	start up the interrupt (defaults to ->enable if NULL)
-  * @irq_shutdown:	shut down the interrupt (defaults to ->disable if NULL)
-@@ -503,7 +502,6 @@ static inline irq_hw_number_t irqd_to_hwirq(struct irq_data *d)
-  * @flags:		chip specific flags
-  */
- struct irq_chip {
--	struct device	*parent_device;
- 	const char	*name;
- 	unsigned int	(*irq_startup)(struct irq_data *data);
- 	void		(*irq_shutdown)(struct irq_data *data);
-diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
-index a2a12cd..24b6f2b 100644
---- a/kernel/irq/chip.c
-+++ b/kernel/irq/chip.c
-@@ -1560,9 +1560,6 @@ int irq_chip_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+diff --git a/drivers/pinctrl/pinctrl-starfive.c b/drivers/pinctrl/pinctrl-starfive.c
+index 0b91215..5be9866 100644
+--- a/drivers/pinctrl/pinctrl-starfive.c
++++ b/drivers/pinctrl/pinctrl-starfive.c
+@@ -1307,7 +1307,6 @@ static int starfive_probe(struct platform_device *pdev)
+ 	sfp->gc.base = -1;
+ 	sfp->gc.ngpio = NR_GPIOS;
  
- static struct device *irq_get_parent_device(struct irq_data *data)
- {
--	if (data->chip->parent_device)
--		return data->chip->parent_device;
--
- 	if (data->domain)
- 		return data->domain->dev;
+-	starfive_irq_chip.parent_device = dev;
+ 	starfive_irq_chip.name = sfp->gc.label;
  
+ 	sfp->gc.irq.chip = &starfive_irq_chip;
+@@ -1330,6 +1329,8 @@ static int starfive_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return dev_err_probe(dev, ret, "could not register gpiochip\n");
+ 
++	irq_domain_set_pm_device(sfp->gc.irq.domain, dev);
++
+ out_pinctrl_enable:
+ 	return pinctrl_enable(sfp->pctl);
+ }

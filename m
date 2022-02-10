@@ -2,190 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BDBF4B0EF7
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48CF04B0F1C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242321AbiBJNly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 08:41:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44444 "EHLO
+        id S242394AbiBJNrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 08:47:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239398AbiBJNlw (ORCPT
+        with ESMTP id S242384AbiBJNrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 08:41:52 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86DAE9D;
-        Thu, 10 Feb 2022 05:41:53 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: adalessandro)
-        with ESMTPSA id 8C4BB1F46488
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644500511;
-        bh=dN4RI96k5x54D4aPNxtFeCeJ0I8/zWUKbrs8hDrqgKE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aYGE4BxT1bNCKimY5aVwl3YsPodASenmQ5XtAqONBy+JIKaLLwui0iG3V4ZIFH6Xm
-         51dFHMK9gNlAjpQPBjwa3Q/uAH1SWkGffeeC1AQEg0Tngwuw1Kblet8CoXmu04+YqC
-         dfAQLKVzBIvUxj1LRMSpGn4tAJS27U/RsfqHVfrqRc55KBgLmLqu13jkgkUW4SZmwl
-         ZXUZEqFxy4JTBEDFEQx6FqkizGDq94CHUsSLmfVE1j6uMS24hhB1USwhnLO4NNVMjC
-         Fal4a+ep08A82+cZ5b9vrWstDt2e0PmInIDnmLP3Nn8SiizT8o6prE5bnDqByYFO+W
-         rX5NkA5T60R9Q==
-From:   Ariel D'Alessandro <ariel.dalessandro@collabora.com>
-To:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
-        linux-imx@nxp.com, linux-kernel@vger.kernel.org
-Cc:     ariel.dalessandro@collabora.com, broonie@kernel.org,
-        festevam@gmail.com, krzysztof.kozlowski@canonical.com,
-        lgirdwood@gmail.com, michael@amarulasolutions.com,
-        robh+dt@kernel.org, s.hauer@pengutronix.de, shawnguo@kernel.org
-Subject: [PATCH v2 2/2] arm64: dts: imx8mn-bsh-smm-s2pro: Add tlv320aic31xx audio card node
-Date:   Thu, 10 Feb 2022 10:40:49 -0300
-Message-Id: <20220210134049.32576-2-ariel.dalessandro@collabora.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220210134049.32576-1-ariel.dalessandro@collabora.com>
-References: <20220210134049.32576-1-ariel.dalessandro@collabora.com>
+        Thu, 10 Feb 2022 08:47:12 -0500
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6D2D73;
+        Thu, 10 Feb 2022 05:47:13 -0800 (PST)
+Received: by mail-ej1-x642.google.com with SMTP id fy20so15431505ejc.0;
+        Thu, 10 Feb 2022 05:47:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3O5dxW8Yi3OGBQsUph2cEFwlLeho+NaqEkL3/CgaS64=;
+        b=UKZG9UDkHLOigLdNLKeZ0FMk/1dFBQae/6nrOMlCiK4oKFBaClwv655PPDg/cf7/Cn
+         x6QIyIowFHjt1tVUIhBnVGU0/QTY0GsbNysAdzdo9nioSB35CA74mDKDxwCanMaKgzZa
+         QQ0QrC3oD7yE1GSkJAwi/6CJoSooxTPiqEWzO+eP+P4cY0RXxCRId1dhG5Tl6B2LbXfC
+         3kSJeyqj6PpHNcoS+2Qf9j264sHgYzxbMXzGPY4nqmMYDPdIwunS4IM+OXlJsWPYWkfs
+         EtIYLpndqbz+NdSMUTrsozOYMfz3qnioawWsMTa5xiDMGgtuK4YPtvVdA2IGSkGpR6S5
+         I56Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3O5dxW8Yi3OGBQsUph2cEFwlLeho+NaqEkL3/CgaS64=;
+        b=of/pj6Nm2MxdYLglRcjOAQNJ7Ij2f+oXi51FxZaGAHT6d/J7VF8SCCTlKgOPV7GLs0
+         ap8mBe6dfSe6pXPkLM8qm21uWxPS6v91HW+Wp+vaFd4XXaXMkcXck+XPZcuP5HBfBitU
+         ndBz3/9IioSjTr+8b9uaDiFcwGuXGSO2B72ub206BycXmnjBmoeKnIbUx1QzSk/oOrr3
+         rHpWlpRmKucnItUH0lhSgtP7IYjTZnmzD3OUeVUyb2phGn4goyBch03cJt0JFJxz5YlK
+         iwrFopkzy3T8Dx5Z/ykaPB1aXh8Ej8259n3zXUG1XdM9O0mCO3PtA13RZM9o9g0L/QnG
+         e7cw==
+X-Gm-Message-State: AOAM532rMBwG+dEE7wc0OoPpkjsPGOAOeto6uX0ecTNT1rR8sZtAWqDT
+        eIISOCs2wcPV5y3XO873Ds1Yov6lYJXhms+Dm1U=
+X-Google-Smtp-Source: ABdhPJyWMp7m4+apEwVy+wWt18FsYjZ2B+C1emhDUEB7/gfu8NcXsUiOi8gdQjmNxvt9Gj9xNCMK4dBf4z0+vyyc7Uw=
+X-Received: by 2002:a17:906:b819:: with SMTP id dv25mr6409626ejb.689.1644500829972;
+ Thu, 10 Feb 2022 05:47:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220128073319.1017084-1-imagedong@tencent.com>
+ <20220128073319.1017084-2-imagedong@tencent.com> <0029e650-3f38-989b-74a3-58c512d63f6b@gmail.com>
+ <CADxym3akuxC_Cr07Vzvv+BD55XgMEx7nqU4qW8WHowGR0jeoOQ@mail.gmail.com> <20220209211202.7cddd337@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220209211202.7cddd337@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Thu, 10 Feb 2022 21:42:14 +0800
+Message-ID: <CADxym3ZajjCV2EHF6+2xa5ewZuVqxwk6bSqF0KuA+J6sGnShbQ@mail.gmail.com>
+Subject: Re: [PATCH v3 net-next 1/7] net: skb_drop_reason: add document for
+ drop reasons
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     David Ahern <dsahern@gmail.com>, David Ahern <dsahern@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
+        David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        pablo@netfilter.org, kadlec@netfilter.org,
+        Florian Westphal <fw@strlen.de>,
+        Menglong Dong <imagedong@tencent.com>,
+        Eric Dumazet <edumazet@google.com>, alobakin@pm.me,
+        paulb@nvidia.com, Kees Cook <keescook@chromium.org>,
+        talalahmad@google.com, haokexin@gmail.com, memxor@gmail.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, Cong Wang <cong.wang@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BSH SystemMaster (SMM) S2 PRO board comes with an audio card based on
-tlv320aic31xx family codec.
+On Thu, Feb 10, 2022 at 1:12 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Thu, 10 Feb 2022 11:19:49 +0800 Menglong Dong wrote:
+> > I'm doing the job of using kfree_skb_reason() for the TCP layer,
+> > and I have some puzzles.
+> >
+> > When collecting drop reason for tcp_v4_inbound_md5_hash() in
+> > tcp_v4_rcv(), I come up with 2 ways:
+> >
+> > First way: pass the address of reason to tcp_v4_inbound_md5_hash()
+> > like this:
+> >
+> >  static bool tcp_v4_inbound_md5_hash(const struct sock *sk,
+> >                       const struct sk_buff *skb,
+> > -                    int dif, int sdif)
+> > +                    int dif, int sdif,
+> > +                    enum skb_drop_reason *reason)
+> >
+> > This can work, but many functions like tcp_v4_inbound_md5_hash()
+> > need to do such a change.
+> >
+> > Second way: introduce a 'drop_reason' field to 'struct sk_buff'. Therefore,
+> > drop reason can be set by 'skb->drop_reason = SKB_DROP_REASON_XXX'
+> > anywhere.
+> >
+> > For TCP, there are many cases where you can't get a drop reason in
+> > the place where skb is freed, so I think there needs to be a way to
+> > deeply collect drop reasons. The second can resolve this problem
+> > easily, but extra fields may have performance problems.
+> >
+> > Do you have some better ideas?
+>
+> On a quick look tcp_v4_inbound_md5_hash() returns a drop / no drop
+> decision, so you could just change the return type to enum
+> skb_drop_reason. SKB_DROP_REASON_NOT_SPECIFIED is 0 is false,
+> so if (reason) goto drop; logic will hold up.
 
-The audio card exposes two playback devices, one of them using the EASRC
-(Enhanced Asynchronous Sample Rate Converter) module. Note that this
-would require SDMA and EASRC firmware in order to work.
+Yeah, that's an idea. But some functions are more complex, such as
+tcp_rcv_state_process() and tcp_rcv_state_process()->tcp_v4_conn_request().
+The return value of tcp_rcv_state_process() can't be reused, and it's hard
+to add a function param of type 'enum skb_drop_reason *' to
+tcp_v4_conn_request().
 
-Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
----
- .../dts/freescale/imx8mn-bsh-smm-s2pro.dts    | 94 +++++++++++++++++++
- 1 file changed, 94 insertions(+)
+There are some nice drop reasons in tcp_v4_conn_request(), it's a pity to
+give up them.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
-index c6a8ed6745c1..3621354b4a92 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
-@@ -7,6 +7,7 @@
- /dts-v1/;
- 
- #include "imx8mn-bsh-smm-s2-common.dtsi"
-+#include <dt-bindings/sound/tlv320aic31xx.h>
- 
- / {
- 	model = "BSH SMM S2 PRO";
-@@ -16,6 +17,69 @@ memory@40000000 {
- 		device_type = "memory";
- 		reg = <0x0 0x40000000 0x0 0x20000000>;
- 	};
-+
-+	sound-tlv320aic31xx {
-+		compatible = "fsl,imx-audio-tlv320aic31xx";
-+		model = "tlv320aic31xx-hifi";
-+		audio-cpu = <&sai3>;
-+		audio-codec = <&codec>;
-+		audio-asrc = <&easrc>;
-+		audio-routing =
-+			"Ext Spk", "SPL",
-+			"Ext Spk", "SPR";
-+		mclk-id = <PLL_CLKIN_BCLK>;
-+	};
-+
-+	vdd_input: vdd_input {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vdd_input";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+	};
-+};
-+
-+&easrc {
-+	fsl,asrc-rate  = <48000>;
-+	fsl,asrc-format = <10>;
-+	status = "okay";
-+};
-+
-+&i2c2 {
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c2>;
-+	status = "okay";
-+
-+	codec: tlv320dac3101@18 {
-+		#sound-dai-cells = <0>;
-+		compatible = "ti,tlv320dac3101";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_dac_rst>;
-+		reg = <0x18>;
-+
-+		ai31xx-micbias-vg = <MICBIAS_AVDDV>;
-+
-+		HPVDD-supply = <&buck4_reg>;
-+		SPRVDD-supply = <&vdd_input>;
-+		SPLVDD-supply = <&vdd_input>;
-+		AVDD-supply = <&buck4_reg>;
-+		IOVDD-supply = <&buck4_reg>;
-+		DVDD-supply = <&buck5_reg>;
-+		reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
-+
-+		clocks = <&clk IMX8MN_CLK_SAI3_ROOT>;
-+		clock-names = "mclk";
-+	};
-+};
-+
-+&sai3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_sai3>;
-+	assigned-clocks = <&clk IMX8MN_CLK_SAI3>;
-+	assigned-clock-parents = <&clk IMX8MN_AUDIO_PLL1_OUT>;
-+	assigned-clock-rates = <24576000>;
-+	fsl,sai-mclk-direction-output;
-+	status = "okay";
- };
- 
- /* eMMC */
-@@ -30,6 +94,36 @@ &usdhc1 {
- };
- 
- &iomuxc {
-+	pinctrl_dac_rst: dac_rst {
-+		fsl,pins = <
-+			MX8MN_IOMUXC_GPIO1_IO06_GPIO1_IO6		0x19 /* DAC_RST */
-+		>;
-+	};
-+
-+	pinctrl_espi2: espi2grp {
-+		fsl,pins = <
-+			MX8MN_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK            0x082
-+			MX8MN_IOMUXC_ECSPI2_MOSI_ECSPI2_MOSI            0x082
-+			MX8MN_IOMUXC_ECSPI2_MISO_ECSPI2_MISO            0x082
-+			MX8MN_IOMUXC_ECSPI2_SS0_ECSPI2_SS0		0x040
-+		>;
-+	};
-+
-+	pinctrl_i2c2: i2c2grp {
-+		fsl,pins = <
-+			MX8MN_IOMUXC_I2C2_SCL_I2C2_SCL			0x400000c3
-+			MX8MN_IOMUXC_I2C2_SDA_I2C2_SDA			0x400000c3
-+		>;
-+	};
-+
-+	pinctrl_sai3: sai3grp {
-+		fsl,pins = <
-+			MX8MN_IOMUXC_SAI3_TXFS_SAI3_TX_SYNC		0xd6
-+			MX8MN_IOMUXC_SAI3_TXC_SAI3_TX_BCLK		0xd6
-+			MX8MN_IOMUXC_SAI3_TXD_SAI3_TX_DATA0		0xd6
-+		>;
-+	};
-+
- 	pinctrl_usdhc1: usdhc1grp {
- 		fsl,pins = <
- 			MX8MN_IOMUXC_SD1_CLK_USDHC1_CLK			0x40000090
--- 
-2.34.1
+How about introducing a field to 'struct sock' for drop reasons? As sk is
+locked during the packet process in tcp_v4_do_rcv(), this seems to work.
 
+Thanks!
+Menglong Dong

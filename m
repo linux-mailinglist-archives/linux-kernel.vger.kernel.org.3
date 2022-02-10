@@ -2,56 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 821D24B13F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:14:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E52634B1401
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:18:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245086AbiBJROM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 12:14:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59716 "EHLO
+        id S245087AbiBJRSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 12:18:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245065AbiBJROL (ORCPT
+        with ESMTP id S240659AbiBJRSk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 12:14:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3495E70;
-        Thu, 10 Feb 2022 09:14:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 506B961DB5;
-        Thu, 10 Feb 2022 17:14:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8470C004E1;
-        Thu, 10 Feb 2022 17:14:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644513251;
-        bh=R4YGxkGRJP3UE9sHNERL+KlLwZq1bt4mwcWdie67LiM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HGI5Is9V3BrzKkuuVltpPwlLK5CAvDWRXEXC/cQkf9hsekWTvaZVyKVpncWf+da+C
-         4EmOo7nbt86m6RvoVE3eyKPERQH563Jfe3fmMgpF5BdUG2IrDgZ64clvOKrxKpjMDf
-         3+Tr71qjF2BF5kSWrld8T9n7zt7JR+Ocpxs72FbcxrsnbX23N3fQ3lnmODxrF9l9rV
-         lkLyvMR/wGWYb7ljYHHBK16ginEmoOdxErpWlDFwEybFQBoSlKbKsJ5bWMzbU2Kn9w
-         Rcpsq2UUmdZSkt3G/6pl7WrcPgi4Y+0c6CKMkgMsAl1TDqcmGQ0esa4tEvwJ8pMZc9
-         JjbmNoIXy5aEA==
-Date:   Thu, 10 Feb 2022 17:14:07 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Yun Zhou <yun.zhou@windriver.com>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Xue, Ying" <Ying.Xue@windriver.com>
-Subject: Re: =?utf-8?B?5Zue5aSN?= =?utf-8?Q?=3A?= [PATCH] spi: disable
- chipselect after complete transfer
-Message-ID: <YgVH310gQ1sK6dlr@sirena.org.uk>
-References: <SN6PR11MB3008AF5619B0B026836FD7429F2F9@SN6PR11MB3008.namprd11.prod.outlook.com>
- <YgU1+cIlANAkJCAL@sirena.org.uk>
- <19c69765-8584-2e6b-25b8-7053a5afa5d4@windriver.com>
+        Thu, 10 Feb 2022 12:18:40 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC9AE6B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:18:40 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id v186so17538370ybg.1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:18:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Y6jU5y+7ciw1kZFk2voVGn514q9KLRF2t/AdSLq2qd4=;
+        b=kA+EU7zowAhr4Q6p3DR2WaQWW+nlLBUiWTFn/6iEG2XqIU0Jvua7ciIE+flrDSx7CH
+         sDKhgfH4W8O+dNAJ2nev5wRYbAZEST6GDKboFkzjFB43X8M7zlX+QwfLa/vs1/EwIzL8
+         I25oIP7rzbivJXAWZTNqJo/ySkuw1c5IhDHFz7IFIvb+xtSqtY+PrfvTDnSIYlhqtdjs
+         TSglyzVe31PfFPTs3w4vLFzd543RzxMSqTuM8htpmRvYtTeis8o63HdsyVwAeo+tIyzn
+         dv6dQvUgRIZQC3LD4TvOHX31y7nuwYywBeDeXJP+y2mbxbp2JUrn79Z1Wqk0QBrLjOfm
+         nMKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Y6jU5y+7ciw1kZFk2voVGn514q9KLRF2t/AdSLq2qd4=;
+        b=2sZWJDw772HAPakGUUqT9X1wfr771rYxFHtsM8c5NxfIjda49h86U4DaRNOGFbJyBE
+         lUp74KlK3HlrS+iVay+Sk8eIzh9kJ9Z4Z7LH0q3RFJrB59TXc6pn8xuNcOlq2Yi585AP
+         pMoWr5tFB6WCLrWDBgSS0zoUf86pXZPYdJegwpOKsfQFBDlij4nP/LHHg6MyCozV5EU7
+         qyTuUdpevTBIC6BB2/Tu83i6/xnz5uiJCom4OyJLU2QaEpb3sWi6tGIJ+bDkpN4JlNeV
+         VNRE4cL/7GUxEVPMrl8Q50TiwyPhMcxtjYVBLUg6Fa2nKq9bAJsWyVEsFWnuc3v2/VsU
+         GvvA==
+X-Gm-Message-State: AOAM530be4N1qcljdDkUjXYeutsUzHe8xgnI+iWJB9/Yz/vTvwn7/dCo
+        q9KTO91UnynM2qZ15tTuaX1vDkie0RhGuhMZRTo+jg==
+X-Google-Smtp-Source: ABdhPJyeRA3e502ZxR+L51J3Klgeehjbwyny/IdqqMZuHjSZtFufytlLUNoKGN3UeoZgnfritSbpsz/suGfpi2djVWk=
+X-Received: by 2002:a25:49c5:: with SMTP id w188mr7757635yba.200.1644513519410;
+ Thu, 10 Feb 2022 09:18:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RkQlFNxHBt14WPKO"
-Content-Disposition: inline
-In-Reply-To: <19c69765-8584-2e6b-25b8-7053a5afa5d4@windriver.com>
-X-Cookie: Only God can make random selections.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220209191248.596319706@linuxfoundation.org>
+In-Reply-To: <20220209191248.596319706@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 10 Feb 2022 22:48:28 +0530
+Message-ID: <CA+G9fYv8ejt_OrujMXdUv3Hgc-BrSFpeZJYx+LEGZoj0eNPDSA@mail.gmail.com>
+Subject: Re: [PATCH 4.19 0/2] 4.19.229-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,67 +70,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 10 Feb 2022 at 00:45, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.229 release.
+> There are 2 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.229-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
---RkQlFNxHBt14WPKO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-On Fri, Feb 11, 2022 at 01:01:20AM +0800, Yun Zhou wrote:
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> > > If there are multiple messages, and each message only has one xfer,
-> > > and the cs_change of each xfer is 1, during the transmission of the
-> > > messages, the CS will keep active even until at the end. This must be
-> > > unreasonable.
+## Build
+* kernel: 4.19.229-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.19.y
+* git commit: 020dc380ec76524a264536664d516a5a4d7cd45d
+* git describe: v4.19.227-90-g020dc380ec76
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.227-90-g020dc380ec76
 
-> > This is not something that most drivers are expected to use, cs_change
-> > should only be being used at all for very unusual hardware and it should
-> > be used even less frequently for the last transfer in a message.  It is
-> > fragile and anyone using it really needs to know what they're doing but
-> > the feature is there.
+## Test Regressions (compared to v4.19.227-87-gb06b07466af8)
+No test regressions found.
 
-> Maybe it's not normal to set "cs_change" in the last xfer. However, in
-> most cases, SPI messages come from user space, and these messages may
+## Metric Regressions (compared to v4.19.227-87-gb06b07466af8)
+No metric regressions found.
 
-I would question your use of "most" here...
+## Test Fixes (compared to v4.19.227-87-gb06b07466af8)
+No test fixes found.
 
-> come from multiple different applications. We can't make the whole
-> controller fail to work normally due to an inappropriate message of one
-> application.
+## Metric Fixes (compared to v4.19.227-87-gb06b07466af8)
+No metric fixes found.
 
-This is one of the many hazards of using spidev, it is not an especially
-safe or robust interface.  To the extent that there's an issue here it's
-something that should be addressed at the spidev level, though I expect
-that there will be some users who want this facility and would want a
-way to disable any access controls.  I recommend writing device drivers
-in kernel.
+## Test result summary
+total: 61877, pass: 52177, fail: 270, skip: 8370, xfail: 1060
 
-> > The feature predates me working on the SPI stack, the obvious examples
-> > would be a device that doesn't actually use chip select where you want
-> > to avoid all chip select changes or if you need to do some other actions
-> > in the middle of a SPI transaction for some reason (which would need a
-> > bunch of system level considerations to actually be safe/sensible like
-> > making sure you're not sharing the SPI bus).
+## Build Summary
+* arm: 130 total, 130 passed, 0 failed
+* arm64: 35 total, 35 passed, 0 failed
+* i386: 18 total, 18 passed, 0 failed
+* mips: 26 total, 26 passed, 0 failed
+* powerpc: 52 total, 39 passed, 13 failed
+* s390: 12 total, 12 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 34 total, 34 passed, 0 failed
 
-> At present, if "cs_change" is not set, CS will be changed back to inactive
-> after the transmission is completed. If "cs_change" is set, CS will not
-> be changed. This obviously violates the definition of "cs_change".
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
 
-No, it is exactly the specified behaviour of cs_change.  Please see
-spi.h.
-
---RkQlFNxHBt14WPKO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIFR94ACgkQJNaLcl1U
-h9BY7wf/WSXE2QTOHx2SZ5StZsWW87+Ik0mAmgSq4zVW9bQdn/yEA89AMmEbD0iC
-D5lM6yKqqPgX3DL8ZDPxqfUK2t2krs18sWVBX2LdAEjdIpI6SqzCttia5F/5N5l7
-zLpzHmpHct/20u5bHCfD0TGco5N+1lyNvu+Cbqk0oZOPRIfLqV+wo0Zq5TEpe+4Y
-Pme+2MEjVo7XuM98M3CDdNv/G46hA3zWL7EvvwajTfAaalwW06a1hdiGowul0Sb2
-xVTsqGtYXS3Y77SzxXrpxC42hTBkVBNAEBswyziQPw3i3Xyr25tUJjBRqM1XueSd
-14Hwkm7BFHgHnl+AQ2mNXUMQQtDCRg==
-=ERST
------END PGP SIGNATURE-----
-
---RkQlFNxHBt14WPKO--
+--
+Linaro LKFT
+https://lkft.linaro.org

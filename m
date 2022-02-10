@@ -2,101 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6C04B10B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:45:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50EA14B10B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243112AbiBJOpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:45:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55134 "EHLO
+        id S243123AbiBJOp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:45:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235171AbiBJOpR (ORCPT
+        with ESMTP id S235171AbiBJOp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:45:17 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3AAC4D
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:45:18 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id v6so6619016vsp.11
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:45:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BmUeuK9aVMpjbFZ/smVPoevWR8+GiP+XuBiB417bv3I=;
-        b=fkmRKS31vly9dxLeyjM8/W7Phgpz0iQilQwns/LZl/8TIWBqf68b2cO2QyF/aSMUvz
-         QJaBX3C/lJLSPc+qoc3W+QiWT+kQsqlWjrrakzfaJe1UOmDUK9LC2PxYW/qFXfy6dW09
-         wYTfK2XWXMZ82MqVFVsgZwcuMd45VsS6DeA6D6jrHHFk0AXzTNy9USBbmsw//a4a50fR
-         Y6ewJnCWHNV6p3Q7Sj9QM6oAj+quLn3GXnssR+msMFo7I8hbNf9DKWxvgn9fdCloYHnl
-         G7rFum6yvzWZ2Y5I5jTDqQZU3RafvL8/o/F0s7AD5P7XpXV6SoBZaRUmhz9rD74yZXNp
-         LGCw==
+        Thu, 10 Feb 2022 09:45:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35238C4D
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:45:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644504358;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=M8Xicx5cO6JYsvcdxnszvP7E4kb3rIjZyILIbpstvnc=;
+        b=CYrJsiEOXqga3cBQBRFxT2N2Wqqsg5FoD+HC0hAxm0ekLIJjG7pcg/UyImjKXkGgKrrAHp
+        Vi+vau1LVwil6L1CQmothOvp6OsPZrce1RkMUvvMAFvguQX75CXbA8tA4r+aamQcLntvtb
+        FCpeB8pXWYRz92sWReBCz0h5XJLpa+w=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-rij9qp0uOAu9OosIsM93HQ-1; Thu, 10 Feb 2022 09:45:57 -0500
+X-MC-Unique: rij9qp0uOAu9OosIsM93HQ-1
+Received: by mail-lj1-f199.google.com with SMTP id m13-20020a2e97cd000000b0023e09d49ce4so2673282ljj.6
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:45:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=BmUeuK9aVMpjbFZ/smVPoevWR8+GiP+XuBiB417bv3I=;
-        b=Fd6DxJc3xSiheFcU9WdQHEuxhFAvKnXOfaY1yDs9HAQqRzZ6k2TDj/FSSvKnP3fKJs
-         ZxYhfaJ56HI3ftcLG/0xIqluBmZ+l8NFgvxpqbvdlpjyx+J3Ohxy0u+r1Y9rkArOu+x1
-         XXUI+qt0YGG4f0GSrLQWrcoJgTQ12wbPy/EBxQXU9dfoHyXECvtdubPQwMLzKEgkLSIS
-         fNbOTCeNhYa2QxsABTPQG6eto7MuNnHLI3JdcJiO1lzC5olk5obYIlL2uHdpGFwsFtzw
-         lDfeIiMbZj7e5/c5RQ/1OmuUqQ+l9gzWYVg+V2Uhy7KB44elGqx1ieF607jOSawPFEe9
-         3BgQ==
-X-Gm-Message-State: AOAM533wTyLyvxjPgHF6AY2KLqdaMI89/Smr8f/zkOwHORpaN7hs54Jo
-        +Sog8CCgwgcbT8EOi1kxBEnmuGoR78DINPz7++VY3A==
-X-Google-Smtp-Source: ABdhPJz32YcC/PDUI4A+wInxpNkrGO9FAyPi/OwpOiDoxDD4IQ18uhmxYCzEjpDavPZ21mDkCwNdh3/60HQo4YOsk4o=
-X-Received: by 2002:a67:ff0a:: with SMTP id v10mr1483386vsp.3.1644504317195;
- Thu, 10 Feb 2022 06:45:17 -0800 (PST)
+        bh=M8Xicx5cO6JYsvcdxnszvP7E4kb3rIjZyILIbpstvnc=;
+        b=W8S3q5OkUs5ILa8dRNdfOS+kE+WOBx/1fdKN1rlZedBN6ntDSflKsT66LKdhu6Hjpo
+         5zHzX5ikaxL8LAz7DMmlRgjjGBggIwLAFDdgSnp0r4JJdKPiIE+xEUNFnZmz2G9vTb9t
+         ZWj5JkdPKQ8hjNurF2ss+YG2vcwPkvFbtnEFnbn5ROnDKr1byzNC4Gr/SHfN2V6diXNJ
+         rxBL4Up01RfATw/C1ASCcE3YUvYAFIP1UNC/uufBrwG002KrMPvDDSko0HYUZrqH1iAH
+         gQPMqU+yR8///IEB6S40DrHTTRf2kFizRkoOaTn4C1Uv+SjcUyKCjMJbhb9/Hg5ZvYNe
+         IOqg==
+X-Gm-Message-State: AOAM53253GBorLtOtX0BGX82T7xTaZfOYYck00cZQ1q9eRs3jN+B0qnS
+        H6ez8QE8omIqVW6q1i/O1Xcptv97pfh/+qdu6UhRI+t3DIYQjUT6JqxN7LVzcLumhxwgYh9Tgkk
+        RchVE3v0QfuYFBwt3Q116ARG15HhUWmfHE41Qn4Q=
+X-Received: by 2002:a05:6512:3f84:: with SMTP id x4mr4204730lfa.484.1644504355578;
+        Thu, 10 Feb 2022 06:45:55 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwC9RjysectHKxeUKPhvllfxiSlrCWq8mr3WeL2XaNx5vQvpP7mOwVzJtA4X3KJF4uBtDLcN6dn9phCAV4+rt4=
+X-Received: by 2002:a05:6512:3f84:: with SMTP id x4mr4204722lfa.484.1644504355403;
+ Thu, 10 Feb 2022 06:45:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20220209191249.887150036@linuxfoundation.org>
-In-Reply-To: <20220209191249.887150036@linuxfoundation.org>
-From:   Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
-Date:   Thu, 10 Feb 2022 20:14:40 +0530
-Message-ID: <CAG=yYw=bh=piFrPMGSebgwtZfv-ChGx2-yj2__ozc4nDsD1HJQ@mail.gmail.com>
-Subject: Re: [PATCH 5.16 0/5] 5.16.9-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
-        torvalds@linux-foundation.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220209170358.3266629-1-atomlin@redhat.com> <20220209170358.3266629-2-atomlin@redhat.com>
+ <a22eb1b0-3fb5-a70e-cf6f-022571538efb@csgroup.eu>
+In-Reply-To: <a22eb1b0-3fb5-a70e-cf6f-022571538efb@csgroup.eu>
+From:   Aaron Tomlin <atomlin@redhat.com>
+Date:   Thu, 10 Feb 2022 14:45:44 +0000
+Message-ID: <CANfR36jh3yg9nqXkpCUWPeHV+sSD6yne9j1=uA5vyUpYOC8t9g@mail.gmail.com>
+Subject: Re: [PATCH v5 01/13] module: Move all into module/
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "cl@linux.com" <cl@linux.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "atomlin@atomlin.com" <atomlin@atomlin.com>,
+        "ghalat@redhat.com" <ghalat@redhat.com>,
+        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
+        "void@manifault.com" <void@manifault.com>,
+        "joe@perches.com" <joe@perches.com>,
+        "msuchanek@suse.de" <msuchanek@suse.de>,
+        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 1:05 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Thu 2022-02-10 11:11 +0000, Christophe Leroy wrote:
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 3e461db9cd91..7e6232bd15f5 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -13001,7 +13001,7 @@ L:    linux-kernel@vger.kernel.org
+> >   S:    Maintained
+> >   T:    git git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
+> >   F:    include/linux/module.h
+> > -F:    kernel/module.c
+> > +F:    kernel/module/main.c
 >
-> This is the start of the stable review cycle for the 5.16.9 release.
-> There are 5 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.9-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+> Shouldn't it be the entire directory ?
 
-hello ,
+Firstly, thank you for your feedback Christophe.
 
-Compiled  and booted 5.16.9-rc1+ on  VivoBook 15_ASUS Laptop X507UAR.
-NO regressions  from  dmesg.
+Indeed it should. Moving forward: kernel/module/*
+
+> > @@ -44,6 +44,7 @@ static inline int module_decompress(struct load_info *info,
+> >   {
+> >       return -EOPNOTSUPP;
+> >   }
+> > +
+>
+> This new line should be in patch 3 instead.
+
+Fair enough. Given that the purpose of this particular patch is a simple
+migration, style violations e.g. "Please use a blank line after
+function/struct/union/enum declarations", can be resolved at a later stage.
+
+
+Kind regards,
 
 -- 
-software engineer
-rajagiri school of engineering and technology  -  autonomous
+Aaron Tomlin
+

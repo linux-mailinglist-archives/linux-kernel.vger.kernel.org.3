@@ -2,102 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8794B0229
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1CEB4B0252
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232171AbiBJB1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 20:27:07 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:53922 "EHLO
+        id S232636AbiBJBaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 20:30:25 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbiBJB06 (ORCPT
+        with ESMTP id S232569AbiBJBaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:26:58 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F89420188;
-        Wed,  9 Feb 2022 17:26:56 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id i21so5996455pfd.13;
-        Wed, 09 Feb 2022 17:26:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=99kJAF1LYHwtSv0Yf3YOWEwdRAz6cOKJMAAN9vZQpPA=;
-        b=V208CxnCfJAW7fmWBawGNO4R+VshKsgngfQdMPxgDkMgP6Ulonm1Em6PIMBqJJbGKU
-         3BMFA9b+vjpeszMj3qdKdDh5kwJ2k/Z+7YPP7vwq3JUsdEw+uih0WJjn/ANjfmOPGeCc
-         duFAf6yoViCOT5T6JehENfcQ9N0Rwyp2NgNTIsC1y2CkAmBJDNQ2VOKzy2oSRB02trnH
-         p4f+FMnlX/E7PMdzfRJrlKkx6x4DfDGGTChKPheLQx0VaEEG+VbFgzlQMFRAz3cZSQUm
-         olxOqp9vVZfixIrFdFEeg8R3GjEarejrwz8ySgcr0g61zr3+1mvRyY20OJP1s+drGjdd
-         cPAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=99kJAF1LYHwtSv0Yf3YOWEwdRAz6cOKJMAAN9vZQpPA=;
-        b=DRpRnG9ywyWQuuSDdmnAlVuKZlaQCVpVRv36iQuR1kcUYfwvC7+pI8neB2+5/p/bp6
-         h+M0eb28whqjRmYE/ivK3gX8IsXJXe3DoZU9mHS0O0T6MsNIdoIn13FrWSfT+64umcNh
-         olVtup9S65O+bhTiI24+otuuYKQO9g+yGzSgIR69686MBM2hYU0UaNo7rRFGQwc/tX7y
-         1xP4+79aj+lr5giqUe+FKYqJ3nRwcoIlqk6LBJ6ncoew9NVeLibADBcKPW2YYJBCcDR0
-         GNJlumkAnVMPS5XbJghoLZmKxgk0t661ZP+FJ6qhJNb135/kMgP6EzfHqyCd42eRPT34
-         c0CA==
-X-Gm-Message-State: AOAM5333ep2CQWnTzuswmnidRTbH0w6RWpYg0zZYMmm+sc0yxlYVcTTf
-        XYl+OGD2h2tpCQgulqbsr6E=
-X-Google-Smtp-Source: ABdhPJx7mH2yZo4C4pJn/aE3cCDOtK+LkPC5Nk+B6bO3/Fqq03i1P/0o3tAvSQXdg21ttVWaEs1o8w==
-X-Received: by 2002:a65:4c87:: with SMTP id m7mr4145769pgt.509.1644456416531;
-        Wed, 09 Feb 2022 17:26:56 -0800 (PST)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id 6sm15177035pgx.36.2022.02.09.17.26.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 17:26:56 -0800 (PST)
-Message-ID: <519bd2d9-1bee-03e1-eeb4-d9883c18be0c@gmail.com>
-Date:   Thu, 10 Feb 2022 10:26:53 +0900
+        Wed, 9 Feb 2022 20:30:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C03A10A0;
+        Wed,  9 Feb 2022 17:30:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A42DBB823FC;
+        Thu, 10 Feb 2022 01:30:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7020BC340ED;
+        Thu, 10 Feb 2022 01:30:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644456609;
+        bh=qGQyGmjtozCv84Ye2BOs+8mk0SR0cVgFlFinrbcqULk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ASgJytk3CD6RUrcArDfPMltQOgX3F6DcY8tpPSBoLsNCyYwOEGSTG+3MF+jTZecoD
+         oKE6caIpaOAcOOeGxF6KSdeBwGQLHmnQAZZFPxjaNESuvqPt0JLewCistNLwZihbWv
+         5DXWiQX+v+HCsSDLG0n/3x9pj67XuGjEyuwXMxCB539HefN3zqpSS2+fA2zKDchpQo
+         ZQ9MP6zT5pL48WnTxKgWHwsxgfvWlqJVlWGwwVPZMcAt8lVgyL5Lj5axLncrfnxQAO
+         tPV49f6PMv98lFvo/hsNqSRwCaOjHYf6TireDHqZo1bkRP2/AaxZAdmO2UQeJ0qM6R
+         xw5S3qdiN/4Ww==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5904AE6D447;
+        Thu, 10 Feb 2022 01:30:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Akira Yokosawa <akiyks@gmail.com>
-From:   Akira Yokosawa <akiyks@gmail.com>
-Subject: [PATCH] docs: Makefile: Add -no-shell-escape option to LATEXOPTS
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: usb: qmi_wwan: Add support for Dell DW5829e
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164445660936.21209.3904165812207339582.git-patchwork-notify@kernel.org>
+Date:   Thu, 10 Feb 2022 01:30:09 +0000
+References: <20220209024717.8564-1-slark_xiao@163.com>
+In-Reply-To: <20220209024717.8564-1-slark_xiao@163.com>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     bjorn@mork.no, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By adding this option, message of "restricted \write18 enabled" from
-LaTeX can be silenced.
+Hello:
 
-As there is no use of \write18 in LaTeX sources from sphinx-build, it
-is safe to add this option.
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Reported-by: Jonathan Corbet <corbet@lwn.net>
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
----
- Documentation/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed,  9 Feb 2022 10:47:17 +0800 you wrote:
+> Dell DW5829e same as DW5821e except the CAT level.
+> DW5821e supports CAT16 but DW5829e supports CAT9.
+> Also, DW5829e includes normal and eSIM type.
+> Please see below test evidence:
+> 
+> T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  5 Spd=5000 MxCh= 0
+> D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
+> P:  Vendor=413c ProdID=81e6 Rev=03.18
+> S:  Manufacturer=Dell Inc.
+> S:  Product=DW5829e Snapdragon X20 LTE
+> S:  SerialNumber=0123456789ABCDEF
+> C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
+> I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+> I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
+> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> 
+> [...]
 
-diff --git a/Documentation/Makefile b/Documentation/Makefile
-index 9f4bd42cef18..64d44c1ecad3 100644
---- a/Documentation/Makefile
-+++ b/Documentation/Makefile
-@@ -26,7 +26,7 @@ SPHINX_CONF   = conf.py
- PAPER         =
- BUILDDIR      = $(obj)/output
- PDFLATEX      = xelatex
--LATEXOPTS     = -interaction=batchmode
-+LATEXOPTS     = -interaction=batchmode -no-shell-escape
- 
- ifeq ($(KBUILD_VERBOSE),0)
- SPHINXOPTS    += "-q"
+Here is the summary with links:
+  - [net] net: usb: qmi_wwan: Add support for Dell DW5829e
+    https://git.kernel.org/netdev/net/c/8ecbb179286c
 
-base-commit: f647de4b02dcb1815fb3019f86a001a681daf0a1
+You are awesome, thank you!
 -- 
-2.17.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

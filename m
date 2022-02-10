@@ -2,87 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF52F4B09AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:38:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4D94B09AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:39:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238806AbiBJJiL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Feb 2022 04:38:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57544 "EHLO
+        id S238832AbiBJJi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:38:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238888AbiBJJiE (ORCPT
+        with ESMTP id S238826AbiBJJi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:38:04 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F8E1AF
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:38:05 -0800 (PST)
-Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MmlCY-1nzR3i0nG2-00jtxd; Thu, 10 Feb 2022 10:38:04 +0100
-Received: by mail-wr1-f45.google.com with SMTP id o24so5777689wro.3;
-        Thu, 10 Feb 2022 01:38:04 -0800 (PST)
-X-Gm-Message-State: AOAM533kp+AEBUaVNUg6ZmbOJEWztxtLWnPklf0Y6tAEDEjjH6kSeSey
-        pB1W+XW88RgTxZ2XM1D4vy9w4HnyV6mqNffl8OY=
-X-Google-Smtp-Source: ABdhPJxyuPFqVuAPp0m7wxkmSqedZ5gdhAYe8N0BP0zMGS9YdwnNAcEToFaurnCdHolQDzxAj8ZmIRKq3k4br+ZsfeY=
-X-Received: by 2002:adf:e5ce:: with SMTP id a14mr681191wrn.317.1644485883806;
- Thu, 10 Feb 2022 01:38:03 -0800 (PST)
+        Thu, 10 Feb 2022 04:38:57 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E7D310BB
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:38:59 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 23C092B;
+        Thu, 10 Feb 2022 01:38:59 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F3D5B3F718;
+        Thu, 10 Feb 2022 01:38:54 -0800 (PST)
+Date:   Thu, 10 Feb 2022 09:38:37 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, ardb@kernel.org,
+        bp@alien8.de, catalin.marinas@arm.com, dave.hansen@linux.intel.com,
+        james.morse@arm.com, joey.gouly@arm.com, juri.lelli@redhat.com,
+        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, tglx@linutronix.de,
+        valentin.schneider@arm.com, will@kernel.org
+Subject: Re: [PATCH v3 7/7] arm64: support PREEMPT_DYNAMIC
+Message-ID: <YgTdHfmubmk1rUi8@FVFF77S0Q05N>
+References: <20220209153535.818830-1-mark.rutland@arm.com>
+ <20220209153535.818830-8-mark.rutland@arm.com>
+ <20220209195709.GA557593@lothringen>
 MIME-Version: 1.0
-References: <20220210021129.3386083-1-masahiroy@kernel.org> <20220210021129.3386083-4-masahiroy@kernel.org>
-In-Reply-To: <20220210021129.3386083-4-masahiroy@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 10 Feb 2022 10:37:47 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a07kN8H-8Zx2vX8b0rHfAjaeWyg4-c1aNEVhTF=miOEpA@mail.gmail.com>
-Message-ID: <CAK8P3a07kN8H-8Zx2vX8b0rHfAjaeWyg4-c1aNEVhTF=miOEpA@mail.gmail.com>
-Subject: Re: [PATCH 3/6] android/binder.h: add linux/android/binder(fs).h to
- UAPI compile-test coverage
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:c/BbFZ5D1fK5UZMctKsor9U6uDxXVPmqFomyNPi5TWKLgvq2Dwi
- 0dsQp76fHAMUch5kg1AbIlwHf3dPcS2tJMhAKdJn6zL6/T9uxE+BA8wgJz2g3RYVBKHb/30
- GnOmU2B4U9UsoJnhTnDFOTekt9bCbyQqYL6Xp90dyNOLDcuxAd1GiNHW05eqn6RPSzUMJLD
- FnWT8ipfqwV5kcRaGyL0w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Al/ZptctYJ4=:mB9cnfgruGlrmJWc4rpgfS
- 0WSAua9wMOO+2XLdpJNTqrUFZY2rp1S4Z59n2Rh3Cj2r8eCAas8hyodu1IEe25B0cuLtEAWjl
- FEKKPFe7adBHkRN6sqqD/fsX53HXvSO4hn1xbGYMWIXYDZh/d4pCtTyAJjXfe6Gbd3Vij2YXN
- 9d8qXtrmAjtc6FVoBCcLGos8wlInuAr1h8m6Hh2eIK3X1mO8jojdUu9TB68u1KKSJmY6ecl2g
- BjG63CmbYf6MUPmaAV/+yl2SeJHiwtwYa0Jf2DkOzYA+jyQCkoN8/IudcZ+/3VWJvA5UB+pxx
- anRuJFakm2Pbcv+EIAZsbv04YHc7NY2tRUUxNkeK0VZZyZU9zyL4KDJb8gyjl4RqsqGBi32Vg
- QlArL6KqbIdra67ZyQv9bWESA/QaAd4FkAO3KNf0mUefNT6gNFspDcw7vWQpyfs2T/aB0VV29
- i12ZSZmXa09cdHbYEJ0kcGU7TURcTmn4tTs3796myFe0AmJKH296vQ5AO5qovA+SwDYD/chvP
- DXB0FoGZHwTmgs3eYrNuxKSrgPtFF45YXuxBACmiIKPIKjdmEqtzYd9ZhB724A64pu0R+g0jT
- nPkyzAe19cLkmq5I+7f+uKYi/IO+YISD16jiY42iD7GIoD0bqR9fihi/eCnZ8dqIJK1rwyMD9
- P/+UeDildxP3iBMZt27lQCzVw65j6cEnwOcwRX9XbIr+thICREa5ROMS4oH7+u1g5CME=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209195709.GA557593@lothringen>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 3:11 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> linux/android/binder.h and linux/android/binderfs.h are currently
-> excluded from the UAPI compile-test because of the errors like follows:
->
->     HDRTEST usr/include/linux/android/binder.h
->   In file included from <command-line>:
->   ./usr/include/linux/android/binder.h:291:9: error: unknown type name ‘pid_t’
->     291 |         pid_t           sender_pid;
->         |         ^~~~~
->   ./usr/include/linux/android/binder.h:292:9: error: unknown type name ‘uid_t’
->     292 |         uid_t           sender_euid;
->         |         ^~~~~
->
-> The errors can be fixed by replacing {pid,uid}_t with __kernel_{pid,uid}_t.
->
-> Then, remove the no-header-test entries from user/include/Makefile.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+On Wed, Feb 09, 2022 at 08:57:09PM +0100, Frederic Weisbecker wrote:
+> On Wed, Feb 09, 2022 at 03:35:35PM +0000, Mark Rutland wrote:
+> > Note that PREEMPT_DYNAMIC is `def bool y`, so this will default to
+> > enabled.
+> 
+> It should probably be "def_bool y if HAVE_STATIC_CALL_INLINE"...
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Sure; I'm more than happy to fold that into patch 5.
+
+Thanks,
+Mark.

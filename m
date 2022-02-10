@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D4D4B02B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:01:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A64714B0205
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:24:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234081AbiBJB7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 20:59:18 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60356 "EHLO
+        id S231806AbiBJBXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 20:23:47 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:44400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234035AbiBJB6B (ORCPT
+        with ESMTP id S231857AbiBJBXm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:58:01 -0500
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8512AA1
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 17:49:26 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R621e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V41QR40_1644454130;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V41QR40_1644454130)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 10 Feb 2022 08:48:51 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] mm/munlock: Fix kernel-doc formatting issues
-Date:   Thu, 10 Feb 2022 08:48:49 +0800
-Message-Id: <20220210004849.69017-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Wed, 9 Feb 2022 20:23:42 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650931EC7D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 17:23:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644456220; x=1675992220;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=3TVWAm9LlhlLa2IkCVU8wnRmJGrW+1uk41RrCt4p/Tc=;
+  b=nIveuFRjgR54ayuDiKg1FgrmA2M6tKaD/CUQGoG1yYChZZzEqGEfDYzt
+   +SnpZkf6dVZMf9lzR7Cp8/V/vsrgKjapPuwNtmneUShkNqkcJZs2WS5Hg
+   bi/TT9Nx1iMaCVtcmmYZIjWMXhtyQieE5epfa2CQSMoFgsaWILmB3N2rM
+   ILoLDMyib7eF5tH1DclwpLKvnekhLd8GuoT4d1VkyTItTsC+GUM+X5lgr
+   MOWAR5gnuqCgfDaCT2PXZu1Wykg7Q0jKiF3KmcIl336oB99QyipfqYWar
+   E5BKL3lUIG44ScRU41CUytJpDYz7F1bJWlI1kMGCT6td9UklYhQT+fr8g
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="273923635"
+X-IronPort-AV: E=Sophos;i="5.88,357,1635231600"; 
+   d="scan'208";a="273923635"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 16:52:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,357,1635231600"; 
+   d="scan'208";a="678968070"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Feb 2022 16:52:21 -0800
+Message-ID: <27fbcb02-4f13-3377-eadd-e689ce063348@linux.intel.com>
+Date:   Thu, 10 Feb 2022 08:51:08 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     baolu.lu@linux.intel.com,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 08/10] iommu: Remove unused argument in
+ is_attach_deferred
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>
+References: <20220208012559.1121729-1-baolu.lu@linux.intel.com>
+ <20220208012559.1121729-9-baolu.lu@linux.intel.com>
+ <290a89f0-8318-6130-468c-6412add62cfb@arm.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <290a89f0-8318-6130-468c-6412add62cfb@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some functions had kernel-doc that used a hash instead of a colon to
-separate the parameter name from the one line description.
+On 2/9/22 9:52 PM, Robin Murphy wrote:
+>> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+>> index 2b5f4e57a8bb..80f1294be634 100644
+>> --- a/drivers/iommu/intel/iommu.c
+>> +++ b/drivers/iommu/intel/iommu.c
+>> @@ -5052,8 +5052,7 @@ intel_iommu_dev_disable_feat(struct device *dev, 
+>> enum iommu_dev_features feat)
+>>       }
+>>   }
+>> -static bool intel_iommu_is_attach_deferred(struct iommu_domain *domain,
+>> -                       struct device *dev)
+>> +static bool intel_iommu_is_attach_deferred(struct device *dev)
+>>   {
+>>       return attach_deferred(dev);
+> 
+> Seems like there's no need to wrap this now?
 
-Replacing them to remove warnings found by running scripts/kernel-doc,
-which is caused by using 'make W=1'.
+Yes. It's pointless.
 
-mm/mlock.c:218: warning: Function parameter or member 'page' not
-described in 'mlock_page'
-mm/mlock.c:240: warning: Function parameter or member 'page' not
-described in 'mlock_new_page'
-mm/mlock.c:260: warning: Function parameter or member 'page' not
-described in 'munlock_page'
-
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- mm/mlock.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/mm/mlock.c b/mm/mlock.c
-index d50d48961b22..7fb97e1242f1 100644
---- a/mm/mlock.c
-+++ b/mm/mlock.c
-@@ -212,7 +212,7 @@ bool need_mlock_page_drain(int cpu)
- 
- /**
-  * mlock_page - mlock a page already on (or temporarily off) LRU
-- * @page - page to be mlocked, either a normal page or a THP head.
-+ * @page: page to be mlocked, either a normal page or a THP head.
-  */
- void mlock_page(struct page *page)
- {
-@@ -234,7 +234,7 @@ void mlock_page(struct page *page)
- 
- /**
-  * mlock_new_page - mlock a newly allocated page not yet on LRU
-- * @page - page to be mlocked, either a normal page or a THP head.
-+ * @page: page to be mlocked, either a normal page or a THP head.
-  */
- void mlock_new_page(struct page *page)
- {
-@@ -254,7 +254,7 @@ void mlock_new_page(struct page *page)
- 
- /**
-  * munlock_page - munlock a page
-- * @page - page to be munlocked, either a normal page or a THP head.
-+ * @page: page to be munlocked, either a normal page or a THP head.
-  */
- void munlock_page(struct page *page)
- {
--- 
-2.20.1.7.g153144c
+Best regards,
+baolu
 

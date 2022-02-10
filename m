@@ -2,112 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC644B1471
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:43:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C20A4B1477
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245268AbiBJRnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 12:43:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49186 "EHLO
+        id S245281AbiBJRnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 12:43:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245236AbiBJRnK (ORCPT
+        with ESMTP id S245269AbiBJRnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 12:43:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E95AF6F
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:43:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644514990;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l/BBZqEoVfgrKabodXFBIfVfpq8FM92AHBedmxW/K9E=;
-        b=Ie9G2HPtAKVSAEIcfInoE5ALNo6uWflVIFlj+duFdB76nem09Ewr9yn5JvWhylDytu7INp
-        9dD+rjZPMVZkeiucrjC/nZF+tjuyCMdT64udZYcKoQZWzYHih36iHUTTKOrB952DegyqsJ
-        a2KuieNsqw+RhbDmH2ASzi5NySiAG9o=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-cEIs4wIqMSKCWU4JMM8PxA-1; Thu, 10 Feb 2022 12:43:04 -0500
-X-MC-Unique: cEIs4wIqMSKCWU4JMM8PxA-1
-Received: by mail-ed1-f70.google.com with SMTP id u24-20020a50d518000000b0040f8cef2463so3742553edi.21
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:43:03 -0800 (PST)
+        Thu, 10 Feb 2022 12:43:13 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941B0101B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:43:13 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id c3so2454570pls.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:43:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RfVaSD5Jbl1UCapkvwTHkbWqS8zVw2iOHKCAwa9H0bo=;
+        b=mPRxMXX+y3f90qS/gIUi3DqSuIu88IQgUnYn/CtI8oUWe8L9TD1H0WXBI064iWvs9x
+         0sURffRFCyyd9vSBECvmcKMtKeYwQRctxSOoQfnBkzNdynfh7tnSgBmffK6bbr4gp+/c
+         kq58WyJkxkzQnHmbGDTtGDYBGOvGAN2PIO5RM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=l/BBZqEoVfgrKabodXFBIfVfpq8FM92AHBedmxW/K9E=;
-        b=68c5adAMY6hbycPX5/AHkBqOpr3TCjF6D1Y5bZlcP6ttTc/TlXGbTEbaKdz/BWxM6x
-         oEauzDOKG493REj4ayAxszQb5n5kecNcN0CrXjWlDnMrH8DbqbCsp73UEsUbdSJ4IzKl
-         CE/eu++jzYxGxGDEMEIKabO43BsnoxMeSahvJ3GeN3DnoiMURJLPp9036ZJL+MBWTszJ
-         nIxfnIdaYTYutZR1w/8IhXFHX3j0WQjUVyvfq/Va24OZVy4r6gIIXcsIKW+0ACErBHIM
-         1iND00lGDwfoKcIr0pqcoGXvXclCyEaqZhQlUr2K+tmJoqdcz28lYrA8K9EF9Rz/qi6m
-         Tq4w==
-X-Gm-Message-State: AOAM530mZVDIt21BG7J0ongGBu2Qnf3O6eKXQdP1B76o1HLDf+pvw0XR
-        0Nh9ukQK8ZrrFDro1iCmS2wwmQnsTZgfhHDJtEBUXYUaFxObtN/X3VQTkZc+lDgMIYVPTr4OFiA
-        6UzfA4cMGxOgSRop6tTOgmBPJ
-X-Received: by 2002:a17:907:7292:: with SMTP id dt18mr6977861ejc.667.1644514982869;
-        Thu, 10 Feb 2022 09:43:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxKjfhznrr9laZMtcRaScaaUKLhriNA5xwcpXInITqCA6iv3CF/yPelg05zk1+mdpH7+t1itQ==
-X-Received: by 2002:a17:907:7292:: with SMTP id dt18mr6977851ejc.667.1644514982705;
-        Thu, 10 Feb 2022 09:43:02 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id z22sm8979452edq.9.2022.02.10.09.43.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 09:43:01 -0800 (PST)
-Message-ID: <88d3f309-9424-9035-b2ef-88c5d7fb088f@redhat.com>
-Date:   Thu, 10 Feb 2022 18:43:00 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RfVaSD5Jbl1UCapkvwTHkbWqS8zVw2iOHKCAwa9H0bo=;
+        b=6+IHIch4PXQUu3gjA7hE0wyrTMm94g8iGpMY617b4mdvnXda697uCr/YgMI8t393Xq
+         75hpyEUHy4JZpr0SIH/14AfR5qvh46ngTIIY0vLVRJ7tcqtKrDAEBeF88TaWwwShm+9R
+         zHMS5o+mYpXK+LL4RH2CgQW97wDEcuYDpR4/bNNRGE9quVW3tdxWhYFadyJZNpyTL4Cd
+         U6kuoEyAd2eL/0Jh9rLOzZVYpGZTeF/n26RC+XI7fef3LoB964Fm/T1XJB2agzpaQJIk
+         vmFsDEqRaEJm5EwWnCoZ2X9addDcF8w4PZMYHbnWah0CFZflZg+tXc1LdxXcy1+WkLri
+         9L7Q==
+X-Gm-Message-State: AOAM533dFNvHxaEWZuoTZef90a99MEKBbQ8V9gwBvjHeYVyngCqlmG1j
+        bqP+6qWIicYxH69G+U7Lo6gNXw==
+X-Google-Smtp-Source: ABdhPJyEmB34sogZs6Rj+2bZzHJh+ef5Kc026LQokIFwesK8wdexB1XeGvWkY1tS4FM6JSfJeUjC1g==
+X-Received: by 2002:a17:902:b90a:: with SMTP id bf10mr8691668plb.36.1644514993117;
+        Thu, 10 Feb 2022 09:43:13 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 204sm24336775pfu.91.2022.02.10.09.43.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 09:43:12 -0800 (PST)
+Date:   Thu, 10 Feb 2022 09:43:12 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     frowand.list@gmail.com
+Cc:     Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Rae Moar <rmoar@google.com>, Tim.Bird@sony.com,
+        Brendan Higgins <brendanhiggins@google.com>, rmr167@gmail.com,
+        guillaume.tucker@collabora.com, dlatypov@google.com,
+        kernelci@groups.io, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] Documentation: dev-tools: clarify KTAP
+ specification wording
+Message-ID: <202202100942.A8206C0@keescook>
+References: <20220210023519.3221051-1-frowand.list@gmail.com>
+ <20220210023519.3221051-2-frowand.list@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 07/23] KVM: MMU: remove kvm_mmu_calc_root_page_role
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        dmatlack@google.com, vkuznets@redhat.com
-References: <20220204115718.14934-1-pbonzini@redhat.com>
- <20220204115718.14934-8-pbonzini@redhat.com> <YgRgrCxLM0Ctfwrj@google.com>
- <1e8c38eb-d66a-60e7-9432-eb70e7ec1dd4@redhat.com>
- <YgVLkgwBRy+JXZiH@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YgVLkgwBRy+JXZiH@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210023519.3221051-2-frowand.list@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/10/22 18:29, Sean Christopherson wrote:
-> On Thu, Feb 10, 2022, Paolo Bonzini wrote:
->> On 2/10/22 01:47, Sean Christopherson wrote:
->>> The nested mess is likely easily solved, I don't see any obvious issue with swapping
->>> the order.  But I still don't love the subtlety.  I do like shaving cycles, just
->>> not the subtlety...
->>
->> Not so easily, but it's doable and it's essentially what I did in the other
->> series (the one that reworks the root cache).
+On Wed, Feb 09, 2022 at 08:35:18PM -0600, frowand.list@gmail.com wrote:
+> From: Frank Rowand <frank.rowand@sony.com>
 > 
-> Sounds like I should reveiw that series first?
+> Add the spec version to the title line.
+> 
+> Explain likely source of "Unknown lines".
+> 
+> "Unknown lines" in nested tests are optionally indented.
+> 
+> Add "Unknown lines" items to differences between TAP & KTAP list
+> 
+> Reviewed-by: Tim Bird <Tim.Bird@sony.com>
+> Reviewed-by: David Gow <davidgow@google.com>
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
 
-Yeah, this one is still a nice step in the direction of guest pt walk 
-from shadow pt build(*), but with no immediate use for TDP MMU root reuse.
+Thanks for nailing this down!
 
-The original idea was to use the MMU role to decide whether to do 
-kvm_mmu_unload(), but that would have still been a bandaid---inefficient 
-and a bad idea overall.  Patches 6+7 of this series (once fixed, because 
-they were buggy as hell) turned out to be enough to tame the PGD cache 
-and remove kvm_mmu_unload() altogether from kvm_mmu_reset_context().
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Paolo
-
-(*) Your idea of detecting stale roots is quite easily implemented on 
-top of these, for example, because a root is stale if and only if the 
-root_role changes.
-
+-- 
+Kees Cook

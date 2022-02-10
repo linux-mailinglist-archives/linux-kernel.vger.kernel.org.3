@@ -2,227 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A02C44B122B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:57:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A78734B122D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243858AbiBJP5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 10:57:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46638 "EHLO
+        id S243885AbiBJP6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 10:58:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238388AbiBJP5k (ORCPT
+        with ESMTP id S243872AbiBJP6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 10:57:40 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D1DA1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 07:57:40 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id x136so14973939ybe.11
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 07:57:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=L/gmacHO+nIX8yUgzR5WCryJPsq0BTK07bA0MOZtRbo=;
-        b=sesbnoOHpiOR51+54Hd3unKOwAtRmwNA/IDMT54hgrg/u8vsTTfmua5W1cVqQW6x3a
-         DDJ8WJAYKeOAwnXiQpx5C0Q0Q8+3qk9zGrZRi6tOGEi/6ReidqsgrrckprUbMIb2OdpM
-         GxNZeJz7gN23OIpZPRR1K/wZWlvRnVByZokAjV5QXgGrCdFNl9FOJH6H8t7ZkmAp+HW/
-         PDLrA2rdRidg9J9ry4zdTEni7zXLm4SVleUn8pzINVztSn9zEnhtyVO7IqK6/Yon2PSE
-         pbQ2Opd6A2SoR23ztkgAlJEPoYFWNB4C9vbwbvkq5bZfyPW3fWya92z5SjYQWb7pguYd
-         d9rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=L/gmacHO+nIX8yUgzR5WCryJPsq0BTK07bA0MOZtRbo=;
-        b=tWQzUtkSidalJGSTJUOtMc+2pqe8n1J/lTn56Rd0iqRiuci/0v+FXTz9c1azQF3Ies
-         WhruNNmr2/Zb7EV0who6S4rXQ8dgzRhjux4VXP4fHEs4Okx0sb4rGS8YgLL1uhh2UBKN
-         /ZYDuu9MJCOvUoW8bhlxIMe2ZLal+Wp1gN4mGKYMF6aqZ2UAhkOFH4EFICnffrBvN7dm
-         xAC2BT7vpsN2mWrThM2OV3J9ZKRm+mn1/xsQDeEr5qvOrf0Q3ixxFcStoPOEisx+UKsG
-         4JMZ1GzCEC4hv3mjPciPO1nXNoUxZrPJIGVw8HUELmu1FMOU3qlBpReLb7g7C090e9dV
-         fB2A==
-X-Gm-Message-State: AOAM531mn9ljA2gBC8mIysCUGDZ58zPW5U9wyj3FEwLk3ka+yAtJH4kr
-        qP5hMDS+ReHjaqmM0AVvAS+xXUmZBzaTUG/ScYtO1A==
-X-Google-Smtp-Source: ABdhPJwtHUHoicTc62W51Ae15FqUt4uok6ofdnQlOyyNuQ+oj4nZayQ1Bjk9IjD6f/RqrnYy+n8F6kqdh5txmwgpJUQ=
-X-Received: by 2002:a25:1402:: with SMTP id 2mr6943610ybu.684.1644508659379;
- Thu, 10 Feb 2022 07:57:39 -0800 (PST)
+        Thu, 10 Feb 2022 10:58:06 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2886FD81;
+        Thu, 10 Feb 2022 07:58:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644508687; x=1676044687;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=nJFK6EQR25scnNWxpyGTRLOMBGca0iR6pOuAC+VH89M=;
+  b=g7zfkK3lxIwZZA4G3PGyj9uDs6zC9Eves19pXZmlcmBUVNDBUCOolXm7
+   dXnInhbR5hkgI7W72ZG/B5i1Bjy5e1dF6qT1+0+mrAbVyp2BOE7QjfMRw
+   tzzzGmW2M4mCcErS51U979Fw54FWk1BXQLLeoTXqEA8t1Anc3KMM1sCpf
+   98P6AuTED36VzUjBVdlX/d4m6dogaE6s8asVfcpW1UEoPJmbrHwOeew/C
+   WR22YLSmPZvCmpOXgwpuxPBel45rVFD/3Qz+cWscHfQ/Fhr/zo/IyLPBg
+   w+fRHtBnl3TvGr1ZsWYDmj/1tc6YLTt1HLH538zn6c/UP5/8tjavc+BPJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="247104613"
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="247104613"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 07:57:48 -0800
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="541659783"
+Received: from vchandol-mobl.gar.corp.intel.com (HELO [10.215.123.92]) ([10.215.123.92])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 07:57:45 -0800
+Message-ID: <6b5b3d5b-68c9-3f04-d9b7-b58951f5557a@linux.intel.com>
+Date:   Thu, 10 Feb 2022 21:27:31 +0530
 MIME-Version: 1.0
-References: <20220209191248.688351316@linuxfoundation.org>
-In-Reply-To: <20220209191248.688351316@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 10 Feb 2022 21:27:28 +0530
-Message-ID: <CA+G9fYtmysoxC=HMRTqQ9jPWWuzqBwukpPuhBoh3e82cu7NhNw@mail.gmail.com>
-Subject: Re: [PATCH 5.4 0/1] 5.4.179-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] hwmon: (pmbus) Clear pmbus fault/warning bits before read
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>, iwona.winiarska@intel.com,
+        jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220210124154.1304852-1-vikash.chandola@linux.intel.com>
+ <46684682-a718-ca9a-b502-2031afd3a756@roeck-us.net>
+From:   Vikash Chandola <vikash.chandola@linux.intel.com>
+In-Reply-To: <46684682-a718-ca9a-b502-2031afd3a756@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Feb 2022 at 00:45, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.4.179 release.
-> There are 1 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.179-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+On 2/10/2022 8:14 PM, Guenter Roeck wrote:
+> On 2/10/22 04:41, Vikash Chandola wrote:
+>> pmbus fault and warning bits are not cleared by itself once fault/warning
+>> condition is not valid anymore. As per pmbus datasheet faults must be
+>> cleared by user.
+>> Modify hwmon behavior to clear latched status bytes if any bit in status
+>> register is high prior to returning fresh data to userspace. If
+>> fault/warning conditions are still applicable fault/warning bits will be
+>> set and we will get updated data in second read.
+>>
+>> Hwmon behavior is changed here. Now sysfs reads will reflect latest
+>> values from pmbus slave, not latched values.
+>> In case a transient warning/fault has happened in the past, it will no
+>> longer be reported to userspace.
+>>
+> 
+> 
+> NACK.
+> 
+> Reporting that information is exactly the point of the current code.
+> We _do_ want to report at least once that a problem occurred in the past,
+> and only clear the warning flag(s) afterwards.
+> 
+> Guenter
+> 
+But as per current implementation we will continue to report fault even 
+after fault condition is cleared. I could not find sysfs entry or any 
+other means by which user/kernel can clear the faults/warnings after it 
+is reported. Please point if I am missing anything.
 
-## Build
-* kernel: 5.4.179-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: 3eacd9fd7c98dd0c2574ea8f3692776fd62b4557
-* git describe: v5.4.177-47-g3eacd9fd7c98
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
-77-47-g3eacd9fd7c98
-
-## Test Regressions (compared to v5.4.177-45-g3836147e31ee)
-No test regressions found.
-
-## Metric Regressions (compared to v5.4.177-45-g3836147e31ee)
-No metric regressions found.
-
-## Test Fixes (compared to v5.4.177-45-g3836147e31ee)
-No test fixes found.
-
-## Metric Fixes (compared to v5.4.177-45-g3836147e31ee)
-No metric fixes found.
-
-## Test result summary
-total: 70784, pass: 60720, fail: 227, skip: 9035, xfail: 802
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 258 total, 258 passed, 0 failed
-* arm64: 35 total, 30 passed, 5 failed
-* i386: 19 total, 19 passed, 0 failed
-* mips: 34 total, 34 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 39 passed, 13 failed
-* riscv: 24 total, 24 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 36 total, 36 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+>> Signed-off-by: Vikash Chandola <vikash.chandola@linux.intel.com>
+>> ---
+>>   drivers/hwmon/pmbus/pmbus_core.c | 9 +++++++++
+>>   1 file changed, 9 insertions(+)
+>>
+>> diff --git a/drivers/hwmon/pmbus/pmbus_core.c 
+>> b/drivers/hwmon/pmbus/pmbus_core.c
+>> index 776ee2237be2..1cc82d644079 100644
+>> --- a/drivers/hwmon/pmbus/pmbus_core.c
+>> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+>> @@ -577,6 +577,15 @@ static int pmbus_get_status(struct i2c_client 
+>> *client, int page, int reg)
+>>           break;
+>>       default:
+>>           status = _pmbus_read_byte_data(client, page, reg);
+>> +        if (status > 0) {
+>> +            /*
+>> +             * Status greater than 0 could mean that there was a 
+>> fault/warning.
+>> +             * Clear faults and do a second read to make sure we are 
+>> not getting
+>> +             * stale values.
+>> +             */
+>> +            pmbus_clear_fault_page(client, page);
+>> +            status = _pmbus_read_byte_data(client, page, reg);
+>> +        }
+>>           break;
+>>       }
+>>       if (status < 0)
+> 

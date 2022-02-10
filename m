@@ -2,102 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B87864B039A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B98AA4B0395
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbiBJCyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 21:54:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57582 "EHLO
+        id S231730AbiBJCxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 21:53:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiBJCyK (ORCPT
+        with ESMTP id S231854AbiBJCxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 21:54:10 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBB12409C;
-        Wed,  9 Feb 2022 18:54:12 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id c5-20020a17090a1d0500b001b904a7046dso5581711pjd.1;
-        Wed, 09 Feb 2022 18:54:12 -0800 (PST)
+        Wed, 9 Feb 2022 21:53:42 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE61125DE5
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 18:53:43 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id f13so3323441ilq.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 18:53:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LYtzFa4ASuB/belwk4SpigACGs97QFCNc+YA+b4+Pu8=;
-        b=ooyOBN7rERkODAn/O7i91EVsu/B8py9/9Ax69BwNB/kc8twYaVRYQbpcJLPfemS8hb
-         HkZrVDMhaV95LcunHTo0tXcqRJZORHlOHEddL00vfE0PK8esTG7SYwyfiB500tCWC5ri
-         l6pU4DRAUF2bgKokxVocV+eyMRJSuUiaChrZncXI+PVNYsSVUld+MssdbvKffnPGzFCP
-         /mFWpEPHIlrNEUqjbs//hj1a3I/579YtM3Jds8TxeUAfuDxW/OEsiijqam43ukxKjsH2
-         DVh6iBEBwC5CIYV0XcyMGIqDOrpfE98dazgVv4DXpTrUcv9pfj8LdcCQ7wiJQIrh4Oh5
-         3Jlw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=02AWBuLGOKzuO/3AWRL6F5OKKIT88gnKBJ88rLS3Q5c=;
+        b=CAoj+qpavcGevLlpNh+qcVIfWEfwcXDkYPEAx5BOrK89vKypxjxQRLKyh/6xJvDViX
+         mVN1CVcxNGTLP5YJpokCbFcaz8DpyVPe3tQHhg4TgRM6wb4yx1FDAoB6T2tgrPOXiskX
+         RSIFS/nBOd5mFD8a+YLouMfTxFhXt0Qe23iMnEzms0mYz2jGD/B8uDYMudEh9KMunSj1
+         eSHhHjLlp9VfnGVlWQzRUjlEIFSoT3E9/68cXa3aKOqEtKxhAX1VOCJzYkXDlCQTLVPd
+         bqkLFX3s8W+0r489fx1fwwrjD5pStmOMDhBcRANMRA+eZ6cBKsaXQcwkdfYUi5k7Z7d3
+         kwiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LYtzFa4ASuB/belwk4SpigACGs97QFCNc+YA+b4+Pu8=;
-        b=uALWmATrZX74RaBe98UHtNXaO4Hi28sKD9ehr2ue7uiuMjaZ3NQA18CDPRmfozkRPB
-         q+0wadNFhmTb3/TM7B0xzKK9+dpDvM1dYrpNeU2tg4jRqDGiCPOmOFedjqwQRR5IjxWv
-         LOw2NYLFOcnfO8oLhRyyUP75QfWZG/ghB/uQ6bJIQgJc6GAQeLS+qUAudQmEJnKDFZTE
-         LiM+RRRh+fGVtXxtkUk7K9tBqVG3FNPpzqZdsj80X0V4nWLFubaf0hNMyU+XT6thyJGM
-         MDWqlXurgp/6Sve2NGtls/J+sDubocjwNa5eK2UF0Xg1pwrgeSbWcgETWOF15RCyvlOx
-         1obA==
-X-Gm-Message-State: AOAM530nZC8cGP8fB+AEg4rfvv3nPQsqbLNJGOd5A5yCHrW+XLpquTcY
-        F0VgsjdM+eMcxlvorzJYHPUwl4a3DyCy0WezQmM=
-X-Google-Smtp-Source: ABdhPJzYBhEkkbttuvOrcTM53VUGSP9oL8rWSIPgIMmpLUpLM1VPVkR+SLhvmLHyyTITlBZxB9qfd23OzJjqo7RcYHM=
-X-Received: by 2002:a17:903:2351:: with SMTP id c17mr367198plh.4.1644461651987;
- Wed, 09 Feb 2022 18:54:11 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=02AWBuLGOKzuO/3AWRL6F5OKKIT88gnKBJ88rLS3Q5c=;
+        b=krsJhIZLqU+sXnkT+DKdfP5GipJPgodCTUznwCg9YD7KXMIaGVfxJsheab/8cWWU6I
+         RmgKggzmz6MyVKwty/P7Kd8OaXhaQbR8qP6yai8tSZWJaRKMrCtRxbwvtuLquuu0QCH0
+         IVzPTqDncEce0ZLdaRZHPr4Cq4s3u7PApFCPcpl0ycn0hsk6eAVO2Q9+rUZ+BVQk3Zv8
+         uQcUeBnmKP/E4eicHpGQPktRlemns7Dea90KyKD2p0EFaO7JD2qt1XkfMcICfK+cIOKm
+         pX/F2If/BQrZR6LNHSYto1HOztcPvIFGtX8l40FPm2gRbKd2Nm5buyxRD1tp1fUEYLrD
+         sHsQ==
+X-Gm-Message-State: AOAM530iyB8XJk7Ea8LfeVLsgs/xvldTWp7UerLGsQ9aRIGaUgFbdG0G
+        KAmPoz1dxRBjtQdWR8kuz6NRbg==
+X-Google-Smtp-Source: ABdhPJxN76sol94sGrXIwyJukfPmPPrpjKCZDatx0OHsW2ZL5QRGOM4AtA0sGQWprYjd1omddFfeFQ==
+X-Received: by 2002:a05:6e02:1d90:: with SMTP id h16mr2623971ila.202.1644461622739;
+        Wed, 09 Feb 2022 18:53:42 -0800 (PST)
+Received: from google.com ([2620:15c:183:200:1792:6c19:6193:97c1])
+        by smtp.gmail.com with ESMTPSA id v4sm7477338ilc.21.2022.02.09.18.53.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 18:53:42 -0800 (PST)
+Date:   Wed, 9 Feb 2022 19:53:37 -0700
+From:   Yu Zhao <yuzhao@google.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
+        <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>
+Subject: Re: [PATCH v7 05/12] mm: multigenerational LRU: minimal
+ implementation
+Message-ID: <YgR+MfXjpg82QyBT@google.com>
+References: <20220208081902.3550911-1-yuzhao@google.com>
+ <20220208081902.3550911-6-yuzhao@google.com>
+ <YgKfQVKcBebL7pY3@cmpxchg.org>
 MIME-Version: 1.0
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <YgAWVSGQg8FPCeba@kernel.org> <YgDIIpCm3UITk896@lisas.de> <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
- <YgI1A0CtfmT7GMIp@kernel.org> <YgI37n+3JfLSNQCQ@grain> <357664de-b089-4617-99d1-de5098953c80@www.fastmail.com>
- <YgKiKEcsNt7mpMHN@grain> <8e36f20723ca175db49ed3cc73e42e8aa28d2615.camel@intel.com>
- <9d664c91-2116-42cc-ef8d-e6d236de43d0@kernel.org>
-In-Reply-To: <9d664c91-2116-42cc-ef8d-e6d236de43d0@kernel.org>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Wed, 9 Feb 2022 18:53:35 -0800
-Message-ID: <CAMe9rOo+RbmK5GyFKe2q3GGFP4Oi3o16x9xVpD7HpoEn=v0mfQ@mail.gmail.com>
-Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-To:     Andy Lutomirski <luto@kernel.org>,
-        Felix Willgerodt <felix.willgerodt@intel.com>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "adrian@lisas.de" <adrian@lisas.de>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "avagin@gmail.com" <avagin@gmail.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
-        "oleg@redhat.com" <oleg@redhat.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "Dave.Martin@arm.com" <Dave.Martin@arm.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgKfQVKcBebL7pY3@cmpxchg.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,87 +105,233 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 6:37 PM Andy Lutomirski <luto@kernel.org> wrote:
->
-> On 2/8/22 18:18, Edgecombe, Rick P wrote:
-> > On Tue, 2022-02-08 at 20:02 +0300, Cyrill Gorcunov wrote:
-> >> On Tue, Feb 08, 2022 at 08:21:20AM -0800, Andy Lutomirski wrote:
-> >>>>> But such a knob will immediately reduce the security value of
-> >>>>> the entire
-> >>>>> thing, and I don't have good ideas how to deal with it :(
-> >>>>
-> >>>> Probably a kind of latch in the task_struct which would trigger
-> >>>> off once
-> >>>> returt to a different address happened, thus we would be able to
-> >>>> jump inside
-> >>>> paratite code. Of course such trigger should be available under
-> >>>> proper
-> >>>> capability only.
-> >>>
-> >>> I'm not fully in touch with how parasite, etc works.  Are we
-> >>> talking about save or restore?
-> >>
-> >> We use parasite code in question during checkpoint phase as far as I
-> >> remember.
-> >> push addr/lret trick is used to run "injected" code (code injection
-> >> itself is
-> >> done via ptrace) in compat mode at least. Dima, Andrei, I didn't look
-> >> into this code
-> >> for years already, do we still need to support compat mode at all?
-> >>
-> >>> If it's restore, what exactly does CRIU need to do?  Is it just
-> >>> that CRIU needs to return
-> >>> out from its resume code into the to-be-resumed program without
-> >>> tripping CET?  Would it
-> >>> be acceptable for CRIU to require that at least one shstk slot be
-> >>> free at save time?
-> >>> Or do we need a mechanism to atomically switch to a completely full
-> >>> shadow stack at resume?
-> >>>
-> >>> Off the top of my head, a sigreturn (or sigreturn-like mechanism)
-> >>> that is intended for
-> >>> use for altshadowstack could safely verify a token on the
-> >>> altshdowstack, possibly
-> >>> compare to something in ucontext (or not -- this isn't clearly
-> >>> necessary) and switch
-> >>> back to the previous stack.  CRIU could use that too.  Obviously
-> >>> CRIU will need a way
-> >>> to populate the relevant stacks, but WRUSS can be used for that,
-> >>> and I think this
-> >>> is a fundamental requirement for CRIU -- CRIU restore absolutely
-> >>> needs a way to write
-> >>> the saved shadow stack data into the shadow stack.
-> >
-> > Still wrapping my head around the CRIU save and restore steps, but
-> > another general approach might be to give ptrace the ability to
-> > temporarily pause/resume/set CET enablement and SSP for a stopped
-> > thread. Then injected code doesn't need to jump through any hoops or
-> > possibly run into road blocks. I'm not sure how much this opens things
-> > up if the thread has to be stopped...
->
-> Hmm, that's maybe not insane.
->
-> An alternative would be to add a bona fide ptrace call-a-function
-> mechanism.  I can think of two potentially usable variants:
->
-> 1. Straight call.  PTRACE_CALL_FUNCTION(addr) just emulates CALL addr,
-> shadow stack push and all.
->
-> 2. Signal-style.  PTRACE_CALL_FUNCTION_SIGFRAME injects an actual signal
-> frame just like a real signal is being delivered with the specified
-> handler.  There could be a variant to opt-in to also using a specified
-> altstack and altshadowstack.
->
-> 2 would be more expensive but would avoid the need for much in the way
-> of asm magic.  The injected code could be plain C (or Rust or Zig or
-> whatever).
->
-> All of this only really handles save, not restore.  I don't understand
-> restore enough to fully understand the issue.
+On Tue, Feb 08, 2022 at 11:50:09AM -0500, Johannes Weiner wrote:
 
-FWIW, CET enabled GDB can call a function in a CET enabled process.
-Adding Felix who may know more about it.
+<snipped>
 
+> On Tue, Feb 08, 2022 at 01:18:55AM -0700, Yu Zhao wrote:
+> > To avoid confusions, the terms "promotion" and "demotion" will be
+> > applied to the multigenerational LRU, as a new convention; the terms
+> > "activation" and "deactivation" will be applied to the active/inactive
+> > LRU, as usual.
+> > 
+> > The aging produces young generations. Given an lruvec, it increments
+> > max_seq when max_seq-min_seq+1 approaches MIN_NR_GENS. The aging
+> > promotes hot pages to the youngest generation when it finds them
+> > accessed through page tables; the demotion of cold pages happens
+> > consequently when it increments max_seq. Since the aging is only
+> > interested in hot pages, its complexity is O(nr_hot_pages). Promotion
+> > in the aging path doesn't require any LRU list operations, only the
+> > updates of the gen counter and lrugen->nr_pages[]; demotion, unless
+> > as the result of the increment of max_seq, requires LRU list
+> > operations, e.g., lru_deactivate_fn().
+> 
+> I'm having trouble with this changelog. It opens with a footnote and
+> summarizes certain aspects of the implementation whose importance to
+> the reader aren't entirely clear at this time.
+> 
+> It would be better to start with a high-level overview of the problem
+> and how this algorithm solves it. How the reclaim algorithm needs to
+> find the page that is most suitable for eviction and to signal when
+> it's time to give up and OOM. Then explain how grouping pages into
+> multiple generations accomplishes that - in particular compared to the
+> current two use-once/use-many lists.
 
--- 
-H.J.
+Hi Johannes,
+
+Thanks for reviewing!
+
+I suspect the information you are looking for might have been in the
+patchset but is scattered in a few places. Could you please glance at
+the following pieces and let me know
+  1. whether they cover some of the points you asked for
+  2. and if so, whether there is a better order/place to present them?
+
+The previous patch has a quick view on the architecture:
+https://lore.kernel.org/linux-mm/20220208081902.3550911-5-yuzhao@google.com/
+
+  Evictable pages are divided into multiple generations for each lruvec.
+  The youngest generation number is stored in lrugen->max_seq for both
+  anon and file types as they're aged on an equal footing. The oldest
+  generation numbers are stored in lrugen->min_seq[] separately for anon
+  and file types as clean file pages can be evicted regardless of swap
+  constraints. These three variables are monotonically increasing.
+  
+  Generation numbers are truncated into order_base_2(MAX_NR_GENS+1) bits
+  in order to fit into the gen counter in folio->flags. Each truncated
+  generation number is an index to lrugen->lists[]. The sliding window
+  technique is used to track at least MIN_NR_GENS and at most
+  MAX_NR_GENS generations. The gen counter stores (seq%MAX_NR_GENS)+1
+  while a page is on one of lrugen->lists[]. Otherwise it stores 0.
+  
+  There are two conceptually independent processes (as in the
+  manufacturing process): "the aging", which produces young generations,
+  and "the eviction", which consumes old generations. They form a
+  closed-loop system, i.e., "the page reclaim". Both processes can be
+  invoked from userspace for the purposes of working set estimation and
+  proactive reclaim. These features are required to optimize job
+  scheduling (bin packing) in data centers. The variable size of the
+  sliding window is designed for such use cases...
+
+And the design doc contains a bit more details, and I'd be happy to
+present it earlier, if you think doing so would help.
+https://lore.kernel.org/linux-mm/20220208081902.3550911-13-yuzhao@google.com/
+
+> Explain the problem of MMU vs syscall references, and how tiering
+> addresses this.
+
+The previous patch also touched on this point:
+https://lore.kernel.org/linux-mm/20220208081902.3550911-5-yuzhao@google.com/
+
+  The protection of hot pages and the selection of cold pages are based
+  on page access channels and patterns. There are two access channels:
+  one through page tables and the other through file descriptors. The
+  protection of the former channel is by design stronger because:
+  1) The uncertainty in determining the access patterns of the former
+     channel is higher due to the approximation of the accessed bit.
+  2) The cost of evicting the former channel is higher due to the TLB
+     flushes required and the likelihood of encountering the dirty bit.
+  3) The penalty of underprotecting the former channel is higher because
+     applications usually don't prepare themselves for major page faults
+     like they do for blocked I/O. E.g., GUI applications commonly use
+     dedicated I/O threads to avoid blocking the rendering threads.
+  There are also two access patterns: one with temporal locality and the
+  other without. For the reasons listed above, the former channel is
+  assumed to follow the former pattern unless VM_SEQ_READ or
+  VM_RAND_READ is present, and the latter channel is assumed to follow
+  the latter pattern unless outlying refaults have been observed.
+
+> Explain the significance of refaults and how the algorithm responds to
+> them. Not in terms of which running averages are updated, but in terms
+> of user-visible behavior ("will start swapping (more)" etc.)
+
+And this patch touched on how tiers would help:
+  1) It removes the cost of activation in the buffered access path by
+     inferring whether pages accessed multiple times through file
+     descriptors are statistically hot and thus worth promoting in the
+     eviction path.
+  2) It takes pages accessed through page tables into account and avoids
+     overprotecting pages accessed multiple times through file
+     descriptors. (Pages accessed through page tables are in the first
+     tier since N=0.)
+  3) More tiers provide better protection for pages accessed more than
+     twice through file descriptors, when under heavy buffered I/O
+     workloads.
+
+And the design doc:
+https://lore.kernel.org/linux-mm/20220208081902.3550911-13-yuzhao@google.com/
+
+  To select a type and a tier to evict from, it first compares min_seq[]
+  to select the older type. If they are equal, it selects the type whose
+  first tier has a lower refault percentage. The first tier contains
+  single-use unmapped clean pages, which are the best bet.
+
+> Express *intent*, how it's supposed to behave wrt workloads and memory
+> pressure. The code itself will explain the how, its complexity etc.
+
+Hmm... This part I'm not so sure. It seems to me this is equivalent to
+describing how it works.
+
+> Most reviewers will understand the fundamental challenges of page
+> reclaim. The difficulty is matching individual aspects of the problem
+> space to your individual components and design choices you have made.
+> 
+> Let us in on that thinking, please ;)
+
+Agreed. I'm sure I haven't covered everything. So I'm trying to figure
+out what's important but missing/insufficient.
+
+> > @@ -892,6 +892,50 @@ config ANON_VMA_NAME
+> >  	  area from being merged with adjacent virtual memory areas due to the
+> >  	  difference in their name.
+> >  
+> > +# multigenerational LRU {
+> > +config LRU_GEN
+> > +	bool "Multigenerational LRU"
+> > +	depends on MMU
+> > +	# the following options can use up the spare bits in page flags
+> > +	depends on !MAXSMP && (64BIT || !SPARSEMEM || SPARSEMEM_VMEMMAP)
+> > +	help
+> > +	  A high performance LRU implementation for memory overcommit. See
+> > +	  Documentation/admin-guide/mm/multigen_lru.rst and
+> > +	  Documentation/vm/multigen_lru.rst for details.
+> 
+> These files don't exist at this time, please introduce them before or
+> when referencing them. If they document things introduced later in the
+> patchset, please start with a minimal version of the file and update
+> it as you extend the algorithm and add optimizations etc.
+> 
+> It's really important to only reference previous patches, not later
+> ones. This allows reviewers to read the patches linearly.  Having to
+> search for missing pieces in patches you haven't looked at yet is bad.
+
+Okay, will remove this bit from this patch.
+
+> > +config NR_LRU_GENS
+> > +	int "Max number of generations"
+> > +	depends on LRU_GEN
+> > +	range 4 31
+> > +	default 4
+> > +	help
+> > +	  Do not increase this value unless you plan to use working set
+> > +	  estimation and proactive reclaim to optimize job scheduling in data
+> > +	  centers.
+> > +
+> > +	  This option uses order_base_2(N+1) bits in page flags.
+> > +
+> > +config TIERS_PER_GEN
+> > +	int "Number of tiers per generation"
+> > +	depends on LRU_GEN
+> > +	range 2 4
+> > +	default 4
+> > +	help
+> > +	  Do not decrease this value unless you run out of spare bits in page
+> > +	  flags, i.e., you see the "Not enough bits in page flags" build error.
+> > +
+> > +	  This option uses N-2 bits in page flags.
+> 
+> Linus had pointed out that we shouldn't ask these questions of the
+> user. How do you pick numbers here? I'm familiar with workingset
+> estimation and proactive reclaim usecases but I wouldn't know.
+> 
+> Even if we removed the config option and hardcoded the number, this is
+> a question for kernel developers: What does "4" mean? How would
+> behavior differ if it were 3 or 5 instead? Presumably there is some
+> sort of behavior gradient. "As you increase the number of
+> generations/tiers, the user-visible behavior of the kernel will..."
+> This should really be documented.
+> 
+> I'd also reiterate Mel's point: Distribution kernels need to support
+> the full spectrum of applications and production environments. Unless
+> using non-defaults it's an extremely niche usecase (like compiling out
+> BUG() calls) compile-time options are not the right choice. If we do
+> need a tunable, it could make more sense to have a compile time upper
+> limit (to determine page flag space) combined with a runtime knob?
+
+I agree, and I think only time can answer all theses questions :)
+
+This effort is not in the final stage but at very its beginning. More
+experiments and wilder adoption are required to see how it's going to
+evolve or where it leads. For now, there is just no way to tell whether
+those values make sense for the majority or we need the runtime knobs.
+
+These are valid concerns, but TBH, I think they are minor ones because
+most users need not to worry about them -- this patchset has been used
+in several downstream kernels and I haven't heard any complaints about
+those options/values:
+https://lore.kernel.org/linux-mm/20220208081902.3550911-1-yuzhao@google.com/
+
+1. Android ARCVM
+2. Arch Linux Zen
+3. Chrome OS
+4. Liquorix
+5. post-factum
+6. XanMod
+
+Then why do we need these options? Because there are always exceptions,
+as stated in the descriptions of those options. Sometimes we just can't
+decide everything for users -- the answers lie in their use cases. The
+bottom line is, if this starts bothering people or gets in somebody's
+way, I'd be glad to revisit. Fair enough?
+
+Thanks!

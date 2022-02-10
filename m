@@ -2,106 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9829A4B0372
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C474B037D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbiBJCgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 21:36:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48586 "EHLO
+        id S230151AbiBJCho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 21:37:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230357AbiBJCgp (ORCPT
+        with ESMTP id S229511AbiBJChm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 21:36:45 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A282237D2;
-        Wed,  9 Feb 2022 18:36:47 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id d9-20020a17090a498900b001b8bb1d00e7so4161952pjh.3;
-        Wed, 09 Feb 2022 18:36:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=OTYmrbGIx6yiOF0Z0bFCD7WxKDh7jr/0cIzV9rC1yXI=;
-        b=ngYRXwXFCD94gM2rlOPHYb53Xo02WgOf9T5fUzPW4ur8qQWwCRXQCUuza+m3EZdwTV
-         4t+Nl46o0H40VbIUQkjiKnvQhNhPIP62SA6gfjGownuxZOktrYllW9yqpbL7ptiudXiS
-         u1VEuCMbZ+uJwLQucORQ4/+rpAT9EMokKrcPvAkAn/O9M61kea4kg1ENtRRDkATieH4b
-         NaA/KF0SpPVyqyeCjQjkTaop+OxRCfxhsPqjoRzrR4PlpCBDN3WzkiNZqIYKqEv+6VEu
-         QpjNs4iFURWGnd7VkaCHSvP9thxAp9wKo+1Fj34ZxjsWt6IPBLKFUPaVqBlnFrB7TbIX
-         0Q1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=OTYmrbGIx6yiOF0Z0bFCD7WxKDh7jr/0cIzV9rC1yXI=;
-        b=quas8HOWwlK5K7TfG7qjunQTTKR5kTSoburEErA02Ohqvxm5z+LCEUZGK+py6wqWJJ
-         /dzO5Nh7BRzhbS1nQcS0u2T1c85IagYSe+I5UoeDIAPiitgzQE7tPDfNBGV0TDl+0Svv
-         RGFnrNW8FLtsVAgzyl6wJ6G31Npz96pq8dML1dJ7va6QwPscmCizcBhsPXtXTgvxl3Yy
-         3F/JSawwD6VsofK8tsyX3x1XJprB3Rusk5+KLK/YT+5QfYkiIDYvFxIVdrbX0CWsd1mN
-         QBcLbA/hnKDbnYnmzCT867556u86zk5RCHpJSgL+54OPSHPvpruhC+8ERv7Js085dQfu
-         2lLw==
-X-Gm-Message-State: AOAM532/68C19JUFh02ft5c9PU0cuoqgZyomdCWQVgpibbC/XxqaOsPW
-        xL50BBB/POacjugu+Vd6aLqWYq/fHs1+vA==
-X-Google-Smtp-Source: ABdhPJwlL3HPV93WjdBrDI+iGqX24qf6pToV1X6K1yVEpflfbuaQG3FCEHUzQ/++0dcVM14GDeoCWA==
-X-Received: by 2002:a17:902:c404:: with SMTP id k4mr5336273plk.71.1644460606616;
-        Wed, 09 Feb 2022 18:36:46 -0800 (PST)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id f16sm20173665pfd.118.2022.02.09.18.36.45
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 09 Feb 2022 18:36:46 -0800 (PST)
-From:   Li-hao Kuo <lhjeff911@gmail.com>
-To:     broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com, trix@redhat.com,
-        Li-hao Kuo <lhjeff911@gmail.com>
-Subject: [PATCH] spi: Fix warning for Clang build
-Date:   Thu, 10 Feb 2022 10:36:56 +0800
-Message-Id: <691d52b72f978f562136c587319852f5c65f08fe.1644460444.git.lhjeff911@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 9 Feb 2022 21:37:42 -0500
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D12B10E2
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 18:37:41 -0800 (PST)
+Date:   Thu, 10 Feb 2022 10:37:14 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1644460659;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f52O7WU1jwjZjNL8pYiw1viyPBOlQoX/LtWrz0nwoZU=;
+        b=t1IVKDGvHGmQCcYPWGCk9v+IX1EUYsLful9GLVsg57O/OrX44rmgLM0/Sz3lt8c+sBH9vZ
+        Ox1Ez1l1gHVncc4IX3DGcrgHllFaWWgaoHzOsH8qKoQcCHxh44tA/ukH72TaLFxNktDC48
+        oHy1Vl0FyCvcIzyYJYYJ5Vo6vUxEh+0=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usbip: vudc: Make use of the helper macro LIST_HEAD()
+Message-ID: <20220210023714.GA7791@chq-T47>
+References: <20220209032813.38703-1-cai.huoqing@linux.dev>
+ <8c8bcf5b-bbda-55e0-6a61-35bfafbafb78@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8c8bcf5b-bbda-55e0-6a61-35bfafbafb78@linuxfoundation.org>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang build fails with
-spi-sunplus-sp7021.c:405:2: error: variable 'ret' is used
-  uninitialized whenever switch default is taken
-        default:
+On 09 2月 22 09:00:37, Shuah Khan wrote:
+> On 2/8/22 8:28 PM, Cai Huoqing wrote:
+> > Replace "struct list_head head = LIST_HEAD_INIT(head)" with
+> > "LIST_HEAD(head)" to simplify the code.
+> > 
+> > Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+> > ---
+> >   drivers/usb/usbip/vudc_main.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/usbip/vudc_main.c b/drivers/usb/usbip/vudc_main.c
+> > index 678faa82598c..d43252b77efd 100644
+> > --- a/drivers/usb/usbip/vudc_main.c
+> > +++ b/drivers/usb/usbip/vudc_main.c
+> > @@ -26,7 +26,7 @@ static struct platform_driver vudc_driver = {
+> >   	},
+> >   };
+> > -static struct list_head vudc_devices = LIST_HEAD_INIT(vudc_devices);
+> > +static LIST_HEAD(vudc_devices);
+> >   static int __init init(void)
+> >   {
+> > 
+> 
+> Explain why this change simplifies the code and also add a comment
+> above LIST_HEAD
+LIST_HEAD() help to clean up the code "struct list_head vudc_devices =
+". we only to care the variable 'vudc_devices',
+> 
+> LIST_HEAD_INIT clearly states what it does, as a result it is easier
+> to understand the code.
+LIST_HEAD() is defined for 17 years, lots of drivers use it
+directly. It's not about code readability.
 
-Restore initializing ret. and add return error at default
-
-Fixes: 47e8fe57a66f ("spi: Modify irq request position and modify parameters")
-Reported-by: Tom Rix <trix@redhat.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
----
- drivers/spi/spi-sunplus-sp7021.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-sunplus-sp7021.c b/drivers/spi/spi-sunplus-sp7021.c
-index ba5ed9f..460993a 100644
---- a/drivers/spi/spi-sunplus-sp7021.c
-+++ b/drivers/spi/spi-sunplus-sp7021.c
-@@ -375,7 +375,7 @@ static int sp7021_spi_slave_transfer_one(struct spi_controller *ctlr, struct spi
- {
- 	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
- 	struct device *dev = pspim->dev;
--	int mode, ret;
-+	int mode, ret = 0;
- 
- 	mode = SP7021_SPI_IDLE;
- 	if (xfer->tx_buf && xfer->rx_buf) {
-@@ -403,7 +403,7 @@ static int sp7021_spi_slave_transfer_one(struct spi_controller *ctlr, struct spi
- 		ret = sp7021_spi_slave_rx(spi, xfer);
- 		break;
- 	default:
--		break;
-+		return -EINVAL;
- 	}
- 	if (xfer->tx_buf)
- 		dma_unmap_single(dev, xfer->tx_dma, xfer->len, DMA_TO_DEVICE);
--- 
-2.7.4
-
+Thanks,
+Cai
+> 
+> thanks,
+> -- Shuah

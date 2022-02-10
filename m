@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE46B4B113C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D915E4B1142
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243442AbiBJPFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 10:05:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46408 "EHLO
+        id S243427AbiBJPFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 10:05:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243414AbiBJPFq (ORCPT
+        with ESMTP id S243423AbiBJPFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 10:05:46 -0500
+        Thu, 10 Feb 2022 10:05:48 -0500
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D42DB1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 07:05:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E8E398
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 07:05:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644505546; x=1676041546;
+  t=1644505549; x=1676041549;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=AEfNjRzAVytF6bGBharl5sxyImB1HHqq9vSUPz7ew5I=;
-  b=VIEgBX3PUXTaNhEKspgf/d5+Y5daL09L/yQI2ys0tG+hzFaSmf2G9GRu
-   D6ZTl/fC/K4y4DT50PzTbHByb+Z9KnN4gtK9f3715oDVaArOZEAY8oCwP
-   Dqm4uqEW3+IOnnUxdgEbfwdWh+5WLvtwVNfVuXvNF2oCOvAiLwUxKy+Iy
-   VTLswdN1X+Jef5v5CWFGj+MIPHfdRiEw2tek1RajOb7Dng4us0Tg5NTJu
-   gd0nlSzbF8DY58TxEcUe+k5MQAk0Y5ZPLgCaHrXEn90zJBKyZw2YUEK3r
-   R12ey3ilvpmZrqan8DkiUwWtKrXknvpqbhX1Luim10TVMZOIXXLX8Qwep
+  bh=avB9gfF1dQpf9ouXWAEoycsyJSGtDd8lbJbB9o+Q0FQ=;
+  b=hKTqFW3OMmwu8lThCAHycPCDiJ3xGtjeWjPGkjZmebT/fNuP7Fl8vGTa
+   OmyzAjk3KeOgzEU2mmeQZtzbDL0lgUlkgVeZYAbeWi1kOAX0sOtYKojvd
+   tPSX2G89O5qG9VjWqSyr1R/9hAPedDxdhZrOoDI2b9MhWNWoPLye/Ay4D
+   2LNTVfsmjvAVoq/weOaI3YVCDTFxKZzUu6Blv2GNdHP89wlZbQhdyAWfp
+   uH/bbkGl8YkhwLZlSuSbXBKRRDLq/PRhigLHFf5sbl2x98efID8d6Q0oH
+   H2IpG9B35092GhKEUlDuzqrcgMsspbGbfobG5rIKUgUXqQXTOUNQt+Cf3
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="230153271"
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="230153297"
 X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="230153271"
+   d="scan'208";a="230153297"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 07:05:46 -0800
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 07:05:49 -0800
 X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="500422656"
+   d="scan'208";a="500422667"
 Received: from barabano-mobl.ccr.corp.intel.com (HELO pujfalus-desk.ger.corp.intel.com) ([10.252.41.18])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 07:05:43 -0800
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 07:05:46 -0800
 From:   Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 To:     lgirdwood@gmail.com, broonie@kernel.org,
         pierre-louis.bossart@linux.intel.com,
@@ -44,9 +44,9 @@ To:     lgirdwood@gmail.com, broonie@kernel.org,
 Cc:     alsa-devel@alsa-project.org, kai.vehmanen@linux.intel.com,
         daniel.baluta@nxp.com, tiwai@suse.com,
         linux-kernel@vger.kernel.org, fred.oh@linux.intel.com
-Subject: [PATCH v2 5/9] ASoC: SOF: Introduce IPC SOF client support
-Date:   Thu, 10 Feb 2022 17:05:21 +0200
-Message-Id: <20220210150525.30756-6-peter.ujfalusi@linux.intel.com>
+Subject: [PATCH v2 6/9] ASoC: SOF: sof-client: Add support for clients not managed by pm framework
+Date:   Thu, 10 Feb 2022 17:05:22 +0200
+Message-Id: <20220210150525.30756-7-peter.ujfalusi@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220210150525.30756-1-peter.ujfalusi@linux.intel.com>
 References: <20220210150525.30756-1-peter.ujfalusi@linux.intel.com>
@@ -62,741 +62,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A client in the SOF (Sound Open Firmware) context is a driver that needs
-to communicate with the DSP via IPC messages. The SOF core is responsible
-for serializing the IPC messages to the DSP from the different clients.
+Some SOF client can be of 'passive' type, meaning that they do not handle
+PM framework callbacks by themselves but rely on the auxiliary driver's
+suspend and resume callbacks to be notified about the core's suspend or
+resume event.
 
-One example of an SOF client would be an IPC test client that floods the
-DSP with test IPC messages to validate if the serialization works as
-expected.
-
-Multi-client support will also add the ability to split the existing audio
-cards into multiple ones, so as to e.g. to deal with HDMI with a dedicated
-client instead of adding HDMI to all cards.
-
-This patch introduces descriptors for SOF client driver and SOF client
-device along with APIs for registering and unregistering a SOF client
-driver, sending IPCs from a client device and accessing the SOF core
-debugfs root entry.
-
-Along with this, add a couple of new members to struct snd_sof_dev that
-will be used for maintaining the list of clients.
-
-Signed-off-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Co-developed-by: Fred Oh <fred.oh@linux.intel.com>
-Signed-off-by: Fred Oh <fred.oh@linux.intel.com>
 Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
 Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 ---
- sound/soc/sof/Kconfig      |   7 +
- sound/soc/sof/Makefile     |   1 +
- sound/soc/sof/core.c       |  43 ++++-
- sound/soc/sof/ipc.c        |  25 +--
- sound/soc/sof/sof-client.c | 340 +++++++++++++++++++++++++++++++++++++
- sound/soc/sof/sof-client.h |  67 ++++++++
- sound/soc/sof/sof-priv.h   |  78 ++++++++-
- 7 files changed, 540 insertions(+), 21 deletions(-)
- create mode 100644 sound/soc/sof/sof-client.c
- create mode 100644 sound/soc/sof/sof-client.h
+ sound/soc/sof/pm.c         | 13 ++++++++++-
+ sound/soc/sof/sof-client.c | 46 ++++++++++++++++++++++++++++++++++++++
+ sound/soc/sof/sof-priv.h   | 12 ++++++++++
+ 3 files changed, 70 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/sof/Kconfig b/sound/soc/sof/Kconfig
-index 1a7d6cefd3b7..468d7c113dae 100644
---- a/sound/soc/sof/Kconfig
-+++ b/sound/soc/sof/Kconfig
-@@ -61,6 +61,13 @@ config SND_SOC_SOF_DEBUG_PROBES
- 	  Say Y if you want to enable probes.
- 	  If unsure, select "N".
+diff --git a/sound/soc/sof/pm.c b/sound/soc/sof/pm.c
+index 197a88695fef..7300ecadabd9 100644
+--- a/sound/soc/sof/pm.c
++++ b/sound/soc/sof/pm.c
+@@ -167,6 +167,9 @@ static int sof_resume(struct device *dev, bool runtime_resume)
+ 		return ret;
+ 	}
  
-+config SND_SOC_SOF_CLIENT
-+	tristate
-+	select AUXILIARY_BUS
-+	help
-+	  This option is not user-selectable but automagically handled by
-+	  'select' statements at a higher level.
++	/* Notify clients not managed by pm framework about core resume */
++	sof_resume_clients(sdev);
 +
- config SND_SOC_SOF_DEVELOPER_SUPPORT
- 	bool "SOF developer options support"
- 	depends on EXPERT && SND_SOC_SOF
-diff --git a/sound/soc/sof/Makefile b/sound/soc/sof/Makefile
-index 4b9fccacc2b7..38ce2fe376fa 100644
---- a/sound/soc/sof/Makefile
-+++ b/sound/soc/sof/Makefile
-@@ -2,6 +2,7 @@
+ 	/* notify DSP of system resume */
+ 	ret = sof_send_pm_ctx_ipc(sdev, SOF_IPC_PM_CTX_RESTORE);
+ 	if (ret < 0)
+@@ -180,6 +183,7 @@ static int sof_resume(struct device *dev, bool runtime_resume)
+ static int sof_suspend(struct device *dev, bool runtime_suspend)
+ {
+ 	struct snd_sof_dev *sdev = dev_get_drvdata(dev);
++	pm_message_t pm_state;
+ 	u32 target_state = 0;
+ 	int ret;
  
- snd-sof-objs := core.o ops.o loader.o ipc.o pcm.o pm.o debug.o topology.o\
- 		control.o trace.o iomem-utils.o sof-audio.o stream-ipc.o
-+snd-sof-$(CONFIG_SND_SOC_SOF_CLIENT) += sof-client.o
+@@ -205,16 +209,23 @@ static int sof_suspend(struct device *dev, bool runtime_suspend)
+ 	}
  
- snd-sof-$(CONFIG_SND_SOC_SOF_DEBUG_PROBES) += sof-probes.o
- snd-sof-$(CONFIG_SND_SOC_SOF_COMPRESS) += compress.o
-diff --git a/sound/soc/sof/core.c b/sound/soc/sof/core.c
-index 8f32b5b12b3e..2aabaac9007f 100644
---- a/sound/soc/sof/core.c
-+++ b/sound/soc/sof/core.c
-@@ -122,6 +122,27 @@ void sof_print_oops_and_stack(struct snd_sof_dev *sdev, const char *level,
- }
- EXPORT_SYMBOL(sof_print_oops_and_stack);
+ 	target_state = snd_sof_dsp_power_target(sdev);
++	pm_state.event = target_state;
  
-+/* Helper to manage DSP state */
-+void sof_set_fw_state(struct snd_sof_dev *sdev, enum sof_fw_state new_state)
-+{
-+	if (sdev->fw_state == new_state)
-+		return;
-+
-+	dev_dbg(sdev->dev, "fw_state change: %d -> %d\n", sdev->fw_state, new_state);
-+	sdev->fw_state = new_state;
-+
-+	switch (new_state) {
-+	case SOF_FW_BOOT_NOT_STARTED:
-+	case SOF_FW_BOOT_COMPLETE:
-+	case SOF_FW_CRASHED:
-+		sof_client_fw_state_dispatcher(sdev);
-+		fallthrough;
-+	default:
-+		break;
+ 	/* Skip to platform-specific suspend if DSP is entering D0 */
+-	if (target_state == SOF_DSP_PM_D0)
++	if (target_state == SOF_DSP_PM_D0) {
++		/* Notify clients not managed by pm framework about core suspend */
++		sof_suspend_clients(sdev, pm_state);
+ 		goto suspend;
 +	}
-+}
-+EXPORT_SYMBOL(sof_set_fw_state);
+ 
+ 	sof_tear_down_pipelines(sdev, false);
+ 
+ 	/* release trace */
+ 	snd_sof_release_trace(sdev);
+ 
++	/* Notify clients not managed by pm framework about core suspend */
++	sof_suspend_clients(sdev, pm_state);
 +
- /*
-  *			FW Boot State Transition Diagram
-  *
-@@ -266,6 +287,12 @@ static int sof_probe_continue(struct snd_sof_dev *sdev)
- 		goto fw_trace_err;
- 	}
- 
-+	ret = sof_register_clients(sdev);
-+	if (ret < 0) {
-+		dev_err(sdev->dev, "failed to register clients %d\n", ret);
-+		goto sof_machine_err;
-+	}
-+
- 	/*
- 	 * Some platforms in SOF, ex: BYT, may not have their platform PM
- 	 * callbacks set. Increment the usage count so as to
-@@ -281,6 +308,8 @@ static int sof_probe_continue(struct snd_sof_dev *sdev)
- 
- 	return 0;
- 
-+sof_machine_err:
-+	snd_sof_machine_unregister(sdev, plat_data);
- fw_trace_err:
- 	snd_sof_free_trace(sdev);
- fw_run_err:
-@@ -329,7 +358,6 @@ int snd_sof_device_probe(struct device *dev, struct snd_sof_pdata *plat_data)
- 
- 	sdev->pdata = plat_data;
- 	sdev->first_boot = true;
--	sof_set_fw_state(sdev, SOF_FW_BOOT_NOT_STARTED);
- #if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_PROBES)
- 	sdev->extractor_stream_tag = SOF_PROBE_INVALID_NODE_ID;
- #endif
-@@ -350,9 +378,14 @@ int snd_sof_device_probe(struct device *dev, struct snd_sof_pdata *plat_data)
- 	INIT_LIST_HEAD(&sdev->widget_list);
- 	INIT_LIST_HEAD(&sdev->dai_list);
- 	INIT_LIST_HEAD(&sdev->route_list);
-+	INIT_LIST_HEAD(&sdev->ipc_client_list);
-+	INIT_LIST_HEAD(&sdev->ipc_rx_handler_list);
-+	INIT_LIST_HEAD(&sdev->fw_state_handler_list);
- 	spin_lock_init(&sdev->ipc_lock);
- 	spin_lock_init(&sdev->hw_lock);
- 	mutex_init(&sdev->power_state_access);
-+	mutex_init(&sdev->ipc_client_mutex);
-+	mutex_init(&sdev->client_event_handler_mutex);
- 
- 	/* set default timeouts if none provided */
- 	if (plat_data->desc->ipc_timeout == 0)
-@@ -364,6 +397,8 @@ int snd_sof_device_probe(struct device *dev, struct snd_sof_pdata *plat_data)
- 	else
- 		sdev->boot_timeout = plat_data->desc->boot_timeout;
- 
-+	sof_set_fw_state(sdev, SOF_FW_BOOT_NOT_STARTED);
-+
- 	if (IS_ENABLED(CONFIG_SND_SOC_SOF_PROBE_WORK_QUEUE)) {
- 		INIT_WORK(&sdev->probe_work, sof_probe_work);
- 		schedule_work(&sdev->probe_work);
-@@ -391,6 +426,12 @@ int snd_sof_device_remove(struct device *dev)
- 	if (IS_ENABLED(CONFIG_SND_SOC_SOF_PROBE_WORK_QUEUE))
- 		cancel_work_sync(&sdev->probe_work);
- 
-+	/*
-+	 * Unregister any registered client device first before IPC and debugfs
-+	 * to allow client drivers to be removed cleanly
-+	 */
-+	sof_unregister_clients(sdev);
-+
- 	/*
- 	 * Unregister machine driver. This will unbind the snd_card which
- 	 * will remove the component driver and unload the topology
-diff --git a/sound/soc/sof/ipc.c b/sound/soc/sof/ipc.c
-index ee56d4fa4053..c729bb7bf8c8 100644
---- a/sound/soc/sof/ipc.c
-+++ b/sound/soc/sof/ipc.c
-@@ -557,22 +557,25 @@ void snd_sof_ipc_msgs_rx(struct snd_sof_dev *sdev)
- 		break;
- 	}
- 
--	if (rx_callback) {
--		/* read the full message as we have rx handler for it */
--		msg_buf = kmalloc(hdr.size, GFP_KERNEL);
--		if (!msg_buf)
--			return;
-+	/* read the full message */
-+	msg_buf = kmalloc(hdr.size, GFP_KERNEL);
-+	if (!msg_buf)
-+		return;
- 
--		err = snd_sof_ipc_msg_data(sdev, NULL, msg_buf, hdr.size);
--		if (err < 0)
--			dev_err(sdev->dev, "%s: Failed to read message: %d\n",
--				__func__, err);
--		else
-+	err = snd_sof_ipc_msg_data(sdev, NULL, msg_buf, hdr.size);
-+	if (err < 0) {
-+		dev_err(sdev->dev, "%s: Failed to read message: %d\n", __func__, err);
-+	} else {
-+		/* Call local handler for the message */
-+		if (rx_callback)
- 			rx_callback(sdev, msg_buf);
- 
--		kfree(msg_buf);
-+		/* Notify registered clients */
-+		sof_client_ipc_rx_dispatcher(sdev, msg_buf);
- 	}
- 
-+	kfree(msg_buf);
-+
- 	ipc_log_header(sdev->dev, "ipc rx done", hdr.cmd);
- }
- EXPORT_SYMBOL(snd_sof_ipc_msgs_rx);
+ #if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_ENABLE_DEBUGFS_CACHE)
+ 	/* cache debugfs contents during runtime suspend */
+ 	if (runtime_suspend)
 diff --git a/sound/soc/sof/sof-client.c b/sound/soc/sof/sof-client.c
-new file mode 100644
-index 000000000000..6f747d051b59
---- /dev/null
+index 6f747d051b59..932bdea49c24 100644
+--- a/sound/soc/sof/sof-client.c
 +++ b/sound/soc/sof/sof-client.c
-@@ -0,0 +1,340 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+//
-+// Copyright(c) 2022 Intel Corporation. All rights reserved.
-+//
-+// Authors: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-+//	    Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-+//
-+
-+#include <linux/debugfs.h>
-+#include <linux/errno.h>
-+#include <linux/list.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/slab.h>
-+#include "ops.h"
-+#include "sof-client.h"
-+#include "sof-priv.h"
-+
-+/**
-+ * struct sof_ipc_event_entry - IPC client event description
-+ * @ipc_msg_type:	IPC msg type of the event the client is interested
-+ * @cdev:		sof_client_dev of the requesting client
-+ * @callback:		Callback function of the client
-+ * @list:		item in SOF core client event list
-+ */
-+struct sof_ipc_event_entry {
-+	u32 ipc_msg_type;
-+	struct sof_client_dev *cdev;
-+	sof_client_event_callback callback;
-+	struct list_head list;
-+};
-+
-+/**
-+ * struct sof_state_event_entry - DSP panic event subscription entry
-+ * @cdev:		sof_client_dev of the requesting client
-+ * @callback:		Callback function of the client
-+ * @list:		item in SOF core client event list
-+ */
-+struct sof_state_event_entry {
-+	struct sof_client_dev *cdev;
-+	sof_client_fw_state_callback callback;
-+	struct list_head list;
-+};
-+
-+static void sof_client_auxdev_release(struct device *dev)
+@@ -169,6 +169,52 @@ int sof_client_ipc_tx_message(struct sof_client_dev *cdev, void *ipc_msg,
+ }
+ EXPORT_SYMBOL_NS_GPL(sof_client_ipc_tx_message, SND_SOC_SOF_CLIENT);
+ 
++int sof_suspend_clients(struct snd_sof_dev *sdev, pm_message_t state)
 +{
-+	struct auxiliary_device *auxdev = to_auxiliary_dev(dev);
-+	struct sof_client_dev *cdev = auxiliary_dev_to_sof_client_dev(auxdev);
-+
-+	kfree(cdev->auxdev.dev.platform_data);
-+	kfree(cdev);
-+}
-+
-+static int sof_client_dev_add_data(struct sof_client_dev *cdev, const void *data,
-+				   size_t size)
-+{
-+	void *d = NULL;
-+
-+	if (data) {
-+		d = kmemdup(data, size, GFP_KERNEL);
-+		if (!d)
-+			return -ENOMEM;
-+	}
-+
-+	cdev->auxdev.dev.platform_data = d;
-+	return 0;
-+}
-+
-+int sof_register_clients(struct snd_sof_dev *sdev)
-+{
-+	if (sof_ops(sdev) && sof_ops(sdev)->register_ipc_clients)
-+		return sof_ops(sdev)->register_ipc_clients(sdev);
-+
-+	return 0;
-+}
-+
-+void sof_unregister_clients(struct snd_sof_dev *sdev)
-+{
-+	if (sof_ops(sdev) && sof_ops(sdev)->unregister_ipc_clients)
-+		sof_ops(sdev)->unregister_ipc_clients(sdev);
-+}
-+
-+int sof_client_dev_register(struct snd_sof_dev *sdev, const char *name, u32 id,
-+			    const void *data, size_t size)
-+{
-+	struct auxiliary_device *auxdev;
-+	struct sof_client_dev *cdev;
-+	int ret;
-+
-+	cdev = kzalloc(sizeof(*cdev), GFP_KERNEL);
-+	if (!cdev)
-+		return -ENOMEM;
-+
-+	cdev->sdev = sdev;
-+	auxdev = &cdev->auxdev;
-+	auxdev->name = name;
-+	auxdev->dev.parent = sdev->dev;
-+	auxdev->dev.release = sof_client_auxdev_release;
-+	auxdev->id = id;
-+
-+	ret = sof_client_dev_add_data(cdev, data, size);
-+	if (ret < 0)
-+		goto err_dev_add_data;
-+
-+	ret = auxiliary_device_init(auxdev);
-+	if (ret < 0) {
-+		dev_err(sdev->dev, "failed to initialize client dev %s.%d\n", name, id);
-+		goto err_dev_init;
-+	}
-+
-+	ret = auxiliary_device_add(&cdev->auxdev);
-+	if (ret < 0) {
-+		dev_err(sdev->dev, "failed to add client dev %s.%d\n", name, id);
-+		/*
-+		 * sof_client_auxdev_release() will be invoked to free up memory
-+		 * allocations through put_device()
-+		 */
-+		auxiliary_device_uninit(&cdev->auxdev);
-+		return ret;
-+	}
-+
-+	/* add to list of SOF client devices */
-+	mutex_lock(&sdev->ipc_client_mutex);
-+	list_add(&cdev->list, &sdev->ipc_client_list);
-+	mutex_unlock(&sdev->ipc_client_mutex);
-+
-+	return 0;
-+
-+err_dev_init:
-+	kfree(cdev->auxdev.dev.platform_data);
-+
-+err_dev_add_data:
-+	kfree(cdev);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_NS_GPL(sof_client_dev_register, SND_SOC_SOF_CLIENT);
-+
-+void sof_client_dev_unregister(struct snd_sof_dev *sdev, const char *name, u32 id)
-+{
++	struct auxiliary_driver *adrv;
 +	struct sof_client_dev *cdev;
 +
 +	mutex_lock(&sdev->ipc_client_mutex);
 +
-+	/*
-+	 * sof_client_auxdev_release() will be invoked to free up memory
-+	 * allocations through put_device()
-+	 */
 +	list_for_each_entry(cdev, &sdev->ipc_client_list, list) {
-+		if (!strcmp(cdev->auxdev.name, name) && cdev->auxdev.id == id) {
-+			list_del(&cdev->list);
-+			auxiliary_device_delete(&cdev->auxdev);
-+			auxiliary_device_uninit(&cdev->auxdev);
-+			break;
-+		}
++		/* Skip devices without loaded driver */
++		if (!cdev->auxdev.dev.driver)
++			continue;
++
++		adrv = to_auxiliary_drv(cdev->auxdev.dev.driver);
++		if (adrv->suspend)
++			adrv->suspend(&cdev->auxdev, state);
 +	}
 +
 +	mutex_unlock(&sdev->ipc_client_mutex);
-+}
-+EXPORT_SYMBOL_NS_GPL(sof_client_dev_unregister, SND_SOC_SOF_CLIENT);
-+
-+int sof_client_ipc_tx_message(struct sof_client_dev *cdev, void *ipc_msg,
-+			      void *reply_data, size_t reply_bytes)
-+{
-+	struct sof_ipc_cmd_hdr *hdr = ipc_msg;
-+
-+	return sof_ipc_tx_message(cdev->sdev->ipc, hdr->cmd, ipc_msg, hdr->size,
-+				  reply_data, reply_bytes);
-+}
-+EXPORT_SYMBOL_NS_GPL(sof_client_ipc_tx_message, SND_SOC_SOF_CLIENT);
-+
-+struct dentry *sof_client_get_debugfs_root(struct sof_client_dev *cdev)
-+{
-+	return cdev->sdev->debugfs_root;
-+}
-+EXPORT_SYMBOL_NS_GPL(sof_client_get_debugfs_root, SND_SOC_SOF_CLIENT);
-+
-+/* DMA buffer allocation in client drivers must use the core SOF device */
-+struct device *sof_client_get_dma_dev(struct sof_client_dev *cdev)
-+{
-+	return cdev->sdev->dev;
-+}
-+EXPORT_SYMBOL_NS_GPL(sof_client_get_dma_dev, SND_SOC_SOF_CLIENT);
-+
-+const struct sof_ipc_fw_version *sof_client_get_fw_version(struct sof_client_dev *cdev)
-+{
-+	struct snd_sof_dev *sdev = sof_client_dev_to_sof_dev(cdev);
-+
-+	return &sdev->fw_ready.version;
-+}
-+EXPORT_SYMBOL_NS_GPL(sof_client_get_fw_version, SND_SOC_SOF_CLIENT);
-+
-+/* module refcount management of SOF core */
-+int sof_client_core_module_get(struct sof_client_dev *cdev)
-+{
-+	struct snd_sof_dev *sdev = sof_client_dev_to_sof_dev(cdev);
-+
-+	if (!try_module_get(sdev->dev->driver->owner))
-+		return -ENODEV;
 +
 +	return 0;
 +}
-+EXPORT_SYMBOL_NS_GPL(sof_client_core_module_get, SND_SOC_SOF_CLIENT);
++EXPORT_SYMBOL_NS_GPL(sof_suspend_clients, SND_SOC_SOF_CLIENT);
 +
-+void sof_client_core_module_put(struct sof_client_dev *cdev)
++int sof_resume_clients(struct snd_sof_dev *sdev)
 +{
-+	struct snd_sof_dev *sdev = sof_client_dev_to_sof_dev(cdev);
++	struct auxiliary_driver *adrv;
++	struct sof_client_dev *cdev;
 +
-+	module_put(sdev->dev->driver->owner);
-+}
-+EXPORT_SYMBOL_NS_GPL(sof_client_core_module_put, SND_SOC_SOF_CLIENT);
++	mutex_lock(&sdev->ipc_client_mutex);
 +
-+/* IPC event handling */
-+void sof_client_ipc_rx_dispatcher(struct snd_sof_dev *sdev, void *msg_buf)
-+{
-+	struct sof_ipc_cmd_hdr *hdr = msg_buf;
-+	u32 msg_type = hdr->cmd & SOF_GLB_TYPE_MASK;
-+	struct sof_ipc_event_entry *event;
++	list_for_each_entry(cdev, &sdev->ipc_client_list, list) {
++		/* Skip devices without loaded driver */
++		if (!cdev->auxdev.dev.driver)
++			continue;
 +
-+	mutex_lock(&sdev->client_event_handler_mutex);
-+
-+	list_for_each_entry(event, &sdev->ipc_rx_handler_list, list) {
-+		if (event->ipc_msg_type == msg_type)
-+			event->callback(event->cdev, msg_buf);
++		adrv = to_auxiliary_drv(cdev->auxdev.dev.driver);
++		if (adrv->resume)
++			adrv->resume(&cdev->auxdev);
 +	}
 +
-+	mutex_unlock(&sdev->client_event_handler_mutex);
-+}
-+
-+int sof_client_register_ipc_rx_handler(struct sof_client_dev *cdev,
-+				       u32 ipc_msg_type,
-+				       sof_client_event_callback callback)
-+{
-+	struct snd_sof_dev *sdev = sof_client_dev_to_sof_dev(cdev);
-+	struct sof_ipc_event_entry *event;
-+
-+	if (!callback || !(ipc_msg_type & SOF_GLB_TYPE_MASK))
-+		return -EINVAL;
-+
-+	event = kmalloc(sizeof(*event), GFP_KERNEL);
-+	if (!event)
-+		return -ENOMEM;
-+
-+	event->ipc_msg_type = ipc_msg_type;
-+	event->cdev = cdev;
-+	event->callback = callback;
-+
-+	/* add to list of SOF client devices */
-+	mutex_lock(&sdev->client_event_handler_mutex);
-+	list_add(&event->list, &sdev->ipc_rx_handler_list);
-+	mutex_unlock(&sdev->client_event_handler_mutex);
++	mutex_unlock(&sdev->ipc_client_mutex);
 +
 +	return 0;
 +}
-+EXPORT_SYMBOL_NS_GPL(sof_client_register_ipc_rx_handler, SND_SOC_SOF_CLIENT);
++EXPORT_SYMBOL_NS_GPL(sof_resume_clients, SND_SOC_SOF_CLIENT);
 +
-+void sof_client_unregister_ipc_rx_handler(struct sof_client_dev *cdev,
-+					  u32 ipc_msg_type)
-+{
-+	struct snd_sof_dev *sdev = sof_client_dev_to_sof_dev(cdev);
-+	struct sof_ipc_event_entry *event;
-+
-+	mutex_lock(&sdev->client_event_handler_mutex);
-+
-+	list_for_each_entry(event, &sdev->ipc_rx_handler_list, list) {
-+		if (event->cdev == cdev && event->ipc_msg_type == ipc_msg_type) {
-+			list_del(&event->list);
-+			kfree(event);
-+			break;
-+		}
-+	}
-+
-+	mutex_unlock(&sdev->client_event_handler_mutex);
-+}
-+EXPORT_SYMBOL_NS_GPL(sof_client_unregister_ipc_rx_handler, SND_SOC_SOF_CLIENT);
-+
-+/*DSP state notification and query */
-+void sof_client_fw_state_dispatcher(struct snd_sof_dev *sdev)
-+{
-+	struct sof_state_event_entry *event;
-+
-+	mutex_lock(&sdev->client_event_handler_mutex);
-+
-+	list_for_each_entry(event, &sdev->fw_state_handler_list, list)
-+		event->callback(event->cdev, sdev->fw_state);
-+
-+	mutex_unlock(&sdev->client_event_handler_mutex);
-+}
-+
-+int sof_client_register_fw_state_handler(struct sof_client_dev *cdev,
-+					 sof_client_fw_state_callback callback)
-+{
-+	struct snd_sof_dev *sdev = sof_client_dev_to_sof_dev(cdev);
-+	struct sof_state_event_entry *event;
-+
-+	if (!callback)
-+		return -EINVAL;
-+
-+	event = kmalloc(sizeof(*event), GFP_KERNEL);
-+	if (!event)
-+		return -ENOMEM;
-+
-+	event->cdev = cdev;
-+	event->callback = callback;
-+
-+	/* add to list of SOF client devices */
-+	mutex_lock(&sdev->client_event_handler_mutex);
-+	list_add(&event->list, &sdev->fw_state_handler_list);
-+	mutex_unlock(&sdev->client_event_handler_mutex);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_NS_GPL(sof_client_register_fw_state_handler, SND_SOC_SOF_CLIENT);
-+
-+void sof_client_unregister_fw_state_handler(struct sof_client_dev *cdev)
-+{
-+	struct snd_sof_dev *sdev = sof_client_dev_to_sof_dev(cdev);
-+	struct sof_state_event_entry *event;
-+
-+	mutex_lock(&sdev->client_event_handler_mutex);
-+
-+	list_for_each_entry(event, &sdev->fw_state_handler_list, list) {
-+		if (event->cdev == cdev) {
-+			list_del(&event->list);
-+			kfree(event);
-+			break;
-+		}
-+	}
-+
-+	mutex_unlock(&sdev->client_event_handler_mutex);
-+}
-+EXPORT_SYMBOL_NS_GPL(sof_client_unregister_fw_state_handler, SND_SOC_SOF_CLIENT);
-+
-+enum sof_fw_state sof_client_get_fw_state(struct sof_client_dev *cdev)
-+{
-+	struct snd_sof_dev *sdev = sof_client_dev_to_sof_dev(cdev);
-+
-+	return sdev->fw_state;
-+}
-+EXPORT_SYMBOL_NS_GPL(sof_client_get_fw_state, SND_SOC_SOF_CLIENT);
-diff --git a/sound/soc/sof/sof-client.h b/sound/soc/sof/sof-client.h
-new file mode 100644
-index 000000000000..4b6394b4c694
---- /dev/null
-+++ b/sound/soc/sof/sof-client.h
-@@ -0,0 +1,67 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef __SOC_SOF_CLIENT_H
-+#define __SOC_SOF_CLIENT_H
-+
-+#include <linux/auxiliary_bus.h>
-+#include <linux/device.h>
-+#include <linux/list.h>
-+#include <sound/sof.h>
-+
-+struct sof_ipc_fw_version;
-+struct sof_ipc_cmd_hdr;
-+struct snd_sof_dev;
-+struct dentry;
-+
-+/**
-+ * struct sof_client_dev - SOF client device
-+ * @auxdev:	auxiliary device
-+ * @sdev:	pointer to SOF core device struct
-+ * @list:	item in SOF core client dev list
-+ * @data:	device specific data
-+ */
-+struct sof_client_dev {
-+	struct auxiliary_device auxdev;
-+	struct snd_sof_dev *sdev;
-+	struct list_head list;
-+	void *data;
-+};
-+
-+#define sof_client_dev_to_sof_dev(cdev)		((cdev)->sdev)
-+
-+#define auxiliary_dev_to_sof_client_dev(auxiliary_dev) \
-+	container_of(auxiliary_dev, struct sof_client_dev, auxdev)
-+
-+#define dev_to_sof_client_dev(dev) \
-+	container_of(to_auxiliary_dev(dev), struct sof_client_dev, auxdev)
-+
-+int sof_client_ipc_tx_message(struct sof_client_dev *cdev, void *ipc_msg,
-+			      void *reply_data, size_t reply_bytes);
-+
-+struct dentry *sof_client_get_debugfs_root(struct sof_client_dev *cdev);
-+struct device *sof_client_get_dma_dev(struct sof_client_dev *cdev);
-+const struct sof_ipc_fw_version *sof_client_get_fw_version(struct sof_client_dev *cdev);
-+
-+/* module refcount management of SOF core */
-+int sof_client_core_module_get(struct sof_client_dev *cdev);
-+void sof_client_core_module_put(struct sof_client_dev *cdev);
-+
-+/* IPC notification */
-+typedef void (*sof_client_event_callback)(struct sof_client_dev *cdev, void *msg_buf);
-+
-+int sof_client_register_ipc_rx_handler(struct sof_client_dev *cdev,
-+				       u32 ipc_msg_type,
-+				       sof_client_event_callback callback);
-+void sof_client_unregister_ipc_rx_handler(struct sof_client_dev *cdev,
-+					  u32 ipc_msg_type);
-+
-+/* DSP state notification and query */
-+typedef void (*sof_client_fw_state_callback)(struct sof_client_dev *cdev,
-+					     enum sof_fw_state state);
-+
-+int sof_client_register_fw_state_handler(struct sof_client_dev *cdev,
-+					 sof_client_fw_state_callback callback);
-+void sof_client_unregister_fw_state_handler(struct sof_client_dev *cdev);
-+enum sof_fw_state sof_client_get_fw_state(struct sof_client_dev *cdev);
-+
-+#endif /* __SOC_SOF_CLIENT_H */
+ struct dentry *sof_client_get_debugfs_root(struct sof_client_dev *cdev)
+ {
+ 	return cdev->sdev->debugfs_root;
 diff --git a/sound/soc/sof/sof-priv.h b/sound/soc/sof/sof-priv.h
-index 27d2f3ca2f06..f641833f3ff9 100644
+index f641833f3ff9..39bbba5aeab2 100644
 --- a/sound/soc/sof/sof-priv.h
 +++ b/sound/soc/sof/sof-priv.h
-@@ -292,6 +292,10 @@ struct snd_sof_dsp_ops {
- 	void (*set_mach_params)(struct snd_soc_acpi_mach *mach,
- 				struct snd_sof_dev *sdev); /* optional */
- 
-+	/* IPC client ops */
-+	int (*register_ipc_clients)(struct snd_sof_dev *sdev); /* optional */
-+	void (*unregister_ipc_clients)(struct snd_sof_dev *sdev); /* optional */
+@@ -653,6 +653,8 @@ int sof_register_clients(struct snd_sof_dev *sdev);
+ void sof_unregister_clients(struct snd_sof_dev *sdev);
+ void sof_client_ipc_rx_dispatcher(struct snd_sof_dev *sdev, void *msg_buf);
+ void sof_client_fw_state_dispatcher(struct snd_sof_dev *sdev);
++int sof_suspend_clients(struct snd_sof_dev *sdev, pm_message_t state);
++int sof_resume_clients(struct snd_sof_dev *sdev);
+ #else /* CONFIG_SND_SOC_SOF_CLIENT */
+ static inline int sof_client_dev_register(struct snd_sof_dev *sdev, const char *name,
+ 					  u32 id, const void *data, size_t size)
+@@ -681,6 +683,16 @@ static inline void sof_client_ipc_rx_dispatcher(struct snd_sof_dev *sdev, void *
+ static inline void sof_client_fw_state_dispatcher(struct snd_sof_dev *sdev)
+ {
+ }
 +
- 	/* DAI ops */
- 	struct snd_soc_dai_driver *drv;
- 	int num_drv;
-@@ -479,6 +483,30 @@ struct snd_sof_dev {
- 	 */
- 	int dsp_core_ref_count[SOF_MAX_DSP_NUM_CORES];
- 
-+	/*
-+	 * Used to keep track of registered IPC client devices so that they can
-+	 * be removed when the parent SOF module is removed.
-+	 */
-+	struct list_head ipc_client_list;
-+
-+	/* mutex to protect client list */
-+	struct mutex ipc_client_mutex;
-+
-+	/*
-+	 * Used for tracking the IPC client's RX registration for DSP initiated
-+	 * message handling.
-+	 */
-+	struct list_head ipc_rx_handler_list;
-+
-+	/*
-+	 * Used for tracking the IPC client's registration for DSP state change
-+	 * notification
-+	 */
-+	struct list_head fw_state_handler_list;
-+
-+	/* to protect the ipc_rx_handler_list  and  dsp_state_handler_list list */
-+	struct mutex client_event_handler_mutex;
-+
- 	void *private;			/* core does not touch this */
- };
- 
-@@ -582,15 +610,7 @@ extern const struct dsp_arch_ops sof_xtensa_arch_ops;
- /*
-  * Firmware state tracking
-  */
--static inline void sof_set_fw_state(struct snd_sof_dev *sdev,
--				    enum sof_fw_state new_state)
--{
--	if (sdev->fw_state == new_state)
--		return;
--
--	dev_dbg(sdev->dev, "fw_state change: %d -> %d\n", sdev->fw_state, new_state);
--	sdev->fw_state = new_state;
--}
-+void sof_set_fw_state(struct snd_sof_dev *sdev, enum sof_fw_state new_state);
- 
- /*
-  * Utilities
-@@ -623,4 +643,44 @@ int sof_stream_pcm_close(struct snd_sof_dev *sdev,
- 			 struct snd_pcm_substream *substream);
- 
- int sof_machine_check(struct snd_sof_dev *sdev);
-+
-+/* SOF client support */
-+#if IS_ENABLED(CONFIG_SND_SOC_SOF_CLIENT)
-+int sof_client_dev_register(struct snd_sof_dev *sdev, const char *name, u32 id,
-+			    const void *data, size_t size);
-+void sof_client_dev_unregister(struct snd_sof_dev *sdev, const char *name, u32 id);
-+int sof_register_clients(struct snd_sof_dev *sdev);
-+void sof_unregister_clients(struct snd_sof_dev *sdev);
-+void sof_client_ipc_rx_dispatcher(struct snd_sof_dev *sdev, void *msg_buf);
-+void sof_client_fw_state_dispatcher(struct snd_sof_dev *sdev);
-+#else /* CONFIG_SND_SOC_SOF_CLIENT */
-+static inline int sof_client_dev_register(struct snd_sof_dev *sdev, const char *name,
-+					  u32 id, const void *data, size_t size)
++static inline int sof_suspend_clients(struct snd_sof_dev *sdev, pm_message_t state)
 +{
 +	return 0;
 +}
 +
-+static inline void sof_client_dev_unregister(struct snd_sof_dev *sdev,
-+					     const char *name, u32 id)
-+{
-+}
-+
-+static inline int sof_register_clients(struct snd_sof_dev *sdev)
++static inline int sof_resume_clients(struct snd_sof_dev *sdev)
 +{
 +	return 0;
 +}
-+
-+static inline  void sof_unregister_clients(struct snd_sof_dev *sdev)
-+{
-+}
-+
-+static inline void sof_client_ipc_rx_dispatcher(struct snd_sof_dev *sdev, void *msg_buf)
-+{
-+}
-+
-+static inline void sof_client_fw_state_dispatcher(struct snd_sof_dev *sdev)
-+{
-+}
-+#endif /* CONFIG_SND_SOC_SOF_CLIENT */
-+
+ #endif /* CONFIG_SND_SOC_SOF_CLIENT */
+ 
  #endif
 -- 
 2.35.1

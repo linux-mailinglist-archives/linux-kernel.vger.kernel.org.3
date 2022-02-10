@@ -2,115 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E004B1423
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FEA44B141E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245202AbiBJRYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 12:24:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36720 "EHLO
+        id S245193AbiBJRYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 12:24:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232479AbiBJRYh (ORCPT
+        with ESMTP id S232479AbiBJRYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 12:24:37 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7AE1C2C
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:24:37 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F1F0D6E;
-        Thu, 10 Feb 2022 09:24:37 -0800 (PST)
-Received: from [10.1.30.148] (e127744.cambridge.arm.com [10.1.30.148])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 283923F718;
-        Thu, 10 Feb 2022 09:24:35 -0800 (PST)
-Subject: Re: [RFC PATCH 1/2] perf: arm_spe: Fix consistency of PMSCR register
- bit CX
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, mark.rutland@arm.com, james.clark@arm.com
-References: <20220117124432.3119132-1-german.gomez@arm.com>
- <20220117124432.3119132-2-german.gomez@arm.com>
- <20220205153940.GB391033@leoy-ThinkPad-X240s>
- <4d5951ee-d7d2-1e76-eb24-5f3c46d1662c@arm.com>
- <20220208130047.GA273989@leoy-ThinkPad-X240s>
-From:   German Gomez <german.gomez@arm.com>
-Message-ID: <e68839bc-b4f0-1fe8-1748-484254ded37a@arm.com>
-Date:   Thu, 10 Feb 2022 17:23:50 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 10 Feb 2022 12:24:21 -0500
+X-Greylist: delayed 259 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 09:24:22 PST
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4ADC2C;
+        Thu, 10 Feb 2022 09:24:22 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 30FC31F466D5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644513861;
+        bh=ALxCZNhUUa/MLQDGtz0GZiz11DXsiOowCf8Tsc6t5l4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EtqS5EoOTji9b+9Jc1s93a42qgJoKE8VvsCtatEIpgvgXblqZBqboEVRqgOMQu+IX
+         L48WaQIAKWT3MK79MVZR0ojw8CRPRcVwHTSXgL3+vrQG7cHyXAnN1KhGFk2vX7eF2R
+         O65JAN1BQn3RSH9p/MhxU8xHmrh8QF46c4C1gdsnZzXEfCXzUiBHSnyEmh0mmSPnNA
+         2+IpK+DopLoxhSNf8IR5C7E1nOrdG1lT+medR8UinzszX7zZy0ob6rtz3Vczh7AfLv
+         srCUe5HIwvBXIqiQRTedimpCwWa04vByDW/eoUTc+ctiG2do3NQ4YFiKZrNWTkZPlA
+         3W7cQVOsWE+Sg==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Peter Gonda <pgonda@google.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, kernelci@groups.io,
+        "kernelci.org bot" <bot@kernelci.org>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V2] selftests: kvm: Remove absent target file
+Date:   Thu, 10 Feb 2022 22:23:51 +0500
+Message-Id: <20220210172352.1317554-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20220208130047.GA273989@leoy-ThinkPad-X240s>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leo,
+There is no vmx_pi_mmio_test file. Remove it to get rid of error while
+creation of selftest archive:
 
-On 08/02/2022 13:00, Leo Yan wrote:
-> Hi German,
->
-> On Mon, Feb 07, 2022 at 12:06:14PM +0000, German Gomez wrote:
->
-> [...]
-> Indeed!  I can reproduce the issue now.  And I can capture backtrace
-> for arm_spe_pmu_start() with below commands:
->
-> # cd /home/leoy/linux/tools/perf
-> # ./perf probe --add "arm_spe_pmu_start" -s /home/leoy/linux/ -k /home/leoy/linux/vmlinux
-> # echo 1 > /sys/kernel/debug/tracing/events/probe/arm_spe_pmu_start/enable
-> # echo stacktrace > /sys/kernel/debug/tracing/events/probe/arm_spe_pmu_start/trigger
->
-> ... run your commands with non-root user ...
->
-> # cat /sys/kernel/debug/tracing/trace
->
->              dd-7697    [000] d.h2.   506.068700: arm_spe_pmu_start: (arm_spe_pmu_start+0x8/0xe0)
->              dd-7697    [000] d.h3.   506.068701: <stack trace>
-> => kprobe_dispatcher
-> => kprobe_breakpoint_handler
-> => call_break_hook
-> [...]
-> => do_el0_svc
-> => el0_svc
-> => el0t_64_sync_handler
-> => el0t_64_sync
->
-> The backtrace clearly shows the function arm_spe_pmu_start() is
-> invoked in the 'dd' process (dd-7697); the flow is:
-> - perf program sends IPI to CPU0;
-> - 'dd' process is running on CPU0 and it's interrupted to handle IPI;
-> - 'dd' process has root capabilities, so it will enable context
->   tracing for non-root perf session.
+rsync: [sender] link_stat "/kselftest/kvm/x86_64/vmx_pi_mmio_test" failed: No such file or directory (2)
+rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1333) [sender=3.2.3]
 
-Thanks for testing, and sharing the commands in your replies!
+Fixes: 6a58150859fd ("selftest: KVM: Add intra host migration tests")
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+Changes in V2:
+Edited the subject line
+---
+ tools/testing/selftests/kvm/Makefile | 1 -
+ 1 file changed, 1 deletion(-)
 
->
->>>> One way to fix this is by caching the value of the CX bit during the
->>>> initialization of the PMU event, so that it remains consistent for the
->>>> duration of the session.
->>>>
->>>> [...]
-> So the patch makes sense to me.  Just a minor comment:
->
-> Here we can define a u64 for recording pmscr value rather than a
-> bool value.
->
-> struct arm_spe_pmu {
->     ...
->     u64 pmscr;
-> };
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index d61286208e242..b970397f725c7 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -82,7 +82,6 @@ TEST_GEN_PROGS_x86_64 += x86_64/tsc_msrs_test
+ TEST_GEN_PROGS_x86_64 += x86_64/vmx_pmu_msrs_test
+ TEST_GEN_PROGS_x86_64 += x86_64/xen_shinfo_test
+ TEST_GEN_PROGS_x86_64 += x86_64/xen_vmcall_test
+-TEST_GEN_PROGS_x86_64 += x86_64/vmx_pi_mmio_test
+ TEST_GEN_PROGS_x86_64 += x86_64/sev_migrate_tests
+ TEST_GEN_PROGS_x86_64 += x86_64/amx_test
+ TEST_GEN_PROGS_x86_64 += access_tracking_perf_test
+-- 
+2.30.2
 
-I agree with the comment from Will that it makes more sense to store the
-value of the register in the perf_event somehow (due to misunderstanding
-from my side, I thought arm_spe_pmu struct was local to the session).
-
-What about perf_event's void *pmu_private?
-
-Thanks,
-German

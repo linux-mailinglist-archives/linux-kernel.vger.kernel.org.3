@@ -2,308 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714A14B0768
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 08:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6094B076D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 08:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236397AbiBJHoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 02:44:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55614 "EHLO
+        id S236421AbiBJHpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 02:45:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiBJHoV (ORCPT
+        with ESMTP id S236403AbiBJHpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 02:44:21 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE39CD72
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 23:44:22 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id y6-20020a7bc186000000b0037bdc5a531eso664979wmi.0
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 23:44:22 -0800 (PST)
+        Thu, 10 Feb 2022 02:45:42 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEF5D71
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 23:45:43 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id p19so12955973ybc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 23:45:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yqwcBS2YnFPC9ilt1Zl2Ei/BAcWYRBw+En94OShotPE=;
-        b=nkmCLz8RurD2nNSotecE1nzeGUioQpJCqwkMrryFZ9s4GluoDisbZEI5spAb/NRC3B
-         MJdUGVoQXVgowJoo6RR7yxgCRnZ0aYkrGB5NtQLs86bBOdRi5ufrLw4N+oUcuSAveebj
-         2dVNd0EVxNbEaDOYw8xIKtkroxTv3UZLriLsIcK8L9zykU+bYrsJHy7aPIfhEetqWNUm
-         lomk4tMAtiVqYB/Kp6gM3opSl1Yc2/tUA0bIWhsKOBUTNDAh+TTbHdJB3JhhxIrI5zFw
-         ixBOw/0bqxKpSda/RwKUg9l3PB5grSujVJ/0j5IOs26FayCYk2HTxHA3o30RhymOdu8n
-         xQWA==
+        bh=H0bpw8ZiHtzokDVaZikQejorexIqOBZeSJyqUU8svCs=;
+        b=0cKvSKcc1KKaEgZvwZfBB/sT+3/J1bnyZKqgjpIZH3rOhPAVTwoVlFnAwsIH1eY6+w
+         xG5HvcMtYGBEMZD95shkO5qKpKZQqrDhZBPWJUNSKw8AEoiJQlXPfzDggY1b02YLIVYz
+         INdKXKl5tkMhiaCPWdSeatI0sUHNHWRnSzSN4bC74ET3lwztwbIa3iQlEurjNt9gYOfG
+         9vxZ8pfHutYzYB+KdqxiEDx7G0XFvBEbc8IXucA0do8ZjID/HpgHx8FpfUxtWOjH11DW
+         1lJ7dT2Nuhmr/xXRAnR1K+TaX8CFHjHf+2L5A0sDifPNWsD3JWVNe0TV/JJPl+7m/uQv
+         AWEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yqwcBS2YnFPC9ilt1Zl2Ei/BAcWYRBw+En94OShotPE=;
-        b=ZW+mQ5+1/puXFyqU52rD9V5EXj5fFN5fI/uWNGOj5C/3c9PdVzDN7ZgB728aMOLuJg
-         y8arEbxKseVwDXg3U6RgmbiXMFqQvSol793i8snoI8yGG/71Hw8gV9jRjGRm7kKeVFTc
-         t3hDGV3NLKrJLy6oewG2YGMLw3lan7AeTjkHRl9o4AqcBBX0aWYj9q6RFv/Ye69Dar/X
-         AHv9llDlYYpvXtcu5DHVBIVVGU4DT2Qo61DMdkDozDa3AEnB5zUuLJvpFNSOUa17Dbu9
-         SfNXtUu4G1fhba4QWHJvktZFaoN5ts015r/aHIwG9aWv4SdMPVO2X4fWVGtpmCTEBonb
-         GvtQ==
-X-Gm-Message-State: AOAM532JpDsLS2X/c+H3Tbbs0kueapBMIO5sKIwk6k8ca8KqdkvXi01B
-        Bepxu7iG9YT3LFI2P0UnycYeRNkhhz4g6b2+DnD+WQ==
-X-Google-Smtp-Source: ABdhPJyhLYkrXk39sK1hvxKDUFbbN1uTu0jDZJk2blsOuNGThdImEGE3IyzmwnaYTv8HMQlM6O50yYgfMyJmqkeqg1A=
-X-Received: by 2002:a05:600c:350e:: with SMTP id h14mr1025507wmq.166.1644479061243;
- Wed, 09 Feb 2022 23:44:21 -0800 (PST)
+        bh=H0bpw8ZiHtzokDVaZikQejorexIqOBZeSJyqUU8svCs=;
+        b=KPM9FOStDJTJefU/XS4rsj8m7JSBUJjdl45oLMJdH4Lvhpgy4GXoCjHVG4eoK6j3K2
+         XebHaPBncAXP/FUGS4r+CMfuAT1nH1UEh6+YVjxe+ckP4l4OwjTTaAZNDhXUNtaVnwiv
+         ux1xg/z8XZ5DAbsvgWtIvlS7Ju48b37YboZ2RDa39Wa58OlEXUNnKdLD9cXcFh1/BWGM
+         0pz+PC2fkGaeTx8ymNPN94rqqEXUwkMXAUrGVRlQdsXV9KXpQOcvk2WHcjjrAPxEAKgx
+         T5E9eCf5vflocgW1GYjCYyiYKUAjWTFjWuahN+7EkO7ZVEE6sw89GNyOUSkArSRQ6oix
+         L/nA==
+X-Gm-Message-State: AOAM532pC/WikTVNRfMTivtyFdWe/Cs+0SVhVhqjefa9KGfKhCsZuHmJ
+        cxG6nbJMLPGS30hPwk3kKEd4o+pt6m49AujotdK49Q==
+X-Google-Smtp-Source: ABdhPJy551ndV8++kKVWq1nu0+LX/n1eH0hGXi+5byk51qcTH4o+UpUO/ZlPArXPB3Hi3VB75BpAsJShzG4LcxV+yJ4=
+X-Received: by 2002:a81:4051:: with SMTP id m17mr5819673ywn.319.1644479143117;
+ Wed, 09 Feb 2022 23:45:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20220210023519.3221051-1-frowand.list@gmail.com> <20220210023519.3221051-3-frowand.list@gmail.com>
-In-Reply-To: <20220210023519.3221051-3-frowand.list@gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 10 Feb 2022 15:44:10 +0800
-Message-ID: <CABVgOSkwCtPiqF-OG=mQqcaPqhM=-cBKwXV=sbT_ig1pRCNgcQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] Documentation: dev-tools: fix KTAP specification
- build warnings
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>, Rae Moar <rmoar@google.com>,
-        "Bird, Tim" <Tim.Bird@sony.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Rae Moar <rmr167@gmail.com>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Daniel Latypov <dlatypov@google.com>, kernelci@groups.io,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000004fe45705d7a51e3d"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20211101031651.75851-1-songmuchun@bytedance.com>
+ <CAMZfGtUeL45=WG3ceaZ_tALMGZTLtuD9jbfKEzeQv270OnaLYQ@mail.gmail.com>
+ <35c5217d-eb8f-6f70-544a-a3e8bd009a46@oracle.com> <CAMZfGtW=e___8kpe1B5a1rK+SV63bP_Nwucj89QKaX4ZOMUpaw@mail.gmail.com>
+ <CAMZfGtV0JKcjVL0qGoYCQJ-LsXdng7Z2UjBym5hf_WM0LcYi=Q@mail.gmail.com>
+ <20211123190952.7d1e0cac2d72acacd2df016c@linux-foundation.org>
+ <CAMZfGtW+DoKp_gCcPSy33Urc86A58rRp8HJ+-GOuW9vFP-BwxQ@mail.gmail.com>
+ <CAMZfGtV-ODDGQ6dUuo_eSEDn2kDSiUjNDc=nyFwoRRSxNLsTeg@mail.gmail.com> <fd4a237e-7494-9bd5-1952-164c22896c43@oracle.com>
+In-Reply-To: <fd4a237e-7494-9bd5-1952-164c22896c43@oracle.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Thu, 10 Feb 2022 15:45:06 +0800
+Message-ID: <CAMZfGtXPUNWheky0PLCOryDBMxGA7vghkzVFC8xahX7+_sUQ8w@mail.gmail.com>
+Subject: Re: [PATCH v7 0/5] Free the 2nd vmemmap page associated with each
+ HugeTLB page
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>,
+        David Hildenbrand <david@redhat.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        Fam Zheng <fam.zheng@bytedance.com>,
+        Muchun Song <smuchun@gmail.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
+        Barry Song <21cnbao@gmail.com>,
+        "Bodeddula, Balasubramaniam" <bodeddub@amazon.com>,
+        Jue Wang <juew@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000004fe45705d7a51e3d
-Content-Type: text/plain; charset="UTF-8"
+On Thu, Feb 10, 2022 at 6:49 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>
+> On 2/8/22 23:44, Muchun Song wrote:
+> > On Wed, Jan 26, 2022 at 4:04 PM Muchun Song <songmuchun@bytedance.com> wrote:
+> >>
+> >> On Wed, Nov 24, 2021 at 11:09 AM Andrew Morton
+> >> <akpm@linux-foundation.org> wrote:
+> >>>
+> >>> On Mon, 22 Nov 2021 12:21:32 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
+> >>>
+> >>>> On Wed, Nov 10, 2021 at 2:18 PM Muchun Song <songmuchun@bytedance.com> wrote:
+> >>>>>
+> >>>>> On Tue, Nov 9, 2021 at 3:33 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+> >>>>>>
+> >>>>>> On 11/8/21 12:16 AM, Muchun Song wrote:
+> >>>>>>> On Mon, Nov 1, 2021 at 11:22 AM Muchun Song <songmuchun@bytedance.com> wrote:
+> >>>>>>>>
+> >>>>>>>> This series can minimize the overhead of struct page for 2MB HugeTLB pages
+> >>>>>>>> significantly. It further reduces the overhead of struct page by 12.5% for
+> >>>>>>>> a 2MB HugeTLB compared to the previous approach, which means 2GB per 1TB
+> >>>>>>>> HugeTLB. It is a nice gain. Comments and reviews are welcome. Thanks.
+> >>>>>>>>
+> >>>>>>>
+> >>>>>>> Hi,
+> >>>>>>>
+> >>>>>>> Ping guys. Does anyone have any comments or suggestions
+> >>>>>>> on this series?
+> >>>>>>>
+> >>>>>>> Thanks.
+> >>>>>>>
+> >>>>>>
+> >>>>>> I did look over the series earlier.  I have no issue with the hugetlb and
+> >>>>>> vmemmap modifications as they are enhancements to the existing
+> >>>>>> optimizations.  My primary concern is the (small) increased overhead
+> >>>>>> for the helpers as outlined in your cover letter.  Since these helpers
+> >>>>>> are not limited to hugetlb and used throughout the kernel, I would
+> >>>>>> really like to get comments from others with a better understanding of
+> >>>>>> the potential impact.
+> >>>>>
+> >>>>> Thanks Mike. I'd like to hear others' comments about this as well.
+> >>>>> From my point of view, maybe the (small) overhead is acceptable
+> >>>>> since it only affects the head page, however Matthew Wilcox's folio
+> >>>>> series could reduce this situation as well.
+> >>>
+> >>> I think Mike was inviting you to run some tests to quantify the
+> >>> overhead ;)
+> >>
+> >> Hi Andrew,
+> >>
+> >> Sorry for the late reply.
+> >>
+> >> Specific overhead figures are already in the cover letter. Also,
+> >> I did some other tests, e.g. kernel compilation, sysbench. I didn't
+> >> see any regressions.
+> >
+> > The overhead is introduced by page_fixed_fake_head() which
+> > has an "if" statement and an access to a possible cold cache line.
+> > I think the main overhead is from the latter. However, probabilistically,
+> > only 1/64 of the pages need to do the latter.  And
+> > page_fixed_fake_head() is already simple (I mean the overhead
+> > is small enough) and many performance bottlenecks in mm are
+> > not in compound_head().  This also matches the tests I did.
+> > I didn't see any regressions after enabling this feature.
+> >
+> > I knew Mike's concern is the increased overhead to use cases
+> > beyond HugeTLB. If we really want to avoid the access to
+> > a possible cold cache line, we can introduce a new page
+> > flag like PG_hugetlb and test if it is set in the page->flags,
+> > if so, then return the read head page struct. Then
+> > page_fixed_fake_head() looks like below.
+> >
+> > static __always_inline const struct page *page_fixed_fake_head(const
+> > struct page *page)
+> > {
+> >         if (!hugetlb_free_vmemmap_enabled())
+> >                 return page;
+> >
+> >         if (test_bit(PG_hugetlb, &page->flags)) {
+> >                 unsigned long head = READ_ONCE(page[1].compound_head);
+> >
+> >                 if (likely(head & 1))
+> >                         return (const struct page *)(head - 1);
+> >         }
+> >         return page;
+> > }
+> >
+> > But I don't think it's worth doing this.
+> >
+> > Hi Mike and Andrew,
+> >
+> > Since these helpers are not limited to hugetlb and used throughout the
+> > kernel, I would really like to get comments from others with a better
+> > understanding of the potential impact. Do you have any appropriate
+> > reviewers to invite?
+> >
+>
+> I think the appropriate people are already on Cc as they provided input on
+> the original vmemmap optimization series.
+>
+> The question that needs to be answered is simple enough:  Is the savings of
+> one vmemmap page per hugetlb page worth the extra minimal overhead in
+> compound_head()?  Like most things, this depends on workload.
+>
+> One thing to note is that compound_page() overhead is only introduced if
+> hugetlb vmemmap freeing is enabled.  Correct?
 
-On Thu, Feb 10, 2022 at 10:35 AM <frowand.list@gmail.com> wrote:
->
-> From: Frank Rowand <frank.rowand@sony.com>
->
-> Convert "Major differences between TAP and KTAP" from a bullet list
-> to a table.  The bullet list was being formatted as a single
-> paragraph.
->
-> Add missing required argument in code-block directives.
->
-> ---
->
-> Table conversion suggested by Shuah.
->
-> Patch 2/2 not previously reviewed, so Reviewed-by tags not provided.
->
-> Changes since version 3
->   - Add this commit (patch 2/2) to the series
->
-> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
-> ---
+Definitely correct.
 
-The table looks good to me, the "none" argument in code-block
-directives is already fixed in another patch.
+> During the original vmemmap
+> optimization discussions, people thought it important that this be 'opt in'.  I do not know if distos will enable this by default.  But, perhaps the
+> potential overhead can be thought of as just part of 'opting in' for
+> vmemmap optimizations.
 
-The table bits are:
+I agree. Does anyone else have a different opinion?
 
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
->  Documentation/dev-tools/ktap.rst | 33 +++++++++++++++++---------------
->  1 file changed, 18 insertions(+), 15 deletions(-)
->
-> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
-> index dfb3f10a8b2d..5ee735c6687f 100644
-> --- a/Documentation/dev-tools/ktap.rst
-> +++ b/Documentation/dev-tools/ktap.rst
-> @@ -68,7 +68,7 @@ Test case result lines
->  Test case result lines indicate the final status of a test.
->  They are required and must have the format:
->
-> -.. code-block::
-> +.. code-block:: none
-
-These code-block changes were already submitted in:
-https://lore.kernel.org/lkml/20220131003637.14274-1-rdunlap@infradead.org/T/
-
-
->
->         <result> <number> [<description>][ # [<directive>] [<diagnostic data>]]
->
-> @@ -117,32 +117,32 @@ separator.
->
->  Example result lines include:
->
-> -.. code-block::
-> +.. code-block:: none
->
->         ok 1 test_case_name
->
->  The test "test_case_name" passed.
->
-> -.. code-block::
-> +.. code-block:: none
->
->         not ok 1 test_case_name
->
->  The test "test_case_name" failed.
->
-> -.. code-block::
-> +.. code-block:: none
->
->         ok 1 test # SKIP necessary dependency unavailable
->
->  The test "test" was SKIPPED with the diagnostic message "necessary dependency
->  unavailable".
->
-> -.. code-block::
-> +.. code-block:: none
->
->         not ok 1 test # TIMEOUT 30 seconds
->
->  The test "test" timed out, with diagnostic data "30 seconds".
->
-> -.. code-block::
-> +.. code-block:: none
->
->         ok 5 check return code # rcode=0
->
-> @@ -202,7 +202,7 @@ allowed to be either indented or not indented.
->
->  An example of a test with two nested subtests:
->
-> -.. code-block::
-> +.. code-block:: none
->
->         KTAP version 1
->         1..1
-> @@ -215,7 +215,7 @@ An example of a test with two nested subtests:
->
->  An example format with multiple levels of nested testing:
->
-> -.. code-block::
-> +.. code-block:: none
->
->         KTAP version 1
->         1..2
-> @@ -234,12 +234,15 @@ An example format with multiple levels of nested testing:
->  Major differences between TAP and KTAP
->  --------------------------------------
->
-> -Note the major differences between the TAP and KTAP specification:
-> -- yaml and json are not recommended in KTAP diagnostic messages
-> -- TODO directive not recognized in KTAP
-> -- KTAP allows for an arbitrary number of tests to be nested
-> -- TAP includes "Unknown lines" in the category of "Anything else"
-> -- TAP says "Unknown lines" are "incorrect"; KTAP allows "Unknown lines"
-> +==================================================   =========  ===============
-> +Feature                                              TAP        KTAP
-> +==================================================   =========  ===============
-> +yaml and json in diagnosic message                   ok         not recommended
-> +TODO directive                                       ok         not recognized
-> +allows an arbitrary number of tests to be nested     no         yes
-> +"Unknown lines" are in category of "Anything else"   yes        no
-> +"Unknown lines" are                                  incorrect  allowed
-> +==================================================   =========  ===============
-
-This looks good to me, thanks!
-
->
->  The TAP14 specification does permit nested tests, but instead of using another
->  nested version line, uses a line of the form
-> @@ -247,7 +250,7 @@ nested version line, uses a line of the form
->
->  Example KTAP output
->  --------------------
-> -.. code-block::
-> +.. code-block:: none
->
->         KTAP version 1
->         1..1
-> --
-> Frank Rowand <frank.rowand@sony.com>
->
-
---0000000000004fe45705d7a51e3d
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
-2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
-dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
-jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
-ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
-QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAW
-Uj6y8rnjHScNV9crl9BF8jYJPpYgSlKxMNrUGc39EzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjAyMTAwNzQ0MjFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAd2lwnOLWnINHsP+066rx
-jpvDD7q9H9RCwMKtjD0EyAeUT+LHs4AzuVmDDKSubKWqZAnaitgeY+cDau2kUh4a///VlGcFka+v
-CEUAT1JuPve6nwxmjzBupgqhMI7mpIy9DKs0wniJKAAgM/a2Kj6snSMiLNIROFzstIyV4qaEc7Zc
-2jCur5ydx4WZZkmaWDQkb9E05QVBSuwdd7VxGynCDa8R98XvUAKWayn9UjlsqJEkDv8FA2Ak5K4N
-xZg0k8oBgGblQ4Gf15yVnoLi1jwaUaIhxFdW7V6D7Yo6gIcSPtVBx0N4Nux2YNV/KKltS8AT6eMy
-qWalnuPWwkqFIfjNzw==
---0000000000004fe45705d7a51e3d--
+Thanks.

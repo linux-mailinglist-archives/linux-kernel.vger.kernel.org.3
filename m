@@ -2,381 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08D74B0D83
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:24:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 018954B0D86
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241522AbiBJMYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 07:24:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41668 "EHLO
+        id S241526AbiBJMZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 07:25:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232743AbiBJMYq (ORCPT
+        with ESMTP id S241519AbiBJMYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 07:24:46 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF830103D;
-        Thu, 10 Feb 2022 04:24:46 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 765BF1F37B;
-        Thu, 10 Feb 2022 12:24:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1644495885; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V7vGqL9kDHDopSycq2pciR9nESF0U5A0PGhxYvc30uI=;
-        b=riWwkdZpE7Hmmps9kxaMzQN/KCLCB49Qc/n/NOMLqJnWBdcMv6FzI1Pw4eBpJRax003ieS
-        EzOtopdOy8Sm6iG9R8VptFdJ95bCtrt6PxbDxOzvZo3qCA1viSu8lMJcq9bIvngSiW+/Lw
-        LAjLAhcbJzf07JA6l7fkGT3wC2FdfV0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1644495885;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V7vGqL9kDHDopSycq2pciR9nESF0U5A0PGhxYvc30uI=;
-        b=9gCKWe6PPoWQjCnWeWNAgisnMWt0P1gwCwfbdnvMUJGPMbNvKMuA7jEhF/euOXsivpRF2m
-        k+If1xEHWBisboCg==
-Received: from quack3.suse.cz (jack.udp.ovpn1.nue.suse.de [10.163.28.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C92A0A3B85;
-        Thu, 10 Feb 2022 12:24:43 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 3F68AA05BC; Thu, 10 Feb 2022 13:24:40 +0100 (CET)
-Date:   Thu, 10 Feb 2022 13:24:40 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>,
-        Wu Fengguang <fengguang.wu@intel.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Paolo Valente <paolo.valente@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-doc@vger.kernel.org,
-        linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org,
-        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-Subject: Re: [PATCH 02/11] MM: document and polish read-ahead code.
-Message-ID: <20220210122440.vqth5mwsqtv6vjpq@quack3.lan>
-References: <164447124918.23354.17858831070003318849.stgit@noble.brown>
- <164447147257.23354.2801426518649016278.stgit@noble.brown>
+        Thu, 10 Feb 2022 07:24:49 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2075.outbound.protection.outlook.com [40.107.237.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E55103D;
+        Thu, 10 Feb 2022 04:24:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QSXkQPHEC7AfCfy43cDpM/n2pueGcHFBlRi6i3P0ANPF41KLnuESQWPfGUiMV13M3RSnBG/e0vQLCMduQFIyxbKhhuAFQpQPwGgEr9wh5tWAI9LZr9YhImI3rayUb+XvorP4EMmfyNhXvvSetYy0PeYQZ6mvrRUZQAX98abZPqmrb1rLoY2RtCxrSxvuuThd4NBvfaCgHDz/EryBbA82M15XoCCukW5jHb4/V8rGr1eiMhiMUmUwli6iuA2fkI92fY2ZtJBG6u8LO39bu3cTf1v/Ep1L0/J0Ju6wKSwwdK/NDzqbfzlCU29s0B89NSbknuumvEU+OpBXBwQZvgeapw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BkQQyXBAq0+5kyulfUQswHSNy0oqllRdyt7sGRsbtbo=;
+ b=IzO5IKMZiTDlAy9pkDXC1FdsxTnHc2M2fMkyFT2TtZ+vwbwGsyqNpRyFjxTpDXNhVZ5wpxEWnH8mw4n/wUaWt36GbboHq2twmdXVPn5AwS81jQBtgnoPZOEh6SqaoDV/ZLhfMXW7hpAVV+STuAbPVfNONlhwr2yh9oobiKF+arufLjh6tSo5CiSDAxtoJYRXZaxSdT9Sk2rq6UfXhe8/NH8UL+MuYl++4/utS8fmPak7W+i7ySP4dEoocM8UAI9zOMnH0OGO1nwbgI843aQEY/7Md+b8jD104YPaExzQB0JEcgBRVq/dX1dyPQiz1nZTtKMVqtiqCnLBxlnKp001eg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kroah.com smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BkQQyXBAq0+5kyulfUQswHSNy0oqllRdyt7sGRsbtbo=;
+ b=sbtq04XXsYM7PVvExraeTPq924laHxRUBMT1FY4EwkFHg1lrnH33u6itO5D7k6UbxE8AFHfSrupt2FXJGjOdIvb5OYHJI9x0TV95VgMGUO9Nk5a/f4g4Oj6tD06szApuRxYbIAlTw6F1st83khAPc6mz4NuPe+JVKqSid2+gKQs=
+Received: from SN7PR04CA0212.namprd04.prod.outlook.com (2603:10b6:806:127::7)
+ by CH2PR02MB6823.namprd02.prod.outlook.com (2603:10b6:610:7f::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Thu, 10 Feb
+ 2022 12:24:48 +0000
+Received: from SN1NAM02FT0058.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:127:cafe::9d) by SN7PR04CA0212.outlook.office365.com
+ (2603:10b6:806:127::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.12 via Frontend
+ Transport; Thu, 10 Feb 2022 12:24:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0058.mail.protection.outlook.com (10.97.5.116) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4975.11 via Frontend Transport; Thu, 10 Feb 2022 12:24:47 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 10 Feb 2022 04:24:47 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Thu, 10 Feb 2022 04:24:47 -0800
+Envelope-to: greg@kroah.com,
+ sfr@canb.auug.org.au,
+ monstr@monstr.eu,
+ david@ixit.cz,
+ linux-kernel@vger.kernel.org,
+ linux-next@vger.kernel.org,
+ sean.anderson@seco.com
+Received: from [10.254.241.49] (port=45778)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1nI8VD-000Ajz-5l; Thu, 10 Feb 2022 04:24:47 -0800
+Message-ID: <d7f84e0a-7c3a-116a-0911-2ed5a0bab2d9@xilinx.com>
+Date:   Thu, 10 Feb 2022 13:24:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <164447147257.23354.2801426518649016278.stgit@noble.brown>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: linux-next: manual merge of the usb tree with the xilinx tree
+Content-Language: en-US
+To:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Michal Simek <monstr@monstr.eu>, David Heidelberg <david@ixit.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Sean Anderson <sean.anderson@seco.com>
+References: <20220210141550.56359523@canb.auug.org.au>
+ <YgTGdwkTkDgx+pan@kroah.com>
+From:   Michal Simek <michal.simek@xilinx.com>
+In-Reply-To: <YgTGdwkTkDgx+pan@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 45986a11-cf96-4159-47f2-08d9ec905410
+X-MS-TrafficTypeDiagnostic: CH2PR02MB6823:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR02MB6823C5ABBF7CE397B76F5BAAC62F9@CH2PR02MB6823.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dLkcduR2Sn76fsZ5JkfTPKpc1KbPy2Spk5Nt8/bYcOpE+5rj2TS+eK1y7hQ0yYE0IwwJwsRLWMR7nwzWYgFhbjMKKPVhOnsB0FigtHvkZODNCCc6eMs+Cqqjd2Wh/FwbUHMf922fKUf7R2qbHs2mRLR+aCAdiAuS+iAgsP6eKBtib1IK3YFZM7f73w9LQSvGFoAdkJYxo/CGrfwj1AQEqe0xoMAQZMwsI2aJV6hDIw7FPU9vTgqVtwuw7WTdmFTa2N53qFF6hVp8L3xZ4UBXxLKYfLXzjGitbD73noKYapB67XeVn6IMbzPrENXTqzXCoCYM53j2n5BofeRv5kAyGLR5TO8x7Gp+djFDNkw+BSQlokaPIwWORG/yUelx0v0oKnWoG5DCdys7gepJx9YPG1M3Pb/+4jkU048oCjP03wo7qIFCnSM+kfYFQPoqjsoE2fzpu23H4HDV1Eaocn3Kz7ZkIoArvQtlr4vgWMqTccaq5i8reh2UcDGqeIfJ/r44ud4V2hnAyvIP7z7Y9lTpgVw+/xr/N8R/QGkPUEMFJqcm4uSdK85dPEMufPr10LaFLksE+pYReoCYmMXUklu4+BJL4WrzynXwZs/FoNzwaYp2HsCwEqX4L7sNv0NJge90TIAbKZhuF7uHrS0vOevt8DTX6W8dU1jFeCLlvqtfON3wIrfOO81srnkM4GFeZPZjB86tY68Z54CDDjdb1PV8/1np+DsgYSY4Mu6MVpy/hu8=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(426003)(70586007)(70206006)(110136005)(4326008)(31696002)(336012)(8936002)(8676002)(2616005)(82310400004)(53546011)(356005)(40460700003)(316002)(186003)(26005)(54906003)(36860700001)(5660300002)(47076005)(508600001)(6666004)(44832011)(9786002)(7636003)(2906002)(36756003)(83380400001)(31686004)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 12:24:47.8653
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 45986a11-cf96-4159-47f2-08d9ec905410
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0058.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6823
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil!
-
-On Thu 10-02-22 16:37:52, NeilBrown wrote:
-> Add some "big-picture" documentation for read-ahead and polish the code
-> to make it fit this documentation.
-> 
-> The meaning of ->async_size is clarified to match its name.
-> i.e. Any request to ->readahead() has a sync part and an async part.
-> The caller will wait for the sync pages to complete, but will not wait
-> for the async pages.  The first async page is still marked PG_readahead
-
-So I don't think this is how the code was meant. My understanding of
-readahead comes from a comment:
-
-/*
- * On-demand readahead design.
- *
-....
-
-in mm/readahead.c. The ra->size is how many pages should be read.
-ra->async_size is the "lookahead size" meaning that we should place a
-marker (PageReadahead) at "ra->size - ra->async_size" to trigger next
-readahead.
-
-> 
-> - in try_context_readahead(), the async_sync is set correctly rather
->   than being set to 1.  Prior to Commit 2cad40180197 ("readahead: make
->   context readahead more conservative") it was set to ra->size which
->   is not correct (that implies no sync component).  As this was too
->   high and caused problems it was reduced to 1, again incorrect but less
->   problematic.  The setting provided with this patch does not restore
->   those problems, and is now not arbitrary.
-
-I agree the 1 there looks strange as it effectively discards all the logic
-handling the lookahead size. I agree with the tweak there but I would do
-this behavioral change as a separate commit since it can have performance
-implications.
-
-> - The calculation of ->async_size in the initial_readahead section of
->   ondemand_readahead() now makes sense - it is zero if the chosen
->   size does not exceed the requested size.  This means that we will not
->   set the PG_readahead flag in this case, but as the requested size
->   has not been satisfied we can expect a subsequent read ahead request
->   any way.
-
-So I agree that setting of ->async_size to ->size in initial_readahead
-section does not make great sence but if you look a bit below into readit
-section, you will notice the ->async_size is overwritten there to something
-meaninful. So I think the code actually does something sensible, maybe it
-could be written in a more readable way.
- 
-> Note that the current function names page_cache_sync_ra() and
-> page_cache_async_ra() are misleading.  All ra request are partly sync
-> and partly async, so either part can be empty.
-
-The meaning of these names IMO is:
-page_cache_sync_ra() - tell readahead that we currently need a page
-ractl->_index and would prefer req_count pages fetched ahead.
-
-page_cache_async_ra() - called when we hit the lookahead marker to give
-opportunity to readahead code to prefetch more pages.
-
-> A page_cache_sync_ra() request will usually set ->async_size non-zero,
-> implying it is not all synchronous.
-> When a non-zero req_count is passed to page_cache_async_ra(), the
-> implication is that some prefix of the request is synchronous, though
-> the calculation made there is incorrect - I haven't tried to fix it.
-> 
-> Signed-off-by: NeilBrown <neilb@suse.de>
-
-								Honza
 
 
-> ---
->  Documentation/core-api/mm-api.rst |   19 ++++++-
->  Documentation/filesystems/vfs.rst |   16 ++++--
->  include/linux/fs.h                |    9 +++
->  mm/readahead.c                    |  103 ++++++++++++++++++++++++++++++++++++-
->  4 files changed, 135 insertions(+), 12 deletions(-)
-> 
-> diff --git a/Documentation/core-api/mm-api.rst b/Documentation/core-api/mm-api.rst
-> index 395835f9289f..f5b2f92822c8 100644
-> --- a/Documentation/core-api/mm-api.rst
-> +++ b/Documentation/core-api/mm-api.rst
-> @@ -58,15 +58,30 @@ Virtually Contiguous Mappings
->  File Mapping and Page Cache
->  ===========================
->  
-> -.. kernel-doc:: mm/readahead.c
-> -   :export:
-> +Filemap
-> +-------
->  
->  .. kernel-doc:: mm/filemap.c
->     :export:
->  
-> +Readahead
-> +---------
-> +
-> +.. kernel-doc:: mm/readahead.c
-> +   :doc: Readahead Overview
-> +
-> +.. kernel-doc:: mm/readahead.c
-> +   :export:
-> +
-> +Writeback
-> +---------
-> +
->  .. kernel-doc:: mm/page-writeback.c
->     :export:
->  
-> +Truncate
-> +--------
-> +
->  .. kernel-doc:: mm/truncate.c
->     :export:
->  
-> diff --git a/Documentation/filesystems/vfs.rst b/Documentation/filesystems/vfs.rst
-> index bf5c48066fac..b4a0baa46dcc 100644
-> --- a/Documentation/filesystems/vfs.rst
-> +++ b/Documentation/filesystems/vfs.rst
-> @@ -806,12 +806,16 @@ cache in your filesystem.  The following members are defined:
->  	object.  The pages are consecutive in the page cache and are
->  	locked.  The implementation should decrement the page refcount
->  	after starting I/O on each page.  Usually the page will be
-> -	unlocked by the I/O completion handler.  If the filesystem decides
-> -	to stop attempting I/O before reaching the end of the readahead
-> -	window, it can simply return.  The caller will decrement the page
-> -	refcount and unlock the remaining pages for you.  Set PageUptodate
-> -	if the I/O completes successfully.  Setting PageError on any page
-> -	will be ignored; simply unlock the page if an I/O error occurs.
-> +	unlocked by the I/O completion handler.  The set of pages are
-> +	divided into some sync pages followed by some async pages,
-> +	rac->ra->async_size gives the number of async pages.  The
-> +	filesystem should attempt to read all sync pages but may decide
-> +	to stop once it reaches the async pages.  If it does decide to
-> +	stop attempting I/O, it can simply return.  The caller will
-> +	remove the remaining pages from the address space, unlock them
-> +	and decrement the page refcount.  Set PageUptodate if the I/O
-> +	completes successfully.  Setting PageError on any page will be
-> +	ignored; simply unlock the page if an I/O error occurs.
->  
->  ``readpages``
->  	called by the VM to read pages associated with the address_space
-> diff --git a/include/linux/fs.h b/include/linux/fs.h
-> index e2d892b201b0..8b5c486bd4a2 100644
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -930,10 +930,15 @@ struct fown_struct {
->   * struct file_ra_state - Track a file's readahead state.
->   * @start: Where the most recent readahead started.
->   * @size: Number of pages read in the most recent readahead.
-> - * @async_size: Start next readahead when this many pages are left.
-> - * @ra_pages: Maximum size of a readahead request.
-> + * @async_size: Numer of pages that were/are not needed immediately
-> + *      and so were/are genuinely "ahead".  Start next readahead when
-> + *      the first of these pages is accessed.
-> + * @ra_pages: Maximum size of a readahead request, copied from the bdi.
->   * @mmap_miss: How many mmap accesses missed in the page cache.
->   * @prev_pos: The last byte in the most recent read request.
-> + *
-> + * When this structure is passed to ->readahead(), the "most recent"
-> + * readahead means the current readahead.
->   */
->  struct file_ra_state {
->  	pgoff_t start;
-> diff --git a/mm/readahead.c b/mm/readahead.c
-> index cf0dcf89eb69..c44b2957f59f 100644
-> --- a/mm/readahead.c
-> +++ b/mm/readahead.c
-> @@ -8,6 +8,105 @@
->   *		Initial version.
->   */
->  
-> +/**
-> + * DOC: Readahead Overview
-> + *
-> + * Readahead is used to read content into the page cache before it is
-> + * explicitly requested by the application.  Readahead only ever
-> + * attempts to read pages that are not yet in the page cache.  If a
-> + * page is present but not up-to-date, readahead will not try to read
-> + * it. In that case a simple ->readpage() will be requested.
-> + *
-> + * Readahead is triggered when an application read request (whether a
-> + * systemcall or a page fault) finds that the requested page is not in
-> + * the page cache, or that it is in the page cache and has the
-> + * %PG_readahead flag set.  This flag indicates that the page was loaded
-> + * as part of a previous read-ahead request and now that it has been
-> + * accessed, it is time for the next read-ahead.
-> + *
-> + * Each readahead request is partly synchronous read, and partly async
-> + * read-ahead.  This is reflected in the struct file_ra_state which
-> + * contains ->size being to total number of pages, and ->async_size
-> + * which is the number of pages in the async section.  The first page in
-> + * this async section will have %PG_readahead set as a trigger for a
-> + * subsequent read ahead.  Once a series of sequential reads has been
-> + * established, there should be no need for a synchronous component and
-> + * all read ahead request will be fully asynchronous.
-> + *
-> + * When either of the triggers causes a readahead, three numbers need to
-> + * be determined: the start of the region, the size of the region, and
-> + * the size of the async tail.
-> + *
-> + * The start of the region is simply the first page address at or after
-> + * the accessed address, which is not currently populated in the page
-> + * cache.  This is found with a simple search in the page cache.
-> + *
-> + * The size of the async tail is determined by subtracting the size that
-> + * was explicitly requested from the determined request size, unless
-> + * this would be less than zero - then zero is used.  NOTE THIS
-> + * CALCULATION IS WRONG WHEN THE START OF THE REGION IS NOT THE ACCESSED
-> + * PAGE.
-> + *
-> + * The size of the region is normally determined from the size of the
-> + * previous readahead which loaded the preceding pages.  This may be
-> + * discovered from the struct file_ra_state for simple sequential reads,
-> + * or from examining the state of the page cache when multiple
-> + * sequential reads are interleaved.  Specifically: where the readahead
-> + * was triggered by the %PG_readahead flag, the size of the previous
-> + * readahead is assumed to be the number of pages from the triggering
-> + * page to the start of the new readahead.  In these cases, the size of
-> + * the previous readahead is scaled, often doubled, for the new
-> + * readahead, though see get_next_ra_size() for details.
-> + *
-> + * If the size of the previous read cannot be determined, the number of
-> + * preceding pages in the page cache is used to estimate the size of
-> + * a previous read.  This estimate could easily be misled by random
-> + * reads being coincidentally adjacent, so it is ignored unless it is
-> + * larger than the current request, and it is not scaled up, unless it
-> + * is at the start of file.
-> + *
-> + * In general read ahead is accelerated at the start of the file, as
-> + * reads from there are often sequential.  There are other minor
-> + * adjustments to the read ahead size in various special cases and these
-> + * are best discovered by reading the code.
-> + *
-> + * The above calculation determines the readahead, to which any requested
-> + * read size may be added.
-> + *
-> + * Readahead requests are sent to the filesystem using the ->readahead()
-> + * address space operation, for which mpage_readahead() is a canonical
-> + * implementation.  ->readahead() should normally initiate reads on all
-> + * pages, but may fail to read any or all pages without causing an IO
-> + * error.  The page cache reading code will issue a ->readpage() request
-> + * for any page which ->readahead() does not provided, and only an error
-> + * from this will be final.
-> + *
-> + * ->readahead() will generally call readahead_page() repeatedly to get
-> + * each page from those prepared for read ahead.  It may fail to read a
-> + * page by:
-> + *
-> + * * not calling readahead_page() sufficiently many times, effectively
-> + *   ignoring some pages, as might be appropriate if the path to
-> + *   storage is congested.
-> + *
-> + * * failing to actually submit a read request for a given page,
-> + *   possibly due to insufficient resources, or
-> + *
-> + * * getting an error during subsequent processing of a request.
-> + *
-> + * In the last two cases, the page should be unlocked to indicate that
-> + * the read attempt has failed.  In the first case the page will be
-> + * unlocked by the caller.
-> + *
-> + * Those pages not in the final ``async_size`` of the request should be
-> + * considered to be important and ->readahead() should not fail them due
-> + * to congestion or temporary resource unavailability, but should wait
-> + * for necessary resources (e.g.  memory or indexing information) to
-> + * become available.  Pages in the final ``async_size`` may be
-> + * considered less urgent and failure to read them is more acceptable.
-> + * They will eventually be read individually using ->readpage().
-> + */
-> +
->  #include <linux/kernel.h>
->  #include <linux/dax.h>
->  #include <linux/gfp.h>
-> @@ -426,7 +525,7 @@ static int try_context_readahead(struct address_space *mapping,
->  
->  	ra->start = index;
->  	ra->size = min(size + req_size, max);
-> -	ra->async_size = 1;
-> +	ra->async_size = ra->size - req_size;
->  
->  	return 1;
->  }
-> @@ -527,7 +626,7 @@ static void ondemand_readahead(struct readahead_control *ractl,
->  initial_readahead:
->  	ra->start = index;
->  	ra->size = get_init_ra_size(req_size, max_pages);
-> -	ra->async_size = ra->size > req_size ? ra->size - req_size : ra->size;
-> +	ra->async_size = ra->size > req_size ? ra->size - req_size : 0;
->  
->  readit:
->  	/*
+On 2/10/22 09:01, Greg KH wrote:
+> On Thu, Feb 10, 2022 at 02:15:50PM +1100, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Today's linux-next merge of the usb tree got a conflict in:
+>>
+>>    arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+>>
+>> between commit:
+>>
+>>    eceb6f8677d3 ("arm64: xilinx: dts: drop legacy property #stream-id-cells")
+>>
+>> from the xilinx tree and commit:
+>>
+>>    d8b1c3d0d700 ("arm64: dts: zynqmp: Move USB clocks to dwc3 node")
+>>
+>> from the usb tree.
+>>
+>> I fixed it up (see below) and can carry the fix as necessary. This
+>> is now fixed as far as linux-next is concerned, but any non trivial
+>> conflicts should be mentioned to your upstream maintainer when your tree
+>> is submitted for merging.  You may also want to consider cooperating
+>> with the maintainer of the conflicting tree to minimise any particularly
+>> complex conflicts.
+>>
+>> diff --cc arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+>> index 056761c974fd,ba68fb8529ee..000000000000
+>> --- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+>> +++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+>> @@@ -823,6 -824,8 +822,7 @@@
+>>    				interrupt-parent = <&gic>;
+>>    				interrupt-names = "dwc_usb3", "otg";
+>>    				interrupts = <0 65 4>, <0 69 4>;
+>> + 				clock-names = "bus_early", "ref";
+>>   -				#stream-id-cells = <1>;
+>>    				iommus = <&smmu 0x860>;
+>>    				snps,quirk-frame-length-adjustment = <0x20>;
+>>    				/* dma-coherent; */
+>> @@@ -849,6 -851,8 +848,7 @@@
+>>    				interrupt-parent = <&gic>;
+>>    				interrupt-names = "dwc_usb3", "otg";
+>>    				interrupts = <0 70 4>, <0 74 4>;
+>> + 				clock-names = "bus_early", "ref";
+>>   -				#stream-id-cells = <1>;
+>>    				iommus = <&smmu 0x861>;
+>>    				snps,quirk-frame-length-adjustment = <0x20>;
+>>    				/* dma-coherent; */
+>> -- 
+>> Cheers,
+>> Stephen Rothwell
 > 
 > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> 
+> Looks good, thanks!
+
++1 on this.
+
+Thanks,
+Michal

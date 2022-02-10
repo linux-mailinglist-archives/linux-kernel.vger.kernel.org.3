@@ -2,147 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0954B0E61
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3764B0E60
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242183AbiBJN12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 08:27:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53388 "EHLO
+        id S242165AbiBJN1T convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Feb 2022 08:27:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242168AbiBJN1T (ORCPT
+        with ESMTP id S239660AbiBJN1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 08:27:19 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D891B5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 05:27:20 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id k1so9562559wrd.8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 05:27:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=lccT1vDs39uO4OztszPn43naV87bgv8lF79Kis/tyDI=;
-        b=ppLX4h1TEy8PBW7a4orzxmSRVpkxMMzDVgFrPPO+f6wmqSNbpVbyd980agqXUsmsK4
-         1t3S3V3yoGn5PBZR2wXsNiBwTiBg+7IWH1M5aJJPZiGs155neECX0Xdc2i3WXR7UwbMM
-         aT3Xtfs00uZGf1TbnMYWNrEUtQHMZ5qRjlmiRc0/xqYQhMq8duwRHg0U0Z9pXtKzJ45Q
-         hYfhYVE/1cZLNyTrYw1GNDxUZjkYoAd3FPrsD2ljbrv3HGwfrkyETIATbgIB71TaTNDV
-         dnfvww2HWwcMyGbOkxaLGF8pIQWjKAPbfSCnWB56bK0zNRSMtsjTh7NuJVkUEYKppMbv
-         lTfg==
+        Thu, 10 Feb 2022 08:27:17 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724E3204
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 05:27:18 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id h1-20020a056602008100b0061152382337so4004399iob.18
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 05:27:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=lccT1vDs39uO4OztszPn43naV87bgv8lF79Kis/tyDI=;
-        b=0z31NOR+o7yyOcc4H62t47McRGKvq2tBTqS/36GDSQvRT1+RkbdtsRWPw+FAFXgfxJ
-         75ji0xP5SRFCe5u3AW4F48nJ+DtVrwgStiWf2RtN7YxdgEzWKV8f0b5bAML1FqZHf9uY
-         2CLLZWnqrGztmq9n+dey8AwpbzrkOCu5zRN+beNYxU822av0IqwSd680yPEdJlHeXr8I
-         2FxiFDDGQZgLmHvqwB8+T/zkGCXKHAZnQZPU0HOCHruR4U7xekC32hbQlpSQ0HFABq3y
-         imCfPE6OtLmLeDK/H2jqYgZoSl88HBaejb1aNvHY6I5IXVd/w3Ag//0ovQ41amB3uII2
-         kefg==
-X-Gm-Message-State: AOAM533om7OZVTE8gLJ7TZ9cYe0TcQxMl0XZKSAdelTOc4H+ug5315ft
-        8NcBM244tphN+8BYm+DzXL3Tdw==
-X-Google-Smtp-Source: ABdhPJzKId3yDGkhp6bPVmSqb71G1h0/VzUuaq+GY1xoayMe32i7GhkM4V+qZRiTEWVDWxES+I9IMA==
-X-Received: by 2002:a5d:4745:: with SMTP id o5mr485824wrs.275.1644499638587;
-        Thu, 10 Feb 2022 05:27:18 -0800 (PST)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id h6sm1559790wmq.26.2022.02.10.05.27.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 05:27:18 -0800 (PST)
-Date:   Thu, 10 Feb 2022 14:27:15 +0100
-From:   LABBE Corentin <clabbe@baylibre.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linus.walleij@linaro.org, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v2] dt-bindings: mtd: drop mtd/cortina,gemini-flash.txt
-Message-ID: <YgUSs3uIgpb91UgD@Red>
-References: <20220131080858.1777518-1-clabbe@baylibre.com>
- <YgQvsQbGEBgfAoVO@robh.at.kernel.org>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to
+         :content-transfer-encoding;
+        bh=DlpPZGGKliMKcWhjenaLMpD1ZyJmKZB8Ha4yhKNSbSo=;
+        b=nJO3QpipZW3vXPA6EYmq0PG3DAIktB9JgbH4URL0c6NQUJ7irkAOwA//D3TO1Ueb6n
+         8Ehta/K5p4sLKM1ow4MmR3XqhHh36rPP59IYKWrjhpXmGS7o9Rr4YFylNVxvs734fltd
+         WZGyej+tbO15Ahu1BkzASKK150qewZMAaC6GIme/6MN8tHwx5f5sDVg8pyvxRPWt8Kua
+         pguEnsuCUoouIXj7ps4mvjZ3NtjZbFNRAkGey691Cvsg+K2lOCl47uG6YkFRf6f19/Iv
+         uScy4kUWL7Dpp73Uww/v+eC3CX/OiMOAHeASRKzvAidkv3p6v7LWL0Oi6cdn1nYV8VSO
+         KAww==
+X-Gm-Message-State: AOAM533xNRMGdNVg9+hcP0MEyF1loaRIlGNkxkojvv2077Gh5CQVyHlc
+        QmldI2EGpr3D3rPBVjHX1qg7zQvEj8ohubroDBHme4yGACjq
+X-Google-Smtp-Source: ABdhPJxktaqc2MT8TGypSv3S6tvzNRIrDITqBFmZIMUyTf+hsDOhN0yqT8VFBTUt97hEaujKN31FgFE53ED94o/E0F7FMTp9X6eh
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YgQvsQbGEBgfAoVO@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1906:: with SMTP id w6mr3703475ilu.43.1644499637838;
+ Thu, 10 Feb 2022 05:27:17 -0800 (PST)
+Date:   Thu, 10 Feb 2022 05:27:17 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000bf2b0705d7a9e8ac@google.com>
+Subject: [syzbot] net-next test error: WARNING: suspicious RCU usage in hsr_node_get_first
+From:   syzbot <syzbot+f0eb4f3876de066b128c@syzkaller.appspotmail.com>
+To:     andrew@lunn.ch, claudiajkang@gmail.com, davem@davemloft.net,
+        ennoerlangen@gmail.com, george.mccollister@gmail.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        marco.wenzel@a-eberle.de, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Wed, Feb 09, 2022 at 03:18:41PM -0600, Rob Herring a écrit :
-> On Mon, Jan 31, 2022 at 08:08:58AM +0000, Corentin Labbe wrote:
-> > Drop mtd/cortina,gemini-flash.txt since it is nearly already handled by
-> > Documentation/devicetree/bindings/mtd/mtd-physmap.yaml.
-> > 
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> > ---
-> > Change since v1:
-> > - fixed typo on syscon
-> > 
-> >  .../bindings/mtd/cortina,gemini-flash.txt     | 24 -------------------
-> >  .../devicetree/bindings/mtd/mtd-physmap.yaml  | 18 +++++++++++++-
-> >  2 files changed, 17 insertions(+), 25 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/mtd/cortina,gemini-flash.txt
-> > 
-> > diff --git a/Documentation/devicetree/bindings/mtd/cortina,gemini-flash.txt b/Documentation/devicetree/bindings/mtd/cortina,gemini-flash.txt
-> > deleted file mode 100644
-> > index efa5b2aba829..000000000000
-> > --- a/Documentation/devicetree/bindings/mtd/cortina,gemini-flash.txt
-> > +++ /dev/null
-> > @@ -1,24 +0,0 @@
-> > -Flash device on Cortina Systems Gemini SoC
-> > -
-> > -This flash is regular CFI compatible (Intel or AMD extended) flash chips with
-> > -some special bits that can be controlled by the machine's system controller.
-> > -
-> > -Required properties:
-> > -- compatible : must be "cortina,gemini-flash", "cfi-flash";
-> > -- reg : memory address for the flash chip
-> > -- syscon : must be a phandle to the system controller
-> > -- bank-width : width in bytes of flash interface, should be <2>
-> > -
-> > -For the rest of the properties, see mtd-physmap.yaml.
-> > -
-> > -The device tree may optionally contain sub-nodes describing partitions of the
-> > -address space. See partition.txt for more detail.
-> > -
-> > -Example:
-> > -
-> > -flash@30000000 {
-> > -	compatible = "cortina,gemini-flash", "cfi-flash";
-> > -	reg = <0x30000000 0x01000000>;
-> > -	syscon = <&syscon>;
-> > -	bank-width = <2>;
-> > -};
-> > diff --git a/Documentation/devicetree/bindings/mtd/mtd-physmap.yaml b/Documentation/devicetree/bindings/mtd/mtd-physmap.yaml
-> > index f827984936f6..82eb4e0f453b 100644
-> > --- a/Documentation/devicetree/bindings/mtd/mtd-physmap.yaml
-> > +++ b/Documentation/devicetree/bindings/mtd/mtd-physmap.yaml
-> > @@ -44,7 +44,9 @@ properties:
-> >                - numonyx,js28f128
-> >                - sst,sst39vf320
-> >                - xlnx,xps-mch-emc-2.00.a
-> > -          - const: cfi-flash
-> > +          - enum:
-> > +              - cfi-flash
-> > +              - jedec-flash
-> 
-> Why is jedec-flash being added? The old doc made no mention of it.
-> 
+Hello,
 
-Because one board (gemini-dlink-dns-313.dts) use it.
-See commit a10d862e585e06aacc3a03e230fdf8faf6b1caf0 
-"""
-The flash on the DNS-313 needs to be probed as JEDEC, it does
-    not conform to the common CFI standard.
-"""
+syzbot found the following issue on:
 
-I will add this (the addition of jedec-flash) in commmit log.
+HEAD commit:    45230829827b Merge git://git.kernel.org/pub/scm/linux/kern..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=12e2f52c700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3fa7f88a3821006b
+dashboard link: https://syzkaller.appspot.com/bug?extid=f0eb4f3876de066b128c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Regards
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f0eb4f3876de066b128c@syzkaller.appspotmail.com
+
+batman_adv: batadv0: The MTU of interface batadv_slave_1 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1560 would solve the problem.
+batman_adv: batadv0: Not using interface batadv_slave_1 (retrying later): interface not active
+=============================
+WARNING: suspicious RCU usage
+5.17.0-rc2-syzkaller-00903-g45230829827b #0 Not tainted
+-----------------------------
+net/hsr/hsr_framereg.c:34 suspicious rcu_dereference_check() usage!
+
+other info that might help us debug this:
+
+
+rcu_scheduler_active = 2, debug_locks = 1
+2 locks held by syz-executor.0/3597:
+ #0: ffffffff8d32ca28 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:72 [inline]
+ #0: ffffffff8d32ca28 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x3be/0xb80 net/core/rtnetlink.c:5591
+ #1: ffff888073fa55f0 (&hsr->list_lock){+...}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:354 [inline]
+ #1: ffff888073fa55f0 (&hsr->list_lock){+...}-{2:2}, at: hsr_create_self_node+0x225/0x650 net/hsr/hsr_framereg.c:108
+
+stack backtrace:
+CPU: 1 PID: 3597 Comm: syz-executor.0 Not tainted 5.17.0-rc2-syzkaller-00903-g45230829827b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ hsr_node_get_first+0x9b/0xb0 net/hsr/hsr_framereg.c:34
+ hsr_create_self_node+0x22d/0x650 net/hsr/hsr_framereg.c:109
+ hsr_dev_finalize+0x2c1/0x7d0 net/hsr/hsr_device.c:514
+ hsr_newlink+0x315/0x730 net/hsr/hsr_netlink.c:102
+ __rtnl_newlink+0x107c/0x1760 net/core/rtnetlink.c:3481
+ rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3529
+ rtnetlink_rcv_msg+0x413/0xb80 net/core/rtnetlink.c:5594
+ netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2494
+ netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
+ netlink_unicast+0x539/0x7e0 net/netlink/af_netlink.c:1343
+ netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1919
+ sock_sendmsg_nosec net/socket.c:705 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:725
+ __sys_sendto+0x21c/0x320 net/socket.c:2040
+ __do_sys_sendto net/socket.c:2052 [inline]
+ __se_sys_sendto net/socket.c:2048 [inline]
+ __x64_sys_sendto+0xdd/0x1b0 net/socket.c:2048
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fca68e2ae1c
+Code: fa fa ff ff 44 8b 4c 24 2c 4c 8b 44 24 20 89 c5 44 8b 54 24 28 48 8b 54 24 18 b8 2c 00 00 00 48 8b 74 24 10 8b 7c 24 08 0f 05 <48> 3d 00 f0 ff ff 77 34 89 ef 48 89 44 24 08 e8 20 fb ff ff 48 8b
+RSP: 002b:00007ffcd2955580 EFLAGS: 00000293 ORIG_RAX: 000000000000002c
+RAX: ffffffffffffffda RBX: 00007fca69ec3320 RCX: 00007fca68e2ae1c
+RDX: 0000000000000048 RSI: 00007fca69ec3370 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 00007ffcd29555d4 R09: 000000000000000c
+R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000000
+R13: 00007fca69ec3370 R14: 0000000000000003 R15: 0000000000000000
+ </TASK>
+device hsr_slave_0 entered promiscuous mode
+device hsr_slave_1 entered promiscuous mode
+netdevsim netdevsim0 netdevsim0: renamed from eth0
+netdevsim netdevsim0 netdevsim1: renamed from eth1
+netdevsim netdevsim0 netdevsim2: renamed from eth2
+netdevsim netdevsim0 netdevsim3: renamed from eth3
+bridge0: port 2(bridge_slave_1) entered blocking state
+bridge0: port 2(bridge_slave_1) entered forwarding state
+bridge0: port 1(bridge_slave_0) entered blocking state
+bridge0: port 1(bridge_slave_0) entered forwarding state
+8021q: adding VLAN 0 to HW filter on device bond0
+8021q: adding VLAN 0 to HW filter on device team0
+IPv6: ADDRCONF(NETDEV_CHANGE): hsr0: link becomes ready
+8021q: adding VLAN 0 to HW filter on device batadv0
+device veth0_vlan entered promiscuous mode
+device veth1_vlan entered promiscuous mode
+device veth0_macvtap entered promiscuous mode
+device veth1_macvtap entered promiscuous mode
+batman_adv: batadv0: Interface activated: batadv_slave_0
+batman_adv: batadv0: Interface activated: batadv_slave_1
+netdevsim netdevsim0 netdevsim0: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim0 netdevsim1: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim0 netdevsim2: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
+syz-executor.0 (3597) used greatest stack depth: 22400 bytes left
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

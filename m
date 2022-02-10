@@ -2,145 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 189904B0A32
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AEF84B0977
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239333AbiBJKCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 05:02:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47788 "EHLO
+        id S238727AbiBJJ3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:29:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234215AbiBJKCg (ORCPT
+        with ESMTP id S238585AbiBJJ3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 05:02:36 -0500
-X-Greylist: delayed 9659 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 02:02:37 PST
-Received: from antispam.sysnetpro.com.br (unknown [201.87.230.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA46C02
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:02:37 -0800 (PST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by antispam.sysnetpro.com.br (Postfix) with ESMTP id 4JvRz90lBjzByXM
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 04:43:33 -0200 (-02)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        encontresuafranquia.com.br; h=message-id:sensitivity:reply-to
-        :date:date:from:from:subject:subject:content-description
-        :content-transfer-encoding:mime-version:content-type
-        :content-type:received:received:received:received:received
-        :received:received; s=dkim; t=1644475406; x=1646289807; bh=qzHHY
-        jL7hU1b4eqqx4Urz2P3r3LTP1eI+hMNkRI+mqE=; b=ozqWqYtT5/rpLWG5OBacs
-        7QAespOVxDbqZDqg1X0rqbyj5wHgGlnDJPZ2bQfvH1sM7JBLB0ckGb6ijTY+6YHB
-        ap9it7oxh0yLPLZYJnzoRSdSZRWdlVCVW0rdaCSi0zbN3DoEB9MsFpblDkc1iPlb
-        an4xIoPRdgHdQm1JFLn//+3Y3Pw4iBTIqLXODpo+gpe8L7EPIN2xyrSJ69gSSgnM
-        Nu3HRoLfTe7LaDy37P22cFSR+FhNmjBTxOc9GFcThMJN4HNHYR8bFb7vlIan8I37
-        CVFpeqBCpmtHcsrsWPP0IRGL5zzH47Idl6prLwjPxpqQThgXALti5jJLhmLQPdRF
-        g==
-X-Amavis-Modified: Mail body modified (using disclaimer) -
-        antispam.sysnetpro.com.br
-X-Virus-Scanned: Scrollout F1 at sysnetpro.com.br
-Received: from antispam.sysnetpro.com.br ([127.0.0.1])
-        by localhost (antispam.sysnetpro.com.br [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id 13RZcVfvlrIY for <linux-kernel@vger.kernel.org>;
-        Thu, 10 Feb 2022 04:43:26 -0200 (-02)
-Received: from mx1.sysnetpro.email (unknown [10.0.3.38])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by antispam.sysnetpro.com.br (Postfix) with ESMTPS id 4JvH5k27CDzC8Hn
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 22:03:38 -0200 (-02)
-Received: from localhost (localhost [127.0.0.1])
-        by mx1.sysnetpro.email (Postfix) with ESMTP id AFA30238F9C
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 21:03:19 -0300 (-03)
-Received: from mx1.sysnetpro.email ([127.0.0.1])
-        by localhost (mta3.sysnetpro.email [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id LLPDhKRuH4g3 for <linux-kernel@vger.kernel.org>;
-        Wed,  9 Feb 2022 21:03:19 -0300 (-03)
-Received: from localhost (localhost [127.0.0.1])
-        by mx1.sysnetpro.email (Postfix) with ESMTP id 8519B23893D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 20:57:49 -0300 (-03)
-X-Virus-Scanned: amavisd-new at mta3.sysnetpro.email
-Received: from mx1.sysnetpro.email ([127.0.0.1])
-        by localhost (mta3.sysnetpro.email [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id wWt8j95pus8q for <linux-kernel@vger.kernel.org>;
-        Wed,  9 Feb 2022 20:57:49 -0300 (-03)
-Received: from [172.20.10.7] (unknown [105.112.59.18])
-        by mx1.sysnetpro.email (Postfix) with ESMTPSA id 19DFD2A2BC9
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 20:53:40 -0300 (-03)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 10 Feb 2022 04:29:18 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00031134;
+        Thu, 10 Feb 2022 01:29:18 -0800 (PST)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21A74UHh017191;
+        Thu, 10 Feb 2022 09:36:21 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=G/1l6JpUGOidRb9dQ6UMR2ViJBXgtTFNmfutsOzLvFc=;
+ b=J2hDc5Bu/cs0d8uvuowAVawTd+ivgAzCtXVnPDrSXJWrcOZAnjuYfdqEHPEAtO1MhbC9
+ G9obSLHoeAYwZiMOveVDF+ivlLiQaYD4Vteg5zzCfNaFRPjE8Q/QjtoFvQNaN2m810fi
+ KphFAi3oDR6FBzRsSB7p6LoN+ZSPWQaS5mq9WmnM7Pei8zA/AWQYOSTurkED/8hBdHE5
+ T9rYB/tKMevcGb15jZbzX6RI6MvDOIogdtmrX4lrIWgWWqzeTPJ7FLmWyFoOV8mj/+fX
+ ByWrm5DNs/y1Opnkp+6TY8WFZqknYKufgZbwujt5+ywli1tLCR1EmIEbL5RjSHIotnaG Tw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e4x0c0j8u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Feb 2022 09:36:21 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4BA7D10002A;
+        Thu, 10 Feb 2022 09:36:20 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 44B452138DE;
+        Thu, 10 Feb 2022 09:36:20 +0100 (CET)
+Received: from [10.201.21.201] (10.75.127.47) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 10 Feb
+ 2022 09:36:19 +0100
+Message-ID: <2dfbf110-9c08-5a4e-7714-6e9e960afae5@foss.st.com>
+Date:   Thu, 10 Feb 2022 09:36:14 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Business Proposal
-To:     linux-kernel@vger.kernel.org
-From:   david <tatiane.rocha@encontresuafranquia.com.br>
-Date:   Wed, 09 Feb 2022 23:53:39 +0000
-Reply-To: davidhilton711@gmail.com
-X-Priority: 1 (High)
-Sensitivity: Private
-Message-Id: <20220209235341.19DFD2A2BC9@mx1.sysnetpro.email>
-X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 03/12] ARM: dts: sti: ensure unique unit-address in
+ stih418-clock
+Content-Language: en-US
+To:     Alain Volmat <avolmat@me.com>, <patrice.chotard@st.com>,
+        <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20211202075105.195664-1-avolmat@me.com>
+ <20211202075105.195664-4-avolmat@me.com>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <20211202075105.195664-4-avolmat@me.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-10_03,2022-02-09_01,2021-12-02_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pozdravujem,
+Hi Alain
 
+On 12/2/21 08:50, Alain Volmat wrote:
+> Move quadfs and a9-mux clocks nodes into clockgen nodes so
+> that they can get the reg property from the parent node and
+> ensure only one node has the address.
+> 
+> Signed-off-by: Alain Volmat <avolmat@me.com>
+> ---
+>  arch/arm/boot/dts/stih418-clock.dtsi | 101 +++++++++++++--------------
+>  1 file changed, 48 insertions(+), 53 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/stih418-clock.dtsi b/arch/arm/boot/dts/stih418-clock.dtsi
+> index e84c476b83ed..e1749e92a2e7 100644
+> --- a/arch/arm/boot/dts/stih418-clock.dtsi
+> +++ b/arch/arm/boot/dts/stih418-clock.dtsi
+> @@ -32,7 +32,7 @@ clocks {
+>  		 */
+>  		clockgen-a9@92b0000 {
+>  			compatible = "st,clkgen-c32";
+> -			reg = <0x92b0000 0xffff>;
+> +			reg = <0x92b0000 0x10000>;
+>  
+>  			clockgen_a9_pll: clockgen-a9-pll {
+>  				#clock-cells = <1>;
+> @@ -40,30 +40,29 @@ clockgen_a9_pll: clockgen-a9-pll {
+>  
+>  				clocks = <&clk_sysin>;
+>  			};
+> -		};
+> -
+> -		/*
+> -		 * ARM CPU related clocks.
+> -		 */
+> -		clk_m_a9: clk-m-a9@92b0000 {
+> -			#clock-cells = <0>;
+> -			compatible = "st,stih407-clkgen-a9-mux", "st,clkgen-mux";
+> -			reg = <0x92b0000 0x10000>;
+> -
+> -			clocks = <&clockgen_a9_pll 0>,
+> -				 <&clockgen_a9_pll 0>,
+> -				 <&clk_s_c0_flexgen 13>,
+> -				 <&clk_m_a9_ext2f_div2>;
+>  
+>  			/*
+> -			 * ARM Peripheral clock for timers
+> +			 * ARM CPU related clocks.
+>  			 */
+> -			arm_periph_clk: clk-m-a9-periphs {
+> +			clk_m_a9: clk-m-a9 {
+>  				#clock-cells = <0>;
+> -				compatible = "fixed-factor-clock";
+> -				clocks = <&clk_m_a9>;
+> -				clock-div = <2>;
+> -				clock-mult = <1>;
+> +				compatible = "st,stih407-clkgen-a9-mux", "st,clkgen-mux";
+> +
+> +				clocks = <&clockgen_a9_pll 0>,
+> +					 <&clockgen_a9_pll 0>,
+> +					 <&clk_s_c0_flexgen 13>,
+> +					 <&clk_m_a9_ext2f_div2>;
+> +
+> +				/*
+> +				 * ARM Peripheral clock for timers
+> +				 */
+> +				arm_periph_clk: clk-m-a9-periphs {
+> +					#clock-cells = <0>;
+> +					compatible = "fixed-factor-clock";
+> +					clocks = <&clk_m_a9>;
+> +					clock-div = <2>;
+> +					clock-mult = <1>;
+> +				};
+>  			};
+>  		};
+>  
+> @@ -88,14 +87,6 @@ clk_s_a0_flexgen: clk-s-a0-flexgen {
+>  			};
+>  		};
+>  
+> -		clk_s_c0_quadfs: clk-s-c0-quadfs@9103000 {
+> -			#clock-cells = <1>;
+> -			compatible = "st,quadfs-pll";
+> -			reg = <0x9103000 0x1000>;
+> -
+> -			clocks = <&clk_sysin>;
+> -		};
+> -
+>  		clk_s_c0: clockgen-c@9103000 {
+>  			compatible = "st,clkgen-c32";
+>  			reg = <0x9103000 0x1000>;
+> @@ -114,6 +105,13 @@ clk_s_c0_pll1: clk-s-c0-pll1 {
+>  				clocks = <&clk_sysin>;
+>  			};
+>  
+> +			clk_s_c0_quadfs: clk-s-c0-quadfs {
+> +				#clock-cells = <1>;
+> +				compatible = "st,quadfs-pll";
+> +
+> +				clocks = <&clk_sysin>;
+> +			};
+> +
+>  			clk_s_c0_flexgen: clk-s-c0-flexgen {
+>  				#clock-cells = <1>;
+>  				compatible = "st,flexgen", "st,flexgen-stih418-c0";
+> @@ -143,18 +141,17 @@ clk_m_a9_ext2f_div2: clk-m-a9-ext2f-div2s {
+>  			};
+>  		};
+>  
+> -		clk_s_d0_quadfs: clk-s-d0-quadfs@9104000 {
+> -			#clock-cells = <1>;
+> -			compatible = "st,quadfs-d0";
+> -			reg = <0x9104000 0x1000>;
+> -
+> -			clocks = <&clk_sysin>;
+> -		};
+> -
+>  		clockgen-d0@9104000 {
+>  			compatible = "st,clkgen-c32";
+>  			reg = <0x9104000 0x1000>;
+>  
+> +			clk_s_d0_quadfs: clk-s-d0-quadfs {
+> +				#clock-cells = <1>;
+> +				compatible = "st,quadfs-d0";
+> +
+> +				clocks = <&clk_sysin>;
+> +			};
+> +
+>  			clk_s_d0_flexgen: clk-s-d0-flexgen {
+>  				#clock-cells = <1>;
+>  				compatible = "st,flexgen", "st,flexgen-stih410-d0";
+> @@ -167,18 +164,17 @@ clk_s_d0_flexgen: clk-s-d0-flexgen {
+>  			};
+>  		};
+>  
+> -		clk_s_d2_quadfs: clk-s-d2-quadfs@9106000 {
+> -			#clock-cells = <1>;
+> -			compatible = "st,quadfs-d2";
+> -			reg = <0x9106000 0x1000>;
+> -
+> -			clocks = <&clk_sysin>;
+> -		};
+> -
+>  		clockgen-d2@9106000 {
+>  			compatible = "st,clkgen-c32";
+>  			reg = <0x9106000 0x1000>;
+>  
+> +			clk_s_d2_quadfs: clk-s-d2-quadfs {
+> +				#clock-cells = <1>;
+> +				compatible = "st,quadfs-d2";
+> +
+> +				clocks = <&clk_sysin>;
+> +			};
+> +
+>  			clk_s_d2_flexgen: clk-s-d2-flexgen {
+>  				#clock-cells = <1>;
+>  				compatible = "st,flexgen", "st,flexgen-stih418-d2";
+> @@ -193,18 +189,17 @@ clk_s_d2_flexgen: clk-s-d2-flexgen {
+>  			};
+>  		};
+>  
+> -		clk_s_d3_quadfs: clk-s-d3-quadfs@9107000 {
+> -			#clock-cells = <1>;
+> -			compatible = "st,quadfs-d3";
+> -			reg = <0x9107000 0x1000>;
+> -
+> -			clocks = <&clk_sysin>;
+> -		};
+> -
+>  		clockgen-d3@9107000 {
+>  			compatible = "st,clkgen-c32";
+>  			reg = <0x9107000 0x1000>;
+>  
+> +			clk_s_d3_quadfs: clk-s-d3-quadfs {
+> +				#clock-cells = <1>;
+> +				compatible = "st,quadfs-d3";
+> +
+> +				clocks = <&clk_sysin>;
+> +			};
+> +
+>  			clk_s_d3_flexgen: clk-s-d3-flexgen {
+>  				#clock-cells = <1>;
+>  				compatible = "st,flexgen", "st,flexgen-stih407-d3";
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
-D=C3=BAfam, =C5=BEe tento e-mail dostanete vo velmi dobrom stave. Som p=C3=
-=A1n David Hilton, ved=C3=BAci =C3=BActovn=C3=ADctva / auditu v Credit Suis=
-se Bank, Cabot Square London, Spojen=C3=A9 kr=C3=A1lovstvo. Oslovil som V=
-=C3=A1s v s=C3=BAvislosti s obchodn=C3=BDm n=C3=A1vrhom, ktor=C3=BD bude pr=
-e n=C3=A1s a menej privilegovan=C3=BDch velk=C3=BDm pr=C3=ADnosom. Ako ved=
-=C3=BAci =C3=BActovn=C3=ADctva / auditu region=C3=A1lnej kancel=C3=A1rie Gr=
-eater London som objavil 15 800 000 libier (15 mili=C3=B3nov 8 000 libier) =
-na =C3=BActe jedn=C3=A9ho z na=C5=A1ich zahranicn=C3=BDch z=C3=A1kazn=C3=AD=
-kov, zosnul=C3=A9ho p=C3=A1na Manzoora Hassana. Bol obchodn=C3=BDm magn=C3=
-=A1tom, ktor=C3=BD zahynul pri hav=C3=A1rii vrtuln=C3=ADka v roku 2014. P=
-=C3=A1n Hassan mal 54 rokov, ked jeho man=C5=BEelka, jeho jedin=C3=BD syn A=
-vraham (Albert) a jeho nevesta zahynuli pri hav=C3=A1rii vrtuln=C3=ADka.
-
-Volba kontaktovat v=C3=A1s vyplynula z geografick=C3=A9ho charakteru miesta=
-, kde =C5=BEijete, najm=C3=A4 z d=C3=B4vodu citlivosti transakcie a d=C3=B4=
-vernosti tu poskytnut=C3=BDch inform=C3=A1ci=C3=AD. Na=C5=A1a banka teraz c=
-ak=C3=A1, k=C3=BDm niekto z jej pr=C3=ADbuzn=C3=BDch po=C5=BEiada o dedicsk=
-=C3=BD fond, no =C5=BEial, v=C5=A1etka n=C3=A1maha je zbytocn=C3=A1. Osobne=
- sa mi nepodarilo n=C3=A1jst pr=C3=ADbuzn=C3=BDch ani in=C3=BDch pr=C3=ADbu=
-zn=C3=BDch p=C3=A1na Hassana. V tejto s=C3=BAvislosti v=C3=A1s =C5=BEiadam =
-o s=C3=BAhlas, aby som v=C3=A1s predstavil ako bl=C3=ADzkeho pr=C3=ADbuzn=
-=C3=A9ho/z=C3=A1vet zosnul=C3=A9ho, aby v=C3=A1m mohol byt vyplaten=C3=BD v=
-=C3=BDta=C5=BEok z tohto =C3=BActu vo v=C3=BD=C5=A1ke 15,8 mili=C3=B3na =C2=
-=A3.
-
-Toto bude vyplaten=C3=A9 alebo rozdelen=C3=A9 v t=C3=BDchto percent=C3=A1ch=
- 60 % mne a 40 % v=C3=A1m. V=C5=A1etky potrebn=C3=A9 pr=C3=A1vne dokumenty,=
- ktor=C3=BDmi je mo=C5=BEn=C3=A9 t=C3=BAto dedicsk=C3=BA pohlad=C3=A1vku z=
-=C3=A1lohovat, nie je v=C3=B4bec probl=C3=A9m. Jedin=C3=A9, co mus=C3=ADm u=
-robit, je nahrat va=C5=A1e men=C3=A1 do dokumentov a legalizovat ich na Naj=
-vy=C5=A1=C5=A1om s=C3=BAde Spojen=C3=A9ho kr=C3=A1lovstva, aby som dok=C3=
-=A1zal, =C5=BEe ste opr=C3=A1vnen=C3=BDm pr=C3=ADjemcom tohto fondu. V=C5=
-=A1etko, o co teraz =C5=BEiadam, je va=C5=A1a =C3=BAprimn=C3=A1 spolupr=C3=
-=A1ca, d=C3=B4vernost a d=C3=B4vera, aby sme mohli uskutocnit t=C3=BAto tra=
-nsakciu. Garantujem V=C3=A1m 100% =C3=BAspe=C5=A1nost a to, =C5=BEe t=C3=A1=
-to obchodn=C3=A1 transakcia prebehne v s=C3=BAlade so z=C3=A1konom.
-
-Uvedte nasleduj=C3=BAce podrobnosti, preto=C5=BEe na ich dokoncenie m=C3=A1=
-me 5 pracovn=C3=BDch dn=C3=AD:
-
-1. Va=C5=A1e cel=C3=A9 meno
-2. Telef=C3=B3nne c=C3=ADslo
-3. Kontaktn=C3=A1 adresa
-
-Po metodickom hladan=C3=AD som sa rozhodol oslovit V=C3=A1s v n=C3=A1deji, =
-=C5=BEe V=C3=A1s tento n=C3=A1vrh zaujme. Po potvrden=C3=AD tejto spr=C3=A1=
-vy a prejaven=C3=AD z=C3=A1ujmu V=C3=A1m poskytnem podrobn=C3=A9 inform=C3=
-=A1cie.
-
-V=C3=A1=C5=BEime si va=C5=A1e schv=C3=A1lenie tohto e-mailu a obchodn=C3=A9=
-ho n=C3=A1vrhu.
-
-Te=C5=A1=C3=ADm sa na skor=C3=BA odpoved.
-
-S pozdravom
-David Hilton.
+Thanks
+Patrice

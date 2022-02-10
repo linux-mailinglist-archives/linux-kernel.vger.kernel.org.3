@@ -2,139 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3B24B090F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 817B54B0885
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238174AbiBJJBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:01:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37444 "EHLO
+        id S237618AbiBJIgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 03:36:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238141AbiBJJBx (ORCPT
+        with ESMTP id S233339AbiBJIgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:01:53 -0500
-X-Greylist: delayed 1587 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 01:01:55 PST
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C68103B
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:01:55 -0800 (PST)
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nI4v5-000E2A-Ja; Thu, 10 Feb 2022 09:35:15 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nI4v5-000DEK-0s; Thu, 10 Feb 2022 09:35:15 +0100
-Subject: Re: [syzbot] WARNING: kmalloc bug in xdp_umem_create (2)
-To:     Willy Tarreau <w@1wt.eu>,
-        syzbot <syzbot+11421fbbff99b989670e@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
-        bjorn.topel@gmail.com, bjorn.topel@intel.com, bjorn@kernel.org,
-        bpf@vger.kernel.org, davem@davemloft.net, fgheet255t@gmail.com,
-        hawk@kernel.org, john.fastabend@gmail.com,
-        jonathan.lemon@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        magnus.karlsson@intel.com, mudongliangabcd@gmail.com,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
-        yhs@fb.com
-References: <000000000000a3571605d27817b5@google.com>
- <0000000000001f60ef05d7a3c6ad@google.com> <20220210081125.GA4616@1wt.eu>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <359ee592-747f-8610-4180-5e1d2aba1b77@iogearbox.net>
-Date:   Thu, 10 Feb 2022 09:35:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Thu, 10 Feb 2022 03:36:09 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8A3204;
+        Thu, 10 Feb 2022 00:36:09 -0800 (PST)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21A76RmZ015012;
+        Thu, 10 Feb 2022 09:35:46 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=y9L4Czc7A2FdXucdrY70AFh+b07oPp3FhPpaO2bKdQE=;
+ b=NOjCvEJ84ZRLEAj5IAIr7aiW0SHED5f+g80DdbZhQBditr4ddDK54uPHdj/t0JTOJ4Ch
+ a90v4pZoIdJ9xgOpaQ46Z3GfQ+srZvV2z52ngI/ZwzuOQNVTso06Qk3lzwe7URXggwnN
+ +T9FE2K774bG5WR/Cv/VTtgoAIFKKqQE7vU9S0tz+gDV12yn4/WgXpRIow/LgJwJRVM+
+ qqTMSBuQPUbnlZQhGLLEtpqhoQ07gUzuwHdseVI2E7RINS7VGAthylHjzDKu5u+Ob/Ay
+ N4EK4gbvB+fqpS1U8+DQ46yXlIh240Tzs33EcnPNIN7yf+KPDCyFFCl8+Q2WxqNuNBKP 4A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e4x1a8gvk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Feb 2022 09:35:46 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4BC4210002A;
+        Thu, 10 Feb 2022 09:35:46 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3D998210F83;
+        Thu, 10 Feb 2022 09:35:46 +0100 (CET)
+Received: from [10.201.21.201] (10.75.127.45) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 10 Feb
+ 2022 09:35:44 +0100
+Message-ID: <344eed6a-5367-35cf-49d8-eb53c50000e5@foss.st.com>
+Date:   Thu, 10 Feb 2022 09:35:43 +0100
 MIME-Version: 1.0
-In-Reply-To: <20220210081125.GA4616@1wt.eu>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 01/12] ARM: dts: sti: ensure unique unit-address in
+ stih407-clock
 Content-Language: en-US
+To:     Alain Volmat <avolmat@me.com>, <patrice.chotard@st.com>,
+        <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20211202075105.195664-1-avolmat@me.com>
+ <20211202075105.195664-2-avolmat@me.com>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <20211202075105.195664-2-avolmat@me.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26448/Wed Feb  9 10:31:19 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-10_03,2022-02-09_01,2021-12-02_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/10/22 9:11 AM, Willy Tarreau wrote:
-> On Wed, Feb 09, 2022 at 10:08:07PM -0800, syzbot wrote:
->> syzbot has bisected this issue to:
->>
->> commit 7661809d493b426e979f39ab512e3adf41fbcc69
->> Author: Linus Torvalds <torvalds@linux-foundation.org>
->> Date:   Wed Jul 14 16:45:49 2021 +0000
->>
->>      mm: don't allow oversized kvmalloc() calls
->>
->> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13bc74c2700000
->> start commit:   f4bc5bbb5fef Merge tag 'nfsd-5.17-2' of git://git.kernel.o..
->> git tree:       upstream
->> final oops:     https://syzkaller.appspot.com/x/report.txt?x=107c74c2700000
->> console output: https://syzkaller.appspot.com/x/log.txt?x=17bc74c2700000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=5707221760c00a20
->> dashboard link: https://syzkaller.appspot.com/bug?extid=11421fbbff99b989670e
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e514a4700000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15fcdf8a700000
->>
->> Reported-by: syzbot+11421fbbff99b989670e@syzkaller.appspotmail.com
->> Fixes: 7661809d493b ("mm: don't allow oversized kvmalloc() calls")
->>
->> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Hi Alain
+
+On 12/2/21 08:50, Alain Volmat wrote:
+> Move quadfs and a9-mux clocks nodes into clockgen nodes so
+> that they can get the reg property from the parent node and
+> ensure only one node has the address.
 > 
-> Interesting, so in fact syzkaller has shown that the aforementioned
-> patch does its job well and has spotted a call path by which a single
-> userland setsockopt() can request more than 2 GB allocation in the
-> kernel. Most likely that's in fact what needs to be addressed.
+> Signed-off-by: Alain Volmat <avolmat@me.com>
+> ---
+>  arch/arm/boot/dts/stih407-clock.dtsi | 101 ++++++++++++---------------
+>  1 file changed, 46 insertions(+), 55 deletions(-)
 > 
-> FWIW the call trace at the URL above is:
-> 
-> Call Trace:
->   kvmalloc include/linux/mm.h:806 [inline]
->   kvmalloc_array include/linux/mm.h:824 [inline]
->   kvcalloc include/linux/mm.h:829 [inline]
->   xdp_umem_pin_pages net/xdp/xdp_umem.c:102 [inline]
->   xdp_umem_reg net/xdp/xdp_umem.c:219 [inline]
->   xdp_umem_create+0x6a5/0xf00 net/xdp/xdp_umem.c:252
->   xsk_setsockopt+0x604/0x790 net/xdp/xsk.c:1068
->   __sys_setsockopt+0x1fd/0x4e0 net/socket.c:2176
->   __do_sys_setsockopt net/socket.c:2187 [inline]
->   __se_sys_setsockopt net/socket.c:2184 [inline]
->   __x64_sys_setsockopt+0xb5/0x150 net/socket.c:2184
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x44/0xae
-> 
-> and the meaningful part of the repro is:
-> 
->    syscall(__NR_mmap, 0x1ffff000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
->    syscall(__NR_mmap, 0x20000000ul, 0x1000000ul, 7ul, 0x32ul, -1, 0ul);
->    syscall(__NR_mmap, 0x21000000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
->    intptr_t res = 0;
->    res = syscall(__NR_socket, 0x2cul, 3ul, 0);
->    if (res != -1)
->      r[0] = res;
->    *(uint64_t*)0x20000080 = 0;
->    *(uint64_t*)0x20000088 = 0xfff02000000;
->    *(uint32_t*)0x20000090 = 0x800;
->    *(uint32_t*)0x20000094 = 0;
->    *(uint32_t*)0x20000098 = 0;
->    syscall(__NR_setsockopt, r[0], 0x11b, 4, 0x20000080ul, 0x20ul);
+> diff --git a/arch/arm/boot/dts/stih407-clock.dtsi b/arch/arm/boot/dts/stih407-clock.dtsi
+> index 9cce9541e26b..350bcfcf498b 100644
+> --- a/arch/arm/boot/dts/stih407-clock.dtsi
+> +++ b/arch/arm/boot/dts/stih407-clock.dtsi
+> @@ -29,7 +29,7 @@ clocks {
+>  		 */
+>  		clockgen-a9@92b0000 {
+>  			compatible = "st,clkgen-c32";
+> -			reg = <0x92b0000 0xffff>;
+> +			reg = <0x92b0000 0x10000>;
+>  
+>  			clockgen_a9_pll: clockgen-a9-pll {
+>  				#clock-cells = <1>;
+> @@ -37,32 +37,27 @@ clockgen_a9_pll: clockgen-a9-pll {
+>  
+>  				clocks = <&clk_sysin>;
+>  			};
+> -		};
+>  
+> -		/*
+> -		 * ARM CPU related clocks.
+> -		 */
+> -		clk_m_a9: clk-m-a9@92b0000 {
+> -			#clock-cells = <0>;
+> -			compatible = "st,stih407-clkgen-a9-mux";
+> -			reg = <0x92b0000 0x10000>;
+> -
+> -			clocks = <&clockgen_a9_pll 0>,
+> -				 <&clockgen_a9_pll 0>,
+> -				 <&clk_s_c0_flexgen 13>,
+> -				 <&clk_m_a9_ext2f_div2>;
+> +			clk_m_a9: clk-m-a9 {
+> +				#clock-cells = <0>;
+> +				compatible = "st,stih407-clkgen-a9-mux";
+>  
+> +				clocks = <&clockgen_a9_pll 0>,
+> +					 <&clockgen_a9_pll 0>,
+> +					 <&clk_s_c0_flexgen 13>,
+> +					 <&clk_m_a9_ext2f_div2>;
+>  
+> -			/*
+> -			 * ARM Peripheral clock for timers
+> -			 */
+> -			arm_periph_clk: clk-m-a9-periphs {
+> -				#clock-cells = <0>;
+> -				compatible = "fixed-factor-clock";
+> +				/*
+> +				 * ARM Peripheral clock for timers
+> +				 */
+> +				arm_periph_clk: clk-m-a9-periphs {
+> +					#clock-cells = <0>;
+> +					compatible = "fixed-factor-clock";
+>  
+> -				clocks = <&clk_m_a9>;
+> -				clock-div = <2>;
+> -				clock-mult = <1>;
+> +					clocks = <&clk_m_a9>;
+> +					clock-div = <2>;
+> +					clock-mult = <1>;
+> +				};
+>  			};
+>  		};
+>  
+> @@ -87,14 +82,6 @@ clk_s_a0_flexgen: clk-s-a0-flexgen {
+>  			};
+>  		};
+>  
+> -		clk_s_c0_quadfs: clk-s-c0-quadfs@9103000 {
+> -			#clock-cells = <1>;
+> -			compatible = "st,quadfs-pll";
+> -			reg = <0x9103000 0x1000>;
+> -
+> -			clocks = <&clk_sysin>;
+> -		};
+> -
+>  		clk_s_c0: clockgen-c@9103000 {
+>  			compatible = "st,clkgen-c32";
+>  			reg = <0x9103000 0x1000>;
+> @@ -113,6 +100,13 @@ clk_s_c0_pll1: clk-s-c0-pll1 {
+>  				clocks = <&clk_sysin>;
+>  			};
+>  
+> +			clk_s_c0_quadfs: clk-s-c0-quadfs {
+> +				#clock-cells = <1>;
+> +				compatible = "st,quadfs-pll";
+> +
+> +				clocks = <&clk_sysin>;
+> +			};
+> +
+>  			clk_s_c0_flexgen: clk-s-c0-flexgen {
+>  				#clock-cells = <1>;
+>  				compatible = "st,flexgen", "st,flexgen-stih407-c0";
+> @@ -142,18 +136,17 @@ clk_m_a9_ext2f_div2: clk-m-a9-ext2f-div2s {
+>  			};
+>  		};
+>  
+> -		clk_s_d0_quadfs: clk-s-d0-quadfs@9104000 {
+> -			#clock-cells = <1>;
+> -			compatible = "st,quadfs-d0";
+> -			reg = <0x9104000 0x1000>;
+> -
+> -			clocks = <&clk_sysin>;
+> -		};
+> -
+>  		clockgen-d0@9104000 {
+>  			compatible = "st,clkgen-c32";
+>  			reg = <0x9104000 0x1000>;
+>  
+> +			clk_s_d0_quadfs: clk-s-d0-quadfs {
+> +				#clock-cells = <1>;
+> +				compatible = "st,quadfs-d0";
+> +
+> +				clocks = <&clk_sysin>;
+> +			};
+> +
+>  			clk_s_d0_flexgen: clk-s-d0-flexgen {
+>  				#clock-cells = <1>;
+>  				compatible = "st,flexgen", "st,flexgen-stih407-d0";
+> @@ -166,18 +159,17 @@ clk_s_d0_flexgen: clk-s-d0-flexgen {
+>  			};
+>  		};
+>  
+> -		clk_s_d2_quadfs: clk-s-d2-quadfs@9106000 {
+> -			#clock-cells = <1>;
+> -			compatible = "st,quadfs-d2";
+> -			reg = <0x9106000 0x1000>;
+> -
+> -			clocks = <&clk_sysin>;
+> -		};
+> -
+>  		clockgen-d2@9106000 {
+>  			compatible = "st,clkgen-c32";
+>  			reg = <0x9106000 0x1000>;
+>  
+> +			clk_s_d2_quadfs: clk-s-d2-quadfs {
+> +				#clock-cells = <1>;
+> +				compatible = "st,quadfs-d2";
+> +
+> +				clocks = <&clk_sysin>;
+> +			};
+> +
+>  			clk_s_d2_flexgen: clk-s-d2-flexgen {
+>  				#clock-cells = <1>;
+>  				compatible = "st,flexgen", "st,flexgen-stih407-d2";
+> @@ -192,18 +184,17 @@ clk_s_d2_flexgen: clk-s-d2-flexgen {
+>  			};
+>  		};
+>  
+> -		clk_s_d3_quadfs: clk-s-d3-quadfs@9107000 {
+> -			#clock-cells = <1>;
+> -			compatible = "st,quadfs-d3";
+> -			reg = <0x9107000 0x1000>;
+> -
+> -			clocks = <&clk_sysin>;
+> -		};
+> -
+>  		clockgen-d3@9107000 {
+>  			compatible = "st,clkgen-c32";
+>  			reg = <0x9107000 0x1000>;
+>  
+> +			clk_s_d3_quadfs: clk-s-d3-quadfs {
+> +				#clock-cells = <1>;
+> +				compatible = "st,quadfs-d3";
+> +
+> +				clocks = <&clk_sysin>;
+> +			};
+> +
+>  			clk_s_d3_flexgen: clk-s-d3-flexgen {
+>  				#clock-cells = <1>;
+>  				compatible = "st,flexgen", "st,flexgen-stih407-d3";
 
-Bjorn had a comment back then when the issue was first raised here:
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
-   https://lore.kernel.org/bpf/3f854ca9-f5d6-4065-c7b1-5e5b25ea742f@iogearbox.net/
-
-There was earlier discussion from Andrew to potentially retire the warning:
-
-   https://lore.kernel.org/bpf/20211201202905.b9892171e3f5b9a60f9da251@linux-foundation.org/
-
-Bjorn / Magnus / Andrew, anyone planning to follow-up on this issue?
-
-Thanks,
-Daniel
+Thanks
+Patrice

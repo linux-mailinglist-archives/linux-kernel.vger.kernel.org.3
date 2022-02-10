@@ -2,95 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A384B12DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:36:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E834B12F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:37:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244237AbiBJQfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 11:35:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45774 "EHLO
+        id S244342AbiBJQhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 11:37:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232641AbiBJQfh (ORCPT
+        with ESMTP id S244288AbiBJQgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 11:35:37 -0500
-X-Greylist: delayed 303 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 08:35:37 PST
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6DA5128
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:35:37 -0800 (PST)
-Received: from mail-wr1-f44.google.com ([209.85.221.44]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M1qbm-1nKOC82xbs-002FVF for <linux-kernel@vger.kernel.org>; Thu, 10 Feb
- 2022 17:30:32 +0100
-Received: by mail-wr1-f44.google.com with SMTP id q7so10473880wrc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:30:32 -0800 (PST)
-X-Gm-Message-State: AOAM533TR4Siq1eqoU2tDQMWXyCopk2EGUSX/fZ+BqQgCfOr+whsE+GF
-        AxDQA538ayt1ZJl1RJnUOb6ZXMBqqDzFmlnaOnE=
-X-Google-Smtp-Source: ABdhPJwxBvlbd4av+M+Wt3kUK7FJRCqF+gfuROuPRVX6DWa4nR1KkBnzFSUpMXDjuIAebSwZ4Cgah/eIprmfjzqcdTk=
-X-Received: by 2002:a5d:58d1:: with SMTP id o17mr5522580wrf.407.1644510632390;
- Thu, 10 Feb 2022 08:30:32 -0800 (PST)
+        Thu, 10 Feb 2022 11:36:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17963137
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:36:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644511014;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=C2hvu0iP1ozzImdwOawq7RtiNZp/sNLo/TZHQM9dTsg=;
+        b=BwlTkMZXpqsUSUb11xzLgJFbYp6LYoHDz9CJaBrt3ipzB1REf4FKQGcTjrriNhsA6K9LUG
+        5joyATGbZe3gXjhyd/8QikN7IilYG7Yps/f44cH6RmiZjw0miP7ESyClV3IJ5N5VmgvrJZ
+        a4A9H26JeyjtAuK3QJ6grkibsbwPQ4Q=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-332-gdZxSdYxMlqE_gHVxxW0Xw-1; Thu, 10 Feb 2022 11:36:53 -0500
+X-MC-Unique: gdZxSdYxMlqE_gHVxxW0Xw-1
+Received: by mail-ej1-f71.google.com with SMTP id o4-20020a170906768400b006a981625756so3024202ejm.0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:36:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=C2hvu0iP1ozzImdwOawq7RtiNZp/sNLo/TZHQM9dTsg=;
+        b=AJBD41dSvBjRcROTltHlUGGRZzk9KOgsGY+Y4CgQa2XXNis5oQyQKDakakzTZvLqS6
+         vu8fau948QNocOv9TyVgbIw2b3R2Xy29/7wgBZoZooShOOkRHFQzW/KR+nYbNEYSCb9r
+         XNFlcFqFawXQ0Xfg1TerdYCgI8pCv1aFlGrChJ1FntIJFh0bwE5uRilXh4lJaoVmggVv
+         3KaZzoNNdfXx9Gg4zIMKg7vclrIQmLAaHQ7PC/+uf8CVBiUG0R3uGyIxgSJST16tjSog
+         yeDf8dCoVNJ3dcqNDX0KdYtwQ8x1XlYuphb0zjedHfqa+WoF46avlkWuBm+H+jnT2AyP
+         gJqw==
+X-Gm-Message-State: AOAM530tqSnl67f9vbZwH5LSNLVUQQA+2Iz13N0LErx3Cs+DXS711So1
+        ZnmMqYi0gEnRf86U0bxhZfT24l/B7Cu1DJpC/uYGef6IfUCpLxBI9Miltzh2yWCO0hZzkIw5xOD
+        y7abDHGM/n+h27PP/pJ1WHd/G
+X-Received: by 2002:a05:6402:348b:: with SMTP id v11mr9188568edc.58.1644511011948;
+        Thu, 10 Feb 2022 08:36:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzJfC1GU+5eGfGNQQxuYJPtmnQ9Njp+YLT1I+95acuMLcAIv38IH5OD1zORnBLD/pfnnJ+cWw==
+X-Received: by 2002:a05:6402:348b:: with SMTP id v11mr9188549edc.58.1644511011762;
+        Thu, 10 Feb 2022 08:36:51 -0800 (PST)
+Received: from [192.168.10.118] ([93.56.170.240])
+        by smtp.googlemail.com with ESMTPSA id g19sm4365247ejd.62.2022.02.10.08.36.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 08:36:50 -0800 (PST)
+Message-ID: <fd3ffa55-5421-fd18-9dc2-82805b694e14@redhat.com>
+Date:   Thu, 10 Feb 2022 17:33:21 +0100
 MIME-Version: 1.0
-References: <20220209224210.153907-1-radhac@marvell.com>
-In-Reply-To: <20220209224210.153907-1-radhac@marvell.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 10 Feb 2022 17:30:15 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a29uJF+dVVjuKmF=rRDJrM2ndbxRJPFt9ga-waQcECb+A@mail.gmail.com>
-Message-ID: <CAK8P3a29uJF+dVVjuKmF=rRDJrM2ndbxRJPFt9ga-waQcECb+A@mail.gmail.com>
-Subject: Re: [PATCH 0/4] soc: Add support for Marvell OcteonTX2 SDP block
-To:     Radha Mohan Chintakuntla <radhac@marvell.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        sburla@marvell.com
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:1olmKYa5/dCgcu1PGJvWHtcH3XEnYETDY8G+sJyWbuGhgFTPBvt
- OwPa3zDJ4uTSbDKDT0Q0d0lLCan2pX87ILht8LHIjb7ubK4m4HBFWHPrQxTb8N/5AY2XdNI
- rkqyGlZ3Stkc+lSGVpR3y91y8xCe1/bJW+oFKouhjYv5kIWfOs+c7SRQmfggl6NafFYd+be
- lQ4MbuH1VVb2EvcXzDoNQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:rOoFpGH6QbU=:1PhDheeNv4rNdbCO8cX+pi
- 8Uxzk37023Y6JM8sooej/X/g3ieBY8RTeOtv/JwrBSr3S3JvAO/IWqjcAB1MmBqZp8z6UBqrg
- iGzncBesosvSSdNUi3GxPVfEaPHekQBj3lKbLhoCkyGnKbPIPyFV0/+4oF55BMWsb2W5O0Zoe
- dLN7r8hAe2TxQ9vYJqsoj8zQNUZMPi/zNGrLqZD5fHRr19I+N7hGhE89ZnlZ1I24Pz9KH76Yr
- Xe9MuxfTH4FYQ6e8VscxvNJq3YEPpWF/B63coGvDkRqmjqqQsN0Tmp4V9VycyYL/Zsot785F6
- KtTmAq1r////C48vaC08GivZ8TOnCnG8wJwQEIvbPbO4CozdOxRVl77/Y49/dZx1qr9rZffLU
- W1FubymdESSNszDLj8A92inOVCaHwpgJeTLb+Da/VbAva41sLkFA5LCN+Sdq+FoPSV90qopBg
- lHRhm/xtpSEOOHHjFlglzRugbubnrNQBZLdVoSifoPhFtYsIHgmPgBFSg3ohFXhpT5KV4EtUe
- KNegOzmAGaTkFbxeke9Qm2getdNROkytxEDdZZBKwFrE4L8nxxbD1KU+4hLQ7FbiBZfv04odS
- 547u7x/upEy34TaQIWml3Em+jeprG8BHwB3tN2Ll53ii51tS71/CBGpNvV0WkHlVzn+jxE2FU
- OjmXJb/QHcvCEHkvD8V31wYy9NPeCRA/L9y5ppg63A6bnePWCCTVH+KAAXAA+qVcbnZa8y8pp
- TPGgBS0UIyQuUOozrnTGCvrRh5v75qdOxukrixa7tseMONKXmOw54Ebmh0SO4/WRAsMWJEdbO
- ZdaKZemQPIAdld3xSdTHYFWA96PtgwXFq9zHk/pGW8txgjg/q8=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH MANUALSEL 5.16 4/8] KVM: nVMX: WARN on any attempt to
+ allocate shadow VMCS for vmcs02
+Content-Language: en-US
+To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, kvm@vger.kernel.org
+References: <20220209185635.48730-1-sashal@kernel.org>
+ <20220209185635.48730-4-sashal@kernel.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220209185635.48730-4-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 11:42 PM Radha Mohan Chintakuntla
-<radhac@marvell.com> wrote:
->
-> The Marvell OcteonTX2's SDP block is a interface for sending and receiving
-> ethernet packets over the PCIe interface when OcteonTX2 is in PCIe endpoint
-> mode. It interfaces with the OcteonTX2's NIX block queues.
+On 2/9/22 19:56, Sasha Levin wrote:
+> From: Sean Christopherson <seanjc@google.com>
+> 
+> [ Upstream commit d6e656cd266cdcc95abd372c7faef05bee271d1a ]
+> 
+> WARN if KVM attempts to allocate a shadow VMCS for vmcs02.  KVM emulates
+> VMCS shadowing but doesn't virtualize it, i.e. KVM should never allocate
+> a "real" shadow VMCS for L2.
+> 
+> The previous code WARNed but continued anyway with the allocation,
+> presumably in an attempt to avoid NULL pointer dereference.
+> However, alloc_vmcs (and hence alloc_shadow_vmcs) can fail, and
+> indeed the sole caller does:
+> 
+> 	if (enable_shadow_vmcs && !alloc_shadow_vmcs(vcpu))
+> 		goto out_shadow_vmcs;
+> 
+> which makes it not a useful attempt.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Message-Id: <20220125220527.2093146-1-seanjc@google.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>   arch/x86/kvm/vmx/nested.c | 22 ++++++++++++----------
+>   1 file changed, 12 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index c605c2c01394b..9cd68e1fcf602 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -4827,18 +4827,20 @@ static struct vmcs *alloc_shadow_vmcs(struct kvm_vcpu *vcpu)
+>   	struct loaded_vmcs *loaded_vmcs = vmx->loaded_vmcs;
+>   
+>   	/*
+> -	 * We should allocate a shadow vmcs for vmcs01 only when L1
+> -	 * executes VMXON and free it when L1 executes VMXOFF.
+> -	 * As it is invalid to execute VMXON twice, we shouldn't reach
+> -	 * here when vmcs01 already have an allocated shadow vmcs.
+> +	 * KVM allocates a shadow VMCS only when L1 executes VMXON and frees it
+> +	 * when L1 executes VMXOFF or the vCPU is forced out of nested
+> +	 * operation.  VMXON faults if the CPU is already post-VMXON, so it
+> +	 * should be impossible to already have an allocated shadow VMCS.  KVM
+> +	 * doesn't support virtualization of VMCS shadowing, so vmcs01 should
+> +	 * always be the loaded VMCS.
+>   	 */
+> -	WARN_ON(loaded_vmcs == &vmx->vmcs01 && loaded_vmcs->shadow_vmcs);
+> +	if (WARN_ON(loaded_vmcs != &vmx->vmcs01 || loaded_vmcs->shadow_vmcs))
+> +		return loaded_vmcs->shadow_vmcs;
+> +
+> +	loaded_vmcs->shadow_vmcs = alloc_vmcs(true);
+> +	if (loaded_vmcs->shadow_vmcs)
+> +		vmcs_clear(loaded_vmcs->shadow_vmcs);
+>   
+> -	if (!loaded_vmcs->shadow_vmcs) {
+> -		loaded_vmcs->shadow_vmcs = alloc_vmcs(true);
+> -		if (loaded_vmcs->shadow_vmcs)
+> -			vmcs_clear(loaded_vmcs->shadow_vmcs);
+> -	}
+>   	return loaded_vmcs->shadow_vmcs;
+>   }
+>   
 
-Hi Radha,
+NACK, it's just extra care but not particularly useful.
 
-I'm not sure drivers/soc/ is the right place for it. I have not done an
-actual review so far, but I have some high-level questions to
-clarify how this fits in:
+Paolo
 
-When you say it is meant for passing ethernet packets, why is
-it not an ethernet driver?
-
-If this drives the PCIe endpoint mode, how does it interface with
-the pci endpoint framework? It looks like a normal PCI driver.
-
-What hardware does this run on? Is this only usable when
-both the host side and the endpoint side are Octexon TX2
-machines with their packet engines, or can one of the two
-be a different machine that has PCIe host or endpoint device
-support?
-
-          Arnd

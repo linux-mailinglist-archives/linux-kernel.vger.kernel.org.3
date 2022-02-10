@@ -2,218 +2,1821 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C6434B0AEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:36:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E448A4B0AD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239754AbiBJKew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 05:34:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46852 "EHLO
+        id S239934AbiBJKfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 05:35:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239746AbiBJKet (ORCPT
+        with ESMTP id S239864AbiBJKfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 05:34:49 -0500
-Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30077.outbound.protection.outlook.com [40.107.3.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02249FF1;
-        Thu, 10 Feb 2022 02:34:50 -0800 (PST)
+        Thu, 10 Feb 2022 05:35:22 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2047.outbound.protection.outlook.com [40.107.94.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9E9FF8
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:35:21 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DIzUontJTpyrDcEP/FW+HGwFcqejOJV+mh8DBI4PCZCEduW07GeFtKuFwhy5Zr6KTtcZHTy+spZctg6tKcs+/1clQyhFftx870Cq0l+6T5hYNvuSWMAsXMgxI+UQQo/7oImIKpyLZ00zah9B1qbz0WNZ8kGwJI8geUVehOj7jxGyhpy7jbikCa3ObooNohh9jRUYfJIOUqU3iOvu+grhqWEgD5WZ9s9vBq0mgzldziQuWqsLA2eYu4E4OXYrWJ+5Mn5/gZQYeV5Qm45j9PYhTC3QWJGd9mXcpcvK4X/pxj9Bc70vjaIccDLUbW0hUs1RKfgVkggm9NNWM+qhzpG9vg==
+ b=gtgHl1i1dpVolDzLPPoxNUdT5ieav0EgL6RuA8vw4c258heavyAGLAEzsnPuFCTxGtpX5dUGPXcXj4X7lIy7Vz7yD5IK24NOqTvrb96A2+qz6/IQF2bIMCwL2rZch00L6ZztTSm+t4fcckuSTOs6GPFMiKhW1gPpe2gh9VW5EYPi1xF+OQ+Si7HOx1MWMbMY2SgWfZOvmysMpPRZqt7Q0tEupegx9M7+zo7TBFPi56JegahIcF3YQxOReiJDgPJe7UanuOdTjge462uj5lL2nGLvO0OEQ07NBGFT4WqzdenrquBQMLUEu13I3KLsHctiqGI2i6q1ul7rhBsuzDE7bQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cTF4O52L6+K1nvAJg6kUnZz7djG5j1e9FJus8l65UUA=;
- b=JJQUqXEFKk6v+5yMdrbabKIRRxVupmx9VIvp80Ia+am+sSWukxk6WhFyb+egw4Yto7WcmQ63iUzKJw942bQ5o8CBxMrTSmkSnZjAZcu0+b8eTDz5JaSNFjxXE06vL/yzkYIqiuomcJyg/ovbblZ2IY64OO7gDnKbbbV4q4o6biXLrf9YdpfXdiXX7LK9uNnTr24hLzjs3yfbN9573bSgUyfkE6maGYO5ZZZ5I+US/xQu7PYrL9YnGpM2jSMS2uwQj5s6doSsWMPSUIX53AChCYolMxOSycZaj5W7o7QL9SE4CVojI0gNdItrtMaEijbpP8fx/FSaYKQgusNd3sAOSg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ bh=8SYYznbc6oYWcqid/DlJkCnV4aVC2ccgXYZGPYeT1sQ=;
+ b=AizZNtO+7RRVG+ZdE01sHgm29F7J5noHYMwZLa2lG6x7eYjX0O8c2qcXn7pDt15y1csa4o52ASUxF9u2LVMIp53uVW3f0/dR+OfgifNp37rAPG4fEfDDSVAgo7pKJIzPHD0rmqJxxuBHl82o9u06piZIZOCZSdft/YDipXv/kYblxfYpyIZMkamr78js9IpqsGPpovX5v5eBX/WjKenrxcWxdLvi2qBvg3hbKexHkLRN3TIZ0anZsCoqJbHHb6mEbaEk24V2bUxAZWvKN0e49khERSCuhIL6bFO9fUe5AbtpD6FCj+7M5UCwibJQmRr0r0Z0IwkQz+EnVHEl1EB2gQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com; dmarc=pass
+ (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cTF4O52L6+K1nvAJg6kUnZz7djG5j1e9FJus8l65UUA=;
- b=CSWaxz8IHzROSfyaHA7U3bCHbIm5YUTk0FzHJZ/hDu8gx5SSkBfmmoo15kxhTBrxN/nEhpCQQTNzpxlNAyc+iQPCP+u3llCPzTS0W1YPw5CbWmsr/sNR8medygzyFrQiSRfR3kcIIhD7bQ7BAvHhdMBmq81V/sPPbvRdBadJwb0=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by DB3PR0402MB3899.eurprd04.prod.outlook.com (2603:10a6:8:f::26) with
+ bh=8SYYznbc6oYWcqid/DlJkCnV4aVC2ccgXYZGPYeT1sQ=;
+ b=XU+ElbEwDhe/+6kwqOa28foaUuDLLfiNnbuzqd2JiUHn9E25YIVJVdFyd0AwMB8twY588Myies+zvJ+yp7Digz21JDVNqDF6OPiCOxNL2+T3UlNLzX9M0MAkze3jSjFGhZD+gk7RuULqcx6JMjcjhQW4lnjHYkv7E6R+hsDTHAzK1ERfFifIScE/SpWhQ4gsMRQr7QOYhZPZiJONk7nzZajc1l3NAWk5Lnzsbfpy34g1nW1pT/EzywCjWOOtAp+6GUMHI7GdC58vCl4xB51h9gBz3cDj7K3CCKJdcaZafnkxC7zddms0rb2rjwBclY8KWGYIlG8dOAPrIg3q7LkocQ==
+Received: from BN9PR03CA0942.namprd03.prod.outlook.com (2603:10b6:408:108::17)
+ by BYAPR12MB2968.namprd12.prod.outlook.com (2603:10b6:a03:ab::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.18; Thu, 10 Feb
- 2022 10:34:47 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::95cf:8c40:b887:a7b9]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::95cf:8c40:b887:a7b9%4]) with mapi id 15.20.4951.019; Thu, 10 Feb 2022
- 10:34:47 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>
-Subject: Re: [PATCH v6 net-next 2/5] net: mscc: ocelot: remove unnecessary
- stat reading from ethtool
-Thread-Topic: [PATCH v6 net-next 2/5] net: mscc: ocelot: remove unnecessary
- stat reading from ethtool
-Thread-Index: AQHYHjTeSRre4+TdMUarRWdg03eF1ayMlzsA
-Date:   Thu, 10 Feb 2022 10:34:47 +0000
-Message-ID: <20220210103446.3rdnulyk5p7tzgn6@skbuf>
-References: <20220210041345.321216-1-colin.foster@in-advantage.com>
- <20220210041345.321216-3-colin.foster@in-advantage.com>
-In-Reply-To: <20220210041345.321216-3-colin.foster@in-advantage.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f8d7b709-9b7d-4c06-a29f-08d9ec80f5d6
-x-ms-traffictypediagnostic: DB3PR0402MB3899:EE_
-x-microsoft-antispam-prvs: <DB3PR0402MB38997037FDBAB26A592B9DDFE02F9@DB3PR0402MB3899.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: vPIJllB+gJHSLiDuLV1gyFKrMdxNo2YTTTCdPA8HkW5NKxK/xkOJqETajAZcuQnUwN/Yl1ypg63vuucUuGPW4WjqbqISXoaD2NrL7SaHhErvFkFF5hSvgSp+zGHMmcXyzQYvA7VnSfIeehY3/nkmsU67jVqzdvcjsJK44QzeiqTA7jGUT84HvjmX/48CsiqT29nMNvRkxgdZpdXa4aJS3X+XoTw2648s+EU6vzWBEOAKNvXM2IHqBNZa85PmbryFYB8c6jmqrlvDw3pJYf3u7pJ8yvi7xRyP8C37KC81ySk7mdWBBFAN1umrR3SfIKVW438XhbUwJIiatUNeQmyIGAmMoyGOg1yPZJTxAC2TSVfhy5Kprcoi2Q2JHlH2aYgemUnJN8SeuGBw9bmxeLiFkPiLvkBJYJdW7lLvTdlT1obe0Z+j9+Dlfo0szvqOYFP9kMsFKYNKenPDum8vPJ+ZKFcNfXdIHk3Mf+8NZm70lC+r7WzJxMmF9f9pmAZs8W3aGTK0mGq7kCeacytTW7U4I05/+lPig2EKRI54EPkgmVkB8Po8Zn0UjFS8z2hi5CTq7R0fZRKZ1Z8KMuD89eDoWVtaXlcx6Yy27S0vTXt+Pw8EMjL8iYJEm0yTwlVk8NUxn6hBqoRqgW240DfULNicSRzlxYnAanDNM0H4T1UogOstry9ow1XYnugKVh9hn5SvPDe7Ir4cfeZJa/Q3YAbSCw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(33716001)(8936002)(38070700005)(316002)(54906003)(66476007)(8676002)(4326008)(38100700002)(76116006)(66946007)(1076003)(122000001)(91956017)(6916009)(66556008)(66446008)(64756008)(2906002)(26005)(5660300002)(86362001)(44832011)(6486002)(9686003)(6512007)(186003)(6506007)(508600001)(83380400001)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?C8lpwtAFhG4DYRdl4OfZvdpBsfJFFTLHrF5dWIHbOpXwuyxKWg4TX/4xm0O/?=
- =?us-ascii?Q?5F6U6A3l2dp0AZvZhKY8ZuoU7qUI1OFllqYIlb6cuNlZ48nUD62X7vm4Wqe+?=
- =?us-ascii?Q?blaYFDIj6l0JthP67nL9S7q6X9P6noKRZqnSAJeNr99Dv5cMU57KC+jSQVrb?=
- =?us-ascii?Q?SGIwOhtVLYEHTDgMmy5820M/7xlThm1S3/dmsAnQBlKh5ZAJALt7hM2vSNXX?=
- =?us-ascii?Q?ciE84m2S2fCh8YCaNp19vqnhmBoWSgogdNRnlWP3OS9XP5g30Q4qTeacDvyi?=
- =?us-ascii?Q?czq8RxwFblTm7b9UrN+Pri+X78mwzfbHhBA/6i6Xnhf/rVt7kWKGkxL4J9Fd?=
- =?us-ascii?Q?+B1Gi93z18pFwRtRjvgQiGmPmj9S2SwDgUlsLtVz0Jz3FXR4o0lLHmz+myoT?=
- =?us-ascii?Q?plqxUoJ/NeBSPUpwc42d9V2z1/GbEVVM82Vh/g8kKwfPbpjA/eDglEG+eFit?=
- =?us-ascii?Q?l0LjAI4nR9AOvHQFaahk/r2qTqYn0z0z6B5AtHaZSNZpz+vgnEYbW4K6W6br?=
- =?us-ascii?Q?gSDRgtL0SJ7EZrjc/+CC/loLJG0IGKbX/fN7r9Fdarb0CEXRLKTWXg+P7XsW?=
- =?us-ascii?Q?7NZPwBxkAQ0dNqCc11mcUc0sce7u5p93Kvn98V40VxJp7vTJCuKRdrtqxLGL?=
- =?us-ascii?Q?5cbVr9U3xTHiu7DXrML7IXV6cK+yYA6TetFf1Q9uGGgxqmoddHmDcrNup0tb?=
- =?us-ascii?Q?+J0iDRcGnfULDf6sdP+TvVK1hYYBxw026Wx9dhjI1n8ThwbvVqJ+0t9yjg+P?=
- =?us-ascii?Q?r+Ge+F0koDrMnzw5uxg8q4A25XkgF82YkIz0sa2VX7T3kySSs4TisQPp7o7k?=
- =?us-ascii?Q?Q3475K0hjM0mhcWe1PUHBuuEkLGTTk3Jnd8uI38HFXTZGqnyVZ/QOPuNeNji?=
- =?us-ascii?Q?eVlkUrZwnvmPszcw8CFeaIETeASoLzVt8pH3fHoxbg8lT8ahE/XaJv6ITCH2?=
- =?us-ascii?Q?1yXChUvRD2XRbtzT0oP0WCl7IlZ9bCCrFzyeiZMqOHbOmb1qlq2NPDf3rksI?=
- =?us-ascii?Q?lCsO3Kl84B2/niNoyX5+1NGFiD3YBP1MwzjkN2Fg8UUCdGQpyAJpEQV4QGsV?=
- =?us-ascii?Q?ghiUAMwLfgcweH+O2ZqdRdNa1gb9ZG+jRoct2CvQX8D+GDxUQNGoNaxkaayA?=
- =?us-ascii?Q?YxrO531Rzr4DApzeVlNCTiyJWD86NekR1U9Yg1xOvQg+QwRTKZB5NFkwr6lB?=
- =?us-ascii?Q?SgRmwNbRhoP77kFojOBhu6K5cMnUtAdho5OH1ymE1JvcgG3Yo+H87v1eKgrH?=
- =?us-ascii?Q?sPi4XHPqyTttOdwM9uYCGT1ochiEkOFssHMYebOmXClLO3bobYK8V+ZDhMtm?=
- =?us-ascii?Q?aKZRtCxPHuUUKw72dEL90qNuCU+Z6D3aHHWQSExif6g04Btq2/enO5Gr+sfM?=
- =?us-ascii?Q?JISwYgWpGc4xIeMsy2y26knyEEAHv9DCEtcpzjjlcSoiuIMsFNr1s57exuWM?=
- =?us-ascii?Q?ZjmTyiTLHSZrvLS7tTFrT9hOse1ZXsohM/aNVz2tpDashibd4NYC205dkDtU?=
- =?us-ascii?Q?93/P97Jk+EMh3WgEoLR8EBFgNJuqDXh4YYMIRrIEW08N94TCFG9EZ2BoPaI2?=
- =?us-ascii?Q?fhuKVl0e5jAFf921bnMWQyrEgeoT8Rw93m3HIBFJq0zqUCsOWbD8h0afwJAb?=
- =?us-ascii?Q?t+SUldOSCV3wgg4doJG7dah3qGjYBv/BeV9DxN4Ty72w?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <95D952DA4770CB4EB2594E26C2AB5817@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Thu, 10 Feb
+ 2022 10:35:18 +0000
+Received: from BN8NAM11FT030.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:108:cafe::1) by BN9PR03CA0942.outlook.office365.com
+ (2603:10b6:408:108::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11 via Frontend
+ Transport; Thu, 10 Feb 2022 10:35:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ BN8NAM11FT030.mail.protection.outlook.com (10.13.177.146) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4975.11 via Frontend Transport; Thu, 10 Feb 2022 10:35:18 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 10 Feb
+ 2022 10:35:17 +0000
+Received: from nvdebian.localnet (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Thu, 10 Feb 2022
+ 02:35:12 -0800
+From:   Alistair Popple <apopple@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Christoph Hellwig <hch@lst.de>
+CC:     Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        <linux-kernel@vger.kernel.org>, <amd-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <nouveau@lists.freedesktop.org>,
+        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>
+Subject: Re: [PATCH 13/27] mm: move the migrate_vma_* device migration code into it's own file
+Date:   Thu, 10 Feb 2022 21:35:10 +1100
+Message-ID: <2160837.zdNQNePZV9@nvdebian>
+In-Reply-To: <20220210072828.2930359-14-hch@lst.de>
+References: <20220210072828.2930359-1-hch@lst.de> <20220210072828.2930359-14-hch@lst.de>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f8d7b709-9b7d-4c06-a29f-08d9ec80f5d6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2022 10:34:47.2839
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f9065be9-e220-400c-4191-08d9ec81083d
+X-MS-TrafficTypeDiagnostic: BYAPR12MB2968:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB2968E053B7B43FA28C158A20DF2F9@BYAPR12MB2968.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DoT9v0KpevTheacEx016QuJM9i/DmIEzAV3Sh5K8NiCRDiDf2xJctebqYLttKrgjCLkwS68ih11SRU7tw+Htszt5bgbdbdplp9mtaNtHKzGZT/cokoNpzyZ0vxgXIWgAgSso7HkwOlV6WX+EpQeFm/povu4D934bfsPQqzi5yd9M2i+H5jTZ9EY4mUebK1CTBRDasNk+lRc13vtkDTH3JTQ+MwUc99+87SEGraMO3HP3Fbg3ceg8rgTOZ8WiUuP2y+m2nnP492pZUaQTzEUaWrs1zHtaOg2k8EQIL4HmUIM1Q9KEwDARroeLrXw1QalONsX0wWphlbAib3/A+RZ7au3NsoR9ycCQVj+4kzYGnZHI5fxj/7DCoRESxR/r1TBokoQ+b9Kih8JRE/zQ8OtD5A5h9Pnps4rHfxYGtJIuKmmetIEKA1K9zU5XPVxahCtmlgVGwocIDp8e0dGRGlGT6nn5vupgr3b18KNo3N9oRT+46qE53q5yfuL7Rkhwc7D7ettL2PUYll4n1jWvqe9uIwMh1RzdHMp5Nbaa8/QMMJHc7RqfyJMNx1WudnNrBBXmKpNoeJc5498Ltvh3WS3ctqdXdr38iiot5L4B1g0gqXk/cCzaJq8yMG11bSc1f2C1U4dMKwEbAhtP++QWGgWJ8x5yxhxdi/mXf3+0odjGluenNHrtnq/BuQYE+ZCtgyZej0s1ICHWxzeISnxCtF/ZyqGkus7KQ/roVaLMUGgE/hQ=
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(81166007)(26005)(426003)(82310400004)(356005)(83380400001)(54906003)(86362001)(47076005)(66574015)(186003)(16526019)(33716001)(336012)(40460700003)(9686003)(36860700001)(508600001)(316002)(70206006)(8676002)(8936002)(5660300002)(70586007)(9576002)(7416002)(4326008)(2906002)(30864003)(110136005)(39026012)(36900700001)(579004)(559001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 10:35:18.0304
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cX84PY6PdKC3pyTOCuZqDUer2JD01fsdobxXyy6p6qZqwn54gI2ztaNTlc+ftKB0Y5DLhfp/YaAs3IzaCAdICg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3899
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9065be9-e220-400c-4191-08d9ec81083d
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT030.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2968
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 08:13:42PM -0800, Colin Foster wrote:
-> The ocelot_update_stats function only needs to read from one port, yet it
-> was updating the stats for all ports. Update to only read the stats that
-> are necessary.
+I got the following build error:
+
+/data/source/linux/mm/migrate_device.c: In function =E2=80=98migrate_vma_co=
+llect_pmd=E2=80=99:
+/data/source/linux/mm/migrate_device.c:242:3: error: implicit declaration o=
+f function =E2=80=98flush_tlb_range=E2=80=99; did you mean =E2=80=98flush_p=
+md_tlb_range=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+  242 |   flush_tlb_range(walk->vma, start, end);
+      |   ^~~~~~~~~~~~~~~
+      |   flush_pmd_tlb_range
+
+Including asm/tlbflush.h in migrate_device.c fixed it for me.
+
+On Thursday, 10 February 2022 6:28:14 PM AEDT Christoph Hellwig wrote:
+> Split the code used to migrate to and from ZONE_DEVICE memory from
+> migrate.c into a new file.
 >=20
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 > ---
-
-Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-
->  drivers/net/ethernet/mscc/ocelot.c | 33 +++++++++++++++---------------
->  1 file changed, 16 insertions(+), 17 deletions(-)
+>  mm/Kconfig          |   3 +
+>  mm/Makefile         |   1 +
+>  mm/migrate.c        | 753 -------------------------------------------
+>  mm/migrate_device.c | 765 ++++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 769 insertions(+), 753 deletions(-)
+>  create mode 100644 mm/migrate_device.c
 >=20
-> diff --git a/drivers/net/ethernet/mscc/ocelot.c b/drivers/net/ethernet/ms=
-cc/ocelot.c
-> index 6933dff1dd37..ab36732e7d3f 100644
-> --- a/drivers/net/ethernet/mscc/ocelot.c
-> +++ b/drivers/net/ethernet/mscc/ocelot.c
-> @@ -1738,27 +1738,24 @@ void ocelot_get_strings(struct ocelot *ocelot, in=
-t port, u32 sset, u8 *data)
->  EXPORT_SYMBOL(ocelot_get_strings);
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index a1901ae6d06293..6391d8d3a616f3 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -249,6 +249,9 @@ config MIGRATION
+>  	  pages as migration can relocate pages to satisfy a huge page
+>  	  allocation instead of reclaiming.
 > =20
->  /* Caller must hold &ocelot->stats_lock */
-> -static void ocelot_update_stats(struct ocelot *ocelot)
-> +static void ocelot_update_stats_for_port(struct ocelot *ocelot, int port=
-)
-
-If you need to resend, I think a name more consistent with the rest of
-the driver would be "ocelot_port_update_stats".
-
->  {
-> -	int i, j;
-> +	int j;
+> +config DEVICE_MIGRATION
+> +	def_bool MIGRATION && DEVICE_PRIVATE
+> +
+>  config ARCH_ENABLE_HUGEPAGE_MIGRATION
+>  	bool
 > =20
-> -	for (i =3D 0; i < ocelot->num_phys_ports; i++) {
-> -		/* Configure the port to read the stats from */
-> -		ocelot_write(ocelot, SYS_STAT_CFG_STAT_VIEW(i), SYS_STAT_CFG);
-> +	/* Configure the port to read the stats from */
-> +	ocelot_write(ocelot, SYS_STAT_CFG_STAT_VIEW(port), SYS_STAT_CFG);
+> diff --git a/mm/Makefile b/mm/Makefile
+> index 70d4309c9ce338..4cc13f3179a518 100644
+> --- a/mm/Makefile
+> +++ b/mm/Makefile
+> @@ -92,6 +92,7 @@ obj-$(CONFIG_KFENCE) +=3D kfence/
+>  obj-$(CONFIG_FAILSLAB) +=3D failslab.o
+>  obj-$(CONFIG_MEMTEST)		+=3D memtest.o
+>  obj-$(CONFIG_MIGRATION) +=3D migrate.o
+> +obj-$(CONFIG_DEVICE_MIGRATION) +=3D migrate_device.o
+>  obj-$(CONFIG_TRANSPARENT_HUGEPAGE) +=3D huge_memory.o khugepaged.o
+>  obj-$(CONFIG_PAGE_COUNTER) +=3D page_counter.o
+>  obj-$(CONFIG_MEMCG) +=3D memcontrol.o vmpressure.o
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 746e1230886ddb..c31d04b46a5e17 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -38,12 +38,10 @@
+>  #include <linux/hugetlb.h>
+>  #include <linux/hugetlb_cgroup.h>
+>  #include <linux/gfp.h>
+> -#include <linux/pagewalk.h>
+>  #include <linux/pfn_t.h>
+>  #include <linux/memremap.h>
+>  #include <linux/userfaultfd_k.h>
+>  #include <linux/balloon_compaction.h>
+> -#include <linux/mmu_notifier.h>
+>  #include <linux/page_idle.h>
+>  #include <linux/page_owner.h>
+>  #include <linux/sched/mm.h>
+> @@ -2125,757 +2123,6 @@ int migrate_misplaced_page(struct page *page, str=
+uct vm_area_struct *vma,
+>  #endif /* CONFIG_NUMA_BALANCING */
+>  #endif /* CONFIG_NUMA */
 > =20
-> -		for (j =3D 0; j < ocelot->num_stats; j++) {
-> -			u32 val;
-> -			unsigned int idx =3D i * ocelot->num_stats + j;
-> +	for (j =3D 0; j < ocelot->num_stats; j++) {
-> +		u32 val;
-> +		unsigned int idx =3D port * ocelot->num_stats + j;
-> =20
-> -			val =3D ocelot_read_rix(ocelot, SYS_COUNT_RX_OCTETS,
-> -					      ocelot->stats_layout[j].offset);
-> +		val =3D ocelot_read_rix(ocelot, SYS_COUNT_RX_OCTETS,
-> +				      ocelot->stats_layout[j].offset);
-> =20
-> -			if (val < (ocelot->stats[idx] & U32_MAX))
-> -				ocelot->stats[idx] +=3D (u64)1 << 32;
-> +		if (val < (ocelot->stats[idx] & U32_MAX))
-> +			ocelot->stats[idx] +=3D (u64)1 << 32;
-> =20
-> -			ocelot->stats[idx] =3D (ocelot->stats[idx] &
-> -					      ~(u64)U32_MAX) + val;
+> -#ifdef CONFIG_DEVICE_PRIVATE
+> -static int migrate_vma_collect_skip(unsigned long start,
+> -				    unsigned long end,
+> -				    struct mm_walk *walk)
+> -{
+> -	struct migrate_vma *migrate =3D walk->private;
+> -	unsigned long addr;
+> -
+> -	for (addr =3D start; addr < end; addr +=3D PAGE_SIZE) {
+> -		migrate->dst[migrate->npages] =3D 0;
+> -		migrate->src[migrate->npages++] =3D 0;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -static int migrate_vma_collect_hole(unsigned long start,
+> -				    unsigned long end,
+> -				    __always_unused int depth,
+> -				    struct mm_walk *walk)
+> -{
+> -	struct migrate_vma *migrate =3D walk->private;
+> -	unsigned long addr;
+> -
+> -	/* Only allow populating anonymous memory. */
+> -	if (!vma_is_anonymous(walk->vma))
+> -		return migrate_vma_collect_skip(start, end, walk);
+> -
+> -	for (addr =3D start; addr < end; addr +=3D PAGE_SIZE) {
+> -		migrate->src[migrate->npages] =3D MIGRATE_PFN_MIGRATE;
+> -		migrate->dst[migrate->npages] =3D 0;
+> -		migrate->npages++;
+> -		migrate->cpages++;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -static int migrate_vma_collect_pmd(pmd_t *pmdp,
+> -				   unsigned long start,
+> -				   unsigned long end,
+> -				   struct mm_walk *walk)
+> -{
+> -	struct migrate_vma *migrate =3D walk->private;
+> -	struct vm_area_struct *vma =3D walk->vma;
+> -	struct mm_struct *mm =3D vma->vm_mm;
+> -	unsigned long addr =3D start, unmapped =3D 0;
+> -	spinlock_t *ptl;
+> -	pte_t *ptep;
+> -
+> -again:
+> -	if (pmd_none(*pmdp))
+> -		return migrate_vma_collect_hole(start, end, -1, walk);
+> -
+> -	if (pmd_trans_huge(*pmdp)) {
+> -		struct page *page;
+> -
+> -		ptl =3D pmd_lock(mm, pmdp);
+> -		if (unlikely(!pmd_trans_huge(*pmdp))) {
+> -			spin_unlock(ptl);
+> -			goto again;
 > -		}
-> +		ocelot->stats[idx] =3D (ocelot->stats[idx] & ~(u64)U32_MAX) + val;
->  	}
->  }
-> =20
-> @@ -1767,9 +1764,11 @@ static void ocelot_check_stats_work(struct work_st=
-ruct *work)
->  	struct delayed_work *del_work =3D to_delayed_work(work);
->  	struct ocelot *ocelot =3D container_of(del_work, struct ocelot,
->  					     stats_work);
-> +	int i;
-> =20
->  	mutex_lock(&ocelot->stats_lock);
-> -	ocelot_update_stats(ocelot);
-> +	for (i =3D 0; i < ocelot->num_phys_ports; i++)
-> +		ocelot_update_stats_for_port(ocelot, i);
->  	mutex_unlock(&ocelot->stats_lock);
-> =20
->  	queue_delayed_work(ocelot->stats_queue, &ocelot->stats_work,
-> @@ -1783,7 +1782,7 @@ void ocelot_get_ethtool_stats(struct ocelot *ocelot=
-, int port, u64 *data)
->  	mutex_lock(&ocelot->stats_lock);
-> =20
->  	/* check and update now */
-> -	ocelot_update_stats(ocelot);
-> +	ocelot_update_stats_for_port(ocelot, port);
-> =20
->  	/* Copy all counters */
->  	for (i =3D 0; i < ocelot->num_stats; i++)
-> --=20
-> 2.25.1
->=
+> -
+> -		page =3D pmd_page(*pmdp);
+> -		if (is_huge_zero_page(page)) {
+> -			spin_unlock(ptl);
+> -			split_huge_pmd(vma, pmdp, addr);
+> -			if (pmd_trans_unstable(pmdp))
+> -				return migrate_vma_collect_skip(start, end,
+> -								walk);
+> -		} else {
+> -			int ret;
+> -
+> -			get_page(page);
+> -			spin_unlock(ptl);
+> -			if (unlikely(!trylock_page(page)))
+> -				return migrate_vma_collect_skip(start, end,
+> -								walk);
+> -			ret =3D split_huge_page(page);
+> -			unlock_page(page);
+> -			put_page(page);
+> -			if (ret)
+> -				return migrate_vma_collect_skip(start, end,
+> -								walk);
+> -			if (pmd_none(*pmdp))
+> -				return migrate_vma_collect_hole(start, end, -1,
+> -								walk);
+> -		}
+> -	}
+> -
+> -	if (unlikely(pmd_bad(*pmdp)))
+> -		return migrate_vma_collect_skip(start, end, walk);
+> -
+> -	ptep =3D pte_offset_map_lock(mm, pmdp, addr, &ptl);
+> -	arch_enter_lazy_mmu_mode();
+> -
+> -	for (; addr < end; addr +=3D PAGE_SIZE, ptep++) {
+> -		unsigned long mpfn =3D 0, pfn;
+> -		struct page *page;
+> -		swp_entry_t entry;
+> -		pte_t pte;
+> -
+> -		pte =3D *ptep;
+> -
+> -		if (pte_none(pte)) {
+> -			if (vma_is_anonymous(vma)) {
+> -				mpfn =3D MIGRATE_PFN_MIGRATE;
+> -				migrate->cpages++;
+> -			}
+> -			goto next;
+> -		}
+> -
+> -		if (!pte_present(pte)) {
+> -			/*
+> -			 * Only care about unaddressable device page special
+> -			 * page table entry. Other special swap entries are not
+> -			 * migratable, and we ignore regular swapped page.
+> -			 */
+> -			entry =3D pte_to_swp_entry(pte);
+> -			if (!is_device_private_entry(entry))
+> -				goto next;
+> -
+> -			page =3D pfn_swap_entry_to_page(entry);
+> -			if (!(migrate->flags &
+> -				MIGRATE_VMA_SELECT_DEVICE_PRIVATE) ||
+> -			    page->pgmap->owner !=3D migrate->pgmap_owner)
+> -				goto next;
+> -
+> -			mpfn =3D migrate_pfn(page_to_pfn(page)) |
+> -					MIGRATE_PFN_MIGRATE;
+> -			if (is_writable_device_private_entry(entry))
+> -				mpfn |=3D MIGRATE_PFN_WRITE;
+> -		} else {
+> -			if (!(migrate->flags & MIGRATE_VMA_SELECT_SYSTEM))
+> -				goto next;
+> -			pfn =3D pte_pfn(pte);
+> -			if (is_zero_pfn(pfn)) {
+> -				mpfn =3D MIGRATE_PFN_MIGRATE;
+> -				migrate->cpages++;
+> -				goto next;
+> -			}
+> -			page =3D vm_normal_page(migrate->vma, addr, pte);
+> -			mpfn =3D migrate_pfn(pfn) | MIGRATE_PFN_MIGRATE;
+> -			mpfn |=3D pte_write(pte) ? MIGRATE_PFN_WRITE : 0;
+> -		}
+> -
+> -		/* FIXME support THP */
+> -		if (!page || !page->mapping || PageTransCompound(page)) {
+> -			mpfn =3D 0;
+> -			goto next;
+> -		}
+> -
+> -		/*
+> -		 * By getting a reference on the page we pin it and that blocks
+> -		 * any kind of migration. Side effect is that it "freezes" the
+> -		 * pte.
+> -		 *
+> -		 * We drop this reference after isolating the page from the lru
+> -		 * for non device page (device page are not on the lru and thus
+> -		 * can't be dropped from it).
+> -		 */
+> -		get_page(page);
+> -
+> -		/*
+> -		 * Optimize for the common case where page is only mapped once
+> -		 * in one process. If we can lock the page, then we can safely
+> -		 * set up a special migration page table entry now.
+> -		 */
+> -		if (trylock_page(page)) {
+> -			pte_t swp_pte;
+> -
+> -			migrate->cpages++;
+> -			ptep_get_and_clear(mm, addr, ptep);
+> -
+> -			/* Setup special migration page table entry */
+> -			if (mpfn & MIGRATE_PFN_WRITE)
+> -				entry =3D make_writable_migration_entry(
+> -							page_to_pfn(page));
+> -			else
+> -				entry =3D make_readable_migration_entry(
+> -							page_to_pfn(page));
+> -			swp_pte =3D swp_entry_to_pte(entry);
+> -			if (pte_present(pte)) {
+> -				if (pte_soft_dirty(pte))
+> -					swp_pte =3D pte_swp_mksoft_dirty(swp_pte);
+> -				if (pte_uffd_wp(pte))
+> -					swp_pte =3D pte_swp_mkuffd_wp(swp_pte);
+> -			} else {
+> -				if (pte_swp_soft_dirty(pte))
+> -					swp_pte =3D pte_swp_mksoft_dirty(swp_pte);
+> -				if (pte_swp_uffd_wp(pte))
+> -					swp_pte =3D pte_swp_mkuffd_wp(swp_pte);
+> -			}
+> -			set_pte_at(mm, addr, ptep, swp_pte);
+> -
+> -			/*
+> -			 * This is like regular unmap: we remove the rmap and
+> -			 * drop page refcount. Page won't be freed, as we took
+> -			 * a reference just above.
+> -			 */
+> -			page_remove_rmap(page, false);
+> -			put_page(page);
+> -
+> -			if (pte_present(pte))
+> -				unmapped++;
+> -		} else {
+> -			put_page(page);
+> -			mpfn =3D 0;
+> -		}
+> -
+> -next:
+> -		migrate->dst[migrate->npages] =3D 0;
+> -		migrate->src[migrate->npages++] =3D mpfn;
+> -	}
+> -	arch_leave_lazy_mmu_mode();
+> -	pte_unmap_unlock(ptep - 1, ptl);
+> -
+> -	/* Only flush the TLB if we actually modified any entries */
+> -	if (unmapped)
+> -		flush_tlb_range(walk->vma, start, end);
+> -
+> -	return 0;
+> -}
+> -
+> -static const struct mm_walk_ops migrate_vma_walk_ops =3D {
+> -	.pmd_entry		=3D migrate_vma_collect_pmd,
+> -	.pte_hole		=3D migrate_vma_collect_hole,
+> -};
+> -
+> -/*
+> - * migrate_vma_collect() - collect pages over a range of virtual address=
+es
+> - * @migrate: migrate struct containing all migration information
+> - *
+> - * This will walk the CPU page table. For each virtual address backed by=
+ a
+> - * valid page, it updates the src array and takes a reference on the pag=
+e, in
+> - * order to pin the page until we lock it and unmap it.
+> - */
+> -static void migrate_vma_collect(struct migrate_vma *migrate)
+> -{
+> -	struct mmu_notifier_range range;
+> -
+> -	/*
+> -	 * Note that the pgmap_owner is passed to the mmu notifier callback so
+> -	 * that the registered device driver can skip invalidating device
+> -	 * private page mappings that won't be migrated.
+> -	 */
+> -	mmu_notifier_range_init_owner(&range, MMU_NOTIFY_MIGRATE, 0,
+> -		migrate->vma, migrate->vma->vm_mm, migrate->start, migrate->end,
+> -		migrate->pgmap_owner);
+> -	mmu_notifier_invalidate_range_start(&range);
+> -
+> -	walk_page_range(migrate->vma->vm_mm, migrate->start, migrate->end,
+> -			&migrate_vma_walk_ops, migrate);
+> -
+> -	mmu_notifier_invalidate_range_end(&range);
+> -	migrate->end =3D migrate->start + (migrate->npages << PAGE_SHIFT);
+> -}
+> -
+> -/*
+> - * migrate_vma_check_page() - check if page is pinned or not
+> - * @page: struct page to check
+> - *
+> - * Pinned pages cannot be migrated. This is the same test as in
+> - * folio_migrate_mapping(), except that here we allow migration of a
+> - * ZONE_DEVICE page.
+> - */
+> -static bool migrate_vma_check_page(struct page *page)
+> -{
+> -	/*
+> -	 * One extra ref because caller holds an extra reference, either from
+> -	 * isolate_lru_page() for a regular page, or migrate_vma_collect() for
+> -	 * a device page.
+> -	 */
+> -	int extra =3D 1;
+> -
+> -	/*
+> -	 * FIXME support THP (transparent huge page), it is bit more complex to
+> -	 * check them than regular pages, because they can be mapped with a pmd
+> -	 * or with a pte (split pte mapping).
+> -	 */
+> -	if (PageCompound(page))
+> -		return false;
+> -
+> -	/* Page from ZONE_DEVICE have one extra reference */
+> -	if (is_zone_device_page(page))
+> -		extra++;
+> -
+> -	/* For file back page */
+> -	if (page_mapping(page))
+> -		extra +=3D 1 + page_has_private(page);
+> -
+> -	if ((page_count(page) - extra) > page_mapcount(page))
+> -		return false;
+> -
+> -	return true;
+> -}
+> -
+> -/*
+> - * migrate_vma_unmap() - replace page mapping with special migration pte=
+ entry
+> - * @migrate: migrate struct containing all migration information
+> - *
+> - * Isolate pages from the LRU and replace mappings (CPU page table pte) =
+with a
+> - * special migration pte entry and check if it has been pinned. Pinned p=
+ages are
+> - * restored because we cannot migrate them.
+> - *
+> - * This is the last step before we call the device driver callback to al=
+locate
+> - * destination memory and copy contents of original page over to new pag=
+e.
+> - */
+> -static void migrate_vma_unmap(struct migrate_vma *migrate)
+> -{
+> -	const unsigned long npages =3D migrate->npages;
+> -	unsigned long i, restore =3D 0;
+> -	bool allow_drain =3D true;
+> -
+> -	lru_add_drain();
+> -
+> -	for (i =3D 0; i < npages; i++) {
+> -		struct page *page =3D migrate_pfn_to_page(migrate->src[i]);
+> -
+> -		if (!page)
+> -			continue;
+> -
+> -		/* ZONE_DEVICE pages are not on LRU */
+> -		if (!is_zone_device_page(page)) {
+> -			if (!PageLRU(page) && allow_drain) {
+> -				/* Drain CPU's pagevec */
+> -				lru_add_drain_all();
+> -				allow_drain =3D false;
+> -			}
+> -
+> -			if (isolate_lru_page(page)) {
+> -				migrate->src[i] &=3D ~MIGRATE_PFN_MIGRATE;
+> -				migrate->cpages--;
+> -				restore++;
+> -				continue;
+> -			}
+> -
+> -			/* Drop the reference we took in collect */
+> -			put_page(page);
+> -		}
+> -
+> -		if (page_mapped(page))
+> -			try_to_migrate(page, 0);
+> -
+> -		if (page_mapped(page) || !migrate_vma_check_page(page)) {
+> -			if (!is_zone_device_page(page)) {
+> -				get_page(page);
+> -				putback_lru_page(page);
+> -			}
+> -
+> -			migrate->src[i] &=3D ~MIGRATE_PFN_MIGRATE;
+> -			migrate->cpages--;
+> -			restore++;
+> -			continue;
+> -		}
+> -	}
+> -
+> -	for (i =3D 0; i < npages && restore; i++) {
+> -		struct page *page =3D migrate_pfn_to_page(migrate->src[i]);
+> -
+> -		if (!page || (migrate->src[i] & MIGRATE_PFN_MIGRATE))
+> -			continue;
+> -
+> -		remove_migration_ptes(page, page, false);
+> -
+> -		migrate->src[i] =3D 0;
+> -		unlock_page(page);
+> -		put_page(page);
+> -		restore--;
+> -	}
+> -}
+> -
+> -/**
+> - * migrate_vma_setup() - prepare to migrate a range of memory
+> - * @args: contains the vma, start, and pfns arrays for the migration
+> - *
+> - * Returns: negative errno on failures, 0 when 0 or more pages were migr=
+ated
+> - * without an error.
+> - *
+> - * Prepare to migrate a range of memory virtual address range by collect=
+ing all
+> - * the pages backing each virtual address in the range, saving them insi=
+de the
+> - * src array.  Then lock those pages and unmap them. Once the pages are =
+locked
+> - * and unmapped, check whether each page is pinned or not.  Pages that a=
+ren't
+> - * pinned have the MIGRATE_PFN_MIGRATE flag set (by this function) in the
+> - * corresponding src array entry.  Then restores any pages that are pinn=
+ed, by
+> - * remapping and unlocking those pages.
+> - *
+> - * The caller should then allocate destination memory and copy source me=
+mory to
+> - * it for all those entries (ie with MIGRATE_PFN_VALID and MIGRATE_PFN_M=
+IGRATE
+> - * flag set).  Once these are allocated and copied, the caller must upda=
+te each
+> - * corresponding entry in the dst array with the pfn value of the destin=
+ation
+> - * page and with MIGRATE_PFN_VALID. Destination pages must be locked via
+> - * lock_page().
+> - *
+> - * Note that the caller does not have to migrate all the pages that are =
+marked
+> - * with MIGRATE_PFN_MIGRATE flag in src array unless this is a migration=
+ from
+> - * device memory to system memory.  If the caller cannot migrate a devic=
+e page
+> - * back to system memory, then it must return VM_FAULT_SIGBUS, which has=
+ severe
+> - * consequences for the userspace process, so it must be avoided if at a=
+ll
+> - * possible.
+> - *
+> - * For empty entries inside CPU page table (pte_none() or pmd_none() is =
+true) we
+> - * do set MIGRATE_PFN_MIGRATE flag inside the corresponding source array=
+ thus
+> - * allowing the caller to allocate device memory for those unbacked virt=
+ual
+> - * addresses.  For this the caller simply has to allocate device memory =
+and
+> - * properly set the destination entry like for regular migration.  Note =
+that
+> - * this can still fail, and thus inside the device driver you must check=
+ if the
+> - * migration was successful for those entries after calling migrate_vma_=
+pages(),
+> - * just like for regular migration.
+> - *
+> - * After that, the callers must call migrate_vma_pages() to go over each=
+ entry
+> - * in the src array that has the MIGRATE_PFN_VALID and MIGRATE_PFN_MIGRA=
+TE flag
+> - * set. If the corresponding entry in dst array has MIGRATE_PFN_VALID fl=
+ag set,
+> - * then migrate_vma_pages() to migrate struct page information from the =
+source
+> - * struct page to the destination struct page.  If it fails to migrate t=
+he
+> - * struct page information, then it clears the MIGRATE_PFN_MIGRATE flag =
+in the
+> - * src array.
+> - *
+> - * At this point all successfully migrated pages have an entry in the src
+> - * array with MIGRATE_PFN_VALID and MIGRATE_PFN_MIGRATE flag set and the=
+ dst
+> - * array entry with MIGRATE_PFN_VALID flag set.
+> - *
+> - * Once migrate_vma_pages() returns the caller may inspect which pages w=
+ere
+> - * successfully migrated, and which were not.  Successfully migrated pag=
+es will
+> - * have the MIGRATE_PFN_MIGRATE flag set for their src array entry.
+> - *
+> - * It is safe to update device page table after migrate_vma_pages() beca=
+use
+> - * both destination and source page are still locked, and the mmap_lock =
+is held
+> - * in read mode (hence no one can unmap the range being migrated).
+> - *
+> - * Once the caller is done cleaning up things and updating its page tabl=
+e (if it
+> - * chose to do so, this is not an obligation) it finally calls
+> - * migrate_vma_finalize() to update the CPU page table to point to new p=
+ages
+> - * for successfully migrated pages or otherwise restore the CPU page tab=
+le to
+> - * point to the original source pages.
+> - */
+> -int migrate_vma_setup(struct migrate_vma *args)
+> -{
+> -	long nr_pages =3D (args->end - args->start) >> PAGE_SHIFT;
+> -
+> -	args->start &=3D PAGE_MASK;
+> -	args->end &=3D PAGE_MASK;
+> -	if (!args->vma || is_vm_hugetlb_page(args->vma) ||
+> -	    (args->vma->vm_flags & VM_SPECIAL) || vma_is_dax(args->vma))
+> -		return -EINVAL;
+> -	if (nr_pages <=3D 0)
+> -		return -EINVAL;
+> -	if (args->start < args->vma->vm_start ||
+> -	    args->start >=3D args->vma->vm_end)
+> -		return -EINVAL;
+> -	if (args->end <=3D args->vma->vm_start || args->end > args->vma->vm_end)
+> -		return -EINVAL;
+> -	if (!args->src || !args->dst)
+> -		return -EINVAL;
+> -
+> -	memset(args->src, 0, sizeof(*args->src) * nr_pages);
+> -	args->cpages =3D 0;
+> -	args->npages =3D 0;
+> -
+> -	migrate_vma_collect(args);
+> -
+> -	if (args->cpages)
+> -		migrate_vma_unmap(args);
+> -
+> -	/*
+> -	 * At this point pages are locked and unmapped, and thus they have
+> -	 * stable content and can safely be copied to destination memory that
+> -	 * is allocated by the drivers.
+> -	 */
+> -	return 0;
+> -
+> -}
+> -EXPORT_SYMBOL(migrate_vma_setup);
+> -
+> -/*
+> - * This code closely matches the code in:
+> - *   __handle_mm_fault()
+> - *     handle_pte_fault()
+> - *       do_anonymous_page()
+> - * to map in an anonymous zero page but the struct page will be a ZONE_D=
+EVICE
+> - * private page.
+> - */
+> -static void migrate_vma_insert_page(struct migrate_vma *migrate,
+> -				    unsigned long addr,
+> -				    struct page *page,
+> -				    unsigned long *src)
+> -{
+> -	struct vm_area_struct *vma =3D migrate->vma;
+> -	struct mm_struct *mm =3D vma->vm_mm;
+> -	bool flush =3D false;
+> -	spinlock_t *ptl;
+> -	pte_t entry;
+> -	pgd_t *pgdp;
+> -	p4d_t *p4dp;
+> -	pud_t *pudp;
+> -	pmd_t *pmdp;
+> -	pte_t *ptep;
+> -
+> -	/* Only allow populating anonymous memory */
+> -	if (!vma_is_anonymous(vma))
+> -		goto abort;
+> -
+> -	pgdp =3D pgd_offset(mm, addr);
+> -	p4dp =3D p4d_alloc(mm, pgdp, addr);
+> -	if (!p4dp)
+> -		goto abort;
+> -	pudp =3D pud_alloc(mm, p4dp, addr);
+> -	if (!pudp)
+> -		goto abort;
+> -	pmdp =3D pmd_alloc(mm, pudp, addr);
+> -	if (!pmdp)
+> -		goto abort;
+> -
+> -	if (pmd_trans_huge(*pmdp) || pmd_devmap(*pmdp))
+> -		goto abort;
+> -
+> -	/*
+> -	 * Use pte_alloc() instead of pte_alloc_map().  We can't run
+> -	 * pte_offset_map() on pmds where a huge pmd might be created
+> -	 * from a different thread.
+> -	 *
+> -	 * pte_alloc_map() is safe to use under mmap_write_lock(mm) or when
+> -	 * parallel threads are excluded by other means.
+> -	 *
+> -	 * Here we only have mmap_read_lock(mm).
+> -	 */
+> -	if (pte_alloc(mm, pmdp))
+> -		goto abort;
+> -
+> -	/* See the comment in pte_alloc_one_map() */
+> -	if (unlikely(pmd_trans_unstable(pmdp)))
+> -		goto abort;
+> -
+> -	if (unlikely(anon_vma_prepare(vma)))
+> -		goto abort;
+> -	if (mem_cgroup_charge(page_folio(page), vma->vm_mm, GFP_KERNEL))
+> -		goto abort;
+> -
+> -	/*
+> -	 * The memory barrier inside __SetPageUptodate makes sure that
+> -	 * preceding stores to the page contents become visible before
+> -	 * the set_pte_at() write.
+> -	 */
+> -	__SetPageUptodate(page);
+> -
+> -	if (is_device_private_page(page)) {
+> -		swp_entry_t swp_entry;
+> -
+> -		if (vma->vm_flags & VM_WRITE)
+> -			swp_entry =3D make_writable_device_private_entry(
+> -						page_to_pfn(page));
+> -		else
+> -			swp_entry =3D make_readable_device_private_entry(
+> -						page_to_pfn(page));
+> -		entry =3D swp_entry_to_pte(swp_entry);
+> -	} else {
+> -		/*
+> -		 * For now we only support migrating to un-addressable device
+> -		 * memory.
+> -		 */
+> -		if (is_zone_device_page(page)) {
+> -			pr_warn_once("Unsupported ZONE_DEVICE page type.\n");
+> -			goto abort;
+> -		}
+> -		entry =3D mk_pte(page, vma->vm_page_prot);
+> -		if (vma->vm_flags & VM_WRITE)
+> -			entry =3D pte_mkwrite(pte_mkdirty(entry));
+> -	}
+> -
+> -	ptep =3D pte_offset_map_lock(mm, pmdp, addr, &ptl);
+> -
+> -	if (check_stable_address_space(mm))
+> -		goto unlock_abort;
+> -
+> -	if (pte_present(*ptep)) {
+> -		unsigned long pfn =3D pte_pfn(*ptep);
+> -
+> -		if (!is_zero_pfn(pfn))
+> -			goto unlock_abort;
+> -		flush =3D true;
+> -	} else if (!pte_none(*ptep))
+> -		goto unlock_abort;
+> -
+> -	/*
+> -	 * Check for userfaultfd but do not deliver the fault. Instead,
+> -	 * just back off.
+> -	 */
+> -	if (userfaultfd_missing(vma))
+> -		goto unlock_abort;
+> -
+> -	inc_mm_counter(mm, MM_ANONPAGES);
+> -	page_add_new_anon_rmap(page, vma, addr, false);
+> -	if (!is_zone_device_page(page))
+> -		lru_cache_add_inactive_or_unevictable(page, vma);
+> -	get_page(page);
+> -
+> -	if (flush) {
+> -		flush_cache_page(vma, addr, pte_pfn(*ptep));
+> -		ptep_clear_flush_notify(vma, addr, ptep);
+> -		set_pte_at_notify(mm, addr, ptep, entry);
+> -		update_mmu_cache(vma, addr, ptep);
+> -	} else {
+> -		/* No need to invalidate - it was non-present before */
+> -		set_pte_at(mm, addr, ptep, entry);
+> -		update_mmu_cache(vma, addr, ptep);
+> -	}
+> -
+> -	pte_unmap_unlock(ptep, ptl);
+> -	*src =3D MIGRATE_PFN_MIGRATE;
+> -	return;
+> -
+> -unlock_abort:
+> -	pte_unmap_unlock(ptep, ptl);
+> -abort:
+> -	*src &=3D ~MIGRATE_PFN_MIGRATE;
+> -}
+> -
+> -/**
+> - * migrate_vma_pages() - migrate meta-data from src page to dst page
+> - * @migrate: migrate struct containing all migration information
+> - *
+> - * This migrates struct page meta-data from source struct page to destin=
+ation
+> - * struct page. This effectively finishes the migration from source page=
+ to the
+> - * destination page.
+> - */
+> -void migrate_vma_pages(struct migrate_vma *migrate)
+> -{
+> -	const unsigned long npages =3D migrate->npages;
+> -	const unsigned long start =3D migrate->start;
+> -	struct mmu_notifier_range range;
+> -	unsigned long addr, i;
+> -	bool notified =3D false;
+> -
+> -	for (i =3D 0, addr =3D start; i < npages; addr +=3D PAGE_SIZE, i++) {
+> -		struct page *newpage =3D migrate_pfn_to_page(migrate->dst[i]);
+> -		struct page *page =3D migrate_pfn_to_page(migrate->src[i]);
+> -		struct address_space *mapping;
+> -		int r;
+> -
+> -		if (!newpage) {
+> -			migrate->src[i] &=3D ~MIGRATE_PFN_MIGRATE;
+> -			continue;
+> -		}
+> -
+> -		if (!page) {
+> -			if (!(migrate->src[i] & MIGRATE_PFN_MIGRATE))
+> -				continue;
+> -			if (!notified) {
+> -				notified =3D true;
+> -
+> -				mmu_notifier_range_init_owner(&range,
+> -					MMU_NOTIFY_MIGRATE, 0, migrate->vma,
+> -					migrate->vma->vm_mm, addr, migrate->end,
+> -					migrate->pgmap_owner);
+> -				mmu_notifier_invalidate_range_start(&range);
+> -			}
+> -			migrate_vma_insert_page(migrate, addr, newpage,
+> -						&migrate->src[i]);
+> -			continue;
+> -		}
+> -
+> -		mapping =3D page_mapping(page);
+> -
+> -		if (is_device_private_page(newpage)) {
+> -			/*
+> -			 * For now only support private anonymous when migrating
+> -			 * to un-addressable device memory.
+> -			 */
+> -			if (mapping) {
+> -				migrate->src[i] &=3D ~MIGRATE_PFN_MIGRATE;
+> -				continue;
+> -			}
+> -		} else if (is_zone_device_page(newpage)) {
+> -			/*
+> -			 * Other types of ZONE_DEVICE page are not supported.
+> -			 */
+> -			migrate->src[i] &=3D ~MIGRATE_PFN_MIGRATE;
+> -			continue;
+> -		}
+> -
+> -		r =3D migrate_page(mapping, newpage, page, MIGRATE_SYNC_NO_COPY);
+> -		if (r !=3D MIGRATEPAGE_SUCCESS)
+> -			migrate->src[i] &=3D ~MIGRATE_PFN_MIGRATE;
+> -	}
+> -
+> -	/*
+> -	 * No need to double call mmu_notifier->invalidate_range() callback as
+> -	 * the above ptep_clear_flush_notify() inside migrate_vma_insert_page()
+> -	 * did already call it.
+> -	 */
+> -	if (notified)
+> -		mmu_notifier_invalidate_range_only_end(&range);
+> -}
+> -EXPORT_SYMBOL(migrate_vma_pages);
+> -
+> -/**
+> - * migrate_vma_finalize() - restore CPU page table entry
+> - * @migrate: migrate struct containing all migration information
+> - *
+> - * This replaces the special migration pte entry with either a mapping t=
+o the
+> - * new page if migration was successful for that page, or to the origina=
+l page
+> - * otherwise.
+> - *
+> - * This also unlocks the pages and puts them back on the lru, or drops t=
+he extra
+> - * refcount, for device pages.
+> - */
+> -void migrate_vma_finalize(struct migrate_vma *migrate)
+> -{
+> -	const unsigned long npages =3D migrate->npages;
+> -	unsigned long i;
+> -
+> -	for (i =3D 0; i < npages; i++) {
+> -		struct page *newpage =3D migrate_pfn_to_page(migrate->dst[i]);
+> -		struct page *page =3D migrate_pfn_to_page(migrate->src[i]);
+> -
+> -		if (!page) {
+> -			if (newpage) {
+> -				unlock_page(newpage);
+> -				put_page(newpage);
+> -			}
+> -			continue;
+> -		}
+> -
+> -		if (!(migrate->src[i] & MIGRATE_PFN_MIGRATE) || !newpage) {
+> -			if (newpage) {
+> -				unlock_page(newpage);
+> -				put_page(newpage);
+> -			}
+> -			newpage =3D page;
+> -		}
+> -
+> -		remove_migration_ptes(page, newpage, false);
+> -		unlock_page(page);
+> -
+> -		if (is_zone_device_page(page))
+> -			put_page(page);
+> -		else
+> -			putback_lru_page(page);
+> -
+> -		if (newpage !=3D page) {
+> -			unlock_page(newpage);
+> -			if (is_zone_device_page(newpage))
+> -				put_page(newpage);
+> -			else
+> -				putback_lru_page(newpage);
+> -		}
+> -	}
+> -}
+> -EXPORT_SYMBOL(migrate_vma_finalize);
+> -#endif /* CONFIG_DEVICE_PRIVATE */
+> -
+>  /*
+>   * node_demotion[] example:
+>   *
+> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
+> new file mode 100644
+> index 00000000000000..749e0bab8e4779
+> --- /dev/null
+> +++ b/mm/migrate_device.c
+> @@ -0,0 +1,765 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Device Memory Migration functionality.
+> + *
+> + * Originally written by J=C3=A9r=C3=B4me Glisse.
+> + */
+> +#include <linux/export.h>
+> +#include <linux/memremap.h>
+> +#include <linux/migrate.h>
+> +#include <linux/mm_inline.h>
+> +#include <linux/mmu_notifier.h>
+> +#include <linux/oom.h>
+> +#include <linux/pagewalk.h>
+> +#include <linux/rmap.h>
+> +#include <linux/swapops.h>
+> +#include "internal.h"
+> +
+> +static int migrate_vma_collect_skip(unsigned long start,
+> +				    unsigned long end,
+> +				    struct mm_walk *walk)
+> +{
+> +	struct migrate_vma *migrate =3D walk->private;
+> +	unsigned long addr;
+> +
+> +	for (addr =3D start; addr < end; addr +=3D PAGE_SIZE) {
+> +		migrate->dst[migrate->npages] =3D 0;
+> +		migrate->src[migrate->npages++] =3D 0;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int migrate_vma_collect_hole(unsigned long start,
+> +				    unsigned long end,
+> +				    __always_unused int depth,
+> +				    struct mm_walk *walk)
+> +{
+> +	struct migrate_vma *migrate =3D walk->private;
+> +	unsigned long addr;
+> +
+> +	/* Only allow populating anonymous memory. */
+> +	if (!vma_is_anonymous(walk->vma))
+> +		return migrate_vma_collect_skip(start, end, walk);
+> +
+> +	for (addr =3D start; addr < end; addr +=3D PAGE_SIZE) {
+> +		migrate->src[migrate->npages] =3D MIGRATE_PFN_MIGRATE;
+> +		migrate->dst[migrate->npages] =3D 0;
+> +		migrate->npages++;
+> +		migrate->cpages++;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int migrate_vma_collect_pmd(pmd_t *pmdp,
+> +				   unsigned long start,
+> +				   unsigned long end,
+> +				   struct mm_walk *walk)
+> +{
+> +	struct migrate_vma *migrate =3D walk->private;
+> +	struct vm_area_struct *vma =3D walk->vma;
+> +	struct mm_struct *mm =3D vma->vm_mm;
+> +	unsigned long addr =3D start, unmapped =3D 0;
+> +	spinlock_t *ptl;
+> +	pte_t *ptep;
+> +
+> +again:
+> +	if (pmd_none(*pmdp))
+> +		return migrate_vma_collect_hole(start, end, -1, walk);
+> +
+> +	if (pmd_trans_huge(*pmdp)) {
+> +		struct page *page;
+> +
+> +		ptl =3D pmd_lock(mm, pmdp);
+> +		if (unlikely(!pmd_trans_huge(*pmdp))) {
+> +			spin_unlock(ptl);
+> +			goto again;
+> +		}
+> +
+> +		page =3D pmd_page(*pmdp);
+> +		if (is_huge_zero_page(page)) {
+> +			spin_unlock(ptl);
+> +			split_huge_pmd(vma, pmdp, addr);
+> +			if (pmd_trans_unstable(pmdp))
+> +				return migrate_vma_collect_skip(start, end,
+> +								walk);
+> +		} else {
+> +			int ret;
+> +
+> +			get_page(page);
+> +			spin_unlock(ptl);
+> +			if (unlikely(!trylock_page(page)))
+> +				return migrate_vma_collect_skip(start, end,
+> +								walk);
+> +			ret =3D split_huge_page(page);
+> +			unlock_page(page);
+> +			put_page(page);
+> +			if (ret)
+> +				return migrate_vma_collect_skip(start, end,
+> +								walk);
+> +			if (pmd_none(*pmdp))
+> +				return migrate_vma_collect_hole(start, end, -1,
+> +								walk);
+> +		}
+> +	}
+> +
+> +	if (unlikely(pmd_bad(*pmdp)))
+> +		return migrate_vma_collect_skip(start, end, walk);
+> +
+> +	ptep =3D pte_offset_map_lock(mm, pmdp, addr, &ptl);
+> +	arch_enter_lazy_mmu_mode();
+> +
+> +	for (; addr < end; addr +=3D PAGE_SIZE, ptep++) {
+> +		unsigned long mpfn =3D 0, pfn;
+> +		struct page *page;
+> +		swp_entry_t entry;
+> +		pte_t pte;
+> +
+> +		pte =3D *ptep;
+> +
+> +		if (pte_none(pte)) {
+> +			if (vma_is_anonymous(vma)) {
+> +				mpfn =3D MIGRATE_PFN_MIGRATE;
+> +				migrate->cpages++;
+> +			}
+> +			goto next;
+> +		}
+> +
+> +		if (!pte_present(pte)) {
+> +			/*
+> +			 * Only care about unaddressable device page special
+> +			 * page table entry. Other special swap entries are not
+> +			 * migratable, and we ignore regular swapped page.
+> +			 */
+> +			entry =3D pte_to_swp_entry(pte);
+> +			if (!is_device_private_entry(entry))
+> +				goto next;
+> +
+> +			page =3D pfn_swap_entry_to_page(entry);
+> +			if (!(migrate->flags &
+> +				MIGRATE_VMA_SELECT_DEVICE_PRIVATE) ||
+> +			    page->pgmap->owner !=3D migrate->pgmap_owner)
+> +				goto next;
+> +
+> +			mpfn =3D migrate_pfn(page_to_pfn(page)) |
+> +					MIGRATE_PFN_MIGRATE;
+> +			if (is_writable_device_private_entry(entry))
+> +				mpfn |=3D MIGRATE_PFN_WRITE;
+> +		} else {
+> +			if (!(migrate->flags & MIGRATE_VMA_SELECT_SYSTEM))
+> +				goto next;
+> +			pfn =3D pte_pfn(pte);
+> +			if (is_zero_pfn(pfn)) {
+> +				mpfn =3D MIGRATE_PFN_MIGRATE;
+> +				migrate->cpages++;
+> +				goto next;
+> +			}
+> +			page =3D vm_normal_page(migrate->vma, addr, pte);
+> +			mpfn =3D migrate_pfn(pfn) | MIGRATE_PFN_MIGRATE;
+> +			mpfn |=3D pte_write(pte) ? MIGRATE_PFN_WRITE : 0;
+> +		}
+> +
+> +		/* FIXME support THP */
+> +		if (!page || !page->mapping || PageTransCompound(page)) {
+> +			mpfn =3D 0;
+> +			goto next;
+> +		}
+> +
+> +		/*
+> +		 * By getting a reference on the page we pin it and that blocks
+> +		 * any kind of migration. Side effect is that it "freezes" the
+> +		 * pte.
+> +		 *
+> +		 * We drop this reference after isolating the page from the lru
+> +		 * for non device page (device page are not on the lru and thus
+> +		 * can't be dropped from it).
+> +		 */
+> +		get_page(page);
+> +
+> +		/*
+> +		 * Optimize for the common case where page is only mapped once
+> +		 * in one process. If we can lock the page, then we can safely
+> +		 * set up a special migration page table entry now.
+> +		 */
+> +		if (trylock_page(page)) {
+> +			pte_t swp_pte;
+> +
+> +			migrate->cpages++;
+> +			ptep_get_and_clear(mm, addr, ptep);
+> +
+> +			/* Setup special migration page table entry */
+> +			if (mpfn & MIGRATE_PFN_WRITE)
+> +				entry =3D make_writable_migration_entry(
+> +							page_to_pfn(page));
+> +			else
+> +				entry =3D make_readable_migration_entry(
+> +							page_to_pfn(page));
+> +			swp_pte =3D swp_entry_to_pte(entry);
+> +			if (pte_present(pte)) {
+> +				if (pte_soft_dirty(pte))
+> +					swp_pte =3D pte_swp_mksoft_dirty(swp_pte);
+> +				if (pte_uffd_wp(pte))
+> +					swp_pte =3D pte_swp_mkuffd_wp(swp_pte);
+> +			} else {
+> +				if (pte_swp_soft_dirty(pte))
+> +					swp_pte =3D pte_swp_mksoft_dirty(swp_pte);
+> +				if (pte_swp_uffd_wp(pte))
+> +					swp_pte =3D pte_swp_mkuffd_wp(swp_pte);
+> +			}
+> +			set_pte_at(mm, addr, ptep, swp_pte);
+> +
+> +			/*
+> +			 * This is like regular unmap: we remove the rmap and
+> +			 * drop page refcount. Page won't be freed, as we took
+> +			 * a reference just above.
+> +			 */
+> +			page_remove_rmap(page, false);
+> +			put_page(page);
+> +
+> +			if (pte_present(pte))
+> +				unmapped++;
+> +		} else {
+> +			put_page(page);
+> +			mpfn =3D 0;
+> +		}
+> +
+> +next:
+> +		migrate->dst[migrate->npages] =3D 0;
+> +		migrate->src[migrate->npages++] =3D mpfn;
+> +	}
+> +	arch_leave_lazy_mmu_mode();
+> +	pte_unmap_unlock(ptep - 1, ptl);
+> +
+> +	/* Only flush the TLB if we actually modified any entries */
+> +	if (unmapped)
+> +		flush_tlb_range(walk->vma, start, end);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct mm_walk_ops migrate_vma_walk_ops =3D {
+> +	.pmd_entry		=3D migrate_vma_collect_pmd,
+> +	.pte_hole		=3D migrate_vma_collect_hole,
+> +};
+> +
+> +/*
+> + * migrate_vma_collect() - collect pages over a range of virtual address=
+es
+> + * @migrate: migrate struct containing all migration information
+> + *
+> + * This will walk the CPU page table. For each virtual address backed by=
+ a
+> + * valid page, it updates the src array and takes a reference on the pag=
+e, in
+> + * order to pin the page until we lock it and unmap it.
+> + */
+> +static void migrate_vma_collect(struct migrate_vma *migrate)
+> +{
+> +	struct mmu_notifier_range range;
+> +
+> +	/*
+> +	 * Note that the pgmap_owner is passed to the mmu notifier callback so
+> +	 * that the registered device driver can skip invalidating device
+> +	 * private page mappings that won't be migrated.
+> +	 */
+> +	mmu_notifier_range_init_owner(&range, MMU_NOTIFY_MIGRATE, 0,
+> +		migrate->vma, migrate->vma->vm_mm, migrate->start, migrate->end,
+> +		migrate->pgmap_owner);
+> +	mmu_notifier_invalidate_range_start(&range);
+> +
+> +	walk_page_range(migrate->vma->vm_mm, migrate->start, migrate->end,
+> +			&migrate_vma_walk_ops, migrate);
+> +
+> +	mmu_notifier_invalidate_range_end(&range);
+> +	migrate->end =3D migrate->start + (migrate->npages << PAGE_SHIFT);
+> +}
+> +
+> +/*
+> + * migrate_vma_check_page() - check if page is pinned or not
+> + * @page: struct page to check
+> + *
+> + * Pinned pages cannot be migrated. This is the same test as in
+> + * folio_migrate_mapping(), except that here we allow migration of a
+> + * ZONE_DEVICE page.
+> + */
+> +static bool migrate_vma_check_page(struct page *page)
+> +{
+> +	/*
+> +	 * One extra ref because caller holds an extra reference, either from
+> +	 * isolate_lru_page() for a regular page, or migrate_vma_collect() for
+> +	 * a device page.
+> +	 */
+> +	int extra =3D 1;
+> +
+> +	/*
+> +	 * FIXME support THP (transparent huge page), it is bit more complex to
+> +	 * check them than regular pages, because they can be mapped with a pmd
+> +	 * or with a pte (split pte mapping).
+> +	 */
+> +	if (PageCompound(page))
+> +		return false;
+> +
+> +	/* Page from ZONE_DEVICE have one extra reference */
+> +	if (is_zone_device_page(page))
+> +		extra++;
+> +
+> +	/* For file back page */
+> +	if (page_mapping(page))
+> +		extra +=3D 1 + page_has_private(page);
+> +
+> +	if ((page_count(page) - extra) > page_mapcount(page))
+> +		return false;
+> +
+> +	return true;
+> +}
+> +
+> +/*
+> + * migrate_vma_unmap() - replace page mapping with special migration pte=
+ entry
+> + * @migrate: migrate struct containing all migration information
+> + *
+> + * Isolate pages from the LRU and replace mappings (CPU page table pte) =
+with a
+> + * special migration pte entry and check if it has been pinned. Pinned p=
+ages are
+> + * restored because we cannot migrate them.
+> + *
+> + * This is the last step before we call the device driver callback to al=
+locate
+> + * destination memory and copy contents of original page over to new pag=
+e.
+> + */
+> +static void migrate_vma_unmap(struct migrate_vma *migrate)
+> +{
+> +	const unsigned long npages =3D migrate->npages;
+> +	unsigned long i, restore =3D 0;
+> +	bool allow_drain =3D true;
+> +
+> +	lru_add_drain();
+> +
+> +	for (i =3D 0; i < npages; i++) {
+> +		struct page *page =3D migrate_pfn_to_page(migrate->src[i]);
+> +
+> +		if (!page)
+> +			continue;
+> +
+> +		/* ZONE_DEVICE pages are not on LRU */
+> +		if (!is_zone_device_page(page)) {
+> +			if (!PageLRU(page) && allow_drain) {
+> +				/* Drain CPU's pagevec */
+> +				lru_add_drain_all();
+> +				allow_drain =3D false;
+> +			}
+> +
+> +			if (isolate_lru_page(page)) {
+> +				migrate->src[i] &=3D ~MIGRATE_PFN_MIGRATE;
+> +				migrate->cpages--;
+> +				restore++;
+> +				continue;
+> +			}
+> +
+> +			/* Drop the reference we took in collect */
+> +			put_page(page);
+> +		}
+> +
+> +		if (page_mapped(page))
+> +			try_to_migrate(page, 0);
+> +
+> +		if (page_mapped(page) || !migrate_vma_check_page(page)) {
+> +			if (!is_zone_device_page(page)) {
+> +				get_page(page);
+> +				putback_lru_page(page);
+> +			}
+> +
+> +			migrate->src[i] &=3D ~MIGRATE_PFN_MIGRATE;
+> +			migrate->cpages--;
+> +			restore++;
+> +			continue;
+> +		}
+> +	}
+> +
+> +	for (i =3D 0; i < npages && restore; i++) {
+> +		struct page *page =3D migrate_pfn_to_page(migrate->src[i]);
+> +
+> +		if (!page || (migrate->src[i] & MIGRATE_PFN_MIGRATE))
+> +			continue;
+> +
+> +		remove_migration_ptes(page, page, false);
+> +
+> +		migrate->src[i] =3D 0;
+> +		unlock_page(page);
+> +		put_page(page);
+> +		restore--;
+> +	}
+> +}
+> +
+> +/**
+> + * migrate_vma_setup() - prepare to migrate a range of memory
+> + * @args: contains the vma, start, and pfns arrays for the migration
+> + *
+> + * Returns: negative errno on failures, 0 when 0 or more pages were migr=
+ated
+> + * without an error.
+> + *
+> + * Prepare to migrate a range of memory virtual address range by collect=
+ing all
+> + * the pages backing each virtual address in the range, saving them insi=
+de the
+> + * src array.  Then lock those pages and unmap them. Once the pages are =
+locked
+> + * and unmapped, check whether each page is pinned or not.  Pages that a=
+ren't
+> + * pinned have the MIGRATE_PFN_MIGRATE flag set (by this function) in the
+> + * corresponding src array entry.  Then restores any pages that are pinn=
+ed, by
+> + * remapping and unlocking those pages.
+> + *
+> + * The caller should then allocate destination memory and copy source me=
+mory to
+> + * it for all those entries (ie with MIGRATE_PFN_VALID and MIGRATE_PFN_M=
+IGRATE
+> + * flag set).  Once these are allocated and copied, the caller must upda=
+te each
+> + * corresponding entry in the dst array with the pfn value of the destin=
+ation
+> + * page and with MIGRATE_PFN_VALID. Destination pages must be locked via
+> + * lock_page().
+> + *
+> + * Note that the caller does not have to migrate all the pages that are =
+marked
+> + * with MIGRATE_PFN_MIGRATE flag in src array unless this is a migration=
+ from
+> + * device memory to system memory.  If the caller cannot migrate a devic=
+e page
+> + * back to system memory, then it must return VM_FAULT_SIGBUS, which has=
+ severe
+> + * consequences for the userspace process, so it must be avoided if at a=
+ll
+> + * possible.
+> + *
+> + * For empty entries inside CPU page table (pte_none() or pmd_none() is =
+true) we
+> + * do set MIGRATE_PFN_MIGRATE flag inside the corresponding source array=
+ thus
+> + * allowing the caller to allocate device memory for those unbacked virt=
+ual
+> + * addresses.  For this the caller simply has to allocate device memory =
+and
+> + * properly set the destination entry like for regular migration.  Note =
+that
+> + * this can still fail, and thus inside the device driver you must check=
+ if the
+> + * migration was successful for those entries after calling migrate_vma_=
+pages(),
+> + * just like for regular migration.
+> + *
+> + * After that, the callers must call migrate_vma_pages() to go over each=
+ entry
+> + * in the src array that has the MIGRATE_PFN_VALID and MIGRATE_PFN_MIGRA=
+TE flag
+> + * set. If the corresponding entry in dst array has MIGRATE_PFN_VALID fl=
+ag set,
+> + * then migrate_vma_pages() to migrate struct page information from the =
+source
+> + * struct page to the destination struct page.  If it fails to migrate t=
+he
+> + * struct page information, then it clears the MIGRATE_PFN_MIGRATE flag =
+in the
+> + * src array.
+> + *
+> + * At this point all successfully migrated pages have an entry in the src
+> + * array with MIGRATE_PFN_VALID and MIGRATE_PFN_MIGRATE flag set and the=
+ dst
+> + * array entry with MIGRATE_PFN_VALID flag set.
+> + *
+> + * Once migrate_vma_pages() returns the caller may inspect which pages w=
+ere
+> + * successfully migrated, and which were not.  Successfully migrated pag=
+es will
+> + * have the MIGRATE_PFN_MIGRATE flag set for their src array entry.
+> + *
+> + * It is safe to update device page table after migrate_vma_pages() beca=
+use
+> + * both destination and source page are still locked, and the mmap_lock =
+is held
+> + * in read mode (hence no one can unmap the range being migrated).
+> + *
+> + * Once the caller is done cleaning up things and updating its page tabl=
+e (if it
+> + * chose to do so, this is not an obligation) it finally calls
+> + * migrate_vma_finalize() to update the CPU page table to point to new p=
+ages
+> + * for successfully migrated pages or otherwise restore the CPU page tab=
+le to
+> + * point to the original source pages.
+> + */
+> +int migrate_vma_setup(struct migrate_vma *args)
+> +{
+> +	long nr_pages =3D (args->end - args->start) >> PAGE_SHIFT;
+> +
+> +	args->start &=3D PAGE_MASK;
+> +	args->end &=3D PAGE_MASK;
+> +	if (!args->vma || is_vm_hugetlb_page(args->vma) ||
+> +	    (args->vma->vm_flags & VM_SPECIAL) || vma_is_dax(args->vma))
+> +		return -EINVAL;
+> +	if (nr_pages <=3D 0)
+> +		return -EINVAL;
+> +	if (args->start < args->vma->vm_start ||
+> +	    args->start >=3D args->vma->vm_end)
+> +		return -EINVAL;
+> +	if (args->end <=3D args->vma->vm_start || args->end > args->vma->vm_end)
+> +		return -EINVAL;
+> +	if (!args->src || !args->dst)
+> +		return -EINVAL;
+> +
+> +	memset(args->src, 0, sizeof(*args->src) * nr_pages);
+> +	args->cpages =3D 0;
+> +	args->npages =3D 0;
+> +
+> +	migrate_vma_collect(args);
+> +
+> +	if (args->cpages)
+> +		migrate_vma_unmap(args);
+> +
+> +	/*
+> +	 * At this point pages are locked and unmapped, and thus they have
+> +	 * stable content and can safely be copied to destination memory that
+> +	 * is allocated by the drivers.
+> +	 */
+> +	return 0;
+> +
+> +}
+> +EXPORT_SYMBOL(migrate_vma_setup);
+> +
+> +/*
+> + * This code closely matches the code in:
+> + *   __handle_mm_fault()
+> + *     handle_pte_fault()
+> + *       do_anonymous_page()
+> + * to map in an anonymous zero page but the struct page will be a ZONE_D=
+EVICE
+> + * private page.
+> + */
+> +static void migrate_vma_insert_page(struct migrate_vma *migrate,
+> +				    unsigned long addr,
+> +				    struct page *page,
+> +				    unsigned long *src)
+> +{
+> +	struct vm_area_struct *vma =3D migrate->vma;
+> +	struct mm_struct *mm =3D vma->vm_mm;
+> +	bool flush =3D false;
+> +	spinlock_t *ptl;
+> +	pte_t entry;
+> +	pgd_t *pgdp;
+> +	p4d_t *p4dp;
+> +	pud_t *pudp;
+> +	pmd_t *pmdp;
+> +	pte_t *ptep;
+> +
+> +	/* Only allow populating anonymous memory */
+> +	if (!vma_is_anonymous(vma))
+> +		goto abort;
+> +
+> +	pgdp =3D pgd_offset(mm, addr);
+> +	p4dp =3D p4d_alloc(mm, pgdp, addr);
+> +	if (!p4dp)
+> +		goto abort;
+> +	pudp =3D pud_alloc(mm, p4dp, addr);
+> +	if (!pudp)
+> +		goto abort;
+> +	pmdp =3D pmd_alloc(mm, pudp, addr);
+> +	if (!pmdp)
+> +		goto abort;
+> +
+> +	if (pmd_trans_huge(*pmdp) || pmd_devmap(*pmdp))
+> +		goto abort;
+> +
+> +	/*
+> +	 * Use pte_alloc() instead of pte_alloc_map().  We can't run
+> +	 * pte_offset_map() on pmds where a huge pmd might be created
+> +	 * from a different thread.
+> +	 *
+> +	 * pte_alloc_map() is safe to use under mmap_write_lock(mm) or when
+> +	 * parallel threads are excluded by other means.
+> +	 *
+> +	 * Here we only have mmap_read_lock(mm).
+> +	 */
+> +	if (pte_alloc(mm, pmdp))
+> +		goto abort;
+> +
+> +	/* See the comment in pte_alloc_one_map() */
+> +	if (unlikely(pmd_trans_unstable(pmdp)))
+> +		goto abort;
+> +
+> +	if (unlikely(anon_vma_prepare(vma)))
+> +		goto abort;
+> +	if (mem_cgroup_charge(page_folio(page), vma->vm_mm, GFP_KERNEL))
+> +		goto abort;
+> +
+> +	/*
+> +	 * The memory barrier inside __SetPageUptodate makes sure that
+> +	 * preceding stores to the page contents become visible before
+> +	 * the set_pte_at() write.
+> +	 */
+> +	__SetPageUptodate(page);
+> +
+> +	if (is_device_private_page(page)) {
+> +		swp_entry_t swp_entry;
+> +
+> +		if (vma->vm_flags & VM_WRITE)
+> +			swp_entry =3D make_writable_device_private_entry(
+> +						page_to_pfn(page));
+> +		else
+> +			swp_entry =3D make_readable_device_private_entry(
+> +						page_to_pfn(page));
+> +		entry =3D swp_entry_to_pte(swp_entry);
+> +	} else {
+> +		/*
+> +		 * For now we only support migrating to un-addressable device
+> +		 * memory.
+> +		 */
+> +		if (is_zone_device_page(page)) {
+> +			pr_warn_once("Unsupported ZONE_DEVICE page type.\n");
+> +			goto abort;
+> +		}
+> +		entry =3D mk_pte(page, vma->vm_page_prot);
+> +		if (vma->vm_flags & VM_WRITE)
+> +			entry =3D pte_mkwrite(pte_mkdirty(entry));
+> +	}
+> +
+> +	ptep =3D pte_offset_map_lock(mm, pmdp, addr, &ptl);
+> +
+> +	if (check_stable_address_space(mm))
+> +		goto unlock_abort;
+> +
+> +	if (pte_present(*ptep)) {
+> +		unsigned long pfn =3D pte_pfn(*ptep);
+> +
+> +		if (!is_zero_pfn(pfn))
+> +			goto unlock_abort;
+> +		flush =3D true;
+> +	} else if (!pte_none(*ptep))
+> +		goto unlock_abort;
+> +
+> +	/*
+> +	 * Check for userfaultfd but do not deliver the fault. Instead,
+> +	 * just back off.
+> +	 */
+> +	if (userfaultfd_missing(vma))
+> +		goto unlock_abort;
+> +
+> +	inc_mm_counter(mm, MM_ANONPAGES);
+> +	page_add_new_anon_rmap(page, vma, addr, false);
+> +	if (!is_zone_device_page(page))
+> +		lru_cache_add_inactive_or_unevictable(page, vma);
+> +	get_page(page);
+> +
+> +	if (flush) {
+> +		flush_cache_page(vma, addr, pte_pfn(*ptep));
+> +		ptep_clear_flush_notify(vma, addr, ptep);
+> +		set_pte_at_notify(mm, addr, ptep, entry);
+> +		update_mmu_cache(vma, addr, ptep);
+> +	} else {
+> +		/* No need to invalidate - it was non-present before */
+> +		set_pte_at(mm, addr, ptep, entry);
+> +		update_mmu_cache(vma, addr, ptep);
+> +	}
+> +
+> +	pte_unmap_unlock(ptep, ptl);
+> +	*src =3D MIGRATE_PFN_MIGRATE;
+> +	return;
+> +
+> +unlock_abort:
+> +	pte_unmap_unlock(ptep, ptl);
+> +abort:
+> +	*src &=3D ~MIGRATE_PFN_MIGRATE;
+> +}
+> +
+> +/**
+> + * migrate_vma_pages() - migrate meta-data from src page to dst page
+> + * @migrate: migrate struct containing all migration information
+> + *
+> + * This migrates struct page meta-data from source struct page to destin=
+ation
+> + * struct page. This effectively finishes the migration from source page=
+ to the
+> + * destination page.
+> + */
+> +void migrate_vma_pages(struct migrate_vma *migrate)
+> +{
+> +	const unsigned long npages =3D migrate->npages;
+> +	const unsigned long start =3D migrate->start;
+> +	struct mmu_notifier_range range;
+> +	unsigned long addr, i;
+> +	bool notified =3D false;
+> +
+> +	for (i =3D 0, addr =3D start; i < npages; addr +=3D PAGE_SIZE, i++) {
+> +		struct page *newpage =3D migrate_pfn_to_page(migrate->dst[i]);
+> +		struct page *page =3D migrate_pfn_to_page(migrate->src[i]);
+> +		struct address_space *mapping;
+> +		int r;
+> +
+> +		if (!newpage) {
+> +			migrate->src[i] &=3D ~MIGRATE_PFN_MIGRATE;
+> +			continue;
+> +		}
+> +
+> +		if (!page) {
+> +			if (!(migrate->src[i] & MIGRATE_PFN_MIGRATE))
+> +				continue;
+> +			if (!notified) {
+> +				notified =3D true;
+> +
+> +				mmu_notifier_range_init_owner(&range,
+> +					MMU_NOTIFY_MIGRATE, 0, migrate->vma,
+> +					migrate->vma->vm_mm, addr, migrate->end,
+> +					migrate->pgmap_owner);
+> +				mmu_notifier_invalidate_range_start(&range);
+> +			}
+> +			migrate_vma_insert_page(migrate, addr, newpage,
+> +						&migrate->src[i]);
+> +			continue;
+> +		}
+> +
+> +		mapping =3D page_mapping(page);
+> +
+> +		if (is_device_private_page(newpage)) {
+> +			/*
+> +			 * For now only support private anonymous when migrating
+> +			 * to un-addressable device memory.
+> +			 */
+> +			if (mapping) {
+> +				migrate->src[i] &=3D ~MIGRATE_PFN_MIGRATE;
+> +				continue;
+> +			}
+> +		} else if (is_zone_device_page(newpage)) {
+> +			/*
+> +			 * Other types of ZONE_DEVICE page are not supported.
+> +			 */
+> +			migrate->src[i] &=3D ~MIGRATE_PFN_MIGRATE;
+> +			continue;
+> +		}
+> +
+> +		r =3D migrate_page(mapping, newpage, page, MIGRATE_SYNC_NO_COPY);
+> +		if (r !=3D MIGRATEPAGE_SUCCESS)
+> +			migrate->src[i] &=3D ~MIGRATE_PFN_MIGRATE;
+> +	}
+> +
+> +	/*
+> +	 * No need to double call mmu_notifier->invalidate_range() callback as
+> +	 * the above ptep_clear_flush_notify() inside migrate_vma_insert_page()
+> +	 * did already call it.
+> +	 */
+> +	if (notified)
+> +		mmu_notifier_invalidate_range_only_end(&range);
+> +}
+> +EXPORT_SYMBOL(migrate_vma_pages);
+> +
+> +/**
+> + * migrate_vma_finalize() - restore CPU page table entry
+> + * @migrate: migrate struct containing all migration information
+> + *
+> + * This replaces the special migration pte entry with either a mapping t=
+o the
+> + * new page if migration was successful for that page, or to the origina=
+l page
+> + * otherwise.
+> + *
+> + * This also unlocks the pages and puts them back on the lru, or drops t=
+he extra
+> + * refcount, for device pages.
+> + */
+> +void migrate_vma_finalize(struct migrate_vma *migrate)
+> +{
+> +	const unsigned long npages =3D migrate->npages;
+> +	unsigned long i;
+> +
+> +	for (i =3D 0; i < npages; i++) {
+> +		struct page *newpage =3D migrate_pfn_to_page(migrate->dst[i]);
+> +		struct page *page =3D migrate_pfn_to_page(migrate->src[i]);
+> +
+> +		if (!page) {
+> +			if (newpage) {
+> +				unlock_page(newpage);
+> +				put_page(newpage);
+> +			}
+> +			continue;
+> +		}
+> +
+> +		if (!(migrate->src[i] & MIGRATE_PFN_MIGRATE) || !newpage) {
+> +			if (newpage) {
+> +				unlock_page(newpage);
+> +				put_page(newpage);
+> +			}
+> +			newpage =3D page;
+> +		}
+> +
+> +		remove_migration_ptes(page, newpage, false);
+> +		unlock_page(page);
+> +
+> +		if (is_zone_device_page(page))
+> +			put_page(page);
+> +		else
+> +			putback_lru_page(page);
+> +
+> +		if (newpage !=3D page) {
+> +			unlock_page(newpage);
+> +			if (is_zone_device_page(newpage))
+> +				put_page(newpage);
+> +			else
+> +				putback_lru_page(newpage);
+> +		}
+> +	}
+> +}
+> +EXPORT_SYMBOL(migrate_vma_finalize);
+>=20
+
+
+
+

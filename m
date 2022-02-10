@@ -2,110 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E37F44B1441
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 658234B1448
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:33:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241610AbiBJRbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 12:31:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42532 "EHLO
+        id S241884AbiBJRcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 12:32:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbiBJRbF (ORCPT
+        with ESMTP id S233830AbiBJRcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 12:31:05 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901A22647;
-        Thu, 10 Feb 2022 09:31:06 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id e7so12967909ejn.13;
-        Thu, 10 Feb 2022 09:31:06 -0800 (PST)
+        Thu, 10 Feb 2022 12:32:15 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955C82649
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:32:16 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id p5so17416458ybd.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:32:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3xFsM0nPuhSGSTkyLUY3o2cz0yH3ogdvJBOAYbLu1Hk=;
-        b=NFIqILJvmbmsmCjc0R4PAAQddul5/KzW7LG+BLzvj0/dNZC+u98M4M+qdq+pUjpJ0b
-         Oleu3IvMbux2SiwuAWOR1U9+OsImEvzVVlmPi7m2AlkbsoVc17iLL2VeR4OGeHSauJ3Z
-         /rqv2WzSu8jI0yXOQWXzGDWEiuw19JQe8GtErQMfpZj3RHdSpjzhDZFqd0ZGjC+vzxif
-         RyiMmWlwfe82G51A598rtuz61GRA4dKTTyPOKB9+Vj8byqr+b46L+PNIuHY82wlmKQGr
-         Dqd+YsQKZRXvgSeDj27Y1rWXcEygIphIXIO233dTjpulEvX72YGnb0homEo3zfQeUyMn
-         cerw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=SXrIU0KF7XQbWElHa5+P1F1VqOxsWYp0GX5PTkvqWDA=;
+        b=IKsCT5qEat5N1zAbDiBeTk5+CvLoBm7v7lFksnZcBLU2YmD/pmN7e1vpko/hSYsL8S
+         XFryVF1kDyohLcORJ5R5Q3anyra60YPgScW3mYToKIjSWOSmpICzfyCU2DzbsSDxvn4r
+         EhC3Gx3FCFXAD+xRBhuIYAV/u6es9Ds96kFHA1+y38j247IiWZbc6lkrj88MqEtIQLq9
+         JPpDMST1R4GEFfmOTlJtb+sd+jBfoLQSEUogJpcPY3MlrUpsxRhppclBU1aQCaH7BsLU
+         uPA60qiZhsUN+JQnVU+8Rv+RmOx5170F1X8IukLHjQiTY8+dBTtWPQAbaov+noeMOHM9
+         P5QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3xFsM0nPuhSGSTkyLUY3o2cz0yH3ogdvJBOAYbLu1Hk=;
-        b=SUuxlvnB9MjtMd4szmNey5R8LloXo6YL7VYLMB/Mn9kGt3vWPFpFdYSozWuqd5uYb2
-         XOxjp6PVwnov/icsVnhsP0V8OkaSQKlroyQM/x/ngIVAb7tc/lwg41zQPbCOad8bjP+p
-         IUXwsG2sZ2R+9zNKz5FssOPHXAlp/NDlRt/S5mkdqo+FDiCaG+Z3zjEPqlZPhQRZVChA
-         niZc6MgbnSfwK2fIAF3/zx0tEKGumKvMhLef0SMdUTzHelXgMuwoS+uiXrAGXJNZjVVo
-         7SpsNuz+KALKSP+eYxkwuACdpdmjseg8p/eM8/lzMf51FvmBeYgbSMZepOz+VzbD9let
-         no2Q==
-X-Gm-Message-State: AOAM531pZkoQgeKkKP4njZld5O3jSkepzwQVNx2sNRo+IusxfOVU2D6D
-        GThVKCpgxcCBT4ZZayhtPdY=
-X-Google-Smtp-Source: ABdhPJzW89YoTkdkUobSkVso7mwzeF8VsYtPcaPJp9tjMWbNziQCLa1dhnHIn3Q/S1wWdTW8tG6m3g==
-X-Received: by 2002:a17:907:f9c:: with SMTP id kb28mr7048664ejc.213.1644514265037;
-        Thu, 10 Feb 2022 09:31:05 -0800 (PST)
-Received: from fedora.robimarko.hr (dh207-99-63.xnet.hr. [88.207.99.63])
-        by smtp.googlemail.com with ESMTPSA id m4sm2206551ejl.45.2022.02.10.09.31.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 09:31:04 -0800 (PST)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, absahu@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Dirk Buchwalder <buchwalder@posteo.de>,
-        Robert Marko <robimarko@gmail.com>
-Subject: [PATCH] clk: qcom: ipq8074: Use floor ops for SDCC1 clock
-Date:   Thu, 10 Feb 2022 18:31:00 +0100
-Message-Id: <20220210173100.505128-1-robimarko@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=SXrIU0KF7XQbWElHa5+P1F1VqOxsWYp0GX5PTkvqWDA=;
+        b=68AoqwyJ3xDZOOh5d+UToUiqm79xg59p0OjL6uMHveMvyOU95iIvyXV35Jm9elH7ha
+         hMoGSJC0puv5iBjhmLQHKjK+HHk8W046YBb6qeUWWnB8LG8NKJX1r9cREgdBzppRxjXY
+         YuJ/Oq2UOru0rQiv0Dg6xeuEgqouXK8kYv3QIDTLXR7V6sZ2Ht+m5I0OJzVNc3vldplb
+         gJIZ7d0c2QELyhQz6SCeTztpXISIJ/vSCDSMgDZqGOUtqKF/cZXrEmb8iWu05e/0T6HB
+         730h1a5aWoXbDAOLAy5nUx3ebVRVaxQ009xKH7RTdT5b0mvZQHPXaVUGLF2asHN8VFu9
+         MuUg==
+X-Gm-Message-State: AOAM530V6P1X4K+eRZjM8KGZlzCSzimjXBqHZFN0w/k2AK15/9wQ5EDT
+        wvYz50o6ilN+qbG+Ak0qy53NQOzdHu8B5m4ZuNtlig==
+X-Google-Smtp-Source: ABdhPJwOA96Lsd+Sfqv1ezk7PWbVHc7qqldIHtgqpu424xlt5qxZU7CJHZx1Vnu8yEhgGlqthn+gTm68os3+UMP6RMk=
+X-Received: by 2002:a25:6b45:: with SMTP id o5mr8012071ybm.704.1644514335602;
+ Thu, 10 Feb 2022 09:32:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220209191247.830371456@linuxfoundation.org>
+In-Reply-To: <20220209191247.830371456@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 10 Feb 2022 23:02:04 +0530
+Message-ID: <CA+G9fYsU-QiGaMywK59ASF0+jrk+Vt+3QWRA738KxgRZfVX5Gg@mail.gmail.com>
+Subject: Re: [PATCH 4.9 0/2] 4.9.301-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dirk Buchwalder <buchwalder@posteo.de>
+On Thu, 10 Feb 2022 at 00:44, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.9.301 release.
+> There are 2 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.9.301-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.9.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Use floor ops on SDCC1 APPS clock in order to round down selected clock
-frequency and avoid overclocking SD/eMMC cards.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-For example, currently HS200 cards were failling tuning as they were
-actually being clocked at 384MHz instead of 192MHz.
-This caused some boards to disable 1.8V I/O and force the eMMC into the
-standard HS mode (50MHz) and that appeared to work despite the eMMC being
-overclocked to 96Mhz in that case.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-There was a previous commit to use floor ops on SDCC clocks, but it looks
-to have only covered SDCC2 clock.
+## Build
+* kernel: 4.9.301-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.9.y
+* git commit: 2b86ebafad46c4f70ed4fbe3a0aff9c3e9b61763
+* git describe: v4.9.299-52-g2b86ebafad46
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.2=
+99-52-g2b86ebafad46
 
-Fixes: 9607f6224b39 ("clk: qcom: ipq8074: add PCIE, USB and SDCC clocks")
+## Test Regressions (compared to v4.9.299-49-gfa39f098578a)
+No test regressions found.
 
-Signed-off-by: Dirk Buchwalder <buchwalder@posteo.de>
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
- drivers/clk/qcom/gcc-ipq8074.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+## Metric Regressions (compared to v4.9.299-49-gfa39f098578a)
+No metric regressions found.
 
-diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
-index 1e493f19fa44..c24e33321f72 100644
---- a/drivers/clk/qcom/gcc-ipq8074.c
-+++ b/drivers/clk/qcom/gcc-ipq8074.c
-@@ -1074,7 +1074,7 @@ static struct clk_rcg2 sdcc1_apps_clk_src = {
- 		.name = "sdcc1_apps_clk_src",
- 		.parent_names = gcc_xo_gpll0_gpll2_gpll0_out_main_div2,
- 		.num_parents = 4,
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_floor_ops,
- 	},
- };
- 
--- 
-2.35.1
+## Test Fixes (compared to v4.9.299-49-gfa39f098578a)
+No test fixes found.
 
+## Metric Fixes (compared to v4.9.299-49-gfa39f098578a)
+No metric fixes found.
+
+## Test result summary
+total: 54263, pass: 45234, fail: 188, skip: 7979, xfail: 862
+
+## Build Summary
+* arm: 254 total, 238 passed, 16 failed
+* arm64: 32 total, 32 passed, 0 failed
+* i386: 18 total, 18 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 31 total, 31 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

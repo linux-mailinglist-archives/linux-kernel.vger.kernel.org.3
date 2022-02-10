@@ -2,132 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 300DA4B09F8
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5F54B09F9
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:51:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239103AbiBJJuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:50:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38572 "EHLO
+        id S239116AbiBJJuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:50:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234025AbiBJJur (ORCPT
+        with ESMTP id S239098AbiBJJux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:50:47 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13A11E2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:50:48 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id 13so9323931lfp.7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:50:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:references:in-reply-to:content-transfer-encoding;
-        bh=CngJ+UjWUmvAVy4/bM0ovf96zSL5J/lSGtKSp/n9h34=;
-        b=p4yIHqvWk/xa+/iIlrU8AOZ70keGFx7j5JwojMxu3Wa36AvnkXN67CXtupYmtsWXs4
-         K7nl7/vys7rpej7STElkxdKfXpQ3mD7/jOPfmPVitL+vl1duvIxMz+pRA05wqf0VMfra
-         UoQgKi8uG2yoHqr2Vk5EyzvG2vPZZhZxr+rS33sgrYJ6uuqoIO7t1arYN92VesztTqs6
-         Us8UMgG2UiWu/+ZtOOiIgQknnHA88cKQ2FDC2A+paIH2kqN9mdnjWjpg6Cq/pm1aZ7xu
-         w1DtrSzPatZy83kNavuf0z3q0viqxClqqEShjWgb6NRF3xwKmRcnAmmXWRZndyYSe8pU
-         3ITw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:references:in-reply-to
-         :content-transfer-encoding;
-        bh=CngJ+UjWUmvAVy4/bM0ovf96zSL5J/lSGtKSp/n9h34=;
-        b=aQgXyBIJGeb4oPEBwVs8pG4+i/gmoqYKH0QglaRAIZk0IO2wps3H+lLAMYJfvBS2Nd
-         YpwqyKQp1lmf/GzZV5VOQ+5Nyhn57syMBdSNEAMuS4MPGeLgUNni1IseeEh/9O6cIkUJ
-         7YcZuOsZa4WUeso6sc+qAEZAtbhQq4bLuWMZM82+k8KtKS1R4r0iC8SKfbbH7KiiV4TJ
-         wHVDzu1hU+IrcLLvSecONyb8BrVfVGbCA9z43dz50bH+LpZJtcvxF8gWwUyW9KqLEiS9
-         sx4ebr3Dn21HFyctKpEwi06SyUveT9r37fOtL17uBKK1ILeWEz45CQgGHYujBoMU5aBI
-         478A==
-X-Gm-Message-State: AOAM5318hUdMYPgUPh0wkLtev97FodfDQ/+oGKa20CTG2EiTGNudDsJ6
-        jea+WmaLb48mygNhxb3v37s0Uw==
-X-Google-Smtp-Source: ABdhPJx+tAi+K4eZQFhjdsO2Hex06V7hu3VnQLUWmC3cKKFbwTFj5NodmbpX5qhlENw6cedikrnPjw==
-X-Received: by 2002:a05:6512:c22:: with SMTP id z34mr4864472lfu.259.1644486646997;
-        Thu, 10 Feb 2022 01:50:46 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id b31sm2729441lfv.163.2022.02.10.01.50.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 01:50:46 -0800 (PST)
-Message-ID: <e9941f8d-5796-b524-793b-148f12fea51e@linaro.org>
-Date:   Thu, 10 Feb 2022 12:50:45 +0300
+        Thu, 10 Feb 2022 04:50:53 -0500
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60070.outbound.protection.outlook.com [40.107.6.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE9B1EA;
+        Thu, 10 Feb 2022 01:50:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iw5z6NgOrUngLpOcNbZ5TzBYjITSz1lZuSGWFS8vOfBW1it/Pk6f3FnDVuVCu41eZxyFUw3Ms4AWvaH4PodPZ1Iek/SrSlRuI2v0lWWCUgAo/X4tPRD0LUITKdJxAYOX7xURZf75U1kYYhFUj0oWIbEhwoqCVhYiUptAF/s7J2WMGScgNJX+DbfawTcPAJ4Vc2NIQiAi0EvueCKNQ7Ejp621Hg1kkhgDphjpmyh10MkAT8O6YWRWoJ/rJpQw8fqpWB74aSEh76UQYiUdOCF4YRUI83Z9HRZG2yJ70pkQA8Xd9x8t+/HYC8WaBMWDJJNge2d19iLrgqQR+hw0JU8GRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SM6s6hvg7rmNOLWqnJnOiFYQNHycnYYz+dZGfjIA5HE=;
+ b=cWT2TT+XbTGG18CGoBrgHYXF1ehtrp8oh5a8w2Dgub6f9zjc1tQYYjaKdoSyTy/h0qgiS/TGU7mO03V5xwZ4saQNTPVkk1Zr+8rDTpRYJZAueIcQAhqMD9dgh/Z6VErET7YisPasr1AWGUjurVB8T3j2cbCgIcckYkWjvXk3frSYL/hKVgMEKSxFTuxx5cudkYJcH0apvwGol6vJR1JZSEcLnbnpi6eFfZ0YnFkdrt9O+0emtDCNiZ42bIZ6kBW8aChDgomoCOK0oS1AP4kQL1N1+U7OnvUvwKOBOzk0lxTR/9tqUdzZ8fQ3kBlm557+FrZBTZM7wrqimnN4STSb5w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SM6s6hvg7rmNOLWqnJnOiFYQNHycnYYz+dZGfjIA5HE=;
+ b=SWzCSCyvqqs58VKxVdUQouY9HNYSfSdIZ5mnC+IuXz9JjtzUjrkmQd34MVVuwXGsywMeLUkgmAG2s5olEQbtnxBL7oD293hMZrpUiaLbIhlA3CO6do5JSUhOxnn71AyTW8PfYwRslv6Ag/BhM4y/mAE8JpLsmRbqG4wL5Eve8nA=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by VI1PR04MB7117.eurprd04.prod.outlook.com (2603:10a6:800:12f::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.12; Thu, 10 Feb
+ 2022 09:50:52 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::95cf:8c40:b887:a7b9]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::95cf:8c40:b887:a7b9%4]) with mapi id 15.20.4951.019; Thu, 10 Feb 2022
+ 09:50:52 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Subject: Re: [PATCH v6 net-next 1/5] net: mscc: ocelot: fix mutex lock error
+ during ethtool stats read
+Thread-Topic: [PATCH v6 net-next 1/5] net: mscc: ocelot: fix mutex lock error
+ during ethtool stats read
+Thread-Index: AQHYHjTcMTiSBcyd20+aLf9EJELZxKyMivaA
+Date:   Thu, 10 Feb 2022 09:50:52 +0000
+Message-ID: <20220210095051.b7rgpy6muvqjnih2@skbuf>
+References: <20220210041345.321216-1-colin.foster@in-advantage.com>
+ <20220210041345.321216-2-colin.foster@in-advantage.com>
+In-Reply-To: <20220210041345.321216-2-colin.foster@in-advantage.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f6e567aa-a813-4823-c92c-08d9ec7ad367
+x-ms-traffictypediagnostic: VI1PR04MB7117:EE_
+x-microsoft-antispam-prvs: <VI1PR04MB711734C591ABD671DAC2680BE02F9@VI1PR04MB7117.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GMOwl7d9jLp8lAImp0LJkh1IQUh0REbhE6lHjAAJkauObJDXaZNOHWzMa2vxk/W6aFXwi8jYIcapcoQrI54WA9UhvVV1SVnP2wXkyfc+ue2VS6QSk5O9gL7SnfQAi59C8vRos/W2eA0fn7gJcZipWRc1AsFaXg09zcLdWwNEB7YDSKlVWgyTIn2tQe/iBwXuCXwShmUiav0JdIdiKLZURa4LI5QpPpCUOd5aPxwHUShNDiAZ1BU4uYE1tnBaIL7idkysS1MCC9ZRm+Hkl43R60FgLmap0C3OiGMrx7IAFysqUpP00GTivGlZGiCKZJzZ5vQ1wdeTY5t6m3lc/9RvPaU4JCFk0+xMbuaWoMqNLFMPMA/3fY+Rfyj+q3tQYX8ITBFqlbS8rVNuQjUKAyF0zLEvAZPxBYFCjAGVNDLjQDuCOFW5WVj41F8zcfE/dKKBqf0kxuxs6SNqXd72P1pyXNXg1DbtVjjaa160qnxGzm2a3Kcee0ofNIFI+XOyIhUYGyXtO9ozaZcjvVXGNIMLFUTYfYXXoqoKhsU4iuSP/k1oh6bVCxLz/Jv0osvMwUFV0pPsg3547L/lXTFPRcd5GaUdZG6v49XmFpTwMYjaF9Ueu5AQvGFECAoMSaziG/fkjUaU0CVi/t/XBfUCFoyuBGfM4c18T7LmBN37Oiym2xem2iwTiNdv7p/zcz/KJmBub5Uq2TZAjRh5kyq1yHg623W67DNL/s9UgAAzXfFJ+PQz1+JzrtBSttRBi7EV/E7ZFXv+XzEb2/u9fKk9wWFt6o3QfkHx9hijkXDJyRIx3vU=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(122000001)(186003)(54906003)(8676002)(26005)(66946007)(4326008)(66556008)(66476007)(66446008)(64756008)(6486002)(966005)(91956017)(76116006)(508600001)(6916009)(86362001)(38100700002)(316002)(44832011)(8936002)(1076003)(83380400001)(71200400001)(5660300002)(6506007)(38070700005)(6512007)(33716001)(9686003)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XRgYzNXsDK/UIqpS0czmVJW+cDWeXUEueFI1nQDB5td0VJthLeT4M5YKqZNW?=
+ =?us-ascii?Q?OUNNy9Yvi0pHy7O1HCw2xA75eGqoXQEOfytBJl9h1+ht2PZ003zuw52sNYnA?=
+ =?us-ascii?Q?qIXU+laeLnyEybRxBmx8FX4LDbi1dgn8SHw0KXjHzMXu5PqD5uHs7osb+0cf?=
+ =?us-ascii?Q?ixN1EMvsTxoyDIOBbdJygwZW4gDqvqxCj5STWN9OCSGQbFgwTEN6x36pOkjI?=
+ =?us-ascii?Q?tbLzWXk55lWXYxO+HLUKzgZR4hJfMeHNsLabMLxb2gEsDwQqVtFQPRYwpexz?=
+ =?us-ascii?Q?en6ud0jyoz9aAgg1TkD4b+qPYwLW0POXIFdLQWqe8G6fVTPO8MNu66VTSf9/?=
+ =?us-ascii?Q?Jif8VvXpUH864lDvi7uU7LX9ZA7oX1fJWE3L7twcXiRs8NdWuqyRQfyI7Mdz?=
+ =?us-ascii?Q?6mkvF6UUa/ai+n5276hXlv90c0Y6PKAnosmIaRy94/cwXJdfEq+0QYGDaEyp?=
+ =?us-ascii?Q?rpfQQ/dQQbiY7oR7zDdPrZT2uObgX1Jn8ekExcQ4Xq4N5U/6Hr/q9YxnB5VW?=
+ =?us-ascii?Q?o2ICn+rYzXFPOfGnAjs+VpTYojMdg15Z8qhnsIwa2WeNBqtcpFyrwJD7hmad?=
+ =?us-ascii?Q?HsUQQ91xmr3SeqSuh4cd3e6+iKocbrjFfdLDIoI2nBxE59UGeaBsH8Nb0kKr?=
+ =?us-ascii?Q?Kp1n7D5lNNTlvVoy+BbZlfrNkMmtH+M1oYXqVt+44/PO89W90/6O43NWBe6O?=
+ =?us-ascii?Q?Nu0Vs1g2i0Qh4HOTwpx5WmGUZ4z5BPvx1KvirhK3ErFJiLKbto3pyq9BEe/k?=
+ =?us-ascii?Q?f2FfNtp/U7bMFi7/ZWnjy84AwvfyzsABmTc2i4dtHBz3nDyJoSNa3vShXSRR?=
+ =?us-ascii?Q?ptnXlC/a/ztEm2Nax6W7bdRU9MDNphHYOFLIT/geC5QRkBxvDJv7SE0eDpDB?=
+ =?us-ascii?Q?pbnYTRRu6JWQT6/yGhneOZp5JEetYKEa2PP7Q5vzEQK0N5SzsAil9tiQkjWj?=
+ =?us-ascii?Q?f54GSmcKFV+saeK8PgiHRa/0S2sn0dw6YYTF/cKPYOoLcYjggurvtL1FClDB?=
+ =?us-ascii?Q?0H7sx9aOv4nUdAtM+PgZDJRKgpAKJqiMXXXwaRQ2qqDQB/RRwvRaPYW7pFCO?=
+ =?us-ascii?Q?EBqnjRoZi2D4Zq04y3JpVaz9kvK39lAimuIupQcrjDVnSwXKrakM2ei0rdWI?=
+ =?us-ascii?Q?hMtxKkowpwKJvIeAKCLDR7ujL4BUQMw0LCp2gVypfSp9JDmXCJIX8G2YHiS1?=
+ =?us-ascii?Q?qL9dWpNzdBjm1EDZUTFB4e6YuDSFtyCG6+74PXn+nJGk0V6H5L05OniEK86J?=
+ =?us-ascii?Q?n0cv/DwA68yUDx7iFfcJ8Cx6PIRx/h+9TsxM/ZURju2zZTbDwck8QqqT+hUW?=
+ =?us-ascii?Q?p7edByLJJ/zUieyp0pH/tHiibkVj3yxEfkpx1LTgEahPBTMUbiX3BrS9ZuoL?=
+ =?us-ascii?Q?DrGiBQlXIKnL5L7FBsrdWVnyKY2iZK41JE1lUIckMKpWcY3ubdjMMwkhUWit?=
+ =?us-ascii?Q?roqBHHWCdbh3nGuwvU3MMJZgwaPrtfBJAeI06TxMVmGFoCo/hly9ioFija2K?=
+ =?us-ascii?Q?uHvJD0Mv2tAlg+Ib5DTs8BXboxyGOJaRZKDQ5xcrseZ5zw0NVnCvf52ANSml?=
+ =?us-ascii?Q?+7Rc8IMa+J+vqkXRTgP2bVMr5Od7sHV2RxbhfpnKN56uLEbHY7QlmNuyInp/?=
+ =?us-ascii?Q?sthvIBJd7EINYu9FL2ukTRQ=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <D1FE637A7AAACE42A902E1A61091E476@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: gpu: drm: msm: use div64_u64() instead of do_div()
-Content-Language: en-GB
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Qing Wang <wangqing@vivo.com>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <1644395837-3845-1-git-send-email-wangqing@vivo.com>
- <6ea0e85e-1ade-f102-86c2-4b71dbc24285@linaro.org>
-In-Reply-To: <6ea0e85e-1ade-f102-86c2-4b71dbc24285@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f6e567aa-a813-4823-c92c-08d9ec7ad367
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2022 09:50:52.5345
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: clJqmeVVOUbJ31CO+MHNsalOIx0eUUKncnYcFeyC9CVjkobBNeLfqEKMVBCf7osFOlOUQXx4FwR8ZgkMlNDg9w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7117
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/2022 01:17, Dmitry Baryshkov wrote:
-> On 09/02/2022 11:37, Qing Wang wrote:
->> From: Wang Qing <wangqing@vivo.com>
->>
->> do_div() does a 64-by-32 division.
->> When the divisor is u64, do_div() truncates it to 32 bits, this means it
->> can test non-zero and be truncated to zero for division.
->>
->> fix do_div.cocci warning:
->> do_div() does a 64-by-32 division, please consider using div64_u64 
->> instead.
->>
->> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+On Wed, Feb 09, 2022 at 08:13:41PM -0800, Colin Foster wrote:
+> An ongoing workqueue populates the stats buffer. At the same time, a user
+> might query the statistics. While writing to the buffer is mutex-locked,
+> reading from the buffer wasn't. This could lead to buggy reads by ethtool=
+.
+>=20
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> Fixes: a556c76adc052 ("net: mscc: Add initial Ocelot switch support")
+> Reported-by: Vladimir Oltean <olteanv@gmail.com>
 
-After rechecking, I'd like to withdraw my R-B tag (Minecrell, thanks for 
-pointing this out!)
+I reported this using vladimir.oltean@nxp.com btw.
 
-The div64_u64 is not equivalent to do_div. It returns the quotient 
-rather than modifying the first arg. Moreover it is unoptimal on 32-bit 
-arches.
+Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-I'd suggest changing the math to remove multiplications by 1000 and 
-10000 before division. Or just ignoring this at all, judging from the 
-fact that these values are used only for tracing rather than actual 
-calculations.
+If you hurry and resend this against the "net" tree, you might catch
+this week's pull request, since the last one was on Feb 3->4:
+https://patchwork.kernel.org/project/netdevbpf/patch/20220204000428.2889873=
+-1-kuba@kernel.org/
+Then "net" will be merged into "net-next" probably the next day or so,
+and you can resend patches 2-5 towards "net-next".
 
-> 
->> ---
->>   drivers/gpu/drm/msm/msm_gpu.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/msm/msm_gpu.c 
->> b/drivers/gpu/drm/msm/msm_gpu.c
->> index 2c1049c..aa4617b
->> --- a/drivers/gpu/drm/msm/msm_gpu.c
->> +++ b/drivers/gpu/drm/msm/msm_gpu.c
->> @@ -648,7 +648,7 @@ static void retire_submit(struct msm_gpu *gpu, 
->> struct msm_ringbuffer *ring,
->>       /* Calculate the clock frequency from the number of CP cycles */
->>       if (elapsed) {
->>           clock = (stats->cpcycles_end - stats->cpcycles_start) * 1000;
->> -        do_div(clock, elapsed);
->> +        div64_u64(clock, elapsed);
->>       }
->>       trace_msm_gpu_submit_retired(submit, elapsed, clock,
-> 
-> 
-
-
--- 
-With best wishes
-Dmitry
+> ---
+>  drivers/net/ethernet/mscc/ocelot.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/net/ethernet/mscc/ocelot.c b/drivers/net/ethernet/ms=
+cc/ocelot.c
+> index 455293aa6343..6933dff1dd37 100644
+> --- a/drivers/net/ethernet/mscc/ocelot.c
+> +++ b/drivers/net/ethernet/mscc/ocelot.c
+> @@ -1737,12 +1737,11 @@ void ocelot_get_strings(struct ocelot *ocelot, in=
+t port, u32 sset, u8 *data)
+>  }
+>  EXPORT_SYMBOL(ocelot_get_strings);
+> =20
+> +/* Caller must hold &ocelot->stats_lock */
+>  static void ocelot_update_stats(struct ocelot *ocelot)
+>  {
+>  	int i, j;
+> =20
+> -	mutex_lock(&ocelot->stats_lock);
+> -
+>  	for (i =3D 0; i < ocelot->num_phys_ports; i++) {
+>  		/* Configure the port to read the stats from */
+>  		ocelot_write(ocelot, SYS_STAT_CFG_STAT_VIEW(i), SYS_STAT_CFG);
+> @@ -1761,8 +1760,6 @@ static void ocelot_update_stats(struct ocelot *ocel=
+ot)
+>  					      ~(u64)U32_MAX) + val;
+>  		}
+>  	}
+> -
+> -	mutex_unlock(&ocelot->stats_lock);
+>  }
+> =20
+>  static void ocelot_check_stats_work(struct work_struct *work)
+> @@ -1771,7 +1768,9 @@ static void ocelot_check_stats_work(struct work_str=
+uct *work)
+>  	struct ocelot *ocelot =3D container_of(del_work, struct ocelot,
+>  					     stats_work);
+> =20
+> +	mutex_lock(&ocelot->stats_lock);
+>  	ocelot_update_stats(ocelot);
+> +	mutex_unlock(&ocelot->stats_lock);
+> =20
+>  	queue_delayed_work(ocelot->stats_queue, &ocelot->stats_work,
+>  			   OCELOT_STATS_CHECK_DELAY);
+> @@ -1781,12 +1780,16 @@ void ocelot_get_ethtool_stats(struct ocelot *ocel=
+ot, int port, u64 *data)
+>  {
+>  	int i;
+> =20
+> +	mutex_lock(&ocelot->stats_lock);
+> +
+>  	/* check and update now */
+>  	ocelot_update_stats(ocelot);
+> =20
+>  	/* Copy all counters */
+>  	for (i =3D 0; i < ocelot->num_stats; i++)
+>  		*data++ =3D ocelot->stats[port * ocelot->num_stats + i];
+> +
+> +	mutex_unlock(&ocelot->stats_lock);
+>  }
+>  EXPORT_SYMBOL(ocelot_get_ethtool_stats);
+> =20
+> --=20
+> 2.25.1
+>=

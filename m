@@ -2,109 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1855B4B098B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B33C94B0988
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238674AbiBJJct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:32:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54056 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238627AbiBJJco (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S238597AbiBJJco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 10 Feb 2022 04:32:44 -0500
-Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF75192;
-        Thu, 10 Feb 2022 01:32:46 -0800 (PST)
-Received: by mail-vk1-f180.google.com with SMTP id 5so2693414vkq.9;
-        Thu, 10 Feb 2022 01:32:46 -0800 (PST)
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238542AbiBJJcm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 10 Feb 2022 04:32:42 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8135D192
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:32:43 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id i14so8361417wrc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:32:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=sE0UL3RxSE/XJwN6exUr6SQxpMt4J1dNpCV9VXj5qB8=;
+        b=6Kvxn9CF7vvjwlRNBuSRaIYc2kaAdU1NmBJa906mzcnrZ3FTns1jEzSgTmAwcB2sIN
+         StbgTTyjH6gacUtZ6pRLAeMyE0yJGwYZxu2ar12FNkG9KOtq833+FRvgoGnM8fz1ZQzR
+         B25G1FKvtWeQA+mLRHzIrAIHZNopGVG1emKPOtYQffrz9NFZo4I+64xOdg+kjOWswvCc
+         jJ/dpqKBndGKD8G9Xjh3gJBupYFiL4lRdXXgUtFVaqs+D4zdrzObABtsRpHcU4Tb7fjD
+         RoekasqX2NLZZd2I0G0Pb1xqo1QADJEGag6iaY0iRqBRbVuuvfKOPB+vQnEvI/5KmQsL
+         7Hrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3h7Fq6t1CyQhpx3fmaUEIuNQ6eeRZ0EVonG+Q/4aZ/M=;
-        b=FsunnLYWRGbn0GhiAu+ZzrMwXf3sS2D5zshBpwZ5rDZHjXfKOCuM/KZTJFZdDxSzla
-         5TxEG3sj1lZdkK0weIcNfwKgzPvvlOEEWz5Z1kEA0QUXXZKWMa32kbnOTr73ETYQc1RS
-         QsQ5UDUKX9ED2rDrJMeOCT+93W812AMU3nn+peWK4DV14B/fu/DakQaL25t9Nxzv/KJ1
-         9ClJ3bIkG4Ehz5IMcMab6dVjKEg42HUhq6oNHWeqRUx12oR4b8ZQZ3L5JIJUOTCYJ9s2
-         3TCojaD/qvylfT8rmtwGcHW1sElKTU9jx37vjEITmb7Jt6BonLa+OvvmaCNwSRw1pVac
-         zQyQ==
-X-Gm-Message-State: AOAM530ROjKsGyJ1kqPy2of2iGU9BvL8If27AFV79N+Rch7ZkOFdP7M6
-        2jj92O50MF+E5jtmgmR83DLUmfYTpgfG8g==
-X-Google-Smtp-Source: ABdhPJyeWmkzVty1o3HEXd1SUVHSE51cTI1/sE8s709QKYS53JxTJljNv0d3KgTc73dEH6p9wavEKw==
-X-Received: by 2002:a05:6122:a0a:: with SMTP id 10mr2266925vkn.17.1644485565262;
-        Thu, 10 Feb 2022 01:32:45 -0800 (PST)
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
-        by smtp.gmail.com with ESMTPSA id p186sm3256151vke.52.2022.02.10.01.32.44
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=sE0UL3RxSE/XJwN6exUr6SQxpMt4J1dNpCV9VXj5qB8=;
+        b=JA748BEuO0x/8mB26wNqSBT0zdTLz0Tu4jANS4Ih3UlbVa8HEqGMINSXmdvS6C+qe8
+         Fu/QF00zaZAxIxPU3vtUq7pp/ExohDcrmKB3T0hcoLH93FWF54FsU8SgJCvEYk6VCVBH
+         zns3tM6P3y0djgE1U2EoqNjGVHagVr6ZYOGs9XMoLAy43/tfUrq8JZUDLA4zbmYv++Of
+         gEjFtpe5iv39tn4z1Pkg4vzVRV2GM9r/TF5zTRSsX1OVERkPWX8NEMBCiyhFigdhJGvO
+         g1jtMs75gtF38QRqmszY0xqIqd0BMt4uoAmMEaOcphS5+njaneYAIRfUsxntIGrKmVGU
+         nYlg==
+X-Gm-Message-State: AOAM533qR6r9q5va7NTfuBI/M9DukB7zfWqOTP53hl2woMx9hq9e8UVd
+        /fzqYeTKdIIP/Bz/TRxg/9g5zA==
+X-Google-Smtp-Source: ABdhPJxaCP++lYv4VszneZqW6IJlYjugiCxUlqoeqTy7SNnnwKM/Nht7WY1oUkjYp5khbO6cggUJpg==
+X-Received: by 2002:a05:6000:184a:: with SMTP id c10mr5611390wri.212.1644485561888;
+        Thu, 10 Feb 2022 01:32:41 -0800 (PST)
+Received: from ?IPV6:2001:861:44c0:66c0:76d9:bf0e:e516:58a9? ([2001:861:44c0:66c0:76d9:bf0e:e516:58a9])
+        by smtp.gmail.com with ESMTPSA id bk5sm6690872wrb.10.2022.02.10.01.32.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 01:32:45 -0800 (PST)
-Received: by mail-ua1-f44.google.com with SMTP id 60so2710018uae.1;
-        Thu, 10 Feb 2022 01:32:44 -0800 (PST)
-X-Received: by 2002:a9f:2c0a:: with SMTP id r10mr2200791uaj.89.1644485564714;
- Thu, 10 Feb 2022 01:32:44 -0800 (PST)
+        Thu, 10 Feb 2022 01:32:41 -0800 (PST)
+Message-ID: <c2be608a-9ce0-4125-3414-d5f05c1cc528@baylibre.com>
+Date:   Thu, 10 Feb 2022 10:32:40 +0100
 MIME-Version: 1.0
-References: <20211218165258.16716-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20211218165258.16716-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdUg3=q7gyaVHP0XcYUOo3PQUUv8Hc8wp5faVQ+bTBpg4A@mail.gmail.com>
- <042a2183-3f04-088c-1861-656de870337d@gmail.com> <CAK8P3a3owi7YWmq-tckD-C7NK5HaX+swGNW-QBkWQuQgVsVWrA@mail.gmail.com>
- <d74ab454-9337-d168-9b21-842569431b4a@gmail.com> <CAK8P3a20mwJXN4Mb063zQG+HAevj_Odpj58EzPHkX-p6pbtnGA@mail.gmail.com>
- <7c47ce67-88ee-9cba-3356-a530b0d3e657@gmail.com>
-In-Reply-To: <7c47ce67-88ee-9cba-3356-a530b0d3e657@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 10 Feb 2022 10:32:33 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXEXjsea1DmebALTNwAQnJeJt4qV_0xkQ-5_OWx7ziF1g@mail.gmail.com>
-Message-ID: <CAMuHMdXEXjsea1DmebALTNwAQnJeJt4qV_0xkQ-5_OWx7ziF1g@mail.gmail.com>
-Subject: Re: [PATCH 2/3] i2c: sh_mobile: Use platform_get_irq_optional() to
- get the interrupt
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 3/3] arm64: dts: meson: add support for OSMC Vero 4K+
+Content-Language: en-US
+To:     Christian Hewitt <christianshewitt@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Mark Rutland <mark.rutland@arm.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Sam Nazarko <email@samnazarko.co.uk>,
+        Chad Wagner <wagnerch42@gmail.com>
+References: <20220210044647.14443-1-christianshewitt@gmail.com>
+ <20220210044647.14443-4-christianshewitt@gmail.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <20220210044647.14443-4-christianshewitt@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergei,
+Hi,
 
-On Wed, Feb 9, 2022 at 4:48 PM Sergei Shtylyov
-<sergei.shtylyov@gmail.com> wrote:
-> On 2/9/22 6:18 PM, Arnd Bergmann wrote:
-> >>> I had another look at this after you asked about it on IRC. I don't
-> >>> know much SH assembly, but I suspect IRQ 0 has not been delivered
->
->    Neither do I, sigh...
->    I do know the instuctions are 16-bit and so there are no immediate
-> opperands... :-)
+On 10/02/2022 05:46, Christian Hewitt wrote:
+> The OSMC Vero 4K+ device is based on the Amlogic S905D (P230)
+> reference design with the following specifications:
+> 
+> - 2GB DDR4 RAM
+> - 16GB eMMC
+> - HDMI 2.1 video
+> - S/PDIF optical output
+> - AV output
+> - 10/100/1000 Ethernet
+> - AP6255 Wireless (802.11 a/b/g/n/ac, BT 4.2)
+> - 2x USB 2.0 ports (1x OTG)
+> - IR receiver (internal)
+> - IR extender port (external)
+> - 1x micro SD card slot
+> - 1x Power LED (red)
+> - 1x Reset button (in AV jack)
+> 
+> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+> Tested-by: Chad Wagner <wagnerch42@gmail.com>
+> ---
+>   arch/arm64/boot/dts/amlogic/Makefile          |   1 +
+>   .../amlogic/meson-gxl-s905d-vero4k-plus.dts   | 125 ++++++++++++++++++
+>   2 files changed, 126 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/amlogic/meson-gxl-s905d-vero4k-plus.dts
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
+> index 13f73ca700ef..0eec18678311 100644
+> --- a/arch/arm64/boot/dts/amlogic/Makefile
+> +++ b/arch/arm64/boot/dts/amlogic/Makefile
+> @@ -36,6 +36,7 @@ dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905d-p230.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905d-p231.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905d-phicomm-n1.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905d-sml5442tw.dtb
+> +dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905d-vero4k-plus.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s805x-p241.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905w-p281.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905w-tx3-mini.dtb
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-vero4k-plus.dts b/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-vero4k-plus.dts
+> new file mode 100644
+> index 000000000000..453d51a4b77e
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-vero4k-plus.dts
+> @@ -0,0 +1,125 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Author: Christian Hewitt <christianshewitt@gmail.com>
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "meson-gxl-s905d.dtsi"
+> +#include "meson-gx-p23x-q20x.dtsi"
+> +#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/leds/common.h>
+> +
+> +/ {
+> +	compatible = "osmc,vero4k-plus", "amlogic,s905d", "amlogic,meson-gxl";
+> +	model = "OSMC Vero 4K Plus";
+> +
+> +	reserved-memory {
+> +		/* 32 MiB reserved for ARM Trusted Firmware (BL32) */
+> +		secmon_reserved_bl32: secmon@5300000 {
+> +			reg = <0x0 0x05300000 0x0 0x2000000>;
+> +			no-map;
+> +		};
+> +	};
 
-There is byte immediate data (TIL).
+This can be dropped since I applied your "arm64: dts: meson-gx: add ATF BL32 reserved-memory region"
 
-Gr{oetje,eeting}s,
+> +
+> +	gpio-keys-polled {
+> +		compatible = "gpio-keys-polled";
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		poll-interval = <20>;
+> +
+> +		button@0 {
+> +			label = "power";
+> +			linux,code = <KEY_POWER>;
+> +			gpios = <&gpio_ao GPIOAO_2 GPIO_ACTIVE_HIGH>;
+> +		};
+> +	};
+> +
+> +	leds {
+> +		compatible = "gpio-leds";
+> +
+> +		led-standby {
+> +			color = <LED_COLOR_ID_RED>;
+> +			function = LED_FUNCTION_POWER;
+> +			gpios = <&gpio_ao GPIOAO_9 GPIO_ACTIVE_LOW>;
+> +			default-state = "off";
+> +			panic-indicator;
+> +		};
+> +	};
+> +};
+> +
+> +&ethmac {
+> +	pinctrl-0 = <&eth_pins>;
+> +	pinctrl-names = "default";
+> +
+> +	phy-mode = "rgmii-txid";
+> +	phy-handle = <&external_phy>;
+> +
+> +	amlogic,tx-delay-ns = <0>;
+> +};
+> +
+> +&external_mdio {
+> +	external_phy: ethernet-phy@0 {
+> +		/* Realtek RTL8211F (0x001cc916) */
+> +		pinctrl-0 = <&eth_phy_irq_pin>;
+> +		pinctrl-names = "default";
+> +
+> +		reg = <0>;
+> +		max-speed = <1000>;
+> +
+> +		/* External PHY reset is shared with internal PHY Led signal */
 
-                        Geert
+I don't think this comment is necessary
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> +		reset-assert-us = <10000>;
+> +		reset-deassert-us = <80000>;
+> +		reset-gpios = <&gpio GPIOZ_14 GPIO_ACTIVE_LOW>;
+> +
+> +		interrupt-parent = <&gpio_intc>;
+> +		interrupts = <25 IRQ_TYPE_LEVEL_LOW>;
+> +	};
+> +};
+> +
+> +&pinctrl_periphs {
+> +	eth_phy_irq_pin: eth-phy-irq {
+> +		mux {
+> +			groups = "GPIOZ_15";
+> +			function = "gpio_periphs";
+> +			bias-disable;
+> +			output-disable;
+> +		};
+> +	};
+> +};
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Add a comment here to specify why you disable bias for the eth irq line.
+
+> +
+> +&sd_emmc_a {
+> +	brcmf: wifi@1 {
+> +		reg = <1>;
+> +		compatible = "brcm,bcm4329-fmac";
+> +	};
+> +};
+> +
+> +&uart_A {
+> +	status = "okay";
+> +	pinctrl-0 = <&uart_a_pins>, <&uart_a_cts_rts_pins>;
+> +	pinctrl-names = "default";
+> +	uart-has-rtscts;
+> +
+> +	bluetooth {
+> +		compatible = "brcm,bcm43438-bt";
+> +		shutdown-gpios = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
+> +		max-speed = <2000000>;
+> +		clocks = <&wifi32k>;
+> +		clock-names = "lpo";
+> +	};
+> +};
+> +
+> +&usb {
+> +	dr_mode = "host";
+> +};
+> +
+> +&usb2_phy0 {
+> +	/* HDMI_5V also supplies the USB VBUS */
+> +	phy-supply = <&hdmi_5v>;
+> +};
+> +
+> +&usb2_phy0 {
+> +	/* HDMI_5V also supplies the USB VBUS */
+> +	phy-supply = <&hdmi_5v>;
+> +};
+
+With those changes, you can add my:
+
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+
+Thanks,
+Neil

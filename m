@@ -2,89 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 279C34B0282
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9FC4B024A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbiBJB5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 20:57:15 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60094 "EHLO
+        id S232361AbiBJB2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 20:28:39 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:56084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233403AbiBJB4I (ORCPT
+        with ESMTP id S232830AbiBJB2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:56:08 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B4D2B6B4;
-        Wed,  9 Feb 2022 17:45:51 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 82BA42C1;
-        Thu, 10 Feb 2022 00:29:55 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 82BA42C1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1644452995; bh=JeAPbfW2n6bSXcS12/5ZU0UMBn33nmdtlOjKnwSEXYI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=rXNFe172Tnb8y40rzYS6eEF0rqWLAAs96fxoear4HGMmRX1ZnNk9UqCglGOg+3lZ+
-         8v16sbsGVmIHRmPvvH+hKOnaGVSrrrn5XxKfcqVjUZYiM6gL4qjZofPWQTshjY5A8P
-         Zkd513+59JDe3owTC8qSwSsZgC5xJ/wF7otnIT1Bn5yvQFRXV9Fo9K9+G6Z58ixzU9
-         i24IKei5rs7g5Vp/7o8g8UXWdydMVlesWkD76QLmX7LNuF2cG1h7CQD1i4ZY4ALUsj
-         djOxGFWQeD7JM3NQ48IZhaHxOcl9R6GNsgATL7HfqDGl0C0o6EAmp8Edr+J0Sc7Nmz
-         WildtHoiciIaw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH v2 0/4] docs: sphinx/kfigure.py: Improve conversion to PDF
-In-Reply-To: <3cfe6cb0-67c7-bd12-0a3c-a609f5341a32@gmail.com>
-References: <e01fe9f9-f600-c2fc-c6b3-ef6395655ffe@gmail.com>
- <e545803a-8f09-f0e7-4ca0-16b673ef1796@gmail.com>
- <20220114094535.5bb9ba94@coco.lan>
- <e03de287-4eef-8a68-89f3-8614db66a74b@gmail.com>
- <87bl0c7l79.fsf@meer.lwn.net>
- <3cfe6cb0-67c7-bd12-0a3c-a609f5341a32@gmail.com>
-Date:   Wed, 09 Feb 2022 17:30:38 -0700
-Message-ID: <874k57ef69.fsf@meer.lwn.net>
+        Wed, 9 Feb 2022 20:28:08 -0500
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B61420197;
+        Wed,  9 Feb 2022 17:28:11 -0800 (PST)
+Received: by mail-ot1-f50.google.com with SMTP id n6-20020a9d6f06000000b005a0750019a7so2778475otq.5;
+        Wed, 09 Feb 2022 17:28:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=siet+Ao2TH7V5m6SftR2gVXEXyrYhoODYtbaQVg/nkg=;
+        b=YNRMeQ04hxyAt6Zpl5OzJOlbVqSXQBqZ0EHbAVqoApo9bi82CP5RXJqAYvlep8w58t
+         SS7AH9OvM+tj0fkIpmv/37FL+Bujqd/ymdtuF9UHtqK4oQSKUu0W5AnSltcsRjHDm52m
+         vDtf9QI+InPCKT4PTQ99IKjY5JryW1eERxUIJifrnHU2oi7sHBGnoXfq4BnEuWDTWB15
+         /7m1M28GKMX6pe3+/y8rht6k7B7Nc5X7nt6iOvQQ6Eo4UmO6I8SERUrI4omfYUvDXabW
+         CDlo2s+RtAwPuCZsJ7m0MZhvcjLCXSnfPbwJndWHtXjtSj+truIg2tGwX6E6cVnRicD9
+         BLQA==
+X-Gm-Message-State: AOAM533UxnDxg/9q66cuB4v5RoOUCRMrGZRCInh8uA0FmnBYLMXQUsvD
+        AfGkcc9kUobwU0nx4briy9cdnOT2Clfz
+X-Google-Smtp-Source: ABdhPJzmtB6J3X9Ywh+GW7FeYw449wZbfGox6Vdj/LQZjI2yjkhUTsq3PQRmfnSFWvpLXg81YeejXg==
+X-Received: by 2002:a05:6830:12cf:: with SMTP id a15mr2071431otq.262.1644453043789;
+        Wed, 09 Feb 2022 16:30:43 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id i1sm4402159ood.32.2022.02.09.16.30.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 16:30:43 -0800 (PST)
+Received: (nullmailer pid 1258215 invoked by uid 1000);
+        Thu, 10 Feb 2022 00:30:42 -0000
+Date:   Wed, 9 Feb 2022 18:30:42 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        kernel-janitors@vger.kernel.org, Ray Jui <rjui@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-gpio@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org, Scott Branden <sbranden@broadcom.com>
+Subject: Re: [PATCH] pinctl: doc: Fix spelling mistake "resisitors" ->
+ "resistors"
+Message-ID: <YgRcspCc9UW2CRp3@robh.at.kernel.org>
+References: <20220202091551.580372-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220202091551.580372-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Akira Yokosawa <akiyks@gmail.com> writes:
+On Wed, 02 Feb 2022 09:15:51 +0000, Colin Ian King wrote:
+> There is a spelling mistake in the documentation. Fix it.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  .../devicetree/bindings/pinctrl/brcm,bcm11351-pinctrl.txt       | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-> On Sat, 15 Jan 2022 14:17:30 -0700,
-> Jonathan Corbet wrote:
->> Akira Yokosawa <akiyks@gmail.com> writes:
->> 
->>> We are in the middle of the v5.17 merge window, and I think of this
->>> series as a v5.18 material.
->>> Which means it won't be merged into doc-next until v5.17-rc5 or -rc6
->>> (mid March or so), unless Jon thinks otherwise.
->> 
->> I'd rather merge it rather sooner than that if possible; 5.18 stuff will
->> start going into docs-next shortly.
->
-> Jon,
->
-> Hearing no objection since mid January, I think it is time for you to
-> merge this series into docs-next.
-
-That has been done - thanks for your work on this!
-
-Since you seem to have a reasonably good understanding of the
-PDF-generation side of things...I noted as I was testing this work that
-we are still getting the "restricted \write18 enabled" messages.  I
-asked about this years ago, and nobody seemed to have a clue of what was
-enabling it.  I'd *really* like to turn that off if possible; do you
-have any idea what's going on there?
-
-Thanks,
-
-jon
+Acked-by: Rob Herring <robh@kernel.org>

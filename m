@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D704B0499
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 05:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D104B049E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 05:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233664AbiBJErA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 23:47:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34556 "EHLO
+        id S233668AbiBJErI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 23:47:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233606AbiBJEqy (ORCPT
+        with ESMTP id S233641AbiBJEq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 23:46:54 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3125E13E;
-        Wed,  9 Feb 2022 20:46:56 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id k18so7319102wrg.11;
-        Wed, 09 Feb 2022 20:46:56 -0800 (PST)
+        Wed, 9 Feb 2022 23:46:56 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB801AA;
+        Wed,  9 Feb 2022 20:46:58 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id k18so7319232wrg.11;
+        Wed, 09 Feb 2022 20:46:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=BjDFuVI1diXeHGjfeYh1Ru7NnwWu54G5DixYVQkN3LQ=;
-        b=Z039O/mT3T2FE/qU1t8Mwr/uL4bTki9Z2yPXpwt87ry32y7atrQ6705/ky6xG5tr3T
-         AIHWO4lBhEEUNgg6Sav8x4kGpm2ZCARFvSpeFmUC42idac09HfzntAMKDX2krZcvMOO7
-         U7MlgFMRNcknC8WoZl46amBd16Ge5+EX8N9qzPHobxVYe2dwikMlFjXq3kss8mJNC4xX
-         8BbR+/xkzvxTkexQDc95DMDy7Bm/Qn0Lcf5z8TskpAPKk4i9GMWLYc6+ByyLw3g6SkfW
-         Nx9pUNWXgohSfGTsfKwK52T8HpqEUY5NoXSsxELoblqX/+6cVRdYlTfF0J52jBy5jkg1
-         gNzg==
+        bh=CINhVeMEJRnxt2N7nzrBj1BDzXGGBYQDuFCYQXZDz9Q=;
+        b=jM4fIs9WFGN+yAxLwcMz2Rw7n5SZE+DiU9dTpcsBap7A6Va+CVuICY8STiXAAwNId9
+         gtUlfLX/KxgxpGIDonB34zxorkxBOjJlOgUMD7ZtJpNMeyREmYWTwslfrwMfQNGeckGf
+         6zbsxERFbaEMHJrDx4ci5dRiLSRkzDK21j4NygrapicI6Mti+Zm66JEbZbNhopSTqtHW
+         LylOkS5wiUi+kFPDLLs0Lf9xhT6N5RvFSloOLoVeEUSFDilkCH+gOUOFhroA+tbu9Y6T
+         GOxX5KKlz7YcBpfT5GJhmrBCPsgSOROoH4hM2E6XGMqzpOngqAjmk9jvhRIzCpO35+QH
+         AE3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=BjDFuVI1diXeHGjfeYh1Ru7NnwWu54G5DixYVQkN3LQ=;
-        b=aM3QbAHp1Cv4MgYFmVCi9x+N7ZFa0BRXObgHZWNIW9ikjY1j2gptK/TDM1JHkvfg8i
-         lJJYNxj2UFeh6oUfR0YdVzMvyr2TkuUxoHztkYVRq/MZDVYO2p0apwxZdOZXMl0lvTgh
-         K59tLojGmbnAJ7+A/Ovo6t9E+txd/eF8SrA3OLgbQv8Te3dXaXQKQtz6VPIayfVcDJNu
-         MiDPR4lP4WOg/1aCtjvPA6rJZrFcUXAhbfFHOiSkpWaKq85OhfbnkCXcA+9ss+wCeV93
-         768IlRTHsMgeDDF7TjxDTXfnOzjO/iRvDmzwXNODHrMf8nme/02YCBkCiL2qtrG3Ev76
-         jc8w==
-X-Gm-Message-State: AOAM531/dqOPtBL29Ssbu/hobBQGVCwoP/ods2vcjHjjZVopgLp+/+dp
-        wW/gGNnPS/QBs9nMiHUf0i4=
-X-Google-Smtp-Source: ABdhPJyfhwJP/OuAqaG/f8JeEci5j9lXhwga9tAVqWh3VfrctxGSoEkAZNw74a62QNHaDsxWat7WWg==
-X-Received: by 2002:adf:eec2:: with SMTP id a2mr4583607wrp.557.1644468414830;
-        Wed, 09 Feb 2022 20:46:54 -0800 (PST)
+        bh=CINhVeMEJRnxt2N7nzrBj1BDzXGGBYQDuFCYQXZDz9Q=;
+        b=u56IwOSBNuHJqVVHt5zUd1YGYUswG8x//+EZ7r+T1rzHpMQOgT7+7rRoAV3+M6Ldqq
+         6CjJ2KVUUY0reoGOeHx7wU970d/P8gBd+0wKtnHXUs/c63U6qbsQAfjwzg6JZA/dWhRZ
+         tYMqGyN1W+q9yahTfZhN4LRzDMoirloZi7tZXaJ9oVeLbc4g/ucD7BKxBK0oNm5SxiPd
+         Y0GtpzC/ds6LOOMtFxnbyLHNpyzHux7TCa/X01ol4I+xkFzZmJc5FOFMum/mbKvEst4q
+         BdTtHNsg3qRwdaCF+FD2GUijW7zQ1+O7/mx5NQaQZzRyNQV0tqlb6ycH/jmsEmEf9Rrm
+         F8FA==
+X-Gm-Message-State: AOAM531PjwVpzJizGZWxDWA0zvFPHqPhHH9EuJCy1xqN5KBN3LvR+wEU
+        R5sPvOz6z1HbKD9aQ5Fs8U/KxG4OJGLLjw==
+X-Google-Smtp-Source: ABdhPJzMSDhKCtHlwy6VUTO3oQMZNo/xnWU8iYVtBLY77RIa9onkmuFf0FO3SP4Gkzl1RllgvBTm0Q==
+X-Received: by 2002:a5d:6e86:: with SMTP id k6mr2441841wrz.388.1644468417203;
+        Wed, 09 Feb 2022 20:46:57 -0800 (PST)
 Received: from localhost.localdomain ([87.200.95.144])
-        by smtp.gmail.com with ESMTPSA id h17sm323089wmm.15.2022.02.09.20.46.52
+        by smtp.gmail.com with ESMTPSA id h17sm323089wmm.15.2022.02.09.20.46.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 20:46:54 -0800 (PST)
+        Wed, 09 Feb 2022 20:46:56 -0800 (PST)
 From:   Christian Hewitt <christianshewitt@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -57,9 +57,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     Christian Hewitt <christianshewitt@gmail.com>,
         Sam Nazarko <email@samnazarko.co.uk>,
         Chad Wagner <wagnerch42@gmail.com>
-Subject: [PATCH 1/3] dt-bindings: vendor-prefixes: add osmc prefix
-Date:   Thu, 10 Feb 2022 04:46:45 +0000
-Message-Id: <20220210044647.14443-2-christianshewitt@gmail.com>
+Subject: [PATCH 2/3] dt-bindings: arm: amlogic: add Vero 4K+ bindings
+Date:   Thu, 10 Feb 2022 04:46:46 +0000
+Message-Id: <20220210044647.14443-3-christianshewitt@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220210044647.14443-1-christianshewitt@gmail.com>
 References: <20220210044647.14443-1-christianshewitt@gmail.com>
@@ -73,27 +73,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Open Source Media Centre (Sam Nazarko Trading Ltd.) are a manufacturer
-of Linux Set-Top Box devices.
+Add the board binding for the OSMC Vero 4K+ STB device
 
 Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/arm/amlogic.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 52ff63248892..b97fd8dfe601 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -882,6 +882,8 @@ patternProperties:
-     description: Ortus Technology Co., Ltd.
-   "^osddisplays,.*":
-     description: OSD Displays
-+  "^osmc,.*":
-+    description: Sam Nazarko Trading Ltd. (Open Source Media Centre)
-   "^ouya,.*":
-     description: Ouya Inc.
-   "^overkiz,.*":
+diff --git a/Documentation/devicetree/bindings/arm/amlogic.yaml b/Documentation/devicetree/bindings/arm/amlogic.yaml
+index a073a959232c..61a6cabb375b 100644
+--- a/Documentation/devicetree/bindings/arm/amlogic.yaml
++++ b/Documentation/devicetree/bindings/arm/amlogic.yaml
+@@ -108,6 +108,7 @@ properties:
+               - amlogic,p230
+               - amlogic,p231
+               - libretech,aml-s905d-pc
++              - osmc,vero4k-plus
+               - phicomm,n1
+               - smartlabs,sml5442tw
+               - videostrong,gxl-kii-pro
 -- 
 2.17.1
 

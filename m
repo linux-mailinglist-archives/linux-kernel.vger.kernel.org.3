@@ -2,119 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D504B15A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4764A4B15B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 20:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343611AbiBJS6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 13:58:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41522 "EHLO
+        id S236722AbiBJS7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 13:59:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239113AbiBJS6P (ORCPT
+        with ESMTP id S229507AbiBJS7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 13:58:15 -0500
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AB810B7;
-        Thu, 10 Feb 2022 10:58:15 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:47730)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nIEdy-00AOdS-VC; Thu, 10 Feb 2022 11:58:15 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:42386 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nIEdx-00DkzX-P8; Thu, 10 Feb 2022 11:58:14 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20220210025321.787113-1-keescook@chromium.org>
-        <871r0a8u29.fsf@email.froward.int.ebiederm.org>
-        <202202101033.9C04563D9@keescook>
-Date:   Thu, 10 Feb 2022 12:58:07 -0600
-In-Reply-To: <202202101033.9C04563D9@keescook> (Kees Cook's message of "Thu,
-        10 Feb 2022 10:41:57 -0800")
-Message-ID: <87pmnu5z28.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 10 Feb 2022 13:59:46 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9344810B7;
+        Thu, 10 Feb 2022 10:59:47 -0800 (PST)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21AItClD018471;
+        Thu, 10 Feb 2022 18:59:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=hHlY7zZWj3WOoFOG4AKZPifEscrBwE3mTuEfJ++rVMk=;
+ b=SC92xEiOKHp8B/YQDhMHHkhi33I4XuvkfhWePkR76TZzfiovy3/7bRNeLWZxVOmoiezX
+ HPtbNbxsukoB2BoIMxEQYtfBJ9c4ebM54+2aGlZ63AfHkPXIaBflO4FREqXzq9CJhP8D
+ g3aN89aZZuRZ5PGPS8YsYzAQee2+WbLSA+yb/00cdeeWxbdS+wTc2kM4OfKZnBe1l4AD
+ eQpNDbnY2qrTTd7kkOpP46P86l81dFEGrjBP/FDxzgjgXLCGK3YZCkLnmLDzdlew9qMG
+ hXUZ9aYrZ2SaM16yPyd7eudwkMc2hFF2mAiLQJYqXjLkrTc5Hnf8YGuX+L7QG2/ywm5i Aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e54ggxg6r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Feb 2022 18:59:45 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21AI6KTN022279;
+        Thu, 10 Feb 2022 18:59:45 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e54ggxg65-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Feb 2022 18:59:45 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21AIvsUg016343;
+        Thu, 10 Feb 2022 18:59:43 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma03wdc.us.ibm.com with ESMTP id 3e1gvcf838-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Feb 2022 18:59:43 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21AIxgaR29688126
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Feb 2022 18:59:42 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E754712405A;
+        Thu, 10 Feb 2022 18:59:41 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 09E46124058;
+        Thu, 10 Feb 2022 18:59:37 +0000 (GMT)
+Received: from [9.211.136.120] (unknown [9.211.136.120])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 10 Feb 2022 18:59:36 +0000 (GMT)
+Message-ID: <bcf04ad2-848b-de03-5610-d99e3b761b10@linux.ibm.com>
+Date:   Thu, 10 Feb 2022 13:59:35 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 24/30] vfio-pci/zdev: wire up group notifier
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        linux-s390@vger.kernel.org, cohuck@redhat.com,
+        farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220204211536.321475-1-mjrosato@linux.ibm.com>
+ <20220204211536.321475-25-mjrosato@linux.ibm.com>
+ <20220208104319.4861fb22.alex.williamson@redhat.com>
+ <20220208185141.GH4160@nvidia.com>
+ <20220208122624.43ad52ef.alex.williamson@redhat.com>
+ <438d8b1e-e149-35f1-a8c9-ed338eb97430@linux.ibm.com>
+ <20220208204041.GK4160@nvidia.com>
+ <13cf51210d125d48a47d55d9c6a20c93f5a2b78b.camel@linux.ibm.com>
+ <20220210130150.GF4160@nvidia.com>
+ <fc5cce270dc01d46a6a42f2d268166a0a952fcb3.camel@linux.ibm.com>
+ <20220210152305.GG4160@nvidia.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20220210152305.GG4160@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: mSVcAdQvMYmEVZgt5jUhdLQtSwl9xMSc
+X-Proofpoint-GUID: lZGjfsQLjweW4qSGxxYfqx1mrVIAbaNs
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nIEdx-00DkzX-P8;;;mid=<87pmnu5z28.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+JrQ7YMIrXD3csaWAuHpMyqCe9x5AzMzo=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-10_08,2022-02-09_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ lowpriorityscore=0 priorityscore=1501 bulkscore=0 malwarescore=0
+ mlxlogscore=999 mlxscore=0 clxscore=1015 suspectscore=0 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202100097
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Kees Cook <keescook@chromium.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 568 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 4.4 (0.8%), b_tie_ro: 3.0 (0.5%), parse: 1.12
-        (0.2%), extract_message_metadata: 11 (1.9%), get_uri_detail_list: 1.91
-        (0.3%), tests_pri_-1000: 10 (1.8%), tests_pri_-950: 1.07 (0.2%),
-        tests_pri_-900: 0.81 (0.1%), tests_pri_-90: 308 (54.2%), check_bayes:
-        304 (53.6%), b_tokenize: 5.0 (0.9%), b_tok_get_all: 7 (1.3%),
-        b_comp_prob: 1.73 (0.3%), b_tok_touch_all: 287 (50.5%), b_finish: 0.86
-        (0.2%), tests_pri_0: 217 (38.2%), check_dkim_signature: 0.37 (0.1%),
-        check_dkim_adsp: 1.80 (0.3%), poll_dns_idle: 0.26 (0.0%),
-        tests_pri_10: 3.0 (0.5%), tests_pri_500: 9 (1.6%), rewrite_mail: 0.00
-        (0.0%)
-Subject: Re: [PATCH 0/3] signal: HANDLER_EXIT should clear SIGNAL_UNKILLABLE
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
+On 2/10/22 10:23 AM, Jason Gunthorpe wrote:
+> On Thu, Feb 10, 2022 at 03:06:35PM +0100, Niklas Schnelle wrote:
+> 
+>>> How does the page pinning work?
+>>
+>> The pinning is done directly in the RPCIT interception handler pinning
+>> both the IOMMU tables and the guest pages mapped for DMA.
+> 
+> And if pinning fails?
 
-> On Thu, Feb 10, 2022 at 12:17:50PM -0600, Eric W. Biederman wrote:
->> Kees Cook <keescook@chromium.org> writes:
->> 
->> > Hi,
->> >
->> > This fixes the signal refactoring to actually kill unkillable processes
->> > when receiving a fatal SIGSYS from seccomp. Thanks to Robert for the
->> > report and Eric for the fix! I've also tweaked seccomp internal a bit to
->> > fail more safely. This was a partial seccomp bypass, in the sense that
->> > SECCOMP_RET_KILL_* didn't kill the process, but it didn't bypass other
->> > aspects of the filters. (i.e. the syscall was still blocked, etc.)
->> 
->> Any luck on figuring out how to suppress the extra event?
->
-> I haven't found a good single indicator of a process being in an "I am dying"
-> state, and even if I did, it seems every architecture's exit path would
-> need to add a new test.
+The RPCIT instruction is goes back to the guest with an indication that 
+informs it the operation failed / gives it impetus to kick off a guest 
+DMA refresh and clear up space (unpin).
 
-The "I am dying" state for a task is fatal_signal_pending, at least
-before get_signal is reached, for a process there is SIGNAL_GROUP_EXIT.
-Something I am busily cleaning up and making more reliable at the
-moment.
+>   
+>>> Then the
+>>> magic kernel code you describe can operate on its own domain without
+>>> becoming confused with a normal map/unmap domain.
+>>
+>> This sounds like an interesting idea. Looking at
+>> drivers/iommu/s390_iommu.c most of that is pretty trivial domain
+>> handling. I wonder if we could share this by marking the existing
+>> s390_iommu_domain type with kind of a "lent out to KVM" flag.
+> 
+> Lu has posted a series here:
+> 
+> https://lore.kernel.org/linux-iommu/20220208012559.1121729-1-baolu.lu@linux.intel.com
+> 
+> Which allows the iommu driver to create a domain with unique ops, so
+> you'd just fork the entire thing, have your own struct
+> s390_kvm_iommu_domain and related ops.
+> 
 
-What is the event that is happening?  Is it
-tracehook_report_syscall_exit or something else?
+OK, looking into this, thanks for the pointer...  Sounds to me like we 
+then want to make the determination upfront and then ensure the right 
+iommu domain ops are registered for the device sometime before creation, 
+based upon the usecase -- general userspace: s390_iommu_ops (existing), 
+kvm: s390_kvm_iommu_domain (new).
 
-From the bits I have seen it seems like something else.
+> When the special creation flow is triggered you'd just create one of
+> these with the proper ops already setup. >
+> We are imagining a special ioctl to create these things and each IOMMU
+> HW driver can supply a unique implementation suited to their HW
+> design.
 
-> The best approach seems to be clearing the TIF_*WORK* bits, but that's
-> still a bit arch-specific. And I'm not sure which layer would do that.
-> At what point have we decided the process will not continue? More
-> than seccomp was calling do_exit() in the middle of a syscall, but those
-> appear to have all been either SIGKILL or SIGSEGV?
-
-This is where I get confused what TIF_WORK bits matter?
-
-I expect if anything else mattered we would need to change it to
-HANDLER_EXIT.
-
-I made a mistake conflating to cases and I want to make certain I
-successfully separate those two cases at the end of the day.
-
-Eric
+But I haven't connected the dots on this part -- At the end of the day 
+for this 'special creation flow' I need the kvm + starting point of the 
+guest table + format before we let the new s390_kvm_iommu_domain start 
+doing automatic map/unmap during RPCIT intercept -- This initial setup 
+has to come from a special ioctl as you say, but where do you see it 
+living?  I could certainly roll my own via a KVM ioctl or whatever, but 
+it sounds like you're also referring to a general-purpose ioctl to 
+encompass each of the different unique implementations, with this s390 
+kvm approach being one.
 

@@ -2,83 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 105E04B123F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7214B1241
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243949AbiBJQA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 11:00:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57136 "EHLO
+        id S243959AbiBJQBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 11:01:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236524AbiBJQA0 (ORCPT
+        with ESMTP id S236524AbiBJQBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 11:00:26 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4672E83
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:00:27 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id x136so14998812ybe.11
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:00:27 -0800 (PST)
+        Thu, 10 Feb 2022 11:01:05 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D433E5D;
+        Thu, 10 Feb 2022 08:01:05 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id k18so10371188wrg.11;
+        Thu, 10 Feb 2022 08:01:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8XCqHQHpWHW92nEkn4B+1VbtafR8Zb17zrKGkCgMBOY=;
-        b=faunBAocEyTU3CGL7gl//+yF9YyCQoMEbj2ZN8NRFm7J2vTf4HCC646inj2AKDJ/Li
-         T+L57QEnJDZMU/x5GvmE1TNoUgI6KdnyW3BJjjsX9Ktj53KEWlWav5AGH3mFjHB/krwD
-         DwKURXCZ+PeogMZdeSdYdXkS9BI63xaS9p7lST+vD23tLVjVQqoY3v+oCv2POgiGsVUC
-         9eEAWA8Vn4Wcjzl2qibliqTyiuxXOWEyrIltryEJ1vCwYCfU+r75T8MMcofrmi6aaQ/E
-         oIZytQHO2X/pmANbIcx4+WBIDHJFfOMRT/t/dE8qVwVBRxhh8Mrp+WqP1zmnFZu+wiZ7
-         7mQw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Vv43b7pMEssZvUBn4Nz22cToBBcn/GrvYK44d38bgMA=;
+        b=iezX7bTaaEgUbpDTHPwaaNSihcWk14mvfpkdoJGF6jQMtdtZWH6hVXrbjDwkIDugoP
+         cnRQKw9lqry4Z9tVLDmVJDzhAzGAEAkxqLbAAIyhRYPA0zVdBpMI6id32d/iKkpsekGa
+         xdYkQSm/xzQMTaAzjrRYKKYnoVN19NryvONwTW/TNrQavLy40g/yWVpBG1TxrdMT0+G7
+         4kvsYuCmvxWFdmoKuaaTkVV9u2HeMxU1chZsZNFcpOiZvbArgzJUVbBmBbs8P7pqjGrr
+         cOTZ8LzCoTUVFNlZOxW5w1AUaWCN1GTK+KvfWne2qzclsPmgGPL5NFSp4eRDu0QBOEQF
+         IIHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8XCqHQHpWHW92nEkn4B+1VbtafR8Zb17zrKGkCgMBOY=;
-        b=gw+QcT/oWtekqy9aIYCIM1g2A9RuMdqyBFInqLMb1fX5AEwQ90q4rv0QYgl1rzYvHc
-         218AvovRO95sqaKsjzP9EzYzMXwszisq0K6ap9On2lOLTumzhiBdeKJuNQXtuBd3l0Z4
-         LSAQDcDawF54wWCmVLq/IGSNpYF+ur3JpMpqeXB7mXiq5ZkYljJRS+v38DVDOeQFarAe
-         myT+USo+31ZES+ZS8+YeySKx0HU3IEYxmMu6YLTeIz+buMS1TCPm7Bibi38IexEeHLOm
-         ILTCcgdqdZh6xSn9oD970fnwqVKkP8EWSkve9i8/zHCpAWgOr1FPQ6Bd8a+jTlR7pxN+
-         /RUw==
-X-Gm-Message-State: AOAM533dvelaDdiPd4zCEWHGr9/DpbK4sm4/v6v/N1A0oWxg+9TGgFfv
-        RnmBnFbfD0QRFbnkPLtq9vWgZl9MKvDRs86RhVOhGA==
-X-Google-Smtp-Source: ABdhPJyK0yeU3tCgFGaq/lWLUswz250+pcrtPVEN8SUTLC8FJkGgxsfg2XRHKVPKKE59pgalYQZ9QccYTUPgTw8lEL0=
-X-Received: by 2002:a81:7e4f:: with SMTP id p15mr7799834ywn.180.1644508825921;
- Thu, 10 Feb 2022 08:00:25 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Vv43b7pMEssZvUBn4Nz22cToBBcn/GrvYK44d38bgMA=;
+        b=SYJTmCCrLc3zyWSgDmWxbiZEkNdroH1VHtEi1HpUPBE88pmZEhGb79aNVoYkteAwvf
+         Nx3r9yTImIChTcNtAqB4UEpWr42Gg2ilhhPe/TjdljULOHHVtpUqcNpDL5X7J+vBO8iE
+         qO1mstdCHAVt8arH5VUkNbaxkjt+sA1TcZ0Wd+EGAFeTDTel2aNlK9sWewpaUQpvZ94U
+         MBY3MSMC5nOe7Gdmk+qT0rHsXIKmCFTRMUV8hfKFMda63zLVtC/jUcQz6auRxXiRmYWl
+         kCb6DM20pOM8C+egWeqTbNSNnB4bH+G7vS2ZK9D1RsoDlmYjrIenQob0JOitQKaWNoa6
+         bSKA==
+X-Gm-Message-State: AOAM531cS6E7qrWWYNlGtKL8HI4y0uZ7aqqyPAiZ32zLFcpaWPYm/JYQ
+        37Pj3I6iboMY4KPVbZ0lxgA=
+X-Google-Smtp-Source: ABdhPJzs9vfUPgIC0KdpPpzihhTIFuLANEm6zs3lJdOmM4a0p98gXdTlLFPpDZFtKJY8bsac68SgFw==
+X-Received: by 2002:a5d:47cb:: with SMTP id o11mr6818424wrc.718.1644508864101;
+        Thu, 10 Feb 2022 08:01:04 -0800 (PST)
+Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
+        by smtp.gmail.com with ESMTPSA id p3sm1939769wmq.40.2022.02.10.08.01.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 08:01:03 -0800 (PST)
+Date:   Thu, 10 Feb 2022 16:01:01 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 0/5] 5.15.23-rc1 review
+Message-ID: <YgU2vRk8u1VyIcA8@debian>
+References: <20220209191249.980911721@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20220210043215.42794-1-surenb@google.com> <YgUHzSqltDp2dr70@dhcp22.suse.cz>
- <CAJuCfpGkW7MoWW=E1tqEib24M3JjxDKF_zgmMnvWo8wJP6cy2g@mail.gmail.com> <YgUu0prRt3iu1Cpy@casper.infradead.org>
-In-Reply-To: <YgUu0prRt3iu1Cpy@casper.infradead.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 10 Feb 2022 08:00:15 -0800
-Message-ID: <CAJuCfpHPZNbK2rd95pZAWr0d3vACGzHdiAFv=bM-G8nC+YdYwg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] mm: fix use-after-free when anon vma name is used
- after vma is freed
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Colin Cross <ccross@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, brauner@kernel.org,
-        legion@kernel.org, ran.xiaokai@zte.com.cn, sashal@kernel.org,
-        Chris Hyser <chris.hyser@oracle.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Peter Collingbourne <pcc@google.com>, caoxiaofeng@yulong.com,
-        David Hildenbrand <david@redhat.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-team <kernel-team@android.com>,
-        syzbot+aa7b3d4b35f9dc46a366@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209191249.980911721@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,54 +73,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 7:27 AM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Thu, Feb 10, 2022 at 07:18:24AM -0800, Suren Baghdasaryan wrote:
-> > On Thu, Feb 10, 2022 at 4:40 AM 'Michal Hocko' via kernel-team
-> > <kernel-team@android.com> wrote:
-> > >
-> > > On Wed 09-02-22 20:32:15, Suren Baghdasaryan wrote:
-> > > > When adjacent vmas are being merged it can result in the vma that was
-> > > > originally passed to madvise_update_vma being destroyed. In the current
-> > > > implementation, the name parameter passed to madvise_update_vma points
-> > > > directly to vma->anon_name->name and it is used after the call to
-> > > > vma_merge. In the cases when vma_merge merges the original vma and
-> > > > destroys it, this will result in use-after-free bug as shown below:
-> > > >
-> > > > madvise_vma_behavior << passes vma->anon_name->name as name param
-> > > >   madvise_update_vma(name)
-> > > >     vma_merge
-> > > >       __vma_adjust
-> > > >         vm_area_free <-- frees the vma
-> > > >     replace_vma_anon_name(name) <-- UAF
-> > > >
-> > > > Fix this by raising the name refcount and stabilizing it. Introduce
-> > > > vma_anon_name_{get/put} API for this purpose.
-> > >
-> > > What is the reason that madvise_update_vma uses the naked name rather
-> > > than the encapsulated anon_vma_name? This really just begs for problems.
-> >
-> > The reason for that is the second place it's being used from the prctl syscall:
-> >
-> > prctl_set_vma
-> >   madvise_set_anon_name
-> >     madvise_vma_anon_name
-> >       madvise_update_vma
-> >
-> > In that case the name parameter is not part of any anon_vma_name
-> > struct and therefore is stable. I can add a comment to
-> > madvise_update_vma indicating that the name parameter has to be stable
-> > if that helps.
->
-> Seems to me it'd simplify things if replace_vma_anon_name() and
-> madvise_vma_anon_name() took a struct anon_vma_name instead of
-> a bare char *.  You could construct it in madvise_set_anon_name().
+Hi Greg,
 
-Ok, this can be done. However I don't think changing
-replace_vma_anon_name() to accept a struct anon_vma_name would be a
-good idea. Reader might think that the object being passed will become
-the vma->anon_name of the vma, while in reality that's not the case.
-Keeping it a char* makes it obvious that the function will construct a
-new anon_vma_name struct.
-I'll post a v3 shortly implementing these suggestions.
-Thanks for the review folks!
+On Wed, Feb 09, 2022 at 08:14:25PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.23 release.
+> There are 5 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
+> Anything received after that time might be too late.
+
+Build test:
+mips (gcc version 11.2.1 20220121): 62 configs -> no new failure
+arm (gcc version 11.2.1 20220121): 100 configs -> no new failure
+arm64 (gcc version 11.2.1 20220121): 3 configs -> no failure
+x86_64 (gcc version 11.2.1 20220121): 4 configs -> no failure
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/735
+[2]. https://openqa.qa.codethink.co.uk/tests/739
+[3]. https://openqa.qa.codethink.co.uk/tests/743
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
+

@@ -2,154 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8724D4B1039
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 345764B1033
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242802AbiBJOVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:21:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38194 "EHLO
+        id S242809AbiBJOVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:21:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238798AbiBJOVC (ORCPT
+        with ESMTP id S238798AbiBJOVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:21:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96354F5;
-        Thu, 10 Feb 2022 06:21:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC08C618FA;
-        Thu, 10 Feb 2022 14:21:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B627C004E1;
-        Thu, 10 Feb 2022 14:20:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644502862;
-        bh=OPamVJysT9X+tCU5hCEJCZxcXEaQ2x6awutvO1oiFc0=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=EtaQxZJqyN2b4cGyGEWmjEPZuXiBpcBqNw+tfobaM4s25xnsh1uVkaz8b/0QVQHN/
-         6ppuT2sr3SCNunBk0hGU75PyTWD2a3gLyIQM9rX6MEmu19FCOpdSw9jKU8kp/Xo7Pn
-         RsRA6XKSx7QPdMKqfx9i4wuLu72nEtlgalFk7lcW76lv5L2H6Y7kA9O+itqk8zlDMq
-         MGtINmZnk9nW900s6SVWuh89+uvvrXED/we4bdwIkDzxt7BENd03ASECMYpH+RTC7o
-         i8v3p1EJr9q4RuFt+B8u7MptkfKJm0NketNO01xy9VG6mq52J/rWE2UL/uGg04vsU4
-         R2C1BJC/A7R6g==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-mmc@vger.kernel.org,
-        Pali =?utf-8?Q?Roh?= =?utf-8?Q?=C3=A1r?= <pali@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH v9 05/24] wfx: add main.c/main.h
-References: <20220111171424.862764-1-Jerome.Pouiller@silabs.com>
-        <20220111171424.862764-6-Jerome.Pouiller@silabs.com>
-        <2898137.rlL8Y2EFai@pc-42>
-Date:   Thu, 10 Feb 2022 16:20:56 +0200
-In-Reply-To: <2898137.rlL8Y2EFai@pc-42> (=?utf-8?B?IkrDqXLDtG1l?=
- Pouiller"'s message of "Wed,
-        26 Jan 2022 09:20:05 +0100")
-Message-ID: <87r18a3irb.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Thu, 10 Feb 2022 09:21:10 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B274AF5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:21:10 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-314-1bdjv44kN9i2uVm1sW-Fng-1; Thu, 10 Feb 2022 14:21:08 +0000
+X-MC-Unique: 1bdjv44kN9i2uVm1sW-Fng-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Thu, 10 Feb 2022 14:21:07 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Thu, 10 Feb 2022 14:21:07 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Arnd Bergmann' <arnd@kernel.org>
+CC:     Michal Simek <monstr@monstr.eu>,
+        Christoph Hellwig <hch@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] microblaze: remove CONFIG_SET_FS
+Thread-Topic: [PATCH] microblaze: remove CONFIG_SET_FS
+Thread-Index: AQHYHcQ6EgAhsRrDe0u1y8RgHhFzdayMhlsAgABCtoCAAAcZYA==
+Date:   Thu, 10 Feb 2022 14:21:07 +0000
+Message-ID: <cc2a0d0eb77b4ace872263db7bf0c115@AcuMS.aculab.com>
+References: <20220209144910.1484686-1-arnd@kernel.org>
+ <80c6df0717014472aa81093ae3894d39@AcuMS.aculab.com>
+ <CAK8P3a3tZEc30AaiNENbHKf8+x5VOw7Q=4dVDMNwz0F6+v9YrQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a3tZEc30AaiNENbHKf8+x5VOw7Q=4dVDMNwz0F6+v9YrQ@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-J=C3=A9r=C3=B4me Pouiller <jerome.pouiller@silabs.com> writes:
+RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAxMCBGZWJydWFyeSAyMDIyIDEzOjMwDQouLi4N
+Cj4gI2RlZmluZSBfX2FjY2Vzc19vayhhZGRyLCBzaXplKSBcDQo+ICAgICAgICAgKChnZXRfZnMo
+KS5zZWcgPT0gS0VSTkVMX0RTLnNlZykgfHwgXA0KPiAgICAgICAgICgoKHVuc2lnbmVkIGxvbmcp
+YWRkciA8IGdldF9mcygpLnNlZykgJiYgXA0KPiAgICAgICAgICAgKHVuc2lnbmVkIGxvbmcpc2l6
+ZSA8IChnZXRfZnMoKS5zZWcgLSAodW5zaWduZWQgbG9uZylhZGRyKSkpDQoNClRoYXQgb25lIGlz
+IHN0cmFuZ2UuDQpTZWVtcyB0byBiZSBvcHRpbWlzZWQgZm9yIGtlcm5lbCBhY2Nlc3NlcyENCg0K
+PiBpYTY0IGFuZCBzcGFyYyBza2lwIHRoZSBzaXplIGNoZWNrIGVudGlyZWx5IGJ1dCByZWx5IG9u
+IGFuIHVubWFwcGVkIHBhZ2UNCj4gYXQgdGhlIGJlZ2lubmluZyBvZiB0aGUga2VybmVsIGFkZHJl
+c3MgcmFuZ2UsIHdoaWNoIGF2b2lkcyB0aGlzIHByb2JsZW0NCj4gYnV0IG1heSBhbHNvIGJlIGRh
+bmdlcm91cy4NCg0KQW4gdW5tYXBwZWQgcGFnZSByZXF1aXJlcyB0aGF0IHRoZSBrZXJuZWwgZG8g
+c2VxdWVudGlhbCBhY2Nlc3Nlcw0KKG9yLCBhdCBsZWFzdCwgbm90IGJpZyBvZmZzZXQpIC0gd2hp
+Y2ggaXMgbm9ybWFsbHkgZmluZS4NCkVzcGVjaWFsbHkgZm9yIDY0Yml0IHdoZXJlIHRoZXJlIGlz
+IHBsZW50eSBvZiBhZGRyZXNzIHNwYWNlLg0KSSBndWVzcyBpdCBjb3VsZCBiZSBwcm9ibGVtYXRp
+YyBmb3IgMzJiaXQgaWYgeW91IGNhbi93YW50IHRvDQp1c2UgJ2JpZyBwYWdlcycgZm9yIHRoZSBr
+ZXJuZWwgYWRkcmVzc2VzLg0KTG9zaW5nIGEgc2luZ2xlICh0eXBpY2FsbHkpIDRrIHBhZ2UgaXNu
+J3QgYSBwcm9ibGVtLg0KDQpDZXJ0YWlubHkgbm90IG1hcHBpbmcgdGhlIHBhZ2UgYXQgVEFTS19T
+SVpFIGlzIGEgZ29vZCBzYWZldHkgY2hlY2suDQpBY3R1YWxseSwgc2V0dGluZyBUQVNLX1NJWkUg
+dG8gMHhjMDAwMDAwMCAtIFBBR0VfU0laRSBhbmQgbmV2ZXINCm1hcHBpbmcgdGhlIGxhc3QgdXNl
+ciBwYWdlIGhhcyB0aGUgc2FtZSBlZmZlY3QuDQpFeGNlcHQgSSBiZXQgdGhlIGxkc28gaGFzIHRv
+IGdvIHRoZXJlIDotKA0KTm90IHRvIG1lbnRpb24gdGhlIGluc3RydWN0aW9uIHNldHMgd2hlcmUg
+bG9hZGluZyB0aGUgY29uc3RhbnQNCndvdWxkIHRoZW4gYmUgdHdvIGluc3RydWN0aW9ucy4NCg0K
+Li4uDQo+ID4gQWx0aG91Z2ggdHlwaWNhbCA2NGJpdCBhcmNoaXRlY3R1cmVzIGNhbiB1c2UgdGhl
+IGZhc3RlcjoNCj4gPiAgICAgICAgICgoYWRkciB8IHNpemUpID4+IDYyKQ0KPiANCj4gSSB0aGlu
+ayB0aGlzIGlzIHRoZSBiZXN0IHZlcnNpb24sIGFuZCBpdCdzIGFscmVhZHkgd2lkZWx5IHVzZWQ6
+DQoNCkkganVzdCBkaWQgYSBxdWljayBjaGVjaywgYm90aCBjbGFuZyBhbmQgZ2NjIG9wdGltaXNl
+IG91dA0KY29uc3RhbnQgdmFsdWVzIGZvciAnc2l6ZScuDQoNCj4gc3RhdGljIGlubGluZSBpbnQg
+X19yYW5nZV9vayh1bnNpZ25lZCBsb25nIGFkZHIsIHVuc2lnbmVkIGxvbmcgc2l6ZSkNCj4gew0K
+PiAgICAgICAgIHJldHVybiBzaXplIDw9IFRBU0tfU0laRSAmJiBhZGRyIDw9IChUQVNLX1NJWkUg
+LSBzaXplKTsNCj4gfQ0KPiANCj4gc2luY2UgJ3NpemUnIGlzIHVzdWFsbHkgY29uc3RhbnQsIHNv
+IHRoaXMgdHVybnMgaW50byBhIHNpbmdsZSBjb21wYXJpc29uDQo+IGFnYWluc3QgYSBjb21waWxl
+LXRpbWUgY29uc3RhbnQuDQoNCkhtbW0uLi4gbWF5YmUgdGhlcmUgc2hvdWxkIGJlIGEgY29tbWVu
+dCB0aGF0IGl0IGlzIHRoZSBzYW1lIGFzDQp0aGUgbW9yZSBvYnZpb3VzOg0KCShhZGRyIDw9IFRB
+U0tfU0laRSAmJiBhZGRyIDw9IFRBU0tfU0laRSAtIHNpemUpDQpidXQgaXMgYmV0dGVyIGZvciBj
+b25zdGFudCBzaXplLg0KKFByb3ZpZGVkIFRBU0tfU0laRSBpcyBhIGNvbnN0YW50LikNCg0KSSdt
+IHN1cmUgTGludXMgd2FzICd1bmhhcHB5JyBhYm91dCBjaGVja2luZyBhZ2FpbnN0IDJeNjMgZm9y
+DQozMmJpdCBwcm9jZXNzZXMgb24gYSA2NGJpdCBrZXJuZWwuDQoNCkhtbW0gY29tcGF0IGNvZGUg
+dGhhdCBoYXMgMzJiaXQgYWRkci9zaXplIG5lZWRuJ3QgZXZlbiBjYWxsDQphY2Nlc3Nfb2soKSAt
+IGl0IGNhbiBuZXZlciBhY2Nlc3Mga2VybmVsIG1lbW9yeSBhdCBhbGwuDQoNCglEYXZpZA0KDQot
+DQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwg
+TWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2Fs
+ZXMpDQo=
 
-> Hi Kalle,
->
-> On Tuesday 11 January 2022 18:14:05 CET Jerome Pouiller wrote:
->> From: J=C3=A9r=C3=B4me Pouiller <jerome.pouiller@silabs.com>
->>=20
->> Signed-off-by: J=C3=A9r=C3=B4me Pouiller <jerome.pouiller@silabs.com>
->> ---
->>  drivers/net/wireless/silabs/wfx/main.c | 485 +++++++++++++++++++++++++
->>  drivers/net/wireless/silabs/wfx/main.h |  42 +++
->>  2 files changed, 527 insertions(+)
->>  create mode 100644 drivers/net/wireless/silabs/wfx/main.c
->>  create mode 100644 drivers/net/wireless/silabs/wfx/main.h
->>=20
-> [...]
->> +/* The device needs data about the antenna configuration. This informat=
-ion in
->> + * provided by PDS (Platform Data Set, this is the wording used in WF200
->> + * documentation) files. For hardware integrators, the full process to =
-create
->> + * PDS files is described here:
->> + *   https:github.com/SiliconLabs/wfx-firmware/blob/master/PDS/README.md
->> + *
->> + * The PDS file is an array of Time-Length-Value structs.
->> + */
->> + int wfx_send_pds(struct wfx_dev *wdev, u8 *buf, size_t len)
->> +{
->> +	int ret, chunk_type, chunk_len, chunk_num =3D 0;
->> +
->> +	if (*buf =3D=3D '{') {
->> +		dev_err(wdev->dev, "PDS: malformed file (legacy format?)\n");
->> +		return -EINVAL;
->> +	}
->> +	while (len > 0) {
->> +		chunk_type =3D get_unaligned_le16(buf + 0);
->> +		chunk_len =3D get_unaligned_le16(buf + 2);
->> +		if (chunk_len > len) {
->> +			dev_err(wdev->dev, "PDS:%d: corrupted file\n", chunk_num);
->> +			return -EINVAL;
->> +		}
->> +		if (chunk_type !=3D WFX_PDS_TLV_TYPE) {
->> +			dev_info(wdev->dev, "PDS:%d: skip unknown data\n", chunk_num);
->> +			goto next;
->> +		}
->> +		if (chunk_len > WFX_PDS_MAX_CHUNK_SIZE)
->> + dev_warn(wdev->dev, "PDS:%d: unexpectly large chunk\n",
->> chunk_num);
->> +		if (buf[4] !=3D '{' || buf[chunk_len - 1] !=3D '}')
->> + dev_warn(wdev->dev, "PDS:%d: unexpected content\n", chunk_num);
->> +
->> +		ret =3D wfx_hif_configuration(wdev, buf + 4, chunk_len - 4);
->> +		if (ret > 0) {
->> + dev_err(wdev->dev, "PDS:%d: invalid data (unsupported
->> options?)\n",
->> +				chunk_num);
->> +			return -EINVAL;
->> +		}
->> +		if (ret =3D=3D -ETIMEDOUT) {
->> + dev_err(wdev->dev, "PDS:%d: chip didn't reply (corrupted
->> file?)\n",
->> +				chunk_num);
->> +			return ret;
->> +		}
->> +		if (ret) {
->> + dev_err(wdev->dev, "PDS:%d: chip returned an unknown error\n",
->> chunk_num);
->> +			return -EIO;
->> +		}
->> +next:
->> +		chunk_num++;
->> +		len -=3D chunk_len;
->> +		buf +=3D chunk_len;
->> +	}
->> +	return 0;
->> +}
->
-> Kalle, is this function what you expected? If it is right for you, I am
-> going to send it to the staging tree.
-
-Looks better, but I don't get why '{' and '}' are still needed. Ah, does
-the firmware require to have them?
-
---=20
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes

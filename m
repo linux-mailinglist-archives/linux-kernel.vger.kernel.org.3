@@ -2,102 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8594B1995
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:35:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E524B1999
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345735AbiBJXfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 18:35:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44832 "EHLO
+        id S1345749AbiBJXg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 18:36:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345736AbiBJXfm (ORCPT
+        with ESMTP id S1345704AbiBJXgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 18:35:42 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DE35F70;
-        Thu, 10 Feb 2022 15:35:41 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id y6so20101847ybc.5;
-        Thu, 10 Feb 2022 15:35:41 -0800 (PST)
+        Thu, 10 Feb 2022 18:36:25 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7655F6A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:36:24 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id b5so7211150qtq.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:36:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=f0OQR6lJELfc5hXAuEQxY1AA157xaZFZkub6I8EmaCE=;
-        b=DGdS78rt4WNFSNFgFhdNXJVLTpvBg8SDtuHN5cVVM/yjrUbSIwD/teT8sFZ0iIkuTJ
-         hqM+bK+TZ4ypnaX0uJAgX+8rGFAnR0Xx3gUnyHybLfSXjsOPdZeNtRoAaIReSmai81bd
-         RrDuW3KsB9l1noVO+ewBhyg2fIQqqzgrSKUaiUvGk6AjrhGzGkLSvE/McY2iy+yu9ZB2
-         X4lKH81IgcGkZJuC9er+bmgPKaTUMyOR5+ykEAA38WPF4Hq8nEj7c/wnX+Cj7PS9ZHBD
-         Hj5EMSzNolH/Y19mDzzjzvIecrMyROdTW51caGIt1oFQw4ABQLs0H6aFDZLeE4WqCQ+s
-         ywWw==
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jdc4wttGNx0+uj82g/3cbdbffgxGg6KC2LBxBSLJrgk=;
+        b=jRX3EwsKEqLkj5t34Wyy1HXC4YVS1isnrMPVqBC4ixn+0oP2qBipNkgdmlqMVQdT43
+         oFKqw7xgqwe9R5L+D7Ssebx1WwzV+x8fcYnrfPNRQioWbF0pVBgIF77MXw72CXw/rBh1
+         R03crznZCerFV0VRfsmmSiS0yCBzJbc+1KBCvbYjswrpa2MUDRIufenGKegLtzpUQKOK
+         fRuy688UtSf/WYawQ7B98TF8bl4BJHLH3h8PeLmYGlSYA5texJ3n2QbtdG/5nMz5A4sD
+         OM6UqY7H9vdsmD/ZtvC73tTJQdCur07s8k4MJdY89xPuA0BhEsqeyrleqRcU8ll1DQCF
+         yalw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=f0OQR6lJELfc5hXAuEQxY1AA157xaZFZkub6I8EmaCE=;
-        b=lYPScfzdTMNWfipovjF3/XJQOxac44CLdEkKtsLhd67c43a/AlKy2L6rIdCAhd6rBe
-         ogV1wOAJ0T1SvCpNHmr/0lqlxt3/i9ZP5eWP1ap9Lb9ki7rQiKImz7kJvfg6nE5MKVys
-         hYgGQB8PhK0jUXHDru+brHs6aronMqsl4RWTFT1ELnlopDtxm12wl72bJZoGmWCY6zK2
-         iLll5GfWM21FOoKs0zxWUzRPhLaOH/nUhoq8Z0KFWtlyKZoXupDrlpNd1mJt0TEl4fci
-         wGBnBSU0N79MiKydM1bKs7/IMXgvHR4n9SKVqUtGcZxj0h7lBfM7kbEYtmcQvngaTTPg
-         y3Uw==
-X-Gm-Message-State: AOAM531jepGjjNiPsi5FDlMictVXiISmRQmWVc3n5vqsA3zsgGpCus/I
-        vsNH1Wyh7RgsD/zi1EXcRhF1awdlvR8kqH6RV9PQzNoAeFc=
-X-Google-Smtp-Source: ABdhPJxZjh/ZB2LxbqndF/NG6fDK29FIN9zEAsqiIy+Bbe+cv8D3FFmaPkaetN5SyZ0IXk77545U1/YrdVeREbCC9Uk=
-X-Received: by 2002:a5b:f4b:: with SMTP id y11mr8706490ybr.634.1644536141049;
- Thu, 10 Feb 2022 15:35:41 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jdc4wttGNx0+uj82g/3cbdbffgxGg6KC2LBxBSLJrgk=;
+        b=Ckm4REV635r3kGDMRPyRPgU8rFZgX58BsKqtyyY905gcak90KKtSVOpnLdrVWitilg
+         zhN2OtmOyUh5DATbCWPdMl/FuaqiWZrQyg2NVranYJ2B1yOCbfpM6WC36el/X9Lme/Br
+         OUlCspMeXU+r0tPzQ0RcW+/+xblC6sckBykiwydbz24RTVGmNa0GEtDplRSYiqaS32S8
+         uREa/p+2xvNFpAq112ZFaoHUyHNAM559XjWyNnDZJY2AUMSHY9UjyA7zjVlBd5BjQ4uh
+         Mb4x5VEM+klhyXs3AuQkqoE6NtPTERwW91CLSKbko/DrammslSkZDQxGMiZvv9uX2Xqm
+         kNDg==
+X-Gm-Message-State: AOAM530K4yTy3i9O2ZImyE6BEtCu4xnAcRgyIJ0csmx72gfXP05R/vpv
+        8OdIb9ZlHm6tKBZe5lRQMTncOJoEtRhSwQ==
+X-Google-Smtp-Source: ABdhPJzQIa5zPQh2XXzG457f36+iK0e3IhFV7shWUsXDsYa/H80qoTgj6GDIRkxYp7seatNxPqPccQ==
+X-Received: by 2002:ac8:588f:: with SMTP id t15mr6728007qta.580.1644536184070;
+        Thu, 10 Feb 2022 15:36:24 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id j15sm9497370qkp.88.2022.02.10.15.36.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 15:36:23 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nIIz8-0021OD-JG; Thu, 10 Feb 2022 19:36:22 -0400
+Date:   Thu, 10 Feb 2022 19:36:22 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     "Saleem, Shiraz" <shiraz.saleem@intel.com>
+Cc:     Victor Erminpour <victor.erminpour@oracle.com>,
+        "Ismail, Mustafa" <mustafa.ismail@intel.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "trivial@kernel.org" <trivial@kernel.org>
+Subject: Re: [PATCH] RDMA/irdma: Fix GCC 12 warning
+Message-ID: <20220210233622.GK49147@ziepe.ca>
+References: <1644453235-1437-1-git-send-email-victor.erminpour@oracle.com>
+ <35240f17968242409a39427c303370df@intel.com>
 MIME-Version: 1.0
-References: <20220210184340.7eba108a@canb.auug.org.au>
-In-Reply-To: <20220210184340.7eba108a@canb.auug.org.au>
-From:   Tong Zhang <ztong0001@gmail.com>
-Date:   Thu, 10 Feb 2022 15:35:30 -0800
-Message-ID: <CAA5qM4BKwS9W5UCbnfo_xSTJKBuUEyNzUrg0UfGhoxWK5WK3RQ@mail.gmail.com>
-Subject: Re: linux-next: boottime warning from todays linux-next
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Domenico Andreoli <domenico.andreoli@linux.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <35240f17968242409a39427c303370df@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 11:43 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> My qemu boot of a powerpc pseries_le_defconfig kernel produced these
-> kernel messages:
->
->   CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc3 #2
->   Call Trace:
->   [c0000000073e3a80] [c0000000007bfd40] dump_stack_lvl+0x74/0xa8 (unreliable)
->   [c0000000073e3ac0] [c00000000057e3dc] __register_sysctl_table+0x60c/0x9f0
->   [c0000000073e3bd0] [c000000002041170] init_fs_stat_sysctls+0x48/0x60
->   [c0000000073e3bf0] [c000000000012110] do_one_initcall+0x60/0x2d0
->   [c0000000073e3cd0] [c0000000020049f0] kernel_init_freeable+0x334/0x3dc
->   [c0000000073e3db0] [c000000000012710] kernel_init+0x30/0x1a0
->   [c0000000073e3e10] [c00000000000cd64] ret_from_kernel_thread+0x5c/0x64
->
-> Presumably introduced by commit
->
->   b42bc9a3c511 ("Fix regression due to "fs: move binfmt_misc sysctl to its own file"")
->
-> --
-> Cheers,
-> Stephen Rothwell
+On Thu, Feb 10, 2022 at 10:09:18PM +0000, Saleem, Shiraz wrote:
+> > Subject: [PATCH] RDMA/irdma: Fix GCC 12 warning
+> > 
+> > When building with automatic stack variable initialization, GCC 12 complains about
+> > variables defined outside of switch case statements.
+> > Move the variable into the case that uses it, which silences the warning:
+> > 
+> > ./drivers/infiniband/hw/irdma/hw.c:270:47: error: statement will never be executed [-
+> > Werror=switch-unreachable]
+> >   270 |                         struct irdma_cm_node *cm_node;
+> >       |
+> > 
+> > ./drivers/infiniband/hw/irdma/utils.c:1215:50: error: statement will never be executed
+> > [-Werror=switch-unreachable]
+> >   1215 |                         struct irdma_gen_ae_info ae_info;
+> >        |
+> > 
+> > Signed-off-by: Victor Erminpour <victor.erminpour@oracle.com>
+> >  drivers/infiniband/hw/irdma/hw.c    | 2 +-
+> >  drivers/infiniband/hw/irdma/utils.c | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/infiniband/hw/irdma/hw.c b/drivers/infiniband/hw/irdma/hw.c
+> > index 89234d04cc65..a41a3b128d0d 100644
+> > +++ b/drivers/infiniband/hw/irdma/hw.c
+> > @@ -267,8 +267,8 @@ static void irdma_process_aeq(struct irdma_pci_f *rf)
+> >  		}
+> > 
+> >  		switch (info->ae_id) {
+> > -			struct irdma_cm_node *cm_node;
+> >  		case IRDMA_AE_LLP_CONNECTION_ESTABLISHED:
+> > +			struct irdma_cm_node *cm_node;
+> >  			cm_node = iwqp->cm_node;
+> >  			if (cm_node->accept_pend) {
+> >  				atomic_dec(&cm_node->listener-
+> 
+> This doesn't compile.
+> 
+> drivers/infiniband/hw/irdma/hw.c: In function \u2018irdma_process_aeq\u2019:
+> drivers/infiniband/hw/irdma/hw.c:271:4: error: a label can only be part of a statement and a declaration is not a statement
+>   271 |    struct irdma_cm_node *cm_node;
+> 
+> Seems like we are accommodating for gcc12 bug since this C code is
+> legit?
 
-Hi Stephen,
-I am trying to see if I can reproduce this.
-Could you share the QEMU command line and pseries_le_defconfig?
-Latest kernel does not have pseries_le_defconfig so I assume you have
-your own version.
-Thanks!
-- Tong
+It might be legit, but it is nutzo and not our coding style.
+
+If the variable is used by many branches it should be declared at the
+top of the function.
+
+If it is used in one branch it should be as above, with the missing {}
+added.
+
+Jason

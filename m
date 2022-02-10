@@ -2,123 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8554B080B
+	by mail.lfdr.de (Postfix) with ESMTP id DC04D4B080C
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:20:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237271AbiBJIT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 03:19:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55240 "EHLO
+        id S237299AbiBJIU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 03:20:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233615AbiBJIT4 (ORCPT
+        with ESMTP id S233615AbiBJIUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 03:19:56 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BA1DA9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 00:19:57 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id A7F191F391;
-        Thu, 10 Feb 2022 08:19:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1644481195; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TLBGuj3WLicY9g1Tmc3UaqmxcEws/oyehgCnWEx0g+g=;
-        b=mb+aWqzk/IgwR3IwCtSKViYm9MwVDvgGZaBJlr0oUcQJC10sJppRy+/WznKA85ZZ1KNpP+
-        lPNNPbNps8H/UjqRlhpL3SeO+xI5YsGKmLg+KXrrzX70rBhStLyaK3uoCvTzxeg3KKLlEI
-        0BHrxwC/661wV9fdIrCTCJMey16IfBE=
-Received: from suse.cz (unknown [10.100.216.66])
+        Thu, 10 Feb 2022 03:20:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5391DA9;
+        Thu, 10 Feb 2022 00:20:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 4B7E5A3B81;
-        Thu, 10 Feb 2022 08:19:55 +0000 (UTC)
-Date:   Thu, 10 Feb 2022 09:19:54 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Vimal Agrawal <avimalin@gmail.com>,
-        Maninder Singh <maninder1.s@samsung.com>, rostedt@goodmis.org,
-        senozhatsky@chromium.org, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, akpm@linux-foundation.org,
-        wangkefeng.wang@huawei.com, mbenes@suse.cz, swboyd@chromium.org,
-        ojeda@kernel.org, linux-kernel@vger.kernel.org, will@kernel.org,
-        catalin.marinas@arm.com, Vaneet Narang <v.narang@samsung.com>,
-        Aaron Tomlin <atomlin@redhat.com>
-Subject: Re: [PATCH 1/1] kallsyms: print module name in %ps/S case when
- KALLSYMS is disabled
-Message-ID: <YgTKqoRIwahzWyh0@alley>
-References: <CGME20220201040100epcas5p180ef094058fc9c76b4b94d9d673fc5fc@epcas5p1.samsung.com>
- <20220201040044.1528568-1-maninder1.s@samsung.com>
- <20220209114038.GA8279@pathway.suse.cz>
- <YgRH7hwFC2AGISdP@bombadil.infradead.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D00BB82423;
+        Thu, 10 Feb 2022 08:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C442C004E1;
+        Thu, 10 Feb 2022 08:20:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644481215;
+        bh=8gIcfyW0sMk2anZv0r3OTynsNPwDNEkdR7Q4n+X25TA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VASQNFNAN2Xg9L8/Klk8/VrzOEmUx0wMjG2l+z74A2KESayDfgZ2ciFz8nJCH/93f
+         X+oZwtCEpF4rRrnbOPqj1w7nO4kUY0Qz+OZQ09xQyGr/TaO/rP50YMMvRLlaSeYYqD
+         qDoabWhqURNMnseklYF4Uf4lG6rSLHORINqWwFQw=
+Date:   Thu, 10 Feb 2022 09:20:12 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Konstantin Aladyshev <aladyshev22@gmail.com>,
+        Oskar Senft <osk@google.com>, openbmc@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] serial: 8250_aspeed_vuart: add PORT_ASPEED_VUART port
+ type
+Message-ID: <YgTKvIqTIOomFSsF@kroah.com>
+References: <20220209203414.23491-1-zev@bewilderbeest.net>
+ <YgTBennInxX3fE3X@kroah.com>
+ <YgTDm5qKUJyzciR2@hatter.bewilderbeest.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YgRH7hwFC2AGISdP@bombadil.infradead.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YgTDm5qKUJyzciR2@hatter.bewilderbeest.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-02-09 15:02:06, Luis Chamberlain wrote:
-> On Wed, Feb 09, 2022 at 12:40:38PM +0100, Petr Mladek wrote:
-> > > --- a/include/linux/kallsyms.h
-> > > +++ b/include/linux/kallsyms.h
-> > > @@ -163,6 +163,33 @@ static inline bool kallsyms_show_value(const struct cred *cred)
-> > >  	return false;
-> > >  }
-> > >  
-> > > +#ifdef CONFIG_MODULES
-> > > +static inline int fill_minimal_module_info(char *sym, int size, unsigned long value)
-> > > +{
-> > > +	struct module *mod;
-> > > +	unsigned long offset;
-> > > +	int ret = 0;
-> > > +
-> > > +	preempt_disable();
-> > > +	mod = __module_address(value);
-> > > +	if (mod) {
-> > > +		offset = value - (unsigned long)mod->core_layout.base;
-> > > +		snprintf(sym, size - 1, "0x%lx+0x%lx [%s]",
-> > > +				(unsigned long)mod->core_layout.base, offset, mod->name);
-> > > +
-> > > +		sym[size - 1] = '\0';
-> > > +		ret = 1;
-> > > +	}
-> > > +
-> > > +	preempt_enable();
-> > > +	return ret;
-> > > +}
+On Wed, Feb 09, 2022 at 11:49:47PM -0800, Zev Weiss wrote:
+> On Wed, Feb 09, 2022 at 11:40:42PM PST, Greg Kroah-Hartman wrote:
+> > On Wed, Feb 09, 2022 at 12:34:14PM -0800, Zev Weiss wrote:
+> > > Commit 54da3e381c2b ("serial: 8250_aspeed_vuart: use UPF_IOREMAP to
+> > > set up register mapping") fixed a bug that had, as a side-effect,
+> > > prevented the 8250_aspeed_vuart driver from enabling the VUART's
+> > > FIFOs.  However, fixing that (and hence enabling the FIFOs) has in
+> > > turn revealed what appears to be a hardware bug in the ASPEED VUART in
+> > > which the host-side THRE bit doesn't get if the BMC-side receive FIFO
+> > > trigger level is set to anything but one byte.  This causes problems
+> > > for polled-mode writes from the host -- for example, Linux kernel
+> > > console writes proceed at a glacial pace (less than 100 bytes per
+> > > second) because the write path waits for a 10ms timeout to expire
+> > > after every character instead of being able to continue on to the next
+> > > character upon seeing THRE asserted.  (GRUB behaves similarly.)
+> > > 
+> > > As a workaround, introduce a new port type for the ASPEED VUART that's
+> > > identical to PORT_16550A as it had previously been using, but with
+> > > UART_FCR_R_TRIG_00 instead to set the receive FIFO trigger level to
+> > > one byte, which (experimentally) seems to avoid the problematic THRE
+> > > behavior.
+> > > 
+> > > Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> > > Tested-by: Konstantin Aladyshev <aladyshev22@gmail.com>
 > > 
-> > It looks too big for an inlined function. Anyway, we will need
-> > something even more complex, see below.
+> > Do we need a "Fixes:" tag here as well?
 > 
-> Interesting, these observations might apply to Vimal's work as well [0].
+> I was wondering the same -- I left it out because it didn't seem like it was
+> strictly a bug in the earlier commit that's really being fixed per se, but
+> perhaps that's an overly pedantic distinction.  I can certainly add it if
+> you'd prefer.
+
+This obviously fixes an issue, if you don't have a specific commit that
+caused it, a cc: stable@vger.kernel.org should be added so we know to
+backport this to all stable kernels.
+
 > 
-> [0] https://lkml.kernel.org/r/YgKyC4ZRud0JW1PF@bombadil.infradead.org
+> > 
+> > > ---
+> > >  drivers/tty/serial/8250/8250_aspeed_vuart.c | 2 +-
+> > >  drivers/tty/serial/8250/8250_port.c         | 8 ++++++++
+> > >  include/uapi/linux/serial_core.h            | 3 +++
+> > >  3 files changed, 12 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/tty/serial/8250/8250_aspeed_vuart.c b/drivers/tty/serial/8250/8250_aspeed_vuart.c
+> > > index 2350fb3bb5e4..c2cecc6f47db 100644
+> > > --- a/drivers/tty/serial/8250/8250_aspeed_vuart.c
+> > > +++ b/drivers/tty/serial/8250/8250_aspeed_vuart.c
+> > > @@ -487,7 +487,7 @@ static int aspeed_vuart_probe(struct platform_device *pdev)
+> > >  	port.port.irq = irq_of_parse_and_map(np, 0);
+> > >  	port.port.handle_irq = aspeed_vuart_handle_irq;
+> > >  	port.port.iotype = UPIO_MEM;
+> > > -	port.port.type = PORT_16550A;
+> > > +	port.port.type = PORT_ASPEED_VUART;
+> > >  	port.port.uartclk = clk;
+> > >  	port.port.flags = UPF_SHARE_IRQ | UPF_BOOT_AUTOCONF | UPF_IOREMAP
+> > >  		| UPF_FIXED_PORT | UPF_FIXED_TYPE | UPF_NO_THRE_TEST;
+> > > diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+> > > index 3b12bfc1ed67..973870ebff69 100644
+> > > --- a/drivers/tty/serial/8250/8250_port.c
+> > > +++ b/drivers/tty/serial/8250/8250_port.c
+> > > @@ -307,6 +307,14 @@ static const struct serial8250_config uart_config[] = {
+> > >  		.rxtrig_bytes	= {1, 32, 64, 112},
+> > >  		.flags		= UART_CAP_FIFO | UART_CAP_SLEEP,
+> > >  	},
+> > > +	[PORT_ASPEED_VUART] = {
+> > > +		.name		= "ASPEED VUART",
+> > > +		.fifo_size	= 16,
+> > > +		.tx_loadsz	= 16,
+> > > +		.fcr		= UART_FCR_ENABLE_FIFO | UART_FCR_R_TRIG_00,
+> > > +		.rxtrig_bytes	= {1, 4, 8, 14},
+> > > +		.flags		= UART_CAP_FIFO,
+> > > +	},
+> > >  };
+> > > 
+> > >  /* Uart divisor latch read */
+> > > diff --git a/include/uapi/linux/serial_core.h b/include/uapi/linux/serial_core.h
+> > > index c4042dcfdc0c..cd11748833e6 100644
+> > > --- a/include/uapi/linux/serial_core.h
+> > > +++ b/include/uapi/linux/serial_core.h
+> > > @@ -274,4 +274,7 @@
+> > >  /* Freescale LINFlexD UART */
+> > >  #define PORT_LINFLEXUART	122
+> > > 
+> > > +/* ASPEED AST2x00 virtual UART */
+> > > +#define PORT_ASPEED_VUART	123
+> > 
+> > Why does this value have to be in a uapi header file?  What userspace
+> > tool is going to need this?
+> > 
+> 
+> I only put it there because that was where all the other port type constants
+> were defined, and wondered the same thing about the lot of them.  Is there a
+> userspace tool that makes use of any of these?
 
-Honestly, I am not sure what is the best practice. My understanding is
-that inlined functions are used primary for speed up at runtime.
+Not really, please don't add it if you do not require it.
 
-Anyway, there is the huge patchset that tries to optimize kernel build
-time by optimizing headers, see
-https://lore.kernel.org/lkml/YdIfz+LMewetSaEB@gmail.com/T/
+thanks,
 
-This is from the cover letter:
-
-<paste>
-Techniques used by the fast-headers tree to reduce header size & dependencies:
-[...]
- - Uninlining: there's a number of unnecessary inline functions that also
-   couple otherwise unrelated headers to each other. The fast-headers tree
-   contains over 100 uninlining commits.
-</paste>
-
-It is probably less important for some local includes. I am not sure how
-widely is kallsyms.h included.
-
-Best Regards,
-Petr
+greg k-h

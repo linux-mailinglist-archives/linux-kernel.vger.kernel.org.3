@@ -2,105 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 654FC4B0352
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F13214B0385
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiBJCZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 21:25:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41854 "EHLO
+        id S231482AbiBJCn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 21:43:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiBJCZQ (ORCPT
+        with ESMTP id S231393AbiBJCny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 21:25:16 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7904822BCC;
-        Wed,  9 Feb 2022 18:25:17 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Wed, 9 Feb 2022 21:43:54 -0500
+X-Greylist: delayed 674 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 18:43:56 PST
+Received: from h2.fbrelay.privateemail.com (h2.fbrelay.privateemail.com [131.153.2.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9612F2409A
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 18:43:56 -0800 (PST)
+Received: from MTA-06-3.privateemail.com (mta-06-1.privateemail.com [68.65.122.26])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvLF41rmvz4xcZ;
-        Thu, 10 Feb 2022 13:25:12 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644459913;
-        bh=D+DjfAKMXi5ZeAZiu2dE72zIwqk88EIi86SvqawOGw8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=W6Jfedq8r5SZVRHpVoRk67DH9Fa4nwuN+h8A1CELYz+0QVAC3tkLYyU5TXBoMDeSp
-         Qq/fmHvAUqxqUD+YWrgyrh7efCTRwvnor+ttJm1UnVe+WzNsWxc/ROZh2vy+S4JJjM
-         MGassANnWlFmf46Radn9zbrtPz8Clj3JVspbLDzcAx7jaQ/NoJJBtiHadI3MqKOhuG
-         RpbnkMwhiOfA4JMfRw2LDREKmeJBzZGfoEcPSDJmr6gb8G5nS67NADQ/AFFE3SCZmc
-         dSe7z1XcfT7xUMF4aAtVuuFHvFAFy3c8phrhPtjBahCF20z3kcbtWUy2j5xDUWgtJb
-         hcBrWEoIkaeAg==
-Date:   Thu, 10 Feb 2022 13:25:06 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>, Guenter Roeck <linux@roeck-us.net>
-Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: linux-next: manual merge of the spi tree with the hwmon-staging
- tree
-Message-ID: <20220210132506.051144fb@canb.auug.org.au>
+        by h1.fbrelay.privateemail.com (Postfix) with ESMTPS id 10F941800A77
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 21:32:42 -0500 (EST)
+Received: from mta-06.privateemail.com (localhost [127.0.0.1])
+        by mta-06.privateemail.com (Postfix) with ESMTP id BA63018000AD;
+        Wed,  9 Feb 2022 21:32:40 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mebeim.net; s=default;
+        t=1644460360; bh=bat2b2vczdAO3gG1eSLsoPHTCx/Y+HGptLuu8z8kW/g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ztPswVJK3qLcaydP8DO220wPp+b+Tv86I+fCBCl9BubJ9aY9NfVJaxpegp3/XvoHd
+         QWCOFCwfB+VfW6yiuonWij5IznhHkvDhvTLjQVdF/mtzhhlLHVuI/p71jDkrRg8jlC
+         KbWS/CgjOBmbcuTAGSQdnGc/1gxREEpH54It6F404FdadAqozuoQ0WdRWS6yNWNSe7
+         oLGxFmQsFIsCr4RmLoaWb6nVxvPoCNUIoVIR4Fq56Rp6tml+mK6yiPNUd/mNkHHgBj
+         uin3doYw4IBI2jB/KJX2S6EsziGbyfRNsplBnkNgsOf75kCYcB/WAJqO+LpKHwftAk
+         fdgFekeW6v26g==
+Received: from warhead.local (unknown [10.20.151.143])
+        by mta-06.privateemail.com (Postfix) with ESMTPA id 06FC818000A1;
+        Wed,  9 Feb 2022 21:32:38 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mebeim.net; s=default;
+        t=1644460360; bh=bat2b2vczdAO3gG1eSLsoPHTCx/Y+HGptLuu8z8kW/g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ztPswVJK3qLcaydP8DO220wPp+b+Tv86I+fCBCl9BubJ9aY9NfVJaxpegp3/XvoHd
+         QWCOFCwfB+VfW6yiuonWij5IznhHkvDhvTLjQVdF/mtzhhlLHVuI/p71jDkrRg8jlC
+         KbWS/CgjOBmbcuTAGSQdnGc/1gxREEpH54It6F404FdadAqozuoQ0WdRWS6yNWNSe7
+         oLGxFmQsFIsCr4RmLoaWb6nVxvPoCNUIoVIR4Fq56Rp6tml+mK6yiPNUd/mNkHHgBj
+         uin3doYw4IBI2jB/KJX2S6EsziGbyfRNsplBnkNgsOf75kCYcB/WAJqO+LpKHwftAk
+         fdgFekeW6v26g==
+From:   Marco Bonelli <marco@mebeim.net>
+To:     dwmw2@infradead.org
+Cc:     Marco Bonelli <marco@mebeim.net>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iommu/vt-d: Add missing "__init" for rmrr_sanity_check()
+Date:   Thu, 10 Feb 2022 03:31:41 +0100
+Message-Id: <20220210023141.9208-1-marco@mebeim.net>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pZxQmqOA4f0WuT9GPIXjHtV";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/pZxQmqOA4f0WuT9GPIXjHtV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+rmrr_sanity_check() calls arch_rmrr_sanity_check(), which is marked as
+"__init". Add the annotation for rmrr_sanity_check() too. This function is
+currently only called from dmar_parse_one_rmrr() which is also "__init".
 
-Hi all,
+Signed-off-by: Marco Bonelli <marco@mebeim.net>
+---
+ drivers/iommu/intel/iommu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Today's linux-next merge of the spi tree got a conflict in:
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 92fea3fbbb11..7a308fd8d4b9 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -3691,7 +3691,7 @@ static void __init init_iommu_pm_ops(void)
+ static inline void init_iommu_pm_ops(void) {}
+ #endif	/* CONFIG_PM */
+ 
+-static int rmrr_sanity_check(struct acpi_dmar_reserved_memory *rmrr)
++static int __init rmrr_sanity_check(struct acpi_dmar_reserved_memory *rmrr)
+ {
+ 	if (!IS_ALIGNED(rmrr->base_address, PAGE_SIZE) ||
+ 	    !IS_ALIGNED(rmrr->end_address + 1, PAGE_SIZE) ||
+-- 
+2.30.2
 
-  drivers/hwmon/adt7310.c
-
-between commits:
-
-  9c950b125f78 ("hwmon: (adt7x10) Remove empty driver removal callback")
-
-from the hwmon-staging tree and commit:
-
-  a0386bba7093 ("spi: make remove callback a void function")
-
-from the spi tree.
-
-I fixed it up (I just used the former version) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
-
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/pZxQmqOA4f0WuT9GPIXjHtV
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIEd4IACgkQAVBC80lX
-0Gz+XggAhrfUjMFc0bg3rXBvjg7x8CqRjr9IVh5JO3IPPsRGZfcxAa1XsVoZ22IA
-Pepvi5L47TFuxW/SQF5g3IlV4fzM5URGcrBpkV6K1qUwIpU3glXGmny9qlp4YPy1
-tSy4MfoiAi4oWx5e9h19saPvyXGNbDMy5v9viEsbTnhmxhDlnScXqRxGB9daRj+X
-mhdZ2uncZoliWF9cJMl1/O6laPISMD2rZrslPZu4oLBemZP4GFF5ii7bDSr4fXUH
-fB14dlJuB4jHjJ9pCSYPGff34st1vAHti0zA2TX1ztA0FVMGOM+jKyDlLF5y5DmA
-n8h7q/t62gQnlRF3tWRJcW4r4zrNYg==
-=SiyM
------END PGP SIGNATURE-----
-
---Sig_/pZxQmqOA4f0WuT9GPIXjHtV--

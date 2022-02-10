@@ -2,97 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DECA4B1312
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6864B133D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:42:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244419AbiBJQjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 11:39:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51072 "EHLO
+        id S244456AbiBJQkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 11:40:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiBJQjm (ORCPT
+        with ESMTP id S244474AbiBJQk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 11:39:42 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652621A8;
-        Thu, 10 Feb 2022 08:39:43 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id 10so2303324plj.1;
-        Thu, 10 Feb 2022 08:39:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=VyCvMQvGVY3kjERzylhRvh9eJlWVE5dyq2500svQ1kU=;
-        b=d8Bk8D7R2QV4lPQwQRa9qVRlrjTslInRci86Cq8Y5GNky2l5t8OEne2EZxM3ML5p4X
-         jxIVXKW0BwRaHOGDPBlYJW2FRum2UTwFz/mbe8+Jaqa4RJzfAUebfcZ/euV+kusRR6Lu
-         ln/PrH81nG0ViGbdrf/zH9HQe2HGTbjWiFSroPuw8EJSBhYrVJt1+6+ILtVyh0si/Lyk
-         TBZksXwTtifJXsFcQAYna71yZw0F/hhos7sPHzQPv5dk7DRC0v53Xt1mir/UrDav0V/x
-         5bM678lUoBhpfTHYCnzOPbRju0OZ7+b4jdKuHBRrStoDzImW+SHDF1oxWzKKZhGyhIyB
-         JCUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VyCvMQvGVY3kjERzylhRvh9eJlWVE5dyq2500svQ1kU=;
-        b=4BzjDFWnGRIdixiJT8QxHf9YlP78JrT6AXMDpgycu5ooo1+lQe/ZUAwIDC049bfS1q
-         p7lK3IZtGXvXuNliR2N8hklQSRICNNfKvYf6lHsnPx+6NCpgtBOzTCZiQAkLLQRN07QD
-         pEAYDPq14C9XR8h5C7Vkb+ecLt9XRp6bACAvv7/A68CvzCg1I3O355FfW0iWFNz4Mp/d
-         gWMqB8bktcKnqov/N+OE3H9XMeI64YAeHqCXc/p/tsy91jYuiidSyg+sG+lGJe6eIbh7
-         RvM6mkUAO9UZYhDGRybe/G+rhuvyTrqO1j/yMaVR7a5GMDj25df8h6zB6YS+3kSRfzYb
-         yadQ==
-X-Gm-Message-State: AOAM530KOihjTuPPCeDOD8ydAfKAaaLdUSJv+Yy05/39lqz0GY4jeBKM
-        5qxexFtbEqb6SJbGBg+ewCg=
-X-Google-Smtp-Source: ABdhPJzhSEdlxQmJY5qsBi6VTBQgg4dInmdj2X7NVorqBfzv4Q6bf37GrGNxmKssnGJee04i9DPkgQ==
-X-Received: by 2002:a17:90a:688e:: with SMTP id a14mr3696420pjd.63.1644511182802;
-        Thu, 10 Feb 2022 08:39:42 -0800 (PST)
-Received: from [192.168.86.21] (c-73-241-150-58.hsd1.ca.comcast.net. [73.241.150.58])
-        by smtp.gmail.com with ESMTPSA id d16sm17367918pfj.1.2022.02.10.08.39.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 08:39:42 -0800 (PST)
-Message-ID: <9bb39c37-0fc9-f4a7-dd4b-897f0a8fae18@gmail.com>
-Date:   Thu, 10 Feb 2022 08:39:40 -0800
+        Thu, 10 Feb 2022 11:40:29 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7505397;
+        Thu, 10 Feb 2022 08:40:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=B/ZQ0AKhexUA/i80GDAohIZZnfnEDMlKumXUHN+Riyk=; b=jUMqRmx4MztS6mYTp3RKIoRW+Z
+        B621JnxCATZFMGNZhYuit7kcbXJnZZqmCFJL3b4YMXmv3e+A4LbHzfITEdKd+Qw499jie6/fIq3rG
+        07abQuGcry2bBg3ImJVN/hmanL3S0IHN0IxSR7eXIRUM3blMuLj6KUMIaG2gWU6dr/JiylKkdNQIo
+        vCHkrzM2HiVwpGa/cp7I/1GSsMf8sI7jdHbs8HE3EBk4cYyb9r2TSSzq5N+difEmKcX5MYXZ1nLm0
+        Tj+W9wxhTVyhAMo1vqrRyQDyVq/PJiVZKoDG19He+4j8vC1aJIcnLGkF5xdrZ/CVcKpIY4DFGkDi1
+        DRrU5aKw==;
+Received: from 201-27-34-10.dsl.telesp.net.br ([201.27.34.10] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nICUL-000BX5-Fi; Thu, 10 Feb 2022 17:40:09 +0100
+Message-ID: <7b45bc2b-f74d-8604-bd8a-4930f7b8f926@igalia.com>
+Date:   Thu, 10 Feb 2022 13:39:50 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [syzbot] WARNING in mroute_clean_tables
+Subject: Re: [PATCH V4] notifier/panic: Introduce panic_notifier_filter
 Content-Language: en-US
-To:     syzbot <syzbot+a7c030a05218db921de5@syzkaller.appspotmail.com>,
-        davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, yoshfuji@linux-ipv6.org
-References: <000000000000ad4e9c05d7aa7064@google.com>
-From:   Eric Dumazet <erdnetdev@gmail.com>
-In-Reply-To: <000000000000ad4e9c05d7aa7064@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     "bhe@redhat.com" <bhe@redhat.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        "dyoung@redhat.com" <dyoung@redhat.com>,
+        "vgoyal@redhat.com" <vgoyal@redhat.com>,
+        "d.hatayama@fujitsu.com" <d.hatayama@fujitsu.com>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "halves@canonical.com" <halves@canonical.com>,
+        "kernel@gpiccoli.net" <kernel@gpiccoli.net>, mhiramat@kernel.org,
+        d.hatayama@jp.fujitsu.com
+References: <20220108153451.195121-1-gpiccoli@igalia.com>
+ <TYAPR01MB6507D06BA6D32218F6E88198955F9@TYAPR01MB6507.jpnprd01.prod.outlook.com>
+ <fda509a5-ea0d-4d1d-a1c1-ca5e80010fc0@igalia.com>
+ <TYAPR01MB6507D9747647685B554B8F8F955F9@TYAPR01MB6507.jpnprd01.prod.outlook.com>
+ <fb5e66b6-049a-22ab-5913-a04cc302b629@igalia.com> <YfPxvzSzDLjO5ldp@alley>
+ <e2d39675-5df6-73fb-fa24-df906a97ee50@igalia.com>
+ <YgMLd+avxyBplfk2@MiWiFi-R3L-srv>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YgMLd+avxyBplfk2@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 08/02/2022 21:31, bhe@redhat.com wrote:
+> [...]
+>> So, what are the opinions from kdump maintainers about this idea?
+>> Baoquan / Vivek / Dave, does it make sense to you? Do you have any
+>> suggestions/concerns to add on top of Petr draft?
+> 
+> Yeah, it's reasonable. As I replied to Michael in another thread, I
+> think splitting the current notifier list is a good idea. At least the
+> code to archieve hyper-V's goal with panic_notifier is a little odd and
+> should be taken out and execute w/o conditional before kdump, and maybe
+> some others Petr has combed out.
+> 
+> For those which will be switched on with the need of adding panic_notifier
+> or panic_print into cmdline, the heavy users like HATAYAMA and Masa can
+> help check.
+> 
+> For Petr's draft code, does it mean hyper-V need another knob to trigger
+> the needed notifiers? Will you go with the draft direclty? Hyper-V now
+> runs panic notifiers by default, just a reminder.
+> 
 
-On 2/10/22 06:05, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
->
-> HEAD commit:    e5313968c41b Merge branch 'Split bpf_sk_lookup remote_port..
-> git tree:       bpf-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=141c859a700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c40b67275bfe2a58
-> dashboard link: https://syzkaller.appspot.com/bug?extid=a7c030a05218db921de5
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=130486f8700000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16d9f758700000
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+a7c030a05218db921de5@syzkaller.appspotmail.com
+Hi Baoquan, thanks for your comments.
+
+I'll need to study the Hyper-V code and how it's done today - I guess
+most part of this implementation will be studying the notifiers we have
+currently, split them among the 3 new notifiers and comb them into
+patches, so they can be reviewed for all relevant maintainers (who know
+the code we are changing).
+
+I'm not sure if I go directly with the draft, likely it'll have some
+changes, but the draft should be the skeleton of the new implementation.
+Specially if you/other kdump maintainers agree it's a good idea =)
+
+Cheers,
 
 
-#syz fix: ipmr,ip6mr: acquire RTNL before calling ip[6]mr_free_table() 
-on failure path
-
-
+Guilherme

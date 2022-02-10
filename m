@@ -2,112 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C36B84B18B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0037D4B18C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:46:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345191AbiBJWpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 17:45:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34316 "EHLO
+        id S1345211AbiBJWqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 17:46:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237923AbiBJWpG (ORCPT
+        with ESMTP id S1345209AbiBJWqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:45:06 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A35732737
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:45:05 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-320-tnvpk8ZBMl6vvx44NdPNoA-1; Thu, 10 Feb 2022 22:45:02 +0000
-X-MC-Unique: tnvpk8ZBMl6vvx44NdPNoA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 10 Feb 2022 22:45:00 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 10 Feb 2022 22:45:00 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Dave Hansen' <dave.hansen@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Thu, 10 Feb 2022 17:46:47 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6872C5F45
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:46:47 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id b5so5579600ile.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:46:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=B/UXIV3zf866V2KVi395pqDMtj3eD/83YXll34yD54w=;
+        b=BDz7AdxsRIcraonOF4GIu+SUGbj1wkvZhku3SLPoSuwmlYMbKzH/x/rw21Zq2qZGN/
+         RqnAHnf0EMjXBB/sYR35dmGGeYeSkNIdE78z1g3sh8hGsS4YXwqr7d54V0YXKW9b5Z7y
+         h3UK4GKzi0cKc8CQOElBzKDKu3ylqWx4Ex2+w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=B/UXIV3zf866V2KVi395pqDMtj3eD/83YXll34yD54w=;
+        b=jOZaKWX4KHCz4Xa1WL0s27FOcZITodByrgQlspaDgSv9tPghf/8SwPvD6DNDNpszeS
+         KbwbsL+FuIIHQdTkzDMtn92cXlFNbNKCozjUoUJG9sl4wNkDUBTzRG4EIhm+G+kwvxkS
+         jgJev33jls0fkF5bBas6O51G7YOCz+c0fqLYjNUNVfqcdY7LvbqnISUS2OinXMVFx+E4
+         CB9mmrOWt/InRlR1rvfCYnpY8MGHGGPR946HoMuclpPdCkqniOU5h/I+0YRr8jS9acnc
+         t7gVMGSwNB1trAqG5VoZZGOFn3DwS6NSGg9y4u5Hil5QHTGBvu6x6y0pGoAZCoFg9guY
+         TCFg==
+X-Gm-Message-State: AOAM5329VuITD/9o7svaXN5ePAx4r1ErltAB6jR/AM8YW+eoBmWz5SlR
+        3J4P/MYA59Y1hVhZCInt31dqLQ==
+X-Google-Smtp-Source: ABdhPJx4+vBo900qqkINhcheGliA9WQQ0yV4w/bhniIOWepwfYg1sRffUB0hU4xb+Z0iqz9KI3p0bQ==
+X-Received: by 2002:a92:1311:: with SMTP id 17mr5118958ilt.42.1644533206807;
+        Thu, 10 Feb 2022 14:46:46 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id c2sm8558041ilh.43.2022.02.10.14.46.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 14:46:46 -0800 (PST)
+Subject: Re: [PATCH 1/2] selftests: x86: allow expansion of $(CC)
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "Eugene Syromiatnikov" <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        "joao.moreira@intel.com" <joao.moreira@intel.com>,
-        John Allen <john.allen@amd.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "eranian@google.com" <eranian@google.com>
-CC:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: RE: [PATCH 20/35] mm: Update can_follow_write_pte() for shadow stack
-Thread-Topic: [PATCH 20/35] mm: Update can_follow_write_pte() for shadow stack
-Thread-Index: AQHYHgex3kDJpMh0kE6CJu25wcKQLKyNYu3Q
-Date:   Thu, 10 Feb 2022 22:45:00 +0000
-Message-ID: <cd5e3eb792474e41bca1bd04d1747c9a@AcuMS.aculab.com>
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <20220130211838.8382-21-rick.p.edgecombe@intel.com>
- <37426b64-2139-dc24-c7be-f3cefa4f0dd9@intel.com>
-In-Reply-To: <37426b64-2139-dc24-c7be-f3cefa4f0dd9@intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Shuah Khan <shuah@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "open list:INTEL SGX" <linux-sgx@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     kernel@collabora.com, kernelci@groups.io,
+        "kernelci.org bot" <bot@kernelci.org>
+References: <20220210190642.1477814-1-usama.anjum@collabora.com>
+ <20220210190642.1477814-2-usama.anjum@collabora.com>
+ <a34f2fc8-f4aa-fef4-d1dd-f3fdb5114f72@linuxfoundation.org>
+ <81619c13-41e6-3aab-4cf7-9b6d5a11e05c@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <08b8b886-4ec4-994a-4a4b-0da30766df1e@linuxfoundation.org>
+Date:   Thu, 10 Feb 2022 15:46:45 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+In-Reply-To: <81619c13-41e6-3aab-4cf7-9b6d5a11e05c@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogRGF2ZSBIYW5zZW4NCj4gU2VudDogMDkgRmVicnVhcnkgMjAyMiAyMjo1Mg0KPiANCj4g
-T24gMS8zMC8yMiAxMzoxOCwgUmljayBFZGdlY29tYmUgd3JvdGU6DQo+ID4gTGlrZSBhIHdyaXRh
-YmxlIGRhdGEgcGFnZSwgYSBzaGFkb3cgc3RhY2sgcGFnZSBpcyB3cml0YWJsZSwgYW5kIGJlY29t
-ZXMNCj4gPiByZWFkLW9ubHkgZHVyaW5nIGNvcHktb24td3JpdGUsIGJ1dCBpdCBpcyBhbHdheXMg
-ZGlydHkuDQo+IA0KPiBPbmUgb3RoZXIgdGhpbmcuLi4NCj4gDQo+IFRoZSBsYW5ndWFnZSBpbiB0
-aGVzZSBjaGFuZ2Vsb2dzIGlzIGEgYml0IHNsb3BweS4gIEZvciBpbnN0YW5jZSwgd2hhdA0KPiBk
-b2VzICJhbHdheXMgZGlydHkiIG1lYW4gaGVyZT8gIHB0ZV9kaXJ0eSgpPyAgT3Igc3RyaWN0bHkg
-X1BBR0VfRElSVFk/DQo+IA0KPiBJbiBvdGhlciB3b3JkcywgbG9naWNhbGx5IGRpcnR5LCBvciBs
-aXRlcmFsbHkgImhhcyAqdGhlKiBkaXJ0eSBiaXQgc2V0Ij8NCg0KRG9lc24ndCBDT1cgaGF2ZSB0
-byBzZXQgaXQgcmVhZG9ubHkgLSBzbyB0aGF0IHRoZSBhY2Nlc3MgZmF1bHRzLg0KQW5kIHRoZW4g
-c2V0IHRoZSBmYXVsdCBjb2RlIHNldCBpdCByZWFkb25seStkaXJ0eSAod2l0aG91dCB3cml0ZSkN
-CnRvIGFsbG93IHRoZSBzaGFkb3cgc3RhY2sgYWNjZXNzZXMgdG8gbm90LWZhdWx0Lg0KDQpPciBh
-bSBJIG1pcy1ndWVzc2luZyB3aGF0IHRoZSBkb2NzIGFjdHVhbGx5IHNheT8NCg0KCURhdmlkDQoN
-Ci0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJt
-LCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChX
-YWxlcykNCg==
+On 2/10/22 3:41 PM, Muhammad Usama Anjum wrote:
+> On 2/11/22 1:51 AM, Shuah Khan wrote:
+>> On 2/10/22 12:06 PM, Muhammad Usama Anjum wrote:
+>>> CC can have multiple sub-strings like "ccache gcc". Erorr pops up if
+>>> it is treated as single string and double quote are used around it.
+>>> This can be fixed by removing the quotes and not treating CC a single
+>>> string.
+>>>
+>>> Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture
+>>> detection")
+>>> Reported-by: "kernelci.org bot" <bot@kernelci.org>
+>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>> ---
+>>>    tools/testing/selftests/x86/check_cc.sh | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/tools/testing/selftests/x86/check_cc.sh
+>>> b/tools/testing/selftests/x86/check_cc.sh
+>>> index 3e2089c8cf549..aff2c15018b53 100755
+>>> --- a/tools/testing/selftests/x86/check_cc.sh
+>>> +++ b/tools/testing/selftests/x86/check_cc.sh
+>>> @@ -7,7 +7,7 @@ CC="$1"
+>>>    TESTPROG="$2"
+>>>    shift 2
+>>>    -if "$CC" -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
+>>> +if $CC -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
+>>>        echo 1
+>>>    else
+>>>        echo 0
+>>>
+>>
+>> The intent is testing if $CC is set. Does this change work when
+>> $CC is not set?
+>>
+> Yeah, it works. I've added a debug variable inside sgx/Makefile and it
+> is detecting empty argument correctly as well.
+> 
 
+Sounds good.
+
+thanks,
+-- Shuah

@@ -2,61 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F67C4B0E58
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8394B4B0E5A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:24:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242144AbiBJNXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 08:23:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51986 "EHLO
+        id S242151AbiBJNYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 08:24:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237587AbiBJNXf (ORCPT
+        with ESMTP id S237587AbiBJNYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 08:23:35 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77628195;
-        Thu, 10 Feb 2022 05:23:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644499416; x=1676035416;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=xaNbbSHH+Oj7f0ul4xNRnJxNvPSGLv4NgNZTbVdjjnc=;
-  b=dVlJswngNgiSDMOvl4v7yxuTdzPe9N810sPJsBD6VKv3f026nOiomc5o
-   cJ8m179rddLCprPA6dN0uID7KVFoQeCQv/ezbNtk5APDQ0Lb50YPVBW3N
-   i81C0fKZ6uWC1202ylvttKP1ozEVkmVgG7TwGBbttE7itXKV0gahenpFy
-   R+pC1TIu/UsVdbDWCsUC03yus/itQ9oV8yr1VuWWwV2O3YpYb0DJwjgtf
-   deO/cJdYpb9WdaawcoTfWwZTQE09Lr1CjTb+TyO2nl7urIWtqGkxm6YPt
-   d01HG90+qk/4ySDCfJEsJJJ1AIQs4Iv2DzPfctQOgfivRAUhmRFkzJhaa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="312774231"
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="312774231"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 05:23:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="633663096"
-Received: from chenyu-dev.sh.intel.com ([10.239.158.61])
-  by orsmga004.jf.intel.com with ESMTP; 10 Feb 2022 05:23:33 -0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     intel-wired-lan@lists.osuosl.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Chen Yu <yu.c.chen@intel.com>,
-        Todd Brandt <todd.e.brandt@intel.com>
-Subject: [PATCH v2] e1000e: Print PHY register address when MDI read/write fails
-Date:   Thu, 10 Feb 2022 21:22:56 +0800
-Message-Id: <20220210132256.53589-1-yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 10 Feb 2022 08:24:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956BC1B5;
+        Thu, 10 Feb 2022 05:24:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41AB7B82542;
+        Thu, 10 Feb 2022 13:24:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D97DEC004E1;
+        Thu, 10 Feb 2022 13:24:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644499481;
+        bh=ViynvLIQDsJVAJBLbYN5w/IOJ3P4Uxv4v6juOv+xZyk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gItkCPtKoy6GdMXg82CIa87ENm4a3P3P9M+aF0xm3hfzRif0qZPfQgr+UnNMZL/Ds
+         KAYO/5+G2nfRuMg44tsmx8PYtt2PO5xWuCiuJEwGvj+W4PO9jAt2Kn2oG8B026iKpr
+         pkQfi/N8iQgdy9vsOwLgj/ljjroVLCvUCPJA6tJ+HuvjHhGMPBj1WZCPm5M/rcboiS
+         Y0NR/iF09U+VYu4gj5OoD9Tkj9YYZ/14obS7bOXYXxYKAiEx7vODQIwKXAO+LunibS
+         08Y7YOtWxrrBoD5YDKwHLYy5H42R3VcZxKa5ThCJWKC0ZH0eblm/nx/5hrjrv4SAiu
+         lTh2xd9mmXKyQ==
+Date:   Thu, 10 Feb 2022 13:24:34 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Apertis package maintainers <packagers@lists.apertis.org>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
+        ariel.dalessandro@collabora.com, festevam@gmail.com,
+        krzysztof.kozlowski@canonical.com, lgirdwood@gmail.com,
+        michael@amarulasolutions.com, robh+dt@kernel.org,
+        s.hauer@pengutronix.de, shawnguo@kernel.org
+Subject: Re: [PATCH 1/2] ASoC: bindings: fsl-asoc-card: Add compatible for
+ tlv320aic31xx codec
+Message-ID: <YgUSEvMGMoSQYy5v@sirena.org.uk>
+References: <20220207164946.558862-1-packagers@lists.apertis.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CYrnMS08Bmr4w452"
+Content-Disposition: inline
+In-Reply-To: <20220207164946.558862-1-packagers@lists.apertis.org>
+X-Cookie: Only God can make random selections.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,60 +62,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is occasional suspend error from e1000e which blocks the
-system from further suspending. And the issue was found on
-a WhiskeyLake-U platform with I219-V:
 
-[   20.078957] PM: pci_pm_suspend(): e1000e_pm_suspend+0x0/0x780 [e1000e] returns -2
-[   20.078970] PM: dpm_run_callback(): pci_pm_suspend+0x0/0x170 returns -2
-[   20.078974] e1000e 0000:00:1f.6: PM: pci_pm_suspend+0x0/0x170 returned -2 after 371012 usecs
-[   20.078978] e1000e 0000:00:1f.6: PM: failed to suspend async: error -2
+--CYrnMS08Bmr4w452
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-According to the code flow, this might be caused by broken MDI read/write
-to PHY registers. However currently the code does not tell us which
-register is broken. Thus enhance the debug information to print the
-offender PHY register. So the next the issue is reproduced, this
-information could be used for narrow down.
+On Mon, Feb 07, 2022 at 01:49:45PM -0300, Apertis package maintainers wrote:
+> From: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+>=20
+> Commit 8c9b9cfb7724 ("ASoC: fsl-asoc-card: Support
+> fsl,imx-audio-tlv320aic31xx codec")' added support for tlv320aic31xx
+> codec to fsl-asoc-card, but missed the related device-tree compatible
+> string documentation. Fix this.
+>=20
+> Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+> ---
 
-Acked-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Reported-by: Todd Brandt <todd.e.brandt@intel.com>
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
----
- drivers/net/ethernet/intel/e1000e/phy.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+This has a signoff from Ariel but the mail comes from something called
+"Apertis package maintainers" and I really can't tell if there's a good
+signoff chain here, please see Documentation/process/submitting-patches.rst
+for details on what this is and why it's important.  The submission
+really needs to come from an actual person who's providing a signoff.
 
-diff --git a/drivers/net/ethernet/intel/e1000e/phy.c b/drivers/net/ethernet/intel/e1000e/phy.c
-index 0f0efee5fc8e..fd07c3679bb1 100644
---- a/drivers/net/ethernet/intel/e1000e/phy.c
-+++ b/drivers/net/ethernet/intel/e1000e/phy.c
-@@ -146,11 +146,11 @@ s32 e1000e_read_phy_reg_mdic(struct e1000_hw *hw, u32 offset, u16 *data)
- 			break;
- 	}
- 	if (!(mdic & E1000_MDIC_READY)) {
--		e_dbg("MDI Read did not complete\n");
-+		e_dbg("MDI Read PHY Reg Address %d did not complete\n", offset);
- 		return -E1000_ERR_PHY;
- 	}
- 	if (mdic & E1000_MDIC_ERROR) {
--		e_dbg("MDI Error\n");
-+		e_dbg("MDI Read PHY Reg Address %d Error\n", offset);
- 		return -E1000_ERR_PHY;
- 	}
- 	if (((mdic & E1000_MDIC_REG_MASK) >> E1000_MDIC_REG_SHIFT) != offset) {
-@@ -210,11 +210,11 @@ s32 e1000e_write_phy_reg_mdic(struct e1000_hw *hw, u32 offset, u16 data)
- 			break;
- 	}
- 	if (!(mdic & E1000_MDIC_READY)) {
--		e_dbg("MDI Write did not complete\n");
-+		e_dbg("MDI Write PHY Reg Address %d did not complete\n", offset);
- 		return -E1000_ERR_PHY;
- 	}
- 	if (mdic & E1000_MDIC_ERROR) {
--		e_dbg("MDI Error\n");
-+		e_dbg("MDI Write PHY Red Address %d Error\n", offset);
- 		return -E1000_ERR_PHY;
- 	}
- 	if (((mdic & E1000_MDIC_REG_MASK) >> E1000_MDIC_REG_SHIFT) != offset) {
--- 
-2.25.1
+--CYrnMS08Bmr4w452
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIFEhEACgkQJNaLcl1U
+h9DDqgf8CJDwEojZnDvk8O6VbLMqNsI7vZnNWIite24PPFflMdCzOcl2IVhXN4T5
+apANt9Yr2O8JzrVxlcFO2rfi0cRDtZoF7Vx/jnpLuVm9jlsLmO+K+HlHUZBUL2XZ
+YUyCW4rigVG6DEoecWrb5Qn6aEqiJ1LAg6G8MLXo9cxe1e2qLZoMVQqcxrbsuFrv
+yo0cAeBtxUqdShl5BZPi6kdT46fHEXMyosHIDNjpN+82h89Bi9ZwHety4rUYGRA9
+civSqSx4+uVuCih0WZJWUNc2U2Mu0RVWjX6HXMrbL3WZxEXNh1nJpv8YIp4jbush
+8DxcuUQz2QS9oyXliknsdIJdLIkCsg==
+=8Brv
+-----END PGP SIGNATURE-----
+
+--CYrnMS08Bmr4w452--

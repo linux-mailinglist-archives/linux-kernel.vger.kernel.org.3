@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7BF4B1A3E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67ED94B1A46
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346190AbiBKAPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:15:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49946 "EHLO
+        id S1346271AbiBKASB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:18:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346226AbiBKAPr (ORCPT
+        with ESMTP id S1346262AbiBKAR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:15:47 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69100558A
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:15:47 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id m185so9505727iof.10
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:15:47 -0800 (PST)
+        Thu, 10 Feb 2022 19:17:59 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608AF105;
+        Thu, 10 Feb 2022 16:18:00 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id d3so5708865ilr.10;
+        Thu, 10 Feb 2022 16:18:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=PIovVUUoTXrNkGptnZalq8qTG6elYmmkmcndd2InBI8=;
-        b=pcjmfLwAiS/XGbn7H5lJSwo1VmJtz/MoynS0X5Dcg+dWgAtP50rspk13S0E5pJvDty
-         S6taB1oBu2sz0cRmYD0OrRjqt2eHBVSewuL1cld2PkhQsvFtl9InCW6guWZsBAakxHMk
-         QeAHrP+IGJZPPsIbTyETpTaKJMX41JIs46ZQl2s+qGfwWzoybsFUJSxmhqN/EcMYGjqu
-         aLAgKKOq45uiO1viWnPybbeWGhqL5zctU9mMIOJebmWir+BUuJeDQnU4GPsD0okN+NS4
-         pJvRQWhfbiVaTp3GfeFPrI0rEQUVFFs+HDyaa7lPxlLEpozQBg6i1VzRnx8jLoMxeYZM
-         MW4w==
+        bh=7yoyMsL7SyevN/y4cH9y7HBy5JcN4ZPi5dkNOU9qEgE=;
+        b=cjSHDomLYdafXDclCfXftX/KeP7y/uJEw/qtk1hqGp3MaWFhiinNwkVAsrB7zXZXCw
+         UVpHjhSNynzmJ61ExawDF3np2A97Q0Qk9+NS7JQ1RHeNCc98/fX5RgP2h74m9/niOGwz
+         B61BqZAjfNBdF5xjhtIPK4DCq7HoJ70gA4gvTK5G9H6BdJ9QDEMId+UXZVzrTgpFvta5
+         7/W1oUpxy8YRdTXbKeWTowVYdpiYUmb5uj2hA2xc0McmxJjnR+QcHrVajxS9eeQAKZt5
+         B2aDKNlfCGJWkf4SSI+yqbkb6Wro/HcRN4rSQ9nt5esXZW/ooo18jiA9RogOaF/Ry2Om
+         nGCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PIovVUUoTXrNkGptnZalq8qTG6elYmmkmcndd2InBI8=;
-        b=3vjumhYVGVtilNlI4+zJxUPjYiRsBlKN96h4xGO6ppEU1RzI+rRZHfphT/+avqYkrl
-         xIqMjopNy1qmA12IVoY5nZv4JHG0VyqAZCfQsNWxe7i50ONM3AqZdepINVgSM4Vfev6P
-         KiIsp/qbSu9PR5NNiggAFm7QxpPphPcgLxB9y1dlxWUQVRvfqQO2YzsPNpDoKF56YOns
-         SzyCHRyL70dq4z8ByIU8qaOcEdSNEL76gfE1UzH0Uvblo/CppY6CNpZJ8qrtm37ZFOwi
-         qd/mKLzZWF/+oeBIWfOwQZBi4TRW+BIOT1j8MiUBbnqYVVR3ZKUm/c/tB4nibIk9i7UK
-         SEWA==
-X-Gm-Message-State: AOAM530Y03xfWyagsvEuP4Id80ip+3t8/WC+1tLNs8/0CPS6WCUSrxOI
-        rYBsVDYpTkO/YmSqcSAc9Ig=
-X-Google-Smtp-Source: ABdhPJxRcsurSAFIVa51O5zD9bcY1kB5OJeXxGfVrQ9MyMfVmVSnWSLVAohEIbusFvdw1qpbmH+QRA==
-X-Received: by 2002:a05:6638:d0c:: with SMTP id q12mr5411794jaj.310.1644538546802;
-        Thu, 10 Feb 2022 16:15:46 -0800 (PST)
+        bh=7yoyMsL7SyevN/y4cH9y7HBy5JcN4ZPi5dkNOU9qEgE=;
+        b=HGl/nkrauDdjCXX8twYSM9xCN+csOmanps7dI5wHm6FYktQlxSs8VFW4/+h+JU9R8L
+         SPlDu1VuuDa0jyPsFNiGm2zOkNByW+hcNny4z4qKa67VoYBvcp5HeVGP9ld2GBO1YcSs
+         y0ABZ+8QXR2s+djRGqqDfOB2LoRCBQCaNT+xv11RCet8oIYoKfDUNLIFkoKEG34K51CP
+         rUryvp5eJoaf55LIwTHcrogryWdiyNs0EK+xHFmiEnbLFFtxmUv3QxBHV1kgWXyQkeTT
+         t5jFX7bcPtcedr7dc6/TXDr9fvEONVApVl8otUYuzBlo5tppOJvjjVColZoA9N/1LXTC
+         HMDg==
+X-Gm-Message-State: AOAM531EKtfl0fPMTOoUoO4PDy8EInGMk1gU98o4Y+VgnEgqHqxHOp69
+        rSMmm6xtq62JuzQLKC+nWkM=
+X-Google-Smtp-Source: ABdhPJxcPsfzEQtc8co4G0V78MxZQ0H3JjCQJHCLjHTl1WrVlCNlJ/iGZcNVR1Vxlyc4FGh8gOvSfA==
+X-Received: by 2002:a05:6e02:180b:: with SMTP id a11mr5307358ilv.196.1644538679746;
+        Thu, 10 Feb 2022 16:17:59 -0800 (PST)
 Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id h3sm12329728ioe.19.2022.02.10.16.15.45
+        by smtp.gmail.com with ESMTPSA id q16sm11837074ion.27.2022.02.10.16.17.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 16:15:46 -0800 (PST)
+        Thu, 10 Feb 2022 16:17:59 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -62,28 +62,19 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Parth Shah <parth@linux.ibm.com>,
-        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Rob Herring <robh@kernel.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Petr Mladek <pmladek@suse.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Xiongwei Song <sxwjean@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 38/49] arch/powerpc: replace cpumask_weight with cpumask_weight_{eq, ...} where appropriate
-Date:   Thu, 10 Feb 2022 14:49:22 -0800
-Message-Id: <20220210224933.379149-39-yury.norov@gmail.com>
+        linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        kernel test robot <lkp@intel.com>, linux-s390@vger.kernel.org
+Subject: [PATCH 39/49] arch/s390: replace cpumask_weight with cpumask_weight_eq where appropriate
+Date:   Thu, 10 Feb 2022 14:49:23 -0800
+Message-Id: <20220210224933.379149-40-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220210224933.379149-1-yury.norov@gmail.com>
 References: <20220210224933.379149-1-yury.norov@gmail.com>
@@ -99,66 +90,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PowerPC code uses cpumask_weight() to compare the weight of cpumask with
-a given number. We can do it more efficiently with cpumask_weight_{eq, ...}
-because conditional cpumask_weight may stop traversing the cpumask earlier,
-as soon as condition is (or can't be)  met.
+cfset_all_start() calls cpumask_weight() to compare the weight of cpumask
+with a given number. We can do it more efficiently with
+cpumask_weight_{eq, ...} because conditional cpumask_weight may stop
+traversing the cpumask earlier, as soon as condition is (or can't be) met.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- arch/powerpc/kernel/smp.c      | 2 +-
- arch/powerpc/kernel/watchdog.c | 2 +-
- arch/powerpc/xmon/xmon.c       | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ arch/s390/kernel/perf_cpum_cf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
-index b7fd6a72aa76..8bff748df402 100644
---- a/arch/powerpc/kernel/smp.c
-+++ b/arch/powerpc/kernel/smp.c
-@@ -1656,7 +1656,7 @@ void start_secondary(void *unused)
- 		if (has_big_cores)
- 			sibling_mask = cpu_smallcore_mask;
- 
--		if (cpumask_weight(mask) > cpumask_weight(sibling_mask(cpu)))
-+		if (cpumask_weight_gt(mask, cpumask_weight(sibling_mask(cpu))))
- 			shared_caches = true;
- 	}
- 
-diff --git a/arch/powerpc/kernel/watchdog.c b/arch/powerpc/kernel/watchdog.c
-index bfc27496fe7e..62937a077de7 100644
---- a/arch/powerpc/kernel/watchdog.c
-+++ b/arch/powerpc/kernel/watchdog.c
-@@ -483,7 +483,7 @@ static void start_watchdog(void *arg)
- 
- 	wd_smp_lock(&flags);
- 	cpumask_set_cpu(cpu, &wd_cpus_enabled);
--	if (cpumask_weight(&wd_cpus_enabled) == 1) {
-+	if (cpumask_weight_eq(&wd_cpus_enabled, 1)) {
- 		cpumask_set_cpu(cpu, &wd_smp_cpus_pending);
- 		wd_smp_last_reset_tb = get_tb();
- 	}
-diff --git a/arch/powerpc/xmon/xmon.c b/arch/powerpc/xmon/xmon.c
-index fd72753e8ad5..b423812e94e0 100644
---- a/arch/powerpc/xmon/xmon.c
-+++ b/arch/powerpc/xmon/xmon.c
-@@ -469,7 +469,7 @@ static bool wait_for_other_cpus(int ncpus)
- 
- 	/* We wait for 2s, which is a metric "little while" */
- 	for (timeout = 20000; timeout != 0; --timeout) {
--		if (cpumask_weight(&cpus_in_xmon) >= ncpus)
-+		if (cpumask_weight_ge(&cpus_in_xmon, ncpus))
- 			return true;
- 		udelay(100);
- 		barrier();
-@@ -1338,7 +1338,7 @@ static int cpu_cmd(void)
- 			case 'S':
- 			case 't':
- 				cpumask_copy(&xmon_batch_cpus, &cpus_in_xmon);
--				if (cpumask_weight(&xmon_batch_cpus) <= 1) {
-+				if (cpumask_weight_le(&xmon_batch_cpus, 1)) {
- 					printf("There are no other cpus in xmon\n");
- 					break;
- 				}
+diff --git a/arch/s390/kernel/perf_cpum_cf.c b/arch/s390/kernel/perf_cpum_cf.c
+index ee8707abdb6a..4d217f7f5ccf 100644
+--- a/arch/s390/kernel/perf_cpum_cf.c
++++ b/arch/s390/kernel/perf_cpum_cf.c
+@@ -975,7 +975,7 @@ static int cfset_all_start(struct cfset_request *req)
+ 		return -ENOMEM;
+ 	cpumask_and(mask, &req->mask, cpu_online_mask);
+ 	on_each_cpu_mask(mask, cfset_ioctl_on, &p, 1);
+-	if (atomic_read(&p.cpus_ack) != cpumask_weight(mask)) {
++	if (!cpumask_weight_eq(mask, atomic_read(&p.cpus_ack))) {
+ 		on_each_cpu_mask(mask, cfset_ioctl_off, &p, 1);
+ 		rc = -EIO;
+ 		debug_sprintf_event(cf_dbg, 4, "%s CPUs missing", __func__);
 -- 
 2.32.0
 

@@ -2,76 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9909D4B0779
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 08:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F06FE4B079D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 08:57:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236599AbiBJHrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 02:47:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57590 "EHLO
+        id S236808AbiBJH5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 02:57:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234424AbiBJHrt (ORCPT
+        with ESMTP id S235869AbiBJH5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 02:47:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7AEDAE;
-        Wed,  9 Feb 2022 23:47:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 10 Feb 2022 02:57:23 -0500
+X-Greylist: delayed 469 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 23:57:24 PST
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CC1BAE;
+        Wed,  9 Feb 2022 23:57:24 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by a.mx.secunet.com (Postfix) with ESMTP id B00B020491;
+        Thu, 10 Feb 2022 08:49:33 +0100 (CET)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id sFuke06hH3_F; Thu, 10 Feb 2022 08:49:33 +0100 (CET)
+Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7B5A60B49;
-        Thu, 10 Feb 2022 07:47:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CEB7C004E1;
-        Thu, 10 Feb 2022 07:47:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644479268;
-        bh=OTUS2plVg6f1zIM/zoZB86CKP0+qe6czXlSwH93Fi9U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hnnZiYjd5dlayL7uCJ5LZU6bn4SM6kxeDIGbWdXeudngmjIz48v0lrJS3EDAM7Mz4
-         R7ORO5FHVrwa1TvKN40Hz4hHE7ilbjfC1vU3I+1PGAU/foJT7rJ11dPReByKLEF0n1
-         sVFnDFbQH612vFADpUX82VMtLz+GzZuMpNKWHbW8=
-Date:   Thu, 10 Feb 2022 08:47:45 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Li Chen <lchen@ambarella.com>
-Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [EXT] [RFC PATCH 0/5] PCIe EPF support for internal DMAC
- handling and driver update for R-Car PCIe EP to support DMAC
-Message-ID: <YgTDIVCQZ3hT9ofX@kroah.com>
-References: <20220126195043.28376-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <PH7PR19MB5562AC3C5E7BBB7730086CC1A02E9@PH7PR19MB5562.namprd19.prod.outlook.com>
- <CA+V-a8tEwOR-r=+KDe2DhpTMwhXPTgbZYgOWepST3mnhBL_Hag@mail.gmail.com>
- <PH7PR19MB5562CE44BBDF09B2ECD30BEDA02F9@PH7PR19MB5562.namprd19.prod.outlook.com>
+        by a.mx.secunet.com (Postfix) with ESMTPS id 159E7201A1;
+        Thu, 10 Feb 2022 08:49:33 +0100 (CET)
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+        by mailout2.secunet.com (Postfix) with ESMTP id 0D14080004A;
+        Thu, 10 Feb 2022 08:49:33 +0100 (CET)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 10 Feb 2022 08:49:32 +0100
+Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Thu, 10 Feb
+ 2022 08:49:32 +0100
+Received: by gauss2.secunet.de (Postfix, from userid 1000)
+        id 115A1318038D; Thu, 10 Feb 2022 08:49:32 +0100 (CET)
+Date:   Thu, 10 Feb 2022 08:49:31 +0100
+From:   Steffen Klassert <steffen.klassert@secunet.com>
+To:     Paolo Abeni <pabeni@redhat.com>
+CC:     Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
+        Lina Wang <lina.wang@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Alexei Starovoitov" <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "Andrii Nakryiko" <andrii@kernel.org>,
+        Linux NetDev <netdev@vger.kernel.org>,
+        "Kernel hackers" <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, "Martin KaFai Lau" <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Willem Bruijn <willemb@google.com>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH] net: fix wrong network header length
+Message-ID: <20220210074931.GB1223722@gauss3.secunet.de>
+References: <20220208025511.1019-1-lina.wang@mediatek.com>
+ <0300acca47b10384e6181516f32caddda043f3e4.camel@redhat.com>
+ <CANP3RGe8ko=18F2cr0_hVMKw99nhTyOCf4Rd_=SMiwBtQ7AmrQ@mail.gmail.com>
+ <a62abfeb0c06bf8be7f4fa271e2bcdef9d86c550.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <PH7PR19MB5562CE44BBDF09B2ECD30BEDA02F9@PH7PR19MB5562.namprd19.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a62abfeb0c06bf8be7f4fa271e2bcdef9d86c550.camel@redhat.com>
+X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 05:54:26AM +0000, Li Chen wrote:
-> **********************************************************************
-> This email and attachments contain Ambarella Proprietary and/or Confidential Information and is intended solely for the use of the individual(s) to whom it is addressed. Any unauthorized review, use, disclosure, distribute, copy, or print is prohibited. If you are not an intended recipient, please contact the sender by reply email and destroy all copies of the original message. Thank you.
+On Tue, Feb 08, 2022 at 05:01:07PM +0100, Paolo Abeni wrote:
+> + Steffen
+> On Tue, 2022-02-08 at 04:57 -0800, Maciej Żenczykowski wrote:
+> > > 
+> > > If traversing the segments become too costly, you can try replacing
+> > > GRO_FRAGLIST with GRO_UDP_FWD.
+> > 
+> > Yeah, I don't know...
+> > 
+> > I've considered that we could perhaps fix the 6to4 helper, and 4to6 helper...
+> > but then I think every *other* helper / code path that plays games
+> > with the packet header needs fixing as well,
+> > ie. everything dealing with encap/decap, vlan, etc..
+> > 
+> > At that point it seems to me like it's worth fixing here rather than
+> > in all those other places.
+> > 
+> > In general it seems gro fraglist as implemented is just a bad idea...
+> > Packets (and things we treat like packets) really should only have 1 header.
+> > GRO fraglist - as implemented - violates this pretty fundamental assumption.
+> > As such it seems to be on the gro fraglist implementation to deal with it.
+> > That to me seems to mean it should be fixed here, and not elsewhere.
+> 
+> @Steffen: IIRC GRO_FRAGLIST was originally added to support some
+> forwarding scenarios. Now we have GRO_UDP_FWD which should be quite
+> comparable. I'm wondering if the latter feature addresses your use
+> case, too.
 
-This email footer is not compatible with Linux kernel development,
-sorry.  Please get your company to remove it so that you can continue to
-participate.
+The advantage of GRO_FRAGLIST for forwarding is that GRO and GSO
+happen with almost no overhead, because the packets are left in
+the skbs we received them and are not mangled during processing.
+
+So if there is no hardware segmentation support, GRO_FRAGLIST is
+still much faster than GRO_UDP_FWD.
+
+> If so, could we consider deprecating (and in a longer run, drop) the
+> GRO_FRAGLIST feature? 
+
+Maybe we can make it exclusive for forwarding or bring the header
+processing a bit closer to GRO_UDP_FWD, but I'd like to keep that
+feature.

@@ -2,111 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4074F4B0B08
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:39:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFCD74B0B0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:41:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239937AbiBJKjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 05:39:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51702 "EHLO
+        id S239948AbiBJKld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 05:41:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239912AbiBJKjr (ORCPT
+        with ESMTP id S237058AbiBJKlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 05:39:47 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A081AFED
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:39:48 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id t14so7316298ljh.8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:39:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uV6ErWvRHqjgOJVJNqpy2N27QhZ/SkH6lhneV2eezQE=;
-        b=nKbcz2Gdq39piyfbPiMit7TrOu1sDICMWcR+0EmABFsSkx77n2YjUmhr9Oadftelnl
-         nzyFf1sLKC1AWxptKuKsXPV9p1RmG+D6jQyD31hPB1kGkeMvwGndSrj/dfuJGfmhzuDY
-         x7S9su9VVRlprEq876OXVw4utyS2H0wqlon8AG1vz+iAvf48UQJTXuAFcdGIJBA5on0Z
-         DIGzgHX/3Kl+0fAUOe+dqph4GRG5mxn4T/P0Wca67iJEh4fWjf/jZ7MKOc/6LKZqW2UX
-         NSqzOhzbWmjRiq5SG4CHSX1xrfFFVHM8mAgo+Tqxdx4SNMrAzC6Yv6jiXtWS1NgpyGsp
-         OlAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uV6ErWvRHqjgOJVJNqpy2N27QhZ/SkH6lhneV2eezQE=;
-        b=0GsgcJTDiwYOX8aVtxQ8hUj69UFmy8zTvow1a0eYYvKbbTcntgSlxNzDGsZvTjTQGL
-         EZlGJ3AygfYV43piOkHx1W2gKPn2mo+fiU6bQyMnlTy74/aDm5AFGuOS49zcUsB26vq9
-         z/TIwQaxhpl1hZcaM5zqUhEgLo9+dkP5KLOyWg7ZbAAvtKqr68EBCMzT/fLcwxSS1mNh
-         4sBGf0WBl0/WzRcx0RoHY8d2JFyJeJh6MLvfx+EmAP74oYnjf0SNSIF6dZZUkh2LJAZ+
-         /9bf8rTSLw2uCaZCZUw7iOEzN1hpzd1d9d3KfY4ZO3ft8kzxX/9llU0Akh/Rdwe5bRZT
-         F5Mg==
-X-Gm-Message-State: AOAM532EFNXIIZq3r6Y18ogE7G5Mdjw66+SncKxAC6fv9d4yIYR6WR4A
-        L8PueQgB6KE3va/Rdnv1nAFC9g==
-X-Google-Smtp-Source: ABdhPJzWQaQGUC9tOFhfWQgRhHoC89SI5cdC7nImJz2CXY8dRllDB4UDR090ZDdk+eOaZKSH3cgx9g==
-X-Received: by 2002:a05:651c:54a:: with SMTP id q10mr4541444ljp.441.1644489586976;
-        Thu, 10 Feb 2022 02:39:46 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id z22sm2754597lji.63.2022.02.10.02.39.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 02:39:46 -0800 (PST)
-Message-ID: <88925781-ccca-b180-4d68-dbc689bd5184@linaro.org>
-Date:   Thu, 10 Feb 2022 13:39:46 +0300
+        Thu, 10 Feb 2022 05:41:31 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747A5C39;
+        Thu, 10 Feb 2022 02:41:32 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvYFk6blpz4xNn;
+        Thu, 10 Feb 2022 21:41:30 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1644489691;
+        bh=zM4o1zwgm3vw53ogWM5KCUtOhCfuY1zqv412d3b2K3U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=E0SAWAeeobP5SsoupU89jcdHIvijYDUJsEHXq0NW4l4TAeX3Ih89zQf/IebVg4Zuj
+         yrP+S7jUadk9wg4fB9NomjPalK5cWxURQp1YBlp493ghAkGkr3coBQJUf4My0u44jG
+         NTxgrU73G7viM0hkGfvp5KB4oNoHVD6Dq/LCo9GuSGTrShkVSrnMmoPbfVirh0DtOU
+         NEWQelcFlvW195iNAqd7BHNg9Yd9Bp7xhjB6y1UdPqYj260sBst8HG2oGLuYhoF+YU
+         XRD7yrHWPE9X8A9dRrtcZs0fdJ1Fgxbfddx17XFpcHjEaaYsEJDvL8wi/ZG1vSO7ld
+         N5KL8OzB9jytg==
+Date:   Thu, 10 Feb 2022 21:41:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Domenico Andreoli <domenico.andreoli@linux.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Tong Zhang <ztong0001@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: boottime warning from todays linux-next
+Message-ID: <20220210214125.2b248790@canb.auug.org.au>
+In-Reply-To: <20220210193302.686fa61a@canb.auug.org.au>
+References: <20220210184340.7eba108a@canb.auug.org.au>
+        <20220210193302.686fa61a@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [REPOST PATCH v4 09/13] drm/msm: Add missing structure
- documentation
-Content-Language: en-GB
-To:     Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-References: <20220210103423.271016-1-vkoul@kernel.org>
- <20220210103423.271016-10-vkoul@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220210103423.271016-10-vkoul@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/.9oRFWI6oIp8UvKbLn8tZsd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/2022 13:34, Vinod Koul wrote:
-> Somehow documentation for dspp was missed, so add that
-> 
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+--Sig_/.9oRFWI6oIp8UvKbLn8tZsd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Hi all,
 
-> ---
->   drivers/gpu/drm/msm/msm_drv.h | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-> index e7a312edfe67..6425a42e997c 100644
-> --- a/drivers/gpu/drm/msm/msm_drv.h
-> +++ b/drivers/gpu/drm/msm/msm_drv.h
-> @@ -102,6 +102,7 @@ enum msm_event_wait {
->    * @num_lm:       number of layer mixers used
->    * @num_enc:      number of compression encoder blocks used
->    * @num_intf:     number of interfaces the panel is mounted on
-> + * @num_dspp:     number of dspp blocks used
->    */
->   struct msm_display_topology {
->   	u32 num_lm;
+On Thu, 10 Feb 2022 19:33:02 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Thu, 10 Feb 2022 18:43:40 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > My qemu boot of a powerpc pseries_le_defconfig kernel produced these
+> > kernel messages:
+> >=20
+> >   CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc3 #2
+> >   Call Trace:
+> >   [c0000000073e3a80] [c0000000007bfd40] dump_stack_lvl+0x74/0xa8 (unrel=
+iable)
+> >   [c0000000073e3ac0] [c00000000057e3dc] __register_sysctl_table+0x60c/0=
+x9f0
+> >   [c0000000073e3bd0] [c000000002041170] init_fs_stat_sysctls+0x48/0x60
+> >   [c0000000073e3bf0] [c000000000012110] do_one_initcall+0x60/0x2d0
+> >   [c0000000073e3cd0] [c0000000020049f0] kernel_init_freeable+0x334/0x3dc
+> >   [c0000000073e3db0] [c000000000012710] kernel_init+0x30/0x1a0
+> >   [c0000000073e3e10] [c00000000000cd64] ret_from_kernel_thread+0x5c/0x64
+> >=20
+> > Presumably introduced by commit
+> >=20
+> >   b42bc9a3c511 ("Fix regression due to "fs: move binfmt_misc sysctl to =
+its own file"") =20
+>=20
+> OK, I cannot reproduce this with just Linus' tree.  I will try to bisect.
 
+It bisected to commit
 
--- 
-With best wishes
-Dmitry
+  43a9443d5da2 ("Merge branch 'akpm-current/current'")
+
+and both parents of that commit are fine :-(
+
+"git diff-tree --cc 43a9443d5da2" looks like this:
+
+43a9443d5da2d53dc06095b90b1aca18b72caef5
+diff --cc lib/Kconfig.debug
+index f15dd96028b5,efc1a1908e04..682c776ae73d
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@@ -317,6 -339,7 +339,7 @@@ config DEBUG_INFO_BT
+  	depends on !DEBUG_INFO_SPLIT && !DEBUG_INFO_REDUCED
+  	depends on !GCC_PLUGIN_RANDSTRUCT || COMPILE_TEST
+  	depends on BPF_SYSCALL
+ -	depends on !DEBUG_INFO_DWARF5
+++	depends on !DEBUG_INFO_DWARF5 || PAHOLE_VERSION >=3D 121
+  	help
+  	  Generate deduplicated BTF type information from DWARF debug info.
+  	  Turning this on expects presence of pahole tool, which will convert
+diff --cc tools/include/linux/gfp.h
+index b238dbc9eb85,22030756fbc0..56eec4445bc9
+--- a/tools/include/linux/gfp.h
++++ b/tools/include/linux/gfp.h
+@@@ -2,31 -1,4 +2,30 @@@
+  #ifndef _TOOLS_INCLUDE_LINUX_GFP_H
+  #define _TOOLS_INCLUDE_LINUX_GFP_H
+ =20
+ +#include <linux/types.h>
+ +
+ +#define __GFP_BITS_SHIFT 26
+ +#define __GFP_BITS_MASK ((gfp_t)((1 << __GFP_BITS_SHIFT) - 1))
+ +
+ +#define __GFP_HIGH		0x20u
+ +#define __GFP_IO		0x40u
+ +#define __GFP_FS		0x80u
+ +#define __GFP_NOWARN		0x200u
+ +#define __GFP_ZERO		0x8000u
+- #define __GFP_ATOMIC		0x80000u
+ +#define __GFP_ACCOUNT		0x100000u
+ +#define __GFP_DIRECT_RECLAIM	0x400000u
+ +#define __GFP_KSWAPD_RECLAIM	0x2000000u
+ +
+ +#define __GFP_RECLAIM	(__GFP_DIRECT_RECLAIM | __GFP_KSWAPD_RECLAIM)
+ +
+ +#define GFP_ZONEMASK	0x0fu
+- #define GFP_ATOMIC	(__GFP_HIGH | __GFP_ATOMIC | __GFP_KSWAPD_RECLAIM)
+++#define GFP_ATOMIC	(__GFP_HIGH | __GFP_KSWAPD_RECLAIM)
+ +#define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
+ +#define GFP_NOWAIT	(__GFP_KSWAPD_RECLAIM)
+ +
+ +static inline bool gfpflags_allow_blocking(const gfp_t gfp_flags)
+ +{
+ +	return !!(gfp_flags & __GFP_DIRECT_RECLAIM);
+ +}
+ +
+  #endif /* _TOOLS_INCLUDE_LINUX_GFP_H */
+
+Which looks pretty innocuous.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/.9oRFWI6oIp8UvKbLn8tZsd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIE69UACgkQAVBC80lX
+0GwUbwf/WQUzB5q1bNcnhWYFuMb3Xg6rTxYL4DnzXcsQGkyX43VwGE2oR4mL6ODP
+Vq03Zg2hj9Nr/EhO6gkfKPwluTKpJ2Vpk0ht5LYijmPwjuk1afI81cnhoP/ghMI8
+iVdfPHcdyBRjp37W5lIUojYRmqKYYaSVW91qm29xjzILAaqQstpsm1k+xf8RqhUH
+TjdVa3nP/YirWfdGqbEhNgNjWOvE9tPYnt2e2KgpHvxJBlBjn4xQIaJrlqJTf1qG
+e95NKq0gnpmgjogzbHSDMFnCPMCwJkjtrq+Z0CCn1ioXAybRV/27QoZ8pdfrqa5b
+IT+dgx3BwhY3Dnuro+QoEcyd+fBFHw==
+=3Smq
+-----END PGP SIGNATURE-----
+
+--Sig_/.9oRFWI6oIp8UvKbLn8tZsd--

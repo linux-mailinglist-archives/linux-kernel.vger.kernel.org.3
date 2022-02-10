@@ -2,72 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DD34B15A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:56:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2D24B15A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343590AbiBJSzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 13:55:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40244 "EHLO
+        id S1343600AbiBJS4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 13:56:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343577AbiBJSzv (ORCPT
+        with ESMTP id S1343577AbiBJS4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 13:55:51 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79388100C
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:55:51 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2086321121;
-        Thu, 10 Feb 2022 18:55:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644519350; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DdvRYUYPbeuUwugRz/zD5fkCcoVbL25yO1bIyTTrtQE=;
-        b=kbho8IjDsMCYYGtM1D3wg8uEHchZfhJ93p54CQVZZV4Ps3xA0QeVKQS6SmnK1WhosD0Ugp
-        eBjpwjMGG3X1RAfKZFlFwn6eHdv7x/XfOlEcjUkSQPJAG1FuJqNY5HCLQ6/ezgsdG4uPxB
-        sBZZirLaPeGQVKr5mTbereSFpjkWZJA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644519350;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DdvRYUYPbeuUwugRz/zD5fkCcoVbL25yO1bIyTTrtQE=;
-        b=kn3NfczTzXNH5S4YABkE3WiOoJMtnuZJs+eToav08csO5x2B9klUAf96MArUbpSawcg3wf
-        lhSIs+86sjnMEjAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DBCE713C22;
-        Thu, 10 Feb 2022 18:55:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id t3hhNLVfBWKPcAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 10 Feb 2022 18:55:49 +0000
-Message-ID: <5df2f9bb-9181-56da-ea85-06af7ea8704a@suse.de>
-Date:   Thu, 10 Feb 2022 19:55:49 +0100
+        Thu, 10 Feb 2022 13:56:10 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657A9109F;
+        Thu, 10 Feb 2022 10:56:10 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 306371F46711
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644519369;
+        bh=p879cBETubHXdemY/PEQK5hOnKUPCYkbBd8qPEuZydk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HUGcHd7Eryz+IswgcaQeXj1SE1zmzZPq8xlW/QQqmSZfcArilD7EgsPxJI4F7e4sY
+         3SifqfLzbqXCbpE5sGfmg+cpRFfmqzoT2Rglv6woYuhs2+gDO2b9Mefr+IBYx9Cetb
+         jXDqwGj78rL6j/sTIGD71YEhycfwVcmMROXV5bu6MO523USIhayfBfuDSVhmE9WJEV
+         m2GIVq4RscFBadbXfFU8JV5ROwmH13cp1p0sk8/iwscy7U6uQFSQDJYAjU9ENJk4b5
+         hMs9kdjtkVa9mwbrXz7JBGleZJ3zXxP0WBw5uoVLNniUYVxr1uZeuv/JGYBPTgYl+c
+         Myk+Ebay3vFbQ==
+Date:   Thu, 10 Feb 2022 13:56:03 -0500
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        srv_heupstream@mediatek.com
+Subject: Re: [PATCH v2] arm64: dts: mediatek: Add Mediatek mt8192 cpufreq
+ device nodes
+Message-ID: <20220210185603.lmgf4ppppe3ccscj@notapiano>
+References: <1609223471-24325-1-git-send-email-andrew-sh.cheng@mediatek.com>
+ <20220210144659.2vkuuh74xagic3ud@notapiano>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] drm/ast: fix using freed memory
-Content-Language: en-US
-To:     trix@redhat.com, airlied@redhat.com, airlied@linux.ie,
-        daniel@ffwll.ch, nathan@kernel.org, ndesaulniers@google.com,
-        maxime@cerno.tech
-Cc:     llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20220203152305.1846862-1-trix@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220203152305.1846862-1-trix@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------092ooI4Qbv1X0dO7Q2ZFcB0X"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220210144659.2vkuuh74xagic3ud@notapiano>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,80 +57,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------092ooI4Qbv1X0dO7Q2ZFcB0X
-Content-Type: multipart/mixed; boundary="------------O6FbTDLRmQ55Ds9EEjrFytE7";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: trix@redhat.com, airlied@redhat.com, airlied@linux.ie, daniel@ffwll.ch,
- nathan@kernel.org, ndesaulniers@google.com, maxime@cerno.tech
-Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-Message-ID: <5df2f9bb-9181-56da-ea85-06af7ea8704a@suse.de>
-Subject: Re: [PATCH] drm/ast: fix using freed memory
-References: <20220203152305.1846862-1-trix@redhat.com>
-In-Reply-To: <20220203152305.1846862-1-trix@redhat.com>
+Hi again,
+please see my comment below.
 
---------------O6FbTDLRmQ55Ds9EEjrFytE7
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On Thu, Feb 10, 2022 at 09:47:04AM -0500, Nícolas F. R. A. Prado wrote:
+> Hi Andrew,
+> 
+> On Tue, Dec 29, 2020 at 02:31:11PM +0800, Andrew-sh.Cheng wrote:
+> > From: "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
+> > 
+> > Correct dts node name in patch v1: performance-domain
+> > This patch depends on [1] and [2].
+> > 
+> > [1]http://lists.infradead.org/pipermail/linux-mediatek/2020-November/019378.html
+> > [2]https://patchwork.kernel.org/project/linux-mediatek/patch/1607586516-6547-3-git-send-email-hector.yuan@mediatek.com/
+> 
+> Those two series are now merged, so no dependencies missing for this patch any
+> longer.
+> 
+> Please rebase this patch, as there are some conflicts. I've already verified it,
+> and after you rebase I can send a reviewed-by.
+> 
+> Thanks,
+> Nícolas
+> 
+> > 
+> > Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
+> > ---
+> >  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > index 69d45c7b31f1..a907ee7e650a 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > @@ -39,6 +39,7 @@
+> >  			compatible = "arm,cortex-a55";
+> >  			reg = <0x000>;
+> >  			enable-method = "psci";
+> > +			performance-domains = <&performance 0>;
+> >  			clock-frequency = <1701000000>;
+> >  			next-level-cache = <&l2_0>;
+> >  			capacity-dmips-mhz = <530>;
+> > @@ -49,6 +50,7 @@
+> >  			compatible = "arm,cortex-a55";
+> >  			reg = <0x100>;
+> >  			enable-method = "psci";
+> > +			performance-domains = <&performance 0>;
+> >  			clock-frequency = <1701000000>;
+> >  			next-level-cache = <&l2_0>;
+> >  			capacity-dmips-mhz = <530>;
+> > @@ -59,6 +61,7 @@
+> >  			compatible = "arm,cortex-a55";
+> >  			reg = <0x200>;
+> >  			enable-method = "psci";
+> > +			performance-domains = <&performance 0>;
+> >  			clock-frequency = <1701000000>;
+> >  			next-level-cache = <&l2_0>;
+> >  			capacity-dmips-mhz = <530>;
+> > @@ -69,6 +72,7 @@
+> >  			compatible = "arm,cortex-a55";
+> >  			reg = <0x300>;
+> >  			enable-method = "psci";
+> > +			performance-domains = <&performance 0>;
+> >  			clock-frequency = <1701000000>;
+> >  			next-level-cache = <&l2_0>;
+> >  			capacity-dmips-mhz = <530>;
+> > @@ -79,6 +83,7 @@
+> >  			compatible = "arm,cortex-a76";
+> >  			reg = <0x400>;
+> >  			enable-method = "psci";
+> > +			performance-domains = <&performance 1>;
+> >  			clock-frequency = <2171000000>;
+> >  			next-level-cache = <&l2_1>;
+> >  			capacity-dmips-mhz = <1024>;
+> > @@ -89,6 +94,7 @@
+> >  			compatible = "arm,cortex-a76";
+> >  			reg = <0x500>;
+> >  			enable-method = "psci";
+> > +			performance-domains = <&performance 1>;
+> >  			clock-frequency = <2171000000>;
+> >  			next-level-cache = <&l2_1>;
+> >  			capacity-dmips-mhz = <1024>;
+> > @@ -99,6 +105,7 @@
+> >  			compatible = "arm,cortex-a76";
+> >  			reg = <0x600>;
+> >  			enable-method = "psci";
+> > +			performance-domains = <&performance 1>;
+> >  			clock-frequency = <2171000000>;
+> >  			next-level-cache = <&l2_1>;
+> >  			capacity-dmips-mhz = <1024>;
+> > @@ -109,6 +116,7 @@
+> >  			compatible = "arm,cortex-a76";
+> >  			reg = <0x700>;
+> >  			enable-method = "psci";
+> > +			performance-domains = <&performance 1>;
+> >  			clock-frequency = <2171000000>;
+> >  			next-level-cache = <&l2_1>;
+> >  			capacity-dmips-mhz = <1024>;
+> > @@ -194,6 +202,12 @@
+> >  		compatible = "simple-bus";
+> >  		ranges;
+> >  
+> > +		performance: performance-controller@0011bc00 {
 
-SGkNCg0KQW0gMDMuMDIuMjIgdW0gMTY6MjMgc2NocmllYiB0cml4QHJlZGhhdC5jb206DQo+
-IEZyb206IFRvbSBSaXggPHRyaXhAcmVkaGF0LmNvbT4NCj4gDQo+IGNsYW5nIHN0YXRpYyBh
-bmFseXNpcyByZXBvcnRzIHRoaXMgcHJvYmxlbQ0KPiBhc3RfbW9kZS5jOjEyMzU6Mzogd2Fy
-bmluZzogVXNlIG9mIG1lbW9yeSBhZnRlciBpdCBpcyBmcmVlZA0KPiAgICBkcm1fY29ubmVj
-dG9yX3VwZGF0ZV9lZGlkX3Byb3BlcnR5KCZhc3RfY29ubmVjdG9yLT5iYXNlLCBlZGlkKTsN
-Cj4gICAgXn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn4NCj4gDQo+IFRoZSBzZWNvbmQgY29uZGl0aW9uIG9uDQo+IA0KPiAg
-ICBpZiAoIWZsYWdzICYmIGFzdF9jb25uZWN0b3ItPmkyYykNCj4gDQo+IE1lYW5zIHRoYXQg
-dGhlIGVkaWQgaXMgbm90IGFsd2F5cyBzZXQuICBJZiB0aGUgcHJldmlvdXMgYmxvY2sNCj4g
-ZmFpbHMgdGhlIGZyZWVkIGVkaWQgdmFsdWUgd2lsbCBiZSB1c2VkLiAgU28gc2V0IGVkaWQg
-dG8gTlVMTA0KPiBhZnRlciBmcmVlaW5nLg0KDQpUaGFua3MgZm9yIHlvdXIgcGF0Y2guIFdl
-IGhhdmUgbWVhbndoaWxlIG1lcmdlcyBhIGNoYW5nZSB0aGF0IHJlcGxhY2VzIA0KdGhlIGNv
-ZGUgZW50aXJlbHkuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IEZpeGVzOiA1
-NWRjNDQ5YTdjNjAgKCJkcm0vYXN0OiBIYW5kbGUgZmFpbGVkIEkyQyBpbml0aWFsaXphdGlv
-biBncmFjZWZ1bGx5IikNCj4gU2lnbmVkLW9mZi1ieTogVG9tIFJpeCA8dHJpeEByZWRoYXQu
-Y29tPg0KPiAtLS0NCj4gICBkcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tb2RlLmMgfCA2ICsr
-KystLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25z
-KC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5j
-IGIvZHJpdmVycy9ncHUvZHJtL2FzdC9hc3RfbW9kZS5jDQo+IGluZGV4IGFiNTJlZmIxNTY3
-MGUuLjkxMzFkYzhhMWEyZmMgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9hc3Qv
-YXN0X21vZGUuYw0KPiArKysgYi9kcml2ZXJzL2dwdS9kcm0vYXN0L2FzdF9tb2RlLmMNCj4g
-QEAgLTEyMjQsMTAgKzEyMjQsMTIgQEAgc3RhdGljIGludCBhc3RfZ2V0X21vZGVzKHN0cnVj
-dCBkcm1fY29ubmVjdG9yICpjb25uZWN0b3IpDQo+ICAgCQkJcmV0dXJuIC1FTk9NRU07DQo+
-ICAgDQo+ICAgCQlmbGFncyA9IGFzdF9kcDUwMV9yZWFkX2VkaWQoY29ubmVjdG9yLT5kZXYs
-ICh1OCAqKWVkaWQpOw0KPiAtCQlpZiAoZmxhZ3MpDQo+ICsJCWlmIChmbGFncykgew0KPiAg
-IAkJCWFzdC0+ZHA1MDFfbWF4Y2xrID0gYXN0X2dldF9kcDUwMV9tYXhfY2xrKGNvbm5lY3Rv
-ci0+ZGV2KTsNCj4gLQkJZWxzZQ0KPiArCQl9IGVsc2Ugew0KPiAgIAkJCWtmcmVlKGVkaWQp
-Ow0KPiArCQkJZWRpZCA9IE5VTEw7DQo+ICsJCX0NCj4gICAJfQ0KPiAgIAlpZiAoIWZsYWdz
-ICYmIGFzdF9jb25uZWN0b3ItPmkyYykNCj4gICAJCWVkaWQgPSBkcm1fZ2V0X2VkaWQoY29u
-bmVjdG9yLCAmYXN0X2Nvbm5lY3Rvci0+aTJjLT5hZGFwdGVyKTsNCg0KLS0gDQpUaG9tYXMg
-WmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBT
-b2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcs
-IEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVy
-OiBJdm8gVG90ZXYNCg==
+Actually there is a warning being introduced here on dtbs_check:
 
---------------O6FbTDLRmQ55Ds9EEjrFytE7--
+	soc: 'performance-controller@0011bc00' does not match any of the regexes: '@(0|[1-9a-f][0-9a-f]*)$', '^[^@]+$', 'pinctrl-[0-9]+'
+		From schema: [...]/dtschema/schemas/simple-bus.yaml
 
---------------092ooI4Qbv1X0dO7Q2ZFcB0X
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+So you should also change the address to not start with zeros: 11bc00
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Nícolas
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIFX7UFAwAAAAAACgkQlh/E3EQov+Bg
-wBAAksaQa3/SWLQEybFdtMJpVESyPa8f/LCtzK+RiiNrEDFUvwMLa9TiADFUgkqVasVgWX8TigZG
-V7S6dSyYE/2h3HvUwpLJvi4aFS9fm7Lzts15k1+Z2zqPr1XwI+RseeX7PrG6kCfpBR296oCIdpD1
-cDP2qy4lybkl/sH8Hj6CXTyEfnVl+UIw2TVI7DQ2ssICFtNsOlsBiVB4lTMJi3fsaUDIxIxZPwak
-xumRRY0EtrrRzoTuUdOYaEUO73dBQ8RpkKZPdeac2BBKv6w14U1+6j2N4NSls22mQK6MjJbZLkHs
-538dat6sGOzmMyOjL2G8ENQJ6BQ1g9JzWAedyWN1EW38es9PT2IsYZMU0wESZfrKBhINBN3MZnuq
-FUaZlCg1nGBJi33ircQkw8Ctkl60OhT7Bfqy5CkeSuf4HaokujZLv/a/xw1PItRGBYiWoBbAaADL
-+eC1piBUxO5ZriVIa5nL38g+3empUpJxhE0+NKqd5x7TSgBD0bpXUxzgvuR042I9En1hfIHyBwD2
-1hk0dwf5c+9CCW9uYzxFVrLK/lCseATVr2lzx0YUDsXvVreYFKknlvhTydlQXqHGUS2kxvi8dOkA
-Mnh5Y/iR+IP46pvSuMTTJaRsf/nDzUFd48tFjCwtkSEc014a8Ht76o1WL/C//uJL1cY32CQU8vep
-aW8=
-=5Niu
------END PGP SIGNATURE-----
-
---------------092ooI4Qbv1X0dO7Q2ZFcB0X--
+> > +			compatible = "mediatek,cpufreq-hw";
+> > +			reg = <0 0x0011bc10 0 0x120>, <0 0x0011bd30 0 0x120>;
+> > +			#performance-domain-cells = <1>;
+> > +		};
+> > +
+> >  		gic: interrupt-controller@c000000 {
+> >  			compatible = "arm,gic-v3";
+> >  			#interrupt-cells = <4>;
+> > -- 
+> > 2.12.5
+> > _______________________________________________
+> > Linux-mediatek mailing list
+> > Linux-mediatek@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-mediatek
+> > 

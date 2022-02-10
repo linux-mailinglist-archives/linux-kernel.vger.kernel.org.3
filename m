@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D0C4B182B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0264B1839
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344928AbiBJW2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 17:28:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53354 "EHLO
+        id S1344944AbiBJWcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 17:32:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbiBJW2w (ORCPT
+        with ESMTP id S242808AbiBJWcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:28:52 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F07B0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:28:50 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id c8-20020a17090a674800b001b91184b732so7621348pjm.5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:28:50 -0800 (PST)
+        Thu, 10 Feb 2022 17:32:15 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5C8BD9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:32:15 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id a12-20020a056902056c00b0061dc0f2a94aso15016846ybt.6
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:32:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ukO0KyYXgy3rVKggK5LNkPNKJG2JLr7pJGZbja+yPMM=;
-        b=JQGD925RtnTgkhEK83SQV2rNJ8pa13YxK29GmUsKVhvyBEbjYls7uqaUewavNRW5Kz
-         FOtrsArFWStAxVweZ+5Eo1NeZlJX4Q0M0tUkxNpl6DGqT1Cn3sKxKuxG5dCBTSefih2j
-         /dKG0B+2n8x/mA9UIaJldB/2OzSifqBmzqvaF3vFEx6/BU4z/lkSQR8mpmhEDIkixRrt
-         cN8No09gd8y9PnTrrL4S+jlkYIeV4rrI6Gf96cJptuV5XTcDTiHfD/h8IRtboeAd/OHO
-         Bu8su7vkELdvVMv8spptX0Er6gQVoiA87Sk95jsVUZTvB8r/sSQ2mMfVyQfTs5DnR+wV
-         nKdQ==
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=gl08/uxFVlmi2wSTq5+9dUe3B/HwzYiRuJoJTn+segs=;
+        b=BdC/fKhWAhUYwCbX8kX1FDzZtTY9aXZLZxD44qMz+MrqHmpo9XxkQ1C7btl4i+KBVV
+         2Ttqt8x0eMP9PuQygYLTj0RxfbJGpXIFw5IZjpN/3or4BSXmsMctd17EhXpz9MgID3jO
+         Q70qwhcGZZ8Q9ILF3wfH79Moln9rfUCDFOmkxEJ40b7+4WFJRQmCmCZl6Gv+hi3LgMGZ
+         WQJEhU9pRiMZ2Kl2UcNgWBheBv/L/Q+B9jAavghoGDh76uwwOd+etdfMAMGK2thVbD7W
+         cLh1JCBDeH/t5HCTavnLVT+ygkAhzWIOeOoVs5j7GDPwte7Qo8aRpEKtRHBfxq58hsKf
+         RM5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ukO0KyYXgy3rVKggK5LNkPNKJG2JLr7pJGZbja+yPMM=;
-        b=NWoQ1em24e1aa6otv61S8audahbiZyAFHXMKQhXDcqYHfYSkQea9W3sL3lEg4OfjO5
-         IV+N3SJpboQhRAF6CqHH/AglaYBzj9QWd1QWh8a36kL6H8Xbi++DL6Gr1+CaPwlzmxzG
-         vNdK1zhnNPDw8C7z1ZnKNA7yTeIv5oJnwewcMEbGz7SVqTpJBcxVNM/OuJcfdCF8Hbhg
-         kyRVeyRBCfPLLdzX975XfBOTGVZqnTrBjV/bvGIDYTAehx+L2zi72bWUkgWsY3Eva+bQ
-         zxVdAy0OnLmXrXW+Ky7tqf/Ir2zTzgIqyywMhz3MaiE0Ft4uDxyCCeBdO10MRI5IQ0a8
-         NkaQ==
-X-Gm-Message-State: AOAM531B0pSdYVUWVIQe6/BaweP/vrU0jV0eQ0gMtoI2sxQLbX6yj9sd
-        BoX9YBgRu/NIl1iwHTEOByX/Lv1XJmbkgs8c
-X-Google-Smtp-Source: ABdhPJxiUYwtJ+/fPuz8YKpP/smG82Yhs4PL8miZeszApzzFLGH0wjxU62BHOJfEfOUAfoexV9cutA==
-X-Received: by 2002:a17:902:da86:: with SMTP id j6mr9720165plx.95.1644532129630;
-        Thu, 10 Feb 2022 14:28:49 -0800 (PST)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id u13sm26000153pfg.151.2022.02.10.14.28.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 14:28:49 -0800 (PST)
-From:   Stafford Horne <shorne@gmail.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stafford Horne <shorne@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        openrisc@lists.librecores.org
-Subject: [PATCH v4] openrisc: remove CONFIG_SET_FS
-Date:   Fri, 11 Feb 2022 07:28:39 +0900
-Message-Id: <20220210222841.3187484-1-shorne@gmail.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=gl08/uxFVlmi2wSTq5+9dUe3B/HwzYiRuJoJTn+segs=;
+        b=31wiwnQWRBo1c39kavC4QDAvVDuomhn/Ombe37Vvd8OylIR5bdB9mbufxUEqQpc5DB
+         2jsMc+eUVlkKwhf8OBgVjvAnMZjE3IvkcWhjps/K3WRK6HJ1h3kr1LWZXOs8KTjabjTC
+         AZwBUJJ5+FG0A6R0pR+JjlqmyBC3FJGkC+P6M1IePglCFyjJfJSZvej03TgGV9OrT6Y1
+         +1UyHfGrUtPl2fL2LsWgwGjv1myowgWYvvbp2fXDGLnJPf6+SSbSHF2X6vimW/5cfkrD
+         mErwi3ArR+xLEEu/cyMwxoZuNlOta0tJNRPfH0i85KvzlZ4zuxmvSLYyxkE3kzYDroj7
+         92xQ==
+X-Gm-Message-State: AOAM5300KV1Ds8eD2PuAZArypgpFboHv8KnPCxRmpKkU/QAQKYQPbITM
+        8DyomU2MOrCkp935M7/fyPXIxOHX
+X-Google-Smtp-Source: ABdhPJzsflLFTtrCxYLYUbOG68XKxeYHkfS3xyNJorZcxmlFdOO6bvUPqjcNKP1xFAdasYI3UiPhTZ8wNQ==
+X-Received: from fawn.svl.corp.google.com ([2620:15c:2cd:202:2f6e:60d0:d1d5:6d5b])
+ (user=morbo job=sendgmr) by 2002:a25:3285:: with SMTP id y127mr9242337yby.205.1644532334603;
+ Thu, 10 Feb 2022 14:32:14 -0800 (PST)
+Date:   Thu, 10 Feb 2022 14:31:34 -0800
+In-Reply-To: <20220204005742.1222997-1-morbo@google.com>
+Message-Id: <20220210223134.233757-1-morbo@google.com>
+Mime-Version: 1.0
+References: <20220204005742.1222997-1-morbo@google.com>
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+Subject: [PATCH v4] x86: use builtins to read eflags
+From:   Bill Wendling <morbo@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,155 +74,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the address space override API set_fs().  The OpenRISC user
-address space is now limited to TASK_SIZE.
+GCC and Clang both have builtins to read and write the EFLAGS register.
+This allows the compiler to determine the best way to generate this
+code, which can improve code generation.
 
-To support this we implement and wire in __get_kernel_nofault and
-__set_kernel_nofault.
+This issue arose due to Clang's issue with the "=rm" constraint.  Clang
+chooses to be conservative in these situations, and so uses memory
+instead of registers. This is a known issue, which is currently being
+addressed.
 
-The function user_addr_max is removed as there is a default definition
-provided when CONFIG_SET_FS is not used.
+However, using builtins is beneficial in general, because it removes the
+burden of determining what's the way to read the flags register from the
+programmer and places it on to the compiler, which has the information
+needed to make that decision. Indeed, this piece of code has had several
+changes over the years, some of which were pinging back and forth to
+determine the correct constraints to use.
 
-Signed-off-by: Stafford Horne <shorne@gmail.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+With this change, Clang generates better code:
+
+Original code:
+        movq    $0, -48(%rbp)
+        #APP
+        # __raw_save_flags
+        pushfq
+        popq    -48(%rbp)
+        #NO_APP
+        movq    -48(%rbp), %rbx
+
+New code:
+        pushfq
+        popq    %rbx
+        #APP
+
+Note that the stack slot in the original code is no longer needed in the
+new code, saving a small amount of stack space.
+
+There is no change to GCC's output:
+
+Original code:
+
+        # __raw_save_flags
+        pushf ; pop %r13        # flags
+
+New code:
+
+        pushfq
+        popq    %r13    # _23
+
+Signed-off-by: Bill Wendling <morbo@google.com>
 ---
-SInce v3:
- - Change order of __range_ok back and add comment about optimization.
+v4: - Clang now no longer generates stack frames when using these builtins.
+    - Corrected misspellings.
+v3: - Add blurb indicating that GCC's output hasn't changed.
+v2: - Kept the original function to retain the out-of-line symbol.
+    - Improved the commit message.
+    - Note that I couldn't use Nick's suggestion of
 
-Since v2:
- - Change order of __range_ok condition to be more clear.
+        return IS_ENABLED(CONFIG_X86_64) ? ...
 
-Since v1:
- - Fix commit message with misleading comment about User Mode Linux.
+      because Clang complains about using __builtin_ia32_readeflags_u32 in
+      64-bit mode.
+---
+ arch/x86/include/asm/irqflags.h | 19 +++++--------------
+ 1 file changed, 5 insertions(+), 14 deletions(-)
 
- arch/openrisc/Kconfig                   |  1 -
- arch/openrisc/include/asm/thread_info.h |  7 ----
- arch/openrisc/include/asm/uaccess.h     | 51 +++++++++++--------------
- 3 files changed, 22 insertions(+), 37 deletions(-)
-
-diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-index bf047dca7ec6..ceda77fb8bc8 100644
---- a/arch/openrisc/Kconfig
-+++ b/arch/openrisc/Kconfig
-@@ -36,7 +36,6 @@ config OPENRISC
- 	select ARCH_WANT_FRAME_POINTERS
- 	select GENERIC_IRQ_MULTI_HANDLER
- 	select MMU_GATHER_NO_RANGE if MMU
--	select SET_FS
- 	select TRACE_IRQFLAGS_SUPPORT
- 
- config CPU_BIG_ENDIAN
-diff --git a/arch/openrisc/include/asm/thread_info.h b/arch/openrisc/include/asm/thread_info.h
-index 659834ab87fa..4af3049c34c2 100644
---- a/arch/openrisc/include/asm/thread_info.h
-+++ b/arch/openrisc/include/asm/thread_info.h
-@@ -40,18 +40,12 @@
-  */
- #ifndef __ASSEMBLY__
- 
--typedef unsigned long mm_segment_t;
--
- struct thread_info {
- 	struct task_struct	*task;		/* main task structure */
- 	unsigned long		flags;		/* low level flags */
- 	__u32			cpu;		/* current CPU */
- 	__s32			preempt_count; /* 0 => preemptable, <0 => BUG */
- 
--	mm_segment_t		addr_limit; /* thread address space:
--					       0-0x7FFFFFFF for user-thead
--					       0-0xFFFFFFFF for kernel-thread
--					     */
- 	__u8			supervisor_stack[0];
- 
- 	/* saved context data */
-@@ -71,7 +65,6 @@ struct thread_info {
- 	.flags		= 0,				\
- 	.cpu		= 0,				\
- 	.preempt_count	= INIT_PREEMPT_COUNT,		\
--	.addr_limit	= KERNEL_DS,			\
- 	.ksp            = 0,                            \
- }
- 
-diff --git a/arch/openrisc/include/asm/uaccess.h b/arch/openrisc/include/asm/uaccess.h
-index 120f5005461b..e6407173e549 100644
---- a/arch/openrisc/include/asm/uaccess.h
-+++ b/arch/openrisc/include/asm/uaccess.h
-@@ -23,36 +23,13 @@
- #include <asm/page.h>
- #include <asm/extable.h>
- 
--/*
-- * The fs value determines whether argument validity checking should be
-- * performed or not.  If get_fs() == USER_DS, checking is performed, with
-- * get_fs() == KERNEL_DS, checking is bypassed.
-- *
-- * For historical reasons, these macros are grossly misnamed.
-- */
--
--/* addr_limit is the maximum accessible address for the task. we misuse
-- * the KERNEL_DS and USER_DS values to both assign and compare the
-- * addr_limit values through the equally misnamed get/set_fs macros.
-- * (see above)
-- */
--
--#define KERNEL_DS	(~0UL)
--
--#define USER_DS		(TASK_SIZE)
--#define get_fs()	(current_thread_info()->addr_limit)
--#define set_fs(x)	(current_thread_info()->addr_limit = (x))
--
--#define uaccess_kernel()	(get_fs() == KERNEL_DS)
--
- /* Ensure that the range from addr to addr+size is all within the process'
-- * address space
-+ * address space.  Note, we compare size vs TASK_SIZE as size is often
-+ * constant and this will be optimized to a single compare.
-  */
- static inline int __range_ok(unsigned long addr, unsigned long size)
+diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
+index 87761396e8cc..f31a035f3c6a 100644
+--- a/arch/x86/include/asm/irqflags.h
++++ b/arch/x86/include/asm/irqflags.h
+@@ -19,20 +19,11 @@
+ extern inline unsigned long native_save_fl(void);
+ extern __always_inline unsigned long native_save_fl(void)
  {
--	const mm_segment_t fs = get_fs();
+-	unsigned long flags;
 -
--	return size <= fs && addr <= (fs - size);
-+	return size <= TASK_SIZE && addr <= TASK_SIZE - size;
- }
- 
- #define access_ok(addr, size)						\
-@@ -241,6 +218,25 @@ do {									\
- 		(__typeof__((x)-(x)))__gu_tmp);		\
- }
- 
-+#define __get_kernel_nofault(dst, src, type, label)	\
-+{							\
-+	type __user *p = (type __force __user *)(src);	\
-+	type data;					\
-+	if (__get_user(data, p))			\
-+		goto label;				\
-+	*(type *)dst = data;				\
-+}
-+
-+#define __put_kernel_nofault(dst, src, type, label)	\
-+{							\
-+	type __user *p = (type __force __user *)(dst);	\
-+	type data = *(type *)src;			\
-+	if (__put_user(data, p))			\
-+		goto label;				\
-+}
-+
-+#define HAVE_GET_KERNEL_NOFAULT
-+
- /* more complex routines */
- 
- extern unsigned long __must_check
-@@ -268,9 +264,6 @@ clear_user(void __user *addr, unsigned long size)
- 	return size;
- }
- 
--#define user_addr_max() \
--	(uaccess_kernel() ? ~0UL : TASK_SIZE)
+-	/*
+-	 * "=rm" is safe here, because "pop" adjusts the stack before
+-	 * it evaluates its effective address -- this is part of the
+-	 * documented behavior of the "pop" instruction.
+-	 */
+-	asm volatile("# __raw_save_flags\n\t"
+-		     "pushf ; pop %0"
+-		     : "=rm" (flags)
+-		     : /* no input */
+-		     : "memory");
 -
- extern long strncpy_from_user(char *dest, const char __user *src, long count);
+-	return flags;
++#ifdef CONFIG_X86_64
++	return __builtin_ia32_readeflags_u64();
++#else
++	return __builtin_ia32_readeflags_u32();
++#endif
+ }
  
- extern __must_check long strnlen_user(const char __user *str, long n);
+ static __always_inline void native_irq_disable(void)
 -- 
-2.31.1
+2.35.1.265.g69c8d7142f-goog
 

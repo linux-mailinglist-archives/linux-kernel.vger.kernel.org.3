@@ -2,67 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 668674B1112
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B264B1115
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:58:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243294AbiBJO5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:57:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42670 "EHLO
+        id S243288AbiBJO5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:57:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243290AbiBJO5h (ORCPT
+        with ESMTP id S240998AbiBJO5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:57:37 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3337DC51
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:57:37 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id u6so10986842lfc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:57:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pg9FzP26LmpWryPvitUm/Fbht2mPNaCOpOrgJa4B7iA=;
-        b=MGIalNatTRUPqIdr82kA6Jju/JdwJreTzuJ4RNGJl1CckGXGKe8QnPM2OD3Qln/SyA
-         agBNetYMZJaxG23W1Wp8HxL/g59dFpXRybZ6ewZeYTlw77dep3Sj/DU/6OWdEKGoxQS/
-         GtpGSDxB6a+tmcLEffj+XUG6sxjZM/qp6jT0kyjMLuCCtswWHpZqkNcLmIehx5S3jKTe
-         /+0kVQA4OJfYapGNFhcoabSMJgczrP+bhujvpM4msu0mwNgxGicAvI7+5BUqanttMyI5
-         Ihf7kqznMLwuxNSTfAfXAI3+Sg4qCfuhycUbGPtlVQIsXcV7HcPE6i8wPWvVDWfC840W
-         K3cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pg9FzP26LmpWryPvitUm/Fbht2mPNaCOpOrgJa4B7iA=;
-        b=VG/nRGyUlbE8XfP2UQiPp0pGVm/eEaBKafSrtQ26IXLC4PtEUTzKyLqi8A6ESZ9q4V
-         IJoAi/odG6Vrm7ArreUDPYej+lr1HPI+C6DNcnTtyKt9dqg0BdcC27zXv0CHCXYecCLa
-         Clz2h2ZObd7jDGuCgqOo0xfJC3Fu0iA7ANaFnVY/5gKTwQ/hA9ceR/i3Gi9A8dQ2WW/d
-         xSqCk/0yYkjx1iG6A56eP14oLv6jrouKv5X6TE4xxWiawqUoPAFafGyTVtnOHIlUBCvE
-         MABZun+nHWfbVpWvmCgHGtd/PX+EehO8XXMweIlkNjSl6FWEfAvDp2+oynEz9mpHEP38
-         L6yg==
-X-Gm-Message-State: AOAM5339czrHGRZNSZzYK3Ijt07+jWlmLo/pMuptJsgKYYukiDIT5SY3
-        O9dT/jcMT32ovuqV+8Z/fVvhwDpyPYIXmpPc6RvHog==
-X-Google-Smtp-Source: ABdhPJwgTzQY+E0X4TE56VOW7BCxvAonO5DARQPbf6Gklh3B7hKtHsAaZZgDoLna4twwtute5zGtrCOkwiMaMiapo30=
-X-Received: by 2002:a05:6512:108e:: with SMTP id j14mr733232lfg.233.1644505055430;
- Thu, 10 Feb 2022 06:57:35 -0800 (PST)
+        Thu, 10 Feb 2022 09:57:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2714496;
+        Thu, 10 Feb 2022 06:57:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5AAD61AEA;
+        Thu, 10 Feb 2022 14:57:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 288EBC004E1;
+        Thu, 10 Feb 2022 14:57:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644505034;
+        bh=DYAxKhfO1WMabdPDfP4WWBxwZceNtLPv6VgxeeFlY6o=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=I5V19VR2bvps0s4U0VS5tAlDhdst0iJNEVbBrb6HXsxsepFpZe5/lJPxjnVuJGPE5
+         pgAVNc3svWvoZAlxrqNBw3FP9cknIHJ6MNzZTwSAY1gQKYiSFgOmPIwQebifqRcwQ2
+         WOLx5EVl++mKN0dE6+CU79lru3lwD7LFaBlLRe2KYmBdzx0SwF391dMvK/mBhJnvqQ
+         QBgOjYnwSm+a2aUoHRXobMh+P98MkLz0CJEA1BJX7wtHgMdPNesHgQmchMEvYNleIX
+         ZmpdnPZUKmyOWIqcjNybhd46UqYHUp1jiyN9fFKGDF/4NV+ywZAlkcqTMIRy66AhLB
+         RZobNCgKgZbyA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id EF0825C0388; Thu, 10 Feb 2022 06:57:13 -0800 (PST)
+Date:   Thu, 10 Feb 2022 06:57:13 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Qian Cai <quic_qiancai@quicinc.com>, Theodore Ts'o <tytso@mit.edu>,
+        Jan Kara <jack@suse.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Boqun Feng <boqun.feng@gmail.com>, linux-ext4@vger.kernel.org,
+        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] jbd2: avoid __GFP_ZERO with SLAB_TYPESAFE_BY_RCU
+Message-ID: <20220210145713.GK4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220209165742.5659-1-quic_qiancai@quicinc.com>
+ <20220209181010.gfn66rvip56i54df@quack3.lan>
+ <20220209201137.GY4285@paulmck-ThinkPad-P17-Gen-1>
+ <20220210091648.w5wie3llqri5kfw3@quack3.lan>
 MIME-Version: 1.0
-References: <8e61aed5f64e434abc1d7b6f81859c8a@realtek.com> <CAPDyKFrLpim75nUB7ksDie2edkWsnFSq6TbFSFFpw5cY5d4y1w@mail.gmail.com>
- <fabaed5751f04105a9719c1cb0390c98@realtek.com> <CAPDyKFr3NRUgfKtkb2DBrhziekFAB0jT_X3Fsfvjk_bGZLC9mA@mail.gmail.com>
- <fa10aa1c644241808c2ad880088240ab@realtek.com> <CAPDyKFrtBKHHRgeF-JO27ANsbSmt8rdnhn-WNr5Je9okEgA29Q@mail.gmail.com>
- <feb0c4e71e9c48a2a21f18b7d3baf135@realtek.com> <CAPDyKFoq_PDk_JgW4D+o4eEPdcffUq2RLbBreRDqeK47m0UnJA@mail.gmail.com>
- <a82d7e877dc041d4be5e0ef38c2da406@realtek.com>
-In-Reply-To: <a82d7e877dc041d4be5e0ef38c2da406@realtek.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 10 Feb 2022 15:56:58 +0100
-Message-ID: <CAPDyKFo59Q3dmUJU-hJ++=k0uwx2KxamW9KckDX=O_CA84O1_g@mail.gmail.com>
-Subject: Re: [PATCH v3] mmc: rtsx: improve performance for multi block rw
-To:     Ricky WU <ricky_wu@realtek.com>
-Cc:     "tommyhebb@gmail.com" <tommyhebb@gmail.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210091648.w5wie3llqri5kfw3@quack3.lan>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,270 +64,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Feb 2022 at 07:43, Ricky WU <ricky_wu@realtek.com> wrote:
->
->
->
-> > -----Original Message-----
-> > From: Ulf Hansson <ulf.hansson@linaro.org>
-> > Sent: Monday, February 7, 2022 7:11 PM
-> > To: Ricky WU <ricky_wu@realtek.com>
-> > Cc: tommyhebb@gmail.com; linux-mmc@vger.kernel.org;
-> > linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH v3] mmc: rtsx: improve performance for multi block =
-rw
-> >
-> > [...]
-> >
-> > > > > > >
-> > > > > > > Do you have any suggestion for testing random I/O But we thin=
-k
-> > > > > > > random I/O will not change much
-> > > > > >
-> > > > > > I would probably look into using fio,
-> > > > > > https://fio.readthedocs.io/en/latest/
-> > > > > >
-> > > > >
-> > > > > Filled random I/O data
-> > > > > Before the patch:
-> > > > > CMD (Randread):
-> > > > > sudo fio -filename=3D/dev/mmcblk0 -direct=3D1 -numjobs=3D1 -threa=
-d
-> > > > > -group_reporting -ioengine=3Dpsync -iodepth=3D1 -size=3D1G -name=
-=3Dmytest
-> > > > > -bs=3D1M -rw=3Drandread
-> > > >
-> > > > Thanks for running the tests! Overall, I would not expect an impact
-> > > > on the throughput when using a big blocksize like 1M. This is also
-> > > > pretty clear from the result you have provided.
-> > > >
-> > > > However, especially for random writes and reads, we want to try wit=
-h
-> > > > smaller blocksizes. Like 8k or 16k, would you mind running another
-> > > > round of tests to see how that works out?
-> > > >
-> > >
-> > > Filled random I/O data(8k/16k)
-> >
-> > Hi Ricky,
-> >
-> > Apologize for the delay! Thanks for running the tests. Let me comment o=
-n
-> > them below.
-> >
-> > >
-> > > Before(randread)
-> > > 8k:
-> > > Cmd: sudo fio -filename=3D/dev/mmcblk0 -direct=3D1 -numjobs=3D1 -thre=
-ad
-> > > -group_reporting -ioengine=3Dpsync -iodepth=3D1 -size=3D1G -name=3Dmy=
-test
-> > > -bs=3D8k -rw=3Drandread
-> > > mytest: (g=3D0): rw=3Drandread, bs=3D(R) 8192B-8192B, (W) 8192B-8192B=
-, (T)
-> > > 8192B-8192B, ioengine=3Dpsync, iodepth=3D1
-> > > result:
-> > > Run status group 0 (all jobs):
-> > >    READ: bw=3D16.5MiB/s (17.3MB/s), 16.5MiB/s-16.5MiB/s
-> > > (17.3MB/s-17.3MB/s), io=3D1024MiB (1074MB), run=3D62019-62019msec Dis=
-k
-> > stats (read/write):
-> > >   mmcblk0: ios=3D130757/0, merge=3D0/0, ticks=3D57751/0, in_queue=3D5=
-7751,
-> > > util=3D99.89%
-> > >
-> > > 16k:
-> > > Cmd: sudo fio -filename=3D/dev/mmcblk0 -direct=3D1 -numjobs=3D1 -thre=
-ad
-> > > -group_reporting -ioengine=3Dpsync -iodepth=3D1 -size=3D1G -name=3Dmy=
-test
-> > > -bs=3D16k -rw=3Drandread
-> > > mytest: (g=3D0): rw=3Drandread, bs=3D(R) 16.0KiB-16.0KiB, (W)
-> > > 16.0KiB-16.0KiB, (T) 16.0KiB-16.0KiB, ioengine=3Dpsync, iodepth=3D1
-> > > result:
-> > > Run status group 0 (all jobs):
-> > >    READ: bw=3D23.3MiB/s (24.4MB/s), 23.3MiB/s-23.3MiB/s
-> > > (24.4MB/s-24.4MB/s), io=3D1024MiB (1074MB), run=3D44034-44034msec Dis=
-k
-> > stats (read/write):
-> > >   mmcblk0: ios=3D65333/0, merge=3D0/0, ticks=3D39420/0, in_queue=3D39=
-420,
-> > > util=3D99.84%
-> > >
-> > > Before(randrwrite)
-> > > 8k:
-> > > Cmd: sudo fio -filename=3D/dev/mmcblk0 -direct=3D1 -numjobs=3D1 -thre=
-ad
-> > > -group_reporting -ioengine=3Dpsync -iodepth=3D1 -size=3D100M -name=3D=
-mytest
-> > > -bs=3D8k -rw=3Drandwrite
-> > > mytest: (g=3D0): rw=3Drandwrite, bs=3D(R) 8192B-8192B, (W) 8192B-8192=
-B, (T)
-> > > 8192B-8192B, ioengine=3Dpsync, iodepth=3D1
-> > > result:
-> > > Run status group 0 (all jobs):
-> > >   WRITE: bw=3D4060KiB/s (4158kB/s), 4060KiB/s-4060KiB/s
-> > > (4158kB/s-4158kB/s), io=3D100MiB (105MB), run=3D25220-25220msec Disk =
-stats
-> > (read/write):
-> > >   mmcblk0: ios=3D51/12759, merge=3D0/0, ticks=3D80/24154, in_queue=3D=
-24234,
-> > > util=3D99.90%
-> > >
-> > > 16k:
-> > > Cmd: sudo fio -filename=3D/dev/mmcblk0 -direct=3D1 -numjobs=3D1 -thre=
-ad
-> > > -group_reporting -ioengine=3Dpsync -iodepth=3D1 -size=3D100M -name=3D=
-mytest
-> > > -bs=3D16k -rw=3Drandwrite
-> > > mytest: (g=3D0): rw=3Drandwrite, bs=3D(R) 16.0KiB-16.0KiB, (W)
-> > > 16.0KiB-16.0KiB, (T) 16.0KiB-16.0KiB, ioengine=3Dpsync, iodepth=3D1
-> > > result:
-> > > Run status group 0 (all jobs):
-> > >   WRITE: bw=3D7201KiB/s (7373kB/s), 7201KiB/s-7201KiB/s
-> > > (7373kB/s-7373kB/s), io=3D100MiB (105MB), run=3D14221-14221msec Disk =
-stats
-> > (read/write):
-> > >   mmcblk0: ios=3D51/6367, merge=3D0/0, ticks=3D82/13647, in_queue=3D1=
-3728,
-> > > util=3D99.81%
-> > >
-> > >
-> > > After(randread)
-> > > 8k:
-> > > Cmd: sudo fio -filename=3D/dev/mmcblk0 -direct=3D1 -numjobs=3D1 -thre=
-ad
-> > > -group_reporting -ioengine=3Dpsync -iodepth=3D1 -size=3D1G -name=3Dmy=
-test
-> > > -bs=3D8k -rw=3Drandread
-> > > mytest: (g=3D0): rw=3Drandread, bs=3D(R) 8192B-8192B, (W) 8192B-8192B=
-, (T)
-> > > 8192B-8192B, ioengine=3Dpsync, iodepth=3D1
-> > > result:
-> > > Run status group 0 (all jobs):
-> > >    READ: bw=3D12.4MiB/s (13.0MB/s), 12.4MiB/s-12.4MiB/s
-> > > (13.0MB/s-13.0MB/s), io=3D1024MiB (1074MB), run=3D82397-82397msec Dis=
-k
-> > stats (read/write):
-> > >   mmcblk0: ios=3D130640/0, merge=3D0/0, ticks=3D74125/0, in_queue=3D7=
-4125,
-> > > util=3D99.94%
-> > >
-> > > 16k:
-> > > Cmd: sudo fio -filename=3D/dev/mmcblk0 -direct=3D1 -numjobs=3D1 -thre=
-ad
-> > > -group_reporting -ioengine=3Dpsync -iodepth=3D1 -size=3D1G -name=3Dmy=
-test
-> > > -bs=3D16k -rw=3Drandread
-> > > mytest: (g=3D0): rw=3Drandread, bs=3D(R) 16.0KiB-16.0KiB, (W)
-> > > 16.0KiB-16.0KiB, (T) 16.0KiB-16.0KiB, ioengine=3Dpsync, iodepth=3D1
-> > > result:
-> > > Run status group 0 (all jobs):
-> > >    READ: bw=3D20.0MiB/s (21.0MB/s), 20.0MiB/s-20.0MiB/s
-> > > (21.0MB/s-21.0MB/s), io=3D1024MiB (1074MB), run=3D51076-51076msec Dis=
-k
-> > stats (read/write):
-> > >   mmcblk0: ios=3D65282/0, merge=3D0/0, ticks=3D46255/0, in_queue=3D46=
-254,
-> > > util=3D99.87%
-> > >
-> > > After(randwrite)
-> > > 8k:
-> > > Cmd: sudo fio -filename=3D/dev/mmcblk0 -direct=3D1 -numjobs=3D1 -thre=
-ad
-> > > -group_reporting -ioengine=3Dpsync -iodepth=3D1 -size=3D100M -name=3D=
-mytest
-> > > -bs=3D8k -rw=3Drandwrite
-> > > mytest: (g=3D0): rw=3Drandwrite, bs=3D(R) 8192B-8192B, (W) 8192B-8192=
-B, (T)
-> > > 8192B-8192B, ioengine=3Dpsync, iodepth=3D1
-> > > result:
-> > > Run status group 0 (all jobs):
-> > >   WRITE: bw=3D4215KiB/s (4317kB/s), 4215KiB/s-4215KiB/s
-> > > (4317kB/s-4317kB/s), io=3D100MiB (105MB), run=3D24292-24292msec Disk =
-stats
-> > (read/write):
-> > >   mmcblk0: ios=3D52/12717, merge=3D0/0, ticks=3D86/23182, in_queue=3D=
-23267,
-> > > util=3D99.92%
-> > >
-> > > 16k:
-> > > Cmd: sudo fio -filename=3D/dev/mmcblk0 -direct=3D1 -numjobs=3D1 -thre=
-ad
-> > > -group_reporting -ioengine=3Dpsync -iodepth=3D1 -size=3D100M -name=3D=
-mytest
-> > > -bs=3D16k -rw=3Drandwrite
-> > > mytest: (g=3D0): rw=3Drandwrite, bs=3D(R) 16.0KiB-16.0KiB, (W)
-> > > 16.0KiB-16.0KiB, (T) 16.0KiB-16.0KiB, ioengine=3Dpsync, iodepth=3D1
-> > > result:
-> > > Run status group 0 (all jobs):
-> > >   WRITE: bw=3D6499KiB/s (6655kB/s), 6499KiB/s-6499KiB/s
-> > > (6655kB/s-6655kB/s), io=3D100MiB (105MB), run=3D15756-15756msec Disk =
-stats
-> > (read/write):
-> > >   mmcblk0: ios=3D51/6347, merge=3D0/0, ticks=3D84/15120, in_queue=3D1=
-5204,
-> > > util=3D99.80%
-> >
-> > It looks like the rand-read tests above are degrading with the new chan=
-ges,
-> > while rand-writes are both improving and degrading.
-> >
-> > To summarize my view from all the tests you have done at this point (th=
-anks a
-> > lot); it looks like the block I/O merging isn't really happening at com=
-mon
-> > blocklayer, at least to that extent that would benefit us. Clearly you =
-have shown
-> > that by the suggested change in the mmc host driver, by detecting wheth=
-er the
-> > "next" request is sequential to the previous one, which allows us to sk=
-ip a
-> > CMD12 and minimize some command overhead.
-> >
-> > However, according to the latest tests above, you have also proved that=
- the
-> > changes in the mmc host driver doesn't come without a cost.
-> > In particular, small random-reads would degrade in performance from the=
-se
-> > changes.
-> >
-> > That said, it looks to me that rather than trying to improve things for=
- one
-> > specific mmc host driver, it would be better to look at this from the g=
-eneric
-> > block layer point of view - and investigate why sequential reads/writes=
- aren't
-> > getting merged often enough for the MMC/SD case. If we can fix the prob=
-lem
-> > there, all mmc host drivers would benefit I assume.
-> >
->
-> So you are thinking about how to patch this in MMC/SD?
-> I don't know if this method is compatible with other MMC Hosts? Or they n=
-eed to patch other code on their host driver
+On Thu, Feb 10, 2022 at 10:16:48AM +0100, Jan Kara wrote:
+> On Wed 09-02-22 12:11:37, Paul E. McKenney wrote:
+> > On Wed, Feb 09, 2022 at 07:10:10PM +0100, Jan Kara wrote:
+> > > On Wed 09-02-22 11:57:42, Qian Cai wrote:
+> > > > Since the linux-next commit 120aa5e57479 (mm: Check for
+> > > > SLAB_TYPESAFE_BY_RCU and __GFP_ZERO slab allocation), we will get a
+> > > > boot warning. Avoid it by calling synchronize_rcu() before the zeroing.
+> > > > 
+> > > > Signed-off-by: Qian Cai <quic_qiancai@quicinc.com>
+> > > 
+> > > No, the performance impact of this would be just horrible. Can you
+> > > ellaborate a bit why SLAB_TYPESAFE_BY_RCU + __GFP_ZERO is a problem and why
+> > > synchronize_rcu() would be needed here before the memset() please? I mean
+> > > how is zeroing here any different from the memory just being used?
+> > 
+> > Suppose a reader picks up a pointer to a memory block, then that memory
+> > is freed.  No problem, given that this is a SLAB_TYPESAFE_BY_RCU slab,
+> > so the memory won't be freed while the reader is accessing it.  But while
+> > the reader is in the process of validating the block, it is zeroed.
+> > 
+> > How does the validation step handle this in all cases?
+> > 
+> > If you have a way of handling this, I will of course drop the patch.
+> > And learn something new, which is always a good thing.  ;-)
+> 
+> So I maybe missed something when implementing the usage of journal_heads
+> under RCU but let's have a look. An example of RCU user of journal heads
+> is fs/jbd2/transaction.c:jbd2_write_access_granted(). It does:
+> 
+>         rcu_read_lock();
+> 
+> 	// This part fetches journal_head from buffer_head - not related to
+> 	// our slab RCU discussion
+> 
+>         if (!buffer_jbd(bh))
+>                 goto out;
+>         /* This should be bh2jh() but that doesn't work with inline functions */
+>         jh = READ_ONCE(bh->b_private);
+>         if (!jh)
+>                 goto out;
+> 
+> 	// The validation comes here
+> 
+>         /* For undo access buffer must have data copied */
+>         if (undo && !jh->b_committed_data)
+>                 goto out;
 
-I would not limit this to the core layer of MMC/SD. The point I was
-trying to make was that it doesn't look like the generic block layer
-is merging the sequential I/O requests in the most efficient way, at
-least for the eMMC/SD devices. Why this is the case, I can't tell. It
-looks like we need to do some more in-depth analysis to understand why
-merging isn't efficient for us.
+OK, so if *jh was freed and re-zallocated in the meantime, this test
+should fail.  One concern would be if the zeroing was not at least eight
+bytes at a time, maybe due to overly eager use of fancy SIMD hardware.
+Though perhaps you also do something about ->b_committed_data on
+the free path, the commit-done path, or whatever?  (I do see a
+"jh->b_committed_data = NULL" on what might well be the commit-done path.)
 
->
-> > BTW, have you tried with different I/O schedulers? If you haven't tried=
- BFQ, I
-> > suggest you do as it's a good fit for MMC/SD.
-> >
->
-> I don=E2=80=99t know what is different I/O schedulers means?
+>         if (READ_ONCE(jh->b_transaction) != handle->h_transaction &&
+>             READ_ONCE(jh->b_next_transaction) != handle->h_transaction)
+>                 goto out;
 
-What I/O scheduler did you use when running the test?
+And same with these guys.
 
-For MMC/SD the only one that makes sense to use is BFQ, however that
-needs to be configured via sysfs after boot. There is no way,
-currently, to make it the default, I think. You may look at
-Documentation/block/bfq-iosched.rst, if you are more interested.
+> 	// Then some more checks unrelated to the slab itself.
+> 
+>         /*
+>          * There are two reasons for the barrier here:
+>          * 1) Make sure to fetch b_bh after we did previous checks so that we
+>          * detect when jh went through free, realloc, attach to transaction
+>          * while we were checking. Paired with implicit barrier in that path.
+>          * 2) So that access to bh done after jbd2_write_access_granted()
+>          * doesn't get reordered and see inconsistent state of concurrent
+>          * do_get_write_access().
+>          */
+>         smp_mb();
+>         if (unlikely(jh->b_bh != bh))
+>                 goto out;
+> 
+> 	// If all passed
+> 
+> 	rcu_read_unlock();
+> 	return true;
+> 
+> So if we are going to return true from the function, we know that 'jh' was
+> attached to handle->h_transaction at some point. And when 'jh' was attached
+> to handle->h_transaction, the transaction was holding reference to the 'jh'
+> and our 'handle' holds reference to the transaction so 'jh' could not be
+> freed since that moment. I.e., we are sure our reference to the handle keeps
+> 'jh' alive and we can safely use it.
+> 
+> I don't see how any amount of scribbling over 'jh' could break this
+> validation. But maybe it is just a lack of my imagination :).
 
-Kind regards
-Uffe
+Regardless of whether you are suffering a lack of imagination, you
+have clearly demonstrated that it is possible to correctly use the
+SLAB_TYPESAFE_BY_RCU flag in conjunction with kmem_cache_alloc(), thus
+demonstrating that I was suffering from a lack of imagination.  ;-)
+
+I have therefore reverted my commit.  Please accept my apologies for
+the hassle!
+
+							Thanx, Paul

@@ -2,111 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 303534B16F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 21:30:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7EE4B16F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 21:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344272AbiBJU23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 15:28:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39760 "EHLO
+        id S1344256AbiBJUbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 15:31:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344231AbiBJU2R (ORCPT
+        with ESMTP id S238675AbiBJUbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 15:28:17 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D584B85;
-        Thu, 10 Feb 2022 12:28:18 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id z20so9671246ljo.6;
-        Thu, 10 Feb 2022 12:28:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8+PCp8VzJ36gwuUuZGOgQHhyJLFNLNE5NPa+Wd4bAXE=;
-        b=IxkmG76bFLc42upQAfX2viuaO+Zvq3ggpHoSw+8vGvIebuVzIO6ZrfDobBHGTLCz/0
-         XxSVDXbvnnPdX3AHIcnKxds+3eXeP98U5QwwlsvBgxzCuJ3xghhmj7P86XOeZInnm2kW
-         67PWvKh7LRd5qrbmweNMQYdV0+luLt0NEUzLnF4niDSeBadknLCZ3GpsON+l75M/58Ht
-         1yRKzdRE4XmQETPnFD8jjo594ks3Xl9ftEIqDM1GTyhEjB5nDjZPonp4G0gEFFV0ydNM
-         eINwZkxY/ZrWyOHBSgTUWbnOkBoGzuezMESL9NHSo+GuU/Akj2EKuJo32/wyI1sFGeR2
-         Jfqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8+PCp8VzJ36gwuUuZGOgQHhyJLFNLNE5NPa+Wd4bAXE=;
-        b=xKKP8O2cu6G0X6YSmfU/B5+QnH1UKTG+MnJTFJRlApXKaSyQEq2d/ZssdUPXuOPVhB
-         4Z+NGL18MMgA41wbtqfF+SPnyLAIYexessHlA8fgCjHN4TL/lWtF9HO97eD6uaYikd6y
-         fxncVsrom4kb8BIN0bcS3WVdKiIbuIicPjBXixZgNoG7o6EGnDYEGEjH0/h7UpxyyK8v
-         nOb92JsTTc8KS54brvY2/+9aND9gjjUOjFn2u9FYCCVSe0yXYnWHXrRrwdajF+QGZ8bn
-         Hg9tIQcE/6A6IZBosAC2XI7Q62m7k6fFREJoovfLyc1S+N4LqrDIQ/V/xygVQdncQR+/
-         mO2Q==
-X-Gm-Message-State: AOAM532pWrV5Um+/ugq+t5PFJglau2LFB3URZNPuFRRSx8PleDqQWk/j
-        LabMekH9WHBLMJTM71+OqMM=
-X-Google-Smtp-Source: ABdhPJxnkMhH+WCNQmT2YfTiDN+Fw9oTWgT0Xe73gy81YT+zJxyQZKdlb9nW6RBG26W2nxeMV9nUfQ==
-X-Received: by 2002:a2e:bc20:: with SMTP id b32mr5976744ljf.214.1644524896908;
-        Thu, 10 Feb 2022 12:28:16 -0800 (PST)
-Received: from localhost.localdomain (h-155-4-221-129.NA.cust.bahnhof.se. [155.4.221.129])
-        by smtp.gmail.com with ESMTPSA id d19sm1223881lfg.108.2022.02.10.12.28.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 12:28:16 -0800 (PST)
-From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Cc:     linux-crypto@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Subject: [PATCH 3/3] crypto/nx: Constify static attribute_group structs
-Date:   Thu, 10 Feb 2022 21:28:05 +0100
-Message-Id: <20220210202805.7750-4-rikard.falkeborn@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220210202805.7750-1-rikard.falkeborn@gmail.com>
-References: <20220210202805.7750-1-rikard.falkeborn@gmail.com>
+        Thu, 10 Feb 2022 15:31:18 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED21B84;
+        Thu, 10 Feb 2022 12:31:19 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21AJ2Pvi017445;
+        Thu, 10 Feb 2022 20:30:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2021-07-09; bh=iFid2oHawZ97i+mh3gez9SH2xyGLZefuUmNiHCuPX2w=;
+ b=XknN75rYi2AgoCpnNSamH2K9QNxTlkdi9KRxli21N1/W8fRMQeJfzR49fafK62sOrQaj
+ emLNVSTEJuWCSRFavxzlWjGRTXOoJPyApt0UsHY1FbjuCYXhWZWbDimCuydeABvuRy28
+ Oz3yK7QpVLt5FmeYWvTq5MZMwdzZt1oZRTHQJj8li4tvytHrFalOIzHYXAqKn4JVzDP1
+ FVYNDbHfDuTNQx0osZAFC2Gna3sNeVwgqcSty11rwZdxQ/QI0OOwDGYJdS188tTBac2c
+ 2Y1H/ucE98SN2J+Z+RSa5Bql9cThk+6Vm6znXtAKFQw4R9Dn0/4SiYFY6t7GGyo7jRjO 1w== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3e3h28s748-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Feb 2022 20:30:53 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21AKKDde180714;
+        Thu, 10 Feb 2022 20:30:52 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by aserp3030.oracle.com with ESMTP id 3e51rtyjgk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Feb 2022 20:30:52 +0000
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 21AKUp6N023749;
+        Thu, 10 Feb 2022 20:30:51 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.147.25.63])
+        by aserp3030.oracle.com with ESMTP id 3e51rtyjfm-1;
+        Thu, 10 Feb 2022 20:30:51 +0000
+From:   Sherry Yang <sherry.yang@oracle.com>
+To:     skhan@linuxfoundation.org, shuah@kernel.org, keescook@chromium.org,
+        luto@amacapital.net, wad@chromium.org, christian@brauner.io,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org, sherry.yang@oracle.com
+Subject: [PATCH v2] selftests/seccomp: Fix seccomp failure by adding missing headers
+Date:   Thu, 10 Feb 2022 12:30:49 -0800
+Message-Id: <20220210203049.67249-1-sherry.yang@oracle.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-ORIG-GUID: rTAVfO73xdUzFbd4s-2N81lXGDYe60LF
+X-Proofpoint-GUID: rTAVfO73xdUzFbd4s-2N81lXGDYe60LF
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The only usage of these is to pass their address to
-sysfs_{create,remove}_group(), which takes pointers to const struct
-attribute_group. Make them const to allow the compiler to put them in
-read-only memory.
+seccomp_bpf failed on tests 47 global.user_notification_filter_empty
+and 48 global.user_notification_filter_empty_threaded when it's
+tested on updated kernel but with old kernel headers. Because old
+kernel headers don't have definition of macro __NR_clone3 which is
+required for these two tests. Since under selftests/, we can install
+headers once for all tests (the default INSTALL_HDR_PATH is
+usr/include), fix it by adding usr/include to the list of directories
+to be searched. Use "-isystem" to indicate it's a system directory as
+the real kernel headers directories are.
 
-Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Signed-off-by: Sherry Yang <sherry.yang@oracle.com>
+Tested-by: Sherry Yang <sherry.yang@oracle.com>
 ---
- drivers/crypto/nx/nx-common-pseries.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/seccomp/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/crypto/nx/nx-common-pseries.c b/drivers/crypto/nx/nx-common-pseries.c
-index 4e304f6081e4..7584a34ba88c 100644
---- a/drivers/crypto/nx/nx-common-pseries.c
-+++ b/drivers/crypto/nx/nx-common-pseries.c
-@@ -962,7 +962,7 @@ static struct attribute *nx842_sysfs_entries[] = {
- 	NULL,
- };
+diff --git a/tools/testing/selftests/seccomp/Makefile b/tools/testing/selftests/seccomp/Makefile
+index 0ebfe8b0e147..585f7a0c10cb 100644
+--- a/tools/testing/selftests/seccomp/Makefile
++++ b/tools/testing/selftests/seccomp/Makefile
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+-CFLAGS += -Wl,-no-as-needed -Wall
++CFLAGS += -Wl,-no-as-needed -Wall -isystem ../../../../usr/include/
+ LDFLAGS += -lpthread
  
--static struct attribute_group nx842_attribute_group = {
-+static const struct attribute_group nx842_attribute_group = {
- 	.name = NULL,		/* put in device directory */
- 	.attrs = nx842_sysfs_entries,
- };
-@@ -992,7 +992,7 @@ static struct attribute *nxcop_caps_sysfs_entries[] = {
- 	NULL,
- };
- 
--static struct attribute_group nxcop_caps_attr_group = {
-+static const struct attribute_group nxcop_caps_attr_group = {
- 	.name	=	"nx_gzip_caps",
- 	.attrs	=	nxcop_caps_sysfs_entries,
- };
+ TEST_GEN_PROGS := seccomp_bpf seccomp_benchmark
 -- 
-2.35.1
+2.31.1
 

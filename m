@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4352D4B1516
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED794B1517
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240735AbiBJSRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 13:17:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42338 "EHLO
+        id S241048AbiBJSRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 13:17:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245622AbiBJSRL (ORCPT
+        with ESMTP id S237679AbiBJSRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 13:17:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C90F1169
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:17:11 -0800 (PST)
+        Thu, 10 Feb 2022 13:17:15 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823E41169
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:17:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BEC261E5A
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 18:17:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DC03C004E1;
-        Thu, 10 Feb 2022 18:17:07 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id F1E9ACE25F2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 18:17:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B6F4C340EB;
+        Thu, 10 Feb 2022 18:17:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644517030;
-        bh=y9KoYEHTuytQnzjdUCEQMgDLFL2j5uawuME74AvZBFw=;
+        s=k20201202; t=1644517032;
+        bh=2EAjaZiUEmEoGGWFDQJoh0nNq0fjsMZ/51ajAw8p5mI=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=ix/mZN/5UW7pmVM3vYhS7NC+PUaymZ+trN2vNmdR2x1+Jhg/EyMXtP6O/J0KCQZa8
-         f3kpnqnwUAbrZwkQU9XW2d54BbskBx7K1C/sYEXQP8zZ7m0vxz8QyehqFEQX958Iz3
-         qIq2HOuR9XJknJcVm3IwN5Oc8bVwyfusA+NvaTH4tBF8OIAhugHP5gn5/nrGQX+otk
-         J0fy+g/JbeBvQ2/BHpQd5M7exuntEgKQWxDSSov9qCLwZgMMvQbIKxYAcEIk4nmGTf
-         UYonPN9jiuDyUeX+rBH/UklWubkXd0VQ2SDdNFaQGrI3PN+IXIisAVMqDBDR2tGWi2
-         gtzLpSDPoH5lA==
+        b=RDQAnF9uMV0AD7GqyFFT2f8/doZ8H1YuMSaaoF5IA4yrVaEqLz3EaThJqZ8OsgkKF
+         WYnovp6l5E51Ae/6/LORXRXccA37QcVmnE55W2Aj+uWjanhHZcX8XXSW2iJZwvYQmi
+         BulehKofnxfzucQov85WLCn/vdBAoW8xl1EwenCRpoinl31HOkedI58AUHdAR2Rc/p
+         arhHWwkysvROnNXkFF6fpy9WsKUrDv3dF1PHh5Wq+ib8r+Ulf+InOwMDlB2VWxraVn
+         b74pHx/0jgsGvWm8xwAZYprEIHrBC26PVKluIAOaEPvl2IOji1R1PshQv3nkJ6lwb+
+         aftfx0L/XIVgw==
 From:   Mark Brown <broonie@kernel.org>
 To:     pierre-louis.bossart@linux.intel.com,
         ranjani.sridharan@linux.intel.com, lgirdwood@gmail.com,
@@ -39,11 +39,11 @@ To:     pierre-louis.bossart@linux.intel.com,
 Cc:     alsa-devel@alsa-project.org, tiwai@suse.com,
         fred.oh@linux.intel.com, linux-kernel@vger.kernel.org,
         kai.vehmanen@linux.intel.com, daniel.baluta@nxp.com
-In-Reply-To: <20220210105519.19795-1-peter.ujfalusi@linux.intel.com>
-References: <20220210105519.19795-1-peter.ujfalusi@linux.intel.com>
-Subject: Re: [PATCH 0/9] ASoC: SOF: IPC client infrastructure
-Message-Id: <164451702780.82170.4074299845971307664.b4-ty@kernel.org>
-Date:   Thu, 10 Feb 2022 18:17:07 +0000
+In-Reply-To: <20220210150525.30756-1-peter.ujfalusi@linux.intel.com>
+References: <20220210150525.30756-1-peter.ujfalusi@linux.intel.com>
+Subject: Re: [PATCH v2 0/9] ASoC: SOF: IPC client infrastructure
+Message-Id: <164451703022.82170.12789113355234920462.b4-ty@kernel.org>
+Date:   Thu, 10 Feb 2022 18:17:10 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,15 +57,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Feb 2022 12:55:10 +0200, Peter Ujfalusi wrote:
-> The Linux SOF implementation is historically monolithic in a sense that all
-> features accessible in the firmware can be used via the snd_sof_dev struct in
-> one way or another.
+On Thu, 10 Feb 2022 17:05:16 +0200, Peter Ujfalusi wrote:
+> Changes since v1:
+> - Fix compilation error in sound/soc/sof/compress.c:
+>   error: implicit declaration of function 'snd_sof_create_page_table'
+>   The patch introducing this is not in sof-dev, and I have missed cross compiling
+>   for aarch64.
 > 
-> Support for features can not be added or removed runtime and with the current
-> way of things it is hard if not impossible to implement support for dynamic
-> feature support when based on the firmware manifest we can easily enable/access
-> independent modules with the SOF.
+> Original Cover letter
 > 
 > [...]
 

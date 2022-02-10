@@ -2,106 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B4D4B0DC3
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 053984B0DCC
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:50:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241713AbiBJMr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 07:47:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32890 "EHLO
+        id S241744AbiBJMuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 07:50:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240903AbiBJMr5 (ORCPT
+        with ESMTP id S241731AbiBJMue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 07:47:57 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1E925C7;
-        Thu, 10 Feb 2022 04:47:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644497279; x=1676033279;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HWZWWxDxk4N9yJjPiALC8RWNE2WvZgl6l+ofOOfgvk0=;
-  b=Ikrpjh1vqL9aE8IIqhyKRCFpWyxZ9xnQ4vpdUAyjmveJ6ZzLfjo3KeI2
-   VLOGDwoqW23f/PR88V5XZwfVHNN/x33pBWbmt2cZ4lmGu3r67HOkpbKLA
-   eBTa5LcivQe2+zROpjpyVlxABuGyu8CAdEwvPOSExY3/3aVS6Rg/f2Mtv
-   iKQBfqph8iduSx9fMJphYKhzFeLClPfh1xqQzcOfDCFuS0WmOlHbulJvB
-   HZlS6oBABPyz1hGuFg2gsyUFVvukJSaGbXron/mYa8vlsVtc9/zDdoP6S
-   KCus+xJHbo+TG5OXXw/JoCuaft0H0bdwWLCP5LHi0gyo63cZK3gzgh/bw
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="249689041"
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="249689041"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 04:47:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="701679860"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 10 Feb 2022 04:47:43 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nI8rO-0003Dp-AR; Thu, 10 Feb 2022 12:47:42 +0000
-Date:   Thu, 10 Feb 2022 20:46:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] net: dsa: qca8k: fix noderef.cocci warnings
-Message-ID: <20220210124658.GA27194@41bd5bfec107>
-References: <202202102036.lklvUIqh-lkp@intel.com>
+        Thu, 10 Feb 2022 07:50:34 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C452633;
+        Thu, 10 Feb 2022 04:50:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644497436; x=1676033436;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=5RFwqeZBHTl8fzPVNM690wz76GpCK7jQ+7aX+IFo96Q=;
+  b=wP7boPm0X3BsGtKegKPDxrL+nL96Z0A9e43an7GvKuDDjvuv7dvqnHVy
+   ag/YW0EIpCIBvLf7j5BfykkJKcPyw6yH1INHRPoihD9JRNbsaAbgDj44U
+   A5TAo1N119DlTWywefnIsAEaRbcQbahRSGcsYbLpwFAOM8JeV1SFUtFxG
+   k=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 10 Feb 2022 04:50:35 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 04:50:34 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 10 Feb 2022 04:50:33 -0800
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 10 Feb 2022 04:50:28 -0800
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <plai@codeaurora.org>, <bgoswami@codeaurora.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <rohitkr@codeaurora.org>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v9 0/3] Machine driver to support LPASS SC7280 sound card registration
+Date:   Thu, 10 Feb 2022 18:20:12 +0530
+Message-ID: <1644497415-25291-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202202102036.lklvUIqh-lkp@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kernel test robot <lkp@intel.com>
+This patch set is to add support for SC7280 sound card registration and
+to add dt-bindings documentation file.
 
-drivers/net/dsa/qca8k.c:422:37-43: ERROR: application of sizeof to pointer
+Srinivasa Rao Mandadapu (3):
+  ASoC: google: dt-bindings: Add sc7280-herobrine machine bindings
+  ASoC: qcom: Add macro for lpass DAI id's max limit
+  ASoC: qcom: SC7280: Add machine driver
 
- sizeof when applied to a pointer typed expression gives the size of
- the pointer
+Changes Since V8:
+    -- Update snd_soc_dai_get_sdw_stream api compatible to latest kernel.
+    -- Fix bot errors in dt-bindings file.
+    -- Add co-developer email id.
+Changes Since V7:
+    -- Create separate patch for dai id's macro.
+    -- Remove unused dapm widget structure.
+    -- Move to quicinc domain email id's.
+Changes Since V6:
+    -- Remove redundant headers.
+    -- Move max ports macro to lpass.h header.
+    -- Arrange structure alignment.
+    -- Fix indentation errors.
+    -- Update module license.
+Changes Since V5:
+    -- Add required properties to dt-bindings
+Changes Since V4:
+    -- Add COMPILE_TEST flag in sc7280 configuration.
+    -- Remove redundant startup and shutdown callbacks of snd_soc_ops.
+    -- Fix typo errors.
+Changes Since V3:
+    -- Change audio jack playpause key value.
+Changes Since V2:
+    -- updated required field in bindings
+    -- updated Return type check with proper enum in sc7280.c
+    -- Updated Header name and Typos in sc7280.c
+Changes Since V1:
+    -- Indentation changes and typo.
 
-Generated by: scripts/coccinelle/misc/noderef.cocci
+ .../bindings/sound/google,sc7280-herobrine.yaml    | 180 +++++++++++++
+ sound/soc/qcom/Kconfig                             |  14 +
+ sound/soc/qcom/Makefile                            |   2 +
+ sound/soc/qcom/lpass.h                             |   1 +
+ sound/soc/qcom/sc7280.c                            | 284 +++++++++++++++++++++
+ 5 files changed, 481 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/google,sc7280-herobrine.yaml
+ create mode 100644 sound/soc/qcom/sc7280.c
 
-Fixes: 90386223f44e ("net: dsa: qca8k: add support for larger read/write size with mgmt Ethernet")
-CC: Ansuel Smith <ansuelsmth@gmail.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
----
+-- 
+2.7.4
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   395a61741f7ea29e1f4a0d6e160197fe8e377572
-commit: 90386223f44e2a751d7e9e9ac8f78ea33358a891 [2956/4901] net: dsa: qca8k: add support for larger read/write size with mgmt Ethernet
-:::::: branch date: 5 hours ago
-:::::: commit date: 8 days ago
-
- qca8k.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/drivers/net/dsa/qca8k.c
-+++ b/drivers/net/dsa/qca8k.c
-@@ -419,7 +419,7 @@ qca8k_regmap_read(void *ctx, uint32_t re
- 	u16 r1, r2, page;
- 	int ret;
- 
--	if (!qca8k_read_eth(priv, reg, val, sizeof(val)))
-+	if (!qca8k_read_eth(priv, reg, val, sizeof(*val)))
- 		return 0;
- 
- 	qca8k_split_addr(reg, &r1, &r2, &page);

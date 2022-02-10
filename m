@@ -2,293 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00024B1643
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 20:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D11D74B1640
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 20:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343957AbiBJT1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 14:27:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60022 "EHLO
+        id S240825AbiBJT1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 14:27:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343544AbiBJT1U (ORCPT
+        with ESMTP id S1343544AbiBJT1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 14:27:20 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D433DBED
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 11:27:20 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id x6-20020a92d306000000b002bdff65a8e1so4642278ila.3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 11:27:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=LMMDOFylVquYF0n4sN4O1PCJ0tpDWdxtYU0vmJFDpqU=;
-        b=qw3LavruVBHfCfWB3dP1G2vxxX57ky1DptW3+XJyKFE+uPmMFYSRB47qXR2QF6oYhi
-         TS6zqu1p5AgomOly62OfzEJDVV0GV+SR4IIzkRzcBKdUNL9ZByfAFax3tnaPjsHv2mBJ
-         7gQV7oGT6fVFcOlIaD6BvWUWBGt1PmWuY/vbkhCqMFCrAY8X8i4UfULtfITDzA/5y5hs
-         Tqcnn/PsQXkLDzS0Z8bIDBMjUbgaP8Ve4RuL5rQzs/c7/rCj4MuPFvmwpMJrMfct8JXk
-         OoEDi+yxuM6/oCBIFc7C8F7/KdWdWhW4vZUDI3Py3WGtZZinydNgaDNo0+60Qf9/Kg/u
-         4+PA==
-X-Gm-Message-State: AOAM530nk5zElhA9bKAD5GLZ0PeBevWDgYtSDVp/Dj4xPIiAqtQpekeJ
-        XLPyOwcb5JeHN6YOXv1U2j3HzkG54wwsAkQD40FP1wbZvBN7
-X-Google-Smtp-Source: ABdhPJyWKbD6+INMHE7mpzXw2Oh5v203nGMEGZRKfzlLwea4FVTMG93Oh2cK/bAN8DpkTgJ5afuSHIJ83kCRLm9AltSGa+TiwfBV
+        Thu, 10 Feb 2022 14:27:39 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CC51BF;
+        Thu, 10 Feb 2022 11:27:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644521259; x=1676057259;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=KgGGYz1uf3JX/t90pBcGCFyoEJL2Bi12Sok3epGvjoU=;
+  b=Q3XCtvxEN8ejztXdjfWGuXT/iSEa5/ftyrHs/SecpTNtpO8MpeifNCR2
+   ZXw0zmf9xMvGLExjFyyRe17N0ZXTYJyPdjnQ5HQw8Tcu4k7xG+4dyWjRc
+   yvshqU2pSsMCzhMQgLpltaOO6p1xsoI+/y+jvoAUKo5ytCa4bakLv8nyJ
+   7JJKzH4yKKn+BdyR+E/yc7/mBv2VFJ1CIRHX5g0it0Q/isMYBhhelnnF5
+   Mr2t7mapvSS+VrPZG05Tv9N8bpjiCe1hhEzP1tIoAdr1ZfZj7dWs2agLG
+   QqW7iKPtn21GpwbdAd+IFgwpv0BUxNyxgoogwPV/KzbeoJlXZDNG7rkUA
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="335996186"
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="335996186"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 11:27:39 -0800
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="500514005"
+Received: from pengyusu-mobl.amr.corp.intel.com (HELO [10.212.149.216]) ([10.212.149.216])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 11:27:37 -0800
+Message-ID: <fc2274d4-4f1d-d86b-38ad-d80141c3115c@intel.com>
+Date:   Thu, 10 Feb 2022 11:27:34 -0800
 MIME-Version: 1.0
-X-Received: by 2002:a92:cd84:: with SMTP id r4mr4886368ilb.180.1644521240227;
- Thu, 10 Feb 2022 11:27:20 -0800 (PST)
-Date:   Thu, 10 Feb 2022 11:27:20 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005975a605d7aef05e@google.com>
-Subject: [syzbot] possible deadlock in worker_thread
-From:   syzbot <syzbot+831661966588c802aae9@syzkaller.appspotmail.com>
-To:     bvanassche@acm.org, jgg@ziepe.ca, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
+ <20220130211838.8382-22-rick.p.edgecombe@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH 21/35] mm/mprotect: Exclude shadow stack from
+ preserve_write
+In-Reply-To: <20220130211838.8382-22-rick.p.edgecombe@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 1/30/22 13:18, Rick Edgecombe wrote:
+> In change_pte_range(), when a PTE is changed for prot_numa, _PAGE_RW is
+> preserved to avoid the additional write fault after the NUMA hinting fault.
+> However, pte_write() now includes both normal writable and shadow stack
+> (RW=0, Dirty=1) PTEs, but the latter does not have _PAGE_RW and has no need
+> to preserve it.
 
-syzbot found the following issue on:
+This series creates an interesting situation: it causes a logical
+disconnection between things that were tightly coupled before.  For
+instance, before this series, _PAGE_RW=1 and "writable" really were
+synonyms.  They meant the same thing.
 
-HEAD commit:    d8ad2ce873ab Merge tag 'ext4_for_linus_stable' of git://gi..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17823662700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6f043113811433a5
-dashboard link: https://syzkaller.appspot.com/bug?extid=831661966588c802aae9
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+One of the complexities in this series is differentiating the two.  For
+instance, a shadow stack page can be written to, even though it has
+_PAGE_RW=0.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+This particular patch seems to be hacking around the problem that a
+p*_mkwrite() doesn't work on shadow stack PTE/PMDs.  First, that makes
+me wonder what *actually* happens if we do a plain pte_mkwrite() on a
+shadow stack PTE.  I *think* it will take the [Write=0,Dirty=1] PTE and
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+831661966588c802aae9@syzkaller.appspotmail.com
+       pte = pte_set_flags(pte, _PAGE_RW);
 
-======================================================
-WARNING: possible circular locking dependency detected
-5.17.0-rc2-syzkaller-00398-gd8ad2ce873ab #0 Not tainted
-------------------------------------------------------
-kworker/0:7/17139 is trying to acquire lock:
-ffff888077a89938 ((wq_completion)loop1){+.+.}-{0:0}, at: flush_workqueue+0xe1/0x13a0 kernel/workqueue.c:2824
+so we'll end up with [Write=1,Dirty=1], which is bad.
 
-but task is already holding lock:
-ffffc9000fa07db8 ((work_completion)(&lo->rundown_work)){+.+.}-{0:0}, at: process_one_work+0x8c4/0x1650 kernel/workqueue.c:2282
+Let's say pte_mkwrite() can't be fixed.  We should probably make it
+VM_BUG_ON() if it's ever asked to muck with a shadow stack PTE.
 
-which lock already depends on the new lock.
+It's also weird because we have this pte_write()==1 PTE in a !VM_WRITE
+VMA.  Then, we're trying to pte_mkwrite() under this !VM_WRITE VMA.
 
+	pte_write() <-- returns true for on shadow stack PTE!
+	pte_mkwrite() <-- illegal on shadow stack PTE
 
-the existing dependency chain (in reverse order) is:
-
--> #7 ((work_completion)(&lo->rundown_work)){+.+.}-{0:0}:
-       process_one_work+0x91b/0x1650 kernel/workqueue.c:2283
-       worker_thread+0x657/0x1110 kernel/workqueue.c:2454
-       kthread+0x2e9/0x3a0 kernel/kthread.c:377
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
--> #6 ((wq_completion)events_long){+.+.}-{0:0}:
-       flush_workqueue+0x110/0x13a0 kernel/workqueue.c:2827
-       srp_remove_one+0x1cf/0x320 drivers/infiniband/ulp/srp/ib_srp.c:4052
-       remove_client_context+0xbe/0x110 drivers/infiniband/core/device.c:775
-       disable_device+0x13b/0x270 drivers/infiniband/core/device.c:1281
-       __ib_unregister_device+0x98/0x1a0 drivers/infiniband/core/device.c:1474
-       ib_unregister_device_and_put+0x57/0x80 drivers/infiniband/core/device.c:1538
-       nldev_dellink+0x1fb/0x300 drivers/infiniband/core/nldev.c:1747
-       rdma_nl_rcv_msg+0x36d/0x690 drivers/infiniband/core/netlink.c:195
-       rdma_nl_rcv_skb drivers/infiniband/core/netlink.c:239 [inline]
-       rdma_nl_rcv+0x2ee/0x430 drivers/infiniband/core/netlink.c:259
-       netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
-       netlink_unicast+0x539/0x7e0 net/netlink/af_netlink.c:1343
-       netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1919
-       sock_sendmsg_nosec net/socket.c:705 [inline]
-       sock_sendmsg+0xcf/0x120 net/socket.c:725
-       ____sys_sendmsg+0x6e8/0x810 net/socket.c:2413
-       ___sys_sendmsg+0xf3/0x170 net/socket.c:2467
-       __sys_sendmsg+0xe5/0x1b0 net/socket.c:2496
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #5 (&device->unregistration_lock){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:600 [inline]
-       __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:733
-       __ib_unregister_device+0x25/0x1a0 drivers/infiniband/core/device.c:1470
-       ib_unregister_device_and_put+0x57/0x80 drivers/infiniband/core/device.c:1538
-       nldev_dellink+0x1fb/0x300 drivers/infiniband/core/nldev.c:1747
-       rdma_nl_rcv_msg+0x36d/0x690 drivers/infiniband/core/netlink.c:195
-       rdma_nl_rcv_skb drivers/infiniband/core/netlink.c:239 [inline]
-       rdma_nl_rcv+0x2ee/0x430 drivers/infiniband/core/netlink.c:259
-       netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
-       netlink_unicast+0x539/0x7e0 net/netlink/af_netlink.c:1343
-       netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1919
-       sock_sendmsg_nosec net/socket.c:705 [inline]
-       sock_sendmsg+0xcf/0x120 net/socket.c:725
-       ____sys_sendmsg+0x6e8/0x810 net/socket.c:2413
-       ___sys_sendmsg+0xf3/0x170 net/socket.c:2467
-       __sys_sendmsg+0xe5/0x1b0 net/socket.c:2496
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #4 (&rdma_nl_types[idx].sem){.+.+}-{3:3}:
-       down_read+0x98/0x440 kernel/locking/rwsem.c:1461
-       rdma_nl_rcv_msg+0x161/0x690 drivers/infiniband/core/netlink.c:164
-       rdma_nl_rcv_skb drivers/infiniband/core/netlink.c:239 [inline]
-       rdma_nl_rcv+0x2ee/0x430 drivers/infiniband/core/netlink.c:259
-       netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
-       netlink_unicast+0x539/0x7e0 net/netlink/af_netlink.c:1343
-       netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1919
-       sock_sendmsg_nosec net/socket.c:705 [inline]
-       sock_sendmsg+0xcf/0x120 net/socket.c:725
-       sock_no_sendpage+0xf6/0x140 net/core/sock.c:3091
-       kernel_sendpage.part.0+0x1a0/0x340 net/socket.c:3492
-       kernel_sendpage net/socket.c:3489 [inline]
-       sock_sendpage+0xe5/0x140 net/socket.c:1007
-       pipe_to_sendpage+0x2ad/0x380 fs/splice.c:364
-       splice_from_pipe_feed fs/splice.c:418 [inline]
-       __splice_from_pipe+0x43e/0x8a0 fs/splice.c:562
-       splice_from_pipe fs/splice.c:597 [inline]
-       generic_splice_sendpage+0xd4/0x140 fs/splice.c:746
-       do_splice_from fs/splice.c:767 [inline]
-       do_splice+0xb7e/0x1960 fs/splice.c:1079
-       __do_splice+0x134/0x250 fs/splice.c:1144
-       __do_sys_splice fs/splice.c:1350 [inline]
-       __se_sys_splice fs/splice.c:1332 [inline]
-       __x64_sys_splice+0x198/0x250 fs/splice.c:1332
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #3 (&pipe->mutex/1){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:600 [inline]
-       __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:733
-       pipe_lock_nested fs/pipe.c:82 [inline]
-       pipe_lock+0x5a/0x70 fs/pipe.c:90
-       iter_file_splice_write+0x15a/0xc10 fs/splice.c:635
-       do_splice_from fs/splice.c:767 [inline]
-       do_splice+0xb7e/0x1960 fs/splice.c:1079
-       __do_splice+0x134/0x250 fs/splice.c:1144
-       __do_sys_splice fs/splice.c:1350 [inline]
-       __se_sys_splice fs/splice.c:1332 [inline]
-       __x64_sys_splice+0x198/0x250 fs/splice.c:1332
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
-
--> #2 (sb_writers#3){.+.+}-{0:0}:
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1722 [inline]
-       sb_start_write include/linux/fs.h:1792 [inline]
-       file_start_write include/linux/fs.h:2937 [inline]
-       lo_write_bvec drivers/block/loop.c:242 [inline]
-       lo_write_simple drivers/block/loop.c:265 [inline]
-       do_req_filebacked drivers/block/loop.c:494 [inline]
-       loop_handle_cmd drivers/block/loop.c:1853 [inline]
-       loop_process_work+0x1499/0x1db0 drivers/block/loop.c:1893
-       process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
-       worker_thread+0x657/0x1110 kernel/workqueue.c:2454
-       kthread+0x2e9/0x3a0 kernel/kthread.c:377
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
--> #1 ((work_completion)(&worker->work)){+.+.}-{0:0}:
-       process_one_work+0x91b/0x1650 kernel/workqueue.c:2283
-       worker_thread+0x657/0x1110 kernel/workqueue.c:2454
-       kthread+0x2e9/0x3a0 kernel/kthread.c:377
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
--> #0 ((wq_completion)loop1){+.+.}-{0:0}:
-       check_prev_add kernel/locking/lockdep.c:3063 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3186 [inline]
-       validate_chain kernel/locking/lockdep.c:3801 [inline]
-       __lock_acquire+0x2a2c/0x5470 kernel/locking/lockdep.c:5027
-       lock_acquire kernel/locking/lockdep.c:5639 [inline]
-       lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
-       flush_workqueue+0x110/0x13a0 kernel/workqueue.c:2827
-       drain_workqueue+0x1a5/0x3c0 kernel/workqueue.c:2992
-       destroy_workqueue+0x71/0x800 kernel/workqueue.c:4429
-       __loop_clr_fd+0x19b/0xd80 drivers/block/loop.c:1118
-       loop_rundown_workfn+0x6f/0x150 drivers/block/loop.c:1185
-       process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
-       worker_thread+0x657/0x1110 kernel/workqueue.c:2454
-       kthread+0x2e9/0x3a0 kernel/kthread.c:377
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-
-other info that might help us debug this:
-
-Chain exists of:
-  (wq_completion)loop1 --> (wq_completion)events_long --> (work_completion)(&lo->rundown_work)
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock((work_completion)(&lo->rundown_work));
-                               lock((wq_completion)events_long);
-                               lock((work_completion)(&lo->rundown_work));
-  lock((wq_completion)loop1);
-
- *** DEADLOCK ***
-
-2 locks held by kworker/0:7/17139:
- #0: ffff888010c73538 ((wq_completion)events_long){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
- #0: ffff888010c73538 ((wq_completion)events_long){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
- #0: ffff888010c73538 ((wq_completion)events_long){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
- #0: ffff888010c73538 ((wq_completion)events_long){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:631 [inline]
- #0: ffff888010c73538 ((wq_completion)events_long){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:658 [inline]
- #0: ffff888010c73538 ((wq_completion)events_long){+.+.}-{0:0}, at: process_one_work+0x890/0x1650 kernel/workqueue.c:2278
- #1: ffffc9000fa07db8 ((work_completion)(&lo->rundown_work)){+.+.}-{0:0}, at: process_one_work+0x8c4/0x1650 kernel/workqueue.c:2282
-
-stack backtrace:
-CPU: 0 PID: 17139 Comm: kworker/0:7 Not tainted 5.17.0-rc2-syzkaller-00398-gd8ad2ce873ab #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events_long loop_rundown_workfn
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2143
- check_prev_add kernel/locking/lockdep.c:3063 [inline]
- check_prevs_add kernel/locking/lockdep.c:3186 [inline]
- validate_chain kernel/locking/lockdep.c:3801 [inline]
- __lock_acquire+0x2a2c/0x5470 kernel/locking/lockdep.c:5027
- lock_acquire kernel/locking/lockdep.c:5639 [inline]
- lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
- flush_workqueue+0x110/0x13a0 kernel/workqueue.c:2827
- drain_workqueue+0x1a5/0x3c0 kernel/workqueue.c:2992
- destroy_workqueue+0x71/0x800 kernel/workqueue.c:4429
- __loop_clr_fd+0x19b/0xd80 drivers/block/loop.c:1118
- loop_rundown_workfn+0x6f/0x150 drivers/block/loop.c:1185
- process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
- worker_thread+0x657/0x1110 kernel/workqueue.c:2454
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-usb 4-1: new high-speed USB device number 63 using dummy_hcd
-usb 4-1: New USB device found, idVendor=0af0, idProduct=d058, bcdDevice= 0.00
-usb 4-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-usb 4-1: Product: syz
-usb 4-1: Manufacturer: syz
-usb 4-1: SerialNumber: syz
-usb 4-1: config 0 descriptor??
-usb-storage 4-1:0.0: USB Mass Storage device detected
-usb 1-1: new high-speed USB device number 103 using dummy_hcd
-usb 1-1: New USB device found, idVendor=0af0, idProduct=d058, bcdDevice= 0.00
-usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-usb 1-1: Product: syz
-usb 1-1: Manufacturer: syz
-usb 1-1: SerialNumber: syz
-usb 1-1: config 0 descriptor??
-usb-storage 1-1:0.0: USB Mass Storage device detected
-usb 4-1: USB disconnect, device number 65
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+I need to think about this a little more.  I don't have a solution.
+But, as-is, it seems untenable.  The rules are just too counter
+intuitive to live.

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9C54B190F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:09:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 913874B192A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345444AbiBJXJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 18:09:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58990 "EHLO
+        id S1345505AbiBJXLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 18:11:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238904AbiBJXJc (ORCPT
+        with ESMTP id S242400AbiBJXLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 18:09:32 -0500
+        Thu, 10 Feb 2022 18:11:45 -0500
 Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7646FC66;
-        Thu, 10 Feb 2022 15:09:32 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id o3so7144365qtm.12;
-        Thu, 10 Feb 2022 15:09:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D415F45;
+        Thu, 10 Feb 2022 15:11:45 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id x5so7142207qtw.10;
+        Thu, 10 Feb 2022 15:11:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=Il/njuSffEOrDW4E6Z5WwCggqy6XxgY6UGpPrL0AIR4=;
-        b=JHJhNoUxh9ZuIiGYQov/FCIzAnjDxw6DqtVPkL1Zy1CLrsVwmf/L1YO0+GvOXbDRZ1
-         pqP9mY9GzQYWTgjathqD6S833i3Jn5LhtxZir6zDdzPkcq0f+VaqtHxlBS6ulo5m01Uc
-         5DJQwrfoKFPrAReQX/OlzhfusR6gY3jUDmZ2vXh/MK0XJxvb+JBDrj+24HC4sMqKBH2x
-         kal6x+3q2ykI4/TCu98o6Mozggc8N7XorGZWzB7iKSz5i9wIizC8TdU+Cz+wzu1nNQay
-         JFJ9W+P6+SkdtD9v9e2pIYBVGBN0oQwzdYpdb3O/UPoDayEfqa2+ziM7S0gFtv3xwP3k
-         JINw==
+        bh=ZBdSYHCr3USYo6W485UfRkjDE4guUfBuyMH5Mb4JqDU=;
+        b=noirHY6GF4V4i8t+uu5JZQoNb9aCpruRdnEm1zuUkGMxjiGL/QA+2jJvW5q696QSYt
+         ArH2xdXNKzx5VAWJf1ZbXj6Kin8p6qbXiG8tHG5RXG6uOggXjgywln0c3VNSq7sLigyy
+         z7NvvKNREN8owyh9M01OFt2t8EjXllkRx7rL32xroe+PX7EzcvAgPKIArIqn+8ZjlOOK
+         BwiWD5bNNWfkAbLL7OZzG+zIgoGXfWQmbCHioMYE/Hixd6D2RclBD1TwsJtxlKfyxR1a
+         3Iql8/K0PmZQ89a+14GQBXllOV38XKrUISn4vaAL9wPTv2tPQ/awzdPhwhPpDuTRlRvK
+         fafA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Il/njuSffEOrDW4E6Z5WwCggqy6XxgY6UGpPrL0AIR4=;
-        b=wij2CJmAo1Sp0oor3zOLtoYdXM4d3E+sJqga2rLIYQpwhx534e0hFSct8wQQrRaQhS
-         NhPZkLGQEuHtXVV4ChYHwuJdD/euv+VwP9yyuFiIWk96GYs4wNdyPgLN0ynE2MpeDLoS
-         HxH9UXgVAtiOks0S3JpR1+xKjmyO1giJT+WByxuxqZKsBRykOM1fDkuNPhCqpmGKecJv
-         kwn/Tv3Qx7HGk5O8T70c7VaHeEF4q3rBVR23YkKUDazxCA5XxBRTZxIaYZ+Xu+8b8/nb
-         0NdTEcCpH7JGBGcHjbDk4usEK1lqOpaKKSwAuSkv2P2r3Lw+AbQqTPQtnZdhmgvYjh7q
-         Xb8w==
-X-Gm-Message-State: AOAM531n4VugdfmWm5lXpAOD1/sDzuv0QK0YGPZbuWtZKmH17QvNqVyA
-        C/IU3zPms1zPU9BBKi40vkc=
-X-Google-Smtp-Source: ABdhPJyv7MT5wCGfdlfCLRk0wYTBM2q1x++ztUAm4XQN4J6MUGrqRSzzk5Brej8rnmEAO7fi58Ap6g==
-X-Received: by 2002:a05:622a:1304:: with SMTP id v4mr6649618qtk.359.1644534571568;
-        Thu, 10 Feb 2022 15:09:31 -0800 (PST)
+        bh=ZBdSYHCr3USYo6W485UfRkjDE4guUfBuyMH5Mb4JqDU=;
+        b=T/ArRcZvgshtDP5falXRVxZIoXaUH3aibUQH7mteOqyVjtM888YPFuSl+n4AR1dAAY
+         0y8G9wD7pgV0mnfRErAWxNap014CmfLCG468+8YuH0ge3XLIXaQCC4z3eKZ8pvWT+bhn
+         fauyjpfMGvN5o+h9opSRZ5mcdZz3KTV2ToQeFBSmvxo5Qh8gb7NZD5M0Yx743qPgNcIo
+         KXKhenNcsIM2T19WbOEjNvnXPP2olxlRGlGmEUpJAGsENAfV3k3KhM6EJhsP2Bpf4jnE
+         C8H9zUKkQ0iigpx6f3mor0+r4OGlTps+KUMLVcV6oluLPyHbUhxAUNEfZai9v2EJ6fc/
+         fH2w==
+X-Gm-Message-State: AOAM530mccGS8+RQAR+VBqiWOmDy6BA4CM2eQsStI65ra4Gb/OagNf4y
+        GLGnXvNBObXrlJGSB1BSFEU=
+X-Google-Smtp-Source: ABdhPJyRNHJTVVPj+RR6tyohLG29mySY3xnZq28upNS8nrO1spe/OPmQyWpzHExT/NjogD+tlz2nxw==
+X-Received: by 2002:a05:622a:349:: with SMTP id r9mr6655005qtw.37.1644534704732;
+        Thu, 10 Feb 2022 15:11:44 -0800 (PST)
 Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id s6sm11824113qtw.18.2022.02.10.15.09.30
+        by smtp.gmail.com with ESMTPSA id h5sm11242509qti.95.2022.02.10.15.11.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 15:09:31 -0800 (PST)
+        Thu, 10 Feb 2022 15:11:44 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -62,15 +62,15 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
-Subject: [PATCH 08/49] drm: replace bitmap_weight with bitmap_empty where appropriate
-Date:   Thu, 10 Feb 2022 14:48:52 -0800
-Message-Id: <20220210224933.379149-9-yury.norov@gmail.com>
+        linux-kernel@vger.kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org
+Subject: [PATCH 09/49] ice: replace bitmap_weight with bitmap_empty
+Date:   Thu, 10 Feb 2022 14:48:53 -0800
+Message-Id: <20220210224933.379149-10-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220210224933.379149-1-yury.norov@gmail.com>
 References: <20220210224933.379149-1-yury.norov@gmail.com>
@@ -86,30 +86,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smp_request_block() in drivers/gpu/drm/msm/disp/mdp5/mdp5_smp.c calls
-bitmap_weight() to check if any bit of a given bitmap is set. It's
-better to use bitmap_empty() in that case because bitmap_empty() stops
-traversing the bitmap as soon as it finds first set bit, while
-bitmap_weight() counts all bits unconditionally.
+The ice_vf_has_no_qs_ena() calls bitmap_weight() to check if any bit
+of a given bitmap is set. It's better to use bitmap_empty() in that
+case because bitmap_empty() stops traversing the bitmap as soon as it
+finds first set bit, while bitmap_weight() counts all bits
+unconditionally.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- drivers/gpu/drm/msm/disp/mdp5/mdp5_smp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_smp.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_smp.c
-index d7fa2c49e741..56a3063545ec 100644
---- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_smp.c
-+++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_smp.c
-@@ -68,7 +68,7 @@ static int smp_request_block(struct mdp5_smp *smp,
- 	uint8_t reserved;
+diff --git a/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c b/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
+index 39b80124d282..9a86eeb6e3f2 100644
+--- a/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
++++ b/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
+@@ -267,8 +267,8 @@ ice_set_pfe_link(struct ice_vf *vf, struct virtchnl_pf_event *pfe,
+  */
+ static bool ice_vf_has_no_qs_ena(struct ice_vf *vf)
+ {
+-	return (!bitmap_weight(vf->rxq_ena, ICE_MAX_RSS_QS_PER_VF) &&
+-		!bitmap_weight(vf->txq_ena, ICE_MAX_RSS_QS_PER_VF));
++	return bitmap_empty(vf->rxq_ena, ICE_MAX_RSS_QS_PER_VF) &&
++		bitmap_empty(vf->txq_ena, ICE_MAX_RSS_QS_PER_VF);
+ }
  
- 	/* we shouldn't be requesting blocks for an in-use client: */
--	WARN_ON(bitmap_weight(cs, cnt) > 0);
-+	WARN_ON(!bitmap_empty(cs, cnt));
- 
- 	reserved = smp->reserved[cid];
- 
+ /**
 -- 
 2.32.0
 

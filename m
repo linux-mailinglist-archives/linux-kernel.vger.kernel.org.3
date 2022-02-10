@@ -2,183 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1954B1866
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:41:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4FF04B186E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345075AbiBJWlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 17:41:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59532 "EHLO
+        id S1345091AbiBJWmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 17:42:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345032AbiBJWlj (ORCPT
+        with ESMTP id S1345087AbiBJWmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:41:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9C7126CD
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:41:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644532899;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=D9z1haah+UIcdDYLlT29sLlYpdDn7jZamy9pjb18HtA=;
-        b=dAVwpkzmnyPm9vN8D5V5ZNcnJbRAjibOVy4VgtB6WqMhLd88IG4+gNT5grc0UtASO5jCUx
-        MwpuRDurNkLYYDieRKjhfx58YHeEDDXZrtEkjJ2DIpp2ESpFwlPBHgRCqxzed//ObXdfYb
-        i1v+M5MDsR1kw0jb7VhPg6GwK17N0zw=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-193-5Gey0cDQM2-zlAyCjmaCnQ-1; Thu, 10 Feb 2022 17:41:37 -0500
-X-MC-Unique: 5Gey0cDQM2-zlAyCjmaCnQ-1
-Received: by mail-lj1-f200.google.com with SMTP id bd23-20020a05651c169700b0023bc6f845beso3238827ljb.17
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:41:37 -0800 (PST)
+        Thu, 10 Feb 2022 17:42:44 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AF526E7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:42:45 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id s133-20020a252c8b000000b0062112290d0bso81353ybs.23
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:42:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:cc;
+        bh=KKogoV3I1Ztwi08cWi/kskl7f13dMqHnW1NYHFKZhQY=;
+        b=MSpmQCaLUVfuj+jaf2QClix5p6yRH8yzpyXKVnUK70zmSq5C6/qdwILNdwUhcYMF8c
+         u2hO+qWimnqb+XJXum2CyHU9kaCpP4gkRh47JMce1cQUyDNmevlnXSk/v4J+ibagMpdi
+         6SyBC+677sSNAQTgfwfnsoK9hG38S7tJZegaoLmq/yU+PY5VBbjSvEWD5BQFkjDn541W
+         0JSNQrorMDSfKK5rlmgt+EWI1MHti2dN4PrYJBbrILg+UvVfff878dBp5MtI/4qmAOqW
+         Nc7XlL61zC/1JLJf8Tf3E1Keb7HV2kSiSgcuaOFlOR7BDfv+pCD6q+wH9wLq+bDThuMT
+         cAVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D9z1haah+UIcdDYLlT29sLlYpdDn7jZamy9pjb18HtA=;
-        b=tXI+istU/ONyxZ9sTAwe4UgwjRxTXpCPvnvj/C49DuVUvZzpsXotLwcyLjn/dpkXPg
-         7wHczy7/G+4XnauPesK/LOrr941YcWEiBaU5cidngbnD/yMX2opmpgPscWu3zyebnVvN
-         i8HELAgPq9K14kI+Hs3UJMsMprA2iDdEb+WIxNfMlgsncqPp+9oMUQvpE5B071d1uafV
-         aHkcbvvNYhKTLrw8gANsJZsNdlfKHh1CxWMCvEYUiyhwNeBrt/Hqcv48p31BHgrPfa8P
-         3IxotOTR2MbAylurdjj5uBTeRSeaTjTiuIlkimLu8wTqi6oyL0ZF9PCe4QCyQUncjlQw
-         TJjw==
-X-Gm-Message-State: AOAM531BLKTcu7sXqZHBhKvlwOdb40kJR/lFV81DlZ/EZVB9tlXq54rV
-        JsXfWCByYZItbzRjZEnXSUof4KV4PssYY0qtPwPqDZqXXmDKUCEJfwL8wTZg3xvSrgdg9lWguUY
-        uHzBAjzus2ixll7Sf878ntMalhUrzeB9NvZHCbxs=
-X-Received: by 2002:a05:6512:33c8:: with SMTP id d8mr6470342lfg.41.1644532896200;
-        Thu, 10 Feb 2022 14:41:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzjGYPFGigD9D5dsbstwF6UYHTzLHLhy3FVbR0KZZXe7/vG4kYJtCyu+fmRfnrOqKewzMh+QFBD+44qNwh8PAk=
-X-Received: by 2002:a05:6512:33c8:: with SMTP id d8mr6470330lfg.41.1644532895928;
- Thu, 10 Feb 2022 14:41:35 -0800 (PST)
-MIME-Version: 1.0
-References: <20220209170358.3266629-1-atomlin@redhat.com> <20220209170358.3266629-6-atomlin@redhat.com>
- <32b37a9b-8765-ca96-7528-0ef4faa9ae34@csgroup.eu>
-In-Reply-To: <32b37a9b-8765-ca96-7528-0ef4faa9ae34@csgroup.eu>
-From:   Aaron Tomlin <atomlin@redhat.com>
-Date:   Thu, 10 Feb 2022 22:41:24 +0000
-Message-ID: <CANfR36iKsTd8Ave+gt2PUho0Zpcnc7kYJrXUHEG5_TrbH_+3jw@mail.gmail.com>
-Subject: Re: [PATCH v5 05/13] module: Move latched RB-tree support to a
- separate file
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "cl@linux.com" <cl@linux.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "ghalat@redhat.com" <ghalat@redhat.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "void@manifault.com" <void@manifault.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:cc;
+        bh=KKogoV3I1Ztwi08cWi/kskl7f13dMqHnW1NYHFKZhQY=;
+        b=TF3POIXn3OhwxXKU3ZKuWyCuvTloq12oS0BvIX9eet3e/1ObhpjY6i8IL8hyjYOMCN
+         FB7DorqHDd7wih3WVBtkc9LlO8cjfBlk4xQjwMJE+yjbxWW6r+FyjyZbpQJO+Ck/GgHg
+         hsG2rgZE1KU1kZQpaHC/KPabVLns+9QzZST+Z9el21kAZYgGvaNe5tBqsp6S9z995kF2
+         myb01YdsScZVnoBMElQgKBbTx7Yembs1uPZqEl3TCtidJJSW2uSYuHP4NvXOdYSQBx+v
+         7UyX5viXF9WL8J2aYvdrR9edqFaQR9XvvvhZfs5t5ve/xzfB1pgaP4dmNSfQbVJY2lLT
+         AilA==
+X-Gm-Message-State: AOAM532TUBqRrHkQOidmexlZJw0CMKt8L8O/z/pgPwA2sAg1U2qDFVfC
+        QdywK7rVs/G/hv8XHG5Fh98CKWPP7wbMd5EweQ==
+X-Google-Smtp-Source: ABdhPJyp/KdgRlhbqVTv9Y4bfoAHsHmpgIk8uWR57nT9DX2u71VlcwaE1ajfiRh3Ozy8DknZf9zAjVroiBACXQvDfw==
+X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:8f02:232:ad86:2ab2])
+ (user=kaleshsingh job=sendgmr) by 2002:a25:5802:: with SMTP id
+ m2mr9400424ybb.681.1644532964348; Thu, 10 Feb 2022 14:42:44 -0800 (PST)
+Date:   Thu, 10 Feb 2022 14:41:41 -0800
+Message-Id: <20220210224220.4076151-1-kaleshsingh@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+Subject: [PATCH 0/7] KVM: arm64: Hypervisor stack enhancements
+From:   Kalesh Singh <kaleshsingh@google.com>
+Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
+        tabba@google.com, surenb@google.com, kernel-team@android.com,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Walbran <qwandor@google.com>,
+        Andrew Scull <ascull@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-02-10 12:03 +0000, Christophe Leroy wrote:
-> > diff --git a/include/linux/module.h b/include/linux/module.h
-> > index 680b31ff57fa..fd6161d78127 100644
-> > --- a/include/linux/module.h
-> > +++ b/include/linux/module.h
-> > @@ -342,9 +342,9 @@ struct module_layout {
-> >   #ifdef CONFIG_MODULES_TREE_LOOKUP
-> >   /* Only touch one cacheline for common rbtree-for-core-layout case. */
-> >   #define __module_layout_align ____cacheline_aligned
-> > -#else
-> > +#else /* !CONFIG_MODULES_TREE_LOOKUP */
-> >   #define __module_layout_align
-> > -#endif
-> > +#endif /* CONFIG_MODULES_TREE_LOOKUP */
-> Commenting an #else / #endif is only usefull when the block is more than
-> one screen or when there are nested #ifdef inside the block.
+This series is based on v5.17-rc3 and adds the following stack features to
+the KVM nVHE hypervisor:
 
-For me, this is a personal style preference. That being said, fair enough.
+== Hyp Stack Guard Pages ==
 
-> > +#else /* !CONFIG_MODULES_TREE_LOOKUP */
-> > +static unsigned long module_addr_min = -1UL, module_addr_max;
->
-> This is wrong to put that in a .h.
->
+Based on the technique used by arm64 VMAP_STACK to detect overflow.
+i.e. the stack is aligned to twice its size which ensure that the 
+'stack shift' bit of any valid SP is 0. The 'stack shift' bit can be
+tested in the exception entry to detect overflow without corrupting GPRs.
 
-I understand. This was an oversight. I'll move this to kernel/module/main.c
-in preparation for your work.
+== Hyp Stack Unwinder ==
 
-> > +static void mod_tree_insert(struct module *mod) { }
-> > +static void mod_tree_remove_init(struct module *mod) { }
-> > +static void mod_tree_remove(struct module *mod) { }
-> > +static struct module *mod_find(unsigned long addr)
->
-> Also keep mod_find() in main.c, or make it a 'static inline'. Otherwise
-> it will be duplicated in every file including internal.h
+Based on the arm64 kernel stack unwinder
+(See: arch/arm64/kernel/stacktrace.c)
 
-Agreed. This too was an oversight. I'll use the 'inline' keyword here.
+The unwinding and dumping of the hyp stack is not enabled by default and
+depends on CONFIG_NVHE_EL2_DEBUG to avoid potential information leaks.
 
-> > diff --git a/kernel/module/tree_lookup.c b/kernel/module/tree_lookup.c
-> > new file mode 100644
-> > index 000000000000..037d6eb2f56f
-> > --- /dev/null
-> > +++ b/kernel/module/tree_lookup.c
-> > @@ -0,0 +1,109 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +/*
-> > + * Modules tree lookup
-> > + *
-> > + * Copyright (C) 2015 Peter Zijlstra
-> > + * Copyright (C) 2015 Rusty Russell
-> > + */
-> > +
-> > +#include <linux/module.h>
-> > +#include <linux/rbtree_latch.h>
-> > +#include "internal.h"
-> > +
-> > +/*
-> > + * Use a latched RB-tree for __module_address(); this allows us to use
-> > + * RCU-sched lookups of the address from any context.
-> > + *
-> > + * This is conditional on PERF_EVENTS || TRACING because those can really hit
-> > + * __module_address() hard by doing a lot of stack unwinding; potentially from
-> > + * NMI context.
-> > + */
-> > +
-> > +__always_inline unsigned long __mod_tree_val(struct latch_tree_node *n)
->
-> Should be static.
-> > +__always_inline unsigned long __mod_tree_size(struct latch_tree_node *n)
->
-> Should be static.
-> > +__always_inline bool
-> > +mod_tree_less(struct latch_tree_node *a, struct latch_tree_node *b)
->
-> Should be static.
->
->
-> > +__always_inline int
-> > +mod_tree_comp(void *key, struct latch_tree_node *n)
->
-> Should be static.
->
-> > +const struct latch_tree_ops mod_tree_ops = {
-> > +    .less = mod_tree_less,
-> > +    .comp = mod_tree_comp,
-> > +};
->
-> Should be static.
+When CONFIG_NVHE_EL2_DEBUG is enabled the host stage 2 protection is
+disabled, allowing the host to read the hypervisor stack pages and unwind
+the stack from EL1. This allows us to print the hypervisor stacktrace
+before panicking the host; as shown below:
 
-Agreed. Only used in kernel/module/tree_lookup.c.
+kvm [408]: nVHE hyp panic at: \
+           [<ffffffc01161460c>] __kvm_nvhe_overflow_stack+0x10/0x34!
+kvm [408]: nVHE HYP call trace:
+kvm [408]: [<ffffffc011614974>] __kvm_nvhe_hyp_panic_bad_stack+0xc/0x10
+kvm [408]: [<ffffffc01160fa48>] __kvm_nvhe___kvm_hyp_host_vector+0x248/0x794
+kvm [408]: [<ffffffc01161461c>] __kvm_nvhe_overflow_stack+0x20/0x34
+. . .
+kvm [408]: [<ffffffc01161461c>] __kvm_nvhe_overflow_stack+0x20/0x34
+kvm [408]: [<ffffffc01161421c>] __kvm_nvhe___kvm_vcpu_run+0x2c/0x40c
+kvm [408]: [<ffffffc011615e14>] __kvm_nvhe_handle___kvm_vcpu_run+0x1c8/0x36c
+kvm [408]: [<ffffffc0116157c4>] __kvm_nvhe_handle_trap+0xa4/0x124
+kvm [408]: [<ffffffc01160f060>] __kvm_nvhe___host_exit+0x60/0x64
+kvm [408]: ---- end of nVHE HYP call trace ----
 
 
+Kalesh Singh (3):
+  KVM: arm64: Add Hyp overflow stack
+  KVM: arm64: Unwind and dump nVHE HYP stacktrace
+  KVM: arm64: Symbolize the nVHE HYP backtrace
+
+Quentin Perret (4):
+  KVM: arm64: Map the stack pages in the 'private' range
+  KVM: arm64: Factor out private range VA allocation
+  arm64: asm: Introduce test_sp_overflow macro
+  KVM: arm64: Allocate guard pages near hyp stacks
+
+ arch/arm64/include/asm/assembler.h   |  11 +
+ arch/arm64/include/asm/kvm_asm.h     |  17 ++
+ arch/arm64/kernel/entry.S            |   9 +-
+ arch/arm64/kvm/Makefile              |   1 +
+ arch/arm64/kvm/arm.c                 |   2 +-
+ arch/arm64/kvm/handle_exit.c         |  14 +-
+ arch/arm64/kvm/hyp/include/nvhe/mm.h |   1 +
+ arch/arm64/kvm/hyp/nvhe/host.S       |  21 ++
+ arch/arm64/kvm/hyp/nvhe/mm.c         |  28 ++-
+ arch/arm64/kvm/hyp/nvhe/setup.c      |  63 +++++-
+ arch/arm64/kvm/hyp/nvhe/switch.c     |  22 ++
+ arch/arm64/kvm/stacktrace.c          | 290 +++++++++++++++++++++++++++
+ arch/arm64/kvm/stacktrace.h          |  17 ++
+ scripts/kallsyms.c                   |   2 +-
+ 14 files changed, 468 insertions(+), 30 deletions(-)
+ create mode 100644 arch/arm64/kvm/stacktrace.c
+ create mode 100644 arch/arm64/kvm/stacktrace.h
+
+
+base-commit: dfd42facf1e4ada021b939b4e19c935dcdd55566
 -- 
-Aaron Tomlin
+2.35.1.265.g69c8d7142f-goog
 

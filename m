@@ -2,73 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169F24B176E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:09:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7826C4B1772
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344523AbiBJVJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 16:09:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39662 "EHLO
+        id S1344531AbiBJVMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 16:12:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238999AbiBJVJO (ORCPT
+        with ESMTP id S239478AbiBJVMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 16:09:14 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D971120
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:09:15 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id om7so6270344pjb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:09:15 -0800 (PST)
+        Thu, 10 Feb 2022 16:12:44 -0500
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C120126C5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:12:44 -0800 (PST)
+Received: by mail-qk1-x72d.google.com with SMTP id 200so6268825qki.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:12:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=5fXnl/zudRlsBaPCWqOQG/BbvW0HiBY1sLTM/v1mLFA=;
-        b=QibC25dEvOYcURSpRQEpOkucBKDrWlDRsi+8kdqduZx4sLEuXF0pkvu+F7bRWCHjIe
-         bltm1u+VTQmR61UkCRsKYD3E0hS1Abt7G61MgZ5Q0w3uA/i0UhCTlcFcCOLxDhIBuq+w
-         WeZ0gcnVD4cHILndhMQkgYaqhFz8Kimx+8zQk=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eGKgAJz2dJO294+be78C8+dB47Cw1SR8HtZpqoI4u6E=;
+        b=rf6aHwLhBkB3nt1N9g+QnhYv5tVOz8GsX7FTsawdB0VluhGjCoaJkkxxBiv4qxeolR
+         vE1TmQf9qSA1iIQomxULfXBZ9GV7TzCO8Iwuavufb+ca1fSUrzSXm8juhUB/GI/mFW0C
+         9TOFfA89ucniP01YY5BNQAh12PPWjgbELaw/cmDhCMtz0x4WcppiwG7JZx6GIyjEUdCV
+         RKWJct1L2mx+RNJ349Ayy/l+WE2cz81CJ/HWNPO3By4ayydhzS0rUwkyGrJEeRRFBnXG
+         EXS0hKNH6txc/MR5jz3DZR5IRd2nbF1/UQ0nYAXGBjkFIPayEMPH7YuUsq/yppjlkGA/
+         38FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=5fXnl/zudRlsBaPCWqOQG/BbvW0HiBY1sLTM/v1mLFA=;
-        b=TFhDFh2pTeG/cpEHzYlq+AN3tBxwkjGHwPzrCA3Fn17IzZYHLHS6CTjQ/CyjCM7HiS
-         key4SYlc/Mhh+dKkgkPG4xpi1c8taU6NhQf2ZsnrRqoMSXGRojBT57HFw78u3b4G4Snq
-         a3xTuihGVLEpxelL9gxLYU8HelKNY6K5TZaOSxJc6LXIcJ61beLxlDa9JSgPlX7nZeQx
-         tJbt8rdeVjdjStfz9IaWk6fAdvQOTe3bRHpj2Uuwh/tdOClOnLeHdaXceh15wjsUMtca
-         dpgoXbaOXpG+nKSciQWTTIZZ9GTsGTbs8sD31ndef0o62xihuc03RyGdg57LlIrm/KpZ
-         cnAQ==
-X-Gm-Message-State: AOAM5310CWE6DopjkU6xP5rBc/g7j2iPTz5fU9qdWOu53wvkcEFF/IKg
-        dV0uV1xBRboqW/T/edMa5fkprw==
-X-Google-Smtp-Source: ABdhPJy30sCEW54x3m+/Y52i3WOAn4oQ+v00ptLFoUMzH69cKTRaNO0Kcem2NoYBDzvdjY7R5URPCA==
-X-Received: by 2002:a17:903:1c4:: with SMTP id e4mr9362662plh.147.1644527354547;
-        Thu, 10 Feb 2022 13:09:14 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id oa10sm1119190pjb.54.2022.02.10.13.09.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 13:09:14 -0800 (PST)
-Date:   Thu, 10 Feb 2022 13:09:13 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Jann Horn <jannh@google.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>,
-        stable@vger.kernel.org, Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>
-Subject: Re: [PATCH 1/3] signal: HANDLER_EXIT should clear SIGNAL_UNKILLABLE
-Message-ID: <202202101254.1174AB2B@keescook>
-References: <20220210025321.787113-1-keescook@chromium.org>
- <20220210025321.787113-2-keescook@chromium.org>
- <CAG48ez1m7XJ1wJvTHtNorH480jTWNgdrn5Q1LTZZQ4uve3r4Sw@mail.gmail.com>
- <202202100935.FB3E60FA5@keescook>
- <CAG48ez3fG7S1dfE2-JAtyOZUK=0_iZ03scf+oD6gwVyD1Qp33g@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eGKgAJz2dJO294+be78C8+dB47Cw1SR8HtZpqoI4u6E=;
+        b=yLnjUA/OCkI9KwuVBIY1xTWGwpHniZCQaf9iZeZtrW81GmIU0+vXvaMpWfAm45Dr5x
+         wfVXcW1/IPEr3QPZzlYaCFuDAJDjrxKp6JUjoVRJFscD2NWBReRfeQ1eNR6pISFzlkbC
+         9+bhOiX2i8JSvlu0FCRmPwLaWDLuVSCkBBRPeqssFUyKnJRmsTxZMx6nDxE9JYg3MDRL
+         VHsViGDEDBGfdYearMwj595bgjVktGEOWpuQQ7Sv8pmrwc+0HegP04gk4cccG8MnwKH4
+         sGjLrT3wwiZGb5c1J8tQc8/HNOw8+0d/1i+RlZUkONU609onl7dt1Ch8gp0UP3LGJdGJ
+         u9tA==
+X-Gm-Message-State: AOAM532oO4o4+im9b7g0UmPGaSZcGCHShgQ5nB+DVVv11G0X4dWD7v+0
+        5lUFhuW/tDTEfDiW5ov1SaGJX2mKLhYrzPcqObw6iA==
+X-Google-Smtp-Source: ABdhPJy+IHLLg+lum0l64VChU98w1V7sQgvluKp2fObOY2Y+7zq6S7LI5qBIbU+kQcI2lns5avDNyi64Irumie2mSQI=
+X-Received: by 2002:a05:620a:75b:: with SMTP id i27mr4757700qki.593.1644527563819;
+ Thu, 10 Feb 2022 13:12:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAG48ez3fG7S1dfE2-JAtyOZUK=0_iZ03scf+oD6gwVyD1Qp33g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220208044328.588860-1-bjorn.andersson@linaro.org>
+ <YgJISIIacBnFyTLq@kroah.com> <YgV8GyK9G0gbWAaq@ripper>
+In-Reply-To: <YgV8GyK9G0gbWAaq@ripper>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 11 Feb 2022 00:12:32 +0300
+Message-ID: <CAA8EJppkZTRApQbuEUACw=r2kBH+321_f1ZqRf_-veEuwB56zg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] drm: Add HPD state to drm_connector_oob_hotplug_event()
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,128 +81,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 07:01:39PM +0100, Jann Horn wrote:
-> On Thu, Feb 10, 2022 at 6:37 PM Kees Cook <keescook@chromium.org> wrote:
-> > On Thu, Feb 10, 2022 at 05:18:39PM +0100, Jann Horn wrote:
-> > > On Thu, Feb 10, 2022 at 3:53 AM Kees Cook <keescook@chromium.org> wrote:
-> > > > Fatal SIGSYS signals were not being delivered to pid namespace init
-> > > > processes. Make sure the SIGNAL_UNKILLABLE doesn't get set for these
-> > > > cases.
-> > > >
-> > > > Reported-by: Robert Święcki <robert@swiecki.net>
-> > > > Suggested-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> > > > Fixes: 00b06da29cf9 ("signal: Add SA_IMMUTABLE to ensure forced siganls do not get changed")
-> > > > Cc: stable@vger.kernel.org
-> > > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > > ---
-> > > >  kernel/signal.c | 5 +++--
-> > > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/kernel/signal.c b/kernel/signal.c
-> > > > index 38602738866e..33e3ee4f3383 100644
-> > > > --- a/kernel/signal.c
-> > > > +++ b/kernel/signal.c
-> > > > @@ -1342,9 +1342,10 @@ force_sig_info_to_task(struct kernel_siginfo *info, struct task_struct *t,
-> > > >         }
-> > > >         /*
-> > > >          * Don't clear SIGNAL_UNKILLABLE for traced tasks, users won't expect
-> > > > -        * debugging to leave init killable.
-> > > > +        * debugging to leave init killable, unless it is intended to exit.
-> > > >          */
-> > > > -       if (action->sa.sa_handler == SIG_DFL && !t->ptrace)
-> > > > +       if (action->sa.sa_handler == SIG_DFL &&
-> > > > +           (!t->ptrace || (handler == HANDLER_EXIT)))
-> > > >                 t->signal->flags &= ~SIGNAL_UNKILLABLE;
+On Thu, 10 Feb 2022 at 23:54, Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+> On Tue 08 Feb 02:39 PST 2022, Greg Kroah-Hartman wrote:
+>
+> > On Mon, Feb 07, 2022 at 08:43:27PM -0800, Bjorn Andersson wrote:
+> > > In some implementations, such as the Qualcomm platforms, the display
+> > > driver has no way to query the current HPD state and as such it's
+> > > impossible to distinguish between disconnect and attention events.
 > > >
-> > > You're changing the subclause:
+> > > Add a parameter to drm_connector_oob_hotplug_event() to pass the HPD
+> > > state.
 > > >
-> > > !t->ptrace
+> > > Also push the test for unchanged state in the displayport altmode driver
+> > > into the i915 driver, to allow other drivers to act upon each update.
 > > >
-> > > to:
+> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > ---
 > > >
-> > > (!t->ptrace || (handler == HANDLER_EXIT))
+> > > Note that the Intel driver has only been compile tested with this patch.
 > > >
-> > > which means that the change only affects cases where the process has a
-> > > ptracer, right? That's not the scenario the commit message is talking
-> > > about...
+> > >  drivers/gpu/drm/drm_connector.c          |  6 ++++--
+> > >  drivers/gpu/drm/i915/display/intel_dp.c  | 14 +++++++++++---
+> > >  drivers/gpu/drm/i915/i915_drv.h          |  3 +++
+> > >  drivers/usb/typec/altmodes/displayport.c |  9 ++-------
+> > >  include/drm/drm_connector.h              |  5 +++--
+> > >  5 files changed, 23 insertions(+), 14 deletions(-)
+> > >
+> > > diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
+> > > index a50c82bc2b2f..ad7295597c0f 100644
+> > > --- a/drivers/gpu/drm/drm_connector.c
+> > > +++ b/drivers/gpu/drm/drm_connector.c
+> > > @@ -2825,6 +2825,7 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
+> > >  /**
+> > >   * drm_connector_oob_hotplug_event - Report out-of-band hotplug event to connector
+> > >   * @connector_fwnode: fwnode_handle to report the event on
+> > > + * @hpd_state: number of data lanes available
 > >
-> > Sorry, yes, I was not as accurate as I should have been in the commit
-> > log. I have changed it to:
+> > "number"?
 > >
-> > Fatal SIGSYS signals (i.e. seccomp RET_KILL_* syscall filter actions)
-> > were not being delivered to ptraced pid namespace init processes. Make
-> > sure the SIGNAL_UNKILLABLE doesn't get set for these cases.
-> 
-> So basically force_sig_info() is trying to figure out whether
-> get_signal() will later on check for SIGNAL_UNKILLABLE (the SIG_DFL
-> case), and if so, it clears the flag from the target's signal_struct
-> that marks the process as unkillable?
-> 
-> This used to be:
-> 
-> if (action->sa.sa_handler == SIG_DFL)
->     t->signal->flags &= ~SIGNAL_UNKILLABLE;
-> 
-> Then someone noticed that in the ptrace case, the signal might not
-> actually end up being consumed by the target process, and added the
-> "&& !t->ptrace" clause in commit
-> eb61b5911bdc923875cde99eb25203a0e2b06d43.
-> 
-> And now Robert Swiecki noticed that that still didn't accurately model
-> what'll happen in get_signal().
-> 
-> This seems hacky to me, and also racy: What if, while you're going
-> through a SECCOMP_RET_KILL_PROCESS in an unkillable process, some
-> other thread e.g. concurrently changes the disposition of SIGSYS from
-> a custom handler to SIG_DFL?
+> > >   *
+> > >   * On some hardware a hotplug event notification may come from outside the display
+> > >   * driver / device. An example of this is some USB Type-C setups where the hardware
+> > > @@ -2834,7 +2835,8 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
+> > >   * This function can be used to report these out-of-band events after obtaining
+> > >   * a drm_connector reference through calling drm_connector_find_by_fwnode().
+> > >   */
+> > > -void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
+> > > +void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
+> > > +                                bool hpd_state)
+> >
+> > This is a boolean, how can it be a number?
+> >
+>
+> The kerneldoc wasn't appropriately updated as this went from being
+> "number of data lanes" to "the hot plug detect (hpd) state".
+>
+> > And having a "flag" like this is a pain, how do you know what the
+> > parameter really means?
+> >
+>
+> You're right, "state" isn't a boolean property, let's rename it
+> "hpd_high" to clarify it.
 
-Do you mean after force_sig_info_to_task() has finished but before
-get_signal()? SA_IMMUTABLE will block changes to the action.
+"connected" ?
 
-If you mean before force_sig_info_to_task(), I don't see how that's
-possible since it's under lock:
+>
+> > >  {
+> > >     struct drm_connector *connector;
+> > >
+> > > @@ -2843,7 +2845,7 @@ void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
+> > >             return;
+> > >
+> > >     if (connector->funcs->oob_hotplug_event)
+> > > -           connector->funcs->oob_hotplug_event(connector);
+> > > +           connector->funcs->oob_hotplug_event(connector, hpd_state);
+> > >
+> > >     drm_connector_put(connector);
+> > >  }
+> > > diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
+> > > index 146b83916005..00520867d37b 100644
+> > > --- a/drivers/gpu/drm/i915/display/intel_dp.c
+> > > +++ b/drivers/gpu/drm/i915/display/intel_dp.c
+> > > @@ -4816,15 +4816,23 @@ static int intel_dp_connector_atomic_check(struct drm_connector *conn,
+> > >     return intel_modeset_synced_crtcs(state, conn);
+> > >  }
+> > >
+> > > -static void intel_dp_oob_hotplug_event(struct drm_connector *connector)
+> > > +static void intel_dp_oob_hotplug_event(struct drm_connector *connector, bool hpd_state)
+> > >  {
+> > >     struct intel_encoder *encoder = intel_attached_encoder(to_intel_connector(connector));
+> > >     struct drm_i915_private *i915 = to_i915(connector->dev);
+> > > +   bool need_work = false;
+> > >
+> > >     spin_lock_irq(&i915->irq_lock);
+> > > -   i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
+> > > +   if (hpd_state != i915->hotplug.oob_hotplug_state) {
+> > > +           i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
+> > > +
+> > > +           i915->hotplug.oob_hotplug_state = hpd_state;
+> > > +           need_work = true;
+> > > +   }
+> > >     spin_unlock_irq(&i915->irq_lock);
+> > > -   queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
+> > > +
+> > > +   if (need_work)
+> > > +           queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
+> > >  }
+> > >
+> > >  static const struct drm_connector_funcs intel_dp_connector_funcs = {
+> > > diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
+> > > index 8c1706fd81f9..543ebf1cfcf4 100644
+> > > --- a/drivers/gpu/drm/i915/i915_drv.h
+> > > +++ b/drivers/gpu/drm/i915/i915_drv.h
+> > > @@ -149,6 +149,9 @@ struct i915_hotplug {
+> > >     /* Whether or not to count short HPD IRQs in HPD storms */
+> > >     u8 hpd_short_storm_enabled;
+> > >
+> > > +   /* Last state reported by oob_hotplug_event */
+> > > +   bool oob_hotplug_state;
+> > > +
+> > >     /*
+> > >      * if we get a HPD irq from DP and a HPD irq from non-DP
+> > >      * the non-DP HPD could block the workqueue on a mode config
+> > > diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+> > > index c1d8c23baa39..a4596be4d34a 100644
+> > > --- a/drivers/usb/typec/altmodes/displayport.c
+> > > +++ b/drivers/usb/typec/altmodes/displayport.c
+> > > @@ -59,7 +59,6 @@ struct dp_altmode {
+> > >     struct typec_displayport_data data;
+> > >
+> > >     enum dp_state state;
+> > > -   bool hpd;
+> > >
+> > >     struct mutex lock; /* device lock */
+> > >     struct work_struct work;
+> > > @@ -143,10 +142,7 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
+> > >             if (!ret)
+> > >                     dp->state = DP_STATE_CONFIGURE;
+> > >     } else {
+> > > -           if (dp->hpd != hpd) {
+> > > -                   drm_connector_oob_hotplug_event(dp->connector_fwnode);
+> > > -                   dp->hpd = hpd;
+> > > -           }
+> > > +           drm_connector_oob_hotplug_event(dp->connector_fwnode, hpd);
+> > >     }
+> > >
+> > >     return ret;
+> > > @@ -573,8 +569,7 @@ void dp_altmode_remove(struct typec_altmode *alt)
+> > >     cancel_work_sync(&dp->work);
+> > >
+> > >     if (dp->connector_fwnode) {
+> > > -           if (dp->hpd)
+> > > -                   drm_connector_oob_hotplug_event(dp->connector_fwnode);
+> > > +           drm_connector_oob_hotplug_event(dp->connector_fwnode, false);
+> >
+> > See, what does "false" here mean?
+> >
+> > Name the function for what it does, do not have random flags as
+> > parameters, that makes it impossible to understand what the code is
+> > doing when you are reading it, without having to jump around and figure
+> > out what the flags are saying.
+> >
+> > And here they just don't even seem to be right :(
+> >
+>
+> Both the old and new code will signal to the DRM driver that the cable
+> was removed, the change is that we're carrying the level in the call
+> rather than just indicating that the state has changed.
+>
+> We could introduce some HPD_HIGH/HPD_LOW defines to make it easier to
+> read. But the various places I'm looking at just represented the hpd
+> state as a bool.
+>
+> Regards,
+> Bjorn
 
-        if (blocked || ignored || (handler != HANDLER_CURRENT)) {
-                action->sa.sa_handler = SIG_DFL;
-                if (handler == HANDLER_EXIT)
-                        action->sa.sa_flags |= SA_IMMUTABLE;
-	...
-        if (action->sa.sa_handler == SIG_DFL &&
-            (!t->ptrace || (handler == HANDLER_EXIT)))
-                t->signal->flags &= ~SIGNAL_UNKILLABLE;
 
-Given handler = HANDLER_EXIT, it'll always be SIG_DFL.
-
-> Instead of trying to figure out whether the signal would have been
-> fatal without SIGNAL_UNKILLABLE, I think it would be better to find a
-> way to tell the signal-handling code that SIGNAL_UNKILLABLE should be
-> bypassed for this specific signal, or something along those lines...
-> but of course that's also kind of messy because the signal-sending
-> code might fall back to just using the pending signal mask on
-> allocation failure IIRC?
-
-My original patch aimed that way:
-
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 9b04631acde8..c124a09de6de 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -2787,7 +2787,8 @@ bool get_signal(struct ksignal *ksig)
- 		 * case, the signal cannot be dropped.
- 		 */
- 		if (unlikely(signal->flags & SIGNAL_UNKILLABLE) &&
--				!sig_kernel_only(signr))
-+				!sig_kernel_only(signr) &&
-+				!(ka->sa.sa_flags & SA_IMMUTABLE))
- 			continue;
- 
- 		if (sig_kernel_stop(signr)) {
-
-But I don't think there's a race, and Eric's suggestion seemed
-better in the sense that the state change is entirely contained by
-force_sig_info_to_task().
-
--Kees
 
 -- 
-Kees Cook
+With best wishes
+Dmitry

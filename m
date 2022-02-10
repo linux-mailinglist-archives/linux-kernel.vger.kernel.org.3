@@ -2,252 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD57A4B18C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C57194B18D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:52:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345237AbiBJWtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 17:49:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37522 "EHLO
+        id S1345283AbiBJWwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 17:52:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242109AbiBJWtM (ORCPT
+        with ESMTP id S1344212AbiBJWwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:49:12 -0500
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958C3B6F;
-        Thu, 10 Feb 2022 14:49:09 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:53576)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nIIFQ-000DO7-EC; Thu, 10 Feb 2022 15:49:08 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:47596 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nIIFO-00EgvJ-TW; Thu, 10 Feb 2022 15:49:07 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20220210025321.787113-1-keescook@chromium.org>
-        <871r0a8u29.fsf@email.froward.int.ebiederm.org>
-        <202202101033.9C04563D9@keescook>
-        <87pmnu5z28.fsf@email.froward.int.ebiederm.org>
-        <202202101137.B48D02138@keescook>
-Date:   Thu, 10 Feb 2022 16:48:30 -0600
-In-Reply-To: <202202101137.B48D02138@keescook> (Kees Cook's message of "Thu,
-        10 Feb 2022 12:43:14 -0800")
-Message-ID: <87k0e249tt.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 10 Feb 2022 17:52:00 -0500
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8559B75
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:52:00 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id j24so6502918qkk.10
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:52:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3Mk85loLOThbNQSOSUb3FqT3m+mzX4GZ/g9jCLAWa+E=;
+        b=iivGpa8prXGA3rTzSN/P2mJPgq9t7ComsLYhdG0poK7tKY/TsriUXmbid+Yv039TYo
+         OLNbQ4ACvyucdaoZMb4fvDnxw1+IFcvGTFXzXwri9ZpflpuV+aVEC1zbXHViKpxMkUAj
+         bl4WvGM0xRKbvMgHLDs3gRUSzDSmKPLHISuaq7bkkiABtsdHIJzhUqR13FLweGZHDRZ5
+         r3ohQlEJHT57ykfIZHb7T3TVdMGkdXAxPi11/Vw6HkN6OkmY0ukX64zOgmiUl73kawT3
+         c3ImSbZa8A4KnDz9/4K/UXM/e+1HWjX0OwOCtLJhM2k/kmOWohqoC4K4SQqKJ8LxIh3B
+         naGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3Mk85loLOThbNQSOSUb3FqT3m+mzX4GZ/g9jCLAWa+E=;
+        b=NQv5iO/tz67WdiiARAUlyyWCLBNrqftIrA04w17qGunLWNF5O0qT7as/NoucdroPhZ
+         OR5KZ89KSEgbpOMJwphpx1ErQepvag5hxbAzEEnqBO9BnyC8//QkEmxpk1XFoQU4Oxzb
+         AOdhNDwY5uX7gu7+Nom+fH/gYc5So/VL8Ql2Pq47gy576XisjgzwqRH7U9tKQUl+eFGg
+         Lghvf+X8sCLezapKrla38gLtB/XQkDPntXIB2ltm1HsZprBiJAEoxRqmFd9Obv4Khaix
+         FUNTPcdYkZUIFd/sjOfk/kaZg3p7yuh95Og3hEv7HJb1/kcNzz8JoWugFt1RVgDOAGtb
+         xQtw==
+X-Gm-Message-State: AOAM533g7xXsgo4vo2KM4+q5AmJ0FMOKgiA8exDgLJhoz2OmH70NET/h
+        6AnSMZDjE2JecoXR7AadRCED11YwYHc=
+X-Google-Smtp-Source: ABdhPJwni4hBc9oW5ikS54OdXNORPGNu27bEUaK6Q7h9OW5yK5s9fw04W/vf71CboIKRYUQFzV9A+Q==
+X-Received: by 2002:ac8:7957:: with SMTP id r23mr6419981qtt.450.1644533509086;
+        Thu, 10 Feb 2022 14:51:49 -0800 (PST)
+Received: from localhost ([12.28.44.171])
+        by smtp.gmail.com with ESMTPSA id d22sm10799771qkn.112.2022.02.10.14.51.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 14:51:48 -0800 (PST)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 00/49] bitmap: optimize bitmap_weight() usage
+Date:   Thu, 10 Feb 2022 14:48:44 -0800
+Message-Id: <20220210224933.379149-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nIIFO-00EgvJ-TW;;;mid=<87k0e249tt.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/JHZfXIjTQBa3uqb2Ausc9H2cCfR+/F2Q=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Kees Cook <keescook@chromium.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 656 ms - load_scoreonly_sql: 0.32 (0.0%),
-        signal_user_changed: 11 (1.7%), b_tie_ro: 8 (1.3%), parse: 1.31 (0.2%),
-         extract_message_metadata: 15 (2.3%), get_uri_detail_list: 4.1 (0.6%),
-        tests_pri_-1000: 6 (0.9%), tests_pri_-950: 1.51 (0.2%),
-        tests_pri_-900: 1.10 (0.2%), tests_pri_-90: 80 (12.1%), check_bayes:
-        78 (11.9%), b_tokenize: 14 (2.1%), b_tok_get_all: 11 (1.6%),
-        b_comp_prob: 4.3 (0.6%), b_tok_touch_all: 46 (7.1%), b_finish: 0.70
-        (0.1%), tests_pri_0: 525 (80.0%), check_dkim_signature: 0.79 (0.1%),
-        check_dkim_adsp: 2.6 (0.4%), poll_dns_idle: 0.69 (0.1%), tests_pri_10:
-        3.0 (0.5%), tests_pri_500: 8 (1.3%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 0/3] signal: HANDLER_EXIT should clear SIGNAL_UNKILLABLE
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
+In many cases people use bitmap_weight()-based functions to compare
+the result against a number of expression:
 
-> On Thu, Feb 10, 2022 at 12:58:07PM -0600, Eric W. Biederman wrote:
->> Kees Cook <keescook@chromium.org> writes:
->> 
->> > On Thu, Feb 10, 2022 at 12:17:50PM -0600, Eric W. Biederman wrote:
->> >> Kees Cook <keescook@chromium.org> writes:
->> >> 
->> >> > Hi,
->> >> >
->> >> > This fixes the signal refactoring to actually kill unkillable processes
->> >> > when receiving a fatal SIGSYS from seccomp. Thanks to Robert for the
->> >> > report and Eric for the fix! I've also tweaked seccomp internal a bit to
->> >> > fail more safely. This was a partial seccomp bypass, in the sense that
->> >> > SECCOMP_RET_KILL_* didn't kill the process, but it didn't bypass other
->> >> > aspects of the filters. (i.e. the syscall was still blocked, etc.)
->> >> 
->> >> Any luck on figuring out how to suppress the extra event?
->> >
->> > I haven't found a good single indicator of a process being in an "I am dying"
->> > state, and even if I did, it seems every architecture's exit path would
->> > need to add a new test.
->> 
->> The "I am dying" state for a task is fatal_signal_pending, at least
->> before get_signal is reached, for a process there is SIGNAL_GROUP_EXIT.
->> Something I am busily cleaning up and making more reliable at the
->> moment.
->
-> The state I need to catch is "I am dying and this syscall was
-> interrupted". fatal_signal_pending() is kind of only the first half
-> (though it doesn't cover fatal SIGSYS?)
->
-> For example, if a process hits a BUG() in the middle of running a
-> syscall, that syscall isn't expected to "exit" from the perspective of
-> userspace. This is similarly true for seccomp's fatal SIGSYS.
->
->> What is the event that is happening?  Is it
->> tracehook_report_syscall_exit or something else?
->
-> Yes, but in more completely, it's these three, which are called in
-> various fashions from architecture syscall exit code:
->
-> 	audit_syscall_exit()		(audit)
-> 	trace_sys_exit()		(see "TRACE_EVENT_FN(sys_exit,")
-> 	tracehook_report_syscall_exit()	(ptrace)
->
->> From the bits I have seen it seems like something else.
->
-> But yes, the place Robert and I both noticed it was with ptrace from
-> tracehook_report_syscall_exit(), which is rather poorly named. :)
+        if (cpumask_weight(mask) > 1)
+                do_something();
 
-Speaking of patches I am just about to send out.
+This may take considerable amount of time on many-cpus machines because
+cpumask_weight() will traverse every word of underlying cpumask
+unconditionally.
 
-> Looking at the results, audit_syscall_exit() and trace_sys_exit() need
-> to be skipped too, since they would each be reporting potential nonsense.
->
->> > The best approach seems to be clearing the TIF_*WORK* bits, but that's
->> > still a bit arch-specific. And I'm not sure which layer would do that.
->> > At what point have we decided the process will not continue? More
->> > than seccomp was calling do_exit() in the middle of a syscall, but those
->> > appear to have all been either SIGKILL or SIGSEGV?
->> 
->> This is where I get confused what TIF_WORK bits matter?
->
-> This is where I wish all the architectures were using the common syscall
-> code. The old do_exit() path would completely skip _everything_ in the
-> exit path, so it was like never calling anything after the syscall
-> dispatch table. The only userspace visible things in there are triggered
-> from having TIF_WORK... flags (but again, it's kind of a per-arch mess).
->
-> Skipping the entire exit path makes a fair bit of sense. For example,
-> rseq_syscall() is redundant (forcing SIGSEGV).
->
-> Regardless, at least the three places above need to be skipped.
->
-> But just testing fatal_signal_pending() seems wrong: a normal syscall
-> could be finishing just fine, it just happens to have a fatal signal
-> ready to be processed.
+We can significantly improve on it for many real cases if stop traversing
+the mask as soon as we count cpus to any number greater than 1:
 
-Yes.  It is really just the HANDLER_EXIT case where this is interesting.
+        if (cpumask_weight_gt(mask, 1))
+                do_something();
 
->
-> Here's the ordering after a syscall on x86 from do_syscall_64():
->
-> do_syscall_x64()
-> 	sys_call_table[...](regs)
-> syscall_exit_to_user_mode()
-> 	__syscall_exit_to_user_mode_work()
-> 		syscall_exit_to_user_mode_prepare()
-> 			syscall_exit_work()
-> 				arch_syscall_exit_tracehook()
-> 					tracehook_report_syscall_exit()
-> 	exit_to_user_mode_prepare()
-> 		exit_to_user_mode_loop()
-> 			handle_signal_work()
-> 				arch_do_signal_or_restart()
-> 					get_signal()
-> 						do_group_exit()
->
-> Here's arm64 from el0_svc():
->
-> do_el0_svc()
-> 	el0_svc_common()
-> 		invoke_syscall()
-> 			syscall_table[...](regs)
-> 		syscall_trace_exit()
-> 			tracehook_report_syscall()
-> 				tracehook_report_syscall_exit()
-> exit_to_user_mode()
-> 	prepare_exit_to_user_mode()
-> 		do_notify_resume()
-> 			do_signal()
-> 				get_signal()
-> 					do_group_exit()
->
-> In the past, any do_exit() would short circuit everything after the
-> syscall table. Now, we do all the exit work before starting the return
-> to user mode which is what processes the signals. So I guess there's
-> more precisely a difference between "visible to userspace" and "return
-> to userspace".
+The first part of the series is a cleanup and rework where bitmap_weight
+API is used wrongly.
 
-Yes.  I see that now.  I had not had an occasion to look at the order
-all of these were called in before and my mental model was wrong.
+Second part converts cpumask_weight() to cpumask_empty() if the number
+to compare with is 0. Ditto for bitmap_weight() and nodes_weight().
 
-It makes a certain kind of sense that the per syscall work happens
-before we do additional things like process signals.  It simply
-had not realized that was happening in that order until now.
+In the 3nd part of the series bitmap_weight_cmp() is added together with
+bitmap_weight_{eq,gt,ge,lt,le} wrappers on top of it. Corresponding
+wrappers for cpumask and nodemask are added as well.
 
+The rough numbers of new functions usage, as counted by grep:
 
-> (an aside: where to PF_IO_WORKER threads die?)
+	{bitmap,cpumask,nodes}_weight_eq	26
+	{bitmap,cpumask,nodes}_weight_ge	25
+	{bitmap,cpumask,nodes}_weight_gt	19
+	{bitmap,cpumask,nodes}_weight_le	18
+	{bitmap,cpumask,nodes}_weight_lt	14
 
-They are calling do_exit explicitly.
+v1: https://lkml.org/lkml/2021/11/27/339
+v2: https://lkml.org/lkml/2021/12/18/241
+v3: https://lkml.org/lkml/2022/1/27/913
+v4: 
+ - rebase on next-20220209;
+ - exclude patches that already in next-20220209;
+ - drop patches 41, 43, 47, 48 from v3 as they are not performance
+   critical;
+ - deeply rework iio_simple_dummy_trigger_h (patch #4) and
+   qed_rdma_bmap_free (#10), instead of replacing bitmap_weight;
+ - use more standard tags.
 
->> I expect if anything else mattered we would need to change it to
->> HANDLER_EXIT.
->> 
->> I made a mistake conflating to cases and I want to make certain I
->> successfully separate those two cases at the end of the day.
->
-> For skipping the exit work, I'm not sure it matters, since all the
-> signal stuff is "too late"...
+Yury Norov (49):
+  net: dsa: don't use bitmap_weight() in b53_arl_read()
+  net: systemport: don't use bitmap_weight() in bcm_sysport_rule_set()
+  net: mellanox: fix open-coded for_each_set_bit()
+  iio: fix opencoded for_each_set_bit()
+  qed: rework qed_rdma_bmap_free()
+  nds32: perf: replace bitmap_weight with bitmap_empty where appropriate
+  KVM: x86: replace bitmap_weight with bitmap_empty where appropriate
+  drm: replace bitmap_weight with bitmap_empty where appropriate
+  ice: replace bitmap_weight with bitmap_empty for intel
+  octeontx2-pf: replace bitmap_weight with bitmap_empty for Marvell
+  qed: replace bitmap_weight with bitmap_empty in qed_roce_stop()
+  perf/arm-cci: replace bitmap_weight with bitmap_empty where
+    appropriate
+  perf tools: replace bitmap_weight with bitmap_empty where appropriate
+  arch/alpha: replace cpumask_weight with cpumask_empty where
+    appropriate
+  arch/ia64: replace cpumask_weight with cpumask_empty where appropriate
+  arch/x86: replace cpumask_weight with cpumask_empty where appropriate
+  cpufreq: replace cpumask_weight with cpumask_empty where appropriate
+  gpu: drm: replace cpumask_weight with cpumask_empty where appropriate
+  RDMA/hfi: replace cpumask_weight with cpumask_empty where appropriate
+  irq: mips: replace cpumask_weight with cpumask_empty where appropriate
+  genirq/affinity: replace cpumask_weight with cpumask_empty where
+    appropriate
+  sched: replace cpumask_weight with cpumask_empty where appropriate
+  clocksource: replace cpumask_weight with cpumask_empty in
+    clocksource.c
+  mm/vmstat: replace cpumask_weight with cpumask_empty where appropriate
+  arch/x86: replace nodes_weight with nodes_empty where appropriate
+  bitmap: add bitmap_weight_{cmp, eq, gt, ge, lt, le} functions
+  arch/x86: replace bitmap_weight with bitmap_weight_{eq,gt,ge,lt,le}
+    where appropriate
+  iio: replace bitmap_weight() with bitmap_weight_{eq,gt} where
+    appropriate
+  memstick: replace bitmap_weight with bitmap_weight_eq where
+    appropriate
+  ixgbe: replace bitmap_weight with bitmap_weight_eq for intel
+  octeontx2-pf: replace bitmap_weight with bitmap_weight_{eq,gt} for
+    OcteonTX2
+  mlx4: replace bitmap_weight with bitmap_weight_{eq,gt,ge,lt,le} for
+    mellanox
+  perf: replace bitmap_weight with bitmap_weight_eq for ThunderX2
+  media: tegra-video:: replace bitmap_weight with bitmap_weight_le
+  cpumask: add cpumask_weight_{eq,gt,ge,lt,le}
+  arch/ia64: replace cpumask_weight with cpumask_weight_eq in mm/tlb.c
+  arch/mips: replace cpumask_weight with cpumask_weight_{eq, ...} where
+    appropriate
+  arch/powerpc: replace cpumask_weight with cpumask_weight_{eq, ...}
+    where appropriate
+  arch/s390: replace cpumask_weight with cpumask_weight_eq where
+    appropriate
+  firmware: pcsi: replace cpumask_weight with cpumask_weight_eq
+  RDMA/hfi1: replace cpumask_weight with cpumask_weight_{eq, ...} where
+    appropriate
+  scsi: lpfc: replace cpumask_weight with cpumask_weight_gt
+  soc/qman: replace cpumask_weight with cpumask_weight_lt
+  nodemask: add nodemask_weight_{eq,gt,ge,lt,le}
+  ACPI: replace nodes__weight with nodes_weight_ge for numa
+  mm/mempolicy: replace nodes_weight with nodes_weight_eq
+  nodemask: add num_node_state_eq()
+  tools: bitmap: sync bitmap_weight
+  MAINTAINERS: add cpumask and nodemask files to BITMAP_API
 
-The conflation lead me to believe that we could simply and safely cause
-seccomp to use normal signal delivery to kill the process.  The first
-part of the conflation I sorted out by introducing HANDLER_EXIT.  The
-user visible part of the change I am not yet certain what to do with.
+ MAINTAINERS                                   |  4 +
+ arch/alpha/kernel/process.c                   |  2 +-
+ arch/ia64/kernel/setup.c                      |  2 +-
+ arch/ia64/mm/tlb.c                            |  2 +-
+ arch/mips/cavium-octeon/octeon-irq.c          |  4 +-
+ arch/mips/kernel/crash.c                      |  2 +-
+ arch/nds32/kernel/perf_event_cpu.c            |  2 +-
+ arch/powerpc/kernel/smp.c                     |  2 +-
+ arch/powerpc/kernel/watchdog.c                |  2 +-
+ arch/powerpc/xmon/xmon.c                      |  4 +-
+ arch/s390/kernel/perf_cpum_cf.c               |  2 +-
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c        | 16 ++--
+ arch/x86/kvm/hyperv.c                         |  8 +-
+ arch/x86/mm/amdtopology.c                     |  2 +-
+ arch/x86/mm/mmio-mod.c                        |  2 +-
+ arch/x86/mm/numa_emulation.c                  |  4 +-
+ arch/x86/platform/uv/uv_nmi.c                 |  2 +-
+ drivers/acpi/numa/srat.c                      |  2 +-
+ drivers/cpufreq/qcom-cpufreq-hw.c             |  2 +-
+ drivers/cpufreq/scmi-cpufreq.c                |  2 +-
+ drivers/firmware/psci/psci_checker.c          |  2 +-
+ drivers/gpu/drm/i915/i915_pmu.c               |  2 +-
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_smp.c      |  2 +-
+ drivers/iio/dummy/iio_simple_dummy_buffer.c   | 48 +++++-------
+ drivers/iio/industrialio-trigger.c            |  2 +-
+ drivers/infiniband/hw/hfi1/affinity.c         | 13 ++--
+ drivers/infiniband/hw/qib/qib_file_ops.c      |  2 +-
+ drivers/infiniband/hw/qib/qib_iba7322.c       |  2 +-
+ drivers/irqchip/irq-bcm6345-l1.c              |  2 +-
+ drivers/memstick/core/ms_block.c              |  4 +-
+ drivers/net/dsa/b53/b53_common.c              |  6 +-
+ drivers/net/ethernet/broadcom/bcmsysport.c    |  6 +-
+ .../net/ethernet/intel/ice/ice_virtchnl_pf.c  |  4 +-
+ .../net/ethernet/intel/ixgbe/ixgbe_sriov.c    |  2 +-
+ .../marvell/octeontx2/nic/otx2_ethtool.c      |  2 +-
+ .../marvell/octeontx2/nic/otx2_flows.c        |  8 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |  2 +-
+ drivers/net/ethernet/mellanox/mlx4/cmd.c      | 33 +++-----
+ drivers/net/ethernet/mellanox/mlx4/eq.c       |  4 +-
+ drivers/net/ethernet/mellanox/mlx4/fw.c       |  4 +-
+ drivers/net/ethernet/mellanox/mlx4/main.c     |  2 +-
+ drivers/net/ethernet/qlogic/qed/qed_rdma.c    | 45 ++++-------
+ drivers/net/ethernet/qlogic/qed/qed_roce.c    |  2 +-
+ drivers/perf/arm-cci.c                        |  2 +-
+ drivers/perf/arm_pmu.c                        |  4 +-
+ drivers/perf/hisilicon/hisi_uncore_pmu.c      |  2 +-
+ drivers/perf/thunderx2_pmu.c                  |  4 +-
+ drivers/perf/xgene_pmu.c                      |  2 +-
+ drivers/scsi/lpfc/lpfc_init.c                 |  2 +-
+ drivers/soc/fsl/qbman/qman_test_stash.c       |  2 +-
+ drivers/staging/media/tegra-video/vi.c        |  2 +-
+ include/linux/bitmap.h                        | 78 +++++++++++++++++++
+ include/linux/cpumask.h                       | 50 ++++++++++++
+ include/linux/nodemask.h                      | 40 ++++++++++
+ kernel/irq/affinity.c                         |  2 +-
+ kernel/sched/core.c                           |  2 +-
+ kernel/sched/topology.c                       |  2 +-
+ kernel/time/clocksource.c                     |  2 +-
+ lib/bitmap.c                                  | 21 +++++
+ mm/mempolicy.c                                |  2 +-
+ mm/page_alloc.c                               |  2 +-
+ mm/vmstat.c                                   |  4 +-
+ tools/include/linux/bitmap.h                  | 44 +++++++++++
+ tools/lib/bitmap.c                            | 20 +++++
+ tools/perf/builtin-c2c.c                      |  4 +-
+ tools/perf/util/pmu.c                         |  2 +-
+ 66 files changed, 384 insertions(+), 178 deletions(-)
 
-My gut reaction is does it matter?  Can you escape the seccomp filter
-with a stop?  Does it break userspace?
-
-I realize the outcome of that question is that it does matter so we
-probably need to find a way to supress that situation for HANDLER_EXIT.
-Both force_exit_sig and force_sig_seccomp appear to be using dumpable
-signals which makes the problem doubly tricky.
-
-The first tricky bit is fatal_signal_pending isn't set because a
-coredump is possible, so something else is needed to detect this
-condition.
-
-The second part is what to do when we detect the condition.
-
-
-The only solution I can think of quickly is to modify
-force_sig_info_to_task clear TIF_SYSCALL_WORK on the architectures where
-that is used and to clear SYSCALL_WORK_EXIT on x86 and s390, and to do
-whatever the architecture appropriate thing is on the other
-architectures.
-
-It might be easier once I have cleaned some more code up but as long as
-we can limit the logic to force_sig_info_to_task for the HANDLER_EXIT
-case I don't see any advantage in the cleanups I have planned for this
-case.  This may be incentive to make the architecture code more uniform
-in this area.
-
-Anyway I am off to finish fixing some other bugs.
-
-Eric
-
+-- 
+2.32.0
 

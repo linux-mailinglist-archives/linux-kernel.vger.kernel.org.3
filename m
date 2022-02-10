@@ -2,73 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 548064B13E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 314A54B13EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245045AbiBJRJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 12:09:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57620 "EHLO
+        id S245050AbiBJRLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 12:11:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237394AbiBJRJq (ORCPT
+        with ESMTP id S244818AbiBJRLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 12:09:46 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A66E6A;
-        Thu, 10 Feb 2022 09:09:46 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id m11so11969767edi.13;
-        Thu, 10 Feb 2022 09:09:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6KO1EHZt76GuJ09+7lD/Q77CRRrPRaK9iQ8TqtMouCs=;
-        b=oE0UWN3i1TkNvMqRFkDLcjavtpSFD1eDEkeFDT4QLUJRC9sc94G+UoYYpZ8WZBZN02
-         9w1bjMoaj4w3ErLUogI86cN813NKNnm5zTxx2NDpe0IOpVftdwCZTA4tl+87sxtB5qg7
-         9F7t+AgNZayB2UOsgR5c9UfnoeanY5vOoC4JxdeNeSP/w584iFgzZvjL3LxWRzwhvirY
-         amdO9wYhDmTv8oXSBPehyhvPJF7ZMOMCb4DA4JIO5xSuGg7ccx8J57opZFRZ8RXBAr32
-         6YwSFyhGYjdarzx8bEcsroRMCgBImWfhVRAvasNn6Bf7QHrmq3nrUfCLZjFpHDu1wZOC
-         YrDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6KO1EHZt76GuJ09+7lD/Q77CRRrPRaK9iQ8TqtMouCs=;
-        b=bHwIbdRyfrdJ4PEfcL9+LenSsjDGvSy34DWMruwhgwrHC8DK6YUNZcpEMRM0IDKK4I
-         ZERdIdVuqxP3JD6se471g/DjYqpkEW/9XjC5mq7z/Qwd74I0sfcKjTugMP8xAlPJU1fn
-         lfmTaZSzKsMd5bwIXHCkD8mZq9Hsbn2afjYrmsabYZs+0zJIRgk5JCvzWpvj+eWBAkzB
-         gKDsFEoDeBm+H/+vhRTExnsqVO1Kn8hH+Efie0Y16gabeAN3HXEwoL7cGdx931lnOuY/
-         qSl7in4Tk2D6v1htL8lKV9Br1vLdwBirXRCWTvPKb0BK11qLCJvkIpfJMnq4qIDRWCUI
-         dviA==
-X-Gm-Message-State: AOAM532c7XrfIvdFX16kcTWtYx+SBI+AplnAh32Xw7GUTMbcvi2HwyYD
-        JRW0d2ZN8uwi2vNzzkvAlco=
-X-Google-Smtp-Source: ABdhPJwbe+YniUx44ThriVsops7IHX9fxPYlLtd68unikrqu6n215gfZVJHNWsldYo+g+aBnZotxKA==
-X-Received: by 2002:a05:6402:190f:: with SMTP id e15mr9479055edz.195.1644512985120;
-        Thu, 10 Feb 2022 09:09:45 -0800 (PST)
-Received: from skbuf ([188.27.184.105])
-        by smtp.gmail.com with ESMTPSA id qx22sm6215632ejb.135.2022.02.10.09.09.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 09:09:44 -0800 (PST)
-Date:   Thu, 10 Feb 2022 19:09:43 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Hans Schultz <schultz.hans@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 3/5] net: dsa: Add support for offloaded
- locked port flag
-Message-ID: <20220210170943.tvmnru5byx5jbqkz@skbuf>
-References: <20220209130538.533699-1-schultz.hans+netdev@gmail.com>
- <20220209130538.533699-4-schultz.hans+netdev@gmail.com>
+        Thu, 10 Feb 2022 12:11:11 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9656E6A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:11:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 42543CE25DC
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:11:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53E09C340EF
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:11:08 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Hs78T9oD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644513066;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cd1/cBHJEw3CGs3r58oCd7nCDjXO3T2dxtJf0WtP2nw=;
+        b=Hs78T9oDSLeIOjx6xKMiBuEsHIRGDmq8RqI9oFk+WCIpF7yzHtF6JRiTSa6nBcK2osw6sd
+        rpLnsvhywdHVWfsLtsYulE227kSruKwQHT81NTZWRSq1Zm/1GLBLtk2wf3cSZv6WmZWwnG
+        1nJra/ApnS3Q8ZSXETm53Y69+4vgHxY=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1d9f4740 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Thu, 10 Feb 2022 17:11:06 +0000 (UTC)
+Received: by mail-yb1-f172.google.com with SMTP id g14so17389845ybs.8
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:11:05 -0800 (PST)
+X-Gm-Message-State: AOAM533+TLODjV9EMcvZfZ4cGP53SEpI7u0qaOGjVz+c7s6olaM2Rcvc
+        Xn6tnxLoD2wBBeaHA3BAYL/OwLAiEOSOxp15lt4=
+X-Google-Smtp-Source: ABdhPJy4vLOCQczbefDfMT6EcWguNmjbhNiEqEMLZXP9BuEYm8uj6KR52sZw6JI7Bkh0A7qbDQYjMYGrh2xX5vGpnfY=
+X-Received: by 2002:a81:c40d:: with SMTP id j13mr8443554ywi.499.1644513064960;
+ Thu, 10 Feb 2022 09:11:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209130538.533699-4-schultz.hans+netdev@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220210160925.156697-1-Jason@zx2c4.com> <20220210160925.156697-3-Jason@zx2c4.com>
+ <YgVDmcG78PVoP4U3@owl.dominikbrodowski.net>
+In-Reply-To: <YgVDmcG78PVoP4U3@owl.dominikbrodowski.net>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Thu, 10 Feb 2022 18:10:53 +0100
+X-Gmail-Original-Message-ID: <CAHmME9rieCnqNp=n2jOp2z+pS8qo59B0ULWBhRjCHM8awRWMPA@mail.gmail.com>
+Message-ID: <CAHmME9rieCnqNp=n2jOp2z+pS8qo59B0ULWBhRjCHM8awRWMPA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] random: deobfuscate irq u32/u64 contributions
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,48 +66,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Feb 10, 2022 at 5:57 PM Dominik Brodowski
+<linux@dominikbrodowski.net> wrote:
+>
+> Am Thu, Feb 10, 2022 at 05:09:25PM +0100 schrieb Jason A. Donenfeld:
+> > In the irq handler, we fill out 16 bytes differently on 32-bit and
+> > 64-bit platforms. Whether or not you like that, it is a matter of fact.
+> > But it might not be a fact you well realized until now, because the code
+> > that loaded the irq info into 4 32-bit words was quite confusing.
+> > Instead, this commit makes everything explicit by having separate
+> > (compile-time) branches for 32-bit and 64-bit machines. In the process,
+> > it exposed a shortcoming in in mix_interrupt_randomness() which we
+>
+> "in in" -> "in"
+>
+> > rectify.
+>
+> Maybe explain the shortcoming in one sentence? I think I spotted it, but...
 
-Next time you send a patch version, if you're going to copy me on a
-patch, can you please copy me on all of them? I have a problem with not
-receiving emails in real time from netdev@vger.kernel.org, and
-refreshing patchwork to see if anything has been said on the other
-patches is pretty out of hand. I don't have enough information to
-comment just on the DSA bits.
-
-Thanks.
-
-On Wed, Feb 09, 2022 at 02:05:35PM +0100, Hans Schultz wrote:
-> Among the switchcores that support this feature is the Marvell
-> mv88e6xxx family.
-> 
-> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
-> ---
->  net/dsa/port.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/net/dsa/port.c b/net/dsa/port.c
-> index bd78192e0e47..01ed22ed74a1 100644
-> --- a/net/dsa/port.c
-> +++ b/net/dsa/port.c
-> @@ -176,7 +176,7 @@ static int dsa_port_inherit_brport_flags(struct dsa_port *dp,
->  					 struct netlink_ext_ack *extack)
->  {
->  	const unsigned long mask = BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD |
-> -				   BR_BCAST_FLOOD;
-> +				   BR_BCAST_FLOOD | BR_PORT_LOCKED;
->  	struct net_device *brport_dev = dsa_port_to_bridge_port(dp);
->  	int flag, err;
->  
-> @@ -200,7 +200,7 @@ static void dsa_port_clear_brport_flags(struct dsa_port *dp)
->  {
->  	const unsigned long val = BR_FLOOD | BR_MCAST_FLOOD | BR_BCAST_FLOOD;
->  	const unsigned long mask = BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD |
-> -				   BR_BCAST_FLOOD;
-> +				   BR_BCAST_FLOOD | BR_PORT_LOCKED;
->  	int flag, err;
->  
->  	for_each_set_bit(flag, &mask, 32) {
-> -- 
-> 2.30.2
-> 
+Will do. v2 incoming.

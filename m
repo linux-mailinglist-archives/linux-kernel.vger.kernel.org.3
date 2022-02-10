@@ -2,75 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 358424B19DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:55:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 446D94B19E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345935AbiBJXzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 18:55:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55504 "EHLO
+        id S1345942AbiBJXzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 18:55:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345909AbiBJXzi (ORCPT
+        with ESMTP id S1345909AbiBJXzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 18:55:38 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3643B5F5C
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:55:39 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id x136so18399680ybe.11
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:55:39 -0800 (PST)
+        Thu, 10 Feb 2022 18:55:50 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6355B5F88
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:55:50 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id r64-20020a17090a43c600b001b8854e682eso7229218pjg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:55:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NBgjpXZigvKnq2ReZid/vVB+xdrDhkSnQh0scwSixew=;
-        b=xZbxhSdG7BP+bJnrVyoE2lszS+OHv+a+H3cQQ/XSPeuBnunccAuxwGYKSfskaMedG+
-         M854Z+EZQraXLGral30yOEGTBOxMdz2uKrWOI4zvQlOOUMiIBbEj99+ZHDFFoIPOYpHX
-         FWVn8PSeldaBpwu8/kCQdARjDyNTXAQ6Gc3X6ARJRIb/8EfAQjg9JJTpALPioBWNXJms
-         GbUG5ppLhIkhcipfpkHzhmLVaYwOfmwgN+/Mp1E6pB7sM8K5YmMFALbSjsySG7zeVMyN
-         2ZYQFhiHmgerzNCmL1Pb6REYcyjuhJXQDBIy3ElkgmmTYutzGkK8emj4JbhcDG45LwX5
-         yaPQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dlMqHYWmeFE9YutBKgR2EWRsK4ahNPNhY+dEU62idVs=;
+        b=U+LPgDEPgoz09gCSOxee5fvC3VuxGKKndS6TlMMy9IQ7jRkw/xAxF6fQZK8UTkyltx
+         whl7YNhPbjG1RVFkAnQIoF917YJGVWExCqY1t5u0AMOKku8nMOHB9T13oQDjrvqzFJ1X
+         eIAzDSm9n97m5x8oa/2fIfW9UEeHpZSiv0G5Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NBgjpXZigvKnq2ReZid/vVB+xdrDhkSnQh0scwSixew=;
-        b=md2uSBf26/Iq0VKfET4Tx/p5H5C+C8dye69qdfxekW1fosoOPW/0eaGTYUUrCOPMLC
-         jioaVZik2lmyIvIl/F4EezMlT2Ohbal2EtCrgZ24WJevUAWN79difYriIfHmxI1qPYcC
-         hqcSKte89kKD+9Bd+hf4D7WRnlSTr/aTUdsbb7Y+p7U9hOz9J8wh6gg3SIFboGE9IZUn
-         hBrkByZ7/I2r8CxMwCa4qW1szIRdVSKJtABWAoBkX8SQfv+ftjRYApxzOYv7waPUeWhY
-         pNYWMhYI7z3rK0rRu3TqGNMDaodK9V5EeRtAYpXtvj4rOj1KMAwr4WUjGlu9CTUGLdP/
-         LPwQ==
-X-Gm-Message-State: AOAM533+YnTSMn6c9tCO6CagNrB+WG2DS5EHehD4P9AvvegLdQcevNG9
-        L0B9uW3lAcNCcFPbT6aWw093dLrg2GfNJhiIbmr/yQ==
-X-Google-Smtp-Source: ABdhPJwipupTHC/BooALieYlhlXLEn3fYioHlw3JUyAr99lmECPcYnKONg/T+vXDZIAm5NxFs4SAErzm0/3TmmckDVg=
-X-Received: by 2002:a81:4cc3:: with SMTP id z186mr10395825ywa.140.1644537338489;
- Thu, 10 Feb 2022 15:55:38 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dlMqHYWmeFE9YutBKgR2EWRsK4ahNPNhY+dEU62idVs=;
+        b=WZWB98lMuiG4aSbQkHD4rOIuwebCom8/+7k5VoxtSG4zZ7uGiPG5C+LYmcqYnQY4Bh
+         tkjlVN5kCwHJJilS1Ltt2Pr3jVJbLQToRI62IjgoNaaF1NuYeCR9rQQ80mNsRSd5HKZK
+         5FAUWH5wOyU3Cgv5TAOaqOl3x31jKRdnbPSFe5i9eF49KwFBc0A2wLSs1dtE1RK8DrMl
+         wtfDhj6ghGhPWhzfDxsjJQe/e8ZN4Btu9iDmBYqf4pw0cwlKvvCPBGaPorZzw38JsxhN
+         6U3v9qDGL3apUJV1wxTTReEBIcTULnioxSsB5k8bU5qvkZh3xWtpdXjhZnZqcoSJitTt
+         Sf9Q==
+X-Gm-Message-State: AOAM533MLMEHJoQ745wkqjVsYldHYLMxipJVowrWrXcO0eSp7inoqlPN
+        AKD9rgkz917I/gBtOrdfFSLIKQ==
+X-Google-Smtp-Source: ABdhPJwWbQAdWi1tu+pJMuOU18Jq/YySWVk/7i1eFjfDT/ZHvGMexKGSOXjumML3yxu4jQLNtqBEZQ==
+X-Received: by 2002:a17:90b:4f41:: with SMTP id pj1mr5347261pjb.209.1644537349836;
+        Thu, 10 Feb 2022 15:55:49 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j4sm25018194pfc.217.2022.02.10.15.55.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 15:55:49 -0800 (PST)
+Date:   Thu, 10 Feb 2022 15:55:48 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
+        kernelci@groups.io, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] selftests/exec: Rename file binfmt_script to
+ binfmt_script.py
+Message-ID: <202202101555.EE737A35@keescook>
+References: <20220210222319.1864680-1-usama.anjum@collabora.com>
 MIME-Version: 1.0
-References: <20220120150024.646714-1-paul.kocialkowski@bootlin.com>
- <20220120150024.646714-4-paul.kocialkowski@bootlin.com> <CACRpkdZnw-Tf2eQwO+LZRW4UacR09qWRWct00=XLb4pfa-N3=g@mail.gmail.com>
- <CAMRc=MewxfQqM+QvzqjP05Qe5TeiEx+iiOFZLmieqCCVOL9UGQ@mail.gmail.com>
-In-Reply-To: <CAMRc=MewxfQqM+QvzqjP05Qe5TeiEx+iiOFZLmieqCCVOL9UGQ@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 11 Feb 2022 00:55:27 +0100
-Message-ID: <CACRpkdb2d2q8DjgjG5_h3TH0ppugAEVyRvYGhNMrWy3fzq2Jcw@mail.gmail.com>
-Subject: Re: [PATCH v10 3/6] gpio: logicvc: Support compatible with major
- version only
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210222319.1864680-1-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,29 +70,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 10:55 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> On Sun, Jan 30, 2022 at 1:43 AM Linus Walleij <linus.walleij@linaro.org> wrote:
-> >
-> > On Thu, Jan 20, 2022 at 4:00 PM Paul Kocialkowski
-> > <paul.kocialkowski@bootlin.com> wrote:
-> >
-> > > Support the newly-introduced common compatible for version 3.
-> > >
-> > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> >
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> >
-> > Are there dependencies between the GPIO patches and the rest?
-> > Doesn't look like that.
-> > Can Bartosz just merge the GPIO stuff to the GPIO tree?
-> >
-> > Yours,
-> > Linus Walleij
->
-> Except I'm seeing there's no agreement on the actual compatible yet in
-> the previous patch.
+On Fri, Feb 11, 2022 at 03:23:19AM +0500, Muhammad Usama Anjum wrote:
+> Rename file for readability purpose. Update its usage and references.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+> This path was suggested while review of the following patch. Please
+> apply it after applying that one first:
+> 	selftests/exec: Add non-regular to TEST_GEN_PROGS
+> Changes in V2:
+> 	Remove changes from binfmt_script.py, they were wrong
 
-Yeah I noticed that after writing that :/
+Thanks! :)
 
-Yours,
-Linus Walleij
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-Kees
+
+> ---
+>  tools/testing/selftests/exec/Makefile                           | 2 +-
+>  .../testing/selftests/exec/{binfmt_script => binfmt_script.py}  | 0
+>  2 files changed, 1 insertion(+), 1 deletion(-)
+>  rename tools/testing/selftests/exec/{binfmt_script => binfmt_script.py} (100%)
+> 
+> diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
+> index a89ba6de79870..a0b8688b08369 100644
+> --- a/tools/testing/selftests/exec/Makefile
+> +++ b/tools/testing/selftests/exec/Makefile
+> @@ -3,7 +3,7 @@ CFLAGS = -Wall
+>  CFLAGS += -Wno-nonnull
+>  CFLAGS += -D_GNU_SOURCE
+>  
+> -TEST_PROGS := binfmt_script
+> +TEST_PROGS := binfmt_script.py
+>  TEST_GEN_PROGS := execveat load_address_4096 load_address_2097152 load_address_16777216 non-regular
+>  TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
+>  # Makefile is a run-time dependency, since it's accessed by the execveat test
+> diff --git a/tools/testing/selftests/exec/binfmt_script b/tools/testing/selftests/exec/binfmt_script.py
+> similarity index 100%
+> rename from tools/testing/selftests/exec/binfmt_script
+> rename to tools/testing/selftests/exec/binfmt_script.py
+> -- 
+> 2.30.2
+> 
+
+-- 
+Kees Cook

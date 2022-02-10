@@ -2,58 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E91A4B1076
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 963784B107E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242967AbiBJOb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:31:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46048 "EHLO
+        id S242979AbiBJOeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:34:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236150AbiBJObz (ORCPT
+        with ESMTP id S236150AbiBJOeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:31:55 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1F9B37;
-        Thu, 10 Feb 2022 06:31:55 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 905F61F465B9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644503514;
-        bh=vnMYZtzLYUlEjqvEffkcsiOlW+x9zxo48b5WEnCoJBc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VJnEf5dXMaVgu7QFE/IW21kmLJ+XXHAjjPtyT0rtTTImZtBbVRXTV0mVIUz9Xgib6
-         isHyrOcpGK9FfvZC+KidtsgsIu4DGevJQoms3+BKSUi90ikZQSkKp/ExbB1gEFkOeG
-         /44ffKLTzSQPg6N27CouFvUb2McyUj+yogaNXgHFTKhW/ode6pMy4JdkwwiIp+Iv8c
-         44cpJbZuu/8e4+B2P7pCEvofXYC1hmg/4rCMcg4pCai8ylMNiC7g1M6aPea2MxspvM
-         pP43/V7+J7RI5JQ8T0gpMMs+VmIwtZvdFvxwzAWH5qwFu8lvPm22/NB4rt/L5pVxTV
-         y8gLMNi/amv2w==
-Message-ID: <06446828-b589-5d7a-0e9f-25f6321e0da6@collabora.com>
-Date:   Thu, 10 Feb 2022 15:31:50 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2] PCI: mediatek: Clear interrupt status before
- dispatching handler
-Content-Language: en-US
-To:     qizhong cheng <qizhong.cheng@mediatek.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        stable@vger.kernel.org, chuanjia.liu@mediatek.com
-References: <20220210012125.6420-1-qizhong.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220210012125.6420-1-qizhong.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        Thu, 10 Feb 2022 09:34:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFE6233;
+        Thu, 10 Feb 2022 06:34:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F538619F3;
+        Thu, 10 Feb 2022 14:34:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98068C340E5;
+        Thu, 10 Feb 2022 14:34:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644503648;
+        bh=SXAZ5/YLYmlUTYA3rw+pgO5OvHv3+PnXWuUz7xNb8j4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BuiX8aK/naj9+yu1TVGz5os4lPGGDL6GH62Kq1aGpbCGnYmS8nPN6vCN3UmLdgh4j
+         TkstSrx948cu7U4VLlUpKxx4e3s6zvsHtU9442ugKGWwl+qhVNoxqSedtRTDUK3NUZ
+         /n9eUKeQiDomXE7jo5L/naCm+mFrJRQzzk65Epgq06FNDNybbKk/Rq42zgFYOYM8LE
+         bvjuUvsDvsUJLebyVMS+AvYTNpL4SDvJ7pjMAxBOvA8Q+RssRSCm2pHSXRR7VjpJXn
+         9Pu2CaN0Ac65cyP+Un5/WkV6p5S8ilNv7uM2OmBvnTO/2lUUtvH+0AUGm95QP/CWvo
+         3j9ltcwe7tqDQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nIAWM-006vav-Ix; Thu, 10 Feb 2022 14:34:06 +0000
+Date:   Thu, 10 Feb 2022 14:34:06 +0000
+Message-ID: <87pmnu4wpt.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Emil Renner Berthing <kernel@esmil.dk>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        kernel-team@android.com
+Subject: Re: [PATCH 10/10] pinctrl: starfive: Switch to dynamic chip name output
+In-Reply-To: <CANBLGcxg0qKWw4aifr+dHWge1aXE66e4wZzDwwpJjSad3xaeTQ@mail.gmail.com>
+References: <20220209162607.1118325-1-maz@kernel.org>
+        <20220209162607.1118325-11-maz@kernel.org>
+        <CANBLGcwKeLn7Q1Ra8pCw=cXy=kJeEFRmBjOxjds10+k70LvzXA@mail.gmail.com>
+        <87zgmz3xbf.wl-maz@kernel.org>
+        <CANBLGcwwrqkYS2cxX5dYAaoWdj5pRp9c+qBDAMb3=0D5oBD+Zg@mail.gmail.com>
+        <87v8xm4zkm.wl-maz@kernel.org>
+        <CANBLGcyvMVdTnndMSWDFnN6207Nareps=AdzVvt0OaMdeAXEHg@mail.gmail.com>
+        <87tud64yqa.wl-maz@kernel.org>
+        <CANBLGcxg0qKWw4aifr+dHWge1aXE66e4wZzDwwpJjSad3xaeTQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kernel@esmil.dk, linus.walleij@linaro.org, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, brgl@bgdev.pl, matthias.bgg@gmail.com, grygorii.strashko@ti.com, ssantosh@kernel.org, khilman@kernel.org, tony@atomide.com, tglx@linutronix.de, vz@mleia.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,61 +87,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/02/22 02:21, qizhong cheng ha scritto:
-> We found a failure when used iperf tool for wifi performance testing,
-> there are some MSIs received while clearing the interrupt status,
-> these MSIs cannot be serviced.
-> 
-> The interrupt status can be cleared even the MSI status still remaining,
-> as an edge-triggered interrupts, its interrupt status should be cleared
-> before dispatching to the handler of device.
-> 
-> Signed-off-by: qizhong cheng <qizhong.cheng@mediatek.com>
+[resending, as I managed to royally screw up my initial email]
 
-Hello Qizhong,
+On Thu, 10 Feb 2022 14:14:19 +0000,
+Emil Renner Berthing <kernel@esmil.dk> wrote:
+>=20
+> On Thu, 10 Feb 2022 at 14:50, Marc Zyngier <maz@kernel.org> wrote:
+> > On Thu, 10 Feb 2022 13:44:12 +0000,
+> > Emil Renner Berthing <kernel@esmil.dk> wrote:
+> > >
+> > > Gotcha. The SoC has been out in very few numbers for less than a year
+> > > and the driver only entered mainline in 5.17-rc1, so I doubt anyone
+> > > has had time to write scripts that check for this, but I'll let it be
+> > > up to you.
+> >
+> > Ah, I should have checked that. In which case, would you be OK if I
+> > simply pushed the removal of this label as a fix for 5.17, and just
+> > have it to say "Star5 GPIO", for example, without any indication of
+> > the device (which appears in debugfs anyway as part of the irqdomain)?
+>=20
+> I'm fine with it although I'd prefer "StarFive GPIO". I haven't seen
+> star5 used anywhere.
 
-This commit is fixing an issue, which means that you *have to* add a proper
-Fixes tag.
+Fair enough.
 
-I believe that this is fixing commit
-43e6409db64d ("PCI: mediatek: Add MSI support for MT2712 and MT7622").
+> But shouldn't changes like this normally go through Linus Walleij's
+> tree?
 
-Please add the tag and send a v3, after which:
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Either way, I don't mind. For the record, see below what I'm
+suggesting we take in before 5.17-final.
+
+Linus?
+
+Thanks,
+
+	M.
+
+=46rom a84b83c32048de2ba72e5d05645eabc95ffabe49 Mon Sep 17 00:00:00 2001
+From: Marc Zyngier <maz@kernel.org>
+Date: Thu, 10 Feb 2022 14:13:36 +0000
+Subject: [PATCH] pinctrl: starfive: Use a static name for the GPIO irq_chip
+
+Drop the device name used for the GPIO irq_chip and replace it
+with something static. The information is still available from
+debugfs and carried as part of the irqdomain.
+
+Suggested-by: Emil Renner Berthing <kernel@esmil.dk>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+---
+ drivers/pinctrl/pinctrl-starfive.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/pinctrl/pinctrl-starfive.c b/drivers/pinctrl/pinctrl-s=
+tarfive.c
+index 0b912152a405..266da41a6162 100644
+--- a/drivers/pinctrl/pinctrl-starfive.c
++++ b/drivers/pinctrl/pinctrl-starfive.c
+@@ -1164,6 +1164,7 @@ static int starfive_irq_set_type(struct irq_data *d, =
+unsigned int trigger)
+ }
+=20
+ static struct irq_chip starfive_irq_chip =3D {
++	.name =3D "StarFive GPIO",
+ 	.irq_ack =3D starfive_irq_ack,
+ 	.irq_mask =3D starfive_irq_mask,
+ 	.irq_mask_ack =3D starfive_irq_mask_ack,
+@@ -1308,7 +1309,6 @@ static int starfive_probe(struct platform_device *pde=
+v)
+ 	sfp->gc.ngpio =3D NR_GPIOS;
+=20
+ 	starfive_irq_chip.parent_device =3D dev;
+-	starfive_irq_chip.name =3D sfp->gc.label;
+=20
+ 	sfp->gc.irq.chip =3D &starfive_irq_chip;
+ 	sfp->gc.irq.parent_handler =3D starfive_gpio_irq_handler;
+--=20
+2.34.1
 
 
-> ---
-> v2:
->   - Update the subject line.
->   - Improve the commit log and code comments.
-> 
->   drivers/pci/controller/pcie-mediatek.c | 9 +++++++--
->   1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
-> index 2f3f974977a3..2856d74b2513 100644
-> --- a/drivers/pci/controller/pcie-mediatek.c
-> +++ b/drivers/pci/controller/pcie-mediatek.c
-> @@ -624,12 +624,17 @@ static void mtk_pcie_intr_handler(struct irq_desc *desc)
->   		if (status & MSI_STATUS){
->   			unsigned long imsi_status;
->   
-> +			/*
-> +			 * The interrupt status can be cleared even the MSI
-> +			 * status still remaining, hence as an edge-triggered
-> +			 * interrupts, its interrupt status should be cleared
-> +			 * before dispatching handler.
-> +			 */
-> +			writel(MSI_STATUS, port->base + PCIE_INT_STATUS);
->   			while ((imsi_status = readl(port->base + PCIE_IMSI_STATUS))) {
->   				for_each_set_bit(bit, &imsi_status, MTK_MSI_IRQS_NUM)
->   					generic_handle_domain_irq(port->inner_domain, bit);
->   			}
-> -			/* Clear MSI interrupt status */
-> -			writel(MSI_STATUS, port->base + PCIE_INT_STATUS);
->   		}
->   	}
->   
-> 
+--=20
+Without deviation from the norm, progress is not possible.
 
-
+--=20
+Without deviation from the norm, progress is not possible.

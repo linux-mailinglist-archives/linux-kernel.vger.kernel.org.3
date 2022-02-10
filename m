@@ -2,290 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 615AD4B0793
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 08:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A8B4B079A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 08:56:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236804AbiBJHxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 02:53:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40752 "EHLO
+        id S236737AbiBJH4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 02:56:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236730AbiBJHxY (ORCPT
+        with ESMTP id S235869AbiBJH4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 02:53:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1617BBAE;
-        Wed,  9 Feb 2022 23:53:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6431B8242A;
-        Thu, 10 Feb 2022 07:53:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8371DC004E1;
-        Thu, 10 Feb 2022 07:53:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644479602;
-        bh=EHwtLM12IbKnr52SQSPs2DLSwzmhLw4dlVHdIhuPQH8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OdokNtUiyrMrUPJ0VCJJsJTW4mKKYRNCBNXxN0aUy5RxG2w86ncVE5+FU+Qn2QHiT
-         kM/16O96B5YY3s1D7iignRSt2fmuy+VXsz2Lwbp3fhIHe3eFkMEO1DqaxOiemkUVV9
-         OlmtDEdLoivzOnpqg5uOFCG0gduGisOH0j+gy6g4=
-Date:   Thu, 10 Feb 2022 08:53:18 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rajat Jain <rajatja@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Len Brown <lenb@kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatxjain@gmail.com>,
-        Dmitry Torokhov <dtor@google.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Pavel Machek <pavel@denx.de>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: Re: [PATCH v2 1/2] PCI: Allow internal devices to be marked as
- untrusted
-Message-ID: <YgTEbpIIuKiBbqqY@kroah.com>
-References: <YgNVJKy0s8MGBRoa@kroah.com>
- <20220209183945.GA571585@bhelgaas>
- <CAJZ5v0hYFRe-HseDnqh4AFpBzzmAjx9nfJo2yC5o=jzbWUqqOw@mail.gmail.com>
- <CACK8Z6Erfmqv39C2a5nAtDMXz3_w1B0ibQLc3dd4HJZ_z=xg+g@mail.gmail.com>
+        Thu, 10 Feb 2022 02:56:13 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D8BBAE;
+        Wed,  9 Feb 2022 23:56:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644479774; x=1676015774;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=d8UgR787ewrZS9tOQpQFXRDaJVesqcuVUgUYSZ5cedQ=;
+  b=qJBi7hHsQkaMz6umMjIaWSYzs690HqNVplGCvGbMIupT75iG49bWOx5x
+   CZz6iTnPTB7ELOqS+DGy1lsocwE5/o+4SFj0JlhImvT1nIAOoQyF2/5r3
+   cbkRPzFz68jHDnmT2gtylsc9q588+4S0+Q4Aq+H+fqgNNsfVEi40a6Abw
+   8=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 09 Feb 2022 23:56:14 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 23:56:14 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 9 Feb 2022 23:56:13 -0800
+Received: from jackp-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 9 Feb 2022 23:56:13 -0800
+Date:   Wed, 9 Feb 2022 23:56:11 -0800
+From:   Jack Pham <quic_jackp@quicinc.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Jameson Thies <jthies@google.com>,
+        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 3/3] usb: typec: ucsi: Register USB Power Delivery
+ Capabilities
+Message-ID: <20220210075611.GC13801@jackp-linux.qualcomm.com>
+References: <20220203144657.16527-1-heikki.krogerus@linux.intel.com>
+ <20220203144657.16527-4-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <CACK8Z6Erfmqv39C2a5nAtDMXz3_w1B0ibQLc3dd4HJZ_z=xg+g@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220203144657.16527-4-heikki.krogerus@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 02:00:54PM -0800, Rajat Jain wrote:
-> Hello,
+Hi Heikki,
+
+On Thu, Feb 03, 2022 at 05:46:57PM +0300, Heikki Krogerus wrote:
+> UCSI allows the USB PD capabilities to be read with the
+> GET_PDO command. This will register those capabilities, and
+> that way make them visible to the user space.
 > 
-> On Wed, Feb 9, 2022 at 10:49 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Wed, Feb 9, 2022 at 7:39 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > >
-> > > On Wed, Feb 09, 2022 at 06:46:12AM +0100, Greg Kroah-Hartman wrote:
-> > > > On Tue, Feb 08, 2022 at 04:23:27PM -0800, Rajat Jain wrote:
-> > > > > On Tue, Feb 1, 2022 at 6:01 PM Rajat Jain <rajatja@google.com> wrote:
-> > > > > >
-> > > > > > Today the pci_dev->untrusted is set for any devices sitting downstream
-> > > > > > an external facing port (determined via "ExternalFacingPort" or the
-> > > > > > "external-facing" properties).
-> > > > > >
-> > > > > > However, currently there is no way for internal devices to be marked as
-> > > > > > untrusted.
-> > > > > >
-> > > > > > There are use-cases though, where a platform would like to treat an
-> > > > > > internal device as untrusted (perhaps because it runs untrusted firmware
-> > > > > > or offers an attack surface by handling untrusted network data etc).
-> > > > > >
-> > > > > > Introduce a new "UntrustedDevice" property that can be used by the
-> > > > > > firmware to mark any device as untrusted.
-> > > > >
-> > > > > Just to unite the threads (from
-> > > > > https://www.spinics.net/lists/linux-pci/msg120221.html). I did reach
-> > > > > out to Microsoft but they haven't acknowledged my email. I also pinged
-> > > > > them again yesterday, but I suspect I may not be able to break the
-> > > > > ice. So this patch may be ready to go in my opinion.
-> > > > >
-> > > > > I don't see any outstanding comments on this patch, but please let me
-> > > > > know if you have any comments.
-> > > > >
-> > > > > > Signed-off-by: Rajat Jain <rajatja@google.com>
-> > > > > > ---
-> > > > > > v2: * Also use the same property for device tree based systems.
-> > > > > >     * Add documentation (next patch)
-> > > > > >
-> > > > > >  drivers/pci/of.c       | 2 ++
-> > > > > >  drivers/pci/pci-acpi.c | 1 +
-> > > > > >  drivers/pci/pci.c      | 9 +++++++++
-> > > > > >  drivers/pci/pci.h      | 2 ++
-> > > > > >  4 files changed, 14 insertions(+)
-> > > > > >
-> > > > > > diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-> > > > > > index cb2e8351c2cc..e8b804664b69 100644
-> > > > > > --- a/drivers/pci/of.c
-> > > > > > +++ b/drivers/pci/of.c
-> > > > > > @@ -24,6 +24,8 @@ void pci_set_of_node(struct pci_dev *dev)
-> > > > > >                                                     dev->devfn);
-> > > > > >         if (dev->dev.of_node)
-> > > > > >                 dev->dev.fwnode = &dev->dev.of_node->fwnode;
-> > > > > > +
-> > > > > > +       pci_set_untrusted(dev);
-> > > > > >  }
-> > > > > >
-> > > > > >  void pci_release_of_node(struct pci_dev *dev)
-> > > > > > diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-> > > > > > index a42dbf448860..2bffbd5c6114 100644
-> > > > > > --- a/drivers/pci/pci-acpi.c
-> > > > > > +++ b/drivers/pci/pci-acpi.c
-> > > > > > @@ -1356,6 +1356,7 @@ void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
-> > > > > >
-> > > > > >         pci_acpi_optimize_delay(pci_dev, adev->handle);
-> > > > > >         pci_acpi_set_external_facing(pci_dev);
-> > > > > > +       pci_set_untrusted(pci_dev);
-> > > > > >         pci_acpi_add_edr_notifier(pci_dev);
-> > > > > >
-> > > > > >         pci_acpi_add_pm_notifier(adev, pci_dev);
-> > > > > > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > > > > > index 9ecce435fb3f..41e887c27004 100644
-> > > > > > --- a/drivers/pci/pci.c
-> > > > > > +++ b/drivers/pci/pci.c
-> > > > > > @@ -6869,3 +6869,12 @@ static int __init pci_realloc_setup_params(void)
-> > > > > >         return 0;
-> > > > > >  }
-> > > > > >  pure_initcall(pci_realloc_setup_params);
-> > > > > > +
-> > > > > > +void pci_set_untrusted(struct pci_dev *pdev)
-> > > > > > +{
-> > > > > > +       u8 val;
-> > > > > > +
-> > > > > > +       if (!device_property_read_u8(&pdev->dev, "UntrustedDevice", &val)
-> > >
-> > > If we do this, can we combine it with set_pcie_untrusted(), where we
-> > > already set pdev->untrusted?  Maybe that needs to be renamed; I don't
-> > > see anything PCIe-specific there, and it looks like it works for
-> > > conventional PCI as well.
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 128 +++++++++++++++++++++++++++++++---
+>  drivers/usb/typec/ucsi/ucsi.h |   8 +++
+>  2 files changed, 125 insertions(+), 11 deletions(-)
 > 
-> Yes, I agree it makes sense to combine with set_pcie_untrusted(). I
-> can do that in the next iteration of my patch, that I intend to work
-> on after we reach some sort of conclusion on the other major comments
-> below.
-> 
-> > >
-> > > > Please no, "Untrusted" does not really convey much, if anything here.
-> > > > You are taking an odd in-kernel-value and making it a user api.
-> > > >
-> > > > Where is this "trust" defined?  Who defines it?  What policy does the
-> > > > kernel impose on it?
-> > >
-> > > I'm a bit hesitant about this, too.  It really doesn't have anything
-> > > in particular to do with the PCI core.  It's not part of the PCI
-> > > specs, and it could apply to any kind of device, not just PCI (ACPI,
-> > > platform, USB, etc).
-> > >
-> > > We have:
-> > >
-> > >   dev->removable                # struct device
-> > >   pdev->is_thunderbolt
-> > >   pdev->untrusted
-> > >   pdev->external_facing
-> > >
-> > > and it feels a little hard to keep everything straight.  Most of them
-> > > are "discovered" based on some DT or ACPI firmware property.  None of
-> > > them really has anything specifically to do with *PCI*, and I don't
-> > > think the PCI core depends on any of them.  I think
-> > > pdev->is_thunderbolt is the only one we discover based on a PCI
-> > > feature (the Thunderbolt Capability), and the things we *use* it for
-> > > are actually not things specified by that capability [1].
-> > >
-> > > Could drivers just look for these properties directly instead of
-> > > relying on the PCI core to get in the middle?  Most callers of
-> > > device_property_read_*() are in drivers.  I do see that doing it in
-> > > the PCI core might help enforce standard usage in DT/ACPI, but we
-> > > could probably do that in other ways, too.
-> >
-> > FWIW, I agree that looking at these things in drivers would be better.
-> 
-> The pci_dev->untrusted property is currently used by:
-> 
-> - IOMMU drivers to determine whether bounce buffers should be used,
-> and whether flush queue should be used for these devices.
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index f0c2fa19f3e0f..5149001093c7f 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -568,8 +568,8 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
+>  	}
+>  }
+>  
+> -static int ucsi_get_pdos(struct ucsi_connector *con, int is_partner,
+> -			 u32 *pdos, int offset, int num_pdos)
+> +static int ucsi_read_pdos(struct ucsi_connector *con, enum typec_role role, int is_partner,
+> +			  u32 *pdos, int offset, int num_pdos)
+>  {
+>  	struct ucsi *ucsi = con->ucsi;
+>  	u64 command;
+> @@ -579,7 +579,7 @@ static int ucsi_get_pdos(struct ucsi_connector *con, int is_partner,
+>  	command |= UCSI_GET_PDOS_PARTNER_PDO(is_partner);
+>  	command |= UCSI_GET_PDOS_PDO_OFFSET(offset);
+>  	command |= UCSI_GET_PDOS_NUM_PDOS(num_pdos - 1);
+> -	command |= UCSI_GET_PDOS_SRC_PDOS;
+> +	command |= is_source(role) ? UCSI_GET_PDOS_SRC_PDOS : 0;
+>  	ret = ucsi_send_command(ucsi, command, pdos + offset,
+>  				num_pdos * sizeof(u32));
+>  	if (ret < 0 && ret != -ETIMEDOUT)
+> @@ -590,26 +590,39 @@ static int ucsi_get_pdos(struct ucsi_connector *con, int is_partner,
+>  	return ret;
+>  }
+>  
+> -static int ucsi_get_src_pdos(struct ucsi_connector *con)
+> +static int ucsi_get_pdos(struct ucsi_connector *con, enum typec_role role,
+> +			 int is_partner, u32 *pdos)
+>  {
+> +	u8 num_pdos;
+>  	int ret;
+>  
+>  	/* UCSI max payload means only getting at most 4 PDOs at a time */
+> -	ret = ucsi_get_pdos(con, 1, con->src_pdos, 0, UCSI_MAX_PDOS);
+> +	ret = ucsi_read_pdos(con, role, is_partner, pdos, 0, UCSI_MAX_PDOS);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	con->num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
+> -	if (con->num_pdos < UCSI_MAX_PDOS)
+> -		return 0;
+> +	num_pdos = ret / sizeof(u32); /* number of bytes to 32-bit PDOs */
+> +	if (num_pdos < UCSI_MAX_PDOS)
+> +		return num_pdos;
+>  
+>  	/* get the remaining PDOs, if any */
+> -	ret = ucsi_get_pdos(con, 1, con->src_pdos, UCSI_MAX_PDOS,
+> -			    PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
+> +	ret = ucsi_read_pdos(con, role, is_partner, pdos, UCSI_MAX_PDOS,
+> +			     PDO_MAX_OBJECTS - UCSI_MAX_PDOS);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return ret / sizeof(u32) + num_pdos;
+> +}
+> +
+> +static int ucsi_get_src_pdos(struct ucsi_connector *con)
+> +{
+> +	int ret;
+> +
+> +	ret = ucsi_get_pdos(con, TYPEC_SOURCE, 1, con->src_pdos);
 
-Then how about naming it "use_iommu" or something like that?  "Trust"
-has nothing to do with this at all.
+This issues the GET_PDOS command to PPM to get the source PDOs of the
+partner...
 
-> - PCI subsystem to determine ACS settings (ATS / TB etc)
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	con->num_pdos += ret / sizeof(u32);
+> +	con->num_pdos += ret;
+>  
+>  	ucsi_port_psy_changed(con);
+>  
+> @@ -638,6 +651,60 @@ static int ucsi_check_altmodes(struct ucsi_connector *con)
+>  	return ret;
+>  }
+>  
+> +static int ucsi_register_partner_pdos(struct ucsi_connector *con)
+> +{
+> +	struct pd_desc desc = { con->ucsi->cap.pd_version };
+> +	struct pd_capabilities *cap;
+> +	struct pd_caps_desc caps;
+> +	int ret;
+> +
+> +	con->partner_pd = typec_partner_register_pd(con->partner, &desc);
+> +	if (IS_ERR(con->partner_pd))
+> +		return PTR_ERR(con->partner_pd);
+> +
+> +	ret = ucsi_get_pdos(con, TYPEC_SOURCE, 1, caps.pdo);
 
-Why is this relevant?
+... and also here.
 
-> As we can see from the usage above, the current primary use of
-> untrusted property in the kernel is to flag and protect against
-> devices that can create a DMA attack on the host physical memory
-> address space (also documented for these properties in [1][2]). IMHO,
-> this property belongs to PCI devices because:
->  * I do not know of any other bus (other than PCI) that can allow DMA
-> access of the host memory, to a device on that bus.
->  * There is some use of this property within the PCI (see above),
-> although I agree it is not much.
->  * The existing properties are currently documented [1][2] to be part
-> of PCIe root ports / PCI-PCI bridges (only):
-> 
-> [1] https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports
-> [2] Documentation/devicetree/bindings/pci/pci.txt
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (ret < PDO_MAX_OBJECTS)
+> +		caps.pdo[ret] = 0;
+> +	caps.role = TYPEC_SOURCE;
+> +
+> +	cap = pd_register_capabilities(con->partner_pd, &caps);
+> +	if (IS_ERR(cap))
+> +		return PTR_ERR(cap);
+> +
+> +	ret = typec_partner_set_pd_capabilities(con->partner, cap);
+> +	if (ret) {
+> +		pd_unregister_capabilities(cap);
+> +		return ret;
+> +	}
+> +
+> +	con->partner_source_caps = cap;
+> +
+> +	ret = ucsi_get_pdos(con, TYPEC_SINK, 1, caps.pdo);
+> +	if (ret <= 0)
+> +		return ret;
+> +
+> +	if (ret < PDO_MAX_OBJECTS)
+> +		caps.pdo[ret] = 0;
+> +	caps.role = TYPEC_SINK;
+> +
+> +	cap = pd_register_capabilities(con->partner_pd, &caps);
+> +	if (IS_ERR(cap))
+> +		return PTR_ERR(cap);
+> +
+> +	ret = typec_partner_set_pd_capabilities(con->partner, cap);
+> +	if (ret) {
+> +		pd_unregister_capabilities(cap);
+> +		return ret;
+> +	}
+> +
+> +	con->partner_sink_caps = cap;
+> +
+> +	return 0;
+> +}
+> +
+>  static void ucsi_pwr_opmode_change(struct ucsi_connector *con)
+>  {
+>  	switch (UCSI_CONSTAT_PWR_OPMODE(con->status.flags)) {
+> @@ -646,6 +713,7 @@ static void ucsi_pwr_opmode_change(struct ucsi_connector *con)
+>  		typec_set_pwr_opmode(con->port, TYPEC_PWR_MODE_PD);
+>  		ucsi_partner_task(con, ucsi_get_src_pdos, 30, 0);
+>  		ucsi_partner_task(con, ucsi_check_altmodes, 30, 0);
+> +		ucsi_partner_task(con, ucsi_register_partner_pdos, 1, HZ);
 
-Then let us mark these as "able to do DMA" or something like that.
-"Trust" is a userspace policy decision, not a kernel decision to make.
+And, both ucsi_get_src_pdos() and ucsi_register_partner_pdos() are
+scheduled to run here...
 
-And there are other busses that can do DMA, PCI is not unique here.
+>  		break;
+>  	case UCSI_CONSTAT_PWR_OPMODE_TYPEC1_5:
+>  		con->rdo = 0;
+> @@ -704,6 +772,17 @@ static void ucsi_unregister_partner(struct ucsi_connector *con)
+>  	if (!con->partner)
+>  		return;
+>  
+> +	typec_partner_unset_pd_capabilities(con->partner, TYPEC_SINK);
+> +	pd_unregister_capabilities(con->partner_sink_caps);
+> +	con->partner_sink_caps = NULL;
+> +
+> +	typec_partner_unset_pd_capabilities(con->partner, TYPEC_SOURCE);
+> +	pd_unregister_capabilities(con->partner_source_caps);
+> +	con->partner_source_caps = NULL;
+> +
+> +	typec_partner_unregister_pd(con->partner);
+> +	con->partner_pd = NULL;
+> +
+>  	ucsi_unregister_altmodes(con, UCSI_RECIPIENT_SOP);
+>  	typec_unregister_partner(con->partner);
+>  	con->partner = NULL;
+> @@ -1037,6 +1116,8 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>  	u64 command;
+>  	char *name;
+>  	int ret;
+> +	struct pd_desc desc = { ucsi->cap.pd_version };
+> +	struct pd_caps_desc caps;
+>  
+>  	name = kasprintf(GFP_KERNEL, "%s-con%d", dev_name(ucsi->dev), con->num);
+>  	if (!name)
+> @@ -1103,6 +1184,24 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>  		goto out;
+>  	}
+>  
+> +	con->pd = typec_port_register_pd(con->port, &desc);
+> +
+> +	ret = ucsi_get_pdos(con, TYPEC_SOURCE, 0, caps.pdo);
+> +	if (ret > 0) {
+> +		caps.pdo[ret] = 0;
+> +		caps.role = TYPEC_SOURCE;
+> +		con->source_caps = pd_register_capabilities(con->pd, &caps);
+> +		typec_port_set_pd_capabilities(con->port, con->source_caps);
+> +	}
+> +
+> +	ret = ucsi_get_pdos(con, TYPEC_SINK, 0, caps.pdo);
+> +	if (ret > 0) {
+> +		caps.pdo[ret] = 0;
+> +		caps.role = TYPEC_SINK;
+> +		con->sink_caps = pd_register_capabilities(con->pd, &caps);
+> +		typec_port_set_pd_capabilities(con->port, con->sink_caps);
+> +	}
+> +
+>  	/* Alternate modes */
+>  	ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_CON);
+>  	if (ret) {
+> @@ -1169,6 +1268,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+>  	    UCSI_CONSTAT_PWR_OPMODE_PD) {
+>  		ucsi_get_src_pdos(con);
+>  		ucsi_check_altmodes(con);
+> +		ucsi_register_partner_pdos(con);
 
-> One can possibly read the device properties in IOMMU drivers, but
-> they'd need to keep it in some device structure.
+... as well as here.
 
-That's fine, let's move it there.
+So wouldn't this result in the PPM issuing the same PD Get_Source_Cap
+message twice to the port partner (in either case of initial port
+registration or op mode change)?  Could we just consolidate them to just
+issue GET_PDOS only once and take care of populating the partner's
+Source Caps for both the pd_capabilties as well as power_supply purposes
+from a single helper?
 
-> I understand moving
-> the pci_dev->untrusted into struct device has been brought up a couple
-> of times in the past, and has met with much stronger resistance.
+Another aside, thinking back to a previous patch [1] I had proposed a
+few months ago, another question I had is whether it is proper to even
+issue a Get_Source_Cap message to sink-only devices, as we did encounter
+certain DisplayPort adapters that don't like when that happens.
+Wondering if it could be possible to limit calling the GET_PDOS command
+unless we know the partner is capable of operating in that particular
+power role.  e.g. don't call get_src_pdos() if partner is sink-only.
+Or is this the kind of thing that the PPM is supposed to be able to
+figure out and allow OPM to naively issue the command regardless, and
+just get an error/empty return?
 
-Because of the issues I am raising here.  It's a bad name and doesn't
-mean what people think it means.
+[1] https://lore.kernel.org/all/20211027064842.6901-1-quic_jackp@quicinc.com/
 
-> The
-> discussion turned into a discussion on security, and the semantics of
-> this property, and allowing userspace to change this property etc,
-> requiring major changes, and thus fizzled out of motivation.
-
-So I guess no one really cares :)
-
-> I'd like to mention that I'm not proposing any changes to the way
-> (already existing) pci_dev->untrusted is being used, or the semantics
-> of this flag. I'm only trying to solve a corner case here i.e.
-> internal devices don't have a way to specify this attribute. Thus
-> requiring us (Chromeos) to carry hacks like [3]. I believe there are
-> others who are also looking for this corner case. From [4]:
-
-Why does Chromeos care about this flag?  What userspace decisions do you
-make based on it?
-
-> ==============================
-> We have a similar trust issue with the BMC in servers even
-> though they're internal devices. They're typically network accessible
-> and infrequently updated so treating them as trustworthy isn't a great
-> idea. We have been slowly de-privileging the BMC over the last few
-> years, but the PCIe interface isn't locked down enough for my liking
-> since the SoCs we use do allow software to set the VDID and perform
-> arbitrary DMAs (thankfully limited to 32bit). If we're going to add in
-> infrastructure for handling possibly untrustworthy PCI devices then
-> I'd like to use that for BMCs too.
-> =============================
-> 
-> [3] https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/3171209
-> [4] https://lkml.org/lkml/2020/6/9/1467
-> 
-> So from what I see, there is a need to solve this problem for internal
-> PCI devices. And presently what I have, seemed like the path of least
-> resistance to me (i.e. without running into big discussions, and major
-> code changes).
-
-It needs those code changes, please do not try to keep adding more to
-this to avoid the real-work that is needed here.  Refer to those other
-discussions you mention above for what should happen to do this
-correctly.
-
-thanks,
-
-greg k-h
+Thanks,
+Jack

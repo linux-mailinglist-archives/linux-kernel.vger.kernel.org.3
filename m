@@ -2,137 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C3E4B07DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 086174B07DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:12:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237130AbiBJILK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 03:11:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49856 "EHLO
+        id S237124AbiBJIMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 03:12:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237098AbiBJILH (ORCPT
+        with ESMTP id S233744AbiBJIMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 03:11:07 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1121097
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 00:11:06 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3C4F83F32C
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:10:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644480658;
-        bh=rnVHj9CHiNB6vcrhWaipk1/sdp7xgf97Hh+oKwEPpOs=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=hKlHiHRQmg2i9AQzqbU5BfEQOztKoNYvApUzp+n4PPyY8KF44lJeVn97keQlOyOTO
-         ovkte5tYNaD15sj1k2ImhDJt9D4uOBGXg/B0Bmg1STf0MnNKY7YWfsjX8fh4e2xfAp
-         7U8K5eu0OCFYEt//NTAeFESqEk+zxlzs6Y8lcC3uaAucTFmqKZ2c7GDPvkmzFWs6nK
-         ht/A3ywBaun6hf8oXorfnrV2SenWAUFYIy0Jy0E9hupGOxx8TjLt69/+XtOFGyhMID
-         /q8YN+uV5rUWrbaplr+d0XidT64dQIkck7iNLiEGaSDmkKuIQ/W9f7cfnnEDJHl2yT
-         o/37vv1gC9xag==
-Received: by mail-ed1-f71.google.com with SMTP id ed6-20020a056402294600b004090fd8a936so2864639edb.23
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 00:10:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rnVHj9CHiNB6vcrhWaipk1/sdp7xgf97Hh+oKwEPpOs=;
-        b=OIKP8GGnNn2rh7SXgWqSqfUwTcEUjkQbSvwfOMveUK3U3fPrj+VCbJEXOoefANDx2+
-         c0oaCXlMH0AcE1KBuWQJ+d5mKHxep7CIGi+1myoq2SoZMT10xt6xCJ1pBttc/pBdNmOA
-         RhNQGAbPnmtyysQkD3Cuw+tnKVDWpscr533piYZefg92f/hjeTv6TiBU4ILyeR6pEF+a
-         WIdVskVGQyFSdryMkG8QnbFtnefS6fZShI//g6eRbLhg7FYn7RHX/2FOPTxsv8IAnH5t
-         LZSqgBUkZltlnffruZ4BYBX+giNBgRx+vJGUA+Ad+W0LodYRIqAxF2H0FSvaLZgt5j9L
-         RV5w==
-X-Gm-Message-State: AOAM5336oDmO+w1AxLyLtLsRvcVqYNqA/Ew1d229ZvEiuUwXHHjCVVts
-        Br5QUZtyWUhcSXe8ys/Jx9Qv1P1pPt/JVKtcQuLE+1MEngtroST1FhEPypuU+JOF76UrbXQAY/j
-        1594WThSTRca4emx5jkeKZE2aCYamzlAqLAe1+kI0eg==
-X-Received: by 2002:a17:906:5349:: with SMTP id j9mr1695990ejo.368.1644480656975;
-        Thu, 10 Feb 2022 00:10:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz93CRsj8ZQh2gY9EXnoyBRs+OT8gb0AMXSmIAPsFac9M3xo7W5tdmNzg25cweSZ1IFjqp/bg==
-X-Received: by 2002:a17:906:5349:: with SMTP id j9mr1695977ejo.368.1644480656756;
-        Thu, 10 Feb 2022 00:10:56 -0800 (PST)
-Received: from [192.168.0.97] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id kw5sm6904003ejc.140.2022.02.10.00.10.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 00:10:56 -0800 (PST)
-Message-ID: <61be0071-a6e9-f749-37e9-978a72a60897@canonical.com>
-Date:   Thu, 10 Feb 2022 09:10:55 +0100
+        Thu, 10 Feb 2022 03:12:15 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B5C51097
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 00:12:16 -0800 (PST)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 21A8BQTo004763;
+        Thu, 10 Feb 2022 09:11:26 +0100
+Date:   Thu, 10 Feb 2022 09:11:26 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     syzbot <syzbot+11421fbbff99b989670e@syzkaller.appspotmail.com>
+Cc:     akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
+        bjorn.topel@gmail.com, bjorn.topel@intel.com, bjorn@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        fgheet255t@gmail.com, hawk@kernel.org, john.fastabend@gmail.com,
+        jonathan.lemon@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        magnus.karlsson@intel.com, mudongliangabcd@gmail.com,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
+        yhs@fb.com
+Subject: Re: [syzbot] WARNING: kmalloc bug in xdp_umem_create (2)
+Message-ID: <20220210081125.GA4616@1wt.eu>
+References: <000000000000a3571605d27817b5@google.com>
+ <0000000000001f60ef05d7a3c6ad@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] selftests/ftrace: Do not trace do_softirq because of
- PREEMPT_RT
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rt-users@vger.kernel.org, joseph.salisbury@canonical.com
-References: <20220209162430.286578-1-krzysztof.kozlowski@canonical.com>
- <20220210000003.6b6142f9@gandalf.local.home>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220210000003.6b6142f9@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000001f60ef05d7a3c6ad@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,GB_FAKE_RF_SHORT,
+        SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/2022 06:00, Steven Rostedt wrote:
-> On Wed,  9 Feb 2022 17:24:30 +0100
-> Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
+On Wed, Feb 09, 2022 at 10:08:07PM -0800, syzbot wrote:
+> syzbot has bisected this issue to:
 > 
->> The PREEMPT_RT patchset does not use soft IRQs thus trying to filter for
->> do_softirq fails for such kernel:
->>
->>   echo do_softirq
->>   ftracetest: 81: echo: echo: I/O error
->>
->> Choose some other externally visible function for the test.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->>
->> ---
->>
->> I understand that the failure does not exist on mainline kernel (only
->> with PREEMPT_RT patchset) but the change does not harm it.
->>
->> If it is not suitable alone, please consider it for RT patchset.
->> ---
->>  .../selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc      | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
->> index e96e279e0533..1d0c7601865f 100644
->> --- a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
->> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
->> @@ -19,7 +19,7 @@ fail() { # mesg
->>  
->>  FILTER=set_ftrace_filter
->>  FUNC1="schedule"
->> -FUNC2="do_softirq"
->> +FUNC2="_printk"
+> commit 7661809d493b426e979f39ab512e3adf41fbcc69
+> Author: Linus Torvalds <torvalds@linux-foundation.org>
+> Date:   Wed Jul 14 16:45:49 2021 +0000
 > 
-> The problem with the above, is that it is not guaranteed to trigger (and
-> probably will not), where as the do_softirq is. The filtering is suppose to
-> trace something that actually happens.
+>     mm: don't allow oversized kvmalloc() calls
 > 
-> How about using: scheduler_tick ?
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13bc74c2700000
+> start commit:   f4bc5bbb5fef Merge tag 'nfsd-5.17-2' of git://git.kernel.o..
+> git tree:       upstream
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=107c74c2700000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=17bc74c2700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=5707221760c00a20
+> dashboard link: https://syzkaller.appspot.com/bug?extid=11421fbbff99b989670e
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e514a4700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15fcdf8a700000
 > 
+> Reported-by: syzbot+11421fbbff99b989670e@syzkaller.appspotmail.com
+> Fixes: 7661809d493b ("mm: don't allow oversized kvmalloc() calls")
+> 
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-This works as well. I had impression that the test is only about
-filtering interface and actual function does not have to hit/trigger.
+Interesting, so in fact syzkaller has shown that the aforementioned
+patch does its job well and has spotted a call path by which a single
+userland setsockopt() can request more than 2 GB allocation in the
+kernel. Most likely that's in fact what needs to be addressed.
 
-I'll send v2 with scheduler_tick.
+FWIW the call trace at the URL above is:
 
+Call Trace:
+ kvmalloc include/linux/mm.h:806 [inline]
+ kvmalloc_array include/linux/mm.h:824 [inline]
+ kvcalloc include/linux/mm.h:829 [inline]
+ xdp_umem_pin_pages net/xdp/xdp_umem.c:102 [inline]
+ xdp_umem_reg net/xdp/xdp_umem.c:219 [inline]
+ xdp_umem_create+0x6a5/0xf00 net/xdp/xdp_umem.c:252
+ xsk_setsockopt+0x604/0x790 net/xdp/xsk.c:1068
+ __sys_setsockopt+0x1fd/0x4e0 net/socket.c:2176
+ __do_sys_setsockopt net/socket.c:2187 [inline]
+ __se_sys_setsockopt net/socket.c:2184 [inline]
+ __x64_sys_setsockopt+0xb5/0x150 net/socket.c:2184
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Best regards,
-Krzysztof
+and the meaningful part of the repro is:
+
+  syscall(__NR_mmap, 0x1ffff000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
+  syscall(__NR_mmap, 0x20000000ul, 0x1000000ul, 7ul, 0x32ul, -1, 0ul);
+  syscall(__NR_mmap, 0x21000000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
+  intptr_t res = 0;
+  res = syscall(__NR_socket, 0x2cul, 3ul, 0);
+  if (res != -1)
+    r[0] = res;
+  *(uint64_t*)0x20000080 = 0;
+  *(uint64_t*)0x20000088 = 0xfff02000000;
+  *(uint32_t*)0x20000090 = 0x800;
+  *(uint32_t*)0x20000094 = 0;
+  *(uint32_t*)0x20000098 = 0;
+  syscall(__NR_setsockopt, r[0], 0x11b, 4, 0x20000080ul, 0x20ul);
+
+Willy

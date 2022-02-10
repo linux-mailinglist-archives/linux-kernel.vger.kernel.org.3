@@ -2,86 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B658D4B0211
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F42C4B0216
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbiBJBZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 20:25:38 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50924 "EHLO
+        id S232102AbiBJBZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 20:25:41 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbiBJBZ2 (ORCPT
+        with ESMTP id S231991AbiBJBZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:25:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FB75598;
-        Wed,  9 Feb 2022 17:25:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD21EB823BB;
-        Thu, 10 Feb 2022 01:25:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 276E9C340E7;
-        Thu, 10 Feb 2022 01:25:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644456327;
-        bh=q1j/8X8KRoaMux0MR33EKmu69UKx9HSvfrHlB087F2Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dSOgMdAvTyqsqgyfjJafaoZDP9KQqRA12znksjSjfUS65ZvWAeU5jZLE44U3J+1Te
-         MblFTGGEnsucHWyXVUgdr+CpwrmS2RkEGHQn1zqk+rYzT1kzBDhkWXfKH4bcty4NF+
-         AnSaHC9mSJ1XsDOYHyxifkbduWYMtOqU+/1ACoSa3/9Hz/5mjA2r4OqEdQLWtvNDn7
-         u5a29BYyu2kAD8e7D9Kvd3BJJ556KnEQX8IYeAk/BKLebT2sZBhScfw1qznLrCjVNV
-         PcCOJ//q4w8XmVdIJS+WtIYh0t78DmP/C2S6oouNqEmN0eFrKNifHdcOlZq+LiltdU
-         6u6/GoJJ1W4tQ==
-Date:   Wed, 9 Feb 2022 17:25:25 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jiri Pirko <jiri@resnulli.us>, Moshe Shemesh <moshe@nvidia.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 0/4] net/mlx5: Introduce devlink param to
- disable SF aux dev probe
-Message-ID: <20220209172525.19977e8c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <YgOQAZKnbm5IzbTy@nanopsycho>
-References: <1644340446-125084-1-git-send-email-moshe@nvidia.com>
-        <20220208212341.513e04bf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <YgOQAZKnbm5IzbTy@nanopsycho>
+        Wed, 9 Feb 2022 20:25:34 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA94FCD
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 17:25:36 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id n17so5532970iod.4
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 17:25:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=EUYeXYnwPWQAai7d38TfE6Low6Zia8y6c+gv6WqQKdw=;
+        b=V4yJnLf0kcj8tup+654gTlpzbRrpgrGzjiS9jcsVoMYBly/G4e7Yhwc4WrJQ4QRj9c
+         w3hPKqi6zYx/EMa3wlW5B25sj6nuzxoaj2fogjxhdHEUnKCoEQOi6JSa8GiZWZuqX/7F
+         1mbxE7dzO3LFu5/DXjX3Z7zaew86O9/rKFmKw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=EUYeXYnwPWQAai7d38TfE6Low6Zia8y6c+gv6WqQKdw=;
+        b=5Lm0aRb4aum1+CNYwTGIRHrRtiyItIxOpcyL8bWLOeo0g0fPnuE/BjLDcq8yRswHfL
+         +tBgOkuVK/rU6Mc4WlgEuI8yTyZhDgodkVTx62+qcPX9oepBA9XKEtCCfTANbfDnnahR
+         dqieGYyNO1WDYEc5v12gOKFeLN2c76dmQDyMwCtXByRY+hIE9gwYStaG5gu170bxFQH9
+         0UqUg3wR+BSA9tjoQ+QeAsz8KEjxWcrO+Wcx+tC+6XAHPeu83L1BRAQrSVvgPyp5P6RV
+         3vq1E27tpTOB1yww//rDGa39zzK37LB6R9VEFkunsCi0isWpnN251gErVrjQd+43Giv+
+         HPsA==
+X-Gm-Message-State: AOAM532BbwbFjIDYS7pnyuXzks2dmm7tL+GLFtcymNcYoouuL70wc3I1
+        GWm5GAWBpRJ7icGxdo5nbaAEqA==
+X-Google-Smtp-Source: ABdhPJzDIQtC64qzn1zaIQABw7VqVnWjqVO0aTcoRuuZp/AmllgRfvy7K87XiLYoQA4Cg74uu4d/XQ==
+X-Received: by 2002:a05:6602:2e16:: with SMTP id o22mr2663900iow.10.1644456335723;
+        Wed, 09 Feb 2022 17:25:35 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id r9sm10720341ill.52.2022.02.09.17.25.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 17:25:35 -0800 (PST)
+Subject: Re: [RFC PATCH 6/6] selftests: Test RLIMIT_NPROC in clone-created
+ user namespaces
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Alexey Gladkov <legion@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Solar Designer <solar@openwall.com>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220207121800.5079-1-mkoutny@suse.com>
+ <20220207121800.5079-7-mkoutny@suse.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <789bda88-1ef7-8c60-5c00-d3b7a2b8588d@linuxfoundation.org>
+Date:   Wed, 9 Feb 2022 18:25:34 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220207121800.5079-7-mkoutny@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Feb 2022 09:39:54 +0200 Moshe Shemesh wrote:
-> Well we don't have the SFs at that stage, how can we tell which SF will 
-> use vnet and which SF will use eth ?
+On 2/7/22 5:18 AM, Michal Koutný wrote:
+> Verify RLIMIT_NPROC observance in user namespaces also in the
+> clone(CLONE_NEWUSER) path.
+> Note the such a user_ns is created by the privileged user.
+> 
 
-On Wed, 9 Feb 2022 10:57:21 +0100 Jiri Pirko wrote: 
-> It's a different user. One works with the eswitch and creates the port
-> function. The other one takes the created instance and works with it.
-> Note that it may be on a different host.
+Does this test run in non-privileged user mode? If it doesn't
+let add a check and skip the test.
 
-It is a little confusing, so I may well be misunderstanding but the
-cover letter says:
+> Signed-off-by: Michal Koutný <mkoutny@suse.com>
 
-$ devlink dev param set pci/0000:08:00.0 name enable_sfs_aux_devs \
-              value false cmode runtime
-
-$ devlink port add pci/0000:08:00.0 flavour pcisf pfnum 0 sfnum 11
-
-So both of these run on the same side, no?
-
-What I meant is make the former part of the latter:
-
-$ devlink port add pci/0000:08:00.0 flavour pcisf pfnum 0 sfnum 11 noprobe
-
-
-Maybe worth clarifying - pci/0000:08:00.0 is the eswitch side and
-auxiliary/mlx5_core.sf.1 is the... "customer" side, correct? 
+thanks,
+-- Shuah

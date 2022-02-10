@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E432A4B0F7C
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDBC4B0F7A
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:58:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242547AbiBJN6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 08:58:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53904 "EHLO
+        id S242550AbiBJN6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 08:58:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242531AbiBJN6L (ORCPT
+        with ESMTP id S242537AbiBJN6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 08:58:11 -0500
+        Thu, 10 Feb 2022 08:58:13 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43A09A;
-        Thu, 10 Feb 2022 05:58:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76989A;
+        Thu, 10 Feb 2022 05:58:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644501492; x=1676037492;
+  t=1644501494; x=1676037494;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=e5tNC2+6Fbm7oyY/6pWR6YVtkr6FDJKgd8DtAgyEHlY=;
-  b=HNWfW0KcUAacvKfz6aV6AZZPdD7k8hdz5AOpEGYFRh8Eoh8pb4bOdSvz
-   vI/iZIm+DL4u32KSVYYprZIjku73shWJ/vbyJmZJYg1d4qzbSJMj9Id4+
-   S9LPs6cSbDrWQ7AXX5YgspwNVRrPicbqHh+wJY+OfGuJGQavQqPNrWD23
-   FbpHgkb6Bag8XOH7ymv3ukvVF3eBgYdQCeZGWeuIGXKPJk8blA5qOgJ8b
-   zIduOzk9Ir7pb6E78Og0gDBLWzRVPICr0HgzjIeScO4AlnL2lHHImBtcj
-   g0NWwJ7pLHkHrf0e9IUJ1dLXCR84AOc1KqqL9Xp1Yy74q27cGSc23UoDN
+  bh=7F2YaYgBAf/PxAB8HDZk89iTLG5JHpdRKPiLykD8JGQ=;
+  b=ZKyBEo4iAn+rvjZ2OW4q2QWzqtiZgkLoajP9J87q9V3uWCcDhqN1sIGh
+   D/xev1aJNEVc+/ELKJdS2DdjBtj70WCuiJ78+zQLVmwsVZQQml15/DzPd
+   X3mglpil/EsuwVgOiuy/3jPe982nzGxjqpyzRrzFKvbJgKdE8l2GZz+zZ
+   hcQa1P4g8XcGhATOWomvYD472dYGQMihEPviVqgLMa98fmq02CzDY4bJ2
+   oouqbk/yTWLQ096Xi5OxVY3/i/iiSgBB5oroTyopQNthwvtge5wYXM1cT
+   3c3ZooLcwJjR/Eofohnaw4YsODHfx8c248rXn8MMieAcCVag8I00p3DkG
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="335910159"
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="335910168"
 X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="335910159"
+   d="scan'208";a="335910168"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 05:58:12 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 05:58:14 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="526487215"
+   d="scan'208";a="526487231"
 Received: from silpixa00400294.ir.intel.com ([10.237.222.100])
-  by orsmga007.jf.intel.com with ESMTP; 10 Feb 2022 05:58:10 -0800
+  by orsmga007.jf.intel.com with ESMTP; 10 Feb 2022 05:58:12 -0800
 From:   Wojciech Ziemba <wojciech.ziemba@intel.com>
 To:     herbert@gondor.apana.org.au
 Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         qat-linux@intel.com, Wojciech Ziemba <wojciech.ziemba@intel.com>,
         Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
         Marco Chiappero <marco.chiappero@intel.com>
-Subject: [PATCH v2 1/3] crypto: qat - add misc workqueue
-Date:   Thu, 10 Feb 2022 13:38:25 +0000
-Message-Id: <20220210133827.2366901-2-wojciech.ziemba@intel.com>
+Subject: [PATCH v2 2/3] crypto: qat - move and rename GEN4 error register definitions
+Date:   Thu, 10 Feb 2022 13:38:26 +0000
+Message-Id: <20220210133827.2366901-3-wojciech.ziemba@intel.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220210133827.2366901-1-wojciech.ziemba@intel.com>
 References: <20220210133827.2366901-1-wojciech.ziemba@intel.com>
@@ -63,110 +63,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In an effort to reduce the amount of workqueues, scattered across
-the QAT driver, introduce the misc workqueue. This queue will be used
-to handle bottom halves, Power Management and more in the future.
-
-The function adf_misc_wq_queue_work() has been added to simplify
-the enqueuing of jobs.
+Move error source related CSRs from 4xxx to the wider GEN4 header file.
 
 Signed-off-by: Wojciech Ziemba <wojciech.ziemba@intel.com>
 Reviewed-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
 Reviewed-by: Marco Chiappero <marco.chiappero@intel.com>
 ---
- .../crypto/qat/qat_common/adf_common_drv.h    |  3 ++
- drivers/crypto/qat/qat_common/adf_ctl_drv.c   |  6 ++++
- drivers/crypto/qat/qat_common/adf_isr.c       | 28 +++++++++++++++++++
- 3 files changed, 37 insertions(+)
+ drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c   |  6 +++---
+ drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.h   | 14 --------------
+ drivers/crypto/qat/qat_common/adf_gen4_hw_data.h | 14 ++++++++++++++
+ 3 files changed, 17 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/crypto/qat/qat_common/adf_common_drv.h b/drivers/crypto/qat/qat_common/adf_common_drv.h
-index 76f4f96ec5eb..077549176879 100644
---- a/drivers/crypto/qat/qat_common/adf_common_drv.h
-+++ b/drivers/crypto/qat/qat_common/adf_common_drv.h
-@@ -188,6 +188,9 @@ int qat_uclo_map_obj(struct icp_qat_fw_loader_handle *handle,
- 		     void *addr_ptr, u32 mem_size, char *obj_name);
- int qat_uclo_set_cfg_ae_mask(struct icp_qat_fw_loader_handle *handle,
- 			     unsigned int cfg_ae_mask);
-+int adf_init_misc_wq(void);
-+void adf_exit_misc_wq(void);
-+bool adf_misc_wq_queue_work(struct work_struct *work);
- #if defined(CONFIG_PCI_IOV)
- int adf_sriov_configure(struct pci_dev *pdev, int numvfs);
- void adf_disable_sriov(struct adf_accel_dev *accel_dev);
-diff --git a/drivers/crypto/qat/qat_common/adf_ctl_drv.c b/drivers/crypto/qat/qat_common/adf_ctl_drv.c
-index 6f64aa693146..e8ac932bbaab 100644
---- a/drivers/crypto/qat/qat_common/adf_ctl_drv.c
-+++ b/drivers/crypto/qat/qat_common/adf_ctl_drv.c
-@@ -419,6 +419,9 @@ static int __init adf_register_ctl_device_driver(void)
- 	if (adf_chr_drv_create())
- 		goto err_chr_dev;
+diff --git a/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c b/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c
+index 68d39c833332..69fb271c85dd 100644
+--- a/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c
++++ b/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.c
+@@ -229,7 +229,7 @@ static void adf_enable_error_correction(struct adf_accel_dev *accel_dev)
+ 	void __iomem *csr = misc_bar->virt_addr;
  
-+	if (adf_init_misc_wq())
-+		goto err_misc_wq;
-+
- 	if (adf_init_aer())
- 		goto err_aer;
- 
-@@ -440,6 +443,8 @@ static int __init adf_register_ctl_device_driver(void)
- err_pf_wq:
- 	adf_exit_aer();
- err_aer:
-+	adf_exit_misc_wq();
-+err_misc_wq:
- 	adf_chr_drv_destroy();
- err_chr_dev:
- 	mutex_destroy(&adf_ctl_lock);
-@@ -449,6 +454,7 @@ static int __init adf_register_ctl_device_driver(void)
- static void __exit adf_unregister_ctl_device_driver(void)
- {
- 	adf_chr_drv_destroy();
-+	adf_exit_misc_wq();
- 	adf_exit_aer();
- 	adf_exit_vf_wq();
- 	adf_exit_pf_wq();
-diff --git a/drivers/crypto/qat/qat_common/adf_isr.c b/drivers/crypto/qat/qat_common/adf_isr.c
-index 4ca482aa69f7..803b89ba9670 100644
---- a/drivers/crypto/qat/qat_common/adf_isr.c
-+++ b/drivers/crypto/qat/qat_common/adf_isr.c
-@@ -16,6 +16,7 @@
- #include "adf_transport_internal.h"
- 
- #define ADF_MAX_NUM_VFS	32
-+static struct workqueue_struct *adf_misc_wq;
- 
- static int adf_enable_msix(struct adf_accel_dev *accel_dev)
- {
-@@ -341,3 +342,30 @@ int adf_isr_resource_alloc(struct adf_accel_dev *accel_dev)
- 	return ret;
+ 	/* Enable all in errsou3 except VFLR notification on host */
+-	ADF_CSR_WR(csr, ADF_4XXX_ERRMSK3, ADF_4XXX_VFLNOTIFY);
++	ADF_CSR_WR(csr, ADF_GEN4_ERRMSK3, ADF_GEN4_VFLNOTIFY);
  }
- EXPORT_SYMBOL_GPL(adf_isr_resource_alloc);
+ 
+ static void adf_enable_ints(struct adf_accel_dev *accel_dev)
+@@ -256,9 +256,9 @@ static int adf_init_device(struct adf_accel_dev *accel_dev)
+ 	addr = (&GET_BARS(accel_dev)[ADF_4XXX_PMISC_BAR])->virt_addr;
+ 
+ 	/* Temporarily mask PM interrupt */
+-	csr = ADF_CSR_RD(addr, ADF_4XXX_ERRMSK2);
++	csr = ADF_CSR_RD(addr, ADF_GEN4_ERRMSK2);
+ 	csr |= ADF_4XXX_PM_SOU;
+-	ADF_CSR_WR(addr, ADF_4XXX_ERRMSK2, csr);
++	ADF_CSR_WR(addr, ADF_GEN4_ERRMSK2, csr);
+ 
+ 	/* Set DRV_ACTIVE bit to power up the device */
+ 	ADF_CSR_WR(addr, ADF_4XXX_PM_INTERRUPT, ADF_4XXX_PM_DRV_ACTIVE);
+diff --git a/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.h b/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.h
+index 12e4fb9b40ce..857b93a3c032 100644
+--- a/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.h
++++ b/drivers/crypto/qat/qat_4xxx/adf_4xxx_hw_data.h
+@@ -39,20 +39,6 @@
+ #define ADF_4XXX_NUM_RINGS_PER_BANK	2
+ #define ADF_4XXX_NUM_BANKS_PER_VF	4
+ 
+-/* Error source registers */
+-#define ADF_4XXX_ERRSOU0	(0x41A200)
+-#define ADF_4XXX_ERRSOU1	(0x41A204)
+-#define ADF_4XXX_ERRSOU2	(0x41A208)
+-#define ADF_4XXX_ERRSOU3	(0x41A20C)
+-
+-/* Error source mask registers */
+-#define ADF_4XXX_ERRMSK0	(0x41A210)
+-#define ADF_4XXX_ERRMSK1	(0x41A214)
+-#define ADF_4XXX_ERRMSK2	(0x41A218)
+-#define ADF_4XXX_ERRMSK3	(0x41A21C)
+-
+-#define ADF_4XXX_VFLNOTIFY	BIT(7)
+-
+ /* Arbiter configuration */
+ #define ADF_4XXX_ARB_CONFIG			(BIT(31) | BIT(6) | BIT(0))
+ #define ADF_4XXX_ARB_OFFSET			(0x0)
+diff --git a/drivers/crypto/qat/qat_common/adf_gen4_hw_data.h b/drivers/crypto/qat/qat_common/adf_gen4_hw_data.h
+index f0f71ca44ca3..43b8f864806b 100644
+--- a/drivers/crypto/qat/qat_common/adf_gen4_hw_data.h
++++ b/drivers/crypto/qat/qat_common/adf_gen4_hw_data.h
+@@ -122,6 +122,20 @@ do { \
+ #define ADF_WQM_CSR_RPRESETSTS_STATUS	BIT(0)
+ #define ADF_WQM_CSR_RPRESETSTS(bank)	(ADF_WQM_CSR_RPRESETCTL(bank) + 4)
+ 
++/* Error source registers */
++#define ADF_GEN4_ERRSOU0	(0x41A200)
++#define ADF_GEN4_ERRSOU1	(0x41A204)
++#define ADF_GEN4_ERRSOU2	(0x41A208)
++#define ADF_GEN4_ERRSOU3	(0x41A20C)
 +
-+/**
-+ * adf_init_misc_wq() - Init misc workqueue
-+ *
-+ * Function init workqueue 'qat_misc_wq' for general purpose.
-+ *
-+ * Return: 0 on success, error code otherwise.
-+ */
-+int __init adf_init_misc_wq(void)
-+{
-+	adf_misc_wq = alloc_workqueue("qat_misc_wq", WQ_MEM_RECLAIM, 0);
++/* Error source mask registers */
++#define ADF_GEN4_ERRMSK0	(0x41A210)
++#define ADF_GEN4_ERRMSK1	(0x41A214)
++#define ADF_GEN4_ERRMSK2	(0x41A218)
++#define ADF_GEN4_ERRMSK3	(0x41A21C)
 +
-+	return !adf_misc_wq ? -ENOMEM : 0;
-+}
++#define ADF_GEN4_VFLNOTIFY	BIT(7)
 +
-+void adf_exit_misc_wq(void)
-+{
-+	if (adf_misc_wq)
-+		destroy_workqueue(adf_misc_wq);
-+
-+	adf_misc_wq = NULL;
-+}
-+
-+bool adf_misc_wq_queue_work(struct work_struct *work)
-+{
-+	return queue_work(adf_misc_wq, work);
-+}
+ void adf_gen4_set_ssm_wdtimer(struct adf_accel_dev *accel_dev);
+ void adf_gen4_init_hw_csr_ops(struct adf_hw_csr_ops *csr_ops);
+ int adf_gen4_ring_pair_reset(struct adf_accel_dev *accel_dev, u32 bank_number);
 -- 
 2.29.2
 

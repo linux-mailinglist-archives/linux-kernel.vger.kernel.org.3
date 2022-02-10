@@ -2,260 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BBFD4B0998
+	by mail.lfdr.de (Postfix) with ESMTP id D8E644B099A
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238759AbiBJJeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:34:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55310 "EHLO
+        id S238769AbiBJJei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:34:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232153AbiBJJe1 (ORCPT
+        with ESMTP id S235553AbiBJJeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:34:27 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4237C64
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:34:27 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id m14so8356571wrg.12
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:34:27 -0800 (PST)
+        Thu, 10 Feb 2022 04:34:36 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF0610BE
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:34:36 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id q7so8332456wrc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:34:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:organization:in-reply-to:content-transfer-encoding;
-        bh=vxX/8zifzyFYTCAPgNpbL+1rDLu/Md5JII8F66Zcgtc=;
-        b=3teWvtZsSrrrJESfa7vF84YVSNgwtbUY1wIxqDcxH7iwMzjyUo7p53oOAmoVaoU16Z
-         PNYf0YZYqECGJy9F+jVXYcFQUXw4TQHFfMmGiW7tNlJDLpsmdH3jB6zD7sJmfbhd83P6
-         drQlHE49cvvnBsEV1WSg6/Icx1q/hJGe5tdBMw4rCVW9kNaendOZHVDH0gmcHNXuYJPu
-         qYfG/tB6X9LQt/hZMzQ+fvWIe2x5MKtPwuRZX6sMAF955nWKFbYPXo4oDIyuEXUYZjwj
-         +8MoWdFO915oyshOm66cayioydZbsisHdtBm2//hBtdV/nAprEYGD0PeOQytScSehht9
-         7Jzg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uP4Uhmk6vf2xAms7r10tSMA4oqT1ek32FC/AUougGL0=;
+        b=W/UdOp+KHYfoCGq5kyfNbeGihSdUCcanlaMSjidwzWLNzJ5O6cFux6UYv15uPgsKV9
+         Q2vh+2e8fi3Et5DhYtOJvR6fjKig3adKGKIbbfQBjz2vhfto3+DLma/Of/trwk2nvjT/
+         FDk2N28echunb9G02DJCM/cedvdpR9XuYF6m02IArUoOUaAg+at+jtQxr7RpkMOytL8D
+         8OJlXvoEaXJEgwu1SEQEW/xgEa2I5qlk7yNTyhzeyZlHIeD+2183hGnloncRONEjq+64
+         LGXMSPwN0+nFLlOw4TshmtY+Soa+5EjDZizvdrz2ds0hCVia/FVhv9P1WYtKcT6G+rcB
+         zpjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:organization:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=vxX/8zifzyFYTCAPgNpbL+1rDLu/Md5JII8F66Zcgtc=;
-        b=lrrkyjQflZ3LzFW/WBV1r/xj3x0t9//9Z6Fc9nKdehw3xTlxX33qOEb6QHOOTWOtN2
-         /E0+J79YX/Cy9rOJBPdxPWM5tgFYEWf5r4uvalcXqgLPvxPDnOnGQvcuKFtAf/KIDVGK
-         /+yAq4bwIR37h9QK4w6ugGCO6qe86/9rOzq+B0hMbc1Cb85XjHK3MCgQU+V+1XlXheSM
-         R5hZwWrKKTVU8WYDG9ThcN4kJGrBQp4mGlUdWMUB0XFIUcFzWDqslD/oRzVQyzGHNi+I
-         HVv+HCSCVHwE0idgHwagufe4+ckh9l17ts5PvR1STWVNppvLbBGO/kpv+GKq0sPfvxsl
-         rayw==
-X-Gm-Message-State: AOAM530IQY2STc0P/fqtAYamvNzceehaVWARMzptaa6kXKJh/UupLLyF
-        O0bYBHf1nbr17aEunerbex2Y+foZbOchN3/s
-X-Google-Smtp-Source: ABdhPJwYmf/xTj+0L3TetNb2WBvO7oJeJgkuCVLbksq3xzAoCbJ6xmnGlCzlqQsuDz7mn0tMnK3fMg==
-X-Received: by 2002:a05:6000:16cc:: with SMTP id h12mr5547466wrf.408.1644485666342;
-        Thu, 10 Feb 2022 01:34:26 -0800 (PST)
-Received: from ?IPV6:2001:861:44c0:66c0:76d9:bf0e:e516:58a9? ([2001:861:44c0:66c0:76d9:bf0e:e516:58a9])
-        by smtp.gmail.com with ESMTPSA id a15sm7522310wri.22.2022.02.10.01.34.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 01:34:25 -0800 (PST)
-Message-ID: <98acfb7c-59bc-e437-899f-4f1eda0fea0b@baylibre.com>
-Date:   Thu, 10 Feb 2022 10:34:24 +0100
+        bh=uP4Uhmk6vf2xAms7r10tSMA4oqT1ek32FC/AUougGL0=;
+        b=OiyKkrERzB19vQJ4SADguB+PyPyFZfmqaMpF20NE6mytXJmhD8L/QpdM62BIoirA/U
+         1+WaGFthJgLmtKQhEq8gLMQJ6WjEHo2zora1mkbyfw9jQ9JJV6z29jaVsQTC3t3pEN8E
+         oyMLYm+7wJKZ6+4MNftgUBs6b0m+poe+m58wyZQSWao7PUdypGWikK1yQZuQAt58YL3o
+         /4Nfzie8f95PJHB/lhDSqGtKHbaoC9dPrxtbBZqEBa1k161Z5BG2eK8uX64SjtrTUCYL
+         jYv6bw2Y4fvdpA9iEzRO77wK06gt8gS9nMdsBvdvLub12G31QQpjJQdsH5ESQxQVBCdg
+         TH+A==
+X-Gm-Message-State: AOAM5318I/TScBMnjFoCRxjzZlNAdW5I6FLvA6JaGRGvWUAt8I/VCpR/
+        uGRlLiFXOdS1B5vg0XfcGCGpxw==
+X-Google-Smtp-Source: ABdhPJwOGqM6+TjFx/Q1NCGhs1yihK636P8Cyp2S1UH3Zdgv/l1e1PR0Y5iMcTh6rIsWe3+M2eU3cA==
+X-Received: by 2002:a5d:6da2:: with SMTP id u2mr5399791wrs.294.1644485674810;
+        Thu, 10 Feb 2022 01:34:34 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id 1sm20531111wry.52.2022.02.10.01.34.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 01:34:34 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     krzysztof.kozlowski@canonical.com, linux@roeck-us.net,
+        robh+dt@kernel.org, wim@linux-watchdog.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH v2] dt-bindings: watchdog: convert faraday,ftwdt010 to yaml
+Date:   Thu, 10 Feb 2022 09:34:27 +0000
+Message-Id: <20220210093427.2813601-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] arm64: dts: meson: remove CPU opps below 1GHz for
- G12B/SM1
-Content-Language: en-US
-To:     Christian Hewitt <christianshewitt@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220209135535.29547-1-christianshewitt@gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220209135535.29547-1-christianshewitt@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2022 14:55, Christian Hewitt wrote:
-> Amlogic G12B and SM1 devices experience CPU stalls and random board
-> wedges when the system idles and CPU cores clock down to lower opp
-> points. Recent vendor kernels include a change to remove 100-250MHz
-> (with no explanation) [0] but other downstream sources also remove
-> the 500/667MHz points (also with no explanation). Unless 100-667Mhz
-> opps are removed or the CPU governor forced to performance, stalls
-> are observed, so let's remove them an improve stability/uptime.
-> 
-> [0] https://github.com/khadas/linux/commit/20e237a4fe9f0302370e24950cb1416e038eee03
-> 
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-> ---
-> Numerous people have experienced this issue and I have tested with
-> only the low opp-points removed and numerous voltage tweaks: but it
-> makes no difference. With the opp points present an Odroid N2 or
-> Khadas VIM3 reliably drop off my network after being left idling
-> overnight with UART showing a CPU stall splat. With the opp points
-> removed I see weeks of uninterupted uptime. It's beyond my skills
-> to research what the cause of the stalls might be, but if anyone
-> ever figures it out we can always restore things. NB: This issue
-> is not too widely reported in forums, but that's largely because
-> most of the Amlogic supporting distros have been including this
-> change picked from my kernel patchset for some time.
-> 
->   .../boot/dts/amlogic/meson-g12b-a311d.dtsi    | 40 -------------------
->   .../boot/dts/amlogic/meson-g12b-s922x.dtsi    | 40 -------------------
->   arch/arm64/boot/dts/amlogic/meson-sm1.dtsi    | 20 ----------
->   3 files changed, 100 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi
-> index d61f43052a34..8e9ad1e51d66 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi
-> @@ -11,26 +11,6 @@
->   		compatible = "operating-points-v2";
->   		opp-shared;
->   
-> -		opp-100000000 {
-> -			opp-hz = /bits/ 64 <100000000>;
-> -			opp-microvolt = <731000>;
-> -		};
-> -
-> -		opp-250000000 {
-> -			opp-hz = /bits/ 64 <250000000>;
-> -			opp-microvolt = <731000>;
-> -		};
-> -
-> -		opp-500000000 {
-> -			opp-hz = /bits/ 64 <500000000>;
-> -			opp-microvolt = <731000>;
-> -		};
-> -
-> -		opp-667000000 {
-> -			opp-hz = /bits/ 64 <667000000>;
-> -			opp-microvolt = <731000>;
-> -		};
-> -
->   		opp-1000000000 {
->   			opp-hz = /bits/ 64 <1000000000>;
->   			opp-microvolt = <761000>;
-> @@ -71,26 +51,6 @@
->   		compatible = "operating-points-v2";
->   		opp-shared;
->   
-> -		opp-100000000 {
-> -			opp-hz = /bits/ 64 <100000000>;
-> -			opp-microvolt = <731000>;
-> -		};
-> -
-> -		opp-250000000 {
-> -			opp-hz = /bits/ 64 <250000000>;
-> -			opp-microvolt = <731000>;
-> -		};
-> -
-> -		opp-500000000 {
-> -			opp-hz = /bits/ 64 <500000000>;
-> -			opp-microvolt = <731000>;
-> -		};
-> -
-> -		opp-667000000 {
-> -			opp-hz = /bits/ 64 <667000000>;
-> -			opp-microvolt = <731000>;
-> -		};
-> -
->   		opp-1000000000 {
->   			opp-hz = /bits/ 64 <1000000000>;
->   			opp-microvolt = <731000>;
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
-> index 1e5d0ee5d541..44c23c984034 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
-> @@ -11,26 +11,6 @@
->   		compatible = "operating-points-v2";
->   		opp-shared;
->   
-> -		opp-100000000 {
-> -			opp-hz = /bits/ 64 <100000000>;
-> -			opp-microvolt = <731000>;
-> -		};
-> -
-> -		opp-250000000 {
-> -			opp-hz = /bits/ 64 <250000000>;
-> -			opp-microvolt = <731000>;
-> -		};
-> -
-> -		opp-500000000 {
-> -			opp-hz = /bits/ 64 <500000000>;
-> -			opp-microvolt = <731000>;
-> -		};
-> -
-> -		opp-667000000 {
-> -			opp-hz = /bits/ 64 <667000000>;
-> -			opp-microvolt = <731000>;
-> -		};
-> -
->   		opp-1000000000 {
->   			opp-hz = /bits/ 64 <1000000000>;
->   			opp-microvolt = <731000>;
-> @@ -76,26 +56,6 @@
->   		compatible = "operating-points-v2";
->   		opp-shared;
->   
-> -		opp-100000000 {
-> -			opp-hz = /bits/ 64 <100000000>;
-> -			opp-microvolt = <751000>;
-> -		};
-> -
-> -		opp-250000000 {
-> -			opp-hz = /bits/ 64 <250000000>;
-> -			opp-microvolt = <751000>;
-> -		};
-> -
-> -		opp-500000000 {
-> -			opp-hz = /bits/ 64 <500000000>;
-> -			opp-microvolt = <751000>;
-> -		};
-> -
-> -		opp-667000000 {
-> -			opp-hz = /bits/ 64 <667000000>;
-> -			opp-microvolt = <751000>;
-> -		};
-> -
->   		opp-1000000000 {
->   			opp-hz = /bits/ 64 <1000000000>;
->   			opp-microvolt = <771000>;
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-> index 3c07a89bfd27..80737731af3f 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-> @@ -95,26 +95,6 @@
->   		compatible = "operating-points-v2";
->   		opp-shared;
->   
-> -		opp-100000000 {
-> -			opp-hz = /bits/ 64 <100000000>;
-> -			opp-microvolt = <730000>;
-> -		};
-> -
-> -		opp-250000000 {
-> -			opp-hz = /bits/ 64 <250000000>;
-> -			opp-microvolt = <730000>;
-> -		};
-> -
-> -		opp-500000000 {
-> -			opp-hz = /bits/ 64 <500000000>;
-> -			opp-microvolt = <730000>;
-> -		};
-> -
-> -		opp-667000000 {
-> -			opp-hz = /bits/ 64 <666666666>;
-> -			opp-microvolt = <750000>;
-> -		};
-> -
->   		opp-1000000000 {
->   			opp-hz = /bits/ 64 <1000000000>;
->   			opp-microvolt = <770000>;
+Convert watchdog/faraday,ftwdt010.txt to yaml.
+This permits to detect missing properties like clocks and resets or
+compatible like moxa,moxart-watchdog.
 
-Can you find if an acceptable set of Fixes tag can be added to permit backporting to the current LTS kernels ?
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+Changes since v1:
+- Added myself as maintainer as requested by Linus
+- Added $ref to watchdog.yaml
+- Removed useless quotes
+- Added blank lines between properties
+- Removed timeout-sec as already provided by watchdog.yaml
 
-Neil
+ .../bindings/watchdog/faraday,ftwdt010.txt    | 22 ------
+ .../bindings/watchdog/faraday,ftwdt010.yaml   | 67 +++++++++++++++++++
+ 2 files changed, 67 insertions(+), 22 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+
+diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
+deleted file mode 100644
+index 9ecdb502e605..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Faraday Technology FTWDT010 watchdog
+-
+-This is an IP part from Faraday Technology found in the Gemini
+-SoCs and others.
+-
+-Required properties:
+-- compatible : must be one of
+-  "faraday,ftwdt010"
+-  "cortina,gemini-watchdog", "faraday,ftwdt010"
+-- reg : shall contain base register location and length
+-- interrupts : shall contain the interrupt for the watchdog
+-
+-Optional properties:
+-- timeout-sec : the default watchdog timeout in seconds.
+-
+-Example:
+-
+-watchdog@41000000 {
+-	compatible = "faraday,ftwdt010";
+-	reg = <0x41000000 0x1000>;
+-	interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
+-};
+diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+new file mode 100644
+index 000000000000..64e9c414cc60
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+@@ -0,0 +1,67 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/faraday,ftwdt010.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Faraday Technology FTWDT010 watchdog
++
++maintainers:
++  - Linus Walleij <linus.walleij@linaro.org>
++  - Corentin Labbe <clabbe@baylibre.com>
++
++description: |
++  This is an IP part from Faraday Technology found in the Gemini
++  SoCs and others.
++
++allOf:
++  - $ref: "watchdog.yaml#"
++
++properties:
++  compatible:
++    oneOf:
++      - const: faraday,ftwdt010
++      - items:
++          - const: cortina,gemini-watchdog
++          - const: faraday,ftwdt010
++      - items:
++          - const: moxa,moxart-watchdog
++          - const: faraday,ftwdt010
++
++  reg:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    const: PCLK
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    watchdog@41000000 {
++      compatible = "faraday,ftwdt010";
++      reg = <0x41000000 0x1000>;
++      interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
++    };
++  - |
++    watchdog: watchdog@98500000 {
++      compatible = "moxa,moxart-watchdog", "faraday,ftwdt010";
++      reg = <0x98500000 0x10>;
++      clocks = <&clk_apb>;
++      clock-names = "PCLK";
++    };
++...
+-- 
+2.34.1
+

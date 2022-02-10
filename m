@@ -2,95 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E784B1765
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 725D54B178C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:30:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344508AbiBJVCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 16:02:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37234 "EHLO
+        id S1344596AbiBJV2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 16:28:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344501AbiBJVCS (ORCPT
+        with ESMTP id S243233AbiBJV2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 16:02:18 -0500
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DE01100;
-        Thu, 10 Feb 2022 13:02:18 -0800 (PST)
-Received: by mail-oo1-xc2b.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso7923913ooi.1;
-        Thu, 10 Feb 2022 13:02:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=J4x457kQosKgp5+2hecYw4PRDh6A9ZpZEBeZtZlLy0s=;
-        b=M/2eYXP5fBXKTGytu+mnlJAFVGenObUSVwi2budaD+lzWVG/BSALY9K/9nNd6pqej0
-         IslENoP+f9A7nEMvSr4iFMQu8PgN6DKdZTvOKStOVTV4044eqo/7pZ034mA1+rgO5qFp
-         gfQitADaHAOkT6PCPIU1jFxQQx+Cl7h+m9L8t9Tk1GmcXKl8rA/ypG6aW/EGuhJyNF9U
-         YSFhNpxn1XD3BPDi98W8Iav3aY6M4tcfzhMTId6Frxrl1PICDyut4SWHAl4iIEokBir6
-         WXccqciBNwVPApq7AV50b+YRzQqlXqVtKRMKFAF+PveeorL6dcTA0kp1PP8WeSe+kzA9
-         n+Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=J4x457kQosKgp5+2hecYw4PRDh6A9ZpZEBeZtZlLy0s=;
-        b=t+GJr2GAuwZW2kr1mWwXqfZ/T6SkUcSh9qQf/+htPPrMmZ6s4/l3ekY+FjzxjSSh0v
-         bk9nfMUI4cHepURQupJidzSpI4MskGnrmsWvFbkGD87TI9ArwR27bmLVyoP864TXMLoh
-         UAQiTMp+43H/pse7MGUeDHeid7kCRNvCQsYJ5ZsLw05JqAL9iqlI6ZAhe6BoU4UERFG5
-         ovmljtwf9s43O8ZvwKtLsVd5PQa254DyYwKkM1TgFDUlua3INF+RlAbVOHAluzfIlo8m
-         qONUzTutBvQSyWQGwhsSc06u9Ht+yaCQ3ABwfPOADaTSQIjXx+Hc1K5rQn5Xrnn8q1Yh
-         h0mQ==
-X-Gm-Message-State: AOAM530lT0PPN3nmehkDgJ3cLWN79W6d+zaEpflorpgIMT3VUlX5ToMy
-        UdVBVV0BgQ9yBbPalviMCeU=
-X-Google-Smtp-Source: ABdhPJx9k+DURPNlqzx+fqvDRIoQSqJ+zZ1bXVBG7Ea3GWHWiLo8AwYPfQQOC5rsZQtxKk8oaqj1jw==
-X-Received: by 2002:a05:6871:605:: with SMTP id w5mr1333822oan.277.1644526937633;
-        Thu, 10 Feb 2022 13:02:17 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a4sm8853161oaa.42.2022.02.10.13.02.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 13:02:17 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 10 Feb 2022 13:02:15 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.16 0/5] 5.16.9-rc1 review
-Message-ID: <20220210210215.GF2963498@roeck-us.net>
-References: <20220209191249.887150036@linuxfoundation.org>
+        Thu, 10 Feb 2022 16:28:43 -0500
+X-Greylist: delayed 1671 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 13:28:41 PST
+Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399B7AF;
+        Thu, 10 Feb 2022 13:28:41 -0800 (PST)
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1nIGYM-000368-37; Thu, 10 Feb 2022 22:00:34 +0100
+Message-ID: <4524b1c9-3a32-8a2d-b7b8-5c4e65df017b@maciej.szmigiero.name>
+Date:   Thu, 10 Feb 2022 22:00:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209191249.887150036@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, Michal Hocko <mhocko@suse.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>, Willy Tarreau <w@1wt.eu>
+References: <1acaee7fa7ef7ab91e51f4417572b099caf2f400.1643405658.git.maciej.szmigiero@oracle.com>
+ <YfRkivAI2P6urdfn@google.com>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Subject: Re: [PATCH] KVM: x86: Fix rmap allocation for very large memslots
+In-Reply-To: <YfRkivAI2P6urdfn@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 08:14:32PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.9 release.
-> There are 5 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 28.01.2022 22:47, Sean Christopherson wrote:
+> On Fri, Jan 28, 2022, Maciej S. Szmigiero wrote:
+>> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+>>
+>> Commit 7661809d493b ("mm: don't allow oversized kvmalloc() calls") has
+>> forbidden using kvmalloc() to make allocations larger than INT_MAX (2 GiB).
+>>
+>> Unfortunately, adding a memslot exceeding 1 TiB in size will result in rmap
+>> code trying to make an allocation exceeding this limit.
+>> Besides failing this allocation, such operation will also trigger a
+>> WARN_ON_ONCE() added by the aforementioned commit.
+>>
+>> Since we probably still want to use kernel slab for small rmap allocations
+>> let's only redirect such oversized allocations to vmalloc.
+>>
+>> A possible alternative would be to add some kind of a __GFP_LARGE flag to
+>> skip the INT_MAX check behind kvmalloc(), however this will impact the
+>> common kernel memory allocation code, not just KVM.
 > 
-> Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
-> Anything received after that time might be too late.
+> Paolo has a cleaner fix for this[1][2], but it appears to have stalled out somewhere.
 > 
+> Paolo???
+> 
+> [1] https://lore.kernel.org/all/20211015165519.135670-1-pbonzini@redhat.com
+> [2] https://lore.kernel.org/all/20211016064302.165220-1-pbonzini@redhat.com
 
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 488 pass: 488 fail: 0
+So, what we do here?
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+Apparently the cleaner fix at [2] wasn't picked up despite Kees giving
+it his "Reviewed-by".
 
-Guenter
+Thanks,
+Maciej

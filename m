@@ -2,106 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594254B0F70
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:56:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA88C4B0F68
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242499AbiBJNzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 08:55:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52366 "EHLO
+        id S242432AbiBJNy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 08:54:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242477AbiBJNzi (ORCPT
+        with ESMTP id S238274AbiBJNy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 08:55:38 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9405FD73;
-        Thu, 10 Feb 2022 05:55:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644501337; x=1676037337;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ay0A3kx32MJfbLcM+1m+RIYTgc6yue+5l1DCkhN+RZI=;
-  b=OkBvhrv96X0VwdktPXcb9GyfjCVRQfdbThoMmqyRPDKtRy8/5vd3mUPi
-   esiHAqL8qF95Z6QP4jLkQSEmmPDLHQ58jOgrmn/kfAo0EJ1ucR4Snm0aV
-   m/QKjbNDHWk07nJCiHo6Xj4IgzkUEZKvUB0VW90xzfz7NN4to4yhcPoht
-   JGjOTNX7pJjBhAfllRpLAC2YvggisMSaFDj+JdfpPcwYyHT47+zVaTCv3
-   ukgiB6kWdZnaO0axU/CrqN+ra3M63nrpHNubXFrf1pHovXaMRATWybG+Q
-   jtqefbAMO48rL990FEGmWs3032NiNYBa5KZoSbGhALDvs2eenZFLRsJX1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="230138803"
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="230138803"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 05:55:37 -0800
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="485691556"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 05:55:35 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nI9u9-0030X4-OH;
-        Thu, 10 Feb 2022 15:54:37 +0200
-Date:   Thu, 10 Feb 2022 15:54:37 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Joe Perches <joe@perches.com>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v2 1/3] iio: temperature: ltc2983: Don't hard code
- defined constants in messages
-Message-ID: <YgUZHW6MHqo468X+@smile.fi.intel.com>
-References: <20220207104830.83882-1-andriy.shevchenko@linux.intel.com>
- <fdb3056dcaf9dd113049adebbc3fcd74de2b3028.camel@perches.com>
- <YgFVFceYQtWq4Hww@smile.fi.intel.com>
- <20220207204421.7f905aa5@jic23-huawei>
+        Thu, 10 Feb 2022 08:54:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FC427C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 05:54:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46C1CB8255B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:54:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD615C004E1;
+        Thu, 10 Feb 2022 13:54:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644501296;
+        bh=4T5GxSxlHHWGyyYwn7ZFv0DAVMPMJFjG9l8aHaQ2gB8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X7sbkJhHzVrU26hiKYcg+Ezd64u/+3cu4op9Bwj15hVpVamwFX5sYdvPTkjd8P2f6
+         6liB3Qw3YkisZX7fIICk7joeUad9bkIX+fhLVMj4HRn5b/dwLC+lSPTrMh4VzvhxBV
+         ZvyCXGqNIwahvMgFqEob7xR229BuYL8G0fqePNnBdNJDr3WC44KwFCKb/6HeLvZXsq
+         BWFrSRpkdKShh3/FfXaKgA/WxvYTp8YPu6VJcYftZnMfKKCOq8/V8LikIT9nV6Tg7g
+         c2Lwx0VZDn53tHlVcFm7MCx1GMY3mVR2wF83K8uvr4oua/vepMqyrnet6D7AjShkCf
+         3uscYbY4zIbYA==
+Date:   Thu, 10 Feb 2022 13:54:50 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Cc:     lgirdwood@gmail.com, pierre-louis.bossart@linux.intel.com,
+        ranjani.sridharan@linux.intel.com, alsa-devel@alsa-project.org,
+        kai.vehmanen@linux.intel.com, daniel.baluta@nxp.com,
+        tiwai@suse.com, linux-kernel@vger.kernel.org,
+        fred.oh@linux.intel.com
+Subject: Re: [PATCH 9/9] ASoC: SOF: Convert the generic probe support to SOF
+ client
+Message-ID: <YgUZKgPacRNrFk/e@sirena.org.uk>
+References: <20220210105519.19795-1-peter.ujfalusi@linux.intel.com>
+ <20220210105519.19795-10-peter.ujfalusi@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="QMm/tXeGvkQp+EWG"
 Content-Disposition: inline
-In-Reply-To: <20220207204421.7f905aa5@jic23-huawei>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220210105519.19795-10-peter.ujfalusi@linux.intel.com>
+X-Cookie: I want a WESSON OIL lease!!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 08:44:21PM +0000, Jonathan Cameron wrote:
-> On Mon, 7 Feb 2022 19:21:25 +0200
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> 
-> > On Mon, Feb 07, 2022 at 08:37:55AM -0800, Joe Perches wrote:
-> > > On Mon, 2022-02-07 at 12:48 +0200, Andy Shevchenko wrote:  
-> > > > In a couple of messages the constants, which have their definitions,
-> > > > are hard coded into the message text. Unhardcode them.  
-> > > 
-> > > Found by inspection or tool?  
-> > 
-> > Does it matter? No, a side effect of the following patch.
-> > 
-> > ...
-> > 
-> > > > +		dev_err(dev, "Steinhart sensors size(%zu) must be %d", new_custom->size,
-> > > > +			LTC2983_CUSTOM_STEINHART_SIZE);  
-> > > 
-> > > probably better using "%u" and not "%d"
-> > > 
-> > > and better with a \n termination too.  
-> > 
-> > I think it would be a separate change if we wish so. Let Jonathan to tell what
-> > to do here.
-> > 
-> Either way is fine by me.  I tend to be a little flexible of trivial fixes
-> in patches that are as simple as this one.
 
-v3 has been just sent.
+--QMm/tXeGvkQp+EWG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-With Best Regards,
-Andy Shevchenko
+On Thu, Feb 10, 2022 at 12:55:19PM +0200, Peter Ujfalusi wrote:
+> Add a new client driver for probes support and move
+> all the probes-related code from the core to the
+> client driver.
 
+This breaks an x86 allmodconfig build:
 
+/mnt/kernel/sound/soc/sof/compress.c: In function 'create_page_table':
+/mnt/kernel/sound/soc/sof/compress.c:87:9: error: implicit declaration of function 'snd_sof_create_page_table'; did you mean 'create_page_table'? [-Werror=implicit-function-declaration]
+   87 |  return snd_sof_create_page_table(component->dev, dmab,
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |         create_page_table
+
+--QMm/tXeGvkQp+EWG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIFGSoACgkQJNaLcl1U
+h9CW0Qf/Q4GQ+DKEP1CNG0ioomd5kKN5fZu16CQ8wlQPl9Cp+h5flqb5dQnZNJGe
+JuyktYDqCZxyJxGdzgHhBSnQ6lCtTW/b6KhBs08lij3PypAVXFyFIuEtbLM4N405
+6mUuoGmoB7HcihCODnDZ+QAhbh7DtPkoN1SoOQO15N4EwYVkL4NuGFkJYD2Am57q
+tr1V/YsYSYlyyuUemcfTQxOr8H5E0c3A7Zm8klJGhM7tIhDldAsoDZUKdh6l6747
+PCe6LSvQ5EyTGj4YxAqYzLPghly8eXCgeRV1Xc4wnjBSn3zZmeal7/klX+p47HPj
+8QMNhdXpErMJbT7SKZr7IPC3bzNOUw==
+=nbVs
+-----END PGP SIGNATURE-----
+
+--QMm/tXeGvkQp+EWG--

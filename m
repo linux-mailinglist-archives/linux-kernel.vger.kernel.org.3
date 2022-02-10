@@ -2,170 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A86544B1508
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C279A4B150C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245589AbiBJSMo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Feb 2022 13:12:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38290 "EHLO
+        id S245606AbiBJSOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 13:14:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239730AbiBJSMn (ORCPT
+        with ESMTP id S239730AbiBJSOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 13:12:43 -0500
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F68D91
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:12:39 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:57436)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nIDvq-003N6V-Oc; Thu, 10 Feb 2022 11:12:38 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:41284 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nIDvo-00DaTn-8A; Thu, 10 Feb 2022 11:12:38 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Jann Horn <jannh@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>,
-        stable@vger.kernel.org, Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>
-References: <20220210025321.787113-1-keescook@chromium.org>
-        <20220210025321.787113-2-keescook@chromium.org>
-        <CAG48ez1m7XJ1wJvTHtNorH480jTWNgdrn5Q1LTZZQ4uve3r4Sw@mail.gmail.com>
-        <202202100935.FB3E60FA5@keescook>
-        <CAG48ez3fG7S1dfE2-JAtyOZUK=0_iZ03scf+oD6gwVyD1Qp33g@mail.gmail.com>
-Date:   Thu, 10 Feb 2022 12:12:03 -0600
-In-Reply-To: <CAG48ez3fG7S1dfE2-JAtyOZUK=0_iZ03scf+oD6gwVyD1Qp33g@mail.gmail.com>
-        (Jann Horn's message of "Thu, 10 Feb 2022 19:01:39 +0100")
-Message-ID: <87h7968ubw.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 10 Feb 2022 13:14:04 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A02391
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:14:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644516845; x=1676052845;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cjWNlMS7wsBHr1pOlccUMjg3bQrDdW47IbfyLA88hpY=;
+  b=OxrAIhutNUp3biQtQHekxN9T/MOb6uwZ9bxBTOg/pTs1t3WLJx/LjlGT
+   Q/GV3CsV7P8vA9wP6nIAxltIi8m0B4OxUxCpvu5iovZowYoEINjM2CNaR
+   K/AG1xgk3fFGnOpGeXpNUUN7QLb+YUKpYOeJzZwnXPSgK53aOg2SLvMCQ
+   rvSe1l4Of8OiIldAQ9E6oRwlgSvPSNSae8yA4bYlynk2NbWfCsAHUrC9D
+   0TGyfvTWZM5TOL48sJfyh1HlYetNpDAcEx0p5YUD+5jcFuJghptI3H5qm
+   prmnhfIuTz9+fH95aEax/szs+KoypM/w1BcOdI4Ff3gIIXdJBKa3DGD7t
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="236958974"
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="236958974"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 10:14:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="586040968"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 10 Feb 2022 10:14:02 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nIDxC-0003Zn-7o; Thu, 10 Feb 2022 18:14:02 +0000
+Date:   Fri, 11 Feb 2022 02:13:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [csky-linux:riscv_compat_v6_svpbmt-v6 10/35]
+ arch/riscv/kernel/cpufeature.c:185:6: warning: variable 'cpu_apply_feature'
+ set but not used
+Message-ID: <202202110204.3m29JCRv-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1nIDvo-00DaTn-8A;;;mid=<87h7968ubw.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18hse56qt4MsIN6aEqx2RTHnzkFuCzJSn8=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Jann Horn <jannh@google.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1842 ms - load_scoreonly_sql: 0.06 (0.0%),
-        signal_user_changed: 12 (0.6%), b_tie_ro: 10 (0.5%), parse: 1.19
-        (0.1%), extract_message_metadata: 25 (1.3%), get_uri_detail_list: 2.8
-        (0.2%), tests_pri_-1000: 46 (2.5%), tests_pri_-950: 1.33 (0.1%),
-        tests_pri_-900: 1.08 (0.1%), tests_pri_-90: 358 (19.4%), check_bayes:
-        356 (19.3%), b_tokenize: 10 (0.6%), b_tok_get_all: 9 (0.5%),
-        b_comp_prob: 3.4 (0.2%), b_tok_touch_all: 329 (17.8%), b_finish: 1.05
-        (0.1%), tests_pri_0: 1378 (74.8%), check_dkim_signature: 0.64 (0.0%),
-        check_dkim_adsp: 2.8 (0.2%), poll_dns_idle: 0.88 (0.0%), tests_pri_10:
-        3.7 (0.2%), tests_pri_500: 12 (0.7%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 1/3] signal: HANDLER_EXIT should clear SIGNAL_UNKILLABLE
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jann Horn <jannh@google.com> writes:
+tree:   https://github.com/c-sky/csky-linux riscv_compat_v6_svpbmt-v6
+head:   54acb36c958fc990cc59889f79c8ddca7386c295
+commit: 9a8cf89570e893738c501551591b03bd868c825c [10/35] riscv: add cpufeature handling via alternatives
+config: riscv-randconfig-r042-20220208 (https://download.01.org/0day-ci/archive/20220211/202202110204.3m29JCRv-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project aa845d7a245d85c441d0bd44fc7b6c3be8f3de8d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/c-sky/csky-linux/commit/9a8cf89570e893738c501551591b03bd868c825c
+        git remote add csky-linux https://github.com/c-sky/csky-linux
+        git fetch --no-tags csky-linux riscv_compat_v6_svpbmt-v6
+        git checkout 9a8cf89570e893738c501551591b03bd868c825c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/ arch/riscv/mm/ drivers/base/firmware_loader/ drivers/pci/ drivers/target/ fs/erofs/ fs/pstore/ kernel/ mm/
 
-> On Thu, Feb 10, 2022 at 6:37 PM Kees Cook <keescook@chromium.org> wrote:
->> On Thu, Feb 10, 2022 at 05:18:39PM +0100, Jann Horn wrote:
->> > On Thu, Feb 10, 2022 at 3:53 AM Kees Cook <keescook@chromium.org> wrote:
->> > > Fatal SIGSYS signals were not being delivered to pid namespace init
->> > > processes. Make sure the SIGNAL_UNKILLABLE doesn't get set for these
->> > > cases.
->> > >
->> > > Reported-by: Robert Święcki <robert@swiecki.net>
->> > > Suggested-by: "Eric W. Biederman" <ebiederm@xmission.com>
->> > > Fixes: 00b06da29cf9 ("signal: Add SA_IMMUTABLE to ensure forced siganls do not get changed")
->> > > Cc: stable@vger.kernel.org
->> > > Signed-off-by: Kees Cook <keescook@chromium.org>
->> > > ---
->> > >  kernel/signal.c | 5 +++--
->> > >  1 file changed, 3 insertions(+), 2 deletions(-)
->> > >
->> > > diff --git a/kernel/signal.c b/kernel/signal.c
->> > > index 38602738866e..33e3ee4f3383 100644
->> > > --- a/kernel/signal.c
->> > > +++ b/kernel/signal.c
->> > > @@ -1342,9 +1342,10 @@ force_sig_info_to_task(struct kernel_siginfo *info, struct task_struct *t,
->> > >         }
->> > >         /*
->> > >          * Don't clear SIGNAL_UNKILLABLE for traced tasks, users won't expect
->> > > -        * debugging to leave init killable.
->> > > +        * debugging to leave init killable, unless it is intended to exit.
->> > >          */
->> > > -       if (action->sa.sa_handler == SIG_DFL && !t->ptrace)
->> > > +       if (action->sa.sa_handler == SIG_DFL &&
->> > > +           (!t->ptrace || (handler == HANDLER_EXIT)))
->> > >                 t->signal->flags &= ~SIGNAL_UNKILLABLE;
->> >
->> > You're changing the subclause:
->> >
->> > !t->ptrace
->> >
->> > to:
->> >
->> > (!t->ptrace || (handler == HANDLER_EXIT))
->> >
->> > which means that the change only affects cases where the process has a
->> > ptracer, right? That's not the scenario the commit message is talking
->> > about...
->>
->> Sorry, yes, I was not as accurate as I should have been in the commit
->> log. I have changed it to:
->>
->> Fatal SIGSYS signals (i.e. seccomp RET_KILL_* syscall filter actions)
->> were not being delivered to ptraced pid namespace init processes. Make
->> sure the SIGNAL_UNKILLABLE doesn't get set for these cases.
->
-> So basically force_sig_info() is trying to figure out whether
-> get_signal() will later on check for SIGNAL_UNKILLABLE (the SIG_DFL
-> case), and if so, it clears the flag from the target's signal_struct
-> that marks the process as unkillable?
->
-> This used to be:
->
-> if (action->sa.sa_handler == SIG_DFL)
->     t->signal->flags &= ~SIGNAL_UNKILLABLE;
->
-> Then someone noticed that in the ptrace case, the signal might not
-> actually end up being consumed by the target process, and added the
-> "&& !t->ptrace" clause in commit
-> eb61b5911bdc923875cde99eb25203a0e2b06d43.
->
-> And now Robert Swiecki noticed that that still didn't accurately model
-> what'll happen in get_signal().
->
->
-> This seems hacky to me, and also racy: What if, while you're going
-> through a SECCOMP_RET_KILL_PROCESS in an unkillable process, some
-> other thread e.g. concurrently changes the disposition of SIGSYS from
-> a custom handler to SIG_DFL?
->
-> Instead of trying to figure out whether the signal would have been
-> fatal without SIGNAL_UNKILLABLE, I think it would be better to find a
-> way to tell the signal-handling code that SIGNAL_UNKILLABLE should be
-> bypassed for this specific signal, or something along those lines...
-> but of course that's also kind of messy because the signal-sending
-> code might fall back to just using the pending signal mask on
-> allocation failure IIRC?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I am actively working on this.  I think I know how to get there but
-it requires cleanups elsewhere as well, so it is not really an approach
-that is appropriate for backporting.
+All warnings (new ones prefixed by >>):
 
-The big bottleneck is that we need to make signals that trigger
-coredumps eligible for short circuit delivery, and that takes a little
-doing.
+>> arch/riscv/kernel/cpufeature.c:185:6: warning: variable 'cpu_apply_feature' set but not used [-Wunused-but-set-variable]
+           u32 cpu_apply_feature = 0;
+               ^
+   1 warning generated.
 
-Eric
 
+vim +/cpu_apply_feature +185 arch/riscv/kernel/cpufeature.c
+
+   180	
+   181	void riscv_cpufeature_patch_func(struct alt_entry *begin, struct alt_entry *end,
+   182					 unsigned int stage)
+   183	{
+   184		u32 cpu_req_feature = cpufeature_probe(stage);
+ > 185		u32 cpu_apply_feature = 0;
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,155 +2,433 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D6B54B1775
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E04F4B1768
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344542AbiBJVNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 16:13:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41206 "EHLO
+        id S1344509AbiBJVFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 16:05:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236222AbiBJVNt (ORCPT
+        with ESMTP id S238999AbiBJVFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 16:13:49 -0500
-X-Greylist: delayed 307 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 13:13:41 PST
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C7AF47;
-        Thu, 10 Feb 2022 13:13:41 -0800 (PST)
-Received: from leknes.fjasle.eu ([46.142.99.154]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1Mnac9-1nyzQT0gvl-00jYQB; Thu, 10 Feb 2022 22:08:24 +0100
-Received: from localhost.fjasle.eu (unknown [IPv6:fd00::6f0:21ff:fe91:394])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id 8705A3C050;
-        Thu, 10 Feb 2022 22:08:19 +0100 (CET)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id 25BC318B0; Thu, 10 Feb 2022 22:00:56 +0100 (CET)
-Date:   Thu, 10 Feb 2022 22:00:56 +0100
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kbuild: replace $(if A,A,B) with $(or A,B)
-Message-ID: <YgV9CHKpS/ptY3my@bergen.fjasle.eu>
-References: <20220210093342.2118196-1-masahiroy@kernel.org>
+        Thu, 10 Feb 2022 16:05:21 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740F42634;
+        Thu, 10 Feb 2022 13:05:20 -0800 (PST)
+Date:   Thu, 10 Feb 2022 22:05:15 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644527116;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=O6xK7iu3facsI/Ueqbgt/rxq0zo/SXZ7KKlOA08fHOU=;
+        b=YpiLOQFuDIDODmGtHsQtxC4vD16j6xpjxYx/GW/GXfmvAjyPgSERuBETcHIKut0D/tWpje
+        fXrxRu3KHS22c0Q08MafgksmFx+Vlf/Iata5I1ZerhFcQWrErlNBoJB9mMI4T9atx+/0Fh
+        HmvVQmqxLs+RL9Le6tt0DnVDBqnfOAqYbkA4itccJHJVYRYvxrQVIRZTC+CiZ9gAuYijFk
+        FkB2ZfvatN7mSF1gMOty74455aQikTdzusrW9qyQBQd28ryBv4suXyUddt/mIJm/XP1WzP
+        fee5aTIdAA7wVUxeS1BOk0ZrOog6Qi+oFgZ5d3TQ0JFkuH6a9HTw02e8nCy6mw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644527116;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=O6xK7iu3facsI/Ueqbgt/rxq0zo/SXZ7KKlOA08fHOU=;
+        b=yo6L5kKCTC8Vxc21WV8V59hzR6Qu2ZFHzStCZbNgFQvkEtzi6bBb2cmd7GpF3mYnyVrqLs
+        YWAlihtFhLxS1pAw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [ANNOUNCE] v5.17-rc3-rt6
+Message-ID: <YgV+CykurNN1n9bz@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220210093342.2118196-1-masahiroy@kernel.org>
-Jabber-ID: nicolas@jabber.no
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:apwdst/S/4MvpD5SeWBwUhd/SEKva7BSqmtXbCEgsgotW4V5moE
- KqINi4CGet4lvPWXMlYDaNrgn7V2RTMdF4hBZuZK+OyLzH0RUURko9mYfH4uwgz4Kvw17oi
- RgxVS/4jQqHYDUw2ir9SeZipIYxutwdx7tk6fJa5aa96IvmirbbmtHiJclS8CfgIOoEziwH
- /YvBZXpDJddXhMk8T1zTg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:BjgAJG7ufrk=:SKnf7B6DC4QEBqtc8z0vov
- rLMtIJ5Mz0KJm86bSwOrHXAbcjKtUQISLXoGCntfXzlCLvRk9rMgCHv/mDcigFYHHLBjRdyXg
- LhwGl+jasbDhdhQvwSm1BHJQTe/KAm+Xi1CSIFE8+Y2NbkDgql5d8JI6Nhc34mazDWGXZO3X8
- 0tIZNUHW1Xv93qc2A1EZyncCyh5FW+jgQ6Fj/dOH/nTCqEc5vj1pRGa2ZFa4iXRklzaIwnWML
- QwHZuRj1szcJ/mrJSUEvswhG+tBuSawCGe6eZNyflCBOLzGMHqfdoyGwlt1GoXqE53UHYQwiJ
- BPZk+FrIHBzm2AeevAvnBSUMI/+y6OheE0E+YDc9/NMC20Gxgqns1n7C7FX8CtzKM7BXeUvLf
- jCHaxPjlPMq3aRka4E2ye2Cdpg2aFtHvb4/9rcft8byVRdDGEyHqvHgE2FtSiG7JnfuFKZMDW
- J5QVAnzFB59NDEnlZOdwykPiur4NHJe+MNT1o2VnBbFBVvKm0JyE5v4KLj+ODn1+QBseb6x/E
- kJUGSR0WwAcOe2WcJXIfoFrfP+95dUX9gL77JZaxk5loIbObySz03EsRx876eaYfU8vnWABEi
- Tt63qfWTMaC6Wu1Tw/MSEkVBDAbzYd3Gc9X8ERBRdYGIQN3uOTC3f7nVnHHpPPWhLIhQ1l/8G
- YbgboL9PeR+ImjvYIkLG71Jd6/aJJktZbYTM/MiuvpsQUS86YbOrtMCvXPfAl7RNK0/U=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-På to. 10. feb. 2022 kl. 18.33 +0000 skrev Masahiro Yamada:
-> Date:   Thu, 10 Feb 2022 18:33:42 +0900
-> From: Masahiro Yamada <masahiroy@kernel.org>
-> To: linux-kbuild@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>
-> Subject: [PATCH] kbuild: replace $(if A,A,B) with $(or A,B)
-> Message-Id: <20220210093342.2118196-1-masahiroy@kernel.org>
-> X-Mailer: git-send-email 2.32.0
-> X-Mailing-List: linux-kbuild@vger.kernel.org
-> 
-> $(or ...) is available since GNU Make 3.81, and useful to shorten the
-> code in some places.
-> 
-> Covert as follows:
-> 
->   $(if A,A,B)  -->  $(or A,B)
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-> 
->  Makefile                                    | 8 ++++----
->  scripts/Makefile.build                      | 3 +--
->  scripts/Makefile.clean                      | 2 +-
->  scripts/Makefile.lib                        | 4 ++--
->  tools/bpf/bpftool/Makefile                  | 4 ++--
->  tools/build/Makefile                        | 2 +-
->  tools/counter/Makefile                      | 2 +-
->  tools/gpio/Makefile                         | 2 +-
->  tools/hv/Makefile                           | 2 +-
->  tools/iio/Makefile                          | 2 +-
->  tools/lib/api/Makefile                      | 2 +-
->  tools/lib/bpf/Makefile                      | 2 +-
->  tools/lib/perf/Makefile                     | 2 +-
->  tools/lib/subcmd/Makefile                   | 2 +-
->  tools/objtool/Makefile                      | 2 +-
->  tools/pci/Makefile                          | 2 +-
->  tools/perf/Makefile.perf                    | 4 ++--
->  tools/power/x86/intel-speed-select/Makefile | 2 +-
->  tools/scripts/utilities.mak                 | 2 +-
->  tools/spi/Makefile                          | 6 +++---
->  tools/tracing/rtla/Makefile                 | 2 +-
->  tools/usb/Makefile                          | 2 +-
->  22 files changed, 30 insertions(+), 31 deletions(-)
-> 
-[...]
-> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-> index f947b61b2107..df1f6ff7bc49 100644
-> --- a/tools/lib/bpf/Makefile
-> +++ b/tools/lib/bpf/Makefile
-> @@ -60,7 +60,7 @@ ifndef VERBOSE
->    VERBOSE = 0
->  endif
->  
-> -INCLUDES = -I$(if $(OUTPUT),$(OUTPUT),.)				\
-> +INCLUDES = -I$(or $(OUTPUT),.)				\
->  	   -I$(srctree)/tools/include -I$(srctree)/tools/include/uapi
+Dear RT folks!
 
-I think I'd have shortened the whitespaces before the stray backslash.
+I'm pleased to announce the v5.17-rc3-rt6 patch set. 
 
->  
->  export prefix libdir src obj
-> diff --git a/tools/lib/perf/Makefile b/tools/lib/perf/Makefile
-> index 08fe6e3c4089..2d985d6a3a96 100644
-> --- a/tools/lib/perf/Makefile
-> +++ b/tools/lib/perf/Makefile
-> @@ -153,7 +153,7 @@ $(TESTS_STATIC): $(TESTS_IN) $(LIBPERF_A) $(LIBAPI)
->  	$(QUIET_LINK)$(CC) -o $@ $^
->  
->  $(TESTS_SHARED): $(TESTS_IN) $(LIBAPI)
-> -	$(QUIET_LINK)$(CC) -o $@ -L$(if $(OUTPUT),$(OUTPUT),.) $^ -lperf
-> +	$(QUIET_LINK)$(CC) -o $@ -L$(if $(OUTPUT),.) $^ -lperf
+Changes since v5.17-rc3-rt5:
 
-$(if ...)  -> $(or ...)
+  - Update John's printk series. It supports now direct printing from
+    irqwork.
 
-With this one fixed:
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+  - Correct atomic access to a variable in printk. Patch by John Ogness.
 
-Thanks for that patch.  I have never seen $(or) in use before but it 
-definitively makes sense!
+  - Add a warning if there is a ksoftirqd wakeup from idle.
 
-Kind regards,
-Nicolas
+  - Jason A. Donenfeld patches against the random subsystem were updated
+    to v4. There is an additional RT related change on top.
 
+  - The known issue
+      netconsole triggers WARN.
+    has been removed from the list since it also triggers with
+    CONFIG_PREEMPT and v5.17-rc3 (without the PREEMPT_RT patch).
 
--- 
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
+Known issues
+     - Valentin Schneider reported a few splats on ARM64, see
+          https://lkml.kernel.org/r/20210810134127.1394269-1-valentin.schneider@arm.com
+
+The delta patch against v5.17-rc3-rt5 is appended below and can be found here:
+ 
+     https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.17/incr/patch-5.17-rc3-rt5-rt6.patch.xz
+
+You can get this release via the git tree at:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v5.17-rc3-rt6
+
+The RT patch against v5.17-rc3 can be found here:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.17/older/patch-5.17-rc3-rt6.patch.xz
+
+The split quilt queue is available at:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.17/older/patches-5.17-rc3-rt6.tar.xz
+
+Sebastian
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index afcedefb0c1c8..e4bde9c917654 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -404,7 +404,7 @@ struct fast_pool {
+ 	struct work_struct mix;
+ 	unsigned long last;
+ 	u32 pool[4];
+-	atomic_t count;
++	unsigned int count;
+ 	u16 reg_idx;
+ };
+ #define FAST_POOL_MIX_INFLIGHT (1U << 31)
+@@ -1045,25 +1045,33 @@ static u32 get_reg(struct fast_pool *f, struct pt_regs *regs)
+ static void mix_interrupt_randomness(struct work_struct *work)
+ {
+ 	struct fast_pool *fast_pool = container_of(work, struct fast_pool, mix);
++	u8 pool[sizeof(fast_pool->pool)];
+ 
+-	fast_pool->last = jiffies;
++	if (unlikely(crng_init == 0)) {
++		size_t ret;
+ 
+-	/* Since this is the result of a trip through the scheduler, xor in
++		ret = crng_fast_load((u8 *)fast_pool->pool, sizeof(fast_pool->pool));
++		if (ret) {
++			WRITE_ONCE(fast_pool->count, 0);
++			fast_pool->last = jiffies;
++			return;
++		}
++	}
++
++	/*
++	 * Since this is the result of a trip through the scheduler, xor in
+ 	 * a cycle counter. It can't hurt, and might help.
+ 	 */
+ 	fast_pool->pool[3] ^= random_get_entropy();
++	/* Copy the pool to the stack so that the mixer always has a consistent view. */
++	memcpy(pool, fast_pool->pool, sizeof(pool));
++	/* We take care to zero out the count only after we're done reading the pool. */
++	WRITE_ONCE(fast_pool->count, 0);
++	fast_pool->last = jiffies;
+ 
+-	if (unlikely(crng_init == 0)) {
+-		if (crng_fast_load((u8 *)&fast_pool->pool, sizeof(fast_pool->pool)) > 0)
+-			atomic_set(&fast_pool->count, 0);
+-		else
+-			atomic_and(~FAST_POOL_MIX_INFLIGHT, &fast_pool->count);
+-		return;
+-	}
+-
+-	mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
+-	atomic_set(&fast_pool->count, 0);
++	mix_pool_bytes(pool, sizeof(pool));
+ 	credit_entropy_bits(1);
++	memzero_explicit(pool, sizeof(pool));
+ }
+ 
+ void add_interrupt_randomness(int irq)
+@@ -1089,15 +1097,33 @@ void add_interrupt_randomness(int irq)
+ 
+ 	fast_mix(fast_pool);
+ 	add_interrupt_bench(cycles);
++	new_count = ++fast_pool->count;
+ 
+-	new_count = (unsigned int)atomic_inc_return(&fast_pool->count);
+-	if (new_count >= 64 && new_count < FAST_POOL_MIX_INFLIGHT &&
+-	    (time_after(now, fast_pool->last + HZ) || unlikely(crng_init == 0))) {
++	if (unlikely(crng_init == 0)) {
++		if (new_count & FAST_POOL_MIX_INFLIGHT)
++			return;
++
++		if (new_count < 64)
++			return;
++
++		fast_pool->count |= FAST_POOL_MIX_INFLIGHT;
+ 		if (unlikely(!fast_pool->mix.func))
+ 			INIT_WORK(&fast_pool->mix, mix_interrupt_randomness);
+-		atomic_or(FAST_POOL_MIX_INFLIGHT, &fast_pool->count);
+-		schedule_work(&fast_pool->mix);
++		queue_work_on(raw_smp_processor_id(), system_highpri_wq,
++			      &fast_pool->mix);
++		return;
+ 	}
++
++	if (new_count & FAST_POOL_MIX_INFLIGHT)
++		return;
++
++	if (new_count < 64 && !time_after(now, fast_pool->last + HZ))
++		return;
++
++	if (unlikely(!fast_pool->mix.func))
++		INIT_WORK(&fast_pool->mix, mix_interrupt_randomness);
++	fast_pool->count |= FAST_POOL_MIX_INFLIGHT;
++	queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
+ }
+ EXPORT_SYMBOL_GPL(add_interrupt_randomness);
+ 
+@@ -1881,13 +1907,16 @@ static int __init random_sysctls_init(void)
+ device_initcall(random_sysctls_init);
+ #endif	/* CONFIG_SYSCTL */
+ 
++static atomic_t batch_generation = ATOMIC_INIT(0);
++
+ struct batched_entropy {
+ 	union {
+ 		u64 entropy_u64[CHACHA_BLOCK_SIZE / sizeof(u64)];
+ 		u32 entropy_u32[CHACHA_BLOCK_SIZE / sizeof(u32)];
+ 	};
++	local_lock_t lock;
+ 	unsigned int position;
+-	spinlock_t batch_lock;
++	int generation;
+ };
+ 
+ /*
+@@ -1899,7 +1928,7 @@ struct batched_entropy {
+  * point prior.
+  */
+ static DEFINE_PER_CPU(struct batched_entropy, batched_entropy_u64) = {
+-	.batch_lock = __SPIN_LOCK_UNLOCKED(batched_entropy_u64.lock),
++	.lock = INIT_LOCAL_LOCK(batched_entropy_u64.lock)
+ };
+ 
+ u64 get_random_u64(void)
+@@ -1908,67 +1937,65 @@ u64 get_random_u64(void)
+ 	unsigned long flags;
+ 	struct batched_entropy *batch;
+ 	static void *previous;
++	int next_gen;
+ 
+ 	warn_unseeded_randomness(&previous);
+ 
++	local_lock_irqsave(&batched_entropy_u64.lock, flags);
+ 	batch = raw_cpu_ptr(&batched_entropy_u64);
+-	spin_lock_irqsave(&batch->batch_lock, flags);
+-	if (batch->position % ARRAY_SIZE(batch->entropy_u64) == 0) {
++
++	next_gen = atomic_read(&batch_generation);
++	if (batch->position % ARRAY_SIZE(batch->entropy_u64) == 0 ||
++	    next_gen != batch->generation) {
+ 		extract_crng((u8 *)batch->entropy_u64);
+ 		batch->position = 0;
++		batch->generation = next_gen;
+ 	}
++
+ 	ret = batch->entropy_u64[batch->position++];
+-	spin_unlock_irqrestore(&batch->batch_lock, flags);
++	local_unlock_irqrestore(&batched_entropy_u64.lock, flags);
+ 	return ret;
+ }
+ EXPORT_SYMBOL(get_random_u64);
+ 
+ static DEFINE_PER_CPU(struct batched_entropy, batched_entropy_u32) = {
+-	.batch_lock = __SPIN_LOCK_UNLOCKED(batched_entropy_u32.lock),
++	.lock = INIT_LOCAL_LOCK(batched_entropy_u32.lock)
+ };
++
+ u32 get_random_u32(void)
+ {
+ 	u32 ret;
+ 	unsigned long flags;
+ 	struct batched_entropy *batch;
+ 	static void *previous;
++	int next_gen;
+ 
+ 	warn_unseeded_randomness(&previous);
+ 
++	local_lock_irqsave(&batched_entropy_u32.lock, flags);
+ 	batch = raw_cpu_ptr(&batched_entropy_u32);
+-	spin_lock_irqsave(&batch->batch_lock, flags);
+-	if (batch->position % ARRAY_SIZE(batch->entropy_u32) == 0) {
++
++	next_gen = atomic_read(&batch_generation);
++	if (batch->position % ARRAY_SIZE(batch->entropy_u32) == 0 ||
++	    next_gen != batch->generation) {
+ 		extract_crng((u8 *)batch->entropy_u32);
+ 		batch->position = 0;
++		batch->generation = next_gen;
+ 	}
++
+ 	ret = batch->entropy_u32[batch->position++];
+-	spin_unlock_irqrestore(&batch->batch_lock, flags);
++	local_unlock_irqrestore(&batched_entropy_u32.lock, flags);
+ 	return ret;
+ }
+ EXPORT_SYMBOL(get_random_u32);
+ 
+ /* It's important to invalidate all potential batched entropy that might
+  * be stored before the crng is initialized, which we can do lazily by
+- * simply resetting the counter to zero so that it's re-extracted on the
+- * next usage. */
++ * bumping the generation counter.
++ */
+ static void invalidate_batched_entropy(void)
+ {
+-	int cpu;
+-	unsigned long flags;
+-
+-	for_each_possible_cpu(cpu) {
+-		struct batched_entropy *batched_entropy;
+-
+-		batched_entropy = per_cpu_ptr(&batched_entropy_u32, cpu);
+-		spin_lock_irqsave(&batched_entropy->batch_lock, flags);
+-		batched_entropy->position = 0;
+-		spin_unlock(&batched_entropy->batch_lock);
+-
+-		batched_entropy = per_cpu_ptr(&batched_entropy_u64, cpu);
+-		spin_lock(&batched_entropy->batch_lock);
+-		batched_entropy->position = 0;
+-		spin_unlock_irqrestore(&batched_entropy->batch_lock, flags);
+-	}
++	atomic_inc(&batch_generation);
+ }
+ 
+ /**
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 3bef5100312ea..ea55bda735dce 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -404,7 +404,7 @@ static atomic_t printk_direct = ATOMIC_INIT(0);
+ 
+ /**
+  * printk_direct_enter - cause console printing to occur in the context of
+- * 	printk() callers
++ *                       printk() callers
+  *
+  * This globally effects all printk() callers.
+  *
+@@ -2451,7 +2451,9 @@ static ssize_t msg_print_ext_body(char *buf, size_t size,
+ static void console_lock_spinning_enable(void) { }
+ static int console_lock_spinning_disable_and_check(void) { return 0; }
+ static void call_console_driver(struct console *con, const char *text, size_t len,
+-				char *dropped_text, bool atomic_printing) {}
++				char *dropped_text, bool atomic_printing)
++{
++}
+ static bool suppress_message_printing(int level) { return false; }
+ static void printk_delay(int level) {}
+ static void start_printk_kthread(struct console *con) {}
+@@ -2878,7 +2880,7 @@ static void write_console_seq(struct console *con, u64 val, bool atomic_printing
+  * CONSOLE_EXT_LOG_MAX. Otherwise @ext_text must be NULL.
+  *
+  * If dropped messages should be printed, @dropped_text is a buffer of size
+- * DROPPED_TEXT_MAX. Otherise @dropped_text must be NULL.
++ * DROPPED_TEXT_MAX. Otherwise @dropped_text must be NULL.
+  *
+  * @atomic_printing specifies if atomic printing should be used.
+  *
+@@ -3873,6 +3875,7 @@ static void start_printk_kthread(struct console *con)
+  */
+ #define PRINTK_PENDING_WAKEUP	0x01
+ #define PRINTK_PENDING_OUTPUT	0x02
++#define PRINTK_DIRECT_OUTPUT	0x04
+ 
+ static DEFINE_PER_CPU(int, printk_pending);
+ 
+@@ -3881,9 +3884,15 @@ static void wake_up_klogd_work_func(struct irq_work *irq_work)
+ 	int pending = __this_cpu_xchg(printk_pending, 0);
+ 
+ 	if (pending & PRINTK_PENDING_OUTPUT) {
++		if (pending & PRINTK_DIRECT_OUTPUT)
++			printk_direct_enter();
++
+ 		/* If trylock fails, someone else is doing the printing */
+ 		if (console_trylock())
+ 			console_unlock();
++
++		if (pending & PRINTK_DIRECT_OUTPUT)
++			printk_direct_exit();
+ 	}
+ 
+ 	if (pending & PRINTK_PENDING_WAKEUP)
+@@ -3908,11 +3917,16 @@ void wake_up_klogd(void)
+ 
+ void defer_console_output(void)
+ {
++	int val = PRINTK_PENDING_OUTPUT;
++
+ 	if (!printk_percpu_data_ready())
+ 		return;
+ 
++	if (atomic_read(&printk_direct))
++		val |= PRINTK_DIRECT_OUTPUT;
++
+ 	preempt_disable();
+-	__this_cpu_or(printk_pending, PRINTK_PENDING_OUTPUT);
++	this_cpu_or(printk_pending, val);
+ 	irq_work_queue(this_cpu_ptr(&wake_up_klogd_work));
+ 	preempt_enable();
+ }
+diff --git a/kernel/smp.c b/kernel/smp.c
+index 250311c2009fe..40deb5c7ef6e2 100644
+--- a/kernel/smp.c
++++ b/kernel/smp.c
+@@ -690,21 +690,26 @@ void flush_smp_call_function_from_idle(void)
+ 
+ 	cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->idle, CFD_SEQ_NOCPU,
+ 		      smp_processor_id(), CFD_SEQ_IDLE);
+-
+ 	local_irq_save(flags);
+-	flush_smp_call_function_queue(true);
+-
+-	if (local_softirq_pending()) {
+-		if (!IS_ENABLED(CONFIG_PREEMPT_RT)) {
++	if (!IS_ENABLED(CONFIG_PREEMPT_RT)) {
++		flush_smp_call_function_queue(true);
++		if (local_softirq_pending())
+ 			do_softirq();
+-		} else {
++	} else {
++		unsigned int pending_prev;
++		unsigned int pending_post;
++
++		pending_prev = local_softirq_pending();
++		flush_smp_call_function_queue(true);
++		pending_post = local_softirq_pending();
++
++		if (WARN_ON_ONCE(!pending_prev && pending_post)) {
+ 			struct task_struct *ksoftirqd = this_cpu_ksoftirqd();
+ 
+ 			if (ksoftirqd && !task_is_running(ksoftirqd))
+ 				wake_up_process(ksoftirqd);
+ 		}
+ 	}
+-
+ 	local_irq_restore(flags);
+ }
+ 
+diff --git a/localversion-rt b/localversion-rt
+index 0efe7ba1930e1..8fc605d806670 100644
+--- a/localversion-rt
++++ b/localversion-rt
+@@ -1 +1 @@
+--rt5
++-rt6

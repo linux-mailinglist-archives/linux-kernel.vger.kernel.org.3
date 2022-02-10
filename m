@@ -2,254 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445504B1613
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 20:17:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 881A24B1619
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 20:18:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343843AbiBJTRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 14:17:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51536 "EHLO
+        id S1343854AbiBJTRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 14:17:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343829AbiBJTRE (ORCPT
+        with ESMTP id S1343850AbiBJTRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 14:17:04 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53AE110C
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 11:17:04 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id i5so7078247oih.1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 11:17:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X3s20vgvk/guHKy7OMkfSdtJHxYHhLQSz8YFs1yoSNU=;
-        b=E57GJzKhbzAlBrtpClBXPC+EYefkQ3zBFy6bahHm7Y61PEgtKH/yogBLaB4mPKBl4c
-         a4Rcfxo7VmsJIxS6DT+TVlMIt5pRl+mOGHNyogYnIQdXdGtL+cEAjALV1/qp4AOwkbVr
-         PvBRYXX/wXsyEJdB1pggwY6/3lg8k1rhGwZ0xnG89zUCPGjgpYLUvbj5JEPj1JEcghMw
-         TE3Nr3hv9RikczXdBtitflOO8oW+2//WWwZolsJ2Zmx6DO/feR/OwpdoPVd8bsNvlkxx
-         YMwOPsagr+LP8lNdrRqJG7O0rcG6hSNPdpqd9dIhTM/EGaI8WbV4NbodOOejfRdMYXW6
-         WrAg==
+        Thu, 10 Feb 2022 14:17:19 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3626E114A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 11:17:19 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id r4-20020a6b4404000000b00614d5a865f7so4740314ioa.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 11:17:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X3s20vgvk/guHKy7OMkfSdtJHxYHhLQSz8YFs1yoSNU=;
-        b=0ERikTFmD7FBVrIH8DmXhKQ9NquCVJ7p87pwW5tJZVnC5n4Dd8C1v6TN+zH8YUbtGJ
-         /zRzubAiHgVYieJu3tDYzTftH71/aGh8lmVSfBO/hZkhQUZ7TzKqkxG4uzibcQRAyUWq
-         P8Nf34RNmEEbdPsO6XSvB305vwDBgQtBdXhOpVAdOLBk84+cBdTrPR6UvJg/y0labLu8
-         hiEjebpBlQtKqgyERWoFIs6M9xkPodVsE4uNHy+PukU7VgaJEbzSYZmH0b+UPvG/6eaK
-         rskLwieUqk8kQJiluf4LiYHG5M49HV3GlDd3noG66aSfifAYAWdqvW1SDveBg+Ov9/sp
-         1eMw==
-X-Gm-Message-State: AOAM5337jdOiI1B3Gwlx1vsSxGjJXus+EIPPKB8ava1b52Itccjox+Ld
-        fs3uU05MYyID1BNKfSTCz8BLrQn775ffT2Hk590DyQ==
-X-Google-Smtp-Source: ABdhPJy/E9Wn5fSooiazKYOicVt1TrF8XzqNeTB6psFmQZiOyn/7C/Bz63TcNhiSjkZblZiIJReF13/67Mc5aGKAUOM=
-X-Received: by 2002:a05:6808:1292:: with SMTP id a18mr1708933oiw.314.1644520623949;
- Thu, 10 Feb 2022 11:17:03 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=dhTqdS5BhFkXmeRR/16Vvef9lka+5JexgN00dZ10W4A=;
+        b=qX+zVfrr/fMODwIiz0k8DovIPJOvP4KClpJui84j4b2Y+SDfB3V0aHnvl8GqOAwcKJ
+         YzX7SwFk7sQ+XeYTgR+xJ0Nwp95BikbUM5m5SwZ+u/4DXSz2VzbWldCJaJv4sZaRVUqv
+         tjUg7WIRHWybRn1D/3qzHhZabaKl85g1I3AN0IXTwWPAk3CiDkisk4sk9zAhHwYSoYsg
+         xoLee1KLF0awogmFudwZo0M+eY6ajLyV7pAJpzrsGWR0slAYVnSWX826dORem2ezUcf1
+         FSi5wCayBzH2LyaZfpez+oTQjXdpr6tWePVP1tGRx9eJp8RK+dvm3W+6RS3rheBu/bCV
+         IwQw==
+X-Gm-Message-State: AOAM531nCWM667RDbVMZeCm44UuPG2dZMsOAqxaz6lfWkylOdDpaqTwH
+        6xm2LU7q3P9flV7UTxKJ9iRAkuHAw/yO6Pwy0fAZd4VVDsf9
+X-Google-Smtp-Source: ABdhPJyBLvgOembLjlTMGygnb+NRkBqPrV4hZGpY8vwXOKFzRYp15MkEXO5VJ1WTtgeZRcU3bBjqxSDDaE+3jSaIe2VrDXyLosRY
 MIME-Version: 1.0
-References: <20220117085307.93030-1-likexu@tencent.com> <20220117085307.93030-3-likexu@tencent.com>
- <20220202144308.GB20638@worktop.programming.kicks-ass.net>
- <CALMp9eRBOmwz=mspp0m5Q093K3rMUeAsF3vEL39MGV5Br9wEQQ@mail.gmail.com>
- <YgO/3usazae9rCEh@hirez.programming.kicks-ass.net> <69c0fc41-a5bd-fea9-43f6-4724368baf66@intel.com>
- <CALMp9eS=1U7T39L-vL_cTXTNN2Li8epjtAPoP_+Hwefe9d+teQ@mail.gmail.com>
- <67a731dd-53ba-0eb8-377f-9707e5c9be1b@intel.com> <CABOYuvbPL0DeEgV4gsC+v786xfBAo3T6+7XQr7cVVzbaoFoEAg@mail.gmail.com>
- <7b5012d8-6ae1-7cde-a381-e82685dfed4f@linux.intel.com> <CALMp9eTOaWxQPfdwMSAn-OYAHKPLcuCyse7BpsSOM35vg5d0Jg@mail.gmail.com>
- <e06db1a5-1b67-28ac-ee4c-34ece5857b1f@linux.intel.com>
-In-Reply-To: <e06db1a5-1b67-28ac-ee4c-34ece5857b1f@linux.intel.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Thu, 10 Feb 2022 11:16:52 -0800
-Message-ID: <CALMp9eSjDro169JjTXyCZn=Rf3PT0uHhdNXEifiXGYQK-Zn8LA@mail.gmail.com>
-Subject: Re: [PATCH kvm/queue v2 2/3] perf: x86/core: Add interface to query
- perfmon_event_map[] directly
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     David Dunn <daviddunn@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>,
-        Stephane Eranian <eranian@google.com>
+X-Received: by 2002:a05:6638:a26:: with SMTP id 6mr5028413jao.34.1644520638577;
+ Thu, 10 Feb 2022 11:17:18 -0800 (PST)
+Date:   Thu, 10 Feb 2022 11:17:18 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007d025d05d7aecc00@google.com>
+Subject: [syzbot] general protection fault in blk_mq_free_rqs
+From:   syzbot <syzbot+7295389ef2000630244b@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 10:30 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
->
->
->
-> On 2/10/2022 11:34 AM, Jim Mattson wrote:
-> > On Thu, Feb 10, 2022 at 7:34 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
-> >>
-> >>
-> >>
-> >> On 2/9/2022 2:24 PM, David Dunn wrote:
-> >>> Dave,
-> >>>
-> >>> In my opinion, the right policy depends on what the host owner and
-> >>> guest owner are trying to achieve.
-> >>>
-> >>> If the PMU is being used to locate places where performance could be
-> >>> improved in the system, there are two sub scenarios:
-> >>>      - The host and guest are owned by same entity that is optimizing
-> >>> overall system.  In this case, the guest doesn't need PMU access and
-> >>> better information is provided by profiling the entire system from the
-> >>> host.
-> >>>      - The host and guest are owned by different entities.  In this
-> >>> case, profiling from the host can identify perf issues in the guest.
-> >>> But what action can be taken?  The host entity must communicate issues
-> >>> back to the guest owner through some sort of out-of-band information
-> >>> channel.  On the other hand, preempting the host PMU to give the guest
-> >>> a fully functional PMU serves this use case well.
-> >>>
-> >>> TDX and SGX (outside of debug mode) strongly assume different
-> >>> entities.  And Intel is doing this to reduce insight of the host into
-> >>> guest operations.  So in my opinion, preemption makes sense.
-> >>>
-> >>> There are also scenarios where the host owner is trying to identify
-> >>> systemwide impacts of guest actions.  For example, detecting memory
-> >>> bandwidth consumption or split locks.  In this case, host control
-> >>> without preemption is necessary.
-> >>>
-> >>> To address these various scenarios, it seems like the host needs to be
-> >>> able to have policy control on whether it is willing to have the PMU
-> >>> preempted by the guest.
-> >>>
-> >>> But I don't see what scenario is well served by the current situation
-> >>> in KVM.  Currently the guest will either be told it has no PMU (which
-> >>> is fine) or that it has full control of a PMU.  If the guest is told
-> >>> it has full control of the PMU, it actually doesn't.  But instead of
-> >>> losing counters on well defined events (from the guest perspective),
-> >>> they simply stop counting depending on what the host is doing with the
-> >>> PMU.
-> >>
-> >> For the current perf subsystem, a PMU should be shared among different
-> >> users via the multiplexing mechanism if the resource is limited. No one
-> >> has full control of a PMU for lifetime. A user can only have the PMU in
-> >> its given period. I think the user can understand how long it runs via
-> >> total_time_enabled and total_time_running.
-> >
-> > For most clients, yes. For kvm, no. KVM currently tosses
-> > total_time_enabled and total_time_running in the bitbucket. It could
-> > extrapolate, but that would result in loss of precision. Some guest
-> > uses of the PMU would not be able to cope (e.g.
-> > https://github.com/rr-debugger/rr).
-> >
-> >> For a guest, it should rely on the host to tell whether the PMU resource
-> >> is available. But unfortunately, I don't think we have such a
-> >> notification mechanism in KVM. The guest has the wrong impression that
-> >> the guest can have full control of the PMU.
-> >
-> > That is the only impression that the architectural specification
-> > allows the guest to have. On Intel, we can mask off individual fixed
-> > counters, and we can reduce the number of GP counters, but AMD offers
-> > us no such freedom. Whatever resources we advertise to the guest must
-> > be available for its use whenever it wants. Otherwise, PMU
-> > virtualization is simply broken.
-> >
-> >> In my opinion, we should add the notification mechanism in KVM. When the
-> >> PMU resource is limited, the guest can know whether it's multiplexing or
-> >> can choose to reschedule the event.
-> >
-> > That sounds like a paravirtual perf mechanism, rather than PMU
-> > virtualization. Are you suggesting that we not try to virtualize the
-> > PMU? Unfortunately, PMU virtualization is what we have customers
-> > clamoring for. No one is interested in a paravirtual perf mechanism.
-> > For example, when will VTune in the guest know how to use your
-> > proposed paravirtual interface?
->
-> OK. If KVM cannot notify the guest, maybe guest can query the usage of
-> counters before using a counter. There is a IA32_PERF_GLOBAL_INUSE MSR
-> introduced with Arch perfmon v4. The MSR provides an "InUse" bit for
-> each counters. But it cannot guarantee that the counter can always be
-> owned by the guest unless the host treats the guest as a super-user and
-> agrees to not touch its counter. This should only works for the Intel
-> platforms.
+Hello,
 
-Simple question: Do all existing guests (Windows and Linux are my
-primary interest) query that MSR today? If not, then this proposal is
-DOA.
+syzbot found the following issue on:
 
-> >
-> >> But seems the notification mechanism may not work for TDX case?
-> >>>
-> >>> On the other hand, if we flip it around the semantics are more clear.
-> >>> A guest will be told it has no PMU (which is fine) or that it has full
-> >>> control of the PMU.  If the guest is told that it has full control of
-> >>> the PMU, it does.  And the host (which is the thing that granted the
-> >>> full PMU to the guest) knows that events inside the guest are not
-> >>> being measured.  This results in all entities seeing something that
-> >>> can be reasoned about from their perspective.
-> >>>
-> >>
-> >> I assume that this is for the TDX case (where the notification mechanism
-> >>    doesn't work). The host still control all the PMU resources. The TDX
-> >> guest is treated as a super-user who can 'own' a PMU. The admin in the
-> >> host can configure/change the owned PMUs of the TDX. Personally, I think
-> >> it makes sense. But please keep in mind that the counters are not
-> >> identical. There are some special events that can only run on a specific
-> >> counter. If the special counter is assigned to TDX, other entities can
-> >> never run some events. We should let other entities know if it happens.
-> >> Or we should never let non-host entities own the special counter.
-> >
-> > Right; the counters are not fungible. Ideally, when the guest requests
-> > a particular counter, that is the counter it gets. If it is given a
-> > different counter, the counter it is given must provide the same
-> > behavior as the requested counter for the event in question.
->
-> Ideally, Yes, but sometimes KVM/host may not know whether they can use
-> another counter to replace the requested counter, because KVM/host
-> cannot retrieve the event constraint information from guest.
+HEAD commit:    90c9e950c0de Merge tag 'for-linus-5.17a-rc3-tag' of git://..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=137905dc700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ee3797346aa03884
+dashboard link: https://syzkaller.appspot.com/bug?extid=7295389ef2000630244b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10801462700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=135d7524700000
 
-In that case, don't do it. When the guest asks for a specific counter,
-give the guest that counter. This isn't rocket science.
+Bisection is inconclusive: the issue happens on the oldest tested release.
 
-> For example, we have Precise Distribution (PDist) feature enabled only
-> for the GP counter 0 on SPR. Perf uses the precise_level 3 (a SW
-> variable) to indicate the feature. For the KVM/host, they never know
-> whether the guest apply the PDist feature.
->
-> I have a patch that forces the perf scheduler starts from the regular
-> counters, which may mitigates the issue, but cannot fix it. (I will post
-> the patch separately.)
->
-> Or we should never let the guest own the special counters. Although the
-> guest has to lose some special events, I guess the host may more likely
-> be willing to let the guest own a regular counter.
->
->
-> Thanks,
-> Kan
->
-> >
-> >>
-> >> Thanks,
-> >> Kan
-> >>
-> >>> Thanks,
-> >>>
-> >>> Dave Dunn
-> >>>
-> >>> On Wed, Feb 9, 2022 at 10:57 AM Dave Hansen <dave.hansen@intel.com> wrote:
-> >>>
-> >>>>> I was referring to gaps in the collection of data that the host perf
-> >>>>> subsystem doesn't know about if ATTRIBUTES.PERFMON is set for a TDX
-> >>>>> guest. This can potentially be a problem if someone is trying to
-> >>>>> measure events per unit of time.
-> >>>>
-> >>>> Ahh, that makes sense.
-> >>>>
-> >>>> Does SGX cause problem for these people?  It can create some of the same
-> >>>> collection gaps:
-> >>>>
-> >>>>           performance monitoring activities are suppressed when entering
-> >>>>           an opt-out (of performance monitoring) enclave.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14b09d42700000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=16b09d42700000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12b09d42700000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7295389ef2000630244b@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 0 PID: 3605 Comm: syz-executor139 Not tainted 5.17.0-rc2-syzkaller-00353-g90c9e950c0de #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:blk_mq_clear_rq_mapping block/blk-mq.c:3061 [inline]
+RIP: 0010:blk_mq_free_rqs+0x399/0x910 block/blk-mq.c:3106
+Code: de e8 8b 83 ac fd 83 fb 3f 0f 87 04 c3 49 05 e8 5d 81 ac fd b8 00 10 00 00 89 d9 48 d3 e0 4c 01 e8 48 89 44 24 08 48 8b 04 24 <0f> b6 00 84 c0 74 08 3c 03 0f 8e bb 03 00 00 41 8b 1f 31 ff 31 ed
+RSP: 0018:ffffc900027afaf8 EFLAGS: 00010286
+RAX: dffffc0000000000 RBX: 0000000000000004 RCX: 0000000000000004
+RDX: ffff888074ef3a00 RSI: ffffffff83cbf733 RDI: 0000000000000003
+RBP: ffff888071ce6000 R08: 000000000000003f R09: ffffffff8ffbf99f
+R10: ffffffff83cbf725 R11: 0000000000000246 R12: dffffc0000000000
+R13: ffff88801a380000 R14: ffff88801a23f000 R15: 0000000000000000
+FS:  00007f894cb64700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f894cc20aa3 CR3: 0000000021f45000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ blk_mq_sched_free_rqs block/blk-mq-sched.c:629 [inline]
+ blk_mq_sched_free_rqs+0x16c/0x270 block/blk-mq-sched.c:618
+ elevator_switch_mq+0xed/0x720 block/elevator.c:600
+ blk_mq_elv_switch_none block/blk-mq.c:4445 [inline]
+ __blk_mq_update_nr_hw_queues block/blk-mq.c:4498 [inline]
+ blk_mq_update_nr_hw_queues+0x3f1/0xd30 block/blk-mq.c:4548
+ nbd_start_device+0x157/0xd10 drivers/block/nbd.c:1347
+ nbd_start_device_ioctl drivers/block/nbd.c:1397 [inline]
+ __nbd_ioctl drivers/block/nbd.c:1471 [inline]
+ nbd_ioctl+0x5f3/0xb10 drivers/block/nbd.c:1511
+ blkdev_ioctl+0x37a/0x800 block/ioctl.c:588
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:874 [inline]
+ __se_sys_ioctl fs/ioctl.c:860 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f894cbb7349
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f894cb642e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f894cc3c4e0 RCX: 00007f894cbb7349
+RDX: 0000000000000000 RSI: 000000000000ab03 RDI: 0000000000000007
+RBP: 00007f894cc091ac R08: 0000000000000002 R09: 0000000000003331
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f894cc3c4ec
+R13: 00007f894cb642f0 R14: 00007f894cc3c4e8 R15: 0000000000000002
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:blk_mq_clear_rq_mapping block/blk-mq.c:3061 [inline]
+RIP: 0010:blk_mq_free_rqs+0x399/0x910 block/blk-mq.c:3106
+Code: de e8 8b 83 ac fd 83 fb 3f 0f 87 04 c3 49 05 e8 5d 81 ac fd b8 00 10 00 00 89 d9 48 d3 e0 4c 01 e8 48 89 44 24 08 48 8b 04 24 <0f> b6 00 84 c0 74 08 3c 03 0f 8e bb 03 00 00 41 8b 1f 31 ff 31 ed
+RSP: 0018:ffffc900027afaf8 EFLAGS: 00010286
+RAX: dffffc0000000000 RBX: 0000000000000004 RCX: 0000000000000004
+RDX: ffff888074ef3a00 RSI: ffffffff83cbf733 RDI: 0000000000000003
+RBP: ffff888071ce6000 R08: 000000000000003f R09: ffffffff8ffbf99f
+R10: ffffffff83cbf725 R11: 0000000000000246 R12: dffffc0000000000
+R13: ffff88801a380000 R14: ffff88801a23f000 R15: 0000000000000000
+FS:  00007f894cb64700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f894cc20aa3 CR3: 0000000021f45000 CR4: 0000000000350ef0
+----------------
+Code disassembly (best guess), 1 bytes skipped:
+   0:	e8 8b 83 ac fd       	callq  0xfdac8390
+   5:	83 fb 3f             	cmp    $0x3f,%ebx
+   8:	0f 87 04 c3 49 05    	ja     0x549c312
+   e:	e8 5d 81 ac fd       	callq  0xfdac8170
+  13:	b8 00 10 00 00       	mov    $0x1000,%eax
+  18:	89 d9                	mov    %ebx,%ecx
+  1a:	48 d3 e0             	shl    %cl,%rax
+  1d:	4c 01 e8             	add    %r13,%rax
+  20:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
+  25:	48 8b 04 24          	mov    (%rsp),%rax
+* 29:	0f b6 00             	movzbl (%rax),%eax <-- trapping instruction
+  2c:	84 c0                	test   %al,%al
+  2e:	74 08                	je     0x38
+  30:	3c 03                	cmp    $0x3,%al
+  32:	0f 8e bb 03 00 00    	jle    0x3f3
+  38:	41 8b 1f             	mov    (%r15),%ebx
+  3b:	31 ff                	xor    %edi,%edi
+  3d:	31 ed                	xor    %ebp,%ebp
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

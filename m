@@ -2,113 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C53484B1A8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81EF34B18F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346443AbiBKAkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:40:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34934 "EHLO
+        id S1345363AbiBJXCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 18:02:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343924AbiBKAkJ (ORCPT
+        with ESMTP id S1345039AbiBJXCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:40:09 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8962F5F6E
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:40:09 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id p63so9520899iod.11
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:40:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=vmCRi5YEMF1V/cao58AWdP9eCW6N73MpNoaksw6efrg=;
-        b=kOleynCii1sTUECOg708u4XojrBU9aS21lN3USq2R+X5/ZO33qGfpqSNvnne6+Tbb7
-         w1a5Q82784qwC6s2+tfAJ08cVm+lekZz2Ht7m8pT16vUPtp9HbSuprSDBx8z1Z82vSp6
-         Lg3sLP3tU5/bASf45WQF9dsmCstphPdp2diEHkM1mHagQsCK1/DuYY/mlwKWTclZubrA
-         UHaoSXaZZ+qrSb8fTEnXC8HD+988Lag0y2tBy/61FrGOBdUeNpOgKYdud9iIuAtqxZuz
-         oSTg9go8Mp2nmp2P4xSC2IaULA7ZdycJf2oeREtRb1akdVemUo6v0PMgDbnpi83Lg4Vi
-         /SpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vmCRi5YEMF1V/cao58AWdP9eCW6N73MpNoaksw6efrg=;
-        b=xdUuIeMyxTXyU6SQ1Kfvlw/83TNb0bkALETzaSGSJ5q5QpEy7LXygdnEhCrRk8Y7Hu
-         1WWVHxSqP5jRF8xDDR6FS3teqNTbkDcgaiSJiBfCU2D0o/MTep0V7YtF408cZVQgzhvR
-         EH24MW7XlqxmVSNhWirIHW9MI5x1yfSPm1WAar9HsxDRORT3dB45EBSVA7K2IvG+1ABQ
-         s2x0D7oN9Ic3bsW9oQ5rdGa3mrEC+ajB2pVCbnOoA/lSVPPo9wTn4zqOX69UY+B7Aana
-         LdI3oM+3yk2Qnzd3Vx5mDiOV6xO6WW8IcHB9WtBMS4Kne6WbDRnFww6wkRug9zSZI2s8
-         cSiQ==
-X-Gm-Message-State: AOAM530Lbsot5VWNb7eYt1UCNOUq+Wp7wjSeH/BFAvCI82c39Ripba4I
-        cUgGWjo5cln0bg7GNGeN88Q=
-X-Google-Smtp-Source: ABdhPJxoFCWN5x2mN0KD5UIrwsWX5nqLJ2PSiQsS/yLSfalb2eKudKYngjMmUEcyHIIzios3XdvRdQ==
-X-Received: by 2002:a05:6638:13d1:: with SMTP id i17mr5558325jaj.182.1644540008959;
-        Thu, 10 Feb 2022 16:40:08 -0800 (PST)
-Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id c9sm668312ile.38.2022.02.10.16.40.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 16:40:08 -0800 (PST)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 49/49] MAINTAINERS: add cpumask and nodemask files to BITMAP_API
-Date:   Thu, 10 Feb 2022 14:49:33 -0800
-Message-Id: <20220210224933.379149-50-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220210224933.379149-1-yury.norov@gmail.com>
-References: <20220210224933.379149-1-yury.norov@gmail.com>
+        Thu, 10 Feb 2022 18:02:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0B121B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:02:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A79E161D4C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 23:02:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18380C36AE2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 23:02:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644534161;
+        bh=dWlM6GzodJ6qB1EODWTpq+ewUBIgSf03yMrzLU0NHO8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=R4M3aM2dbBiCBVRD9SOPozc/V4OMcqIhnAKKSnSRve3J2dFrqxI5l0sj8LlB32DK1
+         /e6iIKXE6/IG2p4Su/Od36qjzmpJA5SYpwfysVYa7gR3d8L15MH6CKyLYX9l47EW5Z
+         dONy7oE4u4OBzkPH6o7ZV1r0SJoKUSqCSWQHwXe+ib0eVkq9SI5PF19U3l918OOA/m
+         88H8jhZkAX9rjjrRGN9geqpzcuCmOKATJ9jR9hwjktaJo1AYeel6jsTuFzSx/hnKLQ
+         rmKEsY6fZTyHKfbMJdVL5IWtQrvEfpvJDzOxE9oLAJTFROsWR8bFOd1lZeRGsskvt0
+         2cSzyvrvcO+aQ==
+Received: by mail-ej1-f54.google.com with SMTP id y3so18944845ejf.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:02:41 -0800 (PST)
+X-Gm-Message-State: AOAM531HKwR5/CfiVkIhgXUh2tHeNqK1uXsetLcHszoZeJuTAXU7OQv1
+        8FaSagx4wbJJOgCKsvyB19l+/3SFOyQi85hb+w==
+X-Google-Smtp-Source: ABdhPJz2bSTC3EJpr7pbff7mvYDGZyI2Hfx9d+xyM27F2vwC06Lxziyew4yTIc/KsKfPOLtMgnGB5JXbzuRSDEEER68=
+X-Received: by 2002:a17:906:c10f:: with SMTP id do15mr8161642ejc.638.1644534159327;
+ Thu, 10 Feb 2022 15:02:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20210915232722.10031-1-chunkuang.hu@kernel.org>
+ <CAAOTY_8BZ9BgWeQVsD_01ioP8H16c1_QUb_+yniU_4Wp91Nc7A@mail.gmail.com> <b233115c-704a-df4c-9d75-70cebb80a53c@gmail.com>
+In-Reply-To: <b233115c-704a-df4c-9d75-70cebb80a53c@gmail.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Fri, 11 Feb 2022 07:02:26 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_9zMfd1inE_4Lo=p3tM7Wq3NerOaDnpksdU811mfm=_4w@mail.gmail.com>
+Message-ID: <CAAOTY_9zMfd1inE_4Lo=p3tM7Wq3NerOaDnpksdU811mfm=_4w@mail.gmail.com>
+Subject: Re: [PATCH] soc: mediatek: cmdq: Use mailbox rx_callback instead of cmdq_task_cb
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Bibby Hsieh <bibby.hsieh@mediatek.com>,
+        Dennis YC Hsieh <dennis-yc.hsieh@mediatek.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cpumask and nodemask APIs are thin wrappers around basic bitmap API, and
-corresponding files are not formally maintained. This patch adds them to
-BITMAP_API section, so that bitmap folks would have closer look at it.
+Hi, Matthias:
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
- MAINTAINERS | 4 ++++
- 1 file changed, 4 insertions(+)
+Matthias Brugger <matthias.bgg@gmail.com> =E6=96=BC 2021=E5=B9=B410=E6=9C=
+=888=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=8810:30=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+> Hi Chun-Kuang,
+>
+> On 08/10/2021 16:15, Chun-Kuang Hu wrote:
+> > Hi, Matthias:
+> >
+> > Please ignore this patch because this patch depend on [1] which would
+> > cause numerous warning message. So I would revert that patch in [2].
+> >
+>
+> Thanks for the head-ups. I'll ignore this patch.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bc32519e5c02..718ed3b81c8e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3434,10 +3434,14 @@ R:	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
- R:	Rasmus Villemoes <linux@rasmusvillemoes.dk>
- S:	Maintained
- F:	include/linux/bitmap.h
-+F:	include/linux/cpumask.h
- F:	include/linux/find.h
-+F:	include/linux/nodemask.h
- F:	lib/bitmap.c
-+F:	lib/cpumask.c
- F:	lib/find_bit.c
- F:	lib/find_bit_benchmark.c
-+F:	lib/nodemask.c
- F:	lib/test_bitmap.c
- F:	tools/include/linux/bitmap.h
- F:	tools/include/linux/find.h
--- 
-2.32.0
+This patch depend on [3] which has been merged into mainline, so you
+could  start to review this parch.
 
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
+it/drivers/gpu/drm/mediatek?h=3Dv5.17-rc3&id=3D1ee07a683b7e4e6ad9ad4f77fce4=
+751741bc8ceb
+
+Regards,
+Chun-Kuang.
+
+>
+> Regards,
+> Matthias
+>
+> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
+commit/drivers/gpu/drm/mediatek?h=3Dv5.15-rc4&id=3Dc1ec54b7b5af25c779192253=
+f5a9f05e95cb43d7
+> > [2] https://patchwork.kernel.org/project/linux-mediatek/patch/202110072=
+35310.14626-6-chunkuang.hu@kernel.org/
+> >
+> > Regards,
+> > Chun-Kuang.
+> >
+> > Chun-Kuang Hu <chunkuang.hu@kernel.org> =E6=96=BC 2021=E5=B9=B49=E6=9C=
+=8816=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=887:27=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+> >>
+> >> rx_callback is a standard mailbox callback mechanism and could cover t=
+he
+> >> function of proprietary cmdq_task_cb, so use the standard one instead =
+of
+> >> the proprietary one. Client has changed to use the standard callback
+> >> machanism and sync dma buffer in client driver, so remove the propriet=
+ary
+> >> callback in cmdq helper.
+> >>
+> >> Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> >> ---
+> >>   drivers/soc/mediatek/mtk-cmdq-helper.c | 25 +-----------------------=
+-
+> >>   include/linux/soc/mediatek/mtk-cmdq.h  |  5 +----
+> >>   2 files changed, 2 insertions(+), 28 deletions(-)
+> >>
+> >> diff --git a/drivers/soc/mediatek/mtk-cmdq-helper.c b/drivers/soc/medi=
+atek/mtk-cmdq-helper.c
+> >> index 3c8e4212d941..c1837a468267 100644
+> >> --- a/drivers/soc/mediatek/mtk-cmdq-helper.c
+> >> +++ b/drivers/soc/mediatek/mtk-cmdq-helper.c
+> >> @@ -425,34 +425,11 @@ int cmdq_pkt_finalize(struct cmdq_pkt *pkt)
+> >>   }
+> >>   EXPORT_SYMBOL(cmdq_pkt_finalize);
+> >>
+> >> -static void cmdq_pkt_flush_async_cb(struct cmdq_cb_data data)
+> >> -{
+> >> -       struct cmdq_pkt *pkt =3D (struct cmdq_pkt *)data.data;
+> >> -       struct cmdq_task_cb *cb =3D &pkt->cb;
+> >> -       struct cmdq_client *client =3D (struct cmdq_client *)pkt->cl;
+> >> -
+> >> -       dma_sync_single_for_cpu(client->chan->mbox->dev, pkt->pa_base,
+> >> -                               pkt->cmd_buf_size, DMA_TO_DEVICE);
+> >> -       if (cb->cb) {
+> >> -               data.data =3D cb->data;
+> >> -               cb->cb(data);
+> >> -       }
+> >> -}
+> >> -
+> >> -int cmdq_pkt_flush_async(struct cmdq_pkt *pkt, cmdq_async_flush_cb cb=
+,
+> >> -                        void *data)
+> >> +int cmdq_pkt_flush_async(struct cmdq_pkt *pkt)
+> >>   {
+> >>          int err;
+> >>          struct cmdq_client *client =3D (struct cmdq_client *)pkt->cl;
+> >>
+> >> -       pkt->cb.cb =3D cb;
+> >> -       pkt->cb.data =3D data;
+> >> -       pkt->async_cb.cb =3D cmdq_pkt_flush_async_cb;
+> >> -       pkt->async_cb.data =3D pkt;
+> >> -
+> >> -       dma_sync_single_for_device(client->chan->mbox->dev, pkt->pa_ba=
+se,
+> >> -                                  pkt->cmd_buf_size, DMA_TO_DEVICE);
+> >> -
+> >>          err =3D mbox_send_message(client->chan, pkt);
+> >>          if (err < 0)
+> >>                  return err;
+> >> diff --git a/include/linux/soc/mediatek/mtk-cmdq.h b/include/linux/soc=
+/mediatek/mtk-cmdq.h
+> >> index ac6b5f3cba95..2b498f4f3946 100644
+> >> --- a/include/linux/soc/mediatek/mtk-cmdq.h
+> >> +++ b/include/linux/soc/mediatek/mtk-cmdq.h
+> >> @@ -268,8 +268,6 @@ int cmdq_pkt_finalize(struct cmdq_pkt *pkt);
+> >>    * cmdq_pkt_flush_async() - trigger CMDQ to asynchronously execute t=
+he CMDQ
+> >>    *                          packet and call back at the end of done =
+packet
+> >>    * @pkt:       the CMDQ packet
+> >> - * @cb:                called at the end of done packet
+> >> - * @data:      this data will pass back to cb
+> >>    *
+> >>    * Return: 0 for success; else the error code is returned
+> >>    *
+> >> @@ -277,7 +275,6 @@ int cmdq_pkt_finalize(struct cmdq_pkt *pkt);
+> >>    * at the end of done packet. Note that this is an ASYNC function. W=
+hen the
+> >>    * function returned, it may or may not be finished.
+> >>    */
+> >> -int cmdq_pkt_flush_async(struct cmdq_pkt *pkt, cmdq_async_flush_cb cb=
+,
+> >> -                        void *data);
+> >> +int cmdq_pkt_flush_async(struct cmdq_pkt *pkt);
+> >>
+> >>   #endif /* __MTK_CMDQ_H__ */
+> >> --
+> >> 2.25.1
+> >>

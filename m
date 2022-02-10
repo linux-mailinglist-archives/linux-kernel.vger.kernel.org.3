@@ -2,73 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77AD4B0CAA
+	by mail.lfdr.de (Postfix) with ESMTP id 588594B0CA9
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241142AbiBJLoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 06:44:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43890 "EHLO
+        id S241111AbiBJLnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 06:43:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234873AbiBJLoI (ORCPT
+        with ESMTP id S234873AbiBJLnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 06:44:08 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB79C1F4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:44:09 -0800 (PST)
-Received: from fsav119.sakura.ne.jp (fsav119.sakura.ne.jp [27.133.134.246])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 21ABhgt7011998;
-        Thu, 10 Feb 2022 20:43:42 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav119.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp);
- Thu, 10 Feb 2022 20:43:42 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 21ABhbnN011847
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 10 Feb 2022 20:43:42 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <7f6d61f4-042f-8c9d-23ed-da6f1dcb20d0@I-love.SAKURA.ne.jp>
-Date:   Thu, 10 Feb 2022 20:43:36 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2 06/19] fbcon: Use delayed work for cursor
-Content-Language: en-US
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        linux-fbdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Claudio Suarez <cssk@net-c.es>, Du Cheng <ducheng2@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20220208210824.2238981-1-daniel.vetter@ffwll.ch>
- <20220208210824.2238981-7-daniel.vetter@ffwll.ch>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <20220208210824.2238981-7-daniel.vetter@ffwll.ch>
+        Thu, 10 Feb 2022 06:43:51 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4681113A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:43:52 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id d10so14538845eje.10
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:43:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
+         :from:to:references:in-reply-to;
+        bh=QCeTPktxYJJYpqPYNifcdFoiHu6/qXeJE2j2d8aAenI=;
+        b=GL1Cbh+/CgSAL4lkyOLwKOefU8vLz3nQuwMJBGYj4mM1R4XztOovNGryf1iPA7iQVW
+         IYKceiJLM4GOrm2mE7d388efnhqADBS13cq3+itEgsnhIY6xh+i2zh0QSH/+QrdSodx4
+         W7OJXxOpJoU/ga13bNfQTxrhrc+OE30EE6opusgub5o9laAkX1QPPLjIqFrrOA1KYLCK
+         vhjcL+il0M5n/asvPF/0+bd+dhpqn5lATZigFV+Mo1bg9tZU12m2gZTMXSOxxEBqFP18
+         HVF77tUtqaCvCyl12CgFI1CrBtPp7+66CCxTn4JGc+mkJE+QgNJ0CeO42mkBdozQN6+Q
+         g6mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:content-transfer-encoding:date
+         :message-id:cc:subject:from:to:references:in-reply-to;
+        bh=QCeTPktxYJJYpqPYNifcdFoiHu6/qXeJE2j2d8aAenI=;
+        b=2meEZcIsDkSkFAarGJc3OuV+lly1tiQN9S3ERj+678/mKYRHyc5FxpuUgurL6kNlfL
+         CL7pFSFzOTE5iOo+O4XR7oCFo2/fCKBdhrC27cgiCiRsVcCUDDw5yR7LhBb34LGMaqfs
+         AhjmwPbFCV7zE55GmBqK2g/lkoHGO6N4uuWgRmRlcYXqvoJeibWHwqccvlMoOUaJkpvU
+         ucFUNH/0QaA7rw2ct8ooC15uZbLupFW89vgFSiRzsZfm0TT72crp2MyPeH8WfhkO/wGR
+         JhL206VqiXKwWA+OZBTWqUMdF6gVz6FkBjYWUbeKMxMzEB0qPcXSBA5zroIT6cWo2E0c
+         4Lfw==
+X-Gm-Message-State: AOAM530Ea8S0D8ZGIuELwe1Qf6vC4YdH3xBnyXn5ZWxxOTWgKdCHUn/B
+        MdY3pMZbex12YR6sobMKLrE=
+X-Google-Smtp-Source: ABdhPJwn1ys3+LzoRmVn5YCRWkSIxHeN2Y4IO6ubZzgATn0CsloRfh34+fPlncqqFtMoyKx2cT2V7w==
+X-Received: by 2002:a17:906:43c9:: with SMTP id j9mr5941529ejn.652.1644493430745;
+        Thu, 10 Feb 2022 03:43:50 -0800 (PST)
+Received: from localhost (a109-49-33-111.cpe.netcabo.pt. [109.49.33.111])
+        by smtp.gmail.com with ESMTPSA id j9sm3365630ejb.189.2022.02.10.03.43.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 03:43:50 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Thu, 10 Feb 2022 11:43:48 +0000
+Message-Id: <CHSC9NU74XQV.2L2R0WCT1UZLA@arch-thunder>
+Cc:     <johan@kernel.org>, <elder@kernel.org>,
+        <gregkh@linuxfoundation.org>, <greybus-dev@lists.linaro.org>,
+        <linux-staging@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        "Minghao Chi" <chi.minghao@zte.com.cn>,
+        "Zeal Robot" <zealci@zte.com.cn>
+Subject: Re: [PATCH] staging: greybus: Remove redundant 'flush_workqueue()'
+ calls
+From:   "Rui Miguel Silva" <rmfrfs@gmail.com>
+To:     <cgel.zte@gmail.com>
+References: <20220210060205.1607792-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20220210060205.1607792-1-chi.minghao@zte.com.cn>
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/02/09 6:08, Daniel Vetter wrote:
-> @@ -714,6 +700,8 @@ static int con2fb_acquire_newinfo(struct vc_data *vc, struct fb_info *info,
->  		ops = kzalloc(sizeof(struct fbcon_ops), GFP_KERNEL);
->  		if (!ops)
->  			err = -ENOMEM;
-> +
-> +		INIT_DELAYED_WORK(&ops->cursor_work, fb_flashcursor);
->  	}
->  
->  	if (!err) {
+Hey Minghao,
+Many thanks for the patch.
 
-Memory allocation fault injection will hit NULL pointer dereference.
+On Thu Feb 10, 2022 at 6:02 AM WET,  wrote:
+
+> From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+>
+> 'destroy_workqueue()' already drains the queue before destroying it,
+> so there is no need to flush it explicitly.
+>
+> Remove the redundant 'flush_workqueue()' calls.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+
+LGTM.
+Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
+
+Cheers,
+     Rui
+
+> ---
+>  drivers/staging/greybus/sdio.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/staging/greybus/sdio.c b/drivers/staging/greybus/sdi=
+o.c
+> index 37bf04c22dbc..25bee5335c70 100644
+> --- a/drivers/staging/greybus/sdio.c
+> +++ b/drivers/staging/greybus/sdio.c
+> @@ -858,7 +858,6 @@ static void gb_sdio_remove(struct gbphy_device *gbphy=
+_dev)
+>  	gb_connection_set_data(connection, NULL);
+>  	mutex_unlock(&host->lock);
+> =20
+> -	flush_workqueue(host->mrq_workqueue);
+>  	destroy_workqueue(host->mrq_workqueue);
+>  	gb_connection_disable_rx(connection);
+>  	mmc_remove_host(mmc);
+> --=20
+> 2.25.1
+
+
+

@@ -2,92 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89B54B09B9
+	by mail.lfdr.de (Postfix) with ESMTP id 588334B09B8
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:40:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238865AbiBJJkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:40:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58836 "EHLO
+        id S238852AbiBJJkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:40:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238868AbiBJJkL (ORCPT
+        with ESMTP id S238786AbiBJJkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:40:11 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EA810DF
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:40:11 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id v47so13693296ybi.4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:40:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vwSyjkWA8Xtx6McE/937H/83En/EAsN4/n12OaGn97U=;
-        b=Q9U5MhFM50SJ6zKg3p/BHPAbW/1PqWiV8IwLRh7eYuvqYsefXz7JVtkApiN0D5tJs9
-         NjgtZ08Kif7nIin7P9Lj3k6IR7GOTseT9s5laCSNNmTWHD2uCXfrqGfuutVuti7FabYq
-         BBBAb4MnvkLH4UJThCTrI8+/mOnZaltJr+bpG6t9FkMSJZxm2G82RI22ShxjcihlxEsi
-         Y82w37OnLpB5Xi9WU56u6QA7+3qLoNq0E7XxjqXpD9HrhneWbPs+sNufIntIIK3bmpgw
-         cO6+9m8+iutxaFYcQMGptKVxtMwZN8MAWIOLV4hGp2W+29wbPx10LCsVwxL/brPe2+Mu
-         8Ffg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vwSyjkWA8Xtx6McE/937H/83En/EAsN4/n12OaGn97U=;
-        b=g7PCgFJjXskOZmuTE0U2ws47tRW8BXDYgn2JYgWpCMVUDHY33/f8OQtwJwFTxynV9e
-         GpR9bHknvgcw+9Xn0WgcR6kylLPu1lifcVOGyRxc26HlPUgkL3Z53QEs9hGkVREqVb6j
-         jcjDXhWzkeUpEAYNk/1GYThC0sJFn3GxfyY6qr5t6omDIDAfX6oQ5R4NAyP8SFXj/bQy
-         g8o+5RM/ZFMU2RtP4nqPZS9GPGR4RSCEV7mZ1MUkGD47gwgiQq+0YlMttXw4fIhkRnEf
-         H6XMDSgzwXQZL7d17PhXRH3lS3q29S81wDVHGY68G+GcLiQ5BixTobdKZcZkrbVOPuMv
-         lcQQ==
-X-Gm-Message-State: AOAM533DoRrt8gfwyhbilu/jsmo+uYMCbLpgspi2SWLsyRLsRWUTdJF8
-        vpaRh6uXMslU/VEGiqVKhkrIpaeLa9BJFqXZyTGXhv6atbHLUUG5
-X-Google-Smtp-Source: ABdhPJyMOovS5IpsBIbmJvgp0LJOskYVPag8axtaKArSDLNMC4EYiKcUxfRUU3qBQ8ccmcQ6MqVRs4tbRTDCogGg4e4=
-X-Received: by 2002:a25:4742:: with SMTP id u63mr6032141yba.523.1644486011092;
- Thu, 10 Feb 2022 01:40:11 -0800 (PST)
+        Thu, 10 Feb 2022 04:40:05 -0500
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2ED10B4;
+        Thu, 10 Feb 2022 01:40:04 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0V43zTg4_1644485997;
+Received: from 30.240.123.68(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V43zTg4_1644485997)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 10 Feb 2022 17:39:59 +0800
+Message-ID: <362d7c9c-4c5e-94f5-8168-39c007465771@linux.alibaba.com>
+Date:   Thu, 10 Feb 2022 17:39:56 +0800
 MIME-Version: 1.0
-References: <20220210072828.2930359-1-hch@lst.de> <20220210072828.2930359-4-hch@lst.de>
-In-Reply-To: <20220210072828.2930359-4-hch@lst.de>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Thu, 10 Feb 2022 17:39:34 +0800
-Message-ID: <CAMZfGtWb9a8gN7DjaJngYi4aJLVHL74eKnXmctXC27QyarHsDQ@mail.gmail.com>
-Subject: Re: [PATCH 03/27] mm: remove pointless includes from <linux/hmm.h>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Alistair Popple <apopple@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, nvdimm@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Subject: Re: [PATCH v7 1/2] ACPI: APEI: explicit init HEST and GHES in
+ apci_init
+Content-Language: en-US
+To:     helgaas@kernel.org, rafael@kernel.org
+Cc:     bp@alien8.de, tony.luck@intel.com, james.morse@arm.com,
+        lenb@kernel.org, rjw@rjwysocki.net, bhelgaas@google.com,
+        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org
+References: <20211126070422.73234-1-xueshuai@linux.alibaba.com>
+ <20220122052618.1074-1-xueshuai@linux.alibaba.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20220122052618.1074-1-xueshuai@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 3:28 PM Christoph Hellwig <hch@lst.de> wrote:
->
-> hmm.h pulls in the world for no good reason at all.  Remove the
-> includes and push a few ones into the users instead.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+在 2022/1/22 PM1:26, Shuai Xue 写道:
+> From commit e147133a42cb ("ACPI / APEI: Make hest.c manage the estatus
+> memory pool") was merged, ghes_init() relies on acpi_hest_init() to manage
+> the estatus memory pool. On the other hand, ghes_init() relies on
+> sdei_init() to detect the SDEI version and (un)register events. The
+> dependencies are as follows:
+> 
+>     ghes_init() => acpi_hest_init() => acpi_bus_init() => acpi_init()
+>     ghes_init() => sdei_init()
+> 
+> HEST is not PCI-specific and initcall ordering is implicit and not
+> well-defined within a level.
+> 
+> Based on above, remove acpi_hest_init() from acpi_pci_root_init() and
+> convert ghes_init() and sdei_init() from initcalls to explicit calls in the
+> following order:
+> 
+>     acpi_hest_init()
+>     ghes_init()
+>         sdei_init()
+> 
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> ---
+>  drivers/acpi/apei/ghes.c    | 19 ++++++++-----------
+>  drivers/acpi/bus.c          |  2 ++
+>  drivers/acpi/pci_root.c     |  3 ---
+>  drivers/firmware/Kconfig    |  1 +
+>  drivers/firmware/arm_sdei.c | 13 ++-----------
+>  include/acpi/apei.h         |  4 +++-
+>  include/linux/arm_sdei.h    |  2 ++
+>  7 files changed, 18 insertions(+), 26 deletions(-)
+> 
+> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
+> index 0c5c9acc6254..aadc0a972f18 100644
+> --- a/drivers/acpi/apei/ghes.c
+> +++ b/drivers/acpi/apei/ghes.c
+> @@ -1457,33 +1457,35 @@ static struct platform_driver ghes_platform_driver = {
+>  	.remove		= ghes_remove,
+>  };
+>  
+> -static int __init ghes_init(void)
+> +void __init ghes_init(void)
+>  {
+>  	int rc;
+>  
+> +	sdei_init();
+> +
+>  	if (acpi_disabled)
+> -		return -ENODEV;
+> +		return;
+>  
+>  	switch (hest_disable) {
+>  	case HEST_NOT_FOUND:
+> -		return -ENODEV;
+> +		return;
+>  	case HEST_DISABLED:
+>  		pr_info(GHES_PFX "HEST is not enabled!\n");
+> -		return -EINVAL;
+> +		return;
+>  	default:
+>  		break;
+>  	}
+>  
+>  	if (ghes_disable) {
+>  		pr_info(GHES_PFX "GHES is not enabled!\n");
+> -		return -EINVAL;
+> +		return;
+>  	}
+>  
+>  	ghes_nmi_init_cxt();
+>  
+>  	rc = platform_driver_register(&ghes_platform_driver);
+>  	if (rc)
+> -		goto err;
+> +		return;
+>  
+>  	rc = apei_osc_setup();
+>  	if (rc == 0 && osc_sb_apei_support_acked)
+> @@ -1494,9 +1496,4 @@ static int __init ghes_init(void)
+>  		pr_info(GHES_PFX "APEI firmware first mode is enabled by APEI bit.\n");
+>  	else
+>  		pr_info(GHES_PFX "Failed to enable APEI firmware first mode.\n");
+> -
+> -	return 0;
+> -err:
+> -	return rc;
+>  }
+> -device_initcall(ghes_init);
+> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+> index 07f604832fd6..3f403db20f69 100644
+> --- a/drivers/acpi/bus.c
+> +++ b/drivers/acpi/bus.c
+> @@ -1331,6 +1331,8 @@ static int __init acpi_init(void)
+>  
+>  	pci_mmcfg_late_init();
+>  	acpi_iort_init();
+> +	acpi_hest_init();
+> +	ghes_init();
+>  	acpi_scan_init();
+>  	acpi_ec_init();
+>  	acpi_debugfs_init();
+> diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
+> index b76db99cced3..6f9e75d14808 100644
+> --- a/drivers/acpi/pci_root.c
+> +++ b/drivers/acpi/pci_root.c
+> @@ -22,8 +22,6 @@
+>  #include <linux/slab.h>
+>  #include <linux/dmi.h>
+>  #include <linux/platform_data/x86/apple.h>
+> -#include <acpi/apei.h>	/* for acpi_hest_init() */
+> -
+>  #include "internal.h"
+>  
+>  #define ACPI_PCI_ROOT_CLASS		"pci_bridge"
+> @@ -943,7 +941,6 @@ struct pci_bus *acpi_pci_root_create(struct acpi_pci_root *root,
+>  
+>  void __init acpi_pci_root_init(void)
+>  {
+> -	acpi_hest_init();
+>  	if (acpi_pci_disabled)
+>  		return;
+>  
+> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+> index 75cb91055c17..ad114d9cdf8e 100644
+> --- a/drivers/firmware/Kconfig
+> +++ b/drivers/firmware/Kconfig
+> @@ -40,6 +40,7 @@ config ARM_SCPI_POWER_DOMAIN
+>  config ARM_SDE_INTERFACE
+>  	bool "ARM Software Delegated Exception Interface (SDEI)"
+>  	depends on ARM64
+> +	select ACPI_APEI_GHES
+>  	help
+>  	  The Software Delegated Exception Interface (SDEI) is an ARM
+>  	  standard for registering callbacks from the platform firmware
+> diff --git a/drivers/firmware/arm_sdei.c b/drivers/firmware/arm_sdei.c
+> index a7e762c352f9..1e1a51510e83 100644
+> --- a/drivers/firmware/arm_sdei.c
+> +++ b/drivers/firmware/arm_sdei.c
+> @@ -1059,14 +1059,14 @@ static bool __init sdei_present_acpi(void)
+>  	return true;
+>  }
+>  
+> -static int __init sdei_init(void)
+> +void __init sdei_init(void)
+>  {
+>  	struct platform_device *pdev;
+>  	int ret;
+>  
+>  	ret = platform_driver_register(&sdei_driver);
+>  	if (ret || !sdei_present_acpi())
+> -		return ret;
+> +		return;
+>  
+>  	pdev = platform_device_register_simple(sdei_driver.driver.name,
+>  					       0, NULL, 0);
+> @@ -1076,17 +1076,8 @@ static int __init sdei_init(void)
+>  		pr_info("Failed to register ACPI:SDEI platform device %d\n",
+>  			ret);
+>  	}
+> -
+> -	return ret;
+>  }
+>  
+> -/*
+> - * On an ACPI system SDEI needs to be ready before HEST:GHES tries to register
+> - * its events. ACPI is initialised from a subsys_initcall(), GHES is initialised
+> - * by device_initcall(). We want to be called in the middle.
+> - */
+> -subsys_initcall_sync(sdei_init);
+> -
+>  int sdei_event_handler(struct pt_regs *regs,
+>  		       struct sdei_registered_event *arg)
+>  {
+> diff --git a/include/acpi/apei.h b/include/acpi/apei.h
+> index ece0a8af2bae..4e60dd73c3bb 100644
+> --- a/include/acpi/apei.h
+> +++ b/include/acpi/apei.h
+> @@ -27,14 +27,16 @@ extern int hest_disable;
+>  extern int erst_disable;
+>  #ifdef CONFIG_ACPI_APEI_GHES
+>  extern bool ghes_disable;
+> +void __init ghes_init(void);
+>  #else
+>  #define ghes_disable 1
+> +static inline void ghes_init(void) { }
+>  #endif
+>  
+>  #ifdef CONFIG_ACPI_APEI
+>  void __init acpi_hest_init(void);
+>  #else
+> -static inline void acpi_hest_init(void) { return; }
+> +static inline void acpi_hest_init(void) { }
+>  #endif
+>  
+>  int erst_write(const struct cper_record_header *record);
+> diff --git a/include/linux/arm_sdei.h b/include/linux/arm_sdei.h
+> index 0a241c5c911d..14dc461b0e82 100644
+> --- a/include/linux/arm_sdei.h
+> +++ b/include/linux/arm_sdei.h
+> @@ -46,9 +46,11 @@ int sdei_unregister_ghes(struct ghes *ghes);
+>  /* For use by arch code when CPU hotplug notifiers are not appropriate. */
+>  int sdei_mask_local_cpu(void);
+>  int sdei_unmask_local_cpu(void);
+> +void __init sdei_init(void);
+>  #else
+>  static inline int sdei_mask_local_cpu(void) { return 0; }
+>  static inline int sdei_unmask_local_cpu(void) { return 0; }
+> +static inline void sdei_init(void) { }
+>  #endif /* CONFIG_ARM_SDE_INTERFACE */
+>  
+>  
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Hi folks,
+
+I am wondering if you have any comments on this series of patches?
+
+Thank you.
+
+Best Regards,
+Shuai

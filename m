@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301104B088D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:38:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 494474B0893
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:38:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237643AbiBJIhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 03:37:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38726 "EHLO
+        id S237653AbiBJIhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 03:37:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236714AbiBJIhU (ORCPT
+        with ESMTP id S237645AbiBJIhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 03:37:20 -0500
+        Thu, 10 Feb 2022 03:37:31 -0500
 Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9A9220;
-        Thu, 10 Feb 2022 00:37:22 -0800 (PST)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21A78EhR010092;
-        Thu, 10 Feb 2022 09:37:08 +0100
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746D3F01;
+        Thu, 10 Feb 2022 00:37:33 -0800 (PST)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21A76cqa015959;
+        Thu, 10 Feb 2022 09:37:19 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
  mime-version : subject : to : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=selector1;
- bh=3njkypwCgEdpulBU+yKQseTenS3B0YILK+Hoj11QnzQ=;
- b=dKwTI6Z7NhOsjb294Isce7jwYUwafrcRAReIAP1VTSa+0UxlGb13JDWWcDX1qvsI9buY
- azC3VtUyvS3BC6JLB8/qUL/Jp0SbkMuzCmWOLpm3AemnHb8jk0k6Jk1T5TsheQXtsBbm
- 373czMyU3KhgNG/FjXAaSLd984PbANbvylzrJWi4ARDkwah77WGhrbDBg+/UrXgigTkw
- CRpy1hvR7KYXeAUiyLgqMRdhmIdYsq/EArnqHqi2U73sdHjITaPsTLXnUm5fS2gtC7DM
- KJpcKroj/FfpCzbzrEQaRhqmxHIkesJ8E7CWAXlyRdli7x/fkfN2OUzwgNGpWjNDbOy/ eQ== 
+ bh=A/0sdX1EYOU+QxwJibhKgHsJ8pFpKN3p77dJmbpBruE=;
+ b=aV4vESRMaZfTEPToGtuq1SSYFyzxpI/tJi2bAcPPDb3BNSWzX6a3Uz+jqJZyIYN5hbZA
+ 3kRnW+k0t18OeDGWehQX/alZJlNP1/eFKDIjZ8CvhHUJ7Zv9eAn0cVge7cdJObRyxga0
+ 2p9O+09ca8XitBRoz6pQqnLrvXW8ILUNMaNpxlvw9DVJhkPZkAg5YCU1rxa6IkxuM3vl
+ EPftLpioTooyftO4eDBKSxGAX6B5rigDBZ/DP51rED9QgJbiOXJD9RtRoXFlxK+ls2Xu
+ dZ8SL4yQaJoc+4vCcKphtlKSplaLBKmOPHRdxhDe06Onm+mPqL7PdVRmd4AnHPHM40U4 qg== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e4x268h2j-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e4x1a8h4w-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Feb 2022 09:37:07 +0100
+        Thu, 10 Feb 2022 09:37:19 +0100
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 806FE10002A;
-        Thu, 10 Feb 2022 09:37:07 +0100 (CET)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9586010002A;
+        Thu, 10 Feb 2022 09:37:18 +0100 (CET)
 Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 799712138E0;
-        Thu, 10 Feb 2022 09:37:07 +0100 (CET)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8E9162138E0;
+        Thu, 10 Feb 2022 09:37:18 +0100 (CET)
 Received: from [10.201.21.201] (10.75.127.46) by SFHDAG2NODE2.st.com
  (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 10 Feb
- 2022 09:37:06 +0100
-Message-ID: <746858c4-09bb-7a95-a9c4-a5d2267ef8b9@foss.st.com>
-Date:   Thu, 10 Feb 2022 09:37:05 +0100
+ 2022 09:37:17 +0100
+Message-ID: <5164af76-18e9-e6ae-87c6-fc096d88a69e@foss.st.com>
+Date:   Thu, 10 Feb 2022 09:37:17 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 06/12] ARM: dts: sti: update stih418-b2199 following
+Subject: Re: [PATCH 07/12] ARM: dts: sti: update stihxxx-b2120 following
  stih407-family DT update
 Content-Language: en-US
 To:     Alain Volmat <avolmat@me.com>, <patrice.chotard@st.com>,
@@ -53,9 +53,9 @@ To:     Alain Volmat <avolmat@me.com>, <patrice.chotard@st.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 References: <20211202075105.195664-1-avolmat@me.com>
- <20211202075105.195664-7-avolmat@me.com>
+ <20211202075105.195664-8-avolmat@me.com>
 From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <20211202075105.195664-7-avolmat@me.com>
+In-Reply-To: <20211202075105.195664-8-avolmat@me.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.75.127.46]
@@ -76,20 +76,20 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Alain
 
-On 12/2/21 08:50, Alain Volmat wrote:
+On 12/2/21 08:51, Alain Volmat wrote:
 > Put of the miphy28lp_phy node out of the soc section following similar
 > update within stih407-family.dtsi file update.
 > 
 > Signed-off-by: Alain Volmat <avolmat@me.com>
 > ---
->  arch/arm/boot/dts/stih418-b2199.dts | 22 +++++++++++-----------
+>  arch/arm/boot/dts/stihxxx-b2120.dtsi | 22 +++++++++++-----------
 >  1 file changed, 11 insertions(+), 11 deletions(-)
 > 
-> diff --git a/arch/arm/boot/dts/stih418-b2199.dts b/arch/arm/boot/dts/stih418-b2199.dts
-> index b66e2b29edea..d21bcc7c1271 100644
-> --- a/arch/arm/boot/dts/stih418-b2199.dts
-> +++ b/arch/arm/boot/dts/stih418-b2199.dts
-> @@ -37,6 +37,17 @@ green {
+> diff --git a/arch/arm/boot/dts/stihxxx-b2120.dtsi b/arch/arm/boot/dts/stihxxx-b2120.dtsi
+> index d051f080e52e..4c72dedcd1be 100644
+> --- a/arch/arm/boot/dts/stihxxx-b2120.dtsi
+> +++ b/arch/arm/boot/dts/stihxxx-b2120.dtsi
+> @@ -71,6 +71,17 @@ codec {
 >  		};
 >  	};
 >  
@@ -107,8 +107,8 @@ On 12/2/21 08:50, Alain Volmat wrote:
 >  	soc {
 >  		sbc_serial0: serial@9530000 {
 >  			status = "okay";
-> @@ -84,17 +95,6 @@ mmc0: sdhci@9060000 {
->  			non-removable;
+> @@ -128,17 +139,6 @@ hdmiddc: i2c@9541000 {
+>  			st,i2c-min-sda-pulse-width-us = <5>;
 >  		};
 >  
 > -		miphy28lp_phy: miphy28lp@0 {

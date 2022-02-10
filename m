@@ -2,91 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4804B0240
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:30:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2034B02B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbiBJB25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 20:28:57 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:55158 "EHLO
+        id S234497AbiBJCAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 21:00:38 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbiBJB1y (ORCPT
+        with ESMTP id S234589AbiBJB7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:27:54 -0500
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B51A220C4;
-        Wed,  9 Feb 2022 17:27:36 -0800 (PST)
-Received: by mail-oo1-f52.google.com with SMTP id t75-20020a4a3e4e000000b002e9c0821d78so4641674oot.4;
-        Wed, 09 Feb 2022 17:27:36 -0800 (PST)
+        Wed, 9 Feb 2022 20:59:23 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16882AAB6
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 17:41:54 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id f13so3233297ilq.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 17:41:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NnM5dCp68E2rE/49/oOSjnZsSaxmdjzgIGASXkmR6xY=;
+        b=SAzNK2jOoju8Kh3tfB4nt1GBgAe2hFe+vZ/ZEcNq9+YseZkdv2Fs4ANx/8Njn2iHYw
+         VgImwzzPwpqjZer2EaG3EFoHGPc7ZAG0lVoML//dwhD2BjDTxWacHXbShQifoKV37Z0B
+         VlqmbomQWjifurbhavxvDrNbK8H8R7Dm5ffKg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=H+aB7MEEh65erIWPmlmykpbHBq+zpDiRSwvKXtfqf4Y=;
-        b=abkCCCcCKq90OeXGTknE6nE6FtDXuSfsvyMmpMHDxMWkrzP53gbBGwsAy5s/Or+pM5
-         uwiuLbl31hq8Xp/VOayW0pE/fjVGPoCnyt7WuER3VMqKTAN2RMA3nTz/g7bJ89ILQrfk
-         DxU49xeBEdIRh2tuN3k1VqxrzyBppFaDBhrZxAvVi1w8bAVKc0MQp80pSet9Jn+i8KHM
-         aZ9VdF7NbM0+XPKtKS61Csy3ZU3AhhlACLQyAVyEA3qsflRWBHTDkHJmg9GTpmwO0YLO
-         G1Orwsrmlwz+l22m+Zh0g5tluEc/mq6X7TPLkRTLEc3qqT/DmkMq1fQQg1OWP9Cu74l5
-         5JFQ==
-X-Gm-Message-State: AOAM532TnNUz3MRXopibyeBncXl4qMU5r0GiWGMxaph228TiA9caMCii
-        xbCV9PKQ51Hh8Tz31OJwmesW1YFxu0Ns
-X-Google-Smtp-Source: ABdhPJyEseR1JkYMfiGodATxo9VXU0oluRqUhwbN59lnCsGWCuMw6s3B1TsytqnRqXVGNm5eIiUTnw==
-X-Received: by 2002:a05:6808:168b:: with SMTP id bb11mr2221766oib.184.1644453108777;
-        Wed, 09 Feb 2022 16:31:48 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id s3sm7743074ois.19.2022.02.09.16.31.47
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NnM5dCp68E2rE/49/oOSjnZsSaxmdjzgIGASXkmR6xY=;
+        b=zzwFSnc3EohXCeHcjpDL4c0BRvJoz/KApETYuxS0I/hQmZKJqQ+cpt0mQRW543ORL5
+         QkbM+iSx6Cda4ZMqKL4oebCl3O9RbMhlqoXOCHJlWggBtpTtU5LTDaCdFx95tUiBTlof
+         D7MXxgZEXCZL8HS98dcKJYv1OO0kojDB3RC7jOo8KEDdvPrp91h2tvCCt2LpM/BZFa+E
+         GpPKdg52RhNKfwCR/c2bXx6q989MULsjfwSdU7ugcJsrT7Nb7KM38wmPvCDdkvg5toUL
+         vKRJz/WdxL/uCGANTN9FctuGsdGbX/VSi6+fFOOnuaTtcAgMNsJHkcsmsg++v/W03wOR
+         LkNg==
+X-Gm-Message-State: AOAM5312ij8ZyThlPSnrbgMv9QJ8QhYfviBGtu3xRGYjOBeFPkpVlAHS
+        Xz5OgfYVB8s36IjhUn0UotZYKSrvpcqLkg==
+X-Google-Smtp-Source: ABdhPJx1Wh7HpA/HF6B4EOxrjALlX3FDTxDRKrQ1wIzg5zjIWbRCBbc3R4Vri25XuSFgtzE6GDqv0A==
+X-Received: by 2002:a63:cf05:: with SMTP id j5mr4054620pgg.544.1644453146584;
+        Wed, 09 Feb 2022 16:32:26 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id lr7sm8382805pjb.42.2022.02.09.16.32.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 16:31:47 -0800 (PST)
-Received: (nullmailer pid 1260233 invoked by uid 1000);
-        Thu, 10 Feb 2022 00:31:47 -0000
-Date:   Wed, 9 Feb 2022 18:31:47 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guodong Liu <guodong.liu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tinghan Shen <tinghan.shen@mediatek.com>
-Subject: Re: [PATCH] dt-bindings: pinctrl: mt8195: fix bias-pull-{up,down}
- checks
-Message-ID: <YgRc860w5Pj6RSlS@robh.at.kernel.org>
-References: <20220202153528.707185-1-wenst@chromium.org>
+        Wed, 09 Feb 2022 16:32:26 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Jeff Dike <jdike@addtoit.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-um@lists.infradead.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] um: Enable FORTIFY_SOURCE
+Date:   Wed,  9 Feb 2022 16:32:24 -0800
+Message-Id: <20220210003224.773957-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220202153528.707185-1-wenst@chromium.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=965; h=from:subject; bh=8p9qV7nCUTAMY0NIWHaERW8Fzn7HqVa7AIuy3N51Nyw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiBF0Xl67ZsAL362Vl2CFFWCSHpRPRaKgRKXg0mWx7 ZMVp4xqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYgRdFwAKCRCJcvTf3G3AJgidD/ 0ZTEYhKrilkWGasprf9ZIJxdPF1kViXr2K/C6/H7qvfbMkbD5Fg2txX23xhIDwLbpy5MpK6IDxNR2P MaUrUJnHJl0ZNl2PNf2uHwC/kjyyYsTvIHWJcdwDIBceeGQ7ub0Oq7j2vm/ldaha1PEymXloMWDwHz /3fj9YBHe5CKyezHu0V0lUx0hm4jNUDN3meuyyr3VAQ7sclsdreGSU+Ci0IhyaH6KuOlPtxmK+GGXQ r8lfsQiPVm5BJl8l+52BHMXlCQNhs4Nz6qv0Woxb9YML5Dv62TkyeGp/lWSPgPJFsSnnm3oycROEtr YxP3tKf0eBqiYZ/BmpO+svULC2RCO1ZBCuZ3Dl7hWtoC0hj6p2l8MwjH/P/VJDj8Qi4IjNAg8Pk1ou Zh7Fye8CDaK8vxMKBKB0HQ+OmgTnf4CM3eYhEvTQgnzhmnsiHS5rsAhfH0pgDMyp8F+WXGDc9CPYaF dBEixq9z4prhX1xhEZ9oZosu4MH0rUOwjFzaLuqJkSlfpIw8limtRgTkrtVFa4NLOjQqLZ1MAkRx5C B4ipNCCEMFhMf21hLLc54+iBrfAutksrvAhvYx8YLdOX/6nn3doqRqbjRwq38WqJsIzWgWeDv1veIK JO/xEQBVhQRO5nJ3XymXJQv5p2F7scM+73OoDDW+Hg+88tMp6ynYwykvph0A==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 02 Feb 2022 23:35:28 +0800, Chen-Yu Tsai wrote:
-> When the constraints and description for bias-pull-{up,down} were added,
-> the constraints were not indented correctly, resulting in them being
-> parsed as part of the description. This effectively nullified their
-> purpose.
-> 
-> Move the constraints out of the description block, make each description
-> part of the same associative array as the enum its describing, and
-> reindent them correctly so they take effect.
-> 
-> Also add "type: boolean" to the list of valid values. This corresponds
-> to having bias-pull-{up,down} without any arguments.
-> 
-> Fixes: 91e7edceda96 ("dt-bindings: pinctrl: mt8195: change pull up/down description")
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> ---
->  .../bindings/pinctrl/pinctrl-mt8195.yaml      | 30 ++++++++++---------
->  1 file changed, 16 insertions(+), 14 deletions(-)
-> 
+Enable FORTIFY_SOURCE so running Kunit tests can test fortified
+functions.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ arch/um/Kconfig              | 1 +
+ arch/um/os-Linux/user_syms.c | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/arch/um/Kconfig b/arch/um/Kconfig
+index 4d398b80aea8..746e661395d7 100644
+--- a/arch/um/Kconfig
++++ b/arch/um/Kconfig
+@@ -9,6 +9,7 @@ config UML
+ 	select ARCH_HAS_KCOV
+ 	select ARCH_HAS_STRNCPY_FROM_USER
+ 	select ARCH_HAS_STRNLEN_USER
++	select ARCH_HAS_FORTIFY_SOURCE
+ 	select ARCH_NO_PREEMPT
+ 	select HAVE_ARCH_AUDITSYSCALL
+ 	select HAVE_ARCH_SECCOMP_FILTER
+diff --git a/arch/um/os-Linux/user_syms.c b/arch/um/os-Linux/user_syms.c
+index 715594fe5719..d9845b5219ce 100644
+--- a/arch/um/os-Linux/user_syms.c
++++ b/arch/um/os-Linux/user_syms.c
+@@ -1,4 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
++#define __NO_FORTIFY
+ #include <linux/types.h>
+ #include <linux/module.h>
+ 
+-- 
+2.30.2
+

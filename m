@@ -2,97 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95844B158F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE964B1598
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343541AbiBJSvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 13:51:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38254 "EHLO
+        id S1343575AbiBJSyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 13:54:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiBJSvI (ORCPT
+        with ESMTP id S243255AbiBJSyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 13:51:08 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E122E7F;
-        Thu, 10 Feb 2022 10:51:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=mEKCxhU+JNeT1eMVQTnlAK3ulpLxB/CwopnVgEI95lA=; b=0cvSbH4Y/kCukzwjlS9gIBRS9q
-        dlBTzfjS8ziXZfcR+CMHsEhjsW2GEW1VYCrlMfcE+mYjv62nsLJtP83VGg1D7qh9Q4eJYe3lNhCsJ
-        RHk/cxEZvK1ZiJeGTg8iSaPYN7SpO7ECLYNa0Wbg9vm4YDgAjyXrhU8h2fAZGGW16QRXUatVgk/71
-        2rgmFNeCSDTu5WQ4CtEnayeDCr/nQbR/oL3zD+10caFRB1eVMHFmUh4OajwwJO/DQaxDFNBVoqiqB
-        e+RMqxk4oLD2lqlu64XvAviH70qmscakTpquZlrjpT8OR/XLMFVsRK4shrjSwHq00P3BoR00beij8
-        E8VHEIEA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nIEWw-004g2X-9h; Thu, 10 Feb 2022 18:50:58 +0000
-Date:   Thu, 10 Feb 2022 10:50:58 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     Aaron Tomlin <atomlin@redhat.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "cl@linux.com" <cl@linux.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "ghalat@redhat.com" <ghalat@redhat.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "void@manifault.com" <void@manifault.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
-Subject: Re: [PATCH v5 01/13] module: Move all into module/
-Message-ID: <YgVekoAxiV5nw22q@bombadil.infradead.org>
-References: <20220209170358.3266629-1-atomlin@redhat.com>
- <20220209170358.3266629-2-atomlin@redhat.com>
- <a22eb1b0-3fb5-a70e-cf6f-022571538efb@csgroup.eu>
- <CANfR36jh3yg9nqXkpCUWPeHV+sSD6yne9j1=uA5vyUpYOC8t9g@mail.gmail.com>
- <926e5c35d50ec5f6d7e789831be96744ca8d6423.camel@perches.com>
+        Thu, 10 Feb 2022 13:54:50 -0500
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58623101E;
+        Thu, 10 Feb 2022 10:54:50 -0800 (PST)
+Message-ID: <79b15466-4fe5-ec2b-5530-e5dbfff52f2b@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1644519286;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8SDUgzwF1MYpOKAYuMJLg2sJ5DHjLA2zzshxQ2LBlaw=;
+        b=Cj6V3g1z+c2zakSOio6cOl9mjXUOx55J/eskpWaPON1f+kCnQUJ4TikXzusV2+6+4bdYHt
+        zahBT+9pgJB1KUxxtP5MN3hiEBPQW6CsWnXTYzhtHayO2s5TefJbmtLEfWxovFotY+2mt2
+        L4Tt2eq96r26NOtyCuoePRIBRxCgccA=
+Date:   Thu, 10 Feb 2022 11:54:24 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <926e5c35d50ec5f6d7e789831be96744ca8d6423.camel@perches.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [Bug] nvme blocks PC10 since v5.15 - bisected
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>, Keith Busch <kbusch@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sagi Grimberg <sagi@grimberg.me>, Len Brown <lenb@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        m.heingbecker@googlemail.com,
+        linux-nvme <linux-nvme@lists.infradead.org>,
+        Nirmal Patel <nirmal.patel@linux.intel.com>
+References: <CAJZ5v0hvvYedSn5u-i7sjpoEHU4P65t7i1b2pVn=S1q0nHWgqQ@mail.gmail.com>
+ <20220121210905.GA1114868@dhcp-10-100-145-180.wdc.com>
+ <CAJZ5v0gybg+Wk+008UBFnm2WqrxowOarhst9Eh+91BN823mqNA@mail.gmail.com>
+ <20220210145635.GA1617879@dhcp-10-100-145-180.wdc.com>
+ <20220210182423.GB16171@lst.de>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Jonathan Derrick <jonathan.derrick@linux.dev>
+In-Reply-To: <20220210182423.GB16171@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 09:02:09AM -0800, Joe Perches wrote:
-> On Thu, 2022-02-10 at 14:45 +0000, Aaron Tomlin wrote:
-> > On Thu 2022-02-10 11:11 +0000, Christophe Leroy wrote:
-> > > > diff --git a/MAINTAINERS b/MAINTAINERS
-> []
-> > > > @@ -13001,7 +13001,7 @@ L:    linux-kernel@vger.kernel.org
-> > > >   S:    Maintained
-> > > >   T:    git git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
-> > > >   F:    include/linux/module.h
-> > > > -F:    kernel/module.c
-> > > > +F:    kernel/module/main.c
-> > > 
-> > > Shouldn't it be the entire directory ?
-> > 
-> > Indeed it should. Moving forward: kernel/module/*
-> 
-> Better would be:
-> 
-> F:	kernel/module/
-> 
-> in case it ever gets subdirectories too.
 
-Yes, that also later allows us to add entries for things like say
-livepatching. Or we peg the livepatching file to the livepatching
-tag. Either way, one of the side goals of the split is to eventually
-help scale maintenance.
 
-  Luis
+On 2/10/2022 11:24 AM, Christoph Hellwig wrote:
+> On Thu, Feb 10, 2022 at 06:56:35AM -0800, Keith Busch wrote:
+>> Apparently it works fine when you disable VMD, so sounds like the
+>> acpi_storage_d3 is set, but we fail to find the correct acpi companion
+>> device when it's in a VMD domain.
+> 
+> I guess the acpi_storage_d3 is set on the VMD device and we need
+> to propagate that down the entire bus hanging off it.
+This is all you needed to say
+
+> 
+> Which kinda makes sense in the twisted world where vmd was invented,
+> given that vmd is Intel's evil plot so that only their Windows driver
+> can bind to these devices, 
+Is this relevant or necessary?
+
+
+so the property also needs to be set on
+> the vmd device.
+> 
+> Nirmal and Jonathan, can you help to sort this mess out?

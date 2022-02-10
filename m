@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1184B198A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:34:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C56534B1998
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345702AbiBJXdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 18:33:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43996 "EHLO
+        id S1345744AbiBJXgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 18:36:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbiBJXdu (ORCPT
+        with ESMTP id S1345734AbiBJXgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 18:33:50 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF07E83;
-        Thu, 10 Feb 2022 15:33:50 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id h7so9454812iof.3;
-        Thu, 10 Feb 2022 15:33:50 -0800 (PST)
+        Thu, 10 Feb 2022 18:36:01 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609875F6B;
+        Thu, 10 Feb 2022 15:36:01 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id o10so5711977ilh.0;
+        Thu, 10 Feb 2022 15:36:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=scQQOeGEKS1UtnSb4hDa2pMn49T7lX7tre18iE1yAHU=;
-        b=RIBQ3M1+e7Un6Pm8klMv7JFRyzLD6R+Ak9wA8JMgVvjGGuFJshj+1pYyY0wdO/sViu
-         r/Sy2qLBoQJw0gRyu/afxAsCIuXSI2sSFdu1izZtWcqnwuDs2ZTvAzbFVFezEXxG+raL
-         rq/FBsjW8A6NSkaXInMpTgc7OsquM6YmI2Q63qt5QOeHsXoQ5u90pe3WWu3iprephA1b
-         d0YrHC/kIfZUHXhzpfBTs1G6T6tsaKxLKbBCCmFVfbNLDUavDbYlK9LcgOLDw3KGs7S3
-         wm2wh5bErKqLnwUFNL6fS5uN9xQAWwZpWzgQoRe4pwJHGyYuKaQt+yygbiUWOaPEYZjL
-         3Pgw==
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=+6fGWOvKupFRHqASATl4H7ePp2/LogONFRX5QE2erMk=;
+        b=c5TKy1a65HE0+KDrrZ0l/0nyjG2KwQMjf+LTDiNfbSE5RPViIvGC8K2sHtLqVEcATl
+         s9UJ/l/F0Gz6sTG4Um9A9x+I5/IKHSGqrabca7G/pE0GFSn3XrH1YGeZFwiQrdeYQ2OO
+         wRYGq1zhoyCG6jEZqlxFK4gKdjeLjsn3FyH/9KWUGJa5YZSktM3YXMRDDCVu/rR+AA2Z
+         oA78RSF7auCtcAT5js4nUbb4fLc9eIrWmHdj2Xyew4TFqMHZNPCFuVgHQyJVH43uWM+x
+         hbbn18w+pjBpT7F/P3oXQdsqSOIcktcYds/lAjybQxjTdeU0egJ1F0ul5vz3eBMhF1Qg
+         zMvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=scQQOeGEKS1UtnSb4hDa2pMn49T7lX7tre18iE1yAHU=;
-        b=C8SmWh+6uKqhsdY9wcTHH1Q+8J6e+I/9iDDCevvC01JVMNcg65rGOADum2u3y5rAzE
-         Qi0G8IKSiCJjVGgNeqSynxoUWX+IN//foBKNge5CAOLiOZ8BA3jV+TuQT4jbwlQth5rV
-         Es83+JviYMHc6wmecRicKeJQfHYJ2JmPR+e4yga1zL7CBf+rSaksFFfZEi/tNLFtFWte
-         dYdvAf7h4lxul/ScALTwVh65518WpeY5jDm57TBNkha5gumJpGLbJKiZ7m/C3rb6WjqM
-         YAzwTUTkYGufW6ZEW4Pq3imslVDpk5VVMn8s8nKFH+kMiRzdkzw4piYnmoYYCjaPWzvY
-         8cog==
-X-Gm-Message-State: AOAM532wtBBhOsREiskDMFqhbov5p+WEcY0kEbuQ/4Pt010ds4zfat1B
-        PNC9Tc1WvAtEG5zEssS9Ltg=
-X-Google-Smtp-Source: ABdhPJwXeQ/bXUwb8aHBaOdNFbuQO4MW/NT2Fa7afUSNlrVEzUO80EGBGp2QuHnt22Zclxq0J+BZVg==
-X-Received: by 2002:a05:6638:1607:: with SMTP id x7mr1605707jas.226.1644536029481;
-        Thu, 10 Feb 2022 15:33:49 -0800 (PST)
+        bh=+6fGWOvKupFRHqASATl4H7ePp2/LogONFRX5QE2erMk=;
+        b=Je0WUv8LTZFb/06BB0tyffvW5e+Oc7MqqdghD3pFwzPq1WhT6yfLFUhxLkl1RsCcEg
+         7JW8ssOV6hUweOq6Uu9htKUk/oOQnFkssshDDPwt9IHjp5tf4bFY9UItTtBQP3zYcV9Y
+         7Z0qVWVMj8rhz+q/CLVYPg2FiRvKIgt3+/tLSLQQdMUq/nt9W6Mqwo9I06WiBY+1AlMa
+         l51BhzCu6EdHkDLQoh1LXDLNZtV8ipEtkU0xbfsF610BC3V2ckhaHu+/FXRTXCzZW851
+         a5WtVzooDXFuD+i+SEYrm2sY56MHrYjwVQ2TokMOjJr++ZAVHSkPQh/IHPmo7/Z23r35
+         feCA==
+X-Gm-Message-State: AOAM533CM9eYh7FtzcLm2Q2NI++rCkX4i/+hfMwl246sK+2oi6h9Ih+D
+        FLCa1+cN5WdOmhPe120HajE=
+X-Google-Smtp-Source: ABdhPJxIyAONwSqovY5ap0uN+hIkP7cYxn35rT83uobFJrTicWBOWExdY8XujcVELZYNJmB7R5CauA==
+X-Received: by 2002:a92:db0e:: with SMTP id b14mr5408913iln.153.1644536160698;
+        Thu, 10 Feb 2022 15:36:00 -0800 (PST)
 Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id d80sm8376224iof.15.2022.02.10.15.33.48
+        by smtp.gmail.com with ESMTPSA id a10sm12126701ilv.44.2022.02.10.15.36.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 15:33:49 -0800 (PST)
+        Thu, 10 Feb 2022 15:36:00 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -63,13 +63,13 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
         linux-kernel@vger.kernel.org,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-rdma@vger.kernel.org
-Cc:     Leon Romanovsky <leonro@nvidia.com>
-Subject: [PATCH 19/49] RDMA/hfi: replace cpumask_weight with cpumask_empty where appropriate
-Date:   Thu, 10 Feb 2022 14:49:03 -0800
-Message-Id: <20220210224933.379149-20-yury.norov@gmail.com>
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, linux-mips@vger.kernel.org
+Subject: [PATCH 20/49] irq: mips: replace cpumask_weight with cpumask_empty where appropriate
+Date:   Thu, 10 Feb 2022 14:49:04 -0800
+Message-Id: <20220210224933.379149-21-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220210224933.379149-1-yury.norov@gmail.com>
 References: <20220210224933.379149-1-yury.norov@gmail.com>
@@ -85,39 +85,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/infiniband/hw/hfi1/affinity.c code calls cpumask_weight() to check
-if any bit of a given cpumask is set. We can do it more efficiently with
-cpumask_empty() because cpumask_empty() stops traversing the cpumask as
-soon as it finds first set bit, while cpumask_weight() counts all bits
-unconditionally.
+bcm6345_l1_of_init() calls cpumask_weight() to check if any bit of a given
+cpumask is set. We can do it more efficiently with cpumask_empty() because
+cpumask_empty() stops traversing the cpumask as soon as it finds first set
+bit, while cpumask_weight() counts all bits unconditionally.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- drivers/infiniband/hw/hfi1/affinity.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/irqchip/irq-bcm6345-l1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/hw/hfi1/affinity.c b/drivers/infiniband/hw/hfi1/affinity.c
-index 706b3b659713..877f8e84a672 100644
---- a/drivers/infiniband/hw/hfi1/affinity.c
-+++ b/drivers/infiniband/hw/hfi1/affinity.c
-@@ -666,7 +666,7 @@ int hfi1_dev_affinity_init(struct hfi1_devdata *dd)
- 			 * engines, use the same CPU cores as general/control
- 			 * context.
- 			 */
--			if (cpumask_weight(&entry->def_intr.mask) == 0)
-+			if (cpumask_empty(&entry->def_intr.mask))
- 				cpumask_copy(&entry->def_intr.mask,
- 					     &entry->general_intr_mask);
- 		}
-@@ -686,7 +686,7 @@ int hfi1_dev_affinity_init(struct hfi1_devdata *dd)
- 		 * vectors, use the same CPU core as the general/control
- 		 * context.
- 		 */
--		if (cpumask_weight(&entry->comp_vect_mask) == 0)
-+		if (cpumask_empty(&entry->comp_vect_mask))
- 			cpumask_copy(&entry->comp_vect_mask,
- 				     &entry->general_intr_mask);
+diff --git a/drivers/irqchip/irq-bcm6345-l1.c b/drivers/irqchip/irq-bcm6345-l1.c
+index fd079215c17f..142a7431745f 100644
+--- a/drivers/irqchip/irq-bcm6345-l1.c
++++ b/drivers/irqchip/irq-bcm6345-l1.c
+@@ -315,7 +315,7 @@ static int __init bcm6345_l1_of_init(struct device_node *dn,
+ 			cpumask_set_cpu(idx, &intc->cpumask);
+ 	}
+ 
+-	if (!cpumask_weight(&intc->cpumask)) {
++	if (cpumask_empty(&intc->cpumask)) {
+ 		ret = -ENODEV;
+ 		goto out_free;
  	}
 -- 
 2.32.0

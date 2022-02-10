@@ -2,127 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7344B1646
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 20:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E438E4B164D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 20:28:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343996AbiBJT2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 14:28:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35160 "EHLO
+        id S1343998AbiBJT2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 14:28:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343987AbiBJT2P (ORCPT
+        with ESMTP id S1343944AbiBJT2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 14:28:15 -0500
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51012D5B
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 11:28:15 -0800 (PST)
-Received: by mail-oo1-xc29.google.com with SMTP id u25-20020a4ad0d9000000b002e8d4370689so7578498oor.12
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 11:28:15 -0800 (PST)
+        Thu, 10 Feb 2022 14:28:43 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD696D82
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 11:28:43 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id m7so6123878pjk.0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 11:28:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=930D25X04cls2iefsnzWxuxmTzXtcDAW/bM9OqaMjEA=;
-        b=BLXOiLlcd94cXNUI9tLNT5nu82g6d0e2d9uHrjUvhuxu2Rcgl9v8bzKfU+Qw4LxJIc
-         nIVVswvxMq9Mnscy2DbpXvD8rd3Vu/jaT15CRCuEgt6SLD0ARECopjZANsVuZaCjUOc3
-         zHRt5wtmSlI99gqHRfhtJ+fSH0UkZCju2qH8mkjMulfWYnskxOdr6N9EV58PJXzJTVn7
-         VCpsqW3vG5mYmK8V8y8UO2665XFsBoausGbUg9LuUk+GSFrA2ILpdah32G2Q200s1ETE
-         GUMV+dnA61FFLsx2DgYrilOuOXF8X4NH0u6dYQlura2Or2HMksoTPpRkJ2cuNezpzpQQ
-         pw7w==
+        bh=MkCAJcsgDnZ4AMQg0YJZxLL5mg72sPEcPDTYT76wphA=;
+        b=VITXk2hMcSEjC+OZoOeI41UdOAsXXnSae+vIO1t5uiJUDG3f+W8Ujvo0MzRncXcGSg
+         USTmlZSg0keVqVzjOeEZQixEP8Pgeq2dITc6QO3lghqqFZQJxwqFTif5bEsHgDSzNkCQ
+         2eE8SKwMDCYSs2aXYXFc+5kXVC2grvOSWZ9IMP+RmFomSSXp/fpnKoid/djrG+9ci/6+
+         l5iMO0ARPss2aCLOgxxHGPRXtXwq90RSu87KgTi6DFizS3nL3ZLpvWb0tjEZ17BsVgSy
+         52BW03EP4lmL4Hg/sREOKFYcn0GlisUdJyuwbMTWxFOmIkab9YrI1eHTWrNQ6y6lfoL4
+         Hg0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=930D25X04cls2iefsnzWxuxmTzXtcDAW/bM9OqaMjEA=;
-        b=E0X/04YmWvhX5osnzTV1A/4yknXwnbLyCBYsU6oqxpYBY3BgpGO+r1e9867B37kDOZ
-         ss4rf1rWpZ9w3MIqzKhaY8WmqVwJRZotAGCaZmO7/e3MFHVXy6oxdkv+mysTBQB8QkWi
-         qGpa13e7WutAVnpeiAyhG3YZx98/UM7Vp4JPH9Gr95sWiA1bhZjI9ndbVQsP4KlhdwXG
-         xC3ckt+UO0bVSwR25eekUyBdMyLcxOd0sLJBUA5XCGfYOaGt0ONI/viFj8A91oMyG/tO
-         iXkH0E/WTpMTeNGCogF3zqJ5AH44M5lgoxzjg0+5XZRxTBh3JHW3Fey4efFq15dSVx9r
-         2l2w==
-X-Gm-Message-State: AOAM530baMDqw5Q9ejrQbIVoM7JN2zf5EBVjtPOAvG6kE9/GrVsWZKsX
-        r/Froq4/1gmKXiJ2d4GC8mzkJg==
-X-Google-Smtp-Source: ABdhPJy8koDFl1OaFEQRTBRYLvOnNs2S1GQYo5qnHkTPB2EgbYUGL4lu2a6RQU2DcuCpTQu/g3MuBg==
-X-Received: by 2002:a05:6870:d2a5:: with SMTP id d37mr1265185oae.75.1644521294612;
-        Thu, 10 Feb 2022 11:28:14 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id ge13sm4788677oab.4.2022.02.10.11.28.13
+        bh=MkCAJcsgDnZ4AMQg0YJZxLL5mg72sPEcPDTYT76wphA=;
+        b=SwwThwMChX8FG+y4xLD4gF89vNRzisJR7/JbS6VYQ9QP+4VjdAvYzZ3f1aCdevIjp5
+         9SBUTj/GbwNUA/2uo0cPilFgi/N3S3GjoGI3gwXxYdWejrNwIo1PRev+7M+jibyel1bt
+         bIpy0uk0sn5uyXvwllIIGbfwaoq2DMd66JyRzpE54DVj3kmhDpU3aM9+AWtL3U4TS6fR
+         oB8Vv+WxWjt8P+JkU8J4vc3osH+z5nKpsQ8DmkZ/+I3vhbmEeecilxTndrryaJeLyF/r
+         zdF6uwvL+OP/QKUf3v2e1fVZHXlrUS0PARf2BRKCHpOw2K3IJWsiRLQO0IWX/TYkd2Vl
+         D1tw==
+X-Gm-Message-State: AOAM533VObfg3WMwDY2ofgCXcE9HHA1HUORdUQRI2mmFQs5U/NjGYSZi
+        zH2TH5UL87U8KNKCWtRPZG6ow1c3JDhxaQ==
+X-Google-Smtp-Source: ABdhPJyGxrYzqC6mAoU/J4x4uF4c35ZsHYMs9x0CCV7EjCPecYGBzI+BZ67c1YA0cq2S+zuo8KoMXw==
+X-Received: by 2002:a17:903:1c8:: with SMTP id e8mr8819514plh.75.1644521323208;
+        Thu, 10 Feb 2022 11:28:43 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id d8sm17720591pfj.179.2022.02.10.11.28.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 11:28:14 -0800 (PST)
-Date:   Thu, 10 Feb 2022 13:28:11 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Taniya Das <tdas@codeaurora.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette ? <mturquette@baylibre.com>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [v1 1/2] clk: qcom: gdsc: Use the default transition delay for
- GDSCs
-Message-ID: <YgVnSy7hjak9aS2T@builder.lan>
-References: <20220209172513.17873-1-tdas@codeaurora.org>
+        Thu, 10 Feb 2022 11:28:42 -0800 (PST)
+Date:   Thu, 10 Feb 2022 19:28:39 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     David Matlack <dmatlack@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Subject: Re: [PATCH 00/23] KVM: MMU: MMU role refactoring
+Message-ID: <YgVnZy6RzX7Vrfru@google.com>
+References: <20220204115718.14934-1-pbonzini@redhat.com>
+ <YgGmgMMR0dBmjW86@google.com>
+ <YgGq31edopd6RMts@google.com>
+ <CALzav=d05sMd=ARkV+GMf9SkxKcg9c9n5ttb274M2fZrP27PDA@mail.gmail.com>
+ <YgRmXDn7b8GQ+VzX@google.com>
+ <40930834-8f54-4701-d3ec-f8287bc1333f@redhat.com>
+ <YgVDfG1DvUdXnd2n@google.com>
+ <344042cf-099e-5e26-026a-c42d0825488e@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220209172513.17873-1-tdas@codeaurora.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <344042cf-099e-5e26-026a-c42d0825488e@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 09 Feb 11:25 CST 2022, Taniya Das wrote:
-
-> Do not update the transition delay and use the default reset values.
+On Thu, Feb 10, 2022, Paolo Bonzini wrote:
+> On 2/10/22 17:55, Sean Christopherson wrote:
+> > > 	union kvm_mmu_page_role root_role;
+> > > 	union kvm_mmu_paging_mode cpu_mode;
+> > 
+> > I'd prefer to not use "paging mode", the SDM uses that terminology to refer to
+> > the four paging modes.  My expectation given the name is that the union would
+> > track only CR0.PG, EFER.LME, CR4.PAE, and CR4.PSE[*].
 > 
-> Fixes: 45dd0e55317cc ("clk: qcom: Add support for GDSCs)
-> Signed-off-by: Taniya Das <tdas@codeaurora.org>
-> ---
->  drivers/clk/qcom/gdsc.c | 6 +++++-
->  drivers/clk/qcom/gdsc.h | 1 +
->  2 files changed, 6 insertions(+), 1 deletion(-)
+> Yeah, I had started with kvm_mmu_paging_flags, but cpu_flags was an even
+> worse method than kvm_mmu_paging_mode.
+
+We could always do s/is_guest_mode/is_nested_mode or something to that effect.
+It would take some retraining, but I feel like we've been fighting the whole
+"guest mode" thing over and over.
+
+> Anyway, now that I have done _some_ replacement, it's a matter of sed -i on
+> the patch files once you or someone else come up with a good moniker.
 > 
-> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-> index 7e1dd8ccfa38..e7b213450640 100644
-> --- a/drivers/clk/qcom/gdsc.c
-> +++ b/drivers/clk/qcom/gdsc.c
-> @@ -380,7 +380,11 @@ static int gdsc_init(struct gdsc *sc)
->  	 */
->  	mask = HW_CONTROL_MASK | SW_OVERRIDE_MASK |
->  	       EN_REST_WAIT_MASK | EN_FEW_WAIT_MASK | CLK_DIS_WAIT_MASK;
-> -	val = EN_REST_WAIT_VAL | EN_FEW_WAIT_VAL | CLK_DIS_WAIT_VAL;
-> +
-> +	regmap_read(sc->regmap, sc->gdscr, &val);
-> +
-> +	if (!(sc->flags & DEFAULT_TRANSITION_DELAY))
-> +		val |= EN_REST_WAIT_VAL | EN_FEW_WAIT_VAL | CLK_DIS_WAIT_VAL;
+> I take it that "root_role" passed your filter successfully.
 
-Forgot to point out this yesterday, but these are multi-bit values, so
-you need to mask out whatever bits are already set before filling in the
-new ones.
-
-Regards,
-Bjorn
-
->  	ret = regmap_update_bits(sc->regmap, sc->gdscr, mask, val);
->  	if (ret)
->  		return ret;
-> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
-> index d7cc4c21a9d4..1bd3ecdd0b0a 100644
-> --- a/drivers/clk/qcom/gdsc.h
-> +++ b/drivers/clk/qcom/gdsc.h
-> @@ -53,6 +53,7 @@ struct gdsc {
->  #define ALWAYS_ON	BIT(6)
->  #define RETAIN_FF_ENABLE	BIT(7)
->  #define NO_RET_PERIPH	BIT(8)
-> +#define DEFAULT_TRANSITION_DELAY	BIT(9)
->  	struct reset_controller_dev	*rcdev;
->  	unsigned int			*resets;
->  	unsigned int			reset_count;
-> --
-> Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
-> of the Code Aurora Forum, hosted by the  Linux Foundation.
-> 
+Yep, works for me.  I almost suggested it, too, but decided I liked mmu_role
+marginally better.  I like root_role because it ties in with root_hpa and root_pga.

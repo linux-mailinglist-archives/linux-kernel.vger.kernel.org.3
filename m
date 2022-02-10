@@ -2,93 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8650B4B05F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 07:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 234DC4B0604
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 07:05:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235046AbiBJF6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 00:58:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48704 "EHLO
+        id S235053AbiBJGE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 01:04:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiBJF6T (ORCPT
+        with ESMTP id S233740AbiBJGEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 00:58:19 -0500
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4391C5;
-        Wed,  9 Feb 2022 21:58:20 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0V42eJYQ_1644472693;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V42eJYQ_1644472693)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 10 Feb 2022 13:58:15 +0800
-Date:   Thu, 10 Feb 2022 13:58:13 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jeffle Xu <jefflexu@linux.alibaba.com>, linux-cachefs@redhat.com,
-        xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        gregkh@linuxfoundation.org, tao.peng@linux.alibaba.com,
-        willy@infradead.org, linux-kernel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        linux-fsdevel@vger.kernel.org, eguan@linux.alibaba.com,
-        gerry@linux.alibaba.com, torvalds@linux-foundation.org
-Subject: Re: [Linux-cachefs] [PATCH v3 00/22] fscache,  erofs: fscache-based
- demand-read semantics
-Message-ID: <YgSpdW1LjK2901ix@B-P7TQMD6M-0146.local>
-Mail-Followup-To: David Howells <dhowells@redhat.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>, linux-cachefs@redhat.com,
-        xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        gregkh@linuxfoundation.org, tao.peng@linux.alibaba.com,
-        willy@infradead.org, linux-kernel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        linux-fsdevel@vger.kernel.org, eguan@linux.alibaba.com,
-        gerry@linux.alibaba.com, torvalds@linux-foundation.org
-References: <20220209060108.43051-1-jefflexu@linux.alibaba.com>
+        Thu, 10 Feb 2022 01:04:47 -0500
+Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EEA1D9
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 22:04:47 -0800 (PST)
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
+        by isilmar-4.linta.de (Postfix) with ESMTPSA id 27645201427;
+        Thu, 10 Feb 2022 06:04:46 +0000 (UTC)
+Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
+        id E935E805A4; Thu, 10 Feb 2022 07:00:33 +0100 (CET)
+Date:   Thu, 10 Feb 2022 07:00:33 +0100
+From:   Dominik Brodowski <linux@dominikbrodowski.net>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH] random: tie batched entropy generation to base_crng
+ generation
+Message-ID: <YgSqAbggkgdAtkcm@owl.dominikbrodowski.net>
+References: <CAHmME9pZB1fWf2nZNwTHw07hrnxZYYymA0_Dy=jauDt9TbF69A@mail.gmail.com>
+ <20220209215406.18850-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220209060108.43051-1-jefflexu@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220209215406.18850-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
-
-On Wed, Feb 09, 2022 at 02:00:46PM +0800, Jeffle Xu wrote:
-
-...
-
+Am Wed, Feb 09, 2022 at 10:54:06PM +0100 schrieb Jason A. Donenfeld:
+> Now that we have an explicit base_crng generation counter, we don't need
+> a separate one for batched entropy. Rather, we can just move the
+> generation forward every time we change crng_init state.
 > 
+> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> Cc: Theodore Ts'o <tytso@mit.edu>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  drivers/char/random.c | 28 +++++++---------------------
+>  1 file changed, 7 insertions(+), 21 deletions(-)
 > 
-> Jeffle Xu (22):
->   fscache: export fscache_end_operation()
->   fscache: add a method to support on-demand read semantics
->   cachefiles: extract generic function for daemon methods
->   cachefiles: detect backing file size in on-demand read mode
->   cachefiles: introduce new devnode for on-demand read mode
+> diff --git a/drivers/char/random.c b/drivers/char/random.c
+> index 999f1d164e72..f4d432305869 100644
+> --- a/drivers/char/random.c
+> +++ b/drivers/char/random.c
+> @@ -431,8 +431,6 @@ static DEFINE_PER_CPU(struct crng, crngs) = {
+>  
+>  static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
+>  
+> -static void invalidate_batched_entropy(void);
+> -
+>  /*
+>   * crng_fast_load() can be called by code in the interrupt service
+>   * path.  So we can't afford to dilly-dally. Returns the number of
+> @@ -455,7 +453,7 @@ static size_t crng_fast_load(const void *cp, size_t len)
+>  		src++; crng_init_cnt++; len--; ret++;
+>  	}
+>  	if (crng_init_cnt >= CRNG_INIT_CNT_THRESH) {
+> -		invalidate_batched_entropy();
+> +		++base_crng.generation;
+>  		crng_init = 1;
+>  	}
+>  	spin_unlock_irqrestore(&base_crng.lock, flags);
 
-...
+This will only ever increase base_crng.generation from 0 to 1, and the
+proper lock is held. The base_crng.key has changed, so it's appropriate
+to state that it has reached a new generation.
 
-> 
->  Documentation/filesystems/netfs_library.rst |  18 +
->  fs/cachefiles/Kconfig                       |  13 +
->  fs/cachefiles/daemon.c                      | 243 +++++++++--
->  fs/cachefiles/internal.h                    |  12 +
->  fs/cachefiles/io.c                          |  60 +++
->  fs/cachefiles/main.c                        |  27 ++
->  fs/cachefiles/namei.c                       |  60 ++-
+> @@ -536,7 +534,6 @@ static void crng_reseed(void)
+>  	spin_unlock_irqrestore(&base_crng.lock, flags);
+>  	memzero_explicit(key, sizeof(key));
+>  	if (finalize_init) {
+> -		invalidate_batched_entropy();
+>  		process_random_ready_list();
+>  		wake_up_interruptible(&crng_init_wait);
+>  		kill_fasync(&fasync, SIGIO, POLL_IN);
 
-Would you mind taking a review at this version? We follow your previous
-advices written in v2 and it reuses almost all cachefiles code except
-that it has slightly different implication of cachefile file size and
-a new daemon node.
+In crng_reseed(), base_crng.generation is incremented above while holding
+the lock, and checked that it doesn't reach ULONG_MAX. OK.
 
-I think it could be as the first step to implement fscache-based
-on-demand read.
+> @@ -1278,7 +1275,7 @@ int __init rand_initialize(void)
+>  
+>  	extract_entropy(base_crng.key, sizeof(base_crng.key));
+>  	if (arch_init && trust_cpu && crng_init < 2) {
+> -		invalidate_batched_entropy();
+> +		++base_crng.generation;
+>  		crng_init = 2;
+>  		pr_notice("crng init done (trusting CPU's manufacturer)\n");
+>  	}
+
+Here we do not need to take a lock (single-threaded operation), can only be
+at generation 0 or 1, and the base_crng.key has changed. Which leads me to
+ask: shouldn't we increase the generation counter always (or at least if
+arch_init is true)? And just make icnrementing crng_init to 2 depending on
+trust_cpu?
+
+To sum it up:
+
+	Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
 
 Thanks,
-Gao Xiang
-
+	Dominik

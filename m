@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67ED94B1A46
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8814B1A51
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:20:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346271AbiBKASB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:18:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51298 "EHLO
+        id S1346300AbiBKAUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:20:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346262AbiBKAR7 (ORCPT
+        with ESMTP id S1346272AbiBKAUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:17:59 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608AF105;
-        Thu, 10 Feb 2022 16:18:00 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id d3so5708865ilr.10;
-        Thu, 10 Feb 2022 16:18:00 -0800 (PST)
+        Thu, 10 Feb 2022 19:20:13 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8EFC7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:20:13 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id c188so9527067iof.6
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:20:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=7yoyMsL7SyevN/y4cH9y7HBy5JcN4ZPi5dkNOU9qEgE=;
-        b=cjSHDomLYdafXDclCfXftX/KeP7y/uJEw/qtk1hqGp3MaWFhiinNwkVAsrB7zXZXCw
-         UVpHjhSNynzmJ61ExawDF3np2A97Q0Qk9+NS7JQ1RHeNCc98/fX5RgP2h74m9/niOGwz
-         B61BqZAjfNBdF5xjhtIPK4DCq7HoJ70gA4gvTK5G9H6BdJ9QDEMId+UXZVzrTgpFvta5
-         7/W1oUpxy8YRdTXbKeWTowVYdpiYUmb5uj2hA2xc0McmxJjnR+QcHrVajxS9eeQAKZt5
-         B2aDKNlfCGJWkf4SSI+yqbkb6Wro/HcRN4rSQ9nt5esXZW/ooo18jiA9RogOaF/Ry2Om
-         nGCg==
+        bh=hLEL9851jabrdDhcxhGMVE1OmCduEAH/N0L9wmwcIjg=;
+        b=Ddx6yjYcPE8CmX5hCgpAe3NuBPN+UEnDWxaj/S4nyidlsNp29Qi4nO6yKxahYSYWze
+         60wBTMk/1n3Bf0Dn3Qa+ISIEaGAIbwgzWu13tuLljBfaY2PsnoHzOrV4sBzxPCb9gaGE
+         obvUhv9/uBtVaE78ha7HcUXUC1VXhfiFzo2TuxG/D3nExuOMPflFJuzfwDMEkVz4obqJ
+         U4tJPN3VkTmPOMPDDmKLp4mU6KISHK1gSlamntZK/Ny7CNDDZI5eMEHdTAG8rnsFssRc
+         k94GWNgNxamMatkGjEVqYabjh/Rr7UGcEqRtK2QKFls+yc5KuvRZaVEOKnKvt6NXX9jZ
+         3Thw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7yoyMsL7SyevN/y4cH9y7HBy5JcN4ZPi5dkNOU9qEgE=;
-        b=HGl/nkrauDdjCXX8twYSM9xCN+csOmanps7dI5wHm6FYktQlxSs8VFW4/+h+JU9R8L
-         SPlDu1VuuDa0jyPsFNiGm2zOkNByW+hcNny4z4qKa67VoYBvcp5HeVGP9ld2GBO1YcSs
-         y0ABZ+8QXR2s+djRGqqDfOB2LoRCBQCaNT+xv11RCet8oIYoKfDUNLIFkoKEG34K51CP
-         rUryvp5eJoaf55LIwTHcrogryWdiyNs0EK+xHFmiEnbLFFtxmUv3QxBHV1kgWXyQkeTT
-         t5jFX7bcPtcedr7dc6/TXDr9fvEONVApVl8otUYuzBlo5tppOJvjjVColZoA9N/1LXTC
-         HMDg==
-X-Gm-Message-State: AOAM531EKtfl0fPMTOoUoO4PDy8EInGMk1gU98o4Y+VgnEgqHqxHOp69
-        rSMmm6xtq62JuzQLKC+nWkM=
-X-Google-Smtp-Source: ABdhPJxcPsfzEQtc8co4G0V78MxZQ0H3JjCQJHCLjHTl1WrVlCNlJ/iGZcNVR1Vxlyc4FGh8gOvSfA==
-X-Received: by 2002:a05:6e02:180b:: with SMTP id a11mr5307358ilv.196.1644538679746;
-        Thu, 10 Feb 2022 16:17:59 -0800 (PST)
+        bh=hLEL9851jabrdDhcxhGMVE1OmCduEAH/N0L9wmwcIjg=;
+        b=cXJpWoIZBbcONy8B2Eczqxruovs5zoYUw3lJeExo0OcrCZ02rqfSjEDKH0tcRfyxMY
+         zsFDMnBJzl+w1TkBC4p93GrzjK0FefD5mktb8l2ZH7T/LEn28VF7amGVHC6IAk011nak
+         zU8PB9OGXaA6HlLFlWhSbna5K67Qi+In3K9Z6qLv8PiaJpGJJzuAyLY/9XuQb3ZtOoZ1
+         NSY2l4hk3nX02gSjGH57hwpGc9ZvXlRAeTqToQm2F7kNPZ3O+DI/a5zuU1+GFmrlcymR
+         DaZL1t/Bg5Uxk70Kfo8R5+U2jsdfv6p7F05Ezcu3hAQARNiIhx6LGtGp8LF7zL7EV34n
+         60mQ==
+X-Gm-Message-State: AOAM5338q/Xbd5i/sHjvVa8pmQkIkyE5UJPBSBHBSd68m4+2Fus0hOXN
+        gr2jQc7pYF0B7OhRcm19KmA=
+X-Google-Smtp-Source: ABdhPJw7qdPMYUQVvRvWAT1whw8GJ3WVabvUcKINgiQx0zHMbH9lOyy7aRlH2DJYa0qShCIMVimymQ==
+X-Received: by 2002:a6b:7316:: with SMTP id e22mr5135069ioh.125.1644538812801;
+        Thu, 10 Feb 2022 16:20:12 -0800 (PST)
 Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id q16sm11837074ion.27.2022.02.10.16.17.59
+        by smtp.gmail.com with ESMTPSA id d12sm11665467ilv.42.2022.02.10.16.20.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 16:17:59 -0800 (PST)
+        Thu, 10 Feb 2022 16:20:12 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -62,19 +62,12 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        kernel test robot <lkp@intel.com>, linux-s390@vger.kernel.org
-Subject: [PATCH 39/49] arch/s390: replace cpumask_weight with cpumask_weight_eq where appropriate
-Date:   Thu, 10 Feb 2022 14:49:23 -0800
-Message-Id: <20220210224933.379149-40-yury.norov@gmail.com>
+        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 40/49] firmware: pcsi: replace cpumask_weight with cpumask_weight_eq
+Date:   Thu, 10 Feb 2022 14:49:24 -0800
+Message-Id: <20220210224933.379149-41-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220210224933.379149-1-yury.norov@gmail.com>
 References: <20220210224933.379149-1-yury.norov@gmail.com>
@@ -90,29 +83,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cfset_all_start() calls cpumask_weight() to compare the weight of cpumask
-with a given number. We can do it more efficiently with
+down_and_up_cpus() calls cpumask_weight() to compare the weight of
+cpumask with a given number. We can do it more efficiently with
 cpumask_weight_{eq, ...} because conditional cpumask_weight may stop
 traversing the cpumask earlier, as soon as condition is (or can't be) met.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- arch/s390/kernel/perf_cpum_cf.c | 2 +-
+ drivers/firmware/psci/psci_checker.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/s390/kernel/perf_cpum_cf.c b/arch/s390/kernel/perf_cpum_cf.c
-index ee8707abdb6a..4d217f7f5ccf 100644
---- a/arch/s390/kernel/perf_cpum_cf.c
-+++ b/arch/s390/kernel/perf_cpum_cf.c
-@@ -975,7 +975,7 @@ static int cfset_all_start(struct cfset_request *req)
- 		return -ENOMEM;
- 	cpumask_and(mask, &req->mask, cpu_online_mask);
- 	on_each_cpu_mask(mask, cfset_ioctl_on, &p, 1);
--	if (atomic_read(&p.cpus_ack) != cpumask_weight(mask)) {
-+	if (!cpumask_weight_eq(mask, atomic_read(&p.cpus_ack))) {
- 		on_each_cpu_mask(mask, cfset_ioctl_off, &p, 1);
- 		rc = -EIO;
- 		debug_sprintf_event(cf_dbg, 4, "%s CPUs missing", __func__);
+diff --git a/drivers/firmware/psci/psci_checker.c b/drivers/firmware/psci/psci_checker.c
+index 116eb465cdb4..90c9473832a9 100644
+--- a/drivers/firmware/psci/psci_checker.c
++++ b/drivers/firmware/psci/psci_checker.c
+@@ -90,7 +90,7 @@ static unsigned int down_and_up_cpus(const struct cpumask *cpus,
+ 		 * cpu_down() checks the number of online CPUs before the TOS
+ 		 * resident CPU.
+ 		 */
+-		if (cpumask_weight(offlined_cpus) + 1 == nb_available_cpus) {
++		if (cpumask_weight_eq(offlined_cpus, nb_available_cpus - 1)) {
+ 			if (ret != -EBUSY) {
+ 				pr_err("Unexpected return code %d while trying "
+ 				       "to power down last online CPU %d\n",
 -- 
 2.32.0
 

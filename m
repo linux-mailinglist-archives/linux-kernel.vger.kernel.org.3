@@ -2,136 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CCBF4B0341
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4ED4B034D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbiBJCVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 21:21:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39974 "EHLO
+        id S229806AbiBJCYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 21:24:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231654AbiBJCVA (ORCPT
+        with ESMTP id S229522AbiBJCYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 21:21:00 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D15922BC0
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 18:20:59 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id g145so3504828qke.3
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 18:20:59 -0800 (PST)
+        Wed, 9 Feb 2022 21:24:46 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88B922BCA;
+        Wed,  9 Feb 2022 18:24:48 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id ki18-20020a17090ae91200b001b8be87e9abso786203pjb.1;
+        Wed, 09 Feb 2022 18:24:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=kxPpYOr9fMCpJd7sCfUn04qJNkl4bMWZoTA8Ys3By8k=;
-        b=BxDabmfDoaUDg1dIy4jDTq+JM5s/45/glUofZdZQaH0DIPhWoBB6gHmDiT2A8DFOva
-         G32ykwm4JiumAeBLNmVBsH3T1FvUvgNfX9W1gelGS4ABinKosCLgG0inBLbTYGLz8uHV
-         /qjKuiTneFLu4RNVWZErq28gjv6qydN2NGQVMd5wNwjeyuC3AeOV5F+X5jMibsRfFJQo
-         AZGztqAZ0+9r1GtckwGOODMrVKec6y1LAdVFCSg6CfzrhO8R5VKvl0F7z1lezAYhBQ0X
-         tYlhMTzDKAFaTDfcajRq4HtNPIMYyxIIOY8054YxUH0GqhY1GsoaRhLaJtl6GfEA3xQP
-         vo1g==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=ZKkwPB7d2E+cRBeGnkjKgyuuzM5ZC8AZavMGZ2zAswg=;
+        b=iWAAk2fNZw0x3C8UqaDT08HyUBFC+pgvVZcTKKQpyZCsrizpLqNb45mGqj8QsZPA39
+         KBOkW7pOwEu65gvJI+OjHiLKnSPln+rn6/iH18XQP/WVgN0r5l4zuWFbJ9578w6/r72U
+         0SWVC6cHmFrESwb41Us/Wp/5pvcYea2M80k/P9DsSXxzp1P4gyTEfvdQtvuezVNxA4pd
+         yJ3C853JCG2qce2RszqDvGVQNDNg4ojlX39T1BlLByICybK3NmwrXr2LpOMGDnR4mnpX
+         KoTOUpUc9tgd5YzR2mnBG5BU4TGylmSaqBOmx3wOKLzepVER2PvTM3RrqAgdiKclwjom
+         5mmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=kxPpYOr9fMCpJd7sCfUn04qJNkl4bMWZoTA8Ys3By8k=;
-        b=TJBuDwJI3zPA5Gy5W+qBS7IcZyt9DWXgNVvhLNUKp0VRzZPCZaNSqCUrP3cDVMFuhR
-         2679ED0WpVoQtfaqZHQno+8X2PneqIGU3BtHCro4SQ5026xLbCsRCZ5nmzKR9Rc146o+
-         jhNAam4WRHd2JI+4u+1dsY/4lfHy2DQl8tEW95i84yZeOI4fJn4E+hl9naDrI0fymITj
-         AUYToH5bCRfX96l2/1M/eY9dVh82N+YaYxltJXfg0Z1dE7EjJIUnGkEUbC0zJ9gHREyD
-         sfU1Vj+wKJ4DJ902lNapZhY2QTOjWJFK0hLMSOiI17Wq/ZQ6lwvxYuXEbChI1ftZDF29
-         BgKA==
-X-Gm-Message-State: AOAM5326qxRW61ZZrZOlAZtaElwfhGmLzbElRtTOsw1LzENnizWI1UBY
-        g7vRTzwGgG2ywCMHvKc1o7K4aQ==
-X-Google-Smtp-Source: ABdhPJz7jqG0d7JGpbU68kibD9jbvyBU3iduP2od/KjZDE0+g8Vn/9ABBS1tr25xGzStG9SpUY1rQg==
-X-Received: by 2002:a05:620a:2904:: with SMTP id m4mr2721558qkp.479.1644459658987;
-        Wed, 09 Feb 2022 18:20:58 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id 16sm10185035qty.86.2022.02.09.18.20.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 18:20:58 -0800 (PST)
-Date:   Wed, 9 Feb 2022 18:20:46 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Yang Li <yang.lee@linux.alibaba.com>
-cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH -next] mm/munlock: Fix kernel-doc formatting issues
-In-Reply-To: <20220210004849.69017-1-yang.lee@linux.alibaba.com>
-Message-ID: <9eceb01a-4a62-985f-52c-266cabc156f9@google.com>
-References: <20220210004849.69017-1-yang.lee@linux.alibaba.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=ZKkwPB7d2E+cRBeGnkjKgyuuzM5ZC8AZavMGZ2zAswg=;
+        b=il8rJw5EJz2TujoUMPPcAgu9xs08uKDmlxIeYDrH7RdJXukoqEvNg3hidh4xO5ATnc
+         wPJ/5D8dRIiVIksjxHsyMG2UDDYry/HCY4jjZvm+ypAECBNEenb4+Yl35uKdjqOTX0r8
+         sJyjmqqTix0TNORUOFHW8+hUxWG80Ox5lIGvKicUdZZDataKe4e/ha/VpTBWIdAWvCcH
+         74f1ph1uqZRgac8OXmB8/7b6YEAAhxG/2jsuu4MjNKQgeFmO04AIJZuZckfOe8XP+Vza
+         1CWJLDD3LrJrycKjuwDp1Vh4KU+tdP9oECYzSCaelC/zpmQMCN0tEk4r7fxTh2w8pXCt
+         BVnw==
+X-Gm-Message-State: AOAM530M1teUQ828tAU47S/oeY2/s1ZOwro3WB9eXHPiZ3oBPt/Y4fCI
+        Xzgt6Cj1cjjEAEhKo1O+GTg8Tc4kpxOf/w==
+X-Google-Smtp-Source: ABdhPJyhQavYI41EZRXm8E4eRovxLSlJHYVyFDzZM9SFcCvP0M5SWGde1YUFIAn0mNAO3vOFTDKogw==
+X-Received: by 2002:a17:90b:4ad1:: with SMTP id mh17mr378365pjb.246.1644459887700;
+        Wed, 09 Feb 2022 18:24:47 -0800 (PST)
+Received: from [10.199.0.6] ([85.203.23.185])
+        by smtp.gmail.com with ESMTPSA id s84sm15477935pgs.77.2022.02.09.18.24.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 18:24:47 -0800 (PST)
+Subject: Re: [BUG] usb: typec: ucsi: possible deadlock in ucsi_pr_swap() and
+ ucsi_handle_connector_change()
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, kyletso@google.com,
+        jackp@codeaurora.org, andy.shevchenko@gmail.com,
+        unixbhaskar@gmail.com, subbaram@codeaurora.org,
+        mrana@codeaurora.org,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <037de7ac-e210-bdf5-ec7a-8c0c88a0be20@gmail.com>
+ <YgPQB9BYJcDzbd02@kuha.fi.intel.com>
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+Message-ID: <43d6c3b5-17e6-63a8-21fa-3ff9f478ada7@gmail.com>
+Date:   Thu, 10 Feb 2022 10:24:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YgPQB9BYJcDzbd02@kuha.fi.intel.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Feb 2022, Yang Li wrote:
 
-> Some functions had kernel-doc that used a hash instead of a colon to
-> separate the parameter name from the one line description.
-> 
-> Replacing them to remove warnings found by running scripts/kernel-doc,
-> which is caused by using 'make W=1'.
-> 
-> mm/mlock.c:218: warning: Function parameter or member 'page' not
-> described in 'mlock_page'
-> mm/mlock.c:240: warning: Function parameter or member 'page' not
-> described in 'mlock_new_page'
-> mm/mlock.c:260: warning: Function parameter or member 'page' not
-> described in 'munlock_page'
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-Oh, great, thanks.  I thought I was just following what was already
-there, but now I look closer, yes, the ones with "/*" at the top had
-dashes and the ones with "/**" at the top had colons: apparently I fell
-for the wrong combination - sorry.
+On 2022/2/9 22:30, Heikki Krogerus wrote:
+> On Wed, Feb 09, 2022 at 11:50:57AM +0800, Jia-Ju Bai wrote:
+>> Hello,
+>>
+>> My static analysis tool reports a possible deadlock in the ucsi driver in
+>> Linux 5.16:
+>>
+>> ucsi_pr_swap()
+>>    mutex_lock(&con->lock); --> Line 962 (Lock A)
+>>    wait_for_completion_timeout(&con->complete, ...) --> Line 981 (Wait X)
+>>
+>> ucsi_handle_connector_change()
+>>    mutex_lock(&con->lock); --> Line 763 (Lock A)
+>>    complete(&con->complete); --> Line 782 (Wake X)
+>>    complete(&con->complete); --> Line 807 (Wake X)
+>>
+>> When ucsi_pr_swap() is executed, "Wait X" is performed by holding "Lock A".
+>> If ucsi_handle_connector_change() is executed at this time, "Wake X" cannot
+>> be performed to wake up "Wait X" in ucsi_handle_connector_change(), because
+>> "Lock A" has been already held by ucsi_handle_connector_change(), causing a
+>> possible deadlock.
+>> I find that "Wait X" is performed with a timeout, to relieve the possible
+>> deadlock; but I think this timeout can cause inefficient execution.
+>>
+>> I am not quite sure whether this possible problem is real.
+>> Any feedback would be appreciated, thanks :)
+> This is probable a regression from commit ad74b8649bea ("usb: typec:
+> ucsi: Preliminary support for alternate modes"). Can you test does
+> this patch fix the issue (attached)?
 
-Hugh
+Hi Heikki,
 
-> ---
->  mm/mlock.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/mlock.c b/mm/mlock.c
-> index d50d48961b22..7fb97e1242f1 100644
-> --- a/mm/mlock.c
-> +++ b/mm/mlock.c
-> @@ -212,7 +212,7 @@ bool need_mlock_page_drain(int cpu)
->  
->  /**
->   * mlock_page - mlock a page already on (or temporarily off) LRU
-> - * @page - page to be mlocked, either a normal page or a THP head.
-> + * @page: page to be mlocked, either a normal page or a THP head.
->   */
->  void mlock_page(struct page *page)
->  {
-> @@ -234,7 +234,7 @@ void mlock_page(struct page *page)
->  
->  /**
->   * mlock_new_page - mlock a newly allocated page not yet on LRU
-> - * @page - page to be mlocked, either a normal page or a THP head.
-> + * @page: page to be mlocked, either a normal page or a THP head.
->   */
->  void mlock_new_page(struct page *page)
->  {
-> @@ -254,7 +254,7 @@ void mlock_new_page(struct page *page)
->  
->  /**
->   * munlock_page - munlock a page
-> - * @page - page to be munlocked, either a normal page or a THP head.
-> + * @page: page to be munlocked, either a normal page or a THP head.
->   */
->  void munlock_page(struct page *page)
->  {
-> -- 
-> 2.20.1.7.g153144c
+Thanks for the reply and patch.
+After the patch is used, my tool does not report this deadlock in the 
+ucsi driver.
+Thus, I think this patch should be okay to fix the deadlock :)
+
+
+Best wishes,
+Jia-Ju Bai

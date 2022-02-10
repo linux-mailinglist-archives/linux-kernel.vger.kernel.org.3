@@ -2,185 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 973C54B0A62
+	by mail.lfdr.de (Postfix) with ESMTP id E5EC54B0A63
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:18:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239508AbiBJKQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 05:16:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36956 "EHLO
+        id S239479AbiBJKQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 05:16:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239504AbiBJKQh (ORCPT
+        with ESMTP id S236365AbiBJKQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 05:16:37 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B80F38
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:16:39 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id c192so3124245wma.4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:16:38 -0800 (PST)
+        Thu, 10 Feb 2022 05:16:30 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89ADCEF
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:16:31 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id k25so14047654ejp.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:16:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=p2L2JMGAHF/fA4cXJq0+NeV9Ap/R7fib8dscPh33vcg=;
-        b=F27+3Ao6twgPUQ/BOE7bCH1y1UIIqmAONzGU3oxFPBf0mAFdO1zuL2KUYM1O++g2kx
-         0QthHn6iinSXUj64X8vvdhOqtR+XWYwn5E/Gw+bJlWic6yenGNohxjvoICKo1CA/v5wh
-         dZGA4pMay8u5aQAVuBZJ9srKDSwgWE/ddXN47oMMFEcWNd53Fe5zwF8cdwre7J051wLF
-         ItDcXZiEPwC7ClNhh568QmdIVrjuPnmTtWwlVTn3hykOQGuNeu6OtXK7BEc5b2gRMv6/
-         7r1aC+tQNy80dt1ZZUiEtUXIHLwa4b8xT03cNBWZKJQJ3w+AQX5CpSGRsTrvE9geY6Nj
-         P3iw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cqd+nHAtyHPX1TFwEse8byzK8ys5i5RMjcpqTUGLpbY=;
+        b=ZzQq1zGYJdLFyrdECQKUokfzSmpV8AqALMPLO487lPqoVwtNE3ikjy6gqgwnwpJ+xU
+         dlmywpWlofAFYfYsu6oGnCUuSX/BKLw+aDeW8YK7gZqUfz8So29y1bznaQA4VtrNAZcA
+         9yXqneAa99/xv4+GK3e59lboF7swv/mALq4i91wXZqGS4itER6DavxIQG0VjOEYPGavD
+         peWfE52Wm4urJbKxbSk+M55S03CC/7ton5MYmIdQa0qFKwuety67toEnOLBCFD8ZdHHA
+         Py4jsMsW7Dqi7DJLvhPgOaAfbEksUOqlw2sCAgzSac852Mt888jxrXQwMe5dtjXA1uCz
+         VA7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=p2L2JMGAHF/fA4cXJq0+NeV9Ap/R7fib8dscPh33vcg=;
-        b=s77VQ7XnZqL0svNecHAzV3PeWoCyRGivS4YGgytyXkGrhGJmpsrfPUGRJsCVdkGbTr
-         IO2377BJkikLBBKwekp2C+ZkzvVt0D5woEp5bClX8RADyS2TC7W7FXFAxnwechyDkgWL
-         38/1802ULndPCRERl/rLb0/H/2ZueQ40v0rU89w7YRxm+BXE4ULsosj9XHPehrU/sV9T
-         Nw76SA6aBfNckuZxNOqrlAKbBuNfmefOGwi7BirFkP3NaQEgbwt9MfuPS1z2XN3Tglbd
-         wIdUddruAUHsO3UVbMTv4NNjFPIRlYPNxx1/oE/0kFWZWVbA7rOX7kN+zj41FhaZ3tqO
-         z3sw==
-X-Gm-Message-State: AOAM533pSmMQ3OnnW/Nja+/BXUqdrytqOr350phgPK4TG1AsN4p42FPw
-        sa5N9oTzMPduyTeM3bNMM9GpGQ==
-X-Google-Smtp-Source: ABdhPJyqF2XvTy7u6DWP/6ivautdkeYnX0LG3m5hhXZW9KBraONCYgZP5/iwGcxiCbFl24LtFFh+PA==
-X-Received: by 2002:a05:600c:2058:: with SMTP id p24mr1538504wmg.3.1644488197579;
-        Thu, 10 Feb 2022 02:16:37 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id y1sm1328053wmi.36.2022.02.10.02.15.53
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cqd+nHAtyHPX1TFwEse8byzK8ys5i5RMjcpqTUGLpbY=;
+        b=KW1Wb01+Tox6IIAbYpd2Q3+bDAnfebN60xKEt1ksbUVAWHnQDkHVX5sDZ5WyxNqNX3
+         oOwVyRjc/OWWETH3pO3Vv2VZEReoUu9uItyvF8SqcNMIa/wrk7gflMsnJKhvnMbHq7iL
+         r2/IErL4nLJ/OKnm/7eylcD97kp28sjrfQmS80JnOz30qMQhbnIVLB+hkOGXkvAgftmX
+         JzlkqpfOAZHNkNBFqHn+v+rrfhfL3oar0FLxaodpEvIORSt/o1wUcwJs7l39TUHxX+Lk
+         4AVVgd7LXq3do2281Rl+aAo43NZdoFUMVOuclReVgpSkV+oQynvT9CAPVTS2+dGiv+pN
+         K7FA==
+X-Gm-Message-State: AOAM531R0SpiXXquw58Fpc7jGBQwEVW6dsn8p/VTZnXEOLNcBxVFSCB9
+        sMvfFrEatD6vp4/rCQUB/73hktxGL9M=
+X-Google-Smtp-Source: ABdhPJw6GGKIy6Xla66jzDmfg+MfJVxsugVCLGL94ScZSCChCbM/0W0cOwAyiwMYiLv6ofnO+/QFcw==
+X-Received: by 2002:a17:907:d01:: with SMTP id gn1mr5853708ejc.507.1644488190439;
+        Thu, 10 Feb 2022 02:16:30 -0800 (PST)
+Received: from localhost.localdomain (ip5f5abb5a.dynamic.kabel-deutschland.de. [95.90.187.90])
+        by smtp.gmail.com with ESMTPSA id i9sm7994855eda.35.2022.02.10.02.16.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 02:15:55 -0800 (PST)
-Date:   Thu, 10 Feb 2022 10:15:52 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Stable <stable@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Chinner <dchinner@redhat.com>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        Johannes Thumshirn <jth@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        cluster-devel@redhat.com,
-        syzbot+0ed9f769264276638893@syzkaller.appspotmail.com
-Subject: Re: [PATCH 1/1] Revert "iomap: fall back to buffered writes for
- invalidation failures"
-Message-ID: <YgTl2Lm9Vk50WNSj@google.com>
-References: <20220209085243.3136536-1-lee.jones@linaro.org>
- <20220210045911.GF8338@magnolia>
+        Thu, 10 Feb 2022 02:16:30 -0800 (PST)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH v2 0/2] staging: r8188eu: clean up ieee80211.h
+Date:   Thu, 10 Feb 2022 11:16:21 +0100
+Message-Id: <20220210101623.13758-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220210045911.GF8338@magnolia>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 09 Feb 2022, Darrick J. Wong wrote:
+This set removes unused structs and enums from the ieee80211.h header.
 
-> On Wed, Feb 09, 2022 at 08:52:43AM +0000, Lee Jones wrote:
-> > This reverts commit 60263d5889e6dc5987dc51b801be4955ff2e4aa7.
-> > 
-> > Reverting since this commit opens a potential avenue for abuse.
-> 
-> What kind of abuse?  Did you conclude there's an avenue solely because
-> some combination of userspace rigging produced a BUG warning?  Or is
-> this a real problem that someone found?
+v2:
+Fixed a typo in the commit message of patch 1/2.
+strutures -> structures
 
-Genuine question: Is the ability for userspace to crash the kernel
-not enough to cause concern?  I would have thought that we'd want to
-prevent this.
+Michael Straube (2):
+  staging: r8188eu: remove unused structs from ieee80211.h
+  staging: r8188eu: remove unused enums from ieee80211.h
 
-If by 'real problem' you mean; privilege escalation, memory corruption
-or data leakage, then no, I haven't found any evidence of that.
-However, that's not to say these aren't possible as a result of this
-issue, just that I do not have the skills or knowledge to be able to
-turn this into a demonstrable attack vector.
-
-However, if you say there is no issue, I'm happy to take your word.
-
-> > The C-reproducer and more information can be found at the link below.
-> 
-> No.  Post the information and your analysis here.  I'm not going to dig
-> into some Google site to find out what happened, and I'm not going to
-> assume that future developers will be able to access that URL to learn
-> why this patch was created.
-
-The link provided doesn't contain any further analysis.  Only the
-reproducer and kernel configuration used, which are both too large to
-enter into a Git commit.
-
-> >   kernel BUG at fs/ext4/inode.c:2647!
-> >   invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> >   CPU: 0 PID: 459 Comm: syz-executor359 Tainted: G        W         5.10.93-syzkaller-01028-g0347b1658399 #0
-> 
-> What BUG on fs/ext4/inode.c:2647?
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/fs/ext4/inode.c?h=v5.10.93#n2647
-> 
-> All I see is a call to pagevec_release()?  There's a BUG_ON further up
-> if we wait for page writeback but then it still has Writeback set.  But
-> I don't see anything in pagevec_release that would actually result in a
-> BUG warning.
-
-Right, this BUG back-trace was taken from the kernel I received the
-bug report for.  I should have used the one I triggered in Mainline,
-apologies for that.
-
-The real source of the BUG is in the inlined call to page_buffers().
-
-Here is the link for the latest release kernel:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/fs/ext4/inode.c?h=v5.16#n2620
-
-#define page_buffers(page)                                      \
-        ({                                                      \
-                BUG_ON(!PagePrivate(page));                     \
-                ((struct buffer_head *)page_private(page));     \
-        })
-
-> Oh, right, this is one of those inscrutable syzkaller things, where a
-> person can spend hours figuring out what the hell it set up.
-
-A link to the config used (again too big to enter into a commit
-message), can be easily sourced from the link provided.
-
-> Yeah...no, you don't get to submit patches to core kernel code, claim
-> it's not your responsibility to know anything about a subsystem that you
-> want to patch, and then expect us to do the work for you.  If you pick
-> up a syzkaller report, you get to figure out what broke, why, and how to
-> fix it in a reasonable manner.
-> 
-> You're a maintainer, would you accept a patch like this?
-
-No.  I would share my knowledge to provide a helpful review and work
-with the contributor to find a solution (if applicable).
-
-> OH WAIT, you're running this on the Android 5.10 kernel, aren't you?
-> The BUG report came from page_buffers failing to find any buffer heads
-> attached to the page.
-> https://android.googlesource.com/kernel/common/+/refs/heads/android12-5.10-2022-02/fs/ext4/inode.c#2647
-
-Yes, the H/W I have to prototype these on is a phone and the report
-that came in was specifically built against the aforementioned
-kernel.
-
-> Yeah, don't care.
-
-"There is nothing to worry about, as it's intended behaviour"?
+ drivers/staging/r8188eu/include/ieee80211.h | 266 --------------------
+ 1 file changed, 266 deletions(-)
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.35.1
+

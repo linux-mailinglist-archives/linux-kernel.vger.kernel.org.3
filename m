@@ -2,107 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8040A4B0266
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06FB34B0238
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232817AbiBJBbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 20:31:50 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38880 "EHLO
+        id S232386AbiBJB2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 20:28:32 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:56192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232726AbiBJBbp (ORCPT
+        with ESMTP id S233116AbiBJB2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:31:45 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6579DC43
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 17:31:47 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id i5so4478293oih.1
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 17:31:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=8+Nru2NcToVw10SMtgwpUUD5V5gNRuUchLBb5mwzcTo=;
-        b=TXHV4iS/LnExFOG16+ujTQmMvV1cNm5vPFzItoWZDg8A8T/YPbRQnR5VB+jSEMaxFU
-         Pt/WKTUgnSrBXxgCyeIzvTEs7ZzqHTpju3FkNOxVi1T4xx3SI1l6pK+TLwjynJqb/OSP
-         R19+UJ4qOCkEjvQcpQOFlPTR99isRfg19NWdQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=8+Nru2NcToVw10SMtgwpUUD5V5gNRuUchLBb5mwzcTo=;
-        b=O9idf7zZbUif7xS2eNnhcTrHQ+a4DfsMnJ46NZvF4p2CfUJzeo3ohSvKO+YLbLvwhx
-         HXCqrvlhQo1/5MlGGcoo04XUXOFKimYUS9DWVED+OFHmA3tNbkAPIy1c0w/x/X5VPJ7h
-         k3gxW7bXUqxu+/JqxwJMs83YOViy4CSo95ljgJI2f1pl03Z4zTvurBa067rAm8UXSKoj
-         rMUgMmKUujhVfCny3NjFVhzk2lXgUjppL4EtTXfmE0XK6NUaVxXmo1hHg+hywhtzWLYY
-         RhWbvm09QpXgJeVAWPs7Hg4pTrZWmF3wciBFgmn82JSyWB5ddlEKxmWi5yHVEOo1kY7w
-         dLzA==
-X-Gm-Message-State: AOAM533fLbVnw9P31pLgmBrBChzWu1nvOZC5ItisvCgMpJO7ewHB+Ia4
-        vlm0K5edBtl6NpsFsh6pT25D9XULvtR6g7XjRpmGoEcD/Q4=
-X-Google-Smtp-Source: ABdhPJziJIFTknz84SWo9mVGHh0qE57URGU8n7DntwMHca8it42Jy2AZliHDBlgXQCx9Gscxm97mfnNa5Z0YJT9CftY=
-X-Received: by 2002:a05:6870:d413:: with SMTP id i19mr1648649oag.54.1644451410730;
- Wed, 09 Feb 2022 16:03:30 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 9 Feb 2022 16:03:30 -0800
+        Wed, 9 Feb 2022 20:28:18 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EF720197;
+        Wed,  9 Feb 2022 17:28:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=ULmAtyK6TJjr1QVUNlDS0X1iN3QvREY5ZfYCv9v5FwA=; b=NtqFXUPsUEV5rj6gTA8JTXNQd0
+        HwWPACBb9ahCPbRj4DW2eX9HhMpYTDG9fvTyUnciQZ/dSmY6+drRmI7AjXLZxDUsp8QLX0ca5k384
+        2N9nzJI6MA6bOU1LGuhw2PcYi8P5dteqquf1DDL+ga6+QOYSv3O+7W0vT6WGsWcKaxUI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nHwwx-005CsL-UU; Thu, 10 Feb 2022 01:04:39 +0100
+Date:   Thu, 10 Feb 2022 01:04:39 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     Martin Schiller <ms@dev.tdt.de>, Hauke Mehrtens <hauke@hauke-m.de>,
+        martin.blumenstingl@googlemail.com,
+        Florian Fainelli <f.fainelli@gmail.com>, hkallweit1@gmail.com,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        David Miller <davem@davemloft.net>, kuba@kernel.org,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net v3] net: phy: intel-xway: enable integrated led
+ functions
+Message-ID: <YgRWl5ykcjPW0xvx@lunn.ch>
+References: <20210421055047.22858-1-ms@dev.tdt.de>
+ <CAJ+vNU1=4sDmGXEzPwp0SCq4_p0J-odw-GLM=Qyi7zQnVHwQRA@mail.gmail.com>
+ <YfspazpWoKuHEwPU@lunn.ch>
+ <CAJ+vNU2v9WD2kzB9uTD5j6DqnBBKhv-XOttKLoZ-VzkwdzwjXw@mail.gmail.com>
+ <YfwEvgerYddIUp1V@lunn.ch>
+ <CAJ+vNU1qY1VJgw1QRsbmED6-TLQP2wwxSYb+bXfqZ3wiObLgHg@mail.gmail.com>
+ <YfxtglvVDx2JJM9w@lunn.ch>
+ <CAJ+vNU1td9aizbws-uZ-p-fEzsD8rJVS-mZn4TT2YFn9PY2n_w@mail.gmail.com>
+ <Yf2usAHGZSUDvLln@lunn.ch>
+ <CAJ+vNU3EY0qp-6oQ6Bjd4mZCKv9AeqiaJp=FSrN84P=8atKLrw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <a1c2a7e6-8d76-6ee6-4bc4-e7ea8013af02@quicinc.com>
-References: <1644334454-16719-1-git-send-email-quic_srivasam@quicinc.com>
- <1644334454-16719-4-git-send-email-quic_srivasam@quicinc.com>
- <CAE-0n50jBeOnkpogPFm+zqTf8bqQs-Bo0Gma658uFE6aA=Edxg@mail.gmail.com> <a1c2a7e6-8d76-6ee6-4bc4-e7ea8013af02@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 9 Feb 2022 16:03:30 -0800
-Message-ID: <CAE-0n52LqrdLXk4=WMQY3WXVYLjpwXH+FP2z71gKMAkjiPR4Xg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sc7280: Add wcd9380 pinmux
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        devicetree@vger.kernel.org, dianders@chromium.org,
-        judyhsiao@chromium.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        rohitkr@codeaurora.org, srinivas.kandagatla@linaro.org
-Cc:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJ+vNU3EY0qp-6oQ6Bjd4mZCKv9AeqiaJp=FSrN84P=8atKLrw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Srinivasa Rao Mandadapu (2022-02-09 06:26:58)
->
-> On 2/9/2022 2:42 AM, Stephen Boyd wrote:
-> > Quoting Srinivasa Rao Mandadapu (2022-02-08 07:34:14)
-> >
-> >> +                       pins = "gpio83";
-> >> +                       function = "gpio";
-> >> +                       drive-strength = <16>;
-> >> +                       output-high;
-> >> +       };
-> >> +
-> >> +       wcd938x_reset_sleep: wcd938x_reset_sleep {
-> >> +                       pins = "gpio83";
-> >> +                       function = "gpio";
-> >> +                       drive-strength = <16>;
-> >> +                       bias-disable;
-> >> +                       output-low;
-> > Why doesn't the device drive the reset gpio by requesting the gpio and
-> > asserting and deasserting it? We shouldn't need to use pinctrl settings
-> > to toggle reset gpios.
-> Okay. Verified without these nodes and didn't see any impact. But
-> similar way it's mentioned in sm8250-mtp.dts. Could You please suggest
-> on it how to go ahead on this?.
+> The errata can be summarized as:
+> - 1 out of 100 boots or cable plug events RGMII GbE link will end up
+> going down and up 3 to 4 times then resort to a 100m link; workaround
+> has been found to require a pin level reset
 
-I'd expect the wcd938x codec device node to have a 'reset-gpios'
-property like
+So that sounds like it is downshifting because it thinks there is a
+broken pair. Can you disable downshift? Problem is, that might just
+result in link down.
 
-	reset-gpios = <&tlmm 83 GPIO_ACTIVE_LOW>
+> - 1 out of 100 boots or cable plug events (varies per board) SGMII
+> will fail link between the MAC and PHY; workaround has been found to
+> require a pin level reset
 
-and then the driver to request that gpio via
+I don't suppose there is a register to restart SGMII sync?  Sometimes
+there is.
 
-	reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
+Anyway, shared reset makes this messy, as you said. Unfortunate
+design. But i don't see how you can work around this in the
+bootloader, especially the cable plug events.
 
-so it gets the gpio during driver probe. Then the gpio can be deasserted
-during suspend and reasserted on resume, if that's even important?
+	Andrew

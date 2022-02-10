@@ -2,135 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D3E4B1769
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:05:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 169F24B176E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344517AbiBJVFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 16:05:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38608 "EHLO
+        id S1344523AbiBJVJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 16:09:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238999AbiBJVFp (ORCPT
+        with ESMTP id S238999AbiBJVJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 16:05:45 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0139C2655;
-        Thu, 10 Feb 2022 13:05:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2Z9d73V1Hk3TZ+5A0nBSljOJ2hSUrKCy4MxgW8Jd6pE=; b=mWmITOP9ohmcC/iELjKVP0aY/U
-        0JXuv3fvinanZVg4Ju0L2+K5L1UQEAkY6Zv+zDpGUds6eL17GzEtWb0f2y2T8Q9nJmkuKxCl1dQoE
-        SuXHE+q8GVXMOLXlDVnybMCb8U1gY9YLmjlg6yvXXRxfQojfsqgJ/qtIrQaU/0AL5rgnsZf8HY9PZ
-        hlCRoBOvQnYhVbcQ5o2dVhbctpbANN6nv99wTnJ6Zid86d9wVF2/4/7BHluvsKaiyJpBSFMjJl6uM
-        aLajiUxbihdXfOaqLt2W97FU/gAMfLsLulO3DUYEWO74t7fEAGWesiYDvJSritf+N7S9Mtpo27F8q
-        LP5lWLNg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nIGd8-004w6Y-Hm; Thu, 10 Feb 2022 21:05:30 +0000
-Date:   Thu, 10 Feb 2022 13:05:30 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Zhen Ni <nizhen@uniontech.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, keescook@chromium.org, yzaikin@google.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2] sched: move cfs_bandwidth_slice sysctls to fair.c
-Message-ID: <YgV+GqGXYUl1ZTj9@bombadil.infradead.org>
-References: <20220210054028.3062-1-nizhen@uniontech.com>
+        Thu, 10 Feb 2022 16:09:14 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D971120
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:09:15 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id om7so6270344pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:09:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=5fXnl/zudRlsBaPCWqOQG/BbvW0HiBY1sLTM/v1mLFA=;
+        b=QibC25dEvOYcURSpRQEpOkucBKDrWlDRsi+8kdqduZx4sLEuXF0pkvu+F7bRWCHjIe
+         bltm1u+VTQmR61UkCRsKYD3E0hS1Abt7G61MgZ5Q0w3uA/i0UhCTlcFcCOLxDhIBuq+w
+         WeZ0gcnVD4cHILndhMQkgYaqhFz8Kimx+8zQk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=5fXnl/zudRlsBaPCWqOQG/BbvW0HiBY1sLTM/v1mLFA=;
+        b=TFhDFh2pTeG/cpEHzYlq+AN3tBxwkjGHwPzrCA3Fn17IzZYHLHS6CTjQ/CyjCM7HiS
+         key4SYlc/Mhh+dKkgkPG4xpi1c8taU6NhQf2ZsnrRqoMSXGRojBT57HFw78u3b4G4Snq
+         a3xTuihGVLEpxelL9gxLYU8HelKNY6K5TZaOSxJc6LXIcJ61beLxlDa9JSgPlX7nZeQx
+         tJbt8rdeVjdjStfz9IaWk6fAdvQOTe3bRHpj2Uuwh/tdOClOnLeHdaXceh15wjsUMtca
+         dpgoXbaOXpG+nKSciQWTTIZZ9GTsGTbs8sD31ndef0o62xihuc03RyGdg57LlIrm/KpZ
+         cnAQ==
+X-Gm-Message-State: AOAM5310CWE6DopjkU6xP5rBc/g7j2iPTz5fU9qdWOu53wvkcEFF/IKg
+        dV0uV1xBRboqW/T/edMa5fkprw==
+X-Google-Smtp-Source: ABdhPJy30sCEW54x3m+/Y52i3WOAn4oQ+v00ptLFoUMzH69cKTRaNO0Kcem2NoYBDzvdjY7R5URPCA==
+X-Received: by 2002:a17:903:1c4:: with SMTP id e4mr9362662plh.147.1644527354547;
+        Thu, 10 Feb 2022 13:09:14 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id oa10sm1119190pjb.54.2022.02.10.13.09.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 13:09:14 -0800 (PST)
+Date:   Thu, 10 Feb 2022 13:09:13 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Jann Horn <jannh@google.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>,
+        stable@vger.kernel.org, Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>
+Subject: Re: [PATCH 1/3] signal: HANDLER_EXIT should clear SIGNAL_UNKILLABLE
+Message-ID: <202202101254.1174AB2B@keescook>
+References: <20220210025321.787113-1-keescook@chromium.org>
+ <20220210025321.787113-2-keescook@chromium.org>
+ <CAG48ez1m7XJ1wJvTHtNorH480jTWNgdrn5Q1LTZZQ4uve3r4Sw@mail.gmail.com>
+ <202202100935.FB3E60FA5@keescook>
+ <CAG48ez3fG7S1dfE2-JAtyOZUK=0_iZ03scf+oD6gwVyD1Qp33g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220210054028.3062-1-nizhen@uniontech.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG48ez3fG7S1dfE2-JAtyOZUK=0_iZ03scf+oD6gwVyD1Qp33g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 01:40:28PM +0800, Zhen Ni wrote:
-> move cfs_bandwidth_slice sysctls to fair.c and use the
-> new register_sysctl_init() to register the sysctl interface.
+On Thu, Feb 10, 2022 at 07:01:39PM +0100, Jann Horn wrote:
+> On Thu, Feb 10, 2022 at 6:37 PM Kees Cook <keescook@chromium.org> wrote:
+> > On Thu, Feb 10, 2022 at 05:18:39PM +0100, Jann Horn wrote:
+> > > On Thu, Feb 10, 2022 at 3:53 AM Kees Cook <keescook@chromium.org> wrote:
+> > > > Fatal SIGSYS signals were not being delivered to pid namespace init
+> > > > processes. Make sure the SIGNAL_UNKILLABLE doesn't get set for these
+> > > > cases.
+> > > >
+> > > > Reported-by: Robert Święcki <robert@swiecki.net>
+> > > > Suggested-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> > > > Fixes: 00b06da29cf9 ("signal: Add SA_IMMUTABLE to ensure forced siganls do not get changed")
+> > > > Cc: stable@vger.kernel.org
+> > > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > > ---
+> > > >  kernel/signal.c | 5 +++--
+> > > >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/kernel/signal.c b/kernel/signal.c
+> > > > index 38602738866e..33e3ee4f3383 100644
+> > > > --- a/kernel/signal.c
+> > > > +++ b/kernel/signal.c
+> > > > @@ -1342,9 +1342,10 @@ force_sig_info_to_task(struct kernel_siginfo *info, struct task_struct *t,
+> > > >         }
+> > > >         /*
+> > > >          * Don't clear SIGNAL_UNKILLABLE for traced tasks, users won't expect
+> > > > -        * debugging to leave init killable.
+> > > > +        * debugging to leave init killable, unless it is intended to exit.
+> > > >          */
+> > > > -       if (action->sa.sa_handler == SIG_DFL && !t->ptrace)
+> > > > +       if (action->sa.sa_handler == SIG_DFL &&
+> > > > +           (!t->ptrace || (handler == HANDLER_EXIT)))
+> > > >                 t->signal->flags &= ~SIGNAL_UNKILLABLE;
+> > >
+> > > You're changing the subclause:
+> > >
+> > > !t->ptrace
+> > >
+> > > to:
+> > >
+> > > (!t->ptrace || (handler == HANDLER_EXIT))
+> > >
+> > > which means that the change only affects cases where the process has a
+> > > ptracer, right? That's not the scenario the commit message is talking
+> > > about...
+> >
+> > Sorry, yes, I was not as accurate as I should have been in the commit
+> > log. I have changed it to:
+> >
+> > Fatal SIGSYS signals (i.e. seccomp RET_KILL_* syscall filter actions)
+> > were not being delivered to ptraced pid namespace init processes. Make
+> > sure the SIGNAL_UNKILLABLE doesn't get set for these cases.
 > 
-> Signed-off-by: Zhen Ni <nizhen@uniontech.com>
-> ---
-
-Your description of what has changed in your v2 should go here.
-If a v3, then your v2 notes and v3 notes should be here as well.
-
->  include/linux/sched/sysctl.h |  4 ----
->  kernel/sched/fair.c          | 25 +++++++++++++++++++++++--
->  kernel/sysctl.c              | 10 ----------
->  3 files changed, 23 insertions(+), 16 deletions(-)
+> So basically force_sig_info() is trying to figure out whether
+> get_signal() will later on check for SIGNAL_UNKILLABLE (the SIG_DFL
+> case), and if so, it clears the flag from the target's signal_struct
+> that marks the process as unkillable?
 > 
-> diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
-> index c19dd5a2c05c..d416d8f45186 100644
-> --- a/include/linux/sched/sysctl.h
-> +++ b/include/linux/sched/sysctl.h
-> @@ -41,10 +41,6 @@ extern unsigned int sysctl_sched_uclamp_util_max;
->  extern unsigned int sysctl_sched_uclamp_util_min_rt_default;
->  #endif
->  
-> -#ifdef CONFIG_CFS_BANDWIDTH
-> -extern unsigned int sysctl_sched_cfs_bandwidth_slice;
-> -#endif
-> -
->  #ifdef CONFIG_SCHED_AUTOGROUP
->  extern unsigned int sysctl_sched_autogroup_enabled;
->  #endif
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 5146163bfabb..354ebf938567 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -141,8 +141,26 @@ int __weak arch_asym_cpu_priority(int cpu)
->   *
->   * (default: 5 msec, units: microseconds)
->   */
-> -unsigned int sysctl_sched_cfs_bandwidth_slice		= 5000UL;
-> -#endif
-> +static unsigned int sysctl_sched_cfs_bandwidth_slice		= 5000UL;
-> +#ifdef CONFIG_SYSCTL
-> +static struct ctl_table sched_cfs_bandwidth_sysctls[] = {
-> +	{
-> +		.procname       = "sched_cfs_bandwidth_slice_us",
-> +		.data           = &sysctl_sched_cfs_bandwidth_slice,
-> +		.maxlen         = sizeof(unsigned int),
-> +		.mode           = 0644,
-> +		.proc_handler   = proc_dointvec_minmax,
-> +		.extra1         = SYSCTL_ONE,
-> +	},
-> +	{}
-> +};
-> +
-> +static void __init sched_cfs_bandwidth_sysctl_init(void)
-> +{
-> +	register_sysctl_init("kernel", sched_cfs_bandwidth_sysctls);
-> +}
-> +#endif /* CONFIG_SYSCTL */
+> This used to be:
+> 
+> if (action->sa.sa_handler == SIG_DFL)
+>     t->signal->flags &= ~SIGNAL_UNKILLABLE;
+> 
+> Then someone noticed that in the ptrace case, the signal might not
+> actually end up being consumed by the target process, and added the
+> "&& !t->ptrace" clause in commit
+> eb61b5911bdc923875cde99eb25203a0e2b06d43.
+> 
+> And now Robert Swiecki noticed that that still didn't accurately model
+> what'll happen in get_signal().
+> 
+> This seems hacky to me, and also racy: What if, while you're going
+> through a SECCOMP_RET_KILL_PROCESS in an unkillable process, some
+> other thread e.g. concurrently changes the disposition of SIGSYS from
+> a custom handler to SIG_DFL?
 
-Maybe an #else which then adds a no-op sched_cfs_bandwidth_sysctl_init
+Do you mean after force_sig_info_to_task() has finished but before
+get_signal()? SA_IMMUTABLE will block changes to the action.
 
-> +#endif /* CONFIG_CFS_BANDWIDTH */
+If you mean before force_sig_info_to_task(), I don't see how that's
+possible since it's under lock:
 
-Likewise, if disabled, then have a no-op sched_cfs_bandwidth_sysctl_init()
+        if (blocked || ignored || (handler != HANDLER_CURRENT)) {
+                action->sa.sa_handler = SIG_DFL;
+                if (handler == HANDLER_EXIT)
+                        action->sa.sa_flags |= SA_IMMUTABLE;
+	...
+        if (action->sa.sa_handler == SIG_DFL &&
+            (!t->ptrace || (handler == HANDLER_EXIT)))
+                t->signal->flags &= ~SIGNAL_UNKILLABLE;
 
->  static inline void update_load_add(struct load_weight *lw, unsigned long inc)
->  {
-> @@ -207,6 +225,9 @@ static void update_sysctl(void)
->  void __init sched_init_granularity(void)
->  {
->  	update_sysctl();
-> +#if defined(CONFIG_CFS_BANDWIDTH) && defined(CONFIG_SYSCTL)
-> +	sched_cfs_bandwidth_sysctl_init();
-> +#endif
+Given handler = HANDLER_EXIT, it'll always be SIG_DFL.
 
-Then you can get remove the #ifdef mess from this code.
+> Instead of trying to figure out whether the signal would have been
+> fatal without SIGNAL_UNKILLABLE, I think it would be better to find a
+> way to tell the signal-handling code that SIGNAL_UNKILLABLE should be
+> bypassed for this specific signal, or something along those lines...
+> but of course that's also kind of messy because the signal-sending
+> code might fall back to just using the pending signal mask on
+> allocation failure IIRC?
 
-But this is a style issue nothing major.
+My original patch aimed that way:
 
-  Luis
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 9b04631acde8..c124a09de6de 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -2787,7 +2787,8 @@ bool get_signal(struct ksignal *ksig)
+ 		 * case, the signal cannot be dropped.
+ 		 */
+ 		if (unlikely(signal->flags & SIGNAL_UNKILLABLE) &&
+-				!sig_kernel_only(signr))
++				!sig_kernel_only(signr) &&
++				!(ka->sa.sa_flags & SA_IMMUTABLE))
+ 			continue;
+ 
+ 		if (sig_kernel_stop(signr)) {
+
+But I don't think there's a race, and Eric's suggestion seemed
+better in the sense that the state change is entirely contained by
+force_sig_info_to_task().
+
+-Kees
+
+-- 
+Kees Cook

@@ -2,71 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 908E54B0375
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9829A4B0372
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:36:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbiBJCgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 21:36:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48348 "EHLO
+        id S231398AbiBJCgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 21:36:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbiBJCg0 (ORCPT
+        with ESMTP id S230357AbiBJCgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 21:36:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92001237D8;
-        Wed,  9 Feb 2022 18:36:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC503B8237D;
-        Thu, 10 Feb 2022 02:36:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13ED9C340E7;
-        Thu, 10 Feb 2022 02:36:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644460585;
-        bh=bP1AetIUeykZM0C9T+LTSmrM0rMHwqKDK4UtSUG36mQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=N9pUXKksn9FrliIkYoOBR+ievtONsYuwkC9IXa1SHRr9hv6rj9MQt0WGpfVAbP+oq
-         qZKbpmwiiBz6opxil1U/Ofky8Ka2Lsg0LjIDkAAdUKPBK8FuEYbF8TLp7+8ElM/IB6
-         Bz92dIL8Ar/kxuq6RK8s66QovL+urjEWF4bpeBse0LwEsS9Tp2Q31nuMJlMljyda2/
-         IciHCk7aYCJ0M7PnmHmYUh61ruD3sbhJztgs5LzA9bnYiy0wYZTxRVHeB5bRtrQPip
-         xLVRIr5Bq/bHEqvXQquBcXFANvv6wzOvANdoTDrV35tbbc8qn2hmISfbk5TumnOJmd
-         ttzKjnLOPn5eA==
-Date:   Wed, 9 Feb 2022 18:36:23 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Mans Rullgard <mans@mansr.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Juergen Borleis <kernel@pengutronix.de>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: dsa: lan9303: fix reset on probe
-Message-ID: <20220209183623.54369689@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220209145454.19749-1-mans@mansr.com>
-References: <20220209145454.19749-1-mans@mansr.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 9 Feb 2022 21:36:45 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A282237D2;
+        Wed,  9 Feb 2022 18:36:47 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id d9-20020a17090a498900b001b8bb1d00e7so4161952pjh.3;
+        Wed, 09 Feb 2022 18:36:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=OTYmrbGIx6yiOF0Z0bFCD7WxKDh7jr/0cIzV9rC1yXI=;
+        b=ngYRXwXFCD94gM2rlOPHYb53Xo02WgOf9T5fUzPW4ur8qQWwCRXQCUuza+m3EZdwTV
+         4t+Nl46o0H40VbIUQkjiKnvQhNhPIP62SA6gfjGownuxZOktrYllW9yqpbL7ptiudXiS
+         u1VEuCMbZ+uJwLQucORQ4/+rpAT9EMokKrcPvAkAn/O9M61kea4kg1ENtRRDkATieH4b
+         NaA/KF0SpPVyqyeCjQjkTaop+OxRCfxhsPqjoRzrR4PlpCBDN3WzkiNZqIYKqEv+6VEu
+         QpjNs4iFURWGnd7VkaCHSvP9thxAp9wKo+1Fj34ZxjsWt6IPBLKFUPaVqBlnFrB7TbIX
+         0Q1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=OTYmrbGIx6yiOF0Z0bFCD7WxKDh7jr/0cIzV9rC1yXI=;
+        b=quas8HOWwlK5K7TfG7qjunQTTKR5kTSoburEErA02Ohqvxm5z+LCEUZGK+py6wqWJJ
+         /dzO5Nh7BRzhbS1nQcS0u2T1c85IagYSe+I5UoeDIAPiitgzQE7tPDfNBGV0TDl+0Svv
+         RGFnrNW8FLtsVAgzyl6wJ6G31Npz96pq8dML1dJ7va6QwPscmCizcBhsPXtXTgvxl3Yy
+         3F/JSawwD6VsofK8tsyX3x1XJprB3Rusk5+KLK/YT+5QfYkiIDYvFxIVdrbX0CWsd1mN
+         QBcLbA/hnKDbnYnmzCT867556u86zk5RCHpJSgL+54OPSHPvpruhC+8ERv7Js085dQfu
+         2lLw==
+X-Gm-Message-State: AOAM532/68C19JUFh02ft5c9PU0cuoqgZyomdCWQVgpibbC/XxqaOsPW
+        xL50BBB/POacjugu+Vd6aLqWYq/fHs1+vA==
+X-Google-Smtp-Source: ABdhPJwlL3HPV93WjdBrDI+iGqX24qf6pToV1X6K1yVEpflfbuaQG3FCEHUzQ/++0dcVM14GDeoCWA==
+X-Received: by 2002:a17:902:c404:: with SMTP id k4mr5336273plk.71.1644460606616;
+        Wed, 09 Feb 2022 18:36:46 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id f16sm20173665pfd.118.2022.02.09.18.36.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 09 Feb 2022 18:36:46 -0800 (PST)
+From:   Li-hao Kuo <lhjeff911@gmail.com>
+To:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com, trix@redhat.com,
+        Li-hao Kuo <lhjeff911@gmail.com>
+Subject: [PATCH] spi: Fix warning for Clang build
+Date:   Thu, 10 Feb 2022 10:36:56 +0800
+Message-Id: <691d52b72f978f562136c587319852f5c65f08fe.1644460444.git.lhjeff911@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  9 Feb 2022 14:54:54 +0000 Mans Rullgard wrote:
-> The reset input to the LAN9303 chip is active low, and devicetree
-> gpio handles reflect this.  Therefore, the gpio should be requested
-> with an initial state of high in order for the reset signal to be
-> asserted.  Other uses of the gpio already use the correct polarity.
-> 
-> Signed-off-by: Mans Rullgard <mans@mansr.com>
+Clang build fails with
+spi-sunplus-sp7021.c:405:2: error: variable 'ret' is used
+  uninitialized whenever switch default is taken
+        default:
 
-Pending Andrew's review, this is the correct fixes tag, right?
+Restore initializing ret. and add return error at default
 
-Fixes: a1292595e006 ("net: dsa: add new DSA switch driver for the SMSC-LAN9303")
+Fixes: 47e8fe57a66f ("spi: Modify irq request position and modify parameters")
+Reported-by: Tom Rix <trix@redhat.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+---
+ drivers/spi/spi-sunplus-sp7021.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi-sunplus-sp7021.c b/drivers/spi/spi-sunplus-sp7021.c
+index ba5ed9f..460993a 100644
+--- a/drivers/spi/spi-sunplus-sp7021.c
++++ b/drivers/spi/spi-sunplus-sp7021.c
+@@ -375,7 +375,7 @@ static int sp7021_spi_slave_transfer_one(struct spi_controller *ctlr, struct spi
+ {
+ 	struct sp7021_spi_ctlr *pspim = spi_master_get_devdata(ctlr);
+ 	struct device *dev = pspim->dev;
+-	int mode, ret;
++	int mode, ret = 0;
+ 
+ 	mode = SP7021_SPI_IDLE;
+ 	if (xfer->tx_buf && xfer->rx_buf) {
+@@ -403,7 +403,7 @@ static int sp7021_spi_slave_transfer_one(struct spi_controller *ctlr, struct spi
+ 		ret = sp7021_spi_slave_rx(spi, xfer);
+ 		break;
+ 	default:
+-		break;
++		return -EINVAL;
+ 	}
+ 	if (xfer->tx_buf)
+ 		dma_unmap_single(dev, xfer->tx_dma, xfer->len, DMA_TO_DEVICE);
+-- 
+2.7.4
+

@@ -2,114 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03DA4B190C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:08:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3418D4B192C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:12:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345441AbiBJXIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 18:08:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58326 "EHLO
+        id S1345494AbiBJXLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 18:11:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238904AbiBJXIi (ORCPT
+        with ESMTP id S1345101AbiBJXLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 18:08:38 -0500
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A790E31;
-        Thu, 10 Feb 2022 15:08:39 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id o10so6606250qkg.0;
-        Thu, 10 Feb 2022 15:08:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8tBSzebx6IZWphnQDmZzi0rvUYtCYRK6nGrmurw7iTk=;
-        b=VctWFimLh3AYddEGqTeZwYpvH+2egElHggiZG6HROcMPM6t4PbuJRA3P7nel5acxHJ
-         iVQtSJ6P8j/vL38rwP+vwLlkPVwnPVBh36AXVths9rFLU8Jf8Nu9MwqwdTO9ndYp1Az+
-         UCDnDGwr/s+vCOfO28O5MqFNsyI7IC+EaInU7kKbFdyTOtNEdWRafeisQBf3eQCBuzqG
-         EJ5T2OOsfp//rGAWOIp72EkCNobq2Jps8jA6DTJ9H14V9rPuEOnbxvlRLfKiLs88A5a+
-         pzF7Lcqq0h8cN3QlFSo/+ZyNgTD0S1drwmCJrCJfDhbCVLKHva/gnz45ss/dsQ2fWwpT
-         nH1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8tBSzebx6IZWphnQDmZzi0rvUYtCYRK6nGrmurw7iTk=;
-        b=A+TBVbkzhSghPUPrxsdtHdPoUx+9S++VKhubygpEw5yKgfmn8fTKOT4nHWyC1eqArU
-         TjNzaZJnCGIx4gyRrxcOjRy311bIagIJBlMEY3IjxTRfWR1QYevJpsxxZ3onSE/QQ5Wj
-         GwEY8KZCYmccOa/VcQqwHNe7WFewrb+Ib0ko9jl+ySq3oMC+8Um13A/6ARVq1wE+HVw4
-         tpgZigACNrC2KTku44YK2tK0zIvuHNOjO9joiQLfTKXKWdDGEUtLKSQGAT+MbCbIW0Lm
-         edQEERdYIKHBMClnNJ2Dr8NwarMKWQ7tVI1VwQv61ev2ugQ6i1GZEmfJuPHAwMkrdJSE
-         yiSA==
-X-Gm-Message-State: AOAM5321Q9vT/H6HxlcVLeozWWOFDhBvMEp+AY1upm1YGM0SFh46e5/s
-        LxMzRIFwsyoI9ldKbP8rQUA=
-X-Google-Smtp-Source: ABdhPJxz8mHol+ysN0OuloI7MrK637q0cIngQIMXKsaQuDg4uwCNVT0JgimFXOAi9PcGNTEyNSlXLA==
-X-Received: by 2002:a05:620a:c4e:: with SMTP id u14mr4883247qki.710.1644534518498;
-        Thu, 10 Feb 2022 15:08:38 -0800 (PST)
-Received: from localhost.localdomain (c-67-187-90-124.hsd1.ky.comcast.net. [67.187.90.124])
-        by smtp.gmail.com with ESMTPSA id s6sm10549153qko.93.2022.02.10.15.08.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 15:08:38 -0800 (PST)
-From:   frowand.list@gmail.com
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] of: unittest: print pass messages at PR_INFO level
-Date:   Thu, 10 Feb 2022 17:08:19 -0600
-Message-Id: <20220210230819.3303212-1-frowand.list@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 10 Feb 2022 18:11:19 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C359266C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:11:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644534679; x=1676070679;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1DcXpIvfkdXgEoN4gqoOn2laBEN3YOEBZFpUnim6c7Y=;
+  b=K82gKaOUJbhBpjbe+LKFGLCB8KPdXCDXdgNSuB0C6X12SJZj2mF0UwhB
+   hIgGjNXc8FnqZ9JndM8iWrD9C1QZXWH+3MrMjfXtLx4biEX3KziAcCJyv
+   +T4DWbxAV6gHRoMr72fES4AHgEPrDxq8xYcQaIfMNMn7Vh6RsVIFgpxop
+   w3z4SWeL7rQY4rFRH1XZo4iSrIMdR8DSmfw9m1gGR/W4OfrlyR5qTpcoY
+   AT4jcq5+wSPmL/ix7l7L9FkleyrhPBuSml5Yx3gAC0NmaaYEZV1hdJUR0
+   F51NUi5Md4qNU92PHMbLXKT14w3G3HfCektdNY7SEjzEz6CMCbmvuFrOo
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="237016209"
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="237016209"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 15:11:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="701881449"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 10 Feb 2022 15:11:17 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nIIaq-0003rs-IE; Thu, 10 Feb 2022 23:11:16 +0000
+Date:   Fri, 11 Feb 2022 07:10:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>
+Subject: [ammarfaizi2-block:powerpc/linux/next-test 41/56]
+ powerpc64-linux-ld: arch/powerpc/kernel/trace/ftrace.o:undefined reference
+ to `_mcount'
+Message-ID: <202202110717.hZrWu55Z-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Rowand <frank.rowand@sony.com>
+tree:   https://github.com/ammarfaizi2/linux-block powerpc/linux/next-test
+head:   14cc509e7b686ce5db7175d0fb084cacae046d96
+commit: 3a1a8f078670c24a1c0c7fef172ea5c0e2385b61 [41/56] powerpc/ftrace: Remove ftrace_32.S
+config: powerpc64-randconfig-r012-20220210 (https://download.01.org/0day-ci/archive/20220211/202202110717.hZrWu55Z-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/3a1a8f078670c24a1c0c7fef172ea5c0e2385b61
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block powerpc/linux/next-test
+        git checkout 3a1a8f078670c24a1c0c7fef172ea5c0e2385b61
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-Printing the devicetree unittest pass message for each passed test
-creates much console verbosity.  The existing pass messages are
-printed at loglevel KERN_DEBUG so they will not print by default.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Change default to print the pass messages at loglevel PR_INFO so
-they will print with the default console loglevel.
+All errors (new ones prefixed by >>):
 
-The test community expects either a pass or a fail message for each
-test in a test suite.  The messages are typically post-processed to
-report pass/fail results.
+   powerpc64-linux-ld: warning: orphan section `.stubs' from `drivers/i2c/busses/i2c-pasemi-core.o' being placed in section `.stubs'
+   powerpc64-linux-ld: warning: orphan section `.ftrace.tramp' from `drivers/i2c/busses/i2c-pasemi-core.o' being placed in section `.ftrace.tramp'
+   powerpc64-linux-ld: warning: discarding dynamic section .glink
+   powerpc64-linux-ld: warning: discarding dynamic section .plt
+   powerpc64-linux-ld: linkage table error against `_mcount'
+   powerpc64-linux-ld: stubs don't match calculated size
+   powerpc64-linux-ld: can not build stubs: bad value
+   powerpc64-linux-ld: init/main.o: in function `.__traceiter_initcall_level':
+>> (.text+0x18): undefined reference to `._mcount'
+   powerpc64-linux-ld: init/main.o: in function `.__traceiter_initcall_start':
+   (.text+0x88): undefined reference to `._mcount'
+   powerpc64-linux-ld: init/main.o: in function `.__traceiter_initcall_finish':
+   (.text+0xf4): undefined reference to `._mcount'
+   powerpc64-linux-ld: init/main.o: in function `.trace_initcall_finish_cb':
+>> main.c:(.text+0x16c): undefined reference to `._mcount'
+   powerpc64-linux-ld: init/main.o: in function `.initcall_blacklisted':
+   main.c:(.text+0x4cc): undefined reference to `._mcount'
+   powerpc64-linux-ld: init/main.o:(.text+0x5bc): more undefined references to `._mcount' follow
+>> powerpc64-linux-ld: arch/powerpc/kernel/trace/ftrace.o:(.toc+0x0): undefined reference to `_mcount'
+>> powerpc64-linux-ld: arch/powerpc/kernel/trace/ftrace.o:(.toc+0x8): undefined reference to `ftrace_tramp_text'
+>> powerpc64-linux-ld: arch/powerpc/kernel/trace/ftrace.o:(.toc+0x10): undefined reference to `ftrace_tramp_init'
+   powerpc64-linux-ld: arch/powerpc/kernel/iomap.o: in function `.ioport_map':
+   (.text+0x14): undefined reference to `._mcount'
+   powerpc64-linux-ld: arch/powerpc/kernel/iomap.o: in function `.pci_iounmap':
+   (.text+0x48): undefined reference to `._mcount'
+   powerpc64-linux-ld: arch/powerpc/kernel/compat_audit.o: in function `.ppc32_classify_syscall':
+>> compat_audit.c:(.text+0x14): undefined reference to `._mcount'
+   powerpc64-linux-ld: arch/powerpc/mm/fault.o: in function `.__bad_area_nosemaphore':
+>> fault.c:(.text+0x5c): undefined reference to `._mcount'
+   powerpc64-linux-ld: arch/powerpc/mm/fault.o: in function `.bad_area_nosemaphore':
+   fault.c:(.text+0xb0): undefined reference to `._mcount'
+   powerpc64-linux-ld: arch/powerpc/mm/fault.o:fault.c:(.text+0x2bc): more undefined references to `._mcount' follow
+>> powerpc64-linux-ld: kernel/trace/ftrace.o:(.toc+0x0): undefined reference to `_mcount'
+   powerpc64-linux-ld: kernel/bpf/core.o: in function `.bpf_adj_delta_to_imm':
+>> core.c:(.text+0x24): undefined reference to `._mcount'
+   powerpc64-linux-ld: kernel/bpf/core.o: in function `.bpf_adj_branches':
+   core.c:(.text+0xdc): undefined reference to `._mcount'
+   powerpc64-linux-ld: kernel/bpf/core.o: in function `.__bpf_call_base':
+   (.text+0x250): undefined reference to `._mcount'
+   powerpc64-linux-ld: kernel/bpf/core.o: in function `.__bpf_prog_ret1':
+   core.c:(.text+0x278): undefined reference to `._mcount'
+   powerpc64-linux-ld: kernel/bpf/core.o: in function `.bpf_prog_array_copy_core':
+   core.c:(.text+0x2ac): undefined reference to `._mcount'
+   powerpc64-linux-ld: kernel/bpf/core.o:(.text+0x31c): more undefined references to `._mcount' follow
+   powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-core.o:(.toc+0x0): undefined reference to `__this_module'
+   powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-platform.o: in function `.pasemi_platform_i2c_remove':
+>> i2c-pasemi-platform.c:(.text+0xc): undefined reference to `._mcount'
+   powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-platform.o: in function `.pasemi_platform_i2c_probe':
+   i2c-pasemi-platform.c:(.text+0x44): undefined reference to `._mcount'
+   powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-platform.o: in function `.pasemi_platform_i2c_driver_init':
+>> i2c-pasemi-platform.c:(.init.text+0x14): undefined reference to `._mcount'
+   powerpc64-linux-ld: drivers/i2c/busses/i2c-pca-platform.o: in function `.i2c_pca_pf_readbyte8':
+>> i2c-pca-platform.c:(.text+0x34): undefined reference to `._mcount'
+   powerpc64-linux-ld: drivers/i2c/busses/i2c-pca-platform.o: in function `.i2c_pca_pf_readbyte16':
+   i2c-pca-platform.c:(.text+0x70): undefined reference to `._mcount'
+   powerpc64-linux-ld: drivers/i2c/busses/i2c-pca-platform.o:i2c-pca-platform.c:(.text+0xb4): more undefined references to `._mcount' follow
 
-Signed-off-by: Frank Rowand <frank.rowand@sony.com>
 ---
-
-One review comment to similar previous patch "of: unittest: print
-pass message as same lovlevel as fail" suggested to also change
-the text of the pass message to include "PASS" instead of "pass".
-I would rather leave the text unchanged to minimize churn for any
-existing users of the message.  It is my intention to change the
-pass and fail messages to KTAP version 2 format as soon as that
-version of the specification is completed.
-
- drivers/of/unittest.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-index 70992103c07d..9012e6900965 100644
---- a/drivers/of/unittest.c
-+++ b/drivers/of/unittest.c
-@@ -44,7 +44,7 @@ static struct unittest_results {
- 		pr_err("FAIL %s():%i " fmt, __func__, __LINE__, ##__VA_ARGS__); \
- 	} else { \
- 		unittest_results.passed++; \
--		pr_debug("pass %s():%i\n", __func__, __LINE__); \
-+		pr_info("pass %s():%i\n", __func__, __LINE__); \
- 	} \
- 	failed; \
- })
--- 
-Frank Rowand <frank.rowand@sony.com>
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

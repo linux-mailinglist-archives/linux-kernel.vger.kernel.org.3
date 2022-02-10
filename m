@@ -2,81 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 922E14B1226
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A02C44B122B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243848AbiBJP5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 10:57:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46304 "EHLO
+        id S243858AbiBJP5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 10:57:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238388AbiBJP5U (ORCPT
+        with ESMTP id S238388AbiBJP5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 10:57:20 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34EDC2B;
-        Thu, 10 Feb 2022 07:57:21 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21AFGMCD005994;
-        Thu, 10 Feb 2022 15:57:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=1pu2Y6xdqrlXEaJ0s3ajV0bIYrEcsZn2fk0EBgAjuWg=;
- b=EsYOrR6puuXJSJfQvlzxX07xMyXtp8ZVYv4Wg8bLDg/i/9MptlBdS9MCi+svmH7n7QSw
- fWL0hYP1+JcCGQe99sTq0Y+oladGgQFsLxYDF6r6KskQdgTocu5MD3QadRAUPuKEPDp0
- /T8aQo9K/hiKCiTjXG1NzODbLlF4z3KcKzj5V6Le5Rb1BYPOpEJwZMpy3gDhT5gJNPW0
- yxX6FpremEBy2oJDiqzBm5ozWP7OsPzs4yBbMWgdfQSpAZwmuXRE0M78yCbP8tyYdLOq
- QkghU6uq06vHUTDPAtgVr1Hy9PRoGpUHF/cr25UnqhcA77Mq2Xrbp2dR0JwFiIgXTLbk ZA== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e4y7bjcxc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Feb 2022 15:57:11 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21AFm6UZ008262;
-        Thu, 10 Feb 2022 15:57:09 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3e1ggkhvpp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Feb 2022 15:57:09 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21AFv6o645351408
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Feb 2022 15:57:06 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C833A52057;
-        Thu, 10 Feb 2022 15:57:06 +0000 (GMT)
-Received: from localhost (unknown [9.43.74.163])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 5A4585204E;
-        Thu, 10 Feb 2022 15:57:06 +0000 (GMT)
-Date:   Thu, 10 Feb 2022 21:27:05 +0530
-From:   Ritesh Harjani <riteshh@linux.ibm.com>
-To:     Jan Kara <jack@suse.cz>
-Cc:     syzbot <syzbot+afa2ca5171d93e44b348@syzkaller.appspotmail.com>,
-        jack@suse.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
-Subject: Re: [syzbot] KASAN: use-after-free Read in jbd2_journal_wait_updates
-Message-ID: <20220210155705.oknqttt7qtynjkwi@riteshh-domain>
-References: <00000000000040c94205d78125af@google.com>
- <20220208161429.6oviyrpovqpcwpz5@quack3.lan>
- <20220209095615.rhoizbwcn3kbazzq@riteshh-domain>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209095615.rhoizbwcn3kbazzq@riteshh-domain>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: H4cq_VCad-sA1UogXl43ADc2x6syBrlQ
-X-Proofpoint-GUID: H4cq_VCad-sA1UogXl43ADc2x6syBrlQ
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 10 Feb 2022 10:57:40 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D1DA1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 07:57:40 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id x136so14973939ybe.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 07:57:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=L/gmacHO+nIX8yUgzR5WCryJPsq0BTK07bA0MOZtRbo=;
+        b=sesbnoOHpiOR51+54Hd3unKOwAtRmwNA/IDMT54hgrg/u8vsTTfmua5W1cVqQW6x3a
+         DDJ8WJAYKeOAwnXiQpx5C0Q0Q8+3qk9zGrZRi6tOGEi/6ReidqsgrrckprUbMIb2OdpM
+         GxNZeJz7gN23OIpZPRR1K/wZWlvRnVByZokAjV5QXgGrCdFNl9FOJH6H8t7ZkmAp+HW/
+         PDLrA2rdRidg9J9ry4zdTEni7zXLm4SVleUn8pzINVztSn9zEnhtyVO7IqK6/Yon2PSE
+         pbQ2Opd6A2SoR23ztkgAlJEPoYFWNB4C9vbwbvkq5bZfyPW3fWya92z5SjYQWb7pguYd
+         d9rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=L/gmacHO+nIX8yUgzR5WCryJPsq0BTK07bA0MOZtRbo=;
+        b=tWQzUtkSidalJGSTJUOtMc+2pqe8n1J/lTn56Rd0iqRiuci/0v+FXTz9c1azQF3Ies
+         WhruNNmr2/Zb7EV0who6S4rXQ8dgzRhjux4VXP4fHEs4Okx0sb4rGS8YgLL1uhh2UBKN
+         /ZYDuu9MJCOvUoW8bhlxIMe2ZLal+Wp1gN4mGKYMF6aqZ2UAhkOFH4EFICnffrBvN7dm
+         xAC2BT7vpsN2mWrThM2OV3J9ZKRm+mn1/xsQDeEr5qvOrf0Q3ixxFcStoPOEisx+UKsG
+         4JMZ1GzCEC4hv3mjPciPO1nXNoUxZrPJIGVw8HUELmu1FMOU3qlBpReLb7g7C090e9dV
+         fB2A==
+X-Gm-Message-State: AOAM531mn9ljA2gBC8mIysCUGDZ58zPW5U9wyj3FEwLk3ka+yAtJH4kr
+        qP5hMDS+ReHjaqmM0AVvAS+xXUmZBzaTUG/ScYtO1A==
+X-Google-Smtp-Source: ABdhPJwtHUHoicTc62W51Ae15FqUt4uok6ofdnQlOyyNuQ+oj4nZayQ1Bjk9IjD6f/RqrnYy+n8F6kqdh5txmwgpJUQ=
+X-Received: by 2002:a25:1402:: with SMTP id 2mr6943610ybu.684.1644508659379;
+ Thu, 10 Feb 2022 07:57:39 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-10_06,2022-02-09_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- priorityscore=1501 lowpriorityscore=0 spamscore=0 clxscore=1015 mlxscore=0
- bulkscore=0 malwarescore=0 suspectscore=0 adultscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202100083
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+References: <20220209191248.688351316@linuxfoundation.org>
+In-Reply-To: <20220209191248.688351316@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 10 Feb 2022 21:27:28 +0530
+Message-ID: <CA+G9fYtmysoxC=HMRTqQ9jPWWuzqBwukpPuhBoh3e82cu7NhNw@mail.gmail.com>
+Subject: Re: [PATCH 5.4 0/1] 5.4.179-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,77 +70,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/09 03:26PM, Ritesh Harjani wrote:
-> On 22/02/08 05:14PM, Jan Kara wrote:
-> > On Tue 08-02-22 04:49:19, syzbot wrote:
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    555f3d7be91a Merge tag '5.17-rc3-ksmbd-server-fixes' of gi..
-> > > git tree:       upstream
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=17e55852700000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=88e0a6a3dbf057cf
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=afa2ca5171d93e44b348
-> > > compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13b03872700000
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+afa2ca5171d93e44b348@syzkaller.appspotmail.com
-> >
-> > So the syzbot reproducer looks bogus to me but the bug is real.
-> > jbd2_journal_wait_updates() looks at commit_transaction after dropping
-> > j_state_lock and sleeping which is certainly prone to use-after-free
-> > issues.
+On Thu, 10 Feb 2022 at 00:45, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Yes, thanks for taking a look at it.
+> This is the start of the stable review cycle for the 5.4.179 release.
+> There are 1 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> >
-> > Funnily, Ritesh's removal of t_handle_lock should "fix" the problem by
-> > removing this dereference. So Ritesh, please just add some reference to
-> > syzbot report and maybe a backport to stable would be warranted.
-> >
+> Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
+> Anything received after that time might be too late.
 >
-> This actually looks like a regression because of commit [1].
-> So I am thinking of sending a separate patch [2] as a fix for this (after my
-> testing).
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.179-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
 >
-> Not sure why fstests testing didn't pick this up (given it's a common race),
-> or is it because of my recent removal of CONFIG_KASAN from my testing :(
+> thanks,
 >
-> I will try a full "auto" test with CONFIG_KASAN enabled and see if we could hit
-> this in fstests or not. If not then I will work towards adding a targetted test
-> to capture such race.
+> greg k-h
 
-FWIW, I did try "auto" run with CONFIG_KASAN enabled (which took hell lot of
-a time to complete :-|) w/o the fix. But it didn't hit this race.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Then, I also tried below combination of dirtying some data and calling
-checkpoint_journal in seperate thread, but I wasn't able to hit this race.
-(Using checkpoint_journal since it will call for jbd2_journal_lock_updates())
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-sudo mount /dev/loop2 /mnt
+## Build
+* kernel: 5.4.179-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: 3eacd9fd7c98dd0c2574ea8f3692776fd62b4557
+* git describe: v5.4.177-47-g3eacd9fd7c98
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
+77-47-g3eacd9fd7c98
 
-Terminal-1  # Tried other combination of higher D, n & S0/1/2, s0/100/4096
-===========
-qemu-> echo /mnt/{1..32} |sed -E 's/[[:space:]]+/ -d /g' | xargs -I {} bash -c "sudo fs_mark -L 100000 -D 4 -n 4 -s 100 -S0 -d {}"
+## Test Regressions (compared to v5.4.177-45-g3836147e31ee)
+No test regressions found.
 
-Terminal-2
-=============
-qemu-> while [ 1 ]; do sudo ./src/checkpoint_journal /mnt; sleep 5; done
+## Metric Regressions (compared to v5.4.177-45-g3836147e31ee)
+No metric regressions found.
 
-Also, I did made other failed attempts with some combinations of running fs_mark with freeze/unfreeze
-(similar to checkpoint_journal), and also changing "commit=1" mount option to
-see if we could hit the race with some such combo.
+## Test Fixes (compared to v5.4.177-45-g3836147e31ee)
+No test fixes found.
 
-So if anyone else has any suggestions on what else can we try to hit this race,
-so that we can add such test case to fstests, I will be happy to attempt it.
+## Metric Fixes (compared to v5.4.177-45-g3836147e31ee)
+No metric fixes found.
 
--ritesh
+## Test result summary
+total: 70784, pass: 60720, fail: 227, skip: 9035, xfail: 802
 
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 258 total, 258 passed, 0 failed
+* arm64: 35 total, 30 passed, 5 failed
+* i386: 19 total, 19 passed, 0 failed
+* mips: 34 total, 34 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 52 total, 39 passed, 13 failed
+* riscv: 24 total, 24 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 36 total, 36 passed, 0 failed
 
->
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git/commit/?h=origin&id=4f98186848707f530669238d90e0562d92a78aab
-> [2]: https://github.com/riteshharjani/linux/commit/628648810011a22dfaba38ead49716720b27a31c
->
-> -ritesh
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

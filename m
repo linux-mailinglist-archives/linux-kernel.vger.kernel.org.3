@@ -2,78 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2944B067F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 07:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDC04B0685
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 07:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235413AbiBJGmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 01:42:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50286 "EHLO
+        id S235473AbiBJGpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 01:45:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235384AbiBJGmA (ORCPT
+        with ESMTP id S231362AbiBJGpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 01:42:00 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECBC10AD;
-        Wed,  9 Feb 2022 22:42:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644475322; x=1676011322;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=fvee1abFfi+F3OUQ6XwujWZeP2UCx/GT5KX8hazMnzg=;
-  b=sK0S+zz5QTbL7CH8nbMosMj97Cif6Cq7rpmzH1UUqC/xWsM5s/DDQFjC
-   CSwplmQCVBzT483ihL4+iFjwYcvZ+Q5TK2G0y+9sPPMhKZHBdHQwWCtNq
-   C7a4wrhWjOJvZh96RE5H36XxMcfGRreAalqJ2r9VhZ2sdHRkv/2+Qf9HZ
-   4=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 09 Feb 2022 22:42:02 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 22:42:01 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 9 Feb 2022 22:42:01 -0800
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 9 Feb 2022 22:41:57 -0800
-Date:   Thu, 10 Feb 2022 12:11:53 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>
-Subject: Re: [PATCH v5] usb: host: xhci-plat: Set XHCI_SKIP_PHY_INIT quirk
- for DWC3 controller
-Message-ID: <20220210064153.GA15114@hu-pkondeti-hyd.qualcomm.com>
-References: <1640153383-21036-1-git-send-email-quic_c_sanm@quicinc.com>
- <Ydb79/twbxLDJB8/@kroah.com>
- <d17330f1-d85e-b8c2-9e87-10d109c25abb@quicinc.com>
- <YfE9s06CIv1P3bA/@kroah.com>
- <f45f5952-e31c-5e9d-2560-064199beb29f@quicinc.com>
- <ca306d7c-d816-3cbd-8c65-2c3619739d47@quicinc.com>
- <YgJB6bGm/y7C0oo/@kroah.com>
- <20220209055352.GA22550@hu-pkondeti-hyd.qualcomm.com>
- <d0048456-eb0a-cf91-fc28-f1dda69c1432@quicinc.com>
- <825a62d8-dc09-fed1-7e33-00d2192a91d5@quicinc.com>
+        Thu, 10 Feb 2022 01:45:04 -0500
+X-Greylist: delayed 118 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 22:45:04 PST
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A93D96;
+        Wed,  9 Feb 2022 22:45:04 -0800 (PST)
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 21A6h0DJ1003219, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 21A6h0DJ1003219
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 10 Feb 2022 14:43:00 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 10 Feb 2022 14:43:00 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 9 Feb 2022 22:43:00 -0800
+Received: from RTEXMBS01.realtek.com.tw ([fe80::472:6d76:b35d:421e]) by
+ RTEXMBS01.realtek.com.tw ([fe80::472:6d76:b35d:421e%5]) with mapi id
+ 15.01.2308.021; Thu, 10 Feb 2022 14:43:00 +0800
+From:   Ricky WU <ricky_wu@realtek.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     "tommyhebb@gmail.com" <tommyhebb@gmail.com>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v3] mmc: rtsx: improve performance for multi block rw
+Thread-Topic: [PATCH v3] mmc: rtsx: improve performance for multi block rw
+Thread-Index: AQHX9mTncx2NNhc4Hk2xCW7FootmX6w8X/iAgAN+/CD//4BBAIAB2EewgAY9WACAAfsEAIA+RCiAgATnqGA=
+Date:   Thu, 10 Feb 2022 06:43:00 +0000
+Message-ID: <a82d7e877dc041d4be5e0ef38c2da406@realtek.com>
+References: <8e61aed5f64e434abc1d7b6f81859c8a@realtek.com>
+ <CAPDyKFrLpim75nUB7ksDie2edkWsnFSq6TbFSFFpw5cY5d4y1w@mail.gmail.com>
+ <fabaed5751f04105a9719c1cb0390c98@realtek.com>
+ <CAPDyKFr3NRUgfKtkb2DBrhziekFAB0jT_X3Fsfvjk_bGZLC9mA@mail.gmail.com>
+ <fa10aa1c644241808c2ad880088240ab@realtek.com>
+ <CAPDyKFrtBKHHRgeF-JO27ANsbSmt8rdnhn-WNr5Je9okEgA29Q@mail.gmail.com>
+ <feb0c4e71e9c48a2a21f18b7d3baf135@realtek.com>
+ <CAPDyKFoq_PDk_JgW4D+o4eEPdcffUq2RLbBreRDqeK47m0UnJA@mail.gmail.com>
+In-Reply-To: <CAPDyKFoq_PDk_JgW4D+o4eEPdcffUq2RLbBreRDqeK47m0UnJA@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.22.81.97]
+x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzIvMTAg5LiK5Y2IIDEyOjQ2OjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <825a62d8-dc09-fed1-7e33-00d2192a91d5@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,139 +78,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sandeep,
-
-On Thu, Feb 10, 2022 at 11:18:19AM +0530, Sandeep Maheswaram wrote:
-> Hi Pavan,
-> 
-> On 2/9/2022 11:31 AM, Sandeep Maheswaram wrote:
-> >
-> >On 2/9/2022 11:23 AM, Pavan Kondeti wrote:
-> >>On Tue, Feb 08, 2022 at 11:11:53AM +0100, Greg Kroah-Hartman wrote:
-> >>>On Tue, Feb 08, 2022 at 03:34:22PM +0530, Sandeep Maheswaram wrote:
-> >>>>Hi Greg,
-> >>>>
-> >>>>On 1/27/2022 10:28 AM, Sandeep Maheswaram wrote:
-> >>>>>On 1/26/2022 5:55 PM, Greg Kroah-Hartman wrote:
-> >>>>>>On Fri, Jan 07, 2022 at 10:27:59AM +0530, Sandeep Maheswaram wrote:
-> >>>>>>>On 1/6/2022 7:55 PM, Greg Kroah-Hartman wrote:
-> >>>>>>>>On Wed, Dec 22, 2021 at 11:39:43AM +0530, Sandeep Maheswaram
-> >>>>>>>>wrote:
-> >>>>>>>>>Set XHCI_SKIP_PHY_INIT quirk to avoid phy initialization twice.
-> >>>>>>>>>Runtime suspend of phy drivers was failing from DWC3
-> >>>>>>>>>driver as runtime
-> >>>>>>>>>usage value is 2 because the phy is initialized from
-> >>>>>>>>>DWC3 and HCD core.
-> >>>>>>>>>DWC3 manages phy in their core drivers. Set this quirk to
-> >>>>>>>>>avoid phy
-> >>>>>>>>>initialization in HCD core.
-> >>>>>>>>>
-> >>>>>>>>>Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> >>>>>>>>>---
-> >>>>>>>>>v5:
-> >>>>>>>>>Added comment to explain the change done.
-> >>>>>>>>>v4:
-> >>>>>>>>>Changed pdev->dev.parent->of_node to sysdev->of_node
-> >>>>>>>>>
-> >>>>>>>>>    drivers/usb/host/xhci-plat.c | 8 ++++++++
-> >>>>>>>>>    1 file changed, 8 insertions(+)
-> >>>>>>>>>
-> >>>>>>>>>diff --git a/drivers/usb/host/xhci-plat.c
-> >>>>>>>>>b/drivers/usb/host/xhci-plat.c
-> >>>>>>>>>index c1edcc9..e6014d4 100644
-> >>>>>>>>>--- a/drivers/usb/host/xhci-plat.c
-> >>>>>>>>>+++ b/drivers/usb/host/xhci-plat.c
-> >>>>>>>>>@@ -327,6 +327,14 @@ static int xhci_plat_probe(struct
-> >>>>>>>>>platform_device *pdev)
-> >>>>>>>>>&xhci->imod_interval);
-> >>>>>>>>>        }
-> >>>>>>>>>+    /*
-> >>>>>>>>>+     * Set XHCI_SKIP_PHY_INIT quirk to avoid phy
-> >>>>>>>>>initialization twice.
-> >>>>>>>>>+     * DWC3 manages phy in their core drivers. Set this
-> >>>>>>>>>quirk to avoid phy
-> >>>>>>>>>+     * initialization in HCD core.
-> >>>>>>>>>+     */
-> >>>>>>>>>+    if (of_device_is_compatible(sysdev->of_node, "snps,dwc3"))
-> >>>>>>>>>+        xhci->quirks |= XHCI_SKIP_PHY_INIT;
-> >>>>>>>>>+
-> >>>>>>>>Why is this function caring about dwc3 stuff? Shoudn't this be a
-> >>>>>>>>"generic" device property instead of this device-specific one?
-> >>>>>>>>
-> >>>>>>>>thanks,
-> >>>>>>>>
-> >>>>>>>>greg k-h
-> >>>>>>>This quirk is set only if required for some controllers (eg:
-> >>>>>>>dwc3 & cdns3).
-> >>>>>>>
-> >>>>>>>Please check below commit.
-> >>>>>>>
-> >>>>>>>https://lore.kernel.org/all/20200918131752.16488-5-mathias.nyman@linux.intel.com/
-> >>>>>>>
-> >>>>>>>
-> >>>>>>That commit has nothing to do with a specific "dwc3" quirk anywhere.
-> >>>>>>Why not set this flag in the specific platform xhci driver
-> >>>>>>instead where
-> >>>>>>it belongs?
-> >>>>>>
-> >>>>>>thanks,
-> >>>>>>
-> >>>>>>greg k-h
-> >>>>>There is no specific xhci platform driver for dwc3 controllers.
-> >>>>>
-> >>>>>dwc3 controllers use xhci-plat driver .
-> >>>>>
-> >>>>>We can add this quirk in usb/dwc3/host.c as cdns3 does but that
-> >>>>>requires
-> >>>>>tying dwc3 and xhci driver .
-> >>>>>
-> >>>>>https://patchwork.kernel.org/project/linux-arm-msm/patch/1633946518-13906-1-git-send-email-sanm@codeaurora.org/
-> >>>>>
-> >>>>>
-> >>>>>
-> >>>>>Regards
-> >>>>>
-> >>>>>Sandeep
-> >>>>>
-> >>>>>
-> >>>>Can you suggest any other method to set this quirk for dwc3
-> >>>>controllers.
-> >>>No idea, sorry.
-> >>Sandeep,
-> >>
-> >>I agree with Greg's comments here. The compatible based check to detect
-> >>dwc3
-> >>controller is not elegant. Your proposal of adding a device tree param
-> >>is
-> >>overkill, I believe.
-> >>
-> >>Greg already gave us a pointer here [1] which I feel is the best
-> >>approach going
-> >>forward. We know that xhci-plat is being used by drivers like dwc3,
-> >>cdns3 and
-> >>these drivers need to expose their xhci quirks. As Greg suggested, why
-> >>can't
-> >>we move xhci quirks definition to include/linux/usb/xhci-quriks.h and
-> >>directly
-> >>access from the glue drivers? The attached is the patch (completely
-> >>untested)
-> >>for your reference. It will prepare the setup for you to add the private
-> >>data
-> >>and quirks in the dwc3 host glue driver.
-> >>
-> >>Thanks,
-> >>Pavan
-> >>
-> >>[1]
-> >>https://patchwork.kernel.org/project/linux-arm-msm/patch/1633946518-13906-1-git-send-email-sanm@codeaurora.org/
-> >>
-> >>
-> >Thanks Pavan..will test the patch.
-> 
-> Tested your patch. It is working fine along with the attached changes.
-> 
-
-Your patch looks good to me. Feel free to send the two patches together.
-
-Thanks,
-Pavan
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogVWxmIEhhbnNzb24gPHVs
+Zi5oYW5zc29uQGxpbmFyby5vcmc+DQo+IFNlbnQ6IE1vbmRheSwgRmVicnVhcnkgNywgMjAyMiA3
+OjExIFBNDQo+IFRvOiBSaWNreSBXVSA8cmlja3lfd3VAcmVhbHRlay5jb20+DQo+IENjOiB0b21t
+eWhlYmJAZ21haWwuY29tOyBsaW51eC1tbWNAdmdlci5rZXJuZWwub3JnOw0KPiBsaW51eC1rZXJu
+ZWxAdmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjNdIG1tYzogcnRzeDog
+aW1wcm92ZSBwZXJmb3JtYW5jZSBmb3IgbXVsdGkgYmxvY2sgcncNCj4gDQo+IFsuLi5dDQo+IA0K
+PiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+IERvIHlvdSBoYXZlIGFueSBzdWdnZXN0aW9uIGZvciB0
+ZXN0aW5nIHJhbmRvbSBJL08gQnV0IHdlIHRoaW5rDQo+ID4gPiA+ID4gPiByYW5kb20gSS9PIHdp
+bGwgbm90IGNoYW5nZSBtdWNoDQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBJIHdvdWxkIHByb2JhYmx5
+IGxvb2sgaW50byB1c2luZyBmaW8sDQo+ID4gPiA+ID4gaHR0cHM6Ly9maW8ucmVhZHRoZWRvY3Mu
+aW8vZW4vbGF0ZXN0Lw0KPiA+ID4gPiA+DQo+ID4gPiA+DQo+ID4gPiA+IEZpbGxlZCByYW5kb20g
+SS9PIGRhdGENCj4gPiA+ID4gQmVmb3JlIHRoZSBwYXRjaDoNCj4gPiA+ID4gQ01EIChSYW5kcmVh
+ZCk6DQo+ID4gPiA+IHN1ZG8gZmlvIC1maWxlbmFtZT0vZGV2L21tY2JsazAgLWRpcmVjdD0xIC1u
+dW1qb2JzPTEgLXRocmVhZA0KPiA+ID4gPiAtZ3JvdXBfcmVwb3J0aW5nIC1pb2VuZ2luZT1wc3lu
+YyAtaW9kZXB0aD0xIC1zaXplPTFHIC1uYW1lPW15dGVzdA0KPiA+ID4gPiAtYnM9MU0gLXJ3PXJh
+bmRyZWFkDQo+ID4gPg0KPiA+ID4gVGhhbmtzIGZvciBydW5uaW5nIHRoZSB0ZXN0cyEgT3ZlcmFs
+bCwgSSB3b3VsZCBub3QgZXhwZWN0IGFuIGltcGFjdA0KPiA+ID4gb24gdGhlIHRocm91Z2hwdXQg
+d2hlbiB1c2luZyBhIGJpZyBibG9ja3NpemUgbGlrZSAxTS4gVGhpcyBpcyBhbHNvDQo+ID4gPiBw
+cmV0dHkgY2xlYXIgZnJvbSB0aGUgcmVzdWx0IHlvdSBoYXZlIHByb3ZpZGVkLg0KPiA+ID4NCj4g
+PiA+IEhvd2V2ZXIsIGVzcGVjaWFsbHkgZm9yIHJhbmRvbSB3cml0ZXMgYW5kIHJlYWRzLCB3ZSB3
+YW50IHRvIHRyeSB3aXRoDQo+ID4gPiBzbWFsbGVyIGJsb2Nrc2l6ZXMuIExpa2UgOGsgb3IgMTZr
+LCB3b3VsZCB5b3UgbWluZCBydW5uaW5nIGFub3RoZXINCj4gPiA+IHJvdW5kIG9mIHRlc3RzIHRv
+IHNlZSBob3cgdGhhdCB3b3JrcyBvdXQ/DQo+ID4gPg0KPiA+DQo+ID4gRmlsbGVkIHJhbmRvbSBJ
+L08gZGF0YSg4ay8xNmspDQo+IA0KPiBIaSBSaWNreSwNCj4gDQo+IEFwb2xvZ2l6ZSBmb3IgdGhl
+IGRlbGF5ISBUaGFua3MgZm9yIHJ1bm5pbmcgdGhlIHRlc3RzLiBMZXQgbWUgY29tbWVudCBvbg0K
+PiB0aGVtIGJlbG93Lg0KPiANCj4gPg0KPiA+IEJlZm9yZShyYW5kcmVhZCkNCj4gPiA4azoNCj4g
+PiBDbWQ6IHN1ZG8gZmlvIC1maWxlbmFtZT0vZGV2L21tY2JsazAgLWRpcmVjdD0xIC1udW1qb2Jz
+PTEgLXRocmVhZA0KPiA+IC1ncm91cF9yZXBvcnRpbmcgLWlvZW5naW5lPXBzeW5jIC1pb2RlcHRo
+PTEgLXNpemU9MUcgLW5hbWU9bXl0ZXN0DQo+ID4gLWJzPThrIC1ydz1yYW5kcmVhZA0KPiA+IG15
+dGVzdDogKGc9MCk6IHJ3PXJhbmRyZWFkLCBicz0oUikgODE5MkItODE5MkIsIChXKSA4MTkyQi04
+MTkyQiwgKFQpDQo+ID4gODE5MkItODE5MkIsIGlvZW5naW5lPXBzeW5jLCBpb2RlcHRoPTENCj4g
+PiByZXN1bHQ6DQo+ID4gUnVuIHN0YXR1cyBncm91cCAwIChhbGwgam9icyk6DQo+ID4gICAgUkVB
+RDogYnc9MTYuNU1pQi9zICgxNy4zTUIvcyksIDE2LjVNaUIvcy0xNi41TWlCL3MNCj4gPiAoMTcu
+M01CL3MtMTcuM01CL3MpLCBpbz0xMDI0TWlCICgxMDc0TUIpLCBydW49NjIwMTktNjIwMTltc2Vj
+IERpc2sNCj4gc3RhdHMgKHJlYWQvd3JpdGUpOg0KPiA+ICAgbW1jYmxrMDogaW9zPTEzMDc1Ny8w
+LCBtZXJnZT0wLzAsIHRpY2tzPTU3NzUxLzAsIGluX3F1ZXVlPTU3NzUxLA0KPiA+IHV0aWw9OTku
+ODklDQo+ID4NCj4gPiAxNms6DQo+ID4gQ21kOiBzdWRvIGZpbyAtZmlsZW5hbWU9L2Rldi9tbWNi
+bGswIC1kaXJlY3Q9MSAtbnVtam9icz0xIC10aHJlYWQNCj4gPiAtZ3JvdXBfcmVwb3J0aW5nIC1p
+b2VuZ2luZT1wc3luYyAtaW9kZXB0aD0xIC1zaXplPTFHIC1uYW1lPW15dGVzdA0KPiA+IC1icz0x
+NmsgLXJ3PXJhbmRyZWFkDQo+ID4gbXl0ZXN0OiAoZz0wKTogcnc9cmFuZHJlYWQsIGJzPShSKSAx
+Ni4wS2lCLTE2LjBLaUIsIChXKQ0KPiA+IDE2LjBLaUItMTYuMEtpQiwgKFQpIDE2LjBLaUItMTYu
+MEtpQiwgaW9lbmdpbmU9cHN5bmMsIGlvZGVwdGg9MQ0KPiA+IHJlc3VsdDoNCj4gPiBSdW4gc3Rh
+dHVzIGdyb3VwIDAgKGFsbCBqb2JzKToNCj4gPiAgICBSRUFEOiBidz0yMy4zTWlCL3MgKDI0LjRN
+Qi9zKSwgMjMuM01pQi9zLTIzLjNNaUIvcw0KPiA+ICgyNC40TUIvcy0yNC40TUIvcyksIGlvPTEw
+MjRNaUIgKDEwNzRNQiksIHJ1bj00NDAzNC00NDAzNG1zZWMgRGlzaw0KPiBzdGF0cyAocmVhZC93
+cml0ZSk6DQo+ID4gICBtbWNibGswOiBpb3M9NjUzMzMvMCwgbWVyZ2U9MC8wLCB0aWNrcz0zOTQy
+MC8wLCBpbl9xdWV1ZT0zOTQyMCwNCj4gPiB1dGlsPTk5Ljg0JQ0KPiA+DQo+ID4gQmVmb3JlKHJh
+bmRyd3JpdGUpDQo+ID4gOGs6DQo+ID4gQ21kOiBzdWRvIGZpbyAtZmlsZW5hbWU9L2Rldi9tbWNi
+bGswIC1kaXJlY3Q9MSAtbnVtam9icz0xIC10aHJlYWQNCj4gPiAtZ3JvdXBfcmVwb3J0aW5nIC1p
+b2VuZ2luZT1wc3luYyAtaW9kZXB0aD0xIC1zaXplPTEwME0gLW5hbWU9bXl0ZXN0DQo+ID4gLWJz
+PThrIC1ydz1yYW5kd3JpdGUNCj4gPiBteXRlc3Q6IChnPTApOiBydz1yYW5kd3JpdGUsIGJzPShS
+KSA4MTkyQi04MTkyQiwgKFcpIDgxOTJCLTgxOTJCLCAoVCkNCj4gPiA4MTkyQi04MTkyQiwgaW9l
+bmdpbmU9cHN5bmMsIGlvZGVwdGg9MQ0KPiA+IHJlc3VsdDoNCj4gPiBSdW4gc3RhdHVzIGdyb3Vw
+IDAgKGFsbCBqb2JzKToNCj4gPiAgIFdSSVRFOiBidz00MDYwS2lCL3MgKDQxNThrQi9zKSwgNDA2
+MEtpQi9zLTQwNjBLaUIvcw0KPiA+ICg0MTU4a0Ivcy00MTU4a0IvcyksIGlvPTEwME1pQiAoMTA1
+TUIpLCBydW49MjUyMjAtMjUyMjBtc2VjIERpc2sgc3RhdHMNCj4gKHJlYWQvd3JpdGUpOg0KPiA+
+ICAgbW1jYmxrMDogaW9zPTUxLzEyNzU5LCBtZXJnZT0wLzAsIHRpY2tzPTgwLzI0MTU0LCBpbl9x
+dWV1ZT0yNDIzNCwNCj4gPiB1dGlsPTk5LjkwJQ0KPiA+DQo+ID4gMTZrOg0KPiA+IENtZDogc3Vk
+byBmaW8gLWZpbGVuYW1lPS9kZXYvbW1jYmxrMCAtZGlyZWN0PTEgLW51bWpvYnM9MSAtdGhyZWFk
+DQo+ID4gLWdyb3VwX3JlcG9ydGluZyAtaW9lbmdpbmU9cHN5bmMgLWlvZGVwdGg9MSAtc2l6ZT0x
+MDBNIC1uYW1lPW15dGVzdA0KPiA+IC1icz0xNmsgLXJ3PXJhbmR3cml0ZQ0KPiA+IG15dGVzdDog
+KGc9MCk6IHJ3PXJhbmR3cml0ZSwgYnM9KFIpIDE2LjBLaUItMTYuMEtpQiwgKFcpDQo+ID4gMTYu
+MEtpQi0xNi4wS2lCLCAoVCkgMTYuMEtpQi0xNi4wS2lCLCBpb2VuZ2luZT1wc3luYywgaW9kZXB0
+aD0xDQo+ID4gcmVzdWx0Og0KPiA+IFJ1biBzdGF0dXMgZ3JvdXAgMCAoYWxsIGpvYnMpOg0KPiA+
+ICAgV1JJVEU6IGJ3PTcyMDFLaUIvcyAoNzM3M2tCL3MpLCA3MjAxS2lCL3MtNzIwMUtpQi9zDQo+
+ID4gKDczNzNrQi9zLTczNzNrQi9zKSwgaW89MTAwTWlCICgxMDVNQiksIHJ1bj0xNDIyMS0xNDIy
+MW1zZWMgRGlzayBzdGF0cw0KPiAocmVhZC93cml0ZSk6DQo+ID4gICBtbWNibGswOiBpb3M9NTEv
+NjM2NywgbWVyZ2U9MC8wLCB0aWNrcz04Mi8xMzY0NywgaW5fcXVldWU9MTM3MjgsDQo+ID4gdXRp
+bD05OS44MSUNCj4gPg0KPiA+DQo+ID4gQWZ0ZXIocmFuZHJlYWQpDQo+ID4gOGs6DQo+ID4gQ21k
+OiBzdWRvIGZpbyAtZmlsZW5hbWU9L2Rldi9tbWNibGswIC1kaXJlY3Q9MSAtbnVtam9icz0xIC10
+aHJlYWQNCj4gPiAtZ3JvdXBfcmVwb3J0aW5nIC1pb2VuZ2luZT1wc3luYyAtaW9kZXB0aD0xIC1z
+aXplPTFHIC1uYW1lPW15dGVzdA0KPiA+IC1icz04ayAtcnc9cmFuZHJlYWQNCj4gPiBteXRlc3Q6
+IChnPTApOiBydz1yYW5kcmVhZCwgYnM9KFIpIDgxOTJCLTgxOTJCLCAoVykgODE5MkItODE5MkIs
+IChUKQ0KPiA+IDgxOTJCLTgxOTJCLCBpb2VuZ2luZT1wc3luYywgaW9kZXB0aD0xDQo+ID4gcmVz
+dWx0Og0KPiA+IFJ1biBzdGF0dXMgZ3JvdXAgMCAoYWxsIGpvYnMpOg0KPiA+ICAgIFJFQUQ6IGJ3
+PTEyLjRNaUIvcyAoMTMuME1CL3MpLCAxMi40TWlCL3MtMTIuNE1pQi9zDQo+ID4gKDEzLjBNQi9z
+LTEzLjBNQi9zKSwgaW89MTAyNE1pQiAoMTA3NE1CKSwgcnVuPTgyMzk3LTgyMzk3bXNlYyBEaXNr
+DQo+IHN0YXRzIChyZWFkL3dyaXRlKToNCj4gPiAgIG1tY2JsazA6IGlvcz0xMzA2NDAvMCwgbWVy
+Z2U9MC8wLCB0aWNrcz03NDEyNS8wLCBpbl9xdWV1ZT03NDEyNSwNCj4gPiB1dGlsPTk5Ljk0JQ0K
+PiA+DQo+ID4gMTZrOg0KPiA+IENtZDogc3VkbyBmaW8gLWZpbGVuYW1lPS9kZXYvbW1jYmxrMCAt
+ZGlyZWN0PTEgLW51bWpvYnM9MSAtdGhyZWFkDQo+ID4gLWdyb3VwX3JlcG9ydGluZyAtaW9lbmdp
+bmU9cHN5bmMgLWlvZGVwdGg9MSAtc2l6ZT0xRyAtbmFtZT1teXRlc3QNCj4gPiAtYnM9MTZrIC1y
+dz1yYW5kcmVhZA0KPiA+IG15dGVzdDogKGc9MCk6IHJ3PXJhbmRyZWFkLCBicz0oUikgMTYuMEtp
+Qi0xNi4wS2lCLCAoVykNCj4gPiAxNi4wS2lCLTE2LjBLaUIsIChUKSAxNi4wS2lCLTE2LjBLaUIs
+IGlvZW5naW5lPXBzeW5jLCBpb2RlcHRoPTENCj4gPiByZXN1bHQ6DQo+ID4gUnVuIHN0YXR1cyBn
+cm91cCAwIChhbGwgam9icyk6DQo+ID4gICAgUkVBRDogYnc9MjAuME1pQi9zICgyMS4wTUIvcyks
+IDIwLjBNaUIvcy0yMC4wTWlCL3MNCj4gPiAoMjEuME1CL3MtMjEuME1CL3MpLCBpbz0xMDI0TWlC
+ICgxMDc0TUIpLCBydW49NTEwNzYtNTEwNzZtc2VjIERpc2sNCj4gc3RhdHMgKHJlYWQvd3JpdGUp
+Og0KPiA+ICAgbW1jYmxrMDogaW9zPTY1MjgyLzAsIG1lcmdlPTAvMCwgdGlja3M9NDYyNTUvMCwg
+aW5fcXVldWU9NDYyNTQsDQo+ID4gdXRpbD05OS44NyUNCj4gPg0KPiA+IEFmdGVyKHJhbmR3cml0
+ZSkNCj4gPiA4azoNCj4gPiBDbWQ6IHN1ZG8gZmlvIC1maWxlbmFtZT0vZGV2L21tY2JsazAgLWRp
+cmVjdD0xIC1udW1qb2JzPTEgLXRocmVhZA0KPiA+IC1ncm91cF9yZXBvcnRpbmcgLWlvZW5naW5l
+PXBzeW5jIC1pb2RlcHRoPTEgLXNpemU9MTAwTSAtbmFtZT1teXRlc3QNCj4gPiAtYnM9OGsgLXJ3
+PXJhbmR3cml0ZQ0KPiA+IG15dGVzdDogKGc9MCk6IHJ3PXJhbmR3cml0ZSwgYnM9KFIpIDgxOTJC
+LTgxOTJCLCAoVykgODE5MkItODE5MkIsIChUKQ0KPiA+IDgxOTJCLTgxOTJCLCBpb2VuZ2luZT1w
+c3luYywgaW9kZXB0aD0xDQo+ID4gcmVzdWx0Og0KPiA+IFJ1biBzdGF0dXMgZ3JvdXAgMCAoYWxs
+IGpvYnMpOg0KPiA+ICAgV1JJVEU6IGJ3PTQyMTVLaUIvcyAoNDMxN2tCL3MpLCA0MjE1S2lCL3Mt
+NDIxNUtpQi9zDQo+ID4gKDQzMTdrQi9zLTQzMTdrQi9zKSwgaW89MTAwTWlCICgxMDVNQiksIHJ1
+bj0yNDI5Mi0yNDI5Mm1zZWMgRGlzayBzdGF0cw0KPiAocmVhZC93cml0ZSk6DQo+ID4gICBtbWNi
+bGswOiBpb3M9NTIvMTI3MTcsIG1lcmdlPTAvMCwgdGlja3M9ODYvMjMxODIsIGluX3F1ZXVlPTIz
+MjY3LA0KPiA+IHV0aWw9OTkuOTIlDQo+ID4NCj4gPiAxNms6DQo+ID4gQ21kOiBzdWRvIGZpbyAt
+ZmlsZW5hbWU9L2Rldi9tbWNibGswIC1kaXJlY3Q9MSAtbnVtam9icz0xIC10aHJlYWQNCj4gPiAt
+Z3JvdXBfcmVwb3J0aW5nIC1pb2VuZ2luZT1wc3luYyAtaW9kZXB0aD0xIC1zaXplPTEwME0gLW5h
+bWU9bXl0ZXN0DQo+ID4gLWJzPTE2ayAtcnc9cmFuZHdyaXRlDQo+ID4gbXl0ZXN0OiAoZz0wKTog
+cnc9cmFuZHdyaXRlLCBicz0oUikgMTYuMEtpQi0xNi4wS2lCLCAoVykNCj4gPiAxNi4wS2lCLTE2
+LjBLaUIsIChUKSAxNi4wS2lCLTE2LjBLaUIsIGlvZW5naW5lPXBzeW5jLCBpb2RlcHRoPTENCj4g
+PiByZXN1bHQ6DQo+ID4gUnVuIHN0YXR1cyBncm91cCAwIChhbGwgam9icyk6DQo+ID4gICBXUklU
+RTogYnc9NjQ5OUtpQi9zICg2NjU1a0IvcyksIDY0OTlLaUIvcy02NDk5S2lCL3MNCj4gPiAoNjY1
+NWtCL3MtNjY1NWtCL3MpLCBpbz0xMDBNaUIgKDEwNU1CKSwgcnVuPTE1NzU2LTE1NzU2bXNlYyBE
+aXNrIHN0YXRzDQo+IChyZWFkL3dyaXRlKToNCj4gPiAgIG1tY2JsazA6IGlvcz01MS82MzQ3LCBt
+ZXJnZT0wLzAsIHRpY2tzPTg0LzE1MTIwLCBpbl9xdWV1ZT0xNTIwNCwNCj4gPiB1dGlsPTk5Ljgw
+JQ0KPiANCj4gSXQgbG9va3MgbGlrZSB0aGUgcmFuZC1yZWFkIHRlc3RzIGFib3ZlIGFyZSBkZWdy
+YWRpbmcgd2l0aCB0aGUgbmV3IGNoYW5nZXMsDQo+IHdoaWxlIHJhbmQtd3JpdGVzIGFyZSBib3Ro
+IGltcHJvdmluZyBhbmQgZGVncmFkaW5nLg0KPiANCj4gVG8gc3VtbWFyaXplIG15IHZpZXcgZnJv
+bSBhbGwgdGhlIHRlc3RzIHlvdSBoYXZlIGRvbmUgYXQgdGhpcyBwb2ludCAodGhhbmtzIGENCj4g
+bG90KTsgaXQgbG9va3MgbGlrZSB0aGUgYmxvY2sgSS9PIG1lcmdpbmcgaXNuJ3QgcmVhbGx5IGhh
+cHBlbmluZyBhdCBjb21tb24NCj4gYmxvY2tsYXllciwgYXQgbGVhc3QgdG8gdGhhdCBleHRlbnQg
+dGhhdCB3b3VsZCBiZW5lZml0IHVzLiBDbGVhcmx5IHlvdSBoYXZlIHNob3duDQo+IHRoYXQgYnkg
+dGhlIHN1Z2dlc3RlZCBjaGFuZ2UgaW4gdGhlIG1tYyBob3N0IGRyaXZlciwgYnkgZGV0ZWN0aW5n
+IHdoZXRoZXIgdGhlDQo+ICJuZXh0IiByZXF1ZXN0IGlzIHNlcXVlbnRpYWwgdG8gdGhlIHByZXZp
+b3VzIG9uZSwgd2hpY2ggYWxsb3dzIHVzIHRvIHNraXAgYQ0KPiBDTUQxMiBhbmQgbWluaW1pemUg
+c29tZSBjb21tYW5kIG92ZXJoZWFkLg0KPiANCj4gSG93ZXZlciwgYWNjb3JkaW5nIHRvIHRoZSBs
+YXRlc3QgdGVzdHMgYWJvdmUsIHlvdSBoYXZlIGFsc28gcHJvdmVkIHRoYXQgdGhlDQo+IGNoYW5n
+ZXMgaW4gdGhlIG1tYyBob3N0IGRyaXZlciBkb2Vzbid0IGNvbWUgd2l0aG91dCBhIGNvc3QuDQo+
+IEluIHBhcnRpY3VsYXIsIHNtYWxsIHJhbmRvbS1yZWFkcyB3b3VsZCBkZWdyYWRlIGluIHBlcmZv
+cm1hbmNlIGZyb20gdGhlc2UNCj4gY2hhbmdlcy4NCj4gDQo+IFRoYXQgc2FpZCwgaXQgbG9va3Mg
+dG8gbWUgdGhhdCByYXRoZXIgdGhhbiB0cnlpbmcgdG8gaW1wcm92ZSB0aGluZ3MgZm9yIG9uZQ0K
+PiBzcGVjaWZpYyBtbWMgaG9zdCBkcml2ZXIsIGl0IHdvdWxkIGJlIGJldHRlciB0byBsb29rIGF0
+IHRoaXMgZnJvbSB0aGUgZ2VuZXJpYw0KPiBibG9jayBsYXllciBwb2ludCBvZiB2aWV3IC0gYW5k
+IGludmVzdGlnYXRlIHdoeSBzZXF1ZW50aWFsIHJlYWRzL3dyaXRlcyBhcmVuJ3QNCj4gZ2V0dGlu
+ZyBtZXJnZWQgb2Z0ZW4gZW5vdWdoIGZvciB0aGUgTU1DL1NEIGNhc2UuIElmIHdlIGNhbiBmaXgg
+dGhlIHByb2JsZW0NCj4gdGhlcmUsIGFsbCBtbWMgaG9zdCBkcml2ZXJzIHdvdWxkIGJlbmVmaXQg
+SSBhc3N1bWUuDQo+IA0KDQpTbyB5b3UgYXJlIHRoaW5raW5nIGFib3V0IGhvdyB0byBwYXRjaCB0
+aGlzIGluIE1NQy9TRD8NCkkgZG9uJ3Qga25vdyBpZiB0aGlzIG1ldGhvZCBpcyBjb21wYXRpYmxl
+IHdpdGggb3RoZXIgTU1DIEhvc3RzPyBPciB0aGV5IG5lZWQgdG8gcGF0Y2ggb3RoZXIgY29kZSBv
+biB0aGVpciBob3N0IGRyaXZlcg0KDQo+IEJUVywgaGF2ZSB5b3UgdHJpZWQgd2l0aCBkaWZmZXJl
+bnQgSS9PIHNjaGVkdWxlcnM/IElmIHlvdSBoYXZlbid0IHRyaWVkIEJGUSwgSQ0KPiBzdWdnZXN0
+IHlvdSBkbyBhcyBpdCdzIGEgZ29vZCBmaXQgZm9yIE1NQy9TRC4NCj4gDQoNCkkgZG9u4oCZdCBr
+bm93IHdoYXQgaXMgZGlmZmVyZW50IEkvTyBzY2hlZHVsZXJzIG1lYW5zPw0KDQo+IFsuLi5dDQo+
+IA0KPiBLaW5kIHJlZ2FyZHMNCj4gVWZmZQ0KPiAtLS0tLS1QbGVhc2UgY29uc2lkZXIgdGhlIGVu
+dmlyb25tZW50IGJlZm9yZSBwcmludGluZyB0aGlzIGUtbWFpbC4NCg==

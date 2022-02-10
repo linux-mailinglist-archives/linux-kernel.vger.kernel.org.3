@@ -2,160 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A3764B0E60
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E79B4B0E69
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:29:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242165AbiBJN1T convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Feb 2022 08:27:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53370 "EHLO
+        id S242208AbiBJN2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 08:28:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239660AbiBJN1R (ORCPT
+        with ESMTP id S242197AbiBJN2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 08:27:17 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724E3204
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 05:27:18 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id h1-20020a056602008100b0061152382337so4004399iob.18
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 05:27:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to
-         :content-transfer-encoding;
-        bh=DlpPZGGKliMKcWhjenaLMpD1ZyJmKZB8Ha4yhKNSbSo=;
-        b=nJO3QpipZW3vXPA6EYmq0PG3DAIktB9JgbH4URL0c6NQUJ7irkAOwA//D3TO1Ueb6n
-         8Ehta/K5p4sLKM1ow4MmR3XqhHh36rPP59IYKWrjhpXmGS7o9Rr4YFylNVxvs734fltd
-         WZGyej+tbO15Ahu1BkzASKK150qewZMAaC6GIme/6MN8tHwx5f5sDVg8pyvxRPWt8Kua
-         pguEnsuCUoouIXj7ps4mvjZ3NtjZbFNRAkGey691Cvsg+K2lOCl47uG6YkFRf6f19/Iv
-         uScy4kUWL7Dpp73Uww/v+eC3CX/OiMOAHeASRKzvAidkv3p6v7LWL0Oi6cdn1nYV8VSO
-         KAww==
-X-Gm-Message-State: AOAM533xNRMGdNVg9+hcP0MEyF1loaRIlGNkxkojvv2077Gh5CQVyHlc
-        QmldI2EGpr3D3rPBVjHX1qg7zQvEj8ohubroDBHme4yGACjq
-X-Google-Smtp-Source: ABdhPJxktaqc2MT8TGypSv3S6tvzNRIrDITqBFmZIMUyTf+hsDOhN0yqT8VFBTUt97hEaujKN31FgFE53ED94o/E0F7FMTp9X6eh
+        Thu, 10 Feb 2022 08:28:19 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8DB4BA0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 05:28:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qgJ7BeTdHSxnO0s1F6v+Di4M//rT9yP6AOORlVtJCSI=; b=pDt7Kz1BNTg3Gif0QrECApPRwq
+        t/zFCnya18pfeKuahfGbTny5QJloaHTjPTgQ/bHWSSq0ejUd7IEzW776dUIekV3nWgM3RDzCnyygU
+        jCAh6agscdA2uUPKvEsEBjr+sykJ6LK8bXafhhGpkLdyMtXI1qHfewnm0j5mkzW/lC0+Q7Ut5v+Tg
+        hycFoeofKLY2e5Q/TLn7Hw1vnXXQ+i2D0Jyqk4DP24VZ3QHEac+pqmbHPI241HgYCm7EfecpC2a1v
+        XJ54dWQ5Ee/uit71wuIYXWqi9xfjCa9gkHaOZu4ttBqGzV31RU+HIcJlerIvdQI1L4bMYTFAqUoeU
+        H5l3tTBA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nI9Tz-009Stf-7J; Thu, 10 Feb 2022 13:27:35 +0000
+Date:   Thu, 10 Feb 2022 13:27:35 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, ccross@google.com,
+        sumit.semwal@linaro.org, mhocko@suse.com, dave.hansen@intel.com,
+        keescook@chromium.org, kirill.shutemov@linux.intel.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, ebiederm@xmission.com,
+        brauner@kernel.org, legion@kernel.org, ran.xiaokai@zte.com.cn,
+        sashal@kernel.org, chris.hyser@oracle.com, dave@stgolabs.net,
+        pcc@google.com, caoxiaofeng@yulong.com, david@redhat.com,
+        gorcunov@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        syzbot+aa7b3d4b35f9dc46a366@syzkaller.appspotmail.com
+Subject: Re: [PATCH v2 1/1] mm: fix use-after-free when anon vma name is used
+ after vma is freed
+Message-ID: <YgUSxzp/qDwLkiKb@casper.infradead.org>
+References: <20220210043215.42794-1-surenb@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1906:: with SMTP id w6mr3703475ilu.43.1644499637838;
- Thu, 10 Feb 2022 05:27:17 -0800 (PST)
-Date:   Thu, 10 Feb 2022 05:27:17 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bf2b0705d7a9e8ac@google.com>
-Subject: [syzbot] net-next test error: WARNING: suspicious RCU usage in hsr_node_get_first
-From:   syzbot <syzbot+f0eb4f3876de066b128c@syzkaller.appspotmail.com>
-To:     andrew@lunn.ch, claudiajkang@gmail.com, davem@davemloft.net,
-        ennoerlangen@gmail.com, george.mccollister@gmail.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        marco.wenzel@a-eberle.de, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210043215.42794-1-surenb@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Feb 09, 2022 at 08:32:15PM -0800, Suren Baghdasaryan wrote:
+> +void vma_anon_name_put(struct anon_vma_name *anon_name)
+> +{
+> +	kref_put(&anon_name->kref, vma_anon_name_free);
+> +}
 
-syzbot found the following issue on:
+To agree with Michal, make this:
 
-HEAD commit:    45230829827b Merge git://git.kernel.org/pub/scm/linux/kern..
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=12e2f52c700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3fa7f88a3821006b
-dashboard link: https://syzkaller.appspot.com/bug?extid=f0eb4f3876de066b128c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+	if (anon_name)
+		kref_put(&anon_name->kref, vma_anon_name_free);
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f0eb4f3876de066b128c@syzkaller.appspotmail.com
+>  
+> -	error = madvise_update_vma(vma, prev, start, end, new_flags,
+> -				   vma_anon_name(vma));
+> +	anon_name = vma_anon_name_get(vma);
+> +	if (anon_name) {
+> +		error = madvise_update_vma(vma, prev, start, end, new_flags,
+> +					   anon_name->name);
+> +		vma_anon_name_put(anon_name);
+> +	} else {
+> +		error = madvise_update_vma(vma, prev, start, end, new_flags,
+> +					   NULL);
+> +	}
 
-batman_adv: batadv0: The MTU of interface batadv_slave_1 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1560 would solve the problem.
-batman_adv: batadv0: Not using interface batadv_slave_1 (retrying later): interface not active
-=============================
-WARNING: suspicious RCU usage
-5.17.0-rc2-syzkaller-00903-g45230829827b #0 Not tainted
------------------------------
-net/hsr/hsr_framereg.c:34 suspicious rcu_dereference_check() usage!
+And then this becomes:
 
-other info that might help us debug this:
-
-
-rcu_scheduler_active = 2, debug_locks = 1
-2 locks held by syz-executor.0/3597:
- #0: ffffffff8d32ca28 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:72 [inline]
- #0: ffffffff8d32ca28 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x3be/0xb80 net/core/rtnetlink.c:5591
- #1: ffff888073fa55f0 (&hsr->list_lock){+...}-{2:2}, at: spin_lock_bh include/linux/spinlock.h:354 [inline]
- #1: ffff888073fa55f0 (&hsr->list_lock){+...}-{2:2}, at: hsr_create_self_node+0x225/0x650 net/hsr/hsr_framereg.c:108
-
-stack backtrace:
-CPU: 1 PID: 3597 Comm: syz-executor.0 Not tainted 5.17.0-rc2-syzkaller-00903-g45230829827b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- hsr_node_get_first+0x9b/0xb0 net/hsr/hsr_framereg.c:34
- hsr_create_self_node+0x22d/0x650 net/hsr/hsr_framereg.c:109
- hsr_dev_finalize+0x2c1/0x7d0 net/hsr/hsr_device.c:514
- hsr_newlink+0x315/0x730 net/hsr/hsr_netlink.c:102
- __rtnl_newlink+0x107c/0x1760 net/core/rtnetlink.c:3481
- rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3529
- rtnetlink_rcv_msg+0x413/0xb80 net/core/rtnetlink.c:5594
- netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2494
- netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
- netlink_unicast+0x539/0x7e0 net/netlink/af_netlink.c:1343
- netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1919
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:725
- __sys_sendto+0x21c/0x320 net/socket.c:2040
- __do_sys_sendto net/socket.c:2052 [inline]
- __se_sys_sendto net/socket.c:2048 [inline]
- __x64_sys_sendto+0xdd/0x1b0 net/socket.c:2048
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fca68e2ae1c
-Code: fa fa ff ff 44 8b 4c 24 2c 4c 8b 44 24 20 89 c5 44 8b 54 24 28 48 8b 54 24 18 b8 2c 00 00 00 48 8b 74 24 10 8b 7c 24 08 0f 05 <48> 3d 00 f0 ff ff 77 34 89 ef 48 89 44 24 08 e8 20 fb ff ff 48 8b
-RSP: 002b:00007ffcd2955580 EFLAGS: 00000293 ORIG_RAX: 000000000000002c
-RAX: ffffffffffffffda RBX: 00007fca69ec3320 RCX: 00007fca68e2ae1c
-RDX: 0000000000000048 RSI: 00007fca69ec3370 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 00007ffcd29555d4 R09: 000000000000000c
-R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000000
-R13: 00007fca69ec3370 R14: 0000000000000003 R15: 0000000000000000
- </TASK>
-device hsr_slave_0 entered promiscuous mode
-device hsr_slave_1 entered promiscuous mode
-netdevsim netdevsim0 netdevsim0: renamed from eth0
-netdevsim netdevsim0 netdevsim1: renamed from eth1
-netdevsim netdevsim0 netdevsim2: renamed from eth2
-netdevsim netdevsim0 netdevsim3: renamed from eth3
-bridge0: port 2(bridge_slave_1) entered blocking state
-bridge0: port 2(bridge_slave_1) entered forwarding state
-bridge0: port 1(bridge_slave_0) entered blocking state
-bridge0: port 1(bridge_slave_0) entered forwarding state
-8021q: adding VLAN 0 to HW filter on device bond0
-8021q: adding VLAN 0 to HW filter on device team0
-IPv6: ADDRCONF(NETDEV_CHANGE): hsr0: link becomes ready
-8021q: adding VLAN 0 to HW filter on device batadv0
-device veth0_vlan entered promiscuous mode
-device veth1_vlan entered promiscuous mode
-device veth0_macvtap entered promiscuous mode
-device veth1_macvtap entered promiscuous mode
-batman_adv: batadv0: Interface activated: batadv_slave_0
-batman_adv: batadv0: Interface activated: batadv_slave_1
-netdevsim netdevsim0 netdevsim0: set [1, 0] type 2 family 0 port 6081 - 0
-netdevsim netdevsim0 netdevsim1: set [1, 0] type 2 family 0 port 6081 - 0
-netdevsim netdevsim0 netdevsim2: set [1, 0] type 2 family 0 port 6081 - 0
-netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
-syz-executor.0 (3597) used greatest stack depth: 22400 bytes left
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+	anon_name = vma_anon_name_get(vma);
+	error = madvise_update_vma(vma, prev, start, end, new_flags, anon_name);
+	vma_anon_name_put(anon_name);

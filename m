@@ -2,62 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040024B0C8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A77AD4B0CAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241095AbiBJLlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 06:41:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42002 "EHLO
+        id S241142AbiBJLoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 06:44:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241058AbiBJLlP (ORCPT
+        with ESMTP id S234873AbiBJLoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 06:41:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D777101E;
-        Thu, 10 Feb 2022 03:41:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2746F61D1F;
-        Thu, 10 Feb 2022 11:41:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C632EC004E1;
-        Thu, 10 Feb 2022 11:41:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644493275;
-        bh=YX1gi59/HZbFW3O0Wnmg+lqGfVhLTyza+iIoN+OkqZ4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WdhEQGRtOpRhyZ6JWVwUVoJSQt9Imap+QU8DPJgQYnD4UI6NkPC67iN6XW2w4X4zx
-         sRcVtwhOm9l3tiEY6pMPQlccFPEDowvg7IVRhr1hTosIlbhx0RZR6Jc21emXLIX7KY
-         XCjFH6rdRXbkuSQVEii+16t3UZk3uWOPbmBz2dcPsjtIwfsa66vLxkxdwvOi8nMCbS
-         aN4h77DFeEsc+PMnpyxGgfGQZzAn0a8zKoiJZtrEBK6v8mXBJvShV++3j1pbL2zItX
-         6FhW2VjPqdwm2xjlFNP8oPu04Cfn5eT88xdnXL2UynMZ9jwKj69rKFpOQ9cJwKrw9p
-         JmVgwIN2YxCBw==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Kalyan Thota <quic_kalyant@quicinc.com>,
-        Mark Yacoub <markyacoub@google.com>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] drm/msm/dpu: Remove set but unused variables
-Date:   Thu, 10 Feb 2022 17:11:04 +0530
-Message-Id: <20220210114106.290669-1-vkoul@kernel.org>
-X-Mailer: git-send-email 2.31.1
+        Thu, 10 Feb 2022 06:44:08 -0500
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB79C1F4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:44:09 -0800 (PST)
+Received: from fsav119.sakura.ne.jp (fsav119.sakura.ne.jp [27.133.134.246])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 21ABhgt7011998;
+        Thu, 10 Feb 2022 20:43:42 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav119.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp);
+ Thu, 10 Feb 2022 20:43:42 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 21ABhbnN011847
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 10 Feb 2022 20:43:42 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <7f6d61f4-042f-8c9d-23ed-da6f1dcb20d0@I-love.SAKURA.ne.jp>
+Date:   Thu, 10 Feb 2022 20:43:36 +0900
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2 06/19] fbcon: Use delayed work for cursor
+Content-Language: en-US
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>
+Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Claudio Suarez <cssk@net-c.es>, Du Cheng <ducheng2@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20220208210824.2238981-1-daniel.vetter@ffwll.ch>
+ <20220208210824.2238981-7-daniel.vetter@ffwll.ch>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20220208210824.2238981-7-daniel.vetter@ffwll.ch>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,59 +60,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We get warning:
+On 2022/02/09 6:08, Daniel Vetter wrote:
+> @@ -714,6 +700,8 @@ static int con2fb_acquire_newinfo(struct vc_data *vc, struct fb_info *info,
+>  		ops = kzalloc(sizeof(struct fbcon_ops), GFP_KERNEL);
+>  		if (!ops)
+>  			err = -ENOMEM;
+> +
+> +		INIT_DELAYED_WORK(&ops->cursor_work, fb_flashcursor);
+>  	}
+>  
+>  	if (!err) {
 
-In function ‘dpu_encoder_virt_enable’: drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c:1145:33:
-warning: variable ‘priv’ set but not used [-Wunused-but-set-variable]
- 1145 |         struct msm_drm_private *priv;
-
-In function ‘dpu_encoder_virt_disable’: drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c:1182:33:
-warning: variable ‘priv’ set but not used [-Wunused-but-set-variable]
- 1182 |         struct msm_drm_private *priv;
-
-Remove these unused but set variables
-
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 5 -----
- 1 file changed, 5 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index 1e648db439f9..132844801e92 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -1142,14 +1142,12 @@ static void dpu_encoder_virt_enable(struct drm_encoder *drm_enc)
- {
- 	struct dpu_encoder_virt *dpu_enc = NULL;
- 	int ret = 0;
--	struct msm_drm_private *priv;
- 	struct drm_display_mode *cur_mode = NULL;
- 
- 	dpu_enc = to_dpu_encoder_virt(drm_enc);
- 
- 	mutex_lock(&dpu_enc->enc_lock);
- 	cur_mode = &dpu_enc->base.crtc->state->adjusted_mode;
--	priv = drm_enc->dev->dev_private;
- 
- 	trace_dpu_enc_enable(DRMID(drm_enc), cur_mode->hdisplay,
- 			     cur_mode->vdisplay);
-@@ -1179,7 +1177,6 @@ static void dpu_encoder_virt_enable(struct drm_encoder *drm_enc)
- static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
- {
- 	struct dpu_encoder_virt *dpu_enc = NULL;
--	struct msm_drm_private *priv;
- 	int i = 0;
- 
- 	dpu_enc = to_dpu_encoder_virt(drm_enc);
-@@ -1188,8 +1185,6 @@ static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
- 	mutex_lock(&dpu_enc->enc_lock);
- 	dpu_enc->enabled = false;
- 
--	priv = drm_enc->dev->dev_private;
--
- 	trace_dpu_enc_disable(DRMID(drm_enc));
- 
- 	/* wait for idle */
--- 
-2.31.1
-
+Memory allocation fault injection will hit NULL pointer dereference.

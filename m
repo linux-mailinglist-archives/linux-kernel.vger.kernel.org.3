@@ -2,58 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B264B1115
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A13624B111F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243288AbiBJO5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:57:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42404 "EHLO
+        id S243312AbiBJPBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 10:01:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240998AbiBJO5O (ORCPT
+        with ESMTP id S243267AbiBJPBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:57:14 -0500
+        Thu, 10 Feb 2022 10:01:17 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2714496;
-        Thu, 10 Feb 2022 06:57:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3891B3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 07:01:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5AAD61AEA;
-        Thu, 10 Feb 2022 14:57:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 288EBC004E1;
-        Thu, 10 Feb 2022 14:57:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D149C61AD8
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:01:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7C03C004E1;
+        Thu, 10 Feb 2022 15:01:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644505034;
-        bh=DYAxKhfO1WMabdPDfP4WWBxwZceNtLPv6VgxeeFlY6o=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=I5V19VR2bvps0s4U0VS5tAlDhdst0iJNEVbBrb6HXsxsepFpZe5/lJPxjnVuJGPE5
-         pgAVNc3svWvoZAlxrqNBw3FP9cknIHJ6MNzZTwSAY1gQKYiSFgOmPIwQebifqRcwQ2
-         WOLx5EVl++mKN0dE6+CU79lru3lwD7LFaBlLRe2KYmBdzx0SwF391dMvK/mBhJnvqQ
-         QBgOjYnwSm+a2aUoHRXobMh+P98MkLz0CJEA1BJX7wtHgMdPNesHgQmchMEvYNleIX
-         ZmpdnPZUKmyOWIqcjNybhd46UqYHUp1jiyN9fFKGDF/4NV+ywZAlkcqTMIRy66AhLB
-         RZobNCgKgZbyA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id EF0825C0388; Thu, 10 Feb 2022 06:57:13 -0800 (PST)
-Date:   Thu, 10 Feb 2022 06:57:13 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Qian Cai <quic_qiancai@quicinc.com>, Theodore Ts'o <tytso@mit.edu>,
-        Jan Kara <jack@suse.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Boqun Feng <boqun.feng@gmail.com>, linux-ext4@vger.kernel.org,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] jbd2: avoid __GFP_ZERO with SLAB_TYPESAFE_BY_RCU
-Message-ID: <20220210145713.GK4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220209165742.5659-1-quic_qiancai@quicinc.com>
- <20220209181010.gfn66rvip56i54df@quack3.lan>
- <20220209201137.GY4285@paulmck-ThinkPad-P17-Gen-1>
- <20220210091648.w5wie3llqri5kfw3@quack3.lan>
+        s=k20201202; t=1644505277;
+        bh=Hi2Mca6jqEt1GgA8oCBVMaSPWVu89ItIPId18WE1+wo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jyWCLFa1Mw22hr0+sxUUJEtJ98QtJ4JJPXo70nMNuzLgcM7f1avHCogMbutMJA2JW
+         cWG1WXhix/0Ra+ALhv74XBk85rxAjUV0XN3f67EOqvzjAarXw516zah75060+9/SL3
+         DwFv2jtxPqLw77w8PAksghjaxmBYedc3GTxH2jJgSxtALSFf1ISuY+DON88OffKy55
+         jEjSugCGbpNc4R4kTrjH1CKwFrtw3KO23kNoDEVlS2Uppfy56vbuEH7VzmdeXRWLVJ
+         9+SKJuEgLWbKyqdnNtS4Vf8yo5Un0yKMBPVjp/rmM8LmvwmKD6rY3nE0p7xZFKYpL9
+         dt4rQCfvOh1pw==
+Date:   Thu, 10 Feb 2022 07:01:14 -0800
+From:   Keith Busch <kbusch@kernel.org>
+To:     Nitin Rawat <quic_nitirawa@quicinc.com>
+Cc:     Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+Subject: Re: [PATCH v1] nvme/pci: Add quick suspend quirk for Toshiba drive.
+Message-ID: <20220210150114.GB1617879@dhcp-10-100-145-180.wdc.com>
+References: <1644495676-8124-1-git-send-email-quic_nitirawa@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220210091648.w5wie3llqri5kfw3@quack3.lan>
+In-Reply-To: <1644495676-8124-1-git-send-email-quic_nitirawa@quicinc.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,102 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 10:16:48AM +0100, Jan Kara wrote:
-> On Wed 09-02-22 12:11:37, Paul E. McKenney wrote:
-> > On Wed, Feb 09, 2022 at 07:10:10PM +0100, Jan Kara wrote:
-> > > On Wed 09-02-22 11:57:42, Qian Cai wrote:
-> > > > Since the linux-next commit 120aa5e57479 (mm: Check for
-> > > > SLAB_TYPESAFE_BY_RCU and __GFP_ZERO slab allocation), we will get a
-> > > > boot warning. Avoid it by calling synchronize_rcu() before the zeroing.
-> > > > 
-> > > > Signed-off-by: Qian Cai <quic_qiancai@quicinc.com>
-> > > 
-> > > No, the performance impact of this would be just horrible. Can you
-> > > ellaborate a bit why SLAB_TYPESAFE_BY_RCU + __GFP_ZERO is a problem and why
-> > > synchronize_rcu() would be needed here before the memset() please? I mean
-> > > how is zeroing here any different from the memory just being used?
-> > 
-> > Suppose a reader picks up a pointer to a memory block, then that memory
-> > is freed.  No problem, given that this is a SLAB_TYPESAFE_BY_RCU slab,
-> > so the memory won't be freed while the reader is accessing it.  But while
-> > the reader is in the process of validating the block, it is zeroed.
-> > 
-> > How does the validation step handle this in all cases?
-> > 
-> > If you have a way of handling this, I will of course drop the patch.
-> > And learn something new, which is always a good thing.  ;-)
+On Thu, Feb 10, 2022 at 05:51:16PM +0530, Nitin Rawat wrote:
+> The Toshiba KBG40ZPZ256G SSD is having resume issues on SC7280 platform.
+> Hence enabling quick suspend quirks for Toshiba KBG40ZPZ256G on sc7280
+> platform so that nvme device is taken through shutdown path
+> during resume.
 > 
-> So I maybe missed something when implementing the usage of journal_heads
-> under RCU but let's have a look. An example of RCU user of journal heads
-> is fs/jbd2/transaction.c:jbd2_write_access_granted(). It does:
+> No issue is seen after enabling this quirks.
 > 
->         rcu_read_lock();
+> Signed-off-by: Nitin Rawat <quic_nitirawa@quicinc.com>
+> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+> ---
+>  drivers/nvme/host/pci.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> 	// This part fetches journal_head from buffer_head - not related to
-> 	// our slab RCU discussion
-> 
->         if (!buffer_jbd(bh))
->                 goto out;
->         /* This should be bh2jh() but that doesn't work with inline functions */
->         jh = READ_ONCE(bh->b_private);
->         if (!jh)
->                 goto out;
-> 
-> 	// The validation comes here
-> 
->         /* For undo access buffer must have data copied */
->         if (undo && !jh->b_committed_data)
->                 goto out;
+> diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+> index 6a99ed6..04c5954 100644
+> --- a/drivers/nvme/host/pci.c
+> +++ b/drivers/nvme/host/pci.c
+> @@ -3032,6 +3032,15 @@ static unsigned long check_vendor_combination_bug(struct pci_dev *pdev)
+>  		if ((dmi_match(DMI_BOARD_VENDOR, "LENOVO")) &&
+>  		     dmi_match(DMI_BOARD_NAME, "LNVNB161216"))
+>  			return NVME_QUIRK_SIMPLE_SUSPEND;
+> +
+> +		/*
+> +		 * Toshiba KBG40ZPZ256G on Sc7280 platform is having NVMe
+> +		 * Resume issue. Appending quick suspend quirks for sc7280
+> +		 * platforms so that full NVMe device shutdown path is
+> +		 * executed during resume.
+> +		 */
+> +		if (of_machine_is_compatible("qcom,sc7280"))
+> +			return NVME_QUIRK_SIMPLE_SUSPEND;
 
-OK, so if *jh was freed and re-zallocated in the meantime, this test
-should fail.  One concern would be if the zeroing was not at least eight
-bytes at a time, maybe due to overly eager use of fancy SIMD hardware.
-Though perhaps you also do something about ->b_committed_data on
-the free path, the commit-done path, or whatever?  (I do see a
-"jh->b_committed_data = NULL" on what might well be the commit-done path.)
+Shouldn't this check be moved outside the vendor/device check? It
+doesn't seem like this behavior for this platform is specific to any
+particular controller, right?
 
->         if (READ_ONCE(jh->b_transaction) != handle->h_transaction &&
->             READ_ONCE(jh->b_next_transaction) != handle->h_transaction)
->                 goto out;
-
-And same with these guys.
-
-> 	// Then some more checks unrelated to the slab itself.
-> 
->         /*
->          * There are two reasons for the barrier here:
->          * 1) Make sure to fetch b_bh after we did previous checks so that we
->          * detect when jh went through free, realloc, attach to transaction
->          * while we were checking. Paired with implicit barrier in that path.
->          * 2) So that access to bh done after jbd2_write_access_granted()
->          * doesn't get reordered and see inconsistent state of concurrent
->          * do_get_write_access().
->          */
->         smp_mb();
->         if (unlikely(jh->b_bh != bh))
->                 goto out;
-> 
-> 	// If all passed
-> 
-> 	rcu_read_unlock();
-> 	return true;
-> 
-> So if we are going to return true from the function, we know that 'jh' was
-> attached to handle->h_transaction at some point. And when 'jh' was attached
-> to handle->h_transaction, the transaction was holding reference to the 'jh'
-> and our 'handle' holds reference to the transaction so 'jh' could not be
-> freed since that moment. I.e., we are sure our reference to the handle keeps
-> 'jh' alive and we can safely use it.
-> 
-> I don't see how any amount of scribbling over 'jh' could break this
-> validation. But maybe it is just a lack of my imagination :).
-
-Regardless of whether you are suffering a lack of imagination, you
-have clearly demonstrated that it is possible to correctly use the
-SLAB_TYPESAFE_BY_RCU flag in conjunction with kmem_cache_alloc(), thus
-demonstrating that I was suffering from a lack of imagination.  ;-)
-
-I have therefore reverted my commit.  Please accept my apologies for
-the hassle!
-
-							Thanx, Paul
+Otherwise, looks fine.

@@ -2,48 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30BDD4B1374
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA1F4B1393
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244815AbiBJQty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 11:49:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34382 "EHLO
+        id S244911AbiBJQxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 11:53:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244612AbiBJQtx (ORCPT
+        with ESMTP id S244896AbiBJQxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 11:49:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BE3128;
-        Thu, 10 Feb 2022 08:49:53 -0800 (PST)
+        Thu, 10 Feb 2022 11:53:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373C1EE;
+        Thu, 10 Feb 2022 08:53:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70184B8085E;
-        Thu, 10 Feb 2022 16:49:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5413C004E1;
-        Thu, 10 Feb 2022 16:49:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644511791;
-        bh=2GTpiJMOFBRO5W5Mh+SNZSt4e8y2L+JqYTp5Ygi3iu8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2IdSsKH1/ow2uRdtx9WV41fjzx7zt61pGTNCd+1b3JaNz1ia/JnIQcY+oN58SGAs/
-         BjfZWAePOkZGHcaazGJU+5fkj0659S3HQNQxoCSKMwiJFJ9ZhQ5erbZmEBVg2y0Etj
-         +4KSXQ/wur4FssFPogQxXF/vyre9ItE6wS9vWHKc=
-Date:   Thu, 10 Feb 2022 17:49:46 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-spdx@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: Re: [PATCH v2] random: add proper SPDX header
-Message-ID: <YgVCKjDpuYChCKzu@kroah.com>
-References: <CAHmME9pc5NRLW4wUy57bqd_gX01PBVoydOQp9Z0rWT+j+fAb+Q@mail.gmail.com>
- <20220210161611.157765-1-Jason@zx2c4.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C80AF61D98;
+        Thu, 10 Feb 2022 16:53:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF44C004E1;
+        Thu, 10 Feb 2022 16:53:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644511993;
+        bh=HAU9jECp8vk3akhAHZrT9sbV+MlXVMIjLGnKhGgo6v8=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=o7Nw65ZDQ0K80ka/Paeu31omt3SmW1dxm5+mHMvPCzvzT8ogIfUh35GZN+m7Eg/+r
+         XfaDIwJIsoKicy+eicDxgiQ4oF+GZtqA+W1TqbLJA4PiIUhAXAScr4x9TUoR7N8NrN
+         /oMsmG8XQSx9FeT7lXtrkow9T339kvIwcLnxnHucMfLk4HnTBDDHLbQjNHc/B4MMnw
+         ZgY7i8cUbMJwIfid6XO0Wbr8gDqL2kec1T0zSSJbCzKqh/9pSVRbmCMWMsILc89MIb
+         7B5LPhwNmT7xCEttNiFrzKo6UqlEYgoDw2D74IECu83ZEJcKt+2nMtQmP0JieZiDFa
+         VkRj2hsuITVZQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     bgoswami@codeaurora.org, srinivas.kandagatla@linaro.org,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        tiwai@suse.com, perex@perex.cz, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, plai@codeaurora.org,
+        robh+dt@kernel.org, lgirdwood@gmail.com,
+        bjorn.andersson@linaro.org, judyhsiao@chromium.org,
+        agross@kernel.org, swboyd@chromium.org,
+        alsa-devel@alsa-project.org, rohitkr@codeaurora.org,
+        linux-arm-msm@vger.kernel.org
+In-Reply-To: <1644413181-26358-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1644413181-26358-1-git-send-email-quic_srivasam@quicinc.com>
+Subject: Re: [RESEND v8 0/3] Machine driver to support LPASS SC7280 sound card registration
+Message-Id: <164451198976.2625306.6596305549471507379.b4-ty@kernel.org>
+Date:   Thu, 10 Feb 2022 16:53:09 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220210161611.157765-1-Jason@zx2c4.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,113 +60,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 05:16:11PM +0100, Jason A. Donenfeld wrote:
-> Somehow this file missed the SPDXification efforts several years ago.
-
-That is because it required manual review.
-
-> Convert the current license into "(GPL-2.0-or-later OR BSD-3-Clause)".
+On Wed, 9 Feb 2022 18:56:18 +0530, Srinivasa Rao Mandadapu wrote:
+> This patch set is to add support for SC7280 sound card registration and
+> to add dt-bindings documentation file.
 > 
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Theodore Ts'o <tytso@mit.edu>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
-> Hi SPDX List,
+> Srinivasa Rao Mandadapu (3):
+>   ASoC: google: dt-bindings: Add sc7280-herobrine machine bindings
+>   ASoC: qcom: Add macro for lpass DAI id's max limit
+>   ASoC: qcom: SC7280: Add machine driver
 > 
-> I think I got this conversion right, but I would certainly appreciate a
-> review on this from somebody with more legal expertise than me.
+> [...]
 
-Where did the "or later" come from?  I don't see that in the original
-text.
+Applied to
 
-> 
-> Thanks,
-> Jason
-> 
->  drivers/char/random.c  | 40 ++--------------------------------------
->  include/linux/random.h |  5 -----
->  2 files changed, 2 insertions(+), 43 deletions(-)
-> 
-> diff --git a/drivers/char/random.c b/drivers/char/random.c
-> index 324574b03120..a2bbae5a693d 100644
-> --- a/drivers/char/random.c
-> +++ b/drivers/char/random.c
-> @@ -1,44 +1,8 @@
-> +// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
->  /*
-> - * random.c -- A strong random number generator
-> - *
->   * Copyright (C) 2017-2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-> - *
->   * Copyright Matt Mackall <mpm@selenic.com>, 2003, 2004, 2005
-> - *
-> - * Copyright Theodore Ts'o, 1994, 1995, 1996, 1997, 1998, 1999.  All
-> - * rights reserved.
-> - *
-> - * Redistribution and use in source and binary forms, with or without
-> - * modification, are permitted provided that the following conditions
-> - * are met:
-> - * 1. Redistributions of source code must retain the above copyright
-> - *    notice, and the entire permission notice in its entirety,
-> - *    including the disclaimer of warranties.
-> - * 2. Redistributions in binary form must reproduce the above copyright
-> - *    notice, this list of conditions and the following disclaimer in the
-> - *    documentation and/or other materials provided with the distribution.
-> - * 3. The name of the author may not be used to endorse or promote
-> - *    products derived from this software without specific prior
-> - *    written permission.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-BSD-3, great.
+Thanks!
 
-> - *
-> - * ALTERNATIVELY, this product may be distributed under the terms of
-> - * the GNU General Public License, in which case the provisions of the GPL are
-> - * required INSTEAD OF the above restrictions.  (This clause is
-> - * necessary due to a potential bad interaction between the GPL and
-> - * the restrictions contained in a BSD-style copyright.)
+[1/3] ASoC: google: dt-bindings: Add sc7280-herobrine machine bindings
+      commit: 7bd431486511482b6e789dd69d07654a1d8c5eba
+[2/3] ASoC: qcom: Add macro for lpass DAI id's max limit
+      commit: 77d0ffef793da818741127f4905a3e3d45d05ac7
+[3/3] ASoC: qcom: SC7280: Add machine driver
+      commit: 57350bd41c3ac01bcae1d94e2c85d47dd90b6a3f
 
-I do not see a "or later" here.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-> - *
-> - * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
-> - * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-> - * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
-> - * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
-> - * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-> - * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
-> - * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-> - * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-> - * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-> - * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
-> - * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
-> - * DAMAGE.
-> + * Copyright Theodore Ts'o, 1994, 1995, 1996, 1997, 1998, 1999.  All rights reserved.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-Why break the line-wrap?
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-
-
->   */
->  
->  /*
-> diff --git a/include/linux/random.h b/include/linux/random.h
-> index e92efb39779c..1a6861aa1277 100644
-> --- a/include/linux/random.h
-> +++ b/include/linux/random.h
-> @@ -1,9 +1,4 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
-> -/*
-> - * include/linux/random.h
-> - *
-> - * Include file for the random number generator.
-> - */
-
-This doesn't have to do with the SPDX change in the other file, it
-belongs in a different patch, sorry.
-
-thanks,
-
-greg k-h
+Thanks,
+Mark

@@ -2,162 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8E24B0DC1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:48:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B4D4B0DC3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241697AbiBJMrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 07:47:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32826 "EHLO
+        id S241713AbiBJMr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 07:47:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240903AbiBJMrv (ORCPT
+        with ESMTP id S240903AbiBJMr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 07:47:51 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817F7FC7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 04:47:51 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id v129so3369510wme.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 04:47:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mntgPn8Qh+Nga93zR2phIa+qhcyXEPyRC4rw0pc7QyU=;
-        b=CBWimZf5de7rEjmsIbxW3CkZ60rLERED1BkV9KD7RlFFX1/jSQ0iQujTrsjEqdyatc
-         TGucGngeS0HAEfQdmLnuUU9bJYzv7aeAxdxRp3pVk2sfsjvLg+iqX9DDb7KH3YkypUJr
-         oJgdm4QB/zazezXnNWw/2NGivfLqUJ5hD+6MHG8JsjA+SxJ9CZZRttVTo/z9Mof1cyDX
-         /tUdxtb5mjbVUUppHuRWzxdARUE+sWUAOKJFgjgi4D1pZaWfhTpLSQTEOGp27Oc3ss6c
-         8CHO5LzVKWymSWP06deo8tlSVJQO21bHmYgdFZIUwRtYgm0Rwc0ivlRgKF7Cwc1wjRKH
-         lA6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mntgPn8Qh+Nga93zR2phIa+qhcyXEPyRC4rw0pc7QyU=;
-        b=XNFGFLqF3PxdOmNib50wHLFShC+76eIIZexOhYqwXSBkUCVsLIkq8q8MfjEoJTXWDt
-         FtF8vHx/TPqJH+ZN2JIKpj6MNdxIFpKa6tjFpur+Lm3mnx7NicYQOUVoBbMAPo6pQVbT
-         rpqernTga93Rg+xwcK68igfZObYx99NzO9yrAawAbNqAQG1anuTELieV46HcZQRQz14A
-         xtPhSL7TGoLdZy1wna74DmLjORX0OuC4XrW+s6gVI1WLgXdSf9Fgn3J3rCznu54OtaRx
-         JMwSdo+9Z0GXJMvcdLdB/kosqlAnWPVKPNVoTWTXjboenUi0Q1cR9r8azWjSEPTQtcVA
-         dknA==
-X-Gm-Message-State: AOAM530noQ6i2Xt1dTkCliQa+nFwFFMYE3+fvQPS0x1YszlzY9s28AjK
-        XbWJgOq0JPx/nHbUSLNtmMeyBw==
-X-Google-Smtp-Source: ABdhPJx1QVGMDH3bSUlRi8xCAZYjMCX58cJhV8Nzi0bBPvuN8l8LEJFyXhAp8Uy4QXE2zk+rqIBFWQ==
-X-Received: by 2002:a1c:4e0c:: with SMTP id g12mr2050270wmh.67.1644497270112;
-        Thu, 10 Feb 2022 04:47:50 -0800 (PST)
-Received: from localhost.localdomain (179.160.117.78.rev.sfr.net. [78.117.160.179])
-        by smtp.gmail.com with ESMTPSA id 24sm1331687wmf.48.2022.02.10.04.47.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 04:47:49 -0800 (PST)
-From:   Julien STEPHAN <jstephan@baylibre.com>
-To:     ck.hu@mediatek.com
-Cc:     Julien STEPHAN <jstephan@baylibre.com>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR MEDIATEK),
-        linux-mediatek@lists.infradead.org (moderated list:DRM DRIVERS FOR
-        MEDIATEK),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2] drm/mediatek: allow commands to be sent during video mode
-Date:   Thu, 10 Feb 2022 13:46:38 +0100
-Message-Id: <20220210124638.2330904-1-jstephan@baylibre.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 10 Feb 2022 07:47:57 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1E925C7;
+        Thu, 10 Feb 2022 04:47:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644497279; x=1676033279;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HWZWWxDxk4N9yJjPiALC8RWNE2WvZgl6l+ofOOfgvk0=;
+  b=Ikrpjh1vqL9aE8IIqhyKRCFpWyxZ9xnQ4vpdUAyjmveJ6ZzLfjo3KeI2
+   VLOGDwoqW23f/PR88V5XZwfVHNN/x33pBWbmt2cZ4lmGu3r67HOkpbKLA
+   eBTa5LcivQe2+zROpjpyVlxABuGyu8CAdEwvPOSExY3/3aVS6Rg/f2Mtv
+   iKQBfqph8iduSx9fMJphYKhzFeLClPfh1xqQzcOfDCFuS0WmOlHbulJvB
+   HZlS6oBABPyz1hGuFg2gsyUFVvukJSaGbXron/mYa8vlsVtc9/zDdoP6S
+   KCus+xJHbo+TG5OXXw/JoCuaft0H0bdwWLCP5LHi0gyo63cZK3gzgh/bw
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="249689041"
+X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
+   d="scan'208";a="249689041"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 04:47:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
+   d="scan'208";a="701679860"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 10 Feb 2022 04:47:43 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nI8rO-0003Dp-AR; Thu, 10 Feb 2022 12:47:42 +0000
+Date:   Thu, 10 Feb 2022 20:46:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net: dsa: qca8k: fix noderef.cocci warnings
+Message-ID: <20220210124658.GA27194@41bd5bfec107>
+References: <202202102036.lklvUIqh-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202202102036.lklvUIqh-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mipi dsi panel drivers can use mipi_dsi_dcs_{set,get}_display_brightness()
-to request backlight changes.
+From: kernel test robot <lkp@intel.com>
 
-This can be done during panel initialization (dsi is in command mode)
-or afterwards (dsi is in Video Mode).
+drivers/net/dsa/qca8k.c:422:37-43: ERROR: application of sizeof to pointer
 
-When the DSI is in Video Mode, all commands are rejected.
+ sizeof when applied to a pointer typed expression gives the size of
+ the pointer
 
-Detect current DSI mode in mtk_dsi_host_transfer() and switch modes
-temporarily to allow commands to be sent.
+Generated by: scripts/coccinelle/misc/noderef.cocci
 
-Signed-off-by: Julien STEPHAN <jstephan@baylibre.com>
-Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Fixes: 90386223f44e ("net: dsa: qca8k: add support for larger read/write size with mgmt Ethernet")
+CC: Ansuel Smith <ansuelsmth@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
 ---
-Changes in v2:
-  - update commit message to be more descriptive
 
- drivers/gpu/drm/mediatek/mtk_dsi.c | 34 ++++++++++++++++++++++--------
- 1 file changed, 25 insertions(+), 9 deletions(-)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   395a61741f7ea29e1f4a0d6e160197fe8e377572
+commit: 90386223f44e2a751d7e9e9ac8f78ea33358a891 [2956/4901] net: dsa: qca8k: add support for larger read/write size with mgmt Ethernet
+:::::: branch date: 5 hours ago
+:::::: commit date: 8 days ago
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-index 5d90d2eb0019..7d66fdc7f81d 100644
---- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-@@ -891,24 +891,34 @@ static ssize_t mtk_dsi_host_transfer(struct mipi_dsi_host *host,
- 	u8 read_data[16];
- 	void *src_addr;
- 	u8 irq_flag = CMD_DONE_INT_FLAG;
--
--	if (readl(dsi->regs + DSI_MODE_CTRL) & MODE) {
--		DRM_ERROR("dsi engine is not command mode\n");
--		return -EINVAL;
-+	u32 dsi_mode;
-+
-+	dsi_mode = readl(dsi->regs + DSI_MODE_CTRL);
-+	if (dsi_mode & MODE) {
-+		mtk_dsi_stop(dsi);
-+		if (mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500)) {
-+			recv_cnt = -EINVAL;
-+			goto restore_dsi_mode;
-+		}
- 	}
- 
- 	if (MTK_DSI_HOST_IS_READ(msg->type))
- 		irq_flag |= LPRX_RD_RDY_INT_FLAG;
- 
--	if (mtk_dsi_host_send_cmd(dsi, msg, irq_flag) < 0)
--		return -ETIME;
-+	if (mtk_dsi_host_send_cmd(dsi, msg, irq_flag) < 0) {
-+		recv_cnt = -ETIME;
-+		goto restore_dsi_mode;
-+	}
- 
--	if (!MTK_DSI_HOST_IS_READ(msg->type))
--		return 0;
-+	if (!MTK_DSI_HOST_IS_READ(msg->type)) {
-+		recv_cnt = 0;
-+		goto restore_dsi_mode;
-+	}
- 
- 	if (!msg->rx_buf) {
- 		DRM_ERROR("dsi receive buffer size may be NULL\n");
--		return -EINVAL;
-+		recv_cnt = -EINVAL;
-+		goto restore_dsi_mode;
- 	}
- 
- 	for (i = 0; i < 16; i++)
-@@ -933,6 +943,12 @@ static ssize_t mtk_dsi_host_transfer(struct mipi_dsi_host *host,
- 	DRM_INFO("dsi get %d byte data from the panel address(0x%x)\n",
- 		 recv_cnt, *((u8 *)(msg->tx_buf)));
- 
-+restore_dsi_mode:
-+	if (dsi_mode & MODE) {
-+		mtk_dsi_set_mode(dsi);
-+		mtk_dsi_start(dsi);
-+	}
-+
- 	return recv_cnt;
- }
- 
--- 
-2.35.1
+ qca8k.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+--- a/drivers/net/dsa/qca8k.c
++++ b/drivers/net/dsa/qca8k.c
+@@ -419,7 +419,7 @@ qca8k_regmap_read(void *ctx, uint32_t re
+ 	u16 r1, r2, page;
+ 	int ret;
+ 
+-	if (!qca8k_read_eth(priv, reg, val, sizeof(val)))
++	if (!qca8k_read_eth(priv, reg, val, sizeof(*val)))
+ 		return 0;
+ 
+ 	qca8k_split_addr(reg, &r1, &r2, &page);

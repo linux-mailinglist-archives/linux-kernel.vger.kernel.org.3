@@ -2,160 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3834B14DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:02:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2633E4B14D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245495AbiBJSCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 13:02:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60240 "EHLO
+        id S245464AbiBJSCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 13:02:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245489AbiBJSCH (ORCPT
+        with ESMTP id S245482AbiBJSCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 13:02:07 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FD525D1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:02:08 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id u6so11961936lfc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:02:08 -0800 (PST)
+        Thu, 10 Feb 2022 13:02:01 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA03115A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:02:01 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id w7so8367757ioj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:02:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=nlOsd5JgRXIirKifvmJwXeIxdew5ZbaSyuXwRWkioH4=;
-        b=p1GAK1V8eXcEzq47Fvq2vN9jx3rSPu4w/KYVw6B2MwJZIhieAFZD4nHhhsr/5D5fFW
-         g0ZGd45Bu7sSltUo7FscaMHJcboP9NblAwTc6OzmdmI2SH31xEnj7Yyeb8F6SfKckWBS
-         ZAQ7iBQ0A+GAl4d5knFsT9gF8ab6dF9duoJ5FleSD2zEiOoi8OxZWSY/W8GCUaaJ933K
-         /kH2LbCOZUIIK0AcX2mgiWFc71+8ECcUBXSBWDi4Ac8llgvUsWQQm2/tEzsBViZW2+PC
-         iKELZEYjQ0R8ePbJnNleYy1k0ExoUt4hR8depXVTZ2P8KU35T+IjMKykOn8gqZv02w6K
-         Q3Eg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=YepB74YlwePIkAaR4jtJTCENwnjxuVeuYeoAzgmVff4=;
+        b=bXMJH/qYLpSGVC+53Dxuy73NFXsj3RTkKnyj0yhH2RrVLo0bm5WgGOa67Qrf9N+Siw
+         s7PWaw8C1karEO3Pz9b6Ti5PK/1HjVIZ//eqWs8JWlJ/DJByvN23Ycp2EG4vUz7o8jYr
+         JmkKYdMJNUozDO9Z/c9yNb5b1NVKBhWVatPxY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nlOsd5JgRXIirKifvmJwXeIxdew5ZbaSyuXwRWkioH4=;
-        b=0gneeT6pjtDf1E1nlkK/CwDxNB2XfY0JDVRoPAQT3oRV3wtqC5i8yHVDsYf+Ftm5YU
-         qP5K0SBiS9zaxnrJd6KM20CjEGtAgLFDlbEzeSsAbTKpFIQtTgs678IextufsZUv0Xvl
-         Rfss65F0XmKYXb9Q+NqHMcYDMDy+L4WyociS5QtjcElFfHCINz5M3oT4pxbeBwq9kg+j
-         pHMSHDHHr6F2j4+l7HIRjA3O16tYzlxwWv14qBS+OuPdPORuicL88BeeCaHF2RC+fjxs
-         YAjFYkgQnOZknDXe3NZlgG3n5/rg4tJqUI52wk5u+Jp+JGvSkjWkaMFddnYWP3Tm8HY8
-         2XvQ==
-X-Gm-Message-State: AOAM5300JDlkve0sUGjI/s3AUdmukcc2WJ7dMRFC5DHYKTEYOA7ZeG3/
-        g82KOEeMnEJyiIX22+mjFGwZHzk2+rd0aG/KXVX+sQ==
-X-Google-Smtp-Source: ABdhPJyJEKNknsqObHfl8Uoa9tzMLpWuOL4UjvrRNQVehKzVHcdc3TUq0BVCGVfxFdgfFKhYlXHSFbkL5zLAvcjxMiI=
-X-Received: by 2002:a19:ee04:: with SMTP id g4mr5780832lfb.157.1644516126252;
- Thu, 10 Feb 2022 10:02:06 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=YepB74YlwePIkAaR4jtJTCENwnjxuVeuYeoAzgmVff4=;
+        b=f7DvE6RK+sdofZDGcWPjTXEbACfh1DUnmolnz1CfPAbMRUF98Ue7rFufnRspOQuyhO
+         caTFvkeVWmVa1T4q8HtXh4nYEnFx+c5ls3vn8SuziCuTmDlqX/fqvLNSw3OkeDaBQ2vD
+         cr7b5jxLd+1fmwlfzXWL4HCyxyi76SOeHL8PK7WBUqN1ium1/KpQRo+H2GqqKRznLJgr
+         U90+cC8FR0wnUyxNx16X7E9LbPBndZmLud/w5FlU9qGFP0HH2w1UrOBVouMha/Q4H0rI
+         E35d/idwamNHJW2YTBQG5XzPLJQNxKQN1vj+/1nSE+snHS7SBlfPiNA2CcQnIkrqEbn0
+         u20Q==
+X-Gm-Message-State: AOAM530Ise7a7Ob2FJC1Qu2sMzbTlJ2esv2HgCm6oyTygsrCCaxNyQ5k
+        Y+Ym2667gn+iYocXF9lvy8VgSQ==
+X-Google-Smtp-Source: ABdhPJwEuUFKMBsXzMtvsJ6U3tEwNExOh8IkrPx4WikpPszvu5J46DYU+pTWMhwP4AnfJ2XywHgyWw==
+X-Received: by 2002:a05:6638:2050:: with SMTP id t16mr4618952jaj.144.1644516121336;
+        Thu, 10 Feb 2022 10:02:01 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id p16sm8482826ilm.85.2022.02.10.10.02.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 10:02:01 -0800 (PST)
+Subject: Re: [PATCH V2] selftests: kvm: Remove absent target file
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, Peter Gonda <pgonda@google.com>
+Cc:     kernel@collabora.com, kernelci@groups.io,
+        "kernelci.org bot" <bot@kernelci.org>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220210172352.1317554-1-usama.anjum@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f9893f6a-b68b-e759-54f5-eef73e8a9eef@linuxfoundation.org>
+Date:   Thu, 10 Feb 2022 11:02:00 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20220210025321.787113-1-keescook@chromium.org>
- <20220210025321.787113-2-keescook@chromium.org> <CAG48ez1m7XJ1wJvTHtNorH480jTWNgdrn5Q1LTZZQ4uve3r4Sw@mail.gmail.com>
- <202202100935.FB3E60FA5@keescook>
-In-Reply-To: <202202100935.FB3E60FA5@keescook>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 10 Feb 2022 19:01:39 +0100
-Message-ID: <CAG48ez3fG7S1dfE2-JAtyOZUK=0_iZ03scf+oD6gwVyD1Qp33g@mail.gmail.com>
-Subject: Re: [PATCH 1/3] signal: HANDLER_EXIT should clear SIGNAL_UNKILLABLE
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        =?UTF-8?B?Um9iZXJ0IMWad2nEmWNraQ==?= <robert@swiecki.net>,
-        stable@vger.kernel.org, Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220210172352.1317554-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 6:37 PM Kees Cook <keescook@chromium.org> wrote:
-> On Thu, Feb 10, 2022 at 05:18:39PM +0100, Jann Horn wrote:
-> > On Thu, Feb 10, 2022 at 3:53 AM Kees Cook <keescook@chromium.org> wrote=
-:
-> > > Fatal SIGSYS signals were not being delivered to pid namespace init
-> > > processes. Make sure the SIGNAL_UNKILLABLE doesn't get set for these
-> > > cases.
-> > >
-> > > Reported-by: Robert =C5=9Awi=C4=99cki <robert@swiecki.net>
-> > > Suggested-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> > > Fixes: 00b06da29cf9 ("signal: Add SA_IMMUTABLE to ensure forced sigan=
-ls do not get changed")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > ---
-> > >  kernel/signal.c | 5 +++--
-> > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/kernel/signal.c b/kernel/signal.c
-> > > index 38602738866e..33e3ee4f3383 100644
-> > > --- a/kernel/signal.c
-> > > +++ b/kernel/signal.c
-> > > @@ -1342,9 +1342,10 @@ force_sig_info_to_task(struct kernel_siginfo *=
-info, struct task_struct *t,
-> > >         }
-> > >         /*
-> > >          * Don't clear SIGNAL_UNKILLABLE for traced tasks, users won'=
-t expect
-> > > -        * debugging to leave init killable.
-> > > +        * debugging to leave init killable, unless it is intended to=
- exit.
-> > >          */
-> > > -       if (action->sa.sa_handler =3D=3D SIG_DFL && !t->ptrace)
-> > > +       if (action->sa.sa_handler =3D=3D SIG_DFL &&
-> > > +           (!t->ptrace || (handler =3D=3D HANDLER_EXIT)))
-> > >                 t->signal->flags &=3D ~SIGNAL_UNKILLABLE;
-> >
-> > You're changing the subclause:
-> >
-> > !t->ptrace
-> >
-> > to:
-> >
-> > (!t->ptrace || (handler =3D=3D HANDLER_EXIT))
-> >
-> > which means that the change only affects cases where the process has a
-> > ptracer, right? That's not the scenario the commit message is talking
-> > about...
->
-> Sorry, yes, I was not as accurate as I should have been in the commit
-> log. I have changed it to:
->
-> Fatal SIGSYS signals (i.e. seccomp RET_KILL_* syscall filter actions)
-> were not being delivered to ptraced pid namespace init processes. Make
-> sure the SIGNAL_UNKILLABLE doesn't get set for these cases.
+On 2/10/22 10:23 AM, Muhammad Usama Anjum wrote:
+> There is no vmx_pi_mmio_test file. Remove it to get rid of error while
+> creation of selftest archive:
+> 
+> rsync: [sender] link_stat "/kselftest/kvm/x86_64/vmx_pi_mmio_test" failed: No such file or directory (2)
+> rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1333) [sender=3.2.3]
+> 
+> Fixes: 6a58150859fd ("selftest: KVM: Add intra host migration tests")
+> Reported-by: "kernelci.org bot" <bot@kernelci.org>
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+> Changes in V2:
+> Edited the subject line
+> ---
+>   tools/testing/selftests/kvm/Makefile | 1 -
+>   1 file changed, 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index d61286208e242..b970397f725c7 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -82,7 +82,6 @@ TEST_GEN_PROGS_x86_64 += x86_64/tsc_msrs_test
+>   TEST_GEN_PROGS_x86_64 += x86_64/vmx_pmu_msrs_test
+>   TEST_GEN_PROGS_x86_64 += x86_64/xen_shinfo_test
+>   TEST_GEN_PROGS_x86_64 += x86_64/xen_vmcall_test
+> -TEST_GEN_PROGS_x86_64 += x86_64/vmx_pi_mmio_test
+>   TEST_GEN_PROGS_x86_64 += x86_64/sev_migrate_tests
+>   TEST_GEN_PROGS_x86_64 += x86_64/amx_test
+>   TEST_GEN_PROGS_x86_64 += access_tracking_perf_test
+> 
 
-So basically force_sig_info() is trying to figure out whether
-get_signal() will later on check for SIGNAL_UNKILLABLE (the SIG_DFL
-case), and if so, it clears the flag from the target's signal_struct
-that marks the process as unkillable?
+I am fine with the change itself. For this patch:
 
-This used to be:
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
-if (action->sa.sa_handler =3D=3D SIG_DFL)
-    t->signal->flags &=3D ~SIGNAL_UNKILLABLE;
+However, are we missing a vmx_pi_mmio_test and that test needs to be added.
 
-Then someone noticed that in the ptrace case, the signal might not
-actually end up being consumed by the target process, and added the
-"&& !t->ptrace" clause in commit
-eb61b5911bdc923875cde99eb25203a0e2b06d43.
+Just in case the test didn't make it into the 6a58150859fd and the intent
+was to add it - hence the Makefile addition? This can be addressed in
+another patch. Just want to make sure we aren't missing a test.
 
-And now Robert Swiecki noticed that that still didn't accurately model
-what'll happen in get_signal().
+Peter Gonda can confirm perhaps?
 
-
-This seems hacky to me, and also racy: What if, while you're going
-through a SECCOMP_RET_KILL_PROCESS in an unkillable process, some
-other thread e.g. concurrently changes the disposition of SIGSYS from
-a custom handler to SIG_DFL?
-
-Instead of trying to figure out whether the signal would have been
-fatal without SIGNAL_UNKILLABLE, I think it would be better to find a
-way to tell the signal-handling code that SIGNAL_UNKILLABLE should be
-bypassed for this specific signal, or something along those lines...
-but of course that's also kind of messy because the signal-sending
-code might fall back to just using the pending signal mask on
-allocation failure IIRC?
+thanks,
+-- Shuah

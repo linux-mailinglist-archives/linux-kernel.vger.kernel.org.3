@@ -2,178 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C229E4B026A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D8A4B0370
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbiBJBcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 20:32:07 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39252 "EHLO
+        id S231519AbiBJCfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 21:35:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232926AbiBJBbz (ORCPT
+        with ESMTP id S231255AbiBJCfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:31:55 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E8510C4
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 17:31:55 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id ki18-20020a17090ae91200b001b8be87e9abso709625pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 17:31:55 -0800 (PST)
+        Wed, 9 Feb 2022 21:35:34 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26FB237D3;
+        Wed,  9 Feb 2022 18:35:36 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21A0AQ7Z017462;
+        Thu, 10 Feb 2022 00:30:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-type : mime-version;
+ s=corp-2021-07-09; bh=lU5ixG5Icbbe63D1lJvUoWI96o5esydDCBJlUeIuLmw=;
+ b=MmuO8Zp13ICbQezk1Bto/XLg4ydqgOBVrGEw0Rg4ZhvLBbnldKbOkilBcEwcS+f4dSwV
+ qRC2wRSHiTpTC13VQzB7gmejor9ekmgTpPaucEYk3TgyI1kFgv1jAPalzKjUXrVHa5Y+
+ D8uQYJ0dR9+LEkvo5wvdXimpShyMXjOLtY1kvOuziFh0YqJTHvVhaU3okCOjvLzbXrn3
+ S+ysruCXPl+//PUhHAtV+gg28c2cq18wTlxUFEkpGtSsvdrxXrGmzRjeD+edDiOz7BXY
+ RuytvI5shsKEVC0IMA0QrFre4mUUQex9Tb++3GorxsSk7nzAUReSC2hoXOzfDw2hCMsN Dw== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3e3h28p5qc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Feb 2022 00:30:38 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21A0G9VB153756;
+        Thu, 10 Feb 2022 00:30:37 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2100.outbound.protection.outlook.com [104.47.58.100])
+        by aserp3030.oracle.com with ESMTP id 3e1f9j9rbb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Feb 2022 00:30:37 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bxLGD1VHe4tudCz32Iyt3NYkBxDMsDz1Dvq8e0ZwaYuS48X7XW3x3aMfAQor9GkO4R5kbRgA8e70mPk3iznmc6F1xyt14AFAMwR+zi60BW+Pu1rH8hJnrEE7cstN/a7xeN7SBMobZkURGFE0LDMK2IoJE/KkQKMnFVTMZ/2Y5xnkjBH/uiN1zAtZHQeDD9YIxqDIUyYrfLVjCCC9NMCXI6xVvFU8quD/kG/+9CeqXwb4byknkGW6tvTWqsjd33vgTaIKnbmkhMf83HkGPMmZlRUw5fysd+fVPkw6hr5Tw1yuBj+Twdrd/+EFHVBeEKy+htSCm61fXcnKBP/FI24+6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lU5ixG5Icbbe63D1lJvUoWI96o5esydDCBJlUeIuLmw=;
+ b=aw8Kxh8l0Q6PuO7kTFNyIO9t8IEn1d9RL7CI6whF9L8PZIYPAu/XWkHqBW8WGP5ltUiFulpjr6YJFY6khehfqWYF9jtTmrwQec79PvZ0VekU/3AfW6G3atRDlScmbldi6w+d/IbtBmUAmwW7rbFwKWD6IPQmfk0oEtF21o7vkRd04BhMjsfAe1JCZNx8OhaczaF6WQu6/g7NYecC6kiES/Bzj5ZHY/LavFItWW25DHP2VpydWoRyTQ8lFhgHkAkPmGLZDIuFvgjP+SmJL5NZbUaikAy9kVliR1alrMYRuvfojFr5bn1Ir+y6zQaLSPDi1rkwiQymFPDuvpDr9qqrYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Yudl84hMQxfLHFinLSXzC02VLhYOexhpsfOokm5q7zI=;
-        b=iFEW70mUyIL6xFZqNc3fyWHhA7kZK7m5jhoBEudtRgQuUlpyo3hymoFzHKr9RsO6/+
-         NdEDJ00DowKRMIYQeISCJHTZ4mbIR5iP+hFQL8F17u1pOwXluhTtTtioMNMC60aY7nzC
-         7FKKeheDXxy54qnX0IiS0kzvvEZufRLroLR5LVUPYKxeWFODnbwJ/93kvpDJyHV5RySB
-         /9C/1IZTvdzM15USHlH1Awi4btfqLsxH9U99a4mXqV4TC1gswlZYuX8r2dXAqZIlJLTS
-         6+/O9OH8A1wLHV0i58r75smombgDabG6r0Re34kGoX2hTQBvSKL632T9mRl6xQm7OhP3
-         xfhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Yudl84hMQxfLHFinLSXzC02VLhYOexhpsfOokm5q7zI=;
-        b=iCAJsSgftXZApRUEsopIY0W/6n9IhbdItvgTJ8CxjvY6eNYhImjAQdi7IKns9/UK4W
-         kGjdHFju4vNBPbLM8fH9KS+PygRrddt6QCaAmShaWmtTzsg1pdeGEtxk7ZQXdXXGRe+E
-         DoQOIzKfRD00amTBbZEmm7+pkYF8c87aEjPzr4OSBQlL5zu0B8PO16ifDcufbP690wnG
-         KZwYJlN0tfTzQ4zy9FV3Sk6g/pvR2SCv4/9An8s4Fo4bBmmPY9B8rjra0NDtPVs9xFcd
-         GGs8AHK9RclIM0tXwt5oOAt+GNVxGuX3hCQM1GQ/D4PS+BN+0OCMvnrvVKouw6vM/mhY
-         DF0A==
-X-Gm-Message-State: AOAM5316rusZtcBBs5b/VyW5vTiC607m7OBI6LYgvamcBuqLxJpSVeVF
-        2v1z2geeDRr+kFpJvi08PpIRdt60Db0fbg==
-X-Google-Smtp-Source: ABdhPJxrU1x5K4f/mXLdxnZ6HovUenwDypXBS9OnT3ytekHe8lLu1VHAQBCI4PBjKjp+rrZhlhUtiA==
-X-Received: by 2002:a17:902:6905:: with SMTP id j5mr4775844plk.145.1644453012311;
-        Wed, 09 Feb 2022 16:30:12 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id i3sm5521002pgq.65.2022.02.09.16.30.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 16:30:11 -0800 (PST)
-Date:   Thu, 10 Feb 2022 00:30:08 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, vkuznets@redhat.com
-Subject: Re: [PATCH 01/23] KVM: MMU: pass uses_nx directly to
- reset_shadow_zero_bits_mask
-Message-ID: <YgRckLixnxa7hLqB@google.com>
-References: <20220204115718.14934-1-pbonzini@redhat.com>
- <20220204115718.14934-2-pbonzini@redhat.com>
- <Yf1pk1EEBXj0O0/p@google.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lU5ixG5Icbbe63D1lJvUoWI96o5esydDCBJlUeIuLmw=;
+ b=QveRU759UqXLG3xiaN8X6Zv2lxpmt6bS4hGWczgnLJCeQuJLDlYS3Y7fhFgmY6zANysZkLoWfL4Z3tmXQUnqT3xko2gWZCcYA2f0ysZAWnwqTaxAMUKyJviolkLfjypcSbK658z0FtcjAtk93L9iaiJOV5ZJTLVgqNk/9RkH/MY=
+Received: from PH0PR10MB4472.namprd10.prod.outlook.com (2603:10b6:510:30::13)
+ by SN6PR10MB2701.namprd10.prod.outlook.com (2603:10b6:805:45::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Thu, 10 Feb
+ 2022 00:30:34 +0000
+Received: from PH0PR10MB4472.namprd10.prod.outlook.com
+ ([fe80::94eb:56d8:7cd8:ca76]) by PH0PR10MB4472.namprd10.prod.outlook.com
+ ([fe80::94eb:56d8:7cd8:ca76%5]) with mapi id 15.20.4951.019; Thu, 10 Feb 2022
+ 00:30:34 +0000
+From:   Victor Erminpour <victor.erminpour@oracle.com>
+To:     a.zummo@towertech.it
+Cc:     alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, trivial@kernel.org,
+        victor.erminpour@oracle.com
+Subject: [PATCH] rtc: pcf8523: Fix GCC 12 warning
+Date:   Wed,  9 Feb 2022 16:30:27 -0800
+Message-Id: <1644453027-886-1-git-send-email-victor.erminpour@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: SN4PR0501CA0058.namprd05.prod.outlook.com
+ (2603:10b6:803:41::35) To PH0PR10MB4472.namprd10.prod.outlook.com
+ (2603:10b6:510:30::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yf1pk1EEBXj0O0/p@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 91f7a4a7-5d32-40e0-c64f-08d9ec2c8d6c
+X-MS-TrafficTypeDiagnostic: SN6PR10MB2701:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR10MB27012F1D0AA1B3E8B7E3C9C0FD2F9@SN6PR10MB2701.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:873;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VotnsYCnondm1YZd7TVqiMVOPzJnzMvvIaJtLKXeT9Nakx0yYG1/7vWw/tERc/vLroALEekSbvUtNzKmRArkOUVeKJPHPkj5UVLmmwYH7i7utyU27SJbXetoFwKf7WDAERum0mzls5RNiuTHQkCosnCnOONhdEQLcsVnnHqqVUna8Qd+JYc4Fvhfk2HYfzRwNx/D9W/iHyGBtLJ1+24zPbduTuvh8Qpx2VGEh38xw0TDYuEaP/OmBwpGGvebc9hRMzhLpM+Z2C07RKA+gFovNMnKYY/7n6bRMdVSI9iuu7nQZopG3+R+H50CCDwHRoYjR4RPFYlkV23U0alwcOmvgXI6zsRr1T8LZR8XRb6Pm8Gd1qarb333KJsLeG/TBymdcVKQ8dSX/ozbKNue2s43/gV/1aIw7pBnPp0uPZ/lrxLW3NRYtP8Z/R8Z/4uYexfIBvgP47m+1XLBPxIhZtUUkN52Tvke4eCiQLq7z3rda7VEo0SparMwsQ06ch+9h7HdFTF0cBUttzg7dnxSKOc6TqZcaaJZ3DgcIaye+phy7pqIobTNlTU/LfBoNROVZ1S0q2nPwB75QcNzfVa0KIzENKJWGt5yKiKz26e/1mFAc6OTd85I4P6oOe11se4Di7CZV8LcjURmfgqtLCtlR3wLS4JFBXE7/fFUB8OYqk0WsKD/KImnPCoIPSFGt3kjIzNTlHYUcMr9wKSRmf3i7xEc0g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4472.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(8676002)(38350700002)(186003)(4326008)(8936002)(107886003)(26005)(316002)(5660300002)(6916009)(66476007)(66556008)(66946007)(36756003)(6666004)(6486002)(6512007)(52116002)(6506007)(44832011)(2616005)(508600001)(38100700002)(2906002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?D7a96bNUJqWI/3xaZ+0QvtcoHjp6N1DjX/plQ75ts4yq1bdcAFOEBBdNcR7U?=
+ =?us-ascii?Q?6E3wvX7ndtQyGiaQXbdl5HTtXv9gyMGzd0OMZbdiKnZncLcyR8z+5Ey0PSR/?=
+ =?us-ascii?Q?jfOjo5fvQT/3fKHcWFQGpxVYubey0MHMZs84ZCXkbnEC77rQDWKsKMVoig6+?=
+ =?us-ascii?Q?ULVFySuq3F88gHVgqBLmHZI67/vYpDwULBOKhDKctbndCyLtEuHpOiV801/4?=
+ =?us-ascii?Q?sVdeyePQBYMXRI+z8FYOnyE6fT27oXElTnloDT3dnUnHQpdM7ek3Z50fxMsK?=
+ =?us-ascii?Q?iiyZoqeOe2DDVkn/R0cVe/C/0ppz5taCAVmScC4l6NBX23cM8zDcv3KnUDmV?=
+ =?us-ascii?Q?i1bnl/7WrkUVW9RoVG/FloH3oifCMqDKlKJ40nM4XiU7q2HcgtTK1Jla9Dm/?=
+ =?us-ascii?Q?0kkNt4dk+EMjzDSPskajvzUfFk3/w2O/EaWi9mZr2CWB2vH9wDPfJVa3bkj6?=
+ =?us-ascii?Q?eNUz9nhmREr21vgzsGuBlrbnciwHm+sJc/u4EY22JybgWjoRAqvZaPS3eKLp?=
+ =?us-ascii?Q?1c/r9j9SFvzw8zSpVzPeXYpX3N061oa3R6WrACTM9Kp/r2tN6iveOvJqinrX?=
+ =?us-ascii?Q?nZZJRbAVazR+cE7+46PYR0U+Aeh+OnKUlcpqiQz9HPA1rIZ3a6StsmyG03Yn?=
+ =?us-ascii?Q?tsaeDCzNJKwrIY1j8LEDHB1TrCkuSkBA9LxNwQqhN8vaANLU8bB2G+1Ho51U?=
+ =?us-ascii?Q?ONVXfZWQFl/EMnolGC1G9mfaRVwB1F+nXyw3goAMc4w4ucY5l2c7qcvSRpdo?=
+ =?us-ascii?Q?BrZcmrT6wo22ywmJEtAbU8lNalM8S8300adE2GPBPrgjMuKA7oxkB/1qEIPw?=
+ =?us-ascii?Q?5aoqmFF+YLCaug8kNpcX2l6MZPUzPdDzv76kh8P7w41O/MwN0pvxdWaCfjIl?=
+ =?us-ascii?Q?YrUlkiWxG5xPRl/DHj+myyl+0/3VtjDOHA26CXoNkcsKnpg/W4QqqvOvKiSL?=
+ =?us-ascii?Q?CtwyBfsDEY5FjnKmQ6iPA3vMWjL8EwLu8qu2aJ7nm6hwMETM1WdKIwFP0g/v?=
+ =?us-ascii?Q?/KdVa6AnKOIOP9id7mp6EbIU6J3j5tBXekXvActnYwmD7Zb27KQ9MqS/yIuA?=
+ =?us-ascii?Q?rpLbRjT0g6wsHPCa8j1w0cPRrtQuPb795m3VhTLWNSVt0OXVBqzfo25kGrAc?=
+ =?us-ascii?Q?qqJXYMm0ZWOI90Ct7wNRMT0YFG6n0Kd+oD4pk0XT9TsSRtaQPPL18jWdJr5d?=
+ =?us-ascii?Q?8zmov6pmgxxTVMRrcCMKqneoIlKIXTeYG8+BKKpa8/42K/ivQU2Onf3HfBlr?=
+ =?us-ascii?Q?jH6MFgS/nrRXgDBdw0NmMxRS0NpnUXeiCtM79hta9JaNOwO8kVVwNUoSunu+?=
+ =?us-ascii?Q?aFxkPSRbcJ0hvxrCsPM12wFxwrjW2M6PrnzcvEZyNNBZEfqUDBMUSEVOCER2?=
+ =?us-ascii?Q?0OmlUF1AsIvgaCBJPntMddJ52NR84Q5yBWXqCdCRwsYvf34o7YVlBfv4vZdp?=
+ =?us-ascii?Q?Hckk9/5iUS1M7gqTBQ6vIxKlueN78+rFjUKA+wOYvQ2Cu4k4NxzEhxTB8L4/?=
+ =?us-ascii?Q?5D4g+EZ4uwDhatB1lN56I1JhbJN6JlCTcXMFooKAMfgCn9Qg32jXpQ21uX2b?=
+ =?us-ascii?Q?+mfGPa9c1n8cm+kXWJJME8j9kum2A9LBhGR06M7khAY1oNp53SbtIb6xqjiH?=
+ =?us-ascii?Q?HF5RqE4jvFKAzuVomIsNy+cO6XxMnKVHyUV3anZvxAPijYeAk1YqLcRPzkPr?=
+ =?us-ascii?Q?v9LQTg=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91f7a4a7-5d32-40e0-c64f-08d9ec2c8d6c
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4472.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 00:30:34.6786
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vpPnCD/PelbhxzPKNXyKPJ1IsL/g3XZyJsy4XrLiJU4anP/sYlhcm8iVeVRVhngKzVAg/gsHmca+cb0yMd9V893JXfnkknIysYSPQL+d2/I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2701
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10253 signatures=673431
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 adultscore=0
+ mlxlogscore=999 suspectscore=0 mlxscore=0 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202100000
+X-Proofpoint-ORIG-GUID: s5pTDQbunDLUe0lM7RbVSrJIwElIpOWP
+X-Proofpoint-GUID: s5pTDQbunDLUe0lM7RbVSrJIwElIpOWP
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022, David Matlack wrote:
-> On Fri, Feb 04, 2022 at 06:56:56AM -0500, Paolo Bonzini wrote:
-> > reset_shadow_zero_bits_mask has a very unintuitive way of deciding
-> > whether the shadow pages will use the NX bit.  The function is used in
-> > two cases, shadow paging and shadow NPT; shadow paging has a use for
-> > EFER.NX and needs to force it enabled, while shadow NPT only needs it
-> > depending on L1's setting.
-> > 
-> > The actual root problem here is that is_efer_nx, despite being part
-> > of the "base" role, only matches the format of the shadow pages in the
-> > NPT case.  For now, just remove the ugly variable initialization and move
-> > the call to reset_shadow_zero_bits_mask out of shadow_mmu_init_context.
-> > The parameter can then be removed after the root problem in the role
-> > is fixed.
-> > 
-> > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> 
-> Reviewed-by: David Matlack <dmatlack@google.com>
-> 
-> (I agree this commit makes no functional change.)
+When building with automatic stack variable initialization, GCC 12
+complains about variables defined outside of switch case statements.
+Move variables outside the switch, which silences warnings:
 
-There may not be a functional change, but it drops an optimization and contributes
-to making future code/patches more fragile due to making it harder to understand
-the relationship between shadow_mmu_init_context() and __kvm_mmu_new_pgd().
+./drivers/rtc/rtc-pcf8523.c:284:20: error: statement will never be executed [-Werror=switch-unreachable]
+  284 |                 u8 mode;
+      |
 
-> > @@ -4829,8 +4820,6 @@ static void shadow_mmu_init_context(struct kvm_vcpu *vcpu, struct kvm_mmu *conte
-> >  
-> >  	reset_guest_paging_metadata(vcpu, context);
-> >  	context->shadow_root_level = new_role.base.level;
-> > -
-> > -	reset_shadow_zero_bits_mask(vcpu, context);
+./drivers/rtc/rtc-pcf8523.c:245:21: error: statement will never be executed [-Werror=switch-unreachable]
+  245 |                 u32 value;
+      |                     ^~~~~
 
-This is guarded by:
+Signed-off-by: Victor Erminpour <victor.erminpour@oracle.com>
+---
+ drivers/rtc/rtc-pcf8523.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-	if (new_role.as_u64 == context->mmu_role.as_u64)
-		return;
-
-> >  }
-> >  
-> >  static void kvm_init_shadow_mmu(struct kvm_vcpu *vcpu,
-> > @@ -4841,6 +4830,16 @@ static void kvm_init_shadow_mmu(struct kvm_vcpu *vcpu,
-> >  		kvm_calc_shadow_mmu_root_page_role(vcpu, regs, false);
-> >  
-> >  	shadow_mmu_init_context(vcpu, context, regs, new_role);
-> > +
-> > +	/*
-> > +	 * KVM uses NX when TDP is disabled to handle a variety of scenarios,
-> > +	 * notably for huge SPTEs if iTLB multi-hit mitigation is enabled and
-> > +	 * to generate correct permissions for CR0.WP=0/CR4.SMEP=1/EFER.NX=0.
-> > +	 * The iTLB multi-hit workaround can be toggled at any time, so assume
-> > +	 * NX can be used by any non-nested shadow MMU to avoid having to reset
-> > +	 * MMU contexts.  Note, KVM forces EFER.NX=1 when TDP is disabled.
-> > +	 */
-> > +	reset_shadow_zero_bits_mask(vcpu, context, true);
-
-Whereas this will compute the mask even if the role doesn't change.  I say that
-matters later on because then this sequence:
-
-	shadow_mmu_init_context(vcpu, context, &regs, new_role);
-	reset_shadow_zero_bits_mask(vcpu, context, is_efer_nx(context));
-	__kvm_mmu_new_pgd(vcpu, nested_cr3, new_role.base);
-
-becomes even more difficult to untangle.
-
-And looking at where this series ends up, I don't understand the purpose of this
-change.  Patch 18 essentially reverts this patch, and I see nothing in between
-that will break without the temporary change.   That patch becomes:
-
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 02e6d256805d..f9c96de1189d 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -4408,7 +4408,7 @@ static void reset_shadow_zero_bits_mask(struct kvm_vcpu *vcpu,
-         * NX can be used by any non-nested shadow MMU to avoid having to reset
-         * MMU contexts.  Note, KVM forces EFER.NX=1 when TDP is disabled.
-         */
--       bool uses_nx = is_efer_nx(context) || !tdp_enabled;
-+       bool uses_nx = context->mmu_role.efer_nx;
-
-        /* @amd adds a check on bit of SPTEs, which KVM shouldn't use anyways. */
-        bool is_amd = true;
-
-though it needs to update the comment as well.
-
-> >  }
-> >  
-> >  static union kvm_mmu_role
-> > @@ -4872,6 +4871,7 @@ void kvm_init_shadow_npt_mmu(struct kvm_vcpu *vcpu, unsigned long cr0,
-> >  	__kvm_mmu_new_pgd(vcpu, nested_cr3, new_role.base);
-> >  
-> >  	shadow_mmu_init_context(vcpu, context, &regs, new_role);
-> > +	reset_shadow_zero_bits_mask(vcpu, context, is_efer_nx(context));
-> 
-> Out of curiousity, how does KVM mitigate iTLB multi-hit when shadowing
-> NPT and the guest has not enabled EFER.NX?
-> 
-> >  }
-> >  EXPORT_SYMBOL_GPL(kvm_init_shadow_npt_mmu);
-> >  
-> > -- 
-> > 2.31.1
-> > 
-> > 
+diff --git a/drivers/rtc/rtc-pcf8523.c b/drivers/rtc/rtc-pcf8523.c
+index c93acade7205..baa89f431ebd 100644
+--- a/drivers/rtc/rtc-pcf8523.c
++++ b/drivers/rtc/rtc-pcf8523.c
+@@ -240,9 +240,9 @@ static int pcf8523_param_get(struct device *dev, struct rtc_param *param)
+ {
+ 	struct pcf8523 *pcf8523 = dev_get_drvdata(dev);
+ 	int ret;
++	u32 value;
+ 
+ 	switch(param->param) {
+-		u32 value;
+ 
+ 	case RTC_PARAM_BACKUP_SWITCH_MODE:
+ 		ret = regmap_read(pcf8523->regmap, PCF8523_REG_CONTROL3, &value);
+@@ -279,9 +279,9 @@ static int pcf8523_param_get(struct device *dev, struct rtc_param *param)
+ static int pcf8523_param_set(struct device *dev, struct rtc_param *param)
+ {
+ 	struct pcf8523 *pcf8523 = dev_get_drvdata(dev);
++	u8 mode;
+ 
+ 	switch(param->param) {
+-		u8 mode;
+ 	case RTC_PARAM_BACKUP_SWITCH_MODE:
+ 		switch (param->uvalue) {
+ 		case RTC_BSM_DISABLED:

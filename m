@@ -2,218 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368944B0DF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:56:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8F24B0DF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:56:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241859AbiBJM4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 07:56:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37858 "EHLO
+        id S241848AbiBJM4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 07:56:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234200AbiBJM4Y (ORCPT
+        with ESMTP id S234200AbiBJM4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 07:56:24 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC27101E;
-        Thu, 10 Feb 2022 04:56:25 -0800 (PST)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21A9o4TS013525;
-        Thu, 10 Feb 2022 12:55:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : references : date : in-reply-to : message-id : content-type :
- mime-version; s=corp-2021-07-09;
- bh=20NkRsiSSpwPzBp9xBYIOEjNwm8jI+IoeeAuD+n/Rr4=;
- b=kF6PmIYU3U30seCHaUIPJ1SMOCqarOD1byRSI7kkSQSCx0DS3tTJnf11rwNjxNaC50vS
- 8ht2u6U4KjkRDr9sw948c3+mGTAG61l2csFscezY+Xn5U0/KfGYJ4dEP38rm97w035fW
- bSbQCBH9TZuAs0ClKYa4pnBFR4/BiRzRhO4l1rlfFCamIJbHnEG/nesIEx28v2LVcWcc
- RdfwZz90uy/GlNjtZw8JgUbABK69cehThoeHE+Q3fvik7LtNFFwICaGr4HC9oNz8K1Cg
- WH5qSuP0F9GSTYs7zLzjYjO3HDzZ4Au8jFXffeR+3A7DN9yx4ivvmkDRiUkclHzyzvKf +A== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3e345ssvd9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Feb 2022 12:55:56 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21ACpumW136171;
-        Thu, 10 Feb 2022 12:55:55 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2043.outbound.protection.outlook.com [104.47.66.43])
-        by userp3030.oracle.com with ESMTP id 3e1ec4vdvq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Feb 2022 12:55:54 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z4myHD43EGMXtqpva/e2/6n8x20sphTgV0znU89BPvrjGFaj9C2EVTFowM+XY+gNrnSH4Re9NlDQcwcx7gewxxgI+nZUnkbtogM8AkKnwJiI/xDWHUaJdkWpAhjzvr2mbtuMqd6Jz/8K9qMEg8WA1rhW8x+0eHGa5KtVCvahj7xxyLEY7V4ex/SzSdrZUCLiXr0u/FVU7Q0TPyoMHwV0I7n7if3AkTzhCD00ygC8mmm8nq6F2G6cPNll9jovMfYjVmfaTBksK4F9fFKB7ONYu0MvOqgJsZETe/i3LhLx5dSWenmZCZPV0B8lz7ocd0y3J5ajR9o1KzdatOxvN7Hslw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=20NkRsiSSpwPzBp9xBYIOEjNwm8jI+IoeeAuD+n/Rr4=;
- b=WEVOUyRd2XeNww0XkdYbWIfy83cM3fdvTW1g2alJovjzEhxpkkulnWgpaMDU6qPENS1bKrhJCqDi4Z/TpFLV0GmI5ShZYZvnTOHf7YVbpWE02QOB0Dd9k8hAgY2sMkNMqMEs/TZ9SAAvYXPz/uQBsIBGGc9rJJRxZeuFYa/kll6nMHz2ieAw1anMacA/mpyUOwnObMrwyKqFWbbwqvsdjkQgPjPOsvpJ+y9NC56avzBd+PGqm7P9dAF97hKqs+5GxYCOEVP+EOiS8/Lf3mst/DZ8FIBARY8EKJ3k8r11u9Gg7hminANFY7dVpC89DMEMLldhHc6yuctQyBPNa6xQEA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
+        Thu, 10 Feb 2022 07:56:08 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B191BD;
+        Thu, 10 Feb 2022 04:56:09 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id y8so7324522pfa.11;
+        Thu, 10 Feb 2022 04:56:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=20NkRsiSSpwPzBp9xBYIOEjNwm8jI+IoeeAuD+n/Rr4=;
- b=mcCkUzpL83ar8uhujQnpbY8FJ3DJoY6Qvl0760rlUg3uPCTabqnK4A/nR2TyH+4/5A2tJPrd3084dagsfDk6gAecm2OPk6WaMK8GfcNY+S1ND6jlGx4X5qmjLQToNGhRhpJYn3OjZWlVSdh5tMmvpziL/XHSqybgsaFaykgA+hE=
-Received: from SA2PR10MB4715.namprd10.prod.outlook.com (2603:10b6:806:fb::10)
- by CY4PR1001MB2245.namprd10.prod.outlook.com (2603:10b6:910:44::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Thu, 10 Feb
- 2022 12:55:52 +0000
-Received: from SA2PR10MB4715.namprd10.prod.outlook.com
- ([fe80::a1ca:a394:7333:2aca]) by SA2PR10MB4715.namprd10.prod.outlook.com
- ([fe80::a1ca:a394:7333:2aca%3]) with mapi id 15.20.4975.014; Thu, 10 Feb 2022
- 12:55:52 +0000
-From:   Nick Alcock <nick.alcock@oracle.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     "Luis R. Rodriguez" <mcgrof@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, bas@baslab.org,
-        tglozar@gmail.com, Ast-x64@protonmail.com, viktor.malik@gmail.com,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-modules <linux-modules@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eugene Loh <eugene.loh@oracle.com>,
-        Kris Van Hees <kris.van.hees@oracle.com>
-Subject: Re: [PATCH v8 2/6] kbuild: add modules_thick.builtin
-References: <20220208184309.148192-1-nick.alcock@oracle.com>
-        <20220208184309.148192-3-nick.alcock@oracle.com>
-        <CAK7LNAToG8ozUcMcro4osBKPiisqW4mpo+=uBeMUmVfztnNMDA@mail.gmail.com>
-Emacs:  ballast for RAM.
-Date:   Thu, 10 Feb 2022 12:55:43 +0000
-In-Reply-To: <CAK7LNAToG8ozUcMcro4osBKPiisqW4mpo+=uBeMUmVfztnNMDA@mail.gmail.com>
-        (Masahiro Yamada's message of "Thu, 10 Feb 2022 09:35:45 +0900")
-Message-ID: <8735kqswxc.fsf@esperi.org.uk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2.50 (gnu/linux)
-Content-Type: text/plain
-X-ClientProxiedBy: LO2P265CA0238.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:b::34) To SA2PR10MB4715.namprd10.prod.outlook.com
- (2603:10b6:806:fb::10)
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=gVKJwu5ERjnZG+6nDLNO4990OulCMrqau9J8QnEaUak=;
+        b=jqyceszF7jyQsxmAF0DP4Y17pXPn7jQO2JQZ0z+nSfyH3FPKgnbkG+zVPNOXq5Fptg
+         BkU6WSrT+9gauHWAq0mnlzvwixsqtlAJkghd1nxQBfgMmx6szjsVrosQwBFb33UKgCee
+         EN9ElQKs8NwR8ndyXktqLoP9zn8gXpKWsafqdpsfFvtKQliM2pIUX3yeOFWp6NUU+s8Z
+         /4Exxn6Mz2f01p2S4SK9nJdIsFIqDeZ6oYjRHtBNcRpYJLH5sZ35EXbkRRou/I9L5WSo
+         ysSymDcaIDL54X8n7lRey0i8VeykGf31qt+HdP3tWMpT8cth0lJs3EEBGQuRtwevtY0c
+         BNbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=gVKJwu5ERjnZG+6nDLNO4990OulCMrqau9J8QnEaUak=;
+        b=amc7el1kwdm8hu3baHB+SmCh2Jn01t566NMSmxCrB6+ko/S0Re4NQi/4D2hWgWOhB/
+         2SilfdZd5wft6Hzkw1dAuQMpRbBHHNzkLxTGTJNlQfdJ06at5Ude+vWqkNOQT8oIchTp
+         qZh41x75VuRfMD6EQ1mT2SmRFDwkkG/BZ/B5jL3zDpvrKkVVsAzolpowM9EeIM3qvOhK
+         a1oTmbmY8VNGS3dznWZYxwvonRbB7rf8hvue7I3+BG2W9zHe4AMqCf+QGtaoacecREo0
+         9V6Ht4f9lSqd28Ao4BlE/xWOS/3jvkT8tqXcilyHJV+ZJ7jlN75wFyhtlfIKHFA3LoC3
+         zlOg==
+X-Gm-Message-State: AOAM531dkuVeJz19Mas/nHa2LP3bsPor5RNO18ZFQOTr0JktblRf2ufh
+        963L6wkOZ/gpgFdFT/Qu2d0=
+X-Google-Smtp-Source: ABdhPJxN5ItqmYGrMDr9Z3JwQkeo6Ly+mT8J3bXZF0BBgPdOhY106zoCEZHr54laiGx1AsQFA2TLGA==
+X-Received: by 2002:a05:6a02:18e:: with SMTP id bj14mr6227006pgb.352.1644497769066;
+        Thu, 10 Feb 2022 04:56:09 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id v17sm22423250pfm.10.2022.02.10.04.56.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 04:56:08 -0800 (PST)
+Message-ID: <76d94feb-3f9e-36da-5f5c-c9e047778b7e@gmail.com>
+Date:   Thu, 10 Feb 2022 20:55:57 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a9a084c2-5bf2-469a-fef3-08d9ec94aafe
-X-MS-TrafficTypeDiagnostic: CY4PR1001MB2245:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR1001MB224594CB1B62B6EE7D70E8968B2F9@CY4PR1001MB2245.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: o0sjwU2YVXgkMs4AHefKzyHioz7sHcS1ymnAkfRrrS9efNMe2z1rbezvBY+bZs1UaXF5sHAR3qt6lfuzEvR1uBNNK+zZHvpWw8AwTTIwZZ2H4AbiEeoBPtlFcxx/COZDZmbNl93ioJAxY1AdOEYx0iN8IgewuzLigtusMc9nIdlZcamqpRaglXNfVavC2zkidRxcxkSTkvrF7/L2TM/MaoFP46c7ljX3525MarMStSpUdEyfDgJ/HhckDuNqJhPdGtGyBOQEIh8BRc3DI6Vktvcuqky09jvb1deEU2y5D7kSG+2csMP5A66oR6HEIEoOOOt2Io3zeTvhY0JOdqP82fjdsiX4pXbFpQ/n3muKrQ9BnLwUbbIGrdgTNRK+21Ug4nrvbVO+HetlXNFKjBw3yMciT1cDRs+SpsB8fE662KWsKrbLqgbJwXCe87KiszOCpDGCvVpjAArSqHPl1u8U+v7IzyGgMd2Vq6g7Pqzl9MjeGHK3M43KX2SXc1AvNnP/QY8U5JLmInSy26plHeEPCmtFnErS6Ktc5LoLsHowusmxKB9VZvDOFtZkJiD8P4N9DqQ3Z1O8r8NxVGlOQZPKNIaAs+Wnl7dUoRgR0kPEZN0cx0h+tTPzhY15RiPn229TXWLtq7f3VgneHPk8SGYiMA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR10MB4715.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(186003)(107886003)(7416002)(83380400001)(2906002)(8676002)(6506007)(38100700002)(4326008)(66476007)(36756003)(8936002)(316002)(6666004)(6486002)(508600001)(6512007)(6916009)(5660300002)(9686003)(66946007)(52116002)(44832011)(53546011)(86362001)(54906003)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EYjXTKk/hcZiIpvp3ZnoZvjiJ2FYdy18x9KUrr0VXB0hGyBUV8KbfbFdFlQg?=
- =?us-ascii?Q?b6p8OWCgiftVmhe7VxjxGaX7iNeo6QofLqlrhFF8KUED8Y6ufZl/sc2FawHb?=
- =?us-ascii?Q?azLTaYE6CbrBJ1DySHK/Myhg+Z7sVbyCMGKzUFF5vw0R8A/RT157oeOQrOyr?=
- =?us-ascii?Q?CJDP/rqrjUjycv7a6uNDwn7OEia1Agx07ovLOqkrXQX6cWggePJQTxkx0T7q?=
- =?us-ascii?Q?LSIVkkIawN/QLrzQJjYeT5mLHSVG4MyetnRFBM0SzOw+BgPQJhG3nQzmm4+G?=
- =?us-ascii?Q?/+sZnd3Nb6bYW/Ek9TjQeAbYbmz2rj4RzMfPWYuSMYgX5JHqDR+OdL4N86PX?=
- =?us-ascii?Q?csk/omsPc/9IySj9PU3jeYK8MhwHH/z5Zb+gv1vJWahsDp61NvIYbfeu8Xfi?=
- =?us-ascii?Q?pyNLKssrOWFIZXITBsyxawiqrjJIgnVzYlIE0IuOVf3Bv+WaQtu4lhxcLuFE?=
- =?us-ascii?Q?zUGsGtiWEfkDg8OiZJPPCH3r5Eu04WFkx3j+3RNmu4oEw1cKiobmtjrD0RFF?=
- =?us-ascii?Q?UqPDoDGIaOyldfVS9MHCpvYJTvqGirf+iUnNMTtdz+14DK1PJhSFxL0WTGOT?=
- =?us-ascii?Q?haRPCnS92xo2sPzDJtsYZEE+reaYSOqJRRt76100RYaOYnertt+oOU8HzAsk?=
- =?us-ascii?Q?Gy4xJfZx25HA+Vt7InnqztkByxlrdInCm5+rDxnBhAiMZH1FmZPXfmYk27Wh?=
- =?us-ascii?Q?Z1P991ULBFTw66yDj2TX7JIv43tnazNZVNaASJu4L5nNXEjCqiYjrjeOI+Kg?=
- =?us-ascii?Q?F+3s/A3Xgz7jDzM1oCX+HRdrCZLDIaeLQoTw+bC+nMBbEtgljEetV/7LjILn?=
- =?us-ascii?Q?6vDmN8tYDfKAWyNw+59oX28EVMScsQmMZ63tQgnX33LpGn1VcwLTNztmDhCI?=
- =?us-ascii?Q?cASVot+QJbgFWD/WTdty+Ed4bVv1CAEwsPEdgneNl4YKBw0s4sFMXPbL3cKN?=
- =?us-ascii?Q?/XIqAYgKxGw49kJeI+eLL5P2s4PDKvcyHVMCz0u1QBPd54vv9bQc2Ivqkwp7?=
- =?us-ascii?Q?IzuUg/1Yd9VfViQvuGCx33ml3+8sz1fjX2oxZ9TSoRyqj6qkrwf/VXjXaMoL?=
- =?us-ascii?Q?kI8KNtyrMW9bj0sUBfsFrBZYv0zgqevJ/FhfjYA8W105c4Fxjx6nnzJ4+1Ag?=
- =?us-ascii?Q?fXMuMthQ5v70+zvBrndkINJRFMuBHQvkwGT6QIMRKYdKhJyVpegiuFIQtzYI?=
- =?us-ascii?Q?C/EKSHUjb5AwQgsVhNs52Iise3x48syZqR8tmF+FiGmibOo60ZKQ+YEIMbAl?=
- =?us-ascii?Q?+p9gzusPk0O7zyOFWUboFy4pwF3wFhNs53sm1jmu28mtVP9ZECfwWi/gZmil?=
- =?us-ascii?Q?TtqaLqtS0y+G1MgAPWnXH/TjpGn09e6ooA9Olz3ZX7GQfCkASQeg2ojsnQG5?=
- =?us-ascii?Q?MS0jnA68Tsk1H6hMfIgU5esowdrQB3fA3CMTK5GAlIcOaBCKA15qD2N7Ie4B?=
- =?us-ascii?Q?TgPQHS+179aGzxudotKpYkRqJ6NiQq2Q0rST2GTtJptn5q1sHMalMgXiPC3v?=
- =?us-ascii?Q?stZkJhcCx55leXK/YBLZQGllKAJ/XzJwb+GNIOyRHtqEvbUQuonN/LxepxPw?=
- =?us-ascii?Q?7crfOkfs4y7RRWeSme2Trafb+5H9eJ7MC5N+6ZZDOy7023JgJYi8CPBpt8oc?=
- =?us-ascii?Q?0OvCKI5F7EQbo5tQJ/VeCbq9Bk9Pzq+6D1qNbqqEgZrT?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a9a084c2-5bf2-469a-fef3-08d9ec94aafe
-X-MS-Exchange-CrossTenant-AuthSource: SA2PR10MB4715.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 12:55:51.9819
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4AzIGKZXCPbwB6cnuqkzAmzslg50WBR70PHrr1xmhvNA2qEdXYQjm50VnM3QOI0VCNwps4UWShdN0M+pO5RlJA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1001MB2245
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10253 signatures=673431
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 suspectscore=0
- mlxlogscore=999 mlxscore=0 adultscore=0 malwarescore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202100070
-X-Proofpoint-GUID: 0GvNy3sxaHOQsS0pNb_CyM5oVVCMlSk_
-X-Proofpoint-ORIG-GUID: 0GvNy3sxaHOQsS0pNb_CyM5oVVCMlSk_
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [PATCH kvm/queue v2 2/3] perf: x86/core: Add interface to query
+ perfmon_event_map[] directly
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Dunn <daviddunn@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+References: <20220117085307.93030-1-likexu@tencent.com>
+ <20220117085307.93030-3-likexu@tencent.com>
+ <20220202144308.GB20638@worktop.programming.kicks-ass.net>
+ <CALMp9eRBOmwz=mspp0m5Q093K3rMUeAsF3vEL39MGV5Br9wEQQ@mail.gmail.com>
+ <YgO/3usazae9rCEh@hirez.programming.kicks-ass.net>
+ <69c0fc41-a5bd-fea9-43f6-4724368baf66@intel.com>
+ <CALMp9eS=1U7T39L-vL_cTXTNN2Li8epjtAPoP_+Hwefe9d+teQ@mail.gmail.com>
+ <67a731dd-53ba-0eb8-377f-9707e5c9be1b@intel.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+Organization: Tencent
+In-Reply-To: <67a731dd-53ba-0eb8-377f-9707e5c9be1b@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10 Feb 2022, Masahiro Yamada told this:
-
-> On Wed, Feb 9, 2022 at 3:44 AM Nick Alcock <nick.alcock@oracle.com> wrote:
+On 10/2/2022 2:57 am, Dave Hansen wrote:
+> On 2/9/22 10:47, Jim Mattson wrote:
+>> On Wed, Feb 9, 2022 at 7:41 AM Dave Hansen <dave.hansen@intel.com> wrote:
+>>>
+>>> On 2/9/22 05:21, Peter Zijlstra wrote:
+>>>> On Wed, Feb 02, 2022 at 02:35:45PM -0800, Jim Mattson wrote:
+>>>>> 3) TDX is going to pull the rug out from under us anyway. When the TDX
+>>>>> module usurps control of the PMU, any active host counters are going
+>>>>> to stop counting. We are going to need a way of telling the host perf
+>>>>> subsystem what's happening, or other host perf clients are going to
+>>>>> get bogus data.
+>>>> That's not acceptible behaviour. I'm all for unilaterally killing any
+>>>> guest that does this.
+>>>
+>>> I'm not sure where the "bogus data" comes or to what that refers
+>>> specifically.  But, the host does have some level of control:
 >>
->> I am not wedded to the approach used to construct this file, but I don't
->> see any other way to do it despite spending a week or so trying to tie
->> it into Kbuild without using a separate Makefile.modbuiltin: unlike the
->> names of builtin modules (which are also recorded in the source files
->> themseves via MODULE_*() macros) the mapping from object file name to
->> built-in module name is not recorded anywhere but in the makefiles
->> themselves, so we have to at least reparse them with something to
->> indicate the builtin-ness of each module (i.e., tristate.conf) if we are
->> to figure out which modules are built-in and which are not.
+>> I was referring to gaps in the collection of data that the host perf
+>> subsystem doesn't know about if ATTRIBUTES.PERFMON is set for a TDX
+>> guest. This can potentially be a problem if someone is trying to
+>> measure events per unit of time.
+> 
+> Ahh, that makes sense.
+> 
+> Does SGX cause problem for these people?  It can create some of the same
+> collection gaps:
+> 
+> 	performance monitoring activities are suppressed when entering
+> 	an opt-out (of performance monitoring) enclave.
+> 
+
+Are the end perf user aware of the collection gaps caused by the code running 
+under SGX?
+
+As far as I know there shouldn't be one yet, we may need a tool like "perf-kvm" 
+for SGX enclaves.
+
+>>>> The host VMM controls whether a guest TD can use the performance
+>>>> monitoring ISA using the TD’s ATTRIBUTES.PERFMON bit...
+>>>
+>>> So, worst-case, we don't need to threaten to kill guests.  The host can
+>>> just deny access in the first place.
+
+The KVM module parameter "enable_pmu" might be respected,
+together with a per-TD guest user space control option.
+
+>>>
+>>> I'm not too picky about what the PMU does, but the TDX behavior didn't
+>>> seem *that* onerous to me.  The gory details are all in "On-TD
+>>> Performance Monitoring" here:
+>>>
+>>>> https://www.intel.com/content/dam/develop/external/us/en/documents/tdx-module-1.0-public-spec-v0.931.pdf
+>>>
+>>> My read on it is that TDX host _can_ cede the PMU to TDX guests if it
+>>> wants.  I assume the context-switching model Jim mentioned is along the
+>>> lines of what TDX is already doing on host<->guest transitions.
 >>
->> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
->> Reviewed-by: Kris Van Hees <kris.van.hees@oracle.com>
->
-> modules.builtin was initially implemented in a terrible way,
-> hence I cleaned up the code and removed the double recursion
-> of the source tree.
+>> Right. If ATTRIBUTES.PERFMON is set, then "perfmon state is
+>> context-switched by the Intel TDX module across TD entry and exit
+>> transitions." Furthermore, the VMM has no access to guest perfmon
+>> state.
 
-That's why I said I was not wedded to this approach, and I'd be happy
-to use another one.
+Even the guest TD is under off-TD debug and is untrusted ?
 
-I tried to reimplement it using a single recursion, but it seems to be
-impossible or at least very difficult, since you have to somehow
-interpret each target in the tree in two ways ("build this" versus
-"figure out whether this is built-in or not): if you can think up a
-trick, I'll give it a try. I tried to make the core Kbuild makefiles
-interpret obj-Y suitably, which might mean you could build the whole
-tree with tristate.conf in force as it is in Makefile.modbuiltin, but
-got lost in the tangle: and in any case doing that seemed far more
-invasive and far more likely to be rejected than just bringing back
-Makefile.modbuiltin.
+I think we (host administrators) need to profile off-TD guests to locate
+performance bottlenecks with a holistic view, regardless of whether the
+ATTRIBUTES.PERFMON bit is cleared or not.
 
-But for now, to me, this seems tolerable. The time costs of building
-modules_thick.builtin are so minimal I cannot determine them in a normal
-parallel build, well down in the noise, unless your machine is so short
-of memory that it can't even cache the directory tree walk (and with the
-cache hot, even with -j 1 building it takes only half a second). The
-maintenance costs appear to be basically zero as well: one file, not
-tightly coupled to the rest (the only coupling it has is the same
-coupling as every makefile in the build tree). Also one file that was
-present for decades already :)
+Perhaps shared memory could be a way to pass guests performance data
+to the host if PMU activities are suppressed across TD entry and exit
+transitions for the guest TD is under off-TD debug and is untrusted.
 
-So... honestly, I don't see your objection. What's terrible about
-scripts/Makefile.modbuiltin? If it's so terrible, do you have an
-alternative way to do what it does in this patch series?
+>>
+>> If you're saying that setting this bit is unacceptable, then perhaps
+>> the TDX folks need to redesign their in-guest PMU support.
+> 
+> It's fine with *me*, but I'm not too picky about the PMU.  But, it
+> sounded like Peter was pretty concerned about it.
 
-> Honestly, I do not want to see you bringing back
-> all the bloat.
+One protocol I've seen is that the (TD or normal) guest cannot compromise
+the host's availability to PMU resources (at least in the host runtime).
 
-It's come back because I find it necessary for the series which follows,
-which surely makes it not bloat. If you can think of another approach
-that can similarly figure out which modules are built in and which are
-not, I'd be happy to use it, but I can't think of one.
+It's pretty fine and expected that performance data within the trusted TDX guest
+should be logically isolated from host data (without artificial aggregation).
+
+> 
+> In any case, if we (Linux folks) need a change, it's *possible* because
+> most of this policy is implemented in software in the TDX module.  It
+> would just be painful for the folks who came up with the existing mechanism.
+> 
+
+When the code to enable ATTRIBUTES.PERFMON appears in the mailing list,
+we can have more discussions in a very good time window.

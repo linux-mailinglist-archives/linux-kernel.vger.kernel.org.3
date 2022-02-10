@@ -2,43 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6860D4B14FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E79164B14C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245548AbiBJSIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 13:08:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35522 "EHLO
+        id S245438AbiBJR6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 12:58:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245540AbiBJSID (ORCPT
+        with ESMTP id S245426AbiBJR6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 13:08:03 -0500
-Received: from mxout01.lancloud.ru (mxout01.lancloud.ru [45.84.86.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0E7B08;
-        Thu, 10 Feb 2022 10:08:02 -0800 (PST)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru AC9A02091EE6
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        <linux-renesas-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Magnus Damm <magnus.damm@gmail.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: [PATCH] MAINTAINERS: specify IRC channel for Renesas ARM32 port
-Organization: Open Mobile Platform
-Message-ID: <2f108f63-0cf7-cc4c-462e-ec63736234cf@omp.ru>
-Date:   Thu, 10 Feb 2022 20:58:12 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 10 Feb 2022 12:58:51 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A4BF5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:58:51 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id h7-20020a17090a648700b001b927560c2bso5137440pjj.1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:58:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eJjpjiZFmC3NVaxARYWkgFsjJKrhv1BAcceimkRM1uc=;
+        b=I4hwIxjkkeAi4jIAR7EXdb4NWii/7oxAC6AKqPuQcnGc8TW/3D7Kxhqam1lyFsXflt
+         Vm5HJqIQnwHvwhbzNaVZa/mGzfaowJ3SBRqQD0pO7VdYw06AMqhgorMLoVu687YW6uRy
+         xkDO6nKGEP1GdnvBreXiy7Bzs/r8JG5ZY52itSe+2nWNR7aR/w54AI9EhT004OHlxO41
+         Zue5nM3Rjk/3mHOTvwbP6nVoO7O6C5tofS/BRIFKSU4np+suf7OKHgu8N9LUfARepCSh
+         PX2O6hjyeqrkf2K0IX6MAgjAOqbTm0uSfwncU7ax0gdaHn259R4/6H92h5F65UBFMXJT
+         ESLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eJjpjiZFmC3NVaxARYWkgFsjJKrhv1BAcceimkRM1uc=;
+        b=m9Yl7iyR/ogiWfH9A7YZ6/Pj8Eu8NEXbZiXr7JbAZqqhGCDtJdC6eh65M0X++j/o+A
+         zj9y7rFXtxcLsf4plYuqdw55diMfeNCldEo7YG3StQ7m6f+Ud6YrKBQm3MSXpG6YadRS
+         ElP2gVGCHXpFhdEM34PhSgrOdVNIwFKksEZSDaj1MzafGlwSfebAGQ5rtaq54iWHoh4Y
+         R1rEPrP1i83fRedA/aohIqnCEiMSAKtr6xK7G7MX8OCzxtzlAQH9VKZDQaaUysanWu6o
+         zvajWhrqHN4az6mW2+dkT0jIh3F3i+65Pq/F58Ns8RHPf6bAfuTPX/99AZcn4n9sF25i
+         tUSA==
+X-Gm-Message-State: AOAM531+BMOXQU/kI6uk4Slc9Frs3iwPckOJmdZWgtWSyG7hQkjAr/0l
+        LC1Z7oMOAHHuQzBmiaQSToK7xw==
+X-Google-Smtp-Source: ABdhPJybX2DTRur/fqp1T3fsi1sv7jdOfBkzRKrTiFCl1wtzaexEErRObkoG10fCF7lKUo/ZB94mrw==
+X-Received: by 2002:a17:902:db01:: with SMTP id m1mr8805397plx.53.1644515931043;
+        Thu, 10 Feb 2022 09:58:51 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id y30sm3834969pfq.142.2022.02.10.09.58.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 09:58:49 -0800 (PST)
+Date:   Thu, 10 Feb 2022 10:58:47 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     Wendy Liang <wendy.liang@xilinx.com>,
+        Michal Simek <monstr@monstr.eu>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kbuild-all@lists.01.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] remoteproc: fix minmax.cocci warnings
+Message-ID: <20220210175847.GA3603040@p14s>
+References: <alpine.DEB.2.22.394.2202082139180.52266@hadrien>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2202082139180.52266@hadrien>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,28 +74,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Renesas ARM ports do have their own IRC channel #renesas-soc (initially
-created on Freenode, then moved to Liberta.Chat).  Hopefully, adding it to
-this file will attract more people... :-)
+Hi,
 
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+On Tue, Feb 08, 2022 at 09:41:39PM +0100, Julia Lawall wrote:
+> From: kernel test robot <lkp@intel.com>
+> 
+> The code seems more readable with min.
+> 
+> Generated by: scripts/coccinelle/misc/minmax.cocci
+> 
+> Fixes: 2b9408d09dc6 ("remoteproc: Add support for peek from remote and acking kick from remote")
+> CC: Wendy Liang <wendy.liang@xilinx.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
+> 
+> ---
+> 
+> tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15
+> head:   1183ce490adb103e5e569b8ebd74c50c885ddc05
+> commit: 2b9408d09dc6367fd2f0820f0c7beab69e9aed56 [550/872] remoteproc: Add support for peek from remote and acking kick from remote
+> :::::: branch date: 7 days ago
+> :::::: commit date: 7 days ago
+> 
+>  remoteproc_sysfs.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- a/drivers/remoteproc/remoteproc_sysfs.c
+> +++ b/drivers/remoteproc/remoteproc_sysfs.c
+> @@ -241,7 +241,7 @@ static ssize_t kick_store(struct device
+>  	size_t cpy_len;
+> 
+>  	(void)attr;
+> -	cpy_len = count <= sizeof(id) ? count : sizeof(id);
+> +	cpy_len = min(count, sizeof(id));
 
----
-This patch is against the 'next' branch of Geert Uytterhoeven's
-'renesas-devel.git' repo.
+Looking at the min() macro the above would become "count < sizeof(id)" rather
+than "count <= sizeof(id)".  I don't have more context into this code because I
+can't find it in rproc-next nor today's linux-next, but it is something to look
+into.  The patch is also missing the minmax.h include for the min() macro.
 
- MAINTAINERS |    1 +
- 1 file changed, 1 insertion(+)
+Thanks,
+Mathieu
 
-Index: renesas-devel/MAINTAINERS
-===================================================================
---- renesas-devel.orig/MAINTAINERS
-+++ renesas-devel/MAINTAINERS
-@@ -2638,6 +2638,7 @@ ARM/SHMOBILE ARM ARCHITECTURE
- M:	Geert Uytterhoeven <geert+renesas@glider.be>
- M:	Magnus Damm <magnus.damm@gmail.com>
- L:	linux-renesas-soc@vger.kernel.org
-+C:	irc://irc.libera.chat/renesas-soc
- S:	Supported
- Q:	http://patchwork.kernel.org/project/linux-renesas-soc/list/
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git next
+>  	memcpy((char *)(&id), buf, cpy_len);
+> 
+>  	if (rproc->ops->kick)

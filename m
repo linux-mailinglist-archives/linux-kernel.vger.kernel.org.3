@@ -2,144 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D91914B0901
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE304B0900
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238120AbiBJI5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 03:57:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54896 "EHLO
+        id S238133AbiBJI5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 03:57:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238088AbiBJI5F (ORCPT
+        with ESMTP id S238127AbiBJI5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 03:57:05 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726CFE7A;
-        Thu, 10 Feb 2022 00:57:07 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 90F0E1F46047
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644483426;
-        bh=beBoCF9E69P2Dr/kHu3IApUCGiTodhpacSRBbcpe5+0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EV+ukFNj/sNvscWcfMeIJt1T7Raaz6uH+ysq9a1OUQIiRCuB1jYVWM1gs3SiW6fXq
-         +W1qHEqA/kQIRoslgeuLHIjelBJh449OZFjzF9ndNBnEsndLL/Uhq6Dci5EDTPMFJ3
-         2b3BTKTNcx7cfRYfFKEc2a1cQdlUehVkFOH9A40Zav4cF91ThhuTeWch3NMyfoawzk
-         lfMBATjnkgXx2TiW/OGjnseyh2aInMPuEMX/LTuwk6iU9yxCyFRtYlxEhAbn+kwb0G
-         MzsY4tKK6hHqu9o44fgNdRAw76Onntol5rlR80qiT+WxDo0kmJmr+j0JeUWkBdWuqC
-         HkP9EKXc4Pj6w==
-Message-ID: <332434dc-2c94-5488-e7d0-7db00139d814@collabora.com>
-Date:   Thu, 10 Feb 2022 09:57:03 +0100
+        Thu, 10 Feb 2022 03:57:20 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5E41091;
+        Thu, 10 Feb 2022 00:57:21 -0800 (PST)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21A74Jtq016680;
+        Thu, 10 Feb 2022 09:57:08 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=TlvWNHfpNPtRw0cITsExVTaGaglDP3mqI5ghOnwVXLI=;
+ b=CCaGg/1+HbopP7CeJ298uUoW5ejCzUglpAH7A5xO6nLoI8fa3I/Xzn9Yc8gFThMWC88t
+ 9eePWeGcx5S+St4tmdaL2q3+CwowR8SNjJFeKm6FIojq1LJrv+BLpfeozdToDFSuzoEP
+ r1xLB4lMy3LZse1BpiRrP0+ISP1hdn+Ykxxl4H5blxEGv/q+rLHtgyUp/odwC6O/5Zv6
+ iQoeDICtCqu0aGgU2y7aKv88k2jnPx0RK7Gn3HsGJmKYqdf20SlEq7Pqy0ETGFH3ak1q
+ rTl5Up7psZqhX9w8XZTbvRnItwneEhRNbRBvxXxCfp+xEDGZIqibS994mCcONf4oXT0N LA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e4x0c0phb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Feb 2022 09:57:08 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E34BD10002A;
+        Thu, 10 Feb 2022 09:57:07 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BC3C8214D3C;
+        Thu, 10 Feb 2022 09:57:07 +0100 (CET)
+Received: from [10.201.21.201] (10.75.127.45) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 10 Feb
+ 2022 09:57:06 +0100
+Message-ID: <a8bef34c-e33b-b482-497c-445f5618fb7b@foss.st.com>
+Date:   Thu, 10 Feb 2022 09:57:04 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v3 2/3] pinctrl: add pinctrl driver on mt8186
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 11/12] ARM: dts: sti: move usb picophy nodes in
+ stih410-b2120.dts
 Content-Language: en-US
-To:     Guodong Liu <guodong.liu@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>
-Cc:     Sean Wang <sean.wang@mediatek.com>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220210062122.23974-1-guodong.liu@mediatek.com>
- <20220210062122.23974-3-guodong.liu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220210062122.23974-3-guodong.liu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Alain Volmat <avolmat@me.com>, <patrice.chotard@st.com>,
+        <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20211202075105.195664-1-avolmat@me.com>
+ <20211202075105.195664-12-avolmat@me.com>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <20211202075105.195664-12-avolmat@me.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-10_03,2022-02-09_01,2021-12-02_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/02/22 07:21, Guodong Liu ha scritto:
-> This commit includes pinctrl driver for mt8186.
+HI Alain
+
+On 12/2/21 08:51, Alain Volmat wrote:
+> Update usb picophy nodes out of the soc section following the
+> related update within the stih410.dtsi file.
 > 
-> Signed-off-by: Guodong Liu <guodong.liu@mediatek.com>
+> Signed-off-by: Alain Volmat <avolmat@me.com>
 > ---
->   drivers/pinctrl/mediatek/Kconfig              |    7 +
->   drivers/pinctrl/mediatek/Makefile             |    1 +
->   drivers/pinctrl/mediatek/pinctrl-mt8186.c     | 1313 ++++++++++
->   drivers/pinctrl/mediatek/pinctrl-mtk-mt8186.h | 2186 +++++++++++++++++
->   4 files changed, 3507 insertions(+)
->   create mode 100644 drivers/pinctrl/mediatek/pinctrl-mt8186.c
->   create mode 100644 drivers/pinctrl/mediatek/pinctrl-mtk-mt8186.h
+>  arch/arm/boot/dts/stih410-b2120.dts | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/pinctrl/mediatek/Kconfig b/drivers/pinctrl/mediatek/Kconfig
-> index 66db4ac5d169..8dca1ef04965 100644
-> --- a/drivers/pinctrl/mediatek/Kconfig
-> +++ b/drivers/pinctrl/mediatek/Kconfig
-> @@ -147,6 +147,13 @@ config PINCTRL_MT8183
->   	default ARM64 && ARCH_MEDIATEK
->   	select PINCTRL_MTK_PARIS
->   
-> +config PINCTRL_MT8186
-> +	bool "Mediatek MT8186 pin control"
-> +	depends on OF
-> +	depends on ARM64 || COMPILE_TEST
-> +	default ARM64 && ARCH_MEDIATEK
-> +	select PINCTRL_MTK_PARIS
+> diff --git a/arch/arm/boot/dts/stih410-b2120.dts b/arch/arm/boot/dts/stih410-b2120.dts
+> index 9d3b118f5f0f..538ff98ca1b1 100644
+> --- a/arch/arm/boot/dts/stih410-b2120.dts
+> +++ b/arch/arm/boot/dts/stih410-b2120.dts
+> @@ -24,6 +24,14 @@ aliases {
+>  		ethernet0 = &ethernet0;
+>  	};
+>  
+> +	usb2_picophy1: phy2 {
+> +		status = "okay";
+> +	};
 > +
->   config PINCTRL_MT8192
->   	bool "Mediatek MT8192 pin control"
->   	depends on OF
-> diff --git a/drivers/pinctrl/mediatek/Makefile b/drivers/pinctrl/mediatek/Makefile
-> index 90f43bb9d9a7..31c3784c6089 100644
-> --- a/drivers/pinctrl/mediatek/Makefile
-> +++ b/drivers/pinctrl/mediatek/Makefile
-> @@ -21,6 +21,7 @@ obj-$(CONFIG_PINCTRL_MT7986)	+= pinctrl-mt7986.o
->   obj-$(CONFIG_PINCTRL_MT8167)	+= pinctrl-mt8167.o
->   obj-$(CONFIG_PINCTRL_MT8173)	+= pinctrl-mt8173.o
->   obj-$(CONFIG_PINCTRL_MT8183)	+= pinctrl-mt8183.o
-> +obj-$(CONFIG_PINCTRL_MT8186)	+= pinctrl-mt8186.o
->   obj-$(CONFIG_PINCTRL_MT8192)	+= pinctrl-mt8192.o
->   obj-$(CONFIG_PINCTRL_MT8195)    += pinctrl-mt8195.o
->   obj-$(CONFIG_PINCTRL_MT8365)	+= pinctrl-mt8365.o
-> diff --git a/drivers/pinctrl/mediatek/pinctrl-mt8186.c b/drivers/pinctrl/mediatek/pinctrl-mt8186.c
-> new file mode 100644
-> index 000000000000..1e550b15b9d4
-> --- /dev/null
-> +++ b/drivers/pinctrl/mediatek/pinctrl-mt8186.c
-> @@ -0,0 +1,1313 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2021 MediaTek Inc.
-> + *
-> + * Author: Guodong Liu <guodong.liu@mediatek.com>
-> + *
-> + */
+> +	usb2_picophy2: phy3 {
+> +		status = "okay";
+> +	};
 > +
-> +#include "pinctrl-mtk-mt8186.h"
-> +#include "pinctrl-paris.h"
-> +
-> +/* MT8186 have multiple bases to program pin configuration listed as the below:
-> + * iocfg[0]:0x10005000, iocfg[1]:0x10002000, iocfg[2]:0x10002200,
-> + * iocfg[3]:0x10002400, iocfg[4]:0x10002600, iocfg[5]:0x10002800,
-> + * iocfg[6]:0x10002C00.
-> + * _i_based could be used to indicate what base the pin should be mapped into.
-> + */
-> +
-> +#define PIN_FIELD_BASE(s_pin, e_pin, i_base, s_addr, x_addrs, s_bit, x_bits) \
-> +	PIN_FIELD_CALC(s_pin, e_pin, i_base, s_addr, x_addrs, s_bit, x_bits, \
-> +		       32, 0)
+>  	soc {
+>  
+>  		mmc0: sdhci@9060000 {
+> @@ -33,14 +41,6 @@ mmc0: sdhci@9060000 {
+>  			sd-uhs-ddr50;
+>  		};
+>  
+> -		usb2_picophy1: phy2@0 {
+> -			status = "okay";
+> -		};
+> -
+> -		usb2_picophy2: phy3@0 {
+> -			status = "okay";
+> -		};
+> -
+>  		ohci0: usb@9a03c00 {
+>  			status = "okay";
+>  		};
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Please don't break this line: 84 columns is fine.
-
-> +
-> +#define PINS_FIELD_BASE(s_pin, e_pin, i_base, s_addr, x_addrs, s_bit, x_bits) \
-> +	PIN_FIELD_CALC(s_pin, e_pin, i_base, s_addr, x_addrs, s_bit, x_bits,  \
-> +		       32, 1)
-
-Same here.
-
-And with that fixed,
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Thanks
+Patrice

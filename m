@@ -2,78 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7826C4B1772
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA29F4B1778
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344531AbiBJVMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 16:12:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40732 "EHLO
+        id S1344550AbiBJVPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 16:15:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239478AbiBJVMo (ORCPT
+        with ESMTP id S236222AbiBJVPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 16:12:44 -0500
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C120126C5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:12:44 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id 200so6268825qki.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:12:44 -0800 (PST)
+        Thu, 10 Feb 2022 16:15:20 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFD8F47
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:15:20 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id t14-20020a17090a3e4e00b001b8f6032d96so6854306pjm.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:15:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eGKgAJz2dJO294+be78C8+dB47Cw1SR8HtZpqoI4u6E=;
-        b=rf6aHwLhBkB3nt1N9g+QnhYv5tVOz8GsX7FTsawdB0VluhGjCoaJkkxxBiv4qxeolR
-         vE1TmQf9qSA1iIQomxULfXBZ9GV7TzCO8Iwuavufb+ca1fSUrzSXm8juhUB/GI/mFW0C
-         9TOFfA89ucniP01YY5BNQAh12PPWjgbELaw/cmDhCMtz0x4WcppiwG7JZx6GIyjEUdCV
-         RKWJct1L2mx+RNJ349Ayy/l+WE2cz81CJ/HWNPO3By4ayydhzS0rUwkyGrJEeRRFBnXG
-         EXS0hKNH6txc/MR5jz3DZR5IRd2nbF1/UQ0nYAXGBjkFIPayEMPH7YuUsq/yppjlkGA/
-         38FQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=82DdbPKP7kjeLQlK5oCbxLVQbpRl6tS9veakwafAfwM=;
+        b=ZEgxS2NOiSTPvF4gN2vTfXSBM/PmC9lw6FPvap3HY16dNy4VNKxbvttaJBVkXJ8rUK
+         6tdvCy7z0n07CEwKw/4F1g2AnT2vriBgeofTEt84Pl71phnqqkLb0SOPvlvQWMCTFWl8
+         fciN7Uw2+iODzzOhcAo0UKbmoVqipKz/K/i68=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eGKgAJz2dJO294+be78C8+dB47Cw1SR8HtZpqoI4u6E=;
-        b=yLnjUA/OCkI9KwuVBIY1xTWGwpHniZCQaf9iZeZtrW81GmIU0+vXvaMpWfAm45Dr5x
-         wfVXcW1/IPEr3QPZzlYaCFuDAJDjrxKp6JUjoVRJFscD2NWBReRfeQ1eNR6pISFzlkbC
-         9+bhOiX2i8JSvlu0FCRmPwLaWDLuVSCkBBRPeqssFUyKnJRmsTxZMx6nDxE9JYg3MDRL
-         VHsViGDEDBGfdYearMwj595bgjVktGEOWpuQQ7Sv8pmrwc+0HegP04gk4cccG8MnwKH4
-         sGjLrT3wwiZGb5c1J8tQc8/HNOw8+0d/1i+RlZUkONU609onl7dt1Ch8gp0UP3LGJdGJ
-         u9tA==
-X-Gm-Message-State: AOAM532oO4o4+im9b7g0UmPGaSZcGCHShgQ5nB+DVVv11G0X4dWD7v+0
-        5lUFhuW/tDTEfDiW5ov1SaGJX2mKLhYrzPcqObw6iA==
-X-Google-Smtp-Source: ABdhPJy+IHLLg+lum0l64VChU98w1V7sQgvluKp2fObOY2Y+7zq6S7LI5qBIbU+kQcI2lns5avDNyi64Irumie2mSQI=
-X-Received: by 2002:a05:620a:75b:: with SMTP id i27mr4757700qki.593.1644527563819;
- Thu, 10 Feb 2022 13:12:43 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=82DdbPKP7kjeLQlK5oCbxLVQbpRl6tS9veakwafAfwM=;
+        b=RfwXDX4GZrUToTgRfEPcnRX+BRzKoN2TGgQ5FRmn26QheG4z4a5qvIJErI93Oc2/aB
+         yHvKZJWdcC8yUBHFJlEfI9pZQA7AAck11g2eC6BLm8BQko5EKqhbb2iBWZPfmhfL0fm/
+         ZNEheSOVFWSXZXZ4sKU0zfcoefF/whHEPK6NRc8TOrt1KJ8nMPXJRRZ8Ixylo1/OC9nO
+         Z2or91KtUDDtWraEzP4SLgYRxEl/fb5i6obwno1DSX10POm1VF9ogSkxHCbu7ITxGJ6l
+         QeynvzCH3ufhC/72AiC9sxBge7y5rnZk57jGSDACx1xwImuzGNUb+W5QzvLo4YrBufar
+         d1sg==
+X-Gm-Message-State: AOAM530NlbKHpl5MAmexNfrMKJOFBkVVCNrE4caPA6P/trashN10cPL9
+        bB2w1bzKB+kESuA2UqseiKhC/Q==
+X-Google-Smtp-Source: ABdhPJyI/iJYt6Y+8VDXdnZEL290wYjAu5cUAZCCuNrgPtqzAfbVr/nbwnhidTNEy2XeQfmPSKHERw==
+X-Received: by 2002:a17:902:7d97:: with SMTP id a23mr9176121plm.92.1644527720463;
+        Thu, 10 Feb 2022 13:15:20 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u13sm25914929pfg.151.2022.02.10.13.15.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 13:15:20 -0800 (PST)
+Date:   Thu, 10 Feb 2022 13:15:19 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
+        kernelci@groups.io, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/exec: Rename file binfmt_script to
+ binfmt_script.py
+Message-ID: <202202101312.23076F5@keescook>
+References: <20220210192845.1533204-1-usama.anjum@collabora.com>
 MIME-Version: 1.0
-References: <20220208044328.588860-1-bjorn.andersson@linaro.org>
- <YgJISIIacBnFyTLq@kroah.com> <YgV8GyK9G0gbWAaq@ripper>
-In-Reply-To: <YgV8GyK9G0gbWAaq@ripper>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 11 Feb 2022 00:12:32 +0300
-Message-ID: <CAA8EJppkZTRApQbuEUACw=r2kBH+321_f1ZqRf_-veEuwB56zg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] drm: Add HPD state to drm_connector_oob_hotplug_event()
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210192845.1533204-1-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,185 +70,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Feb 2022 at 23:54, Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
->
-> On Tue 08 Feb 02:39 PST 2022, Greg Kroah-Hartman wrote:
->
-> > On Mon, Feb 07, 2022 at 08:43:27PM -0800, Bjorn Andersson wrote:
-> > > In some implementations, such as the Qualcomm platforms, the display
-> > > driver has no way to query the current HPD state and as such it's
-> > > impossible to distinguish between disconnect and attention events.
-> > >
-> > > Add a parameter to drm_connector_oob_hotplug_event() to pass the HPD
-> > > state.
-> > >
-> > > Also push the test for unchanged state in the displayport altmode driver
-> > > into the i915 driver, to allow other drivers to act upon each update.
-> > >
-> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > ---
-> > >
-> > > Note that the Intel driver has only been compile tested with this patch.
-> > >
-> > >  drivers/gpu/drm/drm_connector.c          |  6 ++++--
-> > >  drivers/gpu/drm/i915/display/intel_dp.c  | 14 +++++++++++---
-> > >  drivers/gpu/drm/i915/i915_drv.h          |  3 +++
-> > >  drivers/usb/typec/altmodes/displayport.c |  9 ++-------
-> > >  include/drm/drm_connector.h              |  5 +++--
-> > >  5 files changed, 23 insertions(+), 14 deletions(-)
-> > >
-> > > diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-> > > index a50c82bc2b2f..ad7295597c0f 100644
-> > > --- a/drivers/gpu/drm/drm_connector.c
-> > > +++ b/drivers/gpu/drm/drm_connector.c
-> > > @@ -2825,6 +2825,7 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
-> > >  /**
-> > >   * drm_connector_oob_hotplug_event - Report out-of-band hotplug event to connector
-> > >   * @connector_fwnode: fwnode_handle to report the event on
-> > > + * @hpd_state: number of data lanes available
-> >
-> > "number"?
-> >
-> > >   *
-> > >   * On some hardware a hotplug event notification may come from outside the display
-> > >   * driver / device. An example of this is some USB Type-C setups where the hardware
-> > > @@ -2834,7 +2835,8 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
-> > >   * This function can be used to report these out-of-band events after obtaining
-> > >   * a drm_connector reference through calling drm_connector_find_by_fwnode().
-> > >   */
-> > > -void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
-> > > +void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
-> > > +                                bool hpd_state)
-> >
-> > This is a boolean, how can it be a number?
-> >
->
-> The kerneldoc wasn't appropriately updated as this went from being
-> "number of data lanes" to "the hot plug detect (hpd) state".
->
-> > And having a "flag" like this is a pain, how do you know what the
-> > parameter really means?
-> >
->
-> You're right, "state" isn't a boolean property, let's rename it
-> "hpd_high" to clarify it.
+On Fri, Feb 11, 2022 at 12:28:45AM +0500, Muhammad Usama Anjum wrote:
+> Rename file for readability purpose. Update its usage and references.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+> This path was suggested while review of the following patch. Please
+> apply it after applying that one first:
+> 	selftests/exec: Add non-regular to TEST_GEN_PROGS
+> ---
+>  tools/testing/selftests/exec/Makefile          |  2 +-
+>  .../exec/{binfmt_script => binfmt_script.py}   | 18 +++++++++---------
+>  2 files changed, 10 insertions(+), 10 deletions(-)
+>  rename tools/testing/selftests/exec/{binfmt_script => binfmt_script.py} (90%)
+> 
+> diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
+> index a89ba6de79870..a0b8688b08369 100644
+> --- a/tools/testing/selftests/exec/Makefile
+> +++ b/tools/testing/selftests/exec/Makefile
+> @@ -3,7 +3,7 @@ CFLAGS = -Wall
+>  CFLAGS += -Wno-nonnull
+>  CFLAGS += -D_GNU_SOURCE
+>  
+> -TEST_PROGS := binfmt_script
+> +TEST_PROGS := binfmt_script.py
+>  TEST_GEN_PROGS := execveat load_address_4096 load_address_2097152 load_address_16777216 non-regular
+>  TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
+>  # Makefile is a run-time dependency, since it's accessed by the execveat test
+> diff --git a/tools/testing/selftests/exec/binfmt_script b/tools/testing/selftests/exec/binfmt_script.py
+> similarity index 90%
+> rename from tools/testing/selftests/exec/binfmt_script
+> rename to tools/testing/selftests/exec/binfmt_script.py
 
-"connected" ?
+Everything from here up, yes. Thank you! :)
 
->
-> > >  {
-> > >     struct drm_connector *connector;
-> > >
-> > > @@ -2843,7 +2845,7 @@ void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
-> > >             return;
-> > >
-> > >     if (connector->funcs->oob_hotplug_event)
-> > > -           connector->funcs->oob_hotplug_event(connector);
-> > > +           connector->funcs->oob_hotplug_event(connector, hpd_state);
-> > >
-> > >     drm_connector_put(connector);
-> > >  }
-> > > diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
-> > > index 146b83916005..00520867d37b 100644
-> > > --- a/drivers/gpu/drm/i915/display/intel_dp.c
-> > > +++ b/drivers/gpu/drm/i915/display/intel_dp.c
-> > > @@ -4816,15 +4816,23 @@ static int intel_dp_connector_atomic_check(struct drm_connector *conn,
-> > >     return intel_modeset_synced_crtcs(state, conn);
-> > >  }
-> > >
-> > > -static void intel_dp_oob_hotplug_event(struct drm_connector *connector)
-> > > +static void intel_dp_oob_hotplug_event(struct drm_connector *connector, bool hpd_state)
-> > >  {
-> > >     struct intel_encoder *encoder = intel_attached_encoder(to_intel_connector(connector));
-> > >     struct drm_i915_private *i915 = to_i915(connector->dev);
-> > > +   bool need_work = false;
-> > >
-> > >     spin_lock_irq(&i915->irq_lock);
-> > > -   i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
-> > > +   if (hpd_state != i915->hotplug.oob_hotplug_state) {
-> > > +           i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
-> > > +
-> > > +           i915->hotplug.oob_hotplug_state = hpd_state;
-> > > +           need_work = true;
-> > > +   }
-> > >     spin_unlock_irq(&i915->irq_lock);
-> > > -   queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
-> > > +
-> > > +   if (need_work)
-> > > +           queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
-> > >  }
-> > >
-> > >  static const struct drm_connector_funcs intel_dp_connector_funcs = {
-> > > diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
-> > > index 8c1706fd81f9..543ebf1cfcf4 100644
-> > > --- a/drivers/gpu/drm/i915/i915_drv.h
-> > > +++ b/drivers/gpu/drm/i915/i915_drv.h
-> > > @@ -149,6 +149,9 @@ struct i915_hotplug {
-> > >     /* Whether or not to count short HPD IRQs in HPD storms */
-> > >     u8 hpd_short_storm_enabled;
-> > >
-> > > +   /* Last state reported by oob_hotplug_event */
-> > > +   bool oob_hotplug_state;
-> > > +
-> > >     /*
-> > >      * if we get a HPD irq from DP and a HPD irq from non-DP
-> > >      * the non-DP HPD could block the workqueue on a mode config
-> > > diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> > > index c1d8c23baa39..a4596be4d34a 100644
-> > > --- a/drivers/usb/typec/altmodes/displayport.c
-> > > +++ b/drivers/usb/typec/altmodes/displayport.c
-> > > @@ -59,7 +59,6 @@ struct dp_altmode {
-> > >     struct typec_displayport_data data;
-> > >
-> > >     enum dp_state state;
-> > > -   bool hpd;
-> > >
-> > >     struct mutex lock; /* device lock */
-> > >     struct work_struct work;
-> > > @@ -143,10 +142,7 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
-> > >             if (!ret)
-> > >                     dp->state = DP_STATE_CONFIGURE;
-> > >     } else {
-> > > -           if (dp->hpd != hpd) {
-> > > -                   drm_connector_oob_hotplug_event(dp->connector_fwnode);
-> > > -                   dp->hpd = hpd;
-> > > -           }
-> > > +           drm_connector_oob_hotplug_event(dp->connector_fwnode, hpd);
-> > >     }
-> > >
-> > >     return ret;
-> > > @@ -573,8 +569,7 @@ void dp_altmode_remove(struct typec_altmode *alt)
-> > >     cancel_work_sync(&dp->work);
-> > >
-> > >     if (dp->connector_fwnode) {
-> > > -           if (dp->hpd)
-> > > -                   drm_connector_oob_hotplug_event(dp->connector_fwnode);
-> > > +           drm_connector_oob_hotplug_event(dp->connector_fwnode, false);
-> >
-> > See, what does "false" here mean?
-> >
-> > Name the function for what it does, do not have random flags as
-> > parameters, that makes it impossible to understand what the code is
-> > doing when you are reading it, without having to jump around and figure
-> > out what the flags are saying.
-> >
-> > And here they just don't even seem to be right :(
-> >
->
-> Both the old and new code will signal to the DRM driver that the cable
-> was removed, the change is that we're carrying the level in the call
-> rather than just indicating that the state has changed.
->
-> We could introduce some HPD_HIGH/HPD_LOW defines to make it easier to
-> read. But the various places I'm looking at just represented the hpd
-> state as a bool.
->
-> Regards,
-> Bjorn
+All the rest aren't right: it's talking about the binfmt_script subsystem
+of the kernel, rather than the binfmt_script.py test script file itself.
 
-
+> index 05f94a741c7aa..6f717fedc97bd 100755
+> --- a/tools/testing/selftests/exec/binfmt_script
+> +++ b/tools/testing/selftests/exec/binfmt_script.py
+> @@ -28,11 +28,11 @@ foreach my $a (@ARGV) {
+>  '''
+>  
+>  ##
+> -# test - produce a binfmt_script hashbang line for testing
+> +# test - produce a binfmt_script.py hashbang line for testing
+>  #
+>  # @size:     bytes for bprm->buf line, including hashbang but not newline
+>  # @good:     whether this script is expected to execute correctly
+> -# @hashbang: the special 2 bytes for running binfmt_script
+> +# @hashbang: the special 2 bytes for running binfmt_script.py
+>  # @leading:  any leading whitespace before the executable path
+>  # @root:     start of executable pathname
+>  # @target:   end of executable pathname
+> @@ -45,7 +45,7 @@ def test(name, size, good=True, leading="", root="./", target="/perl",
+>      global test_num, tests, NAME_MAX
+>      test_num += 1
+>      if test_num > tests:
+> -        raise ValueError("more binfmt_script tests than expected! (want %d, expected %d)"
+> +        raise ValueError("more binfmt_script.py tests than expected! (want %d, expected %d)"
+>                           % (test_num, tests))
+>  
+>      middle = ""
+> @@ -68,7 +68,7 @@ def test(name, size, good=True, leading="", root="./", target="/perl",
+>      if len(newline) > 0:
+>          buf += 'echo this is not really perl\n'
+>  
+> -    script = "binfmt_script-%s" % (name)
+> +    script = "binfmt_script.py-%s" % (name)
+>      open(script, "w").write(buf)
+>      os.chmod(script, 0o755)
+>  
+> @@ -78,17 +78,17 @@ def test(name, size, good=True, leading="", root="./", target="/perl",
+>  
+>      if proc.returncode == 0 and b'Executed interpreter' in stdout:
+>          if good:
+> -            print("ok %d - binfmt_script %s (successful good exec)"
+> +            print("ok %d - binfmt_script.py %s (successful good exec)"
+>                    % (test_num, name))
+>          else:
+> -            print("not ok %d - binfmt_script %s succeeded when it should have failed"
+> +            print("not ok %d - binfmt_script.py %s succeeded when it should have failed"
+>                    % (test_num, name))
+>      else:
+>          if good:
+> -            print("not ok %d - binfmt_script %s failed when it should have succeeded (rc:%d)"
+> +            print("not ok %d - binfmt_script.py %s failed when it should have succeeded (rc:%d)"
+>                    % (test_num, name, proc.returncode))
+>          else:
+> -            print("ok %d - binfmt_script %s (correctly failed bad exec)"
+> +            print("ok %d - binfmt_script.py %s (correctly failed bad exec)"
+>                    % (test_num, name))
+>  
+>      # Clean up crazy binaries
+> @@ -167,5 +167,5 @@ test(name="two-under-leading",   size=int(SIZE/2), leading=" ")
+>  test(name="two-under-lead-trunc-arg", size=int(SIZE/2), leading=" ", arg=" ")
+>  
+>  if test_num != tests:
+> -    raise ValueError("fewer binfmt_script tests than expected! (ran %d, expected %d"
+> +    raise ValueError("fewer binfmt_script.py tests than expected! (ran %d, expected %d"
+>                       % (test_num, tests))
+> -- 
+> 2.30.2
+> 
 
 -- 
-With best wishes
-Dmitry
+Kees Cook

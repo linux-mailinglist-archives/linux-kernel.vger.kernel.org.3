@@ -2,644 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5EE44B17A1
+	by mail.lfdr.de (Postfix) with ESMTP id 48AC14B179F
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:34:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344661AbiBJVeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 16:34:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47736 "EHLO
+        id S1344617AbiBJVdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 16:33:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344644AbiBJVeB (ORCPT
+        with ESMTP id S230287AbiBJVdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 16:34:01 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFB110D0;
-        Thu, 10 Feb 2022 13:34:01 -0800 (PST)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21AKAGMt023570;
-        Thu, 10 Feb 2022 13:33:50 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=HhRI+gIBq5y4CoizS6/rEOXMcm0VRcpr1IJ+GpLFdsY=;
- b=fj7VVfSGm7abJ4mSiI6TpXxw9wyLoygs1vvFOAPinVhSZf1FiHSwT6AobQd8/HVROUAT
- QZVdAcpA+uxjt6yhRa32T2MCjE1z8asJYoyCEKIx2ZS9E92Bpl2Z91mfZLEB2BJCAV2b
- n2ElWDyaKIoFeUfmWMFbCA9iL6bqY7si75VdZ+4g5SkUvBgWDK02I5vbB9k2x+RarBUG
- XWy2obwt2hTP8dd0tsvi9+nwzToWQ8ZGktk8u4vyijdNTvc3ijhPc75ns2HvlgA2WNGU
- 6EZDS7Eorv66TqIORIcyO7TC/rqM+i2fcvrx76WAmSsMsN8BweBaYpjtboAkD3cUOwsj wQ== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3e5134ap32-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 10 Feb 2022 13:33:50 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 10 Feb
- 2022 13:33:48 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 10 Feb 2022 13:33:48 -0800
-Received: from sburla-PowerEdge-T630.caveonetworks.com (unknown [10.106.27.217])
-        by maili.marvell.com (Postfix) with ESMTP id 219DD3F706B;
-        Thu, 10 Feb 2022 13:33:48 -0800 (PST)
-From:   Veerasenareddy Burru <vburru@marvell.com>
-To:     <vburru@marvell.com>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <corbet@lwn.net>, <netdev@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Abhijit Ayarekar <aayarekar@marvell.com>,
-        Satananda Burla <sburla@marvell.com>
-Subject: [PATCH 4/4] octeon_ep: add ethtool support for Octeon PCI Endpoint NIC.
-Date:   Thu, 10 Feb 2022 13:33:06 -0800
-Message-ID: <20220210213306.3599-5-vburru@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220210213306.3599-1-vburru@marvell.com>
-References: <20220210213306.3599-1-vburru@marvell.com>
+        Thu, 10 Feb 2022 16:33:42 -0500
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140088.outbound.protection.outlook.com [40.107.14.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D089D102F;
+        Thu, 10 Feb 2022 13:33:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SvWTPg3lW43pmAwFWjGeYmJPbVUox0rgI0CuZClcmi1mPxdYEtrzQiGAxegJc+UYBtcD9tmEYUWrp4Y5QNHainZ+AvTROMam5/r568wE3TthxR7rCeiH9QbSxYRvE8BJcp83oVjq7DGZzpifeNmIzYFT3NmjgUFbX6V9xJJh1NunJMiztsBBZo9KwqHirOPK+3p6GUiSoWGVF/KCdgziBxgOJuL1XXypr6U8+pJvjsdnjzpjZ3x03NHJktjcVIQyXcseWHyTf9l6l4jvvaAfx4v7Ez0vdNCURivN+BFkbJbIWUdd/eF2wQNmpbDMm6Znu29Y6T/+b1hzCZBJS/h9QA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9MtpD7IW46cwPezzmDojTR4IOQpiupBXQ2jWgYD3aW4=;
+ b=MY2ba208f6M7RxFJv307DnKDpJez3q6Ad3qKryl7Da30+Q7AZQCxJv84X9igTBypxqzl/TPYidNaswt6qM6sUesrul5OG8nynctRjKbiPDsStb+hJAV01ofPZ7sJJs/w95z1RL1rUEk9tZXx/TP+4WifYGjenrUglNqT0n1Snwg9CAVOy2s88G6UZh1aZVf9EXvUJ5TPZi1HKDb288b/qgECaJmYVJIyC8+sAMAaSYqCq9+B2gdZTgrT8cBEfTCMrUQ/i0D3PLhGgGvw44JCwqHqBMj3dSHc02UOZLaf8iCMZuFYuhAH8VujnOBVJDt/UAqD2+r4pQRMYB7GoduzbQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9MtpD7IW46cwPezzmDojTR4IOQpiupBXQ2jWgYD3aW4=;
+ b=cgGuPp9c8Ds7DG014zNjmYJhh1Njn8oBWcOZnDaSp0SjX3B/hd5Y6z7T2zqE0TaWSKEJr/v/GioJX6aAhEbeNszjpMTATykCVNac31xr6NwM3O6eQK124IUsZ68yJl/q+Dqt/zDyfR4qUnAEEVb6w2H1eAlZsWbCO+oJPyrd9Wo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB4679.eurprd04.prod.outlook.com (2603:10a6:20b:15::32)
+ by DBBPR04MB6075.eurprd04.prod.outlook.com (2603:10a6:10:c4::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Thu, 10 Feb
+ 2022 21:33:38 +0000
+Received: from AM6PR04MB4679.eurprd04.prod.outlook.com
+ ([fe80::28f3:36a7:fc3c:b9aa]) by AM6PR04MB4679.eurprd04.prod.outlook.com
+ ([fe80::28f3:36a7:fc3c:b9aa%5]) with mapi id 15.20.4975.011; Thu, 10 Feb 2022
+ 21:33:38 +0000
+Date:   Thu, 10 Feb 2022 23:33:36 +0200
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Jacky Bai <ping.bai@nxp.com>
+Subject: Re: [RESEND v4 05/10] arm64: dts: freescale: Add the imx8dxl
+ connectivity subsys dtsi
+Message-ID: <YgWEsHZHqDK1sCYz@abelvesa>
+References: <1639680494-23183-1-git-send-email-abel.vesa@nxp.com>
+ <1639680494-23183-6-git-send-email-abel.vesa@nxp.com>
+ <20220126124732.GR4686@dragon>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126124732.GR4686@dragon>
+X-ClientProxiedBy: VI1PR0102CA0027.eurprd01.prod.exchangelabs.com
+ (2603:10a6:802::40) To AM6PR04MB4679.eurprd04.prod.outlook.com
+ (2603:10a6:20b:15::32)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-GUID: siJFOaDHHAPWpsI7FpsFcQlWz3h2MvBj
-X-Proofpoint-ORIG-GUID: siJFOaDHHAPWpsI7FpsFcQlWz3h2MvBj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-10_10,2022-02-09_01,2021-12-02_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 88862aed-b2e0-4d40-d0a5-08d9ecdd0053
+X-MS-TrafficTypeDiagnostic: DBBPR04MB6075:EE_
+X-Microsoft-Antispam-PRVS: <DBBPR04MB607588A6A727609E82AE464DF62F9@DBBPR04MB6075.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Hniuf8ELvYKDRlSSUinYWKeQR7+bDKUDzymAIix0CzHczz0cswbgy6XupsI9QCW6qLFefy0ZHXDlyE0sZNlWkUmT80gJCXv7doN8mV7JkM2MB82zU33LRKY9J+iBESG5EaV4/KJmB9HdPqYHJM3YC7lpvrIS5YnuLE2qgnprDuVuzjTQ6AGgqqmqiiPDKY1wjll9i5i5JtskY5WqjOuNzX+VM6Wd8kLIpi9J2C4vWafx+oVNxDgEy9jCgtcfU9+MSZOiYWEaFu/cTrJeUmN269W2lnu1C2nigqn4epwPtXSNj8MzkoHUDszVkc1CHvzjDF3BhI/sIwJc487KItHsyMD/cmq3DHZLk3Ecg/s+SgRIh87yrcYf8vfOAuxDUV1/QGtREOgQBxZYV4qn6eT3erGQQcg4+p+tz7jwVGRv8nzGxUN/3nQ+oLZzEzzVlHHJmLPW3LEHk4cfMVXhRLKdipkVLn7ocoJhcv2bHFVrOkSYVusTT/kP9BBqhSb47JHC58mRfTMjfaufEydZBgzjtvmjaWFcZfdfuZqdkz1dnJxINJq0wiOxSfsKGpwhhkv4ShS6zfaQWbCog4rljtV1UgsqrcTE0xuJgEeqBceafiyibNg5yMQGMrbY/yFzkyW4AlcXNpE4BBPeB08ZEWuG7GOJU4i3WW7Nh/Xadce11O4QEAFvxtqNA5beCqnyYScBJZllbvZXbzwgBs1heSIUcX9ZFDEwEkcdEQst36i3tYk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4679.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(52116002)(6486002)(83380400001)(508600001)(53546011)(33716001)(6506007)(8676002)(86362001)(38100700002)(7416002)(5660300002)(44832011)(8936002)(26005)(316002)(186003)(38350700002)(54906003)(6916009)(9686003)(6512007)(4326008)(2906002)(66556008)(66476007)(66946007)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?K7noT6TCaNbmqgJKrnCrbeyRnoxfid4QOR438MXVgRKXJgFjvk1MzU9WkPcV?=
+ =?us-ascii?Q?5I4O0jS5INFxzLUJVl7ASyzJMJQRYaX9O8TS/uiIhnKpu09AQWHXjcGj0to7?=
+ =?us-ascii?Q?QOW7o+m+tDcBMAZpLz3kPJlvaZkCF4E0UuRo/0uPmPWBHT89GLmBCkvu7SfV?=
+ =?us-ascii?Q?B0Op34G6+nNpwnGH+fqf4SYh5fbWHwxORuSnePQ7KomoQiJtaTO5el6whvm2?=
+ =?us-ascii?Q?VqH1WsV4ATVDAz0/PXYmrCRwpogL7OhXYrDaOqmLl73Zke6QqwzD1n1hN9tw?=
+ =?us-ascii?Q?QI3Iz5ge8kkowdt91rpzBXaOOSroCk8TW5FRT2dEtxPKU7sywrGMFJ3TF+5E?=
+ =?us-ascii?Q?zZZqnFA0rZhkf68AfbrY2FKIfuv0Ew+zM8sotx0k0RP6TMCYR3EOQEshwCQd?=
+ =?us-ascii?Q?GcPhosJvTjSxLXHs9g7FnmfvKGoaZrGG7kE7A/FHcIAlxGIO0AXiLkl9Ivox?=
+ =?us-ascii?Q?1HptVCethBZrEWEDjG0wY+vJdEsVA8j0iM9rkDBMdL8IM9Dh66sJGHeQGeDx?=
+ =?us-ascii?Q?PJa5jVtrfCiRKc51b08kMVOUC7w/xgn0saChA2m6NvNe69awD5j3OiI68+PA?=
+ =?us-ascii?Q?x4mD2xj48TRSOAtzhyWzyxmxKpEHXJwH5ZhO1cVj8oLctgMNLlaiHMrITEvK?=
+ =?us-ascii?Q?Z0Y7DiRrjIdZy9Wv6DVicWfNdc8iY7sqNhsRXcNgCi1am2hxHys+ESBmPsJZ?=
+ =?us-ascii?Q?94VckzdzStYf5sk31iR9Ao286KoOUkcAoJSAJyhvAcPKa3IKKqd/krJx3wjG?=
+ =?us-ascii?Q?XG/wJ1pjOFbGZ7V6SYX0sWcEQUrn0yPOv24GmVB21u6CP2R2KgI5MS7P4+Ne?=
+ =?us-ascii?Q?uweTeEi6ZZb5YpERcTyy7puasu8dcOAnxn5FtOIOeIDeWmyQHx/C8w1lw4Uf?=
+ =?us-ascii?Q?1osiVFNVtGnK8jBcHZAr4MCjRTR4MPEDdiHcPwV6x7Qw3eeB3T9SELaSuRPO?=
+ =?us-ascii?Q?8jQSIkWlAzyNgf6b1gagWsNOuJCfah7lUBKnL++OLAwBxouscIYkwmwtsJIK?=
+ =?us-ascii?Q?qr6g8MlRYjndDFIt+wEIUIhUki8nv0dqCQZsmulzggHI97QEbN4J9kAZvnI+?=
+ =?us-ascii?Q?QFOstVMLKMQoPFqSwSklMFuoJX2Dky5SYMDnO+JFqR3VVChhm/g6B86Im59Y?=
+ =?us-ascii?Q?dgKwHcn1bzEBhvy4Dzp8yEtSNJJygRMrsZxW9X7wNPgBgaIhPCk0AxeVKWEs?=
+ =?us-ascii?Q?S3Qms5fZjAXxQch9Zwgo6Tszjs8/Q2CpadVJnDrxg57eZFmNjFG6I0tEpMoL?=
+ =?us-ascii?Q?SMRwjYRS9iSvPPrFPY8K4USDSeCYoZc1zYSClJLkjFRgEGFW3Jzm67hC50uL?=
+ =?us-ascii?Q?YJoORDXcAZHYJz/8XNwWrW2hrAIybYeCHI/bDM9KO1GSU0y8/Ka0F+RLftXs?=
+ =?us-ascii?Q?wNVizDvcMkD0/1qLZx5MxRBPdKwAO2338VWX3Tt+Z8UfAmQQp9UC+U3timTK?=
+ =?us-ascii?Q?B0mZpW6aQNB/mRkaVXh25E+a0eT057vxOwfRWhY/0WjxsxBaYIDIqzukf3Pc?=
+ =?us-ascii?Q?tZtjhB6oEP9ukOLzjJ5ZNhHoz8bE/+1BdBGv9PPMpkcmttGBtmOcpu5F6enA?=
+ =?us-ascii?Q?/N972f8ty4t6tbK+9UjPIkh2c336BgwR0ER2pnKWCxC71WT3xu41ad6ZU+oE?=
+ =?us-ascii?Q?Svah1Hep6FFDigl46TnsqBU=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88862aed-b2e0-4d40-d0a5-08d9ecdd0053
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4679.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 21:33:38.8462
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tDksEAWXe0WyaMUejAkQlmPkAacLhGMU1bfqy5cbvOVt5GxSFT2sVd7cY2pMuGKRJ0vz23emqqbFmbEgZVzrhg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB6075
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the following ethtool commands:
+On 22-01-26 20:47:33, Shawn Guo wrote:
+> On Thu, Dec 16, 2021 at 08:48:09PM +0200, Abel Vesa wrote:
+> > From: Jacky Bai <ping.bai@nxp.com>
+> > 
+> > On i.MX8DXL, the Connectivity subsystem includes below peripherals:
+> > 1x ENET with AVB support, 1x ENET with TSN support, 2x USB OTG,
+> > 1x eMMC, 2x SD, 1x NAND.
+> > 
+> > Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+> > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> > ---
+> >  .../boot/dts/freescale/imx8dxl-ss-conn.dtsi   | 137 ++++++++++++++++++
+> >  1 file changed, 137 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
+> > 
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
+> > new file mode 100644
+> > index 000000000000..b0059296a03f
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
+> > @@ -0,0 +1,137 @@
+> > +// SPDX-License-Identifier: GPL-2.0+
+> > +/*
+> > + * Copyright 2019-2021 NXP
+> > + */
+> 
+> Shouldn't we include imx8-ss-conn.dtsi here?  Otherwise, the
+> /delete-node/ and &conn_subsys reference below looks baseless.
+> 
 
-ethtool -i|--driver devname
-ethtool devname
-ethtool -s devname [speed N] [autoneg on|off] [advertise N]
-ethtool -S|--statistics devname
+Nope. The way this works is: imx8dxl.dtsi includes both
+imx8-ss-conn.dtsi (the generic part) and imx8dxl-ss-conn.dtsi
+(the imx8dxl specific part), in this exact order.
+And same does imx8qxp.dtsi. It includes the imx8-ss-conn.dtsi
+(the generic part) and then includes imx8qxp-ss-conn.dtsi
+(the imx8qxp specific part). And so on.
 
-Signed-off-by: Veerasenareddy Burru <vburru@marvell.com>
-Signed-off-by: Abhijit Ayarekar <aayarekar@marvell.com>
-Signed-off-by: Satananda Burla <sburla@marvell.com>
----
- .../net/ethernet/marvell/octeon_ep/Makefile   |   2 +-
- .../marvell/octeon_ep/octep_ethtool.c         | 509 ++++++++++++++++++
- .../ethernet/marvell/octeon_ep/octep_main.c   |   5 +-
- 3 files changed, 513 insertions(+), 3 deletions(-)
- create mode 100644 drivers/net/ethernet/marvell/octeon_ep/octep_ethtool.c
+All other comments will be addressed in the next version of this
+patchset.
 
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/Makefile b/drivers/net/ethernet/marvell/octeon_ep/Makefile
-index 6e2db8e80b4a..2026c8118158 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/Makefile
-+++ b/drivers/net/ethernet/marvell/octeon_ep/Makefile
-@@ -6,4 +6,4 @@
- obj-$(CONFIG_OCTEON_EP) += octeon_ep.o
- 
- octeon_ep-y := octep_main.o octep_cn9k_pf.o octep_tx.o octep_rx.o \
--	       octep_ctrl_mbox.o octep_ctrl_net.o
-+	       octep_ethtool.o octep_ctrl_mbox.o octep_ctrl_net.o
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_ethtool.c b/drivers/net/ethernet/marvell/octeon_ep/octep_ethtool.c
-new file mode 100644
-index 000000000000..0263cfbb2dfb
---- /dev/null
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_ethtool.c
-@@ -0,0 +1,509 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Marvell Octeon EP (EndPoint) Ethernet Driver
-+ *
-+ * Copyright (C) 2020 Marvell.
-+ *
-+ */
-+
-+#include <linux/pci.h>
-+#include <linux/netdevice.h>
-+#include <linux/ethtool.h>
-+
-+#include "octep_config.h"
-+#include "octep_main.h"
-+#include "octep_ctrl_net.h"
-+
-+static const char octep_gstrings_global_stats[][ETH_GSTRING_LEN] = {
-+	"rx_packets",
-+	"tx_packets",
-+	"rx_bytes",
-+	"tx_bytes",
-+	"rx_alloc_errors",
-+	"tx_busy_errors",
-+	"rx_dropped",
-+	"tx_dropped",
-+	"tx_hw_pkts",
-+	"tx_hw_octs",
-+	"tx_hw_bcast",
-+	"tx_hw_mcast",
-+	"tx_hw_underflow",
-+	"tx_hw_control",
-+	"tx_less_than_64",
-+	"tx_equal_64",
-+	"tx_equal_65_to_127",
-+	"tx_equal_128_to_255",
-+	"tx_equal_256_to_511",
-+	"tx_equal_512_to_1023",
-+	"tx_equal_1024_to_1518",
-+	"tx_greater_than_1518",
-+	"rx_hw_pkts",
-+	"rx_hw_bytes",
-+	"rx_hw_bcast",
-+	"rx_hw_mcast",
-+	"rx_pause_pkts",
-+	"rx_pause_bytes",
-+	"rx_dropped_pkts_fifo_full",
-+	"rx_dropped_bytes_fifo_full",
-+	"rx_err_pkts",
-+};
-+
-+#define OCTEP_GLOBAL_STATS_CNT (sizeof(octep_gstrings_global_stats) / ETH_GSTRING_LEN)
-+
-+static const char octep_gstrings_tx_q_stats[][ETH_GSTRING_LEN] = {
-+	"tx_packets_posted[Q-%u]",
-+	"tx_packets_completed[Q-%u]",
-+	"tx_bytes[Q-%u]",
-+	"tx_busy[Q-%u]",
-+};
-+
-+#define OCTEP_TX_Q_STATS_CNT (sizeof(octep_gstrings_tx_q_stats) / ETH_GSTRING_LEN)
-+
-+static const char octep_gstrings_rx_q_stats[][ETH_GSTRING_LEN] = {
-+	"rx_packets[Q-%u]",
-+	"rx_bytes[Q-%u]",
-+	"rx_alloc_errors[Q-%u]",
-+};
-+
-+#define OCTEP_RX_Q_STATS_CNT (sizeof(octep_gstrings_rx_q_stats) / ETH_GSTRING_LEN)
-+
-+static void octep_get_drvinfo(struct net_device *netdev,
-+			      struct ethtool_drvinfo *info)
-+{
-+	struct octep_device *oct = netdev_priv(netdev);
-+
-+	strscpy(info->driver, OCTEP_DRV_NAME, sizeof(info->driver));
-+	strscpy(info->version, OCTEP_DRV_VERSION_STR, sizeof(info->version));
-+	strscpy(info->bus_info, pci_name(oct->pdev), sizeof(info->bus_info));
-+}
-+
-+static void octep_get_strings(struct net_device *netdev,
-+			      u32 stringset, u8 *data)
-+{
-+	struct octep_device *oct = netdev_priv(netdev);
-+	u16 num_queues = CFG_GET_PORTS_ACTIVE_IO_RINGS(oct->conf);
-+	char *strings = (char *)data;
-+	int i, j;
-+
-+	switch (stringset) {
-+	case ETH_SS_STATS:
-+		for (i = 0; i < OCTEP_GLOBAL_STATS_CNT; i++) {
-+			snprintf(strings, ETH_GSTRING_LEN,
-+				 octep_gstrings_global_stats[i]);
-+			strings += ETH_GSTRING_LEN;
-+		}
-+
-+		for (i = 0; i < num_queues; i++) {
-+			for (j = 0; j < OCTEP_TX_Q_STATS_CNT; j++) {
-+				snprintf(strings, ETH_GSTRING_LEN,
-+					 octep_gstrings_tx_q_stats[j], i);
-+				strings += ETH_GSTRING_LEN;
-+			}
-+		}
-+
-+		for (i = 0; i < num_queues; i++) {
-+			for (j = 0; j < OCTEP_RX_Q_STATS_CNT; j++) {
-+				snprintf(strings, ETH_GSTRING_LEN,
-+					 octep_gstrings_rx_q_stats[j], i);
-+				strings += ETH_GSTRING_LEN;
-+			}
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static int octep_get_sset_count(struct net_device *netdev, int sset)
-+{
-+	struct octep_device *oct = netdev_priv(netdev);
-+	u16 num_queues = CFG_GET_PORTS_ACTIVE_IO_RINGS(oct->conf);
-+
-+	switch (sset) {
-+	case ETH_SS_STATS:
-+		return OCTEP_GLOBAL_STATS_CNT + (num_queues *
-+		       (OCTEP_TX_Q_STATS_CNT + OCTEP_RX_Q_STATS_CNT));
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static void
-+octep_get_ethtool_stats(struct net_device *netdev,
-+			struct ethtool_stats *stats, u64 *data)
-+{
-+	struct octep_device *oct = netdev_priv(netdev);
-+	struct octep_iface_tx_stats *iface_tx_stats;
-+	struct octep_iface_rx_stats *iface_rx_stats;
-+	u64 rx_packets, rx_bytes, rx_errors;
-+	u64 tx_packets, tx_bytes, tx_errors;
-+	u64 rx_alloc_errors, tx_busy_errors;
-+	int q, i;
-+
-+	rx_packets = 0;
-+	rx_bytes = 0;
-+	rx_errors = 0;
-+	tx_packets = 0;
-+	tx_bytes = 0;
-+	tx_errors = 0;
-+	rx_alloc_errors = 0;
-+	tx_busy_errors = 0;
-+	tx_packets = 0;
-+	tx_bytes = 0;
-+	rx_packets = 0;
-+	rx_bytes = 0;
-+
-+	octep_get_if_stats(oct);
-+	iface_tx_stats = &oct->iface_tx_stats;
-+	iface_rx_stats = &oct->iface_rx_stats;
-+
-+	for (q = 0; q < oct->num_oqs; q++) {
-+		struct octep_iq *iq = oct->iq[q];
-+		struct octep_oq *oq = oct->oq[q];
-+
-+		tx_packets += iq->stats.instr_completed;
-+		tx_bytes += iq->stats.bytes_sent;
-+		tx_busy_errors += iq->stats.tx_busy;
-+
-+		rx_packets += oq->stats.packets;
-+		rx_bytes += oq->stats.bytes;
-+		rx_alloc_errors += oq->stats.alloc_failures;
-+	}
-+	i = 0;
-+	data[i++] = rx_packets;
-+	data[i++] = tx_packets;
-+	data[i++] = rx_bytes;
-+	data[i++] = tx_bytes;
-+	data[i++] = rx_alloc_errors;
-+	data[i++] = tx_busy_errors;
-+	data[i++] = iface_rx_stats->dropped_pkts_fifo_full +
-+		    iface_rx_stats->err_pkts;
-+	data[i++] = iface_tx_stats->xscol +
-+		    iface_tx_stats->xsdef;
-+	data[i++] = iface_tx_stats->pkts;
-+	data[i++] = iface_tx_stats->octs;
-+	data[i++] = iface_tx_stats->bcst;
-+	data[i++] = iface_tx_stats->mcst;
-+	data[i++] = iface_tx_stats->undflw;
-+	data[i++] = iface_tx_stats->ctl;
-+	data[i++] = iface_tx_stats->hist_lt64;
-+	data[i++] = iface_tx_stats->hist_eq64;
-+	data[i++] = iface_tx_stats->hist_65to127;
-+	data[i++] = iface_tx_stats->hist_128to255;
-+	data[i++] = iface_tx_stats->hist_256to511;
-+	data[i++] = iface_tx_stats->hist_512to1023;
-+	data[i++] = iface_tx_stats->hist_1024to1518;
-+	data[i++] = iface_tx_stats->hist_gt1518;
-+	data[i++] = iface_rx_stats->pkts;
-+	data[i++] = iface_rx_stats->octets;
-+	data[i++] = iface_rx_stats->mcast_pkts;
-+	data[i++] = iface_rx_stats->bcast_pkts;
-+	data[i++] = iface_rx_stats->pause_pkts;
-+	data[i++] = iface_rx_stats->pause_octets;
-+	data[i++] = iface_rx_stats->dropped_pkts_fifo_full;
-+	data[i++] = iface_rx_stats->dropped_octets_fifo_full;
-+	data[i++] = iface_rx_stats->err_pkts;
-+
-+	/* Per Tx Queue stats */
-+	for (q = 0; q < oct->num_iqs; q++) {
-+		struct octep_iq *iq = oct->iq[q];
-+
-+		data[i++] = iq->stats.instr_posted;
-+		data[i++] = iq->stats.instr_completed;
-+		data[i++] = iq->stats.bytes_sent;
-+		data[i++] = iq->stats.tx_busy;
-+	}
-+
-+	/* Per Rx Queue stats */
-+	for (q = 0; q < oct->num_oqs; q++) {
-+		struct octep_oq *oq = oct->oq[q];
-+
-+		data[i++] = oq->stats.packets;
-+		data[i++] = oq->stats.bytes;
-+		data[i++] = oq->stats.alloc_failures;
-+	}
-+}
-+
-+static int octep_get_link_ksettings(struct net_device *netdev,
-+				    struct ethtool_link_ksettings *cmd)
-+{
-+	struct octep_device *oct = netdev_priv(netdev);
-+	struct octep_iface_link_info *link_info;
-+	u32 advertised, supported;
-+
-+	ethtool_link_ksettings_zero_link_mode(cmd, supported);
-+	ethtool_link_ksettings_zero_link_mode(cmd, advertising);
-+
-+	octep_get_link_info(oct);
-+
-+	advertised = oct->link_info.advertised_modes;
-+	supported = oct->link_info.supported_modes;
-+	link_info = &oct->link_info;
-+
-+	if (supported & BIT(OCTEP_LINK_MODE_10GBASE_T))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 10000baseT_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_10GBASE_R))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 10000baseR_FEC);
-+	if (supported & BIT(OCTEP_LINK_MODE_10GBASE_CR))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 10000baseCR_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_10GBASE_KR))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 10000baseKR_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_10GBASE_LR))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 10000baseLR_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_10GBASE_SR))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 10000baseSR_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_25GBASE_CR))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 25000baseCR_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_25GBASE_KR))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 25000baseKR_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_25GBASE_SR))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 25000baseSR_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_40GBASE_CR4))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 40000baseCR4_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_40GBASE_KR4))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 40000baseKR4_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_40GBASE_LR4))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 40000baseLR4_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_40GBASE_SR4))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 40000baseSR4_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_50GBASE_CR2))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 50000baseCR2_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_50GBASE_KR2))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 50000baseKR2_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_50GBASE_SR2))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 50000baseSR2_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_50GBASE_CR))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 50000baseCR_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_50GBASE_KR))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 50000baseKR_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_50GBASE_LR))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 50000baseLR_ER_FR_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_50GBASE_SR))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 50000baseSR_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_100GBASE_CR4))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 100000baseCR4_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_100GBASE_KR4))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 100000baseKR4_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_100GBASE_LR4))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 100000baseLR4_ER4_Full);
-+	if (supported & BIT(OCTEP_LINK_MODE_100GBASE_SR4))
-+		ethtool_link_ksettings_add_link_mode(cmd, supported, 100000baseSR4_Full);
-+
-+	if (advertised & BIT(OCTEP_LINK_MODE_10GBASE_T))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 10000baseT_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_10GBASE_R))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 10000baseR_FEC);
-+	if (advertised & BIT(OCTEP_LINK_MODE_10GBASE_CR))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 10000baseCR_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_10GBASE_KR))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 10000baseKR_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_10GBASE_LR))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 10000baseLR_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_10GBASE_SR))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 10000baseSR_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_25GBASE_CR))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 25000baseCR_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_25GBASE_KR))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 25000baseKR_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_25GBASE_SR))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 25000baseSR_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_40GBASE_CR4))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 40000baseCR4_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_40GBASE_KR4))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 40000baseKR4_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_40GBASE_LR4))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 40000baseLR4_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_40GBASE_SR4))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 40000baseSR4_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_50GBASE_CR2))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 50000baseCR2_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_50GBASE_KR2))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 50000baseKR2_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_50GBASE_SR2))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 50000baseSR2_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_50GBASE_CR))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 50000baseCR_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_50GBASE_KR))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 50000baseKR_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_50GBASE_LR))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 50000baseLR_ER_FR_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_50GBASE_SR))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 50000baseSR_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_100GBASE_CR4))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 100000baseCR4_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_100GBASE_KR4))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 100000baseKR4_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_100GBASE_LR4))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 100000baseLR4_ER4_Full);
-+	if (advertised & BIT(OCTEP_LINK_MODE_100GBASE_SR4))
-+		ethtool_link_ksettings_add_link_mode(cmd, advertising, 100000baseSR4_Full);
-+
-+	if (link_info->autoneg) {
-+		if (link_info->autoneg & OCTEP_LINK_MODE_AUTONEG_SUPPORTED)
-+			ethtool_link_ksettings_add_link_mode(cmd, supported, Autoneg);
-+		if (link_info->autoneg & OCTEP_LINK_MODE_AUTONEG_ADVERTISED) {
-+			ethtool_link_ksettings_add_link_mode(cmd, advertising, Autoneg);
-+			cmd->base.autoneg = AUTONEG_ENABLE;
-+		} else {
-+			cmd->base.autoneg = AUTONEG_DISABLE;
-+		}
-+	} else {
-+		cmd->base.autoneg = AUTONEG_DISABLE;
-+	}
-+
-+	if (link_info->pause) {
-+		if (link_info->pause & OCTEP_LINK_MODE_PAUSE_SUPPORTED)
-+			ethtool_link_ksettings_add_link_mode(cmd, supported, Pause);
-+		if (link_info->pause & OCTEP_LINK_MODE_PAUSE_ADVERTISED)
-+			ethtool_link_ksettings_add_link_mode(cmd, advertising, Pause);
-+	}
-+
-+	cmd->base.port = PORT_FIBRE;
-+	ethtool_link_ksettings_add_link_mode(cmd, supported, FIBRE);
-+	ethtool_link_ksettings_add_link_mode(cmd, advertising, FIBRE);
-+
-+	if (netif_carrier_ok(netdev)) {
-+		cmd->base.speed = link_info->speed;
-+		cmd->base.duplex = DUPLEX_FULL;
-+	} else {
-+		cmd->base.speed = SPEED_UNKNOWN;
-+		cmd->base.duplex = DUPLEX_UNKNOWN;
-+	}
-+	return 0;
-+}
-+
-+static int octep_set_link_ksettings(struct net_device *netdev,
-+				    const struct ethtool_link_ksettings *cmd)
-+{
-+	struct octep_device *oct = netdev_priv(netdev);
-+	struct octep_iface_link_info link_info_new;
-+	struct octep_iface_link_info *link_info;
-+	u64 advertised;
-+	u8 autoneg = 0;
-+	int err;
-+
-+	link_info = &oct->link_info;
-+	memcpy(&link_info_new, link_info, sizeof(struct octep_iface_link_info));
-+
-+	/* Only Full duplex is supported;
-+	 * Assume full duplex when duplex is unknown.
-+	 */
-+	if (cmd->base.duplex != DUPLEX_FULL &&
-+	    cmd->base.duplex != DUPLEX_UNKNOWN)
-+		return -EOPNOTSUPP;
-+
-+	if (cmd->base.autoneg == AUTONEG_ENABLE) {
-+		if (!(link_info->autoneg & OCTEP_LINK_MODE_AUTONEG_SUPPORTED))
-+			return -EOPNOTSUPP;
-+		autoneg = 1;
-+	}
-+
-+	if (!bitmap_subset(cmd->link_modes.advertising,
-+			   cmd->link_modes.supported,
-+			   __ETHTOOL_LINK_MODE_MASK_NBITS))
-+		return -EINVAL;
-+
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  10000baseT_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_10GBASE_T);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  10000baseR_FEC))
-+		advertised |= BIT(OCTEP_LINK_MODE_10GBASE_R);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  10000baseCR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_10GBASE_CR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  10000baseKR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_10GBASE_KR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  10000baseLR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_10GBASE_LR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  10000baseSR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_10GBASE_SR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  25000baseCR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_25GBASE_CR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  25000baseKR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_25GBASE_KR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  25000baseSR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_25GBASE_SR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  40000baseCR4_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_40GBASE_CR4);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  40000baseKR4_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_40GBASE_KR4);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  40000baseLR4_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_40GBASE_LR4);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  40000baseSR4_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_40GBASE_SR4);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  50000baseCR2_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_50GBASE_CR2);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  50000baseKR2_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_50GBASE_KR2);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  50000baseSR2_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_50GBASE_SR2);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  50000baseCR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_50GBASE_CR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  50000baseKR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_50GBASE_KR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  50000baseLR_ER_FR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_50GBASE_LR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  50000baseSR_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_50GBASE_SR);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  100000baseCR4_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_100GBASE_CR4);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  100000baseKR4_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_100GBASE_KR4);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  100000baseLR4_ER4_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_100GBASE_LR4);
-+	if (ethtool_link_ksettings_test_link_mode(cmd, advertising,
-+						  100000baseSR4_Full))
-+		advertised |= BIT(OCTEP_LINK_MODE_100GBASE_SR4);
-+
-+	if (advertised == link_info->advertised_modes &&
-+	    cmd->base.speed == link_info->speed &&
-+	    cmd->base.autoneg == link_info->autoneg)
-+		return 0;
-+
-+	link_info_new.advertised_modes = advertised;
-+	link_info_new.speed = cmd->base.speed;
-+	link_info_new.autoneg = cmd->base.autoneg;
-+
-+	err = octep_set_link_info(oct, &link_info_new);
-+	if (err)
-+		return err;
-+
-+	memcpy(link_info, &link_info_new, sizeof(struct octep_iface_link_info));
-+	return 0;
-+}
-+
-+const struct ethtool_ops octep_ethtool_ops = {
-+	.get_drvinfo = octep_get_drvinfo,
-+	.get_link = ethtool_op_get_link,
-+	.get_strings = octep_get_strings,
-+	.get_sset_count = octep_get_sset_count,
-+	.get_ethtool_stats = octep_get_ethtool_stats,
-+	.get_link_ksettings = octep_get_link_ksettings,
-+	.set_link_ksettings = octep_set_link_ksettings,
-+};
-+
-+void octep_set_ethtool_ops(struct net_device *netdev)
-+{
-+	netdev->ethtool_ops = &octep_ethtool_ops;
-+}
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-index 700852fd4c3a..00c6ca047332 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-@@ -827,7 +827,7 @@ static int octep_set_mac(struct net_device *netdev, void *p)
- 		return err;
- 
- 	memcpy(oct->mac_addr, addr->sa_data, ETH_ALEN);
--	memcpy(netdev->dev_addr, addr->sa_data, netdev->addr_len);
-+	eth_hw_addr_set(netdev, addr->sa_data);
- 
- 	return 0;
- }
-@@ -1058,6 +1058,7 @@ static int octep_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	INIT_WORK(&octep_dev->ctrl_mbox_task, octep_ctrl_mbox_task);
- 
- 	netdev->netdev_ops = &octep_netdev_ops;
-+	octep_set_ethtool_ops(netdev);
- 	netif_carrier_off(netdev);
- 
- 	netdev->hw_features = NETIF_F_SG;
-@@ -1067,7 +1068,7 @@ static int octep_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	netdev->mtu = OCTEP_DEFAULT_MTU;
- 
- 	octep_get_mac_addr(octep_dev, octep_dev->mac_addr);
--	memcpy(netdev->dev_addr, octep_dev->mac_addr, netdev->addr_len);
-+	eth_hw_addr_set(netdev, octep_dev->mac_addr);
- 
- 	if (register_netdev(netdev)) {
- 		dev_err(&pdev->dev, "Failed to register netdev\n");
--- 
-2.17.1
-
+> > +
+> > +/delete-node/ &enet1_lpcg;
+> > +/delete-node/ &fec2;
+> > +
+> > +&conn_subsys {
+> > +	conn_enet0_root_clk: clock-conn-enet0-root {
+> > +		compatible = "fixed-clock";
+> > +		#clock-cells = <0>;
+> > +		clock-frequency = <250000000>;
+> > +		clock-output-names = "conn_enet0_root_clk";
+> > +	};
+> > +
+> > +	eqos: ethernet@5b050000 {
+> > +		compatible = "nxp,imx8dxl-dwmac-eqos", "snps,dwmac-5.10a";
+> > +		reg = <0x5b050000 0x10000>;
+> > +		interrupt-parent = <&gic>;
+> > +		interrupts = <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>,
+> > +			     <GIC_SPI 162 IRQ_TYPE_LEVEL_HIGH>;
+> > +		interrupt-names = "eth_wake_irq", "macirq";
+> > +		clocks = <&eqos_lpcg IMX_LPCG_CLK_2>,
+> > +			 <&eqos_lpcg IMX_LPCG_CLK_4>,
+> > +			 <&eqos_lpcg IMX_LPCG_CLK_0>,
+> > +			 <&eqos_lpcg IMX_LPCG_CLK_3>,
+> > +			 <&eqos_lpcg IMX_LPCG_CLK_1>;
+> > +		clock-names = "stmmaceth", "pclk", "ptp_ref", "tx", "mem";
+> > +		assigned-clocks = <&clk IMX_SC_R_ENET_1 IMX_SC_PM_CLK_PER>;
+> > +		assigned-clock-rates = <125000000>;
+> > +		power-domains = <&pd IMX_SC_R_ENET_1>;
+> > +		clk_csr = <0>;
+> 
+> Is this property documented anywhere?
+> 
+> > +		status = "disabled";
+> > +	};
+> > +
+> > +	usbotg2: usb@5b0e0000 {
+> > +		compatible = "fsl,imx8dxl-usb", "fsl,imx7ulp-usb";
+> > +		reg = <0x5b0e0000 0x200>;
+> > +		interrupt-parent = <&gic>;
+> > +		interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_HIGH>;
+> > +		fsl,usbphy = <&usbphy2>;
+> > +		fsl,usbmisc = <&usbmisc2 0>;
+> > +		/*
+> > +		 * usbotg1 and usbotg2 share one clcok
+> 
+> s/clcok/clock
+> 
+> > +		 * scfw disable clock access and keep it always on
+> > +		 * in case other core (M4) use one of these.
+> > +		 */
+> > +		clocks = <&clk_dummy>;
+> > +		ahb-burst-config = <0x0>;
+> > +		tx-burst-size-dword = <0x10>;
+> > +		rx-burst-size-dword = <0x10>;
+> > +		#stream-id-cells = <1>;
+> > +		power-domains = <&pd IMX_SC_R_USB_1>;
+> > +		status = "disabled";
+> > +	};
+> > +
+> > +	usbmisc2: usbmisc@5b0e0200 {
+> > +		#index-cells = <1>;
+> > +		compatible = "fsl,imx8dxl-usbmisc", "fsl,imx7ulp-usbmisc";
+> > +		reg = <0x5b0e0200 0x200>;
+> > +	};
+> > +
+> > +	usbphy2: usbphy@0x5b110000 {
+> > +		compatible = "fsl,imx8dxl-usbphy", "fsl,imx7ulp-usbphy";
+> > +		reg = <0x5b110000 0x1000>;
+> > +		clocks = <&usb2_2_lpcg IMX_LPCG_CLK_7>;
+> > +		status = "disabled";
+> > +	};
+> > +
+> > +	eqos_lpcg: clock-controller@5b240000 {
+> > +		compatible = "fsl,imx8qxp-lpcg";
+> > +		reg = <0x5b240000 0x10000>;
+> > +		#clock-cells = <1>;
+> > +		clocks = <&conn_enet0_root_clk>,
+> > +			 <&conn_axi_clk>,
+> > +			 <&conn_axi_clk>,
+> > +			 <&clk IMX_SC_R_ENET_1 IMX_SC_PM_CLK_PER>,
+> > +			 <&conn_ipg_clk>;
+> > +		clock-indices = <IMX_LPCG_CLK_0>,
+> > +				<IMX_LPCG_CLK_2>,
+> > +				<IMX_LPCG_CLK_4>,
+> > +				<IMX_LPCG_CLK_5>,
+> > +				<IMX_LPCG_CLK_6>;
+> > +		clock-output-names = "eqos_ptp",
+> > +				     "eqos_mem_clk",
+> > +				     "eqos_aclk",
+> > +				     "eqos_clk",
+> > +				     "eqos_csr_clk";
+> > +		power-domains = <&pd IMX_SC_R_ENET_1>;
+> > +	};
+> > +
+> > +	usb2_2_lpcg: clock-controller@5b280000 {
+> > +		compatible = "fsl,imx8qxp-lpcg";
+> > +		reg = <0x5b280000 0x10000>;
+> > +		#clock-cells = <1>;
+> > +
+> 
+> Unneeded newline.
+> 
+> Shawn
+> 
+> > +		clock-indices = <IMX_LPCG_CLK_7>;
+> > +		clocks = <&conn_ipg_clk>;
+> > +		clock-output-names = "usboh3_2_phy_ipg_clk";
+> > +	};
+> > +
+> > +};
+> > +
+> > +&enet0_lpcg {
+> > +	clocks = <&conn_enet0_root_clk>,
+> > +		 <&conn_enet0_root_clk>,
+> > +		 <&conn_axi_clk>,
+> > +		 <&clk IMX_SC_R_ENET_0 IMX_SC_C_TXCLK>,
+> > +		 <&conn_ipg_clk>,
+> > +		 <&conn_ipg_clk>;
+> > +};
+> > +
+> > +&fec1 {
+> > +	compatible = "fsl,imx8dxl-fec", "fsl,imx8qm-fec";
+> > +	interrupts = <GIC_SPI 160 IRQ_TYPE_LEVEL_HIGH>,
+> > +		     <GIC_SPI 158 IRQ_TYPE_LEVEL_HIGH>,
+> > +		     <GIC_SPI 159 IRQ_TYPE_LEVEL_HIGH>,
+> > +		     <GIC_SPI 161 IRQ_TYPE_LEVEL_HIGH>;
+> > +	assigned-clocks = <&clk IMX_SC_R_ENET_0 IMX_SC_C_CLKDIV>;
+> > +	assigned-clock-rates = <125000000>;
+> > +};
+> > +
+> > +&usdhc1 {
+> > +	compatible = "fsl,imx8dxl-usdhc", "fsl,imx8qxp-usdhc";
+> > +	interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
+> > +};
+> > +
+> > +&usdhc2 {
+> > +	compatible = "fsl,imx8dxl-usdhc", "fsl,imx8qxp-usdhc";
+> > +	interrupts = <GIC_SPI 139 IRQ_TYPE_LEVEL_HIGH>;
+> > +};
+> > +
+> > +&usdhc3 {
+> > +	compatible = "fsl,imx8dxl-usdhc", "fsl,imx8qxp-usdhc";
+> > +	interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+> > +};
+> > -- 
+> > 2.31.1
+> >

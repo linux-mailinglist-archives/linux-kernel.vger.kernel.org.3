@@ -2,106 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7554B16AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 21:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC96D4B16B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 21:07:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343564AbiBJUFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 15:05:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57070 "EHLO
+        id S1344071AbiBJUGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 15:06:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239246AbiBJUFh (ORCPT
+        with ESMTP id S239246AbiBJUGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 15:05:37 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F14726F3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 12:05:37 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 4.0.0)
- id b2f2cd1e5498de8e; Thu, 10 Feb 2022 21:05:35 +0100
-Received: from kreacher.localnet (unknown [213.134.175.120])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id BBC2266B514;
-        Thu, 10 Feb 2022 21:05:34 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Dan Williams <dan.j.williams@intel.co>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH] ACPI: scan: Use ida_alloc() instead of ida_simple_get()
-Date:   Thu, 10 Feb 2022 21:05:33 +0100
-Message-ID: <2645186.mvXUDI8C0e@kreacher>
+        Thu, 10 Feb 2022 15:06:35 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4DBE5595;
+        Thu, 10 Feb 2022 12:06:33 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 62BE3D6E;
+        Thu, 10 Feb 2022 12:06:33 -0800 (PST)
+Received: from e121896.arm.com (unknown [10.57.18.41])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0E2F23F70D;
+        Thu, 10 Feb 2022 12:06:29 -0800 (PST)
+From:   James Clark <james.clark@arm.com>
+To:     acme@kernel.org, linux-perf-users@vger.kernel.org,
+        mathieu.poirier@linaro.org, coresight@lists.linaro.org
+Cc:     James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] perf: cs-etm: No-op refactor of synth opt usage
+Date:   Thu, 10 Feb 2022 20:06:19 +0000
+Message-Id: <20220210200620.1227232-1-james.clark@arm.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.175.120
-X-CLIENT-HOSTNAME: 213.134.175.120
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddriedugddufeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefhgedtffejheekgeeljeevvedtuefgffeiieejuddutdekgfejvdehueejjeetvdenucfkphepvddufedrudefgedrudejhedruddvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddujeehrdduvddtpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhdrjhdrfihilhhlihgrmhhssehinhhtvghlrdgtohdprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhosehlihhnuhigrdhinhhtvghl
- rdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+sample_branches and sample_instructions are already saved in the
+synth_opts struct. Other usages like synth_opts.last_branch don't save
+a value, so make this more consistent by always going through synth_opts
+and not saving duplicate values.
 
-As recommended in include/linux/idr.h, use ida_alloc() instead of
-ida_simple_get() for creating unique device object names and for
-symmetry replace ida_simple_remove() with ida_free() (and fix up
-the related overly long code line while at it).
-
-Also drop the ACPI_MAX_DEVICE_INSTANCES limit that is not necessary
-any more and may not be sufficient for future platforms.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: James Clark <james.clark@arm.com>
 ---
- drivers/acpi/internal.h |    2 --
- drivers/acpi/scan.c     |    5 +++--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ tools/perf/util/cs-etm.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
-Index: linux-pm/drivers/acpi/internal.h
-===================================================================
---- linux-pm.orig/drivers/acpi/internal.h
-+++ linux-pm/drivers/acpi/internal.h
-@@ -96,8 +96,6 @@ void acpi_scan_table_notify(void);
+diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
+index 4f672f7d008c..796a065a500e 100644
+--- a/tools/perf/util/cs-etm.c
++++ b/tools/perf/util/cs-etm.c
+@@ -50,8 +50,6 @@ struct cs_etm_auxtrace {
+ 	u8 timeless_decoding;
+ 	u8 snapshot_mode;
+ 	u8 data_queued;
+-	u8 sample_branches;
+-	u8 sample_instructions;
  
- extern struct list_head acpi_bus_id_list;
+ 	int num_cpu;
+ 	u64 latest_kernel_timestamp;
+@@ -410,8 +408,8 @@ static void cs_etm__packet_swap(struct cs_etm_auxtrace *etm,
+ {
+ 	struct cs_etm_packet *tmp;
  
--#define ACPI_MAX_DEVICE_INSTANCES	4096
--
- struct acpi_device_bus_id {
- 	const char *bus_id;
- 	struct ida instance_ida;
-Index: linux-pm/drivers/acpi/scan.c
-===================================================================
---- linux-pm.orig/drivers/acpi/scan.c
-+++ linux-pm/drivers/acpi/scan.c
-@@ -477,7 +477,8 @@ static void acpi_device_del(struct acpi_
- 	list_for_each_entry(acpi_device_bus_id, &acpi_bus_id_list, node)
- 		if (!strcmp(acpi_device_bus_id->bus_id,
- 			    acpi_device_hid(device))) {
--			ida_simple_remove(&acpi_device_bus_id->instance_ida, device->pnp.instance_no);
-+			ida_free(&acpi_device_bus_id->instance_ida,
-+				 device->pnp.instance_no);
- 			if (ida_is_empty(&acpi_device_bus_id->instance_ida)) {
- 				list_del(&acpi_device_bus_id->node);
- 				kfree_const(acpi_device_bus_id->bus_id);
-@@ -642,7 +643,7 @@ static int acpi_device_set_name(struct a
- 	struct ida *instance_ida = &acpi_device_bus_id->instance_ida;
- 	int result;
+-	if (etm->sample_branches || etm->synth_opts.last_branch ||
+-	    etm->sample_instructions) {
++	if (etm->synth_opts.branches || etm->synth_opts.last_branch ||
++	    etm->synth_opts.instructions) {
+ 		/*
+ 		 * Swap PACKET with PREV_PACKET: PACKET becomes PREV_PACKET for
+ 		 * the next incoming packet.
+@@ -1365,7 +1363,6 @@ static int cs_etm__synth_events(struct cs_etm_auxtrace *etm,
+ 		err = cs_etm__synth_event(session, &attr, id);
+ 		if (err)
+ 			return err;
+-		etm->sample_branches = true;
+ 		etm->branches_sample_type = attr.sample_type;
+ 		etm->branches_id = id;
+ 		id += 1;
+@@ -1389,7 +1386,6 @@ static int cs_etm__synth_events(struct cs_etm_auxtrace *etm,
+ 		err = cs_etm__synth_event(session, &attr, id);
+ 		if (err)
+ 			return err;
+-		etm->sample_instructions = true;
+ 		etm->instructions_sample_type = attr.sample_type;
+ 		etm->instructions_id = id;
+ 		id += 1;
+@@ -1420,7 +1416,7 @@ static int cs_etm__sample(struct cs_etm_queue *etmq,
+ 	    tidq->prev_packet->last_instr_taken_branch)
+ 		cs_etm__update_last_branch_rb(etmq, tidq);
  
--	result = ida_simple_get(instance_ida, 0, ACPI_MAX_DEVICE_INSTANCES, GFP_KERNEL);
-+	result = ida_alloc(instance_ida, GFP_KERNEL);
- 	if (result < 0)
- 		return result;
+-	if (etm->sample_instructions &&
++	if (etm->synth_opts.instructions &&
+ 	    tidq->period_instructions >= etm->instructions_sample_period) {
+ 		/*
+ 		 * Emit instruction sample periodically
+@@ -1503,7 +1499,7 @@ static int cs_etm__sample(struct cs_etm_queue *etmq,
+ 		}
+ 	}
  
-
-
+-	if (etm->sample_branches) {
++	if (etm->synth_opts.branches) {
+ 		bool generate_sample = false;
+ 
+ 		/* Generate sample for tracing on packet */
+@@ -1582,7 +1578,7 @@ static int cs_etm__flush(struct cs_etm_queue *etmq,
+ 
+ 	}
+ 
+-	if (etm->sample_branches &&
++	if (etm->synth_opts.branches &&
+ 	    tidq->prev_packet->sample_type == CS_ETM_RANGE) {
+ 		err = cs_etm__synth_branch_sample(etmq, tidq);
+ 		if (err)
+-- 
+2.28.0
 

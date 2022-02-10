@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C46D4B19B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB264B19BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345816AbiBJXmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 18:42:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48920 "EHLO
+        id S1345844AbiBJXow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 18:44:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240069AbiBJXmk (ORCPT
+        with ESMTP id S245292AbiBJXov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 18:42:40 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BA4AF
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:42:40 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id h11so5659016ilq.9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:42:40 -0800 (PST)
+        Thu, 10 Feb 2022 18:44:51 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEFCF01
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:44:52 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id j12so7284895qtr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:44:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=IfuV7BErsL/W0NpxTgurt/IeS+0DSJusaRrjkOZT71M=;
-        b=V/sbZHygSE1dk4L3f+z50ccoEdc9sz/a/RRC4yulJXVwN6WdNnOhqjtQ5cK1rlbwpC
-         mMMvV3GAPff6zbHgTIblif68WqzZegiNCcV8+EvQkiKppnfLw1/wFAQddm+MAuLz5hKn
-         YJHfx/spl1RzxGn8l+lCGkhtEkCZryEYEk0XVL5UsN/rJX43G+VBpRb5VlBtQ3Lld4eW
-         d8i3QirNuscL7GPG9HtrTU50V0QMM5olYoLQ6p/BehBgEqIM2qWzD8Fuhisb0Xfn+I4g
-         z7bcSzNOZ2Ed+7oZBLJNvnIiQ1G9MDl6KXspbq41/2Cq6r94bgtfU6of+oGXWHNlkEKr
-         zs5g==
+        bh=kme7HdDPBLdZ4YQtPbT4M8C1s/pmrIz1qdi0gwByHEo=;
+        b=Bk7rx9gKhdGsR9i8jgVS556YE2ujf0DSOvVCpTdc9PT65IOYqaQn9aot/Y9Xwof7ki
+         cOnVYvWJbPeDast2MgmpVU8Y4Imurlc5MhQl99D0snMgl+6Gu4ehybSGgqRGOefPOoBX
+         5PEfm69qkAlLEYPK6MkW0jclxUqt7bd8ulqPZGiRaFYvX9dZSOUqEUCbmBDOYFYCflDj
+         g0rF49yNULJKrkgSYVUWolWWUDbQHWS3s4jqHjk5D/DAtrm+AgzV8WvsVC9KB33nSjTz
+         AtmQPfPBeTjUMZLE49hquJI0Dt7lAFl1HT2b050DpuOl8+hOzXAF14k5nUPeiK20UT0y
+         Zq5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IfuV7BErsL/W0NpxTgurt/IeS+0DSJusaRrjkOZT71M=;
-        b=JPbxmK5ScKnLqplFNg8upz1WZs3Had6Go2Cui/7FgL/o1SwoXJgnfou9ZhJ3PniOnF
-         PT25qEVOiG46LAXNASoIY7GcGL0sL8fPI6+lOslet2c5Gh3VU3NYf83nI87Yj1JAdq+K
-         ZZuVTjlAqxOk3pLAolp5W4Xa4cZJWKQCRwgcUmd1KmecexCaeXuyiX5XD8DvDzXi+rqA
-         IBN9zfYt8R36Hz/vXOu/cyrt68/hbjCa0jApRithOH5lfdeIjwULsR0Y2kvL8IIBckHk
-         SouFizYFG8P9yLuaAupHLnZjt6e6DGzlFR/rAMonOxLGOusTdfAaHgEXyw7711RFSLYJ
-         S6cg==
-X-Gm-Message-State: AOAM530dpx8NEU2czQRHdW5uxB76cIloO7sd5vSxJO5MH8UJw0XW17oN
-        HxW+bjfj6b0nf1bhtCpeXnA=
-X-Google-Smtp-Source: ABdhPJyMCRQgDaf6eA53pG3YvPxmIVTNvMprTGUlUaqGwilmflBxGPm7MqMOwsRkroMJ9y4fsTf4uw==
-X-Received: by 2002:a05:6e02:1489:: with SMTP id n9mr4735605ilk.49.1644536559934;
-        Thu, 10 Feb 2022 15:42:39 -0800 (PST)
+        bh=kme7HdDPBLdZ4YQtPbT4M8C1s/pmrIz1qdi0gwByHEo=;
+        b=8NMMxHdqzyP5UXIcQ/EXyYFLfZ3t/IR7pXZPCfgAqWdznms6k1zhZ18X/sglbcf1Ev
+         b/VC3GlQ4A8V3Mhjk0zrq3eOqESlGreUOikpcuq63e0ZFLrQ1ZbiVi/D5+f2vzjqonP7
+         YFm8Agoei65WwOD8rrdtrsdLA1AAnWmse7p6T617XDv/gEuIWaccgQ3HVeMBxq0sNMFu
+         kw1FUxzVvUnZxaBBMNjrRihE8aL/PthtN0j5LRPgYAnljMKXrRmNZ3HGLQrIj3tRWOad
+         C9rpszFzRY9mx2AJc9dP5YOTrh3M2rnbm7Z9CgSqO464KDkEWEWLqHt3hpc/MZhJp7uk
+         PRog==
+X-Gm-Message-State: AOAM532OkOP93G0gn0SkWD8MIqyJBBX0PRxo9dCFGvpM0lIvltUR19yk
+        cmc5TtLOOCc/TJHyGrj0Ut4=
+X-Google-Smtp-Source: ABdhPJweRk+ewB0DrkLNcDIrsEhPbiqs1Kx+pnRXJsHT5Dn4ekm9Sd6GVVslYeAffagwYjFFuj89hQ==
+X-Received: by 2002:ac8:5711:: with SMTP id 17mr6533353qtw.287.1644536691131;
+        Thu, 10 Feb 2022 15:44:51 -0800 (PST)
 Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id x10sm3286383ill.60.2022.02.10.15.42.39
+        by smtp.gmail.com with ESMTPSA id w10sm12500893qtj.73.2022.02.10.15.44.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 15:42:39 -0800 (PST)
+        Thu, 10 Feb 2022 15:44:50 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -62,12 +62,10 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH 23/49] clocksource: replace cpumask_weight with cpumask_empty in clocksource.c
-Date:   Thu, 10 Feb 2022 14:49:07 -0800
-Message-Id: <20220210224933.379149-24-yury.norov@gmail.com>
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 24/49] mm/vmstat: replace cpumask_weight with cpumask_empty where appropriate
+Date:   Thu, 10 Feb 2022 14:49:08 -0800
+Message-Id: <20220210224933.379149-25-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220210224933.379149-1-yury.norov@gmail.com>
 References: <20220210224933.379149-1-yury.norov@gmail.com>
@@ -83,29 +81,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clocksource_verify_percpu() calls cpumask_weight() to check if any bit of
-a given cpumask is set. We can do it more efficiently with cpumask_empty()
-because cpumask_empty() stops traversing the cpumask as soon as it finds
-first set bit, while cpumask_weight() counts all bits unconditionally.
+mm/vmstat.c code calls cpumask_weight() to check if any bit of a given
+cpumask is set. We can do it more efficiently with cpumask_empty() because
+cpumask_empty() stops traversing the cpumask as soon as it finds first set
+bit, while cpumask_weight() counts all bits unconditionally.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- kernel/time/clocksource.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/vmstat.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-index 95d7ca35bdf2..cee5da1e54c4 100644
---- a/kernel/time/clocksource.c
-+++ b/kernel/time/clocksource.c
-@@ -343,7 +343,7 @@ void clocksource_verify_percpu(struct clocksource *cs)
- 	cpus_read_lock();
- 	preempt_disable();
- 	clocksource_verify_choose_cpus();
--	if (cpumask_weight(&cpus_chosen) == 0) {
-+	if (cpumask_empty(&cpus_chosen)) {
- 		preempt_enable();
- 		cpus_read_unlock();
- 		pr_warn("Not enough CPUs to check clocksource '%s'.\n", cs->name);
+diff --git a/mm/vmstat.c b/mm/vmstat.c
+index d5cc8d739fac..27a94afd4ee5 100644
+--- a/mm/vmstat.c
++++ b/mm/vmstat.c
+@@ -2041,7 +2041,7 @@ static void __init init_cpu_node_state(void)
+ 	int node;
+ 
+ 	for_each_online_node(node) {
+-		if (cpumask_weight(cpumask_of_node(node)) > 0)
++		if (!cpumask_empty(cpumask_of_node(node)))
+ 			node_set_state(node, N_CPU);
+ 	}
+ }
+@@ -2068,7 +2068,7 @@ static int vmstat_cpu_dead(unsigned int cpu)
+ 
+ 	refresh_zone_stat_thresholds();
+ 	node_cpus = cpumask_of_node(node);
+-	if (cpumask_weight(node_cpus) > 0)
++	if (!cpumask_empty(node_cpus))
+ 		return 0;
+ 
+ 	node_clear_state(node, N_CPU);
 -- 
 2.32.0
 

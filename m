@@ -2,178 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B7B4B0C6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 634544B0C70
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240986AbiBJLds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 06:33:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38748 "EHLO
+        id S241001AbiBJLfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 06:35:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235635AbiBJLdo (ORCPT
+        with ESMTP id S235635AbiBJLfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 06:33:44 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9101001;
-        Thu, 10 Feb 2022 03:33:42 -0800 (PST)
-Received: from kwepemi100003.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JvZLB4dS2z5HpD;
-        Thu, 10 Feb 2022 19:30:26 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100003.china.huawei.com (7.221.188.122) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 10 Feb 2022 19:33:39 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 10 Feb 2022 19:33:38 +0800
-Subject: Re: [PATCH v8] block: cancel all throttled bios in del_gendisk()
-To:     Ming Lei <ming.lei@redhat.com>
-CC:     <tj@kernel.org>, <axboe@kernel.dk>, <cgroups@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>
-References: <20220208113808.1401601-1-yukuai3@huawei.com>
- <YgMbaqTD+ycFPAtM@T590>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <148a020b-5609-1a3c-cfd9-d02abd26ff67@huawei.com>
-Date:   Thu, 10 Feb 2022 19:33:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 10 Feb 2022 06:35:20 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AC61001
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:35:20 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8FF211F37B;
+        Thu, 10 Feb 2022 11:35:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1644492919; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ANTjimFiWNIfsY0w4OX0/8i+2aewvIuwbua8f0UJFaI=;
+        b=lRmymzO2d51OA3bDvHKy/IPvIcnTe/YIDfHvRvNd2SaAKZl+VxoIMuonUb4MFFQ66D9s79
+        ew7b9QeF2fJ4LHcXYXtQ+rby0FHOWRQZYDMaa+IMkRt4G5Y4wqSdPEUTmUWa9HVR/c2nU1
+        AqA0yrEKgoARlY/VpQLy1HOXLZKjN3E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1644492919;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ANTjimFiWNIfsY0w4OX0/8i+2aewvIuwbua8f0UJFaI=;
+        b=Cy1VlFzFsoqm953pN7vhg6u7WCNGOP1U4Df40zX0qyJh1yO6f05c8LFuziuiYVEHZHYJ0y
+        T0t6BkinF91SSGAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 57F6913B53;
+        Thu, 10 Feb 2022 11:35:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hCLHFHf4BGKTEgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 10 Feb 2022 11:35:19 +0000
+Message-ID: <1699e1b3-0508-4561-a7ec-052f382ca3c8@suse.cz>
+Date:   Thu, 10 Feb 2022 12:35:19 +0100
 MIME-Version: 1.0
-In-Reply-To: <YgMbaqTD+ycFPAtM@T590>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Content-Language: en-US
+To:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Rik van Riel <riel@surriel.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
+ <2b5eee76-183f-bd97-2e9d-f5ff8df63db@google.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH 02/13] mm/munlock: delete FOLL_MLOCK and FOLL_POPULATE
+In-Reply-To: <2b5eee76-183f-bd97-2e9d-f5ff8df63db@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2022/02/09 9:39, Ming Lei Ð´µÀ:
-> On Tue, Feb 08, 2022 at 07:38:08PM +0800, Yu Kuai wrote:
->> Throttled bios can't be issued after del_gendisk() is done, thus
->> it's better to cancel them immediately rather than waiting for
->> throttle is done.
->>
->> For example, if user thread is throttled with low bps while it's
->> issuing large io, and the device is deleted. The user thread will
->> wait for a long time for io to return.
->>
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->> ---
->> Changes in v8:
->>   - fold two patches into one
->> Changes in v7:
->>   - use the new solution as suggested by Ming.
->>
->>   block/blk-throttle.c | 49 ++++++++++++++++++++++++++++++++++++++++----
->>   block/blk-throttle.h |  2 ++
->>   block/genhd.c        |  2 ++
->>   3 files changed, 49 insertions(+), 4 deletions(-)
->>
->> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
->> index 7c462c006b26..557d20796157 100644
->> --- a/block/blk-throttle.c
->> +++ b/block/blk-throttle.c
->> @@ -43,8 +43,12 @@
->>   static struct workqueue_struct *kthrotld_workqueue;
->>   
->>   enum tg_state_flags {
->> -	THROTL_TG_PENDING	= 1 << 0,	/* on parent's pending tree */
->> -	THROTL_TG_WAS_EMPTY	= 1 << 1,	/* bio_lists[] became non-empty */
->> +	/* on parent's pending tree */
->> +	THROTL_TG_PENDING	= 1 << 0,
->> +	/* bio_lists[] became non-empty */
->> +	THROTL_TG_WAS_EMPTY	= 1 << 1,
->> +	/* starts to cancel all bios, will be set if the disk is deleted */
->> +	THROTL_TG_CANCELING	= 1 << 2,
->>   };
->>   
->>   #define rb_entry_tg(node)	rb_entry((node), struct throtl_grp, rb_node)
->> @@ -871,7 +875,8 @@ static bool tg_may_dispatch(struct throtl_grp *tg, struct bio *bio,
->>   	       bio != throtl_peek_queued(&tg->service_queue.queued[rw]));
->>   
->>   	/* If tg->bps = -1, then BW is unlimited */
->> -	if (bps_limit == U64_MAX && iops_limit == UINT_MAX) {
->> +	if ((bps_limit == U64_MAX && iops_limit == UINT_MAX) ||
->> +	    tg->flags & THROTL_TG_CANCELING) {
->>   		if (wait)
->>   			*wait = 0;
->>   		return true;
->> @@ -974,6 +979,9 @@ static void tg_update_disptime(struct throtl_grp *tg)
->>   	unsigned long read_wait = -1, write_wait = -1, min_wait = -1, disptime;
->>   	struct bio *bio;
->>   
->> +	if (tg->flags & THROTL_TG_CANCELING)
->> +		goto update;
->> +
->>   	bio = throtl_peek_queued(&sq->queued[READ]);
->>   	if (bio)
->>   		tg_may_dispatch(tg, bio, &read_wait);
->> @@ -983,9 +991,10 @@ static void tg_update_disptime(struct throtl_grp *tg)
->>   		tg_may_dispatch(tg, bio, &write_wait);
->>   
->>   	min_wait = min(read_wait, write_wait);
->> -	disptime = jiffies + min_wait;
->>   
->> +update:
->>   	/* Update dispatch time */
->> +	disptime = jiffies + min_wait;
+On 2/6/22 22:32, Hugh Dickins wrote:
+> If counting page mlocks, we must not double-count: follow_page_pte() can
+> tell if a page has already been Mlocked or not, but cannot tell if a pte
+> has already been counted or not: that will have to be done when the pte
+> is mapped in (which lru_cache_add_inactive_or_unevictable() already tracks
+> for new anon pages, but there's no such tracking yet for others).
 > 
-> As I mentioned on V7, the change in tg_update_disptime() isn't needed, please
-> drop it.
+> Delete all the FOLL_MLOCK code - faulting in the missing pages will do
+> all that is necessary, without special mlock_vma_page() calls from here.
+> 
+> But then FOLL_POPULATE turns out to serve no purpose - it was there so
+> that its absence would tell faultin_page() not to faultin page when
+> setting up VM_LOCKONFAULT areas; but if there's no special work needed
+> here for mlock, then there's no work at all here for VM_LOCKONFAULT.
+> 
+> Have I got that right?  I've not looked into the history, but see that
+> FOLL_POPULATE goes back before VM_LOCKONFAULT: did it serve a different
+> purpose before?  Ah, yes, it was used to skip the old stack guard page.
+> 
+> And is it intentional that COW is not broken on existing pages when
+> setting up a VM_LOCKONFAULT area?  I can see that being argued either
+> way, and have no reason to disagree with current behaviour.
 
-Hi,
-After dropping it, disptime will set to jiffies instead of
-jiffies -1, this is fine since time_before() won't pass in
-throtl_select_dispatch(). I'll drop it in v9...
-> 
->>   	throtl_dequeue_tg(tg);
->>   	tg->disptime = disptime;
->>   	throtl_enqueue_tg(tg);
->> @@ -1763,6 +1772,38 @@ static bool throtl_hierarchy_can_upgrade(struct throtl_grp *tg)
->>   	return false;
->>   }
->>   
->> +void blk_throtl_cancel_bios(struct request_queue *q)
->> +{
->> +	struct cgroup_subsys_state *pos_css;
->> +	struct blkcg_gq *blkg;
->> +
->> +	spin_lock_irq(&q->queue_lock);
->> +	/*
->> +	 * queue_lock is held, rcu lock is not needed here technically.
->> +	 * However, rcu lock is still held to emphasize that following
->> +	 * path need RCU protection and to prevent warning from lockdep.
->> +	 */
->> +	rcu_read_lock();
->> +	blkg_for_each_descendant_post(blkg, pos_css, q->root_blkg) {
->> +		struct throtl_grp *tg = blkg_to_tg(blkg);
->> +		struct throtl_service_queue *sq = &tg->service_queue;
->> +
->> +		/*
->> +		 * Set disptime in the past to make sure
->> +		 * throtl_select_dispatch() won't exit without dispatching.
->> +		 */
->> +		tg->disptime = jiffies - 1;
-> 
-> It might be better to replace the above line with tg_update_disptime().
+Yeah I think it's consistent with the two usecases stated for VM_LOCKONFAULT:
+https://lore.kernel.org/all/1441720742-7803-1-git-send-email-emunson@akamai.com/
 
-Ok, I'll replace it and setting the flag first.
+> Signed-off-by: Hugh Dickins <hughd@google.com>
 
-Thanks,
-Kuai
-> 
-> Otherwise, the patch looks good.
-> 
-> Thanks,
-> Ming
-> 
-> .
-> 
+Acked-by: Vlastimil Babka <vbabka@suse.cz>

@@ -2,160 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC04D4B080C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC304B0819
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237299AbiBJIU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 03:20:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55502 "EHLO
+        id S237334AbiBJI0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 03:26:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233615AbiBJIUQ (ORCPT
+        with ESMTP id S237267AbiBJI0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 03:20:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5391DA9;
-        Thu, 10 Feb 2022 00:20:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D00BB82423;
-        Thu, 10 Feb 2022 08:20:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C442C004E1;
-        Thu, 10 Feb 2022 08:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644481215;
-        bh=8gIcfyW0sMk2anZv0r3OTynsNPwDNEkdR7Q4n+X25TA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VASQNFNAN2Xg9L8/Klk8/VrzOEmUx0wMjG2l+z74A2KESayDfgZ2ciFz8nJCH/93f
-         X+oZwtCEpF4rRrnbOPqj1w7nO4kUY0Qz+OZQ09xQyGr/TaO/rP50YMMvRLlaSeYYqD
-         qDoabWhqURNMnseklYF4Uf4lG6rSLHORINqWwFQw=
-Date:   Thu, 10 Feb 2022 09:20:12 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Konstantin Aladyshev <aladyshev22@gmail.com>,
-        Oskar Senft <osk@google.com>, openbmc@lists.ozlabs.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] serial: 8250_aspeed_vuart: add PORT_ASPEED_VUART port
- type
-Message-ID: <YgTKvIqTIOomFSsF@kroah.com>
-References: <20220209203414.23491-1-zev@bewilderbeest.net>
- <YgTBennInxX3fE3X@kroah.com>
- <YgTDm5qKUJyzciR2@hatter.bewilderbeest.net>
+        Thu, 10 Feb 2022 03:26:23 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED50109E;
+        Thu, 10 Feb 2022 00:26:24 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id y3so13484705ejf.2;
+        Thu, 10 Feb 2022 00:26:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=yMHDyZywBQd4qMNkOk8QdP2+6QiKb0trxcrPY+YQbc4=;
+        b=njgqt5Nj5PmminE0N6pUUfw9Lfk2kRzztnY5MzbS4OAamt4Ex61GJBcWaWTHZqnR60
+         NPVyuZSsGMMksKLVbbnkVga3AwAiFM381T8penb0vHzc0xfk+x4GBTD3EoHzYoaDLPge
+         cNK5S4F54gPZ0JDk4BOUVOjC9iL2UuBwVCSWHkexnogkx20jZdhgj7DSVibOZbbStq99
+         /PlLs1jXH50MMx37dZpwHbtzVSoYqJ5ZHX7dLDv08Kv+fQU6/KoXcxgsbdVnHJrNPFwU
+         MxOuicrLyUag7gFEk9+bA5KIGDHhXVIruUEc7IP+lKJRLrhjvkc+cmiChBtGQSIM6Wo7
+         j1cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=yMHDyZywBQd4qMNkOk8QdP2+6QiKb0trxcrPY+YQbc4=;
+        b=Ksancc8GKT11G+0w4c4EsGhvHtrhafI3saCQh1QoJ+/cFoAuo1m4R9ntnQjSP0ZPao
+         Tyy/W2f+2vXBCQgmMTwvhPw3Agxe22IU6FwEbdRjr1vNxl6xuHVR31i0r7uoyVFZgguG
+         pNZ758KC8i3gn5V3+Z8Yj1jxuER0iELrPcbelkBUbtlpSlMHScX+SxSPB0bdxXmsWv/p
+         JzpSmf6q0H9Fgxy+/Oht45yRLLQq+N3IGzqQajE8JT/BhHLQZXbA/TcpaAolBDIeker0
+         W8JKt9BKUA34mqFvNB+jf2MWMZdogFn65fZQo6tLeL1NKgYzvhVZBwIN2Z+SeBdHAQyC
+         +bzA==
+X-Gm-Message-State: AOAM533+B5B1xxlTBKWadfU3Em+nlx7AEE5PvDgIUOE0IkWj27XFjiHA
+        I0SBb7IiPK/B8KSMxs0QWOY=
+X-Google-Smtp-Source: ABdhPJy2aJBdHEv7yXFSHSWwQi9rBTIFJ3j4Ilx4K+6p/rvSfIY2fclFlF8scT3AreCRJkaecWgQLQ==
+X-Received: by 2002:a17:907:7207:: with SMTP id dr7mr5412184ejc.500.1644481583146;
+        Thu, 10 Feb 2022 00:26:23 -0800 (PST)
+Received: from ?IPv6:2001:a61:259f:9401:c29b:34d:c30:c5de? ([2001:a61:259f:9401:c29b:34d:c30:c5de])
+        by smtp.gmail.com with ESMTPSA id t8sm3573172eji.94.2022.02.10.00.26.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 00:26:22 -0800 (PST)
+Message-ID: <9cd8a336ed31eaf6bea2ad53f185abac22dc8474.camel@gmail.com>
+Subject: Re: [PATCH v5 1/4] iio:frequency:admv1014: add support for ADMV1014
+From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Antoniu Miclaus <antoniu.miclaus@analog.com>, jic23@kernel.org,
+        robh+dt@kernel.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 10 Feb 2022 09:26:21 +0100
+In-Reply-To: <YgOtN+wha+j3ZFIO@smile.fi.intel.com>
+References: <20220131100102.15372-1-antoniu.miclaus@analog.com>
+         <Yf7AjXsRuhFeFTpD@smile.fi.intel.com>
+         <e59fce3747428f30afdf77f9839910664e3e8524.camel@gmail.com>
+         <YgOtN+wha+j3ZFIO@smile.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgTDm5qKUJyzciR2@hatter.bewilderbeest.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 11:49:47PM -0800, Zev Weiss wrote:
-> On Wed, Feb 09, 2022 at 11:40:42PM PST, Greg Kroah-Hartman wrote:
-> > On Wed, Feb 09, 2022 at 12:34:14PM -0800, Zev Weiss wrote:
-> > > Commit 54da3e381c2b ("serial: 8250_aspeed_vuart: use UPF_IOREMAP to
-> > > set up register mapping") fixed a bug that had, as a side-effect,
-> > > prevented the 8250_aspeed_vuart driver from enabling the VUART's
-> > > FIFOs.  However, fixing that (and hence enabling the FIFOs) has in
-> > > turn revealed what appears to be a hardware bug in the ASPEED VUART in
-> > > which the host-side THRE bit doesn't get if the BMC-side receive FIFO
-> > > trigger level is set to anything but one byte.  This causes problems
-> > > for polled-mode writes from the host -- for example, Linux kernel
-> > > console writes proceed at a glacial pace (less than 100 bytes per
-> > > second) because the write path waits for a 10ms timeout to expire
-> > > after every character instead of being able to continue on to the next
-> > > character upon seeing THRE asserted.  (GRUB behaves similarly.)
+On Wed, 2022-02-09 at 14:01 +0200, Andy Shevchenko wrote:
+> On Mon, Feb 07, 2022 at 09:29:54PM +0100, Nuno Sá wrote:
+> > On Sat, 2022-02-05 at 20:23 +0200, Andy Shevchenko wrote:
+> > > On Mon, Jan 31, 2022 at 12:00:59PM +0200, Antoniu Miclaus wrote:
+> > > > The ADMV1014 is a silicon germanium (SiGe), wideband,
+> > > > microwave downconverter optimized for point to point microwave
+> > > > radio designs operating in the 24 GHz to 44 GHz frequency
+> > > > range.
 > > > 
-> > > As a workaround, introduce a new port type for the ASPEED VUART that's
-> > > identical to PORT_16550A as it had previously been using, but with
-> > > UART_FCR_R_TRIG_00 instead to set the receive FIFO trigger level to
-> > > one byte, which (experimentally) seems to avoid the problematic THRE
-> > > behavior.
+> > > Excellent job!
+> > > A few comments / questions below.
 > > > 
-> > > Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> > > Tested-by: Konstantin Aladyshev <aladyshev22@gmail.com>
+> > > ...
+> > > 
+> > > > +config ADMV1014
+> > > > +       tristate "Analog Devices ADMV1014 Microwave
+> > > > Downconverter"
+> > > > +       depends on SPI && COMMON_CLK && 64BIT
+> > > 
+> > > Why 64BIT only?
 > > 
-> > Do we need a "Fixes:" tag here as well?
+> > Could not resist on this one... The thing is that CCF uses unsigned
+> > long for rates and this part operates in high GHz values. That
+> > means,
+> > as CCF stands, this cannot work on 32bit.
 > 
-> I was wondering the same -- I left it out because it didn't seem like it was
-> strictly a bug in the earlier commit that's really being fixed per se, but
-> perhaps that's an overly pedantic distinction.  I can certainly add it if
-> you'd prefer.
-
-This obviously fixes an issue, if you don't have a specific commit that
-caused it, a cc: stable@vger.kernel.org should be added so we know to
-backport this to all stable kernels.
-
+> I read it a bit differently, i.e. CCF has a bug that needs to be
+> addressed.
 > 
-> > 
-> > > ---
-> > >  drivers/tty/serial/8250/8250_aspeed_vuart.c | 2 +-
-> > >  drivers/tty/serial/8250/8250_port.c         | 8 ++++++++
-> > >  include/uapi/linux/serial_core.h            | 3 +++
-> > >  3 files changed, 12 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/tty/serial/8250/8250_aspeed_vuart.c b/drivers/tty/serial/8250/8250_aspeed_vuart.c
-> > > index 2350fb3bb5e4..c2cecc6f47db 100644
-> > > --- a/drivers/tty/serial/8250/8250_aspeed_vuart.c
-> > > +++ b/drivers/tty/serial/8250/8250_aspeed_vuart.c
-> > > @@ -487,7 +487,7 @@ static int aspeed_vuart_probe(struct platform_device *pdev)
-> > >  	port.port.irq = irq_of_parse_and_map(np, 0);
-> > >  	port.port.handle_irq = aspeed_vuart_handle_irq;
-> > >  	port.port.iotype = UPIO_MEM;
-> > > -	port.port.type = PORT_16550A;
-> > > +	port.port.type = PORT_ASPEED_VUART;
-> > >  	port.port.uartclk = clk;
-> > >  	port.port.flags = UPF_SHARE_IRQ | UPF_BOOT_AUTOCONF | UPF_IOREMAP
-> > >  		| UPF_FIXED_PORT | UPF_FIXED_TYPE | UPF_NO_THRE_TEST;
-> > > diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-> > > index 3b12bfc1ed67..973870ebff69 100644
-> > > --- a/drivers/tty/serial/8250/8250_port.c
-> > > +++ b/drivers/tty/serial/8250/8250_port.c
-> > > @@ -307,6 +307,14 @@ static const struct serial8250_config uart_config[] = {
-> > >  		.rxtrig_bytes	= {1, 32, 64, 112},
-> > >  		.flags		= UART_CAP_FIFO | UART_CAP_SLEEP,
-> > >  	},
-> > > +	[PORT_ASPEED_VUART] = {
-> > > +		.name		= "ASPEED VUART",
-> > > +		.fifo_size	= 16,
-> > > +		.tx_loadsz	= 16,
-> > > +		.fcr		= UART_FCR_ENABLE_FIFO | UART_FCR_R_TRIG_00,
-> > > +		.rxtrig_bytes	= {1, 4, 8, 14},
-> > > +		.flags		= UART_CAP_FIFO,
-> > > +	},
-> > >  };
-> > > 
-> > >  /* Uart divisor latch read */
-> > > diff --git a/include/uapi/linux/serial_core.h b/include/uapi/linux/serial_core.h
-> > > index c4042dcfdc0c..cd11748833e6 100644
-> > > --- a/include/uapi/linux/serial_core.h
-> > > +++ b/include/uapi/linux/serial_core.h
-> > > @@ -274,4 +274,7 @@
-> > >  /* Freescale LINFlexD UART */
-> > >  #define PORT_LINFLEXUART	122
-> > > 
-> > > +/* ASPEED AST2x00 virtual UART */
-> > > +#define PORT_ASPEED_VUART	123
-> > 
-> > Why does this value have to be in a uapi header file?  What userspace
-> > tool is going to need this?
-> > 
-> 
-> I only put it there because that was where all the other port type constants
-> were defined, and wondered the same thing about the lot of them.  Is there a
-> userspace tool that makes use of any of these?
 
-Not really, please don't add it if you do not require it.
+Totally agreed...
 
-thanks,
+However, this can be something that might take time
+to support in CCF (I definetly have plans to send a RFC to, at least,
+start the discussion around this) so I guess we can already support
+this device like this. I believe this is somethig straight to remove
+as soon as CCF works in 32bit archs for high speed devices...
 
-greg k-h
+- Nuno Sá

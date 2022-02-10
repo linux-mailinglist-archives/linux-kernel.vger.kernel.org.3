@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257664B18FB
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A854B18FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345391AbiBJXC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 18:02:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55246 "EHLO
+        id S1345394AbiBJXFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 18:05:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345039AbiBJXCy (ORCPT
+        with ESMTP id S239716AbiBJXFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 18:02:54 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0CD1107;
-        Thu, 10 Feb 2022 15:02:54 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id m8so5613457ilg.7;
-        Thu, 10 Feb 2022 15:02:54 -0800 (PST)
+        Thu, 10 Feb 2022 18:05:06 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348011125;
+        Thu, 10 Feb 2022 15:05:06 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id d7so6703065qvk.2;
+        Thu, 10 Feb 2022 15:05:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=x5y11i0zdnz/BX0MaBmAp+uRfUX2Rak/fHPY7uFI9V0=;
-        b=CSDL1Vj/nWsuuxYBwx/1wZqFN7bmDSB+ohNjATtPUS/FmhKwM8U3HzQsAuHa9fxhdw
-         4Jz3dKN1fN/o+4qihImxLWv+8hHfE0gxZLyEK1R//WED6Y4hZewiadnqdFSpUy5z0lxd
-         lmW8scFb12dfcMOtEH2AdhXB3ZaHAM6AzRoLsapN1LJb1Ng2nN7e6DuYgJSNhKBPQv37
-         Za/uaPxa9OZzjDClHWB4tE9R4ub2sYccHlPLr9lZL9ZjugJwdvgdi67a+QlwHiDQXNF8
-         gufo35FdLMxm4rYABpmBVhdRWQxoj1egoyHZJzvxhzdCt+PUML3+Uln5r0OWfgGCDVoa
-         uptw==
+        bh=KXOSpbk+RXW+DBP53WQyWN4jwpILDSDDpj6Jr1j/OXk=;
+        b=HI2mnNYtTkfI3G65nubNt3EonUdah48+r1Un+jjkwIm5WTUeKo1DSh7mwr1RNCRMgE
+         bziELpIikolO6+XLfN0wr0paDV5evv5uQUe7vVM82nIsTufGcwsTZAklK8FgskeB/Gxs
+         YgPcjoQxWhmMSZW92o3z3PKTdUgV6SSsVrFSHaVYahPoIiJ9jt9mz1ETwAec6RlUOezB
+         PjTKHGc7yT7dL7Jk6cnosjN72yiOPlOXg2Z3zFIPWOIuIsIPzL/GRn8T29YfLAMDtaM7
+         hpgWjT8yH+viYHDWG/BFQtM59cR+p85vdEojzwXcypdnEpm5UXp9OFxTycC6GnmsV3Js
+         azPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=x5y11i0zdnz/BX0MaBmAp+uRfUX2Rak/fHPY7uFI9V0=;
-        b=1xg0xXMb9MCzKdp6ToWjUCV87e1WFC+7uyVu5Mc9AQ7v/YDo+F07OB1lZ6U0A9BXDr
-         UxODn5JZ4LBwCrmND86/C4fiyyJ2rtSCXtH9eFoX/Whcdszza8w+y/RO1bkfeIS8pV+d
-         Tnx2whCGX1aVfAwKihEp9ZCmqP64FFA+WtEgrX8MreEF+zLULxoj1ewBUa70qknnq/Lb
-         xD+nGMSvQspGkHvPSbFHisFOVNivj8ShitbcKv3FgtOUeoewtaqlpSS+22weWT4xZ5K3
-         mTu3UXMp5njuvZNuR1zfOIEd0bmKj1OtIB7WaBSIIRw4kRtkbEeuM9HvRRxDZl3NDalJ
-         K2tg==
-X-Gm-Message-State: AOAM5324b9HOfdIcdOoYESoY3tImeMnEzwgTZTb/LrKem461CNyn2moO
-        6Zm9ENFA6LidaM06OHfPpow=
-X-Google-Smtp-Source: ABdhPJzPA3K644w+KPqoBt0nZGj9yYw0gW84+vIzUuBQFk1Yiwg2zu/FkqSM3NWQY8+eYGjQJPYgSw==
-X-Received: by 2002:a05:6e02:1090:: with SMTP id r16mr5059802ilj.183.1644534173993;
-        Thu, 10 Feb 2022 15:02:53 -0800 (PST)
+        bh=KXOSpbk+RXW+DBP53WQyWN4jwpILDSDDpj6Jr1j/OXk=;
+        b=cpe/XXTxD2SxUfGsQWxJA8l+XqAtYwphlmDqQrnEzsF0sTWggfSPfJfXrpiUH8kv6f
+         22xiSVeASTR2fDs0j+ykJxhF9RXBC7FQmnwLwRKgYpXoDMooeuFWaMB3XpYm1Q/U1Dzy
+         ts2N+dLKzW6GxUqrVh+rYcWah2cVArCdpvKYY6Z3J0lYs7aQ59ycw1mlz1TiTiTrljZo
+         PnrVcou+fBSuGr28eLWRJPHGYbe6IWjQ+usY1dA51WV54CqDGTA0yuCyOdkci4eL8QWY
+         fezdQGC3KV/vSj3rldAV5X3i0sEi2FRnI5Yjhkb/D6JnMyQnvIGIpQ9Kc8cOyqZG9+Xs
+         JoXQ==
+X-Gm-Message-State: AOAM530zVrV0Ggq3KvwDh9FtTZ7RwVcuLPvUnizqLlAgad22dkt1xvdB
+        7Mi0O/TVA+BYgsWRHeLlbIc=
+X-Google-Smtp-Source: ABdhPJyoK1UXHarwQjdmthhpKPhuaMIGYQTI8x7ciOZ5He2zfHWTRwLo34b0L8nU6akmLcRZSIYSow==
+X-Received: by 2002:a05:6214:194d:: with SMTP id q13mr6709929qvk.8.1644534305337;
+        Thu, 10 Feb 2022 15:05:05 -0800 (PST)
 Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id d12sm11567868ilv.42.2022.02.10.15.02.53
+        by smtp.gmail.com with ESMTPSA id w10sm12438294qtj.73.2022.02.10.15.05.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 15:02:53 -0800 (PST)
+        Thu, 10 Feb 2022 15:05:04 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -62,13 +62,19 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
-Subject: [RFC PATCH 05/49] qed: rework qed_rdma_bmap_free()
-Date:   Thu, 10 Feb 2022 14:48:49 -0800
-Message-Id: <20220210224933.379149-6-yury.norov@gmail.com>
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 06/49] nds32: perf: replace bitmap_weight with bitmap_empty where appropriate
+Date:   Thu, 10 Feb 2022 14:48:50 -0800
+Message-Id: <20220210224933.379149-7-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220210224933.379149-1-yury.norov@gmail.com>
 References: <20220210224933.379149-1-yury.norov@gmail.com>
@@ -84,85 +90,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-qed_rdma_bmap_free() is mostly an opencoded version of printk("%*pb").
-Using %*pb format simplifies the code, and helps to avoid inefficient
-usage of bitmap_weight().
-
-While here, reorganize logic to avoid calculating bmap weight if check
-is false.
+nds32_pmu_enable calls bitmap_weight() to check if any bit of a given
+bitmap is set. It's better to use bitmap_empty() in that case because
+bitmap_empty() stops traversing the bitmap as soon as it finds first
+set bit, while bitmap_weight() counts all bits unconditionally.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
+ arch/nds32/kernel/perf_event_cpu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This is RFC because it changes lines printing format to bitmap %*pb. If
-it hurts userspace, it's better to drop the patch.
-
- drivers/net/ethernet/qlogic/qed/qed_rdma.c | 45 +++++++---------------
- 1 file changed, 14 insertions(+), 31 deletions(-)
-
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_rdma.c b/drivers/net/ethernet/qlogic/qed/qed_rdma.c
-index 23b668de4640..f4c04af9d4dd 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_rdma.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_rdma.c
-@@ -319,44 +319,27 @@ static int qed_rdma_alloc(struct qed_hwfn *p_hwfn)
- void qed_rdma_bmap_free(struct qed_hwfn *p_hwfn,
- 			struct qed_bmap *bmap, bool check)
+diff --git a/arch/nds32/kernel/perf_event_cpu.c b/arch/nds32/kernel/perf_event_cpu.c
+index a78a879e7ef1..ea44e9ecb5c7 100644
+--- a/arch/nds32/kernel/perf_event_cpu.c
++++ b/arch/nds32/kernel/perf_event_cpu.c
+@@ -695,7 +695,7 @@ static void nds32_pmu_enable(struct pmu *pmu)
  {
--	int weight = bitmap_weight(bmap->bitmap, bmap->max_count);
--	int last_line = bmap->max_count / (64 * 8);
--	int last_item = last_line * 8 +
--	    DIV_ROUND_UP(bmap->max_count % (64 * 8), 64);
--	u64 *pmap = (u64 *)bmap->bitmap;
--	int line, item, offset;
--	u8 str_last_line[200] = { 0 };
--
--	if (!weight || !check)
-+	unsigned int bit, weight, nbits;
-+	unsigned long *b;
-+
-+	if (!check)
-+		goto end;
-+
-+	weight = bitmap_weight(bmap->bitmap, bmap->max_count);
-+	if (!weight)
- 		goto end;
+ 	struct nds32_pmu *nds32_pmu = to_nds32_pmu(pmu);
+ 	struct pmu_hw_events *hw_events = nds32_pmu->get_hw_events();
+-	int enabled = bitmap_weight(hw_events->used_mask,
++	bool enabled = !bitmap_empty(hw_events->used_mask,
+ 				    nds32_pmu->num_events);
  
- 	DP_NOTICE(p_hwfn,
- 		  "%s bitmap not free - size=%d, weight=%d, 512 bits per line\n",
- 		  bmap->name, bmap->max_count, weight);
- 
--	/* print aligned non-zero lines, if any */
--	for (item = 0, line = 0; line < last_line; line++, item += 8)
--		if (bitmap_weight((unsigned long *)&pmap[item], 64 * 8))
-+	for (bit = 0; bit < bmap->max_count; bit += 512) {
-+		b =  bmap->bitmap + BITS_TO_LONGS(bit);
-+		nbits = min(bmap->max_count - bit, 512);
-+
-+		if (!bitmap_empty(b, nbits))
- 			DP_NOTICE(p_hwfn,
--				  "line 0x%04x: 0x%016llx 0x%016llx 0x%016llx 0x%016llx 0x%016llx 0x%016llx 0x%016llx 0x%016llx\n",
--				  line,
--				  pmap[item],
--				  pmap[item + 1],
--				  pmap[item + 2],
--				  pmap[item + 3],
--				  pmap[item + 4],
--				  pmap[item + 5],
--				  pmap[item + 6], pmap[item + 7]);
--
--	/* print last unaligned non-zero line, if any */
--	if ((bmap->max_count % (64 * 8)) &&
--	    (bitmap_weight((unsigned long *)&pmap[item],
--			   bmap->max_count - item * 64))) {
--		offset = sprintf(str_last_line, "line 0x%04x: ", line);
--		for (; item < last_item; item++)
--			offset += sprintf(str_last_line + offset,
--					  "0x%016llx ", pmap[item]);
--		DP_NOTICE(p_hwfn, "%s\n", str_last_line);
-+				  "line 0x%04x: %*pb\n", bit / 512, nbits, b);
- 	}
- 
- end:
+ 	if (enabled)
 -- 
 2.32.0
 

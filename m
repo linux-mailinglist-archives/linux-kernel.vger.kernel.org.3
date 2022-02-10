@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA29F4B1778
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:15:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B454B177D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:17:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344550AbiBJVPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 16:15:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41748 "EHLO
+        id S1344563AbiBJVQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 16:16:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236222AbiBJVPU (ORCPT
+        with ESMTP id S236222AbiBJVQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 16:15:20 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFD8F47
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:15:20 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id t14-20020a17090a3e4e00b001b8f6032d96so6854306pjm.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:15:20 -0800 (PST)
+        Thu, 10 Feb 2022 16:16:30 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E508F26C5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:16:29 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id y8so9810988pfa.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:16:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=82DdbPKP7kjeLQlK5oCbxLVQbpRl6tS9veakwafAfwM=;
-        b=ZEgxS2NOiSTPvF4gN2vTfXSBM/PmC9lw6FPvap3HY16dNy4VNKxbvttaJBVkXJ8rUK
-         6tdvCy7z0n07CEwKw/4F1g2AnT2vriBgeofTEt84Pl71phnqqkLb0SOPvlvQWMCTFWl8
-         fciN7Uw2+iODzzOhcAo0UKbmoVqipKz/K/i68=
+        bh=56GxMSeC38DM7FjFScYhpGTuLwbWHwsMqi8kcAas7E4=;
+        b=FDKenY6uG8aNafmFX+Zg+YrB5T4Ep6A1O3Fde4Ag43f5AMMXe9HR0HtDP4Ih0HvH+3
+         SY41Qh0xwpNOR/NKw3xSVKjSRjB+SuAm+0uZpPu/J95DLbAkevEwN9+41pCKemI61p5a
+         Rp1jHJIJqVsRIOYArqyB/pwspLyKPK1IeTWXI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=82DdbPKP7kjeLQlK5oCbxLVQbpRl6tS9veakwafAfwM=;
-        b=RfwXDX4GZrUToTgRfEPcnRX+BRzKoN2TGgQ5FRmn26QheG4z4a5qvIJErI93Oc2/aB
-         yHvKZJWdcC8yUBHFJlEfI9pZQA7AAck11g2eC6BLm8BQko5EKqhbb2iBWZPfmhfL0fm/
-         ZNEheSOVFWSXZXZ4sKU0zfcoefF/whHEPK6NRc8TOrt1KJ8nMPXJRRZ8Ixylo1/OC9nO
-         Z2or91KtUDDtWraEzP4SLgYRxEl/fb5i6obwno1DSX10POm1VF9ogSkxHCbu7ITxGJ6l
-         QeynvzCH3ufhC/72AiC9sxBge7y5rnZk57jGSDACx1xwImuzGNUb+W5QzvLo4YrBufar
-         d1sg==
-X-Gm-Message-State: AOAM530NlbKHpl5MAmexNfrMKJOFBkVVCNrE4caPA6P/trashN10cPL9
-        bB2w1bzKB+kESuA2UqseiKhC/Q==
-X-Google-Smtp-Source: ABdhPJyI/iJYt6Y+8VDXdnZEL290wYjAu5cUAZCCuNrgPtqzAfbVr/nbwnhidTNEy2XeQfmPSKHERw==
-X-Received: by 2002:a17:902:7d97:: with SMTP id a23mr9176121plm.92.1644527720463;
-        Thu, 10 Feb 2022 13:15:20 -0800 (PST)
+        bh=56GxMSeC38DM7FjFScYhpGTuLwbWHwsMqi8kcAas7E4=;
+        b=aBm+JvAeOjGm1fslyWNQ3zZwNLBJvRy6TREvzyGG8EPq2DnPSSpOHft8ca6qirTntp
+         ryC4ieJgEtiPkQqqR2ThSZYWzXHlm+AUJjndy+OzCKS8fyL96sPu6k+DdLghfXrKC1mw
+         rxWQt1oqyvsYJbT5cbDCgOZs9FAkiwUK2h3hHZlIHxsf8sXyzvYj3kssBjFxiRywgOAl
+         Ap8gs02yc7UXp2UJFs29AI4BLoA8BbxR/qpRKkPioNrXeOpu25GfwtCGeqNFtSy+iIvL
+         VthB+xAkPuUwSCsjcZlkCmckAiDICrAZ5SkTjpeLYyOH1IYyDWZQH23tu2SAvkR9TW3s
+         qyuA==
+X-Gm-Message-State: AOAM5317yZT9+2DD82tsHPoioqKOVV+OLckmkSoqXdbkb9wu8yemWK7j
+        7bDCQfLttofs+A4LoYfFYNo5Lg==
+X-Google-Smtp-Source: ABdhPJyEIEonG5UDKp6DdoNJBTiX1KgMJI7EkGIooEaffcNz/EsNH1tDm2q31M5y0fyxN0XpV0Gylw==
+X-Received: by 2002:a63:da0b:: with SMTP id c11mr7643183pgh.436.1644527789466;
+        Thu, 10 Feb 2022 13:16:29 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u13sm25914929pfg.151.2022.02.10.13.15.20
+        by smtp.gmail.com with ESMTPSA id r11sm23537151pff.81.2022.02.10.13.16.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 13:15:20 -0800 (PST)
-Date:   Thu, 10 Feb 2022 13:15:19 -0800
+        Thu, 10 Feb 2022 13:16:29 -0800 (PST)
+Date:   Thu, 10 Feb 2022 13:16:28 -0800
 From:   Kees Cook <keescook@chromium.org>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
-        kernelci@groups.io, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/exec: Rename file binfmt_script to
- binfmt_script.py
-Message-ID: <202202101312.23076F5@keescook>
-References: <20220210192845.1533204-1-usama.anjum@collabora.com>
+To:     Sherry Yang <sherry.yang@oracle.com>
+Cc:     skhan@linuxfoundation.org, shuah@kernel.org, luto@amacapital.net,
+        wad@chromium.org, christian@brauner.io, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/seccomp: Fix seccomp failure by adding
+ missing headers
+Message-ID: <202202101316.E38FEAFBCA@keescook>
+References: <20220210203049.67249-1-sherry.yang@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220210192845.1533204-1-usama.anjum@collabora.com>
+In-Reply-To: <20220210203049.67249-1-sherry.yang@oracle.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -70,110 +73,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 12:28:45AM +0500, Muhammad Usama Anjum wrote:
-> Rename file for readability purpose. Update its usage and references.
+On Thu, Feb 10, 2022 at 12:30:49PM -0800, Sherry Yang wrote:
+> seccomp_bpf failed on tests 47 global.user_notification_filter_empty
+> and 48 global.user_notification_filter_empty_threaded when it's
+> tested on updated kernel but with old kernel headers. Because old
+> kernel headers don't have definition of macro __NR_clone3 which is
+> required for these two tests. Since under selftests/, we can install
+> headers once for all tests (the default INSTALL_HDR_PATH is
+> usr/include), fix it by adding usr/include to the list of directories
+> to be searched. Use "-isystem" to indicate it's a system directory as
+> the real kernel headers directories are.
 > 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
-> This path was suggested while review of the following patch. Please
-> apply it after applying that one first:
-> 	selftests/exec: Add non-regular to TEST_GEN_PROGS
-> ---
->  tools/testing/selftests/exec/Makefile          |  2 +-
->  .../exec/{binfmt_script => binfmt_script.py}   | 18 +++++++++---------
->  2 files changed, 10 insertions(+), 10 deletions(-)
->  rename tools/testing/selftests/exec/{binfmt_script => binfmt_script.py} (90%)
-> 
-> diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
-> index a89ba6de79870..a0b8688b08369 100644
-> --- a/tools/testing/selftests/exec/Makefile
-> +++ b/tools/testing/selftests/exec/Makefile
-> @@ -3,7 +3,7 @@ CFLAGS = -Wall
->  CFLAGS += -Wno-nonnull
->  CFLAGS += -D_GNU_SOURCE
->  
-> -TEST_PROGS := binfmt_script
-> +TEST_PROGS := binfmt_script.py
->  TEST_GEN_PROGS := execveat load_address_4096 load_address_2097152 load_address_16777216 non-regular
->  TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
->  # Makefile is a run-time dependency, since it's accessed by the execveat test
-> diff --git a/tools/testing/selftests/exec/binfmt_script b/tools/testing/selftests/exec/binfmt_script.py
-> similarity index 90%
-> rename from tools/testing/selftests/exec/binfmt_script
-> rename to tools/testing/selftests/exec/binfmt_script.py
+> Signed-off-by: Sherry Yang <sherry.yang@oracle.com>
 
-Everything from here up, yes. Thank you! :)
+Thanks!
 
-All the rest aren't right: it's talking about the binfmt_script subsystem
-of the kernel, rather than the binfmt_script.py test script file itself.
-
-> index 05f94a741c7aa..6f717fedc97bd 100755
-> --- a/tools/testing/selftests/exec/binfmt_script
-> +++ b/tools/testing/selftests/exec/binfmt_script.py
-> @@ -28,11 +28,11 @@ foreach my $a (@ARGV) {
->  '''
->  
->  ##
-> -# test - produce a binfmt_script hashbang line for testing
-> +# test - produce a binfmt_script.py hashbang line for testing
->  #
->  # @size:     bytes for bprm->buf line, including hashbang but not newline
->  # @good:     whether this script is expected to execute correctly
-> -# @hashbang: the special 2 bytes for running binfmt_script
-> +# @hashbang: the special 2 bytes for running binfmt_script.py
->  # @leading:  any leading whitespace before the executable path
->  # @root:     start of executable pathname
->  # @target:   end of executable pathname
-> @@ -45,7 +45,7 @@ def test(name, size, good=True, leading="", root="./", target="/perl",
->      global test_num, tests, NAME_MAX
->      test_num += 1
->      if test_num > tests:
-> -        raise ValueError("more binfmt_script tests than expected! (want %d, expected %d)"
-> +        raise ValueError("more binfmt_script.py tests than expected! (want %d, expected %d)"
->                           % (test_num, tests))
->  
->      middle = ""
-> @@ -68,7 +68,7 @@ def test(name, size, good=True, leading="", root="./", target="/perl",
->      if len(newline) > 0:
->          buf += 'echo this is not really perl\n'
->  
-> -    script = "binfmt_script-%s" % (name)
-> +    script = "binfmt_script.py-%s" % (name)
->      open(script, "w").write(buf)
->      os.chmod(script, 0o755)
->  
-> @@ -78,17 +78,17 @@ def test(name, size, good=True, leading="", root="./", target="/perl",
->  
->      if proc.returncode == 0 and b'Executed interpreter' in stdout:
->          if good:
-> -            print("ok %d - binfmt_script %s (successful good exec)"
-> +            print("ok %d - binfmt_script.py %s (successful good exec)"
->                    % (test_num, name))
->          else:
-> -            print("not ok %d - binfmt_script %s succeeded when it should have failed"
-> +            print("not ok %d - binfmt_script.py %s succeeded when it should have failed"
->                    % (test_num, name))
->      else:
->          if good:
-> -            print("not ok %d - binfmt_script %s failed when it should have succeeded (rc:%d)"
-> +            print("not ok %d - binfmt_script.py %s failed when it should have succeeded (rc:%d)"
->                    % (test_num, name, proc.returncode))
->          else:
-> -            print("ok %d - binfmt_script %s (correctly failed bad exec)"
-> +            print("ok %d - binfmt_script.py %s (correctly failed bad exec)"
->                    % (test_num, name))
->  
->      # Clean up crazy binaries
-> @@ -167,5 +167,5 @@ test(name="two-under-leading",   size=int(SIZE/2), leading=" ")
->  test(name="two-under-lead-trunc-arg", size=int(SIZE/2), leading=" ", arg=" ")
->  
->  if test_num != tests:
-> -    raise ValueError("fewer binfmt_script tests than expected! (ran %d, expected %d"
-> +    raise ValueError("fewer binfmt_script.py tests than expected! (ran %d, expected %d"
->                       % (test_num, tests))
-> -- 
-> 2.30.2
-> 
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook

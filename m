@@ -2,74 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C764B0F96
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D564B0FCB
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242578AbiBJODK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:03:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56484 "EHLO
+        id S242644AbiBJOIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:08:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242580AbiBJODE (ORCPT
+        with ESMTP id S240931AbiBJOIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:03:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D519A
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:03:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D60E861812
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:03:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 46386C340E5;
-        Thu, 10 Feb 2022 14:03:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644501784;
-        bh=kKobx81JM9qWQ61Bn0oUUoVkVGcYutTJEWIw6A6X594=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ulJXzZu43tazrHmrEvMiHD4oS+9DPNxsgUhiGW0GuElIYdmtJBD/NawmCQgFWWqGu
-         M3xSVSHlOEEuqqOkjIlqcATX8OcrCENwezOx23ZFLoy2MTshl5THu8r0UlxUXhYElq
-         /1MzaO7aWlXOAISg9NVCK3Xp4AfkUm/e7kRcBTwhERj3pgDgcxtXrNkhcJ96iMOZcY
-         /FIuP/c7ywMzDlZSU2qscJtHdOuwQAYesSbtsD9H+nK9sEPF0/xrIwQ7V0veuKkBo9
-         yBkFdN5giY4VXRgJXK/xe5mMLatK4VIQs1g2altMokyZX9MJYFrCZJOf1z61dDxqIq
-         d5tjM91PYRXrw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 35A07E5D084;
-        Thu, 10 Feb 2022 14:03:04 +0000 (UTC)
-Subject: Re: [GIT PULL] Audit fixes for v5.17 (#2)
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAHC9VhTJR7vwuSBRa1nmP4-EY-GMrJmeQ3F_tuihjqLxT23GQg@mail.gmail.com>
-References: <CAHC9VhTJR7vwuSBRa1nmP4-EY-GMrJmeQ3F_tuihjqLxT23GQg@mail.gmail.com>
-X-PR-Tracked-List-Id: Linux Audit Discussion <linux-audit.redhat.com>
-X-PR-Tracked-Message-Id: <CAHC9VhTJR7vwuSBRa1nmP4-EY-GMrJmeQ3F_tuihjqLxT23GQg@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git tags/audit-pr-20220209
-X-PR-Tracked-Commit-Id: 7a82f89de92aac5a244d3735b2bd162c1147620c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 252787201edfdf563ddf6b6006aa534ddc504031
-Message-Id: <164450178421.30240.1907810739176095127.pr-tracker-bot@kernel.org>
-Date:   Thu, 10 Feb 2022 14:03:04 +0000
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-audit@redhat.com, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 10 Feb 2022 09:08:50 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB05F5;
+        Thu, 10 Feb 2022 06:08:51 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 470541F391;
+        Thu, 10 Feb 2022 14:08:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1644502130;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KKfbdMLq1uv0xXHacVm2GBmBm+0Pa3pnsnQQmDp1SRs=;
+        b=tCS8fnro2eBglLgWwNj/Bhf1jwTIerc+rDKFSgdLLXSlshGhKv5BIA2Zaw5ve3CTPry2PQ
+        EoLH2MS2up75IvH6Q37g+zjdq2s4+ao2X5Y78YoE+kf6jiLBDYWgSHDvWaDBDYwqyKwu3u
+        3yshXktz6z68q4ewKy9MmdzFElIq8bU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1644502130;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KKfbdMLq1uv0xXHacVm2GBmBm+0Pa3pnsnQQmDp1SRs=;
+        b=IlyvGXydUeuFMwaAwUwYRSj0twVgFKnnVCaQABQQJizUUXKAXP3UHf80By6O7GN/VJEwOZ
+        f9NnQWdypK0IkjCg==
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 30644A3B87;
+        Thu, 10 Feb 2022 14:08:50 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id CCCEADA9BA; Thu, 10 Feb 2022 15:05:08 +0100 (CET)
+Date:   Thu, 10 Feb 2022 15:05:08 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     =?utf-8?B?RMSBdmlzIE1vc8SBbnM=?= <davispuh@gmail.com>
+Cc:     linux-btrfs@vger.kernel.org, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] btrfs: prevent copying too big compressed lzo segment
+Message-ID: <20220210140508.GN12643@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz,
+        =?utf-8?B?RMSBdmlzIE1vc8SBbnM=?= <davispuh@gmail.com>,
+        linux-btrfs@vger.kernel.org, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
+        linux-kernel@vger.kernel.org
+References: <20220202214455.15753-1-davispuh@gmail.com>
+ <20220202214455.15753-2-davispuh@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220202214455.15753-2-davispuh@gmail.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 9 Feb 2022 22:42:31 -0500:
+On Wed, Feb 02, 2022 at 11:44:55PM +0200, Dāvis Mosāns wrote:
+> Compressed length can be corrupted to be a lot larger than memory
+> we have allocated for buffer.
+> This will cause memcpy in copy_compressed_segment to write outside
+> of allocated memory.
+> 
+> This mostly results in stuck read syscall but sometimes when using
+> btrfs send can get #GP
+> 
+> kernel: general protection fault, probably for non-canonical address 0x841551d5c1000: 0000 [#1] PREEMPT SMP NOPTI
+> kernel: CPU: 17 PID: 264 Comm: kworker/u256:7 Tainted: P           OE     5.17.0-rc2-1 #12
+> kernel: Workqueue: btrfs-endio btrfs_work_helper [btrfs]
+> kernel: RIP: 0010:lzo_decompress_bio (./include/linux/fortify-string.h:225 fs/btrfs/lzo.c:322 fs/btrfs/lzo.c:394) btrfs
+> Code starting with the faulting instruction
+> ===========================================
+>    0:*  48 8b 06                mov    (%rsi),%rax              <-- trapping instruction
+>    3:   48 8d 79 08             lea    0x8(%rcx),%rdi
+>    7:   48 83 e7 f8             and    $0xfffffffffffffff8,%rdi
+>    b:   48 89 01                mov    %rax,(%rcx)
+>    e:   44 89 f0                mov    %r14d,%eax
+>   11:   48 8b 54 06 f8          mov    -0x8(%rsi,%rax,1),%rdx
+> kernel: RSP: 0018:ffffb110812efd50 EFLAGS: 00010212
+> kernel: RAX: 0000000000001000 RBX: 000000009ca264c8 RCX: ffff98996e6d8ff8
+> kernel: RDX: 0000000000000064 RSI: 000841551d5c1000 RDI: ffffffff9500435d
+> kernel: RBP: ffff989a3be856c0 R08: 0000000000000000 R09: 0000000000000000
+> kernel: R10: 0000000000000000 R11: 0000000000001000 R12: ffff98996e6d8000
+> kernel: R13: 0000000000000008 R14: 0000000000001000 R15: 000841551d5c1000
+> kernel: FS:  0000000000000000(0000) GS:ffff98a09d640000(0000) knlGS:0000000000000000
+> kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> kernel: CR2: 00001e9f984d9ea8 CR3: 000000014971a000 CR4: 00000000003506e0
+> kernel: Call Trace:
+> kernel:  <TASK>
+> kernel: end_compressed_bio_read (fs/btrfs/compression.c:104 fs/btrfs/compression.c:1363 fs/btrfs/compression.c:323) btrfs
+> kernel: end_workqueue_fn (fs/btrfs/disk-io.c:1923) btrfs
+> kernel: btrfs_work_helper (fs/btrfs/async-thread.c:326) btrfs
+> kernel: process_one_work (./arch/x86/include/asm/jump_label.h:27 ./include/linux/jump_label.h:212 ./include/trace/events/workqueue.h:108 kernel/workqueue.c:2312)
+> kernel: worker_thread (./include/linux/list.h:292 kernel/workqueue.c:2455)
+> kernel: ? process_one_work (kernel/workqueue.c:2397)
+> kernel: kthread (kernel/kthread.c:377)
+> kernel: ? kthread_complete_and_exit (kernel/kthread.c:332)
+> kernel: ret_from_fork (arch/x86/entry/entry_64.S:301)
+> kernel:  </TASK>
+> 
+> Signed-off-by: Dāvis Mosāns <davispuh@gmail.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git tags/audit-pr-20220209
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/252787201edfdf563ddf6b6006aa534ddc504031
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks, added to misc-next. I've swapped the order of the patches so
+that it's easier to backport the fix.

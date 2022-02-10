@@ -2,55 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F124C4B0C66
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B7B4B0C6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240973AbiBJL34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 06:29:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37392 "EHLO
+        id S240986AbiBJLds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 06:33:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239612AbiBJL3y (ORCPT
+        with ESMTP id S235635AbiBJLdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 06:29:54 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0741015;
-        Thu, 10 Feb 2022 03:29:55 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvZKZ0C7Tz4xdJ;
-        Thu, 10 Feb 2022 22:29:54 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644492594;
-        bh=6jXUJsBHjs3f1iq/8MbNLq2zqeotd+RgdX7tUxBzy+E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GonPrJWAta1OBNOsrAdnZvUXsgDbpmrpBott4IougAwd2NozWipPvZDi7yTV9gyj0
-         FMLj/Pnr+A0INx+q6JNPl6mksFF4zc6qQXaVC8SUYYRrff3aqmdY3rUsEVi5jYWKxW
-         +I5H1zG9UlbZeYFT2woO4Hx4+qfAp8eu1oC3uHyGyKWWmA0UQzG9Zeg2RVNtdvoC/U
-         sMbnZWgk2CMMFqKUyMOf8j2b4MVkASzyTRGT/aWPqGVKgkatLHOFjT566cIKQ9qT2F
-         EZ0aSykl94r4nRW3HE7e2rQv/xzCGiN/Nxhn60YooRVZpxUQJ55Z3cNqU4lgaIwtT2
-         /4bZVWQTg8Wug==
-Date:   Thu, 10 Feb 2022 22:29:53 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Domenico Andreoli <domenico.andreoli@linux.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Tong Zhang <ztong0001@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: boottime warning from todays linux-next
-Message-ID: <20220210222953.6e078d20@canb.auug.org.au>
-In-Reply-To: <20220210214125.2b248790@canb.auug.org.au>
-References: <20220210184340.7eba108a@canb.auug.org.au>
-        <20220210193302.686fa61a@canb.auug.org.au>
-        <20220210214125.2b248790@canb.auug.org.au>
+        Thu, 10 Feb 2022 06:33:44 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9101001;
+        Thu, 10 Feb 2022 03:33:42 -0800 (PST)
+Received: from kwepemi100003.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JvZLB4dS2z5HpD;
+        Thu, 10 Feb 2022 19:30:26 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100003.china.huawei.com (7.221.188.122) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 10 Feb 2022 19:33:39 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 10 Feb 2022 19:33:38 +0800
+Subject: Re: [PATCH v8] block: cancel all throttled bios in del_gendisk()
+To:     Ming Lei <ming.lei@redhat.com>
+CC:     <tj@kernel.org>, <axboe@kernel.dk>, <cgroups@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20220208113808.1401601-1-yukuai3@huawei.com>
+ <YgMbaqTD+ycFPAtM@T590>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <148a020b-5609-1a3c-cfd9-d02abd26ff67@huawei.com>
+Date:   Thu, 10 Feb 2022 19:33:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//9=tcrmM.GLU/Z.eZRK7BH5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <YgMbaqTD+ycFPAtM@T590>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,72 +55,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_//9=tcrmM.GLU/Z.eZRK7BH5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+ÔÚ 2022/02/09 9:39, Ming Lei Ð´µÀ:
+> On Tue, Feb 08, 2022 at 07:38:08PM +0800, Yu Kuai wrote:
+>> Throttled bios can't be issued after del_gendisk() is done, thus
+>> it's better to cancel them immediately rather than waiting for
+>> throttle is done.
+>>
+>> For example, if user thread is throttled with low bps while it's
+>> issuing large io, and the device is deleted. The user thread will
+>> wait for a long time for io to return.
+>>
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>> ---
+>> Changes in v8:
+>>   - fold two patches into one
+>> Changes in v7:
+>>   - use the new solution as suggested by Ming.
+>>
+>>   block/blk-throttle.c | 49 ++++++++++++++++++++++++++++++++++++++++----
+>>   block/blk-throttle.h |  2 ++
+>>   block/genhd.c        |  2 ++
+>>   3 files changed, 49 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+>> index 7c462c006b26..557d20796157 100644
+>> --- a/block/blk-throttle.c
+>> +++ b/block/blk-throttle.c
+>> @@ -43,8 +43,12 @@
+>>   static struct workqueue_struct *kthrotld_workqueue;
+>>   
+>>   enum tg_state_flags {
+>> -	THROTL_TG_PENDING	= 1 << 0,	/* on parent's pending tree */
+>> -	THROTL_TG_WAS_EMPTY	= 1 << 1,	/* bio_lists[] became non-empty */
+>> +	/* on parent's pending tree */
+>> +	THROTL_TG_PENDING	= 1 << 0,
+>> +	/* bio_lists[] became non-empty */
+>> +	THROTL_TG_WAS_EMPTY	= 1 << 1,
+>> +	/* starts to cancel all bios, will be set if the disk is deleted */
+>> +	THROTL_TG_CANCELING	= 1 << 2,
+>>   };
+>>   
+>>   #define rb_entry_tg(node)	rb_entry((node), struct throtl_grp, rb_node)
+>> @@ -871,7 +875,8 @@ static bool tg_may_dispatch(struct throtl_grp *tg, struct bio *bio,
+>>   	       bio != throtl_peek_queued(&tg->service_queue.queued[rw]));
+>>   
+>>   	/* If tg->bps = -1, then BW is unlimited */
+>> -	if (bps_limit == U64_MAX && iops_limit == UINT_MAX) {
+>> +	if ((bps_limit == U64_MAX && iops_limit == UINT_MAX) ||
+>> +	    tg->flags & THROTL_TG_CANCELING) {
+>>   		if (wait)
+>>   			*wait = 0;
+>>   		return true;
+>> @@ -974,6 +979,9 @@ static void tg_update_disptime(struct throtl_grp *tg)
+>>   	unsigned long read_wait = -1, write_wait = -1, min_wait = -1, disptime;
+>>   	struct bio *bio;
+>>   
+>> +	if (tg->flags & THROTL_TG_CANCELING)
+>> +		goto update;
+>> +
+>>   	bio = throtl_peek_queued(&sq->queued[READ]);
+>>   	if (bio)
+>>   		tg_may_dispatch(tg, bio, &read_wait);
+>> @@ -983,9 +991,10 @@ static void tg_update_disptime(struct throtl_grp *tg)
+>>   		tg_may_dispatch(tg, bio, &write_wait);
+>>   
+>>   	min_wait = min(read_wait, write_wait);
+>> -	disptime = jiffies + min_wait;
+>>   
+>> +update:
+>>   	/* Update dispatch time */
+>> +	disptime = jiffies + min_wait;
+> 
+> As I mentioned on V7, the change in tg_update_disptime() isn't needed, please
+> drop it.
 
-Hi all,
+Hi,
+After dropping it, disptime will set to jiffies instead of
+jiffies -1, this is fine since time_before() won't pass in
+throtl_select_dispatch(). I'll drop it in v9...
+> 
+>>   	throtl_dequeue_tg(tg);
+>>   	tg->disptime = disptime;
+>>   	throtl_enqueue_tg(tg);
+>> @@ -1763,6 +1772,38 @@ static bool throtl_hierarchy_can_upgrade(struct throtl_grp *tg)
+>>   	return false;
+>>   }
+>>   
+>> +void blk_throtl_cancel_bios(struct request_queue *q)
+>> +{
+>> +	struct cgroup_subsys_state *pos_css;
+>> +	struct blkcg_gq *blkg;
+>> +
+>> +	spin_lock_irq(&q->queue_lock);
+>> +	/*
+>> +	 * queue_lock is held, rcu lock is not needed here technically.
+>> +	 * However, rcu lock is still held to emphasize that following
+>> +	 * path need RCU protection and to prevent warning from lockdep.
+>> +	 */
+>> +	rcu_read_lock();
+>> +	blkg_for_each_descendant_post(blkg, pos_css, q->root_blkg) {
+>> +		struct throtl_grp *tg = blkg_to_tg(blkg);
+>> +		struct throtl_service_queue *sq = &tg->service_queue;
+>> +
+>> +		/*
+>> +		 * Set disptime in the past to make sure
+>> +		 * throtl_select_dispatch() won't exit without dispatching.
+>> +		 */
+>> +		tg->disptime = jiffies - 1;
+> 
+> It might be better to replace the above line with tg_update_disptime().
 
-On Thu, 10 Feb 2022 21:41:25 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Thu, 10 Feb 2022 19:33:02 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > On Thu, 10 Feb 2022 18:43:40 +1100 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote: =20
-> > >
-> > > My qemu boot of a powerpc pseries_le_defconfig kernel produced these
-> > > kernel messages:
-> > >=20
-> > >   CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc3 #2
-> > >   Call Trace:
-> > >   [c0000000073e3a80] [c0000000007bfd40] dump_stack_lvl+0x74/0xa8 (unr=
-eliable)
-> > >   [c0000000073e3ac0] [c00000000057e3dc] __register_sysctl_table+0x60c=
-/0x9f0
-> > >   [c0000000073e3bd0] [c000000002041170] init_fs_stat_sysctls+0x48/0x60
-> > >   [c0000000073e3bf0] [c000000000012110] do_one_initcall+0x60/0x2d0
-> > >   [c0000000073e3cd0] [c0000000020049f0] kernel_init_freeable+0x334/0x=
-3dc
-> > >   [c0000000073e3db0] [c000000000012710] kernel_init+0x30/0x1a0
-> > >   [c0000000073e3e10] [c00000000000cd64] ret_from_kernel_thread+0x5c/0=
-x64
-> > >=20
-> > > Presumably introduced by commit
-> > >=20
-> > >   b42bc9a3c511 ("Fix regression due to "fs: move binfmt_misc sysctl t=
-o its own file"")   =20
-> >=20
-> > OK, I cannot reproduce this with just Linus' tree.  I will try to bisec=
-t. =20
->=20
-> It bisected to commit
->=20
->   43a9443d5da2 ("Merge branch 'akpm-current/current'")
->=20
-> and both parents of that commit are fine :-(
+Ok, I'll replace it and setting the flag first.
 
-So it seems that the parent of "fs/binfmt_misc" is a permanently empty
-directory - the is_empty_dir() check in insert_header() succeeds.
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_//9=tcrmM.GLU/Z.eZRK7BH5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIE9zEACgkQAVBC80lX
-0GwDZAf/RwZJos/6GDUzbMTExOg34sC0MFTYScOtUT4/RP3xQbq5dKN67BPU2efg
-2xWf9AuERRsXZgz9CmHWeML4bs0sMyAYLe1/xD2rujIpkc31VpWryWEBjABTlbri
-D1tbbspr0bfegxzQ41FpQksgyRQk2nNXMZbbCoUhaiU3gDxfwor/9lKxwq0deTfJ
-UgeyQz38Ic+BAlyTKdQ1HrSRO50lcFpIcJxLMwU/ponMiSNl//O7pSJ0/YvBDWSI
-bZPel1hq2bunfH6AXjL6wPGtTqhklF5UWyzRQltL5GMCxq6rg19uAYYJBjhSGaOr
-sDKmvipkqA7NPJNGTjvAtEUx1QCVqA==
-=NJXh
------END PGP SIGNATURE-----
-
---Sig_//9=tcrmM.GLU/Z.eZRK7BH5--
+Thanks,
+Kuai
+> 
+> Otherwise, the patch looks good.
+> 
+> Thanks,
+> Ming
+> 
+> .
+> 

@@ -2,87 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD2F4B15B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 20:00:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE6F34B15BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 20:03:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232496AbiBJTAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 14:00:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42196 "EHLO
+        id S243974AbiBJTCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 14:02:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiBJTAA (ORCPT
+        with ESMTP id S231371AbiBJTCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 14:00:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B304410B7;
-        Thu, 10 Feb 2022 11:00:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C31AB826F4;
-        Thu, 10 Feb 2022 18:59:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5FC6C004E1;
-        Thu, 10 Feb 2022 18:59:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644519598;
-        bh=YFktQwJN2xGkszkwO47NT32ieJ7RBfq1Vk3zcnkAT2Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eyUzLU8rjDQBxvWQTVFEW4fixGkc+uKDKbKJsDysKORjE2Mv0WQSk0f0KAhTKMgav
-         xw6lMRIKrHrFdORd+dYfIrGocNdmEDPwbgTMMKbWRLfz324yvMEOZbvjkqs4+drpuy
-         w6YF/7AVFOrFlp028ykwFdVU8/qLsUZEGHHO4qkINFfQSp+O/pvaphyhJx5Dzilgix
-         b1mSUbD4D4CPLzpiops9gUlgVa6IoOjaiYugE7uSbEGIx+XfaiRmyQy9QvPWBw0yZl
-         80Z0rPS1AGxj/TwR1PjWNi3odNFUWdvgz/n30hBOhsHsFFBrN2GG/JSWayLfRjTZ77
-         Mr98atRGyb5CQ==
-Date:   Thu, 10 Feb 2022 10:59:56 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: dsa: qca8k: fix noderef.cocci warnings
-Message-ID: <20220210105956.336c9e6a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <6c74b2f8-dd83-c4f2-cadd-07794a37dfac@gmail.com>
-References: <202202100634.l8CtrpzE-lkp@intel.com>
-        <20220209221304.GA17529@d2214a582157>
-        <6c74b2f8-dd83-c4f2-cadd-07794a37dfac@gmail.com>
+        Thu, 10 Feb 2022 14:02:30 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A689310B7;
+        Thu, 10 Feb 2022 11:02:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=V52I0DAAX6dK6jU5ZQnW77DWoP+74i7YLOYDRfZ7xfg=; b=SBeXG6y7UHu3bmflQARvf/COca
+        PTtDYV3rZzXz3F8hO1BgtSGNhydwz7yRwzCQJpJxUHzP1/HCDmMHNrJOx7hdhFUDwjdzaxO0pzHhq
+        RkV+r2ecEDIzdoBfytSNri/mng6bNbvvkJxq58H9y41owGzFV1pLSDC7GMmgDbN2Bwt2IBGlqqv+I
+        0UBteM1W5lj7Ks8kF8iwwNmA73iku8RrSCtASh1fYmZm3pEz0spuNSAdPc22UrP536tJsk2kKYCy0
+        R0KjmJMFOdGOBh5PWXm5S2akpq1W/kZaEquaxEx+rY7GglNBcZF2jT0x872a5smvdCBUnCiJq0Rdl
+        /m9C9VkA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nIEi1-004iKF-5D; Thu, 10 Feb 2022 19:02:25 +0000
+Date:   Thu, 10 Feb 2022 11:02:25 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Zhen Ni <nizhen@uniontech.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH] sched: move rt_period/runtime sysctls to rt.c
+Message-ID: <YgVhQZQ1LayVcWFi@bombadil.infradead.org>
+References: <20220210012030.8813-1-nizhen@uniontech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210012030.8813-1-nizhen@uniontech.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Feb 2022 19:30:48 -0800 Florian Fainelli wrote:
-> On 2/9/2022 2:13 PM, kernel test robot wrote:
-> > From: kernel test robot <lkp@intel.com>
-> > 
-> > drivers/net/dsa/qca8k.c:422:37-43: ERROR: application of sizeof to pointer
-> > 
-> >   sizeof when applied to a pointer typed expression gives the size of
-> >   the pointer
-> > 
-> > Generated by: scripts/coccinelle/misc/noderef.cocci
-> > 
-> > Fixes: 90386223f44e ("net: dsa: qca8k: add support for larger read/write size with mgmt Ethernet")
-> > CC: Ansuel Smith <ansuelsmth@gmail.com>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: kernel test robot <lkp@intel.com>  
+On Thu, Feb 10, 2022 at 09:20:30AM +0800, Zhen Ni wrote:
+> move rt_period/runtime sysctls to rt.c and use the new
+> register_sysctl_init() to register the sysctl interface.
 > 
-> > qca8k.c |    2 +-
-> > 1 file changed, 1 insertion(+), 1 deletion(-)
+> Signed-off-by: Zhen Ni <nizhen@uniontech.com>
 
-kbuild folks, would it be easy to switch to including full path here?
-It seems like our CI expects that and ignores this patch.
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 
-> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-
-Applied, thanks!
+  Luis

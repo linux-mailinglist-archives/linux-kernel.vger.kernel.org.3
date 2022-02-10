@@ -2,174 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25FB74B02E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AD24B0269
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiBJCAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 21:00:51 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34088 "EHLO
+        id S232894AbiBJBcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 20:32:00 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234369AbiBJB7U (ORCPT
+        with ESMTP id S232726AbiBJBbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:59:20 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC8727D65
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 17:34:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644456876; x=1675992876;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CnOSWYoXr4bC9YQTX0CWWYKZDGp0EePO33bXWv9JyVM=;
-  b=df7/lccGDX+cDSa0/1HgdMS5xGbjRC0aZKWKQ+t1yS9UK87iEqhXEHaH
-   qzZ8xTbqZhmQYWtwfBVwF7n/yoMqkuyBser5yqLGjLaQfxHNKIV5XemHZ
-   V0/GZRc3YLX4RkF419VouMV0WhXG1yWYUPPw9Da3mNYOxpPf0P3gpP67a
-   51y7i8pP7VFL49SKoBnz/NgSKu1n6QiBV78VqXcU8WOglD8FQgBUd8pf0
-   SbNXw26hV77nS9KuFQWu39HvpElnaPKALCPrD0dW0VJix/JFWxtOwO9Gb
-   +x17f9la5nO7qM/BK+ZNlOUwdqyWxHB6nCxmrJDIyci+a/v3R2jqVaGu+
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="273920855"
-X-IronPort-AV: E=Sophos;i="5.88,357,1635231600"; 
-   d="scan'208";a="273920855"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 16:31:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,357,1635231600"; 
-   d="scan'208";a="585774824"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 09 Feb 2022 16:31:17 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nHxMi-0002Sq-U8; Thu, 10 Feb 2022 00:31:16 +0000
-Date:   Thu, 10 Feb 2022 08:30:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Stephane Eranian <eranian@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: [peterz-queue:perf/core 16/17] drivers/acpi/acpi_pad.c:168:4: error:
- implicit declaration of function 'perf_lopwr_cb'
-Message-ID: <202202100823.E5rjIvVT-lkp@intel.com>
+        Wed, 9 Feb 2022 20:31:52 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78861264B;
+        Wed,  9 Feb 2022 17:31:50 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id b22so3379888qkk.12;
+        Wed, 09 Feb 2022 17:31:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=lsjXgBdwVzz1jdG2SwhM08O9CVRULh5B52r/5Wr4x8g=;
+        b=RR/np8HQjvvq6qfHxqri8Xbfmv5/l6SfV/hHZ6reOzohJyFZybkQ3W0ONjBtJC5w7S
+         XgMtOn1lz3tzXFiCXJ3a7VblIpf9ZNvYMMRxC4UVCYc4JH1UJGRbJSs8quS9BBykLYYI
+         3unAmT2Fh7vENgeaXZYBG+r0HN6D1UI1uFEpeuaS4wP/UAuJi30s3hNVdJXZy3TakcJT
+         zUkuqHExfZQfozQZRJVWK0JptRMEUBvUL/jtyenROATB2Oefv1B+mxK6EVoyYH18gg23
+         XlAQ1neaaOaqRjPxRn2ZiAUEasMePHaYNcR0kBnfakbP84PWSns1DbguvjZ9mHZ/L4Td
+         o3yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=lsjXgBdwVzz1jdG2SwhM08O9CVRULh5B52r/5Wr4x8g=;
+        b=FbIOgwZVPOQ7/Rkvizp6iK7tAc/2a0SFNLe9w9p1w1J6X+Q0o/vUJfv0iL+taHhUI8
+         NxfFiCLV4tiVAkqe20uQsZJJL/vaYRW0ZG5k2GDXBdKdbZwfDGhsoXZGHFLRH5J0p0+A
+         CJ/8E3CaIHUonA0kOq3SXr15QgiO81BaQ9WV+xOvqesjkImGLwvGQHGAoHkpw6Nqxry4
+         Es6xh9HiBpfA2Pn7JaAIKdlk/5kEK6i/dSOptBBdExhH3+Z8EfUj5E4YI4pi1ewzPTg0
+         j2LYYACHLXy5/bAZ/bXgxYW49K3ffISoV9nu0le1RBE96sbtg54gWU88xVZe3SE+6zxw
+         1kfg==
+X-Gm-Message-State: AOAM532tcr6sH1RBYr5+nAu0GfN4bkZHGO6ma/544wAGKM8Ia8N60ZAe
+        YNL1EoVlqbaNc42eSYnMVvo6v5XmoVNKa+uC
+X-Google-Smtp-Source: ABdhPJwHZCEP2h/vyvh6lOBT3h8QbQ1oJD1skB/aP+eX9ddsY++wtTgFkcGltvPlampEjZlvTBG4QA==
+X-Received: by 2002:a05:6638:2484:: with SMTP id x4mr2607894jat.245.1644453078675;
+        Wed, 09 Feb 2022 16:31:18 -0800 (PST)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id g8sm9620280ilc.10.2022.02.09.16.31.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 16:31:17 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id AC24127C0054;
+        Wed,  9 Feb 2022 19:31:16 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 09 Feb 2022 19:31:16 -0500
+X-ME-Sender: <xms:01wEYhOs_2pN2zC6yDh91fysr4drI1NvHufl5_iBspkssrCakEDH4g>
+    <xme:01wEYj9y76YXJmVn5ko7jUwsxMiTdS6Z0CP87Lx6nbYlfoWDeOk5EwYy6aq7WZdsr
+    cGz21eWPYCpH9ureA>
+X-ME-Received: <xmr:01wEYgSXDCAGEl7kvhYG7x5UmyTYXR5rRMe-P60eT1w-bazHdaPuE3WSnDw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddriedtgddvudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeeuohhquhhn
+    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
+    htvghrnhepiedvhfdtfeetffeukeeljefgteegveejleevjeejjefhuedujeeihfelffeh
+    fedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsg
+    hoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieeg
+    qddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigi
+    hmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:01wEYttQnelQx44A4NduqJAq0Z_nWbrInmu4FQDBslflCdLx0GfRrA>
+    <xmx:01wEYpfzx35BTVkRKN0fartAklKyD1vOgH7pv49rBMs6Q6gSC_G-Nw>
+    <xmx:01wEYp39FqIgklnSNByUbw6IbnA8e2Fc_TKU2pjpvsETdh5_pJqE-A>
+    <xmx:1FwEYs_bLLKVD1L9qCECUQZ0h3D3CHVxcapRcvJKOncCqDZGA9jVJIEO6qo>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 9 Feb 2022 19:31:14 -0500 (EST)
+Date:   Thu, 10 Feb 2022 08:31:09 +0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Sunil Muthuswamy <sunilmut@linux.microsoft.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] PCI: hv: Avoid the retarget interrupt hypercall in
+ irq_unmask() on ARM64
+Message-ID: <YgRczeswYb3GcJVf@tardis>
+References: <20220209023722.2866009-1-boqun.feng@gmail.com>
+ <20220209161220.GA559499@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220209161220.GA559499@bhelgaas>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/core
-head:   c23483152838201e7eb9d179d121e0ed0189269e
-commit: e879a335a574ca071f76684b8160a56d9147db27 [16/17] ACPI: add perf low power callback
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220210/202202100823.E5rjIvVT-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e8bff9ae54a55b4dbfeb6ba55f723abbd81bf494)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=e879a335a574ca071f76684b8160a56d9147db27
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue perf/core
-        git checkout e879a335a574ca071f76684b8160a56d9147db27
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+On Wed, Feb 09, 2022 at 10:12:20AM -0600, Bjorn Helgaas wrote:
+> On Wed, Feb 09, 2022 at 10:37:20AM +0800, Boqun Feng wrote:
+> > On ARM64 Hyper-V guests, SPIs are used for the interrupts of virtual PCI
+> > devices, and SPIs can be managed directly via GICD registers. Therefore
+> > the retarget interrupt hypercall is not needed on ARM64.
+> >=20
+> > The retarget interrupt hypercall related code is now put in a helper
+> > function and only called on x86.
+> >=20
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > ---
+> >  drivers/pci/controller/pci-hyperv.c | 11 +++++++++--
+> >  1 file changed, 9 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controll=
+er/pci-hyperv.c
+> > index 20ea2ee330b8..80aa33ef5bf0 100644
+> > --- a/drivers/pci/controller/pci-hyperv.c
+> > +++ b/drivers/pci/controller/pci-hyperv.c
+> > @@ -1457,7 +1457,7 @@ static void hv_irq_mask(struct irq_data *data)
+> >  }
+> > =20
+> >  /**
+> > - * hv_irq_unmask() - "Unmask" the IRQ by setting its current
+> > + * __hv_irq_unmask() - "Unmask" the IRQ by setting its current
+> >   * affinity.
+> >   * @data:	Describes the IRQ
+> >   *
+> > @@ -1466,7 +1466,7 @@ static void hv_irq_mask(struct irq_data *data)
+> >   * is built out of this PCI bus's instance GUID and the function
+> >   * number of the device.
+> >   */
+> > -static void hv_irq_unmask(struct irq_data *data)
+> > +static void __hv_irq_unmask(struct irq_data *data)
+> >  {
+> >  	struct msi_desc *msi_desc =3D irq_data_get_msi_desc(data);
+> >  	struct hv_retarget_device_interrupt *params;
+> > @@ -1569,6 +1569,13 @@ static void hv_irq_unmask(struct irq_data *data)
+> >  	if (!hv_result_success(res) && hbus->state !=3D hv_pcibus_removing)
+> >  		dev_err(&hbus->hdev->device,
+> >  			"%s() failed: %#llx", __func__, res);
+> > +}
+> > +
+> > +static void hv_irq_unmask(struct irq_data *data)
+> > +{
+> > +	/* Only use a hypercall on x86 */
+>=20
+> This comment isn't useful because it only repeats what we can already
+> see from the "IS_ENABLED(CONFIG_X86)" below and it doesn't say
+> anything about *why*.
+>=20
+> Didn't we just go though an exercise of adding interfaces for
+> arch-specific things, i.e., 831c1ae725f7 ("PCI: hv: Make the code arch
+> neutral by adding arch specific interfaces")?  Maybe this should be
+> another such interface?
+>=20
+> If you add Hyper-V support for a third arch, this #ifdef will likely
+> be silently incorrect.  If you add an interface, there's at least a
+> clue that this needs to be evaluated.
+>=20
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+You are right. I will make __hv_irq_unmask() as an arch-specific
+interface in the next version (probably with a better name). Thank you!
 
-All errors (new ones prefixed by >>):
+Regards,
+Boqun
 
->> drivers/acpi/acpi_pad.c:168:4: error: implicit declaration of function 'perf_lopwr_cb' [-Werror,-Wimplicit-function-declaration]
-                           perf_lopwr_cb(true);
-                           ^
-   1 error generated.
-
-
-vim +/perf_lopwr_cb +168 drivers/acpi/acpi_pad.c
-
-   135	
-   136	static unsigned int idle_pct = 5; /* percentage */
-   137	static unsigned int round_robin_time = 1; /* second */
-   138	static int power_saving_thread(void *data)
-   139	{
-   140		int do_sleep;
-   141		unsigned int tsk_index = (unsigned long)data;
-   142		u64 last_jiffies = 0;
-   143	
-   144		sched_set_fifo_low(current);
-   145	
-   146		while (!kthread_should_stop()) {
-   147			unsigned long expire_time;
-   148	
-   149			/* round robin to cpus */
-   150			expire_time = last_jiffies + round_robin_time * HZ;
-   151			if (time_before(expire_time, jiffies)) {
-   152				last_jiffies = jiffies;
-   153				round_robin_cpu(tsk_index);
-   154			}
-   155	
-   156			do_sleep = 0;
-   157	
-   158			expire_time = jiffies + HZ * (100 - idle_pct) / 100;
-   159	
-   160			while (!need_resched()) {
-   161				if (tsc_detected_unstable && !tsc_marked_unstable) {
-   162					/* TSC could halt in idle, so notify users */
-   163					mark_tsc_unstable("TSC halts in idle");
-   164					tsc_marked_unstable = 1;
-   165				}
-   166				local_irq_disable();
-   167	
- > 168				perf_lopwr_cb(true);
-   169	
-   170				tick_broadcast_enable();
-   171				tick_broadcast_enter();
-   172				stop_critical_timings();
-   173	
-   174				mwait_idle_with_hints(power_saving_mwait_eax, 1);
-   175	
-   176				start_critical_timings();
-   177				tick_broadcast_exit();
-   178	
-   179				perf_lopwr_cb(false);
-   180	
-   181				local_irq_enable();
-   182	
-   183				if (time_before(expire_time, jiffies)) {
-   184					do_sleep = 1;
-   185					break;
-   186				}
-   187			}
-   188	
-   189			/*
-   190			 * current sched_rt has threshold for rt task running time.
-   191			 * When a rt task uses 95% CPU time, the rt thread will be
-   192			 * scheduled out for 5% CPU time to not starve other tasks. But
-   193			 * the mechanism only works when all CPUs have RT task running,
-   194			 * as if one CPU hasn't RT task, RT task from other CPUs will
-   195			 * borrow CPU time from this CPU and cause RT task use > 95%
-   196			 * CPU time. To make 'avoid starvation' work, takes a nap here.
-   197			 */
-   198			if (unlikely(do_sleep))
-   199				schedule_timeout_killable(HZ * idle_pct / 100);
-   200	
-   201			/* If an external event has set the need_resched flag, then
-   202			 * we need to deal with it, or this loop will continue to
-   203			 * spin without calling __mwait().
-   204			 */
-   205			if (unlikely(need_resched()))
-   206				schedule();
-   207		}
-   208	
-   209		exit_round_robin(tsk_index);
-   210		return 0;
-   211	}
-   212	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> > +	if (IS_ENABLED(CONFIG_X86))
+> > +		__hv_irq_unmask(data);
+> > =20
+> >  	if (data->parent_data->chip->irq_unmask)
+> >  		irq_chip_unmask_parent(data);
+> > --=20
+> > 2.35.1
+> >=20

@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE6B4B154E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:35:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 353894B154F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245759AbiBJSfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 13:35:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58464 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232950AbiBJSfG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S242475AbiBJSfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 10 Feb 2022 13:35:06 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789FC195
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58458 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230310AbiBJSfF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 10 Feb 2022 13:35:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F86192
         for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:35:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644518106; x=1676054106;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9GWiOlqBELONBFdDSp3YdMGj2rAPPUNrkye0GUuhEZE=;
-  b=JFv76xbBR2Ka3gdl6ZwqiYuPiH/nXCVPrJkER6ubrw5Twft0ime3poTs
-   VULIr/03xFx3gDKk2vDtci0NoaZgZLTxFnYtv7thWTG/ZXvjDha+Ss3TG
-   gvX3ke8EPrGkPKv5j708bu5961qE1uvTQBCCPZjcUj2YXwWIYiX34jcHG
-   QbP/RVLJbD68ZJVwpDvvzbBXfV0+PkQoT3LI0CZzvfM0Fqh5G3acQ2QE7
-   j/RAND2pBrK9hdPJ0vIv9tvAOPSevy+w8tf39LwsEZoMUhfXLlJrEpDjC
-   15NgMsdT75HPwPaoYMT8sJI9MvmP15yIqlbHuQ41XJyGCLVfP56TwipT1
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="335980127"
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="335980127"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 10:35:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="482869793"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 10 Feb 2022 10:35:03 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nIEHW-0003at-SD; Thu, 10 Feb 2022 18:35:02 +0000
-Date:   Fri, 11 Feb 2022 02:34:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guo Ren <guoren@linux.alibaba.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [csky-linux:riscv_compat_v6_svpbmt-v6 35/35]
- arch/riscv/include/asm/pgtable.h:167:35: error: '_PAGE_PMA' undeclared
-Message-ID: <202202110244.QjvpBb6X-lkp@intel.com>
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ACBE4B8250C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 18:35:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0310BC340EB;
+        Thu, 10 Feb 2022 18:35:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644518103;
+        bh=WgRDaKWAfHp62EhSRpyG96mSmkZMXuwQRlLHqLS1jYs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=grtMUOHsLFuCnier4WJ3LWpdZIhLbI2geCqFrSrGo0uMC0lvvgUEz5nxuRGxOnnvx
+         09EHgFyO0hOjMAH9yt0rq+JvkysbWGoSVeB/d/iWu82URj23sNueMgEBkqvIXZ/SMY
+         7oSEQxYZQS5MCS199sbw9SclU6GFNcFGL0FLumqCttYTP17LsjwQqw8ByMOkMead4s
+         spNav8XH0ZVlOYPzcA9FghEY0EQ7KVrIjfn8oe1WDfCaC8++PNfSTv64iz2+4zUACs
+         ZbRGU5I86jqWrIapVQAh2gutlud7KgrolZcY5ICiIatwms9kyai264vxbUUKveOfoF
+         Z6EANKh0Yb01g==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 2D984400FE; Thu, 10 Feb 2022 15:34:59 -0300 (-03)
+Date:   Thu, 10 Feb 2022 15:34:59 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>
+Subject: Re: [PATCH 0/4] Handle chroot tasks properly (v2)
+Message-ID: <YgVa0/B7MUKRz88C@kernel.org>
+References: <20220202070828.143303-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220202070828.143303-1-namhyung@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,245 +60,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/c-sky/csky-linux riscv_compat_v6_svpbmt-v6
-head:   54acb36c958fc990cc59889f79c8ddca7386c295
-commit: 54acb36c958fc990cc59889f79c8ddca7386c295 [35/35] riscv: xtpbmt: Fixup T-HEAD CPU _PAGE_KERNEL quirks
-config: riscv-randconfig-r026-20220209 (https://download.01.org/0day-ci/archive/20220211/202202110244.QjvpBb6X-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/c-sky/csky-linux/commit/54acb36c958fc990cc59889f79c8ddca7386c295
-        git remote add csky-linux https://github.com/c-sky/csky-linux
-        git fetch --no-tags csky-linux riscv_compat_v6_svpbmt-v6
-        git checkout 54acb36c958fc990cc59889f79c8ddca7386c295
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+Em Tue, Feb 01, 2022 at 11:08:24PM -0800, Namhyung Kim escreveu:
+> Hello,
+> 
+> I found that perf tools don't work well with tasks in a chroot.  The
+> filenames in MMAP record are from the root directory of the task so
+> it's different than what it sees from outside.
+> 
+>  * changes in v2)
+>   - add Jiri's Acked-by
+>   - split stderr setup for objdump
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Applied 1/4 to perf/urgent, its already upstream.
 
-All error/warnings (new ones prefixed by >>):
+The others are bit big for this time, so I've added it to perf/core.
 
-   In file included from include/linux/pgtable.h:6,
-                    from arch/riscv/include/asm/io.h:15,
-                    from include/linux/io.h:13,
-                    from include/linux/irq.h:20,
-                    from include/asm-generic/hardirq.h:17,
-                    from ./arch/riscv/include/generated/asm/hardirq.h:1,
-                    from include/linux/hardirq.h:11,
-                    from include/linux/interrupt.h:11,
-                    from arch/riscv/kernel/irq.c:8:
-   include/asm-generic/io.h: In function 'ioremap':
->> arch/riscv/include/asm/pgtable.h:167:35: error: '_PAGE_PMA' undeclared (first use in this function)
-     167 |                                 | _PAGE_PMA \
-         |                                   ^~~~~~~~~
-   arch/riscv/include/asm/pgtable.h:178:27: note: in expansion of macro '_PAGE_KERNEL'
-     178 | #define _PAGE_IOREMAP   ((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-         |                           ^~~~~~~~~~~~
-   include/asm-generic/io.h:973:41: note: in expansion of macro '_PAGE_IOREMAP'
-     973 |         return ioremap_prot(addr, size, _PAGE_IOREMAP);
-         |                                         ^~~~~~~~~~~~~
-   arch/riscv/include/asm/pgtable.h:167:35: note: each undeclared identifier is reported only once for each function it appears in
-     167 |                                 | _PAGE_PMA \
-         |                                   ^~~~~~~~~
-   arch/riscv/include/asm/pgtable.h:178:27: note: in expansion of macro '_PAGE_KERNEL'
-     178 | #define _PAGE_IOREMAP   ((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-         |                           ^~~~~~~~~~~~
-   include/asm-generic/io.h:973:41: note: in expansion of macro '_PAGE_IOREMAP'
-     973 |         return ioremap_prot(addr, size, _PAGE_IOREMAP);
-         |                                         ^~~~~~~~~~~~~
---
-   In file included from include/linux/pgtable.h:6,
-                    from include/linux/mm.h:33,
-                    from arch/riscv/kernel/setup.c:12:
-   include/asm-generic/io.h: In function 'ioremap':
->> arch/riscv/include/asm/pgtable.h:167:35: error: '_PAGE_PMA' undeclared (first use in this function)
-     167 |                                 | _PAGE_PMA \
-         |                                   ^~~~~~~~~
-   arch/riscv/include/asm/pgtable.h:178:27: note: in expansion of macro '_PAGE_KERNEL'
-     178 | #define _PAGE_IOREMAP   ((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-         |                           ^~~~~~~~~~~~
-   include/asm-generic/io.h:973:41: note: in expansion of macro '_PAGE_IOREMAP'
-     973 |         return ioremap_prot(addr, size, _PAGE_IOREMAP);
-         |                                         ^~~~~~~~~~~~~
-   arch/riscv/include/asm/pgtable.h:167:35: note: each undeclared identifier is reported only once for each function it appears in
-     167 |                                 | _PAGE_PMA \
-         |                                   ^~~~~~~~~
-   arch/riscv/include/asm/pgtable.h:178:27: note: in expansion of macro '_PAGE_KERNEL'
-     178 | #define _PAGE_IOREMAP   ((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-         |                           ^~~~~~~~~~~~
-   include/asm-generic/io.h:973:41: note: in expansion of macro '_PAGE_IOREMAP'
-     973 |         return ioremap_prot(addr, size, _PAGE_IOREMAP);
-         |                                         ^~~~~~~~~~~~~
-   In file included from arch/riscv/include/asm/thread_info.h:11,
-                    from include/linux/thread_info.h:60,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/riscv/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/spinlock.h:55,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:6,
-                    from include/linux/mm.h:10,
-                    from arch/riscv/kernel/setup.c:12:
-   arch/riscv/kernel/setup.c: In function 'setup_arch':
->> arch/riscv/include/asm/pgtable.h:167:35: error: '_PAGE_PMA' undeclared (first use in this function)
-     167 |                                 | _PAGE_PMA \
-         |                                   ^~~~~~~~~
-   arch/riscv/include/asm/page.h:80:27: note: in definition of macro 'pgprot_val'
-      80 | #define pgprot_val(x)   ((x).pgprot)
-         |                           ^
-   arch/riscv/include/asm/pgtable.h:170:33: note: in expansion of macro '__pgprot'
-     170 | #define PAGE_KERNEL             __pgprot(_PAGE_KERNEL)
-         |                                 ^~~~~~~~
-   arch/riscv/include/asm/pgtable.h:170:42: note: in expansion of macro '_PAGE_KERNEL'
-     170 | #define PAGE_KERNEL             __pgprot(_PAGE_KERNEL)
-         |                                          ^~~~~~~~~~~~
-   include/linux/printk.h:418:33: note: in expansion of macro 'PAGE_KERNEL'
-     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                                 ^~~~~~~~~~~
-   include/linux/printk.h:446:26: note: in expansion of macro 'printk_index_wrap'
-     446 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                          ^~~~~~~~~~~~~~~~~
-   arch/riscv/kernel/setup.c:270:1: note: in expansion of macro 'printk'
-     270 | printk("%s: _PAGE_KERNEL: 0x%lx\n", __func__, pgprot_val(PAGE_KERNEL));
-         | ^~~~~~
-   In file included from include/asm-generic/bug.h:22,
-                    from arch/riscv/include/asm/bug.h:83,
-                    from include/linux/bug.h:5,
-                    from include/linux/mmdebug.h:5,
-                    from include/linux/mm.h:9,
-                    from arch/riscv/kernel/setup.c:12:
->> arch/riscv/kernel/setup.c:271:8: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 3 has type 'int' [-Wformat=]
-     271 | printk("%s: _PAGE_IO: 0x%llx\n", __func__, _PAGE_IO);
-         |        ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
-     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   arch/riscv/kernel/setup.c:271:1: note: in expansion of macro 'printk'
-     271 | printk("%s: _PAGE_IO: 0x%llx\n", __func__, _PAGE_IO);
-         | ^~~~~~
-   arch/riscv/kernel/setup.c:271:28: note: format string is defined here
-     271 | printk("%s: _PAGE_IO: 0x%llx\n", __func__, _PAGE_IO);
-         |                         ~~~^
-         |                            |
-         |                            long long unsigned int
-         |                         %x
-   In file included from include/asm-generic/bug.h:22,
-                    from arch/riscv/include/asm/bug.h:83,
-                    from include/linux/bug.h:5,
-                    from include/linux/mmdebug.h:5,
-                    from include/linux/mm.h:9,
-                    from arch/riscv/kernel/setup.c:12:
-   arch/riscv/kernel/setup.c:272:8: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 3 has type 'int' [-Wformat=]
-     272 | printk("%s: _PAGE_NOCACHE: 0x%llx\n", __func__, _PAGE_NOCACHE);
-         |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
-     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   arch/riscv/kernel/setup.c:272:1: note: in expansion of macro 'printk'
-     272 | printk("%s: _PAGE_NOCACHE: 0x%llx\n", __func__, _PAGE_NOCACHE);
-         | ^~~~~~
-   arch/riscv/kernel/setup.c:272:33: note: format string is defined here
-     272 | printk("%s: _PAGE_NOCACHE: 0x%llx\n", __func__, _PAGE_NOCACHE);
-         |                              ~~~^
-         |                                 |
-         |                                 long long unsigned int
-         |                              %x
---
-   In file included from arch/riscv/include/asm/uaccess.h:12,
-                    from include/linux/uaccess.h:11,
-                    from include/linux/sched/task.h:11,
-                    from include/linux/sched/signal.h:9,
-                    from include/linux/rcuwait.h:6,
-                    from include/linux/percpu-rwsem.h:7,
-                    from include/linux/fs.h:33,
-                    from include/linux/compat.h:17,
-                    from arch/riscv/kernel/signal.c:9:
-   include/asm-generic/io.h: In function 'ioremap':
->> arch/riscv/include/asm/pgtable.h:167:35: error: '_PAGE_PMA' undeclared (first use in this function)
-     167 |                                 | _PAGE_PMA \
-         |                                   ^~~~~~~~~
-   arch/riscv/include/asm/pgtable.h:178:27: note: in expansion of macro '_PAGE_KERNEL'
-     178 | #define _PAGE_IOREMAP   ((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-         |                           ^~~~~~~~~~~~
-   include/asm-generic/io.h:973:41: note: in expansion of macro '_PAGE_IOREMAP'
-     973 |         return ioremap_prot(addr, size, _PAGE_IOREMAP);
-         |                                         ^~~~~~~~~~~~~
-   arch/riscv/include/asm/pgtable.h:167:35: note: each undeclared identifier is reported only once for each function it appears in
-     167 |                                 | _PAGE_PMA \
-         |                                   ^~~~~~~~~
-   arch/riscv/include/asm/pgtable.h:178:27: note: in expansion of macro '_PAGE_KERNEL'
-     178 | #define _PAGE_IOREMAP   ((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
-         |                           ^~~~~~~~~~~~
-   include/asm-generic/io.h:973:41: note: in expansion of macro '_PAGE_IOREMAP'
-     973 |         return ioremap_prot(addr, size, _PAGE_IOREMAP);
-         |                                         ^~~~~~~~~~~~~
-   arch/riscv/kernel/signal.c: At top level:
-   arch/riscv/kernel/signal.c:320:27: warning: no previous prototype for 'do_notify_resume' [-Wmissing-prototypes]
-     320 | asmlinkage __visible void do_notify_resume(struct pt_regs *regs,
-         |                           ^~~~~~~~~~~~~~~~
---
-   In file included from arch/riscv/include/asm/fixmap.h:55,
-                    from arch/riscv/kernel/patch.c:13:
-   arch/riscv/kernel/patch.c: In function 'patch_map':
->> arch/riscv/include/asm/pgtable.h:167:35: error: '_PAGE_PMA' undeclared (first use in this function)
-     167 |                                 | _PAGE_PMA \
-         |                                   ^~~~~~~~~
-   include/asm-generic/fixmap.h:77:33: note: in definition of macro '__set_fixmap_offset'
-      77 |         __set_fixmap(idx, phys, flags);                                 \
-         |                                 ^~~~~
-   arch/riscv/include/asm/pgtable.h:170:33: note: in expansion of macro '__pgprot'
-     170 | #define PAGE_KERNEL             __pgprot(_PAGE_KERNEL)
-         |                                 ^~~~~~~~
-   arch/riscv/include/asm/pgtable.h:170:42: note: in expansion of macro '_PAGE_KERNEL'
-     170 | #define PAGE_KERNEL             __pgprot(_PAGE_KERNEL)
-         |                                          ^~~~~~~~~~~~
-   include/asm-generic/fixmap.h:48:28: note: in expansion of macro 'PAGE_KERNEL'
-      48 | #define FIXMAP_PAGE_NORMAL PAGE_KERNEL
-         |                            ^~~~~~~~~~~
-   include/asm-generic/fixmap.h:83:40: note: in expansion of macro 'FIXMAP_PAGE_NORMAL'
-      83 |         __set_fixmap_offset(idx, phys, FIXMAP_PAGE_NORMAL)
-         |                                        ^~~~~~~~~~~~~~~~~~
-   arch/riscv/kernel/patch.c:42:24: note: in expansion of macro 'set_fixmap_offset'
-      42 |         return (void *)set_fixmap_offset(fixmap, page_to_phys(page) +
-         |                        ^~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/pgtable.h:167:35: note: each undeclared identifier is reported only once for each function it appears in
-     167 |                                 | _PAGE_PMA \
-         |                                   ^~~~~~~~~
-   include/asm-generic/fixmap.h:77:33: note: in definition of macro '__set_fixmap_offset'
-      77 |         __set_fixmap(idx, phys, flags);                                 \
-         |                                 ^~~~~
-   arch/riscv/include/asm/pgtable.h:170:33: note: in expansion of macro '__pgprot'
-     170 | #define PAGE_KERNEL             __pgprot(_PAGE_KERNEL)
-         |                                 ^~~~~~~~
-   arch/riscv/include/asm/pgtable.h:170:42: note: in expansion of macro '_PAGE_KERNEL'
-     170 | #define PAGE_KERNEL             __pgprot(_PAGE_KERNEL)
-         |                                          ^~~~~~~~~~~~
-   include/asm-generic/fixmap.h:48:28: note: in expansion of macro 'PAGE_KERNEL'
-      48 | #define FIXMAP_PAGE_NORMAL PAGE_KERNEL
-         |                            ^~~~~~~~~~~
-   include/asm-generic/fixmap.h:83:40: note: in expansion of macro 'FIXMAP_PAGE_NORMAL'
-      83 |         __set_fixmap_offset(idx, phys, FIXMAP_PAGE_NORMAL)
-         |                                        ^~~~~~~~~~~~~~~~~~
-   arch/riscv/kernel/patch.c:42:24: note: in expansion of macro 'set_fixmap_offset'
-      42 |         return (void *)set_fixmap_offset(fixmap, page_to_phys(page) +
-         |                        ^~~~~~~~~~~~~~~~~
+Thanks,
 
+- Arnaldo
+ 
+> I've tested it with a simple program (myprog - statically built) which
+> just consumes cpu cycles in a loop for a while (default 1 sec, can by
+> overridden by a command-line argument).
+> 
+>   # cd $HOME
+>   # mkdir -p myroot/bin
+>   # cp myprog myroot/bin
+> 
+>   # perf record chroot myroot myprog
+>   # perf report -D | grep MMAP | grep myprog
+>   2084916774977911 0xa2e4 [0x70]: PERF_RECORD_MMAP2 3363818/3363818: \
+>   [0x401000(0x80000) @ 0x1000 fe:01 4346398 2543719070]: r-xp /bin/myprog
+> 
+> So it's reported as /bin/myprog and then it's unable to symbolize the
+> samples.  It seems hard to fix it for the above use case as the record
+> ended after the task exited.  It cannot know the root directory of the
+> task anymore.  But we can fix it for real-time use cases like perf top
+> or pipe-mode at least.
+> 
+> I tested it again with the following command.
+> 
+>   # perf record -o- chroot myroot myprog | perf report -i-
+>   ...
+>   #
+>   # Overhead  Command  Shared Object      Symbol                          
+>   # ........  .......  .................  ................................
+>   #
+>       46.02%  myprog   myprog             [.] 0x000000000000178a
+>       36.71%  myprog   myprog             [.] 0x0000000000001792
+>       17.12%  myprog   myprog             [.] 0x000000000000178e
+>        0.05%  myprog   myprog             [.] 0x0000000000001796
+>        0.05%  chroot   ld-2.33.so         [.] intel_check_word.constprop.0
+> 
+> The symbols are not resolved because it failed to load the symbol
+> table as it didn't find the file in the given path.
+> 
+> So I modified the code to try a new name prepended with the task's
+> root directory when it's not "/".  With this change, I can see the
+> symbols of myprog.  In fact, it depends on timing if perf report hits
+> the file before the task is gone.  Increasing the loop time to 3 sec
+> helped it to get symbols reliably.
+> 
+>   # perf record -o- chroot myroot myprog 3 | perf report -i-
+>   ...
+>   #
+>   # Overhead  Command  Shared Object      Symbol                       
+>   # ........  .......  .................  .............................
+>   #
+>       99.83%  myprog   myprog             [.] loop
+>        0.04%  chroot   [kernel.kallsyms]  [k] fxregs_fixup
+>        0.04%  chroot   [kernel.kallsyms]  [k] rsm_load_seg_32
+>        0.03%  chroot   [kernel.kallsyms]  [k] show_cpuinfo_cur_freq
+>        0.01%  myprog   [kernel.kallsyms]  [k] alarmtimer_fired
+> 
+> 
+> I also found that perf inject and perf annotate need the similar changes.
+> 
+> You can get it from 'perf/dso-chroot-v2' branch at
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+> 
+> 
+> Thanks,
+> Namhyung
+> 
+> 
+> Namhyung Kim (4):
+>   perf annotate: Set error stream of objdump process for TUI
+>   perf tools: Try chroot'ed filename when opening dso/symbol
+>   perf inject: Try chroot directory when reading build-id
+>   perf annotate: Try chroot filename for objdump
+> 
+>  tools/perf/builtin-inject.c | 10 ++++++++++
+>  tools/perf/util/annotate.c  | 11 +++++++++++
+>  tools/perf/util/dso.c       | 15 +++++++++++++--
+>  tools/perf/util/dsos.c      | 13 +++++++++++++
+>  tools/perf/util/symbol.c    | 10 ++++++++++
+>  tools/perf/util/util.c      | 31 +++++++++++++++++++++++++++++++
+>  tools/perf/util/util.h      |  2 ++
+>  7 files changed, 90 insertions(+), 2 deletions(-)
+> 
+> 
+> base-commit: e783362eb54cd99b2cac8b3a9aeac942e6f6ac07
+> -- 
+> 2.35.0.rc2.247.g8bbb082509-goog
 
-vim +/_PAGE_PMA +167 arch/riscv/include/asm/pgtable.h
+-- 
 
-   161	
-   162	#define _PAGE_KERNEL		(_PAGE_READ \
-   163					| _PAGE_WRITE \
-   164					| _PAGE_PRESENT \
-   165					| _PAGE_ACCESSED \
-   166					| _PAGE_DIRTY \
- > 167					| _PAGE_PMA \
-   168					| _PAGE_GLOBAL)
-   169	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+- Arnaldo

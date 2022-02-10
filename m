@@ -2,248 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716384B0B8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6D04B0B9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240398AbiBJK4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 05:56:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35818 "EHLO
+        id S240401AbiBJK64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 05:58:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232915AbiBJK4x (ORCPT
+        with ESMTP id S239713AbiBJK6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 05:56:53 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B331011
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:56:54 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id c6so14214089ybk.3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:56:54 -0800 (PST)
+        Thu, 10 Feb 2022 05:58:55 -0500
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6193FFDB
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:58:57 -0800 (PST)
+Received: by mail-oo1-xc30.google.com with SMTP id t75-20020a4a3e4e000000b002e9c0821d78so5893439oot.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:58:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9dzERHWgyc5EuBWFyClzEUJntXVKSA4IZDebez0ArRo=;
-        b=V+W0V8CuGFdKpUjT2jb0fmRtPi7Zdhc78jNQsOm72cw1yzokTlK6Pg9du6tZmaKT1F
-         b1DZBN2C/Z/tv4dq/LOtHQd/ISKkheVeU/n56WVAY1bTsA9cPtUlkNB6cmW0HjIRc86H
-         xFYusokUNiXtsw2pYrKjw+97Uhq2mGlnuwQ6S8vBvdYbVtnW9luJ6GJIphHCM0PAc6Z2
-         1jPBTSLNrHC1fWjOqHms4ga5hcOoxKKxf+T9IA1LK3D2mFwyYHsKy8wHpkhxplYs8yXI
-         fSRmSS8QqOiY9WABVeo0/+GR3nesvyMFVszVKPOmbdDG3vPT+ZiHzurHYK9EkPIRHaQH
-         LSQA==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:cc;
+        bh=OwBatjmwFCUa5noa+GRU5Nqf9iv/ckA7ZR+G7okpn7Y=;
+        b=h67cAoVo0UFM1wB1SHGZelIYQKwVcCf+GecCds/6ZSWDNebKcbWapPtZ7/VyVYsMld
+         Oq0hBU7SoWTqStny8I9Pv7rsGDm/hL0ZsFxzTKRd6Qh7+BntOxBH2fp3hKo0FsoDAK04
+         mHC3kld0G7rngC1exZCy82m/7AjTWsuHB2GwN8ZaR9i9YeKaj7CC8Y38CKEg0rpKR8os
+         14OvyxXtzWYhJ9S1xsX1CPoPwRaBMV4TAnvqS4z96F36+P6qYfgtLMbqvIN8A5jakiJA
+         WP3+Lc8hLDfS2h9AMfHtmbmQylgfRcmreIS09Wa6UIAfVhjJylFany9z7HyVVKUmQwgt
+         d+IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9dzERHWgyc5EuBWFyClzEUJntXVKSA4IZDebez0ArRo=;
-        b=X0iRH3FZ3tAY1VXi2hzR4OcOxT8Y2Zhkkzu5ojkqDW0D+wjxVTGuXCCFfctkByNZkN
-         dJAXSY52FW5TRKqVyHjdVh1cZg3mnmN2jK/DIQJciGvKLC2LYXOLhY4nmy1W/LAlm/3P
-         00BaDLMyx7/uIXuCNfMhC7vswr4tSAefOqLsIZPUbKklFgpZCsjWmK17dkPAziPMM0XJ
-         vjzAVlzM3v18T2/L0b3/Yjje/w0/PphKXqAlKrKHoi5T1iOS0RtvwZm/tw9u1xzjFDct
-         7nZazhsrYs+vupwmjqH56K1s5eq3vSh6rMu64OkAVDaRfe4juayd3TODGbz1K57fveD9
-         SVaQ==
-X-Gm-Message-State: AOAM532Q7trUmAJpONsFU1piNEDiz0TXnooL3Nlm7KzmGJ3nL8XMYekK
-        DoW3zZ9CM1MZvUakdb8f63ittOVt/X+zwZQwm4U/5Q==
-X-Google-Smtp-Source: ABdhPJzCOE5MyncvIh76vbMreBY9gXT5CYsrNcT+eib7hAjrbEA20QLxcVy3MYuUETXLFh7wrXRFxgfIBeqxb20OZmQ=
-X-Received: by 2002:a25:6b45:: with SMTP id o5mr6277874ybm.704.1644490613338;
- Thu, 10 Feb 2022 02:56:53 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:cc;
+        bh=OwBatjmwFCUa5noa+GRU5Nqf9iv/ckA7ZR+G7okpn7Y=;
+        b=jq6AMfoLl/2nRrbPkRedOyqLJELTXN3OtVpbUiM+1E+fYAnZHm+2RSJvlxnmLt8hHJ
+         Nx4P0lRDiOp+HU1hV/lVpPTmGLapMWyJKHkXy4/mHvNDQtL+agwJhFh7ZHiTIrcbiMSu
+         Oug4Sf31tXIOXCejn0F/OdYAoGJcMz6Oz1wvt0zmmNXgiCjDcENjq32wmbylkR7hHhWN
+         ajMB/jIjFXr3EGNhc06VisvUcEW7TuwdeYTaXXao4Fc4psNvCpUq1YCt6PrcDt6jzCtY
+         OxV7oymhuS/4cZ2uBNGu/lnb7Ke0ysfceGMT6AweP7FdaLM4dk17SmjMuyBcqcjUvLXr
+         vPeA==
+X-Gm-Message-State: AOAM530qBKTGGEj9hbCTstV7GF3RZogiGw4lFeM2A5JcMU67+UcgvrHh
+        ZbxqYD88TlFjnGVv4tSYVg7Vpbeemdxkpnwsas0=
+X-Received: by 2002:a05:6870:3813:: with SMTP id y19mt650092oal.282.1644490736733;
+ Thu, 10 Feb 2022 02:58:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20220209191249.887150036@linuxfoundation.org>
-In-Reply-To: <20220209191249.887150036@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 10 Feb 2022 16:26:42 +0530
-Message-ID: <CA+G9fYu5peHhEJkJW=uWYSbhwj+noMqK6na0guYmDxG0WgK0Bg@mail.gmail.com>
-Subject: Re: [PATCH 5.16 0/5] 5.16.9-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
+Received: by 2002:ac9:3d81:0:0:0:0:0 with HTTP; Thu, 10 Feb 2022 02:58:56
+ -0800 (PST)
+Reply-To: lisamuna2001@gmail.com
+In-Reply-To: <CAA4TxLBOZAmo8bsVkBievLF+ma++aHi7z3Fbmv1077BHjdGuag@mail.gmail.com>
+References: <CAA4TxLCHpFpN+2O=A=7kHbwx1ZL4o4mSufYPkVu358txGicrqA@mail.gmail.com>
+ <CAA4TxLAE6JtNxReLAYpiLtAcp_nW7oaFORhz2zGaRHkHokfAuQ@mail.gmail.com>
+ <CAA4TxLCd+1XMZNs10YB8-=FdgwjEHvdzKK=9Qcb15LKQ9h-gJQ@mail.gmail.com>
+ <CAA4TxLBgHs5-KDLjkv6LN+YY6YequHpntuxb5-8+pYvC_ZY2+Q@mail.gmail.com>
+ <CAA4TxLAB3b6ObDYM8bia+Fx-azuy0-G7Gfunai3FrmM1T5oRmw@mail.gmail.com>
+ <CAA4TxLDfY-Zk71-fi1Hhx9H41nEzVojrY-KP2QxX7xxBBx70ag@mail.gmail.com>
+ <CAA4TxLAeZfZ7ZMwN6KvRaDf1U2tcyLMJ3p2SJ9+TW0E5vMLFww@mail.gmail.com> <CAA4TxLBOZAmo8bsVkBievLF+ma++aHi7z3Fbmv1077BHjdGuag@mail.gmail.com>
+From:   lisa muna <kristengriest098@gmail.com>
+Date:   Thu, 10 Feb 2022 11:58:56 +0100
+Message-ID: <CAA4TxLBx=P25CdC7Fco_k2fBD+94F+NAfQtw+VB6Bf6Y7xORbw@mail.gmail.com>
+Subject: good morning
+Cc:     lisamuna2001@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DEAR_FRIEND,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MISSING_HEADERS,
+        MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:c30 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [kristengriest098[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  1.0 MISSING_HEADERS Missing To: header
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [kristengriest098[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [lisamuna2001[at]gmail.com]
+        *  2.6 DEAR_FRIEND BODY: Dear Friend? That's not very dear!
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Feb 2022 at 00:46, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.16.9 release.
-> There are 5 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.16.9-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Dear Friend,
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+I'm happy to inform you that i finally succeeded in getting the funds
+transferred under the cooperation of a new partner from India,
+Presently I'm in India, for investment projects with my own share of
+the money and also on charity work to the less privileges and the
+orphanages. Meanwhile i didn't forget your past efforts to assist me.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+After your inability to cooperate I found a new partner who helped in
+getting those funds transferred for charity work , please use this
+share of the money for your self and also invest some on charity work
+in your country.
 
-## Build
-* kernel: 5.16.9-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.16.y
-* git commit: ddf6ceb4eefb5985395eb6f289c2e63a46347273
-* git describe: v5.16.7-134-gddf6ceb4eefb
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.16.y/build/v5.16=
-.7-134-gddf6ceb4eefb
+So i left a Visa Card of $850,000.00 US Dollars for you as
+compensation for your past effort. Contact my office manager and give
+her your complete address so she can send you the Visa Card through
+Courier Delivery Logistics
 
-## Test Regressions (compared to v5.16.7-128-g87d888a197db)
-No test regressions found.
+Her Name is Miss . Lisa Muna
 
-## Metric Regressions (compared to v5.16.7-128-g87d888a197db)
-No metric regressions found.
+Email: lisamuna2001@gmail.com
 
-## Test Fixes (compared to v5.16.7-128-g87d888a197db)
-No test fixes found.
+NOTE; The Visa Card is an international Visa Card and you can cash it
+in any ATM machine in your Country.
 
-## Metric Fixes (compared to v5.16.7-128-g87d888a197db)
-No metric fixes found.
-
-## Test result summary
-total: 86799, pass: 74577, fail: 996, skip: 10427, xfail: 799
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 259 total, 259 passed, 0 failed
-* arm64: 37 total, 37 passed, 0 failed
-* i386: 35 total, 35 passed, 0 failed
-* mips: 34 total, 34 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 52 total, 39 passed, 13 failed
-* riscv: 24 total, 20 passed, 4 failed
-* s390: 18 total, 18 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 37 total, 37 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Adding-1767d32e5a104d4d13d92babc85766d7-/tmp
-* perf/Adding-3e9fe97d46b1851c50367e44548ebdcee7d00326-/tmp
-* perf/Adding-8ff8eea75ef21d923271fda79d1afa39-/tmp
-* perf/Adding-b39fb903844ca894205c5dc1a6402f77b152cfcb-/tmp
-* perf/Adding-b49b8dec00f9591b476d003a6e367381-/tmp
-* perf/Adding-c685cd66359fb80ad483b9c8e211a10b776cef29-/tmp
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Regards

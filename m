@@ -2,78 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8224B1346
+	by mail.lfdr.de (Postfix) with ESMTP id 9FCFE4B1345
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240213AbiBJQmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 11:42:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55190 "EHLO
+        id S244629AbiBJQmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 11:42:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244622AbiBJQmg (ORCPT
+        with ESMTP id S244612AbiBJQme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 11:42:36 -0500
+        Thu, 10 Feb 2022 11:42:34 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F3D2EA5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:42:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C7ACF2C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:42:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1644511336;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xG2WsMe2j14laQYWR88mxBtxfylSM+Rc2ZUR4//o/cw=;
-        b=TFuKl4xlewfVOttVSAK6JegAMcjyaYseZssMRuZTjzhCXtV9ivA+Dc8PdIIr5GD20Vwaa5
-        o5hhI1bi4T7I7KWiFm/3SPlFOvAaeNDlxtIpt5avfkuFlfxMV77PZ6I87G9+M621P95lGG
-        HojMI/AGvDieCH+ljC9U09o8BXXBA+E=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=GiMpyWQBZkNvSUgl12YeYCSR3yRtclrMLG+saR/ZKks=;
+        b=h12K1p5wJ/mMpr8GyKdHFQl7G5afArm09dsBBrEW9RqpF3JGr4eNMbFEjMay48hhQzTt2k
+        paBgAevj9IuqFD8RQBPY9HuHxhT19Bb253LVDrj2Wicy0ZAQxn/MFmeGDkSWqs2CUyU8CX
+        P/pBboz/bJn3PRVGpXqsHYW3shzRQKI=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-_DYPkeVpOQSNcYl3pD0KZw-1; Thu, 10 Feb 2022 11:42:12 -0500
-X-MC-Unique: _DYPkeVpOQSNcYl3pD0KZw-1
-Received: by mail-ed1-f72.google.com with SMTP id s7-20020a508dc7000000b0040f29ccd65aso3690551edh.1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:42:12 -0800 (PST)
+ us-mta-557--aBuoSafMLWiIu6OWwIz-Q-1; Thu, 10 Feb 2022 11:42:14 -0500
+X-MC-Unique: -aBuoSafMLWiIu6OWwIz-Q-1
+Received: by mail-ed1-f71.google.com with SMTP id k5-20020a508ac5000000b00408dec8390aso3629415edk.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:42:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=xG2WsMe2j14laQYWR88mxBtxfylSM+Rc2ZUR4//o/cw=;
-        b=JpZclSI0pE2AGcZdSWrPPuEwTonpziTfM9vX8jlm0ymlm8iB8mALVGJCSGIuZnDDnM
-         Lfq7Et7ge6rxu5CVN29LKt0H1zGrZEbCJeD1O1oJLxm5f+lvLVU/cCnEvuauLCzpO5Qm
-         0i1wiMa1aDWnZGDP6Y5W2sjcffMV5IXU8B7INOZe5dJ45haLvhEipQTfgfMH5PqQvX9n
-         Yipopcxyui28YKx72gQbYN/Y+b+T4zqcSrUlRLMBp8buROCjo0+dt3cSV/xQcbKI2AXj
-         PpDxfz/oMtAT0zs8wvF1VBi8xE6WApZd+O09TzKQXHSNQwxa1X+u6IEalHmP40fOv4Zw
-         u7tQ==
-X-Gm-Message-State: AOAM533O3qBml4szuxLcteeeGVybPDHqn1zLA2xIjDCpRVrZLdR1uHLZ
-        LkW+zdy59J7l3olxD/VaQK5sN2Hq32ODZKmsm58aIp/bgVDWkAGdLbRjnQkEql/XKcQ39p5dR6B
-        CkD/+bdMZ9vTkNUnL9bWo6Xk2
-X-Received: by 2002:a17:907:9852:: with SMTP id jj18mr7086156ejc.467.1644511331724;
-        Thu, 10 Feb 2022 08:42:11 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxD7yhLtaVDYQLY+B3/AoTnDP4/nT4uPQqHfgqGbF4Ra8gjpl1Ubrsj3juR4AfkgIGxmYIHIg==
-X-Received: by 2002:a17:907:9852:: with SMTP id jj18mr7086142ejc.467.1644511331525;
-        Thu, 10 Feb 2022 08:42:11 -0800 (PST)
+        bh=GiMpyWQBZkNvSUgl12YeYCSR3yRtclrMLG+saR/ZKks=;
+        b=YZig6wxPZZFKRK+OpHFpH7549GtVbQ+qOmiCLJ3VTDG7/ncz6B1bK2jgJbKqKbY2+0
+         PEyJ4+yuzJp+ro+kJDlPVXKZUuSEOX8igetWjT0D+n7lIzOHBkYi6GWvWUhpUf/cd1rs
+         W7SAB8n3pIGeOqm8cucYZunuEiGA1OYZFzX8+nF+p+qGKPhpxzzaoY0F+Jub4bbJzrFc
+         yWYuwhe5TcpvuoKVKNkB41aNg+K8zvKY54lgKgDiXcsp827vxUBXMRToqp/ucZIU59c2
+         WvVkANu0IOVQQvY0cKYuT+cbFyTMhA6hBER8fPynpgZXfNIzpcImgrCD303OU+1qOxf1
+         OVXA==
+X-Gm-Message-State: AOAM53303covfZCuuN7L38ipPy8I6qYMC7ret5NVUi9eW7K+12fmYLHP
+        0VAXN53GRcvFg1Eevx0G3Q1ZItHOkdIND15S0RCJbiTQZ8llDjIPAk0LWatRPYLI8r1CiU5Mglz
+        favZXVmEACJNM9XJdaVd5R/Xm
+X-Received: by 2002:a05:6402:510b:: with SMTP id m11mr9076902edd.203.1644511333477;
+        Thu, 10 Feb 2022 08:42:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyQOd/EnK3UY3ql0GtZd5WhPki0PqFdaJ4y+dLGYLqYsFZVxVpzrSer2fcZ0Dey1LywLiW38w==
+X-Received: by 2002:a05:6402:510b:: with SMTP id m11mr9076881edd.203.1644511333307;
+        Thu, 10 Feb 2022 08:42:13 -0800 (PST)
 Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id bq11sm3100115ejb.5.2022.02.10.08.42.08
+        by smtp.googlemail.com with ESMTPSA id d7sm4054145ejp.98.2022.02.10.08.42.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 08:42:10 -0800 (PST)
-Message-ID: <e272c421-d860-6656-5c86-0641753a95b8@redhat.com>
-Date:   Thu, 10 Feb 2022 17:42:08 +0100
+        Thu, 10 Feb 2022 08:42:12 -0800 (PST)
+Message-ID: <24055665-db88-7073-2894-f3dbfe578e49@redhat.com>
+Date:   Thu, 10 Feb 2022 17:42:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH MANUALSEL 5.16 8/8] KVM: x86: Report deprecated x87
- features in supported CPUID
+Subject: Re: [PATCH MANUALSEL 5.16 2/8] KVM: nVMX: eVMCS: Filter out
+ VM_EXIT_SAVE_VMX_PREEMPTION_TIMER
 Content-Language: en-US
 To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
         stable@vger.kernel.org
-Cc:     Jim Mattson <jmattson@google.com>,
-        Aaron Lewis <aaronlewis@google.com>, tglx@linutronix.de,
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, tglx@linutronix.de,
         mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
         x86@kernel.org, kvm@vger.kernel.org
 References: <20220209185635.48730-1-sashal@kernel.org>
- <20220209185635.48730-8-sashal@kernel.org>
+ <20220209185635.48730-2-sashal@kernel.org>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220209185635.48730-8-sashal@kernel.org>
+In-Reply-To: <20220209185635.48730-2-sashal@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -87,67 +86,43 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 2/9/22 19:56, Sasha Levin wrote:
-> From: Jim Mattson <jmattson@google.com>
+> From: Vitaly Kuznetsov <vkuznets@redhat.com>
 > 
-> [ Upstream commit e3bcfda012edd3564e12551b212afbd2521a1f68 ]
+> [ Upstream commit 7a601e2cf61558dfd534a9ecaad09f5853ad8204 ]
 
 Acked-by: Paolo Bonzini <pbonzini@redhat.com>
 
 Paolo
 
-> CPUID.(EAX=7,ECX=0):EBX.FDP_EXCPTN_ONLY[bit 6] and
-> CPUID.(EAX=7,ECX=0):EBX.ZERO_FCS_FDS[bit 13] are "defeature"
-> bits. Unlike most of the other CPUID feature bits, these bits are
-> clear if the features are present and set if the features are not
-> present. These bits should be reported in KVM_GET_SUPPORTED_CPUID,
-> because if these bits are set on hardware, they cannot be cleared in
-> the guest CPUID. Doing so would claim guest support for a feature that
-> the hardware doesn't support and that can't be efficiently emulated.
+> Enlightened VMCS v1 doesn't have VMX_PREEMPTION_TIMER_VALUE field,
+> PIN_BASED_VMX_PREEMPTION_TIMER is also filtered out already so it makes
+> sense to filter out VM_EXIT_SAVE_VMX_PREEMPTION_TIMER too.
 > 
-> Of course, any software (e.g WIN87EM.DLL) expecting these features to
-> be present likely predates these CPUID feature bits and therefore
-> doesn't know to check for them anyway.
+> Note, none of the currently existing Windows/Hyper-V versions are known
+> to enable 'save VMX-preemption timer value' when eVMCS is in use, the
+> change is aimed at making the filtering future proof.
 > 
-> Aaron Lewis added the corresponding X86_FEATURE macros in
-> commit cbb99c0f5887 ("x86/cpufeatures: Add FDP_EXCPTN_ONLY and
-> ZERO_FCS_FDS"), with the intention of reporting these bits in
-> KVM_GET_SUPPORTED_CPUID, but I was unable to find a proposed patch on
-> the kvm list.
-> 
-> Opportunistically reordered the CPUID_7_0_EBX capability bits from
-> least to most significant.
-> 
-> Cc: Aaron Lewis <aaronlewis@google.com>
-> Signed-off-by: Jim Mattson <jmattson@google.com>
-> Message-Id: <20220204001348.2844660-1-jmattson@google.com>
+> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Message-Id: <20220112170134.1904308-3-vkuznets@redhat.com>
 > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
->   arch/x86/kvm/cpuid.c | 13 +++++++------
->   1 file changed, 7 insertions(+), 6 deletions(-)
+>   arch/x86/kvm/vmx/evmcs.h | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index add8f58d686e3..bf18679757c70 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -532,12 +532,13 @@ void kvm_set_cpu_caps(void)
->   	);
+> diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
+> index 6255fa7167720..8d70f9aea94bc 100644
+> --- a/arch/x86/kvm/vmx/evmcs.h
+> +++ b/arch/x86/kvm/vmx/evmcs.h
+> @@ -59,7 +59,9 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
+>   	 SECONDARY_EXEC_SHADOW_VMCS |					\
+>   	 SECONDARY_EXEC_TSC_SCALING |					\
+>   	 SECONDARY_EXEC_PAUSE_LOOP_EXITING)
+> -#define EVMCS1_UNSUPPORTED_VMEXIT_CTRL (VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL)
+> +#define EVMCS1_UNSUPPORTED_VMEXIT_CTRL					\
+> +	(VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL |				\
+> +	 VM_EXIT_SAVE_VMX_PREEMPTION_TIMER)
+>   #define EVMCS1_UNSUPPORTED_VMENTRY_CTRL (VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL)
+>   #define EVMCS1_UNSUPPORTED_VMFUNC (VMX_VMFUNC_EPTP_SWITCHING)
 >   
->   	kvm_cpu_cap_mask(CPUID_7_0_EBX,
-> -		F(FSGSBASE) | F(SGX) | F(BMI1) | F(HLE) | F(AVX2) | F(SMEP) |
-> -		F(BMI2) | F(ERMS) | F(INVPCID) | F(RTM) | 0 /*MPX*/ | F(RDSEED) |
-> -		F(ADX) | F(SMAP) | F(AVX512IFMA) | F(AVX512F) | F(AVX512PF) |
-> -		F(AVX512ER) | F(AVX512CD) | F(CLFLUSHOPT) | F(CLWB) | F(AVX512DQ) |
-> -		F(SHA_NI) | F(AVX512BW) | F(AVX512VL) | 0 /*INTEL_PT*/
-> -	);
-> +		F(FSGSBASE) | F(SGX) | F(BMI1) | F(HLE) | F(AVX2) |
-> +		F(FDP_EXCPTN_ONLY) | F(SMEP) | F(BMI2) | F(ERMS) | F(INVPCID) |
-> +		F(RTM) | F(ZERO_FCS_FDS) | 0 /*MPX*/ | F(AVX512F) |
-> +		F(AVX512DQ) | F(RDSEED) | F(ADX) | F(SMAP) | F(AVX512IFMA) |
-> +		F(CLFLUSHOPT) | F(CLWB) | 0 /*INTEL_PT*/ | F(AVX512PF) |
-> +		F(AVX512ER) | F(AVX512CD) | F(SHA_NI) | F(AVX512BW) |
-> +		F(AVX512VL));
->   
->   	kvm_cpu_cap_mask(CPUID_7_ECX,
->   		F(AVX512VBMI) | F(LA57) | F(PKU) | 0 /*OSPKE*/ | F(RDPID) |
 

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 471174B0B7D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CDCE4B0B80
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240281AbiBJKz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 05:55:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33584 "EHLO
+        id S240301AbiBJKze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 05:55:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240231AbiBJKzY (ORCPT
+        with ESMTP id S240279AbiBJKz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 05:55:24 -0500
+        Thu, 10 Feb 2022 05:55:27 -0500
 Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F1FC24
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:55:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BCBFD3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:55:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644490526; x=1676026526;
+  t=1644490529; x=1676026529;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=azAEAI0Fg/kGZ09zLDIdo+Wl6+JUyPmAKn9bATV4jtU=;
-  b=WY3A/Bcr4LB2Oke1WV4hFpfE81F+S6cXboCrCRWmGV6MWEs1voKXZe6a
-   1ioqE117y9TNdyDmnGn+tiFfy+Dk/nEJpu077SxYeBgcJ+Pe+x7qCKhZ/
-   fOvQeB8YrRkyj0MMPQV3if8XN27FmyZ8g2b+/bu+vlMPdVT9/NQSUvNMR
-   PV+A71/oyyvd24WBzqNIgIb2YDMJMqnBE1paB8zuFns9Kbq2ZrvN9G7u+
-   Ty3pWAQqQeTrX44F7C3FcoOjiDZrCsiFe91WUNm+IOPSF/iTxUxcdu000
-   MshkyxlHs8Eocpv5beWsYjyGC/hkeLJxdHdV5OtigYbf8yObqW2tQd+cx
+  bh=+resf7s8/0bfeptpaysoY6mJLYoPAYzroKommF5fV40=;
+  b=PYUKx+f/DhkE96JS6Up5SP5Df7ZIVIBbvngSADtWUzIOvFjDWR+ZjcQE
+   I7VEVRUkAyZpDx1O10fvDma7+aI9On0bqC2uI+etw7b08Zp5g1fGP4cJP
+   OAPQqrY708lc1S7PTVjD5DtqWPQjfi40FH8zeUCqQwOs+lkCmxHvNjLz7
+   9guLiiBKyfj/rOOrvrkS0vKdVRTCQN6m8i4rMaWZq0Trbocr6UNTbO7Is
+   uPssj+S8WR5p1aMKPwutzBy4cpfHbRoLtqpfDOYz8zvNy5T5NOejNcVnI
+   k7X4D56AO+xzpWA29CbDD+UUiFtGququDst4NsQEEtkkMfhT+Isz+7vQY
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="310202829"
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="310202840"
 X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="310202829"
+   d="scan'208";a="310202840"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 02:55:26 -0800
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 02:55:29 -0800
 X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="679106841"
+   d="scan'208";a="679106848"
 Received: from barabano-mobl.ccr.corp.intel.com (HELO pujfalus-desk.ger.corp.intel.com) ([10.252.41.18])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 02:55:23 -0800
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 02:55:26 -0800
 From:   Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 To:     lgirdwood@gmail.com, broonie@kernel.org,
         pierre-louis.bossart@linux.intel.com,
@@ -44,9 +44,9 @@ To:     lgirdwood@gmail.com, broonie@kernel.org,
 Cc:     alsa-devel@alsa-project.org, kai.vehmanen@linux.intel.com,
         daniel.baluta@nxp.com, tiwai@suse.com,
         linux-kernel@vger.kernel.org, fred.oh@linux.intel.com
-Subject: [PATCH 1/9] ASoC: SOF: Drop unused DSP power states: D3_HOT and D3_COLD
-Date:   Thu, 10 Feb 2022 12:55:11 +0200
-Message-Id: <20220210105519.19795-2-peter.ujfalusi@linux.intel.com>
+Subject: [PATCH 2/9] ASoC: SOF: Move the definition of enum sof_dsp_power_states to global header
+Date:   Thu, 10 Feb 2022 12:55:12 +0200
+Message-Id: <20220210105519.19795-3-peter.ujfalusi@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220210105519.19795-1-peter.ujfalusi@linux.intel.com>
 References: <20220210105519.19795-1-peter.ujfalusi@linux.intel.com>
@@ -62,55 +62,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The only reference to D3_HOT and D3_COLD DSP power state is in
-intel/hda-dsp.c in form of a dev_dbg() print.
-
-Remove them as they are not used and even if they are they could be
-re-added via the substate.
+Move the enum sof_dsp_power_states to include/sound/sof.h
+to be accessible outside of the core SOF stack.
 
 Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
 Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 ---
- sound/soc/sof/intel/hda-dsp.c | 6 ------
- sound/soc/sof/sof-priv.h      | 2 --
- 2 files changed, 8 deletions(-)
+ include/sound/sof.h      | 8 ++++++++
+ sound/soc/sof/sof-priv.h | 8 --------
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/sound/soc/sof/intel/hda-dsp.c b/sound/soc/sof/intel/hda-dsp.c
-index 0fe522549c91..8ddde60c56b3 100644
---- a/sound/soc/sof/intel/hda-dsp.c
-+++ b/sound/soc/sof/intel/hda-dsp.c
-@@ -498,15 +498,9 @@ static void hda_dsp_state_log(struct snd_sof_dev *sdev)
- 	case SOF_DSP_PM_D2:
- 		dev_dbg(sdev->dev, "Current DSP power state: D2\n");
- 		break;
--	case SOF_DSP_PM_D3_HOT:
--		dev_dbg(sdev->dev, "Current DSP power state: D3_HOT\n");
--		break;
- 	case SOF_DSP_PM_D3:
- 		dev_dbg(sdev->dev, "Current DSP power state: D3\n");
- 		break;
--	case SOF_DSP_PM_D3_COLD:
--		dev_dbg(sdev->dev, "Current DSP power state: D3_COLD\n");
--		break;
- 	default:
- 		dev_dbg(sdev->dev, "Unknown DSP power state: %d\n",
- 			sdev->dsp_power_state.state);
-diff --git a/sound/soc/sof/sof-priv.h b/sound/soc/sof/sof-priv.h
-index e48402ce4bdb..6358f8c84cce 100644
---- a/sound/soc/sof/sof-priv.h
-+++ b/sound/soc/sof/sof-priv.h
-@@ -84,9 +84,7 @@ enum sof_dsp_power_states {
- 	SOF_DSP_PM_D0,
- 	SOF_DSP_PM_D1,
- 	SOF_DSP_PM_D2,
--	SOF_DSP_PM_D3_HOT,
- 	SOF_DSP_PM_D3,
--	SOF_DSP_PM_D3_COLD,
+diff --git a/include/sound/sof.h b/include/sound/sof.h
+index 813680ab9aad..7cdfc954df12 100644
+--- a/include/sound/sof.h
++++ b/include/sound/sof.h
+@@ -39,6 +39,14 @@ enum sof_fw_state {
+ 	SOF_FW_CRASHED,
  };
  
++/* DSP power states */
++enum sof_dsp_power_states {
++	SOF_DSP_PM_D0,
++	SOF_DSP_PM_D1,
++	SOF_DSP_PM_D2,
++	SOF_DSP_PM_D3,
++};
++
+ /*
+  * SOF Platform data.
+  */
+diff --git a/sound/soc/sof/sof-priv.h b/sound/soc/sof/sof-priv.h
+index 6358f8c84cce..2e474048d708 100644
+--- a/sound/soc/sof/sof-priv.h
++++ b/sound/soc/sof/sof-priv.h
+@@ -79,14 +79,6 @@ bool sof_debug_check_flag(int mask);
+ /* max number of DSP cores */
+ #define SOF_MAX_DSP_NUM_CORES 8
+ 
+-/* DSP power state */
+-enum sof_dsp_power_states {
+-	SOF_DSP_PM_D0,
+-	SOF_DSP_PM_D1,
+-	SOF_DSP_PM_D2,
+-	SOF_DSP_PM_D3,
+-};
+-
  struct sof_dsp_power_state {
+ 	u32 state;
+ 	u32 substate; /* platform-specific */
 -- 
 2.35.1
 

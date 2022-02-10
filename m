@@ -2,104 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6884B08FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 440244B090E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238099AbiBJI5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 03:57:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54890 "EHLO
+        id S238127AbiBJJAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:00:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238087AbiBJI5F (ORCPT
+        with ESMTP id S232598AbiBJJAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 03:57:05 -0500
-X-Greylist: delayed 510 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 00:57:05 PST
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BD6D4A
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 00:57:05 -0800 (PST)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220210084833epoutp037f053b6e6801e65287b9d78d91f32938~SYH9T_F8G3184331843epoutp03D
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:48:33 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220210084833epoutp037f053b6e6801e65287b9d78d91f32938~SYH9T_F8G3184331843epoutp03D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1644482913;
-        bh=KcWEqHF9nH1fZ8q/x1XxY2SexomZ3sxRtUBKXEsjkb4=;
-        h=Date:Subject:Reply-To:From:To:CC:In-Reply-To:References:From;
-        b=DshZ+ZINaQiyAxWmRDOJ3Qlbl5nhXFmoAMh70HjV53yZ8z7azxMzsVhMaJ4Lq3YuM
-         PKN7J/O7Fl2+ZaddHhSa8YyUzR57JFNIfhkKnrLgDkacrruqOMo3sHPDOCpawcgkK0
-         ZIXxmthirLzM+Pn1+pl8UAoNIIaSl1nJ8x/VxIkc=
-Received: from epsmges5p1new.samsung.com (unknown [182.195.42.73]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220210084833epcas5p4ccf8d4cf288fb6bf3f5d71d545222398~SYH8sHlBE0116901169epcas5p4c;
-        Thu, 10 Feb 2022 08:48:33 +0000 (GMT)
-X-AuditID: b6c32a49-b13ff70000001917-86-6204d16170ad
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1F.CF.06423.161D4026; Thu, 10 Feb 2022 17:48:33 +0900 (KST)
-Date:   Thu, 10 Feb 2022 14:18:23 +0530
-Message-ID: <436367503.2691559.1644482903367@mail-kr5-0>
-Mime-Version: 1.0
-Subject: RE: [PATCH 1/1] kallsyms: print module name in %ps/S case when
- KALLSYMS is disabled
-Reply-To: maninder1.s@samsung.com
-Sender: Maninder Singh <maninder1.s@samsung.com>
-From:   Maninder Singh <maninder1.s@samsung.com>
-To:     Petr Mladek <pmladek@suse.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-CC:     Vimal Agrawal <avimalin@gmail.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        "ojeda@kernel.org" <ojeda@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        Vaneet Narang <v.narang@samsung.com>,
-        Aaron Tomlin <atomlin@redhat.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <YgTKqoRIwahzWyh0@alley>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-X-CMS-MailID: 20220210084823epcms5p4aa4b02982ca806b52c5078aa7d9ec76e
-Content-Type: multipart/mixed;
-        boundary="----=_Part_2691558_779447602.1644482903367"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNJsWRmVeSWpSXmKPExsWy7bCmum7iRZYkg1nzuC3mrF/DZtHbNJ3J
-        4sj8NawWDw5eZ7d4v6yH0eLyrjlsFo9nzWOzuLviBpPFjQlPGS1Wzl/OaPH/8VdWi30dD5gs
-        dm9cxGZx/M5TJotDJ+cyWjR+vs9o0XLH1EHQY828NYwesxsusnjsnHWX3aNl3y0gceQtq8em
-        VZ1sHidm/GbxmHcy0ONCV7bH+31X2Tz6tqxi9Fi/5SqLx5kFR9g9Pm+SC+CL4rJJSc3JLEst
-        0rdL4MpofPmBseCQRsWf43INjBeUuhg5OSQETCSOndjBBmILCexmlFi6oRDEZhFQlXi9/z1Y
-        nFfAQmJr7xamLkYOIFtQ4u8OYZCwsECcxPL5E1ghWhUlLsxYwwhSIixgIPFrqwZImE1AT2LV
-        rj0sILaIgIfEn+0fgGwuDmaBt6wSm/oPskCcwCsxo/0plC0tsX35VkYQmxPohKnPPrFBxEUl
-        bq5+yw5jvz82nxHCFpFovXeWGcIWlHjwczdUXEZi9eZesGUSAt2MEuvf7YVyZjBK9DyaBtVh
-        LrF+ySqoqS4S5389BoszC4RJHN97C6pGVmLqqXVMEHE+id7fT5hgrt4xD8ZWlWi5uYEV5oPP
-        Hz9CfeMhMbFnNiMkhL4zStw9JD+BUX4WIhxnIdkGYctLbH87hxmkhFlAU2L9Ln2IsJrElP4v
-        bBC2mURD+1QWCFtRYkr3Q/YFjOyrGCVTC4pz01OLTQsM81LL9YoTc4tL89L1kvNzNzGC06yW
-        5w7Guw8+6B1iZOJgPMSoAtT+aMPqC4xSLHn5ealKIryn6pmThHhTEiurUovy44tKc1KLDzFK
-        c7AoifOeTt+QKCSQnliSmp2aWpBaBJNl4uCUamBqnOvsXXVz8x9xli1nFffpHZqe9CCivE3o
-        sRhHvdKvouwLd7nt9AwXpSfO0I5dkGWSuJjZfd/ZH3OZ1ikwme5U2xWwYbNh8mXjlUZPzsvK
-        acxzPhT5/+/jifwbb3+2V4rhtVib+9lmetLs65f3nTTztSh8+eHo33/u62NFLr6/XzyfIyiq
-        90n6kixN49SiV8fO9EwXtTfbHKintGplvvZVl/DZabWSsSrR38WbOXb5R3I+vJLOw5naouxo
-        EPQz98SZKDFzvS5Tt7Rru6UkKmx5Qy9YLOxs3CDsYPIp96ZZ/MUnT1sbnOy/+a9SSjJi8Vo8
-        84GX5CaLq8ePBt3RbTrD/eTk3bz+dYnZgoHRG5RYijMSDbWYi4oTAcRs0rguBAAA
-X-CMS-RootMailID: 20220201040100epcas5p180ef094058fc9c76b4b94d9d673fc5fc
-References: <YgTKqoRIwahzWyh0@alley>
-        <20220201040044.1528568-1-maninder1.s@samsung.com>
-        <20220209114038.GA8279@pathway.suse.cz>
-        <YgRH7hwFC2AGISdP@bombadil.infradead.org>
-        <CGME20220201040100epcas5p180ef094058fc9c76b4b94d9d673fc5fc@epcms5p4>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        Thu, 10 Feb 2022 04:00:22 -0500
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80080.outbound.protection.outlook.com [40.107.8.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED79E103B;
+        Thu, 10 Feb 2022 01:00:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fmbQzc0Iz/pITxnIanirTae3TpJBMopard+F3wTTmy7MciGF21kFrng6ecRfoMzC24VW4ovACwsTJXkvBhgIfHj8Uqb5mXJLNEGudickNY/ChOzc3kEx/AUPmQdTFdtmzgI23zbNkxuwlsekDC3sD3YfTTb5Dl9EYREVPkJr4O5c6sywlw49KwOXKMl/z0gkQNTloqEds+T+qUzd9XCes6r0Dt9VaYoTzEM6IJ3JNpeRLW8qPb24yLA0GN5n+tE3OTghM6jTKn4kJXdA2SCVpye8Ek24VXp8elUTIb7YRt1/14KIH0Rl0Ux9psNpY2NE9AV5FTnc4YCbB4rdBTWg9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fUj1NqG0RgwyfmMAe0QmaM0YL/tf5B657F3c+6Xeh0Y=;
+ b=oA0TQMyEsmNwyMtJbwEXkvmyFHn+MW1xl+l/ukJSqoJ7u7DL9BaO4jCBcPRDeaH9XaNSpQAUWeJnAyZts3xypBLkxIf7JenbuP5wvV8Z4gHa67uHR6WtDNFS4QpucFPPOJmhn0m5YnrRleGYrbm7AuozklGm7toJ8Iy/ftjE1FJJ0M8YLsJswr06wtpKZlIlToOycYNM+m1TEzJ6rlV81eH0t0iLxcSvyahLjy3cvV8a73NS8DYUrpgmVIpbeeeIfnxkVpvwGpOrPkN7q5ny3ai4/U6NnTKVPloaLWyjuQLjaexqAZTSjvgzZ+u+6/MPRG9Ql48KKbY7UMBmPfEtow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=KoCoConnector.onmicrosoft.com; s=selector2-KoCoConnector-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fUj1NqG0RgwyfmMAe0QmaM0YL/tf5B657F3c+6Xeh0Y=;
+ b=SKfeyeja/r6HnyTdd7wZdItUWqjE+EupJSlTqmC2a6L8sLSJVo2GQZq4iWGMtaY6bQlhlkPTMsO75qNpVMZcDupldQRAaQGpR4y4uq/UrmvgBvxKxEZSj6QRbSPeWTGROFxnhDAsm8rNa9pThJTNGuOS+lfeaOQ8ePRVyARHIoQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kococonnector.com;
+Received: from AM9PR09MB4884.eurprd09.prod.outlook.com (2603:10a6:20b:281::9)
+ by VI1PR0902MB2221.eurprd09.prod.outlook.com (2603:10a6:802:e::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.17; Thu, 10 Feb
+ 2022 09:00:20 +0000
+Received: from AM9PR09MB4884.eurprd09.prod.outlook.com
+ ([fe80::3c7a:2af6:3623:4c3d]) by AM9PR09MB4884.eurprd09.prod.outlook.com
+ ([fe80::3c7a:2af6:3623:4c3d%7]) with mapi id 15.20.4975.011; Thu, 10 Feb 2022
+ 09:00:20 +0000
+Date:   Thu, 10 Feb 2022 09:49:40 +0100
+From:   Oliver Graute <oliver.graute@kococonnector.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Carlis <zhangxuezhi1@yulong.com>, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] fbtft: fb_st7789v: added reset on init_display()
+Message-ID: <20220210084940.GE10212@optiplex>
+References: <20210813062511.14537-1-oliver.graute@kococonnector.com>
+ <YRYrPfEHrcvDL4va@kroah.com>
+ <20210813125430.GA1527@optiplex>
+ <YRaJDyYquuklht6C@kroah.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YRaJDyYquuklht6C@kroah.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: AM0PR02CA0007.eurprd02.prod.outlook.com
+ (2603:10a6:208:3e::20) To AM9PR09MB4884.eurprd09.prod.outlook.com
+ (2603:10a6:20b:281::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7e348b5a-081c-4067-d67e-08d9ec73c3bc
+X-MS-TrafficTypeDiagnostic: VI1PR0902MB2221:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR0902MB222156A90CF1D7AE003D093DEB2F9@VI1PR0902MB2221.eurprd09.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1148;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XXk7IP0Hj+dEdP3yQ1wAWoQxqeNpFxF71ap5/aBeJZe5Tut9ffoPXbyh/NFGw16CNByMFbaugBqNhYOrsyDgEvVWWea8bdM+gnYuQhJxqQkacFrhMSc0bUaz9yF5JSv85fstb/iDkCMhUbGC56mhCWEGZOJ0SPGdHU5KTQvy+B2+nTrglqHsEbkXyoaxjlPuzecqm3mZfHLSNDFvCddqF/cvdAPbOrtkS9w4BZssANyXLjt1zhV69d5oTZFBop26GUaLa9Vg9DLrD/xsoCBtR+MYjcjjbWFkeLqyfxA96MXwEhwTh68MX5DyuhKNV2B6m3uP+Kng9a4qEePToT+mu+FdRzMsEmm06c9X1Y4HlC7YTOfAX73elgcRUw3wpD8oX10LGAj4gUNXPv8f40xwLTIFUS1S6GxbzIfSIXC4Wgqk7xAx1QmyR9Ive1Jv0BxSZFI1C0DXwbWhoSEJ2cnbwp5BtC+YNAJsmkK6YeLFfTO0l8N3IEiVJ/3IzSVMrN2Lv98qPz5orkdUwfMdc4zEABPbtyZo47vj0nH2cGa7s6tXigydJr+scxywd5Cogk/V5r6MaBxrppra63jAY/Zr2wt/g03WWlyvRBHWQwLtBActQN861KlGAlulEdEK08mTNsMv2Ldi+elogb1qAx5/K57mizvds+2OyJLatz2ZJlaQ1YGbQfzfiIRSD/UDKBrG
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR09MB4884.eurprd09.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(376002)(396003)(136003)(39840400004)(346002)(38100700002)(33656002)(66946007)(26005)(86362001)(38350700002)(33716001)(316002)(44832011)(6916009)(5660300002)(2906002)(66556008)(508600001)(8936002)(8676002)(6666004)(9686003)(186003)(6486002)(1076003)(6512007)(66476007)(6506007)(52116002)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?26uIgihGhQnwcr6cdQs/NwgGuc1ifAVUZ8E+8A2uvhmcViMxIdCdUH55j53F?=
+ =?us-ascii?Q?x59sYrk4r3F5QoksgyXrFtVO2j21/OvIIWryw5PJrqMCA41SVCQXBpkDS46F?=
+ =?us-ascii?Q?hbiEr4uxgpmEESHN9EkjOvUSRRzHuvGnAbv+lGYhvCksIYF7WoFf9+LaTzUN?=
+ =?us-ascii?Q?4Dyg2/zqc/2HuTANBNeBIMLy8vLT8hGU9jUDGvACPJWX7hYOWoq7GMjqKM9Q?=
+ =?us-ascii?Q?ipTDZjqGfhXkAujz3ao6TzYqtNx3+WUxKsz2DHN3mbbMf5GocmQuwJ9W71gP?=
+ =?us-ascii?Q?k8ip/tFsJAGLQ5+CteFi8pLcyfWzuSOa6rGvfMwASRpxSkwdtPtQSI1Rv75O?=
+ =?us-ascii?Q?sLnn1ZnP5O1xg/YNV+AbnELbK0CSjeycYbfEusQk7r1Oe8XVCnkox4jL5m02?=
+ =?us-ascii?Q?JAqBRzsOsVRj/Tg+nS0H2QO2TQ9igCti/hZ4wlycHVJwuWhop5CTlX+nJmd2?=
+ =?us-ascii?Q?E4jHP+ThII3vBBO4L6sIXndrTaAKGj4gYqCi0Sr7CLgR/wfSc7cGEdGMjKOF?=
+ =?us-ascii?Q?SuByYQifClilsQprNbj2JLaSQO/VsauLpBLSA7pyV9cUv975AQspBlEuBOpv?=
+ =?us-ascii?Q?2yEav935QwqC9Dr/wE9zfXXRBkOg3TU7bfw+ddj2tDetA8LnsN54J2x4NeKc?=
+ =?us-ascii?Q?nB5iSbP3NSvzNw+vcOkozngEvkCawBrdbZvu+YZIO+XbTgWuWXJhxiT8ckxm?=
+ =?us-ascii?Q?xgqQ5yjXYir4HdakUNIbjIrNzCHNZmLnNeKJsGVVN2PFpo436Pl+DmiajpP1?=
+ =?us-ascii?Q?ci5DoUfrKQxTh6fRFBlSVqChSpFkzVPIsudO1OCFR4qgqHo0gBtcLc9niEhS?=
+ =?us-ascii?Q?msACw1+6f8+H7wxTN3jjpujE5xDjvsOkdDlq26NIBBtERGpTA3lNCOdwpyeN?=
+ =?us-ascii?Q?6+0bs4fBaYsRMFnlXbwA/VZl+qSyktl4FZIpVZdxFx+NDT4JhtL+bSqCUW5N?=
+ =?us-ascii?Q?2+crfIFF9FERNo3F4Kw8zEtdHoQkp0smYfkrX7umNCLCzI/9nSl0q5uSB2AI?=
+ =?us-ascii?Q?bHFYq8ZxWLx6XlmeTp/cRspHSVbuCr4skRamcOvFHQf6Yp4IpoPPfnw9/KBa?=
+ =?us-ascii?Q?kwKx2mJmitIghE6KFOoxK1JmJ5VPAqIXlL9SdUb0oeJ89z//oyYZ7WmfTXDB?=
+ =?us-ascii?Q?zXSb36BZGf/juKrjV8aBzrV2ztE940rLyhfkzzFpXy0GFipjqZx6SL5ahRB9?=
+ =?us-ascii?Q?JaxHNWr/wSgC2c4drRkz4wqKOksjsdpq0u03qNnPWE2riWK1GZo9QJwbZ5Gc?=
+ =?us-ascii?Q?FDq5FaP/rhHQbyx5LoDVuBXOsKqLxDBZdwROuqd3XCA5OuC32S20w2ZxX8pm?=
+ =?us-ascii?Q?EYbPHdrLmz/D0sa+hi+1oVWh3Gv5/FUWEbL5vidjATO67bRCeg+u3dEnzUWR?=
+ =?us-ascii?Q?zDjieKUN5C3sBwRmfsBmAPyzgKbipN9S2Qg/Iwdo1OvNkkYxO3OA5IcO0iOm?=
+ =?us-ascii?Q?dmeA3x+Q1HtU6PIy55pbM2DFqhRKEB/7wOGeK5EgM843xxji/orcHsD7Yucf?=
+ =?us-ascii?Q?1OpMXy//7+TbUv5tyJgzdXtoWSJe3foXG/vI/Yx14N0CtFKJoRf6rmhn5iWc?=
+ =?us-ascii?Q?+Q6xe0UI5NfqU40JXoJu8pTbS1hflf0fpIo1LOtrfJjO6co7lYyHsSVtdU0+?=
+ =?us-ascii?Q?SO/eVIMXQvoq2CZX1uZ+2j6h2A2kRJFGZahaXY+de+/2LDFFGqzH1Ru8vP6P?=
+ =?us-ascii?Q?z3dFyA=3D=3D?=
+X-OriginatorOrg: kococonnector.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e348b5a-081c-4067-d67e-08d9ec73c3bc
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR09MB4884.eurprd09.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 09:00:20.2243
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 59845429-0644-4099-bd7e-17fba65a2f2b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hL4qpTbfJimjSalbmQw6N5YypjWe3H0IUxEAR5XsTi69XoCbU2TpNqlFrIoZQbM1s0wrYiyCgHamX4SBA0nAamDbhthFlYuC3/qJMhCwuOo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0902MB2221
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,103 +120,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------=_Part_2691558_779447602.1644482903367
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-
-Hi All,
-
-Thanks for your inputs.
-
-> On Wed 2022-02-09 15:02:06, Luis Chamberlain wrote:
-> > On Wed, Feb 09, 2022 at 12:40:38PM +0100, Petr Mladek wrote:
-> > > > --- a/include/linux/kallsyms.h
-> > > > +++ b/include/linux/kallsyms.h
-> > > > @@ -163,6 +163,33 @@ static inline bool kallsyms_show_value(const struct cred *cred)
-> > > >          return false;
-> > > >  }
-> > > >  
-> > > > +#ifdef CONFIG_MODULES
-> > > > +static inline int fill_minimal_module_info(char *sym, int size, unsigned long value)
-> > > > +{
-> > > > +        struct module *mod;
-> > > > +        unsigned long offset;
-> > > > +        int ret = 0;
-> > > > +
-> > > > +        preempt_disable();
-> > > > +        mod = __module_address(value);
-> > > > +        if (mod) {
-> > > > +                offset = value - (unsigned long)mod->core_layout.base;
-> > > > +                snprintf(sym, size - 1, "0x%lx+0x%lx [%s]",
-> > > > +                                (unsigned long)mod->core_layout.base, offset, mod->name);
-> > > > +
-> > > > +                sym[size - 1] = '\0';
-> > > > +                ret = 1;
-> > > > +        }
-> > > > +
-> > > > +        preempt_enable();
-> > > > +        return ret;
-> > > > +}
+On 13/08/21, Greg KH wrote:
+> On Fri, Aug 13, 2021 at 02:54:30PM +0200, Oliver Graute wrote:
+> > On 13/08/21, Greg KH wrote:
+> > > On Fri, Aug 13, 2021 at 08:25:10AM +0200, Oliver Graute wrote:
+> > > > staging: fbtft: fb_st7789v: reset display before initialization
 > > > 
-> > > It looks too big for an inlined function. Anyway, we will need
-> > > something even more complex, see below.
+> > > What is this line here, and why is this not your subject line instead?
 > > 
-> > Interesting, these observations might apply to Vimal's work as well [0].
+> > I'll put the line as subject instead.
 > > 
-> > [0] https://lkml.kernel.org/r/YgKyC4ZRud0JW1PF@bombadil.infradead.org
->  
-> Honestly, I am not sure what is the best practice. My understanding is
-> that inlined functions are used primary for speed up at runtime.
->  
+> > > > In rare cases the display is flipped or mirrored. This was observed more
+> > > > often in a low temperature environment. A clean reset on init_display()
+> > > > should help to get registers in a sane state.
+> > > > 
+> > > > Signed-off-by: Oliver Graute <oliver.graute@kococonnector.com>
+> > > 
+> > > What commit does this fix?
+> > 
+> > this is a fix for a rare behavior of the fb_st7789v display. Not a
+> > bugfix for a specific commit.
+> 
+> So if it has always been broken, list the commit where the code was
+> added to the kernel, as this should be backported to the stable kernels,
+> right?
 
-Main reason of making it inline was:
-(1) kallsysm.c was not getting compiled(with disabled config), so could not add defination there.
-(2) lib/vsnprintf.c was not correct place to define new function of kallsyms(fill_minimal_module_info)
-(3) I thought static int will be part of each .c file which includes kallsyms.h and compiler can make noise for unused functions,
-and also increase code size, where as static inline will be added only if some code is calling that function otherwise will be discarded.
+ok thx, will list the commit and add stable@vger.kernel.org to cc
 
-But as peter said better version will be to make a new defination of __sprint_symbol (probably in kernel/module.c)
-to handle all cases of %ps/S/B/b when KALLSYSMS is disabled.
+thx,
 
-I will try to prepare changes and share V2 patch.
-
-Thanks,
-Maninder Singh
-------=_Part_2691558_779447602.1644482903367
-Content-Type: application/octet-stream
-Content-Disposition: attachment; filename="rcptInfo.txt"
-Content-Transfer-Encoding: base64
-
-DQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT0NCiAgICAgIFN1YmplY3QgICAgOiBSZTogW1BBVENIIDEvMV0g
-a2FsbHN5bXM6IHByaW50IG1vZHVsZSBuYW1lIGluICVwcy9TIGNhc2Ugd2hlbiBLQUxMU1lNUyBp
-cyBkaXNhYmxlZA0KICAgICAgRnJvbSAgICAgICA6IG51bGwNCiAgICAgIFNlbnQgRGF0ZSAgOiAy
-MDIyLTAyLTEwIDEzOjUwICBHTVQrNTozMA0KICAgPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQogICAgICAgICAg
-ICAgICAgICBOYW1lICAgICAgICAgICAgICAgIFR5cGUgICAgICAgICAgSm9iIFRpdGxlICAgICAg
-ICAgICAgICAgICAgICAgICBEZXB0LiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBDb21w
-YW55ICAgICAgICAgICAgICAgIA0KICAgPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQogICAgICBtY2dyb2ZAa2Vy
-bmVsLm9yZyAgICAgICAgICAgICAgVE8NCiAgICAgIGF2aW1hbGluQGdtYWlsLmNvbSAgICAgICAg
-ICAgICBDQw0KICAgICAgTWFuaW5kZXIgU2luZ2ggICAgICAgICAgICAgICAgIENDICAgICAgICAg
-U3RhZmYgRW5naW5lZXIgICAgICAgICAgICAgU3lzdGVtIFMvVyBHcm91cCAvU1JJLURlbGhpICAg
-ICAgICAgICAgICAgU2Ftc3VuZ8KgRWxlY3Ryb25pY3PCoA0KICAgICAgcm9zdGVkdEBnb29kbWlz
-Lm9yZyAgICAgICAgICAgIENDDQogICAgICBzZW5vemhhdHNreUBjaHJvbWl1bS5vcmcgICAgICAg
-Q0MNCiAgICAgIGFuZHJpeS5zaGV2Y2hlbmtvQGxpbnV4LmkuLi4gICBDQw0KICAgICAgbGludXhA
-cmFzbXVzdmlsbGVtb2VzLmRrICAgICAgIENDDQogICAgICBha3BtQGxpbnV4LWZvdW5kYXRpb24u
-b3JnICAgICAgQ0MNCiAgICAgIHdhbmdrZWZlbmcud2FuZ0BodWF3ZWkuY29tICAgICBDQw0KICAg
-ICAgbWJlbmVzQHN1c2UuY3ogICAgICAgICAgICAgICAgIENDDQogICAgICBzd2JveWRAY2hyb21p
-dW0ub3JnICAgICAgICAgICAgQ0MNCiAgICAgIG9qZWRhQGtlcm5lbC5vcmcgICAgICAgICAgICAg
-ICBDQw0KICAgICAgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZyAgIENDDQogICAgICB3aWxs
-QGtlcm5lbC5vcmcgICAgICAgICAgICAgICAgQ0MNCiAgICAgIGNhdGFsaW4ubWFyaW5hc0Bhcm0u
-Y29tICAgICAgICBDQw0KICAgICAgVmFuZWV0IE5hcmFuZyAgICAgICAgICAgICAgICAgIENDICAg
-ICAgICAgQXNzb2NpYXRlIEFyY2hpdGVjdCAgICAgICAgU3lzdGVtIFMvVyBHcm91cCAvU1JJLURl
-bGhpICAgICAgICAgICAgICAgU2Ftc3VuZyBFbGVjdHJvbmljcw0KICAgICAgYXRvbWxpbkByZWRo
-YXQuY29tICAgICAgICAgICAgIENDDQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCg==
-
-------=_Part_2691558_779447602.1644482903367--
+Oliver

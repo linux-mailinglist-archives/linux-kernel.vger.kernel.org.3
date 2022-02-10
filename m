@@ -2,129 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E19C4B10B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECFE74B10B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243094AbiBJOnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:43:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54364 "EHLO
+        id S243102AbiBJOoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:44:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243024AbiBJOnw (ORCPT
+        with ESMTP id S243099AbiBJOoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:43:52 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EE2C4C;
-        Thu, 10 Feb 2022 06:43:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644504233; x=1676040233;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Wy1OKbDjlys8WDbmOYGKsbCiELtfH7IPmgm1WpHu2Dg=;
-  b=g5T/0zQgVDZBPH/bR7lRoGFx26/yN1v41l1t4uOtFbnIlohI8YvoE6at
-   mvGXeV/4HsvNblDcsfU+xxvQ2o/woc4sOja86a0y2ziOc+0anWh6HZAoE
-   NToNk3nNty58s1I1dMr+i4754Y1flMQng96tq9ZMJqS0kYj7IRC8eDdAR
-   MUwZoMPyQ9mRvQaPY00Y7+cSdYgpf5395alljQ6SuKAr+1nw1MoN7rufB
-   RvI6qoUB6hkAt+DHF9o9bPKPx/EYDBiEmtq8jCJUMnlyxPPPcndBDdFQm
-   Hf2H0D3ZWZqZY+fYuJ9U0diP089B28GZkhZ8j2xRwX1UAULbjgOeHCtrQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="249453007"
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="249453007"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 06:43:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="485705992"
-Received: from mylly.fi.intel.com (HELO [10.237.72.152]) ([10.237.72.152])
-  by orsmga006.jf.intel.com with ESMTP; 10 Feb 2022 06:43:49 -0800
-Message-ID: <87fcba54-b54a-ea20-63ba-f447f4d34506@linux.intel.com>
-Date:   Thu, 10 Feb 2022 16:43:48 +0200
+        Thu, 10 Feb 2022 09:44:10 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFC6C4F;
+        Thu, 10 Feb 2022 06:44:11 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id s185so6105496oie.3;
+        Thu, 10 Feb 2022 06:44:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=XZ/XXrZj+racVLVnNMLvBbtBG9nrEv0nxXZlOiR9KOw=;
+        b=n45EP27B+6zrfSmpHjUJIM0UV0BPcBRWM3a8N6aphJOjhcESJ5xRq6ba4QHgwpTszs
+         4UkHdrjCbgPO4x8EVyrCFYbt/bOSjsuRAjAGZhCZHbZnDOoQR706cbwmAq85RRf5qzus
+         YdOLAqgFPl0/S2kNZwMBqDwox7/tdOfNUdBgvs94tgcG6/683XJXThculQFAaA2Z+6kp
+         se7CMTtqJpqIqjE0EhQ4RBxLTqOJPvmqdohlZjeQ8M9UowpDzOnTTXJ4U4MJv9HdFfMI
+         aN9odpotJtXTBJyU4jvbSREe8dOhyKMPLxNRNnQ+N11OgpF/EUitOpoJ2Ac8rzrUwcoQ
+         Xh5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=XZ/XXrZj+racVLVnNMLvBbtBG9nrEv0nxXZlOiR9KOw=;
+        b=Z6AXuyGVgu9vpRuSadshNNAL7xPKXz4BvDmVWy/vzkuLqCfQJ06HwiT5tKgBe4uUso
+         VP6SV+/R4wmYpAt7mXVdmYFnElq74JU82O2nuVqA1CKoJFNno7UfZbcffe5iQflA+/AI
+         OAZ/1T/JrjV2pYswWlfLEwRvrakY2z5mwrNyQP/J8jLCpnPQxv/SiYeJF9LpvlBjLNOt
+         /FyPN6PavMamXkkAQdtMxxdRpmsyxmI9RS+kXmFNdjbCXwt9RvNBWzxzUWPvfkAwX9hG
+         EXuPXbCq0Rqh/PQBRd1AZ+eEre/Zzcyf5adCNksvBYAGReOnyzZPunhb7W6erICebC5y
+         atAQ==
+X-Gm-Message-State: AOAM531+MuDVpgZR/raaURNflQGdnglq357gLsxLlwoogAkGSraNsS0W
+        2rDyt+7fouxulzGfJO/uvAfiBcM+PmuoBw==
+X-Google-Smtp-Source: ABdhPJyCA97FMS4pI4Mm7GH6VWM1hU3yLtdtUnKRcqooR/XJ2+SK4/QzR+a921eW5f7Q3DhDDN3J9A==
+X-Received: by 2002:a05:6808:1248:: with SMTP id o8mr1088866oiv.205.1644504250407;
+        Thu, 10 Feb 2022 06:44:10 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 21sm7901044otj.71.2022.02.10.06.44.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 06:44:09 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <46684682-a718-ca9a-b502-2031afd3a756@roeck-us.net>
+Date:   Thu, 10 Feb 2022 06:44:07 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.1
-Subject: Re: [PATCH v4 2/2] i2c: designware: Add AMD PSP I2C bus support
+ Thunderbird/91.5.0
 Content-Language: en-US
-To:     =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        "Easow, Nimesh" <Nimesh.Easow@amd.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>
-References: <20220208141218.2049591-1-jsd@semihalf.com>
- <20220208141218.2049591-3-jsd@semihalf.com>
- <YgPdYw6hDoN198Hf@smile.fi.intel.com>
- <CAOtMz3OJNopHKgKDvGNfVWwvvo57=LyiRcnT+x6TxwLb+hgkyw@mail.gmail.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <CAOtMz3OJNopHKgKDvGNfVWwvvo57=LyiRcnT+x6TxwLb+hgkyw@mail.gmail.com>
+To:     Vikash Chandola <vikash.chandola@linux.intel.com>,
+        iwona.winiarska@intel.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220210124154.1304852-1-vikash.chandola@linux.intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] hwmon: (pmbus) Clear pmbus fault/warning bits before read
+In-Reply-To: <20220210124154.1304852-1-vikash.chandola@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/10/22 10:18, Jan Dąbroś wrote:
-> śr., 9 lut 2022 o 16:28 Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> napisał(a):
->>
->> On Tue, Feb 08, 2022 at 03:12:18PM +0100, Jan Dabros wrote:
->>
->> ...
->>
->> I have noticed code duplication.
->>
->>> +     status = psp_send_i2c_req(PSP_I2C_REQ_ACQUIRE);
->>> +     if (status) {
->>> +             if (status == -ETIMEDOUT)
->>> +                     dev_err(psp_i2c_dev, "Timed out waiting for PSP to release I2C bus\n");
->>> +             else
->>> +                     dev_err(psp_i2c_dev, "PSP communication error\n");
->>> +
->>> +             dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
->>> +             psp_i2c_mbox_fail = true;
->>> +             goto cleanup;
->>> +     }
->>
->>> +     /* Send a release command to PSP */
->>> +     status = psp_send_i2c_req(PSP_I2C_REQ_RELEASE);
->>> +     if (status) {
->>> +             if (status == -ETIMEDOUT)
->>> +                     dev_err(psp_i2c_dev, "Timed out waiting for PSP to acquire I2C bus\n");
->>> +             else
->>> +                     dev_err(psp_i2c_dev, "PSP communication error\n");
->>> +
->>> +             dev_err(psp_i2c_dev, "Assume i2c bus is for exclusive host usage\n");
->>> +             psp_i2c_mbox_fail = true;
->>> +             goto cleanup;
->>> +     }
->>
->> If you are going to update the series, consider to introduce a common helper.
->> Otherwise, consider a follow up.
+On 2/10/22 04:41, Vikash Chandola wrote:
+> pmbus fault and warning bits are not cleared by itself once fault/warning
+> condition is not valid anymore. As per pmbus datasheet faults must be
+> cleared by user.
+> Modify hwmon behavior to clear latched status bytes if any bit in status
+> register is high prior to returning fresh data to userspace. If
+> fault/warning conditions are still applicable fault/warning bits will be
+> set and we will get updated data in second read.
 > 
-> Thanks for your comment. Since Jarkko is running some long-lasting
-> tests with v4 patchset, I would like to keep this as is for now (and
-> make a follow up commit). If there will be some additional comments
-> for v4 from him and will spin v5 - I will introduce a common helper
-> function then.
+> Hwmon behavior is changed here. Now sysfs reads will reflect latest
+> values from pmbus slave, not latched values.
+> In case a transient warning/fault has happened in the past, it will no
+> longer be reported to userspace.
 > 
-Test run fine overnight, although I wasn't expecting this breaking 
-Baytrail since patch is practically touching only semaphore detection at 
-probe time on Baytrail. I'm up to you would you address Andy's comments 
-as a follow up or as v5.
 
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+
+NACK.
+
+Reporting that information is exactly the point of the current code.
+We _do_ want to report at least once that a problem occurred in the past,
+and only clear the warning flag(s) afterwards.
+
+Guenter
+
+> Signed-off-by: Vikash Chandola <vikash.chandola@linux.intel.com>
+> ---
+>   drivers/hwmon/pmbus/pmbus_core.c | 9 +++++++++
+>   1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+> index 776ee2237be2..1cc82d644079 100644
+> --- a/drivers/hwmon/pmbus/pmbus_core.c
+> +++ b/drivers/hwmon/pmbus/pmbus_core.c
+> @@ -577,6 +577,15 @@ static int pmbus_get_status(struct i2c_client *client, int page, int reg)
+>   		break;
+>   	default:
+>   		status = _pmbus_read_byte_data(client, page, reg);
+> +		if (status > 0) {
+> +			/*
+> +			 * Status greater than 0 could mean that there was a fault/warning.
+> +			 * Clear faults and do a second read to make sure we are not getting
+> +			 * stale values.
+> +			 */
+> +			pmbus_clear_fault_page(client, page);
+> +			status = _pmbus_read_byte_data(client, page, reg);
+> +		}
+>   		break;
+>   	}
+>   	if (status < 0)
+

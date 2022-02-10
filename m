@@ -2,64 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6744B19C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:48:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86AB74B19CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345876AbiBJXss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 18:48:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52088 "EHLO
+        id S1345892AbiBJXum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 18:50:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244555AbiBJXsr (ORCPT
+        with ESMTP id S243101AbiBJXul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 18:48:47 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AE75F80
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:48:46 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id w20so3225138plq.12
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:48:46 -0800 (PST)
+        Thu, 10 Feb 2022 18:50:41 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7F65F6E
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:50:41 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id y6so20178904ybc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:50:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+VigcQLytz0iuHCE+k+y78JnvvZ09aQp4DOS6f0o7TM=;
-        b=dAh1C5a34PseGXHmaQZfM4wxYL4wwblUd5jDt5LLve2vU6jWUhtwN8MKnJNOf2qufB
-         lLDHDA3elq1Y16fxoyykEwvdijWHwc7OFoKWI14jMZpOT3WpuvHCKRIZu2l8t+rAqmsE
-         SJZTBCTMhb6eQRwZsHqdo4hY7alEqRycNqGHo=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Hjqjyiq+YanJM9r+MSYUsXMNcE5U+j3JeGuDxm9l+cg=;
+        b=w6ygwCST3sWTGzR/MzLI+iT1H1xADJpjilEAOb5rqJsuAHmA55nuGfnJtgodvMRgwA
+         YEiQpRvq3ILJlaYM4eMM5+hmKjCPh9hKt9hpxt40nnjSVRx9vOFRL3F+/w7Pg237flYr
+         ffAHqxzfXPXO6kMy+ZE2JR4C3Gb3+c0Jfahrk0qukARaQkGBL/HdUOU23Q73s3RQPpPz
+         AcxdSlWV1qhbyD21BpiVaFdn2m8fvviGUuaeeE0Kl4lVjztribFwuRWG+nfylAkEyxQl
+         ZvmieBVTv6ovduFStnIHmtdB62zGmeH6af9lXrIsBu51iNAmiyO+APtUpJJhroWBXUyR
+         7VLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+VigcQLytz0iuHCE+k+y78JnvvZ09aQp4DOS6f0o7TM=;
-        b=Y1xdn4DVxN/OJsq3AYasJMq7apVgjNE7Jvt4uf556QjtviwFPrG7PYvT3v9fjmV586
-         m5u3IezsLV3hRw5t61nMR6rP9Cl/xFolLWRevrXk1u8jnyHuomFzLUn83+Hvd/mrhDLS
-         jAfQevLfQXbs4KY1jljmGayXsZ9XZwE3v3dCdouwzN5Wn223gjJDm2NWNeQQlkwLJlKd
-         9UnxpdAwzMJpEm7CXWudGE9U1Hfg5tgL5S/miypMyZqrqsz+fj5FILk8FeHvoMoM9Kle
-         EciRGtitRGsnhge37W+KKx17AduFH9JnfCkdLlAnN6Byjmh9pVPl3FSDXXo2NPWltGHa
-         J4rA==
-X-Gm-Message-State: AOAM5301RBNFC4YnVou4LKAu9anSFzysWveH24XfAGaT//WqPhXC/B0Q
-        GA3B+kl4qwhpX4qEnKDYlRwZ5A==
-X-Google-Smtp-Source: ABdhPJw7Z7RtNFIjE/eg4qhNf5ROtPlhZI8Yn8t9OlJNY4TOQUQQi24WczGyaruM7kFjyOrv2RoZFw==
-X-Received: by 2002:a17:902:ef49:: with SMTP id e9mr9590070plx.56.1644536926217;
-        Thu, 10 Feb 2022 15:48:46 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j3sm18279269pgs.0.2022.02.10.15.48.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 15:48:45 -0800 (PST)
-Date:   Thu, 10 Feb 2022 15:48:44 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Victor Erminpour <victor.erminpour@oracle.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        trivial@kernel.org
-Subject: Re: [PATCH] rtc: pcf8523: Fix GCC 12 warning
-Message-ID: <202202101548.D2CF8DAC@keescook>
-References: <1644453027-886-1-git-send-email-victor.erminpour@oracle.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Hjqjyiq+YanJM9r+MSYUsXMNcE5U+j3JeGuDxm9l+cg=;
+        b=DmR9bHvrc0nub0yOqXQqulXqP2JWHAFsMmB22Qc58UlOElHVZ+bXZhQsx9dzgdrTnV
+         qHnZO3yF0Qki01WcneoeZuk/CTdSssA5pJCqrV/tPQK9iEhCpeVu6LcT/CG4RjFi7QRb
+         895kkoSpEea5l9tUWACZnb0bltsZonH7Vl+zs8BpqlZ0PTGTsxmBEJ8II8jXUEaanV7a
+         CARKP7Wj4f4hN2inJuKfLfgf7m9somGqFKPofa/ia/HavvLfB3jI8KWqgYIi6jANec8N
+         ZE36DdHFXBvLdv78BgvMC4vHv9grGlYEL3NGyPD7VzL3x6uPslUIHIVj9td/ghHK0H3E
+         xe/w==
+X-Gm-Message-State: AOAM532/XctZJ+IAdia+Tk05QoYFsUq9krOOOnElEYaNb8Zm5oqBttoU
+        /4xeUSQrKx6g7HYTfjYs3kOSxrb7mJY48VsY3NxMRg==
+X-Google-Smtp-Source: ABdhPJx908m+swlqxGjab8+arRYZp1wBGa+IaZNrNQ0lnHOGZTX417Fqb41hwAaTjIXE6AhkR+Fsi76lUGckqp4+0zw=
+X-Received: by 2002:a25:5143:: with SMTP id f64mr9885978ybb.520.1644537040823;
+ Thu, 10 Feb 2022 15:50:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1644453027-886-1-git-send-email-victor.erminpour@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20220210155835.154421-1-markuss.broks@gmail.com> <20220210155835.154421-2-markuss.broks@gmail.com>
+In-Reply-To: <20220210155835.154421-2-markuss.broks@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 11 Feb 2022 00:50:29 +0100
+Message-ID: <CACRpkdZsQyDN+k5r-TmVH5JrJ5EbANTtQ2WGX-WTO+t9usJegw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: input/touchscreen: bindings for Imagis
+To:     Markuss Broks <markuss.broks@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Alistair Francis <alistair@alistair23.me>,
+        Hao Fang <fanghao11@huawei.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Jeff LaBundy <jeff@labundy.com>,
+        Joe Hung <joe_hung@ilitek.com>,
+        Jonathan Albrieux <jonathan.albrieux@gmail.com>,
+        Giulio Benetti <giulio.benetti@benettiengineering.com>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,25 +81,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 04:30:27PM -0800, Victor Erminpour wrote:
-> When building with automatic stack variable initialization, GCC 12
-> complains about variables defined outside of switch case statements.
-> Move variables outside the switch, which silences warnings:
-> 
-> ./drivers/rtc/rtc-pcf8523.c:284:20: error: statement will never be executed [-Werror=switch-unreachable]
->   284 |                 u8 mode;
->       |
-> 
-> ./drivers/rtc/rtc-pcf8523.c:245:21: error: statement will never be executed [-Werror=switch-unreachable]
->   245 |                 u32 value;
->       |                     ^~~~~
-> 
-> Signed-off-by: Victor Erminpour <victor.erminpour@oracle.com>
+On Thu, Feb 10, 2022 at 4:59 PM Markuss Broks <markuss.broks@gmail.com> wrote:
 
-Thanks for finding these! I haven't done any cross compiles with GCC 12
-yet. :)
+> This patch adds device-tree bindings for the Imagis
+> IST3038C touch screen IC.
+>
+> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Looks good to me.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
--- 
-Kees Cook
+Yours,
+Linus Walleij

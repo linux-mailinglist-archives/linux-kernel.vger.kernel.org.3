@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B8D4B03F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 04:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F29FF4B03F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 04:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232452AbiBJDaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 22:30:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56396 "EHLO
+        id S232709AbiBJDbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 22:31:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiBJDat (ORCPT
+        with ESMTP id S232605AbiBJDbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 22:30:49 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A146F23BD5;
-        Wed,  9 Feb 2022 19:30:51 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id a39so7041770pfx.7;
-        Wed, 09 Feb 2022 19:30:51 -0800 (PST)
+        Wed, 9 Feb 2022 22:31:05 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E443123BDB;
+        Wed,  9 Feb 2022 19:31:07 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id h14-20020a17090a130e00b001b88991a305so7168047pja.3;
+        Wed, 09 Feb 2022 19:31:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=AmLyqfUdlL8DhLFGxGUWbqjZWjMo7jccpA1AQzm3NEQ=;
-        b=iMTVcsTiBpdcgE/LXjjjSy9WbEr3RQtlPc14mGvHY8KipI8360dhwh2Bu9pGSdNrGk
-         f5uUflfGWeev1ojIFa7OxtHdZnWEtY3PUZ44BPs/MkEy2LniSd+Ais+/r0ZMdgcHLHGK
-         bTSibGgPe+xucmleAu1TAyDpYtyw6H20nlJBX8hWgvqygH+ZQexf9LLDAKScY5LN604o
-         gz6vASlIW/mZK15So5XVBCMbU2a2IuJfZpC2IiuxYoNzac4cGqrdf69WZCHkfSEj3evR
-         VJeudmoCDUocuwCl6jFh1I9EkHkhNTGMiyo7LofAalaTEHl7Ayqu3/Wi2cUTJhi02Cjw
-         kvFw==
+        bh=nvvlCC3Ik+A9UvhOEE+RahzQMEHLT3ALXE7RPHq6bo0=;
+        b=goUXqtpB5Sj1L6N906G/7vqkEFlKjCFgjbyFkZqaeLmU4hCHLxXnQlfoGeh3X/JwyG
+         TG4G8dTLwSXfHTJG9HtikIr2NPkIAOaGbdMdyI+wTSwjiJzaWu3+5cRjHfHrr5lzsTNg
+         W3MGGYOeCNOwhU+fCafboT+ke37bPLjmvwVDna3kxRER0t0XdABmOMtqrUhALE5S48hv
+         6QbkFAsGeum6AbwKcFw1SNNjew9kXNbfL1JRRXraZwAe4B7NyeDs+pBciYQVCZioCqUf
+         kZVEE2X2Gn+7MvInWt9GZj+L7xpmByspbX61GMthQbMTi1pEJ2c20bta7I3mxuyNFf3E
+         RiYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=AmLyqfUdlL8DhLFGxGUWbqjZWjMo7jccpA1AQzm3NEQ=;
-        b=6a00P4sTYZSAIS34y0FtuJwUKiVzJJNLtY8GViOXoz9NBcdRnNs9u50AB/DtpMisjS
-         XtLm1WQMGNruH//bclvR4rIjtwRQ7UvWKxlC9ijR+JqvKIoJ3k77L43CbHExUozS8R4U
-         75JunipDgY5+NQgGB1xAyjTDD/OPUiwflkzL9fJKFk9jjdzASv2zaWfMRzfmmVBgMXIn
-         rP7ZGQo0fpw9Nv7zaUir4gyFxJXl1nZMIBcjHjQP9Maa7skdRuiLrM6yc7Utyvfr2faq
-         QwWJj6K1AF28GTumSb56SJvhmUQ1dpYAtjlx3U4w3rGHQQIZVsQ3DSeMYCUwj0CPNNyS
-         Fipg==
-X-Gm-Message-State: AOAM53191gBATiHG2sT9HiNsSnnBqmtqL3VZp1soJ0FxPoEvdTVoiwut
-        dxtAb/Kw8KFYx6Z3EXvU0bY=
-X-Google-Smtp-Source: ABdhPJwr143OVyAx/RUyXpTOD2E0EgWk95VWXJ/HPx31CxiYCtnw5wbPpLyMHoaRRGCKRhw4UzvzzQ==
-X-Received: by 2002:a63:2c0c:: with SMTP id s12mr4523537pgs.331.1644463851128;
-        Wed, 09 Feb 2022 19:30:51 -0800 (PST)
+        bh=nvvlCC3Ik+A9UvhOEE+RahzQMEHLT3ALXE7RPHq6bo0=;
+        b=V7gyxsrOYJNWyjBBIid/s9qdiDoMWTcicRxOCqRKo/8rlz5H4AU3vcwEZr4/n1zpec
+         JwxNujboVckNqGLrObJDRMcIKE9I/iqIuU1+IT9s/asUnFQMQ78PJz42eaYGGKSDfAoR
+         R4DP2c47UpbO2/Y3eVvQildOxWgLRmnYlzOGcSKevZtkgVggaZLgESruY+AP7CJJJdw9
+         yb+pcVUv5lX53kRZhz4QQPdf/Gr2gBJ5+pUqaalxy/Ybt8nXWbqSnHLtZ4Z9rjEb01RZ
+         MwI6Tz0lEAPl0mGonYWIbrD4xdLK0BbPuEYwL/HoPqGF7PuOnDIZQybEwNRg0XV9mDzN
+         H2mw==
+X-Gm-Message-State: AOAM532nujInk72l7R2gt6FXkg3zIGngrPsfsSgJoJOesmXQ+iQItv/7
+        UVOclVBC3l64vnAKUy1o9u8=
+X-Google-Smtp-Source: ABdhPJwTpk8bCXpASIyFuhcm3zEkisDZSfKcaGYV7LB7Ohjg4RnU5/jP6CwddnjyMQebLVzHOPLPNg==
+X-Received: by 2002:a17:902:7fc9:: with SMTP id t9mr5614339plb.53.1644463867386;
+        Wed, 09 Feb 2022 19:31:07 -0800 (PST)
 Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id o21sm22276367pfu.100.2022.02.09.19.30.49
+        by smtp.gmail.com with ESMTPSA id mu18sm252537pjb.18.2022.02.09.19.31.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Feb 2022 19:30:50 -0800 (PST)
-Message-ID: <6c74b2f8-dd83-c4f2-cadd-07794a37dfac@gmail.com>
-Date:   Wed, 9 Feb 2022 19:30:48 -0800
+        Wed, 09 Feb 2022 19:31:06 -0800 (PST)
+Message-ID: <21f1016c-d725-2c98-5aef-14e94e02364e@gmail.com>
+Date:   Wed, 9 Feb 2022 19:31:05 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.1
-Subject: Re: [PATCH] net: dsa: qca8k: fix noderef.cocci warnings
+Subject: Re: [PATCH] pinctl: doc: Fix spelling mistake "resisitors" ->
+ "resistors"
 Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <202202100634.l8CtrpzE-lkp@intel.com>
- <20220209221304.GA17529@d2214a582157>
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220202091551.580372-1-colin.i.king@gmail.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220209221304.GA17529@d2214a582157>
+In-Reply-To: <20220202091551.580372-1-colin.i.king@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,20 +81,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2/9/2022 2:13 PM, kernel test robot wrote:
-> From: kernel test robot <lkp@intel.com>
+On 2/2/2022 1:15 AM, Colin Ian King wrote:
+> There is a spelling mistake in the documentation. Fix it.
 > 
-> drivers/net/dsa/qca8k.c:422:37-43: ERROR: application of sizeof to pointer
-> 
->   sizeof when applied to a pointer typed expression gives the size of
->   the pointer
-> 
-> Generated by: scripts/coccinelle/misc/noderef.cocci
-> 
-> Fixes: 90386223f44e ("net: dsa: qca8k: add support for larger read/write size with mgmt Ethernet")
-> CC: Ansuel Smith <ansuelsmth@gmail.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
 Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 

@@ -2,87 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CFEE4B0250
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8C44B0267
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232611AbiBJBaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 20:30:12 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33276 "EHLO
+        id S232716AbiBJBbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 20:31:35 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:37768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232462AbiBJBaJ (ORCPT
+        with ESMTP id S232674AbiBJBbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:30:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE52FE8;
-        Wed,  9 Feb 2022 17:30:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DF42617F7;
-        Thu, 10 Feb 2022 01:30:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B9F32C340F1;
-        Thu, 10 Feb 2022 01:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644456609;
-        bh=QCCqocOBA0QXANoR9Th7qCJXBmcweW8s/m7U1ai9C5E=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=fpB6X8Au1GTblA5imuus/BJFEuX9LTKozlgVvHcwfql2P0FgYwZZgSWigzkzUZkLj
-         Vg86Mp8NvLWFpmr4aP21pLetK+F/IT8sH+oWmUtDU/ErjWc5EkxirpayoJo/vQpiAg
-         akajpvR6h5ZUXZqCy+R0cAe5O6/eUekFoLSD1WAkL9UipJUnrHxqkgPpkg/6asOE1Z
-         8Ey8SttVebfkfytu7QmKjhmRmDnzt2be5IOszye8UP5BDbqfa7zUCYrgmSKX2lVRcc
-         WDK2tvpoQKl5bXBpLMsiGCJ7j9afCHYNx2Br2ASI4Fw3lcLgUhJL+oZ8ZHV5sh2u1t
-         tQIJYMEh21s6A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A8FE3E6D447;
-        Thu, 10 Feb 2022 01:30:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 9 Feb 2022 20:31:11 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCB122533
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 17:31:12 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id 9so4612143pfx.12
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 17:31:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=JNuH55wTGRw2CNKCDmZpYRQ9FVq8mQbAJA/99Xvogog=;
+        b=JGXX4ykemXQNdoTLEmz0NjLVOPq9hzvUeU/SBBNHvgfOoFfHFc+2JBBtgYlb7ih2AS
+         4MxIlGUzOmnpldQOxuuouEQV+inZjrhMPm+YefMjebVbO/PY3af/iTvmMncFcZuOFISu
+         FFa+lu4cPaKNs2fi1PSTSDYSYrdm1lrFYDct028sneLCxdWMIfE7kAbEgFWpT5AEgozl
+         pUQCwY93U2MpLvHdWRj2aPQXvvtkquNep2RlBKFeZ1DzwQ0flb5w1lAYxHLwUay1Kaeo
+         rz7lqe+ip3zF8wlv5YskSHt21q070KJfLHKsI+uEzYZ5Pfeaa946MbWyVvpkbcwPj0Lh
+         9UUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=JNuH55wTGRw2CNKCDmZpYRQ9FVq8mQbAJA/99Xvogog=;
+        b=FDAAiEaVBlnza2n/AUgm1/7iI4KFHJU6GzTm3qn4hGqtEJgo7SUZFFspddV8yKbYiI
+         YADghybnpCc96PHi75s4K5MW16kEwcdZiaugojYex4lGredUhPmLuqLjvgDpgh1w/arv
+         IOQInEPacVoZmwxw/fkX29u1AcI1CJXEVDfKrVRX3ZvxoQnxjAFp7GdUzc3F6yetEqOb
+         bZ0q5z9UxvolS/NSNvuJC6/9mEDNlBR/Eawf92kdq5avr3Ef3Zj84DSi5N5SvYdM0F/W
+         XrUPQ+0BsVWwjF4xL5xf39jnjAhFDR2iOuMNv3VFEEhwruAzHWApWN6eUaq/0BBDRdTo
+         78Ig==
+X-Gm-Message-State: AOAM532XNmu9DhidoHAFf0nxrSNs0Gp/hZTGQr7RjlgTlgZQYuFtw4HA
+        Wz+LPDsvOVag6oFZ5hZ4GUwWbg==
+X-Google-Smtp-Source: ABdhPJz8Wt+8lcJKZREuw8154zIwS0J+JbpHaY9co37OSVxEQFfth+/1EIUNNtqtIRoSxcqsPjQ3uA==
+X-Received: by 2002:a05:6a00:1a52:: with SMTP id h18mr5152362pfv.72.1644456672247;
+        Wed, 09 Feb 2022 17:31:12 -0800 (PST)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id lr8sm58982pjb.11.2022.02.09.17.31.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 17:31:11 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Christian Hewitt <christianshewitt@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Christian Hewitt <christianshewitt@gmail.com>
+Subject: Re: [PATCH] arm64: dts: meson: remove CPU opps below 1GHz for G12B/SM1
+In-Reply-To: <20220209135535.29547-1-christianshewitt@gmail.com>
+References: <20220209135535.29547-1-christianshewitt@gmail.com>
+Date:   Wed, 09 Feb 2022 17:31:11 -0800
+Message-ID: <7h7da3o6cg.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v8 net-next] net: drop_monitor: support drop reason
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164445660968.21209.6215816253255469230.git-patchwork-notify@kernel.org>
-Date:   Thu, 10 Feb 2022 01:30:09 +0000
-References: <20220209060838.55513-1-imagedong@tencent.com>
-In-Reply-To: <20220209060838.55513-1-imagedong@tencent.com>
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     idosch@idosch.org, nhorman@tuxdriver.com, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rostedt@goodmis.org,
-        dsahern@kernel.org, imagedong@tencent.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Christian Hewitt <christianshewitt@gmail.com> writes:
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+> Amlogic G12B and SM1 devices experience CPU stalls and random board
+> wedges when the system idles and CPU cores clock down to lower opp
+> points. Recent vendor kernels include a change to remove 100-250MHz
+> (with no explanation) [0] but other downstream sources also remove
+> the 500/667MHz points (also with no explanation). Unless 100-667Mhz
+> opps are removed or the CPU governor forced to performance, stalls
+> are observed, so let's remove them an improve stability/uptime.
 
-On Wed,  9 Feb 2022 14:08:38 +0800 you wrote:
-> From: Menglong Dong <imagedong@tencent.com>
-> 
-> In the commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()")
-> drop reason is introduced to the tracepoint of kfree_skb. Therefore,
-> drop_monitor is able to report the drop reason to users by netlink.
-> 
-> The drop reasons are reported as string to users, which is exactly
-> the same as what we do when reporting it to ftrace.
-> 
-> [...]
+Just curious: what CPUfreq governor do you use by default for the
+LibreELEC kernel?
 
-Here is the summary with links:
-  - [v8,net-next] net: drop_monitor: support drop reason
-    https://git.kernel.org/netdev/net-next/c/5cad527d5ffa
+Your patch greatly improves the stability I'm seeing, but doesn't quite
+elimitate it.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I'm testing suspend/resume in a loop on VIM3, and with schedutil
+(default) or ondemand, it eventually hangs.  With either powersave or
+performance it's stable.  
 
-
+Kevin

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7004B1A5B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F604B1A66
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:27:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346309AbiBKAYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:24:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55166 "EHLO
+        id S1346330AbiBKA0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:26:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346239AbiBKAYj (ORCPT
+        with ESMTP id S1346261AbiBKA0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:24:39 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7462735;
-        Thu, 10 Feb 2022 16:24:39 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id d188so9541410iof.7;
-        Thu, 10 Feb 2022 16:24:39 -0800 (PST)
+        Thu, 10 Feb 2022 19:26:52 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7915594
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:26:52 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id c12so5109451ilm.8
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:26:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=QAzv4ww8wIlL+as7782AHbg1vH8P76wooakjw6i+3Lc=;
-        b=eXLLwoHPmmMGbzE7v0/eoXuOPxdUXwkX/S1PRH7+XaWXBdBlZ2LApOHE3iMbfl1Kr1
-         4GwEpbo6DXk12uqn0CKDnMRhKWqc5E3xyz9NlalC6BgjOF5wKrnvMhCPW9SSAhlLLl6m
-         SJ7sEazoSG1wTfj/t9S8PKfHMcLUmvpTj5Pc0aeefCRDO6tqtR1xpZoio2/j0k8YYyxX
-         zEBfNvS1zpcUSSWrMuGVBIRyH8o5iTxni7dpOaIzvLu25KQaD405JzCGbLLWDXy3I+2R
-         RrwzKsgeq5+sh8lMKFvhc8G58okPUNcmv6K7HmZ88pG7t1Y1PPc1VwW9SLPBecuQ6xwT
-         /6zg==
+        bh=1MJU8h6aqi1lREanFgpSWWzF65VdO9IwfkWhBgqaH3Y=;
+        b=mvi1bzuGc+ZCDBoKyIvPuu57FjwX/ZNRRmbHLZvq28NxvswbVJpCtL+TPmWTVqyuNq
+         zHOVncwF2tsmDVT250gY7kLq+jhckLGi7PlKEqS4kMkEFP1KTu7Z7xjiQlYjB2792Sy0
+         y79LwuSrYF42p6Ksm7buY7+zkijxS7uB/hHR9ElJmFJeaWgz2GF8WWh/oKXQxLhRyRAL
+         sBCNNuvExT46DRyy/8TIoNJF5PD3spUAqOHHh9NO3ZMs/icV5NIDHPE+azUqsowaetzV
+         7cpHrDo+EZ7zUtQ5l6ZDe3klqtAXMvArBpa4JNsPnSEGr2ueqLcJfFXWmveEcH8M/UrG
+         z/9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=QAzv4ww8wIlL+as7782AHbg1vH8P76wooakjw6i+3Lc=;
-        b=hTsQWyDyKSbu3ZwsEqV2Lzfe8WDWkNt0zcrOhzoUd/fBQGfNHGuJBM+0ezQFO1d8Vw
-         JiJkQor5dpMBA28s2VCM6IETHnXcBobFa2WgdXi9SYoF52ZOi7CLmV1/R7xChSTSgIBk
-         2vIW1WItHEmbEACEi7K6cMoCzdApArl0lABv0RwuQXlYiPbgaX4ptBXDaXCmzn9BN/iH
-         b56qic+7F/HGQ9Q1uvGmbzmQ/k3Cc21qdMQQclMZD/HAGlfn65Lup4hlmJB2/UjssJYm
-         srlWKE1ZeMliouUCh0LXo2Q551VVmkzL8kjChTXs4+xLscfuflTJv+xOgDWtSd7I12f4
-         G0nQ==
-X-Gm-Message-State: AOAM530PwIyTAlaANtjaQJSyBWmEiboBl4iYqctO07BibVncQK6WLvfl
-        1VlMk/tXepdhJS0eAS7TQ94=
-X-Google-Smtp-Source: ABdhPJzat5BMCPgkejoDjmOJcB5P48ExVxXh+fEyDvvDxqoIGAU7OXeWm93caqoE2/ZSItwt5e3CXA==
-X-Received: by 2002:a6b:ed06:: with SMTP id n6mr5210030iog.88.1644539079119;
-        Thu, 10 Feb 2022 16:24:39 -0800 (PST)
+        bh=1MJU8h6aqi1lREanFgpSWWzF65VdO9IwfkWhBgqaH3Y=;
+        b=kjQ/uIH3jWFE9HMBpCZUS59BdbEMlgUUsSdOVC4SnK4i2ebN5bYPHvY3N8c9mMZk/o
+         m5H/DVMDioKvyWiSPmL1IKnkN1BglyR9GXfIKu1o9j4xSG2g5mdK4CzTKrwULnC7svc5
+         Kvez5gATQriISEdkQaZb52CQIeLKAmtTR3ioVt69WPe9bV5zomF5sktsU4ou302a224b
+         apZuo24XMf9TfHzSqb48cbQ48w34hBCSYnBKq3hUBK/Uj7CDpUxssDVa6D8sEDQNwnRA
+         Me5NCqoQP0o+qg8bTpzp6lVThao14c3+t+O5pdbyKS3cLE011/vNUIVWNhSYpnJoww+6
+         3ljA==
+X-Gm-Message-State: AOAM531eR9XqDCJP5E2j9gwx6P1eYV2tVUpZPbp7Ykj+uGT1oRv2leak
+        sCPa9NVCkF8H9axy+Yzq+Ms=
+X-Google-Smtp-Source: ABdhPJw4HRWGUzFWRINnqDSvHJhe4t426yscU51lkh9YSM6/oOmml5+22RpllautY9urs7QLFyNzJQ==
+X-Received: by 2002:a92:ab01:: with SMTP id v1mr5297485ilh.149.1644539212078;
+        Thu, 10 Feb 2022 16:26:52 -0800 (PST)
 Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id b5sm6780043ilr.0.2022.02.10.16.24.38
+        by smtp.gmail.com with ESMTPSA id y22sm12896727iow.2.2022.02.10.16.26.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 16:24:38 -0800 (PST)
+        Thu, 10 Feb 2022 16:26:51 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -62,15 +62,11 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH 42/49] scsi: lpfc: replace cpumask_weight with cpumask_weight_gt
-Date:   Thu, 10 Feb 2022 14:49:26 -0800
-Message-Id: <20220210224933.379149-43-yury.norov@gmail.com>
+        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 43/49] soc/qman: replace cpumask_weight with cpumask_weight_lt
+Date:   Thu, 10 Feb 2022 14:49:27 -0800
+Message-Id: <20220210224933.379149-44-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220210224933.379149-1-yury.norov@gmail.com>
 References: <20220210224933.379149-1-yury.norov@gmail.com>
@@ -86,29 +82,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-lpfc_cpuhp_get_eq() calls cpumask_weight() to compare the weight of
-cpumask with a given number. We can do it more efficiently with
-cpumask_weight_gt because conditional cpumask_weight may stop
-traversing the cpumask earlier, as soon as condition is (or can't be) met.
+qman_test_stash() calls cpumask_weight() to compare the weight of cpumask
+with a given number. We can do it more efficiently with cpumask_weight_lt
+because conditional cpumask_weight may stop traversing the cpumask earlier,
+as soon as condition is (or can't be) met.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_init.c | 2 +-
+ drivers/soc/fsl/qbman/qman_test_stash.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index f5c363f663f6..35688427cb7f 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -12642,7 +12642,7 @@ lpfc_cpuhp_get_eq(struct lpfc_hba *phba, unsigned int cpu,
- 		 * gone offline yet, we need >1.
- 		 */
- 		cpumask_and(tmp, maskp, cpu_online_mask);
--		if (cpumask_weight(tmp) > 1)
-+		if (cpumask_weight_gt(tmp, 1))
- 			continue;
+diff --git a/drivers/soc/fsl/qbman/qman_test_stash.c b/drivers/soc/fsl/qbman/qman_test_stash.c
+index b7e8e5ec884c..28b08568a349 100644
+--- a/drivers/soc/fsl/qbman/qman_test_stash.c
++++ b/drivers/soc/fsl/qbman/qman_test_stash.c
+@@ -561,7 +561,7 @@ int qman_test_stash(void)
+ {
+ 	int err;
  
- 		/* Now that we have an irq to shutdown, get the eq
+-	if (cpumask_weight(cpu_online_mask) < 2) {
++	if (cpumask_weight_lt(cpu_online_mask, 2)) {
+ 		pr_info("%s(): skip - only 1 CPU\n", __func__);
+ 		return 0;
+ 	}
 -- 
 2.32.0
 

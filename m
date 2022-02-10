@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA1F4B1393
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 526FF4B1390
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244911AbiBJQxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 11:53:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36966 "EHLO
+        id S244926AbiBJQxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 11:53:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244896AbiBJQxN (ORCPT
+        with ESMTP id S244896AbiBJQxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 11:53:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373C1EE;
-        Thu, 10 Feb 2022 08:53:14 -0800 (PST)
+        Thu, 10 Feb 2022 11:53:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF12EE;
+        Thu, 10 Feb 2022 08:53:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C80AF61D98;
-        Thu, 10 Feb 2022 16:53:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF44C004E1;
-        Thu, 10 Feb 2022 16:53:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6092EB82663;
+        Thu, 10 Feb 2022 16:53:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD6A0C340EB;
+        Thu, 10 Feb 2022 16:53:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644511993;
-        bh=HAU9jECp8vk3akhAHZrT9sbV+MlXVMIjLGnKhGgo6v8=;
+        s=k20201202; t=1644511999;
+        bh=jU4woLASpR6Ex/J6X55lhs4XNVlGTKqO4+sal3OhZzg=;
         h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=o7Nw65ZDQ0K80ka/Paeu31omt3SmW1dxm5+mHMvPCzvzT8ogIfUh35GZN+m7Eg/+r
-         XfaDIwJIsoKicy+eicDxgiQ4oF+GZtqA+W1TqbLJA4PiIUhAXAScr4x9TUoR7N8NrN
-         /oMsmG8XQSx9FeT7lXtrkow9T339kvIwcLnxnHucMfLk4HnTBDDHLbQjNHc/B4MMnw
-         ZgY7i8cUbMJwIfid6XO0Wbr8gDqL2kec1T0zSSJbCzKqh/9pSVRbmCMWMsILc89MIb
-         7B5LPhwNmT7xCEttNiFrzKo6UqlEYgoDw2D74IECu83ZEJcKt+2nMtQmP0JieZiDFa
-         VkRj2hsuITVZQ==
+        b=MtSnP5goZivyhhcyM1qavOq0s+jAuT2xOsOPztOxRfCVXqxOgtmL+EzpUdD9Ie9vd
+         /CaIzzqw2YbXKjaqPVdI3x7xrep0rLJ6CIkSuMoPdN4SsWxGi/nTvSOj757LD/taku
+         HqLDfWdBeO3X9hcDWADDFwCpzQAt1ZA5/IM39/JQCorHxM3kCLpyD4MLqPNl83lXXY
+         L7xmwvYH5Lyo7SRGDOGn7IXMcwkfxDzp5iT5sL3PIoNO+bz9n3Xd3t2wcnqNN/RtvK
+         MHoyLVYSdYuhw5dyN3rk3YxbnXMwIOtXTxSWHcsfE8iMvQIS9aj/137kyiFQPzoIUr
+         xvXkJ5VSiCpVQ==
 From:   Mark Brown <broonie@kernel.org>
 To:     bgoswami@codeaurora.org, srinivas.kandagatla@linaro.org,
         Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
         tiwai@suse.com, perex@perex.cz, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, plai@codeaurora.org,
-        robh+dt@kernel.org, lgirdwood@gmail.com,
-        bjorn.andersson@linaro.org, judyhsiao@chromium.org,
-        agross@kernel.org, swboyd@chromium.org,
-        alsa-devel@alsa-project.org, rohitkr@codeaurora.org,
-        linux-arm-msm@vger.kernel.org
-In-Reply-To: <1644413181-26358-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1644413181-26358-1-git-send-email-quic_srivasam@quicinc.com>
-Subject: Re: [RESEND v8 0/3] Machine driver to support LPASS SC7280 sound card registration
-Message-Id: <164451198976.2625306.6596305549471507379.b4-ty@kernel.org>
-Date:   Thu, 10 Feb 2022 16:53:09 +0000
+        robh+dt@kernel.org, judyhsiao@chromium.org,
+        bjorn.andersson@linaro.org, lgirdwood@gmail.com, agross@kernel.org,
+        swboyd@chromium.org, alsa-devel@alsa-project.org,
+        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org
+In-Reply-To: <1644497415-25291-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1644497415-25291-1-git-send-email-quic_srivasam@quicinc.com>
+Subject: Re: [PATCH v9 0/3] Machine driver to support LPASS SC7280 sound card registration
+Message-Id: <164451199562.2625306.8749637139176937235.b4-ty@kernel.org>
+Date:   Thu, 10 Feb 2022 16:53:15 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,7 +59,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Feb 2022 18:56:18 +0530, Srinivasa Rao Mandadapu wrote:
+On Thu, 10 Feb 2022 18:20:12 +0530, Srinivasa Rao Mandadapu wrote:
 > This patch set is to add support for SC7280 sound card registration and
 > to add dt-bindings documentation file.
 > 

@@ -2,96 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D704B18CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D914B18D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345249AbiBJWtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 17:49:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37666 "EHLO
+        id S1345257AbiBJWuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 17:50:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237332AbiBJWte (ORCPT
+        with ESMTP id S1345255AbiBJWuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:49:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBD9B73;
-        Thu, 10 Feb 2022 14:49:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4428B8278B;
-        Thu, 10 Feb 2022 22:49:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43D0FC004E1;
-        Thu, 10 Feb 2022 22:49:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644533372;
-        bh=GPGb2/FGNW/119aDp4VcMd34PF0JA9+vm/aklBbSvAk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=mUB2ocgwizYZKem4vP59/xlzbdO0oYSbU2MM2RHh38FZj2/xwx2XwF5/BXlqOmeOq
-         OAlNrC+bUpyYjH2BoLbLr/ZDa1fEAKL2acht8VNkMEGK6PI/9SE0sHrs099tXlR1r8
-         PvOhUIOkwuzam+Bg7YeqSO2YIShLJKC0YsfsjPYSFBPFroUsax0tep0mWoD6kUqo3P
-         JUMSiXvH/5QuHvQ7DIsAg1u+A+wSqSA6qrwqs47082U1bXmpG0YRXrMKYd8hvm3HBm
-         fU/tTVGIf3hC5IpxwK7VR8s4vmKiXtkr8xg1ozs9VJl+ZeGe1z2CnjArhafSfPabz0
-         uxUeRZ+vqntXA==
-Date:   Thu, 10 Feb 2022 16:49:30 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     bhelgaas@google.com, bjorn.andersson@linaro.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: pciehp: Add Qualcomm bridge (0x0110) to the command
- completed quirk
-Message-ID: <20220210224930.GA660547@bhelgaas>
+        Thu, 10 Feb 2022 17:50:01 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C24B76
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:50:02 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id v5-20020a17090a4ec500b001b8b702df57so10130515pjl.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:50:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XkU5iLNArD+gSSsbOviCay34l6txBbFA8zH6dv+uNvw=;
+        b=YPaiEstUGXzuhD/Cg6vlfCuNXdeHpFm5v+9Bb7yfrNTAVUueaL3Tx0iJiwnN3f5t90
+         o54COLLM2Omp0pdH/gBHFkfd2Mc3EU1SHKIPFJR8OQM/a+J/4IOvEPtg68VdYYanZd/E
+         HoFuqxbKGMrXWg8uqSlH6em70kiQzKWC4mNDKcaRQB0sSx2cSYJn4Md2Yg2fsn0ZA2G2
+         jZXr2rO9MHu4kh+BTRzxBTalggjBRX6d74MEJciRH+/RlMbErgpUXYHFgaE8wVC4hWkj
+         Gf84g3ojYFR89mjYV3P/YSoymiT1DZ7/7B65zgR5y/niEpDcrTD+7Jqux9mkNkncTrzi
+         6Wjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XkU5iLNArD+gSSsbOviCay34l6txBbFA8zH6dv+uNvw=;
+        b=AFvz2+u7PYHrdxqF1dgiMmwb7n6urJprli9CKpX3akDwuWoOpQ8qaXXsUBsazi01PC
+         akv+9QkrOhdsRwZYBZS/1AhRsos54S7x1T7YIhx0RXWHQWFPdEiWMYdnbeQ3A13fvixB
+         xg22YVXZaD4WS3ipTG6rRZopZm1GpmwuMVnZ2WwgbRGrpAPOPXvx0uFgAhIwObEfLcxq
+         ZyAOfcfGagJY4AZw1xUvB73zlKa/Z4BuOAz7WCdCDDnR++IYxzmBE4VEQUhHAnHr1sBJ
+         e+w7rigElgTqz7wZjiXXrwCixL+cdnxv9ahnRExtMN6tazdzXkz//0h0vw3o3ESRepLD
+         dxlw==
+X-Gm-Message-State: AOAM530K6jCEYfyJRqdDTlLjkGjJuRTcSt3u7qKar4HdMc+BgjZeW9Tn
+        DvGXbBuIwBwNQuRdo6Rlw58wDA==
+X-Google-Smtp-Source: ABdhPJzzbNPsKwKl0OnLYb9dCa4vgV+051VSPWXGr9kQVp9PSnpPfGQeV097gomnmYuBH4/z/wfuDA==
+X-Received: by 2002:a17:90b:1c0f:: with SMTP id oc15mr5128547pjb.70.1644533401368;
+        Thu, 10 Feb 2022 14:50:01 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id pi9sm3850809pjb.46.2022.02.10.14.50.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 14:50:00 -0800 (PST)
+Date:   Thu, 10 Feb 2022 22:49:57 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 01/12] KVM: x86: host-initiated EFER.LME write affects
+ the MMU
+Message-ID: <YgWWldQdqHBMdzA6@google.com>
+References: <20220209170020.1775368-1-pbonzini@redhat.com>
+ <20220209170020.1775368-2-pbonzini@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220210145003.135907-1-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220209170020.1775368-2-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 08:20:03PM +0530, Manivannan Sadhasivam wrote:
-> The Qualcomm PCI bridge device (0x0110) found in chipsets such as SM8450
-> does not set the command completed bit unless writes to the Slot Command
-> register change "Control" bits.
+On Wed, Feb 09, 2022, Paolo Bonzini wrote:
+> While the guest runs, EFER.LME cannot change unless CR0.PG is clear, and therefore
+> EFER.NX is the only bit that can affect the MMU role.  However, set_efer accepts
+> a host-initiated change to EFER.LME even with CR0.PG=1.  In that case, the
+> MMU has to be reset.
 > 
-> This results in timeouts like below:
-> 
-> pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2020 msec ago)
-> 
-> Hence, add the device to the command completed quirk to mark commands
-> "completed" immediately unless they change the "Control" bits.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-
-Applied to pci/hotplug for v5.18, thanks!
-
-Should we assume that this erratum will be fixed in future Qualcomm
-devices?  Or should we apply the quirk for all Qualcomm hotplug
-bridges, as we do for Intel?
-
+> Fixes: 11988499e62b ("KVM: x86: Skip EFER vs. guest CPUID checks for host-initiated writes")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
->  drivers/pci/hotplug/pciehp_hpc.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/pci/hotplug/pciehp_hpc.c b/drivers/pci/hotplug/pciehp_hpc.c
-> index 1c1ebf3dad43..4e4ccf3afbe3 100644
-> --- a/drivers/pci/hotplug/pciehp_hpc.c
-> +++ b/drivers/pci/hotplug/pciehp_hpc.c
-> @@ -1084,6 +1084,8 @@ static void quirk_cmd_compl(struct pci_dev *pdev)
->  }
->  DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_INTEL, PCI_ANY_ID,
->  			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
-> +DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0110,
-> +			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
->  DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0400,
->  			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
->  DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0401,
-> -- 
-> 2.25.1
-> 
+
+Ugh, but KVM_SET_SREGS handles this... It's basically KVM's equivalent of VMX putting
+EFER in the VMCS, but then also allowing EFER in the load/store lists.
+
+Reviewed-by: Sean Christopherson <seanjc@google.com>

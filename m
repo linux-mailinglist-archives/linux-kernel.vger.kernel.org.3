@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2414B113B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B3C4B1138
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243464AbiBJPF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 10:05:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46644 "EHLO
+        id S243499AbiBJPGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 10:06:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243428AbiBJPFz (ORCPT
+        with ESMTP id S243446AbiBJPFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 10 Feb 2022 10:05:55 -0500
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F78EF05
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 07:05:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF454F18
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 07:05:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644505553; x=1676041553;
+  t=1644505555; x=1676041555;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0a13th8h9Lv5Z+IwxFrXbqOGa1xLawzT2dOPjxWpNgI=;
-  b=SLS42mGuUgMCZIzqA0mCb6DkyQfJOpauAtBhG+peGhnYisu90djRvBmA
-   E5zKL5aRMig0Q9DH+9arW+JvP9ZHHqFVlmzMzD8v+Dz7MbEjDEKbM7wLw
-   F7y3c1KNZacjHH3RtcZs9fk3NOxB1DeK15E69Tg2XwEs1OCpMw6M9AT+P
-   Qj5hjDdXyl6jYODJnZtowEEw3+sfsITZUUUqrha//W750pgbe8DYLxxXU
-   PlsycPHpO0wxvMbzvMUiqL0qBmZO02Z/V2Gm6juegEdhMOsYYz2K7VQVB
-   UZvkU33ilnoVFpLLDqpKcmXcjdvhP9Ys8Xeo9Qr6F/nje+EkdKvWLUHNC
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="230153314"
+  bh=0ZJgAw18oUydj5dB+pUqxA25mSWs0m+bYy7EXxR8ToA=;
+  b=Y0goKQaNBh8R6uJJedxwzmNtEpe2IyhIqH3ufLb2+9hQhd4qp4fJ1h2u
+   +u3M74tHRaVE+eNnW4W8OjG0K58bheaqIdoszuCiYeXpiY4Jr6GHffsCm
+   JToSzL7PwdJJBTaoYkyVosYRmm6JFxI/6DDCEbvo1fKajU04sicS4nu1m
+   CTOFOg7gfhEib6nqJQX9UG2UR1VqAiAZdLNZ6PfLkA80rvA9Nj1uShwGJ
+   n9xpaSNSi1PFPM0X9a2NhTBRjz5hq+CvEurJcxZ+iGad//zK3Qk1cUg/a
+   e5zBf/1tO6swmkIbQzGr1xw6nm8jupxYjJ890lKNazYscGcADSB3TlSmR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="230153327"
 X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="230153314"
+   d="scan'208";a="230153327"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 07:05:52 -0800
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 07:05:55 -0800
 X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="500422691"
+   d="scan'208";a="500422732"
 Received: from barabano-mobl.ccr.corp.intel.com (HELO pujfalus-desk.ger.corp.intel.com) ([10.252.41.18])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 07:05:49 -0800
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 07:05:52 -0800
 From:   Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 To:     lgirdwood@gmail.com, broonie@kernel.org,
         pierre-louis.bossart@linux.intel.com,
@@ -44,9 +44,9 @@ To:     lgirdwood@gmail.com, broonie@kernel.org,
 Cc:     alsa-devel@alsa-project.org, kai.vehmanen@linux.intel.com,
         daniel.baluta@nxp.com, tiwai@suse.com,
         linux-kernel@vger.kernel.org, fred.oh@linux.intel.com
-Subject: [PATCH v2 7/9] ASoC: SOF: Convert the generic IPC flood test into SOF client
-Date:   Thu, 10 Feb 2022 17:05:23 +0200
-Message-Id: <20220210150525.30756-8-peter.ujfalusi@linux.intel.com>
+Subject: [PATCH v2 8/9] ASoC: SOF: Convert the generic IPC message injector into SOF client
+Date:   Thu, 10 Feb 2022 17:05:24 +0200
+Message-Id: <20220210150525.30756-9-peter.ujfalusi@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220210150525.30756-1-peter.ujfalusi@linux.intel.com>
 References: <20220210150525.30756-1-peter.ujfalusi@linux.intel.com>
@@ -62,388 +62,197 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-
-Move the IPC flood test code out from the debug file as separate SOF client
-driver.
+Move the IPC message injection code out from the debug file as separate
+SOF client driver.
 
 Based on the kernel configuration, the device registration for the new IPC
-flood test is going to happen in the core.
-With the separate client driver it is going to be possible to run multiple
-flood tests in parallel to increase the stress, the new Kconfig option can
-be used to select this (defaults to 1).
-In order to preserve backward compatibility with existing SW/scripts, the
-first IPC flood test's debugfs files have been linked to the old files.
+message injector is going to happen in the core.
 
-Signed-off-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Co-developed-by: Fred Oh <fred.oh@linux.intel.com>
-Signed-off-by: Fred Oh <fred.oh@linux.intel.com>
 Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
 Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 ---
- sound/soc/sof/Kconfig                     |  16 +-
- sound/soc/sof/Makefile                    |   4 +
- sound/soc/sof/core.c                      |   1 +
- sound/soc/sof/debug.c                     | 231 -------------
- sound/soc/sof/sof-client-ipc-flood-test.c | 396 ++++++++++++++++++++++
- sound/soc/sof/sof-client.c                |  56 ++-
- sound/soc/sof/sof-priv.h                  |   6 +-
- 7 files changed, 469 insertions(+), 241 deletions(-)
- create mode 100644 sound/soc/sof/sof-client-ipc-flood-test.c
+ sound/soc/sof/Kconfig                       |   3 +-
+ sound/soc/sof/Makefile                      |   2 +
+ sound/soc/sof/debug.c                       | 108 -----------
+ sound/soc/sof/sof-client-ipc-msg-injector.c | 192 ++++++++++++++++++++
+ sound/soc/sof/sof-client.c                  |  35 +++-
+ sound/soc/sof/sof-priv.h                    |   4 -
+ 6 files changed, 229 insertions(+), 115 deletions(-)
+ create mode 100644 sound/soc/sof/sof-client-ipc-msg-injector.c
 
 diff --git a/sound/soc/sof/Kconfig b/sound/soc/sof/Kconfig
-index 468d7c113dae..3f8a2cadd2f8 100644
+index 3f8a2cadd2f8..203b086ac22c 100644
 --- a/sound/soc/sof/Kconfig
 +++ b/sound/soc/sof/Kconfig
-@@ -194,13 +194,23 @@ config SND_SOC_SOF_DEBUG_ENABLE_FIRMWARE_TRACE
- 	  If unsure, select "N".
+@@ -212,7 +212,8 @@ config SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST_NUM
+ 	  Select the number of IPC flood test clients to be created.
  
- config SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST
--	bool "SOF enable IPC flood test"
-+	tristate "SOF enable IPC flood test"
+ config SND_SOC_SOF_DEBUG_IPC_MSG_INJECTOR
+-	bool "SOF enable IPC message injector"
++	tristate "SOF enable IPC message injector"
 +	select SND_SOC_SOF_CLIENT
  	help
--	  This option enables the IPC flood test which can be used to flood
--	  the DSP with test IPCs and gather stats about response times.
-+	  This option enables a separate client device for IPC flood test
-+	  which can be used to flood the DSP with test IPCs and gather stats
-+	  about response times.
- 	  Say Y if you want to enable IPC flood test.
- 	  If unsure, select "N".
- 
-+config SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST_NUM
-+	int "Number of IPC flood test clients"
-+	range 1 32
-+	default 2
-+	depends on SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST
-+	help
-+	  Select the number of IPC flood test clients to be created.
-+
- config SND_SOC_SOF_DEBUG_IPC_MSG_INJECTOR
- 	bool "SOF enable IPC message injector"
- 	help
+ 	  This option enables the IPC message injector which can be used to send
+ 	  crafted IPC messages to the DSP to test its robustness.
 diff --git a/sound/soc/sof/Makefile b/sound/soc/sof/Makefile
-index 38ce2fe376fa..964eff43c9ba 100644
+index 964eff43c9ba..a2ae79ebf756 100644
 --- a/sound/soc/sof/Makefile
 +++ b/sound/soc/sof/Makefile
-@@ -11,6 +11,8 @@ snd-sof-pci-objs := sof-pci-dev.o
- snd-sof-acpi-objs := sof-acpi-dev.o
+@@ -12,6 +12,7 @@ snd-sof-acpi-objs := sof-acpi-dev.o
  snd-sof-of-objs := sof-of-dev.o
  
-+snd-sof-ipc-flood-test-objs := sof-client-ipc-flood-test.o
-+
+ snd-sof-ipc-flood-test-objs := sof-client-ipc-flood-test.o
++snd-sof-ipc-msg-injector-objs := sof-client-ipc-msg-injector.o
+ 
  snd-sof-nocodec-objs := nocodec.o
  
- snd-sof-utils-objs := sof-utils.o
-@@ -24,6 +26,8 @@ obj-$(CONFIG_SND_SOC_SOF_ACPI_DEV) += snd-sof-acpi.o
- obj-$(CONFIG_SND_SOC_SOF_OF_DEV) += snd-sof-of.o
+@@ -27,6 +28,7 @@ obj-$(CONFIG_SND_SOC_SOF_OF_DEV) += snd-sof-of.o
  obj-$(CONFIG_SND_SOC_SOF_PCI_DEV) += snd-sof-pci.o
  
-+obj-$(CONFIG_SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST) += snd-sof-ipc-flood-test.o
-+
+ obj-$(CONFIG_SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST) += snd-sof-ipc-flood-test.o
++obj-$(CONFIG_SND_SOC_SOF_DEBUG_IPC_MSG_INJECTOR) += snd-sof-ipc-msg-injector.o
+ 
  obj-$(CONFIG_SND_SOC_SOF_INTEL_TOPLEVEL) += intel/
  obj-$(CONFIG_SND_SOC_SOF_IMX_TOPLEVEL) += imx/
- obj-$(CONFIG_SND_SOC_SOF_AMD_TOPLEVEL) += amd/
-diff --git a/sound/soc/sof/core.c b/sound/soc/sof/core.c
-index 2aabaac9007f..f29fe573ec3c 100644
---- a/sound/soc/sof/core.c
-+++ b/sound/soc/sof/core.c
-@@ -484,3 +484,4 @@ MODULE_AUTHOR("Liam Girdwood");
- MODULE_DESCRIPTION("Sound Open Firmware (SOF) Core");
- MODULE_LICENSE("Dual BSD/GPL");
- MODULE_ALIAS("platform:sof-audio");
-+MODULE_IMPORT_NS(SND_SOC_SOF_CLIENT);
 diff --git a/sound/soc/sof/debug.c b/sound/soc/sof/debug.c
-index 6d6757075f7c..e3a5f77bbd4d 100644
+index e3a5f77bbd4d..937fe6e11d0d 100644
 --- a/sound/soc/sof/debug.c
 +++ b/sound/soc/sof/debug.c
-@@ -234,107 +234,6 @@ static int snd_sof_debugfs_probe_item(struct snd_sof_dev *sdev,
+@@ -234,105 +234,6 @@ static int snd_sof_debugfs_probe_item(struct snd_sof_dev *sdev,
  }
  #endif
  
--#if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST)
--#define MAX_IPC_FLOOD_DURATION_MS 1000
--#define MAX_IPC_FLOOD_COUNT 10000
--#define IPC_FLOOD_TEST_RESULT_LEN 512
 -
--static int sof_debug_ipc_flood_test(struct snd_sof_dev *sdev,
--				    struct snd_sof_dfsentry *dfse,
--				    bool flood_duration_test,
--				    unsigned long ipc_duration_ms,
--				    unsigned long ipc_count)
+-#if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_IPC_MSG_INJECTOR)
+-static ssize_t msg_inject_read(struct file *file, char __user *buffer,
+-			       size_t count, loff_t *ppos)
 -{
--	struct sof_ipc_cmd_hdr hdr;
--	struct sof_ipc_reply reply;
--	u64 min_response_time = U64_MAX;
--	ktime_t start, end, test_end;
--	u64 avg_response_time = 0;
--	u64 max_response_time = 0;
--	u64 ipc_response_time;
--	int i = 0;
--	int ret;
+-	struct snd_sof_dfsentry *dfse = file->private_data;
+-	struct sof_ipc_reply *rhdr = dfse->msg_inject_rx;
 -
--	/* configure test IPC */
--	hdr.cmd = SOF_IPC_GLB_TEST_MSG | SOF_IPC_TEST_IPC_FLOOD;
--	hdr.size = sizeof(hdr);
+-	if (!rhdr->hdr.size || !count || *ppos)
+-		return 0;
 -
--	/* set test end time for duration flood test */
--	if (flood_duration_test)
--		test_end = ktime_get_ns() + ipc_duration_ms * NSEC_PER_MSEC;
+-	if (count > rhdr->hdr.size)
+-		count = rhdr->hdr.size;
 -
--	/* send test IPC's */
--	while (1) {
--		start = ktime_get();
--		ret = sof_ipc_tx_message(sdev->ipc, hdr.cmd, &hdr, hdr.size,
--					 &reply, sizeof(reply));
--		end = ktime_get();
+-	if (copy_to_user(buffer, dfse->msg_inject_rx, count))
+-		return -EFAULT;
 -
--		if (ret < 0)
--			break;
--
--		/* compute min and max response times */
--		ipc_response_time = ktime_to_ns(ktime_sub(end, start));
--		min_response_time = min(min_response_time, ipc_response_time);
--		max_response_time = max(max_response_time, ipc_response_time);
--
--		/* sum up response times */
--		avg_response_time += ipc_response_time;
--		i++;
--
--		/* test complete? */
--		if (flood_duration_test) {
--			if (ktime_to_ns(end) >= test_end)
--				break;
--		} else {
--			if (i == ipc_count)
--				break;
--		}
--	}
--
--	if (ret < 0)
--		dev_err(sdev->dev,
--			"error: ipc flood test failed at %d iterations\n", i);
--
--	/* return if the first IPC fails */
--	if (!i)
--		return ret;
--
--	/* compute average response time */
--	do_div(avg_response_time, i);
--
--	/* clear previous test output */
--	memset(dfse->cache_buf, 0, IPC_FLOOD_TEST_RESULT_LEN);
--
--	if (flood_duration_test) {
--		dev_dbg(sdev->dev, "IPC Flood test duration: %lums\n",
--			ipc_duration_ms);
--		snprintf(dfse->cache_buf, IPC_FLOOD_TEST_RESULT_LEN,
--			 "IPC Flood test duration: %lums\n", ipc_duration_ms);
--	}
--
--	dev_dbg(sdev->dev,
--		"IPC Flood count: %d, Avg response time: %lluns\n",
--		i, avg_response_time);
--	dev_dbg(sdev->dev, "Max response time: %lluns\n",
--		max_response_time);
--	dev_dbg(sdev->dev, "Min response time: %lluns\n",
--		min_response_time);
--
--	/* format output string */
--	snprintf(dfse->cache_buf + strlen(dfse->cache_buf),
--		 IPC_FLOOD_TEST_RESULT_LEN - strlen(dfse->cache_buf),
--		 "IPC Flood count: %d\nAvg response time: %lluns\n",
--		 i, avg_response_time);
--
--	snprintf(dfse->cache_buf + strlen(dfse->cache_buf),
--		 IPC_FLOOD_TEST_RESULT_LEN - strlen(dfse->cache_buf),
--		 "Max response time: %lluns\nMin response time: %lluns\n",
--		 max_response_time, min_response_time);
--
--	return ret;
+-	*ppos += count;
+-	return count;
 -}
--#endif
- 
- #if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_IPC_MSG_INJECTOR)
- static ssize_t msg_inject_read(struct file *file, char __user *buffer,
-@@ -437,15 +336,6 @@ static int snd_sof_debugfs_msg_inject_item(struct snd_sof_dev *sdev,
- static ssize_t sof_dfsentry_write(struct file *file, const char __user *buffer,
- 				  size_t count, loff_t *ppos)
- {
--#if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST)
+-
+-static ssize_t msg_inject_write(struct file *file, const char __user *buffer,
+-				size_t count, loff_t *ppos)
+-{
 -	struct snd_sof_dfsentry *dfse = file->private_data;
 -	struct snd_sof_dev *sdev = dfse->sdev;
--	unsigned long ipc_duration_ms = 0;
--	bool flood_duration_test = false;
--	unsigned long ipc_count = 0;
--	struct dentry *dentry;
--	int err;
--#endif
- 	size_t size;
- 	char *string;
- 	int ret;
-@@ -457,78 +347,6 @@ static ssize_t sof_dfsentry_write(struct file *file, const char __user *buffer,
- 	size = simple_write_to_buffer(string, count, ppos, buffer, count);
- 	ret = size;
- 
--#if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST)
--	/*
--	 * write op is only supported for ipc_flood_count or
--	 * ipc_flood_duration_ms debugfs entries atm.
--	 * ipc_flood_count floods the DSP with the number of IPC's specified.
--	 * ipc_duration_ms test floods the DSP for the time specified
--	 * in the debugfs entry.
--	 */
--	dentry = file->f_path.dentry;
--	if (strcmp(dentry->d_name.name, "ipc_flood_count") &&
--	    strcmp(dentry->d_name.name, "ipc_flood_duration_ms")) {
--		ret = -EINVAL;
--		goto out;
--	}
+-	struct sof_ipc_cmd_hdr *hdr = dfse->msg_inject_tx;
+-	size_t size;
+-	int ret, err;
 -
--	if (!strcmp(dentry->d_name.name, "ipc_flood_duration_ms"))
--		flood_duration_test = true;
+-	if (*ppos)
+-		return 0;
 -
--	/* test completion criterion */
--	if (flood_duration_test)
--		ret = kstrtoul(string, 0, &ipc_duration_ms);
--	else
--		ret = kstrtoul(string, 0, &ipc_count);
--	if (ret < 0)
--		goto out;
--
--	/* limit max duration/ipc count for flood test */
--	if (flood_duration_test) {
--		if (!ipc_duration_ms) {
--			ret = size;
--			goto out;
--		}
--
--		/* find the minimum. min() is not used to avoid warnings */
--		if (ipc_duration_ms > MAX_IPC_FLOOD_DURATION_MS)
--			ipc_duration_ms = MAX_IPC_FLOOD_DURATION_MS;
--	} else {
--		if (!ipc_count) {
--			ret = size;
--			goto out;
--		}
--
--		/* find the minimum. min() is not used to avoid warnings */
--		if (ipc_count > MAX_IPC_FLOOD_COUNT)
--			ipc_count = MAX_IPC_FLOOD_COUNT;
--	}
+-	size = simple_write_to_buffer(dfse->msg_inject_tx, SOF_IPC_MSG_MAX_SIZE,
+-				      ppos, buffer, count);
+-	if (size != count)
+-		return size > 0 ? -EFAULT : size;
 -
 -	ret = pm_runtime_get_sync(sdev->dev);
 -	if (ret < 0 && ret != -EACCES) {
--		dev_err_ratelimited(sdev->dev,
--				    "error: debugfs write failed to resume %d\n",
--				    ret);
+-		dev_err_ratelimited(sdev->dev, "%s: DSP resume failed: %d\n",
+-				    __func__, ret);
 -		pm_runtime_put_noidle(sdev->dev);
 -		goto out;
 -	}
 -
--	/* flood test */
--	ret = sof_debug_ipc_flood_test(sdev, dfse, flood_duration_test,
--				       ipc_duration_ms, ipc_count);
+-	/* send the message */
+-	memset(dfse->msg_inject_rx, 0, SOF_IPC_MSG_MAX_SIZE);
+-	ret = sof_ipc_tx_message(sdev->ipc, hdr->cmd, dfse->msg_inject_tx, count,
+-				 dfse->msg_inject_rx, SOF_IPC_MSG_MAX_SIZE);
 -
 -	pm_runtime_mark_last_busy(sdev->dev);
 -	err = pm_runtime_put_autosuspend(sdev->dev);
 -	if (err < 0)
--		dev_err_ratelimited(sdev->dev,
--				    "error: debugfs write failed to idle %d\n",
--				    err);
+-		dev_err_ratelimited(sdev->dev, "%s: DSP idle failed: %d\n",
+-				    __func__, err);
 -
 -	/* return size if test is successful */
 -	if (ret >= 0)
 -		ret = size;
+-
 -out:
--#endif
- 	kfree(string);
- 	return ret;
- }
-@@ -544,24 +362,6 @@ static ssize_t sof_dfsentry_read(struct file *file, char __user *buffer,
- 	int size;
- 	u8 *buf;
- 
--#if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST)
--	struct dentry *dentry;
+-	return ret;
+-}
 -
--	dentry = file->f_path.dentry;
--	if ((!strcmp(dentry->d_name.name, "ipc_flood_count") ||
--	     !strcmp(dentry->d_name.name, "ipc_flood_duration_ms"))) {
--		if (*ppos)
--			return 0;
+-static const struct file_operations msg_inject_fops = {
+-	.open = simple_open,
+-	.read = msg_inject_read,
+-	.write = msg_inject_write,
+-	.llseek = default_llseek,
+-};
 -
--		count = strlen(dfse->cache_buf);
--		size_ret = copy_to_user(buffer, dfse->cache_buf, count);
--		if (size_ret)
--			return -EFAULT;
+-static int snd_sof_debugfs_msg_inject_item(struct snd_sof_dev *sdev,
+-					   const char *name, mode_t mode,
+-					   const struct file_operations *fops)
+-{
+-	struct snd_sof_dfsentry *dfse;
 -
--		*ppos += count;
--		return count;
--	}
--#endif
- 	size = dfse->size;
- 
- 	/* validate position & count */
-@@ -719,19 +519,6 @@ int snd_sof_debugfs_buf_item(struct snd_sof_dev *sdev,
- 	dfse->size = size;
- 	dfse->sdev = sdev;
- 
--#if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST)
--	if (!strncmp(name, "ipc_flood", strlen("ipc_flood"))) {
--		/*
--		 * cache_buf is unused for SOF_DFSENTRY_TYPE_BUF debugfs entries.
--		 * So, use it to save the results of the last IPC flood test.
--		 */
--		dfse->cache_buf = devm_kzalloc(sdev->dev, IPC_FLOOD_TEST_RESULT_LEN,
--					       GFP_KERNEL);
--		if (!dfse->cache_buf)
--			return -ENOMEM;
--	}
+-	dfse = devm_kzalloc(sdev->dev, sizeof(*dfse), GFP_KERNEL);
+-	if (!dfse)
+-		return -ENOMEM;
+-
+-	/* pre allocate the tx and rx buffers */
+-	dfse->msg_inject_tx = devm_kzalloc(sdev->dev, SOF_IPC_MSG_MAX_SIZE, GFP_KERNEL);
+-	dfse->msg_inject_rx = devm_kzalloc(sdev->dev, SOF_IPC_MSG_MAX_SIZE, GFP_KERNEL);
+-	if (!dfse->msg_inject_tx || !dfse->msg_inject_rx)
+-		return -ENOMEM;
+-
+-	dfse->type = SOF_DFSENTRY_TYPE_BUF;
+-	dfse->sdev = sdev;
+-
+-	debugfs_create_file(name, mode, sdev->debugfs_root, dfse, fops);
+-	/* add to dfsentry list */
+-	list_add(&dfse->list, &sdev->dfsentry_list);
+-
+-	return 0;
+-}
 -#endif
 -
- 	debugfs_create_file(name, mode, sdev->debugfs_root, dfse,
- 			    &sof_dfs_fops);
- 	/* add to dfsentry list */
-@@ -892,24 +679,6 @@ int snd_sof_dbg_init(struct snd_sof_dev *sdev)
+ static ssize_t sof_dfsentry_write(struct file *file, const char __user *buffer,
+ 				  size_t count, loff_t *ppos)
+ {
+@@ -679,15 +580,6 @@ int snd_sof_dbg_init(struct snd_sof_dev *sdev)
  		return err;
  #endif
  
--#if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST)
--	/* create read-write ipc_flood_count debugfs entry */
--	err = snd_sof_debugfs_buf_item(sdev, NULL, 0,
--				       "ipc_flood_count", 0666);
--
--	/* errors are only due to memory allocation, not debugfs */
--	if (err < 0)
--		return err;
--
--	/* create read-write ipc_flood_duration_ms debugfs entry */
--	err = snd_sof_debugfs_buf_item(sdev, NULL, 0,
--				       "ipc_flood_duration_ms", 0666);
+-#if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_IPC_MSG_INJECTOR)
+-	err = snd_sof_debugfs_msg_inject_item(sdev, "ipc_msg_inject", 0644,
+-					      &msg_inject_fops);
 -
 -	/* errors are only due to memory allocation, not debugfs */
 -	if (err < 0)
 -		return err;
 -#endif
 -
- #if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_IPC_MSG_INJECTOR)
- 	err = snd_sof_debugfs_msg_inject_item(sdev, "ipc_msg_inject", 0644,
- 					      &msg_inject_fops);
-diff --git a/sound/soc/sof/sof-client-ipc-flood-test.c b/sound/soc/sof/sof-client-ipc-flood-test.c
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(snd_sof_dbg_init);
+diff --git a/sound/soc/sof/sof-client-ipc-msg-injector.c b/sound/soc/sof/sof-client-ipc-msg-injector.c
 new file mode 100644
-index 000000000000..db3a052c5dd2
+index 000000000000..bce103da4c49
 --- /dev/null
-+++ b/sound/soc/sof/sof-client-ipc-flood-test.c
-@@ -0,0 +1,396 @@
++++ b/sound/soc/sof/sof-client-ipc-msg-injector.c
+@@ -0,0 +1,192 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +//
 +// Copyright(c) 2022 Intel Corporation. All rights reserved.
 +//
-+// Authors: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-+//	    Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
++// Author: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 +//
 +
 +#include <linux/auxiliary_bus.h>
@@ -459,21 +268,16 @@ index 000000000000..db3a052c5dd2
 +
 +#include "sof-client.h"
 +
-+#define MAX_IPC_FLOOD_DURATION_MS	1000
-+#define MAX_IPC_FLOOD_COUNT		10000
-+#define IPC_FLOOD_TEST_RESULT_LEN	512
 +#define SOF_IPC_CLIENT_SUSPEND_DELAY_MS	3000
 +
-+#define DEBUGFS_IPC_FLOOD_COUNT		"ipc_flood_count"
-+#define DEBUGFS_IPC_FLOOD_DURATION	"ipc_flood_duration_ms"
++struct sof_msg_inject_priv {
++	struct dentry *dfs_file;
 +
-+struct sof_ipc_flood_priv {
-+	struct dentry *dfs_root;
-+	struct dentry *dfs_link[2];
-+	char *buf;
++	void *tx_buffer;
++	void *rx_buffer;
 +};
 +
-+static int sof_ipc_flood_dfs_open(struct inode *inode, struct file *file)
++static int sof_msg_inject_dfs_open(struct inode *inode, struct file *file)
 +{
 +	struct sof_client_dev *cdev = inode->i_private;
 +	int ret;
@@ -492,182 +296,54 @@ index 000000000000..db3a052c5dd2
 +	return ret;
 +}
 +
-+/*
-+ * helper function to perform the flood test. Only one of the two params, ipc_duration_ms
-+ * or ipc_count, will be non-zero and will determine the type of test
-+ */
-+static int sof_debug_ipc_flood_test(struct sof_client_dev *cdev,
-+				    bool flood_duration_test,
-+				    unsigned long ipc_duration_ms,
-+				    unsigned long ipc_count)
-+{
-+	struct sof_ipc_flood_priv *priv = cdev->data;
-+	struct device *dev = &cdev->auxdev.dev;
-+	struct sof_ipc_cmd_hdr hdr;
-+	struct sof_ipc_reply reply;
-+	u64 min_response_time = U64_MAX;
-+	ktime_t start, end, test_end;
-+	u64 avg_response_time = 0;
-+	u64 max_response_time = 0;
-+	u64 ipc_response_time;
-+	int i = 0;
-+	int ret;
-+
-+	/* configure test IPC */
-+	hdr.cmd = SOF_IPC_GLB_TEST_MSG | SOF_IPC_TEST_IPC_FLOOD;
-+	hdr.size = sizeof(hdr);
-+
-+	/* set test end time for duration flood test */
-+	if (flood_duration_test)
-+		test_end = ktime_get_ns() + ipc_duration_ms * NSEC_PER_MSEC;
-+
-+	/* send test IPC's */
-+	while (1) {
-+		start = ktime_get();
-+		ret = sof_client_ipc_tx_message(cdev, &hdr, &reply, sizeof(reply));
-+		end = ktime_get();
-+
-+		if (ret < 0)
-+			break;
-+
-+		/* compute min and max response times */
-+		ipc_response_time = ktime_to_ns(ktime_sub(end, start));
-+		min_response_time = min(min_response_time, ipc_response_time);
-+		max_response_time = max(max_response_time, ipc_response_time);
-+
-+		/* sum up response times */
-+		avg_response_time += ipc_response_time;
-+		i++;
-+
-+		/* test complete? */
-+		if (flood_duration_test) {
-+			if (ktime_to_ns(end) >= test_end)
-+				break;
-+		} else {
-+			if (i == ipc_count)
-+				break;
-+		}
-+	}
-+
-+	if (ret < 0)
-+		dev_err(dev, "ipc flood test failed at %d iterations\n", i);
-+
-+	/* return if the first IPC fails */
-+	if (!i)
-+		return ret;
-+
-+	/* compute average response time */
-+	do_div(avg_response_time, i);
-+
-+	/* clear previous test output */
-+	memset(priv->buf, 0, IPC_FLOOD_TEST_RESULT_LEN);
-+
-+	if (!ipc_count) {
-+		dev_dbg(dev, "IPC Flood test duration: %lums\n", ipc_duration_ms);
-+		snprintf(priv->buf, IPC_FLOOD_TEST_RESULT_LEN,
-+			 "IPC Flood test duration: %lums\n", ipc_duration_ms);
-+	}
-+
-+	dev_dbg(dev, "IPC Flood count: %d, Avg response time: %lluns\n",
-+		i, avg_response_time);
-+	dev_dbg(dev, "Max response time: %lluns\n", max_response_time);
-+	dev_dbg(dev, "Min response time: %lluns\n", min_response_time);
-+
-+	/* format output string and save test results */
-+	snprintf(priv->buf + strlen(priv->buf),
-+		 IPC_FLOOD_TEST_RESULT_LEN - strlen(priv->buf),
-+		 "IPC Flood count: %d\nAvg response time: %lluns\n",
-+		 i, avg_response_time);
-+
-+	snprintf(priv->buf + strlen(priv->buf),
-+		 IPC_FLOOD_TEST_RESULT_LEN - strlen(priv->buf),
-+		 "Max response time: %lluns\nMin response time: %lluns\n",
-+		 max_response_time, min_response_time);
-+
-+	return ret;
-+}
-+
-+/*
-+ * Writing to the debugfs entry initiates the IPC flood test based on
-+ * the IPC count or the duration specified by the user.
-+ */
-+static ssize_t sof_ipc_flood_dfs_write(struct file *file, const char __user *buffer,
++static ssize_t sof_msg_inject_dfs_read(struct file *file, char __user *buffer,
 +				       size_t count, loff_t *ppos)
 +{
 +	struct sof_client_dev *cdev = file->private_data;
++	struct sof_msg_inject_priv *priv = cdev->data;
++	struct sof_ipc_reply *rhdr = priv->rx_buffer;
++
++	if (!rhdr->hdr.size || !count || *ppos)
++		return 0;
++
++	if (count > rhdr->hdr.size)
++		count = rhdr->hdr.size;
++
++	if (copy_to_user(buffer, priv->rx_buffer, count))
++		return -EFAULT;
++
++	*ppos += count;
++	return count;
++}
++
++static ssize_t sof_msg_inject_dfs_write(struct file *file, const char __user *buffer,
++					size_t count, loff_t *ppos)
++{
++	struct sof_client_dev *cdev = file->private_data;
++	struct sof_msg_inject_priv *priv = cdev->data;
 +	struct device *dev = &cdev->auxdev.dev;
-+	unsigned long ipc_duration_ms = 0;
-+	bool flood_duration_test = false;
-+	unsigned long ipc_count = 0;
-+	struct dentry *dentry;
-+	int err;
++	int ret, err;
 +	size_t size;
-+	char *string;
-+	int ret;
 +
-+	string = kzalloc(count + 1, GFP_KERNEL);
-+	if (!string)
-+		return -ENOMEM;
++	if (*ppos)
++		return 0;
 +
-+	size = simple_write_to_buffer(string, count, ppos, buffer, count);
-+
-+	/*
-+	 * write op is only supported for ipc_flood_count or
-+	 * ipc_flood_duration_ms debugfs entries atm.
-+	 * ipc_flood_count floods the DSP with the number of IPC's specified.
-+	 * ipc_duration_ms test floods the DSP for the time specified
-+	 * in the debugfs entry.
-+	 */
-+	dentry = file->f_path.dentry;
-+	if (strcmp(dentry->d_name.name, DEBUGFS_IPC_FLOOD_COUNT) &&
-+	    strcmp(dentry->d_name.name, DEBUGFS_IPC_FLOOD_DURATION)) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	if (!strcmp(dentry->d_name.name, DEBUGFS_IPC_FLOOD_DURATION))
-+		flood_duration_test = true;
-+
-+	/* test completion criterion */
-+	if (flood_duration_test)
-+		ret = kstrtoul(string, 0, &ipc_duration_ms);
-+	else
-+		ret = kstrtoul(string, 0, &ipc_count);
-+	if (ret < 0)
-+		goto out;
-+
-+	/* limit max duration/ipc count for flood test */
-+	if (flood_duration_test) {
-+		if (!ipc_duration_ms) {
-+			ret = size;
-+			goto out;
-+		}
-+
-+		/* find the minimum. min() is not used to avoid warnings */
-+		if (ipc_duration_ms > MAX_IPC_FLOOD_DURATION_MS)
-+			ipc_duration_ms = MAX_IPC_FLOOD_DURATION_MS;
-+	} else {
-+		if (!ipc_count) {
-+			ret = size;
-+			goto out;
-+		}
-+
-+		/* find the minimum. min() is not used to avoid warnings */
-+		if (ipc_count > MAX_IPC_FLOOD_COUNT)
-+			ipc_count = MAX_IPC_FLOOD_COUNT;
-+	}
++	size = simple_write_to_buffer(priv->tx_buffer, SOF_IPC_MSG_MAX_SIZE,
++				      ppos, buffer, count);
++	if (size != count)
++		return size > 0 ? -EFAULT : size;
 +
 +	ret = pm_runtime_get_sync(dev);
 +	if (ret < 0 && ret != -EACCES) {
 +		dev_err_ratelimited(dev, "debugfs write failed to resume %d\n", ret);
 +		pm_runtime_put_noidle(dev);
-+		goto out;
++		return ret;
 +	}
 +
-+	/* flood test */
-+	ret = sof_debug_ipc_flood_test(cdev, flood_duration_test,
-+				       ipc_duration_ms, ipc_count);
-+
++	/* send the message */
++	memset(priv->rx_buffer, 0, SOF_IPC_MSG_MAX_SIZE);
++	ret = sof_client_ipc_tx_message(cdev, priv->tx_buffer, priv->rx_buffer,
++					SOF_IPC_MSG_MAX_SIZE);
 +	pm_runtime_mark_last_busy(dev);
 +	err = pm_runtime_put_autosuspend(dev);
 +	if (err < 0)
@@ -676,114 +352,49 @@ index 000000000000..db3a052c5dd2
 +	/* return size if test is successful */
 +	if (ret >= 0)
 +		ret = size;
-+out:
-+	kfree(string);
++
 +	return ret;
-+}
++};
 +
-+/* return the result of the last IPC flood test */
-+static ssize_t sof_ipc_flood_dfs_read(struct file *file, char __user *buffer,
-+				      size_t count, loff_t *ppos)
-+{
-+	struct sof_client_dev *cdev = file->private_data;
-+	struct sof_ipc_flood_priv *priv = cdev->data;
-+	size_t size_ret;
-+
-+	struct dentry *dentry;
-+
-+	dentry = file->f_path.dentry;
-+	if (!strcmp(dentry->d_name.name, DEBUGFS_IPC_FLOOD_COUNT) ||
-+	    !strcmp(dentry->d_name.name, DEBUGFS_IPC_FLOOD_DURATION)) {
-+		if (*ppos)
-+			return 0;
-+
-+		count = min_t(size_t, count, strlen(priv->buf));
-+		size_ret = copy_to_user(buffer, priv->buf, count);
-+		if (size_ret)
-+			return -EFAULT;
-+
-+		*ppos += count;
-+		return count;
-+	}
-+	return count;
-+}
-+
-+static int sof_ipc_flood_dfs_release(struct inode *inode, struct file *file)
++static int sof_msg_inject_dfs_release(struct inode *inode, struct file *file)
 +{
 +	debugfs_file_put(file->f_path.dentry);
 +
 +	return 0;
 +}
 +
-+static const struct file_operations sof_ipc_flood_fops = {
-+	.open = sof_ipc_flood_dfs_open,
-+	.read = sof_ipc_flood_dfs_read,
++static const struct file_operations sof_msg_inject_fops = {
++	.open = sof_msg_inject_dfs_open,
++	.read = sof_msg_inject_dfs_read,
++	.write = sof_msg_inject_dfs_write,
 +	.llseek = default_llseek,
-+	.write = sof_ipc_flood_dfs_write,
-+	.release = sof_ipc_flood_dfs_release,
++	.release = sof_msg_inject_dfs_release,
 +
 +	.owner = THIS_MODULE,
 +};
 +
-+/*
-+ * The IPC test client creates a couple of debugfs entries that will be used
-+ * flood tests. Users can write to these entries to execute the IPC flood test
-+ * by specifying either the number of IPCs to flood the DSP with or the duration
-+ * (in ms) for which the DSP should be flooded with test IPCs. At the
-+ * end of each test, the average, min and max response times are reported back.
-+ * The results of the last flood test can be accessed by reading the debugfs
-+ * entries.
-+ */
-+static int sof_ipc_flood_probe(struct auxiliary_device *auxdev,
-+			       const struct auxiliary_device_id *id)
++static int sof_msg_inject_probe(struct auxiliary_device *auxdev,
++				const struct auxiliary_device_id *id)
 +{
 +	struct sof_client_dev *cdev = auxiliary_dev_to_sof_client_dev(auxdev);
 +	struct dentry *debugfs_root = sof_client_get_debugfs_root(cdev);
 +	struct device *dev = &auxdev->dev;
-+	struct sof_ipc_flood_priv *priv;
++	struct sof_msg_inject_priv *priv;
 +
 +	/* allocate memory for client data */
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	priv = devm_kzalloc(&auxdev->dev, sizeof(*priv), GFP_KERNEL);
 +	if (!priv)
 +		return -ENOMEM;
 +
-+	priv->buf = devm_kmalloc(dev, IPC_FLOOD_TEST_RESULT_LEN, GFP_KERNEL);
-+	if (!priv->buf)
++	priv->tx_buffer = devm_kmalloc(dev, SOF_IPC_MSG_MAX_SIZE, GFP_KERNEL);
++	priv->rx_buffer = devm_kmalloc(dev, SOF_IPC_MSG_MAX_SIZE, GFP_KERNEL);
++	if (!priv->tx_buffer || !priv->rx_buffer)
 +		return -ENOMEM;
 +
 +	cdev->data = priv;
 +
-+	/* create debugfs root folder with device name under parent SOF dir */
-+	priv->dfs_root = debugfs_create_dir(dev_name(dev), debugfs_root);
-+	if (!IS_ERR_OR_NULL(priv->dfs_root)) {
-+		/* create read-write ipc_flood_count debugfs entry */
-+		debugfs_create_file(DEBUGFS_IPC_FLOOD_COUNT, 0644, priv->dfs_root,
-+				    cdev, &sof_ipc_flood_fops);
-+
-+		/* create read-write ipc_flood_duration_ms debugfs entry */
-+		debugfs_create_file(DEBUGFS_IPC_FLOOD_DURATION, 0644,
-+				    priv->dfs_root, cdev, &sof_ipc_flood_fops);
-+
-+		if (auxdev->id == 0) {
-+			/*
-+			 * Create symlinks for backwards compatibility to the
-+			 * first IPC flood test instance
-+			 */
-+			char target[100];
-+
-+			snprintf(target, 100, "%s/" DEBUGFS_IPC_FLOOD_COUNT,
-+				 dev_name(dev));
-+			priv->dfs_link[0] =
-+				debugfs_create_symlink(DEBUGFS_IPC_FLOOD_COUNT,
-+						       debugfs_root, target);
-+
-+			snprintf(target, 100, "%s/" DEBUGFS_IPC_FLOOD_DURATION,
-+				 dev_name(dev));
-+			priv->dfs_link[1] =
-+				debugfs_create_symlink(DEBUGFS_IPC_FLOOD_DURATION,
-+						       debugfs_root, target);
-+		}
-+	}
++	priv->dfs_file = debugfs_create_file("ipc_msg_inject", 0644, debugfs_root,
++					     cdev, &sof_msg_inject_fops);
 +
 +	/* enable runtime PM */
 +	pm_runtime_set_autosuspend_delay(dev, SOF_IPC_CLIENT_SUSPEND_DELAY_MS);
@@ -795,26 +406,21 @@ index 000000000000..db3a052c5dd2
 +	return 0;
 +}
 +
-+static void sof_ipc_flood_remove(struct auxiliary_device *auxdev)
++static void sof_msg_inject_remove(struct auxiliary_device *auxdev)
 +{
 +	struct sof_client_dev *cdev = auxiliary_dev_to_sof_client_dev(auxdev);
-+	struct sof_ipc_flood_priv *priv = cdev->data;
++	struct sof_msg_inject_priv *priv = cdev->data;
 +
 +	pm_runtime_disable(&auxdev->dev);
 +
-+	if (auxdev->id == 0) {
-+		debugfs_remove(priv->dfs_link[0]);
-+		debugfs_remove(priv->dfs_link[1]);
-+	}
-+
-+	debugfs_remove_recursive(priv->dfs_root);
++	debugfs_remove(priv->dfs_file);
 +}
 +
-+static const struct auxiliary_device_id sof_ipc_flood_client_id_table[] = {
-+	{ .name = "snd_sof.ipc_flood" },
++static const struct auxiliary_device_id sof_msg_inject_client_id_table[] = {
++	{ .name = "snd_sof.msg_injector" },
 +	{},
 +};
-+MODULE_DEVICE_TABLE(auxiliary, sof_ipc_flood_client_id_table);
++MODULE_DEVICE_TABLE(auxiliary, sof_msg_inject_client_id_table);
 +
 +/*
 + * No need for driver pm_ops as the generic pm callbacks in the auxiliary bus
@@ -822,119 +428,98 @@ index 000000000000..db3a052c5dd2
 + * back to D0.
 + * Driver name will be set based on KBUILD_MODNAME.
 + */
-+static struct auxiliary_driver sof_ipc_flood_client_drv = {
-+	.probe = sof_ipc_flood_probe,
-+	.remove = sof_ipc_flood_remove,
++static struct auxiliary_driver sof_msg_inject_client_drv = {
++	.probe = sof_msg_inject_probe,
++	.remove = sof_msg_inject_remove,
 +
-+	.id_table = sof_ipc_flood_client_id_table,
++	.id_table = sof_msg_inject_client_id_table,
 +};
 +
-+module_auxiliary_driver(sof_ipc_flood_client_drv);
++module_auxiliary_driver(sof_msg_inject_client_drv);
 +
-+MODULE_DESCRIPTION("SOF IPC Flood Test Client Driver");
++MODULE_DESCRIPTION("SOF IPC Message Injector Client Driver");
 +MODULE_LICENSE("GPL");
 +MODULE_IMPORT_NS(SND_SOC_SOF_CLIENT);
 diff --git a/sound/soc/sof/sof-client.c b/sound/soc/sof/sof-client.c
-index 932bdea49c24..0ffe7a26a19a 100644
+index 0ffe7a26a19a..686ad0c3bb61 100644
 --- a/sound/soc/sof/sof-client.c
 +++ b/sound/soc/sof/sof-client.c
-@@ -66,18 +66,70 @@ static int sof_client_dev_add_data(struct sof_client_dev *cdev, const void *data
- 	return 0;
- }
+@@ -102,6 +102,25 @@ static inline int sof_register_ipc_flood_test(struct snd_sof_dev *sdev)
+ static inline void sof_unregister_ipc_flood_test(struct snd_sof_dev *sdev) {}
+ #endif /* CONFIG_SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST */
  
-+#if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST)
-+static int sof_register_ipc_flood_test(struct snd_sof_dev *sdev)
++#if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_IPC_MSG_INJECTOR)
++static int sof_register_ipc_msg_injector(struct snd_sof_dev *sdev)
 +{
-+	int ret = 0;
-+	int i;
-+
-+	for (i = 0; i < CONFIG_SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST_NUM; i++) {
-+		ret = sof_client_dev_register(sdev, "ipc_flood", i, NULL, 0);
-+		if (ret < 0)
-+			break;
-+	}
-+
-+	if (ret) {
-+		for (; i >= 0; --i)
-+			sof_client_dev_unregister(sdev, "ipc_flood", i);
-+	}
-+
-+	return ret;
++	return sof_client_dev_register(sdev, "msg_injector", 0, NULL, 0);
 +}
 +
-+static void sof_unregister_ipc_flood_test(struct snd_sof_dev *sdev)
++static void sof_unregister_ipc_msg_injector(struct snd_sof_dev *sdev)
 +{
-+	int i;
-+
-+	for (i = 0; i < CONFIG_SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST_NUM; i++)
-+		sof_client_dev_unregister(sdev, "ipc_flood", i);
++	sof_client_dev_unregister(sdev, "msg_injector", 0);
 +}
 +#else
-+static inline int sof_register_ipc_flood_test(struct snd_sof_dev *sdev)
++static inline int sof_register_ipc_msg_injector(struct snd_sof_dev *sdev)
 +{
 +	return 0;
 +}
 +
-+static inline void sof_unregister_ipc_flood_test(struct snd_sof_dev *sdev) {}
-+#endif /* CONFIG_SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST */
++static inline void sof_unregister_ipc_msg_injector(struct snd_sof_dev *sdev) {}
++#endif /* CONFIG_SND_SOC_SOF_DEBUG_IPC_MSG_INJECTOR */
 +
  int sof_register_clients(struct snd_sof_dev *sdev)
  {
-+	int ret;
-+
-+	/* Register platform independent client devices */
-+	ret = sof_register_ipc_flood_test(sdev);
+ 	int ret;
+@@ -113,13 +132,24 @@ int sof_register_clients(struct snd_sof_dev *sdev)
+ 		return ret;
+ 	}
+ 
++	ret = sof_register_ipc_msg_injector(sdev);
 +	if (ret) {
-+		dev_err(sdev->dev, "IPC flood test client registration failed\n");
-+		return ret;
++		dev_err(sdev->dev, "IPC message injector client registration failed\n");
++		goto err_msg_injector;
 +	}
 +
-+	/* Platform depndent client device registration */
-+
+ 	/* Platform depndent client device registration */
+ 
  	if (sof_ops(sdev) && sof_ops(sdev)->register_ipc_clients)
--		return sof_ops(sdev)->register_ipc_clients(sdev);
-+		ret = sof_ops(sdev)->register_ipc_clients(sdev);
+ 		ret = sof_ops(sdev)->register_ipc_clients(sdev);
  
--	return 0;
-+	if (ret)
-+		sof_unregister_ipc_flood_test(sdev);
+-	if (ret)
+-		sof_unregister_ipc_flood_test(sdev);
++	if (!ret)
++		return 0;
 +
-+	return ret;
- }
++	sof_unregister_ipc_msg_injector(sdev);
++
++err_msg_injector:
++	sof_unregister_ipc_flood_test(sdev);
  
- void sof_unregister_clients(struct snd_sof_dev *sdev)
- {
+ 	return ret;
+ }
+@@ -129,6 +159,7 @@ void sof_unregister_clients(struct snd_sof_dev *sdev)
  	if (sof_ops(sdev) && sof_ops(sdev)->unregister_ipc_clients)
  		sof_ops(sdev)->unregister_ipc_clients(sdev);
-+
-+	sof_unregister_ipc_flood_test(sdev);
+ 
++	sof_unregister_ipc_msg_injector(sdev);
+ 	sof_unregister_ipc_flood_test(sdev);
  }
  
- int sof_client_dev_register(struct snd_sof_dev *sdev, const char *name, u32 id,
 diff --git a/sound/soc/sof/sof-priv.h b/sound/soc/sof/sof-priv.h
-index 39bbba5aeab2..1af61ff89345 100644
+index 1af61ff89345..2529408a4e90 100644
 --- a/sound/soc/sof/sof-priv.h
 +++ b/sound/soc/sof/sof-priv.h
-@@ -69,10 +69,6 @@ bool sof_debug_check_flag(int mask);
- #define SOF_FORMATS (SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S24_LE | \
- 	SNDRV_PCM_FMTBIT_S32_LE | SNDRV_PCM_FMTBIT_FLOAT)
- 
--#define ENABLE_DEBUGFS_CACHEBUF \
--	(IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_ENABLE_DEBUGFS_CACHE) || \
--	 IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_IPC_FLOOD_TEST))
--
- /* So far the primary core on all DSPs has ID 0 */
- #define SOF_DSP_PRIMARY_CORE 0
- 
-@@ -326,7 +322,7 @@ struct snd_sof_dfsentry {
- 	 * or if it is accessible only when the DSP is in D0.
- 	 */
+@@ -324,10 +324,6 @@ struct snd_sof_dfsentry {
  	enum sof_debugfs_access_type access_type;
--#if ENABLE_DEBUGFS_CACHEBUF
-+#if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_ENABLE_DEBUGFS_CACHE)
+ #if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_ENABLE_DEBUGFS_CACHE)
  	char *cache_buf; /* buffer to cache the contents of debugfs memory */
+-#endif
+-#if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_IPC_MSG_INJECTOR)
+-	void *msg_inject_tx;
+-	void *msg_inject_rx;
  #endif
- #if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_IPC_MSG_INJECTOR)
+ 	struct snd_sof_dev *sdev;
+ 	struct list_head list;  /* list in sdev dfsentry list */
 -- 
 2.35.1
 

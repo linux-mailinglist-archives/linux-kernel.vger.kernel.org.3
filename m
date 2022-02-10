@@ -2,78 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705814B0C03
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:13:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A03784B0C0F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240672AbiBJLNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 06:13:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48150 "EHLO
+        id S240695AbiBJLQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 06:16:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240640AbiBJLNw (ORCPT
+        with ESMTP id S240673AbiBJLQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 06:13:52 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EB9CD1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:13:53 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id k13so9702101lfg.9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:13:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=oJDCoiutr8vf5YbaLkWj3Md5jRXFjDATVFVc73zTlO4=;
-        b=tqTWjE0emnnEVVDqkiruTk9iUuvpPKmh3E0rPYH8TtvlVptcSmIUhw7brCsf/fNXgR
-         Dhpg+T/bYw8m+eFKQdLpp8u8YkOmwOT9Zz3ZIV1PtSdMOb0r5fcgigNVam8QOQfOYXRQ
-         +6QB/6iFXsqPUnev0XQROsvj5RNJSC5EMmf10C9/sSb07mlr+1FyD10qlAnLLJfzGdsI
-         8ARUsIL535nFmO/iUNQ1bnsrJcW+Up60nUVWClXGtXKyrXA6trGQZuji2aXPs9/K7vqa
-         EnaMazKitqvb1rKqBY0Y4NJ9P1Fm1iY7gDjOhcbmJA/0Uu0VaD9btwMi4pqgrZFWpJ5r
-         80mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oJDCoiutr8vf5YbaLkWj3Md5jRXFjDATVFVc73zTlO4=;
-        b=RGht0s92R9e/neQSDLxl1rT9gdqdwwnNmOmg7NSwyda4fHMRUqWpA/leiN976Yyzz0
-         y2oJKm9I2rrk+h9KBuTT5ngSGwEEHI/o2FPnkDh0LXyhhSmki58SyXol/HXhD9VXBAqz
-         4dZIgwor012oxqJpOsS6/UL1YseOK+ApA7ThXIgPSwV6AhxkFEzXGEtXqnIm3JMUHsi6
-         1D6hDIMGexNeN6hP40t0KFjrLttugx/vfa4kWypfp0lRDWDkLwwa7msFk0A20Cqrgv2M
-         rQOZTze9vRhGGI0lEXZRICC9le7yxHk5nFnnbZzJmOdN5Nv3nTIxIsK4thvLkdJoyFLv
-         UJOA==
-X-Gm-Message-State: AOAM531AnlufuW0GYHx0ikVZIz9bwZ3h/53RtdoDCB81K3wzffe/KdUp
-        JA7109fF+fcYrMDF1lMbZ4IPtg==
-X-Google-Smtp-Source: ABdhPJwXrWVvUCG7QjcWH2MIZavnkxCAKl/OfkTpOtukGvVRaDApv/WHbFo9GFzCxrZXpAJ4inv7zQ==
-X-Received: by 2002:a05:6512:1191:: with SMTP id g17mr4892062lfr.55.1644491631877;
-        Thu, 10 Feb 2022 03:13:51 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id f26sm2752418lfm.251.2022.02.10.03.13.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 03:13:51 -0800 (PST)
-Message-ID: <470a42b0-4b9e-33d4-37f4-0d7700207a18@linaro.org>
-Date:   Thu, 10 Feb 2022 14:13:50 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [REPOST PATCH v4 07/13] drm/msm/disp/dpu1: Add support for DSC in
- encoder
-Content-Language: en-GB
-To:     Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-References: <20220210103423.271016-1-vkoul@kernel.org>
- <20220210103423.271016-8-vkoul@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220210103423.271016-8-vkoul@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Thu, 10 Feb 2022 06:16:08 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F12CCD1;
+        Thu, 10 Feb 2022 03:16:09 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21A8jMK0010335;
+        Thu, 10 Feb 2022 11:16:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=jjl+l2gIH59pb2scj5j6m3QhM+UWJMqM+s2ZYSvpQN4=;
+ b=V6fLC0gH3wCgE76LPNfxveXkJIhARU1YRoDvZMkulUD1PjDM7zgjgH2Xu7mHEAsGmnH8
+ HEZDSjmn7Fy0mtQafwG7Z7lu531XMriDnu81ILbaaj4lxnzo9Un70l+Wi3c9Zd/4WRmM
+ azrL+gALPG/AoTEAVdP612Jxqq+jaJqMuMMoL5p34NJBPhSk4aBdN5awt3XrQQa0gWVM
+ JNrAdFeJAgTNZCGZvHCEQmzAj1gnG4ApXjFQapvUJTguE3m9PnDZEDFLr6g6GPKz6YoP
+ dw2c3Nwm3g6GqfYQx1E69M6irq02jtw8JW0nn8F+o0wmcsdXJnInhH7SAt32rY1KahAF yQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e4cryjvd2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Feb 2022 11:16:06 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21AAewYc008181;
+        Thu, 10 Feb 2022 11:16:05 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e4cryjvc1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Feb 2022 11:16:05 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21ABG3FH023991;
+        Thu, 10 Feb 2022 11:16:03 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3e1ggkfa8r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Feb 2022 11:16:03 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21ABG0ei46072270
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Feb 2022 11:16:00 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5D23D4C04A;
+        Thu, 10 Feb 2022 11:16:00 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 524884C04E;
+        Thu, 10 Feb 2022 11:15:59 +0000 (GMT)
+Received: from sig-9-145-10-197.uk.ibm.com (unknown [9.145.10.197])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 10 Feb 2022 11:15:59 +0000 (GMT)
+Message-ID: <13cf51210d125d48a47d55d9c6a20c93f5a2b78b.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 24/30] vfio-pci/zdev: wire up group notifier
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        linux-s390@vger.kernel.org, cohuck@redhat.com,
+        farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        frankja@linux.ibm.com, david@redhat.com, imbrenda@linux.ibm.com,
+        vneethv@linux.ibm.com, oberpar@linux.ibm.com, freude@linux.ibm.com,
+        thuth@redhat.com, pasic@linux.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 10 Feb 2022 12:15:58 +0100
+In-Reply-To: <20220208204041.GK4160@nvidia.com>
+References: <20220204211536.321475-1-mjrosato@linux.ibm.com>
+         <20220204211536.321475-25-mjrosato@linux.ibm.com>
+         <20220208104319.4861fb22.alex.williamson@redhat.com>
+         <20220208185141.GH4160@nvidia.com>
+         <20220208122624.43ad52ef.alex.williamson@redhat.com>
+         <438d8b1e-e149-35f1-a8c9-ed338eb97430@linux.ibm.com>
+         <20220208204041.GK4160@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: SBj8JJ4Oym0m4i0kZa7mH5EdtlbCSWbp
+X-Proofpoint-ORIG-GUID: DkazDgcZ_2_1InUZkd_IM6LLW0gKRWvX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-10_03,2022-02-09_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 clxscore=1011 adultscore=0 priorityscore=1501
+ phishscore=0 suspectscore=0 mlxlogscore=581 malwarescore=0 mlxscore=0
+ bulkscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2202100061
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,283 +106,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/2022 13:34, Vinod Koul wrote:
-> We need to configure the encoder for DSC configuration and calculate DSC
-> parameters for the given timing so this patch adds that support by
-> adding dpu_encoder_prep_dsc() which is invoked when DSC is enabled.
+On Tue, 2022-02-08 at 16:40 -0400, Jason Gunthorpe wrote:
+> On Tue, Feb 08, 2022 at 03:33:58PM -0500, Matthew Rosato wrote:
 > 
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c   | 164 +++++++++++++++++-
->   .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h  |   8 +
->   2 files changed, 171 insertions(+), 1 deletion(-)
+> > > Is the purpose of IOAT to associate the device to a set of KVM page
+> > > tables?  That seems like a container or future iommufd operation.  I
+> > 
+> > Yes, here we are establishing a relationship with the DMA table in the guest
+> > so that once mappings are established guest PCI operations (handled via
+> > special instructions in s390) don't need to go through the host but can be
+> > directly handled by firmware (so, effectively guest can keep running on its
+> > vcpu vs breaking out).
 > 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> index 1e648db439f9..95a7bf362e81 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> @@ -21,6 +21,7 @@
->   #include "dpu_hw_intf.h"
->   #include "dpu_hw_ctl.h"
->   #include "dpu_hw_dspp.h"
-> +#include "dpu_hw_dsc.h"
->   #include "dpu_formats.h"
->   #include "dpu_encoder_phys.h"
->   #include "dpu_crtc.h"
-> @@ -136,6 +137,8 @@ enum dpu_enc_rc_states {
->    * @cur_slave:		As above but for the slave encoder.
->    * @hw_pp:		Handle to the pingpong blocks used for the display. No.
->    *			pingpong blocks can be different than num_phys_encs.
-> + * @hw_dsc:		Handle to the DSC blocks used for the display.
-> + * @dsc_mask:		The bitmask of used DSC blocks.
->    * @intfs_swapped:	Whether or not the phys_enc interfaces have been swapped
->    *			for partial update right-only cases, such as pingpong
->    *			split where virtual pingpong does not generate IRQs
-> @@ -169,6 +172,7 @@ enum dpu_enc_rc_states {
->    * @topology:                   topology of the display
->    * @idle_timeout:		idle timeout duration in milliseconds
->    * @dp:				msm_dp pointer, for DP encoders
-> + * @dsc:			msm_display_dsc_config pointer, for DSC-enabled encoders
->    */
->   struct dpu_encoder_virt {
->   	struct drm_encoder base;
-> @@ -182,6 +186,9 @@ struct dpu_encoder_virt {
->   	struct dpu_encoder_phys *cur_master;
->   	struct dpu_encoder_phys *cur_slave;
->   	struct dpu_hw_pingpong *hw_pp[MAX_CHANNELS_PER_ENC];
-> +	struct dpu_hw_dsc *hw_dsc[MAX_CHANNELS_PER_ENC];
-> +
-> +	unsigned int dsc_mask;
->   
->   	bool intfs_swapped;
->   
-> @@ -209,6 +216,9 @@ struct dpu_encoder_virt {
->   	u32 idle_timeout;
->   
->   	struct msm_dp *dp;
-> +
-> +	/* DSC configuration */
-> +	struct msm_display_dsc_config *dsc;
->   };
->   
->   #define to_dpu_encoder_virt(x) container_of(x, struct dpu_encoder_virt, base)
-> @@ -972,7 +982,8 @@ static void dpu_encoder_virt_mode_set(struct drm_encoder *drm_enc,
->   	struct dpu_hw_blk *hw_ctl[MAX_CHANNELS_PER_ENC];
->   	struct dpu_hw_blk *hw_lm[MAX_CHANNELS_PER_ENC];
->   	struct dpu_hw_blk *hw_dspp[MAX_CHANNELS_PER_ENC] = { NULL };
-> -	int num_lm, num_ctl, num_pp;
-> +	struct dpu_hw_blk *hw_dsc[MAX_CHANNELS_PER_ENC];
-> +	int num_lm, num_ctl, num_pp, num_dsc;
->   	int i, j;
->   
->   	if (!drm_enc) {
-> @@ -1027,6 +1038,23 @@ static void dpu_encoder_virt_mode_set(struct drm_encoder *drm_enc,
->   		dpu_enc->hw_pp[i] = i < num_pp ? to_dpu_hw_pingpong(hw_pp[i])
->   						: NULL;
->   
-> +	dpu_enc->dsc_mask = 0;
-> +
-> +	if (dpu_enc->dsc) {
-> +		unsigned int dsc_mask = 0;
-> +
-> +		num_dsc = dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
-> +							drm_enc->base.id, DPU_HW_BLK_DSC,
-> +							hw_dsc, ARRAY_SIZE(hw_dsc));
-> +		for (i = 0; i < MAX_CHANNELS_PER_ENC; i++)
-> +			dpu_enc->hw_dsc[i] = i < num_dsc ? to_dpu_hw_dsc(hw_dsc[i]) : NULL;
-> +
-> +		for (i = 0; i < num_dsc; i++)
-> +			dsc_mask |= BIT(dpu_enc->hw_dsc[i]->idx - DSC_0);
-> +
-> +		dpu_enc->dsc_mask = dsc_mask;
-> +	}
-> +
->   	cstate = to_dpu_crtc_state(drm_crtc->state);
->   
->   	for (i = 0; i < num_lm; i++) {
-> @@ -1739,6 +1767,127 @@ static void dpu_encoder_vsync_event_work_handler(struct kthread_work *work)
->   			nsecs_to_jiffies(ktime_to_ns(wakeup_time)));
->   }
->   
-> +static void
-> +dpu_encoder_dsc_pclk_param_calc(struct msm_display_dsc_config *dsc, u32 width)
-> +{
-> +	int slice_count, slice_per_intf;
-> +	int bytes_in_slice, total_bytes_per_intf;
-> +
-> +	if (!dsc || !dsc->drm->slice_width || !dsc->drm->slice_count) {
-> +		DPU_ERROR("Invalid DSC/slices\n");
-> +		return;
-> +	}
-> +
-> +	slice_count = dsc->drm->slice_count;
-> +	slice_per_intf = DIV_ROUND_UP(width, dsc->drm->slice_width);
-> +
-> +	/*
-> +	 * If slice_count is greater than slice_per_intf then default to 1.
-> +	 * This can happen during partial update.
-> +	 */
-> +	if (slice_count > slice_per_intf)
-> +		slice_count = 1;
-> +
-> +	bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width *
-> +				      dsc->drm->bits_per_pixel, 8);
-> +	total_bytes_per_intf = bytes_in_slice * slice_per_intf;
-> +
-> +	dsc->eol_byte_num = total_bytes_per_intf % 3;
-> +	dsc->pclk_per_line =  DIV_ROUND_UP(total_bytes_per_intf, 3);
-> +	dsc->bytes_in_slice = bytes_in_slice;
-> +	dsc->bytes_per_pkt = bytes_in_slice * slice_count;
-> +	dsc->pkt_per_line = slice_per_intf / slice_count;
-> +}
-> +
-> +static void
-> +dpu_encoder_dsc_initial_line_calc(struct msm_display_dsc_config *dsc,
-> +				  u32 enc_ip_width)
-> +{
-> +	int ssm_delay, total_pixels, soft_slice_per_enc;
-> +
-> +	soft_slice_per_enc = enc_ip_width / dsc->drm->slice_width;
-> +
-> +	/*
-> +	 * minimum number of initial line pixels is a sum of:
-> +	 * 1. sub-stream multiplexer delay (83 groups for 8bpc,
-> +	 *    91 for 10 bpc) * 3
-> +	 * 2. for two soft slice cases, add extra sub-stream multiplexer * 3
-> +	 * 3. the initial xmit delay
-> +	 * 4. total pipeline delay through the "lock step" of encoder (47)
-> +	 * 5. 6 additional pixels as the output of the rate buffer is
-> +	 *    48 bits wide
-> +	 */
-> +	ssm_delay = ((dsc->drm->bits_per_component < 10) ? 84 : 92);
-> +	total_pixels = ssm_delay * 3 + dsc->drm->initial_xmit_delay + 47;
-> +	if (soft_slice_per_enc > 1)
-> +		total_pixels += (ssm_delay * 3);
-> +	dsc->initial_lines = DIV_ROUND_UP(total_pixels, dsc->drm->slice_width);
-> +}
-> +
-> +static void dpu_encoder_dsc_pipe_cfg(struct dpu_hw_dsc *hw_dsc,
-> +				     struct dpu_hw_pingpong *hw_pp,
-> +				     struct msm_display_dsc_config *dsc,
-> +				     u32 common_mode)
-> +{
-> +	if (hw_dsc->ops.dsc_config)
-> +		hw_dsc->ops.dsc_config(hw_dsc, dsc, common_mode);
-> +
-> +	if (hw_dsc->ops.dsc_config_thresh)
-> +		hw_dsc->ops.dsc_config_thresh(hw_dsc, dsc);
-> +
-> +	if (hw_pp->ops.setup_dsc)
-> +		hw_pp->ops.setup_dsc(hw_pp);
-> +
-> +	if (hw_pp->ops.enable_dsc)
-> +		hw_pp->ops.enable_dsc(hw_pp);
-> +}
-> +
-> +static void dpu_encoder_prep_dsc(struct dpu_encoder_virt *dpu_enc,
-> +				 struct msm_display_dsc_config *dsc)
-> +{
-> +	/* coding only for 2LM, 2enc, 1 dsc config */
-> +	struct dpu_encoder_phys *enc_master = dpu_enc->cur_master;
-> +	struct dpu_hw_dsc *hw_dsc[MAX_CHANNELS_PER_ENC];
-> +	struct dpu_hw_pingpong *hw_pp[MAX_CHANNELS_PER_ENC];
-> +	int this_frame_slices;
-> +	int intf_ip_w, enc_ip_w;
-> +	int dsc_common_mode;
-> +	int pic_width;
-> +	int i;
-> +
-> +	for (i = 0; i < MAX_CHANNELS_PER_ENC; i++) {
-> +		hw_pp[i] = dpu_enc->hw_pp[i];
-> +		hw_dsc[i] = dpu_enc->hw_dsc[i];
-> +
-> +		if (!hw_pp[i] || !hw_dsc[i]) {
-> +			DPU_ERROR_ENC(dpu_enc, "invalid params for DSC\n");
-> +			return;
-> +		}
-> +	}
-> +
-> +	dsc_common_mode = 0;
-> +	pic_width = dsc->drm->pic_width;
-> +
-> +	dsc_common_mode = DSC_MODE_MULTIPLEX | DSC_MODE_SPLIT_PANEL;
-> +	if (enc_master->intf_mode == INTF_MODE_VIDEO)
-> +		dsc_common_mode |= DSC_MODE_VIDEO;
-> +
-> +	this_frame_slices = pic_width / dsc->drm->slice_width;
-> +	intf_ip_w = this_frame_slices * dsc->drm->slice_width;
-> +
-> +	dpu_encoder_dsc_pclk_param_calc(dsc, intf_ip_w);
-> +
-> +	/*
-> +	 * dsc merge case: when using 2 encoders for the same stream,
-> +	 * no. of slices need to be same on both the encoders.
-> +	 */
-> +	enc_ip_w = intf_ip_w / 2;
-> +	dpu_encoder_dsc_initial_line_calc(dsc, enc_ip_w);
-> +
-> +	for (i = 0; i < MAX_CHANNELS_PER_ENC; i++)
-> +		dpu_encoder_dsc_pipe_cfg(hw_dsc[i], hw_pp[i], dsc, dsc_common_mode);
-> +}
-> +
->   void dpu_encoder_prepare_for_kickoff(struct drm_encoder *drm_enc)
->   {
->   	struct dpu_encoder_virt *dpu_enc;
-> @@ -1770,6 +1919,9 @@ void dpu_encoder_prepare_for_kickoff(struct drm_encoder *drm_enc)
->   			dpu_encoder_helper_hw_reset(dpu_enc->phys_encs[i]);
->   		}
->   	}
-> +
-> +	if (dpu_enc->dsc)
-> +		dpu_encoder_prep_dsc(dpu_enc, dpu_enc->dsc);
->   }
->   
->   void dpu_encoder_kickoff(struct drm_encoder *drm_enc)
-> @@ -2015,6 +2167,8 @@ static int dpu_encoder_setup_display(struct dpu_encoder_virt *dpu_enc,
->   		dpu_enc->idle_pc_supported =
->   				dpu_kms->catalog->caps->has_idle_pc;
->   
-> +	dpu_enc->dsc = disp_info->dsc;
-> +
->   	mutex_lock(&dpu_enc->enc_lock);
->   	for (i = 0; i < disp_info->num_of_h_tiles && !ret; i++) {
->   		/*
-> @@ -2244,3 +2398,11 @@ enum dpu_intf_mode dpu_encoder_get_intf_mode(struct drm_encoder *encoder)
->   
->   	return INTF_MODE_NONE;
->   }
-> +
-> +unsigned int dpu_encoder_helper_get_dsc(struct dpu_encoder_phys *phys_enc)
-> +{
-> +	struct drm_encoder *encoder = phys_enc->parent;
-> +	struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(encoder);
-> +
-> +	return dpu_enc->dsc_mask;
-> +}
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h
-> index e7270eb6b84b..7b90d644a41b 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h
-> @@ -332,6 +332,14 @@ static inline enum dpu_3d_blend_mode dpu_encoder_helper_get_3d_blend_mode(
->   	return BLEND_3D_NONE;
->   }
->   
-> +/**
-> + * dpu_encoder_helper_get_dsc - get DSC blocks mask for the DPU encoder
-> + *   This helper function is used by physical encoder to get DSC blocks mask
-> + *   used for this encoder.
-> + * @phys_enc: Pointer to physical encoder structure
-> + */
-> +unsigned int dpu_encoder_helper_get_dsc(struct dpu_encoder_phys *phys_enc);
-> +
->   /**
->    * dpu_encoder_helper_split_config - split display configuration helper function
->    *	This helper function may be used by physical encoders to configure
+> Oh, well, certainly sounds like a NAK on that - anything to do with
+> the DMA translation of a PCI device must go through the iommu layer,
+> not here.
+> 
+> Lets not repeat the iommu subsytem bypass mess power made please.
 
+Maybe some context on all of this. First it's important to note that on
+s390x the PCI IOMMU hardware is controlled with special instructions.
+For pass-through this is actually quite nice as it makes it relatively
+simple for us to always run with an IOMMU in the guest we simply need
+to provide the instructions. Meaning we get full IOMMU protection for
+pass-through devices on KVM guests, guests with pass-through remain
+pageable and we can even support nested pass-through.
 
--- 
-With best wishes
-Dmitry
+This is possible with relatively little overhead because we can do all
+of the per map/unmap guest IOMMU  operations with a single instruction
+intercept. The instruction we need to intercept is called Refresh PCI
+Translations (RPCIT). It's job is twofold.
+
+For an OS running directly on our machine hypervisor LPAR it flushes
+the IOMMU's TLB by informing it which pages have been invalidated while
+the hardware walks the page tables and fills the TLB on it's own for
+establishing a mapping for previously invalid IOVAs.
+
+In a KVM or z/VM guest the guest is informed that IOMMU translations
+need to be refreshed even for previously invalid IOVAs. With this the
+guest builds it's IOMMU translation tables as normal but then does a
+RPCIT for the IOVA range it touched. In the hypervisor we can then
+simply walk the translation tables, pin the guest pages and map them in
+the host IOMMU. Prior to this series this happened in QEMU which does
+the map via vfio-iommu-type1 from user-space. This works and will
+remain as a fallback. Sadly it is quite slow and has a large impact on
+performance as we need to do a lot of mapping operations as the DMA API
+of the guest goes through the virtual IOMMU. This series thus adds the
+same functionality but as a KVM intercept of RPCIT. Now I think this
+neatly fits into KVM, we're emulating an instruction after all and most
+of its work is KVM specific pinning of guest pages. Importantly all
+other handling like IOMMU domain attachment still goes through vfio-
+iommu-type1 and we just fast path the map/unmap operations.
+
+In the code the map/unmap boils down to dma_walk_cpu_trans() and parts
+of dma_shadow_cpu_trans() both called in dma_table_shadow(). The former
+is a function already shared between our DMA API and IOMMU API
+implementations and the only code that walks the host translation
+tables. So in a way we're side stepping the IOMMU API ops that is true
+but we do not side step the IOMMU host table access code paths. Notice
+how our IOMMU API is also < 400 LOC because both the DMA and IOMMU APIs
+share code.
+
+That said, I believe we should be able to do the mapping still in a KVM
+RPCIT intercept but going through IOMMU API ops if this side stepping
+is truly unacceptable. It definitely adds overhead though and I'm not
+sure what we gain in clarity or maintainability since we already share
+the actual host table access code and there is only one PCI IOMMU and
+that is part of the architecture. Also either KVM or QEMU needs to know
+about the same details for looking at guest IOMMU translation tables /
+emulating the guest IOMMU. It's also clear that the IOMMU API will
+remain functional on its own as it is necesssary for any non-KVM use
+case which of course can't intercept RPCIT but on the other hand can
+also keep mappings much longer signficantly reducing overhead.
+

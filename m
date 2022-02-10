@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2136A4B1900
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E2F4B1902
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345402AbiBJXFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 18:05:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56626 "EHLO
+        id S1345411AbiBJXF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 18:05:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239716AbiBJXFT (ORCPT
+        with ESMTP id S1345377AbiBJXF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 18:05:19 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B29855BB
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:05:20 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id 10so3183501plj.1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:05:20 -0800 (PST)
+        Thu, 10 Feb 2022 18:05:56 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D49155BB
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:05:56 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id a39so12133960pfx.7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:05:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=semihalf-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=qNkOMQl8A7JQLLAN3dPQVZBYTQmGZfJ4kUvqGnhtRTk=;
-        b=xdBflYLnhxEHNH6JIJuACj7OdWdgrvGdKoSrMPDYXmcLbjoiN+G1T37ecYmXol7rXR
-         B5vW+i/XKfhbdlk4c3Z6m+rXdO42mLs5N/2Ez/yio5Kyu9Az4E8eWKVrqALUXh7YEPc9
-         knBXltFv1ZPUzGFiiwHGeq2VY4hb/gOJzUJpPI7T0+qQJ1ZPDq7TBqfHin5+ywTLUBuh
-         7XPTS0bdKu7tvfqjIIbFXDGvJfz7FWYf5Rn4EWXK4IV2lkV7c8d4ENtaF/Q5a6gcvW46
-         pbFnGl1rAhyQ1lHgKmKSRugUVy303WZBK0T4pZQV4aKzeL5mStH5SfI8q9wkIQGkLHCc
-         Eisg==
+        bh=kJZrXnKlSxrjXbd3RYug7qVrQuHlSubZSZCjGAgo8T4=;
+        b=pNQoziWj07h4zslfeAEKP41bWOo3sO/yJWcqO/A73915ts3EeEVSQ4oiToHcfESyd6
+         GtjbtUCRsXDmi5XhNLoKpIK+lpE6SKAUEn9hIcmwm9XRM+FJSqsavYN3wmCSKuWdyCs+
+         ESTvUDypoE9TvzXF/2Qone/FMH+zNAOxzReSpY4FP4s7hdn5CPpj5V3i1cr39euOtWUy
+         UBOylmxUTqoEAeB9fevPvnaSGagIyLO6esskwvDnj0cAnEyXWQ0MwIB3iO6HIqagSs3H
+         I71bXk1pl9iaYcP7aNN06qvVWbCYJ+S8J4FtmJg9VmpWCQYx+1oZhR/2BRIFC8PNiluR
+         31iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:content-transfer-encoding;
-        bh=qNkOMQl8A7JQLLAN3dPQVZBYTQmGZfJ4kUvqGnhtRTk=;
-        b=GHTXyLyuuKZkfBy/5T1OY8t7wrsDZmzF2PyOMRc1G9gjVShC11iA2p7nG+K9sEjqOE
-         F24XIXMYf9qryO4ZCIfnzoWj74n7MGjkd0Eou1xz63L3QyXL9J8MjaWqgWA1yvCplVhh
-         zzRXwYHP7dL+Dx01Z2s9C/jK6R467glgXy3BIoWIDOqotKzeo4lyZw9jHjpWjUezuu21
-         jGRgwAZxFG9ZKRT+Q7GtJNox8Bu4T7uBuripsczsLNEFTT2V+VfDA+7VW1d56pqUSJgw
-         fafT77Pfg8Fo/07oHVjqNZsLDPotYtC99HF/3jLznkia54x39nDrysyJxtXyKh997H2E
-         9wJg==
-X-Gm-Message-State: AOAM530SnuzXkkYIuDPYP5sIPxnni3c2oVIoGZzIJA7LuHfRpSni6Lba
-        9l1dB/T3omYD+hRCkEiOVexawzs1LXR2ot3rx/wDNQ==
-X-Google-Smtp-Source: ABdhPJxaI7jmbXG/8FmqFKX7oMH4/7grnAKgz27+XnP7j6Wyj40STiwkaL0zsugwZ2UI/3p5t0dwMy6xeaBf7lvTR8U=
-X-Received: by 2002:a17:902:ec82:: with SMTP id x2mr9821081plg.139.1644534320059;
- Thu, 10 Feb 2022 15:05:20 -0800 (PST)
+        bh=kJZrXnKlSxrjXbd3RYug7qVrQuHlSubZSZCjGAgo8T4=;
+        b=4WFp99bq+W+xrXxqHjdg6OnyCf2/Bw2aKGgMtxMrlfrJP+YYc3a3C0KttYGsaCSJnw
+         ELjKQAfl6PiAInu2I3d89bii4OoQAd9wpEO4OHPfa380GQVM8Bw/Zxy7a0cXNYuILpgj
+         JDJ9hdwvoBhKvnh/rWD4JO/eAYvG3dYwuKOJDz6nT8Nt5WHEvKC0HCo60mLRCdB+MGh+
+         hdZVwNSUvQt4e8hiApYykAFUoEkSPbtbRE/91p4r+JdjM3v2plnGCpF9Hk9tej/8ZaPD
+         fJfp+LObA6f9FdZO03+CoBXZ35EFNkShnA1IY7Ygv1apjvLLWSkwkYFyjVCHTI3SvTh9
+         c5Fg==
+X-Gm-Message-State: AOAM532269J4VsfS+ytcRbTgHbr+V1dfWeLh0wOYI9kBSxHNFp4N+5Aj
+        jcecVAeU8uuyFKcPR1fCJn4gLyPK/c7UfOJU5UJ2Xw==
+X-Google-Smtp-Source: ABdhPJz+Z/Y4py18mYB9eOlDDSIClqj/qJhYYV/2ESV7+c6avGFBXkdIO0PdvABjMYEYUn0hB5b6yrkhz+rDHKAmWJY=
+X-Received: by 2002:a63:6a06:: with SMTP id f6mr7998246pgc.18.1644534355976;
+ Thu, 10 Feb 2022 15:05:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20220208141218.2049591-1-jsd@semihalf.com> <20220208141218.2049591-3-jsd@semihalf.com>
- <YgWNE05eVK+LijL/@kunai>
-In-Reply-To: <YgWNE05eVK+LijL/@kunai>
+References: <20220208141218.2049591-1-jsd@semihalf.com> <20220208141218.2049591-2-jsd@semihalf.com>
+ <YgWMyj6ZZzBQRODX@kunai>
+In-Reply-To: <YgWMyj6ZZzBQRODX@kunai>
 From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Fri, 11 Feb 2022 00:05:08 +0100
-Message-ID: <CAOtMz3OyYXeyrpcSUpHZCR4tqroKWd09gYsjsU2W_idt8udMbQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] i2c: designware: Add AMD PSP I2C bus support
+Date:   Fri, 11 Feb 2022 00:05:45 +0100
+Message-ID: <CAOtMz3PLx4oqDYZ19vDrSXJkzhUXhWAKwvxBz=V8S4b4xEEQhg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] i2c: designware: Add missing locks
 To:     Wolfram Sang <wsa@kernel.org>, Jan Dabros <jsd@semihalf.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-i2c <linux-i2c@vger.kernel.org>,
@@ -77,43 +77,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-czw., 10 lut 2022 o 23:09 Wolfram Sang <wsa@kernel.org> napisa=C5=82(a):
+czw., 10 lut 2022 o 23:08 Wolfram Sang <wsa@kernel.org> napisa=C5=82(a):
 >
-> On Tue, Feb 08, 2022 at 03:12:18PM +0100, Jan Dabros wrote:
-> > Implement an I2C controller sharing mechanism between the host (kernel)
-> > and PSP co-processor on some platforms equipped with AMD Cezanne SoC.
+> On Tue, Feb 08, 2022 at 03:12:17PM +0100, Jan Dabros wrote:
+> > All accesses to controller's registers should be protected on
+> > probe, disable and xfer paths. This is needed for i2c bus controllers
+> > that are shared with but not controller by kernel.
 > >
-> > On these platforms we need to implement "software" i2c arbitration.
-> > Default arbitration owner is PSP and kernel asks for acquire as well
-> > as inform about release of the i2c bus via mailbox mechanism.
-> >
-> >             +---------+
-> >  <- ACQUIRE |         |
-> >   +---------|   CPU   |\
-> >   |         |         | \      +----------+  SDA
+> > Signed-off-by: Jan Dabros <jsd@semihalf.com>
+> > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 >
 > Applied to for-next, thanks!
 
-Thanks a lot!
-
-> I fixed the following checkpatch warnings:
->
-> CHECK: Please don't use multiple blank lines
-> #232: FILE: drivers/i2c/busses/i2c-designware-amdpsp.c:92:
-> +
-> +
->
-> WARNING: braces {} are not necessary for single statement blocks
-> #361: FILE: drivers/i2c/busses/i2c-designware-amdpsp.c:221:
-> +       if (ret) {
-> +               goto cleanup;
-> +       }
->
-> Please also use checkpatch next time.
-
-Ooops, sorry for this. Actually I used checkpatch till v3, but forgot
-to run this on v4 where this change was introduced, my bad. Will
-improve going forward :)
+Thanks!
 
 Best Regards,
 Jan

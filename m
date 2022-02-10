@@ -2,174 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131684B0878
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:35:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3B24B090F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237595AbiBJIeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 03:34:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36646 "EHLO
+        id S238174AbiBJJBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:01:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234928AbiBJIeD (ORCPT
+        with ESMTP id S238141AbiBJJBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 03:34:03 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C76E4F
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 00:34:03 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 63A21FF807;
-        Thu, 10 Feb 2022 08:34:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644482041;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HgitZVATVaYH5V1qanLOVQRl0TQFTmB+LKJYVRUVulU=;
-        b=KdXvZxmhx5PkcLFZcpXpmXWPoMY3ds+nmck8VKPrOqfjF2ywuLYlvdZVwFrXX0xZXFDQQV
-        4QnGOsAhEsg9rlJQlKpk7sRWCoFsCS1taZGAAjzXRonHsUgg6Rmuvs0gYZCLyJJ1VWsUCj
-        zi+pd4iKGqjkK4Ekc/R98hW/ztRUcG6hPvWFUJaAXM4tUhpk8wjRJjtdAu+jhUC6Cjb+UY
-        dFUYZF73+biq7T9RM4ivAcLOU65ExDMTHIzDKTmk2CP2NbPwiurZ1uIwAw3Xi5M3I/y2FW
-        5OK4Opzzqza0fY5cfW2QYtfs7Lmbd63N9X/mc5QTPidjhu/KqZeU7Hsp0vgKug==
-Date:   Thu, 10 Feb 2022 09:33:59 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     kbuild@lists.01.org, lkp@intel.com, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [mtd:spi-mem-ecc 16/29] drivers/mtd/nand/ecc-mxic.c:652
- mxic_ecc_finish_io_req_external() error: uninitialized symbol 'ret'.
-Message-ID: <20220210093359.779eb1dc@xps13>
-In-Reply-To: <202202100023.AD5wMMvp-lkp@intel.com>
-References: <202202100023.AD5wMMvp-lkp@intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Thu, 10 Feb 2022 04:01:53 -0500
+X-Greylist: delayed 1587 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 01:01:55 PST
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C68103B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:01:55 -0800 (PST)
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nI4v5-000E2A-Ja; Thu, 10 Feb 2022 09:35:15 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nI4v5-000DEK-0s; Thu, 10 Feb 2022 09:35:15 +0100
+Subject: Re: [syzbot] WARNING: kmalloc bug in xdp_umem_create (2)
+To:     Willy Tarreau <w@1wt.eu>,
+        syzbot <syzbot+11421fbbff99b989670e@syzkaller.appspotmail.com>
+Cc:     akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
+        bjorn.topel@gmail.com, bjorn.topel@intel.com, bjorn@kernel.org,
+        bpf@vger.kernel.org, davem@davemloft.net, fgheet255t@gmail.com,
+        hawk@kernel.org, john.fastabend@gmail.com,
+        jonathan.lemon@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        magnus.karlsson@intel.com, mudongliangabcd@gmail.com,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
+        yhs@fb.com
+References: <000000000000a3571605d27817b5@google.com>
+ <0000000000001f60ef05d7a3c6ad@google.com> <20220210081125.GA4616@1wt.eu>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <359ee592-747f-8610-4180-5e1d2aba1b77@iogearbox.net>
+Date:   Thu, 10 Feb 2022 09:35:14 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220210081125.GA4616@1wt.eu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26448/Wed Feb  9 10:31:19 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan,
+On 2/10/22 9:11 AM, Willy Tarreau wrote:
+> On Wed, Feb 09, 2022 at 10:08:07PM -0800, syzbot wrote:
+>> syzbot has bisected this issue to:
+>>
+>> commit 7661809d493b426e979f39ab512e3adf41fbcc69
+>> Author: Linus Torvalds <torvalds@linux-foundation.org>
+>> Date:   Wed Jul 14 16:45:49 2021 +0000
+>>
+>>      mm: don't allow oversized kvmalloc() calls
+>>
+>> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13bc74c2700000
+>> start commit:   f4bc5bbb5fef Merge tag 'nfsd-5.17-2' of git://git.kernel.o..
+>> git tree:       upstream
+>> final oops:     https://syzkaller.appspot.com/x/report.txt?x=107c74c2700000
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=17bc74c2700000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=5707221760c00a20
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=11421fbbff99b989670e
+>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e514a4700000
+>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15fcdf8a700000
+>>
+>> Reported-by: syzbot+11421fbbff99b989670e@syzkaller.appspotmail.com
+>> Fixes: 7661809d493b ("mm: don't allow oversized kvmalloc() calls")
+>>
+>> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> 
+> Interesting, so in fact syzkaller has shown that the aforementioned
+> patch does its job well and has spotted a call path by which a single
+> userland setsockopt() can request more than 2 GB allocation in the
+> kernel. Most likely that's in fact what needs to be addressed.
+> 
+> FWIW the call trace at the URL above is:
+> 
+> Call Trace:
+>   kvmalloc include/linux/mm.h:806 [inline]
+>   kvmalloc_array include/linux/mm.h:824 [inline]
+>   kvcalloc include/linux/mm.h:829 [inline]
+>   xdp_umem_pin_pages net/xdp/xdp_umem.c:102 [inline]
+>   xdp_umem_reg net/xdp/xdp_umem.c:219 [inline]
+>   xdp_umem_create+0x6a5/0xf00 net/xdp/xdp_umem.c:252
+>   xsk_setsockopt+0x604/0x790 net/xdp/xsk.c:1068
+>   __sys_setsockopt+0x1fd/0x4e0 net/socket.c:2176
+>   __do_sys_setsockopt net/socket.c:2187 [inline]
+>   __se_sys_setsockopt net/socket.c:2184 [inline]
+>   __x64_sys_setsockopt+0xb5/0x150 net/socket.c:2184
+>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>   do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>   entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> and the meaningful part of the repro is:
+> 
+>    syscall(__NR_mmap, 0x1ffff000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
+>    syscall(__NR_mmap, 0x20000000ul, 0x1000000ul, 7ul, 0x32ul, -1, 0ul);
+>    syscall(__NR_mmap, 0x21000000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
+>    intptr_t res = 0;
+>    res = syscall(__NR_socket, 0x2cul, 3ul, 0);
+>    if (res != -1)
+>      r[0] = res;
+>    *(uint64_t*)0x20000080 = 0;
+>    *(uint64_t*)0x20000088 = 0xfff02000000;
+>    *(uint32_t*)0x20000090 = 0x800;
+>    *(uint32_t*)0x20000094 = 0;
+>    *(uint32_t*)0x20000098 = 0;
+>    syscall(__NR_setsockopt, r[0], 0x11b, 4, 0x20000080ul, 0x20ul);
 
-dan.carpenter@oracle.com wrote on Wed, 9 Feb 2022 20:58:57 +0300:
+Bjorn had a comment back then when the issue was first raised here:
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi=
--mem-ecc
-> head:   b556a86810e25b9d5a56da553bc65e5f4dcbedb6
-> commit: f46b431b115d2ead7ccf71da53a5d1993f0acfcd [16/29] mtd: nand: mxic-=
-ecc: Support SPI pipelined mode
-> config: arm64-randconfig-m031-20220209 (https://download.01.org/0day-ci/a=
-rchive/20220210/202202100023.AD5wMMvp-lkp@intel.com/config)
-> compiler: aarch64-linux-gcc (GCC) 11.2.0
->=20
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
->=20
-> vim +/ret +652 drivers/mtd/nand/ecc-mxic.c
->=20
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  611  static int mxic_ecc_finish=
-_io_req_external(struct nand_device *nand,
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  612  					   struct nand_page_i=
-o_req *req)
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  613  {
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  614  	struct mxic_ecc_engine *m=
-xic =3D nand_to_mxic(nand);
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  615  	struct mxic_ecc_ctx *ctx =
-=3D nand_to_ecc_ctx(nand);
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  616  	int nents, step, ret;
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  617 =20
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  618  	if (req->mode =3D=3D MTD_=
-OPS_RAW)
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  619  		return 0;
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  620 =20
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  621  	if (req->type =3D=3D NAND=
-_PAGE_WRITE) {
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  622  		nand_ecc_restore_req(&ct=
-x->req_ctx, req);
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  623  		return 0;
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  624  	}
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  625 =20
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  626  	/* Copy the OOB buffer an=
-d add room for the ECC engine status bytes */
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  627  	mxic_ecc_add_room_in_oobb=
-uf(ctx, ctx->oobwithstat, ctx->req->oobbuf.in);
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  628 =20
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  629  	sg_set_buf(&ctx->sg[0], r=
-eq->databuf.in, req->datalen);
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  630  	sg_set_buf(&ctx->sg[1], c=
-tx->oobwithstat,
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  631  		   req->ooblen + (ctx->s=
-teps * STAT_BYTES));
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  632  	nents =3D dma_map_sg(mxic=
-->dev, ctx->sg, 2, DMA_BIDIRECTIONAL);
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  633  	if (!nents)
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  634  		return -EINVAL;
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  635 =20
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  636  	mutex_lock(&mxic->lock);
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  637 =20
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  638  	for (step =3D 0; step < c=
-tx->steps; step++) {
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  639  		writel(sg_dma_address(&c=
-tx->sg[0]) + (step * ctx->data_step_sz),
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  640  		       mxic->regs + SDMA=
-_MAIN_ADDR);
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  641  		writel(sg_dma_address(&c=
-tx->sg[1]) + (step * (ctx->oob_step_sz + STAT_BYTES)),
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  642  		       mxic->regs + SDMA=
-_SPARE_ADDR);
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  643  		ret =3D mxic_ecc_process=
-_data(mxic, ctx->req->type);
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  644  		if (ret)
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  645  			break;
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  646  	}
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  647 =20
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  648  	mutex_unlock(&mxic->lock);
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  649 =20
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  650  	dma_unmap_sg(mxic->dev, c=
-tx->sg, 2, DMA_BIDIRECTIONAL);
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  651 =20
-> f46b431b115d2ea Miquel Raynal 2021-12-16 @652  	if (!ret) {
->=20
-> Hi Miquel,
->=20
-> This if statement is reversed.  No !
+   https://lore.kernel.org/bpf/3f854ca9-f5d6-4065-c7b1-5e5b25ea742f@iogearbox.net/
 
--___-
+There was earlier discussion from Andrew to potentially retire the warning:
 
-I've attempted to do something else, and finally got rid of it, but
-left the '!' behind...
+   https://lore.kernel.org/bpf/20211201202905.b9892171e3f5b9a60f9da251@linux-foundation.org/
 
-> f46b431b115d2ea Miquel Raynal 2021-12-16  653  		nand_ecc_restore_req(&ct=
-x->req_ctx, req);
-> f46b431b115d2ea Miquel Raynal 2021-12-16  654  		return ret;
-> f46b431b115d2ea Miquel Raynal 2021-12-16  655  	}
-> f46b431b115d2ea Miquel Raynal 2021-12-16  656 =20
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  657  	/* Extract the status byt=
-es and reconstruct the buffer */
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  658  	mxic_ecc_extract_status_b=
-ytes(ctx);
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  659  	mxic_ecc_reconstruct_oobb=
-uf(ctx, ctx->req->oobbuf.in, ctx->oobwithstat);
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  660 =20
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  661  	nand_ecc_restore_req(&ctx=
-->req_ctx, req);
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  662 =20
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  663  	return mxic_ecc_count_bit=
-errs(mxic, nand);
-> 48e6633a9fa2400 Miquel Raynal 2021-12-16  664  }
->=20
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
->=20
-
+Bjorn / Magnus / Andrew, anyone planning to follow-up on this issue?
 
 Thanks,
-Miqu=C3=A8l
+Daniel

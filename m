@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC96D4B16B1
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8FE4B16B0
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 21:07:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344071AbiBJUGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 15:06:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57584 "EHLO
+        id S1344085AbiBJUGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 15:06:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239246AbiBJUGf (ORCPT
+        with ESMTP id S1344056AbiBJUGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 10 Feb 2022 15:06:35 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4DBE5595;
-        Thu, 10 Feb 2022 12:06:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B89F5F4F;
+        Thu, 10 Feb 2022 12:06:36 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 62BE3D6E;
-        Thu, 10 Feb 2022 12:06:33 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 451A5106F;
+        Thu, 10 Feb 2022 12:06:36 -0800 (PST)
 Received: from e121896.arm.com (unknown [10.57.18.41])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0E2F23F70D;
-        Thu, 10 Feb 2022 12:06:29 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F11793F70D;
+        Thu, 10 Feb 2022 12:06:33 -0800 (PST)
 From:   James Clark <james.clark@arm.com>
 To:     acme@kernel.org, linux-perf-users@vger.kernel.org,
         mathieu.poirier@linaro.org, coresight@lists.linaro.org
@@ -34,10 +34,12 @@ Cc:     James Clark <james.clark@arm.com>,
         Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] perf: cs-etm: No-op refactor of synth opt usage
-Date:   Thu, 10 Feb 2022 20:06:19 +0000
-Message-Id: <20220210200620.1227232-1-james.clark@arm.com>
+Subject: [PATCH 2/2] perf: cs-etm: Fix corrupt inject files when only last branch option is enabled
+Date:   Thu, 10 Feb 2022 20:06:20 +0000
+Message-Id: <20220210200620.1227232-2-james.clark@arm.com>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20220210200620.1227232-1-james.clark@arm.com>
+References: <20220210200620.1227232-1-james.clark@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
@@ -49,83 +51,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sample_branches and sample_instructions are already saved in the
-synth_opts struct. Other usages like synth_opts.last_branch don't save
-a value, so make this more consistent by always going through synth_opts
-and not saving duplicate values.
+Perf inject with Coresight data generates files that cannot be opened
+when only the last branch option is specified:
+
+  perf inject -i perf.data --itrace=l -o inject.data
+  perf script -i inject.data
+  0x33faa8 [0x8]: failed to process type: 9 [Bad address]
+
+This is because cs_etm__synth_instruction_sample() is called even when
+the sample type for instructions hasn't been setup. Last branch records
+are attached to instruction samples so it doesn't make sense to generate
+them when --itrace=i isn't specified anyway.
+
+This change disables all calls of cs_etm__synth_instruction_sample()
+unless --itrace=i is specified, resulting in a file with no samples if
+only --itrace=l is provided, rather than a bad file.
 
 Signed-off-by: James Clark <james.clark@arm.com>
 ---
- tools/perf/util/cs-etm.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+ tools/perf/util/cs-etm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-index 4f672f7d008c..796a065a500e 100644
+index 796a065a500e..8b95fb3c4d7b 100644
 --- a/tools/perf/util/cs-etm.c
 +++ b/tools/perf/util/cs-etm.c
-@@ -50,8 +50,6 @@ struct cs_etm_auxtrace {
- 	u8 timeless_decoding;
- 	u8 snapshot_mode;
- 	u8 data_queued;
--	u8 sample_branches;
--	u8 sample_instructions;
+@@ -1553,6 +1553,7 @@ static int cs_etm__flush(struct cs_etm_queue *etmq,
+ 		goto swap_packet;
  
- 	int num_cpu;
- 	u64 latest_kernel_timestamp;
-@@ -410,8 +408,8 @@ static void cs_etm__packet_swap(struct cs_etm_auxtrace *etm,
- {
- 	struct cs_etm_packet *tmp;
- 
--	if (etm->sample_branches || etm->synth_opts.last_branch ||
--	    etm->sample_instructions) {
-+	if (etm->synth_opts.branches || etm->synth_opts.last_branch ||
-+	    etm->synth_opts.instructions) {
- 		/*
- 		 * Swap PACKET with PREV_PACKET: PACKET becomes PREV_PACKET for
- 		 * the next incoming packet.
-@@ -1365,7 +1363,6 @@ static int cs_etm__synth_events(struct cs_etm_auxtrace *etm,
- 		err = cs_etm__synth_event(session, &attr, id);
- 		if (err)
- 			return err;
--		etm->sample_branches = true;
- 		etm->branches_sample_type = attr.sample_type;
- 		etm->branches_id = id;
- 		id += 1;
-@@ -1389,7 +1386,6 @@ static int cs_etm__synth_events(struct cs_etm_auxtrace *etm,
- 		err = cs_etm__synth_event(session, &attr, id);
- 		if (err)
- 			return err;
--		etm->sample_instructions = true;
- 		etm->instructions_sample_type = attr.sample_type;
- 		etm->instructions_id = id;
- 		id += 1;
-@@ -1420,7 +1416,7 @@ static int cs_etm__sample(struct cs_etm_queue *etmq,
- 	    tidq->prev_packet->last_instr_taken_branch)
- 		cs_etm__update_last_branch_rb(etmq, tidq);
- 
--	if (etm->sample_instructions &&
-+	if (etm->synth_opts.instructions &&
- 	    tidq->period_instructions >= etm->instructions_sample_period) {
- 		/*
- 		 * Emit instruction sample periodically
-@@ -1503,7 +1499,7 @@ static int cs_etm__sample(struct cs_etm_queue *etmq,
- 		}
- 	}
- 
--	if (etm->sample_branches) {
-+	if (etm->synth_opts.branches) {
- 		bool generate_sample = false;
- 
- 		/* Generate sample for tracing on packet */
-@@ -1582,7 +1578,7 @@ static int cs_etm__flush(struct cs_etm_queue *etmq,
- 
- 	}
- 
--	if (etm->sample_branches &&
-+	if (etm->synth_opts.branches &&
+ 	if (etmq->etm->synth_opts.last_branch &&
++	    etmq->etm->synth_opts.instructions &&
  	    tidq->prev_packet->sample_type == CS_ETM_RANGE) {
- 		err = cs_etm__synth_branch_sample(etmq, tidq);
- 		if (err)
+ 		u64 addr;
+ 
+@@ -1610,6 +1611,7 @@ static int cs_etm__end_block(struct cs_etm_queue *etmq,
+ 	 * the trace.
+ 	 */
+ 	if (etmq->etm->synth_opts.last_branch &&
++	    etmq->etm->synth_opts.instructions &&
+ 	    tidq->prev_packet->sample_type == CS_ETM_RANGE) {
+ 		u64 addr;
+ 
 -- 
 2.28.0
 

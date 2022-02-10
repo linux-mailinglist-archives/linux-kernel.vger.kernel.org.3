@@ -2,156 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4EF4B040B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 04:43:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B8D4B03F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 04:31:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232964AbiBJDnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 22:43:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33222 "EHLO
+        id S232452AbiBJDaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 22:30:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbiBJDnN (ORCPT
+        with ESMTP id S229898AbiBJDat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 22:43:13 -0500
-X-Greylist: delayed 914 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 19:43:13 PST
-Received: from m13101.mail.163.com (m13101.mail.163.com [220.181.13.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B29DC23BF6;
-        Wed,  9 Feb 2022 19:43:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=c85HH
-        iv/NNEvYmRAHu1FxIBJCC6ptXYLNbFxD5zqy/Y=; b=XF+4k8ofwDlWT6dL+rV3t
-        d8peBguI8sr7WxTMIRYVKGthPHWNoCQhGFUUZB7oPDCdaCYDPp67b4RSdTzyuOCK
-        g7UL043+SmtRAMBQvgRQ1sPOBrdhkU9h9YY8La5WoV0bDn5vVaFnIRpUs8UqaqW5
-        iUL95OjSLZngWLPJ5whm2c=
-Received: from slark_xiao$163.com ( [112.97.49.191] ) by
- ajax-webmail-wmsvr101 (Coremail) ; Thu, 10 Feb 2022 11:27:45 +0800 (CST)
-X-Originating-IP: [112.97.49.191]
-Date:   Thu, 10 Feb 2022 11:27:45 +0800 (CST)
-From:   "Slark Xiao" <slark_xiao@163.com>
-To:     "Johan Hovold" <johan@kernel.org>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH] USB: serial: option: add support for DW5829e
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <YgPPNVzyg7Gypzv9@hovoldconsulting.com>
-References: <20220209031535.9668-1-slark_xiao@163.com>
- <YgPPNVzyg7Gypzv9@hovoldconsulting.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Wed, 9 Feb 2022 22:30:49 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A146F23BD5;
+        Wed,  9 Feb 2022 19:30:51 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id a39so7041770pfx.7;
+        Wed, 09 Feb 2022 19:30:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AmLyqfUdlL8DhLFGxGUWbqjZWjMo7jccpA1AQzm3NEQ=;
+        b=iMTVcsTiBpdcgE/LXjjjSy9WbEr3RQtlPc14mGvHY8KipI8360dhwh2Bu9pGSdNrGk
+         f5uUflfGWeev1ojIFa7OxtHdZnWEtY3PUZ44BPs/MkEy2LniSd+Ais+/r0ZMdgcHLHGK
+         bTSibGgPe+xucmleAu1TAyDpYtyw6H20nlJBX8hWgvqygH+ZQexf9LLDAKScY5LN604o
+         gz6vASlIW/mZK15So5XVBCMbU2a2IuJfZpC2IiuxYoNzac4cGqrdf69WZCHkfSEj3evR
+         VJeudmoCDUocuwCl6jFh1I9EkHkhNTGMiyo7LofAalaTEHl7Ayqu3/Wi2cUTJhi02Cjw
+         kvFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AmLyqfUdlL8DhLFGxGUWbqjZWjMo7jccpA1AQzm3NEQ=;
+        b=6a00P4sTYZSAIS34y0FtuJwUKiVzJJNLtY8GViOXoz9NBcdRnNs9u50AB/DtpMisjS
+         XtLm1WQMGNruH//bclvR4rIjtwRQ7UvWKxlC9ijR+JqvKIoJ3k77L43CbHExUozS8R4U
+         75JunipDgY5+NQgGB1xAyjTDD/OPUiwflkzL9fJKFk9jjdzASv2zaWfMRzfmmVBgMXIn
+         rP7ZGQo0fpw9Nv7zaUir4gyFxJXl1nZMIBcjHjQP9Maa7skdRuiLrM6yc7Utyvfr2faq
+         QwWJj6K1AF28GTumSb56SJvhmUQ1dpYAtjlx3U4w3rGHQQIZVsQ3DSeMYCUwj0CPNNyS
+         Fipg==
+X-Gm-Message-State: AOAM53191gBATiHG2sT9HiNsSnnBqmtqL3VZp1soJ0FxPoEvdTVoiwut
+        dxtAb/Kw8KFYx6Z3EXvU0bY=
+X-Google-Smtp-Source: ABdhPJwr143OVyAx/RUyXpTOD2E0EgWk95VWXJ/HPx31CxiYCtnw5wbPpLyMHoaRRGCKRhw4UzvzzQ==
+X-Received: by 2002:a63:2c0c:: with SMTP id s12mr4523537pgs.331.1644463851128;
+        Wed, 09 Feb 2022 19:30:51 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id o21sm22276367pfu.100.2022.02.09.19.30.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Feb 2022 19:30:50 -0800 (PST)
+Message-ID: <6c74b2f8-dd83-c4f2-cadd-07794a37dfac@gmail.com>
+Date:   Wed, 9 Feb 2022 19:30:48 -0800
 MIME-Version: 1.0
-Message-ID: <62feaf3.248f.17ee1ac3017.Coremail.slark_xiao@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: ZcGowACXTmkyhgRizC8jAA--.29194W
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiow+jZFUMa6bjEgACsM
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] net: dsa: qca8k: fix noderef.cocci warnings
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>,
+        Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <202202100634.l8CtrpzE-lkp@intel.com>
+ <20220209221304.GA17529@d2214a582157>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220209221304.GA17529@d2214a582157>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgpBdCAyMDIyLTAyLTA5IDIyOjI3OjAxLCAiSm9oYW4gSG92b2xkIiA8am9oYW5Aa2VybmVsLm9y
-Zz4gd3JvdGU6Cgo+T24gV2VkLCBGZWIgMDksIDIwMjIgYXQgMTE6MTU6MzVBTSArMDgwMCwgU2xh
-cmsgWGlhbyB3cm90ZToKPj4gRGVsbCBEVzU4MjllIHNhbWUgYXMgRFc1ODIxZSBleGNlcHQgQ0FU
-IGxldmVsLgo+PiBEVzU4MjFlIHN1cHBvcnRzIENBVDE2IGJ1dCBEVzU4MjllIHN1cHBvcnRzIENB
-VDkuCj4+IFRoZXJlIGFyZSAyIHR5cGVzIHByb2R1Y3Qgb2YgRFc1ODI5ZTogbm9ybWFsIGFuZCBl
-U0lNLgo+PiBTbyB3ZSB3aWxsIGFkZCAyIFBJRCBmb3IgRFc1ODI5ZS4KPj4gQW5kIGZvciBlYWNo
-IFBJRCwgaXQgc3VwcG9ydCBNQklNIG9yIFJNTkVULgo+PiBMZXQncyBzZWUgdGVzdCBldmlkZW5j
-ZSBhcyBiZWxvdzoKPj4gCj4+IERXNTgyOWUgTUJJTSBtb2RlOgo+PiBUOiAgQnVzPTA0IExldj0w
-MSBQcm50PTAxIFBvcnQ9MDEgQ250PTAxIERldiM9ICA0IFNwZD01MDAwIE14Q2g9IDAKPj4gRDog
-IFZlcj0gMy4xMCBDbHM9ZWYobWlzYyApIFN1Yj0wMiBQcm90PTAxIE14UFM9IDkgI0NmZ3M9ICAy
-Cj4+IFA6ICBWZW5kb3I9NDEzYyBQcm9kSUQ9ODFlNiBSZXY9MDMuMTgKPj4gUzogIE1hbnVmYWN0
-dXJlcj1EZWxsIEluYy4KPj4gUzogIFByb2R1Y3Q9RFc1ODI5ZSBTbmFwZHJhZ29uIFgyMCBMVEUK
-Pj4gUzogIFNlcmlhbE51bWJlcj0wMTIzNDU2Nzg5QUJDREVGCj4+IEM6ICAjSWZzPSA3IENmZyM9
-IDIgQXRyPWEwIE14UHdyPTg5Nm1BCj4+IEk6ICBJZiM9MHgwIEFsdD0gMCAjRVBzPSAxIENscz0w
-Mihjb21tYykgU3ViPTBlIFByb3Q9MDAgRHJpdmVyPWNkY19tYmltCj4+IEk6ICBJZiM9MHgxIEFs
-dD0gMSAjRVBzPSAyIENscz0wYShkYXRhICkgU3ViPTAwIFByb3Q9MDIgRHJpdmVyPWNkY19tYmlt
-Cj4+IEk6ICBJZiM9MHgyIEFsdD0gMCAjRVBzPSAzIENscz1mZih2ZW5kLikgU3ViPTAwIFByb3Q9
-MDAgRHJpdmVyPW9wdGlvbgo+PiBJOiAgSWYjPTB4MyBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVu
-ZC4pIFN1Yj0wMCBQcm90PTAwIERyaXZlcj1vcHRpb24KPj4gSTogIElmIz0weDQgQWx0PSAwICNF
-UHM9IDMgQ2xzPWZmKHZlbmQuKSBTdWI9MDAgUHJvdD0wMCBEcml2ZXI9b3B0aW9uCj4+IEk6ICBJ
-ZiM9MHg1IEFsdD0gMCAjRVBzPSAyIENscz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9ZmYgRHJpdmVy
-PW9wdGlvbgo+PiBJOiAgSWYjPTB4NiBBbHQ9IDAgI0VQcz0gMSBDbHM9ZmYodmVuZC4pIFN1Yj1m
-ZiBQcm90PWZmIERyaXZlcj0obm9uZSkKPj4gCj4+IERXNTgyOWUgUk1ORVQgbW9kZToKPj4gVDog
-IEJ1cz0wNCBMZXY9MDEgUHJudD0wMSBQb3J0PTAxIENudD0wMSBEZXYjPSAgNSBTcGQ9NTAwMCBN
-eENoPSAwCj4+IEQ6ICBWZXI9IDMuMTAgQ2xzPWVmKG1pc2MgKSBTdWI9MDIgUHJvdD0wMSBNeFBT
-PSA5ICNDZmdzPSAgMQo+PiBQOiAgVmVuZG9yPTQxM2MgUHJvZElEPTgxZTYgUmV2PTAzLjE4Cj4+
-IFM6ICBNYW51ZmFjdHVyZXI9RGVsbCBJbmMuCj4+IFM6ICBQcm9kdWN0PURXNTgyOWUgU25hcGRy
-YWdvbiBYMjAgTFRFCj4+IFM6ICBTZXJpYWxOdW1iZXI9MDEyMzQ1Njc4OUFCQ0RFRgo+PiBDOiAg
-I0lmcz0gNiBDZmcjPSAxIEF0cj1hMCBNeFB3cj04OTZtQQo+PiBJOiAgSWYjPTB4MCBBbHQ9IDAg
-I0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1Yj1mZiBQcm90PWZmIERyaXZlcj1xbWlfd3dhbgo+PiBJ
-OiAgSWYjPTB4MSBBbHQ9IDAgI0VQcz0gMSBDbHM9MDMoSElEICApIFN1Yj0wMCBQcm90PTAwIERy
-aXZlcj11c2JoaWQKPj4gSTogIElmIz0weDIgQWx0PSAwICNFUHM9IDMgQ2xzPWZmKHZlbmQuKSBT
-dWI9MDAgUHJvdD0wMCBEcml2ZXI9b3B0aW9uCj4+IEk6ICBJZiM9MHgzIEFsdD0gMCAjRVBzPSAz
-IENscz1mZih2ZW5kLikgU3ViPTAwIFByb3Q9MDAgRHJpdmVyPW9wdGlvbgo+PiBJOiAgSWYjPTB4
-NCBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1Yj0wMCBQcm90PTAwIERyaXZlcj1vcHRp
-b24KPj4gSTogIElmIz0weDUgQWx0PSAwICNFUHM9IDIgQ2xzPWZmKHZlbmQuKSBTdWI9ZmYgUHJv
-dD1mZiBEcml2ZXI9b3B0aW9uCj4+IAo+PiBEVzU4MjllLWVTSU0gTUJJTSBtb2RlOgo+PiBUOiAg
-QnVzPTA0IExldj0wMSBQcm50PTAxIFBvcnQ9MDEgQ250PTAxIERldiM9ICA2IFNwZD01MDAwIE14
-Q2g9IDAKPj4gRDogIFZlcj0gMy4xMCBDbHM9ZWYobWlzYyApIFN1Yj0wMiBQcm90PTAxIE14UFM9
-IDkgI0NmZ3M9ICAyCj4+IFA6ICBWZW5kb3I9NDEzYyBQcm9kSUQ9ODFlNCBSZXY9MDMuMTgKPj4g
-UzogIE1hbnVmYWN0dXJlcj1EZWxsIEluYy4KPj4gUzogIFByb2R1Y3Q9RFc1ODI5ZS1lU0lNIFNu
-YXBkcmFnb24gWDIwIExURQo+PiBTOiAgU2VyaWFsTnVtYmVyPTAxMjM0NTY3ODlBQkNERUYKPj4g
-QzogICNJZnM9IDcgQ2ZnIz0gMiBBdHI9YTAgTXhQd3I9ODk2bUEKPj4gSTogIElmIz0weDAgQWx0
-PSAwICNFUHM9IDEgQ2xzPTAyKGNvbW1jKSBTdWI9MGUgUHJvdD0wMCBEcml2ZXI9Y2RjX21iaW0K
-Pj4gSTogIElmIz0weDEgQWx0PSAxICNFUHM9IDIgQ2xzPTBhKGRhdGEgKSBTdWI9MDAgUHJvdD0w
-MiBEcml2ZXI9Y2RjX21iaW0KPj4gSTogIElmIz0weDIgQWx0PSAwICNFUHM9IDMgQ2xzPWZmKHZl
-bmQuKSBTdWI9MDAgUHJvdD0wMCBEcml2ZXI9b3B0aW9uCj4+IEk6ICBJZiM9MHgzIEFsdD0gMCAj
-RVBzPSAzIENscz1mZih2ZW5kLikgU3ViPTAwIFByb3Q9MDAgRHJpdmVyPW9wdGlvbgo+PiBJOiAg
-SWYjPTB4NCBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1Yj0wMCBQcm90PTAwIERyaXZl
-cj1vcHRpb24KPj4gSTogIElmIz0weDUgQWx0PSAwICNFUHM9IDIgQ2xzPWZmKHZlbmQuKSBTdWI9
-ZmYgUHJvdD1mZiBEcml2ZXI9b3B0aW9uCj4+IEk6ICBJZiM9MHg2IEFsdD0gMCAjRVBzPSAxIENs
-cz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9ZmYgRHJpdmVyPShub25lKQo+PiAKPj4gRFc1ODI5ZS1l
-U0lNIFJNTkVUIG1vZGU6Cj4+IFQ6ICBCdXM9MDQgTGV2PTAxIFBybnQ9MDEgUG9ydD0wMSBDbnQ9
-MDEgRGV2Iz0gIDcgU3BkPTUwMDAgTXhDaD0gMAo+PiBEOiAgVmVyPSAzLjEwIENscz1lZihtaXNj
-ICkgU3ViPTAyIFByb3Q9MDEgTXhQUz0gOSAjQ2Zncz0gIDEKPj4gUDogIFZlbmRvcj00MTNjIFBy
-b2RJRD04MWU0IFJldj0wMy4xOAo+PiBTOiAgTWFudWZhY3R1cmVyPURlbGwgSW5jLgo+PiBTOiAg
-UHJvZHVjdD1EVzU4MjllLWVTSU0gU25hcGRyYWdvbiBYMjAgTFRFCj4+IFM6ICBTZXJpYWxOdW1i
-ZXI9MDEyMzQ1Njc4OUFCQ0RFRgo+PiBDOiAgI0lmcz0gNiBDZmcjPSAxIEF0cj1hMCBNeFB3cj04
-OTZtQQo+PiBJOiAgSWYjPTB4MCBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4pIFN1Yj1mZiBQ
-cm90PWZmIERyaXZlcj1xbWlfd3dhbgo+PiBJOiAgSWYjPTB4MSBBbHQ9IDAgI0VQcz0gMSBDbHM9
-MDMoSElEICApIFN1Yj0wMCBQcm90PTAwIERyaXZlcj11c2JoaWQKPj4gSTogIElmIz0weDIgQWx0
-PSAwICNFUHM9IDMgQ2xzPWZmKHZlbmQuKSBTdWI9MDAgUHJvdD0wMCBEcml2ZXI9b3B0aW9uCj4+
-IEk6ICBJZiM9MHgzIEFsdD0gMCAjRVBzPSAzIENscz1mZih2ZW5kLikgU3ViPTAwIFByb3Q9MDAg
-RHJpdmVyPW9wdGlvbgo+PiBJOiAgSWYjPTB4NCBBbHQ9IDAgI0VQcz0gMyBDbHM9ZmYodmVuZC4p
-IFN1Yj0wMCBQcm90PTAwIERyaXZlcj1vcHRpb24KPj4gSTogIElmIz0weDUgQWx0PSAwICNFUHM9
-IDIgQ2xzPWZmKHZlbmQuKSBTdWI9ZmYgUHJvdD1mZiBEcml2ZXI9b3B0aW9uCj4+IAo+PiBCVFcs
-IHRoZSBpbnRlcmZhY2UgMHg2IG9mIE1CSU0gbW9kZSBpcyBHTlNTIHBvcnQsIHdoaWNoIG5vdCBz
-YW1lIGFzIE5NRUEKPj4gcG9ydC4gU28gaXQncyBiYW5uZWQgZnJvbSBzZXJpYWwgb3B0aW9uIGRy
-aXZlci4KPj4gVGhlIHJlbWFpbmluZyBpbnRlcmZhY2VzIDB4Mi0weDUgYXJlOiBNT0RFTSwgTU9E
-RU0sIE5NRUEsIERJQUcuCj4+IAo+PiBTaWduZWQtb2ZmLWJ5OiBTbGFyayBYaWFvIDxzbGFya194
-aWFvQDE2My5jb20+Cj4KPlRoYW5rcyBmb3IgcHJvdmlkaW5nIGFsbCB0aGUgbmVjZXNzYXJ5IGRl
-dGFpbHMuCj4KPj4gLS0tCj4+ICBkcml2ZXJzL3VzYi9zZXJpYWwvb3B0aW9uLmMgfCA2ICsrKysr
-Kwo+PiAgMSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKQo+PiAKPj4gZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvdXNiL3NlcmlhbC9vcHRpb24uYyBiL2RyaXZlcnMvdXNiL3NlcmlhbC9vcHRpb24u
-Ywo+PiBpbmRleCA5NjJlOTk0M2ZjMjAuLmI0N2JhZDgxMGVlYyAxMDA2NDQKPj4gLS0tIGEvZHJp
-dmVycy91c2Ivc2VyaWFsL29wdGlvbi5jCj4+ICsrKyBiL2RyaXZlcnMvdXNiL3NlcmlhbC9vcHRp
-b24uYwo+PiBAQCAtMTk4LDYgKzE5OCw4IEBAIHN0YXRpYyB2b2lkIG9wdGlvbl9pbnN0YXRfY2Fs
-bGJhY2soc3RydWN0IHVyYiAqdXJiKTsKPj4gIAo+PiAgI2RlZmluZSBERUxMX1BST0RVQ1RfNTgy
-MUUJCQkweDgxZDcKPj4gICNkZWZpbmUgREVMTF9QUk9EVUNUXzU4MjFFX0VTSU0JCQkweDgxZTAK
-Pj4gKyNkZWZpbmUgREVMTF9QUk9EVUNUXzU4MjlFCQkJMHg4MWU2Cj4+ICsjZGVmaW5lIERFTExf
-UFJPRFVDVF81ODI5RV9FU0lNCQkJMHg4MWU0Cj4KPlBsZWFzZSBrZWVwIHRoZSBkZWZpbmVzIHNv
-cnRlZCBieSBQSUQuCj4KT0ssIEkgd2lsbCB1cGRhdGUgaXQgaW4gVjIgdmVyc2lvbi4KCj4+ICAj
-ZGVmaW5lIEtZT0NFUkFfVkVORE9SX0lECQkJMHgwYzg4Cj4+ICAjZGVmaW5lIEtZT0NFUkFfUFJP
-RFVDVF9LUEM2NTAJCQkweDE3ZGEKPj4gQEAgLTEwNjMsNiArMTA2NSwxMCBAQCBzdGF0aWMgY29u
-c3Qgc3RydWN0IHVzYl9kZXZpY2VfaWQgb3B0aW9uX2lkc1tdID0gewo+PiAgCSAgLmRyaXZlcl9p
-bmZvID0gUlNWRCgwKSB8IFJTVkQoMSkgfCBSU1ZEKDYpIH0sCj4+ICAJeyBVU0JfREVWSUNFKERF
-TExfVkVORE9SX0lELCBERUxMX1BST0RVQ1RfNTgyMUVfRVNJTSksCj4+ICAJICAuZHJpdmVyX2lu
-Zm8gPSBSU1ZEKDApIHwgUlNWRCgxKSB8IFJTVkQoNikgfSwKPj4gKwl7IFVTQl9ERVZJQ0VfSU5U
-RVJGQUNFX0NMQVNTKERFTExfVkVORE9SX0lELCBERUxMX1BST0RVQ1RfNTgyOUUsIDB4ZmYpLAo+
-PiArCSAgLmRyaXZlcl9pbmZvID0gUlNWRCg2KSB9LAo+PiArCXsgVVNCX0RFVklDRV9JTlRFUkZB
-Q0VfQ0xBU1MoREVMTF9WRU5ET1JfSUQsIERFTExfUFJPRFVDVF81ODI5RV9FU0lNLCAweGZmKSwK
-Pj4gKwkgIC5kcml2ZXJfaW5mbyA9IFJTVkQoNikgfSwKPgo+SXQgbG9va3MgbGlrZSB0aGVzZSBl
-bnRyaWVzIHdpbGwgY2F1c2UgdGhlIGRyaXZlciB0byBiaW5kIGFsc28gdG8gdGhlCj5RTUkgcG9y
-dCBob3dldmVyLgo+CkFjdHVhbGx5IG5vdCwgIGN1cnJlbnRseSBSTU5FVCBwb3J0IHdvdWxkIGxv
-YWQgdGhlIHFtaV93d2FuIGRyaXZlciBzdWNjZXNzZnVsbHkgZXZlbiB0aGUgY2xhc3Mgb2YgUU1J
-IGlzIGFsc28gMHhmZi4KRG8geW91IG1lYW4gSSBzaG91bGQgYWRkIFJTVkQoMCkgdG8gcmVkdWNl
-IGNvbmZ1c2lvbj8KCj4+ICAJeyBVU0JfREVWSUNFKEFOWURBVEFfVkVORE9SX0lELCBBTllEQVRB
-X1BST0RVQ1RfQURVX0UxMDBBKSB9LAkvKiBBRFUtRTEwMCwgQURVLTMxMCAqLwo+PiAgCXsgVVNC
-X0RFVklDRShBTllEQVRBX1ZFTkRPUl9JRCwgQU5ZREFUQV9QUk9EVUNUX0FEVV81MDBBKSB9LAo+
-PiAgCXsgVVNCX0RFVklDRShBTllEQVRBX1ZFTkRPUl9JRCwgQU5ZREFUQV9QUk9EVUNUX0FEVV82
-MjBVVykgfSwKPgo+Sm9oYW4K
+
+
+On 2/9/2022 2:13 PM, kernel test robot wrote:
+> From: kernel test robot <lkp@intel.com>
+> 
+> drivers/net/dsa/qca8k.c:422:37-43: ERROR: application of sizeof to pointer
+> 
+>   sizeof when applied to a pointer typed expression gives the size of
+>   the pointer
+> 
+> Generated by: scripts/coccinelle/misc/noderef.cocci
+> 
+> Fixes: 90386223f44e ("net: dsa: qca8k: add support for larger read/write size with mgmt Ethernet")
+> CC: Ansuel Smith <ansuelsmth@gmail.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: kernel test robot <lkp@intel.com>
+
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

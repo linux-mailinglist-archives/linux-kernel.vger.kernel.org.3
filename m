@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57194B18D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:52:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A95C24B18DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345283AbiBJWwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 17:52:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39106 "EHLO
+        id S1345307AbiBJWyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 17:54:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344212AbiBJWwA (ORCPT
+        with ESMTP id S238083AbiBJWyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:52:00 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8559B75
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:52:00 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id j24so6502918qkk.10
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:52:00 -0800 (PST)
+        Thu, 10 Feb 2022 17:54:01 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD0F55A4;
+        Thu, 10 Feb 2022 14:54:02 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id h7so9358264iof.3;
+        Thu, 10 Feb 2022 14:54:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=3Mk85loLOThbNQSOSUb3FqT3m+mzX4GZ/g9jCLAWa+E=;
-        b=iivGpa8prXGA3rTzSN/P2mJPgq9t7ComsLYhdG0poK7tKY/TsriUXmbid+Yv039TYo
-         OLNbQ4ACvyucdaoZMb4fvDnxw1+IFcvGTFXzXwri9ZpflpuV+aVEC1zbXHViKpxMkUAj
-         bl4WvGM0xRKbvMgHLDs3gRUSzDSmKPLHISuaq7bkkiABtsdHIJzhUqR13FLweGZHDRZ5
-         r3ohQlEJHT57ykfIZHb7T3TVdMGkdXAxPi11/Vw6HkN6OkmY0ukX64zOgmiUl73kawT3
-         c3ImSbZa8A4KnDz9/4K/UXM/e+1HWjX0OwOCtLJhM2k/kmOWohqoC4K4SQqKJ8LxIh3B
-         naGQ==
+        bh=VUKtrHLt0fjPmTgGEZzFREYA4A6F0kdoS7SyUvKa0qA=;
+        b=O4LOqpJXDQnBxYPr0uj95YnMfkewxiGbbQ/CJY8h9XDEPOvDjwh5qXW6DLwNj/4efC
+         P5rQp/xAmEmeII8/061Ts7JTt7EVmLB+11xoYOuxl7Aj0qEYkDOLJXycZvl5sufYs5DF
+         4vgFdiDGtrUyNKnS0E80RAJT2kAGsFDMrBOB59uXItyZqs3bPTBgtjGn6yYWYd71QIEW
+         8KOtB1BJ6WgWf06cjSV8ERv8TMMgsw5f8McINFBn9SGaJ/oPcElXl8/Qyis/NPO2ABMh
+         WOFjIQmst1HJnqh3/u46Cy212ZQva5eXTTBHPDZw+ohS/wXIhQ4nIa2v1/cyXJNuAQAX
+         FndA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3Mk85loLOThbNQSOSUb3FqT3m+mzX4GZ/g9jCLAWa+E=;
-        b=NQv5iO/tz67WdiiARAUlyyWCLBNrqftIrA04w17qGunLWNF5O0qT7as/NoucdroPhZ
-         OR5KZ89KSEgbpOMJwphpx1ErQepvag5hxbAzEEnqBO9BnyC8//QkEmxpk1XFoQU4Oxzb
-         AOdhNDwY5uX7gu7+Nom+fH/gYc5So/VL8Ql2Pq47gy576XisjgzwqRH7U9tKQUl+eFGg
-         Lghvf+X8sCLezapKrla38gLtB/XQkDPntXIB2ltm1HsZprBiJAEoxRqmFd9Obv4Khaix
-         FUNTPcdYkZUIFd/sjOfk/kaZg3p7yuh95Og3hEv7HJb1/kcNzz8JoWugFt1RVgDOAGtb
-         xQtw==
-X-Gm-Message-State: AOAM533g7xXsgo4vo2KM4+q5AmJ0FMOKgiA8exDgLJhoz2OmH70NET/h
-        6AnSMZDjE2JecoXR7AadRCED11YwYHc=
-X-Google-Smtp-Source: ABdhPJwni4hBc9oW5ikS54OdXNORPGNu27bEUaK6Q7h9OW5yK5s9fw04W/vf71CboIKRYUQFzV9A+Q==
-X-Received: by 2002:ac8:7957:: with SMTP id r23mr6419981qtt.450.1644533509086;
-        Thu, 10 Feb 2022 14:51:49 -0800 (PST)
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=VUKtrHLt0fjPmTgGEZzFREYA4A6F0kdoS7SyUvKa0qA=;
+        b=ChNSB6q5ku8zlDdlNMr7s6ZV4KdXrcvnRGXcNXTUii0pJwXgivl1Ag29XMp9HHeYQn
+         teG2SSycs0FxW6k+SJZvPBwY0YOnT33z6or8FFwz+l+Fl9A7vdiTIjAd67bBxJBxzzOF
+         D1g5u65zm4HSUw7PolBbfrja/d6FPUjxfLN6A8tmZOGcSzRBLYl2xIPlyijjeNf3+MfH
+         wazvh9dMghQFf9xfgBJLW+5hbqVFGtLqog9IqCCt9jbv94fQRZGnWVAwKLWhX1pQkaOc
+         uNBHynbqVVnoLIoCbOaaJ5JOOpy66LRYwYpf4hiORQtMuvwWSz3wr6X4ivc2bEqSusHP
+         jA+g==
+X-Gm-Message-State: AOAM530oEcxM0DdC/p7UYeWBrAYcCcFWtZliBpATdg8cqsPBWLHXQqrg
+        i2GqOUZX8dmSWqOY1ENYTh4=
+X-Google-Smtp-Source: ABdhPJzaRpwSbO6X1WBTl+WfBx/q4TwWiCIEqIJ9Q6DkzZZR70REkK2F4cQiJwbzEUceoLbWMe36Mg==
+X-Received: by 2002:a02:cd0a:: with SMTP id g10mr5229490jaq.223.1644533641691;
+        Thu, 10 Feb 2022 14:54:01 -0800 (PST)
 Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id d22sm10799771qkn.112.2022.02.10.14.51.48
+        by smtp.gmail.com with ESMTPSA id a15sm6591675ilq.24.2022.02.10.14.54.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 14:51:48 -0800 (PST)
+        Thu, 10 Feb 2022 14:54:01 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -62,13 +62,20 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 00/49] bitmap: optimize bitmap_weight() usage
-Date:   Thu, 10 Feb 2022 14:48:44 -0800
-Message-Id: <20220210224933.379149-1-yury.norov@gmail.com>
+        linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
+Subject: [PATCH 01/49] net: dsa: don't use bitmap_weight() in b53_arl_read()
+Date:   Thu, 10 Feb 2022 14:48:45 -0800
+Message-Id: <20220210224933.379149-2-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220210224933.379149-1-yury.norov@gmail.com>
+References: <20220210224933.379149-1-yury.norov@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -80,184 +87,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In many cases people use bitmap_weight()-based functions to compare
-the result against a number of expression:
+Don't call bitmap_weight() if the following code can get by
+without it.
 
-        if (cpumask_weight(mask) > 1)
-                do_something();
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ drivers/net/dsa/b53/b53_common.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-This may take considerable amount of time on many-cpus machines because
-cpumask_weight() will traverse every word of underlying cpumask
-unconditionally.
-
-We can significantly improve on it for many real cases if stop traversing
-the mask as soon as we count cpus to any number greater than 1:
-
-        if (cpumask_weight_gt(mask, 1))
-                do_something();
-
-The first part of the series is a cleanup and rework where bitmap_weight
-API is used wrongly.
-
-Second part converts cpumask_weight() to cpumask_empty() if the number
-to compare with is 0. Ditto for bitmap_weight() and nodes_weight().
-
-In the 3nd part of the series bitmap_weight_cmp() is added together with
-bitmap_weight_{eq,gt,ge,lt,le} wrappers on top of it. Corresponding
-wrappers for cpumask and nodemask are added as well.
-
-The rough numbers of new functions usage, as counted by grep:
-
-	{bitmap,cpumask,nodes}_weight_eq	26
-	{bitmap,cpumask,nodes}_weight_ge	25
-	{bitmap,cpumask,nodes}_weight_gt	19
-	{bitmap,cpumask,nodes}_weight_le	18
-	{bitmap,cpumask,nodes}_weight_lt	14
-
-v1: https://lkml.org/lkml/2021/11/27/339
-v2: https://lkml.org/lkml/2021/12/18/241
-v3: https://lkml.org/lkml/2022/1/27/913
-v4: 
- - rebase on next-20220209;
- - exclude patches that already in next-20220209;
- - drop patches 41, 43, 47, 48 from v3 as they are not performance
-   critical;
- - deeply rework iio_simple_dummy_trigger_h (patch #4) and
-   qed_rdma_bmap_free (#10), instead of replacing bitmap_weight;
- - use more standard tags.
-
-Yury Norov (49):
-  net: dsa: don't use bitmap_weight() in b53_arl_read()
-  net: systemport: don't use bitmap_weight() in bcm_sysport_rule_set()
-  net: mellanox: fix open-coded for_each_set_bit()
-  iio: fix opencoded for_each_set_bit()
-  qed: rework qed_rdma_bmap_free()
-  nds32: perf: replace bitmap_weight with bitmap_empty where appropriate
-  KVM: x86: replace bitmap_weight with bitmap_empty where appropriate
-  drm: replace bitmap_weight with bitmap_empty where appropriate
-  ice: replace bitmap_weight with bitmap_empty for intel
-  octeontx2-pf: replace bitmap_weight with bitmap_empty for Marvell
-  qed: replace bitmap_weight with bitmap_empty in qed_roce_stop()
-  perf/arm-cci: replace bitmap_weight with bitmap_empty where
-    appropriate
-  perf tools: replace bitmap_weight with bitmap_empty where appropriate
-  arch/alpha: replace cpumask_weight with cpumask_empty where
-    appropriate
-  arch/ia64: replace cpumask_weight with cpumask_empty where appropriate
-  arch/x86: replace cpumask_weight with cpumask_empty where appropriate
-  cpufreq: replace cpumask_weight with cpumask_empty where appropriate
-  gpu: drm: replace cpumask_weight with cpumask_empty where appropriate
-  RDMA/hfi: replace cpumask_weight with cpumask_empty where appropriate
-  irq: mips: replace cpumask_weight with cpumask_empty where appropriate
-  genirq/affinity: replace cpumask_weight with cpumask_empty where
-    appropriate
-  sched: replace cpumask_weight with cpumask_empty where appropriate
-  clocksource: replace cpumask_weight with cpumask_empty in
-    clocksource.c
-  mm/vmstat: replace cpumask_weight with cpumask_empty where appropriate
-  arch/x86: replace nodes_weight with nodes_empty where appropriate
-  bitmap: add bitmap_weight_{cmp, eq, gt, ge, lt, le} functions
-  arch/x86: replace bitmap_weight with bitmap_weight_{eq,gt,ge,lt,le}
-    where appropriate
-  iio: replace bitmap_weight() with bitmap_weight_{eq,gt} where
-    appropriate
-  memstick: replace bitmap_weight with bitmap_weight_eq where
-    appropriate
-  ixgbe: replace bitmap_weight with bitmap_weight_eq for intel
-  octeontx2-pf: replace bitmap_weight with bitmap_weight_{eq,gt} for
-    OcteonTX2
-  mlx4: replace bitmap_weight with bitmap_weight_{eq,gt,ge,lt,le} for
-    mellanox
-  perf: replace bitmap_weight with bitmap_weight_eq for ThunderX2
-  media: tegra-video:: replace bitmap_weight with bitmap_weight_le
-  cpumask: add cpumask_weight_{eq,gt,ge,lt,le}
-  arch/ia64: replace cpumask_weight with cpumask_weight_eq in mm/tlb.c
-  arch/mips: replace cpumask_weight with cpumask_weight_{eq, ...} where
-    appropriate
-  arch/powerpc: replace cpumask_weight with cpumask_weight_{eq, ...}
-    where appropriate
-  arch/s390: replace cpumask_weight with cpumask_weight_eq where
-    appropriate
-  firmware: pcsi: replace cpumask_weight with cpumask_weight_eq
-  RDMA/hfi1: replace cpumask_weight with cpumask_weight_{eq, ...} where
-    appropriate
-  scsi: lpfc: replace cpumask_weight with cpumask_weight_gt
-  soc/qman: replace cpumask_weight with cpumask_weight_lt
-  nodemask: add nodemask_weight_{eq,gt,ge,lt,le}
-  ACPI: replace nodes__weight with nodes_weight_ge for numa
-  mm/mempolicy: replace nodes_weight with nodes_weight_eq
-  nodemask: add num_node_state_eq()
-  tools: bitmap: sync bitmap_weight
-  MAINTAINERS: add cpumask and nodemask files to BITMAP_API
-
- MAINTAINERS                                   |  4 +
- arch/alpha/kernel/process.c                   |  2 +-
- arch/ia64/kernel/setup.c                      |  2 +-
- arch/ia64/mm/tlb.c                            |  2 +-
- arch/mips/cavium-octeon/octeon-irq.c          |  4 +-
- arch/mips/kernel/crash.c                      |  2 +-
- arch/nds32/kernel/perf_event_cpu.c            |  2 +-
- arch/powerpc/kernel/smp.c                     |  2 +-
- arch/powerpc/kernel/watchdog.c                |  2 +-
- arch/powerpc/xmon/xmon.c                      |  4 +-
- arch/s390/kernel/perf_cpum_cf.c               |  2 +-
- arch/x86/kernel/cpu/resctrl/rdtgroup.c        | 16 ++--
- arch/x86/kvm/hyperv.c                         |  8 +-
- arch/x86/mm/amdtopology.c                     |  2 +-
- arch/x86/mm/mmio-mod.c                        |  2 +-
- arch/x86/mm/numa_emulation.c                  |  4 +-
- arch/x86/platform/uv/uv_nmi.c                 |  2 +-
- drivers/acpi/numa/srat.c                      |  2 +-
- drivers/cpufreq/qcom-cpufreq-hw.c             |  2 +-
- drivers/cpufreq/scmi-cpufreq.c                |  2 +-
- drivers/firmware/psci/psci_checker.c          |  2 +-
- drivers/gpu/drm/i915/i915_pmu.c               |  2 +-
- drivers/gpu/drm/msm/disp/mdp5/mdp5_smp.c      |  2 +-
- drivers/iio/dummy/iio_simple_dummy_buffer.c   | 48 +++++-------
- drivers/iio/industrialio-trigger.c            |  2 +-
- drivers/infiniband/hw/hfi1/affinity.c         | 13 ++--
- drivers/infiniband/hw/qib/qib_file_ops.c      |  2 +-
- drivers/infiniband/hw/qib/qib_iba7322.c       |  2 +-
- drivers/irqchip/irq-bcm6345-l1.c              |  2 +-
- drivers/memstick/core/ms_block.c              |  4 +-
- drivers/net/dsa/b53/b53_common.c              |  6 +-
- drivers/net/ethernet/broadcom/bcmsysport.c    |  6 +-
- .../net/ethernet/intel/ice/ice_virtchnl_pf.c  |  4 +-
- .../net/ethernet/intel/ixgbe/ixgbe_sriov.c    |  2 +-
- .../marvell/octeontx2/nic/otx2_ethtool.c      |  2 +-
- .../marvell/octeontx2/nic/otx2_flows.c        |  8 +-
- .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |  2 +-
- drivers/net/ethernet/mellanox/mlx4/cmd.c      | 33 +++-----
- drivers/net/ethernet/mellanox/mlx4/eq.c       |  4 +-
- drivers/net/ethernet/mellanox/mlx4/fw.c       |  4 +-
- drivers/net/ethernet/mellanox/mlx4/main.c     |  2 +-
- drivers/net/ethernet/qlogic/qed/qed_rdma.c    | 45 ++++-------
- drivers/net/ethernet/qlogic/qed/qed_roce.c    |  2 +-
- drivers/perf/arm-cci.c                        |  2 +-
- drivers/perf/arm_pmu.c                        |  4 +-
- drivers/perf/hisilicon/hisi_uncore_pmu.c      |  2 +-
- drivers/perf/thunderx2_pmu.c                  |  4 +-
- drivers/perf/xgene_pmu.c                      |  2 +-
- drivers/scsi/lpfc/lpfc_init.c                 |  2 +-
- drivers/soc/fsl/qbman/qman_test_stash.c       |  2 +-
- drivers/staging/media/tegra-video/vi.c        |  2 +-
- include/linux/bitmap.h                        | 78 +++++++++++++++++++
- include/linux/cpumask.h                       | 50 ++++++++++++
- include/linux/nodemask.h                      | 40 ++++++++++
- kernel/irq/affinity.c                         |  2 +-
- kernel/sched/core.c                           |  2 +-
- kernel/sched/topology.c                       |  2 +-
- kernel/time/clocksource.c                     |  2 +-
- lib/bitmap.c                                  | 21 +++++
- mm/mempolicy.c                                |  2 +-
- mm/page_alloc.c                               |  2 +-
- mm/vmstat.c                                   |  4 +-
- tools/include/linux/bitmap.h                  | 44 +++++++++++
- tools/lib/bitmap.c                            | 20 +++++
- tools/perf/builtin-c2c.c                      |  4 +-
- tools/perf/util/pmu.c                         |  2 +-
- 66 files changed, 384 insertions(+), 178 deletions(-)
-
+diff --git a/drivers/net/dsa/b53/b53_common.c b/drivers/net/dsa/b53/b53_common.c
+index a3b98992f180..d99813bf3cdd 100644
+--- a/drivers/net/dsa/b53/b53_common.c
++++ b/drivers/net/dsa/b53/b53_common.c
+@@ -1620,12 +1620,8 @@ static int b53_arl_read(struct b53_device *dev, u64 mac,
+ 		return 0;
+ 	}
+ 
+-	if (bitmap_weight(free_bins, dev->num_arl_bins) == 0)
+-		return -ENOSPC;
+-
+ 	*idx = find_first_bit(free_bins, dev->num_arl_bins);
+-
+-	return -ENOENT;
++	return *idx >= dev->num_arl_bins ? -ENOSPC : -ENOENT;
+ }
+ 
+ static int b53_arl_op(struct b53_device *dev, int op, int port,
 -- 
 2.32.0
 

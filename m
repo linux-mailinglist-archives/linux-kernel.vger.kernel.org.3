@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FADB4B126E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A494B12B0
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:26:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244057AbiBJQML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 11:12:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34544 "EHLO
+        id S244183AbiBJQ0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 11:26:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243839AbiBJQMK (ORCPT
+        with ESMTP id S244167AbiBJQ0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 11:12:10 -0500
-X-Greylist: delayed 1842 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 08:12:11 PST
+        Thu, 10 Feb 2022 11:26:11 -0500
 Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF340EB;
-        Thu, 10 Feb 2022 08:12:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B2DC26;
+        Thu, 10 Feb 2022 08:26:11 -0800 (PST)
 Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21AEBMiK025584;
-        Thu, 10 Feb 2022 09:41:21 -0600
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21AEBMiL025584;
+        Thu, 10 Feb 2022 09:41:22 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=ZcE6+fIEhouQflq6SsdYNwRtkbBAzXLAZhmoezOqjSU=;
- b=IlCoODTBMzey/Sj5wVEjA1csXujawVmllHw9glGsfo0i7WUSqNldfupDrQYKEg3hCof0
- x8II4XGesbT+TGgJyIZzDhZ/LAbT4tqP7MmQXpiQNRVCasWZfQgsgHUr5LdyF8v8p80X
- AzStJzdSoaC6LM43HAqU4pmIP88gFMKXHZLduYqanhBocWaS+An7+/uJs7lmVUMygdpl
- GZfWjU+mbOyMVA+0X2693baBJNdObpjiLqSt4QUmnBC5t+euWsxIq48WUP7yvR7u0Uad
- to7xjxb1Jg1Q2cnhWGV58qShodp+hXo+5j/QoGyiDVA3pjU3y47FiflMttroAqpadRVW IQ== 
+ bh=iAIOic3fs3DHgtceBaD28ld8RhX+XmG05O99KFICyHU=;
+ b=OPz9mg1lCGDZFcdrjNWJ1hjxWGEdoO1jB+ngD8AWBqiUWuBULOfNxyhbtIl1s1bRC+nE
+ WUDLJ+HsoQkkmvaO36rYOsztpW7kGyiDfTMtD8INGF1z8RlZlffHA+jeLN6xLvbRKwFh
+ n44n9bI/jQ0dNoYlV2Md7EJIaZ5TtHgctrcwYSf6ICy8tue/hZ7o67P11En6yDEvrbHf
+ 4nYHzGr6NDRrfIRffHjJGE5Q646xsPaSr/Z099XvqFKynhUZvGSt1/Kqr1iDdAV4TZzT
+ 7X0SotbkfJPF7NEaT0/Je3rlImax2cNFpOAN2rktjeVbfZF10boLWI/zwSrY/jPVvi+p wg== 
 Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3e4detskyx-1
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3e4detskyx-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
         Thu, 10 Feb 2022 09:41:21 -0600
 Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 10 Feb
- 2022 15:41:19 +0000
+ 2022 15:41:20 +0000
 Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Thu, 10 Feb 2022 15:41:19 +0000
+ Transport; Thu, 10 Feb 2022 15:41:20 +0000
 Received: from ricardo-lws.crystal.cirrus.com (ricardo-lws.ad.cirrus.com [141.131.206.19])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id E66312A1;
-        Thu, 10 Feb 2022 15:41:18 +0000 (UTC)
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 10A532A1;
+        Thu, 10 Feb 2022 15:41:19 +0000 (UTC)
 From:   Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
 To:     <sre@kernel.org>, <linux-pm@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
 CC:     Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
-Subject: [RESEND v2 1/2] power: supply: Introduces bypass charging property
-Date:   Thu, 10 Feb 2022 09:41:07 -0600
-Message-ID: <20220210154108.641369-2-rriveram@opensource.cirrus.com>
+Subject: [RESEND v2 2/2] power: supply: bq25980: Implements POWER_SUPPLY_CHARGE_TYPE_BYPASS
+Date:   Thu, 10 Feb 2022 09:41:08 -0600
+Message-ID: <20220210154108.641369-3-rriveram@opensource.cirrus.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220210154108.641369-1-rriveram@opensource.cirrus.com>
 References: <20220210154108.641369-1-rriveram@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: EHQHKr75_rbswWjslGMUEHJFsMAt3tYY
-X-Proofpoint-ORIG-GUID: EHQHKr75_rbswWjslGMUEHJFsMAt3tYY
+X-Proofpoint-GUID: feDhXOyhHV27GLGeJJQd63wmvEu18Zvo
+X-Proofpoint-ORIG-GUID: feDhXOyhHV27GLGeJJQd63wmvEu18Zvo
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
@@ -67,52 +66,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds a POWER_SUPPLY_CHARGE_TYPE_BYPASS option to the POWER_SUPPLY_PROP_CHARGE_TYPE
-property to facilitate bypass charging operation.
-
-In bypass charging operation, the charger bypasses the charging path around the
-integrated converter allowing for a "smart" wall adaptor to perform the power
-conversion externally.
-
-This operational mode is critical for the USB PPS standard of power adaptors and is
-becoming a common feature in modern charging ICs such as:
-
-- BQ25980
-- BQ25975
-- BQ25960
-- LN8000
-- LN8410
+This patch remaps the bypass operation from POWER_SUPPLY_CHARGE_TYPE_FAST
+to POWER_SUPPLY_CHARGE_TYPE_BYPASS.
 
 Signed-off-by: Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
 ---
- drivers/power/supply/power_supply_sysfs.c | 1 +
- include/linux/power_supply.h              | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/power/supply/bq25980_charger.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index 6ac88fbee3cb..52c909bae457 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -89,6 +89,7 @@ static const char * const POWER_SUPPLY_CHARGE_TYPE_TEXT[] = {
- 	[POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE]	= "Adaptive",
- 	[POWER_SUPPLY_CHARGE_TYPE_CUSTOM]	= "Custom",
- 	[POWER_SUPPLY_CHARGE_TYPE_LONGLIFE]	= "Long Life",
-+	[POWER_SUPPLY_CHARGE_TYPE_BYPASS]	= "Bypass",
- };
- 
- static const char * const POWER_SUPPLY_HEALTH_TEXT[] = {
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 86b4d5c4dab9..164779bc7e8f 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -49,6 +49,7 @@ enum {
- 	POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE,	/* dynamically adjusted speed */
- 	POWER_SUPPLY_CHARGE_TYPE_CUSTOM,	/* use CHARGE_CONTROL_* props */
- 	POWER_SUPPLY_CHARGE_TYPE_LONGLIFE,	/* slow speed, longer life */
-+	POWER_SUPPLY_CHARGE_TYPE_BYPASS,	/* bypassing the charger */
- };
- 
- enum {
+diff --git a/drivers/power/supply/bq25980_charger.c b/drivers/power/supply/bq25980_charger.c
+index 9daa6d14db4d..9339f5649282 100644
+--- a/drivers/power/supply/bq25980_charger.c
++++ b/drivers/power/supply/bq25980_charger.c
+@@ -764,7 +764,7 @@ static int bq25980_get_charger_property(struct power_supply *psy,
+ 		if (!state.ce)
+ 			val->intval = POWER_SUPPLY_CHARGE_TYPE_NONE;
+ 		else if (state.bypass)
+-			val->intval = POWER_SUPPLY_CHARGE_TYPE_FAST;
++			val->intval = POWER_SUPPLY_CHARGE_TYPE_BYPASS;
+ 		else if (!state.bypass)
+ 			val->intval = POWER_SUPPLY_CHARGE_TYPE_STANDARD;
+ 		break;
 -- 
 2.25.1
 

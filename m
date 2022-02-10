@@ -2,146 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 824B94B17B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BE044B17B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344696AbiBJViL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 16:38:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50688 "EHLO
+        id S1344710AbiBJVkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 16:40:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240037AbiBJViK (ORCPT
+        with ESMTP id S1344699AbiBJVka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 16:38:10 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED2BB80;
-        Thu, 10 Feb 2022 13:38:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=yiMGkSWaUlInyUsSv6Ymz5MFl5rNEExeyed6yGoVqQo=; b=UIBM663WVp45nBpTuklKQYIaOO
-        qIqrGLpntoMuj+w0Zjrsb/3bZRZJHEEBxo01/e5j3RYuA16k+JKr4fXCfwg+B99MF5J+1bLJ+Jxsb
-        3k8e1hjG5sxhZ9+FHYVTUSLLfp6CtesC8oHLlIKQvubiwHmjfQp10vYPT10He77uRiHG23oMbvVaT
-        hbtgH4yrj9vzhechikN/jUpAujlWHmSBPuF4DwpgNoDDB+kk0W8w+9iAabVzgoCun/4jStR/hmaq+
-        FafNBU3pb8iFAL7unJt95dvc82gwXZa10B2otIddSZzFA2j7wS3Y6c4RwzGAGaj0raGgYGzcSGNPG
-        hk7iEN6w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nIH81-009n2P-Of; Thu, 10 Feb 2022 21:37:25 +0000
-Date:   Thu, 10 Feb 2022 21:37:25 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>
-Subject: Re: [PATCH v7 04/12] mm: multigenerational LRU: groundwork
-Message-ID: <YgWFlYi5jGENGD4G@casper.infradead.org>
-References: <20220208081902.3550911-1-yuzhao@google.com>
- <20220208081902.3550911-5-yuzhao@google.com>
+        Thu, 10 Feb 2022 16:40:30 -0500
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB582707
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:40:29 -0800 (PST)
+Received: by mail-oo1-xc2e.google.com with SMTP id v17-20020a4ac911000000b002eac41bb3f4so7989061ooq.10
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:40:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sYxNbm3oeGTvOZBjs/cPB3osaO0SDrWrhLkY+LP7ILU=;
+        b=mXt7X2fqMXlhgBdk2hQKdn+EPzT3nfrG298GNRe+727egR9dlEBR0Q3Xr93bBxgAgU
+         BV/wjgb6Ro/lOB8MDyuCy3w5SE+V5PRgO0IYRriAhXqHpGLGyHxAtNHTH6rHP+CYJ/I+
+         ZlDAw8G4Chdvvicn+kKxX61+BzJRBJen+FaAQjo1sMAM7EEH/anqxQIKN6SA3YIy+ol6
+         L7cDclRNMEpauUUJt6IxQxQZZBwBJr1/1Q5Quzv2AmMuBjSisQuXMN8Gi2yryJffeDX4
+         aKqF62yXhDffpfKKXAFuiq/5mJL8rvzrTpMmkuEmD4yqWoF37X4xIT7TF3K7J/fFB40I
+         5P1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sYxNbm3oeGTvOZBjs/cPB3osaO0SDrWrhLkY+LP7ILU=;
+        b=gTh1+xHXm+GDNyyW22kVc1puyv+2XDLGA57YWrK3uKqPAuRj9MhY3Wc/1RhRfHY7D5
+         NKv7p+PNo2Oi7xlIAV5AW8pv+/i/rpGFdE85ib3q69TRo87cW2ouPHFjSGbNCMjQAhlS
+         po6rd7i7h2Q+JLd5xM+vJ5/1cdGr4z4bg5STNCBMyFXHF0xsxmTX5R+t+ktA3tGHuxEm
+         ywrZ7opp8xXHf3S7JiP5KGe/dM2MAM2eQaVVZUvzH2nQuNkRwbElCd3nR6lt5cBZ6umO
+         ks4/LXQuTTn8kw/MjP2kiGwJe5PWbhsdiUNM8oAUej32X8M00kePW2qYdwPgvaWdozbC
+         cyQA==
+X-Gm-Message-State: AOAM533vCy1KIcPii4Wjh3oYHX6ghCzROUkb3fVS4SWI2KSWtQSBQYEf
+        4/163sdL7dPe8C9qlfLaXHz2Jy49ADN/aJjZ
+X-Google-Smtp-Source: ABdhPJyNy85sqXA9jkFA6VdYAx9vnjI1G5u4976z/UV8JDAiyvnszJFiLyt6VW/DI+LwnbfYF54FWQ==
+X-Received: by 2002:a05:6870:e743:: with SMTP id t3mr1394603oak.265.1644529228715;
+        Thu, 10 Feb 2022 13:40:28 -0800 (PST)
+Received: from rivos-atish.. (adsl-70-228-75-190.dsl.akrnoh.ameritech.net. [70.228.75.190])
+        by smtp.gmail.com with ESMTPSA id u5sm8700000ooo.46.2022.02.10.13.40.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 13:40:28 -0800 (PST)
+From:   Atish Patra <atishp@rivosinc.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Atish Patra <atishp@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        devicetree@vger.kernel.org, Jisheng Zhang <jszhang@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-riscv@lists.infradead.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH v2 0/6] Provide a fraemework for RISC-V ISA extensions 
+Date:   Thu, 10 Feb 2022 13:40:12 -0800
+Message-Id: <20220210214018.55739-1-atishp@rivosinc.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208081902.3550911-5-yuzhao@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 01:18:54AM -0700, Yu Zhao wrote:
-> Evictable pages are divided into multiple generations for each lruvec.
-> The youngest generation number is stored in lrugen->max_seq for both
-> anon and file types as they're aged on an equal footing. The oldest
-> generation numbers are stored in lrugen->min_seq[] separately for anon
-> and file types as clean file pages can be evicted regardless of swap
-> constraints. These three variables are monotonically increasing.
-> 
-> Generation numbers are truncated into order_base_2(MAX_NR_GENS+1) bits
-> in order to fit into the gen counter in folio->flags. Each truncated
-> generation number is an index to lrugen->lists[]. The sliding window
-> technique is used to track at least MIN_NR_GENS and at most
-> MAX_NR_GENS generations. The gen counter stores (seq%MAX_NR_GENS)+1
-> while a page is on one of lrugen->lists[]. Otherwise it stores 0.
-> 
-> There are two conceptually independent processes (as in the
-> manufacturing process): "the aging", which produces young generations,
-> and "the eviction", which consumes old generations. They form a
-> closed-loop system, i.e., "the page reclaim". Both processes can be
-> invoked from userspace for the purposes of working set estimation and
-> proactive reclaim. These features are required to optimize job
-> scheduling (bin packing) in data centers. The variable size of the
-> sliding window is designed for such use cases [1][2].
-> 
-> To avoid confusions, the terms "hot" and "cold" will be applied to the
-> multigenerational LRU, as a new convention; the terms "active" and
-> "inactive" will be applied to the active/inactive LRU, as usual.
+This series implements a generic framework to parse multi-letter ISA
+extensions. This series is based on Tsukasa's v3 isa extension improvement
+series[1]. I have fixed few bugs and improved comments from that series
+(PATCH1-3). I have not used PATCH 4 from that series as we are not using
+ISA extension versioning as of now. We can add that later if required.
 
-[...]
+PATCH 4 allows the probing of multi-letter extensions via a macro.
+It continues to use the common isa extensions between all the harts.
+Thus hetergenous hart systems will only see the common ISA extensions.
 
-> +++ b/include/linux/page-flags-layout.h
-> @@ -26,6 +26,14 @@
->  
->  #define ZONES_WIDTH		ZONES_SHIFT
->  
-> +#ifdef CONFIG_LRU_GEN
-> +/* LRU_GEN_WIDTH is generated from order_base_2(CONFIG_NR_LRU_GENS + 1). */
-> +#define LRU_REFS_WIDTH		(CONFIG_TIERS_PER_GEN - 2)
-> +#else
-> +#define LRU_GEN_WIDTH		0
-> +#define LRU_REFS_WIDTH		0
-> +#endif /* CONFIG_LRU_GEN */
+PATCH 6 improves the /proc/cpuinfo interface for the available ISA extensions
+via /proc/cpuinfo.
 
-I'm concerned about the number of bits being used in page->flags.
-It seems to me that we already have six bits in use to aid us in choosing
-which pages to reclaim: referenced, lru, active, workingset, reclaim,
-unevictable.
+Here is the example output of /proc/cpuinfo:
+(with debug patches in Qemu and Linux kernel)
 
-What I was hoping to see from this patch set was reuse of those bits.
-That would give us 32 queues in total.  Some would be special (eg pages
-cannot migrate out of the unevictable queue), but it seems to me that you
-effectively have 4 queues for active and 4 queues for inactive at this
-point (unless I misunderstood that).  I think we need special numbers
-for: Not on the LRU and Unevictable, but that still leaves us with 30
-generations to split between active & inactive.
+/ # cat /proc/cpuinfo
+processor	: 0
+hart		: 0
+isa		: rv64imafdcsu
+isa-ext		: sstc,sscofpmf
+mmu		: sv48
 
-But maybe we still need some of those bits?  Perhaps it's not OK to say
-that queue id 0 is !LRU, queue 1 is unevictable, queue #2 is workingset,
-queues 3-7 are active, queues 8-15 are various degrees of inactive.
-I'm assuming that it's not sensible to have a page that's marked as both
-"reclaim" and "workingset", but perhaps it is.
+processor	: 1
+hart		: 1
+isa		: rv64imafdcsu
+isa-ext		: sstc,sscofpmf
+mmu		: sv48
 
-Anyway, I don't understand this area well enough.  I was just hoping
-for some simplification.
+processor	: 2
+hart		: 2
+isa		: rv64imafdcsu
+isa-ext		: sstc,sscofpmf
+mmu		: sv48
+
+processor	: 3
+hart		: 3
+isa		: rv64imafdcsu
+isa-ext		: sstc,sscofpmf
+mmu		: sv48
+
+Anybody adding support for any new multi-letter extensions should add an
+entry to the riscv_isa_ext_id and the isa extension array. 
+E.g. The patch[2] adds the support for sstc extension.
+
+[1] https://lore.kernel.org/all/0f568515-a05e-8204-aae3-035975af3ee8@irq.a4lg.com/T/
+[2] https://github.com/atishp04/linux/commit/dfc9b0d16f5a6e4695f0b3ca2f6e3f99654992db 
+
+
+Changes from v1->v2:
+1. Instead of adding a separate DT property use the riscv,isa property.
+2. Based on Tsukasa's v3 isa extension improvement series.
+
+Atish Patra (3):
+RISC-V: Implement multi-letter ISA extension probing framework
+RISC-V: Do no continue isa string parsing without correct XLEN
+RISC-V: Improve /proc/cpuinfo output for ISA extensions
+
+Tsukasa OI (3):
+RISC-V: Correctly print supported extensions
+RISC-V: Minimal parser for "riscv, isa" strings
+RISC-V: Extract multi-letter extension names from "riscv,isa"
+
+arch/riscv/include/asm/hwcap.h |  25 +++++++
+arch/riscv/kernel/cpu.c        |  44 ++++++++++-
+arch/riscv/kernel/cpufeature.c | 132 ++++++++++++++++++++++++++++-----
+3 files changed, 180 insertions(+), 21 deletions(-)
+
+--
+2.30.2
+

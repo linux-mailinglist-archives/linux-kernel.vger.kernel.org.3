@@ -2,135 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65DC64B19D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 358424B19DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:55:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345933AbiBJXxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 18:53:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54342 "EHLO
+        id S1345935AbiBJXzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 18:55:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345927AbiBJXxN (ORCPT
+        with ESMTP id S1345909AbiBJXzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 18:53:13 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E416B5F75
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:53:13 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id u6so13398603lfc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:53:13 -0800 (PST)
+        Thu, 10 Feb 2022 18:55:38 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3643B5F5C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:55:39 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id x136so18399680ybe.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:55:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=FYlkrxPZ2Z2zJ0ERqrS7qUlWPElIVoGvIlqioJZlkEg=;
-        b=N7sJdoUSvYyq4MjeAPZ+AFQb0pTRwxjWTrsPhX0XMSt6+2JQTgiCBZcetXZs1nn0iF
-         4Mnb+PdRGBlJgMhfrAdhn5bYjANfKDHCNuCeLZDHMFckT6QMOsgNCIMfFzeekLGylJ5P
-         wNUQvGaZVE164HcLoLdHVIv4PMt/RYLPqLzyYPWKs2LWg0XHv4Cng2Bg0iIqBVVl9dhC
-         PuoIWkNoA7GZVZcRSnk/dg6fjwvxyIJ1DSLaTAgIgroZT3KUMkI62C/BmXmLWdbltMZD
-         FtofcFN19iXXP4W5nA4N2/9YVNIv3zJSO3wYrw2lnv6lXYCFZED9GP4KMjf5FAU7UHK2
-         JrEQ==
+        bh=NBgjpXZigvKnq2ReZid/vVB+xdrDhkSnQh0scwSixew=;
+        b=xZbxhSdG7BP+bJnrVyoE2lszS+OHv+a+H3cQQ/XSPeuBnunccAuxwGYKSfskaMedG+
+         M854Z+EZQraXLGral30yOEGTBOxMdz2uKrWOI4zvQlOOUMiIBbEj99+ZHDFFoIPOYpHX
+         FWVn8PSeldaBpwu8/kCQdARjDyNTXAQ6Gc3X6ARJRIb/8EfAQjg9JJTpALPioBWNXJms
+         GbUG5ppLhIkhcipfpkHzhmLVaYwOfmwgN+/Mp1E6pB7sM8K5YmMFALbSjsySG7zeVMyN
+         2ZYQFhiHmgerzNCmL1Pb6REYcyjuhJXQDBIy3ElkgmmTYutzGkK8emj4JbhcDG45LwX5
+         yaPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=FYlkrxPZ2Z2zJ0ERqrS7qUlWPElIVoGvIlqioJZlkEg=;
-        b=MCf8M5p+G3O7QKJS3FSK2gMTxyOYWnW2UJ1V9Pr/a4gbCAZlvgxlypRg5lKnh35NU+
-         cY+4GclN7tTsWaFzGKZ01YcNA7MPyy+Ol7gbRLKMZKYfwqVSywaafA+CD7IMzYK5V6U5
-         NfIGBDjsV9CnfFEoi5/bSxjVPwu2g7upnXbs+1rd+Ae1Z8LZkhfhdPkrDXtW4UiON/pL
-         NtYoE1uPhmx3FjaP+Vw74/ffZgYjikgZBHXwUM/+0qoJ55J4jVwvqr2YDbzAkGPS4CFv
-         jNZU1SkhjaGvxvtMkLFuQ7Gjz+8Y0WKJKfiIQHeZveNxI33m3SW7kaw22GXILWkiMkYG
-         TfkA==
-X-Gm-Message-State: AOAM530rZE26nQj0U2tqrfDR/fDCKEjQd1l3tBB4bBIQQyPlz+W4jzDZ
-        KqkNh6Zj9knEvqu30ehXW+WSMaxF+Osp3IlWILtw0w==
-X-Google-Smtp-Source: ABdhPJzlQ7C2povlgj2WhXWBIUQvgOe7nN/U/YEt/xipMo3xl/7n7Z7MXLZqPTYBMl70EN25TbWtI04N4CiekUZ7TOQ=
-X-Received: by 2002:a19:9144:: with SMTP id y4mr6846910lfj.494.1644537192004;
- Thu, 10 Feb 2022 15:53:12 -0800 (PST)
+        bh=NBgjpXZigvKnq2ReZid/vVB+xdrDhkSnQh0scwSixew=;
+        b=md2uSBf26/Iq0VKfET4Tx/p5H5C+C8dye69qdfxekW1fosoOPW/0eaGTYUUrCOPMLC
+         jioaVZik2lmyIvIl/F4EezMlT2Ohbal2EtCrgZ24WJevUAWN79difYriIfHmxI1qPYcC
+         hqcSKte89kKD+9Bd+hf4D7WRnlSTr/aTUdsbb7Y+p7U9hOz9J8wh6gg3SIFboGE9IZUn
+         hBrkByZ7/I2r8CxMwCa4qW1szIRdVSKJtABWAoBkX8SQfv+ftjRYApxzOYv7waPUeWhY
+         pNYWMhYI7z3rK0rRu3TqGNMDaodK9V5EeRtAYpXtvj4rOj1KMAwr4WUjGlu9CTUGLdP/
+         LPwQ==
+X-Gm-Message-State: AOAM533+YnTSMn6c9tCO6CagNrB+WG2DS5EHehD4P9AvvegLdQcevNG9
+        L0B9uW3lAcNCcFPbT6aWw093dLrg2GfNJhiIbmr/yQ==
+X-Google-Smtp-Source: ABdhPJwipupTHC/BooALieYlhlXLEn3fYioHlw3JUyAr99lmECPcYnKONg/T+vXDZIAm5NxFs4SAErzm0/3TmmckDVg=
+X-Received: by 2002:a81:4cc3:: with SMTP id z186mr10395825ywa.140.1644537338489;
+ Thu, 10 Feb 2022 15:55:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20220210081437.1884008-1-shakeelb@google.com> <20220210081437.1884008-5-shakeelb@google.com>
- <YgVyZrDPxVgP6OLG@carbon.dhcp.thefacebook.com> <CALvZod5xFmCVV_AZO1be8pYakmDvYh-QXmNYtTNT4zvCw-m4bQ@mail.gmail.com>
- <YgWf0wL5RoSpNrWn@carbon.dhcp.thefacebook.com>
-In-Reply-To: <YgWf0wL5RoSpNrWn@carbon.dhcp.thefacebook.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Thu, 10 Feb 2022 15:53:00 -0800
-Message-ID: <CALvZod5XstvNB_=qprW6_bx33h8JeyE5TjvX3UDoqG8XHBr14w@mail.gmail.com>
-Subject: Re: [PATCH 4/4] memcg: synchronously enforce memory.high
-To:     Roman Gushchin <guro@fb.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Chris Down <chris@chrisdown.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220120150024.646714-1-paul.kocialkowski@bootlin.com>
+ <20220120150024.646714-4-paul.kocialkowski@bootlin.com> <CACRpkdZnw-Tf2eQwO+LZRW4UacR09qWRWct00=XLb4pfa-N3=g@mail.gmail.com>
+ <CAMRc=MewxfQqM+QvzqjP05Qe5TeiEx+iiOFZLmieqCCVOL9UGQ@mail.gmail.com>
+In-Reply-To: <CAMRc=MewxfQqM+QvzqjP05Qe5TeiEx+iiOFZLmieqCCVOL9UGQ@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 11 Feb 2022 00:55:27 +0100
+Message-ID: <CACRpkdb2d2q8DjgjG5_h3TH0ppugAEVyRvYGhNMrWy3fzq2Jcw@mail.gmail.com>
+Subject: Re: [PATCH v10 3/6] gpio: logicvc: Support compatible with major
+ version only
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 3:29 PM Roman Gushchin <guro@fb.com> wrote:
->
-> On Thu, Feb 10, 2022 at 02:22:36PM -0800, Shakeel Butt wrote:
-> > On Thu, Feb 10, 2022 at 12:15 PM Roman Gushchin <guro@fb.com> wrote:
-> > >
-> > [...]
-> > >
-> > > Has this approach been extensively tested in the production?
-> > >
-> > > Injecting sleeps at return-to-userspace moment is safe in terms of priority
-> > > inversions: a slowed down task will unlikely affect the rest of the system.
-> > >
-> > > It way less predictable for a random allocation in the kernel mode, what if
-> > > the task is already holding a system-wide resource?
-> > >
-> > > Someone might argue that it's not better than a system-wide memory shortage
-> > > and the same allocation might go into a direct reclaim anyway, but with
-> > > the way how memory.high is used it will happen way more often.
-> > >
+On Tue, Feb 8, 2022 at 10:55 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> On Sun, Jan 30, 2022 at 1:43 AM Linus Walleij <linus.walleij@linaro.org> wrote:
 > >
-> > Thanks for the review.
+> > On Thu, Jan 20, 2022 at 4:00 PM Paul Kocialkowski
+> > <paul.kocialkowski@bootlin.com> wrote:
 > >
-> > This patchset is tested in the test environment for now and I do plan
-> > to test this in production but that is a slow process and will take
-> > some time.
+> > > Support the newly-introduced common compatible for version 3.
+> > >
+> > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 > >
-> > Let me answer the main concern you have raised i.e. the safety of
-> > throttling a task synchronously in the charge code path. Please note
-> > that synchronous memory reclaim and oom-killing can already cause the
-> > priority inversion issues you have mentioned. The way we usually
-> > tackle such issues are through userspace controllers. For example oomd
-> > is the userspace solution for catering such issues related to
-> > oom-killing. Here we have a similar userspace daemon monitoring the
-> > workload and deciding if it should let the workload grow or kill it.
+> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 > >
-> > Now should we keep the current high limit enforcement implementation
-> > and let it be ineffective for some real workloads or should we make
-> > the enforcement more robust and let the userspace tackle some corner
-> > case priority inversion issues. I think we should follow the second
-> > option as we already have precedence of doing the same for reclaim and
-> > oom-killing.
+> > Are there dependencies between the GPIO patches and the rest?
+> > Doesn't look like that.
+> > Can Bartosz just merge the GPIO stuff to the GPIO tree?
+> >
+> > Yours,
+> > Linus Walleij
 >
-> Well, in a theory it sounds good and I have no intention to oppose the
-> idea. However in practice we might easily get quite serious problems.
-> So I think we should be extra careful here. In the end we don't want to
-> pull and then revert this patch.
->
-> The difference between the system-wide direct reclaim and this case is that
-> usually kswapd is doing a good job of refilling the empty buffer, so we don't
-> usually work in the circumstances of the global memory shortage. And when we do,
-> often it's not working out quite well, this is why oomd and other similar
-> solutions are required.
->.
-> Another option is to use your approach only for special cases (e.g. huge
-> allocations) and keep the existing approach for most other allocations.
->
+> Except I'm seeing there's no agreement on the actual compatible yet in
+> the previous patch.
 
-These are not necessarily huge allocations and can be a large number
-of small allocations. However I think we can make this idea work by
-checking current->memcg_nr_pages_over_high. If
-order(current->memcg_nr_pages_over_high) is, let's say, larger than
-PAGE_ALLOC_COSTLY_ORDER, then throttle synchronously. WDYT?
+Yeah I noticed that after writing that :/
+
+Yours,
+Linus Walleij

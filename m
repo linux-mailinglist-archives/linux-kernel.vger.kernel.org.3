@@ -2,91 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8EB74B121F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:55:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E32D94B121C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243845AbiBJPzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 10:55:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45304 "EHLO
+        id S243817AbiBJPyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 10:54:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238388AbiBJPzG (ORCPT
+        with ESMTP id S236180AbiBJPyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 10:55:06 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9626C2D;
-        Thu, 10 Feb 2022 07:55:06 -0800 (PST)
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 21AFsWxL026635
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Feb 2022 10:54:33 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 97AF715C0040; Thu, 10 Feb 2022 10:54:32 -0500 (EST)
-Date:   Thu, 10 Feb 2022 10:54:32 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Jan Kara <jack@suse.cz>, Qian Cai <quic_qiancai@quicinc.com>,
-        Jan Kara <jack@suse.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Boqun Feng <boqun.feng@gmail.com>, linux-ext4@vger.kernel.org,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] jbd2: avoid __GFP_ZERO with SLAB_TYPESAFE_BY_RCU
-Message-ID: <YgU1ONDsn9xgs/CG@mit.edu>
-References: <20220209165742.5659-1-quic_qiancai@quicinc.com>
- <20220209181010.gfn66rvip56i54df@quack3.lan>
- <20220209201137.GY4285@paulmck-ThinkPad-P17-Gen-1>
- <YgSdlew4B5FWY6Qm@mit.edu>
- <20220210054357.GH4285@paulmck-ThinkPad-P17-Gen-1>
+        Thu, 10 Feb 2022 10:54:51 -0500
+Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57169C24
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 07:54:52 -0800 (PST)
+Received: from gproxy2-pub.mail.unifiedlayer.com (unknown [69.89.18.3])
+        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id CAF89802F406
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:54:49 +0000 (UTC)
+Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
+        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 4D7DC100488E1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:54:49 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id IBmRnKwm1XOyfIBmRnJmTf; Thu, 10 Feb 2022 15:54:48 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=EucXEQQA c=1 sm=1 tr=0 ts=62053548
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=oGFeUVbbRNcA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=cEBh+rmEkXJATJYFKN6Cgk92oAlcQ1oW3+4Ahs4+OOk=; b=IYoQeD/3Q3QdhkZ0B1M8zdONNu
+        9qPxZSPAne8BLCGyu9+TDKu38vtQH9Cex+ZwvxkasdhLXucuvXz1NfhdVcg0oD9A8xNmaR88HtvtA
+        cGQXlTm1jrAEXZgcwALlFNzO6;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:53976 helo=[10.0.1.23])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nIBmR-000ma5-4S; Thu, 10 Feb 2022 08:54:47 -0700
+Message-ID: <37525d88-a3cb-c8ef-cd62-bfa48aa36ff6@w6rz.net>
+Date:   Thu, 10 Feb 2022 07:54:45 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220210054357.GH4285@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.16 0/5] 5.16.9-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220209191249.887150036@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+In-Reply-To: <20220209191249.887150036@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nIBmR-000ma5-4S
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:53976
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 13
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 09:43:57PM -0800, Paul E. McKenney wrote:
-> So the typical RCU approach (not involving SLAB_TYPESAFE_BY_RCU)
-> is to take the grace period at the time of the free.  This can be
-> done synchronously using synchronize_rcu(), but is often instead done
-> asynchronously using call_rcu() or kfree_rcu().  So in this case,
-> you don't need synchronize_rcu() on allocation because the required
-> grace period already happened at *free() time.
-> 
-> But there are a few situations where it makes sense to free blocks that
-> readers might still be referencing.  Readers must then add validity
-> checks to detect this case, and also prevent freeing, for example,
-> using a per-block spinlock for synchronization.  For example, a reader
-> might acquire a spinlock in the block to prevent changes, recheck the
-> lookup key, and if the key does not match, release the lock and pretend
-> not to have found the block.  If the key does match, anything attempting
-> to delete and free the block will be spinning on that same spinlock.
-> 
-> And so if you specify SLAB_TYPESAFE_BY_RCU, the slab allocator is
-> guaranteeing type safety to RCU readers instead of the usual existence
-> guarantee.  A memory block might be freed out from under an RCU reader,
-> but its type will remain the same.  This means that the grace period
-> happens internally to the slab allocator when a slab is returned to
-> the system.
-> 
-> So either the validation checks are quite novel, the kmem_cache_zalloc()
-> calls should be replaced by kmem_cache_alloc() plus validation checks,
-> or the SLAB_TYPESAFE_BY_RCU should be removed.
-> 
-> Just out of curiosity, what is your mental model of SLAB_TYPESAFE_BY_RCU?
+On 2/9/22 11:14, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.9 release.
+> There are 5 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.9-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Hmm, so the code in question the flag was called SLAB_DESTROY_BY_RCU
-in June 205 by commit de92c8caf16c ("jbd2: speedup
-jbd2_journal_get_[write|undo]_access()"), and it was written by Jan.
-I don't see anything to make sure the jh doesn't get freed until after
-the grace period, and so that looks like a problem unless I'm missing
-something.   Jan, what do you think?
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-					- Ted
+Tested-by: Ron Economos <re@w6rz.net>
+

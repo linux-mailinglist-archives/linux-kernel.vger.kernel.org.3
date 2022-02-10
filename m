@@ -2,150 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42AF44B0515
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 06:30:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76B284B0522
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 06:33:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233838AbiBJFaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 00:30:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60320 "EHLO
+        id S233905AbiBJFd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 00:33:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbiBJFaV (ORCPT
+        with ESMTP id S233826AbiBJFdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 00:30:21 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CBD10A1;
-        Wed,  9 Feb 2022 21:30:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644471023; x=1676007023;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=oGbEvg1aMnrNswkZgez4Y5yikBdZfnle+KS/F+LNsaw=;
-  b=c9X9lOOtSSt55/1vrq3hzKjjoL+cObf/iF16OcJiztsVHmVXH5rMSj3f
-   c91NF+DkM1oNlUTNNoW7XJWa9qA4+qoEr5c8KCDnFqpXsvtxp9e78NOKk
-   PezoU7Ftrv7Jy+yy3ajp1htgHsIl0deOhEv4tYWjUZYxuGLH8z8+gf4Vy
-   XtQjGxCyfwmGMlJPscI+vOpE3Cl2c77CWqjL7noYQYT4L0OGJtsKEhUXX
-   lnKoJhiL9HO7CUxrbrk/FQBlZpxiqZthdYcRMM7m9V3ELNODg0tCUT7XT
-   NfAb+b53tEQpwsZsT9LeCagHi8xZpj+3RiTSD2816wTRGf+XTm/0NJQZE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="249623650"
-X-IronPort-AV: E=Sophos;i="5.88,357,1635231600"; 
-   d="scan'208";a="249623650"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 21:30:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,357,1635231600"; 
-   d="scan'208";a="629565762"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga002.fm.intel.com with ESMTP; 09 Feb 2022 21:30:22 -0800
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 9 Feb 2022 21:30:21 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Wed, 9 Feb 2022 21:30:21 -0800
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.174)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Wed, 9 Feb 2022 21:29:55 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VxooxZJgV++Rvi6ZjhFjxjwWrHZXydOnsCWRoxpkQYm6eNLWB22VIhopRame4osIGIXghx4s3arV4LwZFegLpD9gLYfySmUcwzaqhgk0klDY36u3EA6YjTy3mQkgpPmsVPHxbQDQDgT4ODXtSX9RB9q7dkOTYjHsDC5WAhg17oPz1DS8+kjJ87aRkbUcegrNmfgWGJAlxIXO6ouAcz80Vszyuu8ZQ23DfRCctynFENpG2uwg5qXYvCo3/J40DHfHh2+0av2Tiog5QpUrMz3Ppvc/0Ov7H0qHoSJuyWTmjUPr5t6RdvMG7EaTCsUG1JH7xvjwnCvMFVxfsWvQUThwtQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=J2tlsJLm3fGC9G/nI1ezpy4crqvIplKB24GTQ9rwycA=;
- b=CxVM7jAPowLWK9vk/nyUIya8Oczg8/jeKSu2iS9oTlHcFGkmv9WEap3Ibm4WqkUMjPTtLlndFu7AwQKSlkeqgat8mhlP6yFrNtOXfLVdzzbE1mxxc4OOdajB24YK19izUHPyzDBEPiekg+J/ZYPAFpDN0LNoFCysnHuzOtSgD8OkxBXFSCNqb0hAzeokjvLITvpwiLEpDTh7xZpT7ZmdZ3fOwus162oQA2JXp9ffr8hDmTSoVu4pYd9+ndNTJhUo1QxRhnz+fn63bxfrF90sKNuhAKU2VbCJyzZUIKsVIJoY8yFOtVzZ+6uH64kouw4wXzA5a/3w+yqGpekWveVT7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from BYAPR11MB3367.namprd11.prod.outlook.com (2603:10b6:a03:79::29)
- by MWHPR11MB1870.namprd11.prod.outlook.com (2603:10b6:300:10f::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Thu, 10 Feb
- 2022 05:29:54 +0000
-Received: from BYAPR11MB3367.namprd11.prod.outlook.com
- ([fe80::3162:31b:8e9c:173b]) by BYAPR11MB3367.namprd11.prod.outlook.com
- ([fe80::3162:31b:8e9c:173b%4]) with mapi id 15.20.4951.019; Thu, 10 Feb 2022
- 05:29:54 +0000
-From:   "G, GurucharanX" <gurucharanx.g@intel.com>
-To:     Jonathan Toppins <jtoppins@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: RE: [Intel-wired-lan] [PATCH v2] ice: change "can't set link" message
- to dbg level
-Thread-Topic: [Intel-wired-lan] [PATCH v2] ice: change "can't set link"
- message to dbg level
-Thread-Index: AQHYGSX4f1yBEjaVTU2GO55MmC32ZqyMTBHA
-Date:   Thu, 10 Feb 2022 05:29:53 +0000
-Message-ID: <BYAPR11MB336795B622887929554E63B0FC2F9@BYAPR11MB3367.namprd11.prod.outlook.com>
-References: <b25f9e524c404820b310c73012507c8e65a2ef97.1643834329.git.jtoppins@redhat.com>
- <cfb30f5c84364c8eff96c0a3ea0231e5dfda17e4.1643910316.git.jtoppins@redhat.com>
-In-Reply-To: <cfb30f5c84364c8eff96c0a3ea0231e5dfda17e4.1643910316.git.jtoppins@redhat.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 222ed90d-2662-4320-4ee0-08d9ec565e34
-x-ms-traffictypediagnostic: MWHPR11MB1870:EE_
-x-microsoft-antispam-prvs: <MWHPR11MB1870A4A6B39DB61097930E85FC2F9@MWHPR11MB1870.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4502;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qDdVlFVMDyOjqRwfSareTTZuSrxn/QivH1xL5kdXSUY5HV0qKvV2pu3HxZfxFnHi6ZH4wKPpOneBm3fgwV07twT4TF7uth8B/7sPV9MjIn7AOrGL7fGnWWjDKBnRWzOmOzt4HA6ygz9z5Kfa5vEhI9CfWeZ+aGRT08oq4n51cMKHPG/lLAfc5glcvTWdFfByUYwd67gy3wfSxAWwNBbEYR8v5K3Eis183ozpzWPq+qIZMhWUeDHw8APx/EQtbGt2ghGsBdlYJrIkMOY2mTh9PZg3UvrAb9uRhLbauhco8PeipP9AsKIW0xH9LtSUK3gnhIinDf6gnvshLq2T9hTqw2lvovAvgHxiSxWGrISkmfomRy0nxWIsLHv03THoo+n9lqRfTFVgokg/mq6J44c8BeTNmX4pFMDXxcFV8PgniJ2Q79yAau3DaT7v9tTIiE2IOm7uOW0/YQaofh9daXMi/35a9iGRf27E2NZJ5ezvnYa6ivQy1Xzvx8F3t3SybpX/4rYmEj6yyZEfdJ/ENSDtd7d/QabJU8mcNzy1y6NkbHWmAf0OmJtMeu++DlxLymg4u6KcnN9qZyCRwzaLDrVfR8yFT6OX0hydRB/oZxHjMQ20YSa/rFIgA6OuOCJpOoBMIkj/skLel6vkq2hssRKzBYIMF0SDugTeia92obxPlkSxaGRztG7uKuPgXmEXn1dCebGnWbFVkoHAcNXQCvD3YA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3367.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(82960400001)(8676002)(4326008)(8936002)(55016003)(55236004)(66446008)(66476007)(66556008)(76116006)(64756008)(110136005)(66946007)(53546011)(38070700005)(122000001)(2906002)(15650500001)(83380400001)(316002)(52536014)(5660300002)(4744005)(54906003)(33656002)(7696005)(71200400001)(6506007)(9686003)(508600001)(86362001)(26005)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?u+qP2373O3c1eF55FOIcXBu6XjTUex+/PLxv4QLSwoWvW6QNAvGOZmVcFmvu?=
- =?us-ascii?Q?KbEvPQHIbiz2AxTjIVwQ24UYEcRKiZ//H2iW5nCnC4hu/ErUEJ4qTYoQNpRj?=
- =?us-ascii?Q?l/j16odQgC22ecN/SnZKBqLN6edBOA4yXyy+SddA+//Pij/gscZjh93aFkqq?=
- =?us-ascii?Q?GB1vFUBuWhpubZJqyExcr5M726En3d5Ve20voAskVWhFu59W4kmrdka13xrn?=
- =?us-ascii?Q?hPj4xLBDbBKme2LkrYrInK9jEiKNxq+Z3C00Km3PlP2MMHotwHhZnrx3VVlN?=
- =?us-ascii?Q?Krm9Uo2cZQG0wgJNlMstH+6GL5vRjivtZOAuMVf4MBHGTXokEF4Wg4ywMan7?=
- =?us-ascii?Q?KCcXAol3nKE7nowBneIbjeUpkvtahg+0NRqzfb8Y92QYsrMv9KcqrW3gVx2F?=
- =?us-ascii?Q?/IJyow5gnnGWNotHZRDqsj7x5lPW4tTcbpWPWaTaqii6A8frc+5PCkBC+yey?=
- =?us-ascii?Q?z1WfYBRKRBsb375IDRO5+q4wb01w8UmeFnPZ76ZtJ7QNkeR8+UxIJLRb0Q/J?=
- =?us-ascii?Q?uG5Xwm8LJjOF/m6bUQBiU7jOs9r/16uH/Btbnx7PbyAcaNWs8lG7M8/6D5XX?=
- =?us-ascii?Q?UI+dR3F4Mzoh5wQXGI4jb7Sxnig9eXzA9xWjXtiuUtu0rbXH2T1hLAcSjb4c?=
- =?us-ascii?Q?LM9CnVVe4H3azpl5ggrhnQj3Y2i3RjBtb5SKusDM/du2aYAboGcbKVECz/m8?=
- =?us-ascii?Q?4YewVGLc4t3HcV/e7PKKiVd69Klt25Nw62wB0+E5SCZnDHfg7ggCm+ax7YcA?=
- =?us-ascii?Q?16VnV0zUvS1xim2QNY+E1kx/fJxQwCGuNqUd5KyTG+2QbRVCzUWEUhR4UoJu?=
- =?us-ascii?Q?PbuFCRekR6L1ZWgL1bk+Izy6aifHt5uby3zcsylbQrsrfyFfpkeXpFl5crH+?=
- =?us-ascii?Q?Zda3bTUT5b2VEKHADAry0dxzC+PM5KBR5VZTMlHUiino7ML9wFd6B+Xvngzx?=
- =?us-ascii?Q?lzszPhGuQfjYEjGw+VlIeOCD94MvAugvlPNxa6WEC2TyGZP9gnn/qSrNyomH?=
- =?us-ascii?Q?TXj8tg7qteT6lcbsTAh9cc4l7qqjOXKHqyz8cu+vaHH7K1DqjZ5pJRm6wVNI?=
- =?us-ascii?Q?vVOJsskWdWyjWvoOa0bYmm7CFMoY442GUHq7JoDTt+/htiBl6KYxcZSxa5sH?=
- =?us-ascii?Q?KqZNIhcibw8kuzs9JJOSCMFAc58BKm2jHdOW/jppeEDq+Gx4+LHZtdSdD5xh?=
- =?us-ascii?Q?5DrWGkwM3tqvja9dxy2T7eJVgM0cJFpwAeb6SwllDaLLbwjKnTxbThFdow0P?=
- =?us-ascii?Q?ijL89Oryhu/0Zpy94UoduWQDj8WFwxmzWgGEoOpS9PFFuGrxMLi9FeKP3av2?=
- =?us-ascii?Q?Ic83eN62Xf2C/zYtaesnWzvBgkXLufd+n8RQ+slh8Q8trJBYJHyz1q19AcM2?=
- =?us-ascii?Q?GusDgJyjwQljDVbIvTZRAU9Nb+qUaVpVUUmu9U5PGZDIGt7+z72Yh1/8ep9j?=
- =?us-ascii?Q?5HyLYiTf036OvTeAEsPUiakILNgD/ybr5yfoJ1+m7IrfasbioNFfUSRJBGg7?=
- =?us-ascii?Q?QJtkN119/6Mw4/aDduI3eGbAkgJzqHNlGoT5/1lazbuiJzBgpsguP8LUoBKM?=
- =?us-ascii?Q?OE956jiRe/5yQS8yyyQ6mTugK/aSsvSAYQpfW7EiaSbA3EhiBEBYiJjJj1AW?=
- =?us-ascii?Q?Sw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 10 Feb 2022 00:33:25 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B02410C0;
+        Wed,  9 Feb 2022 21:33:25 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nI255-000qlO-OE; Thu, 10 Feb 2022 05:33:23 +0000
+Date:   Thu, 10 Feb 2022 05:33:23 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Stephen Brennan <stephen.s.brennan@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v2 1/4] dcache: sweep cached negative dentries to the end
+ of list of siblings
+Message-ID: <YgSjo5wascR9mfnA@zeniv-ca.linux.org.uk>
+References: <20220209231406.187668-1-stephen.s.brennan@oracle.com>
+ <20220209231406.187668-2-stephen.s.brennan@oracle.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3367.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 222ed90d-2662-4320-4ee0-08d9ec565e34
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2022 05:29:54.0683
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Eg+TPVRO1vr4/T9fwduzumhZqm6B/37O+9zeqc+NSAScunP/ott0rQ0qap9Pl2Co3ZhDy9VFHmHcqAAE8986+A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1870
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209231406.187668-2-stephen.s.brennan@oracle.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -154,31 +44,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 09, 2022 at 03:14:03PM -0800, Stephen Brennan wrote:
 
+> +static void sweep_negative(struct dentry *dentry)
+> +{
+> +	struct dentry *parent;
+> +
+> +	rcu_read_lock();
+> +	parent = lock_parent(dentry);
+> +	if (!parent) {
+> +		rcu_read_unlock();
+> +		return;
+> +	}
+> +
+> +	/*
+> +	 * If we did not hold a reference to dentry (as in the case of dput),
+> +	 * and dentry->d_lock was dropped in lock_parent(), then we could now be
+> +	 * holding onto a dead dentry. Be careful to check d_count and unlock
+> +	 * before dropping RCU lock, otherwise we could corrupt freed memory.
+> +	 */
+> +	if (!d_count(dentry) && d_is_negative(dentry) &&
+> +		!d_is_tail_negative(dentry)) {
+> +		dentry->d_flags |= DCACHE_TAIL_NEGATIVE;
+> +		list_move_tail(&dentry->d_child, &parent->d_subdirs);
+> +	}
+> +
+> +	spin_unlock(&parent->d_lock);
+> +	spin_unlock(&dentry->d_lock);
+> +	rcu_read_unlock();
+> +}
 
-> -----Original Message-----
-> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of
-> Jonathan Toppins
-> Sent: Thursday, February 3, 2022 11:15 PM
-> To: netdev@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org; Jakub Kicinski <kuba@kernel.org>; intel=
--
-> wired-lan@lists.osuosl.org; David S. Miller <davem@davemloft.net>
-> Subject: [Intel-wired-lan] [PATCH v2] ice: change "can't set link" messag=
-e to
-> dbg level
->=20
-> In the case where the link is owned by manageability, the firmware is not
-> allowed to set the link state, so an error code is returned.
-> This however is non-fatal and there is nothing the operator can do, so
-> instead of confusing the operator with messages they can do nothing about
-> hide this message behind the debug log level.
->=20
-> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
-> ---
->  drivers/net/ethernet/intel/ice/ice_lib.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
+	I'm not sure if it came up the last time you'd posted this series
+(and I apologize if it had and I forgot the explanation), but... consider
+the comment in dentry_unlist().  What's to prevent the race described there
+making d_walk() skip a part of tree, by replacing the "lseek moving cursor
+in just the wrong moment" with "dput moving the negative dentry right next
+to the one being killed to the tail of the list"?
 
-Tested-by: Gurucharan G <gurucharanx.g@intel.com> (A Contingent worker at I=
-ntel)
+	The race in question:
+d_walk() is leaving a subdirectory.  We are here:
+        rcu_read_lock();
+ascend:
+        if (this_parent != parent) {
+
+It isn't - we are not back to the root of tree being walked.
+At this point this_parent is the directory we'd just finished looking into.
+
+                struct dentry *child = this_parent;
+                this_parent = child->d_parent;
+
+... and now child points to it, and this_parent points to its parent.
+
+                spin_unlock(&child->d_lock);
+
+No locks held.  Another CPU gets through successful rmdir().  child gets
+unhashed and dropped.  It's off the ->d_subdirs of this_parent; its
+->d_child.next is still pointing where it used to, and whatever it points
+to won't be physically freed until rcu_read_unlock().
+
+Moreover, in the meanwhile this next sibling (negative, pinned) got dput().
+And had been moved to the tail of the this_parent->d_subdirs.  Since
+its ->d_child.prev does *NOT* point to child (which is off-list, about to
+be freed shortly, etc.), child->d_dchild.next is not modified - it still
+points to that (now moved) sibling.
+
+                spin_lock(&this_parent->d_lock);
+Got it.
+
+                /* might go back up the wrong parent if we have had a rename. */
+                if (need_seqretry(&rename_lock, seq))
+                        goto rename_retry;
+
+Nope, hadn't happened.
+
+                /* go into the first sibling still alive */
+                do {
+                        next = child->d_child.next;
+... and this is the moved sibling, now in the end of the ->d_subdirs.
+
+                        if (next == &this_parent->d_subdirs)
+                                goto ascend;
+
+No, it is not - it's the last element of the list, not its anchor.
+
+                        child = list_entry(next, struct dentry, d_child);
+
+Our moved negative dentry.
+
+                } while (unlikely(child->d_flags & DCACHE_DENTRY_KILLED));
+
+Not killed, that one.
+                rcu_read_unlock();
+                goto resume;
+
+... and since that sucker has no children, we proceed to look at it,
+ascend and now we are at the end of this_parent->d_subdirs.  And we
+ascend out of it, having entirely skipped all branches that used to
+be between the rmdir victim and the end of the parent's ->d_subdirs.
+
+What am I missing here?  Unlike the trick we used with cursors (see
+dentry_unlist()) we can't predict who won't get moved in this case...
+
+Note that treating "child is has DCACHE_DENTRY_KILLED" same as we do
+for rename_lock mismatches would not work unless you grab the spinlock
+component of rename_lock every time dentry becomes positive.  Which
+is obviously not feasible (it's a system-wide lock and cacheline
+pingpong alone would hurt us very badly, not to mention the contention
+issues due to the frequency of grabbing it going up by several orders
+of magnitude).

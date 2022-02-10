@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7464B0960
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 566A94B096B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238470AbiBJJWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:22:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47434 "EHLO
+        id S237336AbiBJJYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:24:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235335AbiBJJWV (ORCPT
+        with ESMTP id S229534AbiBJJYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:22:21 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CE610B5;
-        Thu, 10 Feb 2022 01:22:22 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id h8so5990870lfj.10;
-        Thu, 10 Feb 2022 01:22:22 -0800 (PST)
+        Thu, 10 Feb 2022 04:24:44 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FC5D94;
+        Thu, 10 Feb 2022 01:24:46 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id c6so13623216ybk.3;
+        Thu, 10 Feb 2022 01:24:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=nsTVaT+UT9MHEz7rhHRMqhy05TbGiCCQO6axpgS2mow=;
-        b=bSNPCd7D7+ZPmKMhWJm+NE7jDlibmc7BV/Wfg3NIFdY6l5NMTPKPjWG4G1SeghmOiW
-         4Mo4FTsE2ARgtf/IPMJ8sMVVbiq+BfVlkCnjdqMsJSTwpl+dV0rRlU+TLUuCvPZ8zTLK
-         dlO/k/qeIP+RjIEMrDMwElUmhfFKcY+Sq1RLnd5K+mUiwHWTthNL6cVQOu8jhEXxu3wL
-         3fKQpbhBxaKDLe/ZkhiQee9T+VZxK+uPmVBTyvzVRnbW0T3LklhEDGQXWqcuxZLJ/WAm
-         Eu7v5rjieKB9FK668L7of1I8vnl8S4illOAhUxTN63oAAWFk0gbCZKidv2q5I63YqmXE
-         RzBA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TpXloTlHsM1ntk3sqSjk73sshHjTMcoczp7h9ZRIX5M=;
+        b=nG29oYDVD0/CTfWlZlBTSYZYkCvfxxAe2ytLf/1ynW7ACv4wOR+kS5nLbgNWO2cwRZ
+         3Ij2aZCSYTEkTmMSPSlSfWMgEfPqIZvmyaGa8tmGFzhMUFE2+O2zqecFSoGkWwRl0jZs
+         M+WaWwq+eBUHgvWShFJbAdVFJRGokJbQY8t6UP7UVfPcr02Lbaq22WgI8NPIPmEjBTk7
+         nPW+6TyijgTBSh70Z30FssDYCEuTSB2J+Sdl9nphMYf1+stA3ecTIsBgceW+fzEpFaYw
+         LX123oN0/7N25IN7mdCJN3L/oT5PrXZOLZbV5QLRqMBEJcX9KdyBp1GRJEuGIyDxxjwU
+         NnQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=nsTVaT+UT9MHEz7rhHRMqhy05TbGiCCQO6axpgS2mow=;
-        b=aoN/Af6wAazLXQlFEV+Me2Tnk3+pDk0iXCX+2bgAj//5k5jruJvjSQ/BAyO+ylCEfs
-         xZaL06Kp00kJwKWcQ1B9xwm5Hk59NM/IuzNorZ/YEGXZYoUiITQMR8QFeOaHwhWzL80h
-         3ah6Rwkq6oaP0BqofoDyX0dbdS7UyHNbjbOGnLWzgR/8pBvctKOZMQEvXqloy3Z+eBpF
-         ijb87zH/qf0nyqhmNvcMU0gOQnZZPOWWkl3LsM5c3M77NWE7r4n87ZwpPUzLg5p1TJhN
-         y9NzIitFTK8MzJZVqv1UFcDzHn4bkplNFT6yAi+gOxM3Tb+rn4TIgvknzDTC5M3XDnxZ
-         bYeQ==
-X-Gm-Message-State: AOAM530CFykAfzC+MC6uNJnEyil86TQa+0yucNs/w4Fqu7vMD9qak6M8
-        z1Ndn+l9YenUHxFG4cdrzTf0OGmC8bFnF2s4VW8=
-X-Google-Smtp-Source: ABdhPJy3ngnKMEfBOmDyt9BDD0Fk/R8gFeaOkOvPjAAvY1gYVeuYXBWsEIS8hn6/chXIWRfJZSDGgw==
-X-Received: by 2002:a05:6512:104a:: with SMTP id c10mr4619459lfb.297.1644484941078;
-        Thu, 10 Feb 2022 01:22:21 -0800 (PST)
-Received: from wse-c0127 ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id k1sm2712230lfu.136.2022.02.10.01.22.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 01:22:20 -0800 (PST)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     Nikolay Aleksandrov <razor@blackwall.org>,
-        Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Hans Schultz <schultz.hans+lkml@gmail.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        bridge@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 5/5] net: bridge: Refactor bridge port in
- locked mode to use jump labels
-In-Reply-To: <fed43e8d-de8c-aa76-1451-877cf4cc76d2@blackwall.org>
-References: <20220209130538.533699-1-schultz.hans+netdev@gmail.com>
- <20220209130538.533699-6-schultz.hans+netdev@gmail.com>
- <fed43e8d-de8c-aa76-1451-877cf4cc76d2@blackwall.org>
-Date:   Thu, 10 Feb 2022 10:22:17 +0100
-Message-ID: <86o83fuldi.fsf@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TpXloTlHsM1ntk3sqSjk73sshHjTMcoczp7h9ZRIX5M=;
+        b=vRTYu81L6g4IHulWtqq8JA4lIwvzhIsNvBOVewQxDVG1dVU+FRcTs3SUmbh75YeYf1
+         55pQY/YKG8HuuafHwhP3SVHocS/A+l+khBIiI/VLQbKFE3Y0ZDHz99RPX7xl0Yt3vORk
+         3FZE1OwaIwTbsu4N5XDdgTI2xZ6Z1VobveEhkmZKcyp3B7MoH+Rdo6Bm2QKAYsCRHpfB
+         6MAGKnmDQA0nMug8Ds5sUNmTNR6+Wd+e7AMtExBA/jNZynU55MfzcKJnVWYq8PT2e+8s
+         zBzVVImKNbrNFLKqzhpGGhtnszNbtTE34wfnSvR5CDVV/9kx6MO7SEh/DVGv+SytOEti
+         rk7w==
+X-Gm-Message-State: AOAM5327JW4oR6zDJTr9A9RaMBoCU9Y6CMCr67PpIIdFTFdRRxwV6nW1
+        P/Ph5r6kXxF5DzXQN+8srmqc+ERjw4UCgqCZVpV0HMYGHqxcxA==
+X-Google-Smtp-Source: ABdhPJz++32w1O5FkVObhtJdMj6KLqzBo+ajd9SwAzC/wnU3f93LjZv5QlOZX9jC+CIinuCj1qagS6bWtzuF3Wz/kNo=
+X-Received: by 2002:a25:be50:: with SMTP id d16mr5721263ybm.41.1644485085432;
+ Thu, 10 Feb 2022 01:24:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220126195043.28376-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220210084052.GA69529@thinkpad>
+In-Reply-To: <20220210084052.GA69529@thinkpad>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 10 Feb 2022 09:24:19 +0000
+Message-ID: <CA+V-a8tivrjPoae69pqH1D+B=_Bd7ZzKjCA0PcfBz7Rpf022mA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/5] PCIe EPF support for internal DMAC handling and
+ driver update for R-Car PCIe EP to support DMAC
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -77,104 +78,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On tor, feb 10, 2022 at 10:31, Nikolay Aleksandrov <razor@blackwall.org> wrote:
-> On 09/02/2022 15:05, Hans Schultz wrote:
->> From: Hans Schultz <schultz.hans+lkml@gmail.com>
->> 
->> As the locked mode feature is in the hot path of the bridge modules
->> reception of packets, it needs to be refactored to use jump labels
->> for optimization.
->> 
->> Signed-off-by: Hans Schultz <schultz.hans+lkml@gmail.com>
->> Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
->> ---
->
-> Why two (almost) identical sign-offs?
+Hi,
 
-Ups, a mistake...
+On Thu, Feb 10, 2022 at 8:40 AM Manivannan Sadhasivam
+<manivannan.sadhasivam@linaro.org> wrote:
+>
+> Hi,
+>
+> On Wed, Jan 26, 2022 at 07:50:38PM +0000, Lad Prabhakar wrote:
+> > Hi All,
+> >
+> > The current PCIe EPF framework supports DMA data transfers using external
+> > DMA only, this patch series aims to add support for platforms supporting
+> > internal DMAC on PCIe for data transfers.
+> >
+> > R-Car PCIe supports internal DMAC to transfer data between Internal Bus to
+> > PCI Express and vice versa. Last patch fills up the required flags and ops
+> > to support internal DMAC.
+> >
+> > Patches 1-3 are for PCIe EPF core to support internal DMAC handling, patch
+> > 4/5 is to fix test cases based on the conversation [1].
+> >
+>
+> This looks similar to the Synopsys eDMA IP [1] that goes with the Synopsys PCIe
+> endpoint IP. Why can't you represent it as a dmaengine driver and use the
+> existing DMA support?
+>
+Let me have a look. Could you please share a link to the Synopsys PCIe
+endpoint HW manual (the driver doesn't have a binding doc).
 
+Cheers,
+Prabhakar
+
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/dma/dw-edma
 >
-> Also, as Ido mentioned, please fold this patch into patch 01.
->
->>  net/bridge/br_input.c   | 22 ++++++++++++++++++----
->>  net/bridge/br_netlink.c |  6 ++++++
->>  net/bridge/br_private.h |  2 ++
->>  3 files changed, 26 insertions(+), 4 deletions(-)
->> 
->> diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
->> index 469e3adbce07..6fc428d6bac5 100644
->> --- a/net/bridge/br_input.c
->> +++ b/net/bridge/br_input.c
->> @@ -23,6 +23,18 @@
->>  #include "br_private.h"
->>  #include "br_private_tunnel.h"
->>  
->> +static struct static_key_false br_input_locked_port_feature;
->> +
->> +void br_input_locked_port_add(void)
->> +{
->> +	static_branch_inc(&br_input_locked_port_feature);
->> +}
->> +
->> +void br_input_locked_port_remove(void)
->> +{
->> +	static_branch_dec(&br_input_locked_port_feature);
->> +}
->> +
->>  static int
->>  br_netif_receive_skb(struct net *net, struct sock *sk, struct sk_buff *skb)
->>  {
->> @@ -91,10 +103,12 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
->>  				&state, &vlan))
->>  		goto out;
->>  
->> -	if (p->flags & BR_PORT_LOCKED) {
->> -		fdb_entry = br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
->> -		if (!(fdb_entry && fdb_entry->dst == p))
->> -			goto drop;
->> +	if (static_branch_unlikely(&br_input_locked_port_feature)) {
->> +		if (p->flags & BR_PORT_LOCKED) {
->> +			fdb_entry = br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
->> +			if (!(fdb_entry && fdb_entry->dst == p))
->> +				goto drop;
->> +		}
->>  	}
->>  
->>  	nbp_switchdev_frame_mark(p, skb);
->> diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
->> index 7d4432ca9a20..e3dbe9fed75c 100644
->> --- a/net/bridge/br_netlink.c
->> +++ b/net/bridge/br_netlink.c
->> @@ -860,6 +860,7 @@ static int br_set_port_state(struct net_bridge_port *p, u8 state)
->>  static void br_set_port_flag(struct net_bridge_port *p, struct nlattr *tb[],
->>  			     int attrtype, unsigned long mask)
->>  {
->> +	bool locked = p->flags & BR_PORT_LOCKED;
->>  	if (!tb[attrtype])
->>  		return;
->>  
->> @@ -867,6 +868,11 @@ static void br_set_port_flag(struct net_bridge_port *p, struct nlattr *tb[],
->>  		p->flags |= mask;
->>  	else
->>  		p->flags &= ~mask;
->> +
->> +	if ((p->flags & BR_PORT_LOCKED) && !locked)
->> +		br_input_locked_port_add();
->> +	if (!(p->flags & BR_PORT_LOCKED) && locked)
->> +		br_input_locked_port_remove();
->>  }
->>  
->>  /* Process bridge protocol info on port */
->> diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
->> index 2661dda1a92b..0ec3ef897978 100644
->> --- a/net/bridge/br_private.h
->> +++ b/net/bridge/br_private.h
->> @@ -832,6 +832,8 @@ void br_manage_promisc(struct net_bridge *br);
->>  int nbp_backup_change(struct net_bridge_port *p, struct net_device *backup_dev);
->>  
->>  /* br_input.c */
->> +void br_input_locked_port_add(void);
->> +void br_input_locked_port_remove(void);
->>  int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb);
->>  rx_handler_func_t *br_get_rx_handler(const struct net_device *dev);
->>  
+> > Patches are based on top of [1] next branch.
+> >
+> > [0] https://www.spinics.net/lists/linux-pci/msg92385.html
+> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git
+> >
+> > Cheers,
+> > Prabhakar
+> >
+> > Lad Prabhakar (5):
+> >   PCI: endpoint: Add ops and flag to support internal DMAC
+> >   PCI: endpoint: Add support to data transfer using internal dmac
+> >   misc: pci_endpoint_test: Add driver data for Renesas RZ/G2{EHMN}
+> >   misc: pci_endpoint_test: Add support to pass flags for buffer
+> >     allocation
+> >   PCI: rcar-ep: Add support for DMAC
+> >
+> >  drivers/misc/pci_endpoint_test.c              |  56 ++++-
+> >  drivers/pci/controller/pcie-rcar-ep.c         | 227 ++++++++++++++++++
+> >  drivers/pci/controller/pcie-rcar.h            |  23 ++
+> >  drivers/pci/endpoint/functions/pci-epf-test.c | 184 ++++++++++----
+> >  drivers/pci/endpoint/pci-epf-core.c           |  32 +++
+> >  include/linux/pci-epc.h                       |   8 +
+> >  include/linux/pci-epf.h                       |   7 +
+> >  7 files changed, 483 insertions(+), 54 deletions(-)
+> >
+> > --
+> > 2.25.1
+> >

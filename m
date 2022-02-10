@@ -2,116 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 744064B173C
+	by mail.lfdr.de (Postfix) with ESMTP id C31EF4B173D
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 21:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344371AbiBJUwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 15:52:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60254 "EHLO
+        id S1344419AbiBJUxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 15:53:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344336AbiBJUwG (ORCPT
+        with ESMTP id S242216AbiBJUxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 15:52:06 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C814010B8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 12:52:05 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id e79so8909863iof.13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 12:52:05 -0800 (PST)
+        Thu, 10 Feb 2022 15:53:42 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652111034
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 12:53:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZDmTcXbfCgXu5awEkEkH5h6M1B7QYIk5NA43T9cuepo=;
-        b=gxHVZlPIYOHcQPLsLrfHJVOy+4sm5LiddBbY884K3dpEMzZVGPqLXx8cPls3wtGXE3
-         T4KPGCLxJG7ZefY+MDFO2FYShWKMsTqbUUKXkOogoNUCmMBOcim8TauHAL1cEN/Di1sa
-         E9Sp2Rz/bXncSrKDa1xsmtUGNe1p21Z1AAHiU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ZDmTcXbfCgXu5awEkEkH5h6M1B7QYIk5NA43T9cuepo=;
-        b=egvkSec3LEE54HaXGNCqv9M+jYSW1Rw/RaDjqNYMnAJlk2J9OJJk0v1LZ9+26DjhRN
-         d6i3NPnrggyTK1EiC6TP9G6j1h7RzG7JgRU4Zc2uwt97RO7oKnnBGVgB57k/NeWPWKGR
-         0lAjw33W3KIYCIkKyx6AwSKiUUDBxscx6zSUTiPIEVqVVeigItuxUIscOc0y2xxENSM+
-         +ppLmi5s+Dc2nxGlRhSUUxBr9sUgMFJTCki7FNprFO/N069jqYs0MoD4yNBVtSXDgpoO
-         zWPBzdJBg97xe4C3yx5H7LYaaXlxZJ2quHk2lpc+dNtE/jx7v5M+z7pHAsJ2uzuhcc4a
-         hypA==
-X-Gm-Message-State: AOAM530kJiNNzKyAtc+Ku8B6wNP57vRXXW9gZHNobgzPZbN2nZmUMAeN
-        KdwGAnOgtTlvmbvrvz56XtJh9g==
-X-Google-Smtp-Source: ABdhPJzrz7xQPZCYP3BEuJcYIkGZ8gXDQZXXiBB6HqpqMPptfSV1nxX3Wnr697ep6+rpXCCFXzHaCQ==
-X-Received: by 2002:a02:b0c3:: with SMTP id w3mr4709002jah.37.1644526325191;
-        Thu, 10 Feb 2022 12:52:05 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id l6sm7179414ilt.16.2022.02.10.12.52.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 12:52:04 -0800 (PST)
-Subject: Re: [PATCH 2/2] selftests: sgx: Treat CC as one argument
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "open list:INTEL SGX" <linux-sgx@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     kernel@collabora.com, kernelci@groups.io,
-        "kernelci.org bot" <bot@kernelci.org>
-References: <20220210190642.1477814-1-usama.anjum@collabora.com>
- <20220210190642.1477814-3-usama.anjum@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <2e40809b-fb03-24cb-d68c-c89b464be39b@linuxfoundation.org>
-Date:   Thu, 10 Feb 2022 13:52:04 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <20220210190642.1477814-3-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644526423; x=1676062423;
+  h=from:to:cc:subject:date:message-id;
+  bh=jsiMHNGnwK5aOfnfdJPXvi+L/dETJi4cf0IWcHr0ezM=;
+  b=fyZzd6//SwEeMAJ5amWLQKKiORYb8qofnPerweMDEWrnynCV/PdkaNa8
+   JPejTfi5GhwQUKxJEF89EJAVtrTvvlJLWF1qBEBEWyj7z2mFZvUp+utzD
+   WoZKCyYxg+s5AVfqK2vD6lyAgY7T1EhXuad5/8DW7pfEpGfASnPndGRxr
+   c=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 10 Feb 2022 12:53:43 -0800
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 10 Feb 2022 12:53:41 -0800
+X-QCInternal: smtphost
+Received: from maggarwa.ap.qualcomm.com (HELO nitirawa-linux.qualcomm.com) ([10.206.25.176])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 11 Feb 2022 02:23:31 +0530
+Received: by nitirawa-linux.qualcomm.com (Postfix, from userid 2342877)
+        id 5D1903B6F; Fri, 11 Feb 2022 02:23:30 +0530 (IST)
+From:   Nitin Rawat <quic_nitirawa@quicinc.com>
+To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Nitin Rawat <quic_nitirawa@quicinc.com>,
+        Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+Subject: [PATCH v3] nvme/pci: Add quick suspend quirk for Sc7280 Platform
+Date:   Fri, 11 Feb 2022 02:23:28 +0530
+Message-Id: <1644526408-10834-1-git-send-email-quic_nitirawa@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/10/22 12:06 PM, Muhammad Usama Anjum wrote:
-> CC can have multiple sub-strings like "ccache gcc". For check_cc.sh,
-> CC needs to be treated like one argument. Put double quotes around it to
-> make CC one string and hence one argument.
-> 
-> Fixes: 2adcba79e69d ("selftests/x86: Add a selftest for SGX")
-> Reported-by: "kernelci.org bot" <bot@kernelci.org>
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->   tools/testing/selftests/sgx/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/sgx/Makefile b/tools/testing/selftests/sgx/Makefile
-> index 2956584e1e37f..75af864e07b65 100644
-> --- a/tools/testing/selftests/sgx/Makefile
-> +++ b/tools/testing/selftests/sgx/Makefile
-> @@ -4,7 +4,7 @@ include ../lib.mk
->   
->   .PHONY: all clean
->   
-> -CAN_BUILD_X86_64 := $(shell ../x86/check_cc.sh $(CC) \
-> +CAN_BUILD_X86_64 := $(shell ../x86/check_cc.sh "$(CC)" \
->   			    ../x86/trivial_64bit_program.c)
->   
->   ifndef OBJCOPY
-> 
+Enable quick suspend quirks for Sc7280 platform, where power
+to nvme device is removed during suspend-resume process. This
+is done to avoid the failure dring resume.
 
-The intent is testing if $CC is set. Does this change work when
-$CC is not set?
+This enables simple suspend path for this platform.
 
-thanks,
--- Shuah
+Signed-off-by: Nitin Rawat <quic_nitirawa@quicinc.com>
+Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+---
+
+Change from v2-v3:
+* changed if/else condition
+
+---
+
+ drivers/nvme/host/pci.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index 6a99ed6..1dff749 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -3034,6 +3034,15 @@ static unsigned long check_vendor_combination_bug(struct pci_dev *pdev)
+ 			return NVME_QUIRK_SIMPLE_SUSPEND;
+ 	}
+
++	if (of_machine_is_compatible("qcom,sc7280")) {
++		/*
++		 * Append quick suspend quirks for sc7280 platforms
++		 * so that simple suspend path is executed for this
++		 * platform to avoid any resume failure.
++		 */
++		return NVME_QUIRK_SIMPLE_SUSPEND;
++	}
++
+ 	return 0;
+ }
+
+--
+2.7.4
+

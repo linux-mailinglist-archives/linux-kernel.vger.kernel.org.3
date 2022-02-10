@@ -2,83 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E834B12F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 422954B12FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244342AbiBJQhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 11:37:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47152 "EHLO
+        id S244386AbiBJQhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 11:37:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244288AbiBJQgy (ORCPT
+        with ESMTP id S244358AbiBJQhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 11:36:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17963137
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:36:55 -0800 (PST)
+        Thu, 10 Feb 2022 11:37:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85B99EAF
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:37:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644511014;
+        s=mimecast20190719; t=1644511025;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=C2hvu0iP1ozzImdwOawq7RtiNZp/sNLo/TZHQM9dTsg=;
-        b=BwlTkMZXpqsUSUb11xzLgJFbYp6LYoHDz9CJaBrt3ipzB1REf4FKQGcTjrriNhsA6K9LUG
-        5joyATGbZe3gXjhyd/8QikN7IilYG7Yps/f44cH6RmiZjw0miP7ESyClV3IJ5N5VmgvrJZ
-        a4A9H26JeyjtAuK3QJ6grkibsbwPQ4Q=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=5WySc1RlGnG8P3T39mlzj8E39X8bwgB3Tm12/xbTZl0=;
+        b=TEBgsqv0DHjMI0cXBhHhQzhCNZuGIlGCfS14QEN8L7fD/PUjkEgGKrevAQPsgTS3n5K3D7
+        okDBuSk/7VNNlYo4Coalh0j0+pWR0UXNEy7Hnn4uH//ptTwo9MvJpzwegdW3izSMxm2+u2
+        96JDcsr6AsKwYMnSFtCquzZ9NraVagY=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-332-gdZxSdYxMlqE_gHVxxW0Xw-1; Thu, 10 Feb 2022 11:36:53 -0500
-X-MC-Unique: gdZxSdYxMlqE_gHVxxW0Xw-1
-Received: by mail-ej1-f71.google.com with SMTP id o4-20020a170906768400b006a981625756so3024202ejm.0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:36:52 -0800 (PST)
+ us-mta-45-JU1A0gllMrOCqawAqpTh7A-1; Thu, 10 Feb 2022 11:36:59 -0500
+X-MC-Unique: JU1A0gllMrOCqawAqpTh7A-1
+Received: by mail-ed1-f69.google.com with SMTP id bq19-20020a056402215300b0040f276105a4so3669368edb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:36:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=C2hvu0iP1ozzImdwOawq7RtiNZp/sNLo/TZHQM9dTsg=;
-        b=AJBD41dSvBjRcROTltHlUGGRZzk9KOgsGY+Y4CgQa2XXNis5oQyQKDakakzTZvLqS6
-         vu8fau948QNocOv9TyVgbIw2b3R2Xy29/7wgBZoZooShOOkRHFQzW/KR+nYbNEYSCb9r
-         XNFlcFqFawXQ0Xfg1TerdYCgI8pCv1aFlGrChJ1FntIJFh0bwE5uRilXh4lJaoVmggVv
-         3KaZzoNNdfXx9Gg4zIMKg7vclrIQmLAaHQ7PC/+uf8CVBiUG0R3uGyIxgSJST16tjSog
-         yeDf8dCoVNJ3dcqNDX0KdYtwQ8x1XlYuphb0zjedHfqa+WoF46avlkWuBm+H+jnT2AyP
-         gJqw==
-X-Gm-Message-State: AOAM530tqSnl67f9vbZwH5LSNLVUQQA+2Iz13N0LErx3Cs+DXS711So1
-        ZnmMqYi0gEnRf86U0bxhZfT24l/B7Cu1DJpC/uYGef6IfUCpLxBI9Miltzh2yWCO0hZzkIw5xOD
-        y7abDHGM/n+h27PP/pJ1WHd/G
-X-Received: by 2002:a05:6402:348b:: with SMTP id v11mr9188568edc.58.1644511011948;
-        Thu, 10 Feb 2022 08:36:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzJfC1GU+5eGfGNQQxuYJPtmnQ9Njp+YLT1I+95acuMLcAIv38IH5OD1zORnBLD/pfnnJ+cWw==
-X-Received: by 2002:a05:6402:348b:: with SMTP id v11mr9188549edc.58.1644511011762;
-        Thu, 10 Feb 2022 08:36:51 -0800 (PST)
+        bh=5WySc1RlGnG8P3T39mlzj8E39X8bwgB3Tm12/xbTZl0=;
+        b=xmL2PSz6nhMOsDHEdfjomHUcAOr8nBZJwImGyhOEJdwD38GChYXFBD7FymHl098Wil
+         AVOf/8MKWXg+KFKz/psbnTN75jPH5Lxck9oqnml1+SNJf9iT/uc8+NaEs4BZiG8XTa2p
+         D6pPrsh6KnvQKhhXfgOrhIo9ENLkHWwGrw2Xa7aCfyhisefFdDyqvKE6L0ORacrYiiNj
+         WDWjSpQQTI0RrZygI3T45Hcb559f8jdnkWlpXtoGWQ+baVTyO7+0/ctAXWa8Jfn0Vv7M
+         0KaTdIdzdCdigWWoIt/AZ19ttb/ps7o1nLM8VQ7nzNfLuo7oaXZweJP2/Glfw7bxgapb
+         kmTQ==
+X-Gm-Message-State: AOAM533pGRh1IKDykBZl6g8fBlH6FL1YNFIVGRS+Q+nR7gLhrIAuKRFG
+        L9ZZPyJz5REUzFLnWhslxSrYOqfhqwZgP6DEp3B/oTR3/Jmwa07kBo12f46PhB41Jv4wyjrKbCj
+        oKm9B/IG+bN6FASfRKSPhMvnD
+X-Received: by 2002:a17:906:73ce:: with SMTP id n14mr6827048ejl.312.1644511018362;
+        Thu, 10 Feb 2022 08:36:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxDLWA297hpVfTcfKzBU3jAjpUisYVnV/ULWs53msCQUuZNZ+de98gW+3zY9Ew60sUlgr8XXw==
+X-Received: by 2002:a17:906:73ce:: with SMTP id n14mr6827032ejl.312.1644511018158;
+        Thu, 10 Feb 2022 08:36:58 -0800 (PST)
 Received: from [192.168.10.118] ([93.56.170.240])
-        by smtp.googlemail.com with ESMTPSA id g19sm4365247ejd.62.2022.02.10.08.36.42
+        by smtp.googlemail.com with ESMTPSA id m17sm8783672edr.62.2022.02.10.08.36.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 08:36:50 -0800 (PST)
-Message-ID: <fd3ffa55-5421-fd18-9dc2-82805b694e14@redhat.com>
-Date:   Thu, 10 Feb 2022 17:33:21 +0100
+        Thu, 10 Feb 2022 08:36:57 -0800 (PST)
+Message-ID: <042c4562-3eb8-f141-a363-67ec1def8e2c@redhat.com>
+Date:   Thu, 10 Feb 2022 17:33:40 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH MANUALSEL 5.16 4/8] KVM: nVMX: WARN on any attempt to
- allocate shadow VMCS for vmcs02
+Subject: Re: [PATCH MANUALSEL 5.16 5/8] KVM: SVM: Don't kill SEV guest if SMAP
+ erratum triggers in usermode
 Content-Language: en-US
 To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
         stable@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>, tglx@linutronix.de,
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Liam Merwick <liam.merwick@oracle.com>, tglx@linutronix.de,
         mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
         x86@kernel.org, kvm@vger.kernel.org
 References: <20220209185635.48730-1-sashal@kernel.org>
- <20220209185635.48730-4-sashal@kernel.org>
+ <20220209185635.48730-5-sashal@kernel.org>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220209185635.48730-4-sashal@kernel.org>
+In-Reply-To: <20220209185635.48730-5-sashal@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,67 +89,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 2/9/22 19:56, Sasha Levin wrote:
 > From: Sean Christopherson <seanjc@google.com>
 > 
-> [ Upstream commit d6e656cd266cdcc95abd372c7faef05bee271d1a ]
+> [ Upstream commit cdf85e0c5dc766fc7fc779466280e454a6d04f87 ]
 > 
-> WARN if KVM attempts to allocate a shadow VMCS for vmcs02.  KVM emulates
-> VMCS shadowing but doesn't virtualize it, i.e. KVM should never allocate
-> a "real" shadow VMCS for L2.
-> 
-> The previous code WARNed but continued anyway with the allocation,
-> presumably in an attempt to avoid NULL pointer dereference.
-> However, alloc_vmcs (and hence alloc_shadow_vmcs) can fail, and
-> indeed the sole caller does:
-> 
-> 	if (enable_shadow_vmcs && !alloc_shadow_vmcs(vcpu))
-> 		goto out_shadow_vmcs;
-> 
-> which makes it not a useful attempt.
-> 
+> Inject a #GP instead of synthesizing triple fault to try to avoid killing
+> the guest if emulation of an SEV guest fails due to encountering the SMAP
+> erratum.  The injected #GP may still be fatal to the guest, e.g. if the
+> userspace process is providing critical functionality, but KVM should
+> make every attempt to keep the guest alive.
+
+Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+
+Paolo
+
 > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Message-Id: <20220125220527.2093146-1-seanjc@google.com>
+> Reviewed-by: Liam Merwick <liam.merwick@oracle.com>
+> Message-Id: <20220120010719.711476-10-seanjc@google.com>
 > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
->   arch/x86/kvm/vmx/nested.c | 22 ++++++++++++----------
->   1 file changed, 12 insertions(+), 10 deletions(-)
+>   arch/x86/kvm/svm/svm.c | 16 +++++++++++++++-
+>   1 file changed, 15 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> index c605c2c01394b..9cd68e1fcf602 100644
-> --- a/arch/x86/kvm/vmx/nested.c
-> +++ b/arch/x86/kvm/vmx/nested.c
-> @@ -4827,18 +4827,20 @@ static struct vmcs *alloc_shadow_vmcs(struct kvm_vcpu *vcpu)
->   	struct loaded_vmcs *loaded_vmcs = vmx->loaded_vmcs;
->   
->   	/*
-> -	 * We should allocate a shadow vmcs for vmcs01 only when L1
-> -	 * executes VMXON and free it when L1 executes VMXOFF.
-> -	 * As it is invalid to execute VMXON twice, we shouldn't reach
-> -	 * here when vmcs01 already have an allocated shadow vmcs.
-> +	 * KVM allocates a shadow VMCS only when L1 executes VMXON and frees it
-> +	 * when L1 executes VMXOFF or the vCPU is forced out of nested
-> +	 * operation.  VMXON faults if the CPU is already post-VMXON, so it
-> +	 * should be impossible to already have an allocated shadow VMCS.  KVM
-> +	 * doesn't support virtualization of VMCS shadowing, so vmcs01 should
-> +	 * always be the loaded VMCS.
->   	 */
-> -	WARN_ON(loaded_vmcs == &vmx->vmcs01 && loaded_vmcs->shadow_vmcs);
-> +	if (WARN_ON(loaded_vmcs != &vmx->vmcs01 || loaded_vmcs->shadow_vmcs))
-> +		return loaded_vmcs->shadow_vmcs;
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 3efada37272c0..d6a4acaa65742 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -4530,7 +4530,21 @@ static bool svm_can_emulate_instruction(struct kvm_vcpu *vcpu, void *insn, int i
+>   	is_user = svm_get_cpl(vcpu) == 3;
+>   	if (smap && (!smep || is_user)) {
+>   		pr_err_ratelimited("KVM: SEV Guest triggered AMD Erratum 1096\n");
+> -		kvm_make_request(KVM_REQ_TRIPLE_FAULT, vcpu);
 > +
-> +	loaded_vmcs->shadow_vmcs = alloc_vmcs(true);
-> +	if (loaded_vmcs->shadow_vmcs)
-> +		vmcs_clear(loaded_vmcs->shadow_vmcs);
+> +		/*
+> +		 * If the fault occurred in userspace, arbitrarily inject #GP
+> +		 * to avoid killing the guest and to hopefully avoid confusing
+> +		 * the guest kernel too much, e.g. injecting #PF would not be
+> +		 * coherent with respect to the guest's page tables.  Request
+> +		 * triple fault if the fault occurred in the kernel as there's
+> +		 * no fault that KVM can inject without confusing the guest.
+> +		 * In practice, the triple fault is moot as no sane SEV kernel
+> +		 * will execute from user memory while also running with SMAP=1.
+> +		 */
+> +		if (is_user)
+> +			kvm_inject_gp(vcpu, 0);
+> +		else
+> +			kvm_make_request(KVM_REQ_TRIPLE_FAULT, vcpu);
+>   	}
 >   
-> -	if (!loaded_vmcs->shadow_vmcs) {
-> -		loaded_vmcs->shadow_vmcs = alloc_vmcs(true);
-> -		if (loaded_vmcs->shadow_vmcs)
-> -			vmcs_clear(loaded_vmcs->shadow_vmcs);
-> -	}
->   	return loaded_vmcs->shadow_vmcs;
->   }
->   
-
-NACK, it's just extra care but not particularly useful.
-
-Paolo
+>   	return false;
 

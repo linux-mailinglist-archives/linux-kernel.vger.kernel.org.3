@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB584B0F98
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:03:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1630B4B0F95
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:03:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242586AbiBJODU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:03:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56660 "EHLO
+        id S242572AbiBJODI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:03:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242583AbiBJODR (ORCPT
+        with ESMTP id S242575AbiBJODC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:03:17 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9EEBF5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:03:16 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21AE35dK007606;
-        Thu, 10 Feb 2022 08:03:05 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1644501785;
-        bh=PiljcDEbg06UCTJ9yZCFbrV4SBZ07VQn7L8EF42ldHs=;
-        h=From:To:CC:Subject:Date;
-        b=UQXriwppD610PoH34lX2lGKDBDN/juwI102urjc7inUHzYIzZSw8FhRwMPGubaFpM
-         V5WKcwhr6k7EZZR+m6ZelutM+LWf2UJk9kSUwCadqj6MpXjPUX53Wrq13SSBqJzwMa
-         gkPNqlTKsi+qlf5x8sN34xUP4IbD5sQaEm6Nnfvc=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21AE35x3027136
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 10 Feb 2022 08:03:05 -0600
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 10
- Feb 2022 08:03:04 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 10 Feb 2022 08:03:04 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21AE331H077747;
-        Thu, 10 Feb 2022 08:03:04 -0600
-From:   Rahul T R <r-ravikumar@ti.com>
-To:     <thierry.reding@gmail.com>
-CC:     <sam@ravnborg.org>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <nikhil.nd@ti.com>, <tomi.valkeinen@ideasonboard.com>,
-        <laurent.pinchart@ideasonboard.com>, Rahul T R <r-ravikumar@ti.com>
-Subject: [PATCH] drm/panel: simple: Initialize bpc in RK101II01D-CT panel descriptor
-Date:   Thu, 10 Feb 2022 19:33:00 +0530
-Message-ID: <20220210140300.11900-1-r-ravikumar@ti.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Thu, 10 Feb 2022 09:03:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689539A;
+        Thu, 10 Feb 2022 06:03:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0433D612CC;
+        Thu, 10 Feb 2022 14:03:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 673CDC004E1;
+        Thu, 10 Feb 2022 14:03:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644501783;
+        bh=L+PpSV/TcNiz+mfnm44CEXLNSfejV2BvLcPSOPgEGHg=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=heErZJ5gEuTECPxXK3+pdRe0LQ3IWwF+7AdPZ5b+6req+YnOf+g8gWdiHus1kJ+Rr
+         FdZUryam4V3vKWG33gVz6Y5h5Ovwuwv5W15E4ejY2Nq5bJxFAoNTQFFPTax7zuXJA6
+         hL2tdNzVFbvYU3/AOL3K6tMiNEY4RTq22Q+J1GBWYUuUb9EhNjoiNz9cf90FPPZ+ou
+         3gyjJLg/srnPLH3a2jGEW7SI3XjZb35xh3TPfPgRQynwYSt4kwW+5nRZ6wD6+Aw1yN
+         JyMwYAC/fz+bpMea+sZ89UKq1GQvS9cc/Bxqg2oVbJXXl3Z6IjA16LyKeJxkVEaJhD
+         jfoVPfw5ObEwg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5181FE5D084;
+        Thu, 10 Feb 2022 14:03:03 +0000 (UTC)
+Subject: Re: [GIT PULL] MIPS fixes for v5.17
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220210102939.GA9285@alpha.franken.de>
+References: <20220210102939.GA9285@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-mips.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220210102939.GA9285@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes-5.17_3
+X-PR-Tracked-Commit-Id: d9565bf40da22426d2f660cb31700b6858d1911d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e3c85076d7a6f986445b9008be7e7f83d1b0780a
+Message-Id: <164450178331.30240.93820123938051512.pr-tracker-bot@kernel.org>
+Date:   Thu, 10 Feb 2022 14:03:03 +0000
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,30 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Initialize bpc while creating panel_desc structure for RK101II01D-CT
+The pull request you sent on Thu, 10 Feb 2022 11:29:39 +0100:
 
-Below warning is triggered since bpc is not being initialized
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes-5.17_3
 
-WARNING: CPU: 2 PID: 47 at drivers/gpu/drm/panel/panel-simple.c:614
-panel_simple_probe+0x1b0/0x3c8
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e3c85076d7a6f986445b9008be7e7f83d1b0780a
 
-Signed-off-by: Rahul T R <r-ravikumar@ti.com>
----
- drivers/gpu/drm/panel/panel-simple.c | 1 +
- 1 file changed, 1 insertion(+)
+Thank you!
 
-diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index c324a3ed34b9..c09eb5ad65fc 100644
---- a/drivers/gpu/drm/panel/panel-simple.c
-+++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -3058,6 +3058,7 @@ static const struct drm_display_mode rocktech_rk101ii01d_ct_mode = {
- 
- static const struct panel_desc rocktech_rk101ii01d_ct = {
- 	.modes = &rocktech_rk101ii01d_ct_mode,
-+	.bpc = 8,
- 	.num_modes = 1,
- 	.size = {
- 		.width = 217,
 -- 
-2.17.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,90 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2851E4B1294
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B42D4B1297
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:22:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244022AbiBJQVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 11:21:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39198 "EHLO
+        id S244140AbiBJQWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 11:22:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234883AbiBJQVF (ORCPT
+        with ESMTP id S240419AbiBJQWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 11:21:05 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4C798
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:21:05 -0800 (PST)
-Received: from mail-wm1-f45.google.com ([209.85.128.45]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MS3zP-1nl5hE3SGp-00TXbr for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022
- 17:21:03 +0100
-Received: by mail-wm1-f45.google.com with SMTP id j9-20020a05600c190900b0037bff8a24ebso1111295wmq.4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:21:03 -0800 (PST)
-X-Gm-Message-State: AOAM530eHuBi/2UnuaZofXosOgY/croxe3Bqdm6quxsRM6Wsja3s3uPG
-        5XTCwFEFG09mFFgBY/dP08JTBmAS4QT9gMLVCtM=
-X-Google-Smtp-Source: ABdhPJxEt42iOSrAM6C3TvkblI3b5gQmXnnRKKOtEBtFl2RyO5MYFlbo5PnAEnruW7eQTVPA+SeI0QUJdaKY2LsCsdY=
-X-Received: by 2002:a05:600c:1f0b:: with SMTP id bd11mr2796188wmb.82.1644510063280;
- Thu, 10 Feb 2022 08:21:03 -0800 (PST)
+        Thu, 10 Feb 2022 11:22:20 -0500
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87A81A7;
+        Thu, 10 Feb 2022 08:22:20 -0800 (PST)
+Received: by mail-qk1-f181.google.com with SMTP id 13so5311621qkd.13;
+        Thu, 10 Feb 2022 08:22:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=+GeqGuh981U4ovUDSjvJdu2yKZRMHALTYZnjSh1GDTs=;
+        b=fwy/iaExfgOreHfSjTcn3FVGDFlb0Cj9jGrzPQd39XAq+MfmaJbk2DfX2m6t79cvDx
+         u8envE+dExuEnavB88J5phYqbx/tnkZ2eisJnvwxCk3s+aIg4wjInrb2nWqqOJiGOcUo
+         nH9jQtUiY2S7UIgPOQD3e9y5wGZZy2LNTk663qDqNMkmI99roL7SKOQoQI4QE4Ewsm1c
+         AqoZ5sWc4uENLtGEUFd5c/nx9NKo9PxQyYLR6SOp5e5dmzd9XYx5OvK0GERZJPlHTM64
+         XjzGn5RuX8enxfJpfDhF/4tGW5GsaScO2IvyS8gos956axzJDWV/UebDphP1OAa3+4E0
+         zqsg==
+X-Gm-Message-State: AOAM533ql3GlqhJmfsa8UnWMgr1I3mLivniLbFdUBwWw2CFH8ZeSVfFj
+        5tTuelImcZgWEtxUxCqMmAA=
+X-Google-Smtp-Source: ABdhPJyuUZuhZA63K6TFCv2cuVjLaXfVWmyTaDqapp6THScQOR7ATeNEe0e9ilGyJWzXMkMyxBwZxQ==
+X-Received: by 2002:a05:620a:7e9:: with SMTP id k9mr4224181qkk.208.1644510139612;
+        Thu, 10 Feb 2022 08:22:19 -0800 (PST)
+Received: from dev0025.ash9.facebook.com (fwdproxy-ash-000.fbsv.net. [2a03:2880:20ff::face:b00c])
+        by smtp.gmail.com with ESMTPSA id d17sm10343115qkn.84.2022.02.10.08.22.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 08:22:19 -0800 (PST)
+Date:   Thu, 10 Feb 2022 08:22:15 -0800
+From:   David Vernet <void@manifault.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
+        joe.lawrence@redhat.com, corbet@lwn.net, kernel-team@fb.com
+Subject: Re: [PATCH v2] livepatch: Skip livepatch tests if ftrace cannot be
+ configured
+Message-ID: <20220210162215.oupcqlcglfpeqkbp@dev0025.ash9.facebook.com>
+References: <20220203233205.1554034-1-void@manifault.com>
+ <20220204205625.2628328-1-void@manifault.com>
+ <20220209130233.GB8279@pathway.suse.cz>
+ <20220209154934.5w5k5tqcqldbfjt3@dev0025.ash9.facebook.com>
+ <YgUt4+XGLOB4+0H3@alley>
 MIME-Version: 1.0
-References: <20220209163242.430265-1-michael@walle.cc>
-In-Reply-To: <20220209163242.430265-1-michael@walle.cc>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 10 Feb 2022 17:20:47 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0cBdT0EjStDhB5jSPWm=FiPVj8_5X6rVnBfXOcznTy6g@mail.gmail.com>
-Message-ID: <CAK8P3a0cBdT0EjStDhB5jSPWm=FiPVj8_5X6rVnBfXOcznTy6g@mail.gmail.com>
-Subject: Re: [PATCH v2 0/7] soc: fsl: guts: cleanups and serial_number support
-To:     Michael Walle <michael@walle.cc>
-Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Li Yang <leoyang.li@nxp.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sudeep Holla <Sudeep.Holla@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:WHj5oaTRZYHSkNli9IcEqspxMVOanKqshGxvtcOA2tehxwogl/1
- xTtnqpL1McELerOGOaBpVItu7QNXHXP0hQ4HqzUcAqKEsL12Qt2tG5NXLqA9i2sjjLraCAj
- jpI+whuu/87WvpeetUOzYLxMgjPKS/z81ARZbxC7t2dUMcwOKFdLaMrKmCt/xtru/TE0AWT
- o0jkm+PBkd+8dzhElIKKw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:GeHd+OAoNPg=:Y7BgX5BIPgszT0O4BxZW7J
- WaaFg03KOchGu73tJVqpCMjndPFmr/7oMG9c0pM/9tLcxqL4bfT6hg88+zije3jeSCRsQHid6
- TQ2blzfgVe5+u0qN8xpzHUvhQ2QHp5/AG/pw7iyp7HPdzpYLLzXRkj5Iah3By1hgwlKgzpQ5x
- 7/4aRq+XMM5fh9vN3LNqsw3TBRyOGA1o3YM71Au/uQvmV7G7TSiWdNJtYcipspFHsAFqVan2U
- 6Vla6fj6UAue+9riHNlf/iDNY/BS92awiHlXbFdTxiULoJ9rDgMyvISJdVwCxQSoZKej/hxts
- NidOpVLETufpcwbh7w1E6XPRYd6HAb4Gvr0ggnYcWy72cVxrd9kOFnMnNP35XHjqo3Aq5WXR9
- mZLST7iJghJGI5bZZU/WS4eu04UmA2dsqinpDTzqmM3ihDnvn1olaWwszcEdki5tchasqvs9/
- avk6MFAgexGImMYBVuDl5XJT/6bCfxzwkpSZDLkMxoIV3GwKRuXNll/9CRrIKjfhTNspX7Wx7
- ud6XRgvlRDCyOfLsVEJLjfYsD6WQTpZ6HjgET7dBqmOmeU4duT2ngthrbLrWrsCpq55DozLx7
- o3hFmjGuxrHzILCk+qWdEoTIV7sHfSyIDJbB8ddxG/bqgnUvVo6mFFZ2eJ4H022vMFNpVV/MB
- kIPWLmZaBsOaDDIaYTbZMir/EFcrhRuIqJYn9D1uNKDF1B1Tef0RmdXyeGQZAFYTo3ek=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgUt4+XGLOB4+0H3@alley>
+User-Agent: NeoMutt/20211029
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 5:32 PM Michael Walle <michael@walle.cc> wrote:
->
-> This series converts the guts driver from a platform driver to just an
-> core_initcall. The driver itself cannot (or rather should never) be
-> unloaded because others depends on detecting the current SoC revision
-> to apply chip errata. Other SoC drivers do it the same way. Overall I
-> got rid of all the global static variables.
->
-> The last patch finally adds unique id support to the guts driver. But
-> because the binding [1] for the security fuse processor is still pending,
-> it is marked as RFC.
->
-> [1] https://lore.kernel.org/linux-devicetree/20220127163728.3650648-2-michael@walle.cc/
->
-> changes since v1:
->  - call kfree() in error case, thanks Dan
->  - add missing of_node_put(np), thanks Dan
+On Thu, Feb 10, 2022 at 04:23:15PM +0100, Petr Mladek wrote:
+> OK, what about the following change:
+> 
+>    1. Store only the value (number) in $result
+>    2. Add optional --fail parameter
 
-Looks all good to me,
+I'm fine with this approach. I agree that it's probably less confusing than
+"$2" == "$1". I don't think the elif check I proposed is strictly necessary
+either, and in any case the way you've rewired the patch address that.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> Hmm, the 1st step is not needed after several iterations here ;-)
+> Anyway, it should be easier to maintain it in the long term when the
+> sysctl output might change. We should probably do it in a separate patch.
+>
+>
+> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+> index 846c7ed71556..7b624d0fd7c0 100644
+> --- a/tools/testing/selftests/livepatch/functions.sh
+> +++ b/tools/testing/selftests/livepatch/functions.sh
+> @@ -75,9 +75,25 @@ function set_dynamic_debug() {
+>  }
+>  
+>  function set_ftrace_enabled() {
+> -	result=$(sysctl -q kernel.ftrace_enabled="$1" 2>&1 && \
+> -		 sysctl kernel.ftrace_enabled 2>&1)
+> -	echo "livepatch: $result" > /dev/kmsg
+> +	can_fail=0
+
+Can you make this variable a local?
+
+> +	if [[ "$1" == "--fail" ]] ; then
+> +		can_fail=1
+> +		shift
+> +	fi
+> +
+> +	err=$(sysctl -q kernel.ftrace_enabled="$1" 2>&1)
+> +	result=$(sysctl --values kernel.ftrace_enabled)
+> +
+> +	if [[ "$result" != "$1" ]] ; then
+> +		if [[ $can_fail -eq 1 ]] ; then
+> +			echo "livepatch: $err" > /dev/kmsg
+> +			return
+> +		fi
+> +
+> +		skip "failed to set kernel.ftrace_enabled = $1"
+> +	fi
+> +
+> +	echo "livepatch: kernel.ftrace_enabled = $result" > /dev/kmsg
+>  }
+>  
+>  function cleanup() {
+> diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
+> index 552e165512f4..825540a5194d 100755
+> --- a/tools/testing/selftests/livepatch/test-ftrace.sh
+> +++ b/tools/testing/selftests/livepatch/test-ftrace.sh
+> @@ -25,7 +25,8 @@ if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]]
+>  	die "livepatch kselftest(s) failed"
+>  fi
+>  
+> -set_ftrace_enabled 0
+> +# Check that ftrace could not get disabled when a livepatch is enabled
+> +set_ftrace_enabled --fail 0
+>  if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]] ; then
+>  	echo -e "FAIL\n\n"
+>  	die "livepatch kselftest(s) failed"
+
+Patch looks great otherwise and works fine after testing on my end. Do you
+want me to send it out as a v3? Or would you prefer to just apply it as is?
+Assuming it's the latter, then:
+
+Reviewed-by: David Vernet <void@manifault.com>
+
+Thanks,
+David

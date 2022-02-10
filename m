@@ -2,158 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480874B0619
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 07:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8D64B0615
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 07:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235087AbiBJGI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 01:08:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53772 "EHLO
+        id S235064AbiBJGIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 01:08:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbiBJGIx (ORCPT
+        with ESMTP id S229865AbiBJGIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 01:08:53 -0500
-X-Greylist: delayed 17286 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 22:08:52 PST
-Received: from smtpbg156.qq.com (smtpbg156.qq.com [15.184.82.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3061E6
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 22:08:52 -0800 (PST)
-X-QQ-mid: bizesmtp31t1644473325t4um6gr6
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 10 Feb 2022 14:08:37 +0800 (CST)
-X-QQ-SSF: 0140000000200020C000B00A0000000
-X-QQ-FEAT: F3yR32iATbgqbQ7dxOEjZ8MGKfPiaMbvMu0Lq+6FSWO29t6tRcEdrRK9bqB6x
-        6aj+EpSZ8mgnCUh5uBOeMlsuP0R9Cuu97YEieN8zDS8/x8QgmK5qPKZqWr7iR9cG6FcziWv
-        6QzARQiZcGm/PMiKERzdDxkcYj7ATOzHWcaTl7cWKZjrXuk/3RymxEBeMDhtp5Wrudj8/Zj
-        4iDluVCjd1pTAXXiWD8Y8EDW5/RnYeVopR43TAJLIreAqjq48kulVMilXMU1x6MX9sTApXG
-        i5CB/SmqFf+gDgrN02X3HfkLzDA/9NK7y/rIQzc9PVDAyBOXi96jgOjsmy1KsGlL6Q+5QtH
-        nY4FDRfAQSfHG3Z49OGOF003OETqbMnzfjdwCbzeyQ4LDK+GBg=
-X-QQ-GoodBg: 2
-From:   Zhen Ni <nizhen@uniontech.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, mcgrof@kernel.org,
-        keescook@chromium.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Zhen Ni <nizhen@uniontech.com>
-Subject: [PATCH] sched: move rr_timeslice sysctls to rt.c
-Date:   Thu, 10 Feb 2022 14:08:31 +0800
-Message-Id: <20220210060831.26689-1-nizhen@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Thu, 10 Feb 2022 01:08:50 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555C61A5;
+        Wed,  9 Feb 2022 22:08:52 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id k4so3961315qvt.6;
+        Wed, 09 Feb 2022 22:08:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7JmUNCH8ILvUpgW5tfKMuBrQ9Oc08aN4VH7PCjI93Sg=;
+        b=XURn4hJpnc9rH6q6uqnGir8XcYYLszbadb/32HdlDIZAesJDwK97Yze8V+sz4BhEY5
+         PuwMZLEifxqHRd27nB6fRtRvMXY+JF8aW7DZJwJD1avljzuFKC9JC15tANE0zROJOFUv
+         Calf8rI/v5S7GvEYHIRtXELkZV0+1nqzFPnysN37w0zj3ZaypfJnMZQpU1QFrZlXVfov
+         EfSxVQ99/K9wqGY2ShWsqd+hHWk+CLAhoFS8nVSx2chA857udYczOslXTLHklB8P5Zsm
+         gVmhY5QBqAS3pBDbnabH04R89ntWFoOWfQKPA8urWTnS32bnOWXqTrO3NTPKx/gGUSW4
+         4dgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7JmUNCH8ILvUpgW5tfKMuBrQ9Oc08aN4VH7PCjI93Sg=;
+        b=QScmdlvmoiBPCIZ+67kQZJra7yyuUWwZBRIVmikLmGFa1NOW0wXlxVBrG8kcMHr/t/
+         ZVNBI83IpK65XINZEP+A/BeYS/akWvfSBeRdW6dgb4E5V+wWqOKjk0dTqNv0PFelxcCW
+         Z2W/grB+C2cOH23oOHLN9eqJVe9vryCTZ0Ut4qSL82WEFkFZrW4X0P/Qfpw+TEjtL8pz
+         hY8DH68n89QzucO/JJuOK1AXkUMIG0zKQVMRZDPzPgxZrmEw2sXlBmrrTBRkYCx09s8c
+         n23XMWroSY3X0I3ND1h5HFQ9DunZQheZkuu0HWOAQAXjuU5tkHiAguS11e5ovye4osNQ
+         0Rfg==
+X-Gm-Message-State: AOAM5319Egnj5HXu1Vpl5q+EFwOorg68yNDW/SQuCHKlHiDKom3Yd+SA
+        8ukCRK498/59A982b7nch20=
+X-Google-Smtp-Source: ABdhPJxoS1gFeEW+kHFthBrPAumPRtegWqJziHdxjRwdjbPjnN9LJW1nPN96Evo+JpE1y6xfm/IGhw==
+X-Received: by 2002:ad4:5deb:: with SMTP id jn11mr3994703qvb.120.1644473331569;
+        Wed, 09 Feb 2022 22:08:51 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id d11sm10224915qtd.63.2022.02.09.22.08.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 22:08:51 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     davem@davemloft.net
+Cc:     kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH V2] net/802: use struct_size over open coded arithmetic
+Date:   Thu, 10 Feb 2022 06:08:45 +0000
+Message-Id: <20220210060845.1608290-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-move rr_timeslice sysctls to rt.c and use the new
-register_sysctl_init() to register the sysctl interface.
+From: "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>
 
-Signed-off-by: Zhen Ni <nizhen@uniontech.com>
+Replace zero-length array with flexible-array member and make use
+of the struct_size() helper in kmalloc(). For example:
+
+struct garp_attr {
+    struct rb_node            node;
+    enum garp_applicant_state    state;
+    u8                type;
+    u8                dlen;
+    unsigned char            data[];
+};
+
+Make use of the struct_size() helper instead of an open-coded version
+in order to avoid any potential type mistakes.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 ---
- include/linux/sched/sysctl.h |  3 ---
- kernel/sched/rt.c            | 28 ++++++++++++++++++++++++++--
- kernel/sysctl.c              |  7 -------
- 3 files changed, 26 insertions(+), 12 deletions(-)
+ net/802/mrp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
-index d416d8f45186..f6466040883c 100644
---- a/include/linux/sched/sysctl.h
-+++ b/include/linux/sched/sysctl.h
-@@ -45,11 +45,8 @@ extern unsigned int sysctl_sched_uclamp_util_min_rt_default;
- extern unsigned int sysctl_sched_autogroup_enabled;
- #endif
- 
--extern int sysctl_sched_rr_timeslice;
- extern int sched_rr_timeslice;
- 
--int sched_rr_handler(struct ctl_table *table, int write, void *buffer,
--		size_t *lenp, loff_t *ppos);
- int sched_rt_handler(struct ctl_table *table, int write, void *buffer,
- 		size_t *lenp, loff_t *ppos);
- int sysctl_sched_uclamp_handler(struct ctl_table *table, int write,
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 7b4f4fbbb404..e8316e0307b0 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -8,10 +8,33 @@
- #include "pelt.h"
- 
- int sched_rr_timeslice = RR_TIMESLICE;
--int sysctl_sched_rr_timeslice = (MSEC_PER_SEC / HZ) * RR_TIMESLICE;
-+static int sysctl_sched_rr_timeslice = (MSEC_PER_SEC / HZ) * RR_TIMESLICE;
- /* More than 4 hours if BW_SHIFT equals 20. */
- static const u64 max_rt_runtime = MAX_BW;
- 
-+static int sched_rr_handler(struct ctl_table *table, int write, void *buffer,
-+		size_t *lenp, loff_t *ppos);
-+
-+#ifdef CONFIG_SYSCTL
-+static struct ctl_table sched_rr_sysctls[] = {
-+	{
-+		.procname       = "sched_rr_timeslice_ms",
-+		.data           = &sysctl_sched_rr_timeslice,
-+		.maxlen         = sizeof(int),
-+		.mode           = 0644,
-+		.proc_handler   = sched_rr_handler,
-+	},
-+	{}
-+};
-+
-+static void __init sched_rr_sysctl_init(void)
-+{
-+	register_sysctl_init("kernel", sched_rr_sysctls);
-+}
-+#else
-+#define sched_rr_sysctl_init() do { } while (0)
-+#endif
-+
- static int do_sched_rt_period_timer(struct rt_bandwidth *rt_b, int overrun);
- 
- struct rt_bandwidth def_rt_bandwidth;
-@@ -2471,6 +2494,7 @@ void __init init_sched_rt_class(void)
- 		zalloc_cpumask_var_node(&per_cpu(local_cpu_mask, i),
- 					GFP_KERNEL, cpu_to_node(i));
+diff --git a/net/802/mrp.c b/net/802/mrp.c
+index 35e04cc5390c..880cb9ed9c4b 100644
+--- a/net/802/mrp.c
++++ b/net/802/mrp.c
+@@ -273,7 +273,7 @@ static struct mrp_attr *mrp_attr_create(struct mrp_applicant *app,
+ 			return attr;
+ 		}
  	}
-+	sched_rr_sysctl_init();
- }
- #endif /* CONFIG_SMP */
- 
-@@ -2967,7 +2991,7 @@ int sched_rt_handler(struct ctl_table *table, int write, void *buffer,
- 	return ret;
- }
- 
--int sched_rr_handler(struct ctl_table *table, int write, void *buffer,
-+static int sched_rr_handler(struct ctl_table *table, int write, void *buffer,
- 		size_t *lenp, loff_t *ppos)
- {
- 	int ret;
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 981a1902d7a4..d0c45bf6801d 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -1720,13 +1720,6 @@ static struct ctl_table kern_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec,
- 	},
--	{
--		.procname	= "sched_rr_timeslice_ms",
--		.data		= &sysctl_sched_rr_timeslice,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= sched_rr_handler,
--	},
- #ifdef CONFIG_UCLAMP_TASK
- 	{
- 		.procname	= "sched_util_clamp_min",
+-	attr = kmalloc(sizeof(*attr) + len, GFP_ATOMIC);
++	attr = kmalloc(struct_size(attr, data, len), GFP_ATOMIC);
+ 	if (!attr)
+ 		return attr;
+ 	attr->state = MRP_APPLICANT_VO;
 -- 
-2.20.1
-
-
+2.25.1
 

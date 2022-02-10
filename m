@@ -2,146 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688104B097A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7594B0980
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238730AbiBJJaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:30:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51956 "EHLO
+        id S238688AbiBJJa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:30:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238720AbiBJJ3g (ORCPT
+        with ESMTP id S238790AbiBJJaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:29:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5A31112
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:29:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69418619A5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:29:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD7A3C340F3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:29:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644485374;
-        bh=HGM4Q7IrvX3TCMF1bCBJF/zPO3rFe3dmiOQn+Ok2zCM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Tbc8VMytVSPwXhPAFQ+pHW0VyXILcAVQiYcTRAHd9pZIO4SZXyZVupdvYHlpEfFUs
-         MayK24kZfPvksWqOGd40rwRrxRceQ8hjZPiEmP1pVr5n4iLKklamS+/WhXp9dsCxXB
-         YBENBAFVolTJop4EqJPtwL22sKGbSygW6QpHvUlYeCJX/4bYti6U8wgKltQs9Il4Hm
-         Oar81vk9stV3J1/N2UpeA/eufrKFhbtybgz5pVV7hxvEv2O+cfPgePE5fuW/w+zGL5
-         BQWTAdmZ0xL8lSQ1hjWn/wJHdOJASqQgkwogbXY+ipSoHzuHxmQaURClnCHG0CgVfR
-         mFmr+OZgFVCFg==
-Received: by mail-wr1-f50.google.com with SMTP id d27so4604821wrb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:29:34 -0800 (PST)
-X-Gm-Message-State: AOAM532hJDDeZV2n4UE6v1wRghffSnlw3aJE+3bVmmJTI09re+R1UA3X
-        eheLHNNqiW3i4mwOMVZgw+wH5r0A7Q4/UZ8rlNA=
-X-Google-Smtp-Source: ABdhPJyj1SGdUBiIOfZDt8ZwdLNUao09JQ8pTbN3rxClO1zCdUAgLNfU5RFjsfxJNTGpgIBiQYMSTTpb0iJqfvEwCss=
-X-Received: by 2002:a05:6000:15ca:: with SMTP id y10mr5599700wry.417.1644485373021;
- Thu, 10 Feb 2022 01:29:33 -0800 (PST)
+        Thu, 10 Feb 2022 04:30:11 -0500
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893A710DF
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:29:51 -0800 (PST)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 21A9LU10015199;
+        Thu, 10 Feb 2022 17:21:30 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 10 Feb
+ 2022 17:29:43 +0800
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+To:     <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
+        <andrew@aj.id.au>, <linux-media@vger.kernel.org>,
+        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+CC:     Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: [PATCH v3] media: aspeed: Use full swing as JFIF to fix incorrect color
+Date:   Thu, 10 Feb 2022 17:29:45 +0800
+Message-ID: <20220210092945.5027-1-jammy_huang@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220209153535.818830-1-mark.rutland@arm.com>
-In-Reply-To: <20220209153535.818830-1-mark.rutland@arm.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 10 Feb 2022 10:29:21 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGKRc8NNQWDpgLL_=G2DWYv6wXcgkpFw=H98LxTHjpq+w@mail.gmail.com>
-Message-ID: <CAMj1kXGKRc8NNQWDpgLL_=G2DWYv6wXcgkpFw=H98LxTHjpq+w@mail.gmail.com>
-Subject: Re: [PATCH v3 0/7] arm64 / sched/preempt: support PREEMPT_DYNAMIC
- with static keys
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        James Morse <james.morse@arm.com>, joey.gouly@arm.com,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 21A9LU10015199
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Feb 2022 at 16:35, Mark Rutland <mark.rutland@arm.com> wrote:
->
-> This series enables PREEMPT_DYNAMIC on arm64. To do so, it adds a new
-> mechanism allowing the preemption functions to be enabled/disabled using
-> static keys rather than static calls, with architectures selecting
-> whether they use static calls or static keys.
->
-> With non-inline static calls, each function call results in a call to
-> the (out-of-line) trampoline which either tail-calls its associated
-> callee or performs an early return.
->
-> The key idea is that where we're only enabling/disabling a single
-> callee, we can inline this trampoline into the start of the callee,
-> using a static key to decide whether to return early, and leaving the
-> remaining codegen to the compiler. The overhead should be similar to
-> (and likely lower than) using a static call trampoline. Since most
-> codegen is up to the compiler, we sidestep a number of implementation
-> pain-points (e.g. things like CFI should "just work" as well as they do
-> for any other functions).
->
-> The bulk of the diffstat for kernel/sched/core.c is shuffling the
-> PREEMPT_DYNAMIC code later in the file, and the actual additions are
-> fairly trivial.
->
-> I've given this very light build+boot testing so far.
->
-> Since v1 [1]:
-> * Rework Kconfig text to be clearer
-> * Rework arm64 entry code
-> * Clarify commit messages.
->
-> Since v2 [2]:
-> * Add missing includes
-> * Always provide prototype for preempt_schedule()
-> * Always provide prototype for preempt_schedule_notrace()
-> * Fix __cond_resched() to default to disabled
-> * Fix might_resched() to default to disabled
-> * Clarify example in commit message
->
-> [1] https://lore.kernel.org/r/20211109172408.49641-1-mark.rutland@arm.com/
-> [2] https://lore.kernel.org/r/20220204150557.434610-1-mark.rutland@arm.com/
->
-> Mark Rutland (7):
->   sched/preempt: move PREEMPT_DYNAMIC logic later
->   sched/preempt: refactor sched_dynamic_update()
->   sched/preempt: simplify irqentry_exit_cond_resched() callers
->   sched/preempt: decouple HAVE_PREEMPT_DYNAMIC from GENERIC_ENTRY
->   sched/preempt: add PREEMPT_DYNAMIC using static keys
->   arm64: entry: centralize premeption decision
->   arm64: support PREEMPT_DYNAMIC
->
+Current settings for video capture rgb-2-yuv is BT.601(studio swing),
+but JFIF uses BT.601(full swing) to deocde. This mismatch will lead
+to incorrect color. For example, input RGB value, (0, 0, 255), will
+become (16, 16, 235) after jpg decoded.
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Add an enum, aspeed_video_capture_format, to define VR008[7:6]
+capture format and correct default settings for video capture to fix
+the problem.
 
+VR008[7:6] decides the data format for video capture as below:
+* 00: CCIR601 studio swing compliant YUV format
+* 01: CCIR601 full swing compliant YUV format
+* 10: RGB format
+* 11: Gray color mode
 
->  arch/Kconfig                     |  37 +++-
->  arch/arm64/Kconfig               |   1 +
->  arch/arm64/include/asm/preempt.h |  19 +-
->  arch/arm64/kernel/entry-common.c |  28 ++-
->  arch/x86/Kconfig                 |   2 +-
->  arch/x86/include/asm/preempt.h   |  10 +-
->  include/linux/entry-common.h     |  15 +-
->  include/linux/kernel.h           |   7 +-
->  include/linux/sched.h            |  10 +-
->  kernel/entry/common.c            |  23 +-
->  kernel/sched/core.c              | 347 ++++++++++++++++++-------------
->  11 files changed, 327 insertions(+), 172 deletions(-)
->
-> --
-> 2.30.2
->
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+---
+v3:
+ - update commit message
+ - update enum's naming to append '_SWING'
+v2:
+ - update subject from 'media: aspeed: Fix-incorrect-color' to
+   'media: aspeed: Use full swing as JFIF to fix incorrect'
+ - update commit message
+ - add enum, aspeed_video_capture_format, to define VR008[7:6]
+---
+ drivers/media/platform/aspeed-video.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+index eb9c17ac0e14..ee702f9b708b 100644
+--- a/drivers/media/platform/aspeed-video.c
++++ b/drivers/media/platform/aspeed-video.c
+@@ -86,8 +86,6 @@
+ #define  VE_CTRL_SOURCE			BIT(2)
+ #define  VE_CTRL_INT_DE			BIT(4)
+ #define  VE_CTRL_DIRECT_FETCH		BIT(5)
+-#define  VE_CTRL_YUV			BIT(6)
+-#define  VE_CTRL_RGB			BIT(7)
+ #define  VE_CTRL_CAPTURE_FMT		GENMASK(7, 6)
+ #define  VE_CTRL_AUTO_OR_CURSOR		BIT(8)
+ #define  VE_CTRL_CLK_INVERSE		BIT(11)
+@@ -202,6 +200,15 @@ enum {
+ 	VIDEO_CLOCKS_ON,
+ };
+ 
++// for VE_CTRL_CAPTURE_FMT
++enum aspeed_video_capture_format {
++	VIDEO_CAP_FMT_YUV_STUDIO_SWING = 0,
++	VIDEO_CAP_FMT_YUV_FULL_SWING,
++	VIDEO_CAP_FMT_RGB,
++	VIDEO_CAP_FMT_GRAY,
++	VIDEO_CAP_FMT_MAX
++};
++
+ struct aspeed_video_addr {
+ 	unsigned int size;
+ 	dma_addr_t dma;
+@@ -1089,7 +1096,8 @@ static void aspeed_video_init_regs(struct aspeed_video *video)
+ 	u32 comp_ctrl = VE_COMP_CTRL_RSVD |
+ 		FIELD_PREP(VE_COMP_CTRL_DCT_LUM, video->jpeg_quality) |
+ 		FIELD_PREP(VE_COMP_CTRL_DCT_CHR, video->jpeg_quality | 0x10);
+-	u32 ctrl = VE_CTRL_AUTO_OR_CURSOR;
++	u32 ctrl = VE_CTRL_AUTO_OR_CURSOR |
++		FIELD_PREP(VE_CTRL_CAPTURE_FMT, VIDEO_CAP_FMT_YUV_FULL_SWING);
+ 	u32 seq_ctrl = video->jpeg_mode;
+ 
+ 	if (video->frame_rate)
+-- 
+2.25.1
+

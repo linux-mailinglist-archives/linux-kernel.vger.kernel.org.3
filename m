@@ -2,64 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB944B0D1F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:04:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A70704B0D26
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:04:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241355AbiBJMDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 07:03:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56518 "EHLO
+        id S241392AbiBJME3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 07:04:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234968AbiBJMDw (ORCPT
+        with ESMTP id S235034AbiBJME1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 07:03:52 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45622102A;
-        Thu, 10 Feb 2022 04:03:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1644494633; x=1676030633;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=/QlpKJ0CM3BFbESDBVfYSFlxY6nL1RIf7FZPBAXC1J4=;
-  b=T++siLYoVJdKJF5O9gKYJtVuYu/qvrAKoEr1k3xvGIECjHg/zo7QQJHr
-   f7JOTWGRnzkKnUmTBFIiHDfJjJrAWrjDYkzskvxPKuHNzdAf6VplHdTvH
-   1sdW3YD3/pAreFiolYCcXLa2MSspqrFzFjNFkoF3ItWR/M92rT91iqko5
-   QpUkFuK7V8h8ECCJ/7YyVOryMpGq5ayc8J6QKUt7b383cuAE5nM5fSKZX
-   6xPVFcx/FWZIR5nqdQuRyAlMa43I6r9eXwD4iVH1DzMuqh7IR5UvUpEsK
-   Y61pTfEjTUplT1PU3AoB1/48XoV46WkPOQlnGAI48RDetm3T+lg4DZzMl
-   Q==;
-IronPort-SDR: LJriOWYn+YqpKnw+ulSGha3eA0bTulDnE98gm11dqVy1QE5O5e7lGRY9Kz7c015Ruju9+eDcZ1
- tcK0Lq/u5WBgJ1AK5SjQXtBrLfKSuXft0KFaRaJiG9GFXkzA3sf6KZv+J9/eFgRpnmNAFYRdKU
- Px2TyJeucbelYE2ebWHGmP661F+FAGTxA9okAN681AdBZJ06JSbjd+5njQJ79SbvAjdDUaUtho
- 75keb4qIiPyRlsoHzu0TKpoVCWR35FYCyLU9fddyN2F/wmWoPTMZFIdWmqem63lm17AUtEHDFI
- SOENjePYjNWbiL7MyvMSEpQu
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="85296846"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Feb 2022 05:03:52 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 10 Feb 2022 05:03:51 -0700
-Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Thu, 10 Feb 2022 05:03:47 -0700
-From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-To:     <arnd@arndb.de>, <alexandre.belloni@bootlin.com>, <olof@lixom.net>,
-        <soc@kernel.org>, <robh+dt@kernel.org>,
-        <nicolas.ferre@microchip.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <Kavyasree.Kotagiri@microchip.com>,
-        <Manohar.Puri@microchip.com>
-Subject: [PATCH v5] ARM: dts: add DT for lan966 SoC and 2-port board pcb8291
-Date:   Thu, 10 Feb 2022 17:33:19 +0530
-Message-ID: <20220210120319.32190-1-kavyasree.kotagiri@microchip.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Thu, 10 Feb 2022 07:04:27 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1D810D1;
+        Thu, 10 Feb 2022 04:04:28 -0800 (PST)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21A9GrcA003482;
+        Thu, 10 Feb 2022 12:03:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=p+BE6Y6sJrfRGA0AJBWVlskZdaJxi0BEOlEnAHgtAKo=;
+ b=fI0QNIrvTv6agAKFZY+cfCipuBuiEggpCB8n0QdzHocmvYEKojaSE45HoCVRpArfrRmK
+ V84v0sZ96pYdXBp3zt2NgTfFz7XrTJSQqL2S/jsyA37Jfj393digFfihdyMU3pr7k6/M
+ jMmgP2loGD5hETTzpfTlfuknMeE4Rc+OUifd/d8YyZqxXZp2FiMWmyYaLXEap6hi8106
+ Sex68AqLvtBBNdcdnpMq/oanDOj+m95NNcilAtOFN+PtPlNaEPU/46UwxQQBz+w5W3yd
+ NjUwp0Ve6gIILSWLyX+LOXoksrN8bTNLeGqsXVKxGnQo+WGjQKOZtkRjf4cNDceYmOwN FQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e4m9892wp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Feb 2022 12:03:39 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21ABrXrj017771;
+        Thu, 10 Feb 2022 12:03:38 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e4m9892vx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Feb 2022 12:03:38 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21ABgYLF016889;
+        Thu, 10 Feb 2022 12:03:36 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 3e1gv9ykqw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Feb 2022 12:03:36 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21AC3Vrm38797672
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Feb 2022 12:03:31 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4CF94A4051;
+        Thu, 10 Feb 2022 12:03:31 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B2BC9A405D;
+        Thu, 10 Feb 2022 12:03:28 +0000 (GMT)
+Received: from sig-9-65-78-200.ibm.com (unknown [9.65.78.200])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 10 Feb 2022 12:03:28 +0000 (GMT)
+Message-ID: <39ec72c0776f67c89fc80a0305c75ec4290590ae.camel@linux.ibm.com>
+Subject: Re: [PATCH v10 04/27] securityfs: rework dentry creation
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     serge@hallyn.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Christian Brauner <brauner@kernel.org>,
+        John Johansen <john.johansen@canonical.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Micah Morton <mortonm@chromium.org>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>
+Date:   Thu, 10 Feb 2022 07:03:28 -0500
+In-Reply-To: <20220201203735.164593-5-stefanb@linux.ibm.com>
+References: <20220201203735.164593-1-stefanb@linux.ibm.com>
+         <20220201203735.164593-5-stefanb@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: GDSRi3shqM6Q_rqBG1jTy-54l4DqTi2n
+X-Proofpoint-GUID: y1yXODbJN_CINniHtnKSINPce3QR-Aof
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-10_03,2022-02-09_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
+ spamscore=0 suspectscore=0 adultscore=0 clxscore=1011 impostorscore=0
+ priorityscore=1501 bulkscore=0 lowpriorityscore=0 phishscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202100066
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,363 +104,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds basic DT for Microchip lan966x SoC and associated board
-pcb8291(2-port EVB). Adds peripherals required to allow booting: Interrupt
-Controller, Clock, Generic ARMv7 Timers, Synopsys Timer, Flexcoms, GPIOs.
-Also adds other peripherals like crypto(AES/SHA), DMA, Watchdog Timer, TRNG
-and MCAN0.
+[Cc'ing JJ, Matthew, Micah, Kentaro, Casey - maintainers of securityfs
+usages, not already cc'ed]
 
-Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
----
-v4 -> v5:
-- Modified AES, SHA, TRNG node names as per generic names recommended.
+On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
+> From: Christian Brauner <brauner@kernel.org>
+> 
+> When securityfs creates a new file or directory via
+> securityfs_create_dentry() it will take an additional reference on the
+> newly created dentry after it has attached the new inode to the new
+> dentry and added it to the hashqueues.
+> If we contrast this with debugfs which has the same underlying logic as
+> securityfs. It uses a similar pairing as securityfs. Where securityfs
+> has the securityfs_create_dentry() and securityfs_remove() pairing,
+> debugfs has the __debugfs_create_file() and debugfs_remove() pairing.
+> 
+> In contrast to securityfs, debugfs doesn't take an additional reference
+> on the newly created dentry in __debugfs_create_file() which would need
+> to be put in debugfs_remove().
+> 
+> The additional dget() isn't a problem per se. In the current
+> implementation of securityfs each created dentry pins the filesystem via
+> until it is removed. Since it is virtually guaranteed that there is at
+> least one user of securityfs that has created dentries the initial
+> securityfs mount cannot go away until all dentries have been removed.
+> 
+> Since most of the users of the initial securityfs mount don't go away
+> until the system is shutdown the initial securityfs won't go away when
+> unmounted. Instead a mount will usually surface the same superblock as
+> before. The additional dget() doesn't matter in this scenario since it
+> is required that all dentries have been cleaned up by the respective
+> users before the superblock can be destroyed, i.e. superblock shutdown
+> is tied to the lifetime of the associated dentries.
+> 
+> However, in order to support ima namespaces we need to extend securityfs
+> to support being mounted outside of the initial user namespace. For
+> namespaced users the pinning logic doesn't make sense. Whereas in the
+> initial namespace the securityfs instance and the associated data
+> structures of its users can't go away for reason explained earlier users
+> of non-initial securityfs instances do go away when the last users of
+> the namespace are gone.
+> 
+> So for those users we neither want to duplicate the pinning logic nor
+> make the global securityfs instance display different information based
+> on the namespace. Both options would be really messy and hacky.
+> 
+> Instead we will simply give each namespace its own securityfs instance
+> similar to how each ipc namespace has its own mqueue instance and all
+> entries in there are cleaned up on umount or when the last user of the
+> associated namespace is gone.
+> 
+> This means that the superblock's lifetime isn't tied to the dentries.
+> Instead the last umount, without any fds kept open, will trigger a clean
+> shutdown. But now the additional dget() gets in the way. Instead of
+> being able to rely on the generic superblock shutdown logic we would
+> need to drop the additional dentry reference during superblock shutdown
+> for all associated users. That would force the use of a generic
+> coordination mechanism for current and future users of securityfs which
+> is unnecessary. Simply remove the additional dget() in
+> securityfs_dentry_create().
+> 
+> In securityfs_remove() we will call dget() to take an additional
+> reference on the dentry about to be removed. After simple_unlink() or
+> simple_rmdir() have dropped the dentry refcount we can call d_delete()
+> which will either turn the dentry into negative dentry if our earlier
+> dget() is the only reference to the dentry, i.e. it has no other users,
+> or remove it from the hashqueues in case there are additional users.
+> 
+> All of these changes should not have any effect on the userspace
+> semantics of the initial securityfs mount.
+> 
+> Signed-off-by: Christian Brauner <brauner@kernel.org>
 
-v3 -> v4:
-- Removed character 'x' from compatible string.
-- Removed memory node as handled by bootloader.
-- Renamed flexcom3 usart0 to usart3
-- Added /chosen and /aliases nodes in dts file.
+Thanks, Christian, Stefan.
 
-v2 -> v3:
-- Enabling trng in dtsi itself.
-- Removed "status=okay" dma0.
-- Add gpio pin settings for can0(missed adding this in previous version)
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-v1 -> v2:
-- Moved flx3 usart0 node to dtsi file.
-- Removed status="okay" for dma0 to maintain consistency across nodes
-  (which means enabling dma0 by default)
+This change is really independent of the IMA namespacing.  Based on
+Greg's request of unification of where platform specific
+variables/keys/etc are stored, the consensus so far seems to be
+'securityfs/secrets'.  Although this patch isn't a bug fix, let's try
+and get this upstreamed.
 
- arch/arm/boot/dts/Makefile            |   2 +
- arch/arm/boot/dts/lan966x.dtsi        | 237 ++++++++++++++++++++++++++
- arch/arm/boot/dts/lan966x_pcb8291.dts |  61 +++++++
- 3 files changed, 300 insertions(+)
- create mode 100644 arch/arm/boot/dts/lan966x.dtsi
- create mode 100644 arch/arm/boot/dts/lan966x_pcb8291.dts
+The current securityfs usages are apparmor, lockdown, safesetid,
+tomoyo, core LSM ("security/lsm"), and the TPM.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 235ad559acb2..2040a990f08c 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -735,6 +735,8 @@ dtb-$(CONFIG_SOC_IMX7D) += \
- dtb-$(CONFIG_SOC_IMX7ULP) += \
- 	imx7ulp-com.dtb \
- 	imx7ulp-evk.dtb
-+dtb-$(CONFIG_SOC_LAN966) += \
-+	lan966x_pcb8291.dtb
- dtb-$(CONFIG_SOC_LS1021A) += \
- 	ls1021a-moxa-uc-8410a.dtb \
- 	ls1021a-qds.dtb \
-diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-new file mode 100644
-index 000000000000..6647e9ece8ae
---- /dev/null
-+++ b/arch/arm/boot/dts/lan966x.dtsi
-@@ -0,0 +1,237 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * lan966x.dtsi - Device Tree Include file for Microchip LAN966 family SoC
-+ *
-+ * Copyright (C) 2021 Microchip Technology, Inc. and its subsidiaries
-+ *
-+ * Author: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-+ *
-+ */
-+
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/mfd/atmel-flexcom.h>
-+#include <dt-bindings/dma/at91.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/clock/microchip,lan966x.h>
-+
-+/ {
-+	model = "Microchip LAN966 family SoC";
-+	compatible = "microchip,lan966";
-+	interrupt-parent = <&gic>;
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a7";
-+			clock-frequency = <600000000>;
-+			reg = <0x0>;
-+		};
-+	};
-+
-+	clocks {
-+		sys_clk: sys_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <162500000>;
-+		};
-+
-+		cpu_clk: cpu_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <600000000>;
-+		};
-+
-+		ddr_clk: ddr_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <300000000>;
-+		};
-+
-+		nic_clk: nic_clk {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <200000000>;
-+		};
-+	};
-+
-+	clks: clock-controller@e00c00a8 {
-+		compatible = "microchip,lan966x-gck";
-+		#clock-cells = <1>;
-+		clocks = <&cpu_clk>, <&ddr_clk>, <&sys_clk>;
-+		clock-names = "cpu", "ddr", "sys";
-+		reg = <0xe00c00a8 0x38>;
-+	};
-+
-+	timer {
-+		compatible = "arm,armv7-timer";
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
-+		clock-frequency = <37500000>;
-+		arm,cpu-registers-not-fw-configured;
-+	};
-+
-+	soc {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		flx0: flexcom@e0040000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0040000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM0>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0040000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		flx1: flexcom@e0044000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0044000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM1>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0044000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		trng: rng@e0048000 {
-+			compatible = "atmel,at91sam9g45-trng";
-+			reg = <0xe0048000 0x100>;
-+			clocks = <&nic_clk>;
-+		};
-+
-+		aes: crypto@e004c000 {
-+			compatible = "atmel,at91sam9g46-aes";
-+			reg = <0xe004c000 0x100>;
-+			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&dma0 AT91_XDMAC_DT_PERID(13)>,
-+			       <&dma0 AT91_XDMAC_DT_PERID(12)>;
-+			dma-names = "rx", "tx";
-+			clocks = <&nic_clk>;
-+			clock-names = "aes_clk";
-+		};
-+
-+		flx2: flexcom@e0060000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0060000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM2>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0060000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		flx3: flexcom@e0064000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0064000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM3>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0064000 0x800>;
-+			status = "disabled";
-+
-+			usart3: serial@200 {
-+				compatible = "atmel,at91sam9260-usart";
-+				reg = <0x200 0x200>;
-+				interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&nic_clk>;
-+				clock-names = "usart";
-+				atmel,fifo-size = <32>;
-+				status = "disabled";
-+			};
-+		};
-+
-+		dma0: dma-controller@e0068000 {
-+			compatible = "microchip,sama7g5-dma";
-+			reg = <0xe0068000 0x1000>;
-+			interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
-+			#dma-cells = <1>;
-+			clocks = <&nic_clk>;
-+			clock-names = "dma_clk";
-+		};
-+
-+		sha: crypto@e006c000 {
-+			compatible = "atmel,at91sam9g46-sha";
-+			reg = <0xe006c000 0xec>;
-+			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
-+			dmas = <&dma0 AT91_XDMAC_DT_PERID(14)>;
-+			dma-names = "tx";
-+			clocks = <&nic_clk>;
-+			clock-names = "sha_clk";
-+		};
-+
-+		flx4: flexcom@e0070000 {
-+			compatible = "atmel,sama5d2-flexcom";
-+			reg = <0xe0070000 0x100>;
-+			clocks = <&clks GCK_ID_FLEXCOM4>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0xe0070000 0x800>;
-+			status = "disabled";
-+		};
-+
-+		timer0: timer@e008c000 {
-+			compatible = "snps,dw-apb-timer";
-+			reg = <0xe008c000 0x400>;
-+			clocks = <&nic_clk>;
-+			clock-names = "timer";
-+			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-+		};
-+
-+		watchdog: watchdog@e0090000 {
-+			compatible = "snps,dw-wdt";
-+			reg = <0xe0090000 0x1000>;
-+			interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&nic_clk>;
-+		};
-+
-+		can0: can@e081c000 {
-+			compatible = "bosch,m_can";
-+			reg = <0xe081c000 0xfc>, <0x00100000 0x4000>;
-+			reg-names = "m_can", "message_ram";
-+			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "int0", "int1";
-+			clocks = <&clks GCK_ID_MCAN0>, <&clks GCK_ID_MCAN0>;
-+			clock-names = "hclk", "cclk";
-+			assigned-clocks = <&clks GCK_ID_MCAN0>;
-+			assigned-clock-rates = <40000000>;
-+			bosch,mram-cfg = <0x0 0 0 64 0 0 32 32>;
-+			status = "disabled";
-+		};
-+
-+		gpio: pinctrl@e2004064 {
-+			compatible = "microchip,lan966x-pinctrl";
-+			reg = <0xe2004064 0xb4>,
-+			    <0xe2010024 0x138>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			gpio-ranges = <&gpio 0 0 78>;
-+			interrupt-controller;
-+			interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		gic: interrupt-controller@e8c11000 {
-+			compatible = "arm,gic-400", "arm,cortex-a7-gic";
-+			#interrupt-cells = <3>;
-+			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-controller;
-+			reg = <0xe8c11000 0x1000>,
-+			      <0xe8c12000 0x2000>,
-+			      <0xe8c14000 0x2000>,
-+			      <0xe8c16000 0x2000>;
-+		};
-+	};
-+};
-diff --git a/arch/arm/boot/dts/lan966x_pcb8291.dts b/arch/arm/boot/dts/lan966x_pcb8291.dts
-new file mode 100644
-index 000000000000..ccec4177990b
---- /dev/null
-+++ b/arch/arm/boot/dts/lan966x_pcb8291.dts
-@@ -0,0 +1,61 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * lan966x_pcb8291.dts - Device Tree file for PCB8291
-+ */
-+/dts-v1/;
-+#include "lan966x.dtsi"
-+
-+/ {
-+	model = "Microchip EVB - LAN9662";
-+	compatible = "microchip,lan9662-pcb8291", "microchip,lan9662", "microchip,lan966";
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	aliases {
-+		serial0 = &usart3;
-+	};
-+};
-+
-+&gpio {
-+	fc_shrd7_pins: fc_shrd7-pins {
-+		pins = "GPIO_49";
-+		function = "fc_shrd7";
-+	};
-+
-+	fc_shrd8_pins: fc_shrd8-pins {
-+		pins = "GPIO_54";
-+		function = "fc_shrd8";
-+	};
-+
-+	fc3_b_pins: fcb3-spi-pins {
-+		/* SCK, RXD, TXD */
-+		pins = "GPIO_51", "GPIO_52", "GPIO_53";
-+		function = "fc3_b";
-+	};
-+
-+	can0_b_pins:  can0_b_pins {
-+		/* RX, TX */
-+		pins = "GPIO_35", "GPIO_36";
-+		function = "can0_b";
-+	};
-+};
-+
-+&can0 {
-+	pinctrl-0 = <&can0_b_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
-+&flx3 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
-+	status = "okay";
-+
-+	usart3: serial@200 {
-+		pinctrl-0 = <&fc3_b_pins>, <&fc_shrd7_pins>, <&fc_shrd8_pins>;
-+		pinctrl-names = "default";
-+		status = "okay";
-+	};
-+};
-+
+Only on failure to create securityfs files or directories, are
+previously created securityfs files/directories removed.  The one
+exception seems to be the TPM, which may be built as a kernel module.
+
 -- 
-2.17.1
+thanks,
+
+Mimi
 

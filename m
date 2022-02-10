@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FB84B1139
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE46B4B113C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243433AbiBJPFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 10:05:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46318 "EHLO
+        id S243442AbiBJPFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 10:05:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243403AbiBJPFm (ORCPT
+        with ESMTP id S243414AbiBJPFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 10:05:42 -0500
+        Thu, 10 Feb 2022 10:05:46 -0500
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCA4EA1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 07:05:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D42DB1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 07:05:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644505543; x=1676041543;
+  t=1644505546; x=1676041546;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=vvDOY79Q2gjpg6f1x/4HPyiA0Mvu6fmD5T9PEpYf1WM=;
-  b=ReoiDKsAcj3oQXaODosM/v/0j9Qyhv9mTPKkBPYnUVeHi0JfyTFBFln5
-   vfBIQWHpZrTh8Mw88b333voHfGTOmcsuUitRTcj7Y7qEFoDMoj/llBFQX
-   v+hts0a8tTiZ/m+nzM+Vz1w6dxAyhu2uLaNY4fk6gkhUcc1LpQ7gEihBo
-   gzm3qDR5Tf6bO3z+YtOLEpemG4V0nuMjL5lp+aiLTWhVnhBAtlDzPFmWE
-   rzGUaxZ5G4v+G8HEvZeQB/u/idbagAewoSVv3rHuIN8gwkmnS0DuO6olj
-   NyWzp59YmobHhMAx1rWw5R9KqpFLFBUMnyq3oxrkq5MKtJ6V1sciwI1BM
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="230153250"
+  bh=AEfNjRzAVytF6bGBharl5sxyImB1HHqq9vSUPz7ew5I=;
+  b=VIEgBX3PUXTaNhEKspgf/d5+Y5daL09L/yQI2ys0tG+hzFaSmf2G9GRu
+   D6ZTl/fC/K4y4DT50PzTbHByb+Z9KnN4gtK9f3715oDVaArOZEAY8oCwP
+   Dqm4uqEW3+IOnnUxdgEbfwdWh+5WLvtwVNfVuXvNF2oCOvAiLwUxKy+Iy
+   VTLswdN1X+Jef5v5CWFGj+MIPHfdRiEw2tek1RajOb7Dng4us0Tg5NTJu
+   gd0nlSzbF8DY58TxEcUe+k5MQAk0Y5ZPLgCaHrXEn90zJBKyZw2YUEK3r
+   R12ey3ilvpmZrqan8DkiUwWtKrXknvpqbhX1Luim10TVMZOIXXLX8Qwep
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="230153271"
 X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="230153250"
+   d="scan'208";a="230153271"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 07:05:42 -0800
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 07:05:46 -0800
 X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="500422639"
+   d="scan'208";a="500422656"
 Received: from barabano-mobl.ccr.corp.intel.com (HELO pujfalus-desk.ger.corp.intel.com) ([10.252.41.18])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 07:05:39 -0800
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 07:05:43 -0800
 From:   Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 To:     lgirdwood@gmail.com, broonie@kernel.org,
         pierre-louis.bossart@linux.intel.com,
@@ -44,9 +44,9 @@ To:     lgirdwood@gmail.com, broonie@kernel.org,
 Cc:     alsa-devel@alsa-project.org, kai.vehmanen@linux.intel.com,
         daniel.baluta@nxp.com, tiwai@suse.com,
         linux-kernel@vger.kernel.org, fred.oh@linux.intel.com
-Subject: [PATCH v2 4/9] ASoC: SOF: Split up utils.c into sof-utils and iomem-utils
-Date:   Thu, 10 Feb 2022 17:05:20 +0200
-Message-Id: <20220210150525.30756-5-peter.ujfalusi@linux.intel.com>
+Subject: [PATCH v2 5/9] ASoC: SOF: Introduce IPC SOF client support
+Date:   Thu, 10 Feb 2022 17:05:21 +0200
+Message-Id: <20220210150525.30756-6-peter.ujfalusi@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220210150525.30756-1-peter.ujfalusi@linux.intel.com>
 References: <20220210150525.30756-1-peter.ujfalusi@linux.intel.com>
@@ -62,295 +62,742 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The utils.c contains wrappers and implementation for accessing iomem mapped
-regions and a single unrelated function to create a compressed page table
-from snd_dma_buffer for firmware use.
+A client in the SOF (Sound Open Firmware) context is a driver that needs
+to communicate with the DSP via IPC messages. The SOF core is responsible
+for serializing the IPC messages to the DSP from the different clients.
 
-The latter is used by the PCM and the dma trace code and it needs to be
-moved to a generic source/header for the client conversion to be possible.
+One example of an SOF client would be an IPC test client that floods the
+DSP with test IPC messages to validate if the serialization works as
+expected.
 
+Multi-client support will also add the ability to split the existing audio
+cards into multiple ones, so as to e.g. to deal with HDMI with a dedicated
+client instead of adding HDMI to all cards.
+
+This patch introduces descriptors for SOF client driver and SOF client
+device along with APIs for registering and unregistering a SOF client
+driver, sending IPCs from a client device and accessing the SOF core
+debugfs root entry.
+
+Along with this, add a couple of new members to struct snd_sof_dev that
+will be used for maintaining the list of clients.
+
+Signed-off-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Co-developed-by: Fred Oh <fred.oh@linux.intel.com>
+Signed-off-by: Fred Oh <fred.oh@linux.intel.com>
 Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
 Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 ---
- sound/soc/sof/Makefile                   |  5 +-
- sound/soc/sof/compress.c                 |  1 +
- sound/soc/sof/{utils.c => iomem-utils.c} | 61 +------------------
- sound/soc/sof/pcm.c                      |  1 +
- sound/soc/sof/sof-priv.h                 |  4 --
- sound/soc/sof/sof-utils.c                | 77 ++++++++++++++++++++++++
- sound/soc/sof/sof-utils.h                | 19 ++++++
- sound/soc/sof/trace.c                    |  1 +
- 8 files changed, 104 insertions(+), 65 deletions(-)
- rename sound/soc/sof/{utils.c => iomem-utils.c} (59%)
- create mode 100644 sound/soc/sof/sof-utils.c
- create mode 100644 sound/soc/sof/sof-utils.h
+ sound/soc/sof/Kconfig      |   7 +
+ sound/soc/sof/Makefile     |   1 +
+ sound/soc/sof/core.c       |  43 ++++-
+ sound/soc/sof/ipc.c        |  25 +--
+ sound/soc/sof/sof-client.c | 340 +++++++++++++++++++++++++++++++++++++
+ sound/soc/sof/sof-client.h |  67 ++++++++
+ sound/soc/sof/sof-priv.h   |  78 ++++++++-
+ 7 files changed, 540 insertions(+), 21 deletions(-)
+ create mode 100644 sound/soc/sof/sof-client.c
+ create mode 100644 sound/soc/sof/sof-client.h
 
+diff --git a/sound/soc/sof/Kconfig b/sound/soc/sof/Kconfig
+index 1a7d6cefd3b7..468d7c113dae 100644
+--- a/sound/soc/sof/Kconfig
++++ b/sound/soc/sof/Kconfig
+@@ -61,6 +61,13 @@ config SND_SOC_SOF_DEBUG_PROBES
+ 	  Say Y if you want to enable probes.
+ 	  If unsure, select "N".
+ 
++config SND_SOC_SOF_CLIENT
++	tristate
++	select AUXILIARY_BUS
++	help
++	  This option is not user-selectable but automagically handled by
++	  'select' statements at a higher level.
++
+ config SND_SOC_SOF_DEVELOPER_SUPPORT
+ 	bool "SOF developer options support"
+ 	depends on EXPERT && SND_SOC_SOF
 diff --git a/sound/soc/sof/Makefile b/sound/soc/sof/Makefile
-index 964b429146be..4b9fccacc2b7 100644
+index 4b9fccacc2b7..38ce2fe376fa 100644
 --- a/sound/soc/sof/Makefile
 +++ b/sound/soc/sof/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+@@ -2,6 +2,7 @@
  
  snd-sof-objs := core.o ops.o loader.o ipc.o pcm.o pm.o debug.o topology.o\
--		control.o trace.o utils.o sof-audio.o stream-ipc.o
-+		control.o trace.o iomem-utils.o sof-audio.o stream-ipc.o
+ 		control.o trace.o iomem-utils.o sof-audio.o stream-ipc.o
++snd-sof-$(CONFIG_SND_SOC_SOF_CLIENT) += sof-client.o
  
  snd-sof-$(CONFIG_SND_SOC_SOF_DEBUG_PROBES) += sof-probes.o
  snd-sof-$(CONFIG_SND_SOC_SOF_COMPRESS) += compress.o
-@@ -12,9 +12,12 @@ snd-sof-of-objs := sof-of-dev.o
- 
- snd-sof-nocodec-objs := nocodec.o
- 
-+snd-sof-utils-objs := sof-utils.o
-+
- obj-$(CONFIG_SND_SOC_SOF) += snd-sof.o
- obj-$(CONFIG_SND_SOC_SOF_NOCODEC) += snd-sof-nocodec.o
- 
-+obj-$(CONFIG_SND_SOC_SOF) += snd-sof-utils.o
- 
- obj-$(CONFIG_SND_SOC_SOF_ACPI_DEV) += snd-sof-acpi.o
- obj-$(CONFIG_SND_SOC_SOF_OF_DEV) += snd-sof-of.o
-diff --git a/sound/soc/sof/compress.c b/sound/soc/sof/compress.c
-index 91a9c95929cd..2137d1d65dd9 100644
---- a/sound/soc/sof/compress.c
-+++ b/sound/soc/sof/compress.c
-@@ -9,6 +9,7 @@
- #include <sound/compress_driver.h>
- #include "sof-audio.h"
- #include "sof-priv.h"
-+#include "sof-utils.h"
- 
- static void sof_set_transferred_bytes(struct snd_compr_tstamp *tstamp,
- 				      u64 host_pos, u64 buffer_size)
-diff --git a/sound/soc/sof/utils.c b/sound/soc/sof/iomem-utils.c
-similarity index 59%
-rename from sound/soc/sof/utils.c
-rename to sound/soc/sof/iomem-utils.c
-index 66fa6602fb67..3f57f6cf6542 100644
---- a/sound/soc/sof/utils.c
-+++ b/sound/soc/sof/iomem-utils.c
-@@ -3,7 +3,7 @@
- // This file is provided under a dual BSD/GPLv2 license.  When using or
- // redistributing this file, you may do so under either license.
- //
--// Copyright(c) 2018 Intel Corporation. All rights reserved.
-+// Copyright(c) 2018-2022 Intel Corporation. All rights reserved.
- //
- // Author: Keyon Jie <yang.jie@linux.intel.com>
- //
-@@ -125,62 +125,3 @@ int sof_block_read(struct snd_sof_dev *sdev, enum snd_sof_fw_blk_type blk_type,
- 	return 0;
+diff --git a/sound/soc/sof/core.c b/sound/soc/sof/core.c
+index 8f32b5b12b3e..2aabaac9007f 100644
+--- a/sound/soc/sof/core.c
++++ b/sound/soc/sof/core.c
+@@ -122,6 +122,27 @@ void sof_print_oops_and_stack(struct snd_sof_dev *sdev, const char *level,
  }
- EXPORT_SYMBOL(sof_block_read);
--
--/*
-- * Generic buffer page table creation.
-- * Take the each physical page address and drop the least significant unused
-- * bits from each (based on PAGE_SIZE). Then pack valid page address bits
-- * into compressed page table.
-- */
--
--int snd_sof_create_page_table(struct device *dev,
--			      struct snd_dma_buffer *dmab,
--			      unsigned char *page_table, size_t size)
--{
--	int i, pages;
--
--	pages = snd_sgbuf_aligned_pages(size);
--
--	dev_dbg(dev, "generating page table for %p size 0x%zx pages %d\n",
--		dmab->area, size, pages);
--
--	for (i = 0; i < pages; i++) {
--		/*
--		 * The number of valid address bits for each page is 20.
--		 * idx determines the byte position within page_table
--		 * where the current page's address is stored
--		 * in the compressed page_table.
--		 * This can be calculated by multiplying the page number by 2.5.
--		 */
--		u32 idx = (5 * i) >> 1;
--		u32 pfn = snd_sgbuf_get_addr(dmab, i * PAGE_SIZE) >> PAGE_SHIFT;
--		u8 *pg_table;
--
--		dev_vdbg(dev, "pfn i %i idx %d pfn %x\n", i, idx, pfn);
--
--		pg_table = (u8 *)(page_table + idx);
--
--		/*
--		 * pagetable compression:
--		 * byte 0     byte 1     byte 2     byte 3     byte 4     byte 5
--		 * ___________pfn 0__________ __________pfn 1___________  _pfn 2...
--		 * .... ....  .... ....  .... ....  .... ....  .... ....  ....
--		 * It is created by:
--		 * 1. set current location to 0, PFN index i to 0
--		 * 2. put pfn[i] at current location in Little Endian byte order
--		 * 3. calculate an intermediate value as
--		 *    x = (pfn[i+1] << 4) | (pfn[i] & 0xf)
--		 * 4. put x at offset (current location + 2) in LE byte order
--		 * 5. increment current location by 5 bytes, increment i by 2
--		 * 6. continue to (2)
--		 */
--		if (i & 1)
--			put_unaligned_le32((pg_table[0] & 0xf) | pfn << 4,
--					   pg_table);
--		else
--			put_unaligned_le32(pfn, pg_table);
--	}
--
--	return pages;
--}
--EXPORT_SYMBOL(snd_sof_create_page_table);
-diff --git a/sound/soc/sof/pcm.c b/sound/soc/sof/pcm.c
-index 37fb8e6cd493..62cb61655761 100644
---- a/sound/soc/sof/pcm.c
-+++ b/sound/soc/sof/pcm.c
-@@ -19,6 +19,7 @@
- #if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_PROBES)
- #include "sof-probes.h"
- #endif
-+#include "sof-utils.h"
+ EXPORT_SYMBOL(sof_print_oops_and_stack);
  
- /* Create DMA buffer page table for DSP */
- static int create_page_table(struct snd_soc_component *component,
-diff --git a/sound/soc/sof/sof-priv.h b/sound/soc/sof/sof-priv.h
-index 2e474048d708..27d2f3ca2f06 100644
---- a/sound/soc/sof/sof-priv.h
-+++ b/sound/soc/sof/sof-priv.h
-@@ -502,10 +502,6 @@ void snd_sof_complete(struct device *dev);
- 
- void snd_sof_new_platform_drv(struct snd_sof_dev *sdev);
- 
--int snd_sof_create_page_table(struct device *dev,
--			      struct snd_dma_buffer *dmab,
--			      unsigned char *page_table, size_t size);
--
- /*
-  * Firmware loading.
-  */
-diff --git a/sound/soc/sof/sof-utils.c b/sound/soc/sof/sof-utils.c
-new file mode 100644
-index 000000000000..a3300ecee062
---- /dev/null
-+++ b/sound/soc/sof/sof-utils.c
-@@ -0,0 +1,77 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
-+//
-+// This file is provided under a dual BSD/GPLv2 license.  When using or
-+// redistributing this file, you may do so under either license.
-+//
-+// Copyright(c) 2018-2022 Intel Corporation. All rights reserved.
-+//
-+// Author: Keyon Jie <yang.jie@linux.intel.com>
-+//
-+
-+#include <asm/unaligned.h>
-+#include <linux/io-64-nonatomic-lo-hi.h>
-+#include <linux/device.h>
-+#include <sound/memalloc.h>
-+#include <linux/module.h>
-+#include "sof-utils.h"
-+
-+/*
-+ * Generic buffer page table creation.
-+ * Take the each physical page address and drop the least significant unused
-+ * bits from each (based on PAGE_SIZE). Then pack valid page address bits
-+ * into compressed page table.
-+ */
-+
-+int snd_sof_create_page_table(struct device *dev,
-+			      struct snd_dma_buffer *dmab,
-+			      unsigned char *page_table, size_t size)
++/* Helper to manage DSP state */
++void sof_set_fw_state(struct snd_sof_dev *sdev, enum sof_fw_state new_state)
 +{
-+	int i, pages;
++	if (sdev->fw_state == new_state)
++		return;
 +
-+	pages = snd_sgbuf_aligned_pages(size);
++	dev_dbg(sdev->dev, "fw_state change: %d -> %d\n", sdev->fw_state, new_state);
++	sdev->fw_state = new_state;
 +
-+	dev_dbg(dev, "generating page table for %p size 0x%zx pages %d\n",
-+		dmab->area, size, pages);
++	switch (new_state) {
++	case SOF_FW_BOOT_NOT_STARTED:
++	case SOF_FW_BOOT_COMPLETE:
++	case SOF_FW_CRASHED:
++		sof_client_fw_state_dispatcher(sdev);
++		fallthrough;
++	default:
++		break;
++	}
++}
++EXPORT_SYMBOL(sof_set_fw_state);
 +
-+	for (i = 0; i < pages; i++) {
-+		/*
-+		 * The number of valid address bits for each page is 20.
-+		 * idx determines the byte position within page_table
-+		 * where the current page's address is stored
-+		 * in the compressed page_table.
-+		 * This can be calculated by multiplying the page number by 2.5.
-+		 */
-+		u32 idx = (5 * i) >> 1;
-+		u32 pfn = snd_sgbuf_get_addr(dmab, i * PAGE_SIZE) >> PAGE_SHIFT;
-+		u8 *pg_table;
-+
-+		dev_vdbg(dev, "pfn i %i idx %d pfn %x\n", i, idx, pfn);
-+
-+		pg_table = (u8 *)(page_table + idx);
-+
-+		/*
-+		 * pagetable compression:
-+		 * byte 0     byte 1     byte 2     byte 3     byte 4     byte 5
-+		 * ___________pfn 0__________ __________pfn 1___________  _pfn 2...
-+		 * .... ....  .... ....  .... ....  .... ....  .... ....  ....
-+		 * It is created by:
-+		 * 1. set current location to 0, PFN index i to 0
-+		 * 2. put pfn[i] at current location in Little Endian byte order
-+		 * 3. calculate an intermediate value as
-+		 *    x = (pfn[i+1] << 4) | (pfn[i] & 0xf)
-+		 * 4. put x at offset (current location + 2) in LE byte order
-+		 * 5. increment current location by 5 bytes, increment i by 2
-+		 * 6. continue to (2)
-+		 */
-+		if (i & 1)
-+			put_unaligned_le32((pg_table[0] & 0xf) | pfn << 4,
-+					   pg_table);
-+		else
-+			put_unaligned_le32(pfn, pg_table);
+ /*
+  *			FW Boot State Transition Diagram
+  *
+@@ -266,6 +287,12 @@ static int sof_probe_continue(struct snd_sof_dev *sdev)
+ 		goto fw_trace_err;
+ 	}
+ 
++	ret = sof_register_clients(sdev);
++	if (ret < 0) {
++		dev_err(sdev->dev, "failed to register clients %d\n", ret);
++		goto sof_machine_err;
 +	}
 +
-+	return pages;
-+}
-+EXPORT_SYMBOL(snd_sof_create_page_table);
-+
-+MODULE_LICENSE("Dual BSD/GPL");
-diff --git a/sound/soc/sof/sof-utils.h b/sound/soc/sof/sof-utils.h
-new file mode 100644
-index 000000000000..6f902893807e
---- /dev/null
-+++ b/sound/soc/sof/sof-utils.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
-+/*
-+ * This file is provided under a dual BSD/GPLv2 license.  When using or
-+ * redistributing this file, you may do so under either license.
-+ *
-+ * Copyright(c) 2022 Intel Corporation. All rights reserved.
-+ */
-+
-+#ifndef __SOC_SOF_UTILS_H
-+#define __SOC_SOF_UTILS_H
-+
-+struct snd_dma_buffer;
-+struct device;
-+
-+int snd_sof_create_page_table(struct device *dev,
-+			      struct snd_dma_buffer *dmab,
-+			      unsigned char *page_table, size_t size);
-+
-+#endif
-diff --git a/sound/soc/sof/trace.c b/sound/soc/sof/trace.c
-index 2335d0f06d42..104388c551cb 100644
---- a/sound/soc/sof/trace.c
-+++ b/sound/soc/sof/trace.c
-@@ -12,6 +12,7 @@
- #include <linux/sched/signal.h>
- #include "sof-priv.h"
- #include "ops.h"
-+#include "sof-utils.h"
+ 	/*
+ 	 * Some platforms in SOF, ex: BYT, may not have their platform PM
+ 	 * callbacks set. Increment the usage count so as to
+@@ -281,6 +308,8 @@ static int sof_probe_continue(struct snd_sof_dev *sdev)
  
- #define TRACE_FILTER_ELEMENTS_PER_ENTRY 4
- #define TRACE_FILTER_MAX_CONFIG_STRING_LENGTH 1024
+ 	return 0;
+ 
++sof_machine_err:
++	snd_sof_machine_unregister(sdev, plat_data);
+ fw_trace_err:
+ 	snd_sof_free_trace(sdev);
+ fw_run_err:
+@@ -329,7 +358,6 @@ int snd_sof_device_probe(struct device *dev, struct snd_sof_pdata *plat_data)
+ 
+ 	sdev->pdata = plat_data;
+ 	sdev->first_boot = true;
+-	sof_set_fw_state(sdev, SOF_FW_BOOT_NOT_STARTED);
+ #if IS_ENABLED(CONFIG_SND_SOC_SOF_DEBUG_PROBES)
+ 	sdev->extractor_stream_tag = SOF_PROBE_INVALID_NODE_ID;
+ #endif
+@@ -350,9 +378,14 @@ int snd_sof_device_probe(struct device *dev, struct snd_sof_pdata *plat_data)
+ 	INIT_LIST_HEAD(&sdev->widget_list);
+ 	INIT_LIST_HEAD(&sdev->dai_list);
+ 	INIT_LIST_HEAD(&sdev->route_list);
++	INIT_LIST_HEAD(&sdev->ipc_client_list);
++	INIT_LIST_HEAD(&sdev->ipc_rx_handler_list);
++	INIT_LIST_HEAD(&sdev->fw_state_handler_list);
+ 	spin_lock_init(&sdev->ipc_lock);
+ 	spin_lock_init(&sdev->hw_lock);
+ 	mutex_init(&sdev->power_state_access);
++	mutex_init(&sdev->ipc_client_mutex);
++	mutex_init(&sdev->client_event_handler_mutex);
+ 
+ 	/* set default timeouts if none provided */
+ 	if (plat_data->desc->ipc_timeout == 0)
+@@ -364,6 +397,8 @@ int snd_sof_device_probe(struct device *dev, struct snd_sof_pdata *plat_data)
+ 	else
+ 		sdev->boot_timeout = plat_data->desc->boot_timeout;
+ 
++	sof_set_fw_state(sdev, SOF_FW_BOOT_NOT_STARTED);
++
+ 	if (IS_ENABLED(CONFIG_SND_SOC_SOF_PROBE_WORK_QUEUE)) {
+ 		INIT_WORK(&sdev->probe_work, sof_probe_work);
+ 		schedule_work(&sdev->probe_work);
+@@ -391,6 +426,12 @@ int snd_sof_device_remove(struct device *dev)
+ 	if (IS_ENABLED(CONFIG_SND_SOC_SOF_PROBE_WORK_QUEUE))
+ 		cancel_work_sync(&sdev->probe_work);
+ 
++	/*
++	 * Unregister any registered client device first before IPC and debugfs
++	 * to allow client drivers to be removed cleanly
++	 */
++	sof_unregister_clients(sdev);
++
+ 	/*
+ 	 * Unregister machine driver. This will unbind the snd_card which
+ 	 * will remove the component driver and unload the topology
+diff --git a/sound/soc/sof/ipc.c b/sound/soc/sof/ipc.c
+index ee56d4fa4053..c729bb7bf8c8 100644
+--- a/sound/soc/sof/ipc.c
++++ b/sound/soc/sof/ipc.c
+@@ -557,22 +557,25 @@ void snd_sof_ipc_msgs_rx(struct snd_sof_dev *sdev)
+ 		break;
+ 	}
+ 
+-	if (rx_callback) {
+-		/* read the full message as we have rx handler for it */
+-		msg_buf = kmalloc(hdr.size, GFP_KERNEL);
+-		if (!msg_buf)
+-			return;
++	/* read the full message */
++	msg_buf = kmalloc(hdr.size, GFP_KERNEL);
++	if (!msg_buf)
++		return;
+ 
+-		err = snd_sof_ipc_msg_data(sdev, NULL, msg_buf, hdr.size);
+-		if (err < 0)
+-			dev_err(sdev->dev, "%s: Failed to read message: %d\n",
+-				__func__, err);
+-		else
++	err = snd_sof_ipc_msg_data(sdev, NULL, msg_buf, hdr.size);
++	if (err < 0) {
++		dev_err(sdev->dev, "%s: Failed to read message: %d\n", __func__, err);
++	} else {
++		/* Call local handler for the message */
++		if (rx_callback)
+ 			rx_callback(sdev, msg_buf);
+ 
+-		kfree(msg_buf);
++		/* Notify registered clients */
++		sof_client_ipc_rx_dispatcher(sdev, msg_buf);
+ 	}
+ 
++	kfree(msg_buf);
++
+ 	ipc_log_header(sdev->dev, "ipc rx done", hdr.cmd);
+ }
+ EXPORT_SYMBOL(snd_sof_ipc_msgs_rx);
+diff --git a/sound/soc/sof/sof-client.c b/sound/soc/sof/sof-client.c
+new file mode 100644
+index 000000000000..6f747d051b59
+--- /dev/null
++++ b/sound/soc/sof/sof-client.c
+@@ -0,0 +1,340 @@
++// SPDX-License-Identifier: GPL-2.0-only
++//
++// Copyright(c) 2022 Intel Corporation. All rights reserved.
++//
++// Authors: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
++//	    Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
++//
++
++#include <linux/debugfs.h>
++#include <linux/errno.h>
++#include <linux/list.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/slab.h>
++#include "ops.h"
++#include "sof-client.h"
++#include "sof-priv.h"
++
++/**
++ * struct sof_ipc_event_entry - IPC client event description
++ * @ipc_msg_type:	IPC msg type of the event the client is interested
++ * @cdev:		sof_client_dev of the requesting client
++ * @callback:		Callback function of the client
++ * @list:		item in SOF core client event list
++ */
++struct sof_ipc_event_entry {
++	u32 ipc_msg_type;
++	struct sof_client_dev *cdev;
++	sof_client_event_callback callback;
++	struct list_head list;
++};
++
++/**
++ * struct sof_state_event_entry - DSP panic event subscription entry
++ * @cdev:		sof_client_dev of the requesting client
++ * @callback:		Callback function of the client
++ * @list:		item in SOF core client event list
++ */
++struct sof_state_event_entry {
++	struct sof_client_dev *cdev;
++	sof_client_fw_state_callback callback;
++	struct list_head list;
++};
++
++static void sof_client_auxdev_release(struct device *dev)
++{
++	struct auxiliary_device *auxdev = to_auxiliary_dev(dev);
++	struct sof_client_dev *cdev = auxiliary_dev_to_sof_client_dev(auxdev);
++
++	kfree(cdev->auxdev.dev.platform_data);
++	kfree(cdev);
++}
++
++static int sof_client_dev_add_data(struct sof_client_dev *cdev, const void *data,
++				   size_t size)
++{
++	void *d = NULL;
++
++	if (data) {
++		d = kmemdup(data, size, GFP_KERNEL);
++		if (!d)
++			return -ENOMEM;
++	}
++
++	cdev->auxdev.dev.platform_data = d;
++	return 0;
++}
++
++int sof_register_clients(struct snd_sof_dev *sdev)
++{
++	if (sof_ops(sdev) && sof_ops(sdev)->register_ipc_clients)
++		return sof_ops(sdev)->register_ipc_clients(sdev);
++
++	return 0;
++}
++
++void sof_unregister_clients(struct snd_sof_dev *sdev)
++{
++	if (sof_ops(sdev) && sof_ops(sdev)->unregister_ipc_clients)
++		sof_ops(sdev)->unregister_ipc_clients(sdev);
++}
++
++int sof_client_dev_register(struct snd_sof_dev *sdev, const char *name, u32 id,
++			    const void *data, size_t size)
++{
++	struct auxiliary_device *auxdev;
++	struct sof_client_dev *cdev;
++	int ret;
++
++	cdev = kzalloc(sizeof(*cdev), GFP_KERNEL);
++	if (!cdev)
++		return -ENOMEM;
++
++	cdev->sdev = sdev;
++	auxdev = &cdev->auxdev;
++	auxdev->name = name;
++	auxdev->dev.parent = sdev->dev;
++	auxdev->dev.release = sof_client_auxdev_release;
++	auxdev->id = id;
++
++	ret = sof_client_dev_add_data(cdev, data, size);
++	if (ret < 0)
++		goto err_dev_add_data;
++
++	ret = auxiliary_device_init(auxdev);
++	if (ret < 0) {
++		dev_err(sdev->dev, "failed to initialize client dev %s.%d\n", name, id);
++		goto err_dev_init;
++	}
++
++	ret = auxiliary_device_add(&cdev->auxdev);
++	if (ret < 0) {
++		dev_err(sdev->dev, "failed to add client dev %s.%d\n", name, id);
++		/*
++		 * sof_client_auxdev_release() will be invoked to free up memory
++		 * allocations through put_device()
++		 */
++		auxiliary_device_uninit(&cdev->auxdev);
++		return ret;
++	}
++
++	/* add to list of SOF client devices */
++	mutex_lock(&sdev->ipc_client_mutex);
++	list_add(&cdev->list, &sdev->ipc_client_list);
++	mutex_unlock(&sdev->ipc_client_mutex);
++
++	return 0;
++
++err_dev_init:
++	kfree(cdev->auxdev.dev.platform_data);
++
++err_dev_add_data:
++	kfree(cdev);
++
++	return ret;
++}
++EXPORT_SYMBOL_NS_GPL(sof_client_dev_register, SND_SOC_SOF_CLIENT);
++
++void sof_client_dev_unregister(struct snd_sof_dev *sdev, const char *name, u32 id)
++{
++	struct sof_client_dev *cdev;
++
++	mutex_lock(&sdev->ipc_client_mutex);
++
++	/*
++	 * sof_client_auxdev_release() will be invoked to free up memory
++	 * allocations through put_device()
++	 */
++	list_for_each_entry(cdev, &sdev->ipc_client_list, list) {
++		if (!strcmp(cdev->auxdev.name, name) && cdev->auxdev.id == id) {
++			list_del(&cdev->list);
++			auxiliary_device_delete(&cdev->auxdev);
++			auxiliary_device_uninit(&cdev->auxdev);
++			break;
++		}
++	}
++
++	mutex_unlock(&sdev->ipc_client_mutex);
++}
++EXPORT_SYMBOL_NS_GPL(sof_client_dev_unregister, SND_SOC_SOF_CLIENT);
++
++int sof_client_ipc_tx_message(struct sof_client_dev *cdev, void *ipc_msg,
++			      void *reply_data, size_t reply_bytes)
++{
++	struct sof_ipc_cmd_hdr *hdr = ipc_msg;
++
++	return sof_ipc_tx_message(cdev->sdev->ipc, hdr->cmd, ipc_msg, hdr->size,
++				  reply_data, reply_bytes);
++}
++EXPORT_SYMBOL_NS_GPL(sof_client_ipc_tx_message, SND_SOC_SOF_CLIENT);
++
++struct dentry *sof_client_get_debugfs_root(struct sof_client_dev *cdev)
++{
++	return cdev->sdev->debugfs_root;
++}
++EXPORT_SYMBOL_NS_GPL(sof_client_get_debugfs_root, SND_SOC_SOF_CLIENT);
++
++/* DMA buffer allocation in client drivers must use the core SOF device */
++struct device *sof_client_get_dma_dev(struct sof_client_dev *cdev)
++{
++	return cdev->sdev->dev;
++}
++EXPORT_SYMBOL_NS_GPL(sof_client_get_dma_dev, SND_SOC_SOF_CLIENT);
++
++const struct sof_ipc_fw_version *sof_client_get_fw_version(struct sof_client_dev *cdev)
++{
++	struct snd_sof_dev *sdev = sof_client_dev_to_sof_dev(cdev);
++
++	return &sdev->fw_ready.version;
++}
++EXPORT_SYMBOL_NS_GPL(sof_client_get_fw_version, SND_SOC_SOF_CLIENT);
++
++/* module refcount management of SOF core */
++int sof_client_core_module_get(struct sof_client_dev *cdev)
++{
++	struct snd_sof_dev *sdev = sof_client_dev_to_sof_dev(cdev);
++
++	if (!try_module_get(sdev->dev->driver->owner))
++		return -ENODEV;
++
++	return 0;
++}
++EXPORT_SYMBOL_NS_GPL(sof_client_core_module_get, SND_SOC_SOF_CLIENT);
++
++void sof_client_core_module_put(struct sof_client_dev *cdev)
++{
++	struct snd_sof_dev *sdev = sof_client_dev_to_sof_dev(cdev);
++
++	module_put(sdev->dev->driver->owner);
++}
++EXPORT_SYMBOL_NS_GPL(sof_client_core_module_put, SND_SOC_SOF_CLIENT);
++
++/* IPC event handling */
++void sof_client_ipc_rx_dispatcher(struct snd_sof_dev *sdev, void *msg_buf)
++{
++	struct sof_ipc_cmd_hdr *hdr = msg_buf;
++	u32 msg_type = hdr->cmd & SOF_GLB_TYPE_MASK;
++	struct sof_ipc_event_entry *event;
++
++	mutex_lock(&sdev->client_event_handler_mutex);
++
++	list_for_each_entry(event, &sdev->ipc_rx_handler_list, list) {
++		if (event->ipc_msg_type == msg_type)
++			event->callback(event->cdev, msg_buf);
++	}
++
++	mutex_unlock(&sdev->client_event_handler_mutex);
++}
++
++int sof_client_register_ipc_rx_handler(struct sof_client_dev *cdev,
++				       u32 ipc_msg_type,
++				       sof_client_event_callback callback)
++{
++	struct snd_sof_dev *sdev = sof_client_dev_to_sof_dev(cdev);
++	struct sof_ipc_event_entry *event;
++
++	if (!callback || !(ipc_msg_type & SOF_GLB_TYPE_MASK))
++		return -EINVAL;
++
++	event = kmalloc(sizeof(*event), GFP_KERNEL);
++	if (!event)
++		return -ENOMEM;
++
++	event->ipc_msg_type = ipc_msg_type;
++	event->cdev = cdev;
++	event->callback = callback;
++
++	/* add to list of SOF client devices */
++	mutex_lock(&sdev->client_event_handler_mutex);
++	list_add(&event->list, &sdev->ipc_rx_handler_list);
++	mutex_unlock(&sdev->client_event_handler_mutex);
++
++	return 0;
++}
++EXPORT_SYMBOL_NS_GPL(sof_client_register_ipc_rx_handler, SND_SOC_SOF_CLIENT);
++
++void sof_client_unregister_ipc_rx_handler(struct sof_client_dev *cdev,
++					  u32 ipc_msg_type)
++{
++	struct snd_sof_dev *sdev = sof_client_dev_to_sof_dev(cdev);
++	struct sof_ipc_event_entry *event;
++
++	mutex_lock(&sdev->client_event_handler_mutex);
++
++	list_for_each_entry(event, &sdev->ipc_rx_handler_list, list) {
++		if (event->cdev == cdev && event->ipc_msg_type == ipc_msg_type) {
++			list_del(&event->list);
++			kfree(event);
++			break;
++		}
++	}
++
++	mutex_unlock(&sdev->client_event_handler_mutex);
++}
++EXPORT_SYMBOL_NS_GPL(sof_client_unregister_ipc_rx_handler, SND_SOC_SOF_CLIENT);
++
++/*DSP state notification and query */
++void sof_client_fw_state_dispatcher(struct snd_sof_dev *sdev)
++{
++	struct sof_state_event_entry *event;
++
++	mutex_lock(&sdev->client_event_handler_mutex);
++
++	list_for_each_entry(event, &sdev->fw_state_handler_list, list)
++		event->callback(event->cdev, sdev->fw_state);
++
++	mutex_unlock(&sdev->client_event_handler_mutex);
++}
++
++int sof_client_register_fw_state_handler(struct sof_client_dev *cdev,
++					 sof_client_fw_state_callback callback)
++{
++	struct snd_sof_dev *sdev = sof_client_dev_to_sof_dev(cdev);
++	struct sof_state_event_entry *event;
++
++	if (!callback)
++		return -EINVAL;
++
++	event = kmalloc(sizeof(*event), GFP_KERNEL);
++	if (!event)
++		return -ENOMEM;
++
++	event->cdev = cdev;
++	event->callback = callback;
++
++	/* add to list of SOF client devices */
++	mutex_lock(&sdev->client_event_handler_mutex);
++	list_add(&event->list, &sdev->fw_state_handler_list);
++	mutex_unlock(&sdev->client_event_handler_mutex);
++
++	return 0;
++}
++EXPORT_SYMBOL_NS_GPL(sof_client_register_fw_state_handler, SND_SOC_SOF_CLIENT);
++
++void sof_client_unregister_fw_state_handler(struct sof_client_dev *cdev)
++{
++	struct snd_sof_dev *sdev = sof_client_dev_to_sof_dev(cdev);
++	struct sof_state_event_entry *event;
++
++	mutex_lock(&sdev->client_event_handler_mutex);
++
++	list_for_each_entry(event, &sdev->fw_state_handler_list, list) {
++		if (event->cdev == cdev) {
++			list_del(&event->list);
++			kfree(event);
++			break;
++		}
++	}
++
++	mutex_unlock(&sdev->client_event_handler_mutex);
++}
++EXPORT_SYMBOL_NS_GPL(sof_client_unregister_fw_state_handler, SND_SOC_SOF_CLIENT);
++
++enum sof_fw_state sof_client_get_fw_state(struct sof_client_dev *cdev)
++{
++	struct snd_sof_dev *sdev = sof_client_dev_to_sof_dev(cdev);
++
++	return sdev->fw_state;
++}
++EXPORT_SYMBOL_NS_GPL(sof_client_get_fw_state, SND_SOC_SOF_CLIENT);
+diff --git a/sound/soc/sof/sof-client.h b/sound/soc/sof/sof-client.h
+new file mode 100644
+index 000000000000..4b6394b4c694
+--- /dev/null
++++ b/sound/soc/sof/sof-client.h
+@@ -0,0 +1,67 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++
++#ifndef __SOC_SOF_CLIENT_H
++#define __SOC_SOF_CLIENT_H
++
++#include <linux/auxiliary_bus.h>
++#include <linux/device.h>
++#include <linux/list.h>
++#include <sound/sof.h>
++
++struct sof_ipc_fw_version;
++struct sof_ipc_cmd_hdr;
++struct snd_sof_dev;
++struct dentry;
++
++/**
++ * struct sof_client_dev - SOF client device
++ * @auxdev:	auxiliary device
++ * @sdev:	pointer to SOF core device struct
++ * @list:	item in SOF core client dev list
++ * @data:	device specific data
++ */
++struct sof_client_dev {
++	struct auxiliary_device auxdev;
++	struct snd_sof_dev *sdev;
++	struct list_head list;
++	void *data;
++};
++
++#define sof_client_dev_to_sof_dev(cdev)		((cdev)->sdev)
++
++#define auxiliary_dev_to_sof_client_dev(auxiliary_dev) \
++	container_of(auxiliary_dev, struct sof_client_dev, auxdev)
++
++#define dev_to_sof_client_dev(dev) \
++	container_of(to_auxiliary_dev(dev), struct sof_client_dev, auxdev)
++
++int sof_client_ipc_tx_message(struct sof_client_dev *cdev, void *ipc_msg,
++			      void *reply_data, size_t reply_bytes);
++
++struct dentry *sof_client_get_debugfs_root(struct sof_client_dev *cdev);
++struct device *sof_client_get_dma_dev(struct sof_client_dev *cdev);
++const struct sof_ipc_fw_version *sof_client_get_fw_version(struct sof_client_dev *cdev);
++
++/* module refcount management of SOF core */
++int sof_client_core_module_get(struct sof_client_dev *cdev);
++void sof_client_core_module_put(struct sof_client_dev *cdev);
++
++/* IPC notification */
++typedef void (*sof_client_event_callback)(struct sof_client_dev *cdev, void *msg_buf);
++
++int sof_client_register_ipc_rx_handler(struct sof_client_dev *cdev,
++				       u32 ipc_msg_type,
++				       sof_client_event_callback callback);
++void sof_client_unregister_ipc_rx_handler(struct sof_client_dev *cdev,
++					  u32 ipc_msg_type);
++
++/* DSP state notification and query */
++typedef void (*sof_client_fw_state_callback)(struct sof_client_dev *cdev,
++					     enum sof_fw_state state);
++
++int sof_client_register_fw_state_handler(struct sof_client_dev *cdev,
++					 sof_client_fw_state_callback callback);
++void sof_client_unregister_fw_state_handler(struct sof_client_dev *cdev);
++enum sof_fw_state sof_client_get_fw_state(struct sof_client_dev *cdev);
++
++#endif /* __SOC_SOF_CLIENT_H */
+diff --git a/sound/soc/sof/sof-priv.h b/sound/soc/sof/sof-priv.h
+index 27d2f3ca2f06..f641833f3ff9 100644
+--- a/sound/soc/sof/sof-priv.h
++++ b/sound/soc/sof/sof-priv.h
+@@ -292,6 +292,10 @@ struct snd_sof_dsp_ops {
+ 	void (*set_mach_params)(struct snd_soc_acpi_mach *mach,
+ 				struct snd_sof_dev *sdev); /* optional */
+ 
++	/* IPC client ops */
++	int (*register_ipc_clients)(struct snd_sof_dev *sdev); /* optional */
++	void (*unregister_ipc_clients)(struct snd_sof_dev *sdev); /* optional */
++
+ 	/* DAI ops */
+ 	struct snd_soc_dai_driver *drv;
+ 	int num_drv;
+@@ -479,6 +483,30 @@ struct snd_sof_dev {
+ 	 */
+ 	int dsp_core_ref_count[SOF_MAX_DSP_NUM_CORES];
+ 
++	/*
++	 * Used to keep track of registered IPC client devices so that they can
++	 * be removed when the parent SOF module is removed.
++	 */
++	struct list_head ipc_client_list;
++
++	/* mutex to protect client list */
++	struct mutex ipc_client_mutex;
++
++	/*
++	 * Used for tracking the IPC client's RX registration for DSP initiated
++	 * message handling.
++	 */
++	struct list_head ipc_rx_handler_list;
++
++	/*
++	 * Used for tracking the IPC client's registration for DSP state change
++	 * notification
++	 */
++	struct list_head fw_state_handler_list;
++
++	/* to protect the ipc_rx_handler_list  and  dsp_state_handler_list list */
++	struct mutex client_event_handler_mutex;
++
+ 	void *private;			/* core does not touch this */
+ };
+ 
+@@ -582,15 +610,7 @@ extern const struct dsp_arch_ops sof_xtensa_arch_ops;
+ /*
+  * Firmware state tracking
+  */
+-static inline void sof_set_fw_state(struct snd_sof_dev *sdev,
+-				    enum sof_fw_state new_state)
+-{
+-	if (sdev->fw_state == new_state)
+-		return;
+-
+-	dev_dbg(sdev->dev, "fw_state change: %d -> %d\n", sdev->fw_state, new_state);
+-	sdev->fw_state = new_state;
+-}
++void sof_set_fw_state(struct snd_sof_dev *sdev, enum sof_fw_state new_state);
+ 
+ /*
+  * Utilities
+@@ -623,4 +643,44 @@ int sof_stream_pcm_close(struct snd_sof_dev *sdev,
+ 			 struct snd_pcm_substream *substream);
+ 
+ int sof_machine_check(struct snd_sof_dev *sdev);
++
++/* SOF client support */
++#if IS_ENABLED(CONFIG_SND_SOC_SOF_CLIENT)
++int sof_client_dev_register(struct snd_sof_dev *sdev, const char *name, u32 id,
++			    const void *data, size_t size);
++void sof_client_dev_unregister(struct snd_sof_dev *sdev, const char *name, u32 id);
++int sof_register_clients(struct snd_sof_dev *sdev);
++void sof_unregister_clients(struct snd_sof_dev *sdev);
++void sof_client_ipc_rx_dispatcher(struct snd_sof_dev *sdev, void *msg_buf);
++void sof_client_fw_state_dispatcher(struct snd_sof_dev *sdev);
++#else /* CONFIG_SND_SOC_SOF_CLIENT */
++static inline int sof_client_dev_register(struct snd_sof_dev *sdev, const char *name,
++					  u32 id, const void *data, size_t size)
++{
++	return 0;
++}
++
++static inline void sof_client_dev_unregister(struct snd_sof_dev *sdev,
++					     const char *name, u32 id)
++{
++}
++
++static inline int sof_register_clients(struct snd_sof_dev *sdev)
++{
++	return 0;
++}
++
++static inline  void sof_unregister_clients(struct snd_sof_dev *sdev)
++{
++}
++
++static inline void sof_client_ipc_rx_dispatcher(struct snd_sof_dev *sdev, void *msg_buf)
++{
++}
++
++static inline void sof_client_fw_state_dispatcher(struct snd_sof_dev *sdev)
++{
++}
++#endif /* CONFIG_SND_SOC_SOF_CLIENT */
++
+ #endif
 -- 
 2.35.1
 

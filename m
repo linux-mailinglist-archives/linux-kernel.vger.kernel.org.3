@@ -2,195 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 466684B0FF2
+	by mail.lfdr.de (Postfix) with ESMTP id 91DA64B0FF3
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:15:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242712AbiBJOOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:14:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34708 "EHLO
+        id S242698AbiBJOO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:14:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242701AbiBJOOa (ORCPT
+        with ESMTP id S234309AbiBJOO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:14:30 -0500
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930CF1B1;
-        Thu, 10 Feb 2022 06:14:31 -0800 (PST)
-Received: by mail-pf1-f178.google.com with SMTP id y8so7734102pfa.11;
-        Thu, 10 Feb 2022 06:14:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LUbnigTK7eMp70mYsejtJbJYjEFyQuhAMXnMyn7VY2s=;
-        b=WoxjrqKt/C2/8hUf6FRXzJhbHV20uHkulyFEzwWmtvct4ZtIB0wSQ7Krt6DpZZH6IK
-         80QV1JvPuUHLvWPBCYvBhtr4lfPMk878gnVk+cT0cuLzgkVMVas3ioeisCwibJKqx1i8
-         qIqGECgK6kZQPWErfI21RJWQC1SSKrQ2oo09hyt6bqAzMxivSp5gigh+2LjHz7EXQCVI
-         ghogz6WxM5d7jUBk9QAVmzuOoxQjp8ReNivv/s3celq3/G7ZvelDOkC0ydZA6b8blGK1
-         rZA6bOz64tLjffKGDhLe1uS7pkPUBIy5EYMYBwalZy6+r7my3YCBjg90uhqdoIwfGou+
-         KQgA==
-X-Gm-Message-State: AOAM5313qUSSa05KH9IqGsaaS+x08u+yTQKemHREeNL8+yya8f9WrOaR
-        MlQPPnZIQ7NssAB0wkYjJ0ZyYo+qTqO+PdMg3yk=
-X-Google-Smtp-Source: ABdhPJwiopYFp7pKfiNckfL/EHgfbB16QLvg8l6yZlX0EwLMXr0WLF0kGb74/gs3GKS1QXJuplwxBRuUJHp03LesFYo=
-X-Received: by 2002:a63:4505:: with SMTP id s5mr2889541pga.531.1644502471010;
- Thu, 10 Feb 2022 06:14:31 -0800 (PST)
+        Thu, 10 Feb 2022 09:14:26 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5CF194;
+        Thu, 10 Feb 2022 06:14:27 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3737B1F391;
+        Thu, 10 Feb 2022 14:14:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644502466; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nnfenqfMSf5bQb0IqxKHoM36/ly8R0G5NUn4G0bgjt8=;
+        b=mgxF2nsYDMQ7L6BkLhsB5HgcSss96awHu+5ZIerjKCp0z0BFmbXjKi3j7NG94vD+Mzw3Dr
+        0BCBEQW04eXssTyj1VUORNFNlrMCdUWkI9Hh3xJjEULlJM1JsNDIlDNDWewydg7433fdd1
+        xudWM8o9ptMizYSc8TFppA7sghW1yP0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644502466;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nnfenqfMSf5bQb0IqxKHoM36/ly8R0G5NUn4G0bgjt8=;
+        b=AL/9AQnfURS4DaMh2/JBFhnZhLaRBN1XsVuxhnJ1AqP7RyS1Z5FpSZr53tjOIWaERu0cHj
+        goZ8wmKODsSzF0Dw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EFE1513B9E;
+        Thu, 10 Feb 2022 14:14:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7jeOOcEdBWKuagAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 10 Feb 2022 14:14:25 +0000
+Message-ID: <b9ab9aee-2a21-0ff6-032a-694066b2588a@suse.de>
+Date:   Thu, 10 Feb 2022 15:14:25 +0100
 MIME-Version: 1.0
-References: <20220209162607.1118325-1-maz@kernel.org> <20220209162607.1118325-11-maz@kernel.org>
- <CANBLGcwKeLn7Q1Ra8pCw=cXy=kJeEFRmBjOxjds10+k70LvzXA@mail.gmail.com>
- <87zgmz3xbf.wl-maz@kernel.org> <CANBLGcwwrqkYS2cxX5dYAaoWdj5pRp9c+qBDAMb3=0D5oBD+Zg@mail.gmail.com>
- <87v8xm4zkm.wl-maz@kernel.org> <CANBLGcyvMVdTnndMSWDFnN6207Nareps=AdzVvt0OaMdeAXEHg@mail.gmail.com>
- <87tud64yqa.wl-maz@kernel.org>
-In-Reply-To: <87tud64yqa.wl-maz@kernel.org>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-Date:   Thu, 10 Feb 2022 15:14:19 +0100
-Message-ID: <CANBLGcxg0qKWw4aifr+dHWge1aXE66e4wZzDwwpJjSad3xaeTQ@mail.gmail.com>
-Subject: Re: [PATCH 10/10] pinctrl: starfive: Switch to dynamic chip name output
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 10/19] fbcon: Ditch error handling for
+ con2fb_release_oldinfo
+Content-Language: en-US
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>
+Cc:     Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Claudio Suarez <cssk@net-c.es>, Du Cheng <ducheng2@gmail.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+References: <20220208210824.2238981-1-daniel.vetter@ffwll.ch>
+ <20220208210824.2238981-11-daniel.vetter@ffwll.ch>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220208210824.2238981-11-daniel.vetter@ffwll.ch>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------KxoDVfMsoxYBeASsq40IP0O6"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Feb 2022 at 14:50, Marc Zyngier <maz@kernel.org> wrote:
-> On Thu, 10 Feb 2022 13:44:12 +0000,
-> Emil Renner Berthing <kernel@esmil.dk> wrote:
-> >
-> > On Thu, 10 Feb 2022 at 14:32, Marc Zyngier <maz@kernel.org> wrote:
-> > > On Thu, 10 Feb 2022 12:59:59 +0000,
-> > > Emil Renner Berthing <kernel@esmil.dk> wrote:
-> > > >
-> > > > On Thu, 10 Feb 2022 at 10:06, Marc Zyngier <maz@kernel.org> wrote:
-> > > > > On Wed, 09 Feb 2022 23:30:55 +0000,
-> > > > > Emil Renner Berthing <kernel@esmil.dk> wrote:
-> > > > > >
-> > > > > > On Wed, 9 Feb 2022 at 17:49, Marc Zyngier <maz@kernel.org> wrote:
-> > > > > > >
-> > > > > > > Instead of overloading the name field, use the relevant callback to
-> > > > > > > output the device name.
-> > > > > > >
-> > > > > > > Signed-off-by: Marc Zyngier <maz@kernel.org>
-> > > > > > > ---
-> > > > > > >  drivers/pinctrl/pinctrl-starfive.c | 11 +++++++++--
-> > > > > > >  1 file changed, 9 insertions(+), 2 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/pinctrl/pinctrl-starfive.c b/drivers/pinctrl/pinctrl-starfive.c
-> > > > > > > index 5be9866c2b3c..f29d9ccf858b 100644
-> > > > > > > --- a/drivers/pinctrl/pinctrl-starfive.c
-> > > > > > > +++ b/drivers/pinctrl/pinctrl-starfive.c
-> > > > > > > @@ -15,6 +15,7 @@
-> > > > > > >  #include <linux/of.h>
-> > > > > > >  #include <linux/platform_device.h>
-> > > > > > >  #include <linux/reset.h>
-> > > > > > > +#include <linux/seq_file.h>
-> > > > > > >  #include <linux/spinlock.h>
-> > > > > > >
-> > > > > > >  #include <linux/pinctrl/pinctrl.h>
-> > > > > > > @@ -1163,12 +1164,20 @@ static int starfive_irq_set_type(struct irq_data *d, unsigned int trigger)
-> > > > > > >         return 0;
-> > > > > > >  }
-> > > > > > >
-> > > > > > > +static void starfive_irq_print_chip(struct irq_data *d, struct seq_file *p)
-> > > > > > > +{
-> > > > > > > +       struct starfive_pinctrl *sfp = starfive_from_irq_data(d);
-> > > > > > > +
-> > > > > > > +       seq_printf(p, sfp->gc.label);
-> > > > > > > +}
-> > > > > > > +
-> > > > > > >  static struct irq_chip starfive_irq_chip = {
-> > > > > > >         .irq_ack = starfive_irq_ack,
-> > > > > > >         .irq_mask = starfive_irq_mask,
-> > > > > > >         .irq_mask_ack = starfive_irq_mask_ack,
-> > > > > > >         .irq_unmask = starfive_irq_unmask,
-> > > > > > >         .irq_set_type = starfive_irq_set_type,
-> > > > > > > +       .irq_print_chip = starfive_irq_print_chip,
-> > > > > > >         .flags = IRQCHIP_SET_TYPE_MASKED,
-> > > > > > >  };
-> > > > > >
-> > > > > > The parent interrupt doesn't show up in /proc/interrupts anyway, so if
-> > > > > > setting the name is considered abuse we can just drop the addition
-> > > > > > above and just delete the two lines below.
-> > > > >
-> > > > > Are you sure this never appears? Is there a another irqchip stacked on
-> > > > > top of this one? Could you please dump /sys/kernel/debug/irq/irqs/XX,
-> > > > > where XX is an interrupt number using one of these GPIO pins? Please
-> > > > > run it without this patch, as I just noticed that debugfs blindly
-> > > > > uses the name.
-> > > >
-> > > > Yes, the old gpio driver this derives from used to set
-> > > >     sfp->gc.irq.parent_handler = NULL
-> > > > and then register its own irq handler, then the parent would show up
-> > > > in /proc/interrupts. But after switching to letting the gpio framework
-> > > > register the handler it stopped showing up.
-> > >
-> > > But this patch does not deal with the parent interrupt. It deals with
-> > > the irqchip that is used for the 'children interrupt'. Output
-> > > interrupts for a chained handler are never shown, as they don't really
-> > > make much sense on their own (you'd only see the sum of the input
-> > > interrupts).
-> >
-> > I see. Sorry for the confusion.
-> >
-> > > >
-> > > > root@visionfive~# cat /proc/interrupts
-> > > >            CPU0       CPU1
-> > > >   5:       5035       4907  RISC-V INTC   5 Edge      riscv-timer
-> > > >   6:        960          0  SiFive PLIC   4 Edge      dw-mci
-> > > >   7:       4384          0  SiFive PLIC   5 Edge      dw-mci
-> > > >   8:        562          0  SiFive PLIC   6 Edge      eth0
-> > > >  10:          1          0  SiFive PLIC   7 Edge      eth0
-> > > >  11:          0          0  SiFive PLIC   2 Edge      dw_axi_dmac_platform
-> > > >  15:       2690          0  SiFive PLIC  44 Edge      xhci-hcd:usb1
-> > > >  17:          0          0  SiFive PLIC  43 Edge      104c0000.usb
-> > > >  18:          0          0  SiFive PLIC   1 Edge      dw_axi_dmac_platform
-> > > >  20:        234          0  SiFive PLIC  96 Edge      118b0000.i2c
-> > > >  21:          0          0  SiFive PLIC  97 Edge      118c0000.i2c
-> > > >  22:          7          0  SiFive PLIC  98 Edge      118d0000.trng
-> > > >  28:          0          0  SiFive PLIC 101 Edge      sf_lcdc
-> > > >  29:          0          0  SiFive PLIC 103 Edge      sf_vpp1
-> > > >  30:          0          0  SiFive PLIC  70 Edge      12410000.spi
-> > > >  31:        205          0  SiFive PLIC  73 Edge      ttyS0
-> > > >  32:          0          0  SiFive PLIC  74 Edge      12450000.i2c
-> > > >  33:          0          0  SiFive PLIC  80 Edge      12480000.watchdog
-> > > >  34:         28          0  SiFive PLIC 122 Edge      124a0000.tmon
-> > > >  37:          0          0  11910000.pinctrl  35 Edge      gpiomon
-> > >                               ^^^^^^^^^^^^^^^^
-> > > This is what this patch deals with. Going with your suggestion of
-> > > dropping this output (or to hardcode it to something else) would be a
-> > > userspace visible change, and we can't do that.
-> >
-> > Gotcha. The SoC has been out in very few numbers for less than a year
-> > and the driver only entered mainline in 5.17-rc1, so I doubt anyone
-> > has had time to write scripts that check for this, but I'll let it be
-> > up to you.
->
-> Ah, I should have checked that. In which case, would you be OK if I
-> simply pushed the removal of this label as a fix for 5.17, and just
-> have it to say "Star5 GPIO", for example, without any indication of
-> the device (which appears in debugfs anyway as part of the irqdomain)?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------KxoDVfMsoxYBeASsq40IP0O6
+Content-Type: multipart/mixed; boundary="------------MaeCgNpsSLLQxEICSStY0Q7g";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Daniel Vetter <daniel.vetter@ffwll.ch>,
+ DRI Development <dri-devel@lists.freedesktop.org>
+Cc: Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+ linux-fbdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ Sam Ravnborg <sam@ravnborg.org>, Daniel Vetter <daniel.vetter@intel.com>,
+ Daniel Vetter <daniel@ffwll.ch>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Claudio Suarez <cssk@net-c.es>, Du Cheng <ducheng2@gmail.com>,
+ Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Message-ID: <b9ab9aee-2a21-0ff6-032a-694066b2588a@suse.de>
+Subject: Re: [PATCH v2 10/19] fbcon: Ditch error handling for
+ con2fb_release_oldinfo
+References: <20220208210824.2238981-1-daniel.vetter@ffwll.ch>
+ <20220208210824.2238981-11-daniel.vetter@ffwll.ch>
+In-Reply-To: <20220208210824.2238981-11-daniel.vetter@ffwll.ch>
 
-I'm fine with it although I'd prefer "StarFive GPIO". I haven't seen
-star5 used anywhere.
-But shouldn't changes like this normally go through Linus Walleij's tree?
+--------------MaeCgNpsSLLQxEICSStY0Q7g
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-/Emil
+DQoNCkFtIDA4LjAyLjIyIHVtIDIyOjA4IHNjaHJpZWIgRGFuaWVsIFZldHRlcjoNCj4gSXQg
+ZG9lc24ndCBldmVyIGZhaWwgYW55bW9yZS4NCj4gDQo+IEFja2VkLWJ5OiBTYW0gUmF2bmJv
+cmcgPHNhbUByYXZuYm9yZy5vcmc+DQo+IFNpZ25lZC1vZmYtYnk6IERhbmllbCBWZXR0ZXIg
+PGRhbmllbC52ZXR0ZXJAaW50ZWwuY29tPg0KPiBDYzogRGFuaWVsIFZldHRlciA8ZGFuaWVs
+QGZmd2xsLmNoPg0KPiBDYzogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2Uu
+ZGU+DQo+IENjOiBHcmVnIEtyb2FoLUhhcnRtYW4gPGdyZWdraEBsaW51eGZvdW5kYXRpb24u
+b3JnPg0KPiBDYzogQ2xhdWRpbyBTdWFyZXogPGNzc2tAbmV0LWMuZXM+DQo+IENjOiBEdSBD
+aGVuZyA8ZHVjaGVuZzJAZ21haWwuY29tPg0KPiBDYzogVGV0c3VvIEhhbmRhIDxwZW5ndWlu
+LWtlcm5lbEBJLWxvdmUuU0FLVVJBLm5lLmpwPg0KDQpBY2tlZC1ieTogVGhvbWFzIFppbW1l
+cm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQoNCj4gLS0tDQo+ICAgZHJpdmVycy92aWRl
+by9mYmRldi9jb3JlL2ZiY29uLmMgfCAzNyArKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0t
+LS0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxMyBpbnNlcnRpb25zKCspLCAyNCBkZWxldGlv
+bnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJj
+b24uYyBiL2RyaXZlcnMvdmlkZW8vZmJkZXYvY29yZS9mYmNvbi5jDQo+IGluZGV4IDNlMWEz
+ZTdiZjUyNy4uYTYwODkxMDA1ZDQ0IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3ZpZGVvL2Zi
+ZGV2L2NvcmUvZmJjb24uYw0KPiArKysgYi9kcml2ZXJzL3ZpZGVvL2ZiZGV2L2NvcmUvZmJj
+b24uYw0KPiBAQCAtNzM5LDkgKzczOSw4IEBAIHN0YXRpYyBpbnQgY29uMmZiX2FjcXVpcmVf
+bmV3aW5mbyhzdHJ1Y3QgdmNfZGF0YSAqdmMsIHN0cnVjdCBmYl9pbmZvICppbmZvLA0KPiAg
+IAlyZXR1cm4gZXJyOw0KPiAgIH0NCj4gICANCj4gLXN0YXRpYyBpbnQgY29uMmZiX3JlbGVh
+c2Vfb2xkaW5mbyhzdHJ1Y3QgdmNfZGF0YSAqdmMsIHN0cnVjdCBmYl9pbmZvICpvbGRpbmZv
+LA0KPiAtCQkJCSAgc3RydWN0IGZiX2luZm8gKm5ld2luZm8sIGludCB1bml0LA0KPiAtCQkJ
+CSAgaW50IG9sZGlkeCwgaW50IGZvdW5kKQ0KPiArc3RhdGljIHZvaWQgY29uMmZiX3JlbGVh
+c2Vfb2xkaW5mbyhzdHJ1Y3QgdmNfZGF0YSAqdmMsIHN0cnVjdCBmYl9pbmZvICpvbGRpbmZv
+LA0KPiArCQkJCSAgIHN0cnVjdCBmYl9pbmZvICpuZXdpbmZvKQ0KPiAgIHsNCj4gICAJc3Ry
+dWN0IGZiY29uX29wcyAqb3BzID0gb2xkaW5mby0+ZmJjb25fcGFyOw0KPiAgIAlpbnQgcmV0
+Ow0KPiBAQCAtNzcwLDggKzc2OSw2IEBAIHN0YXRpYyBpbnQgY29uMmZiX3JlbGVhc2Vfb2xk
+aW5mbyhzdHJ1Y3QgdmNfZGF0YSAqdmMsIHN0cnVjdCBmYl9pbmZvICpvbGRpbmZvLA0KPiAg
+IAkJCQkiZGV0ZWN0ZWQgdW5oYW5kbGVkIGZiX3NldF9wYXIgZXJyb3IsICINCj4gICAJCQkJ
+ImVycm9yIGNvZGUgJWRcbiIsIHJldCk7DQo+ICAgCX0NCj4gLQ0KPiAtCXJldHVybiAwOw0K
+PiAgIH0NCj4gICANCj4gICBzdGF0aWMgdm9pZCBjb24yZmJfaW5pdF9kaXNwbGF5KHN0cnVj
+dCB2Y19kYXRhICp2Yywgc3RydWN0IGZiX2luZm8gKmluZm8sDQo+IEBAIC04MjUsNyArODIy
+LDcgQEAgc3RhdGljIGludCBzZXRfY29uMmZiX21hcChpbnQgdW5pdCwgaW50IG5ld2lkeCwg
+aW50IHVzZXIpDQo+ICAgCWludCBvbGRpZHggPSBjb24yZmJfbWFwW3VuaXRdOw0KPiAgIAlz
+dHJ1Y3QgZmJfaW5mbyAqaW5mbyA9IHJlZ2lzdGVyZWRfZmJbbmV3aWR4XTsNCj4gICAJc3Ry
+dWN0IGZiX2luZm8gKm9sZGluZm8gPSBOVUxMOw0KPiAtCWludCBmb3VuZCwgZXJyID0gMDsN
+Cj4gKwlpbnQgZm91bmQsIGVyciA9IDAsIHNob3dfbG9nbzsNCj4gICANCj4gICAJV0FSTl9D
+T05TT0xFX1VOTE9DS0VEKCk7DQo+ICAgDQo+IEBAIC04NTQsMTggKzg1MSwxNSBAQCBzdGF0
+aWMgaW50IHNldF9jb24yZmJfbWFwKGludCB1bml0LCBpbnQgbmV3aWR4LCBpbnQgdXNlcikN
+Cj4gICAJICogZmJjb24gc2hvdWxkIHJlbGVhc2UgaXQuDQo+ICAgCSAqLw0KPiAgIAlpZiAo
+IWVyciAmJiBvbGRpbmZvICYmICFzZWFyY2hfZmJfaW5fbWFwKG9sZGlkeCkpDQo+IC0JCWVy
+ciA9IGNvbjJmYl9yZWxlYXNlX29sZGluZm8odmMsIG9sZGluZm8sIGluZm8sIHVuaXQsIG9s
+ZGlkeCwNCj4gLQkJCQkJICAgICBmb3VuZCk7DQo+ICsJCWNvbjJmYl9yZWxlYXNlX29sZGlu
+Zm8odmMsIG9sZGluZm8sIGluZm8pOw0KPiAgIA0KPiAtCWlmICghZXJyKSB7DQo+IC0JCWlu
+dCBzaG93X2xvZ28gPSAoZmdfY29uc29sZSA9PSAwICYmICF1c2VyICYmDQo+IC0JCQkJIGxv
+Z29fc2hvd24gIT0gRkJDT05fTE9HT19ET05UU0hPVyk7DQo+ICsJc2hvd19sb2dvID0gKGZn
+X2NvbnNvbGUgPT0gMCAmJiAhdXNlciAmJg0KPiArCQkJIGxvZ29fc2hvd24gIT0gRkJDT05f
+TE9HT19ET05UU0hPVyk7DQo+ICAgDQo+IC0JCWlmICghZm91bmQpDQo+IC0JCQlmYmNvbl9h
+ZGRfY3Vyc29yX3dvcmsoaW5mbyk7DQo+IC0JCWNvbjJmYl9tYXBfYm9vdFt1bml0XSA9IG5l
+d2lkeDsNCj4gLQkJY29uMmZiX2luaXRfZGlzcGxheSh2YywgaW5mbywgdW5pdCwgc2hvd19s
+b2dvKTsNCj4gLQl9DQo+ICsJaWYgKCFmb3VuZCkNCj4gKwkJZmJjb25fYWRkX2N1cnNvcl93
+b3JrKGluZm8pOw0KPiArCWNvbjJmYl9tYXBfYm9vdFt1bml0XSA9IG5ld2lkeDsNCj4gKwlj
+b24yZmJfaW5pdF9kaXNwbGF5KHZjLCBpbmZvLCB1bml0LCBzaG93X2xvZ28pOw0KPiAgIA0K
+PiAgIAlpZiAoIXNlYXJjaF9mYl9pbl9tYXAoaW5mb19pZHgpKQ0KPiAgIAkJaW5mb19pZHgg
+PSBuZXdpZHg7DQo+IEBAIC0yNzY5LDcgKzI3NjMsNyBAQCBzdGF0aWMgaW5saW5lIHZvaWQg
+ZmJjb25fdW5iaW5kKHZvaWQpIHt9DQo+ICAgLyogY2FsbGVkIHdpdGggY29uc29sZV9sb2Nr
+IGhlbGQgKi8NCj4gICB2b2lkIGZiY29uX2ZiX3VuYmluZChzdHJ1Y3QgZmJfaW5mbyAqaW5m
+bykNCj4gICB7DQo+IC0JaW50IGksIG5ld19pZHggPSAtMSwgcmV0ID0gMDsNCj4gKwlpbnQg
+aSwgbmV3X2lkeCA9IC0xOw0KPiAgIAlpbnQgaWR4ID0gaW5mby0+bm9kZTsNCj4gICANCj4g
+ICAJV0FSTl9DT05TT0xFX1VOTE9DS0VEKCk7DQo+IEBAIC0yODAzLDEzICsyNzk3LDggQEAg
+dm9pZCBmYmNvbl9mYl91bmJpbmQoc3RydWN0IGZiX2luZm8gKmluZm8pDQo+ICAgCQkJaWYg
+KGNvbjJmYl9tYXBbaV0gPT0gaWR4KSB7DQo+ICAgCQkJCWNvbjJmYl9tYXBbaV0gPSAtMTsN
+Cj4gICAJCQkJaWYgKCFzZWFyY2hfZmJfaW5fbWFwKGlkeCkpIHsNCj4gLQkJCQkJcmV0ID0g
+Y29uMmZiX3JlbGVhc2Vfb2xkaW5mbyh2Y19jb25zW2ldLmQsDQo+IC0JCQkJCQkJCSAgICAg
+aW5mbywgTlVMTCwgaSwNCj4gLQkJCQkJCQkJICAgICBpZHgsIDApOw0KPiAtCQkJCQlpZiAo
+cmV0KSB7DQo+IC0JCQkJCQljb24yZmJfbWFwW2ldID0gaWR4Ow0KPiAtCQkJCQkJcmV0dXJu
+Ow0KPiAtCQkJCQl9DQo+ICsJCQkJCWNvbjJmYl9yZWxlYXNlX29sZGluZm8odmNfY29uc1tp
+XS5kLA0KPiArCQkJCQkJCSAgICAgICBpbmZvLCBOVUxMKTsNCj4gICAJCQkJfQ0KPiAgIAkJ
+CX0NCj4gICAJCX0NCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVy
+IERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhm
+ZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7D
+vHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+
+--------------MaeCgNpsSLLQxEICSStY0Q7g--
+
+--------------KxoDVfMsoxYBeASsq40IP0O6
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIFHcEFAwAAAAAACgkQlh/E3EQov+D5
+9BAAvIDTeMUHZ7/wVXLw/JN5ujphJHSg09vWdT3vd/aT/EnXjLE2BpITWfyzaM9I7yXlmhFaFZDc
+BzdI/Ps1Zz3d1BxnS/E/Bsi4DAF5ZRgn9nA7S9z6VVzss7EuG3qDFCM/4p1Xvb/tr27HVFmc3GrI
+xXfNYTKV4941E7vhOaCEWFewAqcm25+NaXFHv8CpeE2rsYOqN6KPFttbSZNF8fYykKHwMSj+w2hj
+f62P0FbYVKx4+c8pQf2VVVFn+26fklkP3kfatUNldohjMXrog7b8pf8Pb1igtjukjmqvBOPUenJM
+dyOQITdBjBO3x1McqnaNu99w2xRFsTYU4n2/dTqYcg/vQvAKkQlDeeG1o97dcLl58k09wgtIKtnj
+RazRcZQ4oudcGu2uCkFrFNq8mBSgr2xYeGCu8jjYwxoUtwU5yKj26YhsEhb9rTPAIOqYCVEowTeW
+SDRFwoBK9wmxuTKgCj9YNW8taVp0mJu+MBvrv9WjvxP+Taq28BqIRaFK8J8HkbaIGz243oIBBnXS
+ZJEcJM7QggGeII+n8tnh7B16A8gJ93vVx7HAkTWOcO3r3ImnN8UxVH8LsPppYgUI1U64zkZsFYJQ
+WFYrn97/GE4P+FdoJIMidblnEcDmgZiqDdMUOSBBR0Z572uNGXUQB1M31tO1wX1pEeUS+GWZH43u
+58M=
+=KQhL
+-----END PGP SIGNATURE-----
+
+--------------KxoDVfMsoxYBeASsq40IP0O6--

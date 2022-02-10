@@ -2,87 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA4C4B0FEC
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6044B0FEB
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242683AbiBJONT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:13:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33940 "EHLO
+        id S242009AbiBJONg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:13:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237901AbiBJONS (ORCPT
+        with ESMTP id S237901AbiBJONe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:13:18 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03619194
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:13:19 -0800 (PST)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D9D674005E
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:13:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644502397;
-        bh=hHqRmwBM+7RA1FsnxWr2R/UGBrQXiz3iEv5wI0eWRho=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=LmQn7pOAUZ3OvE/C+LWSj4tzRYbPoxsmHTdKdhSI81nqDclOyAElIgKrsJNV98etI
-         FFeS+veQZgW2t+Sd/LiSHXpWn0n8rVBaPSb3QZ7kkhgUOxbovhn2CP51M2rvmOxpU1
-         2ar9ElWlf5LcmSedjbJMU8cV4PvehVZ3K0o+i0nlPMoJJkfFuSFWN761zwlfNWN55W
-         HAejwl438QvlS7Eg6tGSkcyeSkUbg3P9IS7oXIknED2BL7ObAV6tRe0nOTUeouRHoD
-         Zs33CcVPtL4x50aUaO7tQzdEA9shpLpeuawdZJU6zYRy0yCDcW8LmHzP9IQobRoNrx
-         f/7pyV/fFIZ3A==
-Received: by mail-ed1-f69.google.com with SMTP id ee7-20020a056402290700b0040f680071c9so3386166edb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:13:17 -0800 (PST)
+        Thu, 10 Feb 2022 09:13:34 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E981D6
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:13:36 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id z7so4409381ilb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:13:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=FTAdirp5u7kTPPTGGN6xaNHqqgo+3Ngm4ug8TFgRbao=;
+        b=NXxgxLaGF5+w3dAUHgP2M1xT8dNGrVXDIfLw2d9aAp3zn4ve9J+lzs73YNobNypHTA
+         yfbuFMac6Zdeo9iXFLeyRWqzfM7zNDbdmbPqPyYi9fsvPBfkf6Vdj+74DSM8wM5HgadH
+         DODEHzBNXeYw7VmiWueDAfqATbSOu+CkntoIc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=hHqRmwBM+7RA1FsnxWr2R/UGBrQXiz3iEv5wI0eWRho=;
-        b=Sng4NGWnw5Sct6LHrBfBkx7FK73DNsTsLvEb+xbEEB6d409nuHqitjOn7Bf6abyvwt
-         7VQ1zVdDFtHY8LLhOOYq/JhLLbOBVzhCCrnFJW/WovrUItomOJXix+PgE2MVNaBI80kV
-         tdNw+MlVyLwWT/jrE98+/jGB+LNSuSrKOUTBMA1pildSs+7EJ2j/cguP8pCGknr7WTT9
-         QDfy8I/I8Qj5yk/HABghLGVgie9mMS06bKqbn1212JbfFa5Z7mQl6Tsm2BiBfqotWMiJ
-         J2NS32mkfk9dOSBJxW1qXi8qnU8wxyKmv+b/w45QepubySMAXwPOzZjiEo/b7yENWjEn
-         L1lg==
-X-Gm-Message-State: AOAM532i7rgVYlsEzZYTLYy1/oXqpc8N8f3bYR56mbsFt1NOJIMHodx6
-        5TZjo6lTWsz8Q0v0g+ww5+Y/f2yp9XRjd3C5rXb1o3UE90yfpH1plHnCrGccFUWgNEm7+Ps91a2
-        pCGijOLJ7GltZct7qIty1p0BoAY2VPzR0r6vTA3A9Xw==
-X-Received: by 2002:a17:907:6d88:: with SMTP id sb8mr6493820ejc.25.1644502397480;
-        Thu, 10 Feb 2022 06:13:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxKV8TCZcJWN5L34rb74wIkQ6Jh9rhzbMYwLJm4thNkuEMEFmBKSz705+0NcRlXlKj8mCINJw==
-X-Received: by 2002:a17:907:6d88:: with SMTP id sb8mr6493806ejc.25.1644502397287;
-        Thu, 10 Feb 2022 06:13:17 -0800 (PST)
-Received: from [192.168.0.98] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id s11sm4966412ejr.176.2022.02.10.06.13.15
+        bh=FTAdirp5u7kTPPTGGN6xaNHqqgo+3Ngm4ug8TFgRbao=;
+        b=g9NWT2g/JLK7Mw1i9ZRp01AUdidRj1ZYlSLYW+irm9vJmQnd/HaKqRs9sDEEDpoXQb
+         7upFAY7P3GJQSa+QKwUPes6C7AbyfYO+vpIJyHz1eCWobjGe3mW7FyzHnk4byo8i0NKw
+         adLekQtqF7FGy5JjHUV+pBr/2lPZQTFcWqbmulHj+RsaGbWH29vMRFHYqGn/1JVtYwhV
+         9MUFOmfYTGWYGP2hxPaOZxKvzOnLgGj7BznpGJeZDPeQnBre3pSosznJ+yXJysjMHZ7W
+         6oLtx/vc85eArtVjsei9zlZDpkX1ZL34/aGyg6z/GmHN8i+4JcmwFY9Kqb9ERWivPn7F
+         btBg==
+X-Gm-Message-State: AOAM530QM7MdwSketnZYYmBHLTgEDckMvsMME4Lgdyy8jdHZtLyMYBBs
+        HGbfGEjksuH7QmFTx2njhlbVsw==
+X-Google-Smtp-Source: ABdhPJwDBBWJKOGCBNeiFKJ0MK8ImMpMu2FRLOjiWecOhD52Iay9AOmBJc34TV8aSZHSnhOMJ0k66Q==
+X-Received: by 2002:a05:6e02:1949:: with SMTP id x9mr4198030ilu.269.1644502415395;
+        Thu, 10 Feb 2022 06:13:35 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id e5sm9302582ilq.9.2022.02.10.06.13.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 06:13:16 -0800 (PST)
-Message-ID: <429dd2fd-3ceb-6780-f970-4ea9b115388c@canonical.com>
-Date:   Thu, 10 Feb 2022 15:13:15 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] selftests/ftrace: Do not trace do_softirq because of
- PREEMPT_RT
-Content-Language: en-US
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rt-users@vger.kernel.org, joseph.salisbury@canonical.com,
+        Thu, 10 Feb 2022 06:13:35 -0800 (PST)
+Subject: Re: [PATCH] usbip: vudc: Make use of the helper macro LIST_HEAD()
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20220210083356.11212-1-krzysztof.kozlowski@canonical.com>
- <YgUXcGC1mH7VX1d9@linutronix.de>
- <546f147d-1682-fb92-42e5-7247dc19dcf1@canonical.com>
- <YgUc5HxfIdJ0Z5AN@linutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <YgUc5HxfIdJ0Z5AN@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+References: <20220209032813.38703-1-cai.huoqing@linux.dev>
+ <8c8bcf5b-bbda-55e0-6a61-35bfafbafb78@linuxfoundation.org>
+ <20220210023714.GA7791@chq-T47>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <b4f2bdf3-9584-0dd5-f4e2-fae97018fcfc@linuxfoundation.org>
+Date:   Thu, 10 Feb 2022 07:13:34 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20220210023714.GA7791@chq-T47>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,38 +76,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/2022 15:10, Sebastian Andrzej Siewior wrote:
-> On 2022-02-10 15:05:24 [+0100], Krzysztof Kozlowski wrote:
->> On 10/02/2022 14:47, Sebastian Andrzej Siewior wrote:
->>> On 2022-02-10 09:33:56 [+0100], Krzysztof Kozlowski wrote:
->>>> The PREEMPT_RT patchset does not use soft IRQs thus trying to filter for
->>>> do_softirq fails for such kernel:
+On 2/9/22 7:37 PM, Cai Huoqing wrote:
+> On 09 2月 22 09:00:37, Shuah Khan wrote:
+>> On 2/8/22 8:28 PM, Cai Huoqing wrote:
+>>> Replace "struct list_head head = LIST_HEAD_INIT(head)" with
+>>> "LIST_HEAD(head)" to simplify the code.
 >>>
->>> PREEMPT_RT does use soft IRQs.
+>>> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+>>> ---
+>>>    drivers/usb/usbip/vudc_main.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/usb/usbip/vudc_main.c b/drivers/usb/usbip/vudc_main.c
+>>> index 678faa82598c..d43252b77efd 100644
+>>> --- a/drivers/usb/usbip/vudc_main.c
+>>> +++ b/drivers/usb/usbip/vudc_main.c
+>>> @@ -26,7 +26,7 @@ static struct platform_driver vudc_driver = {
+>>>    	},
+>>>    };
+>>> -static struct list_head vudc_devices = LIST_HEAD_INIT(vudc_devices);
+>>> +static LIST_HEAD(vudc_devices);
+>>>    static int __init init(void)
+>>>    {
+>>>
 >>
->> Correct. It does not use do_softirq() code, but follows different path
->> with ksoftirqd.
->> Shall I rephrase it towards something like this? Or maybe you have some
->> more accurate description?
-> 
-> It would be good to describe what the purpose of the change in terms of
-> the actual problem and the aimed solution.
+>> Explain why this change simplifies the code and also add a comment
+>> above LIST_HEAD
+> LIST_HEAD() help to clean up the code "struct list_head vudc_devices =
+> ". we only to care the variable 'vudc_devices',
+>>
 
-The purpose was explain - fix a failing test with PREEMPT_RT. I am not
-planning to rework entire test, it is merely a fix.
+How does LIST_HEAD() make it simpler. It does that I am sure. I am looking
+for you to explain how it does in the change log.
 
-> 
->> The implementation detail is that do_softirq() is in ifndef.
-> 
-> So let me ask again.  We have
->    FUNC1="schedule"
->    FUNC2="do_softirq"
-> 
-> What is the purpose of this? Do you need FUNC2 when ksoftirqd is run or
-> when softirqs are served? Not sure how scheduler_tick fits in all this.
-
-I guess this is more a question to the author of the test. Unless you
-are now questioning the entire purpose of this test?
-
-Best regards,
-Krzysztof
+thanks,
+-- Shuah

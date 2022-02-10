@@ -2,106 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 345764B1033
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2163C4B104A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242809AbiBJOVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:21:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38278 "EHLO
+        id S242804AbiBJOWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:22:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238798AbiBJOVK (ORCPT
+        with ESMTP id S237743AbiBJOW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:21:10 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B274AF5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:21:10 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-314-1bdjv44kN9i2uVm1sW-Fng-1; Thu, 10 Feb 2022 14:21:08 +0000
-X-MC-Unique: 1bdjv44kN9i2uVm1sW-Fng-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 10 Feb 2022 14:21:07 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 10 Feb 2022 14:21:07 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Arnd Bergmann' <arnd@kernel.org>
-CC:     Michal Simek <monstr@monstr.eu>,
-        Christoph Hellwig <hch@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] microblaze: remove CONFIG_SET_FS
-Thread-Topic: [PATCH] microblaze: remove CONFIG_SET_FS
-Thread-Index: AQHYHcQ6EgAhsRrDe0u1y8RgHhFzdayMhlsAgABCtoCAAAcZYA==
-Date:   Thu, 10 Feb 2022 14:21:07 +0000
-Message-ID: <cc2a0d0eb77b4ace872263db7bf0c115@AcuMS.aculab.com>
-References: <20220209144910.1484686-1-arnd@kernel.org>
- <80c6df0717014472aa81093ae3894d39@AcuMS.aculab.com>
- <CAK8P3a3tZEc30AaiNENbHKf8+x5VOw7Q=4dVDMNwz0F6+v9YrQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a3tZEc30AaiNENbHKf8+x5VOw7Q=4dVDMNwz0F6+v9YrQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Feb 2022 09:22:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F90D102;
+        Thu, 10 Feb 2022 06:22:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD335619BA;
+        Thu, 10 Feb 2022 14:22:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC8DC004E1;
+        Thu, 10 Feb 2022 14:22:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644502949;
+        bh=u1dWT5JVXt/QwWGF+tQ50S7611q/WfJq6ECL0E8JWqI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bQYIgmjyDFeql0nuSOkDje8apjcCoy4exZGXjLviL6cSoco7gsu0vmvqmtDoHf1VM
+         Lzq/mk6U4krtWeJ4iH5bYq5uR+8eTCR0JUBsYfNpeolY3nOS2pf4NGN9phPkm9FAbx
+         bD5o/jEzbuXFKHBRfo0pXe/Ha5u0oseEEW/5LF4P5N85++/Mw2L58L0G/kn4s/Z1rg
+         aSnkjsAF2xc73eFIGMTY63U6x3TTYlbr9nbk8iC++gd1mnIY8r6SvIvNq/Q2ka5Lz3
+         FS92/wnqhA54ekmXn/QoOimj3QuA5nWFX9qhQ1qPUHYH4fLdAZhhbNFugg65Hil+gP
+         SzCePw4hOM9iw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nIAL5-006vLF-2A; Thu, 10 Feb 2022 14:22:27 +0000
+Date:   Thu, 10 Feb 2022 14:22:26 +0000
+Message-ID: <87r18a4x99.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+To:     Emil Renner Berthing <kernel@esmil.dk>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        kernel-team@android.com
+Subject: Re: [PATCH 10/10] pinctrl: starfive: Switch to dynamic chip name output
+In-Reply-To: <CANBLGcxg0qKWw4aifr+dHWge1aXE66e4wZzDwwpJjSad3xaeTQ@mail.gmail.com>
+References: <20220209162607.1118325-1-maz@kernel.org>
+        <20220209162607.1118325-11-maz@kernel.org>
+        <CANBLGcwKeLn7Q1Ra8pCw=cXy=kJeEFRmBjOxjds10+k70LvzXA@mail.gmail.com>
+        <87zgmz3xbf.wl-maz@kernel.org>
+        <CANBLGcwwrqkYS2cxX5dYAaoWdj5pRp9c+qBDAMb3=0D5oBD+Zg@mail.gmail.com>
+        <87v8xm4zkm.wl-maz@kernel.org>
+        <CANBLGcyvMVdTnndMSWDFnN6207Nareps=AdzVvt0OaMdeAXEHg@mail.gmail.com>
+        <87tud64yqa.wl-maz@kernel.org>
+        <CANBLGcxg0qKWw4aifr+dHWge1aXE66e4wZzDwwpJjSad3xaeTQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kernel@esmil.dk, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, brgl@bgdev.pl, matthias.bgg@gmail.com, grygorii.strashko@ti.com, ssantosh@kernel.org, khilman@kernel.org, tony@atomide.com, tglx@linutronix.de, vz@mleia.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAxMCBGZWJydWFyeSAyMDIyIDEzOjMwDQouLi4N
-Cj4gI2RlZmluZSBfX2FjY2Vzc19vayhhZGRyLCBzaXplKSBcDQo+ICAgICAgICAgKChnZXRfZnMo
-KS5zZWcgPT0gS0VSTkVMX0RTLnNlZykgfHwgXA0KPiAgICAgICAgICgoKHVuc2lnbmVkIGxvbmcp
-YWRkciA8IGdldF9mcygpLnNlZykgJiYgXA0KPiAgICAgICAgICAgKHVuc2lnbmVkIGxvbmcpc2l6
-ZSA8IChnZXRfZnMoKS5zZWcgLSAodW5zaWduZWQgbG9uZylhZGRyKSkpDQoNClRoYXQgb25lIGlz
-IHN0cmFuZ2UuDQpTZWVtcyB0byBiZSBvcHRpbWlzZWQgZm9yIGtlcm5lbCBhY2Nlc3NlcyENCg0K
-PiBpYTY0IGFuZCBzcGFyYyBza2lwIHRoZSBzaXplIGNoZWNrIGVudGlyZWx5IGJ1dCByZWx5IG9u
-IGFuIHVubWFwcGVkIHBhZ2UNCj4gYXQgdGhlIGJlZ2lubmluZyBvZiB0aGUga2VybmVsIGFkZHJl
-c3MgcmFuZ2UsIHdoaWNoIGF2b2lkcyB0aGlzIHByb2JsZW0NCj4gYnV0IG1heSBhbHNvIGJlIGRh
-bmdlcm91cy4NCg0KQW4gdW5tYXBwZWQgcGFnZSByZXF1aXJlcyB0aGF0IHRoZSBrZXJuZWwgZG8g
-c2VxdWVudGlhbCBhY2Nlc3Nlcw0KKG9yLCBhdCBsZWFzdCwgbm90IGJpZyBvZmZzZXQpIC0gd2hp
-Y2ggaXMgbm9ybWFsbHkgZmluZS4NCkVzcGVjaWFsbHkgZm9yIDY0Yml0IHdoZXJlIHRoZXJlIGlz
-IHBsZW50eSBvZiBhZGRyZXNzIHNwYWNlLg0KSSBndWVzcyBpdCBjb3VsZCBiZSBwcm9ibGVtYXRp
-YyBmb3IgMzJiaXQgaWYgeW91IGNhbi93YW50IHRvDQp1c2UgJ2JpZyBwYWdlcycgZm9yIHRoZSBr
-ZXJuZWwgYWRkcmVzc2VzLg0KTG9zaW5nIGEgc2luZ2xlICh0eXBpY2FsbHkpIDRrIHBhZ2UgaXNu
-J3QgYSBwcm9ibGVtLg0KDQpDZXJ0YWlubHkgbm90IG1hcHBpbmcgdGhlIHBhZ2UgYXQgVEFTS19T
-SVpFIGlzIGEgZ29vZCBzYWZldHkgY2hlY2suDQpBY3R1YWxseSwgc2V0dGluZyBUQVNLX1NJWkUg
-dG8gMHhjMDAwMDAwMCAtIFBBR0VfU0laRSBhbmQgbmV2ZXINCm1hcHBpbmcgdGhlIGxhc3QgdXNl
-ciBwYWdlIGhhcyB0aGUgc2FtZSBlZmZlY3QuDQpFeGNlcHQgSSBiZXQgdGhlIGxkc28gaGFzIHRv
-IGdvIHRoZXJlIDotKA0KTm90IHRvIG1lbnRpb24gdGhlIGluc3RydWN0aW9uIHNldHMgd2hlcmUg
-bG9hZGluZyB0aGUgY29uc3RhbnQNCndvdWxkIHRoZW4gYmUgdHdvIGluc3RydWN0aW9ucy4NCg0K
-Li4uDQo+ID4gQWx0aG91Z2ggdHlwaWNhbCA2NGJpdCBhcmNoaXRlY3R1cmVzIGNhbiB1c2UgdGhl
-IGZhc3RlcjoNCj4gPiAgICAgICAgICgoYWRkciB8IHNpemUpID4+IDYyKQ0KPiANCj4gSSB0aGlu
-ayB0aGlzIGlzIHRoZSBiZXN0IHZlcnNpb24sIGFuZCBpdCdzIGFscmVhZHkgd2lkZWx5IHVzZWQ6
-DQoNCkkganVzdCBkaWQgYSBxdWljayBjaGVjaywgYm90aCBjbGFuZyBhbmQgZ2NjIG9wdGltaXNl
-IG91dA0KY29uc3RhbnQgdmFsdWVzIGZvciAnc2l6ZScuDQoNCj4gc3RhdGljIGlubGluZSBpbnQg
-X19yYW5nZV9vayh1bnNpZ25lZCBsb25nIGFkZHIsIHVuc2lnbmVkIGxvbmcgc2l6ZSkNCj4gew0K
-PiAgICAgICAgIHJldHVybiBzaXplIDw9IFRBU0tfU0laRSAmJiBhZGRyIDw9IChUQVNLX1NJWkUg
-LSBzaXplKTsNCj4gfQ0KPiANCj4gc2luY2UgJ3NpemUnIGlzIHVzdWFsbHkgY29uc3RhbnQsIHNv
-IHRoaXMgdHVybnMgaW50byBhIHNpbmdsZSBjb21wYXJpc29uDQo+IGFnYWluc3QgYSBjb21waWxl
-LXRpbWUgY29uc3RhbnQuDQoNCkhtbW0uLi4gbWF5YmUgdGhlcmUgc2hvdWxkIGJlIGEgY29tbWVu
-dCB0aGF0IGl0IGlzIHRoZSBzYW1lIGFzDQp0aGUgbW9yZSBvYnZpb3VzOg0KCShhZGRyIDw9IFRB
-U0tfU0laRSAmJiBhZGRyIDw9IFRBU0tfU0laRSAtIHNpemUpDQpidXQgaXMgYmV0dGVyIGZvciBj
-b25zdGFudCBzaXplLg0KKFByb3ZpZGVkIFRBU0tfU0laRSBpcyBhIGNvbnN0YW50LikNCg0KSSdt
-IHN1cmUgTGludXMgd2FzICd1bmhhcHB5JyBhYm91dCBjaGVja2luZyBhZ2FpbnN0IDJeNjMgZm9y
-DQozMmJpdCBwcm9jZXNzZXMgb24gYSA2NGJpdCBrZXJuZWwuDQoNCkhtbW0gY29tcGF0IGNvZGUg
-dGhhdCBoYXMgMzJiaXQgYWRkci9zaXplIG5lZWRuJ3QgZXZlbiBjYWxsDQphY2Nlc3Nfb2soKSAt
-IGl0IGNhbiBuZXZlciBhY2Nlc3Mga2VybmVsIG1lbW9yeSBhdCBhbGwuDQoNCglEYXZpZA0KDQot
-DQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwg
-TWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2Fs
-ZXMpDQo=
+On Thu, 10 Feb 2022 14:14:19 +0000,
+Emil Renner Berthing <kernel@esmil.dk> wrote:
+>=20
+> On Thu, 10 Feb 2022 at 14:50, Marc Zyngier <maz@kernel.org> wrote:
+> > On Thu, 10 Feb 2022 13:44:12 +0000,
+> > Emil Renner Berthing <kernel@esmil.dk> wrote:
+> > >
+> > > Gotcha. The SoC has been out in very few numbers for less than a year
+> > > and the driver only entered mainline in 5.17-rc1, so I doubt anyone
+> > > has had time to write scripts that check for this, but I'll let it be
+> > > up to you.
+> >
+> > Ah, I should have checked that. In which case, would you be OK if I
+> > simply pushed the removal of this label as a fix for 5.17, and just
+> > have it to say "Star5 GPIO", for example, without any indication of
+> > the device (which appears in debugfs anyway as part of the irqdomain)?
+>=20
+> I'm fine with it although I'd prefer "StarFive GPIO". I haven't seen
+> star5 used anywhere.
 
+Fair enough.
+
+> But shouldn't changes like this normally go through Linus Walleij's
+> tree?
+
+Either way, I don't mind. For the record, see below what I'm
+suggesting we take in before 5.17-final.
+
+Linus?
+
+Thanks,
+
+	M.
+
+=46rom a84b83c32048de2ba72e5d05645eabc95ffabe49 Mon Sep 17 00:00:00 2001
+From: Marc Zyngier <maz@kernel.org>
+Date: Thu, 10 Feb 2022 14:13:36 +0000
+Subject: [PATCH] pinctrl: starfive: Use a static name for the GPIO irq_chip
+
+Drop the device name used for the GPIO irq_chip and replace it
+with something static. The information is still available from
+debugfs and carried as part of the irqdomain.
+
+Suggested-by: Emil Renner Berthing <kernel@esmil.dk>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+---
+ drivers/pinctrl/pinctrl-starfive.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/pinctrl/pinctrl-starfive.c b/drivers/pinctrl/pinctrl-s=
+tarfive.c
+index 0b912152a405..266da41a6162 100644
+--- a/drivers/pinctrl/pinctrl-starfive.c
++++ b/drivers/pinctrl/pinctrl-starfive.c
+@@ -1164,6 +1164,7 @@ static int starfive_irq_set_type(struct irq_data *d, =
+unsigned int trigger)
+ }
+=20
+ static struct irq_chip starfive_irq_chip =3D {
++	.name =3D "StarFive GPIO",
+ 	.irq_ack =3D starfive_irq_ack,
+ 	.irq_mask =3D starfive_irq_mask,
+ 	.irq_mask_ack =3D starfive_irq_mask_ack,
+@@ -1308,7 +1309,6 @@ static int starfive_probe(struct platform_device *pde=
+v)
+ 	sfp->gc.ngpio =3D NR_GPIOS;
+=20
+ 	starfive_irq_chip.parent_device =3D dev;
+-	starfive_irq_chip.name =3D sfp->gc.label;
+=20
+ 	sfp->gc.irq.chip =3D &starfive_irq_chip;
+ 	sfp->gc.irq.parent_handler =3D starfive_gpio_irq_handler;
+--=20
+2.34.1
+
+
+--=20
+Without deviation from the norm, progress is not possible.

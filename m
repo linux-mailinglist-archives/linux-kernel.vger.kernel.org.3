@@ -2,114 +2,423 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 917A94B0995
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8864B099E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238731AbiBJJdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:33:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54758 "EHLO
+        id S238748AbiBJJeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:34:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232153AbiBJJdn (ORCPT
+        with ESMTP id S232153AbiBJJeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:33:43 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5B2C64;
-        Thu, 10 Feb 2022 01:33:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=I+KdT8Ft4gEDreuv2bs/lK/WKosbMae+Gs2ZDIi52r8=; b=v5x6DP/o1WOVzInYWj+OWguYjf
-        eLQpr7RM3CnxAAk3jaO2rcVftZ1e+5phpKIodTkLSxDXOwSvcTLi4qk5/ySJRc/hI1ychJkAen1z0
-        Zp9OoP3OirWBCpXqLYBpe9/Sj5681YQ0jr1jxFHLaRwcMpikdJabxjYU5JWHBXZkz9o4nzeVsrg6P
-        3kcm8y3Q7W1+pNSL5ou9mrCzcTeYQh59B1RYKiy79tD66DAHw03/JjWeZzPf9H4ShJonEVXh+vnnk
-        BnDNFiE1x/ux56JFcpXclclJQt/Xhc668p+s+htSe08/XCrlKbLPn7mqxLMMMLhiQWq2+o3CtuCxk
-        YxstcdEw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nI5p4-009J34-3j; Thu, 10 Feb 2022 09:33:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CBA9A3002DB;
-        Thu, 10 Feb 2022 10:33:03 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B6A72201D84A1; Thu, 10 Feb 2022 10:33:03 +0100 (CET)
-Date:   Thu, 10 Feb 2022 10:33:03 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        rostedt <rostedt@goodmis.org>,
-        Byungchul Park <byungchul.park@lge.com>,
-        Radoslaw Burny <rburny@google.com>, Tejun Heo <tj@kernel.org>,
-        rcu <rcu@vger.kernel.org>, cgroups <cgroups@vger.kernel.org>,
-        linux-btrfs <linux-btrfs@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        paulmck <paulmck@kernel.org>
-Subject: Re: [RFC 00/12] locking: Separate lock tracepoints from
- lockdep/lock_stat (v1)
-Message-ID: <YgTbz55YtOQbnA3m@hirez.programming.kicks-ass.net>
-References: <20220208184208.79303-1-namhyung@kernel.org>
- <20220209090908.GK23216@worktop.programming.kicks-ass.net>
- <24fe6a08-5931-8e8d-8d77-459388c4654e@redhat.com>
- <919214156.50301.1644431371345.JavaMail.zimbra@efficios.com>
- <69e5f778-8715-4acf-c027-58b6ec4a9e77@redhat.com>
- <CAM9d7ci=N2NVj57k=W0ebqBzfW+ThBqYSrx-CZbgwGcbOSrEGA@mail.gmail.com>
- <718973621.50447.1644434890744.JavaMail.zimbra@efficios.com>
- <CAM9d7cj=tj6pA48q_wkQOGn-2vUc9FRj63bMBOm5R7OukmMbTQ@mail.gmail.com>
- <f8b7760f-16a2-6ada-de88-9e21a7e8fef9@redhat.com>
+        Thu, 10 Feb 2022 04:34:08 -0500
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F731FC2;
+        Thu, 10 Feb 2022 01:34:08 -0800 (PST)
+Received: from grover.. (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
+        by conuserg-10.nifty.com with ESMTP id 21A9XggI019627;
+        Thu, 10 Feb 2022 18:33:42 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 21A9XggI019627
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1644485622;
+        bh=2yvxQilrm/40NtY+4z5nWuXN4qSw3UjMY+RpJhjiWaI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=1jr52K48UgVraQJXsRhpNydiknW491SIMqHLLP1mBwY12Mavb8SJeP27FzevmLPY3
+         5ixX3bS1qhoW4GdZHpzNXI+zTa67xz7hfDx8UWc2UeVMUrHkaLSye0WJxQMxACs3BI
+         L/MTCheFzdWO4VELcR/UX7ADDIA7URiJ/n3CQ5aO6L3kWR8QtuHFntiLkl+W7Jc90m
+         4DqV40+msXi2uKqU66YxrsQ9HySxA9d+AjMDyEsNF4+RDhFtVmoHzx1ZS1sxJnbB7Q
+         pRiiKHIjp9bCzeMj6EGmjdEd96YDBUy8xCuQPQLeKpsHiyi27QYuKcjWLnE8G9UXyz
+         fGL8CxRuQJBCQ==
+X-Nifty-SrcIP: [133.32.232.101]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH] kbuild: replace $(if A,A,B) with $(or A,B)
+Date:   Thu, 10 Feb 2022 18:33:42 +0900
+Message-Id: <20220210093342.2118196-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f8b7760f-16a2-6ada-de88-9e21a7e8fef9@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 03:17:38PM -0500, Waiman Long wrote:
-> 
-> On 2/9/22 14:45, Namhyung Kim wrote:
-> > On Wed, Feb 9, 2022 at 11:28 AM Mathieu Desnoyers
-> > <mathieu.desnoyers@efficios.com> wrote:
-> > > ----- On Feb 9, 2022, at 2:22 PM, Namhyung Kim namhyung@kernel.org wrote:
-> > > > I'm also concerning dynamic allocated locks in a data structure.
-> > > > If we keep the info in a hash table, we should delete it when the
-> > > > lock is gone.  I'm not sure we have a good place to hook it up all.
-> > > I was wondering about this use case as well. Can we make it mandatory to
-> > > declare the lock "class" (including the name) statically, even though the
-> > > lock per-se is allocated dynamically ? Then the initialization of the lock
-> > > embedded within the data structure would simply refer to the lock class
-> > > definition.
-> > Isn't it still the same if we have static lock classes that the entry needs
-> > to be deleted from the hash table when it frees the data structure?
-> > I'm more concerned about free than alloc as there seems to be no
-> > API to track that in a place.
-> 
-> We may have to invent some new APIs to do that. For example,
-> spin_lock_exit() can be the counterpart of spin_lock_init() and so on. Of
-> course, existing kernel code have to be modified to designate the point
-> after which a lock is no longer being used or is freed.
+$(or ...) is available since GNU Make 3.81, and useful to shorten the
+code in some places.
 
-The canonical name is _destroy(). We even have mutex_destroy() except
-it's usage isn't mandatory.
+Covert as follows:
 
-The easy way out is doing as lockdep does and hook into the memory
-allocators and check every free'd hunk of memory for a lock. It does
-hoever mean your data structure of choice needs to be able to answer: do
-I have an entry in @range. Which mostly disqualifies a hash-table.
+  $(if A,A,B)  -->  $(or A,B)
 
-Still, I really don't think you need any of this, it's just bloat. A
-very limited stack unwind for one of the two tracepoints should allow
-you to find the offending lock just fine.
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+ Makefile                                    | 8 ++++----
+ scripts/Makefile.build                      | 3 +--
+ scripts/Makefile.clean                      | 2 +-
+ scripts/Makefile.lib                        | 4 ++--
+ tools/bpf/bpftool/Makefile                  | 4 ++--
+ tools/build/Makefile                        | 2 +-
+ tools/counter/Makefile                      | 2 +-
+ tools/gpio/Makefile                         | 2 +-
+ tools/hv/Makefile                           | 2 +-
+ tools/iio/Makefile                          | 2 +-
+ tools/lib/api/Makefile                      | 2 +-
+ tools/lib/bpf/Makefile                      | 2 +-
+ tools/lib/perf/Makefile                     | 2 +-
+ tools/lib/subcmd/Makefile                   | 2 +-
+ tools/objtool/Makefile                      | 2 +-
+ tools/pci/Makefile                          | 2 +-
+ tools/perf/Makefile.perf                    | 4 ++--
+ tools/power/x86/intel-speed-select/Makefile | 2 +-
+ tools/scripts/utilities.mak                 | 2 +-
+ tools/spi/Makefile                          | 6 +++---
+ tools/tracing/rtla/Makefile                 | 2 +-
+ tools/usb/Makefile                          | 2 +-
+ 22 files changed, 30 insertions(+), 31 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 402121aca40a..a700edb54939 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1240,8 +1240,8 @@ define filechk_version.h
+ 	echo \#define LINUX_VERSION_SUBLEVEL $(SUBLEVEL)
+ endef
+ 
+-$(version_h): PATCHLEVEL := $(if $(PATCHLEVEL), $(PATCHLEVEL), 0)
+-$(version_h): SUBLEVEL := $(if $(SUBLEVEL), $(SUBLEVEL), 0)
++$(version_h): PATCHLEVEL := $(or $(PATCHLEVEL), 0)
++$(version_h): SUBLEVEL := $(or $(SUBLEVEL), 0)
+ $(version_h): FORCE
+ 	$(call filechk,version.h)
+ 
+@@ -1624,7 +1624,7 @@ help:
+ 	@$(MAKE) -f $(srctree)/Documentation/Makefile dochelp
+ 	@echo  ''
+ 	@echo  'Architecture specific targets ($(SRCARCH)):'
+-	@$(if $(archhelp),$(archhelp),\
++	@$(or $(archhelp),\
+ 		echo '  No architecture specific help defined for $(SRCARCH)')
+ 	@echo  ''
+ 	@$(if $(boards), \
+@@ -1841,7 +1841,7 @@ $(clean-dirs):
+ 
+ clean: $(clean-dirs)
+ 	$(call cmd,rmfiles)
+-	@find $(if $(KBUILD_EXTMOD), $(KBUILD_EXTMOD), .) $(RCS_FIND_IGNORE) \
++	@find $(or $(KBUILD_EXTMOD), .) $(RCS_FIND_IGNORE) \
+ 		\( -name '*.[aios]' -o -name '*.ko' -o -name '.*.cmd' \
+ 		-o -name '*.ko.*' \
+ 		-o -name '*.dtb' -o -name '*.dtbo' -o -name '*.dtb.S' -o -name '*.dt.yaml' \
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index a4b89b757287..7e177d0ee02d 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -40,8 +40,7 @@ include $(srctree)/scripts/Makefile.compiler
+ 
+ # The filename Kbuild has precedence over Makefile
+ kbuild-dir := $(if $(filter /%,$(src)),$(src),$(srctree)/$(src))
+-kbuild-file := $(if $(wildcard $(kbuild-dir)/Kbuild),$(kbuild-dir)/Kbuild,$(kbuild-dir)/Makefile)
+-include $(kbuild-file)
++include $(or $(wildcard $(kbuild-dir)/Kbuild),$(kbuild-dir)/Makefile)
+ 
+ include $(srctree)/scripts/Makefile.lib
+ 
+diff --git a/scripts/Makefile.clean b/scripts/Makefile.clean
+index fd6175322470..74cb1c5c3658 100644
+--- a/scripts/Makefile.clean
++++ b/scripts/Makefile.clean
+@@ -12,7 +12,7 @@ include $(srctree)/scripts/Kbuild.include
+ 
+ # The filename Kbuild has precedence over Makefile
+ kbuild-dir := $(if $(filter /%,$(src)),$(src),$(srctree)/$(src))
+-include $(if $(wildcard $(kbuild-dir)/Kbuild), $(kbuild-dir)/Kbuild, $(kbuild-dir)/Makefile)
++include $(or $(wildcard $(kbuild-dir)/Kbuild),$(kbuild-dir)/Makefile)
+ 
+ # Figure out what we need to build from the various variables
+ # ==========================================================================
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 40735a3adb54..49377d2c2d20 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -111,7 +111,7 @@ subdir-ym	:= $(addprefix $(obj)/,$(subdir-ym))
+ modname-multi = $(sort $(foreach m,$(multi-obj-ym),\
+ 		$(if $(filter $*.o, $(call suffix-search, $m, .o, -objs -y -m)),$(m:.o=))))
+ 
+-__modname = $(if $(modname-multi),$(modname-multi),$(basetarget))
++__modname = $(or $(modname-multi),$(basetarget))
+ 
+ modname = $(subst $(space),:,$(__modname))
+ modfile = $(addprefix $(obj)/,$(__modname))
+@@ -434,7 +434,7 @@ MKIMAGE := $(srctree)/scripts/mkuboot.sh
+ # SRCARCH just happens to match slightly more than ARCH (on sparc), so reduces
+ # the number of overrides in arch makefiles
+ UIMAGE_ARCH ?= $(SRCARCH)
+-UIMAGE_COMPRESSION ?= $(if $(2),$(2),none)
++UIMAGE_COMPRESSION ?= $(or $(2),none)
+ UIMAGE_OPTS-y ?=
+ UIMAGE_TYPE ?= kernel
+ UIMAGE_LOADADDR ?= arch_must_set_this
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index 83369f55df61..ebd21a609910 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -78,7 +78,7 @@ CFLAGS += -O2
+ CFLAGS += -W -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers
+ CFLAGS += $(filter-out -Wswitch-enum -Wnested-externs,$(EXTRA_WARNINGS))
+ CFLAGS += -DPACKAGE='"bpftool"' -D__EXPORTED_HEADERS__ \
+-	-I$(if $(OUTPUT),$(OUTPUT),.) \
++	-I$(or $(OUTPUT),.) \
+ 	-I$(LIBBPF_INCLUDE) \
+ 	-I$(srctree)/kernel/bpf/ \
+ 	-I$(srctree)/tools/include \
+@@ -186,7 +186,7 @@ endif
+ 
+ $(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux.h $(LIBBPF_BOOTSTRAP)
+ 	$(QUIET_CLANG)$(CLANG) \
+-		-I$(if $(OUTPUT),$(OUTPUT),.) \
++		-I$(or $(OUTPUT),.) \
+ 		-I$(srctree)/tools/include/uapi/ \
+ 		-I$(LIBBPF_BOOTSTRAP_INCLUDE) \
+ 		-g -O2 -Wall -target bpf -c $< -o $@
+diff --git a/tools/build/Makefile b/tools/build/Makefile
+index 6f11e6fc9ffe..17cdf01e29a0 100644
+--- a/tools/build/Makefile
++++ b/tools/build/Makefile
+@@ -36,7 +36,7 @@ TMP_O := $(if $(OUTPUT),$(OUTPUT)feature/,./)
+ 
+ clean:
+ 	$(call QUIET_CLEAN, fixdep)
+-	$(Q)find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.cmd' -delete -o -name '\.*.d' -delete
++	$(Q)find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.cmd' -delete -o -name '\.*.d' -delete
+ 	$(Q)rm -f $(OUTPUT)fixdep
+ 	$(call QUIET_CLEAN, feature-detect)
+ ifneq ($(wildcard $(TMP_O)),)
+diff --git a/tools/counter/Makefile b/tools/counter/Makefile
+index 5ebc195fd9c0..8843f0fa6119 100644
+--- a/tools/counter/Makefile
++++ b/tools/counter/Makefile
+@@ -40,7 +40,7 @@ $(OUTPUT)counter_example: $(COUNTER_EXAMPLE)
+ clean:
+ 	rm -f $(ALL_PROGRAMS)
+ 	rm -rf $(OUTPUT)include/linux/counter.h
+-	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
++	find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
+ 
+ install: $(ALL_PROGRAMS)
+ 	install -d -m 755 $(DESTDIR)$(bindir);		\
+diff --git a/tools/gpio/Makefile b/tools/gpio/Makefile
+index 440434027557..d29c9c49e251 100644
+--- a/tools/gpio/Makefile
++++ b/tools/gpio/Makefile
+@@ -78,7 +78,7 @@ $(OUTPUT)gpio-watch: $(GPIO_WATCH_IN)
+ clean:
+ 	rm -f $(ALL_PROGRAMS)
+ 	rm -f $(OUTPUT)include/linux/gpio.h
+-	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
++	find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
+ 
+ install: $(ALL_PROGRAMS)
+ 	install -d -m 755 $(DESTDIR)$(bindir);		\
+diff --git a/tools/hv/Makefile b/tools/hv/Makefile
+index b57143d9459c..fe770e679ae8 100644
+--- a/tools/hv/Makefile
++++ b/tools/hv/Makefile
+@@ -47,7 +47,7 @@ $(OUTPUT)hv_fcopy_daemon: $(HV_FCOPY_DAEMON_IN)
+ 
+ clean:
+ 	rm -f $(ALL_PROGRAMS)
+-	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
++	find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
+ 
+ install: $(ALL_PROGRAMS)
+ 	install -d -m 755 $(DESTDIR)$(sbindir); \
+diff --git a/tools/iio/Makefile b/tools/iio/Makefile
+index 5d12ac4e7f8f..fa720f062229 100644
+--- a/tools/iio/Makefile
++++ b/tools/iio/Makefile
+@@ -58,7 +58,7 @@ $(OUTPUT)iio_generic_buffer: $(IIO_GENERIC_BUFFER_IN)
+ clean:
+ 	rm -f $(ALL_PROGRAMS)
+ 	rm -rf $(OUTPUT)include/linux/iio
+-	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
++	find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
+ 
+ install: $(ALL_PROGRAMS)
+ 	install -d -m 755 $(DESTDIR)$(bindir);		\
+diff --git a/tools/lib/api/Makefile b/tools/lib/api/Makefile
+index a13e9c7f1fc5..e21e1b40b525 100644
+--- a/tools/lib/api/Makefile
++++ b/tools/lib/api/Makefile
+@@ -60,7 +60,7 @@ $(LIBFILE): $(API_IN)
+ 
+ clean:
+ 	$(call QUIET_CLEAN, libapi) $(RM) $(LIBFILE); \
+-	find $(if $(OUTPUT),$(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d | xargs $(RM)
++	find $(or $(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d | xargs $(RM)
+ 
+ FORCE:
+ 
+diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+index f947b61b2107..df1f6ff7bc49 100644
+--- a/tools/lib/bpf/Makefile
++++ b/tools/lib/bpf/Makefile
+@@ -60,7 +60,7 @@ ifndef VERBOSE
+   VERBOSE = 0
+ endif
+ 
+-INCLUDES = -I$(if $(OUTPUT),$(OUTPUT),.)				\
++INCLUDES = -I$(or $(OUTPUT),.)				\
+ 	   -I$(srctree)/tools/include -I$(srctree)/tools/include/uapi
+ 
+ export prefix libdir src obj
+diff --git a/tools/lib/perf/Makefile b/tools/lib/perf/Makefile
+index 08fe6e3c4089..2d985d6a3a96 100644
+--- a/tools/lib/perf/Makefile
++++ b/tools/lib/perf/Makefile
+@@ -153,7 +153,7 @@ $(TESTS_STATIC): $(TESTS_IN) $(LIBPERF_A) $(LIBAPI)
+ 	$(QUIET_LINK)$(CC) -o $@ $^
+ 
+ $(TESTS_SHARED): $(TESTS_IN) $(LIBAPI)
+-	$(QUIET_LINK)$(CC) -o $@ -L$(if $(OUTPUT),$(OUTPUT),.) $^ -lperf
++	$(QUIET_LINK)$(CC) -o $@ -L$(if $(OUTPUT),.) $^ -lperf
+ 
+ make-tests: libs $(TESTS_SHARED) $(TESTS_STATIC)
+ 
+diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
+index 1c777a72bb39..8f1a09cdfd17 100644
+--- a/tools/lib/subcmd/Makefile
++++ b/tools/lib/subcmd/Makefile
+@@ -63,7 +63,7 @@ $(LIBFILE): $(SUBCMD_IN)
+ 
+ clean:
+ 	$(call QUIET_CLEAN, libsubcmd) $(RM) $(LIBFILE); \
+-	find $(if $(OUTPUT),$(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d | xargs $(RM)
++	find $(or $(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d | xargs $(RM)
+ 
+ FORCE:
+ 
+diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
+index 92ce4fce7bc7..0dbd397f319d 100644
+--- a/tools/objtool/Makefile
++++ b/tools/objtool/Makefile
+@@ -13,7 +13,7 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
+ endif
+ 
+ SUBCMD_SRCDIR		= $(srctree)/tools/lib/subcmd/
+-LIBSUBCMD_OUTPUT	= $(if $(OUTPUT),$(OUTPUT),$(CURDIR)/)
++LIBSUBCMD_OUTPUT	= $(or $(OUTPUT),$(CURDIR)/)
+ LIBSUBCMD		= $(LIBSUBCMD_OUTPUT)libsubcmd.a
+ 
+ OBJTOOL    := $(OUTPUT)objtool
+diff --git a/tools/pci/Makefile b/tools/pci/Makefile
+index 4b95a5176355..57744778b518 100644
+--- a/tools/pci/Makefile
++++ b/tools/pci/Makefile
+@@ -42,7 +42,7 @@ $(OUTPUT)pcitest: $(PCITEST_IN)
+ clean:
+ 	rm -f $(ALL_PROGRAMS)
+ 	rm -rf $(OUTPUT)include/
+-	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
++	find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
+ 
+ install: $(ALL_PROGRAMS)
+ 	install -d -m 755 $(DESTDIR)$(bindir);		\
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index ac861e42c8f7..8583d18a3739 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -724,7 +724,7 @@ endif
+ # get relative building directory (to $(OUTPUT))
+ # and '.' if it's $(OUTPUT) itself
+ __build-dir = $(subst $(OUTPUT),,$(dir $@))
+-build-dir   = $(if $(__build-dir),$(__build-dir),.)
++build-dir   = $(or $(__build-dir),.)
+ 
+ prepare: $(OUTPUT)PERF-VERSION-FILE $(OUTPUT)common-cmds.h archheaders $(drm_ioctl_array) \
+ 	$(fadvise_advice_array) \
+@@ -1090,7 +1090,7 @@ bpf-skel-clean:
+ 
+ clean:: $(LIBTRACEEVENT)-clean $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBPERF)-clean fixdep-clean python-clean bpf-skel-clean
+ 	$(call QUIET_CLEAN, core-objs)  $(RM) $(LIBPERF_A) $(OUTPUT)perf-archive $(OUTPUT)perf-with-kcore $(OUTPUT)perf-iostat $(LANG_BINDINGS)
+-	$(Q)find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.cmd' -delete -o -name '\.*.d' -delete
++	$(Q)find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.cmd' -delete -o -name '\.*.d' -delete
+ 	$(Q)$(RM) $(OUTPUT).config-detected
+ 	$(call QUIET_CLEAN, core-progs) $(RM) $(ALL_PROGRAMS) perf perf-read-vdso32 perf-read-vdsox32 $(OUTPUT)pmu-events/jevents $(OUTPUT)$(LIBJVMTI).so
+ 	$(call QUIET_CLEAN, core-gen)   $(RM)  *.spec *.pyc *.pyo */*.pyc */*.pyo $(OUTPUT)common-cmds.h TAGS tags cscope* $(OUTPUT)PERF-VERSION-FILE $(OUTPUT)FEATURE-DUMP $(OUTPUT)util/*-bison* $(OUTPUT)util/*-flex* \
+diff --git a/tools/power/x86/intel-speed-select/Makefile b/tools/power/x86/intel-speed-select/Makefile
+index 12c6939dca2a..7eaa517cd403 100644
+--- a/tools/power/x86/intel-speed-select/Makefile
++++ b/tools/power/x86/intel-speed-select/Makefile
+@@ -43,7 +43,7 @@ $(OUTPUT)intel-speed-select: $(ISST_IN)
+ clean:
+ 	rm -f $(ALL_PROGRAMS)
+ 	rm -rf $(OUTPUT)include/linux/isst_if.h
+-	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
++	find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
+ 
+ install: $(ALL_PROGRAMS)
+ 	install -d -m 755 $(DESTDIR)$(bindir);		\
+diff --git a/tools/scripts/utilities.mak b/tools/scripts/utilities.mak
+index c16ce833079c..172e47273b5d 100644
+--- a/tools/scripts/utilities.mak
++++ b/tools/scripts/utilities.mak
+@@ -175,5 +175,5 @@ _ge-abspath = $(if $(is-executable),$(1))
+ define get-executable-or-default
+ $(if $($(1)),$(call _ge_attempt,$($(1)),$(1)),$(call _ge_attempt,$(2)))
+ endef
+-_ge_attempt = $(if $(get-executable),$(get-executable),$(call _gea_err,$(2)))
++_ge_attempt = $(or $(get-executable),$(call _gea_err,$(2)))
+ _gea_err  = $(if $(1),$(error Please set '$(1)' appropriately))
+diff --git a/tools/spi/Makefile b/tools/spi/Makefile
+index 0aa6dbd31fb8..7fccd245a535 100644
+--- a/tools/spi/Makefile
++++ b/tools/spi/Makefile
+@@ -53,9 +53,9 @@ $(OUTPUT)spidev_fdx: $(SPIDEV_FDX_IN)
+ clean:
+ 	rm -f $(ALL_PROGRAMS)
+ 	rm -rf $(OUTPUT)include/
+-	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete
+-	find $(if $(OUTPUT),$(OUTPUT),.) -name '\.*.o.d' -delete
+-	find $(if $(OUTPUT),$(OUTPUT),.) -name '\.*.o.cmd' -delete
++	find $(or $(OUTPUT),.) -name '*.o' -delete
++	find $(or $(OUTPUT),.) -name '\.*.o.d' -delete
++	find $(or $(OUTPUT),.) -name '\.*.o.cmd' -delete
+ 
+ install: $(ALL_PROGRAMS)
+ 	install -d -m 755 $(DESTDIR)$(bindir);		\
+diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
+index 7c39728d08de..3097f132f096 100644
+--- a/tools/tracing/rtla/Makefile
++++ b/tools/tracing/rtla/Makefile
+@@ -45,7 +45,7 @@ DATADIR	:=	/usr/share
+ DOCDIR	:=	$(DATADIR)/doc
+ MANDIR	:=	$(DATADIR)/man
+ LICDIR	:=	$(DATADIR)/licenses
+-SRCTREE	:=	$(if $(BUILD_SRC),$(BUILD_SRC),$(CURDIR))
++SRCTREE	:=	$(or $(BUILD_SRC),$(CURDIR))
+ 
+ # If running from the tarball, man pages are stored in the Documentation
+ # dir. If running from the kernel source, man pages are stored in
+diff --git a/tools/usb/Makefile b/tools/usb/Makefile
+index 1b128e551b2e..c6235667dd46 100644
+--- a/tools/usb/Makefile
++++ b/tools/usb/Makefile
+@@ -38,7 +38,7 @@ $(OUTPUT)ffs-test: $(FFS_TEST_IN)
+ 
+ clean:
+ 	rm -f $(ALL_PROGRAMS)
+-	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete -o -name '\.*.o.cmd' -delete
++	find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete -o -name '\.*.o.cmd' -delete
+ 
+ install: $(ALL_PROGRAMS)
+ 	install -d -m 755 $(DESTDIR)$(bindir);		\
+-- 
+2.32.0
+

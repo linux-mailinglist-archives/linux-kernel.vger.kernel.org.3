@@ -2,108 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34C04B0D9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 807454B0DAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241563AbiBJMft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 07:35:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54186 "EHLO
+        id S241576AbiBJMhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 07:37:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237067AbiBJMfr (ORCPT
+        with ESMTP id S241557AbiBJMhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 07:35:47 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242B621BB
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 04:35:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644496548; x=1676032548;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dg3mYH/kxWETIHR59Cu6igjsfuGx8EecWXhf54VEyNg=;
-  b=iBLJ3m8l0Qn1TwajhbrIOlP3PEzBJwnGGPH2t/+oqv2I5fnsy6wY75df
-   aIqBj1+Ic+PoogK1temcnlwNfXOIOyq2mZjeCL5Nn4oexnisMSkRoxGBN
-   6Ce2w7iLyDexBW6EEy9X2JSLjLXRZnoGMMNAfgfhevKog/YF/VFZMh+0M
-   Mfy8f4e/zi6m6Kn4G5KaBZeV06TFvwzs8EU4z65stEt6W5DQJBCvKTUfb
-   /7/xc+4gbeYl5VV4P8zbiEJb5y1BY4y0hvF4osqK8fGhcA3823YOrx4Uk
-   /pYDS2wiGbjeHJRIF6ELZ10hv6kJDXXdV6jhynEz0G4nCc35ABDu5E+r+
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="248311513"
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="248311513"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 04:35:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="482750305"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 10 Feb 2022 04:35:45 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nI8fl-0003Cl-Tz; Thu, 10 Feb 2022 12:35:41 +0000
-Date:   Thu, 10 Feb 2022 20:35:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Thierry Reding <treding@nvidia.com>
-Subject: ld.lld: error: undefined symbol: cpu_arm925_suspend_size
-Message-ID: <202202102039.wkitu2Mo-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 10 Feb 2022 07:37:00 -0500
+Received: from so254-9.mailgun.net (so254-9.mailgun.net [198.61.254.9])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id D030925C9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 04:37:01 -0800 (PST)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1644496621; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=VUibi0hgCckN5je/t/ZeyQ477IBxddkvL5uVTzlBSck=;
+ b=mnV0PjBsM3ZOUtNy7kZrjOam1FueC6tOjaW5nU5QqPJyzCb1w4jjEktycCDvsbl2EHwwYr9U
+ yPj4CZSA29rk6PBV5RG6KCxEtDOdFO9PrAL9C9PxIb778ECk3q4f2difFeOPwQShhPkabGma
+ yjN4wW+XeouP21zWzGTBnbT3wvE=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 620506ec19d16b66a95b50fb (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 10 Feb 2022 12:37:00
+ GMT
+Sender: nitirawa=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 74726C4360D; Thu, 10 Feb 2022 12:37:00 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: nitirawa)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id EDC77C4338F;
+        Thu, 10 Feb 2022 12:36:59 +0000 (UTC)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 10 Feb 2022 18:06:59 +0530
+From:   nitirawa@codeaurora.org
+To:     Lukas Wunner <lukas@wunner.de>, Keith Busch <kbusch@kernel.org>
+Cc:     Vidya Sagar <vidyas@nvidia.com>, Keith Busch <kbusch@kernel.org>,
+        robh+dt@kernel.org, rafael.j.wysocki@intel.com, hch@lst.de,
+        bhelgaas@google.com, mmaddireddy@nvidia.com, kthota@nvidia.com,
+        sagar.tv@gmail.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Query related to shutting down NVMe during system suspend
+In-Reply-To: <20220210054019.GA929@wunner.de>
+References: <65b836cd-8d5d-b9c2-eb8f-2ee3ef46112b@nvidia.com>
+ <20220209202639.GB1616420@dhcp-10-100-145-180.wdc.com>
+ <0801d0ee-1c39-4413-7865-6c1c61e4706e@nvidia.com>
+ <20220210054019.GA929@wunner.de>
+Message-ID: <65a50f83e87d4cf8b1ac1b740b4fa35b@codeaurora.org>
+X-Sender: nitirawa@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f4bc5bbb5fef3cf421ba3485d6d383c27ec473ed
-commit: faae6c9f2e68e62687636a7d6e0517b3bf594add cpuidle: tegra: Enable compile testing
-date:   4 months ago
-config: arm-buildonly-randconfig-r004-20220210 (https://download.01.org/0day-ci/archive/20220210/202202102039.wkitu2Mo-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project aa845d7a245d85c441d0bd44fc7b6c3be8f3de8d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=faae6c9f2e68e62687636a7d6e0517b3bf594add
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout faae6c9f2e68e62687636a7d6e0517b3bf594add
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On 2022-02-10 11:10, Lukas Wunner wrote:
+> On Thu, Feb 10, 2022 at 09:41:04AM +0530, Vidya Sagar wrote:
+>> On 2/10/2022 1:56 AM, Keith Busch wrote:
+>> > Christoph prefers to append quirks for platforms that need full device
+>> > shutdown on s2idle instead of changing the driver default.
+>> >
+>> > We use dmi matching for our current platform quirk list. I do not know
+>> > what the equivalent is for device-tree based platforms. Do you know?
+>> 
+>> I'm afraid I don't.
+> 
+> of_machine_is_compatible()
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
-   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
->> ld.lld: error: undefined symbol: cpu_arm925_suspend_size
-   >>> referenced by kernel/sleep.o:(.text+0x68) in archive arch/arm/built-in.a
---
->> ld.lld: error: undefined symbol: cpu_arm925_do_suspend
-   >>> referenced by suspend.c
-   >>> kernel/suspend.o:(__cpu_suspend_save) in archive arch/arm/built-in.a
---
->> ld.lld: error: undefined symbol: cpu_arm925_do_resume
-   >>> referenced by suspend.c
-   >>> kernel/suspend.o:(__cpu_suspend_save) in archive arch/arm/built-in.a
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
-   Depends on ARCH_SUSPEND_POSSIBLE
-   Selected by
-   - ARM_TEGRA_CPUIDLE && CPU_IDLE && (ARM || ARM64) && (ARCH_TEGRA || COMPILE_TEST && !ARM64 && MMU
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks Lukas and keith . Yes it worked using of_machine_is_compatible as 
+it checks root node of device tree for a given compatible value.
+@keith - I have posted the change using above API to enable nvme quick 
+suspend quirks for sc7280 platform. Please can you review it.

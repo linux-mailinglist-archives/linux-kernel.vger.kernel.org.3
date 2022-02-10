@@ -2,94 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 362B04B1937
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CEB4B1935
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345543AbiBJXOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 18:14:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33798 "EHLO
+        id S1345529AbiBJXOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 18:14:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345532AbiBJXOa (ORCPT
+        with ESMTP id S243041AbiBJXOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 18:14:30 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296D25F45;
-        Thu, 10 Feb 2022 15:14:31 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 2EC861F469B4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644534869;
-        bh=o9q78kTwG5UmK6/5Bu7ra/nY0WB8DC6T1nn3SDr51bM=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=OWjwy7ePObdQwYLGZ827EpObqOzhn+TNJ4HTTUKnn02v1nnpHj7SkPSXT1I4fdEG6
-         M8vNVbqFqLR948xyhEoi27Bd5Z1pNZ1/6ipD/Eg+8AhiTmDdNBb4dABjrmCJEu6PQG
-         KlgcZFLoHY12EEZP7W6gwnHz0KT4YnplsdBOfx0GiGWYkoqKGhjupnXfSeeNRbmFBa
-         +BHqNCbMIdoXYSVEYlyTulOF5bP8/AmGrsjOiXDJWrB+6tzjfeGiNFxoHDDWSHQcN+
-         AEmsFODOXyjZOQVxJH0prJunaBafHD0423ghUKUWWe2bs+Xv1YH5K2wpX/MGroYU3B
-         6KNZvMp22yXVQ==
-Message-ID: <755ec9b2-8781-a75a-4fd0-39fb518fc484@collabora.com>
-Date:   Fri, 11 Feb 2022 04:14:17 +0500
+        Thu, 10 Feb 2022 18:14:24 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3549E5F44
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:14:24 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id h7-20020a17090a648700b001b927560c2bso5915637pjj.1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:14:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zVPS2ok9/nx7180z6dx4Z4VBr5ge+N4XNxLNYfv1b4E=;
+        b=VyyafF8z0UHAylczbPUn4iflRukwWBbb+WUXy47xyXqkhIbDPqr8QWGmQRK08hrtkt
+         IUUtWOTxMrtxTQUmV5kZYgN3t5yJfO7EHgX1B94/+OGtyIuYZf67FGfL78/A1VRN1qcR
+         yZHUxbG//rJmxAlIy7hmpGz03vxelXwsVQjC0dYELgXlme1cj3t4zxZ+Lt5i3/buYshI
+         +C49g6w39oWHqkT88ERKBpyaHXMiJ7pIKTD7TDNl2iFt4ZRdymGwPi8c3Vn1JgLkNuU9
+         663OJuen9xmZPOyn+rAyIydumJ/0FtLmSD9sd9DH8klMuOW6aTJEkunzim8z31w/hhgh
+         5aBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zVPS2ok9/nx7180z6dx4Z4VBr5ge+N4XNxLNYfv1b4E=;
+        b=kDkee7lcQdbgYvY52KvRpE5EfGhAgt1TIX9kDshR3o+4aY/bHrYi/caHH/eEPx/sOp
+         +MuJRTSVB9HRpHrsD+FQqvezS9JjEhV7Pp5U2wlwcdNsc72WO/9kT8OM1EDRlnAZGZXa
+         w4pdPbCSGGluy50MTTwOOvQt0DxO/Yg6fBVEDKSMG/M0PNK2Ml1KgPPQHPxzPIO0Uz/m
+         DA/AbslJFJc0yJ1svHvoyzzSGLOHV6OfXZw01he79jsMAnaNtz1OjMFf8SrmqELxmhEF
+         nwoUzcJkiZxbEINRsdFuMdveBLXTn9wadtCUg4QeteQIe62DTR3taA1No6XN6jqyG01I
+         o8vw==
+X-Gm-Message-State: AOAM532icZsE0Ql7VoUy8bLzZABt9xoeiDNG4Sg0AuYML/tjYxWVgLpR
+        dad4wmYrHcOceFFqxJ0Fc8+dTg==
+X-Google-Smtp-Source: ABdhPJw188UyNNoqFlMqDgKpm7hdg8bXICpgwoP46Vv6pmyTqCweCur2W7sJkfRIks5cXCOoPrUP5Q==
+X-Received: by 2002:a17:902:f789:: with SMTP id q9mr9618229pln.135.1644534863552;
+        Thu, 10 Feb 2022 15:14:23 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k16sm24789705pfu.140.2022.02.10.15.14.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 15:14:22 -0800 (PST)
+Date:   Thu, 10 Feb 2022 23:14:19 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com
+Subject: Re: [PATCH 03/12] KVM: x86: do not deliver asynchronous page faults
+ if CR0.PG=0
+Message-ID: <YgWcS/0naKPdAn2E@google.com>
+References: <20220209170020.1775368-1-pbonzini@redhat.com>
+ <20220209170020.1775368-4-pbonzini@redhat.com>
+ <YgWbgfSrzAhd97LG@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     usama.anjum@collabora.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/seccomp: Fix seccomp failure by adding
- missing headers
-Content-Language: en-US
-To:     Sherry Yang <sherry.yang@oracle.com>, skhan@linuxfoundation.org,
-        shuah@kernel.org, keescook@chromium.org, luto@amacapital.net,
-        wad@chromium.org, christian@brauner.io, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org
-References: <20220210203049.67249-1-sherry.yang@oracle.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20220210203049.67249-1-sherry.yang@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgWbgfSrzAhd97LG@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/11/22 1:30 AM, Sherry Yang wrote:
-> seccomp_bpf failed on tests 47 global.user_notification_filter_empty
-> and 48 global.user_notification_filter_empty_threaded when it's
-> tested on updated kernel but with old kernel headers. Because old
-> kernel headers don't have definition of macro __NR_clone3 which is
-> required for these two tests. Since under selftests/, we can install
-> headers once for all tests (the default INSTALL_HDR_PATH is
-> usr/include), fix it by adding usr/include to the list of directories
-> to be searched. Use "-isystem" to indicate it's a system directory as
-> the real kernel headers directories are.
+On Thu, Feb 10, 2022, Sean Christopherson wrote:
+> On Wed, Feb 09, 2022, Paolo Bonzini wrote:
+> > Enabling async page faults is nonsensical if paging is disabled, but
+> > it is allowed because CR0.PG=0 does not clear the async page fault
+> > MSR.  Just ignore them and only use the artificial halt state,
+> > similar to what happens in guest mode if async #PF vmexits are disabled.
+> > 
+> > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> > ---
+> >  arch/x86/kvm/x86.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index 5e1298aef9e2..98aca0f2af12 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -12272,7 +12272,9 @@ static inline bool apf_pageready_slot_free(struct kvm_vcpu *vcpu)
+> >  
+> >  static bool kvm_can_deliver_async_pf(struct kvm_vcpu *vcpu)
+> >  {
+> > -	if (!vcpu->arch.apf.delivery_as_pf_vmexit && is_guest_mode(vcpu))
+> > +	if (is_guest_mode(vcpu)
+> > +	    ? !vcpu->arch.apf.delivery_as_pf_vmexit
+> > +	    : !is_cr0_pg(vcpu->arch.mmu))
 > 
-> Signed-off-by: Sherry Yang <sherry.yang@oracle.com>
-> Tested-by: Sherry Yang <sherry.yang@oracle.com>
-> ---
->  tools/testing/selftests/seccomp/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> As suggested in the previous patch, is_paging(vcpu).
 > 
-> diff --git a/tools/testing/selftests/seccomp/Makefile b/tools/testing/selftests/seccomp/Makefile
-> index 0ebfe8b0e147..585f7a0c10cb 100644
-> --- a/tools/testing/selftests/seccomp/Makefile
-> +++ b/tools/testing/selftests/seccomp/Makefile
-> @@ -1,5 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0
-> -CFLAGS += -Wl,-no-as-needed -Wall
-> +CFLAGS += -Wl,-no-as-needed -Wall -isystem ../../../../usr/include/
+> I find a more tradition if-elif marginally easier to understand the implication
+> that CR0.PG is L2's CR0 and thus irrelevant if is_guest_mode()==true.  Not a big
+> deal though.
+> 
+> 	if (is_guest_mode(vcpu)) {
+> 		if (!vcpu->arch.apf.delivery_as_pf_vmexit)
+> 			return false;
+> 	} else if (!is_paging(vcpu)) {
+> 		return false;
+> 	}
 
-"../../../../usr/include/" directory doesn't have header files if
-different output directory is used for kselftests build like "make -C
-tools/tests/selftest O=build". Can you try adding recently added
-variable, KHDR_INCLUDES here which makes this kind of headers inclusion
-easy and correct for other build combinations as well?
+Alternatively, what about reordering and refactoring to yield:
 
+	if (kvm_pv_async_pf_enabled(vcpu))
+		return false;
 
+	if (vcpu->arch.apf.send_user_only &&
+	    static_call(kvm_x86_get_cpl)(vcpu) == 0)
+		return false;
+
+	/* L1 CR0.PG=1 is guaranteed if the vCPU is in guest mode (L2). */
+	if (is_guest_mode(vcpu)
+		return !vcpu->arch.apf.delivery_as_pf_vmexit;
+
+	return is_cr0_pg(vcpu->arch.mmu);
+
+There isn't any need to "batch" the if statements.

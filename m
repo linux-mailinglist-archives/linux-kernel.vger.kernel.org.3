@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285744B0616
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 07:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C84304B061D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 07:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235129AbiBJGKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 01:10:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54864 "EHLO
+        id S235088AbiBJGMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 01:12:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234038AbiBJGKQ (ORCPT
+        with ESMTP id S232667AbiBJGMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 01:10:16 -0500
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFC0FEC;
-        Wed,  9 Feb 2022 22:10:16 -0800 (PST)
-Received: by mail-qv1-xf2e.google.com with SMTP id o5so3973827qvm.3;
-        Wed, 09 Feb 2022 22:10:16 -0800 (PST)
+        Thu, 10 Feb 2022 01:12:10 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF3810CB
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 22:12:12 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id j12so4180902qtr.2
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 22:12:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=XnTlfC/2x4nU8jxxfPLwDgpfMYqygXbQEq1bZIQt1jE=;
-        b=EZGx4WJiNDunR1WPhi39k4/6ZN0nK9jfRC+ShkmT7FS8xAMsYLAfkehNbNFDKoln17
-         SDd8geDmJcsqr62D9px1Fgujy1JHGJPVwCJCzDyb+ffF7vfNqMmE0qGmN5ZWl1y9aBZg
-         G12UR3tYJLftUj/iPgduQDCS07Ur7ir9OHtFnQL5n+x7yT85hkIjf2786RRESyZMdAKz
-         o485B1/YuVB42fRe409eia4M2tSzcNEuQjXa+sSsFNE8hgGBqr5IHahAKb8WE+eWcEGf
-         XXggc8WMP3TCys2hx7JD6fCeyvbDJZfmgyLtTh9X5srz2WsozgwH/LqjjmlsDPi1Gn/O
-         G/EQ==
+        bh=lrZYZhVieaqUVr9oKAFnYwTp3j/qeulQmt2ZySmuWeQ=;
+        b=UT4Dl+p/YSVrocXeWDiK+6I87l9ZhKpYNodmNNUudH8LJCpzfFqdzLA9kNP46ISFy1
+         LDlO4L3hrcqAb6hWjOwxjJYDEELQeVbNtE2kNCC7afieSt/D2FSl4uCc9yc3w7XZXGZw
+         AvcY9l1Y/12IurnciB9utSodjMLXP4w2SXog24+x7y4lrQmdKjIq6Jq+og3jYqbpAegI
+         GRHDWQXpyiC8R7Jhmf1eomY3eLQZRDBwSe48FwVsSo3Ck5T4MR1wgFhva4PgbOtD2OUY
+         u9g7/z7QUHfu9e4cArDKJBzQNqQ9FBCJ1PZmZMsN8m7QbwrromM9bYl6kExsPD7D9jyy
+         ZcKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=XnTlfC/2x4nU8jxxfPLwDgpfMYqygXbQEq1bZIQt1jE=;
-        b=F6SSh85Gz1QrlQ64wMcE2iF4Id16dFRs310XlkDTNIBxemyrHJxXv2rd6E3W0yEq3k
-         /UEQ6zWyYocRz4+69iB3aNhc/p9Dk4h5PA2++IqRftaXIBnh8ZXoW1iFctFnWl7zXuUd
-         q2k9zgyb95ynGdf7mz6BZPhea1HwcmRdgfy65ORFY//QdJx1y4hy7C7MtDJj7tYzuoiL
-         /xmFWk8KnAx8n6guN+m/0BQhy9ac0/+ixNCvWqC9L1ZwkLnBujrtjGvqRh3dQHIiXKnl
-         49zYV1YJUBJcXfnRXS1nFXXsTWoSMRl1R9HJSqAv3T3BLYU7xxGjLri/l8oHLmNSC//T
-         6hEg==
-X-Gm-Message-State: AOAM533dLYIDmbtc7RoqFzw2TcwQnuH9QrAzHbzJIJo+mAkaqMs+rfx3
-        o/zeoeHSss2+hvvi468p2I8=
-X-Google-Smtp-Source: ABdhPJyRIjQr3Q1UO5UoVGh01kGMlu25+dOhQvvlLjVnC7TT4XAPR/oxv5s4cwa0EgtWeEgN0HEjiQ==
-X-Received: by 2002:a05:6214:1948:: with SMTP id q8mr3971770qvk.98.1644473415502;
-        Wed, 09 Feb 2022 22:10:15 -0800 (PST)
+        bh=lrZYZhVieaqUVr9oKAFnYwTp3j/qeulQmt2ZySmuWeQ=;
+        b=UfI56vBYWvmGKs42m9vk71HKFaKevJD4OZZOkaMECbTc26OU8zaBLiCLSzG+mgcioQ
+         53v+4mi0KkzCQcNWV9c0hb0qkSBHYBHKGRHpdDp9czy6tVRjGe3+33QrsYkaKfppa7aN
+         yypxpkuKykD+7TUxXa3sZDMw8/ZnU6LAYjiw4+ZRGlzlI1HAxLGuPXn/ElPa8n7Psfqw
+         ZA5AvlAUIHxYCCeztBa6VCPft8MEhGq87axYlWmS/UvpSIv0gW6Wf/VB/2915PrCDk8c
+         a7B2/uCMXvOBNmrkSKQxS0yFMpUBkLr+4fRsvCK+v0ZHz+lxTIeIH7gM4Xx2FMH15wX+
+         knfw==
+X-Gm-Message-State: AOAM533QRkmwpbqHwi79jgtMNCMpI5wfso2fs9gu36+jChJjPkN3aT5H
+        e0TKZZrYboiPcQBNEBez204=
+X-Google-Smtp-Source: ABdhPJzsa2hL8YGGhXHZpNoEomnhQ6Wwhy3EqJ/StnQcNRNmyAYikGzhfkdlM7ir7IIPmj6w5cq/pQ==
+X-Received: by 2002:a05:622a:1a18:: with SMTP id f24mr3814901qtb.158.1644473531544;
+        Wed, 09 Feb 2022 22:12:11 -0800 (PST)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id e17sm10298456qte.94.2022.02.09.22.10.12
+        by smtp.gmail.com with ESMTPSA id bq41sm9273835qkb.9.2022.02.09.22.12.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 22:10:15 -0800 (PST)
+        Wed, 09 Feb 2022 22:12:11 -0800 (PST)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     jiri@resnulli.us
-Cc:     ivecera@redhat.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     codrin.ciubotariu@microchip.com
+Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        ludovic.desroches@microchip.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH V2] net/switchdev: use struct_size over open coded arithmetic
-Date:   Thu, 10 Feb 2022 06:10:08 +0000
-Message-Id: <20220210061008.1608468-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] drivers/misc: Fix IRQ check
+Date:   Thu, 10 Feb 2022 06:12:04 +0000
+Message-Id: <20220210061204.1608604-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -73,36 +75,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 
-Replace zero-length array with flexible-array member and make use
-of the struct_size() helper in kmalloc(). For example:
-
-struct switchdev_deferred_item {
-    ...
-    unsigned long data[];
-};
-
-Make use of the struct_size() helper instead of an open-coded version
-in order to avoid any potential type mistakes.
+platform_get_irq() returns negative error number instead 0 on failure.
+Fix the check of return value to catch errors correctly.
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 ---
- net/switchdev/switchdev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/misc/atmel-ssc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/switchdev/switchdev.c b/net/switchdev/switchdev.c
-index b62565278fac..12e6b4146bfb 100644
---- a/net/switchdev/switchdev.c
-+++ b/net/switchdev/switchdev.c
-@@ -85,7 +85,7 @@ static int switchdev_deferred_enqueue(struct net_device *dev,
- {
- 	struct switchdev_deferred_item *dfitem;
+diff --git a/drivers/misc/atmel-ssc.c b/drivers/misc/atmel-ssc.c
+index d6cd5537126c..69f9b0336410 100644
+--- a/drivers/misc/atmel-ssc.c
++++ b/drivers/misc/atmel-ssc.c
+@@ -232,9 +232,9 @@ static int ssc_probe(struct platform_device *pdev)
+ 	clk_disable_unprepare(ssc->clk);
  
--	dfitem = kmalloc(sizeof(*dfitem) + data_len, GFP_ATOMIC);
-+	dfitem = kmalloc(struct_size(dfitem, data, data_len), GFP_ATOMIC);
- 	if (!dfitem)
- 		return -ENOMEM;
- 	dfitem->dev = dev;
+ 	ssc->irq = platform_get_irq(pdev, 0);
+-	if (!ssc->irq) {
++	if (ssc->irq < 0) {
+ 		dev_dbg(&pdev->dev, "could not get irq\n");
+-		return -ENXIO;
++		return ssc->irq;
+ 	}
+ 
+ 	mutex_lock(&user_lock);
 -- 
 2.25.1
 

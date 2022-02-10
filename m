@@ -2,51 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54FEC4B0767
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 08:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 714A14B0768
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 08:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236350AbiBJHnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 02:43:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55196 "EHLO
+        id S236397AbiBJHoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 02:44:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiBJHnm (ORCPT
+        with ESMTP id S229613AbiBJHoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 02:43:42 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0D2D71;
-        Wed,  9 Feb 2022 23:43:43 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvTJY4C9Xz4xNn;
-        Thu, 10 Feb 2022 18:43:41 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644479021;
-        bh=GmNUgiuUI4wGUSUdmWY5dDIG/MzEogexYWKT6/FN4yY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=emDPeTRTCRm47PXxPT10cG4F0JiPSV2V+r4ZtTaGbpo2r/aYi2xX3zyHo4dBM3QAS
-         2jEmHAZdlJp4PN1Qe/fsGMqhLz/e26uj/9Goz7fgk8Xa9JeXVgSecijH31PNhG/Tcn
-         nhYKICNfJt4hO1gMOC898vgBDxbyQ5C7CLpxWRqpMFtZFN92CLr4hqyD6yHQMCQTiS
-         hdm58m1lcHrf1eKbfr8yW7q339Q648hCXFfRsnMHsp3/cMV0Ntgjv4LpiXZAiRruPw
-         4KQx5ZFCL+wsKLSUul480U6jZD8upDnOF0epJFIcu2N0NO6f/53+2abSvSo/4wk+Bo
-         O6x9LlXE6tJGQ==
-Date:   Thu, 10 Feb 2022 18:43:40 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Domenico Andreoli <domenico.andreoli@linux.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Tong Zhang <ztong0001@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: boottime warning from todays linux-next
-Message-ID: <20220210184340.7eba108a@canb.auug.org.au>
+        Thu, 10 Feb 2022 02:44:21 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE39CD72
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 23:44:22 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id y6-20020a7bc186000000b0037bdc5a531eso664979wmi.0
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 23:44:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yqwcBS2YnFPC9ilt1Zl2Ei/BAcWYRBw+En94OShotPE=;
+        b=nkmCLz8RurD2nNSotecE1nzeGUioQpJCqwkMrryFZ9s4GluoDisbZEI5spAb/NRC3B
+         MJdUGVoQXVgowJoo6RR7yxgCRnZ0aYkrGB5NtQLs86bBOdRi5ufrLw4N+oUcuSAveebj
+         2dVNd0EVxNbEaDOYw8xIKtkroxTv3UZLriLsIcK8L9zykU+bYrsJHy7aPIfhEetqWNUm
+         lomk4tMAtiVqYB/Kp6gM3opSl1Yc2/tUA0bIWhsKOBUTNDAh+TTbHdJB3JhhxIrI5zFw
+         ixBOw/0bqxKpSda/RwKUg9l3PB5grSujVJ/0j5IOs26FayCYk2HTxHA3o30RhymOdu8n
+         xQWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yqwcBS2YnFPC9ilt1Zl2Ei/BAcWYRBw+En94OShotPE=;
+        b=ZW+mQ5+1/puXFyqU52rD9V5EXj5fFN5fI/uWNGOj5C/3c9PdVzDN7ZgB728aMOLuJg
+         y8arEbxKseVwDXg3U6RgmbiXMFqQvSol793i8snoI8yGG/71Hw8gV9jRjGRm7kKeVFTc
+         t3hDGV3NLKrJLy6oewG2YGMLw3lan7AeTjkHRl9o4AqcBBX0aWYj9q6RFv/Ye69Dar/X
+         AHv9llDlYYpvXtcu5DHVBIVVGU4DT2Qo61DMdkDozDa3AEnB5zUuLJvpFNSOUa17Dbu9
+         SfNXtUu4G1fhba4QWHJvktZFaoN5ts015r/aHIwG9aWv4SdMPVO2X4fWVGtpmCTEBonb
+         GvtQ==
+X-Gm-Message-State: AOAM532JpDsLS2X/c+H3Tbbs0kueapBMIO5sKIwk6k8ca8KqdkvXi01B
+        Bepxu7iG9YT3LFI2P0UnycYeRNkhhz4g6b2+DnD+WQ==
+X-Google-Smtp-Source: ABdhPJyhLYkrXk39sK1hvxKDUFbbN1uTu0jDZJk2blsOuNGThdImEGE3IyzmwnaYTv8HMQlM6O50yYgfMyJmqkeqg1A=
+X-Received: by 2002:a05:600c:350e:: with SMTP id h14mr1025507wmq.166.1644479061243;
+ Wed, 09 Feb 2022 23:44:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8XH3mUK8e..xQKie=tiiqmM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220210023519.3221051-1-frowand.list@gmail.com> <20220210023519.3221051-3-frowand.list@gmail.com>
+In-Reply-To: <20220210023519.3221051-3-frowand.list@gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 10 Feb 2022 15:44:10 +0800
+Message-ID: <CABVgOSkwCtPiqF-OG=mQqcaPqhM=-cBKwXV=sbT_ig1pRCNgcQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] Documentation: dev-tools: fix KTAP specification
+ build warnings
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>, Rae Moar <rmoar@google.com>,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Rae Moar <rmr167@gmail.com>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Daniel Latypov <dlatypov@google.com>, kernelci@groups.io,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000004fe45705d7a51e3d"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,49 +79,231 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/8XH3mUK8e..xQKie=tiiqmM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+--0000000000004fe45705d7a51e3d
+Content-Type: text/plain; charset="UTF-8"
 
-Hi all,
+On Thu, Feb 10, 2022 at 10:35 AM <frowand.list@gmail.com> wrote:
+>
+> From: Frank Rowand <frank.rowand@sony.com>
+>
+> Convert "Major differences between TAP and KTAP" from a bullet list
+> to a table.  The bullet list was being formatted as a single
+> paragraph.
+>
+> Add missing required argument in code-block directives.
+>
+> ---
+>
+> Table conversion suggested by Shuah.
+>
+> Patch 2/2 not previously reviewed, so Reviewed-by tags not provided.
+>
+> Changes since version 3
+>   - Add this commit (patch 2/2) to the series
+>
+> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+> ---
 
-My qemu boot of a powerpc pseries_le_defconfig kernel produced these
-kernel messages:
+The table looks good to me, the "none" argument in code-block
+directives is already fixed in another patch.
 
-  CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc3 #2
-  Call Trace:
-  [c0000000073e3a80] [c0000000007bfd40] dump_stack_lvl+0x74/0xa8 (unreliabl=
-e)
-  [c0000000073e3ac0] [c00000000057e3dc] __register_sysctl_table+0x60c/0x9f0
-  [c0000000073e3bd0] [c000000002041170] init_fs_stat_sysctls+0x48/0x60
-  [c0000000073e3bf0] [c000000000012110] do_one_initcall+0x60/0x2d0
-  [c0000000073e3cd0] [c0000000020049f0] kernel_init_freeable+0x334/0x3dc
-  [c0000000073e3db0] [c000000000012710] kernel_init+0x30/0x1a0
-  [c0000000073e3e10] [c00000000000cd64] ret_from_kernel_thread+0x5c/0x64
+The table bits are:
 
-Presumably introduced by commit
+Reviewed-by: David Gow <davidgow@google.com>
 
-  b42bc9a3c511 ("Fix regression due to "fs: move binfmt_misc sysctl to its =
-own file"")
-
---=20
 Cheers,
-Stephen Rothwell
+-- David
 
---Sig_/8XH3mUK8e..xQKie=tiiqmM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+>  Documentation/dev-tools/ktap.rst | 33 +++++++++++++++++---------------
+>  1 file changed, 18 insertions(+), 15 deletions(-)
+>
+> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
+> index dfb3f10a8b2d..5ee735c6687f 100644
+> --- a/Documentation/dev-tools/ktap.rst
+> +++ b/Documentation/dev-tools/ktap.rst
+> @@ -68,7 +68,7 @@ Test case result lines
+>  Test case result lines indicate the final status of a test.
+>  They are required and must have the format:
+>
+> -.. code-block::
+> +.. code-block:: none
 
------BEGIN PGP SIGNATURE-----
+These code-block changes were already submitted in:
+https://lore.kernel.org/lkml/20220131003637.14274-1-rdunlap@infradead.org/T/
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIEwiwACgkQAVBC80lX
-0Gwpkgf9FDhRS+oGJo17XZiR5FrLO60Ay9dM8qIytpbmnlTFvtVeLvArQxicdbK8
-Kh53VnqgHwF4j4l1D/wrH1tgLR5r3WT8/loOOkx7ZOBl+LyAhfEjzSLMjkVqFDJ4
-T0b/7Nbn1ckNZhqCNyk9YVcwC6YJ4Nvb8lQgt8DLc9AWjDJVi/KKO+lZMhEDca4E
-0ZKTrDgCOU7YTM2k/Tt8nvn46ZIavA9ilD9AXwkKMlLU7hpVh3y3I1jhQYxZy5M+
-fsNjv1LRTthpYaSZMC0gSq7H7RpWV8x30oNb0gEmzkTtvLVAJ1TrYCLnxGzvG4B0
-Dq7ZCs44FQO5uKgHRJZP0W3cRj26YQ==
-=dnGc
------END PGP SIGNATURE-----
 
---Sig_/8XH3mUK8e..xQKie=tiiqmM--
+>
+>         <result> <number> [<description>][ # [<directive>] [<diagnostic data>]]
+>
+> @@ -117,32 +117,32 @@ separator.
+>
+>  Example result lines include:
+>
+> -.. code-block::
+> +.. code-block:: none
+>
+>         ok 1 test_case_name
+>
+>  The test "test_case_name" passed.
+>
+> -.. code-block::
+> +.. code-block:: none
+>
+>         not ok 1 test_case_name
+>
+>  The test "test_case_name" failed.
+>
+> -.. code-block::
+> +.. code-block:: none
+>
+>         ok 1 test # SKIP necessary dependency unavailable
+>
+>  The test "test" was SKIPPED with the diagnostic message "necessary dependency
+>  unavailable".
+>
+> -.. code-block::
+> +.. code-block:: none
+>
+>         not ok 1 test # TIMEOUT 30 seconds
+>
+>  The test "test" timed out, with diagnostic data "30 seconds".
+>
+> -.. code-block::
+> +.. code-block:: none
+>
+>         ok 5 check return code # rcode=0
+>
+> @@ -202,7 +202,7 @@ allowed to be either indented or not indented.
+>
+>  An example of a test with two nested subtests:
+>
+> -.. code-block::
+> +.. code-block:: none
+>
+>         KTAP version 1
+>         1..1
+> @@ -215,7 +215,7 @@ An example of a test with two nested subtests:
+>
+>  An example format with multiple levels of nested testing:
+>
+> -.. code-block::
+> +.. code-block:: none
+>
+>         KTAP version 1
+>         1..2
+> @@ -234,12 +234,15 @@ An example format with multiple levels of nested testing:
+>  Major differences between TAP and KTAP
+>  --------------------------------------
+>
+> -Note the major differences between the TAP and KTAP specification:
+> -- yaml and json are not recommended in KTAP diagnostic messages
+> -- TODO directive not recognized in KTAP
+> -- KTAP allows for an arbitrary number of tests to be nested
+> -- TAP includes "Unknown lines" in the category of "Anything else"
+> -- TAP says "Unknown lines" are "incorrect"; KTAP allows "Unknown lines"
+> +==================================================   =========  ===============
+> +Feature                                              TAP        KTAP
+> +==================================================   =========  ===============
+> +yaml and json in diagnosic message                   ok         not recommended
+> +TODO directive                                       ok         not recognized
+> +allows an arbitrary number of tests to be nested     no         yes
+> +"Unknown lines" are in category of "Anything else"   yes        no
+> +"Unknown lines" are                                  incorrect  allowed
+> +==================================================   =========  ===============
+
+This looks good to me, thanks!
+
+>
+>  The TAP14 specification does permit nested tests, but instead of using another
+>  nested version line, uses a line of the form
+> @@ -247,7 +250,7 @@ nested version line, uses a line of the form
+>
+>  Example KTAP output
+>  --------------------
+> -.. code-block::
+> +.. code-block:: none
+>
+>         KTAP version 1
+>         1..1
+> --
+> Frank Rowand <frank.rowand@sony.com>
+>
+
+--0000000000004fe45705d7a51e3d
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
+2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
+dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
+jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
+ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
+QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAW
+Uj6y8rnjHScNV9crl9BF8jYJPpYgSlKxMNrUGc39EzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjAyMTAwNzQ0MjFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAd2lwnOLWnINHsP+066rx
+jpvDD7q9H9RCwMKtjD0EyAeUT+LHs4AzuVmDDKSubKWqZAnaitgeY+cDau2kUh4a///VlGcFka+v
+CEUAT1JuPve6nwxmjzBupgqhMI7mpIy9DKs0wniJKAAgM/a2Kj6snSMiLNIROFzstIyV4qaEc7Zc
+2jCur5ydx4WZZkmaWDQkb9E05QVBSuwdd7VxGynCDa8R98XvUAKWayn9UjlsqJEkDv8FA2Ak5K4N
+xZg0k8oBgGblQ4Gf15yVnoLi1jwaUaIhxFdW7V6D7Yo6gIcSPtVBx0N4Nux2YNV/KKltS8AT6eMy
+qWalnuPWwkqFIfjNzw==
+--0000000000004fe45705d7a51e3d--

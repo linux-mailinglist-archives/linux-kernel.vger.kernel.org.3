@@ -2,126 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CBF4B0A74
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62AA24B0A78
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239530AbiBJKTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 05:19:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39012 "EHLO
+        id S239551AbiBJKU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 05:20:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239433AbiBJKTh (ORCPT
+        with ESMTP id S239433AbiBJKU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 05:19:37 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4551DB88
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:19:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3xweEom7G+dDeu6xr1iKwUdMJ+gkhA5yXvU23l0enCI=; b=VKuta7L7BFHOPw/ExmtRyTNVL7
-        XzLBMFKGOXyUgWRrxeukq1azQbMrKtlKGvEI9hSpjrWwVm7AzH0jY6nsqnB6poS+kWZyXP9AMR6UY
-        hNLHf/ET8GVaRVT+VsBrLVtGaAdV5Oiok4G8JBI4+GiUPHe5K6TGk+7XN+KB7K+oVkIdGiOzPSAbB
-        eZ50DjlR/+sp/H0fyMPeyAWqHAx/XVkJkLeW0Ki4Sb5fDI/EfFQvqnwsm7ZUja8NXA86+S+y5zarr
-        UjrD6MJ50kI+7m7iTHiByvo5woq14tyI4wYo63an/z0S3vBzervhzfDBWPxyEhCiRZx30H66bgzu7
-        TRN7jCtQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nI6Y1-008gCW-I3; Thu, 10 Feb 2022 10:19:33 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D973230023F;
-        Thu, 10 Feb 2022 11:19:31 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9CA872C4B1BE9; Thu, 10 Feb 2022 11:19:31 +0100 (CET)
-Date:   Thu, 10 Feb 2022 11:19:31 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will.deacon@arm.com>,
-        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] locking/semaphore: Use wake_q to wake up processes
- outside lock critical section
-Message-ID: <YgTms3tGYeQ4HYFZ@hirez.programming.kicks-ass.net>
-References: <20220118153254.358748-1-longman@redhat.com>
+        Thu, 10 Feb 2022 05:20:56 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BB3B88;
+        Thu, 10 Feb 2022 02:20:56 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 886E65C00E5;
+        Thu, 10 Feb 2022 05:20:54 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Thu, 10 Feb 2022 05:20:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=HxZ0IRRgHJ9M+edFd
+        /uChpMWKuc/uyIm4Qwe86ghBaQ=; b=YpgAO98pauEPZcjNOoITdgX8mZWyvSVKN
+        aaQ1jEXcc8/8FZVCEdIxgRen43i8vPpq/vq17hMiEkjQ3WAt8Tauy9z5LNEaCLBH
+        TTWEFZPDhVKb/cC+Jwu2I9yDhCaA8ebeeLdwTI5oF5zEhaaQJqxZmeFrT0A/445N
+        M0ZMtI2q6f88n5yTbpQVSNZVdEB6KgttihpX8B+gWQZYfBLV5y9Ye26Ajria4+jJ
+        KJnTDKT8u6D1ReeOKBeDI+m+tysQBGQmsJQK4UAsm90fa4nTwCqTpICOatvtmCON
+        rRvem3rUWsM8/Ds3+NC0bpSJeev+6lM1XwLJgHYSCjHAgKbh7geng==
+X-ME-Sender: <xms:BecEYrjylSb1dzgy-2v0Iz514pqq3-nEwqBaJ3Z3j630Ww1Y90JjwA>
+    <xme:BecEYoDEf7_bQIZjoigfvoFXKvuxfzJdo7C32no61_ANuSWOcv7F3pysOSXfl5HE9
+    Qf3ihtr-GdQGNQ>
+X-ME-Received: <xmr:BecEYrECUnFAV1B6ZRWg6V77dlgezxLR5clUs7UtYgDykRuqLOdWZfBrZDvOxjuK3WpRWiyyZziVJBDkDuLRtrWniPl0ug>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddriedugddufecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtrodttddtvdenucfhrhhomhepkfguohcuufgt
+    hhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvg
+    hrnhepgfejvefhvdegiedukeetudevgeeujeefffeffeetkeekueeuheejudeltdejuedu
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepihguoh
+    hstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:BecEYoSXZSxNuEwA3yN7Jq1t6sTHX9XpUHJHnyC8aaKQByn1spUhrQ>
+    <xmx:BecEYozfVY-FC4c5BVv_ee9AFukGJN24hZiMrqw1_sJc4CvFqs94NA>
+    <xmx:BecEYu6SXizFA8bKHP_gzY9CrY2vSdBMcFR5NEo6pjDrdXJGL_LpOQ>
+    <xmx:BucEYrxuY5vScmJWvTk1a_kjAzumUIH5squwNeLU1lH_phqzLMRaIw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 10 Feb 2022 05:20:52 -0500 (EST)
+Date:   Thu, 10 Feb 2022 12:20:49 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Nikolay Aleksandrov <razor@blackwall.org>
+Cc:     Hans Schultz <schultz.hans@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org
+Subject: Re: [PATCH net-next v2 1/5] net: bridge: Add support for bridge port
+ in locked mode
+Message-ID: <YgTnAcfTfeyQOQCf@shredder>
+References: <20220209130538.533699-1-schultz.hans+netdev@gmail.com>
+ <20220209130538.533699-2-schultz.hans+netdev@gmail.com>
+ <c821f05b-94e1-cf48-f2a6-40a689678c2b@blackwall.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220118153254.358748-1-longman@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <c821f05b-94e1-cf48-f2a6-40a689678c2b@blackwall.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 10:32:54AM -0500, Waiman Long wrote:
-> The following lockdep splat was observed:
+On Thu, Feb 10, 2022 at 10:30:01AM +0200, Nikolay Aleksandrov wrote:
+> On 09/02/2022 15:05, Hans Schultz wrote:
+> > In a 802.1X scenario, clients connected to a bridge port shall not
+> > be allowed to have traffic forwarded until fully authenticated.
+> > A static fdb entry of the clients MAC address for the bridge port
+> > unlocks the client and allows bidirectional communication.
+> > 
+> > This scenario is facilitated with setting the bridge port in locked
+> > mode, which is also supported by various switchcore chipsets.
+> > 
+> > Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
+> > ---
 > 
-> [ 9776.459819] ======================================================
-> [ 9776.459820] WARNING: possible circular locking dependency detected
-> [ 9776.459821] 5.14.0-0.rc4.35.el9.x86_64+debug #1 Not tainted
-> [ 9776.459823] ------------------------------------------------------
-> [ 9776.459824] stress-ng/117708 is trying to acquire lock:
-> [ 9776.459825] ffffffff892d41d8 ((console_sem).lock){-...}-{2:2}, at: down_trylock+0x13/0x70
+> Hi,
+> I'm writing from my private email because for some reason I'm not receiving the full
+> patch-set in my nvidia mail, a few comments below..
 > 
-> [ 9776.459831] but task is already holding lock:
-> [ 9776.459832] ffff888e005f6d18 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x27/0x130
+> >  include/linux/if_bridge.h    |  1 +
+> >  include/uapi/linux/if_link.h |  1 +
+> >  net/bridge/br_input.c        | 10 +++++++++-
+> >  net/bridge/br_netlink.c      |  6 +++++-
+> >  4 files changed, 16 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/include/linux/if_bridge.h b/include/linux/if_bridge.h
+> > index 509e18c7e740..3aae023a9353 100644
+> > --- a/include/linux/if_bridge.h
+> > +++ b/include/linux/if_bridge.h
+> > @@ -58,6 +58,7 @@ struct br_ip_list {
+> >  #define BR_MRP_LOST_CONT	BIT(18)
+> >  #define BR_MRP_LOST_IN_CONT	BIT(19)
+> >  #define BR_TX_FWD_OFFLOAD	BIT(20)
+> > +#define BR_PORT_LOCKED		BIT(21)
+> >  
+> >  #define BR_DEFAULT_AGEING_TIME	(300 * HZ)
+> >  
+> > diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
+> > index 6218f93f5c1a..a45cc0a1f415 100644
+> > --- a/include/uapi/linux/if_link.h
+> > +++ b/include/uapi/linux/if_link.h
+> > @@ -537,6 +537,7 @@ enum {
+> >  	IFLA_BRPORT_MRP_IN_OPEN,
+> >  	IFLA_BRPORT_MCAST_EHT_HOSTS_LIMIT,
+> >  	IFLA_BRPORT_MCAST_EHT_HOSTS_CNT,
+> > +	IFLA_BRPORT_LOCKED,
+> >  	__IFLA_BRPORT_MAX
+> >  };
+> >  #define IFLA_BRPORT_MAX (__IFLA_BRPORT_MAX - 1)
+> > diff --git a/net/bridge/br_input.c b/net/bridge/br_input.c
+> > index b50382f957c1..469e3adbce07 100644
+> > --- a/net/bridge/br_input.c
+> > +++ b/net/bridge/br_input.c
+> > @@ -69,6 +69,7 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
+> >  	struct net_bridge_port *p = br_port_get_rcu(skb->dev);
+> >  	enum br_pkt_type pkt_type = BR_PKT_UNICAST;
+> >  	struct net_bridge_fdb_entry *dst = NULL;
+> > +	struct net_bridge_fdb_entry *fdb_entry;
 > 
-> [ 9776.459837] which lock already depends on the new lock.
->       :
-> [ 9776.459857] -> #1 (&p->pi_lock){-.-.}-{2:2}:
-> [ 9776.459860]        __lock_acquire+0xb72/0x1870
-> [ 9776.459861]        lock_acquire+0x1ca/0x570
-> [ 9776.459862]        _raw_spin_lock_irqsave+0x40/0x90
-> [ 9776.459863]        try_to_wake_up+0x9d/0x1210
-> [ 9776.459864]        up+0x7a/0xb0
-> [ 9776.459864]        __up_console_sem+0x33/0x70
-> [ 9776.459865]        console_unlock+0x3a1/0x5f0
-> [ 9776.459866]        vprintk_emit+0x23b/0x2b0
-> [ 9776.459867]        devkmsg_emit.constprop.0+0xab/0xdc
-> [ 9776.459868]        devkmsg_write.cold+0x4e/0x78
-> [ 9776.459869]        do_iter_readv_writev+0x343/0x690
-> [ 9776.459870]        do_iter_write+0x123/0x340
-> [ 9776.459871]        vfs_writev+0x19d/0x520
-> [ 9776.459871]        do_writev+0x110/0x290
-> [ 9776.459872]        do_syscall_64+0x3b/0x90
-> [ 9776.459873]        entry_SYSCALL_64_after_hwframe+0x44/0xae
->       :
-> [ 9776.459905] Chain exists of:
-> [ 9776.459906]   (console_sem).lock --> &p->pi_lock --> &rq->__lock
+> move fdb_entry below to where it is used
 > 
-> [ 9776.459911]  Possible unsafe locking scenario:
+> >  	struct net_bridge_mcast_port *pmctx;
+> >  	struct net_bridge_mdb_entry *mdst;
+> >  	bool local_rcv, mcast_hit = false;
+> > @@ -81,6 +82,8 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
+> >  	if (!p || p->state == BR_STATE_DISABLED)
+> >  		goto drop;
+> >  
+> > +	br = p->br;
+> > +
 > 
-> [ 9776.459913]        CPU0                    CPU1
-> [ 9776.459914]        ----                    ----
-> [ 9776.459914]   lock(&rq->__lock);
-> [ 9776.459917]                                lock(&p->pi_lock);
-> [ 9776.459919]                                lock(&rq->__lock);
-> [ 9776.459921]   lock((console_sem).lock);
+> please drop the extra new line
 > 
-> [ 9776.459923]  *** DEADLOCK ***
+> >  	brmctx = &p->br->multicast_ctx;
+> >  	pmctx = &p->multicast_ctx;
+> >  	state = p->state;
+> > @@ -88,10 +91,15 @@ int br_handle_frame_finish(struct net *net, struct sock *sk, struct sk_buff *skb
+> >  				&state, &vlan))
+> >  		goto out;
+> >  
+> > +	if (p->flags & BR_PORT_LOCKED) {
+> 
+> fdb_entry should be defined in this scope only, and please rename it to something
+> like fdb_src or just "src" as we already have "dst".
+> 
+> > +		fdb_entry = br_fdb_find_rcu(br, eth_hdr(skb)->h_source, vid);
+> > +		if (!(fdb_entry && fdb_entry->dst == p))
+> 
+> if (!fdb_entry || READ_ONCE(fdb_entry->dst) != p
 
-Is this new due to the ongoing printk rewrite? Also the above doesn't
-actually describe the whole invesion, the one where console sem is taken
-inside pi_lock is missing.
+I think we should also check that entry does not have 'BR_FDB_LOCAL'
+set. These entries point at the bridge ports themselves, but do not
+actually represent hosts behind the ports. Since they are automatically
+populated, a malicious host can craft packets with SMAC of the bridge
+port and bypass the check.
 
-More concerning, that ordering is invalid to begin with, so the above
-seems like a very poor justification for this patch.
+Assuming the above is true (didn't test), would be good to add a test
+case for it in the selftest.
 
-> The problematic locking sequence ((console_sem).lock --> &p->pi_lock)
-> was caused by the fact the semaphore up() function is calling
-> wake_up_process() while holding the semaphore raw spinlock.
 > 
-> By moving the wake_up_processs() call out of the raw spinlock critical
-> section using wake_q, it will break the problematic locking sequence as
-> well as reducing raw spinlock hold time which will be good for
-> PREEMPT_RT.
+> > +			goto drop;
+> > +	}
+> > +
+> >  	nbp_switchdev_frame_mark(p, skb);
+> >  
+> >  	/* insert into forwarding database after filtering to avoid spoofing */
+> > -	br = p->br;
+> >  	if (p->flags & BR_LEARNING)
+> >  		br_fdb_update(br, p, eth_hdr(skb)->h_source, vid, 0);
+> >  
+> > diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
+> > index 2ff83d84230d..7d4432ca9a20 100644
+> > --- a/net/bridge/br_netlink.c
+> > +++ b/net/bridge/br_netlink.c
+> > @@ -184,6 +184,7 @@ static inline size_t br_port_info_size(void)
+> >  		+ nla_total_size(1)	/* IFLA_BRPORT_VLAN_TUNNEL */
+> >  		+ nla_total_size(1)	/* IFLA_BRPORT_NEIGH_SUPPRESS */
+> >  		+ nla_total_size(1)	/* IFLA_BRPORT_ISOLATED */
+> > +		+ nla_total_size(1)	/* IFLA_BRPORT_LOCKED */
+> >  		+ nla_total_size(sizeof(struct ifla_bridge_id))	/* IFLA_BRPORT_ROOT_ID */
+> >  		+ nla_total_size(sizeof(struct ifla_bridge_id))	/* IFLA_BRPORT_BRIDGE_ID */
+> >  		+ nla_total_size(sizeof(u16))	/* IFLA_BRPORT_DESIGNATED_PORT */
+> > @@ -269,7 +270,8 @@ static int br_port_fill_attrs(struct sk_buff *skb,
+> >  							  BR_MRP_LOST_CONT)) ||
+> >  	    nla_put_u8(skb, IFLA_BRPORT_MRP_IN_OPEN,
+> >  		       !!(p->flags & BR_MRP_LOST_IN_CONT)) ||
+> > -	    nla_put_u8(skb, IFLA_BRPORT_ISOLATED, !!(p->flags & BR_ISOLATED)))
+> > +	    nla_put_u8(skb, IFLA_BRPORT_ISOLATED, !!(p->flags & BR_ISOLATED)) ||
+> > +	    nla_put_u8(skb, IFLA_BRPORT_LOCKED, !!(p->flags & BR_PORT_LOCKED)))
+> >  		return -EMSGSIZE;
+> >  
+> >  	timerval = br_timer_value(&p->message_age_timer);
+> > @@ -827,6 +829,7 @@ static const struct nla_policy br_port_policy[IFLA_BRPORT_MAX + 1] = {
+> >  	[IFLA_BRPORT_GROUP_FWD_MASK] = { .type = NLA_U16 },
+> >  	[IFLA_BRPORT_NEIGH_SUPPRESS] = { .type = NLA_U8 },
+> >  	[IFLA_BRPORT_ISOLATED]	= { .type = NLA_U8 },
+> > +	[IFLA_BRPORT_LOCKED] = { .type = NLA_U8 },
+> >  	[IFLA_BRPORT_BACKUP_PORT] = { .type = NLA_U32 },
+> >  	[IFLA_BRPORT_MCAST_EHT_HOSTS_LIMIT] = { .type = NLA_U32 },
+> >  };
+> > @@ -893,6 +896,7 @@ static int br_setport(struct net_bridge_port *p, struct nlattr *tb[],
+> >  	br_set_port_flag(p, tb, IFLA_BRPORT_VLAN_TUNNEL, BR_VLAN_TUNNEL);
+> >  	br_set_port_flag(p, tb, IFLA_BRPORT_NEIGH_SUPPRESS, BR_NEIGH_SUPPRESS);
+> >  	br_set_port_flag(p, tb, IFLA_BRPORT_ISOLATED, BR_ISOLATED);
+> > +	br_set_port_flag(p, tb, IFLA_BRPORT_LOCKED, BR_PORT_LOCKED);
+> >  
+> >  	changed_mask = old_flags ^ p->flags;
+> >  
 > 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-
-I have no problem with the patch, just the justification / Changelog.
+> Thanks,
+>  Nik

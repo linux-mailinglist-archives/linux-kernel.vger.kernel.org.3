@@ -2,255 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 655464B0A97
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:31:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 550EB4B0A9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239641AbiBJKah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 05:30:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43858 "EHLO
+        id S239650AbiBJKaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 05:30:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238573AbiBJKag (ORCPT
+        with ESMTP id S238573AbiBJKap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 05:30:36 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A37314
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:30:37 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id h6so8645332wrb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:30:37 -0800 (PST)
+        Thu, 10 Feb 2022 05:30:45 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0706BFD5;
+        Thu, 10 Feb 2022 02:30:47 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id r19so9436353pfh.6;
+        Thu, 10 Feb 2022 02:30:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Hg0ykC/xhPsgiw+XPFRSb93UCPPBSVUUOU7Rmic0fE4=;
-        b=wWLK6GqWuhu0ioKmV+tcw7GHuor880s1xgFFVK7lPyRdcUdDfQRbYyclB5/rSEdzhU
-         ESG89iDplhau7sARiBhl4TjvQPchmERJqq1R58jvq4AApxhkVhKdb8Vxt0u+tNa2Xlm8
-         EpNhX49RvD3fv2Rvphw26g/IIqrhgQl9y9JGjDlvUyxyF+JEgN5b6Trs2ZQXKg07XdWn
-         O1DNTxm6UOFKPFM0XuXbFhwUkfKodMuVeVyPYeZpUITq8n9tRg4G9tejr6rfctLq+WXu
-         kZPMiyxIcuOlNOKpo02vQmRkV8TsNe+ejCLNOCYHgrb+8En2qKkuCKBmMgkyHR8x+ZMc
-         1dXg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u8Rld+m6OEJFLOsMO8vIniJg0JFc0WepfyNgmJKCu48=;
+        b=hn1uw+yTA6qNKKFEVtpq5qJXS9gBX3gkuxZRQi3zMi3bIOSmY3JofKCqisNIS7R056
+         h/Y0mDk1aj0xlheQShSlisg1HLVOo0Ww0f61X6a01WcQjOJ6ekTKJcY1ffx0kOa+O0JS
+         OjknpUtRZA6KdPXaFTqavMmbXNQ2lRwoNxtVXb1+gVUy8dNDFKk6fP8J/7NHMFcvvsKt
+         F47/ImeydzRQUz6hLRLJAUcsQot/72ywWw95mQHcyo3yesSMcjL1SvATPees4I8fByJd
+         /rl+dt5O+pkJF/TeXPK7yT/mCG+Dnqkp+2eyHxHBHd5wmoHrU0B1/rco5vD8EdXoBnZY
+         RJyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Hg0ykC/xhPsgiw+XPFRSb93UCPPBSVUUOU7Rmic0fE4=;
-        b=P6c1Fcv9BEPdLrqHIYIjVUI2tX26vL1iVQGFaFFCPx0twPK/yBAyLGhCsPdRmz5ICS
-         MJGYsX0SpjNe00xWsYUyKmJxv7TaJYlTDh/mYewqQRjUTZdHMrKLGen6nkyQ7JAkTkbD
-         +GnoRawkqFEvKA113vwTZaH4klx6XYKtke09lYikp59eoMKLhlp+3KCtyoDy8ZxN2HNd
-         qxf2J6qpMos03qQVODp4mGsdWJ3iQKZxqj5DT/8Y0crBdaa5418Uj0jxbOfiJc/SosRH
-         BfaZNI7D29jFxnQEwahv4MrsFkMYGx0a9O/+wmQpvfvPFjruKTQKHTbHV6UiZUroq1kB
-         NafQ==
-X-Gm-Message-State: AOAM532oxdgf0c6o6hYw7Bmvywi8BphA5mjUUxEq6i2PHAq6gGip4JXV
-        0heYq9VKSx95UmFInhDNolGG/FELzGgvXHVsGKlBmg==
-X-Google-Smtp-Source: ABdhPJwmg0KhQ8UiefJfT2UWLNxUjOicv7T38bCIeIVIl6YHjrtOD81dGFp0nBU3TO2ZkJj9+8CZgmF/+f0mqgovw6g=
-X-Received: by 2002:adf:f4d1:: with SMTP id h17mr2495434wrp.111.1644489035607;
- Thu, 10 Feb 2022 02:30:35 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u8Rld+m6OEJFLOsMO8vIniJg0JFc0WepfyNgmJKCu48=;
+        b=RphOYGMEeJ4PyijoU//8C2FIWf3DxypdHZPz0uI4hdO/v9bTX40vVdtvBt6mAKX3rD
+         g9LDXnDvrzLNCoF9Y4KjwN4Vrnx1eJ6qoSh3sekOIcwUsEEA2IZiY9mAvmoH2URel1oA
+         6W25QLX0F4ReoylXzr/GzU8RFpWrWMsj7IVX6OYlgmXz73ukYqmQ+PbqcHJSb94c0eBv
+         +Di6WVv2C4lp+kSdn9mlXe0iyu6EaoG2Wy4xjf92f96WLzLNDiMj+3jYEPPyo1jp5QWn
+         XADRbKYENxx536nr4UKdfVF9ts/2s1IECqbmQVQ5RLzqBTdJBSuyUIfnamUGTAx3l2yz
+         7TKA==
+X-Gm-Message-State: AOAM532oJFvL24jde+5rV30cuRxTtQ12p4rwPLqlMapug+60B1HIJhPu
+        BOj7Uv8Pcq9fzuPP8NzXlgA=
+X-Google-Smtp-Source: ABdhPJy+48YXnVW5XW4uzVHpXO7BcxA/pbAbynGq8rTHE0PTo4LoEzEPbftoG4ZaMXUe0NNhw14uYw==
+X-Received: by 2002:a05:6a00:2305:: with SMTP id h5mr6925065pfh.13.1644489046507;
+        Thu, 10 Feb 2022 02:30:46 -0800 (PST)
+Received: from localhost.localdomain (192.243.120.166.16clouds.com. [192.243.120.166])
+        by smtp.gmail.com with ESMTPSA id s42sm24041730pfg.146.2022.02.10.02.30.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 02:30:45 -0800 (PST)
+From:   davidcomponentone@gmail.com
+To:     jikos@kernel.org
+Cc:     davidcomponentone@gmail.com, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Guang <yang.guang5@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH v2] HID: lenovo: replace snprintf with sysfs_emit
+Date:   Thu, 10 Feb 2022 18:30:30 +0800
+Message-Id: <abc0adf5d226f72a0df7de90a08faaa6710647d9.1644396161.git.yang.guang5@zte.com.cn>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220209105706.18852-1-quic_jinlmao@quicinc.com>
-In-Reply-To: <20220209105706.18852-1-quic_jinlmao@quicinc.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Thu, 10 Feb 2022 10:30:24 +0000
-Message-ID: <CAJ9a7VhZtNrj9S4T=dNDOWT9fEcnm1qqtp+4h3EqytidDwEd5Q@mail.gmail.com>
-Subject: Re: [PATCH v3 00/10] Coresight: Add support for TPDM and TPDA
-To:     Mao Jinlong <quic_jinlmao@quicinc.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello  Mao,
+From: Yang Guang <yang.guang5@zte.com.cn>
 
-I have looked through this set and have a few general questions.
+coccinelle report:
+./drivers/hid/hid-lenovo.c:636:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/hid/hid-lenovo.c:403:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/hid/hid-lenovo.c:755:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/hid/hid-lenovo.c:606:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/hid/hid-lenovo.c:666:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/hid/hid-lenovo.c:696:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/hid/hid-lenovo.c:445:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/hid/hid-lenovo.c:726:8-16:
+WARNING: use scnprintf or sprintf
 
-My understanding based on the information in the code is that the TPDM
-devices will always send data to the TPDA device, the TPDM is not
-capable of directly driving the ATB itself?
-The TPDA device  will then packetize the inputs and output these to
-the ATB over the normal CoreSight architecture to a standard ETR / ETF
-for collection.
+Use sysfs_emit instead of scnprintf or sprintf makes more sense.
 
-Looking at the TPDM driver - it is assigned a trace ID but never
-actually uses it in the hardware. My assumption here is that this is
-used purely to satisfy the requirement that the CoreSight core has
-that all sources have a unique trace id?
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+Signed-off-by: David Yang <davidcomponentone@gmail.com>
 
-For the TPDA driver you assign an ATID as an attribute in device tree,
-and then program this into the devices control register.
+---
+Change from v1-v2:
+- Adjust some format
 
-The trace IDs in ETM / ETE / STM, are programmed into the hardware and
-these values drive the ATID value on the trace bus. So assigning an
-ATID value to the TPDA driver through device tree will lead to clashes
-with the assignment of trace IDs in the other driver software.
+---
+ drivers/hid/hid-lenovo.c | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
 
-The topology here appears to me that you have multiple  "data source"
-devices TPDM, supplying a TPDA - which is the real CoreSight "trace
-source" from the viewpoint of the trace bus and CoreSight
-infrastructure.
-To get this to work in the current CoreSight driver stack, you have
-assigned the TPDM as a source type, and the TPDA as a link to ensure
-that when a TPDM is started, all the components on the path to the
-sink are activated.
-This is fine.
+diff --git a/drivers/hid/hid-lenovo.c b/drivers/hid/hid-lenovo.c
+index 93b1f935e526..69ae39bdbe70 100644
+--- a/drivers/hid/hid-lenovo.c
++++ b/drivers/hid/hid-lenovo.c
+@@ -400,7 +400,7 @@ static ssize_t attr_fn_lock_show(struct device *dev,
+ 	struct hid_device *hdev = to_hid_device(dev);
+ 	struct lenovo_drvdata *data = hid_get_drvdata(hdev);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%u\n", data->fn_lock);
++	return sysfs_emit(buf, "%u\n", data->fn_lock);
+ }
+ 
+ static ssize_t attr_fn_lock_store(struct device *dev,
+@@ -442,8 +442,7 @@ static ssize_t attr_sensitivity_show_cptkbd(struct device *dev,
+ 	struct hid_device *hdev = to_hid_device(dev);
+ 	struct lenovo_drvdata *cptkbd_data = hid_get_drvdata(hdev);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%u\n",
+-		cptkbd_data->sensitivity);
++	return sysfs_emit(buf, "%u\n", cptkbd_data->sensitivity);
+ }
+ 
+ static ssize_t attr_sensitivity_store_cptkbd(struct device *dev,
+@@ -603,7 +602,7 @@ static ssize_t attr_press_to_select_show_tpkbd(struct device *dev,
+ 	struct hid_device *hdev = to_hid_device(dev);
+ 	struct lenovo_drvdata *data_pointer = hid_get_drvdata(hdev);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%u\n", data_pointer->press_to_select);
++	return sysfs_emit(buf, "%u\n", data_pointer->press_to_select);
+ }
+ 
+ static ssize_t attr_press_to_select_store_tpkbd(struct device *dev,
+@@ -633,7 +632,7 @@ static ssize_t attr_dragging_show_tpkbd(struct device *dev,
+ 	struct hid_device *hdev = to_hid_device(dev);
+ 	struct lenovo_drvdata *data_pointer = hid_get_drvdata(hdev);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%u\n", data_pointer->dragging);
++	return sysfs_emit(buf, "%u\n", data_pointer->dragging);
+ }
+ 
+ static ssize_t attr_dragging_store_tpkbd(struct device *dev,
+@@ -663,7 +662,7 @@ static ssize_t attr_release_to_select_show_tpkbd(struct device *dev,
+ 	struct hid_device *hdev = to_hid_device(dev);
+ 	struct lenovo_drvdata *data_pointer = hid_get_drvdata(hdev);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%u\n", data_pointer->release_to_select);
++	return sysfs_emit(buf, "%u\n", data_pointer->release_to_select);
+ }
+ 
+ static ssize_t attr_release_to_select_store_tpkbd(struct device *dev,
+@@ -693,7 +692,7 @@ static ssize_t attr_select_right_show_tpkbd(struct device *dev,
+ 	struct hid_device *hdev = to_hid_device(dev);
+ 	struct lenovo_drvdata *data_pointer = hid_get_drvdata(hdev);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%u\n", data_pointer->select_right);
++	return sysfs_emit(buf, "%u\n", data_pointer->select_right);
+ }
+ 
+ static ssize_t attr_select_right_store_tpkbd(struct device *dev,
+@@ -723,8 +722,7 @@ static ssize_t attr_sensitivity_show_tpkbd(struct device *dev,
+ 	struct hid_device *hdev = to_hid_device(dev);
+ 	struct lenovo_drvdata *data_pointer = hid_get_drvdata(hdev);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%u\n",
+-		data_pointer->sensitivity);
++	return sysfs_emit(buf, "%u\n", data_pointer->sensitivity);
+ }
+ 
+ static ssize_t attr_sensitivity_store_tpkbd(struct device *dev,
+@@ -752,8 +750,7 @@ static ssize_t attr_press_speed_show_tpkbd(struct device *dev,
+ 	struct hid_device *hdev = to_hid_device(dev);
+ 	struct lenovo_drvdata *data_pointer = hid_get_drvdata(hdev);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%u\n",
+-		data_pointer->press_speed);
++	return sysfs_emit(buf, "%u\n", data_pointer->press_speed);
+ }
+ 
+ static ssize_t attr_press_speed_store_tpkbd(struct device *dev,
+-- 
+2.30.2
 
-If my assumptions above are all accurate I suggest the following improvements
-
-For TPDA drop the device tree assignment of ATID and instead use the
-coresight_get_system_trace_id() function you introduce in the 2nd
-patch in this set.
-
-For TPDM you have assigned a unique source sub-type
-CORESIGHT_DEV_SUBTYPE_SOURCE_SYS.- this could become
-CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY. If the trace ID assigned to
-this device is only to satisfy the unique ID requirement and is not
-used elsewhere, then the sub type could become
-CORESIGHT_DEV_SUBTYPE_SOURCE_DATA_ONLY. We can agree that this sub
-type does not need a unique ID and acts as none ATB a source for
-another component, The core code can be altered to drop the
-requirement for this sub-type and trace ID can be dropped for this
-component.
-
-You should be aware that we are in the process of re-designed how
-trace IDs are allocated. The current mechanism does not scale for
-large multi-core systems (currently broken for any system > 46 cores),
-and as you have discovered there is a need for additional allocation
-of IDs. Also the ETE / TRBE combination does not need a trace ID.  A
-dynamic allocation system is being proposed.
-
-Regards
-
-Mike
-
-
-On Wed, 9 Feb 2022 at 10:57, Mao Jinlong <quic_jinlmao@quicinc.com> wrote:
->
-> This series adds support for the trace performance monitoring and
-> diagnostics hardware (TPDM and TPDA). It is composed of two major
-> elements.
-> a) Changes for original coresight framework to support for TPDM and TPDA.
-> b) Add driver code for TPDM and TPDA.
->
-> Introduction of changes for original coresight framework
-> Support TPDM as new coresight source.
-> Since only STM and ETM are supported as coresight source originally.
-> TPDM is a newly added coresight source. We need to change
-> the original way of saving coresight path to support more types source
-> for coresight driver.
-> The following patch is to add support more coresight sources.
->     Use IDR to maintain all the enabled sources' paths.
->     coresight: Use bitmap to assign trace id to the sources
->
-> Introduction of TPDM and TPDA
-> TPDM - The trace performance monitoring and diagnostics monitor or TPDM in
-> short serves as data collection component for various dataset types
-> specified in the QPMDA(Qualcomm performance monitoring and diagnostics
-> architecture) spec. The primary use case of the TPDM is to collect data
-> from different data sources and send it to a TPDA for packetization,
-> timestamping and funneling.
->     Coresight: Add coresight TPDM source driver
->     dt-bindings: arm: Adds CoreSight TPDM hardware definitions
->     coresight-tpdm: Add DSB dataset support
->     coresight-tpdm: Add integration test support
->     docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
->
-> TPDA - The trace performance monitoring and diagnostics aggregator or
-> TPDA in short serves as an arbitration and packetization engine for the
-> performance monitoring and diagnostics network as specified in the QPMDA
-> (Qualcomm performance monitoring and diagnostics architecture)
-> specification. The primary use case of the TPDA is to provide
-> packetization, funneling and timestamping of Monitor data as specified
-> in the QPMDA specification.
-> The following patch is to add driver for TPDA.
->     Coresight: Add TPDA link driver
->     dt-bindings: arm: Adds CoreSight TPDA hardware definitions
->
-> The last patch of this series is a device tree modification, which add
-> the TPDM and TPDA configuration to device tree for validating.
->     ARM: dts: msm: Add coresight components for SM8250
->
-> Once this series patches are applied properly, the tpdm and tpda nodes
-> should be observed at the coresight path /sys/bus/coresight/devices
-> e.g.
-> /sys/bus/coresight/devices # ls -l | grep tpd
-> tpda0 -> ../../../devices/platform/soc@0/6004000.tpda/tpda0
-> tpdm0 -> ../../../devices/platform/soc@0/6c08000.mm.tpdm/tpdm0
->
-> We can use the commands are similar to the below to validate TPDMs.
-> Enable coresight sink first.
->
-> echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
-> echo 1 > /sys/bus/coresight/devices/tpdm0/enable_source
-> echo 1 > /sys/bus/coresight/devices/tpdm0/integration_test
-> echo 2 > /sys/bus/coresight/devices/tpdm0/integration_test
-> The test data will be collected in the coresight sink which is enabled.
-> If rwp register of the sink is keeping updating when do
-> integration_test (by cat tmc_etf0/mgmt/rwp), it means there is data
-> generated from TPDM to sink.
->
-> Changes from V2:
-> 1. Use bitmap to assign the trace id. (Mathieu Poirier)
->
-> Mao Jinlong (10):
->   Use IDR to maintain all the enabled sources' paths.
->   coresight: Use bitmap to assign trace id to the sources
->   Coresight: Add coresight TPDM source driver
->   dt-bindings: arm: Adds CoreSight TPDM hardware definitions
->   coresight-tpdm: Add DSB dataset support
->   coresight-tpdm: Add integration test support
->   docs: sysfs: coresight: Add sysfs ABI documentation for TPDM
->   Coresight: Add TPDA link driver
->   dt-bindings: arm: Adds CoreSight TPDA hardware definitions
->   ARM: dts: msm: Add coresight components for SM8250
->
->  .../testing/sysfs-bus-coresight-devices-tpdm  |   6 +
->  .../bindings/arm/coresight-tpda.yaml          | 129 ++++
->  .../bindings/arm/coresight-tpdm.yaml          |  81 ++
->  .../devicetree/bindings/arm/coresight.txt     |   7 +
->  MAINTAINERS                                   |   1 +
->  .../arm64/boot/dts/qcom/sm8250-coresight.dtsi | 690 ++++++++++++++++++
->  arch/arm64/boot/dts/qcom/sm8250.dtsi          |   2 +
->  drivers/hwtracing/coresight/Kconfig           |  33 +
->  drivers/hwtracing/coresight/Makefile          |   2 +
->  drivers/hwtracing/coresight/coresight-core.c  | 127 ++--
->  drivers/hwtracing/coresight/coresight-tpda.c  | 193 +++++
->  drivers/hwtracing/coresight/coresight-tpda.h  |  32 +
->  drivers/hwtracing/coresight/coresight-tpdm.c  | 270 +++++++
->  drivers/hwtracing/coresight/coresight-tpdm.h  |  57 ++
->  include/linux/coresight-pmu.h                 |  11 +
->  include/linux/coresight.h                     |   1 +
->  16 files changed, 1592 insertions(+), 50 deletions(-)
->  create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
->  create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpda.yaml
->  create mode 100644 Documentation/devicetree/bindings/arm/coresight-tpdm.yaml
->  create mode 100644 arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
->  create mode 100644 drivers/hwtracing/coresight/coresight-tpda.c
->  create mode 100644 drivers/hwtracing/coresight/coresight-tpda.h
->  create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
->  create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
->
-> --
-> 2.17.1
->
-
-
---
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK

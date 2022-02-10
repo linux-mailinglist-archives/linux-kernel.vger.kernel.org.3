@@ -2,81 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1AF4B17F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDDE4B17EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:09:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344830AbiBJWJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 17:09:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44506 "EHLO
+        id S1344810AbiBJWJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 17:09:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241875AbiBJWJn (ORCPT
+        with ESMTP id S241875AbiBJWJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:09:43 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E0FE7B;
-        Thu, 10 Feb 2022 14:09:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644530982; x=1676066982;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=XyOoywc4THLPzW+PmVQhClugtwQHmT6Xsd0BZq1fpE4=;
-  b=CIEZ5lokxaYl7LA+gppQ+CyMiZ7XODF2t6MBTQSIhWvl7xULsI9sqmHs
-   IGL/ql10MJJ9sSsXydVmSYOAo/rWlyrrtuk8uAVh8TwTc9KIYcDTazzii
-   VBd19i/BkxkmQN5uNnzp4F0Xm1P5PPOY8OlyuIiLKH2Bn5YdVXTb+FD91
-   soS1Heyh/tC6g1HlL9x9M5/OStDpNkhpHYKkjKWKGMPKcfkfC2ud3du8k
-   ic06BjNrTJ+9PZxuuVMOGm0llpRv+4mmD4WowohTkhH2b1zjIG/v+h0TZ
-   RT4AbTkYKCihpVjnbsc01MS6PGw1ulc1bb65ro7FtfFyHst+JI82ueoNz
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="248435960"
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="248435960"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 14:09:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="701862618"
-Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
-  by orsmga005.jf.intel.com with ESMTP; 10 Feb 2022 14:09:19 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 10 Feb 2022 14:09:19 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 10 Feb 2022 14:09:18 -0800
-Received: from fmsmsx612.amr.corp.intel.com ([10.18.126.92]) by
- fmsmsx612.amr.corp.intel.com ([10.18.126.92]) with mapi id 15.01.2308.020;
- Thu, 10 Feb 2022 14:09:18 -0800
-From:   "Saleem, Shiraz" <shiraz.saleem@intel.com>
-To:     Victor Erminpour <victor.erminpour@oracle.com>,
-        "Ismail, Mustafa" <mustafa.ismail@intel.com>
-CC:     "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "trivial@kernel.org" <trivial@kernel.org>
-Subject: RE: [PATCH] RDMA/irdma: Fix GCC 12 warning
-Thread-Topic: [PATCH] RDMA/irdma: Fix GCC 12 warning
-Thread-Index: AQHYHhXpIKGNtR9Qu0Cesy+E4ixcfayNV7Tw
-Date:   Thu, 10 Feb 2022 22:09:18 +0000
-Message-ID: <35240f17968242409a39427c303370df@intel.com>
-References: <1644453235-1437-1-git-send-email-victor.erminpour@oracle.com>
-In-Reply-To: <1644453235-1437-1-git-send-email-victor.erminpour@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.200.16
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 10 Feb 2022 17:09:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD36E7B;
+        Thu, 10 Feb 2022 14:09:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D474B8277B;
+        Thu, 10 Feb 2022 22:09:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E016C004E1;
+        Thu, 10 Feb 2022 22:09:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644530967;
+        bh=+4yvyX7PL/o1aUlKtZM+y5DyMbqKBp/T0joxRm70QJM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RYgDhrZ/8e10s7o31z/gfptXJi5wydGHjl4gOa69iXCSPzpg610dL/NEfD9AsiwPl
+         QXYc643G6SB54pPui5ZBRR46KAUopwFvIm1thxGsDDbK6YumH4PaYW7ubqKE76TAos
+         z69fPQyEWMzhXp7gGD0xiejG26y67gtjd+ShzGqcsid7T0JM0weZUkgFRUZAlxBwl/
+         2LH463pvowaZJM+36t/Sqd+WQWzupGDVTSWrNW5aCjmpFkI9J+iXXbZmYmzOTWtR+R
+         on7m3UcnQ1HzUUaLbPM7lWA4/WTEFYCTkHxjNCD/3V2iDt3g69tFESxDoA9hrdc0JN
+         cCCrD6IOFw8bQ==
+Date:   Thu, 10 Feb 2022 23:09:23 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Jan Dabros <jsd@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, hdegoede@redhat.com,
+        rrangel@chromium.org, mw@semihalf.com, jaz@semihalf.com,
+        upstream@semihalf.com, thomas.lendacky@amd.com,
+        alexander.deucher@amd.com, Nimesh.Easow@amd.com,
+        mario.limonciello@amd.com
+Subject: Re: [PATCH v4 2/2] i2c: designware: Add AMD PSP I2C bus support
+Message-ID: <YgWNE05eVK+LijL/@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Jan Dabros <jsd@semihalf.com>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, jarkko.nikula@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        hdegoede@redhat.com, rrangel@chromium.org, mw@semihalf.com,
+        jaz@semihalf.com, upstream@semihalf.com, thomas.lendacky@amd.com,
+        alexander.deucher@amd.com, Nimesh.Easow@amd.com,
+        mario.limonciello@amd.com
+References: <20220208141218.2049591-1-jsd@semihalf.com>
+ <20220208141218.2049591-3-jsd@semihalf.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="TzVXNhoD/5i1HVBQ"
+Content-Disposition: inline
+In-Reply-To: <20220208141218.2049591-3-jsd@semihalf.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,56 +69,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: [PATCH] RDMA/irdma: Fix GCC 12 warning
->=20
-> When building with automatic stack variable initialization, GCC 12 compla=
-ins about
-> variables defined outside of switch case statements.
-> Move the variable into the case that uses it, which silences the warning:
->=20
-> ./drivers/infiniband/hw/irdma/hw.c:270:47: error: statement will never be=
- executed [-
-> Werror=3Dswitch-unreachable]
->   270 |                         struct irdma_cm_node *cm_node;
->       |
->=20
-> ./drivers/infiniband/hw/irdma/utils.c:1215:50: error: statement will neve=
-r be executed
-> [-Werror=3Dswitch-unreachable]
->   1215 |                         struct irdma_gen_ae_info ae_info;
->        |
->=20
-> Signed-off-by: Victor Erminpour <victor.erminpour@oracle.com>
-> ---
->  drivers/infiniband/hw/irdma/hw.c    | 2 +-
->  drivers/infiniband/hw/irdma/utils.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/infiniband/hw/irdma/hw.c b/drivers/infiniband/hw/ird=
-ma/hw.c
-> index 89234d04cc65..a41a3b128d0d 100644
-> --- a/drivers/infiniband/hw/irdma/hw.c
-> +++ b/drivers/infiniband/hw/irdma/hw.c
-> @@ -267,8 +267,8 @@ static void irdma_process_aeq(struct irdma_pci_f *rf)
->  		}
->=20
->  		switch (info->ae_id) {
-> -			struct irdma_cm_node *cm_node;
->  		case IRDMA_AE_LLP_CONNECTION_ESTABLISHED:
-> +			struct irdma_cm_node *cm_node;
->  			cm_node =3D iwqp->cm_node;
->  			if (cm_node->accept_pend) {
->  				atomic_dec(&cm_node->listener-
 
-This doesn't compile.
+--TzVXNhoD/5i1HVBQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-drivers/infiniband/hw/irdma/hw.c: In function \u2018irdma_process_aeq\u2019=
-:
-drivers/infiniband/hw/irdma/hw.c:271:4: error: a label can only be part of =
-a statement and a declaration is not a statement
-  271 |    struct irdma_cm_node *cm_node;
+On Tue, Feb 08, 2022 at 03:12:18PM +0100, Jan Dabros wrote:
+> Implement an I2C controller sharing mechanism between the host (kernel)
+> and PSP co-processor on some platforms equipped with AMD Cezanne SoC.
+>=20
+> On these platforms we need to implement "software" i2c arbitration.
+> Default arbitration owner is PSP and kernel asks for acquire as well
+> as inform about release of the i2c bus via mailbox mechanism.
+>=20
+>             +---------+
+>  <- ACQUIRE |         |
+>   +---------|   CPU   |\
+>   |         |         | \      +----------+  SDA
 
-Seems like we are accommodating for gcc12 bug since this C code is legit?=20
+Applied to for-next, thanks! I fixed the following checkpatch warnings:
 
-Shiraz
+CHECK: Please don't use multiple blank lines
+#232: FILE: drivers/i2c/busses/i2c-designware-amdpsp.c:92:
++
++
 
+WARNING: braces {} are not necessary for single statement blocks
+#361: FILE: drivers/i2c/busses/i2c-designware-amdpsp.c:221:
++	if (ret) {
++		goto cleanup;
++	}
+
+Please also use checkpatch next time.
+
+
+--TzVXNhoD/5i1HVBQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIFjRMACgkQFA3kzBSg
+KbaLFQ/8DKZmeRjUSNfLZh6Kfbjk1tQaIbq2RFIvYtX6aDyJdr2WAfzwqYg4yDNZ
+2lP1LlqgaAJfbUjw7MucblsRy96TBS5qa8DfzgSQ7CHd1kJ+4gJTrJipozmyt/0d
+AWh88pnH+zTz0cfL9VXgzXMETLJl9NHar69mox5e9dunsEJphkr99sQCpAbVYgac
+EyuplJGGGhqyTV2dB9Twtb7jx4mIN4JGbpP0HUJwbVscqrzgzc2ChK5eCYkwagZ8
+H2+kLVs4DyEtmP0vI00xiB56k3xAXDCuj6TpZBq0W9kSUvDtrJHLVNi1yWbKomIH
+nGSiN+xqz7Pcy9Od+95mgVCgZ1QyfvbghIGG2MwKn5OWAfcoSTOE7nyouGw+9Hku
+ZcciytjnwuzMmFkWU3JRz/MoMrHljlekGE2mT1gnUL0DmVdumb5MZAskJurPTXYh
+0Gine2IZCLRgokO4Dm8Z0qZslaRzVrByMggnU36nLX4auqV08LdhS3w0QrfCRKZc
+lcvHdBNNoR2Uv1GnAbuhSRwHsDy4dcO4Ug1n7sVOJEZ5Dxmleqz8VME1RRFwjZhu
+QftepRfZu5VKLlX57ELq6iWylDeY1m8/SmaRQjQK842QqhTyrKX7t2gW+d/WcO/k
+MTiJ5tpwGsHqPdtbcJozfmGBPb5e2Qo6yPunc3xUAFDIVChYZTw=
+=gemd
+-----END PGP SIGNATURE-----
+
+--TzVXNhoD/5i1HVBQ--

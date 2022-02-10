@@ -2,151 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6F84B0784
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 08:50:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC184B0781
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 08:50:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236339AbiBJHt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 02:49:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38556 "EHLO
+        id S236583AbiBJHtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 02:49:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236596AbiBJHt4 (ORCPT
+        with ESMTP id S234424AbiBJHtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 02:49:56 -0500
-X-Greylist: delayed 39988 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 23:49:58 PST
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27921103F;
-        Wed,  9 Feb 2022 23:49:58 -0800 (PST)
-Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 10 Feb 2022 02:49:50 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C95103D
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 23:49:51 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 45DF71F382;
+        Thu, 10 Feb 2022 07:49:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1644479390; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EDHtHvuI0rX56upto/aTnkApaVCYeNt0NfBKbGzA2cw=;
+        b=eoyRrh0VWU/qJAoLWCl9fgGdtYB1r6YQ73vYM6K7VJQdi8D3ZgJQpKti2VXmaxHz6O82Tl
+        Mrz4lRsft7pzJHNn0OGo6csM5urkGCFprE9QJvBKirma9L6Jy5uie/5LuxR76/dvRk1x12
+        mVW46fCjSh7pKbD39YAlgCoLAMHPJ1E=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 933CBD7;
-        Wed,  9 Feb 2022 23:49:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1644479397;
-        bh=WDZKBxFLFY5R2xvQgKTR8shZQ5vRP9WinLJPjTOcMu8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MXaZ9DfhNmPah+A2PCKy7N4cdGmqbX+ggNr4LG7BNA+M65b1Pc4UwdvrEsQnnObs6
-         HgL/sLbPOLmGM6Nw5GlqPyuY4RSOpcCQv3d6gq+MRSaLLlwlgH8cFvd4TZivY4qUCU
-         cTswE3pW9lWkLMsAkIhxqYcvYjl/KVYGyU97O5Oo=
-Date:   Wed, 9 Feb 2022 23:49:47 -0800
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Konstantin Aladyshev <aladyshev22@gmail.com>,
-        Oskar Senft <osk@google.com>, openbmc@lists.ozlabs.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] serial: 8250_aspeed_vuart: add PORT_ASPEED_VUART port
- type
-Message-ID: <YgTDm5qKUJyzciR2@hatter.bewilderbeest.net>
-References: <20220209203414.23491-1-zev@bewilderbeest.net>
- <YgTBennInxX3fE3X@kroah.com>
+        by relay2.suse.de (Postfix) with ESMTPS id 38A70A3B8A;
+        Thu, 10 Feb 2022 07:49:49 +0000 (UTC)
+Date:   Thu, 10 Feb 2022 08:49:49 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Rik van Riel <riel@surriel.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 00/13] mm/munlock: rework of mlock+munlock page handling
+Message-ID: <YgTDnd9MihFS4cjD@dhcp22.suse.cz>
+References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
+ <YgPfX+/f0ksBpx6G@dhcp22.suse.cz>
+ <147388c6-eb7-5c58-79a-7a8279c27fd@google.com>
+ <YgQrpMpYiGZXqdbp@dhcp22.suse.cz>
+ <a650e078-25cb-14f8-4880-e575c937847@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YgTBennInxX3fE3X@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a650e078-25cb-14f8-4880-e575c937847@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 11:40:42PM PST, Greg Kroah-Hartman wrote:
->On Wed, Feb 09, 2022 at 12:34:14PM -0800, Zev Weiss wrote:
->> Commit 54da3e381c2b ("serial: 8250_aspeed_vuart: use UPF_IOREMAP to
->> set up register mapping") fixed a bug that had, as a side-effect,
->> prevented the 8250_aspeed_vuart driver from enabling the VUART's
->> FIFOs.  However, fixing that (and hence enabling the FIFOs) has in
->> turn revealed what appears to be a hardware bug in the ASPEED VUART in
->> which the host-side THRE bit doesn't get if the BMC-side receive FIFO
->> trigger level is set to anything but one byte.  This causes problems
->> for polled-mode writes from the host -- for example, Linux kernel
->> console writes proceed at a glacial pace (less than 100 bytes per
->> second) because the write path waits for a 10ms timeout to expire
->> after every character instead of being able to continue on to the next
->> character upon seeing THRE asserted.  (GRUB behaves similarly.)
->>
->> As a workaround, introduce a new port type for the ASPEED VUART that's
->> identical to PORT_16550A as it had previously been using, but with
->> UART_FCR_R_TRIG_00 instead to set the receive FIFO trigger level to
->> one byte, which (experimentally) seems to avoid the problematic THRE
->> behavior.
->>
->> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
->> Tested-by: Konstantin Aladyshev <aladyshev22@gmail.com>
->
->Do we need a "Fixes:" tag here as well?
+On Wed 09-02-22 14:59:19, Hugh Dickins wrote:
+[...]
+> Ah, but you're worrying about any previously-mapped pages when
+> VM_LOCKONFAULT is established: those ones get done by mlock_pte_range()
+> in 07/13, same as when VM_LOCKED is established - I checked again,
+> VM_LOCKONFAULT is not set without VM_LOCKED.
 
-I was wondering the same -- I left it out because it didn't seem like it 
-was strictly a bug in the earlier commit that's really being fixed per 
-se, but perhaps that's an overly pedantic distinction.  I can certainly 
-add it if you'd prefer.
+Right you are. mlock_fixup->mlock_vma_pages_range is the missing piece.
+This is called for both do_mlock and mlockall paths. So all good and
+thanks for the clarification!
 
->
->> ---
->>  drivers/tty/serial/8250/8250_aspeed_vuart.c | 2 +-
->>  drivers/tty/serial/8250/8250_port.c         | 8 ++++++++
->>  include/uapi/linux/serial_core.h            | 3 +++
->>  3 files changed, 12 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/tty/serial/8250/8250_aspeed_vuart.c b/drivers/tty/serial/8250/8250_aspeed_vuart.c
->> index 2350fb3bb5e4..c2cecc6f47db 100644
->> --- a/drivers/tty/serial/8250/8250_aspeed_vuart.c
->> +++ b/drivers/tty/serial/8250/8250_aspeed_vuart.c
->> @@ -487,7 +487,7 @@ static int aspeed_vuart_probe(struct platform_device *pdev)
->>  	port.port.irq = irq_of_parse_and_map(np, 0);
->>  	port.port.handle_irq = aspeed_vuart_handle_irq;
->>  	port.port.iotype = UPIO_MEM;
->> -	port.port.type = PORT_16550A;
->> +	port.port.type = PORT_ASPEED_VUART;
->>  	port.port.uartclk = clk;
->>  	port.port.flags = UPF_SHARE_IRQ | UPF_BOOT_AUTOCONF | UPF_IOREMAP
->>  		| UPF_FIXED_PORT | UPF_FIXED_TYPE | UPF_NO_THRE_TEST;
->> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
->> index 3b12bfc1ed67..973870ebff69 100644
->> --- a/drivers/tty/serial/8250/8250_port.c
->> +++ b/drivers/tty/serial/8250/8250_port.c
->> @@ -307,6 +307,14 @@ static const struct serial8250_config uart_config[] = {
->>  		.rxtrig_bytes	= {1, 32, 64, 112},
->>  		.flags		= UART_CAP_FIFO | UART_CAP_SLEEP,
->>  	},
->> +	[PORT_ASPEED_VUART] = {
->> +		.name		= "ASPEED VUART",
->> +		.fifo_size	= 16,
->> +		.tx_loadsz	= 16,
->> +		.fcr		= UART_FCR_ENABLE_FIFO | UART_FCR_R_TRIG_00,
->> +		.rxtrig_bytes	= {1, 4, 8, 14},
->> +		.flags		= UART_CAP_FIFO,
->> +	},
->>  };
->>
->>  /* Uart divisor latch read */
->> diff --git a/include/uapi/linux/serial_core.h b/include/uapi/linux/serial_core.h
->> index c4042dcfdc0c..cd11748833e6 100644
->> --- a/include/uapi/linux/serial_core.h
->> +++ b/include/uapi/linux/serial_core.h
->> @@ -274,4 +274,7 @@
->>  /* Freescale LINFlexD UART */
->>  #define PORT_LINFLEXUART	122
->>
->> +/* ASPEED AST2x00 virtual UART */
->> +#define PORT_ASPEED_VUART	123
->
->Why does this value have to be in a uapi header file?  What userspace
->tool is going to need this?
->
-
-I only put it there because that was where all the other port type 
-constants were defined, and wondered the same thing about the lot of 
-them.  Is there a userspace tool that makes use of any of these?
-
-
-Zev
-
+I will get back to this sometimes next week.
+-- 
+Michal Hocko
+SUSE Labs

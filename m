@@ -2,107 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B840A4B0763
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 08:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54FEC4B0767
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 08:43:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236327AbiBJHk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 02:40:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51764 "EHLO
+        id S236350AbiBJHnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 02:43:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236276AbiBJHk5 (ORCPT
+        with ESMTP id S229613AbiBJHnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 02:40:57 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B97C58
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 23:40:59 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nI44S-0000X2-8R; Thu, 10 Feb 2022 08:40:52 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nI44Q-00FfMG-KB; Thu, 10 Feb 2022 08:40:49 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nI44P-00EEQc-7S; Thu, 10 Feb 2022 08:40:49 +0100
-Date:   Thu, 10 Feb 2022 08:40:46 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     zhaoxiao <zhaoxiao@uniontech.com>
-Cc:     thierry.reding@gmail.com, lee.jones@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pwm: vt8500: Rename variable pointing to driver private
- data
-Message-ID: <20220210074046.vxskduecvgiehvnl@pengutronix.de>
-References: <20220209064755.7287-1-zhaoxiao@uniontech.com>
+        Thu, 10 Feb 2022 02:43:42 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0D2D71;
+        Wed,  9 Feb 2022 23:43:43 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvTJY4C9Xz4xNn;
+        Thu, 10 Feb 2022 18:43:41 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1644479021;
+        bh=GmNUgiuUI4wGUSUdmWY5dDIG/MzEogexYWKT6/FN4yY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=emDPeTRTCRm47PXxPT10cG4F0JiPSV2V+r4ZtTaGbpo2r/aYi2xX3zyHo4dBM3QAS
+         2jEmHAZdlJp4PN1Qe/fsGMqhLz/e26uj/9Goz7fgk8Xa9JeXVgSecijH31PNhG/Tcn
+         nhYKICNfJt4hO1gMOC898vgBDxbyQ5C7CLpxWRqpMFtZFN92CLr4hqyD6yHQMCQTiS
+         hdm58m1lcHrf1eKbfr8yW7q339Q648hCXFfRsnMHsp3/cMV0Ntgjv4LpiXZAiRruPw
+         4KQx5ZFCL+wsKLSUul480U6jZD8upDnOF0epJFIcu2N0NO6f/53+2abSvSo/4wk+Bo
+         O6x9LlXE6tJGQ==
+Date:   Thu, 10 Feb 2022 18:43:40 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Domenico Andreoli <domenico.andreoli@linux.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Tong Zhang <ztong0001@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: boottime warning from todays linux-next
+Message-ID: <20220210184340.7eba108a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fyuwep3g3kqdbwyv"
-Content-Disposition: inline
-In-Reply-To: <20220209064755.7287-1-zhaoxiao@uniontech.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/8XH3mUK8e..xQKie=tiiqmM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---fyuwep3g3kqdbwyv
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+--Sig_/8XH3mUK8e..xQKie=tiiqmM
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 09, 2022 at 02:47:55PM +0800, zhaoxiao wrote:
-> Status quo is that variables of type struct vt8500_chip * are named
-> "pwm", "chip" or "pc". The two formers are all not optimal because
+Hi all,
 
-There are no variables named "pwm" or "pc".
+My qemu boot of a powerpc pseries_le_defconfig kernel produced these
+kernel messages:
 
-> usually only struct pwm_device * variables are named "pwm" and "chip" is
-> usually used for variabled of type struct pwm_chip *.
->=20
-> So consistently use the same and non-conflicting name "pc".
+  CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc3 #2
+  Call Trace:
+  [c0000000073e3a80] [c0000000007bfd40] dump_stack_lvl+0x74/0xa8 (unreliabl=
+e)
+  [c0000000073e3ac0] [c00000000057e3dc] __register_sysctl_table+0x60c/0x9f0
+  [c0000000073e3bd0] [c000000002041170] init_fs_stat_sysctls+0x48/0x60
+  [c0000000073e3bf0] [c000000000012110] do_one_initcall+0x60/0x2d0
+  [c0000000073e3cd0] [c0000000020049f0] kernel_init_freeable+0x334/0x3dc
+  [c0000000073e3db0] [c000000000012710] kernel_init+0x30/0x1a0
+  [c0000000073e3e10] [c00000000000cd64] ret_from_kernel_thread+0x5c/0x64
 
-The intention is fine, but you missed a few instances that are named
-"vt8500". The statistic in mainline looks as follows:
+Presumably introduced by commit
 
-	$ git grep -o -h -E 'struct vt8500_chip \*[a-zA-Z0-9_]*' linus/master driv=
-ers/pwm/pwm-vt8500.c | sort | uniq -c
-	      2 struct vt8500_chip *chip
-	      5 struct vt8500_chip *vt8500
-
-(So there 2 variabled named "chip" (that you renamed to "pc") and 5 that
-are named "vt8500". I prefer to rename the "chip"s to "vt8500".
-
-Best regards
-Uwe
+  b42bc9a3c511 ("Fix regression due to "fs: move binfmt_misc sysctl to its =
+own file"")
 
 --=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Cheers,
+Stephen Rothwell
 
---fyuwep3g3kqdbwyv
-Content-Type: application/pgp-signature; name="signature.asc"
+--Sig_/8XH3mUK8e..xQKie=tiiqmM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEyBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIEwXsACgkQwfwUeK3K
-7AmJmwf4pLI+xky/sNclDRJg2Ypliqo7er293BmkpQULSlxeCTscd0Cl5DAuPzu5
-EqieGUMK5TWQXrCzmByT4/DZMdAVZKD/MS562QMmt31ZO+qyGFiT52iFAShqqDbv
-KHE48UL7Qx3z3lTl3BLW/kDAanm24DtzQA5q6jT3EWko1HGbmM94Lk6xOfj0CgG1
-I0seC3QwNugGJ79qjwkbb+bHCcMo2JGkMTFPPy7mibkfx5l5MnbPWLYU7uJHdR5w
-A7ynb5iknN/OxjrbVv0/r8B9+PWN0uOWRVOCNGiK6ZIIeN8YvhDxHVke1hNYnowP
-S41JpAYy9TdGGvSTYBy56A1KPeBh
-=EHRm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIEwiwACgkQAVBC80lX
+0Gwpkgf9FDhRS+oGJo17XZiR5FrLO60Ay9dM8qIytpbmnlTFvtVeLvArQxicdbK8
+Kh53VnqgHwF4j4l1D/wrH1tgLR5r3WT8/loOOkx7ZOBl+LyAhfEjzSLMjkVqFDJ4
+T0b/7Nbn1ckNZhqCNyk9YVcwC6YJ4Nvb8lQgt8DLc9AWjDJVi/KKO+lZMhEDca4E
+0ZKTrDgCOU7YTM2k/Tt8nvn46ZIavA9ilD9AXwkKMlLU7hpVh3y3I1jhQYxZy5M+
+fsNjv1LRTthpYaSZMC0gSq7H7RpWV8x30oNb0gEmzkTtvLVAJ1TrYCLnxGzvG4B0
+Dq7ZCs44FQO5uKgHRJZP0W3cRj26YQ==
+=dnGc
 -----END PGP SIGNATURE-----
 
---fyuwep3g3kqdbwyv--
+--Sig_/8XH3mUK8e..xQKie=tiiqmM--

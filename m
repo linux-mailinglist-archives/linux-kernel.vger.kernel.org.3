@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A0A4B10E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4528E4B10EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:51:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243206AbiBJOuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:50:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38652 "EHLO
+        id S243226AbiBJOvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:51:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238303AbiBJOux (ORCPT
+        with ESMTP id S238303AbiBJOvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:50:53 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C744EA1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:50:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644504654; x=1676040654;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=6RsubzXM+GzN9yvnRsU2F1Ujjq8hUfNBS47UtXZzmA8=;
-  b=Q6PTdEtM3Y3KzB0oswCJReww5/sxvtVF9Lli07JWMUPLEavRNgI1nrL4
-   PY6N0tAJWmD6cJ41zd4dEaYQN9ykooElhNinQLlEB6P182BZ1DPOTUy2S
-   W8k45EaUIsQcH8cDWNEoWcSiQkE+lHEnGga6caFgf71iF0iY2VU1+zKYb
-   jAUOZCS2zJncyWCuGAcfpoqXxIAg6+Fojl+x+88VI6eWcourHb1AK5nj9
-   bpbQy0hAM9d5hfgk6qsKPQOwDokCTX3P5d/5tc7XOdXUBvXKWM2H6fBXw
-   IBvByf90EQdhD8dSAEaN59pUhTgRuiJzaxkmgWv92MsjZV7Fn6sUvOw8q
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="335921401"
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="335921401"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 06:50:54 -0800
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="679167899"
-Received: from barabano-mobl.ccr.corp.intel.com (HELO [10.252.41.18]) ([10.252.41.18])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 06:50:51 -0800
-Message-ID: <9d1ed0e0-e69e-e725-b820-4a1c04ecdf4c@linux.intel.com>
-Date:   Thu, 10 Feb 2022 16:50:50 +0200
+        Thu, 10 Feb 2022 09:51:09 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67F2EA1;
+        Thu, 10 Feb 2022 06:51:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 725C361AC3;
+        Thu, 10 Feb 2022 14:51:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A231C004E1;
+        Thu, 10 Feb 2022 14:51:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644504669;
+        bh=lRD3lBDFEjNGr8K6VaXM+s1gigm4CwkCeahOEMFr7wI=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=KMZqYCBbcthMl1mXPaGgp3+weM0K5VQvzyDdObE8aENPyWjeaAK/cWrH/bEV9yujA
+         BndPt2/E0Kdtf2JHJKPGO7K343yIuOlkBm1bWhltGfDLYWnWOdR14AMw9lmyDl5nE7
+         tACxdqbHzYrRGCsBRfRUq4B0SapvMn8dgJanC8aNzBD0BHURduPhVDaf5bpZF+WV9/
+         npsY+Nbnnvnwm3j44WnYbu3FMdoqdRS6FRp/pH7pbSh2JyOLl9SDDnaOG3B4Q0KsQj
+         aAct2uel6hwPigln7QwJB0ASNo/qj4idSNBLgXdLF2NmmHjasrkUI1rMe+uc8weZEg
+         bkMYhlD2Bl9sQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     =?utf-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-mmc@vger.kernel.org,
+        Pali =?utf-8?Q?Roh?= =?utf-8?Q?=C3=A1r?= <pali@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v9 05/24] wfx: add main.c/main.h
+References: <20220111171424.862764-1-Jerome.Pouiller@silabs.com>
+        <2898137.rlL8Y2EFai@pc-42> <87r18a3irb.fsf@kernel.org>
+        <4055223.VTxhiZFAix@pc-42>
+Date:   Thu, 10 Feb 2022 16:51:03 +0200
+In-Reply-To: <4055223.VTxhiZFAix@pc-42> (=?utf-8?B?IkrDqXLDtG1l?=
+ Pouiller"'s message of "Thu,
+        10 Feb 2022 15:41:39 +0100")
+Message-ID: <87ee4a3hd4.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 9/9] ASoC: SOF: Convert the generic probe support to SOF
- client
-Content-Language: en-US
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        kai.vehmanen@linux.intel.com, linux-kernel@vger.kernel.org,
-        tiwai@suse.com, ranjani.sridharan@linux.intel.com,
-        lgirdwood@gmail.com, fred.oh@linux.intel.com, daniel.baluta@nxp.com
-References: <20220210105519.19795-1-peter.ujfalusi@linux.intel.com>
- <20220210105519.19795-10-peter.ujfalusi@linux.intel.com>
- <YgUZKgPacRNrFk/e@sirena.org.uk>
- <cc1598d7-5029-197c-9abc-49043fdc11ed@linux.intel.com>
-In-Reply-To: <cc1598d7-5029-197c-9abc-49043fdc11ed@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,38 +65,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+J=C3=A9r=C3=B4me Pouiller <jerome.pouiller@silabs.com> writes:
 
+> On Thursday 10 February 2022 15:20:56 CET Kalle Valo wrote:
+>>=20
+>> J=C3=A9r=C3=B4me Pouiller <jerome.pouiller@silabs.com> writes:
+>>=20
+>> > Kalle, is this function what you expected? If it is right for you, I am
+>> > going to send it to the staging tree.
+>>=20
+>> Looks better, but I don't get why '{' and '}' are still needed. Ah, does
+>> the firmware require to have them?
+>
+> Indeed. If '{' and '}' are not present, I guarantee the firmware will ret=
+urn
+> an error (or assert). However, I am more confident in the driver than in =
+the
+> firmware to report errors to the user.
 
-On 10/02/2022 16:41, Péter Ujfalusi wrote:
-> 
-> 
-> On 10/02/2022 15:54, Mark Brown wrote:
->> On Thu, Feb 10, 2022 at 12:55:19PM +0200, Peter Ujfalusi wrote:
->>> Add a new client driver for probes support and move
->>> all the probes-related code from the core to the
->>> client driver.
->>
->> This breaks an x86 allmodconfig build:
->>
->> /mnt/kernel/sound/soc/sof/compress.c: In function 'create_page_table':
->> /mnt/kernel/sound/soc/sof/compress.c:87:9: error: implicit declaration of function 'snd_sof_create_page_table'; did you mean 'create_page_table'? [-Werror=implicit-function-declaration]
->>    87 |  return snd_sof_create_page_table(component->dev, dmab,
->>       |         ^~~~~~~~~~~~~~~~~~~~~~~~~
->>       |         create_page_table
-> 
-> Interesting, we have this under constant builds for months and we
-> certainly are building things as modules.
-> 
-> Let me check and fix this.
+Agreed.
 
-This patch never got reviewed in SOF:
-ASoC: SOF: compr: Add compress ops implementation
+> If there is no other comment, I am going to:
+>   - submit this change to the staging tree
 
-and this introduced the use of snd_sof_create_page_table()
+Good, it's important that you get all your changes to the staging tree
+before the next merge window.
 
-I don't sof-compress enabled, only imx and mediatek have it enabled.
+>   - publish the tool that generate this new format
+>   - submit the PDS files referenced in bus_{sdio,spi}.c to linux-firmware
+>   - send the v10 of this PR
 
-Daniel, were there any reason to not send this to sof-dev prior?
+I'm not sure if there's a need to send a full patchset anymore? We are
+so close now anyway and the full driver is available from the staging
+tree, at least that's what I will use from now on when reviewing wfx.
 
--- 
-Péter
+What about the Device Tree bindings? That needs to be acked by the DT
+maintainers, so that's good to submit as a separate patch for review.
+
+--=20
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
+hes

@@ -2,117 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB574B1071
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E91A4B1076
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242956AbiBJOa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:30:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45360 "EHLO
+        id S242967AbiBJOb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:31:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242945AbiBJOa1 (ORCPT
+        with ESMTP id S236150AbiBJObz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:30:27 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01109B92;
-        Thu, 10 Feb 2022 06:30:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644503428; x=1676039428;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=raoLlF1RJ+lMrQ5oJTeQR9ZgMBhNkETVNbVQPX0SD0k=;
-  b=PUlXK2cM5gIB6Ghiexz2EZ+hKJ8FdBzXpVfkwM90FNJJ/z3ZwOqdsngm
-   P1zd23rZmW/Fl2P/FCveIowBjXDm4qqBrXv7pxBG9mma1p4Vu7Y5Amp+P
-   eV+FrdW2LkjoduwckzWMTEoWUq0Q3TKbEcfJjcT+HXcpmmN39emYduW09
-   qBnGP5Fg4+Vv3xc6EaRGJOSmsZZgi8L1KJN8NaU5wZIJN+KbZisS84T4N
-   Sw/n8s1IYklkcBjBsWY0oH+nSxdJyexgiKj8dSzrfdjw/ZYoG4trxP6Pa
-   TPlmuB2sRcYwTrUiB2eXRFk+LbtHjJALW9yI18ox6b+YIKFHIdoLrlEYD
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="310238769"
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="310238769"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 06:30:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="679163361"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 10 Feb 2022 06:30:23 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 10 Feb 2022 16:30:23 +0200
-Date:   Thu, 10 Feb 2022 16:30:23 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, kyletso@google.com,
-        jackp@codeaurora.org, andy.shevchenko@gmail.com,
-        unixbhaskar@gmail.com, subbaram@codeaurora.org,
-        mrana@codeaurora.org,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] usb: typec: ucsi: possible deadlock in ucsi_pr_swap() and
- ucsi_handle_connector_change()
-Message-ID: <YgUhf9o5F98dZyxn@kuha.fi.intel.com>
-References: <037de7ac-e210-bdf5-ec7a-8c0c88a0be20@gmail.com>
- <YgPQB9BYJcDzbd02@kuha.fi.intel.com>
- <43d6c3b5-17e6-63a8-21fa-3ff9f478ada7@gmail.com>
+        Thu, 10 Feb 2022 09:31:55 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1F9B37;
+        Thu, 10 Feb 2022 06:31:55 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 905F61F465B9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644503514;
+        bh=vnMYZtzLYUlEjqvEffkcsiOlW+x9zxo48b5WEnCoJBc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=VJnEf5dXMaVgu7QFE/IW21kmLJ+XXHAjjPtyT0rtTTImZtBbVRXTV0mVIUz9Xgib6
+         isHyrOcpGK9FfvZC+KidtsgsIu4DGevJQoms3+BKSUi90ikZQSkKp/ExbB1gEFkOeG
+         /44ffKLTzSQPg6N27CouFvUb2McyUj+yogaNXgHFTKhW/ode6pMy4JdkwwiIp+Iv8c
+         44cpJbZuu/8e4+B2P7pCEvofXYC1hmg/4rCMcg4pCai8ylMNiC7g1M6aPea2MxspvM
+         pP43/V7+J7RI5JQ8T0gpMMs+VmIwtZvdFvxwzAWH5qwFu8lvPm22/NB4rt/L5pVxTV
+         y8gLMNi/amv2w==
+Message-ID: <06446828-b589-5d7a-0e9f-25f6321e0da6@collabora.com>
+Date:   Thu, 10 Feb 2022 15:31:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <43d6c3b5-17e6-63a8-21fa-3ff9f478ada7@gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v2] PCI: mediatek: Clear interrupt status before
+ dispatching handler
+Content-Language: en-US
+To:     qizhong cheng <qizhong.cheng@mediatek.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        stable@vger.kernel.org, chuanjia.liu@mediatek.com
+References: <20220210012125.6420-1-qizhong.cheng@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220210012125.6420-1-qizhong.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 10:24:42AM +0800, Jia-Ju Bai wrote:
+Il 10/02/22 02:21, qizhong cheng ha scritto:
+> We found a failure when used iperf tool for wifi performance testing,
+> there are some MSIs received while clearing the interrupt status,
+> these MSIs cannot be serviced.
 > 
+> The interrupt status can be cleared even the MSI status still remaining,
+> as an edge-triggered interrupts, its interrupt status should be cleared
+> before dispatching to the handler of device.
 > 
-> On 2022/2/9 22:30, Heikki Krogerus wrote:
-> > On Wed, Feb 09, 2022 at 11:50:57AM +0800, Jia-Ju Bai wrote:
-> > > Hello,
-> > > 
-> > > My static analysis tool reports a possible deadlock in the ucsi driver in
-> > > Linux 5.16:
-> > > 
-> > > ucsi_pr_swap()
-> > >    mutex_lock(&con->lock); --> Line 962 (Lock A)
-> > >    wait_for_completion_timeout(&con->complete, ...) --> Line 981 (Wait X)
-> > > 
-> > > ucsi_handle_connector_change()
-> > >    mutex_lock(&con->lock); --> Line 763 (Lock A)
-> > >    complete(&con->complete); --> Line 782 (Wake X)
-> > >    complete(&con->complete); --> Line 807 (Wake X)
-> > > 
-> > > When ucsi_pr_swap() is executed, "Wait X" is performed by holding "Lock A".
-> > > If ucsi_handle_connector_change() is executed at this time, "Wake X" cannot
-> > > be performed to wake up "Wait X" in ucsi_handle_connector_change(), because
-> > > "Lock A" has been already held by ucsi_handle_connector_change(), causing a
-> > > possible deadlock.
-> > > I find that "Wait X" is performed with a timeout, to relieve the possible
-> > > deadlock; but I think this timeout can cause inefficient execution.
-> > > 
-> > > I am not quite sure whether this possible problem is real.
-> > > Any feedback would be appreciated, thanks :)
-> > This is probable a regression from commit ad74b8649bea ("usb: typec:
-> > ucsi: Preliminary support for alternate modes"). Can you test does
-> > this patch fix the issue (attached)?
-> 
-> Hi Heikki,
-> 
-> Thanks for the reply and patch.
-> After the patch is used, my tool does not report this deadlock in the ucsi
-> driver.
-> Thus, I think this patch should be okay to fix the deadlock :)
+> Signed-off-by: qizhong cheng <qizhong.cheng@mediatek.com>
 
-Thanks for testing it. I'll tag you as the reporter and tester in the
-patch.
+Hello Qizhong,
 
-Br,
+This commit is fixing an issue, which means that you *have to* add a proper
+Fixes tag.
 
--- 
-heikki
+I believe that this is fixing commit
+43e6409db64d ("PCI: mediatek: Add MSI support for MT2712 and MT7622").
+
+Please add the tag and send a v3, after which:
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+
+> ---
+> v2:
+>   - Update the subject line.
+>   - Improve the commit log and code comments.
+> 
+>   drivers/pci/controller/pcie-mediatek.c | 9 +++++++--
+>   1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pcie-mediatek.c b/drivers/pci/controller/pcie-mediatek.c
+> index 2f3f974977a3..2856d74b2513 100644
+> --- a/drivers/pci/controller/pcie-mediatek.c
+> +++ b/drivers/pci/controller/pcie-mediatek.c
+> @@ -624,12 +624,17 @@ static void mtk_pcie_intr_handler(struct irq_desc *desc)
+>   		if (status & MSI_STATUS){
+>   			unsigned long imsi_status;
+>   
+> +			/*
+> +			 * The interrupt status can be cleared even the MSI
+> +			 * status still remaining, hence as an edge-triggered
+> +			 * interrupts, its interrupt status should be cleared
+> +			 * before dispatching handler.
+> +			 */
+> +			writel(MSI_STATUS, port->base + PCIE_INT_STATUS);
+>   			while ((imsi_status = readl(port->base + PCIE_IMSI_STATUS))) {
+>   				for_each_set_bit(bit, &imsi_status, MTK_MSI_IRQS_NUM)
+>   					generic_handle_domain_irq(port->inner_domain, bit);
+>   			}
+> -			/* Clear MSI interrupt status */
+> -			writel(MSI_STATUS, port->base + PCIE_INT_STATUS);
+>   		}
+>   	}
+>   
+> 
+
+

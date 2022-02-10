@@ -2,246 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE774B0A35
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:03:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0194B0A39
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:04:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238564AbiBJKD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 05:03:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50886 "EHLO
+        id S239279AbiBJKEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 05:04:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237267AbiBJKDY (ORCPT
+        with ESMTP id S234215AbiBJKEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 05:03:24 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A77C55;
-        Thu, 10 Feb 2022 02:03:24 -0800 (PST)
-Date:   Thu, 10 Feb 2022 10:03:19 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644487401;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zc0xH8itYv/4XoUiMkxXEZ2R9+uDkizmJaSXvpSeCIo=;
-        b=34yaGaMrytbAQWmX09fJ0plL77KI4TQlAjY5yjLq8u4ATrk1WcG1+bDQAmd/DbtFNuksS+
-        7NPsKzihhbUGEPNavj1XVkuCfsU9vqPOYcNfO1nF21qjFOmSKPAJW3nbVps2yIOXOJXLfh
-        i/uNllBsItEnilaNKXY22ByEtCNVCK5QKbMKhw/aTGj/sv1TlJeLg6maLszjJYm0JUDRO/
-        u6jqnZhMqywKMw6w8VPbrnh8elZkijrr6mkuZQzcXGkESfXve1cPWIyk/s16OMozMWffU2
-        9zpoCcnEMAvyCGlLV28JCkCn4PT3DpAvLj8AH17Lkt9i+DoiyKvR8cqZlVk07g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644487401;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zc0xH8itYv/4XoUiMkxXEZ2R9+uDkizmJaSXvpSeCIo=;
-        b=PfnEDuSk2T2tSP6sNd9i2Zf5HMW9EPkMMzspNxQDKepGJRXFuqDP4aMYI0tx2I6PQ4FdT4
-        JVlWG5BsUGT4tbAg==
-From:   "tip-bot2 for Nick Desaulniers" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/urgent] x86/bug: Merge annotate_reachable() into
- _BUG_FLAGS() asm
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220202205557.2260694-1-ndesaulniers@google.com>
-References: <20220202205557.2260694-1-ndesaulniers@google.com>
+        Thu, 10 Feb 2022 05:04:00 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38595CF2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:04:01 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nI6Im-00011D-CV; Thu, 10 Feb 2022 11:03:48 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nI6Ii-00FgSL-CN; Thu, 10 Feb 2022 11:03:43 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nI6Ig-00EMKr-Tm; Thu, 10 Feb 2022 11:03:42 +0100
+Date:   Thu, 10 Feb 2022 11:03:42 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Song Chen <chensong_2000@189.cn>
+Cc:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, lee.jones@linaro.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
+Subject: Re: [PATCH] staging: greybus: introduce pwm_ops::apply
+Message-ID: <20220210100342.q2t4ykgyymjzr3fj@pengutronix.de>
+References: <1644483902-9200-1-git-send-email-chensong_2000@189.cn>
 MIME-Version: 1.0
-Message-ID: <164448739969.16921.718126712933524460.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="c2eicqlj24ajfowz"
+Content-Disposition: inline
+In-Reply-To: <1644483902-9200-1-git-send-email-chensong_2000@189.cn>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the objtool/urgent branch of tip:
 
-Commit-ID:     bfb1a7c91fb7758273b4a8d735313d9cc388b502
-Gitweb:        https://git.kernel.org/tip/bfb1a7c91fb7758273b4a8d735313d9cc388b502
-Author:        Nick Desaulniers <ndesaulniers@google.com>
-AuthorDate:    Wed, 02 Feb 2022 12:55:53 -08:00
-Committer:     Josh Poimboeuf <jpoimboe@redhat.com>
-CommitterDate: Wed, 02 Feb 2022 14:41:04 -08:00
+--c2eicqlj24ajfowz
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-x86/bug: Merge annotate_reachable() into _BUG_FLAGS() asm
+On Thu, Feb 10, 2022 at 05:05:02PM +0800, Song Chen wrote:
+> Introduce apply in pwm_ops to replace legacy operations,
+> like enable, disable, config and set_polarity.
+>=20
+> Signed-off-by: Song Chen <chensong_2000@189.cn>
+> ---
+>  drivers/staging/greybus/pwm.c | 46 +++++++++++++++--------------------
+>  1 file changed, 19 insertions(+), 27 deletions(-)
+>=20
+> diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
+> index 891a6a672378..e1889cf979b2 100644
+> --- a/drivers/staging/greybus/pwm.c
+> +++ b/drivers/staging/greybus/pwm.c
+> @@ -204,43 +204,35 @@ static void gb_pwm_free(struct pwm_chip *chip, stru=
+ct pwm_device *pwm)
+>  	gb_pwm_deactivate_operation(pwmc, pwm->hwpwm);
+>  }
+> =20
+> -static int gb_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
+> -			 int duty_ns, int period_ns)
+> -{
+> -	struct gb_pwm_chip *pwmc =3D pwm_chip_to_gb_pwm_chip(chip);
+> -
+> -	return gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_ns, period_ns);
+> -};
+> -
+> -static int gb_pwm_set_polarity(struct pwm_chip *chip, struct pwm_device =
+*pwm,
+> -			       enum pwm_polarity polarity)
+> +static int gb_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+> +			const struct pwm_state *state)
+>  {
+> +	int ret;
+>  	struct gb_pwm_chip *pwmc =3D pwm_chip_to_gb_pwm_chip(chip);
+> =20
+> -	return gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, polarity);
+> -};
+> -
+> -static int gb_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
+> -{
+> -	struct gb_pwm_chip *pwmc =3D pwm_chip_to_gb_pwm_chip(chip);
+> +	/* set period and duty cycle*/
+> +	ret =3D gb_pwm_config_operation(pwmc, pwm->hwpwm, state->duty_cycle, st=
+ate->period);
 
-In __WARN_FLAGS(), we had two asm statements (abbreviated):
+gb_pwm_config_operation's 3rd parameter is an u32, so you're loosing
+bits here as state->duty_cycle is a u64. Ditto for period.
 
-  asm volatile("ud2");
-  asm volatile(".pushsection .discard.reachable");
+Also it would be nice if you go from
 
-These pair of statements are used to trigger an exception, but then help
-objtool understand that for warnings, control flow will be restored
-immediately afterwards.
+	.duty_cycle =3D A, .period =3D B, .enabled =3D 1
 
-The problem is that volatile is not a compiler barrier. GCC explicitly
-documents this:
+to
 
-> Note that the compiler can move even volatile asm instructions
-> relative to other code, including across jump instructions.
+	.duty_cycle =3D C, .period =3D D, .enabled =3D 0
 
-Also, no clobbers are specified to prevent instructions from subsequent
-statements from being scheduled by compiler before the second asm
-statement. This can lead to instructions from subsequent statements
-being emitted by the compiler before the second asm statement.
+that C/D wasn't visible on the output pin. So please disable earlier
+(but keep enable at the end).
 
-Providing a scheduling model such as via -march= options enables the
-compiler to better schedule instructions with known latencies to hide
-latencies from data hazards compared to inline asm statements in which
-latencies are not estimated.
+Best regards
+Uwe
 
-If an instruction gets scheduled by the compiler between the two asm
-statements, then objtool will think that it is not reachable, producing
-a warning.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-To prevent instructions from being scheduled in between the two asm
-statements, merge them.
+--c2eicqlj24ajfowz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Also remove an unnecessary unreachable() asm annotation from BUG() in
-favor of __builtin_unreachable(). objtool is able to track that the ud2
-from BUG() terminates control flow within the function.
+-----BEGIN PGP SIGNATURE-----
 
-Link: https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile
-Link: https://github.com/ClangBuiltLinux/linux/issues/1483
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/20220202205557.2260694-1-ndesaulniers@google.com
----
- arch/x86/include/asm/bug.h | 20 +++++++++++---------
- include/linux/compiler.h   | 21 +++++----------------
- 2 files changed, 16 insertions(+), 25 deletions(-)
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIE4vsACgkQwfwUeK3K
+7AkEpgf+NdtDJKYavGime3N4rxugOTI4u9kbDL4z7GiAYjXWb3aqvB8ZsjirVc7i
+o5Iyf7fCb0IP/4Vc2N6ndkRlBlr8FGcsgC7MlRq3T89Z5eJvpbAlWzIxFovJclmE
+9TwGI0GHXH8It4I4p2hB0mtSwwyfuwB6vj+v8kEv+13niJA3MuIFaWWW5SayW0Ep
+HF4ovCusOjE7Q3L7r8ebGNUoLz3Ku0u8EPoqc5/gnqUz9lmGrwpPB/rGJerJyLuq
+RCDmQSB2+/ChdzV9Lb8adWrDv81fnxi7Va9wTwqFPXR/cAXkko9gGow/RioUL3g0
+df5QN/eWXnu0TUW5XBEv2l3NvffGAw==
+=MnRK
+-----END PGP SIGNATURE-----
 
-diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
-index 84b8753..bab883c 100644
---- a/arch/x86/include/asm/bug.h
-+++ b/arch/x86/include/asm/bug.h
-@@ -22,7 +22,7 @@
- 
- #ifdef CONFIG_DEBUG_BUGVERBOSE
- 
--#define _BUG_FLAGS(ins, flags)						\
-+#define _BUG_FLAGS(ins, flags, extra)					\
- do {									\
- 	asm_inline volatile("1:\t" ins "\n"				\
- 		     ".pushsection __bug_table,\"aw\"\n"		\
-@@ -31,7 +31,8 @@ do {									\
- 		     "\t.word %c1"        "\t# bug_entry::line\n"	\
- 		     "\t.word %c2"        "\t# bug_entry::flags\n"	\
- 		     "\t.org 2b+%c3\n"					\
--		     ".popsection"					\
-+		     ".popsection\n"					\
-+		     extra						\
- 		     : : "i" (__FILE__), "i" (__LINE__),		\
- 			 "i" (flags),					\
- 			 "i" (sizeof(struct bug_entry)));		\
-@@ -39,14 +40,15 @@ do {									\
- 
- #else /* !CONFIG_DEBUG_BUGVERBOSE */
- 
--#define _BUG_FLAGS(ins, flags)						\
-+#define _BUG_FLAGS(ins, flags, extra)					\
- do {									\
- 	asm_inline volatile("1:\t" ins "\n"				\
- 		     ".pushsection __bug_table,\"aw\"\n"		\
- 		     "2:\t" __BUG_REL(1b) "\t# bug_entry::bug_addr\n"	\
- 		     "\t.word %c0"        "\t# bug_entry::flags\n"	\
- 		     "\t.org 2b+%c1\n"					\
--		     ".popsection"					\
-+		     ".popsection\n"					\
-+		     extra						\
- 		     : : "i" (flags),					\
- 			 "i" (sizeof(struct bug_entry)));		\
- } while (0)
-@@ -55,7 +57,7 @@ do {									\
- 
- #else
- 
--#define _BUG_FLAGS(ins, flags)  asm volatile(ins)
-+#define _BUG_FLAGS(ins, flags, extra)  asm volatile(ins)
- 
- #endif /* CONFIG_GENERIC_BUG */
- 
-@@ -63,8 +65,8 @@ do {									\
- #define BUG()							\
- do {								\
- 	instrumentation_begin();				\
--	_BUG_FLAGS(ASM_UD2, 0);					\
--	unreachable();						\
-+	_BUG_FLAGS(ASM_UD2, 0, "");				\
-+	__builtin_unreachable();				\
- } while (0)
- 
- /*
-@@ -75,9 +77,9 @@ do {								\
-  */
- #define __WARN_FLAGS(flags)					\
- do {								\
-+	__auto_type f = BUGFLAG_WARNING|(flags);		\
- 	instrumentation_begin();				\
--	_BUG_FLAGS(ASM_UD2, BUGFLAG_WARNING|(flags));		\
--	annotate_reachable();					\
-+	_BUG_FLAGS(ASM_UD2, f, ASM_REACHABLE);			\
- 	instrumentation_end();					\
- } while (0)
- 
-diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-index 429dceb..0f7fd20 100644
---- a/include/linux/compiler.h
-+++ b/include/linux/compiler.h
-@@ -117,14 +117,6 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
-  */
- #define __stringify_label(n) #n
- 
--#define __annotate_reachable(c) ({					\
--	asm volatile(__stringify_label(c) ":\n\t"			\
--		     ".pushsection .discard.reachable\n\t"		\
--		     ".long " __stringify_label(c) "b - .\n\t"		\
--		     ".popsection\n\t" : : "i" (c));			\
--})
--#define annotate_reachable() __annotate_reachable(__COUNTER__)
--
- #define __annotate_unreachable(c) ({					\
- 	asm volatile(__stringify_label(c) ":\n\t"			\
- 		     ".pushsection .discard.unreachable\n\t"		\
-@@ -133,24 +125,21 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
- })
- #define annotate_unreachable() __annotate_unreachable(__COUNTER__)
- 
--#define ASM_UNREACHABLE							\
--	"999:\n\t"							\
--	".pushsection .discard.unreachable\n\t"				\
--	".long 999b - .\n\t"						\
-+#define ASM_REACHABLE							\
-+	"998:\n\t"							\
-+	".pushsection .discard.reachable\n\t"				\
-+	".long 998b - .\n\t"						\
- 	".popsection\n\t"
- 
- /* Annotate a C jump table to allow objtool to follow the code flow */
- #define __annotate_jump_table __section(".rodata..c_jump_table")
- 
- #else
--#define annotate_reachable()
- #define annotate_unreachable()
-+# define ASM_REACHABLE
- #define __annotate_jump_table
- #endif
- 
--#ifndef ASM_UNREACHABLE
--# define ASM_UNREACHABLE
--#endif
- #ifndef unreachable
- # define unreachable() do {		\
- 	annotate_unreachable();		\
+--c2eicqlj24ajfowz--

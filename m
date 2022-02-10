@@ -2,199 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257B94B1050
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 885ED4B1057
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242894AbiBJOYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:24:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42072 "EHLO
+        id S242897AbiBJO0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:26:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237743AbiBJOYc (ORCPT
+        with ESMTP id S237743AbiBJO0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:24:32 -0500
+        Thu, 10 Feb 2022 09:26:20 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEF021B;
-        Thu, 10 Feb 2022 06:24:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2A121B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:26:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BF4CB8242B;
-        Thu, 10 Feb 2022 14:24:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 136FBC004E1;
-        Thu, 10 Feb 2022 14:24:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644503070;
-        bh=vlIFPYvkjSkOpL2HPlt0rUGcV+Ocy5LzZaD62R1oaS8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qnchhmCVQZ6NnnxeaYiw/Ou2N+c77xr6j1hxt35A8TA/DycP5FN/In/sgxdJBdD3J
-         j2JSx80DKyvmgHCpV0A0eggRepPZ/fGmd5Cqr6LWGt2AOVDQz9sbQZUvdZxxcFqruR
-         VImkB79OFFqH0pcI+wKyMET+zE+u7uUmCopaCwro=
-Date:   Thu, 10 Feb 2022 15:24:27 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shanker Donthineni <shankerd@codeaurora.org>,
-        Adam Wallis <awallis@codeaurora.org>,
-        Timur Tabi <timur@codeaurora.org>,
-        Elliot Berman <eberman@codeaurora.org>
-Subject: Re: [PATCHv4] tty: hvc: dcc: Bind driver to CPU core0 for reads and
- writes
-Message-ID: <YgUgG/rjIGEvB8pB@kroah.com>
-References: <20220210135632.24638-1-quic_saipraka@quicinc.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0C53B8204B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:26:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10F6CC004E1;
+        Thu, 10 Feb 2022 14:26:18 +0000 (UTC)
+Date:   Thu, 10 Feb 2022 09:26:17 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] tracing: uninline trace_trigger_soft_disabled()
+Message-ID: <20220210092617.2bb40912@gandalf.local.home>
+In-Reply-To: <38191e96ec6d331662ee7278e26edb79cdf95402.1644482771.git.christophe.leroy@csgroup.eu>
+References: <38191e96ec6d331662ee7278e26edb79cdf95402.1644482771.git.christophe.leroy@csgroup.eu>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220210135632.24638-1-quic_saipraka@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 07:26:32PM +0530, Sai Prakash Ranjan wrote:
-> From: Shanker Donthineni <shankerd@codeaurora.org>
+On Thu, 10 Feb 2022 09:47:52 +0100
+Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
+
+> On a ppc32 build with CONFIG_CC_OPTIMISE_FOR_SIZE,
+> trace_trigger_soft_disabled() appears more than 50 times in vmlinux.
 > 
-> Some debuggers, such as Trace32 from Lauterbach GmbH, do not handle
-> reads/writes from/to DCC on secondary cores. Each core has its
-> own DCC device registers, so when a core reads or writes from/to DCC,
-> it only accesses its own DCC device. Since kernel code can run on
-> any core, every time the kernel wants to write to the console, it
-> might write to a different DCC.
+> That function is rather big for an inlined function, and
+> it doesn't benefit much from inlining as its only parameter
+> is a pointer to a struct in memory:
+
+The number of parameters is not the reason for it being inlined. It's in a
+*very* hot path, and a function call causes a noticeable performance hit.
+
+
 > 
-> In SMP mode, Trace32 creates multiple windows, and each window shows
-> the DCC output only from that core's DCC. The result is that console
-> output is either lost or scattered across windows.
+> 	c003df60 <trace_trigger_soft_disabled>:
+> 	c003df60:	94 21 ff f0 	stwu    r1,-16(r1)
+> 	c003df64:	7c 08 02 a6 	mflr    r0
+> 	c003df68:	90 01 00 14 	stw     r0,20(r1)
+> 	c003df6c:	bf c1 00 08 	stmw    r30,8(r1)
+> 	c003df70:	83 e3 00 24 	lwz     r31,36(r3)
+> 	c003df74:	73 e9 01 00 	andi.   r9,r31,256
+> 	c003df78:	41 82 00 10 	beq     c003df88 <trace_trigger_soft_disabled+0x28>
+> 	c003df7c:	38 60 00 00 	li      r3,0
+> 	c003df80:	39 61 00 10 	addi    r11,r1,16
+> 	c003df84:	4b fd 60 ac 	b       c0014030 <_rest32gpr_30_x>
+> 	c003df88:	73 e9 00 80 	andi.   r9,r31,128
+> 	c003df8c:	7c 7e 1b 78 	mr      r30,r3
+> 	c003df90:	41 a2 00 14 	beq     c003dfa4 <trace_trigger_soft_disabled+0x44>
+> 	c003df94:	38 c0 00 00 	li      r6,0
+> 	c003df98:	38 a0 00 00 	li      r5,0
+> 	c003df9c:	38 80 00 00 	li      r4,0
+> 	c003dfa0:	48 05 c5 f1 	bl      c009a590 <event_triggers_call>
+> 	c003dfa4:	73 e9 00 40 	andi.   r9,r31,64
+> 	c003dfa8:	40 82 00 28 	bne     c003dfd0 <trace_trigger_soft_disabled+0x70>
+> 	c003dfac:	73 ff 02 00 	andi.   r31,r31,512
+> 	c003dfb0:	41 82 ff cc 	beq     c003df7c <trace_trigger_soft_disabled+0x1c>
+> 	c003dfb4:	80 01 00 14 	lwz     r0,20(r1)
+> 	c003dfb8:	83 e1 00 0c 	lwz     r31,12(r1)
+> 	c003dfbc:	7f c3 f3 78 	mr      r3,r30
+> 	c003dfc0:	83 c1 00 08 	lwz     r30,8(r1)
+> 	c003dfc4:	7c 08 03 a6 	mtlr    r0
+> 	c003dfc8:	38 21 00 10 	addi    r1,r1,16
+> 	c003dfcc:	48 05 6f 6c 	b       c0094f38 <trace_event_ignore_this_pid>
+> 	c003dfd0:	38 60 00 01 	li      r3,1
+> 	c003dfd4:	4b ff ff ac 	b       c003df80 <trace_trigger_soft_disabled+0x20>
 > 
-> Selecting this option will enable code that serializes all console
-> input and output to core 0. The DCC driver will create input and
-> output FIFOs that all cores will use. Reads and writes from/to DCC
-> are handled by a workqueue that runs only core 0.
+> It doesn't benefit much from inlining as its only parameter is a
+> pointer to a struct in memory so no constant folding is involved.
 > 
-> Signed-off-by: Shanker Donthineni <shankerd@codeaurora.org>
-> Acked-by: Adam Wallis <awallis@codeaurora.org>
-> Signed-off-by: Timur Tabi <timur@codeaurora.org>
-> Signed-off-by: Elliot Berman <eberman@codeaurora.org>
-> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-> ---
+> Uninline it and move it into kernel/trace/trace_events_trigger.c
 > 
-> Changes in v4:
->  * Use module parameter for runtime choice of enabling this feature.
+> It reduces the size of vmlinux by approximately 10 kbytes.
 
-No, this is not the 1990's, module parameters do not work and are not
-sustainable.  They operate on a code-level while you are modifying a
-device-specific attribute here.  Please make this per-device if you
-really want to be able to somehow turn this on or off.
+If you have an issue with the size, perhaps the function can be modified to
+condense it. I'm happy to have a size reduction, but I will NACK making it
+into a function call.
 
->  * Use hotplug locks to avoid race between cpu online check and work schedule.
->  * Remove ifdefs and move to common ops.
->  * Remove unnecessary check for this configuration.
->  * Use macros for buf size instead of magic numbers.
->  * v3 - https://lore.kernel.org/lkml/20211213141013.21464-1-quic_saipraka@quicinc.com/
-> 
-> Changes in v3:
->  * Handle case where core0 is not online.
-> 
-> Changes in v2:
->  * Checkpatch warning fixes.
->  * Use of IS_ENABLED macros instead of ifdefs.
-> 
-> ---
->  drivers/tty/hvc/hvc_dcc.c | 177 +++++++++++++++++++++++++++++++++++++-
->  1 file changed, 174 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/tty/hvc/hvc_dcc.c b/drivers/tty/hvc/hvc_dcc.c
-> index 8e0edb7d93fd..535b09441e55 100644
-> --- a/drivers/tty/hvc/hvc_dcc.c
-> +++ b/drivers/tty/hvc/hvc_dcc.c
-> @@ -2,19 +2,35 @@
->  /* Copyright (c) 2010, 2014 The Linux Foundation. All rights reserved.  */
->  
->  #include <linux/console.h>
-> +#include <linux/cpu.h>
-> +#include <linux/cpumask.h>
->  #include <linux/init.h>
-> +#include <linux/kfifo.h>
-> +#include <linux/moduleparam.h>
->  #include <linux/serial.h>
->  #include <linux/serial_core.h>
-> +#include <linux/spinlock.h>
->  
->  #include <asm/dcc.h>
->  #include <asm/processor.h>
->  
->  #include "hvc_console.h"
->  
-> +static bool serialize_smp;
-> +module_param(serialize_smp, bool, 0444);
-> +MODULE_PARM_DESC(serialize_smp, "Serialize all DCC console input and output to CPU core 0");
-> +
->  /* DCC Status Bits */
->  #define DCC_STATUS_RX		(1 << 30)
->  #define DCC_STATUS_TX		(1 << 29)
->  
-> +#define DCC_INBUF_SIZE		128
-> +#define DCC_OUTBUF_SIZE		1024
-
-Why these random sizes?  Why is one bigger than the other?  Why are they
-these specific numbers?
-
-> +
-> +static DEFINE_SPINLOCK(dcc_lock);
-
-What is this locking?  Please document it (didn't checkpatch complain?)
-
-> +static DEFINE_KFIFO(inbuf, unsigned char, DCC_INBUF_SIZE);
-> +static DEFINE_KFIFO(outbuf, unsigned char, DCC_OUTBUF_SIZE);
-> +
->  static void dcc_uart_console_putchar(struct uart_port *port, int ch)
->  {
->  	while (__dcc_getstatus() & DCC_STATUS_TX)
-> @@ -67,24 +83,179 @@ static int hvc_dcc_get_chars(uint32_t vt, char *buf, int count)
->  	return i;
->  }
->  
-> +/*
-> + * Check if the DCC is enabled. If serialize_smp module param is enabled,
-> + * then we assume then this function will be called first on core0. That way,
-> + * dcc_core0_available will be true only if it's available on core0.
-> + */
->  static bool hvc_dcc_check(void)
->  {
->  	unsigned long time = jiffies + (HZ / 10);
-> +	static bool dcc_core0_available;
-> +
-> +	/*
-> +	 * If we're not on core 0, but we previously confirmed that DCC is
-> +	 * active, then just return true.
-> +	 */
-> +	if (serialize_smp && smp_processor_id() && dcc_core0_available)
-
-Why are you checking smp_processor_id()?  Are you sure it is safe to do
-that here?
-
-
-
-> +		return true;
->  
->  	/* Write a test character to check if it is handled */
->  	__dcc_putchar('\n');
->  
->  	while (time_is_after_jiffies(time)) {
-> -		if (!(__dcc_getstatus() & DCC_STATUS_TX))
-> +		if (!(__dcc_getstatus() & DCC_STATUS_TX)) {
-> +			dcc_core0_available = true;
->  			return true;
-> +		}
-
-That's a hard busy loop, are you sure it will always exit?
-
-thanks,
-
-greg k-h
+-- Steve

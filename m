@@ -2,125 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA0854B14CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A3834B14DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245469AbiBJSAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 13:00:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59236 "EHLO
+        id S245495AbiBJSCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 13:02:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239511AbiBJSAT (ORCPT
+        with ESMTP id S245489AbiBJSCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 13:00:19 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF373F5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:00:19 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id k25so17231954ejp.5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:00:19 -0800 (PST)
+        Thu, 10 Feb 2022 13:02:07 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FD525D1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:02:08 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id u6so11961936lfc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:02:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VyiRrCTCvD3kSlcteklEwF1Z7ulIFO497MFIShZC2EQ=;
-        b=lDJDV3gk7vJd8epZow77aLEhctdFJiMdWg4bPXyRqV+P8SCznLTjg9qaMrl4uBKi4W
-         FIa5xSqiTkfMTDDaQX3a6eOR3PULr05leKgBb7dtj1Z9aBTmqdnSEHwpCDlCePcizdIr
-         RL4deMl0WEaY0Jh1Ab9JXnycY4MaE3/yjJweZ3uE1EswISDRfgGvftKiIcyY4+H4cJmx
-         ksSJIN7XeO+LqnG802F/TkZsEYNXr+GmnNkQS0ZABy7zH5ImLkTkhCeBnSYlJHR3czCM
-         ubCKLT2cdNKaVcXthXtuVbskMddyIIhCb3KdDg7PxHdghxxP8+GQpQM+WnSRcdvK6IOK
-         wuSg==
+         :cc:content-transfer-encoding;
+        bh=nlOsd5JgRXIirKifvmJwXeIxdew5ZbaSyuXwRWkioH4=;
+        b=p1GAK1V8eXcEzq47Fvq2vN9jx3rSPu4w/KYVw6B2MwJZIhieAFZD4nHhhsr/5D5fFW
+         g0ZGd45Bu7sSltUo7FscaMHJcboP9NblAwTc6OzmdmI2SH31xEnj7Yyeb8F6SfKckWBS
+         ZAQ7iBQ0A+GAl4d5knFsT9gF8ab6dF9duoJ5FleSD2zEiOoi8OxZWSY/W8GCUaaJ933K
+         /kH2LbCOZUIIK0AcX2mgiWFc71+8ECcUBXSBWDi4Ac8llgvUsWQQm2/tEzsBViZW2+PC
+         iKELZEYjQ0R8ePbJnNleYy1k0ExoUt4hR8depXVTZ2P8KU35T+IjMKykOn8gqZv02w6K
+         Q3Eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VyiRrCTCvD3kSlcteklEwF1Z7ulIFO497MFIShZC2EQ=;
-        b=419pYnMGGb9Vv20okCDNRX8msXiuesbQajmZIcnR6biQzzuOPSgDEwfy9EK4o/FAoa
-         6CQzuYaxE9iaoO0Ic8nFNpPi3IP9JjjPcTKSbP9GEzrlr7d39gamTeXkXgi/BatwEjI0
-         HYLr9RvEhDEUSUH/h4dgKz9TGDn/xCGzxUo8sSCw+kqFcYahXK4F6Pcw7MVzvAix/DfN
-         HNHYypVgdZ6fw52yyhrQp7lBA1Q/1nJjbMgFEgkayGFOsKmDPvDLIE4RkdA4utxTFk46
-         NHeH4pvjgCJawsuYwAu0G4+3JNlawponUqUSk/sRNPSudRlfK6BrEnl9q0+NwdFIwmwP
-         O6uA==
-X-Gm-Message-State: AOAM5329OA0DUZeDn4erd7pBOCD4KSaJ03J+Bbx6AuPd/qj+bZFLU1qR
-        vjrKJUBn1jfKGpIP1yu/VC1mcuaKgxPjgUuWGMkWDw==
-X-Google-Smtp-Source: ABdhPJxJuyhh7OCTVxsg1XD+thnzuteOezciR0odv+RtncFHrFra5L3HMOaU0zxHkSa4CRu6l4IZA/I4m8Gi0BaaQrw=
-X-Received: by 2002:a17:906:7948:: with SMTP id l8mr7308424ejo.636.1644516018273;
- Thu, 10 Feb 2022 10:00:18 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nlOsd5JgRXIirKifvmJwXeIxdew5ZbaSyuXwRWkioH4=;
+        b=0gneeT6pjtDf1E1nlkK/CwDxNB2XfY0JDVRoPAQT3oRV3wtqC5i8yHVDsYf+Ftm5YU
+         qP5K0SBiS9zaxnrJd6KM20CjEGtAgLFDlbEzeSsAbTKpFIQtTgs678IextufsZUv0Xvl
+         Rfss65F0XmKYXb9Q+NqHMcYDMDy+L4WyociS5QtjcElFfHCINz5M3oT4pxbeBwq9kg+j
+         pHMSHDHHr6F2j4+l7HIRjA3O16tYzlxwWv14qBS+OuPdPORuicL88BeeCaHF2RC+fjxs
+         YAjFYkgQnOZknDXe3NZlgG3n5/rg4tJqUI52wk5u+Jp+JGvSkjWkaMFddnYWP3Tm8HY8
+         2XvQ==
+X-Gm-Message-State: AOAM5300JDlkve0sUGjI/s3AUdmukcc2WJ7dMRFC5DHYKTEYOA7ZeG3/
+        g82KOEeMnEJyiIX22+mjFGwZHzk2+rd0aG/KXVX+sQ==
+X-Google-Smtp-Source: ABdhPJyJEKNknsqObHfl8Uoa9tzMLpWuOL4UjvrRNQVehKzVHcdc3TUq0BVCGVfxFdgfFKhYlXHSFbkL5zLAvcjxMiI=
+X-Received: by 2002:a19:ee04:: with SMTP id g4mr5780832lfb.157.1644516126252;
+ Thu, 10 Feb 2022 10:02:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20211116093833.245542-1-shreeya.patel@collabora.com> <874k56znix.fsf@collabora.com>
-In-Reply-To: <874k56znix.fsf@collabora.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 10 Feb 2022 19:00:07 +0100
-Message-ID: <CAMRc=MdByxO3+hJruvUkULtXAaB7aWewTd=Wv0MbWyX2vykdjA@mail.gmail.com>
-Subject: Re: [PATCH v4] gpio: Return EPROBE_DEFER if gc->to_irq is NULL
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Shreeya Patel <shreeya.patel@collabora.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        wsa@kernel.org, kernel@collabora.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        kbuild test robot <lkp@intel.com>
+References: <20220210025321.787113-1-keescook@chromium.org>
+ <20220210025321.787113-2-keescook@chromium.org> <CAG48ez1m7XJ1wJvTHtNorH480jTWNgdrn5Q1LTZZQ4uve3r4Sw@mail.gmail.com>
+ <202202100935.FB3E60FA5@keescook>
+In-Reply-To: <202202100935.FB3E60FA5@keescook>
+From:   Jann Horn <jannh@google.com>
+Date:   Thu, 10 Feb 2022 19:01:39 +0100
+Message-ID: <CAG48ez3fG7S1dfE2-JAtyOZUK=0_iZ03scf+oD6gwVyD1Qp33g@mail.gmail.com>
+Subject: Re: [PATCH 1/3] signal: HANDLER_EXIT should clear SIGNAL_UNKILLABLE
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        =?UTF-8?B?Um9iZXJ0IMWad2nEmWNraQ==?= <robert@swiecki.net>,
+        stable@vger.kernel.org, Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 5:36 PM Gabriel Krisman Bertazi
-<krisman@collabora.com> wrote:
->
-> Shreeya Patel <shreeya.patel@collabora.com> writes:
->
-> > We are racing the registering of .to_irq when probing the
-> > i2c driver. This results in random failure of touchscreen
-> > devices.
+On Thu, Feb 10, 2022 at 6:37 PM Kees Cook <keescook@chromium.org> wrote:
+> On Thu, Feb 10, 2022 at 05:18:39PM +0100, Jann Horn wrote:
+> > On Thu, Feb 10, 2022 at 3:53 AM Kees Cook <keescook@chromium.org> wrote=
+:
+> > > Fatal SIGSYS signals were not being delivered to pid namespace init
+> > > processes. Make sure the SIGNAL_UNKILLABLE doesn't get set for these
+> > > cases.
+> > >
+> > > Reported-by: Robert =C5=9Awi=C4=99cki <robert@swiecki.net>
+> > > Suggested-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> > > Fixes: 00b06da29cf9 ("signal: Add SA_IMMUTABLE to ensure forced sigan=
+ls do not get changed")
+> > > Cc: stable@vger.kernel.org
+> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > ---
+> > >  kernel/signal.c | 5 +++--
+> > >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/kernel/signal.c b/kernel/signal.c
+> > > index 38602738866e..33e3ee4f3383 100644
+> > > --- a/kernel/signal.c
+> > > +++ b/kernel/signal.c
+> > > @@ -1342,9 +1342,10 @@ force_sig_info_to_task(struct kernel_siginfo *=
+info, struct task_struct *t,
+> > >         }
+> > >         /*
+> > >          * Don't clear SIGNAL_UNKILLABLE for traced tasks, users won'=
+t expect
+> > > -        * debugging to leave init killable.
+> > > +        * debugging to leave init killable, unless it is intended to=
+ exit.
+> > >          */
+> > > -       if (action->sa.sa_handler =3D=3D SIG_DFL && !t->ptrace)
+> > > +       if (action->sa.sa_handler =3D=3D SIG_DFL &&
+> > > +           (!t->ptrace || (handler =3D=3D HANDLER_EXIT)))
+> > >                 t->signal->flags &=3D ~SIGNAL_UNKILLABLE;
 > >
-> > Following errors could be seen in dmesg logs when gc->to_irq is NULL
+> > You're changing the subclause:
 > >
-> > [2.101857] i2c_hid i2c-FTS3528:00: HID over i2c has not been provided an Int IRQ
-> > [2.101953] i2c_hid: probe of i2c-FTS3528:00 failed with error -22
+> > !t->ptrace
 > >
-> > To avoid this situation, defer probing until to_irq is registered.
+> > to:
 > >
-> > This issue has been reported many times in past and people have been
-> > using workarounds like changing the pinctrl_amd to built-in instead
-> > of loading it as a module or by adding a softdep for pinctrl_amd into
-> > the config file.
+> > (!t->ptrace || (handler =3D=3D HANDLER_EXIT))
 > >
-> > BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=209413
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+> > which means that the change only affects cases where the process has a
+> > ptracer, right? That's not the scenario the commit message is talking
+> > about...
 >
-> Hi guys,
+> Sorry, yes, I was not as accurate as I should have been in the commit
+> log. I have changed it to:
 >
-> This seems to not have reached the Linus tree on 5.17.  If I'm not
-> mistaken, it also hasn't reached linux-next as of today. Is there
-> anything I'm missing here?
->
-> This is required to prevent spurious probe crashes of devices like this
-> FocalTech touchscreen, FT3528, when using pinctrl-amd. We've been
-> carrying it downstream for quite a while.
->
-> Thanks,
->
-> --
-> Gabriel Krisman Bertazi
+> Fatal SIGSYS signals (i.e. seccomp RET_KILL_* syscall filter actions)
+> were not being delivered to ptraced pid namespace init processes. Make
+> sure the SIGNAL_UNKILLABLE doesn't get set for these cases.
 
-Hi Gabriel!
+So basically force_sig_info() is trying to figure out whether
+get_signal() will later on check for SIGNAL_UNKILLABLE (the SIG_DFL
+case), and if so, it clears the flag from the target's signal_struct
+that marks the process as unkillable?
 
-My email address changed in September, that's why I didn't see the
-email you sent in November to my old one.
+This used to be:
 
-gpiod_to_irq() can be used in context other than driver probing, I'm
-worried existing users would not know how to handle it. Also: how come
-you can get the GPIO descriptor from the provider but its interrupts
-are not yet set up?
+if (action->sa.sa_handler =3D=3D SIG_DFL)
+    t->signal->flags &=3D ~SIGNAL_UNKILLABLE;
 
-Bart
+Then someone noticed that in the ptrace case, the signal might not
+actually end up being consumed by the target process, and added the
+"&& !t->ptrace" clause in commit
+eb61b5911bdc923875cde99eb25203a0e2b06d43.
+
+And now Robert Swiecki noticed that that still didn't accurately model
+what'll happen in get_signal().
+
+
+This seems hacky to me, and also racy: What if, while you're going
+through a SECCOMP_RET_KILL_PROCESS in an unkillable process, some
+other thread e.g. concurrently changes the disposition of SIGSYS from
+a custom handler to SIG_DFL?
+
+Instead of trying to figure out whether the signal would have been
+fatal without SIGNAL_UNKILLABLE, I think it would be better to find a
+way to tell the signal-handling code that SIGNAL_UNKILLABLE should be
+bypassed for this specific signal, or something along those lines...
+but of course that's also kind of messy because the signal-sending
+code might fall back to just using the pending signal mask on
+allocation failure IIRC?

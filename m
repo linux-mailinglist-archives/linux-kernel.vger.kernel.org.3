@@ -2,115 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A004B095A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:22:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4024B095B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238431AbiBJJWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:22:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47242 "EHLO
+        id S238455AbiBJJWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:22:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235335AbiBJJWF (ORCPT
+        with ESMTP id S235335AbiBJJWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:22:05 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67980F1C
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:22:07 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 20A2E21115;
-        Thu, 10 Feb 2022 09:22:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1644484926; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dASyFwKr2xiaR0nvQCK6HgwyeDwxFBBe//zBNc7fFyw=;
-        b=NncAtze7jYeP3VtbjAI8A8uDHQ+oyiUzTzl3LWhSaBojK6w3C1WLr5d1DUBtlv2LLlvpxH
-        2V5zdkGS3OPQYhe97+zsBinOopaO/1HbMvcyOs4dZjB2pKJ/ObS1ssRlExJ9OhmGeeOq00
-        d1jXjnADDRBGjQOFUdOP3cGMJuddsZY=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 10 Feb 2022 04:22:11 -0500
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4856E1039;
+        Thu, 10 Feb 2022 01:22:13 -0800 (PST)
+Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B1B21A3B84;
-        Thu, 10 Feb 2022 09:22:05 +0000 (UTC)
-Date:   Thu, 10 Feb 2022 10:22:05 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>
-Subject: Re: [PATCH v4 0/4] printk: reduce deadlocks during panic
-Message-ID: <YgTZPQEay6T/nhu6@alley>
-References: <20220202171821.179394-1-stephen.s.brennan@oracle.com>
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 537DA283;
+        Thu, 10 Feb 2022 01:22:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1644484932;
+        bh=YYp49ln6qDD6oDwCC4EQTXa3MheUKZJ27LXDjoYZpLo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZwHj0U8EiiyLti7wh/GpeLfS81YfJ6qhA6Ey/xOmQV3Gt9+jRIjd3mg9Rw+bTMpth
+         BqMOB3Dbr0+KfEsXwqR0OrA3aopUioSA+oQfisTOCb0hBwZ7hzsmo0FlVlonFLJQgo
+         NHNkku0Sf1uc7IcnysI2wiJ6hQ0X8TcUKvmOmYtg=
+Date:   Thu, 10 Feb 2022 01:22:09 -0800
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Konstantin Aladyshev <aladyshev22@gmail.com>,
+        Oskar Senft <osk@google.com>, openbmc@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] serial: 8250_aspeed_vuart: add PORT_ASPEED_VUART port
+ type
+Message-ID: <YgTZQQuTkLjnkeyB@hatter.bewilderbeest.net>
+References: <20220209203414.23491-1-zev@bewilderbeest.net>
+ <YgTBennInxX3fE3X@kroah.com>
+ <YgTDm5qKUJyzciR2@hatter.bewilderbeest.net>
+ <YgTKvIqTIOomFSsF@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20220202171821.179394-1-stephen.s.brennan@oracle.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YgTKvIqTIOomFSsF@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-02-02 09:18:17, Stephen Brennan wrote:
-> When a caller writes heavily to the kernel log (e.g. writing to
-> /dev/kmsg in a loop) while another panics, there's currently a high
-> likelihood of a deadlock (see patch 2 for the full description of this
-> deadlock).
-> 
-> The principle fix is to disable the optimistic spin once panic_cpu is
-> set, so the panic CPU doesn't spin waiting for a halted CPU to hand over
-> the console_sem.
-> 
-> However, this exposed us to a livelock situation, where the panic CPU
-> holds the console_sem, and another CPU could fill up the log buffer
-> faster than the consoles could drain it, preventing the panic from
-> progressing and halting the other CPUs. To avoid this, patch 3 adds a
-> mechanism to suppress printk (from non-panic-CPU) during panic, if we
-> reach a threshold of dropped messages.
-> 
-> A major goal with all of these patches is to try to decrease the
-> likelihood that another CPU is holding the console_sem when we halt it
-> in panic(). This reduces the odds of needing to break locks and
-> potentially encountering further deadlocks with the console drivers.
-> 
-> To test, I use the following script, kmsg_panic.sh:
-> 
->     #!/bin/bash
->     date
->     # 991 chars (based on log buffer size):
->     chars="$(printf 'a%.0s' {1..991})"
->     while :; do
->         echo $chars > /dev/kmsg
->     done &
->     echo c > /proc/sysrq-trigger &
->     date
->     exit
-> 
-> I defined a hang as any time the system did not reboot to a login prompt
-> on the serial console within 60 seconds. Here are the statistics on
-> hangs using this script, before and after the patch.
-> 
-> before:  776 hangs / 1484 trials - 52.3%
-> after :    0 hangs /  15k trials -  0.0%
-> 
-> Stephen Brennan (4):
->   printk: Add panic_in_progress helper
->   printk: disable optimistic spin during panic
->   printk: Avoid livelock with heavy printk during panic
->   printk: Drop console_sem during panic
-> 
->  kernel/printk/printk.c | 55 +++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 54 insertions(+), 1 deletion(-)
+On Thu, Feb 10, 2022 at 12:20:12AM PST, Greg Kroah-Hartman wrote:
+>On Wed, Feb 09, 2022 at 11:49:47PM -0800, Zev Weiss wrote:
+>> On Wed, Feb 09, 2022 at 11:40:42PM PST, Greg Kroah-Hartman wrote:
+>> > On Wed, Feb 09, 2022 at 12:34:14PM -0800, Zev Weiss wrote:
+>> > > Commit 54da3e381c2b ("serial: 8250_aspeed_vuart: use UPF_IOREMAP to
+>> > > set up register mapping") fixed a bug that had, as a side-effect,
+>> > > prevented the 8250_aspeed_vuart driver from enabling the VUART's
+>> > > FIFOs.  However, fixing that (and hence enabling the FIFOs) has in
+>> > > turn revealed what appears to be a hardware bug in the ASPEED VUART in
+>> > > which the host-side THRE bit doesn't get if the BMC-side receive FIFO
+>> > > trigger level is set to anything but one byte.  This causes problems
+>> > > for polled-mode writes from the host -- for example, Linux kernel
+>> > > console writes proceed at a glacial pace (less than 100 bytes per
+>> > > second) because the write path waits for a 10ms timeout to expire
+>> > > after every character instead of being able to continue on to the next
+>> > > character upon seeing THRE asserted.  (GRUB behaves similarly.)
+>> > >
+>> > > As a workaround, introduce a new port type for the ASPEED VUART that's
+>> > > identical to PORT_16550A as it had previously been using, but with
+>> > > UART_FCR_R_TRIG_00 instead to set the receive FIFO trigger level to
+>> > > one byte, which (experimentally) seems to avoid the problematic THRE
+>> > > behavior.
+>> > >
+>> > > Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+>> > > Tested-by: Konstantin Aladyshev <aladyshev22@gmail.com>
+>> >
+>> > Do we need a "Fixes:" tag here as well?
+>>
+>> I was wondering the same -- I left it out because it didn't seem like it was
+>> strictly a bug in the earlier commit that's really being fixed per se, but
+>> perhaps that's an overly pedantic distinction.  I can certainly add it if
+>> you'd prefer.
+>
+>This obviously fixes an issue, if you don't have a specific commit that
+>caused it, a cc: stable@vger.kernel.org should be added so we know to
+>backport this to all stable kernels.
+>
 
-For the entire patchset:
+Okay -- well, I suppose it's a fix in the sense that if you have the 
+earlier commit, you'll also want this one, so I'll add the tag.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+>>
+>> >
+>> > > ---
+>> > >  drivers/tty/serial/8250/8250_aspeed_vuart.c | 2 +-
+>> > >  drivers/tty/serial/8250/8250_port.c         | 8 ++++++++
+>> > >  include/uapi/linux/serial_core.h            | 3 +++
+>> > >  3 files changed, 12 insertions(+), 1 deletion(-)
+>> > >
+>> > > diff --git a/drivers/tty/serial/8250/8250_aspeed_vuart.c b/drivers/tty/serial/8250/8250_aspeed_vuart.c
+>> > > index 2350fb3bb5e4..c2cecc6f47db 100644
+>> > > --- a/drivers/tty/serial/8250/8250_aspeed_vuart.c
+>> > > +++ b/drivers/tty/serial/8250/8250_aspeed_vuart.c
+>> > > @@ -487,7 +487,7 @@ static int aspeed_vuart_probe(struct platform_device *pdev)
+>> > >  	port.port.irq = irq_of_parse_and_map(np, 0);
+>> > >  	port.port.handle_irq = aspeed_vuart_handle_irq;
+>> > >  	port.port.iotype = UPIO_MEM;
+>> > > -	port.port.type = PORT_16550A;
+>> > > +	port.port.type = PORT_ASPEED_VUART;
+>> > >  	port.port.uartclk = clk;
+>> > >  	port.port.flags = UPF_SHARE_IRQ | UPF_BOOT_AUTOCONF | UPF_IOREMAP
+>> > >  		| UPF_FIXED_PORT | UPF_FIXED_TYPE | UPF_NO_THRE_TEST;
+>> > > diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+>> > > index 3b12bfc1ed67..973870ebff69 100644
+>> > > --- a/drivers/tty/serial/8250/8250_port.c
+>> > > +++ b/drivers/tty/serial/8250/8250_port.c
+>> > > @@ -307,6 +307,14 @@ static const struct serial8250_config uart_config[] = {
+>> > >  		.rxtrig_bytes	= {1, 32, 64, 112},
+>> > >  		.flags		= UART_CAP_FIFO | UART_CAP_SLEEP,
+>> > >  	},
+>> > > +	[PORT_ASPEED_VUART] = {
+>> > > +		.name		= "ASPEED VUART",
+>> > > +		.fifo_size	= 16,
+>> > > +		.tx_loadsz	= 16,
+>> > > +		.fcr		= UART_FCR_ENABLE_FIFO | UART_FCR_R_TRIG_00,
+>> > > +		.rxtrig_bytes	= {1, 4, 8, 14},
+>> > > +		.flags		= UART_CAP_FIFO,
+>> > > +	},
+>> > >  };
+>> > >
+>> > >  /* Uart divisor latch read */
+>> > > diff --git a/include/uapi/linux/serial_core.h b/include/uapi/linux/serial_core.h
+>> > > index c4042dcfdc0c..cd11748833e6 100644
+>> > > --- a/include/uapi/linux/serial_core.h
+>> > > +++ b/include/uapi/linux/serial_core.h
+>> > > @@ -274,4 +274,7 @@
+>> > >  /* Freescale LINFlexD UART */
+>> > >  #define PORT_LINFLEXUART	122
+>> > >
+>> > > +/* ASPEED AST2x00 virtual UART */
+>> > > +#define PORT_ASPEED_VUART	123
+>> >
+>> > Why does this value have to be in a uapi header file?  What userspace
+>> > tool is going to need this?
+>> >
+>>
+>> I only put it there because that was where all the other port type constants
+>> were defined, and wondered the same thing about the lot of them.  Is there a
+>> userspace tool that makes use of any of these?
+>
+>Not really, please don't add it if you do not require it.
+>
 
-It looks ready for linux-next from my POV. I am going to push it early
-next week unless anyone complains in the meantime.
+It seems like an odd inconsistency to put this one particular definition 
+somewhere else when the other 100+ of its siblings are in the uapi 
+header; would you want a preceding patch to move them all somewhere 
+under include/linux?  (Which in turn doesn't really seem like a change 
+for -stable I'd think.)
 
-Best Regards,
-Petr Mladek
+Though actually, on further investigation I see those constants are in 
+fact exposed to userspace in struct serial_struct->type (via 
+TIOCGSERIAL/TIOCSSERIAL), and via the 'type' sysfs attribute, so I'd 
+think we'd probably want to keep them as they are?
+
+
+Zev
+

@@ -2,97 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B234B06E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 08:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A55A4B06E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 08:22:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235863AbiBJHUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 02:20:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38312 "EHLO
+        id S235881AbiBJHWa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Feb 2022 02:22:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiBJHUd (ORCPT
+        with ESMTP id S230002AbiBJHW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 02:20:33 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB8FD6D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 23:20:35 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id v47so12820546ybi.4
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 23:20:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZX/WOZsnGI7NHrW3LHW9fWbxuWWXkvq+KrfxlH19WkQ=;
-        b=mnCQTtryb0tmtF8+f3k+sVI71drjg1mVtn46FiiiRafv0su+7dnP8kwTMp/ROdO048
-         fcfOjVYrES+pwRrCHDsb2EFqdXLRXvCOJUML8Byl50JsMjb2ZqqzRvyi27AFULX36V4k
-         e0bSSMnAvdy+UuvKrjJF2Eq/gWCNzHStw1iY8Gd29DOd4pTEqiMb6E4B7Yc8wGmJ1dPg
-         tK05dDTqrH0pimHGgGB5AoLlLnyIFeckKIV8XW2xPI+VISAKUXI633AEmu4XAbQfENd5
-         +CTvdOtmZZU5UzYXvyu94nambEXkpN3j2sx3dD7w9y9ciuqii1a6zZf1spDvyf1PlvZf
-         h8dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZX/WOZsnGI7NHrW3LHW9fWbxuWWXkvq+KrfxlH19WkQ=;
-        b=5Jk5TIMp4qxhpVGv2l42eEUf7tjtMaB2VbwwVis+Hyi4DAndUEHy4e4CzkBiAYnb7B
-         EEkmzzA0zHTWuioJpvWAOBw8JS7GMa8E7np0OUnjOf8MRRG2E2qwrbMhTU+M/yF9AbTV
-         cafqbQVSK5PlhKSwaQ4T060zIcW/27VSjs2FmAO6PNjis8Ad1GOHYCNEcNhAQxhR30+u
-         CPPTCfcaenlTs7IhBoT6Yfm2FmfxxBRUSnDR0+KwGxRPqHBO6DpxetnhDfotb2yxSO45
-         Gv2Czzc9hXVs2+PW0dQl9gB12CF502TK0R13lJCKUHUXf6o3oRQDWS0wRRvhDJKRu0Kx
-         XBwQ==
-X-Gm-Message-State: AOAM530hg+opyAcWZDg4f9Njjkig00gVjjEvj52+lowhtLHq8cJrNWJR
-        9qy3YEf3pqWosemi4NSXAhuzcFTLMfn596a+5IJ6u0GNXy4GT1pr
-X-Google-Smtp-Source: ABdhPJwaXiABsmttpq0abL+FY1DkbKr8FxxA6gSxIWp2Lq3V0jvddYBCy3+ENnEdd8oHMco7G1iYYIzkL6kvQl23mjM=
-X-Received: by 2002:a81:4524:: with SMTP id s36mr6060238ywa.331.1644477634424;
- Wed, 09 Feb 2022 23:20:34 -0800 (PST)
+        Thu, 10 Feb 2022 02:22:28 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A970C56;
+        Wed,  9 Feb 2022 23:22:28 -0800 (PST)
+Received: from dggeme760-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JvSl73RbrzZfRY;
+        Thu, 10 Feb 2022 15:18:11 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggeme760-chm.china.huawei.com (10.3.19.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Thu, 10 Feb 2022 15:22:25 +0800
+Received: from dggpemm500006.china.huawei.com ([7.185.36.236]) by
+ dggpemm500006.china.huawei.com ([7.185.36.236]) with mapi id 15.01.2308.021;
+ Thu, 10 Feb 2022 15:22:25 +0800
+From:   "Gonglei (Arei)" <arei.gonglei@huawei.com>
+To:     zhenwei pi <pizhenwei@bytedance.com>,
+        "mst@redhat.com" <mst@redhat.com>
+CC:     "jasowang@redhat.com" <jasowang@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "helei.sig11@bytedance.com" <helei.sig11@bytedance.com>
+Subject: RE: [PATCH 1/3] virtio_crypto: Introduce VIRTIO_CRYPTO_NOSPC
+Thread-Topic: [PATCH 1/3] virtio_crypto: Introduce VIRTIO_CRYPTO_NOSPC
+Thread-Index: AQHYDm44Bq+fl173Z0edEmaWVexeY6yMgIDQ
+Date:   Thu, 10 Feb 2022 07:22:24 +0000
+Message-ID: <fac2cfd89f3f4fff9e5c5d29c8c4ed8a@huawei.com>
+References: <20220121022438.1042547-1-pizhenwei@bytedance.com>
+ <20220121022438.1042547-2-pizhenwei@bytedance.com>
+In-Reply-To: <20220121022438.1042547-2-pizhenwei@bytedance.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.149.11]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <20220208073617.70342-1-songmuchun@bytedance.com>
- <20220208073617.70342-4-songmuchun@bytedance.com> <d78d6e56-1879-94c8-dc28-06431e583a77@oracle.com>
-In-Reply-To: <d78d6e56-1879-94c8-dc28-06431e583a77@oracle.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Thu, 10 Feb 2022 15:19:57 +0800
-Message-ID: <CAMZfGtUTj-r-sO3YRfyEhvR1mKYxi6kXx+ZZPVYjV3AhAMdh1g@mail.gmail.com>
-Subject: Re: [PATCH v4 3/5] mm: hugetlb: fix missing cache flush in copy_huge_page_from_user()
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, zi.yan@cs.rutgers.edu,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Lars Persson <lars.persson@axis.com>, Zi Yan <ziy@nvidia.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Fam Zheng <fam.zheng@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 3:07 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
->
-> On 2/7/22 23:36, Muchun Song wrote:
-> > The userfaultfd calls copy_huge_page_from_user() which does not do
-> > any cache flushing for the target page.  Then the target page will
-> > be mapped to the user space with a different address (user address),
-> > which might have an alias issue with the kernel address used to copy
-> > the data from the user to.  Fix this issue by flushing dcache in
-> > copy_huge_page_from_user().
->
-> Quick question.
->
-> Should this also be done for the non-hugetlb case?  Take a look at the
-> routines __mcopy_atomic() and mcopy_atomic_pte().  Or, is that somehow
-> handled?
 
-Actually, you are right. __mcopy_atomic() and mcopy_atomic_pte()
-should also be fixed.  And shmem_mfill_atomic_pte() also should
-be fixed. I'll fix those places in the next version. Thanks.
 
->
-> For this change,
-> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+> -----Original Message-----
+> From: zhenwei pi [mailto:pizhenwei@bytedance.com]
+> Sent: Friday, January 21, 2022 10:25 AM
+> To: mst@redhat.com; Gonglei (Arei) <arei.gonglei@huawei.com>
+> Cc: jasowang@redhat.com; virtualization@lists.linux-foundation.org;
+> linux-crypto@vger.kernel.org; linux-kernel@vger.kernel.org;
+> helei.sig11@bytedance.com; zhenwei pi <pizhenwei@bytedance.com>
+> Subject: [PATCH 1/3] virtio_crypto: Introduce VIRTIO_CRYPTO_NOSPC
+> 
+> Base on the lastest virtio crypto spec, define VIRTIO_CRYPTO_NOSPC.
+> 
+> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
+> ---
+>  include/uapi/linux/virtio_crypto.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/include/uapi/linux/virtio_crypto.h
+> b/include/uapi/linux/virtio_crypto.h
+> index a03932f10565..1166a49084b0 100644
+> --- a/include/uapi/linux/virtio_crypto.h
+> +++ b/include/uapi/linux/virtio_crypto.h
+> @@ -408,6 +408,7 @@ struct virtio_crypto_op_data_req {
+>  #define VIRTIO_CRYPTO_BADMSG    2
+>  #define VIRTIO_CRYPTO_NOTSUPP   3
+>  #define VIRTIO_CRYPTO_INVSESS   4 /* Invalid session id */
+> +#define VIRTIO_CRYPTO_NOSPC     5 /* no free session ID */
+> 
+>  /* The accelerator hardware is ready */  #define
+> VIRTIO_CRYPTO_S_HW_READY  (1 << 0)
+> --
+> 2.25.1
 
-Thanks Mike.
+Reviewed-by: Gonglei <arei.gonglei@huawei.com>

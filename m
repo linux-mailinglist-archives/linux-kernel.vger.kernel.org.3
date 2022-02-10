@@ -2,112 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B2F4B01D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0CF04B0255
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbiBJBU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 20:20:27 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36226 "EHLO
+        id S232640AbiBJBbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 20:31:05 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:37438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiBJBUV (ORCPT
+        with ESMTP id S232563AbiBJBbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:20:21 -0500
-Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C92E84;
-        Wed,  9 Feb 2022 17:20:18 -0800 (PST)
-X-UUID: f752996293804c03af1205c5fae73d9a-20220210
-X-CPASD-INFO: 10bbcf6a07a64175b9b2a3889822b914@eoCcgpCYZJFcV6OCg3SCb4JqkmKRX1i
-        He3JSYpBpXVSVhH5xTWJsXVKBfG5QZWNdYVN_eGpQYl9gZFB5i3-XblBgXoZgUZB3gHKcgpOUZg==
-X-CPASD-FEATURE: 0.0
-X-CLOUD-ID: 10bbcf6a07a64175b9b2a3889822b914
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,EXT:0.0,OB:0.0,URL:-5,T
-        VAL:133.0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:151.0,IP:-2.0,MAL:0.0,ATTNUM:0
-        .0,PHF:-5.0,PHC:-5.0,SPF:4.0,EDMS:-3,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CF
-        OB:0.0,SPC:0.0,SIG:-5,AUF:15,DUF:32547,ACD:190,DCD:292,SL:0,AG:0,CFC:0.522,CF
-        SR:0.063,UAT:0,RAF:2,VERSION:2.3.4
-X-CPASD-ID: f752996293804c03af1205c5fae73d9a-20220210
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1, 1
-X-UUID: f752996293804c03af1205c5fae73d9a-20220210
-X-User: xiehongyu1@kylinos.cn
-Received: from [172.20.4.10] [(116.128.244.169)] by nksmu.kylinos.cn
-        (envelope-from <xiehongyu1@kylinos.cn>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256 128/128)
-        with ESMTP id 1501960626; Thu, 10 Feb 2022 09:17:13 +0800
-Message-ID: <59231732-82a3-3a0c-db0c-eec252b35d3b@kylinos.cn>
-Date:   Thu, 10 Feb 2022 09:04:40 +0800
+        Wed, 9 Feb 2022 20:31:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0712F22527;
+        Wed,  9 Feb 2022 17:31:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AD8F616B2;
+        Thu, 10 Feb 2022 01:06:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCEB8C340E7;
+        Thu, 10 Feb 2022 01:06:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644455172;
+        bh=OBeVERzluy4DArHFC4mn3YZzQAgsdo26IY1UOV+S3po=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=neW6q5TJZCtjBdRjuhBPe+fIQsoITAs+gqkje+/Oguku7udHSpMNRMzCKSdgscQn6
+         7FmDKj+IO9dmg0svmZqafQNZ6HuHSeVuosT1ezyk+J5yEQbEWfb9JtxwbLHkUTBMBW
+         XktUDiEeL0sGM5Z+elyaa3276MG8A10Qk7Gb0/Or0qEMecOdvGmIpIyLuqbgvC0Cam
+         +PDuhw3lYYM8bFxNLSOWHdJOT/Tds/blKfKqAhEBhzcKvSyWiuwEvbHRoMElsQZ3z8
+         dnc6ltsVSwxCXn54z+6MxGujQXS6V4VyuZrRYWRuT52gneoQF8PV+TtD+ciQPvODcG
+         WsCeJxOtKjYaQ==
+Date:   Wed, 9 Feb 2022 17:06:10 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "lina.wang" <lina.wang@mediatek.com>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        Maciej =?UTF-8?B?xbtlbmN6eWtvd3NraQ==?= <maze@google.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Alexei Starovoitov" <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "Andrii Nakryiko" <andrii@kernel.org>,
+        Linux NetDev <netdev@vger.kernel.org>,
+        "Kernel hackers" <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, "Martin KaFai Lau" <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Willem Bruijn <willemb@google.com>,
+        Eric Dumazet <edumazet@google.com>, <zhuoliang@mediatek.com>,
+        <chao.song@mediatek.com>
+Subject: Re: [PATCH] net: fix wrong network header length
+Message-ID: <20220209170610.10694339@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <5ca86c46109794a627e6e2a62b140963217984a0.camel@mediatek.com>
+References: <20220208025511.1019-1-lina.wang@mediatek.com>
+        <0300acca47b10384e6181516f32caddda043f3e4.camel@redhat.com>
+        <CANP3RGe8ko=18F2cr0_hVMKw99nhTyOCf4Rd_=SMiwBtQ7AmrQ@mail.gmail.com>
+        <a62abfeb0c06bf8be7f4fa271e2bcdef9d86c550.camel@redhat.com>
+        <5ca86c46109794a627e6e2a62b140963217984a0.camel@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH -next v2] xhci: fix two places when dealing with return
- value of function xhci_check_args
-Content-Language: en-US
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Hongyu Xie <xy521521@gmail.com>, gregkh@linuxfoundation.org,
-        mathias.nyman@intel.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20220209025234.25230-1-xy521521@gmail.com>
- <89d59749-8ca3-b30b-4da6-a6e567528d1b@linux.intel.com>
-From:   =?UTF-8?B?6LCi5rOT5a6H?= <xiehongyu1@kylinos.cn>
-In-Reply-To: <89d59749-8ca3-b30b-4da6-a6e567528d1b@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 9 Feb 2022 18:25:07 +0800 lina.wang wrote:
+> We use NETIF_F_GRO_FRAGLIST not for forwarding scenary, just for
+> software udp gro. Whatever NETIF_F_GRO_FRAGLIST or NETIF_F_GRO_FWD,
+> skb_segment_list should not have bugs.
+> 
+> We modify skb_segment_list, not in epbf. One point is traversing the
+> segments costly, another is what @Maciej said, *other* helper may have
+> the same problem. In skb_segment_list, it calls
+> skb_headers_offset_update to update different headroom, which implys
+> header maybe different.
 
-On 2022/2/9 17:29, Mathias Nyman wrote:
-> On 9.2.2022 4.52, Hongyu Xie wrote:
->> From: Hongyu Xie <xiehongyu1@kylinos.cn>
->>
->> xhci_check_args returns 4 types of value, -ENODEV, -EINVAL, 1 and 0.
->> xhci_urb_enqueue and xhci_check_streams_endpoint return -EINVAL if
->> the return value of xhci_check_args <= 0.
->> This will cause a problem.
->> For example, r8152_submit_rx calling usb_submit_urb in
->> drivers/net/usb/r8152.c.
->> r8152_submit_rx will never get -ENODEV after submiting an urb
->> when xHC is halted,
->> because xhci_urb_enqueue returns -EINVAL in the very beginning.
->>
->> Fixes: 203a86613fb3 ("xhci: Avoid NULL pointer deref when host dies.")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
->> ---
-> Thanks, added to queue.
-> Changed the commit message and header a bit:
->
-> "xhci: Prevent futile URB re-submissions due to incorrect return value.
->      
-> The -ENODEV return value from xhci_check_args() is incorrectly changed
-> to -EINVAL in a couple places before propagated further.
->      
-> xhci_check_args() returns 4 types of value, -ENODEV, -EINVAL, 1 and 0.
-> xhci_urb_enqueue and xhci_check_streams_endpoint return -EINVAL if
-> the return value of xhci_check_args <= 0.
-> This causes problems for example r8152_submit_rx, calling usb_submit_urb
-> in drivers/net/usb/r8152.c.
-> r8152_submit_rx will never get -ENODEV after submiting an urb when xHC
-> is halted because xhci_urb_enqueue returns -EINVAL in the very beginning."
->
-> Let me know if you disagree with this.
->
-> Thanks
-> -Mathias
-
-Sounds good to me.
-
-Do I have to send another patch with commit message and header changed?
-
-Thanks
-
-Hongyu Xie
-
+Process notes:
+ - the patch didn't apply so even if the discussion concludes that 
+   the patch was good you'll need to rebase on netdev/net and repost;
+ - please don't top post.

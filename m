@@ -2,105 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 685DC4B060F
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3414B060E
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 07:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235025AbiBJGIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 01:08:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53272 "EHLO
+        id S233957AbiBJGII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 01:08:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235022AbiBJGIK (ORCPT
+        with ESMTP id S231782AbiBJGIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 01:08:10 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06E81E6
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 22:08:11 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id 200so3871663qki.2
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 22:08:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=b350Wl0VMceiJC3Swb0UabBZ5Vh81zaMpkDROb2RE6s=;
-        b=qitJCd3TMvStsCo0PhbT6b6rUT6TLl0NwK6BsY3/uDGoySzqmhXvJaXpYrlqMe4Rop
-         NkG4jd9l7EwdMfCxmqRq5h3KwDz7BvqxIvU71/eDdGdP3dIgneWolQMmlbJuNEPQVmtJ
-         effMR0ily+rcN5OT/WNF7wmuLYnZZoAdJscpIkeOBsLFYytRBxSSXmtv1o7wFHeFDVd8
-         lsb45fiYqzhrYctAo6aEpG1VmPX4e29598smHfMfXjtuJ0CwpMWOdQeCkWCw6yY1dn+4
-         bLyNL73v5UjFiy/Phv/qfw+ZKVKyc99mgG27ZYbqvtrKcGfGoB5fFk4YjV7NSUcy9qFA
-         sy5w==
+        Thu, 10 Feb 2022 01:08:05 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE2C1F5
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 22:08:07 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id m3-20020a056e02158300b002b6e3d1f97cso3259443ilu.19
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 22:08:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=b350Wl0VMceiJC3Swb0UabBZ5Vh81zaMpkDROb2RE6s=;
-        b=r/n8obKayFki6P2tKcmySBl/vXmV/mP0aUC8UHOQIfq1Dtg8SE3pwCkOJKurEKO7NN
-         0f1gyy43/PWApz3uBY/XgvZuOh92bQPkRts3X9oOIaTBzeW5W++GMoW7QGWbS6rJ3amO
-         rDy1lKDAs1ql6DB/orxuJnHli4GLSq+7Oi2mNgUTik8prZd03p0/Y1f/dSHgtPKZQ8h1
-         7zAQiiqjipXwWbfuKYH+MX98NUqMPsLUTSizmm8c4OId7r5I4Thof/PZ++KnCSzq4YQz
-         0l2wgNj9cHkcyKWfZ8hoodSgg+xwfKyF/6nh4LX/6qQKW2Jbu+tG2Rzjav6IJzvxdtgI
-         xVVg==
-X-Gm-Message-State: AOAM532TfW09+PapOX9yTUFeAbFFqWkYgjFUpO82CS4m5m6Lz4AYqSoC
-        v7XizLAbriyB8KASq/ua1Uc=
-X-Google-Smtp-Source: ABdhPJwBWc13kiK0vC+W7G4h7jxvn2PXms2HPDb1+edK2QXRj032AlWU4FKZAPTbk6P4Cipy8L07DA==
-X-Received: by 2002:a05:620a:1678:: with SMTP id d24mr3037940qko.477.1644473291074;
-        Wed, 09 Feb 2022 22:08:11 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id g21sm10467362qtb.70.2022.02.09.22.08.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 22:08:10 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     stefanr@s5r6.in-berlin.de
-Cc:     linux1394-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org,
-        "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>
-Subject: [PATCH V2] drivers/firewire: use struct_size over open coded arithmetic
-Date:   Thu, 10 Feb 2022 06:08:05 +0000
-Message-Id: <20220210060805.1608198-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=hxxPMFG7Sy5R8OTw+DHD+CiI9MhDe02HH/eavpKJlVI=;
+        b=A9WHhWUXQrf3ilNJClGCB4zXvQvSRnK2UAg0fJ8MDz9bCUQ3HErI3CKMy2931MHlXM
+         Z0hG/5CXU/zbVPd9DqO+/5U036FwVtf9QoaIalZOWD+6V2sNrm1AUYoH6pPYw8Q5yT7a
+         xRMFErvPRFoi0YG2erMsnRNP76CItKWqQDieQ0y9ouKECcc/qT9UR7lIsV8Cd0aftmRD
+         QVqCrBMybYC90BPT5z628ZO8qkYcW4rGL49EkLpHpq6tDH69AN0Z9JRRsSLDz5O5gv30
+         fpqKUlX5vyyen78scDGhB7rDXZZ0tUYJySAFxJLIy820M3YKEJiLV9eiCj8fRXkMm9TU
+         oevg==
+X-Gm-Message-State: AOAM533wPAvJPnCw76FwvSGAAwYIFvWCa9yOSmpD/y3ET0QIdu/OWS7R
+        l+G5D0+TeST4z+5T/WFNLrwDTvygxR0ZW9OGdv1FM4Gs9H8a
+X-Google-Smtp-Source: ABdhPJxoAleQUKXdKQfyFJ/lU/DvKG+eN88p4ZFdGI/Tl2jq2ibPHrnZmPgShLp0DuHR0xD1pBw8UCAuxjN2bbrZc03Lii2YDBgU
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:2cd2:: with SMTP id j18mr3118329iow.92.1644473287137;
+ Wed, 09 Feb 2022 22:08:07 -0800 (PST)
+Date:   Wed, 09 Feb 2022 22:08:07 -0800
+In-Reply-To: <000000000000a3571605d27817b5@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001f60ef05d7a3c6ad@google.com>
+Subject: Re: [syzbot] WARNING: kmalloc bug in xdp_umem_create (2)
+From:   syzbot <syzbot+11421fbbff99b989670e@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
+        bjorn.topel@gmail.com, bjorn.topel@intel.com, bjorn@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        fgheet255t@gmail.com, hawk@kernel.org, john.fastabend@gmail.com,
+        jonathan.lemon@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        magnus.karlsson@intel.com, mudongliangabcd@gmail.com,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
+        w@1wt.eu, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>
+syzbot has bisected this issue to:
 
-Replace zero-length array with flexible-array member and make use
-of the struct_size() helper in kmalloc(). For example:
+commit 7661809d493b426e979f39ab512e3adf41fbcc69
+Author: Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed Jul 14 16:45:49 2021 +0000
 
-struct fw_request {
-    ...
-    u32 data[];
-}
+    mm: don't allow oversized kvmalloc() calls
 
-Make use of the struct_size() helper instead of an open-coded version
-in order to avoid any potential type mistakes.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13bc74c2700000
+start commit:   f4bc5bbb5fef Merge tag 'nfsd-5.17-2' of git://git.kernel.o..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=107c74c2700000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17bc74c2700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5707221760c00a20
+dashboard link: https://syzkaller.appspot.com/bug?extid=11421fbbff99b989670e
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e514a4700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15fcdf8a700000
 
-Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
----
- drivers/firewire/core-transaction.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reported-by: syzbot+11421fbbff99b989670e@syzkaller.appspotmail.com
+Fixes: 7661809d493b ("mm: don't allow oversized kvmalloc() calls")
 
-diff --git a/drivers/firewire/core-transaction.c b/drivers/firewire/core-transaction.c
-index ac487c96bb71..563fdf8b2657 100644
---- a/drivers/firewire/core-transaction.c
-+++ b/drivers/firewire/core-transaction.c
-@@ -777,7 +777,7 @@ static struct fw_request *allocate_request(struct fw_card *card,
- 		return NULL;
- 	}
- 
--	request = kmalloc(sizeof(*request) + length, GFP_ATOMIC);
-+	request = kmalloc(struct_size(request, data, length), GFP_ATOMIC);
- 	if (request == NULL)
- 		return NULL;
- 
--- 
-2.25.1
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

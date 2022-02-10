@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405A84B0EF6
+	by mail.lfdr.de (Postfix) with ESMTP id 8BDBF4B0EF7
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242308AbiBJNls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 08:41:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44382 "EHLO
+        id S242321AbiBJNly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 08:41:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239398AbiBJNlr (ORCPT
+        with ESMTP id S239398AbiBJNlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 08:41:47 -0500
+        Thu, 10 Feb 2022 08:41:52 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD990E9D;
-        Thu, 10 Feb 2022 05:41:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86DAE9D;
+        Thu, 10 Feb 2022 05:41:53 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: adalessandro)
-        with ESMTPSA id 566771F46487
+        with ESMTPSA id 8C4BB1F46488
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644500506;
-        bh=5tPW/YqhYGMQLNvAF+hQaPwiACKlUkeaqqMZxviHvtc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=W448nmFw8HNSbVxZAR2A51Rd/IldqxV6x12swftrWN1skn1vdP/a/LqokCZ8pva5O
-         KjiLJ9ay3IJIsc/3pyILk0vgWoZKIcJKsrKSc01YW+IYa7aTwtLeP1oTIB04cLeZTG
-         L/SxRfdvQfzF5Y+vP4At6gFyyXGPWij77LL+SGK0ejIaBHkUdEcjgs8VMWNtaUvF2a
-         HQV8WeEIN7OW5u2YiqO/CYai14I97jb6PGdDM44eU/of0IgQN4rkZSpzx0O+4Z7+94
-         CcXlf8bmun+VGUvlMsujIqEiecSDZ44+Tg3tvZSe8TycKdzYm6kNGJNmE+7hSqNVcj
-         SvGxVMIxB1b3w==
+        s=mail; t=1644500511;
+        bh=dN4RI96k5x54D4aPNxtFeCeJ0I8/zWUKbrs8hDrqgKE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=aYGE4BxT1bNCKimY5aVwl3YsPodASenmQ5XtAqONBy+JIKaLLwui0iG3V4ZIFH6Xm
+         51dFHMK9gNlAjpQPBjwa3Q/uAH1SWkGffeeC1AQEg0Tngwuw1Kblet8CoXmu04+YqC
+         dfAQLKVzBIvUxj1LRMSpGn4tAJS27U/RsfqHVfrqRc55KBgLmLqu13jkgkUW4SZmwl
+         ZXUZEqFxy4JTBEDFEQx6FqkizGDq94CHUsSLmfVE1j6uMS24hhB1USwhnLO4NNVMjC
+         Fal4a+ep08A82+cZ5b9vrWstDt2e0PmInIDnmLP3Nn8SiizT8o6prE5bnDqByYFO+W
+         rX5NkA5T60R9Q==
 From:   Ariel D'Alessandro <ariel.dalessandro@collabora.com>
 To:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
@@ -36,10 +36,12 @@ Cc:     ariel.dalessandro@collabora.com, broonie@kernel.org,
         festevam@gmail.com, krzysztof.kozlowski@canonical.com,
         lgirdwood@gmail.com, michael@amarulasolutions.com,
         robh+dt@kernel.org, s.hauer@pengutronix.de, shawnguo@kernel.org
-Subject: [PATCH v2 1/2] ASoC: bindings: fsl-asoc-card: Add compatible for tlv320aic31xx codec
-Date:   Thu, 10 Feb 2022 10:40:48 -0300
-Message-Id: <20220210134049.32576-1-ariel.dalessandro@collabora.com>
+Subject: [PATCH v2 2/2] arm64: dts: imx8mn-bsh-smm-s2pro: Add tlv320aic31xx audio card node
+Date:   Thu, 10 Feb 2022 10:40:49 -0300
+Message-Id: <20220210134049.32576-2-ariel.dalessandro@collabora.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220210134049.32576-1-ariel.dalessandro@collabora.com>
+References: <20220210134049.32576-1-ariel.dalessandro@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -52,29 +54,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 8c9b9cfb7724 ("ASoC: fsl-asoc-card: Support
-fsl,imx-audio-tlv320aic31xx codec")' added support for tlv320aic31xx
-codec to fsl-asoc-card, but missed the related device-tree compatible
-string documentation. Fix this.
+BSH SystemMaster (SMM) S2 PRO board comes with an audio card based on
+tlv320aic31xx family codec.
+
+The audio card exposes two playback devices, one of them using the EASRC
+(Enhanced Asynchronous Sample Rate Converter) module. Note that this
+would require SDMA and EASRC firmware in order to work.
 
 Signed-off-by: Ariel D'Alessandro <ariel.dalessandro@collabora.com>
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
 ---
- Documentation/devicetree/bindings/sound/fsl-asoc-card.txt | 2 ++
- 1 file changed, 2 insertions(+)
+ .../dts/freescale/imx8mn-bsh-smm-s2pro.dts    | 94 +++++++++++++++++++
+ 1 file changed, 94 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sound/fsl-asoc-card.txt b/Documentation/devicetree/bindings/sound/fsl-asoc-card.txt
-index b219626a5403..8b4f4015cfe4 100644
---- a/Documentation/devicetree/bindings/sound/fsl-asoc-card.txt
-+++ b/Documentation/devicetree/bindings/sound/fsl-asoc-card.txt
-@@ -40,6 +40,8 @@ The compatible list for this generic sound card currently:
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
+index c6a8ed6745c1..3621354b4a92 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-bsh-smm-s2pro.dts
+@@ -7,6 +7,7 @@
+ /dts-v1/;
  
-  "fsl,imx-audio-tlv320aic32x4"
+ #include "imx8mn-bsh-smm-s2-common.dtsi"
++#include <dt-bindings/sound/tlv320aic31xx.h>
  
-+ "fsl,imx-audio-tlv320aic31xx"
+ / {
+ 	model = "BSH SMM S2 PRO";
+@@ -16,6 +17,69 @@ memory@40000000 {
+ 		device_type = "memory";
+ 		reg = <0x0 0x40000000 0x0 0x20000000>;
+ 	};
 +
-  "fsl,imx-audio-si476x"
++	sound-tlv320aic31xx {
++		compatible = "fsl,imx-audio-tlv320aic31xx";
++		model = "tlv320aic31xx-hifi";
++		audio-cpu = <&sai3>;
++		audio-codec = <&codec>;
++		audio-asrc = <&easrc>;
++		audio-routing =
++			"Ext Spk", "SPL",
++			"Ext Spk", "SPR";
++		mclk-id = <PLL_CLKIN_BCLK>;
++	};
++
++	vdd_input: vdd_input {
++		compatible = "regulator-fixed";
++		regulator-name = "vdd_input";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++	};
++};
++
++&easrc {
++	fsl,asrc-rate  = <48000>;
++	fsl,asrc-format = <10>;
++	status = "okay";
++};
++
++&i2c2 {
++	clock-frequency = <400000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c2>;
++	status = "okay";
++
++	codec: tlv320dac3101@18 {
++		#sound-dai-cells = <0>;
++		compatible = "ti,tlv320dac3101";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_dac_rst>;
++		reg = <0x18>;
++
++		ai31xx-micbias-vg = <MICBIAS_AVDDV>;
++
++		HPVDD-supply = <&buck4_reg>;
++		SPRVDD-supply = <&vdd_input>;
++		SPLVDD-supply = <&vdd_input>;
++		AVDD-supply = <&buck4_reg>;
++		IOVDD-supply = <&buck4_reg>;
++		DVDD-supply = <&buck5_reg>;
++		reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
++
++		clocks = <&clk IMX8MN_CLK_SAI3_ROOT>;
++		clock-names = "mclk";
++	};
++};
++
++&sai3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_sai3>;
++	assigned-clocks = <&clk IMX8MN_CLK_SAI3>;
++	assigned-clock-parents = <&clk IMX8MN_AUDIO_PLL1_OUT>;
++	assigned-clock-rates = <24576000>;
++	fsl,sai-mclk-direction-output;
++	status = "okay";
+ };
  
-  "fsl,imx-audio-wm8958"
+ /* eMMC */
+@@ -30,6 +94,36 @@ &usdhc1 {
+ };
+ 
+ &iomuxc {
++	pinctrl_dac_rst: dac_rst {
++		fsl,pins = <
++			MX8MN_IOMUXC_GPIO1_IO06_GPIO1_IO6		0x19 /* DAC_RST */
++		>;
++	};
++
++	pinctrl_espi2: espi2grp {
++		fsl,pins = <
++			MX8MN_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK            0x082
++			MX8MN_IOMUXC_ECSPI2_MOSI_ECSPI2_MOSI            0x082
++			MX8MN_IOMUXC_ECSPI2_MISO_ECSPI2_MISO            0x082
++			MX8MN_IOMUXC_ECSPI2_SS0_ECSPI2_SS0		0x040
++		>;
++	};
++
++	pinctrl_i2c2: i2c2grp {
++		fsl,pins = <
++			MX8MN_IOMUXC_I2C2_SCL_I2C2_SCL			0x400000c3
++			MX8MN_IOMUXC_I2C2_SDA_I2C2_SDA			0x400000c3
++		>;
++	};
++
++	pinctrl_sai3: sai3grp {
++		fsl,pins = <
++			MX8MN_IOMUXC_SAI3_TXFS_SAI3_TX_SYNC		0xd6
++			MX8MN_IOMUXC_SAI3_TXC_SAI3_TX_BCLK		0xd6
++			MX8MN_IOMUXC_SAI3_TXD_SAI3_TX_DATA0		0xd6
++		>;
++	};
++
+ 	pinctrl_usdhc1: usdhc1grp {
+ 		fsl,pins = <
+ 			MX8MN_IOMUXC_SD1_CLK_USDHC1_CLK			0x40000090
 -- 
 2.34.1
 

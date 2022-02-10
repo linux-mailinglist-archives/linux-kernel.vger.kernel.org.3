@@ -2,115 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634544B0C70
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE79C4B0C74
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241001AbiBJLfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 06:35:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39370 "EHLO
+        id S241023AbiBJLh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 06:37:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235635AbiBJLfU (ORCPT
+        with ESMTP id S235635AbiBJLh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 06:35:20 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AC61001
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:35:20 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8FF211F37B;
-        Thu, 10 Feb 2022 11:35:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1644492919; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ANTjimFiWNIfsY0w4OX0/8i+2aewvIuwbua8f0UJFaI=;
-        b=lRmymzO2d51OA3bDvHKy/IPvIcnTe/YIDfHvRvNd2SaAKZl+VxoIMuonUb4MFFQ66D9s79
-        ew7b9QeF2fJ4LHcXYXtQ+rby0FHOWRQZYDMaa+IMkRt4G5Y4wqSdPEUTmUWa9HVR/c2nU1
-        AqA0yrEKgoARlY/VpQLy1HOXLZKjN3E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1644492919;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ANTjimFiWNIfsY0w4OX0/8i+2aewvIuwbua8f0UJFaI=;
-        b=Cy1VlFzFsoqm953pN7vhg6u7WCNGOP1U4Df40zX0qyJh1yO6f05c8LFuziuiYVEHZHYJ0y
-        T0t6BkinF91SSGAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 57F6913B53;
-        Thu, 10 Feb 2022 11:35:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hCLHFHf4BGKTEgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 10 Feb 2022 11:35:19 +0000
-Message-ID: <1699e1b3-0508-4561-a7ec-052f382ca3c8@suse.cz>
-Date:   Thu, 10 Feb 2022 12:35:19 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Content-Language: en-US
-To:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
+        Thu, 10 Feb 2022 06:37:27 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9F81001
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:37:28 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JvZT42pQKzcckG;
+        Thu, 10 Feb 2022 19:36:24 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 10 Feb 2022 19:37:24 +0800
+Subject: Re: [PATCH 01/27] mm: remove a pointless CONFIG_ZONE_DEVICE check in
+ memremap_pages
+To:     Christoph Hellwig <hch@lst.de>
+CC:     Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
         Alistair Popple <apopple@nvidia.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Rik van Riel <riel@surriel.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
- <2b5eee76-183f-bd97-2e9d-f5ff8df63db@google.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH 02/13] mm/munlock: delete FOLL_MLOCK and FOLL_POPULATE
-In-Reply-To: <2b5eee76-183f-bd97-2e9d-f5ff8df63db@google.com>
-Content-Type: text/plain; charset=UTF-8
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        <linux-kernel@vger.kernel.org>, <amd-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <nouveau@lists.freedesktop.org>,
+        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Williams <dan.j.williams@intel.com>
+References: <20220210072828.2930359-1-hch@lst.de>
+ <20220210072828.2930359-2-hch@lst.de>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <fcd1848f-19af-6572-942f-bdcd51bf143c@huawei.com>
+Date:   Thu, 10 Feb 2022 19:37:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <20220210072828.2930359-2-hch@lst.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/6/22 22:32, Hugh Dickins wrote:
-> If counting page mlocks, we must not double-count: follow_page_pte() can
-> tell if a page has already been Mlocked or not, but cannot tell if a pte
-> has already been counted or not: that will have to be done when the pte
-> is mapped in (which lru_cache_add_inactive_or_unevictable() already tracks
-> for new anon pages, but there's no such tracking yet for others).
+On 2022/2/10 15:28, Christoph Hellwig wrote:
+> memremap.c is only built when CONFIG_ZONE_DEVICE is set, so remove
+> the superflous extra check.
 > 
-> Delete all the FOLL_MLOCK code - faulting in the missing pages will do
-> all that is necessary, without special mlock_vma_page() calls from here.
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> ---
+>  mm/memremap.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> But then FOLL_POPULATE turns out to serve no purpose - it was there so
-> that its absence would tell faultin_page() not to faultin page when
-> setting up VM_LOCKONFAULT areas; but if there's no special work needed
-> here for mlock, then there's no work at all here for VM_LOCKONFAULT.
+> diff --git a/mm/memremap.c b/mm/memremap.c
+> index 6aa5f0c2d11fda..5f04a0709e436e 100644
+> --- a/mm/memremap.c
+> +++ b/mm/memremap.c
+> @@ -328,8 +328,7 @@ void *memremap_pages(struct dev_pagemap *pgmap, int nid)
+>  		}
+>  		break;
+>  	case MEMORY_DEVICE_FS_DAX:
+> -		if (!IS_ENABLED(CONFIG_ZONE_DEVICE) ||
+> -		    IS_ENABLED(CONFIG_FS_DAX_LIMITED)) {
+> +		if (IS_ENABLED(CONFIG_FS_DAX_LIMITED)) {
+>  			WARN(1, "File system DAX not supported\n");
+>  			return ERR_PTR(-EINVAL);
+>  		}
 > 
-> Have I got that right?  I've not looked into the history, but see that
-> FOLL_POPULATE goes back before VM_LOCKONFAULT: did it serve a different
-> purpose before?  Ah, yes, it was used to skip the old stack guard page.
-> 
-> And is it intentional that COW is not broken on existing pages when
-> setting up a VM_LOCKONFAULT area?  I can see that being argued either
-> way, and have no reason to disagree with current behaviour.
 
-Yeah I think it's consistent with the two usecases stated for VM_LOCKONFAULT:
-https://lore.kernel.org/all/1441720742-7803-1-git-send-email-emunson@akamai.com/
+LGTM. Thanks.
 
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>

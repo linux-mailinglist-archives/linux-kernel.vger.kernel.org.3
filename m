@@ -2,101 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E888C4B1840
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 139134B1857
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345005AbiBJWfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 17:35:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56000 "EHLO
+        id S1345038AbiBJWjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 17:39:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345004AbiBJWfG (ORCPT
+        with ESMTP id S1345032AbiBJWi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:35:06 -0500
-Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3049E10AA
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:35:07 -0800 (PST)
-Received: from pop-os.home ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id II1pnjJ4L9r2MII1pnUsZS; Thu, 10 Feb 2022 23:35:05 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 10 Feb 2022 23:35:05 +0100
-X-ME-IP: 90.126.236.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Simon Horman <simon.horman@corigine.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        oss-drivers@corigine.com, netdev@vger.kernel.org
-Subject: [PATCH v2 2/2] nfp: flower: Remove usage of the deprecated ida_simple_xxx API
-Date:   Thu, 10 Feb 2022 23:35:04 +0100
-Message-Id: <721abecd2f40bed319ab9fb3feebbea8431b73ed.1644532467.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <4acb805751f2cf5de8d69e9602a88ec39feff9fc.1644532467.git.christophe.jaillet@wanadoo.fr>
-References: <4acb805751f2cf5de8d69e9602a88ec39feff9fc.1644532467.git.christophe.jaillet@wanadoo.fr>
+        Thu, 10 Feb 2022 17:38:58 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2B7326CD
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:38:56 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-231-YriZOnoSNKCN8L5w2e2KaA-1; Thu, 10 Feb 2022 22:38:54 +0000
+X-MC-Unique: YriZOnoSNKCN8L5w2e2KaA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Thu, 10 Feb 2022 22:38:51 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Thu, 10 Feb 2022 22:38:51 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Dave Hansen' <dave.hansen@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Eugene Syromiatnikov" <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "joao.moreira@intel.com" <joao.moreira@intel.com>,
+        John Allen <john.allen@amd.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "eranian@google.com" <eranian@google.com>
+CC:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: RE: [PATCH 18/35] mm: Add guard pages around a shadow stack.
+Thread-Topic: [PATCH 18/35] mm: Add guard pages around a shadow stack.
+Thread-Index: AQHYHgPE4ng9s1QFWkGaF1pqJykcg6yNYAXA
+Date:   Thu, 10 Feb 2022 22:38:51 +0000
+Message-ID: <1b5d83dc4cd84309823f012a3dce24f0@AcuMS.aculab.com>
+References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
+ <20220130211838.8382-19-rick.p.edgecombe@intel.com>
+ <f92c5110-7d97-b68d-d387-7e6a16a29e49@intel.com>
+In-Reply-To: <f92c5110-7d97-b68d-d387-7e6a16a29e49@intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use ida_alloc_xxx()/ida_free() instead to
-ida_simple_get()/ida_simple_remove().
-The latter is deprecated and more verbose.
-
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- .../net/ethernet/netronome/nfp/flower/tunnel_conf.c    | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-index 9244b35e3855..c71bd555f482 100644
---- a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-+++ b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-@@ -942,8 +942,8 @@ nfp_tunnel_add_shared_mac(struct nfp_app *app, struct net_device *netdev,
- 	if (!nfp_mac_idx) {
- 		/* Assign a global index if non-repr or MAC is now shared. */
- 		if (entry || !port) {
--			ida_idx = ida_simple_get(&priv->tun.mac_off_ids, 0,
--						 NFP_MAX_MAC_INDEX, GFP_KERNEL);
-+			ida_idx = ida_alloc_max(&priv->tun.mac_off_ids,
-+						NFP_MAX_MAC_INDEX, GFP_KERNEL);
- 			if (ida_idx < 0)
- 				return ida_idx;
- 
-@@ -998,7 +998,7 @@ nfp_tunnel_add_shared_mac(struct nfp_app *app, struct net_device *netdev,
- 	kfree(entry);
- err_free_ida:
- 	if (ida_idx != -1)
--		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
-+		ida_free(&priv->tun.mac_off_ids, ida_idx);
- 
- 	return err;
- }
-@@ -1061,7 +1061,7 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
- 		}
- 
- 		ida_idx = nfp_tunnel_get_ida_from_global_mac_idx(entry->index);
--		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
-+		ida_free(&priv->tun.mac_off_ids, ida_idx);
- 		entry->index = nfp_mac_idx;
- 		return 0;
- 	}
-@@ -1081,7 +1081,7 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
- 	/* If MAC has global ID then extract and free the ida entry. */
- 	if (nfp_tunnel_is_mac_idx_global(nfp_mac_idx)) {
- 		ida_idx = nfp_tunnel_get_ida_from_global_mac_idx(entry->index);
--		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
-+		ida_free(&priv->tun.mac_off_ids, ida_idx);
- 	}
- 
- 	kfree(entry);
--- 
-2.32.0
+RnJvbTogRGF2ZSBIYW5zZW4NCj4gU2VudDogMDkgRmVicnVhcnkgMjAyMiAyMjoyNA0KPiANCj4g
+T24gMS8zMC8yMiAxMzoxOCwgUmljayBFZGdlY29tYmUgd3JvdGU6DQo+ID4gSU5DU1NQKFEvRCkg
+aW5jcmVtZW50cyBzaGFkb3cgc3RhY2sgcG9pbnRlciBhbmQgJ3BvcHMgYW5kIGRpc2NhcmRzJyB0
+aGUNCj4gPiBmaXJzdCBhbmQgdGhlIGxhc3QgZWxlbWVudHMgaW4gdGhlIHJhbmdlLCBlZmZlY3Rp
+dmVseSB0b3VjaGVzIHRob3NlIG1lbW9yeQ0KPiA+IGFyZWFzLg0KPiANCj4gVGhpcyBpcyBhIHBy
+ZXR0eSBjbG9zZSBjb3B5IG9mIHRoZSBpbnN0cnVjdGlvbiByZWZlcmVuY2UgdGV4dCBmb3INCj4g
+SU5DU1NQLiAgSSdtIGZlZWxpbmcgcmF0aGVyIGRlbnNlIHRvZGF5LCBidXQgdGhhdCdzIGp1c3Qg
+bm90IG1ha2luZyBhbnkNCj4gc2Vuc2UuDQo+IA0KPiBUaGUgcHNldWRvY29kZSBpcyBtb3JlIHNl
+bnNpYmxlIGluIHRoZSBTRE0uICBJIHRoaW5rIHRoaXMgbmVlZHMgYSBiZXR0ZXINCj4gZXhwbGFu
+YXRpb246DQo+IA0KPiAJVGhlIElOQ1NTUCBpbnN0cnVjdGlvbiBpbmNyZW1lbnRzIHRoZSBzaGFk
+b3cgc3RhY2sgcG9pbnRlci4gIEl0DQo+IAlpcyB0aGUgc2hhZG93IHN0YWNrIGFuYWxvZyBvZiBh
+biBpbnN0cnVjdGlvbiBsaWtlOg0KPiANCj4gCQlhZGRxCSQweDgwLCAlcnNwDQo+IA0KPiAJSG93
+ZXZlciwgdGhlcmUgaXMgb25lIGltcG9ydGFudCBkaWZmZXJlbmNlIGJldHdlZW4gYW4gQUREIG9u
+DQo+IAklcnNwIGFuZCBJTkNTU1AuICBJbiBhZGRpdGlvbiB0byBtb2RpZnlpbmcgU1NQLCBJTkNT
+U1AgYWxzbw0KPiAJcmVhZHMgZnJvbSB0aGUgbWVtb3J5IG9mIHRoZSBmaXJzdCBhbmQgbGFzdCBl
+bGVtZW50cyB0aGF0IHdlcmUNCj4gCSJwb3BwZWQiLiAgWW91IGNhbiB0aGluayBvZiBpdCBhcyBh
+Y3RpbmcgbGlrZSB0aGlzOg0KPiANCj4gCVJFQURfT05DRShzc3ApOyAgICAgICAvLyByZWFkK2Rp
+c2NhcmQgdG9wIGVsZW1lbnQgb24gc3RhY2sNCj4gCXNzcCArPSBucl90b19wb3AgKiA4OyAvLyBt
+b3ZlIHRoZSBzaGFkb3cgc3RhY2sNCj4gCVJFQURfT05DRShzc3AtOCk7ICAgICAvLyByZWFkK2Rp
+c2NhcmQgbGFzdCBwb3BwZWQgc3RhY2sgZWxlbWVudA0KPiANCj4gDQo+ID4gVGhlIG1heGltdW0g
+bW92aW5nIGRpc3RhbmNlIGJ5IElOQ1NTUFEgaXMgMjU1ICogOCA9IDIwNDAgYnl0ZXMgYW5kDQo+
+ID4gMjU1ICogNCA9IDEwMjAgYnl0ZXMgYnkgSU5DU1NQRC4gIEJvdGggcmFuZ2VzIGFyZSBmYXIg
+ZnJvbSBQQUdFX1NJWkUuDQo+IA0KPiAuLi4gVGhhdCBtYXhpbXVtIGRpc3RhbmNlLCBjb21iaW5l
+ZCB3aXRoIGFuIGEgZ3VhcmQgcGFnZXMgYXQgdGhlIGVuZCBvZg0KPiBhIHNoYWRvdyBzdGFjayBl
+bnN1cmVzIHRoYXQgSU5DU1NQIHdpbGwgZmF1bHQgYmVmb3JlIGl0IGlzIGFibGUgdG8gbW92ZQ0K
+PiBhY3Jvc3MgYW4gZW50aXJlIGd1YXJkIHBhZ2UuDQo+IA0KPiA+IFRodXMsIHB1dHRpbmcgYSBn
+YXAgcGFnZSBvbiBib3RoIGVuZHMgb2YgYSBzaGFkb3cgc3RhY2sgcHJldmVudHMgSU5DU1NQLA0K
+PiA+IENBTEwsIGFuZCBSRVQgZnJvbSBnb2luZyBiZXlvbmQuDQoNCkRvIHlvdSBuZWVkIGEgcmVh
+bCBndWFyZCBwYWdlPw0KT3IgaXMgaXQganVzdCBlbm91Z2ggdG8gZW5zdXJlIHRoYXQgdGhlIGFk
+amFjZW50IHBhZ2UgaXNuJ3QgYW5vdGhlcg0Kc2hhZG93IHN0YWNrIHBhZ2U/DQoNCkFueSBvdGhl
+ciBwYWdlIHdpbGwgY2F1c2UgYSBmYXVsdCBiZWNhdXNlIHRoZSBQVEUgaXNuJ3QgcmVhZG9ubHkr
+ZGlydHkuDQoNCkknbSBub3Qgc3VyZSBob3cgY29tbW9uIHNpbmdsZSBwYWdlIGFsbG9jYXRlcyBh
+cmUgaW4gTGludXguDQpCdXQgYWRqYWNlbnQgc2hhZG93IHN0YWNrcyBtYXkgYmUgcmFyZSBhbnl3
+YXkuDQpTbyBhIGNoZWNrIGFnYWluc3QgYm90aCBhZGphY2VudCBQVEUgZW50cmllcyB3b3VsZCBz
+dWZmaWNlLg0KT3IgbWF5YmUgYWx3YXlzIGFsbG9jYXRlIGFuIGV2ZW4gKG9yIG9kZCkgbnVtYmVy
+ZWQgcGFnZS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJh
+bWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0
+cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 

@@ -2,93 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9884B0D4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0CD4B0D6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241474AbiBJMQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 07:16:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34052 "EHLO
+        id S241484AbiBJMRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 07:17:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232947AbiBJMQg (ORCPT
+        with ESMTP id S232947AbiBJMRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 07:16:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7F1116D;
-        Thu, 10 Feb 2022 04:16:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3965EB82426;
-        Thu, 10 Feb 2022 12:16:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A27C004E1;
-        Thu, 10 Feb 2022 12:16:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644495395;
-        bh=EtUqhE4EZ9tdkev8HxZrxLizLPpEiWHGvcR5Smiyjcc=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=r1O7Xl728X6lQMXclEDmP1qt51soJ34yuAs975UmUN1mwAwIz8lI8E5ZDMW4x9r0k
-         uzcOjB40XXO7jYXPE97bky+6IS4ffDfvh9ikj191yBlRPPo83CvZd/fsLwDKxSdeKq
-         9r/v13pF/CwrXDrcSbLX1B9vwEQgLvf4Jg0sXF0Yq0YSHlUDjHmxxIiyKs06iXFJnC
-         tiPliv7heN7wLogCp8zs6JYpCg6zK4u2G/EkAeZSr/6J/arUMgXgeKDRxnhdxjazfl
-         VHsWlsWJLLxWKHENbSfw9pQLX0zJT4r/kgsX6mRpPnwZt/3jpLJMMboIPR3hpVQUrs
-         DSlB7J+M5gLGA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Qing Wang <wangqing@vivo.com>
-Cc:     Maya Erez <merez@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, wil6210@qti.qualcomm.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: wireless: ath: use div64_u64() instead of do_div()
-References: <1644395972-4303-1-git-send-email-wangqing@vivo.com>
-Date:   Thu, 10 Feb 2022 14:16:28 +0200
-In-Reply-To: <1644395972-4303-1-git-send-email-wangqing@vivo.com> (Qing Wang's
-        message of "Wed, 9 Feb 2022 00:39:32 -0800")
-Message-ID: <877da2c3xf.fsf@tynnyri.adurom.net>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Thu, 10 Feb 2022 07:17:07 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A14116E;
+        Thu, 10 Feb 2022 04:17:08 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id i30so9860422pfk.8;
+        Thu, 10 Feb 2022 04:17:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=WHF1RWc56iEqxR4rGHxDa3d4lPmQZECBnMy5/fMq4U8=;
+        b=hoZmVVW+gZMMsD122dMrOPK9QHZyUY2vm+hsZ5v71qu64ZBcjS0NnDSOf6TwATJI5z
+         RbpRLLViI6k0qt1vEj09VeX5e2De0lcFLxSPuziqdZ5hT84EmAcktFjwRtK0eOi6XwQY
+         XEoISYp5x8kiYvis2VkVON7BV3XH6vEXsQFZ7SywJxS1x52TsgjU3Cs9boWOeU5un6lE
+         UAZRU0HDNmnvKJn/mH2oF3bvoioc/OkEelXd2gFPDHmjNMN7eb8vtqIz0RV6nShym/QZ
+         JZftNdGZhXyTA1TDN9h2VGJo4RehgTCV7q+uJs77GTIanCyiq0IVEX49GkG11d++LMU6
+         +6Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=WHF1RWc56iEqxR4rGHxDa3d4lPmQZECBnMy5/fMq4U8=;
+        b=xW/50e8krqyrfbTiTUBgCZhUNIIaSPdJkiux6swkEZmztMF9YjuBMYH5n0aL8rdK7S
+         MA8JMt//4HmxHwKeFPwoXw/tYo5ir/qjU3DH203wnjGVtLHFKbOeyq0ZQnLt43rX/GlN
+         gLNLRQRyQLFjMBA4NNYAkrFhMfnKy2Nj/G5Zu+a4FfLLGqEeC4q1PfTcPTBBUbMg8eFC
+         xFszU6uLf2r0+ucbtsC6h1azlyQHikG4AeLYhGRovLix8Zpnts2m55VhbD1FsIKWsF9z
+         bpFobvsbBUj+aXgw7SUIRzImNxyxnOH7Nj1M7gr8Uz5djX8+ZJM0GKd28gCmXQv3if23
+         FWMw==
+X-Gm-Message-State: AOAM533MTf1uwJWadgdIyIEazWXaZY6/TVrZTzOOWcf719aMGnJ9lOFL
+        610ddfn52Plhb/7NYcAsQ/Y=
+X-Google-Smtp-Source: ABdhPJzFSaQ5io/oy39aM/do/W/exTdqUfhkx2Vq2aOlHDZ5TFMPqo5tzpket/zIYhtrA+yGv+qiQg==
+X-Received: by 2002:a63:dd0f:: with SMTP id t15mr5916213pgg.12.1644495428396;
+        Thu, 10 Feb 2022 04:17:08 -0800 (PST)
+Received: from ?IPV6:2601:206:8000:2834::19b? ([2601:206:8000:2834::19b])
+        by smtp.gmail.com with ESMTPSA id r12sm16860920pgn.6.2022.02.10.04.17.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 04:17:07 -0800 (PST)
+Message-ID: <3531b0fa-4eef-aaa9-6509-39403019c909@gmail.com>
+Date:   Thu, 10 Feb 2022 04:17:05 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 5.16 0/5] 5.16.9-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220209191249.887150036@linuxfoundation.org>
+From:   Scott Bruce <smbruce@gmail.com>
+In-Reply-To: <20220209191249.887150036@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qing Wang <wangqing@vivo.com> writes:
+On 2/9/22 11:14, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.9 release.
+> There are 5 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.9-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-> From: Wang Qing <wangqing@vivo.com>
->
-> do_div() does a 64-by-32 division.
-> When the divisor is u64, do_div() truncates it to 32 bits, this means it
-> can test non-zero and be truncated to zero for division.
->
-> fix do_div.cocci warning:
-> do_div() does a 64-by-32 division, please consider using div64_u64 instead.
->
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> ---
->  drivers/net/wireless/ath/wil6210/debugfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/wireless/ath/wil6210/debugfs.c b/drivers/net/wireless/ath/wil6210/debugfs.c
-> index 4c944e5..2cee9dd
-> --- a/drivers/net/wireless/ath/wil6210/debugfs.c
-> +++ b/drivers/net/wireless/ath/wil6210/debugfs.c
-> @@ -1766,7 +1766,7 @@ __acquires(&p->tid_rx_lock) __releases(&p->tid_rx_lock)
->  			seq_puts(s, "\n");
->  			if (!num_packets)
->  				continue;
-> -			do_div(tx_latency_avg, num_packets);
-> +			div64_u64(tx_latency_avg, num_packets);
+Tested on x86-64/Cezanne: No regressions during Clang or GCC builds, in dmesg or during a dozen s0ix suspend cycles.
 
-As you have been pointed out in your other patches, do_div() and
-div64_u64() work differently.
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Tested-by: Scott Bruce <smbruce@gmail.com>

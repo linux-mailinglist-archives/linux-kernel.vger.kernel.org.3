@@ -2,38 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688364B183B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E888C4B1840
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:35:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345001AbiBJWe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 17:34:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55938 "EHLO
+        id S1345005AbiBJWfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 17:35:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238570AbiBJWe4 (ORCPT
+        with ESMTP id S1345004AbiBJWfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:34:56 -0500
+        Thu, 10 Feb 2022 17:35:06 -0500
 Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C0110AA
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:34:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3049E10AA
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:35:07 -0800 (PST)
 Received: from pop-os.home ([90.126.236.122])
         by smtp.orange.fr with ESMTPA
-        id II1dnjIzz9r2MII1enUsYH; Thu, 10 Feb 2022 23:34:55 +0100
+        id II1pnjJ4L9r2MII1pnUsZS; Thu, 10 Feb 2022 23:35:05 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Thu, 10 Feb 2022 23:34:55 +0100
+X-ME-Date: Thu, 10 Feb 2022 23:35:05 +0100
 X-ME-IP: 90.126.236.122
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 To:     Simon Horman <simon.horman@corigine.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        John Hurley <john.hurley@netronome.com>
+        "David S. Miller" <davem@davemloft.net>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         oss-drivers@corigine.com, netdev@vger.kernel.org
-Subject: [PATCH v2 1/2] nfp: flower: Fix a potential leak in nfp_tunnel_add_shared_mac()
-Date:   Thu, 10 Feb 2022 23:34:52 +0100
-Message-Id: <4acb805751f2cf5de8d69e9602a88ec39feff9fc.1644532467.git.christophe.jaillet@wanadoo.fr>
+Subject: [PATCH v2 2/2] nfp: flower: Remove usage of the deprecated ida_simple_xxx API
+Date:   Thu, 10 Feb 2022 23:35:04 +0100
+Message-Id: <721abecd2f40bed319ab9fb3feebbea8431b73ed.1644532467.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <4acb805751f2cf5de8d69e9602a88ec39feff9fc.1644532467.git.christophe.jaillet@wanadoo.fr>
+References: <4acb805751f2cf5de8d69e9602a88ec39feff9fc.1644532467.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
@@ -45,45 +46,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ida_simple_get() returns an id between min (0) and max (NFP_MAX_MAC_INDEX)
-inclusive.
-So NFP_MAX_MAC_INDEX (0xff) is a valid id.
+Use ida_alloc_xxx()/ida_free() instead to
+ida_simple_get()/ida_simple_remove().
+The latter is deprecated and more verbose.
 
-In order for the error handling path to work correctly, the 'invalid'
-value for 'ida_idx' should not be in the 0..NFP_MAX_MAC_INDEX range,
-inclusive.
-
-So set it to -1.
-
-Fixes: 20cce8865098 ("nfp: flower: enable MAC address sharing for offloadable devs")
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../net/ethernet/netronome/nfp/flower/tunnel_conf.c    | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-index cd50db779dda..9244b35e3855 100644
+index 9244b35e3855..c71bd555f482 100644
 --- a/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
 +++ b/drivers/net/ethernet/netronome/nfp/flower/tunnel_conf.c
-@@ -922,8 +922,8 @@ nfp_tunnel_add_shared_mac(struct nfp_app *app, struct net_device *netdev,
- 			  int port, bool mod)
- {
- 	struct nfp_flower_priv *priv = app->priv;
--	int ida_idx = NFP_MAX_MAC_INDEX, err;
- 	struct nfp_tun_offloaded_mac *entry;
-+	int ida_idx = -1, err;
- 	u16 nfp_mac_idx = 0;
+@@ -942,8 +942,8 @@ nfp_tunnel_add_shared_mac(struct nfp_app *app, struct net_device *netdev,
+ 	if (!nfp_mac_idx) {
+ 		/* Assign a global index if non-repr or MAC is now shared. */
+ 		if (entry || !port) {
+-			ida_idx = ida_simple_get(&priv->tun.mac_off_ids, 0,
+-						 NFP_MAX_MAC_INDEX, GFP_KERNEL);
++			ida_idx = ida_alloc_max(&priv->tun.mac_off_ids,
++						NFP_MAX_MAC_INDEX, GFP_KERNEL);
+ 			if (ida_idx < 0)
+ 				return ida_idx;
  
- 	entry = nfp_tunnel_lookup_offloaded_macs(app, netdev->dev_addr);
-@@ -997,7 +997,7 @@ nfp_tunnel_add_shared_mac(struct nfp_app *app, struct net_device *netdev,
- err_free_entry:
+@@ -998,7 +998,7 @@ nfp_tunnel_add_shared_mac(struct nfp_app *app, struct net_device *netdev,
  	kfree(entry);
  err_free_ida:
--	if (ida_idx != NFP_MAX_MAC_INDEX)
-+	if (ida_idx != -1)
- 		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
+ 	if (ida_idx != -1)
+-		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
++		ida_free(&priv->tun.mac_off_ids, ida_idx);
  
  	return err;
+ }
+@@ -1061,7 +1061,7 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
+ 		}
+ 
+ 		ida_idx = nfp_tunnel_get_ida_from_global_mac_idx(entry->index);
+-		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
++		ida_free(&priv->tun.mac_off_ids, ida_idx);
+ 		entry->index = nfp_mac_idx;
+ 		return 0;
+ 	}
+@@ -1081,7 +1081,7 @@ nfp_tunnel_del_shared_mac(struct nfp_app *app, struct net_device *netdev,
+ 	/* If MAC has global ID then extract and free the ida entry. */
+ 	if (nfp_tunnel_is_mac_idx_global(nfp_mac_idx)) {
+ 		ida_idx = nfp_tunnel_get_ida_from_global_mac_idx(entry->index);
+-		ida_simple_remove(&priv->tun.mac_off_ids, ida_idx);
++		ida_free(&priv->tun.mac_off_ids, ida_idx);
+ 	}
+ 
+ 	kfree(entry);
 -- 
 2.32.0
 

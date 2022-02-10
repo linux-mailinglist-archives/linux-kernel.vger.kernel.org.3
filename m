@@ -2,187 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73CC4B07CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C3E4B07DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237043AbiBJIKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 03:10:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48810 "EHLO
+        id S237130AbiBJILK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 03:11:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237016AbiBJIKE (ORCPT
+        with ESMTP id S237098AbiBJILH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 03:10:04 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA27D1A6;
-        Thu, 10 Feb 2022 00:10:05 -0800 (PST)
-Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 10 Feb 2022 17:10:05 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 5FAC3205D901;
-        Thu, 10 Feb 2022 17:10:05 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Thu, 10 Feb 2022 17:10:05 +0900
-Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id E9B9EC1E22;
-        Thu, 10 Feb 2022 17:10:03 +0900 (JST)
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH v3 3/3] PCI: uniphier-ep: Add NX1 support
-Date:   Thu, 10 Feb 2022 17:09:56 +0900
-Message-Id: <1644480596-20037-4-git-send-email-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1644480596-20037-1-git-send-email-hayashi.kunihiko@socionext.com>
-References: <1644480596-20037-1-git-send-email-hayashi.kunihiko@socionext.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 10 Feb 2022 03:11:07 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1121097
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 00:11:06 -0800 (PST)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3C4F83F32C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:10:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644480658;
+        bh=rnVHj9CHiNB6vcrhWaipk1/sdp7xgf97Hh+oKwEPpOs=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=hKlHiHRQmg2i9AQzqbU5BfEQOztKoNYvApUzp+n4PPyY8KF44lJeVn97keQlOyOTO
+         ovkte5tYNaD15sj1k2ImhDJt9D4uOBGXg/B0Bmg1STf0MnNKY7YWfsjX8fh4e2xfAp
+         7U8K5eu0OCFYEt//NTAeFESqEk+zxlzs6Y8lcC3uaAucTFmqKZ2c7GDPvkmzFWs6nK
+         ht/A3ywBaun6hf8oXorfnrV2SenWAUFYIy0Jy0E9hupGOxx8TjLt69/+XtOFGyhMID
+         /q8YN+uV5rUWrbaplr+d0XidT64dQIkck7iNLiEGaSDmkKuIQ/W9f7cfnnEDJHl2yT
+         o/37vv1gC9xag==
+Received: by mail-ed1-f71.google.com with SMTP id ed6-20020a056402294600b004090fd8a936so2864639edb.23
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 00:10:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rnVHj9CHiNB6vcrhWaipk1/sdp7xgf97Hh+oKwEPpOs=;
+        b=OIKP8GGnNn2rh7SXgWqSqfUwTcEUjkQbSvwfOMveUK3U3fPrj+VCbJEXOoefANDx2+
+         c0oaCXlMH0AcE1KBuWQJ+d5mKHxep7CIGi+1myoq2SoZMT10xt6xCJ1pBttc/pBdNmOA
+         RhNQGAbPnmtyysQkD3Cuw+tnKVDWpscr533piYZefg92f/hjeTv6TiBU4ILyeR6pEF+a
+         WIdVskVGQyFSdryMkG8QnbFtnefS6fZShI//g6eRbLhg7FYn7RHX/2FOPTxsv8IAnH5t
+         LZSqgBUkZltlnffruZ4BYBX+giNBgRx+vJGUA+Ad+W0LodYRIqAxF2H0FSvaLZgt5j9L
+         RV5w==
+X-Gm-Message-State: AOAM5336oDmO+w1AxLyLtLsRvcVqYNqA/Ew1d229ZvEiuUwXHHjCVVts
+        Br5QUZtyWUhcSXe8ys/Jx9Qv1P1pPt/JVKtcQuLE+1MEngtroST1FhEPypuU+JOF76UrbXQAY/j
+        1594WThSTRca4emx5jkeKZE2aCYamzlAqLAe1+kI0eg==
+X-Received: by 2002:a17:906:5349:: with SMTP id j9mr1695990ejo.368.1644480656975;
+        Thu, 10 Feb 2022 00:10:56 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz93CRsj8ZQh2gY9EXnoyBRs+OT8gb0AMXSmIAPsFac9M3xo7W5tdmNzg25cweSZ1IFjqp/bg==
+X-Received: by 2002:a17:906:5349:: with SMTP id j9mr1695977ejo.368.1644480656756;
+        Thu, 10 Feb 2022 00:10:56 -0800 (PST)
+Received: from [192.168.0.97] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id kw5sm6904003ejc.140.2022.02.10.00.10.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 00:10:56 -0800 (PST)
+Message-ID: <61be0071-a6e9-f749-37e9-978a72a60897@canonical.com>
+Date:   Thu, 10 Feb 2022 09:10:55 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] selftests/ftrace: Do not trace do_softirq because of
+ PREEMPT_RT
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rt-users@vger.kernel.org, joseph.salisbury@canonical.com
+References: <20220209162430.286578-1-krzysztof.kozlowski@canonical.com>
+ <20220210000003.6b6142f9@gandalf.local.home>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220210000003.6b6142f9@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add basic support for UniPhier NX1 SoC as non-legacy SoC. This includes
-a compatible string, SoC-dependent data containing init() and wait()
-functions for the controller.
+On 10/02/2022 06:00, Steven Rostedt wrote:
+> On Wed,  9 Feb 2022 17:24:30 +0100
+> Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
+> 
+>> The PREEMPT_RT patchset does not use soft IRQs thus trying to filter for
+>> do_softirq fails for such kernel:
+>>
+>>   echo do_softirq
+>>   ftracetest: 81: echo: echo: I/O error
+>>
+>> Choose some other externally visible function for the test.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>>
+>> ---
+>>
+>> I understand that the failure does not exist on mainline kernel (only
+>> with PREEMPT_RT patchset) but the change does not harm it.
+>>
+>> If it is not suitable alone, please consider it for RT patchset.
+>> ---
+>>  .../selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc      | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+>> index e96e279e0533..1d0c7601865f 100644
+>> --- a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+>> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+>> @@ -19,7 +19,7 @@ fail() { # mesg
+>>  
+>>  FILTER=set_ftrace_filter
+>>  FUNC1="schedule"
+>> -FUNC2="do_softirq"
+>> +FUNC2="_printk"
+> 
+> The problem with the above, is that it is not guaranteed to trigger (and
+> probably will not), where as the do_softirq is. The filtering is suppose to
+> trace something that actually happens.
+> 
+> How about using: scheduler_tick ?
+> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
----
- drivers/pci/controller/dwc/pcie-uniphier-ep.c | 81 +++++++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
+This works as well. I had impression that the test is only about
+filtering interface and actual function does not have to hit/trigger.
 
-diff --git a/drivers/pci/controller/dwc/pcie-uniphier-ep.c b/drivers/pci/controller/dwc/pcie-uniphier-ep.c
-index 6c035fc45aaa..4d0a587c0ba5 100644
---- a/drivers/pci/controller/dwc/pcie-uniphier-ep.c
-+++ b/drivers/pci/controller/dwc/pcie-uniphier-ep.c
-@@ -10,6 +10,7 @@
- #include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/init.h>
-+#include <linux/iopoll.h>
- #include <linux/of_device.h>
- #include <linux/pci.h>
- #include <linux/phy/phy.h>
-@@ -31,6 +32,17 @@
- #define PCL_RSTCTRL2			0x0024
- #define PCL_RSTCTRL_PHY_RESET		BIT(0)
- 
-+#define PCL_PINCTRL0			0x002c
-+#define PCL_PERST_PLDN_REGEN		BIT(12)
-+#define PCL_PERST_NOE_REGEN		BIT(11)
-+#define PCL_PERST_OUT_REGEN		BIT(8)
-+#define PCL_PERST_PLDN_REGVAL		BIT(4)
-+#define PCL_PERST_NOE_REGVAL		BIT(3)
-+#define PCL_PERST_OUT_REGVAL		BIT(0)
-+
-+#define PCL_PIPEMON			0x0044
-+#define PCL_PCLK_ALIVE			BIT(15)
-+
- #define PCL_MODE			0x8000
- #define PCL_MODE_REGEN			BIT(8)
- #define PCL_MODE_REGVAL			BIT(0)
-@@ -51,6 +63,9 @@
- #define PCL_APP_INTX			0x8074
- #define PCL_APP_INTX_SYS_INT		BIT(0)
- 
-+#define PCL_APP_PM0			0x8078
-+#define PCL_SYS_AUX_PWR_DET		BIT(8)
-+
- /* assertion time of INTx in usec */
- #define PCL_INTX_WIDTH_USEC		30
- 
-@@ -123,6 +138,55 @@ static void uniphier_pcie_pro5_init_ep(struct uniphier_pcie_ep_priv *priv)
- 	msleep(100);
- }
- 
-+static void uniphier_pcie_nx1_init_ep(struct uniphier_pcie_ep_priv *priv)
-+{
-+	u32 val;
-+
-+	/* set EP mode */
-+	val = readl(priv->base + PCL_MODE);
-+	val |= PCL_MODE_REGEN | PCL_MODE_REGVAL;
-+	writel(val, priv->base + PCL_MODE);
-+
-+	/* use auxiliary power detection */
-+	val = readl(priv->base + PCL_APP_PM0);
-+	val |= PCL_SYS_AUX_PWR_DET;
-+	writel(val, priv->base + PCL_APP_PM0);
-+
-+	/* assert PERST# */
-+	val = readl(priv->base + PCL_PINCTRL0);
-+	val &= ~(PCL_PERST_NOE_REGVAL | PCL_PERST_OUT_REGVAL
-+		 | PCL_PERST_PLDN_REGVAL);
-+	val |= PCL_PERST_NOE_REGEN | PCL_PERST_OUT_REGEN
-+		| PCL_PERST_PLDN_REGEN;
-+	writel(val, priv->base + PCL_PINCTRL0);
-+
-+	uniphier_pcie_ltssm_enable(priv, false);
-+
-+	usleep_range(100000, 200000);
-+
-+	/* deassert PERST# */
-+	val = readl(priv->base + PCL_PINCTRL0);
-+	val |= PCL_PERST_OUT_REGVAL | PCL_PERST_OUT_REGEN;
-+	writel(val, priv->base + PCL_PINCTRL0);
-+}
-+
-+static int uniphier_pcie_nx1_wait_ep(struct uniphier_pcie_ep_priv *priv)
-+{
-+	u32 status;
-+	int ret;
-+
-+	/* wait PIPE clock */
-+	ret = readl_poll_timeout(priv->base + PCL_PIPEMON, status,
-+				 status & PCL_PCLK_ALIVE, 100000, 1000000);
-+	if (ret) {
-+		dev_err(priv->pci.dev,
-+			"Failed to initialize controller in EP mode\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static int uniphier_pcie_start_link(struct dw_pcie *pci)
- {
- 	struct uniphier_pcie_ep_priv *priv = to_uniphier_pcie(pci);
-@@ -353,11 +417,28 @@ static const struct uniphier_pcie_ep_soc_data uniphier_pro5_data = {
- 	},
- };
- 
-+static const struct uniphier_pcie_ep_soc_data uniphier_nx1_data = {
-+	.has_gio = false,
-+	.init = uniphier_pcie_nx1_init_ep,
-+	.wait = uniphier_pcie_nx1_wait_ep,
-+	.features = {
-+		.linkup_notifier = false,
-+		.msi_capable = true,
-+		.msix_capable = false,
-+		.align = 1 << 12,
-+		.bar_fixed_64bit = BIT(BAR_0) | BIT(BAR_2) | BIT(BAR_4),
-+	},
-+};
-+
- static const struct of_device_id uniphier_pcie_ep_match[] = {
- 	{
- 		.compatible = "socionext,uniphier-pro5-pcie-ep",
- 		.data = &uniphier_pro5_data,
- 	},
-+	{
-+		.compatible = "socionext,uniphier-nx1-pcie-ep",
-+		.data = &uniphier_nx1_data,
-+	},
- 	{ /* sentinel */ },
- };
- 
--- 
-2.7.4
+I'll send v2 with scheduler_tick.
 
+
+Best regards,
+Krzysztof

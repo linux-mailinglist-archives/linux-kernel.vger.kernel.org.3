@@ -2,187 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2D24B15A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D204B15A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:58:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343600AbiBJS4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 13:56:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40372 "EHLO
+        id S245236AbiBJS5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 13:57:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343577AbiBJS4K (ORCPT
+        with ESMTP id S238999AbiBJS5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 13:56:10 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657A9109F;
-        Thu, 10 Feb 2022 10:56:10 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 306371F46711
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644519369;
-        bh=p879cBETubHXdemY/PEQK5hOnKUPCYkbBd8qPEuZydk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HUGcHd7Eryz+IswgcaQeXj1SE1zmzZPq8xlW/QQqmSZfcArilD7EgsPxJI4F7e4sY
-         3SifqfLzbqXCbpE5sGfmg+cpRFfmqzoT2Rglv6woYuhs2+gDO2b9Mefr+IBYx9Cetb
-         jXDqwGj78rL6j/sTIGD71YEhycfwVcmMROXV5bu6MO523USIhayfBfuDSVhmE9WJEV
-         m2GIVq4RscFBadbXfFU8JV5ROwmH13cp1p0sk8/iwscy7U6uQFSQDJYAjU9ENJk4b5
-         hMs9kdjtkVa9mwbrXz7JBGleZJ3zXxP0WBw5uoVLNniUYVxr1uZeuv/JGYBPTgYl+c
-         Myk+Ebay3vFbQ==
-Date:   Thu, 10 Feb 2022 13:56:03 -0500
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        srv_heupstream@mediatek.com
-Subject: Re: [PATCH v2] arm64: dts: mediatek: Add Mediatek mt8192 cpufreq
- device nodes
-Message-ID: <20220210185603.lmgf4ppppe3ccscj@notapiano>
-References: <1609223471-24325-1-git-send-email-andrew-sh.cheng@mediatek.com>
- <20220210144659.2vkuuh74xagic3ud@notapiano>
+        Thu, 10 Feb 2022 13:57:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0066D109F
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:57:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644519421;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DWbyQbdk9qYouLFOqzK9so4MUWtuTXwuFOQGtTfjM4U=;
+        b=AN34HMogNuk47vWFY8E/EpE+yrzx2k1IXrObTgHhnn0hB2Y+dP9wyAoh+kvAt9wqeEnpWZ
+        x8wRuPRgYlhhh/6GE5zKR44f1QxllJdh1x0DLITfWfL+PUjrpFsg5H1wbyHRg9AKf2ZRSX
+        OQg6cl3AtdzWpYXHj01OOMeBSYPmLvg=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-540--3NdVMsNNOKORU9uxyTH0g-1; Thu, 10 Feb 2022 13:56:59 -0500
+X-MC-Unique: -3NdVMsNNOKORU9uxyTH0g-1
+Received: by mail-ej1-f70.google.com with SMTP id d7-20020a1709061f4700b006bbf73a7becso3148027ejk.17
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:56:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DWbyQbdk9qYouLFOqzK9so4MUWtuTXwuFOQGtTfjM4U=;
+        b=YPnn6LlLkljq/izhVNPjbTKUOdrPSonYHnuNBNLvBXciaeglGmo3MuOB3YvHcuBeGZ
+         hejpLzY8+MImxXtE/c1ESczuHIzgerIGX78iCgNm0yV7gYSMPiOEB+pCo0RcFRgfpNYR
+         AI6rJA5SAOffAeDCYuqsP3LrVkko2dxhGioiCL7wjXs31rxoqDkekQbc4dp+Yi3Dww4M
+         nmOjbtWT+TWMUwwEr90keJNG4/8cMrE3FjhWcYxj/PvicUJ8ksnZHpJClcn0EKq5SD5d
+         MxAf/f6kuA43hrVLU7vX1QMN4f9/aEXUIHQ7nhgjsvfaCkaHOkCu3TxrLES3GPfh+EM+
+         HGcQ==
+X-Gm-Message-State: AOAM531ODQblnMZrPHeDaWlrH9o8cnsNiWCALsRx061x9FOkylH/KYpQ
+        ymPprtoMNKf92gcdwr6zoA4idPgmrpivzsgFYMNnstQsWuOU6im/6pl07bLiovJ9LCdnarn2Ar1
+        ySODkAMvZtfUe+4hflm8GxynC
+X-Received: by 2002:a17:907:2da9:: with SMTP id gt41mr7685853ejc.513.1644519418706;
+        Thu, 10 Feb 2022 10:56:58 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxvFJcAbdybxVzcC8D3D9vkzAiD98jI69gE2Nw72A19tnn9TpZ23h5B47EVgBdJZZI5zNg0+g==
+X-Received: by 2002:a17:907:2da9:: with SMTP id gt41mr7685844ejc.513.1644519418519;
+        Thu, 10 Feb 2022 10:56:58 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id i6sm7304048eja.132.2022.02.10.10.56.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 10:56:57 -0800 (PST)
+Message-ID: <eb4e24c6-41d0-4f3a-2af0-3008db408da6@redhat.com>
+Date:   Thu, 10 Feb 2022 19:56:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220210144659.2vkuuh74xagic3ud@notapiano>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V2] selftests: kvm: Remove absent target file
+Content-Language: en-US
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Shuah Khan <shuah@kernel.org>, Peter Gonda <pgonda@google.com>
+Cc:     kernel@collabora.com, kernelci@groups.io,
+        "kernelci.org bot" <bot@kernelci.org>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220210172352.1317554-1-usama.anjum@collabora.com>
+ <f9893f6a-b68b-e759-54f5-eef73e8a9eef@linuxfoundation.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <f9893f6a-b68b-e759-54f5-eef73e8a9eef@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi again,
-please see my comment below.
-
-On Thu, Feb 10, 2022 at 09:47:04AM -0500, Nícolas F. R. A. Prado wrote:
-> Hi Andrew,
+On 2/10/22 19:02, Shuah Khan wrote:
 > 
-> On Tue, Dec 29, 2020 at 02:31:11PM +0800, Andrew-sh.Cheng wrote:
-> > From: "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
-> > 
-> > Correct dts node name in patch v1: performance-domain
-> > This patch depends on [1] and [2].
-> > 
-> > [1]http://lists.infradead.org/pipermail/linux-mediatek/2020-November/019378.html
-> > [2]https://patchwork.kernel.org/project/linux-mediatek/patch/1607586516-6547-3-git-send-email-hector.yuan@mediatek.com/
+> I am fine with the change itself. For this patch:
 > 
-> Those two series are now merged, so no dependencies missing for this patch any
-> longer.
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 > 
-> Please rebase this patch, as there are some conflicts. I've already verified it,
-> and after you rebase I can send a reviewed-by.
+> However, are we missing a vmx_pi_mmio_test and that test needs to be added.
 > 
-> Thanks,
-> Nícolas
-> 
-> > 
-> > Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
-> > ---
-> >  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> > index 69d45c7b31f1..a907ee7e650a 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> > @@ -39,6 +39,7 @@
-> >  			compatible = "arm,cortex-a55";
-> >  			reg = <0x000>;
-> >  			enable-method = "psci";
-> > +			performance-domains = <&performance 0>;
-> >  			clock-frequency = <1701000000>;
-> >  			next-level-cache = <&l2_0>;
-> >  			capacity-dmips-mhz = <530>;
-> > @@ -49,6 +50,7 @@
-> >  			compatible = "arm,cortex-a55";
-> >  			reg = <0x100>;
-> >  			enable-method = "psci";
-> > +			performance-domains = <&performance 0>;
-> >  			clock-frequency = <1701000000>;
-> >  			next-level-cache = <&l2_0>;
-> >  			capacity-dmips-mhz = <530>;
-> > @@ -59,6 +61,7 @@
-> >  			compatible = "arm,cortex-a55";
-> >  			reg = <0x200>;
-> >  			enable-method = "psci";
-> > +			performance-domains = <&performance 0>;
-> >  			clock-frequency = <1701000000>;
-> >  			next-level-cache = <&l2_0>;
-> >  			capacity-dmips-mhz = <530>;
-> > @@ -69,6 +72,7 @@
-> >  			compatible = "arm,cortex-a55";
-> >  			reg = <0x300>;
-> >  			enable-method = "psci";
-> > +			performance-domains = <&performance 0>;
-> >  			clock-frequency = <1701000000>;
-> >  			next-level-cache = <&l2_0>;
-> >  			capacity-dmips-mhz = <530>;
-> > @@ -79,6 +83,7 @@
-> >  			compatible = "arm,cortex-a76";
-> >  			reg = <0x400>;
-> >  			enable-method = "psci";
-> > +			performance-domains = <&performance 1>;
-> >  			clock-frequency = <2171000000>;
-> >  			next-level-cache = <&l2_1>;
-> >  			capacity-dmips-mhz = <1024>;
-> > @@ -89,6 +94,7 @@
-> >  			compatible = "arm,cortex-a76";
-> >  			reg = <0x500>;
-> >  			enable-method = "psci";
-> > +			performance-domains = <&performance 1>;
-> >  			clock-frequency = <2171000000>;
-> >  			next-level-cache = <&l2_1>;
-> >  			capacity-dmips-mhz = <1024>;
-> > @@ -99,6 +105,7 @@
-> >  			compatible = "arm,cortex-a76";
-> >  			reg = <0x600>;
-> >  			enable-method = "psci";
-> > +			performance-domains = <&performance 1>;
-> >  			clock-frequency = <2171000000>;
-> >  			next-level-cache = <&l2_1>;
-> >  			capacity-dmips-mhz = <1024>;
-> > @@ -109,6 +116,7 @@
-> >  			compatible = "arm,cortex-a76";
-> >  			reg = <0x700>;
-> >  			enable-method = "psci";
-> > +			performance-domains = <&performance 1>;
-> >  			clock-frequency = <2171000000>;
-> >  			next-level-cache = <&l2_1>;
-> >  			capacity-dmips-mhz = <1024>;
-> > @@ -194,6 +202,12 @@
-> >  		compatible = "simple-bus";
-> >  		ranges;
-> >  
-> > +		performance: performance-controller@0011bc00 {
+> Just in case the test didn't make it into the 6a58150859fd and the intent
+> was to add it - hence the Makefile addition? This can be addressed in
+> another patch. Just want to make sure we aren't missing a test.
 
-Actually there is a warning being introduced here on dtbs_check:
+This was probably a rebase resolution issue.  The vmx_pi_mmio_test fails 
+in the mainline tree, and is lingering in my tree together with the fix 
+because somebody promised a better fix for it.  I included the 
+TEST_GEN_PROGS_x86_64 line by mistake when rebasing Peter Gonda's test 
+below vmx_pi_mmio_test.
 
-	soc: 'performance-controller@0011bc00' does not match any of the regexes: '@(0|[1-9a-f][0-9a-f]*)$', '^[^@]+$', 'pinctrl-[0-9]+'
-		From schema: [...]/dtschema/schemas/simple-bus.yaml
+Thanks for the fix,
 
-So you should also change the address to not start with zeros: 11bc00
+Acked-by: Paolo Bonzini <pbonzini@redhat.com>
 
-Thanks,
-Nícolas
+Paolo
 
-> > +			compatible = "mediatek,cpufreq-hw";
-> > +			reg = <0 0x0011bc10 0 0x120>, <0 0x0011bd30 0 0x120>;
-> > +			#performance-domain-cells = <1>;
-> > +		};
-> > +
-> >  		gic: interrupt-controller@c000000 {
-> >  			compatible = "arm,gic-v3";
-> >  			#interrupt-cells = <4>;
-> > -- 
-> > 2.12.5
-> > _______________________________________________
-> > Linux-mediatek mailing list
-> > Linux-mediatek@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-mediatek
-> > 

@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A22984B10C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD964B10C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:48:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243152AbiBJOrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:47:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56372 "EHLO
+        id S243178AbiBJOsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:48:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243134AbiBJOrU (ORCPT
+        with ESMTP id S243200AbiBJOsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:47:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60710C4D
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:47:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F210B61A78
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:47:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5729CC004E1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:47:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644504440;
-        bh=O3JOfPmpBwP/gmoNJ7OcEd8I9SFz30bb2+bBccRllQo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UG557PE0zKLLnOzvvt/XPxcYZtX2VYIeGz3rd+I50f5mCxayksCvm3SOIoREvUKDz
-         yeqHjK1VhFBiHZLF+qPoeRhxg1qcRqUrL0klmNDz1o54X3PFsW5nISll9zhmP7nys0
-         GzYRGHTit0QS+ZSuiqTvMz3Am3kgREsZaFhKgAuTT0NhojJBjzVEj3Jk7KTxi7FQRI
-         xBFrokui8CvRxiAc3RoZcWSvUW5spHTQyYJlknePvkdBSORrdXhPpLYeFozH/0deBD
-         N/Z4eElMKAqfBmseWEctG1HPJeeH2gHgsenDcApGh8IxivUeZ9yD4PLelHZpFA1mz6
-         XCWVFLLNt6Riw==
-Received: by mail-ed1-f44.google.com with SMTP id f17so11405827edd.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:47:20 -0800 (PST)
-X-Gm-Message-State: AOAM53388Ryx5PmBJfswDaI9etGF6nOZhwcBBNTu1aZ+dsU+Qn/0UN5a
-        bf2tBsF4szxmTigLA+zMHnBjQCbHQjesYDpjBQ==
-X-Google-Smtp-Source: ABdhPJxpwUZeJ0qluZsLz3I68UmvPC5zgdCoTcIEq2Zdeqtnc4dwKsGWjpYJoB+Qs4sdmpTJIWsWCoOUl8JTom8pf4k=
-X-Received: by 2002:aa7:c418:: with SMTP id j24mr8683068edq.451.1644504438640;
- Thu, 10 Feb 2022 06:47:18 -0800 (PST)
+        Thu, 10 Feb 2022 09:48:02 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0D0D6A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:48:03 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id y17so2008207plg.7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:48:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UTlhzilwZJ+GV0G2sShDk8AU6wcwqOk4GnRwj06CIc0=;
+        b=Yl5VNVAN/O18uDWiOHZoyJaHv8Yj2hrpvi9Ai+sn/m8cHmMi3G/uOE7DuKDKtX/Eik
+         jV7mgLokb+hr+I90QsDfmFWsrOvAsm1JZFxwN0ai68h6ekLNQ8L0NG/P3eBQBhLbaCD+
+         mivFLnVauQDBJSFZIY4MGoRFJQFp6MM0ob9CMOneu/uA0OfUG4odyKXaLhcm4AjdUFXC
+         woeCqSWUNhX098pO/ko1m2rnp1n9iSzZaO+gXYbJ12/21rblVvhJdWDI3aDleljLpYmB
+         0OlGek5ROehPCw/ZUGRXIUs0QtTlN7AiUIEyQbDNlOxv5l3jWmYpyixt4ivSBPRBjm0g
+         rMGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UTlhzilwZJ+GV0G2sShDk8AU6wcwqOk4GnRwj06CIc0=;
+        b=TTk8KfRVAfs2iV1IfzhSRBKjlanEG76fMHriBYMBcM4j0UzwBaYJZtxQHS7kurKV87
+         O4GVm0x+Zh7ygn+PhWPsHLvu8kbc45gMcjX2ohk2CfduAfQ04iQCVIwUe8lYdBSEnEfq
+         n0bl7fbBiPYoz+C3jhP0bT4ZraFRNw/cLJ10lgR7KxUXU0Yd+87Lp9wW1Vq229S4LTGL
+         h1rKZ7HO39YaWsUM1kDc8l/6jUiIc2ZAhMFIFDLBCh04GU5immPRDiq0iH2eE7O8rWBu
+         b6q2T/1wG1hp9GEaUc4zw1Nm4ipToXdjeX0QLJeE1dKPHKX/xt6M/ZFwLVRs+zYffJs5
+         NtGw==
+X-Gm-Message-State: AOAM531p77mesOpqialXtzT2WU6L5F84osg0oFgk1NMAVDonXR27dgkZ
+        kWtSXXbeB8EpL6WpAdsrMf+u
+X-Google-Smtp-Source: ABdhPJzNPs7oJuxf+RGN9n4bAwd3UkaD8iV0GSwuukEFfop8/LTWoR3TpFFs+XL+xfJqsfA3hcVDWw==
+X-Received: by 2002:a17:902:b684:: with SMTP id c4mr8126073pls.122.1644504483364;
+        Thu, 10 Feb 2022 06:48:03 -0800 (PST)
+Received: from localhost.localdomain ([27.111.75.88])
+        by smtp.gmail.com with ESMTPSA id p11sm15960117pff.45.2022.02.10.06.48.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 06:48:03 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     lorenzo.pieralisi@arm.com, bhelgaas@google.com
+Cc:     svarbanov@mm-sol.com, bjorn.andersson@linaro.org, robh@kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2] PCI: qcom: Add support for handling MSIs from 8 endpoints
+Date:   Thu, 10 Feb 2022 20:17:45 +0530
+Message-Id: <20220210144745.135721-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220210124638.2330904-1-jstephan@baylibre.com>
-In-Reply-To: <20220210124638.2330904-1-jstephan@baylibre.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Thu, 10 Feb 2022 22:47:05 +0800
-X-Gmail-Original-Message-ID: <CAAOTY__gw5GZT3+=R4CiaVX=DTRGTs2vtOvXxV6v+tw7LwnU2g@mail.gmail.com>
-Message-ID: <CAAOTY__gw5GZT3+=R4CiaVX=DTRGTs2vtOvXxV6v+tw7LwnU2g@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/mediatek: allow commands to be sent during video mode
-To:     Julien STEPHAN <jstephan@baylibre.com>
-Cc:     CK Hu <ck.hu@mediatek.com>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "open list:DRM DRIVERS FOR MEDIATEK" 
-        <dri-devel@lists.freedesktop.org>,
-        "moderated list:DRM DRIVERS FOR MEDIATEK" 
-        <linux-mediatek@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,101 +70,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Julien:
+The DWC controller used in the Qcom Platforms are capable of addressing the
+MSIs generated from 8 different endpoints each with 32 vectors (256 in
+total). Currently the driver is using the default value of addressing the
+MSIs from 1 endpoint only. Extend it by passing the MAX_MSI_IRQS to the
+num_vectors field of pcie_port structure.
 
-Julien STEPHAN <jstephan@baylibre.com> =E6=96=BC 2022=E5=B9=B42=E6=9C=8810=
-=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=888:47=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> Mipi dsi panel drivers can use mipi_dsi_dcs_{set,get}_display_brightness(=
-)
-> to request backlight changes.
->
-> This can be done during panel initialization (dsi is in command mode)
-> or afterwards (dsi is in Video Mode).
->
-> When the DSI is in Video Mode, all commands are rejected.
->
-> Detect current DSI mode in mtk_dsi_host_transfer() and switch modes
-> temporarily to allow commands to be sent.
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
 
-Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Changes in v2:
 
->
-> Signed-off-by: Julien STEPHAN <jstephan@baylibre.com>
-> Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
-> ---
-> Changes in v2:
->   - update commit message to be more descriptive
->
->  drivers/gpu/drm/mediatek/mtk_dsi.c | 34 ++++++++++++++++++++++--------
->  1 file changed, 25 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediate=
-k/mtk_dsi.c
-> index 5d90d2eb0019..7d66fdc7f81d 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> @@ -891,24 +891,34 @@ static ssize_t mtk_dsi_host_transfer(struct mipi_ds=
-i_host *host,
->         u8 read_data[16];
->         void *src_addr;
->         u8 irq_flag =3D CMD_DONE_INT_FLAG;
-> -
-> -       if (readl(dsi->regs + DSI_MODE_CTRL) & MODE) {
-> -               DRM_ERROR("dsi engine is not command mode\n");
-> -               return -EINVAL;
-> +       u32 dsi_mode;
-> +
-> +       dsi_mode =3D readl(dsi->regs + DSI_MODE_CTRL);
-> +       if (dsi_mode & MODE) {
-> +               mtk_dsi_stop(dsi);
-> +               if (mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500=
-)) {
-> +                       recv_cnt =3D -EINVAL;
-> +                       goto restore_dsi_mode;
-> +               }
->         }
->
->         if (MTK_DSI_HOST_IS_READ(msg->type))
->                 irq_flag |=3D LPRX_RD_RDY_INT_FLAG;
->
-> -       if (mtk_dsi_host_send_cmd(dsi, msg, irq_flag) < 0)
-> -               return -ETIME;
-> +       if (mtk_dsi_host_send_cmd(dsi, msg, irq_flag) < 0) {
-> +               recv_cnt =3D -ETIME;
-> +               goto restore_dsi_mode;
-> +       }
->
-> -       if (!MTK_DSI_HOST_IS_READ(msg->type))
-> -               return 0;
-> +       if (!MTK_DSI_HOST_IS_READ(msg->type)) {
-> +               recv_cnt =3D 0;
-> +               goto restore_dsi_mode;
-> +       }
->
->         if (!msg->rx_buf) {
->                 DRM_ERROR("dsi receive buffer size may be NULL\n");
-> -               return -EINVAL;
-> +               recv_cnt =3D -EINVAL;
-> +               goto restore_dsi_mode;
->         }
->
->         for (i =3D 0; i < 16; i++)
-> @@ -933,6 +943,12 @@ static ssize_t mtk_dsi_host_transfer(struct mipi_dsi=
-_host *host,
->         DRM_INFO("dsi get %d byte data from the panel address(0x%x)\n",
->                  recv_cnt, *((u8 *)(msg->tx_buf)));
->
-> +restore_dsi_mode:
-> +       if (dsi_mode & MODE) {
-> +               mtk_dsi_set_mode(dsi);
-> +               mtk_dsi_start(dsi);
-> +       }
-> +
->         return recv_cnt;
->  }
->
-> --
-> 2.35.1
->
+* Rebased on top of v5.17-rc1
+
+ drivers/pci/controller/dwc/pcie-qcom.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+index c19cd506ed3f..03e766f6937e 100644
+--- a/drivers/pci/controller/dwc/pcie-qcom.c
++++ b/drivers/pci/controller/dwc/pcie-qcom.c
+@@ -1556,6 +1556,7 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+ 	pci->dev = dev;
+ 	pci->ops = &dw_pcie_ops;
+ 	pp = &pci->pp;
++	pp->num_vectors = MAX_MSI_IRQS;
+ 
+ 	pcie->pci = pci;
+ 
+-- 
+2.25.1
+

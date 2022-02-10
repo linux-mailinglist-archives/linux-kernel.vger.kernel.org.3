@@ -2,106 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2034B02B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58AB54B0294
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234497AbiBJCAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 21:00:38 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60146 "EHLO
+        id S233215AbiBJB4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 20:56:36 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234589AbiBJB7X (ORCPT
+        with ESMTP id S232923AbiBJB4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:59:23 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16882AAB6
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 17:41:54 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id f13so3233297ilq.5
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 17:41:54 -0800 (PST)
+        Wed, 9 Feb 2022 20:56:00 -0500
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294CF270FC
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 17:34:07 -0800 (PST)
+Received: by mail-vs1-xe34.google.com with SMTP id j5so1406373vsm.5
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 17:34:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NnM5dCp68E2rE/49/oOSjnZsSaxmdjzgIGASXkmR6xY=;
-        b=SAzNK2jOoju8Kh3tfB4nt1GBgAe2hFe+vZ/ZEcNq9+YseZkdv2Fs4ANx/8Njn2iHYw
-         VgImwzzPwpqjZer2EaG3EFoHGPc7ZAG0lVoML//dwhD2BjDTxWacHXbShQifoKV37Z0B
-         VlqmbomQWjifurbhavxvDrNbK8H8R7Dm5ffKg=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CpXL3kPoVZ7att1zdwN8Mf8Da7ajP98VvjIjGbgaZGA=;
+        b=ENY37unj6f6SjoHK/K0Df/VIBp8PpZN9GGdjmw2F5RHMgth0BKvyfe7sX2l5TwfuMv
+         Bw72HuoCoav/n3JPrtIVxRyg7PhW6XYai1AIx9e9CG7QfpdEhEDh7DNsywpBfEYsuHG0
+         PC/EAciecqkqFtBE+fMv5STFjECmxiVAH8eSI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NnM5dCp68E2rE/49/oOSjnZsSaxmdjzgIGASXkmR6xY=;
-        b=zzwFSnc3EohXCeHcjpDL4c0BRvJoz/KApETYuxS0I/hQmZKJqQ+cpt0mQRW543ORL5
-         QkbM+iSx6Cda4ZMqKL4oebCl3O9RbMhlqoXOCHJlWggBtpTtU5LTDaCdFx95tUiBTlof
-         D7MXxgZEXCZL8HS98dcKJYv1OO0kojDB3RC7jOo8KEDdvPrp91h2tvCCt2LpM/BZFa+E
-         GpPKdg52RhNKfwCR/c2bXx6q989MULsjfwSdU7ugcJsrT7Nb7KM38wmPvCDdkvg5toUL
-         vKRJz/WdxL/uCGANTN9FctuGsdGbX/VSi6+fFOOnuaTtcAgMNsJHkcsmsg++v/W03wOR
-         LkNg==
-X-Gm-Message-State: AOAM5312ij8ZyThlPSnrbgMv9QJ8QhYfviBGtu3xRGYjOBeFPkpVlAHS
-        Xz5OgfYVB8s36IjhUn0UotZYKSrvpcqLkg==
-X-Google-Smtp-Source: ABdhPJx1Wh7HpA/HF6B4EOxrjALlX3FDTxDRKrQ1wIzg5zjIWbRCBbc3R4Vri25XuSFgtzE6GDqv0A==
-X-Received: by 2002:a63:cf05:: with SMTP id j5mr4054620pgg.544.1644453146584;
-        Wed, 09 Feb 2022 16:32:26 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id lr7sm8382805pjb.42.2022.02.09.16.32.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 16:32:26 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Jeff Dike <jdike@addtoit.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-um@lists.infradead.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] um: Enable FORTIFY_SOURCE
-Date:   Wed,  9 Feb 2022 16:32:24 -0800
-Message-Id: <20220210003224.773957-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CpXL3kPoVZ7att1zdwN8Mf8Da7ajP98VvjIjGbgaZGA=;
+        b=Xoajm94P9uEvi/97w9VT/XFqURmIZQszBYCYFArhA+DiZ1M7Nw9qGOWJsiLEJLFehg
+         6CFBL1ExL8bUOvZoJZvhwzXnmQ/581dYyhXzu7vdKxK10Du9HiGYzYhcOIn/iTY3eNzJ
+         4vnDpID0ZII2wDoc3NfLy77H7TTi/94FQ+5QAIalH4HxehGxmQxnyY26nlfrV5v/nPuD
+         Ew4k8h/xbJFvKYL6abcgF78V9ZS2VnhG17iSw1XlsIKNvExbdkTSGLEHh9ApKuoRcPOO
+         d/tKfEUpcr98O/W9iIJHBMhmvIMM9l6/kKBAmZ+hO8/vniz3dgNF4HT4vzWQw6JpkC5E
+         V7Tw==
+X-Gm-Message-State: AOAM530nPHg4LD2FTJmKiyGB6x+Woa0+KUOWeBQHBEscM8aTIDoxOyBp
+        eRyj9hdalA9kcHkHC7UA14u/s2dvNqdndDDuOavpifhpf3ijCQ==
+X-Google-Smtp-Source: ABdhPJz8Fs/lByCRrqqXLa3uco/tN8npZwUZ9fqdEfcHy+dfvEkvZxsQSmSiX8brFmaAbGdrbukbIMqI5en+3f8e4rg=
+X-Received: by 2002:a05:6102:cc8:: with SMTP id g8mr1471720vst.39.1644453157351;
+ Wed, 09 Feb 2022 16:32:37 -0800 (PST)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=965; h=from:subject; bh=8p9qV7nCUTAMY0NIWHaERW8Fzn7HqVa7AIuy3N51Nyw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiBF0Xl67ZsAL362Vl2CFFWCSHpRPRaKgRKXg0mWx7 ZMVp4xqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYgRdFwAKCRCJcvTf3G3AJgidD/ 0ZTEYhKrilkWGasprf9ZIJxdPF1kViXr2K/C6/H7qvfbMkbD5Fg2txX23xhIDwLbpy5MpK6IDxNR2P MaUrUJnHJl0ZNl2PNf2uHwC/kjyyYsTvIHWJcdwDIBceeGQ7ub0Oq7j2vm/ldaha1PEymXloMWDwHz /3fj9YBHe5CKyezHu0V0lUx0hm4jNUDN3meuyyr3VAQ7sclsdreGSU+Ci0IhyaH6KuOlPtxmK+GGXQ r8lfsQiPVm5BJl8l+52BHMXlCQNhs4Nz6qv0Woxb9YML5Dv62TkyeGp/lWSPgPJFsSnnm3oycROEtr YxP3tKf0eBqiYZ/BmpO+svULC2RCO1ZBCuZ3Dl7hWtoC0hj6p2l8MwjH/P/VJDj8Qi4IjNAg8Pk1ou Zh7Fye8CDaK8vxMKBKB0HQ+OmgTnf4CM3eYhEvTQgnzhmnsiHS5rsAhfH0pgDMyp8F+WXGDc9CPYaF dBEixq9z4prhX1xhEZ9oZosu4MH0rUOwjFzaLuqJkSlfpIw8limtRgTkrtVFa4NLOjQqLZ1MAkRx5C B4ipNCCEMFhMf21hLLc54+iBrfAutksrvAhvYx8YLdOX/6nn3doqRqbjRwq38WqJsIzWgWeDv1veIK JO/xEQBVhQRO5nJ3XymXJQv5p2F7scM+73OoDDW+Hg+88tMp6ynYwykvph0A==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20211006224659.21434-1-digetx@gmail.com> <20211006224659.21434-4-digetx@gmail.com>
+ <YWimShkkxkR+bQLK@robh.at.kernel.org> <CAODwPW-2othAhTC9a_joBdHScA86iqs-FkZJZDrK5LxrJm8F8Q@mail.gmail.com>
+ <d69f99ed-75a4-9b8c-addb-3eaa2b2be6a6@canonical.com> <CAODwPW-AMqQ+ZbnvUTuxP5Bbxdcy08GSXnhcLC+V6BW=OPYaqg@mail.gmail.com>
+ <6568fd31-113f-1581-4eff-45a4a1eb4e5d@canonical.com> <c33c9de2-ff0f-0ba7-b424-728d316dcca2@gmail.com>
+In-Reply-To: <c33c9de2-ff0f-0ba7-b424-728d316dcca2@gmail.com>
+From:   Julius Werner <jwerner@chromium.org>
+Date:   Wed, 9 Feb 2022 16:32:25 -0800
+Message-ID: <CAODwPW-VfbvWs3OVON1m=WWFXN2V86o9jqurVDShpfTrSn=Mkw@mail.gmail.com>
+Subject: Re: [PATCH v5 3/9] dt-bindings: memory: lpddr2: Add revision-id properties
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Rob Herring <robh@kernel.org>, linux-tegra@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable FORTIFY_SOURCE so running Kunit tests can test fortified
-functions.
+> I don't mind, but I also don't see where the revision-id property of
+> LPDDR3 is used at all. I can't find any device-tree with LPDDR3
+> revision-id and don't see it being used in the code either. Maybe it's
+> the LPDDR3 binding that needs to be changed?
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- arch/um/Kconfig              | 1 +
- arch/um/os-Linux/user_syms.c | 1 +
- 2 files changed, 2 insertions(+)
+We are using the revision ID in userspace (read through
+/proc/device-tree) for runtime memory identification. We don't have a
+kernel driver bound to it. Our boot firmware is inserting this value
+at runtime into the FDT (that's basically the reason we have this, our
+firmware auto-detects memory during boot and we use the FDT to report
+what it found to userspace), that's why you can't find it anywhere in
+the static device trees in boot/dts/.
 
-diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-index 4d398b80aea8..746e661395d7 100644
---- a/arch/um/Kconfig
-+++ b/arch/um/Kconfig
-@@ -9,6 +9,7 @@ config UML
- 	select ARCH_HAS_KCOV
- 	select ARCH_HAS_STRNCPY_FROM_USER
- 	select ARCH_HAS_STRNLEN_USER
-+	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_NO_PREEMPT
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select HAVE_ARCH_SECCOMP_FILTER
-diff --git a/arch/um/os-Linux/user_syms.c b/arch/um/os-Linux/user_syms.c
-index 715594fe5719..d9845b5219ce 100644
---- a/arch/um/os-Linux/user_syms.c
-+++ b/arch/um/os-Linux/user_syms.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#define __NO_FORTIFY
- #include <linux/types.h>
- #include <linux/module.h>
- 
--- 
-2.30.2
+> I made each LPDDR2 revision-id property to correspond to a dedicated MR
+> of LPDDR, which feels okay to me to since it matches h/w.
 
+I'm not super married to my solution, so if that makes things easier
+we can standardize on the two-property version as well. I mostly
+designed it my way because I thought we may one day also want to do
+something like this for the 8-byte LPDDR5 serial-id, and then it would
+get kinda cumbersome to have serial-id1 through serial-id8 all as
+separate properties. But that's also a bridge we can cross when we get
+there.
+
+My use case is in a position where we could still change this now
+without requiring backwards-compatibility. Krzysztof, would you be
+okay if I instead changed the "jedec,lpddr3" to the same thing
+"jedec,lpddr2" does -- seeing as the original patch was from me, my
+use case could handle the switch, there has never been any actual
+kernel code using the property, and it seems very unlikely that anyone
+else has silently started using the same thing in the time it's been
+in the tree? Or do we also need to go the official deprecation route
+for that?

@@ -2,87 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6A14B122F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA684B1232
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243894AbiBJP6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 10:58:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49150 "EHLO
+        id S243907AbiBJP7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 10:59:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243877AbiBJP6H (ORCPT
+        with ESMTP id S243877AbiBJP7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 10:58:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6F6CD6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 07:58:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC7D461CAE
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:58:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABE13C004E1;
-        Thu, 10 Feb 2022 15:58:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644508687;
-        bh=fJz0mfpB47QMQtMUTnDAOyZFLprkCOZTHFgVXNMTvCA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fQdu/gY1hIYhmwvrgNpyofmzlsCOxzGe2azh+1Mlr3oBKY1Rl09Xl7aChZiJXZYB6
-         ve1k4JTINR8Pwn8hwVAL0BsApSNlGT7vQtlq6HqVLlTj9j4XKk3XE9jnd+75UNznvn
-         3hI7hCU8y8UD6hfBFUtJMu18RmUsuAuhg2dxL7em3RGS7et4okrWr2oGKow6FVw6ru
-         bz8qHIY95KCn6kbDwXhQsNVdlAWf5N+vZIm3P7wICE2Wh+j9AzytW/XWNsGGTr6a3m
-         Qevy7h6XkkHYO/UIt/N6T0pPEte13kdDMSspnVtfGnZg/NNXCRCSvkZANvKbTz6gfn
-         n2kXkGtpCvF2A==
-Date:   Thu, 10 Feb 2022 16:58:04 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, ardb@kernel.org,
-        bp@alien8.de, catalin.marinas@arm.com, dave.hansen@linux.intel.com,
-        james.morse@arm.com, joey.gouly@arm.com, juri.lelli@redhat.com,
-        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, tglx@linutronix.de,
-        valentin.schneider@arm.com, will@kernel.org
-Subject: Re: [PATCH v3 7/7] arm64: support PREEMPT_DYNAMIC
-Message-ID: <20220210155804.GA567552@lothringen>
-References: <20220209153535.818830-1-mark.rutland@arm.com>
- <20220209153535.818830-8-mark.rutland@arm.com>
- <20220209195709.GA557593@lothringen>
- <YgTdHfmubmk1rUi8@FVFF77S0Q05N>
- <YgT+eHjtgrHl+wWw@FVFF77S0Q05N>
+        Thu, 10 Feb 2022 10:59:22 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E773E5D;
+        Thu, 10 Feb 2022 07:59:23 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id d14-20020a05600c34ce00b0037bf4d14dc7so3619626wmq.3;
+        Thu, 10 Feb 2022 07:59:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hBkaEtppjIdvRqQzatDwBLZj9pqZ7aXbGEZtGIQhqCQ=;
+        b=OUjF/bTwjTt65gFZqbXNvr8rNT5GYCuoWFVD1ah0VjqENAvZN0izKGeItjNxfB51vW
+         yijAhi3Kutns9V1iWa1LKkzdMmM+P9BhXR7v+15kk01/QeLevmYWWxk8BLalzApvr8Fi
+         um0THjhZja42eWnXTY65YOpYrKvN0ZyTvDLq6gT4bKrT9tCNAkPaYiZH3FFOIfbjIpVW
+         oDFUqOG54ONWe7x1f4GztJder26J3HiHy06fpRoMZ2DnBGqNrYUMaXEtFluHB092vGZY
+         RqIqK1Kb8gvHJGQHC4N3fiJDRAfMaqnGO1tTGwPe8GBrTCGRhy3R5wlzK97xh9XxSb+G
+         JEQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hBkaEtppjIdvRqQzatDwBLZj9pqZ7aXbGEZtGIQhqCQ=;
+        b=Si6bj8MVJToJW0aafJwvLVwrGBzN8XAOZL3JPYakrhrUeGL5Mc4Q8hmdOjQ6f78Ybj
+         MIyoRD3Rvwgm/XsgJW0TddL08fV+0690QuH06bX5Uw6DRh5HgsWQ/VTlBKnI120gd9NW
+         0cIlOIBj4p4bsImIV7ZkThImzBLXBBRb5rDASMg7uphelEjBPaKSB9ySWcBk7GyGfQQ8
+         +e041jFpWn9Tiy5P8PMMqJRMKkHPqYok5KkgEa/TJNqiDLbQiDG6QxXbsjHyqPbGXIkC
+         ykNLLFQDkzqYiPVdQYoqbxDa3UKBSL0hNfGkzjSov4XU1e9vIqO7G0JI20wh0F7fy1Gp
+         XJLA==
+X-Gm-Message-State: AOAM532UCVRT0OqGSeGyv/aVSk1nKyI3YLhBqMqNzttY+5QJKzn+hOdI
+        LO8tBrS5e5SrRCiIgG8ipvpbHRkz7eXjWw==
+X-Google-Smtp-Source: ABdhPJzxo2NQNX2s5Pr0xANuiGS1KH2RSfz5xcLf24jM0AeCV5RoE3NWtczH4jRpFqShHXRmUDVpUg==
+X-Received: by 2002:a05:600c:4e16:: with SMTP id b22mr2720187wmq.8.1644508762016;
+        Thu, 10 Feb 2022 07:59:22 -0800 (PST)
+Received: from nergzd-desktop.localdomain ([62.122.67.26])
+        by smtp.gmail.com with ESMTPSA id p2sm12990551wrt.101.2022.02.10.07.59.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 07:59:21 -0800 (PST)
+From:   Markuss Broks <markuss.broks@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     phone-devel@vger.kernel.org,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Alistair Francis <alistair@alistair23.me>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hao Fang <fanghao11@huawei.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Jeff LaBundy <jeff@labundy.com>,
+        Joe Hung <joe_hung@ilitek.com>,
+        Jonathan Albrieux <jonathan.albrieux@gmail.com>,
+        Giulio Benetti <giulio.benetti@benettiengineering.com>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH 0/2] Add support for Imagis touchscreens
+Date:   Thu, 10 Feb 2022 17:58:29 +0200
+Message-Id: <20220210155835.154421-1-markuss.broks@gmail.com>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgT+eHjtgrHl+wWw@FVFF77S0Q05N>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 12:00:56PM +0000, Mark Rutland wrote:
-> On Thu, Feb 10, 2022 at 09:38:37AM +0000, Mark Rutland wrote:
-> > On Wed, Feb 09, 2022 at 08:57:09PM +0100, Frederic Weisbecker wrote:
-> > > On Wed, Feb 09, 2022 at 03:35:35PM +0000, Mark Rutland wrote:
-> > > > Note that PREEMPT_DYNAMIC is `def bool y`, so this will default to
-> > > > enabled.
-> > > 
-> > > It should probably be "def_bool y if HAVE_STATIC_CALL_INLINE"...
-> > 
-> > Sure; I'm more than happy to fold that into patch 5.
-> 
-> For the moment I've made that:
-> 
-> 	def_bool y if HAVE_PREEMPT_DYNAMIC_CALL
-> 
-> ... since that fit more neatly with the other bits I had to add, and didn't
-> change the existing behaviour of 32-bit x86.
-> 
-> Please shout if you think that should be HAVE_STATIC_CALL_INLINE specifically!
+Add support for Imagis touchscreens, used on various mobile
+devices such as Samsung Galaxy J5 (2015), J3 (2015), J5 (2016).
 
-I seem to remember peterz didn't mind keeping it default y as long as
-HAVE_STATIC_CALL*. So I guess that's fine.
+Markuss Broks (2):
+  dt-bindings: input/touchscreen: bindings for Imagis
+  Input: add Imagis touchscreen driver
 
-Thanks!
+ .../input/touchscreen/imagis,ist3038c.yaml    |  78 +++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   6 +
+ drivers/input/touchscreen/Kconfig             |  10 +
+ drivers/input/touchscreen/Makefile            |   1 +
+ drivers/input/touchscreen/imagis.c            | 329 ++++++++++++++++++
+ 6 files changed, 426 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/input/touchscreen/imagis,ist3038c.yaml
+ create mode 100644 drivers/input/touchscreen/imagis.c
+
+-- 
+2.35.0
+

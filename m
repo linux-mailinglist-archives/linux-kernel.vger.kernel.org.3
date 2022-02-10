@@ -2,118 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC7D4B07E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:13:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A51C24B07E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:15:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237086AbiBJINa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 03:13:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51348 "EHLO
+        id S237153AbiBJIOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 03:14:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233744AbiBJIN2 (ORCPT
+        with ESMTP id S234713AbiBJIOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 03:13:28 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7054D108A
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 00:13:26 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id x4so1195310plb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 00:13:26 -0800 (PST)
+        Thu, 10 Feb 2022 03:14:52 -0500
+Received: from mail-oo1-xc49.google.com (mail-oo1-xc49.google.com [IPv6:2607:f8b0:4864:20::c49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DF4109B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 00:14:54 -0800 (PST)
+Received: by mail-oo1-xc49.google.com with SMTP id t10-20020a4ad0aa000000b002fd44c52176so3177397oor.9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 00:14:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=bO+Jcgpt393mmvw7hWqpbnpyQZTC3EQ5YNZf+mvO9Jo=;
-        b=bhUyXrrl/fStj/Fh/OyKQCL0uj7GVwTOaqiqNoImZLt8mbSfBxz1s9YHa90GH50xju
-         fLB1kUWp6kNCp/FuMt2VI/naCioRLhe2eISZqatWYyAULvXPm+M1+kDDGyFLIU2tSPHz
-         ky5jcxEQUtv4TJMhllTMaGL6eB4U7R2foF11jx+NdziYQ1KMT6IAmmw4A09Xev89YkmW
-         xw7YKZc/qXCBc9L3zhbShL8fwTdJ3skyINkPO8nYfcKuY+OPEcQSiVv0Rn3dCvH4eHyb
-         s0H2ur7mck3uxoR7mJHMUkXXLFWsilwkMk8nPQ2DdvW5xtU+ezAj4m7XUg+CR05uT5/2
-         00mw==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=T9FcBDMwvgeHBlJy4y16uXfaabYSCGyJ3a5EN/2FH/k=;
+        b=MxdsYuSId5HtvKIg92vKZD2AqHFrlV0PE/vRdDgoIOtAxeRQ9ojCRGSaEaK45fB/bh
+         We8jMJdFWXIW3lmpW/ZDfeZqIzKdt/QwufKjFYFwGOjP5J1vxnhO4F61EVjj6I5nQCH9
+         fDEgALX0BPefVUNsfL9sWq0H2oZnkV64CrnT5tb6XTyHRbhSH20LE7MeL9YrcLKE+Upn
+         ca0C2CBxPkElew+dpCqGOsBsQheR9rbsOFacWIyuWmkdp6LjxepL0z7kc5y4slTtujd4
+         Lyx2Ub3/D9/fZ76P15/g2wgvb8rYb5WxFCWJrzgsjaJGP5phBtg3xbKKR3MOb87xNC86
+         TOKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bO+Jcgpt393mmvw7hWqpbnpyQZTC3EQ5YNZf+mvO9Jo=;
-        b=507xUl7rfe0RaK0EafyJSvzpp6ziETthGVYDEnZJh7k4cTxxQuIs/PAa9xZw8lYG/j
-         ngWeX3b1ufTpnP8D27dXvtBIchTWIDnZw/pO1K4l0ISLnTXc9FD06XPk7fygOSTNvDkz
-         VubcKi8d/w4x/j9dI9onNg3JsawVu9VsFCDawb00hHXH5bMZdWGzMm5lNDjgEreNxA87
-         WqwyEZ32gfhcY7o4FZVoQr4myz+nEpPy6isgyR+AvchQxr6RYFkql3nJenv9hzWPd9H4
-         lC9pCpOouu9tBzHuijHkrfvbnn1YtmzZo6MCVYgSSOx9EWRjMYOb2OJqg4Lh/pfMV6O3
-         ERwA==
-X-Gm-Message-State: AOAM5305daGY1p5XOxjrXrNOxCxZ9dCF+XzvKoLz0tXEj9aXRalst3ve
-        dWHZXY+1AoWQ4+kDKHGOP6XfnHO+zzwdRs/LzyIKPQ==
-X-Google-Smtp-Source: ABdhPJyT5/JbvvVvpH2gdfpK9WJPLlUlqqwiwN1MC0YK332Oj1cOtTLaNGarMrSWWTO1Qo/JHFoy2RJWCkYXB8lDd28=
-X-Received: by 2002:a17:90a:348e:: with SMTP id p14mr1555020pjb.71.1644480805969;
- Thu, 10 Feb 2022 00:13:25 -0800 (PST)
-MIME-Version: 1.0
-References: <20220208141218.2049591-1-jsd@semihalf.com> <2551b3f1-0dc0-aaf1-680c-9634d2a6b65d@linux.intel.com>
-In-Reply-To: <2551b3f1-0dc0-aaf1-680c-9634d2a6b65d@linux.intel.com>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Thu, 10 Feb 2022 09:13:15 +0100
-Message-ID: <CAOtMz3NX=J3YZa=1tORZA6eLxYpFQb=zChB5gRrQX6BHG2zTLg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/2] i2c-designware: Add support for AMD PSP semaphore
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        "Easow, Nimesh" <Nimesh.Easow@amd.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        kernel test robot <lkp@intel.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=T9FcBDMwvgeHBlJy4y16uXfaabYSCGyJ3a5EN/2FH/k=;
+        b=siQHKg16FNJdtzasS/xpKGUHtjbcVCNlKOt0hmKK3R/0ilbUOH4/tA+X+yCR5/owy5
+         mIn1u/mFT5/yMh7MNT51+Ci6xQdGddk15E3LbhY1pQuTYgUA7JgG1Cz2lPGiwMi9hPwA
+         RGy3ZRpJr7tKksS0BoNp9eXjDpQ12GaGSdMjRbxXbh6x0yOYN0rZheQnz4gqSkglNmqa
+         c4RO2rmfvipuA34UhsvI2HGJwTiIW0TICYA8ep4Bip1Ha5Kl0AmwWF4VNqHJbTlgjtuw
+         naqakUM2TtMxJ4UhC6yNj/fQdop6beE6870SK3SHafJAvWzjaOcuO9T9jDSId9UMcol0
+         fgSA==
+X-Gm-Message-State: AOAM532SkYM/EdpJcLuKCShv0mGQIFkDUAzwVYfbocv/tvr+T399l0De
+        qHNn7csDA0BaK7Vqm4FX12zDTqOSMJPmxg==
+X-Google-Smtp-Source: ABdhPJwpmJs5KvIzTk+4UqumkYVhgfmnjA3Xqt4XkjaPcdUfPtlskWzbyZqOPhpvf84nMJpU67NzE5RGU1VfFw==
+X-Received: from shakeelb.svl.corp.google.com ([2620:15c:2cd:202:6801:6774:cb90:c600])
+ (user=shakeelb job=sendgmr) by 2002:a05:6808:1688:: with SMTP id
+ bb8mr599419oib.163.1644480893417; Thu, 10 Feb 2022 00:14:53 -0800 (PST)
+Date:   Thu, 10 Feb 2022 00:14:33 -0800
+Message-Id: <20220210081437.1884008-1-shakeelb@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+Subject: [PATCH 0/4] memcg: robust enforcement of memory.high
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>
+Cc:     Chris Down <chris@chrisdown.name>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Shakeel Butt <shakeelb@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=C5=9Br., 9 lut 2022 o 16:11 Jarkko Nikula <jarkko.nikula@linux.intel.com>
-napisa=C5=82(a):
->
-> On 2/8/22 16:12, Jan Dabros wrote:
-> > This patchset comprises support for new i2c-designware controller setup=
- on some
-> > AMD Cezanne SoCs, where x86 is sharing i2c bus with PSP. PSP uses the s=
-ame
-> > controller and acts as an i2c arbitrator there (x86 is leasing bus from=
- it).
-> >
-> > First commit aims to improve generic i2c-designware code by adding extr=
-a locking
-> > on probe() and disable() paths. I would like to ask someone with access=
- to
-> > boards which use Intel BayTrail(CONFIG_I2C_DESIGNWARE_BAYTRAIL) to veri=
-fy
-> > behavior of my changes on such setup.
-> >
-> I'm going to run overnight with both patches a test case that used to
-> cause some activity on a shared I2C bus on Baytrail based MRD 7 tablet.
-> Test below used to trigger system hang after a few hours - days before
-> some PUNIT - graphics related issue was fixed a few years ago:
->
-> #!/bin/sh
-> X &
-> export DISPLAY=3D:0
-> sleep 2
-> xclock -update 30 -digital -geometry 500x50+1+1027 &
-> xload -update 60 -bg black -hl red -fg green -geometry 1916x250+1+774 &
-> sleep 1
-> xsetroot -solid red
-> xset s noblank s off -dpms
-> glxgears >/dev/null &
-> while :; do acpi -b; sleep 1.2; done
+Due to the semantics of memory.high enforcement i.e. throttle the
+workload without oom-kill, we are trying to use it for right sizing the
+workloads in our production environment. However we observed the
+mechanism fails for some specific applications which does bug chunck of
+allocations in a single syscall. The reason behind this failure is due
+to the limitation of the memory.high enforcement's current
+implementation. This patch series solves this issue by enforcing the
+memory.high synchronously and making it more robust.
 
-Thanks, looking forward to the results.
+Shakeel Butt (4):
+  memcg: refactor mem_cgroup_oom
+  memcg: unify force charging conditions
+  selftests: memcg: test high limit for single entry allocation
+  memcg: synchronously enforce memory.high
 
-Best Regards,
-Jan
+ include/linux/page_counter.h                  |  10 +
+ mm/memcontrol.c                               | 175 ++++++++++--------
+ mm/page_counter.c                             |  59 ++++--
+ tools/testing/selftests/cgroup/cgroup_util.c  |  15 +-
+ tools/testing/selftests/cgroup/cgroup_util.h  |   1 +
+ .../selftests/cgroup/test_memcontrol.c        |  78 ++++++++
+ 6 files changed, 240 insertions(+), 98 deletions(-)
+
+-- 
+2.35.1.265.g69c8d7142f-goog
+

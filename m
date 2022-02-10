@@ -2,111 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC8E4B06BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 07:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D009B4B06C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 08:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235778AbiBJG6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 01:58:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59150 "EHLO
+        id S235799AbiBJHCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 02:02:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232769AbiBJG6p (ORCPT
+        with ESMTP id S235488AbiBJHCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 01:58:45 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D683E10A6;
-        Wed,  9 Feb 2022 22:58:46 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id s18so7762254wrv.7;
-        Wed, 09 Feb 2022 22:58:46 -0800 (PST)
+        Thu, 10 Feb 2022 02:02:15 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCD2FC0
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 23:02:15 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id f17so9332680edd.2
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 23:02:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u78B18o9gcsc4cL6IkzErLE1PeBzNrlXsUNhAfo/eQA=;
-        b=Z+CyvLG7KD/HpWPAArX/wKn2XNrlxk7iy8frG7an2ljCw2UYm4L+d2nlDwDzVHi3lP
-         jFbwovb1dRqTM/2101G1HUM/8mtO8uLvQ0gVqEf3ulnKJeMOY6IJVtgcy35mntS9byQy
-         alpXiBuP+DJ5fBtj4gakO1YdgI1d2qoUG5bvX2ecVuzvRQZkkl7FOGaxxOeyvuAXZpsa
-         Cmss2vfY1cWUZu/F+ggYvG6vOhgeVCyXVfM820UicCMYzO15VyUl9/aH3zciHnzreBM6
-         GuOrzWPgzGxeROCjQqdoDth5TVAsYGaY6KRNT/CU6VNNsoVZsMWbHG4/qIdEXwyFqVcQ
-         zIVA==
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8W8qNsQkPekx4+jBc/rCyADx6fiSCeEy7qv0YDJEz88=;
+        b=4o+JMS3rdmjt+g1J3QFITq+TZSTKGRuxLoxc0CjtqNWBBi4qithMjTsOBKg26gNcDc
+         VTLnb39R8b3NxFmtS0/6w4k4uhe8C/5V36bSVd+Jwd4iZ6RyTmWnzSepJHTdglHcufaA
+         9JRR8EYuWCLQpM03Y7LdHgdxTEd2sQ1sfftV/blEloM0+Ka/IC8DQyLKh7Z32EG7yf/N
+         vS22MFH8o7GdDetXK5vn++ksGZ0yiKeoQ2xBbM8u4f+XIfMxoL8znHIirXD4LGwNLGlo
+         idaClRwVE+S0XQZwLZnGARFuGg/xdG8tWbkX3P9w2IHC1O31ll8jwoBf6D6ObzEk8NiN
+         eSGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u78B18o9gcsc4cL6IkzErLE1PeBzNrlXsUNhAfo/eQA=;
-        b=7hQC74p9wrnPHl090WuYi3ahoM5g4Z96XBRKq3MA8yWl8ASFqKZABGB8ab1ajuFKtq
-         L4abT5xbAtG3CvnKVgoOBhXDpm24bLzT3oWCvWkbCRYRsEKEfJXBR2osEOFnx2zDKE+/
-         f9f3GphJEVuYgvbpDgCp5LZvwUHWjp1mdNCxFs4gRaWKdBZJWLu72EPOoAmmpg4fMEJj
-         VoOZeFOak1U5u4Tpqnkd5vfIOE4lR9rS7VudbTskFLy6y4GI5qNTXr4j622/wbI0UHlj
-         Xze8dThYKTyTtvE5aVpUyrySCeKQSSq59lkrQiZvp1AbMH57url3FeFAI9/Kx4s9V7k9
-         a7Cg==
-X-Gm-Message-State: AOAM5306zu3pR1xbwZx03Am2sUF4IfcgqjoPmIQkrZOadUltZPhohb1L
-        0gPfqh0apENiWffzl99RW3+JqztSp33T7q4R
-X-Google-Smtp-Source: ABdhPJwe+XGoIjBrzTJSHQ7oKv5mlppiFkBHW6003ML4aU0ugi6ehTht+78ijXA2D7tO+Ul/JUwQrA==
-X-Received: by 2002:a05:6000:178f:: with SMTP id e15mr5133719wrg.439.1644476324368;
-        Wed, 09 Feb 2022 22:58:44 -0800 (PST)
-Received: from localhost.localdomain ([64.64.123.24])
-        by smtp.gmail.com with ESMTPSA id v9sm6621456wrw.84.2022.02.09.22.58.39
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8W8qNsQkPekx4+jBc/rCyADx6fiSCeEy7qv0YDJEz88=;
+        b=o9QIZRzCHEiQvusbtlm2uagULQc63uh9kbRWJJcSwBbvDrSlT/bJopvIGzpTMUp/jq
+         R/O6Kg83wqaSt5puP2nCX8oeopsQbZ70XyZedkUNKzuOF+lfayXgtUOKbUt8bjMHIoTE
+         q4oDdWzrdVUfjuhrzyrNi3Xcwli+EkNVva+orqgoaVhDdZ+3zolvFxvztcyP1eHcESQD
+         xjqAWuz3xWrE47XXV7Q0jLcb3ftRxpSIPtKWUEbab/uCak0OFXkImESecutMs41dkkng
+         6RXb8p4SgRH674x8Q1NyCVq1RogxnMgfOrTZ8SnLouHlTmsYMCYMgablH8jqE7lvZ+L6
+         2iQQ==
+X-Gm-Message-State: AOAM530+x50pepo6xEPYhJaBJGFP5NDy90am4Pi4byNcfhPOzYaA4Kyf
+        r4Ocgqq1u2h/j20hcBzBSNXTtg==
+X-Google-Smtp-Source: ABdhPJxlDHHK73hDkQqMYWRIurlz7AdZtYqkU6ZeihEyFDPU6Q3mF2n+XsBeID30velI8V06BJDCuQ==
+X-Received: by 2002:a50:ccd3:: with SMTP id b19mr6831351edj.253.1644476534054;
+        Wed, 09 Feb 2022 23:02:14 -0800 (PST)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id b7sm9215079edv.58.2022.02.09.23.02.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 22:58:44 -0800 (PST)
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-To:     daniel@ffwll.ch, deller@gmx.de, sam@ravnborg.org,
-        linux@roeck-us.net, willy@infradead.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, paulmck@kernel.org,
-        rcu@vger.kernel.org, pmenzel@molgen.mpg.de
-Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>
-Subject: [PATCH linux-next] video: fbdev: fbmem: fix pointer reference to null device field
-Date:   Thu, 10 Feb 2022 14:58:24 +0800
-Message-Id: <20220210065824.368355-1-zhouzhouyi@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 09 Feb 2022 23:02:13 -0800 (PST)
+Date:   Thu, 10 Feb 2022 08:02:12 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Moshe Shemesh <moshe@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 0/4] net/mlx5: Introduce devlink param to
+ disable SF aux dev probe
+Message-ID: <YgS4dFHFPPMITaoV@nanopsycho>
+References: <1644340446-125084-1-git-send-email-moshe@nvidia.com>
+ <20220208212341.513e04bf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <YgOQAZKnbm5IzbTy@nanopsycho>
+ <20220209172525.19977e8c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209172525.19977e8c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In function do_remove_conflicting_framebuffers, if device is NULL, there
-will be null pointer reference. The patch add a check to the if expression.
+Thu, Feb 10, 2022 at 02:25:25AM CET, kuba@kernel.org wrote:
+>On Wed, 9 Feb 2022 09:39:54 +0200 Moshe Shemesh wrote:
+>> Well we don't have the SFs at that stage, how can we tell which SF will 
+>> use vnet and which SF will use eth ?
+>
+>On Wed, 9 Feb 2022 10:57:21 +0100 Jiri Pirko wrote: 
+>> It's a different user. One works with the eswitch and creates the port
+>> function. The other one takes the created instance and works with it.
+>> Note that it may be on a different host.
+>
+>It is a little confusing, so I may well be misunderstanding but the
+>cover letter says:
+>
+>$ devlink dev param set pci/0000:08:00.0 name enable_sfs_aux_devs \
+>              value false cmode runtime
+>
+>$ devlink port add pci/0000:08:00.0 flavour pcisf pfnum 0 sfnum 11
+>
+>So both of these run on the same side, no?
+>
+>What I meant is make the former part of the latter:
+>
+>$ devlink port add pci/0000:08:00.0 flavour pcisf pfnum 0 sfnum 11 noprobe
 
-Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
----
-Dear Linux folks
+I see. So it would not be "global policy" but per-instance option during
+creation. That makes sense. I wonder if the HW is capable of such flow,
+Moshe, Saeed?
 
-I discover this bug in the PowerPC VM provided by
-Open source lab of Oregon State University:
 
-https://lkml.org/lkml/2022/2/8/1145
+>
+>
+>Maybe worth clarifying - pci/0000:08:00.0 is the eswitch side and
+>auxiliary/mlx5_core.sf.1 is the... "customer" side, correct? 
 
-I found that the root cause of null device field is in offb_init_fb:
-info = framebuffer_alloc(sizeof(u32) * 16, NULL);
-
-I have tested the patch in the PowerPC VM. Hope my patch can be correct.
-
-Many Thanks
-Zhouyi
---
- drivers/video/fbdev/core/fbmem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
-index 34d6bb1bf82e..422b1fc01722 100644
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -1579,7 +1579,7 @@ static void do_remove_conflicting_framebuffers(struct apertures_struct *a,
- 			 * If it's not a platform device, at least print a warning. A
- 			 * fix would add code to remove the device from the system.
- 			 */
--			if (dev_is_platform(device)) {
-+			if (device && dev_is_platform(device)) {
- 				registered_fb[i]->forced_out = true;
- 				platform_device_unregister(to_platform_device(device));
- 			} else {
--- 
-2.25.1
-
+Yep.

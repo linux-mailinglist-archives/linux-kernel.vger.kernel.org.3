@@ -2,129 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE344B09A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 758184B0952
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238794AbiBJJe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:34:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55838 "EHLO
+        id S238401AbiBJJTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:19:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235553AbiBJJez (ORCPT
+        with ESMTP id S238391AbiBJJTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:34:55 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B2210BB
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:34:57 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id o24so5763098wro.3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:34:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:organization:in-reply-to:content-transfer-encoding;
-        bh=G+YDDnr2slUFHsUM/IlbFGkS85HzAaIxJtVEmZjhqMI=;
-        b=fFvqalnJA8sWVtzDVywLCenoPVSbM4BhkZK9XFrkh6Uhpi+h4y/LKiKPi0+ZpMMW/Z
-         8oUWKgTy+/vB6iqVkziuScLT+kEEaPx4cW97cxs178WEC9/LpV1PbchEV0yhArLeUKei
-         Mlqk8nmMSwVxPZPMdo7PhJzx9J9flAKp6V/antjKCI6D9JvcSZIa993aC67gdMa40vNi
-         iKaOYZWoizEF4zUNkT7BdkzPJ0w9QQSZNiE4Tkh/yi1bZG8tc6HGVwyxPS8oH35Nuysb
-         fBd++IIZ5lX81lBwDZ4ywBPbYiCD3/fndjabl0NGgG41OW1NKXnrFD1wVZveXOfhwjmg
-         bMNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=G+YDDnr2slUFHsUM/IlbFGkS85HzAaIxJtVEmZjhqMI=;
-        b=HsxnmpJChPxoNINRDJxZCk4MkHirDaqVGGs2L6ExM3+xCPFMXIoC1P7M8U742vyDes
-         UlYOw9u4wGbmuDEgyG6XOezIuwT0nAgsLUJr2hCdP6mrmg+SLiIOn2kmftycr0a4ylJZ
-         Dn1o3BhiYaNY3lu+wrY15XH4WixBJj/jsm1/lQeRej/+5v3ZDzk4u1GMSIn4xQuRQE7o
-         ptN7F1aF2HLICHfqKWSxkz4Cgnw8rcb2Uv3FVIK5vqcWSqvH9GITXEynA0GDblOIPVF0
-         J3j/U94PXRCZHQShAGauP1VqGs8vHHx96CmqOxsMFPxQZ/pojPonuE43uhK/6bn9xSP0
-         8vvA==
-X-Gm-Message-State: AOAM5306WDDzT5c1Z47Qo4w6Zq6vQTkJDOVLQqbqrd3kBaARAPLefbj9
-        yzlHQVUC+Z6cLO8ob/dO1fMeKg==
-X-Google-Smtp-Source: ABdhPJxBmsNmtY10oYaIzh1QwOHqjXPf7ItHPImfVqE1FxspgN0H8jxhkM1pdM6mESt6dmgnlo306g==
-X-Received: by 2002:a5d:4c85:: with SMTP id z5mr5695114wrs.225.1644485695484;
-        Thu, 10 Feb 2022 01:34:55 -0800 (PST)
-Received: from ?IPV6:2001:861:44c0:66c0:76d9:bf0e:e516:58a9? ([2001:861:44c0:66c0:76d9:bf0e:e516:58a9])
-        by smtp.gmail.com with ESMTPSA id x5sm9483363wrv.63.2022.02.10.01.34.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 01:34:54 -0800 (PST)
-Message-ID: <640ef0b2-fcba-50a6-71c2-8156181682b0@baylibre.com>
-Date:   Thu, 10 Feb 2022 10:34:53 +0100
+        Thu, 10 Feb 2022 04:19:41 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D496F10B3;
+        Thu, 10 Feb 2022 01:19:41 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JvWPV1Sttz9sXd;
+        Thu, 10 Feb 2022 17:18:06 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 10 Feb 2022 17:19:24 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 10 Feb 2022 17:19:24 +0800
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+To:     <axboe@kernel.dk>, <hch@lst.de>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yuyufen@huawei.com>, <guohanjun@huawei.com>,
+        <wangxiongfeng2@huawei.com>
+Subject: [RFC PATCH] blk-mq: avoid housekeeping CPUs scheduling a worker on a non-housekeeping CPU
+Date:   Thu, 10 Feb 2022 17:35:32 +0800
+Message-ID: <20220210093532.182818-1-wangxiongfeng2@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] drivers: meson: vdec: add VP9 support to GXM
-Content-Language: en-US
-To:     Christian Hewitt <christianshewitt@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220209153150.30688-1-christianshewitt@gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220209153150.30688-1-christianshewitt@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2022 16:31, Christian Hewitt wrote:
-> VP9 support for GXM appears to have been missed from the original
-> codec submission [0] but it works well, so let's add support.
-> 
-> [0] https://github.com/torvalds/linux/commit/00c43088aa680989407b6afbda295f67b3f123f1
-> 
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-> ---
-> Tested with LibreELEC 11 nightly 'AMLGX' dev images for Khadas VIM2
-> and WeTek Core2 GXM devices which can be found here [1]. The images
-> combine Linux 5.16.y [2] with Kodi v20 [3] and FFmpeg 4.4 [4] which
-> notably includes many V4L2 refinements for stability and usability.
-> 
-> [1] https://test.libreelec.tv/
-> [2] https://github.com/chewitt/linux/commits/amlogic-5.16.y
-> [3] https://github.com/xbmc/xbmc/
-> [4] https://github.com/jc-kynesim/rpi-ffmpeg/commits/dev/4.4/rpi_import_1
-> 
->   drivers/staging/media/meson/vdec/vdec_platform.c | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/staging/media/meson/vdec/vdec_platform.c b/drivers/staging/media/meson/vdec/vdec_platform.c
-> index eabbebab2da2..88c9d72e1c83 100644
-> --- a/drivers/staging/media/meson/vdec/vdec_platform.c
-> +++ b/drivers/staging/media/meson/vdec/vdec_platform.c
-> @@ -103,6 +103,18 @@ static const struct amvdec_format vdec_formats_gxl[] = {
->   
->   static const struct amvdec_format vdec_formats_gxm[] = {
->   	{
-> +		.pixfmt = V4L2_PIX_FMT_VP9,
-> +		.min_buffers = 16,
-> +		.max_buffers = 24,
-> +		.max_width = 3840,
-> +		.max_height = 2160,
-> +		.vdec_ops = &vdec_hevc_ops,
-> +		.codec_ops = &codec_vp9_ops,
-> +		.firmware_path = "meson/vdec/gxl_vp9.bin",
-> +		.pixfmts_cap = { V4L2_PIX_FMT_NV12M, 0 },
-> +		.flags = V4L2_FMT_FLAG_COMPRESSED |
-> +			 V4L2_FMT_FLAG_DYN_RESOLUTION,
-> +	}, {
->   		.pixfmt = V4L2_PIX_FMT_H264,
->   		.min_buffers = 2,
->   		.max_buffers = 24,
+When NOHZ_FULL is enabled, such as in HPC situation, CPUs are divided
+into housekeeping CPUs and non-housekeeping CPUs. Non-housekeeping CPUs
+are NOHZ_FULL CPUs and are often monopolized by the userspace process,
+such HPC application process. Any sort of interruption is not expected.
 
+blk_mq_hctx_next_cpu() selects each cpu in 'hctx->cpumask' alternately
+to schedule the work thread blk_mq_run_work_fn(). When 'hctx->cpumask'
+contains housekeeping CPU and non-housekeeping CPU at the same time, a
+housekeeping CPU, which want to request a IO, may schedule a worker on a
+non-housekeeping CPU. This may affect the performance of the userspace
+application running on non-housekeeping CPUs.
 
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+So let's just schedule the worker thread on the current CPU when the
+current CPU is housekeeping CPU.
+
+Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+---
+ block/blk-mq.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 1adfe4824ef5..ff9a4bf16858 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -24,6 +24,7 @@
+ #include <linux/sched/sysctl.h>
+ #include <linux/sched/topology.h>
+ #include <linux/sched/signal.h>
++#include <linux/sched/isolation.h>
+ #include <linux/delay.h>
+ #include <linux/crash_dump.h>
+ #include <linux/prefetch.h>
+@@ -2036,6 +2037,8 @@ static int blk_mq_hctx_next_cpu(struct blk_mq_hw_ctx *hctx)
+ static void __blk_mq_delay_run_hw_queue(struct blk_mq_hw_ctx *hctx, bool async,
+ 					unsigned long msecs)
+ {
++	int work_cpu;
++
+ 	if (unlikely(blk_mq_hctx_stopped(hctx)))
+ 		return;
+ 
+@@ -2050,7 +2053,17 @@ static void __blk_mq_delay_run_hw_queue(struct blk_mq_hw_ctx *hctx, bool async,
+ 		put_cpu();
+ 	}
+ 
+-	kblockd_mod_delayed_work_on(blk_mq_hctx_next_cpu(hctx), &hctx->run_work,
++	/*
++	 * Avoid housekeeping CPUs scheduling a worker on a non-housekeeping
++	 * CPU
++	 */
++	if (tick_nohz_full_enabled() && housekeeping_cpu(smp_processor_id(),
++							 HK_FLAG_WQ))
++		work_cpu = smp_processor_id();
++	else
++		work_cpu = blk_mq_hctx_next_cpu(hctx);
++
++	kblockd_mod_delayed_work_on(work_cpu, &hctx->run_work,
+ 				    msecs_to_jiffies(msecs));
+ }
+ 
+-- 
+2.20.1
+

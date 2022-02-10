@@ -2,81 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2163C4B104A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F554B104E
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242804AbiBJOWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:22:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40330 "EHLO
+        id S242874AbiBJOXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:23:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237743AbiBJOW2 (ORCPT
+        with ESMTP id S237743AbiBJOXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:22:28 -0500
+        Thu, 10 Feb 2022 09:23:49 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F90D102;
-        Thu, 10 Feb 2022 06:22:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFDE21B;
+        Thu, 10 Feb 2022 06:23:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD335619BA;
-        Thu, 10 Feb 2022 14:22:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC8DC004E1;
-        Thu, 10 Feb 2022 14:22:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DF6E6141B;
+        Thu, 10 Feb 2022 14:23:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDC17C004E1;
+        Thu, 10 Feb 2022 14:23:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644502949;
-        bh=u1dWT5JVXt/QwWGF+tQ50S7611q/WfJq6ECL0E8JWqI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bQYIgmjyDFeql0nuSOkDje8apjcCoy4exZGXjLviL6cSoco7gsu0vmvqmtDoHf1VM
-         Lzq/mk6U4krtWeJ4iH5bYq5uR+8eTCR0JUBsYfNpeolY3nOS2pf4NGN9phPkm9FAbx
-         bD5o/jEzbuXFKHBRfo0pXe/Ha5u0oseEEW/5LF4P5N85++/Mw2L58L0G/kn4s/Z1rg
-         aSnkjsAF2xc73eFIGMTY63U6x3TTYlbr9nbk8iC++gd1mnIY8r6SvIvNq/Q2ka5Lz3
-         FS92/wnqhA54ekmXn/QoOimj3QuA5nWFX9qhQ1qPUHYH4fLdAZhhbNFugg65Hil+gP
-         SzCePw4hOM9iw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nIAL5-006vLF-2A; Thu, 10 Feb 2022 14:22:27 +0000
-Date:   Thu, 10 Feb 2022 14:22:26 +0000
-Message-ID: <87r18a4x99.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-To:     Emil Renner Berthing <kernel@esmil.dk>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        kernel-team@android.com
-Subject: Re: [PATCH 10/10] pinctrl: starfive: Switch to dynamic chip name output
-In-Reply-To: <CANBLGcxg0qKWw4aifr+dHWge1aXE66e4wZzDwwpJjSad3xaeTQ@mail.gmail.com>
-References: <20220209162607.1118325-1-maz@kernel.org>
-        <20220209162607.1118325-11-maz@kernel.org>
-        <CANBLGcwKeLn7Q1Ra8pCw=cXy=kJeEFRmBjOxjds10+k70LvzXA@mail.gmail.com>
-        <87zgmz3xbf.wl-maz@kernel.org>
-        <CANBLGcwwrqkYS2cxX5dYAaoWdj5pRp9c+qBDAMb3=0D5oBD+Zg@mail.gmail.com>
-        <87v8xm4zkm.wl-maz@kernel.org>
-        <CANBLGcyvMVdTnndMSWDFnN6207Nareps=AdzVvt0OaMdeAXEHg@mail.gmail.com>
-        <87tud64yqa.wl-maz@kernel.org>
-        <CANBLGcxg0qKWw4aifr+dHWge1aXE66e4wZzDwwpJjSad3xaeTQ@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: kernel@esmil.dk, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, brgl@bgdev.pl, matthias.bgg@gmail.com, grygorii.strashko@ti.com, ssantosh@kernel.org, khilman@kernel.org, tony@atomide.com, tglx@linutronix.de, vz@mleia.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, kernel-team@android.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+        s=k20201202; t=1644503030;
+        bh=kFD4BdX/xGNQMXDRnzY9jSgp8cW8ooG1pe8p+Wttp5o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g5CmlsrmlIy2rSKWBZvJJzCg9k2iQDqcY05aL6/qJCLmA2IH8GC93GNE6UM0MdFAa
+         TIcu51fyjfmx+H8sDOR0CGwa4x0pPNjzUUBGgyYXy25Hy9hq4J/BZO0PTrDhwzSzB7
+         8/xQiaG2+wokXKBkfljrGfKqKRf2OGP8w4ec+rBPGLu01D0OVoiBtIyvucfoVY51un
+         tkkkWv5Fs0KIYG3NTRrpxenwUd5I2LxFRfUE94RBRbkNa6JwvAdrxnZ7QuGO0SOeUo
+         agkz2KmIaP0viGxAQwvL2PUmGHe+gut85/5PgS47s5FZaH/O7H/DiDlmZj61whcCOM
+         U98HjespBmwNA==
+Received: by pali.im (Postfix)
+        id 96859869; Thu, 10 Feb 2022 15:23:47 +0100 (CET)
+Date:   Thu, 10 Feb 2022 15:23:47 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Jerome Pouiller <Jerome.Pouiller@silabs.com>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-mmc@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v9 05/24] wfx: add main.c/main.h
+Message-ID: <20220210142347.nwmbynkcdtjhvsj5@pali>
+References: <20220111171424.862764-1-Jerome.Pouiller@silabs.com>
+ <20220111171424.862764-6-Jerome.Pouiller@silabs.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220111171424.862764-6-Jerome.Pouiller@silabs.com>
+User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -87,81 +63,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Feb 2022 14:14:19 +0000,
-Emil Renner Berthing <kernel@esmil.dk> wrote:
->=20
-> On Thu, 10 Feb 2022 at 14:50, Marc Zyngier <maz@kernel.org> wrote:
-> > On Thu, 10 Feb 2022 13:44:12 +0000,
-> > Emil Renner Berthing <kernel@esmil.dk> wrote:
-> > >
-> > > Gotcha. The SoC has been out in very few numbers for less than a year
-> > > and the driver only entered mainline in 5.17-rc1, so I doubt anyone
-> > > has had time to write scripts that check for this, but I'll let it be
-> > > up to you.
-> >
-> > Ah, I should have checked that. In which case, would you be OK if I
-> > simply pushed the removal of this label as a fix for 5.17, and just
-> > have it to say "Star5 GPIO", for example, without any indication of
-> > the device (which appears in debugfs anyway as part of the irqdomain)?
->=20
-> I'm fine with it although I'd prefer "StarFive GPIO". I haven't seen
-> star5 used anywhere.
+On Tuesday 11 January 2022 18:14:05 Jerome Pouiller wrote:
+> +/* The device needs data about the antenna configuration. This information in
+> + * provided by PDS (Platform Data Set, this is the wording used in WF200
+> + * documentation) files. For hardware integrators, the full process to create
+> + * PDS files is described here:
+> + *   https:github.com/SiliconLabs/wfx-firmware/blob/master/PDS/README.md
+> + *
 
-Fair enough.
-
-> But shouldn't changes like this normally go through Linus Walleij's
-> tree?
-
-Either way, I don't mind. For the record, see below what I'm
-suggesting we take in before 5.17-final.
-
-Linus?
-
-Thanks,
-
-	M.
-
-=46rom a84b83c32048de2ba72e5d05645eabc95ffabe49 Mon Sep 17 00:00:00 2001
-From: Marc Zyngier <maz@kernel.org>
-Date: Thu, 10 Feb 2022 14:13:36 +0000
-Subject: [PATCH] pinctrl: starfive: Use a static name for the GPIO irq_chip
-
-Drop the device name used for the GPIO irq_chip and replace it
-with something static. The information is still available from
-debugfs and carried as part of the irqdomain.
-
-Suggested-by: Emil Renner Berthing <kernel@esmil.dk>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
----
- drivers/pinctrl/pinctrl-starfive.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/pinctrl/pinctrl-starfive.c b/drivers/pinctrl/pinctrl-s=
-tarfive.c
-index 0b912152a405..266da41a6162 100644
---- a/drivers/pinctrl/pinctrl-starfive.c
-+++ b/drivers/pinctrl/pinctrl-starfive.c
-@@ -1164,6 +1164,7 @@ static int starfive_irq_set_type(struct irq_data *d, =
-unsigned int trigger)
- }
-=20
- static struct irq_chip starfive_irq_chip =3D {
-+	.name =3D "StarFive GPIO",
- 	.irq_ack =3D starfive_irq_ack,
- 	.irq_mask =3D starfive_irq_mask,
- 	.irq_mask_ack =3D starfive_irq_mask_ack,
-@@ -1308,7 +1309,6 @@ static int starfive_probe(struct platform_device *pde=
-v)
- 	sfp->gc.ngpio =3D NR_GPIOS;
-=20
- 	starfive_irq_chip.parent_device =3D dev;
--	starfive_irq_chip.name =3D sfp->gc.label;
-=20
- 	sfp->gc.irq.chip =3D &starfive_irq_chip;
- 	sfp->gc.irq.parent_handler =3D starfive_gpio_irq_handler;
---=20
-2.34.1
-
-
---=20
-Without deviation from the norm, progress is not possible.
+Just a small cosmetic issue but URL cannot be automatically opened as it
+is missing slashes after https protocol.

@@ -2,78 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5874B0BE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:09:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B114B0BE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:09:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240550AbiBJLIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 06:08:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42444 "EHLO
+        id S240560AbiBJLIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 06:08:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238281AbiBJLIE (ORCPT
+        with ESMTP id S240561AbiBJLIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 06:08:04 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138E03BD
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:08:03 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id i17so9640779lfg.11
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:08:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=GAVqfn2OlJnaPhVaal0OTt8GkRWxgqq3BRYHfex43bQ=;
-        b=eXRA+OMJ4xvu7XUkXE8A1QNPl6XeV2NViBIP24pfmczewmuGnEo22jQCumMnAhCFMz
-         vSj0uJWslGQJgDDa25PU4NUMQoYo77VFRA6a7Y9uLUZj8TfopLlJ+4GxZc+FSufre5eH
-         ukXKJ84MWC71Fat48EQt6NoDFvj6XDaoeUNVO4wGcvzELwOzHmikBfKORu8Mt0uOMVv9
-         gN64bucozrTavo/MN+fa0zILcFoOoUGcxlrVPtvvTmyZiGOwnYkRznwRlRl3odyVXtlg
-         IJCYNJK7iff8TpRebVyZ5trAbvNAAyzmhEfFNyG/fDrNrpMHbs2z2rZ8KeogAqMiw8h7
-         N2UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=GAVqfn2OlJnaPhVaal0OTt8GkRWxgqq3BRYHfex43bQ=;
-        b=eTIZphwUXEMKOzPUmiqx5boha8aeBHrHjTHvA4oMgo13eZKyHBze8ZmCF7Oilq9JOE
-         bOxX9Bv0/vurtdAISSiPWt1yULP8oxNb6l5zGzSbtyVbydQUBUf6P6fxvLzqOTVEszaj
-         HP9xB9BTdU16oLaCgLzp73gyapfVtf3KSP0cWFo9JDoIBNFwlWHuqYpDeuV5hFzR3TSn
-         14sIx/jRRp83QescXVORONuTk3cDiZGV5b/is7Q6IMg44241YrlpXvb2rxpsCiMGc+cM
-         5FCQWXZrSUxXZvGA1OxN6ixFA3Hs1nORk8CfTPCev9a2MXmqRgkSmAhlxlgDMEIU2wUR
-         V4SQ==
-X-Gm-Message-State: AOAM532viBL4inXycF8kDTW2TBRfTUbR5LnhH/bgQSsG3GR3QxizhzyD
-        b3xT04KddQH7az1Icon6Za5O3g==
-X-Google-Smtp-Source: ABdhPJwkht9x8dOfGAEnVyxU7zJa0q2yxslNzRuT1ZVH5FsX+Ybq14ysKU2hHQRz7ir8teHdklJLBA==
-X-Received: by 2002:a05:6512:1315:: with SMTP id x21mr5008968lfu.454.1644491281066;
-        Thu, 10 Feb 2022 03:08:01 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id z8sm2836057ljz.90.2022.02.10.03.08.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 03:08:00 -0800 (PST)
-Message-ID: <93ee82de-6ea3-e58b-8691-9fc8d0dad439@linaro.org>
-Date:   Thu, 10 Feb 2022 14:07:59 +0300
+        Thu, 10 Feb 2022 06:08:14 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A301B78;
+        Thu, 10 Feb 2022 03:08:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644491295; x=1676027295;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=P0TWt16Fd1z8nwCSFNxZK6KaUzghbPYOvC3LHm0T8yE=;
+  b=Hsk4vnZBgjdFizdFnClUA57o7+Lr06IGqG6+NygcEBZ+mK86KhBFT1+B
+   pmQjn3APxdyupI6VpEaj/Sb3kcRDIqj3239IQE+TvL2F9cw/gznUWlVQL
+   VVoBF4VMkpqNYgHPSra8TzW4hXO8FLiY0TsfPBElmxjnNShl0eavm9sHU
+   l7zIToGlenvsOEWQO9TuBXtk1KbjvDA10biMuO15PmwCRdOW8F1aEnO86
+   FvN1jpKyMcIvn//ffNYkGLCzYTk1frmkFejlW6tKtSgdHihls6+Y0yuUv
+   U1Imnn+zLGF5LZ3PWvD9+YYfYTs4pICRsvZLuuCPMI8GjuVt5aqPuz7VN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="249673732"
+X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
+   d="scan'208";a="249673732"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 03:08:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
+   d="scan'208";a="568615790"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga001.jf.intel.com with ESMTP; 10 Feb 2022 03:08:12 -0800
+Subject: Re: [PATCH v6] xhci: re-initialize the HC during resume if HCE was
+ set
+To:     Puma Hsu <pumahsu@google.com>
+Cc:     mathias.nyman@intel.com, Greg KH <gregkh@linuxfoundation.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Albert Wang <albertccwang@google.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20220129093036.488231-1-pumahsu@google.com>
+ <413ce7e5-1c35-c3d0-a89e-a3c7f03b4db7@linux.intel.com>
+ <CAGCq0La83AKrdk4w2b6wJLZVB0oKB7_AH3iqc4R0K1vDnqrX9A@mail.gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <86bd1bef-2f07-8dee-a125-be208903204e@linux.intel.com>
+Date:   Thu, 10 Feb 2022 13:09:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [REPOST PATCH v4 01/13] drm/msm/dsi: add support for dsc data
-Content-Language: en-GB
-To:     Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-References: <20220210103423.271016-1-vkoul@kernel.org>
- <20220210103423.271016-2-vkoul@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220210103423.271016-2-vkoul@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <CAGCq0La83AKrdk4w2b6wJLZVB0oKB7_AH3iqc4R0K1vDnqrX9A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,212 +69,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/2022 13:34, Vinod Koul wrote:
-> Display Stream Compression (DSC) parameters need to be calculated. Add
-> helpers and struct msm_display_dsc_config in msm_drv for this
-> msm_display_dsc_config uses drm_dsc_config for DSC parameters.
+On 8.2.2022 9.11, Puma Hsu wrote:
+> On Thu, Feb 3, 2022 at 3:11 AM Mathias Nyman
+> <mathias.nyman@linux.intel.com> wrote:
+>>
+>> On 29.1.2022 11.30, Puma Hsu wrote:
+>>> When HCE(Host Controller Error) is set, it means an internal
+>>> error condition has been detected. Software needs to re-initialize
+>>> the HC, so add this check in xhci resume.
+>>>
+>>> Cc: stable@vger.kernel.org
+>>> Signed-off-by: Puma Hsu <pumahsu@google.com>
+>>> ---
+>>> v2: Follow Sergey Shtylyov <s.shtylyov@omp.ru>'s comment.
+>>> v3: Add stable@vger.kernel.org for stable release.
+>>> v4: Refine the commit message.
+>>> v5: Add a debug log. Follow Mathias Nyman <mathias.nyman@linux.intel.com>'s comment.
+>>> v6: Fix the missing declaration for str.
+>>>
+>>>  drivers/usb/host/xhci.c | 7 +++++--
+>>>  1 file changed, 5 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>>> index dc357cabb265..6f1198068004 100644
+>>> --- a/drivers/usb/host/xhci.c
+>>> +++ b/drivers/usb/host/xhci.c
+>>> @@ -1091,6 +1091,7 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+>>>       int                     retval = 0;
+>>>       bool                    comp_timer_running = false;
+>>>       bool                    pending_portevent = false;
+>>> +     char                    str[XHCI_MSG_MAX];
+>>>
+>>>       if (!hcd->state)
+>>>               return 0;
+>>> @@ -1146,8 +1147,10 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+>>>               temp = readl(&xhci->op_regs->status);
+>>>       }
+>>>
+>>> -     /* If restore operation fails, re-initialize the HC during resume */
+>>> -     if ((temp & STS_SRE) || hibernated) {
+>>> +     /* If restore operation fails or HC error is detected, re-initialize the HC during resume */
+>>> +     if ((temp & (STS_SRE | STS_HCE)) || hibernated) {
+>>> +             xhci_warn(xhci, "re-initialize HC during resume, USBSTS:%s\n",
+>>> +                       xhci_decode_usbsts(str, temp));
+>>>
+>>>               if ((xhci->quirks & XHCI_COMP_MODE_QUIRK) &&
+>>>                               !(xhci_all_ports_seen_u0(xhci))) {
+>>>
+>>
+>> Ended up modifying this patch a bit more than I first intended,
+>> - don't print warning in hibernation case, only error.
+>> - maybe using a lot of stack for a debug string isn't really needed.
+>> - make sure we read the usbsts register before checking for the HCE bit.
+>>
+>> Does the below work for you? If yes, and you agree I'll apply it instead
 > 
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> Hi Mathias,
+> Yes, your patch works for me, thanks!
+> Will you submit a new patch? or should I update to a new version?
+> Thanks.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+I'll submit it
 
-> ---
->   drivers/gpu/drm/msm/dsi/dsi_host.c | 132 +++++++++++++++++++++++++++++
->   drivers/gpu/drm/msm/msm_drv.h      |  15 ++++
->   2 files changed, 147 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index 6b3ced4aaaf5..27553194f9fa 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -31,6 +31,8 @@
->   
->   #define DSI_RESET_TOGGLE_DELAY_MS 20
->   
-> +static int dsi_populate_dsc_params(struct msm_display_dsc_config *dsc);
-> +
->   static int dsi_get_version(const void __iomem *base, u32 *major, u32 *minor)
->   {
->   	u32 ver;
-> @@ -157,6 +159,7 @@ struct msm_dsi_host {
->   	struct regmap *sfpb;
->   
->   	struct drm_display_mode *mode;
-> +	struct msm_display_dsc_config *dsc;
->   
->   	/* connected device info */
->   	struct device_node *device_node;
-> @@ -1718,6 +1721,135 @@ static int dsi_host_parse_lane_data(struct msm_dsi_host *msm_host,
->   	return -EINVAL;
->   }
->   
-> +static u32 dsi_dsc_rc_buf_thresh[DSC_NUM_BUF_RANGES - 1] = {
-> +	0x0e, 0x1c, 0x2a, 0x38, 0x46, 0x54, 0x62,
-> +	0x69, 0x70, 0x77, 0x79, 0x7b, 0x7d, 0x7e
-> +};
-> +
-> +/* only 8bpc, 8bpp added */
-> +static char min_qp[DSC_NUM_BUF_RANGES] = {
-> +	0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 7, 13
-> +};
-> +
-> +static char max_qp[DSC_NUM_BUF_RANGES] = {
-> +	4, 4, 5, 6, 7, 7, 7, 8, 9, 10, 11, 12, 13, 13, 15
-> +};
-> +
-> +static char bpg_offset[DSC_NUM_BUF_RANGES] = {
-> +	2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12
-> +};
-> +
-> +static int dsi_populate_dsc_params(struct msm_display_dsc_config *dsc)
-> +{
-> +	int mux_words_size;
-> +	int groups_per_line, groups_total;
-> +	int min_rate_buffer_size;
-> +	int hrd_delay;
-> +	int pre_num_extra_mux_bits, num_extra_mux_bits;
-> +	int slice_bits;
-> +	int target_bpp_x16;
-> +	int data;
-> +	int final_value, final_scale;
-> +	int i;
-> +
-> +	dsc->drm->rc_model_size = 8192;
-> +	dsc->drm->first_line_bpg_offset = 12;
-> +	dsc->drm->rc_edge_factor = 6;
-> +	dsc->drm->rc_tgt_offset_high = 3;
-> +	dsc->drm->rc_tgt_offset_low = 3;
-> +	dsc->drm->simple_422 = 0;
-> +	dsc->drm->convert_rgb = 1;
-> +	dsc->drm->vbr_enable = 0;
-> +
-> +	/* handle only bpp = bpc = 8 */
-> +	for (i = 0; i < DSC_NUM_BUF_RANGES - 1 ; i++)
-> +		dsc->drm->rc_buf_thresh[i] = dsi_dsc_rc_buf_thresh[i];
-> +
-> +	for (i = 0; i < DSC_NUM_BUF_RANGES; i++) {
-> +		dsc->drm->rc_range_params[i].range_min_qp = min_qp[i];
-> +		dsc->drm->rc_range_params[i].range_max_qp = max_qp[i];
-> +		dsc->drm->rc_range_params[i].range_bpg_offset = bpg_offset[i];
-> +	}
-> +
-> +	dsc->drm->initial_offset = 6144; /* Not bpp 12 */
-> +	if (dsc->drm->bits_per_pixel != 8)
-> +		dsc->drm->initial_offset = 2048;	/* bpp = 12 */
-> +
-> +	mux_words_size = 48;		/* bpc == 8/10 */
-> +	if (dsc->drm->bits_per_component == 12)
-> +		mux_words_size = 64;
-> +
-> +	dsc->drm->initial_xmit_delay = 512;
-> +	dsc->drm->initial_scale_value = 32;
-> +	dsc->drm->first_line_bpg_offset = 12;
-> +	dsc->drm->line_buf_depth = dsc->drm->bits_per_component + 1;
-> +
-> +	/* bpc 8 */
-> +	dsc->drm->flatness_min_qp = 3;
-> +	dsc->drm->flatness_max_qp = 12;
-> +	dsc->det_thresh_flatness = 7 + 2 * (dsc->drm->bits_per_component - 8);
-> +	dsc->drm->rc_quant_incr_limit0 = 11;
-> +	dsc->drm->rc_quant_incr_limit1 = 11;
-> +	dsc->drm->mux_word_size = DSC_MUX_WORD_SIZE_8_10_BPC;
-> +
-> +	/* FIXME: need to call drm_dsc_compute_rc_parameters() so that rest of
-> +	 * params are calculated
-> +	 */
-> +	dsc->slice_last_group_size = 3 - (dsc->drm->slice_width % 3);
-> +	groups_per_line = DIV_ROUND_UP(dsc->drm->slice_width, 3);
-> +	dsc->drm->slice_chunk_size = dsc->drm->slice_width * dsc->drm->bits_per_pixel / 8;
-> +	if ((dsc->drm->slice_width * dsc->drm->bits_per_pixel) % 8)
-> +		dsc->drm->slice_chunk_size++;
-> +
-> +	/* rbs-min */
-> +	min_rate_buffer_size =  dsc->drm->rc_model_size - dsc->drm->initial_offset +
-> +				dsc->drm->initial_xmit_delay * dsc->drm->bits_per_pixel +
-> +				groups_per_line * dsc->drm->first_line_bpg_offset;
-> +
-> +	hrd_delay = DIV_ROUND_UP(min_rate_buffer_size, dsc->drm->bits_per_pixel);
-> +
-> +	dsc->drm->initial_dec_delay = hrd_delay - dsc->drm->initial_xmit_delay;
-> +
-> +	dsc->drm->initial_scale_value = 8 * dsc->drm->rc_model_size /
-> +				       (dsc->drm->rc_model_size - dsc->drm->initial_offset);
-> +
-> +	slice_bits = 8 * dsc->drm->slice_chunk_size * dsc->drm->slice_height;
-> +
-> +	groups_total = groups_per_line * dsc->drm->slice_height;
-> +
-> +	data = dsc->drm->first_line_bpg_offset * 2048;
-> +
-> +	dsc->drm->nfl_bpg_offset = DIV_ROUND_UP(data, (dsc->drm->slice_height - 1));
-> +
-> +	pre_num_extra_mux_bits = 3 * (mux_words_size + (4 * dsc->drm->bits_per_component + 4) - 2);
-> +
-> +	num_extra_mux_bits = pre_num_extra_mux_bits - (mux_words_size -
-> +			     ((slice_bits - pre_num_extra_mux_bits) % mux_words_size));
-> +
-> +	data = 2048 * (dsc->drm->rc_model_size - dsc->drm->initial_offset + num_extra_mux_bits);
-> +	dsc->drm->slice_bpg_offset = DIV_ROUND_UP(data, groups_total);
-> +
-> +	/* bpp * 16 + 0.5 */
-> +	data = dsc->drm->bits_per_pixel * 16;
-> +	data *= 2;
-> +	data++;
-> +	data /= 2;
-> +	target_bpp_x16 = data;
-> +
-> +	data = (dsc->drm->initial_xmit_delay * target_bpp_x16) / 16;
-> +	final_value =  dsc->drm->rc_model_size - data + num_extra_mux_bits;
-> +	dsc->drm->final_offset = final_value;
-> +
-> +	final_scale = 8 * dsc->drm->rc_model_size / (dsc->drm->rc_model_size - final_value);
-> +
-> +	data = (final_scale - 9) * (dsc->drm->nfl_bpg_offset + dsc->drm->slice_bpg_offset);
-> +	dsc->drm->scale_increment_interval = (2048 * dsc->drm->final_offset) / data;
-> +
-> +	dsc->drm->scale_decrement_interval = groups_per_line / (dsc->drm->initial_scale_value - 8);
-> +
-> +	return 0;
-> +}
-> +
->   static int dsi_host_parse_dt(struct msm_dsi_host *msm_host)
->   {
->   	struct device *dev = &msm_host->pdev->dev;
-> diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-> index d7574e6bd4e4..384f9bad4760 100644
-> --- a/drivers/gpu/drm/msm/msm_drv.h
-> +++ b/drivers/gpu/drm/msm/msm_drv.h
-> @@ -30,6 +30,7 @@
->   #include <drm/drm_plane_helper.h>
->   #include <drm/drm_probe_helper.h>
->   #include <drm/drm_fb_helper.h>
-> +#include <drm/drm_dsc.h>
->   #include <drm/msm_drm.h>
->   #include <drm/drm_gem.h>
->   
-> @@ -134,6 +135,20 @@ struct msm_drm_thread {
->   	struct kthread_worker *worker;
->   };
->   
-> +/* DSC config */
-> +struct msm_display_dsc_config {
-> +	struct drm_dsc_config *drm;
-> +
-> +	u32 initial_lines;
-> +	u32 pkt_per_line;
-> +	u32 bytes_in_slice;
-> +	u32 bytes_per_pkt;
-> +	u32 eol_byte_num;
-> +	u32 pclk_per_line;
-> +	u32 slice_last_group_size;
-> +	u32 det_thresh_flatness;
-> +};
-> +
->   struct msm_drm_private {
->   
->   	struct drm_device *dev;
-
-
--- 
-With best wishes
-Dmitry
+Thanks
+-Mathias

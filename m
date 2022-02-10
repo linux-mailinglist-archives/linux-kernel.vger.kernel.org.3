@@ -2,172 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0264B1839
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9BB4B1834
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344944AbiBJWcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 17:32:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54506 "EHLO
+        id S1344987AbiBJWch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 17:32:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242808AbiBJWcP (ORCPT
+        with ESMTP id S1344965AbiBJWcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:32:15 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5C8BD9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:32:15 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id a12-20020a056902056c00b0061dc0f2a94aso15016846ybt.6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:32:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=gl08/uxFVlmi2wSTq5+9dUe3B/HwzYiRuJoJTn+segs=;
-        b=BdC/fKhWAhUYwCbX8kX1FDzZtTY9aXZLZxD44qMz+MrqHmpo9XxkQ1C7btl4i+KBVV
-         2Ttqt8x0eMP9PuQygYLTj0RxfbJGpXIFw5IZjpN/3or4BSXmsMctd17EhXpz9MgID3jO
-         Q70qwhcGZZ8Q9ILF3wfH79Moln9rfUCDFOmkxEJ40b7+4WFJRQmCmCZl6Gv+hi3LgMGZ
-         WQJEhU9pRiMZ2Kl2UcNgWBheBv/L/Q+B9jAavghoGDh76uwwOd+etdfMAMGK2thVbD7W
-         cLh1JCBDeH/t5HCTavnLVT+ygkAhzWIOeOoVs5j7GDPwte7Qo8aRpEKtRHBfxq58hsKf
-         RM5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=gl08/uxFVlmi2wSTq5+9dUe3B/HwzYiRuJoJTn+segs=;
-        b=31wiwnQWRBo1c39kavC4QDAvVDuomhn/Ombe37Vvd8OylIR5bdB9mbufxUEqQpc5DB
-         2jsMc+eUVlkKwhf8OBgVjvAnMZjE3IvkcWhjps/K3WRK6HJ1h3kr1LWZXOs8KTjabjTC
-         AZwBUJJ5+FG0A6R0pR+JjlqmyBC3FJGkC+P6M1IePglCFyjJfJSZvej03TgGV9OrT6Y1
-         +1UyHfGrUtPl2fL2LsWgwGjv1myowgWYvvbp2fXDGLnJPf6+SSbSHF2X6vimW/5cfkrD
-         mErwi3ArR+xLEEu/cyMwxoZuNlOta0tJNRPfH0i85KvzlZ4zuxmvSLYyxkE3kzYDroj7
-         92xQ==
-X-Gm-Message-State: AOAM5300KV1Ds8eD2PuAZArypgpFboHv8KnPCxRmpKkU/QAQKYQPbITM
-        8DyomU2MOrCkp935M7/fyPXIxOHX
-X-Google-Smtp-Source: ABdhPJzsflLFTtrCxYLYUbOG68XKxeYHkfS3xyNJorZcxmlFdOO6bvUPqjcNKP1xFAdasYI3UiPhTZ8wNQ==
-X-Received: from fawn.svl.corp.google.com ([2620:15c:2cd:202:2f6e:60d0:d1d5:6d5b])
- (user=morbo job=sendgmr) by 2002:a25:3285:: with SMTP id y127mr9242337yby.205.1644532334603;
- Thu, 10 Feb 2022 14:32:14 -0800 (PST)
-Date:   Thu, 10 Feb 2022 14:31:34 -0800
-In-Reply-To: <20220204005742.1222997-1-morbo@google.com>
-Message-Id: <20220210223134.233757-1-morbo@google.com>
-Mime-Version: 1.0
-References: <20220204005742.1222997-1-morbo@google.com>
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH v4] x86: use builtins to read eflags
-From:   Bill Wendling <morbo@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, llvm@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 10 Feb 2022 17:32:36 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B36267F;
+        Thu, 10 Feb 2022 14:32:36 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 75E0F240003;
+        Thu, 10 Feb 2022 22:32:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1644532354;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+QgVffAGvdGWhHLFKs1yKdpUZfk0sx8ZccSaPdB92Lc=;
+        b=lAQGGi+iO2hQ8Jo77cYHXAKC9fn+Dtj73HjHETDcS6HzIAeGvxrIUqUd2p3khMDYu59OyQ
+        d9Wm+X31vHFHH9humJRy1hjWfxtz/H6kXk285aSJ/p1fIVcjmtz3S7uLf2y/5HJiwhor0i
+        DRn+HxJNSn3bc7bhcAHlJsRPTil3HN8+B6G1b6EqyZZsdXrr5i3EmcI4Etj2AjEffrUg96
+        V15H9Li6j9h1AmY5UgQAqAn9h8u0C9G2vbO1c+4ZvfqA0ngcTdT8CWoH/OxOCSq8K9dShP
+        j9PNV6UDcJ1h6C/zXPXsyClS634lZLYkI5pSXEYeTz737HEZfHqvuaqVqz3Nvw==
+Date:   Thu, 10 Feb 2022 23:32:32 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/10] dt-bindings: rtc: pcf2127: add PCF2131 INT_A and
+ INT_B support
+Message-ID: <YgWSgGTKR63g+S9e@piout.net>
+References: <20220125200009.900660-1-hugo@hugovil.com>
+ <20220125200009.900660-11-hugo@hugovil.com>
+ <YgMy/CYL8lmf6Y+J@robh.at.kernel.org>
+ <20220210171234.4e317c8a5d5f91f358382b07@hugovil.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210171234.4e317c8a5d5f91f358382b07@hugovil.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GCC and Clang both have builtins to read and write the EFLAGS register.
-This allows the compiler to determine the best way to generate this
-code, which can improve code generation.
+On 10/02/2022 17:12:34-0500, Hugo Villeneuve wrote:
+> On Tue, 8 Feb 2022 21:20:28 -0600
+> Rob Herring <robh@kernel.org> wrote:
+> 
+> > On Tue, Jan 25, 2022 at 03:00:09PM -0500, Hugo Villeneuve wrote:
+> > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > 
+> > > The PCF2131 has two output interrupt pins, named INT_A and INT_B.
+> > > 
+> > > Add properties to identify onto which pin we want the alarm interrupt
+> > > to be routed. It can be either one, or both.
+> > > 
+> > > These properties are automatically set to false for variants other
+> > > than PCF2131 (ex: PCF2127).
+> > > 
+> > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > ---
+> > >  .../devicetree/bindings/rtc/nxp,pcf2127.yaml  | 23 +++++++++++++++++++
+> > >  1 file changed, 23 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+> > > index 57eb0a58afa3..83656dd2f97f 100644
+> > > --- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+> > > +++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
+> > > @@ -24,6 +24,16 @@ properties:
+> > >    interrupts:
+> > >      maxItems: 1
+> > >  
+> > > +  alarm-output-a:
+> > 
+> > nxp,alarm-output-a
+> 
+> Ok, this will be fixed for V2.
+> 
 
-This issue arose due to Clang's issue with the "=rm" constraint.  Clang
-chooses to be conservative in these situations, and so uses memory
-instead of registers. This is a known issue, which is currently being
-addressed.
+Actually, this property has to be made more generic and thought out.
+There are multiple RTCs that have multiple interrupt pins where one of
+the pin can be used for different interrupt or clock output.
 
-However, using builtins is beneficial in general, because it removes the
-burden of determining what's the way to read the flags register from the
-programmer and places it on to the compiler, which has the information
-needed to make that decision. Indeed, this piece of code has had several
-changes over the years, some of which were pinging back and forth to
-determine the correct constraints to use.
+With your binding, there is no way to separate which interrupt is going
+to which pin and so there is no way to get the alarm and BLF or the
+watchdog on different pins and we certainly don't want to have a
+property per interrupt type.
 
-With this change, Clang generates better code:
+Also, the documentation is missing the fact that the driver makes having
+one of the property mandatory.
 
-Original code:
-        movq    $0, -48(%rbp)
-        #APP
-        # __raw_save_flags
-        pushfq
-        popq    -48(%rbp)
-        #NO_APP
-        movq    -48(%rbp), %rbx
 
-New code:
-        pushfq
-        popq    %rbx
-        #APP
-
-Note that the stack slot in the original code is no longer needed in the
-new code, saving a small amount of stack space.
-
-There is no change to GCC's output:
-
-Original code:
-
-        # __raw_save_flags
-        pushf ; pop %r13        # flags
-
-New code:
-
-        pushfq
-        popq    %r13    # _23
-
-Signed-off-by: Bill Wendling <morbo@google.com>
----
-v4: - Clang now no longer generates stack frames when using these builtins.
-    - Corrected misspellings.
-v3: - Add blurb indicating that GCC's output hasn't changed.
-v2: - Kept the original function to retain the out-of-line symbol.
-    - Improved the commit message.
-    - Note that I couldn't use Nick's suggestion of
-
-        return IS_ENABLED(CONFIG_X86_64) ? ...
-
-      because Clang complains about using __builtin_ia32_readeflags_u32 in
-      64-bit mode.
----
- arch/x86/include/asm/irqflags.h | 19 +++++--------------
- 1 file changed, 5 insertions(+), 14 deletions(-)
-
-diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
-index 87761396e8cc..f31a035f3c6a 100644
---- a/arch/x86/include/asm/irqflags.h
-+++ b/arch/x86/include/asm/irqflags.h
-@@ -19,20 +19,11 @@
- extern inline unsigned long native_save_fl(void);
- extern __always_inline unsigned long native_save_fl(void)
- {
--	unsigned long flags;
--
--	/*
--	 * "=rm" is safe here, because "pop" adjusts the stack before
--	 * it evaluates its effective address -- this is part of the
--	 * documented behavior of the "pop" instruction.
--	 */
--	asm volatile("# __raw_save_flags\n\t"
--		     "pushf ; pop %0"
--		     : "=rm" (flags)
--		     : /* no input */
--		     : "memory");
--
--	return flags;
-+#ifdef CONFIG_X86_64
-+	return __builtin_ia32_readeflags_u64();
-+#else
-+	return __builtin_ia32_readeflags_u32();
-+#endif
- }
- 
- static __always_inline void native_irq_disable(void)
 -- 
-2.35.1.265.g69c8d7142f-goog
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

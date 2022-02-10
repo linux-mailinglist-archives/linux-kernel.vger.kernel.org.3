@@ -2,174 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A5B4B0B3F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7614B0B41
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240070AbiBJKqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 05:46:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55790 "EHLO
+        id S240062AbiBJKqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 05:46:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240006AbiBJKqO (ORCPT
+        with ESMTP id S231878AbiBJKqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 10 Feb 2022 05:46:14 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2044.outbound.protection.outlook.com [40.107.237.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09D7FE2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:46:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hjToKzJo6aAJNlUy8oBFNkXFdJkw9SHGPfqjgQxo0xreISaR0rBuaKi/MMASr4dmt7AOUN9jGOwJYqWTzJ9qvpVZAjGSddlku2olcn71b8f/helyOArqPbwkuFJ3W86ETqLB6ti2P4DVtNu1g9oYDUMDB6E+EqEIowipkw36FV9md9mFajzb73nSpQr0sjZCnFr6kogi7i2CN+WTad6fxCZKF6fU6TXjCiT3tWmB5k9rFrCaBlYvVC1PhoPj/063+d5ZnJUYSbq3JVSs7KIXnaWWlxvbhwDr5I3zIOrR/h+03VKevAVxcAI5An9YPd9cmMx1dbwJbwuJ4zmhXwEQ8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bHJdHP3XsDlfuJQe2q73BClNb8AfWL94Ii6kL948ayI=;
- b=LtcPoxwkaRjehZSTD7JdnXQMJgP3VY1A+b91VYRhqTqDV8TVl66nnFfbNZZuF44829+rnWXoURG/GDxXgyOXviTSDmUnveH5jyofsq57AWSzyvIfJ82CRSfUScx5QZdHDYpqmMz3jJiLSNKRpjUgZD5PFVSpbrX0rkMbat/OxhIv5eEoUTLTHgHFz9rkJILTco03Lp4S9wa4wt16v/Y2UM5rK2zPAWW0WgKlmQhYTJV9dg59IIX+Oi9t1hyejWyKyvShVW0uXJ3aVnJcnH9ha2YrjM5roDpIn5VkAVJfpHxsgDlkDo5RHTholib0nQKjZpzeRHCQLeQXEZ6TbOyupw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.238) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com; dmarc=pass
- (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
- (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bHJdHP3XsDlfuJQe2q73BClNb8AfWL94Ii6kL948ayI=;
- b=t08YNwMf5i9ZNa/uMOjZPhXqIJjY0dOhIOONX79TkOQJ0jqVDbblePK4d2coGYabr5y/3ZfF467QkdC3eGvlZcKe2FJZThmxNgxQOAzNVgdO02jCEcA0IFU4OagruqrXRqKvKu38lLim1oOSRqTThLn5fLoYDjT00Gd3lFw9SjN+OhfYi6qVtHztn1bB95gGIhuxzpm5s9fuhwmyF90ps09zalTZ2SLEL+D/TboXUIQqSAiEADGr0vukOHkZKMr4I6AIC9nCdMr6YoGW3BqHFDNfyay9XyA2k73kXXg50tCQ+DA1KX8COtHf5ofgVXEMPGeA9USGEoOOCnp5bJ0fUg==
-Received: from MW4PR03CA0174.namprd03.prod.outlook.com (2603:10b6:303:8d::29)
- by BL1PR12MB5378.namprd12.prod.outlook.com (2603:10b6:208:31d::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.14; Thu, 10 Feb
- 2022 10:46:13 +0000
-Received: from CO1NAM11FT058.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8d:cafe::10) by MW4PR03CA0174.outlook.office365.com
- (2603:10b6:303:8d::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11 via Frontend
- Transport; Thu, 10 Feb 2022 10:46:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.238; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.238) by
- CO1NAM11FT058.mail.protection.outlook.com (10.13.174.164) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4975.11 via Frontend Transport; Thu, 10 Feb 2022 10:46:12 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL105.nvidia.com
- (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 10 Feb
- 2022 10:46:12 +0000
-Received: from nvdebian.localnet (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.9; Thu, 10 Feb 2022
- 02:46:08 -0800
-From:   Alistair Popple <apopple@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Christoph Hellwig <hch@lst.de>
-CC:     Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        <linux-kernel@vger.kernel.org>, <amd-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <nouveau@lists.freedesktop.org>,
-        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>
-Subject: Re: [PATCH 12/27] mm: refactor the ZONE_DEVICE handling in migrate_vma_pages
-Date:   Thu, 10 Feb 2022 21:46:05 +1100
-Message-ID: <2486253.gG6I7sY731@nvdebian>
-In-Reply-To: <20220210072828.2930359-13-hch@lst.de>
-References: <20220210072828.2930359-1-hch@lst.de> <20220210072828.2930359-13-hch@lst.de>
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63EEFF1;
+        Thu, 10 Feb 2022 02:46:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93EF3B824B3;
+        Thu, 10 Feb 2022 10:46:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAAC8C004E1;
+        Thu, 10 Feb 2022 10:46:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644489972;
+        bh=qhgOSNqzVwAgQEC+/Ughopou3AgvMKYhrHTrwnUjWFo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W4iUUfliBgRfgMb3+LAgt77ybKOcO8zcmnMp7YXwwzY8e2ldIwu+gZuQj4SyOCk0m
+         +u+WSqYFt+URKQQUJQ1v2flcaSrGHdy0TGgBwv5T6kfaMXo8mWFH2lGxzVf+JtE+xc
+         hLd/K/qM8dR02Z4k3bRl+LKOlbGx1P/hhKDs/bGg=
+Date:   Thu, 10 Feb 2022 11:46:09 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Konstantin Aladyshev <aladyshev22@gmail.com>,
+        Oskar Senft <osk@google.com>, openbmc@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] serial: 8250_aspeed_vuart: add PORT_ASPEED_VUART port
+ type
+Message-ID: <YgTs8XNR6h34s0jc@kroah.com>
+References: <20220209203414.23491-1-zev@bewilderbeest.net>
+ <YgTBennInxX3fE3X@kroah.com>
+ <YgTDm5qKUJyzciR2@hatter.bewilderbeest.net>
+ <YgTKvIqTIOomFSsF@kroah.com>
+ <YgTZQQuTkLjnkeyB@hatter.bewilderbeest.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 77d714c6-ed32-4c04-57fb-08d9ec828e85
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5378:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB537860F44DF5F20D4F6BD0E5DF2F9@BL1PR12MB5378.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2733;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kcbEHdE6kpF7sxS6GDIcAxii/TzCQjGIOv1TKIZtg6Ntv2mjMBwPQzOd7uEpxfJFW9kF/q1L5hMlfd+jjQdqHYfi0m4HivdKa2wvwAlxw5L2Yl7kldWjwvsMm7yferitovqh8uxPP8jrJlImtwkVA9B/MtmzGNy7K1dmoqcxjk9KK6VgBjxiq80R81cJKsxuu9HhQDb96prDtj93rHwLt/EEVIhTC4mwOFymNZ8ZFozxwS3sfvoQlnc/kL4PE9DrHTu+iaVFHSHaT18A7Cnz2jdgMWU42dfr35WOnYsGQQa9fO51z5H+5/IFFQZJUbytM95QfblP/PHlYKsb7eYSrJcvkfIPpSdtQe06Mi9GMX+gZBIrTTNDAP7Zd19+DbEQpAsx+7KUr4JmcfKohfrOS4VQndBluxggjQSCnpA/+Iw2l151ToUohfESZprkWngb6FnR5ZFgUVpDurSVTFnIfjoV/w1aDW+cY5NA+Byztjfth5DRsGx3Q8sZDCMKu8saQQWNwrDBlS6nWZX2N9FVfp6vh83uMzQny+zcUElG6z4gLMI0X6kwxhRBN7mYj0kGjUSo1qM9B5gGI7K03X6hcr+ZQjarYXAmD/41iZeuhx7X7XsyzezEIqrEBKjTGvOGrzUKtDD9P8IVqdobW0rwPQ/6UaYvcth/3SvXre8GrN21GFJRhUiBvvV90U+V4T9SPwJTSp4OM5sJoTZWqLJ8Zg==
-X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(508600001)(26005)(5660300002)(54906003)(81166007)(186003)(426003)(336012)(7416002)(316002)(40460700003)(86362001)(356005)(16526019)(110136005)(70206006)(8676002)(33716001)(70586007)(9686003)(83380400001)(6666004)(36860700001)(47076005)(4326008)(82310400004)(2906002)(8936002)(9576002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 10:46:12.7518
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 77d714c6-ed32-4c04-57fb-08d9ec828e85
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT058.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5378
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgTZQQuTkLjnkeyB@hatter.bewilderbeest.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Alistair Popple <apopple@nvidia.com>
-
-On Thursday, 10 February 2022 6:28:13 PM AEDT Christoph Hellwig wrote:
-> Make the flow a little more clear and prepare for adding a new
-> ZONE_DEVICE memory type.
+On Thu, Feb 10, 2022 at 01:22:09AM -0800, Zev Weiss wrote:
+> On Thu, Feb 10, 2022 at 12:20:12AM PST, Greg Kroah-Hartman wrote:
+> > On Wed, Feb 09, 2022 at 11:49:47PM -0800, Zev Weiss wrote:
+> > > On Wed, Feb 09, 2022 at 11:40:42PM PST, Greg Kroah-Hartman wrote:
+> > > > On Wed, Feb 09, 2022 at 12:34:14PM -0800, Zev Weiss wrote:
+> > > > > Commit 54da3e381c2b ("serial: 8250_aspeed_vuart: use UPF_IOREMAP to
+> > > > > set up register mapping") fixed a bug that had, as a side-effect,
+> > > > > prevented the 8250_aspeed_vuart driver from enabling the VUART's
+> > > > > FIFOs.  However, fixing that (and hence enabling the FIFOs) has in
+> > > > > turn revealed what appears to be a hardware bug in the ASPEED VUART in
+> > > > > which the host-side THRE bit doesn't get if the BMC-side receive FIFO
+> > > > > trigger level is set to anything but one byte.  This causes problems
+> > > > > for polled-mode writes from the host -- for example, Linux kernel
+> > > > > console writes proceed at a glacial pace (less than 100 bytes per
+> > > > > second) because the write path waits for a 10ms timeout to expire
+> > > > > after every character instead of being able to continue on to the next
+> > > > > character upon seeing THRE asserted.  (GRUB behaves similarly.)
+> > > > >
+> > > > > As a workaround, introduce a new port type for the ASPEED VUART that's
+> > > > > identical to PORT_16550A as it had previously been using, but with
+> > > > > UART_FCR_R_TRIG_00 instead to set the receive FIFO trigger level to
+> > > > > one byte, which (experimentally) seems to avoid the problematic THRE
+> > > > > behavior.
+> > > > >
+> > > > > Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> > > > > Tested-by: Konstantin Aladyshev <aladyshev22@gmail.com>
+> > > >
+> > > > Do we need a "Fixes:" tag here as well?
+> > > 
+> > > I was wondering the same -- I left it out because it didn't seem like it was
+> > > strictly a bug in the earlier commit that's really being fixed per se, but
+> > > perhaps that's an overly pedantic distinction.  I can certainly add it if
+> > > you'd prefer.
+> > 
+> > This obviously fixes an issue, if you don't have a specific commit that
+> > caused it, a cc: stable@vger.kernel.org should be added so we know to
+> > backport this to all stable kernels.
+> > 
 > 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  mm/migrate.c | 27 ++++++++++++---------------
->  1 file changed, 12 insertions(+), 15 deletions(-)
+> Okay -- well, I suppose it's a fix in the sense that if you have the earlier
+> commit, you'll also want this one, so I'll add the tag.
+
+Please do.
+
+> > > > > ---
+> > > > >  drivers/tty/serial/8250/8250_aspeed_vuart.c | 2 +-
+> > > > >  drivers/tty/serial/8250/8250_port.c         | 8 ++++++++
+> > > > >  include/uapi/linux/serial_core.h            | 3 +++
+> > > > >  3 files changed, 12 insertions(+), 1 deletion(-)
+> > > > >
+> > > > > diff --git a/drivers/tty/serial/8250/8250_aspeed_vuart.c b/drivers/tty/serial/8250/8250_aspeed_vuart.c
+> > > > > index 2350fb3bb5e4..c2cecc6f47db 100644
+> > > > > --- a/drivers/tty/serial/8250/8250_aspeed_vuart.c
+> > > > > +++ b/drivers/tty/serial/8250/8250_aspeed_vuart.c
+> > > > > @@ -487,7 +487,7 @@ static int aspeed_vuart_probe(struct platform_device *pdev)
+> > > > >  	port.port.irq = irq_of_parse_and_map(np, 0);
+> > > > >  	port.port.handle_irq = aspeed_vuart_handle_irq;
+> > > > >  	port.port.iotype = UPIO_MEM;
+> > > > > -	port.port.type = PORT_16550A;
+> > > > > +	port.port.type = PORT_ASPEED_VUART;
+> > > > >  	port.port.uartclk = clk;
+> > > > >  	port.port.flags = UPF_SHARE_IRQ | UPF_BOOT_AUTOCONF | UPF_IOREMAP
+> > > > >  		| UPF_FIXED_PORT | UPF_FIXED_TYPE | UPF_NO_THRE_TEST;
+> > > > > diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+> > > > > index 3b12bfc1ed67..973870ebff69 100644
+> > > > > --- a/drivers/tty/serial/8250/8250_port.c
+> > > > > +++ b/drivers/tty/serial/8250/8250_port.c
+> > > > > @@ -307,6 +307,14 @@ static const struct serial8250_config uart_config[] = {
+> > > > >  		.rxtrig_bytes	= {1, 32, 64, 112},
+> > > > >  		.flags		= UART_CAP_FIFO | UART_CAP_SLEEP,
+> > > > >  	},
+> > > > > +	[PORT_ASPEED_VUART] = {
+> > > > > +		.name		= "ASPEED VUART",
+> > > > > +		.fifo_size	= 16,
+> > > > > +		.tx_loadsz	= 16,
+> > > > > +		.fcr		= UART_FCR_ENABLE_FIFO | UART_FCR_R_TRIG_00,
+> > > > > +		.rxtrig_bytes	= {1, 4, 8, 14},
+> > > > > +		.flags		= UART_CAP_FIFO,
+> > > > > +	},
+> > > > >  };
+> > > > >
+> > > > >  /* Uart divisor latch read */
+> > > > > diff --git a/include/uapi/linux/serial_core.h b/include/uapi/linux/serial_core.h
+> > > > > index c4042dcfdc0c..cd11748833e6 100644
+> > > > > --- a/include/uapi/linux/serial_core.h
+> > > > > +++ b/include/uapi/linux/serial_core.h
+> > > > > @@ -274,4 +274,7 @@
+> > > > >  /* Freescale LINFlexD UART */
+> > > > >  #define PORT_LINFLEXUART	122
+> > > > >
+> > > > > +/* ASPEED AST2x00 virtual UART */
+> > > > > +#define PORT_ASPEED_VUART	123
+> > > >
+> > > > Why does this value have to be in a uapi header file?  What userspace
+> > > > tool is going to need this?
+> > > >
+> > > 
+> > > I only put it there because that was where all the other port type constants
+> > > were defined, and wondered the same thing about the lot of them.  Is there a
+> > > userspace tool that makes use of any of these?
+> > 
+> > Not really, please don't add it if you do not require it.
+> > 
 > 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 30ecd7223656c1..746e1230886ddb 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -2788,24 +2788,21 @@ void migrate_vma_pages(struct migrate_vma *migrate)
->  
->  		mapping = page_mapping(page);
->  
-> -		if (is_zone_device_page(newpage)) {
-> -			if (is_device_private_page(newpage)) {
-> -				/*
-> -				 * For now only support private anonymous when
-> -				 * migrating to un-addressable device memory.
-> -				 */
-> -				if (mapping) {
-> -					migrate->src[i] &= ~MIGRATE_PFN_MIGRATE;
-> -					continue;
-> -				}
-> -			} else {
-> -				/*
-> -				 * Other types of ZONE_DEVICE page are not
-> -				 * supported.
-> -				 */
-> +		if (is_device_private_page(newpage)) {
-> +			/*
-> +			 * For now only support private anonymous when migrating
-> +			 * to un-addressable device memory.
-> +			 */
-> +			if (mapping) {
->  				migrate->src[i] &= ~MIGRATE_PFN_MIGRATE;
->  				continue;
->  			}
-> +		} else if (is_zone_device_page(newpage)) {
-> +			/*
-> +			 * Other types of ZONE_DEVICE page are not supported.
-> +			 */
-> +			migrate->src[i] &= ~MIGRATE_PFN_MIGRATE;
-> +			continue;
->  		}
->  
->  		r = migrate_page(mapping, newpage, page, MIGRATE_SYNC_NO_COPY);
+> It seems like an odd inconsistency to put this one particular definition
+> somewhere else when the other 100+ of its siblings are in the uapi header;
+> would you want a preceding patch to move them all somewhere under
+> include/linux?  (Which in turn doesn't really seem like a change for -stable
+> I'd think.)
 > 
+> Though actually, on further investigation I see those constants are in fact
+> exposed to userspace in struct serial_struct->type (via
+> TIOCGSERIAL/TIOCSSERIAL), and via the 'type' sysfs attribute, so I'd think
+> we'd probably want to keep them as they are?
 
+One of these days I'll unwind this mess.  There should not be any need
+to export this to userspace as userspace doesn't really care about it.
 
+but for now, sure, keep it :(
 
+thanks,
 
+greg k-h

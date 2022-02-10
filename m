@@ -2,47 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 656064B04BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 06:08:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31CA14B04C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 06:08:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231887AbiBJFII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 00:08:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41840 "EHLO
+        id S233096AbiBJFI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 00:08:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbiBJFIA (ORCPT
+        with ESMTP id S232073AbiBJFIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 00:08:00 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5551628C;
-        Wed,  9 Feb 2022 21:08:00 -0800 (PST)
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 21A57X4O005422
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 10 Feb 2022 00:07:34 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 96ED815C0040; Thu, 10 Feb 2022 00:07:33 -0500 (EST)
-Date:   Thu, 10 Feb 2022 00:07:33 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Jan Kara <jack@suse.cz>, Qian Cai <quic_qiancai@quicinc.com>,
-        Jan Kara <jack@suse.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Boqun Feng <boqun.feng@gmail.com>, linux-ext4@vger.kernel.org,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] jbd2: avoid __GFP_ZERO with SLAB_TYPESAFE_BY_RCU
-Message-ID: <YgSdlew4B5FWY6Qm@mit.edu>
-References: <20220209165742.5659-1-quic_qiancai@quicinc.com>
- <20220209181010.gfn66rvip56i54df@quack3.lan>
- <20220209201137.GY4285@paulmck-ThinkPad-P17-Gen-1>
+        Thu, 10 Feb 2022 00:08:24 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7587028C
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 21:08:26 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id s185so4822901oie.3
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 21:08:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=17HQ1lZ4Nfz73vYr3iF8T8txXNV0ECOTIWhcMcq56Ns=;
+        b=MY0483PAAismrHYbFZFzShmOwL5Bjug/y7G2BDSpPqDsC3dbhYUAsmCP85NC5oTMAw
+         RabL0o9i9iYRc6BV1JhmtUop9PRVeFYzXUdD0l7OIj7227F+vaZnf1r5a4Rs0FYzUdDz
+         1AuW6LLRyVDuk/LsmboGoT4Q4SjwuJKuyB4SKpwAAGRAV8BOgxOyyNhiXkfK+fUWz32z
+         unXibIaPtrwqkwC4UyGy2Srwq1w4VLAty5EIQRLlsxhUTnoWXtoTABGJ97jhLZDSXB55
+         gPuW3DBHMD8J2i7DnKW5ISkkHXsPuKLc9gtMOaE8OrizMCLVBoFJ2pdCdHfV/OS0gAy8
+         sssQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=17HQ1lZ4Nfz73vYr3iF8T8txXNV0ECOTIWhcMcq56Ns=;
+        b=oNsQpD1bzi5JOY8SAOVOHHUcx5POgDhuW+9rZRRxWRKCXMnWHgmqgjIbhOSogEJXYm
+         23oXISdeVEq3EF9hlgNRGYse0jMm9Hd6X7fdYvF6w3N1UX/sJpqCoMxrmaYdFrdP4flE
+         Wb1lNipIo171f+vpNosNJTeCK3J7V3P8PwANnqpIeyeq6n34ktoXHcYNcTe3xpqzN0BZ
+         Fxcf0VFoyUvKvwPT9ngJaLOBfLxs8ED8YMI0hn2IrDk1gK/26svC1ISeD3g2S7mY0o1m
+         dHc7xcAkLE8l0GeRe3RSkmRvCkcZZaGRNJ2cHWZ22URhgTEjRc2pODUsh81T6JlZpm9v
+         pHSQ==
+X-Gm-Message-State: AOAM532205pga43+MzXQuPw/VzgjW0pPvwM7rAAOyzPcphXErkVtVl/Q
+        v32C4bQofNixrwFKC9zp2vOGAl4NU+Zfvw==
+X-Google-Smtp-Source: ABdhPJwCiMJEvUF1a9t7kam4kZ/xoR3EK6VXaI8vakYWaJc8fUukLGyPwT9ZZx9m4Dvk6OnjNH8j/w==
+X-Received: by 2002:a05:6808:168e:: with SMTP id bb14mr363067oib.106.1644469705872;
+        Wed, 09 Feb 2022 21:08:25 -0800 (PST)
+Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id p22sm8915912oae.33.2022.02.09.21.08.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 21:08:25 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] soc: qcom: socinfo: Add some more PMICs and SoCs
+Date:   Wed,  9 Feb 2022 21:10:43 -0800
+Message-Id: <20220210051043.748275-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209201137.GY4285@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,71 +67,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 12:11:37PM -0800, Paul E. McKenney wrote:
-> On Wed, Feb 09, 2022 at 07:10:10PM +0100, Jan Kara wrote:
-> > 
-> > No, the performance impact of this would be just horrible. Can you
-> > ellaborate a bit why SLAB_TYPESAFE_BY_RCU + __GFP_ZERO is a problem and why
-> > synchronize_rcu() would be needed here before the memset() please? I mean
-> > how is zeroing here any different from the memory just being used?
-> 
-> Suppose a reader picks up a pointer to a memory block, then that memory
-> is freed.  No problem, given that this is a SLAB_TYPESAFE_BY_RCU slab,
-> so the memory won't be freed while the reader is accessing it.  But while
-> the reader is in the process of validating the block, it is zeroed.
-> 
-> How does the validation step handle this in all cases?
-> 
-> If you have a way of handling this, I will of course drop the patch.
-> And learn something new, which is always a good thing.  ;-)
+Add SM8350, SC8280XP, SA8540P and one more SM8450 and various PMICs
+found on boards on these platforms to the socinfo driver.
 
-I must be missing something.  The change is on the allocation path,
-and why would kmem_cache_[z]alloc() return a memory chunk which could
-still be in use by a reader?  Shouldn't the allocator _not_ return a
-particular chunk until it is sure there aren't any readers left that
-would be discombobulated by that memory being used for some new use
-case?
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ drivers/soc/qcom/socinfo.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Otherwise we would have to add synchronize_rcu(); after every single
-kmem_cache allocation which might be using RCU, and that would be
-terrible, no?
+diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
+index 6dc0f39c0ec3..8b38d134720a 100644
+--- a/drivers/soc/qcom/socinfo.c
++++ b/drivers/soc/qcom/socinfo.c
+@@ -104,6 +104,14 @@ static const char *const pmic_models[] = {
+ 	[36] = "PM8009",
+ 	[38] = "PM8150C",
+ 	[41] = "SMB2351",
++	[47] = "PMK8350",
++	[48] = "PM8350",
++	[49] = "PM8350C",
++	[50] = "PM8350B",
++	[51] = "PMR735A",
++	[52] = "PMR735B",
++	[58] = "PM8450",
++	[65] = "PM8010",
+ };
+ #endif /* CONFIG_DEBUG_FS */
+ 
+@@ -314,10 +322,14 @@ static const struct soc_id soc_id[] = {
+ 	{ 422, "IPQ6010" },
+ 	{ 425, "SC7180" },
+ 	{ 434, "SM6350" },
++	{ 439, "SM8350" },
++	{ 449, "SC8280XP" },
+ 	{ 453, "IPQ6005" },
+ 	{ 455, "QRB5165" },
+ 	{ 457, "SM8450" },
+ 	{ 459, "SM7225" },
++	{ 460, "SA8540P" },
++	{ 480, "SM8450" },
+ };
+ 
+ static const char *socinfo_machine(struct device *dev, unsigned int id)
+-- 
+2.33.1
 
-					- Ted
-
-
-> > > ---
-> > >  fs/jbd2/journal.c | 9 ++++++---
-> > >  1 file changed, 6 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/fs/jbd2/journal.c b/fs/jbd2/journal.c
-> > > index c2cf74b01ddb..323112de5921 100644
-> > > --- a/fs/jbd2/journal.c
-> > > +++ b/fs/jbd2/journal.c
-> > > @@ -2861,15 +2861,18 @@ static struct journal_head *journal_alloc_journal_head(void)
-> > >  #ifdef CONFIG_JBD2_DEBUG
-> > >  	atomic_inc(&nr_journal_heads);
-> > >  #endif
-> > > -	ret = kmem_cache_zalloc(jbd2_journal_head_cache, GFP_NOFS);
-> > > +	ret = kmem_cache_alloc(jbd2_journal_head_cache, GFP_NOFS);
-> > >  	if (!ret) {
-> > >  		jbd_debug(1, "out of memory for journal_head\n");
-> > >  		pr_notice_ratelimited("ENOMEM in %s, retrying.\n", __func__);
-> > > -		ret = kmem_cache_zalloc(jbd2_journal_head_cache,
-> > > +		ret = kmem_cache_alloc(jbd2_journal_head_cache,
-> > >  				GFP_NOFS | __GFP_NOFAIL);
-> > >  	}
-> > > -	if (ret)
-> > > +	if (ret) {
-> > > +		synchronize_rcu();
-> > > +		memset(ret, 0, sizeof(*ret));
-> > >  		spin_lock_init(&ret->b_state_lock);
-> > > +	}
-> > >  	return ret;
-> > >  }
-> > >  
-> > > -- 
-> > > 2.30.2
-> > > 
-> > -- 
-> > Jan Kara <jack@suse.com>
-> > SUSE Labs, CR

@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC18F4B10D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:50:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A0A4B10E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:51:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243201AbiBJOuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:50:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38248 "EHLO
+        id S243206AbiBJOuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:50:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238303AbiBJOuI (ORCPT
+        with ESMTP id S238303AbiBJOux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:50:08 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEE2EA1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:50:09 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id p6so1825895plf.10
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:50:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mldDtPK/YShlaxniuH+3uQLRX7HHInnMOPZ6vrRICic=;
-        b=IPAZVFUrFJKLW/2M19S1gOpWRk5N811dE8ZSeDPl474N9O6CUPX3MurHqyYaCOcKPk
-         jAUBSDiCIDkCIpL1sP0nOO0xX9KXtH2DPohRcE/VIaCQ+uWQVd1vrqzdN0Er2eTyVe5x
-         8M0zyBg+0hX6o3e26SweX9vDuvT55BhT+XVpoCr0ztzeXWflP2aFYGrfYdZnDbhkCE0v
-         5bueIft6l2Bh9tw8onbJMOyAPZSfLgukj8StGxzkcHnp/gKjoiwVN7b2WeHn+/RZxTxc
-         LQPN6t7RxgqS11KUjG/ZuQIG/JRwyb2ULe7cea0kDlaQ03NK9Zg6OKlSpkXEHaWXVCPz
-         97rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mldDtPK/YShlaxniuH+3uQLRX7HHInnMOPZ6vrRICic=;
-        b=0kn5m0INHHqZAKcE3767mVXPn+49zEJOXpjymdWsrshIK54W2eKoWfJ3uc4byeAFG6
-         4Hcr7RgLqiDZRnhi1KhhtpNSaRczWohVmjQjd7jS1O6gnbD4hxwC8uQFtHOBVg3s//ER
-         6sOkWLnmblEnw6QDbiVXbI+ve79REPn731WGwY+TQGUaeC3EroNm4LI6uy9MOuoIkgei
-         oh5LuC/bdKcYHy4WbcpuFwD0X6ZeGYpWUzUzD0487DYepQjxBo+skrxFqXRa98w4KYsL
-         M8nH6osdcOFeNLyFRBZ7alf6tf/XAd0yQf1be849iRWlYQ4hOqd9ZEzuq1Rm3NLhf7yo
-         eILA==
-X-Gm-Message-State: AOAM533n2aKltIOvLoQej1XWQssWnQNNc8+MqZ99Her6itysQf9fU9Tp
-        ZHUi2F0x+f0N4OIr1iR1H6PH
-X-Google-Smtp-Source: ABdhPJyZq00sxNb5hAHpRbhT6EmJjtzQ75byHD7XHTLWQnIKn8R1+p4oCNwbrxsl5vTZQr6effGtuQ==
-X-Received: by 2002:a17:90a:8804:: with SMTP id s4mr3169533pjn.129.1644504608770;
-        Thu, 10 Feb 2022 06:50:08 -0800 (PST)
-Received: from localhost.localdomain ([27.111.75.88])
-        by smtp.gmail.com with ESMTPSA id f8sm24219206pfe.204.2022.02.10.06.50.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 06:50:08 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     bhelgaas@google.com
-Cc:     bjorn.andersson@linaro.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH] PCI: pciehp: Add Qualcomm bridge (0x0110) to the command completed quirk
-Date:   Thu, 10 Feb 2022 20:20:03 +0530
-Message-Id: <20220210145003.135907-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Thu, 10 Feb 2022 09:50:53 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C744EA1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:50:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644504654; x=1676040654;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=6RsubzXM+GzN9yvnRsU2F1Ujjq8hUfNBS47UtXZzmA8=;
+  b=Q6PTdEtM3Y3KzB0oswCJReww5/sxvtVF9Lli07JWMUPLEavRNgI1nrL4
+   PY6N0tAJWmD6cJ41zd4dEaYQN9ykooElhNinQLlEB6P182BZ1DPOTUy2S
+   W8k45EaUIsQcH8cDWNEoWcSiQkE+lHEnGga6caFgf71iF0iY2VU1+zKYb
+   jAUOZCS2zJncyWCuGAcfpoqXxIAg6+Fojl+x+88VI6eWcourHb1AK5nj9
+   bpbQy0hAM9d5hfgk6qsKPQOwDokCTX3P5d/5tc7XOdXUBvXKWM2H6fBXw
+   IBvByf90EQdhD8dSAEaN59pUhTgRuiJzaxkmgWv92MsjZV7Fn6sUvOw8q
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="335921401"
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="335921401"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 06:50:54 -0800
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="679167899"
+Received: from barabano-mobl.ccr.corp.intel.com (HELO [10.252.41.18]) ([10.252.41.18])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 06:50:51 -0800
+Message-ID: <9d1ed0e0-e69e-e725-b820-4a1c04ecdf4c@linux.intel.com>
+Date:   Thu, 10 Feb 2022 16:50:50 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 9/9] ASoC: SOF: Convert the generic probe support to SOF
+ client
+Content-Language: en-US
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        kai.vehmanen@linux.intel.com, linux-kernel@vger.kernel.org,
+        tiwai@suse.com, ranjani.sridharan@linux.intel.com,
+        lgirdwood@gmail.com, fred.oh@linux.intel.com, daniel.baluta@nxp.com
+References: <20220210105519.19795-1-peter.ujfalusi@linux.intel.com>
+ <20220210105519.19795-10-peter.ujfalusi@linux.intel.com>
+ <YgUZKgPacRNrFk/e@sirena.org.uk>
+ <cc1598d7-5029-197c-9abc-49043fdc11ed@linux.intel.com>
+In-Reply-To: <cc1598d7-5029-197c-9abc-49043fdc11ed@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,35 +68,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Qualcomm PCI bridge device (0x0110) found in chipsets such as SM8450
-does not set the command completed bit unless writes to the Slot Command
-register change "Control" bits.
 
-This results in timeouts like below:
 
-pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2020 msec ago)
+On 10/02/2022 16:41, Péter Ujfalusi wrote:
+> 
+> 
+> On 10/02/2022 15:54, Mark Brown wrote:
+>> On Thu, Feb 10, 2022 at 12:55:19PM +0200, Peter Ujfalusi wrote:
+>>> Add a new client driver for probes support and move
+>>> all the probes-related code from the core to the
+>>> client driver.
+>>
+>> This breaks an x86 allmodconfig build:
+>>
+>> /mnt/kernel/sound/soc/sof/compress.c: In function 'create_page_table':
+>> /mnt/kernel/sound/soc/sof/compress.c:87:9: error: implicit declaration of function 'snd_sof_create_page_table'; did you mean 'create_page_table'? [-Werror=implicit-function-declaration]
+>>    87 |  return snd_sof_create_page_table(component->dev, dmab,
+>>       |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+>>       |         create_page_table
+> 
+> Interesting, we have this under constant builds for months and we
+> certainly are building things as modules.
+> 
+> Let me check and fix this.
 
-Hence, add the device to the command completed quirk to mark commands
-"completed" immediately unless they change the "Control" bits.
+This patch never got reviewed in SOF:
+ASoC: SOF: compr: Add compress ops implementation
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/pci/hotplug/pciehp_hpc.c | 2 ++
- 1 file changed, 2 insertions(+)
+and this introduced the use of snd_sof_create_page_table()
 
-diff --git a/drivers/pci/hotplug/pciehp_hpc.c b/drivers/pci/hotplug/pciehp_hpc.c
-index 1c1ebf3dad43..4e4ccf3afbe3 100644
---- a/drivers/pci/hotplug/pciehp_hpc.c
-+++ b/drivers/pci/hotplug/pciehp_hpc.c
-@@ -1084,6 +1084,8 @@ static void quirk_cmd_compl(struct pci_dev *pdev)
- }
- DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_INTEL, PCI_ANY_ID,
- 			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
-+DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0110,
-+			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
- DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0400,
- 			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
- DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0401,
+I don't sof-compress enabled, only imx and mediatek have it enabled.
+
+Daniel, were there any reason to not send this to sof-dev prior?
+
 -- 
-2.25.1
-
+Péter

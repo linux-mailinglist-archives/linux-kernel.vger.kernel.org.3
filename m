@@ -2,95 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B774D4B0484
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 05:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 008C04B048B
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 05:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233396AbiBJEhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 23:37:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59072 "EHLO
+        id S233429AbiBJElI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 23:41:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiBJEhh (ORCPT
+        with ESMTP id S229489AbiBJElG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 23:37:37 -0500
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AA1137
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 20:37:33 -0800 (PST)
-Received: by mail-qv1-xf33.google.com with SMTP id p7so3775339qvk.11
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 20:37:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=Yn6D5zszKlFFTj2ppKQupmnyQ5qIo8Lc60YvIthRsEY=;
-        b=qW92ZoTcKqckRiGPMTxt23+m9OqS4N94afHcq9j/4BRKnlwh8S/OxBT5OZ/yJZhkg+
-         wXMBKMIhHrYjR++xkkK2a0vFPdhpK25q8eVdi5fnPRFDmrJojRhj9FeqlFbSxWGVsuri
-         NTT1MzCBARnAUBH+7hGwqe1Ui8V3nXhoUwKKHDDzDr92rr1CVDQusOrqh3UZgyjmBgjQ
-         TPCnLg6i9mgNh8Avx5fy11ERWw77IzlyGY0Ssd6BGVE52BB+yuAhlOeMkdSzl1gaF0W+
-         O1o9z9w5qvsqPXB/7XCoCJPysXUj5ZsZZJU8IpwwHDuU6de2OHPCdGCwPUxplt4heCBl
-         PKEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=Yn6D5zszKlFFTj2ppKQupmnyQ5qIo8Lc60YvIthRsEY=;
-        b=Nh4M8ZPqv2yXkUPSN0iBzcxkOMD22NIdSlJH2suSsBiuKCX9bkf1GORmuuSD8Kri5I
-         cDuRwTEUuiz2DQbdBx/Fkm5uNeuvOkKzHkcFqoDnZ9w9X8eDyQtoKOjBdzWXXGPKwn5d
-         kzMFPXGrxcuyQJCatEgG7WGR5NaD3Lg4UNlOEvnZ8AWcCYi/tAkw2RRXV/N3c/1CqX9b
-         66ywNAhHClTXy66Eu8NNUkvGpLPYCrM0xmD/hJOkj5SlBMKq5Tw4oz4iFN8bcN6/ww9x
-         +xzV3XoptIeoxyRoc5JXLcaK+lb7+bmrz29PjiYm5KEuyncRfrtSnfD8qmOmYVfC7OE2
-         zUCg==
-X-Gm-Message-State: AOAM53248zECQs/SivxYUVmZyMJ3PVR8bP4SiSRh3nXFytFZzZpUK30k
-        9VI6WreXGOH4n/kIf0HY8JoK2Q3/jDl4sA==
-X-Google-Smtp-Source: ABdhPJxuuIgMQDhC4FYhTpD5F+jZXdAdK+z59w4/q95HooTGaDUbGSqm89h2112MIthns8qBBeCe/A==
-X-Received: by 2002:a05:6214:1bce:: with SMTP id m14mr3865403qvc.102.1644467852786;
-        Wed, 09 Feb 2022 20:37:32 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id p10sm8941203qtx.62.2022.02.09.20.37.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 20:37:31 -0800 (PST)
-Date:   Wed, 9 Feb 2022 20:37:16 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-cc:     Hugh Dickins <hughd@google.com>, SeongJae Park <sj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH for-mm 1/2] mm/internal: Implement no-op mlock_page_drain()
- for !CONFIG_MMU
-In-Reply-To: <CAMuHMdV7EaHK5zJAbLU9eKwMYxFdAQ0TiS+Ydg56mGkBv09dHA@mail.gmail.com>
-Message-ID: <be1b571c-ca4b-ab4a-ea8c-43fd579e3a32@google.com>
-References: <20220209094158.21941-1-sj@kernel.org> <20220209094158.21941-2-sj@kernel.org> <715a8b2e-1048-c098-8b89-bcf3c13cbd75@google.com> <CAMuHMdV7EaHK5zJAbLU9eKwMYxFdAQ0TiS+Ydg56mGkBv09dHA@mail.gmail.com>
+        Wed, 9 Feb 2022 23:41:06 -0500
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5397313E;
+        Wed,  9 Feb 2022 20:41:05 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R871e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=wenyang@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0V42e1.5_1644467991;
+Received: from localhost(mailfrom:wenyang@linux.alibaba.com fp:SMTPD_---0V42e1.5_1644467991)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 10 Feb 2022 12:41:02 +0800
+From:   Wen Yang <simon.wy@alibaba-inc.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Wen Yang <simon.wy@alibaba-inc.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] perf/x86: improve the event scheduling to avoid unnecessary pmu_stop/start
+Date:   Thu, 10 Feb 2022 12:39:30 +0800
+Message-Id: <20220210043930.34311-1-simon.wy@alibaba-inc.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Feb 2022, Geert Uytterhoeven wrote:
-> On Wed, Feb 9, 2022 at 4:38 PM Hugh Dickins <hughd@google.com> wrote:
-> > The thing is, SeongJae's patch makes me wonder, why did it not need a
-> > !CONFIG_MMU definition for need_mlock_page_drain() too?  That's because
-> > mm/swap.c's call to it is under an #ifdef CONFIG_SMP, and I imagine that
-> > CONFIG_MMU=n usually goes along with (but does not necessarily imply?)
-> > CONFIG_SMP=n.  It'll be safer to add a need_mlock_page_drain() stub too.
-> 
-> RISC-V K210 is SMP without MMU.
+This issue has been there for a long time, we could reproduce it as follows:
 
-Thanks Geert, that makes it very clear that we also want the stub for
-need_mlock_page_drain().  I'll follow now with update of SeongJae's patch.
+1, run a script that periodically collects perf data, eg:
+while true
+do
+    perf stat -e cache-misses,cache-misses,cache-misses -C 1 sleep 2
+    perf stat -e cache-misses -C 1 sleep 2
+    sleep 1
+done
 
-My fear of wider implications of not having CONFIG_SMP turned out to
-be a false alarm.  The UP lru_add_drain_cpu() calls mlock_page_drain()
-just like the SMP one does: the difference between them is merely that
-the UP case doesn't need an efficient way for asking in advance whether
-drain on another cpu will be needed.
+2, run another one to capture the IPC, eg:
+perf stat -e cycles:D,instructions:D  -C 1 -I 1000
 
-Hugh
+Then we could observe that the counter used by cycles:D changes frequently:
+crash> struct  cpu_hw_events.n_events,assign,event_list,events  ffff88bf7f44f420
+  n_events = 3
+  assign = {33, 1, 32, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+  event_list = {0xffff88bf77b85000, 0xffff88b72db82000, 0xffff88b72db85800, 0xffff88ff6cfcb000, 0xffff88ff609f1800, 0xffff88ff609f1800, 0xffff88ff5f46a800, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
+  events = {0x0, 0xffff88b72db82000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xffff88b72db85800, 0xffff88bf77b85000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
+
+crash> struct  cpu_hw_events.n_events,assign,event_list,events  ffff88bf7f44f420
+  n_events = 6
+  assign = {33, 3, 32, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+  event_list = {0xffff88bf77b85000, 0xffff88b72db82000, 0xffff88b72db85800, 0xffff88bf46c34000, 0xffff88bf46c35000, 0xffff88bf46c30000, 0xffff88ff5f46a800, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
+  events = {0xffff88bf46c34000, 0xffff88bf46c35000, 0xffff88bf46c30000, 0xffff88b72db82000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xffff88b72db85800, 0xffff88bf77b85000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
+
+The reason is that NMI watchdog permanently consumes one FP,
+so cycles can only use one GP, and its hweight is 5,
+but the hweight of other events (cache misses) is 4,
+so the counter used by cycles will be frequently taken away,
+resulting in unnecessary pmu_stop/start.
+
+Signed-off-by: Wen Yang <simon.wy@alibaba-inc.com>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: linux-perf-users@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ arch/x86/events/core.c         | 40 +++++++++++++++++++++++++++++++---------
+ arch/x86/events/intel/uncore.c |  2 +-
+ arch/x86/events/perf_event.h   |  3 ++-
+ 3 files changed, 34 insertions(+), 11 deletions(-)
+
+diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+index e686c5e..1a47e31 100644
+--- a/arch/x86/events/core.c
++++ b/arch/x86/events/core.c
+@@ -796,6 +796,8 @@ struct perf_sched {
+ 	int			max_events;
+ 	int			max_gp;
+ 	int			saved_states;
++	u64			cnt_mask;
++	u64			evt_mask;
+ 	struct event_constraint	**constraints;
+ 	struct sched_state	state;
+ 	struct sched_state	saved[SCHED_STATES_MAX];
+@@ -805,7 +807,7 @@ struct perf_sched {
+  * Initialize iterator that runs through all events and counters.
+  */
+ static void perf_sched_init(struct perf_sched *sched, struct event_constraint **constraints,
+-			    int num, int wmin, int wmax, int gpmax)
++			    int num, int wmin, int wmax, int gpmax, u64 cnt_mask, u64 evt_mask)
+ {
+ 	int idx;
+ 
+@@ -814,6 +816,8 @@ static void perf_sched_init(struct perf_sched *sched, struct event_constraint **
+ 	sched->max_weight	= wmax;
+ 	sched->max_gp		= gpmax;
+ 	sched->constraints	= constraints;
++	sched->cnt_mask	= cnt_mask;
++	sched->evt_mask	= evt_mask;
+ 
+ 	for (idx = 0; idx < num; idx++) {
+ 		if (constraints[idx]->weight == wmin)
+@@ -822,7 +826,10 @@ static void perf_sched_init(struct perf_sched *sched, struct event_constraint **
+ 
+ 	sched->state.event	= idx;		/* start with min weight */
+ 	sched->state.weight	= wmin;
+-	sched->state.unassigned	= num;
++	sched->state.unassigned	= num - hweight_long(evt_mask);
++
++	while (sched->evt_mask & BIT_ULL(sched->state.event))
++		sched->state.event++;
+ }
+ 
+ static void perf_sched_save_state(struct perf_sched *sched)
+@@ -874,6 +881,9 @@ static bool __perf_sched_find_counter(struct perf_sched *sched)
+ 		for_each_set_bit_from(idx, c->idxmsk, X86_PMC_IDX_MAX) {
+ 			u64 mask = BIT_ULL(idx);
+ 
++			if (sched->cnt_mask & mask)
++				continue;
++
+ 			if (sched->state.used & mask)
+ 				continue;
+ 
+@@ -890,6 +900,9 @@ static bool __perf_sched_find_counter(struct perf_sched *sched)
+ 		if (c->flags & PERF_X86_EVENT_PAIR)
+ 			mask |= mask << 1;
+ 
++		if (sched->cnt_mask & mask)
++			continue;
++
+ 		if (sched->state.used & mask)
+ 			continue;
+ 
+@@ -934,7 +947,10 @@ static bool perf_sched_next_event(struct perf_sched *sched)
+ 
+ 	do {
+ 		/* next event */
+-		sched->state.event++;
++		do {
++			sched->state.event++;
++		} while (sched->evt_mask & BIT_ULL(sched->state.event));
++
+ 		if (sched->state.event >= sched->max_events) {
+ 			/* next weight */
+ 			sched->state.event = 0;
+@@ -954,11 +970,11 @@ static bool perf_sched_next_event(struct perf_sched *sched)
+  * Assign a counter for each event.
+  */
+ int perf_assign_events(struct event_constraint **constraints, int n,
+-			int wmin, int wmax, int gpmax, int *assign)
++			int wmin, int wmax, int gpmax, u64 cnt_mask, u64 evt_mask, int *assign)
+ {
+ 	struct perf_sched sched;
+ 
+-	perf_sched_init(&sched, constraints, n, wmin, wmax, gpmax);
++	perf_sched_init(&sched, constraints, n, wmin, wmax, gpmax, cnt_mask, evt_mask);
+ 
+ 	do {
+ 		if (!perf_sched_find_counter(&sched))
+@@ -978,7 +994,8 @@ int x86_schedule_events(struct cpu_hw_events *cpuc, int n, int *assign)
+ 	struct perf_event *e;
+ 	int n0, i, wmin, wmax, unsched = 0;
+ 	struct hw_perf_event *hwc;
+-	u64 used_mask = 0;
++	u64 cnt_mask = 0;
++	u64 evt_mask = 0;
+ 
+ 	/*
+ 	 * Compute the number of events already present; see x86_pmu_add(),
+@@ -1038,10 +1055,11 @@ int x86_schedule_events(struct cpu_hw_events *cpuc, int n, int *assign)
+ 			mask |= mask << 1;
+ 
+ 		/* not already used */
+-		if (used_mask & mask)
++		if (cnt_mask & mask)
+ 			break;
+ 
+-		used_mask |= mask;
++		cnt_mask |= mask;
++		evt_mask |= BIT_ULL(i);
+ 
+ 		if (assign)
+ 			assign[i] = hwc->idx;
+@@ -1075,7 +1093,11 @@ int x86_schedule_events(struct cpu_hw_events *cpuc, int n, int *assign)
+ 		}
+ 
+ 		unsched = perf_assign_events(cpuc->event_constraint, n, wmin,
+-					     wmax, gpmax, assign);
++					     wmax, gpmax, cnt_mask, evt_mask, assign);
++		if (unsched) {
++			unsched = perf_assign_events(cpuc->event_constraint, n, wmin,
++					wmax, gpmax, 0, 0, assign);
++		}
+ 	}
+ 
+ 	/*
+diff --git a/arch/x86/events/intel/uncore.c b/arch/x86/events/intel/uncore.c
+index e497da9..8afff7a 100644
+--- a/arch/x86/events/intel/uncore.c
++++ b/arch/x86/events/intel/uncore.c
+@@ -480,7 +480,7 @@ static int uncore_assign_events(struct intel_uncore_box *box, int assign[], int
+ 	/* slow path */
+ 	if (i != n)
+ 		ret = perf_assign_events(box->event_constraint, n,
+-					 wmin, wmax, n, assign);
++					 wmin, wmax, n, 0, 0, assign);
+ 
+ 	if (!assign || ret) {
+ 		for (i = 0; i < n; i++)
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index 150261d..2ae1e98 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -1131,7 +1131,8 @@ static inline void __x86_pmu_enable_event(struct hw_perf_event *hwc,
+ void x86_pmu_enable_all(int added);
+ 
+ int perf_assign_events(struct event_constraint **constraints, int n,
+-			int wmin, int wmax, int gpmax, int *assign);
++			int wmin, int wmax, int gpmax, u64 cnt_mask, u64 evt_mask,
++			int *assign);
+ int x86_schedule_events(struct cpu_hw_events *cpuc, int n, int *assign);
+ 
+ void x86_pmu_stop(struct perf_event *event, int flags);
+-- 
+1.8.3.1
+

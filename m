@@ -2,162 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29E54B18F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:00:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D704B18CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345238AbiBJXAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 18:00:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54050 "EHLO
+        id S1345249AbiBJWtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 17:49:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344698AbiBJXAm (ORCPT
+        with ESMTP id S237332AbiBJWte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 18:00:42 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AB21105;
-        Thu, 10 Feb 2022 15:00:43 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id e8so5588189ilm.13;
-        Thu, 10 Feb 2022 15:00:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=r7B1u3StVmNn+cEV4ztOlK7kYJWbJkFyeLauH29gYM8=;
-        b=dzLBz2h9W3+P1fTFVwJCXjMzkDS/do2ayswvINxgwRV6LLNSkbDxlUQcxdk+LJZ5Gx
-         vwqdX6D12rc1Yvd9fQaPcwN9sVvGOovH2iqr9zxZY7dauw3jnWm/j6Ep0mU30c80bSMn
-         x0XJB822IsAmPLlczCETi3PVgDyd0smheFP2USkn/XObVyW1NxHYcT0aTPxrxtrBTRYb
-         xBuWoEUXkdw3rPyD+c8jdwY2BMCXVdxzxFDgblYiKQjVEL6J813R1xNRtcpVL4OQ0a7u
-         fhfqQFn9ElMVCLQ6Sq8p4ZBLU1HYI1JL0a8nEn94OxrS6Mh7CubSmLYNEUawMDPT+DL4
-         V42g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=r7B1u3StVmNn+cEV4ztOlK7kYJWbJkFyeLauH29gYM8=;
-        b=JYbrZX5/FO5si8lHPf+AzsAUwkBUJgaAl7Yn7PRPyZwtMwA2kk32CdCwLLyhEsMUf0
-         Eqmw3Hu03yJdf1M/HEaFivr7GdNAUETVnIB+CAYZEu/O6zPbrUOciCEw0gVhBH/6Hd14
-         wFoF5BWBvWIy6LJdNR0xK8leWG0d6ACLurnIjYNVog7lzu7086875h7k1fkRTsOC8nnR
-         ZUTyViEiI3AT01R/lquqMVdPlUdKHPs1782F06GtYcv6Q8ZkzwKCGtK200lrtupWy08d
-         fyL+WKJHW579cJKRT+ufO217XxkiyEGyT9IThPtbdUx6u7Hjt38JC+gnjMqKeg6t+l+g
-         V4sw==
-X-Gm-Message-State: AOAM532gfznWk9reF0lj1jgrtS69IiyJ0w8O+vDQvAooN4w3QCTZM9sY
-        andOPrXBKsmPxHFx4UV4CNI=
-X-Google-Smtp-Source: ABdhPJyDaHsNtIqicj2d5g0OLH9mju+tDwyc+D9hx93ef0eytT5AHJVFdIVfEcBuRUZkUUoFK32Fgg==
-X-Received: by 2002:a05:6e02:1d12:: with SMTP id i18mr4925637ila.323.1644534042346;
-        Thu, 10 Feb 2022 15:00:42 -0800 (PST)
-Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id y9sm7235385ilg.58.2022.02.10.15.00.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 15:00:41 -0800 (PST)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-iio@vger.kernel.org
-Subject: [PATCH 04/49] iio: fix opencoded for_each_set_bit()
-Date:   Thu, 10 Feb 2022 14:48:48 -0800
-Message-Id: <20220210224933.379149-5-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220210224933.379149-1-yury.norov@gmail.com>
-References: <20220210224933.379149-1-yury.norov@gmail.com>
+        Thu, 10 Feb 2022 17:49:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBD9B73;
+        Thu, 10 Feb 2022 14:49:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4428B8278B;
+        Thu, 10 Feb 2022 22:49:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43D0FC004E1;
+        Thu, 10 Feb 2022 22:49:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644533372;
+        bh=GPGb2/FGNW/119aDp4VcMd34PF0JA9+vm/aklBbSvAk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=mUB2ocgwizYZKem4vP59/xlzbdO0oYSbU2MM2RHh38FZj2/xwx2XwF5/BXlqOmeOq
+         OAlNrC+bUpyYjH2BoLbLr/ZDa1fEAKL2acht8VNkMEGK6PI/9SE0sHrs099tXlR1r8
+         PvOhUIOkwuzam+Bg7YeqSO2YIShLJKC0YsfsjPYSFBPFroUsax0tep0mWoD6kUqo3P
+         JUMSiXvH/5QuHvQ7DIsAg1u+A+wSqSA6qrwqs47082U1bXmpG0YRXrMKYd8hvm3HBm
+         fU/tTVGIf3hC5IpxwK7VR8s4vmKiXtkr8xg1ozs9VJl+ZeGe1z2CnjArhafSfPabz0
+         uxUeRZ+vqntXA==
+Date:   Thu, 10 Feb 2022 16:49:30 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     bhelgaas@google.com, bjorn.andersson@linaro.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: pciehp: Add Qualcomm bridge (0x0110) to the command
+ completed quirk
+Message-ID: <20220210224930.GA660547@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210145003.135907-1-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-iio_simple_dummy_trigger_h() is mostly an opencoded for_each_set_bit().
-Using for_each_set_bit() make code much cleaner, and more effective.
+On Thu, Feb 10, 2022 at 08:20:03PM +0530, Manivannan Sadhasivam wrote:
+> The Qualcomm PCI bridge device (0x0110) found in chipsets such as SM8450
+> does not set the command completed bit unless writes to the Slot Command
+> register change "Control" bits.
+> 
+> This results in timeouts like below:
+> 
+> pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2020 msec ago)
+> 
+> Hence, add the device to the command completed quirk to mark commands
+> "completed" immediately unless they change the "Control" bits.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
- drivers/iio/dummy/iio_simple_dummy_buffer.c | 48 ++++++++-------------
- 1 file changed, 19 insertions(+), 29 deletions(-)
+Applied to pci/hotplug for v5.18, thanks!
 
-diff --git a/drivers/iio/dummy/iio_simple_dummy_buffer.c b/drivers/iio/dummy/iio_simple_dummy_buffer.c
-index d81c2b2dad82..3bc1b7529e2a 100644
---- a/drivers/iio/dummy/iio_simple_dummy_buffer.c
-+++ b/drivers/iio/dummy/iio_simple_dummy_buffer.c
-@@ -45,41 +45,31 @@ static irqreturn_t iio_simple_dummy_trigger_h(int irq, void *p)
- {
- 	struct iio_poll_func *pf = p;
- 	struct iio_dev *indio_dev = pf->indio_dev;
-+	int i = 0, j;
- 	u16 *data;
- 
- 	data = kmalloc(indio_dev->scan_bytes, GFP_KERNEL);
- 	if (!data)
- 		goto done;
- 
--	if (!bitmap_empty(indio_dev->active_scan_mask, indio_dev->masklength)) {
--		/*
--		 * Three common options here:
--		 * hardware scans: certain combinations of channels make
--		 *   up a fast read.  The capture will consist of all of them.
--		 *   Hence we just call the grab data function and fill the
--		 *   buffer without processing.
--		 * software scans: can be considered to be random access
--		 *   so efficient reading is just a case of minimal bus
--		 *   transactions.
--		 * software culled hardware scans:
--		 *   occasionally a driver may process the nearest hardware
--		 *   scan to avoid storing elements that are not desired. This
--		 *   is the fiddliest option by far.
--		 * Here let's pretend we have random access. And the values are
--		 * in the constant table fakedata.
--		 */
--		int i, j;
--
--		for (i = 0, j = 0;
--		     i < bitmap_weight(indio_dev->active_scan_mask,
--				       indio_dev->masklength);
--		     i++, j++) {
--			j = find_next_bit(indio_dev->active_scan_mask,
--					  indio_dev->masklength, j);
--			/* random access read from the 'device' */
--			data[i] = fakedata[j];
--		}
--	}
-+	/*
-+	 * Three common options here:
-+	 * hardware scans: certain combinations of channels make
-+	 *   up a fast read.  The capture will consist of all of them.
-+	 *   Hence we just call the grab data function and fill the
-+	 *   buffer without processing.
-+	 * software scans: can be considered to be random access
-+	 *   so efficient reading is just a case of minimal bus
-+	 *   transactions.
-+	 * software culled hardware scans:
-+	 *   occasionally a driver may process the nearest hardware
-+	 *   scan to avoid storing elements that are not desired. This
-+	 *   is the fiddliest option by far.
-+	 * Here let's pretend we have random access. And the values are
-+	 * in the constant table fakedata.
-+	 */
-+	for_each_set_bit(j, indio_dev->active_scan_mask, indio_dev->masklength)
-+		data[i++] = fakedata[j];
- 
- 	iio_push_to_buffers_with_timestamp(indio_dev, data,
- 					   iio_get_time_ns(indio_dev));
--- 
-2.32.0
+Should we assume that this erratum will be fixed in future Qualcomm
+devices?  Or should we apply the quirk for all Qualcomm hotplug
+bridges, as we do for Intel?
 
+> ---
+>  drivers/pci/hotplug/pciehp_hpc.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/pci/hotplug/pciehp_hpc.c b/drivers/pci/hotplug/pciehp_hpc.c
+> index 1c1ebf3dad43..4e4ccf3afbe3 100644
+> --- a/drivers/pci/hotplug/pciehp_hpc.c
+> +++ b/drivers/pci/hotplug/pciehp_hpc.c
+> @@ -1084,6 +1084,8 @@ static void quirk_cmd_compl(struct pci_dev *pdev)
+>  }
+>  DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_INTEL, PCI_ANY_ID,
+>  			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
+> +DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0110,
+> +			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
+>  DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0400,
+>  			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
+>  DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0401,
+> -- 
+> 2.25.1
+> 

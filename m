@@ -2,227 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAA04B0E51
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6454B0E54
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242118AbiBJNWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 08:22:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50846 "EHLO
+        id S242128AbiBJNWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 08:22:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239047AbiBJNWF (ORCPT
+        with ESMTP id S242110AbiBJNWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 08:22:05 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48589208
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 05:22:04 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id q7so9459507wrc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 05:22:04 -0800 (PST)
+        Thu, 10 Feb 2022 08:22:23 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE46EB9D
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 05:22:23 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id x3so1810761pll.3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 05:22:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=NKJ18gxzb+DSZ0V1Oa8wZA6qFSAn8YENHdOaAvTuJeA=;
-        b=LwgbNOmQG0mrjTHwQz9e6vSkt9hihsXNSD64VOOThEIVzJ1hfLCKo7u0jJa8HevzYM
-         eqsqgAVQFeUO+0klCneyi3Tcjc7YEAx0MUWVNmNLLYeM1+BgfCzij5/S/oZyPJ17mRng
-         MhgNZ1nIXPhwSxtjJ3yIN7KhzobdDekBbcl1xiDrQ1Wb2kMcBkGenzydiiGgh0ReMnt0
-         Xdj0i4kgxDoCU3I904j9KU29a6VX6PooDdoynrxBhDWmlYm4VJR+/0bDNLkxOooc7w09
-         OjneyXIBDXTm+IxTEvjrIGUyIWWSWCMahw9m/IBOpjB8jZJxv10dmyFQnnRYghHEAcjz
-         CGow==
+         :content-disposition:in-reply-to;
+        bh=lmOwrWMBvG/QSqfuMjJnJ7kGjRK9jagfZ0MoGw4iJ8k=;
+        b=UjppnTNb82HEctUbBZO6K12OIzgXOTnqDKLtSDd2sA6wa9ybDXORdycoNkVY60QX3z
+         lCJS1XOx/McRZcFLUwl4MKVrzJP7HeZqQoa2sXYuPLSyGX9K5Jh7nb/sEcc0DLSnDxia
+         qOK5qPKs1GEAtcrhQN0FTTkg7fk4GHSXHQnKAucijTqi18kl9pCxaLlCMAlWFzvdDrzj
+         w+r/I9YanmnzSzb6/O0TG7udN2mPltC2EgKUW30CnXC2ATtTxOExyduUtpg08PKigg9x
+         vDr9uCrih8Cm5jSRniyOP6VmnH6PC9lO4xX/NmJVrKAngm5NrgibhJ4jzXXPtzE4eTfO
+         wjuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=NKJ18gxzb+DSZ0V1Oa8wZA6qFSAn8YENHdOaAvTuJeA=;
-        b=cmOddA/WSqa3WIsoh3H7jy8+ocITEHsMkDvQpnw7DPPigI78Nws5m6CWVT8REPcBQP
-         usmn8erx0qoaTsHe6HJI6lcscpXgunuoCl3d5ZujbMC96+Adv8C7JM6DBBwWEBsJavbG
-         yyzxmz5vjXWq6Ion9GsyX7cHZpyRc60mjXjO9upynIeTE0XyIRkNBgNvkEsYCH9+UOp/
-         Z5xd8kOsPooDN9j333uWgqvBzhDNxniPgqd3V34UnJhbtnmCy/fhfE6T+0hx5uoUhzlr
-         RVvhQnZs5dZ38Rd251YOL1wuSnT9inq3UgP1D/Om4wLwlxgNcptcoTuaYIZkTiRWjApH
-         rCeQ==
-X-Gm-Message-State: AOAM533nDqSw7zcJtId1CF+AIWI1oxq0nCFT4O/4DYQc6hQhYbRCEa3W
-        i4gJLr7j3yGaa/apWWtWTGenBg==
-X-Google-Smtp-Source: ABdhPJzcmxLy2Eka/lbS611JX3zJDDqg2yREihDf25aO97Nup+iQ58tpH4OX0cwKoVbe6p1sQ33ajA==
-X-Received: by 2002:a5d:48c1:: with SMTP id p1mr6406878wrs.137.1644499322727;
-        Thu, 10 Feb 2022 05:22:02 -0800 (PST)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id b4sm10992490wrw.100.2022.02.10.05.22.01
+         :mime-version:content-disposition:in-reply-to;
+        bh=lmOwrWMBvG/QSqfuMjJnJ7kGjRK9jagfZ0MoGw4iJ8k=;
+        b=4JIoW/TtqQUBTp4DPh+v2H8QjbUoVFTZo2Pm0iO83893hgvj9UhBloWSBRwTgldczs
+         2ZY8Qq4TtWfGgX8jYRl95v+yPDWjeQGXhN3bXiM5c7S87BT/eXT+ist2fjViHD29Coai
+         j8AYuG6OYpFGCYCYjbOX9MwSfeAy4S4W0f8mRSGUZA+Aj9flswUh/QrMBLWZpN4i4au5
+         YaZ2dQI2Kq4Kj66MZ771zd8MxDqiuMQ6rnciewDc9QusdOBuZ3Isdo0MnvytTQNppcst
+         xfNP6Bu5Sf4pr5SOXwY/9DjvxxAQM17NQJhprCI3ZvA33FLa9aiszZFfwJR665MI8+QD
+         PPMQ==
+X-Gm-Message-State: AOAM530+u95CBkAMrtEz+HRH4luYrfa+PXxH6cFerd2AInmGKZqigUEa
+        0QcqB3bT2NVN9gG1gLaFQKN/
+X-Google-Smtp-Source: ABdhPJw31or8pz7dzjuhoSiIHSPofndiHPzzKxNU2XV4sjPE/gHq/d1sWMqRkZNI1mdKZE2l0jrPHA==
+X-Received: by 2002:a17:902:e781:: with SMTP id cp1mr7342690plb.45.1644499343306;
+        Thu, 10 Feb 2022 05:22:23 -0800 (PST)
+Received: from thinkpad ([27.111.75.88])
+        by smtp.gmail.com with ESMTPSA id u19sm13443711pfi.126.2022.02.10.05.22.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 05:22:02 -0800 (PST)
-Date:   Thu, 10 Feb 2022 14:22:00 +0100
-From:   LABBE Corentin <clabbe@baylibre.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     damien.lemoal@opensource.wdc.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v3] dt-bindings: convert ata/cortina,gemini-sata-bridge
- to yaml
-Message-ID: <YgUReEQ1TlTMdenJ@Red>
-References: <20220210094414.2815616-1-clabbe@baylibre.com>
- <50d3bef2-82af-325e-72e9-15af5794ce12@canonical.com>
+        Thu, 10 Feb 2022 05:22:22 -0800 (PST)
+Date:   Thu, 10 Feb 2022 18:52:16 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [RFC PATCH 0/5] PCIe EPF support for internal DMAC handling and
+ driver update for R-Car PCIe EP to support DMAC
+Message-ID: <20220210132216.GE69529@thinkpad>
+References: <20220126195043.28376-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220210084052.GA69529@thinkpad>
+ <CA+V-a8tivrjPoae69pqH1D+B=_Bd7ZzKjCA0PcfBz7Rpf022mA@mail.gmail.com>
+ <20220210105023.GB69529@thinkpad>
+ <CA+V-a8tfUgvzPyMe_FHuz=8mmC6dPHP7E=e+nCzOey04vCcAkg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <50d3bef2-82af-325e-72e9-15af5794ce12@canonical.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CA+V-a8tfUgvzPyMe_FHuz=8mmC6dPHP7E=e+nCzOey04vCcAkg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Thu, Feb 10, 2022 at 10:58:39AM +0100, Krzysztof Kozlowski a écrit :
-> On 10/02/2022 10:44, Corentin Labbe wrote:
-> > This patch converts ata/cortina,gemini-sata-bridge binding to yaml
-> > 
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> > Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> > ---
-> > Change since v1:
-> > - fixed cosmetic nits reported by Damien Le Moal
-> > Changes since v2:
-> > - Added blank lines between properties
-> > - Removed useless quotes and label
-> > - Re-indented description
-> > 
-> >  .../ata/cortina,gemini-sata-bridge.txt        |  55 ---------
-> >  .../ata/cortina,gemini-sata-bridge.yaml       | 107 ++++++++++++++++++
-> >  2 files changed, 107 insertions(+), 55 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt
-> >  create mode 100644 Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt
-> > deleted file mode 100644
-> > index 1c3d3cc70051..000000000000
-> > --- a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt
-> > +++ /dev/null
-> > @@ -1,55 +0,0 @@
-> > -* Cortina Systems Gemini SATA Bridge
-> > -
-> > -The Gemini SATA bridge in a SoC-internal PATA to SATA bridge that
-> > -takes two Faraday Technology FTIDE010 PATA controllers and bridges
-> > -them in different configurations to two SATA ports.
-> > -
-> > -Required properties:
-> > -- compatible: should be
-> > -  "cortina,gemini-sata-bridge"
-> > -- reg: registers and size for the block
-> > -- resets: phandles to the reset lines for both SATA bridges
-> > -- reset-names: must be "sata0", "sata1"
-> > -- clocks: phandles to the compulsory peripheral clocks
-> > -- clock-names: must be "SATA0_PCLK", "SATA1_PCLK"
-> > -- syscon: a phandle to the global Gemini system controller
-> > -- cortina,gemini-ata-muxmode: tell the desired multiplexing mode for
-> > -  the ATA controller and SATA bridges. Values 0..3:
-> > -  Mode 0: ata0 master <-> sata0
-> > -          ata1 master <-> sata1
-> > -          ata0 slave interface brought out on IDE pads
-> > -  Mode 1: ata0 master <-> sata0
-> > -          ata1 master <-> sata1
-> > -          ata1 slave interface brought out on IDE pads
-> > -  Mode 2: ata1 master <-> sata1
-> > -          ata1 slave  <-> sata0
-> > -          ata0 master and slave interfaces brought out
-> > -               on IDE pads
-> > -  Mode 3: ata0 master <-> sata0
-> > -          ata0 slave  <-> sata1
-> > -          ata1 master and slave interfaces brought out
-> > -               on IDE pads
-> > -
-> > -Optional boolean properties:
-> > -- cortina,gemini-enable-ide-pins: enables the PATA to IDE connection.
-> > -  The muxmode setting decides whether ATA0 or ATA1 is brought out,
-> > -  and whether master, slave or both interfaces get brought out.
-> > -- cortina,gemini-enable-sata-bridge: enables the PATA to SATA bridge
-> > -  inside the Gemnini SoC. The Muxmode decides what PATA blocks will
-> > -  be muxed out and how.
-> > -
-> > -Example:
-> > -
-> > -sata: sata@46000000 {
-> > -	compatible = "cortina,gemini-sata-bridge";
-> > -	reg = <0x46000000 0x100>;
-> > -	resets = <&rcon 26>, <&rcon 27>;
-> > -	reset-names = "sata0", "sata1";
-> > -	clocks = <&gcc GEMINI_CLK_GATE_SATA0>,
-> > -		 <&gcc GEMINI_CLK_GATE_SATA1>;
-> > -	clock-names = "SATA0_PCLK", "SATA1_PCLK";
-> > -	syscon = <&syscon>;
-> > -	cortina,gemini-ata-muxmode = <3>;
-> > -	cortina,gemini-enable-ide-pins;
-> > -	cortina,gemini-enable-sata-bridge;
-> > -};
-> > diff --git a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
-> > new file mode 100644
-> > index 000000000000..f0fad63bb1af
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
-> > @@ -0,0 +1,107 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/ata/cortina,gemini-sata-bridge.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Cortina Systems Gemini SATA Bridge
-> > +
-> > +maintainers:
-> > +  - Linus Walleij <linus.walleij@linaro.org>
-> > +
-> > +description: |
-> > +    The Gemini SATA bridge in a SoC-internal PATA to SATA bridge that
-> > +    takes two Faraday Technology FTIDE010 PATA controllers and bridges
-> > +    them in different configurations to two SATA ports.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: cortina,gemini-sata-bridge
-> > +
-> > +  reg:
-> > +    minItems: 1
-> 
-> maxItems? Why min?
-> 
-> > +
-> > +  resets:
-> > +    minItems: 2
-> > +    description: phandles to the reset lines for both SATA bridges
-> 
-> min+maxItems
-> 
-> > +
-> > +  reset-names:
-> > +    items:
-> > +      - const: sata0
-> > +      - const: sata1
-> > +
-> > +  clocks:
-> > +    minItems: 2
-> > +    description: phandles to the compulsory peripheral clocks
-> 
-> min+maxItems
-> 
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: SATA0_PCLK
-> > +      - const: SATA1_PCLK
-> > +
-> > +  syscon:
-> > +    minItems: 1
-> 
-> maxItems
+On Thu, Feb 10, 2022 at 11:05:45AM +0000, Lad, Prabhakar wrote:
+> On Thu, Feb 10, 2022 at 10:50 AM Manivannan Sadhasivam
+> <manivannan.sadhasivam@linaro.org> wrote:
+> >
+> > On Thu, Feb 10, 2022 at 09:24:19AM +0000, Lad, Prabhakar wrote:
+> > > Hi,
+> > >
+> > > On Thu, Feb 10, 2022 at 8:40 AM Manivannan Sadhasivam
+> > > <manivannan.sadhasivam@linaro.org> wrote:
+> > > >
+> > > > Hi,
+> > > >
+> > > > On Wed, Jan 26, 2022 at 07:50:38PM +0000, Lad Prabhakar wrote:
+> > > > > Hi All,
+> > > > >
+> > > > > The current PCIe EPF framework supports DMA data transfers using external
+> > > > > DMA only, this patch series aims to add support for platforms supporting
+> > > > > internal DMAC on PCIe for data transfers.
+> > > > >
+> > > > > R-Car PCIe supports internal DMAC to transfer data between Internal Bus to
+> > > > > PCI Express and vice versa. Last patch fills up the required flags and ops
+> > > > > to support internal DMAC.
+> > > > >
+> > > > > Patches 1-3 are for PCIe EPF core to support internal DMAC handling, patch
+> > > > > 4/5 is to fix test cases based on the conversation [1].
+> > > > >
+> > > >
+> > > > This looks similar to the Synopsys eDMA IP [1] that goes with the Synopsys PCIe
+> > > > endpoint IP. Why can't you represent it as a dmaengine driver and use the
+> > > > existing DMA support?
+> > > >
+> > > Let me have a look. Could you please share a link to the Synopsys PCIe
+> > > endpoint HW manual (the driver doesn't have a binding doc).
+> > >
+> >
+> > I don't think the PCIe reference manual is available publicly. And you are right
+> > that the driver is not tied to devicetree. The reason is, it gets probed using
+> > the PCI ID of the EP and all the resources are defined statically in the driver
+> > itself.
+> >
+> In R-Car PCIe the internal dmac is part of the PCIe block itself [0]
+> and not a separate block. I don't see any drivers implementing the
+> internal dmac drivers as a DMA engine driver. For example the Renesas
+> SDHI driver has internal dmac too, this is handled in the SDHI driver
+> itself [1] and not implemented as DMA engine driver. Let me know if my
+> understanding is wrong here.
 > 
 
-Hello
+Okay, thanks for the clarification. I thought that if the IP is same, we could
+implement it as a standalone DMA engine driver, but looks like it is customized.
+So I guess it is reasonable to have an internal implementation.
 
-I will fix them in v4.
+Thanks,
+Mani
 
-Thanks
-Regards
+> [0] https://elixir.bootlin.com/linux/v5.17-rc3/source/Documentation/devicetree/bindings/pci/rcar-pci-ep.yaml#L76
+> [1] https://elixir.bootlin.com/linux/v5.17-rc3/source/drivers/mmc/host/renesas_sdhi_internal_dmac.c
+> 
+> Cheers,
+> Prabhakar
+> 
+> > Thanks,
+> > Mani
+> >
+> > > Cheers,
+> > > Prabhakar
+> > >
+> > > > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/dma/dw-edma
+> > > >
+> > > > > Patches are based on top of [1] next branch.
+> > > > >
+> > > > > [0] https://www.spinics.net/lists/linux-pci/msg92385.html
+> > > > > [1] https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git
+> > > > >
+> > > > > Cheers,
+> > > > > Prabhakar
+> > > > >
+> > > > > Lad Prabhakar (5):
+> > > > >   PCI: endpoint: Add ops and flag to support internal DMAC
+> > > > >   PCI: endpoint: Add support to data transfer using internal dmac
+> > > > >   misc: pci_endpoint_test: Add driver data for Renesas RZ/G2{EHMN}
+> > > > >   misc: pci_endpoint_test: Add support to pass flags for buffer
+> > > > >     allocation
+> > > > >   PCI: rcar-ep: Add support for DMAC
+> > > > >
+> > > > >  drivers/misc/pci_endpoint_test.c              |  56 ++++-
+> > > > >  drivers/pci/controller/pcie-rcar-ep.c         | 227 ++++++++++++++++++
+> > > > >  drivers/pci/controller/pcie-rcar.h            |  23 ++
+> > > > >  drivers/pci/endpoint/functions/pci-epf-test.c | 184 ++++++++++----
+> > > > >  drivers/pci/endpoint/pci-epf-core.c           |  32 +++
+> > > > >  include/linux/pci-epc.h                       |   8 +
+> > > > >  include/linux/pci-epf.h                       |   7 +
+> > > > >  7 files changed, 483 insertions(+), 54 deletions(-)
+> > > > >
+> > > > > --
+> > > > > 2.25.1
+> > > > >

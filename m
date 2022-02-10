@@ -2,96 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C9A4B17DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 22:58:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE434B17E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:02:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344688AbiBJV6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 16:58:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40552 "EHLO
+        id S1344785AbiBJWCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 17:02:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238245AbiBJV6U (ORCPT
+        with ESMTP id S236817AbiBJWCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 16:58:20 -0500
-Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA4EB37
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:58:19 -0800 (PST)
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4JvrGW3Gdmz1s767;
-        Thu, 10 Feb 2022 22:58:11 +0100 (CET)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4JvrGW04bKz1qqkB;
-        Thu, 10 Feb 2022 22:58:10 +0100 (CET)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id P0Gm9oQZh0uW; Thu, 10 Feb 2022 22:58:09 +0100 (CET)
-X-Auth-Info: K9Vgp8IFWJ4Z7781WVGKiz1IyIbMo3h9rBlVSRIGtFnKqw4w1utxrA8f7q6T64u9
-Received: from igel.home (ppp-46-244-163-189.dynamic.mnet-online.de [46.244.163.189])
+        Thu, 10 Feb 2022 17:02:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A59EBBC;
+        Thu, 10 Feb 2022 14:02:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Thu, 10 Feb 2022 22:58:09 +0100 (CET)
-Received: by igel.home (Postfix, from userid 1000)
-        id 33DC02C3B35; Thu, 10 Feb 2022 22:58:09 +0100 (CET)
-From:   Andreas Schwab <schwab@linux-m68k.org>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        devicetree@vger.kernel.org, Jisheng Zhang <jszhang@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-riscv@lists.infradead.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 5/6] RISC-V: Do no continue isa string parsing
- without correct XLEN
-References: <20220210214018.55739-1-atishp@rivosinc.com>
-        <20220210214018.55739-6-atishp@rivosinc.com>
-X-Yow:  I don't believe there really IS a GAS SHORTAGE..  I think it's all
- just a BIG HOAX on the part of the plastic sign salesmen--
- ..  to sell more numbers!!
-Date:   Thu, 10 Feb 2022 22:58:09 +0100
-In-Reply-To: <20220210214018.55739-6-atishp@rivosinc.com> (Atish Patra's
-        message of "Thu, 10 Feb 2022 13:40:17 -0800")
-Message-ID: <877da2xu32.fsf@igel.home>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.91 (gnu/linux)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC44361BCD;
+        Thu, 10 Feb 2022 22:02:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94026C340ED;
+        Thu, 10 Feb 2022 22:02:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644530522;
+        bh=FuA/vqugt280wWCxhxZPTSLe70pjFP3XNTWK4mjkZK8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=SpDKy7QRhMlA9bXNKBRu4KtjJa8jIRmRvxhf6VP1avsbU6/DPJu0u5/CeMZvmV9QW
+         bf5IY4iX+2nnDvIyjJNDc/qBgA0oP8PpizL06ElHs4DKXrTNaczpA8efdh0EW+Jrb5
+         6SRtWtj2Edaq+H7SGjL8VXIEUcY2yqiY56gE766rVJFxuYumV+iGvUlRwSBqJ4ZyQr
+         zhMWHZr+Uz76Mm7XbupcxyrXAqxyZp/tpl1KG/9pF8+uwj9bB87ix6AoPWUkHlz3qW
+         RbrwCYC5ipYPzPDsUhrwpmCEmEGNPLAIG2j+s/MQwjrEgTKr0TPQBjvKN1RpR3ZC6p
+         zMx989cHvwN0Q==
+Date:   Thu, 10 Feb 2022 23:01:58 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     linux-watchdog@vger.kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PULL REQUEST] immutable branch
+ "i2c/add-request_mem_region_muxed-20220210"
+Message-ID: <YgWLVmSsav7XULiC@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        linux-watchdog@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="upvdmhasOsfGQAmT"
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Feb 10 2022, Atish Patra wrote:
 
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 469b9739faf7..cca579bae8a0 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -84,6 +84,7 @@ void __init riscv_fill_hwcap(void)
->  	for_each_of_cpu_node(node) {
->  		unsigned long this_hwcap = 0;
->  		uint64_t this_isa = 0;
-> +		char *temp;
->  
->  		if (riscv_of_processor_hartid(node) < 0)
->  			continue;
-> @@ -93,6 +94,7 @@ void __init riscv_fill_hwcap(void)
->  			continue;
->  		}
->  
-> +		temp = (char *)isa;
+--upvdmhasOsfGQAmT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-There should be no need for this cast.
+Guenter, Wim
 
--- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+here are the ioport changes needed for the WDT series by Terry Bowman.
+Please pull them into your branch.
+
+Thanks,
+
+   Wolfram
+
+
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/add-request_mem_region_muxed
+
+for you to fetch changes up to 27c196c7b73cb70bbed3a9df46563bab60e63415:
+
+  kernel/resource: Introduce request_mem_region_muxed() (2022-02-10 22:40:00 +0100)
+
+----------------------------------------------------------------
+Terry Bowman (1):
+      kernel/resource: Introduce request_mem_region_muxed()
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      (Rev.) kernel/resource: Introduce request_mem_region_muxed()
+
+ include/linux/ioport.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+--upvdmhasOsfGQAmT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIFi1YACgkQFA3kzBSg
+KbZROBAAo05toUcrtIJud8wqybjTg4u6VcLsPHYNmXwQrIL6630BeyYEWsMbN/0n
+inXhBriOTRq21Rjb5XQk0ftXVKZPiZiutHAHi75XD7VqpSo23BE3wPZ/WK4r8NcT
+nOTXojj8ISEfDwEr1ZTUNL1oZBoH6/9mnx6ZmYFTqcCAxN/jCOy6oMCxDjSuVA33
+LguH97rDUYZbqTLlcq+MJZlpd6ep+v362gAPsTawPrIi/C1aSUqDMqInWHRwJD2L
+TwroPT0Sq6QFmV9zCqwzSGD7cVWybYgo3+5MfdhEeEJZewPhxw1L/U2IxIhXvREc
+EQ3FlEr5Zp9exsaVhmap3ToL2RMHCaIvKhx0cbIB5BTSgRakp7DiRK9SJScVljFe
+Fev3HejCcXXa31v8OflMdaKnTJxjH4WhOgPgKool0tAsXBR/vJ/kv+Sl+O8R2Yrj
++MlwxRr3JV3X3IMkl3OJycyo7fLdnXI+oEAZx9LfzppTYic2qrGft4VrZPP/JTxu
+rx2qhRuUtSe7YraJrq0cCmanWwuRfdnP+mzTBlKTOLK6u6EOYFSVwrGc7D4Rdvwd
+6kPlwg33zOHc4P/GabxOuMqiFODirirzwDy+FQxrw4h3jChG1kACWxZD34nV0uv6
+4m1+dUExWETsFHcYBPUYpfdatd5OvNOcD+RTu4lgtJuhW9lVx2k=
+=pTXp
+-----END PGP SIGNATURE-----
+
+--upvdmhasOsfGQAmT--

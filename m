@@ -2,61 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3418D4B192C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:12:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D878D4B191A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345494AbiBJXLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 18:11:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60106 "EHLO
+        id S1345453AbiBJXKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 18:10:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345101AbiBJXLT (ORCPT
+        with ESMTP id S238904AbiBJXKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 18:11:19 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C359266C
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:11:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644534679; x=1676070679;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1DcXpIvfkdXgEoN4gqoOn2laBEN3YOEBZFpUnim6c7Y=;
-  b=K82gKaOUJbhBpjbe+LKFGLCB8KPdXCDXdgNSuB0C6X12SJZj2mF0UwhB
-   hIgGjNXc8FnqZ9JndM8iWrD9C1QZXWH+3MrMjfXtLx4biEX3KziAcCJyv
-   +T4DWbxAV6gHRoMr72fES4AHgEPrDxq8xYcQaIfMNMn7Vh6RsVIFgpxop
-   w3z4SWeL7rQY4rFRH1XZo4iSrIMdR8DSmfw9m1gGR/W4OfrlyR5qTpcoY
-   AT4jcq5+wSPmL/ix7l7L9FkleyrhPBuSml5Yx3gAC0NmaaYEZV1hdJUR0
-   F51NUi5Md4qNU92PHMbLXKT14w3G3HfCektdNY7SEjzEz6CMCbmvuFrOo
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="237016209"
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="237016209"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 15:11:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="701881449"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 10 Feb 2022 15:11:17 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nIIaq-0003rs-IE; Thu, 10 Feb 2022 23:11:16 +0000
-Date:   Fri, 11 Feb 2022 07:10:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>
-Subject: [ammarfaizi2-block:powerpc/linux/next-test 41/56]
- powerpc64-linux-ld: arch/powerpc/kernel/trace/ftrace.o:undefined reference
- to `_mcount'
-Message-ID: <202202110717.hZrWu55Z-lkp@intel.com>
+        Thu, 10 Feb 2022 18:10:15 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740EDE31;
+        Thu, 10 Feb 2022 15:10:15 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id b13so13745745edn.0;
+        Thu, 10 Feb 2022 15:10:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=4zd+d9NdEXjmSBG6eKyyZ32RF9eXdrBZvgQdiNkAdR4=;
+        b=JerGdJDRLq42TNluoDiDdyNEa5OPpLv5oClSPNriUX77iN4SVSpFrrCj8awES3byVZ
+         2hEJabfnFYY7ptl7M0jjxrmxJscJjkMV15GrCx0y8xw5KrBZ+vq80gW4uVItK2r3WlxK
+         X5jbpvzf31Xsq6M9tQ/KjGinbM0jA+y/SzxuDAdbSrrUb47JQP5TDiIKR10idscms+Fq
+         DNUrbm6iPhhQ/eIEktGPAv2iSPib/cmjz/ouIiOxUdWavH2Bzw5Yg0EMLS76DpofHavh
+         zCYmP8sgju1C0daSBk7jIl8mZINhLQlBSKmqjaPQixwVMlq9JlivNQ6QPCIGpBsj/b7R
+         E9lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=4zd+d9NdEXjmSBG6eKyyZ32RF9eXdrBZvgQdiNkAdR4=;
+        b=7an6M1ozyB8FHSH8kHBqJnCz6A/N42eTizictQkWhW6tO62xu/jlyOcdg1eJLA5RJg
+         8FnhVKDq//ipk8YW400HypI3WZuJl1mN0ULuaoLKAvyN+jHkZynVaxx02TzKkmK7pYlf
+         qepfAUbgW5YJitostbAj/TwouQcG6cdUDrmeGREMaf3CJBbGnke6SovQkx0BJT6997Ku
+         jPZywYUK4deyFqU2f97ft6LMggcHZSXw3FiQUUaX9XZcJMug4Qx2HTUba8WICtEYLVHI
+         D6StjQ5G/dxuDoIwgKvFr6hzNKk8U8WZ4tW3CPLPiPCBByDMUNYyUjY9ln24ugAdtOnq
+         eWVg==
+X-Gm-Message-State: AOAM530INHaqL+eKWrjXSN2ymtGSX9OPnC7ihQ25abEUxvl+ZyOXfErV
+        TmIQsUHXyqAtfoP7MY08N3M=
+X-Google-Smtp-Source: ABdhPJzX7WEZ/93GNx4TcH64x4mdLF678GL6+j9Mynk3mAi5IzBr1N/UwQtqQ7WyHJfKSEpndcM+Pw==
+X-Received: by 2002:a05:6402:440a:: with SMTP id y10mr10569403eda.215.1644534614032;
+        Thu, 10 Feb 2022 15:10:14 -0800 (PST)
+Received: from localhost (92.40.202.152.threembb.co.uk. [92.40.202.152])
+        by smtp.gmail.com with ESMTPSA id h6sm2213164ede.50.2022.02.10.15.10.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 15:10:13 -0800 (PST)
+Date:   Thu, 10 Feb 2022 23:10:45 +0000
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     linus.walleij@linaro.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pinctrl: ingenic: Fix regmap on X series SoCs
+Message-ID: <YgWbdYDiVQyHkHiJ@localhost>
+References: <20220209230452.19535-1-aidanmacdonald.0x0@gmail.com>
+ <DD537R.K2D13DXGNPGH@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DD537R.K2D13DXGNPGH@crapouillou.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,84 +73,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block powerpc/linux/next-test
-head:   14cc509e7b686ce5db7175d0fb084cacae046d96
-commit: 3a1a8f078670c24a1c0c7fef172ea5c0e2385b61 [41/56] powerpc/ftrace: Remove ftrace_32.S
-config: powerpc64-randconfig-r012-20220210 (https://download.01.org/0day-ci/archive/20220211/202202110717.hZrWu55Z-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/3a1a8f078670c24a1c0c7fef172ea5c0e2385b61
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block powerpc/linux/next-test
-        git checkout 3a1a8f078670c24a1c0c7fef172ea5c0e2385b61
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
+On Thu, Feb 10, 2022 at 11:03:13AM +0000, Paul Cercueil wrote:
+> Hi Aidan,
+> 
+> Le mer., févr. 9 2022 at 23:04:54 +0000, Aidan MacDonald 
+> <aidanmacdonald.0x0@gmail.com> a écrit :
+> > The X series Ingenic SoCs have a shadow GPIO group which
+> > is at a higher offset than the other groups, and is used
+> > for all GPIO configuration. The regmap did not take this
+> > offset into account and set max_register too low. Writes
+> > to the shadow group registers were blocked, which made it
+> > impossible to change any pin configuration.
+> > 
+> > Fix this by pretending there are at least 8 chips on any
+> > 'X' SoC for the purposes of calculating max_register. This
+> > ensures the shadow group is accessible.
+> 
+> I don't like your solution, it sounds very hacky. I think it would make 
+> more sense to use a dedicated x1000_pinctrl_regmap_config that would be 
+> used for the X1000 SoC. That would also allow you to express that there 
+> are no registers in the 0x400-0x700 range (through 
+> regmap_config.wr_table / .rd_table).
+> 
+> Cheers,
+> -Paul
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+That's fine, I'll put together a v2 patch using the approach you suggest.
+I think all the 'X' SoCs will require a similar regmap as they're using
+ingenic_gpio_shadow_* functions too, but I'll check their datasheets to
+be sure.
 
-All errors (new ones prefixed by >>):
-
-   powerpc64-linux-ld: warning: orphan section `.stubs' from `drivers/i2c/busses/i2c-pasemi-core.o' being placed in section `.stubs'
-   powerpc64-linux-ld: warning: orphan section `.ftrace.tramp' from `drivers/i2c/busses/i2c-pasemi-core.o' being placed in section `.ftrace.tramp'
-   powerpc64-linux-ld: warning: discarding dynamic section .glink
-   powerpc64-linux-ld: warning: discarding dynamic section .plt
-   powerpc64-linux-ld: linkage table error against `_mcount'
-   powerpc64-linux-ld: stubs don't match calculated size
-   powerpc64-linux-ld: can not build stubs: bad value
-   powerpc64-linux-ld: init/main.o: in function `.__traceiter_initcall_level':
->> (.text+0x18): undefined reference to `._mcount'
-   powerpc64-linux-ld: init/main.o: in function `.__traceiter_initcall_start':
-   (.text+0x88): undefined reference to `._mcount'
-   powerpc64-linux-ld: init/main.o: in function `.__traceiter_initcall_finish':
-   (.text+0xf4): undefined reference to `._mcount'
-   powerpc64-linux-ld: init/main.o: in function `.trace_initcall_finish_cb':
->> main.c:(.text+0x16c): undefined reference to `._mcount'
-   powerpc64-linux-ld: init/main.o: in function `.initcall_blacklisted':
-   main.c:(.text+0x4cc): undefined reference to `._mcount'
-   powerpc64-linux-ld: init/main.o:(.text+0x5bc): more undefined references to `._mcount' follow
->> powerpc64-linux-ld: arch/powerpc/kernel/trace/ftrace.o:(.toc+0x0): undefined reference to `_mcount'
->> powerpc64-linux-ld: arch/powerpc/kernel/trace/ftrace.o:(.toc+0x8): undefined reference to `ftrace_tramp_text'
->> powerpc64-linux-ld: arch/powerpc/kernel/trace/ftrace.o:(.toc+0x10): undefined reference to `ftrace_tramp_init'
-   powerpc64-linux-ld: arch/powerpc/kernel/iomap.o: in function `.ioport_map':
-   (.text+0x14): undefined reference to `._mcount'
-   powerpc64-linux-ld: arch/powerpc/kernel/iomap.o: in function `.pci_iounmap':
-   (.text+0x48): undefined reference to `._mcount'
-   powerpc64-linux-ld: arch/powerpc/kernel/compat_audit.o: in function `.ppc32_classify_syscall':
->> compat_audit.c:(.text+0x14): undefined reference to `._mcount'
-   powerpc64-linux-ld: arch/powerpc/mm/fault.o: in function `.__bad_area_nosemaphore':
->> fault.c:(.text+0x5c): undefined reference to `._mcount'
-   powerpc64-linux-ld: arch/powerpc/mm/fault.o: in function `.bad_area_nosemaphore':
-   fault.c:(.text+0xb0): undefined reference to `._mcount'
-   powerpc64-linux-ld: arch/powerpc/mm/fault.o:fault.c:(.text+0x2bc): more undefined references to `._mcount' follow
->> powerpc64-linux-ld: kernel/trace/ftrace.o:(.toc+0x0): undefined reference to `_mcount'
-   powerpc64-linux-ld: kernel/bpf/core.o: in function `.bpf_adj_delta_to_imm':
->> core.c:(.text+0x24): undefined reference to `._mcount'
-   powerpc64-linux-ld: kernel/bpf/core.o: in function `.bpf_adj_branches':
-   core.c:(.text+0xdc): undefined reference to `._mcount'
-   powerpc64-linux-ld: kernel/bpf/core.o: in function `.__bpf_call_base':
-   (.text+0x250): undefined reference to `._mcount'
-   powerpc64-linux-ld: kernel/bpf/core.o: in function `.__bpf_prog_ret1':
-   core.c:(.text+0x278): undefined reference to `._mcount'
-   powerpc64-linux-ld: kernel/bpf/core.o: in function `.bpf_prog_array_copy_core':
-   core.c:(.text+0x2ac): undefined reference to `._mcount'
-   powerpc64-linux-ld: kernel/bpf/core.o:(.text+0x31c): more undefined references to `._mcount' follow
-   powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-core.o:(.toc+0x0): undefined reference to `__this_module'
-   powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-platform.o: in function `.pasemi_platform_i2c_remove':
->> i2c-pasemi-platform.c:(.text+0xc): undefined reference to `._mcount'
-   powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-platform.o: in function `.pasemi_platform_i2c_probe':
-   i2c-pasemi-platform.c:(.text+0x44): undefined reference to `._mcount'
-   powerpc64-linux-ld: drivers/i2c/busses/i2c-pasemi-platform.o: in function `.pasemi_platform_i2c_driver_init':
->> i2c-pasemi-platform.c:(.init.text+0x14): undefined reference to `._mcount'
-   powerpc64-linux-ld: drivers/i2c/busses/i2c-pca-platform.o: in function `.i2c_pca_pf_readbyte8':
->> i2c-pca-platform.c:(.text+0x34): undefined reference to `._mcount'
-   powerpc64-linux-ld: drivers/i2c/busses/i2c-pca-platform.o: in function `.i2c_pca_pf_readbyte16':
-   i2c-pca-platform.c:(.text+0x70): undefined reference to `._mcount'
-   powerpc64-linux-ld: drivers/i2c/busses/i2c-pca-platform.o:i2c-pca-platform.c:(.text+0xb4): more undefined references to `._mcount' follow
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> > ---
+> >  drivers/pinctrl/pinctrl-ingenic.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/pinctrl/pinctrl-ingenic.c 
+> > b/drivers/pinctrl/pinctrl-ingenic.c
+> > index 2712f51eb238..9d2bccda50f1 100644
+> > --- a/drivers/pinctrl/pinctrl-ingenic.c
+> > +++ b/drivers/pinctrl/pinctrl-ingenic.c
+> > @@ -4168,7 +4168,10 @@ static int __init ingenic_pinctrl_probe(struct 
+> > platform_device *pdev)
+> >  		return PTR_ERR(base);
+> > 
+> >  	regmap_config = ingenic_pinctrl_regmap_config;
+> > -	regmap_config.max_register = chip_info->num_chips * 
+> > chip_info->reg_offset;
+> > +	if (chip_info->version >= ID_X1000)
+> > +		regmap_config.max_register = MIN(8, chip_info->num_chips) * 
+> > chip_info->reg_offset;
+> > +	else
+> > +		regmap_config.max_register = chip_info->num_chips * 
+> > chip_info->reg_offset;
+> > 
+> >  	jzpc->map = devm_regmap_init_mmio(dev, base, &regmap_config);
+> >  	if (IS_ERR(jzpc->map)) {
+> > --
+> > 2.34.1
+> > 
+> 
+> 

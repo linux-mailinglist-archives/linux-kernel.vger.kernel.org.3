@@ -2,69 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526574B1147
+	by mail.lfdr.de (Postfix) with ESMTP id A06994B1148
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243336AbiBJPHo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Feb 2022 10:07:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48648 "EHLO
+        id S243453AbiBJPH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 10:07:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234385AbiBJPHn (ORCPT
+        with ESMTP id S243315AbiBJPH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 10:07:43 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637181A2;
-        Thu, 10 Feb 2022 07:07:43 -0800 (PST)
-Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jvg80084yz67MkT;
-        Thu, 10 Feb 2022 23:06:56 +0800 (CST)
-Received: from lhreml714-chm.china.huawei.com (10.201.108.65) by
- fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Thu, 10 Feb 2022 16:07:40 +0100
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- lhreml714-chm.china.huawei.com (10.201.108.65) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 10 Feb 2022 15:07:40 +0000
-Received: from lhreml710-chm.china.huawei.com ([169.254.81.184]) by
- lhreml710-chm.china.huawei.com ([169.254.81.184]) with mapi id
- 15.01.2308.021; Thu, 10 Feb 2022 15:07:40 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     Alex Williamson <alex.williamson@redhat.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "mgurtovoy@nvidia.com" <mgurtovoy@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        liulongfang <liulongfang@huawei.com>,
-        "Zengtao (B)" <prime.zeng@hisilicon.com>,
-        "Jonathan Cameron" <jonathan.cameron@huawei.com>,
-        "Wangzhou (B)" <wangzhou1@hisilicon.com>
-Subject: RE: [RFC v4 7/8] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Thread-Topic: [RFC v4 7/8] hisi_acc_vfio_pci: Add support for VFIO live
- migration
-Thread-Index: AQHYHPDyAsbl+xVOv0mWAZg3hAhxZqyL5CAAgAEAYUA=
-Date:   Thu, 10 Feb 2022 15:07:40 +0000
-Message-ID: <e739f0cef853428e9d72ebc6e3c52187@huawei.com>
-References: <20220208133425.1096-1-shameerali.kolothum.thodi@huawei.com>
-        <20220208133425.1096-8-shameerali.kolothum.thodi@huawei.com>
- <20220209164440.0d77284c.alex.williamson@redhat.com>
-In-Reply-To: <20220209164440.0d77284c.alex.williamson@redhat.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.47.92.146]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 10 Feb 2022 10:07:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF51DBF;
+        Thu, 10 Feb 2022 07:07:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B07961B66;
+        Thu, 10 Feb 2022 15:07:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F04E4C004E1;
+        Thu, 10 Feb 2022 15:07:54 +0000 (UTC)
+Date:   Thu, 10 Feb 2022 10:07:53 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rt-users@vger.kernel.org, joseph.salisbury@canonical.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v2] selftests/ftrace: Do not trace do_softirq because of
+ PREEMPT_RT
+Message-ID: <20220210100753.27248bf6@gandalf.local.home>
+In-Reply-To: <YgUlybNMlpheddiD@linutronix.de>
+References: <20220210083356.11212-1-krzysztof.kozlowski@canonical.com>
+        <YgUXcGC1mH7VX1d9@linutronix.de>
+        <546f147d-1682-fb92-42e5-7247dc19dcf1@canonical.com>
+        <YgUc5HxfIdJ0Z5AN@linutronix.de>
+        <429dd2fd-3ceb-6780-f970-4ea9b115388c@canonical.com>
+        <YgUlybNMlpheddiD@linutronix.de>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,44 +53,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 10 Feb 2022 15:48:41 +0100
+Sebastian Andrzej Siewior <bigeasy@linutronix.de> wrote:
 
+> After looking into the test it appears that two random functions are
+> enough to be specified because the actual purpose is it to figure out if
+> the function is recorded and not the actual functionality behind the
+> function.
 
-> -----Original Message-----
-> From: Alex Williamson [mailto:alex.williamson@redhat.com]
-> Sent: 09 February 2022 23:45
-> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-> Cc: kvm@vger.kernel.org; linux-kernel@vger.kernel.org;
-> linux-crypto@vger.kernel.org; jgg@nvidia.com; cohuck@redhat.com;
-> mgurtovoy@nvidia.com; yishaih@nvidia.com; Linuxarm
-> <linuxarm@huawei.com>; liulongfang <liulongfang@huawei.com>; Zengtao (B)
-> <prime.zeng@hisilicon.com>; Jonathan Cameron
-> <jonathan.cameron@huawei.com>; Wangzhou (B) <wangzhou1@hisilicon.com>
-> Subject: Re: [RFC v4 7/8] hisi_acc_vfio_pci: Add support for VFIO live
-> migration
-> 
-> On Tue, 8 Feb 2022 13:34:24 +0000
-> Shameer Kolothum <shameerali.kolothum.thodi@huawei.com> wrote:
-> > +
-> > +static struct hisi_acc_vf_migration_file *
-> > +hisi_acc_vf_stop_copy(struct hisi_acc_vf_core_device *hisi_acc_vdev)
-> > +{
-> > +	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
-> > +	struct device *dev = &hisi_acc_vdev->vf_dev->dev;
-> > +	struct hisi_acc_vf_migration_file *migf;
-> > +	int ret;
-> > +
-> > +	if (unlikely(qm_wait_dev_not_ready(vf_qm))) {
-> > +		dev_info(dev, "QM device not ready, no data to transfer\n");
-> > +		return 0;
-> > +	}
-> 
-> This return value looks suspicious and I think would cause a segfault
-> in the calling code:
+Correct. And if I ever do get a chance to revisit this test, I plan on
+adding a bunch of comments to it. It's hard enough to add tests for one's
+code, but even harder to document what those tests actually do ;-)
 
-Ah..Right!. I think I can move the above to the vf_qm_state_save()
-and use migf->total_length to handle this.
-
-Thanks,
-Shameer
- 
-
+-- Steve

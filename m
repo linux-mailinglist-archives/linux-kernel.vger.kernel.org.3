@@ -2,118 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD7F4B1914
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D5B4B1929
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 00:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345486AbiBJXLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 18:11:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59734 "EHLO
+        id S1345521AbiBJXLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 18:11:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345101AbiBJXLB (ORCPT
+        with ESMTP id S1345508AbiBJXLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 18:11:01 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7A41105
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:11:02 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id on2so6511931pjb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 15:11:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=G6h4BaCdrqdbFhFcxIl9IdHmu9enCO1yunXO86W7eOE=;
-        b=fgUXjVCC65eMisH+QxSH8aEPf5l9+N39zoxRgxP323KCp0K/cN4FZ6k3tr5ZsSh+gY
-         qvRCe1oJbD2vEsRKFX+72ZgpgcM8cejJ16Ux6tPK0Nq74ZJABFaDqqLRtnedeXXuGfLp
-         nWj+Kxy0oRzjwL4GHw1oPgh3yrzqk0SGp3PIOUQezPUEHiOmWRbmQs7VhmN+HKSF+wSO
-         LYBRr9Mi2q18uxKppIR7mfX0oDxaHBBivZy6pj6OQGLuieVwdhd0l2QeMrinP+0eF7l4
-         5F34wcao4dDvj4NMhQns/WvRgc1Oei4MMJwaKKqk3PjqSRQZ5JrI6LvfYtoUmy7NQ4+5
-         dyCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=G6h4BaCdrqdbFhFcxIl9IdHmu9enCO1yunXO86W7eOE=;
-        b=DAeXU3AhklicEOxFiqerPC+k5TUPw3WvI84CqABA+SyBEiwiqKk9gqgq3M0H90pTv1
-         Dfvcu7r44Slk9kuBtuOtdr0z4Ww6JY+qgQa5N9a8MAVhqtzs7lPYamrbapW+qHz0zkcp
-         9VcPcOwBLwWnGth1aCUSIhqPHStYK6wUMvA2lEFEbtz/0YnAROjP/+P0vuQzQRZbqCua
-         LbZ6tP62jxYu+NMMYPKsmjo2B2bsCxVPastPkBj6ssyqXEbewOfrInxlN+jPfFES0PLf
-         n9PVpyG1Bw46asDxW0NyjOEsFV3oBc4TJDOWg2AYKIQ+oC2PytC/R5BejXogBBH0SVaX
-         MgNw==
-X-Gm-Message-State: AOAM531oKYWGG2rOxAycsEZ5NajhYRpNAv8ATURP6UmoafEjKySJtRh7
-        tyXOPYcwkV72euxI86zycVFFaA==
-X-Google-Smtp-Source: ABdhPJz/EaccljVntzlr26C+gJqik/vn3hF52wWE4j4iG6jH0Zzf1GrlbXsuwbU+8ODnz0gG3JAWhg==
-X-Received: by 2002:a17:902:680f:: with SMTP id h15mr9858207plk.17.1644534661358;
-        Thu, 10 Feb 2022 15:11:01 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id q21sm25673162pfu.104.2022.02.10.15.11.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 15:11:00 -0800 (PST)
-Date:   Thu, 10 Feb 2022 23:10:57 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com
-Subject: Re: [PATCH 03/12] KVM: x86: do not deliver asynchronous page faults
- if CR0.PG=0
-Message-ID: <YgWbgfSrzAhd97LG@google.com>
-References: <20220209170020.1775368-1-pbonzini@redhat.com>
- <20220209170020.1775368-4-pbonzini@redhat.com>
+        Thu, 10 Feb 2022 18:11:52 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC455F5D;
+        Thu, 10 Feb 2022 15:11:52 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 1E5A31F469B1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644534711;
+        bh=xJk1X1Ou6Pj/lU4m3+l3X4A8FKv0b4TtWehWstyFtXM=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=lkNkBwNu3iDeSbxbxmet/aqfx3hhFrQ3FBBRbXIoO+lQStXrobNg3t/g4nl3tQ1gX
+         FIZPublwfNFKTq0N+K3/aOdozYJVx5cKySe/NoLst7xgG5oghsf/2DTe1rKAmYXk52
+         OSHezvvvrA2ceJ0fxhgAi35xzbqLDZN6a4Z+DN2AQNHnQT92cxiCzYGSaZhHpD6tqQ
+         bYRF3c7Sh6e/B7vfE1bxu5Iji30pldoNAFuBGMvg47DAV/WAwWUVdBtNjDaC3tYaeB
+         zUzQ3D2nvsEL2zJywXcCRm+3Lp9K0H4azyW19a8BUVPwPwRd0vy8w/V1khLtWkOR22
+         7fPgtj9o+VzXg==
+Message-ID: <63e239fc-9282-0276-50b2-3172a446262d@collabora.com>
+Date:   Fri, 11 Feb 2022 04:11:40 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209170020.1775368-4-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     usama.anjum@collabora.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/seccomp: Fix seccomp failure by adding
+ missing headers
+Content-Language: en-US
+To:     Sherry Yang <sherry.yang@oracle.com>, skhan@linuxfoundation.org,
+        shuah@kernel.org, keescook@chromium.org, luto@amacapital.net,
+        wad@chromium.org, christian@brauner.io, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org
+References: <20220210203049.67249-1-sherry.yang@oracle.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20220210203049.67249-1-sherry.yang@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022, Paolo Bonzini wrote:
-> Enabling async page faults is nonsensical if paging is disabled, but
-> it is allowed because CR0.PG=0 does not clear the async page fault
-> MSR.  Just ignore them and only use the artificial halt state,
-> similar to what happens in guest mode if async #PF vmexits are disabled.
+On 2/11/22 1:30 AM, Sherry Yang wrote:
+> seccomp_bpf failed on tests 47 global.user_notification_filter_empty
+> and 48 global.user_notification_filter_empty_threaded when it's
+> tested on updated kernel but with old kernel headers. Because old
+> kernel headers don't have definition of macro __NR_clone3 which is
+> required for these two tests. Since under selftests/, we can install
+> headers once for all tests (the default INSTALL_HDR_PATH is
+> usr/include), fix it by adding usr/include to the list of directories
+> to be searched. Use "-isystem" to indicate it's a system directory as
+> the real kernel headers directories are.
 > 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> Signed-off-by: Sherry Yang <sherry.yang@oracle.com>
+> Tested-by: Sherry Yang <sherry.yang@oracle.com>
 > ---
->  arch/x86/kvm/x86.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  tools/testing/selftests/seccomp/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 5e1298aef9e2..98aca0f2af12 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -12272,7 +12272,9 @@ static inline bool apf_pageready_slot_free(struct kvm_vcpu *vcpu)
->  
->  static bool kvm_can_deliver_async_pf(struct kvm_vcpu *vcpu)
->  {
-> -	if (!vcpu->arch.apf.delivery_as_pf_vmexit && is_guest_mode(vcpu))
-> +	if (is_guest_mode(vcpu)
-> +	    ? !vcpu->arch.apf.delivery_as_pf_vmexit
-> +	    : !is_cr0_pg(vcpu->arch.mmu))
+> diff --git a/tools/testing/selftests/seccomp/Makefile b/tools/testing/selftests/seccomp/Makefile
+> index 0ebfe8b0e147..585f7a0c10cb 100644
+> --- a/tools/testing/selftests/seccomp/Makefile
+> +++ b/tools/testing/selftests/seccomp/Makefile
+> @@ -1,5 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -CFLAGS += -Wl,-no-as-needed -Wall
+> +CFLAGS += -Wl,-no-as-needed -Wall -isystem ../../../../usr/include/"../../../../usr/include/" directory doesn't have header files if
+different output directory is used for kselftests build like "make -C
+tools/tests/selftest O=build". Can you try adding recently added
+variable, KHDR_INCLUDES here which makes this kind of headers inclusion
+easy and correct for other build combinations as well?
 
-As suggested in the previous patch, is_paging(vcpu).
-
-I find a more tradition if-elif marginally easier to understand the implication
-that CR0.PG is L2's CR0 and thus irrelevant if is_guest_mode()==true.  Not a big
-deal though.
-
-	if (is_guest_mode(vcpu)) {
-		if (!vcpu->arch.apf.delivery_as_pf_vmexit)
-			return false;
-	} else if (!is_paging(vcpu)) {
-		return false;
-	}
-
->  		return false;
->  
->  	if (!kvm_pv_async_pf_enabled(vcpu) ||
-> -- 
-> 2.31.1
-> 
-> 

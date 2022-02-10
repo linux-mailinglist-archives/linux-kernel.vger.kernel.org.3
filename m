@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D265E4B0F23
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:49:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 246F64B0F27
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242410AbiBJNsa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Feb 2022 08:48:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48492 "EHLO
+        id S242419AbiBJNsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 08:48:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233034AbiBJNs1 (ORCPT
+        with ESMTP id S233034AbiBJNso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 08:48:27 -0500
-X-Greylist: delayed 76448 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 05:48:27 PST
-Received: from unicorn.mansr.com (unicorn.mansr.com [IPv6:2001:8b0:ca0d:8d8e::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B747191;
-        Thu, 10 Feb 2022 05:48:27 -0800 (PST)
-Received: from raven.mansr.com (raven.mansr.com [IPv6:2001:8b0:ca0d:8d8e::3])
-        by unicorn.mansr.com (Postfix) with ESMTPS id 6107F15360;
-        Thu, 10 Feb 2022 13:48:25 +0000 (GMT)
-Received: by raven.mansr.com (Postfix, from userid 51770)
-        id 4A572219C0A; Thu, 10 Feb 2022 13:48:25 +0000 (GMT)
-From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Juergen Borleis <kernel@pengutronix.de>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: dsa: lan9303: fix reset on probe
-References: <20220209145454.19749-1-mans@mansr.com>
-        <20220209183623.54369689@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Date:   Thu, 10 Feb 2022 13:48:25 +0000
-In-Reply-To: <20220209183623.54369689@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        (Jakub Kicinski's message of "Wed, 9 Feb 2022 18:36:23 -0800")
-Message-ID: <yw1xsfsq4yty.fsf@mansr.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        Thu, 10 Feb 2022 08:48:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8588191
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 05:48:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A3FBB82557
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:48:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EACDC004E1;
+        Thu, 10 Feb 2022 13:48:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644500923;
+        bh=p4N+78S3zEuymfrL0nYcGvJ9HSg9I+EqER3IH8vanbw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RCpZyENIV4XpcuwU2buWrt+5Y6o0fabxY8fTF9YUi37BjKPmx3kqwdH5n0rRtbhqv
+         tEKjct5vRxAlO4LunX6eu4/y3W9CbWcF3IW6bt1k5rUbhCl9YQ2f0Wr/GyJ19BtlaT
+         rApMZquzP6WJ3qWygWpJqf5unNurs/vonu4/x6U9R4vEbBUKReUSTRaVv+VDuKOzPp
+         LMj+4xc5jO+a1mvgBmwQIAbvMM0O0svGdYxerPIdeIEKURjVgDpHk1fLfMTam7jf/s
+         +7d2QqoiY6Ci4ouT3HXxxTIJ/AETxWsVsRY4ssorOSroeTCNpX9MSMAQDgdEyQ5Zj2
+         Oiju85ZQLkTwA==
+Date:   Thu, 10 Feb 2022 19:18:39 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bard Liao <yung-chuan.liao@linux.intel.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, srinivas.kandagatla@linaro.org,
+        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
+        bard.liao@intel.com, libin.yang@intel.com
+Subject: Re: [PATCH] soundwire: intel: fix wrong register name in
+ intel_shim_wake
+Message-ID: <YgUXtwfOPy0tD33z@matsya>
+References: <20220126011451.27853-1-yung-chuan.liao@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126011451.27853-1-yung-chuan.liao@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jakub Kicinski <kuba@kernel.org> writes:
+On 26-01-22, 09:14, Bard Liao wrote:
+> From: Libin Yang <libin.yang@intel.com>
+> 
+> When clearing the sdw wakests status, we should use SDW_SHIM_WAKESTS.
 
-> On Wed,  9 Feb 2022 14:54:54 +0000 Mans Rullgard wrote:
->> The reset input to the LAN9303 chip is active low, and devicetree
->> gpio handles reflect this.  Therefore, the gpio should be requested
->> with an initial state of high in order for the reset signal to be
->> asserted.  Other uses of the gpio already use the correct polarity.
->> 
->> Signed-off-by: Mans Rullgard <mans@mansr.com>
->
-> Pending Andrew's review, this is the correct fixes tag, right?
->
-> Fixes: a1292595e006 ("net: dsa: add new DSA switch driver for the SMSC-LAN9303")
-
-Yes, the error has been there since the driver was first added.
+Applied, thanks
 
 -- 
-Måns Rullgård
+~Vinod

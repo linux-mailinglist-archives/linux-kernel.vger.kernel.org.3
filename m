@@ -2,54 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D394B0A51
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:10:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 973C54B0A62
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:18:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239445AbiBJKJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 05:09:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34680 "EHLO
+        id S239508AbiBJKQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 05:16:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238921AbiBJKJv (ORCPT
+        with ESMTP id S239504AbiBJKQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 05:09:51 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BED2FD6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:09:53 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nI6OZ-0001lk-IQ; Thu, 10 Feb 2022 11:09:47 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nI6OX-00FgT6-PY; Thu, 10 Feb 2022 11:09:45 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nI6OW-00EN0I-8N; Thu, 10 Feb 2022 11:09:44 +0100
-Date:   Thu, 10 Feb 2022 11:09:44 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     Qing Wang <wangqing@vivo.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] pwm: use div64_u64() instead of do_div()
-Message-ID: <20220210100944.ebkiezfablofqitj@pengutronix.de>
-References: <1644395998-4397-1-git-send-email-wangqing@vivo.com>
- <20220209152609.gqeivcehkuzgz3sk@pengutronix.de>
- <9273cd6497354dd882faf55b194ff590@AcuMS.aculab.com>
+        Thu, 10 Feb 2022 05:16:37 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B80F38
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:16:39 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id c192so3124245wma.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:16:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=p2L2JMGAHF/fA4cXJq0+NeV9Ap/R7fib8dscPh33vcg=;
+        b=F27+3Ao6twgPUQ/BOE7bCH1y1UIIqmAONzGU3oxFPBf0mAFdO1zuL2KUYM1O++g2kx
+         0QthHn6iinSXUj64X8vvdhOqtR+XWYwn5E/Gw+bJlWic6yenGNohxjvoICKo1CA/v5wh
+         dZGA4pMay8u5aQAVuBZJ9srKDSwgWE/ddXN47oMMFEcWNd53Fe5zwF8cdwre7J051wLF
+         ItDcXZiEPwC7ClNhh568QmdIVrjuPnmTtWwlVTn3hykOQGuNeu6OtXK7BEc5b2gRMv6/
+         7r1aC+tQNy80dt1ZZUiEtUXIHLwa4b8xT03cNBWZKJQJ3w+AQX5CpSGRsTrvE9geY6Nj
+         P3iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=p2L2JMGAHF/fA4cXJq0+NeV9Ap/R7fib8dscPh33vcg=;
+        b=s77VQ7XnZqL0svNecHAzV3PeWoCyRGivS4YGgytyXkGrhGJmpsrfPUGRJsCVdkGbTr
+         IO2377BJkikLBBKwekp2C+ZkzvVt0D5woEp5bClX8RADyS2TC7W7FXFAxnwechyDkgWL
+         38/1802ULndPCRERl/rLb0/H/2ZueQ40v0rU89w7YRxm+BXE4ULsosj9XHPehrU/sV9T
+         Nw76SA6aBfNckuZxNOqrlAKbBuNfmefOGwi7BirFkP3NaQEgbwt9MfuPS1z2XN3Tglbd
+         wIdUddruAUHsO3UVbMTv4NNjFPIRlYPNxx1/oE/0kFWZWVbA7rOX7kN+zj41FhaZ3tqO
+         z3sw==
+X-Gm-Message-State: AOAM533pSmMQ3OnnW/Nja+/BXUqdrytqOr350phgPK4TG1AsN4p42FPw
+        sa5N9oTzMPduyTeM3bNMM9GpGQ==
+X-Google-Smtp-Source: ABdhPJyqF2XvTy7u6DWP/6ivautdkeYnX0LG3m5hhXZW9KBraONCYgZP5/iwGcxiCbFl24LtFFh+PA==
+X-Received: by 2002:a05:600c:2058:: with SMTP id p24mr1538504wmg.3.1644488197579;
+        Thu, 10 Feb 2022 02:16:37 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id y1sm1328053wmi.36.2022.02.10.02.15.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 02:15:55 -0800 (PST)
+Date:   Thu, 10 Feb 2022 10:15:52 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Stable <stable@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Chinner <dchinner@redhat.com>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        "Darrick J . Wong" <darrick.wong@oracle.com>,
+        Bob Peterson <rpeterso@redhat.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        Johannes Thumshirn <jth@kernel.org>, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        cluster-devel@redhat.com,
+        syzbot+0ed9f769264276638893@syzkaller.appspotmail.com
+Subject: Re: [PATCH 1/1] Revert "iomap: fall back to buffered writes for
+ invalidation failures"
+Message-ID: <YgTl2Lm9Vk50WNSj@google.com>
+References: <20220209085243.3136536-1-lee.jones@linaro.org>
+ <20220210045911.GF8338@magnolia>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="y2i7qhj2ao7l5u5v"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <9273cd6497354dd882faf55b194ff590@AcuMS.aculab.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220210045911.GF8338@magnolia>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,60 +86,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 09 Feb 2022, Darrick J. Wong wrote:
 
---y2i7qhj2ao7l5u5v
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Wed, Feb 09, 2022 at 08:52:43AM +0000, Lee Jones wrote:
+> > This reverts commit 60263d5889e6dc5987dc51b801be4955ff2e4aa7.
+> > 
+> > Reverting since this commit opens a potential avenue for abuse.
+> 
+> What kind of abuse?  Did you conclude there's an avenue solely because
+> some combination of userspace rigging produced a BUG warning?  Or is
+> this a real problem that someone found?
 
-On Thu, Feb 10, 2022 at 09:48:44AM +0000, David Laight wrote:
-> From: Uwe Kleine-K=F6nig
-> > Sent: 09 February 2022 15:26
-> ...
-> > > -	do_div(cycles, period_ns);
-> > > +	div64_u64(cycles, period_ns);
-> >=20
-> > This is wrong, div64_u64() has a different calling convention than do_d=
-iv().
-> >=20
-> > The issue however is real. Please add
->=20
-> Not really although I can't see a check I'd assume that period_ns
-> is expected to be much less than a second - so well under 32 bits
-> There is certainly a general expectation that multiplying by
-> other 'largish' values won't exceed 64 bits.
+Genuine question: Is the ability for userspace to crash the kernel
+not enough to cause concern?  I would have thought that we'd want to
+prevent this.
 
-I'd consider such expectations a bug and hope to catch this type of
-problem for new drivers. However I'm not surprised if you can point out
-several such problems in the code base. Please fix at will :-)
+If by 'real problem' you mean; privilege escalation, memory corruption
+or data leakage, then no, I haven't found any evidence of that.
+However, that's not to say these aren't possible as a result of this
+issue, just that I do not have the skills or knowledge to be able to
+turn this into a demonstrable attack vector.
 
-> Plausible the pwm 'period' should actually be a u32.
-> But then care would be needed to ensure the multiplies have
-> 64bit results.
+However, if you say there is no issue, I'm happy to take your word.
 
-There are definitely consumers expecting to be able to set bigger
-periods, see a9d887dc1c60ed67f2271d66560cdcf864c4a578.
+> > The C-reproducer and more information can be found at the link below.
+> 
+> No.  Post the information and your analysis here.  I'm not going to dig
+> into some Google site to find out what happened, and I'm not going to
+> assume that future developers will be able to access that URL to learn
+> why this patch was created.
 
-Best regards
-Uwe
+The link provided doesn't contain any further analysis.  Only the
+reproducer and kernel configuration used, which are both too large to
+enter into a Git commit.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+> >   kernel BUG at fs/ext4/inode.c:2647!
+> >   invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> >   CPU: 0 PID: 459 Comm: syz-executor359 Tainted: G        W         5.10.93-syzkaller-01028-g0347b1658399 #0
+> 
+> What BUG on fs/ext4/inode.c:2647?
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/fs/ext4/inode.c?h=v5.10.93#n2647
+> 
+> All I see is a call to pagevec_release()?  There's a BUG_ON further up
+> if we wait for page writeback but then it still has Writeback set.  But
+> I don't see anything in pagevec_release that would actually result in a
+> BUG warning.
 
---y2i7qhj2ao7l5u5v
-Content-Type: application/pgp-signature; name="signature.asc"
+Right, this BUG back-trace was taken from the kernel I received the
+bug report for.  I should have used the one I triggered in Mainline,
+apologies for that.
 
------BEGIN PGP SIGNATURE-----
+The real source of the BUG is in the inlined call to page_buffers().
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIE5GQACgkQwfwUeK3K
-7Al9NwgAk6OM7KdG3nsMvl8IKkiFnZyxKG7EO70mqkeXD387kU+iOvf+UpAEaMGx
-itlqP/2akcfuwSvHAajqDH6LS2HLp7FRlcllYjlIXjuB1ZTBwtMjY3v1fL20mpfq
-cr6nn6yYIZ3To+OUgxcBz/QORIh2E+HO6r4OxnVjd1Ov/+7ah/nTBeFk4Utrpnw9
-yCIqEtgB7fUPqDOJI2v4KgQrxXgiOhJ9ZHP2SdpNdZ0Gm+TiGve49wP1Zy5Soghz
-HO8GvcU9JqgOCoI7Pxxv69CcZyttAf8YuGY3+8kubIcJbaOwDtmSxSpnTsYZtnwL
-KdeaNeTXYKzwGN+yoCOCDl7HLwwjFQ==
-=J/um
------END PGP SIGNATURE-----
+Here is the link for the latest release kernel:
 
---y2i7qhj2ao7l5u5v--
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/fs/ext4/inode.c?h=v5.16#n2620
+
+#define page_buffers(page)                                      \
+        ({                                                      \
+                BUG_ON(!PagePrivate(page));                     \
+                ((struct buffer_head *)page_private(page));     \
+        })
+
+> Oh, right, this is one of those inscrutable syzkaller things, where a
+> person can spend hours figuring out what the hell it set up.
+
+A link to the config used (again too big to enter into a commit
+message), can be easily sourced from the link provided.
+
+> Yeah...no, you don't get to submit patches to core kernel code, claim
+> it's not your responsibility to know anything about a subsystem that you
+> want to patch, and then expect us to do the work for you.  If you pick
+> up a syzkaller report, you get to figure out what broke, why, and how to
+> fix it in a reasonable manner.
+> 
+> You're a maintainer, would you accept a patch like this?
+
+No.  I would share my knowledge to provide a helpful review and work
+with the contributor to find a solution (if applicable).
+
+> OH WAIT, you're running this on the Android 5.10 kernel, aren't you?
+> The BUG report came from page_buffers failing to find any buffer heads
+> attached to the page.
+> https://android.googlesource.com/kernel/common/+/refs/heads/android12-5.10-2022-02/fs/ext4/inode.c#2647
+
+Yes, the H/W I have to prototype these on is a phone and the report
+that came in was specifically built against the aforementioned
+kernel.
+
+> Yeah, don't care.
+
+"There is nothing to worry about, as it's intended behaviour"?
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

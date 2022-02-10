@@ -2,97 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B434B09B7
+	by mail.lfdr.de (Postfix) with ESMTP id A89B54B09B9
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:40:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238843AbiBJJju convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Feb 2022 04:39:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58510 "EHLO
+        id S238865AbiBJJkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:40:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238786AbiBJJjs (ORCPT
+        with ESMTP id S238868AbiBJJkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:39:48 -0500
-X-Greylist: delayed 102 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 01:39:49 PST
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88AA220;
-        Thu, 10 Feb 2022 01:39:48 -0800 (PST)
-Received: from mail-wm1-f45.google.com ([209.85.128.45]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M3Eqr-1nJSJC0kQ9-003h6D; Thu, 10 Feb 2022 10:39:47 +0100
-Received: by mail-wm1-f45.google.com with SMTP id i19so1652570wmq.5;
-        Thu, 10 Feb 2022 01:39:47 -0800 (PST)
-X-Gm-Message-State: AOAM531cb0eqtPrq/hCj9B/hPBhQNdci/UadveB7HA3H/hnCgUdoURyD
-        GycahrxyX7E3dkwlbQAmsYFFmtQe7P7Nov0WHIk=
-X-Google-Smtp-Source: ABdhPJzUBE9AmHKtA86Xv3LRiM760+wqDeJhZfBxDNdjYz5WjMMMxnuXS2W7stLYFq1NMZvK6WNceMm+VXnOfCsZ8qY=
-X-Received: by 2002:a05:600c:1f06:: with SMTP id bd6mr1419523wmb.98.1644485986746;
- Thu, 10 Feb 2022 01:39:46 -0800 (PST)
+        Thu, 10 Feb 2022 04:40:11 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EA810DF
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:40:11 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id v47so13693296ybi.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:40:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vwSyjkWA8Xtx6McE/937H/83En/EAsN4/n12OaGn97U=;
+        b=Q9U5MhFM50SJ6zKg3p/BHPAbW/1PqWiV8IwLRh7eYuvqYsefXz7JVtkApiN0D5tJs9
+         NjgtZ08Kif7nIin7P9Lj3k6IR7GOTseT9s5laCSNNmTWHD2uCXfrqGfuutVuti7FabYq
+         BBBAb4MnvkLH4UJThCTrI8+/mOnZaltJr+bpG6t9FkMSJZxm2G82RI22ShxjcihlxEsi
+         Y82w37OnLpB5Xi9WU56u6QA7+3qLoNq0E7XxjqXpD9HrhneWbPs+sNufIntIIK3bmpgw
+         cO6+9m8+iutxaFYcQMGptKVxtMwZN8MAWIOLV4hGp2W+29wbPx10LCsVwxL/brPe2+Mu
+         8Ffg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vwSyjkWA8Xtx6McE/937H/83En/EAsN4/n12OaGn97U=;
+        b=g7PCgFJjXskOZmuTE0U2ws47tRW8BXDYgn2JYgWpCMVUDHY33/f8OQtwJwFTxynV9e
+         GpR9bHknvgcw+9Xn0WgcR6kylLPu1lifcVOGyRxc26HlPUgkL3Z53QEs9hGkVREqVb6j
+         jcjDXhWzkeUpEAYNk/1GYThC0sJFn3GxfyY6qr5t6omDIDAfX6oQ5R4NAyP8SFXj/bQy
+         g8o+5RM/ZFMU2RtP4nqPZS9GPGR4RSCEV7mZ1MUkGD47gwgiQq+0YlMttXw4fIhkRnEf
+         H6XMDSgzwXQZL7d17PhXRH3lS3q29S81wDVHGY68G+GcLiQ5BixTobdKZcZkrbVOPuMv
+         lcQQ==
+X-Gm-Message-State: AOAM533DoRrt8gfwyhbilu/jsmo+uYMCbLpgspi2SWLsyRLsRWUTdJF8
+        vpaRh6uXMslU/VEGiqVKhkrIpaeLa9BJFqXZyTGXhv6atbHLUUG5
+X-Google-Smtp-Source: ABdhPJyMOovS5IpsBIbmJvgp0LJOskYVPag8axtaKArSDLNMC4EYiKcUxfRUU3qBQ8ccmcQ6MqVRs4tbRTDCogGg4e4=
+X-Received: by 2002:a25:4742:: with SMTP id u63mr6032141yba.523.1644486011092;
+ Thu, 10 Feb 2022 01:40:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20220210021129.3386083-1-masahiroy@kernel.org> <20220210021129.3386083-3-masahiroy@kernel.org>
-In-Reply-To: <20220210021129.3386083-3-masahiroy@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 10 Feb 2022 10:39:31 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1qbAXeKuuswuCSmMqC8k4wC-uQZqjiSd8WsFuqM906MA@mail.gmail.com>
-Message-ID: <CAK8P3a1qbAXeKuuswuCSmMqC8k4wC-uQZqjiSd8WsFuqM906MA@mail.gmail.com>
-Subject: Re: [PATCH 2/6] shmbuf.h: add asm/shmbuf.h to UAPI compile-test coverage
-To:     Masahiro Yamada <masahiroy@kernel.org>
+References: <20220210072828.2930359-1-hch@lst.de> <20220210072828.2930359-4-hch@lst.de>
+In-Reply-To: <20220210072828.2930359-4-hch@lst.de>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Thu, 10 Feb 2022 17:39:34 +0800
+Message-ID: <CAMZfGtWb9a8gN7DjaJngYi4aJLVHL74eKnXmctXC27QyarHsDQ@mail.gmail.com>
+Subject: Re: [PATCH 03/27] mm: remove pointless includes from <linux/hmm.h>
+To:     Christoph Hellwig <hch@lst.de>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Dan Williams <dan.j.williams@intel.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Alistair Popple <apopple@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, nvdimm@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:jyMslo3fNya4WydPD3YHn1XYJyEHge1unk7I3p/UHh5+V+hBae5
- wgwCe5jLJ7oH/GBSFMm+AzIAUuyxeWRUzleqR1Kg4VjxdY+wUtO2cBkAWo80I7QcJR0QdGC
- SSd23Vwu7H9HxnW/jJg5UFRzKhoTzz9XFoJLe1u8gcCE3xFYjAY9CpYgp88mhorTOTzoOgt
- C9plEZhksApmrn2eQq4nw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qkRBoUw9+k8=:lXxLoYCwEmC9akTlT8jJQI
- 6kbqoGW9UuaUcSJ1ZBgsrj8IPjccg4OIYivU0eoXpC7uAzD+JtBooH1dxwvvUuaof27+GU8Y+
- 6LgmrIXEVHL7B7rmhM+AHKQVhFtaor6+NLv9FFVKOBJnuj8DqfvZQnv9XXR2SSlZegoqK7YrP
- /gHmqkNruerBOpcrU0GWwvBfqMjydhwiT7ImPkmcU8E8A9zSPJnuZXOE3T4KDUR4z7M/T8Etj
- nU4Nhn5kPWo4Ea87WOVjRnG7KQvevb8xS9Uy8YgHJrcmGJE9MSEkp4GPGCH1r48+cO4CPSCB2
- OVJrNoaBdZBjlX/r4IqO2WO9cZgiHLLJV7wNcOukIaxTISzF29vTvq6PVZCqgBurxWbk2w1MH
- 0HtDCM5j/INvXcnlL663pl5mTD83RZNSZlMBk/xj7A6sUqRbY4EibnVCBXZAI/0Mr1hc3PlE/
- m56xyLVy36Gz42Kf2qZY9wyXp7EUw/HheO2JvckLkm1BTT9QhF85BUfezhmGlqHFXU3U/jcCj
- CMSzU7vBA2pRSpsA7XRMluWEpVU8ZWU6X2l3koizq7OZ5wSf2kcRoJThd9tuILN8OPhPv05GY
- V8BIe5KgdDpz100hFhtOnejFtUYaYj19GyHrzBddHTvmajCQeqH8GyjNyupFfMZg3+x7RrU0n
- TR9qFV6tQXktJLcrSrswbQTU1t+gFLqmdN0iiwXSx8B2gSyErTiHpII7BKvm/Biif511qU6z1
- rR0OBWlvI4GY55v2t5sCYm0FOtOXqV5j3GVr++TuPZkteqBeKLOGSdkE0LUv8E0fJT5hcbd6V
- imjiOhtcrki+7JriX/1dlX488JJ2humobMlx0Ww+tCMCgDdMjU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 3:11 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Thu, Feb 10, 2022 at 3:28 PM Christoph Hellwig <hch@lst.de> wrote:
 >
-> asm/shmbuf.h is currently excluded from the UAPI compile-test because of
-> the errors like follows:
+> hmm.h pulls in the world for no good reason at all.  Remove the
+> includes and push a few ones into the users instead.
 >
->     HDRTEST usr/include/asm/shmbuf.h
->   In file included from ./usr/include/asm/shmbuf.h:6,
->                    from <command-line>:
->   ./usr/include/asm-generic/shmbuf.h:26:33: error: field ‘shm_perm’ has incomplete type
->      26 |         struct ipc64_perm       shm_perm;       /* operation perms */
->         |                                 ^~~~~~~~
->   ./usr/include/asm-generic/shmbuf.h:27:9: error: unknown type name ‘size_t’
->      27 |         size_t                  shm_segsz;      /* size of segment (bytes) */
->         |         ^~~~~~
->   ./usr/include/asm-generic/shmbuf.h:40:9: error: unknown type name ‘__kernel_pid_t’
->      40 |         __kernel_pid_t          shm_cpid;       /* pid of creator */
->         |         ^~~~~~~~~~~~~~
->   ./usr/include/asm-generic/shmbuf.h:41:9: error: unknown type name ‘__kernel_pid_t’
->      41 |         __kernel_pid_t          shm_lpid;       /* pid of last operator */
->         |         ^~~~~~~~~~~~~~
->
-> The errors can be fixed by replacing size_t with __kernel_size_t and by
-> including proper headers.
->
-> Then, remove the no-header-test entry from user/include/Makefile.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>

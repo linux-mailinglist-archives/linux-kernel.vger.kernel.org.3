@@ -2,87 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28994B0DD8
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DD54B0DF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241803AbiBJMvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 07:51:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34646 "EHLO
+        id S241827AbiBJMxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 07:53:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241791AbiBJMvM (ORCPT
+        with ESMTP id S236713AbiBJMxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 07:51:12 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C41264D;
-        Thu, 10 Feb 2022 04:51:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=yuPcI0QzBL48BxbAjyu4LlEm62NrnIzpXRoG3bjaCaI=; b=Dw6ucic43KkRADr2FWktACPMlR
-        FLGDDzcs39F0aJ96aAm4RpX0fgVOXLXQtOM28jKeDcyt50+FLIZuW1biwtVAM4C86RTC05pcVu+Rq
-        3aV5SfPtOHGOSdL7/i56HrMMk5HepSbPtsFzxy2gTHwzxX0T/+MogbXUxWgvOahj1qPZFZK47CVU2
-        fr3K+M4hCbNDpBuq5CKvDdMGo8rZQJ3N4VssbvJ4Su480da2Iph3IjHXIiab9dZcGtAjMIU1IiXju
-        IsnmDS3AMV6+YdoBedBjPoI8OetpGEUviQS/LrFe2sQoGyl58xKdHOGYmqKs0ryolGkJsrVfIPXWo
-        KkpaT/sw==;
-Received: from 201-27-34-10.dsl.telesp.net.br ([201.27.34.10] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nI8uU-0000mt-Qs; Thu, 10 Feb 2022 13:50:55 +0100
-Message-ID: <b82f13ea-fc7e-7037-9f3f-5b3cc1d69257@igalia.com>
-Date:   Thu, 10 Feb 2022 09:50:37 -0300
+        Thu, 10 Feb 2022 07:53:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7166D1026;
+        Thu, 10 Feb 2022 04:53:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0ED1061DCC;
+        Thu, 10 Feb 2022 12:53:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCE8AC004E1;
+        Thu, 10 Feb 2022 12:53:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644497627;
+        bh=Sj8DWq94LOKTBM0ypVNljY/FQe/q5/1ffqBT+QjXKsU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nqLLEdK01Ls4G9UhwGNLKFP2ED7XDuwawFhl64Aal59FMAGnTN6bg54QVqVxEp+3n
+         vfdLYXzwTJ9C3myyptw2qrYxUB0EbyRCJL54k4nBWTIkIHJjNDXRguCeTvNJZ+BcBR
+         rDvOeJkfp5v6S39D8dzpoPDPzklGzEIkUCmOEOzs=
+Date:   Thu, 10 Feb 2022 13:53:43 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Cheng Jui Wang <cheng-jui.wang@mediatek.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, stable@vger.kernel.org,
+        wsd_upstream@mediatek.com,
+        Eason-YH Lin <eason-yh.lin@mediatek.com>,
+        Kobe-CP Wu <kobe-cp.wu@mediatek.com>,
+        Jeff-CC Hsu <jeff-cc.hsu@mediatek.com>
+Subject: Re: [PATCH] lockdep: Correct lock_classes index mapping
+Message-ID: <YgUK134eEhCXOsgk@kroah.com>
+References: <20220210105011.21712-1-cheng-jui.wang@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 3/3] panic: Allow printing extra panic information on
- kdump
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>, akpm@linux-foundation.org
-Cc:     Petr Mladek <pmladek@suse.com>, Dave Young <dyoung@redhat.com>,
-        Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        feng.tang@intel.com, siglesias@igalia.com, kernel@gpiccoli.net
-References: <20211109202848.610874-1-gpiccoli@igalia.com>
- <20211109202848.610874-4-gpiccoli@igalia.com> <Yd/qmyz+qSuoUwbs@alley>
- <7c516696-be5b-c280-7f4e-554834f5e472@igalia.com>
- <c10fc4fc-58c9-0b3f-5f1e-6f44b0c190d2@igalia.com>
- <20220209083951.50060e15@canb.auug.org.au>
- <c4f0c53e-cfe4-b693-6af2-df827bc94fa8@igalia.com>
- <20220210102621.250d6741@canb.auug.org.au>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20220210102621.250d6741@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210105011.21712-1-cheng-jui.wang@mediatek.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2022 20:26, Stephen Rothwell wrote:
-> [...]
->> Hi Stephen, thanks! I'm still seeing this patch over there, though - I'm
->> not sure if takes a while to show up in the tree...
+On Thu, Feb 10, 2022 at 06:50:11PM +0800, Cheng Jui Wang wrote:
+> A kernel exception was hit when trying to dump /proc/lockdep_chains after
+> lockdep report "BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!":
 > 
-> Andrew did another mmotm release which put it back in.  I have removed
-> it again for today.
+> Unable to handle kernel paging request at virtual address 00054005450e05c3
+> ...
+> 00054005450e05c3] address between user and kernel address ranges
+> ...
+> pc : [0xffffffece769b3a8] string+0x50/0x10c
+> lr : [0xffffffece769ac88] vsnprintf+0x468/0x69c
+> ...
+>  Call trace:
+>   string+0x50/0x10c
+>   vsnprintf+0x468/0x69c
+>   seq_printf+0x8c/0xd8
+>   print_name+0x64/0xf4
+>   lc_show+0xb8/0x128
+>   seq_read_iter+0x3cc/0x5fc
+>   proc_reg_read_iter+0xdc/0x1d4
 > 
->> Notice this request is only for patch 3/3 in this series - patches 1 and
->> 2 are fine, were reviewed and accepted =)
+> The cause of the problem is the function lock_chain_get_class() will
+> shift lock_classes index by 1, but the index don't need to be shifted
+> anymore since commit 01bb6f0af992 ("locking/lockdep: Change the range of
+> class_idx in held_lock struct") already change the index to start from
+> 0.
 > 
-> Understood.
+> The lock_classes[-1] located at chain_hlocks array. When printing
+> lock_classes[-1] after the chain_hlocks entries are modified, the
+> exception happened.
+> 
+> The output of lockdep_chains are incorrect due to this problem too.
+> 
+> Fixes: f611e8cf98ec ("lockdep: Take read/write status in consideration when generate chainkey")
+> 
+> Signed-off-by: Cheng Jui Wang <cheng-jui.wang@mediatek.com>
+> ---
+>  kernel/locking/lockdep.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+> index 4a882f83aeb9..f8a0212189ca 100644
+> --- a/kernel/locking/lockdep.c
+> +++ b/kernel/locking/lockdep.c
+> @@ -3462,7 +3462,7 @@ struct lock_class *lock_chain_get_class(struct lock_chain *chain, int i)
+>  	u16 chain_hlock = chain_hlocks[chain->base + i];
+>  	unsigned int class_idx = chain_hlock_class_idx(chain_hlock);
+>  
+> -	return lock_classes + class_idx - 1;
+> +	return lock_classes + class_idx;
+>  }
+>  
+>  /*
+> @@ -3530,7 +3530,7 @@ static void print_chain_keys_chain(struct lock_chain *chain)
+>  		hlock_id = chain_hlocks[chain->base + i];
+>  		chain_key = print_chain_key_iteration(hlock_id, chain_key);
+>  
+> -		print_lock_name(lock_classes + chain_hlock_class_idx(hlock_id) - 1);
+> +		print_lock_name(lock_classes + chain_hlock_class_idx(hlock_id));
+>  		printk("\n");
+>  	}
+>  }
+> -- 
+> 2.18.0
 > 
 
-Thanks a bunch! So it seems Andrew needs to remove patch 3 from mmotm right?
+<formletter>
 
-Cheers,
+This is not the correct way to submit patches for inclusion in the
+stable kernel tree.  Please read:
+    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+for how to do this properly.
 
-
-Guilherme
+</formletter>

@@ -2,106 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8E44B14A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:55:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF96A4B14B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244452AbiBJRyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 12:54:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54884 "EHLO
+        id S245396AbiBJRzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 12:55:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245379AbiBJRyd (ORCPT
+        with ESMTP id S240671AbiBJRzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 12:54:33 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBDF1A8;
-        Thu, 10 Feb 2022 09:54:34 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id v13-20020a17090ac90d00b001b87bc106bdso9309251pjt.4;
-        Thu, 10 Feb 2022 09:54:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:subject:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=j6VklXNfL6k5eUjJlLYz2A3oBYRWOpdX7+tGhrBhGFU=;
-        b=aH8DDobGL9QfTU+sukYmgW9PVhyOW/T75zs3RVNVdrYT/wdOo6WkNKEh7/eyXJ4alR
-         yMdzB+sg9YqY0fyckhW1AeedfI5Kl1F8YodJAfdLccvtd1u6zdMx8q7ry/6ju4t+DHv+
-         k7fqX4mU3L1dM9DVb4pEk4XfvW96rnFI8CNX+NiKlSGj7+7ERpHNdS7ckA1J7qqOSEID
-         CDLyr8kj3sUhPx2WC6MDvqUUyotFaIYlKFd0cyZEQ3ZXPUbdiR5z4Rkjzc2m9AJS1kAn
-         jg8G0WrmLiRQHT5t91/pYc2niq5nrAyF9WjA2FkhwtYZ19Y5W2YsFhqpA8VrosUPa5v5
-         M92g==
+        Thu, 10 Feb 2022 12:55:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03F4225D1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:55:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644515753;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2pgYKgbH/aywvATf7zLUXZmomBX6TKWirDhHOAVvfKM=;
+        b=FuxKBNoyOSvtwCeB9aqGl1JjZ3/8hSHfpudh+RSYLOMO3KB0ZWkym/2YcB/e31YLk7wxsn
+        Fo+ZFsaUwU8knr+Jrdrs6C9DvizR7/skomz7PNXpUQJK+Pbw51YgktPeUpOF8Ycx8T2bAl
+        9/fcXyTpXvZY5TORdRfs3fvr5sypxBA=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-551-HrE9gddpOUaT038DLWrC_Q-1; Thu, 10 Feb 2022 12:55:51 -0500
+X-MC-Unique: HrE9gddpOUaT038DLWrC_Q-1
+Received: by mail-wm1-f70.google.com with SMTP id l20-20020a05600c1d1400b0035153bf34c3so4672029wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:55:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=j6VklXNfL6k5eUjJlLYz2A3oBYRWOpdX7+tGhrBhGFU=;
-        b=z4YJh8jB5Uz86ocHU18FIjDlrRPm7KRw03bdnVQIbT2qKPB8veXsytW23c7uzu0pyZ
-         bFIEaLFzqhRZQMBTWNwi6PaHn2GOP7acjGL3AGcQtq5jeU8tRv165fAPEam6bo8ti+mX
-         DrTuua3p/WhI1NMorC3+xEaFvzqa+hRD9RCHJ7V4tWONz+Bo3jmxDosgwZvwsJ/5xZ2b
-         oJGLM35TGmHCqAd0/nROhV00lb1QHPLDpn0+7DPT9Yttu5HPPfKv6IreI4G1fGngwixI
-         stYUNvqChugxjHqagUIKLg8+Ye+kf5YW9KZPNgrrKpc9Ow3jV7C/TA4FxJRy3ngZOSVg
-         yPLw==
-X-Gm-Message-State: AOAM530lNNlAb0KB9ChYO6HJFWDYIIItxKl9tgCD3KAsd+6RVgmfiNrg
-        gOa7SsE81kC1S/9yapLoPqI=
-X-Google-Smtp-Source: ABdhPJyqA0PRFak1ycm5kPbDCqBDwIMXwRmH7xo1hcQnl8URdvZxgOXGg1a2XhU5d1mLAJn3gaImig==
-X-Received: by 2002:a17:90b:a06:: with SMTP id gg6mr4010128pjb.153.1644515674061;
-        Thu, 10 Feb 2022 09:54:34 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id q2sm17465582pgt.47.2022.02.10.09.54.29
+        bh=2pgYKgbH/aywvATf7zLUXZmomBX6TKWirDhHOAVvfKM=;
+        b=3TdhQLu0siixAxFhVP5BLCCRl9wO9r8GDywrv2ykKvi5I7ZSPlp74teYaX3rqk8sn3
+         HEcMz4joEEfmvtMe20PwkalP2jpK1U8G1BZ17Rzfjpt942vCupvfYnxR4zSp7PvbnLDL
+         5zfQaFOGHgQFOLL83aWGH1OO9/aXSTTC9Wm8tOzDAew0zze3IgAjjNnwvYiA5XskaAdo
+         dDL1XUqKR76yv3vHt1X4ji62hA+hvo1k06wl4/2qFYmgRDn7BRGt8ysrmcazyifYT6NE
+         fAIeBMzDV1yHm420JaTot5PY1IvlhsqB0tq25XGziVGnoigfYrqbI4ZeQCFBhoFw84bL
+         uhgw==
+X-Gm-Message-State: AOAM532mIPnVoR3ojbLBLioj2NdGHpcB+1GTiqZCSA6f6pRofnNEhch5
+        l1zcxZ6DSFuLtdtsBZpftTuxc1g9fDJI9PjpWovFKrRjMTpCjGcZvN3UJzoEVnCqb6GNv645v5T
+        iN2aVw0luYd9P/KvrmsZ/x8eT
+X-Received: by 2002:a05:600c:501f:: with SMTP id n31mr3110907wmr.141.1644515750096;
+        Thu, 10 Feb 2022 09:55:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzztOtP2nPNM37UZbRdKgmrkAzYQV0Pr1R7MI99JcWycnjK/AG6TWJyvSRPiuS1u8x26j6AYA==
+X-Received: by 2002:a05:600c:501f:: with SMTP id n31mr3110886wmr.141.1644515749879;
+        Thu, 10 Feb 2022 09:55:49 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id p8sm21716128wrr.16.2022.02.10.09.55.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 09:54:33 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH 5.15 0/5] 5.15.23-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220209191249.980911721@linuxfoundation.org>
-Message-ID: <93bb31dc-bd3f-21b6-eb35-4ee087b667e8@gmail.com>
-Date:   Thu, 10 Feb 2022 09:54:28 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 10 Feb 2022 09:55:49 -0800 (PST)
+Message-ID: <e910fc2f-2acb-b81d-4b8c-532562952aeb@redhat.com>
+Date:   Thu, 10 Feb 2022 18:55:47 +0100
 MIME-Version: 1.0
-In-Reply-To: <20220209191249.980911721@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 0/7] drm: Add driver for Solomon SSD130X OLED displays
 Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>
+References: <20220209090314.2511959-1-javierm@redhat.com>
+ <CAMuHMdVs750iE=kP1vabwgsGOb8sHc8aC5k=HwCU32CURnYktw@mail.gmail.com>
+ <CAMuHMdVKmfOAdTG70KF+eAw3noXHSGCPyGjw3cSVyQOvzUafhQ@mail.gmail.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <CAMuHMdVKmfOAdTG70KF+eAw3noXHSGCPyGjw3cSVyQOvzUafhQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Geert,
 
+On 2/10/22 18:06, Geert Uytterhoeven wrote:
+> On Wed, Feb 9, 2022 at 1:19 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>> On Wed, Feb 9, 2022 at 10:03 AM Javier Martinez Canillas
+>> <javierm@redhat.com> wrote:
+>>> This patch series adds a DRM driver for the Solomon OLED SSD1305, SSD1306,
+>>> SSD1307 and SSD1309 displays. It is a port of the ssd1307fb fbdev driver.
+>>
+>> [...]
+> 
+>> The logo is not shown, even when I create a 16-color or 224-color
+>> version of the small monochrome logo I'm using.
+> 
+> My mistake, I messed up the hook-up, causing it to pick a different
+> logo that was too large to be displayed.
+>
 
-On 2/9/2022 11:14 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.23 release.
-> There are 5 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.23-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Great, thanks for all the testing.
+ 
+> Of course it's using the 224-color logo reduced to monochrome instead
+> of the real monochrome logo, as fbcon thinks it's running on XRGB8888.
+>
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Right. Once the patch lands, I'll look at wiring up the needed support in
+DRM for the drivers to be able to advertise 8-bit grayscale and monochrome
+to avoid the unnecessary conversions and to have feature parity with fbdev.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+But I just wanted to do it incrementally and first port to DRM as first step.
+ 
+Best regards,
 -- 
-Florian
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

@@ -2,73 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8764B14CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0854B14CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:00:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245463AbiBJSAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 13:00:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59038 "EHLO
+        id S245469AbiBJSAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 13:00:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243410AbiBJSAB (ORCPT
+        with ESMTP id S239511AbiBJSAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 13:00:01 -0500
-X-Greylist: delayed 102 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 09:59:59 PST
-Received: from mxout04.lancloud.ru (mxout04.lancloud.ru [45.84.86.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E158DF2D;
-        Thu, 10 Feb 2022 09:59:59 -0800 (PST)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 00C3F20491FF
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: [PATCH] MAINTAINERS: specify IRC channel for Renesas ARM64 port
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        <linux-renesas-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Magnus Damm <magnus.damm@gmail.com>
-Organization: Open Mobile Platform
-Message-ID: <6c08e98f-c7bb-9d95-5032-69022e43e39b@omp.ru>
-Date:   Thu, 10 Feb 2022 20:59:57 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 10 Feb 2022 13:00:19 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF373F5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:00:19 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id k25so17231954ejp.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:00:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VyiRrCTCvD3kSlcteklEwF1Z7ulIFO497MFIShZC2EQ=;
+        b=lDJDV3gk7vJd8epZow77aLEhctdFJiMdWg4bPXyRqV+P8SCznLTjg9qaMrl4uBKi4W
+         FIa5xSqiTkfMTDDaQX3a6eOR3PULr05leKgBb7dtj1Z9aBTmqdnSEHwpCDlCePcizdIr
+         RL4deMl0WEaY0Jh1Ab9JXnycY4MaE3/yjJweZ3uE1EswISDRfgGvftKiIcyY4+H4cJmx
+         ksSJIN7XeO+LqnG802F/TkZsEYNXr+GmnNkQS0ZABy7zH5ImLkTkhCeBnSYlJHR3czCM
+         ubCKLT2cdNKaVcXthXtuVbskMddyIIhCb3KdDg7PxHdghxxP8+GQpQM+WnSRcdvK6IOK
+         wuSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VyiRrCTCvD3kSlcteklEwF1Z7ulIFO497MFIShZC2EQ=;
+        b=419pYnMGGb9Vv20okCDNRX8msXiuesbQajmZIcnR6biQzzuOPSgDEwfy9EK4o/FAoa
+         6CQzuYaxE9iaoO0Ic8nFNpPi3IP9JjjPcTKSbP9GEzrlr7d39gamTeXkXgi/BatwEjI0
+         HYLr9RvEhDEUSUH/h4dgKz9TGDn/xCGzxUo8sSCw+kqFcYahXK4F6Pcw7MVzvAix/DfN
+         HNHYypVgdZ6fw52yyhrQp7lBA1Q/1nJjbMgFEgkayGFOsKmDPvDLIE4RkdA4utxTFk46
+         NHeH4pvjgCJawsuYwAu0G4+3JNlawponUqUSk/sRNPSudRlfK6BrEnl9q0+NwdFIwmwP
+         O6uA==
+X-Gm-Message-State: AOAM5329OA0DUZeDn4erd7pBOCD4KSaJ03J+Bbx6AuPd/qj+bZFLU1qR
+        vjrKJUBn1jfKGpIP1yu/VC1mcuaKgxPjgUuWGMkWDw==
+X-Google-Smtp-Source: ABdhPJxJuyhh7OCTVxsg1XD+thnzuteOezciR0odv+RtncFHrFra5L3HMOaU0zxHkSa4CRu6l4IZA/I4m8Gi0BaaQrw=
+X-Received: by 2002:a17:906:7948:: with SMTP id l8mr7308424ejo.636.1644516018273;
+ Thu, 10 Feb 2022 10:00:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20211116093833.245542-1-shreeya.patel@collabora.com> <874k56znix.fsf@collabora.com>
+In-Reply-To: <874k56znix.fsf@collabora.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 10 Feb 2022 19:00:07 +0100
+Message-ID: <CAMRc=MdByxO3+hJruvUkULtXAaB7aWewTd=Wv0MbWyX2vykdjA@mail.gmail.com>
+Subject: Re: [PATCH v4] gpio: Return EPROBE_DEFER if gc->to_irq is NULL
+To:     Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Shreeya Patel <shreeya.patel@collabora.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        wsa@kernel.org, kernel@collabora.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        kbuild test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Renesas ARM ports do have their own IRC channel #renesas-soc (initially
-created on Freenode, then moved to Liberta.Chat).  Hopefully, adding it to
-this file will attract more people... :-)
+On Thu, Feb 10, 2022 at 5:36 PM Gabriel Krisman Bertazi
+<krisman@collabora.com> wrote:
+>
+> Shreeya Patel <shreeya.patel@collabora.com> writes:
+>
+> > We are racing the registering of .to_irq when probing the
+> > i2c driver. This results in random failure of touchscreen
+> > devices.
+> >
+> > Following errors could be seen in dmesg logs when gc->to_irq is NULL
+> >
+> > [2.101857] i2c_hid i2c-FTS3528:00: HID over i2c has not been provided an Int IRQ
+> > [2.101953] i2c_hid: probe of i2c-FTS3528:00 failed with error -22
+> >
+> > To avoid this situation, defer probing until to_irq is registered.
+> >
+> > This issue has been reported many times in past and people have been
+> > using workarounds like changing the pinctrl_amd to built-in instead
+> > of loading it as a module or by adding a softdep for pinctrl_amd into
+> > the config file.
+> >
+> > BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=209413
+> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+>
+> Hi guys,
+>
+> This seems to not have reached the Linus tree on 5.17.  If I'm not
+> mistaken, it also hasn't reached linux-next as of today. Is there
+> anything I'm missing here?
+>
+> This is required to prevent spurious probe crashes of devices like this
+> FocalTech touchscreen, FT3528, when using pinctrl-amd. We've been
+> carrying it downstream for quite a while.
+>
+> Thanks,
+>
+> --
+> Gabriel Krisman Bertazi
 
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Hi Gabriel!
 
----
-This patch is against the 'next' branch of Geert Uytterhoeven's
-'renesas-devel.git' repo.
+My email address changed in September, that's why I didn't see the
+email you sent in November to my old one.
 
- MAINTAINERS |    1 +
- 1 file changed, 1 insertion(+)
+gpiod_to_irq() can be used in context other than driver probing, I'm
+worried existing users would not know how to handle it. Also: how come
+you can get the GPIO descriptor from the provider but its interrupts
+are not yet set up?
 
-Index: renesas-devel/MAINTAINERS
-===================================================================
---- renesas-devel.orig/MAINTAINERS
-+++ renesas-devel/MAINTAINERS
-@@ -2525,6 +2525,7 @@ ARM/RENESAS ARM64 ARCHITECTURE
- M:	Geert Uytterhoeven <geert+renesas@glider.be>
- M:	Magnus Damm <magnus.damm@gmail.com>
- L:	linux-renesas-soc@vger.kernel.org
-+C:	irc://irc.libera.chat/renesas-soc
- S:	Supported
- Q:	http://patchwork.kernel.org/project/linux-renesas-soc/list/
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git next
+Bart

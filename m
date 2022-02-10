@@ -2,100 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52794B096C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A99A44B0976
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:29:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238497AbiBJJ0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:26:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49712 "EHLO
+        id S238664AbiBJJ3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:29:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiBJJ02 (ORCPT
+        with ESMTP id S238558AbiBJJ3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:26:28 -0500
-Received: from qq.com (smtpbg480.qq.com [59.36.132.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EE91039
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:26:27 -0800 (PST)
-X-QQ-mid: bizesmtp7t1644485113tmirrnd0j
-Received: from localhost.localdomain (unknown [123.114.60.34])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 10 Feb 2022 17:25:11 +0800 (CST)
-X-QQ-SSF: 01400000002000B0L000B00A0000000
-X-QQ-FEAT: F3yR32iATbhAQRozjq/gd6A+ycs4suDR+IjPdybesPlhivT2B/iKjlYafIKa1
-        1gbjBK7a9XUT5dF0hcYVcCXggTGbuooygvM7JwTfr5hDTSLTs1M+bPZWXDEIjT9maGOFsO2
-        Co+dQ9S+7O19b0DtaYh2STMxy/YXPSAaiqGb1JSqozfIZUrNsVIu5ie6X5m3swdJRFEFm8I
-        CRSo+S4fBfh8iTkloFw/8EA5YjNl2CWtfzipZU7mlVZhPf6tKR6y2I0X45b4XaohQCpRs+h
-        nUkqwkRQTMyKkQauyWjsKMd41VACYmGI6ljvdtW3Z2jCs3xS4KEAqbjrFdg1RDr4AOTWgMJ
-        ApMVPbz98T0rYwAWCDD8+LcTFeTcQ==
-X-QQ-GoodBg: 2
-From:   zhaoxiao <zhaoxiao@uniontech.com>
-To:     f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
-        nsaenz@kernel.org
-Cc:     linux-i2c@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        zhaoxiao <zhaoxiao@uniontech.com>
-Subject: [PATCH] i2c: bcm2835: Use platform_get_irq() to get the interrupt
-Date:   Thu, 10 Feb 2022 17:25:06 +0800
-Message-Id: <20220210092506.21251-1-zhaoxiao@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Thu, 10 Feb 2022 04:29:04 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EDA1089
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:29:06 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id o8-20020a056e0214c800b002bc2f9cffffso3571431ilk.8
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:29:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=lbZClnawL85i6y/f1XZKEH3U2806L2hF7lFn0+Ro7Ew=;
+        b=SmwGTsRJmb9NNN5twJxnWmKFX3XJ0OTZ7M5dcMG2qi6Px7dEvfnDpE89abLKQXaZqt
+         li3JtXG0cW3ndTRrCxE1q+RACZ99wLv3Bj0EUABezDEj9vkP2OwwRcmKuutVHWALDXQx
+         dFDQYpT6ymzN6XILXxwAACmLHkc+QT//D3/lbOkrBwDoPxTjpu4/bFE6X9HP7/MLIl/b
+         2+0bmG39nceXi42VmnPtdS2PTOB8+9abP1cMVB2w6sdmgIfIZHMspdMQJk6QD5nKv00h
+         GNNEIj1gJUbhAbQz8V2wx45mZR/dG4YnbKXswzZER5t6/lquAeZe7R0D1ZvAkF/13wWe
+         knHQ==
+X-Gm-Message-State: AOAM5306hjtCQTqgEYcA2B2SbgU6TsN/D0R+AYH7f09POsQ6VgL0VfZp
+        5kHCFxm2Kjkd2/ODOQryIXKPgzERklmvtN+eod9b++eIwsAe
+X-Google-Smtp-Source: ABdhPJx22vdsd9ZwS5xcJlnZq2r7nAA5BqmnE9xXQOkXPLW5oeCWMIkcNmqMItDy/Lg+pycfhLQYxawcp7pQ1kDwS81fqOWh7+0x
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:aa0a:: with SMTP id r10mr3655553jam.246.1644485345948;
+ Thu, 10 Feb 2022 01:29:05 -0800 (PST)
+Date:   Thu, 10 Feb 2022 01:29:05 -0800
+In-Reply-To: <000000000000a16ad7059cbcbe43@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e238bf05d7a69450@google.com>
+Subject: Re: [syzbot] WARNING in bpf_warn_invalid_xdp_action
+From:   syzbot <syzbot+8ce4113dadc4789fac74@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, andriin@fb.com, ast@kernel.org,
+        bpf@vger.kernel.org, corbet@lwn.net, daniel@iogearbox.net,
+        davem@davemloft.net, dsahern@gmail.com, dvyukov@google.com,
+        eric.dumazet@gmail.com, hawk@kernel.org, john.fastabend@gmail.com,
+        kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, toke@redhat.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypassed the hierarchical setup and messed up the
-irq chaining.
+syzbot suspects this issue was fixed by commit:
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq().
+commit 2cbad989033bff0256675c38f96f5faab852af4b
+Author: Paolo Abeni <pabeni@redhat.com>
+Date:   Tue Nov 30 10:08:06 2021 +0000
 
-Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
----
- drivers/i2c/busses/i2c-bcm2835.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+    bpf: Do not WARN in bpf_warn_invalid_xdp_action()
 
-diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
-index 37443edbf754..dfc534065595 100644
---- a/drivers/i2c/busses/i2c-bcm2835.c
-+++ b/drivers/i2c/busses/i2c-bcm2835.c
-@@ -402,7 +402,7 @@ static const struct i2c_adapter_quirks bcm2835_i2c_quirks = {
- static int bcm2835_i2c_probe(struct platform_device *pdev)
- {
- 	struct bcm2835_i2c_dev *i2c_dev;
--	struct resource *mem, *irq;
-+	struct resource *mem;
- 	int ret;
- 	struct i2c_adapter *adap;
- 	struct clk *mclk;
-@@ -452,12 +452,9 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (!irq) {
--		dev_err(&pdev->dev, "No IRQ resource\n");
--		return -ENODEV;
--	}
--	i2c_dev->irq = irq->start;
-+	i2c_dev->irq = platform_get_irq(pdev, 0);
-+	if (i2c_dev->irq < 0)
-+		return i2c_dev->irq;
- 
- 	ret = request_irq(i2c_dev->irq, bcm2835_i2c_isr, IRQF_SHARED,
- 			  dev_name(&pdev->dev), i2c_dev);
--- 
-2.20.1
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10d50baa700000
+start commit:   b3c8e0de473e Merge branch '40GbE' of git://git.kernel.org/..
+git tree:       net
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1a86c22260afac2f
+dashboard link: https://syzkaller.appspot.com/bug?extid=8ce4113dadc4789fac74
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=113c8a3bb00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16eb4307b00000
 
+If the result looks correct, please mark the issue as fixed by replying with:
 
+#syz fix: bpf: Do not WARN in bpf_warn_invalid_xdp_action()
 
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

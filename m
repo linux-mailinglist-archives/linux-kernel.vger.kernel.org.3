@@ -2,105 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C279A4B150C
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59BEF4B150F
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:14:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245606AbiBJSOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 13:14:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41014 "EHLO
+        id S245614AbiBJSOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 13:14:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239730AbiBJSOE (ORCPT
+        with ESMTP id S245607AbiBJSOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 13:14:04 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A02391
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:14:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644516845; x=1676052845;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cjWNlMS7wsBHr1pOlccUMjg3bQrDdW47IbfyLA88hpY=;
-  b=OxrAIhutNUp3biQtQHekxN9T/MOb6uwZ9bxBTOg/pTs1t3WLJx/LjlGT
-   Q/GV3CsV7P8vA9wP6nIAxltIi8m0B4OxUxCpvu5iovZowYoEINjM2CNaR
-   K/AG1xgk3fFGnOpGeXpNUUN7QLb+YUKpYOeJzZwnXPSgK53aOg2SLvMCQ
-   rvSe1l4Of8OiIldAQ9E6oRwlgSvPSNSae8yA4bYlynk2NbWfCsAHUrC9D
-   0TGyfvTWZM5TOL48sJfyh1HlYetNpDAcEx0p5YUD+5jcFuJghptI3H5qm
-   prmnhfIuTz9+fH95aEax/szs+KoypM/w1BcOdI4Ff3gIIXdJBKa3DGD7t
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="236958974"
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="236958974"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 10:14:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="586040968"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 10 Feb 2022 10:14:02 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nIDxC-0003Zn-7o; Thu, 10 Feb 2022 18:14:02 +0000
-Date:   Fri, 11 Feb 2022 02:13:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [csky-linux:riscv_compat_v6_svpbmt-v6 10/35]
- arch/riscv/kernel/cpufeature.c:185:6: warning: variable 'cpu_apply_feature'
- set but not used
-Message-ID: <202202110204.3m29JCRv-lkp@intel.com>
+        Thu, 10 Feb 2022 13:14:37 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BEC1167
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:14:38 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id p11so5040471ils.1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:14:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=gXG8tJVzrMFq4C8hId95PJlogUK12YK3EnPowhKGkb4=;
+        b=ZIXzPvySnYF7ILs4xx3XU4BBL0GgywKstA+ZKJv4g1ICO/A2UbZScYJFtDNaG0R1NM
+         wynZtHnzJx2nKGOX+kHf796Uf3T3PSeTMqmdDocutHQY1PYtrO6tVWd2f+Rtc0Z7NhfO
+         gQA1QrxQ22M1iunv2zNRNRlF0hSVM0/W3mJXM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=gXG8tJVzrMFq4C8hId95PJlogUK12YK3EnPowhKGkb4=;
+        b=POQbW16MlLh6L+6xjUax2lCKiN58fjAaa08LSQG0CL5DwzK+nYdw6M01t7hyBdGdfc
+         w0SHvq7J2I7brk1JiHhI2fjuUgyHMyOgHbTOxelCjLQXVzKz6+jPKmjatYjAcBydqhqb
+         lnEed9kC2nQ0/ErahMpxYe+Ue5zkq1aAqXgBZsUN5KjrHuHShdbxRckd4T9852n03X8Q
+         ZqhcueAlJmLCTlu9CYxXq5dD7kUvKiJpQ+k/exP1vCH62r3tRTQTmvtWOIjMvozEyPfC
+         Kr9b/xTJyJ+zuJQEYi07tnROpq029pvZQzSmzxXECG5TM1rYXjTqtRHvH89yuY7NARWE
+         ijLA==
+X-Gm-Message-State: AOAM530tPT8wFPnxEr4lzLJZYJYbAD0JjkBg20Kn9bAV4V4I+KcFFGi4
+        OGVspzEiITEMyS+uhKKLnSbzsAE34NjoBw==
+X-Google-Smtp-Source: ABdhPJxzqCXnyKU0rVKea/h/aM2EYzsEG28YeSvqPRtlrTz2ig8+angmY+Yv31ftwnhbSZRR4RGbMA==
+X-Received: by 2002:a05:6e02:19c6:: with SMTP id r6mr1338659ill.306.1644516877448;
+        Thu, 10 Feb 2022 10:14:37 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id i9sm2069385ilm.74.2022.02.10.10.14.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 10:14:37 -0800 (PST)
+Subject: Re: [PATCH] selftests/seccomp: Fix seccomp failure by adding missing
+ headers
+To:     Sherry Yang <sherry.yang@oracle.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+References: <20220202201118.13933-1-sherry.yang@oracle.com>
+ <203db09a-b048-1c1b-6609-d91e51e3c2f7@linuxfoundation.org>
+ <A8A651FC-37A5-4716-888B-F141E7241003@oracle.com>
+ <202202031219.792E9AFF@keescook>
+ <C340461A-6FD2-440A-8EFC-D7E85BF48DB5@oracle.com>
+ <b908237b-63ad-ff10-8d89-540d2cab842e@linuxfoundation.org>
+ <6FCDF584-C765-4344-A851-E623B2FCB9A6@oracle.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <9fb71ee9-37c8-575c-0ca7-5a849403f7d9@linuxfoundation.org>
+Date:   Thu, 10 Feb 2022 11:14:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <6FCDF584-C765-4344-A851-E623B2FCB9A6@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/c-sky/csky-linux riscv_compat_v6_svpbmt-v6
-head:   54acb36c958fc990cc59889f79c8ddca7386c295
-commit: 9a8cf89570e893738c501551591b03bd868c825c [10/35] riscv: add cpufeature handling via alternatives
-config: riscv-randconfig-r042-20220208 (https://download.01.org/0day-ci/archive/20220211/202202110204.3m29JCRv-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project aa845d7a245d85c441d0bd44fc7b6c3be8f3de8d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/c-sky/csky-linux/commit/9a8cf89570e893738c501551591b03bd868c825c
-        git remote add csky-linux https://github.com/c-sky/csky-linux
-        git fetch --no-tags csky-linux riscv_compat_v6_svpbmt-v6
-        git checkout 9a8cf89570e893738c501551591b03bd868c825c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/ arch/riscv/mm/ drivers/base/firmware_loader/ drivers/pci/ drivers/target/ fs/erofs/ fs/pstore/ kernel/ mm/
+On 2/10/22 11:08 AM, Sherry Yang wrote:
+> Yeah, -I works, but just with some compiler warnings.
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+warnings aren't good. Kees, hope you are okay with this.
 
-All warnings (new ones prefixed by >>):
+> If warnings are acceptable, do I need to send V2 patch with -I?
+> 
+> Sherry
+> 
 
->> arch/riscv/kernel/cpufeature.c:185:6: warning: variable 'cpu_apply_feature' set but not used [-Wunused-but-set-variable]
-           u32 cpu_apply_feature = 0;
-               ^
-   1 warning generated.
+No top posting please. No need to fix it to -I - please send v2
+I can't find your patch on lore - not sure why.
 
+Please cc linux-kselftest and linux-kernel@vger.kernel.org
 
-vim +/cpu_apply_feature +185 arch/riscv/kernel/cpufeature.c
+Also run scripts/get_maintainer.pl for a complete list of recipients
+for this patch.
 
-   180	
-   181	void riscv_cpufeature_patch_func(struct alt_entry *begin, struct alt_entry *end,
-   182					 unsigned int stage)
-   183	{
-   184		u32 cpu_req_feature = cpufeature_probe(stage);
- > 185		u32 cpu_apply_feature = 0;
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+thanks,
+-- Shuah

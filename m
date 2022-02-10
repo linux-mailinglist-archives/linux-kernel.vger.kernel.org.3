@@ -2,103 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A64714B0205
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:24:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 367F14B01E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:21:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbiBJBXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 20:23:47 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:44400 "EHLO
+        id S231133AbiBJBUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 20:20:42 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:37442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231857AbiBJBXm (ORCPT
+        with ESMTP id S229469AbiBJBUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:23:42 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650931EC7D
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 17:23:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644456220; x=1675992220;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3TVWAm9LlhlLa2IkCVU8wnRmJGrW+1uk41RrCt4p/Tc=;
-  b=nIveuFRjgR54ayuDiKg1FgrmA2M6tKaD/CUQGoG1yYChZZzEqGEfDYzt
-   +SnpZkf6dVZMf9lzR7Cp8/V/vsrgKjapPuwNtmneUShkNqkcJZs2WS5Hg
-   bi/TT9Nx1iMaCVtcmmYZIjWMXhtyQieE5epfa2CQSMoFgsaWILmB3N2rM
-   ILoLDMyib7eF5tH1DclwpLKvnekhLd8GuoT4d1VkyTItTsC+GUM+X5lgr
-   MOWAR5gnuqCgfDaCT2PXZu1Wykg7Q0jKiF3KmcIl336oB99QyipfqYWar
-   E5BKL3lUIG44ScRU41CUytJpDYz7F1bJWlI1kMGCT6td9UklYhQT+fr8g
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="273923635"
-X-IronPort-AV: E=Sophos;i="5.88,357,1635231600"; 
-   d="scan'208";a="273923635"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 16:52:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,357,1635231600"; 
-   d="scan'208";a="678968070"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Feb 2022 16:52:21 -0800
-Message-ID: <27fbcb02-4f13-3377-eadd-e689ce063348@linux.intel.com>
-Date:   Thu, 10 Feb 2022 08:51:08 +0800
+        Wed, 9 Feb 2022 20:20:39 -0500
+Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746072629;
+        Wed,  9 Feb 2022 17:20:38 -0800 (PST)
+Received: from conssluserg-02.nifty.com ([10.126.8.81])by condef-07.nifty.com with ESMTP id 21A0sXbt021538;
+        Thu, 10 Feb 2022 09:54:33 +0900
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 21A0s7YW021042;
+        Thu, 10 Feb 2022 09:54:08 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 21A0s7YW021042
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1644454448;
+        bh=GzF9d1CPJ6YQKFkbbGBhv3+4+f8c6oA7UoFBRscMx1o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=xvGvf1XYqFFIJt4Otcj/oDt5pe8gRh6D7SbUOuChUJOgUD5sptvKTvlrK7lDb2hqp
+         NBb0T5F/mj1Zf43Pke58lSfGTU2XaLdZ0HuNo5u6a8xGDLl7i04ApNkv0WijbKup3w
+         +9wZrS6yaJu4vMSopyBIppW8ic52RbYqR9DpZmjqFgRUiy7jhP0jxb/IC/302wis/I
+         GG4RW0/n6aQkhzwUtDXdE6e5KrAXFAIm+cfnhajL2izuqSAxt/df8wFRFWlFh59H9I
+         HJgjz8PmFdnNEU2RmJEq2l+kQF+0mT3HQV8rOzlplllBR2PRCyhJ1nn7AnabZNLobs
+         pofTxmTSjMfNw==
+X-Nifty-SrcIP: [209.85.216.47]
+Received: by mail-pj1-f47.google.com with SMTP id c8-20020a17090a674800b001b91184b732so4448996pjm.5;
+        Wed, 09 Feb 2022 16:54:08 -0800 (PST)
+X-Gm-Message-State: AOAM533OpxsU4JIrDxZI5PJt4Bd76G/Jbc632UaLIAWf0uqFECOrh08V
+        WKzMTdrpbl8ZfhbMcZd4zRuAEhECJyD+lyX+u14=
+X-Google-Smtp-Source: ABdhPJxYNdvbvsgfJh3s8wRrHOxkb+ZVxnQom67+weOLsIwyXbGJaZTgP6KgRQYD3yXAWw8K9ul72rUx61a9pv7ueFo=
+X-Received: by 2002:a17:903:22c5:: with SMTP id y5mr2853067plg.99.1644454447226;
+ Wed, 09 Feb 2022 16:54:07 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     baolu.lu@linux.intel.com,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 08/10] iommu: Remove unused argument in
- is_attach_deferred
-Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>
-References: <20220208012559.1121729-1-baolu.lu@linux.intel.com>
- <20220208012559.1121729-9-baolu.lu@linux.intel.com>
- <290a89f0-8318-6130-468c-6412add62cfb@arm.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <290a89f0-8318-6130-468c-6412add62cfb@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220208062618.1869210-1-masahiroy@kernel.org>
+In-Reply-To: <20220208062618.1869210-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 10 Feb 2022 09:53:32 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASojfnOaAmgwwCsA9J-nhYtRzJx8AKmy8OpRm50uWfegQ@mail.gmail.com>
+Message-ID: <CAK7LNASojfnOaAmgwwCsA9J-nhYtRzJx8AKmy8OpRm50uWfegQ@mail.gmail.com>
+Subject: Re: [PATCH] kconfig: fix missing fclose() on error paths
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     Ryan Cai <ycaibb@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/22 9:52 PM, Robin Murphy wrote:
->> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
->> index 2b5f4e57a8bb..80f1294be634 100644
->> --- a/drivers/iommu/intel/iommu.c
->> +++ b/drivers/iommu/intel/iommu.c
->> @@ -5052,8 +5052,7 @@ intel_iommu_dev_disable_feat(struct device *dev, 
->> enum iommu_dev_features feat)
->>       }
->>   }
->> -static bool intel_iommu_is_attach_deferred(struct iommu_domain *domain,
->> -                       struct device *dev)
->> +static bool intel_iommu_is_attach_deferred(struct device *dev)
->>   {
->>       return attach_deferred(dev);
-> 
-> Seems like there's no need to wrap this now?
+On Tue, Feb 8, 2022 at 3:26 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> The file is not closed when ferror() fails.
+>
+> Fixes: 00d674cb3536 ("kconfig: refactor conf_write_dep()")
+> Fixes: 57ddd07c4560 ("kconfig: refactor conf_write_autoconf()")
+> Reported-by: Ryan Cai <ycaibb@gmail.com>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 
-Yes. It's pointless.
 
-Best regards,
-baolu
+Applied to linux-kbuild/fixes.
 
+
+>
+>  scripts/kconfig/confdata.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
+> index 59717be31210..16897cb8cefd 100644
+> --- a/scripts/kconfig/confdata.c
+> +++ b/scripts/kconfig/confdata.c
+> @@ -979,10 +979,10 @@ static int conf_write_autoconf_cmd(const char *autoconf_name)
+>
+>         fprintf(out, "\n$(deps_config): ;\n");
+>
+> -       if (ferror(out)) /* error check for all fprintf() calls */
+> -               return -1;
+> -
+> +       ret = ferror(out); /* error check for all fprintf() calls */
+>         fclose(out);
+> +       if (ret)
+> +               return -1;
+>
+>         if (rename(tmp, name)) {
+>                 perror("rename");
+> @@ -1093,10 +1093,10 @@ static int __conf_write_autoconf(const char *filename,
+>                         print_symbol(file, sym);
+>
+>         /* check possible errors in conf_write_heading() and print_symbol() */
+> -       if (ferror(file))
+> -               return -1;
+> -
+> +       ret = ferror(file);
+>         fclose(file);
+> +       if (ret)
+> +               return -1;
+>
+>         if (rename(tmp, filename)) {
+>                 perror("rename");
+> --
+> 2.32.0
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada

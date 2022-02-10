@@ -2,71 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AACEA4B08D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:50:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 574AA4B08D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237944AbiBJIuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 03:50:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48614 "EHLO
+        id S237954AbiBJIuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 03:50:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237904AbiBJIuG (ORCPT
+        with ESMTP id S234728AbiBJIut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 03:50:06 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F8EC35
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 00:50:08 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id l67-20020a1c2546000000b00353951c3f62so3369047wml.5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 00:50:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=2HIB1M6jwQ5nWTEfvyIdVxfSERSQYYsQThkMz/GI+18=;
-        b=IH56MEnePQNyrWyAv3s1h7/TzNSubqet2B8uOHEHxFy17F6USuEdC9NR48cJTD6OS4
-         rxx0qe4d31ECfCWbDsxLb0JOsXR0qlXS6zYF6PSNa4rVsj/eKyhXys8tTiQHkhSpuyJR
-         tGwADAfj7HZ8vtTDLosMaNFLAehdWGHBVkYiquWGooGddppA5kpfJuuRBGi9EXj3y5D8
-         acwpcprxgdt/MvzSpFDSwt2zClRVHqTEFwZc84OPSYa8gT0RdckBOX3NnQDSEwsBDpMa
-         8eoKjmVNCdCxI81lrAXiyobIRfIERTelxePO0YXerL1inVUHAlrITywKGB30uy6hN6QT
-         Egnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=2HIB1M6jwQ5nWTEfvyIdVxfSERSQYYsQThkMz/GI+18=;
-        b=4kOZyQnGi+Abrr8/FR9g8AosSmBJGSowg/Bm8FgmYP3AqKunym3E2vNi37ot+7zMws
-         fqiq5VMXtNFo56f0cjvF8yt0MrK6URdIb93kCETiCIPKPAhJWSI85UJrKGyeAXVvLXPz
-         9j+Br577MW0RUfjJwUIsALYq/ijIuQG01tK7mmbPJ8MTWLKiVXXOaA27Oaypr8eVMFNK
-         +kMMgCRLCritsXXQGI5x+4TGVqyQ0n/Wo/wPhNtav6ZZ4zc2AsbzW3ma1mTItYWbWmJr
-         tjMhF75h4qnMSCTX1Q5ev9OMytQz4bgQnWYKY8oc1c6i3wum6irnOvIXmnFLZKWT87Q0
-         CG9w==
-X-Gm-Message-State: AOAM533LJjd0uEIzQ2vrRRxK5fXioAfnyLi0jLM5y+2j1sJjkLAnPIwX
-        SL/CvT/u56WCwLFFFIVT87U0bVQOTXzayUtQ
-X-Google-Smtp-Source: ABdhPJwwzb/7D0/gDBMBQu8hIp2d95PYNzftq0RpMbqRA4tyhaG7fB4bs00eVkfRZaC9yEH/rwqreg==
-X-Received: by 2002:a05:600c:4f08:: with SMTP id l8mr1237441wmq.112.1644483006565;
-        Thu, 10 Feb 2022 00:50:06 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id y17sm857020wma.5.2022.02.10.00.50.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 00:50:06 -0800 (PST)
-Date:   Thu, 10 Feb 2022 08:50:03 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Alistair Francis <alistair@alistair23.me>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the hwmon-staging tree
-Message-ID: <YgTRu7iLgJMymeT5@google.com>
-References: <20220210185123.4d39766c@canb.auug.org.au>
+        Thu, 10 Feb 2022 03:50:49 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC17C2A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 00:50:50 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 5A7BB1F45F95
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644483049;
+        bh=QB8v1TZ46BYQxibDWegAgbUNsBvd0WdJQaG+Wn+uyBY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fNQBfk80LkkNCaIMaWvxNI/HF+K/sMgLrX9ou1kchJKZOJljSkL0AsJuYT5tGPAmL
+         Iv2lToQSBybMGoJe7oovnIuHB9tXIX0vtPJKOPuPd7G++oUy8eGWBC/vaqeW2oyHy6
+         pmJmj3Tps/xUUR1NLYDBQzUgfdLrS7B56eEFv+Tqm4HL3U2NEgh1l5eVdZLhSDENkW
+         Aj9DMPe5PPI3MLFjiihFXz+g+zipEmbHIuuu7vI/KkhZT83JXKFJ8MRHrS/Sp4WaIT
+         qiMMZluWNYNwbki6cYzdJ5PgEYR0XHhn4tX222wGmcs5/hfCYQQhegJAEplZCDZitf
+         a02NxyvkdrWOg==
+Message-ID: <8c5cf4b7-dd73-49f6-60dd-b62b3fc3ecdb@collabora.com>
+Date:   Thu, 10 Feb 2022 09:50:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220210185123.4d39766c@canb.auug.org.au>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v3 3/3] pinctrl: canonical rsel resistance selection
+ property
+Content-Language: en-US
+To:     Guodong Liu <guodong.liu@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>
+Cc:     Sean Wang <sean.wang@mediatek.com>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220210062122.23974-1-guodong.liu@mediatek.com>
+ <20220210062122.23974-4-guodong.liu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220210062122.23974-4-guodong.liu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,58 +62,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Feb 2022, Stephen Rothwell wrote:
-
-> Hi all,
+Il 10/02/22 07:21, Guodong Liu ha scritto:
+> Change "mediatek,rsel_resistance_in_si_unit" to "mediatek,rsel-resistance-in-si-unit"
 > 
-> After merging the hwmon-staging tree, today's linux-next build (htmldocs)
-> produced this warning:
+> Signed-off-by: Guodong Liu <guodong.liu@mediatek.com>
+
+Hello Guodong,
+thanks for the patch!
+
+However, you forgot to add the required Fixes tag to this one; this patch
+should be fixing fb34a9ae383a ("pinctrl: mediatek: support rsel feature").
+
+Please add the required tag.
+
+Thanks,
+Angelo
+
+> ---
+>   drivers/pinctrl/mediatek/pinctrl-paris.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Documentation/hwmon/sy7636a-hwmon.rst:4: WARNING: Title underline too short.
+> diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c b/drivers/pinctrl/mediatek/pinctrl-paris.c
+> index d4e02c5d74a8..38c0f0c4cf95 100644
+> --- a/drivers/pinctrl/mediatek/pinctrl-paris.c
+> +++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
+> @@ -989,7 +989,7 @@ int mtk_paris_pinctrl_probe(struct platform_device *pdev,
+>   	hw->nbase = hw->soc->nbase_names;
+>   
+>   	if (of_find_property(hw->dev->of_node,
+> -			     "mediatek,rsel_resistance_in_si_unit", NULL))
+> +			     "mediatek,rsel-resistance-in-si-unit", NULL))
+>   		hw->rsel_si_unit = true;
+>   	else
+>   		hw->rsel_si_unit = false;
 > 
-> Kernel driver sy7636a-hwmon
-> =========================
-> 
-> Introduced by commit
-> 
->   de34a4053250 ("hwmon: sy7636a: Add temperature driver for sy7636a")
 
-Oh wow, that's new (to me), and a little petty, no?
 
-Would you like me to apply this patch to my branch Guenter?
 
-I can either send out a new PR, or let it wallow.
-
--------- 8< --------
-
-From: Lee Jones <lee.jones@linaro.org>
-
- Documentation/hwmon/sy7636a-hwmon.rst:4: WARNING: Title underline too short.
-
- Kernel driver sy7636a-hwmon
- =========================
-
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- Documentation/hwmon/sy7636a-hwmon.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/hwmon/sy7636a-hwmon.rst b/Documentation/hwmon/sy7636a-hwmon.rst
-index 5612079397d52..c85db7b329415 100644
---- a/Documentation/hwmon/sy7636a-hwmon.rst
-+++ b/Documentation/hwmon/sy7636a-hwmon.rst
-@@ -1,7 +1,7 @@
- .. SPDX-License-Identifier: GPL-2.0-or-later
- 
- Kernel driver sy7636a-hwmon
--=========================
-+===========================
- 
- Supported chips:
- 
--- 
-
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog

@@ -2,134 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 139134B1857
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A25C54B185D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345038AbiBJWjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 17:39:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57636 "EHLO
+        id S1345053AbiBJWk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 17:40:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345032AbiBJWi6 (ORCPT
+        with ESMTP id S1345032AbiBJWkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:38:58 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2B7326CD
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:38:56 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-231-YriZOnoSNKCN8L5w2e2KaA-1; Thu, 10 Feb 2022 22:38:54 +0000
-X-MC-Unique: YriZOnoSNKCN8L5w2e2KaA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 10 Feb 2022 22:38:51 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 10 Feb 2022 22:38:51 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Dave Hansen' <dave.hansen@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Eugene Syromiatnikov" <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        "joao.moreira@intel.com" <joao.moreira@intel.com>,
-        John Allen <john.allen@amd.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "eranian@google.com" <eranian@google.com>
-CC:     Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: RE: [PATCH 18/35] mm: Add guard pages around a shadow stack.
-Thread-Topic: [PATCH 18/35] mm: Add guard pages around a shadow stack.
-Thread-Index: AQHYHgPE4ng9s1QFWkGaF1pqJykcg6yNYAXA
-Date:   Thu, 10 Feb 2022 22:38:51 +0000
-Message-ID: <1b5d83dc4cd84309823f012a3dce24f0@AcuMS.aculab.com>
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <20220130211838.8382-19-rick.p.edgecombe@intel.com>
- <f92c5110-7d97-b68d-d387-7e6a16a29e49@intel.com>
-In-Reply-To: <f92c5110-7d97-b68d-d387-7e6a16a29e49@intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 10 Feb 2022 17:40:25 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7AC26F3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:40:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644532824; x=1676068824;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ezk2NeDdSc2e0TnIa0ixhn44aPSqO9eSdI6KS3XUWsc=;
+  b=EfqQF+u7kYcfTFbHdZpzaqq7gSCbS/OKXCjMAgmEI5SHfBoJh3EWVIwr
+   9R9tzzMTEgFH057gYLkdKxu8zDdudEvg80gorM6qspLoY/G6L5WEzjbMw
+   DENz2VL5AaWjShz/lr2IG/L9FOY1BQM6hDPOfoIw1/GHKvGJhHst+WmoA
+   8nLgA9OcY/VIsgr6/vMUXwfLFw2Y0Y48IKq/En0DZhyYTA1o1z6cKPFmJ
+   r88TUqK05dalrGMwyzPzruGzLLgZJLYvNTZ0Q2lWINzbv4jTCagaN5gzc
+   YXGS9abMPT+fePv9lPDB7pi2Yb4AM3A2f7s1EJNmuQFiySUlyyyTMYXHg
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="247196603"
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="247196603"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 14:40:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="526706517"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 10 Feb 2022 14:40:22 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nII6q-0003qn-6G; Thu, 10 Feb 2022 22:40:16 +0000
+Date:   Fri, 11 Feb 2022 06:39:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nikolay Aleksandrov <nikolay@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: net/bridge/br_private.h:901 br_multicast_rport_from_node_skb() warn:
+ inconsistent indenting
+Message-ID: <202202110618.ujwjrHxI-lkp@intel.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogRGF2ZSBIYW5zZW4NCj4gU2VudDogMDkgRmVicnVhcnkgMjAyMiAyMjoyNA0KPiANCj4g
-T24gMS8zMC8yMiAxMzoxOCwgUmljayBFZGdlY29tYmUgd3JvdGU6DQo+ID4gSU5DU1NQKFEvRCkg
-aW5jcmVtZW50cyBzaGFkb3cgc3RhY2sgcG9pbnRlciBhbmQgJ3BvcHMgYW5kIGRpc2NhcmRzJyB0
-aGUNCj4gPiBmaXJzdCBhbmQgdGhlIGxhc3QgZWxlbWVudHMgaW4gdGhlIHJhbmdlLCBlZmZlY3Rp
-dmVseSB0b3VjaGVzIHRob3NlIG1lbW9yeQ0KPiA+IGFyZWFzLg0KPiANCj4gVGhpcyBpcyBhIHBy
-ZXR0eSBjbG9zZSBjb3B5IG9mIHRoZSBpbnN0cnVjdGlvbiByZWZlcmVuY2UgdGV4dCBmb3INCj4g
-SU5DU1NQLiAgSSdtIGZlZWxpbmcgcmF0aGVyIGRlbnNlIHRvZGF5LCBidXQgdGhhdCdzIGp1c3Qg
-bm90IG1ha2luZyBhbnkNCj4gc2Vuc2UuDQo+IA0KPiBUaGUgcHNldWRvY29kZSBpcyBtb3JlIHNl
-bnNpYmxlIGluIHRoZSBTRE0uICBJIHRoaW5rIHRoaXMgbmVlZHMgYSBiZXR0ZXINCj4gZXhwbGFu
-YXRpb246DQo+IA0KPiAJVGhlIElOQ1NTUCBpbnN0cnVjdGlvbiBpbmNyZW1lbnRzIHRoZSBzaGFk
-b3cgc3RhY2sgcG9pbnRlci4gIEl0DQo+IAlpcyB0aGUgc2hhZG93IHN0YWNrIGFuYWxvZyBvZiBh
-biBpbnN0cnVjdGlvbiBsaWtlOg0KPiANCj4gCQlhZGRxCSQweDgwLCAlcnNwDQo+IA0KPiAJSG93
-ZXZlciwgdGhlcmUgaXMgb25lIGltcG9ydGFudCBkaWZmZXJlbmNlIGJldHdlZW4gYW4gQUREIG9u
-DQo+IAklcnNwIGFuZCBJTkNTU1AuICBJbiBhZGRpdGlvbiB0byBtb2RpZnlpbmcgU1NQLCBJTkNT
-U1AgYWxzbw0KPiAJcmVhZHMgZnJvbSB0aGUgbWVtb3J5IG9mIHRoZSBmaXJzdCBhbmQgbGFzdCBl
-bGVtZW50cyB0aGF0IHdlcmUNCj4gCSJwb3BwZWQiLiAgWW91IGNhbiB0aGluayBvZiBpdCBhcyBh
-Y3RpbmcgbGlrZSB0aGlzOg0KPiANCj4gCVJFQURfT05DRShzc3ApOyAgICAgICAvLyByZWFkK2Rp
-c2NhcmQgdG9wIGVsZW1lbnQgb24gc3RhY2sNCj4gCXNzcCArPSBucl90b19wb3AgKiA4OyAvLyBt
-b3ZlIHRoZSBzaGFkb3cgc3RhY2sNCj4gCVJFQURfT05DRShzc3AtOCk7ICAgICAvLyByZWFkK2Rp
-c2NhcmQgbGFzdCBwb3BwZWQgc3RhY2sgZWxlbWVudA0KPiANCj4gDQo+ID4gVGhlIG1heGltdW0g
-bW92aW5nIGRpc3RhbmNlIGJ5IElOQ1NTUFEgaXMgMjU1ICogOCA9IDIwNDAgYnl0ZXMgYW5kDQo+
-ID4gMjU1ICogNCA9IDEwMjAgYnl0ZXMgYnkgSU5DU1NQRC4gIEJvdGggcmFuZ2VzIGFyZSBmYXIg
-ZnJvbSBQQUdFX1NJWkUuDQo+IA0KPiAuLi4gVGhhdCBtYXhpbXVtIGRpc3RhbmNlLCBjb21iaW5l
-ZCB3aXRoIGFuIGEgZ3VhcmQgcGFnZXMgYXQgdGhlIGVuZCBvZg0KPiBhIHNoYWRvdyBzdGFjayBl
-bnN1cmVzIHRoYXQgSU5DU1NQIHdpbGwgZmF1bHQgYmVmb3JlIGl0IGlzIGFibGUgdG8gbW92ZQ0K
-PiBhY3Jvc3MgYW4gZW50aXJlIGd1YXJkIHBhZ2UuDQo+IA0KPiA+IFRodXMsIHB1dHRpbmcgYSBn
-YXAgcGFnZSBvbiBib3RoIGVuZHMgb2YgYSBzaGFkb3cgc3RhY2sgcHJldmVudHMgSU5DU1NQLA0K
-PiA+IENBTEwsIGFuZCBSRVQgZnJvbSBnb2luZyBiZXlvbmQuDQoNCkRvIHlvdSBuZWVkIGEgcmVh
-bCBndWFyZCBwYWdlPw0KT3IgaXMgaXQganVzdCBlbm91Z2ggdG8gZW5zdXJlIHRoYXQgdGhlIGFk
-amFjZW50IHBhZ2UgaXNuJ3QgYW5vdGhlcg0Kc2hhZG93IHN0YWNrIHBhZ2U/DQoNCkFueSBvdGhl
-ciBwYWdlIHdpbGwgY2F1c2UgYSBmYXVsdCBiZWNhdXNlIHRoZSBQVEUgaXNuJ3QgcmVhZG9ubHkr
-ZGlydHkuDQoNCkknbSBub3Qgc3VyZSBob3cgY29tbW9uIHNpbmdsZSBwYWdlIGFsbG9jYXRlcyBh
-cmUgaW4gTGludXguDQpCdXQgYWRqYWNlbnQgc2hhZG93IHN0YWNrcyBtYXkgYmUgcmFyZSBhbnl3
-YXkuDQpTbyBhIGNoZWNrIGFnYWluc3QgYm90aCBhZGphY2VudCBQVEUgZW50cmllcyB3b3VsZCBz
-dWZmaWNlLg0KT3IgbWF5YmUgYWx3YXlzIGFsbG9jYXRlIGFuIGV2ZW4gKG9yIG9kZCkgbnVtYmVy
-ZWQgcGFnZS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJh
-bWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0
-cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e3c85076d7a6f986445b9008be7e7f83d1b0780a
+commit: 9632233e7de8da43711bb7cd3e054af32fedcc38 net: bridge: multicast: factor out port multicast context
+date:   7 months ago
+config: openrisc-randconfig-m031-20220210 (https://download.01.org/0day-ci/archive/20220211/202202110618.ujwjrHxI-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 11.2.0
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+New smatch warnings:
+net/bridge/br_private.h:901 br_multicast_rport_from_node_skb() warn: inconsistent indenting
+
+Old smatch warnings:
+net/bridge/br_forward.c:317 br_multicast_flood() error: we previously assumed 'p' could be null (see line 293)
+
+vim +901 net/bridge/br_private.h
+
+   890	
+   891	static inline struct net_bridge_port *
+   892	br_multicast_rport_from_node_skb(struct hlist_node *rp, struct sk_buff *skb) {
+   893		struct net_bridge_mcast_port *mctx;
+   894	
+   895	#if IS_ENABLED(CONFIG_IPV6)
+   896		if (skb->protocol == htons(ETH_P_IPV6))
+   897			mctx = hlist_entry_safe(rp, struct net_bridge_mcast_port,
+   898						ip6_rlist);
+   899		else
+   900	#endif
+ > 901			mctx = hlist_entry_safe(rp, struct net_bridge_mcast_port,
+   902						ip4_rlist);
+   903	
+   904		if (mctx)
+   905			return mctx->port;
+   906		else
+   907			return NULL;
+   908	}
+   909	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

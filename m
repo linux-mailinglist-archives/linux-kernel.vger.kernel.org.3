@@ -2,49 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A58344B01DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5204B01E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbiBJBVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 20:21:05 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38074 "EHLO
+        id S231309AbiBJBVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 20:21:34 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbiBJBUy (ORCPT
+        with ESMTP id S230391AbiBJBV2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:20:54 -0500
-X-Greylist: delayed 85738 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 17:20:52 PST
-Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0ED11EC50
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 17:20:51 -0800 (PST)
-X-QQ-mid: bizesmtp40t1644456039t9nh99gn
-Received: from localhost.localdomain (unknown [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 10 Feb 2022 09:20:34 +0800 (CST)
-X-QQ-SSF: 0140000000200010C000B00A0000000
-X-QQ-FEAT: Mx1dxJbW4IUnI3y2SrIKQ5MSdeobh2lcs2b75Si5IgzgCw7r9y38BqfW4vBA9
-        xk/kJQG3oS0EvLCXEVA/nZEskyBd5PkZlC2sGH4Qeu7pq02CiBtDFKPxqCPAyreZ983hXP5
-        SuIbS70XcvIsmXnX+tCEVcOYj8HUoCeJ05TmUdNmrgKgqPxAjCVnskHdx1Bpg6xB4tVwo+j
-        ef3S0f4JYv8YklAsA5X1srsGORy5DbieueM6g9APVE4OIxh5PRL2CAyy/n4Sfk5DGlhkATC
-        dqGLQY4/u2XR/vG3A3+Xvmk3CG9qfkZYbNOEdiEv/5OYJWxhSBIkrNYFbSYf7SKiK+eDCs0
-        HPJG4xZA67E82VLzHM=
-X-QQ-GoodBg: 2
-From:   Zhen Ni <nizhen@uniontech.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, mcgrof@kernel.org,
-        keescook@chromium.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Zhen Ni <nizhen@uniontech.com>
-Subject: [PATCH] sched: move rt_period/runtime sysctls to rt.c
-Date:   Thu, 10 Feb 2022 09:20:30 +0800
-Message-Id: <20220210012030.8813-1-nizhen@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Wed, 9 Feb 2022 20:21:28 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA237651
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 17:21:29 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id v13-20020a17090ac90d00b001b87bc106bdso6936309pjt.4
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 17:21:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XWLLyk1K8bfKzJedzmC1sFWb4iWL67xU1QxSZHF4aB8=;
+        b=XNShvWlg/NeIyAfYGVaBcqrHzDAVDur9USDuZi3W2M5ist2p48UKF0SSmAIWRx9wDo
+         8SuzqVc+BIerw6jPCIV0yUBdXchxww2HrVKE1lNEyIkMswe/x/GsaWQzpmw8fiyc3/q+
+         xMRWamP5cVmJJWotaAu36q56YK4qUivk/30r4RgQCSfoKaG5S4a5TwohPlhtbGaWcn1I
+         nYD8jQ0yWvZIApbFUvwWgkTaWksTIj8gPLjKB8Wx/+ml6o70SyXSjUMNAXJwKeqtiKmk
+         8OYvtF+YZ3rv+kGAulEmNDWUV34YH2IhuhykgRzRAQKUCvv4WbHrGHjrT8szM5MZqAnp
+         nPMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XWLLyk1K8bfKzJedzmC1sFWb4iWL67xU1QxSZHF4aB8=;
+        b=z9Wt58fvGOV6J4ob3nB59WGMN5fD4G3Y9J374Y9sy+5YM4U9AKy0Tl+4Nzp/h/1+r+
+         xP0RZdML3JWNYfSQ1x2LCAPMZJvAYvfCDIYJiIos+vUw+J0T82gDiqMNdv1Hnev8L6V1
+         ig3cdj8g9w1073DbsZepIw+ZXgkttzjs+T+EJlZSB1rMGBMLeIC8PLgAInhs8G9BeLg+
+         hgsWxTfyLw3ENjWYihCI5M/lvFudtq76d7UCzRrR2KlwXcYoXy0JTcMhGIWvys1FJnp9
+         oCWccWhNeSJazIBjMMcQlmzBnSTFbZNd8fhuTFXO08hMuAHGRX1rbrZh9YZOkuio6iXX
+         D0Zw==
+X-Gm-Message-State: AOAM533t+AeOUhvcEpkUC+/VcDcxmRLzHepTMVd4zEZ1Q261J4La3gks
+        UNGgOw/iK3VDElXJ9nVwbOH6MQ==
+X-Google-Smtp-Source: ABdhPJxcVoAd/rRot/wAvwCLs9lrgjobRNVk7/4ehykJKy+6HfjWIozsUP5gp1UukUKaBm/i3EoAjg==
+X-Received: by 2002:a17:903:234f:: with SMTP id c15mr4902041plh.50.1644456088551;
+        Wed, 09 Feb 2022 17:21:28 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id l13sm14816202pgs.16.2022.02.09.17.21.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 17:21:27 -0800 (PST)
+Date:   Thu, 10 Feb 2022 01:21:24 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, bp@alien8.de,
+        aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
+        dave.hansen@intel.com, david@redhat.com, hpa@zytor.com,
+        jgross@suse.com, jmattson@google.com, joro@8bytes.org,
+        jpoimboe@redhat.com, knsathya@kernel.org,
+        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+Subject: Re: [PATCHv2.1 05/29] x86/tdx: Add HLT support for TDX guests
+Message-ID: <YgRolJPJ0bGk4N12@google.com>
+References: <YfVU01dBD36H0EIv@zn.tnic>
+ <20220129223021.29417-1-kirill.shutemov@linux.intel.com>
+ <874k5iz3ih.ffs@tglx>
+ <20220202124830.yd4vkmy56j67tyz4@black.fi.intel.com>
+ <875ypxur1n.ffs@tglx>
+ <20220204165539.oqw7bj3ri4hzjiy6@black.fi.intel.com>
+ <YgGioxo4hnJBJUgT@google.com>
+ <20220209143407.by4s2h4zybfbvlhv@black.fi.intel.com>
+ <YgQCgCx0R+RvFkyE@google.com>
+ <20220209222327.5c2gv5owhhgzg2rs@black.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209222327.5c2gv5owhhgzg2rs@black.fi.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,189 +88,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-move rt_period/runtime sysctls to rt.c and use the new
-register_sysctl_init() to register the sysctl interface.
+On Thu, Feb 10, 2022, Kirill A. Shutemov wrote:
+> On Wed, Feb 09, 2022 at 06:05:52PM +0000, Sean Christopherson wrote:
+> > On Wed, Feb 09, 2022, Kirill A. Shutemov wrote:
+> > > On Mon, Feb 07, 2022 at 10:52:19PM +0000, Sean Christopherson wrote:
+> > > .Lskip_sti:
+> > > 	tdcall
+> > > 
+> > > 	/*
+> > > 	 * TDVMCALL leaf does not suppose to fail. If it fails something
+> > > 	 * is horribly wrong with TDX module. Stop the world.
+> > > 	 */
+> > > 	test %rax, %rax
+> > > 	je .Lsuccess
+> > > 	ud2
+> > 
+> > If the ud2 or call to an external "do panic" helper is out-of-line, then the happy
+> > path avoids a taken branch.  Not a big deal, but it's also trivial to do.
+> 
+> Something like this?
 
-Signed-off-by: Zhen Ni <nizhen@uniontech.com>
----
- include/linux/sched/sysctl.h | 11 ---------
- kernel/sched/core.c          | 13 -----------
- kernel/sched/rt.c            | 44 +++++++++++++++++++++++++++++++++++-
- kernel/sched/sched.h         |  4 ++++
- kernel/sysctl.c              | 14 ------------
- 5 files changed, 47 insertions(+), 39 deletions(-)
+Yep.
 
-diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
-index 1f07d14cf9fc..e18ce60d6c8c 100644
---- a/include/linux/sched/sysctl.h
-+++ b/include/linux/sched/sysctl.h
-@@ -23,15 +23,6 @@ enum sched_tunable_scaling {
- 	SCHED_TUNABLESCALING_END,
- };
- 
--/*
-- *  control realtime throttling:
-- *
-- *  /proc/sys/kernel/sched_rt_period_us
-- *  /proc/sys/kernel/sched_rt_runtime_us
-- */
--extern unsigned int sysctl_sched_rt_period;
--extern int sysctl_sched_rt_runtime;
--
- extern unsigned int sysctl_sched_dl_period_max;
- extern unsigned int sysctl_sched_dl_period_min;
- 
-@@ -48,8 +39,6 @@ extern int sched_rr_timeslice;
- 
- int sched_rr_handler(struct ctl_table *table, int write, void *buffer,
- 		size_t *lenp, loff_t *ppos);
--int sched_rt_handler(struct ctl_table *table, int write, void *buffer,
--		size_t *lenp, loff_t *ppos);
- int sysctl_numa_balancing(struct ctl_table *table, int write, void *buffer,
- 		size_t *lenp, loff_t *ppos);
- int sysctl_schedstats(struct ctl_table *table, int write, void *buffer,
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 1962111416e4..9742ad1276b0 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -80,12 +80,6 @@ const_debug unsigned int sysctl_sched_nr_migrate = 8;
- const_debug unsigned int sysctl_sched_nr_migrate = 32;
- #endif
- 
--/*
-- * period over which we measure -rt task CPU usage in us.
-- * default: 1s
-- */
--unsigned int sysctl_sched_rt_period = 1000000;
--
- __read_mostly int scheduler_running;
- 
- #ifdef CONFIG_SCHED_CORE
-@@ -379,13 +373,6 @@ sched_core_dequeue(struct rq *rq, struct task_struct *p, int flags) { }
- 
- #endif /* CONFIG_SCHED_CORE */
- 
--/*
-- * part of the period that we allow rt tasks to run in us.
-- * default: 0.95s
-- */
--int sysctl_sched_rt_runtime = 950000;
--
--
- /*
-  * Serialization rules:
-  *
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 7b4f4fbbb404..5f23778c80b4 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -16,6 +16,47 @@ static int do_sched_rt_period_timer(struct rt_bandwidth *rt_b, int overrun);
- 
- struct rt_bandwidth def_rt_bandwidth;
- 
-+/*
-+ * period over which we measure -rt task CPU usage in us.
-+ * default: 1s
-+ */
-+unsigned int sysctl_sched_rt_period = 1000000;
-+
-+/*
-+ * part of the period that we allow rt tasks to run in us.
-+ * default: 0.95s
-+ */
-+int sysctl_sched_rt_runtime = 950000;
-+
-+static int sched_rt_handler(struct ctl_table *table, int write, void *buffer,
-+		size_t *lenp, loff_t *ppos);
-+#ifdef CONFIG_SYSCTL
-+static struct ctl_table sched_rt_sysctls[] = {
-+	{
-+		.procname       = "sched_rt_period_us",
-+		.data           = &sysctl_sched_rt_period,
-+		.maxlen         = sizeof(unsigned int),
-+		.mode           = 0644,
-+		.proc_handler   = sched_rt_handler,
-+	},
-+	{
-+		.procname       = "sched_rt_runtime_us",
-+		.data           = &sysctl_sched_rt_runtime,
-+		.maxlen         = sizeof(int),
-+		.mode           = 0644,
-+		.proc_handler   = sched_rt_handler,
-+	},
-+	{}
-+};
-+
-+static void __init sched_rt_sysctl_init(void)
-+{
-+	register_sysctl_init("kernel", sched_rt_sysctls);
-+}
-+#else
-+#define sched_rt_sysctl_init() do { } while (0)
-+#endif
-+
- static enum hrtimer_restart sched_rt_period_timer(struct hrtimer *timer)
- {
- 	struct rt_bandwidth *rt_b =
-@@ -2471,6 +2512,7 @@ void __init init_sched_rt_class(void)
- 		zalloc_cpumask_var_node(&per_cpu(local_cpu_mask, i),
- 					GFP_KERNEL, cpu_to_node(i));
- 	}
-+	sched_rt_sysctl_init();
- }
- #endif /* CONFIG_SMP */
- 
-@@ -2928,7 +2970,7 @@ static void sched_rt_do_global(void)
- 	raw_spin_unlock_irqrestore(&def_rt_bandwidth.rt_runtime_lock, flags);
- }
- 
--int sched_rt_handler(struct ctl_table *table, int write, void *buffer,
-+static int sched_rt_handler(struct ctl_table *table, int write, void *buffer,
- 		size_t *lenp, loff_t *ppos)
- {
- 	int old_period, old_runtime;
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index de53be905739..695e280b063f 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -100,6 +100,10 @@ extern void calc_global_load_tick(struct rq *this_rq);
- extern long calc_load_fold_active(struct rq *this_rq, long adjust);
- 
- extern void call_trace_sched_update_nr_running(struct rq *rq, int count);
-+
-+extern unsigned int sysctl_sched_rt_period;
-+extern int sysctl_sched_rt_runtime;
-+
- /*
-  * Helpers for converting nanosecond timing to jiffy resolution
-  */
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 78996c0c8852..88264300ce69 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -1692,20 +1692,6 @@ static struct ctl_table kern_table[] = {
- 		.extra2		= SYSCTL_ONE,
- 	},
- #endif /* CONFIG_NUMA_BALANCING */
--	{
--		.procname	= "sched_rt_period_us",
--		.data		= &sysctl_sched_rt_period,
--		.maxlen		= sizeof(unsigned int),
--		.mode		= 0644,
--		.proc_handler	= sched_rt_handler,
--	},
--	{
--		.procname	= "sched_rt_runtime_us",
--		.data		= &sysctl_sched_rt_runtime,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= sched_rt_handler,
--	},
- 	{
- 		.procname	= "sched_deadline_period_max_us",
- 		.data		= &sysctl_sched_dl_period_max,
--- 
-2.20.1
+> I assume FRAME_END is irrelevent after UD2.
 
-
-
+Not irrelevant, but we don't want to do FRAME_END in this case.  Keeping the current
+frame pointer (setup by FRAME_BEGIN, torn down by FRAME_END) will let the unwinder
+do its thing when its using frame pointers.

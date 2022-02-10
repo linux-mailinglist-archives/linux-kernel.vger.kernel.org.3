@@ -2,60 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CAC4B0DAE
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF27D4B0DE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:52:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239850AbiBJMku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 07:40:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57724 "EHLO
+        id S241801AbiBJMvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 07:51:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233218AbiBJMkr (ORCPT
+        with ESMTP id S238007AbiBJMvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 07:40:47 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597151036
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 04:40:48 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id A5E1E21115;
-        Thu, 10 Feb 2022 12:40:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1644496846; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=F9ZbzBgnxPunXqjYGK83et/vqjK6YE0/d/TYWMUW5n8=;
-        b=sOOedZfG3mAXqF2Xghmmi6/8PqkLVcjEIfwWB5Llzc+Mw2cDNcri6STJXa5GG8nHO148nV
-        DrTHbR/DHi9cJOwwlK+W/ON0zOfxvNNvXR7OzAHbYj/nkR92F25aMpzTa2wxK+hw8c1WHQ
-        pTyqYfJp7+bXUgbEHfdA6OYr6WwEfQA=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 25F55A3B83;
-        Thu, 10 Feb 2022 12:40:45 +0000 (UTC)
-Date:   Thu, 10 Feb 2022 13:40:45 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, ccross@google.com,
-        sumit.semwal@linaro.org, dave.hansen@intel.com,
-        keescook@chromium.org, willy@infradead.org,
-        kirill.shutemov@linux.intel.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, ebiederm@xmission.com, brauner@kernel.org,
-        legion@kernel.org, ran.xiaokai@zte.com.cn, sashal@kernel.org,
-        chris.hyser@oracle.com, dave@stgolabs.net, pcc@google.com,
-        caoxiaofeng@yulong.com, david@redhat.com, gorcunov@gmail.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com,
-        syzbot+aa7b3d4b35f9dc46a366@syzkaller.appspotmail.com
-Subject: Re: [PATCH v2 1/1] mm: fix use-after-free when anon vma name is used
- after vma is freed
-Message-ID: <YgUHzSqltDp2dr70@dhcp22.suse.cz>
-References: <20220210043215.42794-1-surenb@google.com>
+        Thu, 10 Feb 2022 07:51:51 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BC2263E;
+        Thu, 10 Feb 2022 04:51:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644497513; x=1676033513;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=O2sV7j//NOYqlh2mGrqgY1OMSmiSfEuikM6h29Iuhms=;
+  b=IGS6lhYDpzM5SGU1S8PNhBOb9VOdUIxDyK64bS+GhBupxS8rOeFSL6pH
+   0oIkVAL5qmcACJRX7XB14gGoQf+i9mV9TJZ4qxui74hO9SVjUX6A05ehw
+   f5Y/HqPnwQO6AJScaPt0jtGyRU1Rh4bQtxkIp8ucRrG+5Aqy1fIiqFkTp
+   Qh/OmaXme0RaYQC2+p2HSwcfyav2/YPXMLJhqJVJIuKOf6xyTjIHFZJX/
+   52fXP2PVJNTxgO74wsBfM5qQxPljAjVwHSONbcjTm851lZfQiUo2I+8OW
+   b3oKCCWXfBi3OioYsLoLShrfVi090jhbdk9m8ZYDhSWFripzZJZMQ+n/9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="335899265"
+X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
+   d="scan'208";a="335899265"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 04:51:52 -0800
+X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
+   d="scan'208";a="541595712"
+Received: from muni.iind.intel.com ([10.190.201.115])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 04:51:50 -0800
+From:   Vikash Chandola <vikash.chandola@linux.intel.com>
+To:     iwona.winiarska@intel.com, linux@roeck-us.net, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Vikash Chandola <vikash.chandola@linux.intel.com>
+Subject: [PATCH] hwmon: (pmbus) Clear pmbus fault/warning bits before read
+Date:   Thu, 10 Feb 2022 12:41:54 +0000
+Message-Id: <20220210124154.1304852-1-vikash.chandola@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220210043215.42794-1-surenb@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,26 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 09-02-22 20:32:15, Suren Baghdasaryan wrote:
-> When adjacent vmas are being merged it can result in the vma that was
-> originally passed to madvise_update_vma being destroyed. In the current
-> implementation, the name parameter passed to madvise_update_vma points
-> directly to vma->anon_name->name and it is used after the call to
-> vma_merge. In the cases when vma_merge merges the original vma and
-> destroys it, this will result in use-after-free bug as shown below:
-> 
-> madvise_vma_behavior << passes vma->anon_name->name as name param
->   madvise_update_vma(name)
->     vma_merge
->       __vma_adjust
->         vm_area_free <-- frees the vma
->     replace_vma_anon_name(name) <-- UAF
-> 
-> Fix this by raising the name refcount and stabilizing it. Introduce
-> vma_anon_name_{get/put} API for this purpose.
+pmbus fault and warning bits are not cleared by itself once fault/warning
+condition is not valid anymore. As per pmbus datasheet faults must be
+cleared by user.
+Modify hwmon behavior to clear latched status bytes if any bit in status
+register is high prior to returning fresh data to userspace. If
+fault/warning conditions are still applicable fault/warning bits will be
+set and we will get updated data in second read.
 
-What is the reason that madvise_update_vma uses the naked name rather
-than the encapsulated anon_vma_name? This really just begs for problems.
+Hwmon behavior is changed here. Now sysfs reads will reflect latest
+values from pmbus slave, not latched values.
+In case a transient warning/fault has happened in the past, it will no
+longer be reported to userspace.
+
+Signed-off-by: Vikash Chandola <vikash.chandola@linux.intel.com>
+---
+ drivers/hwmon/pmbus/pmbus_core.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 776ee2237be2..1cc82d644079 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -577,6 +577,15 @@ static int pmbus_get_status(struct i2c_client *client, int page, int reg)
+ 		break;
+ 	default:
+ 		status = _pmbus_read_byte_data(client, page, reg);
++		if (status > 0) {
++			/*
++			 * Status greater than 0 could mean that there was a fault/warning.
++			 * Clear faults and do a second read to make sure we are not getting
++			 * stale values.
++			 */
++			pmbus_clear_fault_page(client, page);
++			status = _pmbus_read_byte_data(client, page, reg);
++		}
+ 		break;
+ 	}
+ 	if (status < 0)
 -- 
-Michal Hocko
-SUSE Labs
+2.25.1
+

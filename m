@@ -2,91 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A494B12B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD56C4B1204
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:47:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244183AbiBJQ0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 11:26:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41508 "EHLO
+        id S243740AbiBJPrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 10:47:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244167AbiBJQ0L (ORCPT
+        with ESMTP id S239919AbiBJPrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 11:26:11 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B2DC26;
-        Thu, 10 Feb 2022 08:26:11 -0800 (PST)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21AEBMiL025584;
-        Thu, 10 Feb 2022 09:41:22 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=iAIOic3fs3DHgtceBaD28ld8RhX+XmG05O99KFICyHU=;
- b=OPz9mg1lCGDZFcdrjNWJ1hjxWGEdoO1jB+ngD8AWBqiUWuBULOfNxyhbtIl1s1bRC+nE
- WUDLJ+HsoQkkmvaO36rYOsztpW7kGyiDfTMtD8INGF1z8RlZlffHA+jeLN6xLvbRKwFh
- n44n9bI/jQ0dNoYlV2Md7EJIaZ5TtHgctrcwYSf6ICy8tue/hZ7o67P11En6yDEvrbHf
- 4nYHzGr6NDRrfIRffHjJGE5Q646xsPaSr/Z099XvqFKynhUZvGSt1/Kqr1iDdAV4TZzT
- 7X0SotbkfJPF7NEaT0/Je3rlImax2cNFpOAN2rktjeVbfZF10boLWI/zwSrY/jPVvi+p wg== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3e4detskyx-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 10 Feb 2022 09:41:21 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 10 Feb
- 2022 15:41:20 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Thu, 10 Feb 2022 15:41:20 +0000
-Received: from ricardo-lws.crystal.cirrus.com (ricardo-lws.ad.cirrus.com [141.131.206.19])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 10A532A1;
-        Thu, 10 Feb 2022 15:41:19 +0000 (UTC)
-From:   Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
-To:     <sre@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
-CC:     Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
-Subject: [RESEND v2 2/2] power: supply: bq25980: Implements POWER_SUPPLY_CHARGE_TYPE_BYPASS
-Date:   Thu, 10 Feb 2022 09:41:08 -0600
-Message-ID: <20220210154108.641369-3-rriveram@opensource.cirrus.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220210154108.641369-1-rriveram@opensource.cirrus.com>
-References: <20220210154108.641369-1-rriveram@opensource.cirrus.com>
+        Thu, 10 Feb 2022 10:47:42 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE15DC
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 07:47:42 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 4B2CF1F399;
+        Thu, 10 Feb 2022 15:47:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1644508061; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6DvmGQ057+uOZYubo7rFkvNL5DX0u2Pzzr6JgHWxYu0=;
+        b=ZElNN3FZwb3XaoWPOEpxq20+Lo98lpDcydjimmmeGoS+6YKUt0xluEeAjzn0kKBTBO5gpC
+        PgOvA1N5BT5iEnM6/Q8NF+2YtXhFWPMu2dv+9eqmVdK4lhOluO8YW9lmDUrbndryrc5MXi
+        Jn7NOJC3tP1ZiO1F9SYi0Bsch2o56Kc=
+Received: from suse.cz (unknown [10.100.216.66])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id E6FA1A3B83;
+        Thu, 10 Feb 2022 15:47:40 +0000 (UTC)
+Date:   Thu, 10 Feb 2022 16:47:39 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [PATCH v2] printk: defer_console_output: use atomic update
+Message-ID: <YgUzm5POctivsjUg@alley>
+References: <20220203112915.1350753-1-john.ogness@linutronix.de>
+ <YfzP50vDiJiaRVCr@google.com>
+ <87bkzj3t77.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: feDhXOyhHV27GLGeJJQd63wmvEu18Zvo
-X-Proofpoint-ORIG-GUID: feDhXOyhHV27GLGeJJQd63wmvEu18Zvo
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87bkzj3t77.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch remaps the bypass operation from POWER_SUPPLY_CHARGE_TYPE_FAST
-to POWER_SUPPLY_CHARGE_TYPE_BYPASS.
+On Mon 2022-02-07 10:52:20, John Ogness wrote:
+> The per-cpu @printk_pending variable can be updated from
+> sleepable contexts, such as:
+> 
+>   get_random_bytes()
+>     warn_unseeded_randomness()
+>       printk_deferred()
+>         defer_console_output()
+> 
+> and can be updated from interrupt contexts, such as:
+> 
+>   handle_irq_event_percpu()
+>     __irq_wake_thread()
+>       wake_up_process()
+>         try_to_wake_up()
+>           select_task_rq()
+>             select_fallback_rq()
+>               printk_deferred()
+>                 defer_console_output()
+> 
+> and can be updated from NMI contexts, such as:
+> 
+>   vprintk()
+>     if (in_nmi()) defer_console_output()
+> 
+> Therefore this_cpu_or(), the atomic variant of __this_cpu_or(),
+> should be used to update the variable.
+> 
+> Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
-Signed-off-by: Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
----
- drivers/power/supply/bq25980_charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Makes sense.
 
-diff --git a/drivers/power/supply/bq25980_charger.c b/drivers/power/supply/bq25980_charger.c
-index 9daa6d14db4d..9339f5649282 100644
---- a/drivers/power/supply/bq25980_charger.c
-+++ b/drivers/power/supply/bq25980_charger.c
-@@ -764,7 +764,7 @@ static int bq25980_get_charger_property(struct power_supply *psy,
- 		if (!state.ce)
- 			val->intval = POWER_SUPPLY_CHARGE_TYPE_NONE;
- 		else if (state.bypass)
--			val->intval = POWER_SUPPLY_CHARGE_TYPE_FAST;
-+			val->intval = POWER_SUPPLY_CHARGE_TYPE_BYPASS;
- 		else if (!state.bypass)
- 			val->intval = POWER_SUPPLY_CHARGE_TYPE_STANDARD;
- 		break;
--- 
-2.25.1
+The patch has been committed into printk/linux.git, branch for-5.18.
 
+Best Regards,
+Petr

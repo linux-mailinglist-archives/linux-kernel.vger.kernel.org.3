@@ -2,214 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6A54B1501
+	by mail.lfdr.de (Postfix) with ESMTP id 2E8D64B1500
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 19:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245566AbiBJSLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 13:11:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36898 "EHLO
+        id S245555AbiBJSLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 13:11:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiBJSLD (ORCPT
+        with ESMTP id S245582AbiBJSLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 13:11:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8882C110C
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:11:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644516662;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ChKOo/Qv0R89dvgKNKcoh58DZx/3Fryy1wSZpo9TRf0=;
-        b=EHmoDVq9e707vB8IYqXGvrPNRNL+PVM0/6YUUTcfUcZWBibpjPOXoi63YxgeTuXb/3qeLO
-        BvjxeMQn5J6lSADt+/XscI8qLc7mEBndanrCOLLRbKIKkEGEgZoR53/5AXDairjxla0Btk
-        rfv0WsFuhvd0jXeX34pKqKgedH+eEu4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-330-TFAb_GXkM4mn1hD7alkfXA-1; Thu, 10 Feb 2022 13:10:58 -0500
-X-MC-Unique: TFAb_GXkM4mn1hD7alkfXA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D2890109B5EC;
-        Thu, 10 Feb 2022 18:10:31 +0000 (UTC)
-Received: from llong.com (unknown [10.22.19.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2DE73348E0;
-        Thu, 10 Feb 2022 18:10:31 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>
-Subject: [PATCH v2] locking/semaphore: Use wake_q to wake up processes outside lock critical section
-Date:   Thu, 10 Feb 2022 13:10:19 -0500
-Message-Id: <20220210181019.1259677-1-longman@redhat.com>
+        Thu, 10 Feb 2022 13:11:38 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F327C2187
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:11:38 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id w6so6995385vsf.3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 10:11:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m+hInPGeofgQvr+B+jVJK410sDOyGMUjmtcn9HJ0ffY=;
+        b=flqnBBPVANSD1q26AJK1xKHd6Pz8XsN5l5tNUv0zrjZ6RUkvAhmsCcb2usX76C3vze
+         BKQrSKHOjwhTWQ8zLtP0DwlqZU2SZ1gutMd+mUC2qMxIBtTl+AZrnhS8Ud7gT9mdwbxi
+         5BDCER/FC7wNbWpnFp5+7hKfdPu2ON2BDi0AWBt9Q/lbujogRcsefNa6QEIFX42OADob
+         kQ50VLfgVRE2YphEk0I5jOQvXDCXzqj2VfDbkAFstqP0CW3rjHIZ/2kOGpi+2ej68ixh
+         swkWO+3eL+q68NYwP5EkES500gpKk9md4DW9TPEE87u0QzYq/Lr6RF9kWQd2Jiwq8Fpi
+         MJnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m+hInPGeofgQvr+B+jVJK410sDOyGMUjmtcn9HJ0ffY=;
+        b=kyG4lqs/0OjgpxKlpmC5pg4v7r/tAhiAFI5x/QIA0QvYuNNF1gzvLkjVm7GyLPt6bD
+         nDry6S+ATKz1F2u4krEoZBOGehqrCvfOBgt1VPlE4QgCULWTgeg7NZbeEuBMM45jjpRS
+         DMleOQDTDEjQaOZnNWaVhAujSlNRRjwTyHTSGWHVCQAB6kSqb/NGITv0qGpNuaCq0Fqm
+         7yehik0SV/MLVS69cgzzJHWNcGh0MZ1Ow0dGIgqrq+s1nXwwhcUAl1MV+jnYGIWsqyNr
+         lJ35ctHLiN9THaBmIhzmvBtK8eMyW8R6ce6kzmKaJYvgPd4QqeC4en5d/UsnHgJrERFN
+         kdoQ==
+X-Gm-Message-State: AOAM533FNLssx+9PlTIP2iTEnZo3te5v8YR8b9EdyRqdpDOrHHScUTZ+
+        ySZCNDME2sl+cl8tM93Bl2Nd8ynPwJhX0LundFYPig==
+X-Google-Smtp-Source: ABdhPJw0wrjMPSV0KitDigRahLC/42LEA2IINh4KLCyn8gAYrV3PQkar+WOmsLQ0V6q190C4yh2BfHWfFZg0RMqQ4wo=
+X-Received: by 2002:a67:ff0a:: with SMTP id v10mr1811061vsp.3.1644516698069;
+ Thu, 10 Feb 2022 10:11:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220209191248.596319706@linuxfoundation.org>
+In-Reply-To: <20220209191248.596319706@linuxfoundation.org>
+From:   Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
+Date:   Thu, 10 Feb 2022 13:11:01 -0500
+Message-ID: <CAG=yYwk2JyJsUsBR_aRxY2j=i=snjoCTx+D70x78BRwN-X53=Q@mail.gmail.com>
+Subject: Re: [PATCH 4.19 0/2] 4.19.229-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
+        torvalds@linux-foundation.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Content-Type: multipart/mixed; boundary="0000000000009ddee705d7ade1bc"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following lockdep splat was observed:
+--0000000000009ddee705d7ade1bc
+Content-Type: text/plain; charset="UTF-8"
 
-[ 9776.459819] ======================================================
-[ 9776.459820] WARNING: possible circular locking dependency detected
-[ 9776.459821] 5.14.0-0.rc4.35.el9.x86_64+debug #1 Not tainted
-[ 9776.459823] ------------------------------------------------------
-[ 9776.459824] stress-ng/117708 is trying to acquire lock:
-[ 9776.459825] ffffffff892d41d8 ((console_sem).lock){-...}-{2:2}, at: down_trylock+0x13/0x70
+On Wed, Feb 9, 2022 at 2:25 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.229 release.
+> There are 2 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.229-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-[ 9776.459831] but task is already holding lock:
-[ 9776.459832] ffff888e005f6d18 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x27/0x130
+hello,
+Compiled  and booted kernel 4.19.229-rc1+ on :
 
-[ 9776.459837] which lock already depends on the new lock.
-      :
-[ 9776.459857] -> #1 (&p->pi_lock){-.-.}-{2:2}:
-[ 9776.459860]        __lock_acquire+0xb72/0x1870
-[ 9776.459861]        lock_acquire+0x1ca/0x570
-[ 9776.459862]        _raw_spin_lock_irqsave+0x40/0x90
-[ 9776.459863]        try_to_wake_up+0x9d/0x1210
-[ 9776.459864]        up+0x7a/0xb0
-[ 9776.459864]        __up_console_sem+0x33/0x70
-[ 9776.459865]        console_unlock+0x3a1/0x5f0
-[ 9776.459866]        vprintk_emit+0x23b/0x2b0
-[ 9776.459867]        devkmsg_emit.constprop.0+0xab/0xdc
-[ 9776.459868]        devkmsg_write.cold+0x4e/0x78
-[ 9776.459869]        do_iter_readv_writev+0x343/0x690
-[ 9776.459870]        do_iter_write+0x123/0x340
-[ 9776.459871]        vfs_writev+0x19d/0x520
-[ 9776.459871]        do_writev+0x110/0x290
-[ 9776.459872]        do_syscall_64+0x3b/0x90
-[ 9776.459873]        entry_SYSCALL_64_after_hwframe+0x44/0xae
-      :
-[ 9776.459905] Chain exists of:
-[ 9776.459906]   (console_sem).lock --> &p->pi_lock --> &rq->__lock
+Processor Information:
+    Socket Designation: FM2
+    Type: Central Processor
+    Family: A-Series
+    Manufacturer: AuthenticAMD
+    ID: 31 0F 61 00 FF FB 8B 17
+    Signature: Family 21, Model 19, Stepping 1
 
-[ 9776.459911]  Possible unsafe locking scenario:
 
-[ 9776.459913]        CPU0                    CPU1
-[ 9776.459914]        ----                    ----
-[ 9776.459914]   lock(&rq->__lock);
-[ 9776.459917]                                lock(&p->pi_lock);
-[ 9776.459919]                                lock(&rq->__lock);
-[ 9776.459921]   lock((console_sem).lock);
+i have a new  display card of nvidia chipset. iam using non-free drivers here.
+01:00.0 VGA compatible controller: NVIDIA Corporation GP108 [GeForce
+GT 1030] (rev a1) (from lspci output)
+resources: irq:29 memory:fd000000-fdffffff memory:c0000000-cfffffff
+memory:d0000000-d1ffffff ioport:e000(size=128) memory:c0000-dffff
+(from "sudo lshw -c video"  output)
 
-[ 9776.459923]  *** DEADLOCK ***
-[ 9776.459925] 2 locks held by stress-ng/117708:
-[ 9776.459925]  #0: ffffffff89403960 (&cpuset_rwsem){++++}-{0:0}, at: __sched_setscheduler+0xe2f/0x2c80
-[ 9776.459930]  #1: ffff888e005f6d18 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x27/0x130
+dmesg related actions attached.
 
-[ 9776.459935] stack backtrace:
-[ 9776.459936] CPU: 95 PID: 117708 Comm: stress-ng Kdump: loaded Not tainted 5.14.0-0.rc4.35.el9.x86_64+debug #1
-[ 9776.459938] Hardware name: FUJITSU PRIMEQUEST 2800E3/D3752, BIOS PRIMEQUEST 2000 Series BIOS Version 01.51 06/29/2020
-[ 9776.459939] Call Trace:
-[ 9776.459940]  <IRQ>
-[ 9776.459940]  dump_stack_lvl+0x57/0x7d
-[ 9776.459941]  check_noncircular+0x26a/0x310
-[ 9776.459945]  check_prev_add+0x15e/0x20f0
-[ 9776.459946]  validate_chain+0xaba/0xde0
-[ 9776.459948]  __lock_acquire+0xb72/0x1870
-[ 9776.459949]  lock_acquire+0x1ca/0x570
-[ 9776.459952]  _raw_spin_lock_irqsave+0x40/0x90
-[ 9776.459954]  down_trylock+0x13/0x70
-[ 9776.459955]  __down_trylock_console_sem+0x2a/0xb0
-[ 9776.459956]  console_trylock_spinning+0x13/0x1f0
-[ 9776.459957]  vprintk_emit+0x1e6/0x2b0
-[ 9776.459958]  printk+0xb2/0xe3
-[ 9776.459960]  __warn_printk+0x9b/0xf3
-[ 9776.459964]  update_rq_clock+0x3c2/0x780
-[ 9776.459966]  do_sched_rt_period_timer+0x19e/0x9a0
-[ 9776.459968]  sched_rt_period_timer+0x6b/0x150
-[ 9776.459969]  __run_hrtimer+0x27a/0xb20
-[ 9776.459970]  __hrtimer_run_queues+0x159/0x260
-[ 9776.459974]  hrtimer_interrupt+0x2cb/0x8f0
-[ 9776.459976]  __sysvec_apic_timer_interrupt+0x13e/0x540
-[ 9776.459977]  sysvec_apic_timer_interrupt+0x6a/0x90
-[ 9776.459977]  </IRQ>
+Tested-by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+--
+software engineer
+rajagiri school of engineering and technology  -  autonomous
 
-The problematic locking sequence ((console_sem).lock --> &p->pi_lock)
-was caused by the fact the semaphore up() function is calling
-wake_up_process() while holding the semaphore raw spinlock.
+--0000000000009ddee705d7ade1bc
+Content-Type: text/plain; charset="US-ASCII"; name="dmesg0.txt"
+Content-Disposition: attachment; filename="dmesg0.txt"
+Content-Transfer-Encoding: base64
+Content-ID: <f_kzhaqwpy0>
+X-Attachment-Id: f_kzhaqwpy0
 
-The (&rq->__lock --> (console_sem).lock) locking sequence seems to be
-caused by a SCHED_WARN_ON() call in update_rq_clock(). To work around
-this problematic locking sequence, we may have to ban all WARN*() calls
-when the rq lock is held, which may be too restrictive, or we may have
-to add a WARN_DEFERRED() call which can be quite a lot of work.
-
-On the other hand, by moving the wake_up_processs() call out of the
-raw spinlock critical section using wake_q, it will break the first
-problematic locking sequence as well as reducing raw spinlock hold time.
-This is easier and cleaner.
-
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/locking/semaphore.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/locking/semaphore.c b/kernel/locking/semaphore.c
-index 9ee381e4d2a4..a26c915430ba 100644
---- a/kernel/locking/semaphore.c
-+++ b/kernel/locking/semaphore.c
-@@ -29,6 +29,7 @@
- #include <linux/export.h>
- #include <linux/sched.h>
- #include <linux/sched/debug.h>
-+#include <linux/sched/wake_q.h>
- #include <linux/semaphore.h>
- #include <linux/spinlock.h>
- #include <linux/ftrace.h>
-@@ -37,7 +38,7 @@ static noinline void __down(struct semaphore *sem);
- static noinline int __down_interruptible(struct semaphore *sem);
- static noinline int __down_killable(struct semaphore *sem);
- static noinline int __down_timeout(struct semaphore *sem, long timeout);
--static noinline void __up(struct semaphore *sem);
-+static noinline void __up(struct semaphore *sem, struct wake_q_head *wake_q);
- 
- /**
-  * down - acquire the semaphore
-@@ -182,13 +183,16 @@ EXPORT_SYMBOL(down_timeout);
- void up(struct semaphore *sem)
- {
- 	unsigned long flags;
-+	DEFINE_WAKE_Q(wake_q);
- 
- 	raw_spin_lock_irqsave(&sem->lock, flags);
- 	if (likely(list_empty(&sem->wait_list)))
- 		sem->count++;
- 	else
--		__up(sem);
-+		__up(sem, &wake_q);
- 	raw_spin_unlock_irqrestore(&sem->lock, flags);
-+	if (!wake_q_empty(&wake_q))
-+		wake_up_q(&wake_q);
- }
- EXPORT_SYMBOL(up);
- 
-@@ -256,11 +260,12 @@ static noinline int __sched __down_timeout(struct semaphore *sem, long timeout)
- 	return __down_common(sem, TASK_UNINTERRUPTIBLE, timeout);
- }
- 
--static noinline void __sched __up(struct semaphore *sem)
-+static noinline void __sched __up(struct semaphore *sem,
-+				  struct wake_q_head *wake_q)
- {
- 	struct semaphore_waiter *waiter = list_first_entry(&sem->wait_list,
- 						struct semaphore_waiter, list);
- 	list_del(&waiter->list);
- 	waiter->up = true;
--	wake_up_process(waiter->task);
-+	wake_q_add(wake_q, waiter->task);
- }
--- 
-2.27.0
-
+JHN1ZG8gc3lzY3RsIC13IGtlcm5lbC5kbWVzZ19yZXN0cmljdD0wCmtlcm5lbC5kbWVzZ19yZXN0
+cmljdCA9IDAKJGRtZXNnIC1sIGVtZXJnCiRkbWVzZyAtbCBhbGVydAokZG1lc2cgLWwgY3JpdAok
+ZG1lc2cgLWwgZXJyClsgICAgMS4yNzAwOTJdIG52aWRpYWZiOiB1bmtub3duIE5WX0FSQ0gKWyAg
+ICA1LjUzMTk5Ml0gY2dyb3VwOiBjZ3JvdXAyOiB1bmtub3duIG9wdGlvbiAibWVtb3J5X3JlY3Vy
+c2l2ZXByb3QiCiRkbWVzZyAtbCB3YXJuClsgICAgMC4wMTczODRdIEFDUEkgQklPUyBXYXJuaW5n
+IChidWcpOiBPcHRpb25hbCBGQURUIGZpZWxkIFBtMkNvbnRyb2xCbG9jayBoYXMgdmFsaWQgTGVu
+Z3RoIGJ1dCB6ZXJvIEFkZHJlc3M6IDB4MDAwMDAwMDAwMDAwMDAwMC8weDEgKDIwMTgwODEwL3Ri
+ZmFkdC02MTUpClsgICAgMS4yNzAwNDBdIG52aWRpYWZiX3NldHVwIFNUQVJUClsgICAgMS4yNzAw
+NDddIG52aWRpYWZiX3Byb2JlIFNUQVJUClsgICAxMi4zMjk2OTZdIG52aWRpYTogbG9hZGluZyBv
+dXQtb2YtdHJlZSBtb2R1bGUgdGFpbnRzIGtlcm5lbC4KWyAgIDEyLjMyOTcxMF0gbnZpZGlhOiBt
+b2R1bGUgbGljZW5zZSAnTlZJRElBJyB0YWludHMga2VybmVsLgpbICAgMTIuMzI5NzExXSBEaXNh
+YmxpbmcgbG9jayBkZWJ1Z2dpbmcgZHVlIHRvIGtlcm5lbCB0YWludApbICAgMTIuNDg2Mjg5XSBO
+VlJNOiBsb2FkaW5nIE5WSURJQSBVTklYIHg4Nl82NCBLZXJuZWwgTW9kdWxlICA0NzAuMTAzLjAx
+ICBUaHUgSmFuICA2IDEyOjEwOjA0IFVUQyAyMDIyClsgICAzMS41NDcwNzNdIHJlc291cmNlIHNh
+bml0eSBjaGVjazogcmVxdWVzdGluZyBbbWVtIDB4MDAwYzAwMDAtMHgwMDBmZmZmZl0sIHdoaWNo
+IHNwYW5zIG1vcmUgdGhhbiBQQ0kgQnVzIDAwMDA6MDAgW21lbSAweDAwMGMwMDAwLTB4MDAwZGZm
+ZmYgd2luZG93XQpbICAgMzEuNTQ3NDgzXSBjYWxsZXIgX252MDAwNzIycm0rMHgxYWQvMHgyMDAg
+W252aWRpYV0gbWFwcGluZyBtdWx0aXBsZSBCQVJzClsgICA0MC4wOTk0MDJdIGthdWRpdGRfcHJp
+bnRrX3NrYjogMTEgY2FsbGJhY2tzIHN1cHByZXNzZWQKJAo=
+--0000000000009ddee705d7ade1bc--

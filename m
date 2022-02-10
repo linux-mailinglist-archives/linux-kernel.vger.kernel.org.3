@@ -2,118 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F7D4B0E2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF964B0E2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:13:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242053AbiBJNOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 08:14:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47052 "EHLO
+        id S242025AbiBJNNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 08:13:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242043AbiBJNOP (ORCPT
+        with ESMTP id S238484AbiBJNNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 08:14:15 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155A71157
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 05:14:16 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id k9so4853182qvv.9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 05:14:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=marek-ca.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=uqnW/szZ8yMl69fSxYGMyrphrxanTs2JR1CLOUZb5zM=;
-        b=KShJlbJHbAl9loI8iynvAEQIMPYc002bkwj24615T+nnpTbXCABKyQbvp9hykiZ/w2
-         WCz49rBtNp4Sy8SHN2nzpsHgR9N5e8Rj0Lxwzc8LJEmkm248uqvHCNZZVKXEVzS+9IUT
-         DLJYyp9XJAdrrGNE191HFk+8BPwBh9rE9OFdi8LK6NgYji+1ygWZBEXO0XCBOb8PprPc
-         +ObYK6uIRS91ao8H3r4WLm8clFNIe+5ofxQXVIIOdgLLzYjapvJarbpRTBjixI1Cg/3G
-         /MAuozCLQ2bWnVA8LIXKp0adkVoZaO750eITaXpy5bC/Q/dTruvoMdeB7jSflLLv6LIN
-         U2mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=uqnW/szZ8yMl69fSxYGMyrphrxanTs2JR1CLOUZb5zM=;
-        b=nZJvoclOqVnOX9W4X8vHQnXN6wdzQjKvKym6elsP0L5gMvnoJlvk52m/1XIs+xg7u3
-         0F0TypcZnevF97ncav+/R86odXTKhQlxvD7F9f40nLqcxDMHqAh+YDMRWBHKu9CMhIaU
-         QvJgWoiyoq7W4G2SaQ/NlUORG5tWIE/ZYXw2AlheoaA2i6PaaU1YmRkPnh9hV7Qyl2Mw
-         BkL/h97dC5C1cZ01L5eoAUswWGp2+e437rrxoiLgEimSROHkASHZhTB4FZYvS08yo51v
-         17AkA+y6JCQmhzlXckdcUYovDFRFyCFnQekoqtU1/m7wlUOXkyQEaZ9/da/+11QLwOP2
-         M0fg==
-X-Gm-Message-State: AOAM530gnRCpIwA47SQBkolQ8BVd8sWOp7gHif6LTwVAI6YWCHr/blGy
-        EWxgzdtT8uexF0Y1V2sqxZlCNIYPWhIug9n2Ipk=
-X-Google-Smtp-Source: ABdhPJwX48+RfVd9PNIxvmxM+Lm9nNjH5HsHrTT/zZU2MUbiGHSQODMEVBJbkr7/14XjQg60DJyvWw==
-X-Received: by 2002:a05:6214:5081:: with SMTP id kk1mr5009104qvb.112.1644498855283;
-        Thu, 10 Feb 2022 05:14:15 -0800 (PST)
-Received: from localhost.localdomain (modemcable134.222-177-173.mc.videotron.ca. [173.177.222.134])
-        by smtp.gmail.com with ESMTPSA id p15sm10969824qtk.56.2022.02.10.05.14.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 05:14:14 -0800 (PST)
-From:   Jonathan Marek <jonathan@marek.ca>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     dmitry.baryshkov@linaro.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org (open list:PIN CONTROL SUBSYSTEM),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 2/2] pinctrl: qcom: print egpio mode in debugfs
-Date:   Thu, 10 Feb 2022 08:12:09 -0500
-Message-Id: <20220210131210.24605-2-jonathan@marek.ca>
-X-Mailer: git-send-email 2.26.1
-In-Reply-To: <20220210131210.24605-1-jonathan@marek.ca>
-References: <20220210131210.24605-1-jonathan@marek.ca>
+        Thu, 10 Feb 2022 08:13:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F9C113F
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 05:13:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23F71B824B3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 13:13:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 737A4C004E1;
+        Thu, 10 Feb 2022 13:13:15 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hR3fwfat"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644498794;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IzzyXRQXp1fF2yvhjaLxOErxhAVSjKgIdCU6rMFCToc=;
+        b=hR3fwfatTqVS4+eNt/tG8z1aIvnKYVXs5swQt1n88Q2hgTzHZanflrrTR1rGNOy2ukspm6
+        X64RtyboJL6M1QvLRnrAnhw2Q48dI2G1sF49v0cNuPFsvuc/Y1jUN+/sVxr3LH7KOp2JA3
+        1hNkZbsmTxddm5GgbSmZZY8ILw/j4oM=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 71accad9 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 10 Feb 2022 13:13:13 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: [PATCH v2] random: tie batched entropy generation to base_crng generation
+Date:   Thu, 10 Feb 2022 14:13:04 +0100
+Message-Id: <20220210131304.97224-1-Jason@zx2c4.com>
+In-Reply-To: <CAHmME9oo5y08skaOOXg-q0T9pDs580dOotm6Wz0t96AssZr2Pw@mail.gmail.com>
+References: <CAHmME9oo5y08skaOOXg-q0T9pDs580dOotm6Wz0t96AssZr2Pw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When egpio_enable bit is cleared, the gpio is driven by SSC/LPASS TLMM and
-the APSS TLMM settings are ignored. Reflect that in the debugfs dump.
+Now that we have an explicit base_crng generation counter, we don't need
+a separate one for batched entropy. Rather, we can just move the
+generation forward every time we change crng_init state or update the
+base_crng key.
 
-Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- drivers/pinctrl/qcom/pinctrl-msm.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+v2 always increments the generation after extraction, as suggested by
+Dominik.
 
-diff --git a/drivers/pinctrl/qcom/pinctrl-msm.c b/drivers/pinctrl/qcom/pinctrl-msm.c
-index 780878dede9e0..27c19a206502d 100644
---- a/drivers/pinctrl/qcom/pinctrl-msm.c
-+++ b/drivers/pinctrl/qcom/pinctrl-msm.c
-@@ -615,6 +615,7 @@ static void msm_gpio_dbg_show_one(struct seq_file *s,
- 	int drive;
- 	int pull;
- 	int val;
-+	int egpio_enable;
- 	u32 ctl_reg, io_reg;
+ drivers/char/random.c | 29 ++++++++---------------------
+ 1 file changed, 8 insertions(+), 21 deletions(-)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 5beb421ec12b..57d36f13e3a6 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -431,8 +431,6 @@ static DEFINE_PER_CPU(struct crng, crngs) = {
  
- 	static const char * const pulls_keeper[] = {
-@@ -641,12 +642,20 @@ static void msm_gpio_dbg_show_one(struct seq_file *s,
- 	func = (ctl_reg >> g->mux_bit) & 7;
- 	drive = (ctl_reg >> g->drv_bit) & 7;
- 	pull = (ctl_reg >> g->pull_bit) & 3;
-+	egpio_enable = 0;
-+	if (pctrl->soc->egpio_func && ctl_reg & BIT(g->egpio_present))
-+		egpio_enable = !(ctl_reg & BIT(g->egpio_enable));
+ static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
  
- 	if (is_out)
- 		val = !!(io_reg & BIT(g->out_bit));
- 	else
- 		val = !!(io_reg & BIT(g->in_bit));
+-static void invalidate_batched_entropy(void);
+-
+ /*
+  * crng_fast_load() can be called by code in the interrupt service
+  * path.  So we can't afford to dilly-dally. Returns the number of
+@@ -455,7 +453,7 @@ static size_t crng_fast_load(const void *cp, size_t len)
+ 		src++; crng_init_cnt++; len--; ret++;
+ 	}
+ 	if (crng_init_cnt >= CRNG_INIT_CNT_THRESH) {
+-		invalidate_batched_entropy();
++		++base_crng.generation;
+ 		crng_init = 1;
+ 	}
+ 	spin_unlock_irqrestore(&base_crng.lock, flags);
+@@ -530,7 +528,6 @@ static void crng_reseed(void)
+ 	WRITE_ONCE(base_crng.generation, next_gen);
+ 	base_crng.birth = jiffies;
+ 	if (crng_init < 2) {
+-		invalidate_batched_entropy();
+ 		crng_init = 2;
+ 		finalize_init = true;
+ 	}
+@@ -1277,8 +1274,9 @@ int __init rand_initialize(void)
+ 	mix_pool_bytes(utsname(), sizeof(*(utsname())));
  
-+	if (egpio_enable) {
-+		seq_printf(s, " %-8s: egpio\n", g->name);
-+		return;
-+	}
+ 	extract_entropy(base_crng.key, sizeof(base_crng.key));
++	++base_crng.generation;
 +
- 	seq_printf(s, " %-8s: %-3s", g->name, is_out ? "out" : "in");
- 	seq_printf(s, " %-4s func%d", val ? "high" : "low", func);
- 	seq_printf(s, " %dmA", msm_regval_to_drive(drive));
+ 	if (arch_init && trust_cpu && crng_init < 2) {
+-		invalidate_batched_entropy();
+ 		crng_init = 2;
+ 		pr_notice("crng init done (trusting CPU's manufacturer)\n");
+ 	}
+@@ -1628,8 +1626,6 @@ static int __init random_sysctls_init(void)
+ device_initcall(random_sysctls_init);
+ #endif	/* CONFIG_SYSCTL */
+ 
+-static atomic_t batch_generation = ATOMIC_INIT(0);
+-
+ struct batched_entropy {
+ 	union {
+ 		/* We make this 1.5x a ChaCha block, so that we get the
+@@ -1642,8 +1638,8 @@ struct batched_entropy {
+ 		u32 entropy_u32[CHACHA_BLOCK_SIZE * 3 / (2 * sizeof(u32))];
+ 	};
+ 	local_lock_t lock;
++	unsigned long generation;
+ 	unsigned int position;
+-	int generation;
+ };
+ 
+ /*
+@@ -1662,14 +1658,14 @@ u64 get_random_u64(void)
+ 	unsigned long flags;
+ 	struct batched_entropy *batch;
+ 	static void *previous;
+-	int next_gen;
++	unsigned long next_gen;
+ 
+ 	warn_unseeded_randomness(&previous);
+ 
+ 	local_lock_irqsave(&batched_entropy_u64.lock, flags);
+ 	batch = raw_cpu_ptr(&batched_entropy_u64);
+ 
+-	next_gen = atomic_read(&batch_generation);
++	next_gen = READ_ONCE(base_crng.generation);
+ 	if (batch->position % ARRAY_SIZE(batch->entropy_u64) == 0 ||
+ 	    next_gen != batch->generation) {
+ 		_get_random_bytes(batch->entropy_u64, sizeof(batch->entropy_u64));
+@@ -1695,14 +1691,14 @@ u32 get_random_u32(void)
+ 	unsigned long flags;
+ 	struct batched_entropy *batch;
+ 	static void *previous;
+-	int next_gen;
++	unsigned long next_gen;
+ 
+ 	warn_unseeded_randomness(&previous);
+ 
+ 	local_lock_irqsave(&batched_entropy_u32.lock, flags);
+ 	batch = raw_cpu_ptr(&batched_entropy_u32);
+ 
+-	next_gen = atomic_read(&batch_generation);
++	next_gen = READ_ONCE(base_crng.generation);
+ 	if (batch->position % ARRAY_SIZE(batch->entropy_u32) == 0 ||
+ 	    next_gen != batch->generation) {
+ 		_get_random_bytes(batch->entropy_u32, sizeof(batch->entropy_u32));
+@@ -1718,15 +1714,6 @@ u32 get_random_u32(void)
+ }
+ EXPORT_SYMBOL(get_random_u32);
+ 
+-/* It's important to invalidate all potential batched entropy that might
+- * be stored before the crng is initialized, which we can do lazily by
+- * bumping the generation counter.
+- */
+-static void invalidate_batched_entropy(void)
+-{
+-	atomic_inc(&batch_generation);
+-}
+-
+ /**
+  * randomize_page - Generate a random, page aligned address
+  * @start:	The smallest acceptable address the caller will take.
 -- 
-2.26.1
+2.35.0
 

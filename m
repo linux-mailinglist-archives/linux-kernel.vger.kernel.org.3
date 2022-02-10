@@ -2,75 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8A94B08A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:41:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 113804B07F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:17:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237732AbiBJIlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 03:41:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41552 "EHLO
+        id S237264AbiBJIRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 03:17:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237655AbiBJIlE (ORCPT
+        with ESMTP id S237230AbiBJIRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 03:41:04 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C92BEB4;
-        Thu, 10 Feb 2022 00:41:01 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 1F71E1F45FED
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644482459;
-        bh=dxxB5y7E7AReW2OAClnLIQexw3iKhotkP4SOeOAGdAE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lymY0FiuiysUb7/sSKRGIAg4jthJDb4GiQzlbfekQkSWXBOvc5GXsheGI2D39J1Qi
-         k3vPiOsX1+GILO03JWThkAH1dG6l+O2/r5mfnGztJ0BOCm05187+jqRK+CupRNXscf
-         8dVNhlmp9hrk5o4Ovl1lidzZFLamLR6CSZwgupmALF+H0sAgSH1XA9hwLQqYRDgzh+
-         q0WsnrGIZDrVnlsWpC4OslPfBt9Ww3yFdx067aDeyIWs8l4V+hlIwGYGc5mfb1ossx
-         jKqVmmQpyz+sUPAhv1UfvSxb/UCIP2+mkls3Ei8ZXuqiZEcWe8v06niHjVo4uepz4E
-         k7FeUraA0G4cg==
-Message-ID: <f807c862-d327-5b12-7443-c4fed6e1ef6a@collabora.com>
-Date:   Thu, 10 Feb 2022 09:40:55 +0100
+        Thu, 10 Feb 2022 03:17:41 -0500
+X-Greylist: delayed 918 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 00:17:39 PST
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8026C5;
+        Thu, 10 Feb 2022 00:17:39 -0800 (PST)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4JvTfJ3SzxzdZbx;
+        Thu, 10 Feb 2022 15:59:04 +0800 (CST)
+Received: from dggpemm500003.china.huawei.com (7.185.36.56) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 10 Feb 2022 16:02:17 +0800
+Received: from huawei.com (10.175.104.170) by dggpemm500003.china.huawei.com
+ (7.185.36.56) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 10 Feb
+ 2022 16:02:16 +0800
+From:   Liang Zhang <zhangliang5@huawei.com>
+To:     <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
+        <wanpengli@tencent.com>, <jmattson@google.com>, <joro@8bytes.org>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>
+CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <wangzhigang17@huawei.com>, <zhangliang5@huawei.com>
+Subject: [PATCH] KVM: x86/mmu: make apf token non-zero to fix bug
+Date:   Thu, 10 Feb 2022 16:41:13 +0800
+Message-ID: <20220210084113.73005-1-zhangliang5@huawei.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2, 1/7] dt-bindings: media: mtk-vcodec: Adds decoder
- dt-bindings for lat soc
-Content-Language: en-US
-To:     "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>,
-        George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220128035440.24533-1-yunfei.dong@mediatek.com>
- <20220128035440.24533-2-yunfei.dong@mediatek.com>
- <YgQl8CtttQ99+8lB@robh.at.kernel.org>
- <aa72bec2064e25990e1a3641b920cb5528cfccd4.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <aa72bec2064e25990e1a3641b920cb5528cfccd4.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.170]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500003.china.huawei.com (7.185.36.56)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,116 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/02/22 04:06, yunfei.dong@mediatek.com ha scritto:
-> Hi Rob,
-> 
-> Thanks for your suggestion.
-> On Wed, 2022-02-09 at 14:37 -0600, Rob Herring wrote:
->> On Fri, Jan 28, 2022 at 11:54:34AM +0800, Yunfei Dong wrote:
->>> Adds decoder dt-bindings for compatible "mediatek,mtk-vcodec-lat-
->>> soc".
->>
->> What's lat soc? How does this relate to what's already there in this
->> binding.
->>
-> lat soc is another hardware, is related with some vdec larb ports.
-> Won't be used to decode, but must to write it in dtsi, or hardware
-> can't work well.
+In current async pagefault logic, when a page is ready, KVM relies on
+kvm_arch_can_dequeue_async_page_present() to determine whether to deliver
+a READY event to the Guest. This function test token value of struct
+kvm_vcpu_pv_apf_data, which must be reset to zero by Guest kernel when a
+READY event is finished by Guest. If value is zero meaning that a READY
+event is done, so the KVM can deliver another.
+But the kvm_arch_setup_async_pf() may produce a valid token with zero
+value, which is confused with previous mention and may lead the loss of
+this READY event.
 
-Hello Yunfei,
+This bug may cause task blocked forever in Guest:
+ INFO: task stress:7532 blocked for more than 1254 seconds.
+       Not tainted 5.10.0 #16
+ "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+ task:stress          state:D stack:    0 pid: 7532 ppid:  1409
+ flags:0x00000080
+ Call Trace:
+  __schedule+0x1e7/0x650
+  schedule+0x46/0xb0
+  kvm_async_pf_task_wait_schedule+0xad/0xe0
+  ? exit_to_user_mode_prepare+0x60/0x70
+  __kvm_handle_async_pf+0x4f/0xb0
+  ? asm_exc_page_fault+0x8/0x30
+  exc_page_fault+0x6f/0x110
+  ? asm_exc_page_fault+0x8/0x30
+  asm_exc_page_fault+0x1e/0x30
+ RIP: 0033:0x402d00
+ RSP: 002b:00007ffd31912500 EFLAGS: 00010206
+ RAX: 0000000000071000 RBX: ffffffffffffffff RCX: 00000000021a32b0
+ RDX: 000000000007d011 RSI: 000000000007d000 RDI: 00000000021262b0
+ RBP: 00000000021262b0 R08: 0000000000000003 R09: 0000000000000086
+ R10: 00000000000000eb R11: 00007fefbdf2baa0 R12: 0000000000000000
+ R13: 0000000000000002 R14: 000000000007d000 R15: 0000000000001000
 
-as a suggestion, writing the meaning of the "LAT" acronym may also
-help to clear some doubts around (please, also do that in the yaml file,
-other than the commit description).
+Signed-off-by: Liang Zhang <zhangliang5@huawei.com>
+---
+ arch/x86/kvm/mmu/mmu.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-Thank you!
-Angelo
-
-> 
-> Need to enable clock/power/iommus, no interrupt.
->> The subject space is limited, avoid saying the same thing twice
->> (dt-bindings).
->>
-> 
-> Best Regards,
-> Yunfei Dong
->>>
->>> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
->>> ---
->>>   .../media/mediatek,vcodec-subdev-decoder.yaml | 49
->>> +++++++++++++++++++
->>>   1 file changed, 49 insertions(+)
->>>
->>> diff --git
->>> a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-
->>> decoder.yaml
->>> b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-
->>> decoder.yaml
->>> index 6415c9f29130..a3c892338ac0 100644
->>> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-
->>> subdev-decoder.yaml
->>> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-
->>> subdev-decoder.yaml
->>> @@ -189,6 +189,55 @@ patternProperties:
->>>   
->>>       additionalProperties: false
->>>   
->>> +  '^vcodec-lat-soc@[0-9a-f]+$':
->>> +    type: object
->>> +
->>> +    properties:
->>> +      compatible:
->>> +        const: mediatek,mtk-vcodec-lat-soc
->>> +
->>> +      reg:
->>> +        maxItems: 1
->>> +
->>> +      iommus:
->>> +        minItems: 1
->>> +        maxItems: 32
->>> +        description: |
->>> +          List of the hardware port in respective IOMMU block for
->>> current Socs.
->>> +          Refer to bindings/iommu/mediatek,iommu.yaml.
->>> +
->>> +      clocks:
->>> +        maxItems: 5
->>> +
->>> +      clock-names:
->>> +        items:
->>> +          - const: sel
->>> +          - const: soc-vdec
->>> +          - const: soc-lat
->>> +          - const: vdec
->>> +          - const: top
->>> +
->>> +      assigned-clocks:
->>> +        maxItems: 1
->>> +
->>> +      assigned-clock-parents:
->>> +        maxItems: 1
->>> +
->>> +      power-domains:
->>> +        maxItems: 1
->>> +
->>> +    required:
->>> +      - compatible
->>> +      - reg
->>> +      - iommus
->>> +      - clocks
->>> +      - clock-names
->>> +      - assigned-clocks
->>> +      - assigned-clock-parents
->>> +      - power-domains
->>> +
->>> +    additionalProperties: false
->>> +
->>>   required:
->>>     - compatible
->>>     - reg
->>> -- 
->>> 2.25.1
->>>
->>>
-> 
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 593093b52395..8e24f73bf60b 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -3889,12 +3889,23 @@ static void shadow_page_table_clear_flood(struct kvm_vcpu *vcpu, gva_t addr)
+ 	walk_shadow_page_lockless_end(vcpu);
+ }
+ 
++static u32 alloc_apf_token(struct kvm_vcpu *vcpu)
++{
++	/* make sure the token value is not 0 */
++	u32 id = vcpu->arch.apf.id;
++
++	if (id << 12 == 0)
++		vcpu->arch.apf.id = 1;
++
++	return (vcpu->arch.apf.id++ << 12) | vcpu->vcpu_id;
++}
++
+ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+ 				    gfn_t gfn)
+ {
+ 	struct kvm_arch_async_pf arch;
+ 
+-	arch.token = (vcpu->arch.apf.id++ << 12) | vcpu->vcpu_id;
++	arch.token = alloc_apf_token(vcpu);
+ 	arch.gfn = gfn;
+ 	arch.direct_map = vcpu->arch.mmu->direct_map;
+ 	arch.cr3 = vcpu->arch.mmu->get_guest_pgd(vcpu);
+-- 
+2.30.0
 

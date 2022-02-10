@@ -2,117 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 853E94B0FA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 754D24B0FA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 15:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242600AbiBJOFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 09:05:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57560 "EHLO
+        id S242610AbiBJOF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 09:05:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241248AbiBJOFR (ORCPT
+        with ESMTP id S242579AbiBJOF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 09:05:17 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6741B3
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:05:19 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id 193-20020a6b01ca000000b00612778c712aso4121396iob.14
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:05:19 -0800 (PST)
+        Thu, 10 Feb 2022 09:05:27 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156991B3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:05:28 -0800 (PST)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C189940058
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 14:05:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644501926;
+        bh=zKXhRO/iKyX7h/YxXn3Y6EhBscMlQ0dLk5x/LHBq8KY=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=tDcqdVz0TLEF8AGnlZRUTNWm9Onu6Ags5FP7q3aXx5fKisM1hFr9TNJD9iRHrVe/1
+         qX+EopV3UnHqvpF5HRHSUlzXBGDZDUQnvvf8/M/YOXS3+djATWlh+CxNkpFr1hY6Vn
+         RW9ZS2LwzBv80UQpj59fOsSnWijybsVUt8bGUaXXoxFEwJbs9hSiSyuiubrnluOpCm
+         ZZW9lV6Xu+Xf0LM6M3BIEfHEvhZ3oB32JPcbRKSodnQFRe6I3votUAtD3T/fV7A8zO
+         nf4C7vpkUvuqR/gXALLJQmsV7S2nJXOc2BzRuA/X/MIWvtBbi1t7t7ZiF0iBTucVch
+         aR4FRkSvTAp3g==
+Received: by mail-ej1-f70.google.com with SMTP id q3-20020a17090676c300b006a9453c33b0so2751293ejn.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 06:05:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=9sgSbApQo++c7T70sHfxQzyj8WhWNYeWFt0ennmNEF4=;
-        b=xFZSAPiqKuYfPRr4QX2wB4P95A6Ty8vQl6fA1433P/913GqdvNYZsefZITXOQ+7e1X
-         LfQ5GZMHY4LtXiqP4HUm09qaqYj5xsQ+6q63z5z8WtTySctQ2TNzpyrgmtE8qUkOxVRb
-         lENC2nZ+HWFfcisgVFlZmcme/1Dv2dfvMP8u47LmM+jvG42FpJJxtWfYra8CJUHa42Rn
-         eKKG5tATjjWJ9rVn2hJPd2KR/o6+/VN/74KEMCLQxJagmEYBwk58vQhTvTQneqPG5+js
-         w953ZGHNqxxgFqrV7t18dduDHn8eDx1eIO6w4o89xnafchfVEfT+dHrA8hCNZB0DkZm8
-         /tKA==
-X-Gm-Message-State: AOAM531xLx6bgKn247fta4aaiaodWBUhQ9apI7uHBEiELOBcu9uiAVhR
-        T15klJFk0Hd3Etc3t/Ezy/JPLMcfrANIVVKxLRJK3/5n8o5w
-X-Google-Smtp-Source: ABdhPJx9Wn+4DdjWmfvunvoohS0TCSGFqtxqixRGiPT2n7ES7InJgdBlxLJp6xXEqCpCxhBmFGtGpg9ihjjFDl5JQHf92GXr/eOb
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zKXhRO/iKyX7h/YxXn3Y6EhBscMlQ0dLk5x/LHBq8KY=;
+        b=lc8p4L6lkzeZ1WMdZiAfTkSjURYRdSekz3JpAUXhmhHvfjwczktWYGDxMgF4U2bQAW
+         AMMgrsSPTGzkPkHjVjXAKJmlvHnmqfdJOMFI7F0d/c8vGXN0/XkumGBUKyTtMsFH4aDy
+         tMgo8guKMm1EE9X30LuEAKSGiLMB+uWWPd/dkODxBE8M3FVQnQ+PT0JSJeWhUAO3XSwE
+         Q57bMDY3yXmxCWFeiBgDZ9PJCbjJbyqgBeAVtx36LG3QvHCaeei2rwvM1CWTBXmEZw8m
+         CU6OSTUJr1OXVs7FJpkXq7ac8/Abs6Pasxpmmtr/teZT6SOZPoMzjZ2ucrj05B1ecoYe
+         oOPQ==
+X-Gm-Message-State: AOAM533/SzVrksx35X7Dkpdb8BCAHNeJlcp8BqJrwNKN5OkId3vfhhDD
+        ZQOufqCQR2nZHH2OJQLm9odfzyX50J3+Z5/YakaBYq/N+POGFdZH6ymA3LZkHWcGnsHI+8K/7Jw
+        7ldbjPFOh/WmFwdxovsKiRzKaDP5FVKm/G44R3h9+Uw==
+X-Received: by 2002:a17:907:3ea9:: with SMTP id hs41mr6869690ejc.727.1644501926406;
+        Thu, 10 Feb 2022 06:05:26 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJye7QQ/M4O+aQStNkXT2r87JXvIqUAITU2CmbxyLbP+hraXKwtnrC+00UUlx02GVr7CyioUXw==
+X-Received: by 2002:a17:907:3ea9:: with SMTP id hs41mr6869681ejc.727.1644501926248;
+        Thu, 10 Feb 2022 06:05:26 -0800 (PST)
+Received: from [192.168.0.98] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id i6sm9812939edf.20.2022.02.10.06.05.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 06:05:25 -0800 (PST)
+Message-ID: <546f147d-1682-fb92-42e5-7247dc19dcf1@canonical.com>
+Date:   Thu, 10 Feb 2022 15:05:24 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2054:: with SMTP id t20mr4051237jaj.207.1644501918370;
- Thu, 10 Feb 2022 06:05:18 -0800 (PST)
-Date:   Thu, 10 Feb 2022 06:05:18 -0800
-In-Reply-To: <0000000000009962dc05d7a6b27f@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ad4e9c05d7aa7064@google.com>
-Subject: Re: [syzbot] WARNING in mroute_clean_tables
-From:   syzbot <syzbot+a7c030a05218db921de5@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, yoshfuji@linux-ipv6.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] selftests/ftrace: Do not trace do_softirq because of
+ PREEMPT_RT
+Content-Language: en-US
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rt-users@vger.kernel.org, joseph.salisbury@canonical.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220210083356.11212-1-krzysztof.kozlowski@canonical.com>
+ <YgUXcGC1mH7VX1d9@linutronix.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <YgUXcGC1mH7VX1d9@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On 10/02/2022 14:47, Sebastian Andrzej Siewior wrote:
+> On 2022-02-10 09:33:56 [+0100], Krzysztof Kozlowski wrote:
+>> The PREEMPT_RT patchset does not use soft IRQs thus trying to filter for
+>> do_softirq fails for such kernel:
+> 
+> PREEMPT_RT does use soft IRQs.
 
-HEAD commit:    e5313968c41b Merge branch 'Split bpf_sk_lookup remote_port..
-git tree:       bpf-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=141c859a700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c40b67275bfe2a58
-dashboard link: https://syzkaller.appspot.com/bug?extid=a7c030a05218db921de5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=130486f8700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16d9f758700000
+Correct. It does not use do_softirq() code, but follows different path
+with ksoftirqd.
+Shall I rephrase it towards something like this? Or maybe you have some
+more accurate description?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a7c030a05218db921de5@syzkaller.appspotmail.com
+The implementation detail is that do_softirq() is in ifndef.
 
-------------[ cut here ]------------
-RTNL: assertion failed at net/core/dev.c (10367)
-WARNING: CPU: 1 PID: 3674 at net/core/dev.c:10367 unregister_netdevice_many+0x1246/0x1850 net/core/dev.c:10367
-Modules linked in:
-CPU: 1 PID: 3674 Comm: syz-executor165 Not tainted 5.16.0-syzkaller-11655-ge5313968c41b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:unregister_netdevice_many+0x1246/0x1850 net/core/dev.c:10367
-Code: 0f 85 9b ee ff ff e8 59 f1 4a fa ba 7f 28 00 00 48 c7 c6 00 90 ae 8a 48 c7 c7 40 90 ae 8a c6 05 0e a1 51 06 01 e8 3c 8a d8 01 <0f> 0b e9 70 ee ff ff e8 2e f1 4a fa 4c 89 e7 e8 c6 22 59 fa e9 ee
-RSP: 0018:ffffc90003adf6e0 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff888075bf8000 RSI: ffffffff815fa058 RDI: fffff5200075bece
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff815f3dbe R11: 0000000000000000 R12: 00000000fffffff4
-R13: dffffc0000000000 R14: ffffc90003adf750 R15: ffff888070f9c000
-FS:  00007f8cda422700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f8cda4229d0 CR3: 0000000071e66000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- mroute_clean_tables+0x244/0xb40 net/ipv6/ip6mr.c:1509
- ip6mr_free_table net/ipv6/ip6mr.c:389 [inline]
- ip6mr_rules_init net/ipv6/ip6mr.c:246 [inline]
- ip6mr_net_init net/ipv6/ip6mr.c:1306 [inline]
- ip6mr_net_init+0x3f0/0x4e0 net/ipv6/ip6mr.c:1298
- ops_init+0xaf/0x470 net/core/net_namespace.c:140
- setup_net+0x54f/0xbb0 net/core/net_namespace.c:331
- copy_net_ns+0x318/0x760 net/core/net_namespace.c:475
- create_new_namespaces+0x3f6/0xb20 kernel/nsproxy.c:110
- copy_namespaces+0x391/0x450 kernel/nsproxy.c:178
- copy_process+0x2e15/0x7310 kernel/fork.c:2167
- kernel_clone+0xe7/0xab0 kernel/fork.c:2555
- __do_sys_clone+0xc8/0x110 kernel/fork.c:2672
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f8cda472169
-Code: Unable to access opcode bytes at RIP 0x7f8cda47213f.
-RSP: 002b:00007f8cda4222f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
-RAX: ffffffffffffffda RBX: 00007f8cda4fb4e0 RCX: 00007f8cda472169
-RDX: 0000000020000080 RSI: 0000000020000050 RDI: 0000000046000080
-RBP: 00007f8cda4c82fc R08: 0000000020000100 R09: 0000000000000000
-R10: 00000000200000c0 R11: 0000000000000246 R12: 00007f8cda4c82ed
-R13: 2bcc52a5f498fa8d R14: 000000344059e000 R15: 00007f8cda4fb4e8
- </TASK>
+> 
+>>   echo do_softirq
+>>   ftracetest: 81: echo: echo: I/O error
+>>
+>> Choose some other visible function for the test.
+>>
+> …
+> 
+>> --- a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+>> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+>> @@ -19,7 +19,7 @@ fail() { # mesg
+>>  
+>>  FILTER=set_ftrace_filter
+>>  FUNC1="schedule"
+>> -FUNC2="do_softirq"
+>> +FUNC2="scheduler_tick"
+> 
+> What is the purpose of this?
+> 
+>>  ALL_FUNCS="#### all functions enabled ####"
+>>  
+> 
+> Sebastian
 
+
+Best regards,
+Krzysztof

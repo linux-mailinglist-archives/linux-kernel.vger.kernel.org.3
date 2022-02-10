@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 447484B1339
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8154B133A
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 17:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244538AbiBJQkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 11:40:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51718 "EHLO
+        id S238972AbiBJQlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 11:41:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244522AbiBJQkn (ORCPT
+        with ESMTP id S244570AbiBJQlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 11:40:43 -0500
+        Thu, 10 Feb 2022 11:41:07 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB6EFC51
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:40:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36E991A8
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:41:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644511243;
+        s=mimecast20190719; t=1644511267;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lKM3MG407sDe7fSxFjGv90FiembQtgV4jikyh1VEkmM=;
-        b=cXzus7t+kppOjLV8Zi4t02AQg/dW/Jv9ID7OwHeRsMcZXXErY7+6foTx4wbp9oIaDGO8nI
-        cvxxM9PxAt6aLQQEe2rFg5hE4aoHJg8+hm1Fh+HO9XqhhZ6GFPaAmCFaz20P+X/Qagi+g1
-        RLxm0sARfUArM2sxwjelVS1kZGY0ces=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=0l/m87uQUmT5CdzB+3f+eMwCEX3CAuEYEJDghPjLWUg=;
+        b=eF8paujx6WLC/UXm2UsrQt/QJk02UIBm3lE2r6ABy3c3zVNlXzHWTe5ZDFOQktUwXErOHT
+        E06tDDy2XIrY9wQNEp0eKIezwTg6BKU+xdjDBZO7CfzI0VaWCTMr0qUBc5o63ul+j18+yt
+        lnbudSbuTVhVbPSz7VnZEWmidz6/4Pg=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-187-rOqjzm6INaWiTZTl4OE8YQ-1; Thu, 10 Feb 2022 11:40:41 -0500
-X-MC-Unique: rOqjzm6INaWiTZTl4OE8YQ-1
-Received: by mail-ej1-f71.google.com with SMTP id q3-20020a17090676c300b006a9453c33b0so2968110ejn.13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:40:41 -0800 (PST)
+ us-mta-159-zn2PGcbFMrWwV6cEoudXsA-1; Thu, 10 Feb 2022 11:41:00 -0500
+X-MC-Unique: zn2PGcbFMrWwV6cEoudXsA-1
+Received: by mail-ed1-f69.google.com with SMTP id k5-20020a508ac5000000b00408dec8390aso3627508edk.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:41:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=lKM3MG407sDe7fSxFjGv90FiembQtgV4jikyh1VEkmM=;
-        b=DJFCSPRZdymdD2/p6GWG31DVo6PtfZ2i3Cd2QnOxtn5KVYAh188KO08NW5tc4ctbBl
-         +LPxgEkF4TSIN09t5bnW/5PDoZa+/lg5N9lesDfZ7qz00fYIIsM4+WqyfvKEtYb3EhOK
-         sFcHgsB/GZLF6rDi1fR3NepvsYn423YA3JrOfV2TEYLgT3SHjFEe0hv57nlz00L6X2YU
-         ouvfCwvehC9a4fcV9QixYgZq5wDeYDykELGnivoU5gjtyCBTd3THReWrfseCiuXMdq1T
-         OyiVRvSBUZ8HUMFccZc/w+8gT7Olht+o9dpBLJmolQx88S4MzdAXGMO+VuruhBnMloMc
-         SsCQ==
-X-Gm-Message-State: AOAM530ZuLgrJKx6l3gy1SQ3D1FLL7Q/kGA/N3P9ds0HEiQ5VyuZCQ8p
-        R2VmppKv7IPUX/hO5WuaOIyU08EczyXms9nvCBCAFXiZi7Lciqwa7yi2+4J0puYiX+thyGhW5fT
-        1v0q0GSuDaJm1iYEU2aTkVfLL
-X-Received: by 2002:a17:906:4fc5:: with SMTP id i5mr7086706ejw.729.1644511240545;
-        Thu, 10 Feb 2022 08:40:40 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzV+kkWAkDA+GVbVhDi40TKxNCd+Z8dy6ITJnQdUuE1VbOyNuQ9Fpdu14fPSu5orbUKXw9xqA==
-X-Received: by 2002:a17:906:4fc5:: with SMTP id i5mr7086689ejw.729.1644511240351;
-        Thu, 10 Feb 2022 08:40:40 -0800 (PST)
+        bh=0l/m87uQUmT5CdzB+3f+eMwCEX3CAuEYEJDghPjLWUg=;
+        b=m55D3BVOvYb5/b6Bx0WOpAo2cqKkpIGXpNpRlKWDQ3kHkgmrXLI9Ist6kt0Pt4xAVW
+         Qa1Ts49SYiRX55KdoUIgfma2ULZ9vMN4v8uZPI/dRNAZPYJFliO2/71p4Agme20TjU8j
+         c6f+R5ht2jjMh+ZcyBXdTzpYOLpitM7+vqPJ4XvPrmlZZ7I5IP5YToIncHToOaAlV635
+         aQQg+JrGK2Pz6c1PJGy0tqOvjudwfTX/ne7LKzfuHmvXFiCjGBwpZV5nqxxRXAjyD87J
+         xCjvhLUsCGAMs8WzwqRy/aVOERKeh/RgmSlOGH25ftQ2XSdW7TySOytwklauhQBGrlQj
+         QAag==
+X-Gm-Message-State: AOAM53015lUSfx4grOxYFPrwV9hdzElW/KCkuTPU0+FeOf4ONayTYOCA
+        GFMxQC4MWGceYyBPdSHhf0QLT63aJ9pxMrsPPsizX3Jqem+EnHWnTbuzBUFwjsPrv1P4I7TdLUt
+        L5zTLvuCkPqE4sFt2KZ5k9h6C
+X-Received: by 2002:a05:6402:4490:: with SMTP id er16mr9338799edb.453.1644511262947;
+        Thu, 10 Feb 2022 08:41:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyZECJ9IV0hUhjUbenMOOxBbaVN6c3Lw279B4RgPUaIqhBLIYpmJT4dWjQTktndy3A8BvGpTw==
+X-Received: by 2002:a05:6402:4490:: with SMTP id er16mr9338778edb.453.1644511262720;
+        Thu, 10 Feb 2022 08:41:02 -0800 (PST)
 Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id s8sm7105459ejb.59.2022.02.10.08.40.39
+        by smtp.googlemail.com with ESMTPSA id f28sm2372477ejl.46.2022.02.10.08.40.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 08:40:39 -0800 (PST)
-Message-ID: <b0b3d4be-8adb-335c-90cc-fa85637d3f51@redhat.com>
-Date:   Thu, 10 Feb 2022 17:40:38 +0100
+        Thu, 10 Feb 2022 08:41:02 -0800 (PST)
+Message-ID: <14850b2d-f55f-712a-41fe-b6ee4a291de0@redhat.com>
+Date:   Thu, 10 Feb 2022 17:40:40 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH MANUALSEL 5.10 2/6] KVM: nVMX: eVMCS: Filter out
- VM_EXIT_SAVE_VMX_PREEMPTION_TIMER
+Subject: Re: [PATCH MANUALSEL 5.10 3/6] KVM: nVMX: Also filter
+ MSR_IA32_VMX_TRUE_PINBASED_CTLS when eVMCS
 Content-Language: en-US
 To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
         stable@vger.kernel.org
@@ -70,9 +70,9 @@ Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, tglx@linutronix.de,
         mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
         x86@kernel.org, kvm@vger.kernel.org
 References: <20220209185714.48936-1-sashal@kernel.org>
- <20220209185714.48936-2-sashal@kernel.org>
+ <20220209185714.48936-3-sashal@kernel.org>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220209185714.48936-2-sashal@kernel.org>
+In-Reply-To: <20220209185714.48936-3-sashal@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -88,41 +88,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 2/9/22 19:57, Sasha Levin wrote:
 > From: Vitaly Kuznetsov <vkuznets@redhat.com>
 > 
-> [ Upstream commit 7a601e2cf61558dfd534a9ecaad09f5853ad8204 ]
+> [ Upstream commit f80ae0ef089a09e8c18da43a382c3caac9a424a7 ]
 
 Acked-by: Paolo Bonzini <pbonzini@redhat.com>
 
 Paolo
 
-> Enlightened VMCS v1 doesn't have VMX_PREEMPTION_TIMER_VALUE field,
-> PIN_BASED_VMX_PREEMPTION_TIMER is also filtered out already so it makes
-> sense to filter out VM_EXIT_SAVE_VMX_PREEMPTION_TIMER too.
+> Similar to MSR_IA32_VMX_EXIT_CTLS/MSR_IA32_VMX_TRUE_EXIT_CTLS,
+> MSR_IA32_VMX_ENTRY_CTLS/MSR_IA32_VMX_TRUE_ENTRY_CTLS pair,
+> MSR_IA32_VMX_TRUE_PINBASED_CTLS needs to be filtered the same way
+> MSR_IA32_VMX_PINBASED_CTLS is currently filtered as guests may solely rely
+> on 'true' MSR data.
 > 
 > Note, none of the currently existing Windows/Hyper-V versions are known
-> to enable 'save VMX-preemption timer value' when eVMCS is in use, the
-> change is aimed at making the filtering future proof.
+> to stumble upon the unfiltered MSR_IA32_VMX_TRUE_PINBASED_CTLS, the change
+> is aimed at making the filtering future proof.
 > 
 > Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> Message-Id: <20220112170134.1904308-3-vkuznets@redhat.com>
+> Message-Id: <20220112170134.1904308-2-vkuznets@redhat.com>
 > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
->   arch/x86/kvm/vmx/evmcs.h | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
+>   arch/x86/kvm/vmx/evmcs.c | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
-> index bd41d9462355f..011929a638230 100644
-> --- a/arch/x86/kvm/vmx/evmcs.h
-> +++ b/arch/x86/kvm/vmx/evmcs.h
-> @@ -59,7 +59,9 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
->   	 SECONDARY_EXEC_SHADOW_VMCS |					\
->   	 SECONDARY_EXEC_TSC_SCALING |					\
->   	 SECONDARY_EXEC_PAUSE_LOOP_EXITING)
-> -#define EVMCS1_UNSUPPORTED_VMEXIT_CTRL (VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL)
-> +#define EVMCS1_UNSUPPORTED_VMEXIT_CTRL					\
-> +	(VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL |				\
-> +	 VM_EXIT_SAVE_VMX_PREEMPTION_TIMER)
->   #define EVMCS1_UNSUPPORTED_VMENTRY_CTRL (VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL)
->   #define EVMCS1_UNSUPPORTED_VMFUNC (VMX_VMFUNC_EPTP_SWITCHING)
->   
+> diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
+> index c0d6fee9225fe..5b68034ec5f9c 100644
+> --- a/arch/x86/kvm/vmx/evmcs.c
+> +++ b/arch/x86/kvm/vmx/evmcs.c
+> @@ -361,6 +361,7 @@ void nested_evmcs_filter_control_msr(u32 msr_index, u64 *pdata)
+>   	case MSR_IA32_VMX_PROCBASED_CTLS2:
+>   		ctl_high &= ~EVMCS1_UNSUPPORTED_2NDEXEC;
+>   		break;
+> +	case MSR_IA32_VMX_TRUE_PINBASED_CTLS:
+>   	case MSR_IA32_VMX_PINBASED_CTLS:
+>   		ctl_high &= ~EVMCS1_UNSUPPORTED_PINCTRL;
+>   		break;
 

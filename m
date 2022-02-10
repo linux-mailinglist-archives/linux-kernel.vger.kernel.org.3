@@ -2,187 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B04684B11C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:35:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4812D4B11CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 16:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243661AbiBJPep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 10:34:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33714 "EHLO
+        id S243680AbiBJPfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 10:35:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243638AbiBJPeo (ORCPT
+        with ESMTP id S234987AbiBJPfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 10:34:44 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980211D6;
-        Thu, 10 Feb 2022 07:34:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644507285; x=1676043285;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/CpZixoP9LqieCKr1GT1o2hb5f+axkirfN4SJnts4rY=;
-  b=BpMWv8fDvaE7Ld4ChjfyvBVo9OaGza/u9Vgw8tU2pdD83p5SzyapGUfb
-   NykTs2b9iHV/nnw2td7Srs4y/9LCBEIuvYIE89ZfiXIkTUrSvnU5sraO4
-   9VKFQ+1VTiqtm5RalhlafeIk+lV4dIPkoAVOlxlzpvk3JGTwX8QL8gKIl
-   7Eiee14PZVE1DmoNUFCwv+21v/WnR38O3m2y/gvQabFdX/WE5iefkWTZg
-   MgqPmNVedTJZr6sOTEvw4yco1bUn0hTeWKnWpT+DRD9iF5w/E71GKPvu3
-   Zz545YIpEA8g2nUspxTXFOqSOqW7XoN6FWwCBFHOwfsT4V7YBZ62SjQ+s
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="310253233"
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="310253233"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 07:34:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="701724952"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga005.jf.intel.com with ESMTP; 10 Feb 2022 07:34:44 -0800
-Received: from [10.252.133.207] (dgupta-mobl1.amr.corp.intel.com [10.252.133.207])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id C15A8580A8B;
-        Thu, 10 Feb 2022 07:34:43 -0800 (PST)
-Message-ID: <7b5012d8-6ae1-7cde-a381-e82685dfed4f@linux.intel.com>
-Date:   Thu, 10 Feb 2022 10:34:42 -0500
+        Thu, 10 Feb 2022 10:35:46 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2117.outbound.protection.outlook.com [40.107.94.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B28D1F4;
+        Thu, 10 Feb 2022 07:35:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M3IaxRIzaRKaxV0yRng3MX+8ELFId1bbWkSuq5LxByNpcEv+78wDMg3WdeLHrrVcJoIQKmJZbrRtXPn2B7zTxWGUyjOtskD7LrJyBNIhUdLORrKg2M9/RLAaty3S6+F/UP/bBf+sZBCssWdbk4J9dbx/xuEgNuojC8hMWCjUM+lU5Z371CzOYw5Gy6U+OdEockHTIvRx5qQic4TEYTlZHyeBhVrlYYVSUVMzbvxti7MJZpn90MuCyhxilcFxGosnzjj7XnP6suRdxXKLr4dRDBd56YyBwIbFloTkxZd18Loi0DHBNdmsgO0MSKt6jONmmhmWd2vgzOPmdiOPR2/G9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bQibbOYoz3j4663IAMto4myREgWjBOgK3ROCVjflfI8=;
+ b=dXqsQXwE8iQiCoqYkO+2Lcnqqq6GtAT8kOfo8opSnI+qD6rJlPPhc4jaJ3jJdBgzMPFiGW/KREmkiHpGqNwDHAiPpEWB6affnHOEQ0eZ46pVlz2xgQin5j8BdzL1ZYZmuMm66b9gFtq8tyCOiNZL+Mqyvc7VYVhTABgKFcFS9JpibuTq4EU0SOY7jZPtDRNrQabZTMfMuR4Ta9NmUy4TA7fONiaXyhzn1H1I+ZBwJt0x1rIzY+M4BXSA8MjWsr761qur567nKlgjIZ5CVz1YSwvZdKxvK6WcnFVvYTMeZEAaq8H9ernfV+j+BJk3fDVxV4ct65npcjDSRGM8gtGRfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bQibbOYoz3j4663IAMto4myREgWjBOgK3ROCVjflfI8=;
+ b=UmZdCTFcYoVRPmDzstbO08sjWf/JuDsPqd3szermoXBOdyYxtGW2n9u+CEvd6UOP36COi+jHzwIW8ZbNXUQQ/VOtjRhPk+BiPaLwZH9bJmIm+IYD6I8Mf85zQwRlPZGXmL9yD1TqoidsbK/fdFdVw9Of8uHqB5j2YHrKPSkxoR0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by DM6PR10MB3307.namprd10.prod.outlook.com
+ (2603:10b6:5:1a1::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.18; Thu, 10 Feb
+ 2022 15:35:44 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::7c:dc80:7f24:67c5]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::7c:dc80:7f24:67c5%6]) with mapi id 15.20.4975.012; Thu, 10 Feb 2022
+ 15:35:44 +0000
+Date:   Thu, 10 Feb 2022 07:35:40 -0800
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>
+Subject: Re: [PATCH v6 net-next 5/5] net: mscc: ocelot: use bulk reads for
+ stats
+Message-ID: <20220210153540.GC354478@euler>
+References: <20220210041345.321216-1-colin.foster@in-advantage.com>
+ <20220210041345.321216-6-colin.foster@in-advantage.com>
+ <20220210103636.gtkky2l2q7jyn7y5@skbuf>
+ <20220210152103.GB354478@euler>
+ <20220210152712.jchztf34gf3pgsyf@skbuf>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210152712.jchztf34gf3pgsyf@skbuf>
+X-ClientProxiedBy: CO2PR05CA0088.namprd05.prod.outlook.com
+ (2603:10b6:104:1::14) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH kvm/queue v2 2/3] perf: x86/core: Add interface to query
- perfmon_event_map[] directly
-Content-Language: en-US
-To:     David Dunn <daviddunn@google.com>,
-        Dave Hansen <dave.hansen@intel.com>
-Cc:     Jim Mattson <jmattson@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>,
-        Stephane Eranian <eranian@google.com>
-References: <20220117085307.93030-1-likexu@tencent.com>
- <20220117085307.93030-3-likexu@tencent.com>
- <20220202144308.GB20638@worktop.programming.kicks-ass.net>
- <CALMp9eRBOmwz=mspp0m5Q093K3rMUeAsF3vEL39MGV5Br9wEQQ@mail.gmail.com>
- <YgO/3usazae9rCEh@hirez.programming.kicks-ass.net>
- <69c0fc41-a5bd-fea9-43f6-4724368baf66@intel.com>
- <CALMp9eS=1U7T39L-vL_cTXTNN2Li8epjtAPoP_+Hwefe9d+teQ@mail.gmail.com>
- <67a731dd-53ba-0eb8-377f-9707e5c9be1b@intel.com>
- <CABOYuvbPL0DeEgV4gsC+v786xfBAo3T6+7XQr7cVVzbaoFoEAg@mail.gmail.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <CABOYuvbPL0DeEgV4gsC+v786xfBAo3T6+7XQr7cVVzbaoFoEAg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1c0b06cc-3b5e-4146-19c6-08d9ecab003b
+X-MS-TrafficTypeDiagnostic: DM6PR10MB3307:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR10MB33078BAF89AE56B140E935C2A42F9@DM6PR10MB3307.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SuGx1W/3ZRidts7vA3HS/SJmmF/6Itn8ZHbrVSR1I8oC/375FLeKr6nlUJR5KxzaSmYtw0NDyjf+6t8H/pEbLAwq3lOSIYtkSDu1Y0sOuTmg3FCJxf/uAnNmsvRmQJDML5NPSCi4TKFLEvFNwFWtcYS7TERCt+xFDYdcr/2b5csWEhTJOE1Zc5vFkFtZN2SvSD+IYopR1wRLEFHTfSJq+MPCYYWjj+LlgzoxsXolq8pCFG/0qf7OQVtBGQatq4Ic6lV9LV/rWnaSB8K6woNCo8vakh4ZCqSU4dq5qPgPDkDp9FBjv8iBtvcyoFHQPTDPvGB4xlJiec6jHTuFkdy5CfBGqe0AYzBRersoxP7i4HQIwwMlKs5OYp6aeVNrO0e/nIGY+6gZPHp0xGkdritZT1giJ3k0/Z9Z8HW6LmfArwqu5CPyxGMNDXNc/1o0p9J9P/F6MaBi7TebgqnFrs0mYOB/JK1LTLyFp+39YahuMoGd6YEPy15obu2wL8qNys/9DMcP8umDCTIbOcH1T30JIHiIGa0wsMONvpizc+1d2SjSdCvwcNKWjb/1TTEmXOAJvGFk1xOphEOpihJ/TO8oKv1KfIJDFOW3QRT17lE1mm3VaL2uxgtAYyC6JLAxGZ2M8I/kcYNXnmmnSZLA7e8evlqSf7QIYrF4yS1QILFzMyapr9XEX4+nibubtPZrRNY3V82sQG+nsV18zDWNgNH3gg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(39840400004)(136003)(346002)(42606007)(366004)(396003)(376002)(33716001)(52116002)(6666004)(4326008)(44832011)(9686003)(6512007)(33656002)(83380400001)(66476007)(86362001)(38100700002)(508600001)(5660300002)(66556008)(8936002)(6506007)(6486002)(38350700002)(8676002)(2906002)(186003)(4744005)(6916009)(54906003)(66946007)(26005)(316002)(1076003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9Rv5++Q+65HCELKWCjfTM/wStuqB7snhvaw1O3gw5pwlzhcMONyXg/mRXZQl?=
+ =?us-ascii?Q?Dr6FQYpz+ECe2BfOAPN/ng7ONOaNtPj7Q9951eYg9+sPyFdS1EXnL9Rp2Z4N?=
+ =?us-ascii?Q?yLIZFSD42TJVO55AL3HRLVYJfOZX6fqc0JCo/lb6ZoZDm/KD4Q6valkE1GO7?=
+ =?us-ascii?Q?zw32AMVOiQIYidVKHyo5CCuWlGzjevRZwFaDRqBN4PY3nNm7DvUmTOehych0?=
+ =?us-ascii?Q?EiI1lCvOJOF9vqrx3srJnWRJo+GupxdkHk0COh3sMmTkE0EE2sHaAYqXrgsf?=
+ =?us-ascii?Q?vigQDoLUd7Nxoc+ze3gtoeqmUthKzIiEC9HbaWay9a7hqLJ6eZ/4ek2SlfLu?=
+ =?us-ascii?Q?wjKWjdARtJMXIM4C/njGTyR4nUvXAV0m8yqojHrPyednd4LkaIuZozUZUTzA?=
+ =?us-ascii?Q?oNjnAMkjGiJ5XUQaCRFKggpIwWLUXHt/Fdfc8gy8cmfNmziZQ5ph08nsFz0U?=
+ =?us-ascii?Q?gdwX3gsj452ny4rurqMsohxFuQDPt3YP/iBH04db1uwTgznleaiI8nzM5TJi?=
+ =?us-ascii?Q?sanBvbWbHsLGZxV+nLiJazL24XoqHP8iuS31sAIh8Su7duIWyaDzOYRePv2Y?=
+ =?us-ascii?Q?lkY80VhtT5k1aI1Xf69LbDZs3Ujz4to8URfRrqM1QU2cLspUp9dP4e4x3z5p?=
+ =?us-ascii?Q?sAdSXqeTogbqgkfpVUNnx9QSpQOjjbvvAX2/7/or1/f5dAd1EpKOaervzuxN?=
+ =?us-ascii?Q?b8BO3QEaZatFKsntehwCRgifn52qgnvlyXSX7HyfaIgUtAg4MltqY0V+Efud?=
+ =?us-ascii?Q?7Knb/Y9fmZATI7Lt+4xwgVE0bkRNeLVr76sxNkTtaINHUqcapjjCkYspkv3P?=
+ =?us-ascii?Q?0ecc1s29TAf17CY17zYre5X1DEf6RBclZrht+gLwQ8FLR7bWBZfamgi6CvWX?=
+ =?us-ascii?Q?lZVdgYNML+2T6rlm3aBM55LPoexk7cndzj79mrxFgM61eRUcp4A8mTCGkpEb?=
+ =?us-ascii?Q?Q5EBwyYenCDFIkTz2WrGyB+YxPq1vA4fdPJnC8GCtlcDfy4DT50aNQVxYsnM?=
+ =?us-ascii?Q?aSI5wQlRJIhgtbIYObNrKnm6os8YZahZ9Af/o8jJa3IcVa+kf++7Jl6GyL4Q?=
+ =?us-ascii?Q?SKsnmXRmJt6GwalVY4AekGDSdW///lryUkoDqjutGx9X4PZ1ZcyaSilLp37E?=
+ =?us-ascii?Q?RwhEB88U5KjSb3ho9dwvn/ABwWPD2KIgQXxNMHJtHsGY6J5Prk41Zkojsft6?=
+ =?us-ascii?Q?0++Rl1yf1ZZKlHmh6S2Ws2tdAIGZXjRHe/njdHD1wTdMLnsAHjRwI59ehCcJ?=
+ =?us-ascii?Q?MQIm+AKDV4c73jIyznh8Tm5exKl5DJVPPcZiH/2ggfXZEKM9zguI8WxD/iCa?=
+ =?us-ascii?Q?pviJh9eosswaHVawckctbZSifcq9NklxuqaqY1YlhinMmnpkwtZnZXcFQkos?=
+ =?us-ascii?Q?6kR82vAE+Fkp4ZSpiS51Xemvjd5CNnUdL1YNGUJE+DSYZ1Tgf0swWE6GDfuW?=
+ =?us-ascii?Q?ed3Ghf2KwR/DUgLfy0yV+ySGuePphShMiF1/07MVOZzFTdfvHbZUhM/4FHfy?=
+ =?us-ascii?Q?AgsKfQVMaYNGro9YJLGTUxS667CS8WbQgLKmDa0pYnMDVGdl9YuIGQZrv5bC?=
+ =?us-ascii?Q?99xwFosZlJJAIN3q8ODX60a5vUgXl+WD23nfiMCEceaNaE+OyhCQZMvzc1UV?=
+ =?us-ascii?Q?GZ5EfG8oVz2Hcza8fbTiEiBgQMv9SlnoBCgF+Ocd5jlNOont5n31bjpw34Aj?=
+ =?us-ascii?Q?WDe//3pShFCJb5mvsfbSw/q2oqM=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1c0b06cc-3b5e-4146-19c6-08d9ecab003b
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 15:35:44.8008
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: C2huxfnJJ+q1sAkeqer5Dbwk4QqH/eXys/wSH2NrQqh+pw2ML08tR7iXqRt62yie3yR+2QKcoGeJR0OFVG4s+f50A1COQWso70UnIhK9UWc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3307
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/9/2022 2:24 PM, David Dunn wrote:
-> Dave,
+On Thu, Feb 10, 2022 at 03:27:13PM +0000, Vladimir Oltean wrote:
+> On Thu, Feb 10, 2022 at 07:21:03AM -0800, Colin Foster wrote:
+> > > ocelot_check_stats_work() should also check for errors.
+> > 
+> > Another change I'm catching: I assume calling dev_err while holding a
+> > mutex is frowned upon, so I'm moving this err check after the counter
+> > copy / mutex unlock. I'll submit that fix after patch 1 gets merged into
+> > net / mainline.
 > 
-> In my opinion, the right policy depends on what the host owner and
-> guest owner are trying to achieve.
-> 
-> If the PMU is being used to locate places where performance could be
-> improved in the system, there are two sub scenarios:
->     - The host and guest are owned by same entity that is optimizing
-> overall system.  In this case, the guest doesn't need PMU access and
-> better information is provided by profiling the entire system from the
-> host.
->     - The host and guest are owned by different entities.  In this
-> case, profiling from the host can identify perf issues in the guest.
-> But what action can be taken?  The host entity must communicate issues
-> back to the guest owner through some sort of out-of-band information
-> channel.  On the other hand, preempting the host PMU to give the guest
-> a fully functional PMU serves this use case well.
-> 
-> TDX and SGX (outside of debug mode) strongly assume different
-> entities.  And Intel is doing this to reduce insight of the host into
-> guest operations.  So in my opinion, preemption makes sense.
-> 
-> There are also scenarios where the host owner is trying to identify
-> systemwide impacts of guest actions.  For example, detecting memory
-> bandwidth consumption or split locks.  In this case, host control
-> without preemption is necessary.
-> 
-> To address these various scenarios, it seems like the host needs to be
-> able to have policy control on whether it is willing to have the PMU
-> preempted by the guest.
-> 
-> But I don't see what scenario is well served by the current situation
-> in KVM.  Currently the guest will either be told it has no PMU (which
-> is fine) or that it has full control of a PMU.  If the guest is told
-> it has full control of the PMU, it actually doesn't.  But instead of
-> losing counters on well defined events (from the guest perspective),
-> they simply stop counting depending on what the host is doing with the
-> PMU.
+> Where did you read that? Doing work that doesn't need to be under a lock
+> while that work is held isn't preferable, of course, but what is special
+> about dev_err?
 
-For the current perf subsystem, a PMU should be shared among different 
-users via the multiplexing mechanism if the resource is limited. No one 
-has full control of a PMU for lifetime. A user can only have the PMU in 
-its given period. I think the user can understand how long it runs via 
-total_time_enabled and total_time_running.
-
-For a guest, it should rely on the host to tell whether the PMU resource 
-is available. But unfortunately, I don't think we have such a 
-notification mechanism in KVM. The guest has the wrong impression that 
-the guest can have full control of the PMU.
-
-In my opinion, we should add the notification mechanism in KVM. When the 
-PMU resource is limited, the guest can know whether it's multiplexing or 
-can choose to reschedule the event.
-
-But seems the notification mechanism may not work for TDX case?
-> 
-> On the other hand, if we flip it around the semantics are more clear.
-> A guest will be told it has no PMU (which is fine) or that it has full
-> control of the PMU.  If the guest is told that it has full control of
-> the PMU, it does.  And the host (which is the thing that granted the
-> full PMU to the guest) knows that events inside the guest are not
-> being measured.  This results in all entities seeing something that
-> can be reasoned about from their perspective.
->
-
-I assume that this is for the TDX case (where the notification mechanism 
-  doesn't work). The host still control all the PMU resources. The TDX 
-guest is treated as a super-user who can 'own' a PMU. The admin in the 
-host can configure/change the owned PMUs of the TDX. Personally, I think 
-it makes sense. But please keep in mind that the counters are not 
-identical. There are some special events that can only run on a specific 
-counter. If the special counter is assigned to TDX, other entities can 
-never run some events. We should let other entities know if it happens. 
-Or we should never let non-host entities own the special counter.
-
-
-Thanks,
-Kan
-
-> Thanks,
-> 
-> Dave Dunn
-> 
-> On Wed, Feb 9, 2022 at 10:57 AM Dave Hansen <dave.hansen@intel.com> wrote:
-> 
->>> I was referring to gaps in the collection of data that the host perf
->>> subsystem doesn't know about if ATTRIBUTES.PERFMON is set for a TDX
->>> guest. This can potentially be a problem if someone is trying to
->>> measure events per unit of time.
->>
->> Ahh, that makes sense.
->>
->> Does SGX cause problem for these people?  It can create some of the same
->> collection gaps:
->>
->>          performance monitoring activities are suppressed when entering
->>          an opt-out (of performance monitoring) enclave.
+I didn't read it anywhere, just a hunch about string formatting
+overhead. Either way - not necessary to do inside of stats_lock, so I
+moved it out. Next round will hopefully be early next week.

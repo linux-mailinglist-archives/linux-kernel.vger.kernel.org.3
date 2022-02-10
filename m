@@ -2,92 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB404B0BB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD4A4B0BB2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:03:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240447AbiBJLDX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Feb 2022 06:03:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38926 "EHLO
+        id S240465AbiBJLDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 06:03:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232915AbiBJLDW (ORCPT
+        with ESMTP id S232915AbiBJLDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 06:03:22 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B8CB6B;
-        Thu, 10 Feb 2022 03:03:23 -0800 (PST)
-Date:   Thu, 10 Feb 2022 11:03:13 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] pinctrl: ingenic: Fix regmap on X series SoCs
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     linus.walleij@linaro.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <DD537R.K2D13DXGNPGH@crapouillou.net>
-In-Reply-To: <20220209230452.19535-1-aidanmacdonald.0x0@gmail.com>
-References: <20220209230452.19535-1-aidanmacdonald.0x0@gmail.com>
+        Thu, 10 Feb 2022 06:03:39 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF84FE2;
+        Thu, 10 Feb 2022 03:03:40 -0800 (PST)
+X-UUID: f16f89fe7ede40bcb9dc9a77101ecd2b-20220210
+X-UUID: f16f89fe7ede40bcb9dc9a77101ecd2b-20220210
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1689102185; Thu, 10 Feb 2022 19:03:37 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 10 Feb 2022 19:03:36 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 10 Feb 2022 19:03:35 +0800
+Message-ID: <7c517b787d1dd768372d0141f5078e3089e883cb.camel@mediatek.com>
+Subject: Re: [PATCH v6 25/35] iommu/mediatek: Migrate to aggregate driver
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>,
+        "Joerg Roedel" <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rob Clark" <robdclark@gmail.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Saravana Kannan <saravanak@google.com>
+Date:   Thu, 10 Feb 2022 19:03:35 +0800
+In-Reply-To: <20220127200141.1295328-26-swboyd@chromium.org>
+References: <20220127200141.1295328-1-swboyd@chromium.org>
+         <20220127200141.1295328-26-swboyd@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aidan,
-
-Le mer., févr. 9 2022 at 23:04:54 +0000, Aidan MacDonald 
-<aidanmacdonald.0x0@gmail.com> a écrit :
-> The X series Ingenic SoCs have a shadow GPIO group which
-> is at a higher offset than the other groups, and is used
-> for all GPIO configuration. The regmap did not take this
-> offset into account and set max_register too low. Writes
-> to the shadow group registers were blocked, which made it
-> impossible to change any pin configuration.
+On Thu, 2022-01-27 at 12:01 -0800, Stephen Boyd wrote:
+> Use an aggregate driver instead of component ops so that we can get
+> proper driver probe ordering of the aggregate device with respect to
+> all
+> the component devices that make up the aggregate device.
 > 
-> Fix this by pretending there are at least 8 chips on any
-> 'X' SoC for the purposes of calculating max_register. This
-> ensures the shadow group is accessible.
+> Cc: Yong Wu <yong.wu@mediatek.com>
+> Cc: Joerg Roedel <joro@8bytes.org>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Rob Clark <robdclark@gmail.com>
+> Cc: Russell King <rmk+kernel@arm.linux.org.uk>
+> Cc: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 
-I don't like your solution, it sounds very hacky. I think it would make 
-more sense to use a dedicated x1000_pinctrl_regmap_config that would be 
-used for the X1000 SoC. That would also allow you to express that there 
-are no registers in the 0x400-0x700 range (through 
-regmap_config.wr_table / .rd_table).
++ Krzysztof
 
-Cheers,
--Paul
+The memory/mtk-smi.c is expected to get Ack from Krzysztof.
 
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Tested-by: Yong Wu <yong.wu@mediatek.com>
+
 > ---
->  drivers/pinctrl/pinctrl-ingenic.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pinctrl/pinctrl-ingenic.c 
-> b/drivers/pinctrl/pinctrl-ingenic.c
-> index 2712f51eb238..9d2bccda50f1 100644
-> --- a/drivers/pinctrl/pinctrl-ingenic.c
-> +++ b/drivers/pinctrl/pinctrl-ingenic.c
-> @@ -4168,7 +4168,10 @@ static int __init ingenic_pinctrl_probe(struct 
-> platform_device *pdev)
->  		return PTR_ERR(base);
-> 
->  	regmap_config = ingenic_pinctrl_regmap_config;
-> -	regmap_config.max_register = chip_info->num_chips * 
-> chip_info->reg_offset;
-> +	if (chip_info->version >= ID_X1000)
-> +		regmap_config.max_register = MIN(8, chip_info->num_chips) * 
-> chip_info->reg_offset;
-> +	else
-> +		regmap_config.max_register = chip_info->num_chips * 
-> chip_info->reg_offset;
-> 
->  	jzpc->map = devm_regmap_init_mmio(dev, base, &regmap_config);
->  	if (IS_ERR(jzpc->map)) {
-> --
-> 2.34.1
-> 
+>  drivers/iommu/mtk_iommu.c    | 14 +++++++++-----
+>  drivers/iommu/mtk_iommu.h    |  6 ++++--
+>  drivers/iommu/mtk_iommu_v1.c | 14 +++++++++-----
+>  drivers/memory/mtk-smi.c     | 10 ++++------
+>  4 files changed, 26 insertions(+), 18 deletions(-)
 
+[...]
+
+> diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
+> index e201e5976f34..0910fe109f53 100644
+> --- a/drivers/memory/mtk-smi.c
+> +++ b/drivers/memory/mtk-smi.c
+> @@ -175,6 +175,8 @@ mtk_smi_larb_bind(struct device *dev, struct
+> device *master, void *data)
+>  			larb->larbid = i;
+>  			larb->mmu = &larb_mmu[i].mmu;
+>  			larb->bank = larb_mmu[i].bank;
+> +
+> +			pm_runtime_enable(dev);
+>  			return 0;
+>  		}
+>  	}
+> @@ -450,15 +452,11 @@ static int mtk_smi_larb_probe(struct
+> platform_device *pdev)
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	pm_runtime_enable(dev);
+>  	platform_set_drvdata(pdev, larb);
+>  	ret = component_add(dev, &mtk_smi_larb_component_ops);
+> -	if (ret)
+> -		goto err_pm_disable;
+> -	return 0;
+> +	if (!ret)
+> +		return 0;
+>  
+> -err_pm_disable:
+> -	pm_runtime_disable(dev);
+>  	device_link_remove(dev, larb->smi_common_dev);
+
+Here is right. But at a glance code here, I was confused why it always
+call device_link_remove here. If we have v7, Could you help keep the
+original format? something like below. This may be helpful when we add
+new error flow in future.
+
+        if (ret)
+              goto dev_link_remove;
+        return ret;
+
+dev_link_remove:
+        device_link_remove(dev, larb->smi_common_dev);
+
+Thanks.     
+
+>  	return ret;
+>  }
 

@@ -2,113 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14AF54B09E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:50:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC62C4B09D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:46:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239074AbiBJJtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:49:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37642 "EHLO
+        id S238965AbiBJJqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:46:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239035AbiBJJtl (ORCPT
+        with ESMTP id S238777AbiBJJqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:49:41 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A1B1BC;
-        Thu, 10 Feb 2022 01:49:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644486582; x=1676022582;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=QD7diRDjosCEK96P8HtODobHDCAMfgamv9O2SqAn5T8=;
-  b=bXFLTH+d4CTCsHh/02B2eT8t8ffTPoVbEmFd8izEHiZtHvcOxnAWlaVj
-   i0Of0zNHqItzZXZ9PeumDwa5322GPzm3DZvCMTtYlrAQLqRyAaTC3LbXY
-   KWXR8hYiR/pKvu2b1d8H1fDHgtsOTlMMA6CQiCAKYamjSOtQlIjs1KTao
-   cxbDNsiXkBbZw+SE2P/cV0baMYf4A/DwH4L3GCusrPNUGM4AhDiSwJpoF
-   /atG3pnlOGbWqsJgqMm5grxnsmPlKjx+0CokkVP9At5TTWesNyh7t6uiY
-   Wv2+ydv2F2s75Nx2p3pfsPkbbyKVfv9wwtWZdO7EHLOMCaIDX9WloPaFs
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="312742027"
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="312742027"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 01:49:42 -0800
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="541538900"
-Received: from duan-server-s2600bt.bj.intel.com ([10.240.192.123])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 01:49:40 -0800
-From:   Zhenzhong Duan <zhenzhong.duan@intel.com>
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com
-Subject: [PATCH v2] KVM: x86: Fix emulation in writing cr8
-Date:   Thu, 10 Feb 2022 17:45:06 +0800
-Message-Id: <20220210094506.20181-1-zhenzhong.duan@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 10 Feb 2022 04:46:11 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9931A19B;
+        Thu, 10 Feb 2022 01:46:12 -0800 (PST)
+Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N4z2a-1oGPo62Bqm-010wgz; Thu, 10 Feb 2022 10:46:10 +0100
+Received: by mail-wr1-f54.google.com with SMTP id m14so8409986wrg.12;
+        Thu, 10 Feb 2022 01:46:10 -0800 (PST)
+X-Gm-Message-State: AOAM530DjWZ/6dciD1ZMv+DeDBCoINrNbiAANWKZ9LtbtEtI12J6bceL
+        ugullxZ8wKTOzNrtWWnvfFW5RmxjbyZpB8tFMKg=
+X-Google-Smtp-Source: ABdhPJxcpQFyag0KwSELzBj9ldE+qSL1/H/9t/X1/IgTrmi6bmIj3+YDSYUbn2Cst0fnVEDT6DYwWrIQLi2F7dpyEWc=
+X-Received: by 2002:adf:e5ce:: with SMTP id a14mr707156wrn.317.1644486370130;
+ Thu, 10 Feb 2022 01:46:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220210021129.3386083-1-masahiroy@kernel.org>
+In-Reply-To: <20220210021129.3386083-1-masahiroy@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 10 Feb 2022 10:45:54 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3uZJuf9naTerxMdUeW4CEuvfK0knC0JDTZteYHPqddTw@mail.gmail.com>
+Message-ID: <CAK8P3a3uZJuf9naTerxMdUeW4CEuvfK0knC0JDTZteYHPqddTw@mail.gmail.com>
+Subject: Re: [PATCH 0/6] Add more export headers to compile-test coverage
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:1x4Cb7skvs1UW7XhHMLHn2O2tD5ZgZyMngr8pVLVHJJbQ/OTYnN
+ FIwlJO3ODsMjMXnOmebowYnbCii/sQHJvfQZqmDL+OLRc86kV1PwMAO8ujA3aqXeRuQDiK+
+ Nz4NfZIr4d9EByy0GUVhMg4amB/Fl9sR7voshB1VgKsTRFZF4jpVZPj5tExwdOS03ay+aPM
+ fwx1f3iRxh8ncxmNxzAUQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/W4Cj46B6kQ=:KIJx7QwTj9KsemFdmuXi9P
+ TnH/0zulKv4LW9PJFWg+mbj3xoRgTJQwzw+ZQ66mIHSlV+2bld16OJuNr4ab97DRsx04FKHjZ
+ dO9xmGzCHSKUdK9rBpArTFvu/5qDUujNFbcnJGn28jnYXodC0bq/41FFpnFNUD+HX0Svv46Pu
+ zB2Zb/6xqqzF3qsk/YJnr1X97lGEbvOxprdusZoREgisuNkE6vArFFEYNvwM51arA/p9mNr4L
+ xPn1+xCFd+RCWA8m0LQP/gDBJp9Yh5/rFUVDBDWipZoK2of1z5nIP3S1hrzFbQGM/VXwDONHj
+ O/whNtVu6AlTFf+v3DHuE/ewgrmxRb02hVBZqWiaX3Vzb3SWimVL/swRcvml2V3A5F35/laqG
+ YI3FTZDhF4i18fja8FGSjewzoMpnRYBIGZRMYVLo+U+ANuhhzeHXTqEXoA4PQKVQh7YewVS3X
+ HGVmZMWboZzOxaJUsfnyjICE9nGMmiwDRQVHfb1jCxWt0fcBEzsDFmtdkA+R1PDcx3aDX5PXS
+ TrmJGZlCHVGjjwhGCxuhPgaUOf23IJHc/vC6ez/AwgkKvLptJbWMe2PrgxDwz5BZPogeAQUkj
+ 9MOu5wGCN3FOtkn3A+cexFxmxPvKKnHtF5WShUaBE99/0vxavJdB9Wi29bEaaqziIEatiylx4
+ waHj/0mQXymFJhO75Z374PM9L5+EC4+2qZbYQeAnqbsF67teU8TWdNpF+cbgSNO6RtdthbyPU
+ bPcAjlZ4nFqokjHz1EwN6m+RzlhBvTboXFKcUBIhdRj26JtjZKDSHEC/bZTP0bvzhyi7H9Gj7
+ UJws6hJ7htI7HRGJbQOHWLnT63RNqKKCX5NzA96WdaGw2pDD1s=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In emulation of writing to cr8, one of the lowest four bits in TPR[3:0]
-is kept.
+On Thu, Feb 10, 2022 at 3:11 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> Masahiro Yamada (6):
+>   signal.h: add linux/signal.h and asm/signal.h to UAPI compile-test
+>     coverage
+>   shmbuf.h: add asm/shmbuf.h to UAPI compile-test coverage
+>   android/binder.h: add linux/android/binder(fs).h to UAPI compile-test
+>     coverage
+>   fsmap.h: add linux/fsmap.h to UAPI compile-test coverage
+>   kexec.h: add linux/kexec.h to UAPI compile-test coverage
+>   reiserfs_xattr.h: add linux/reiserfs_xattr.h to UAPI compile-test
+>     coverage
 
-According to Intel SDM 10.8.6.1(baremetal scenario):
-"APIC.TPR[bits 7:4] = CR8[bits 3:0], APIC.TPR[bits 3:0] = 0";
+Very nice! Should I pick these up into the asm-generic tree?
 
-and SDM 28.3(use TPR shadow):
-"MOV to CR8. The instruction stores bits 3:0 of its source operand into
-bits 7:4 of VTPR; the remainder of VTPR (bits 3:0 and bits 31:8) are
-cleared.";
-
-and AMD's APM 16.6.4:
-"Task Priority Sub-class (TPS)-Bits 3 : 0. The TPS field indicates the
-current sub-priority to be used when arbitrating lowest-priority messages.
-This field is written with zero when TPR is written using the architectural
-CR8 register.";
-
-so in KVM emulated scenario, clear TPR[3:0] to make a consistent behavior
-as in other scenarios.
-
-This doesn't impact evaluation and delivery of pending virtual interrupts
-because processor does not use the processor-priority sub-class to
-determine which interrupts to delivery and which to inhibit.
-
-Sub-class is used by hardware to arbitrate lowest priority interrupts,
-but KVM just does a round-robin style delivery.
-
-Fixes: b93463aa59d6 ("KVM: Accelerated apic support")
-Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
----
-v2: Add Sean's comments and "Fixes:" to patch description
-
- arch/x86/kvm/lapic.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index d7e6fde82d25..306025db9959 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -2242,10 +2242,7 @@ void kvm_set_lapic_tscdeadline_msr(struct kvm_vcpu *vcpu, u64 data)
- 
- void kvm_lapic_set_tpr(struct kvm_vcpu *vcpu, unsigned long cr8)
- {
--	struct kvm_lapic *apic = vcpu->arch.apic;
--
--	apic_set_tpr(apic, ((cr8 & 0x0f) << 4)
--		     | (kvm_lapic_get_reg(apic, APIC_TASKPRI) & 4));
-+	apic_set_tpr(vcpu->arch.apic, (cr8 & 0x0f) << 4);
- }
- 
- u64 kvm_lapic_get_cr8(struct kvm_vcpu *vcpu)
--- 
-2.25.1
-
+      Arnd

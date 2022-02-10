@@ -2,120 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2E94B0357
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8040A4B0266
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiBJC1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 21:27:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42728 "EHLO
+        id S232817AbiBJBbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 20:31:50 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiBJC1c (ORCPT
+        with ESMTP id S232726AbiBJBbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 21:27:32 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC7C22BCE;
-        Wed,  9 Feb 2022 18:27:34 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvH0y3Fwfz4xcp;
-        Thu, 10 Feb 2022 10:59:29 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644451170;
-        bh=3taperdGKmrOZtQFKGHUJwb32+AU1uia470nz+nIGLg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FvNQe8WgSZ81ocK6UfW2hJ442D6RROI38Bh57AKin/k4EWQkR+mRU2J/y+xxUu81E
-         O+FM4zz6hE1Zx80LFM9zaWxvZWIHwuPTK5tBe3/fAVg6u9K2oAONl87+Kugc1orZTT
-         HTs8DsPx2ULolcWL6VX/Hpgdo3ExhUstESq9agdHRzt4sRTJv+peBAK4KS1kTL5ua4
-         nWjk1j+UX9e1Ccg7FqyzYIumQtFdtKeGgKrYBsnSyH1NHMZSR/3p6xhACr3Rc9loQ2
-         CYng+mN4K05d46Cg36pKJyOQAhDMlxtBHL4oFE5D5QNzF+LlFMvkGg5j1Pbd30u6ZI
-         e3Wkna4SSCsng==
-Date:   Thu, 10 Feb 2022 10:59:28 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Hariprasad Kelam <hkelam@marvell.com>,
-        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
-        Sunil Kumar Kori <skori@marvell.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the net-next tree
-Message-ID: <20220210105928.1877d587@canb.auug.org.au>
+        Wed, 9 Feb 2022 20:31:45 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6579DC43
+        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 17:31:47 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id i5so4478293oih.1
+        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 17:31:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=8+Nru2NcToVw10SMtgwpUUD5V5gNRuUchLBb5mwzcTo=;
+        b=TXHV4iS/LnExFOG16+ujTQmMvV1cNm5vPFzItoWZDg8A8T/YPbRQnR5VB+jSEMaxFU
+         Pt/WKTUgnSrBXxgCyeIzvTEs7ZzqHTpju3FkNOxVi1T4xx3SI1l6pK+TLwjynJqb/OSP
+         R19+UJ4qOCkEjvQcpQOFlPTR99isRfg19NWdQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=8+Nru2NcToVw10SMtgwpUUD5V5gNRuUchLBb5mwzcTo=;
+        b=O9idf7zZbUif7xS2eNnhcTrHQ+a4DfsMnJ46NZvF4p2CfUJzeo3ohSvKO+YLbLvwhx
+         HXCqrvlhQo1/5MlGGcoo04XUXOFKimYUS9DWVED+OFHmA3tNbkAPIy1c0w/x/X5VPJ7h
+         k3gxW7bXUqxu+/JqxwJMs83YOViy4CSo95ljgJI2f1pl03Z4zTvurBa067rAm8UXSKoj
+         rMUgMmKUujhVfCny3NjFVhzk2lXgUjppL4EtTXfmE0XK6NUaVxXmo1hHg+hywhtzWLYY
+         RhWbvm09QpXgJeVAWPs7Hg4pTrZWmF3wciBFgmn82JSyWB5ddlEKxmWi5yHVEOo1kY7w
+         dLzA==
+X-Gm-Message-State: AOAM533fLbVnw9P31pLgmBrBChzWu1nvOZC5ItisvCgMpJO7ewHB+Ia4
+        vlm0K5edBtl6NpsFsh6pT25D9XULvtR6g7XjRpmGoEcD/Q4=
+X-Google-Smtp-Source: ABdhPJziJIFTknz84SWo9mVGHh0qE57URGU8n7DntwMHca8it42Jy2AZliHDBlgXQCx9Gscxm97mfnNa5Z0YJT9CftY=
+X-Received: by 2002:a05:6870:d413:: with SMTP id i19mr1648649oag.54.1644451410730;
+ Wed, 09 Feb 2022 16:03:30 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 9 Feb 2022 16:03:30 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/JAQtZNoJvBCGJ1elJ+aszuF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a1c2a7e6-8d76-6ee6-4bc4-e7ea8013af02@quicinc.com>
+References: <1644334454-16719-1-git-send-email-quic_srivasam@quicinc.com>
+ <1644334454-16719-4-git-send-email-quic_srivasam@quicinc.com>
+ <CAE-0n50jBeOnkpogPFm+zqTf8bqQs-Bo0Gma658uFE6aA=Edxg@mail.gmail.com> <a1c2a7e6-8d76-6ee6-4bc4-e7ea8013af02@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 9 Feb 2022 16:03:30 -0800
+Message-ID: <CAE-0n52LqrdLXk4=WMQY3WXVYLjpwXH+FP2z71gKMAkjiPR4Xg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sc7280: Add wcd9380 pinmux
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        devicetree@vger.kernel.org, dianders@chromium.org,
+        judyhsiao@chromium.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        rohitkr@codeaurora.org, srinivas.kandagatla@linaro.org
+Cc:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/JAQtZNoJvBCGJ1elJ+aszuF
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Quoting Srinivasa Rao Mandadapu (2022-02-09 06:26:58)
+>
+> On 2/9/2022 2:42 AM, Stephen Boyd wrote:
+> > Quoting Srinivasa Rao Mandadapu (2022-02-08 07:34:14)
+> >
+> >> +                       pins = "gpio83";
+> >> +                       function = "gpio";
+> >> +                       drive-strength = <16>;
+> >> +                       output-high;
+> >> +       };
+> >> +
+> >> +       wcd938x_reset_sleep: wcd938x_reset_sleep {
+> >> +                       pins = "gpio83";
+> >> +                       function = "gpio";
+> >> +                       drive-strength = <16>;
+> >> +                       bias-disable;
+> >> +                       output-low;
+> > Why doesn't the device drive the reset gpio by requesting the gpio and
+> > asserting and deasserting it? We shouldn't need to use pinctrl settings
+> > to toggle reset gpios.
+> Okay. Verified without these nodes and didn't see any impact. But
+> similar way it's mentioned in sm8250-mtp.dts. Could You please suggest
+> on it how to go ahead on this?.
 
-Hi all,
+I'd expect the wcd938x codec device node to have a 'reset-gpios'
+property like
 
-After merging the net-next tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+	reset-gpios = <&tlmm 83 GPIO_ACTIVE_LOW>
 
-In file included from include/linux/bitmap.h:9,
-                 from include/linux/cpumask.h:12,
-                 from arch/x86/include/asm/cpumask.h:5,
-                 from arch/x86/include/asm/msr.h:11,
-                 from arch/x86/include/asm/processor.h:22,
-                 from arch/x86/include/asm/timex.h:5,
-                 from include/linux/timex.h:65,
-                 from include/linux/time32.h:13,
-                 from include/linux/time.h:60,
-                 from include/linux/skbuff.h:15,
-                 from include/linux/if_ether.h:19,
-                 from include/linux/etherdevice.h:20,
-                 from drivers/net/ethernet/marvell/octeontx2/af/mbox.h:11,
-                 from drivers/net/ethernet/marvell/octeontx2/af/cgx.h:11,
-                 from drivers/net/ethernet/marvell/octeontx2/af/rpm.c:8:
-drivers/net/ethernet/marvell/octeontx2/af/rpm.c: In function 'rpm_cfg_pfc_q=
-uanta_thresh':
-include/linux/find.h:40:23: error: array subscript 'long unsigned int[0]' i=
-s partly outside array bounds of 'u16[1]' {aka 'short unsigned int[1]'} [-W=
-error=3Darray-bounds]
-   40 |                 val =3D *addr & GENMASK(size - 1, offset);
-      |                       ^~~~~
-drivers/net/ethernet/marvell/octeontx2/af/rpm.c:144:68: note: while referen=
-cing 'pfc_en'
-  144 | static void rpm_cfg_pfc_quanta_thresh(rpm_t *rpm, int lmac_id, u16 =
-pfc_en,
-      |                                                                ~~~~=
-^~~~~~
+and then the driver to request that gpio via
 
-Caused by commit
+	reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
 
-  1121f6b02e7a ("octeontx2-af: Priority flow control configuration support")
-
-I have used the net-next tree frm next-20220209 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/JAQtZNoJvBCGJ1elJ+aszuF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIEVWAACgkQAVBC80lX
-0GzMIggAnZEdjRVp48k/a5FBizoXCCA3d36ID1HAPYJ3dMqKeZbAN06K6nieFiQS
-PzooAipsaw9kltj4vVGHUFsJh3owKWUgQUFgpsDt7Ni6WnwrAxTuJsszr1xIZhr0
-6nMnRdNBFiuymXSaEr4LtemzamnliYKi0SewLxDynI7QfcWLBiFI5ikiyvnH5TSZ
-BQebm3Wryv3XYWsHQyMsrT3QsV6mPRO7NLqYbQOKbojn79RwwVsA+xugy0rBzhcx
-Eyi1LIudq4NHEsgU49yHqdz8+t/4Wqv1fOifxVNjleGNoCEbofvDk6ldSAuVx9uk
-shO+lBaibvsyATz3mT1gzCRnKbo2kw==
-=Xslb
------END PGP SIGNATURE-----
-
---Sig_/JAQtZNoJvBCGJ1elJ+aszuF--
+so it gets the gpio during driver probe. Then the gpio can be deasserted
+during suspend and reasserted on resume, if that's even important?

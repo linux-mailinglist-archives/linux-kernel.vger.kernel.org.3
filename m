@@ -2,122 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB7B4B0B67
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1D74B0B61
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240238AbiBJKuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 05:50:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59416 "EHLO
+        id S240181AbiBJKuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 05:50:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240214AbiBJKum (ORCPT
+        with ESMTP id S240208AbiBJKuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 05:50:42 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12663101;
-        Thu, 10 Feb 2022 02:50:39 -0800 (PST)
-X-UUID: f22d432b66fd4044b7d9032c26b2248f-20220210
-X-UUID: f22d432b66fd4044b7d9032c26b2248f-20220210
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <cheng-jui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1612641741; Thu, 10 Feb 2022 18:50:35 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 10 Feb 2022 18:50:34 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 10 Feb 2022 18:50:33 +0800
-From:   Cheng Jui Wang <cheng-jui.wang@mediatek.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>
-CC:     Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>,
-        "Boqun Feng" <boqun.feng@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <stable@vger.kernel.org>,
-        <wsd_upstream@mediatek.com>,
-        Eason-YH Lin <eason-yh.lin@mediatek.com>,
-        Kobe-CP Wu <kobe-cp.wu@mediatek.com>,
-        Jeff-CC Hsu <jeff-cc.hsu@mediatek.com>,
-        Cheng Jui Wang <cheng-jui.wang@mediatek.com>
-Subject: [PATCH] lockdep: Correct lock_classes index mapping
-Date:   Thu, 10 Feb 2022 18:50:11 +0800
-Message-ID: <20220210105011.21712-1-cheng-jui.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Thu, 10 Feb 2022 05:50:16 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086A4100A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:50:18 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id q15-20020a92ca4f000000b002be3e7707ffso3710490ilo.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 02:50:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=sxYpZJUZ2c9zNF0g11fgItZpAgYz7w3rafFkaJxtZEQ=;
+        b=6Eutxt3C58LvlZ/DWvWYx53UDpaTPwMUCdf+/rkGpnLuS4MS9JQH3AihrT1yAi2cCw
+         EIFRAYf7bm9P+qYdZfAVCwvFUxf3l1bsk//13A0fdiXYmdYTVwGDEE/PVFmK9vUJ4w/G
+         5I3do46AIjmJ8eBlvko+mru1QPbbLkN4CMLp/s/JCxTpV4r2+hJudIyInXF82K9f0XBw
+         GoyKMNn91Yvk7LKsVfMSBYm5xINaMXKudLsVvwWxhbFFZDQYZnWK8ITGycZX6uOGxSh/
+         JAARFAAkFi6KOyIC/5sOifVyoXaAQHJYlkK0/jzkfQqGP9pQWpuj7rWblTZJkFPjlBcG
+         t/Wg==
+X-Gm-Message-State: AOAM5338dGFjOgemBtR+YdueiibqpuDZ/SF6fkGBOVwj+/biolTiJVcu
+        LuUN3knp+YjgZkr6PDj/A0IIikIXVkxYEDKswd8UnkEyDg64
+X-Google-Smtp-Source: ABdhPJzDPwxNgGEw7MSf2dUinV4AhG1lZH2BM4eClEPzLE93HkKhYeXKN5whaoqHy9jESUgvFBAgh+EYiT8naivCOjHaQBhUIyma
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:7219:: with SMTP id n25mr3519606ioc.12.1644490217356;
+ Thu, 10 Feb 2022 02:50:17 -0800 (PST)
+Date:   Thu, 10 Feb 2022 02:50:17 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003e009a05d7a7b77f@google.com>
+Subject: [syzbot] KCSAN: data-race in copy_page_to_iter / strncpy (4)
+From:   syzbot <syzbot+88a9b535e28311efdcd4@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A kernel exception was hit when trying to dump /proc/lockdep_chains after
-lockdep report "BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!":
+Hello,
 
-Unable to handle kernel paging request at virtual address 00054005450e05c3
-...
-00054005450e05c3] address between user and kernel address ranges
-...
-pc : [0xffffffece769b3a8] string+0x50/0x10c
-lr : [0xffffffece769ac88] vsnprintf+0x468/0x69c
-...
- Call trace:
-  string+0x50/0x10c
-  vsnprintf+0x468/0x69c
-  seq_printf+0x8c/0xd8
-  print_name+0x64/0xf4
-  lc_show+0xb8/0x128
-  seq_read_iter+0x3cc/0x5fc
-  proc_reg_read_iter+0xdc/0x1d4
+syzbot found the following issue on:
 
-The cause of the problem is the function lock_chain_get_class() will
-shift lock_classes index by 1, but the index don't need to be shifted
-anymore since commit 01bb6f0af992 ("locking/lockdep: Change the range of
-class_idx in held_lock struct") already change the index to start from
-0.
+HEAD commit:    e6251ab4551f Merge tag 'nfs-for-5.17-2' of git://git.linux..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=109133b4700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1dcc3374da7c1f7c
+dashboard link: https://syzkaller.appspot.com/bug?extid=88a9b535e28311efdcd4
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
 
-The lock_classes[-1] located at chain_hlocks array. When printing
-lock_classes[-1] after the chain_hlocks entries are modified, the
-exception happened.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-The output of lockdep_chains are incorrect due to this problem too.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+88a9b535e28311efdcd4@syzkaller.appspotmail.com
 
-Fixes: f611e8cf98ec ("lockdep: Take read/write status in consideration when generate chainkey")
+==================================================================
+BUG: KCSAN: data-race in copy_page_to_iter / strncpy
 
-Signed-off-by: Cheng Jui Wang <cheng-jui.wang@mediatek.com>
+write to 0xffff888108b1b488 of 1 bytes by task 16090 on cpu 1:
+ strncpy+0xcf/0x150 lib/string.c:114
+ ext4_sample_last_mounted fs/ext4/file.c:828 [inline]
+ ext4_file_open+0x3a6/0x4e0 fs/ext4/file.c:847
+ do_dentry_open+0x52c/0x860 fs/open.c:824
+ vfs_open+0x43/0x50 fs/open.c:959
+ do_open fs/namei.c:3476 [inline]
+ path_openat+0x170c/0x1f30 fs/namei.c:3609
+ do_filp_open+0x105/0x220 fs/namei.c:3636
+ do_sys_openat2+0xb5/0x2b0 fs/open.c:1214
+ do_sys_open fs/open.c:1230 [inline]
+ __do_sys_open fs/open.c:1238 [inline]
+ __se_sys_open fs/open.c:1234 [inline]
+ __x64_sys_open+0xe2/0x110 fs/open.c:1234
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+read to 0xffff888108b1b400 of 1024 bytes by task 10450 on cpu 0:
+ instrument_copy_to_user include/linux/instrumented.h:119 [inline]
+ copyout lib/iov_iter.c:154 [inline]
+ copy_page_to_iter_iovec lib/iov_iter.c:226 [inline]
+ __copy_page_to_iter lib/iov_iter.c:850 [inline]
+ copy_page_to_iter+0x2cb/0x950 lib/iov_iter.c:878
+ copy_folio_to_iter include/linux/uio.h:153 [inline]
+ filemap_read+0x1126/0x1430 mm/filemap.c:2727
+ blkdev_read_iter+0x2cc/0x380 block/fops.c:614
+ call_read_iter include/linux/fs.h:2068 [inline]
+ new_sync_read fs/read_write.c:400 [inline]
+ vfs_read+0x66c/0x750 fs/read_write.c:481
+ ksys_read+0xd9/0x190 fs/read_write.c:619
+ __do_sys_read fs/read_write.c:629 [inline]
+ __se_sys_read fs/read_write.c:627 [inline]
+ __x64_sys_read+0x3e/0x50 fs/read_write.c:627
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 0 PID: 10450 Comm: udevd Not tainted 5.17.0-rc3-syzkaller-00029-ge6251ab4551f-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+==================================================================
+I/O error, dev loop2, sector 0 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 0
+
+
 ---
- kernel/locking/lockdep.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 4a882f83aeb9..f8a0212189ca 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -3462,7 +3462,7 @@ struct lock_class *lock_chain_get_class(struct lock_chain *chain, int i)
- 	u16 chain_hlock = chain_hlocks[chain->base + i];
- 	unsigned int class_idx = chain_hlock_class_idx(chain_hlock);
- 
--	return lock_classes + class_idx - 1;
-+	return lock_classes + class_idx;
- }
- 
- /*
-@@ -3530,7 +3530,7 @@ static void print_chain_keys_chain(struct lock_chain *chain)
- 		hlock_id = chain_hlocks[chain->base + i];
- 		chain_key = print_chain_key_iteration(hlock_id, chain_key);
- 
--		print_lock_name(lock_classes + chain_hlock_class_idx(hlock_id) - 1);
-+		print_lock_name(lock_classes + chain_hlock_class_idx(hlock_id));
- 		printk("\n");
- 	}
- }
--- 
-2.18.0
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

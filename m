@@ -2,69 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D5A4B0213
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:25:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B658D4B0211
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 02:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231971AbiBJBYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 20:24:30 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:46182 "EHLO
+        id S231842AbiBJBZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 20:25:38 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiBJBYZ (ORCPT
+        with ESMTP id S232057AbiBJBZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:24:25 -0500
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B627A133
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 17:24:27 -0800 (PST)
-Received: by mail-oo1-xc30.google.com with SMTP id f11-20020a4abb0b000000b002e9abf6bcbcso4664294oop.0
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 17:24:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=27Sh/gjTQKrc1Azsx7TamN01kBkavB9Nd2smrY49IYs=;
-        b=RNbSnjwslH0xYngfJEtgMMri9g9VWvX8QUMKepo8DyvQmuKVO8z7uusX/NJ102syep
-         6j2NrhvLeTW/hZNMIpRlCJZcLSY3Y3Jx2Cvt0TBjnWeVZdumDmcGvpmLwuNY2ziVMk4s
-         reGibwi0vzCv8RvrpFqu6my6XvlTm5KOSSQQs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=27Sh/gjTQKrc1Azsx7TamN01kBkavB9Nd2smrY49IYs=;
-        b=qcCl/oQGKuo3fmOJPrtbKrhP3lK0ogAO9fmg00mg743B009bN4uaAYE6OlB3x9nKWW
-         HzXpcj5NukCrHChFn6O53okIQotMHB0iAirZZREXyiGTf0XGtYydfKadi0YP1TYX2Qxr
-         nhMmPmTEYund4wpIQSrfFxuvjIVYIVkjEOGC7z8rwerAF9M+S6F5ZdiSl1ppl37kBfxv
-         yOeSBLSsrAOgZTstdPUravhklJYFrJAq6AovRj+SU/CPaUzKRWT3YrXNf8w7QHNWX0W/
-         L4tUYSj8FWfW2K6tUPiJivV/jBuckMzmWZRP6PsdKpqtsnsurnRc1vdn6L0o1QaGfMBA
-         ud8g==
-X-Gm-Message-State: AOAM531XXePLUcuxTVEIJxVtgU+5FfQhBM9O9AWXLAVWvuVtVRdBJKB6
-        uDWooYz7WQ8thkAfWnnnocooIUsAm1W84mCJlzDc+Q==
-X-Google-Smtp-Source: ABdhPJyGpdG7EGFYVbHR1S5gBzqW7H/LjHzkWQMB7qqnIX2TFR25pk7CNsX9nO6gZmvzXDDT4FlsDtbMDdsGOlmtjNU=
-X-Received: by 2002:a05:6870:1209:: with SMTP id 9mr51140oan.8.1644456267103;
- Wed, 09 Feb 2022 17:24:27 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 9 Feb 2022 17:24:26 -0800
+        Wed, 9 Feb 2022 20:25:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FB75598;
+        Wed,  9 Feb 2022 17:25:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD21EB823BB;
+        Thu, 10 Feb 2022 01:25:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 276E9C340E7;
+        Thu, 10 Feb 2022 01:25:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644456327;
+        bh=q1j/8X8KRoaMux0MR33EKmu69UKx9HSvfrHlB087F2Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dSOgMdAvTyqsqgyfjJafaoZDP9KQqRA12znksjSjfUS65ZvWAeU5jZLE44U3J+1Te
+         MblFTGGEnsucHWyXVUgdr+CpwrmS2RkEGHQn1zqk+rYzT1kzBDhkWXfKH4bcty4NF+
+         AnSaHC9mSJ1XsDOYHyxifkbduWYMtOqU+/1ACoSa3/9Hz/5mjA2r4OqEdQLWtvNDn7
+         u5a29BYyu2kAD8e7D9Kvd3BJJ556KnEQX8IYeAk/BKLebT2sZBhScfw1qznLrCjVNV
+         PcCOJ//q4w8XmVdIJS+WtIYh0t78DmP/C2S6oouNqEmN0eFrKNifHdcOlZq+LiltdU
+         6u6/GoJJ1W4tQ==
+Date:   Wed, 9 Feb 2022 17:25:25 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jiri Pirko <jiri@resnulli.us>, Moshe Shemesh <moshe@nvidia.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 0/4] net/mlx5: Introduce devlink param to
+ disable SF aux dev probe
+Message-ID: <20220209172525.19977e8c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <YgOQAZKnbm5IzbTy@nanopsycho>
+References: <1644340446-125084-1-git-send-email-moshe@nvidia.com>
+        <20220208212341.513e04bf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <YgOQAZKnbm5IzbTy@nanopsycho>
 MIME-Version: 1.0
-In-Reply-To: <1644331940-18986-2-git-send-email-quic_c_skakit@quicinc.com>
-References: <1644331940-18986-1-git-send-email-quic_c_skakit@quicinc.com> <1644331940-18986-2-git-send-email-quic_c_skakit@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 9 Feb 2022 17:24:26 -0800
-Message-ID: <CAE-0n51AYxeWMpgS=Ya-_5Ly_h3uB346aZc9j596iZxQ+ZtcMQ@mail.gmail.com>
-Subject: Re: [PATCH V5 1/6] dt-bindings: regulator: Add pm8008 regulator bindings
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Das Srinagesh <gurus@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_collinsd@quicinc.com,
-        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,39 +59,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Satya Priya (2022-02-08 06:52:15)
-> diff --git a/Documentation/devicetree/bindings/regulator/qcom,pm8008-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,pm8008-regulator.yaml
-> new file mode 100644
-> index 0000000..0098845
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/qcom,pm8008-regulator.yaml
-> @@ -0,0 +1,31 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/qcom,pm8008-regulator.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Technologies, Inc. PM8008 Regulator bindings
-> +
-> +maintainers:
-> +  - Satya Priya <skakit@codeaurora.org>
-> +
-> +description:
-> +  Qualcomm Technologies, Inc. PM8008 is an I2C controlled PMIC
-> +  containing 7 LDO regulators.
-> +
-> +patternProperties:
-> +  "^LDO[1-7]$":
+On Wed, 9 Feb 2022 09:39:54 +0200 Moshe Shemesh wrote:
+> Well we don't have the SFs at that stage, how can we tell which SF will 
+> use vnet and which SF will use eth ?
 
-Any reason it needs to be capitalized vs. lowercase ldo?
+On Wed, 9 Feb 2022 10:57:21 +0100 Jiri Pirko wrote: 
+> It's a different user. One works with the eswitch and creates the port
+> function. The other one takes the created instance and works with it.
+> Note that it may be on a different host.
 
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +    description: PM8008 regulator peripherals of PM8008 regulator device
-> +
-> +    properties:
-> +      regulator-name: true
-> +
-> +    required:
-> +      - regulator-name
+It is a little confusing, so I may well be misunderstanding but the
+cover letter says:
+
+$ devlink dev param set pci/0000:08:00.0 name enable_sfs_aux_devs \
+              value false cmode runtime
+
+$ devlink port add pci/0000:08:00.0 flavour pcisf pfnum 0 sfnum 11
+
+So both of these run on the same side, no?
+
+What I meant is make the former part of the latter:
+
+$ devlink port add pci/0000:08:00.0 flavour pcisf pfnum 0 sfnum 11 noprobe
+
+
+Maybe worth clarifying - pci/0000:08:00.0 is the eswitch side and
+auxiliary/mlx5_core.sf.1 is the... "customer" side, correct? 

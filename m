@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F604B1A66
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C1F4B1A6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:29:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346330AbiBKA0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:26:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56308 "EHLO
+        id S1346343AbiBKA3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:29:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346261AbiBKA0w (ORCPT
+        with ESMTP id S1345570AbiBKA3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:26:52 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7915594
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:26:52 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id c12so5109451ilm.8
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:26:52 -0800 (PST)
+        Thu, 10 Feb 2022 19:29:05 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6B6E1E
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:29:05 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id p63so9500344iod.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:29:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=1MJU8h6aqi1lREanFgpSWWzF65VdO9IwfkWhBgqaH3Y=;
-        b=mvi1bzuGc+ZCDBoKyIvPuu57FjwX/ZNRRmbHLZvq28NxvswbVJpCtL+TPmWTVqyuNq
-         zHOVncwF2tsmDVT250gY7kLq+jhckLGi7PlKEqS4kMkEFP1KTu7Z7xjiQlYjB2792Sy0
-         y79LwuSrYF42p6Ksm7buY7+zkijxS7uB/hHR9ElJmFJeaWgz2GF8WWh/oKXQxLhRyRAL
-         sBCNNuvExT46DRyy/8TIoNJF5PD3spUAqOHHh9NO3ZMs/icV5NIDHPE+azUqsowaetzV
-         7cpHrDo+EZ7zUtQ5l6ZDe3klqtAXMvArBpa4JNsPnSEGr2ueqLcJfFXWmveEcH8M/UrG
-         z/9w==
+        bh=ZDTlgBeWU01PBOzjEa5E75U6QWQseHc5+WCVq5kwy3w=;
+        b=HM8kw4tWsOdALdKvtiwg2yy9eOvpQP+q0yOYC3qOjgrpR8fI4vo/sNinxN+PB+x/Ol
+         jByaLF6SaOUOAP39+R0hdd76DXy4YmvFOlSGW6WvBQuLHJhLwD9LtChUJ0kIsq1VgDpt
+         9zckiYssOWPzRn1v/clJUdveiACOLwgOPwPmzgTEXdvK0beN6ZNDn9AYQI6fFMTgnM38
+         wm9a4sIxFBKuY0LyCYAB26zyZCuFv/y2XI02KUyo7gtVdClkz+WUvOihIGw2V5OsAtQJ
+         Wifm0YtgNEUu29R3DbtPrD2hbVucPDQkBrf9ZGTr8wkNeEu0FKXVsUdOusf28EPD3pz9
+         b5SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1MJU8h6aqi1lREanFgpSWWzF65VdO9IwfkWhBgqaH3Y=;
-        b=kjQ/uIH3jWFE9HMBpCZUS59BdbEMlgUUsSdOVC4SnK4i2ebN5bYPHvY3N8c9mMZk/o
-         m5H/DVMDioKvyWiSPmL1IKnkN1BglyR9GXfIKu1o9j4xSG2g5mdK4CzTKrwULnC7svc5
-         Kvez5gATQriISEdkQaZb52CQIeLKAmtTR3ioVt69WPe9bV5zomF5sktsU4ou302a224b
-         apZuo24XMf9TfHzSqb48cbQ48w34hBCSYnBKq3hUBK/Uj7CDpUxssDVa6D8sEDQNwnRA
-         Me5NCqoQP0o+qg8bTpzp6lVThao14c3+t+O5pdbyKS3cLE011/vNUIVWNhSYpnJoww+6
-         3ljA==
-X-Gm-Message-State: AOAM531eR9XqDCJP5E2j9gwx6P1eYV2tVUpZPbp7Ykj+uGT1oRv2leak
-        sCPa9NVCkF8H9axy+Yzq+Ms=
-X-Google-Smtp-Source: ABdhPJw4HRWGUzFWRINnqDSvHJhe4t426yscU51lkh9YSM6/oOmml5+22RpllautY9urs7QLFyNzJQ==
-X-Received: by 2002:a92:ab01:: with SMTP id v1mr5297485ilh.149.1644539212078;
-        Thu, 10 Feb 2022 16:26:52 -0800 (PST)
+        bh=ZDTlgBeWU01PBOzjEa5E75U6QWQseHc5+WCVq5kwy3w=;
+        b=DhCan/V1CsBzAh0hXkPQyhS6EFI46o7pi20dlmA0ueO8vsrSCpoxjS97jyB0EvdyhS
+         jaSmtk88cbptYEKlvuWl7xaSMaRqwOSl803EflpuDAjbyXB7L+t+vaeKbPxWzJkT7FxJ
+         Qnz7iVRPBjwrjRi1+q55we4vlkgogpsgN5xaDnOQtWEUR3qM9jUUO2HYgAjiHIK21CtB
+         gs9eCyWYjbMkyVm2CvLRcKXqiIPDzXWxMDrHDP/lUkbTopX5DnnL+mcVgeUxRh9iHsjd
+         Z68wNa6qRqkr8/YsECBjbogrhf0S8zKUsYEFtQwC1Kye9eyEWpZrNbQcrlHNPhUL7JZB
+         yLvw==
+X-Gm-Message-State: AOAM533fHsWoDkCnJdAKhbFjNMt5NBmMlsOgAUnlrZzIGLrZbrFr0KUt
+        mJWXrZGfwvfMqBQ2wJX6j1o=
+X-Google-Smtp-Source: ABdhPJwy0yG0d3qlBtG2SbAr160MBRvEPBQfXpQbtOrFB7KYpu61+Ou5PiEWocR3zTMOS1zHZBe0nA==
+X-Received: by 2002:a02:852e:: with SMTP id g43mr5671744jai.40.1644539345325;
+        Thu, 10 Feb 2022 16:29:05 -0800 (PST)
 Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id y22sm12896727iow.2.2022.02.10.16.26.51
+        by smtp.gmail.com with ESMTPSA id c12sm10343849ilo.70.2022.02.10.16.29.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 16:26:51 -0800 (PST)
+        Thu, 10 Feb 2022 16:29:04 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -62,11 +62,10 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 43/49] soc/qman: replace cpumask_weight with cpumask_weight_lt
-Date:   Thu, 10 Feb 2022 14:49:27 -0800
-Message-Id: <20220210224933.379149-44-yury.norov@gmail.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 44/49] nodemask: add nodemask_weight_{eq,gt,ge,lt,le}
+Date:   Thu, 10 Feb 2022 14:49:28 -0800
+Message-Id: <20220210224933.379149-45-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220210224933.379149-1-yury.norov@gmail.com>
 References: <20220210224933.379149-1-yury.norov@gmail.com>
@@ -82,29 +81,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-qman_test_stash() calls cpumask_weight() to compare the weight of cpumask
-with a given number. We can do it more efficiently with cpumask_weight_lt
-because conditional cpumask_weight may stop traversing the cpumask earlier,
-as soon as condition is (or can't be) met.
+In many cases kernel code uses nodemask_weight() to compare the result
+against some number or expression:
+
+	if (nodes_weight(...) > 1)
+		do_something();
+
+It may be significantly improved for large nodemasks: if first few words
+count set bits to a number greater than given, we can stop counting and
+immediately return.
+
+The same idea would work in other direction: if we know that the number
+of set bits that we counted so far is small enough, so that it would be
+smaller than required number even if all bits of the rest of the nodemask
+are set, we can stop counting earlier.
+
+This patch adds nodes_weight{eq, gt, ge, lt, le} helpers based on
+corresponding bitmap functions. The following patches apply new functions
+where appropriate.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- drivers/soc/fsl/qbman/qman_test_stash.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/nodemask.h | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/drivers/soc/fsl/qbman/qman_test_stash.c b/drivers/soc/fsl/qbman/qman_test_stash.c
-index b7e8e5ec884c..28b08568a349 100644
---- a/drivers/soc/fsl/qbman/qman_test_stash.c
-+++ b/drivers/soc/fsl/qbman/qman_test_stash.c
-@@ -561,7 +561,7 @@ int qman_test_stash(void)
- {
- 	int err;
+diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
+index 567c3ddba2c4..197598e075e9 100644
+--- a/include/linux/nodemask.h
++++ b/include/linux/nodemask.h
+@@ -38,6 +38,11 @@
+  * int nodes_empty(mask)		Is mask empty (no bits sets)?
+  * int nodes_full(mask)			Is mask full (all bits sets)?
+  * int nodes_weight(mask)		Hamming weight - number of set bits
++ * bool nodes_weight_eq(src, nbits, num) Hamming Weight is equal to num
++ * bool nodes_weight_gt(src, nbits, num) Hamming Weight is greater than num
++ * bool nodes_weight_ge(src, nbits, num) Hamming Weight is greater than or equal to num
++ * bool nodes_weight_lt(src, nbits, num) Hamming Weight is less than num
++ * bool nodes_weight_le(src, nbits, num) Hamming Weight is less than or equal to num
+  *
+  * void nodes_shift_right(dst, src, n)	Shift right
+  * void nodes_shift_left(dst, src, n)	Shift left
+@@ -240,6 +245,36 @@ static inline int __nodes_weight(const nodemask_t *srcp, unsigned int nbits)
+ 	return bitmap_weight(srcp->bits, nbits);
+ }
  
--	if (cpumask_weight(cpu_online_mask) < 2) {
-+	if (cpumask_weight_lt(cpu_online_mask, 2)) {
- 		pr_info("%s(): skip - only 1 CPU\n", __func__);
- 		return 0;
- 	}
++#define nodes_weight_eq(nodemask, num) __nodes_weight_eq(&(nodemask), MAX_NUMNODES, (num))
++static inline int __nodes_weight_eq(const nodemask_t *srcp, unsigned int nbits, int num)
++{
++	return bitmap_weight_eq(srcp->bits, nbits, num);
++}
++
++#define nodes_weight_gt(nodemask, num) __nodes_weight_gt(&(nodemask), MAX_NUMNODES, (num))
++static inline int __nodes_weight_gt(const nodemask_t *srcp, unsigned int nbits, int num)
++{
++	return bitmap_weight_gt(srcp->bits, nbits, num);
++}
++
++#define nodes_weight_ge(nodemask, num) __nodes_weight_ge(&(nodemask), MAX_NUMNODES, (num))
++static inline int __nodes_weight_ge(const nodemask_t *srcp, unsigned int nbits, int num)
++{
++	return bitmap_weight_ge(srcp->bits, nbits, num);
++}
++
++#define nodes_weight_lt(nodemask, num) __nodes_weight_lt(&(nodemask), MAX_NUMNODES, (num))
++static inline int __nodes_weight_lt(const nodemask_t *srcp, unsigned int nbits, int num)
++{
++	return bitmap_weight_lt(srcp->bits, nbits, num);
++}
++
++#define nodes_weight_le(nodemask, num) __nodes_weight_le(&(nodemask), MAX_NUMNODES, (num))
++static inline int __nodes_weight_le(const nodemask_t *srcp, unsigned int nbits, int num)
++{
++	return bitmap_weight_le(srcp->bits, nbits, num);
++}
++
+ #define nodes_shift_right(dst, src, n) \
+ 			__nodes_shift_right(&(dst), &(src), (n), MAX_NUMNODES)
+ static inline void __nodes_shift_right(nodemask_t *dstp,
 -- 
 2.32.0
 

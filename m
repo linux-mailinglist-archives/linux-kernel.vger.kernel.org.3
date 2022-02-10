@@ -2,59 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 208B44B0F21
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D265E4B0F23
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 14:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242404AbiBJNrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 08:47:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47764 "EHLO
+        id S242410AbiBJNsa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 10 Feb 2022 08:48:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240115AbiBJNrc (ORCPT
+        with ESMTP id S233034AbiBJNs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 08:47:32 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1C6DC2;
-        Thu, 10 Feb 2022 05:47:33 -0800 (PST)
-Date:   Thu, 10 Feb 2022 14:47:28 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644500849;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zSr2ss2XeDq1uSx/52DLJxAukEh718lajFixXSZYo0Y=;
-        b=XzVSm1oGXQRb9fGaQie8jawnpDq2BileH+QA9VnwZkHOtdaJscOuZag9iuGfUsX5Mmv9cz
-        sKmdKhGiGANr7YXNajGqAnpNNo4TzxiUng3Ns6Y8bCvLJfdROw64vAL2OvnRlgCk7UVas1
-        KYT9EwD9Yorv05neTRDuylIYm+MiFDcqLEPC7qkcczGHEIUR6XUCOUi64T/1P9UyRBTou2
-        o1zwe+3ZBM0+Y66ZXT8FBZwTpkYQFrOZTMM/6v1RX1ZXo00kpymGLFQRRW8d5Ws9PxC++1
-        1qhUFgK4s+Oteimvo5MVFzP8aB0yL/nZH6RjGoE2icCU8quiN4VdDLyHMXAoVg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644500849;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zSr2ss2XeDq1uSx/52DLJxAukEh718lajFixXSZYo0Y=;
-        b=sX7FCscNJWJk5dqwgIws8B0emR5gI5UgS+LF0QYJ+0lQeQ6hTuHRSxw9ZRtEAXfhAsrs97
-        VIuYiR5sEFFcW5Dw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rt-users@vger.kernel.org, joseph.salisbury@canonical.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH v2] selftests/ftrace: Do not trace do_softirq because of
- PREEMPT_RT
-Message-ID: <YgUXcGC1mH7VX1d9@linutronix.de>
-References: <20220210083356.11212-1-krzysztof.kozlowski@canonical.com>
+        Thu, 10 Feb 2022 08:48:27 -0500
+X-Greylist: delayed 76448 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 05:48:27 PST
+Received: from unicorn.mansr.com (unicorn.mansr.com [IPv6:2001:8b0:ca0d:8d8e::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B747191;
+        Thu, 10 Feb 2022 05:48:27 -0800 (PST)
+Received: from raven.mansr.com (raven.mansr.com [IPv6:2001:8b0:ca0d:8d8e::3])
+        by unicorn.mansr.com (Postfix) with ESMTPS id 6107F15360;
+        Thu, 10 Feb 2022 13:48:25 +0000 (GMT)
+Received: by raven.mansr.com (Postfix, from userid 51770)
+        id 4A572219C0A; Thu, 10 Feb 2022 13:48:25 +0000 (GMT)
+From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Juergen Borleis <kernel@pengutronix.de>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: dsa: lan9303: fix reset on probe
+References: <20220209145454.19749-1-mans@mansr.com>
+        <20220209183623.54369689@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Date:   Thu, 10 Feb 2022 13:48:25 +0000
+In-Reply-To: <20220209183623.54369689@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        (Jakub Kicinski's message of "Wed, 9 Feb 2022 18:36:23 -0800")
+Message-ID: <yw1xsfsq4yty.fsf@mansr.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220210083356.11212-1-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,31 +50,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-10 09:33:56 [+0100], Krzysztof Kozlowski wrote:
-> The PREEMPT_RT patchset does not use soft IRQs thus trying to filter for
-> do_softirq fails for such kernel:
+Jakub Kicinski <kuba@kernel.org> writes:
 
-PREEMPT_RT does use soft IRQs.
+> On Wed,  9 Feb 2022 14:54:54 +0000 Mans Rullgard wrote:
+>> The reset input to the LAN9303 chip is active low, and devicetree
+>> gpio handles reflect this.  Therefore, the gpio should be requested
+>> with an initial state of high in order for the reset signal to be
+>> asserted.  Other uses of the gpio already use the correct polarity.
+>> 
+>> Signed-off-by: Mans Rullgard <mans@mansr.com>
+>
+> Pending Andrew's review, this is the correct fixes tag, right?
+>
+> Fixes: a1292595e006 ("net: dsa: add new DSA switch driver for the SMSC-LAN9303")
 
->   echo do_softirq
->   ftracetest: 81: echo: echo: I/O error
->=20
-> Choose some other visible function for the test.
->=20
-=E2=80=A6
+Yes, the error has been there since the driver was first added.
 
-> --- a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
-> @@ -19,7 +19,7 @@ fail() { # mesg
-> =20
->  FILTER=3Dset_ftrace_filter
->  FUNC1=3D"schedule"
-> -FUNC2=3D"do_softirq"
-> +FUNC2=3D"scheduler_tick"
-
-What is the purpose of this?
-
->  ALL_FUNCS=3D"#### all functions enabled ####"
-> =20
-
-Sebastian
+-- 
+Måns Rullgård

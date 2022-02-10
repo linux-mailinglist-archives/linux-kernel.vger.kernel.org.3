@@ -2,423 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8864B099E
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BBFD4B0998
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238748AbiBJJeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:34:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55044 "EHLO
+        id S238759AbiBJJeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:34:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232153AbiBJJeI (ORCPT
+        with ESMTP id S232153AbiBJJe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:34:08 -0500
-Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F731FC2;
-        Thu, 10 Feb 2022 01:34:08 -0800 (PST)
-Received: from grover.. (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id 21A9XggI019627;
-        Thu, 10 Feb 2022 18:33:42 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 21A9XggI019627
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1644485622;
-        bh=2yvxQilrm/40NtY+4z5nWuXN4qSw3UjMY+RpJhjiWaI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=1jr52K48UgVraQJXsRhpNydiknW491SIMqHLLP1mBwY12Mavb8SJeP27FzevmLPY3
-         5ixX3bS1qhoW4GdZHpzNXI+zTa67xz7hfDx8UWc2UeVMUrHkaLSye0WJxQMxACs3BI
-         L/MTCheFzdWO4VELcR/UX7ADDIA7URiJ/n3CQ5aO6L3kWR8QtuHFntiLkl+W7Jc90m
-         4DqV40+msXi2uKqU66YxrsQ9HySxA9d+AjMDyEsNF4+RDhFtVmoHzx1ZS1sxJnbB7Q
-         pRiiKHIjp9bCzeMj6EGmjdEd96YDBUy8xCuQPQLeKpsHiyi27QYuKcjWLnE8G9UXyz
-         fGL8CxRuQJBCQ==
-X-Nifty-SrcIP: [133.32.232.101]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH] kbuild: replace $(if A,A,B) with $(or A,B)
-Date:   Thu, 10 Feb 2022 18:33:42 +0900
-Message-Id: <20220210093342.2118196-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Thu, 10 Feb 2022 04:34:27 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4237C64
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:34:27 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id m14so8356571wrg.12
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:34:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:organization:in-reply-to:content-transfer-encoding;
+        bh=vxX/8zifzyFYTCAPgNpbL+1rDLu/Md5JII8F66Zcgtc=;
+        b=3teWvtZsSrrrJESfa7vF84YVSNgwtbUY1wIxqDcxH7iwMzjyUo7p53oOAmoVaoU16Z
+         PNYf0YZYqECGJy9F+jVXYcFQUXw4TQHFfMmGiW7tNlJDLpsmdH3jB6zD7sJmfbhd83P6
+         drQlHE49cvvnBsEV1WSg6/Icx1q/hJGe5tdBMw4rCVW9kNaendOZHVDH0gmcHNXuYJPu
+         qYfG/tB6X9LQt/hZMzQ+fvWIe2x5MKtPwuRZX6sMAF955nWKFbYPXo4oDIyuEXUYZjwj
+         +8MoWdFO915oyshOm66cayioydZbsisHdtBm2//hBtdV/nAprEYGD0PeOQytScSehht9
+         7Jzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=vxX/8zifzyFYTCAPgNpbL+1rDLu/Md5JII8F66Zcgtc=;
+        b=lrrkyjQflZ3LzFW/WBV1r/xj3x0t9//9Z6Fc9nKdehw3xTlxX33qOEb6QHOOTWOtN2
+         /E0+J79YX/Cy9rOJBPdxPWM5tgFYEWf5r4uvalcXqgLPvxPDnOnGQvcuKFtAf/KIDVGK
+         /+yAq4bwIR37h9QK4w6ugGCO6qe86/9rOzq+B0hMbc1Cb85XjHK3MCgQU+V+1XlXheSM
+         R5hZwWrKKTVU8WYDG9ThcN4kJGrBQp4mGlUdWMUB0XFIUcFzWDqslD/oRzVQyzGHNi+I
+         HVv+HCSCVHwE0idgHwagufe4+ckh9l17ts5PvR1STWVNppvLbBGO/kpv+GKq0sPfvxsl
+         rayw==
+X-Gm-Message-State: AOAM530IQY2STc0P/fqtAYamvNzceehaVWARMzptaa6kXKJh/UupLLyF
+        O0bYBHf1nbr17aEunerbex2Y+foZbOchN3/s
+X-Google-Smtp-Source: ABdhPJwYmf/xTj+0L3TetNb2WBvO7oJeJgkuCVLbksq3xzAoCbJ6xmnGlCzlqQsuDz7mn0tMnK3fMg==
+X-Received: by 2002:a05:6000:16cc:: with SMTP id h12mr5547466wrf.408.1644485666342;
+        Thu, 10 Feb 2022 01:34:26 -0800 (PST)
+Received: from ?IPV6:2001:861:44c0:66c0:76d9:bf0e:e516:58a9? ([2001:861:44c0:66c0:76d9:bf0e:e516:58a9])
+        by smtp.gmail.com with ESMTPSA id a15sm7522310wri.22.2022.02.10.01.34.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 01:34:25 -0800 (PST)
+Message-ID: <98acfb7c-59bc-e437-899f-4f1eda0fea0b@baylibre.com>
+Date:   Thu, 10 Feb 2022 10:34:24 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] arm64: dts: meson: remove CPU opps below 1GHz for
+ G12B/SM1
+Content-Language: en-US
+To:     Christian Hewitt <christianshewitt@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220209135535.29547-1-christianshewitt@gmail.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <20220209135535.29547-1-christianshewitt@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-$(or ...) is available since GNU Make 3.81, and useful to shorten the
-code in some places.
+On 09/02/2022 14:55, Christian Hewitt wrote:
+> Amlogic G12B and SM1 devices experience CPU stalls and random board
+> wedges when the system idles and CPU cores clock down to lower opp
+> points. Recent vendor kernels include a change to remove 100-250MHz
+> (with no explanation) [0] but other downstream sources also remove
+> the 500/667MHz points (also with no explanation). Unless 100-667Mhz
+> opps are removed or the CPU governor forced to performance, stalls
+> are observed, so let's remove them an improve stability/uptime.
+> 
+> [0] https://github.com/khadas/linux/commit/20e237a4fe9f0302370e24950cb1416e038eee03
+> 
+> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+> ---
+> Numerous people have experienced this issue and I have tested with
+> only the low opp-points removed and numerous voltage tweaks: but it
+> makes no difference. With the opp points present an Odroid N2 or
+> Khadas VIM3 reliably drop off my network after being left idling
+> overnight with UART showing a CPU stall splat. With the opp points
+> removed I see weeks of uninterupted uptime. It's beyond my skills
+> to research what the cause of the stalls might be, but if anyone
+> ever figures it out we can always restore things. NB: This issue
+> is not too widely reported in forums, but that's largely because
+> most of the Amlogic supporting distros have been including this
+> change picked from my kernel patchset for some time.
+> 
+>   .../boot/dts/amlogic/meson-g12b-a311d.dtsi    | 40 -------------------
+>   .../boot/dts/amlogic/meson-g12b-s922x.dtsi    | 40 -------------------
+>   arch/arm64/boot/dts/amlogic/meson-sm1.dtsi    | 20 ----------
+>   3 files changed, 100 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi
+> index d61f43052a34..8e9ad1e51d66 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi
+> @@ -11,26 +11,6 @@
+>   		compatible = "operating-points-v2";
+>   		opp-shared;
+>   
+> -		opp-100000000 {
+> -			opp-hz = /bits/ 64 <100000000>;
+> -			opp-microvolt = <731000>;
+> -		};
+> -
+> -		opp-250000000 {
+> -			opp-hz = /bits/ 64 <250000000>;
+> -			opp-microvolt = <731000>;
+> -		};
+> -
+> -		opp-500000000 {
+> -			opp-hz = /bits/ 64 <500000000>;
+> -			opp-microvolt = <731000>;
+> -		};
+> -
+> -		opp-667000000 {
+> -			opp-hz = /bits/ 64 <667000000>;
+> -			opp-microvolt = <731000>;
+> -		};
+> -
+>   		opp-1000000000 {
+>   			opp-hz = /bits/ 64 <1000000000>;
+>   			opp-microvolt = <761000>;
+> @@ -71,26 +51,6 @@
+>   		compatible = "operating-points-v2";
+>   		opp-shared;
+>   
+> -		opp-100000000 {
+> -			opp-hz = /bits/ 64 <100000000>;
+> -			opp-microvolt = <731000>;
+> -		};
+> -
+> -		opp-250000000 {
+> -			opp-hz = /bits/ 64 <250000000>;
+> -			opp-microvolt = <731000>;
+> -		};
+> -
+> -		opp-500000000 {
+> -			opp-hz = /bits/ 64 <500000000>;
+> -			opp-microvolt = <731000>;
+> -		};
+> -
+> -		opp-667000000 {
+> -			opp-hz = /bits/ 64 <667000000>;
+> -			opp-microvolt = <731000>;
+> -		};
+> -
+>   		opp-1000000000 {
+>   			opp-hz = /bits/ 64 <1000000000>;
+>   			opp-microvolt = <731000>;
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
+> index 1e5d0ee5d541..44c23c984034 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
+> @@ -11,26 +11,6 @@
+>   		compatible = "operating-points-v2";
+>   		opp-shared;
+>   
+> -		opp-100000000 {
+> -			opp-hz = /bits/ 64 <100000000>;
+> -			opp-microvolt = <731000>;
+> -		};
+> -
+> -		opp-250000000 {
+> -			opp-hz = /bits/ 64 <250000000>;
+> -			opp-microvolt = <731000>;
+> -		};
+> -
+> -		opp-500000000 {
+> -			opp-hz = /bits/ 64 <500000000>;
+> -			opp-microvolt = <731000>;
+> -		};
+> -
+> -		opp-667000000 {
+> -			opp-hz = /bits/ 64 <667000000>;
+> -			opp-microvolt = <731000>;
+> -		};
+> -
+>   		opp-1000000000 {
+>   			opp-hz = /bits/ 64 <1000000000>;
+>   			opp-microvolt = <731000>;
+> @@ -76,26 +56,6 @@
+>   		compatible = "operating-points-v2";
+>   		opp-shared;
+>   
+> -		opp-100000000 {
+> -			opp-hz = /bits/ 64 <100000000>;
+> -			opp-microvolt = <751000>;
+> -		};
+> -
+> -		opp-250000000 {
+> -			opp-hz = /bits/ 64 <250000000>;
+> -			opp-microvolt = <751000>;
+> -		};
+> -
+> -		opp-500000000 {
+> -			opp-hz = /bits/ 64 <500000000>;
+> -			opp-microvolt = <751000>;
+> -		};
+> -
+> -		opp-667000000 {
+> -			opp-hz = /bits/ 64 <667000000>;
+> -			opp-microvolt = <751000>;
+> -		};
+> -
+>   		opp-1000000000 {
+>   			opp-hz = /bits/ 64 <1000000000>;
+>   			opp-microvolt = <771000>;
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
+> index 3c07a89bfd27..80737731af3f 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
+> @@ -95,26 +95,6 @@
+>   		compatible = "operating-points-v2";
+>   		opp-shared;
+>   
+> -		opp-100000000 {
+> -			opp-hz = /bits/ 64 <100000000>;
+> -			opp-microvolt = <730000>;
+> -		};
+> -
+> -		opp-250000000 {
+> -			opp-hz = /bits/ 64 <250000000>;
+> -			opp-microvolt = <730000>;
+> -		};
+> -
+> -		opp-500000000 {
+> -			opp-hz = /bits/ 64 <500000000>;
+> -			opp-microvolt = <730000>;
+> -		};
+> -
+> -		opp-667000000 {
+> -			opp-hz = /bits/ 64 <666666666>;
+> -			opp-microvolt = <750000>;
+> -		};
+> -
+>   		opp-1000000000 {
+>   			opp-hz = /bits/ 64 <1000000000>;
+>   			opp-microvolt = <770000>;
 
-Covert as follows:
+Can you find if an acceptable set of Fixes tag can be added to permit backporting to the current LTS kernels ?
 
-  $(if A,A,B)  -->  $(or A,B)
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- Makefile                                    | 8 ++++----
- scripts/Makefile.build                      | 3 +--
- scripts/Makefile.clean                      | 2 +-
- scripts/Makefile.lib                        | 4 ++--
- tools/bpf/bpftool/Makefile                  | 4 ++--
- tools/build/Makefile                        | 2 +-
- tools/counter/Makefile                      | 2 +-
- tools/gpio/Makefile                         | 2 +-
- tools/hv/Makefile                           | 2 +-
- tools/iio/Makefile                          | 2 +-
- tools/lib/api/Makefile                      | 2 +-
- tools/lib/bpf/Makefile                      | 2 +-
- tools/lib/perf/Makefile                     | 2 +-
- tools/lib/subcmd/Makefile                   | 2 +-
- tools/objtool/Makefile                      | 2 +-
- tools/pci/Makefile                          | 2 +-
- tools/perf/Makefile.perf                    | 4 ++--
- tools/power/x86/intel-speed-select/Makefile | 2 +-
- tools/scripts/utilities.mak                 | 2 +-
- tools/spi/Makefile                          | 6 +++---
- tools/tracing/rtla/Makefile                 | 2 +-
- tools/usb/Makefile                          | 2 +-
- 22 files changed, 30 insertions(+), 31 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 402121aca40a..a700edb54939 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1240,8 +1240,8 @@ define filechk_version.h
- 	echo \#define LINUX_VERSION_SUBLEVEL $(SUBLEVEL)
- endef
- 
--$(version_h): PATCHLEVEL := $(if $(PATCHLEVEL), $(PATCHLEVEL), 0)
--$(version_h): SUBLEVEL := $(if $(SUBLEVEL), $(SUBLEVEL), 0)
-+$(version_h): PATCHLEVEL := $(or $(PATCHLEVEL), 0)
-+$(version_h): SUBLEVEL := $(or $(SUBLEVEL), 0)
- $(version_h): FORCE
- 	$(call filechk,version.h)
- 
-@@ -1624,7 +1624,7 @@ help:
- 	@$(MAKE) -f $(srctree)/Documentation/Makefile dochelp
- 	@echo  ''
- 	@echo  'Architecture specific targets ($(SRCARCH)):'
--	@$(if $(archhelp),$(archhelp),\
-+	@$(or $(archhelp),\
- 		echo '  No architecture specific help defined for $(SRCARCH)')
- 	@echo  ''
- 	@$(if $(boards), \
-@@ -1841,7 +1841,7 @@ $(clean-dirs):
- 
- clean: $(clean-dirs)
- 	$(call cmd,rmfiles)
--	@find $(if $(KBUILD_EXTMOD), $(KBUILD_EXTMOD), .) $(RCS_FIND_IGNORE) \
-+	@find $(or $(KBUILD_EXTMOD), .) $(RCS_FIND_IGNORE) \
- 		\( -name '*.[aios]' -o -name '*.ko' -o -name '.*.cmd' \
- 		-o -name '*.ko.*' \
- 		-o -name '*.dtb' -o -name '*.dtbo' -o -name '*.dtb.S' -o -name '*.dt.yaml' \
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index a4b89b757287..7e177d0ee02d 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -40,8 +40,7 @@ include $(srctree)/scripts/Makefile.compiler
- 
- # The filename Kbuild has precedence over Makefile
- kbuild-dir := $(if $(filter /%,$(src)),$(src),$(srctree)/$(src))
--kbuild-file := $(if $(wildcard $(kbuild-dir)/Kbuild),$(kbuild-dir)/Kbuild,$(kbuild-dir)/Makefile)
--include $(kbuild-file)
-+include $(or $(wildcard $(kbuild-dir)/Kbuild),$(kbuild-dir)/Makefile)
- 
- include $(srctree)/scripts/Makefile.lib
- 
-diff --git a/scripts/Makefile.clean b/scripts/Makefile.clean
-index fd6175322470..74cb1c5c3658 100644
---- a/scripts/Makefile.clean
-+++ b/scripts/Makefile.clean
-@@ -12,7 +12,7 @@ include $(srctree)/scripts/Kbuild.include
- 
- # The filename Kbuild has precedence over Makefile
- kbuild-dir := $(if $(filter /%,$(src)),$(src),$(srctree)/$(src))
--include $(if $(wildcard $(kbuild-dir)/Kbuild), $(kbuild-dir)/Kbuild, $(kbuild-dir)/Makefile)
-+include $(or $(wildcard $(kbuild-dir)/Kbuild),$(kbuild-dir)/Makefile)
- 
- # Figure out what we need to build from the various variables
- # ==========================================================================
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 40735a3adb54..49377d2c2d20 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -111,7 +111,7 @@ subdir-ym	:= $(addprefix $(obj)/,$(subdir-ym))
- modname-multi = $(sort $(foreach m,$(multi-obj-ym),\
- 		$(if $(filter $*.o, $(call suffix-search, $m, .o, -objs -y -m)),$(m:.o=))))
- 
--__modname = $(if $(modname-multi),$(modname-multi),$(basetarget))
-+__modname = $(or $(modname-multi),$(basetarget))
- 
- modname = $(subst $(space),:,$(__modname))
- modfile = $(addprefix $(obj)/,$(__modname))
-@@ -434,7 +434,7 @@ MKIMAGE := $(srctree)/scripts/mkuboot.sh
- # SRCARCH just happens to match slightly more than ARCH (on sparc), so reduces
- # the number of overrides in arch makefiles
- UIMAGE_ARCH ?= $(SRCARCH)
--UIMAGE_COMPRESSION ?= $(if $(2),$(2),none)
-+UIMAGE_COMPRESSION ?= $(or $(2),none)
- UIMAGE_OPTS-y ?=
- UIMAGE_TYPE ?= kernel
- UIMAGE_LOADADDR ?= arch_must_set_this
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 83369f55df61..ebd21a609910 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -78,7 +78,7 @@ CFLAGS += -O2
- CFLAGS += -W -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers
- CFLAGS += $(filter-out -Wswitch-enum -Wnested-externs,$(EXTRA_WARNINGS))
- CFLAGS += -DPACKAGE='"bpftool"' -D__EXPORTED_HEADERS__ \
--	-I$(if $(OUTPUT),$(OUTPUT),.) \
-+	-I$(or $(OUTPUT),.) \
- 	-I$(LIBBPF_INCLUDE) \
- 	-I$(srctree)/kernel/bpf/ \
- 	-I$(srctree)/tools/include \
-@@ -186,7 +186,7 @@ endif
- 
- $(OUTPUT)%.bpf.o: skeleton/%.bpf.c $(OUTPUT)vmlinux.h $(LIBBPF_BOOTSTRAP)
- 	$(QUIET_CLANG)$(CLANG) \
--		-I$(if $(OUTPUT),$(OUTPUT),.) \
-+		-I$(or $(OUTPUT),.) \
- 		-I$(srctree)/tools/include/uapi/ \
- 		-I$(LIBBPF_BOOTSTRAP_INCLUDE) \
- 		-g -O2 -Wall -target bpf -c $< -o $@
-diff --git a/tools/build/Makefile b/tools/build/Makefile
-index 6f11e6fc9ffe..17cdf01e29a0 100644
---- a/tools/build/Makefile
-+++ b/tools/build/Makefile
-@@ -36,7 +36,7 @@ TMP_O := $(if $(OUTPUT),$(OUTPUT)feature/,./)
- 
- clean:
- 	$(call QUIET_CLEAN, fixdep)
--	$(Q)find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.cmd' -delete -o -name '\.*.d' -delete
-+	$(Q)find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.cmd' -delete -o -name '\.*.d' -delete
- 	$(Q)rm -f $(OUTPUT)fixdep
- 	$(call QUIET_CLEAN, feature-detect)
- ifneq ($(wildcard $(TMP_O)),)
-diff --git a/tools/counter/Makefile b/tools/counter/Makefile
-index 5ebc195fd9c0..8843f0fa6119 100644
---- a/tools/counter/Makefile
-+++ b/tools/counter/Makefile
-@@ -40,7 +40,7 @@ $(OUTPUT)counter_example: $(COUNTER_EXAMPLE)
- clean:
- 	rm -f $(ALL_PROGRAMS)
- 	rm -rf $(OUTPUT)include/linux/counter.h
--	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
-+	find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
- 
- install: $(ALL_PROGRAMS)
- 	install -d -m 755 $(DESTDIR)$(bindir);		\
-diff --git a/tools/gpio/Makefile b/tools/gpio/Makefile
-index 440434027557..d29c9c49e251 100644
---- a/tools/gpio/Makefile
-+++ b/tools/gpio/Makefile
-@@ -78,7 +78,7 @@ $(OUTPUT)gpio-watch: $(GPIO_WATCH_IN)
- clean:
- 	rm -f $(ALL_PROGRAMS)
- 	rm -f $(OUTPUT)include/linux/gpio.h
--	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
-+	find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
- 
- install: $(ALL_PROGRAMS)
- 	install -d -m 755 $(DESTDIR)$(bindir);		\
-diff --git a/tools/hv/Makefile b/tools/hv/Makefile
-index b57143d9459c..fe770e679ae8 100644
---- a/tools/hv/Makefile
-+++ b/tools/hv/Makefile
-@@ -47,7 +47,7 @@ $(OUTPUT)hv_fcopy_daemon: $(HV_FCOPY_DAEMON_IN)
- 
- clean:
- 	rm -f $(ALL_PROGRAMS)
--	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
-+	find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
- 
- install: $(ALL_PROGRAMS)
- 	install -d -m 755 $(DESTDIR)$(sbindir); \
-diff --git a/tools/iio/Makefile b/tools/iio/Makefile
-index 5d12ac4e7f8f..fa720f062229 100644
---- a/tools/iio/Makefile
-+++ b/tools/iio/Makefile
-@@ -58,7 +58,7 @@ $(OUTPUT)iio_generic_buffer: $(IIO_GENERIC_BUFFER_IN)
- clean:
- 	rm -f $(ALL_PROGRAMS)
- 	rm -rf $(OUTPUT)include/linux/iio
--	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
-+	find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
- 
- install: $(ALL_PROGRAMS)
- 	install -d -m 755 $(DESTDIR)$(bindir);		\
-diff --git a/tools/lib/api/Makefile b/tools/lib/api/Makefile
-index a13e9c7f1fc5..e21e1b40b525 100644
---- a/tools/lib/api/Makefile
-+++ b/tools/lib/api/Makefile
-@@ -60,7 +60,7 @@ $(LIBFILE): $(API_IN)
- 
- clean:
- 	$(call QUIET_CLEAN, libapi) $(RM) $(LIBFILE); \
--	find $(if $(OUTPUT),$(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d | xargs $(RM)
-+	find $(or $(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d | xargs $(RM)
- 
- FORCE:
- 
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index f947b61b2107..df1f6ff7bc49 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -60,7 +60,7 @@ ifndef VERBOSE
-   VERBOSE = 0
- endif
- 
--INCLUDES = -I$(if $(OUTPUT),$(OUTPUT),.)				\
-+INCLUDES = -I$(or $(OUTPUT),.)				\
- 	   -I$(srctree)/tools/include -I$(srctree)/tools/include/uapi
- 
- export prefix libdir src obj
-diff --git a/tools/lib/perf/Makefile b/tools/lib/perf/Makefile
-index 08fe6e3c4089..2d985d6a3a96 100644
---- a/tools/lib/perf/Makefile
-+++ b/tools/lib/perf/Makefile
-@@ -153,7 +153,7 @@ $(TESTS_STATIC): $(TESTS_IN) $(LIBPERF_A) $(LIBAPI)
- 	$(QUIET_LINK)$(CC) -o $@ $^
- 
- $(TESTS_SHARED): $(TESTS_IN) $(LIBAPI)
--	$(QUIET_LINK)$(CC) -o $@ -L$(if $(OUTPUT),$(OUTPUT),.) $^ -lperf
-+	$(QUIET_LINK)$(CC) -o $@ -L$(if $(OUTPUT),.) $^ -lperf
- 
- make-tests: libs $(TESTS_SHARED) $(TESTS_STATIC)
- 
-diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
-index 1c777a72bb39..8f1a09cdfd17 100644
---- a/tools/lib/subcmd/Makefile
-+++ b/tools/lib/subcmd/Makefile
-@@ -63,7 +63,7 @@ $(LIBFILE): $(SUBCMD_IN)
- 
- clean:
- 	$(call QUIET_CLEAN, libsubcmd) $(RM) $(LIBFILE); \
--	find $(if $(OUTPUT),$(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d | xargs $(RM)
-+	find $(or $(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d | xargs $(RM)
- 
- FORCE:
- 
-diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-index 92ce4fce7bc7..0dbd397f319d 100644
---- a/tools/objtool/Makefile
-+++ b/tools/objtool/Makefile
-@@ -13,7 +13,7 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
- endif
- 
- SUBCMD_SRCDIR		= $(srctree)/tools/lib/subcmd/
--LIBSUBCMD_OUTPUT	= $(if $(OUTPUT),$(OUTPUT),$(CURDIR)/)
-+LIBSUBCMD_OUTPUT	= $(or $(OUTPUT),$(CURDIR)/)
- LIBSUBCMD		= $(LIBSUBCMD_OUTPUT)libsubcmd.a
- 
- OBJTOOL    := $(OUTPUT)objtool
-diff --git a/tools/pci/Makefile b/tools/pci/Makefile
-index 4b95a5176355..57744778b518 100644
---- a/tools/pci/Makefile
-+++ b/tools/pci/Makefile
-@@ -42,7 +42,7 @@ $(OUTPUT)pcitest: $(PCITEST_IN)
- clean:
- 	rm -f $(ALL_PROGRAMS)
- 	rm -rf $(OUTPUT)include/
--	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
-+	find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
- 
- install: $(ALL_PROGRAMS)
- 	install -d -m 755 $(DESTDIR)$(bindir);		\
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index ac861e42c8f7..8583d18a3739 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -724,7 +724,7 @@ endif
- # get relative building directory (to $(OUTPUT))
- # and '.' if it's $(OUTPUT) itself
- __build-dir = $(subst $(OUTPUT),,$(dir $@))
--build-dir   = $(if $(__build-dir),$(__build-dir),.)
-+build-dir   = $(or $(__build-dir),.)
- 
- prepare: $(OUTPUT)PERF-VERSION-FILE $(OUTPUT)common-cmds.h archheaders $(drm_ioctl_array) \
- 	$(fadvise_advice_array) \
-@@ -1090,7 +1090,7 @@ bpf-skel-clean:
- 
- clean:: $(LIBTRACEEVENT)-clean $(LIBAPI)-clean $(LIBBPF)-clean $(LIBSUBCMD)-clean $(LIBPERF)-clean fixdep-clean python-clean bpf-skel-clean
- 	$(call QUIET_CLEAN, core-objs)  $(RM) $(LIBPERF_A) $(OUTPUT)perf-archive $(OUTPUT)perf-with-kcore $(OUTPUT)perf-iostat $(LANG_BINDINGS)
--	$(Q)find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.cmd' -delete -o -name '\.*.d' -delete
-+	$(Q)find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.cmd' -delete -o -name '\.*.d' -delete
- 	$(Q)$(RM) $(OUTPUT).config-detected
- 	$(call QUIET_CLEAN, core-progs) $(RM) $(ALL_PROGRAMS) perf perf-read-vdso32 perf-read-vdsox32 $(OUTPUT)pmu-events/jevents $(OUTPUT)$(LIBJVMTI).so
- 	$(call QUIET_CLEAN, core-gen)   $(RM)  *.spec *.pyc *.pyo */*.pyc */*.pyo $(OUTPUT)common-cmds.h TAGS tags cscope* $(OUTPUT)PERF-VERSION-FILE $(OUTPUT)FEATURE-DUMP $(OUTPUT)util/*-bison* $(OUTPUT)util/*-flex* \
-diff --git a/tools/power/x86/intel-speed-select/Makefile b/tools/power/x86/intel-speed-select/Makefile
-index 12c6939dca2a..7eaa517cd403 100644
---- a/tools/power/x86/intel-speed-select/Makefile
-+++ b/tools/power/x86/intel-speed-select/Makefile
-@@ -43,7 +43,7 @@ $(OUTPUT)intel-speed-select: $(ISST_IN)
- clean:
- 	rm -f $(ALL_PROGRAMS)
- 	rm -rf $(OUTPUT)include/linux/isst_if.h
--	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
-+	find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete
- 
- install: $(ALL_PROGRAMS)
- 	install -d -m 755 $(DESTDIR)$(bindir);		\
-diff --git a/tools/scripts/utilities.mak b/tools/scripts/utilities.mak
-index c16ce833079c..172e47273b5d 100644
---- a/tools/scripts/utilities.mak
-+++ b/tools/scripts/utilities.mak
-@@ -175,5 +175,5 @@ _ge-abspath = $(if $(is-executable),$(1))
- define get-executable-or-default
- $(if $($(1)),$(call _ge_attempt,$($(1)),$(1)),$(call _ge_attempt,$(2)))
- endef
--_ge_attempt = $(if $(get-executable),$(get-executable),$(call _gea_err,$(2)))
-+_ge_attempt = $(or $(get-executable),$(call _gea_err,$(2)))
- _gea_err  = $(if $(1),$(error Please set '$(1)' appropriately))
-diff --git a/tools/spi/Makefile b/tools/spi/Makefile
-index 0aa6dbd31fb8..7fccd245a535 100644
---- a/tools/spi/Makefile
-+++ b/tools/spi/Makefile
-@@ -53,9 +53,9 @@ $(OUTPUT)spidev_fdx: $(SPIDEV_FDX_IN)
- clean:
- 	rm -f $(ALL_PROGRAMS)
- 	rm -rf $(OUTPUT)include/
--	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete
--	find $(if $(OUTPUT),$(OUTPUT),.) -name '\.*.o.d' -delete
--	find $(if $(OUTPUT),$(OUTPUT),.) -name '\.*.o.cmd' -delete
-+	find $(or $(OUTPUT),.) -name '*.o' -delete
-+	find $(or $(OUTPUT),.) -name '\.*.o.d' -delete
-+	find $(or $(OUTPUT),.) -name '\.*.o.cmd' -delete
- 
- install: $(ALL_PROGRAMS)
- 	install -d -m 755 $(DESTDIR)$(bindir);		\
-diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-index 7c39728d08de..3097f132f096 100644
---- a/tools/tracing/rtla/Makefile
-+++ b/tools/tracing/rtla/Makefile
-@@ -45,7 +45,7 @@ DATADIR	:=	/usr/share
- DOCDIR	:=	$(DATADIR)/doc
- MANDIR	:=	$(DATADIR)/man
- LICDIR	:=	$(DATADIR)/licenses
--SRCTREE	:=	$(if $(BUILD_SRC),$(BUILD_SRC),$(CURDIR))
-+SRCTREE	:=	$(or $(BUILD_SRC),$(CURDIR))
- 
- # If running from the tarball, man pages are stored in the Documentation
- # dir. If running from the kernel source, man pages are stored in
-diff --git a/tools/usb/Makefile b/tools/usb/Makefile
-index 1b128e551b2e..c6235667dd46 100644
---- a/tools/usb/Makefile
-+++ b/tools/usb/Makefile
-@@ -38,7 +38,7 @@ $(OUTPUT)ffs-test: $(FFS_TEST_IN)
- 
- clean:
- 	rm -f $(ALL_PROGRAMS)
--	find $(if $(OUTPUT),$(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete -o -name '\.*.o.cmd' -delete
-+	find $(or $(OUTPUT),.) -name '*.o' -delete -o -name '\.*.d' -delete -o -name '\.*.o.cmd' -delete
- 
- install: $(ALL_PROGRAMS)
- 	install -d -m 755 $(DESTDIR)$(bindir);		\
--- 
-2.32.0
-
+Neil

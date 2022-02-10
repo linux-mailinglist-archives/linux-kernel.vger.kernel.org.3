@@ -2,79 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245C84B0A0B
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3354B0A10
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:56:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239196AbiBJJyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:54:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41264 "EHLO
+        id S239215AbiBJJ4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:56:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239130AbiBJJyK (ORCPT
+        with ESMTP id S239202AbiBJJ41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:54:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66B17BA1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:54:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644486851;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1/c/W6OJxEmmuWZtANR8s8A0dNFJN61EVaFfDBYgRP0=;
-        b=WSPgPe7RGec7Z2fTJQx/HyGWI1xLrrbrnU1+uKJ5G2oH8uLHckzwvflS3acOoPpRPz2n7U
-        dV5YIQWtHFShT9/+CbgsKDOo1f/HjpFPoMDTcC2cNxJYpzEIyvSLbDbR5+TuAyPIiUBbnM
-        7hocEtI+UHvjr8cdhsfwaeKC05v97y8=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-399-Oc_tF_fHNW2M2s9u9TpDtw-1; Thu, 10 Feb 2022 04:54:10 -0500
-X-MC-Unique: Oc_tF_fHNW2M2s9u9TpDtw-1
-Received: by mail-ej1-f69.google.com with SMTP id ky6-20020a170907778600b0068e4bd99fd1so2461798ejc.15
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:54:10 -0800 (PST)
+        Thu, 10 Feb 2022 04:56:27 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDD3B08
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:56:28 -0800 (PST)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B74114004C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:56:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644486986;
+        bh=lQAi25ad0WedYqAR8W5lfFiy2PNOb0q0WyI0GNyN3vw=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=avWfIgEZEWbOXpmfDOyIijAt9HPDnqbNhnTOERpfCP4cBDh1KhXl5aPL72rk3F5ff
+         6lKJNoanffcNMioMY9iX2ZRRG2M3ZwuhQ2qqGsOJfulOCC9WXXx+csOx1YVk72M5Ly
+         MEPWh7b7tGKq8gEFxG7gd2g9lDseKjF+bComyHYa3rxuCN8iqgV2o0LhNh/EJ8yttM
+         0V8xjrpTL1llDc9NgOQ4Ss3mhGquiUB8+WtKHQnef5sd3o3QsYWyX2AeQA9tfG7/Ub
+         5tL9E+Av/Utx+iYqCVZaNQK9bC75BTASbRelYuKKHezH7JgK3swYfIJ//pOh8kBKk+
+         KDNeWRVDvFOdg==
+Received: by mail-ej1-f71.google.com with SMTP id o7-20020a170906860700b006cbe6deec1bso2444958ejx.22
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:56:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=1/c/W6OJxEmmuWZtANR8s8A0dNFJN61EVaFfDBYgRP0=;
-        b=kWCBVnpUhXLzbbfUfph+5vrbNkrdwx6b/YVLxnltoY2+ID+BSjRel6f5n1uRgT++7l
-         9vmfxRV/qR4p/c408SY5sTvsG81oNsUN/tcOZl4mLnbDCI8fXA2iTNgXFOshyb2098EG
-         Baq00AEDVCy4dnUOYLauCi7CSK7Li5ChGwoDw01v934GnSc9pKcI9E87fMOjY27zkIrZ
-         X/uUDV1KaMfNtKCzP/HB3SJLA6s/AXnZbxgCvbt8HMHlAmNBhnWKb5SJ2JZ6jU0CWuhJ
-         h2XIg4sW5zZwXpbQVb9TGSMM9VdrZijiAr3tToSY64ERKjfMJ7hG8uNoHSY/0un3j7I+
-         ImUw==
-X-Gm-Message-State: AOAM532pJDulRenRYG8sP2ceeCNgX2V4H/TGDmzBI8WyPtTlzPkqEO4l
-        xCFWG54A3JhiNB5ZWVW0zvyZIuGDKY00jsZZvA5KxnyW8qvWOykpfOS8vIpzIafFGY7tF/2o5Mt
-        TB9//6Fmv1+LUhpWcPRCC26i2
-X-Received: by 2002:a17:906:77c3:: with SMTP id m3mr5574139ejn.698.1644486849267;
-        Thu, 10 Feb 2022 01:54:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwV3BuvD8BD0jNJbRr7myPZuSZZFBdr4xgjx6HK56XZC5hg8XqoVjKaopXYnS591ZwLkwtzlg==
-X-Received: by 2002:a17:906:77c3:: with SMTP id m3mr5574127ejn.698.1644486849094;
-        Thu, 10 Feb 2022 01:54:09 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id bo9sm4961286edb.29.2022.02.10.01.54.08
+        bh=lQAi25ad0WedYqAR8W5lfFiy2PNOb0q0WyI0GNyN3vw=;
+        b=HdMN4sangBvQF66opqEOgZkPRNMph9E6mkQMXphyeXgj1lPxbEFSbljnbPMxSH0T0C
+         pG09n8pimIFJ3SWrV22MiEcvfO8s1qZYeJvkjsF4oat8J4ywLJ6bqmbt7XMlOu0K6TX8
+         qeSARSz3LPHOctIVpiv7A4xgbKMpR7i2Z5LXigmflXXOLn6sYtyNqkFmPteQarwLE6IF
+         lGgStfbcaNi0DqEN9o0WL1w8ySEr8FJMhUhkgYh4cSRX6ahJ3GzbHoqvRq1TRMdFuk0M
+         zsjp+ibr98sALPgTL2IrLJhdn196GNdVm8G3KH+idxyftU8zfHduqYVrEKRZHPEcBPlu
+         CHZQ==
+X-Gm-Message-State: AOAM530es2jvcTIbiP5iDCsWZc/T0TsWkQaLSPGXSZWdnXTxeIkTX0JG
+        UGWkay90Ete6j5Jmz61pmPOgrKcKKgdvFolRS2aQG4gAyOQBo/JxHYMUvraqecZhEUOeKI9r1jP
+        a1bYTyLGN5VlYdo7gtWZpFl1Vl13THxJg781XbrMqyg==
+X-Received: by 2002:a17:906:2ccc:: with SMTP id r12mr5545721ejr.549.1644486986322;
+        Thu, 10 Feb 2022 01:56:26 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxc52uTv0kpoyAJ0Kps4Wr6p3N4LOPiiiqved+a3jIg857MB5O1jSYCvd0RnB95/Rnk+wfurg==
+X-Received: by 2002:a17:906:2ccc:: with SMTP id r12mr5545700ejr.549.1644486986041;
+        Thu, 10 Feb 2022 01:56:26 -0800 (PST)
+Received: from [192.168.0.97] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id wq18sm4370531ejb.149.2022.02.10.01.56.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 01:54:08 -0800 (PST)
-Message-ID: <e02f05cb-d4b7-1fe5-0d1e-d9aec06a1842@redhat.com>
-Date:   Thu, 10 Feb 2022 10:54:07 +0100
+        Thu, 10 Feb 2022 01:56:25 -0800 (PST)
+Message-ID: <1c5b2019-2258-f95c-eee3-32cef1c98c7a@canonical.com>
+Date:   Thu, 10 Feb 2022 10:56:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 00/23] KVM: MMU: MMU role refactoring
+Subject: Re: [PATCH v2] dt-bindings: watchdog: convert faraday,ftwdt010 to
+ yaml
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        dmatlack@google.com, vkuznets@redhat.com
-References: <20220204115718.14934-1-pbonzini@redhat.com>
- <YgRApq20ds4FDivX@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YgRApq20ds4FDivX@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Corentin Labbe <clabbe@baylibre.com>, linux@roeck-us.net,
+        robh+dt@kernel.org, wim@linux-watchdog.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+References: <20220210093427.2813601-1-clabbe@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220210093427.2813601-1-clabbe@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,22 +86,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/22 23:31, Sean Christopherson wrote:
-> Heresy!  Everyone knows the one true way is "KVM: x86/mmu:"
+On 10/02/2022 10:34, Corentin Labbe wrote:
+> Convert watchdog/faraday,ftwdt010.txt to yaml.
+> This permits to detect missing properties like clocks and resets or
+> compatible like moxa,moxart-watchdog.
 > 
->    $ glo | grep "KVM: MMU:" | wc -l
->    740
->    $ glo | grep "KVM: x86/mmu:" | wc -l
->    403
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> ---
+> Changes since v1:
+> - Added myself as maintainer as requested by Linus
+> - Added $ref to watchdog.yaml
+> - Removed useless quotes
+> - Added blank lines between properties
+> - Removed timeout-sec as already provided by watchdog.yaml
 > 
-> Dammit, I'm the heathen...
+>  .../bindings/watchdog/faraday,ftwdt010.txt    | 22 ------
+>  .../bindings/watchdog/faraday,ftwdt010.yaml   | 67 +++++++++++++++++++
+>  2 files changed, 67 insertions(+), 22 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
 > 
-> I do think we should use x86/mmu though.  VMX and SVM (and nVMX and nSVM) are ok
-> because they're unlikely to collide with other architectures, but every arch has
-> an MMU...
-> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
+> deleted file mode 100644
+> index 9ecdb502e605..000000000000
+> --- a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.txt
+> +++ /dev/null
+> @@ -1,22 +0,0 @@
+> -Faraday Technology FTWDT010 watchdog
+> -
+> -This is an IP part from Faraday Technology found in the Gemini
+> -SoCs and others.
+> -
+> -Required properties:
+> -- compatible : must be one of
+> -  "faraday,ftwdt010"
+> -  "cortina,gemini-watchdog", "faraday,ftwdt010"
+> -- reg : shall contain base register location and length
+> -- interrupts : shall contain the interrupt for the watchdog
+> -
+> -Optional properties:
+> -- timeout-sec : the default watchdog timeout in seconds.
+> -
+> -Example:
+> -
+> -watchdog@41000000 {
+> -	compatible = "faraday,ftwdt010";
+> -	reg = <0x41000000 0x1000>;
+> -	interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+> new file mode 100644
+> index 000000000000..64e9c414cc60
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/faraday,ftwdt010.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/faraday,ftwdt010.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Faraday Technology FTWDT010 watchdog
+> +
+> +maintainers:
+> +  - Linus Walleij <linus.walleij@linaro.org>
+> +  - Corentin Labbe <clabbe@baylibre.com>
+> +
+> +description: |
+> +  This is an IP part from Faraday Technology found in the Gemini
+> +  SoCs and others.
+> +
+> +allOf:
+> +  - $ref: "watchdog.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - const: faraday,ftwdt010
+> +      - items:
+> +          - const: cortina,gemini-watchdog
+> +          - const: faraday,ftwdt010
+> +      - items:
+> +          - const: moxa,moxart-watchdog
+> +          - const: faraday,ftwdt010
 
-Sure, I can adjust my habits.
+It looks like you duplicated these two entries. This should be an enum
+followed by a const.
 
-Paolo
 
+Best regards,
+Krzysztof

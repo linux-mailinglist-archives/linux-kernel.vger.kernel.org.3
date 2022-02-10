@@ -2,105 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D884B0386
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29EF74B038C
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:50:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbiBJCoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 21:44:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53390 "EHLO
+        id S231512AbiBJCuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 21:50:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbiBJCon (ORCPT
+        with ESMTP id S229469AbiBJCuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 21:44:43 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A7E2409A;
-        Wed,  9 Feb 2022 18:44:45 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id bt13so11526113ybb.2;
-        Wed, 09 Feb 2022 18:44:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Yae8xh6+/RqAjaPxfOanlLu1lpjK4lOMpxS+ykxZ6Ck=;
-        b=PkZFlJba0ASmUM09LH0Aj6AVWyyqxqQFoEAO7Q2GzWCXVd+iWGwZmQbY9EZr4ovvYE
-         hNjB3CoZahIBB+jznu8m24SjeXDCLHE5VmBPTK6Mj/DdTya4KVYwfndgQf7qvEcuYxMj
-         zOGE6SzY/rScVftDHv/U1Ww9nD4W2EK5TNHpW8/o+9syMV4AK7yrgCgmBMFo1LpdPn1D
-         qIuVk5HMeMg17jqAJ91r7zAF61IYaYCmCwQp1mjyCOuuybzwaW6jKC0YuzvhFqNHrCdS
-         3F363h003Bp7r2hI9TCQSfnhTq2T03ioUoPqFZtbFH42OR0mY+I6mNPrFTS4Q7O7KrwU
-         +6+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Yae8xh6+/RqAjaPxfOanlLu1lpjK4lOMpxS+ykxZ6Ck=;
-        b=oNobM8n6z9vaY13IuzpvUfC1mjCtAwLQu082FE25Lt0A56/zmhfRCj73HbstLjc/8Z
-         mQN6g3Y1jO1fr8r99q7hnHs6+rob58L+O/2vsjw1wpeKq3gv1gldmV7HoteFIXIjpEGf
-         j5XXFg1uQ1+Wv0b2kpiruEwCwmMmwueHDeeomiOTH3mvWngU5B4ExKUmA89h6ax2CK1W
-         XKJ9TghEL750L+TYsqMQPzBm1uI3FEZuPYRiz/Q6QT23dfYVbuFIVCGiwlsb/W+BUG6v
-         B5sMOQY62eDFM9ZPN3QfSenHcr3gHa6RlUW242MAH2GkIjqdnUCJYylP02vi2Ly/iOgQ
-         9PLw==
-X-Gm-Message-State: AOAM532Or52YB98PJ5BVdh/6nuoymUeeW4h4pm2wATRKhQn+sIJ1MRj8
-        t5my3dUBolEvS4JSmB6o2l/qyga1U4KeUzfmLuw=
-X-Google-Smtp-Source: ABdhPJxJo9spdHYdv+eWs5mpin2D3XWhlrqvPJszbnGJ90dCoz+MsjNLGtdXa9zo3Qe6xNc5xeHQNVZlcm3halUMO2s=
-X-Received: by 2002:a05:6902:114b:: with SMTP id p11mr5153810ybu.2.1644461084954;
- Wed, 09 Feb 2022 18:44:44 -0800 (PST)
+        Wed, 9 Feb 2022 21:50:09 -0500
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793EA240A4;
+        Wed,  9 Feb 2022 18:50:10 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=tonylu@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V41xdUo_1644461407;
+Received: from localhost(mailfrom:tonylu@linux.alibaba.com fp:SMTPD_---0V41xdUo_1644461407)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 10 Feb 2022 10:50:07 +0800
+Date:   Thu, 10 Feb 2022 10:50:06 +0800
+From:   Tony Lu <tonylu@linux.alibaba.com>
+To:     Wen Gu <guwen@linux.alibaba.com>
+Cc:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net/smc: Avoid overwriting the copies of clcsock
+ callback functions
+Message-ID: <YgR9XrT8cATDP4Zx@TonyMac-Alibaba>
+Reply-To: Tony Lu <tonylu@linux.alibaba.com>
+References: <1644415853-46641-1-git-send-email-guwen@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20220209163029.2299009-1-trix@redhat.com> <YgPs8U85ZFbDWYlx@sirena.org.uk>
- <61a545d5-224d-86fb-2fe3-406c3ffd78fb@redhat.com> <YgP0JOilWpKU4704@sirena.org.uk>
- <CAGcXWkyCQ4JExvHv3cEL7vLMOcq_iPu0vOyOmnfzbQmMxHEp=Q@mail.gmail.com> <27a1822d798641f5bba33d7529ec02c0@sphcmbx02.sunplus.com.tw>
-In-Reply-To: <27a1822d798641f5bba33d7529ec02c0@sphcmbx02.sunplus.com.tw>
-From:   =?UTF-8?B?6YOt5Yqb6LGq?= <lhjeff911@gmail.com>
-Date:   Thu, 10 Feb 2022 10:45:46 +0800
-Message-ID: <CAGcXWkyF8FdRNP7=pcLQw339QpVX82op+zEMS7KrXXZJ8SLMQw@mail.gmail.com>
-Subject: Re: [PATCH] spi: initialize ret variable
-To:     =?UTF-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
-Cc:     Tom Rix <trix@redhat.com>, "nathan@kernel.org" <nathan@kernel.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Mark Brown <broonie@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1644415853-46641-1-git-send-email-guwen@linux.alibaba.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->Yes, that's what I'm asking.
+On Wed, Feb 09, 2022 at 10:10:53PM +0800, Wen Gu wrote:
+> The callback functions of clcsock will be saved and replaced during
+> the fallback. But if the fallback happens more than once, then the
+> copies of these callback functions will be overwritten incorrectly,
+> resulting in a loop call issue:
+> 
+> clcsk->sk_error_report
+>  |- smc_fback_error_report() <------------------------------|
+>      |- smc_fback_forward_wakeup()                          | (loop)
+>          |- clcsock_callback()  (incorrectly overwritten)   |
+>              |- smc->clcsk_error_report() ------------------|
+> 
+> So this patch fixes the issue by saving these function pointers only
+> once in the fallback and avoiding overwriting.
+> 
+> Reported-by: syzbot+4de3c0e8a263e1e499bc@syzkaller.appspotmail.com
+> Fixes: 341adeec9ada ("net/smc: Forward wakeup to smc socket waitqueue after fallback")
+> Link: https://lore.kernel.org/r/0000000000006d045e05d78776f6@google.com
+> Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+> ---
+>  net/smc/af_smc.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+> index 8c89d0b..306d9e8c 100644
+> --- a/net/smc/af_smc.c
+> +++ b/net/smc/af_smc.c
+> @@ -667,14 +667,17 @@ static void smc_fback_error_report(struct sock *clcsk)
+>  static int smc_switch_to_fallback(struct smc_sock *smc, int reason_code)
+>  {
+>  	struct sock *clcsk;
+> +	int rc = 0;
+>  
+>  	mutex_lock(&smc->clcsock_release_lock);
+>  	if (!smc->clcsock) {
+> -		mutex_unlock(&smc->clcsock_release_lock);
+> -		return -EBADF;
+> +		rc = -EBADF;
+> +		goto out;
+>  	}
+>  	clcsk = smc->clcsock->sk;
+>  
+> +	if (smc->use_fallback)
+> +		goto out;
+>  	smc->use_fallback = true;
 
+I am wondering that there is a potential racing. If ->use_fallback is
+setted to true, but the rest of replacing process is on the way, others
+who tested and passed ->use_fallback, they would get old value before
+replacing.
 
-
->The original setting was ret=0; I just wanted to remove it when defining
-
->the ret, but it looks like it's required.
-
->Yes, it should return error at default
-
-
-
->I will submit new patch for this.
-
-
-
-
-> The old behavior returned 0 and I am treating this as a regression.
-
-The goal here isn't just to shut up warnings, it's to fix any problems
-that they identify.  Unconditionally initialising return values is a
-common way of fixing warnings while leaving real problems in place.
-
-
-The original setting was ret=0; I just wanted to remove it when defining
-
-the ret, but it looks like it's required.
-
-Yes, it should return error at default
-
-
-
-I will submit new patch for this.
+Thanks,
+Tony Lu

@@ -2,109 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3B54B086A
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 581584B086D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 09:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237553AbiBJIdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 03:33:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35298 "EHLO
+        id S237602AbiBJIes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 03:34:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237530AbiBJIdE (ORCPT
+        with ESMTP id S232971AbiBJIen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 03:33:04 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290D7D8A;
-        Thu, 10 Feb 2022 00:33:04 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Thu, 10 Feb 2022 03:34:43 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8718A204
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 00:34:45 -0800 (PST)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvVPW1kZPz4xNn;
-        Thu, 10 Feb 2022 19:33:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644481983;
-        bh=E+FtqzckTxmcWbMLn2k22WXUJefWAeHDdlsXk10dyok=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NsDBkqsuJr7HIQ6Baa/iBaKSMYAYaD9+gWizkSxAl9C4nfOtH412vLq4+kmDItkD+
-         eC69PtyF9O5AKyy4tMNHyMZlPoiMcH8clKu8J3BH8qnOcHnztiauDD2xOkGZu224WL
-         fyVUhwGkdRmJS4gAkSOO/BhytSTEjjTvKZPtlOKgdzUl1l7nyoQ49DBqku9N6p44Uw
-         fwLV6hz6sH94pwhle9VJeJw7v0V5ffHUy/ta1O3Y4U6pBMANg9hfF+yQLspWeVrubr
-         nyhROu5m60eQyNFe54E7+h/BCEkvtvPCl7i66vzqsdsmUZMIELNn1pK9YkOxwh3Zjj
-         KJiLnojVRIjMg==
-Date:   Thu, 10 Feb 2022 19:33:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Domenico Andreoli <domenico.andreoli@linux.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Tong Zhang <ztong0001@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: boottime warning from todays linux-next
-Message-ID: <20220210193302.686fa61a@canb.auug.org.au>
-In-Reply-To: <20220210184340.7eba108a@canb.auug.org.au>
-References: <20220210184340.7eba108a@canb.auug.org.au>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4729B3F17B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 08:34:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644482084;
+        bh=pGebfukMA0/cVNt1ZjmZH/7cNrKPzwQS8ExlqEeW/aA=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=lwnSlTzfmpcEx9Wh36NnaX5DTSjRKDDTSBLIpAHIIGq4aCPoLHqmzXK6fq9x2w87B
+         ceH1NQTB/RzDnb5QxFV/xbjqiS9gsYRLZyv0OaPDd3x5+n7xqatCyAn2GmSwJiTDnU
+         5sIaexIyYDdk44tcpi5fzaJWSRb98SYa8fTpz8V1KfpQDSogkxaNJ11jH+7nc3MKmC
+         18ySKAXkD2VxDsxV+arS2Ygom7EljaUB9kNtpi/lFfhUlbb++urf1NCcRCEnuZBf2v
+         nPSiddECJuJSGzPZP9lglkqY33oc3hXYuEtnRDNb/58/lMK0ugOYEMBQ/pMy/Ox4kY
+         cQBR2KfUZJrPg==
+Received: by mail-ej1-f71.google.com with SMTP id z26-20020a1709067e5a00b006cbe0628826so2368022ejr.10
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 00:34:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pGebfukMA0/cVNt1ZjmZH/7cNrKPzwQS8ExlqEeW/aA=;
+        b=xMQ7ZZo+ttQCat0YAkVdg9a7dfF5/uyyH1b113luG1qlPODW6WKvjrtTCA83g+TRVH
+         rqrmbdC0VIM+bCde9ig68taOg/vJHWIWWpjwF81/reo78WISVKDMsh+eR7Sh1+InEFD5
+         NzCYs37vgRIeiPcPXT4XGIZZsgAeLPqNHHHmNFO+EAXRAHK9+klWYfMQO8J8EVCwuAKb
+         q+MA3gCjvERVHwNc+YLdfnOmVidVr0aiAdP41W1Rlmhuw2iwgx77TFzsZwGXx2Fg5TA6
+         COkOnRAZn+ClIIs8ffQIBCSNfHAqxaNsjIuDTDzhzGAyIe4EvmlZ1878RLW5HVexmGvs
+         r8zA==
+X-Gm-Message-State: AOAM532YUqa5zk/0lht9RDemi68YojvBHnNe6ozbToLE6fv/UCfLfzW+
+        ZpAKcRQrwtKbs0yEe3AP9gZqggLVT5o84O60i0rCyy3lhq0fkl507PecYYy0G25mrg7hrC/A7vq
+        lcKiKmq88QOeSVhXr/Aopgjd3ulIQ9F3tGFCWQBfBlg==
+X-Received: by 2002:a17:906:648a:: with SMTP id e10mr5362012ejm.608.1644482083889;
+        Thu, 10 Feb 2022 00:34:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxi63reSP6zKskv4B7VSWKJyO4DkjBtRkrM6w8hTZY1HnS05jKb54fS63VtY8oyNWSo8tLgdA==
+X-Received: by 2002:a17:906:648a:: with SMTP id e10mr5362002ejm.608.1644482083651;
+        Thu, 10 Feb 2022 00:34:43 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id r22sm9289438edt.51.2022.02.10.00.34.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 00:34:42 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rt-users@vger.kernel.org, joseph.salisbury@canonical.com
+Cc:     Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH v2] selftests/ftrace: Do not trace do_softirq because of PREEMPT_RT
+Date:   Thu, 10 Feb 2022 09:33:56 +0100
+Message-Id: <20220210083356.11212-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2ADvCwIdjLZxpqlDQgzJpML";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/2ADvCwIdjLZxpqlDQgzJpML
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The PREEMPT_RT patchset does not use soft IRQs thus trying to filter for
+do_softirq fails for such kernel:
 
-Hi all,
+  echo do_softirq
+  ftracetest: 81: echo: echo: I/O error
 
-On Thu, 10 Feb 2022 18:43:40 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> My qemu boot of a powerpc pseries_le_defconfig kernel produced these
-> kernel messages:
->=20
->   CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc3 #2
->   Call Trace:
->   [c0000000073e3a80] [c0000000007bfd40] dump_stack_lvl+0x74/0xa8 (unrelia=
-ble)
->   [c0000000073e3ac0] [c00000000057e3dc] __register_sysctl_table+0x60c/0x9=
-f0
->   [c0000000073e3bd0] [c000000002041170] init_fs_stat_sysctls+0x48/0x60
->   [c0000000073e3bf0] [c000000000012110] do_one_initcall+0x60/0x2d0
->   [c0000000073e3cd0] [c0000000020049f0] kernel_init_freeable+0x334/0x3dc
->   [c0000000073e3db0] [c000000000012710] kernel_init+0x30/0x1a0
->   [c0000000073e3e10] [c00000000000cd64] ret_from_kernel_thread+0x5c/0x64
->=20
-> Presumably introduced by commit
->=20
->   b42bc9a3c511 ("Fix regression due to "fs: move binfmt_misc sysctl to it=
-s own file"")
+Choose some other visible function for the test.
 
-OK, I cannot reproduce this with just Linus' tree.  I will try to bisect.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
---=20
-Cheers,
-Stephen Rothwell
+---
 
---Sig_/2ADvCwIdjLZxpqlDQgzJpML
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Changes since v1:
+1. Use scheduler_tick.
+2. Add review tag.
 
------BEGIN PGP SIGNATURE-----
+Notes:
+I understand that the failure does not exist on mainline kernel (only
+with PREEMPT_RT patchset) but the change does not harm it.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIEzb4ACgkQAVBC80lX
-0GwOPggAo8y9fTP5XIjhAfCoybh2AdkSVWLYHqC/wrZLgmIgTzbiPQTNg93x+YzJ
-zgXATsbKibq/Vjnm1ph1zxhTkd7ku/azsjTuqdUeiaE1XcHK9txJHxQ0YrX2x+au
-a4ZOCBZZoPr6dkszIfPPRCMWtfJiuu2WP+SYfRKoRYjP4zo9qIyyBorLfqdYZsoz
-TAbUi4in0tx1Dske+1nfzUzdb7vQP80QtkKJM7bGHoR2DvHMT0gYEwsMW/c8Tmgc
-DiAmwWrsAYmLc858aeIBxPZvlR+rvjFYyRXGucb6UrkEZ2WL3rKbTxZ058O+uvcy
-CjNtvV3Po0VFua7GZbZaccGJASFsbA==
-=wnAm
------END PGP SIGNATURE-----
+If it is not suitable alone, please consider it for RT patchset.
+---
+ .../selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc      | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---Sig_/2ADvCwIdjLZxpqlDQgzJpML--
+diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+index e96e279e0533..25432b8cd5bd 100644
+--- a/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
++++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_set_ftrace_file.tc
+@@ -19,7 +19,7 @@ fail() { # mesg
+ 
+ FILTER=set_ftrace_filter
+ FUNC1="schedule"
+-FUNC2="do_softirq"
++FUNC2="scheduler_tick"
+ 
+ ALL_FUNCS="#### all functions enabled ####"
+ 
+-- 
+2.32.0
+

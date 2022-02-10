@@ -2,99 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF27D4B0DE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 414534B0DC9
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:50:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241801AbiBJMvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 07:51:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35340 "EHLO
+        id S241725AbiBJMuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 07:50:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238007AbiBJMvv (ORCPT
+        with ESMTP id S235587AbiBJMuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 07:51:51 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BC2263E;
-        Thu, 10 Feb 2022 04:51:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644497513; x=1676033513;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=O2sV7j//NOYqlh2mGrqgY1OMSmiSfEuikM6h29Iuhms=;
-  b=IGS6lhYDpzM5SGU1S8PNhBOb9VOdUIxDyK64bS+GhBupxS8rOeFSL6pH
-   0oIkVAL5qmcACJRX7XB14gGoQf+i9mV9TJZ4qxui74hO9SVjUX6A05ehw
-   f5Y/HqPnwQO6AJScaPt0jtGyRU1Rh4bQtxkIp8ucRrG+5Aqy1fIiqFkTp
-   Qh/OmaXme0RaYQC2+p2HSwcfyav2/YPXMLJhqJVJIuKOf6xyTjIHFZJX/
-   52fXP2PVJNTxgO74wsBfM5qQxPljAjVwHSONbcjTm851lZfQiUo2I+8OW
-   b3oKCCWXfBi3OioYsLoLShrfVi090jhbdk9m8ZYDhSWFripzZJZMQ+n/9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="335899265"
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="335899265"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 04:51:52 -0800
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="541595712"
-Received: from muni.iind.intel.com ([10.190.201.115])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 04:51:50 -0800
-From:   Vikash Chandola <vikash.chandola@linux.intel.com>
-To:     iwona.winiarska@intel.com, linux@roeck-us.net, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Vikash Chandola <vikash.chandola@linux.intel.com>
-Subject: [PATCH] hwmon: (pmbus) Clear pmbus fault/warning bits before read
-Date:   Thu, 10 Feb 2022 12:41:54 +0000
-Message-Id: <20220210124154.1304852-1-vikash.chandola@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 10 Feb 2022 07:50:17 -0500
+X-Greylist: delayed 455 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 04:50:18 PST
+Received: from srv6.fidu.org (srv6.fidu.org [IPv6:2a01:4f8:231:de0::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5522925C7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 04:50:18 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by srv6.fidu.org (Postfix) with ESMTP id 88BB3C80082;
+        Thu, 10 Feb 2022 13:42:41 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
+Received: from srv6.fidu.org ([127.0.0.1])
+        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id wgvB-zJ5M1dL; Thu, 10 Feb 2022 13:42:41 +0100 (CET)
+Received: from [192.168.176.116] (host-88-217-226-44.customer.m-online.net [88.217.226.44])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: wse@tuxedocomputers.com)
+        by srv6.fidu.org (Postfix) with ESMTPSA id F2393C80080;
+        Thu, 10 Feb 2022 13:42:40 +0100 (CET)
+Message-ID: <dc7e56bb-e7a0-1694-36bb-4e4d0d2dbc17@tuxedocomputers.com>
+Date:   Thu, 10 Feb 2022 13:42:40 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] input/i8042: Add quirk table to disable aux port on
+ Clevo NS70MU
+Content-Language: en-US
+From:   Werner Sembach <wse@tuxedocomputers.com>
+To:     dmitry.torokhov@gmail.com, tiwai@suse.com, mpdesouza@suse.com,
+        arnd@arndb.de, samuel@cavoj.net, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220118115532.33011-1-wse@tuxedocomputers.com>
+In-Reply-To: <20220118115532.33011-1-wse@tuxedocomputers.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pmbus fault and warning bits are not cleared by itself once fault/warning
-condition is not valid anymore. As per pmbus datasheet faults must be
-cleared by user.
-Modify hwmon behavior to clear latched status bytes if any bit in status
-register is high prior to returning fresh data to userspace. If
-fault/warning conditions are still applicable fault/warning bits will be
-set and we will get updated data in second read.
-
-Hwmon behavior is changed here. Now sysfs reads will reflect latest
-values from pmbus slave, not latched values.
-In case a transient warning/fault has happened in the past, it will no
-longer be reported to userspace.
-
-Signed-off-by: Vikash Chandola <vikash.chandola@linux.intel.com>
----
- drivers/hwmon/pmbus/pmbus_core.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index 776ee2237be2..1cc82d644079 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -577,6 +577,15 @@ static int pmbus_get_status(struct i2c_client *client, int page, int reg)
- 		break;
- 	default:
- 		status = _pmbus_read_byte_data(client, page, reg);
-+		if (status > 0) {
-+			/*
-+			 * Status greater than 0 could mean that there was a fault/warning.
-+			 * Clear faults and do a second read to make sure we are not getting
-+			 * stale values.
-+			 */
-+			pmbus_clear_fault_page(client, page);
-+			status = _pmbus_read_byte_data(client, page, reg);
-+		}
- 		break;
- 	}
- 	if (status < 0)
--- 
-2.25.1
-
+> At least one modern Clevo barebone has the touchpad connected both via PS/2
+> and i2c interface. This causes a race condition between the psmouse and
+> i2c-hid driver. Since the full capability if the touchpad is available via
+> the i2c interface and the device has no external PS/2 port, it is save to
+> just ignore all ps2 mouses here to avoid this issue.
+>
+> The know affected device is the Clevo NS70MU.
+>
+> This patch adds a new i8042_dmi_noaux_table with the dmi strings of the
+> affected device of different revisions. The table is then evaluated like
+> the other quirk tables in the i8042 driver.
+>
+> This is revision 2 as I got aware that there are yet another 2 dmi string
+> combinations identifying the same device.
+Please let me know if a patch like this could be accepted or if the i8042 quirk tables are in a freeze state and issues
+like this should be fixed another way now?
+> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+> Cc: stable@vger.kernel.org
+> ---
+>  drivers/input/serio/i8042-x86ia64io.h | 54 +++++++++++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>
+> diff --git a/drivers/input/serio/i8042-x86ia64io.h b/drivers/input/serio/i8042-x86ia64io.h
+> index 148a7c5fd0e2..e39d3d840a31 100644
+> --- a/drivers/input/serio/i8042-x86ia64io.h
+> +++ b/drivers/input/serio/i8042-x86ia64io.h
+> @@ -1013,6 +1013,57 @@ static const struct dmi_system_id i8042_dmi_probe_defer_table[] __initconst = {
+>  	{ }
+>  };
+>  
+> +static const struct dmi_system_id i8042_dmi_noaux_table[] __initconst = {
+> +	/*
+> +	 * At least one modern Clevo barebone has the touchpad connected
+> +	 * both via PS/2 and i2c interface. This causes a race condition
+> +	 * between the psmouse and i2c-hid driver. Since the full
+> +	 * capability if the touchpad is available via the i2c interface
+> +	 * and the device has no external PS/2 port, it is save to just
+> +	 * ignore all ps2 mouses here to avoid this issue.
+> +	 * The know affected device is the
+> +	 * TUXEDO InfinityBook S17 Gen6 / Clevo NS70MU which comes with
+> +	 * one of the 6 different dmi string combinations below.
+> +	 */
+> +	{
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
+> +			DMI_MATCH(DMI_BOARD_NAME, "NS50MU"),
+> +		},
+> +	},
+> +	{
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
+> +			DMI_MATCH(DMI_BOARD_NAME, "NS50_70MU"),
+> +		},
+> +	},
+> +	{
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
+> +			DMI_MATCH(DMI_BOARD_NAME, "NS50MU"),
+> +		},
+> +	},
+> +	{
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
+> +			DMI_MATCH(DMI_BOARD_NAME, "NS50_70MU"),
+> +		},
+> +	},
+> +	{
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
+> +			DMI_MATCH(DMI_BOARD_NAME, "NS50MU"),
+> +		},
+> +	},
+> +	{
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
+> +			DMI_MATCH(DMI_BOARD_NAME, "NS50_70MU"),
+> +		},
+> +	},
+> +	{ }
+> +};
+> +
+>  #endif /* CONFIG_X86 */
+>  
+>  #ifdef CONFIG_PNP
+> @@ -1336,6 +1387,9 @@ static int __init i8042_platform_init(void)
+>  	if (dmi_check_system(i8042_dmi_probe_defer_table))
+>  		i8042_probe_defer = true;
+>  
+> +	if (dmi_check_system(i8042_dmi_noaux_table))
+> +		i8042_noaux = true;
+> +
+>  	/*
+>  	 * A20 was already enabled during early kernel init. But some buggy
+>  	 * BIOSes (in MSI Laptops) require A20 to be enabled using 8042 to

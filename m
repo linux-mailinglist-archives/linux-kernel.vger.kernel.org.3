@@ -2,186 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3472C4B0A03
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6B04B0A01
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239161AbiBJJwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:52:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39956 "EHLO
+        id S239171AbiBJJxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:53:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239024AbiBJJwf (ORCPT
+        with ESMTP id S232590AbiBJJxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:52:35 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E5E260
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:52:33 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 795FA1F39E;
-        Thu, 10 Feb 2022 09:52:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1644486752; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w6GJn+T84R1s3QqBKa+NtkToxwVpusGQeVmkWbu88iU=;
-        b=pgS0N+5qo+bTJDY2+ExZLBoTQGzSf8xFR/qxENFs/HGpWqHkbu42fFgEDIehnNB6kiFTt8
-        dY+osM7i42Jvm7wccQjr81pmy0tlFtJ2qWCQE0FU+A0WzJ9cMUb+mO/QaM/M3j63F2mtE4
-        9MA2484/TZttw046gKPrvd4SLM9O4mE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1644486752;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w6GJn+T84R1s3QqBKa+NtkToxwVpusGQeVmkWbu88iU=;
-        b=gooBhHaAkbfz22D/kJNhv/7mwHFFkQQBsPxACjaWouyHFyAoVPgP2QP5yzcIjqUf6g+puy
-        p8PuWlluiqGK3JAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4472D13B35;
-        Thu, 10 Feb 2022 09:52:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id mHv5D2DgBGKoWAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 10 Feb 2022 09:52:32 +0000
-Message-ID: <957e2ea6-d01e-256f-51a0-d927a93b50a5@suse.cz>
-Date:   Thu, 10 Feb 2022 10:52:31 +0100
+        Thu, 10 Feb 2022 04:53:03 -0500
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BDE128;
+        Thu, 10 Feb 2022 01:53:04 -0800 (PST)
+Received: by mail-vs1-xe34.google.com with SMTP id j5so2434371vsm.5;
+        Thu, 10 Feb 2022 01:53:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=N/o/oEDK6yNA6KzQQ36RhfRwk2uRGWwiWLSILhdKP7k=;
+        b=kqbXjTNyeNaOJPTbZTaTkpLJJbJdJN35K23eEWCPQYQWK5f9EUQMZt1qygDTuXHANb
+         eKBBIx0YJ89trZZabVjK9YltMrTqVuvyv1Ylp3PodeckaKNlcTOeSL9yXkFxFSzGTgAh
+         H8pBwAUYO9ZtYNl+cDM+hoQF5+e7qPVCrP9m+ypCU6QSaM6aJhPPTbvI+q5VexvO8JB9
+         Zxcz/WkbFtMgjuFqe/fJ0OCRz/drMA/0I1Y1siddfF8ocT82IBe1+T2T5mAu60IRbBnc
+         O3Ga+/BrmxDaITxMs1ASPhH9RWURXvloUTyHTxHYO499G+vWQRQwR6pNpWfXdwBztLlZ
+         6VTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=N/o/oEDK6yNA6KzQQ36RhfRwk2uRGWwiWLSILhdKP7k=;
+        b=FZ6oaTRlIztaRPzTFBl5zzecNEmgGiuFyzEYj6oRgs/Tn0G0jC7X7Rg1m8n+m25xQ8
+         1dzgMcD+7kiaQgLgQGJAsjih5AlBd088OCBgYAlEU/8YT9QmR65GDqEvYYgbkS0ZPgQN
+         ZAwZ8NoSIQtFDpoCUBog5LOSmhj4Xc/xRmkWpz3i4IXgQqx6a3m9s7E9wORWMDgEhvdu
+         YrIQhh3CVmyQJ8oCrG1rjwXfRHLwetcEawms3U9FMgwWQBh2i8R/KOVfjm9S36vd3cJ5
+         AJ/+J8R4M4v3UM0vMh0sJNMX/Yt2mr3+ghrsyrJTV90nyUJe8IJZRG25h5D7qP7emsx1
+         Y6aA==
+X-Gm-Message-State: AOAM532q/02EAeCEWDHZgDzH+yIebV+zRvUWmU30fJTBA6KkFb3sy7fh
+        6FGUC+gEeuZwj6vIsDhYfjIwmIgU1B7IPVqisos=
+X-Google-Smtp-Source: ABdhPJy3BmfjGBsQ/1m6jTaEjOrRuG/WxuKfSjaUqL39oOImZUuIRENvrfMRIIwP14Pwy6n28CGijThXnVMbZNnA5hE=
+X-Received: by 2002:a67:f890:: with SMTP id h16mr2554081vso.43.1644486783621;
+ Thu, 10 Feb 2022 01:53:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Content-Language: en-US
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Rik van Riel <riel@surriel.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
- <5ed1f01-3e7e-7e26-cc1-2b7a574e2147@google.com>
- <4a5bc989-e59a-d421-faf4-8156f700ec99@suse.cz>
- <ed2c4952-f3e-688d-40c1-53afebe5c7cb@google.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH 01/13] mm/munlock: delete page_mlock() and all its works
-In-Reply-To: <ed2c4952-f3e-688d-40c1-53afebe5c7cb@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220110114930.1406665-1-sergio.paracuellos@gmail.com>
+ <YfE5MOkQRoHQV7Wf@kroah.com> <CAMhs-H8s0d=PswQDR86Tq-bQt634Z6rdFYHTE+DFepsthmKAYA@mail.gmail.com>
+ <YfE7LNFuf79i3oAQ@kroah.com> <CAMhs-H9c8zF=v2tu5Y1OsFRP6esOi5zrUceqS_OUiJ=MSfCvRQ@mail.gmail.com>
+ <20220205025548.AA1BBC004E1@smtp.kernel.org> <CAMhs-H82J5DC+m0V==tQKKYyqsu30kGLkdUbMRU+nsyLb8sL3Q@mail.gmail.com>
+ <CAMhs-H9RSjgW1-dafqDqbfBaQ4iH6NFDLoRHqjt=f41zAEcC-g@mail.gmail.com> <YgS26WAtSkQbZam4@kroah.com>
+In-Reply-To: <YgS26WAtSkQbZam4@kroah.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Thu, 10 Feb 2022 10:52:52 +0100
+Message-ID: <CAMhs-H_x0My6ZfnZkyyEiSd+vT66ijf-fPzxxHohD_Yzko4h-Q@mail.gmail.com>
+Subject: Re: [PATCH v8 0/4] clk: ralink: make system controller a reset provider
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        John Crispin <john@phrozen.org>, linux-staging@lists.linux.dev,
+        NeilBrown <neil@brown.name>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/22 23:28, Hugh Dickins wrote:
-> On Wed, 9 Feb 2022, Vlastimil Babka wrote:
->> On 2/6/22 22:30, Hugh Dickins wrote:
-> Thanks for taking a look, Vlastimil.  You make a good point here.
-> 
-> I had satisfied myself that no stage of the series was going to introduce
-> boot failures or BUGs; and if someone is bisecting some mlock/munlock
-> misbehaviour, I would not worry about which commit of the series they
-> alight on, but root cause it keeping all the patches in mind.
-> 
-> But we certainly wouldn't want the series split up into separately
-> submitted parts (that is, split anywhere between 01/13 and 07/13:
-> splitting the rest apart wouldn't matter much); and it would be
-> unfortunate if someone were bisecting some reclaim failure OOM problem
-> elsewhere, and their test app happened to be using mlock, and their
-> bisection landed part way between 01 and 07 here - the unimplemented
-> munlock confusing the bisection for OOM.
-> 
-> The worst of it would be, I think, landing between 05 and 07: where
-> your mlockall could mlock a variety of shared libraries etc, moving
-> all their pages to unevictable, and those pagecache pages not getting
-> moved back to evictable when unmapped.  I forget the current shrinker
-> situation, whether inode pressure could evict that pagecache or not.
-> 
-> Two mitigations come to mind, let me think on it some more (and hope
-> nobody's bisecting OOMs meanwhile): one might be to shift 05 (the one
-> which replaces clear_page_inode() on last unmap by clearance when
-> freeing) later in the series - its position was always somewhat
-> arbitrary, but that position is where it's been tested; another might
-> be to put nothing at all on the unevictable list in between 01 and 07.
-> 
-> Though taking this apart and putting it back together brings its own
-> dangers.  That second suggestion probably won't fly very well, with
-> 06/13 using mlock_count only while on the unevictable.  I'm not sure
-> how much rethinking the bisection possibility deserves.
+On Thu, Feb 10, 2022 at 7:55 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Feb 10, 2022 at 07:44:33AM +0100, Sergio Paracuellos wrote:
+> > Hi Greg,
+> >
+> > On Sat, Feb 5, 2022 at 8:31 AM Sergio Paracuellos
+> > <sergio.paracuellos@gmail.com> wrote:
+> > >
+> > > On Sat, Feb 5, 2022 at 3:55 AM Stephen Boyd <sboyd@kernel.org> wrote:
+> > > >
+> > > > Quoting Sergio Paracuellos (2022-01-26 04:45:31)
+> > > > > On Wed, Jan 26, 2022 at 1:14 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > > > >
+> > > > > > On Wed, Jan 26, 2022 at 01:08:52PM +0100, Sergio Paracuellos wrote:
+> > > > > > > On Wed, Jan 26, 2022 at 1:06 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > > > > > >
+> > > > > > > > On Mon, Jan 10, 2022 at 12:49:26PM +0100, Sergio Paracuellos wrote:
+> > > > > > > > > Hi all,
+> > > > > > > > >
+> > > > > > > > > This patch series add minimal change to provide mt7621 resets properly
+> > > > > > > > > defining them in the 'mediatek,mt7621-sysc' node which is the system
+> > > > > > > > > controller of the SoC and is already providing clocks to the rest of
+> > > > > > > > > the world.
+> > > > > > > > >
+> > > > > > > > > There is shared architecture code for all ralink platforms in 'reset.c'
+> > > > > > > > > file located in 'arch/mips/ralink' but the correct thing to do to align
+> > > > > > > > > hardware with software seems to define and add related reset code to the
+> > > > > > > > > already mainlined clock driver.
+> > > > > > > > >
+> > > > > > > > > After this changes, we can get rid of the useless reset controller node
+> > > > > > > > > in the device tree and use system controller node instead where the property
+> > > > > > > > > '#reset-cells' has been added. Binding documentation for this nodeq has
+> > > > > > > > > been updated with the new property accordly.
+> > > > > > > > >
+> > > > > > > > > This series also provide a bindings include header where all related
+> > > > > > > > > reset bits for the MT7621 SoC are defined.
+> > > > > > > > >
+> > > > > > > > > Also, please take a look to this review [0] to understand better motivation
+> > > > > > > > > for this series.
+> > > > > > > > >
+> > > > > > > > > Regarding the way of merging this:
+> > > > > > > > >  - I'd like patches 1 and 4 which are related going through staging tree.
+> > > > > > > >
+> > > > > > > > Patches 1 and 4 now in the staging tree, thanks.
+> > > > > > >
+> > > > > > > Stephen wanted all to go through the CLK tree since PATCH 3 and 1 were
+> > > > > > > also a dependency... Can we get all of them through the same tree,
+> > > > > > > then? I am ok with both CLK or staging trees.
+> > > > > >
+> > > > > > That's fine with me if they all go through the CLK tree, but there will
+> > > > > > be a merge issue that I already fixed up in my tree.  If you want me to
+> > > > > > drop them, just let me know.
+> > > > >
+> > > > > Stephen, what do you prefer? Is it better all going through staging-tree then?
+> > > > >
+> > > >
+> > > > Sure take them through staging tree.
+> > > >
+> > > > Acked-by: Stephen Boyd <sboyd@kernel.org>
+> > >
+> > > Thanks, Stephen.
+> > >
+> > > Greg, can you please take remaining patches 2 and 3 through your tree, then?
+> > >
+> > > Thanks in advance for your time.
+> >
+> > Please, let me know if you prefer me to resend the remaining two
+> > patches with tags added to make this easier for you.
+>
+> Please do so, as I can't seem to dig up the remaining ones...
 
-Right, if it's impractical to change for a potential and hopefully unlikely
-bad bisection luck, just a note at the end of each patch's changelog
-mentioning what temporarily doesn't work, should be enough.
+Ok, done. Please check:
+https://lore.kernel.org/linux-staging/20220210094859.927868-1-sergio.paracuellos@gmail.com/T/#t
 
->> Yet it differs from the existing "failure modes" where pages would be left
->> as "stranded" due to failure of being isolated, because they would at least
->> go through TestClearPageMlocked and counters update.
->> 
->> >  
->> >  /*
->> > @@ -413,75 +136,11 @@ static unsigned long __munlock_pagevec_fill(struct pagevec *pvec,
->> >   *
->> >   * Returns with VM_LOCKED cleared.  Callers must be prepared to
->> >   * deal with this.
->> > - *
->> > - * We don't save and restore VM_LOCKED here because pages are
->> > - * still on lru.  In unmap path, pages might be scanned by reclaim
->> > - * and re-mlocked by page_mlock/try_to_unmap before we unmap and
->> > - * free them.  This will result in freeing mlocked pages.
->> >   */
->> >  void munlock_vma_pages_range(struct vm_area_struct *vma,
->> >  			     unsigned long start, unsigned long end)
->> >  {
->> > -	vma->vm_flags &= VM_LOCKED_CLEAR_MASK;
->> 
->> Should we at least keep doing the flags clearing? I haven't check if there
->> are some VM_BUG_ONs that would trip on not cleared, but wouldn't be entirely
->> surprised.
-> 
-> There are two flags in question here, VM_LOCKED and VM_LOCKONFAULT:
-> I'm not sure which of them you're particularly concerned about.
+Best regards,
+    Sergio Paracuellos
 
-Well, either of those, but I said I didn't dig for possible consequences as
-simply not removing line above looked simpler and matched the comment.
-
-> As to VM_LOCKED: yes, you're right, at this stage of the series the
-> munlock really ought to be clearing VM_LOCKED (even while it doesn't
-> go on to do anything about the pages), as it claims in the comment above.
-> I removed this line at a later stage (07/13), when changing it to
-> mlock_vma_pages_range() serving both mlock and munlock according to
-> whether VM_LOCKED is provided - and mistakenly folded back that deletion
-> to this patch.  End result the same, but better to restore that maskout
-> in this patch, as you suggest.
-
-Great, thanks. That restores any effect on VM_LOCKONFAULT in any case as well.
-
-> As to VM_LOCKONFAULT: I had checked the rest of mm/mlock.c, and the
-> rest of the tree, and it only ever reached here along with VM_LOCKED;
-> so when in 07/13 I switched over to "vma->vm_flags = newflags" (or
-> WRITE_ONCE equivalent), I just didn't see the need to mask it out in
-> the munlocking case; but could add a VM_BUG_ON that newflags never
-> has it without VM_LOCKED, if you like. 
-> 
-> (You'll say VM_WARN_ON_ONCE, I'll say VM_BUG_ON because it never happens,
-> then as soon as I put it in and run LTP or kselftests, I'll be ashamed
-> to discover I've got it wrong, perhaps.)
-
-Wasn't suggesting new VM_BUG_ONs just worried if the patch were breaking any
-existing ones.
-
-> Hugh
-
+>
+> thanks,
+>
+> greg k-h

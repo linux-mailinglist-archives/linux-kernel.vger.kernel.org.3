@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994914B049A
+	by mail.lfdr.de (Postfix) with ESMTP id 49D704B0499
 	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 05:47:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233619AbiBJEqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 23:46:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34542 "EHLO
+        id S233664AbiBJErA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 9 Feb 2022 23:47:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiBJEqw (ORCPT
+        with ESMTP id S233606AbiBJEqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 23:46:52 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E614D13E;
-        Wed,  9 Feb 2022 20:46:53 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id d14-20020a05600c34ce00b0037bf4d14dc7so2444117wmq.3;
-        Wed, 09 Feb 2022 20:46:53 -0800 (PST)
+        Wed, 9 Feb 2022 23:46:54 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3125E13E;
+        Wed,  9 Feb 2022 20:46:56 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id k18so7319102wrg.11;
+        Wed, 09 Feb 2022 20:46:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=vRozfgv8c4CSVg47eYADPpU+vSvhsWF/kMmMfWcmYYE=;
-        b=nLYaz8y/oYtDmbRGVqujXFIxW76NS6aKCy3G5lxsRPiBFGjwbj379Zk2feZ75DC+N5
-         iQAP6VL0m+GxPufKrEU0IT3U0M/kHFirStAtjTGTQX4hKXYunqwVxqKI717dU0bL9AQg
-         05zCz0fafn/g1fSDGWfw247fiR3h2bl1nFgn8cVI86dFJSuNeLBHdJGDsWMt4iNQQlDO
-         oWznqUkMk4utglAMob5GXrRnkjkhE+G3H6uxEt2zRHAiLWwIilcNGYHhIimj7+8SZ7oi
-         BzPXUVz1odlwIO00mFOokMN4Jq3baEDtkTt/aavV2OlunblOH292AgJQ2H8n+4SXsl+A
-         VxGw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=BjDFuVI1diXeHGjfeYh1Ru7NnwWu54G5DixYVQkN3LQ=;
+        b=Z039O/mT3T2FE/qU1t8Mwr/uL4bTki9Z2yPXpwt87ry32y7atrQ6705/ky6xG5tr3T
+         AIHWO4lBhEEUNgg6Sav8x4kGpm2ZCARFvSpeFmUC42idac09HfzntAMKDX2krZcvMOO7
+         U7MlgFMRNcknC8WoZl46amBd16Ge5+EX8N9qzPHobxVYe2dwikMlFjXq3kss8mJNC4xX
+         8BbR+/xkzvxTkexQDc95DMDy7Bm/Qn0Lcf5z8TskpAPKk4i9GMWLYc6+ByyLw3g6SkfW
+         Nx9pUNWXgohSfGTsfKwK52T8HpqEUY5NoXSsxELoblqX/+6cVRdYlTfF0J52jBy5jkg1
+         gNzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=vRozfgv8c4CSVg47eYADPpU+vSvhsWF/kMmMfWcmYYE=;
-        b=qu/1rGiOgaw/pxETUem4jYRszy5flDiTVc+QQCJBjC8kU9J+mu08k1YHJxyEnk/4O/
-         9qpeV4LGwE+HENZlHSYRR8IdchEjMRP1hMlGOQN4dbnFx+Mnn/2IGjFUq5m6Ndou97uA
-         UsbxJRYL7nwGnqJB7fJ0gfIg3wqJcam0sOCapohGBww5OLc8Q13PugPWVMym0j9cyKud
-         xZNlyTthcYaOu4YKzSwYEfD7foXmBkDXD6/OnLfYX0iI8sNLNN8s9FVeWYvfb+LlxDmx
-         cexH2ddtOZapGvU1EWNmNFJe8yIby2of6JorJz9X8W/zNmWOjIEqhRSeeujidsaPuvRd
-         hR8w==
-X-Gm-Message-State: AOAM530k2+GcHEr63qNqLakpr8wn7iKO+GlKzHNtLNcE7NxjogxdxhWp
-        koYMHMJotC1fbrmUmn4jjt4=
-X-Google-Smtp-Source: ABdhPJweKEsPlbgk+HcEoXMNC4J0RLS0HDhL0yuHl2kaYSZgeB5vQc0hi4wUyqwPLuunLDtg6Jj+BA==
-X-Received: by 2002:a1c:a791:: with SMTP id q139mr560008wme.176.1644468412353;
-        Wed, 09 Feb 2022 20:46:52 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=BjDFuVI1diXeHGjfeYh1Ru7NnwWu54G5DixYVQkN3LQ=;
+        b=aM3QbAHp1Cv4MgYFmVCi9x+N7ZFa0BRXObgHZWNIW9ikjY1j2gptK/TDM1JHkvfg8i
+         lJJYNxj2UFeh6oUfR0YdVzMvyr2TkuUxoHztkYVRq/MZDVYO2p0apwxZdOZXMl0lvTgh
+         K59tLojGmbnAJ7+A/Ovo6t9E+txd/eF8SrA3OLgbQv8Te3dXaXQKQtz6VPIayfVcDJNu
+         MiDPR4lP4WOg/1aCtjvPA6rJZrFcUXAhbfFHOiSkpWaKq85OhfbnkCXcA+9ss+wCeV93
+         768IlRTHsMgeDDF7TjxDTXfnOzjO/iRvDmzwXNODHrMf8nme/02YCBkCiL2qtrG3Ev76
+         jc8w==
+X-Gm-Message-State: AOAM531/dqOPtBL29Ssbu/hobBQGVCwoP/ods2vcjHjjZVopgLp+/+dp
+        wW/gGNnPS/QBs9nMiHUf0i4=
+X-Google-Smtp-Source: ABdhPJyfhwJP/OuAqaG/f8JeEci5j9lXhwga9tAVqWh3VfrctxGSoEkAZNw74a62QNHaDsxWat7WWg==
+X-Received: by 2002:adf:eec2:: with SMTP id a2mr4583607wrp.557.1644468414830;
+        Wed, 09 Feb 2022 20:46:54 -0800 (PST)
 Received: from localhost.localdomain ([87.200.95.144])
-        by smtp.gmail.com with ESMTPSA id h17sm323089wmm.15.2022.02.09.20.46.49
+        by smtp.gmail.com with ESMTPSA id h17sm323089wmm.15.2022.02.09.20.46.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 20:46:51 -0800 (PST)
+        Wed, 09 Feb 2022 20:46:54 -0800 (PST)
 From:   Christian Hewitt <christianshewitt@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -56,10 +57,12 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     Christian Hewitt <christianshewitt@gmail.com>,
         Sam Nazarko <email@samnazarko.co.uk>,
         Chad Wagner <wagnerch42@gmail.com>
-Subject: [PATCH 0/3] arm64: dts: meson: add support for OSMC Vero 4K+
-Date:   Thu, 10 Feb 2022 04:46:44 +0000
-Message-Id: <20220210044647.14443-1-christianshewitt@gmail.com>
+Subject: [PATCH 1/3] dt-bindings: vendor-prefixes: add osmc prefix
+Date:   Thu, 10 Feb 2022 04:46:45 +0000
+Message-Id: <20220210044647.14443-2-christianshewitt@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220210044647.14443-1-christianshewitt@gmail.com>
+References: <20220210044647.14443-1-christianshewitt@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -70,24 +73,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds support for the OSMC Vero 4K+ Set-Top Box device
-based on the Amlogic GXL (S905D) chipset. The Vero 4k+ is notable
-for being an original Linux (not Android) STB device, running its
-own Debian-derived 'OSMC' distro. Big thanks to Chad Wagner for his
-help with testing and device-tree fettling.
+Open Source Media Centre (Sam Nazarko Trading Ltd.) are a manufacturer
+of Linux Set-Top Box devices.
 
-Christian Hewitt (3):
-  dt-bindings: vendor-prefixes: add osmc prefix
-  dt-bindings: arm: amlogic: add Vero 4K+ bindings
-  arm64: dts: meson: add support for OSMC Vero 4K+
+Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
- .../devicetree/bindings/arm/amlogic.yaml      |   1 +
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- arch/arm64/boot/dts/amlogic/Makefile          |   1 +
- .../amlogic/meson-gxl-s905d-vero4k-plus.dts   | 125 ++++++++++++++++++
- 4 files changed, 129 insertions(+)
- create mode 100644 arch/arm64/boot/dts/amlogic/meson-gxl-s905d-vero4k-plus.dts
-
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 52ff63248892..b97fd8dfe601 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -882,6 +882,8 @@ patternProperties:
+     description: Ortus Technology Co., Ltd.
+   "^osddisplays,.*":
+     description: OSD Displays
++  "^osmc,.*":
++    description: Sam Nazarko Trading Ltd. (Open Source Media Centre)
+   "^ouya,.*":
+     description: Ouya Inc.
+   "^overkiz,.*":
 -- 
 2.17.1
 

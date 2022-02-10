@@ -2,216 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532444B18DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D4F4B18D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 23:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345282AbiBJWw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 17:52:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39344 "EHLO
+        id S1345297AbiBJWxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 17:53:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242333AbiBJWwZ (ORCPT
+        with ESMTP id S238083AbiBJWxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 17:52:25 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9348B7D;
-        Thu, 10 Feb 2022 14:52:25 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id m7so6533736pjk.0;
-        Thu, 10 Feb 2022 14:52:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=I+G4ImXqp+YpMfGeGYS+9Bq40aQsZnhUC626GwYdKvE=;
-        b=jRjyEU3R4uemNWY/qUKFenrVhNKeIRQQgJQSjLwWDYkm3k+ajMOQmWGRJUFOUAbMGI
-         JeIY1Qp+Xjv95rv7BnlpEjJ9BUO+wW005jxc9qhsCwhMBRhMBeJonVCSIrhgtG3bR7A5
-         RbBvwl5EqA1Snj+FzmxTF+NKlYtNySD3GBveYDIMArClsb3349mLYd+dbzPQ1QAEdGAn
-         t87Hfn5dANzEfUds5SpNlZ/gSWI96WeItS2rlmom5oiqM2DQNc7JeLjdHz3dKFgyHlGe
-         BRTStPnk4QON0Flb68BwRrgHC+AX9tIVL2fXPinY9TwFWNMAnRkrGFOZeZ5EQ51ia6Rs
-         EHBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=I+G4ImXqp+YpMfGeGYS+9Bq40aQsZnhUC626GwYdKvE=;
-        b=aHLgxLNhpeNyzgMqEXM2YufGNdmxgcBMCvY8Z2L1pAXtY5IuoZ1HeJ8PWnZKrGuKhz
-         3beSI9hPXpN9XKX1dHtCQOJtWQX+zGHYT+qewO5MIupsv59YefMzzuRTcI4/RSX2op0F
-         g4gGPbLHINYdn5OJXV40V3Ty29FElIGjrD9MH3yzKfSDgRrTknJUHbmvu3rNdloywLQB
-         m03irc5dZYfhIKkADUcjIdXgUSCOj+o/HxW4magkjyj/q7Kt1ut6zNesnAGMuyq+bUSb
-         wtRTTHoD6zulNCs2b6mfrCcupWyh9rIcClkuyHOd37+GxOYSKgWoerxrSwvIsNc89u/4
-         VE9Q==
-X-Gm-Message-State: AOAM533J4uN+Mgqw6vMRMRPMeIaZpXcF3tM+pT/Atz4TKBcnCbIdYv0w
-        WrCwxUCvN2gDfPHgNXGdn+U=
-X-Google-Smtp-Source: ABdhPJwQ2J1fWIOUF1+0+pC4v7lYv7ERiZvxzsDAUbW70rk1etY82hcz+XyErcUx8/OKwz8H4J9L1w==
-X-Received: by 2002:a17:902:7049:: with SMTP id h9mr9947785plt.121.1644533545134;
-        Thu, 10 Feb 2022 14:52:25 -0800 (PST)
-Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
-        by smtp.gmail.com with ESMTPSA id d9sm11033569pfl.69.2022.02.10.14.52.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 14:52:23 -0800 (PST)
-From:   Yang Shi <shy828301@gmail.com>
-To:     axboe@kernel.dk, hch@infradead.org, rostedt@goodmis.org,
-        kch@nvidia.com, xiyou.wangcong@gmail.com
-Cc:     shy828301@gmail.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [v8 PATCH] block: introduce block_rq_error tracepoint
-Date:   Thu, 10 Feb 2022 14:52:22 -0800
-Message-Id: <20220210225222.260069-1-shy828301@gmail.com>
-X-Mailer: git-send-email 2.26.3
+        Thu, 10 Feb 2022 17:53:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7724273D;
+        Thu, 10 Feb 2022 14:53:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99A88B827BB;
+        Thu, 10 Feb 2022 22:53:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B51C004E1;
+        Thu, 10 Feb 2022 22:53:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644533623;
+        bh=UWJBiNM1e5s58iDH2kQaRabS4o2/BGSKcudejnGvHQk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=VDZo6yYpPCxmhgs6YUPFLdHvi098Th/D3Ymqa8EINDqYnQlW95gQ6SO/Q9thIFq5d
+         SxvDEbxk5fyL2SZ83hYI7MbQjeVRQuwk6BnF54zBYjS7qnLWqZbxRUkj7jgSnosgiR
+         2GwWUkT2kryjvw/RBswjYYewFbrCDFnyL4i3CC3TKDzTEKQ1Lp+nEmxhTQtc0Gsshx
+         i7hPh9C7+6+7mcfaTL4qomDyvcX3ftk3koGthf7AwWShnTCKkoEUZgSfPpMbxhH83d
+         mdO9oHdrhiCxWBsPhw2C161hWN/nYM7wraxNs7Bf7iI2htlbQVqOxrX2clWzFKQUZm
+         GBAGyiN4t7tbw==
+Date:   Thu, 10 Feb 2022 16:53:41 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Yang, Shunyong" <shunyong.yang@hxt-semitech.com>
+Cc:     "okaya@kernel.org" <okaya@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Zheng, Joey" <yu.zheng@hxt-semitech.com>
+Subject: Re: [PATCH v2 1/2] PCI: Add HXT vendor ID and ACS quirk
+Message-ID: <20220210225341.GA660963@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6b4a41788f0d4b1c8388ebfb4d5abea4@HXTBJIDCEMVIW01.hxtcorp.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, rasdaemon uses the existing tracepoint block_rq_complete
-and filters out non-error cases in order to capture block disk errors.
+On Mon, Feb 11, 2019 at 12:52:29AM +0000, Yang, Shunyong wrote:
+> Hi, Bjorn,
+> 
+> Thank you for reminding me. I will check with our IC team for these
+> design issues.
+> Sorry for the delay as I was taking Chinese New Year holiday.
 
-But there are a few problems with this approach:
+Hi, happened to apply a new similar quirk for Qualcomm today, so just
+checking in to see whether there are any new HXT devices that also
+require this quirk, or whether we should apply the quirk for *all* HXT
+devices as we do for Intel.
 
-1. Even kernel trace filter could do the filtering work, there is
-   still some overhead after we enable this tracepoint.
+Bjorn
 
-2. The filter is merely based on errno, which does not align with kernel
-   logic to check the errors for print_req_error().
-
-3. block_rq_complete only provides dev major and minor to identify
-   the block device, it is not convenient to use in user-space.
-
-So introduce a new tracepoint block_rq_error just for the error case.
-With this patch, rasdaemon could switch to block_rq_error.
-
-Since the new tracepoint has the similar implementation with
-block_rq_complete, so move the existing code from TRACE_EVENT
-block_rq_complete() into new event class block_rq_completion(). Then add
-event for block_rq_complete and block_rq_err respectively from the newly
-created event class per the suggestion from Chaitanya Kulkarni.
-
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Christoph Hellwig <hch@infradead.org>
-Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Cong Wang <xiyou.wangcong@gmail.com>
-Signed-off-by: Chaitanya Kulkarni <kch@nvidia.com>
-Signed-off-by: Yang Shi <shy828301@gmail.com>
----
-The v3 patch was submitted in Feb 2020, and Steven reviewed the patch, but
-it was not merged to upstream. See
-https://lore.kernel.org/lkml/20200203053650.8923-1-xiyou.wangcong@gmail.com/.
-
-The problems fixed by that patch still exist and we do need it to make
-disk error handling in rasdaemon easier. So this resurrected it and
-continued the version number.
-
-v7 --> v8:
- * Combined two patches into one per Christoph Hellwig.
- * Kept Steven's reviewed-by since there is no significant change for
-   tracepoint other than creating event class.
-v6 --> v7:
- * Prepared (two patches) by Chaitanya Kulkarni
- * Created event class
-v5 --> v6:
- * Removed disk name per Christoph and Chaitanya
- * Kept errno since I didn't find any other block tracepoints print blk
-   status code and userspace (i.e. rasdaemon) does expect errno.
-v4 --> v5:
- * Report the actual block layer status code instead of the errno per
-   Christoph Hellwig.
-v3 --> v4:
- * Rebased to v5.17-rc1.
- * Collected reviewed-by tag from Steven.
-
- block/blk-mq.c               |  4 ++-
- include/trace/events/block.h | 49 ++++++++++++++++++++++++++----------
- 2 files changed, 39 insertions(+), 14 deletions(-)
-
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 1adfe4824ef5..b79a9b500105 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -789,8 +789,10 @@ bool blk_update_request(struct request *req, blk_status_t error,
- #endif
- 
- 	if (unlikely(error && !blk_rq_is_passthrough(req) &&
--		     !(req->rq_flags & RQF_QUIET)))
-+		     !(req->rq_flags & RQF_QUIET))) {
- 		blk_print_req_error(req, error);
-+		trace_block_rq_error(req, error, nr_bytes);
-+	}
- 
- 	blk_account_io_completion(req, nr_bytes);
- 
-diff --git a/include/trace/events/block.h b/include/trace/events/block.h
-index 27170e40e8c9..7f4dfbdf12a6 100644
---- a/include/trace/events/block.h
-+++ b/include/trace/events/block.h
-@@ -100,19 +100,7 @@ TRACE_EVENT(block_rq_requeue,
- 		  __entry->nr_sector, 0)
- );
- 
--/**
-- * block_rq_complete - block IO operation completed by device driver
-- * @rq: block operations request
-- * @error: status code
-- * @nr_bytes: number of completed bytes
-- *
-- * The block_rq_complete tracepoint event indicates that some portion
-- * of operation request has been completed by the device driver.  If
-- * the @rq->bio is %NULL, then there is absolutely no additional work to
-- * do for the request. If @rq->bio is non-NULL then there is
-- * additional work required to complete the request.
-- */
--TRACE_EVENT(block_rq_complete,
-+DECLARE_EVENT_CLASS(block_rq_completion,
- 
- 	TP_PROTO(struct request *rq, blk_status_t error, unsigned int nr_bytes),
- 
-@@ -144,6 +132,41 @@ TRACE_EVENT(block_rq_complete,
- 		  __entry->nr_sector, __entry->error)
- );
- 
-+/**
-+ * block_rq_complete - block IO operation completed by device driver
-+ * @rq: block operations request
-+ * @error: status code
-+ * @nr_bytes: number of completed bytes
-+ *
-+ * The block_rq_complete tracepoint event indicates that some portion
-+ * of operation request has been completed by the device driver.  If
-+ * the @rq->bio is %NULL, then there is absolutely no additional work to
-+ * do for the request. If @rq->bio is non-NULL then there is
-+ * additional work required to complete the request.
-+ */
-+DEFINE_EVENT(block_rq_completion, block_rq_complete,
-+
-+	TP_PROTO(struct request *rq, blk_status_t error, unsigned int nr_bytes),
-+
-+	TP_ARGS(rq, error, nr_bytes)
-+);
-+
-+/**
-+ * block_rq_error - block IO operation error reported by device driver
-+ * @rq: block operations request
-+ * @error: status code
-+ * @nr_bytes: number of completed bytes
-+ *
-+ * The block_rq_error tracepoint event indicates that some portion
-+ * of operation request has failed as reported by the device driver.
-+ */
-+DEFINE_EVENT(block_rq_completion, block_rq_error,
-+
-+	TP_PROTO(struct request *rq, blk_status_t error, unsigned int nr_bytes),
-+
-+	TP_ARGS(rq, error, nr_bytes)
-+);
-+
- DECLARE_EVENT_CLASS(block_rq,
- 
- 	TP_PROTO(struct request *rq),
--- 
-2.26.3
-
+> On 2019/2/2 7:19, Bjorn Helgaas wrote:
+> > On Wed, Nov 07, 2018 at 03:24:12PM +0800, Shunyong Yang wrote:
+> >> Add the HXT vendor ID to pci_ids.h and use it in quirks. As the
+> >> design of HXT SD4800 ACS feature is the same as QCOM QDF2xxx,
+> >> pci_quirk_qcom_rp_acs() is reused for SD4800 quirk.
+> >>
+> >> cc: Joey Zheng <yu.zheng@hxt-semitech.com>
+> >> Reviewed-by: Sinan Kaya <okaya@kernel.org>
+> >> Signed-off-by: Shunyong Yang <shunyong.yang@hxt-semitech.com>
+> > 
+> > I applied both of these to pci/misc for v5.1, thanks!
+> > 
+> > As I'm sure you know, both the ACS and the pciehp issues are cases where
+> > the part does not conform to the PCIe spec.  Hopefully future parts will
+> > change the design so they *do* conform to the spec so we don't have to add
+> > quirks for every new part.  Adding quirks works around the problem, but
+> > it's a hassle for customers (and developers and distributors) because they
+> > need kernel updates when they wouldn't otherwise.
+> > 
+> > Bjorn
+> > 
+> >> ---
+> >> v2:
+> >>   Add Reviewed-by: Sinan Kaya.
+> >>
+> >> v1:
+> >>   Initial version.
+> >> ---
+> >>
+> >> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> >> index 4700d24e5d55..1e00ef6a88f4 100644
+> >> --- a/drivers/pci/quirks.c
+> >> +++ b/drivers/pci/quirks.c
+> >> @@ -4495,6 +4495,8 @@ static int pci_quirk_mf_endpoint_acs(struct pci_dev *dev, u16 acs_flags)
+> >>  	/* QCOM QDF2xxx root ports */
+> >>  	{ PCI_VENDOR_ID_QCOM, 0x0400, pci_quirk_qcom_rp_acs },
+> >>  	{ PCI_VENDOR_ID_QCOM, 0x0401, pci_quirk_qcom_rp_acs },
+> >> +	/* HXT SD4800 root ports. The ACS design is same as QCOM QDF2xxx */
+> >> +	{ PCI_VENDOR_ID_HXT, 0x0401, pci_quirk_qcom_rp_acs },
+> >>  	/* Intel PCH root ports */
+> >>  	{ PCI_VENDOR_ID_INTEL, PCI_ANY_ID, pci_quirk_intel_pch_acs },
+> >>  	{ PCI_VENDOR_ID_INTEL, PCI_ANY_ID, pci_quirk_intel_spt_pch_acs },
+> >> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> >> index 69f0abe1ba1a..e60a6bc38298 100644
+> >> --- a/include/linux/pci_ids.h
+> >> +++ b/include/linux/pci_ids.h
+> >> @@ -2565,6 +2565,8 @@
+> >>  
+> >>  #define PCI_VENDOR_ID_HYGON		0x1d94
+> >>  
+> >> +#define PCI_VENDOR_ID_HXT		0x1dbf
+> >> +
+> >>  #define PCI_VENDOR_ID_TEKRAM		0x1de1
+> >>  #define PCI_DEVICE_ID_TEKRAM_DC290	0xdc29
+> >>  
+> >> -- 
+> >> 1.8.3.1
+> >>
+> > 
+> 

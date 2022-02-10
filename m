@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31CA14B04C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 06:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 962D24B04C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 06:12:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233096AbiBJFI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 00:08:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42118 "EHLO
+        id S233635AbiBJFMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 00:12:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232073AbiBJFIY (ORCPT
+        with ESMTP id S231807AbiBJFMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 00:08:24 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7587028C
-        for <linux-kernel@vger.kernel.org>; Wed,  9 Feb 2022 21:08:26 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id s185so4822901oie.3
-        for <linux-kernel@vger.kernel.org>; Wed, 09 Feb 2022 21:08:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=17HQ1lZ4Nfz73vYr3iF8T8txXNV0ECOTIWhcMcq56Ns=;
-        b=MY0483PAAismrHYbFZFzShmOwL5Bjug/y7G2BDSpPqDsC3dbhYUAsmCP85NC5oTMAw
-         RabL0o9i9iYRc6BV1JhmtUop9PRVeFYzXUdD0l7OIj7227F+vaZnf1r5a4Rs0FYzUdDz
-         1AuW6LLRyVDuk/LsmboGoT4Q4SjwuJKuyB4SKpwAAGRAV8BOgxOyyNhiXkfK+fUWz32z
-         unXibIaPtrwqkwC4UyGy2Srwq1w4VLAty5EIQRLlsxhUTnoWXtoTABGJ97jhLZDSXB55
-         gPuW3DBHMD8J2i7DnKW5ISkkHXsPuKLc9gtMOaE8OrizMCLVBoFJ2pdCdHfV/OS0gAy8
-         sssQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=17HQ1lZ4Nfz73vYr3iF8T8txXNV0ECOTIWhcMcq56Ns=;
-        b=oNsQpD1bzi5JOY8SAOVOHHUcx5POgDhuW+9rZRRxWRKCXMnWHgmqgjIbhOSogEJXYm
-         23oXISdeVEq3EF9hlgNRGYse0jMm9Hd6X7fdYvF6w3N1UX/sJpqCoMxrmaYdFrdP4flE
-         Wb1lNipIo171f+vpNosNJTeCK3J7V3P8PwANnqpIeyeq6n34ktoXHcYNcTe3xpqzN0BZ
-         Fxcf0VFoyUvKvwPT9ngJaLOBfLxs8ED8YMI0hn2IrDk1gK/26svC1ISeD3g2S7mY0o1m
-         dHc7xcAkLE8l0GeRe3RSkmRvCkcZZaGRNJ2cHWZ22URhgTEjRc2pODUsh81T6JlZpm9v
-         pHSQ==
-X-Gm-Message-State: AOAM532205pga43+MzXQuPw/VzgjW0pPvwM7rAAOyzPcphXErkVtVl/Q
-        v32C4bQofNixrwFKC9zp2vOGAl4NU+Zfvw==
-X-Google-Smtp-Source: ABdhPJwCiMJEvUF1a9t7kam4kZ/xoR3EK6VXaI8vakYWaJc8fUukLGyPwT9ZZx9m4Dvk6OnjNH8j/w==
-X-Received: by 2002:a05:6808:168e:: with SMTP id bb14mr363067oib.106.1644469705872;
-        Wed, 09 Feb 2022 21:08:25 -0800 (PST)
-Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id p22sm8915912oae.33.2022.02.09.21.08.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 21:08:25 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] soc: qcom: socinfo: Add some more PMICs and SoCs
-Date:   Wed,  9 Feb 2022 21:10:43 -0800
-Message-Id: <20220210051043.748275-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.33.1
+        Thu, 10 Feb 2022 00:12:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F23E290;
+        Wed,  9 Feb 2022 21:12:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADAEF61BA3;
+        Thu, 10 Feb 2022 05:12:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30F7BC340E5;
+        Thu, 10 Feb 2022 05:12:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644469925;
+        bh=LFqZdC12qnwe1Y76es8sEhk/QMcb0vADkit1XFNLr34=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SLaXM7J9xK+YQ9Jr7kXvubbxpi3xl7gqfDPey6gwEBPx2hWZ12w9X7UbLDtyz6blr
+         mE0EImwRa46BGO201erGuYl1zMHxJ8M/TE0y/D/+vEClKv2CGXfC6zHqkotWC8sb5J
+         84yOu6sctQvK3e+L1YPK6ZS2PagBVB5+scs5nnrWly++bWRlTuZKZY8cnW5CCHO5ii
+         CVfxTzQWdfAqHrDQZIoOnqzOSMnCNAs67uFSV19RRniqAkTwG9z4d9awrgoXOOaiLK
+         4untIMC2Ku42zp5TFTnIejVV1xLvwlEj3Ttvkwg515y5TYwbT0HmOeprMyZa1SXwdG
+         EHLIz1eGtApcQ==
+Date:   Wed, 9 Feb 2022 21:12:02 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     David Ahern <dsahern@gmail.com>, David Ahern <dsahern@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
+        David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        pablo@netfilter.org, kadlec@netfilter.org,
+        Florian Westphal <fw@strlen.de>,
+        Menglong Dong <imagedong@tencent.com>,
+        Eric Dumazet <edumazet@google.com>, alobakin@pm.me,
+        paulb@nvidia.com, Kees Cook <keescook@chromium.org>,
+        talalahmad@google.com, haokexin@gmail.com, memxor@gmail.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH v3 net-next 1/7] net: skb_drop_reason: add document for
+ drop reasons
+Message-ID: <20220209211202.7cddd337@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <CADxym3akuxC_Cr07Vzvv+BD55XgMEx7nqU4qW8WHowGR0jeoOQ@mail.gmail.com>
+References: <20220128073319.1017084-1-imagedong@tencent.com>
+        <20220128073319.1017084-2-imagedong@tencent.com>
+        <0029e650-3f38-989b-74a3-58c512d63f6b@gmail.com>
+        <CADxym3akuxC_Cr07Vzvv+BD55XgMEx7nqU4qW8WHowGR0jeoOQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,48 +69,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add SM8350, SC8280XP, SA8540P and one more SM8450 and various PMICs
-found on boards on these platforms to the socinfo driver.
+On Thu, 10 Feb 2022 11:19:49 +0800 Menglong Dong wrote:
+> I'm doing the job of using kfree_skb_reason() for the TCP layer,
+> and I have some puzzles.
+> 
+> When collecting drop reason for tcp_v4_inbound_md5_hash() in
+> tcp_v4_rcv(), I come up with 2 ways:
+> 
+> First way: pass the address of reason to tcp_v4_inbound_md5_hash()
+> like this:
+> 
+>  static bool tcp_v4_inbound_md5_hash(const struct sock *sk,
+>                       const struct sk_buff *skb,
+> -                    int dif, int sdif)
+> +                    int dif, int sdif,
+> +                    enum skb_drop_reason *reason)
+> 
+> This can work, but many functions like tcp_v4_inbound_md5_hash()
+> need to do such a change.
+> 
+> Second way: introduce a 'drop_reason' field to 'struct sk_buff'. Therefore,
+> drop reason can be set by 'skb->drop_reason = SKB_DROP_REASON_XXX'
+> anywhere.
+> 
+> For TCP, there are many cases where you can't get a drop reason in
+> the place where skb is freed, so I think there needs to be a way to
+> deeply collect drop reasons. The second can resolve this problem
+> easily, but extra fields may have performance problems.
+> 
+> Do you have some better ideas?
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- drivers/soc/qcom/socinfo.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
-index 6dc0f39c0ec3..8b38d134720a 100644
---- a/drivers/soc/qcom/socinfo.c
-+++ b/drivers/soc/qcom/socinfo.c
-@@ -104,6 +104,14 @@ static const char *const pmic_models[] = {
- 	[36] = "PM8009",
- 	[38] = "PM8150C",
- 	[41] = "SMB2351",
-+	[47] = "PMK8350",
-+	[48] = "PM8350",
-+	[49] = "PM8350C",
-+	[50] = "PM8350B",
-+	[51] = "PMR735A",
-+	[52] = "PMR735B",
-+	[58] = "PM8450",
-+	[65] = "PM8010",
- };
- #endif /* CONFIG_DEBUG_FS */
- 
-@@ -314,10 +322,14 @@ static const struct soc_id soc_id[] = {
- 	{ 422, "IPQ6010" },
- 	{ 425, "SC7180" },
- 	{ 434, "SM6350" },
-+	{ 439, "SM8350" },
-+	{ 449, "SC8280XP" },
- 	{ 453, "IPQ6005" },
- 	{ 455, "QRB5165" },
- 	{ 457, "SM8450" },
- 	{ 459, "SM7225" },
-+	{ 460, "SA8540P" },
-+	{ 480, "SM8450" },
- };
- 
- static const char *socinfo_machine(struct device *dev, unsigned int id)
--- 
-2.33.1
-
+On a quick look tcp_v4_inbound_md5_hash() returns a drop / no drop
+decision, so you could just change the return type to enum
+skb_drop_reason. SKB_DROP_REASON_NOT_SPECIFIED is 0 is false, 
+so if (reason) goto drop; logic will hold up.

@@ -2,297 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24FA34B0BA4
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:01:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DAAF4B0BAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240410AbiBJK7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 05:59:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37332 "EHLO
+        id S240420AbiBJLCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 06:02:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233803AbiBJK7u (ORCPT
+        with ESMTP id S240390AbiBJLCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 05:59:50 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CC1FDB;
-        Thu, 10 Feb 2022 02:59:50 -0800 (PST)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JvYdf50pwzccsH;
-        Thu, 10 Feb 2022 18:58:46 +0800 (CST)
-Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 10 Feb 2022 18:59:48 +0800
-Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
- (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 10 Feb
- 2022 18:59:47 +0800
-Subject: Re: [PATCH 0/2] mm/page_alloc: Remote per-cpu lists drain support
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        <akpm@linux-foundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <frederic@kernel.org>, <tglx@linutronix.de>, <mtosatti@redhat.com>,
-        <mgorman@suse.de>, <linux-rt-users@vger.kernel.org>,
-        <vbabka@suse.cz>, <cl@linux.com>, <paulmck@kernel.org>,
-        <willy@infradead.org>
-References: <20220208100750.1189808-1-nsaenzju@redhat.com>
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Message-ID: <8cf34eed-be5a-1aae-0523-c2de9e087cb6@huawei.com>
-Date:   Thu, 10 Feb 2022 18:59:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Thu, 10 Feb 2022 06:02:18 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331EBFDB
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:02:19 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id 9so6673470pfx.12
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 03:02:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=D3n9GGBmDktyoUOPvx6bv8pnSzGQstasxqMB02evq5Y=;
+        b=i0SrODC31YHkgfQRD4n8OMDj+NFU1Vq1WCcnbgUx57RNw+QVi584LCQLISQYBW6k22
+         LtCz9NpQeiy8iizL03jsva87BNjRzegD/8yTtpT9cpK4uQ2TXoEHnyopgjAT3U7Rb7yR
+         Q37m9xZ/oxkxSI3d8FuDPwjishj4mFQTJoL9pPB0WuWd2mlzJFhzqOT20ZFduPkYEwma
+         eo22FGV/6rmm4WbzIDGP3rggbi06kskL8cGccnR17auRrNhayehgnYhHFtfcEW3SRSHV
+         rj5J9Zt4odyPc96JPh0zCJ3d9gwvltzvtmitLaTjOe9anof4SzJDdkARbAoLE36TIM4b
+         mwTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=D3n9GGBmDktyoUOPvx6bv8pnSzGQstasxqMB02evq5Y=;
+        b=7EFiu65COrnAJYArxSwt3AZGFQPf+UtQOlFEuhKgS9GAnX5kRq48GgcEzbxYXZ+aZ0
+         FSSsTlY7myuoECiDeaM0+STSAjr3zp6czWFplOO+1wzrQSAsc+bT8V2A1vvDa5bMEpX3
+         dyCIEFU13xWLOv3DFG0CeoHrWNdZr8gjNOVRdEF529WtxVjMXJj9yFMVwS742t30icJe
+         NuP66vuM+s6RGDWnmCXTt6+/q/BfkSL5T9TBPc/xH88V5DzcRijFcW71Y9A1b3g6dmSQ
+         LIY9T/eqpaCSYe/xyC6EZS3a2AZiBu9uiAdhmxbL4rT49NgR+TINAvQNbqHJchc6/RFa
+         w/bw==
+X-Gm-Message-State: AOAM532I80ZvpxVFvCfvLQhiJp6VJj31gH5rmVS/pffAj10igKvbWlL9
+        QsVmk3sh2AQp5bV9QS/p6tBT
+X-Google-Smtp-Source: ABdhPJxu3t6vJViDB9slmnnfMVZr3euogAjFa+bxRwkWwfcx6AwWlt5EvzczDuFNojXgeCvMRRMIig==
+X-Received: by 2002:a05:6a00:140e:: with SMTP id l14mr7055920pfu.22.1644490938557;
+        Thu, 10 Feb 2022 03:02:18 -0800 (PST)
+Received: from thinkpad ([27.111.75.88])
+        by smtp.gmail.com with ESMTPSA id y5sm6851248pfw.165.2022.02.10.03.02.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 03:02:17 -0800 (PST)
+Date:   Thu, 10 Feb 2022 16:32:12 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Kishon Vijay Abraham I <kishon@ti.com>
+Cc:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Xiaowei Bao <xiaowei.bao@nxp.com>,
+        Om Prakash Singh <omp@nvidia.com>,
+        Vidya Sagar <vidyas@nvidia.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] PCI: designware-ep: Fix the access to DBI/iATU
+ registers before enabling controller
+Message-ID: <20220210110212.GC69529@thinkpad>
+References: <1630473361-27198-1-git-send-email-hayashi.kunihiko@socionext.com>
+ <1630473361-27198-3-git-send-email-hayashi.kunihiko@socionext.com>
+ <576457dd-3e66-a3b9-f51c-ea94bc267fdb@ti.com>
 MIME-Version: 1.0
-In-Reply-To: <20220208100750.1189808-1-nsaenzju@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.5]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <576457dd-3e66-a3b9-f51c-ea94bc267fdb@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nicolas,
+Hi Kishon,
 
-I found there are several 'lru_add_drain_per_cpu()' worker thread on the
-NOHZ_FULL CPUs. I am just wondering do you have plan to add support for remote
-per-cpu LRU pagevec drain ?
+On Fri, Dec 03, 2021 at 10:36:00AM +0530, Kishon Vijay Abraham I wrote:
+> Hi Kunihiko,
+> 
+> On 01/09/21 10:46 am, Kunihiko Hayashi wrote:
+> > The driver using core_init_notifier, e.g. pcie-tegra194.c, runs according
+> > to the following sequence:
+> > 
+> >     probe()
+> >         dw_pcie_ep_init()
+> > 
+> >     bind()
+> >         dw_pcie_ep_start()
+> >             enable_irq()
+> > 
+> >     (interrupt occurred)
+> >     handler()
+> >         [enable controller]
+> >         dw_pcie_ep_init_complete()
+> >         dw_pcie_ep_init_notify()
+> > 
+> > After receiving an interrupt from RC, the handler enables the controller
+> > and the controller registers can be accessed.
+> > So accessing the registers should do in dw_pcie_ep_init_complete().
+> > 
+> > Currently dw_pcie_ep_init() has functions dw_iatu_detect() and
+> > dw_pcie_ep_find_capability() that include accesses to DWC registers.
+> > As a result, accessing the registers before enabling the controller,
+> > the access will fail.
+> > 
+> > The function dw_pcie_ep_init() shouldn't have any access to DWC registers
+> > if the controller is enabled after calling bind(). This moves access codes
+> > to DBI/iATU registers and depending variables from dw_pcie_ep_init() to
+> > dw_pcie_ep_init_complete().
+> 
+> Ideally pci_epc_create() should be the last step by the controller driver before
+> handing the control to the core EPC framework. Since after this step the EPC
+> framework can start invoking the epc_ops.
+> 
+> Here more stuff is being added to dw_pcie_ep_init_complete() which is required
+> for epc_ops and this could result in aborts for platforms which does not add
+> core_init_notifier.
+> 
+
+Is there a better way to handle this situation? IMO the existing situation is
+messy. Assume that if EP is gonna powered separately by an independent power
+rail not tied to host PCIe domain (that's the typical endpoint device usecase),
+the EP driver will fail to probe due to PHY link not getting stabilized.
+
+So ultimately the board design needs to take care of an extra logic to power the
+EP device after powering the host properly and that's not ideal.
 
 Thanks,
-Xiongfeng
+Mani
 
-On 2022/2/8 18:07, Nicolas Saenz Julienne wrote:
-> This series replaces mm/page_alloc's per-cpu page lists drain mechanism with
-> one that allows accessing the lists remotely. Currently, only a local CPU is
-> permitted to change its per-cpu lists, and it's expected to do so, on-demand,
-> whenever a process demands it by means of queueing a drain task on the local
-> CPU. This causes problems for NOHZ_FULL CPUs and real-time systems that can't
-> take any sort of interruption and to some lesser extent inconveniences idle and
-> virtualised systems.
+> Thanks,
+> Kishon
 > 
-> The new algorithm will atomically switch the pointer to the per-cpu page lists
-> and use RCU to make sure it's not being concurrently used before draining the
-> lists. And its main benefit of is that it fixes the issue for good, avoiding
-> the need for configuration based heuristics or having to modify applications
-> (i.e. using the isolation prctrl being worked by Marcello Tosatti ATM).
-> 
-> All this with minimal performance implications: a page allocation
-> microbenchmark was run on multiple systems and architectures generally showing
-> no performance differences, only the more extreme cases showed a 1-3%
-> degradation. See data below. Needless to say that I'd appreciate if someone
-> could validate my values independently.
-> 
-> The approach has been stress-tested: I forced 100 drains/s while running
-> mmtests' pft in a loop for a full day on multiple machines and archs (arm64,
-> x86_64, ppc64le).
-> 
-> Note that this is not the first attempt at fixing this per-cpu page lists:
->  - The first attempt[1] tried to conditionally change the pagesets locking
->    scheme based the NOHZ_FULL config. It was deemed hard to maintain as the
->    NOHZ_FULL code path would be rarely tested. Also, this only solves the issue
->    for NOHZ_FULL setups, which isn't ideal.
->  - The second[2] unanimously switched the local_locks to per-cpu spinlocks. The
->    performance degradation was too big.
-> 
-> Previous RFC: https://lkml.org/lkml/2021/10/8/793
-> 
-> Thanks!
-> 
-> [1] https://lkml.org/lkml/2021/9/21/599
-> [2] https://lkml.org/lkml/2021/11/3/644
-> 
-> ---
-> 
-> Changes since RFC:
->  - Get rid of aesthetic changes that affected performance
->  - Add more documentation
->  - Add better commit messages
->  - Pass sparse tests
->  - Verify this_cpu_*() usage
->  - Performance measurements
-> 
-> Nicolas Saenz Julienne (2):
->   mm/page_alloc: Access lists in 'struct per_cpu_pages' indirectly
->   mm/page_alloc: Add remote draining support to per-cpu lists
-> 
->  include/linux/mmzone.h |  28 +++++-
->  mm/page_alloc.c        | 212 ++++++++++++++++++++++++++---------------
->  mm/vmstat.c            |   6 +-
->  3 files changed, 162 insertions(+), 84 deletions(-)
-> 
-> 
-> -------------------------Performance results-----------------------------
-> 
-> I'm focusing on mmtests' Page Fault Test (pft), as it's page allocator
-> intensive.
-> 
-> - AMD Daytona Reference System, 2 sockets, AMD EPYC 7742, Zen 2, 64-Core,
->   4 NUMA nodes, x86_64
-> 
-> pft timings:
->                                      vanilla                    rcu
-> Amean     system-1          58.52 (   0.00%)       58.92 *  -0.68%*
-> Amean     system-4          61.00 (   0.00%)       61.41 *  -0.67%*
-> Amean     system-7          61.55 (   0.00%)       61.74 *  -0.30%*
-> Amean     system-12         64.91 (   0.00%)       64.94 *  -0.05%*
-> Amean     system-21         98.80 (   0.00%)       99.92 *  -1.13%*
-> Amean     system-30        147.68 (   0.00%)      145.83 *   1.25%*
-> Amean     system-48        237.04 (   0.00%)      241.29 *  -1.79%*
-> Amean     system-79        286.61 (   0.00%)      283.72 *   1.01%*
-> Amean     system-110       303.40 (   0.00%)      299.91 *   1.15%*
-> Amean     system-128       345.07 (   0.00%)      342.10 *   0.86%*
-> Amean     elapsed-1         61.21 (   0.00%)       61.65 *  -0.71%*
-> Amean     elapsed-4         15.94 (   0.00%)       16.05 *  -0.69%*
-> Amean     elapsed-7          9.24 (   0.00%)        9.28 *  -0.47%*
-> Amean     elapsed-12         5.70 (   0.00%)        5.70 *  -0.07%*
-> Amean     elapsed-21         5.11 (   0.00%)        5.06 *   1.13%*
-> Amean     elapsed-30         5.28 (   0.00%)        5.14 *   2.73%*
-> Amean     elapsed-48         5.28 (   0.00%)        5.24 *   0.74%*
-> Amean     elapsed-79         4.41 (   0.00%)        4.31 *   2.17%*
-> Amean     elapsed-110        3.45 (   0.00%)        3.44 *   0.40%*
-> Amean     elapsed-128        2.75 (   0.00%)        2.75 *  -0.28%*
-> 
-> - AMD Speedway Reference System, 2 sockets, AMD EPYC 7601, Zen 1, 64-core, 8
->   NUMA nodes, x86_64. Lots of variance between tests on this platform. It'll
->   easily swing -+5% on each result. 
-> 
-> pft timings:
->                                      vanilla                    rcu
-> Amean     system-1          69.20 (   0.00%)       66.21 *   4.32%*
-> Amean     system-4          70.79 (   0.00%)       69.01 *   2.52%*
-> Amean     system-7          71.34 (   0.00%)       69.16 *   3.05%*
-> Amean     system-12         74.00 (   0.00%)       72.74 *   1.70%*
-> Amean     system-21         86.01 (   0.00%)       85.70 *   0.36%*
-> Amean     system-30         89.21 (   0.00%)       89.93 *  -0.80%*
-> Amean     system-48         92.39 (   0.00%)       92.43 *  -0.04%*
-> Amean     system-79        120.19 (   0.00%)      121.30 *  -0.92%*
-> Amean     system-110       172.79 (   0.00%)      179.37 *  -3.81%*
-> Amean     system-128       201.70 (   0.00%)      212.57 *  -5.39%*
-> Amean     elapsed-1         72.23 (   0.00%)       69.29 *   4.08%*
-> Amean     elapsed-4         18.69 (   0.00%)       18.28 *   2.20%*
-> Amean     elapsed-7         10.80 (   0.00%)       10.54 *   2.41%*
-> Amean     elapsed-12         6.62 (   0.00%)        6.53 *   1.30%*
-> Amean     elapsed-21         4.68 (   0.00%)        4.69 *  -0.14%*
-> Amean     elapsed-30         3.44 (   0.00%)        3.50 *  -1.66%*
-> Amean     elapsed-48         2.40 (   0.00%)        2.42 *  -1.00%*
-> Amean     elapsed-79         2.05 (   0.00%)        2.09 *  -1.90%*
-> Amean     elapsed-110        1.83 (   0.00%)        1.91 *  -4.60%*
-> Amean     elapsed-128        1.75 (   0.00%)        1.85 *  -5.99%*
-> 
-> - IBM 9006-22C system, 2 sockets, POWER9, 64-Core, 1 NUMA node per cpu,
->   pppc64le.
-> 
-> pft timings:
->                                      vanilla                    rcu
-> Amean     system-1           1.82 (   0.00%)        1.85 *  -1.43%*
-> Amean     system-4           2.18 (   0.00%)        2.22 *  -2.02%*
-> Amean     system-7           3.27 (   0.00%)        3.28 *  -0.15%*
-> Amean     system-12          5.22 (   0.00%)        5.20 *   0.26%*
-> Amean     system-21         10.10 (   0.00%)       10.20 *  -1.00%*
-> Amean     system-30         15.00 (   0.00%)       14.52 *   3.20%*
-> Amean     system-48         26.41 (   0.00%)       25.96 *   1.71%*
-> Amean     system-79         29.35 (   0.00%)       29.70 *  -1.21%*
-> Amean     system-110        24.01 (   0.00%)       23.40 *   2.54%*
-> Amean     system-128        24.57 (   0.00%)       25.32 *  -3.06%*
-> Amean     elapsed-1          1.85 (   0.00%)        1.87 *  -1.28%*
-> Amean     elapsed-4          0.56 (   0.00%)        0.57 *  -1.72%*
-> Amean     elapsed-7          0.51 (   0.00%)        0.50 *   0.07%*
-> Amean     elapsed-12         0.51 (   0.00%)        0.51 *   0.06%*
-> Amean     elapsed-21         0.54 (   0.00%)        0.54 *   0.06%*
-> Amean     elapsed-30         0.54 (   0.00%)        0.53 *   2.22%*
-> Amean     elapsed-48         0.58 (   0.00%)        0.57 *   1.73%*
-> Amean     elapsed-79         0.49 (   0.00%)        0.48 *   0.89%*
-> Amean     elapsed-110        0.37 (   0.00%)        0.37 *  -1.08%*
-> Amean     elapsed-128        0.33 (   0.00%)        0.33 *   0.00%*
-> 
-> - Ampere MtSnow, 1 socket, Neoverse-N1, 80-Cores, 1 NUMA node, arm64.
-> 
-> pft timings:
->                                     vanilla		       rcu
-> Amean     system-1         11.92 (   0.00%)       11.99 *  -0.61%*
-> Amean     system-4         13.13 (   0.00%)       13.09 *   0.31%*
-> Amean     system-7         13.91 (   0.00%)       13.94 *  -0.20%*
-> Amean     system-12        15.77 (   0.00%)       15.69 *   0.48%*
-> Amean     system-21        21.32 (   0.00%)       21.42 *  -0.46%*
-> Amean     system-30        28.58 (   0.00%)       29.12 *  -1.90%*
-> Amean     system-48        47.41 (   0.00%)       46.91 *   1.04%*
-> Amean     system-79        76.76 (   0.00%)       77.16 *  -0.52%*
-> Amean     system-80        77.98 (   0.00%)       78.23 *  -0.32%*
-> Amean     elapsed-1        12.46 (   0.00%)       12.53 *  -0.58%*
-> Amean     elapsed-4         3.47 (   0.00%)        3.46 *   0.34%*
-> Amean     elapsed-7         2.18 (   0.00%)        2.21 *  -1.58%*
-> Amean     elapsed-12        1.41 (   0.00%)        1.42 *  -0.80%*
-> Amean     elapsed-21        1.09 (   0.00%)        1.12 *  -2.60%*
-> Amean     elapsed-30        0.98 (   0.00%)        1.01 *  -3.08%*
-> Amean     elapsed-48        1.08 (   0.00%)        1.10 *  -1.78%*
-> Amean     elapsed-79        1.32 (   0.00%)        1.28 *   2.71%*
-> Amean     elapsed-80        1.32 (   0.00%)        1.28 *   3.23%*
-> 
-> - Dell R430, 2 sockets, Intel Xeon E5-2640 v3, Sandy Bridge, 16-Cores, 2 NUMA
->   nodes, x86_64.
-> 
-> pft timings:
->                                     vanilla		       rcu
-> Amean     system-1         11.10 (   0.00%)       11.07 *   0.24%*
-> Amean     system-3         11.14 (   0.00%)       11.10 *   0.34%*
-> Amean     system-5         11.18 (   0.00%)       11.13 *   0.47%*
-> Amean     system-7         11.21 (   0.00%)       11.17 *   0.38%*
-> Amean     system-12        11.28 (   0.00%)       11.28 (  -0.03%)
-> Amean     system-18        13.24 (   0.00%)       13.25 *  -0.11%*
-> Amean     system-24        17.12 (   0.00%)       17.14 (  -0.13%)
-> Amean     system-30        21.10 (   0.00%)       21.23 *  -0.60%*
-> Amean     system-32        22.31 (   0.00%)       22.47 *  -0.71%*
-> Amean     elapsed-1        11.76 (   0.00%)       11.73 *   0.29%*
-> Amean     elapsed-3         3.93 (   0.00%)        3.93 *   0.17%*
-> Amean     elapsed-5         2.39 (   0.00%)        2.37 *   0.74%*
-> Amean     elapsed-7         1.72 (   0.00%)        1.71 *   0.81%*
-> Amean     elapsed-12        1.02 (   0.00%)        1.03 (  -0.42%)
-> Amean     elapsed-18        1.13 (   0.00%)        1.14 (  -0.18%)
-> Amean     elapsed-24        0.87 (   0.00%)        0.88 *  -0.65%*
-> Amean     elapsed-30        0.77 (   0.00%)        0.78 *  -0.86%*
-> Amean     elapsed-32        0.74 (   0.00%)        0.74 (   0.00%)
-> 
-> - HPE Apollo 70, 2 sockets, Cavium ThunderX2, 128-Cores, 2 NUMA nodes, arm64.
->   NOTE: The test here only goes up to 128 for some reason, although there are
->   256 CPUs. Maybe a mmtests issue? I didn't investigate.
-> 
-> pft timings:
->                                      vanilla		        rcu
-> Amean     system-1           4.42 (   0.00%)        4.36 *   1.29%*
-> Amean     system-4           4.56 (   0.00%)        4.51 *   1.05%*
-> Amean     system-7           4.63 (   0.00%)        4.65 *  -0.42%*
-> Amean     system-12          5.96 (   0.00%)        6.02 *  -1.00%*
-> Amean     system-21         10.97 (   0.00%)       11.01 *  -0.32%*
-> Amean     system-30         16.01 (   0.00%)       16.04 *  -0.19%*
-> Amean     system-48         26.81 (   0.00%)       26.78 *   0.09%*
-> Amean     system-79         30.80 (   0.00%)       30.85 *  -0.16%*
-> Amean     system-110        31.87 (   0.00%)       31.93 *  -0.19%*
-> Amean     system-128        36.27 (   0.00%)       36.31 *  -0.10%*
-> Amean     elapsed-1          4.88 (   0.00%)        4.85 *   0.60%*
-> Amean     elapsed-4          1.27 (   0.00%)        1.26 *   1.00%*
-> Amean     elapsed-7          0.73 (   0.00%)        0.74 *  -0.46%*
-> Amean     elapsed-12         0.55 (   0.00%)        0.55 *   1.09%*
-> Amean     elapsed-21         0.59 (   0.00%)        0.60 *  -0.96%*
-> Amean     elapsed-30         0.60 (   0.00%)        0.60 *   0.28%*
-> Amean     elapsed-48         0.60 (   0.00%)        0.60 *   0.44%*
-> Amean     elapsed-79         0.49 (   0.00%)        0.49 *  -0.07%*
-> Amean     elapsed-110        0.36 (   0.00%)        0.36 *   0.28%*
-> Amean     elapsed-128        0.31 (   0.00%)        0.31 *  -0.43%*
-> 
-> - Raspberry Pi 4, 1 socket, bcm2711, Cortex-A72, 4-Cores, 1 NUMA node, arm64.
-> 
-> pft timings:
->                                    vanilla		      rcu
-> Amean     system-1         0.67 (   0.00%)        0.67 *  -1.25%*
-> Amean     system-3         1.30 (   0.00%)        1.29 *   0.62%*
-> Amean     system-4         1.61 (   0.00%)        1.59 *   0.95%*
-> Amean     elapsed-1        0.71 (   0.00%)        0.72 *  -1.17%*
-> Amean     elapsed-3        0.45 (   0.00%)        0.45 *   0.88%*
-> Amean     elapsed-4        0.42 (   0.00%)        0.42 *   1.19%*
-> 
-> 
+> > 
+> > Cc: Xiaowei Bao <xiaowei.bao@nxp.com>
+> > Cc: Vidya Sagar <vidyas@nvidia.com>
+> > Fixes: 6bfc9c3a2c70 ("PCI: designware-ep: Move the function of getting MSI capability forward")
+> > Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> > Acked-by: Om Prakash Singh <omp@nvidia.com>
+> > Reviewed-by: Vidya Sagar <vidyas@nvidia.com>
+> > ---
+> >  drivers/pci/controller/dwc/pcie-designware-ep.c | 81 +++++++++++++------------
+> >  1 file changed, 41 insertions(+), 40 deletions(-)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> > index 998b698..00ce83c 100644
+> > --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
+> > +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> > @@ -636,16 +636,56 @@ static unsigned int dw_pcie_ep_find_ext_capability(struct dw_pcie *pci, int cap)
+> >  int dw_pcie_ep_init_complete(struct dw_pcie_ep *ep)
+> >  {
+> >  	struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
+> > +	struct dw_pcie_ep_func *ep_func;
+> > +	struct device *dev = pci->dev;
+> >  	unsigned int offset;
+> >  	unsigned int nbars;
+> >  	u8 hdr_type;
+> > +	u8 func_no;
+> > +	void *addr;
+> >  	u32 reg;
+> >  	int i;
+> >  
+> > +	dw_pcie_iatu_detect(pci);
+> > +
+> > +	ep->ib_window_map = devm_kcalloc(dev,
+> > +					 BITS_TO_LONGS(pci->num_ib_windows),
+> > +					 sizeof(long),
+> > +					 GFP_KERNEL);
+> > +	if (!ep->ib_window_map)
+> > +		return -ENOMEM;
+> > +
+> > +	ep->ob_window_map = devm_kcalloc(dev,
+> > +					 BITS_TO_LONGS(pci->num_ob_windows),
+> > +					 sizeof(long),
+> > +					 GFP_KERNEL);
+> > +	if (!ep->ob_window_map)
+> > +		return -ENOMEM;
+> > +
+> > +	addr = devm_kcalloc(dev, pci->num_ob_windows, sizeof(phys_addr_t),
+> > +			    GFP_KERNEL);
+> > +	if (!addr)
+> > +		return -ENOMEM;
+> > +	ep->outbound_addr = addr;
+> > +
+> > +	for (func_no = 0; func_no < ep->epc->max_functions; func_no++) {
+> > +		ep_func = devm_kzalloc(dev, sizeof(*ep_func), GFP_KERNEL);
+> > +		if (!ep_func)
+> > +			return -ENOMEM;
+> > +
+> > +		ep_func->func_no = func_no;
+> > +		ep_func->msi_cap = dw_pcie_ep_find_capability(ep, func_no,
+> > +							      PCI_CAP_ID_MSI);
+> > +		ep_func->msix_cap = dw_pcie_ep_find_capability(ep, func_no,
+> > +							       PCI_CAP_ID_MSIX);
+> > +
+> > +		list_add_tail(&ep_func->list, &ep->func_list);
+> > +	}
+> > +
+> >  	hdr_type = dw_pcie_readb_dbi(pci, PCI_HEADER_TYPE) &
+> >  		   PCI_HEADER_TYPE_MASK;
+> >  	if (hdr_type != PCI_HEADER_TYPE_NORMAL) {
+> > -		dev_err(pci->dev,
+> > +		dev_err(dev,
+> >  			"PCIe controller is not set to EP mode (hdr_type:0x%x)!\n",
+> >  			hdr_type);
+> >  		return -EIO;
+> > @@ -674,8 +714,6 @@ EXPORT_SYMBOL_GPL(dw_pcie_ep_init_complete);
+> >  int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> >  {
+> >  	int ret;
+> > -	void *addr;
+> > -	u8 func_no;
+> >  	struct resource *res;
+> >  	struct pci_epc *epc;
+> >  	struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
+> > @@ -683,7 +721,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> >  	struct platform_device *pdev = to_platform_device(dev);
+> >  	struct device_node *np = dev->of_node;
+> >  	const struct pci_epc_features *epc_features;
+> > -	struct dw_pcie_ep_func *ep_func;
+> >  
+> >  	INIT_LIST_HEAD(&ep->func_list);
+> >  
+> > @@ -705,8 +742,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> >  		}
+> >  	}
+> >  
+> > -	dw_pcie_iatu_detect(pci);
+> > -
+> >  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "addr_space");
+> >  	if (!res)
+> >  		return -EINVAL;
+> > @@ -714,26 +749,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> >  	ep->phys_base = res->start;
+> >  	ep->addr_size = resource_size(res);
+> >  
+> > -	ep->ib_window_map = devm_kcalloc(dev,
+> > -					 BITS_TO_LONGS(pci->num_ib_windows),
+> > -					 sizeof(long),
+> > -					 GFP_KERNEL);
+> > -	if (!ep->ib_window_map)
+> > -		return -ENOMEM;
+> > -
+> > -	ep->ob_window_map = devm_kcalloc(dev,
+> > -					 BITS_TO_LONGS(pci->num_ob_windows),
+> > -					 sizeof(long),
+> > -					 GFP_KERNEL);
+> > -	if (!ep->ob_window_map)
+> > -		return -ENOMEM;
+> > -
+> > -	addr = devm_kcalloc(dev, pci->num_ob_windows, sizeof(phys_addr_t),
+> > -			    GFP_KERNEL);
+> > -	if (!addr)
+> > -		return -ENOMEM;
+> > -	ep->outbound_addr = addr;
+> > -
+> >  	if (pci->link_gen < 1)
+> >  		pci->link_gen = of_pci_get_max_link_speed(np);
+> >  
+> > @@ -750,20 +765,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+> >  	if (ret < 0)
+> >  		epc->max_functions = 1;
+> >  
+> > -	for (func_no = 0; func_no < epc->max_functions; func_no++) {
+> > -		ep_func = devm_kzalloc(dev, sizeof(*ep_func), GFP_KERNEL);
+> > -		if (!ep_func)
+> > -			return -ENOMEM;
+> > -
+> > -		ep_func->func_no = func_no;
+> > -		ep_func->msi_cap = dw_pcie_ep_find_capability(ep, func_no,
+> > -							      PCI_CAP_ID_MSI);
+> > -		ep_func->msix_cap = dw_pcie_ep_find_capability(ep, func_no,
+> > -							       PCI_CAP_ID_MSIX);
+> > -
+> > -		list_add_tail(&ep_func->list, &ep->func_list);
+> > -	}
+> > -
+> >  	if (ep->ops->ep_init)
+> >  		ep->ops->ep_init(ep);
+> >  
+> > 

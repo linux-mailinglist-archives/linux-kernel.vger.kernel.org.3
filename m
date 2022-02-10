@@ -2,347 +2,381 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D6F4B0D75
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C08D74B0D83
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237080AbiBJMVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 07:21:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38048 "EHLO
+        id S241522AbiBJMYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 07:24:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232743AbiBJMVv (ORCPT
+        with ESMTP id S232743AbiBJMYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 07:21:51 -0500
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120045.outbound.protection.outlook.com [40.107.12.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D012621;
-        Thu, 10 Feb 2022 04:21:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T7+kjOmpb6JSeugPGbQEPp7mSIHgMo3/Z7WSC/zLtRm1huNHY3tHUM1iJpK8LlHUfDcehviNLOgd0b7QEpQmK3fVoU0zU3E+e8/Lerl2g+L8sPYfxBjSRI5cRFtQ2I4Jg26P36SrJN20HLwG/TkZZw00ikqxl5E9VOoKaq+L1Qy7iwLOIC53pyz+q3b6DCI78yDSCkLQLDkFaUU9TahYO+58VyMJwK7kV3oX/u40e8vX+NZySFivyKyBqmQs5VigB2f2X0hIHhFFFu1b+bAE+L8pN1aBgz7MFBesgO+LltUjFXld7ONn8M3bCAD+v56K51dsKyTRCdBlBVUeyseVBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=e2mzmLtNkVO8ldhP3VVaX/SD4y8UB5X4HzfyAEmF20o=;
- b=Mwzq1r70jIUxhpBOD/GWMmfwZnrDjrRUd75s6AKrxt4zpY/yu0knijK0mjUOtzE9HjGxYs/9YnqmXLS0Wm28UkhjQxRbieA00ac38wVVAp1uRo6ccG4K28nFdb2iCRLaaS+EOC6oMuFZlthWxDjo32oYCB4btXKf1w9Ogwh/4Wb9oWamh4GnuBjPtcqOktWbWpi1YWxs63N6K6mqS71HKIF2T4+DvvMqhXbdmxvc0bD/1irjr9volHI1FZd+1+cVgMWagjBhBw8S0c7jV54wMQD8d/b0LsntxNZE8q2M9d8FpWprtRQx3g/7vK3ac1XUCiHLb/OUdxE8V4XrN2oJ8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR0P264MB1945.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:16b::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Thu, 10 Feb
- 2022 12:21:45 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c9a2:1db0:5469:54e1]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c9a2:1db0:5469:54e1%9]) with mapi id 15.20.4975.011; Thu, 10 Feb 2022
- 12:21:45 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Aaron Tomlin <atomlin@redhat.com>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>
-CC:     "cl@linux.com" <cl@linux.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "ghalat@redhat.com" <ghalat@redhat.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "void@manifault.com" <void@manifault.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
-Subject: Re: [PATCH v5 06/13] module: Move strict rwx support to a separate
- file
-Thread-Topic: [PATCH v5 06/13] module: Move strict rwx support to a separate
- file
-Thread-Index: AQHYHdcQTlWlgOfxykOmyN1GjoqwnayMtdiA
-Date:   Thu, 10 Feb 2022 12:21:44 +0000
-Message-ID: <a05710d0-3b2c-1405-df44-f1315f8fe765@csgroup.eu>
-References: <20220209170358.3266629-1-atomlin@redhat.com>
- <20220209170358.3266629-7-atomlin@redhat.com>
-In-Reply-To: <20220209170358.3266629-7-atomlin@redhat.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3b2308c8-283d-4650-63b9-08d9ec8fe711
-x-ms-traffictypediagnostic: PR0P264MB1945:EE_
-x-microsoft-antispam-prvs: <PR0P264MB19458E8D9B8561B184108838ED2F9@PR0P264MB1945.FRAP264.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:2150;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4E2wcILya1VqAeutBAIHZDK6/e1dm3Qxm8LcuM4pWv3lJDovN5crxSo/4Y98bbc+DfalkDkvyzt80YErE25veXzuxCCo7z5Wtfrk2iwdqecL3hQUQ+2G1tDkD3z8/mbU5JDCAlLfPdm9bG0v7UQ5zmJ7MCOWtde8wnaN9vB6HKEXYkh9ubuwR50i6OgyZTqxLW9zV3rPLctFdMIeVxGphy+GuI42lET3SfX4OZLiyqupQdG7IWA6R6NLY4anlomCkcS8W7dbZgN4/37tmqEr0fgTXYKdcTIYiOw5PtjG6emltBXuIbErf/230yKszgMNYnyaMUboSDIaOPy4MRGMH3iV6e7bOl2hhuywytkXCDDBsKv6xkM4zPdPErzGkjwAo5cH+oDljbzhyWwuXwDm98ocJ3+RUC+NhEWAJgALmJjNUbHJ/4bDnXQpa4FoumVMxEKk56OU5OBDCWKiwQncuvkY7bwSceIEY2GvSChsrutsPGw5qCahp7ZnrvLKfIlYRMO8Ea2ovz6DWi+eqc/lcRC/ua2e1oxXOsp2WDMZ8/qMn4GKOoI8341Yo0p3jC/GN2CeRAll1i7hWMtbgx5BuRg1RHf4wngws+d/K+APDP3ZRONo+cfgPxMx/Z2XwoPKpJw+8AcLllAR302ZhKrw5frThGjVTDXzlJRUv50lP0EAeLgLoWbB6IKXKHXAvBGHau5Ubaw7zFOzIh9TheFw1fu2JlRi4z5xdrFaEOM18p0sHEZhEa0wXEDRXZ6+VuZDCmCybfzY4uXomujD/R1Ckw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(2906002)(508600001)(122000001)(316002)(38070700005)(86362001)(31696002)(110136005)(38100700002)(5660300002)(66946007)(7416002)(76116006)(54906003)(30864003)(6506007)(6512007)(36756003)(4326008)(66446008)(64756008)(66476007)(31686004)(83380400001)(2616005)(8936002)(26005)(91956017)(6486002)(8676002)(66556008)(71200400001)(44832011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZUpQUVdkOC91QURDc1REbHRwdExEUU10M3NiWFJXSlk4enRDN2FzMmZ5R1NW?=
- =?utf-8?B?UnNjTFRQek9rT0t0REtNeTFqeTh5VzZydjB6MHpNSGZoR05aTDNrakl1UlJh?=
- =?utf-8?B?ZWNnSHp2dEdpdHBEUU1UakJwamVMeXlQNmVqUUVUSU5qcEdLNHh2UlR4Ylh5?=
- =?utf-8?B?elFyVjYvUElCZTNseEhsSjNRei81TlZaYkpDeCtHREY5L2lTYkdBQWZiOXR0?=
- =?utf-8?B?bVQ5TlAyK0xGZXE5cjZWOG0xeG9DUGx0TTc4NWYvMmpwNEh1SzVCZVFXMTU0?=
- =?utf-8?B?Q3I4Lzl1TzNpWVRUREcvOExGWU9tZ1dZNUtTWS9QRmlHL0VIbFM1N3F1Zm1z?=
- =?utf-8?B?NWVYMjdDMnZDOFBaM0M5c09mYmo0NmVWdFBZaHFiRGNUMk95TE91K21mamVa?=
- =?utf-8?B?dVZjcG1OYWJ6VUxWbXd1OHF1Y1U4YVM4UVlFcFVzMWgvVzYzTForamJsYkts?=
- =?utf-8?B?MWJMeDVxSVV3U2U4bHZWWmdabEk0Zlp2c0VSMjAwSm0wWE5Gc29wRi9hbUVo?=
- =?utf-8?B?V1IrM2hOQ1RvYjZ5YjkzdkNya3FYeEFjcnp4aFZKaUFqNHp1N3lxUzRRQ2ha?=
- =?utf-8?B?b1JCdEl6cHJzVTR5dDM2UU1rSm9XYzVpb2VaSDFGamFrd2lCNHFHcWtMT2VQ?=
- =?utf-8?B?WUxCUlA5R0I4clkwZFphUkZlTGdoVDBFbS9EM3plbFBsREtnNkxTaDNrUW9t?=
- =?utf-8?B?MDhTSkhnWmJwWEhOakdYVXc3TDZoK1VHMHdyUVNxSU1uWC9oRndrWFdlUHM3?=
- =?utf-8?B?cFhmSzQxQ2Z4Q1ZVNGhVUzlxYVZxb1E5MUtVMmpSKy8vWFQ4NXlkS1RqVnBl?=
- =?utf-8?B?c2ROUVdNV0FucXFWRCtNci8yUitVbU1MSWdzVmFpUjBWQ1o4dURSeTN0eUkr?=
- =?utf-8?B?SHBTY3pOclFBNVJMY2h1OXoxNzlMaVdPa3ZnSERjdUNtNDg1dGJ3L0dkZVBu?=
- =?utf-8?B?QU9ycHRZdXVReDFJalp6enh3c1Nmc0kvZ2N0RVZIU25COVZjdTM0MmtFbzFS?=
- =?utf-8?B?TGMxcCtuakI5N29mL0pXM1FiSi9WMFVpQkZJTS9zMVJlTWdybXFVS0ZMVG5E?=
- =?utf-8?B?ZlB6UlJRUE1yakZCRUIzYnVRNExNZDNRRlhBUW9xdVBlalBoYlR6LzNoQ1Qw?=
- =?utf-8?B?WThmbHQ1ZGFndlloSyt6S3RuS2U2Z2V0eExxZmpCOWJzSTB0Q3c3R0Z0aWNs?=
- =?utf-8?B?S1hOZ0ttdmR3emNScEEyYnhZaW1zd2dEZ1FRWUlzaFppYW9RUUUzR1V0QWxu?=
- =?utf-8?B?VjJpZlRQQ3h1dDZjSVo0WEN0ekE5VUgrOHpyTTV0WUxGLythZERZZXpsYjN1?=
- =?utf-8?B?QS9pZ2ZYMk5sMHhlR0pkamhwTzRWb1pyS09NSTNlUjVwQWhmM25POW1jKzNC?=
- =?utf-8?B?REp1RXBIWTdkME9CbmJqVUpRczNvUFdvMTA1TDZPUEltOWZmVW9kNnhqYkg4?=
- =?utf-8?B?QlhnTXJoSDloS2tTNWVYdndxUVppc21LcjFnQWZ2b3BPaFNMMHZUWGdrdXc4?=
- =?utf-8?B?NjhNZmtsbTA0a2pvbzVXcWQxazBPSCtHRXVpeXZ5UE44d3hSTHZERUd6bHY5?=
- =?utf-8?B?TWNQUDZSd2dXcnhlSHIwVDR2RXFoQTVKTFFpUjhpRnhLVE5SZGFhMG5vSCtu?=
- =?utf-8?B?VTJjQnNadzM0Yjg0MlZ1M2hPTWIzRkFuTXR0bjF3b1NYYkMyZnM1ell6VjFr?=
- =?utf-8?B?clI4VFZTUmlBNm5obTJqYlI2OXNUeTNWaVVHb1hmdUVCS2ZoeGpnYXNGNktE?=
- =?utf-8?B?ZElxRU5SYVFaU3grMEowbnFZZktzWXVVZzlHR1JHN0tFTjl1UUFncEZPK0lS?=
- =?utf-8?B?OGZuVGg2QlVuUlRhb3llenc5YWxEclJVSUlsbXlMV05FZFJDMGNBWW11Myto?=
- =?utf-8?B?KzN3bzVjNmFVcVZZVmJRRlZrQTRoYXdZbnVWb2FtZ1pVRFB5QU42UDQvWlRO?=
- =?utf-8?B?cjg3YWRWMk9qNEZqb2xnVnk5ejlMbUcwanJxanN5ZDAzbHNwUTlWeGdYNks0?=
- =?utf-8?B?eFV5bFhDSjNWN0NUQURIRm03UjliSlU1VytueWVrTUt2T0wrOXhqZm9OR3JM?=
- =?utf-8?B?aVYvNW1xZHJuSi8vSHZKbzg0dVdMVUJDT0gwREpBMXRyaU1OVnhrd3hTNlNF?=
- =?utf-8?B?RUFMTXZYUS90Rk5KTnpycEY0MFBobzBMR3VUOHE1VWdRa1MwVDgvaGNqYm1D?=
- =?utf-8?B?eG92NzZyTWhuR1NXNlpsOUJwUVVYQ2Q4bjYvWDZGbmIyNEpBRDJudXFKM3Fv?=
- =?utf-8?Q?b3/eCLbymtGeCkXFNCFazCjmbIMflhffNmc3Ft1+Bc=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C1B96FEA311B414FAE7750FB68CB5132@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Thu, 10 Feb 2022 07:24:46 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF830103D;
+        Thu, 10 Feb 2022 04:24:46 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 765BF1F37B;
+        Thu, 10 Feb 2022 12:24:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1644495885; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=V7vGqL9kDHDopSycq2pciR9nESF0U5A0PGhxYvc30uI=;
+        b=riWwkdZpE7Hmmps9kxaMzQN/KCLCB49Qc/n/NOMLqJnWBdcMv6FzI1Pw4eBpJRax003ieS
+        EzOtopdOy8Sm6iG9R8VptFdJ95bCtrt6PxbDxOzvZo3qCA1viSu8lMJcq9bIvngSiW+/Lw
+        LAjLAhcbJzf07JA6l7fkGT3wC2FdfV0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1644495885;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=V7vGqL9kDHDopSycq2pciR9nESF0U5A0PGhxYvc30uI=;
+        b=9gCKWe6PPoWQjCnWeWNAgisnMWt0P1gwCwfbdnvMUJGPMbNvKMuA7jEhF/euOXsivpRF2m
+        k+If1xEHWBisboCg==
+Received: from quack3.suse.cz (jack.udp.ovpn1.nue.suse.de [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C92A0A3B85;
+        Thu, 10 Feb 2022 12:24:43 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 3F68AA05BC; Thu, 10 Feb 2022 13:24:40 +0100 (CET)
+Date:   Thu, 10 Feb 2022 13:24:40 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>,
+        Wu Fengguang <fengguang.wu@intel.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org,
+        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+Subject: Re: [PATCH 02/11] MM: document and polish read-ahead code.
+Message-ID: <20220210122440.vqth5mwsqtv6vjpq@quack3.lan>
+References: <164447124918.23354.17858831070003318849.stgit@noble.brown>
+ <164447147257.23354.2801426518649016278.stgit@noble.brown>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b2308c8-283d-4650-63b9-08d9ec8fe711
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2022 12:21:44.9697
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YGLdszBGgsQe5ersXddKv6aK26yCIxjRamB0GZw3n7fR0B3NLzjdkV+TZLzwX2VG81cDEqj+38KPRDm87Rztl0j7C7m3eizdkOZVf7ybDU4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB1945
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <164447147257.23354.2801426518649016278.stgit@noble.brown>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDA5LzAyLzIwMjIgw6AgMTg6MDMsIEFhcm9uIFRvbWxpbiBhIMOpY3JpdMKgOg0KPiBO
-byBmdW5jdGlvbmFsIGNoYW5nZS4NCj4gDQo+IFRoaXMgcGF0Y2ggbWlncmF0ZXMgY29kZSB0aGF0
-IG1ha2VzIG1vZHVsZSB0ZXh0DQo+IGFuZCByb2RhdGEgbWVtb3J5IHJlYWQtb25seSBhbmQgbm9u
-LXRleHQgbWVtb3J5DQo+IG5vbi1leGVjdXRhYmxlIGZyb20gY29yZSBtb2R1bGUgY29kZSBpbnRv
-DQo+IGtlcm5lbC9tb2R1bGUvc3RyaWN0X3J3eC5jLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogQWFy
-b24gVG9tbGluIDxhdG9tbGluQHJlZGhhdC5jb20+DQo+IC0tLQ0KPiAgIGtlcm5lbC9tb2R1bGUv
-TWFrZWZpbGUgICAgIHwgIDEgKw0KPiAgIGtlcm5lbC9tb2R1bGUvaW50ZXJuYWwuaCAgIHwgMzgg
-KysrKysrKysrKysrKysrDQo+ICAga2VybmVsL21vZHVsZS9tYWluLmMgICAgICAgfCA5NyArLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiAgIGtlcm5lbC9tb2R1bGUvc3Ry
-aWN0X3J3eC5jIHwgODQgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQoNClRoaXMg
-ZmlsZSBnZW5lcmF0ZXMgbWFueSBjaGVja3BhdGNoIFdBUk5JTkdzIGFuZCBDSEVDS3MuDQoNCkRv
-bid0IHdvcnJ5IHRvbyBtdWNoIGFib3V0IHRoZSBvbmVzIHRlbGxpbmcgeW91IHRvIHVzZSBXQVJO
-X09OKCkgaW5zdGVhZCANCm9mIEJVR19PTigpIGZvciB0aGUgdGltZSBiZWluZywgYnV0IG90aGVy
-cyBzaG91bGQgYmUgaGFuZGxlZC4NCg0KPiAgIDQgZmlsZXMgY2hhbmdlZCwgMTI0IGluc2VydGlv
-bnMoKyksIDk2IGRlbGV0aW9ucygtKQ0KPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBrZXJuZWwvbW9k
-dWxlL3N0cmljdF9yd3guYw0KPiANCj4gZGlmZiAtLWdpdCBhL2tlcm5lbC9tb2R1bGUvTWFrZWZp
-bGUgYi9rZXJuZWwvbW9kdWxlL01ha2VmaWxlDQo+IGluZGV4IGZjNmQ3YTA1M2E2Mi4uOGYyODU3
-ZDliYTFlIDEwMDY0NA0KPiAtLS0gYS9rZXJuZWwvbW9kdWxlL01ha2VmaWxlDQo+ICsrKyBiL2tl
-cm5lbC9tb2R1bGUvTWFrZWZpbGUNCj4gQEAgLTEwLDQgKzEwLDUgQEAgb2JqLSQoQ09ORklHX01P
-RFVMRV9TSUdfRk9STUFUKSArPSBzaWduYXR1cmUubw0KPiAgIGlmZGVmIENPTkZJR19NT0RVTEVT
-DQo+ICAgb2JqLSQoQ09ORklHX0xJVkVQQVRDSCkgKz0gbGl2ZXBhdGNoLm8NCj4gICBvYmotJChD
-T05GSUdfTU9EVUxFU19UUkVFX0xPT0tVUCkgKz0gdHJlZV9sb29rdXAubw0KPiArb2JqLSQoQ09O
-RklHX1NUUklDVF9NT0RVTEVfUldYKSArPSBzdHJpY3Rfcnd4Lm8NCj4gICBlbmRpZg0KPiBkaWZm
-IC0tZ2l0IGEva2VybmVsL21vZHVsZS9pbnRlcm5hbC5oIGIva2VybmVsL21vZHVsZS9pbnRlcm5h
-bC5oDQo+IGluZGV4IDA4YjZiZTAzN2I3Mi4uOTkyMDQ0NDdjZTg2IDEwMDY0NA0KPiAtLS0gYS9r
-ZXJuZWwvbW9kdWxlL2ludGVybmFsLmgNCj4gKysrIGIva2VybmVsL21vZHVsZS9pbnRlcm5hbC5o
-DQo+IEBAIC0yMSw2ICsyMSwxNyBAQA0KPiAgICNkZWZpbmUgTU9EVUxFX0ZMQUdTX0JVRl9TSVpF
-IChUQUlOVF9GTEFHU19DT1VOVCArIDQpDQo+ICAgI2RlZmluZSBNT0RVTEVfU0VDVF9SRUFEX1NJ
-WkUgKDMgLyogIjB4IiwgIlxuIiAqLyArIChCSVRTX1BFUl9MT05HIC8gNCkpDQo+ICAgDQo+ICsv
-Kg0KPiArICogTW9kdWxlcycgc2VjdGlvbnMgd2lsbCBiZSBhbGlnbmVkIG9uIHBhZ2UgYm91bmRh
-cmllcw0KPiArICogdG8gZW5zdXJlIGNvbXBsZXRlIHNlcGFyYXRpb24gb2YgY29kZSBhbmQgZGF0
-YSwgYnV0DQo+ICsgKiBvbmx5IHdoZW4gQ09ORklHX0FSQ0hfSEFTX1NUUklDVF9NT0RVTEVfUldY
-PXkNCj4gKyAqLw0KPiArI2lmZGVmIENPTkZJR19BUkNIX0hBU19TVFJJQ1RfTU9EVUxFX1JXWA0K
-PiArIyBkZWZpbmUgZGVidWdfYWxpZ24oWCkgQUxJR04oWCwgUEFHRV9TSVpFKQ0KDQpZb3UgY2Fu
-IHVzZSBQQUdFX0FMSUdOKCkgaW5zdGVhZC4NCg0KPiArI2Vsc2UNCj4gKyMgZGVmaW5lIGRlYnVn
-X2FsaWduKFgpIChYKQ0KPiArI2VuZGlmDQo+ICsNCj4gICBleHRlcm4gc3RydWN0IG11dGV4IG1v
-ZHVsZV9tdXRleDsNCj4gICBleHRlcm4gc3RydWN0IGxpc3RfaGVhZCBtb2R1bGVzOw0KPiAgIA0K
-PiBAQCAtMTI0LDMgKzEzNSwzMCBAQCBzdGF0aWMgc3RydWN0IG1vZHVsZSAqbW9kX2ZpbmQodW5z
-aWduZWQgbG9uZyBhZGRyKQ0KPiAgIAlyZXR1cm4gTlVMTDsNCj4gICB9DQo+ICAgI2VuZGlmIC8q
-IENPTkZJR19NT0RVTEVTX1RSRUVfTE9PS1VQICovDQo+ICsNCj4gKyNpZmRlZiBDT05GSUdfQVJD
-SF9IQVNfU1RSSUNUX01PRFVMRV9SV1gNCg0KVGhpcyAjaWZkZWYgaXMgbm90IG5lZWRlZCwgZnJv
-Yl90ZXh0KCkgYWx3YXlzIGV4aXN0cy4NCg0KPiArdm9pZCBmcm9iX3RleHQoY29uc3Qgc3RydWN0
-IG1vZHVsZV9sYXlvdXQgKmxheW91dCwgaW50ICgqc2V0X21lbW9yeSkodW5zaWduZWQgbG9uZyBz
-dGFydCwNCj4gKwkgICAgICAgaW50IG51bV9wYWdlcykpOw0KPiArI2VuZGlmIC8qIENPTkZJR19B
-UkNIX0hBU19TVFJJQ1RfTU9EVUxFX1JXWCAqLw0KPiArDQo+ICsjaWZkZWYgQ09ORklHX1NUUklD
-VF9NT0RVTEVfUldYDQo+ICt2b2lkIGZyb2Jfcm9kYXRhKGNvbnN0IHN0cnVjdCBtb2R1bGVfbGF5
-b3V0ICpsYXlvdXQsDQo+ICsJCQlpbnQgKCpzZXRfbWVtb3J5KSh1bnNpZ25lZCBsb25nIHN0YXJ0
-LCBpbnQgbnVtX3BhZ2VzKSk7DQo+ICt2b2lkIGZyb2Jfcm9fYWZ0ZXJfaW5pdChjb25zdCBzdHJ1
-Y3QgbW9kdWxlX2xheW91dCAqbGF5b3V0LA0KPiArCQkJICAgICAgIGludCAoKnNldF9tZW1vcnkp
-KHVuc2lnbmVkIGxvbmcgc3RhcnQsIGludCBudW1fcGFnZXMpKTsNCj4gK3ZvaWQgZnJvYl93cml0
-YWJsZV9kYXRhKGNvbnN0IHN0cnVjdCBtb2R1bGVfbGF5b3V0ICpsYXlvdXQsDQo+ICsJCQkgICAg
-ICAgaW50ICgqc2V0X21lbW9yeSkodW5zaWduZWQgbG9uZyBzdGFydCwgaW50IG51bV9wYWdlcykp
-Ow0KPiArdm9pZCBtb2R1bGVfZW5hYmxlX3JvKGNvbnN0IHN0cnVjdCBtb2R1bGUgKm1vZCwgYm9v
-bCBhZnRlcl9pbml0KTsNCj4gK3ZvaWQgbW9kdWxlX2VuYWJsZV9ueChjb25zdCBzdHJ1Y3QgbW9k
-dWxlICptb2QpOw0KPiAraW50IG1vZHVsZV9lbmZvcmNlX3J3eF9zZWN0aW9ucyhFbGZfRWhkciAq
-aGRyLCBFbGZfU2hkciAqc2VjaGRycywNCj4gKwkJCQkgICAgICAgY2hhciAqc2Vjc3RyaW5ncywg
-c3RydWN0IG1vZHVsZSAqbW9kKTsNCj4gKw0KPiArI2Vsc2UgLyogIUNPTkZJR19TVFJJQ1RfTU9E
-VUxFX1JXWCAqLw0KPiArc3RhdGljIHZvaWQgbW9kdWxlX2VuYWJsZV9ueChjb25zdCBzdHJ1Y3Qg
-bW9kdWxlICptb2QpIHsgfQ0KPiArc3RhdGljIHZvaWQgbW9kdWxlX2VuYWJsZV9ybyhjb25zdCBz
-dHJ1Y3QgbW9kdWxlICptb2QsIGJvb2wgYWZ0ZXJfaW5pdCkge30NCj4gK3N0YXRpYyBpbnQgbW9k
-dWxlX2VuZm9yY2Vfcnd4X3NlY3Rpb25zKEVsZl9FaGRyICpoZHIsIEVsZl9TaGRyICpzZWNoZHJz
-LA0KPiArCQkJCSAgICAgICBjaGFyICpzZWNzdHJpbmdzLCBzdHJ1Y3QgbW9kdWxlICptb2QpDQo+
-ICt7DQo+ICsJcmV0dXJuIDA7DQo+ICt9DQo+ICsjZW5kaWYgLyogQ09ORklHX1NUUklDVF9NT0RV
-TEVfUldYICovDQo+IGRpZmYgLS1naXQgYS9rZXJuZWwvbW9kdWxlL21haW4uYyBiL2tlcm5lbC9t
-b2R1bGUvbWFpbi5jDQo+IGluZGV4IGY3MzNhNzE5YzY1ZC4uYWJkZWRjMTVmNGYxIDEwMDY0NA0K
-PiAtLS0gYS9rZXJuZWwvbW9kdWxlL21haW4uYw0KPiArKysgYi9rZXJuZWwvbW9kdWxlL21haW4u
-Yw0KPiBAQCAtNjMsMTcgKzYzLDYgQEANCj4gICAjZGVmaW5lIENSRUFURV9UUkFDRV9QT0lOVFMN
-Cj4gICAjaW5jbHVkZSA8dHJhY2UvZXZlbnRzL21vZHVsZS5oPg0KPiAgIA0KPiAtLyoNCj4gLSAq
-IE1vZHVsZXMnIHNlY3Rpb25zIHdpbGwgYmUgYWxpZ25lZCBvbiBwYWdlIGJvdW5kYXJpZXMNCj4g
-LSAqIHRvIGVuc3VyZSBjb21wbGV0ZSBzZXBhcmF0aW9uIG9mIGNvZGUgYW5kIGRhdGEsIGJ1dA0K
-PiAtICogb25seSB3aGVuIENPTkZJR19BUkNIX0hBU19TVFJJQ1RfTU9EVUxFX1JXWD15DQo+IC0g
-Ki8NCj4gLSNpZmRlZiBDT05GSUdfQVJDSF9IQVNfU1RSSUNUX01PRFVMRV9SV1gNCj4gLSMgZGVm
-aW5lIGRlYnVnX2FsaWduKFgpIEFMSUdOKFgsIFBBR0VfU0laRSkNCj4gLSNlbHNlDQo+IC0jIGRl
-ZmluZSBkZWJ1Z19hbGlnbihYKSAoWCkNCj4gLSNlbmRpZg0KPiAtDQo+ICAgLyoNCj4gICAgKiBN
-dXRleCBwcm90ZWN0czoNCj4gICAgKiAxKSBMaXN0IG9mIG1vZHVsZXMgKGFsc28gc2FmZWx5IHJl
-YWRhYmxlIHdpdGggcHJlZW1wdF9kaXNhYmxlKSwNCj4gQEAgLTE4MTUsNyArMTgwNCw3IEBAIHN0
-YXRpYyB2b2lkIG1vZF9zeXNmc190ZWFyZG93bihzdHJ1Y3QgbW9kdWxlICptb2QpDQo+ICAgICog
-d2hldGhlciB3ZSBhcmUgc3RyaWN0Lg0KPiAgICAqLw0KPiAgICNpZmRlZiBDT05GSUdfQVJDSF9I
-QVNfU1RSSUNUX01PRFVMRV9SV1gNCj4gLXN0YXRpYyB2b2lkIGZyb2JfdGV4dChjb25zdCBzdHJ1
-Y3QgbW9kdWxlX2xheW91dCAqbGF5b3V0LA0KPiArdm9pZCBmcm9iX3RleHQoY29uc3Qgc3RydWN0
-IG1vZHVsZV9sYXlvdXQgKmxheW91dCwNCj4gICAJCSAgICAgIGludCAoKnNldF9tZW1vcnkpKHVu
-c2lnbmVkIGxvbmcgc3RhcnQsIGludCBudW1fcGFnZXMpKQ0KDQpUaGUgYWxpZ25tZW50IG9mIHRo
-ZSBzZWNvbmQgbGluZSBpcyBub3QgY29ycmVjdC4NCg0KPiAgIHsNCj4gICAJQlVHX09OKCh1bnNp
-Z25lZCBsb25nKWxheW91dC0+YmFzZSAmIChQQUdFX1NJWkUtMSkpOw0KPiBAQCAtMTgzMyw5MCAr
-MTgyMiw2IEBAIHN0YXRpYyB2b2lkIG1vZHVsZV9lbmFibGVfeChjb25zdCBzdHJ1Y3QgbW9kdWxl
-ICptb2QpDQo+ICAgc3RhdGljIHZvaWQgbW9kdWxlX2VuYWJsZV94KGNvbnN0IHN0cnVjdCBtb2R1
-bGUgKm1vZCkgeyB9DQo+ICAgI2VuZGlmIC8qIENPTkZJR19BUkNIX0hBU19TVFJJQ1RfTU9EVUxF
-X1JXWCAqLw0KPiAgIA0KPiAtI2lmZGVmIENPTkZJR19TVFJJQ1RfTU9EVUxFX1JXWA0KPiAtc3Rh
-dGljIHZvaWQgZnJvYl9yb2RhdGEoY29uc3Qgc3RydWN0IG1vZHVsZV9sYXlvdXQgKmxheW91dCwN
-Cj4gLQkJCWludCAoKnNldF9tZW1vcnkpKHVuc2lnbmVkIGxvbmcgc3RhcnQsIGludCBudW1fcGFn
-ZXMpKQ0KPiAtew0KPiAtCUJVR19PTigodW5zaWduZWQgbG9uZylsYXlvdXQtPmJhc2UgJiAoUEFH
-RV9TSVpFLTEpKTsNCj4gLQlCVUdfT04oKHVuc2lnbmVkIGxvbmcpbGF5b3V0LT50ZXh0X3NpemUg
-JiAoUEFHRV9TSVpFLTEpKTsNCj4gLQlCVUdfT04oKHVuc2lnbmVkIGxvbmcpbGF5b3V0LT5yb19z
-aXplICYgKFBBR0VfU0laRS0xKSk7DQo+IC0Jc2V0X21lbW9yeSgodW5zaWduZWQgbG9uZylsYXlv
-dXQtPmJhc2UgKyBsYXlvdXQtPnRleHRfc2l6ZSwNCj4gLQkJICAgKGxheW91dC0+cm9fc2l6ZSAt
-IGxheW91dC0+dGV4dF9zaXplKSA+PiBQQUdFX1NISUZUKTsNCj4gLX0NCj4gLQ0KPiAtc3RhdGlj
-IHZvaWQgZnJvYl9yb19hZnRlcl9pbml0KGNvbnN0IHN0cnVjdCBtb2R1bGVfbGF5b3V0ICpsYXlv
-dXQsDQo+IC0JCQkJaW50ICgqc2V0X21lbW9yeSkodW5zaWduZWQgbG9uZyBzdGFydCwgaW50IG51
-bV9wYWdlcykpDQo+IC17DQo+IC0JQlVHX09OKCh1bnNpZ25lZCBsb25nKWxheW91dC0+YmFzZSAm
-IChQQUdFX1NJWkUtMSkpOw0KPiAtCUJVR19PTigodW5zaWduZWQgbG9uZylsYXlvdXQtPnJvX3Np
-emUgJiAoUEFHRV9TSVpFLTEpKTsNCj4gLQlCVUdfT04oKHVuc2lnbmVkIGxvbmcpbGF5b3V0LT5y
-b19hZnRlcl9pbml0X3NpemUgJiAoUEFHRV9TSVpFLTEpKTsNCj4gLQlzZXRfbWVtb3J5KCh1bnNp
-Z25lZCBsb25nKWxheW91dC0+YmFzZSArIGxheW91dC0+cm9fc2l6ZSwNCj4gLQkJICAgKGxheW91
-dC0+cm9fYWZ0ZXJfaW5pdF9zaXplIC0gbGF5b3V0LT5yb19zaXplKSA+PiBQQUdFX1NISUZUKTsN
-Cj4gLX0NCj4gLQ0KPiAtc3RhdGljIHZvaWQgZnJvYl93cml0YWJsZV9kYXRhKGNvbnN0IHN0cnVj
-dCBtb2R1bGVfbGF5b3V0ICpsYXlvdXQsDQo+IC0JCQkgICAgICAgaW50ICgqc2V0X21lbW9yeSko
-dW5zaWduZWQgbG9uZyBzdGFydCwgaW50IG51bV9wYWdlcykpDQo+IC17DQo+IC0JQlVHX09OKCh1
-bnNpZ25lZCBsb25nKWxheW91dC0+YmFzZSAmIChQQUdFX1NJWkUtMSkpOw0KPiAtCUJVR19PTigo
-dW5zaWduZWQgbG9uZylsYXlvdXQtPnJvX2FmdGVyX2luaXRfc2l6ZSAmIChQQUdFX1NJWkUtMSkp
-Ow0KPiAtCUJVR19PTigodW5zaWduZWQgbG9uZylsYXlvdXQtPnNpemUgJiAoUEFHRV9TSVpFLTEp
-KTsNCj4gLQlzZXRfbWVtb3J5KCh1bnNpZ25lZCBsb25nKWxheW91dC0+YmFzZSArIGxheW91dC0+
-cm9fYWZ0ZXJfaW5pdF9zaXplLA0KPiAtCQkgICAobGF5b3V0LT5zaXplIC0gbGF5b3V0LT5yb19h
-ZnRlcl9pbml0X3NpemUpID4+IFBBR0VfU0hJRlQpOw0KPiAtfQ0KPiAtDQo+IC1zdGF0aWMgdm9p
-ZCBtb2R1bGVfZW5hYmxlX3JvKGNvbnN0IHN0cnVjdCBtb2R1bGUgKm1vZCwgYm9vbCBhZnRlcl9p
-bml0KQ0KPiAtew0KPiAtCWlmICghcm9kYXRhX2VuYWJsZWQpDQo+IC0JCXJldHVybjsNCj4gLQ0K
-PiAtCXNldF92bV9mbHVzaF9yZXNldF9wZXJtcyhtb2QtPmNvcmVfbGF5b3V0LmJhc2UpOw0KPiAt
-CXNldF92bV9mbHVzaF9yZXNldF9wZXJtcyhtb2QtPmluaXRfbGF5b3V0LmJhc2UpOw0KPiAtCWZy
-b2JfdGV4dCgmbW9kLT5jb3JlX2xheW91dCwgc2V0X21lbW9yeV9ybyk7DQo+IC0NCj4gLQlmcm9i
-X3JvZGF0YSgmbW9kLT5jb3JlX2xheW91dCwgc2V0X21lbW9yeV9ybyk7DQo+IC0JZnJvYl90ZXh0
-KCZtb2QtPmluaXRfbGF5b3V0LCBzZXRfbWVtb3J5X3JvKTsNCj4gLQlmcm9iX3JvZGF0YSgmbW9k
-LT5pbml0X2xheW91dCwgc2V0X21lbW9yeV9ybyk7DQo+IC0NCj4gLQlpZiAoYWZ0ZXJfaW5pdCkN
-Cj4gLQkJZnJvYl9yb19hZnRlcl9pbml0KCZtb2QtPmNvcmVfbGF5b3V0LCBzZXRfbWVtb3J5X3Jv
-KTsNCj4gLX0NCj4gLQ0KPiAtc3RhdGljIHZvaWQgbW9kdWxlX2VuYWJsZV9ueChjb25zdCBzdHJ1
-Y3QgbW9kdWxlICptb2QpDQo+IC17DQo+IC0JZnJvYl9yb2RhdGEoJm1vZC0+Y29yZV9sYXlvdXQs
-IHNldF9tZW1vcnlfbngpOw0KPiAtCWZyb2Jfcm9fYWZ0ZXJfaW5pdCgmbW9kLT5jb3JlX2xheW91
-dCwgc2V0X21lbW9yeV9ueCk7DQo+IC0JZnJvYl93cml0YWJsZV9kYXRhKCZtb2QtPmNvcmVfbGF5
-b3V0LCBzZXRfbWVtb3J5X254KTsNCj4gLQlmcm9iX3JvZGF0YSgmbW9kLT5pbml0X2xheW91dCwg
-c2V0X21lbW9yeV9ueCk7DQo+IC0JZnJvYl93cml0YWJsZV9kYXRhKCZtb2QtPmluaXRfbGF5b3V0
-LCBzZXRfbWVtb3J5X254KTsNCj4gLX0NCj4gLQ0KPiAtc3RhdGljIGludCBtb2R1bGVfZW5mb3Jj
-ZV9yd3hfc2VjdGlvbnMoRWxmX0VoZHIgKmhkciwgRWxmX1NoZHIgKnNlY2hkcnMsDQo+IC0JCQkJ
-ICAgICAgIGNoYXIgKnNlY3N0cmluZ3MsIHN0cnVjdCBtb2R1bGUgKm1vZCkNCj4gLXsNCj4gLQlj
-b25zdCB1bnNpZ25lZCBsb25nIHNoZl93eCA9IFNIRl9XUklURXxTSEZfRVhFQ0lOU1RSOw0KPiAt
-CWludCBpOw0KPiAtDQo+IC0JZm9yIChpID0gMDsgaSA8IGhkci0+ZV9zaG51bTsgaSsrKSB7DQo+
-IC0JCWlmICgoc2VjaGRyc1tpXS5zaF9mbGFncyAmIHNoZl93eCkgPT0gc2hmX3d4KSB7DQo+IC0J
-CQlwcl9lcnIoIiVzOiBzZWN0aW9uICVzIChpbmRleCAlZCkgaGFzIGludmFsaWQgV1JJVEV8RVhF
-QyBmbGFnc1xuIiwNCj4gLQkJCQltb2QtPm5hbWUsIHNlY3N0cmluZ3MgKyBzZWNoZHJzW2ldLnNo
-X25hbWUsIGkpOw0KPiAtCQkJcmV0dXJuIC1FTk9FWEVDOw0KPiAtCQl9DQo+IC0JfQ0KPiAtDQo+
-IC0JcmV0dXJuIDA7DQo+IC19DQo+IC0NCj4gLSNlbHNlIC8qICFDT05GSUdfU1RSSUNUX01PRFVM
-RV9SV1ggKi8NCj4gLXN0YXRpYyB2b2lkIG1vZHVsZV9lbmFibGVfbngoY29uc3Qgc3RydWN0IG1v
-ZHVsZSAqbW9kKSB7IH0NCj4gLXN0YXRpYyB2b2lkIG1vZHVsZV9lbmFibGVfcm8oY29uc3Qgc3Ry
-dWN0IG1vZHVsZSAqbW9kLCBib29sIGFmdGVyX2luaXQpIHt9DQo+IC1zdGF0aWMgaW50IG1vZHVs
-ZV9lbmZvcmNlX3J3eF9zZWN0aW9ucyhFbGZfRWhkciAqaGRyLCBFbGZfU2hkciAqc2VjaGRycywN
-Cj4gLQkJCQkgICAgICAgY2hhciAqc2Vjc3RyaW5ncywgc3RydWN0IG1vZHVsZSAqbW9kKQ0KPiAt
-ew0KPiAtCXJldHVybiAwOw0KPiAtfQ0KPiAtI2VuZGlmIC8qICBDT05GSUdfU1RSSUNUX01PRFVM
-RV9SV1ggKi8NCj4gLQ0KPiAgIHZvaWQgX193ZWFrIG1vZHVsZV9tZW1mcmVlKHZvaWQgKm1vZHVs
-ZV9yZWdpb24pDQo+ICAgew0KPiAgIAkvKg0KPiBkaWZmIC0tZ2l0IGEva2VybmVsL21vZHVsZS9z
-dHJpY3Rfcnd4LmMgYi9rZXJuZWwvbW9kdWxlL3N0cmljdF9yd3guYw0KPiBuZXcgZmlsZSBtb2Rl
-IDEwMDY0NA0KPiBpbmRleCAwMDAwMDAwMDAwMDAuLjE5MzMyNzIwNTZjNw0KPiAtLS0gL2Rldi9u
-dWxsDQo+ICsrKyBiL2tlcm5lbC9tb2R1bGUvc3RyaWN0X3J3eC5jDQo+IEBAIC0wLDAgKzEsODQg
-QEANCj4gKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9yLWxhdGVyDQo+ICsv
-Kg0KPiArICogTW9kdWxlIHN0cmljdCByd3gNCj4gKyAqDQo+ICsgKiBDb3B5cmlnaHQgKEMpIDIw
-MTUgUnVzdHkgUnVzc2VsbA0KPiArICovDQo+ICsNCj4gKyNpbmNsdWRlIDxsaW51eC9tb2R1bGUu
-aD4NCj4gKyNpbmNsdWRlIDxsaW51eC92bWFsbG9jLmg+DQo+ICsjaW5jbHVkZSA8bGludXgvc2V0
-X21lbW9yeS5oPg0KPiArI2luY2x1ZGUgImludGVybmFsLmgiDQo+ICsNCj4gK3ZvaWQgZnJvYl9y
-b2RhdGEoY29uc3Qgc3RydWN0IG1vZHVsZV9sYXlvdXQgKmxheW91dCwNCj4gKwkJCWludCAoKnNl
-dF9tZW1vcnkpKHVuc2lnbmVkIGxvbmcgc3RhcnQsIGludCBudW1fcGFnZXMpKQ0KPiArew0KPiAr
-CUJVR19PTigodW5zaWduZWQgbG9uZylsYXlvdXQtPmJhc2UgJiAoUEFHRV9TSVpFLTEpKTsNCg0K
-Q291bGQgYmU6DQoNCglCVUdfT04oIVBBR0VfQUxJR05FRChsYXlvdXQtPmJhc2UpKTsNCg0KDQpT
-YW1lIGZvciBhbGwgb3RoZXJzLg0KDQo+ICsJQlVHX09OKCh1bnNpZ25lZCBsb25nKWxheW91dC0+
-dGV4dF9zaXplICYgKFBBR0VfU0laRS0xKSk7DQo+ICsJQlVHX09OKCh1bnNpZ25lZCBsb25nKWxh
-eW91dC0+cm9fc2l6ZSAmIChQQUdFX1NJWkUtMSkpOw0KPiArCXNldF9tZW1vcnkoKHVuc2lnbmVk
-IGxvbmcpbGF5b3V0LT5iYXNlICsgbGF5b3V0LT50ZXh0X3NpemUsDQo+ICsJCSAgIChsYXlvdXQt
-PnJvX3NpemUgLSBsYXlvdXQtPnRleHRfc2l6ZSkgPj4gUEFHRV9TSElGVCk7DQo+ICt9DQo+ICsN
-Cj4gK3ZvaWQgZnJvYl9yb19hZnRlcl9pbml0KGNvbnN0IHN0cnVjdCBtb2R1bGVfbGF5b3V0ICps
-YXlvdXQsDQo+ICsJCQkJaW50ICgqc2V0X21lbW9yeSkodW5zaWduZWQgbG9uZyBzdGFydCwgaW50
-IG51bV9wYWdlcykpDQo+ICt7DQo+ICsJQlVHX09OKCh1bnNpZ25lZCBsb25nKWxheW91dC0+YmFz
-ZSAmIChQQUdFX1NJWkUtMSkpOw0KPiArCUJVR19PTigodW5zaWduZWQgbG9uZylsYXlvdXQtPnJv
-X3NpemUgJiAoUEFHRV9TSVpFLTEpKTsNCj4gKwlCVUdfT04oKHVuc2lnbmVkIGxvbmcpbGF5b3V0
-LT5yb19hZnRlcl9pbml0X3NpemUgJiAoUEFHRV9TSVpFLTEpKTsNCj4gKwlzZXRfbWVtb3J5KCh1
-bnNpZ25lZCBsb25nKWxheW91dC0+YmFzZSArIGxheW91dC0+cm9fc2l6ZSwNCj4gKwkJICAgKGxh
-eW91dC0+cm9fYWZ0ZXJfaW5pdF9zaXplIC0gbGF5b3V0LT5yb19zaXplKSA+PiBQQUdFX1NISUZU
-KTsNCj4gK30NCj4gKw0KPiArdm9pZCBmcm9iX3dyaXRhYmxlX2RhdGEoY29uc3Qgc3RydWN0IG1v
-ZHVsZV9sYXlvdXQgKmxheW91dCwNCj4gKwkJCSAgICAgICBpbnQgKCpzZXRfbWVtb3J5KSh1bnNp
-Z25lZCBsb25nIHN0YXJ0LCBpbnQgbnVtX3BhZ2VzKSkNCj4gK3sNCj4gKwlCVUdfT04oKHVuc2ln
-bmVkIGxvbmcpbGF5b3V0LT5iYXNlICYgKFBBR0VfU0laRS0xKSk7DQo+ICsJQlVHX09OKCh1bnNp
-Z25lZCBsb25nKWxheW91dC0+cm9fYWZ0ZXJfaW5pdF9zaXplICYgKFBBR0VfU0laRS0xKSk7DQo+
-ICsJQlVHX09OKCh1bnNpZ25lZCBsb25nKWxheW91dC0+c2l6ZSAmIChQQUdFX1NJWkUtMSkpOw0K
-PiArCXNldF9tZW1vcnkoKHVuc2lnbmVkIGxvbmcpbGF5b3V0LT5iYXNlICsgbGF5b3V0LT5yb19h
-ZnRlcl9pbml0X3NpemUsDQo+ICsJCSAgIChsYXlvdXQtPnNpemUgLSBsYXlvdXQtPnJvX2FmdGVy
-X2luaXRfc2l6ZSkgPj4gUEFHRV9TSElGVCk7DQo+ICt9DQo+ICsNCj4gK3ZvaWQgbW9kdWxlX2Vu
-YWJsZV9ybyhjb25zdCBzdHJ1Y3QgbW9kdWxlICptb2QsIGJvb2wgYWZ0ZXJfaW5pdCkNCj4gK3sN
-Cj4gKwlpZiAoIXJvZGF0YV9lbmFibGVkKQ0KPiArCQlyZXR1cm47DQo+ICsNCj4gKwlzZXRfdm1f
-Zmx1c2hfcmVzZXRfcGVybXMobW9kLT5jb3JlX2xheW91dC5iYXNlKTsNCj4gKwlzZXRfdm1fZmx1
-c2hfcmVzZXRfcGVybXMobW9kLT5pbml0X2xheW91dC5iYXNlKTsNCj4gKwlmcm9iX3RleHQoJm1v
-ZC0+Y29yZV9sYXlvdXQsIHNldF9tZW1vcnlfcm8pOw0KPiArDQo+ICsJZnJvYl9yb2RhdGEoJm1v
-ZC0+Y29yZV9sYXlvdXQsIHNldF9tZW1vcnlfcm8pOw0KPiArCWZyb2JfdGV4dCgmbW9kLT5pbml0
-X2xheW91dCwgc2V0X21lbW9yeV9ybyk7DQo+ICsJZnJvYl9yb2RhdGEoJm1vZC0+aW5pdF9sYXlv
-dXQsIHNldF9tZW1vcnlfcm8pOw0KPiArDQo+ICsJaWYgKGFmdGVyX2luaXQpDQo+ICsJCWZyb2Jf
-cm9fYWZ0ZXJfaW5pdCgmbW9kLT5jb3JlX2xheW91dCwgc2V0X21lbW9yeV9ybyk7DQo+ICt9DQo+
-ICsNCj4gK3ZvaWQgbW9kdWxlX2VuYWJsZV9ueChjb25zdCBzdHJ1Y3QgbW9kdWxlICptb2QpDQo+
-ICt7DQo+ICsJZnJvYl9yb2RhdGEoJm1vZC0+Y29yZV9sYXlvdXQsIHNldF9tZW1vcnlfbngpOw0K
-PiArCWZyb2Jfcm9fYWZ0ZXJfaW5pdCgmbW9kLT5jb3JlX2xheW91dCwgc2V0X21lbW9yeV9ueCk7
-DQo+ICsJZnJvYl93cml0YWJsZV9kYXRhKCZtb2QtPmNvcmVfbGF5b3V0LCBzZXRfbWVtb3J5X254
-KTsNCj4gKwlmcm9iX3JvZGF0YSgmbW9kLT5pbml0X2xheW91dCwgc2V0X21lbW9yeV9ueCk7DQo+
-ICsJZnJvYl93cml0YWJsZV9kYXRhKCZtb2QtPmluaXRfbGF5b3V0LCBzZXRfbWVtb3J5X254KTsN
-Cj4gK30NCj4gKw0KPiAraW50IG1vZHVsZV9lbmZvcmNlX3J3eF9zZWN0aW9ucyhFbGZfRWhkciAq
-aGRyLCBFbGZfU2hkciAqc2VjaGRycywNCj4gKwkJCQkgICAgICAgY2hhciAqc2Vjc3RyaW5ncywg
-c3RydWN0IG1vZHVsZSAqbW9kKQ0KPiArew0KPiArCWNvbnN0IHVuc2lnbmVkIGxvbmcgc2hmX3d4
-ID0gU0hGX1dSSVRFfFNIRl9FWEVDSU5TVFI7DQo+ICsJaW50IGk7DQo+ICsNCj4gKwlmb3IgKGkg
-PSAwOyBpIDwgaGRyLT5lX3NobnVtOyBpKyspIHsNCj4gKwkJaWYgKChzZWNoZHJzW2ldLnNoX2Zs
-YWdzICYgc2hmX3d4KSA9PSBzaGZfd3gpIHsNCj4gKwkJCXByX2VycigiJXM6IHNlY3Rpb24gJXMg
-KGluZGV4ICVkKSBoYXMgaW52YWxpZCBXUklURXxFWEVDIGZsYWdzXG4iLA0KPiArCQkJCW1vZC0+
-bmFtZSwgc2Vjc3RyaW5ncyArIHNlY2hkcnNbaV0uc2hfbmFtZSwgaSk7DQo+ICsJCQlyZXR1cm4g
-LUVOT0VYRUM7DQo+ICsJCX0NCj4gKwl9DQo+ICsNCj4gKwlyZXR1cm4gMDsNCj4gK30=
+Hi Neil!
+
+On Thu 10-02-22 16:37:52, NeilBrown wrote:
+> Add some "big-picture" documentation for read-ahead and polish the code
+> to make it fit this documentation.
+> 
+> The meaning of ->async_size is clarified to match its name.
+> i.e. Any request to ->readahead() has a sync part and an async part.
+> The caller will wait for the sync pages to complete, but will not wait
+> for the async pages.  The first async page is still marked PG_readahead
+
+So I don't think this is how the code was meant. My understanding of
+readahead comes from a comment:
+
+/*
+ * On-demand readahead design.
+ *
+....
+
+in mm/readahead.c. The ra->size is how many pages should be read.
+ra->async_size is the "lookahead size" meaning that we should place a
+marker (PageReadahead) at "ra->size - ra->async_size" to trigger next
+readahead.
+
+> 
+> - in try_context_readahead(), the async_sync is set correctly rather
+>   than being set to 1.  Prior to Commit 2cad40180197 ("readahead: make
+>   context readahead more conservative") it was set to ra->size which
+>   is not correct (that implies no sync component).  As this was too
+>   high and caused problems it was reduced to 1, again incorrect but less
+>   problematic.  The setting provided with this patch does not restore
+>   those problems, and is now not arbitrary.
+
+I agree the 1 there looks strange as it effectively discards all the logic
+handling the lookahead size. I agree with the tweak there but I would do
+this behavioral change as a separate commit since it can have performance
+implications.
+
+> - The calculation of ->async_size in the initial_readahead section of
+>   ondemand_readahead() now makes sense - it is zero if the chosen
+>   size does not exceed the requested size.  This means that we will not
+>   set the PG_readahead flag in this case, but as the requested size
+>   has not been satisfied we can expect a subsequent read ahead request
+>   any way.
+
+So I agree that setting of ->async_size to ->size in initial_readahead
+section does not make great sence but if you look a bit below into readit
+section, you will notice the ->async_size is overwritten there to something
+meaninful. So I think the code actually does something sensible, maybe it
+could be written in a more readable way.
+ 
+> Note that the current function names page_cache_sync_ra() and
+> page_cache_async_ra() are misleading.  All ra request are partly sync
+> and partly async, so either part can be empty.
+
+The meaning of these names IMO is:
+page_cache_sync_ra() - tell readahead that we currently need a page
+ractl->_index and would prefer req_count pages fetched ahead.
+
+page_cache_async_ra() - called when we hit the lookahead marker to give
+opportunity to readahead code to prefetch more pages.
+
+> A page_cache_sync_ra() request will usually set ->async_size non-zero,
+> implying it is not all synchronous.
+> When a non-zero req_count is passed to page_cache_async_ra(), the
+> implication is that some prefix of the request is synchronous, though
+> the calculation made there is incorrect - I haven't tried to fix it.
+> 
+> Signed-off-by: NeilBrown <neilb@suse.de>
+
+								Honza
+
+
+> ---
+>  Documentation/core-api/mm-api.rst |   19 ++++++-
+>  Documentation/filesystems/vfs.rst |   16 ++++--
+>  include/linux/fs.h                |    9 +++
+>  mm/readahead.c                    |  103 ++++++++++++++++++++++++++++++++++++-
+>  4 files changed, 135 insertions(+), 12 deletions(-)
+> 
+> diff --git a/Documentation/core-api/mm-api.rst b/Documentation/core-api/mm-api.rst
+> index 395835f9289f..f5b2f92822c8 100644
+> --- a/Documentation/core-api/mm-api.rst
+> +++ b/Documentation/core-api/mm-api.rst
+> @@ -58,15 +58,30 @@ Virtually Contiguous Mappings
+>  File Mapping and Page Cache
+>  ===========================
+>  
+> -.. kernel-doc:: mm/readahead.c
+> -   :export:
+> +Filemap
+> +-------
+>  
+>  .. kernel-doc:: mm/filemap.c
+>     :export:
+>  
+> +Readahead
+> +---------
+> +
+> +.. kernel-doc:: mm/readahead.c
+> +   :doc: Readahead Overview
+> +
+> +.. kernel-doc:: mm/readahead.c
+> +   :export:
+> +
+> +Writeback
+> +---------
+> +
+>  .. kernel-doc:: mm/page-writeback.c
+>     :export:
+>  
+> +Truncate
+> +--------
+> +
+>  .. kernel-doc:: mm/truncate.c
+>     :export:
+>  
+> diff --git a/Documentation/filesystems/vfs.rst b/Documentation/filesystems/vfs.rst
+> index bf5c48066fac..b4a0baa46dcc 100644
+> --- a/Documentation/filesystems/vfs.rst
+> +++ b/Documentation/filesystems/vfs.rst
+> @@ -806,12 +806,16 @@ cache in your filesystem.  The following members are defined:
+>  	object.  The pages are consecutive in the page cache and are
+>  	locked.  The implementation should decrement the page refcount
+>  	after starting I/O on each page.  Usually the page will be
+> -	unlocked by the I/O completion handler.  If the filesystem decides
+> -	to stop attempting I/O before reaching the end of the readahead
+> -	window, it can simply return.  The caller will decrement the page
+> -	refcount and unlock the remaining pages for you.  Set PageUptodate
+> -	if the I/O completes successfully.  Setting PageError on any page
+> -	will be ignored; simply unlock the page if an I/O error occurs.
+> +	unlocked by the I/O completion handler.  The set of pages are
+> +	divided into some sync pages followed by some async pages,
+> +	rac->ra->async_size gives the number of async pages.  The
+> +	filesystem should attempt to read all sync pages but may decide
+> +	to stop once it reaches the async pages.  If it does decide to
+> +	stop attempting I/O, it can simply return.  The caller will
+> +	remove the remaining pages from the address space, unlock them
+> +	and decrement the page refcount.  Set PageUptodate if the I/O
+> +	completes successfully.  Setting PageError on any page will be
+> +	ignored; simply unlock the page if an I/O error occurs.
+>  
+>  ``readpages``
+>  	called by the VM to read pages associated with the address_space
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index e2d892b201b0..8b5c486bd4a2 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -930,10 +930,15 @@ struct fown_struct {
+>   * struct file_ra_state - Track a file's readahead state.
+>   * @start: Where the most recent readahead started.
+>   * @size: Number of pages read in the most recent readahead.
+> - * @async_size: Start next readahead when this many pages are left.
+> - * @ra_pages: Maximum size of a readahead request.
+> + * @async_size: Numer of pages that were/are not needed immediately
+> + *      and so were/are genuinely "ahead".  Start next readahead when
+> + *      the first of these pages is accessed.
+> + * @ra_pages: Maximum size of a readahead request, copied from the bdi.
+>   * @mmap_miss: How many mmap accesses missed in the page cache.
+>   * @prev_pos: The last byte in the most recent read request.
+> + *
+> + * When this structure is passed to ->readahead(), the "most recent"
+> + * readahead means the current readahead.
+>   */
+>  struct file_ra_state {
+>  	pgoff_t start;
+> diff --git a/mm/readahead.c b/mm/readahead.c
+> index cf0dcf89eb69..c44b2957f59f 100644
+> --- a/mm/readahead.c
+> +++ b/mm/readahead.c
+> @@ -8,6 +8,105 @@
+>   *		Initial version.
+>   */
+>  
+> +/**
+> + * DOC: Readahead Overview
+> + *
+> + * Readahead is used to read content into the page cache before it is
+> + * explicitly requested by the application.  Readahead only ever
+> + * attempts to read pages that are not yet in the page cache.  If a
+> + * page is present but not up-to-date, readahead will not try to read
+> + * it. In that case a simple ->readpage() will be requested.
+> + *
+> + * Readahead is triggered when an application read request (whether a
+> + * systemcall or a page fault) finds that the requested page is not in
+> + * the page cache, or that it is in the page cache and has the
+> + * %PG_readahead flag set.  This flag indicates that the page was loaded
+> + * as part of a previous read-ahead request and now that it has been
+> + * accessed, it is time for the next read-ahead.
+> + *
+> + * Each readahead request is partly synchronous read, and partly async
+> + * read-ahead.  This is reflected in the struct file_ra_state which
+> + * contains ->size being to total number of pages, and ->async_size
+> + * which is the number of pages in the async section.  The first page in
+> + * this async section will have %PG_readahead set as a trigger for a
+> + * subsequent read ahead.  Once a series of sequential reads has been
+> + * established, there should be no need for a synchronous component and
+> + * all read ahead request will be fully asynchronous.
+> + *
+> + * When either of the triggers causes a readahead, three numbers need to
+> + * be determined: the start of the region, the size of the region, and
+> + * the size of the async tail.
+> + *
+> + * The start of the region is simply the first page address at or after
+> + * the accessed address, which is not currently populated in the page
+> + * cache.  This is found with a simple search in the page cache.
+> + *
+> + * The size of the async tail is determined by subtracting the size that
+> + * was explicitly requested from the determined request size, unless
+> + * this would be less than zero - then zero is used.  NOTE THIS
+> + * CALCULATION IS WRONG WHEN THE START OF THE REGION IS NOT THE ACCESSED
+> + * PAGE.
+> + *
+> + * The size of the region is normally determined from the size of the
+> + * previous readahead which loaded the preceding pages.  This may be
+> + * discovered from the struct file_ra_state for simple sequential reads,
+> + * or from examining the state of the page cache when multiple
+> + * sequential reads are interleaved.  Specifically: where the readahead
+> + * was triggered by the %PG_readahead flag, the size of the previous
+> + * readahead is assumed to be the number of pages from the triggering
+> + * page to the start of the new readahead.  In these cases, the size of
+> + * the previous readahead is scaled, often doubled, for the new
+> + * readahead, though see get_next_ra_size() for details.
+> + *
+> + * If the size of the previous read cannot be determined, the number of
+> + * preceding pages in the page cache is used to estimate the size of
+> + * a previous read.  This estimate could easily be misled by random
+> + * reads being coincidentally adjacent, so it is ignored unless it is
+> + * larger than the current request, and it is not scaled up, unless it
+> + * is at the start of file.
+> + *
+> + * In general read ahead is accelerated at the start of the file, as
+> + * reads from there are often sequential.  There are other minor
+> + * adjustments to the read ahead size in various special cases and these
+> + * are best discovered by reading the code.
+> + *
+> + * The above calculation determines the readahead, to which any requested
+> + * read size may be added.
+> + *
+> + * Readahead requests are sent to the filesystem using the ->readahead()
+> + * address space operation, for which mpage_readahead() is a canonical
+> + * implementation.  ->readahead() should normally initiate reads on all
+> + * pages, but may fail to read any or all pages without causing an IO
+> + * error.  The page cache reading code will issue a ->readpage() request
+> + * for any page which ->readahead() does not provided, and only an error
+> + * from this will be final.
+> + *
+> + * ->readahead() will generally call readahead_page() repeatedly to get
+> + * each page from those prepared for read ahead.  It may fail to read a
+> + * page by:
+> + *
+> + * * not calling readahead_page() sufficiently many times, effectively
+> + *   ignoring some pages, as might be appropriate if the path to
+> + *   storage is congested.
+> + *
+> + * * failing to actually submit a read request for a given page,
+> + *   possibly due to insufficient resources, or
+> + *
+> + * * getting an error during subsequent processing of a request.
+> + *
+> + * In the last two cases, the page should be unlocked to indicate that
+> + * the read attempt has failed.  In the first case the page will be
+> + * unlocked by the caller.
+> + *
+> + * Those pages not in the final ``async_size`` of the request should be
+> + * considered to be important and ->readahead() should not fail them due
+> + * to congestion or temporary resource unavailability, but should wait
+> + * for necessary resources (e.g.  memory or indexing information) to
+> + * become available.  Pages in the final ``async_size`` may be
+> + * considered less urgent and failure to read them is more acceptable.
+> + * They will eventually be read individually using ->readpage().
+> + */
+> +
+>  #include <linux/kernel.h>
+>  #include <linux/dax.h>
+>  #include <linux/gfp.h>
+> @@ -426,7 +525,7 @@ static int try_context_readahead(struct address_space *mapping,
+>  
+>  	ra->start = index;
+>  	ra->size = min(size + req_size, max);
+> -	ra->async_size = 1;
+> +	ra->async_size = ra->size - req_size;
+>  
+>  	return 1;
+>  }
+> @@ -527,7 +626,7 @@ static void ondemand_readahead(struct readahead_control *ractl,
+>  initial_readahead:
+>  	ra->start = index;
+>  	ra->size = get_init_ra_size(req_size, max_pages);
+> -	ra->async_size = ra->size > req_size ? ra->size - req_size : ra->size;
+> +	ra->async_size = ra->size > req_size ? ra->size - req_size : 0;
+>  
+>  readit:
+>  	/*
+> 
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

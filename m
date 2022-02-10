@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015CA4B1A7E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 598D84B1A85
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346395AbiBKAfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:35:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60756 "EHLO
+        id S1346417AbiBKAh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:37:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245125AbiBKAfn (ORCPT
+        with ESMTP id S242949AbiBKAh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:35:43 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D685F66
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:35:43 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id o3so7353855qtm.12
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:35:43 -0800 (PST)
+        Thu, 10 Feb 2022 19:37:56 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFF15F7C;
+        Thu, 10 Feb 2022 16:37:56 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id s18so9531390ioa.12;
+        Thu, 10 Feb 2022 16:37:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=OWAdmxyB++0+PrjBMyb2j1q4M+ZTDvPBI87BwMKOTA4=;
-        b=px25tVfseTRg17nKrinckLpm5Os6T2EDwYc8LKgshVBbe8wsdoAH40zqblIKerCD/M
-         9FOLPx46bt7sHkinZB7cbxFBdikM66T7mIE2f+XeWCQEEWgZ6+Fj8c60iMtssJ2j4Ax5
-         ywQwibJ3q+gTnIvO+B0epbOGU2k7wcFwtAmB2Ekl9ZcADK2LwleSSxyJRs3DD/O5DZ2q
-         3TtJYkbVmKfY7d2ve4Ep5xreuUGke1oZrOtsnTBOvbkyt9qrnwapvEabYRk+An2u5fDB
-         srQ7MLPu2N9T8Fk0fsc3+eu95bT6srOmeEd1PY3YKp7ljCULaG+YIorAkRi025pE/HtS
-         At7Q==
+        bh=YsSFVcBAVgAnh1p0qtI8V/Jpa4hlZLllbwLcaFPQgA0=;
+        b=cW/5wKGiWXoUhwkDkZDHsCqrs3nultWGlDM8mzcIOR/k2uTAprKe5yszATQTNPCSCJ
+         1m7THR5JF2seGAiygdS0fr24QyEZT0sgAQ9wB5PCP4TWpuejgB2a01Q0MvyEJuc1shdA
+         8CJ4yWoIsRObMajqGrLb7XTjEVviIfaKIgFnmab7Rbb4qJmhUzcNdYqczakRU0Ci90pn
+         HqP+vbPkC+SeNc5JD+FFLVP2GkIQ8WDQIRlDpIQzZo52mMn00OCewffUksZ8Aol+2Bi+
+         OejfdElRAWRhWleKV+UcqqDm0Zc49ACLla4SRERHQMkPyydvud7vDMi/NBzJxhFT+wlg
+         2qjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OWAdmxyB++0+PrjBMyb2j1q4M+ZTDvPBI87BwMKOTA4=;
-        b=Nqair/vDeS2BUuKINeYHkwBe78SI351hrXzh/AMoNbldp6hcS9CA8MWJ3vOOe0Tegp
-         rrUk0+sWHcPXBmCaWv1VrQnLaz1sE9Bqes5TT8gug6T4GGSnq0D3M4WakkHIEpIEDTmz
-         jawHYWnCQF0c+ZuqCBOwjxx1gSLa37Q7ZIOuWtI9daXZqD7GbBHgHHQuQFBSkUDaNKOV
-         zDWMwMXtcpxaOrd3qTaQWZChzEW2qtRfoqF9FooSqy9AuwxWkuQB6QDZ76HDVYOl/whZ
-         ZCJWOMe3no0XTQZGaNlnpAIcgLn0hXBFloQEAIt3z1Tsv4NOilhpg0pufYSmu7YaTmLL
-         mfNQ==
-X-Gm-Message-State: AOAM533zG5zuN1evAY5B2mKOsLNkeaT/1CfjbK4NV05k46qH7zAf1OUW
-        Blq0NAv1vKoz6myCjSVeko4=
-X-Google-Smtp-Source: ABdhPJwKE/7L+78ImyHSzKItwQ+7D0kCNRZ6HRgstwY/P0UGJdT1+mnItTy7cbAEdrMnsxIjkAmO9Q==
-X-Received: by 2002:ac8:5747:: with SMTP id 7mr6794649qtx.95.1644539742833;
-        Thu, 10 Feb 2022 16:35:42 -0800 (PST)
+        bh=YsSFVcBAVgAnh1p0qtI8V/Jpa4hlZLllbwLcaFPQgA0=;
+        b=2ZjnqgCD3j0TMjvn6h8UpEim5/VZECiOdeXMUy5SO7D+BRAeklrVmpMSxZxaEF6WOa
+         UhbsHMa301YRH9W2lgs2Gkb/VSTP5ft5zwnnIoAJIVOj4Km4B0eXCPpJRTGSSt02g1eD
+         CL0DpRETnK3Td4zHyxCAhLsJDrGSeze5aFjNb5WuLgnAvGlnA1noShbVW21zXPJSP5YX
+         wK/Qwhq01XmsdGwP9+Lnd1b2ugUUdE7bS7Dh/ZAl/RyD7sEyVMeZY8V9Tahpu5Y/DGXt
+         m4Z+/JD8f6F6l/SAwhPp9FI71RYBu62NXBvJ0MMd8CVSlT19mTE/8CC/hBLrfJS5N5Z1
+         yQ0w==
+X-Gm-Message-State: AOAM530SkE1r4qzasOEXBvdAJEN5FVpyC9ke9Lh5dttACyK2KfTuwrXj
+        +2hDICgxkWTDz3BTZQoBUqg=
+X-Google-Smtp-Source: ABdhPJw313nFWHa7NqEf6BSTSrIQf9t0LekjW6QyePAevB7Ed9CZMq3DGQ+dll3RTz0cTf9zJfAbpA==
+X-Received: by 2002:a6b:d80c:: with SMTP id y12mr4955845iob.31.1644539875809;
+        Thu, 10 Feb 2022 16:37:55 -0800 (PST)
 Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id k13sm11581386qko.45.2022.02.10.16.35.42
+        by smtp.gmail.com with ESMTPSA id w11sm11664522ill.46.2022.02.10.16.37.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 16:35:42 -0800 (PST)
+        Thu, 10 Feb 2022 16:37:55 -0800 (PST)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -62,10 +62,20 @@ To:     Yury Norov <yury.norov@gmail.com>,
         Nicholas Piggin <npiggin@gmail.com>,
         Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
         Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 47/49] nodemask: add num_node_state_eq()
-Date:   Thu, 10 Feb 2022 14:49:31 -0800
-Message-Id: <20220210224933.379149-48-yury.norov@gmail.com>
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        John Garry <john.garry@huawei.com>,
+        Ian Rogers <irogers@google.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 48/49] tools: bitmap: sync bitmap_weight
+Date:   Thu, 10 Feb 2022 14:49:32 -0800
+Message-Id: <20220210224933.379149-49-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220210224933.379149-1-yury.norov@gmail.com>
 References: <20220210224933.379149-1-yury.norov@gmail.com>
@@ -81,47 +91,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Page allocator uses num_node_state() to compare number of nodes with a
-given number. The underlying code calls bitmap_weight(), and we can do
-it more efficiently with num_node_state_eq because conditional nodes_weight
-may stop traversing the nodemask earlier, as soon as condition is (or is
-not) met.
+Pull bitmap_weight_{cmp,eq,gt,ge,lt,le} from mother kernel and
+use where applicable.
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- include/linux/nodemask.h | 5 +++++
- mm/page_alloc.c          | 2 +-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ tools/include/linux/bitmap.h | 44 ++++++++++++++++++++++++++++++++++++
+ tools/lib/bitmap.c           | 20 ++++++++++++++++
+ tools/perf/util/pmu.c        |  2 +-
+ 3 files changed, 65 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
-index 197598e075e9..c5014dbf3cce 100644
---- a/include/linux/nodemask.h
-+++ b/include/linux/nodemask.h
-@@ -466,6 +466,11 @@ static inline int num_node_state(enum node_states state)
- 	return nodes_weight(node_states[state]);
+diff --git a/tools/include/linux/bitmap.h b/tools/include/linux/bitmap.h
+index ea97804d04d4..29bf54996a84 100644
+--- a/tools/include/linux/bitmap.h
++++ b/tools/include/linux/bitmap.h
+@@ -12,6 +12,8 @@
+ 	unsigned long name[BITS_TO_LONGS(bits)]
+ 
+ int __bitmap_weight(const unsigned long *bitmap, int bits);
++int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int bits,
++			 unsigned int num);
+ void __bitmap_or(unsigned long *dst, const unsigned long *bitmap1,
+ 		 const unsigned long *bitmap2, int bits);
+ int __bitmap_and(unsigned long *dst, const unsigned long *bitmap1,
+@@ -68,6 +70,48 @@ static inline int bitmap_weight(const unsigned long *src, unsigned int nbits)
+ 	return __bitmap_weight(src, nbits);
  }
  
-+static inline int num_node_state_eq(enum node_states state, int num)
++static __always_inline
++int bitmap_weight_cmp(const unsigned long *src, unsigned int nbits, int num)
 +{
-+	return nodes_weight_eq(node_states[state], num);
++	if ((unsigned int)num > nbits)
++		return -num;
++
++	if (small_const_nbits(nbits))
++		return hweight_long(*src & BITMAP_LAST_WORD_MASK(nbits)) - num;
++
++	return __bitmap_weight_cmp(src, nbits, num);
 +}
 +
- #define for_each_node_state(__node, __state) \
- 	for_each_node_mask((__node), node_states[__state])
++static __always_inline
++bool bitmap_weight_eq(const unsigned long *src, unsigned int nbits, int num)
++{
++	return bitmap_weight_cmp(src, nbits, num) == 0;
++}
++
++static __always_inline
++bool bitmap_weight_gt(const unsigned long *src, unsigned int nbits, int num)
++{
++	return bitmap_weight_cmp(src, nbits, num) > 0;
++}
++
++static __always_inline
++bool bitmap_weight_ge(const unsigned long *src, unsigned int nbits, int num)
++{
++	return bitmap_weight_cmp(src, nbits, num - 1) > 0;
++}
++
++static __always_inline
++bool bitmap_weight_lt(const unsigned long *src, unsigned int nbits, int num)
++{
++	return bitmap_weight_cmp(src, nbits, num - 1) <= 0;
++}
++
++static __always_inline
++bool bitmap_weight_le(const unsigned long *src, unsigned int nbits, int num)
++{
++	return bitmap_weight_cmp(src, nbits, num) <= 0;
++}
++
+ static inline void bitmap_or(unsigned long *dst, const unsigned long *src1,
+ 			     const unsigned long *src2, unsigned int nbits)
+ {
+diff --git a/tools/lib/bitmap.c b/tools/lib/bitmap.c
+index db466ef7be9d..06e58fee8523 100644
+--- a/tools/lib/bitmap.c
++++ b/tools/lib/bitmap.c
+@@ -18,6 +18,26 @@ int __bitmap_weight(const unsigned long *bitmap, int bits)
+ 	return w;
+ }
  
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index cface1d38093..897e64b66ca4 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -8434,7 +8434,7 @@ void __init page_alloc_init(void)
- 	int ret;
- 
- #ifdef CONFIG_NUMA
--	if (num_node_state(N_MEMORY) == 1)
-+	if (num_node_state_eq(N_MEMORY, 1))
- 		hashdist = 0;
- #endif
- 
++int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int bits, int num)
++{
++	unsigned int k, w, lim = bits / BITS_PER_LONG;
++
++	for (k = 0, w = 0; k < lim; k++) {
++		if (w + bits - k * BITS_PER_LONG < num)
++			goto out;
++
++		w += hweight_long(bitmap[k]);
++
++		if (w > num)
++			goto out;
++	}
++
++	if (bits % BITS_PER_LONG)
++		w += hweight_long(bitmap[k] & BITMAP_LAST_WORD_MASK(bits));
++out:
++	return w - num;
++}
++
+ void __bitmap_or(unsigned long *dst, const unsigned long *bitmap1,
+ 		 const unsigned long *bitmap2, int bits)
+ {
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index 8dfbba15aeb8..2c26cdd7f9b0 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -1314,7 +1314,7 @@ static int pmu_config_term(const char *pmu_name,
+ 	 */
+ 	if (term->type_val == PARSE_EVENTS__TERM_TYPE_NUM) {
+ 		if (term->no_value &&
+-		    bitmap_weight(format->bits, PERF_PMU_FORMAT_BITS) > 1) {
++		    bitmap_weight_gt(format->bits, PERF_PMU_FORMAT_BITS, 1)) {
+ 			if (err) {
+ 				parse_events_error__handle(err, term->err_val,
+ 					   strdup("no value assigned for term"),
 -- 
 2.32.0
 

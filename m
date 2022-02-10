@@ -2,148 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C0D4B0CE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:57:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9AD34B0CE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 12:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235858AbiBJL5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 06:57:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50986 "EHLO
+        id S235431AbiBJL5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 06:57:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236181AbiBJL52 (ORCPT
+        with ESMTP id S234984AbiBJL5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 06:57:28 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AD6262F;
-        Thu, 10 Feb 2022 03:57:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644494248; x=1676030248;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aUDTUwtDlGMi21r3TDkZxoQ2hVhLGhZaFoI/YDySAPc=;
-  b=D8ZRPRpTTwN5kYrlOdAwljpuSS1ZDXZye+DognHDF2najUMPY9vitIcD
-   HtI7iRXQ6JOMnmQcVj95ZSiByeJ7n/YCzNMszLauijCDoIF00V+824FLZ
-   EGtOVyEcv105cWUHeQzoPaOzUr3mynbAdg3mFbf+pgMQHBkduutrkPydm
-   8gxb3edFoob/xjMj8rrCxm0ckJGux9K97M1aa9l96vfCKb4xM58hn0Fvx
-   HKECrZ1O5f/LLlU4RY/JnL5qpxgb4hrl2+5Kb1yYsxxSDA19y3001GgYg
-   irELzoKmnf5FtyiX/He/mD1qK1IaVqhbMI9Lujf2sk8QJeQnCkiYVy9oC
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="249225612"
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="249225612"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 03:57:27 -0800
-X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
-   d="scan'208";a="541577635"
-Received: from chenyu-dev.sh.intel.com (HELO chenyu-dev) ([10.239.158.61])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 03:57:25 -0800
-Date:   Thu, 10 Feb 2022 19:56:53 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     intel-wired-lan@osuosl.org, Len Brown <len.brown@intel.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Todd Brandt <todd.e.brandt@intel.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [Intel-wired-lan] [PATCH] e1000e: Print PHY register address
- when MDI read/write fails
-Message-ID: <20220210115653.GA53223@chenyu-dev>
-References: <20220209234302.50833-1-yu.c.chen@intel.com>
- <c496b425-7e8a-a0d9-b27a-990b54743a01@molgen.mpg.de>
+        Thu, 10 Feb 2022 06:57:13 -0500
+Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.142.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F542260C;
+        Thu, 10 Feb 2022 03:57:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
+  t=1644494235; x=1645099035;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=exKlbmYv/oyaqwWImyuDqeBArqspuLQJo/KP2mwUT2Q=;
+  b=06fY/4V9CSAU65CApJGt5tF80u8JCZcPrM5H6CVwKlyPLkwdLBCOU67V
+   hhZB2hEURIuQfbkCUBGEI0rt7RwB4xJ515ej32E3ZqU5hh1uVtpPq+Wh2
+   gzUgUMrgTup4HNo/aWt4A6GlmPa1r9NzNkXRfwdELVclu3rdpbHSRBfia
+   s=;
+Received: from mail-mw2nam12lp2042.outbound.protection.outlook.com (HELO NAM12-MW2-obe.outbound.protection.outlook.com) ([104.47.66.42])
+  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 11:57:13 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c5Qi5KiesyH9nSO8vYr6P68to/85gB1JGk+HhHKBXQlSlIOlWt4DHYEeiGb6WV4Bai1kt0KwlHXFUHRD3bBkjFbWQXIM6ljE/sMfePY4h3zleNaFULNgrD5HApkUJbkaLgK4WjAAfgG1YRs09EGBh9d1dG1rBsm/rcwjDil9Zm5CXZxWzj3Ph9cH63v5e8RbVDGdAgUh6v3Z18/YEvhEE+DdoofJiJv8EKpj5zb5r+3TaStoArfCu0k5lGUUFpjvQg5Om9N5PFtdXL4VDR+zK7Yr4tKc7ZOv+T9ifSIzGg2g86elyImoYOzlsYm6Ect4cgCPhtpbT5nNl4FUbrtMyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=exKlbmYv/oyaqwWImyuDqeBArqspuLQJo/KP2mwUT2Q=;
+ b=IV7OBlYRCxQiOUhIwcbRzSuCh92SszGUnbTNT4BWEwxxRpGrdGRlsXUFJgekJ3QR2vw3JQRkg2USnSdAH2T/3Jc4LzqEIXxYEAhskXYDgi8PWdjWB54oA1Q8ZVB9n68Ox5Wek0sgD7liFtEKXCxyqfniwIeeCM24cEMCgP22KS/pFXyXI2w2wF7HLlyaCRe0/BHtpfMrBMXkfTMa5paMaQiRWao9KLkZA1+iNfophtaQukPp/du5F4lSZF78/PRvd6mNt2bmvz1nJDmSdQ6HdWiOxnJgVY3USI1RZVUmzCMsfHa6GGxWVjL506JlFGgHsc/XJyDghN+dYws9FRTfMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from MW4PR02MB7186.namprd02.prod.outlook.com (2603:10b6:303:73::6)
+ by SN6PR02MB5277.namprd02.prod.outlook.com (2603:10b6:805:68::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Thu, 10 Feb
+ 2022 11:57:10 +0000
+Received: from MW4PR02MB7186.namprd02.prod.outlook.com
+ ([fe80::2d87:6bad:f96d:9006]) by MW4PR02MB7186.namprd02.prod.outlook.com
+ ([fe80::2d87:6bad:f96d:9006%3]) with mapi id 15.20.4975.011; Thu, 10 Feb 2022
+ 11:57:10 +0000
+From:   "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
+To:     Stephen Boyd <swboyd@chromium.org>,
+        "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>,
+        "agross@kernel.org" <agross@kernel.org>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "dianders@chromium.org" <dianders@chromium.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
+        "krzysztof.kozlowski@canonical.com" 
+        <krzysztof.kozlowski@canonical.com>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robdclark@gmail.com" <robdclark@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "sam@ravnborg.org" <sam@ravnborg.org>,
+        "seanpaul@chromium.org" <seanpaul@chromium.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>
+CC:     quic_kalyant <quic_kalyant@quicinc.com>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        quic_mkrishn <quic_mkrishn@quicinc.com>,
+        quic_vproddut <quic_vproddut@quicinc.com>
+Subject: RE: [PATCH v3 3/4] drm/panel-edp: Add eDP sharp panel support
+Thread-Topic: [PATCH v3 3/4] drm/panel-edp: Add eDP sharp panel support
+Thread-Index: AQHYHZLpazYQE5h65kS31b2Hu7lVo6yL/JSAgACy7aA=
+Date:   Thu, 10 Feb 2022 11:57:10 +0000
+Message-ID: <MW4PR02MB71860D663CCAAE4BB37FA119E12F9@MW4PR02MB7186.namprd02.prod.outlook.com>
+References: <1644396932-17932-1-git-send-email-quic_sbillaka@quicinc.com>
+ <1644396932-17932-4-git-send-email-quic_sbillaka@quicinc.com>
+ <CAE-0n50FK4FSr6Xau9-UBYk9-0kVrETkCPr8TaDrPGS7BN6pMQ@mail.gmail.com>
+In-Reply-To: <CAE-0n50FK4FSr6Xau9-UBYk9-0kVrETkCPr8TaDrPGS7BN6pMQ@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=quicinc.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d5387c78-fe0b-4a1e-1b1e-08d9ec8c77f7
+x-ms-traffictypediagnostic: SN6PR02MB5277:EE_
+x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
+x-microsoft-antispam-prvs: <SN6PR02MB52779AE744849EAB0D536A3B9D2F9@SN6PR02MB5277.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4502;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5j7zYR1K4bWrGv1CY50OHDiESUUDSQtPs4DfFmina8nBRwau/H73RI7CMrB5VlW6cZeea9yq/h38FeVlfkVIdRPKnnXDWwHYyuCDBFbVoRVIGiene+wXMk1fhwSAhpygyR4+f2PAQn/Uq9S94P2CvjPorQCQEU5ASTo47DwNXnVO47dKDkNMsg8Sj31LLF+Wqpxz9N0Mh1+Ab+K8ew1dpYEFIK2Lj8nxraV0g/wNpgL5ATa5X7rw0hDloBdv8dSWFWSoQjtjK9Fau1xsdiuJK/tWhOrpAO66pq4LAMk2VG61kzIQ5z0A0pvcOow9RyGlO68imq3WGQ6FtiGYyDX8r/3jEn0bWl2LKwFCSUfHqFELl837UVXDfE98dEqbaj9Yl89kau8HWNoWFEIeo3sJlLc90a23OVpB0BYfOdMc3u+LDhUstQdkI0F/aTsDrkGXEXRDcObCjqINZCJraxyS7Zc8W5j10vCNfSphNM9cii2JmjQKuDwC12cNFXQ2ZolPLEWRJ1iFCLPhPw89e4dLuqwWgQ447zCUPDGr9usuLQl74L4HqU/dYRyJGXBbW1MUM3WtvTD3ZC7sDnSHiy55uj9JPTkl6I5t51Cvxd8bvYWkfgAoO4mGp645uuiXx+nqFM8rjaCuu1/R9T9e9QfVIuh+Iu4qcIjsc/vLKLP5hKx5mOxFFS06IZ0VDcsCjOwU+3M8HxFQoXZ7m56v3Flii7ItovvrFzgBSFA2DKyG+Iw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR02MB7186.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(64756008)(71200400001)(8676002)(107886003)(6506007)(110136005)(86362001)(38070700005)(54906003)(53546011)(4326008)(508600001)(8936002)(7696005)(316002)(55016003)(33656002)(66476007)(66556008)(66946007)(66446008)(76116006)(122000001)(2906002)(83380400001)(38100700002)(9686003)(5660300002)(7416002)(52536014)(921005)(186003)(26005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?N2owU1VNSWhFUGRobCswZythY1dJdG5IQlI1S2JFd2VOc0U3dEN4b2lHdDRO?=
+ =?utf-8?B?eDZlTytaWFl3ZndXRnFSeU40cFNROXI1d0tzQ3A4NmNrRnUzLytBSTNVT0pH?=
+ =?utf-8?B?WkVZKzFzdjZFSHczRks3em80ZWdrL1VzR1dNcXk4czJyejkzSVlLa3ZkTWFz?=
+ =?utf-8?B?WlltdnNLNks1OU1SS3ZjMndLZlIvb3YyZFBoUTNqM1NRd1k3K1pQZnpQdlNu?=
+ =?utf-8?B?ZXdKVUY0ZFV5cmxtcjJrQ1M5TTROOTBZbGRPeHp0OFBwZlM2dXVaM21rYStF?=
+ =?utf-8?B?N3RsejhpSlpqZmJyb2pmV0JYZDVIeTRGRkJ4K0NtOW02L2VOa1JXazNQQmF4?=
+ =?utf-8?B?cmFMVEtaRVpQMGhwM3NYY0Fob3hOZXB1YUhqWkVpWEN5c0RwZEIxK0pEekdB?=
+ =?utf-8?B?MVZFS0dibTVzM05RU24wWGJsKzQybXJtU2doaVprcEhBa1lGV2dCQUdTeG9E?=
+ =?utf-8?B?YWU0cE1jRFNrN3pzTlM1Z1AwVXl2TGhtRFhKbzNDNlR1SW90aHhoZk1PaXFL?=
+ =?utf-8?B?UGlXenJqVkpKbGplWC9xV2pDNnIxWExPM1hsdlVqME1XWG1sMDdIWVZ3Q1p5?=
+ =?utf-8?B?S3RNZHZzV2tqWUZlTHpMdmtwVFF0eHRpajJyVXh3WDZFL2VLbFhFSHB1WHhx?=
+ =?utf-8?B?NUhJbTJzNE14ZkdKZGNNc1dDTEg2NTdXelpwb0xyUm9WSzZTQTlNNzJPeUhs?=
+ =?utf-8?B?UGNMR0wydUhTQnc5OS91LzFJdzlQanBRUC9VeGhZaUFzUTk0THNsa3hIQ2lL?=
+ =?utf-8?B?UU1ZU3dqbmZNcWtsVHoyZG4wdEJQRmJjNndVWXRrV3A5cmV2anFVQ3E3KzZq?=
+ =?utf-8?B?a2w1WXNUdHdRNjhoQXpIQWRiaUptYWZ3Y0dwbVNjLzhtM3REc1djMk4wWjhv?=
+ =?utf-8?B?aEdaN09xNkozSTdpcFFlYUhocjJDYkFZWG1iaVRUSnkzWitnYndrUGxHN1kv?=
+ =?utf-8?B?b3RFU04ydjd5Y2pOVG1keDBVaUF4VlVFRlR6Q3g1Rks1MnMrakxIZVBGQVEw?=
+ =?utf-8?B?dE53dGVnb2xsbmJmZktMTi9ocTExTVJGVWZnWko4ZHAyeUpBZGZRY01xd1E0?=
+ =?utf-8?B?T20wbWkzbVg5aWMvZCtJRjdXZWpnSjRyVllSczU5VGNCdzFvMk1FNCtHWXIz?=
+ =?utf-8?B?Uitwd1dPT1FTM1l0SnlpNkhtOWh4MFFaUi9BYXN4bFkyNXFKV0x1cndsVXpO?=
+ =?utf-8?B?allwd0R4RHZEMDd2ZHdQbStZN3AxNm5WNjRMd3B4bHdwbmpzOXd5S1FNWnV5?=
+ =?utf-8?B?bHhLZzFQM0NpNnBHVy9JaWd5MnVrZGNUNHY1RnBGTjIyUythbDZQTU1NZFh3?=
+ =?utf-8?B?RXcvbHdCTUtvTnV3ZkJhTks0bXc5WWEyaktEOGlGamM0MFkrdlZKOG00eDdx?=
+ =?utf-8?B?TFZ6RWl5ekF1cDNXRjZIdDFMMlJyR3Z4Wi8wR0t6czdBdEdKQ3BaZnlMbkpt?=
+ =?utf-8?B?MmFXbmlyNm1TVzh3MkZmMnh4d2wyQVZ4MFh0WEZjclY4UFNyU1M3NVRSRURo?=
+ =?utf-8?B?TE9kSGMrU1c2MjRaTUlmSS94MVUyZEU0ZjVmS1FaM0FiNHhGbGRwcWpmMU5M?=
+ =?utf-8?B?dUwvWkpRaUwyVnBrT1hMcG9KWHVmM2cvbXlEMEYwK1QvdERXcnVMTC9kZTNR?=
+ =?utf-8?B?d1pvNDRyKzZuUGFyNjdkTXVSNmpEVi9ad0hxdlBTaTlpbitxeFp5YkM5Y3VU?=
+ =?utf-8?B?Q2FoZUJCYXQxMUdINm5mY0F0dzZhTjB6aDI4UW5wOEZrb2tCQ1N3VTNOdUlN?=
+ =?utf-8?B?b2V1eGhHa3ZqRHpiZnZwYUpSRHpIZ0Z4ZGdsNVhLdWFrMVZ6UTl3WVVVZjln?=
+ =?utf-8?B?STR3T2p0S0FxdGNQWHN2ODJlaVpvYnFiS2Y5aDZ5cjRQdzB6Ym1DMGNPcDJU?=
+ =?utf-8?B?TG5NZXRqb0lKZ2pyTzNEdmdQR2gzcHZZcmtJN055UXRPMjBzRnJlRTZiUWpq?=
+ =?utf-8?B?MDhzOFlMTUlUVEtjdmVZcDdSeUFpODl3UlVZYUgwTVd1OGNtYlFyeU5Qcy80?=
+ =?utf-8?B?ZWN6Tm12MHFBOFlIMXpCeVJ1OENtUTJwcDJicFVQVlBlejZhcFcrZzZtYWpS?=
+ =?utf-8?B?QTIwUXQrTkZnL1d4YXYxTDJsTHQ4ZzZDSkdERVkyK0oycUZvMlFvNElyUWdX?=
+ =?utf-8?B?cXFmNjdKOFJXMk9MaG50RHhyWE8wL3VteGx4WTFUcUM1V202TFArY05mSHBF?=
+ =?utf-8?Q?UR1lDZv5jdOnTX8ke7HkW6m0vBVVz0S+WAeYK38sL5WC?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c496b425-7e8a-a0d9-b27a-990b54743a01@molgen.mpg.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: quicinc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR02MB7186.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5387c78-fe0b-4a1e-1b1e-08d9ec8c77f7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2022 11:57:10.0645
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: F7u777bToE6bMudafyqDkW5R1JkC62cQ0hcnfmvEJCnHDrxb6XpNBKSxsiSZyqqWqGFq6d9I9bjW46une6XEz831qDiDrKtFvXzmxwcLV/w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR02MB5277
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul, thanks for the review,
-On Wed, Feb 09, 2022 at 05:54:25PM +0100, Paul Menzel wrote:
-> Dear Chen,
-> 
-> 
-> First, your system time is incorrect, and the message date from the future.
-> 
-I did not realize this after the system been re-installed recently,
-thanks for reminding me.
-> 
-> Am 10.02.22 um 00:43 schrieb Chen Yu:
-> > There is occasional suspend error from e1000e which blocks the
-> > system from further suspending:
-> 
-> Please add a blank line here.
->
-Ok.
-> Also, please document the specific board/configuration in question.
-> 
-Ok.
-> > [   20.078957] PM: pci_pm_suspend(): e1000e_pm_suspend+0x0/0x780 [e1000e] returns -2
-> > [   20.078970] PM: dpm_run_callback(): pci_pm_suspend+0x0/0x170 returns -2
-> > [   20.078974] e1000e 0000:00:1f.6: PM: pci_pm_suspend+0x0/0x170 returned -2 after 371012 usecs
-> > [   20.078978] e1000e 0000:00:1f.6: PM: failed to suspend async: error -2
-> 
-> Please add a blank line her.e
-> 
-Ok.
-> > According to the code flow, this might be caused by broken MDI read/write to PHY registers.
-> > However currently the code does not tell us which register is broken. Thus enhance the debug
-> > information to print the offender PHY register for easier debugging.
-> 
-> Please reflow for 75 characters per line, and maybe even paste the new
-> messages, if you have a system, where you can reproduce that on.
-> 
-Ok, will do.
-
-Thanks,
-Chenyu
-> > Reported-by: Todd Brandt <todd.e.brandt@intel.com>
-> > Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-> > ---
-> >   drivers/net/ethernet/intel/e1000e/phy.c | 8 ++++----
-> >   1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/net/ethernet/intel/e1000e/phy.c b/drivers/net/ethernet/intel/e1000e/phy.c
-> > index 0f0efee5fc8e..fd07c3679bb1 100644
-> > --- a/drivers/net/ethernet/intel/e1000e/phy.c
-> > +++ b/drivers/net/ethernet/intel/e1000e/phy.c
-> > @@ -146,11 +146,11 @@ s32 e1000e_read_phy_reg_mdic(struct e1000_hw *hw, u32 offset, u16 *data)
-> >   			break;
-> >   	}
-> >   	if (!(mdic & E1000_MDIC_READY)) {
-> > -		e_dbg("MDI Read did not complete\n");
-> > +		e_dbg("MDI Read PHY Reg Address %d did not complete\n", offset);
-> >   		return -E1000_ERR_PHY;
-> >   	}
-> >   	if (mdic & E1000_MDIC_ERROR) {
-> > -		e_dbg("MDI Error\n");
-> > +		e_dbg("MDI Read PHY Reg Address %d Error\n", offset);
-> >   		return -E1000_ERR_PHY;
-> >   	}
-> >   	if (((mdic & E1000_MDIC_REG_MASK) >> E1000_MDIC_REG_SHIFT) != offset) {
-> > @@ -210,11 +210,11 @@ s32 e1000e_write_phy_reg_mdic(struct e1000_hw *hw, u32 offset, u16 data)
-> >   			break;
-> >   	}
-> >   	if (!(mdic & E1000_MDIC_READY)) {
-> > -		e_dbg("MDI Write did not complete\n");
-> > +		e_dbg("MDI Write PHY Reg Address %d did not complete\n", offset);
-> >   		return -E1000_ERR_PHY;
-> >   	}
-> >   	if (mdic & E1000_MDIC_ERROR) {
-> > -		e_dbg("MDI Error\n");
-> > +		e_dbg("MDI Write PHY Red Address %d Error\n", offset);
-> >   		return -E1000_ERR_PHY;
-> >   	}
-> >   	if (((mdic & E1000_MDIC_REG_MASK) >> E1000_MDIC_REG_SHIFT) != offset) {
-> 
-> Acked-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> 
-> 
-> Kind regards,
-> 
-> Paul
+SGkgU3RlcGhlbiwNClRoYW5rIHlvdSBmb3IgdGhlIHJldmlldy4gSSB3aWxsIHNoYXJlIHRoZSBu
+ZXcgcGF0Y2guDQoNCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBTdGVwaGVuIEJv
+eWQgPHN3Ym95ZEBjaHJvbWl1bS5vcmc+IA0KU2VudDogVGh1cnNkYXksIEZlYnJ1YXJ5IDEwLCAy
+MDIyIDY6NDcgQU0NClRvOiBTYW5rZWVydGggQmlsbGFrYW50aSAoUVVJQykgPHF1aWNfc2JpbGxh
+a2FAcXVpY2luYy5jb20+OyBhZ3Jvc3NAa2VybmVsLm9yZzsgYWlybGllZEBsaW51eC5pZTsgYmpv
+cm4uYW5kZXJzc29uQGxpbmFyby5vcmc7IGRhbmllbEBmZndsbC5jaDsgZGV2aWNldHJlZUB2Z2Vy
+Lmtlcm5lbC5vcmc7IGRpYW5kZXJzQGNocm9taXVtLm9yZzsgZHJpLWRldmVsQGxpc3RzLmZyZWVk
+ZXNrdG9wLm9yZzsgZnJlZWRyZW5vQGxpc3RzLmZyZWVkZXNrdG9wLm9yZzsga3J6eXN6dG9mLmtv
+emxvd3NraUBjYW5vbmljYWwuY29tOyBsaW51eC1hcm0tbXNtQHZnZXIua2VybmVsLm9yZzsgbGlu
+dXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgcm9iZGNsYXJrQGdtYWlsLmNvbTsgcm9iaCtkdEBr
+ZXJuZWwub3JnOyBzYW1AcmF2bmJvcmcub3JnOyBzZWFucGF1bEBjaHJvbWl1bS5vcmc7IHRoaWVy
+cnkucmVkaW5nQGdtYWlsLmNvbQ0KQ2M6IHF1aWNfa2FseWFudCA8cXVpY19rYWx5YW50QHF1aWNp
+bmMuY29tPjsgQWJoaW5hdiBLdW1hciAoUVVJQykgPHF1aWNfYWJoaW5hdmtAcXVpY2luYy5jb20+
+OyBLdW9nZWUgSHNpZWggKFFVSUMpIDxxdWljX2toc2llaEBxdWljaW5jLmNvbT47IHF1aWNfbWty
+aXNobiA8cXVpY19ta3Jpc2huQHF1aWNpbmMuY29tPjsgcXVpY192cHJvZGR1dCA8cXVpY192cHJv
+ZGR1dEBxdWljaW5jLmNvbT4NClN1YmplY3Q6IFJlOiBbUEFUQ0ggdjMgMy80XSBkcm0vcGFuZWwt
+ZWRwOiBBZGQgZURQIHNoYXJwIHBhbmVsIHN1cHBvcnQNCg0KUXVvdGluZyBTYW5rZWVydGggQmls
+bGFrYW50aSAoMjAyMi0wMi0wOSAwMDo1NTozMSkNCj4gQWRkIHN1cHBvcnQgZm9yIHRoZSAxNCIg
+c2hhcnAsbHExNDBtMWp3NDYgZURQIHBhbmVsLg0KPg0KPiBTaWduZWQtb2ZmLWJ5OiBTYW5rZWVy
+dGggQmlsbGFrYW50aSA8cXVpY19zYmlsbGFrYUBxdWljaW5jLmNvbT4NCj4gLS0tDQoNCkNhbiB5
+b3Ugc2hhcmUgdGhlIGVkaWQtZGVjb2RlIGZvciB0aGlzIHBhbmVsIGhlcmUgdW5kZXIgdGhlIGN1
+dCAiLS0tIj8NCkl0IHdvdWxkIGhlbHAgdG8gc2VlIHRoZSB0aW1pbmdzIGFuZCBtYWtlIHN1cmUg
+ZXZlcnl0aGluZyBtYXRjaGVzLg0K

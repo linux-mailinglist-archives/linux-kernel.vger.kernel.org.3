@@ -2,91 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552F74B0D98
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F34C04B0D9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 13:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241546AbiBJMdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 07:33:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53548 "EHLO
+        id S241563AbiBJMft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 07:35:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237067AbiBJMdk (ORCPT
+        with ESMTP id S237067AbiBJMfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 07:33:40 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D32A21BB;
-        Thu, 10 Feb 2022 04:33:42 -0800 (PST)
-Date:   Thu, 10 Feb 2022 13:33:39 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644496420;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TxmbYaTryp+KlSSB5iDMTD3Bmc1tpuLh8fsDSqyGEx4=;
-        b=oRGiCWX4/uWUoh3HHtJCnQ6kOsATOu93uH9Mudn7oi5/S1tu4G3bGL3kCpGp/+iPdYOCUG
-        VJoOSE0r13M4DS3ERa34umQNeOeYY14sZTRgJCHlGxMSFmn0O/6Zd7PFDC7hJa6aO7aZaF
-        fPwTne3eGenywlqht72sxWeEJsX/QxPDBu9svTfr72AwpS8LiD1Bn1X43C37/qv/KvJeE2
-        Qsuhvhgs0xsGW7sr/o+lJH9XdwXdGgR3Lgy9oX7kY4z3klUzfuMsAc+HILNLw6oDbw1omq
-        CpWJyn56PCc41Kj1OAaThNImIoHj1HF3Wz+Ly9QCjwdWG6Rcdir7X9jEKb2woA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644496421;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TxmbYaTryp+KlSSB5iDMTD3Bmc1tpuLh8fsDSqyGEx4=;
-        b=VOxiAlEUiI3YtqFLr6dIHVVav7shnvA8NSoP9z/vuiFbgiRafe1qH7vlnB4rTUlYCxxMcM
-        Xhcn7N91mmCjOqDw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH REPOST] irq_poll: Add local_bh_disable() in cpu_dead
- notifier
-Message-ID: <YgUGI9qAKUh4AOUY@linutronix.de>
-References: <YgJ/XWVxxWDVBBVA@linutronix.de>
- <YgNzsnIE9bwQZ1Zg@infradead.org>
+        Thu, 10 Feb 2022 07:35:47 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242B621BB
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 04:35:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644496548; x=1676032548;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dg3mYH/kxWETIHR59Cu6igjsfuGx8EecWXhf54VEyNg=;
+  b=iBLJ3m8l0Qn1TwajhbrIOlP3PEzBJwnGGPH2t/+oqv2I5fnsy6wY75df
+   aIqBj1+Ic+PoogK1temcnlwNfXOIOyq2mZjeCL5Nn4oexnisMSkRoxGBN
+   6Ce2w7iLyDexBW6EEy9X2JSLjLXRZnoGMMNAfgfhevKog/YF/VFZMh+0M
+   Mfy8f4e/zi6m6Kn4G5KaBZeV06TFvwzs8EU4z65stEt6W5DQJBCvKTUfb
+   /7/xc+4gbeYl5VV4P8zbiEJb5y1BY4y0hvF4osqK8fGhcA3823YOrx4Uk
+   /pYDS2wiGbjeHJRIF6ELZ10hv6kJDXXdV6jhynEz0G4nCc35ABDu5E+r+
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="248311513"
+X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
+   d="scan'208";a="248311513"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 04:35:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,358,1635231600"; 
+   d="scan'208";a="482750305"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 10 Feb 2022 04:35:45 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nI8fl-0003Cl-Tz; Thu, 10 Feb 2022 12:35:41 +0000
+Date:   Thu, 10 Feb 2022 20:35:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Thierry Reding <treding@nvidia.com>
+Subject: ld.lld: error: undefined symbol: cpu_arm925_suspend_size
+Message-ID: <202202102039.wkitu2Mo-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <YgNzsnIE9bwQZ1Zg@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-08 23:56:34 [-0800], Christoph Hellwig wrote:
-> On Tue, Feb 08, 2022 at 03:34:05PM +0100, Sebastian Andrzej Siewior wrote:
-> > __raise_softirq_irqoff() adds a bit to the pending sofirq mask and this
-> > is it. The softirq won't be handled in a deterministic way but randomly
-> > when an interrupt fires and handles the softirq in its irq_exit() routi=
-ne or
-> > if something randomly checks and handles pending softirqs in the call
-> > chain before the CPU goes idle.
-> >=20
-> > Add a local_bh_disable/enable() around the IRQ-off section which will
-> > handle pending softirqs.
->=20
-> And I still haven't seen any good explanation of why this is useful.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f4bc5bbb5fef3cf421ba3485d6d383c27ec473ed
+commit: faae6c9f2e68e62687636a7d6e0517b3bf594add cpuidle: tegra: Enable compile testing
+date:   4 months ago
+config: arm-buildonly-randconfig-r004-20220210 (https://download.01.org/0day-ci/archive/20220210/202202102039.wkitu2Mo-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project aa845d7a245d85c441d0bd44fc7b6c3be8f3de8d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=faae6c9f2e68e62687636a7d6e0517b3bf594add
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout faae6c9f2e68e62687636a7d6e0517b3bf594add
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-You need to handle the pending softirqs. If you don't handle them
-immediately or in a deterministic say (like on IRQ exit) then they will
-be handled at a random point. If you don't handle them at all, the CPU
-will go idle and at least the NO_HZ will complain about pending softirqs
-(can_stop_idle_tick()).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-You could still argue that the CPU will go down and the there are
-latencies involved but=E2=80=A6
-I want to avoid waking ksoftirqd for that since there is no need to wake
-it and the pending work can be done in-context, right away.
+All errors (new ones prefixed by >>):
 
-Sebastian
+   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
+   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
+>> ld.lld: error: undefined symbol: cpu_arm925_suspend_size
+   >>> referenced by kernel/sleep.o:(.text+0x68) in archive arch/arm/built-in.a
+--
+>> ld.lld: error: undefined symbol: cpu_arm925_do_suspend
+   >>> referenced by suspend.c
+   >>> kernel/suspend.o:(__cpu_suspend_save) in archive arch/arm/built-in.a
+--
+>> ld.lld: error: undefined symbol: cpu_arm925_do_resume
+   >>> referenced by suspend.c
+   >>> kernel/suspend.o:(__cpu_suspend_save) in archive arch/arm/built-in.a
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
+   Depends on ARCH_SUSPEND_POSSIBLE
+   Selected by
+   - ARM_TEGRA_CPUIDLE && CPU_IDLE && (ARM || ARM64) && (ARCH_TEGRA || COMPILE_TEST && !ARM64 && MMU
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

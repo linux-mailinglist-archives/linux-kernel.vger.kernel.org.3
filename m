@@ -2,191 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA764B02D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:01:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 322264B02EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 03:06:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233893AbiBJB7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 9 Feb 2022 20:59:36 -0500
+        id S234008AbiBJCDH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 9 Feb 2022 21:03:07 -0500
 Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234407AbiBJB7K (ORCPT
+        with ESMTP id S234608AbiBJCAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 9 Feb 2022 20:59:10 -0500
-Received: from EUR03-DB5-obe.outbound.protection.outlook.com (mail-eopbgr40079.outbound.protection.outlook.com [40.107.4.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90D42BB05;
-        Wed,  9 Feb 2022 17:49:04 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=En5i4Q40FmcWCCPT7RfIsvLZ704nSgOKNFwntt2j9lmxJjQ/ATMOWrlq6V1dVIA9kUAciR/Yo91eSvedpygH+ct6utQD5lXqLcBeZDo+OGoxxBdJwzWB4ofoUuHusVfpW9KJX9ch3we7WlQM7IhNS1x0s54bcMkT8KyoZ86o7JIISU7OAFJXdOTmTvBA7v2jUHJ9C7SVOcfY2maxHRC9740KjvbQRVXBAeO1uiSchM2cdZsGdrg0DNhHjNtIpY3Eo3EKWoDAEYVAwimLIVVXBNDw3Aqkbk8kjkhJnMfp2iyD+jECNrO+/5ZRpQ/vv/t5M7n544CBDwUOB60LsEAATg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UiPd+1t7tx4nAqNnUXoQYwc0/VeLRG2sb/m6bdT3CME=;
- b=cBzNQ/E/fpKZW/shKDGiGdknZI72diQkAw4QWLluOdhlRmEaBy9ZT2k0N9o8XKaO7UKRnMXQsigiCCPuhTb5QApibvzVI4gQ4dZmp+zSQ9SfeCD05nRO///Fxyw+eH82BE5rDGwQgHNuv33BEBNZWn0odgLZPxCSQU10zu1U2BF97ocfK/SZsCsqvGOMcvc8hcxeAddOvGtTR1P6Kjy4yr6OjIyamhcKHdNrA7705LWmnaDEWtXFc8EM/BUh76XRfcxKWH57tTjmIDRcsqVYFisloDjMvkqunocCcWaX4h5hZnB0WdGhx+aEMuJXPZ6NIoc8ySGdqWkmzB4iv9KjVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UiPd+1t7tx4nAqNnUXoQYwc0/VeLRG2sb/m6bdT3CME=;
- b=EZQDLRXXzwbGrILaGjYQw+Oj5DxGxdg7fK4lzdDYVSz/TWXJFB06aqhLST0EesBBlEvrWfd73z4Z535SBWBfdRVgR1KjenD0XHOtPZoyvjKXCsEkv4MbmLW5kvRwylqf+jYNRJObJz0Ib1aIDQfmICfIo2iJl3ud2+eglGQzbp4=
-Received: from AS8PR04MB8676.eurprd04.prod.outlook.com (2603:10a6:20b:42b::10)
- by VI1PR04MB4606.eurprd04.prod.outlook.com (2603:10a6:803:70::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.19; Thu, 10 Feb
- 2022 01:49:02 +0000
-Received: from AS8PR04MB8676.eurprd04.prod.outlook.com
- ([fe80::3d1c:b479:1c58:199]) by AS8PR04MB8676.eurprd04.prod.outlook.com
- ([fe80::3d1c:b479:1c58:199%4]) with mapi id 15.20.4975.011; Thu, 10 Feb 2022
- 01:49:01 +0000
-From:   Hongxing Zhu <hongxing.zhu@nxp.com>
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>
-CC:     "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [RFC 1/2] ARM: dts: imx6qp-sabresd: Enable pcie support
-Thread-Topic: [RFC 1/2] ARM: dts: imx6qp-sabresd: Enable pcie support
-Thread-Index: AQHYHYdu67AFaSp4qEGLVrmOItYVrayK7T8AgAESc1A=
-Date:   Thu, 10 Feb 2022 01:49:01 +0000
-Message-ID: <AS8PR04MB8676827B341CCD4580DF53198C2F9@AS8PR04MB8676.eurprd04.prod.outlook.com>
-References: <1644390156-5940-1-git-send-email-hongxing.zhu@nxp.com>
- <936cc917828bfa3c089a33f0af219fecdc2a778a.camel@pengutronix.de>
-In-Reply-To: <936cc917828bfa3c089a33f0af219fecdc2a778a.camel@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a6db21ba-ca4d-487c-1e16-08d9ec37834a
-x-ms-traffictypediagnostic: VI1PR04MB4606:EE_
-x-microsoft-antispam-prvs: <VI1PR04MB4606920412AB587FC17731268C2F9@VI1PR04MB4606.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: utR/Wj8KDP+VkrAcluUJHe0jUS+ehvWsFYUfoEIUXAUay5KurY2tQl9HjBL40Bk/oiSgszbFKxBl5T+kkejPFdRxd9okrdoynM9tvYnygYaZRTOopqVXYfGutPDLhzmqjQWEK9Z2ZtTBqxQUqCzV9rLDlXPMga4OFJgX3s4sJM8MkrVfImpScJSWCy7UebcpGAT2vhtRM21Eom2WefKzDzCJn3RNvSrDqTMFJs2dbsEACp2EpB2vHQVUOmgRviaq0qW4taHbyheO+sf4uuO2ypt3vyGTG4RaHB8Tl6OIu55Nyr7cD8XBHo5Cx363x2uAliGcx2Cah4Dt0tQtlYM8BYmyMme42Uj0ckPNSR8eEY5C4hGcLqcVETW5YNb6WhWkjyPFRnMR88j6DrDe+3CdZYy7IDcxMDhv9Zg9pFBb5x/fBEAL6y1fVzSXY7rENlsdxZ1qcZXFnSASJ85b7KKGTzqQSccZwd7w9BhO1NZN20L6ae70BKjExAC7mTJb6keOYmIRQE3y6+AjqQW3cyJg7l7rHIVKmdMCCiNFcP576ihJ4hMsTvsh0uwGid3RDxBIJJOzwJ8DuWggZbc9aGU69nXfg0InfaUfya9RJS+BeUWv+/Lkx9sr8k6jlmuAGBw4dXB0tElekQ+wNAhkx1fsasCChFYQJeSP/UJEE+1qEMDY1QtXzrdrP8a4IoRozlPpYb55MNE8Er0CuAxgacVX0e9ULs07Wa3oW2H82yyUJoY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8676.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(64756008)(66446008)(76116006)(66476007)(38100700002)(83380400001)(38070700005)(53546011)(122000001)(508600001)(8936002)(8676002)(66946007)(66556008)(55016003)(4326008)(52536014)(86362001)(316002)(110136005)(54906003)(26005)(44832011)(2906002)(186003)(5660300002)(9686003)(6506007)(7696005)(33656002)(71200400001)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?L1lvcVVGOG12bWpCVXlrQUU3RUtUZDVPZjh5WDdUc0hKTktPUllOT1Q5ejhW?=
- =?utf-8?B?aUhKRENQbks3aW9IYWFIZzBVN3pGWHh4NXVRNlM1R0F1dVQwS0MzLzk2WVBK?=
- =?utf-8?B?OHBTaHozUGRjM1N4VTZNVlNhYU1pZ3BjTDZ0elYyekgvYXl3MW1WcVI4eTlZ?=
- =?utf-8?B?S0J4UVcxUTA1eVRXU2pYNEEvR2Z2bERraStUenhrVjRQTnRkRW9FdDUzaDFm?=
- =?utf-8?B?ekxDM2x5bEpscGRtNGpPS3doZ292MzhIbSt5Q1YrY1d4MTE2TFpMTHJkZE8x?=
- =?utf-8?B?TGJHdnhaOGovVnA3UllldUVycEkyVFZSZW5aRHRqNFBFMGVSQTB0aGl2d2Rv?=
- =?utf-8?B?Yjlnd1FVaUEzamxVTmJ3VWpsckVHblZtenlHSEJKK0ZDemlyekFOdkhvMGRL?=
- =?utf-8?B?MkJFazhUd3dNTmtMZkkySHg0RjB2RXJjMldmNnZEVWdQK1JZTHlYZHRhaEd5?=
- =?utf-8?B?MjhjUWdZS3pxNlJ2SmF0NnFCOUlXU3FGdy8vL21tRlhFdVpGVkkva0tMOFdk?=
- =?utf-8?B?WWVwTm1IQ0txMHFzUGU4UFZOVEI1djgvZlN1eE1ieUdJU1dCaHliY2E5cEFE?=
- =?utf-8?B?UHlxUWtGRkhraXNpMmZ5SDg1bUJaZkdiSHdOM0FJZUdTdHl2TDMyNlN2eFBm?=
- =?utf-8?B?VG1reFhZM3dwSUVOUENvRWkzQi9TYWdqbFpDNktRUXFhd1RWRlVQeUZkUy84?=
- =?utf-8?B?UGFzQTdMcHlJMkNSZWlOSnF3aFpGclhyWk5zWWdHcTRhM0toeU9qZ0JoTTl6?=
- =?utf-8?B?YWZNSUtZam9ycDBoWjV2aU1FWnQwc2VDQmdXaW1odGdsL2JGcUhBRy9Pd1oz?=
- =?utf-8?B?QjhWTlpORmoxa1J5VE5Mbk9DSEFHdTRiMDFPYWEwR1g5YnJ6UzF5U2lVVmVh?=
- =?utf-8?B?VjB3WDFPUllSeW4vNTl4Q1hLNElMMTFHMGNaYkhaejRML1MwL3NQaElUMlFR?=
- =?utf-8?B?SGJaYmFzbGhLcGdPMUsvZS9VTTVRNkc0ZTVFUXB5b2kzZXlPVWpqSStjMGZV?=
- =?utf-8?B?aEh1ZFhJUmhsejhRVG5oNVNjTmozY1lIcG00VDA2bm12V1pxQVFHM3VCcDNE?=
- =?utf-8?B?V1dnL1FIWFpXTzlXcVAzbjFhMFVSMDBJOHBUTklOamU0RUxYdWFtTXZrdXRk?=
- =?utf-8?B?RXd4UCsySHBoRC8wSnNHV1B5cFZ3NWRQeCtUVUh4OGF4Q2g0Y1RqMFpvMDF1?=
- =?utf-8?B?WXdmaGhwTnNncG9JRFR5TXJING9HZ1RlRUd6dzc1VUo3M1hzUnNKSWRGTkhv?=
- =?utf-8?B?eGczekNSY0RLWmFDQjBNdGJkMUhaY3NvNEtEdDREMXNHOXRNYW1nMGpkK1BO?=
- =?utf-8?B?dzZRcjZuM1ZueVNDQW5yNHNTc2JYL3ZVMm5xNFJ6NlNWRTBabFJTQUtvZ0FY?=
- =?utf-8?B?cEJTNDBoWThJOUEvZFZ2MVFuOTdOMnRmcFZsOUlQRWVQbFhFaytMTjBlbEhD?=
- =?utf-8?B?TldTNkNIVEx3WFJlK1RXY1ZONkk3ZDdhQjFZbTZaQkloU1FaMGJwZFRpQUJR?=
- =?utf-8?B?eDdCSmJ0QnBvZmF6VS9FcTJPNW5FeWFXTVpLU3MrMDVIcHQ5UGhsUzFYUWp6?=
- =?utf-8?B?dFV2YUF6bnVkMWZ1cnY1V2lybTFTVm1ubEdNQks0MitNQnlFOFRMMTlneGpY?=
- =?utf-8?B?Sk8xYUQzQitjUFM2NTFpWWRYQXQxTDc1NFNiWlAvMTVKV3AwTi9pK1J0bHh1?=
- =?utf-8?B?OFpIV3BqamtmaUJ1L2NGUHZ0eS9Ia3Y3Z2VmSWEvdExRWWQ4V2xxVmdTaVlC?=
- =?utf-8?B?T0ZqbUV6UElieGIxa2JDMThRQ0sxWG9YUHlDMTNHRWY5LzIyYUZEbmRwYmxT?=
- =?utf-8?B?N3dDRmlTNThyUUNNcmR4ZlN0VVBFTi91SzE0eTFJSEJjZlJqSk9CN3FyNit5?=
- =?utf-8?B?aWw2eWVXUGwyTjVrK0tyY1J6a2g5ck45blV2Vk52MVJpUDQzMGFSU2NwSmwz?=
- =?utf-8?B?RTVpWlM5anpPU053bGd2cDRVMFNiQUlPNWI5N3EzQmw1NVk4aHFXOG9NbzNO?=
- =?utf-8?B?NlQ2WXNLblRhRXBodTRyS2VDTmkrbS9nbU05YjhGQVRtU3dhSkFweGlzcWkr?=
- =?utf-8?B?TkJ1V0Rxc2JLSnkxcVRKOG1PZ2RFUkFIVXh1MlBsZnZEdnNJT3VLOGFWVDVH?=
- =?utf-8?B?dzZvTjRIRWpqREVVN0FRQmhiUlBiYVlpWStIcmZSSWZUUUc1QVYzcjdxZ1hm?=
- =?utf-8?B?M3c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 9 Feb 2022 21:00:17 -0500
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458DB103F;
+        Wed,  9 Feb 2022 17:57:21 -0800 (PST)
+Received: from in01.mta.xmission.com ([166.70.13.51]:43770)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nHyhy-0011Oq-PQ; Wed, 09 Feb 2022 18:57:18 -0700
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:44682 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nHyhw-00AMiJ-MT; Wed, 09 Feb 2022 18:57:18 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Solar Designer <solar@openwall.com>
+Cc:     Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Linux Containers <containers@lists.linux-foundation.org>
+References: <20220207121800.5079-1-mkoutny@suse.com>
+        <20220207121800.5079-2-mkoutny@suse.com>
+        <20220210011405.GA17076@openwall.com>
+Date:   Wed, 09 Feb 2022 19:57:10 -0600
+In-Reply-To: <20220210011405.GA17076@openwall.com> (Solar Designer's message
+        of "Thu, 10 Feb 2022 02:14:05 +0100")
+Message-ID: <87v8xn8ow9.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8676.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a6db21ba-ca4d-487c-1e16-08d9ec37834a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2022 01:49:01.8883
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: KWwEVxLA4QRX0n2hlrcV1//xsnYijAn8mwFxD2hwb0gWgsEeVt1PtcS3uJDgoJawkE+GIa9+MTUGtBZummekBQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4606
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-XM-SPF: eid=1nHyhw-00AMiJ-MT;;;mid=<87v8xn8ow9.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18XlNqZ8OwOBkY4TyLNlmApbq/5YW22QNU=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Virus: No
+X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *****;Solar Designer <solar@openwall.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1481 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 4.8 (0.3%), b_tie_ro: 3.2 (0.2%), parse: 1.37
+        (0.1%), extract_message_metadata: 16 (1.1%), get_uri_detail_list: 2.1
+        (0.1%), tests_pri_-1000: 17 (1.2%), tests_pri_-950: 1.06 (0.1%),
+        tests_pri_-900: 0.84 (0.1%), tests_pri_-90: 64 (4.3%), check_bayes: 63
+        (4.2%), b_tokenize: 8 (0.5%), b_tok_get_all: 10 (0.7%), b_comp_prob:
+        2.2 (0.2%), b_tok_touch_all: 38 (2.6%), b_finish: 0.79 (0.1%),
+        tests_pri_0: 1365 (92.2%), check_dkim_signature: 0.44 (0.0%),
+        check_dkim_adsp: 2.1 (0.1%), poll_dns_idle: 0.22 (0.0%), tests_pri_10:
+        1.85 (0.1%), tests_pri_500: 7 (0.4%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [RFC PATCH 1/6] set_user: Perform RLIMIT_NPROC capability check
+ against new user credentials
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBMdWNhcyBTdGFjaCA8bC5zdGFj
-aEBwZW5ndXRyb25peC5kZT4NCj4gU2VudDogMjAyMuW5tDLmnIg55pelIDE3OjA1DQo+IFRvOiBI
-b25neGluZyBaaHUgPGhvbmd4aW5nLnpodUBueHAuY29tPjsgYmhlbGdhYXNAZ29vZ2xlLmNvbTsN
-Cj4gbG9yZW56by5waWVyYWxpc2lAYXJtLmNvbTsgc2hhd25ndW9Aa2VybmVsLm9yZw0KPiBDYzog
-bGludXgtcGNpQHZnZXIua2VybmVsLm9yZzsgbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRl
-YWQub3JnOw0KPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBrZXJuZWxAcGVuZ3V0cm9u
-aXguZGU7IGRsLWxpbnV4LWlteA0KPiA8bGludXgtaW14QG54cC5jb20+DQo+IFN1YmplY3Q6IFJl
-OiBbUkZDIDEvMl0gQVJNOiBkdHM6IGlteDZxcC1zYWJyZXNkOiBFbmFibGUgcGNpZSBzdXBwb3J0
-DQo+IA0KPiBIaSBSaWNoYXJkLA0KPiANCj4gQW0gTWl0dHdvY2gsIGRlbSAwOS4wMi4yMDIyIHVt
-IDE1OjAyICswODAwIHNjaHJpZWIgUmljaGFyZCBaaHU6DQo+ID4gSW4gdGhlIGkuTVg2UVAgc2Fi
-cmVzZCBib2FyZChzY2gtMjg4NTcpIGRlc2lnbiwgb25lIGV4dGVybmFsDQo+ID4gb3NjaWxsYXRv
-ciBpcyB1c2VkIGFzIHRoZSBQQ0llIHJlZmVyZW5jZSBjbG9jayBzb3VyY2UgYnkgdGhlIGVuZHBv
-aW50IGRldmljZS4NCj4gPg0KPiA+IElmIFJDIHVzZXMgdGhpcyBvc2NpbGxhdG9yIGFzIHJlZmVy
-ZW5jZSBjbG9jayB0b28sIFBMTDYoRU5FVCBQTEwpDQo+ID4gd291bGQgaGFzIHRvIGJlIGluIGJ5
-cGFzcyBtb2RlLCBhbmQgRU5FVCBjbG9ja3Mgd291bGQgYmUgbWVzc2VkIHVwLg0KPiA+DQo+ID4g
-VG8ga2VlcCB0aGluZ3Mgc2ltcGxlLCBsZXQgUkMgdXNlIHRoZSBpbnRlcm5hbCBQTEwgYXMgcmVm
-ZXJlbmNlIGNsb2NrDQo+ID4gYW5kIGFsd2F5cyBlbmFibGUgdGhlIGV4dGVybmFsIG9zY2lsbGF0
-b3IgZm9yIGVuZHBvaW50IGRldmljZSBvbg0KPiA+IGkuTVg2UVAgc2FicmVzZCBib2FyZC4NCj4g
-Pg0KPiBUaGUgY29tbWl0IG1lc3NhZ2UgZG9lc24ndCByZWFsbHkgbWF0Y2ggd2hhdCdzIGJlaW5n
-IGRvbmUgaW4gdGhlIHBhdGNoLg0KPiBNYXliZSB5b3UgbWVhbnQgdG8gc2F5IHRoYXQgZXZlbiB0
-aG91Z2ggdGhlIEhXIGRlc2lnbiBpcyBkaWZmZXJlbnQgeW91IGFyZQ0KPiBlbmFibGluZyB0aGUg
-UENJZSBjb250cm9sbGVyIGluIHRoZSBzYW1lIHdheSBhcyBvbiB0aGUgNlEgc2FicmVzZD8NCj4g
-DQo+IEFsc28sIGlzIHRoaXMgY29uZmlndXJhdGlvbiBzdGFibGUgZm9yIHlvdT8gV2UndmUgaGFk
-IHNvbWUgaXNzdWVzIHdpdGggdGhpcyBraW5kDQo+IG9mIHNwbGl0IGNsb2NraW5nIHNldHVwIGlu
-IGEgY3VzdG9tZXIgZGVzaWduLCB3aGVyZSBpdCB3YXMgZW5hYmxlZCBieSBhY2NpZGVudCwNCj4g
-ZHVlIHRvIFBMTDYgbm8gYmVpbmcgYnlwYXNzZWQuIEluIHRoaXMgZGVzaWduIGl0IGNhdXNlZCB0
-aGUgbGluayB0byByYW5kb21seQ0KPiBkcm9wIHVuZGVyIGxvYWQgYW5kIGNhdXNpbmcgYWJvcnRz
-IG9uIHRoZSBDUFUgc2lkZSwgZHVlIHRvIGNvbXBsZXRpb24NCj4gdGltZW91dHMuIEkgdGhpbmsg
-aXQgYXQgbGVhc3Qgd2FycmFudHMgYSBjb21tZW50IHNvbWV3aGVyZSB0aGF0IHRoaXMgaXNuJ3Qg
-YQ0KPiByZWNvbW1lbmRlZCBzZXR1cC4NCkhpIEx1Y2FzOg0KVGhhbmtzIGZvciB5b3VyIHJldmll
-dy4NClRoZXJlIGlzIGEgZGlmZmVyZW5jZSBiZXR3ZWVuIGkuTVg2US9ETCBzYWJyZXNkIGFuZCBp
-Lk1YNlFQIHNhYnJlc2QgYm9hcmQuDQoNCk9uIGkuTVg2US9ETCBzYWJyZXNkIGJvYXJkIGRlc2ln
-biwgdGhlIFBDSWUgY2xvY2sgdXNlZCBieSBFUCBkZXZpY2UgaXMNCiBvdXRwdXQgZnJvbSBpbnRl
-cm5hbCBQTEwgYnkgQ0xLX04vUCBwYWRzLiBUaGlzIGNsb2NrIGhhcyBzb21lIGppdHRlcg0KIHBy
-b2JsZW1zLCBhbmQgY2FuJ3QgcGFzcyB0aGUgR0VOMiBUWCBjb21wbGlhbmNlIHRlc3RzIGVpdGhl
-ci4NCg0KVG8gbGV0IHJlbW90ZSBFUCBkZXZpY2UgdXNlIHF1YWxpZmllZCByZWZlcmVuY2UgY2xv
-Y2ssIGFuZCBsZXQgUENJZQ0KIGhhcmR3YXJlIGRlc2lnbiBwYXNzIHRoZSBQQ0llIEdFTjIgVFgg
-Y29tcGxpYW5jZSB0ZXN0cywgb25lIGV4dGVybmFsDQogb3NjaWxsYXRvciBpcyBwb3B1bGF0ZWQg
-b24gdGhlIGkuTVg2UVAgc2FicmVzZCBib2FyZC4NCg0KVGhpcyBwYXRjaCBpcyBhcHBsaWVkIHRv
-IGkuTVg2UVAgc2FiZXJzZCBib2FyZCwgYW5kIGVuYWJsZSBQQ0llIHBvcnQuDQpZZXMsIHRoZSBQ
-Q0llIGlzIHN0YWJsZSBhbmQgcGFzcyB0aGUgR0VOMiBUWCBjb21wbGlhbmNlIHRlc3RzIG9uIGku
-TVg2UVANCiBzYWJyZXNkIGJvYXJkDQoNClRoYW5rcy4NCkJlc3QgUmVnYXJkcw0KUmljaGFyZA0K
-PiANCj4gUmVnYXJkcywNCj4gTHVjYXMNCj4gDQo+ID4gU2lnbmVkLW9mZi1ieTogUmljaGFyZCBa
-aHUgPGhvbmd4aW5nLnpodUBueHAuY29tPg0KPiA+IC0tLQ0KPiA+ICBhcmNoL2FybS9ib290L2R0
-cy9pbXg2cXAtc2FicmVzZC5kdHMgfCA4ICsrKysrKystDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA3
-IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9hcmNo
-L2FybS9ib290L2R0cy9pbXg2cXAtc2FicmVzZC5kdHMNCj4gPiBiL2FyY2gvYXJtL2Jvb3QvZHRz
-L2lteDZxcC1zYWJyZXNkLmR0cw0KPiA+IGluZGV4IDQ4MGU3MzE4M2Y2Yi4uMDgzY2Y5MGJjYWI1
-IDEwMDY0NA0KPiA+IC0tLSBhL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDZxcC1zYWJyZXNkLmR0cw0K
-PiA+ICsrKyBiL2FyY2gvYXJtL2Jvb3QvZHRzL2lteDZxcC1zYWJyZXNkLmR0cw0KPiA+IEBAIC01
-MCw4ICs1MCwxNCBAQCBNWDZRRExfUEFEX1NEM19EQVQ3X19TRDNfREFUQTcNCj4gCTB4MTcwNTkN
-Cj4gPiAgCX07DQo+ID4gIH07DQo+ID4NCj4gPiArJnZnZW4zX3JlZyB7DQo+ID4gKwlyZWd1bGF0
-b3ItbWluLW1pY3Jvdm9sdCA9IDwxODAwMDAwPjsNCj4gPiArCXJlZ3VsYXRvci1tYXgtbWljcm92
-b2x0ID0gPDMzMDAwMDA+Ow0KPiA+ICsJcmVndWxhdG9yLWFsd2F5cy1vbjsNCj4gPiArfTsNCj4g
-PiArDQo+ID4gICZwY2llIHsNCj4gPiAtCXN0YXR1cyA9ICJkaXNhYmxlZCI7DQo+ID4gKwlzdGF0
-dXMgPSAib2theSI7DQo+ID4gIH07DQo+ID4NCj4gPiAgJnNhdGEgew0KPiANCg0K
+Solar Designer <solar@openwall.com> writes:
+
+> Hi Michal,
+>
+> On Mon, Feb 07, 2022 at 01:17:55PM +0100, Michal Koutný wrote:
+>> The check is currently against the current->cred but since those are
+>> going to change and we want to check RLIMIT_NPROC condition after the
+>> switch, supply the capability check with the new cred.
+>> But since we're checking new_user being INIT_USER any new cred's
+>> capability-based allowance may be redundant when the check fails and the
+>> alternative solution would be revert of the commit 2863643fb8b9
+>> ("set_user: add capability check when rlimit(RLIMIT_NPROC) exceeds")
+>> 
+>> Fixes: 2863643fb8b9 ("set_user: add capability check when rlimit(RLIMIT_NPROC) exceeds")
+>> 
+>> Cc: Solar Designer <solar@openwall.com>
+>> Cc: Christian Brauner <christian.brauner@ubuntu.com>
+>> Signed-off-by: Michal Koutný <mkoutny@suse.com>
+>> ---
+>>  kernel/sys.c | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/kernel/sys.c b/kernel/sys.c
+>> index 8ea20912103a..48c90dcceff3 100644
+>> --- a/kernel/sys.c
+>> +++ b/kernel/sys.c
+>> @@ -481,7 +481,8 @@ static int set_user(struct cred *new)
+>>  	 */
+>>  	if (ucounts_limit_cmp(new->ucounts, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) >= 0 &&
+>>  			new_user != INIT_USER &&
+>> -			!capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
+>> +			!security_capable(new, &init_user_ns, CAP_SYS_RESOURCE, CAP_OPT_NONE) &&
+>> +			!security_capable(new, &init_user_ns, CAP_SYS_ADMIN, CAP_OPT_NONE))
+>>  		current->flags |= PF_NPROC_EXCEEDED;
+>>  	else
+>>  		current->flags &= ~PF_NPROC_EXCEEDED;
+>
+> Thank you for working on this and CC'ing me on it.  This is related to
+> the discussion Christian and I had in September:
+>
+> https://lore.kernel.org/all/20210913100140.bxqlg47pushoqa3r@wittgenstein/
+>
+> Christian was going to revert 2863643fb8b9, but apparently that never
+> happened.  Back then, I also suggested:
+>
+> "Alternatively, we could postpone the set_user() calls until we're
+> running with the new user's capabilities, but that's an invasive change
+> that's likely to create its own issues."
+
+I really think we need to do something like that.  Probably just set a
+flag in commit_creds and test later.
+
+I was working on fixes that looked cleaner and I just recently realized
+that the test in fork is almost as bad.  The function has_capability can
+be used but the same kind of problems exist.
+
+I thought I was very quickly going to have patches to post but I need
+to redo everything now that I have noticed the issue in fork, so it will
+be a day or so.
+
+Eric
+
+
+> The change you propose above is similar to that, but is more limited and
+> non-invasive.  That looks good to me.
+>
+> However, I think you need to drop the negations of the return value from
+> security_capable().  security_capable() returns 0 or -EPERM, while
+> capable() returns a bool, in kernel/capability.c: ns_capable_common():
+>
+> 	capable = security_capable(current_cred(), ns, cap, opts);
+> 	if (capable == 0) {
+> 		current->flags |= PF_SUPERPRIV;
+> 		return true;
+> 	}
+> 	return false;
+>
+> Also, your change would result in this no longer setting PF_SUPERPRIV.
+> This may be fine, but you could want to document it.
+>
+> On a related note, this comment in security/commoncap.c needs an update:
+>
+>  * NOTE WELL: cap_has_capability() cannot be used like the kernel's capable()
+>  * and has_capability() functions.  That is, it has the reverse semantics:
+>  * cap_has_capability() returns 0 when a task has a capability, but the
+>  * kernel's capable() and has_capability() returns 1 for this case.
+>
+> cap_has_capability() doesn't actually exist, and perhaps the comment
+> should refer to cap_capable().
+>
+> Alexander

@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4994B0AA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D44F4B0AAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 11:34:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239690AbiBJKcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 05:32:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45566 "EHLO
+        id S239701AbiBJKeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 05:34:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239586AbiBJKco (ORCPT
+        with ESMTP id S236014AbiBJKeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 05:32:44 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED74E250;
-        Thu, 10 Feb 2022 02:32:45 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id x4so1457541plb.4;
-        Thu, 10 Feb 2022 02:32:45 -0800 (PST)
+        Thu, 10 Feb 2022 05:34:09 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F780B9B;
+        Thu, 10 Feb 2022 02:34:07 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id 9so6561029pfx.12;
+        Thu, 10 Feb 2022 02:34:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=iCt716I4ZsYeZgcPgpvG3pnbHYTizG7AtfrrJ1x1TOA=;
-        b=CFsSFvhjhxVoaibC5X/hwIKPR1L7HhOKYGLkRmUz8ZcPBMqNesWqfb9NwECE6mLAmD
-         SphYxEQc9AI0iasLiZ/XOoW2R4wL8+Vm1o0ELkSToFVLcPoM2WMUVpd6zEf66SYyRqKg
-         TIR4+Q1qtV2HmjNSIs0aiouCGdoeXMAlG5gJp1i9uDoSne77ZGTxreYR9Wdt03mNJgr/
-         w2tO53TcuhddezEDL96JOknQ0mUxgevLIDQVInT/jU92LTcQjBbYu1Vsxyrwgf5k61fa
-         jRBWxoL0GYpqd8KbQZMy7g1t6fNjS3KS/2LDG1LCrdQJnUESp7xwkQnhop7hgWzCK+40
-         PK1w==
+        bh=yZrnHVGdRb2E3LKqHBhEp3nq9Ei2BPCgAdM7PxxwMUI=;
+        b=PXSYfz1zlVDEi9sS6GcnqRPXe6uYTBJ9eWKA+Lz9jSghUhglwdFclzfXxQyE3j/5yJ
+         825mmWLFHknGcmPg8a471WS8c+Rr1LFzJiJ12GpN8vwGUTfx0mEzrhYJCwrNCA3PJ1I7
+         /k8med1t4oqKWNDv0et45hVWUgsLCFIxG3SRD7nurNmnIvgdi8L9SLL+OlIixTgMscd2
+         h+CtSTrwCrToMb1Jk4YWSPRjxuqkGaSRLUs+wRmKXxbmPa1KaTRR0OjIqkozDvTht89m
+         ZsMMZYvdQSzX2V7X5miQUOtXopp+4Z6W0tsz6yKvygUnTeOES3VhwXXLGAPLE5uKtaFb
+         DHIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=iCt716I4ZsYeZgcPgpvG3pnbHYTizG7AtfrrJ1x1TOA=;
-        b=B2H6qb9fvW1uWfXF4g51sY33CH72lQg93h/FvCIuPa53HcWv1YZ1jmhYktmJBNMO7l
-         HvkTXmQqjxa3ew3SHI63PGdIUtyqIX7im2jEYZRducd7ddfbL9E/8kbG2FXFCSse+qIM
-         1lEfRwA6t1MuNOPHcv05HCbSVVL9hP/3rucz3dD7L6QBWHO5fLVRnrcmcsw81snegFht
-         +CbtdIiG+NkVws2iE3VU5Rjw2gpSz1z8dodu7INOA7zmwK+hzlUUPMrLFTDc5iE/QEGZ
-         TY3koSy/c3WW6qWmSMRr0X4aT2sVFZTRiiYcCbzO8yKwnNIs5SvtCmhYm5yL/jCmpvzf
-         2ySA==
-X-Gm-Message-State: AOAM5332y04opIcxOa60a3GUOxUhbQT0karABCrpA3hEK6QuM0hRakIi
-        cHMvl9ZZLJ49wLAogbPAO+8=
-X-Google-Smtp-Source: ABdhPJxWjbHm/+RgTiVUnCHOj6vTi+8a59SQARtf5Hv0LIP7fzhuIFTUhFk+AiTameQDve1RW5w2dQ==
-X-Received: by 2002:a17:902:8a8d:: with SMTP id p13mr6999717plo.80.1644489165477;
-        Thu, 10 Feb 2022 02:32:45 -0800 (PST)
+        bh=yZrnHVGdRb2E3LKqHBhEp3nq9Ei2BPCgAdM7PxxwMUI=;
+        b=EWHyhusB8XXil6AuoqHnH/Py/royZ2hfUZ8z30lxjPxae5OfiLh6t2/wzCxSk8myyb
+         y5N4BBoc7cwoDQJdiUGmoKTf/Rv3hqpgVrWcMh576KYdlAkg/KiIXFHR9qihhN54NINc
+         JG9yQl7h31Q62eYqTyqdUFF4WUiaJTJ+RBg4Z2OcfbWYzRON6vvfZE7l/51fc08JuHhy
+         rjelW4LTu8/2IIJEawBQ3f8j2gb/cUBfBBw0zGLmG0ZzcfrhFZhkCLCnE1alKPXyKHu+
+         5ZyLObH1W2cWK+Q5OohBSi+bNSMaYDQcSLPU3HoJikHms7iqCDPCf1fYcXHhPVE/iZLl
+         /Prg==
+X-Gm-Message-State: AOAM533QOEDh66J+gDsVWxy/Jpj+2OJCgFiEkLchSsCT+wz4VaC0xYoU
+        FuCdsgJxRRUBjwmiAfN6Yr4=
+X-Google-Smtp-Source: ABdhPJz+7MqFtDttNvkV2X42b/qYinotvqOCw91RqjewAExO8EGpTeo1aV5tFMRxmG3VHYU0H1nRfQ==
+X-Received: by 2002:a63:358c:: with SMTP id c134mr5647595pga.116.1644489247124;
+        Thu, 10 Feb 2022 02:34:07 -0800 (PST)
 Received: from localhost.localdomain (192.243.120.166.16clouds.com. [192.243.120.166])
-        by smtp.gmail.com with ESMTPSA id p1sm24663913pfh.98.2022.02.10.02.32.41
+        by smtp.gmail.com with ESMTPSA id p21sm10044134pfo.97.2022.02.10.02.34.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 02:32:45 -0800 (PST)
+        Thu, 10 Feb 2022 02:34:06 -0800 (PST)
 From:   davidcomponentone@gmail.com
-To:     jejb@linux.ibm.com
-Cc:     davidcomponentone@gmail.com, martin.petersen@oracle.com,
-        bvanassche@acm.org, jiapeng.chong@linux.alibaba.com,
-        yang.guang5@zte.com.cn, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH v2] scsi: csiostor: replace snprintf with sysfs_emit
-Date:   Thu, 10 Feb 2022 18:32:27 +0800
-Message-Id: <ce1cb616187bdd9e248008ef60ba07910c647355.1644399526.git.yang.guang5@zte.com.cn>
+To:     tyreld@linux.ibm.com
+Cc:     davidcomponentone@gmail.com, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Yang Guang <yang.guang5@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH v2] scsi: ibmvfc: replace snprintf with sysfs_emit
+Date:   Thu, 10 Feb 2022 18:33:51 +0800
+Message-Id: <6e673c1aeb3140ab7ac89a56e79be624e713f152.1644397683.git.yang.guang5@zte.com.cn>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -73,11 +75,17 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 From: Yang Guang <yang.guang5@zte.com.cn>
 
 coccinelle report:
-./drivers/scsi/csiostor/csio_scsi.c:1433:8-16:
+./drivers/scsi/ibmvscsi/ibmvfc.c:3453:8-16:
 WARNING: use scnprintf or sprintf
-./drivers/scsi/csiostor/csio_scsi.c:1369:9-17:
+./drivers/scsi/ibmvscsi/ibmvfc.c:3416:8-16:
 WARNING: use scnprintf or sprintf
-./drivers/scsi/csiostor/csio_scsi.c:1479:8-16:
+./drivers/scsi/ibmvscsi/ibmvfc.c:3436:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/ibmvscsi/ibmvfc.c:3426:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/ibmvscsi/ibmvfc.c:3445:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/ibmvscsi/ibmvfc.c:3406:8-16:
 WARNING: use scnprintf or sprintf
 
 Use sysfs_emit instead of scnprintf or sprintf makes more sense.
@@ -91,43 +99,91 @@ Change from v1-v2:
 - Adjust some format
 
 ---
- drivers/scsi/csiostor/csio_scsi.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ drivers/scsi/ibmvscsi/ibmvfc.c | 22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/scsi/csiostor/csio_scsi.c b/drivers/scsi/csiostor/csio_scsi.c
-index 55db02521221..05f52fc3efb8 100644
---- a/drivers/scsi/csiostor/csio_scsi.c
-+++ b/drivers/scsi/csiostor/csio_scsi.c
-@@ -1365,10 +1365,7 @@ csio_show_hw_state(struct device *dev,
- 	struct csio_lnode *ln = shost_priv(class_to_shost(dev));
- 	struct csio_hw *hw = csio_lnode_to_hw(ln);
+diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
+index d0eab5700dc5..ec63c45bf66b 100644
+--- a/drivers/scsi/ibmvscsi/ibmvfc.c
++++ b/drivers/scsi/ibmvscsi/ibmvfc.c
+@@ -3403,8 +3403,7 @@ static ssize_t ibmvfc_show_host_partition_name(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct ibmvfc_host *vhost = shost_priv(shost);
  
--	if (csio_is_hw_ready(hw))
--		return snprintf(buf, PAGE_SIZE, "ready\n");
--	else
--		return snprintf(buf, PAGE_SIZE, "not ready\n");
-+	return sysfs_emit(buf, "%sready\n", csio_is_hw_ready(hw) ? "" : "not ");
+-	return snprintf(buf, PAGE_SIZE, "%s\n",
+-			vhost->login_buf->resp.partition_name);
++	return sysfs_emit(buf, "%s\n", vhost->login_buf->resp.partition_name);
  }
  
- /* Device reset */
-@@ -1430,7 +1427,7 @@ csio_show_dbg_level(struct device *dev,
+ static ssize_t ibmvfc_show_host_device_name(struct device *dev,
+@@ -3413,8 +3412,7 @@ static ssize_t ibmvfc_show_host_device_name(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct ibmvfc_host *vhost = shost_priv(shost);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%s\n",
+-			vhost->login_buf->resp.device_name);
++	return sysfs_emit(buf, "%s\n", vhost->login_buf->resp.device_name);
+ }
+ 
+ static ssize_t ibmvfc_show_host_loc_code(struct device *dev,
+@@ -3423,8 +3421,7 @@ static ssize_t ibmvfc_show_host_loc_code(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct ibmvfc_host *vhost = shost_priv(shost);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%s\n",
+-			vhost->login_buf->resp.port_loc_code);
++	return sysfs_emit(buf, "%s\n", vhost->login_buf->resp.port_loc_code);
+ }
+ 
+ static ssize_t ibmvfc_show_host_drc_name(struct device *dev,
+@@ -3433,8 +3430,7 @@ static ssize_t ibmvfc_show_host_drc_name(struct device *dev,
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct ibmvfc_host *vhost = shost_priv(shost);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%s\n",
+-			vhost->login_buf->resp.drc_name);
++	return sysfs_emit(buf, "%s\n", vhost->login_buf->resp.drc_name);
+ }
+ 
+ static ssize_t ibmvfc_show_host_npiv_version(struct device *dev,
+@@ -3442,7 +3438,8 @@ static ssize_t ibmvfc_show_host_npiv_version(struct device *dev,
  {
- 	struct csio_lnode *ln = shost_priv(class_to_shost(dev));
- 
--	return snprintf(buf, PAGE_SIZE, "%x\n", ln->params.log_level);
-+	return sysfs_emit(buf, "%x\n", ln->params.log_level);
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct ibmvfc_host *vhost = shost_priv(shost);
+-	return snprintf(buf, PAGE_SIZE, "%d\n", be32_to_cpu(vhost->login_buf->resp.version));
++
++	return sysfs_emit(buf, "%u\n", be32_to_cpu(vhost->login_buf->resp.version));
  }
  
- /* Store debug level */
-@@ -1476,7 +1473,7 @@ csio_show_num_reg_rnodes(struct device *dev,
+ static ssize_t ibmvfc_show_host_capabilities(struct device *dev,
+@@ -3450,7 +3447,8 @@ static ssize_t ibmvfc_show_host_capabilities(struct device *dev,
  {
- 	struct csio_lnode *ln = shost_priv(class_to_shost(dev));
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n", ln->num_reg_rnodes);
-+	return sysfs_emit(buf, "%u\n", ln->num_reg_rnodes);
+ 	struct Scsi_Host *shost = class_to_shost(dev);
+ 	struct ibmvfc_host *vhost = shost_priv(shost);
+-	return snprintf(buf, PAGE_SIZE, "%llx\n", be64_to_cpu(vhost->login_buf->resp.capabilities));
++
++	return sysfs_emit(buf, "%llx\n", be64_to_cpu(vhost->login_buf->resp.capabilities));
  }
  
- static DEVICE_ATTR(num_reg_rnodes, S_IRUGO, csio_show_num_reg_rnodes, NULL);
+ /**
+@@ -3471,7 +3469,7 @@ static ssize_t ibmvfc_show_log_level(struct device *dev,
+ 	int len;
+ 
+ 	spin_lock_irqsave(shost->host_lock, flags);
+-	len = snprintf(buf, PAGE_SIZE, "%d\n", vhost->log_level);
++	len = sysfs_emit(buf, "%d\n", vhost->log_level);
+ 	spin_unlock_irqrestore(shost->host_lock, flags);
+ 	return len;
+ }
+@@ -3509,7 +3507,7 @@ static ssize_t ibmvfc_show_scsi_channels(struct device *dev,
+ 	int len;
+ 
+ 	spin_lock_irqsave(shost->host_lock, flags);
+-	len = snprintf(buf, PAGE_SIZE, "%d\n", vhost->client_scsi_channels);
++	len = sysfs_emit(buf, "%d\n", vhost->client_scsi_channels);
+ 	spin_unlock_irqrestore(shost->host_lock, flags);
+ 	return len;
+ }
 -- 
 2.30.2
 

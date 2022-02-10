@@ -2,345 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2694B13D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DDFC4B13DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 18:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245018AbiBJRFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 12:05:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47114 "EHLO
+        id S245035AbiBJRG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 12:06:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244899AbiBJRFD (ORCPT
+        with ESMTP id S244916AbiBJRG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 12:05:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46AF0C11
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 09:05:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644512703;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EcUyYohhMJ5KXE2ZDmyVNbCNr3iROwNbVCC/hxYqX6Y=;
-        b=RhCMfAu5z6hRFZvR6EFjnZySfbbePton4tWyKhwkg7Tg0H4alTi0sbtxbzU7zHSfGjLO3M
-        gA/7kVjDcQi4LLCQCcBmmAVVhPyyqmogidHeXgk/QpnBCh++a0Z3HAhPn+OVavyo2Gd6Uh
-        jz4eVYrDdvMIYaJ+0s20mWpO9VuiR6E=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-338-CKmqClBxNlaPT_Ap9o7yng-1; Thu, 10 Feb 2022 12:05:01 -0500
-X-MC-Unique: CKmqClBxNlaPT_Ap9o7yng-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D6DC5100D681;
-        Thu, 10 Feb 2022 17:05:00 +0000 (UTC)
-Received: from [10.22.19.255] (unknown [10.22.19.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1493E7DE5E;
-        Thu, 10 Feb 2022 17:04:59 +0000 (UTC)
-Message-ID: <e30a6464-708b-4946-65f0-c9a1e6bf2b35@redhat.com>
-Date:   Thu, 10 Feb 2022 12:04:59 -0500
+        Thu, 10 Feb 2022 12:06:28 -0500
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464A6C10;
+        Thu, 10 Feb 2022 09:06:29 -0800 (PST)
+Received: by mail-vs1-f44.google.com with SMTP id m24so7172404vsp.7;
+        Thu, 10 Feb 2022 09:06:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QZ3cH0FU++BGKzJo9VuS5Ab2ppvdiiMqMLbf8RhGMsg=;
+        b=Grg9wOHd1qWSZTkk9MEBIS0oN1exdpNjb/XEsByDNLKzAI9CiWXq1/DF+m98y/nMLm
+         EIuQZUVo4LRpaPjfPjP0q//c2wuD3QwNi1NWW8Bg6qhaYkihmL67ghFpNt4HmkoKO09q
+         YM9/acNt9zu7cfErtNvCI2hxKzJaO9sBQt561bdBWDERFsMlYJK08lzGMkw6LQSGQQeM
+         GuWQEpdVxV1t62V/dAsXyTmId3hzFbhxMNsfrwQVNi4f1cQX+ttYTSElgERI6EFjx5+E
+         V08u/2OoWKlr0l8pH4bQePdPy6IX6xf5sCwwG1D+EDY/ctnDTfTfOCvWmcR3OQatr5Pc
+         1rdA==
+X-Gm-Message-State: AOAM532raiOLcne/FCks9zIEOJC+uHpHxJtIpSpnuqBo3watOVe59f+h
+        /MtK6X70PLsNhXi7ilij/ntyP6iHbWbgZA==
+X-Google-Smtp-Source: ABdhPJztBpj2vO4DubXI/HAAhBknXIkKuEN8YhpvQDPxD9EiQOqDTWycowptsR1lFkYTkUaR5O53TQ==
+X-Received: by 2002:a05:6102:c87:: with SMTP id f7mr2656595vst.49.1644512788382;
+        Thu, 10 Feb 2022 09:06:28 -0800 (PST)
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com. [209.85.221.182])
+        by smtp.gmail.com with ESMTPSA id z3sm201748vsk.25.2022.02.10.09.06.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 09:06:27 -0800 (PST)
+Received: by mail-vk1-f182.google.com with SMTP id u65so2963940vkg.8;
+        Thu, 10 Feb 2022 09:06:26 -0800 (PST)
+X-Received: by 2002:a1f:294c:: with SMTP id p73mr2998419vkp.0.1644512786734;
+ Thu, 10 Feb 2022 09:06:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] locking/semaphore: Use wake_q to wake up processes
- outside lock critical section
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will.deacon@arm.com>,
-        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
-References: <20220118153254.358748-1-longman@redhat.com>
- <YgTms3tGYeQ4HYFZ@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YgTms3tGYeQ4HYFZ@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220209090314.2511959-1-javierm@redhat.com> <CAMuHMdVs750iE=kP1vabwgsGOb8sHc8aC5k=HwCU32CURnYktw@mail.gmail.com>
+In-Reply-To: <CAMuHMdVs750iE=kP1vabwgsGOb8sHc8aC5k=HwCU32CURnYktw@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 10 Feb 2022 18:06:15 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVKmfOAdTG70KF+eAw3noXHSGCPyGjw3cSVyQOvzUafhQ@mail.gmail.com>
+Message-ID: <CAMuHMdVKmfOAdTG70KF+eAw3noXHSGCPyGjw3cSVyQOvzUafhQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/7] drm: Add driver for Solomon SSD130X OLED displays
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/10/22 05:19, Peter Zijlstra wrote:
-> On Tue, Jan 18, 2022 at 10:32:54AM -0500, Waiman Long wrote:
->> The following lockdep splat was observed:
->>
->> [ 9776.459819] ======================================================
->> [ 9776.459820] WARNING: possible circular locking dependency detected
->> [ 9776.459821] 5.14.0-0.rc4.35.el9.x86_64+debug #1 Not tainted
->> [ 9776.459823] ------------------------------------------------------
->> [ 9776.459824] stress-ng/117708 is trying to acquire lock:
->> [ 9776.459825] ffffffff892d41d8 ((console_sem).lock){-...}-{2:2}, at: down_trylock+0x13/0x70
->>
->> [ 9776.459831] but task is already holding lock:
->> [ 9776.459832] ffff888e005f6d18 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x27/0x130
->>
->> [ 9776.459837] which lock already depends on the new lock.
->>        :
->> [ 9776.459857] -> #1 (&p->pi_lock){-.-.}-{2:2}:
->> [ 9776.459860]        __lock_acquire+0xb72/0x1870
->> [ 9776.459861]        lock_acquire+0x1ca/0x570
->> [ 9776.459862]        _raw_spin_lock_irqsave+0x40/0x90
->> [ 9776.459863]        try_to_wake_up+0x9d/0x1210
->> [ 9776.459864]        up+0x7a/0xb0
->> [ 9776.459864]        __up_console_sem+0x33/0x70
->> [ 9776.459865]        console_unlock+0x3a1/0x5f0
->> [ 9776.459866]        vprintk_emit+0x23b/0x2b0
->> [ 9776.459867]        devkmsg_emit.constprop.0+0xab/0xdc
->> [ 9776.459868]        devkmsg_write.cold+0x4e/0x78
->> [ 9776.459869]        do_iter_readv_writev+0x343/0x690
->> [ 9776.459870]        do_iter_write+0x123/0x340
->> [ 9776.459871]        vfs_writev+0x19d/0x520
->> [ 9776.459871]        do_writev+0x110/0x290
->> [ 9776.459872]        do_syscall_64+0x3b/0x90
->> [ 9776.459873]        entry_SYSCALL_64_after_hwframe+0x44/0xae
->>        :
->> [ 9776.459905] Chain exists of:
->> [ 9776.459906]   (console_sem).lock --> &p->pi_lock --> &rq->__lock
->>
->> [ 9776.459911]  Possible unsafe locking scenario:
->>
->> [ 9776.459913]        CPU0                    CPU1
->> [ 9776.459914]        ----                    ----
->> [ 9776.459914]   lock(&rq->__lock);
->> [ 9776.459917]                                lock(&p->pi_lock);
->> [ 9776.459919]                                lock(&rq->__lock);
->> [ 9776.459921]   lock((console_sem).lock);
->>
->> [ 9776.459923]  *** DEADLOCK ***
-> Is this new due to the ongoing printk rewrite? Also the above doesn't
-> actually describe the whole invesion, the one where console sem is taken
-> inside pi_lock is missing.
-
-I am sorry that I might have stripped out too much for the lockdep splat 
-to make it understandable. Below is the full lockdep splat:
-
-[ 9776.459819] ======================================================
-[ 9776.459820] WARNING: possible circular locking dependency detected
-[ 9776.459821] 5.14.0-0.rc4.35.el9.x86_64+debug #1 Not tainted
-[ 9776.459823] ------------------------------------------------------
-[ 9776.459824] stress-ng/117708 is trying to acquire lock:
-[ 9776.459825] ffffffff892d41d8 ((console_sem).lock){-...}-{2:2}, at: 
-down_trylock+0x13/0x70
-
-[ 9776.459831] but task is already holding lock:
-[ 9776.459832] ffff888e005f6d18 (&rq->__lock){-.-.}-{2:2}, at: 
-raw_spin_rq_lock_nested+0x27/0x130
-
-[ 9776.459837] which lock already depends on the new lock.
-
-
-[ 9776.459839] the existing dependency chain (in reverse order) is:
-
-[ 9776.459841] -> #2 (&rq->__lock){-.-.}-{2:2}:
-[ 9776.459845]        __lock_acquire+0xb72/0x1870
-[ 9776.459846]        lock_acquire+0x1ca/0x570
-[ 9776.459847]        _raw_spin_lock_nested+0x2f/0x80
-[ 9776.459848]        raw_spin_rq_lock_nested+0x27/0x130
-[ 9776.459849]        task_fork_fair+0x41/0x550
-[ 9776.459850]        sched_fork+0x40b/0xb60
-[ 9776.459851]        copy_process+0x160b/0x4db0
-[ 9776.459852]        kernel_clone+0xba/0x880
-[ 9776.459853]        kernel_thread+0xae/0xe0
-[ 9776.459853]        rest_init+0x22/0x2f0
-[ 9776.459854]        start_kernel+0x3cd/0x3eb
-[ 9776.459855]        secondary_startup_64_no_verify+0xc2/0xcb
-
-[ 9776.459857] -> #1 (&p->pi_lock){-.-.}-{2:2}:
-[ 9776.459860]        __lock_acquire+0xb72/0x1870
-[ 9776.459861]        lock_acquire+0x1ca/0x570
-[ 9776.459862]        _raw_spin_lock_irqsave+0x40/0x90
-[ 9776.459863]        try_to_wake_up+0x9d/0x1210
-[ 9776.459864]        up+0x7a/0xb0
-[ 9776.459864]        __up_console_sem+0x33/0x70
-[ 9776.459865]        console_unlock+0x3a1/0x5f0
-[ 9776.459866]        vprintk_emit+0x23b/0x2b0
-[ 9776.459867]        devkmsg_emit.constprop.0+0xab/0xdc
-[ 9776.459868]        devkmsg_write.cold+0x4e/0x78
-[ 9776.459869]        do_iter_readv_writev+0x343/0x690
-[ 9776.459870]        do_iter_write+0x123/0x340
-[ 9776.459871]        vfs_writev+0x19d/0x520
-[ 9776.459871]        do_writev+0x110/0x290
-[ 9776.459872]        do_syscall_64+0x3b/0x90
-[ 9776.459873]        entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-[ 9776.459875] -> #0 ((console_sem).lock){-...}-{2:2}:
-[ 9776.459878]        check_prev_add+0x15e/0x20f0
-[ 9776.459880]        validate_chain+0xaba/0xde0
-[ 9776.459880]        __lock_acquire+0xb72/0x1870
-[ 9776.459881]        lock_acquire+0x1ca/0x570
-[ 9776.459883]        _raw_spin_lock_irqsave+0x40/0x90
-[ 9776.459884]        down_trylock+0x13/0x70
-[ 9776.459885]        __down_trylock_console_sem+0x2a/0xb0
-[ 9776.459886]        console_trylock_spinning+0x13/0x1f0
-[ 9776.459887]        vprintk_emit+0x1e6/0x2b0
-[ 9776.459888]        printk+0xb2/0xe3
-[ 9776.459889]        __warn_printk+0x9b/0xf3
-[ 9776.459889]        update_rq_clock+0x3c2/0x780
-[ 9776.459890]        do_sched_rt_period_timer+0x19e/0x9a0
-[ 9776.459891]        sched_rt_period_timer+0x6b/0x150
-[ 9776.459892]        __run_hrtimer+0x27a/0xb20
-[ 9776.459893]        __hrtimer_run_queues+0x159/0x260
-[ 9776.459894]        hrtimer_interrupt+0x2cb/0x8f0
-[ 9776.459895]        __sysvec_apic_timer_interrupt+0x13e/0x540
-[ 9776.459896]        sysvec_apic_timer_interrupt+0x6a/0x90
-[ 9776.459897]        asm_sysvec_apic_timer_interrupt+0x12/0x20
-[ 9776.459897]        _raw_spin_unlock_irqrestore+0x3f/0x50
-[ 9776.459898]        __sched_setscheduler+0xb9a/0x2c80
-[ 9776.459899]        _sched_setscheduler.isra.0+0xd0/0x140
-[ 9776.459900]        do_sched_setscheduler+0x151/0x2b0
-[ 9776.459901]        __x64_sys_sched_setscheduler+0x76/0xa0
-[ 9776.459902]        do_syscall_64+0x3b/0x90
-[ 9776.459903]        entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-[ 9776.459904] other info that might help us debug this:
-
-[ 9776.459905] Chain exists of:
-[ 9776.459906]   (console_sem).lock --> &p->pi_lock --> &rq->__lock
-
-[ 9776.459911]  Possible unsafe locking scenario:
-
-[ 9776.459913]        CPU0                    CPU1
-[ 9776.459914]        ----                    ----
-[ 9776.459914]   lock(&rq->__lock);
-[ 9776.459917] lock(&p->pi_lock);
-[ 9776.459919] lock(&rq->__lock);
-[ 9776.459921]   lock((console_sem).lock);
-
-[ 9776.459923]  *** DEADLOCK ***
-
-[ 9776.459925] 2 locks held by stress-ng/117708:
-[ 9776.459925]  #0: ffffffff89403960 (&cpuset_rwsem){++++}-{0:0}, at: 
-__sched_setscheduler+0xe2f/0x2c80
-[ 9776.459930]  #1: ffff888e005f6d18 (&rq->__lock){-.-.}-{2:2}, at: 
-raw_spin_rq_lock_nested+0x27/0x130
-
-[ 9776.459935] stack backtrace:
-[ 9776.459936] CPU: 95 PID: 117708 Comm: stress-ng Kdump: loaded Not 
-tainted 5.14.0-0.rc4.35.el9.x86_64+debug #1
-[ 9776.459938] Hardware name: FUJITSU PRIMEQUEST 2800E3/D3752, BIOS 
-PRIMEQUEST 2000 Series BIOS Version 01.51 06/29/2020
-[ 9776.459939] Call Trace:
-[ 9776.459940]  <IRQ>
-[ 9776.459940]  dump_stack_lvl+0x57/0x7d
-[ 9776.459941]  check_noncircular+0x26a/0x310
-[ 9776.459942]  ? print_circular_bug+0x1f0/0x1f0
-[ 9776.459943]  ? data_push_tail.part.0+0x92/0x3e0
-[ 9776.459944]  ? alloc_chain_hlocks+0x1de/0x530
-[ 9776.459945]  check_prev_add+0x15e/0x20f0
-[ 9776.459946]  validate_chain+0xaba/0xde0
-[ 9776.459947]  ? check_prev_add+0x20f0/0x20f0
-[ 9776.459947]  ? vsnprintf+0x852/0x15f0
-[ 9776.459948]  __lock_acquire+0xb72/0x1870
-[ 9776.459949]  lock_acquire+0x1ca/0x570
-[ 9776.459950]  ? down_trylock+0x13/0x70
-[ 9776.459950]  ? rcu_read_unlock+0x40/0x40
-[ 9776.459951]  ? validate_chain+0x14c/0xde0
-[ 9776.459952]  _raw_spin_lock_irqsave+0x40/0x90
-[ 9776.459953]  ? down_trylock+0x13/0x70
-[ 9776.459954]  down_trylock+0x13/0x70
-[ 9776.459954]  ? vprintk_emit+0x1e6/0x2b0
-[ 9776.459955]  __down_trylock_console_sem+0x2a/0xb0
-[ 9776.459956]  console_trylock_spinning+0x13/0x1f0
-[ 9776.459957]  vprintk_emit+0x1e6/0x2b0
-[ 9776.459958]  printk+0xb2/0xe3
-[ 9776.459958]  ? record_print_text.cold+0x11/0x11
-[ 9776.459959]  ? lock_acquire+0x1ca/0x570
-[ 9776.459960]  __warn_printk+0x9b/0xf3
-[ 9776.459961]  ? __mmdrop.cold+0x33/0x33
-[ 9776.459961]  ? __lock_contended+0x910/0x910
-[ 9776.459962]  ? do_raw_spin_trylock+0xb5/0x180
-[ 9776.459963]  ? do_raw_spin_lock+0x270/0x270
-[ 9776.459964]  update_rq_clock+0x3c2/0x780
-[ 9776.459965]  ? raw_spin_rq_lock_nested+0x27/0x130
-[ 9776.459966]  do_sched_rt_period_timer+0x19e/0x9a0
-[ 9776.459967]  ? sched_rt_period_timer+0x60/0x150
-[ 9776.459968]  sched_rt_period_timer+0x6b/0x150
-[ 9776.459969]  __run_hrtimer+0x27a/0xb20
-[ 9776.459969]  ? do_sched_rt_period_timer+0x9a0/0x9a0
-[ 9776.459970]  __hrtimer_run_queues+0x159/0x260
-[ 9776.459971]  ? __run_hrtimer+0xb20/0xb20
-[ 9776.459972]  ? recalibrate_cpu_khz+0x10/0x10
-[ 9776.459973]  ? ktime_get_update_offsets_now+0xe0/0x2c0
-[ 9776.459974]  hrtimer_interrupt+0x2cb/0x8f0
-[ 9776.459976]  __sysvec_apic_timer_interrupt+0x13e/0x540
-[ 9776.459977]  sysvec_apic_timer_interrupt+0x6a/0x90
-[ 9776.459977]  </IRQ>
-[ 9776.459978]  asm_sysvec_apic_timer_interrupt+0x12/0x20
-[ 9776.459979] RIP: 0010:_raw_spin_unlock_irqrestore+0x3f/0x50
-[ 9776.459981] Code: 10 e8 75 82 28 fe 48 89 ef e8 ed 15 29 fe 81 e3 00 
-02 00 00 75 17 9c 58 f6 c4 02 75 17 48 85 db 74 01 fb 65 ff 0d d1 c8 54 
-78 <5b> 5d c3 e8 a9 4f 4c fe eb e2 e8 62 7b fd ff eb e2 0f 1f 44 00 00
-[ 9776.459983] RSP: 0018:ffffc90028e8fcb8 EFLAGS: 00000282
-[ 9776.459984] RAX: 0000000000000002 RBX: 0000000000000200 RCX: 
-1ffffffff15ba646
-[ 9776.459985] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 
-ffffffff87ad28b7
-[ 9776.459986] RBP: ffff888453ac8d28 R08: 0000000000000001 R09: 
-ffffffff8adc9fd7
-[ 9776.459987] R10: fffffbfff15b93fa R11: 0000000000000001 R12: 
-0000000000000000
-[ 9776.459988] R13: ffff888453ac8000 R14: ffff8c8ccbdf6d00 R15: 
-ffff8c8ccbdf77d0
-[ 9776.459989]  ? _raw_spin_unlock_irqrestore+0x47/0x50
-[ 9776.459990]  __sched_setscheduler+0xb9a/0x2c80
-[ 9776.459991]  ? cpu_cgroup_fork+0x180/0x180
-[ 9776.459992]  ? sched_clock_cpu+0x15/0x170
-[ 9776.459993]  ? find_held_lock+0x33/0x110
-[ 9776.459993]  _sched_setscheduler.isra.0+0xd0/0x140
-[ 9776.459994]  ? lock_downgrade+0x110/0x110
-[ 9776.459995]  ? __ia32_sys_sched_setattr+0xa0/0xa0
-[ 9776.459996]  ? do_sched_setscheduler+0x111/0x2b0
-[ 9776.459997]  do_sched_setscheduler+0x151/0x2b0
-[ 9776.459998]  ? _sched_setscheduler.isra.0+0x140/0x140
-[ 9776.459998]  ? ktime_get_coarse_real_ts64+0x128/0x160
-[ 9776.459999]  __x64_sys_sched_setscheduler+0x76/0xa0
-[ 9776.460000]  do_syscall_64+0x3b/0x90
-[ 9776.460001]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[ 9776.460002] RIP: 0033:0x7fe60257a27b
-[ 9776.460003] Code: 73 01 c3 48 8b 0d ad 2b 10 00 f7 d8 64 89 01 48 83 
-c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 90 00 00 00 0f 
-05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 7d 2b 10 00 f7 d8 64 89 01 48
-[ 9776.460004] RSP: 002b:00007ffdfe38c5e8 EFLAGS: 00000206 ORIG_RAX: 
-0000000000000090
-[ 9776.460006] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 
-00007fe60257a27b
-[ 9776.460007] RDX: 00007ffdfe38c604 RSI: 0000000000000002 RDI: 
-000000000001cbcc
-[ 9776.460008] RBP: 0000000000000002 R08: 00007ffdfe38c510 R09: 
-0000000000000883
-[ 9776.460009] R10: 0000000000000000 R11: 0000000000000206 R12: 
-0000000000000002
-[ 9776.460010] R13: 0000000000000001 R14: 000000000001cbcc R15: 
-000055b909b568c6
-[ 9779.843476] sched: RT throttling activated
-
+On Wed, Feb 9, 2022 at 1:19 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Wed, Feb 9, 2022 at 10:03 AM Javier Martinez Canillas
+> <javierm@redhat.com> wrote:
+> > This patch series adds a DRM driver for the Solomon OLED SSD1305, SSD1306,
+> > SSD1307 and SSD1309 displays. It is a port of the ssd1307fb fbdev driver.
 >
-> More concerning, that ordering is invalid to begin with, so the above
-> seems like a very poor justification for this patch.
+> [...]
 
-Which lock ordering are you considered invalid?
+> The logo is not shown, even when I create a 16-color or 224-color
+> version of the small monochrome logo I'm using.
 
-The stack trace included in the patch description show the 
-(console_sem).lock --> &p->pi_lock --> &rq->__lock sequence because of 
-the wake_up_process() call while holding the console_sem.lock.
+My mistake, I messed up the hook-up, causing it to pick a different
+logo that was too large to be displayed.
 
-The reverse &rq->__lock lock may happen when a printk() statement is 
-called while holding the rq lock.
+Of course it's using the 224-color logo reduced to monochrome instead
+of the real monochrome logo, as fbcon thinks it's running on XRGB8888.
 
-In this case, the printk() is triggered by a SCHED_WARN_ON() statement 
-in update_rq_clock() which don't call printk_deferred and so won't have 
-LOGLEVEL_SCHED set. I guess there is alternative way to work around this 
-issue, but moving the process wakeup out from the semaphore spinlock 
-will solve this problem in case there are other corner cases like that.
+Gr{oetje,eeting}s,
 
-I will update the patch description to include this additional information.
+                        Geert
 
-Cheers,
-Longman
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,70 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6B04B0A01
-	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 054754B0A08
+	for <lists+linux-kernel@lfdr.de>; Thu, 10 Feb 2022 10:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239171AbiBJJxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 04:53:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40504 "EHLO
+        id S239174AbiBJJxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 04:53:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232590AbiBJJxD (ORCPT
+        with ESMTP id S232590AbiBJJxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 04:53:03 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BDE128;
-        Thu, 10 Feb 2022 01:53:04 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id j5so2434371vsm.5;
-        Thu, 10 Feb 2022 01:53:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=N/o/oEDK6yNA6KzQQ36RhfRwk2uRGWwiWLSILhdKP7k=;
-        b=kqbXjTNyeNaOJPTbZTaTkpLJJbJdJN35K23eEWCPQYQWK5f9EUQMZt1qygDTuXHANb
-         eKBBIx0YJ89trZZabVjK9YltMrTqVuvyv1Ylp3PodeckaKNlcTOeSL9yXkFxFSzGTgAh
-         H8pBwAUYO9ZtYNl+cDM+hoQF5+e7qPVCrP9m+ypCU6QSaM6aJhPPTbvI+q5VexvO8JB9
-         Zxcz/WkbFtMgjuFqe/fJ0OCRz/drMA/0I1Y1siddfF8ocT82IBe1+T2T5mAu60IRbBnc
-         O3Ga+/BrmxDaITxMs1ASPhH9RWURXvloUTyHTxHYO499G+vWQRQwR6pNpWfXdwBztLlZ
-         6VTw==
+        Thu, 10 Feb 2022 04:53:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 847F1128
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:53:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644486805;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2ALXd4CkpYhz0PzrpWR8ccebfEXt2RH4smcsnpQnLsk=;
+        b=UZDzIv9ZoI9s0CIq9GiXHT82B2QJo9BPqANMT9PhnXYCot0gCln8BhMSlR5Ra776aZ9u7h
+        Hn/W7ggMhyEVS1TyEW8L6cwOngDgphaQoTDr6F8asqeKn5tz6Kso0LGvB5Q2iVM8Bfiwgw
+        Bg+/s5Ejlcn3AP2Qu9dEE/SC7iCAbY4=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-529-YAtIIdocNTeOdT3qo_VwNA-1; Thu, 10 Feb 2022 04:53:24 -0500
+X-MC-Unique: YAtIIdocNTeOdT3qo_VwNA-1
+Received: by mail-ej1-f72.google.com with SMTP id hr36-20020a1709073fa400b006cd2c703959so2456814ejc.14
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 01:53:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N/o/oEDK6yNA6KzQQ36RhfRwk2uRGWwiWLSILhdKP7k=;
-        b=FZ6oaTRlIztaRPzTFBl5zzecNEmgGiuFyzEYj6oRgs/Tn0G0jC7X7Rg1m8n+m25xQ8
-         1dzgMcD+7kiaQgLgQGJAsjih5AlBd088OCBgYAlEU/8YT9QmR65GDqEvYYgbkS0ZPgQN
-         ZAwZ8NoSIQtFDpoCUBog5LOSmhj4Xc/xRmkWpz3i4IXgQqx6a3m9s7E9wORWMDgEhvdu
-         YrIQhh3CVmyQJ8oCrG1rjwXfRHLwetcEawms3U9FMgwWQBh2i8R/KOVfjm9S36vd3cJ5
-         AJ/+J8R4M4v3UM0vMh0sJNMX/Yt2mr3+ghrsyrJTV90nyUJe8IJZRG25h5D7qP7emsx1
-         Y6aA==
-X-Gm-Message-State: AOAM532q/02EAeCEWDHZgDzH+yIebV+zRvUWmU30fJTBA6KkFb3sy7fh
-        6FGUC+gEeuZwj6vIsDhYfjIwmIgU1B7IPVqisos=
-X-Google-Smtp-Source: ABdhPJy3BmfjGBsQ/1m6jTaEjOrRuG/WxuKfSjaUqL39oOImZUuIRENvrfMRIIwP14Pwy6n28CGijThXnVMbZNnA5hE=
-X-Received: by 2002:a67:f890:: with SMTP id h16mr2554081vso.43.1644486783621;
- Thu, 10 Feb 2022 01:53:03 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2ALXd4CkpYhz0PzrpWR8ccebfEXt2RH4smcsnpQnLsk=;
+        b=CdMPLykLMV6gT5EIcBoQbtgDy5Iouwc3O3tdGEFwIV9n4SQDxmVDip2gmOmkmuD2GT
+         D3Yk/nnINT2i5BKbgCFb05KeqCAtrhEV8Igns4XlZc3zfMeAOMWzXHbd5fKWMwl9tZHR
+         J8/CmLJQjrtvS8pjsDeMBubHZYCZEDMMtTfnBoLOVKQOFEiUbZhTwKAmIHTUP/jr2RTR
+         St6p2pbfuvmgVkQInILKNA9f1jY4SE0o7OqhgPBrNHeOA4XZrGUgmOeNA7wR71iSciVL
+         Dr6AoW+BodUzM9Qc4CbUMn2qUtBnxBznvUYbS33ZqN3l95YFd4e119WhnSnUUisYgvIm
+         D76w==
+X-Gm-Message-State: AOAM530wMhAuMhi2KyS9bwYexJYOj9viCaM3DyHPLhjQXtaC0H6gZrRE
+        X4sOf5d1zE7outBva4EHDvThNRa1vPKsriyv4WLty9iEt0bSpe60r4i9GH2uqI7xrwDiG69hsLB
+        1weYt64a4dYHbmfkhre3MWNbO
+X-Received: by 2002:a05:6402:4c2:: with SMTP id n2mr7224990edw.247.1644486803370;
+        Thu, 10 Feb 2022 01:53:23 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxYsGzFAIAxGewz0MvOdM1WduQkHptGANoYIsynhjpXJkagAgM4JHO0ZXxslFEDVseEyx+sdg==
+X-Received: by 2002:a05:6402:4c2:: with SMTP id n2mr7224973edw.247.1644486803214;
+        Thu, 10 Feb 2022 01:53:23 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id i5sm3866374ejh.13.2022.02.10.01.53.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 01:53:22 -0800 (PST)
+Message-ID: <7e2767c2-d772-a485-ce8c-ed5d4da06b3f@redhat.com>
+Date:   Thu, 10 Feb 2022 10:53:21 +0100
 MIME-Version: 1.0
-References: <20220110114930.1406665-1-sergio.paracuellos@gmail.com>
- <YfE5MOkQRoHQV7Wf@kroah.com> <CAMhs-H8s0d=PswQDR86Tq-bQt634Z6rdFYHTE+DFepsthmKAYA@mail.gmail.com>
- <YfE7LNFuf79i3oAQ@kroah.com> <CAMhs-H9c8zF=v2tu5Y1OsFRP6esOi5zrUceqS_OUiJ=MSfCvRQ@mail.gmail.com>
- <20220205025548.AA1BBC004E1@smtp.kernel.org> <CAMhs-H82J5DC+m0V==tQKKYyqsu30kGLkdUbMRU+nsyLb8sL3Q@mail.gmail.com>
- <CAMhs-H9RSjgW1-dafqDqbfBaQ4iH6NFDLoRHqjt=f41zAEcC-g@mail.gmail.com> <YgS26WAtSkQbZam4@kroah.com>
-In-Reply-To: <YgS26WAtSkQbZam4@kroah.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Thu, 10 Feb 2022 10:52:52 +0100
-Message-ID: <CAMhs-H_x0My6ZfnZkyyEiSd+vT66ijf-fPzxxHohD_Yzko4h-Q@mail.gmail.com>
-Subject: Re: [PATCH v8 0/4] clk: ralink: make system controller a reset provider
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
-        John Crispin <john@phrozen.org>, linux-staging@lists.linux.dev,
-        NeilBrown <neil@brown.name>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 03/23] KVM: MMU: remove valid from extended role
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        dmatlack@google.com, vkuznets@redhat.com
+References: <20220204115718.14934-1-pbonzini@redhat.com>
+ <20220204115718.14934-4-pbonzini@redhat.com> <YgRGQ1HiB2jSTr5M@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YgRGQ1HiB2jSTr5M@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,84 +82,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 7:55 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Feb 10, 2022 at 07:44:33AM +0100, Sergio Paracuellos wrote:
-> > Hi Greg,
-> >
-> > On Sat, Feb 5, 2022 at 8:31 AM Sergio Paracuellos
-> > <sergio.paracuellos@gmail.com> wrote:
-> > >
-> > > On Sat, Feb 5, 2022 at 3:55 AM Stephen Boyd <sboyd@kernel.org> wrote:
-> > > >
-> > > > Quoting Sergio Paracuellos (2022-01-26 04:45:31)
-> > > > > On Wed, Jan 26, 2022 at 1:14 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > > > >
-> > > > > > On Wed, Jan 26, 2022 at 01:08:52PM +0100, Sergio Paracuellos wrote:
-> > > > > > > On Wed, Jan 26, 2022 at 1:06 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > > > > > >
-> > > > > > > > On Mon, Jan 10, 2022 at 12:49:26PM +0100, Sergio Paracuellos wrote:
-> > > > > > > > > Hi all,
-> > > > > > > > >
-> > > > > > > > > This patch series add minimal change to provide mt7621 resets properly
-> > > > > > > > > defining them in the 'mediatek,mt7621-sysc' node which is the system
-> > > > > > > > > controller of the SoC and is already providing clocks to the rest of
-> > > > > > > > > the world.
-> > > > > > > > >
-> > > > > > > > > There is shared architecture code for all ralink platforms in 'reset.c'
-> > > > > > > > > file located in 'arch/mips/ralink' but the correct thing to do to align
-> > > > > > > > > hardware with software seems to define and add related reset code to the
-> > > > > > > > > already mainlined clock driver.
-> > > > > > > > >
-> > > > > > > > > After this changes, we can get rid of the useless reset controller node
-> > > > > > > > > in the device tree and use system controller node instead where the property
-> > > > > > > > > '#reset-cells' has been added. Binding documentation for this nodeq has
-> > > > > > > > > been updated with the new property accordly.
-> > > > > > > > >
-> > > > > > > > > This series also provide a bindings include header where all related
-> > > > > > > > > reset bits for the MT7621 SoC are defined.
-> > > > > > > > >
-> > > > > > > > > Also, please take a look to this review [0] to understand better motivation
-> > > > > > > > > for this series.
-> > > > > > > > >
-> > > > > > > > > Regarding the way of merging this:
-> > > > > > > > >  - I'd like patches 1 and 4 which are related going through staging tree.
-> > > > > > > >
-> > > > > > > > Patches 1 and 4 now in the staging tree, thanks.
-> > > > > > >
-> > > > > > > Stephen wanted all to go through the CLK tree since PATCH 3 and 1 were
-> > > > > > > also a dependency... Can we get all of them through the same tree,
-> > > > > > > then? I am ok with both CLK or staging trees.
-> > > > > >
-> > > > > > That's fine with me if they all go through the CLK tree, but there will
-> > > > > > be a merge issue that I already fixed up in my tree.  If you want me to
-> > > > > > drop them, just let me know.
-> > > > >
-> > > > > Stephen, what do you prefer? Is it better all going through staging-tree then?
-> > > > >
-> > > >
-> > > > Sure take them through staging tree.
-> > > >
-> > > > Acked-by: Stephen Boyd <sboyd@kernel.org>
-> > >
-> > > Thanks, Stephen.
-> > >
-> > > Greg, can you please take remaining patches 2 and 3 through your tree, then?
-> > >
-> > > Thanks in advance for your time.
-> >
-> > Please, let me know if you prefer me to resend the remaining two
-> > patches with tags added to make this easier for you.
->
-> Please do so, as I can't seem to dig up the remaining ones...
+On 2/9/22 23:54, Sean Christopherson wrote:
+> Nope, it's not guaranteed to be non-zero:
+> 
+> static int role_regs_to_root_level(struct kvm_mmu_role_regs *regs)
+> {
+> 	if (!____is_cr0_pg(regs))
+> 		return 0; <=============================================
+> 	else if (____is_efer_lma(regs))
+> 		return ____is_cr4_la57(regs) ? PT64_ROOT_5LEVEL :
+> 					       PT64_ROOT_4LEVEL;
+> 	else if (____is_cr4_pae(regs))
+> 		return PT32E_ROOT_LEVEL;
+> 	else
+> 		return PT32_ROOT_LEVEL;
+> }
+> 
 
-Ok, done. Please check:
-https://lore.kernel.org/linux-staging/20220210094859.927868-1-sergio.paracuellos@gmail.com/T/#t
+Yes, see my reply to David.  At the end of the series the assumption is 
+correct:
 
-Best regards,
-    Sergio Paracuellos
+- level is always nonzero in mmu_role
 
->
-> thanks,
->
-> greg k-h
+- one of level or direct (which is !CR0.PG) is always nonzero in cpu_role
+
+So the patch can be kept but it has to be moved much later.
+
+Paolo
+

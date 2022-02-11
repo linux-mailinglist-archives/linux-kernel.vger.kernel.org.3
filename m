@@ -2,120 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3644E4B2B7C
+	by mail.lfdr.de (Postfix) with ESMTP id 84E8C4B2B7D
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344543AbiBKRNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 12:13:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36418 "EHLO
+        id S237798AbiBKRNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 12:13:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352010AbiBKRNX (ORCPT
+        with ESMTP id S1351987AbiBKRNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 12:13:23 -0500
-Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C09BD6
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:13:20 -0800 (PST)
-Received: from [192.168.1.18] ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id IZTkni5cbeHnVIZTlnZbwN; Fri, 11 Feb 2022 18:13:18 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Fri, 11 Feb 2022 18:13:18 +0100
-X-ME-IP: 90.126.236.122
-Message-ID: <ea4efad6-a15c-3749-f177-640396b52857@wanadoo.fr>
-Date:   Fri, 11 Feb 2022 18:13:03 +0100
+        Fri, 11 Feb 2022 12:13:19 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3792E8
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:13:17 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id i10so7373932ilm.4
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:13:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=s7mGcCDwRakb27nJ+hvyeCmB5+buamXTCZy5wLIRtRg=;
+        b=fdomvHt9zMMnngWxveYBK7C1iFPQy7YFQkSeuwToo7/UZg+ppFxZs0Fw3zN6ixIwaQ
+         VXQnU2ouajTpSQ2eoUlvf6o71S1OtOngn9AI/mJVsIkvRwcTaJ+L2voh+dW10QNq9D9b
+         8F1hoRb4YxlbTzngZ1UTU8CJDV5l4NpeIjmzU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=s7mGcCDwRakb27nJ+hvyeCmB5+buamXTCZy5wLIRtRg=;
+        b=c/2lb7drZrio9cpEagan8wJUTv2cor5cSU0culdEBSeEu/wY75bfT2wcCnaF78sBxF
+         EkfGHRl8pUOZb4jRNJYFuGDLgHDd0ur2eCqkx+XR+Z1VH/p34FUaic9BueTTsKWM2yUh
+         dJZu5CowFtn78TX//6Vu/hzoMeQYmZpcE/jo4TriKZRPWinHbcVVlLLKI0XV+68HhTDW
+         3cklsMGt8Fb/onX/qkKloJFod2IfDIxdGX1Soo3TZndHNztxPPRePqtcIl8sYBWmIBOC
+         pdimkgAPIm+/VcDN5/CptpPXiwpSlbXE4LXCvevZgKoZTYS+EkXcjHyUSwan8dM7uz47
+         3/Qg==
+X-Gm-Message-State: AOAM5318JP3oOEA2ffFdkLF2Ila6XCKz2u71nLE4LXsm8nUMrcTprCYl
+        DedUzua3TeFn5mJBxvXkJA8mdQ==
+X-Google-Smtp-Source: ABdhPJzQxZAzYhrwCZEUCoks+3wdFiATxCz/aohhMfPrkypn1nXkiEYj5RZUxC0OLhuRar6INy0rHQ==
+X-Received: by 2002:a92:1311:: with SMTP id 17mr1371108ilt.42.1644599597132;
+        Fri, 11 Feb 2022 09:13:17 -0800 (PST)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id u8sm5050640ilb.39.2022.02.11.09.13.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Feb 2022 09:13:16 -0800 (PST)
+Subject: Re: [PATCH 1/2] selftests: x86: allow expansion of $(CC)
+To:     David Laight <David.Laight@ACULAB.COM>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "open list:INTEL SGX" <linux-sgx@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     "kernel@collabora.com" <kernel@collabora.com>,
+        "kernelci@groups.io" <kernelci@groups.io>,
+        "kernelci.org bot" <bot@kernelci.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220210190642.1477814-1-usama.anjum@collabora.com>
+ <20220210190642.1477814-2-usama.anjum@collabora.com>
+ <a34f2fc8-f4aa-fef4-d1dd-f3fdb5114f72@linuxfoundation.org>
+ <99625ceecead4e9eb73de2fc8acb2ae9@AcuMS.aculab.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <7a501981-e4ce-fb08-7c1e-6aca26245cef@linuxfoundation.org>
+Date:   Fri, 11 Feb 2022 10:13:15 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 07/49] KVM: x86: replace bitmap_weight with bitmap_empty
- where appropriate
+In-Reply-To: <99625ceecead4e9eb73de2fc8acb2ae9@AcuMS.aculab.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-References: <20220210224933.379149-1-yury.norov@gmail.com>
- <20220210224933.379149-8-yury.norov@gmail.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220210224933.379149-8-yury.norov@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 10/02/2022 à 23:48, Yury Norov a écrit :
-> In some places kvm/hyperv.c code calls bitmap_weight() to check if any bit
-> of a given bitmap is set. It's better to use bitmap_empty() in that case
-> because bitmap_empty() stops traversing the bitmap as soon as it finds
-> first set bit, while bitmap_weight() counts all bits unconditionally.
+On 2/11/22 9:47 AM, David Laight wrote:
+> From: Shuah Khan
+>> Sent: 10 February 2022 20:52
+>>
+>> On 2/10/22 12:06 PM, Muhammad Usama Anjum wrote:
+>>> CC can have multiple sub-strings like "ccache gcc". Erorr pops up if
+>>> it is treated as single string and double quote are used around it.
+>>> This can be fixed by removing the quotes and not treating CC a single
+>>> string.
+>>>
+>>> Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture detection")
+>>> Reported-by: "kernelci.org bot" <bot@kernelci.org>
+>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>> ---
+>>>    tools/testing/selftests/x86/check_cc.sh | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/tools/testing/selftests/x86/check_cc.sh b/tools/testing/selftests/x86/check_cc.sh
+>>> index 3e2089c8cf549..aff2c15018b53 100755
+>>> --- a/tools/testing/selftests/x86/check_cc.sh
+>>> +++ b/tools/testing/selftests/x86/check_cc.sh
+>>> @@ -7,7 +7,7 @@ CC="$1"
+>>>    TESTPROG="$2"
+>>>    shift 2
+>>>
+>>> -if "$CC" -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
+>>> +if $CC -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
+>>>        echo 1
+>>>    else
+>>>        echo 0
+>>>
+>>
+>> The intent is testing if $CC is set. Does this change work when
+>> $CC is not set?
 > 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->   arch/x86/kvm/hyperv.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
+> More by luck than judgement. Before and after.
+> If $CC might be empty you probably want:
 > 
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index 6e38a7d22e97..06c2a5603123 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -90,7 +90,7 @@ static void synic_update_vector(struct kvm_vcpu_hv_synic *synic,
->   {
->   	struct kvm_vcpu *vcpu = hv_synic_to_vcpu(synic);
->   	struct kvm_hv *hv = to_kvm_hv(vcpu->kvm);
-> -	int auto_eoi_old, auto_eoi_new;
-> +	bool auto_eoi_old, auto_eoi_new;
->   
->   	if (vector < HV_SYNIC_FIRST_VALID_VECTOR)
->   		return;
-> @@ -100,16 +100,16 @@ static void synic_update_vector(struct kvm_vcpu_hv_synic *synic,
->   	else
->   		__clear_bit(vector, synic->vec_bitmap);
->   
-> -	auto_eoi_old = bitmap_weight(synic->auto_eoi_bitmap, 256);
-> +	auto_eoi_old = !bitmap_empty(synic->auto_eoi_bitmap, 256);
+> [ -n "$CC" ] && { echo 0; return; }
+> 
+> The subject is also wrong. Should be "allow field splitting' of ${CC}.
+> (no brace or curly braces, not round ones.)
+> 
 
-I think that you can also remove the "!" here, ...
+Good points. It would be good enhancement to add the check - since the
+current logic doesn't handle the null CC
 
->   
->   	if (synic_has_vector_auto_eoi(synic, vector))
->   		__set_bit(vector, synic->auto_eoi_bitmap);
->   	else
->   		__clear_bit(vector, synic->auto_eoi_bitmap);
->   
-> -	auto_eoi_new = bitmap_weight(synic->auto_eoi_bitmap, 256);
-> +	auto_eoi_new = !bitmap_empty(synic->auto_eoi_bitmap, 256);
-
-... and there...
-
->   
-> -	if (!!auto_eoi_old == !!auto_eoi_new)
-> +	if (auto_eoi_old == auto_eoi_new)
-
-... because this test would still give the same result.
-
-Just my 2c,
-CJ
-
->   		return;
->   
->   	down_write(&vcpu->kvm->arch.apicv_update_lock);
-
+thanks,
+-- Shuah

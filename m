@@ -2,72 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 826AB4B1B53
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 02:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDC54B1B5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 02:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346850AbiBKBfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 20:35:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44762 "EHLO
+        id S1346906AbiBKBho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 20:37:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346823AbiBKBfq (ORCPT
+        with ESMTP id S1346823AbiBKBhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 20:35:46 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002525F71
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:35:46 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id i6so11593555pfc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:35:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=m7OTZN6MMJaOtWh3GEnwnLzNFllEBgIohS86VWKpGKg=;
-        b=pwTr6XihNQSpOrHNa73cPDI9LUWGbCjQmOTkYSAUF4oHhAL6nnH1MPWpx0PWgO13zw
-         hZQ3dtKXaI+WL0N8yW65h4Gak8Xb9Ojg+TxwGAqzEaj6yB+13WtQRqRn8WKqjtRuAPWw
-         Cwamfr7Gn7rcKUiGHGtprSiAieYVaTRUaAy4wBTh70sYVlIgdwAMxw1u2s10X2KulZ8o
-         SQyabb3il4e7E/NrDxw5k7bFQ40uxVKLYLuPDxGZbjm2g8oxu6TLSeW77Ym1VOvHa5eD
-         v7gTEZ+uu2PNbaZiJ0Nbmg7xaiU8RWfiqgWcyWaYJW0srHhPxIwJDqFnyjKRgW/qPXqW
-         8TrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=m7OTZN6MMJaOtWh3GEnwnLzNFllEBgIohS86VWKpGKg=;
-        b=kgLfELQD9Cs8bSL/HaOPwqBH03s7OMPFL/YMwUDMCJyfB493ulYq/j5wFfpiUk4i85
-         NFQWDsw8sn41cIBKO1QHLiF319ti5WRpyF1Z4vCc7N1HYXvcYHVnjExsZhi9wcRuKwmx
-         K4aM3qrux/+QaCtGdNlsUV1wZu/zkYho81eDIMMh5NoMxWlHCMAB+1e/cQ1pEU8NSsCP
-         WEj03iGQVS7lzVLba3zh7pSGGKswcW8JmSjMhiL2EgiuqUtFL/ADcuWWGGoCyB4WGUhO
-         pF7hCeUNPvSLb7GSMg33EvH6bUsKvPnqXm7MC+draIi6/6pawp4+MNmnXH0aD171Jfoi
-         jsAA==
-X-Gm-Message-State: AOAM531ZTc5vePCxrzpQ/tc0O6qezXxexS/IeudCxcSH2ED++tsPe5v7
-        WjsT5xo79apMbJ9s3kwg7ZogKA==
-X-Google-Smtp-Source: ABdhPJxdym9QXrbD8SY5hJ202JdMfDsCGHjo7Bl0bto7Qh08A17Zfp+LuzUE/d9K6rNIhhxMR+Hmjg==
-X-Received: by 2002:a05:6a00:c83:: with SMTP id a3mr10367017pfv.36.1644543346299;
-        Thu, 10 Feb 2022 17:35:46 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id u25sm2905415pgf.42.2022.02.10.17.35.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 17:35:45 -0800 (PST)
-Date:   Fri, 11 Feb 2022 01:35:42 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com
-Subject: Re: [PATCH 08/12] KVM: MMU: do not consult levels when freeing roots
-Message-ID: <YgW9bqM1M/zJEzqy@google.com>
-References: <20220209170020.1775368-1-pbonzini@redhat.com>
- <20220209170020.1775368-9-pbonzini@redhat.com>
- <YgWwrG+EQgTwyt8v@google.com>
- <YgWzyBbAZe89ljqO@google.com>
- <ba9e1a56-f769-01c1-607f-3630a62a1b5d@redhat.com>
+        Thu, 10 Feb 2022 20:37:43 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0961558E
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:37:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=RpduqcaMhZKLCDjE8PG5uh0tA5u/80+FbxboARzzqGg=; b=BDQwdSWakCszYDEreP6D31+6f0
+        uk3LvofeQyFhvpckTO70aiWBzfJxyr/n86wkyg29AlOmUTl9M+/k6RkSgexZ0Jcd67IVY8NLMWznV
+        /asfun8rFhKA19Nu+xhJ9sQoTlvwoV8WkoQhPiTF/FI7mBk3AaTCBGIGZuZMPrLqG10w02VePAxOQ
+        K0Z2ANhDTJnk/Hg7O82klqHOy18Kr1rLmpYdZMS3k3sK6BRDwbFf2E4pWGi8Kg3YdxDJJIX/FYRU4
+        4BD6wsfqx28GUCsdJFhfzIHx1ceDEKso+2Do4bPUa3GRk4GxFlV4Ta2Jnf/yADf4kDE2r5MGz45+X
+        cTZ1IXwQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nIKsB-005Qsi-Jf; Fri, 11 Feb 2022 01:37:19 +0000
+Date:   Thu, 10 Feb 2022 17:37:19 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Maninder Singh <maninder1.s@samsung.com>
+Cc:     Petr Mladek <pmladek@suse.com>, Vimal Agrawal <avimalin@gmail.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "swboyd@chromium.org" <swboyd@chromium.org>,
+        "ojeda@kernel.org" <ojeda@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        Vaneet Narang <v.narang@samsung.com>,
+        Aaron Tomlin <atomlin@redhat.com>
+Subject: Re: [PATCH 1/1] kallsyms: print module name in %ps/S case when
+ KALLSYMS is disabled
+Message-ID: <YgW9z0ncrzrzwndP@bombadil.infradead.org>
+References: <YgTKqoRIwahzWyh0@alley>
+ <20220201040044.1528568-1-maninder1.s@samsung.com>
+ <20220209114038.GA8279@pathway.suse.cz>
+ <YgRH7hwFC2AGISdP@bombadil.infradead.org>
+ <CGME20220201040100epcas5p180ef094058fc9c76b4b94d9d673fc5fc@epcms5p4>
+ <436367503.2691559.1644482903367@mail-kr5-0>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ba9e1a56-f769-01c1-607f-3630a62a1b5d@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <436367503.2691559.1644482903367@mail-kr5-0>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,51 +70,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022, Paolo Bonzini wrote:
-> On 2/11/22 01:54, Sean Christopherson wrote:
-> > > 	free_active_root = (roots_to_free & KVM_MMU_ROOT_CURRENT) &&
-> > > 			   VALID_PAGE(mmu->root.hpa);
+On Thu, Feb 10, 2022 at 02:18:23PM +0530, Maninder Singh wrote:
+> Hi All,
+> 
+> Thanks for your inputs.
+> 
+> > On Wed 2022-02-09 15:02:06, Luis Chamberlain wrote:
+> > > On Wed, Feb 09, 2022 at 12:40:38PM +0100, Petr Mladek wrote:
+> > > > > --- a/include/linux/kallsyms.h
+> > > > > +++ b/include/linux/kallsyms.h
+> > > > > @@ -163,6 +163,33 @@ static inline bool kallsyms_show_value(const struct cred *cred)
+> > > > >          return false;
+> > > > >  }
+> > > > >  
+> > > > > +#ifdef CONFIG_MODULES
+> > > > > +static inline int fill_minimal_module_info(char *sym, int size, unsigned long value)
+> > > > > +{
+> > > > > +        struct module *mod;
+> > > > > +        unsigned long offset;
+> > > > > +        int ret = 0;
+> > > > > +
+> > > > > +        preempt_disable();
+> > > > > +        mod = __module_address(value);
+> > > > > +        if (mod) {
+> > > > > +                offset = value - (unsigned long)mod->core_layout.base;
+> > > > > +                snprintf(sym, size - 1, "0x%lx+0x%lx [%s]",
+> > > > > +                                (unsigned long)mod->core_layout.base, offset, mod->name);
+> > > > > +
+> > > > > +                sym[size - 1] = '\0';
+> > > > > +                ret = 1;
+> > > > > +        }
+> > > > > +
+> > > > > +        preempt_enable();
+> > > > > +        return ret;
+> > > > > +}
+> > > > 
+> > > > It looks too big for an inlined function. Anyway, we will need
+> > > > something even more complex, see below.
 > > > 
-> > > Isn't this a separate bug fix?  E.g. call kvm_mmu_unload() without a valid current
-> > > root, but with valid previous roots?  In which case we'd try to free garbage, no?
+> > > Interesting, these observations might apply to Vimal's work as well [0].
+> > > 
+> > > [0] https://lkml.kernel.org/r/YgKyC4ZRud0JW1PF@bombadil.infradead.org
+> >  
+> > Honestly, I am not sure what is the best practice. My understanding is
+> > that inlined functions are used primary for speed up at runtime.
+> >  
 > 
-> mmu_free_root_page checks VALID_PAGE(*root_hpa).  If that's what you meant,
-> then it wouldn't be a preexisting bug (and I think it'd be a fairly common
-> case).
-
-Ahh, yep.
-
-> > > > +
-> > > > +	if (!free_active_root) {
-> > > >   		for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++)
-> > > >   			if ((roots_to_free & KVM_MMU_ROOT_PREVIOUS(i)) &&
-> > > >   			    VALID_PAGE(mmu->prev_roots[i].hpa))
-> > > > @@ -3242,8 +3245,7 @@ void kvm_mmu_free_roots(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
-> > > >   					   &invalid_list);
-> > > >   	if (free_active_root) {
-> > > > -		if (mmu->shadow_root_level >= PT64_ROOT_4LEVEL &&
-> > > > -		    (mmu->root_level >= PT64_ROOT_4LEVEL || mmu->direct_map)) {
-> > > > +		if (to_shadow_page(mmu->root.hpa)) {
-> > > >   			mmu_free_root_page(kvm, &mmu->root.hpa, &invalid_list);
-> > > >   		} else if (mmu->pae_root) {
-> > 
-> > Gah, this is technically wrong.  It shouldn't truly matter, but it's wrong.  root.hpa
-> > will not be backed by shadow page if the root is pml4_root or pml5_root, in which
-> > case freeing the PAE root is wrong.  They should obviously be invalid already, but
-> > it's a little confusing because KVM wanders down a path that may not be relevant
-> > to the current mode.
+> Main reason of making it inline was:
+> (1) kallsysm.c was not getting compiled(with disabled config), so could not add defination there.
+> (2) lib/vsnprintf.c was not correct place to define new function of kallsyms(fill_minimal_module_info)
+> (3) I thought static int will be part of each .c file which includes kallsyms.h and compiler can make noise for unused functions,
+> and also increase code size, where as static inline will be added only if some code is calling that function otherwise will be discarded.
 > 
-> pml4_root and pml5_root are dummy, and the first "real" level of page tables
-> is stored in pae_root for that case too, so I think that should DTRT.
-
-Ugh, completely forgot that detail.  You're correct.  Probably worth a comment?
-
-> That's why I also disliked the shadow_root_level/root_level/direct check:
-> even though there's half a dozen of cases involved, they all boil down to
-> either 4 pae_roots or a single root with a backing kvm_mmu_page.
+> But as peter said better version will be to make a new defination of __sprint_symbol (probably in kernel/module.c)
+> to handle all cases of %ps/S/B/b when KALLSYSMS is disabled.
 > 
-> It's even more obscure to check shadow_root_level/root_level/direct in
-> fast_pgd_switch, where it's pretty obvious that you cannot cache 4 pae_roots
-> in a single (hpa, pgd) pair...
+> I will try to prepare changes and share V2 patch.
 
-Heh, apparently not obvious enough for me :-)
+If you do please Cc me and Vimal, and Aaron.
+
+  Luis

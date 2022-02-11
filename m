@@ -2,135 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1224B29F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3384B2A17
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351091AbiBKQQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:16:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44816 "EHLO
+        id S1351110AbiBKQSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:18:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238817AbiBKQQI (ORCPT
+        with ESMTP id S1351108AbiBKQSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:16:08 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDE8B70
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:16:07 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id y9so8531660pjf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:16:07 -0800 (PST)
+        Fri, 11 Feb 2022 11:18:45 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB36C2E5
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:18:43 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id j17-20020a25ec11000000b0061dabf74012so19738429ybh.15
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:18:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tKrit6f1ZhoCBVqw3r076zw40XfZbFZ96sRHFdOuik8=;
-        b=FMITympTyB4cxAdAJLed/W53mGKN/3NHq1jFRdxfurhodPtGBFlft8BTrukwBpuCfu
-         KMkxE+xw4PnMbSEBJFU4w1dW2pxj7l6TJr1XAyxYC+2IfZjA6r3/SSJpGXmINmPPpBsN
-         LOT0ufqNBQgZuvDr4tp6QtaPiUCjPv//mv2zx3UFDXSv13C0WMlrqGbN5b1naRQlAPyS
-         TE8nij9lYk92KfPQeFAnibxrihgIAWHfNWQY5Oi8Iy+YggCZokb8WdcaxHzZseiqo2zo
-         md27CAHY1XV4WUGfesGoXAtwiB33MCylqYqZCuJsWoWz9nT+nP4H2gpy9I5TXpRFZcaY
-         uOAQ==
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=yZLJCK7E+jF9SMNP1+4R/zXh1+xClGhVRWVCTVgc4sc=;
+        b=XMgJm0JnHLSh1BoAQZ0wKW1tqDREm4lLvo1GgrQbJjxOht9DuV2ml/M55v/YYYtwG0
+         EiX+KPa11IXCkHxfjDJ+jqjtozMdXO8Np1xzeO0YafmBD2TU0JlinyFCVvLW1rCwcCdZ
+         /67a9xCpHLDF2di7B26fW8eJ3s0rX9wB1nI24kFBk8sgAKm4tMtoVZMf/yF+8MHFUzmC
+         QNdvprMkp7K7VXtvF+nMffFYcUR4zeTM22B4QkFSF1Qw8M748l+D1HGKINDyJL+qVrEZ
+         7Hxo0m9piTC3QY0bjNEgwJt9fVXLWzIOFBU2gNAs/Btn+n7fz9/GKQAbXBpP767W1iWa
+         t4eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tKrit6f1ZhoCBVqw3r076zw40XfZbFZ96sRHFdOuik8=;
-        b=d5MNaG5zf2XjYvgbxRcwJCn+VgEEGRvIld9+iWFrn/oC4KNt7cyjqonBiBZpK8wcw1
-         cNTT8+wTqqRWS5SP2Zjr1kXoTLL6+6cxkbI78ezBk3clC6dFjd2ei98mUL/OMelDszoP
-         cR30B3Zr2sgGxEIMUaOm3wcMdg2Am8KvPRGbG1DKnYdHV4CUoGURL5ieCOP4d98oGfxz
-         E4eRwBqT/epluBXB6DvcGur8eEf3eao9rK/HNbFKzL3uv1PhFG7msPPXrn1gUABl6gLN
-         RdimPJCm3mZZEOOemGY72V6zXYjFVFNY7RvtWIPu6LjkyrpNGdpXPZWIy70hX9XJLp+N
-         pMiw==
-X-Gm-Message-State: AOAM531mNYrt5F8qe7irF048v2zIGPsrAJ7VpsrtiHHR34UfjbFpcfaT
-        ecrQtmXi/F++CUejdPHVlvKuIkWt5vQnkQ==
-X-Google-Smtp-Source: ABdhPJyqGYLnBNu+H8/gpBo2EeOE7b86nFUYoNTSLZ+1Xo8/LqsVf93PHnoOnvHRWNRDEgg7nNvk5A==
-X-Received: by 2002:a17:90b:38c9:: with SMTP id nn9mr1130824pjb.47.1644596166187;
-        Fri, 11 Feb 2022 08:16:06 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id d15sm27969915pfu.72.2022.02.11.08.16.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 08:16:05 -0800 (PST)
-Date:   Fri, 11 Feb 2022 16:16:02 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com
-Subject: Re: [PATCH 06/12] KVM: MMU: rename kvm_mmu_reload
-Message-ID: <YgaLwvo2Gl565H3/@google.com>
-References: <20220209170020.1775368-1-pbonzini@redhat.com>
- <20220209170020.1775368-7-pbonzini@redhat.com>
- <YgWtdUotsoBOOtXz@google.com>
- <4e05cfc5-55bb-1273-5309-46ed4fe52fed@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4e05cfc5-55bb-1273-5309-46ed4fe52fed@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=yZLJCK7E+jF9SMNP1+4R/zXh1+xClGhVRWVCTVgc4sc=;
+        b=JvLWwHcCpG5SR6o5vvsHLbSyj/rQErtGyXS3R+fjXkept4oUL0mYjIH40OJbyGj6sR
+         VMfnVNLzeyb4D04sy519E86Er73ck72x/RaUe2s0fHoIJ/w2np1jbRymO4JoBDMt19Jt
+         IKmN26mXwKiJBLZslQFut7haCIRPlmestniIFAYIH4VX1YYz0Oc6MyrqzULj9mqaLmMJ
+         24nGbPvzJUYpEWOzPdt7Dopry3DXqk3geI2NOs0zxfEox6XGZXtXilRJ3kvLfd0jvEN5
+         vsxetbQhc9Xjj7axyEack08Kyf70SS6FJlOHpghq46TxsN3ew0p5NwGUZuBsawX2DKoP
+         Y1xQ==
+X-Gm-Message-State: AOAM532e/wPa7lmbeE1cHrGsk+teDI7mmh/cBskG1nXiF3MeFjpxtL9X
+        QBqZmy8re+ZwW1L1OhrXJugdjSq6z0Mt1U4=
+X-Google-Smtp-Source: ABdhPJzhF/L162IKZGA2v1vfeqRBtKk+kc26yO7jRh6AAqTqVZtjKGL2w7yvYf60mUisa/RM+m5bcl0vC/4rWsw=
+X-Received: from tj2.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:187])
+ (user=tjmercier job=sendgmr) by 2002:a5b:c6:: with SMTP id
+ d6mr1955239ybp.273.1644596323025; Fri, 11 Feb 2022 08:18:43 -0800 (PST)
+Date:   Fri, 11 Feb 2022 16:18:23 +0000
+Message-Id: <20220211161831.3493782-1-tjmercier@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+Subject: [RFC v2 0/6] Proposal for a GPU cgroup controller
+From:   "T.J. Mercier" <tjmercier@google.com>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     kaleshsingh@google.com, Kenny.Ho@amd.com,
+        "T.J. Mercier" <tjmercier@google.com>,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022, Paolo Bonzini wrote:
-> On 2/11/22 01:27, Sean Christopherson wrote:
-> > On Wed, Feb 09, 2022, Paolo Bonzini wrote:
-> > > The name of kvm_mmu_reload is very confusing for two reasons:
-> > > first, KVM_REQ_MMU_RELOAD actually does not call it; second,
-> > > it only does anything if there is no valid root.
-> > > 
-> > > Rename it to kvm_mmu_ensure_valid_root, which matches the actual
-> > > behavior better.
-> > 
-> > 100% agree that kvm_mmu_reload() is a terrible name, but kvm_mmu_ensure_valid_root()
-> > isn't much better, e.g. it sounds like a sanity check and nothing more.
-> 
-> I would have thought that would be more of a check_valid_root().  There are
-> other functions in the kernel following the idea that "ensure" means
-> idempotency: skb_ensure_writable, perf_cgroup_ensure_storage,
-> btf_ensure_modifiable and libbpf_ensure_mem in libbpf.  I'm not a native
-> speaker but, at least in computing, "ensure" seems to mean not just "to make
-> certain that (something) will be true", but also taking steps if that's not
-> already the case.
+This patch series revisits the proposal for a GPU cgroup controller to
+track and limit memory allocations by various device/allocator
+subsystems. The patch series also contains a simple prototype to
+illustrate how Android intends to implement DMA-BUF allocator
+attribution using the GPU cgroup controller. The prototype does not
+include resource limit enforcements.
 
-There's no ambiguity on the "make certain that <x> will be true", it's the second
-part about taking steps that's ambiguous.  Specifically, it doesn't convey any
-information about _what_ steps will be taken, e.g. the below implementation is
-also a possibility since it ensures the root is valid by preventing forward
-progress if the root is invalid.
+Changelog:
 
-  static inline int kvm_mmu_ensure_valid_root(struct kvm_vcpu *vcpu)
-  { 
-	if (unlikely(vcpu->arch.mmu->root.hpa != INVALID_PAGE))
-		return -EFAULT;
-	return 0;
-  }
+v2:
+See the previous revision of this change submitted by Hridya Valsaraju
+at: https://lore.kernel.org/all/20220115010622.3185921-1-hridya@google.com/
 
-Existing example of that interpretation are input_dev_ensure_poller() and
-rtnl_ensure_unique_netns().
+Move dma-buf cgroup charge transfer from a dma_buf_op defined by every
+heap to a single dma-buf function for all heaps per Daniel Vetter and
+Christian K=C3=B6nig. Pointers to struct gpucg and struct gpucg_device
+tracking the current associations were added to the dma_buf struct to
+achieve this.
 
-The other nuance that I want to avoid is the implication that KVM is checking for
-a valid root because it doesn't trust what has happened before, i.e. that the call
-is there as a safeguard.  That's misleading for the most common path, vcpu_enter_guest(),
-because when the helper does do some work, it's usually because KVM deliberately
-invalidated the root.
+Fix incorrect Kconfig help section indentation per Randy Dunlap.
 
+History of the GPU cgroup controller
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+The GPU/DRM cgroup controller came into being when a consensus[1]
+was reached that the resources it tracked were unsuitable to be integrated
+into memcg. Originally, the proposed controller was specific to the DRM
+subsystem and was intended to track GEM buffers and GPU-specific
+resources[2]. In order to help establish a unified memory accounting model
+for all GPU and all related subsystems, Daniel Vetter put forth a
+suggestion to move it out of the DRM subsystem so that it can be used by
+other DMA-BUF exporters as well[3]. This RFC proposes an interface that
+does the same.
 
-> I also thought of "establish_valid_root", but it has the opposite
-> problem---it does not convey well, if at all, that the root could be valid
-> already.
+[1]: https://patchwork.kernel.org/project/dri-devel/cover/20190501140438.95=
+06-1-brian.welty@intel.com/#22624705
+[2]: https://lore.kernel.org/amd-gfx/20210126214626.16260-1-brian.welty@int=
+el.com/
+[3]: https://lore.kernel.org/amd-gfx/YCVOl8%2F87bqRSQei@phenom.ffwll.local/
 
-Heh, I agree that "establish" would imply the root is always invalid, but amusingly
-"establish" is listed as a synonym for "ensure" on the few sites of checked. Yay English.  
+T.J. Mercier (6):
+  gpu: rfc: Proposal for a GPU cgroup controller
+  cgroup: gpu: Add a cgroup controller for allocator attribution of GPU
+    memory
+  dmabuf: Use the GPU cgroup charge/uncharge APIs
+  dmabuf: heaps: export system_heap buffers with GPU cgroup charging
+  dmabuf: Add gpu cgroup charge transfer function
+  android: binder: Add a buffer flag to relinquish ownership of fds
 
-I was going to suggest we just open code it in vcpu_enter_guest, but async #PF
-uses it too :-/
+ Documentation/gpu/rfc/gpu-cgroup.rst | 195 +++++++++++++++++
+ Documentation/gpu/rfc/index.rst      |   4 +
+ drivers/android/binder.c             |  26 +++
+ drivers/dma-buf/dma-buf.c            | 100 +++++++++
+ drivers/dma-buf/dma-heap.c           |  27 +++
+ drivers/dma-buf/heaps/system_heap.c  |   3 +
+ include/linux/cgroup_gpu.h           | 127 +++++++++++
+ include/linux/cgroup_subsys.h        |   4 +
+ include/linux/dma-buf.h              |  22 +-
+ include/linux/dma-heap.h             |  11 +
+ include/uapi/linux/android/binder.h  |   1 +
+ init/Kconfig                         |   7 +
+ kernel/cgroup/Makefile               |   1 +
+ kernel/cgroup/gpu.c                  | 304 +++++++++++++++++++++++++++
+ 14 files changed, 830 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/gpu/rfc/gpu-cgroup.rst
+ create mode 100644 include/linux/cgroup_gpu.h
+ create mode 100644 kernel/cgroup/gpu.c
 
-Can we put this on the backburner for now?  IMO, KVM_REQ_MMU_RELOAD is far more
-misleading than kvm_mmu_reload(), and I posted a series to remedy that (though I
-need to check if it's still viable since you vetoed adding the check for a pending
-request in the page fault handler).
+--=20
+2.35.1.265.g69c8d7142f-goog
 
-https://lore.kernel.org/all/20211209060552.2956723-1-seanjc@google.com

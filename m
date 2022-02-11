@@ -2,137 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BCD94B316F
+	by mail.lfdr.de (Postfix) with ESMTP id D2FA64B3171
 	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 00:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354300AbiBKXm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 18:42:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42800 "EHLO
+        id S1354266AbiBKXml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 18:42:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354281AbiBKXmv (ORCPT
+        with ESMTP id S235335AbiBKXmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 18:42:51 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67105D6C;
-        Fri, 11 Feb 2022 15:42:48 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id k18so1570222ils.11;
-        Fri, 11 Feb 2022 15:42:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EJieVrYw7bGsS/GbDwdyCqkJlHD+DNLeYNU+G9HF0Kw=;
-        b=aJyCdrt6mtHVARW18KLBIZip5IXDQg3a50Kp8xN8UESpGu5Hg8vkgiS7JCTti43+MI
-         YHzD/b+jZuTBWbpTbtgFWzZzikCdZT94HGe2M2cnWMzri3xBEX7c7vaxgRBFerE0rxuM
-         bvcMe9NGtEpqZac2QheDaLEp3CjfrPoYKXTwSLVZ0IWpwd40PEHkzn2/ogEh5iAOw4TL
-         S2Pq8mZCCyop5a3yYxrSOkPKb3vF/s/PW0xtrEEOEqI1qdyA3WmmIZrlfgd4c1rwuzMK
-         kxWYhiAKGA5y8ueqQ8VWfZcTi5r/Z4k3SuxubyaLXnOcnXpxWWN0aL9Wywn91URR+8L1
-         4Oaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EJieVrYw7bGsS/GbDwdyCqkJlHD+DNLeYNU+G9HF0Kw=;
-        b=eTgeOrulndOIdVAyKHHsZBrIv0odvSeXs3hnU9O1iqLB3KvU6B0x4+W3OSxHxiksMn
-         fgyX434kziLJ43eio06YCT4sfLlWzoJzLX/PZ9QqsVIgfbFX8D15/lfbq1peouVKvEId
-         bSZygV2bsRud0W/SPJreuhsIUs1moMKp0fxMB0FHPEhCQr3GH3MT0OZkFi3w9W4uMSbJ
-         6YNGqgg8zd1tlJGjI2b+rV/dRWA+LYraUDZWi9fnPaEJWgHZ5nc9X4OxA7wXkgV/5Fht
-         aIhtXWbTmkHQl47Lz7kjWVXIX3YL/ncRDO3JZrbpldC1T275zNsBMKsY9jA9lx3p/nnd
-         afGw==
-X-Gm-Message-State: AOAM533UgaxCDJN5hr8jXn/ioDB+wuTKRTbKWrxHftQwF9zCBICeAMN3
-        dAyYdvoEPJcSMOcH2N2pQrw=
-X-Google-Smtp-Source: ABdhPJx2/HGyOBckGTxMpiRreSEAJEsNJebRTbV0IbocBugJaSb4aBKID1N0GneyP9liEw2Hu3L3lw==
-X-Received: by 2002:a92:d648:: with SMTP id x8mr2031228ilp.142.1644622967680;
-        Fri, 11 Feb 2022 15:42:47 -0800 (PST)
-Received: from localhost ([12.28.44.171])
-        by smtp.gmail.com with ESMTPSA id h19sm12766856ila.4.2022.02.11.15.42.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 15:42:47 -0800 (PST)
-Date:   Fri, 11 Feb 2022 15:40:36 -0800
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        kernel test robot <lkp@intel.com>, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 39/49] arch/s390: replace cpumask_weight with
- cpumask_weight_eq where appropriate
-Message-ID: <Ygbz9G3DlPZYQ7Y7@yury-laptop>
-References: <20220210224933.379149-1-yury.norov@gmail.com>
- <20220210224933.379149-40-yury.norov@gmail.com>
- <yt9dwni17v19.fsf@linux.ibm.com>
+        Fri, 11 Feb 2022 18:42:39 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A08FCCFE;
+        Fri, 11 Feb 2022 15:42:37 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 50FECED1;
+        Fri, 11 Feb 2022 15:42:37 -0800 (PST)
+Received: from mammon-tx2.austin.arm.com (mammon-tx2.austin.arm.com [10.118.28.62])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3C4B93F70D;
+        Fri, 11 Feb 2022 15:42:37 -0800 (PST)
+From:   Jeremy Linton <jeremy.linton@arm.com>
+To:     netdev@vger.kernel.org
+Cc:     mw@semihalf.com, linux@armlinux.org.uk, davem@davemloft.net,
+        kuba@kernel.org, rmk+kernel@armlinux.org.uk,
+        linux-kernel@vger.kernel.org, Jeremy Linton <jeremy.linton@arm.com>
+Subject: [PATCH] net: mvpp2: Check for null pcs in mvpp2_acpi_start()
+Date:   Fri, 11 Feb 2022 17:42:35 -0600
+Message-Id: <20220211234235.3180025-1-jeremy.linton@arm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <yt9dwni17v19.fsf@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 07:54:26AM +0100, Sven Schnelle wrote:
-> Hi Yury,
-> 
-> Yury Norov <yury.norov@gmail.com> writes:
-> 
-> > cfset_all_start() calls cpumask_weight() to compare the weight of cpumask
-> > with a given number. We can do it more efficiently with
-> > cpumask_weight_{eq, ...} because conditional cpumask_weight may stop
-> > traversing the cpumask earlier, as soon as condition is (or can't be) met.
-> >
-> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> > ---
-> >  arch/s390/kernel/perf_cpum_cf.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/s390/kernel/perf_cpum_cf.c b/arch/s390/kernel/perf_cpum_cf.c
-> > index ee8707abdb6a..4d217f7f5ccf 100644
-> > --- a/arch/s390/kernel/perf_cpum_cf.c
-> > +++ b/arch/s390/kernel/perf_cpum_cf.c
-> > @@ -975,7 +975,7 @@ static int cfset_all_start(struct cfset_request *req)
-> >  		return -ENOMEM;
-> >  	cpumask_and(mask, &req->mask, cpu_online_mask);
-> >  	on_each_cpu_mask(mask, cfset_ioctl_on, &p, 1);
-> > -	if (atomic_read(&p.cpus_ack) != cpumask_weight(mask)) {
-> > +	if (!cpumask_weight_eq(mask, atomic_read(&p.cpus_ack))) {
-> >  		on_each_cpu_mask(mask, cfset_ioctl_off, &p, 1);
-> >  		rc = -EIO;
-> >  		debug_sprintf_event(cf_dbg, 4, "%s CPUs missing", __func__);
-> 
-> given that you're adding a bunch of these functions - gt,lt,eq and
-> others, i wonder whether it makes sense to also add cpumask_weight_ne(),
-> so one could just write:
-> 
-> if (cpumask_weight_ne(mask, atomic_read(&p.cpus_ack))) {
-> 	...
-> }
-> 
-> ?
+Booting a MACCHIATObin with 5.17 the system OOPs with
+a null pointer deref when the network is started. This
+is caused by the pcs->ops structure being null on this
+particular platform/firmware.
 
-It will have 3 users in cpumask + 1 in nodemask. I have no strong opinion
-whether we need it or not. Let's see what people say.
+Simply adding a null ptr check, reverts to a functional
+system with networking.
 
-Thanks,
-Yury
+The OOPs looks like:
+[   18.687760] Unable to handle kernel access to user memory outside uaccess routines at virtual address 0000000000000010
+[   18.698561] Mem abort info:
+[   18.698564]   ESR = 0x96000004
+[   18.698567]   EC = 0x25: DABT (current EL), IL = 32 bits
+[   18.709821]   SET = 0, FnV = 0
+[   18.714292]   EA = 0, S1PTW = 0
+[   18.718833]   FSC = 0x04: level 0 translation fault
+[   18.725126] Data abort info:
+[   18.729408]   ISV = 0, ISS = 0x00000004
+[   18.734655]   CM = 0, WnR = 0
+[   18.738933] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000111bbf000
+[   18.745409] [0000000000000010] pgd=0000000000000000, p4d=0000000000000000
+[   18.752235] Internal error: Oops: 96000004 [#1] SMP
+[   18.757134] Modules linked in: rfkill ip_set nf_tables nfnetlink qrtr sunrpc vfat fat omap_rng fuse zram xfs crct10dif_ce mvpp2 ghash_ce sbsa_gwdt phylink xhci_plat_hcd ahci_plam
+[   18.773481] CPU: 0 PID: 681 Comm: NetworkManager Not tainted 5.17.0-0.rc3.89.fc36.aarch64 #1
+[   18.781954] Hardware name: Marvell                         Armada 7k/8k Family Board      /Armada 7k/8k Family Board      , BIOS EDK II Jun  4 2019
+[   18.795222] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   18.802213] pc : mvpp2_start_dev+0x2b0/0x300 [mvpp2]
+[   18.807208] lr : mvpp2_start_dev+0x298/0x300 [mvpp2]
+[   18.812197] sp : ffff80000b4732c0
+[   18.815522] x29: ffff80000b4732c0 x28: 0000000000000000 x27: ffffccab38ae57f8
+[   18.822689] x26: ffff6eeb03065a10 x25: ffff80000b473a30 x24: ffff80000b4735b8
+[   18.829855] x23: 0000000000000000 x22: 00000000000001e0 x21: ffff6eeb07b6ab68
+[   18.837021] x20: ffff6eeb07b6ab30 x19: ffff6eeb07b6a9c0 x18: 0000000000000014
+[   18.844187] x17: 00000000f6232bfe x16: ffffccab899b1dc0 x15: 000000006a30f9fa
+[   18.851353] x14: 000000003b77bd50 x13: 000006dc896f0e8e x12: 001bbbfccfd0d3a2
+[   18.858519] x11: 0000000000001528 x10: 0000000000001548 x9 : ffffccab38ad0fb0
+[   18.865685] x8 : ffff80000b473330 x7 : 0000000000000000 x6 : 0000000000000000
+[   18.872851] x5 : 0000000000000000 x4 : 0000000000000000 x3 : ffff80000b4732f8
+[   18.880017] x2 : 000000000000001a x1 : 0000000000000002 x0 : ffff6eeb07b6ab68
+[   18.887183] Call trace:
+[   18.889637]  mvpp2_start_dev+0x2b0/0x300 [mvpp2]
+[   18.894279]  mvpp2_open+0x134/0x2b4 [mvpp2]
+[   18.898483]  __dev_open+0x128/0x1e4
+[   18.901988]  __dev_change_flags+0x17c/0x1d0
+[   18.906187]  dev_change_flags+0x30/0x70
+[   18.910038]  do_setlink+0x278/0xa7c
+[   18.913540]  __rtnl_newlink+0x44c/0x7d0
+[   18.917391]  rtnl_newlink+0x5c/0x8c
+[   18.920892]  rtnetlink_rcv_msg+0x254/0x314
+[   18.925006]  netlink_rcv_skb+0x48/0x10c
+[   18.928858]  rtnetlink_rcv+0x24/0x30
+[   18.932449]  netlink_unicast+0x290/0x2f4
+[   18.936386]  netlink_sendmsg+0x1d0/0x41c
+[   18.940323]  sock_sendmsg+0x60/0x70
+[   18.943825]  ____sys_sendmsg+0x248/0x260
+[   18.947762]  ___sys_sendmsg+0x74/0xa0
+[   18.951438]  __sys_sendmsg+0x64/0xcc
+[   18.955027]  __arm64_sys_sendmsg+0x30/0x40
+[   18.959140]  invoke_syscall+0x50/0x120
+[   18.962906]  el0_svc_common.constprop.0+0x4c/0xf4
+[   18.967629]  do_el0_svc+0x30/0x9c
+[   18.970958]  el0_svc+0x28/0xb0
+[   18.974025]  el0t_64_sync_handler+0x10c/0x140
+[   18.978400]  el0t_64_sync+0x1a4/0x1a8
+[   18.982078] Code: 52800004 b9416262 aa1503e0 52800041 (f94008a5)
+[   18.988196] ---[ end trace 0000000000000000 ]---
+
+Fixes: cff056322372 ("net: mvpp2: use .mac_select_pcs() interface")
+Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+---
+ drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+index 7cdbf8b8bbf6..d53d7648625f 100644
+--- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
++++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+@@ -6631,8 +6631,9 @@ static void mvpp2_acpi_start(struct mvpp2_port *port)
+ 	mvpp2_mac_prepare(&port->phylink_config, MLO_AN_INBAND,
+ 			  port->phy_interface);
+ 	mvpp2_mac_config(&port->phylink_config, MLO_AN_INBAND, &state);
+-	pcs->ops->pcs_config(pcs, MLO_AN_INBAND, port->phy_interface,
+-			     state.advertising, false);
++	if (pcs && pcs->ops)
++		pcs->ops->pcs_config(pcs, MLO_AN_INBAND, port->phy_interface,
++				     state.advertising, false);
+ 	mvpp2_mac_finish(&port->phylink_config, MLO_AN_INBAND,
+ 			 port->phy_interface);
+ 	mvpp2_mac_link_up(&port->phylink_config, NULL,
+-- 
+2.34.1
+

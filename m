@@ -2,86 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDED04B1DAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 06:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 747724B1DEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 06:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234149AbiBKFYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 00:24:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53908 "EHLO
+        id S230357AbiBKFc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 00:32:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232414AbiBKFYJ (ORCPT
+        with ESMTP id S232291AbiBKFc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 00:24:09 -0500
-X-Greylist: delayed 97915 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 21:24:08 PST
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D5F558E;
-        Thu, 10 Feb 2022 21:24:08 -0800 (PST)
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 21B5Nd5D013458;
-        Fri, 11 Feb 2022 14:23:39 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 21B5Nd5D013458
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1644557019;
-        bh=YLkBkuR1U+jQHwVN/aG4iVNRqXdadclQuIILONhbIjY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=q66m5q7WkKum132uEFi8h+OaMjzBXPhEW+wTSfWLDSwWP2vdwIysY4Qa4zshNVfpD
-         dCHuAM9xTKVzQhTEyElBuERIxSUgyqul7MnamKbZbGrBv+1TCW1Z6edzWlkUyPfSev
-         qmhVyxlg99/yfsRBF9gefhTYD2mnHV3QSg38CNHIpzzm14p6VmBbDr7WK+G/2zvBBk
-         ez1A2Q+Rlzo8Wnyx8gr0qJsOR8n2uzoXyxxvnrYRpfUob2VDIYBBs1/HDXARNqYfQN
-         c2NTneauVAGhtd91LM/nqLG+xuFQKbSm/6Yj5F6U1odQEqa5itGRPTj3u/8uxGxxac
-         k/+zNh6QFIR9g==
-X-Nifty-SrcIP: [209.85.216.53]
-Received: by mail-pj1-f53.google.com with SMTP id a11-20020a17090a740b00b001b8b506c42fso10949649pjg.0;
-        Thu, 10 Feb 2022 21:23:39 -0800 (PST)
-X-Gm-Message-State: AOAM533Q05WfxvxcsQINPFq0STwgHHR9JMRGv79yhy84cwMGdIaCay+R
-        6Li5/w1aU2QLCx6bonuQYzAmF/drI0VoKnn8uM4=
-X-Google-Smtp-Source: ABdhPJz+PKju5x1pJ9BLVRECLUS31oqFpM+kKLWB59S5rETYSrnr/4WKSfRdirM9eCzG7Qpo2to+dCHMHJRsZXRDpeE=
-X-Received: by 2002:a17:902:e782:: with SMTP id cp2mr123201plb.162.1644557018773;
- Thu, 10 Feb 2022 21:23:38 -0800 (PST)
+        Fri, 11 Feb 2022 00:32:57 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D6FFC2;
+        Thu, 10 Feb 2022 21:32:57 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id c6so21820248ybk.3;
+        Thu, 10 Feb 2022 21:32:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8U0RdmyBvYMlSjjVGSo29oUB6sKZ9Ib1qgyUq3axU1s=;
+        b=mlq3/lPCpacSw9Wok7V4785+SFzOSp4VQmDDp0GXG+Xae5/dVQB0sDJ0AaEE6HHZl/
+         n7AbDmgRrjIuNO4pDma68HPkiAfjkyYXhU0GNL0x0PbaUY0dSemFCgYysOoHhWnmeB8+
+         hbjkC0t8dR3+BovBYT2EYsLN4W62EIQqKjjgIbnuu7t7X63wg1SlpbSelbe7ChQN/vAW
+         G92VnQu7w/U8hd5rSCZEA3H1u+yIsOq32+YSAPX1ln1byP30TZPHtO2aEYSgZltcSLP2
+         Gzq4TIEa2S3qJOAUVlRPsl7WGA3tOu00USgPV8e3kMkdkxaETz7L7r3xZ9Uo0miDffMH
+         nBzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8U0RdmyBvYMlSjjVGSo29oUB6sKZ9Ib1qgyUq3axU1s=;
+        b=xTHvYsfNpdpqZZYeGujDZRLTnDPOzSwljMYcA+rfEUQLOgAH8GP5YCnDl3gJ9VV44j
+         ZpzfTF++ops2soZPI8sdUSjT3ufeJjdSM/wSmEbxH/mVtzNtDJnqVV5OhQLM7cEEA39E
+         CpcZEMVa4B8xGBH1Wur3baOP9Zuxs14/loNE/LM0vkepclg+pKrHIUDqGPueIiURLDhv
+         j1QsESavIgL/+go/58Q3NigJDkBtgwqyzL1+bIUIDtBK+SJsc3ti1jBI4yIc0+mMXfiz
+         I6OrKKu+/I7ykFkC/01MKBkeWTSijWBAw65DMTMKh+y1mK4VsW+cG1rRh/bXfJOxPwhF
+         Z6HA==
+X-Gm-Message-State: AOAM531ztx81w+J4f47Y6pUcZTwiYHlXFiKiF8UPCdigD+f3h2/uu8NM
+        9020r33Y8mo+TSYS4M/8wQkHXEOUpjuicARAFss=
+X-Google-Smtp-Source: ABdhPJyzlJsDeZdZNy7m8oPjzrRKU1aUU6XC5vS3tQ5d7HSSYJ9EXJIJJVFi7Z+uamL2iPSi6pZqDqIJAi11VndkRyg=
+X-Received: by 2002:a25:d088:: with SMTP id h130mr2847070ybg.691.1644557576709;
+ Thu, 10 Feb 2022 21:32:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20220210021129.3386083-1-masahiroy@kernel.org> <CAK8P3a3uZJuf9naTerxMdUeW4CEuvfK0knC0JDTZteYHPqddTw@mail.gmail.com>
-In-Reply-To: <CAK8P3a3uZJuf9naTerxMdUeW4CEuvfK0knC0JDTZteYHPqddTw@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 11 Feb 2022 14:23:02 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATPU6yc4i15i2XDCKDMEjwUK9H3TSYP9b8qkrhsuSRXLw@mail.gmail.com>
-Message-ID: <CAK7LNATPU6yc4i15i2XDCKDMEjwUK9H3TSYP9b8qkrhsuSRXLw@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Add more export headers to compile-test coverage
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211216021938.11752-1-jiangshanlai@gmail.com> <7fc9348d-5bee-b5b6-4457-6bde1e749422@redhat.com>
+In-Reply-To: <7fc9348d-5bee-b5b6-4457-6bde1e749422@redhat.com>
+From:   Wanpeng Li <kernellwp@gmail.com>
+Date:   Fri, 11 Feb 2022 13:32:45 +0800
+Message-ID: <CANRm+CyHfgOyxyk7KPzYR714dQaakPrVbwSf_cyvBMo+vQcmAw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] KVM: x86: Fixes for kvm/queue
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Lai Jiangshan <laijs@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 6:46 PM Arnd Bergmann <arnd@arndb.de> wrote:
+On Tue, 21 Dec 2021 at 04:13, Paolo Bonzini <pbonzini@redhat.com> wrote:
 >
-> On Thu, Feb 10, 2022 at 3:11 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > Masahiro Yamada (6):
-> >   signal.h: add linux/signal.h and asm/signal.h to UAPI compile-test
-> >     coverage
-> >   shmbuf.h: add asm/shmbuf.h to UAPI compile-test coverage
-> >   android/binder.h: add linux/android/binder(fs).h to UAPI compile-test
-> >     coverage
-> >   fsmap.h: add linux/fsmap.h to UAPI compile-test coverage
-> >   kexec.h: add linux/kexec.h to UAPI compile-test coverage
-> >   reiserfs_xattr.h: add linux/reiserfs_xattr.h to UAPI compile-test
-> >     coverage
+> On 12/16/21 03:19, Lai Jiangshan wrote:
+> > From: Lai Jiangshan <laijs@linux.alibaba.com>
+> >
+> > Patch 1 and patch 2 are updated version of the original patches with
+> > the same title.  The original patches need to be dequeued.  (Paolo has
+> > sent the reverting patches to the mail list and done the work, but I
+> > haven't seen the original patches dequeued or reverted in the public
+> > kvm tree.  I need to learn a bit more how patches are managed in kvm
+> > tree.)
 >
-> Very nice! Should I pick these up into the asm-generic tree?
->
->       Arnd
+> This cycle has been a bit more disorganized than usual, due to me taking
+> some time off and a very unusual amount of patches sent for -rc.
+> Usually kvm/queue is updated about once a week and kvm/next once every
+> 1-2 weeks.
 
+Maybe the patch "Revert "KVM: VMX: Save HOST_CR3 in
+vmx_prepare_switch_to_guest()"" is still missing in the latest
+kvm/queue, I saw the same warning.
 
-Yes, please.
-
-
--- 
-Best Regards
-Masahiro Yamada
+    Wanpeng

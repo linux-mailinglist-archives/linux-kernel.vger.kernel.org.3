@@ -2,126 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E7AB4B2E9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:40:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 482164B2EA1
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:41:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245499AbiBKUkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 15:40:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39180 "EHLO
+        id S1353001AbiBKUkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 15:40:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234402AbiBKUkL (ORCPT
+        with ESMTP id S230259AbiBKUka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 15:40:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB20CF5
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 12:40:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5795862071
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 20:40:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57468C340ED;
-        Fri, 11 Feb 2022 20:40:07 +0000 (UTC)
-Date:   Fri, 11 Feb 2022 15:40:05 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v2] tracing: uninline trace_trigger_soft_disabled()
- partly
-Message-ID: <20220211154005.01fd3c24@gandalf.local.home>
-In-Reply-To: <69ce0986a52d026d381d612801d978aa4f977460.1644563295.git.christophe.leroy@csgroup.eu>
-References: <69ce0986a52d026d381d612801d978aa4f977460.1644563295.git.christophe.leroy@csgroup.eu>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 11 Feb 2022 15:40:30 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B686CF5
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 12:40:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644612029; x=1676148029;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hMLogYdTPwvN7aEbRQDmMTbRpetFKlJo+PCjc3Htt4g=;
+  b=SXognhXi0CDvq8MU6uuX9RkYNbtNYpJafy92aDqEjK+lVEXFrr0Sev5/
+   41nW0Aw317JTl6ThxQkTtxfxCWRTNb9KQWsGYwFjJMFPP+LczuZxBihP8
+   yDu1z4ZUXJVfI4FwMOqNpp/NgoQoTgwO2xE2ANTpXV/3Zjh8LfJkwN0/O
+   GcxBSafkGxNmU0ByMbxvskPDE9sAgUk5T8FTw61enzPI+Ro3sqD9CWL05
+   ow+5ussW9LjG0CP7DyO10yJe0GK8QTrR9becHxSonSPqlSLWubaKcxFrK
+   j2J9FLGFWH9oMnPITUF1f/l7GzyQaTHTHIG1Oj49HL/scfg+1zggDvF1w
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="336228442"
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="336228442"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 12:40:28 -0800
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="488738173"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 12:40:28 -0800
+Date:   Fri, 11 Feb 2022 12:40:28 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "hpa@zytor.com" <hpa@zytor.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V8 18/44] x86/fault: Add a PKS test fault hook
+Message-ID: <20220211204027.GS785175@iweiny-DESK2.sc.intel.com>
+References: <20220127175505.851391-1-ira.weiny@intel.com>
+ <20220127175505.851391-19-ira.weiny@intel.com>
+ <2a7b0a94ea52952927c29bfc32f0085cbdfe5747.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2a7b0a94ea52952927c29bfc32f0085cbdfe5747.camel@intel.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Feb 2022 08:10:18 +0100
-Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
+On Mon, Jan 31, 2022 at 11:56:57AM -0800, Edgecombe, Rick P wrote:
+> On Thu, 2022-01-27 at 09:54 -0800, ira.weiny@intel.com wrote:
+> > +                * If a protection key exception occurs it could be
+> > because a PKS test
+> > +                * is running.  If so, pks_test_callback() will clear
+> > the protection
+> > +                * mechanism and return true to indicate the fault
+> > was handled.
+> > +                */
+> > +               if (pks_test_callback())
+> > +                       return;
+> 
+> Why do we need both this and pks_handle_key_fault()?
 
-> diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-> index 70c069aef02c..dcea51fb60e2 100644
-> --- a/include/linux/trace_events.h
-> +++ b/include/linux/trace_events.h
-> @@ -699,6 +699,8 @@ event_triggers_post_call(struct trace_event_file *file,
->  
->  bool trace_event_ignore_this_pid(struct trace_event_file *trace_file);
->  
-> +bool __trace_trigger_soft_disabled(struct trace_event_file *file);
-> +
->  /**
->   * trace_trigger_soft_disabled - do triggers and test if soft disabled
->   * @file: The file pointer of the event to test
-> @@ -708,20 +710,20 @@ bool trace_event_ignore_this_pid(struct trace_event_file *trace_file);
->   * triggers that require testing the fields, it will return true,
->   * otherwise false.
->   */
-> -static inline bool
-> +static __always_inline bool
->  trace_trigger_soft_disabled(struct trace_event_file *file)
->  {
->  	unsigned long eflags = file->flags;
->  
-> -	if (!(eflags & EVENT_FILE_FL_TRIGGER_COND)) {
-> -		if (eflags & EVENT_FILE_FL_TRIGGER_MODE)
-> -			event_triggers_call(file, NULL, NULL, NULL);
-> -		if (eflags & EVENT_FILE_FL_SOFT_DISABLED)
-> -			return true;
-> -		if (eflags & EVENT_FILE_FL_PID_FILTER)
-> -			return trace_event_ignore_this_pid(file);
-> -	}
-> -	return false;
-> +	if (likely(!(eflags & (EVENT_FILE_FL_TRIGGER_MODE |
-> +			       EVENT_FILE_FL_SOFT_DISABLED |
-> +			       EVENT_FILE_FL_PID_FILTER))))
-> +		return false;
-> +
-> +	if (likely(eflags & EVENT_FILE_FL_TRIGGER_COND))
-> +		return false;
-> +
-> +	return __trace_trigger_soft_disabled(file);
->  }
->  
->  #ifdef CONFIG_BPF_EVENTS
-> diff --git a/kernel/trace/trace_events_trigger.c b/kernel/trace/trace_events_trigger.c
-> index d00fee705f9c..55de490e25ca 100644
-> --- a/kernel/trace/trace_events_trigger.c
-> +++ b/kernel/trace/trace_events_trigger.c
-> @@ -84,6 +84,20 @@ event_triggers_call(struct trace_event_file *file,
->  }
->  EXPORT_SYMBOL_GPL(event_triggers_call);
->  
-> +bool __trace_trigger_soft_disabled(struct trace_event_file *file)
-> +{
-> +	unsigned long eflags = file->flags;
-> +
-> +	if (eflags & EVENT_FILE_FL_TRIGGER_MODE)
-> +		event_triggers_call(file, NULL, NULL, NULL);
-> +	if (eflags & EVENT_FILE_FL_SOFT_DISABLED)
-> +		return true;
-> +	if (eflags & EVENT_FILE_FL_PID_FILTER)
-> +		return trace_event_ignore_this_pid(file);
-> +	return false;
-> +}
-> +EXPORT_SYMBOL_GPL(__trace_trigger_soft_disabled);
-> +
->  /**
->   * event_triggers_post_call - Call 'post_triggers' for a trace event
->   * @file: The trace_event_file associated with the event
-> -- 
+I debated this.  And I convinced myself that it was worth the extra code.
 
+For this series, when testing pks_handle_key_fault() this may get called if
+something goes wrong.  And when the test code is not configured it is a no-op.
+So I don't see any harm in keeping this as a general handler.
 
-This version looks fine to me. I'll pull it into my queue.
+I mentioned this when adding pks_handle_key_fault().[1]  I could make a note of
+it in this patch if that would help.
 
-Thanks!
+Ira
 
--- Steve
+[1] https://lore.kernel.org/lkml/20220127175505.851391-30-ira.weiny@intel.com/

@@ -2,31 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7045D4B2357
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EE8E4B2363
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:40:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244530AbiBKKig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 05:38:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41728 "EHLO
+        id S1349112AbiBKKiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 05:38:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbiBKKid (ORCPT
+        with ESMTP id S237330AbiBKKie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 05:38:33 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0764DD41;
-        Fri, 11 Feb 2022 02:38:27 -0800 (PST)
-X-UUID: 132cd1ca924447b6a00f1e5d537fbd3d-20220211
-X-UUID: 132cd1ca924447b6a00f1e5d537fbd3d-20220211
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        Fri, 11 Feb 2022 05:38:34 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB465CFC;
+        Fri, 11 Feb 2022 02:38:31 -0800 (PST)
+X-UUID: ca786e55090041f09f42187473e802cc-20220211
+X-UUID: ca786e55090041f09f42187473e802cc-20220211
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 133670868; Fri, 11 Feb 2022 18:38:24 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 11 Feb 2022 18:38:23 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1526165724; Fri, 11 Feb 2022 18:38:26 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 11 Feb 2022 18:38:25 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 11 Feb
+ 2022 18:38:25 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 11 Feb 2022 18:38:23 +0800
+ Transport; Fri, 11 Feb 2022 18:38:24 +0800
 From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
 To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <tiwai@suse.com>,
         <robh+dt@kernel.org>, <matthias.bgg@gmail.com>, <perex@perex.cz>,
@@ -36,12 +40,10 @@ CC:     <trevor.wu@mediatek.com>, <tzungbi@google.com>,
         <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Jiaxin Yu <jiaxin.yu@mediatek.corp-partner.google.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>
-Subject: [PATCH 01/15] ASoC: mediatek: mt6366: add codec driver
-Date:   Fri, 11 Feb 2022 18:38:04 +0800
-Message-ID: <20220211103818.8266-2-jiaxin.yu@mediatek.com>
+        <linux-kernel@vger.kernel.org>, Jiaxin Yu <jiaxin.yu@mediatek.com>
+Subject: [PATCH 02/15] ASoC: mediatek: mt8186: support audsys clock control
+Date:   Fri, 11 Feb 2022 18:38:05 +0800
+Message-ID: <20220211103818.8266-3-jiaxin.yu@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220211103818.8266-1-jiaxin.yu@mediatek.com>
 References: <20220211103818.8266-1-jiaxin.yu@mediatek.com>
@@ -49,72 +51,258 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiaxin Yu <jiaxin.yu@mediatek.corp-partner.google.com>
-
-Mt6366 is a new version of mt6358, and they are same about audio part.
-So we can reuse the driver of mt6358.
+This patch adds mt8186 audio cg control.
+Audio clock gates are registered to CCF for reference count and
+clock parent management.
 
 Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
 ---
- sound/soc/codecs/Kconfig  | 8 ++++++++
- sound/soc/codecs/Makefile | 2 ++
- 2 files changed, 10 insertions(+)
+ sound/soc/mediatek/mt8186/mt8186-audsys-clk.c | 151 ++++++++++++++++++
+ sound/soc/mediatek/mt8186/mt8186-audsys-clk.h |  15 ++
+ .../soc/mediatek/mt8186/mt8186-audsys-clkid.h |  45 ++++++
+ 3 files changed, 211 insertions(+)
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-audsys-clk.c
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-audsys-clk.h
+ create mode 100644 sound/soc/mediatek/mt8186/mt8186-audsys-clkid.h
 
-diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
-index 8fa24783ce01..6631094678f5 100644
---- a/sound/soc/codecs/Kconfig
-+++ b/sound/soc/codecs/Kconfig
-@@ -132,6 +132,7 @@ config SND_SOC_ALL_CODECS
- 	imply SND_SOC_MT6351
- 	imply SND_SOC_MT6358
- 	imply SND_SOC_MT6359
-+	imply SND_SOC_MT6366
- 	imply SND_SOC_MT6660
- 	imply SND_SOC_NAU8315
- 	imply SND_SOC_NAU8540
-@@ -1888,6 +1889,13 @@ config SND_SOC_MT6359_ACCDET
- 	  for ASoC codec soc-jack detection mechanism.
- 	  Select N if you don't have jack on board.
- 
-+config SND_SOC_MT6366
-+	tristate "MediaTek MT6366 Codec"
-+	depends on MTK_PMIC_WRAP
-+	help
-+	  Enable support for the platform which uses MT6366 as
-+	  external codec device.
+diff --git a/sound/soc/mediatek/mt8186/mt8186-audsys-clk.c b/sound/soc/mediatek/mt8186/mt8186-audsys-clk.c
+new file mode 100644
+index 000000000000..f0ca57f00e91
+--- /dev/null
++++ b/sound/soc/mediatek/mt8186/mt8186-audsys-clk.c
+@@ -0,0 +1,151 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * mt8186-audsys-clk.h  --  Mediatek 8186 audsys clock control
++ *
++ * Copyright (c) 2022 MediaTek Inc.
++ * Author: Jiaxin Yu <jiaxin.yu@mediatek.com>
++ */
 +
- config SND_SOC_MT6660
- 	tristate "Mediatek MT6660 Speaker Amplifier"
- 	depends on I2C
-diff --git a/sound/soc/codecs/Makefile b/sound/soc/codecs/Makefile
-index 42d00aa4ee46..df6518306cd4 100644
---- a/sound/soc/codecs/Makefile
-+++ b/sound/soc/codecs/Makefile
-@@ -137,6 +137,7 @@ snd-soc-mt6351-objs := mt6351.o
- snd-soc-mt6358-objs := mt6358.o
- snd-soc-mt6359-objs := mt6359.o
- snd-soc-mt6359-accdet-objs := mt6359-accdet.o
-+snd-soc-mt6366-objs := mt6358.o
- snd-soc-mt6660-objs := mt6660.o
- snd-soc-nau8315-objs := nau8315.o
- snd-soc-nau8540-objs := nau8540.o
-@@ -465,6 +466,7 @@ obj-$(CONFIG_SND_SOC_MT6351)	+= snd-soc-mt6351.o
- obj-$(CONFIG_SND_SOC_MT6358)	+= snd-soc-mt6358.o
- obj-$(CONFIG_SND_SOC_MT6359)	+= snd-soc-mt6359.o
- obj-$(CONFIG_SND_SOC_MT6359_ACCDET) += mt6359-accdet.o
-+obj-$(CONFIG_SND_SOC_MT6366)	+= snd-soc-mt6366.o
- obj-$(CONFIG_SND_SOC_MT6660)	+= snd-soc-mt6660.o
- obj-$(CONFIG_SND_SOC_NAU8315)   += snd-soc-nau8315.o
- obj-$(CONFIG_SND_SOC_NAU8540)   += snd-soc-nau8540.o
++#include <linux/clk.h>
++#include <linux/clk-provider.h>
++#include <linux/clkdev.h>
++#include "mt8186-afe-common.h"
++#include "mt8186-audsys-clk.h"
++#include "mt8186-audsys-clkid.h"
++#include "mt8186-reg.h"
++
++struct afe_gate {
++	int id;
++	const char *name;
++	const char *parent_name;
++	int reg;
++	u8 bit;
++	const struct clk_ops *ops;
++	unsigned long flags;
++	u8 cg_flags;
++};
++
++#define GATE_AFE_FLAGS(_id, _name, _parent, _reg, _bit, _flags, _cgflags) {\
++		.id = _id,					\
++		.name = _name,					\
++		.parent_name = _parent,				\
++		.reg = _reg,					\
++		.bit = _bit,					\
++		.flags = _flags,				\
++		.cg_flags = _cgflags,				\
++	}
++
++#define GATE_AFE(_id, _name, _parent, _reg, _bit)		\
++	GATE_AFE_FLAGS(_id, _name, _parent, _reg, _bit,		\
++		       CLK_SET_RATE_PARENT, CLK_GATE_SET_TO_DISABLE)
++
++#define GATE_AUD0(_id, _name, _parent, _bit)			\
++	GATE_AFE(_id, _name, _parent, AUDIO_TOP_CON0, _bit)
++
++#define GATE_AUD1(_id, _name, _parent, _bit)			\
++	GATE_AFE(_id, _name, _parent, AUDIO_TOP_CON1, _bit)
++
++#define GATE_AUD2(_id, _name, _parent, _bit)			\
++	GATE_AFE(_id, _name, _parent, AUDIO_TOP_CON2, _bit)
++
++static const struct afe_gate aud_clks[CLK_AUD_NR_CLK] = {
++	/* AUD0 */
++	GATE_AUD0(CLK_AUD_AFE, "aud_afe_clk", "top_audio", 2),
++	GATE_AUD0(CLK_AUD_22M, "aud_apll22m_clk", "top_aud_engen1", 8),
++	GATE_AUD0(CLK_AUD_24M, "aud_apll24m_clk", "top_aud_engen2", 9),
++	GATE_AUD0(CLK_AUD_APLL2_TUNER, "aud_apll2_tuner_clk", "top_aud_engen2", 18),
++	GATE_AUD0(CLK_AUD_APLL_TUNER, "aud_apll_tuner_clk", "top_aud_engen1", 19),
++	GATE_AUD0(CLK_AUD_TDM, "aud_tdm_clk", "top_aud_1", 20),
++	GATE_AUD0(CLK_AUD_ADC, "aud_adc_clk", "top_audio", 24),
++	GATE_AUD0(CLK_AUD_DAC, "aud_dac_clk", "top_audio", 25),
++	GATE_AUD0(CLK_AUD_DAC_PREDIS, "aud_dac_predis_clk", "top_audio", 26),
++	GATE_AUD0(CLK_AUD_TML, "aud_tml_clk", "top_audio", 27),
++	GATE_AUD0(CLK_AUD_NLE, "aud_nle_clk", "top_audio", 28),
++
++	/* AUD1 */
++	GATE_AUD1(CLK_AUD_I2S1_BCLK, "aud_i2s1_bclk", "top_audio", 4),
++	GATE_AUD1(CLK_AUD_I2S2_BCLK, "aud_i2s2_bclk", "top_audio", 5),
++	GATE_AUD1(CLK_AUD_I2S3_BCLK, "aud_i2s3_bclk", "top_audio", 6),
++	GATE_AUD1(CLK_AUD_I2S4_BCLK, "aud_i2s4_bclk", "top_audio", 7),
++	GATE_AUD1(CLK_AUD_CONNSYS_I2S_ASRC, "aud_connsys_i2s_asrc", "top_audio", 12),
++	GATE_AUD1(CLK_AUD_GENERAL1_ASRC, "aud_general1_asrc", "top_audio", 13),
++	GATE_AUD1(CLK_AUD_GENERAL2_ASRC, "aud_general2_asrc", "top_audio", 14),
++	GATE_AUD1(CLK_AUD_DAC_HIRES, "aud_dac_hires_clk", "top_audio_h", 15),
++	GATE_AUD1(CLK_AUD_ADC_HIRES, "aud_adc_hires_clk", "top_audio_h", 16),
++	GATE_AUD1(CLK_AUD_ADC_HIRES_TML, "aud_adc_hires_tml", "top_audio_h", 17),
++	GATE_AUD1(CLK_AUD_ADDA6_ADC, "aud_adda6_adc", "top_audio", 20),
++	GATE_AUD1(CLK_AUD_ADDA6_ADC_HIRES, "aud_adda6_adc_hires", "top_audio_h", 21),
++	GATE_AUD1(CLK_AUD_3RD_DAC, "aud_3rd_dac", "top_audio", 28),
++	GATE_AUD1(CLK_AUD_3RD_DAC_PREDIS, "aud_3rd_dac_predis", "top_audio", 29),
++	GATE_AUD1(CLK_AUD_3RD_DAC_TML, "aud_3rd_dac_tml", "top_audio", 30),
++	GATE_AUD1(CLK_AUD_3RD_DAC_HIRES, "aud_3rd_dac_hires", "top_audio_h", 31),
++
++	/* AUD2 */
++	GATE_AUD2(CLK_AUD_ETDM_IN1_BCLK, "aud_etdm_in1_bclk", "top_audio", 23),
++	GATE_AUD2(CLK_AUD_ETDM_OUT1_BCLK, "aud_etdm_out1_bclk", "top_audio", 24),
++};
++
++int mt8186_audsys_clk_register(struct mtk_base_afe *afe)
++{
++	struct mt8186_afe_private *afe_priv = afe->platform_priv;
++	struct clk *clk;
++	struct clk_lookup *cl;
++	int i;
++
++	afe_priv->lookup = devm_kcalloc(afe->dev, CLK_AUD_NR_CLK,
++					sizeof(*afe_priv->lookup),
++					GFP_KERNEL);
++
++	if (!afe_priv->lookup)
++		return -ENOMEM;
++
++	for (i = 0; i < ARRAY_SIZE(aud_clks); i++) {
++		const struct afe_gate *gate = &aud_clks[i];
++
++		clk = clk_register_gate(afe->dev, gate->name, gate->parent_name,
++					gate->flags, afe->base_addr + gate->reg,
++					gate->bit, gate->cg_flags, NULL);
++
++		if (IS_ERR(clk)) {
++			dev_err(afe->dev, "Failed to register clk %s: %ld\n",
++				gate->name, PTR_ERR(clk));
++			continue;
++		}
++
++		/* add clk_lookup for devm_clk_get(SND_SOC_DAPM_CLOCK_SUPPLY) */
++		cl = kzalloc(sizeof(*cl), GFP_KERNEL);
++		if (!cl)
++			return -ENOMEM;
++
++		cl->clk = clk;
++		cl->con_id = gate->name;
++		cl->dev_id = dev_name(afe->dev);
++		clkdev_add(cl);
++
++		afe_priv->lookup[i] = cl;
++	}
++
++	return 0;
++}
++
++void mt8186_audsys_clk_unregister(struct mtk_base_afe *afe)
++{
++	struct mt8186_afe_private *afe_priv = afe->platform_priv;
++	struct clk *clk;
++	struct clk_lookup *cl;
++	int i;
++
++	if (!afe_priv)
++		return;
++
++	for (i = 0; i < CLK_AUD_NR_CLK; i++) {
++		cl = afe_priv->lookup[i];
++		if (!cl)
++			continue;
++
++		clk = cl->clk;
++		clk_unregister_gate(clk);
++
++		clkdev_drop(cl);
++	}
++}
+diff --git a/sound/soc/mediatek/mt8186/mt8186-audsys-clk.h b/sound/soc/mediatek/mt8186/mt8186-audsys-clk.h
+new file mode 100644
+index 000000000000..6023cd788b13
+--- /dev/null
++++ b/sound/soc/mediatek/mt8186/mt8186-audsys-clk.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * mt8186-audsys-clk.h  --  Mediatek 8186 audsys clock definition
++ *
++ * Copyright (c) 2022 MediaTek Inc.
++ * Author: Trevor Wu <trevor.wu@mediatek.com>
++ */
++
++#ifndef _MT8186_AUDSYS_CLK_H_
++#define _MT8186_AUDSYS_CLK_H_
++
++int mt8186_audsys_clk_register(struct mtk_base_afe *afe);
++void mt8186_audsys_clk_unregister(struct mtk_base_afe *afe);
++
++#endif
+diff --git a/sound/soc/mediatek/mt8186/mt8186-audsys-clkid.h b/sound/soc/mediatek/mt8186/mt8186-audsys-clkid.h
+new file mode 100644
+index 000000000000..823ee43a0c55
+--- /dev/null
++++ b/sound/soc/mediatek/mt8186/mt8186-audsys-clkid.h
+@@ -0,0 +1,45 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * mt8186-audsys-clkid.h  --  Mediatek 8186 audsys clock id definition
++ *
++ * Copyright (c) 2022 MediaTek Inc.
++ * Author: Jiaxin Yu <jiaxin.yu@mediatek.com>
++ */
++
++#ifndef _MT8186_AUDSYS_CLKID_H_
++#define _MT8186_AUDSYS_CLKID_H_
++
++enum{
++	CLK_AUD_AFE,
++	CLK_AUD_22M,
++	CLK_AUD_24M,
++	CLK_AUD_APLL2_TUNER,
++	CLK_AUD_APLL_TUNER,
++	CLK_AUD_TDM,
++	CLK_AUD_ADC,
++	CLK_AUD_DAC,
++	CLK_AUD_DAC_PREDIS,
++	CLK_AUD_TML,
++	CLK_AUD_NLE,
++	CLK_AUD_I2S1_BCLK,
++	CLK_AUD_I2S2_BCLK,
++	CLK_AUD_I2S3_BCLK,
++	CLK_AUD_I2S4_BCLK,
++	CLK_AUD_CONNSYS_I2S_ASRC,
++	CLK_AUD_GENERAL1_ASRC,
++	CLK_AUD_GENERAL2_ASRC,
++	CLK_AUD_DAC_HIRES,
++	CLK_AUD_ADC_HIRES,
++	CLK_AUD_ADC_HIRES_TML,
++	CLK_AUD_ADDA6_ADC,
++	CLK_AUD_ADDA6_ADC_HIRES,
++	CLK_AUD_3RD_DAC,
++	CLK_AUD_3RD_DAC_PREDIS,
++	CLK_AUD_3RD_DAC_TML,
++	CLK_AUD_3RD_DAC_HIRES,
++	CLK_AUD_ETDM_IN1_BCLK,
++	CLK_AUD_ETDM_OUT1_BCLK,
++	CLK_AUD_NR_CLK,
++};
++
++#endif
 -- 
 2.18.0
 

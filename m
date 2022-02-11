@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5EF94B1FFE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 09:17:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A61E4B200A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 09:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347974AbiBKIRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 03:17:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43788 "EHLO
+        id S1347999AbiBKIVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 03:21:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237756AbiBKIRX (ORCPT
+        with ESMTP id S1347989AbiBKIV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 03:17:23 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3963B4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 00:17:21 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id l19so9127472pfu.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 00:17:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BRhdyHPO6pxhmoZenbCd5DFkYFwKSkq+xX2G7rJZdJo=;
-        b=VTkf35datGbME5I3ZG/ERx6IBxNf1TBSegS6CtlX7Mc79lYH6FbUzSylxY7iVzFeUm
-         WfqKI25lR86njWGpabHfRIvHAlE2lr2i2R3gk3KDhrxkx/m1R/UqBd7Jw1phWBDuUhOD
-         R4g1G4PIYf0KHCFbVOeCMYK2zWQJedDrde77Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BRhdyHPO6pxhmoZenbCd5DFkYFwKSkq+xX2G7rJZdJo=;
-        b=nMahM72ZVDkZa1JvCKV5bXBBL1GBpJTbTHmis8tHVCSp8c1vcbayupvbcTF86qyCJ0
-         S5MhHDEZfS+e/bQcfe3AoS6cdqM9odhmIrROwucF8DsMIhm8+56YQg30+auCiuiHo57M
-         MLfL6z+O6jdvKE09uZ7ofd/gAWvEzaz1c0o/dBezjrjChbdLCmDRr9+gInG9WG9Q9iFK
-         /xRRC+CMZ4ZVcftwsT8SQS+3zAuFGIhi9UzwLnJOkvoN5q7Tw+Ea2f394hyK3VV0fMaO
-         dMg8o9a5MRH+QPr7TA52Un3tEzf0YUXRF3uSzzYd7VB3uVrjbw4cFNo6u035fqgAarVc
-         QKIw==
-X-Gm-Message-State: AOAM533Z9tXimPl6IuGqLukaYsGFo5G9ihz94pUU3fMKvhZ4MEAK4fmj
-        HolKCbLtmIED8ILUv86b70r36g==
-X-Google-Smtp-Source: ABdhPJwpu9qZKsbrkfR+8XnpPW1JuZotWgf3UXc8UyRjii33cHyKXSo0dBFRAfDvg/WTr6D9TKC7dg==
-X-Received: by 2002:a63:2322:: with SMTP id j34mr388612pgj.583.1644567440615;
-        Fri, 11 Feb 2022 00:17:20 -0800 (PST)
-Received: from 02a66449913b ([203.221.136.13])
-        by smtp.gmail.com with ESMTPSA id k16sm26260605pfu.140.2022.02.11.00.17.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 00:17:19 -0800 (PST)
-Date:   Fri, 11 Feb 2022 08:17:10 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.16 0/5] 5.16.9-rc1 review
-Message-ID: <20220211081710.GA1189530@02a66449913b>
-References: <20220209191249.887150036@linuxfoundation.org>
+        Fri, 11 Feb 2022 03:21:26 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4911E43;
+        Fri, 11 Feb 2022 00:21:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1644567685; x=1676103685;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1UsTRf6vAc8LZ7TbQ26bS4L3iuvgio5huOsqnR05FIQ=;
+  b=HK4/dce2PMKUg/UxiXx6WSCCWEsCsAsNev+rc9jo79ejK/EfsxzoDLxG
+   W3nrZPiyn+ymLatnrfo6UEMLOon1fPhGf4ovVKnnesP7rgr3R9ZaY4xT/
+   ThUF61k1C11mbRzZ+EXz0lUxVyNM+FDpWoXt/uxW7le6egcKFkFuxtq9T
+   wbQ9s1fOR4Z4enUpVJB2EG1+NCoVgPCKf0aO1Bbxj1SCPZ113KNq6CIwm
+   KglBq2r4WK/OD+BNYzIE6/Of845swSSNExR3Vl5JtHxzPCZv0m8aYv8AL
+   xvyzhywnmdwTlmnrYbc8pKviYKLuyvhUzzRKMiaa9VySdkf/Q9R8oYcni
+   w==;
+IronPort-SDR: bwmf1RwIFZKooVK5HAVj2uMcrzgwBV1imp6sYYobwCbo6DlxQc6CgeEKFzWG67Spwmcx1j0UsA
+ ZAVfrCdrF9ZH5j3cOueG1MBNQeS55SIr6zPlwjJOdxM28wUucCf40igIfiPYamTnrMx+HflDKd
+ bLI9alAjzyw9R5UfEjntJJyhuzFGydOwZlkSCNTLdGquxwhLNazujeLYAvFTkhrKcyX/5bvDiX
+ 4I7qJRq1mrM5KpYI2BmiLp9rQLB26TJn7N82QSFA3Jn5ZJmI/WUn2jgXOSw9ac9Wa3wiedgFwB
+ qY4GKw0qTJOXPwt0CHlby8RK
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="148383285"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Feb 2022 01:21:23 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 11 Feb 2022 01:21:18 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Fri, 11 Feb 2022 01:21:15 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <herbert@gondor.apana.org.au>, <krzysztof.kozlowski@canonical.com>,
+        <robh+dt@kernel.org>
+CC:     <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <linux-crypto@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kavyasree.kotagiri@microchip.com>,
+        <devicetree@vger.kernel.org>,
+        "Tudor Ambarus" <tudor.ambarus@microchip.com>
+Subject: [PACTH v3 0/3] dt-bindings: crypto: Convert atmel-crypto to YAML
+Date:   Fri, 11 Feb 2022 10:21:11 +0200
+Message-ID: <20220211082114.452911-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209191249.887150036@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,35 +70,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 08:14:32PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.9 release.
-> There are 5 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
-> Anything received after that time might be too late.
+Convert Atmel AES, TDES and SHA documentation to yaml format. There is one
+binding defined per file. Keeping all bindings under the same yaml does
+not make sense, as these are individual IPs. With the conversion the clock
+and clock-names properties are made mandatory, to reflect how the drivers
+treat them: when these properties are not provided, the drivers return
+error.
 
-Hi Greg,
+v3:
+- update license to (GPL-2.0-only OR BSD-2-Clause)
+- add "Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries"
+- add Krzysztof's R-b tag on patch 3/3. Chose to keep "maxItems: 1" instead
+of "items" and "description" because that's what the guide at [1] suggests:
+"# Cases that have only a single entry just need to express that with
+maxItems"
 
-5.16.9-rc1 tested.
+[1] https://www.kernel.org/doc/html/latest/devicetree/bindings/writing-schema.html#annotated-example-schema
 
-Run tested on:
-- Allwinner H6 (Tanix TX6)
-- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
+v2:
+- use generic "crypto" node name
+- drop redundant status = "okay" - it's the default state anyway
+- introduce empty line for readability
+- be specific and rename the bindings to let room for future possible
+  lines of architectures.
 
-In addition - build tested on:
-- Allwinner A64
-- Allwinner H3
-- Allwinner H5
-- NXP iMX6
-- NXP iMX8
-- Qualcomm Dragonboard
-- Rockchip RK3288
-- Rockchip RK3328
-- Rockchip RK3399pro
-- Samsung Exynos
+Tudor Ambarus (3):
+  dt-bindings: crypto: Convert Atmel AES to yaml
+  dt-bindings: crypto: Convert Atmel TDES to yaml
+  dt-bindings: crypto: Convert Atmel SHA to yaml
 
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
---
-Rudi
+ .../crypto/atmel,at91sam9g46-aes.yaml         | 66 ++++++++++++++++++
+ .../crypto/atmel,at91sam9g46-sha.yaml         | 60 ++++++++++++++++
+ .../crypto/atmel,at91sam9g46-tdes.yaml        | 64 +++++++++++++++++
+ .../bindings/crypto/atmel-crypto.txt          | 68 -------------------
+ 4 files changed, 190 insertions(+), 68 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-aes.yaml
+ create mode 100644 Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
+ create mode 100644 Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml
+ delete mode 100644 Documentation/devicetree/bindings/crypto/atmel-crypto.txt
+
+-- 
+2.25.1
+

@@ -2,183 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B00C4B1CCC
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 04:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC524B1CCE
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 04:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242227AbiBKDGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 22:06:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40046 "EHLO
+        id S242081AbiBKDG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 22:06:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347550AbiBKDGQ (ORCPT
+        with ESMTP id S232948AbiBKDGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 22:06:16 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4979D2647
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 19:06:16 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id b5so7686916qtq.11
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 19:06:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wtoQPG3jIyNhfYs5Ug8GoOsBEXEnyAg/kCZOfo5eUW4=;
-        b=aTQRjBrtMxHqjA8dGQkttGtKl/OvztIJaTGZxxn47YkTNBCFWo7/UTFqTXotHgY3NU
-         1Oeztm+aI3Ay1vO3Xu0GlbBR2/bUyafb2Lz2hwOJFCD6LMAR71oaiepbsNTYIe+zR6Xa
-         ePz7MUEcCGSl7OKEmANSik79EWuo6//V44iBXNsthzF3M4PmN6Xg047/Z516mOCYYwl5
-         bD87MlDZ0DCYGVv49FYerymRfIh0Syil85VX33E8kDOJGGNYfy0fopp8W2fHMPb3KXro
-         7rwUVpRBLaMhZ/SbsD8CcFZmQXvQ7jaLdkWxou2ock+CF3A8DKSJe0GUSA3xlYDzYgDp
-         Scpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wtoQPG3jIyNhfYs5Ug8GoOsBEXEnyAg/kCZOfo5eUW4=;
-        b=yRS+t2qPCzA327IxfQRydgmQ1qh3CNhllH1qzrotB5Fw5lRJ0x7hQvPTp2HN882pRo
-         qp17gbBv8VYcIC9aZ2yOWqTQQwAR/OeZg8OEyX8O3ovCek70vZo0D6L2a1WKkv9qBbet
-         eNqQX15fODZg63QXqsXsXzbJ3h2Luex3dKb7yU8nbyhV80rLBXrTxmummSrI/Kdwt8IX
-         XzdHtIwLELY37MzKVQdzpfCf9ULt4aq93+ZBYpyDCEKKY2OAicA4Mg4rKGuN4b9VNoAB
-         HAAUU6yfnM23dELtExayg7A+cKDAE2oFGSM0Er9UgdKpSWWvhtyGoWlsDgjVjuypgLNd
-         sWqw==
-X-Gm-Message-State: AOAM532dZtBX1f3FICFZ8Asv8xft78TA+fzr6MYhg8gpo8Qr0g8RMMe6
-        VqTGYFRO27LMS502pB5/CX7ErD7d6PHF9xUC
-X-Google-Smtp-Source: ABdhPJxzSUy/I3v5zqlAVtjR5BiaITi+ml5Pkxod3S4XUKthVj3/cIc4iqiu1geQsoWspzLJKjjYVA==
-X-Received: by 2002:a05:622a:11ca:: with SMTP id n10mr7027854qtk.42.1644548775320;
-        Thu, 10 Feb 2022 19:06:15 -0800 (PST)
-Received: from mail.google.com ([207.246.89.135])
-        by smtp.gmail.com with ESMTPSA id u63sm10780528qkh.43.2022.02.10.19.06.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 19:06:14 -0800 (PST)
-Date:   Fri, 11 Feb 2022 11:06:13 +0800
-From:   Changbin Du <changbin.du@gmail.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Changbin Du <changbin.du@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] riscv: fix oops caused by irq on/off tracer
-Message-ID: <20220211030613.s75irqxhflc25t7a@mail.google.com>
-References: <20220129004226.32868-1-changbin.du@gmail.com>
- <YgAEb425uqy5/dw1@xhacker>
- <20220207123850.l4r5qjswaegwisbx@mail.google.com>
- <YgE7XRE/Uc6gTCWd@xhacker>
- <20220208003502.62gi5xhyg6bk2t2h@mail.google.com>
- <YgP6y99LWFSoxjHg@xhacker>
- <20220210133758.yzebffln6j76zme6@mail.google.com>
- <YgUuzZp/eiNoXejK@xhacker>
- <YgUxIgMJRhJD6/GP@xhacker>
+        Thu, 10 Feb 2022 22:06:41 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A8622647;
+        Thu, 10 Feb 2022 19:06:40 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.31:49220.1910361997
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-123.150.8.42 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id 99CBF1002B4;
+        Fri, 11 Feb 2022 11:06:36 +0800 (CST)
+Received: from  ([123.150.8.42])
+        by gateway-153622-dep-749df8664c-cv9r2 with ESMTP id 4ae6a8bd32514b71bf2478f1bf333233 for u.kleine-koenig@pengutronix.de;
+        Fri, 11 Feb 2022 11:06:38 CST
+X-Transaction-ID: 4ae6a8bd32514b71bf2478f1bf333233
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 123.150.8.42
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+Message-ID: <6acc4f74-31a1-75b2-f7e8-610aac7b0ec8@189.cn>
+Date:   Fri, 11 Feb 2022 11:06:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgUxIgMJRhJD6/GP@xhacker>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] staging: greybus: introduce pwm_ops::apply
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, lee.jones@linaro.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
+References: <1644483902-9200-1-git-send-email-chensong_2000@189.cn>
+ <20220210100342.q2t4ykgyymjzr3fj@pengutronix.de>
+From:   Song Chen <chensong_2000@189.cn>
+In-Reply-To: <20220210100342.q2t4ykgyymjzr3fj@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I reconsidered the problem and found my previous analysis is flawed. So let's re-explain.
 
-The fault happens on code generated by CALLER_ADDR1 (aka.__builtin_return_address(1)):
-   0xffffffff8011510e <+80>:    ld      a1,-16(s0)
-   0xffffffff80115112 <+84>:    ld      s2,-8(a1)  # <-- paging fault here,a1=0x0000000000000100
 
-This because the assembly entry code doesn't setup a valid frame pointer, and the fp(aka. s0) register is used for other purpose.
-resume_kernel:
-	REG_L s0, TASK_TI_PREEMPT_COUNT(tp)
-	bnez s0, restore_all
-	REG_L s0, TASK_TI_FLAGS(tp)
-	andi s0, s0, _TIF_NEED_RESCHED
-	beqz s0, restore_all
-	call preempt_schedule_irq
-	j restore_all
+在 2022/2/10 18:03, Uwe Kleine-König 写道:
+> On Thu, Feb 10, 2022 at 05:05:02PM +0800, Song Chen wrote:
+>> Introduce apply in pwm_ops to replace legacy operations,
+>> like enable, disable, config and set_polarity.
+>>
+>> Signed-off-by: Song Chen <chensong_2000@189.cn>
+>> ---
+>>   drivers/staging/greybus/pwm.c | 46 +++++++++++++++--------------------
+>>   1 file changed, 19 insertions(+), 27 deletions(-)
+>>
+>> diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
+>> index 891a6a672378..e1889cf979b2 100644
+>> --- a/drivers/staging/greybus/pwm.c
+>> +++ b/drivers/staging/greybus/pwm.c
+>> @@ -204,43 +204,35 @@ static void gb_pwm_free(struct pwm_chip *chip, struct pwm_device *pwm)
+>>   	gb_pwm_deactivate_operation(pwmc, pwm->hwpwm);
+>>   }
+>>   
+>> -static int gb_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
+>> -			 int duty_ns, int period_ns)
+>> -{
+>> -	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
+>> -
+>> -	return gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_ns, period_ns);
+>> -};
+>> -
+>> -static int gb_pwm_set_polarity(struct pwm_chip *chip, struct pwm_device *pwm,
+>> -			       enum pwm_polarity polarity)
+>> +static int gb_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+>> +			const struct pwm_state *state)
+>>   {
+>> +	int ret;
+>>   	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
+>>   
+>> -	return gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, polarity);
+>> -};
+>> -
+>> -static int gb_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
+>> -{
+>> -	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
+>> +	/* set period and duty cycle*/
+>> +	ret = gb_pwm_config_operation(pwmc, pwm->hwpwm, state->duty_cycle, state->period);
+> 
+> gb_pwm_config_operation's 3rd parameter is an u32, so you're loosing
+> bits here as state->duty_cycle is a u64. Ditto for period.
 
-So, there is two solutions:
- 1) Invoke trace_hardirqs_on/off in C function, so the compiler will take care of frame pointer. This what I did.
- 2) Always setup vaild frame pointer in assembly entry code. I think this is what JiSheng suggested?
+originally, pwm_apply_state --> pwm_apply_legacy --> gb_pwm_config --> 
+gb_pwm_config_operation is also loosing bits, does it mean greybus can 
+live with that?
 
-I prefer #1 since we don't need to setup frame pointer if irqoff tracer is not enabled.
+Or redefine gb_pwm_config_request, switch duty and period to __le64?
 
-On Thu, Feb 10, 2022 at 11:37:06PM +0800, Jisheng Zhang wrote:
-> On Thu, Feb 10, 2022 at 11:27:21PM +0800, Jisheng Zhang wrote:
-> > On Thu, Feb 10, 2022 at 09:37:58PM +0800, Changbin Du wrote:
-> > > On Thu, Feb 10, 2022 at 01:32:59AM +0800, Jisheng Zhang wrote:
-> > > [snip]
-> > > > Hi Changbin,
-> > > > 
-> > > > I read the code and find that current riscv frame records during
-> > > > exception isn't as completed as other architectures. riscv only
-> > > > records frames from the ret_from_exception(). If we add completed
-> > > What do you mean for 'record'?
-> > > 
-> > 
-> > stack frame record.
-> > 
-> > > > frame records as other arch do, then the issue you saw can also
-> > > > be fixed at the same time.
-> > > > 
-> > > I don't think so. The problem is __builtin_return_address(1) trigger page fault
-> > > here.
-> > 
-> > There's misunderstanding here. I interpret this bug as incomplete
-> > stackframes.
-> > 
-> > This is current riscv stackframe during exception:
-> > 
-> > high
-> >  	----------------
-> > top	|		|  <- ret_from_exception
-> > 	----------------
-> > 	|		|  <- trace_hardirqs_on
-> > 	-----------------
-> > low
 > 
-> sorry, the "top" is wrongly placed.
->  high
->   	----------------
->  	|		|  <- ret_from_exception
->  	----------------
->  	|		|  <- trace_hardirqs_on
->  	-----------------
-> top
+> Also it would be nice if you go from
 > 
->  low
+> 	.duty_cycle = A, .period = B, .enabled = 1
 > 
+> to
 > 
+> 	.duty_cycle = C, .period = D, .enabled = 0
 > 
-> > 
-> > As you said, the CALLER_ADDR1 a.k.a __builtin_return_address(1) needs
-> > at least two parent call frames. 
-> > 
-> > If we complete the stackframes during exception as other arch does:
-> > 
-> > high
-> >  	----------------
-> > top	|		|  <- the synthetic stackframe from the interrupted point
-> >  	----------------
-> > 	      .....	      
-> >         ----------------
-> > 	|		|  <- ret_from_exception
-> > 	----------------
-> > 	|		|  <- trace_hardirqs_on
-> > 	-----------------
-> > low
-> 
-> ditto
-> 
-> > 
-> > 
-> > Then we meet the "at least two parent call frames" requirement. IOW, my
-> > solution solve the problem from the entry.S side. One of the advantages
-> > would be we let interrupted point show up in dump_stack() as other arch
-> > do. What I'm not sure is whether it's safe to do so now since rc3 is
-> > released.
-> > 
+> that C/D wasn't visible on the output pin. So please disable earlier
+> (but keep enable at the end).
 
--- 
-Cheers,
-Changbin Du
+sorry, i don't quite understand this part, but is below code looking 
+good to you?
+
+static int gb_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+			const struct pwm_state *state)
+{
+	int err;
+	bool enabled = pwm->state.enabled;
+	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
+
+	/* set polarity */
+	if (state->polarity != pwm->state.polarity) {
+		if (enabled) {
+			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
+			enabled = false;
+		}
+		err = gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, state->polarity);
+		if (err)
+			return err;
+	}
+
+	if (!state->enabled) {
+		if (enabled)
+			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
+		return 0;
+	}
+
+	/* set period and duty cycle*/
+	err = gb_pwm_config_operation(pwmc, pwm->hwpwm, state->duty_cycle, 
+state->period);
+	if (err)
+		return err;
+
+	/* enable/disable */
+	if (!enabled)
+		return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
+
+	return 0;
+}
+
+> 
+> Best regards
+> Uwe
+> 

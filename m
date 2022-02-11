@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A1D4B2EE6
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F784B2EEF
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353132AbiBKUyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 15:54:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48682 "EHLO
+        id S1353433AbiBKU4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 15:56:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232904AbiBKUyJ (ORCPT
+        with ESMTP id S232904AbiBKU4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 15:54:09 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2FCB5
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 12:54:07 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id c3so5628904pls.5
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 12:54:07 -0800 (PST)
+        Fri, 11 Feb 2022 15:56:15 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26B59E;
+        Fri, 11 Feb 2022 12:56:12 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id cf2so18176764edb.9;
+        Fri, 11 Feb 2022 12:56:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=vyS8enjp3MoFhalQV38fhwt/m4nt1gdOZVHuo1kTc9Q=;
-        b=TeZsjJVypJgjEKoHluoc/XfLqXIwLe3CWDguw5qoWU9aVUkTRs5QNxp+mxBNFGWY8I
-         IetHveD0ZZHP+WHWN0td99bGJgS/HFlRS6EvikFaOBopIzIL/LX7CpWCBSq+ogeITa/i
-         lQT8bAqiOu0XfYtFAmLinXe8UWVo/K1HqY1lFDOCBX1A02IKEuQjNb3aHPrYqWRtN7Xx
-         MRkDv/8kvEfb7nKZSfMw+9XMWtFfHDSHALr8FvIOTZ7zoMe6S8hW34F0WvDdF7fO4yOl
-         0JZmQuo0SEau2TQZqmm0MO36doMmYHAeFeuqa5ArofmfZ7taCevdR/7cl9JDhSGK9+Uu
-         59VQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Tgv7ys2zhrW+e9PNgo8siOn8/16+4IpioSAv02Oc+pc=;
+        b=SGKgygnDcuydKQNXbAIAgtRCWdEnfQlF9CLEP9e6blfzdYaBrvvQPYnvveYkBTsY9x
+         zwitWArfsEx/f0tNRYkf/fcKCQ/vV36NKqYw6nE/93GyZcIH8G+h/P28pNU74IDGeWbL
+         sIFxjm7sjdEEUtC/28AKRpEmPr8rkDdOV+0gY3REEIh776vbIWXYhBw3Rm8XFGeYN6XG
+         +YNALzF8qdQCsEqCNO/xmdslyWBRmViAwvYwDg+O6+fndpsgULQjcFzHq52qq4YtGNqd
+         pN0PYM5wrmIABdwGW3uZeivWEE6m0y3vxvoKU929A6H82nZgowbt0X3Sb19OXIzxnQv8
+         hBcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=vyS8enjp3MoFhalQV38fhwt/m4nt1gdOZVHuo1kTc9Q=;
-        b=jwcQ5ytENBMqmPzN9Gtr+hh5OMw2cu85WLnhHmEEZbGIdUZmC8vLpYA8j2CZTNx+Fz
-         KFr+GBQ8DI1STb0cpgyHp1hMCBLvSAIUROvMs4EtWde6Uw8F3wVJijduhmNa1Rkp208J
-         3fbzJA89yH9GL8C5fNvpKlUZy6G5VlT1N2WsN51u3g5CEOM1BcsVXkkrSbMHqh5xGWgL
-         n22wI479czz/eVKnAK15/07f0OLEYX3yqaS0rm0lCkRRGIAp/88XRGqu0/rOScW3X1i3
-         FIwJ9mrjaS9EbxTky3tTmpj5v8SAskOhXSypcZOqHcjfWpkhGOZ3ziDqEAjMXbsQ6FpD
-         F3Xw==
-X-Gm-Message-State: AOAM530Ym+/iiOZHJNJcMNn1cQ9w0JKc5Xqu1vzErcBiikNji2e6ACgs
-        NLOqfNBmyHJ/F/AezBUizGYCmA==
-X-Google-Smtp-Source: ABdhPJx4dfsIqmmZ6a/E1jxZB/gsh98/+uLWnFAbi9FRThvagfZHmHl8p1aQgBOjvYP4R7+ULg3qGg==
-X-Received: by 2002:a17:902:f68f:: with SMTP id l15mr3376435plg.169.1644612846949;
-        Fri, 11 Feb 2022 12:54:06 -0800 (PST)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id f3sm28492008pfe.43.2022.02.11.12.54.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 12:54:06 -0800 (PST)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Christian Hewitt <christianshewitt@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: meson: remove CPU opps below 1GHz for G12B/SM1
-In-Reply-To: <C70293C2-8CE8-42CE-911A-E0CC3DFB82FC@gmail.com>
-References: <20220209135535.29547-1-christianshewitt@gmail.com>
- <7h7da3o6cg.fsf@baylibre.com>
- <C70293C2-8CE8-42CE-911A-E0CC3DFB82FC@gmail.com>
-Date:   Fri, 11 Feb 2022 12:54:06 -0800
-Message-ID: <7ha6exm8ep.fsf@baylibre.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Tgv7ys2zhrW+e9PNgo8siOn8/16+4IpioSAv02Oc+pc=;
+        b=R88n/OCSZRJtwQDKdNeBQS3kuMps/KBH8C7pOutJMeJm9fnu7HNgezjbK81DGF74TG
+         8Bilzzh/JXn6FsxBzuWQR/7zSu3hoYIXNX7oG4rrB/uElrVwNM1PdyF3EtDVm6xoSeiQ
+         oljOXuf/CkfW3+55qFKKzbHj/sQFrRXlxRqKbNfCpwr9dGcGZLJkX107/SafqXXQY4tn
+         F0UUf7f/aadwEQJqmSsOkiXg06sOGrSdH6Gs9tT1W0wmDJPam3l6h5TXH8+cDQjp18CC
+         EpFpFKS8LYZE4NFWPFJCI5M/avQnJmxBLkE4J6FZjBv0MuVfGXb7Bu2CD/pUKgvzKdch
+         C1WQ==
+X-Gm-Message-State: AOAM532ZpfdJrs0XMinaZREp5Pi4purRYEF8fZPDOtEO+vDCKrz1RbQ8
+        3wpNtzwslNsBoGkDjMYdNBWIlP5YQvARky+fRDg=
+X-Google-Smtp-Source: ABdhPJydyDt3+X5VIrTpx3PQtQy02bTuF2uAvgGMZN91i8Gglb3c6XTZvHHha46M4FOtfhkw/fqNSmsN6xZNrW8VX9Q=
+X-Received: by 2002:a05:6402:3492:: with SMTP id v18mr3902168edc.345.1644612971455;
+ Fri, 11 Feb 2022 12:56:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20220210225222.260069-1-shy828301@gmail.com> <YgYCdhgQ+PoudJvv@infradead.org>
+In-Reply-To: <YgYCdhgQ+PoudJvv@infradead.org>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Fri, 11 Feb 2022 12:55:58 -0800
+Message-ID: <CAHbLzkoF6JenubW_p0sO-_GZ6repeOm7euZKq0kG+UvcZWw6Mw@mail.gmail.com>
+Subject: Re: [v8 PATCH] block: introduce block_rq_error tracepoint
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, Steven Rostedt <rostedt@goodmis.org>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        linux-block@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,80 +68,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christian Hewitt <christianshewitt@gmail.com> writes:
-
->> On 10 Feb 2022, at 5:31 am, Kevin Hilman <khilman@baylibre.com> wrote:
->>=20
->> Christian Hewitt <christianshewitt@gmail.com> writes:
->>=20
->>> Amlogic G12B and SM1 devices experience CPU stalls and random board
->>> wedges when the system idles and CPU cores clock down to lower opp
->>> points. Recent vendor kernels include a change to remove 100-250MHz
->>> (with no explanation) [0] but other downstream sources also remove
->>> the 500/667MHz points (also with no explanation). Unless 100-667Mhz
->>> opps are removed or the CPU governor forced to performance, stalls
->>> are observed, so let's remove them an improve stability/uptime.
->>=20
->> Just curious: what CPUfreq governor do you use by default for the
->> LibreELEC kernel?
+On Thu, Feb 10, 2022 at 10:30 PM Christoph Hellwig <hch@infradead.org> wrote:
 >
-> LE uses ondemand. One of the original clues on the problem us that the
-> issue isn=E2=80=99t seen in some of the retro-gaming forks on LE's codeba=
-se
-> which use the performance governor (and overclocks, etc.)
+> Looks good,
+>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
 
-OK, thanks.  And does LE ever do full system suspend/resume?  Are things
-stable for you across multiple suspend/resume cycles on G12B or SM1
-devices?
-
-I'm seeing hat with either powersave or performance, repeated
-suspend/resume is stable, but with ondemand or schedultil it's not, even
-with $SUBJECT patch applied.
-
-If you have some time to test, seeing how long this loop[1] runs with
-ondemand vs performance or powersave would be instructive.
-
-Even more interesting...  if I set the governor to performance, but set
-the suspend OPP to 1GHz[2] (which is what it would be for the powersave
-governor), it is also unstable.  This suggests (to me) that any sort of
-OPP change during the suspend/resume process is going to be unstable.
-Now the challenge is to understand why so we can avoid it.
-
-Thanks,
-
-Kevin
-
-[1]
-while true;  do
-    echo "=3D=3D=3D SUSPEND =3D=3D=3D"
-    cat /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
-    cat /sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq
-    cat /sys/devices/system/cpu/cpufreq/policy2/scaling_governor
-    cat /sys/devices/system/cpu/cpufreq/policy2/scaling_cur_freq
-    echo rtcwake -d rtc0 -m mem -s4
-    echo "=3D=3D=3D RESUME =3D=3D=3D"
-    sleep 4
-done
-
-[2]
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi b/arch/arm64=
-/boot/dts/amlogic/meson-g12b-s922x.dtsi
-index 1e5d0ee5d541..37da8be85288 100644
---- a/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
-@@ -14,6 +14,7 @@ cpu_opp_table_0: opp-table-0 {
- 		opp-100000000 {
- 			opp-hz =3D /bits/ 64 <100000000>;
- 			opp-microvolt =3D <731000>;
-+ 		        opp-suspend;
- 		};
-=20
- 		opp-250000000 {
-@@ -79,6 +80,7 @@ cpub_opp_table_1: opp-table-1 {
- 		opp-100000000 {
- 			opp-hz =3D /bits/ 64 <100000000>;
- 			opp-microvolt =3D <751000>;
-+ 		        opp-suspend;
- 		};
-=20
- 		opp-250000000 {
+Thank you!

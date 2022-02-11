@@ -2,110 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E7D4B1EA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:36:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 600834B1E9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345823AbiBKGgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 01:36:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36674 "EHLO
+        id S1343827AbiBKGgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 01:36:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243174AbiBKGgh (ORCPT
+        with ESMTP id S243174AbiBKGga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 01:36:37 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86D726DA
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 22:36:35 -0800 (PST)
+        Fri, 11 Feb 2022 01:36:30 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254EDE56;
+        Thu, 10 Feb 2022 22:36:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644561396; x=1676097396;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ie/i3Qvp4DuzO1nw6b7nkiCe6qMgPLbvuZfIsTPFAY8=;
-  b=ZNBH5+RGPaQmfb0hDdqoi65xUSkB1K7Lpgv4VEAYRHf+7fPY4bwlF6HO
-   XdNeU3JNzaIYvrHb1fqW4zLjA5yhIeVGofgmbmp4K/dAcfgvFepf46oU9
-   oii3XhkpLYkyTBl0O9cCxcgQMC7gxBrREhVEzDC8v4IFz7gJSoMwJW8cV
-   BXoLgaiUVR738qDNiJUZT2mD5aUNF5W/yFDLZ+8IPcNXuqi4U0ij/iVeN
-   fW5n16kK2pFNK6fGq8hULkVAD0D/FjF9OKBtbTFG6QvWdQ+9wwlXuX44c
-   6aw5b8ripm0RyvjoF6wAl8qxYUlxVF85L90pzf9oylJAwpQm+Ja3K9To0
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="249423537"
+  t=1644561390; x=1676097390;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=vvaAaRgq6EsdB48AtN0e/kt285sXi+0TKs83/n1Uo5k=;
+  b=T7PMGyXyd0sYZM8uU6+DVhljhkr7Iw3YvmZBnttwFclSP8nZfVeXBnmb
+   sRH/ww251xUYUznfaXqz0Bcz3J6gpzi3ondK43B0f8jDJ9LD4gbJMYsyp
+   k78v8XJdZPW6sVtiI4ywtMEpKfRGIuM2P12FjhhVmodcp+3/tEjxhhrvI
+   eu61WsHa83IhyePYOBEm9sya41MX6I+R8qW8D0pxwfflfp2/lMq59HNKt
+   p/IQcF6PUpuzjQtUTgWTc96RktJp0D7Wer+Ij2DIo3SglRM6ipsvB3V3Y
+   iaOjGbYyf0t1FFK8ZJedjjxuBhgYbdz9FvBGnZSQ5mnCjoumzdTBy2pYQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="312955617"
 X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="249423537"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 22:36:35 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="312955617"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 22:36:29 -0800
 X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="623123666"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Feb 2022 22:36:32 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nIPXk-0004Ek-4p; Fri, 11 Feb 2022 06:36:32 +0000
-Date:   Fri, 11 Feb 2022 14:35:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/m68k/coldfire/m523x.c:31:19: sparse: sparse: symbol
- 'm523x_clk_lookup' was not declared. Should it be static?
-Message-ID: <202202111434.ezwGbZ9a-lkp@intel.com>
+   d="scan'208";a="486910936"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.28.229]) ([10.255.28.229])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 22:36:24 -0800
+Subject: Re: [kbuild-all] Re: [PATCH] net: dsa: qca8k: fix noderef.cocci
+ warnings
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <202202100634.l8CtrpzE-lkp@intel.com>
+ <20220209221304.GA17529@d2214a582157>
+ <6c74b2f8-dd83-c4f2-cadd-07794a37dfac@gmail.com>
+ <20220210105956.336c9e6a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <161e2399-222e-b675-36e1-ec39eb96da4e@intel.com>
+Date:   Fri, 11 Feb 2022 14:36:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220210105956.336c9e6a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f1baf68e1383f6ed93eb9cff2866d46562607a43
-commit: 63aadb77669a6856b26d73da85b4f788731524a3 m68k: coldfire: use clkdev_lookup on most coldfire
-date:   8 months ago
-config: m68k-randconfig-s032-20220211 (https://download.01.org/0day-ci/archive/20220211/202202111434.ezwGbZ9a-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=63aadb77669a6856b26d73da85b4f788731524a3
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 63aadb77669a6856b26d73da85b4f788731524a3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/coldfire/ drivers/net/ethernet/cirrus/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
 
-sparse warnings: (new ones prefixed by >>)
->> arch/m68k/coldfire/m523x.c:31:19: sparse: sparse: symbol 'm523x_clk_lookup' was not declared. Should it be static?
+On 2/11/2022 2:59 AM, Jakub Kicinski wrote:
+> On Wed, 9 Feb 2022 19:30:48 -0800 Florian Fainelli wrote:
+>> On 2/9/2022 2:13 PM, kernel test robot wrote:
+>>> From: kernel test robot <lkp@intel.com>
+>>>
+>>> drivers/net/dsa/qca8k.c:422:37-43: ERROR: application of sizeof to pointer
+>>>
+>>>    sizeof when applied to a pointer typed expression gives the size of
+>>>    the pointer
+>>>
+>>> Generated by: scripts/coccinelle/misc/noderef.cocci
+>>>
+>>> Fixes: 90386223f44e ("net: dsa: qca8k: add support for larger read/write size with mgmt Ethernet")
+>>> CC: Ansuel Smith <ansuelsmth@gmail.com>
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>> Signed-off-by: kernel test robot <lkp@intel.com>
+>>
+>>> qca8k.c |    2 +-
+>>> 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> kbuild folks, would it be easy to switch to including full path here?
+> It seems like our CI expects that and ignores this patch.
 
-vim +/m523x_clk_lookup +31 arch/m68k/coldfire/m523x.c
+Hi Jakub,
 
-    30	
-  > 31	struct clk_lookup m523x_clk_lookup[] = {
-    32		CLKDEV_INIT(NULL, "pll.0", &clk_pll),
-    33		CLKDEV_INIT(NULL, "sys.0", &clk_sys),
-    34		CLKDEV_INIT("mcfpit.0", NULL, &clk_pll),
-    35		CLKDEV_INIT("mcfpit.1", NULL, &clk_pll),
-    36		CLKDEV_INIT("mcfpit.2", NULL, &clk_pll),
-    37		CLKDEV_INIT("mcfpit.3", NULL, &clk_pll),
-    38		CLKDEV_INIT("mcfuart.0", NULL, &clk_sys),
-    39		CLKDEV_INIT("mcfuart.1", NULL, &clk_sys),
-    40		CLKDEV_INIT("mcfuart.2", NULL, &clk_sys),
-    41		CLKDEV_INIT("mcfqspi.0", NULL, &clk_sys),
-    42		CLKDEV_INIT("fec.0", NULL, &clk_sys),
-    43		CLKDEV_INIT("imx1-i2c.0", NULL, &clk_sys),
-    44	};
-    45	
+Thanks for the advice, will change it.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Best Regards,
+Rong Chen
+
+> 
+>> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> Applied, thanks!
+> _______________________________________________
+> kbuild-all mailing list -- kbuild-all@lists.01.org
+> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+> 

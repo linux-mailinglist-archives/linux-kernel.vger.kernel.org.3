@@ -2,86 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B854B2B2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C32E04B2B29
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:01:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351869AbiBKRAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 12:00:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56940 "EHLO
+        id S1351873AbiBKRAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 12:00:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbiBKRAi (ORCPT
+        with ESMTP id S1351864AbiBKRAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 12:00:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01CEBD6;
+        Fri, 11 Feb 2022 12:00:40 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A26CC8
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:00:38 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id w7so12168955ioj.5
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:00:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=j04MZc7+Vllk/SHsVsvPL62aWIq/a7UweoKiSdDovz8=;
+        b=U5HR3RIgVsW3EN89TU5D4lkYEFA+vDIX5nj7bkmLfAuZEmrki8f0fvqnkdSzwdLFlC
+         +uYNpj0IGaaZwkIt83tpes5r1g3B3VmPgWiTb5QmO0L8PjNaHLsFciuxc5vHZ7kI0bc1
+         s+x6JQaDlPOl2NnRMX16uD5Lj34GKT5GWous40Vsp9s+I9eauif1QAQGFYmzfLQPF9Rk
+         UjTrexosgjIhjP7H3P7BrDPp9XYkuj6xIUbCam5a3Q3akjdX27auaKp2Sr5xusrkSmWq
+         mYsVT+Vv630I0d+FSSgwrB7Fntz9yfn29ko++D630ik1lxHuCvBB2a7ThqSN2ZXE7JMR
+         4zwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=j04MZc7+Vllk/SHsVsvPL62aWIq/a7UweoKiSdDovz8=;
+        b=L8jZJsfI+jQo58w62eAq3wLdoUe/S8qAW68LhYevs7u92z2F8Khw8Sl0z85s42Z1Ql
+         4s7/GtKktSNv5ONxEURz3yRmlTg8BgPZHiPcaTGOxqKgojUqs+8HUH2YMXxPR/qN18ev
+         xauTtz+lz3QuNDG8uuerGYy03ZvR9fltQIppW8JH2h+oLqRmV8Tq8L7q9IO55bX3+hyX
+         6Rk0pnTz74NGQdGfj/XH6Qd4HVoZbKSsoUxzcgPLJOCWJ6N2Fd88w32QalvOY5scluh7
+         Se0Iasxf4VKTpbi71eDQfwNgCzVdXSmi29KdtTrztY8NxjK8QlsrzYJxUEV5J5bSISsS
+         193w==
+X-Gm-Message-State: AOAM5300fIdzpb4Jx0ykm+7EPsZNEsSlxuWSNl/JT5vc+DP5gQhQWoie
+        LpOLZHYAygUtI7wtScC/3JdDzCcpVrV8ROaE
+X-Google-Smtp-Source: ABdhPJxux5F6R5SvtJI/DzQlxnzd3eFWXbeOX9EF3IQMxW67V7t0NP5IQyqA2R8Tjc8c0z7wGxPuyg==
+X-Received: by 2002:a05:6638:1038:: with SMTP id n24mr1404494jan.36.1644598837958;
         Fri, 11 Feb 2022 09:00:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B153618F8;
-        Fri, 11 Feb 2022 17:00:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EEBBC340E9;
-        Fri, 11 Feb 2022 17:00:36 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="h2SpPH1n"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644598834;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=C9IVZkbdA8oN9E2Z4/YFEIlHEsl8hy8tO1E3qKdfEdg=;
-        b=h2SpPH1nJSREKLO/2BP72RdjuKuixvCIpBAWy51gR2BuxR6CI1bry9aEb6XH58bT+l3tyX
-        MHufFaSfI97iAlF6YAgnwzYI45L3sf0bvnNFJTOWOZKbDYOQdWCkDH2NhpVrhj07YLFvDj
-        Cj3FRWEgJo8Cj1noNRUQFj00dON6sKI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 9ef0b82b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 11 Feb 2022 17:00:34 +0000 (UTC)
-Received: by mail-yb1-f170.google.com with SMTP id v47so26710690ybi.4;
-        Fri, 11 Feb 2022 09:00:33 -0800 (PST)
-X-Gm-Message-State: AOAM530bX53FjK0ui+Yv/oc7lDRjGFe5nRULLj4VbdmlcM6dc0czyEe2
-        PkExutpxmpq105iQeyoJfdOUON4gYkT7XEPLzdI=
-X-Google-Smtp-Source: ABdhPJzRmZbwROoTGWk4Ik9cqBCwTOHkOSdZChh4VdhcxipEcaWO0yDyMIzQIrCRijtuPo76xBfeBIvrjhSqZV1Z1ZQ=
-X-Received: by 2002:a25:ba49:: with SMTP id z9mr2268190ybj.32.1644598832549;
- Fri, 11 Feb 2022 09:00:32 -0800 (PST)
+Received: from x1.localdomain ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id k11sm13565121iob.23.2022.02.11.09.00.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 09:00:37 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     rostedt@goodmis.org, Yang Shi <shy828301@gmail.com>,
+        xiyou.wangcong@gmail.com, kch@nvidia.com, hch@infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+In-Reply-To: <20220210225222.260069-1-shy828301@gmail.com>
+References: <20220210225222.260069-1-shy828301@gmail.com>
+Subject: Re: [v8 PATCH] block: introduce block_rq_error tracepoint
+Message-Id: <164459883724.122482.1096803254957441815.b4-ty@kernel.dk>
+Date:   Fri, 11 Feb 2022 10:00:37 -0700
 MIME-Version: 1.0
-References: <YgZ6IEbiDgz5X1ON@linutronix.de> <20220211162515.554867-1-Jason@zx2c4.com>
- <YgaSYlVEBOxfJbSD@linutronix.de> <CAHmME9rC_q4LGq2JaAAeGbtRA2cibTe9bnvhMLng+QnzAy2DVg@mail.gmail.com>
- <YgaV0UZO1KfmtLLh@linutronix.de>
-In-Reply-To: <YgaV0UZO1KfmtLLh@linutronix.de>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Fri, 11 Feb 2022 18:00:21 +0100
-X-Gmail-Original-Message-ID: <CAHmME9qR02XCX48D+AoT1rOFyNo_GXubyHPzoX01BYkJDX7p1A@mail.gmail.com>
-Message-ID: <CAHmME9qR02XCX48D+AoT1rOFyNo_GXubyHPzoX01BYkJDX7p1A@mail.gmail.com>
-Subject: Re: [PATCH v6] random: defer fast pool mixing to worker
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
+On Thu, 10 Feb 2022 14:52:22 -0800, Yang Shi wrote:
+> Currently, rasdaemon uses the existing tracepoint block_rq_complete
+> and filters out non-error cases in order to capture block disk errors.
+> 
+> But there are a few problems with this approach:
+> 
+> 1. Even kernel trace filter could do the filtering work, there is
+>    still some overhead after we enable this tracepoint.
+> 
+> [...]
 
-On Fri, Feb 11, 2022 at 5:59 PM Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
-> > Okay, I'll do that then, and then in the process get rid of the
-> > cmpxchg loop since it's no longer required.
->
-> So the only reason why we have that atomic_t is for rare case where run
-> on the remote CPU and need to remove the upper bit in the counter?
+Applied, thanks!
 
-Yes. That's the only remaining reason. Annoying, but whatareyagonnado?
+[1/1] block: introduce block_rq_error tracepoint
+      commit: d5869fdc189f0f12a954a48d58a48104a2f5d044
 
-Jason
+Best regards,
+-- 
+Jens Axboe
+
+

@@ -2,98 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E094B2C17
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 757384B2C14
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:51:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352341AbiBKRvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 12:51:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42516 "EHLO
+        id S1352349AbiBKRvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 12:51:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352330AbiBKRvA (ORCPT
+        with ESMTP id S1352338AbiBKRvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Feb 2022 12:51:00 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A452FCEC;
-        Fri, 11 Feb 2022 09:50:57 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 59F281042;
-        Fri, 11 Feb 2022 09:50:57 -0800 (PST)
-Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1B0AC3F70D;
-        Fri, 11 Feb 2022 09:50:56 -0800 (PST)
-Date:   Fri, 11 Feb 2022 17:50:45 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 00/11] PCI: mvebu: subsystem ids, AER and INTx
-Message-ID: <20220211175029.GA2300@lpieralisi>
-References: <20220105150239.9628-1-pali@kernel.org>
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E68CD5
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:50:59 -0800 (PST)
+Received: from in02.mta.xmission.com ([166.70.13.52]:46566)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nIa4M-00DWVf-UO; Fri, 11 Feb 2022 10:50:54 -0700
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:47806 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nIa4L-009ZGG-PP; Fri, 11 Feb 2022 10:50:54 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Alexey Gladkov <legion@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Solar Designer <solar@openwall.com>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        containers@lists.linux-foundation.org,
+        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+References: <87o83e2mbu.fsf@email.froward.int.ebiederm.org>
+        <20220211021324.4116773-6-ebiederm@xmission.com>
+        <20220211113454.socmlrne5heux7q7@example.org>
+Date:   Fri, 11 Feb 2022 11:50:46 -0600
+In-Reply-To: <20220211113454.socmlrne5heux7q7@example.org> (Alexey Gladkov's
+        message of "Fri, 11 Feb 2022 12:34:54 +0100")
+Message-ID: <87sfspz409.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220105150239.9628-1-pali@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nIa4L-009ZGG-PP;;;mid=<87sfspz409.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+5NZOYvFHMyiJziNe9v0dW5vlnbSAVvWo=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *****;Alexey Gladkov <legion@kernel.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 491 ms - load_scoreonly_sql: 0.12 (0.0%),
+        signal_user_changed: 13 (2.6%), b_tie_ro: 11 (2.2%), parse: 1.69
+        (0.3%), extract_message_metadata: 18 (3.7%), get_uri_detail_list: 2.6
+        (0.5%), tests_pri_-1000: 23 (4.6%), tests_pri_-950: 1.84 (0.4%),
+        tests_pri_-900: 1.55 (0.3%), tests_pri_-90: 64 (13.0%), check_bayes:
+        62 (12.6%), b_tokenize: 11 (2.2%), b_tok_get_all: 9 (1.8%),
+        b_comp_prob: 2.8 (0.6%), b_tok_touch_all: 35 (7.1%), b_finish: 1.08
+        (0.2%), tests_pri_0: 354 (72.1%), check_dkim_signature: 1.71 (0.3%),
+        check_dkim_adsp: 4.0 (0.8%), poll_dns_idle: 0.98 (0.2%), tests_pri_10:
+        2.1 (0.4%), tests_pri_500: 7 (1.5%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 6/8] ucounts: Handle inc_rlimit_ucounts wrapping in fork
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 04:02:28PM +0100, Pali Rohár wrote:
-> This patch series extends pci-bridge-emul.c driver to emulate PCI Subsystem
-> Vendor ID capability and PCIe extended capabilities. And then implement
-> in pci-mvebu.c driver support for PCI Subsystem Vendor IDs, PCIe AER
-> registers, support for legacy INTx interrupts, configuration for X1/X4
-> mode and usage of new PCI child_ops API.
-> 
-> This patch series depends on other pci-mvebu and pci-bridge-emul patches from:
-> https://lore.kernel.org/linux-pci/20220104153529.31647-1-pali@kernel.org/
-Hi Pali,
+Alexey Gladkov <legion@kernel.org> writes:
 
-I went through the series quickly and I don't think there is anything
-controversial, posted some minor comments. Do not repost yet, I will
-be back at v5.17-rc5 and work towards merging it for v5.18.
+> On Thu, Feb 10, 2022 at 08:13:22PM -0600, Eric W. Biederman wrote:
+>> Move inc_rlimit_ucounts from copy_creds into copy_process immediately
+>> after copy_creds where it can be called exactly once.  Test for and
+>> handle it when inc_rlimit_ucounts returns LONG_MAX indicating the
+>> count has wrapped.
+>> 
+>> This is good hygenine and fixes a theoretical bug.  In practice
+>> PID_MAX_LIMIT is at most 2^22 so there is not a chance the number of
+>> processes would ever wrap even on an architecture with a 32bit long.
+>> 
+>> Fixes: 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts")
+>> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+>> ---
+>>  kernel/cred.c | 2 --
+>>  kernel/fork.c | 2 ++
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/kernel/cred.c b/kernel/cred.c
+>> index 229cff081167..96d5fd6ff26f 100644
+>> --- a/kernel/cred.c
+>> +++ b/kernel/cred.c
+>> @@ -358,7 +358,6 @@ int copy_creds(struct task_struct *p, unsigned long clone_flags)
+>>  		kdebug("share_creds(%p{%d,%d})",
+>>  		       p->cred, atomic_read(&p->cred->usage),
+>>  		       read_cred_subscribers(p->cred));
+>> -		inc_rlimit_ucounts(task_ucounts(p), UCOUNT_RLIMIT_NPROC, 1);
+>>  		return 0;
+>>  	}
+>>  
+>> @@ -395,7 +394,6 @@ int copy_creds(struct task_struct *p, unsigned long clone_flags)
+>>  #endif
+>>  
+>>  	p->cred = p->real_cred = get_cred(new);
+>> -	inc_rlimit_ucounts(task_ucounts(p), UCOUNT_RLIMIT_NPROC, 1);
+>>  	alter_cred_subscribers(new, 2);
+>>  	validate_creds(new);
+>>  	return 0;
+>> diff --git a/kernel/fork.c b/kernel/fork.c
+>> index 6f62d37f3650..69333078259c 100644
+>> --- a/kernel/fork.c
+>> +++ b/kernel/fork.c
+>> @@ -2026,6 +2026,8 @@ static __latent_entropy struct task_struct *copy_process(
+>>  		goto bad_fork_free;
+>>  
+>>  	retval = -EAGAIN;
+>> +	if (inc_rlimit_ucounts(task_ucounts(p), UCOUNT_RLIMIT_NPROC, 1) == LONG_MAX)
+>> +		goto bad_fork_cleanup_count;
+>>  	if (is_ucounts_overlimit(task_ucounts(p), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC))) {
+>>  		if ((task_ucounts(p) != &init_ucounts) &&
+>>  		    !capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
+>
+> It might make sense to do something like:
+>
+> 	if (inc_rlimit_ucounts_overlimit(task_ucounts(p), UCOUNT_RLIMIT_NPROC, 1, rlimit(RLIMIT_NPROC)) == LONG_MAX) {
+> 		if ((task_ucounts(p) != &init_ucounts) &&
+> 		    !capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
+>
+> and the new function:
+>
+> long inc_rlimit_ucounts_overlimit(struct ucounts *ucounts, enum ucount_type type, long v, unsigned long rlimit)
+> {
+> 	struct ucounts *iter;
+> 	long ret = 0;
+> 	long max = rlimit;
+> 	if (rlimit > LONG_MAX)
+> 		max = LONG_MAX;
+> 	for (iter = ucounts; iter; iter = iter->ns->ucounts) {
+> 		long new = atomic_long_add_return(v, &iter->ucount[type]);
+> 		if (new < 0 || new > max)
+> 			ret = LONG_MAX;
+> 		else if (iter == ucounts)
+> 			ret = new;
+> 		max = READ_ONCE(iter->ns->ucount_max[type]);
+> 	}
+> 	return ret;
+> }
+>
+> This will avoid double checking the same userns tree.
+>
+> Or even modify inc_rlimit_ucounts. This function is used elsewhere like
+> this:
+>
+>
+> msgqueue = inc_rlimit_ucounts(info->ucounts, UCOUNT_RLIMIT_MSGQUEUE, mq_bytes);
+> if (msgqueue == LONG_MAX || msgqueue > rlimit(RLIMIT_MSGQUEUE)) {
+>
+>
+> memlock = inc_rlimit_ucounts(ucounts, UCOUNT_RLIMIT_MEMLOCK, locked);
+> if (!allowed && (memlock == LONG_MAX || memlock > lock_limit) && !capable(CAP_IPC_LOCK)) {
+>
+>
+> In all cases, we have max value for comparison.
 
-Lorenzo
+Good point.   The downside is that it means we can't use the same code
+in exec.  The upside is that the code is more idiomatic.
 
-> 
-> Pali Rohár (9):
->   PCI: pci-bridge-emul: Add support for PCI Bridge Subsystem Vendor ID
->     capability
->   dt-bindings: PCI: mvebu: Add num-lanes property
->   PCI: mvebu: Correctly configure x1/x4 mode
->   PCI: mvebu: Add support for PCI Bridge Subsystem Vendor ID on emulated
->     bridge
->   PCI: mvebu: Add support for Advanced Error Reporting registers on
->     emulated bridge
->   PCI: mvebu: Use child_ops API
->   dt-bindings: PCI: mvebu: Update information about intx interrupts
->   PCI: mvebu: Implement support for legacy INTx interrupts
->   ARM: dts: armada-385.dtsi: Add definitions for PCIe legacy INTx
->     interrupts
-> 
-> Russell King (2):
->   PCI: pci-bridge-emul: Re-arrange register tests
->   PCI: pci-bridge-emul: Add support for PCIe extended capabilities
-> 
->  .../devicetree/bindings/pci/mvebu-pci.txt     |  16 +
->  arch/arm/boot/dts/armada-385.dtsi             |  52 ++-
->  drivers/pci/controller/pci-mvebu.c            | 352 +++++++++++++++---
->  drivers/pci/pci-bridge-emul.c                 | 167 ++++++---
->  drivers/pci/pci-bridge-emul.h                 |  17 +
->  5 files changed, 494 insertions(+), 110 deletions(-)
-> 
-> -- 
-> 2.20.1
-> 
+Eric
+

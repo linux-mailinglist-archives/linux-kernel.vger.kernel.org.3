@@ -2,98 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EAA44B2A77
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF004B2A79
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:35:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351552AbiBKQeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:34:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39630 "EHLO
+        id S1351562AbiBKQer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:34:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242130AbiBKQeR (ORCPT
+        with ESMTP id S1351554AbiBKQeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:34:17 -0500
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B182D65;
-        Fri, 11 Feb 2022 08:34:15 -0800 (PST)
-Received: by mail-qv1-f41.google.com with SMTP id a28so8942019qvb.10;
-        Fri, 11 Feb 2022 08:34:15 -0800 (PST)
+        Fri, 11 Feb 2022 11:34:46 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D701D65
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:34:45 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id v5-20020a17090a4ec500b001b8b702df57so12411621pjl.2
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:34:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nnbh1kcsPFrkObOs46hEdsbrlaqoVOUtEvBqKgaq+f4=;
+        b=d5ekGY39eMlMbpMvv/K+V1eUuxLZLh3unB3n7ncytffyG3c1xxOj/pnvUaDvLHp2tL
+         qq4LwyufFmnekBFCTOqBEYSAxUA2btVoNm4NcMJWppvrT+2DLu8mFLyPAoz2Bku6lqeW
+         yip7ROgpgf0Q+h3mdGz8mTAeHlts9S2wE7Ftp+NZsLeZzpognpiS1WYm5IEWnDYpVAJW
+         p1XGTbhWJmW9nrKPuWbqdp6oNrd8Qm0OwrPogu8zogjsPH1SL3xuDopFI97uitonJz9e
+         GKqRae9DJ/uf/ZbACdhh7jRxtuqm955H07JuDE/rqkcN+WqMZAVeRFL0Ey3MUYpNJAo/
+         Ecug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ezNh3EWqFsaaHlTrJOp98oUzk3Ea1bEigkfyW/1bRyI=;
-        b=jw06rknBTakeYUYLqiVd1ypF3mhjn0E7Hv7cQII8Y34axuPkq8JzHuOo8dCO/nv5Yh
-         2rk5FI+N5n7Z1YoCns7kQ66HFn6GioDiRcsF0kZFHHIHKd3aHMdmxeKw2NS4LdWo/W40
-         yzjFzHdBzM5ZH6O83ojVRARuJAhHwixX+YbSTpkyx+iAnvFLfc4naTNRZd6IK00yXwlV
-         qiLalHghZbjHxhhyT25gDAL39Cid8V6uBGCjScQjf4a9B4j0st4UucFApQNvDHRUiA+Q
-         CuyKpVPUr1NmqxryfD2kJFxS+X7C8TwVqvSxuYEYlhknnZHD1kDbXBRqpWT7wq0zPzhZ
-         pE3A==
-X-Gm-Message-State: AOAM531CzU19CPGLtqLNOK/dp2sjTUCEbv+WDaSmZE5rwo8cUH/Cw2iP
-        0cCp39EIxvspqEGAP9yo51ZwK2iJ9Q==
-X-Google-Smtp-Source: ABdhPJzj+wCyynuKjTOGmIuc/1i5fpet5RySNhT8B/SqV7zEdro99sXdRni/6BFsjBoqncLtEVijyA==
-X-Received: by 2002:ad4:5bac:: with SMTP id 12mr1717492qvq.34.1644597254399;
-        Fri, 11 Feb 2022 08:34:14 -0800 (PST)
-Received: from robh.at.kernel.org ([2607:fb90:5fee:dfce:b6df:c3e1:b1e5:d6d8])
-        by smtp.gmail.com with ESMTPSA id bp18sm4153957qtb.72.2022.02.11.08.34.12
+         :mime-version:content-disposition:in-reply-to;
+        bh=nnbh1kcsPFrkObOs46hEdsbrlaqoVOUtEvBqKgaq+f4=;
+        b=r9BRB2M301ktTqgRni2xoJ6R+gJ38ytwQJfYeym/76pPW5WovsHxwdzl07ja/f3LPu
+         /DEFKVTMV6PUQ8U0AtI6tldXDPj0s4vQ8r8Vxc3KTK2H3i03indXk1dkw8omrmAU1SrU
+         f/vp9m+ND8EjjQ2iqUgi1UqkafsIUT+3bgX2AQyg31rwpRMiC+JdZM3ZB9/SNGZe4WW8
+         d6JhQUZtuM57D2cCOJxa6gpxzXQ0s+vkSe8ogjsr0OWc2T88N5Bu17v8gY9/i0YDfhES
+         kG1hTkw5qGuP6O63Ir+1HjSEYhgL29eh3ZEvDv/wqqPD+2lyKrFh1DiuNufq6dS++ZgT
+         2Lbw==
+X-Gm-Message-State: AOAM531A7nINKXcCpH7agwyY35r+tt79+ocsFfb4DsFLTP2FnmzS0Jlk
+        YlhsMrFNb7/+mP2lWm4HbhsT+Q==
+X-Google-Smtp-Source: ABdhPJx+osARJx/twyvZl7y4qsl5OM6D7RX8kmclkHHmc/IvYT0ruVeU/6sp/h17pjZsGWSbBXpqbg==
+X-Received: by 2002:a17:90a:ea85:: with SMTP id h5mr1201105pjz.13.1644597284563;
+        Fri, 11 Feb 2022 08:34:44 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id md9sm5690196pjb.6.2022.02.11.08.34.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 08:34:13 -0800 (PST)
-Received: (nullmailer pid 480397 invoked by uid 1000);
-        Fri, 11 Feb 2022 16:34:11 -0000
-Date:   Fri, 11 Feb 2022 10:34:11 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v2 2/3] dt-bindings: leds: sgm3140: Document ocp8110
- compatible
-Message-ID: <YgaQAwfYnt6E9buG@robh.at.kernel.org>
-References: <20211117091405.7412-1-git@apitzsch.eu>
- <20220207230638.56730-1-git@apitzsch.eu>
- <20220207230638.56730-3-git@apitzsch.eu>
+        Fri, 11 Feb 2022 08:34:43 -0800 (PST)
+Date:   Fri, 11 Feb 2022 16:34:40 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH 07/49] KVM: x86: replace bitmap_weight with bitmap_empty
+ where appropriate
+Message-ID: <YgaQIJfgJhe4LY9H@google.com>
+References: <20220210224933.379149-1-yury.norov@gmail.com>
+ <20220210224933.379149-8-yury.norov@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220207230638.56730-3-git@apitzsch.eu>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220210224933.379149-8-yury.norov@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 12:06:37AM +0100, André Apitzsch wrote:
-> Signed-off-by: André Apitzsch <git@apitzsch.eu>
-
-Commit msg? What's this h/w?
-
+On Thu, Feb 10, 2022, Yury Norov wrote:
+> In some places kvm/hyperv.c code calls bitmap_weight() to check if any bit
+> of a given bitmap is set. It's better to use bitmap_empty() in that case
+> because bitmap_empty() stops traversing the bitmap as soon as it finds
+> first set bit, while bitmap_weight() counts all bits unconditionally.
+> 
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 > ---
->  Documentation/devicetree/bindings/leds/leds-sgm3140.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml b/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml
-> index f68259619488..1c345cf16d08 100644
-> --- a/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml
-> +++ b/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml
-> @@ -18,7 +18,9 @@ description: |
->  
->  properties:
->    compatible:
-> -    const: sgmicro,sgm3140
-> +    enum:
-> +      - ocs,ocp8110
-> +      - sgmicro,sgm3140
->  
->    enable-gpios:
->      maxItems: 1
-> -- 
-> 2.35.1
-> 
-> 
+
+Reviewed-by: Sean Christopherson <seanjc@google.com>

@@ -2,116 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947B64B2A61
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D95034B2A58
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351514AbiBKQ3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:29:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33482 "EHLO
+        id S1351520AbiBKQ3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:29:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235352AbiBKQ3C (ORCPT
+        with ESMTP id S235352AbiBKQ3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:29:02 -0500
-Received: from cavan.codon.org.uk (irc.codon.org.uk [IPv6:2a00:1098:84:22e::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A881EC03;
-        Fri, 11 Feb 2022 08:28:58 -0800 (PST)
-Received: by cavan.codon.org.uk (Postfix, from userid 1000)
-        id 447E840A67; Fri, 11 Feb 2022 16:28:57 +0000 (GMT)
-Date:   Fri, 11 Feb 2022 16:28:57 +0000
-From:   Matthew Garrett <mjg59@srcf.ucam.org>
-To:     Aditya Garg <gargaditya08@live.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Jeremy Kerr <jk@ozlabs.org>,
-        "joeyli.kernel@gmail.com" <joeyli.kernel@gmail.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "eric.snowberg@oracle.com" <eric.snowberg@oracle.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "jlee@suse.com" <jlee@suse.com>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "mic@digikod.net" <mic@digikod.net>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>
-Subject: Re: [PATCH] efi: Do not import certificates from UEFI Secure Boot
- for T2 Macs
-Message-ID: <20220211162857.GB10606@srcf.ucam.org>
-References: <9D0C961D-9999-4C41-A44B-22FEAF0DAB7F@live.com>
- <20220209164957.GB12763@srcf.ucam.org>
- <5A3C2EBF-13FF-4C37-B2A0-1533A818109F@live.com>
- <20220209183545.GA14552@srcf.ucam.org>
- <20220209193705.GA15463@srcf.ucam.org>
- <2F1CC5DE-5A03-46D2-95E7-DD07A4EF2766@live.com>
- <20220210180905.GB18445@srcf.ucam.org>
- <99BB011C-71DE-49FA-81CB-BE2AC9613030@live.com>
+        Fri, 11 Feb 2022 11:29:43 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600FDCC9;
+        Fri, 11 Feb 2022 08:29:41 -0800 (PST)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7AAA9240009;
+        Fri, 11 Feb 2022 16:29:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1644596980;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4kVSfBMlOpLVxwAYqmjgdSsjcSKy3f9ulmjYySBtivY=;
+        b=T4TSHYvfEdtrIdt54FMQc8fkxl6Sb+6Fb/eoGRfWYgAdoQJkHicqhpsEGSiJd0cHoyQsF0
+        Vfva/O33f9O65QrX1haPnlzjQ2sIPixy0kxvHp+MbuQfN91FPpawkqwPurQIRekmoMFTg5
+        qgKvKxWeNpHSODYhBMZuYE2WpvWAEd3JOjoRKSVqgBQcVuJ4n24mz4t3hrZpjVZ4hHSCFQ
+        bW4jOJBvKyEPdisxxKSIzqqzIB3HyKBI4ApuvsfblSRxCFUi3AWIy4ujaGUzzOyqQFbkTY
+        Lmw/3Fq/7PX7QEpH+8uAap60ARcPDWvaATeXcm8/9Fpz2Nh+MEA1tsWW9xauGA==
+Date:   Fri, 11 Feb 2022 17:29:37 +0100
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 21/66] media: sun6i-csi: Always set exclusive module
+ clock rate
+Message-ID: <YgaO8bfP4gKW8BM0@aptenodytes>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+ <20220205185429.2278860-22-paul.kocialkowski@bootlin.com>
+ <20220207091443.cr5udv7fxx65ptty@houat>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Tv5rA21o/SqhzaB6"
 Content-Disposition: inline
-In-Reply-To: <99BB011C-71DE-49FA-81CB-BE2AC9613030@live.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,KHOP_HELO_FCRDNS,SPF_HELO_NEUTRAL,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220207091443.cr5udv7fxx65ptty@houat>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 04:51:22AM +0000, Aditya Garg wrote:
 
-> With this patch, I built 2 kernels, one with CONFIG_LOAD_UEFI_KEYS=y and other with CONFIG_LOAD_UEFI_KEYS=n. I have got different variables causing panics in both cases. The logs couldn't get saved in journalctl so, I clicked a picture of the same. The kernel anyways was refusing to boot after these logs.
+--Tv5rA21o/SqhzaB6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Oh gosh I'm an idiot. Please try this one instead.
+Hi,
 
-diff --git a/drivers/firmware/efi/runtime-wrappers.c b/drivers/firmware/efi/runtime-wrappers.c
-index f3e54f6616f0..79a003c2f7b6 100644
---- a/drivers/firmware/efi/runtime-wrappers.c
-+++ b/drivers/firmware/efi/runtime-wrappers.c
-@@ -32,6 +32,8 @@
- #include <linux/stringify.h>
- #include <linux/workqueue.h>
- #include <linux/completion.h>
-+#include <linux/ucs2_string.h>
-+#include <linux/slab.h>
- 
- #include <asm/efi.h>
- 
-@@ -179,6 +181,9 @@ static void efi_call_rts(struct work_struct *work)
- {
- 	void *arg1, *arg2, *arg3, *arg4, *arg5;
- 	efi_status_t status = EFI_NOT_FOUND;
-+	unsigned long utf8_name_size;
-+	char *utf8_name;
-+	char guid_str[UUID_STRING_LEN + 1];
- 
- 	arg1 = efi_rts_work.arg1;
- 	arg2 = efi_rts_work.arg2;
-@@ -203,6 +208,17 @@ static void efi_call_rts(struct work_struct *work)
- 				       (efi_time_t *)arg2);
- 		break;
- 	case EFI_GET_VARIABLE:
-+		utf8_name_size = ucs2_utf8size((efi_char16_t *)arg1);
-+		utf8_name = kmalloc(utf8_name_size+1, GFP_KERNEL);
-+		if (!utf8_name) {
-+			printk(KERN_INFO "failed to allocate UTF8 buffer\n");
-+			break;
-+		}
-+
-+		ucs2_as_utf8(utf8_name, (efi_char16_t *)arg1, utf8_name_size + 1);
-+		efi_guid_to_str((efi_guid_t *)arg2, guid_str);
-+
-+		printk(KERN_INFO "Reading EFI variable %s-%s\n", utf8_name, guid_str);
- 		status = efi_call_virt(get_variable, (efi_char16_t *)arg1,
- 				       (efi_guid_t *)arg2, (u32 *)arg3,
- 				       (unsigned long *)arg4, (void *)arg5);
+Thanks for the review,
 
+On Mon 07 Feb 22, 10:14, Maxime Ripard wrote:
+> On Sat, Feb 05, 2022 at 07:53:44PM +0100, Paul Kocialkowski wrote:
+> > In some situations the default rate of the module clock is not the
+> > required one for operation (for example when reconfiguring the clock
+> > tree to use a different parent). As a result, always set the correct
+> > rate for the clock (and take care of cleanup).
+> >=20
+> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > ---
+> >  .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 54 ++++++++++++++-----
+> >  1 file changed, 41 insertions(+), 13 deletions(-)
+> >=20
+> > diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drive=
+rs/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > index 8155e9560164..2355088fdc37 100644
+> > --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > @@ -154,9 +154,6 @@ int sun6i_csi_set_power(struct sun6i_csi_device *cs=
+i_dev, bool enable)
+> >  		regmap_update_bits(regmap, CSI_EN_REG, CSI_EN_CSI_EN, 0);
+> > =20
+> >  		clk_disable_unprepare(csi_dev->clk_ram);
+> > -		if (of_device_is_compatible(dev->of_node,
+> > -					    "allwinner,sun50i-a64-csi"))
+> > -			clk_rate_exclusive_put(csi_dev->clk_mod);
+> >  		clk_disable_unprepare(csi_dev->clk_mod);
+> >  		reset_control_assert(csi_dev->reset);
+> >  		return 0;
+> > @@ -168,9 +165,6 @@ int sun6i_csi_set_power(struct sun6i_csi_device *cs=
+i_dev, bool enable)
+> >  		return ret;
+> >  	}
+> > =20
+> > -	if (of_device_is_compatible(dev->of_node, "allwinner,sun50i-a64-csi"))
+> > -		clk_set_rate_exclusive(csi_dev->clk_mod, 300000000);
+> > -
+> >  	ret =3D clk_prepare_enable(csi_dev->clk_ram);
+> >  	if (ret) {
+> >  		dev_err(csi_dev->dev, "Enable clk_dram_csi clk err %d\n", ret);
+> > @@ -190,8 +184,6 @@ int sun6i_csi_set_power(struct sun6i_csi_device *cs=
+i_dev, bool enable)
+> >  clk_ram_disable:
+> >  	clk_disable_unprepare(csi_dev->clk_ram);
+> >  clk_mod_disable:
+> > -	if (of_device_is_compatible(dev->of_node, "allwinner,sun50i-a64-csi"))
+> > -		clk_rate_exclusive_put(csi_dev->clk_mod);
+> >  	clk_disable_unprepare(csi_dev->clk_mod);
+> >  	return ret;
+> >  }
+> > @@ -819,6 +811,7 @@ static int sun6i_csi_resources_setup(struct sun6i_c=
+si_device *csi_dev,
+> >  				     struct platform_device *platform_dev)
+> >  {
+> >  	struct device *dev =3D csi_dev->dev;
+> > +	unsigned long clk_mod_rate;
+> >  	void __iomem *io_base;
+> >  	int ret;
+> >  	int irq;
+> > @@ -856,28 +849,53 @@ static int sun6i_csi_resources_setup(struct sun6i=
+_csi_device *csi_dev,
+> >  		return PTR_ERR(csi_dev->clk_ram);
+> >  	}
+> > =20
+> > +	if (of_device_is_compatible(dev->of_node, "allwinner,sun50i-a64-csi"))
+> > +		clk_mod_rate =3D 300000000;
+> > +	else
+> > +		clk_mod_rate =3D 297000000;
+> > +
+> > +	ret =3D clk_set_rate_exclusive(csi_dev->clk_mod, clk_mod_rate);
+> > +	if (ret) {
+> > +		dev_err(dev, "failed to set mod clock rate\n");
+> > +		return ret;
+> > +	}
+> > +
+> >  	/* Reset */
+> > =20
+> >  	csi_dev->reset =3D devm_reset_control_get_shared(dev, NULL);
+> >  	if (IS_ERR(csi_dev->reset)) {
+> >  		dev_err(dev, "failed to acquire reset\n");
+> > -		return PTR_ERR(csi_dev->reset);
+> > +		ret =3D PTR_ERR(csi_dev->reset);
+> > +		goto error_clk_rate_exclusive;
+> >  	}
+> > =20
+> >  	/* Interrupt */
+> > =20
+> >  	irq =3D platform_get_irq(platform_dev, 0);
+> > -	if (irq < 0)
+> > -		return -ENXIO;
+> > +	if (irq < 0) {
+> > +		dev_err(dev, "failed to get interrupt\n");
+> > +		ret =3D -ENXIO;
+> > +		goto error_clk_rate_exclusive;
+> > +	}
+> > =20
+> >  	ret =3D devm_request_irq(dev, irq, sun6i_csi_isr, 0, SUN6I_CSI_NAME,
+> >  			       csi_dev);
+> >  	if (ret) {
+> >  		dev_err(dev, "failed to request interrupt\n");
+> > -		return ret;
+> > +		goto error_clk_rate_exclusive;
+> >  	}
+> > =20
+> >  	return 0;
+> > +
+> > +error_clk_rate_exclusive:
+> > +	clk_rate_exclusive_put(csi_dev->clk_mod);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static void sun6i_csi_resources_cleanup(struct sun6i_csi_device *csi_d=
+ev)
+> > +{
+> > +	clk_rate_exclusive_put(csi_dev->clk_mod);
+> >  }
+>=20
+> If you're going to have that function anyway, let's use
+> devm_add_action_or_reset, it'll simplify the rest of the patch.
+
+Well, this will cause issues later on when adding runtime pm support to
+sun6i_csi_resources_cleanup: then it will no longer be equivalent
+to the error case label.
+
+Also I feel like making the resources_cleanup call a devm action would not
+help clarify the general flow of the driver, where the matching setup/clean=
+up
+calls are ordered in probe/remove. The driver is quite big with various par=
+ts
+and I'd rather have them behave in a coherent and similar way.
+
+What do you think?
+
+Paul
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--Tv5rA21o/SqhzaB6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIGjvEACgkQ3cLmz3+f
+v9Eq7wf/aVHx73dljDp0YxBy+q2PMLd3CTowE7OvhhXXMz24VfzET01MwXfyxeo0
+IpqwMV0dz5U1iy/ofxtZPJW832v08EZXXCod4h3E+L0lRi/HSkJlW67Gt5z4uZmu
+4tWN4NXJ2hXJlUT717HxRvTD7sl3oGOODuemqyPwmVLp/FJ/8dZZcwz38cyHXdL7
+v1nT9o/Cdpz5Mj1IECQaqEovJ3zU6sTFfd3YAYc4qPYYXmok4mq4GoqChSlB2y4y
+9DxH3t/4vciCVCon1d4Z7gOZML2IdzZBx3NwV+TKVUOBNCsVqz/pl4XVG+ZJ+Lvs
+bQio4a8S1+h+txomzaXIBPr1XlOENg==
+=d+6J
+-----END PGP SIGNATURE-----
+
+--Tv5rA21o/SqhzaB6--

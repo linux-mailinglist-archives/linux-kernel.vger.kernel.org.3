@@ -2,149 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D854B2A26
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C270B4B2A2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351448AbiBKQX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:23:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52432 "EHLO
+        id S1351456AbiBKQY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:24:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231518AbiBKQXZ (ORCPT
+        with ESMTP id S1351414AbiBKQY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:23:25 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 313C738C;
-        Fri, 11 Feb 2022 08:23:20 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A3F04106F;
-        Fri, 11 Feb 2022 08:23:20 -0800 (PST)
-Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 647893F70D;
-        Fri, 11 Feb 2022 08:23:19 -0800 (PST)
-Date:   Fri, 11 Feb 2022 16:23:17 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Ray Jui <ray.jui@broadcom.com>,
-        Roman Bacik <roman.bacik@broadcom.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: iproc: Set all 24 bits of PCI class code
-Message-ID: <20220211162317.GC448@lpieralisi>
-References: <20220105093552.27542-1-pali@kernel.org>
- <244e74d9-1b46-2abc-6c2a-c089fa5b68b4@broadcom.com>
- <20220105181306.mkratasqg36tjf4e@pali>
+        Fri, 11 Feb 2022 11:24:28 -0500
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568623AD;
+        Fri, 11 Feb 2022 08:24:26 -0800 (PST)
+Received: by mail-oo1-f44.google.com with SMTP id o128-20020a4a4486000000b003181707ed40so10851303ooa.11;
+        Fri, 11 Feb 2022 08:24:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kk86tqsUEpDxDSxl+QDVY+d5jMkdIEVlk+S99jE+nwY=;
+        b=orAsap5i7t6qb+bOf+RnTyV+xxH9aJ07p53Ajrs9AU0bfKpqLcO1KUN938Nx3px1XP
+         9BQ+tjQUVZRR0KVY5If5pyCO80LEH9fG2ZB5EViAW1f9PaV2vTtEPaHa63qwMYLK8bzI
+         rDThbz8knfIv+h2U1m/kocjAiDgVSNbAkadjK+023IlX7MAt20vGS+4mEaBsF6T5LRJf
+         W/fbEtZ/j4IhVHqGsbRdekpwyl1DPMDjmEiXTLmsStZ8XX4kNPoW8KbXIZr0en5za6Yd
+         AtTlZwjO4FyTFzubK68ItjD+DerMGX4vPFIeLFtwsFREhWmSgZCdKZw9w0t5wfYpJPZ/
+         hiPw==
+X-Gm-Message-State: AOAM533zxnv6RnSeU/wBUcuPmHbI7euNIunf/ury3izbZ+1sTc5SuVPO
+        yYApxEhdLyru3B5DLs0VdQ==
+X-Google-Smtp-Source: ABdhPJwKruKy6RoVrRIbIioHuouwXc6h8IL6hYm+OIbFE+u/d+PwHhNYbAkPHqMG6SHemeIcPu1jZQ==
+X-Received: by 2002:a05:6870:5795:: with SMTP id i21mr405221oap.284.1644596665526;
+        Fri, 11 Feb 2022 08:24:25 -0800 (PST)
+Received: from robh.at.kernel.org ([2607:fb90:5fee:dfce:b6df:c3e1:b1e5:d6d8])
+        by smtp.gmail.com with ESMTPSA id 4sm9809239oon.21.2022.02.11.08.24.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 08:24:24 -0800 (PST)
+Received: (nullmailer pid 465268 invoked by uid 1000);
+        Fri, 11 Feb 2022 16:24:20 -0000
+Date:   Fri, 11 Feb 2022 10:24:20 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-pwm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+Subject: Re: [PATCH] dt-bindings: pwm: mtk-disp: add compatible string for
+ MT8183 SoC
+Message-ID: <YgaNtPOGlX0hZpWw@robh.at.kernel.org>
+References: <20220207112657.18246-1-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220105181306.mkratasqg36tjf4e@pali>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220207112657.18246-1-allen-kh.cheng@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 07:13:06PM +0100, Pali Rohár wrote:
-> Hello!
+On Mon, 07 Feb 2022 19:26:57 +0800, Allen-KH Cheng wrote:
+> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
 > 
-> On Wednesday 05 January 2022 09:51:48 Ray Jui wrote:
-> > Hi Pali,
-> > 
-> > On 1/5/2022 1:35 AM, Pali Rohár wrote:
-> > > Register 0x43c in its low 24 bits contains PCI class code.
-> > > 
-> > > Update code to set all 24 bits of PCI class code and not only upper 16 bits
-> > > of PCI class code.
-> > > 
-> > > Use a new macro PCI_CLASS_BRIDGE_PCI_NORMAL which represents whole 24 bits
-> > > of normal PCI bridge class.
-> > > 
-> > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > 
-> > > ---
-> > > Roman helped me with this change and confirmed that class code is stored
-> > > really in bits [23:0] of custom register 0x43c (normally class code is
-> > > stored in bits [31:8] of pci register 0x08).
-> > > 
-> > > This patch depends on patch which adds PCI_CLASS_BRIDGE_PCI_NORMAL macro:
-> > > https://lore.kernel.org/linux-pci/20211220145140.31898-1-pali@kernel.org/
-> > > ---
-> > >  drivers/pci/controller/pcie-iproc.c | 9 ++++-----
-> > >  1 file changed, 4 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/drivers/pci/controller/pcie-iproc.c b/drivers/pci/controller/pcie-iproc.c
-> > > index 3df4ab209253..2519201b0e51 100644
-> > > --- a/drivers/pci/controller/pcie-iproc.c
-> > > +++ b/drivers/pci/controller/pcie-iproc.c
-> > > @@ -789,14 +789,13 @@ static int iproc_pcie_check_link(struct iproc_pcie *pcie)
-> > >  		return -EFAULT;
-> > >  	}
-> > >  
-> > > -	/* force class to PCI_CLASS_BRIDGE_PCI (0x0604) */
-> > > +	/* force class to PCI_CLASS_BRIDGE_PCI_NORMAL (0x060400) */
-> > >  #define PCI_BRIDGE_CTRL_REG_OFFSET	0x43c
-> > > -#define PCI_CLASS_BRIDGE_MASK		0xffff00
-> > > -#define PCI_CLASS_BRIDGE_SHIFT		8
-> > > +#define PCI_BRIDGE_CTRL_REG_CLASS_MASK	0xffffff
-> > >  	iproc_pci_raw_config_read32(pcie, 0, PCI_BRIDGE_CTRL_REG_OFFSET,
-> > >  				    4, &class);
-> > > -	class &= ~PCI_CLASS_BRIDGE_MASK;
-> > > -	class |= (PCI_CLASS_BRIDGE_PCI << PCI_CLASS_BRIDGE_SHIFT);
-> > > +	class &= ~PCI_BRIDGE_CTRL_REG_CLASS_MASK;
-> > > +	class |= PCI_CLASS_BRIDGE_PCI_NORMAL;
-> > >  	iproc_pci_raw_config_write32(pcie, 0, PCI_BRIDGE_CTRL_REG_OFFSET,
-> > >  				     4, class);
-> > >  
-> > 
-> > I have two comments:
-> > 
-> > 1. You do not seem to generate the email list using the
-> > get_maintainer.pl script, so the two maintainers for Broadcom ARM
-> > architecture (Ray Jui and Scott Branden) are left out.
+> Add compatible string for MT8183 SoC in device tree binding.
 > 
-> Ou, sorry for that! I have generated this patch for U-Boot and Linux
-> kernel and probably mixed or forgot to include correct recipients for
-> correct project.
+> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/pwm/pwm-mtk-disp.txt | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> > 2. I suppose 'PCI_CLASS_BRIDGE_PCI_NORMAL' is defined in some common PCI
-> > header in a separate patch as described in the commit message. Then how
-> > come these patches are not constructed with a patch series?
-> 
-> Yes, PCI_CLASS_BRIDGE_PCI_NORMAL is a new constant for common pci header
-> file defined in patch linked in commit message.
-> https://lore.kernel.org/linux-pci/20211220145140.31898-1-pali@kernel.org/
-> 
-> Originally I included this change in v1 of linked patch in December but
-> I realized that it does not match standard PCI config space (different
-> offset 0x43c vs 0x08 and also different shift 0x8 vs 0x0) and probably
-> there is something either incorrect or really non-standard. So later in
-> December I dropped iproc_pcie_check_link() change in v2 of the linked
-> patch where is introduced PCI_CLASS_BRIDGE_PCI_NORMAL and now sent new
-> change for iproc_pcie_check_link() separately.
-> 
-> Technically, linked patch in commit message is just extracting code into
-> the common macros without any functional changed. But change in this
-> iproc_pcie_check_link() has also functional change as now also lower 8
-> bits of class code are changed. So in my opinion this patch should be
-> really separate of linked patch.
-> 
-> I hope that Lorenzo and Bjorn take patches in correct order...
 
-Can you resend the patches in a series please, I will drop this one.
-
-Thanks,
-Lorenzo
-
-> > Other than, the change itself is exactly what I sent to Roman and looks
-> > good to me. Thanks.
-> > 
-> > Acked-by: Ray Jui <ray.jui@broadcom.com>
-> 
-> Perfect!
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,105 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF004B2A79
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:35:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 704CC4B2A81
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:37:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351562AbiBKQer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:34:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40000 "EHLO
+        id S1346259AbiBKQfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:35:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351554AbiBKQeq (ORCPT
+        with ESMTP id S244001AbiBKQfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:34:46 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D701D65
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:34:45 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id v5-20020a17090a4ec500b001b8b702df57so12411621pjl.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:34:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nnbh1kcsPFrkObOs46hEdsbrlaqoVOUtEvBqKgaq+f4=;
-        b=d5ekGY39eMlMbpMvv/K+V1eUuxLZLh3unB3n7ncytffyG3c1xxOj/pnvUaDvLHp2tL
-         qq4LwyufFmnekBFCTOqBEYSAxUA2btVoNm4NcMJWppvrT+2DLu8mFLyPAoz2Bku6lqeW
-         yip7ROgpgf0Q+h3mdGz8mTAeHlts9S2wE7Ftp+NZsLeZzpognpiS1WYm5IEWnDYpVAJW
-         p1XGTbhWJmW9nrKPuWbqdp6oNrd8Qm0OwrPogu8zogjsPH1SL3xuDopFI97uitonJz9e
-         GKqRae9DJ/uf/ZbACdhh7jRxtuqm955H07JuDE/rqkcN+WqMZAVeRFL0Ey3MUYpNJAo/
-         Ecug==
+        Fri, 11 Feb 2022 11:35:44 -0500
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3ABD68;
+        Fri, 11 Feb 2022 08:35:42 -0800 (PST)
+Received: by mail-qk1-f180.google.com with SMTP id bs32so8754713qkb.1;
+        Fri, 11 Feb 2022 08:35:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=nnbh1kcsPFrkObOs46hEdsbrlaqoVOUtEvBqKgaq+f4=;
-        b=r9BRB2M301ktTqgRni2xoJ6R+gJ38ytwQJfYeym/76pPW5WovsHxwdzl07ja/f3LPu
-         /DEFKVTMV6PUQ8U0AtI6tldXDPj0s4vQ8r8Vxc3KTK2H3i03indXk1dkw8omrmAU1SrU
-         f/vp9m+ND8EjjQ2iqUgi1UqkafsIUT+3bgX2AQyg31rwpRMiC+JdZM3ZB9/SNGZe4WW8
-         d6JhQUZtuM57D2cCOJxa6gpxzXQ0s+vkSe8ogjsr0OWc2T88N5Bu17v8gY9/i0YDfhES
-         kG1hTkw5qGuP6O63Ir+1HjSEYhgL29eh3ZEvDv/wqqPD+2lyKrFh1DiuNufq6dS++ZgT
-         2Lbw==
-X-Gm-Message-State: AOAM531A7nINKXcCpH7agwyY35r+tt79+ocsFfb4DsFLTP2FnmzS0Jlk
-        YlhsMrFNb7/+mP2lWm4HbhsT+Q==
-X-Google-Smtp-Source: ABdhPJx+osARJx/twyvZl7y4qsl5OM6D7RX8kmclkHHmc/IvYT0ruVeU/6sp/h17pjZsGWSbBXpqbg==
-X-Received: by 2002:a17:90a:ea85:: with SMTP id h5mr1201105pjz.13.1644597284563;
-        Fri, 11 Feb 2022 08:34:44 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id md9sm5690196pjb.6.2022.02.11.08.34.43
+        bh=c1udRbf1uC+kDWQeOZj9JBiNWHoKMYK/y5Ub9jmuMho=;
+        b=kad5V+SWXGiEAwLNzSBh0EoJYkSt7VCV4Mcdon0i2pgORVd+nIW9ppXE05T2mbWvnO
+         0DulOdHXg075siaV4DJrefD3C5TrJApdJlDfweiyxId965kTZIewevE4jndWJNzDogOT
+         8inLbF42W1MMj1Ei5h0ZV1hBxUgSrVt1TJpiL12nB+QmYsBppORGZjycbs8AmEeXHAzZ
+         VMJ6iH//D+t6vxuorXi7vxEN33Hcz/suoqRnJKTLH47dn35Yk0sOFyl5I0+EsM5wdIvB
+         xt9+mI77NtVcbkygTFtSWlol8JWYmDQyxknIbr+b/VcA+7pRMx40lNwBew8AcDkC28ky
+         0eog==
+X-Gm-Message-State: AOAM530pxkrTtTw9GTjjAQrgVL3fkBev2JuJEv2+/xSG63ctDcLhk6Ij
+        xdiZDY8017LIzMnNvZUuDFUbBYCOhA==
+X-Google-Smtp-Source: ABdhPJxo705niC2XVKpENdkx7eVh/hoikJc4qjsb1wAnlhFIyJaF30haPmhwmT0rm9YpC7VLkkhDFQ==
+X-Received: by 2002:a05:620a:13ef:: with SMTP id h15mr1169914qkl.713.1644597341787;
+        Fri, 11 Feb 2022 08:35:41 -0800 (PST)
+Received: from robh.at.kernel.org ([2607:fb90:5fee:dfce:b6df:c3e1:b1e5:d6d8])
+        by smtp.gmail.com with ESMTPSA id y20sm12427633qta.9.2022.02.11.08.35.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 08:34:43 -0800 (PST)
-Date:   Fri, 11 Feb 2022 16:34:40 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH 07/49] KVM: x86: replace bitmap_weight with bitmap_empty
- where appropriate
-Message-ID: <YgaQIJfgJhe4LY9H@google.com>
-References: <20220210224933.379149-1-yury.norov@gmail.com>
- <20220210224933.379149-8-yury.norov@gmail.com>
+        Fri, 11 Feb 2022 08:35:41 -0800 (PST)
+Received: (nullmailer pid 482563 invoked by uid 1000);
+        Fri, 11 Feb 2022 16:35:37 -0000
+Date:   Fri, 11 Feb 2022 10:35:37 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-acpi@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-usb@vger.kernel.org,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH v2 5/6] dt-bindings: usb: Add binding for fcs,fsa4480
+Message-ID: <YgaQWWTQrvb3kDHC@robh.at.kernel.org>
+References: <20220208031944.3444-1-bjorn.andersson@linaro.org>
+ <20220208031944.3444-6-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220210224933.379149-8-yury.norov@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220208031944.3444-6-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022, Yury Norov wrote:
-> In some places kvm/hyperv.c code calls bitmap_weight() to check if any bit
-> of a given bitmap is set. It's better to use bitmap_empty() in that case
-> because bitmap_empty() stops traversing the bitmap as soon as it finds
-> first set bit, while bitmap_weight() counts all bits unconditionally.
+On Mon, 07 Feb 2022 19:19:43 -0800, Bjorn Andersson wrote:
+> The Fairchild/ON Semiconductor FSA4480 Analog Audio switch is used in
+> USB Type-C configurations for muxing analog audio onto the USB
+> connector, and as such used to control the SBU signals for altmodes such
+> as DisplayPort.
 > 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Add a binding for this hardware block.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 > ---
+> 
+> Changes since v1:
+> - None
+> 
+>  .../devicetree/bindings/usb/fcs,fsa4480.yaml  | 72 +++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+> 
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+Reviewed-by: Rob Herring <robh@kernel.org>

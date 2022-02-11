@@ -2,79 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09BB4B26CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 14:07:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 396C04B26CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 14:08:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350372AbiBKNHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 08:07:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42224 "EHLO
+        id S1350429AbiBKNIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 08:08:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244052AbiBKNHX (ORCPT
+        with ESMTP id S237873AbiBKNII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 08:07:23 -0500
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B737FF43;
-        Fri, 11 Feb 2022 05:07:22 -0800 (PST)
-Received: by mail-io1-f46.google.com with SMTP id 9so11292554iou.2;
-        Fri, 11 Feb 2022 05:07:22 -0800 (PST)
+        Fri, 11 Feb 2022 08:08:08 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2F6F43
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 05:08:06 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id m14so15116107wrg.12
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 05:08:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I+k2v7vnbgMhSaU57JWk13mn9hMYpBDkI2h6mlnSApw=;
+        b=QCTfdGUKhNUL0g7+17DFABMk2Fal7ltvf/O5v7hKbvy6X0h4rvk81T2fhM0dCeVdGM
+         IleZArGD5lA5+3npeBX2yf0qzrPnAfO4g2w+hKsxcexcyJrHcejkY2cXi+8961MWn/XX
+         PJsT78uUZWuDP2vguIbVyWb+nCgWq48iOUaF9SDQiFtrobnLTfZmjAKofAIAAgnn2+CM
+         /Cjpyy2Ol3tgdFyC7+NC16AlWNLmiLhoQaH0jmsOkpWh82GGlH2vTqwZYySUPS7o/2Mx
+         mVZBVA/j+dkhEgqvf63Y58L2JUzWZm6A1bv6T5QpmJ0crzuBRQtIGTqLDOp3wlyn/m0J
+         og+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=N1qRUmipcdDvpt9C5NYp9d7NWGG0ZyGLcJiXryEwpdc=;
-        b=chsQkIJrOcpR5C9hsqvFkasirYt8dQgABcdSxKC/hJKuRUyjdhfEKcvzkiOCERJOF2
-         ud5r4lw2rqk+hPGT3Pw6hO2NgrqMQ1QaeMSBHeIU4ToPOrWLH45+7apJkCbVKE8EJmch
-         L9MAGjDTFON9mwpyIgW3HYa60vCE8lZivwWZ22dhqga6puK2rDiZ7RLxFV2YLAb599PS
-         j/W2Tr9Uw1HIq3uuJSeNIHSJWTQW8KByJgVvIhEPch+4QQNfKKjzdw+aQqPIEjAwPFlR
-         R2TDRvm20jWGvWuImAo0c/2Zq3RbDngYqLRvKi82qK+rl3v0YcdDtMsgPMmgN3DOX/li
-         5lMQ==
-X-Gm-Message-State: AOAM5300mvUb5509rsoqjEHZFsBXvL3St7xszeAFCJwHKtal3Dnisah1
-        fSXjUCm8HGTPzWwsv14U9Q==
-X-Google-Smtp-Source: ABdhPJyBXOpVW7E9SyHEbD8si+3vMq0RKj0SJqPTLTYBDRorD8Y+cy9tDDMvSGsMw77DoqQoGpC9ww==
-X-Received: by 2002:a02:ce32:: with SMTP id v18mr790617jar.66.1644584842011;
-        Fri, 11 Feb 2022 05:07:22 -0800 (PST)
-Received: from robh.at.kernel.org ([172.58.139.71])
-        by smtp.gmail.com with ESMTPSA id q5sm13162625ilu.64.2022.02.11.05.07.20
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I+k2v7vnbgMhSaU57JWk13mn9hMYpBDkI2h6mlnSApw=;
+        b=raX+dFQ6WwmP1YXVPd1Oz1cM5ZhTsTOUUUnAkZoTXk8/Wa6w4JzheeDIPa4bXQZgwa
+         I255qySGyPaOTxTo2JYN2kvfcXBGKAmigtmiClSc9Es6TSYBk+k+Rq8Na8QILA/7JfI5
+         MCANvS6fqrwlxIO2FbU/4q0BITcooifyEr3ZEp6mLdmPYMicvGHsj8dlhk/ypRMcpK2r
+         2YQVxfyMA+MMY0OKxQGAFkK6fwvTmCry0HGyDokZZj8Oi2nv/ODmjXzTHgRMgvHWIzEg
+         4kY6G0C6SI/ajPQ7Knea18hksc0RhnH3BxdHjbgXwNDG2p6nMzfyhP5aJoiF/UmHeYr+
+         o+pg==
+X-Gm-Message-State: AOAM530zvZ4/oLuZfZqveRQOvZM3dnyuiEz7GLc95IIp4SjJETb+0sGT
+        kYvubeM1WKXiIjbQMQ6vxrvQuA==
+X-Google-Smtp-Source: ABdhPJyNGbjyagJVMCs0GpGGHe8iuMQr/P3hbA5LSCnv1B0i+lUtSDpTvOEX0k/zAOETavkpDQBdmA==
+X-Received: by 2002:adf:e886:: with SMTP id d6mr1433078wrm.656.1644584884979;
+        Fri, 11 Feb 2022 05:08:04 -0800 (PST)
+Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
+        by smtp.gmail.com with ESMTPSA id p27sm4161351wms.39.2022.02.11.05.08.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 05:07:21 -0800 (PST)
-Received: (nullmailer pid 224799 invoked by uid 1000);
-        Fri, 11 Feb 2022 13:07:18 -0000
-Date:   Fri, 11 Feb 2022 07:07:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Ondrej Jirman <megous@megous.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: trivial-devices: Add Injoinic power
- bank ICs
-Message-ID: <YgZfhgYc/tgluUGc@robh.at.kernel.org>
-References: <20220129222424.45707-1-samuel@sholland.org>
- <20220129222424.45707-2-samuel@sholland.org>
+        Fri, 11 Feb 2022 05:08:04 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [GIT PULL] gpio: fixes for v5.17-rc4
+Date:   Fri, 11 Feb 2022 14:08:01 +0100
+Message-Id: <20220211130801.280029-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220129222424.45707-2-samuel@sholland.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 29 Jan 2022 16:24:23 -0600, Samuel Holland wrote:
-> Some Injoinic power bank ICs feature an I2C interface which allows
-> monitoring and controlling the battery charger and boost converter.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-> 
->  Documentation/devicetree/bindings/trivial-devices.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
+Linus,
 
-Acked-by: Rob Herring <robh@kernel.org>
+Please pull the following set of fixes from the GPIO subsystem for the next
+release candidate.
+
+Best Regards,
+Bartosz Golaszewski
+
+The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
+
+  Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v5.17-rc4
+
+for you to fetch changes up to c162ca0bcbfb39308c4dff4157e27c751af7032a:
+
+  gpio: sim: fix hogs with custom chip labels (2022-02-09 11:41:29 +0100)
+
+----------------------------------------------------------------
+gpio fixes for v5.17-rc4
+
+- use sleeping variants of GPIO accessors where needed in gpio-aggregator
+- never return kernel's internal error codes to user-space in gpiolib core
+- use the correct register for reading output values in gpio-sifive
+- fix line hogging in gpio-sim
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      gpiolib: Never return internal error codes to user space
+
+Bartosz Golaszewski (1):
+      gpio: sim: fix hogs with custom chip labels
+
+Geert Uytterhoeven (1):
+      gpio: aggregator: Fix calling into sleeping GPIO controllers
+
+Niklas Cassel (1):
+      gpio: sifive: use the correct register to read output values
+
+ drivers/gpio/gpio-aggregator.c | 18 ++++++++++++++----
+ drivers/gpio/gpio-sifive.c     |  2 +-
+ drivers/gpio/gpio-sim.c        | 19 +++++++++++++++----
+ drivers/gpio/gpiolib-cdev.c    |  6 +++---
+ drivers/gpio/gpiolib-sysfs.c   |  7 ++-----
+ drivers/gpio/gpiolib.h         | 12 ++++++++++++
+ 6 files changed, 47 insertions(+), 17 deletions(-)

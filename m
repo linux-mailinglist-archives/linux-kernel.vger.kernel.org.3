@@ -2,49 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F484B2D4D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 20:11:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 497FC4B2D4F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 20:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242888AbiBKTKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 14:10:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38532 "EHLO
+        id S244933AbiBKTMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 14:12:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234187AbiBKTKt (ORCPT
+        with ESMTP id S234187AbiBKTMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 14:10:49 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E27CC8;
-        Fri, 11 Feb 2022 11:10:47 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 101771EC05DE;
-        Fri, 11 Feb 2022 20:10:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1644606642;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=vi/2f3BkZ5RPd66GrgDCvoYiNBLnsHrhasUTq7tPgPc=;
-        b=r9pvFL3gB63rbfAyO0Ti9+4UYEs3FxUuH0ZmlQ2qS30TAUUSTa1bvdEUMu92hFJ1xdlwwv
-        ANNq1xqKp1c/xvzO9M4rZkd16lWq7zrQ0jSs2luK2BP1tDmd/rafqU5ywlEAjC9sRc9L6u
-        Ye83f/ASCSzlyHXWEl1hz5hEHjG6fVo=
-Date:   Fri, 11 Feb 2022 20:10:43 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, tony.luck@intel.com, james.morse@arm.com,
-        rric@kernel.org, Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH v4 01/24] EDAC/amd64: Define Data Fabric operations
-Message-ID: <Yga0s+9cqtfB3Yxu@zn.tnic>
-References: <20220127204115.384161-1-yazen.ghannam@amd.com>
- <20220127204115.384161-2-yazen.ghannam@amd.com>
+        Fri, 11 Feb 2022 14:12:09 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD0DCE7
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 11:12:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644606727; x=1676142727;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OpQRZh+mKPJH6X4O7agdIjv5RxBIcNXlPQT1ivzX0PA=;
+  b=g5dq695VD40h/iDo8355ur4UcXrOkx5QVWaDyWiUCfHQSCta6EvJMMqb
+   JbLI0KVFp7bgJ/VRYryfopfwL0PZvBZdqaGSq/36svOqDs7WsVp8dS1ml
+   igZYfI/Q0sOgSK7NbXTdT+oPz5az5WM/9Tva0MU9q7Rj/xLJVngyJpsix
+   KmhmYwfwChriykFKeDiP0RJTL7fwq/smanmWvniKa3ZNkOZHXyPYTBzsj
+   mygDLWTUVgT8s8UVNHUBfFHvwPBVg2In4jX8wD8F4MKO2gAbUfdOrvZ7C
+   VuNfx6JSdC8DHZOo9tdrXsxTs2ykqPe1ouBvAE8fEqe2p5yDURXO/cvEd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="249541536"
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="249541536"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 11:12:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="488530711"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 11 Feb 2022 11:12:04 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nIbKu-00053L-9B; Fri, 11 Feb 2022 19:12:04 +0000
+Date:   Sat, 12 Feb 2022 03:11:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Carl Huang <quic_cjhuang@quicinc.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Kalle Valo <quic_kvalo@quicinc.com>,
+        Baochen Qiang <quic_bqiang@quicinc.com>,
+        Wen Gong <quic_wgong@quicinc.com>
+Subject: [ammarfaizi2-block:kvalo/ath/pending-deferred 57/62]
+ drivers/net/wireless/ath/ath11k/wow.c:466:5: error: redefinition of
+ 'ath11k_wow_init'
+Message-ID: <202202120334.sUc5tt9e-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220127204115.384161-2-yazen.ghannam@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,89 +66,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 08:40:52PM +0000, Yazen Ghannam wrote:
-> Define a stub to hold operations for different Data Fabric versions.
-> This will be filled in following patches.
-> 
-> Set the operations at init-time as appropriate for each model/family
-> group.
-> 
-> Also, start a glossary of acronyms used in the translation code.
-> 
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> ---
-> Link:
-> https://lore.kernel.org/r/20211028175728.121452-6-yazen.ghannam@amd.com
-> 
-> v3->v4:
-> * Started glossary.
-> * Included pr_debug() for failing case.
-> 
-> v2->v3:
-> * Was patch 6 in v2.
-> * "df_ops" is set at init time.
-> 
-> v1->v2:
-> * New in v2.
-> 
->  drivers/edac/amd64_edac.c | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-> index fba609ada0e6..639dfbea3348 100644
-> --- a/drivers/edac/amd64_edac.c
-> +++ b/drivers/edac/amd64_edac.c
-> @@ -988,6 +988,12 @@ static int sys_addr_to_csrow(struct mem_ctl_info *mci, u64 sys_addr)
->  	return csrow;
->  }
->  
-> +/*
-> + * Glossary of acronyms used in address translation for Zen-based systems
-> + *
-> + * DF          =       Data Fabric
+tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/pending-deferred
+head:   9a4dbe8c276e1d26533f2e4191c2b5dbef2d7b1e
+commit: 24a2528121749a929923132e26ef5b0180e18544 [57/62] ath11k: Add basic WoW functionalities
+config: parisc-allyesconfig (https://download.01.org/0day-ci/archive/20220212/202202120334.sUc5tt9e-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/24a2528121749a929923132e26ef5b0180e18544
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block kvalo/ath/pending-deferred
+        git checkout 24a2528121749a929923132e26ef5b0180e18544
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash
 
-Yeah, "DF: Data Fabric" is probably easier to parse, without that weird
-spacing and equals sign.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> + */
-> +
->  /* Protect the PCI config register pairs used for DF indirect access. */
->  static DEFINE_MUTEX(df_indirect_mutex);
->  
-> @@ -1058,6 +1064,14 @@ struct addr_ctx {
->  	u8 inst_id;
->  };
->  
-> +struct data_fabric_ops {
-> +};
+All errors (new ones prefixed by >>):
 
-I know that this is not the only example but we have struct definitions
-interspersed with functions in the .c file while former should be all in
-the header. It is a lot cleaner to have definitions and inline functions
-in the header and the actual functionality in the C file but I leave it
-up to you to decide what you prefer.
+   drivers/net/wireless/ath/ath11k/wow.c:356:5: warning: no previous prototype for 'ath11k_wow_op_suspend' [-Wmissing-prototypes]
+     356 | int ath11k_wow_op_suspend(struct ieee80211_hw *hw,
+         |     ^~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/ath/ath11k/wow.c:415:6: warning: no previous prototype for 'ath11k_wow_op_set_wakeup' [-Wmissing-prototypes]
+     415 | void ath11k_wow_op_set_wakeup(struct ieee80211_hw *hw, bool enabled)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/ath/ath11k/wow.c:424:5: warning: no previous prototype for 'ath11k_wow_op_resume' [-Wmissing-prototypes]
+     424 | int ath11k_wow_op_resume(struct ieee80211_hw *hw)
+         |     ^~~~~~~~~~~~~~~~~~~~
+>> drivers/net/wireless/ath/ath11k/wow.c:466:5: error: redefinition of 'ath11k_wow_init'
+     466 | int ath11k_wow_init(struct ath11k *ar)
+         |     ^~~~~~~~~~~~~~~
+   In file included from drivers/net/wireless/ath/ath11k/core.h:26,
+                    from drivers/net/wireless/ath/ath11k/wow.c:11:
+   drivers/net/wireless/ath/ath11k/wow.h:40:19: note: previous definition of 'ath11k_wow_init' with type 'int(struct ath11k *)'
+      40 | static inline int ath11k_wow_init(struct ath11k *ar)
+         |                   ^~~~~~~~~~~~~~~
+   drivers/net/wireless/ath/ath11k/wow.c: In function 'ath11k_wow_init':
+>> drivers/net/wireless/ath/ath11k/wow.c:481:22: error: 'struct wiphy' has no member named 'wowlan'
+     481 |         ar->hw->wiphy->wowlan = &ar->wow.wowlan_support;
+         |                      ^~
 
-> +
-> +struct data_fabric_ops df2_ops = {
-> +};
-> +
-> +struct data_fabric_ops *df_ops;
-> +
->  static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr)
->  {
->  	u64 dram_base_addr, dram_limit_addr, dram_hole_base;
-> @@ -1072,6 +1086,11 @@ static int umc_normaddr_to_sysaddr(u64 norm_addr, u16 nid, u8 umc, u64 *sys_addr
->  
->  	struct addr_ctx ctx;
->  
-> +	if (!df_ops) {
-> +		pr_debug("Data Fabric Operations not set");
 
-That probably wants to be a WARN_ON_ONCE() so that it is loud and
-prominent when it happens...
+vim +/ath11k_wow_init +466 drivers/net/wireless/ath/ath11k/wow.c
 
--- 
-Regards/Gruss,
-    Boris.
+   465	
+ > 466	int ath11k_wow_init(struct ath11k *ar)
+   467	{
+   468		if (WARN_ON(!test_bit(WMI_TLV_SERVICE_WOW, ar->wmi->wmi_ab->svc_map)))
+   469			return -EINVAL;
+   470	
+   471		ar->wow.wowlan_support = ath11k_wowlan_support;
+   472	
+   473		if (ar->wmi->wmi_ab->wlan_resource_config.rx_decap_mode ==
+   474		    ATH11K_HW_TXRX_NATIVE_WIFI) {
+   475			ar->wow.wowlan_support.pattern_max_len -= WOW_MAX_REDUCE;
+   476			ar->wow.wowlan_support.max_pkt_offset -= WOW_MAX_REDUCE;
+   477		}
+   478	
+   479		ar->wow.max_num_patterns = ATH11K_WOW_PATTERNS;
+   480		ar->wow.wowlan_support.n_patterns = ar->wow.max_num_patterns;
+ > 481		ar->hw->wiphy->wowlan = &ar->wow.wowlan_support;
 
-https://people.kernel.org/tglx/notes-about-netiquette
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

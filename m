@@ -2,109 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CEE24B1A56
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 528F94B1A5D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346255AbiBKAU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:20:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53274 "EHLO
+        id S1346260AbiBKAYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:24:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346244AbiBKAUz (ORCPT
+        with ESMTP id S1346239AbiBKAYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:20:55 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F02B5594;
-        Thu, 10 Feb 2022 16:20:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644538855; x=1676074855;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=e5IiG17cQUjJ9PQOtAwSdbXG1C8VuyC2rEhJR099Nh0=;
-  b=CKOumQBxcF5ZMTqiM+NbGG2w10b7obDNAH4wV+Qv62oVb2GAExdFxbHT
-   E9G5xVN37/aaf8OWhVbYFNNRwgBheYeB/GUo4j43sC11t0VbptYfSVK1Y
-   jYrmmzdO0Wn/h0aYx+Z7EWuSJE2vcu9tuSQYVhr47s41otER/udhWTmQJ
-   FJszQIsh+J1axg99dYqYt0JrWE9H3gFtUkUCmZMsNovYcG+5b7DDPGk4U
-   BIIFRbSyskrPEo+vsAxj41EtFNGwI3VIaxmwEAhVnsVU6o89BgeTK03eh
-   sIRtZQlGN1Ikvzr+iobUoTRRDkeULjEJiyDW7RGCRw5pm8xiqFJvLDeEB
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="336046688"
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="336046688"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 16:20:55 -0800
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="774072606"
-Received: from wlincolx-mobl.amr.corp.intel.com (HELO [10.212.86.106]) ([10.212.86.106])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 16:20:54 -0800
-Message-ID: <d26561a1-ddd4-aea0-792d-efce104ad44f@linux.intel.com>
-Date:   Thu, 10 Feb 2022 18:20:53 -0600
+        Thu, 10 Feb 2022 19:24:05 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15505590
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:24:05 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id r64-20020a17090a43c600b001b8854e682eso7282118pjg.0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:24:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LrUyb0Wh6q+TWQdBAwHTHlIVx9+z8b9Fs7B5ywluypo=;
+        b=byNY5Pw6n4O+A1Q3QFXWhgzmCWlIQeKjcQUWZJ+DB0iNn6tZK4MT+hS6YSspA+h6bs
+         jQa8L7AoQ4gf7HiYdKT9kprrE3EEg2SozoFAdE6qCOgU4p/0vHsXRbay/qdPQRfSyE8c
+         uoHZzTYhOGPFz+DVto+lcTWIDjTXeT8u1ckhRepZoJbX+yBc0h/qzWrXD3XNuktL30Pd
+         uQDROctnatm8uQ2LT/yqgFQOe693BKBmpFVHStg1CYX1nse3bEoOVfETyM3b3sZHKx0X
+         zou/jBtc5nB0F51EuGLQlbGzX66gCbBkBXBj4SUAMoY35zWFdMlxc5HuUWl2+oZKFDrK
+         cxgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LrUyb0Wh6q+TWQdBAwHTHlIVx9+z8b9Fs7B5ywluypo=;
+        b=48v5nYUrfZ2FK9pNv2EF34xBlGJKnqI3hvf6w/Byzso1gIgkRUMyBVI98zLxSBgoPu
+         wpRno+GNmQh3cDux7mfEMAWgAgO4isRTcrihoQBqF3SnM/3TfGaQZUPu5otu0Zoyi21r
+         Tkqrv/Sn2ZiMiAPzYEAj9ylaGLMteTa4lfmrMSpO1Gy+9Sk9pb5iQCAtS1uh8DNep14N
+         sWx7SBwLIlMMlHbtwt7iAO3ZAPOtYpv8wcpiQFbXtivDmQqH14PdUUXw+EO+cdrT/Lxh
+         KCv2TIebizqc8TwUDLYDWC4674EnW0RlgOMYzrC9zgkdE9vgyQVIWy18eb+RGZKxDk1s
+         ekug==
+X-Gm-Message-State: AOAM5329JAYwtYNgrued13H3LhSlhbGfyCdix0IHNgRx8P7hRx1mLtra
+        glbqgglP1ESblt7NBxIAngnVdQ==
+X-Google-Smtp-Source: ABdhPJy6NqoftN81+qGjPmSwA1HX60QzmRV7HaXy1H+bXAqKzrJoFkfKC5JwQ2PB4RaR/grvsdiu3g==
+X-Received: by 2002:a17:902:ea06:: with SMTP id s6mr9827627plg.163.1644539045142;
+        Thu, 10 Feb 2022 16:24:05 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id iy13sm3338563pjb.51.2022.02.10.16.24.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 16:24:04 -0800 (PST)
+Date:   Fri, 11 Feb 2022 00:24:00 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com
+Subject: Re: [PATCH 05/12] KVM: MMU: avoid NULL-pointer dereference on page
+ freeing bugs
+Message-ID: <YgWsoKskWnahgR8j@google.com>
+References: <20220209170020.1775368-1-pbonzini@redhat.com>
+ <20220209170020.1775368-6-pbonzini@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH 3/9] ASoC: Intel: bytcr_wm5102: use GFP_KERNEL
-Content-Language: en-US
-To:     Julia Lawall <Julia.Lawall@inria.fr>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     alsa-devel@alsa-project.org, kernel-janitors@vger.kernel.org,
-        Takashi Iwai <tiwai@suse.com>,
-        Jie Yang <yang.jie@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-References: <20220210204223.104181-1-Julia.Lawall@inria.fr>
- <20220210204223.104181-4-Julia.Lawall@inria.fr>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20220210204223.104181-4-Julia.Lawall@inria.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209170020.1775368-6-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 09, 2022, Paolo Bonzini wrote:
+> If kvm_mmu_free_roots encounters a PAE page table where a 64-bit page
+> table is expected, the result is a NULL pointer dereference.  Instead
+> just WARN and exit.
 
+This confused the heck out of me, because we obviously free PAE page tables.  What
+we don't do is back the root that gets shoved into CR3 with a shadow page.  It'd
+be especially confusing without the context that this WARN was helpful during
+related development, as it's not super obvious why mmu_free_root_page() is a special
+snowflake and deserves a WARN.
 
-On 2/10/22 14:42, Julia Lawall wrote:
-> Platform_driver probe functions aren't called with locks held
-> and thus don't need GFP_ATOMIC. Use GFP_KERNEL instead.
-> 
-> Problem found with Coccinelle.
+Something like this?
 
-Thanks Julia, indeed it's the only case where GFP_ATOMIC is used for
-machine drivers.
+  WARN and bail if KVM attempts to free a root that isn't backed by a shadow
+  page.  KVM allocates a bare page for "special" roots, e.g. when using PAE
+  paging or shadowing 2/3/4-level page tables with 4/5-level, and so root_hpa
+  will be valid but won't be backed by a shadow page.  It's all too easy to
+  blindly call mmu_free_root_page() on root_hpa, be nice and WARN instead of
+  crashing KVM and possibly the kernel.
 
-This was already present in the initial Android driver from Intel (2013)
-[1] and missed in the multiple passes to get this upstream.
-
-Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-
-[1]
-https://github.com/lenovo-yt2-dev/android_kernel_lenovo_baytrail/blob/cm-12.1/sound/soc/intel/board/byt_bl_wm5102.c
-
-> 
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
-> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
->  sound/soc/intel/boards/bytcr_wm5102.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/x86/kvm/mmu/mmu.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/sound/soc/intel/boards/bytcr_wm5102.c b/sound/soc/intel/boards/bytcr_wm5102.c
-> index 504ef4cab111..8d8e96e3cd2d 100644
-> --- a/sound/soc/intel/boards/bytcr_wm5102.c
-> +++ b/sound/soc/intel/boards/bytcr_wm5102.c
-> @@ -389,7 +389,7 @@ static int snd_byt_wm5102_mc_probe(struct platform_device *pdev)
->  	bool sof_parent;
->  	int ret;
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 7b5765ced928..d0f2077bd798 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -3201,6 +3201,8 @@ static void mmu_free_root_page(struct kvm *kvm, hpa_t *root_hpa,
+>  		return;
 >  
-> -	priv = devm_kzalloc(dev, sizeof(*priv), GFP_ATOMIC);
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
->  	if (!priv)
->  		return -ENOMEM;
+>  	sp = to_shadow_page(*root_hpa & PT64_BASE_ADDR_MASK);
+> +	if (WARN_ON(!sp))
+
+Should this be KVM_BUG_ON()?  I.e. when you triggered these, would continuing on
+potentially corrupt guest data, or was it truly benign-ish?
+
+> +		return;
 >  
+>  	if (is_tdp_mmu_page(sp))
+>  		kvm_tdp_mmu_put_root(kvm, sp, false);
+> -- 
+> 2.31.1
+> 
 > 

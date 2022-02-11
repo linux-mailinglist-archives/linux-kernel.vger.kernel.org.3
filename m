@@ -2,37 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B464B28D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:12:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 790754B28DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:14:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351271AbiBKPMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 10:12:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59712 "EHLO
+        id S1351277AbiBKPNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 10:13:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244193AbiBKPMh (ORCPT
+        with ESMTP id S243585AbiBKPNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 10:12:37 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E64C304;
-        Fri, 11 Feb 2022 07:12:34 -0800 (PST)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2B19E1BF209;
-        Fri, 11 Feb 2022 15:12:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644592353;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UtWBObtE4IkrC6h1yUcZW77RKDqVsXLhy4QmmGFNKO4=;
-        b=ccsc7k/xzRCiUCIwcH++UiryHmcKwovXKWAbQ0BzGb8gXA7/c8bPP7QQpRxDTUfei/rYsO
-        d2zRJkIzW4z/xEJVPa3feg2jB8zwr9sqda3PLMZgq3VJLgdEk06z3RUHSwBXd/OXAxJ2eM
-        KlEVy+4ibDVuU1T0dMtE01z5jZ/TCudeLgPpcdB9swBmayu6bLsxSAGhcAxSZys48c74xl
-        nL/iFCoeQaOpaTEgxvEpNM3GZbRmrgM9Q8jFSds66zhUkcvuEyHjQFOFZO68n6Y7H9e+Gi
-        IAJig+PEZNDNOaCGhfhGel6U1f02I9kEIVUyRv9Rr7uxZ+Jw6iwN7Lvp1nKJ9A==
-Date:   Fri, 11 Feb 2022 16:12:29 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Fri, 11 Feb 2022 10:13:37 -0500
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC42B1A3;
+        Fri, 11 Feb 2022 07:13:35 -0800 (PST)
+Received: by mail-oi1-f169.google.com with SMTP id r27so9858849oiw.4;
+        Fri, 11 Feb 2022 07:13:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nAFVbtRVtzhYKIqkkFFxa3DynoLvmGUt99SFwmIUitE=;
+        b=s8NsgSiwpaGes4F/DU2604UOgpZCEH8KBAa569Nf9/VkCqPnY3EzktMkGF/hWN8AZn
+         SclY0VCIQnKUGiGxMSWzxEfg9UVDokOtIqfKjhbbHnUfjtSxE6Vm/95/kOKZQsrGre1A
+         pUUk/v+D2tBIbHwmFCom0QW10BImL3jT7NPqe7hk1ZoXbVmap9e19mhUObCYMhhF+ZX1
+         5vz2xyBf9SbNO5cxC52dO7Xwq2QzG9MjE1m2eqa0YtV9hlIj4WS7XgceVAUu/Zs3e9Mf
+         oSvAArg6jo1dI1US1jR5NrfYUW5Ja7pIkMr3DBJP/McXNhnDD/T5q9DQMmlQ/CStxqRJ
+         4dkw==
+X-Gm-Message-State: AOAM5308P0SzF+17eAaZAYhVbz0znhJFt+9wo4FHSlN7K7LqgrtI4euw
+        HawhXIor0IWQoEBgUKqUIw==
+X-Google-Smtp-Source: ABdhPJwaPHuiQHGSQ6kUYYw0O9nkOWW7a1boAaJFBE38Tc1cgFspZLWYz6Pn0l3DnSsVViQOAEGGUg==
+X-Received: by 2002:aca:aa96:: with SMTP id t144mr415668oie.132.1644592415173;
+        Fri, 11 Feb 2022 07:13:35 -0800 (PST)
+Received: from robh.at.kernel.org ([2607:fb90:20d7:a802:e6b0:6d9c:32f7:4bd9])
+        by smtp.gmail.com with ESMTPSA id j3sm9649552oig.37.2022.02.11.07.13.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 07:13:34 -0800 (PST)
+Received: (nullmailer pid 378308 invoked by uid 1000);
+        Fri, 11 Feb 2022 15:13:31 -0000
+Date:   Fri, 11 Feb 2022 09:13:30 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
@@ -45,111 +56,116 @@ Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Helen Koike <helen.koike@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 05/66] dt-bindings: sun6i-a31-mipi-dphy: Add optional
- direction property
-Message-ID: <YgZ83To26Dgy+JD4@aptenodytes>
+Subject: Re: [PATCH v2 61/66] dt-bindings: media: Add Allwinner A31 ISP
+ bindings documentation
+Message-ID: <YgZ9GjgasiPljg9X@robh.at.kernel.org>
 References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-6-paul.kocialkowski@bootlin.com>
- <YgZ6qsdO+SfTemPZ@robh.at.kernel.org>
+ <20220205185429.2278860-62-paul.kocialkowski@bootlin.com>
+ <YgE/+UmP4nJVxtRT@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="C0Hx0xaxCNYFUf5H"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YgZ6qsdO+SfTemPZ@robh.at.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YgE/+UmP4nJVxtRT@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---C0Hx0xaxCNYFUf5H
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Rob,
-
-On Fri 11 Feb 22, 09:03, Rob Herring wrote:
-> On Sat, Feb 05, 2022 at 07:53:28PM +0100, Paul Kocialkowski wrote:
-> > The Allwinner A31 MIPI D-PHY block supports both tx and rx directions,
-> > although each instance of the block is meant to be used in one
-> > direction only. There will typically be one instance for MIPI DSI and
-> > one for MIPI CSI-2 (it seems unlikely to ever see a shared instance).
-> >=20
-> > Describe the direction with a new allwinner,direction property.
-> > For backwards compatibility, the property is optional and tx mode
-> > should be assumed by default.
-> >=20
+On Mon, Feb 07, 2022 at 05:51:21PM +0200, Laurent Pinchart wrote:
+> Hi Paul,
+> 
+> Thank you for the patch.
+> 
+> On Sat, Feb 05, 2022 at 07:54:24PM +0100, Paul Kocialkowski wrote:
+> > This introduces YAML bindings documentation for the Allwinner A31 Image
+> > Signal Processor (ISP).
+> > 
 > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 > > ---
-> >  .../bindings/phy/allwinner,sun6i-a31-mipi-dphy.yaml  | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun6i-a31-=
-mipi-dphy.yaml b/Documentation/devicetree/bindings/phy/allwinner,sun6i-a31-=
-mipi-dphy.yaml
-> > index d0b541a461f3..22636c9fdab8 100644
-> > --- a/Documentation/devicetree/bindings/phy/allwinner,sun6i-a31-mipi-dp=
-hy.yaml
-> > +++ b/Documentation/devicetree/bindings/phy/allwinner,sun6i-a31-mipi-dp=
-hy.yaml
-> > @@ -37,6 +37,18 @@ properties:
-> >    resets:
-> >      maxItems: 1
-> > =20
-> > +  allwinner,direction:
-> > +    $ref: '/schemas/types.yaml#/definitions/string'
-> > +    description: |
-> > +      Direction of the D-PHY:
-> > +      - "rx" for receiving (e.g. when used with MIPI CSI-2);
-> > +      - "tx" for transmitting (e.g. when used with MIPI DSI).
+> >  .../media/allwinner,sun6i-a31-isp.yaml        | 117 ++++++++++++++++++
+> >  1 file changed, 117 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> > new file mode 100644
+> > index 000000000000..2d87022c43ce
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> > @@ -0,0 +1,117 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-isp.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > > +
+> > +title: Allwinner A31 Image Signal Processor Driver (ISP) Device Tree Bindings
+> > +
+> > +maintainers:
+> > +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > +
+> > +properties:
+> > +  compatible:
 > > +    enum:
-> > +      - tx
-> > +      - rx
-> > +    default: tx
->=20
-> Can you the phy mode to imply the direction?
+> > +      - allwinner,sun6i-a31-isp
+> > +      - allwinner,sun8i-v3s-isp
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: Bus Clock
+> > +      - description: Module Clock
+> > +      - description: DRAM Clock
+> 
+> That's interesting, does the ISP have a dedicated DRAM ?
+> 
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: bus
+> > +      - const: mod
+> > +      - const: ram
+> > +
+> > +  resets:
+> > +    maxItems: 1
+> > +
+> > +  ports:
+> > +    $ref: /schemas/graph.yaml#/properties/ports
+> > +
+> > +    properties:
+> > +      port@0:
+> > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > +        description: CSI0 input port
+> > +
+> > +        properties:
+> > +          reg:
+> > +            const: 0
+> > +
+> > +          endpoint:
+> > +            $ref: video-interfaces.yaml#
+> > +            unevaluatedProperties: false
+> 
+> If no other property than remote-endpoint are allowed, I'd write
+> 
+>           endpoint:
+>             $ref: video-interfaces.yaml#
+> 	    remote-endpoint: true
 
-So there was a first attempt at this which introduced a PHY submode but
-it was concluded after discussions that the direction is not really a
-mode of operation choice, in the sense that the D-PHY cannot be reconfigured
-to behave in Rx or Tx mode: it is instead statically assigned to one role
-or the other. This is why it feels more appropriate to describe it in the
-device-tree.
+You just mixed a node and a property...
 
-See this thread from the previous iteration:
-https://patchwork.linuxtv.org/project/linux-media/patch/20210115200141.1397=
-785-3-paul.kocialkowski@bootlin.com/#128800
+'remote-endpoint' is always allowed, so need to put it here and every 
+other user. So 'unevaluatedProperties' is correct. But it would be good 
+to define what properties from video-interfaces.yaml are used here.
 
-Cheers,
-
-Paul
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---C0Hx0xaxCNYFUf5H
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIGfN0ACgkQ3cLmz3+f
-v9E7MwgAgb6y0f+35BKNQMY0ApR9vBuccUbtMvfY5MRxfwFygHy+dHC03V+oFXWR
-oh9Mb6Wc3RKnI6nyWPgoFzbz7KDXpHf9rubsuw9dZYtytY7cAVla5GHfJxLSZVzj
-g7Em8TMkWD86KmX7jl2LtkUyjpuWZ2YWnZnS+s2fOHBMLbUAuc2I+lelXgKxLCTL
-gluqLgtLSxn/T6tGheE5exmUTWV5Wq17QWtx+ganNYMEQoG9d0Q2sf1kE1eOocHF
-8sSTdFPAzC/f6nhMYoXBiCIpTKtAMZ+1kTuBJDEEhPLTCQ/YKvxu4UfbV2W5EvLa
-zi3iRUd2SKPMnAblAuD9zINCfUPEMQ==
-=h8WY
------END PGP SIGNATURE-----
-
---C0Hx0xaxCNYFUf5H--
+Rob

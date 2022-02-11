@@ -2,149 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D2D4B304E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 23:22:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D2E4B3048
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 23:22:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354050AbiBKWVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 17:21:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54602 "EHLO
+        id S233403AbiBKWV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 17:21:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354027AbiBKWVC (ORCPT
+        with ESMTP id S234605AbiBKWVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 17:21:02 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE204D4A;
-        Fri, 11 Feb 2022 14:21:00 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id BE9693200F9C;
-        Fri, 11 Feb 2022 17:20:59 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Fri, 11 Feb 2022 17:21:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; bh=YvSCKSU842KzUhf1LCRE65E1fnv+NK6PdKlIlr
-        Basv4=; b=xeDJtk6zHVtUdiFHLhCC/YBEB2g3ZJsr0pN0e/420tNIotNVFwBt2e
-        C45b16uOVdnz7RcPh587jto9J3KyZ4VKLO9/v3b8r7g9Y0aiqvPavimtQQsWtAAe
-        IRG0911yqXFINWdI9cm4wGSH4lXFVPz9+w5p1QOdSFOQmrR5yFCVI8HmBa+C7w/8
-        C1YqfpsYEPolsFufZheIc5I1Maz4Sd1FOYb4gRxzOjURbAxaziVQDviltIX6XHq4
-        c7dXV1chNbs09PeFgqSvVJPLI+AeUX4KvDaqiUE8OO3ynJ6kR/Qr3F3iFc5U+40D
-        oQwdaSVOrqNzvKHqcSDNMsa+mmpsGjYw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=YvSCKSU842KzUhf1L
-        CRE65E1fnv+NK6PdKlIlrBasv4=; b=P1WnFAFFnm8D2e+2b0zfbIs5NtfVi/Zqv
-        eB4pyQhjvsFLoP5Ko1Li/Gee+xIjtMJ37Rln3khH3WHrfgcfIdJ0jaUy3RXx+2Lg
-        Su1+26M3dts9PaCQgCP3Xt1XD0YRwOTzqBy4VW9m3XT0Ehf8/vOBymdYjTOjIY7x
-        xq1MkyQg4t7tJp22kqk6+nFthrqUPSTtUM/oAzlIFwS+SaoCEKASG7MiftlQmsgX
-        HFQqMz2AxyK/brDuC1tTTuoqu31LS+fR6DWj/5buDmQiOdKu1H+eCyK2sNsZi4An
-        d2svM5FvLyyVlhKDWA/s+5EpDqzbQi1UiERMD7M32mKNG/Ougl6Ag==
-X-ME-Sender: <xms:SuEGYq9Up2Dm3DQXmA26el_nzm_9_wMSISTSaCYm6Qeii1qeDiJwHA>
-    <xme:SuEGYqtknph7FQOnM0NVYyt_pJ694Zea4XQdpfgq84UGYB2aIYK2olonq__6JE2z_
-    akKgZj1Ptu5Ahyj4IU>
-X-ME-Received: <xmr:SuEGYgDX5liqCcPCTD0-uqdZe9Dlv9-beCysXDFu_Ax6wNbF0VGhisF4kX6phjhoRLiGw4QSYumImG8bFXBxAELO7Aq-Bg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrieefgdduheekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlfeehmdenucfjughrpeffhffvuffkfhggtggujgesghdtreertddt
-    vdenucfhrhhomheprfgrthhrihgtkhcuhghilhhlihgrmhhsuceophgrthhrihgtkhessh
-    htfigtgidrgiihiieqnecuggftrfgrthhtvghrnhepvdffgefgfeetiefgtefhieevuedu
-    gedvgffgjeefheduteejfeffteektdelhefhnecuffhomhgrihhnpehkvghrnhgvlhdroh
-    hrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehp
-    rghtrhhitghksehsthiftgigrdighiii
-X-ME-Proxy: <xmx:SuEGYif3VrhbjzMAesscHcS03PF8XG0vOzDobEPpKmJkhnj2sTRLAQ>
-    <xmx:SuEGYvMJTIUDhBnPt14lzV4jHuDPG2htCjfPSVe5mWSb7bDK_ChmFQ>
-    <xmx:SuEGYskqO3nohhsN_3OC6EVGHvHYgmOt2obWuf9QQVTRy-xaHhcOXQ>
-    <xmx:S-EGYrBD34OycxYFW1mgRMx81So_55a_OvRH8Li6w5TN_TDPThYGHA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 11 Feb 2022 17:20:58 -0500 (EST)
-Date:   Fri, 11 Feb 2022 16:20:56 -0600
-From:   Patrick Williams <patrick@stwcx.xyz>
-To:     Potin Lai <potin.lai@quantatw.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/10] arch: arm: dts: update Facebook Bletchley BMC
-Message-ID: <YgbhSCx9qDinSAq/@heinlein>
-References: <20220211014347.24841-1-potin.lai@quantatw.com>
+        Fri, 11 Feb 2022 17:21:54 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522C8D48;
+        Fri, 11 Feb 2022 14:21:52 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id 9so15722476pfx.12;
+        Fri, 11 Feb 2022 14:21:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Gp/zsuHKYh5My8PR8Z8zMLkl9KcvlSL8qBfbEmgIsWo=;
+        b=FbC+aa/JuHHGAUA0o4a7ARROkYlUgtF89jqqv1971NAcrPrUSBCHntXAKxWKY1qSQE
+         AFVRvaMiLhFaWVq4PK+cScT+HTjVT3B+3FYvmez6AKToFoigGVn2E9A3a642mY2KMEj4
+         5/0tuPl72S/A1jO943oZMmvPk9oa7cBAhbvSI5HhcdfggrFAkt6tK0wEiKe90MFWuKYS
+         0HDbNhFEBCn7hewZSU0mhtre4vrbPav2md7HpiW4LtrZzxCgBHalGEmdN67mq/xeWXRy
+         U2JluWcMTCjoX1ZOKDB+b1e5XJiTbnrxj+l36UkSk+7fxf9MNZVo8UxJppvmMDayZFro
+         ufOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Gp/zsuHKYh5My8PR8Z8zMLkl9KcvlSL8qBfbEmgIsWo=;
+        b=hPl7DGfSnQWChC+ZGUeLukhiapy1QoNSK0Ud0w7+KGw0HD5b2R4n/tYwOR7lTDq/N/
+         4SmQkEMw1LRskN4JO4+4d8xMoEQtBLbJX/f8lY7lANm5q1t3ytIOfVlll6KZHfLDX7vQ
+         +v6S9iivozQNzv9G90YxygdBw5uI5sZjWg3MrFT+DkeA2kR8iXzAwF2EajjCTdqh1I8X
+         qZhaiWjj2eSlA6pttR62Qqb/ySdVkkq18RlPs3EZOn+hImru8G8vMr7aq4nuczZd+GLX
+         BxH/BgyVvZsV6o3e4g61+OjJ7nbiBkoYxLyO0IAS3+vTZTZKOYhms+H/07o2vr7P5AM3
+         VoHg==
+X-Gm-Message-State: AOAM532+/9j+bixYQ58DlN0+fTCM7k+AWxp7Ej6twxlNGTe1vKVRIsyI
+        r7ST+1qtOoxDqfKRZzAym6I=
+X-Google-Smtp-Source: ABdhPJzgUOwow1Kw0Nqi3SZXj+CluzcAukjRqtFGLhJHuV04lh6TJBYGd6gfq9E4miw55l9+syK/tw==
+X-Received: by 2002:aa7:8d08:: with SMTP id j8mr3616091pfe.68.1644618111742;
+        Fri, 11 Feb 2022 14:21:51 -0800 (PST)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id a12sm24442962pfv.18.2022.02.11.14.21.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 14:21:51 -0800 (PST)
+Date:   Sat, 12 Feb 2022 07:21:49 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH] microblaze: remove CONFIG_SET_FS
+Message-ID: <YgbhfZ4tlWByxm+B@antec>
+References: <CAHTX3dKyAha8_nu=7e413pKr+SAaPBLp9=FTdQ=GZNdjQHW+zA@mail.gmail.com>
+ <CAK8P3a2Om2SYchx8q=ddkNeJ4o=1MVXD2MFSV2SGJ_vuTUcp0Q@mail.gmail.com>
+ <126ae5ee-342c-334c-9c07-c00213dd7b7e@xilinx.com>
+ <CAK8P3a2zZfFa55nNeMicWHhia7fkT0cJBzYvUi0O+v0B13BOMA@mail.gmail.com>
+ <YgROuYDWfWYlTUKD@antec>
+ <YgWrFnoOOn/B3X4k@antec>
+ <CAK8P3a0eAv168eepvdZQbYDstTQHc-Hb2_PMS3bseV3caB4oAA@mail.gmail.com>
+ <CAHk-=wj7kOxDg+2Ym1EQsTZaZqU-p7aFHiNVOmtEhNS8jjapLQ@mail.gmail.com>
+ <CAK8P3a22q+vTb3cEurhA0zXzw8-9+jKJRotC0oWMncS3sb-7zA@mail.gmail.com>
+ <87a6exxg7h.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="xmU4fn0mtBe9neDo"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220211014347.24841-1-potin.lai@quantatw.com>
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <87a6exxg7h.fsf@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 11, 2022 at 03:10:10PM -0600, Eric W. Biederman wrote:
+> Arnd Bergmann <arnd@kernel.org> writes:
+> >
+> > I had previously gotten stuck at ia64, but gave it another go now
+> > and uploaded an updated branch with ia64 taken care of and another
+> > patch to clean up bits afterwards.
+> >
+> > I only gave it light testing so far, mainly building the defconfig for every
+> > architecture. I'll post the series once the build bots are happy with the
+> > branch overall.
+> >
+> 
+> Thank you so much for doing this work.
+> 
 
---xmU4fn0mtBe9neDo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'll echo this.  Thank you, the changes look good.  I test built and booted the
+OpenRISC architecture and it works.
 
-On Fri, Feb 11, 2022 at 09:43:37AM +0800, Potin Lai wrote:
-> Update Facebook Bletchley BMC devicetree base on EVT HW design and=20
-> rebase sled numbering to 1-based for OpenBMC multi-host
->=20
-> This patch series are modified from
-> LINK: https://lore.kernel.org/all/20220209100413.23714-1-potin.lai@quanta=
-tw.com/
->=20
-> Potin Lai (10):
->   arch: arm: dts: bletchley: switch sled numbering to 1-based
->   arch: arm: dts: bletchley: separate leds into multiple groups
->   arch: arm: dts: bletchley: update gpio-line-names
->   arch: arm: dts: bletchley: update fmc configurations
->   arch: arm: dts: bletchley: switch to spi-gpio for spi2
->   arch: arm: dts: bletchley: add interrupt support for sled io expander
->   arch: arm: dts: bletchley: add shunt-resistor for ADM1278
->   arch: arm: dts: bletchley: add INA230 sensor on each sled
->   arch: arm: dts: bletchley: enable mdio3 bus
->   arch: arm: dts: bletchley: cleanup redundant node
->=20
->  .../dts/aspeed-bmc-facebook-bletchley.dts     | 303 +++++++++++-------
->  1 file changed, 194 insertions(+), 109 deletions(-)
->=20
-> --=20
-> 2.17.1
->=20
+I can drop the openrisc only patch for this from the openrisc queue now.
 
-Left a few minor comments on potential improvements to the commit messages,=
- but
-otherwise whole series is:
-
-Reviewed-by: Patrick Williams <patrick@stwcx.xyz>=20
-
---=20
-Patrick Williams
-
---xmU4fn0mtBe9neDo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmIG4UgACgkQqwNHzC0A
-wRm1+Q//QGpQSab1LPXpRmbccPbMhY3kwnMBcOQ2Llp2NrnebTJqjVLaJcmWu62Z
-bBCXv5Ag6mDXh4Y0rOT/NfPkZpzqa0F65WkXaXNmCzOwOWDc7GTOhXFSKD6bjbH3
-84O4ZaVkczBWGbLun2C83gfVyv1nXuRSeWGJ0T0e9sMWUgV1TJPtSIQjwbv8ABFh
-lq38vC51sibgumC542MUetQO/UWCr5YYn34CLBwRwQPgaK15rCjr++sgd+r8sh+S
-O8SaeaqsdtMZfp+FpwY7lyeImhFE94r6qZ/bT7B+8AnP9QeC1rC2GnNrEHZKxT2i
-Y5XOmIwb9VFh5Y7nl/i3zLDqTaqhw6k9F/HbLZWbwFLRSaE+4SCk+Dv/bfAjb9Jp
-BAwlLZsa9S+dcJVeW2FxIxuWtMXvhH7xNFUnEBjaObvLQCal4ek5BDWydsvzFFzN
-HpMukmUAOmIe3yhxAi6uNqAj7Xn1B0ZElsc3G7skO+oLpqRraU9Ss2e+APgKy6Jq
-iDnXtnPsyW9C33nfOq0m5SVQHfRNlsnbG6Ez1nPZFgWcbLdYPo4+RLBYA/EPr66Y
-UBDyxT5UPdSQIuaqyf/a31qAqP8cpV3loeikAq5Zf1lTo0tZ9y9gT8tByctg3PTs
-Z2dZLZxnVKsRfwrdhppRk6ncUmN/XFMYo0/kJ/M9YZLS1kN+fgY=
-=4x0h
------END PGP SIGNATURE-----
-
---xmU4fn0mtBe9neDo--
+-Stafford

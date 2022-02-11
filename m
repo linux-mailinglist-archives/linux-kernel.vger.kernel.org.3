@@ -2,130 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCD734B21A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:23:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAFA94B21AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:23:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347883AbiBKJWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 04:22:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36568 "EHLO
+        id S1348447AbiBKJXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 04:23:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234323AbiBKJWv (ORCPT
+        with ESMTP id S242601AbiBKJXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 04:22:51 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6382DB96
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:22:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644571371; x=1676107371;
-  h=from:to:cc:subject:date:message-id;
-  bh=uA2i1mughdRhhDjbb2ENH21e2dlT+e2Pom7qGofKmI8=;
-  b=qD7Z1YzkDqN4N8QXvdgYyRJjkxsA/984UhSLIfPClqmwtLv4xSfJLhGs
-   LVLvfDEvvJJpPqU6/jQ7FnLo2WdK37I0Nl3Mdtm8d9tPgyXB1QeHe0a/M
-   aszv84mEopDpKHKrHQltAIEsyNJUSPnJ1gRlFS0GK4f68ZFGq1oeTe0hJ
-   c=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 11 Feb 2022 01:22:51 -0800
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 11 Feb 2022 01:22:51 -0800
-X-QCInternal: smtphost
-Received: from c-sbhanu-linux.qualcomm.com ([10.242.50.201])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 11 Feb 2022 14:52:31 +0530
-Received: by c-sbhanu-linux.qualcomm.com (Postfix, from userid 2344807)
-        id B0CB756EE; Fri, 11 Feb 2022 14:52:30 +0530 (IST)
-From:   Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-To:     dianders@chromium.org, tudor.ambarus@microchip.com,
-        michael@walle.cc, p.yadav@ti.com, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     quic_stummala@quicinc.com, quic_vbadigan@quicinc.com,
-        quic_rampraka@quicinc.com, quic_pragalla@quicinc.com,
-        quic_sartgarg@quicinc.com,
-        Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-Subject: [PATCH V6] mtd: spi-nor: winbond: Add support for winbond chip
-Date:   Fri, 11 Feb 2022 14:52:29 +0530
-Message-Id: <1644571349-29649-1-git-send-email-quic_c_sbhanu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Feb 2022 04:23:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15C22EBE
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:23:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644571383;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qo5tt7qfqFuuHdwxRe62Yd9mxK2KKNk3oIAuQuMoJM4=;
+        b=C34PYzMbNnAlfRQ/lVP4jXhOVSdCEBID+yOybRmtRfbkU5iqgm6USifdFHf6yE2+iTeamk
+        nd0zNFNlbXkGKqt3oyg1x6hBoSYNmPERuItnB2tqGTdKMtGOAkhu0NQy+NBIZww6yQJn5f
+        Agf7Uw6khAdiuu/DF1jtDuz+d/vQkHg=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-495-CNqavvkvMLKVlDk0G_6Zwg-1; Fri, 11 Feb 2022 04:23:02 -0500
+X-MC-Unique: CNqavvkvMLKVlDk0G_6Zwg-1
+Received: by mail-wr1-f69.google.com with SMTP id c9-20020adfa709000000b001dde29c3202so3630856wrd.22
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:23:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Qo5tt7qfqFuuHdwxRe62Yd9mxK2KKNk3oIAuQuMoJM4=;
+        b=KNFcAonwrFgWcyG28zSuPMnv4ff9ijcejvobxOON+euY9mKQnuzRM7zKgr3hC14tSB
+         dcJgXgfJkQC1cOBYNiKHdI8QvW3pKLDbnCOp2f06sF+Owzh7L8MsoTHaBvrNVRaqR+zz
+         k/xiM1hoBd8zYNiUzP5hLxZOtrirPAOYNj0SB4e3+rqgagkt3uEZh5dTJvrxs5nvL4Mt
+         +LZlK0T2pLQnge1gY5UxN//cnAexXLnZ+Wp5dRDM9KNtpytrBmRHsGCKRN/JoEHnE6T3
+         6X0gM4PJwXawdz/9Z4zfdkABnzguEl1jATAxf/keGMUUZWd9qilHgfJGnGRbtQBgwP7v
+         EtZg==
+X-Gm-Message-State: AOAM532U9ftXkw8gBch1qOTcvWjoMTcyrlPtBD5aYcfHxcmAk+INBKkz
+        fduxS0//r2r+TlxRn5kVKsa/8DojreyG/eTDLrG7ZKS29pr/ziXBDaWCdNeQdY3Zndltu5b6+Dv
+        2L4KHVSz6mJVjCU3Su1BHuJX54rWCoHosXb2AbVj/nQMOBkrgjLSkBlfNXg2tYELMZyS60H8xYa
+        w=
+X-Received: by 2002:a5d:4910:: with SMTP id x16mr617234wrq.360.1644571381021;
+        Fri, 11 Feb 2022 01:23:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwQmkhSio3XmknDv+U+BFj72PJlq29Q9DPCbv2FXY27W3811LtmWuIDulWlfqEUKhTodynTLQ==
+X-Received: by 2002:a5d:4910:: with SMTP id x16mr617195wrq.360.1644571380540;
+        Fri, 11 Feb 2022 01:23:00 -0800 (PST)
+Received: from minerva.home ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id q76sm3795124wme.1.2022.02.11.01.22.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 01:23:00 -0800 (PST)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Sam Ravnborg <sam@ravnborg.org>, Rob Herring <robh@kernel.org>
+Subject: [PATCH v4 6/6] dt-bindings: display: ssd1307fb: Add myself as binding co-maintainer
+Date:   Fri, 11 Feb 2022 10:22:53 +0100
+Message-Id: <20220211092253.2988843-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220211091927.2988283-1-javierm@redhat.com>
+References: <20220211091927.2988283-1-javierm@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for winbond W25Q512NW-IM chip.
+The ssd130x DRM driver also makes use of this Device Tree binding to allow
+existing users of the fbdev driver to migrate without the need to change
+their Device Trees.
 
-Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
-Reviewed-by: Doug Anderson <dianders@chromium.org>
+Add myself as another maintainer of the binding, to make sure that I will
+be on Cc when patches are proposed for it.
+
+Suggested-by: Sam Ravnborg <sam@ravnborg.org>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
-localhost / # cat /sys/bus/platform/devices/soc\@0/88dc000.spi/spi_master/spi16/
-spi16.0/spi-nor/jedec_id
-ef8020
 
-localhost / # cat /sys/bus/platform/devices/soc\@0/88dc000.spi/spi_master/spi16/
-spi16.0/spi-nor/manufacturer
-winbond
+Changes in v4:
+- Add Rob Herring Acked-by tag to patch adding as DT binding co-maintainer.
 
-localhost / # cat /sys/bus/platform/devices/soc\@0/88dc000.spi/spi_master/spi16/
-spi16.0/spi-nor/partname
-w25q512nwm
+Changes in v2:
+- Add myself as co-maintainer of the ssd1370fb DT binding (Sam Ravnborg).
 
-localhost / # hexdump /sys/bus/platform/devices/soc\@0/88dc000.spi/spi_master/sp
-i16/spi16.0/spi-nor/sfdp
-0000000 4653 5044 0106 ff01 0600 1001 0080 ff00
-0000010 0084 0201 00d0 ff00 ffff ffff ffff ffff
-0000020 6800 6c65 6f6c 7720 726f 646c ffff ffff
-0000030 ffff ffff ffff ffff ffff ffff ffff ffff
-*
-0000080 20e5 fffb ffff 1fff eb44 6b08 3b08 bb42
-0000090 fffe ffff ffff 0000 ffff eb40 200c 520f
-00000a0 d810 0000 0233 00a6 e781 d914 63e9 3376
-00000b0 757a 757a bdf7 5cd5 f719 ff5d 70e9 a5f9
-00000c0 ffff ffff ffff ffff ffff ffff ffff ffff
-00000d0 0aff fff0 ff21 ffdc
-00000d8
+ Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Changes since V1:
-	- Added space before name of the flash part as suggested by Doug.
-
-Changes since V2:
-	- Updated chip name as w25q512nwm as suggested by Doug.
-
-Changes since V3:
-	- Updated flash_info flags passing according to below patch.
-
-Changes since V4:
-	- Added OTP support for SPI card as suggested by Michael Walle.
-	- Updated SFDP flags passing as suggested by Pratyush Yadav.
-
-Changes since V5:
-	- Reordered flags passing info for spi nor as suggested by
-	  Michael Walle.
-	- Added SFDP dump info in commit as suggested by Michael Walle.
----
- drivers/mtd/spi-nor/winbond.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
-index 675f32c..315b9f6 100644
---- a/drivers/mtd/spi-nor/winbond.c
-+++ b/drivers/mtd/spi-nor/winbond.c
-@@ -124,6 +124,10 @@ static const struct flash_info winbond_parts[] = {
- 	{ "w25m512jv", INFO(0xef7119, 0, 64 * 1024, 1024)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ |
- 			      SPI_NOR_DUAL_READ) },
-+	{ "w25q512nwm", INFO(0xef8020, 0, 64 * 1024, 1024)
-+		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB)
-+		PARSE_SFDP
-+		OTP_INFO(256, 3, 0x1000, 0x1000) },
- 	{ "w25q512jvq", INFO(0xef4020, 0, 64 * 1024, 1024)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
- 			      SPI_NOR_QUAD_READ) },
+diff --git a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
+index 2ed2a7d0ca2f..9baafd0c42dd 100644
+--- a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
++++ b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
+@@ -8,6 +8,7 @@ title: Solomon SSD1307 OLED Controller Framebuffer
+ 
+ maintainers:
+   - Maxime Ripard <mripard@kernel.org>
++  - Javier Martinez Canillas <javierm@redhat.com>
+ 
+ properties:
+   compatible:
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
-of Code Aurora Forum, hosted by The Linux Foundation
+2.34.1
 

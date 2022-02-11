@@ -2,67 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D936A4B2288
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2DC4B2272
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348763AbiBKJzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 04:55:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37114 "EHLO
+        id S1345745AbiBKJvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 04:51:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348734AbiBKJzG (ORCPT
+        with ESMTP id S229739AbiBKJvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 04:55:06 -0500
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3128FE6F;
-        Fri, 11 Feb 2022 01:55:05 -0800 (PST)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21B1vwbU022442;
-        Fri, 11 Feb 2022 04:54:58 -0500
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3e46jc2ks2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Feb 2022 04:54:58 -0500
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 21B9sucF041739
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 11 Feb 2022 04:54:56 -0500
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Fri, 11 Feb
- 2022 04:54:55 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Fri, 11 Feb 2022 04:54:55 -0500
-Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.166])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 21B9sh6C002029;
-        Fri, 11 Feb 2022 04:54:51 -0500
-From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
-To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Subject: [PATCH 3/3] MAINTAINERS: add maintainer for ADA4250 driver
-Date:   Fri, 11 Feb 2022 11:50:57 +0200
-Message-ID: <20220211095057.54979-4-antoniu.miclaus@analog.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220211095057.54979-1-antoniu.miclaus@analog.com>
-References: <20220211095057.54979-1-antoniu.miclaus@analog.com>
+        Fri, 11 Feb 2022 04:51:40 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780DFE51
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:51:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644573099; x=1676109099;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0mXqDOwW22bUhnQUeJtpNRx2NwBK4pzkw0tnt/i07uw=;
+  b=VXmRE4J1ZWGHw7TI9bAdgBDYhe6geHv1G0XKAGJwxkIYqd4Qib8jzK7W
+   hvfFiP/WIvZzQladJJcfIxIy8jGiDXhEW5mPKuoz3ZvohOPH1clo3sa1W
+   6quIuBNtyXp0zxEV1j1kzpN2kMXg7L8zNBO4g6/6+sepgAiSNSrAZ6DNN
+   gpJtcQhOofkHLOhTkQPfpekusCELYf0yGo73fvCXYLplJt7pCVLVpWtaj
+   Gh6LWgsRJ+vANmgU1811wi01nG0QomawBeNUuF7wrbrVvCAJAiWy+6YJb
+   YN41cDNi02iOboQ9MBMnmVBEBz9g6vDgN7PvDwonegYPBf+nLPbAnuOuZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="230345102"
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="230345102"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 01:51:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="602332572"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 11 Feb 2022 01:51:38 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nISaX-0004PT-BT; Fri, 11 Feb 2022 09:51:37 +0000
+Date:   Fri, 11 Feb 2022 17:51:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <anup.patel@wdc.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_sbi_hsm_suspend_v11 6/8]
+ drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: error: implicit declaration of
+ function 'cpuid_to_hartid_map'
+Message-ID: <202202111718.2xBAlFri-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: 5pC-OzmrW74ypfHGjH7MHkmFRZtGcdFI
-X-Proofpoint-GUID: 5pC-OzmrW74ypfHGjH7MHkmFRZtGcdFI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-11_03,2022-02-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=806
- priorityscore=1501 adultscore=0 lowpriorityscore=0 malwarescore=0
- suspectscore=0 impostorscore=0 bulkscore=0 clxscore=1015 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202110056
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,32 +63,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add myself as maintainer for the ADA4250 driver.
+tree:   https://github.com/avpatel/linux.git riscv_sbi_hsm_suspend_v11
+head:   23c200d61b016e3b70c0f352ee89d8ff0511ba82
+commit: 64abac12078cac4dcf481c1cb8f4bc72d9049bae [6/8] cpuidle: Add RISC-V SBI CPU idle driver
+config: riscv-randconfig-r016-20220211 (https://download.01.org/0day-ci/archive/20220211/202202111718.2xBAlFri-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f774697c85d6a352dcea013f46a99f9fe31)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/avpatel/linux/commit/64abac12078cac4dcf481c1cb8f4bc72d9049bae
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_sbi_hsm_suspend_v11
+        git checkout 64abac12078cac4dcf481c1cb8f4bc72d9049bae
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/
 
-Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
+                            cpuid_to_hartid_map(cpu));
+                            ^
+   drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
+                            cpuid_to_hartid_map(cpu));
+                            ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:576:38: note: expanded from macro 'pr_debug'
+           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+                                       ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   drivers/cpuidle/cpuidle-riscv-sbi.c:359:10: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
+                          cpuid_to_hartid_map(cpu));
+                          ^
+   drivers/cpuidle/cpuidle-riscv-sbi.c:359:10: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
+                          cpuid_to_hartid_map(cpu));
+                          ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:489:33: note: expanded from macro 'pr_err'
+           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+                                  ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   drivers/cpuidle/cpuidle-riscv-sbi.c:567:6: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
+                                    cpuid_to_hartid_map(cpu));
+                                    ^
+   drivers/cpuidle/cpuidle-riscv-sbi.c:567:6: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
+                                    cpuid_to_hartid_map(cpu));
+                                    ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:576:38: note: expanded from macro 'pr_debug'
+           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+                                       ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
+                   printk(fmt, ##__VA_ARGS__);             \
+                          ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:446:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   3 warnings and 3 errors generated.
+
+
+vim +/cpuid_to_hartid_map +350 drivers/cpuidle/cpuidle-riscv-sbi.c
+
+   317	
+   318	static int sbi_cpuidle_init_cpu(struct device *dev, int cpu)
+   319	{
+   320		struct cpuidle_driver *drv;
+   321		unsigned int state_count = 0;
+   322		int ret = 0;
+   323	
+   324		drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
+   325		if (!drv)
+   326			return -ENOMEM;
+   327	
+   328		drv->name = "sbi_cpuidle";
+   329		drv->owner = THIS_MODULE;
+   330		drv->cpumask = (struct cpumask *)cpumask_of(cpu);
+   331	
+   332		/* RISC-V architectural WFI to be represented as state index 0. */
+   333		drv->states[0].enter = sbi_cpuidle_enter_state;
+   334		drv->states[0].exit_latency = 1;
+   335		drv->states[0].target_residency = 1;
+   336		drv->states[0].power_usage = UINT_MAX;
+   337		strcpy(drv->states[0].name, "WFI");
+   338		strcpy(drv->states[0].desc, "RISC-V WFI");
+   339	
+   340		/*
+   341		 * If no DT idle states are detected (ret == 0) let the driver
+   342		 * initialization fail accordingly since there is no reason to
+   343		 * initialize the idle driver if only wfi is supported, the
+   344		 * default archictectural back-end already executes wfi
+   345		 * on idle entry.
+   346		 */
+   347		ret = dt_init_idle_driver(drv, sbi_cpuidle_state_match, 1);
+   348		if (ret <= 0) {
+   349			pr_debug("HART%ld: failed to parse DT idle states\n",
+ > 350				 cpuid_to_hartid_map(cpu));
+   351			return ret ? : -ENODEV;
+   352		}
+   353		state_count = ret + 1; /* Include WFI state as well */
+   354	
+   355		/* Initialize idle states from DT. */
+   356		ret = sbi_cpuidle_dt_init_states(dev, drv, cpu, state_count);
+   357		if (ret) {
+   358			pr_err("HART%ld: failed to init idle states\n",
+   359			       cpuid_to_hartid_map(cpu));
+   360			return ret;
+   361		}
+   362	
+   363		ret = cpuidle_register(drv, NULL);
+   364		if (ret)
+   365			goto deinit;
+   366	
+   367		cpuidle_cooling_register(drv);
+   368	
+   369		return 0;
+   370	deinit:
+   371		sbi_cpuidle_deinit_cpu(cpu);
+   372		return ret;
+   373	}
+   374	
+
 ---
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fb18ce7168aa..0410054a7bf5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1075,6 +1075,14 @@ L:	linux-media@vger.kernel.org
- S:	Maintained
- F:	drivers/media/i2c/ad9389b*
- 
-+ANALOG DEVICES INC ADA4250 DRIVER
-+M:	Antoniu Miclaus <antoniu.miclaus@analog.com>
-+L:	linux-iio@vger.kernel.org
-+S:	Supported
-+W:	https://ez.analog.com/linux-software-drivers
-+F:	Documentation/devicetree/bindings/iio/amplifiers/adi,ada4250.yaml
-+F:	drivers/iio/amplifiers/ada4250.c
-+
- ANALOG DEVICES INC ADGS1408 DRIVER
- M:	Mircea Caprioru <mircea.caprioru@analog.com>
- S:	Supported
--- 
-2.35.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

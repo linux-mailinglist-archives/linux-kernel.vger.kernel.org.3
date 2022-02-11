@@ -2,114 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732F84B1F3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 08:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F624B1F43
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 08:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347675AbiBKHTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 02:19:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40456 "EHLO
+        id S1347683AbiBKHYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 02:24:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbiBKHTg (ORCPT
+        with ESMTP id S235819AbiBKHYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 02:19:36 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3EE410A4;
-        Thu, 10 Feb 2022 23:19:35 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id fy20so20745549ejc.0;
-        Thu, 10 Feb 2022 23:19:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Eyr+k5MIXDuO745m6jwHbykSM9pTm41Qg3KUng2I5bA=;
-        b=G64W731dlvyWLNkI7Hd4YwwJv6RNWFQXlxlBKNz1K7j46nVxu3h92y7bXJBvZ0aeNL
-         9YR/0rWt8HJ2hTy6eb2xFiW+dV/CDnuYkEVDD7pRYxnZKGk0ZCgkwSfB6z6G4ulFC6GN
-         eqQIjAASDWshS4cRIQZSZh6Fx+uGvc8WA1mgNiynj9jf6xfPmuTx3Dk+X0ZSHCsN2nHY
-         M7y3igGjZQ1QzuiGoQg4+ZiNvuAidJ58eqtKAcfEwjDzlUTbMpbBLffkiPkIyUwmNBrQ
-         lX2rm2nTFoMtZ1IutWKvpAPwW1RC1l/9Wl2Isde1Xvd6lFyUypLF7urSprFThc57kvRB
-         nGnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Eyr+k5MIXDuO745m6jwHbykSM9pTm41Qg3KUng2I5bA=;
-        b=Xlmn22SxOEgBO36YiBPgQxU/Uh0M7gbMNh7R4S7uXqweJ1eJbbbrF4dEH6ZZbd5n6Z
-         PPGuBAsS3sILDnvG5AH6KQPn84knDkK1nIiz2gsY1C5cwPvlG6rLsnuNxNV+L9wCnKOi
-         RPoj9omYJ3Pz5U3BDEDnkxdqOaVk7eAjoqMxxcYqkjEdYBem8EPF2V+GUNpy+Y/mYGxT
-         owu8GSCSAe+nnIzRJDHGIDQHZU3mEmM0I4lO+ko1JUrvPngw8FvTLR6IcDZ9nyH2KJ5W
-         xSp1yC1T+5MqN6uaVNfemEcjxq8aT57mMjCuDIwXUDoVtBieyKE2wAFAQZytf4uuvNak
-         s7bw==
-X-Gm-Message-State: AOAM530ip5j3YhggYg9i9QZpVAzDwpvy6WNYB8+iMi5ieXj8eLsTi/96
-        r1I3yY1Nro0dp9bAixq9cZeEQ3Vai6Nl1XgKV1E=
-X-Google-Smtp-Source: ABdhPJytMGOwVYbNRUat6pl2WpmZXfQRsKhLuWHbdL37IA1eTf3GybFocliDjiRWE5Y0jjF2JjV7RhOpA8yeSWRSqK4=
-X-Received: by 2002:a17:906:5d0a:: with SMTP id g10mr252126ejt.595.1644563974461;
- Thu, 10 Feb 2022 23:19:34 -0800 (PST)
-MIME-Version: 1.0
-References: <20220210172246.27871-1-hnagalla@ti.com>
-In-Reply-To: <20220210172246.27871-1-hnagalla@ti.com>
-From:   Christian Gmeiner <christian.gmeiner@gmail.com>
-Date:   Fri, 11 Feb 2022 08:19:23 +0100
-Message-ID: <CAH9NwWes070Z+VmpfvkUfx+vGn_41H_Ps2960uaktJkyXPrWuQ@mail.gmail.com>
-Subject: Re: [PATCH v1] arm64: dts: ti: k3-am64: Add ESM0 to device memory map
-To:     Hari Nagalla <hnagalla@ti.com>
-Cc:     devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tero Kristo <kristo@kernel.org>
+        Fri, 11 Feb 2022 02:24:52 -0500
+Received: from out199-10.us.a.mail.aliyun.com (out199-10.us.a.mail.aliyun.com [47.90.199.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559F6B3D
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 23:24:51 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R541e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V47qv8-_1644564287;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V47qv8-_1644564287)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 11 Feb 2022 15:24:47 +0800
+Message-ID: <1644564073.3777697-1-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH v4 14/14] virtio_pci: queue_reset: support VIRTIO_F_RING_RESET
+Date:   Fri, 11 Feb 2022 15:21:13 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+References: <20220209122901.51790-1-xuanzhuo@linux.alibaba.com>
+ <20220209122901.51790-15-xuanzhuo@linux.alibaba.com>
+ <8b0b5f06-74eb-d6cb-07e2-38249e4cda92@redhat.com>
+In-Reply-To: <8b0b5f06-74eb-d6cb-07e2-38249e4cda92@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
-
-Am Do., 10. Feb. 2022 um 18:30 Uhr schrieb Hari Nagalla <hnagalla@ti.com>:
+On Fri, 11 Feb 2022 15:05:40 +0800, Jason Wang <jasowang@redhat.com> wrote:
 >
-> AM64x SoCs have two ESM modules, with one in MAIN voltage domain and the
-> other in MCU voltage domain. The error output from Main ESM module can
-> be routed to the MCU ESM module. The error output of MCU ESM can be
-> configured to reset the device. The MCU ESM configuration address space
-> is already opened and this patch opens the MAIN ESM configuration
-> address space.
+> =E5=9C=A8 2022/2/9 =E4=B8=8B=E5=8D=888:29, Xuan Zhuo =E5=86=99=E9=81=93:
+> > This patch implements virtio pci support for QUEUE RESET.
+> >
+> > Performing reset on a queue is divided into these steps:
+> >
+> > 1. reset_vq: reset one vq
+> > 2. recycle the buffer from vq by virtqueue_detach_unused_buf()
+> > 3. release the ring of the vq by vring_release_virtqueue()
+> > 4. enable_reset_vq: re-enable the reset queue
+> >
+> > This patch implements reset_vq, enable_reset_vq in the pci scenario
+> >
+> > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> > ---
+> >   drivers/virtio/virtio_pci_common.c |  8 +--
+> >   drivers/virtio/virtio_pci_modern.c | 80 ++++++++++++++++++++++++++++--
+> >   drivers/virtio/virtio_ring.c       |  2 +
+> >   include/linux/virtio.h             |  1 +
+> >   4 files changed, 85 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio=
+_pci_common.c
+> > index cb01eb0cb2e4..303637ac4914 100644
+> > --- a/drivers/virtio/virtio_pci_common.c
+> > +++ b/drivers/virtio/virtio_pci_common.c
+> > @@ -255,9 +255,11 @@ static void vp_del_vq(struct virtqueue *vq)
+> >   	struct virtio_pci_vq_info *info =3D vp_dev->vqs[vq->index];
+> >   	unsigned long flags;
+> >
+> > -	spin_lock_irqsave(&vp_dev->lock, flags);
+> > -	list_del(&info->node);
+> > -	spin_unlock_irqrestore(&vp_dev->lock, flags);
+> > +	if (!vq->reset) {
+> > +		spin_lock_irqsave(&vp_dev->lock, flags);
+> > +		list_del(&info->node);
+> > +		spin_unlock_irqrestore(&vp_dev->lock, flags);
+> > +	}
+> >
+> >   	vp_dev->del_vq(info);
+> >   	kfree(info);
+> > diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio=
+_pci_modern.c
+> > index d29d40bf0b45..cc45515eda50 100644
+> > --- a/drivers/virtio/virtio_pci_modern.c
+> > +++ b/drivers/virtio/virtio_pci_modern.c
+> > @@ -34,6 +34,9 @@ static void vp_transport_features(struct virtio_devic=
+e *vdev, u64 features)
+> >   	if ((features & BIT_ULL(VIRTIO_F_SR_IOV)) &&
+> >   			pci_find_ext_capability(pci_dev, PCI_EXT_CAP_ID_SRIOV))
+> >   		__virtio_set_bit(vdev, VIRTIO_F_SR_IOV);
+> > +
+> > +	if (features & BIT_ULL(VIRTIO_F_RING_RESET))
+> > +		__virtio_set_bit(vdev, VIRTIO_F_RING_RESET);
+> >   }
+> >
+> >   /* virtio config->finalize_features() implementation */
+> > @@ -176,6 +179,70 @@ static void vp_reset(struct virtio_device *vdev)
+> >   	vp_disable_cbs(vdev);
+> >   }
+> >
+> > +static int vp_modern_reset_vq(struct virtqueue *vq)
+> > +{
+> > +	struct virtio_pci_device *vp_dev =3D to_vp_device(vq->vdev);
+> > +	struct virtio_pci_modern_device *mdev =3D &vp_dev->mdev;
+> > +	struct virtio_pci_vq_info *info;
+> > +	unsigned long flags;
+> > +	u16 msix_vec;
+> > +
+> > +	if (!virtio_has_feature(vq->vdev, VIRTIO_F_RING_RESET))
+> > +		return -ENOENT;
+> > +
+> > +	vp_modern_set_queue_reset(mdev, vq->index);
+> > +
+> > +	info =3D vp_dev->vqs[vq->index];
+> > +	msix_vec =3D info->msix_vector;
+> > +
+> > +	/* Disable VQ callback. */
+> > +	if (vp_dev->per_vq_vectors && msix_vec !=3D VIRTIO_MSI_NO_VECTOR)
+> > +		disable_irq(pci_irq_vector(vp_dev->pci_dev, msix_vec));
 >
-> For ESM details please refer technical reference manual at
-> https://www.ti.com/lit/pdf/spruim2
 >
-> Signed-off-by: Hari Nagalla <hnagalla@ti.com>
+> I think we need a comment to explain why per_vq_mode needs to be dealt
+> with differently.
 
-Reviewed-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+OK.
 
-> ---
->  arch/arm64/boot/dts/ti/k3-am64.dtsi | 1 +
->  1 file changed, 1 insertion(+)
 >
-> diff --git a/arch/arm64/boot/dts/ti/k3-am64.dtsi b/arch/arm64/boot/dts/ti/k3-am64.dtsi
-> index 120974726be8..0622a93ec136 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am64.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am64.dtsi
-> @@ -66,6 +66,7 @@
->                 #address-cells = <2>;
->                 #size-cells = <2>;
->                 ranges = <0x00 0x000f4000 0x00 0x000f4000 0x00 0x000002d0>, /* PINCTRL */
-> +                        <0x00 0x00420000 0x00 0x00420000 0x00 0x00001000>, /* ESM0 */
->                          <0x00 0x00600000 0x00 0x00600000 0x00 0x00001100>, /* GPIO */
->                          <0x00 0x00a40000 0x00 0x00a40000 0x00 0x00000800>, /* Timesync router */
->                          <0x00 0x01000000 0x00 0x01000000 0x00 0x02330400>, /* First peripheral window */
-> --
-> 2.17.1
 >
+> > +
+> > +	/* delete vq */
+> > +	spin_lock_irqsave(&vp_dev->lock, flags);
+> > +	list_del(&info->node);
+> > +	spin_unlock_irqrestore(&vp_dev->lock, flags);
+>
+>
+> So I don't see where vring is freed and vp_setup_vq() may try to
+> allocate new memory, won't it be a memory leak in this case?
 
+1. reset_vq: reset one vq
+2. recycle the buffer from vq by virtqueue_detach_unused_buf()
+3. release the ring of the vq by vring_release_virtqueue()
+4. enable_reset_vq: re-enable the reset queue
 
--- 
-greets
---
-Christian Gmeiner, MSc
+vring_release_virtqueue() (#8 patch) will release the vring.
+That is called by the driver.
 
-https://christian-gmeiner.info/privacypolicy
+I think I should add a check to vp_modern_enable_reset_vq() that
+vring_release_virtqueue() has already been called.
+
+Thanks
+
+>
+> Thanks
+>
+>
+> > +
+> > +	vq->reset =3D true;
+> > +
+> > +	INIT_LIST_HEAD(&info->node);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int vp_modern_enable_reset_vq(struct virtqueue *vq, u16 ring_nu=
+m)
+> > +{
+> > +	struct virtio_pci_device *vp_dev =3D to_vp_device(vq->vdev);
+> > +	struct virtio_pci_modern_device *mdev =3D &vp_dev->mdev;
+> > +	struct virtio_pci_vq_info *info;
+> > +	struct virtqueue *_vq;
+> > +	u16 msix_vec;
+> > +
+> > +	if (!vq->reset)
+> > +		return -EPERM;
+> > +
+> > +	/* check queue reset status */
+> > +	if (vp_modern_get_queue_reset(mdev, vq->index) !=3D 1)
+> > +		return -EBUSY;
+> > +
+> > +	info =3D vp_dev->vqs[vq->index];
+> > +	_vq =3D vp_setup_vq(vq->vdev, vq->index, NULL, NULL, NULL,
+> > +			 info->msix_vector, ring_num);
+> > +	if (IS_ERR(_vq)) {
+> > +		vq->reset =3D true;
+> > +		return PTR_ERR(_vq);
+> > +	}
+> > +
+> > +	vp_modern_set_queue_enable(&vp_dev->mdev, vq->index, true);
+> > +
+> > +	msix_vec =3D vp_dev->vqs[vq->index]->msix_vector;
+> > +	if (vp_dev->per_vq_vectors && msix_vec !=3D VIRTIO_MSI_NO_VECTOR)
+> > +		enable_irq(pci_irq_vector(vp_dev->pci_dev, msix_vec));
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >   static u16 vp_config_vector(struct virtio_pci_device *vp_dev, u16 vec=
+tor)
+> >   {
+> >   	return vp_modern_config_vector(&vp_dev->mdev, vector);
+> > @@ -231,10 +298,13 @@ static struct virtqueue *setup_vq(struct virtio_p=
+ci_device *vp_dev,
+> >   				virtqueue_get_avail_addr(vq),
+> >   				virtqueue_get_used_addr(vq));
+> >
+> > -	vq->priv =3D (void __force *)vp_modern_map_vq_notify(mdev, index, NUL=
+L);
+> >   	if (!vq->priv) {
+> > -		err =3D -ENOMEM;
+> > -		goto err_map_notify;
+> > +		vq->priv =3D (void __force *)vp_modern_map_vq_notify(mdev, index,
+> > +								   NULL);
+> > +		if (!vq->priv) {
+> > +			err =3D -ENOMEM;
+> > +			goto err_map_notify;
+> > +		}
+>
+>
+> This seems unrelated or an artifact of previous patches?
+>
+> Thanks
+>
+>
+> >   	}
+> >
+> >   	if (msix_vec !=3D VIRTIO_MSI_NO_VECTOR) {
+> > @@ -402,6 +472,8 @@ static const struct virtio_config_ops virtio_pci_co=
+nfig_nodev_ops =3D {
+> >   	.set_vq_affinity =3D vp_set_vq_affinity,
+> >   	.get_vq_affinity =3D vp_get_vq_affinity,
+> >   	.get_shm_region  =3D vp_get_shm_region,
+> > +	.reset_vq	 =3D vp_modern_reset_vq,
+> > +	.enable_reset_vq =3D vp_modern_enable_reset_vq,
+> >   };
+> >
+> >   static const struct virtio_config_ops virtio_pci_config_ops =3D {
+> > @@ -420,6 +492,8 @@ static const struct virtio_config_ops virtio_pci_co=
+nfig_ops =3D {
+> >   	.set_vq_affinity =3D vp_set_vq_affinity,
+> >   	.get_vq_affinity =3D vp_get_vq_affinity,
+> >   	.get_shm_region  =3D vp_get_shm_region,
+> > +	.reset_vq	 =3D vp_modern_reset_vq,
+> > +	.enable_reset_vq =3D vp_modern_enable_reset_vq,
+> >   };
+> >
+> >   /* the PCI probing function */
+> > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > index b8747df8dc1f..4f6028e1e2d9 100644
+> > --- a/drivers/virtio/virtio_ring.c
+> > +++ b/drivers/virtio/virtio_ring.c
+> > @@ -1731,6 +1731,7 @@ static struct virtqueue *vring_create_virtqueue_p=
+acked(
+> >   	vq->vq.vdev =3D vdev;
+> >   	vq->vq.num_free =3D num;
+> >   	vq->vq.index =3D index;
+> > +	vq->vq.reset =3D false;
+> >   	vq->we_own_ring =3D true;
+> >   	vq->notify =3D notify;
+> >   	vq->weak_barriers =3D weak_barriers;
+> > @@ -2220,6 +2221,7 @@ static int __vring_init_virtqueue(struct virtqueu=
+e *_vq,
+> >   	vq->vq.vdev =3D vdev;
+> >   	vq->vq.num_free =3D vring.num;
+> >   	vq->vq.index =3D index;
+> > +	vq->vq.reset =3D false;
+> >   	vq->we_own_ring =3D false;
+> >   	vq->notify =3D notify;
+> >   	vq->weak_barriers =3D weak_barriers;
+> > diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+> > index dd1657c3a488..5d4817d79f3f 100644
+> > --- a/include/linux/virtio.h
+> > +++ b/include/linux/virtio.h
+> > @@ -32,6 +32,7 @@ struct virtqueue {
+> >   	unsigned int index;
+> >   	unsigned int num_free;
+> >   	void *priv;
+> > +	bool reset;
+> >   };
+> >
+> >   int virtqueue_add_outbuf(struct virtqueue *vq,
+>

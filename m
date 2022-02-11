@@ -2,122 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAFA94B21AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9CB4B21CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348447AbiBKJXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 04:23:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37588 "EHLO
+        id S232969AbiBKJZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 04:25:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242601AbiBKJXE (ORCPT
+        with ESMTP id S1348558AbiBKJZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 04:23:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15C22EBE
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:23:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644571383;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qo5tt7qfqFuuHdwxRe62Yd9mxK2KKNk3oIAuQuMoJM4=;
-        b=C34PYzMbNnAlfRQ/lVP4jXhOVSdCEBID+yOybRmtRfbkU5iqgm6USifdFHf6yE2+iTeamk
-        nd0zNFNlbXkGKqt3oyg1x6hBoSYNmPERuItnB2tqGTdKMtGOAkhu0NQy+NBIZww6yQJn5f
-        Agf7Uw6khAdiuu/DF1jtDuz+d/vQkHg=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-495-CNqavvkvMLKVlDk0G_6Zwg-1; Fri, 11 Feb 2022 04:23:02 -0500
-X-MC-Unique: CNqavvkvMLKVlDk0G_6Zwg-1
-Received: by mail-wr1-f69.google.com with SMTP id c9-20020adfa709000000b001dde29c3202so3630856wrd.22
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:23:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Qo5tt7qfqFuuHdwxRe62Yd9mxK2KKNk3oIAuQuMoJM4=;
-        b=KNFcAonwrFgWcyG28zSuPMnv4ff9ijcejvobxOON+euY9mKQnuzRM7zKgr3hC14tSB
-         dcJgXgfJkQC1cOBYNiKHdI8QvW3pKLDbnCOp2f06sF+Owzh7L8MsoTHaBvrNVRaqR+zz
-         k/xiM1hoBd8zYNiUzP5hLxZOtrirPAOYNj0SB4e3+rqgagkt3uEZh5dTJvrxs5nvL4Mt
-         +LZlK0T2pLQnge1gY5UxN//cnAexXLnZ+Wp5dRDM9KNtpytrBmRHsGCKRN/JoEHnE6T3
-         6X0gM4PJwXawdz/9Z4zfdkABnzguEl1jATAxf/keGMUUZWd9qilHgfJGnGRbtQBgwP7v
-         EtZg==
-X-Gm-Message-State: AOAM532U9ftXkw8gBch1qOTcvWjoMTcyrlPtBD5aYcfHxcmAk+INBKkz
-        fduxS0//r2r+TlxRn5kVKsa/8DojreyG/eTDLrG7ZKS29pr/ziXBDaWCdNeQdY3Zndltu5b6+Dv
-        2L4KHVSz6mJVjCU3Su1BHuJX54rWCoHosXb2AbVj/nQMOBkrgjLSkBlfNXg2tYELMZyS60H8xYa
-        w=
-X-Received: by 2002:a5d:4910:: with SMTP id x16mr617234wrq.360.1644571381021;
-        Fri, 11 Feb 2022 01:23:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwQmkhSio3XmknDv+U+BFj72PJlq29Q9DPCbv2FXY27W3811LtmWuIDulWlfqEUKhTodynTLQ==
-X-Received: by 2002:a5d:4910:: with SMTP id x16mr617195wrq.360.1644571380540;
-        Fri, 11 Feb 2022 01:23:00 -0800 (PST)
-Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id q76sm3795124wme.1.2022.02.11.01.22.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 01:23:00 -0800 (PST)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Sam Ravnborg <sam@ravnborg.org>, Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 6/6] dt-bindings: display: ssd1307fb: Add myself as binding co-maintainer
-Date:   Fri, 11 Feb 2022 10:22:53 +0100
-Message-Id: <20220211092253.2988843-1-javierm@redhat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220211091927.2988283-1-javierm@redhat.com>
-References: <20220211091927.2988283-1-javierm@redhat.com>
+        Fri, 11 Feb 2022 04:25:04 -0500
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA90A1093;
+        Fri, 11 Feb 2022 01:24:59 -0800 (PST)
+Received: from localhost.localdomain ([81.221.85.15]) by mrelay.perfora.net
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MC3mA-1nRDZx0FBw-008rrY;
+ Fri, 11 Feb 2022 10:23:45 +0100
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Marek Vasut <marek.vasut@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Adam Ford <aford173@gmail.com>,
+        Alex Marginean <alexandru.marginean@nxp.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chester Lin <clin@suse.com>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Heiko Thiery <heiko.thiery@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Li Yang <leoyang.li@nxp.com>, Lucas Stach <dev@lynxeye.de>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Marek Vasut <marex@denx.de>, Martin KaFai Lau <kafai@fb.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        =?UTF-8?q?Oliver=20St=C3=A4bler?= <oliver.staebler@bytesatwork.ch>,
+        Olof Johansson <olof@lixom.net>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Will Deacon <will@kernel.org>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v6 00/12] arm64: prepare and add verdin imx8m mini support
+Date:   Fri, 11 Feb 2022 10:23:10 +0100
+Message-Id: <20220211092322.287487-1-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:7w5KYRKknb7BBDzPYukxiHh8yFyZKgSG9xwi/4LCD9cxSfbNnZA
+ pfVIg4x+OjCZx3OYYTUpS6Ejdg9I9y4pr2HyC/rVjP61OSGk6rt7dyWNPa1Ec3I9gq4hH9c
+ WBxjo38Xg2mDpcIYgotq/IFKwqAp+RO5dH87WVRDEosKjQ1tkRyvsYAQeSaIYX0gFNMxyvi
+ 15bzF8L66zXSbWXRNKQCQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+ZUf9f1Mwk8=:u9ps+IeiHfrybGOvLWFmoB
+ qCHNyq8RF3QcHEwb1bmLNJS6CJZo3E9srdgqdWb7+Gi9wo/kH9YXBOkUbCqKZdWIrTT/IyqpS
+ C8QKNB4Y43mEVPDErQtvunEo/TGVPsCSzO73Ma/eCnjBaZRs95bxGMZXljRIMpZKpj2Tookix
+ i3KIe+8zJIDcAzw3baoDW2X/9p5syEyr2tJZotYEvHez0VEeegS856rhEf1WUQfmd9ZZ22G1S
+ OOmOWrt1xMVE3+j55BuLUZ8POsOxXUJPe5qYK7g9YgddkR1++wLN5+pW6kVlh2nByY4+58V/7
+ Jgzzbgs4CdaqNWSJjuWbwCQ591QJqqzq9PR1HnArCVuKQei6GRWv7n9ZkgBAZce8YzN49pOm0
+ azE/oBUCsxCO5SFrRjGhson2+mVn71sPFmWXXO1am6D6O6qeyatQB58PtnE9p+NVcAG/e33nC
+ pqOQry9EZLN+dhmUl22glExsxQSnsSiPj6srwHMs60zm7QeUgKocoJh7/mafacGEziZkoWrn3
+ AWmzhOXPoTxSDykEfaVf8pg4tOO2pgXAqgz4A4Bg2NYy59cQstPczuiOlxLNnxospnQwoKPWo
+ 64GVk6UmmnL/HDFpnUCYbCR5nXNn/Ao4IHe8OKPm0Th33BeN+2IMe/+Sd1n0MetPAy9NoBT1g
+ pyQNy++Veq9u8y2jgVoLFyW2QZgPu3rtFhaXOR4cHaREo4CjLVP3yoZFsrCR2E+0U0XA=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ssd130x DRM driver also makes use of this Device Tree binding to allow
-existing users of the fbdev driver to migrate without the need to change
-their Device Trees.
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Add myself as another maintainer of the binding, to make sure that I will
-be on Cc when patches are proposed for it.
 
-Suggested-by: Sam Ravnborg <sam@ravnborg.org>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Acked-by: Rob Herring <robh@kernel.org>
----
+Fix strange hex notation and gpio-hog example, rebuild default
+configuration, enable various relevant configuration options mainly to
+be built as modules, add toradex,verdin-imx8mm et al. to dt-bindings and
+finally, add initial support for Verdin iMX8M Mini.
+
+Changes in v6:
+- Rename codec to audio-codec.
+- Put status property last.
+Thanks, Shawn for reviewing and pointing those out!
+
+Changes in v5:
+- Add Rob's ack.
+- Remove invalid wifi-host property.
+- Remove rpmsg_reserved from the NXP vendor BSP not applicable upstream.
+- Remove 2nd cs-gpio only going to an N/A component.
+- Remove spi-num-chipselects as it is implicit by cs-gpios.
+- Remove vbus-wakeup-supply not being a valid property.
+- Fix picophy,dc-vol-level-adjust and picophy,pre-emp-curr-control which
+  upstream are rather called samsung,picophy-dc-vol-level-adjust resp.
+  samsung,picophy-pre-emp-curr-control.
+Thanks, Fabio for reviewing and pointing those out!
 
 Changes in v4:
-- Add Rob Herring Acked-by tag to patch adding as DT binding co-maintainer.
+- Re-base on top of Shawn's for-next branch.
+- Fix gpio-line-names taking V1.1 re-design into account.
+- Fix wrong SODIMM pin number.
+- Drop 2nd SPI CAN instance being N/A in all SKUs.
+
+Changes in v3:
+- Add Krzysztof's reviewed-by tag.
+- Add Krzysztof's reviewed-by tag.
+- New separate patch only for re-ordering as suggested by Krzysztof.
+- Not dropping CONFIG_SECCOMP=y, CONFIG_SLIMBUS=m, CONFIG_INTERCONNECT=y
+  and CONFIG_CONFIGFS_FS=y as requested by Krzysztof.
+- Add Krzysztof's reviewed-by tag.
+- New patch enabling imx8m pcie phy driver in arm64 defconfig.
+- Add Krzysztof's reviewed-by tag.
+- Add Krzysztof's reviewed-by tag.
+- Rebase on top of shawnguo's for-next.
+- Drop [PATCH v2 02/11] ("dt-bindings: gpio: fix gpio-hog example") as
+  it already got applied by Bart.
+- Remove the 'pm-ignore-notify' property analogous to commit aafac22d6b23
+  ("arm64: dts: imx8mm/n: Remove the 'pm-ignore-notify' property").
+- Now with PCIe support finally having landed in -next enable it as well.
+- Add Krzysztof's acked-by tag.
 
 Changes in v2:
-- Add myself as co-maintainer of the ssd1370fb DT binding (Sam Ravnborg).
+- Add Laurent's reviewed-by tag.
+- New patch following full defconfig analysis as requested by Krzysztof.
+- New patch following full defconfig analysis as requested by Krzysztof.
+- Done full defconfig analysis as requested by Krzysztof.
+- Add Song's acked-by tag.
+- A similar change got accepted for imx_v6_v7_defconfig. Further
+  discussion may be found in [1].
+[1] https://lore.kernel.org/lkml/20210920144938.314588-6-marcel@ziswiler.com/
+- Explain why enabling it may be a good idea as requested by Krzysztof.
+- Explain why enabling these may make sense and squash them relevant
+  changes as requested by Krzysztof.
+- Add Rob's acked-by tag.
+- Fix Colibri vs. Verdin copy/paste mistake. Thanks to Francesco Dolcini
+  <francesco.dolcini@toradex.com> for pointing that out to me.
+- Remove bootargs which will be filled in by the bootloader as requested
+  by Krzysztof.
+- Remove the previously #ifdefed-out spi-nor as requested by Krzysztof.
+- Fix capitalisation in cover-letter.
 
- Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Marcel Ziswiler (12):
+  arm64: dts: imx8mm: fix strange hex notation
+  arm64: defconfig: enable taskstats configuration
+  arm64: defconfig: enable pcieaer configuration
+  arm64: defconfig: re-order default configuration
+  arm64: defconfig: rebuild default configuration
+  arm64: defconfig: enable bpf/cgroup firewalling
+  arm64: defconfig: enable imx8m pcie phy driver
+  arm64: defconfig: build imx-sdma as a module
+  arm64: defconfig: build r8169 as a module
+  arm64: defconfig: enable verdin-imx8mm relevant drivers as modules
+  dt-bindings: arm: fsl: add toradex,verdin-imx8mm et al.
+  arm64: dts: freescale: add initial support for verdin imx8m mini
 
-diff --git a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-index 2ed2a7d0ca2f..9baafd0c42dd 100644
---- a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-+++ b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-@@ -8,6 +8,7 @@ title: Solomon SSD1307 OLED Controller Framebuffer
- 
- maintainers:
-   - Maxime Ripard <mripard@kernel.org>
-+  - Javier Martinez Canillas <javierm@redhat.com>
- 
- properties:
-   compatible:
+ .../devicetree/bindings/arm/fsl.yaml          |   21 +
+ arch/arm64/boot/dts/freescale/Makefile        |    4 +
+ .../arm64/boot/dts/freescale/imx8mm-pinfunc.h |    6 +-
+ .../dts/freescale/imx8mm-verdin-dahlia.dtsi   |  150 ++
+ .../boot/dts/freescale/imx8mm-verdin-dev.dtsi |   67 +
+ .../imx8mm-verdin-nonwifi-dahlia.dts          |   18 +
+ .../freescale/imx8mm-verdin-nonwifi-dev.dts   |   18 +
+ .../dts/freescale/imx8mm-verdin-nonwifi.dtsi  |   75 +
+ .../freescale/imx8mm-verdin-wifi-dahlia.dts   |   18 +
+ .../dts/freescale/imx8mm-verdin-wifi-dev.dts  |   18 +
+ .../dts/freescale/imx8mm-verdin-wifi.dtsi     |   94 ++
+ .../boot/dts/freescale/imx8mm-verdin.dtsi     | 1264 +++++++++++++++++
+ arch/arm64/configs/defconfig                  |  126 +-
+ 13 files changed, 1811 insertions(+), 68 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-dahlia.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-dev.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dahlia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dev.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dahlia.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dev.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
+
 -- 
-2.34.1
+2.33.1
 

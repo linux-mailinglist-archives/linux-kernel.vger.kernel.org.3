@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF3A74B2861
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 15:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A87024B286F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 15:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351076AbiBKOyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 09:54:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48726 "EHLO
+        id S1351098AbiBKOyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 09:54:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236601AbiBKOyn (ORCPT
+        with ESMTP id S1351092AbiBKOys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 09:54:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B4D131;
-        Fri, 11 Feb 2022 06:54:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E4B4B82A7B;
-        Fri, 11 Feb 2022 14:54:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9778FC340E9;
-        Fri, 11 Feb 2022 14:54:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644591280;
-        bh=bxAUhKGpof08/VSFAF/LODZ1CrGcjJunAUPVk+bKa1Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=C2yhIiXOQJRaIajP29LJOZGHUZ49NqmL5XSbf84yvJD0Cw2RNDpIGCzeh6pq/cxqX
-         uMjolHWJhWpBzvViLbTxleRtgSRANAN1ctsOwk806VP+3Sx/GqaykpD6jf5dDFbQGD
-         HJWdgA3AanLR6avnq77f2sQ8yMIizJCJW4CsjxGC+pF/oVUJ8aUS835nn5eyix7gsf
-         FIRqJFZtb/mfdN1fgHqd9D6ovpuzZbhGfFejkRBvi0WBh7FkoqCRHRoLGDtw+hhfgR
-         Hpa9+82grgIKShn00SCZvCnsCpRVfHQ2hBBiwrKffa++rXwr7RuAv4SakvArbBEnR2
-         thCnb2uM5iDFQ==
-Date:   Fri, 11 Feb 2022 14:54:33 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
-Cc:     lgirdwood@gmail.com, tiwai@suse.com, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, perex@perex.cz, p.zabel@pengutronix.de,
-        geert+renesas@glider.be, trevor.wu@mediatek.com,
-        tzungbi@google.com, zhangqilong3@huawei.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiaxin Yu <jiaxin.yu@mediatek.corp-partner.google.com>
-Subject: Re: [PATCH 01/15] ASoC: mediatek: mt6366: add codec driver
-Message-ID: <YgZ4qdYWeAutC2Jo@sirena.org.uk>
-References: <20220211103818.8266-1-jiaxin.yu@mediatek.com>
- <20220211103818.8266-2-jiaxin.yu@mediatek.com>
+        Fri, 11 Feb 2022 09:54:48 -0500
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD5E131;
+        Fri, 11 Feb 2022 06:54:45 -0800 (PST)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id E459C1C000C;
+        Fri, 11 Feb 2022 14:54:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1644591284;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/snWoyO1kCOhCBySz55Uo3NXloeQ7id88PKB2/aReeA=;
+        b=dfg7TkK0I/3exJfTOxYHVvr+fl22x+mJh10e7NYDZQrLuonafe07F0MGv4zTJwjUywdwFo
+        jszufveg/kUZOQseo7aSWH+ZDBcvBvoeUGIXooGkG9zRt7vZ4ZXkQXuyUEiJKBa3hL5v5z
+        VLjimiAl3xTxrobw3fTaaSlsB2FmK0aWuxFNKiErLGib6APgR2wqIuxyqMlNBE/CVJSVao
+        m5j1qNLRBIw+OhjrBFwakpt30YI4+kdgQ3oA9WZihYjswXyBWQznS97QrkPcL1aCexMaiY
+        RWHtH3TXANId8vXSxjIngtuLKGcITBqu8JEMrJhbgvQdBGniWJi2Q16d1PRMZg==
+Date:   Fri, 11 Feb 2022 15:54:42 +0100
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-gpio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH v10 2/6] dt-bindings: gpio: logicvc: Add a compatible
+ with major version only
+Message-ID: <YgZ4sj1o4WzMPd0P@aptenodytes>
+References: <20220120150024.646714-1-paul.kocialkowski@bootlin.com>
+ <20220120150024.646714-3-paul.kocialkowski@bootlin.com>
+ <CACRpkdbnEKeDNmFCuUCLaySs6AtD9MPtxV+9JDxKuXvTs9iMVQ@mail.gmail.com>
+ <6f0e58dc-4b81-d819-13e3-9e0f79ba279c@arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="QlW9pqOvflC+sGV2"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="fi4rh3UJ303yTdHr"
 Content-Disposition: inline
-In-Reply-To: <20220211103818.8266-2-jiaxin.yu@mediatek.com>
-X-Cookie: do {
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <6f0e58dc-4b81-d819-13e3-9e0f79ba279c@arm.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,43 +64,110 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---QlW9pqOvflC+sGV2
-Content-Type: text/plain; charset=us-ascii
+--fi4rh3UJ303yTdHr
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 11, 2022 at 06:38:04PM +0800, Jiaxin Yu wrote:
+Hi,
 
-> Mt6366 is a new version of mt6358, and they are same about audio part.
-> So we can reuse the driver of mt6358.
+On Wed 02 Feb 22, 14:26, Robin Murphy wrote:
+> On 2022-01-30 00:46, Linus Walleij wrote:
+> > On Thu, Jan 20, 2022 at 4:00 PM Paul Kocialkowski
+> > <paul.kocialkowski@bootlin.com> wrote:
+> >=20
+> > > There are lots of different versions of the logicvc block and it
+> > > makes little sense to list them all in compatibles since all versions
+> > > with the same major are found to be register-compatible.
+> >=20
+> > The reason we try to be precise is because sometime, long after the dri=
+ver
+> > has been merged and maintained for a few years, a bug is discovered
+> > in a specific version of the silicon.
+> >=20
+> > What happens is that a fix is applied on all silicon whether it is need=
+ed
+> > or not.
+> >=20
+> > If you have the precise silicon compatible, you can avoid this and targ=
+et
+> > only a specific version.
+>=20
+> Indeed, the better approach would be something like:
+>=20
+>   compatible:
+>     oneOf:
+>       - items:
+>           - enum:
+>               - foo,bar-v1.0
+>               - foo,bar,v1.1
+>           - const: foo,bar-v1
+>       - items:
+>           - enum:
+>               - foo,bar-v2.0
+>           - const: foo,bar-v2
+>=20
+> That way the DTs are future-proof, while drivers can still match on only =
+the
+> less-specific strings until a need arises. Plus it avoids the problem that
+> if an existing OS that only understands "foo,bar-v1.0" is given a new DT
+> with only "foo,bar-v1" for v1.0 hardware it won't be able to use the devi=
+ce,
+> even though it's *functionally* capable of doing so.
 
->  snd-soc-mt6359-accdet-objs := mt6359-accdet.o
-> +snd-soc-mt6366-objs := mt6358.o
->  snd-soc-mt6660-objs := mt6660.o
->  snd-soc-nau8315-objs := nau8315.o
->  snd-soc-nau8540-objs := nau8540.o
-> @@ -465,6 +466,7 @@ obj-$(CONFIG_SND_SOC_MT6351)	+= snd-soc-mt6351.o
->  obj-$(CONFIG_SND_SOC_MT6358)	+= snd-soc-mt6358.o
->  obj-$(CONFIG_SND_SOC_MT6359)	+= snd-soc-mt6359.o
->  obj-$(CONFIG_SND_SOC_MT6359_ACCDET) += mt6359-accdet.o
-> +obj-$(CONFIG_SND_SOC_MT6366)	+= snd-soc-mt6366.o
+Yes I understand that we need to keep compatibility with the already-defined
+compatible.
 
-Why build a separate module here?  That'll just make the binary larger
-but not otherwise do anything.  Usually we'd just add a new ID to the
-existing driver.
+> However, from skimming patch #5, it looks possible that none of these
+> changes are needed at all. If LOGICVC_IP_VERSION_REG tells you the exact
+> revision, and is always present (as the unconditional reading of it
+> implies), then the only reason for adding new compatibles would be if, sa=
+y,
+> v5 has more clocks from v4 and you want the binding to enforce that;
+> otherwise, newer versions are literally compatible with the
+> currently-defined binding and therefore should continue to bind against t=
+he
+> existing string(s) to maximise forward- and backward-compatibility. Sure,
+> it's not the prettiest thing for a "generic" compatible to be based on an
+> oddly-specific version number that doesn't necessarily match the actual
+> software-discoverable version, but what's done is done and that's the cost
+> of ABI.
 
---QlW9pqOvflC+sGV2
+Indeed it's true that hardware quirks can be applied based on the precise
+version read from the register, so I don't think there is a need for overly
+precise compatibles.
+
+Since the device-tree binding is currently the same for all versions,
+I understand that it makes sense to keep a single compatible (the already
+defined one), so I guess I will make another iteration without introducing
+new compatibles. But I will probably update the binding document to reflect
+which versions are currently known to work with its current state.
+
+> (also, nitpick for that part of patch #5 since I'm here: please include
+> linux/bitfield.h rather than reinventing FIELD_GET() locally)
+
+Ah good to know thanks, first time hearing about those.
+
+Paul
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--fi4rh3UJ303yTdHr
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIGeKgACgkQJNaLcl1U
-h9DIMwf+Pw2HnVc26RpFgDOHvR1H5BYRLyHgSJCd6JQpE2TKhMORPogTaAy1fbkv
-Z5OLAx1KFg8nMeSJuCXzny8VmMmY+MLyp4c8kuIdowe+ClR9PrF0XkA+IOLy/eLJ
-GF6OxinUeozGJ2rjC58quKQ0cW187ZimFRHTnD7oMDvFI8o9utLHA1Uu7/qQEHDC
-J7jBMlvxGdd+rXgKTC7qcL2tFsoUT4VXcTugl3snvv6NqoKw+oAbDKzDKCCfBJRh
-nWFWTgMaFIF2GLUoWUP2Z/s42wATKLOBpA0HrwxK8dAx3Q7rvLNLROLlr7efJ9Ou
-DXPbM6WV2+luGql1tBWKti715JibHQ==
-=+wGZ
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIGeLIACgkQ3cLmz3+f
+v9Fovwf9FazGyUpB/nAwH7VeTeXwajEB0NHvM9mlYAMba4/aI1h1YN7YzzP6bCm6
+xHVZg35DyCEzdwgDdrqhskFL94mRN43XIsu4a6tZhdJ38uqXAu91O/bjQDaNu4zM
+h37R+IAlna1D/+O9iiwQ/46t0mdI1kRmsgNcrMwG1ERdMQs7o2tZAupPuhHHioZk
+dPwBHCMAJkljVgzf80BgtFuNXglYHp8sunbv05NtodkFLZ/mAANkyRqq9IztJR3D
+Myu/D9/AZjU/57KFg3vuveYoMs3PJrPV0No5pgZX2HP0SJwVL9zmLj43L5K2POdK
+2LJbjDIKaSkNQ0iJE55P1Qzmqmb7Tg==
+=9Gbl
 -----END PGP SIGNATURE-----
 
---QlW9pqOvflC+sGV2--
+--fi4rh3UJ303yTdHr--

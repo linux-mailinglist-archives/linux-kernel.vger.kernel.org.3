@@ -2,84 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F844B2BE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F3E4B2BE7
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352231AbiBKRhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 12:37:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55210 "EHLO
+        id S1352272AbiBKRiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 12:38:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245333AbiBKRhe (ORCPT
+        with ESMTP id S1344286AbiBKRiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 12:37:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42703392
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:37:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644601052;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Lb+5m3UkvEcY0i6pZfp3uff/KtF/0biJeSNgO+ZhLKc=;
-        b=B2a7BOywXMwk5FHx9FLZrFWHH9xc11A656TSlLqDMoJqyyIWNpGLfV+HVNYYxshThYT2CS
-        /yA1WR2lZEDrPa9zcnly4KcUZc6uE3eUiEcg0CrUw6t3qcCom4wSWTXEBeBNJUVMs67MsP
-        zjyX3gyj6TePjPXdL8aMKdZuiGG2t3Q=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-663-Mcb-mSvsObWkYov-5woBWg-1; Fri, 11 Feb 2022 12:37:31 -0500
-X-MC-Unique: Mcb-mSvsObWkYov-5woBWg-1
-Received: by mail-ej1-f69.google.com with SMTP id mp5-20020a1709071b0500b0069f2ba47b20so4346567ejc.19
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:37:31 -0800 (PST)
+        Fri, 11 Feb 2022 12:38:11 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3830EB85
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:38:10 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id v13-20020a17090ac90d00b001b87bc106bdso12533810pjt.4
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:38:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=31WXEtNem9gDE7QTRA9SonhwVjBCyz+p2rqK3D2sGGU=;
+        b=dU/3B4Fo9darPqSSrUz1zLT1vpNqKT1vkn7X+utRHFkgIQOezdeVsoWlYRswUNXQj5
+         I/NAwe1wD2B3R3oHMsjLCkiTKtISujMdurYNpAtsaZ3trY8Hzp8jpeuGvouwPt5+60mw
+         XVhcPtDi/7CWNQfs6h9DbfZhSSe1Z0TzQXUfx7m7tEM8fgiCQDYpdFr9usq3zgW6dQ/h
+         9KL292gK1YoVlSOkZ/RJAERpO4osrFj30RGaFIK5IrUuaBZ0ZWmcfNigR4L4mZP5hkIw
+         EwClZJaztQsZnZy72gYVCjvAQTp4k55ZXZd8CZc0oLPPbCDOkM9EaF7luXbkf9wPSEWn
+         NuAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Lb+5m3UkvEcY0i6pZfp3uff/KtF/0biJeSNgO+ZhLKc=;
-        b=Bh9Odc145+JcBhvJIDRLSbBscGut64eDSplzmjrPSwBM12hJVQ9Iu53rBpynCW7lGl
-         NnqiE128DzddBEE5upnGEwhcV0x905t5wxx4nQA58zTe7EfTDsiJhHBVE5Y74sN9byQa
-         l4w1GrzpEs9hzk/42CvFLcO+MuwKRgqL6KwnPkczP3lNyUIlKgQAg6iNbpTrvlLNl3e+
-         M86tvRqffN6m6dN5Mfvqy2N7uUMRpEAU6exjrOv+TSNqkukbvnn4FIjmti3SiZt22JIu
-         Aex0ztpT6ToKp8+Ha0+6RKeJi2Zva0pBPEW5Qw52ePKUPtwElsFITOOc2bcrRmhaS03l
-         Yo5w==
-X-Gm-Message-State: AOAM532yansXVxjYbEcZUqZBGXLXxdvzKHiZelGwCVammMbT2sbQrQZ8
-        WRaZGe75y9oPE1IlxpW3xeKMHn3O/UcUviCeULwXWUeGDBgrqVqBncwJxtciJWcjDnZHOA4KSz5
-        vib9Cz7CBafnhDz9wF7ey/bw5
-X-Received: by 2002:a17:906:b116:: with SMTP id u22mr2339317ejy.427.1644601049749;
-        Fri, 11 Feb 2022 09:37:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJysRgOQX6h5hRe6xafAimOWoRs3+jppMqkGmJ61EpELY50wNI9nETyBQTfyjx9OM1/mztWdtg==
-X-Received: by 2002:a17:906:b116:: with SMTP id u22mr2339244ejy.427.1644601048751;
-        Fri, 11 Feb 2022 09:37:28 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id e4sm1062414ejm.116.2022.02.11.09.37.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Feb 2022 09:37:28 -0800 (PST)
-Message-ID: <e9f1166d-78a0-1806-42bb-03f2e1671128@redhat.com>
-Date:   Fri, 11 Feb 2022 18:37:24 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=31WXEtNem9gDE7QTRA9SonhwVjBCyz+p2rqK3D2sGGU=;
+        b=Dpyf64GY6w0r8Zeb0bNbu4+YLvd1DYmTPBiDaO8QYCr0D5BFEKuh3TM5dKIaT5NCd9
+         CREuHIOOEQx3CbzX+9IrktmpS1VaW+4XxlS1040ICWVYRhfiXeZis2CifKZ3xqEYJNg+
+         Uce7NSshH34bzXZ71HgvHwojMYXN9cTFUasWcJqTSCVrn/Df9/sKYAk+r+HbOAa8LjD1
+         BtszqlmHsnsebij1u0EW/iKCUjMJbu3X+5vJfD8gyOZlRqAT+EWRE674PTjGFlIlkKJk
+         XoMJ1YJ1IlsrjX8Xy1/BWzUfU1NFrSnMOBdH44y/zrxdHGKlujxoXWv8wJhuqeSxAw5M
+         uVoQ==
+X-Gm-Message-State: AOAM533ELeXklLYJGyD7aBJiBLtoiAldV89ev3w3DRyDGk/blUVnYo8F
+        47bYue6tI7/+bOrDUx6+eKSbIA==
+X-Google-Smtp-Source: ABdhPJxiTJxp7ZsT+fYmpI+xrlg9ysC/lAiYRtpL8wjjBFlEb4G5pawDR+vfltdYJpnkfKgT2tFv1g==
+X-Received: by 2002:a17:903:1108:: with SMTP id n8mr2626684plh.94.1644601089552;
+        Fri, 11 Feb 2022 09:38:09 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id y42sm27832633pfa.5.2022.02.11.09.38.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 09:38:08 -0800 (PST)
+Date:   Fri, 11 Feb 2022 17:38:05 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com
+Subject: Re: [PATCH 09/12] KVM: MMU: look for a cached PGD when going from
+ 32-bit to 64-bit
+Message-ID: <Ygae/V/UxD6axX2G@google.com>
+References: <20220209170020.1775368-1-pbonzini@redhat.com>
+ <20220209170020.1775368-10-pbonzini@redhat.com>
+ <YgW8ySdRSWjPvOQx@google.com>
+ <51fcfb88-417b-e638-78b7-bbca82d8bd8b@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V2] selftests: kvm: Remove absent target file
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Shuah Khan <shuah@kernel.org>, Peter Gonda <pgonda@google.com>
-Cc:     kernel@collabora.com, kernelci@groups.io,
-        "kernelci.org bot" <bot@kernelci.org>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220210172352.1317554-1-usama.anjum@collabora.com>
- <f9893f6a-b68b-e759-54f5-eef73e8a9eef@linuxfoundation.org>
- <eb4e24c6-41d0-4f3a-2af0-3008db408da6@redhat.com>
- <9198c43b-e5e2-fa58-5862-598dc7019ad6@linuxfoundation.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <9198c43b-e5e2-fa58-5862-598dc7019ad6@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <51fcfb88-417b-e638-78b7-bbca82d8bd8b@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,41 +75,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/11/22 18:34, Shuah Khan wrote:
-> On 2/10/22 11:56 AM, Paolo Bonzini wrote:
->> On 2/10/22 19:02, Shuah Khan wrote:
->>>
->>> I am fine with the change itself. For this patch:
->>>
->>> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
->>>
->>> However, are we missing a vmx_pi_mmio_test and that test needs to be 
->>> added.
->>>
->>> Just in case the test didn't make it into the 6a58150859fd and the 
->>> intent
->>> was to add it - hence the Makefile addition? This can be addressed in
->>> another patch. Just want to make sure we aren't missing a test.
->>
->> This was probably a rebase resolution issue.  The vmx_pi_mmio_test 
->> fails in the mainline tree, and is lingering in my tree together with 
->> the fix because somebody promised a better fix for it.  I included the 
->> TEST_GEN_PROGS_x86_64 line by mistake when rebasing Peter Gonda's test 
->> below vmx_pi_mmio_test.
->>
->> Thanks for the fix,
->>
->> Acked-by: Paolo Bonzini <pbonzini@redhat.com>
->>
+On Fri, Feb 11, 2022, Paolo Bonzini wrote:
+> On 2/11/22 02:32, Sean Christopherson wrote:
+> > Maybe cached_root_find_and_rotate() or cached_root_find_and_age()?
 > 
-> Paolo,
+> I'll go for cached_root_find_and_keep_current() and
+> cached_root_find_without_current(), respectively.
 > 
-> Thank you for explaining the discrepancy. Would you like take
-> this through your tree? This patch depends on
+> > 
+> > Hmm, while we're refactoring this, I'd really prefer we not grab vcpu->arch.mmu
+> > way down in the helpers.  @vcpu is needed only for the request, so what about
+> > doing this?
+> > 
+> > 	if (!fast_pgd_switch(vcpu, new_pgd, new_role)) {
+> > 		/*
+> > 		 * <whatever kvm_mmu_reload() becomes> will set up a new root
+> > 		 * prior to the next VM-Enter.  Free the current root if it's
+> > 		 * valid, i.e. if a valid root was evicted from the cache.
+> > 		 */
+> > 		if (VALID_PAGE(vcpu->arch.mmu->root.hpa))
+> > 			kvm_mmu_free_roots(vcpu, vcpu->arch.mmu, KVM_MMU_ROOT_CURRENT);
+> > 		return;
+> > 	}
 > 
-> commit: de1956f48543e90f94b1194395f33140898b39b2
+> I tried, but it's much easier to describe the cache functions if their
+> common postcondition is "vcpu->arch.mmu->root.hpa is never stale"; which
+> requires not a struct kvm_vcpu* but at least a struct kvm*, for the MMU
+> lock.
+> 
+> I could change kvm_mmu_free_roots and cached_root_* to take a struct kvm*
+> plus a struct kvm_mmu*.  Does that sound better?
 
-Yes, of course.  Queued now.
-
-Paolo
-
+Ya, works for me, thanks!

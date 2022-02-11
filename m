@@ -2,487 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7B64B2620
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C94F14B262C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350268AbiBKMq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 07:46:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48394 "EHLO
+        id S1350275AbiBKMq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 07:46:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350245AbiBKMqZ (ORCPT
+        with ESMTP id S242037AbiBKMqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 07:46:25 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40001FCB;
-        Fri, 11 Feb 2022 04:46:23 -0800 (PST)
-Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JwCtR4CDzz683T0;
-        Fri, 11 Feb 2022 20:42:07 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 11 Feb 2022 13:46:20 +0100
-Received: from localhost (10.202.226.41) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 11 Feb
- 2022 12:46:20 +0000
-Date:   Fri, 11 Feb 2022 12:46:18 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-CC:     <jic23@kernel.org>, <robh+dt@kernel.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/3] iio:amplifiers:ada4250: add support for ADA4250
-Message-ID: <20220211124618.00000a70@Huawei.com>
-In-Reply-To: <20220211095057.54979-2-antoniu.miclaus@analog.com>
-References: <20220211095057.54979-1-antoniu.miclaus@analog.com>
-        <20220211095057.54979-2-antoniu.miclaus@analog.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Fri, 11 Feb 2022 07:46:53 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF4BFD2;
+        Fri, 11 Feb 2022 04:46:51 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A730B2113A;
+        Fri, 11 Feb 2022 12:46:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644583610; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7+slQW1mVxtLZnGNIO+PCLy/Omno/FWxTRdp0Yt9v0I=;
+        b=DLTWC1YzwRCBXVeQY4SWKbgFLwcVADocgFd0dPIO03bdttJn+tGMhUot7tAIv44/nV9SHp
+        rLtCQHweOrZ4fuYjYHpQgij2TrOC6B0CIp5ZCN+jMk35GFMODncGK1RhkIY5vb9lAfm15e
+        jMEyUGu8bGcZk0uXROrHKTe9ES+hiKI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644583610;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7+slQW1mVxtLZnGNIO+PCLy/Omno/FWxTRdp0Yt9v0I=;
+        b=qFbZy3xK9lFG5p+Zql3nkeL26F0OveBBUfqOZ8TzOBqMsU8j/9SV7MsUSzaLfI5Mj3Jgx0
+        uNo9ECcDv14qlYAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5487613C72;
+        Fri, 11 Feb 2022 12:46:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kMsLE7paBmIEeAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 11 Feb 2022 12:46:50 +0000
+Message-ID: <3b5b2b1e-0375-cbe4-5e55-a783480e6ebb@suse.de>
+Date:   Fri, 11 Feb 2022 13:46:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.41]
-X-ClientProxiedBy: lhreml727-chm.china.huawei.com (10.201.108.78) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 2/6] drm/format-helper: Add
+ drm_fb_xrgb8888_to_mono_reversed()
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-fbdev@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, Sam Ravnborg <sam@ravnborg.org>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>
+References: <20220211091927.2988283-1-javierm@redhat.com>
+ <20220211091927.2988283-3-javierm@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220211091927.2988283-3-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------MBff9comIPrzKVkl5gT20c0e"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Feb 2022 11:50:55 +0200
-Antoniu Miclaus <antoniu.miclaus@analog.com> wrote:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------MBff9comIPrzKVkl5gT20c0e
+Content-Type: multipart/mixed; boundary="------------w0qr4Eok71HjKmm68VtNFjrJ";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: linux-fbdev@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Maxime Ripard <maxime@cerno.tech>, Daniel Vetter <daniel.vetter@ffwll.ch>,
+ dri-devel@lists.freedesktop.org, Sam Ravnborg <sam@ravnborg.org>,
+ =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+ Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>
+Message-ID: <3b5b2b1e-0375-cbe4-5e55-a783480e6ebb@suse.de>
+Subject: Re: [PATCH v4 2/6] drm/format-helper: Add
+ drm_fb_xrgb8888_to_mono_reversed()
+References: <20220211091927.2988283-1-javierm@redhat.com>
+ <20220211091927.2988283-3-javierm@redhat.com>
+In-Reply-To: <20220211091927.2988283-3-javierm@redhat.com>
 
-> The ADA4250 is an instrumentation amplifier with SPI/pin-strap
-> progammable gains that is optimized for ultra-low power systems.
-> With a minimum supply voltage of 1.7V, 26uA of quiescent current,
-> a shutdown mode, a sleep mode, and a fast wake up settling time,
-> ADA4250 can be power cycled on a battery powered system for even
-> futher savings.
-> 
-> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+--------------w0qr4Eok71HjKmm68VtNFjrJ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Hi Antoniu,
+SGkNCg0KQW0gMTEuMDIuMjIgdW0gMTA6MTkgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+IEFkZCBzdXBwb3J0IHRvIGNvbnZlcnQgZnJvbSBYUjI0IHRvIHJldmVyc2Vk
+IG1vbm9jaHJvbWUgZm9yIGRyaXZlcnMgdGhhdA0KPiBjb250cm9sIG1vbm9jaHJvbWF0aWMg
+ZGlzcGxheSBwYW5lbHMsIHRoYXQgb25seSBoYXZlIDEgYml0IHBlciBwaXhlbC4NCj4gDQo+
+IFRoZSBmdW5jdGlvbiBkb2VzIGEgbGluZS1ieS1saW5lIGNvbnZlcnNpb24gZG9pbmcgYW4g
+aW50ZXJtZWRpYXRlIHN0ZXANCj4gZmlyc3QgZnJvbSBYUjI0IHRvIDgtYml0IGdyYXlzY2Fs
+ZSBhbmQgdGhlbiB0byByZXZlcnNlZCBtb25vY2hyb21lLg0KPiANCj4gVGhlIGRybV9mYl9n
+cmF5OF90b19tb25vX3JldmVyc2VkX2xpbmUoKSBoZWxwZXIgd2FzIGJhc2VkIG9uIGNvZGUg
+ZnJvbQ0KPiBkcml2ZXJzL2dwdS9kcm0vdGlueS9yZXBhcGVyLmMgZHJpdmVyLg0KPiANCj4g
+U2lnbmVkLW9mZi1ieTogSmF2aWVyIE1hcnRpbmV6IENhbmlsbGFzIDxqYXZpZXJtQHJlZGhh
+dC5jb20+DQo+IFJldmlld2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5A
+c3VzZS5kZT4NCj4gLS0tDQo+IA0KPiBDaGFuZ2VzIGluIHY0Og0KPiAtIFJlbmFtZSBlbmRf
+b2Zmc2V0IHRvIGVuZF9sZW4gKFRob21hcyBaaW1tZXJtYW5uKQ0KPiAtIFdhcm4gb25jZSBp
+ZiBkc3RfcGl0Y2ggaXMgbm90IGEgbXVsdGlwbGUgb2YgOCAoVGhvbWFzIFppbW1lcm1hbm4p
+DQo+IC0gRHJvcCBkcm1fZmJfZ3JheThfdG9fbW9ub19yZXZlcnNlZCgpIHRoYXQncyBub3Qg
+dXNlZCAoVGhvbWFzIFppbW1lcm1hbm4pDQo+IC0gQWxsb2NhdGUgc2luZ2xlIGJ1ZmZlciBm
+b3IgYm90aCBjb3B5IGNtYSBtZW1vcnkgYW5kIGdyYXk4IChUaG9tYXMgWmltbWVybWFubikN
+Cj4gLSBBZGQgVGhvbWFzIFppbW1lcm1hbm4gUmV2aWV3ZWQtYnkgdGFnIHRvIHBhdGNoIGFk
+ZGluZyBYUjI0IC0+IG1vbm8gaGVscGVyLg0KPiANCj4gQ2hhbmdlcyBpbiB2MzoNCj4gLSBB
+bHNvIGFkZCBhIGRybV9mYl94cmdiODg4OF90b19tb25vX3JldmVyc2VkKCkgaGVscGVyIChU
+aG9tYXMgWmltbWVybWFubikNCj4gLSBTcGxpdCBsaW5lcyBjb3B5IHRvIGRybV9mYl9ncmF5
+OF90b19tb25vX3JldmVyc2VkX2xpbmUoKSAoVGhvbWFzIFppbW1lcm1hbm4pDQo+IC0gSGFu
+ZGxlIGNhc2Ugd2hlcmUgdGhlIHNvdXJjZSBidWZmZXIgaXMgbm90IGFsaWduZWQgdG8gOCAo
+VGhvbWFzIFppbW1lcm1hbm4pDQo+IA0KPiAgIGRyaXZlcnMvZ3B1L2RybS9kcm1fZm9ybWF0
+X2hlbHBlci5jIHwgMTA3ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gICBpbmNs
+dWRlL2RybS9kcm1fZm9ybWF0X2hlbHBlci5oICAgICB8ICAgNCArKw0KPiAgIDIgZmlsZXMg
+Y2hhbmdlZCwgMTExIGluc2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
+L2dwdS9kcm0vZHJtX2Zvcm1hdF9oZWxwZXIuYyBiL2RyaXZlcnMvZ3B1L2RybS9kcm1fZm9y
+bWF0X2hlbHBlci5jDQo+IGluZGV4IGI5ODE3MTI2MjNkMy4uZWM0ZTM3MjRlZTc5IDEwMDY0
+NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2Zvcm1hdF9oZWxwZXIuYw0KPiArKysg
+Yi9kcml2ZXJzL2dwdS9kcm0vZHJtX2Zvcm1hdF9oZWxwZXIuYw0KPiBAQCAtNTkxLDMgKzU5
+MSwxMTAgQEAgaW50IGRybV9mYl9ibGl0X3RvaW8odm9pZCBfX2lvbWVtICpkc3QsIHVuc2ln
+bmVkIGludCBkc3RfcGl0Y2gsIHVpbnQzMl90IGRzdF9mb3INCj4gICAJcmV0dXJuIC1FSU5W
+QUw7DQo+ICAgfQ0KPiAgIEVYUE9SVF9TWU1CT0woZHJtX2ZiX2JsaXRfdG9pbyk7DQo+ICsN
+Cj4gK3N0YXRpYyB2b2lkIGRybV9mYl9ncmF5OF90b19tb25vX3JldmVyc2VkX2xpbmUodTgg
+KmRzdCwgY29uc3QgdTggKnNyYywgdW5zaWduZWQgaW50IHBpeGVscywNCj4gKwkJCQkJICAg
+ICAgIHVuc2lnbmVkIGludCBzdGFydF9vZmZzZXQsIHVuc2lnbmVkIGludCBlbmRfbGVuKQ0K
+PiArew0KPiArCXVuc2lnbmVkIGludCB4YiwgaTsNCj4gKw0KPiArCWZvciAoeGIgPSAwOyB4
+YiA8IHBpeGVsczsgeGIrKykgew0KPiArCQl1bnNpZ25lZCBpbnQgc3RhcnQgPSAwLCBlbmQg
+PSA4Ow0KPiArCQl1OCBieXRlID0gMHgwMDsNCj4gKw0KPiArCQlpZiAoeGIgPT0gMCAmJiBz
+dGFydF9vZmZzZXQpDQo+ICsJCQlzdGFydCA9IHN0YXJ0X29mZnNldDsNCj4gKw0KPiArCQlp
+ZiAoeGIgPT0gcGl4ZWxzIC0gMSAmJiBlbmRfbGVuKQ0KPiArCQkJZW5kID0gZW5kX2xlbjsN
+Cj4gKw0KPiArCQlmb3IgKGkgPSBzdGFydDsgaSA8IGVuZDsgaSsrKSB7DQo+ICsJCQl1bnNp
+Z25lZCBpbnQgeCA9IHhiICogOCArIGk7DQo+ICsNCj4gKwkJCWJ5dGUgPj49IDE7DQo+ICsJ
+CQlpZiAoc3JjW3hdID4+IDcpDQo+ICsJCQkJYnl0ZSB8PSBCSVQoNyk7DQo+ICsJCX0NCj4g
+KwkJKmRzdCsrID0gYnl0ZTsNCj4gKwl9DQo+ICt9DQo+ICsNCj4gKy8qKg0KPiArICogZHJt
+X2ZiX3hyZ2I4ODg4X3RvX21vbm9fcmV2ZXJzZWQgLSBDb252ZXJ0IFhSR0I4ODg4IHRvIHJl
+dmVyc2VkIG1vbm9jaHJvbWUNCj4gKyAqIEBkc3Q6IHJldmVyc2VkIG1vbm9jaHJvbWUgZGVz
+dGluYXRpb24gYnVmZmVyDQo+ICsgKiBAZHN0X3BpdGNoOiBOdW1iZXIgb2YgYnl0ZXMgYmV0
+d2VlbiB0d28gY29uc2VjdXRpdmUgc2NhbmxpbmVzIHdpdGhpbiBkc3QNCj4gKyAqIEBzcmM6
+IFhSR0I4ODg4IHNvdXJjZSBidWZmZXINCj4gKyAqIEBmYjogRFJNIGZyYW1lYnVmZmVyDQo+
+ICsgKiBAY2xpcDogQ2xpcCByZWN0YW5nbGUgYXJlYSB0byBjb3B5DQo+ICsgKg0KPiArICog
+RFJNIGRvZXNuJ3QgaGF2ZSBuYXRpdmUgbW9ub2Nocm9tZSBzdXBwb3J0Lg0KPiArICogU3Vj
+aCBkcml2ZXJzIGNhbiBhbm5vdW5jZSB0aGUgY29tbW9ubHkgc3VwcG9ydGVkIFhSMjQgZm9y
+bWF0IHRvIHVzZXJzcGFjZQ0KPiArICogYW5kIHVzZSB0aGlzIGZ1bmN0aW9uIHRvIGNvbnZl
+cnQgdG8gdGhlIG5hdGl2ZSBmb3JtYXQuDQo+ICsgKg0KPiArICogVGhpcyBmdW5jdGlvbiB1
+c2VzIGRybV9mYl94cmdiODg4OF90b19ncmF5OCgpIHRvIGNvbnZlcnQgdG8gZ3JheXNjYWxl
+IGFuZA0KPiArICogdGhlbiB0aGUgcmVzdWx0IGlzIGNvbnZlcnRlZCBmcm9tIGdyYXlzY2Fs
+ZSB0byByZXZlcnNlZCBtb25vaHJvbWUuDQo+ICsgKi8NCj4gK3ZvaWQgZHJtX2ZiX3hyZ2I4
+ODg4X3RvX21vbm9fcmV2ZXJzZWQodm9pZCAqZHN0LCB1bnNpZ25lZCBpbnQgZHN0X3BpdGNo
+LCBjb25zdCB2b2lkICp2YWRkciwNCj4gKwkJCQkgICAgICBjb25zdCBzdHJ1Y3QgZHJtX2Zy
+YW1lYnVmZmVyICpmYiwgY29uc3Qgc3RydWN0IGRybV9yZWN0ICpjbGlwKQ0KPiArew0KPiAr
+CXVuc2lnbmVkIGludCBsaW5lcGl4ZWxzID0gZHJtX3JlY3Rfd2lkdGgoY2xpcCk7DQo+ICsJ
+dW5zaWduZWQgaW50IGxpbmVzID0gY2xpcC0+eTIgLSBjbGlwLT55MTsNCj4gKwl1bnNpZ25l
+ZCBpbnQgY3BwID0gZmItPmZvcm1hdC0+Y3BwWzBdOw0KPiArCXVuc2lnbmVkIGludCBsZW5f
+c3JjMzIgPSBsaW5lcGl4ZWxzICogY3BwOw0KPiArCXVuc2lnbmVkIGludCBzdGFydF9vZmZz
+ZXQsIGVuZF9sZW47DQo+ICsJdW5zaWduZWQgaW50IHk7DQo+ICsJdTggKm1vbm8gPSBkc3Qs
+ICpncmF5ODsNCj4gKwl1MzIgKnNyYzMyOw0KPiArDQo+ICsJaWYgKFdBUk5fT04oZmItPmZv
+cm1hdC0+Zm9ybWF0ICE9IERSTV9GT1JNQVRfWFJHQjg4ODgpKQ0KPiArCQlyZXR1cm47DQoN
+ClRoZXNlIFdBUk4gbWFjcm9zIGFyZSBkZXByZWNhdGVkLiBVc2UgZHJtX3dhcm4sIGRybV9X
+QVJOX09OQ0UsIGV0YyBpbnN0ZWFkLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+ICsN
+Cj4gKwkvKg0KPiArCSAqIFRoZSByZXZlcnNlZCBtb25vIGRlc3RpbmF0aW9uIGJ1ZmZlciBj
+b250YWlucyAxIGJpdCBwZXIgcGl4ZWwNCj4gKwkgKiBhbmQgZGVzdGluYXRpb24gc2Nhbmxp
+bmVzIGhhdmUgdG8gYmUgaW4gbXVsdGlwbGUgb2YgOCBwaXhlbHMuDQo+ICsJICovDQo+ICsJ
+aWYgKCFkc3RfcGl0Y2gpDQo+ICsJCWRzdF9waXRjaCA9IERJVl9ST1VORF9VUChsaW5lcGl4
+ZWxzLCA4KTsNCj4gKw0KPiArCVdBUk5fT05DRShkc3RfcGl0Y2ggJSA4ICE9IDAsICJkc3Rf
+cGl0Y2ggaXMgbm90IGEgbXVsdGlwbGUgb2YgOFxuIik7DQo+ICsNCj4gKwkvKg0KPiArCSAq
+IFRoZSBjbWEgbWVtb3J5IGlzIHdyaXRlLWNvbWJpbmVkIHNvIHJlYWRzIGFyZSB1bmNhY2hl
+ZC4NCj4gKwkgKiBTcGVlZCB1cCBieSBmZXRjaGluZyBvbmUgbGluZSBhdCBhIHRpbWUuDQo+
+ICsJICoNCj4gKwkgKiBBbHNvLCBmb3JtYXQgY29udmVyc2lvbiBmcm9tIFhSMjQgdG8gcmV2
+ZXJzZWQgbW9ub2Nocm9tZQ0KPiArCSAqIGFyZSBkb25lIGxpbmUtYnktbGluZSBidXQgYXJl
+IGNvbnZlcnRlZCB0byA4LWJpdCBncmF5c2NhbGUNCj4gKwkgKiBhcyBhbiBpbnRlcm1lZGlh
+dGUgc3RlcC4NCj4gKwkgKg0KPiArCSAqIEFsbG9jYXRlIGEgYnVmZmVyIHRvIGJlIHVzZWQg
+Zm9yIGJvdGggY29weWluZyBmcm9tIHRoZSBjbWENCj4gKwkgKiBtZW1vcnkgYW5kIHRvIHN0
+b3JlIHRoZSBpbnRlcm1lZGlhdGUgZ3JheXNjYWxlIGxpbmUgcGl4ZWxzLg0KPiArCSAqLw0K
+PiArCXNyYzMyID0ga21hbGxvYyhsZW5fc3JjMzIgKyBsaW5lcGl4ZWxzLCBHRlBfS0VSTkVM
+KTsNCj4gKwlpZiAoIXNyYzMyKQ0KPiArCQlyZXR1cm47DQo+ICsNCj4gKwlncmF5OCA9ICh1
+OCAqKXNyYzMyICsgbGVuX3NyYzMyOw0KPiArDQo+ICsJLyoNCj4gKwkgKiBGb3IgZGFtYWdl
+IGhhbmRsaW5nLCBpdCBpcyBwb3NzaWJsZSB0aGF0IG9ubHkgcGFydHMgb2YgdGhlIHNvdXJj
+ZQ0KPiArCSAqIGJ1ZmZlciBpcyBjb3BpZWQgYW5kIHRoaXMgY291bGQgbGVhZCB0byBzdGFy
+dCBhbmQgZW5kIHBpeGVscyB0aGF0DQo+ICsJICogYXJlIG5vdCBhbGlnbmVkIHRvIG11bHRp
+cGxlIG9mIDguDQo+ICsJICoNCj4gKwkgKiBDYWxjdWxhdGUgaWYgdGhlIHN0YXJ0IGFuZCBl
+bmQgcGl4ZWxzIGFyZSBub3QgYWxpZ25lZCBhbmQgc2V0IHRoZQ0KPiArCSAqIG9mZnNldHMg
+Zm9yIHRoZSByZXZlcnNlZCBtb25vIGxpbmUgY29udmVyc2lvbiBmdW5jdGlvbiB0byBhZGp1
+c3QuDQo+ICsJICovDQo+ICsJc3RhcnRfb2Zmc2V0ID0gY2xpcC0+eDEgJSA4Ow0KPiArCWVu
+ZF9sZW4gPSBjbGlwLT54MiAlIDg7DQo+ICsNCj4gKwl2YWRkciArPSBjbGlwX29mZnNldChj
+bGlwLCBmYi0+cGl0Y2hlc1swXSwgY3BwKTsNCj4gKwlmb3IgKHkgPSAwOyB5IDwgbGluZXM7
+IHkrKykgew0KPiArCQlzcmMzMiA9IG1lbWNweShzcmMzMiwgdmFkZHIsIGxlbl9zcmMzMik7
+DQo+ICsJCWRybV9mYl94cmdiODg4OF90b19ncmF5OF9saW5lKGdyYXk4LCBzcmMzMiwgbGlu
+ZXBpeGVscyk7DQo+ICsJCWRybV9mYl9ncmF5OF90b19tb25vX3JldmVyc2VkX2xpbmUobW9u
+bywgZ3JheTgsIGRzdF9waXRjaCwNCj4gKwkJCQkJCSAgIHN0YXJ0X29mZnNldCwgZW5kX2xl
+bik7DQo+ICsJCXZhZGRyICs9IGZiLT5waXRjaGVzWzBdOw0KPiArCQltb25vICs9IGRzdF9w
+aXRjaDsNCj4gKwl9DQo+ICsNCj4gKwlrZnJlZShzcmMzMik7DQo+ICt9DQo+ICtFWFBPUlRf
+U1lNQk9MKGRybV9mYl94cmdiODg4OF90b19tb25vX3JldmVyc2VkKTsNCj4gZGlmZiAtLWdp
+dCBhL2luY2x1ZGUvZHJtL2RybV9mb3JtYXRfaGVscGVyLmggYi9pbmNsdWRlL2RybS9kcm1f
+Zm9ybWF0X2hlbHBlci5oDQo+IGluZGV4IGIzMGVkNWRlMGEzMy4uMGIwOTM3YzBiMmY2IDEw
+MDY0NA0KPiAtLS0gYS9pbmNsdWRlL2RybS9kcm1fZm9ybWF0X2hlbHBlci5oDQo+ICsrKyBi
+L2luY2x1ZGUvZHJtL2RybV9mb3JtYXRfaGVscGVyLmgNCj4gQEAgLTQzLDQgKzQzLDggQEAg
+aW50IGRybV9mYl9ibGl0X3RvaW8odm9pZCBfX2lvbWVtICpkc3QsIHVuc2lnbmVkIGludCBk
+c3RfcGl0Y2gsIHVpbnQzMl90IGRzdF9mb3INCj4gICAJCSAgICAgY29uc3Qgdm9pZCAqdm1h
+cCwgY29uc3Qgc3RydWN0IGRybV9mcmFtZWJ1ZmZlciAqZmIsDQo+ICAgCQkgICAgIGNvbnN0
+IHN0cnVjdCBkcm1fcmVjdCAqcmVjdCk7DQo+ICAgDQo+ICt2b2lkIGRybV9mYl94cmdiODg4
+OF90b19tb25vX3JldmVyc2VkKHZvaWQgKmRzdCwgdW5zaWduZWQgaW50IGRzdF9waXRjaCwg
+Y29uc3Qgdm9pZCAqc3JjLA0KPiArCQkJCSAgICAgIGNvbnN0IHN0cnVjdCBkcm1fZnJhbWVi
+dWZmZXIgKmZiLA0KPiArCQkJCSAgICAgIGNvbnN0IHN0cnVjdCBkcm1fcmVjdCAqY2xpcCk7
+DQo+ICsNCj4gICAjZW5kaWYgLyogX19MSU5VWF9EUk1fRk9STUFUX0hFTFBFUl9IICovDQoN
+Ci0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNV
+U0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0
+MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNj
+aMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-Just to check, this sort of amplifier is normally not used as
-an analog front end?  If it were we'd want to deal with it
-being a consumer of the ADC channels similar to our other AFE drivers.
-If that's a possible usecase we might want to consider how to support
-that if relevant to a particular configuration.
+--------------w0qr4Eok71HjKmm68VtNFjrJ--
 
-I don't understand what the two channels are.  Could you give us
-some more description?
+--------------MBff9comIPrzKVkl5gT20c0e
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Thanks,
+-----BEGIN PGP SIGNATURE-----
 
-Jonathan
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIGWrkFAwAAAAAACgkQlh/E3EQov+DU
+vRAAySXjWt/gwKxNCjPRiNTDkjoYSLCN0f/3Mtf5yZ35DI9PqxQL8Ryov/Fi7Ilb2DSvZ/QGBYdQ
+DsAKo1tKUGZfWduUdVtuKteszsndoQ3JdfXSa+SFinCNBayiBgF3wytUY2opyBlLaaYvek7cpmCq
+lYRgsRReJ+HCYufRcqbG+tU5fC5BVWxZsCYXxEzIGLMccEAQqP3+NhrQwDdcAwKrKCg/NiWqsEwA
+N13LPXH1VJwL3/jqb1aFy9AfJP0NHRpxVLjB6xjTPT5bV3162R4/JkBNuEIouocP6UTiZ2RW17m9
+GwawMdJ8djg+uEzUMN3wM5Nx149lt/m7bPZR/BU1BXuEeU0QjtqL0pfBV5DUF1f0+djQT0ygb3oy
+HKcvf1BmHFFZlUOZAEW4w1rFsx2/6vjkWvNECJOaVaGhUxZdPf9rbZPh9/QimBXqPU3UjabTmOBF
+kfbqMxJnKrGuBlp1nbCe4QjF0Qpr/b4h6STdbXrO71zM/PaZ/p9qggBxBEL2GiVLnZT3KtqXAf/f
+WPEdlTHSmx8QTLt6NkdCyARlIDXq2+8tytWaSeWLsjwKFwGVCJk2Ws78/dCzeyoC60BKGKMwx5wX
+cZ95imikXWSl7wBaV52FHrbBpUqEWUvwkziUvoivZXE7ViDJgDjko8Kay46KI+5zu9UHrNbcCLeN
+Xv0=
+=6Iky
+-----END PGP SIGNATURE-----
 
-
-> ---
->  drivers/iio/amplifiers/Kconfig   |  11 +
->  drivers/iio/amplifiers/Makefile  |   1 +
->  drivers/iio/amplifiers/ada4250.c | 388 +++++++++++++++++++++++++++++++
->  3 files changed, 400 insertions(+)
->  create mode 100644 drivers/iio/amplifiers/ada4250.c
-> 
-> diff --git a/drivers/iio/amplifiers/Kconfig b/drivers/iio/amplifiers/Kconfig
-> index 5eb1357a9c78..98612e01d9d4 100644
-> --- a/drivers/iio/amplifiers/Kconfig
-> +++ b/drivers/iio/amplifiers/Kconfig
-> @@ -23,6 +23,17 @@ config AD8366
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called ad8366.
->  
-> +config ADA4250
-> +	tristate "Analog Devices ADA4250 Instrumentation Amplifier"
-> +	depends on SPI
-> +	help
-> +	  Say yes here to build support for Analog Devices ADA4250
-> +	  SPI Amplifier's support. The driver provides direct access via
-> +          sysfs.
-
-Odd spacing.
-
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called ada4250.
-> +
->  config HMC425
->  	tristate "Analog Devices HMC425A and similar GPIO Gain Amplifiers"
->  	depends on GPIOLIB
-> diff --git a/drivers/iio/amplifiers/Makefile b/drivers/iio/amplifiers/Makefile
-> index cb551d82f56b..2126331129cf 100644
-> --- a/drivers/iio/amplifiers/Makefile
-> +++ b/drivers/iio/amplifiers/Makefile
-> @@ -5,4 +5,5 @@
->  
->  # When adding new entries keep the list in alphabetical order
->  obj-$(CONFIG_AD8366) += ad8366.o
-> +obj-$(CONFIG_ADA4250) += ada4250.o
->  obj-$(CONFIG_HMC425) += hmc425a.o
-> diff --git a/drivers/iio/amplifiers/ada4250.c b/drivers/iio/amplifiers/ada4250.c
-> new file mode 100644
-> index 000000000000..10725f6c2751
-> --- /dev/null
-> +++ b/drivers/iio/amplifiers/ada4250.c
-> @@ -0,0 +1,388 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * ADA4250 driver
-> + *
-> + * Copyright 2022 Analog Devices Inc.
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/bits.h>
-> +#include <linux/device.h>
-> +#include <linux/iio/iio.h>
-> +#include <linux/module.h>
-> +#include <linux/regmap.h>
-> +#include <linux/regulator/consumer.h>
-> +#include <linux/spi/spi.h>
-> +
-> +/* ADA4250 Register Map */
-> +#define ADA4250_REG_GAIN_MUX        0x00
-> +#define ADA4250_REG_REFBUF_EN       0x01
-> +#define ADA4250_REG_RESET           0x02
-> +#define ADA4250_REG_SNSR_CAL_VAL    0x04
-> +#define ADA4250_REG_SNSR_CAL_CNFG   0x05
-> +#define ADA4250_REG_DIE_REV         0x18
-> +#define ADA4250_REG_CHIP_ID         0x19
-> +
-> +/* ADA4250_REG_GAIN_MUX Map */
-> +#define ADA4250_GAIN_MUX_MSK        GENMASK(2, 0)
-> +
-> +/* ADA4250_REG_REFBUF Map */
-> +#define ADA4250_REFBUF_MSK          BIT(0)
-> +
-> +/* ADA4250_REG_RESET Map */
-> +#define ADA4250_RESET_MSK           BIT(0)
-> +
-> +/* ADA4250_REG_SNSR_CAL_VAL Map */
-> +#define ADA4250_SNSR_CAL_VAL_MSK    GENMASK(7, 0)
-> +
-> +/* ADA4250_REG_SNSR_CAL_CNFG Bit Definition */
-> +#define ADA4250_BIAS_SET_MSK        GENMASK(3, 2)
-> +#define ADA4250_RANGE_SET_MSK       GENMASK(1, 0)
-> +
-> +/* Miscellaneous definitions */
-> +#define ADA4250_CHIP_ID             0x4250
-> +#define ADA4250_RANGE1              0
-> +#define	ADA4250_RANGE4              3
-> +
-> +/* ADA4250 current bias set */
-> +enum ada4250_current_bias {
-> +	ADA4250_BIAS_DISABLED,
-> +	ADA4250_BIAS_BANDGAP,
-> +	ADA4250_BIAS_AVDD,
-> +};
-> +
-> +struct ada4250_state {
-> +	struct spi_device	*spi;
-> +	struct regmap		*regmap;
-> +	struct regulator	*reg;
-> +	/* Protect against concurrent accesses to the device and data content */
-> +	struct mutex		lock;
-> +	u8			bias;
-> +	u8			gain;
-> +	int			offset_uv;
-> +	bool			refbuf_en;
-> +};
-> +
-> +/* ADA4250 Current Bias Source Settings: Disabled, Bandgap Reference, AVDD */
-> +static const int calibbias_table[] = {0, 1, 2};
-> +
-> +/* ADA4250 Gain (V/V) values: 1, 2, 4, 8, 16, 32, 64, 128 */
-> +static const int hwgain_table[] = {0, 1, 2, 3, 4, 5, 6, 7};
-> +
-> +static const struct regmap_config ada4250_regmap_config = {
-> +	.reg_bits = 8,
-> +	.val_bits = 8,
-> +	.read_flag_mask = BIT(7),
-> +	.max_register = 0x1A,
-> +};
-> +
-> +static int ada4250_set_offset_uv(struct iio_dev *indio_dev,
-> +				 const struct iio_chan_spec *chan,
-> +				 int offset_uv)
-> +{
-> +	struct ada4250_state *st = iio_priv(indio_dev);
-> +
-> +	int i, ret, x[8], max_vos, min_vos, voltage_v, vlsb = 0;
-> +	u8 offset_raw, range = ADA4250_RANGE1;
-> +	u32 lsb_coeff[6] = {1333, 2301, 4283, 8289, 16311, 31599};
-> +
-> +	if (st->bias == 0 || st->bias == 3)
-> +		return -EINVAL;
-> +
-> +	voltage_v = regulator_get_voltage(st->reg);
-> +	voltage_v = DIV_ROUND_CLOSEST(voltage_v, 1000000);
-> +
-> +	if (st->bias == ADA4250_BIAS_AVDD)
-> +		x[0] = voltage_v;
-> +	else
-> +		x[0] = 5;
-> +
-> +	x[1] = 126 * (x[0] - 1);
-> +
-> +	for (i = 0; i < 6; i++)
-> +		x[i + 2] = DIV_ROUND_CLOSEST(x[1] * 1000, lsb_coeff[i]);
-> +
-> +	if (st->gain == 0)
-> +		return -EINVAL;
-> +
-> +	/* Compute Range and VLSB for the Sensor Offset Calibration */
-> +	for (i = ADA4250_RANGE1; i <= ADA4250_RANGE4; i++) {
-> +		max_vos = x[st->gain] *  127 * ((1 << (i + 1)) - 1);
-> +		min_vos = -1 * max_vos;
-> +		if (offset_uv > min_vos && offset_uv < max_vos) {
-> +			range = i;
-> +			vlsb = x[st->gain] * ((1 << (i + 1)) - 1);
-> +			break;
-> +		}
-> +	}
-> +
-> +	if (vlsb <= 0)
-> +		return -EINVAL;
-> +
-> +	offset_raw = DIV_ROUND_CLOSEST(abs(offset_uv), vlsb);
-> +
-> +	mutex_lock(&st->lock);
-> +	ret = regmap_update_bits(st->regmap, ADA4250_REG_SNSR_CAL_CNFG,
-> +				 ADA4250_RANGE_SET_MSK,
-> +				 FIELD_PREP(ADA4250_RANGE_SET_MSK, range));
-> +	if (ret)
-> +		goto exit;
-> +
-> +	st->offset_uv = offset_raw * vlsb;
-> +
-> +	if (offset_uv < 0) {
-> +		offset_raw |= 1 << 8;
-> +		st->offset_uv *= (-1);
-> +	}
-> +
-> +	ret = regmap_write(st->regmap, ADA4250_REG_SNSR_CAL_VAL, offset_raw);
-> +
-> +exit:
-> +	mutex_unlock(&st->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static int ada4250_read_raw(struct iio_dev *indio_dev,
-> +			    struct iio_chan_spec const *chan,
-> +			    int *val, int *val2, long info)
-> +{
-> +	struct ada4250_state *st = iio_priv(indio_dev);
-> +	int ret;
-> +
-> +	switch (info) {
-> +	case IIO_CHAN_INFO_HARDWAREGAIN:
-> +		ret = regmap_read(st->regmap, ADA4250_REG_GAIN_MUX, val);
-> +		if (ret)
-> +			return ret;
-> +
-> +		return IIO_VAL_INT;
-> +	case IIO_CHAN_INFO_OFFSET:
-> +		*val = st->offset_uv;
-> +
-> +		return IIO_VAL_INT;
-> +	case IIO_CHAN_INFO_CALIBBIAS:
-> +		ret = regmap_read(st->regmap, ADA4250_REG_SNSR_CAL_CNFG, val);
-> +		if (ret)
-> +			return ret;
-> +
-> +		*val = FIELD_GET(ADA4250_BIAS_SET_MSK, *val);
-> +
-> +		return IIO_VAL_INT;
-> +	case IIO_CHAN_INFO_SCALE:
-> +		*val = 1;
-> +		*val2 = 1000000;
-> +
-> +		return IIO_VAL_FRACTIONAL;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +static int ada4250_write_raw(struct iio_dev *indio_dev,
-> +			     struct iio_chan_spec const *chan,
-> +			     int val, int val2, long info)
-> +{
-> +	struct ada4250_state *st = iio_priv(indio_dev);
-> +	int ret;
-> +
-> +	switch (info) {
-> +	case IIO_CHAN_INFO_HARDWAREGAIN:
-> +		ret = regmap_write(st->regmap, ADA4250_REG_GAIN_MUX,
-> +				   FIELD_PREP(ADA4250_GAIN_MUX_MSK, val));
-> +		if (ret)
-> +			return ret;
-> +
-> +		st->gain = val;
-> +
-> +		return ret;
-> +	case IIO_CHAN_INFO_OFFSET:
-
-Given no DS, please provide some more info on what the channels are to
-help evaluate if this is the appropriate interface.
-
-> +		return ada4250_set_offset_uv(indio_dev, chan, val);
-> +	case IIO_CHAN_INFO_CALIBBIAS:
-> +		ret = regmap_update_bits(st->regmap, ADA4250_REG_SNSR_CAL_CNFG,
-> +					 ADA4250_BIAS_SET_MSK,
-> +					 FIELD_PREP(ADA4250_BIAS_SET_MSK, val));
-> +		if (ret)
-> +			return ret;
-> +
-> +		st->bias = val;
-> +
-> +		return ret;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +static int ada4250_read_avail(struct iio_dev *indio_dev,
-> +			      struct iio_chan_spec const *chan,
-> +			      const int **vals, int *type, int *length,
-> +			      long mask)
-> +{
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_CALIBBIAS:
-> +		*vals = calibbias_table;
-> +		*type = IIO_VAL_INT;
-> +		*length = ARRAY_SIZE(calibbias_table);
-> +
-> +		return IIO_AVAIL_LIST;
-> +	case IIO_CHAN_INFO_HARDWAREGAIN:
-> +		*vals = hwgain_table;
-> +		*type = IIO_VAL_INT;
-> +		*length = ARRAY_SIZE(hwgain_table);
-> +
-> +		return IIO_AVAIL_LIST;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +static int ada4250_reg_access(struct iio_dev *indio_dev,
-> +			      unsigned int reg,
-> +			      unsigned int write_val,
-> +			      unsigned int *read_val)
-> +{
-> +	struct ada4250_state *st = iio_priv(indio_dev);
-> +
-> +	if (read_val)
-> +		return regmap_read(st->regmap, reg, read_val);
-> +	else
-> +		return regmap_write(st->regmap, reg, write_val);
-> +}
-> +
-> +static const struct iio_info ada4250_info = {
-> +	.read_raw = ada4250_read_raw,
-> +	.write_raw = ada4250_write_raw,
-> +	.read_avail = &ada4250_read_avail,
-> +	.debugfs_reg_access = &ada4250_reg_access,
-> +};
-> +
-> +static const struct iio_chan_spec ada4250_channels[] = {
-> +	{
-> +		.type = IIO_ALTVOLTAGE,
-
-For a device like this, I'd argue it's not 'necessarily' an alternating
-voltage so type should probably be just voltage.  Obviously if there
-is something about the amplifier architecture that means it won't carry
-DC then it's a different matter.
-
-> +		.output = 1,
-> +		.indexed = 1,
-> +		.channel = 0,
-> +		.info_mask_separate = BIT(IIO_CHAN_INFO_CALIBBIAS) |
-> +				      BIT(IIO_CHAN_INFO_HARDWAREGAIN),
-> +		.info_mask_separate_available = BIT(IIO_CHAN_INFO_CALIBBIAS) |
-> +						BIT(IIO_CHAN_INFO_HARDWAREGAIN),
-> +	},
-> +	{
-> +		.type = IIO_VOLTAGE,
-
-Given we have no datasheet, what's this?  Add a comment.
-
-> +		.output = 1,
-> +		.indexed = 1,
-> +		.channel = 0,
-> +		.info_mask_separate = BIT(IIO_CHAN_INFO_OFFSET) |
-> +				      BIT(IIO_CHAN_INFO_SCALE),
-
-This is unusual as I'm not sure what meaning an offset and scale have
-with out a raw value. 
-
-> +	},
-> +};
-> +
-> +static void ada4250_reg_disable(void *data)
-> +{
-> +	regulator_disable(data);
-> +}
-> +
-> +static int ada4250_init(struct ada4250_state *st)
-> +{
-> +	int ret;
-> +	u16 chip_id;
-> +	u8 data[2];
-> +	struct spi_device *spi = st->spi;
-> +
-> +	st->refbuf_en = device_property_read_bool(&spi->dev, "adi,refbuf-enable");
-> +
-> +	st->reg = devm_regulator_get(&spi->dev, "avdd");
-> +	if (IS_ERR(st->reg))
-> +		return dev_err_probe(&spi->dev, PTR_ERR(st->reg),
-> +				     "failed to get the AVDD voltage\n");
-> +
-> +	ret = regulator_enable(st->reg);
-> +	if (ret) {
-> +		dev_err(&spi->dev, "Failed to enable specified AVDD supply\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = devm_add_action_or_reset(&spi->dev, ada4250_reg_disable, st->reg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_write(st->regmap, ADA4250_REG_RESET,
-> +			   FIELD_PREP(ADA4250_RESET_MSK, 1));
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_bulk_read(st->regmap, ADA4250_REG_CHIP_ID, data, 2);
-I think our current position is that regmap_bulk_* accesses should use
-DMA safe buffers (on SPI anyway) as it's possible the implementation may
-required that and it isn't documented as not requiring it.
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	chip_id = (data[1] << 8) | data[0];
-
-Endian conversion.  Firstly make data the appropriate type then use
-the appropriate endian conversion function.
-
-> +
-> +	if (chip_id != ADA4250_CHIP_ID) {
-> +		dev_err(&spi->dev, "Invalid chip ID.\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	return regmap_write(st->regmap, ADA4250_REG_REFBUF_EN,
-> +			    FIELD_PREP(ADA4250_REFBUF_MSK, st->refbuf_en));
-> +}
-> +
-
-
+--------------MBff9comIPrzKVkl5gT20c0e--

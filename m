@@ -2,77 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AF84B1AA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A60FF4B1AAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346496AbiBKAnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:43:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37406 "EHLO
+        id S1346484AbiBKAqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:46:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346489AbiBKAnv (ORCPT
+        with ESMTP id S240135AbiBKAqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:43:51 -0500
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3395F94
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:43:51 -0800 (PST)
-Received: by mail-oo1-xc2a.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso8489170ooi.1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:43:51 -0800 (PST)
+        Thu, 10 Feb 2022 19:46:14 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C033DBE4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:46:14 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id g14so20413742ybs.8
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:46:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=peIv1RFotlCgbTarhFLi0yleT6U74UOU0UlSRN43yHs=;
-        b=sgQGKQAWGA48N63ZFsHjuJMQge4WD3VzF3QcEOfMBQlnVQl93uLyEJcqouoqhe0VvZ
-         lwJXuQg9so3eOc0kKP/zoRvBj3tOMygTO/P/HxCsL29Z3aN0QIdyCo9qARxBlpHhbFdt
-         lqbSF/ofPqsTi5hnAiQZCH3SH0cGcX8p36Ca9RBE10MTdECRSHfiwvHGahYTJoQJwnOX
-         r5+qzDgAz0uyODssAnktdXUj8hNBXdVBpdUtLiJDbmG78rYzsl5SFoGz3dRrZQcn2plH
-         S6hpeFPDk/Vi51/d+M7bkbfs9W5UE86rIKkbNzFOVCooOCVcDmj6GWdvujmjm0qLJ6pz
-         fVxA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Aqg2zYlKFhDU5R59omnns1h0zMhseRBVTVyLe6xPNAw=;
+        b=X0L8pqDQdxoPIp+SQ9ATds+ARsJ5XaRoakuQEEb9AFJOQkztFhYCnS4eoc+7WtnGKs
+         IsI/x2HthuAgMOz5p1lV5S0zHy571/uytyaHe9Es0b2tW60l4snqT95ZuJ+UA8SkdRfh
+         aWdY5u7olCieQnKYht1p5QG5ZQf0gfpf2YXRz6Hn26bbnAQ8XSniclLvAF8ru4GJg8ie
+         jY8OPuKSa+f2NFkdpfL7Qp+Bt2Vh53xHnARth/o1ESmN8uulrsmvf30hIXvcbA/e1lL2
+         R5hGHRrGYCrVsTi32PzHqttKWX6Jc1xa1FGkhTcFZxvZKx9tKO/rSiTm9a6waUuh7myC
+         RGIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=peIv1RFotlCgbTarhFLi0yleT6U74UOU0UlSRN43yHs=;
-        b=JOzDj9hQPzDAxi0hwHHgVUD3Hn5faBf21nHru6HtAqlBCniZgZgd56BZbHqvw4NmY9
-         PoLOyvkZMQqEfuMymi4MuVednnQwxdINYj9mID4N74AmdnAWXDQo51rtS2W0h4+el89/
-         7oMbkgL9oes6AfbKOFEs2rNyUTV/s2G6bnuFZmEvFJRAEvp6PVj5MXNv4v4Xff4CnOV1
-         gsghtcfC6Yow2r2r609Ic9+vVv7aGXLyAwLtPh/qgVPqxR17ggzaRJsGu8QB0nOKebiJ
-         VMFmOQQk2GurV+yKyVRoS1BJAvuuG3dl/cS9nS9JjHcZXx+KF6Cvg/B5FfituXnrwHlk
-         3oLQ==
-X-Gm-Message-State: AOAM533Ax9UGBZaBbm7Tn76sNLNW4lmV18o36P07VVTfWXp49HFy21eH
-        m0F1AP+r9t2H8oBNeGXexhEVWA==
-X-Google-Smtp-Source: ABdhPJye74c/DJOt1K0YAT2tbR4IdgDDxYX8XW4nFCogk+IMn+j8gnTxxW0JFF4y1ybzr4mm0UP2Rw==
-X-Received: by 2002:a4a:8f14:: with SMTP id e20mr3673292ool.0.1644540230638;
-        Thu, 10 Feb 2022 16:43:50 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id x17sm8572223oop.1.2022.02.10.16.43.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 16:43:50 -0800 (PST)
-Date:   Thu, 10 Feb 2022 18:43:48 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Satya Priya <quic_c_skakit@quicinc.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Das Srinagesh <gurus@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
-        quic_jprakash@quicinc.com
-Subject: Re: [PATCH V5 1/6] dt-bindings: regulator: Add pm8008 regulator
- bindings
-Message-ID: <YgWxRDeo7vuTBeAo@builder.lan>
-References: <1644331940-18986-1-git-send-email-quic_c_skakit@quicinc.com>
- <1644331940-18986-2-git-send-email-quic_c_skakit@quicinc.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Aqg2zYlKFhDU5R59omnns1h0zMhseRBVTVyLe6xPNAw=;
+        b=3eC3pXm/0U5SC/GBDcoRMWsg8fCHExK5EgCP6aPHipwlNCPr090/sm0npyCYTg73P3
+         2eDWGdioe3XXB0HmjXb81A0e2HalUN2dGZuo3FWjIeovjFkI5TkmZO/eDVhhrH456c8f
+         UsQl+B3EYSeEBe/pRUKXT9ekRmiQr86RwlCl9tDpSLPcn8S2izmxPY7HHO41D/bSx33a
+         oPgJv21q4Hms7Sgm2SRW+HM3MyC79bFtvLgODfRUfKcb5NADw99PG4oQN14ACIOlCX1v
+         8gvpUBkhgUvXqvFHZIx1NbK2W7zmo8TTsdzZM4niPiku9jkjzDf2cNnngMNJBJ5DstzK
+         VaIA==
+X-Gm-Message-State: AOAM530mehmWTRqmm+ZMkG07lCoK3v4zWZFDpeRtk5jiXlTkzF2PNxFj
+        WxaIL33jL3sOlHt5RplDBG+O9O+cHEZhK2SaWjNNzw==
+X-Google-Smtp-Source: ABdhPJxPdUAdZzu441vtdOPhtVOnx5TxV2FVC7NtVsI9RRP7ptyI1elK0lctrq3IqH8VqzMTb+ldzwpyBRi01HARJ18=
+X-Received: by 2002:a81:4cc3:: with SMTP id z186mr10573147ywa.140.1644540373922;
+ Thu, 10 Feb 2022 16:46:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1644331940-18986-2-git-send-email-quic_c_skakit@quicinc.com>
+References: <20220202153528.707185-1-wenst@chromium.org>
+In-Reply-To: <20220202153528.707185-1-wenst@chromium.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 11 Feb 2022 01:46:03 +0100
+Message-ID: <CACRpkdaqKAU7_HWoCqjnbmCEc77FKJD9gUFR+ARbmQmR9zRZSg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: pinctrl: mt8195: fix bias-pull-{up,down} checks
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Guodong Liu <guodong.liu@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,81 +70,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 08 Feb 08:52 CST 2022, Satya Priya wrote:
+On Wed, Feb 2, 2022 at 4:35 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
 
-> Add bindings for pm8008 pmic regulators.
-> 
-> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
-> ---
-> Changes in V2:
->  - Moved this patch before "mfd: pm8008: Add pm8008 regulator node" to
->    resolve dtschema errors. Removed regulator-min-microvolt and 
->    regulator-max-microvolt properties.
-> 
-> Changes in V3:
->  - As per Rob's comments added standard unit suffix for mindropout property,
->    added blank lines where required and added description for reg property.
-> 
-> Changes in V4:
->  - Changed compatible string to "com,pm8008-regulators"
->  - Moved "regulator-min-dropout-voltage-microvolt" to regulator.yaml as
->    separate patch.
-> 
-> Changes in V5:
->  - Removed the separate compatible for pm8008 regulator driver.
->  - Moved the supply nodes to chip level.
->  - Removed min-dropout property.
-> 
->  .../bindings/regulator/qcom,pm8008-regulator.yaml  | 31 ++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/qcom,pm8008-regulator.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/regulator/qcom,pm8008-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,pm8008-regulator.yaml
-> new file mode 100644
-> index 0000000..0098845
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/qcom,pm8008-regulator.yaml
-> @@ -0,0 +1,31 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/qcom,pm8008-regulator.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Technologies, Inc. PM8008 Regulator bindings
-> +
-> +maintainers:
-> +  - Satya Priya <skakit@codeaurora.org>
-> +
-> +description:
-> +  Qualcomm Technologies, Inc. PM8008 is an I2C controlled PMIC
-> +  containing 7 LDO regulators.
-> +
-> +patternProperties:
-> +  "^LDO[1-7]$":
+> When the constraints and description for bias-pull-{up,down} were added,
+> the constraints were not indented correctly, resulting in them being
+> parsed as part of the description. This effectively nullified their
+> purpose.
+>
+> Move the constraints out of the description block, make each description
+> part of the same associative array as the enum its describing, and
+> reindent them correctly so they take effect.
+>
+> Also add "type: boolean" to the list of valid values. This corresponds
+> to having bias-pull-{up,down} without any arguments.
+>
+> Fixes: 91e7edceda96 ("dt-bindings: pinctrl: mt8195: change pull up/down description")
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 
-Please make this lower case, to match all other regulator bindings.
+Patch applied!
 
-> +    type: object
-> +    $ref: "regulator.yaml#"
-> +    description: PM8008 regulator peripherals of PM8008 regulator device
-> +
-> +    properties:
-> +      regulator-name: true
-> +
-> +    required:
-> +      - regulator-name
-
-Why is regulator-name a (and the only) required property?
-
-Regards,
-Bjorn
-
-> +
-> +    unevaluatedProperties: false
-> +
-> +additionalProperties: false
-> +...
-> -- 
-> 2.7.4
-> 
+Yours,
+Linus Walleij

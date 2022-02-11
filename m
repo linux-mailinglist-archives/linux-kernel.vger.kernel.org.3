@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87024B286F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 15:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBFBF4B286A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 15:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351098AbiBKOyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 09:54:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48782 "EHLO
+        id S244059AbiBKOzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 09:55:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351092AbiBKOys (ORCPT
+        with ESMTP id S1351111AbiBKOzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 09:54:48 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD5E131;
-        Fri, 11 Feb 2022 06:54:45 -0800 (PST)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E459C1C000C;
-        Fri, 11 Feb 2022 14:54:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644591284;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/snWoyO1kCOhCBySz55Uo3NXloeQ7id88PKB2/aReeA=;
-        b=dfg7TkK0I/3exJfTOxYHVvr+fl22x+mJh10e7NYDZQrLuonafe07F0MGv4zTJwjUywdwFo
-        jszufveg/kUZOQseo7aSWH+ZDBcvBvoeUGIXooGkG9zRt7vZ4ZXkQXuyUEiJKBa3hL5v5z
-        VLjimiAl3xTxrobw3fTaaSlsB2FmK0aWuxFNKiErLGib6APgR2wqIuxyqMlNBE/CVJSVao
-        m5j1qNLRBIw+OhjrBFwakpt30YI4+kdgQ3oA9WZihYjswXyBWQznS97QrkPcL1aCexMaiY
-        RWHtH3TXANId8vXSxjIngtuLKGcITBqu8JEMrJhbgvQdBGniWJi2Q16d1PRMZg==
-Date:   Fri, 11 Feb 2022 15:54:42 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-gpio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH v10 2/6] dt-bindings: gpio: logicvc: Add a compatible
- with major version only
-Message-ID: <YgZ4sj1o4WzMPd0P@aptenodytes>
-References: <20220120150024.646714-1-paul.kocialkowski@bootlin.com>
- <20220120150024.646714-3-paul.kocialkowski@bootlin.com>
- <CACRpkdbnEKeDNmFCuUCLaySs6AtD9MPtxV+9JDxKuXvTs9iMVQ@mail.gmail.com>
- <6f0e58dc-4b81-d819-13e3-9e0f79ba279c@arm.com>
+        Fri, 11 Feb 2022 09:55:52 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523961AE;
+        Fri, 11 Feb 2022 06:55:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644591351; x=1676127351;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=l+zQGEVSkem0Lfm/Lr3g2q66KqstuPi5Ur0AUi2o700=;
+  b=L/IikKRfL2rC7A0plqc0j5aok9Ox/nqsBZ4Im7GN73dUur7YPRyhPWqR
+   qzyoir2d59JAyDi0OxJgnIazF/SCgfG0nHBp+lbevTY98MgZSaqBkd+vb
+   vwx29c/8S1PGFykYEXp5ilJ/ZHBM+HL4+fOVCY/xDq9Ial8aAK5boJDzS
+   8=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 11 Feb 2022 06:55:51 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 06:55:50 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Fri, 11 Feb 2022 06:55:50 -0800
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 11 Feb 2022 06:55:46 -0800
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <rohitkr@codeaurora.org>, <srinivas.kandagatla@linaro.org>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [RESEND v3 0/2] Add lpass pin control support for audio on sc7280 based targets
+Date:   Fri, 11 Feb 2022 20:25:03 +0530
+Message-ID: <1644591305-6235-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="fi4rh3UJ303yTdHr"
-Content-Disposition: inline
-In-Reply-To: <6f0e58dc-4b81-d819-13e3-9e0f79ba279c@arm.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,111 +64,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch set is to add lpass pin control support for Audio over I2S,
+wcd codec and digital mics.
+This patch set depends on:
+	-- https://patchwork.kernel.org/project/alsa-devel/patch/1638891339-21806-3-git-send-email-quic_srivasam@quicinc.com/
 
---fi4rh3UJ303yTdHr
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Changes Since V2:
+    -- Move lpass pin control node to main dtsi file.
+    -- Sort nodes alphabetically.
+    -- Remove redundant wcd reset gpio nodes.
+    -- Remove redundant input-enable field in dmic pin control nodes.
+    -- Update amp_en node. 
+    -- Fix typo errors.
+    -- Modify node names.
+    -- Create patches on latest kernel.    
+Changes Since V1:
+    -- Merge pinmux and pinconf properties in amp_en and wcd pin reset node.
+    -- Split common i2s pin control nodes to functionality specific nodes.
+    -- Move board specific properties to board specific dtsi file.
+    -- Update dmic pin control node name.
 
-Hi,
+Srinivasa Rao Mandadapu (2):
+  arm64: dts: qcom: sc7280: Add pinmux for I2S speaker and Headset
+  arm64: dts: qcom: sc7280: add lpass lpi pin controller node
 
-On Wed 02 Feb 22, 14:26, Robin Murphy wrote:
-> On 2022-01-30 00:46, Linus Walleij wrote:
-> > On Thu, Jan 20, 2022 at 4:00 PM Paul Kocialkowski
-> > <paul.kocialkowski@bootlin.com> wrote:
-> >=20
-> > > There are lots of different versions of the logicvc block and it
-> > > makes little sense to list them all in compatibles since all versions
-> > > with the same major are found to be register-compatible.
-> >=20
-> > The reason we try to be precise is because sometime, long after the dri=
-ver
-> > has been merged and maintained for a few years, a bug is discovered
-> > in a specific version of the silicon.
-> >=20
-> > What happens is that a fix is applied on all silicon whether it is need=
-ed
-> > or not.
-> >=20
-> > If you have the precise silicon compatible, you can avoid this and targ=
-et
-> > only a specific version.
->=20
-> Indeed, the better approach would be something like:
->=20
->   compatible:
->     oneOf:
->       - items:
->           - enum:
->               - foo,bar-v1.0
->               - foo,bar,v1.1
->           - const: foo,bar-v1
->       - items:
->           - enum:
->               - foo,bar-v2.0
->           - const: foo,bar-v2
->=20
-> That way the DTs are future-proof, while drivers can still match on only =
-the
-> less-specific strings until a need arises. Plus it avoids the problem that
-> if an existing OS that only understands "foo,bar-v1.0" is given a new DT
-> with only "foo,bar-v1" for v1.0 hardware it won't be able to use the devi=
-ce,
-> even though it's *functionally* capable of doing so.
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi |  41 +++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi     | 188 +++++++++++++++++++++++++++++++
+ 2 files changed, 229 insertions(+)
 
-Yes I understand that we need to keep compatibility with the already-defined
-compatible.
+-- 
+2.7.4
 
-> However, from skimming patch #5, it looks possible that none of these
-> changes are needed at all. If LOGICVC_IP_VERSION_REG tells you the exact
-> revision, and is always present (as the unconditional reading of it
-> implies), then the only reason for adding new compatibles would be if, sa=
-y,
-> v5 has more clocks from v4 and you want the binding to enforce that;
-> otherwise, newer versions are literally compatible with the
-> currently-defined binding and therefore should continue to bind against t=
-he
-> existing string(s) to maximise forward- and backward-compatibility. Sure,
-> it's not the prettiest thing for a "generic" compatible to be based on an
-> oddly-specific version number that doesn't necessarily match the actual
-> software-discoverable version, but what's done is done and that's the cost
-> of ABI.
-
-Indeed it's true that hardware quirks can be applied based on the precise
-version read from the register, so I don't think there is a need for overly
-precise compatibles.
-
-Since the device-tree binding is currently the same for all versions,
-I understand that it makes sense to keep a single compatible (the already
-defined one), so I guess I will make another iteration without introducing
-new compatibles. But I will probably update the binding document to reflect
-which versions are currently known to work with its current state.
-
-> (also, nitpick for that part of patch #5 since I'm here: please include
-> linux/bitfield.h rather than reinventing FIELD_GET() locally)
-
-Ah good to know thanks, first time hearing about those.
-
-Paul
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---fi4rh3UJ303yTdHr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIGeLIACgkQ3cLmz3+f
-v9Fovwf9FazGyUpB/nAwH7VeTeXwajEB0NHvM9mlYAMba4/aI1h1YN7YzzP6bCm6
-xHVZg35DyCEzdwgDdrqhskFL94mRN43XIsu4a6tZhdJ38uqXAu91O/bjQDaNu4zM
-h37R+IAlna1D/+O9iiwQ/46t0mdI1kRmsgNcrMwG1ERdMQs7o2tZAupPuhHHioZk
-dPwBHCMAJkljVgzf80BgtFuNXglYHp8sunbv05NtodkFLZ/mAANkyRqq9IztJR3D
-Myu/D9/AZjU/57KFg3vuveYoMs3PJrPV0No5pgZX2HP0SJwVL9zmLj43L5K2POdK
-2LJbjDIKaSkNQ0iJE55P1Qzmqmb7Tg==
-=9Gbl
------END PGP SIGNATURE-----
-
---fi4rh3UJ303yTdHr--

@@ -2,255 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3354B1D0D
+	by mail.lfdr.de (Postfix) with ESMTP id C9C8F4B1D0E
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 04:49:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234864AbiBKDtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 22:49:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36552 "EHLO
+        id S237291AbiBKDtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 22:49:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236624AbiBKDtr (ORCPT
+        with ESMTP id S236363AbiBKDtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 22:49:47 -0500
-Received: from mail-m17664.qiye.163.com (mail-m17664.qiye.163.com [59.111.176.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A617855BE;
-        Thu, 10 Feb 2022 19:49:46 -0800 (PST)
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by mail-m17664.qiye.163.com (Hmail) with ESMTPA id D6F9E140149;
-        Fri, 11 Feb 2022 11:49:44 +0800 (CST)
-From:   Jon Lin <jon.lin@rock-chips.com>
-To:     broonie@kernel.org
-Cc:     heiko@sntech.de, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jon Lin <jon.lin@rock-chips.com>
-Subject: [RFC PATCH v1 1/6] spi: rockchip: Stop spi slave dma receiver when cs inactive
-Date:   Fri, 11 Feb 2022 11:49:33 +0800
-Message-Id: <20220211034938.25097-2-jon.lin@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220211034938.25097-1-jon.lin@rock-chips.com>
-References: <20220211034938.25097-1-jon.lin@rock-chips.com>
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
-        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWRpOHhpWTkNPGhpPHx1ITk
-        pDVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWVVLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PzI6MSo6LD4DDh46CEg6DSsU
-        LQEwFDRVSlVKTU9PTk5KSENOSUJNVTMWGhIXVREUFVUXEhU7CRQYEFYYExILCFUYFBZFWVdZEgtZ
-        QVlOQ1VJSVVMVUpKT1lXWQgBWUFMTE9INwY+
-X-HM-Tid: 0a7ee6e6afccda2fkuwsd6f9e140149
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Thu, 10 Feb 2022 22:49:46 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABDF26E7;
+        Thu, 10 Feb 2022 19:49:41 -0800 (PST)
+X-UUID: d06ba2d611cb44b6af1db57bbff36032-20220211
+X-UUID: d06ba2d611cb44b6af1db57bbff36032-20220211
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <dawei.chien@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 431359559; Fri, 11 Feb 2022 11:49:36 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 11 Feb 2022 11:49:34 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 11 Feb 2022 11:49:34 +0800
+Message-ID: <fa9336d8fb2b24538f4ebcc2474a37bd8f7b8653.camel@mediatek.com>
+Subject: Re: [V11, PATCH 12/19] interconnect: mediatek: Add interconnect
+ provider driver
+From:   Dawei Chien <dawei.chien@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ryan Case <ryandcase@chromium.org>
+CC:     Mark Rutland <mark.rutland@arm.com>,
+        Nicolas Boichat <drinkcat@google.com>,
+        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Fan Chen <fan.chen@mediatek.com>,
+        Arvin Wang <arvin.wang@mediatek.com>,
+        "James Liao" <jamesjj.liao@mediatek.com>,
+        Henry Chen <henryc.chen@mediatek.com>
+Date:   Fri, 11 Feb 2022 11:49:34 +0800
+In-Reply-To: <abf785dd-c1d8-b433-f280-3c42043e4684@collabora.com>
+References: <20210812085846.2628-1-dawei.chien@mediatek.com>
+         <20210812085846.2628-13-dawei.chien@mediatek.com>
+         <abf785dd-c1d8-b433-f280-3c42043e4684@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The spi which's version is higher than ver 2 will automatically
-enable this feature.
+On Thu, 2022-02-03 at 16:19 +0100, AngeloGioacchino Del Regno wrote:
+> Il 12/08/21 10:58, Dawei Chien ha scritto:
+> > From: Henry Chen <henryc.chen@mediatek.com>
+> > 
+> > Introduce Mediatek MT6873/MT8183/MT8192 specific provider driver
+> > using the interconnect framework.
+> > 
+> >               ICC provider         ICC Nodes
+> >                                ----          ----
+> >               ---------       |CPU |   |--- |VPU |
+> >      -----   |         |-----  ----    |     ----
+> >     |DRAM |--|DRAM     |       ----    |     ----
+> >     |     |--|scheduler|----- |GPU |   |--- |DISP|
+> >     |     |--|(EMI)    |       ----    |     ----
+> >     |     |--|         |       -----   |     ----
+> >      -----   |         |----- |MMSYS|--|--- |VDEC|
+> >               ---------        -----   |     ----
+> >                 /|\                    |     ----
+> >                  |change DRAM freq     |--- |VENC|
+> >               ----------               |     ----
+> >              |  DVFSR   |              |
+> >              |          |              |     ----
+> >               ----------               |--- |IMG |
+> >                                        |     ----
+> >                                        |     ----
+> >                                        |--- |CAM |
+> >                                              ----
+> > Signed-off-by: Henry Chen <henryc.chen@mediatek.com>
+> > Reviewed-by: Georgi Djakov <georgi.djakov@linaro.org>
+> 
+> This patch deserves my Reviewed-by tag, but I cannot release that if
+> the
+> driver is not properly signed-off.
 
-If the length of master transmission is uncertain, the RK spi slave
-is better to automatically stop after cs inactive instead of waiting
-for xfer_completion forever.
-
-Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
----
-
- drivers/spi/spi-rockchip.c | 85 ++++++++++++++++++++++++++++++++++----
- 1 file changed, 77 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index 553b6b9d0222..7ac07569e103 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -133,7 +133,8 @@
- #define INT_TF_OVERFLOW				(1 << 1)
- #define INT_RF_UNDERFLOW			(1 << 2)
- #define INT_RF_OVERFLOW				(1 << 3)
--#define INT_RF_FULL					(1 << 4)
-+#define INT_RF_FULL				(1 << 4)
-+#define INT_CS_INACTIVE				(1 << 6)
- 
- /* Bit fields in ICR, 4bit */
- #define ICR_MASK					0x0f
-@@ -194,6 +195,8 @@ struct rockchip_spi {
- 	bool cs_asserted[ROCKCHIP_SPI_MAX_CS_NUM];
- 
- 	bool slave_abort;
-+	bool cs_inactive; /* spi slave tansmition stop when cs inactive */
-+	struct spi_transfer *xfer; /* Store xfer temporarily */
- };
- 
- static inline void spi_enable_chip(struct rockchip_spi *rs, bool enable)
-@@ -343,6 +346,15 @@ static irqreturn_t rockchip_spi_isr(int irq, void *dev_id)
- 	struct spi_controller *ctlr = dev_id;
- 	struct rockchip_spi *rs = spi_controller_get_devdata(ctlr);
- 
-+	/* When int_cs_inactive comes, spi slave abort */
-+	if (rs->cs_inactive && readl_relaxed(rs->regs + ROCKCHIP_SPI_IMR) & INT_CS_INACTIVE) {
-+		ctlr->slave_abort(ctlr);
-+		writel_relaxed(0, rs->regs + ROCKCHIP_SPI_IMR);
-+		writel_relaxed(0xffffffff, rs->regs + ROCKCHIP_SPI_ICR);
-+
-+		return IRQ_HANDLED;
-+	}
-+
- 	if (rs->tx_left)
- 		rockchip_spi_pio_writer(rs);
- 
-@@ -350,6 +362,7 @@ static irqreturn_t rockchip_spi_isr(int irq, void *dev_id)
- 	if (!rs->rx_left) {
- 		spi_enable_chip(rs, false);
- 		writel_relaxed(0, rs->regs + ROCKCHIP_SPI_IMR);
-+		writel_relaxed(0xffffffff, rs->regs + ROCKCHIP_SPI_ICR);
- 		spi_finalize_current_transfer(ctlr);
- 	}
- 
-@@ -357,14 +370,18 @@ static irqreturn_t rockchip_spi_isr(int irq, void *dev_id)
- }
- 
- static int rockchip_spi_prepare_irq(struct rockchip_spi *rs,
--		struct spi_transfer *xfer)
-+				    struct spi_controller *ctlr,
-+				    struct spi_transfer *xfer)
- {
- 	rs->tx = xfer->tx_buf;
- 	rs->rx = xfer->rx_buf;
- 	rs->tx_left = rs->tx ? xfer->len / rs->n_bytes : 0;
- 	rs->rx_left = xfer->len / rs->n_bytes;
- 
--	writel_relaxed(INT_RF_FULL, rs->regs + ROCKCHIP_SPI_IMR);
-+	if (rs->cs_inactive)
-+		writel_relaxed(INT_RF_FULL | INT_CS_INACTIVE, rs->regs + ROCKCHIP_SPI_IMR);
-+	else
-+		writel_relaxed(INT_RF_FULL, rs->regs + ROCKCHIP_SPI_IMR);
- 	spi_enable_chip(rs, true);
- 
- 	if (rs->tx_left)
-@@ -383,6 +400,9 @@ static void rockchip_spi_dma_rxcb(void *data)
- 	if (state & TXDMA && !rs->slave_abort)
- 		return;
- 
-+	if (rs->cs_inactive)
-+		writel_relaxed(0, rs->regs + ROCKCHIP_SPI_IMR);
-+
- 	spi_enable_chip(rs, false);
- 	spi_finalize_current_transfer(ctlr);
- }
-@@ -423,14 +443,16 @@ static int rockchip_spi_prepare_dma(struct rockchip_spi *rs,
- 
- 	atomic_set(&rs->state, 0);
- 
-+	rs->tx = xfer->tx_buf;
-+	rs->rx = xfer->rx_buf;
-+
- 	rxdesc = NULL;
- 	if (xfer->rx_buf) {
- 		struct dma_slave_config rxconf = {
- 			.direction = DMA_DEV_TO_MEM,
- 			.src_addr = rs->dma_addr_rx,
- 			.src_addr_width = rs->n_bytes,
--			.src_maxburst = rockchip_spi_calc_burst_size(xfer->len /
--								     rs->n_bytes),
-+			.src_maxburst = rockchip_spi_calc_burst_size(xfer->len / rs->n_bytes),
- 		};
- 
- 		dmaengine_slave_config(ctlr->dma_rx, &rxconf);
-@@ -474,10 +496,13 @@ static int rockchip_spi_prepare_dma(struct rockchip_spi *rs,
- 	/* rx must be started before tx due to spi instinct */
- 	if (rxdesc) {
- 		atomic_or(RXDMA, &rs->state);
--		dmaengine_submit(rxdesc);
-+		ctlr->dma_rx->cookie = dmaengine_submit(rxdesc);
- 		dma_async_issue_pending(ctlr->dma_rx);
- 	}
- 
-+	if (rs->cs_inactive)
-+		writel_relaxed(INT_CS_INACTIVE, rs->regs + ROCKCHIP_SPI_IMR);
-+
- 	spi_enable_chip(rs, true);
- 
- 	if (txdesc) {
-@@ -584,7 +609,46 @@ static size_t rockchip_spi_max_transfer_size(struct spi_device *spi)
- static int rockchip_spi_slave_abort(struct spi_controller *ctlr)
- {
- 	struct rockchip_spi *rs = spi_controller_get_devdata(ctlr);
-+	u32 rx_fifo_left;
-+	struct dma_tx_state state;
-+	enum dma_status status;
-+
-+	/* Get current dma rx point */
-+	if (atomic_read(&rs->state) & RXDMA) {
-+		dmaengine_pause(ctlr->dma_rx);
-+		status = dmaengine_tx_status(ctlr->dma_rx, ctlr->dma_rx->cookie, &state);
-+		dmaengine_terminate_sync(ctlr->dma_rx);
-+		atomic_set(&rs->state, 0);
-+		if (status == DMA_ERROR) {
-+			rs->rx = rs->xfer->rx_buf;
-+			rs->xfer->len = 0;
-+			rx_fifo_left = readl_relaxed(rs->regs + ROCKCHIP_SPI_RXFLR);
-+			for (; rx_fifo_left; rx_fifo_left--)
-+				readl_relaxed(rs->regs + ROCKCHIP_SPI_RXDR);
-+			goto out;
-+		} else {
-+			rs->rx += rs->xfer->len - rs->n_bytes * state.residue;
-+		}
-+	}
-+
-+	/* Get the valid data left in rx fifo and set rs->xfer->len real rx size */
-+	if (rs->rx) {
-+		rx_fifo_left = readl_relaxed(rs->regs + ROCKCHIP_SPI_RXFLR);
-+		for (; rx_fifo_left; rx_fifo_left--) {
-+			u32 rxw = readl_relaxed(rs->regs + ROCKCHIP_SPI_RXDR);
-+
-+			if (rs->n_bytes == 1)
-+				*(u8 *)rs->rx = (u8)rxw;
-+			else
-+				*(u16 *)rs->rx = (u16)rxw;
-+			rs->rx += rs->n_bytes;
-+		}
- 
-+		rs->xfer->len = (unsigned int)(rs->rx - rs->xfer->rx_buf);
-+	}
-+
-+out:
-+	spi_enable_chip(rs, false);
- 	rs->slave_abort = true;
- 	spi_finalize_current_transfer(ctlr);
- 
-@@ -620,7 +684,7 @@ static int rockchip_spi_transfer_one(
- 	}
- 
- 	rs->n_bytes = xfer->bits_per_word <= 8 ? 1 : 2;
--
-+	rs->xfer = xfer;
- 	use_dma = ctlr->can_dma ? ctlr->can_dma(ctlr, spi, xfer) : false;
- 
- 	ret = rockchip_spi_config(rs, spi, xfer, use_dma, ctlr->slave);
-@@ -630,7 +694,7 @@ static int rockchip_spi_transfer_one(
- 	if (use_dma)
- 		return rockchip_spi_prepare_dma(rs, ctlr, xfer);
- 
--	return rockchip_spi_prepare_irq(rs, xfer);
-+	return rockchip_spi_prepare_irq(rs, ctlr, xfer);
- }
- 
- static bool rockchip_spi_can_dma(struct spi_controller *ctlr,
-@@ -808,8 +872,13 @@ static int rockchip_spi_probe(struct platform_device *pdev)
- 	switch (readl_relaxed(rs->regs + ROCKCHIP_SPI_VERSION)) {
- 	case ROCKCHIP_SPI_VER2_TYPE2:
- 		ctlr->mode_bits |= SPI_CS_HIGH;
-+		if (ctlr->can_dma && slave_mode)
-+			rs->cs_inactive = true;
-+		else
-+			rs->cs_inactive = false;
- 		break;
- 	default:
-+		rs->cs_inactive = false;
- 		break;
- 	}
- 
--- 
-2.17.1
+I would add singed-off tag on next version, thank you.
 

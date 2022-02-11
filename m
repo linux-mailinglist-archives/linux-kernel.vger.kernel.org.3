@@ -2,153 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 735FD4B2ABF
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB484B2AD0
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351669AbiBKQok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:44:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45606 "EHLO
+        id S1351677AbiBKQpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:45:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351658AbiBKQoj (ORCPT
+        with ESMTP id S1351666AbiBKQpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:44:39 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31067D69
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:44:38 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id i6so15339477pfc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:44:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=r7NCO79fgZUXR96waIBzEeiI4gx4cTiLegBPPI5RNb8=;
-        b=Q5OzlsIC4foZeakkGt9H8BjVT2KH/yZ/4TfSdFiUKGp5oU+SorT6vicq3AjtOpNzJw
-         v1f2tflNnlumvQ809bGznbktwquG3rlCJtuHZtaExab1SiqFwg7BzV0sDt5B5D9rVOGR
-         Aww0R0/rV2U9Qwzt0/QvRu2iCkFGczwxdTRcAWnGHWYpxEmztpcSQQKxlxWWw4uTAbB3
-         USv/GEFjMm6BMNaI8Z2m5pVRO9Vut5cW5xnZvEFDthk55ddRSHPiBpDLOU/TYoaI0ImO
-         Ru8TByld3V1DF75IIE2D3UIHr23aBRujTS1JZZl4+kVuxKW6uWAuKHuU9Z+T5YuUZPwn
-         qPjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=r7NCO79fgZUXR96waIBzEeiI4gx4cTiLegBPPI5RNb8=;
-        b=wSc0Zp98a23wYfSUSHK8uNU+MnxD5SWPBwyg+TiAbVoIL1+TW0ukyWfkFJMjBYtau5
-         thPU8HUETQkgxIk8MjoFzFo1iHS/+TPFue8JZX5VX1Bb+/JKjb3tpAAErs/Li0XDvEkZ
-         9chb7yaqrNAh3vC47VxOuhmNa0bcyV1vZ3tr2ePhcTBNQ6lKiAOCFfcOF1BtU4TRNSq6
-         BuDoElRZJtR3Meq7Uy/45O8sKZJl/jOBA2oVH8lmZFDhA1G4aKvVxT8oYZ3X5Dm03m4r
-         q/cyeVu7OOZG3qxPmr0EEsy7hKjxRAcdz81rKzjjsZk5ugtsSmMNwjZCu0UBYxqcp8Wn
-         oOag==
-X-Gm-Message-State: AOAM5314oLMn5/4pp8F2TZD2ntFDwJzRzS13gqL/5GNP1q5ow3eHVN0F
-        fPd1RMkbKG5raEk3lBdR7qKTsw==
-X-Google-Smtp-Source: ABdhPJyjAIoZ/R9oEZ8eL+pz+reQ18dctVyR3eFvE//hoFFGEaHJCLU6dR7zg2dzJ1JG4ry0oqA/Tw==
-X-Received: by 2002:a63:81c3:: with SMTP id t186mr2011835pgd.460.1644597877458;
-        Fri, 11 Feb 2022 08:44:37 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id gk15sm6250388pjb.3.2022.02.11.08.44.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 08:44:36 -0800 (PST)
-Date:   Fri, 11 Feb 2022 16:44:33 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        mlevitsk@redhat.com
-Subject: Re: [PATCH 1/3] KVM: SVM: extract avic_ring_doorbell
-Message-ID: <YgaScaJD6fpk2xgJ@google.com>
-References: <20220211110117.2764381-1-pbonzini@redhat.com>
- <20220211110117.2764381-2-pbonzini@redhat.com>
+        Fri, 11 Feb 2022 11:45:10 -0500
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A92D65;
+        Fri, 11 Feb 2022 08:45:08 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id C10372B0011D;
+        Fri, 11 Feb 2022 11:45:06 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Fri, 11 Feb 2022 11:45:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; bh=eo8aiB2mus8/xVU+tXfVcKNpkakKTM0CPZmwuT
+        Q+Md4=; b=OkQHq4iQXuj5DGw/FQexPgUXogxYrjqPUWML2VbmzfPJ2eUYtQ8nvv
+        EiRgy+QJN8pY3m40VbWgF0mpZ+L3kYqv9KRpARy0/TTHMAFemv7NxIel+pEX/FeM
+        R09c/a9ZDqnp6Jh9qDixD6HAkVRx5r2gKizzrmjuj+krKC0AmXIW6360yO4iVLUp
+        s544StMYzUxFRdHc0a2aeeMm5cBQauEGlCwDS8U9yp5AEMG0jtZgkgwBT9JruTJY
+        KR7L62BZVHn7S3BJZRrceuHyzUVJpaGyWPVUx75ThhM7+XEuNPSd12uGmBAQx3oM
+        Hvqghp9GBrid+uo0u5Zy+W3Qqmt9yxsA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=eo8aiB2mus8/xVU+t
+        XfVcKNpkakKTM0CPZmwuTQ+Md4=; b=Z4lYehPf3DNwVu/GkcgzeRBiF3+syGBKM
+        PfUYC5CLUsb7TvDfymYt/3o4PGmYUVVW/PO9S0yidZqjac3a0eW7HBvnPuCcXg/b
+        SFT2kEmzwIkMBH9yF8rqtckESs7lxXX07LskjmzPQXZHxrfI1/bhGm+26gGzpRm2
+        qrLNoqE+I9rfr1cvhKuXPxeegYB1VnLJjzY99tuO2iw3cV1uF8Aa1++VyNuUIDU2
+        GwX4SYKyduD1t1qdVm2S9+Zalga4ueQ5AvzG56xeiNbTJoHit6/OsFK5j8HYCMij
+        FTQ8IswHgj3/6B3h4d5NzRVAf9HE81WSN+6DOk1ExhRvIGsU0v5rg==
+X-ME-Sender: <xms:kZIGYpR7yqMcw6nGGSW-_VtkatBlAxVE49bTMRFlGDaVcTijmugTgQ>
+    <xme:kZIGYiyyozTfomQUxetA33-kqeMdJ6N8ZLHLOl6Y5l0pf_8IIkwsxf2JoNbGIzo0F
+    EDnAy6UWxLs4GNQ7F8>
+X-ME-Received: <xmr:kZIGYu28ttvvFUbBN69JusevKwMFMqLWssQZSRMxKoiDOO_58Kn1k17K4MRzdS1_GUQHZchBUgNNI7R5qLCCbONFzeALzDRrEjnrPII>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrieefgdeltdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
+    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    igihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:kZIGYhDL6q-gg81aukUianHJm_n8E-AK0WCmh_2GGHyeIIyCZRQZ0g>
+    <xmx:kZIGYiiabCj5_MOaGMzxe4tPDVKlo9dXfQuFoaNOPpUrOInwb0DWaw>
+    <xmx:kZIGYlovhBY75W3cYoziUJpOHxVfQX5MtrA-CPjio4BxxGpozLvTrw>
+    <xmx:kZIGYrYQ5YCgy4P0RGMCa3JlN2ipbfJHa2v2E-Dod0mIUqJdYJsuzg9Xn7Q>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 11 Feb 2022 11:45:04 -0500 (EST)
+Date:   Fri, 11 Feb 2022 17:45:03 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 32/66] media: sun6i-csi: Add capture state using vsync
+ for page flip
+Message-ID: <20220211164503.5hftzazx56cwvk66@houat>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+ <20220205185429.2278860-33-paul.kocialkowski@bootlin.com>
+ <20220209092642.hhppmrrekj7zrorj@houat>
+ <YgaDhxYLciLUm5ks@aptenodytes>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="k3t4wpl7ilwsk77w"
 Content-Disposition: inline
-In-Reply-To: <20220211110117.2764381-2-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YgaDhxYLciLUm5ks@aptenodytes>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022, Paolo Bonzini wrote:
-> From: Maxim Levitsky <mlevitsk@redhat.com>
-> 
-> The check on the current CPU adds an extra level of indentation to
-> svm_deliver_avic_intr and conflates documentation on what happens
-> if the vCPU exits (of interest to svm_deliver_avic_intr) and migrates
-> (only of interest to avic_ring_doorbell, which calls get/put_cpu()).
-> Extract the wrmsr to a separate function and rewrite the
-> comment in svm_deliver_avic_intr().
-> 
-> Co-developed-by: Paolo Bonzini <pbonzini@redhat.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 
-Bad SoB chain, should be:
+--k3t4wpl7ilwsk77w
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-  Co-developed-by: Paolo Bonzini <pbonzini@redhat.com>
-  Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+On Fri, Feb 11, 2022 at 04:40:55PM +0100, Paul Kocialkowski wrote:
+> Hi,
+>=20
+> On Wed 09 Feb 22, 10:26, Maxime Ripard wrote:
+> > On Sat, Feb 05, 2022 at 07:53:55PM +0100, Paul Kocialkowski wrote:
+> > > This introduces a new state structure and associated helpers for
+> > > capture, which handles the buffer queue and state for each submitted
+> > > buffer.
+> > >=20
+> > > Besides from the code refactoring, this changes the page flip point
+> > > to vsync instead of frame done, which allows working with only
+> > > two buffers without losing frames. This is apparently a more
+> > > appropriate thing to do with this controller.
+> >=20
+> > Why? What issues were you seeing before, how does using a separate
+> > interrupt addresses it, and what makes you think it's more appropriate?
+>=20
+> I'll try to update the commit log to address this, thanks.
+>=20
+> One of the main issues that the rework is trying to address is the way
+> that double buffering is handled, which currently requires up to 3 buffers
+> to work, due to how buffer configuration is implemented. In particular,
+> it's synchronizing to the frame done interrupt which seems to hit after
+> scanout of the next frame begins, so page flips are always delayed by one
+> frame.
+>=20
+> This is currently solved by setting two buffers when starting the stream:
+> the first one is set before vcap is enabled and seems to be sampled when =
+the
+> first frame scan begins and the second one is set after and stays until t=
+he
+> second vsync hits, at which point it becomes the current active buffer.
+> This way no frame is lost but 3 frames are needed to start.
+>=20
+> This proposal changes the sync point to vsync which allows page flipping =
+to
+> happen for the next frame, thus only 2 buffers are required.
 
-Interestingly, git-apply drops the second, redundant SoB and yields
+This should be in your commit log
 
-  Co-developed-by: Paolo Bonzini <pbonzini@redhat.com>
-  Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-  Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+Maxime
 
-Which will probably get you yelled at by Stephen's scripts :-)
+--k3t4wpl7ilwsk77w
+Content-Type: application/pgp-signature; name="signature.asc"
 
-A few nits below...
+-----BEGIN PGP SIGNATURE-----
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgaSjwAKCRDj7w1vZxhR
+xbTMAP0ZxnXJgdsVzBNK31eF7ZlX4Snoq2+j1MQhKokvYb7MgAD/WKJ1C/ETfaBn
+jWqoaBEKuLs4T72QKJN7yiyARbVePAI=
+=qBtU
+-----END PGP SIGNATURE-----
 
-> ---
->  arch/x86/kvm/svm/avic.c | 33 ++++++++++++++++++++++-----------
->  1 file changed, 22 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 3f9b48732aea..4d1baf5c8f6a 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -269,6 +269,24 @@ static int avic_init_backing_page(struct kvm_vcpu *vcpu)
->  	return 0;
->  }
->  
-> +
-
-Spurious newline.
-
-> +static void avic_ring_doorbell(struct kvm_vcpu *vcpu)
-> +{
-> +	/*
-> +	 * Note, the vCPU could get migrated to a different pCPU at any
-> +	 * point, which could result in signalling the wrong/previous
-> +	 * pCPU.  But if that happens the vCPU is guaranteed to do a
-> +	 * VMRUN (after being migrated) and thus will process pending
-> +	 * interrupts, i.e. a doorbell is not needed (and the spurious
-> +	 * one is harmless).
-
-Please run these out to 80 chars, it saves a whole line!
-
-	/*
-	 * Note, the vCPU could get migrated to a different pCPU at any point,
-	 * which could result in signalling the wrong/previous pCPU.  But if
-	 * that happens the vCPU is guaranteed to do a VMRUN (after being
-	 * migrated) and thus will process pending interrupts, i.e. a doorbell
-	 * is not needed (and the spurious one is harmless).
-	 */
-
-> +	 */
-> +	int cpu = READ_ONCE(vcpu->cpu);
-> +
-> +	if (cpu != get_cpu())
-> +		wrmsrl(MSR_AMD64_SVM_AVIC_DOORBELL, kvm_cpu_get_apicid(cpu));
-> +	put_cpu();
-> +}
-> +
->  static void avic_kick_target_vcpus(struct kvm *kvm, struct kvm_lapic *source,
->  				   u32 icrl, u32 icrh)
->  {
+--k3t4wpl7ilwsk77w--

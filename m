@@ -2,367 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 316C84B23B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A581C4B23B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:51:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349195AbiBKKss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 05:48:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53944 "EHLO
+        id S1349198AbiBKKvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 05:51:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238232AbiBKKsp (ORCPT
+        with ESMTP id S230359AbiBKKvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 05:48:45 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822E5D64;
-        Fri, 11 Feb 2022 02:48:43 -0800 (PST)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Jw9MM6swQz687Jc;
-        Fri, 11 Feb 2022 18:48:31 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 11 Feb 2022 11:48:40 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <zohar@linux.ibm.com>, <shuah@kernel.org>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <andrii@kernel.org>, <kpsingh@kernel.org>
-CC:     <linux-integrity@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH] ima: Calculate digest in ima_inode_hash() if not available
-Date:   Fri, 11 Feb 2022 11:48:28 +0100
-Message-ID: <20220211104828.4061334-1-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.32.0
+        Fri, 11 Feb 2022 05:51:12 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091CAD6A
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:51:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=GLm+KvRrEwRZFrrXIWURqoXEA2SInMX7B9xsdcrqh6s=; b=jCqg6DeYVDkrxdmWUhOcOTD5XL
+        KJ3I9M2hquDsH+ryirBtogtgzPZXQIIQ3o+62eTtPafU4TArgxKROYT45pdXFTUyiXUJq+8ID6Mm5
+        XaU/e1GX4MeDlxbzUyyBLSzSiAlw/xg2puiswy4RsQD0JJf89ba7fBHs6w7JfU+XoQFkaDRu2JDeS
+        XWGVMNsQ5dJccmN3PX6RgYzmbMxyAaHxLBIZMioEpJrvyTuA7IMmjYUPWtObttQJ2NCUQqbA4Z4vZ
+        qkX7uM6uL6Xr+zD50rDwMvP8wRUl0VarXLV9Qq1KcROU/796NdVAkGmtbGLliR3S8DXCKFJUZfVJC
+        57vG8NSw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nITW7-00AKRa-96; Fri, 11 Feb 2022 10:51:07 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3BA8C9853C7; Fri, 11 Feb 2022 11:51:06 +0100 (CET)
+Date:   Fri, 11 Feb 2022 11:51:06 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will.deacon@arm.com>,
+        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] locking/semaphore: Use wake_q to wake up processes
+ outside lock critical section
+Message-ID: <20220211105106.GS23216@worktop.programming.kicks-ass.net>
+References: <20220118153254.358748-1-longman@redhat.com>
+ <YgTms3tGYeQ4HYFZ@hirez.programming.kicks-ass.net>
+ <e30a6464-708b-4946-65f0-c9a1e6bf2b35@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhreml753-chm.china.huawei.com (10.201.108.203) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e30a6464-708b-4946-65f0-c9a1e6bf2b35@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__ima_inode_hash() checks if a digest has been already calculated by
-looking for the integrity_iint_cache structure associated to the passed
-inode.
+On Thu, Feb 10, 2022 at 12:04:59PM -0500, Waiman Long wrote:
+> On 2/10/22 05:19, Peter Zijlstra wrote:
 
-Users of ima_file_hash() and ima_inode_hash() (e.g. eBPF) might be
-interested in obtaining the information without having to setup an IMA
-policy so that the digest is always available at the time they call one of
-those functions.
+> I am sorry that I might have stripped out too much for the lockdep splat to
+> make it understandable. Below is the full lockdep splat:
 
-Open a new file descriptor in __ima_inode_hash(), so that this function
-could invoke ima_collect_measurement() to calculate the digest if it is not
-available. Still return -EOPNOTSUPP if the calculation failed.
+Right, so please just transcribe the relevant bits instead of including
+this massive splat. It really isn't too complicated.
 
-Instead of opening a new file descriptor, the one from ima_file_hash()
-could have been used. However, since ima_inode_hash() was created to obtain
-the digest when the file descriptor is not available, it could benefit from
-this change too. Also, the opened file descriptor might be not suitable for
-use (file descriptor opened not for reading).
+> [ 9776.459819] ======================================================
+> [ 9776.459820] WARNING: possible circular locking dependency detected
+> [ 9776.459821] 5.14.0-0.rc4.35.el9.x86_64+debug #1 Not tainted
+> [ 9776.459823] ------------------------------------------------------
+> [ 9776.459824] stress-ng/117708 is trying to acquire lock:
+> [ 9776.459825] ffffffff892d41d8 ((console_sem).lock){-...}-{2:2}, at:
+> down_trylock+0x13/0x70
+> 
+> [ 9776.459831] but task is already holding lock:
+> [ 9776.459832] ffff888e005f6d18 (&rq->__lock){-.-.}-{2:2}, at:
+> raw_spin_rq_lock_nested+0x27/0x130
+> 
+> [ 9776.459837] which lock already depends on the new lock.
+> 
+> 
+> [ 9776.459839] the existing dependency chain (in reverse order) is:
+> 
+> [ 9776.459841] -> #2 (&rq->__lock){-.-.}-{2:2}:
+> [ 9776.459845]        __lock_acquire+0xb72/0x1870
+> [ 9776.459846]        lock_acquire+0x1ca/0x570
+> [ 9776.459847]        _raw_spin_lock_nested+0x2f/0x80
+> [ 9776.459848]        raw_spin_rq_lock_nested+0x27/0x130
+> [ 9776.459849]        task_fork_fair+0x41/0x550
+> [ 9776.459850]        sched_fork+0x40b/0xb60
+> [ 9776.459851]        copy_process+0x160b/0x4db0
+> [ 9776.459852]        kernel_clone+0xba/0x880
+> [ 9776.459853]        kernel_thread+0xae/0xe0
+> [ 9776.459853]        rest_init+0x22/0x2f0
+> [ 9776.459854]        start_kernel+0x3cd/0x3eb
+> [ 9776.459855]        secondary_startup_64_no_verify+0xc2/0xcb
+> 
+> [ 9776.459857] -> #1 (&p->pi_lock){-.-.}-{2:2}:
+> [ 9776.459860]        __lock_acquire+0xb72/0x1870
+> [ 9776.459861]        lock_acquire+0x1ca/0x570
+> [ 9776.459862]        _raw_spin_lock_irqsave+0x40/0x90
+> [ 9776.459863]        try_to_wake_up+0x9d/0x1210
+> [ 9776.459864]        up+0x7a/0xb0
+> [ 9776.459864]        __up_console_sem+0x33/0x70
+> [ 9776.459865]        console_unlock+0x3a1/0x5f0
+> [ 9776.459866]        vprintk_emit+0x23b/0x2b0
+> [ 9776.459867]        devkmsg_emit.constprop.0+0xab/0xdc
+> [ 9776.459868]        devkmsg_write.cold+0x4e/0x78
+> [ 9776.459869]        do_iter_readv_writev+0x343/0x690
+> [ 9776.459870]        do_iter_write+0x123/0x340
+> [ 9776.459871]        vfs_writev+0x19d/0x520
+> [ 9776.459871]        do_writev+0x110/0x290
+> [ 9776.459872]        do_syscall_64+0x3b/0x90
+> [ 9776.459873]        entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> [ 9776.459875] -> #0 ((console_sem).lock){-...}-{2:2}:
+> [ 9776.459878]        check_prev_add+0x15e/0x20f0
+> [ 9776.459880]        validate_chain+0xaba/0xde0
+> [ 9776.459880]        __lock_acquire+0xb72/0x1870
+> [ 9776.459881]        lock_acquire+0x1ca/0x570
+> [ 9776.459883]        _raw_spin_lock_irqsave+0x40/0x90
+> [ 9776.459884]        down_trylock+0x13/0x70
+> [ 9776.459885]        __down_trylock_console_sem+0x2a/0xb0
+> [ 9776.459886]        console_trylock_spinning+0x13/0x1f0
+> [ 9776.459887]        vprintk_emit+0x1e6/0x2b0
+> [ 9776.459888]        printk+0xb2/0xe3
+> [ 9776.459889]        __warn_printk+0x9b/0xf3
+> [ 9776.459889]        update_rq_clock+0x3c2/0x780
+> [ 9776.459890]        do_sched_rt_period_timer+0x19e/0x9a0
+> [ 9776.459891]        sched_rt_period_timer+0x6b/0x150
+> [ 9776.459892]        __run_hrtimer+0x27a/0xb20
+> [ 9776.459893]        __hrtimer_run_queues+0x159/0x260
+> [ 9776.459894]        hrtimer_interrupt+0x2cb/0x8f0
+> [ 9776.459895]        __sysvec_apic_timer_interrupt+0x13e/0x540
+> [ 9776.459896]        sysvec_apic_timer_interrupt+0x6a/0x90
+> [ 9776.459897]        asm_sysvec_apic_timer_interrupt+0x12/0x20
+> [ 9776.459897]        _raw_spin_unlock_irqrestore+0x3f/0x50
+> [ 9776.459898]        __sched_setscheduler+0xb9a/0x2c80
+> [ 9776.459899]        _sched_setscheduler.isra.0+0xd0/0x140
+> [ 9776.459900]        do_sched_setscheduler+0x151/0x2b0
+> [ 9776.459901]        __x64_sys_sched_setscheduler+0x76/0xa0
+> [ 9776.459902]        do_syscall_64+0x3b/0x90
+> [ 9776.459903]        entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> [ 9776.459904] other info that might help us debug this:
+> 
+> [ 9776.459905] Chain exists of:
+> [ 9776.459906]   (console_sem).lock --> &p->pi_lock --> &rq->__lock
+> 
+> [ 9776.459911]  Possible unsafe locking scenario:
+> 
+> [ 9776.459913]        CPU0                    CPU1
+> [ 9776.459914]        ----                    ----
+> [ 9776.459914]   lock(&rq->__lock);
+> [ 9776.459917] lock(&p->pi_lock);
+> [ 9776.459919] lock(&rq->__lock);
+> [ 9776.459921]   lock((console_sem).lock);
+> 
+> [ 9776.459923]  *** DEADLOCK ***
+> 
+> [ 9776.459925] 2 locks held by stress-ng/117708:
+> [ 9776.459925]  #0: ffffffff89403960 (&cpuset_rwsem){++++}-{0:0}, at:
+> __sched_setscheduler+0xe2f/0x2c80
+> [ 9776.459930]  #1: ffff888e005f6d18 (&rq->__lock){-.-.}-{2:2}, at:
+> raw_spin_rq_lock_nested+0x27/0x130
+> 
+> [ 9776.459935] stack backtrace:
+> [ 9776.459936] CPU: 95 PID: 117708 Comm: stress-ng Kdump: loaded Not tainted
+> 5.14.0-0.rc4.35.el9.x86_64+debug #1
+> [ 9776.459938] Hardware name: FUJITSU PRIMEQUEST 2800E3/D3752, BIOS
+> PRIMEQUEST 2000 Series BIOS Version 01.51 06/29/2020
+> [ 9776.459939] Call Trace:
+> [ 9776.459940]  <IRQ>
+> [ 9776.459940]  dump_stack_lvl+0x57/0x7d
+> [ 9776.459941]  check_noncircular+0x26a/0x310
+> [ 9776.459942]  ? print_circular_bug+0x1f0/0x1f0
+> [ 9776.459943]  ? data_push_tail.part.0+0x92/0x3e0
+> [ 9776.459944]  ? alloc_chain_hlocks+0x1de/0x530
+> [ 9776.459945]  check_prev_add+0x15e/0x20f0
+> [ 9776.459946]  validate_chain+0xaba/0xde0
+> [ 9776.459947]  ? check_prev_add+0x20f0/0x20f0
+> [ 9776.459947]  ? vsnprintf+0x852/0x15f0
+> [ 9776.459948]  __lock_acquire+0xb72/0x1870
+> [ 9776.459949]  lock_acquire+0x1ca/0x570
+> [ 9776.459950]  ? down_trylock+0x13/0x70
+> [ 9776.459950]  ? rcu_read_unlock+0x40/0x40
+> [ 9776.459951]  ? validate_chain+0x14c/0xde0
+> [ 9776.459952]  _raw_spin_lock_irqsave+0x40/0x90
+> [ 9776.459953]  ? down_trylock+0x13/0x70
+> [ 9776.459954]  down_trylock+0x13/0x70
+> [ 9776.459954]  ? vprintk_emit+0x1e6/0x2b0
+> [ 9776.459955]  __down_trylock_console_sem+0x2a/0xb0
+> [ 9776.459956]  console_trylock_spinning+0x13/0x1f0
+> [ 9776.459957]  vprintk_emit+0x1e6/0x2b0
+> [ 9776.459958]  printk+0xb2/0xe3
+> [ 9776.459958]  ? record_print_text.cold+0x11/0x11
+> [ 9776.459959]  ? lock_acquire+0x1ca/0x570
+> [ 9776.459960]  __warn_printk+0x9b/0xf3
+> [ 9776.459961]  ? __mmdrop.cold+0x33/0x33
+> [ 9776.459961]  ? __lock_contended+0x910/0x910
+> [ 9776.459962]  ? do_raw_spin_trylock+0xb5/0x180
+> [ 9776.459963]  ? do_raw_spin_lock+0x270/0x270
+> [ 9776.459964]  update_rq_clock+0x3c2/0x780
+> [ 9776.459965]  ? raw_spin_rq_lock_nested+0x27/0x130
+> [ 9776.459966]  do_sched_rt_period_timer+0x19e/0x9a0
+> [ 9776.459967]  ? sched_rt_period_timer+0x60/0x150
+> [ 9776.459968]  sched_rt_period_timer+0x6b/0x150
+> [ 9776.459969]  __run_hrtimer+0x27a/0xb20
+> [ 9776.459969]  ? do_sched_rt_period_timer+0x9a0/0x9a0
+> [ 9776.459970]  __hrtimer_run_queues+0x159/0x260
+> [ 9776.459971]  ? __run_hrtimer+0xb20/0xb20
+> [ 9776.459972]  ? recalibrate_cpu_khz+0x10/0x10
+> [ 9776.459973]  ? ktime_get_update_offsets_now+0xe0/0x2c0
+> [ 9776.459974]  hrtimer_interrupt+0x2cb/0x8f0
+> [ 9776.459976]  __sysvec_apic_timer_interrupt+0x13e/0x540
+> [ 9776.459977]  sysvec_apic_timer_interrupt+0x6a/0x90
+> [ 9776.459977]  </IRQ>
+> [ 9776.459978]  asm_sysvec_apic_timer_interrupt+0x12/0x20
+> [ 9776.459979] RIP: 0010:_raw_spin_unlock_irqrestore+0x3f/0x50
+> [ 9776.459981] Code: 10 e8 75 82 28 fe 48 89 ef e8 ed 15 29 fe 81 e3 00 02
+> 00 00 75 17 9c 58 f6 c4 02 75 17 48 85 db 74 01 fb 65 ff 0d d1 c8 54 78 <5b>
+> 5d c3 e8 a9 4f 4c fe eb e2 e8 62 7b fd ff eb e2 0f 1f 44 00 00
+> [ 9776.459983] RSP: 0018:ffffc90028e8fcb8 EFLAGS: 00000282
+> [ 9776.459984] RAX: 0000000000000002 RBX: 0000000000000200 RCX:
+> 1ffffffff15ba646
+> [ 9776.459985] RDX: 0000000000000000 RSI: 0000000000000000 RDI:
+> ffffffff87ad28b7
+> [ 9776.459986] RBP: ffff888453ac8d28 R08: 0000000000000001 R09:
+> ffffffff8adc9fd7
+> [ 9776.459987] R10: fffffbfff15b93fa R11: 0000000000000001 R12:
+> 0000000000000000
+> [ 9776.459988] R13: ffff888453ac8000 R14: ffff8c8ccbdf6d00 R15:
+> ffff8c8ccbdf77d0
+> [ 9776.459989]  ? _raw_spin_unlock_irqrestore+0x47/0x50
+> [ 9776.459990]  __sched_setscheduler+0xb9a/0x2c80
+> [ 9776.459991]  ? cpu_cgroup_fork+0x180/0x180
+> [ 9776.459992]  ? sched_clock_cpu+0x15/0x170
+> [ 9776.459993]  ? find_held_lock+0x33/0x110
+> [ 9776.459993]  _sched_setscheduler.isra.0+0xd0/0x140
+> [ 9776.459994]  ? lock_downgrade+0x110/0x110
+> [ 9776.459995]  ? __ia32_sys_sched_setattr+0xa0/0xa0
+> [ 9776.459996]  ? do_sched_setscheduler+0x111/0x2b0
+> [ 9776.459997]  do_sched_setscheduler+0x151/0x2b0
+> [ 9776.459998]  ? _sched_setscheduler.isra.0+0x140/0x140
+> [ 9776.459998]  ? ktime_get_coarse_real_ts64+0x128/0x160
+> [ 9776.459999]  __x64_sys_sched_setscheduler+0x76/0xa0
+> [ 9776.460000]  do_syscall_64+0x3b/0x90
+> [ 9776.460001]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [ 9776.460002] RIP: 0033:0x7fe60257a27b
+> [ 9776.460003] Code: 73 01 c3 48 8b 0d ad 2b 10 00 f7 d8 64 89 01 48 83 c8
+> ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 90 00 00 00 0f 05 <48>
+> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 7d 2b 10 00 f7 d8 64 89 01 48
+> [ 9776.460004] RSP: 002b:00007ffdfe38c5e8 EFLAGS: 00000206 ORIG_RAX:
+> 0000000000000090
+> [ 9776.460006] RAX: ffffffffffffffda RBX: 0000000000000000 RCX:
+> 00007fe60257a27b
+> [ 9776.460007] RDX: 00007ffdfe38c604 RSI: 0000000000000002 RDI:
+> 000000000001cbcc
+> [ 9776.460008] RBP: 0000000000000002 R08: 00007ffdfe38c510 R09:
+> 0000000000000883
+> [ 9776.460009] R10: 0000000000000000 R11: 0000000000000206 R12:
+> 0000000000000002
+> [ 9776.460010] R13: 0000000000000001 R14: 000000000001cbcc R15:
+> 000055b909b568c6
+> [ 9779.843476] sched: RT throttling activated
 
-This change does not cause memory usage increase, due to using a temporary
-integrity_iint_cache structure for the digest calculation, and due to
-freeing the ima_digest_data structure inside integrity_iint_cache before
-exiting from __ima_inode_hash().
+That can be summarized as:
 
-Finally, update the test by removing ima_setup.sh (it is not necessary
-anymore to set an IMA policy) and by directly executing /bin/true.
+	0:		1:		2:
+	pi_lock		rq->lock	console_sem
+	  rq->lock	  console_sem	  pi_lock
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/ima/ima_main.c             |  46 ++++++-
- tools/testing/selftests/bpf/Makefile          |   1 -
- tools/testing/selftests/bpf/ima_setup.sh      | 123 ------------------
- .../selftests/bpf/prog_tests/test_ima.c       |  25 +---
- 4 files changed, 43 insertions(+), 152 deletions(-)
- delete mode 100755 tools/testing/selftests/bpf/ima_setup.sh
+Which is *much* shorter and *much* easier to read.
 
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 8c6e4514d494..44df3f990950 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -26,6 +26,7 @@
- #include <linux/ima.h>
- #include <linux/iversion.h>
- #include <linux/fs.h>
-+#include <linux/fs_struct.h>
- 
- #include "ima.h"
- 
-@@ -521,15 +522,43 @@ EXPORT_SYMBOL_GPL(ima_file_check);
- 
- static int __ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
- {
--	struct integrity_iint_cache *iint;
--	int hash_algo;
-+	struct integrity_iint_cache *iint = NULL, tmp_iint;
-+	struct file *file;
-+	struct path root, path;
-+	int rc, hash_algo;
-+
-+	if (ima_policy_flag)
-+		iint = integrity_iint_find(inode);
-+
-+	if (!iint) {
-+		memset(&tmp_iint, 0, sizeof(tmp_iint));
-+		tmp_iint.inode = inode;
-+		iint = &tmp_iint;
-+
-+		path.dentry = d_find_alias(inode);
-+		if (!path.dentry)
-+			return -EOPNOTSUPP;
-+
-+		get_fs_root(current->fs, &root);
-+		path.mnt = root.mnt;
-+
-+		file = dentry_open(&path, O_RDONLY, current_cred());
-+		if (IS_ERR(file)) {
-+			dput(path.dentry);
-+			path_put(&root);
-+			return -EOPNOTSUPP;
-+		}
- 
--	if (!ima_policy_flag)
--		return -EOPNOTSUPP;
-+		rc = ima_collect_measurement(iint, file, NULL, 0, ima_hash_algo,
-+					     NULL);
- 
--	iint = integrity_iint_find(inode);
--	if (!iint)
--		return -EOPNOTSUPP;
-+		fput(file);
-+		dput(path.dentry);
-+		path_put(&root);
-+
-+		if (rc != 0)
-+			return -EOPNOTSUPP;
-+	}
- 
- 	mutex_lock(&iint->mutex);
- 
-@@ -551,6 +580,9 @@ static int __ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
- 	hash_algo = iint->ima_hash->algo;
- 	mutex_unlock(&iint->mutex);
- 
-+	if (iint == &tmp_iint)
-+		kfree(iint->ima_hash);
-+
- 	return hash_algo;
- }
- 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 42ffc24e9e71..f7f850b2cf26 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -480,7 +480,6 @@ TRUNNER_EXTRA_SOURCES := test_progs.c cgroup_helpers.c trace_helpers.c	\
- 			 network_helpers.c testing_helpers.c		\
- 			 btf_helpers.c flow_dissector_load.h
- TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko	\
--		       ima_setup.sh					\
- 		       $(wildcard progs/btf_dump_test_case_*.c)
- TRUNNER_BPF_BUILD_RULE := CLANG_BPF_BUILD_RULE
- TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(CLANG_CFLAGS) -DENABLE_ATOMICS_TESTS
-diff --git a/tools/testing/selftests/bpf/ima_setup.sh b/tools/testing/selftests/bpf/ima_setup.sh
-deleted file mode 100755
-index 8e62581113a3..000000000000
---- a/tools/testing/selftests/bpf/ima_setup.sh
-+++ /dev/null
-@@ -1,123 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0
--
--set -e
--set -u
--set -o pipefail
--
--IMA_POLICY_FILE="/sys/kernel/security/ima/policy"
--TEST_BINARY="/bin/true"
--VERBOSE="${SELFTESTS_VERBOSE:=0}"
--LOG_FILE="$(mktemp /tmp/ima_setup.XXXX.log)"
--
--usage()
--{
--	echo "Usage: $0 <setup|cleanup|run> <existing_tmp_dir>"
--	exit 1
--}
--
--ensure_mount_securityfs()
--{
--	local securityfs_dir=$(grep "securityfs" /proc/mounts | awk '{print $2}')
--
--	if [ -z "${securityfs_dir}" ]; then
--		securityfs_dir=/sys/kernel/security
--		mount -t securityfs security "${securityfs_dir}"
--	fi
--
--	if [ ! -d "${securityfs_dir}" ]; then
--		echo "${securityfs_dir}: securityfs is not mounted" && exit 1
--	fi
--}
--
--setup()
--{
--	local tmp_dir="$1"
--	local mount_img="${tmp_dir}/test.img"
--	local mount_dir="${tmp_dir}/mnt"
--	local copied_bin_path="${mount_dir}/$(basename ${TEST_BINARY})"
--	mkdir -p ${mount_dir}
--
--	dd if=/dev/zero of="${mount_img}" bs=1M count=10
--
--	losetup -f "${mount_img}"
--	local loop_device=$(losetup -a | grep ${mount_img:?} | cut -d ":" -f1)
--
--	mkfs.ext2 "${loop_device:?}"
--	mount "${loop_device}" "${mount_dir}"
--
--	cp "${TEST_BINARY}" "${mount_dir}"
--	local mount_uuid="$(blkid ${loop_device} | sed 's/.*UUID="\([^"]*\)".*/\1/')"
--
--	ensure_mount_securityfs
--	echo "measure func=BPRM_CHECK fsuuid=${mount_uuid}" > ${IMA_POLICY_FILE}
--}
--
--cleanup() {
--	local tmp_dir="$1"
--	local mount_img="${tmp_dir}/test.img"
--	local mount_dir="${tmp_dir}/mnt"
--
--	local loop_devices=$(losetup -a | grep ${mount_img:?} | cut -d ":" -f1)
--
--	for loop_dev in "${loop_devices}"; do
--		losetup -d $loop_dev
--	done
--
--	umount ${mount_dir}
--	rm -rf ${tmp_dir}
--}
--
--run()
--{
--	local tmp_dir="$1"
--	local mount_dir="${tmp_dir}/mnt"
--	local copied_bin_path="${mount_dir}/$(basename ${TEST_BINARY})"
--
--	exec "${copied_bin_path}"
--}
--
--catch()
--{
--	local exit_code="$1"
--	local log_file="$2"
--
--	if [[ "${exit_code}" -ne 0 ]]; then
--		cat "${log_file}" >&3
--	fi
--
--	rm -f "${log_file}"
--	exit ${exit_code}
--}
--
--main()
--{
--	[[ $# -ne 2 ]] && usage
--
--	local action="$1"
--	local tmp_dir="$2"
--
--	[[ ! -d "${tmp_dir}" ]] && echo "Directory ${tmp_dir} doesn't exist" && exit 1
--
--	if [[ "${action}" == "setup" ]]; then
--		setup "${tmp_dir}"
--	elif [[ "${action}" == "cleanup" ]]; then
--		cleanup "${tmp_dir}"
--	elif [[ "${action}" == "run" ]]; then
--		run "${tmp_dir}"
--	else
--		echo "Unknown action: ${action}"
--		exit 1
--	fi
--}
--
--trap 'catch "$?" "${LOG_FILE}"' EXIT
--
--if [[ "${VERBOSE}" -eq 0 ]]; then
--	# Save the stderr to 3 so that we can output back to
--	# it incase of an error.
--	exec 3>&2 1>"${LOG_FILE}" 2>&1
--fi
--
--main "$@"
--rm -f "${LOG_FILE}"
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_ima.c b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-index 97d8a6f84f4a..82427549f45a 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_ima.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-@@ -13,15 +13,14 @@
- 
- #include "ima.skel.h"
- 
--static int run_measured_process(const char *measured_dir, u32 *monitored_pid)
-+static int run_measured_process(u32 *monitored_pid)
- {
- 	int child_pid, child_status;
- 
- 	child_pid = fork();
- 	if (child_pid == 0) {
- 		*monitored_pid = getpid();
--		execlp("./ima_setup.sh", "./ima_setup.sh", "run", measured_dir,
--		       NULL);
-+		execlp("/bin/true", "/bin/true", NULL);
- 		exit(errno);
- 
- 	} else if (child_pid > 0) {
-@@ -42,10 +41,7 @@ static int process_sample(void *ctx, void *data, size_t len)
- 
- void test_test_ima(void)
- {
--	char measured_dir_template[] = "/tmp/ima_measuredXXXXXX";
- 	struct ring_buffer *ringbuf = NULL;
--	const char *measured_dir;
--	char cmd[256];
- 
- 	int err, duration = 0;
- 	struct ima *skel = NULL;
-@@ -63,27 +59,14 @@ void test_test_ima(void)
- 	if (CHECK(err, "attach", "attach failed: %d\n", err))
- 		goto close_prog;
- 
--	measured_dir = mkdtemp(measured_dir_template);
--	if (CHECK(measured_dir == NULL, "mkdtemp", "err %d\n", errno))
--		goto close_prog;
--
--	snprintf(cmd, sizeof(cmd), "./ima_setup.sh setup %s", measured_dir);
--	err = system(cmd);
--	if (CHECK(err, "failed to run command", "%s, errno = %d\n", cmd, errno))
--		goto close_clean;
--
--	err = run_measured_process(measured_dir, &skel->bss->monitored_pid);
-+	err = run_measured_process(&skel->bss->monitored_pid);
- 	if (CHECK(err, "run_measured_process", "err = %d\n", err))
--		goto close_clean;
-+		goto close_prog;
- 
- 	err = ring_buffer__consume(ringbuf);
- 	ASSERT_EQ(err, 1, "num_samples_or_err");
- 	ASSERT_NEQ(ima_hash_from_bpf, 0, "ima_hash");
- 
--close_clean:
--	snprintf(cmd, sizeof(cmd), "./ima_setup.sh cleanup %s", measured_dir);
--	err = system(cmd);
--	CHECK(err, "failed to run command", "%s, errno = %d\n", cmd, errno);
- close_prog:
- 	ring_buffer__free(ringbuf);
- 	ima__destroy(skel);
--- 
-2.32.0
+> > More concerning, that ordering is invalid to begin with, so the above
+> > seems like a very poor justification for this patch.
+> 
+> Which lock ordering are you considered invalid?
 
+1: above. You cannot take a semaphore inside a (raw) spinlock.
+
+> The stack trace included in the patch description show the
+> (console_sem).lock --> &p->pi_lock --> &rq->__lock sequence because of the
+> wake_up_process() call while holding the console_sem.lock.
+> 
+> The reverse &rq->__lock lock may happen when a printk() statement is called
+> while holding the rq lock.
+> 
+> In this case, the printk() is triggered by a SCHED_WARN_ON() statement in
+> update_rq_clock() which don't call printk_deferred and so won't have
+> LOGLEVEL_SCHED set. I guess there is alternative way to work around this
+> issue, but moving the process wakeup out from the semaphore spinlock will
+> solve this problem in case there are other corner cases like that.
+> 
+> I will update the patch description to include this additional information.
+
+The right solution is to burn printk_deferred at the stake and most of
+printk along with it (they're working on it).
+
+Hitting that WARN is the real problem, the rest is collateral damage and
+I'm really not interested in fixing that.

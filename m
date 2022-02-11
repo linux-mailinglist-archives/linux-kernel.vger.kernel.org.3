@@ -2,222 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87BA44B1A64
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D97B4B1A69
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:27:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346323AbiBKA0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:26:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55954 "EHLO
+        id S1346340AbiBKA1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:27:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345707AbiBKA0J (ORCPT
+        with ESMTP id S1345570AbiBKA1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:26:09 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE83E5594
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:26:09 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id p5so20160112ybd.13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:26:09 -0800 (PST)
+        Thu, 10 Feb 2022 19:27:38 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACB255A3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:27:38 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id p6so3110260plf.10
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:27:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=83N6vWrDkZWain3/17uq/dXBQLDHd+VSAFLGYlPzOiw=;
-        b=ImzKyXL9JdkGxreq3TljkBiZd1/U2yOKqNjkNfES3hHIqCkqc0E0m7Oc1VYnpT7xre
-         T1ktfUfsg9ZAC6caxpY83Ize6AJQM2iG+kiFsOG7ZDmqX+9xTYM5FrZ0/HrQzj73phmk
-         rrpWGoclZftkmpWT+Ivndn2D/r3rIUPv5ByNM=
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=87vVVlt1Gj8gtKfe5Lr2/twqlYXCww3QQq8NSJlRxOY=;
+        b=g6faqlPYdt6/QRXXz+XK476VGGGfTiJy3bKL70N0F+WD8GrL4lZc+StV90vlUD3Nm4
+         W0WE6qNKicd2LtJjrPifzDGgb1ONl2cgs7eY0MEoZQ65zsVV5LsiiKDDDDJpzwRgeAQg
+         syxBykrBibhV/yk/P7fGUObXiFfiICbaDF8awb8nT++oCUI1u7qxVNQuGV8LCndsLJwW
+         sMFVwlqYEJH/gntTENi/GnHlDxMm6LGhaeH7NLF83CUzQH6UH0u+IyLCCPEtgzVL2UIg
+         WhcqEsBAXsgRMKLIqat4nfklmIdWaHd7UltnlJAqSi4fX8L6LnbYFa86sKy+qS7LBeFP
+         EIMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=83N6vWrDkZWain3/17uq/dXBQLDHd+VSAFLGYlPzOiw=;
-        b=4X+orBnj3sNDGH/tBsu/7B4u40E3/0DM5EFCzGsHAvwn6bQp1+/TstcMK5WWlyIgcD
-         JMDw9EjY8ahPLdysjtEH4avhQUnnvYGPaIUdeZ/xJRH1PgulNE+PR1o98g1aZMBd+zrG
-         78NpqsgXZAmtBGBKpa6rhzrSm7/aahLGKx8GIuQzgUbgDA+4oHZnD7hT2nhLU5lLegVi
-         +aHXrOp0zsvqYNr3vu0/ESfV3qrSjQM10acP3Hy50oXjdSSIKe0t+06qJOg+inasbKPX
-         zQwLHmvg3BiTNTIZJqM3P6dUOO34CC+wyR9jnENMJ8/f3ne3PTjuJHhTmLshHLtkcS8x
-         sy1w==
-X-Gm-Message-State: AOAM533W5VZ9s2BNOFOM4grdE4wNp9lePPxWllfD2h0wD+/WUyKxko7N
-        os/TM4hkAxp3Gk9cUGEH/0PmxCf85LJuFzd2hruq
-X-Google-Smtp-Source: ABdhPJy4a/432gjLvmZVWdj5crHbM/KsVz7OqHnLg1XVpmyOGMdekEAT80M2FEW71WD3+vYj/xMBF2lWxTdBiWgGtNQ=
-X-Received: by 2002:a25:c344:: with SMTP id t65mr9155165ybf.10.1644539168913;
- Thu, 10 Feb 2022 16:26:08 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=87vVVlt1Gj8gtKfe5Lr2/twqlYXCww3QQq8NSJlRxOY=;
+        b=u5spaFSneQ3Z379hQQwDm2oqTwbFolBaNcN94PYrqZ4I+ux3P7ytljNmN3n1l0EP3d
+         o0tm9YOqimOLhF/BwAafzAvU06gxxHhhj4rH+7WaKRl/d7vzlPtnHrWBY3XYoU2Gmoq/
+         gaLTSdZkyzo5NexAmUcQxhvpAlh+O1XCnJ4iRDhAMilUmsL8DDkOhbsi4NBboHdZDinG
+         dCmzj8+060YxjgFtGLha3ENwebfx0/xLkxjcpg5+S9Z/dRbcpQJwDYnXIIdBdgvuiCGG
+         x7RdXF3tQkZ+ZLCzqx3w6cmd0CcUNeJ3M5d1p3Gago/8aX0Wjxq9dcQB5xRI8SWePfcO
+         slWw==
+X-Gm-Message-State: AOAM532N4tmZDBgFAlKpaD41PXlidlHQE0Yn6SO3yrOVgj+BvI23uMez
+        jL/v2RPA121vk7xxgKD7Gfs2WPOZ+C6DMw==
+X-Google-Smtp-Source: ABdhPJzTy01qWyWwog/7undC3RcQ3tQ8v0n1XiIFjQWriUIblT6wduEMltC5zYBM6SDbmqX8rigDaw==
+X-Received: by 2002:a17:902:eb8f:: with SMTP id q15mr5303584plg.67.1644539257851;
+        Thu, 10 Feb 2022 16:27:37 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id t15sm18290964pgc.49.2022.02.10.16.27.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 16:27:37 -0800 (PST)
+Date:   Fri, 11 Feb 2022 00:27:33 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com
+Subject: Re: [PATCH 06/12] KVM: MMU: rename kvm_mmu_reload
+Message-ID: <YgWtdUotsoBOOtXz@google.com>
+References: <20220209170020.1775368-1-pbonzini@redhat.com>
+ <20220209170020.1775368-7-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <20220209123800.269774-1-heiko@sntech.de>
-In-Reply-To: <20220209123800.269774-1-heiko@sntech.de>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Thu, 10 Feb 2022 16:25:58 -0800
-Message-ID: <CAOnJCUL5w4+_zJvu-BxP+LGN2ohv6arY+uh0DOU586v_5mCE8g@mail.gmail.com>
-Subject: Re: [PATCH v6 00/14] riscv: support for Svpbmt and D1 memory types
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Wei Fu <wefu@redhat.com>,
-        liush <liush@allwinnertech.com>, Guo Ren <guoren@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Drew Fustini <drew@beagleboard.org>,
-        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Greg Favor <gfavor@ventanamicro.com>,
-        Andrea Mondelli <andrea.mondelli@huawei.com>,
-        Jonathan Behrens <behrensj@mit.edu>,
-        Xinhaoqu <xinhaoqu@huawei.com>,
-        Bill Huffman <huffman@cadence.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Allen Baum <allen.baum@esperantotech.com>,
-        Josh Scheid <jscheid@ventanamicro.com>,
-        Richard Trauben <rtrauben@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Christoph Muellner <cmuellner@linux.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209170020.1775368-7-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 4:38 AM Heiko Stuebner <heiko@sntech.de> wrote:
->
-> Svpbmt is an extension defining "Supervisor-mode: page-based memory types"
-> for things like non-cacheable pages or I/O memory pages.
->
->
-> So this is my 2nd try at implementing Svpbmt (and the diverging D1 memory
-> types) using the alternatives framework.
->
-> This includes a number of changes to the alternatives mechanism itself.
-> The biggest one being the move to a more central location, as I expect
-> in the future, nearly every chip needing some sort of patching, be it
-> either for erratas or for optional features (svpbmt or others).
->
-> The dt-binding for svpbmt itself is of course not finished and is still
-> using the binding introduced in previous versions, as where to put
-> a svpbmt-property in the devicetree is still under dicussion.
-> Atish seems to be working on a framework for extensions [0],
->
+On Wed, Feb 09, 2022, Paolo Bonzini wrote:
+> The name of kvm_mmu_reload is very confusing for two reasons:
+> first, KVM_REQ_MMU_RELOAD actually does not call it; second,
+> it only does anything if there is no valid root.
+> 
+> Rename it to kvm_mmu_ensure_valid_root, which matches the actual
+> behavior better.
 
-Here is the patch series
-https://lore.kernel.org/lkml/20220210214018.55739-1-atishp@rivosinc.com/
+100% agree that kvm_mmu_reload() is a terrible name, but kvm_mmu_ensure_valid_root()
+isn't much better, e.g. it sounds like a sanity check and nothing more.
 
-I think we can simplify the cpu feature probing in PATCH 10 with the
-above series
-which simply relies on the existing riscv_isa bitmap.
+Maybe just be very literalal?
 
-We also don't need the separate svpbmt property in DT mmu node.
-Let me know what you think.
+  kvm_mmu_load_if_necessary()
+  kvm_mmu_load_if_invalid()
 
-> The series also introduces support for the memory types of the D1
-> which are implemented differently to svpbmt. But when patching anyway
-> it's pretty clean to add the D1 variant via ALTERNATIVE_2 to the same
-> location.
->
-> The only slightly bigger difference is that the "normal" type is not 0
-> as with svpbmt, so kernel patches for this PMA type need to be applied
-> even before the MMU is brought up, so the series introduces a separate
-> stage for that.
->
->
-> In theory this series is 3 parts:
-> - sbi cache-flush / null-ptr
-> - alternatives improvements
-> - svpbmt+d1
->
-> So expecially patches from the first 2 areas could be applied when
-> deemed ready, I just thought to keep it together to show-case where
-> the end-goal is and not requiring jumping between different series.
->
->
-> The sbi cache-flush patch is based on Atish's sparse-hartid patch [1],
-> as it touches a similar area in mm/cacheflush.c
->
->
-> I picked the recipient list from the previous version, hopefully
-> I didn't forget anybody.
->
-> changes in v6:
-> - rebase onto 5.17-rc1
-> - handle sbi null-ptr differently
-> - improve commit messages
-> - use riscv,mmu as property name
->
-> changes in v5:
-> - move to use alternatives for runtime-patching
-> - add D1 variant
->
->
-> [0] https://lore.kernel.org/r/20211224211632.1698523-1-atishp@rivosinc.com
-> [1] https://lore.kernel.org/r/20220120090918.2646626-1-atishp@rivosinc.com
->
->
-> Heiko Stuebner (12):
->   riscv: prevent null-pointer dereference with sbi_remote_fence_i
->   riscv: integrate alternatives better into the main architecture
->   riscv: allow different stages with alternatives
->   riscv: implement module alternatives
->   riscv: implement ALTERNATIVE_2 macro
->   riscv: extend concatenated alternatives-lines to the same length
->   riscv: prevent compressed instructions in alternatives
->   riscv: move boot alternatives to a slightly earlier position
->   riscv: Fix accessing pfn bits in PTEs for non-32bit variants
->   riscv: add cpufeature handling via alternatives
->   riscv: remove FIXMAP_PAGE_IO and fall back to its default value
->   riscv: add memory-type errata for T-Head
->
-> Wei Fu (2):
->   dt-bindings: riscv: add MMU Standard Extensions support for Svpbmt
->   riscv: add RISC-V Svpbmt extension support
->
->  .../devicetree/bindings/riscv/cpus.yaml       |  10 ++
->  arch/riscv/Kconfig.erratas                    |  29 ++--
->  arch/riscv/Kconfig.socs                       |   1 -
->  arch/riscv/Makefile                           |   2 +-
->  arch/riscv/errata/Makefile                    |   2 +-
->  arch/riscv/errata/sifive/errata.c             |  10 +-
->  arch/riscv/errata/thead/Makefile              |   1 +
->  arch/riscv/errata/thead/errata.c              |  85 +++++++++++
->  arch/riscv/include/asm/alternative-macros.h   | 114 ++++++++-------
->  arch/riscv/include/asm/alternative.h          |  16 ++-
->  arch/riscv/include/asm/errata_list.h          |  52 +++++++
->  arch/riscv/include/asm/fixmap.h               |   2 -
->  arch/riscv/include/asm/pgtable-32.h           |  17 +++
->  arch/riscv/include/asm/pgtable-64.h           |  79 +++++++++-
->  arch/riscv/include/asm/pgtable-bits.h         |  10 --
->  arch/riscv/include/asm/pgtable.h              |  53 +++++--
->  arch/riscv/include/asm/vendorid_list.h        |   1 +
->  arch/riscv/kernel/Makefile                    |   1 +
->  arch/riscv/{errata => kernel}/alternative.c   |  48 ++++++-
->  arch/riscv/kernel/cpufeature.c                | 136 +++++++++++++++++-
->  arch/riscv/kernel/head.S                      |   2 +
->  arch/riscv/kernel/module.c                    |  29 ++++
->  arch/riscv/kernel/sbi.c                       |  10 +-
->  arch/riscv/kernel/smpboot.c                   |   4 -
->  arch/riscv/kernel/traps.c                     |   2 +-
->  arch/riscv/mm/init.c                          |   1 +
->  26 files changed, 606 insertions(+), 111 deletions(-)
->  create mode 100644 arch/riscv/errata/thead/Makefile
->  create mode 100644 arch/riscv/errata/thead/errata.c
->  rename arch/riscv/{errata => kernel}/alternative.c (59%)
->
-> --
-> 2.30.2
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Or follow cond_sched()?
 
-
-
--- 
-Regards,
-Atish
+  kvm_mmu_cond_load()

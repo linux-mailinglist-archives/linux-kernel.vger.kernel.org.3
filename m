@@ -2,115 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6DAE4B1A8A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C994B1A8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346441AbiBKAjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:39:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34506 "EHLO
+        id S1346454AbiBKAkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:40:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346413AbiBKAjV (ORCPT
+        with ESMTP id S1346447AbiBKAkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:39:21 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8E55F6E
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:39:21 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id 4so7858573oil.11
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:39:21 -0800 (PST)
+        Thu, 10 Feb 2022 19:40:22 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5477A5F8B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:40:19 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id e79so9513580iof.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:40:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Rw+VMRXRUIyN9bF2/fBVa49N7kaF4tRFWJnCSrzk2zU=;
-        b=o686K0dnNs/4K4igN49JLtIdabbs0iDVtN8mKYgzWwa1omAktAYG74Uqne79/xcitc
-         A+NBL/bXZnnFt0TS3SkYxrxFxYfIqJvw8o7JP6iJ9PPRJJRQXzlqOfcn3beWA3IUISvd
-         gzq2EMCP4L6SqhZGN3gISzcadXQop0MIHY9Yj5D9SjVcnPsJBw+OHKm+Rz0wmLO+/vWo
-         z/hYYrL8b4Z9sHQ8LDzEmf0el+NtOyKeCdb+IpxrA0gTjo3DcfTMyB3EFBU01brqETMd
-         lJcTSWIRdC6lYBHxOTZIb85ZoE9oYGMQjk6l/DdTh02ck4hT0Z3fif0jH95Si7db14mn
-         GFUg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:cc;
+        bh=lFCvE5g2JTD7Wl81REd7Gq5kC+E/CgUSaN7wy6qbWOE=;
+        b=VtYPNobKD09wldiKKvTu91rXQCR0IYONn5V1OzDhc2Cdc3IOtrLo6mBgEZ3sqH3Pfa
+         IN32zk1uZODJ1Jz7OyVbpEuHVXgb5hv+WW3p7NOcK6LMcaHhnw5NAWexF1O+I5tuYFVj
+         wTtYO5MC8v2Ogp0J+wzT5vCnkG16XHFKJq57XSh2W1WiT5X0FhwmNAUz7xLMdkCJI/vj
+         I8Dcr88qlqQkPLTrgDMQJMX4N3mwKi5bKAxTAOf1Z8rBOflBExxdGoTXIhAMLz6Jebzv
+         YxCvRShMHjL0tmfzkpChHFXTGv6ykKmpjblS3sTwUu4QMmEgWBGVQv0LUr8Fexfh3w/e
+         BnvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Rw+VMRXRUIyN9bF2/fBVa49N7kaF4tRFWJnCSrzk2zU=;
-        b=izvdvNWAhL23nqt6r2kbDtmDvy2p4hORSDeQFp19cr1n/PUC6d/gMTbcUyfvtDDq58
-         RVCKspLdrQd/jfCMEB6E2N6oYaXLZJnKeoEGBx3CHloml1W/lrrMt+ZfJ7nzwEbTDZ5I
-         XB4smGSBT0aswNze34Jy24UOyWKy7qm9nHhT1jdMqnT2S+ayl5uWyH+ISuxLFVYZZXFY
-         mrBLxsoSSbw4TAddFJi+NRQV6Trm/mgO6ON6lk8Y2J41yLOIExiPLv701fZevWFr54JV
-         RL9PlwOnCXB2Mp0LwPgqrjhBtvMKIOwyHQokr6rY6MX4cLQtfKlYVvoFwX+eOGlJSqbO
-         PxOQ==
-X-Gm-Message-State: AOAM530nbunq42qhnzV+XB+55jIWL+lG17O136yk+FsE/C/lTNtkqcO6
-        e1snLlOTAepcdRHwmIftHpDCwg==
-X-Google-Smtp-Source: ABdhPJxlUSCZBHWuEgaZh+RQGoqoZLfLJqg6+11ciAbqbNDR4kjCc+y/5UG4wCcE0o6ZCt+xFGiGyQ==
-X-Received: by 2002:a05:6808:30a0:: with SMTP id bl32mr16087oib.262.1644539960585;
-        Thu, 10 Feb 2022 16:39:20 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id m5sm8497035otk.78.2022.02.10.16.39.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 16:39:20 -0800 (PST)
-Date:   Thu, 10 Feb 2022 18:39:18 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Sai Teja Aluvala <quic_saluvala@quicinc.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, mka@chromium.org,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        quic_hemantg@quicinc.com, linux-arm-msm@vger.kernel.org,
-        quic_bgodavar@quicinc.com, quic_rjliao@quicinc.com,
-        quic_hbandi@quicinc.com, abhishekpandit@chromium.org,
-        mcchou@chromium.org
-Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280: setting the vddio supply
- for Bluetooth node on CRD
-Message-ID: <YgWwNiLDCZ0jEV30@builder.lan>
-References: <1644318803-14950-1-git-send-email-quic_saluvala@quicinc.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:cc;
+        bh=lFCvE5g2JTD7Wl81REd7Gq5kC+E/CgUSaN7wy6qbWOE=;
+        b=TuPZJaMZNXuQNsgA9YLqRLfU8KB8SO2jvyXlXxx2N00k3XPYhZHtEx6K9T4NkOI4KE
+         vbdur1dR5iSKd4iWd7E3IQMg7TkiFJt9Idu3OY1s43aNTJQqZcFac4KcujO8vfjFyvSv
+         y+IB0YDu/NpukiDcR8slX6cNO4HzEFGpW3YuiRpuJ0LSLzX5ISqXwJR57MSGGe0cLjWD
+         C4YdzRm4vaU+Kniu/V0pvV6SLso+dcg6Atq+9Cis4JUliqPLwKqvmh2vd56njvuwxKUI
+         uyt3Z3YZMgIGqV858/GLGtCdG6TXgZa0lL3nPjxFs2bpM600NPWYIgDZgUH0Da41M4CO
+         XCPQ==
+X-Gm-Message-State: AOAM533uxbvQbcQNkNPx6pG55tjYW3/XbyKmwbzopm0v9PHR48wNdNnt
+        w3Rto3bPEpwMspgZQ8AbT7rg5M4V7Sn9zZbEU20=
+X-Received: by 2002:a5d:9d9e:: with SMTP id ay30mt5247367iob.192.1644540018688;
+ Thu, 10 Feb 2022 16:40:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1644318803-14950-1-git-send-email-quic_saluvala@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220211003641.73111-1-eugene.shalygin@gmail.com>
+In-Reply-To: <20220211003641.73111-1-eugene.shalygin@gmail.com>
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Date:   Fri, 11 Feb 2022 01:40:07 +0100
+Message-ID: <CAB95QAS4ow16O6Fb8Q_q5yoZaUzVaBWF59PgmdBCfOsxM0ugpA@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (asus-ec-sensors) deduce sensor signess from its type
+Cc:     Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_GMAIL_RCVD,FREEMAIL_FROM,
+        MISSING_HEADERS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 08 Feb 05:13 CST 2022, Sai Teja Aluvala wrote:
+On Fri, 11 Feb 2022 at 01:36, Eugene Shalygin <eugene.shalygin@gmail.com> wrote:
+>
+> Reading DSDT code for ASUS X470-based boards (the ones served by the
+> asus_wmi_Sensors driver), where ASUS put hardware monitoring functions
+> into the WMI code, reveals that fan and current sensors data is
+> unsigned. For the current sensor that was confirmed by a user who showed
+> high enough current value for overflow.
 
-> setting the vddio supply for Bluetooth SoC WCN6750 node
-> on SC7280 crd board
-> 
+Denis, you might be interested in fixing temperature sensors in the
+asus_wmi_sensors driver too.
 
-While this does better describe what the change does, as Matthias
-requested on v1, it fails to provide any information about why this
-done.
+>  static inline s32 get_sensor_value(const struct ec_sensor_info *si, u8 *data)
+>  {
+> -       switch (si->addr.components.size) {
+> -       case 1:
+> -               return (s8)*data;
+> -       case 2:
+> -               return (s16)get_unaligned_be16(data);
+> -       case 4:
+> -               return (s32)get_unaligned_be32(data);
+> -       default:
+> -               return 0;
+> +       if (is_sensor_data_signed(si)) {
+> +               switch (si->addr.components.size) {
+> +               case 1:
+> +                       return (s8)*data;
+> +               case 2:
+> +                       return (s16)get_unaligned_be16(data);
+> +               case 4:
+> +                       return (s32)get_unaligned_be32(data);
+> +               default:
+> +                       return 0;
+> +               }
+> +       } else {
+> +               switch (si->addr.components.size) {
+> +               case 1:
+> +                       return *data;
+> +               case 2:
+> +                       return get_unaligned_be16(data);
+> +               case 4:
+> +                       return get_unaligned_be32(data);
+> +               default:
+> +                       return 0;
+> +               }
+>         }
+>  }
 
-Is vddio simply not powered on the IDP? Or did someone forget to add it
-to the idp.dtsi?
+I would appreciate it if anyone could help me to collapse this
+ugliness somehow, without multi-level macros, please.
 
-Regards,
-Bjorn
-
-> Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sc7280-crd.dts | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-> index cd2755c..53ea3b4 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-> @@ -23,6 +23,10 @@
->  	};
->  };
->  
-> +&bluetooth {
-> +	vddio-supply = <&vreg_l18b_1p8>;
-> +};
-> +
->  ap_tp_i2c: &i2c0 {
->  	status = "okay";
->  	clock-frequency = <400000>;
-> -- 
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
-> 
+Thank you,
+Eugene

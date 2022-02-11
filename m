@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFADF4B259D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:27:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9234B25AB
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:27:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350018AbiBKM1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 07:27:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34294 "EHLO
+        id S244455AbiBKM1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 07:27:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349992AbiBKM04 (ORCPT
+        with ESMTP id S1349994AbiBKM06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 07:26:56 -0500
+        Fri, 11 Feb 2022 07:26:58 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BAE9F28;
-        Fri, 11 Feb 2022 04:26:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C22DF60;
+        Fri, 11 Feb 2022 04:26:57 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F5E01042;
-        Fri, 11 Feb 2022 04:26:55 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4B0A112FC;
+        Fri, 11 Feb 2022 04:26:57 -0800 (PST)
 Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.196.172])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A02483F70D;
-        Fri, 11 Feb 2022 04:26:53 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8DF163F70D;
+        Fri, 11 Feb 2022 04:26:55 -0800 (PST)
 From:   Andre Przywara <andre.przywara@arm.com>
 To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>
@@ -32,9 +32,9 @@ Cc:     Rob Herring <robh@kernel.org>, Ondrej Jirman <megous@megous.com>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         linux-rtc@vger.kernel.org
-Subject: [PATCH v10 03/18] rtc: sun6i: Fix time overflow handling
-Date:   Fri, 11 Feb 2022 12:26:28 +0000
-Message-Id: <20220211122643.1343315-4-andre.przywara@arm.com>
+Subject: [PATCH v10 04/18] rtc: sun6i: Add support for linear day storage
+Date:   Fri, 11 Feb 2022 12:26:29 +0000
+Message-Id: <20220211122643.1343315-5-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220211122643.1343315-1-andre.przywara@arm.com>
 References: <20220211122643.1343315-1-andre.przywara@arm.com>
@@ -49,71 +49,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using "unsigned long" for UNIX timestamps is never a good idea, and
-comparing the value of such a variable against U32_MAX does not do
-anything useful on 32-bit systems.
+Newer versions of the Allwinner RTC, as for instance found in the H616
+SoC, no longer store a broken-down day/month/year representation in the
+RTC_DAY_REG, but just a linear day number.
+The user manual does not give any indication about the expected epoch
+time of this day count, but the BSP kernel uses the UNIX epoch, which
+allows easy support due to existing conversion functions in the kernel.
 
-Use the proper time64_t type when dealing with timestamps, and avoid
-cutting down the time range unnecessarily. This also fixes the flawed
-check for the alarm time being too far into the future.
+Allow tagging a compatible string with a flag, and use that to mark
+those new RTCs. Then convert between a UNIX day number (converted into
+seconds) and the broken-down day representation using mktime64() and
+time64_to_tm() in the set_time/get_time functions.
 
-The check for this condition is actually somewhat theoretical, as the
-RTC counts till 2033 only anyways, and 2^32 seconds from now is not
-before the year 2157 - at which point I hope nobody will be using this
-hardware anymore.
+That enables support for the RTC in those new chips.
 
 Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- drivers/rtc/rtc-sun6i.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+ drivers/rtc/rtc-sun6i.c | 69 +++++++++++++++++++++++++++--------------
+ 1 file changed, 46 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/rtc/rtc-sun6i.c b/drivers/rtc/rtc-sun6i.c
-index 35b34d14a1db..dc3ae851841c 100644
+index dc3ae851841c..996d05938839 100644
 --- a/drivers/rtc/rtc-sun6i.c
 +++ b/drivers/rtc/rtc-sun6i.c
-@@ -139,7 +139,7 @@ struct sun6i_rtc_dev {
+@@ -111,6 +111,8 @@
+ #define SUN6I_YEAR_MIN				1970
+ #define SUN6I_YEAR_OFF				(SUN6I_YEAR_MIN - 1900)
+ 
++#define SECS_PER_DAY				(24 * 3600ULL)
++
+ /*
+  * There are other differences between models, including:
+  *
+@@ -134,12 +136,15 @@ struct sun6i_rtc_clk_data {
+ 	unsigned int has_auto_swt : 1;
+ };
+ 
++#define RTC_LINEAR_DAY	BIT(0)
++
+ struct sun6i_rtc_dev {
+ 	struct rtc_device *rtc;
  	const struct sun6i_rtc_clk_data *data;
  	void __iomem *base;
  	int irq;
--	unsigned long alarm;
-+	time64_t alarm;
+ 	time64_t alarm;
++	unsigned long flags;
  
  	struct clk_hw hw;
  	struct clk_hw *int_osc;
-@@ -511,10 +511,8 @@ static int sun6i_rtc_setalarm(struct device *dev, struct rtc_wkalrm *wkalrm)
- 	struct sun6i_rtc_dev *chip = dev_get_drvdata(dev);
- 	struct rtc_time *alrm_tm = &wkalrm->time;
- 	struct rtc_time tm_now;
--	unsigned long time_now = 0;
--	unsigned long time_set = 0;
--	unsigned long time_gap = 0;
--	int ret = 0;
-+	time64_t time_now, time_set;
-+	int ret;
+@@ -468,22 +473,30 @@ static int sun6i_rtc_gettime(struct device *dev, struct rtc_time *rtc_tm)
+ 	} while ((date != readl(chip->base + SUN6I_RTC_YMD)) ||
+ 		 (time != readl(chip->base + SUN6I_RTC_HMS)));
  
- 	ret = sun6i_rtc_gettime(dev, &tm_now);
- 	if (ret < 0) {
-@@ -529,9 +527,7 @@ static int sun6i_rtc_setalarm(struct device *dev, struct rtc_wkalrm *wkalrm)
- 		return -EINVAL;
- 	}
++	if (chip->flags & RTC_LINEAR_DAY) {
++		/*
++		 * Newer chips store a linear day number, the manual
++		 * does not mandate any epoch base. The BSP driver uses
++		 * the UNIX epoch, let's just copy that, as it's the
++		 * easiest anyway.
++		 */
++		rtc_time64_to_tm((date & 0xffff) * SECS_PER_DAY, rtc_tm);
++	} else {
++		rtc_tm->tm_mday = SUN6I_DATE_GET_DAY_VALUE(date);
++		rtc_tm->tm_mon  = SUN6I_DATE_GET_MON_VALUE(date) - 1;
++		rtc_tm->tm_year = SUN6I_DATE_GET_YEAR_VALUE(date);
++
++		/*
++		 * switch from (data_year->min)-relative offset to
++		 * a (1900)-relative one
++		 */
++		rtc_tm->tm_year += SUN6I_YEAR_OFF;
++	}
++
+ 	rtc_tm->tm_sec  = SUN6I_TIME_GET_SEC_VALUE(time);
+ 	rtc_tm->tm_min  = SUN6I_TIME_GET_MIN_VALUE(time);
+ 	rtc_tm->tm_hour = SUN6I_TIME_GET_HOUR_VALUE(time);
  
--	time_gap = time_set - time_now;
+-	rtc_tm->tm_mday = SUN6I_DATE_GET_DAY_VALUE(date);
+-	rtc_tm->tm_mon  = SUN6I_DATE_GET_MON_VALUE(date);
+-	rtc_tm->tm_year = SUN6I_DATE_GET_YEAR_VALUE(date);
 -
--	if (time_gap > U32_MAX) {
-+	if ((time_set - time_now) > U32_MAX) {
- 		dev_err(dev, "Date too far in the future\n");
- 		return -EINVAL;
- 	}
-@@ -540,7 +536,7 @@ static int sun6i_rtc_setalarm(struct device *dev, struct rtc_wkalrm *wkalrm)
- 	writel(0, chip->base + SUN6I_ALRM_COUNTER);
- 	usleep_range(100, 300);
+-	rtc_tm->tm_mon  -= 1;
+-
+-	/*
+-	 * switch from (data_year->min)-relative offset to
+-	 * a (1900)-relative one
+-	 */
+-	rtc_tm->tm_year += SUN6I_YEAR_OFF;
+-
+ 	return 0;
+ }
  
--	writel(time_gap, chip->base + SUN6I_ALRM_COUNTER);
-+	writel(time_set - time_now, chip->base + SUN6I_ALRM_COUNTER);
- 	chip->alarm = time_set;
+@@ -568,20 +581,25 @@ static int sun6i_rtc_settime(struct device *dev, struct rtc_time *rtc_tm)
+ 	u32 date = 0;
+ 	u32 time = 0;
  
- 	sun6i_rtc_setaie(wkalrm->enabled, chip);
+-	rtc_tm->tm_year -= SUN6I_YEAR_OFF;
+-	rtc_tm->tm_mon += 1;
+-
+-	date = SUN6I_DATE_SET_DAY_VALUE(rtc_tm->tm_mday) |
+-		SUN6I_DATE_SET_MON_VALUE(rtc_tm->tm_mon)  |
+-		SUN6I_DATE_SET_YEAR_VALUE(rtc_tm->tm_year);
+-
+-	if (is_leap_year(rtc_tm->tm_year + SUN6I_YEAR_MIN))
+-		date |= SUN6I_LEAP_SET_VALUE(1);
+-
+ 	time = SUN6I_TIME_SET_SEC_VALUE(rtc_tm->tm_sec)  |
+ 		SUN6I_TIME_SET_MIN_VALUE(rtc_tm->tm_min)  |
+ 		SUN6I_TIME_SET_HOUR_VALUE(rtc_tm->tm_hour);
+ 
++	if (chip->flags & RTC_LINEAR_DAY) {
++		/* The division will cut off the H:M:S part of rtc_tm. */
++		date = div_u64(rtc_tm_to_time64(rtc_tm), SECS_PER_DAY);
++	} else {
++		rtc_tm->tm_year -= SUN6I_YEAR_OFF;
++		rtc_tm->tm_mon += 1;
++
++		date = SUN6I_DATE_SET_DAY_VALUE(rtc_tm->tm_mday) |
++			SUN6I_DATE_SET_MON_VALUE(rtc_tm->tm_mon)  |
++			SUN6I_DATE_SET_YEAR_VALUE(rtc_tm->tm_year);
++
++		if (is_leap_year(rtc_tm->tm_year + SUN6I_YEAR_MIN))
++			date |= SUN6I_LEAP_SET_VALUE(1);
++	}
++
+ 	/* Check whether registers are writable */
+ 	if (sun6i_rtc_wait(chip, SUN6I_LOSC_CTRL,
+ 			   SUN6I_LOSC_CTRL_ACC_MASK, 50)) {
+@@ -714,6 +732,8 @@ static int sun6i_rtc_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, chip);
+ 
++	chip->flags = (unsigned long)of_device_get_match_data(&pdev->dev);
++
+ 	chip->irq = platform_get_irq(pdev, 0);
+ 	if (chip->irq < 0)
+ 		return chip->irq;
+@@ -760,7 +780,10 @@ static int sun6i_rtc_probe(struct platform_device *pdev)
+ 		return PTR_ERR(chip->rtc);
+ 
+ 	chip->rtc->ops = &sun6i_rtc_ops;
+-	chip->rtc->range_max = 2019686399LL; /* 2033-12-31 23:59:59 */
++	if (chip->flags & RTC_LINEAR_DAY)
++		chip->rtc->range_max = (65536 * SECS_PER_DAY) - 1;
++	else
++		chip->rtc->range_max = 2019686399LL; /* 2033-12-31 23:59:59 */
+ 
+ 	ret = devm_rtc_register_device(chip->rtc);
+ 	if (ret)
 -- 
 2.25.1
 

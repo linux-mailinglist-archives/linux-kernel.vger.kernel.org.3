@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C014B2347
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A15AE4B233F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:36:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348974AbiBKKem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 05:34:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60722 "EHLO
+        id S238414AbiBKKeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 05:34:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348950AbiBKKe3 (ORCPT
+        with ESMTP id S1348945AbiBKKeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 05:34:29 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DF0EB4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:34:28 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id j17-20020a25ec11000000b0061dabf74012so17894373ybh.15
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:34:28 -0800 (PST)
+        Fri, 11 Feb 2022 05:34:31 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA58FEA8
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:34:30 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id b12-20020a056902030c00b0061d720e274aso17824428ybs.20
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:34:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=+vOkqY9ujgn8jSfYzqg46hBeUg4M5HreQws2W8UcU8Y=;
-        b=tPuuDRE6WJC7bnfBoA28dPv83FT6FoKMQeGtZeMSpWXQALL6+dTtChTvyGeC+iT/Nk
-         +s+ggMScw3vJsOiWa06ibucn2ixK71ZSDjFQrAaJzMLe3tTONDalV2bBy/DIWdT3Bnaz
-         M5HKBclNdOh9ULkPxXrSxPNsAoA+UIDN+61OVLmgIDvHIygcwrzkiDPcSn7qH/fFaaTA
-         p2/VQZ245a7r2mXjA/Nxo2ArOnBvWBD9lYCueIBdFBw7zCcAQO/WODyc3MOoW7LtSTBw
-         SlUqh3YPj3BmD+kyQkqD8k+K1gUWzPSgtwdecN5ucaNcrGsyMbup8x5jMeq4oQcqws11
-         vQyw==
+        bh=wQ52+X1lVqs3NA4HQ0Y5oly0G0KrCZg9YO1xv1PXn5A=;
+        b=a3hvrMFEyL/k2U8ysBuPjJnJ+Ygk9IuzMt5WdmMQmX9koGxdtYxgjRVe1l+4k8Kz+8
+         13Z3YydDRdSRXaU/sf9MCqpHBy+i9m5aSw/NnjsmXsuL7/HFDACiZf2VX9kCUpttkoVx
+         p+dc3kkdel5pMgKWNy+PwNAXYXubgTfW/Y+VaRnTkocNolWj1Z674DOIAwh0ozl8gt+v
+         c58txNVmQQuMwB7+qt9QpQ7DIeuwdHyolkNvkdmGxK7dVAek5PLOwiiilaE3DRtckn07
+         79qTmiIkiHJ8AiSApLd/ygFShczSb113Duj1eNT6rLT1hj1z5ebbdzQuzrNDxrmGav9/
+         EoAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=+vOkqY9ujgn8jSfYzqg46hBeUg4M5HreQws2W8UcU8Y=;
-        b=DwVI1/8Po4JmHEjlsAR+Mqv35wm5BHNuEiIxtzfzoz7CQ+x5+7asA6tJNOI3eHu2Dj
-         +6o/LbGsNMkHfGaJ5MTbVanMpnojvp27v9wVLirXqYXZ/BLX0VvpIpraGid71zs1i+Rs
-         1TeHV+XP93NP6NlRtn4HFKxOMsBX/oD+aFKP5GlbGcmgUc8oVbnn4UOdFRVWC6BIKLl5
-         RcasUWV/Jtgz3WYFvKNMS2EH9YRLYFoLdQ7AeTQwb1t/u5ZZgJrdVTVc0IxYAvGca5RL
-         YOjGrWTXX6fmzH66GqDQCpFNr1wwjqn05INlH/+BsBULVnB5LK1rQRny/+PM1beagrM9
-         UZqA==
-X-Gm-Message-State: AOAM531XZfptnU//EhfuMcMnT8vvlbRafbzh+Xf0e9SrG0EhFJ/6Z8y4
-        jSkWH11PCu5vyWaKGPL2e66UKDcQciX/
-X-Google-Smtp-Source: ABdhPJyonsoIUZQUmjbnltCqHmTteIdPLW9jFfUL6XJGAvW1QrRbXzSVJ1ciNuSiL89/bIjjujvp6zxp+ryV
+        bh=wQ52+X1lVqs3NA4HQ0Y5oly0G0KrCZg9YO1xv1PXn5A=;
+        b=iXni0WcOd3g836YbkPUDTJxPXDgYpR2g0jlHrFT7XuA/jnDyn0JOWo3iNH7WZV/I8a
+         aF/JeRY81pO5JgIQ6zbJ5ZahoZ0BGr+2o9NarLBbut6h9muqusGAKW6RI9D72OoRrks/
+         WNttnbAn4X3xGdyZTUlAEw8qu8+A8tg5SHmL+3X3RUq1bHyrXkUi+OGL5iE7J8aTr91S
+         Z+FTkxirThIAkHb4DxBOo6bOVGyaHJTvgFSICNoLqfzm98JAjTFzZ2kfGoRMk47irciC
+         RLAAcdjnpkbTAEdlhbp1IzfC3j1eDwnsqfiCNJJxoYmmNBvWfEKHVyveprm2X71tePT1
+         Icyw==
+X-Gm-Message-State: AOAM533EECqzJCbviDYnAzgrXR5qNSpdmCrFP5rg2TNjjG6eeR5Dqo8x
+        TqJRCuuPnai5jmGDG9t3GXzgTD2oXg69
+X-Google-Smtp-Source: ABdhPJxL1gJ1wtKPcRX3YXRp7qrePWMozQDDx5tNxxp/EendyW1MtiPytq9GoEJML/jt8+AhT8d3Ej6nzmbl
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:2d98:3ad9:1d8a:fb9b])
- (user=irogers job=sendgmr) by 2002:a25:2155:: with SMTP id
- h82mr645997ybh.606.1644575667809; Fri, 11 Feb 2022 02:34:27 -0800 (PST)
-Date:   Fri, 11 Feb 2022 02:33:56 -0800
+ (user=irogers job=sendgmr) by 2002:a25:7809:: with SMTP id
+ t9mr606088ybc.577.1644575670099; Fri, 11 Feb 2022 02:34:30 -0800 (PST)
+Date:   Fri, 11 Feb 2022 02:33:57 -0800
 In-Reply-To: <20220211103415.2737789-1-irogers@google.com>
-Message-Id: <20220211103415.2737789-4-irogers@google.com>
+Message-Id: <20220211103415.2737789-5-irogers@google.com>
 Mime-Version: 1.0
 References: <20220211103415.2737789-1-irogers@google.com>
 X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH v3 03/22] perf dso: Make lock error check and add BUG_ONs
+Subject: [PATCH v3 04/22] perf dso: Hold lock when accessing nsinfo
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -100,71 +100,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make the pthread mutex on dso use the error check type. This allows
-deadlock checking via the return type. Assert the returned value from
-mutex lock is always 0.
+There may be threads racing to update dso->nsinfo:
+https://lore.kernel.org/linux-perf-users/CAP-5=fWZH20L4kv-BwVtGLwR=Em3AOOT+Q4QGivvQuYn5AsPRg@mail.gmail.com/
+Holding the dso->lock avoids use-after-free, memory leaks and other
+such bugs. Apply the fix in:
+https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/
+of there being a missing nsinfo__put now that the accesses are data race
+free.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/dso.c    | 12 +++++++++---
- tools/perf/util/symbol.c |  2 +-
- 2 files changed, 10 insertions(+), 4 deletions(-)
+ tools/perf/builtin-inject.c   | 4 ++++
+ tools/perf/util/dso.c         | 5 ++++-
+ tools/perf/util/map.c         | 3 +++
+ tools/perf/util/probe-event.c | 2 ++
+ tools/perf/util/symbol.c      | 2 +-
+ 5 files changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
-index 9cc8a1772b4b..6beccffeef7b 100644
---- a/tools/perf/util/dso.c
-+++ b/tools/perf/util/dso.c
-@@ -784,7 +784,7 @@ dso_cache__free(struct dso *dso)
- 	struct rb_root *root = &dso->data.cache;
- 	struct rb_node *next = rb_first(root);
- 
--	pthread_mutex_lock(&dso->lock);
-+	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
- 	while (next) {
- 		struct dso_cache *cache;
- 
-@@ -830,7 +830,7 @@ dso_cache__insert(struct dso *dso, struct dso_cache *new)
- 	struct dso_cache *cache;
- 	u64 offset = new->offset;
- 
--	pthread_mutex_lock(&dso->lock);
-+	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
- 	while (*p != NULL) {
- 		u64 end;
- 
-@@ -1259,6 +1259,8 @@ struct dso *dso__new_id(const char *name, struct dso_id *id)
- 	struct dso *dso = calloc(1, sizeof(*dso) + strlen(name) + 1);
- 
- 	if (dso != NULL) {
-+		pthread_mutexattr_t lock_attr;
-+
- 		strcpy(dso->name, name);
- 		if (id)
- 			dso->id = *id;
-@@ -1286,8 +1288,12 @@ struct dso *dso__new_id(const char *name, struct dso_id *id)
- 		dso->root = NULL;
- 		INIT_LIST_HEAD(&dso->node);
- 		INIT_LIST_HEAD(&dso->data.open_entry);
--		pthread_mutex_init(&dso->lock, NULL);
-+		pthread_mutexattr_init(&lock_attr);
-+		pthread_mutexattr_settype(&lock_attr, PTHREAD_MUTEX_ERRORCHECK);
-+		pthread_mutex_init(&dso->lock, &lock_attr);
-+		pthread_mutexattr_destroy(&lock_attr);
- 		refcount_set(&dso->refcnt, 1);
-+
+diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+index fbf43a454cba..bede332bf0e2 100644
+--- a/tools/perf/builtin-inject.c
++++ b/tools/perf/builtin-inject.c
+@@ -363,8 +363,10 @@ static struct dso *findnew_dso(int pid, int tid, const char *filename,
  	}
  
- 	return dso;
+ 	if (dso) {
++		BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
+ 		nsinfo__put(dso->nsinfo);
+ 		dso->nsinfo = nsi;
++		pthread_mutex_unlock(&dso->lock);
+ 	} else
+ 		nsinfo__put(nsi);
+ 
+@@ -547,7 +549,9 @@ static int dso__read_build_id(struct dso *dso)
+ 	if (dso->has_build_id)
+ 		return 0;
+ 
++	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
+ 	nsinfo__mountns_enter(dso->nsinfo, &nsc);
++	pthread_mutex_unlock(&dso->lock);
+ 	if (filename__read_build_id(dso->long_name, &dso->bid) > 0)
+ 		dso->has_build_id = true;
+ 	nsinfo__mountns_exit(&nsc);
+diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
+index 6beccffeef7b..b2f570adba35 100644
+--- a/tools/perf/util/dso.c
++++ b/tools/perf/util/dso.c
+@@ -548,8 +548,11 @@ static int open_dso(struct dso *dso, struct machine *machine)
+ 	int fd;
+ 	struct nscookie nsc;
+ 
+-	if (dso->binary_type != DSO_BINARY_TYPE__BUILD_ID_CACHE)
++	if (dso->binary_type != DSO_BINARY_TYPE__BUILD_ID_CACHE) {
++		BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
+ 		nsinfo__mountns_enter(dso->nsinfo, &nsc);
++		pthread_mutex_unlock(&dso->lock);
++	}
+ 	fd = __open_dso(dso, machine);
+ 	if (dso->binary_type != DSO_BINARY_TYPE__BUILD_ID_CACHE)
+ 		nsinfo__mountns_exit(&nsc);
+diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
+index 8af693d9678c..ae99b52502d5 100644
+--- a/tools/perf/util/map.c
++++ b/tools/perf/util/map.c
+@@ -192,7 +192,10 @@ struct map *map__new(struct machine *machine, u64 start, u64 len,
+ 			if (!(prot & PROT_EXEC))
+ 				dso__set_loaded(dso);
+ 		}
++		BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
++		nsinfo__put(dso->nsinfo);
+ 		dso->nsinfo = nsi;
++		pthread_mutex_unlock(&dso->lock);
+ 
+ 		if (build_id__is_defined(bid))
+ 			dso__set_build_id(dso, bid);
+diff --git a/tools/perf/util/probe-event.c b/tools/perf/util/probe-event.c
+index a834918a0a0d..7444e689ece7 100644
+--- a/tools/perf/util/probe-event.c
++++ b/tools/perf/util/probe-event.c
+@@ -180,8 +180,10 @@ struct map *get_target_map(const char *target, struct nsinfo *nsi, bool user)
+ 
+ 		map = dso__new_map(target);
+ 		if (map && map->dso) {
++			BUG_ON(pthread_mutex_lock(&map->dso->lock) != 0);
+ 			nsinfo__put(map->dso->nsinfo);
+ 			map->dso->nsinfo = nsinfo__get(nsi);
++			pthread_mutex_unlock(&map->dso->lock);
+ 		}
+ 		return map;
+ 	} else {
 diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index b2ed3140a1fa..43f47532696f 100644
+index 43f47532696f..a504346feb05 100644
 --- a/tools/perf/util/symbol.c
 +++ b/tools/perf/util/symbol.c
-@@ -1783,7 +1783,7 @@ int dso__load(struct dso *dso, struct map *map)
+@@ -1774,6 +1774,7 @@ int dso__load(struct dso *dso, struct map *map)
+ 	char newmapname[PATH_MAX];
+ 	const char *map_path = dso->long_name;
+ 
++	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
+ 	perfmap = strncmp(dso->name, "/tmp/perf-", 10) == 0;
+ 	if (perfmap) {
+ 		if (dso->nsinfo && (dso__find_perf_map(newmapname,
+@@ -1783,7 +1784,6 @@ int dso__load(struct dso *dso, struct map *map)
  	}
  
  	nsinfo__mountns_enter(dso->nsinfo, &nsc);
--	pthread_mutex_lock(&dso->lock);
-+	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
+-	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
  
  	/* check again under the dso->lock */
  	if (dso__loaded(dso)) {

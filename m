@@ -2,95 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A4B4B2ABA
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1D04B2ABD
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238544AbiBKQoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:44:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45174 "EHLO
+        id S1351660AbiBKQo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:44:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234654AbiBKQoG (ORCPT
+        with ESMTP id S234654AbiBKQoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:44:06 -0500
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE955102;
-        Fri, 11 Feb 2022 08:44:05 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id A17F12B0013A;
-        Fri, 11 Feb 2022 11:44:03 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Fri, 11 Feb 2022 11:44:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=ufGFnpr7sURnSIynd9rsTHgA0vYHEgxxVeCjWO
-        TqPFE=; b=DPLFx3pt0hR902PHT4xjUPd2AsKbnV2Plr2ZZhMFmL8rsJohPxWjO+
-        OLnQrI+QFzlEeOa4b7NXnFWofkh+4tLxK3CJF9+AUk7bEUW4hQj6clVovOP6ECk1
-        CgVuYFGvuEhQO22C2ImalqqOxJ3QLNe3yRQ9pirmVVeesXW2oV3I6y2eTDeKPQG1
-        z4j6TTvFC0wTbkVFkM06LT9GQfmtCST1v4q5W9iMRu1YCxs2GXCqJEnAClxQavL7
-        HhP2G7WBKvHYx+2QGOBHP9t+Oquiv7U9zDVpXCOrQHmOTm8LhFEXVii3yFSNeNlT
-        c6gjePfuzfRRGKgQUglB0q31CB7dkHiQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=ufGFnpr7sURnSIynd
-        9rsTHgA0vYHEgxxVeCjWOTqPFE=; b=dTNlyGMFEs90slxYGRRhPUr43pbBHp161
-        /zAifbSRLtO9AEGMtH+go+SL3ey/MRHEn+sdrwy2naxaneReAXqQ7J03Tl1nZuwX
-        GLHRgIG5AQQOJR19+4/2kk2f8fML6CoCUi30EGj2ZtWMzh4IqEAwH0eSYfTOoi0q
-        coq8P9jeF1yp7Te0dALiSoib6BVMpZSvpuPMs+gbWNZ7Gbv/i3dl2vtOhx0SheCg
-        RevV/vyMULSA1r4CI0nMq/AE1NnsrSnpnE9LpG1znBmBcXsr3PVpV+zXEJxJq2Kc
-        HLjnrP7quO/o5nj4SLuNUCCFd98NurK5kPHAUVVH+qP6lNYrUnSWA==
-X-ME-Sender: <xms:UpIGYhrMuSxOQdzJG75Qq-RujOVne0fDn5y9AgO_tMB6rEVJhsLWaQ>
-    <xme:UpIGYjpfafTjW6cjTPOhcfnFzSTMGCJBzukO7aFnzQLnnWB-O5zaqWzEMTGifQCez
-    dr0fPbAZ3uLAel50u4>
-X-ME-Received: <xmr:UpIGYuP_Q8lJxK06tFjq-OmPa3lURdA4A2gNuEsGQkKaJ_EhZKvcL7-KjwyU2XIU05kwa9qAtSSzWP4jZ0aL__3tatyxVoDTqwb3_DY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrieefgdeltdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeg
-    udenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
-    igihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:UpIGYs5RAc7Wt6K3FuFO0Bk_sMjPLB17jeIdzBHYpxJHUuy2LqlWLA>
-    <xmx:UpIGYg6tOjCuxkxayoVde7o8wcsUtb2EofG194h3fknc6HCczlnPyQ>
-    <xmx:UpIGYkjfRG6hygHsXDpmdU5AF0clTcliuKu_AU9TgJOunipGWrJsjg>
-    <xmx:U5IGYtwPDu5_9M8QxmjFAvA89YFYvswqzP6MVmzEaTv_Ek-Y0YXf0FIwDic>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 11 Feb 2022 11:44:02 -0500 (EST)
-Date:   Fri, 11 Feb 2022 17:44:00 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 30/66] media: sun6i-csi: Add bridge v4l2 subdev with
- port management
-Message-ID: <20220211164400.ccp4j2puryhurvzd@houat>
-References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-31-paul.kocialkowski@bootlin.com>
- <20220209092419.i3kver4f2am7mnow@houat>
- <YgaEN0ziZx5X7tQe@aptenodytes>
+        Fri, 11 Feb 2022 11:44:22 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977C3102;
+        Fri, 11 Feb 2022 08:44:21 -0800 (PST)
+Date:   Fri, 11 Feb 2022 17:44:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644597860;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0A1YAzfFVguyJP3Z4agEv2LMfFbEvYq8NP31pPvmRuM=;
+        b=Y205eAYN6GtUImSDfmTa9eAMD3AjxSfoik2fzsehBPIyb5lUHYPcy+9Xo1CyrUZi5gjrnf
+        K4mMBahzDzyztjLKz2gcGNKvOZPNg6nk/3mTHeyv1Y2Z3QoWH4WYAfyETK5GfRaMtjCbnX
+        QyTsy/Vb+7fO2lu4+IXUx52MW+g/TnEudqfzUykR/iM208tGX8SCjgZp3mxMw8iDhkOnwU
+        JYan1ocAZCnbnwy+yXuJDLG+v4aGv9oMkD9d/qS/n5MCJvRRxyuqZv6XHXoxt5b/oNiSlW
+        DuYIw2T3uF4YPNSx4TqRYtRaWGtJ/Oz7Mrl9dT4T7ENoiwHADq09r1WiIDYdCw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644597860;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0A1YAzfFVguyJP3Z4agEv2LMfFbEvYq8NP31pPvmRuM=;
+        b=/GiC4jLw0zWz3Pg2Jd+PX0zj+hJXLwZhxY0zFwZX5VtkbzBHLnwWdHLX/vKEo/QYpjAGLh
+        fbB5mqNQtIzTtUDw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: Re: [PATCH v6] random: defer fast pool mixing to worker
+Message-ID: <YgaSYlVEBOxfJbSD@linutronix.de>
+References: <YgZ6IEbiDgz5X1ON@linutronix.de>
+ <20220211162515.554867-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xqbsdqvt6owp5vdi"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YgaEN0ziZx5X7tQe@aptenodytes>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220211162515.554867-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -99,58 +65,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-02-11 17:25:15 [+0100], Jason A. Donenfeld wrote:
+> diff --git a/drivers/char/random.c b/drivers/char/random.c
+> index c42c07a7eb56..20b11a4b6559 100644
+> --- a/drivers/char/random.c
+> +++ b/drivers/char/random.c
+> @@ -1214,12 +1215,59 @@ static u32 get_reg(struct fast_pool *f, struct pt=
+_regs *regs)
+>  	return *ptr;
+>  }
+> =20
+> +static void mix_interrupt_randomness(struct work_struct *work)
+> +{
+> +	struct fast_pool *fast_pool =3D container_of(work, struct fast_pool, mi=
+x);
+> +	unsigned long pool[ARRAY_SIZE(fast_pool->pool)];
+> +	int count;
+> +
+> +	/* Check to see if we're running on the wrong CPU due to hotplug. */
+> +	migrate_disable();
+> +	if (fast_pool !=3D this_cpu_ptr(&irq_randomness)) {
+> +		migrate_enable();
+> +		/*
+> +		 * If we are unlucky enough to have been moved to another CPU,
 
---xqbsdqvt6owp5vdi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
++ "during CPU hotplug while the CPU was shutdown". It should not look
+like the worker can be migrated on system without CPU-hotplug involved.
 
-On Fri, Feb 11, 2022 at 04:43:51PM +0100, Paul Kocialkowski wrote:
-> Hi,
->=20
-> On Wed 09 Feb 22, 10:24, Maxime Ripard wrote:
-> > On Sat, Feb 05, 2022 at 07:53:53PM +0100, Paul Kocialkowski wrote:
-> > > Introduce a bridge v4l2 subdev to prepare for separation between the
-> > > processing part (bridge) and the dma engine, which is required to
-> > > properly support ths isp workflow later on.
-> > >=20
-> > > Currently the bridge just manages fwnode mapping to media pads,
-> > > using an async notifier (which was previously in the main code).
-> > > The s_stream video op just forwards to the connected v4l2 subdev
-> > > (sensor or MIPI CSI-2 bridge).
-> > >=20
-> > > The video capture device is now registered after the bridge and
-> > > attaches to it with a media link.
-> > >=20
-> > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> >=20
-> > There's a bunch of checkpatch --strict warnings that need to be fixed
->=20
-> Yes so it turns out these are adaptations to the existing video code
-> which has these warnings already merged. They are cleaned up later on
-> in a dedicated commit, but since it's not the topic of this change
-> (which is a logic change) I kept the code as it is.
->=20
-> What do you think?
+> +		 * then we set our count to zero atomically so that when the
+> +		 * CPU comes back online, it can enqueue work again. The
+> +		 * _release here pairs with the atomic_inc_return_acquire in
+> +		 * add_interrupt_randomness().
+> +		 */
+> +		atomic_set_release(&fast_pool->count, 0);
+> +		return;
+> +	}
+> +
+> +	/*
+> +	 * Copy the pool to the stack so that the mixer always has a
+> +	 * consistent view. It's extremely unlikely but possible that
+> +	 * this 2 or 4 word read is interrupted by an irq, but in case
+> +	 * it is, we double check that count stays the same.
+> +	 *
+> +	 * We set the count to 0 so that irqs can immediately begin to
+> +	 * accumulate again after. Since any possible interruptions
+> +	 * at this stage are guaranteed to be on the same CPU, we can
+> +	 * use cmpxchg_relaxed.
+> +	 */
+> +	count =3D atomic_read(&fast_pool->count);
+> +	do {
+> +		memcpy(pool, fast_pool->pool, sizeof(pool));
+> +	} while (atomic_try_cmpxchg_relaxed(&fast_pool->count, &count, 0));
 
-+       async_subdev =3D v4l2_async_nf_add_fwnode_remote(notifier, handle,
-+               struct v4l2_async_subdev);
+I *think* we could drop that "fast_pool !=3D
+this_cpu_ptr(&irq_randomness)" check at the top since that cmpxchg will
+save us and redo the loop. But if I remember correctly you worried about
+fast_pool->pool being modified (which is only a corner case if we are on
+the other CPU while the orig CPU is back again). Either way, it would be
+random and we would not consume more entropy.
 
-CHECK: Alignment should match open parenthesis
+So if we have to keep this then please swap that migrate_disable() with
+local_irq_disable(). Otherwise PeterZ will yell at me.
 
-This one at least is introduced by your patch
+> +	fast_pool->last =3D jiffies;
+> +	migrate_enable();
+> +
+> +	mix_pool_bytes(pool, sizeof(pool));
+> +	credit_entropy_bits(1);
+> +	memzero_explicit(pool, sizeof(pool));
+> +}
+> +
+=E2=80=A6
+> @@ -1235,12 +1283,13 @@ void add_interrupt_randomness(int irq)
+>  	}
+> =20
+>  	fast_mix((u32 *)fast_pool->pool);
+> -	++fast_pool->count;
+> +	/* The _acquire here pairs with the atomic_set_release in mix_interrupt=
+_randomness(). */
+> +	new_count =3D (unsigned int)atomic_inc_return_acquire(&fast_pool->count=
+);
+> =20
+>  	if (unlikely(crng_init =3D=3D 0)) {
+> -		if (fast_pool->count >=3D 64 &&
+> +		if (new_count >=3D 64 &&
+>  		    crng_fast_load(fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
+> -			fast_pool->count =3D 0;
+> +			atomic_set(&fast_pool->count, 0);
+>  			fast_pool->last =3D now;
 
-Maxime
+I'm fine if we keep this as is for now.
+What do we do here vs RT? I suggested this
+  https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/com=
+mit/?id=3Da2d2d54409481aa23a3e11ab9559a843e36a79ec
 
---xqbsdqvt6owp5vdi
-Content-Type: application/pgp-signature; name="signature.asc"
+Is this doable?
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgaSUAAKCRDj7w1vZxhR
-xXGWAP0VX30FCSaxEfCylC0wvIQbV1OfNYW4aaL8aT/WKEZPGgEAtehwn0huoPF7
-uno2SSUQZBowBDAPo9fxBKol2O9KAwQ=
-=0iKA
------END PGP SIGNATURE-----
-
---xqbsdqvt6owp5vdi--
+Sebastian

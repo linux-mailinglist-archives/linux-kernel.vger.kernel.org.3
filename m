@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCB34B3148
+	by mail.lfdr.de (Postfix) with ESMTP id C259F4B314B
 	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 00:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354171AbiBKXdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 18:33:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38250 "EHLO
+        id S1354187AbiBKXeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 18:34:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243430AbiBKXdm (ORCPT
+        with ESMTP id S243430AbiBKXeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 18:33:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CC0C66;
-        Fri, 11 Feb 2022 15:33:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 06EF061AB8;
-        Fri, 11 Feb 2022 23:33:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6308C340E9;
-        Fri, 11 Feb 2022 23:33:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644622418;
-        bh=NcXN/ZExFBWEE/4j7wW8A6WXqsCsTCy55XEhj/QVImY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MD/s1KgbDdFqUM3Vb1BzoByXZiIGv1RlMk7utUYwSOUf2JBAZFlRXxt4ECnUyYqy2
-         W2P/xae6UgnONaMt/yfHTrkcp/Ewnkisg3q/XL2qGzszRkrYQfhNfDKBUVkaTyjKiI
-         TMeacNN8OOe3NX8ZpbtDEriWYxrQhsGFC7y9uGqj0S7moAb1kWthU5wOueV/EfmDja
-         96CZMpWUQRSafptUAWevRxcbiJHzmf1Bt5DG3KdDxxX9JAXkqI6HsnPE0GyAOsixEF
-         V+mxb58acULwgB8+JZQHVywpmh7FewNQBkD25shtBrNaMabuc4v6KV0+VFfKIvJZXJ
-         fcZZKVqrIZMqg==
-Message-ID: <619547ad-de96-1be9-036b-a7b4e99b09a6@kernel.org>
-Date:   Fri, 11 Feb 2022 15:33:35 -0800
+        Fri, 11 Feb 2022 18:34:08 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1791DC66
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 15:34:06 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id b13so18824168edn.0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 15:34:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rteO8hmsqvWS5TzaahvTaNw6Vcr2tYr2Ng0DScuG/u4=;
+        b=D5CJ80Ys6vjr4MzEeX0n32e5+AF9VgVmFwxGHen7st7grLT9jReFAEo+Ny8NMiGFR/
+         gGpfJlh2TiuVucej1bJwXvXwRBMBnjd0N5i3SA97iaBBWp2MW2nOLZhUBvFupfB2Cq/9
+         hICuGdCJkV8z7IwIp1bEjqjCPDOiy0ulD1Qt0oQc2fPecW6N7iPLNumHgxgdu088wvlz
+         rjarJqG2HgbQdexVQoUQy0xOT0PWcV/HiBhbe88vYSZJGTyS3OiriAd7vCcFNApexQYB
+         9ZTPn5mu4rMbDrxi9MeSmKav9v1IL92nOAn3ljYzE+rvck42YMWXBMClBLrJ7IXDd7eC
+         h7IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rteO8hmsqvWS5TzaahvTaNw6Vcr2tYr2Ng0DScuG/u4=;
+        b=5uF9IukuVrh230LRwX4GjMwCphuLs53ii4uE+dByfYLZ3I5YYTjidOIOSuNKGoOdBC
+         0QMAMMMHA+7KwEh4yFuaW6IgBvZpNV1aNv0X1SmmTM4vH3mzjn64Cvm14oW3O0+stWal
+         1yasQW3CjqLKRAYEv8xSIP+Wa1PqymAEGenz1wdUUqWG30IqS0M0bBVQDPeAKFJctonr
+         ofdh2nPGXaj9z2PVZnC/ksT3lVAWfR6ShDq+BErdNFA/2YxZmSjPggnn8SgKG1bEwq++
+         0pm5A+xfwfZorWkUuMq2Vjeg47T5AU0CiiBrInGm7lRGXFDVuAljZ1vkEUxqcs9YRdzA
+         WWtA==
+X-Gm-Message-State: AOAM533qjxLfPV2RKBuqyayWvIgH8aoTJqnSJWHKeZ9jlOkYG0F0Wk0B
+        5j4HDuAyEuQzgUv87E4tjYZTWKzWZ98EQKbu9xkc
+X-Google-Smtp-Source: ABdhPJy6uJNCk5UYrKhEXTYpMQGPUr/ePYBIQV7ya4gcQZ5mRq/9auBnjQPthgA9Z4UGA/NOugGQdAD5AOBIJHy+hcw=
+X-Received: by 2002:a05:6402:7ce:: with SMTP id u14mr4353715edy.35.1644622444358;
+ Fri, 11 Feb 2022 15:34:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 01/12] mm/shmem: Introduce F_SEAL_INACCESSIBLE
-Content-Language: en-US
-To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, qemu-devel@nongnu.org,
-        Linux API <linux-api@vger.kernel.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+References: <20220204005742.1222997-1-morbo@google.com> <20220210223134.233757-1-morbo@google.com>
+ <cb2ff5da9b704a9792549a9433dc0ac8@AcuMS.aculab.com> <CAGG=3QXvSt=d94iqSV-Y9JVNc+pt-WOZGpSeW--fp=w2ttMvUA@mail.gmail.com>
+ <6b83fa302b974f749c60fc6c456e055f@AcuMS.aculab.com>
+In-Reply-To: <6b83fa302b974f749c60fc6c456e055f@AcuMS.aculab.com>
+From:   Bill Wendling <morbo@google.com>
+Date:   Fri, 11 Feb 2022 15:33:53 -0800
+Message-ID: <CAGG=3QVUHv-R61cHLEO1JgF=q_qY9sO53tmRYWLfZve0SYi7iw@mail.gmail.com>
+Subject: Re: [PATCH v4] x86: use builtins to read eflags
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com
-References: <20220118132121.31388-1-chao.p.peng@linux.intel.com>
- <20220118132121.31388-2-chao.p.peng@linux.intel.com>
-From:   Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <20220118132121.31388-2-chao.p.peng@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,30 +78,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/18/22 05:21, Chao Peng wrote:
-> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> 
-> Introduce a new seal F_SEAL_INACCESSIBLE indicating the content of
-> the file is inaccessible from userspace through ordinary MMU access
-> (e.g., read/write/mmap). However, the file content can be accessed
-> via a different mechanism (e.g. KVM MMU) indirectly.
-> 
-> It provides semantics required for KVM guest private memory support
-> that a file descriptor with this seal set is going to be used as the
-> source of guest memory in confidential computing environments such
-> as Intel TDX/AMD SEV but may not be accessible from host userspace.
-> 
-> At this time only shmem implements this seal.
-> 
+On Fri, Feb 11, 2022 at 2:10 PM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Bill Wendling > Sent: 11 February 2022 19:26
+> >
+> > On Fri, Feb 11, 2022 at 8:40 AM David Laight <David.Laight@aculab.com> wrote:
+> > > From: Bill Wendling
+> > > > Sent: 10 February 2022 22:32
+> > > >
+> > > > GCC and Clang both have builtins to read and write the EFLAGS register.
+> > > > This allows the compiler to determine the best way to generate this
+> > > > code, which can improve code generation.
+> > > >
+> > > > This issue arose due to Clang's issue with the "=rm" constraint.  Clang
+> > > > chooses to be conservative in these situations, and so uses memory
+> > > > instead of registers. This is a known issue, which is currently being
+> > > > addressed.
+> > > >
+> > > > However, using builtins is beneficial in general, because it removes the
+> > > > burden of determining what's the way to read the flags register from the
+> > > > programmer and places it on to the compiler, which has the information
+> > > > needed to make that decision.
+> > >
+> > > Except that neither gcc nor clang attempt to make that decision.
+> > > They always do pushf; pop ax;
+> > >
+> > It looks like both GCC and Clang pop into virtual registers. The
+> > register allocator is then able to determine if it can allocate a
+> > physical register or if a stack slot is required.
+>
+> Doing:
+>         int fl;
+>         void f(void) { fl = __builtin_ia32_readeflags_u64(); }
+> Seems to use register.
+> If it pops to a virtual register it will probably never pop
+> into a real target location.
+>
+> See https://godbolt.org/z/8aY8o8rhe
+>
+Yes, it does produce the appropriate code. What I meant was that,
+internal to the compiler, the code that's generated before register
+allocation contains "virtual" registers. I.e., registers that would
+exist if the machine had an infinite number of registers to use. It's
+the job of the register allocator to replace those virtual registers
+with physical ones, or with spills to memory if no registers are
+available. My (completely made up) example was to show that in an
+extreme case where no registers are available, and no amount of code
+motion can alleviate the register pressure, then both clang and gcc
+will produce the appropriate spills to memory.
 
-I don't dislike this *that* much, but I do dislike this. 
-F_SEAL_INACCESSIBLE essentially transmutes a memfd into a different type 
-of object.  While this can apparently be done successfully and without 
-races (as in this code), it's at least awkward.  I think that either 
-creating a special inaccessible memfd should be a single operation that 
-create the correct type of object or there should be a clear 
-justification for why it's a two-step process.
+> But performance wise the pop+mov is just one byte longer.
+> Instruction decode time might be higher for two instruction, but since
+> 'pop mem' generates 2 uops (intel) it may be constrained to the first
+> decoder (I can't rememberthe exact details), but the separate pop+mov
+> can be decoded in parallel - so could end up faster.
+>
+It's the spill to memory that I'm trying to avoid here. I'm not
+concerned about a "pop ; mov" combination (though even that is one
+instruction too many except in the most extreme cases).
 
-(Imagine if the way to create an eventfd would be to call 
-timerfd_create() and then do a special fcntl to turn it into an eventfd 
-but only if it's not currently armed.  This would be weird.)
+> Actual execution time (if that makes any sense) is really the same.
+> Two operations, one pop and one memory write.
+>
+> I bet you'd be hard pressed to find a piece of code where it even made
+> a consistent difference.
+>
+> > > ...
+> > > > v4: - Clang now no longer generates stack frames when using these builtins.
+> > > >     - Corrected misspellings.
+> > >
+> > > While clang 'head' has been fixed, it seems a bit premature to say
+> > > it is 'fixed' enough for all clang builds to use the builtin.
+> > >
+> > True, but it's been cherry-picked into the clang 14.0.0 branch, which
+> > is scheduled for release in March.
+> >
+> > > Seems better to change it (back) to "=r" and comment that this
+> > > is currently as good as __builtin_ia32_readeflags_u64() and that
+> > > clang makes a 'pigs breakfast' of "=rm" - which has only marginal
+> > > benefit.
+> > >
+> > That would be okay as far as code generation is concerned, but it does
+> > place the burden of correctness back on the programmer. Also, it was
+> > that at some point, but was changed to "=rm" here. :-)
+>
+> As I said, a comment should stop the bounce.
+>
+The constraints on this piece of code went from "=g" to "=r" to "=rm".
+Which is the correct one and why? The last will apparently work in all
+situations, because the compiler's left to determine the output
+destination: register or memory. The "=r" constraint may fail if a
+register cannot be allocated for some reason.
+
+> ...
+> > I was able to come up with an example where GCC generates "pushf ; pop mem":
+> >
+> >   https://godbolt.org/z/9rocjdoaK
+> >
+> > (Clang generates a variation of "pop mem," and is horrible code, but
+> > it's meant for demonstration purposes only.) One interesting thing
+> > about the use of the builtins is that if at all possible, the "pop"
+> > instruction may be moved away from the "pushf" if it's safe and would
+> > reduce register pressure.
+>
+> I wouldn't trust the compiler to get stack pointer relative accesses
+> right if it does move them apart.
+> Definitely scope for horrid bugs ;-)
+>
+Compilers are pretty good at knowing such things and doing it correctly.
+
+-bw

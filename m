@@ -2,135 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 199664B22B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:04:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0B14B22C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:08:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240225AbiBKKD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 05:03:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42098 "EHLO
+        id S1348786AbiBKKIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 05:08:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235417AbiBKKD4 (ORCPT
+        with ESMTP id S232868AbiBKKIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 05:03:56 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D677DE6E;
-        Fri, 11 Feb 2022 02:03:54 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: shreeya)
-        with ESMTPSA id C68F61F46C0A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644573833;
-        bh=EFWC4KDHDq8iIszJtQjvd2nEkpU5s9EQ1vyKADI1IXg=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=MaCgPIWeVDpK6yQTs4fqczqKXoTBqfoRqIbHrFl36PoVAQ8KJtjxxb4Iw8RcuNw+m
-         RTiAIUzykLbjzQ++TSm38i9TJtJkJ1WkS2ltrq3jg5jR1vkisV4hgkQpIMO9b/0eTI
-         9YFlCUKxQMtUCydgiO28ZA6mi8qmzrxlJFFlOrSuoGyEKdTBSn/0yBZfxGgtqQo1YC
-         FxpOD11Y3MGlNZFvjn4g/Ovtrv5AMfJINjLZPeDm2o3sGA81pba6meEfYyi2iuaYvM
-         jlmqtsbke8p6QyADoqHyfs6UmGuXv0UDAVlDENQJL4DMVtmQO+kQQ8mnxBeWDSePXZ
-         GWHinXtxc3xHw==
-Subject: Re: [PATCH v4] gpio: Return EPROBE_DEFER if gc->to_irq is NULL
-To:     Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        wsa@kernel.org, kernel@collabora.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        kbuild test robot <lkp@intel.com>
-References: <20211116093833.245542-1-shreeya.patel@collabora.com>
- <874k56znix.fsf@collabora.com>
- <CAMRc=MdByxO3+hJruvUkULtXAaB7aWewTd=Wv0MbWyX2vykdjA@mail.gmail.com>
- <87v8xmxkg7.fsf@collabora.com>
-From:   Shreeya Patel <shreeya.patel@collabora.com>
-Message-ID: <fb31ea17-2ec2-4acf-94b8-03e850a4c256@collabora.com>
-Date:   Fri, 11 Feb 2022 15:33:44 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 11 Feb 2022 05:08:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5FB72A5
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:07:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644574079;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gfGkA7Cm98mQQxNqLHSWcgGR5BEvRqLzjxzk/VgJxmM=;
+        b=QgfI5LTT0nMBO/3np/vjnSFofQsFmwH8UFg/eNfit7ERaNOnbpyfjhI0F8GhOMlWeTp87f
+        esCAB8BAfnta8fAkZjlVox4PKOJQySR46qlzTlW+rpX37kGg1DjOomBFRVbSUWTqzQxztX
+        qOel18ssxNRA368ablMfAk8v2JdKsNM=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-169-UJhPphNQO4GDPCAR9XW4kQ-1; Fri, 11 Feb 2022 05:07:57 -0500
+X-MC-Unique: UJhPphNQO4GDPCAR9XW4kQ-1
+Received: by mail-ej1-f72.google.com with SMTP id aj9-20020a1709069a4900b006cd205be806so3884071ejc.18
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:07:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gfGkA7Cm98mQQxNqLHSWcgGR5BEvRqLzjxzk/VgJxmM=;
+        b=aZ//SMaQ9V2dNTnY3x4Iz+8xJU8d7vpjmiDWKmyJJF18fnvRABVLpkvVvo1fIC0DGf
+         H1bGGIvuEyMYT+Cj4VHtKxEf6v+/WiMhJlif/Zhy+Z/mFOffSF3bzQSIBId5blXejcSb
+         KQVVNZGE/j5QUNv9+NpONBeufnhEgZTzgRsjbGQ2rSqZw7+BfSxh6HFwTLrr5gtFU0PD
+         j9gJE1+5N8QTXKC0lsMaUaR6auEJ6HGFpX6NvjfWsVAseJTMaUxMykeggLhYKrAM93jX
+         Mr1Q/c75b24GVTyE9NBWuzxz9oR8xNBtMAvG2J8pPnbOGMArEl1dLDyLUOefePcdpZCH
+         cU1A==
+X-Gm-Message-State: AOAM533NfVHNx0sd0e2AdUtrtIGeAcCNU1qJnvu1shbAug/b/5HqAHs/
+        aOUe2t7VNag99daMem/hYAMhmMI90BdTZ4OmXmPAey9PVza5xztfjorulnjuYElMK0oZGfFE1C+
+        SkpjC/+jkOqRC003gCQe9ewfx
+X-Received: by 2002:a17:906:c112:: with SMTP id do18mr757967ejc.472.1644574076535;
+        Fri, 11 Feb 2022 02:07:56 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxwSxBBvCyB7sNCA0jxUcGqy/Oa2XplQTQXcQusTsHvIPMzyxnX9ROCzac1cYFUj2oGOkQd3Q==
+X-Received: by 2002:a17:906:c112:: with SMTP id do18mr757957ejc.472.1644574076322;
+        Fri, 11 Feb 2022 02:07:56 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id eg11sm9365972edb.17.2022.02.11.02.07.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Feb 2022 02:07:55 -0800 (PST)
+Message-ID: <4e05cfc5-55bb-1273-5309-46ed4fe52fed@redhat.com>
+Date:   Fri, 11 Feb 2022 11:07:53 +0100
 MIME-Version: 1.0
-In-Reply-To: <87v8xmxkg7.fsf@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 06/12] KVM: MMU: rename kvm_mmu_reload
 Content-Language: en-US
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com
+References: <20220209170020.1775368-1-pbonzini@redhat.com>
+ <20220209170020.1775368-7-pbonzini@redhat.com> <YgWtdUotsoBOOtXz@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YgWtdUotsoBOOtXz@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/11/22 01:27, Sean Christopherson wrote:
+> On Wed, Feb 09, 2022, Paolo Bonzini wrote:
+>> The name of kvm_mmu_reload is very confusing for two reasons:
+>> first, KVM_REQ_MMU_RELOAD actually does not call it; second,
+>> it only does anything if there is no valid root.
+>>
+>> Rename it to kvm_mmu_ensure_valid_root, which matches the actual
+>> behavior better.
+> 
+> 100% agree that kvm_mmu_reload() is a terrible name, but kvm_mmu_ensure_valid_root()
+> isn't much better, e.g. it sounds like a sanity check and nothing more.
 
-On 11/02/22 6:56 am, Gabriel Krisman Bertazi wrote:
-> Bartosz Golaszewski <brgl@bgdev.pl> writes:
->
->> My email address changed in September, that's why I didn't see the
->> email you sent in November to my old one.
-> Hi Bart,
->
-> thanks for the prompt reply and sorry for the wrong email address.
->
->> gpiod_to_irq() can be used in context other than driver probing, I'm
->> worried existing users would not know how to handle it. Also: how come
->> you can get the GPIO descriptor from the provider but its interrupts
->> are not yet set up?
-> I'm definitely some context here, as its been quite a while.
-> Shreeya, feel free to pitch in. :)
+I would have thought that would be more of a check_valid_root().  There 
+are other functions in the kernel following the idea that "ensure" means 
+idempotency: skb_ensure_writable, perf_cgroup_ensure_storage, 
+btf_ensure_modifiable and libbpf_ensure_mem in libbpf.  I'm not a native 
+speaker but, at least in computing, "ensure" seems to mean not just "to 
+make certain that (something) will be true", but also taking steps if 
+that's not already the case.
 
+I also thought of "establish_valid_root", but it has the opposite 
+problem---it does not convey well, if at all, that the root could be 
+valid already.
 
-Existing users will probably receive -ENXIO in case to_irq is not
-set and wasn't intended to be set.
-We are trying to solve the race which happens frequently in cases
-where I2C is set as built-in and pinctrl-amd is set as module.
-There is no dependency between I2C and pinctrl-amd, while pinctrl-amd is
-still trying to set the gc irq members through gpiochip_add_irqchip, I2C
-calls gpiod_to_irq() which leads to returning -ENXIO since gc->to_irq is 
-still NULL
+Paolo
 
+> 
+> Maybe just be very literalal?
+> 
+>    kvm_mmu_load_if_necessary()
+>    kvm_mmu_load_if_invalid()
+> 
+> Or follow cond_sched()?
+> 
+>    kvm_mmu_cond_load()
+> 
 
-There have also been cases where gc->to_irq is set successfully but 
-other members
-are yet to be initalized by gpiochip_add_irqchip like the domain 
-variable which is
-being used in .to_irq() and ultimately leads to a NULL pointer 
-dereference as Gabriel
-mentioned. I am working on a fix which would use mutex to not let gc irq 
-members
-be accessed until they all have been completely initialized.
-
-I2C calls gpiod_to_irq through the following stack trace
-
-kernel: Call Trace:
-kernel:  gpiod_to_irq.cold+0x49/0x8f
-kernel:  acpi_dev_gpio_irq_get_by+0x113/0x1f0
-kernel:  i2c_acpi_get_irq+0xc0/0xd0
-kernel:  i2c_device_probe+0x28a/0x2a0
-kernel:  really_probe+0xf2/0x460
-kernel:  driver_probe_device+0xe8/0x160
-
-and pinctrl-amd makes gc visible through gpiochip_add_data_with_key()
-
-
-Thanks,
-Shreeya Patel
-
-
-> This is one of the races we saw in gpiochip_add_irqchip, depending on
-> the probe order.  The gc is already visible while partially initialized,
-> if pinctrl-amd hasn't been probed yet.  Another device being probed can
-> hit an -ENXIO here if to_irq is yet uninitialized or enter .to_irq() and
-> oops.  Shreeya's patch workarounds the first issue, but is not a
-> solution for the second.
->
-> There is another patch that has been flying around to address the Oops.
->
-> https://lkml.org/lkml/2021/11/8/900
->
-> She's been working on a proper solution for that one, which might
-> actually address this too and replace the current patch.  Maybe you
-> could help us get to a proper solution there?  I'm quite unfamiliar with
-> this code myself :)
->

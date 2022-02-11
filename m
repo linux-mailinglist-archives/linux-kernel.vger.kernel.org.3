@@ -2,58 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2419A4B29E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E844B29EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:15:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232190AbiBKQOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:14:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43512 "EHLO
+        id S1351016AbiBKQO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:14:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350775AbiBKQOT (ORCPT
+        with ESMTP id S1350520AbiBKQOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:14:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB2F21D;
-        Fri, 11 Feb 2022 08:14:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03BE9B82A77;
-        Fri, 11 Feb 2022 16:14:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE074C340E9;
-        Fri, 11 Feb 2022 16:14:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644596055;
-        bh=sNz2tFUsc7yL/pDTYZgBpCU9uV+JsVM0G9jqqLqvVS8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uwgNsAej4XLRiZXEwDL7bwZAM73hhCpGYFCmS8Y6u8dtAKyi+fmfSTv9AJWAE2NeI
-         KSzDwuVt9HFRbOvvpN1ayO7UN31FXA0Ceo6ao0md5ccyywTJcUwoi2C3JOV0sQrSGt
-         RZWXUqS2O9OMReelWJYHPAB7PXNi3OMmTa9QRQXXRJYF1XB3VyhQGb3qQ2Nfq+2NN2
-         KSVm73tUGepdEjLf02jl4IMwtYVaoUpB/Pp/TusIqrBCYPrpslzBOQOTE4Jsbz+4+V
-         y/7LQF9rNVOomWzPV/XJkGr3z8oe/friRlhBR40sQwaU4/hcZbxA8/Fs7Rjw8Z3r7k
-         B3GU6bwsnq+YQ==
-Date:   Fri, 11 Feb 2022 16:14:08 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
-Cc:     lgirdwood@gmail.com, tiwai@suse.com, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, perex@perex.cz, p.zabel@pengutronix.de,
-        geert+renesas@glider.be, trevor.wu@mediatek.com,
-        tzungbi@google.com, zhangqilong3@huawei.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/15] ASoC: mediatek: Add support for MT8186 SoC
-Message-ID: <YgaLUNQXnGsZHuXQ@sirena.org.uk>
-References: <20220211103818.8266-1-jiaxin.yu@mediatek.com>
+        Fri, 11 Feb 2022 11:14:53 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED3021D;
+        Fri, 11 Feb 2022 08:14:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644596092; x=1676132092;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RWbStBYrWNvjoowojkTzcClFVyUrdMqAa6rUIGP5GYk=;
+  b=YfhjY0Itk7Qy8ZdLN7bomIuG5FfguhVSRHe+zAlXrokY9A3RvXuh4Ed4
+   Sdcpl+JXLqXo2RGquuRybrk+axhKfUFRaP1uha8uxTKnldSSVV8AI+Nxj
+   EddBGMo3P9LbKP1z+rmrB3AOBfYno3HqhPMdhuETS5CxpCKrDvoDk4Zju
+   n3CrxUn58He29OEIbIclz6cDVAxTQ2uNhXTKaidoLMJ5Eur2UVudJmrSu
+   lICAeAVghvJ3/4+uZ5kF0eeKxgq/ZeH5TAq3VA4mbn69+sWxXBy3cSVCq
+   6Cgy7BlsqiVflhe25B6uVRdHs/ToCqmgGYORzEsYm6YLcTcjIDCSq5L3+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="313039538"
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="313039538"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 08:14:51 -0800
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="542143938"
+Received: from chenyu-dev.sh.intel.com (HELO chenyu-dev) ([10.239.158.61])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 08:14:49 -0800
+Date:   Sat, 12 Feb 2022 00:14:23 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     "Brown, Len" <len.brown@intel.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] tools/power turbostat: Support thermal throttle
+ count print
+Message-ID: <20220211161423.GA55414@chenyu-dev>
+References: <20211112115159.725357-1-yu.c.chen@intel.com>
+ <PH0PR11MB4887077D94A30A5F757F01B4E0309@PH0PR11MB4887.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xkn+amad5HrevOtl"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220211103818.8266-1-jiaxin.yu@mediatek.com>
-X-Cookie: do {
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <PH0PR11MB4887077D94A30A5F757F01B4E0309@PH0PR11MB4887.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,33 +64,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Len,
+On Fri, Feb 11, 2022 at 10:14:12AM +0800, Brown, Len wrote:
+> What is the scope of this counter -- per-core or per-CPU?
+>
+The counter is read from
+/sys/devices/system/cpu/cpu0/thermal_throttle/core_throttle_count,
+which is calculated from MSR_IA32_THERM_STATUS (0x19c) in therm_throt.c.
+According to sdm, this MSR is of core scope.
 
---xkn+amad5HrevOtl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Fri, Feb 11, 2022 at 06:38:03PM +0800, Jiaxin Yu wrote:
-> This series of patches adds support for Mediatek AFE of MT8186 Soc.
-> Patches are based on broonie tree "for-next" branch.
-
-This all looks basically good, there are some issues which I've
-highlighted on the patches but like I kept on saying they're all fairly
-small and hopefully easy to address - there's no big structural problems
-or anything that I noticed.
-
---xkn+amad5HrevOtl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIGi08ACgkQJNaLcl1U
-h9CKkwf/SLonnfl3fV+46O1AC+u/WFZePStG+cGxvOGhs2iKcs612qJNEAOgEy0T
-5lZRM+tTsja54tt7keZXc+AulVVpMOu2ROqTU4BJp3Zygt++snT8v2OTC3XSnjcI
-vJOrvxSUxA3zKxdquTHgcCG+MQOjQi2B1MfD5gU5ZrJLhO9u6CjOSkhTFGwCdhn5
-O38VRqcD17TbQXKnSqWKGOKJJWywGW84Gv2P7M7QlZqugFHkEzo21Fw+Y6m0SSQI
-I/LKyDgTu+Me3OIweHSNrFO9WDAE3Pv8Q9V8alHjd+iGpGLJWBoHk3SMXVnCZEe2
-xr5Jvd5fZyGKpL/T//Iyhxzqx84fDg==
-=7jLS
------END PGP SIGNATURE-----
-
---xkn+amad5HrevOtl--
+thanks,
+Chenyu
+> -----Original Message-----
+> From: Chen, Yu C <yu.c.chen@intel.com>
+> Sent: Friday, November 12, 2021 6:52 AM
+> To: linux-pm@vger.kernel.org; Len Brown <lenb@kernel.org>
+> Cc: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>; Rafael J. Wysocki <rafael@kernel.org>; Brown, Len <len.brown@intel.com>; linux-kernel@vger.kernel.org; Chen, Yu C <yu.c.chen@intel.com>
+> Subject: [PATCH 1/2] tools/power turbostat: Support thermal throttle count print
+> 
+> The turbostat data is collected by end user for power evaluationit. However it looks like we are missing enough thermal context there. Already a couple of time we found that power management developer asking something like this:
+> grep -r . /sys/devices/system/cpu/cpu*/thermal_throttle/*
+> 
+> Print the per core thermal throttle count so as to get suffificent thermal context.
+> 
+> turbostat -i 5 -s Core,CPU,CoreThr
+> Core    CPU     CoreThr
+> -       -       104
+> 0       0       61
+> 0       4
+> 1       1       0
+> 1       5
+> 2       2       104
+> 2       6
+> 3       3       7
+> 3       7
+> 
+> Suggested-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> Signed-off-by: Chen Yu <yu.c.chen@intel.com>

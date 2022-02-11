@@ -2,80 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8654B2EAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 334034B2EAF
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:46:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353401AbiBKUog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 15:44:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41462 "EHLO
+        id S1353319AbiBKUqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 15:46:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232014AbiBKUof (ORCPT
+        with ESMTP id S229988AbiBKUqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 15:44:35 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F821A2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 12:44:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644612273; x=1676148273;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ooP7Nd9GepcPUnJpgnBJPD3s6gNZ7UwYLT/WQ+DKCcM=;
-  b=gBBykbgumlZMgNF3vNiOf3TOlncxzV3e/BmqWwJcPRvthhQnHQ+VPJCv
-   j6P3udDW7BtoPDOP02JwaEid21jQoJT8FXuTuTOCeF4zvFUyRiGp1O7uh
-   RUhlTVtF1vWXa9QJKiWtslq0Sqxl+nVCNQkVvfnLY51ljy0YDEIgBLC0y
-   P7uv9QZ1QF0aWnVMHDLomPxj0nUntOqmcqWwcEB6my2Mm/4KYNNs8MYMZ
-   FsNY+Rt0lcUO844PDm81ujDKqW+ErGRhT7wLW3fGprmSYug4O2wK/dy5w
-   mL0HurdUjcQnNcs0zL+mEmyH1tuTVdQonL/T1h0U2sM9xkyPFiaia4ea+
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="237211909"
-X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="237211909"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 12:44:33 -0800
-X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="527093527"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 12:44:33 -0800
-Date:   Fri, 11 Feb 2022 12:44:33 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "hpa@zytor.com" <hpa@zytor.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V8 30/44] mm/pkeys: Test setting a PKS key in a custom
- fault callback
-Message-ID: <20220211204433.GT785175@iweiny-DESK2.sc.intel.com>
-References: <20220127175505.851391-1-ira.weiny@intel.com>
- <20220127175505.851391-31-ira.weiny@intel.com>
- <9ef3dff3f46edda07afdf6b2469ef9a1a606563e.camel@intel.com>
+        Fri, 11 Feb 2022 15:46:36 -0500
+Received: from mxout01.lancloud.ru (mxout01.lancloud.ru [45.84.86.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8B61A2;
+        Fri, 11 Feb 2022 12:46:33 -0800 (PST)
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru CF85C20AC19D
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH] sh: avoid using IRQ0 on SH3/4
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Rich Felker <dalias@libc.org>, <linux-sh@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Yoshinori Sato <ysato@users.sourceforge.jp>
+References: <2f419ed2-66b8-4098-7cd3-0fe698d341c9@omp.ru>
+ <63f06bf0-fc7b-3c5c-8af9-5adfd7628354@omp.ru>
+ <dde846f0-1324-7fde-ef92-eb72d4200b50@physik.fu-berlin.de>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <e4c1aec0-e8a0-4577-d12b-8e4efedbf7e6@omp.ru>
+Date:   Fri, 11 Feb 2022 23:46:30 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9ef3dff3f46edda07afdf6b2469ef9a1a606563e.camel@intel.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <dde846f0-1324-7fde-ef92-eb72d4200b50@physik.fu-berlin.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 09:42:32AM -0800, Edgecombe, Rick P wrote:
-> On Thu, 2022-01-27 at 09:54 -0800, ira.weiny@intel.com wrote:
-> > +#define RUN_FAULT_ABANDON      5
-> 
-> The tests still call this operation "abandon" all throughout, but the
-> operation got renamed in the kernel. Probably should rename it in the
-> tests too.
+On 2/11/22 11:30 PM, John Paul Adrian Glaubitz wrote:
 
-Thanks...  I thought I had changed all the names.  Missed that one.
+[...]
+>>> Using IRQ0 by the platform devices is going to be disallowed soon (see [1])
+>>> and the code supporting SH3/4 SoCs maps the IRQ #s starting at 0 -- modify
+>>> that code to start the IRQ #s from 16 instead.
+>>>
+>>> [1] https://lore.kernel.org/all/5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru/
+>>>
+>>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+>>>
+>>> ---
+>>> The patch is against Linus Torvalds' 'linux.git' repo.
+>>>
+>>>  arch/sh/kernel/cpu/sh3/entry.S |    4 ++--
+>>>  include/linux/sh_intc.h        |    6 +++---
+>>>  2 files changed, 5 insertions(+), 5 deletions(-)
+>>>
+>>> Index: linux/arch/sh/kernel/cpu/sh3/entry.S
+>>> ===================================================================
+>>> --- linux.orig/arch/sh/kernel/cpu/sh3/entry.S
+>>> +++ linux/arch/sh/kernel/cpu/sh3/entry.S
+>>> @@ -470,9 +470,9 @@ ENTRY(handle_interrupt)
+>>>  	mov	r4, r0		! save vector->jmp table offset for later
+>>>  
+>>>  	shlr2	r4		! vector to IRQ# conversion
+>>> -	add	#-0x10, r4
+>>>  
+>>> -	cmp/pz	r4		! is it a valid IRQ?
+>>> +	mov	#0x10, r5
+>>> +	cmp/ge	r5, r4		! is it a valid IRQ?
+>>
+>>    Maybe I should've used cmp/hs... my 1st try at SH assembly! :-)
 
-s/RUN_FAULT_ABANDON/RUN_FAULT_CALLBACK
+   Yeah, cmp/hs seems m ore correct as we don't subtract any more...
 
-Ira
+> I can test your revised patch next week on my SH7785LCR.
+
+   Please do, although testing on the AP-SH4A* bords would be a bit more
+interesting, as they actually use IRQ0 for the SMSC911x chip...
+   Maybe you have SH7786 base board, by chance? 
+
+> Thanks,
+> Adrian
+
+MBR, Sergey

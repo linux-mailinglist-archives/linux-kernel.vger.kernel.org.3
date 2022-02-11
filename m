@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489524B25E4
+	by mail.lfdr.de (Postfix) with ESMTP id D7DDB4B25E5
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350164AbiBKMgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 07:36:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41746 "EHLO
+        id S1350173AbiBKMgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 07:36:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243958AbiBKMgL (ORCPT
+        with ESMTP id S1350141AbiBKMgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 07:36:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062BADB3
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:36:09 -0800 (PST)
+        Fri, 11 Feb 2022 07:36:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0555DB3
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:36:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 918E361D64
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 12:36:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB01FC340E9;
-        Fri, 11 Feb 2022 12:36:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A359B829DD
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 12:36:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E319CC340E9;
+        Fri, 11 Feb 2022 12:36:09 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="QBB72DiJ"
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="alGXrey+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644582967;
+        t=1644582969;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=HyNsVaUyQWOPLIUs8NzWo56+7MmoIS24JC7SU4iNpOc=;
-        b=QBB72DiJGxEYs11e7lVekH2F1M1hCb+/hTdG479c9LMVCqhsuU1HQ6JrtalBkbGogRWGyn
-        oNrNjp1cAeGQEzsItFvCWb03iQSm7XhWl6/MCS77PZ23lbKdlKo8spVlFR+TSeGoNrZseg
-        dc6E84C2EpEu7Ens84nQxbJqwnAHBcU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 75506883 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 11 Feb 2022 12:36:06 +0000 (UTC)
+        bh=3W9147nzeFnTQhROd6DTBvSjeGMqVmGM0L+osN5FRJA=;
+        b=alGXrey+kCWtpqeSkSNZam3X5XDDhmGLrXs+AyjlObb/vg1+ut7f+s/0epHOZuNPFhI20Y
+        OFDS0k9CzXpL1N42yb9dnSlnnJqAgXdDKhkX1PESXDaG8q0HCDdi998y+TSC/OKuZrWjQD
+        fVKF4KR1ugQo6VmIijrCvWQa1TeeXF8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4506ae0d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 11 Feb 2022 12:36:09 +0000 (UTC)
 From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
 To:     linux-kernel@vger.kernel.org, linux@dominikbrodowski.net
 Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Theodore Ts'o <tytso@mit.edu>
-Subject: [PATCH 2/9] random: remove useless header comment
-Date:   Fri, 11 Feb 2022 13:35:39 +0100
-Message-Id: <20220211123546.474952-3-Jason@zx2c4.com>
+Subject: [PATCH 3/9] random: rewrite header introductory comment
+Date:   Fri, 11 Feb 2022 13:35:40 +0100
+Message-Id: <20220211123546.474952-4-Jason@zx2c4.com>
 In-Reply-To: <20220211123546.474952-1-Jason@zx2c4.com>
 References: <20220211123546.474952-1-Jason@zx2c4.com>
 MIME-Version: 1.0
@@ -57,30 +57,206 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This really adds nothing at all useful.
+This top comment is a description of what's to follow below, and hence
+in the subsequent reorganization commits, where much of this text will
+resurface.
 
 Cc: Theodore Ts'o <tytso@mit.edu>
 Cc: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- include/linux/random.h | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/char/random.c | 175 ++++--------------------------------------
+ 1 file changed, 16 insertions(+), 159 deletions(-)
 
-diff --git a/include/linux/random.h b/include/linux/random.h
-index e92efb39779c..37e1e8c43d7e 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -1,9 +1,5 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * include/linux/random.h
-- *
-- * Include file for the random number generator.
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 436b146b33be..149cbd481b96 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -2,168 +2,25 @@
+ /*
+  * Copyright (C) 2017-2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+  * Copyright Matt Mackall <mpm@selenic.com>, 2003, 2004, 2005
+- * Copyright Theodore Ts'o, 1994, 1995, 1996, 1997, 1998, 1999.  All
+- * rights reserved.
 - */
-+
- #ifndef _LINUX_RANDOM_H
- #define _LINUX_RANDOM_H
+-
+-/*
+- * Exported interfaces ---- output
+- * ===============================
+- *
+- * There are four exported interfaces; two for use within the kernel,
+- * and two for use from userspace.
+- *
+- * Exported interfaces ---- userspace output
+- * -----------------------------------------
+- *
+- * The userspace interfaces are two character devices /dev/random and
+- * /dev/urandom.  /dev/random is suitable for use when very high
+- * quality randomness is desired (for example, for key generation or
+- * one-time pads), as it will only return a maximum of the number of
+- * bits of randomness (as estimated by the random number generator)
+- * contained in the entropy pool.
+- *
+- * The /dev/urandom device does not have this limit, and will return
+- * as many bytes as are requested.  As more and more random bytes are
+- * requested without giving time for the entropy pool to recharge,
+- * this will result in random numbers that are merely cryptographically
+- * strong.  For many applications, however, this is acceptable.
+- *
+- * Exported interfaces ---- kernel output
+- * --------------------------------------
+- *
+- * The primary kernel interfaces are:
+- *
+- *	void get_random_bytes(void *buf, size_t nbytes);
+- *	u32 get_random_u32()
+- *	u64 get_random_u64()
+- *	unsigned int get_random_int()
+- *	unsigned long get_random_long()
+- *
+- * These interfaces will return the requested number of random bytes
+- * into the given buffer or as a return value. This is equivalent to a
+- * read from /dev/urandom. The get_random_{u32,u64,int,long}() family
+- * of functions may be higher performance for one-off random integers,
+- * because they do a bit of buffering.
+- *
+- * prandom_u32()
+- * -------------
+- *
+- * For even weaker applications, see the pseudorandom generator
+- * prandom_u32(), prandom_max(), and prandom_bytes().  If the random
+- * numbers aren't security-critical at all, these are *far* cheaper.
+- * Useful for self-tests, random error simulation, randomized backoffs,
+- * and any other application where you trust that nobody is trying to
+- * maliciously mess with you by guessing the "random" numbers.
+- *
+- * Exported interfaces ---- input
+- * ==============================
+- *
+- * The current exported interfaces for gathering environmental noise
+- * from the devices are:
+- *
+- *	void add_device_randomness(const void *buf, size_t size);
+- *	void add_input_randomness(unsigned int type, unsigned int code,
+- *                                unsigned int value);
+- *	void add_interrupt_randomness(int irq);
+- *	void add_disk_randomness(struct gendisk *disk);
+- *	void add_hwgenerator_randomness(const void *buffer, size_t count,
+- *					size_t entropy);
+- *	void add_bootloader_randomness(const void *buf, size_t size);
+- *
+- * add_device_randomness() is for adding data to the random pool that
+- * is likely to differ between two devices (or possibly even per boot).
+- * This would be things like MAC addresses or serial numbers, or the
+- * read-out of the RTC. This does *not* add any actual entropy to the
+- * pool, but it initializes the pool to different values for devices
+- * that might otherwise be identical and have very little entropy
+- * available to them (particularly common in the embedded world).
+- *
+- * add_input_randomness() uses the input layer interrupt timing, as well as
+- * the event type information from the hardware.
+- *
+- * add_interrupt_randomness() uses the interrupt timing as random
+- * inputs to the entropy pool. Using the cycle counters and the irq source
+- * as inputs, it feeds the randomness roughly once a second.
+- *
+- * add_disk_randomness() uses what amounts to the seek time of block
+- * layer request events, on a per-disk_devt basis, as input to the
+- * entropy pool. Note that high-speed solid state drives with very low
+- * seek times do not make for good sources of entropy, as their seek
+- * times are usually fairly consistent.
+- *
+- * All of these routines try to estimate how many bits of randomness a
+- * particular randomness source.  They do this by keeping track of the
+- * first and second order deltas of the event timings.
+- *
+- * add_hwgenerator_randomness() is for true hardware RNGs, and will credit
+- * entropy as specified by the caller. If the entropy pool is full it will
+- * block until more entropy is needed.
+- *
+- * add_bootloader_randomness() is the same as add_hwgenerator_randomness() or
+- * add_device_randomness(), depending on whether or not the configuration
+- * option CONFIG_RANDOM_TRUST_BOOTLOADER is set.
+- *
+- * Ensuring unpredictability at system startup
+- * ============================================
+- *
+- * When any operating system starts up, it will go through a sequence
+- * of actions that are fairly predictable by an adversary, especially
+- * if the start-up does not involve interaction with a human operator.
+- * This reduces the actual number of bits of unpredictability in the
+- * entropy pool below the value in entropy_count.  In order to
+- * counteract this effect, it helps to carry information in the
+- * entropy pool across shut-downs and start-ups.  To do this, put the
+- * following lines an appropriate script which is run during the boot
+- * sequence:
+- *
+- *	echo "Initializing random number generator..."
+- *	random_seed=/var/run/random-seed
+- *	# Carry a random seed from start-up to start-up
+- *	# Load and then save the whole entropy pool
+- *	if [ -f $random_seed ]; then
+- *		cat $random_seed >/dev/urandom
+- *	else
+- *		touch $random_seed
+- *	fi
+- *	chmod 600 $random_seed
+- *	dd if=/dev/urandom of=$random_seed count=1 bs=512
+- *
+- * and the following lines in an appropriate script which is run as
+- * the system is shutdown:
+- *
+- *	# Carry a random seed from shut-down to start-up
+- *	# Save the whole entropy pool
+- *	echo "Saving random seed..."
+- *	random_seed=/var/run/random-seed
+- *	touch $random_seed
+- *	chmod 600 $random_seed
+- *	dd if=/dev/urandom of=$random_seed count=1 bs=512
+- *
+- * For example, on most modern systems using the System V init
+- * scripts, such code fragments would be found in
+- * /etc/rc.d/init.d/random.  On older Linux systems, the correct script
+- * location might be in /etc/rcb.d/rc.local or /etc/rc.d/rc.0.
+- *
+- * Effectively, these commands cause the contents of the entropy pool
+- * to be saved at shut-down time and reloaded into the entropy pool at
+- * start-up.  (The 'dd' in the addition to the bootup script is to
+- * make sure that /etc/random-seed is different for every start-up,
+- * even if the system crashes without executing rc.0.)  Even with
+- * complete knowledge of the start-up activities, predicting the state
+- * of the entropy pool requires knowledge of the previous history of
+- * the system.
++ * Copyright Theodore Ts'o, 1994, 1995, 1996, 1997, 1998, 1999. All rights reserved.
+  *
+- * Configuring the /dev/random driver under Linux
+- * ==============================================
++ * This driver produces cryptographically secure pseudorandom data. It is divided
++ * into roughly 5 sections, each with a section header:
+  *
+- * The /dev/random driver under Linux uses minor numbers 8 and 9 of
+- * the /dev/mem major number (#1).  So if your system does not have
+- * /dev/random and /dev/urandom created already, they can be created
+- * by using the commands:
++ *   - Fast key erasure RNG, the "crng".
++ *   - Entropy accumulation and extraction routines.
++ *   - Entropy collection routines.
++ *   - Userspace reader/writer interfaces.
++ *   - Sysctl interface.
+  *
+- *	mknod /dev/random c 1 8
+- *	mknod /dev/urandom c 1 9
++ * The high level overview is that, there is one input pool, into which
++ * various pieces of data are hashed. Some of that data is then "credited" as
++ * having a certain number of bits of entropy. When enough bits of entropy are
++ * available, the hash is finalized and handed as a key to a stream cipher that
++ * expands it indefinately for various consumers. This key is periodically
++ * refreshed as the various entropy collectors, described below, add data to the
++ * input pool and credit it. There is currently no Fortuna-like scheduler
++ * involved, and the entropy estimates are, at best, conservative guesses.
+  */
  
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 -- 
 2.35.0
 

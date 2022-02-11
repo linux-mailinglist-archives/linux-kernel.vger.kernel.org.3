@@ -2,72 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081634B29C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4EAB4B29DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344266AbiBKQKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:10:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41666 "EHLO
+        id S1350352AbiBKQMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:12:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350553AbiBKQKq (ORCPT
+        with ESMTP id S241537AbiBKQM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:10:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02098188
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:10:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644595843;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=wv4wDMknRhoRv5J/R0DKZOmWjk7EJX8SY/gPCW59QMU=;
-        b=gZFzHcxLzRH9Ji7nI8vbGX1vK/rzACcQVcDJGEheEzL+WtGL9ZjuWaNfqTLl2ntIp0DxyF
-        3RQzqWg/7VDOIROxJer4k/F+c6mpK9f03A4Eati4EtDAnrY7MyG0ILPFe2ILzA0q2iI5Z7
-        wIu6lk2nCxgHTZkCnoOH18c+1zCzeyM=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-245-sZ9GpNCjMMmUZNLqwwbTmg-1; Fri, 11 Feb 2022 11:10:42 -0500
-X-MC-Unique: sZ9GpNCjMMmUZNLqwwbTmg-1
-Received: by mail-oi1-f200.google.com with SMTP id bx17-20020a0568081b1100b002d2e2df9e60so2407118oib.22
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:10:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wv4wDMknRhoRv5J/R0DKZOmWjk7EJX8SY/gPCW59QMU=;
-        b=pdEHVgcpsZ9G9HshRbztP5jCc+XetlxxeBGTtYf6Jgu7xYzK1elYPejNrNZTEb1ZhJ
-         GnYb1W8F1ZCAU50KNp2zblw+M72x5Yp2JCsls/dTtDEG7gTNZHIAhiCpfag1hQed/tXb
-         Z6zadDs/rQcBwgOGcLm2YvVLve/7pMusUCeSibrXvxjYmR4CcBuvXQRxJ8M9ymowsxGa
-         vnck0ey4V/EvpQDhGkvxLDADzUHmUFOKFumdtzbj/lm8xC6V7/q5mQxh4tKIwS5PveSw
-         Y4feL647P8P3r686h/cSicAjiyKdXHdneyUYzTcekge7Yp10Yly2B02Lk3erVw+0EJwv
-         AY+w==
-X-Gm-Message-State: AOAM531uncBlqSzuXqBMG2EFLhzADuMcp8sqQ5GNc59lA3nhL/6JQw99
-        unoz7Z2b9OwhzPVLrBVBakzch3JwpzmTs9DUcNj6V72g6QRPRzPnIpCj7LsWi2nRb88jQUYcBdl
-        MIFCy+yC4Xf3F0T+c3UnRQv2C
-X-Received: by 2002:a9d:6086:: with SMTP id m6mr854392otj.284.1644595840855;
-        Fri, 11 Feb 2022 08:10:40 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwu+zFXmT2uhpj6XQra+rL5A6s/OVXMaLY1RwA874o6rssX56oeYMdm1pSJ+FREMEUciMTQng==
-X-Received: by 2002:a9d:6086:: with SMTP id m6mr854384otj.284.1644595840684;
-        Fri, 11 Feb 2022 08:10:40 -0800 (PST)
-Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id d14sm9532779ooh.44.2022.02.11.08.10.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 08:10:40 -0800 (PST)
-From:   trix@redhat.com
-To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        gregkh@linuxfoundation.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] PM: cleanup comments
-Date:   Fri, 11 Feb 2022 08:10:27 -0800
-Message-Id: <20220211161027.2516447-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        Fri, 11 Feb 2022 11:12:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2E1D84;
+        Fri, 11 Feb 2022 08:12:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 600A7B82A9F;
+        Fri, 11 Feb 2022 16:12:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCB90C340EB;
+        Fri, 11 Feb 2022 16:12:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644595945;
+        bh=rgSRG/wI/UvP1JIcRcANguOObOhXqt/uGPw7rZYmMLc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TH0MAjBSPqE4IvkEaG/RqqjT//6OxDhIaX4ubPKeBufLBVs+dhZOSFK76aUYUIrFu
+         qm3Q+9OuINork29yHWxhWekK77boma+MX+IjD6R9YfY+PtYB1WtxsvcQq3H0qzE8kj
+         fMEaAzT+nHQQNoA75Wd2N3/mqGMd4UAWe7pz/iO6v8MFKpcQFelNPDWbiXMKx2T8N2
+         hyCknDNwaFNyJff8KDVIr5Ndy2b12grxjQXCyMli2hTx9y4czC4fWzJLiLhwgw3iNh
+         c3RgLyGb5dSSXN9m5nZQ3qGxBkZsW6/C2qS0l8OzNN2wMfOS0SLqDusMgBWWe5+25A
+         e310hORe+8+Xg==
+Date:   Fri, 11 Feb 2022 16:12:18 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
+Cc:     lgirdwood@gmail.com, tiwai@suse.com, robh+dt@kernel.org,
+        matthias.bgg@gmail.com, perex@perex.cz, p.zabel@pengutronix.de,
+        geert+renesas@glider.be, trevor.wu@mediatek.com,
+        tzungbi@google.com, zhangqilong3@huawei.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/15] ASoC: mediatek: mt8186: add platform driver
+Message-ID: <YgaK4hiRjEJi9wQ4@sirena.org.uk>
+References: <20220211103818.8266-1-jiaxin.yu@mediatek.com>
+ <20220211103818.8266-11-jiaxin.yu@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gYCP5ior9YtfvDdG"
+Content-Disposition: inline
+In-Reply-To: <20220211103818.8266-11-jiaxin.yu@mediatek.com>
+X-Cookie: do {
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,53 +62,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
 
-Remove the second 'the'.
-Replace the second 'of' with 'the'.
-Replace 'couter' with 'counter'.
+--gYCP5ior9YtfvDdG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/base/power/wakeirq.c | 2 +-
- drivers/base/power/wakeup.c  | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Fri, Feb 11, 2022 at 06:38:13PM +0800, Jiaxin Yu wrote:
 
-diff --git a/drivers/base/power/wakeirq.c b/drivers/base/power/wakeirq.c
-index 0004db4a9d3b..d487a6bac630 100644
---- a/drivers/base/power/wakeirq.c
-+++ b/drivers/base/power/wakeirq.c
-@@ -289,7 +289,7 @@ EXPORT_SYMBOL_GPL(dev_pm_disable_wake_irq);
-  *
-  * Enables wakeirq conditionally. We need to enable wake-up interrupt
-  * lazily on the first rpm_suspend(). This is needed as the consumer device
-- * starts in RPM_SUSPENDED state, and the the first pm_runtime_get() would
-+ * starts in RPM_SUSPENDED state, and the first pm_runtime_get() would
-  * otherwise try to disable already disabled wakeirq. The wake-up interrupt
-  * starts disabled with IRQ_NOAUTOEN set.
-  *
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index 8666590201c9..a57d469676ca 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -587,7 +587,7 @@ static bool wakeup_source_not_registered(struct wakeup_source *ws)
-  * @ws: Wakeup source to handle.
-  *
-  * Update the @ws' statistics and, if @ws has just been activated, notify the PM
-- * core of the event by incrementing the counter of of wakeup events being
-+ * core of the event by incrementing the counter of the wakeup events being
-  * processed.
-  */
- static void wakeup_source_activate(struct wakeup_source *ws)
-@@ -733,7 +733,7 @@ static void wakeup_source_deactivate(struct wakeup_source *ws)
- 
- 	/*
- 	 * Increment the counter of registered wakeup events and decrement the
--	 * couter of wakeup events in progress simultaneously.
-+	 * counter of wakeup events in progress simultaneously.
- 	 */
- 	cec = atomic_add_return(MAX_IN_PROGRESS, &combined_event_count);
- 	trace_wakeup_source_deactivate(ws->name, cec);
--- 
-2.26.3
+>  sound/soc/mediatek/Kconfig                    |   44 +
+>  sound/soc/mediatek/Makefile                   |    1 +
+>  sound/soc/mediatek/mt8186/Makefile            |   21 +
+>  sound/soc/mediatek/mt8186/mt8186-afe-clk.c    |  719 ++++
+>  sound/soc/mediatek/mt8186/mt8186-afe-clk.h    |  210 +
+>  sound/soc/mediatek/mt8186/mt8186-afe-common.h |  245 ++
+>  .../soc/mediatek/mt8186/mt8186-afe-control.c  |  262 ++
+>  sound/soc/mediatek/mt8186/mt8186-afe-gpio.c   |  211 +
+>  sound/soc/mediatek/mt8186/mt8186-afe-gpio.h   |   19 +
+>  sound/soc/mediatek/mt8186/mt8186-afe-pcm.c    | 3030 +++++++++++++++
+>  .../mediatek/mt8186/mt8186-interconnection.h  |   69 +
+>  .../soc/mediatek/mt8186/mt8186-misc-control.c | 1729 +++++++++
+>  sound/soc/mediatek/mt8186/mt8186-reg.h        | 3433 +++++++++++++++++
 
+I know it's already a long series but perhaps the clock and GPIO bits
+could be split out into separate patches?  This one patch is over 300K
+which is a bit much in one go, especially when it's not just all big
+tables.
+
+--gYCP5ior9YtfvDdG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIGiuEACgkQJNaLcl1U
+h9CJtQf7BDZBnFCixO3E3MMHZvLzF2Pnw7+W3qm+6WvLPzVSD0iOyTc1J3ZrilB9
+06VgI3G0b0T12wP+S0o0m4nWBfjBuFcSm0SlMQ8tNHm4VNZz13RJWL/HFKOWBmyL
+j3orzapgV2Q46cYWkZpRu1ghoNt8yHbXOtj9fM847nykba62lkcTCCMQkGZCxPuU
+wSQvZko3pHCRhRV24sQuIuLE2XhP+trDjSJzEG7EpcgPC2OLioAtCOZMaqbjLT1P
+7K2gfHPXcBfiCOAn4p/Ns4votdDgBcoPwnyKmcn1V+wuRKdGQT5E15QOAyRi6s3Q
+9pCv5S38o6lxca49gRWRCRt7T79E8g==
+=dsn2
+-----END PGP SIGNATURE-----
+
+--gYCP5ior9YtfvDdG--

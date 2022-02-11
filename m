@@ -2,70 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6BC84B2141
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:14:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 814904B2149
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:16:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235817AbiBKJOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 04:14:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56598 "EHLO
+        id S1348410AbiBKJPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 04:15:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344212AbiBKJOQ (ORCPT
+        with ESMTP id S235530AbiBKJPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 04:14:16 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB53F69
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:14:15 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id y18so4159794plb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:14:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AnYtNhdLAufx/Wabg2w3ZU5XlCq9QWc6T4pL9mdKHRk=;
-        b=PNPe2khfRgmo+HiRLlAoG8nVNb0scB964DKEKSYoD7jVClmPhbuGxl65L227FrqsEV
-         4iVXQk8yjkMgI4Zhwnus0nHOI5kzk+FjeqIZLwu8gcgvdb5Ux6L6guI4TmJf1iJ2CCYb
-         NJPvElMNC+IdNHNEp8OCZhHSaZaJzH245SUwRA0tIVkUbZmm9jrIIdqcnhSioTl6xg74
-         kXPojEOuzOH6ySvsn4F29C2yeDxpHL02dfhn80v0ic8b7gnNaSLrqooTu0WH3UqgNRNs
-         /jpQ651JLr3m4/kZa5eZRasvXTwPv6nOg7gd2feWYA67K7391vlqj86x/yjM0XjqTeoe
-         8fjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AnYtNhdLAufx/Wabg2w3ZU5XlCq9QWc6T4pL9mdKHRk=;
-        b=m1kWJyJlpfBAcHSEcTbo74pNA3cGNgefLp2eGTAoJYTM1F0fauExSHfQ91lDHF2DoO
-         9b0qB70nsJRswWOYQXD/NmamEZO842KnE/nFQH94B3oIO/GD0pT2THCsQ9c31AQhVOxo
-         TS5U1XB762eZjfPzsiHeOTiJmd2Kgpw6Oti6/OXBvY0QjZR+wRJSNxJLb05or1zDT5vl
-         uMGsrGGOKyCU6L6oaXKroxIVUqZfAJclHSo++T4nEuOmTgsu6haw5GZtGO1T8SBcc0OW
-         w7dvsDHZ/jjpmyJHSdME6kAyUbJZCMMcLkoC3tjWToZ15KUCpDwnbiSeiIFIQsl7g5Ir
-         rxwQ==
-X-Gm-Message-State: AOAM533rTyNpPuuJYglK9KMgZYY4lwFabU8P65nQnFjk6cIVoAYBb+ch
-        PnQwUJIgyfbiSGayO27LfJ8A
-X-Google-Smtp-Source: ABdhPJwHRpEeOjwi5F77yVboQHbjWdwulWc/2KiRTMLMCZ9HfBIOxiShsb9dQk3Gt66vTmxNGYNhAA==
-X-Received: by 2002:a17:90b:3b8f:: with SMTP id pc15mr1606035pjb.165.1644570855042;
-        Fri, 11 Feb 2022 01:14:15 -0800 (PST)
-Received: from thinkpad ([27.111.75.38])
-        by smtp.gmail.com with ESMTPSA id h4sm26078995pfv.166.2022.02.11.01.14.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 01:14:14 -0800 (PST)
-Date:   Fri, 11 Feb 2022 14:44:09 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Prasad Malisetty <quic_pmaliset@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
-        swboyd@chromium.org
-Subject: Re: [PATCH v2] PCI: qcom: Add system PM support
-Message-ID: <20220211091409.GB3223@thinkpad>
-References: <1643738876-18572-1-git-send-email-quic_pmaliset@quicinc.com>
+        Fri, 11 Feb 2022 04:15:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784BD102D;
+        Fri, 11 Feb 2022 01:15:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13CE261EAB;
+        Fri, 11 Feb 2022 09:15:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA570C340E9;
+        Fri, 11 Feb 2022 09:15:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644570930;
+        bh=QTZP8fqHHC1+Y2mhadMmJp6T7ga9jtD4xF9Z0QYiPSQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aZ/YUWnhWWOBYxozzvnRQG10LeoqFwxlFQsLVYXgo0fTxUlJUWK8sMcJeBb1O4Amf
+         GXKJyAk90xQhrEqSsH/ibRzDoLf+hAFXpwACpeyZFMWta/Erm28GXQuBCbDA2DGpVu
+         lazI0vnF1l2CPrxQAnEXElaV8/ZoSgHG0uT8SIS1DWQihFjGGaObZV3tjV1t1IIeHq
+         Uz3wrXeIOeNinkzGW9vb1+mtdVg6bMcJ5Fsvv9a0ydym5MozZactOkM/mMRv9/WQuS
+         2UB8vMIaU3MeZmuAH99gfptZ7AfzUcdt8Nz4eDDcr2mtWp3PdffZRK8SwZB8ynlpKn
+         fHScQCykTYe2Q==
+Date:   Fri, 11 Feb 2022 17:15:24 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arm64: dts: imx8mp-evk: add PCA6416 interrupt
+ controller mode
+Message-ID: <20220211091524.GT4909@dragon>
+References: <20220129060818.GQ4686@dragon>
+ <20220129202617.2332885-1-hugo@hugovil.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1643738876-18572-1-git-send-email-quic_pmaliset@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20220129202617.2332885-1-hugo@hugovil.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,103 +63,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On top of Bjorn's review:
-
-On Tue, Feb 01, 2022 at 11:37:56PM +0530, Prasad Malisetty wrote:
-> Add suspend_noirq and resume_noirq callbacks to handle
-> System suspend and resume in dwc pcie controller driver.
+On Sat, Jan 29, 2022 at 03:26:17PM -0500, Hugo Villeneuve wrote:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > 
-> When system suspends, send PME turnoff message to enter
-> link into L2 state. Along with powerdown the PHY, disable
-> pipe clock, switch gcc_pcie_1_pipe_clk_src to XO if mux is
-> supported and disable the pcie clocks, regulators.
+> Add interrupt controller mode for the pca6416 on i.MX8MP EVK board's.
 > 
-> When system resumes, PCIe link will be re-established and
-> setup rc settings.
-> 
-> Signed-off-by: Prasad Malisetty <quic_pmaliset@quicinc.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> ---
-> Changes since v1:
-> 	- Removed unnecessary logs and modified log level suggested by Manivannan.
-> 	- Removed platform specific callbacks as PM support is generic.
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-This is not still generic... Please see below.
-
-> ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 97 ++++++++++++++++++++++++++++++++++
->  1 file changed, 97 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index c19cd506..d1dd6c7 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -73,6 +73,8 @@
->  
->  #define PCIE20_PARF_Q2A_FLUSH			0x1AC
->  
-> +#define PCIE20_PARF_PM_STTS                     0x24
-> +
->  #define PCIE20_MISC_CONTROL_1_REG		0x8BC
->  #define DBI_RO_WR_EN				1
->  
-> @@ -1616,6 +1618,100 @@ static int qcom_pcie_probe(struct platform_device *pdev)
->  	return ret;
->  }
->  
-> +static int qcom_pcie_send_pme_turnoff_msg(struct qcom_pcie *pcie)
-> +{
-> +	int ret = 0;
-> +	u32 val = 0, poll_val = 0;
-> +	u64 l23_rdy_poll_timeout = 100000;
-> +	struct dw_pcie *pci = pcie->pci;
-> +	struct device *dev = pci->dev;
-> +
-> +	val = readl(pcie->elbi + PCIE20_ELBI_SYS_CTRL);
-> +	val |= BIT(4);
-
-Define BIT(4)
-
-> +	writel(val, pcie->elbi + PCIE20_ELBI_SYS_CTRL);
-> +
-> +	ret = readl_poll_timeout((pcie->parf + PCIE20_PARF_PM_STTS), poll_val,
-> +			(poll_val & BIT(5)), 10000, l23_rdy_poll_timeout);
-
-Define BIT(5)
-
-> +	if (!ret)
-> +		dev_info(dev, "PM_Enter_L23 is received\n");
-
-Maybe print, "Device entered L23_Ready state"? Also this should be dev_dbg().
-
-> +	else
-> +		dev_err(dev, "PM_Enter_L23 is NOT received.PARF_PM_STTS 0x%x\n",
-
-Maybe print, "Device failed to enter L23_Ready state"?
-
-> +			readl_relaxed(pcie->parf + PCIE20_PARF_PM_STTS));
-> +
-> +	return ret;
-> +}
-> +
-> +static void qcom_pcie_host_disable(struct qcom_pcie *pcie)
-> +{
-> +	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
-> +
-
-As Bjorn said this would only work for platforms supporting v2.7.0 ops. Please
-make it generic.
-
-> +	/* Assert the reset of endpoint */
-> +	qcom_ep_reset_assert(pcie);
-> +
-> +	/* Put PHY into POWER DOWN state */
-> +	phy_power_off(pcie->phy);
-> +
-> +	writel(1, pcie->parf + PCIE20_PARF_PHY_CTRL);
-
-Define "1".
-
-Thanks,
-Mani
+Applied, thanks!

@@ -2,62 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7234E4B1E0F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1CC4B1E16
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:04:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243614AbiBKGDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 01:03:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48820 "EHLO
+        id S243099AbiBKGEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 01:04:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239178AbiBKGDe (ORCPT
+        with ESMTP id S237990AbiBKGD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 01:03:34 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D215589
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 22:03:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644559414; x=1676095414;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HK4xC+6JUpQkmPX0PZae+YBXwScsP73EELvRa6GGoCM=;
-  b=kZfpPmikODPF5RGm20Fm62iWbuxN6gvQgFdL+oWiTfZKYcfWuhA9egNw
-   wI4nmPGtW8fhUcbpJrwvnNagVD3oi7tphIw7j3D6DBTDIpEapQ+8Bd6Xq
-   0srY95Lo6gVBIQU9W1qFL0S4C/514HIV8ZgfK6QpoT1e55gySpoDnIMLr
-   hX3LAiEBtu8aDboUXqRst4talz6Q8S5b6Au4aBCo1dTdM7gn8FlxVNlfS
-   g7Sms1E2E6ioELIU4BrpXZa/n9l783neebSlQhKTNgvh5JkpK+Iq2OG/p
-   Gof5AljqeC/UL4w7MI0WfFlsAM3KhIwyatGo0M+e39Oz0cw4Pcb+TFqU8
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="249419500"
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="249419500"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 22:03:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="679414671"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Feb 2022 22:03:31 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nIP1n-0004C1-1G; Fri, 11 Feb 2022 06:03:31 +0000
+        Fri, 11 Feb 2022 01:03:59 -0500
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2058.outbound.protection.outlook.com [40.107.22.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2827C5F41;
+        Thu, 10 Feb 2022 22:03:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O8OMp8/1uAOvhhUuvdvQNVzC6hDqm0nkyGfDDxGYlz8o/KHhhTLxo+KXNQQP3IHAZZOshkQ147HliYkvXvZyg0zkShsHSga1ZyF+Vlm1UzXXLt3uGRhEhPtHDrkDgf+swDyvLAZP/I1/b97AqppSq2WH4ygICjzHNC33H6VBKHTmkZUUfbfIRiFcyglOsIjsS6X4qb4Z+fvOVFioKaNB3/1PnJc18oY7oJi9Bur1i1SLJ978U0wBh/dZuhg720B3uF7EVEHrdOzo+sF8NnbcE1LMH9Ls+N49ghEwI9ucvILu0orOxqKQWJ3lpq0lBXRVkW3S/9OMGFzMByiP9YrJTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IeRy9BadU4UQFEB6z8Ea1yVUomY81ufMaOc/Z0lK1n0=;
+ b=hNj4CQ+ttea92KnNpm6aCKoEwweWvnlVpHLl6VIkGQuEh0xgKY1bVuooUP+wUqXgtd+TKBWS4gNEeSkwUL+CIjiDzCIH32w2EroT/Y/UBCgIBAVpcn/wPc9rA/d+KPG0ax112pcMlfoasOUC7MNb6P7Oprw+T84trlALTovsKpdmS/X+1arIUkWrpjoKMnV4OOggGSzrrAASxVY12womTWbG35TIZ4RDvS27aiWMqt69gF1MWYsjaK+WfWC84V4XHVu40h82p/LloAfgf0OtHhvSLM8k2vXDR7Rdp3tti/D6CuFiHt5f85DlSL1+6UQIivJ+MJC7z5ynbe0zNDTq+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IeRy9BadU4UQFEB6z8Ea1yVUomY81ufMaOc/Z0lK1n0=;
+ b=jhBMPNUWAa4uCMoCMEUcBFBNQ/5OUtVd8CpMCER+ENNQBsLij1iFs4lz670klB4iGMW4sSuMZSd4Npt9/5sIvcIVWMhfsFZhFPCMBbC5wx4jsh9YS4BFvIxqDmVMRp44UCJ1siOg5Jjm+uFYZwsUmiZBDwEMTlfWHv3mGgxBnL8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DB8PR04MB7113.eurprd04.prod.outlook.com (2603:10a6:10:12a::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.15; Fri, 11 Feb
+ 2022 06:03:54 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::448c:19d:ca9a:123e]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::448c:19d:ca9a:123e%7]) with mapi id 15.20.4975.011; Fri, 11 Feb 2022
+ 06:03:54 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     jassisinghbrar@gmail.com, robh+dt@kernel.org, shawnguo@kernel.org
+Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        krzysztof.kozlowski@canonical.com, daniel.baluta@nxp.com,
+        Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V3 0/5] mailbox: imx: support i.MX93
 Date:   Fri, 11 Feb 2022 14:02:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 29/35]
- fs/netfs/write_helper.c:28:26: warning: comparison of distinct pointer types
- ('typeof (((1UL) << 12) - offset) *' (aka 'unsigned long *') and 'typeof
- (size) *' (aka 'unsigned int *'))
-Message-ID: <202202111324.LBsc3lm4-lkp@intel.com>
+Message-Id: <20220211060301.1852772-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR06CA0008.apcprd06.prod.outlook.com
+ (2603:1096:4:186::23) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d82d9dfa-5d8b-4434-25b9-08d9ed244808
+X-MS-TrafficTypeDiagnostic: DB8PR04MB7113:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-Microsoft-Antispam-PRVS: <DB8PR04MB7113F81D2DC5D94B4AD7BB05C9309@DB8PR04MB7113.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3044;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PnRwfFxjAAZq/yuA98KZZzQq3uYNKz89BNiLkISOjhFSJ/P6RX89LpzKShoj0uXFrhB1zEb+Cr7Sa6Ui7ptvrREJ+63fWsAqzAVHz1qTWdb+316olL5jzyrKz1lUr6cOdxZnc/y9g0QRIJEN7yHzucC4hUVu0SXTxQssw/aEo66Zsa1OEnlAk9vTx/CU4ogRymIq9Z3n8ARtJCtfRoS5DSaRmkh0NEiy7DUsjC9qrfRPiDfqXvQEvBDS+ubT/g6R9WRy0tiGFRia4aKDGQXL56yX0PbVZpiM4bMkCSKsf5+WZnNEf7rJr9GTXufrKGhuqt6vN+uBURmiTDU1OcfhSYfukcEUvi6LPD8PczTuI5Lta1Kk1LbexZsXip1QCP73GBOYaPSZog4dJS1r3g4bAV3k6IqXufRNWgp+KOJNduUMQEWKzrLAH2t9hpPUJDIIFdU6vg9wAynkaEM3AwLntL3dAVMByCscszgtMTZ8fHyA3GA02/YTrXQlK/WHVGT/Zv9O3gsYB8gUsyz6jNdPLxFsW5kH46IJwJ0WlXfLKnVV21DTYW9wdFk//k65ahqhV/vV6BOKFwFouMnu2r6ln03JidFlHgOmuaW5le7/BQJdnlGiKRP4sDklywvM1jVqcmDIaySBHLN6BKEEhwOmQjVNVm8myk7uvROjpkUaMw2Tel2PDbfBdKzroP+LfWSxjLOJNCU32rJrU9iB8ZZn8W89eGNUNxUUEpTy8gPWmm9OOU9JNRkMslgKQ/vJIxQxo0c4PIYCWSN+WWFAnh8e1DhLQy9zCUuox+60UhVOEi4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6512007)(186003)(26005)(8676002)(4326008)(6486002)(966005)(2906002)(66556008)(66946007)(66476007)(508600001)(316002)(1076003)(2616005)(86362001)(38100700002)(38350700002)(7416002)(6506007)(8936002)(83380400001)(15650500001)(5660300002)(52116002)(4744005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PXzw1qj3fsscJ8Zru2BcCGyE83nrsvl1RjG3PME6OeGj7XPRsOlAYgMn1kjq?=
+ =?us-ascii?Q?yUEMOMwU2aB0Q7BCl/MSB05Y91qDz6cHo5y1TvL9BYCTWBaRQ223exDFaKDz?=
+ =?us-ascii?Q?dpDjEnbX5M5vmf8OIgkgNE/1Lr+z8oncF2rgZOdxPc+qpOtWYlFY4Ut+JRn/?=
+ =?us-ascii?Q?mrE30dGvbh8+DVKmLugMN4rsFJUpY8wa8lBLJi8Ln3gEkYcrfZksUzz9IvIS?=
+ =?us-ascii?Q?3KNudQb7WGz0CsezSoPVg3fAdPJSFWTcvGlMKRe1cxDTAFrZy3hoRv29nj4V?=
+ =?us-ascii?Q?/jl4jkLCNqVHMsYVrR6+RoofacgzIqtCbuKE9eXv4I2KDHYQYoYFWhrXTUpW?=
+ =?us-ascii?Q?UngjrEKM+gyfenjMkDbwlgGTXnSH9lBjw3xHSm3znwnSmzkQvr3ZECftDvaj?=
+ =?us-ascii?Q?jYgnMv+BtBG1olG/nbiWH43FodNzxsS9qtIk9mShbct9O5Qde0dMkc0xm6LH?=
+ =?us-ascii?Q?2Qq895cSfHIAkkgH9Exg0V0kH/PROvdDGpnmgfx09odnJUTfaXy+TjAxoDw7?=
+ =?us-ascii?Q?qCSWzXhZrqnpnwfcI8o2m4XdtRwn9pRGDPSp6Q7dLpl68BGeGrEqasnbDLg0?=
+ =?us-ascii?Q?MaA/R8zXjCkxZ6MXFepQLYZnFGOQ8t9OlmWOcoCkotmycYrsy2qsZwdFe5Xg?=
+ =?us-ascii?Q?Un+Kbahtk4nWDTSLwOp67x7JnGPoOMqf/JSZ9fm3dVKzaaJPG847gpuFSYLU?=
+ =?us-ascii?Q?PuLtQJRVmi8htgLOVSQZH/qrPn57L5Cnl+BfbiWbGPmX0Ndp9hokglHbHHgN?=
+ =?us-ascii?Q?FQTTQao2pPZk1JJG9iG7v6UhNc572NpGmuKXzmQEKdP+YyFVecf9Qzd7THqL?=
+ =?us-ascii?Q?R5cVO2/5ILWihf8lJTRuYmlGfoHRIHdl2qghHFCmzSZF+cavnp6OdRjvJ7Pv?=
+ =?us-ascii?Q?VQlDZBTPmyG+tm4OiBb35sdWz5Xw1IODgvEI+tGaLPf9o//BFi6jVPIPnLdP?=
+ =?us-ascii?Q?MCumCVrdVShMQq6shE8GCH7colpuMMyISOPcPCBy+u+xBApAcZzafXwaoCBB?=
+ =?us-ascii?Q?ARk/mXTuI7HMlKtWnTrbtWTQv7vc6D3H84psQvIfB05s7LK5r3SDhOAJPu+2?=
+ =?us-ascii?Q?x5iTiw8iHGy9yG0fjkdyaHwFtfsnh8zxcQrt8cbjq1BWt/4QooRdzw3YOIJZ?=
+ =?us-ascii?Q?sO8dEYsJD7vvnBNVEUbGvO+EWbE+eXdcAVfheZrLvg4V7vwRUB1efIPMLMW7?=
+ =?us-ascii?Q?8Bn2cdM1A/6i9oGHyskqL1ZjK7ZPUad+gNDZYHIkJGhiWSlN1cYtgTg2y9fj?=
+ =?us-ascii?Q?hBIabmIuCqI+UMiMvg+0RyHddK+Wx+7sxoPnb1kLjYI+0jPxSB7C0+JMIQjW?=
+ =?us-ascii?Q?fykFdcvsnksr/cvyu/mrTXq4SdYn9qSs0wZt+RQ2YquRpGvQznzgz59cWH5C?=
+ =?us-ascii?Q?/J+NOTvwmImN5t/zqF2eKxpox05/zWR1CdlKA0auNI3OSiI4M8Gnt9TgB2YX?=
+ =?us-ascii?Q?OjszyyR+THx7xDqiAC1yVvT74GZXo4C1NH3w0j90R1sAoJlO6QxbgCXcWwbQ?=
+ =?us-ascii?Q?5OWoY7/ZYH5+3m2bromGsrmFNlJ03X6dXHzIvDaFo+cB2W3vIK/PLCpjGSSs?=
+ =?us-ascii?Q?YaHW/is6xyw5G0w5+nYvaSHMyjvPBP6K40BUSEd6Dp3u2/XSXjDe8y7+xtph?=
+ =?us-ascii?Q?KV9hNIrWJ23AgPpdDwLXerg=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d82d9dfa-5d8b-4434-25b9-08d9ed244808
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2022 06:03:54.0871
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nig6AhG6Oxt6wGsyz64qf+HMVvwSrIrnw1wDO448KTTs3N7nU/Mp5ABEHSpBz4MSK6gg61c3Nf3LMSHst4jOnQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7113
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,208 +118,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   429e2bb6fb190f390ed23afc0d2308e877c43be5
-commit: 01abe2ebb0b5676c9d0394947cfeea45d0f5c09f [29/35] netfs: Implement buffered writes through netfs_file_write_iter()
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220211/202202111324.LBsc3lm4-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f774697c85d6a352dcea013f46a99f9fe31)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/01abe2ebb0b5676c9d0394947cfeea45d0f5c09f
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout 01abe2ebb0b5676c9d0394947cfeea45d0f5c09f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
+From: Peng Fan <peng.fan@nxp.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+V3:
+ Add R-b for 1/5 2/5
+ Split V2 patch 4/4 into two patch 4/5, patch 5/5
 
-All warnings (new ones prefixed by >>):
+V2:
+ Fix dt bindings in patch 1/4 2/4
+ Squash author/copyright patch into patch 4/4
 
->> fs/netfs/write_helper.c:28:26: warning: comparison of distinct pointer types ('typeof (((1UL) << 12) - offset) *' (aka 'unsigned long *') and 'typeof (size) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-                   unsigned int psize   = min(PAGE_SIZE - offset, size);
-                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->> fs/netfs/write_helper.c:126:18: warning: comparison of distinct pointer types ('typeof (target->from) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
-           target->from  = min(target->from, folio_pos(folio) + offset);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:45:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
->> fs/netfs/write_helper.c:127:18: warning: comparison of distinct pointer types ('typeof (target->to) *' (aka 'unsigned long long *') and 'typeof (folio_pos(folio) + offset + len) *' (aka 'long long *')) [-Wcompare-distinct-pointer-types]
-           target->to    = max(target->to,   folio_pos(folio) + offset + len);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:52:19: note: expanded from macro 'max'
-   #define max(x, y)       __careful_cmp(x, y, >)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   3 warnings generated.
+Based on: https://lkml.org/lkml/2022/2/6/304
+Add i.MX93 Generic MU and S4 MU support
+i.MX93 S4 MU has some changes compared with i.MX8ULP S4 MU, it
+has two interrupts, tx/rx, so also update dt binding doc.
 
+Peng Fan (5):
+  dt-bindings: mailbox: imx-mu: add i.MX93 MU
+  dt-bindings: mailbox: imx-mu: add i.MX93 S4 MU support
+  mailbox: imx: extend irq to an array
+  mailbox: imx: support dual interrupts
+  mailbox: imx: support i.MX93 S401 MU
 
-vim +28 fs/netfs/write_helper.c
+ .../devicetree/bindings/mailbox/fsl,mu.yaml   | 24 +++++++++
+ drivers/mailbox/imx-mailbox.c                 | 53 +++++++++++++++----
+ 2 files changed, 66 insertions(+), 11 deletions(-)
 
-    18	
-    19	static size_t copy_folio_from_iter_atomic(struct folio *folio,
-    20						  unsigned int offset, size_t size,
-    21						  struct iov_iter *i)
-    22	{
-    23		size_t copied = 0, n;
-    24	
-    25		do {
-    26			unsigned int index   = offset / PAGE_SIZE;
-    27			unsigned int poffset = offset % PAGE_SIZE;
-  > 28			unsigned int psize   = min(PAGE_SIZE - offset, size);
-    29	
-    30			n = copy_page_from_iter_atomic(folio_file_page(folio, index),
-    31						       poffset, psize, i);
-    32			copied += n;
-    33			if (n < psize)
-    34				break;
-    35			size -= n;
-    36		} while (size);
-    37		return copied;
-    38	}
-    39	
-    40	/*
-    41	 * Initialise a new dirty folio group.  We have to round it out to any crypto
-    42	 * alignment.
-    43	 */
-    44	static void netfs_init_dirty_region(struct netfs_i_context *ctx,
-    45					    struct netfs_dirty_region *region,
-    46					    struct file *file,
-    47					    enum netfs_write_type write_type,
-    48					    loff_t start, size_t len)
-    49	{
-    50		struct netfs_flush_group *group;
-    51	
-    52		region->from		= start;
-    53		region->to		= start + len;
-    54		region->debug_id	= atomic_inc_return(&netfs_region_debug_ids);
-    55		refcount_set(&region->ref, 1);
-    56	
-    57		switch (write_type) {
-    58		case NETFS_ORDINARY_WRITE:
-    59		case NETFS_DIO_WRITE:
-    60			break;
-    61		case NETFS_SYNC_WRITE:
-    62			__set_bit(NETFS_REGION_SYNC, &region->flags);
-    63			break;
-    64		case NETFS_DSYNC_WRITE:
-    65			__set_bit(NETFS_REGION_DSYNC, &region->flags);
-    66			break;
-    67		}
-    68	
-    69		if (file && ctx->ops->init_dirty_region)
-    70			ctx->ops->init_dirty_region(region, file);
-    71	
-    72		if (!region->group) {
-    73			group = list_last_entry(&ctx->flush_groups,
-    74						struct netfs_flush_group, group_link);
-    75			region->group = netfs_get_flush_group(group);
-    76		}
-    77		trace_netfs_ref_region(region->debug_id, refcount_read(&region->ref),
-    78				       netfs_region_trace_new);
-    79	}
-    80	
-    81	/*
-    82	 * Decide if/how a write can be merged with a dirty region.
-    83	 */
-    84	static bool netfs_is_write_compatible(struct netfs_i_context *ctx,
-    85					      struct netfs_dirty_region *old,
-    86					      struct netfs_dirty_region *candidate)
-    87	{
-    88		/* Regions being actively flushed can't be merged with */
-    89		if (netfs_mas_is_flushing(old) ||
-    90		    candidate->group != old->group ||
-    91		    test_bit(NETFS_FGROUP_FLUSHED, &old->group->flags)) {
-    92			_leave(" = f [flush]");
-    93			return false;
-    94		}
-    95	
-    96		if (test_bit(NETFS_REGION_DSYNC, &old->flags)) {
-    97			_leave(" = f [dsync]");
-    98			return false;
-    99		}
-   100	
-   101		if (!ctx->ops->is_write_compatible) {
-   102			if (test_bit(NETFS_REGION_DSYNC, &candidate->flags)) {
-   103				_leave(" = f [dsync]");
-   104				return false;
-   105			}
-   106			_leave(" = t");
-   107			return true;
-   108		}
-   109		return ctx->ops->is_write_compatible(ctx, old, candidate);
-   110	}
-   111	
-   112	/*
-   113	 * Subsume the modifications into an existing target region.  Returns true if
-   114	 * we need to update the dirty_regions tree.
-   115	 */
-   116	static bool netfs_subsume_into_existing(struct netfs_i_context *ctx,
-   117						struct folio *folio,
-   118						struct ma_state *mas,
-   119						struct netfs_dirty_region **_target,
-   120						struct netfs_dirty_region **_to_put,
-   121						pgoff_t *_first, pgoff_t *_last,
-   122						size_t offset, size_t len)
-   123	{
-   124		struct netfs_dirty_region *target = *_target, *prev;
-   125	
- > 126		target->from  = min(target->from, folio_pos(folio) + offset);
- > 127		target->to    = max(target->to,   folio_pos(folio) + offset + len);
-   128		trace_netfs_dirty(ctx, target, NULL, *_first, *_last,
-   129				  netfs_dirty_trace_modified);
-   130	
-   131		/* We might have bridged to the previous region also. */
-   132		prev = mas_prev(mas, *_first - 1);
-   133		if (!netfs_mas_is_valid(prev))
-   134			return false;
-   135	
-   136		if (prev->to != target->from ||
-   137		    prev->waiting_on_wb != target->waiting_on_wb)
-   138			return false;
-   139	
-   140		*_first = mas->index;
-   141		prev->to = target->to;
-   142		*_to_put = target;
-   143		trace_netfs_dirty(ctx, prev, NULL, *_first, *_last,
-   144				  netfs_dirty_trace_merged_prev);
-   145		return true;
-   146	}
-   147	
+-- 
+2.25.1
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

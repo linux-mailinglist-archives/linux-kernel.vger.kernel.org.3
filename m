@@ -2,216 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7224B24C4
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5FA4B24C2
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349604AbiBKLuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 06:50:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40392 "EHLO
+        id S1349603AbiBKLuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 06:50:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiBKLuK (ORCPT
+        with ESMTP id S1349605AbiBKLuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 06:50:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5CF41F3B
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:50:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644580208;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OICV3mcUbBxV6suQ2V0x/IRiIlr0MLiQcnu4h3ef4B4=;
-        b=cLtGToEM1gvFiuuCpFl7M/zGyP3bGDi9PLeeXyZj15DvPcyhmUl8vsF2xQHz21FTmhqJ1i
-        vLKh1K6y899YB6Nkc+snbEaB9CgSC1N0nxNkq+7OO0kyZna6IVQgkcPj4OWsLoZUGgHsLL
-        DVPW41KYxSxCjjPRHpoBWWwUjPgz3Zw=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-27-6BwHNgJHNDueH2qIuB21uQ-1; Fri, 11 Feb 2022 06:50:07 -0500
-X-MC-Unique: 6BwHNgJHNDueH2qIuB21uQ-1
-Received: by mail-wr1-f71.google.com with SMTP id g17-20020adfa591000000b001da86c91c22so3790317wrc.5
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:50:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OICV3mcUbBxV6suQ2V0x/IRiIlr0MLiQcnu4h3ef4B4=;
-        b=lvzFUd/3ukNgZHKWGFBx3ppBmYTnD1WWXwfvpqFBzAc/Xzpk2Qrgco29maf8D++EgP
-         Jb2QmZHctNwZO9XE8qtLu11xXubmyVmm8wSNOYRJMvMQs0ovwyVyPcHr+wv2QSFgkDPE
-         hZaVS8BaO2DyUX1WneBk/pZrxJE98/rgPXyf/iZtQ00BomzjX8KHuRYnxg4RuD3oPkq7
-         EIrzq6+lKlsHHLXzB0Qx00ZxW7lMhNgSThcfxtpbjaK+iao79fSVDZgGYjhx1yvR0Mcu
-         VK2hoMM9DmJOEbuKwWnfRYE/SE7Cgyxwi0RE1Qk1CkDc2J78cmPldJ4qVqzPEIOUP6eB
-         xMmg==
-X-Gm-Message-State: AOAM530rJsrO4PW/mlLrZr42dpoRUNsIbdyBaUcWluGGEl9DEFH7RtXT
-        bNePlonR8Vi5K2OepLrQOdVO3qROg7WZV8JmZkokNjFh0AZPDfFL76xi4YSTAIVMzIuQKIyyQsz
-        Vl/AcndW65GTY6CXP9eWJPLqE
-X-Received: by 2002:adf:e4ca:: with SMTP id v10mr1064550wrm.635.1644580206266;
-        Fri, 11 Feb 2022 03:50:06 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxxu19EHwNoykZrkYLd84XXhMKpSr092i38lxhqdJ6Cbdpiv/di8sAiWsz0wnYXMkIZVmABsA==
-X-Received: by 2002:adf:e4ca:: with SMTP id v10mr1064526wrm.635.1644580205951;
-        Fri, 11 Feb 2022 03:50:05 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id ay12sm2689074wrb.73.2022.02.11.03.50.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Feb 2022 03:50:05 -0800 (PST)
-Message-ID: <00616642-1c95-9258-ab6e-b08116b36d21@redhat.com>
-Date:   Fri, 11 Feb 2022 12:50:04 +0100
+        Fri, 11 Feb 2022 06:50:22 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCF0F4F;
+        Fri, 11 Feb 2022 03:50:21 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id B04DC1F46D3E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644580219;
+        bh=YoiosXYfuzCdv75Q/QHeODvcQlcGqCPnisvrlLqIWlM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GTLGC4aXdUu/HNLbQWFHvoE4iM7hofN1vXc9X7vuswhNjFoA+7s1JE0VPabZpHjKP
+         ur3PKD8vtNTjtm7+H3MVyS858xTgldAxBwrE+uHqul1zODaxn3Lkrw2CGShpwj4ryb
+         EH6J9xrmZtiwuTwsfrnnplzsFTcFjpZhwhi0dVd02QBipVGO34lu7IPM9ZlOy6HaX5
+         6eWapx+KB+Av1nl1wFLUB2NPltshUp2Bt+OgAMBY7OJKhxZueS+0DH7kF06nQTv4vf
+         tMFBi/tYTl302CE/ne7Nerj49cWLDBCnexztlPIHPbRx9q1ZTcSHlYNQwopgA9RyBa
+         m1zKHA0aUmgzg==
+Message-ID: <e7cbca18-a343-4058-6a1e-1e6bfb167bd9@collabora.com>
+Date:   Fri, 11 Feb 2022 12:50:09 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 2/6] drm/format-helper: Add
- drm_fb_xrgb8888_to_mono_reversed()
+ Thunderbird/91.5.1
+Subject: Re: [V11,PATCH 04/19] soc: mediatek: add driver for dvfsrc support
 Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>
-References: <20220211091927.2988283-1-javierm@redhat.com>
- <20220211091927.2988283-3-javierm@redhat.com>
- <YgZEPo0ERFRloDyA@smile.fi.intel.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <YgZEPo0ERFRloDyA@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Dawei Chien <dawei.chien@mediatek.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ryan Case <ryandcase@chromium.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Nicolas Boichat <drinkcat@google.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Fan Chen <fan.chen@mediatek.com>,
+        Arvin Wang <arvin.wang@mediatek.com>,
+        James Liao <jamesjj.liao@mediatek.com>,
+        Henry Chen <henryc.chen@mediatek.com>
+References: <20210812085846.2628-1-dawei.chien@mediatek.com>
+ <20210812085846.2628-5-dawei.chien@mediatek.com>
+ <3d1ba05d-0013-a9ac-1fe1-1d60e510c574@collabora.com>
+ <3d30fe7f61b558d3c2c8214e0e936903657f8231.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <3d30fe7f61b558d3c2c8214e0e936903657f8231.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Andy,
+Il 11/02/22 04:51, Dawei Chien ha scritto:
+> On Thu, 2022-02-03 at 16:04 +0100, AngeloGioacchino Del Regno wrote:
+>> Il 12/08/21 10:58, Dawei Chien ha scritto:
+>>> From: Henry Chen <henryc.chen@mediatek.com>
+>>>
+>>> Add dvfsrc driver for MT6873/MT8183/MT8192
+>>>
+>>> Signed-off-by: Henry Chen <henryc.chen@mediatek.com>
+>>> Signed-off-by: Dawei Chien <dawei.chien@mediatek.com>
+>>> ---
+>>>    drivers/soc/mediatek/Kconfig            |  11 +
+>>>    drivers/soc/mediatek/Makefile           |   1 +
+>>>    drivers/soc/mediatek/mtk-dvfsrc.c       | 421
+>>> ++++++++++++++++++++++++++++++++
+>>>    include/linux/soc/mediatek/mtk_dvfsrc.h |  35 +++
+>>>    4 files changed, 468 insertions(+)
+>>>    create mode 100644 drivers/soc/mediatek/mtk-dvfsrc.c
+>>>    create mode 100644 include/linux/soc/mediatek/mtk_dvfsrc.h
+>>>
 
-Thanks for your feedback.
+..snip..
 
-On 2/11/22 12:10, Andy Shevchenko wrote:
+>>> diff --git a/drivers/soc/mediatek/mtk-dvfsrc.c
+>>> b/drivers/soc/mediatek/mtk-dvfsrc.c
+>>> new file mode 100644
+>>> index 000000000000..6ef167cf55bd
+>>> --- /dev/null
+>>> +++ b/drivers/soc/mediatek/mtk-dvfsrc.c
 
-[snip]
+..snip..
 
->> +static void drm_fb_gray8_to_mono_reversed_line(u8 *dst, const u8 *src, unsigned int pixels,
->> +					       unsigned int start_offset, unsigned int end_len)
->> +{
->> +	unsigned int xb, i;
->> +
->> +	for (xb = 0; xb < pixels; xb++) {
->> +		unsigned int start = 0, end = 8;
->> +		u8 byte = 0x00;
+>>> +static int mtk_dvfsrc_probe(struct platform_device *pdev)
+>>> +{
+>>> +	struct arm_smccc_res ares;
+>>> +	struct resource *res;
+>>> +	struct mtk_dvfsrc *dvfsrc;
+>>> +	int ret;
+>>> +
+>>> +	dvfsrc = devm_kzalloc(&pdev->dev, sizeof(*dvfsrc), GFP_KERNEL);
+>>> +	if (!dvfsrc)
+>>> +		return -ENOMEM;
+>>> +
+>>> +	dvfsrc->dvd = of_device_get_match_data(&pdev->dev);
+>>> +	dvfsrc->dev = &pdev->dev;
+>>> +
+>>> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>>> +	dvfsrc->regs = devm_ioremap_resource(&pdev->dev, res);
+>>> +	if (IS_ERR(dvfsrc->regs))
+>>> +		return PTR_ERR(dvfsrc->regs);
+>>> +
+>>> +	spin_lock_init(&dvfsrc->req_lock);
+>>> +	mutex_init(&dvfsrc->pstate_lock);
+>>> +
+>>> +	arm_smccc_smc(MTK_SIP_VCOREFS_CONTROL, MTK_SIP_DVFSRC_INIT, 0,
+>>> 0, 0,
+>>> +		0, 0, 0, &ares);
+>>> +
+>>> +	if (!ares.a0) {
+>>> +		dvfsrc->dram_type = ares.a1;
+>>> +		dev_info(dvfsrc->dev, "dram_type: %d\n", dvfsrc-
+>>>> dram_type);
+>>> +	} else {
+>>> +		dev_err(dvfsrc->dev, "init fails: %lu\n", ares.a0);
+>>> +		return ares.a0;
+>>> +	}
+>>> +
+>>> +	dvfsrc->curr_opps = &dvfsrc->dvd->opps_desc[dvfsrc->dram_type];
+>>> +	platform_set_drvdata(pdev, dvfsrc);
+>>> +
+>>> +	dvfsrc->regulator = platform_device_register_data(dvfsrc->dev,
+>>> +			"mtk-dvfsrc-regulator", -1, NULL, 0);
+>>
+>> Why are you registering platform devices like this?
+>>
+>> Please use device-tree instead.
+>>
 > 
->> +		if (xb == 0 && start_offset)
->> +			start = start_offset;
+> Thank you for advisement. Let me just describe history.
 > 
-> This is invariant to the loop, can be moved out.
-> 
->> +		if (xb == pixels - 1 && end_len)
->> +			end = end_len;
-> 
-> Ditto. However it may require to factor out the following loop to a helper.
->
-
-Not sure I'm following, it's not invariant since it depends on the
-loop iterator value. It only applies to the first and last pixels.
- 
-[snip]
-
->> +	/*
->> +	 * The reversed mono destination buffer contains 1 bit per pixel
->> +	 * and destination scanlines have to be in multiple of 8 pixels.
->> +	 */
->> +	if (!dst_pitch)
->> +		dst_pitch = DIV_ROUND_UP(linepixels, 8);
-> 
-> round_up() ?
-> 
-
-But it's not a round up operation but a div and round up.
-
->> +	WARN_ONCE(dst_pitch % 8 != 0, "dst_pitch is not a multiple of 8\n");
+> Actually, we did use device-tree to probe interconnect/regulator driver
+> in v4, and reviewer had some advisement
 > 
 > 
-> I would move this to the if conditional, i.e.
+> https://patchwork.kernel.org/project/linux-mediatek/patch/1584092066-24425-12-git-send-email-henryc.chen@mediatek.com/#23243049
 > 
-> 	if (dst_pitch)
-> 		WARN_ONCE(dst_pitch % 8 != 0, "dst_pitch is not a multiple of 8\n");
-> 	else
-> 		dst_pitch = round_up(linepixels, 8);
->
-
-No, because we always need to div and round up. The warning is just printed to
-let know that the dst pitch is not a multiple of 8 as it should be. So callers
-could be fixed.
-
->> +	/*
->> +	 * The cma memory is write-combined so reads are uncached.
+> https://patchwork.kernel.org/project/linux-mediatek/patch/1584092066-24425-9-git-send-email-henryc.chen@mediatek.com/#23236945
 > 
-> CMA
->
-
-Yes, this bug me too. But other format helpers (e.g: drm_fb_xrgb8888_to_rgb565
-and drm_fb_xrgb8888_to_gray8) had this comment with CMA in lower case. So did
-the same for consistency.
-
->> +	 * Speed up by fetching one line at a time.
->> +	 *
->> +	 * Also, format conversion from XR24 to reversed monochrome
->> +	 * are done line-by-line but are converted to 8-bit grayscale
->> +	 * as an intermediate step.
->> +	 *
->> +	 * Allocate a buffer to be used for both copying from the cma
->> +	 * memory and to store the intermediate grayscale line pixels.
->> +	 */
->> +	src32 = kmalloc(len_src32 + linepixels, GFP_KERNEL);
+> so we refer to this driver to use platform_device_register_data after
+> v5.
 > 
-> size_add() ?
->
-
-I wasn't familiar with this macro and git grep returned nothing. Then I noticed
-that it is fairly new, introduced in commit a66866cff71c ("overflow: Implement
-size_t saturating arithmetic helpers").
-
-git tag --contains a66866cff71c | head -1
-next-20220207
-
-So I can't really use it since isn't yet in the latest drm-misc-next base tag :)
-
->> +	if (!src32)
->> +		return;
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/soc/qcom/smd-rpm.c?h=next-20220209#n213
 > 
-> ...
-> 
->> +	/*
->> +	 * For damage handling, it is possible that only parts of the source
->> +	 * buffer is copied and this could lead to start and end pixels that
->> +	 * are not aligned to multiple of 8.
->> +	 *
->> +	 * Calculate if the start and end pixels are not aligned and set the
->> +	 * offsets for the reversed mono line conversion function to adjust.
->> +	 */
->> +	start_offset = clip->x1 % 8;
->> +	end_len = clip->x2 % 8;
-> 
-> ALIGN() ?
+> Would you kindly give your advisement, thank you.
 > 
 
-But we don't want to align here but to know what's the start and end if is
-not aligned since that would mean converting to mono in the middle of a byte.
+Hello Dawei,
+I was under the impression that the regulator and EMI were different hardware,
+while effectively they are inside of the DVFS Resource Collector IP, and the
+registers look like being a bit mixed up, so it's impossible to actually
+specify a relative iospace for the regulator, or for the EMI.
 
-Best regards,
--- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+In this case, from what I understand right now, the emi and regulator are not
+different hardware, but "features of" the DVFS Resource Collector.
 
+I've done some research around the kernel and, effectively, the only way that
+makes sense, is to register the feature-drivers (emi/vreg) with
+platform_device_register_data(), as per your current approach, even though I
+have a hunch that it will look a bit confusing in device-tree, as you'd be using
+the same node for both regulator and interconnects...
+
+I would exclude doing it as a MFD driver, as I don't see any very clean way to
+actually implement that.
+
+At this point, let's just keep it as it is, or this would probably get a lot
+overcomplicated for no good reasons.
+So, please ignore the device-tree suggestion and go on with the other suggested
+fixes for this driver.
+
+Looking forward to see your v4!
+
+Kind regards,
+Angelo

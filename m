@@ -2,68 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E014B2483
+	by mail.lfdr.de (Postfix) with ESMTP id 682604B2484
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349477AbiBKLgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 06:36:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50412 "EHLO
+        id S1349486AbiBKLgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 06:36:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349469AbiBKLgD (ORCPT
+        with ESMTP id S1343573AbiBKLgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 06:36:03 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7182E9A;
-        Fri, 11 Feb 2022 03:36:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644579362; x=1676115362;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bTdjHFPr4nUGXu4pkdc+I1g9MpzgJ+mPYB+7OmSpI0M=;
-  b=kUmus4ZgUHJybwx9oGpA7n5rWQbC0XkmCMJnmdpam9V7xIiMpuqmU8Jc
-   qllVEuhGnUBwdXzOztoiaFkRACCBgoAnsHeC9RQ2nGeflCUwu05S/3wfS
-   UTkkajLoOl9ilvlSqyShMwCmPAhWNezEdj9OidyoEC00Htsh4Sa+lirdv
-   3s6drvE5Z3xihd7ZT+0vq8l9QThOTDqmLfgQFV7k5cYuSwn6rWBujgUBy
-   qrcBYNHRxvKqAhwtFowyT6fu9f9iBmO0ffKgeOIel8kszWGhiuQrRcdL7
-   1JLJEnSxZQE8EAJjgzOWU21sjeo3xPYndb/vYfDtY3WK26BzM3kaqXGYs
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="249924371"
-X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
-   d="scan'208";a="249924371"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 03:36:02 -0800
-X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
-   d="scan'208";a="500756801"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 03:36:00 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nIUCc-003QOI-Io;
-        Fri, 11 Feb 2022 13:35:02 +0200
-Date:   Fri, 11 Feb 2022 13:35:02 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        Sam Ravnborg <sam@ravnborg.org>, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v4 6/6] dt-bindings: display: ssd1307fb: Add myself as
- binding co-maintainer
-Message-ID: <YgZJ5jX9BUZ4/0Ed@smile.fi.intel.com>
-References: <20220211091927.2988283-1-javierm@redhat.com>
- <20220211092253.2988843-1-javierm@redhat.com>
+        Fri, 11 Feb 2022 06:36:18 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34461E9B
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:36:18 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id 200so8039960qki.2
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:36:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=z2gFosycv/4d8F4IH6M5EFvOMVfX/xiPl+lWjQfsKQI=;
+        b=GH6rnxlQa7pKNjEQnolaZU35YnXATMMaIEv/EgjGDcfLKG6UJ9EBOr2pcjSc4J1VJO
+         BTqltSgJL8G2aCptNRD0PVpBJ7WDQReVx0z66wzwhKe1s4Vt/sIDaYiQgVUzRb7k8kuE
+         vjAyQoHdlml/JUxTC7qSd4vz5P3Q+AtcJ8H5TCc+zQ6OPY8EA06JQtcoCgJfZDYHYC7J
+         TKdbr1QDS+LKGe67wERxIX03UxuSYv0cghWefW90yg789TT9rg+6mN7uGCCHRbh+exq/
+         234G/GEHxEkAa5ieM2CvmTwo2o27Aw6X02yT0PEQZPZ+YIpLqrupYGZaS800V15pHF0V
+         ocGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=z2gFosycv/4d8F4IH6M5EFvOMVfX/xiPl+lWjQfsKQI=;
+        b=3y3E8P2X5G0jfoWs8jXz/w44fAXl0A4Ks/6Dk0uVTqtteIsO5P1qaHBJdZVZtmvll/
+         uRLvcFIMslR1VIsjliHgACsJumZ7GQ+gc0j1rS2t9ybcUqBlv97N525I2cRYSM3EdP5K
+         ISCn+KjwFF6ThbITyhYs6v2gDZX9E6fqeSqiUUe2sKkPpKIJJxkAJbhVtv9rXGxZTeiK
+         bEnfnkkihZ/pV1DYJjEo7EXVYKayyLCx24m472QtNIhoC8XlvLvwokb7qFzhsOTafHOI
+         2JJyta6ZxLoo7gil/EXKFuNlV9eYP673usQRq2+GE+FMHEJLxbuhTBY1E1L1gS/05lzk
+         Uwrg==
+X-Gm-Message-State: AOAM532eaVTuw0ZAxmqSOY4FiZo+2XgZSO6HK5pAXiELMSPVPzerutVd
+        SNR0NG7fsfBl/VAiFoDwgNCKIZ63uyyNsE0kUNovm3mdocinvqY1
+X-Google-Smtp-Source: ABdhPJw+zRKiCGuV/1ZWcPlYBvRrQjpU5Z6uQC8o9T0TfxgGs2cdTfNB2ENGcWUcVcMRirXpB/llqb3XudKxcG/4gOo=
+X-Received: by 2002:a05:620a:254a:: with SMTP id s10mr473911qko.724.1644579377319;
+ Fri, 11 Feb 2022 03:36:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220211092253.2988843-1-javierm@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+From:   Du Dengke <pinganddu90@gmail.com>
+Date:   Fri, 11 Feb 2022 19:36:06 +0800
+Message-ID: <CAKHP1dtwQRD4Q6poVopyZ1WXtBL5kavw1BYQZBU1_LP1VNtJMA@mail.gmail.com>
+Subject: 
+To:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        TVD_SPACE_RATIO,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,48 +60,4 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 10:22:53AM +0100, Javier Martinez Canillas wrote:
-> The ssd130x DRM driver also makes use of this Device Tree binding to allow
-> existing users of the fbdev driver to migrate without the need to change
-> their Device Trees.
-> 
-> Add myself as another maintainer of the binding, to make sure that I will
-> be on Cc when patches are proposed for it.
-
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Suggested-by: Sam Ravnborg <sam@ravnborg.org>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> ---
-> 
-> Changes in v4:
-> - Add Rob Herring Acked-by tag to patch adding as DT binding co-maintainer.
-> 
-> Changes in v2:
-> - Add myself as co-maintainer of the ssd1370fb DT binding (Sam Ravnborg).
-> 
->  Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-> index 2ed2a7d0ca2f..9baafd0c42dd 100644
-> --- a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-> +++ b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-> @@ -8,6 +8,7 @@ title: Solomon SSD1307 OLED Controller Framebuffer
->  
->  maintainers:
->    - Maxime Ripard <mripard@kernel.org>
-> +  - Javier Martinez Canillas <javierm@redhat.com>
->  
->  properties:
->    compatible:
-> -- 
-> 2.34.1
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+unsubscribe linux-kernel

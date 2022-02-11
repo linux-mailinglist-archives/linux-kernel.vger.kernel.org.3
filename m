@@ -2,113 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADAC94B2A8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECF84B2A92
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:40:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351608AbiBKQjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:39:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42462 "EHLO
+        id S1351609AbiBKQkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:40:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349644AbiBKQjO (ORCPT
+        with ESMTP id S230040AbiBKQkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:39:14 -0500
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F50FD;
-        Fri, 11 Feb 2022 08:39:13 -0800 (PST)
-Received: by mail-qt1-f169.google.com with SMTP id s1so9496079qtw.9;
-        Fri, 11 Feb 2022 08:39:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=91wBUM1U5Fgu+1y7VkG8fjzKeiOG8ccSLVnmdenYAgc=;
-        b=qzv4nq9b4iUxpSKzq/8grp+xNhr7NdiJTXM23eHS1GzMO/rxqPZo0DmvRlg4bN7j1y
-         vz+g0kwMlIdPBrFT7+NTsFkddB0ni7cNiMTxMeynhyoh8OUimYYOQ0EPqGBXpCJaHpe6
-         q3BwhOoJZgB0SDVWPyDFNl4KzUpE2WG8E4aAqZi3tLzdal4MoP22YlU9JFpQdGjdaDh1
-         P6H2HfOnBYoZ7cR/LSEv3yBqhTzh7xMdq0X7ltPcT175WnBUtVo/aBoJT3VvY3HUxy4H
-         MJGh9y6nrPVVZjpi4vrkmRJIFGZ9ilcQmGwGwa1RDkoNuhTPwiVHmp6823uWD0YpDXk3
-         IQ7w==
-X-Gm-Message-State: AOAM530wJMFQV+Sn71I9zUtjj0Vua5XGO4/bn2NPevHyVMmOPrHiBKgb
-        IRC86MhAKwREf9jjpLouGA==
-X-Google-Smtp-Source: ABdhPJwSVEFpGB453dlo9FfCGEHx6G37GlTlLco94HSNEFo/4ttgi4d9rr4+dNlSqK0nBUsP+D9CBA==
-X-Received: by 2002:a05:622a:88:: with SMTP id o8mr1719393qtw.116.1644597552393;
-        Fri, 11 Feb 2022 08:39:12 -0800 (PST)
-Received: from robh.at.kernel.org ([2607:fb90:5fee:dfce:b6df:c3e1:b1e5:d6d8])
-        by smtp.gmail.com with ESMTPSA id j11sm12731354qtx.67.2022.02.11.08.39.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 08:39:11 -0800 (PST)
-Received: (nullmailer pid 487918 invoked by uid 1000);
-        Fri, 11 Feb 2022 16:39:08 -0000
-Date:   Fri, 11 Feb 2022 10:39:08 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Tero Kristo <kristo@kernel.org>, devicetree@vger.kernel.org,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 2/5] dt-bindings: arm: ti: Add bindings for AM625 SoC
-Message-ID: <YgaRLOjB0Y0uCY4m@robh.at.kernel.org>
-References: <20220208131827.1430086-1-vigneshr@ti.com>
- <20220208131827.1430086-3-vigneshr@ti.com>
+        Fri, 11 Feb 2022 11:40:08 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C03DFD
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:40:06 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-160-wZ1-VjIMOoK4So3RgiPxRg-1; Fri, 11 Feb 2022 16:40:03 +0000
+X-MC-Unique: wZ1-VjIMOoK4So3RgiPxRg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Fri, 11 Feb 2022 16:40:01 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Fri, 11 Feb 2022 16:40:01 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Bill Wendling' <morbo@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        Juergen Gross <jgross@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v4] x86: use builtins to read eflags
+Thread-Topic: [PATCH v4] x86: use builtins to read eflags
+Thread-Index: AQHYHs4TBErQZHLpBUiy6+9ZW5FRHqyOjNCA
+Date:   Fri, 11 Feb 2022 16:40:01 +0000
+Message-ID: <cb2ff5da9b704a9792549a9433dc0ac8@AcuMS.aculab.com>
+References: <20220204005742.1222997-1-morbo@google.com>
+ <20220210223134.233757-1-morbo@google.com>
+In-Reply-To: <20220210223134.233757-1-morbo@google.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208131827.1430086-3-vigneshr@ti.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 08 Feb 2022 18:48:24 +0530, Vignesh Raghavendra wrote:
-> From: Nishanth Menon <nm@ti.com>
-> 
-> The AM62 SoC family is the follow on AM335x built on K3 Multicore SoC
-> architecture platform, providing ultra-low-power modes, dual display,
-> multi-sensor edge compute, security and other BOM-saving integration.
-> The AM62 SoC targets broad market to enable applications such as
-> Industrial HMI, PLC/CNC/Robot control, Medical Equipment, Building
-> Automation, Appliances and more.
-> 
-> Some highlights of this SoC are:
-> 
-> * Quad-Cortex-A53s (running up to 1.4GHz) in a single cluster.
->   Pin-to-pin compatible options for single and quad core are available.
-> * Cortex-M4F for general-purpose or safety usage.
-> * Dual display support, providing 24-bit RBG parallel interface and
->   OLDI/LVDS-4 Lane x2, up to 200MHz pixel clock support for 2K display
->   resolution.
-> * Selectable GPUsupport, up to 8GFLOPS, providing better user experience
->   in 3D graphic display case and Android.
-> * PRU(Programmable Realtime Unit) support for customized programmable
->   interfaces/IOs.
-> * Integrated Giga-bit Ethernet switch supporting up to a total of two
->   external ports (TSN capable).
-> * 9xUARTs, 5xSPI, 6xI2C, 2xUSB2, 3xCAN-FD, 3x eMMC and SD, GPMC for
->   NAND/FPGA connection, OSPI memory controller, 3xMcASP for audio,
->   1x CSI-RX-4L for Camera, eCAP/eQEP, ePWM, among other peripherals.
-> * Dedicated Centralized System Controller for Security, Power, and
->   Resource Management.
-> * Multiple low power modes support, ex: Deep sleep,Standby, MCU-only,
->   enabling battery powered system design.
-> 
-> AM625 is the first device of the family. Add DT bindings for the same.
-> 
-> More details can be found in the Technical Reference Manual:
-> https://www.ti.com/lit/pdf/spruiv7
-> 
-> Signed-off-by: Nishanth Menon <nm@ti.com>
-> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-> ---
->  Documentation/devicetree/bindings/arm/ti/k3.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
+RnJvbTogQmlsbCBXZW5kbGluZw0KPiBTZW50OiAxMCBGZWJydWFyeSAyMDIyIDIyOjMyDQo+IA0K
+PiBHQ0MgYW5kIENsYW5nIGJvdGggaGF2ZSBidWlsdGlucyB0byByZWFkIGFuZCB3cml0ZSB0aGUg
+RUZMQUdTIHJlZ2lzdGVyLg0KPiBUaGlzIGFsbG93cyB0aGUgY29tcGlsZXIgdG8gZGV0ZXJtaW5l
+IHRoZSBiZXN0IHdheSB0byBnZW5lcmF0ZSB0aGlzDQo+IGNvZGUsIHdoaWNoIGNhbiBpbXByb3Zl
+IGNvZGUgZ2VuZXJhdGlvbi4NCj4gDQo+IFRoaXMgaXNzdWUgYXJvc2UgZHVlIHRvIENsYW5nJ3Mg
+aXNzdWUgd2l0aCB0aGUgIj1ybSIgY29uc3RyYWludC4gIENsYW5nDQo+IGNob29zZXMgdG8gYmUg
+Y29uc2VydmF0aXZlIGluIHRoZXNlIHNpdHVhdGlvbnMsIGFuZCBzbyB1c2VzIG1lbW9yeQ0KPiBp
+bnN0ZWFkIG9mIHJlZ2lzdGVycy4gVGhpcyBpcyBhIGtub3duIGlzc3VlLCB3aGljaCBpcyBjdXJy
+ZW50bHkgYmVpbmcNCj4gYWRkcmVzc2VkLg0KPiANCj4gSG93ZXZlciwgdXNpbmcgYnVpbHRpbnMg
+aXMgYmVuZWZpY2lhbCBpbiBnZW5lcmFsLCBiZWNhdXNlIGl0IHJlbW92ZXMgdGhlDQo+IGJ1cmRl
+biBvZiBkZXRlcm1pbmluZyB3aGF0J3MgdGhlIHdheSB0byByZWFkIHRoZSBmbGFncyByZWdpc3Rl
+ciBmcm9tIHRoZQ0KPiBwcm9ncmFtbWVyIGFuZCBwbGFjZXMgaXQgb24gdG8gdGhlIGNvbXBpbGVy
+LCB3aGljaCBoYXMgdGhlIGluZm9ybWF0aW9uDQo+IG5lZWRlZCB0byBtYWtlIHRoYXQgZGVjaXNp
+b24uDQoNCkV4Y2VwdCB0aGF0IG5laXRoZXIgZ2NjIG5vciBjbGFuZyBhdHRlbXB0IHRvIG1ha2Ug
+dGhhdCBkZWNpc2lvbi4NClRoZXkgYWx3YXlzIGRvIHB1c2hmOyBwb3AgYXg7DQoNCi4uLg0KPiB2
+NDogLSBDbGFuZyBub3cgbm8gbG9uZ2VyIGdlbmVyYXRlcyBzdGFjayBmcmFtZXMgd2hlbiB1c2lu
+ZyB0aGVzZSBidWlsdGlucy4NCj4gICAgIC0gQ29ycmVjdGVkIG1pc3NwZWxsaW5ncy4NCg0KV2hp
+bGUgY2xhbmcgJ2hlYWQnIGhhcyBiZWVuIGZpeGVkLCBpdCBzZWVtcyBhIGJpdCBwcmVtYXR1cmUg
+dG8gc2F5DQppdCBpcyAnZml4ZWQnIGVub3VnaCBmb3IgYWxsIGNsYW5nIGJ1aWxkcyB0byB1c2Ug
+dGhlIGJ1aWx0aW4uDQoNClNlZW1zIGJldHRlciB0byBjaGFuZ2UgaXQgKGJhY2spIHRvICI9ciIg
+YW5kIGNvbW1lbnQgdGhhdCB0aGlzDQppcyBjdXJyZW50bHkgYXMgZ29vZCBhcyBfX2J1aWx0aW5f
+aWEzMl9yZWFkZWZsYWdzX3U2NCgpIGFuZCB0aGF0DQpjbGFuZyBtYWtlcyBhICdwaWdzIGJyZWFr
+ZmFzdCcgb2YgIj1ybSIgLSB3aGljaCBoYXMgb25seSBtYXJnaW5hbA0KYmVuZWZpdC4NCg0KQ2hh
+bmdpbmcgdG8gX19idWlsdGluX2lhMzJfcmVhZGVmbGFnc191NjQoKSBtYXkgYmUgd29ydGggd2hp
+bGUNCmlmL3doZW4gdGhlIGNvbXBpbGVycyB3aWxsIGdlbmVyYXRlIHB1c2hmOyBwb3AgbWVtOyBm
+b3IgaXQuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1s
+ZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJh
+dGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-Acked-by: Rob Herring <robh@kernel.org>

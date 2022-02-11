@@ -2,125 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E524B2CDE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 19:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 856874B2CC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 19:25:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345562AbiBKSWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 13:22:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32870 "EHLO
+        id S1352687AbiBKSWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 13:22:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233971AbiBKSWQ (ORCPT
+        with ESMTP id S1352584AbiBKSW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 13:22:16 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E7513A
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 10:22:15 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id w7so12456394ioj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 10:22:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hkbmDwYDwx2wqLp1lGX+KUQy10/X+s3WGM8MSf5ON1w=;
-        b=MLe3n7egkgK2wBrAtLEGr+Wt/ZL1sIg9SQf8aNVVGD+I/3hGFM0Hmnm6wNIGY6BHGq
-         NVCJhAuxKp13uT3mMVtTQ+4dC1Hh8herpbZyURBx8NY+xgXvZ7FB52vB8hWXa36uF+1g
-         miFXtya38GqrY7ZX73/kNGpaF6e8tPPnPLV6s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hkbmDwYDwx2wqLp1lGX+KUQy10/X+s3WGM8MSf5ON1w=;
-        b=476m0E35OqtMXqvBI5LhGUKUnSUgQfGETN19q2T7S59+KD16FgrWKXz/ZklMFpegzH
-         KVBqBO1s2CjH+ZRU5ICspCueY6ulnkFxS3YxchDe3T+8BnBLmRYXtwvKhw4Vkd4ss+V1
-         l0h/a+Pz7l5SMkk7tNG87bzbXHfmvTAOqhmVmV2QwnZIWyJYDUcuTfsCh/VOvDqSXTSc
-         HQAJUT0ZF9rRq9aOBz1AUmTsShc4S/RswKLynPKXnRreY4ik28aFMI2TvLuzuG/74RZN
-         J0izAjU5mq1NkGIpMTsc7SvOQtVqdlI/psQz6f76D1q2Tb5Bf3GivRP5wQJ+lyyrXOfs
-         bMxA==
-X-Gm-Message-State: AOAM533PvfIA79VFiSKhT5mWh3+2m1lhtH7KcFT0JHya9V7lWOhtQGsn
-        9u4//SIzhjKEIdwH9Y7rHGHrxw==
-X-Google-Smtp-Source: ABdhPJyrmNlin/hQGqjCfsJoBD/NlkAK2Gahcqev8CYFJuBbz2hz/GxVSZdf6flskKaJVxNoaCW58Q==
-X-Received: by 2002:a05:6638:1908:: with SMTP id p8mr1550656jal.282.1644603734444;
-        Fri, 11 Feb 2022 10:22:14 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id i20sm3669740iov.46.2022.02.11.10.22.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Feb 2022 10:22:14 -0800 (PST)
-Subject: Re: [PATCH 0/8] ucounts: RLIMIT_NPROC fixes
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Alexey Gladkov <legion@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Solar Designer <solar@openwall.com>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220207121800.5079-1-mkoutny@suse.com>
- <87o83e2mbu.fsf@email.froward.int.ebiederm.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f0d686aa-3fad-afac-d377-f5d63111704a@linuxfoundation.org>
-Date:   Fri, 11 Feb 2022 11:22:13 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 11 Feb 2022 13:22:29 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B971DCD3;
+        Fri, 11 Feb 2022 10:22:27 -0800 (PST)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21BGsvZv010648;
+        Fri, 11 Feb 2022 18:22:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=N6mXra5Ie4+ZeBnaR8payp93zxPRlR66EUeezDLCiSs=;
+ b=sBXy5waDnVJRQeiUn+Bu8DJ20pXO/YLlUnBhqpWJtx8oLLFSEEtAY8u+sGonRkiaRCEb
+ lue/WWKa1XYX+ve7gWV7d2zx3A4tSzI3Hxgi5INU17S2PHl8J5ZJui2iLKFIORUpAkBX
+ /CzeoP+nr7e+n3gzwCj+HGRvCsckMcz6LlrcGXLBHwP8f0wJ8q2dOKd1dn2SM03j7u/1
+ PWmi3pDUQscwYslBg3K8+6sU7Zu3qyZbvYwKz/R6gug3hjlliEJn+T7VJO3RPxQ+RXBY
+ agv++XbMB2Ag3pmYCLMMOjoD3dJf8lc/KcXfxjGrkO6NWYR89rATK/xOHaCG7tZO+VVD Bg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e5sk5n5na-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Feb 2022 18:22:27 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21BIHm4f027653;
+        Fri, 11 Feb 2022 18:22:26 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e5sk5n5mp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Feb 2022 18:22:26 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21BICAMf028899;
+        Fri, 11 Feb 2022 18:22:24 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3e1ggkv5s4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Feb 2022 18:22:24 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21BIMLg234144614
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Feb 2022 18:22:21 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0D1895204E;
+        Fri, 11 Feb 2022 18:22:21 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 8E9AD52057;
+        Fri, 11 Feb 2022 18:22:20 +0000 (GMT)
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>
+Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: [PATCH v4 08/10] KVM: s390: Add capability for storage key extension of MEM_OP IOCTL
+Date:   Fri, 11 Feb 2022 19:22:13 +0100
+Message-Id: <20220211182215.2730017-9-scgl@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220211182215.2730017-1-scgl@linux.ibm.com>
+References: <20220211182215.2730017-1-scgl@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <87o83e2mbu.fsf@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: M5FY2t2cYJMoF7H3HIXVaxpG_8iuPtdU
+X-Proofpoint-GUID: 38QdVAVT4jJW02NM1mfQhijb_PPaCDCd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-11_05,2022-02-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
+ priorityscore=1501 mlxlogscore=999 suspectscore=0 spamscore=0 adultscore=0
+ phishscore=0 lowpriorityscore=0 clxscore=1015 impostorscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202110098
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/10/22 7:01 PM, Eric W. Biederman wrote:
-> 
-> Michal Koutný recently found some bugs in the enforcement of
-> RLIMIT_NPROC in the recent ucount rlimit implementation.
-> 
-> I saw some additional bugs and some cleaner ways to fix the problem so
-> instead of starting with his fixes these are my own.
-> 
-> I am aiming to send the first 5 of these to Linus once they have been
-> reviewed.  Two more are fixes in principle but I don't think do anything
-> in practice.  The last one is just a cleanup to prevent future
-> divergence of RLIMIT_NPROC logic.
-> 
-> Eric W. Biederman (8):
->        ucounts: Fix RLIMIT_NPROC regression
->        ucounts: Fix set_cred_ucounts
->        ucounts: Fix and simplify RLIMIT_NPROC handling during setuid()+execve
->        ucounts: Only except the root user in init_user_ns from RLIMIT_NPROC
+Availability of the KVM_CAP_S390_MEM_OP_EXTENSION capability signals that:
+* The vcpu MEM_OP IOCTL supports storage key checking.
+* The vm MEM_OP IOCTL exists.
 
-Should this be "Only exempt"?
-  
->        ucounts: Handle wrapping in is_ucounts_overlimit
->        ucounts: Handle inc_rlimit_ucounts wrapping in fork
->        rlimit: For RLIMIT_NPROC test the child not the parent for capabilites
->        ucounts: Use the same code to enforce RLIMIT_NPROC in fork and exec
-> 
->   fs/exec.c                    | 12 +++++-------
->   include/linux/sched.h        |  2 +-
->   include/linux/sched/signal.h |  2 ++
->   kernel/cred.c                | 24 +++++++++++-------------
->   kernel/fork.c                | 32 ++++++++++++++++++++++++--------
->   kernel/sys.c                 | 14 --------------
->   kernel/ucount.c              |  3 ++-
->   kernel/user_namespace.c      |  2 ++
->   8 files changed, 47 insertions(+), 44 deletions(-)
-> 
-> Eric
-> 
+Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+---
+ arch/s390/kvm/kvm-s390.c | 1 +
+ include/uapi/linux/kvm.h | 1 +
+ 2 files changed, 2 insertions(+)
 
-Do we need updates to selftests - Michal's patch series included changes to
-selftests/exec
+diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+index 773bccdd446c..c2c26c2aad64 100644
+--- a/arch/s390/kvm/kvm-s390.c
++++ b/arch/s390/kvm/kvm-s390.c
+@@ -564,6 +564,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 	case KVM_CAP_S390_VCPU_RESETS:
+ 	case KVM_CAP_SET_GUEST_DEBUG:
+ 	case KVM_CAP_S390_DIAG318:
++	case KVM_CAP_S390_MEM_OP_EXTENSION:
+ 		r = 1;
+ 		break;
+ 	case KVM_CAP_SET_GUEST_DEBUG2:
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index 4bc7623def87..08756eeea065 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -1140,6 +1140,7 @@ struct kvm_ppc_resize_hpt {
+ #define KVM_CAP_VM_GPA_BITS 207
+ #define KVM_CAP_XSAVE2 208
+ #define KVM_CAP_SYS_ATTRIBUTES 209
++#define KVM_CAP_S390_MEM_OP_EXTENSION 210
+ 
+ #ifdef KVM_CAP_IRQ_ROUTING
+ 
+-- 
+2.32.0
 
-thanks,
--- Shuah

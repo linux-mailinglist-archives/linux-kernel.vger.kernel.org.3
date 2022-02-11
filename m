@@ -2,169 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CDF4B3044
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 23:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E58F44B304A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 23:22:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354026AbiBKWTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 17:19:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53746 "EHLO
+        id S1354036AbiBKWT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 17:19:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349957AbiBKWTm (ORCPT
+        with ESMTP id S1354034AbiBKWTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 17:19:42 -0500
-X-Greylist: delayed 194 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 14:19:40 PST
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A65BF1;
-        Fri, 11 Feb 2022 14:19:40 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 6208D3202152;
-        Fri, 11 Feb 2022 17:19:39 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 11 Feb 2022 17:19:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; bh=RTc40DrDIwSBEwSKbaE6X7bElwvJ01jh9SfVla
-        ee3V0=; b=i7AsSyZjLcSEF+5Hu0j8R6hc3REOMN+3DwOB6Jc5BH6hv7g9/leVPD
-        NCtf7UC4CjEvQQBxXD9TIxq/CQDnkHCwaQl/6438gvnVewTqedvtsnnKKJarxCid
-        8W93S/5qKAgEjXEguQ81eiw8Z29eqEUymuB4W4WYHmYbcLHPmhohz5Y9bt/ZSnm0
-        A0TWi41d2UNBLYjlRdNAwairhdKVPCBLRCmbA4PovJwKo/bE9eCo7UGcju/FfPoS
-        MhTeX5434sM+hGpPXSSOGata2dWA7lc/lJ594gDgV4l6oy2YA8v1njhz+4mDZQKb
-        RErBKfmO9x2RVZfY9y064QU8W9rtg/tw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=RTc40DrDIwSBEwSKb
-        aE6X7bElwvJ01jh9SfVlaee3V0=; b=dy2oHKAS3X3UyXDWTFApsolPkUO11Ipi9
-        KEg0dotznhG0QKAhz8x9PO3q2cJhR2i3KFg7mV06VwJGADElDDXyHTRjzx+RbS8W
-        cMxOV5a8Mwl2Gk1DZBJFFPBuFw5IS1ldxGlAGWNpCZPIvc1N4SYhEy/cuiLOCMjW
-        INafyvl9hWGNqPQjqmXnbMVl8ybq4nKd/FW1DHEiVXQv7Qcij51BHvyAXxF2Lh/7
-        LurwVhdM7tIUcLOZHywLg7ruV21MYsn9WPKBHwiORS7//XvBxfsUiLEcT6zebKIY
-        qdC8PpohXK139gbh4eUAenDXSBbGUVib+WBvzu/Qq+8BDkCJvvQGw==
-X-ME-Sender: <xms:-uAGYnDKvdaCwFEgT89xro4hCiriuh172938UC2LkCXnD6x8bYcMgQ>
-    <xme:-uAGYtjt5fla02LsKAZ0opi3pklL239h55HOH0jcraXka7Csc4upFKalsCJLRmG-P
-    zX7fngyuWTDuQEUqeY>
-X-ME-Received: <xmr:-uAGYimtFoUmV1p-bf9pfEbevvDeBAxD_rB1AC1GPWDaqSOSS2HSRj9pT_NtHKf7EyIGQU1EHRrrdw1aNG-vml7kw_7eIA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrieefgdduheejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlfeehmdenucfjughrpeffhffvuffkfhggtggujgesghdtreertddt
-    vdenucfhrhhomheprfgrthhrihgtkhcuhghilhhlihgrmhhsuceophgrthhrihgtkhessh
-    htfigtgidrgiihiieqnecuggftrfgrthhtvghrnhepgeehheefffegkeevhedthffgudfh
-    geefgfdthefhkedtleffveekgfeuffehtdeinecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepphgrthhrihgtkhesshhtfigtgidrgiihii
-X-ME-Proxy: <xmx:-uAGYpz86X5lMT_KrnV0qcOp0lIJQWacait7yMz7w7kTcLuJcxzaag>
-    <xmx:-uAGYsR6qKZ3UU1sPyLTDj1hhfJ_r8V-3N-tYdS2ZrylCU6yLhm-4A>
-    <xmx:-uAGYsb5nvnHysL_dj2K3O9OtJvTRj1AJY9dzvlhu2nrKhvP1tk3-Q>
-    <xmx:-uAGYrGr8mclckFYz2PPdcq-CQakm8OjmO4grOnwUQoXa_FcK_BG-Q>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 11 Feb 2022 17:19:37 -0500 (EST)
-Date:   Fri, 11 Feb 2022 16:19:36 -0600
-From:   Patrick Williams <patrick@stwcx.xyz>
-To:     Potin Lai <potin.lai@quantatw.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/10] arch: arm: dts: bletchley: cleanup redundant node
-Message-ID: <Ygbg+KYK9qT90O2N@heinlein>
-References: <20220211014347.24841-1-potin.lai@quantatw.com>
- <20220211014347.24841-11-potin.lai@quantatw.com>
+        Fri, 11 Feb 2022 17:19:55 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B614ED5E;
+        Fri, 11 Feb 2022 14:19:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644617993; x=1676153993;
+  h=message-id:date:mime-version:to:references:from:subject:
+   in-reply-to:content-transfer-encoding;
+  bh=QhwemLJz6XJr4WABSGeGJItc6/s04gnX8fKaV4emL8o=;
+  b=RVeAhIHC8pPpmfl3USyTn2BShq9mrCdK8YGuhDI+NkPy8zeGLghkvxLk
+   lf6qWGWsJGYdiFN4OKID7GNlhqG3ClvblwVkQ+XBgJdurSOuR6aur7pzg
+   xsf/71RWhk2vT9mNJ0ym3pDiv+N933v3YIYeu9WV2WeAeCLWRbFSBZOkw
+   G5fdaDJwvqoSwNfDNGgIrvTnW89mgc9kbdMdGqERXvhfo8LGujFxbpNsS
+   h8W80lFafIg2vhPieX3G5KyOwYsZa1tUCZ1PLPVTHyXv72LKoKAcQrddk
+   i448uERDKnGtw6xiHepTXB4yOChusSH+8QkmWfuUSXX101WF0CLYU2Ii/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="237224081"
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="237224081"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 14:19:53 -0800
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="542262078"
+Received: from nsmdimra-mobl.amr.corp.intel.com (HELO [10.209.96.127]) ([10.209.96.127])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 14:19:52 -0800
+Message-ID: <3df8595d-46d9-aaee-dd33-3118102ef750@intel.com>
+Date:   Fri, 11 Feb 2022 14:19:49 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="JisbnzQp48fIKCGa"
-Content-Disposition: inline
-In-Reply-To: <20220211014347.24841-11-potin.lai@quantatw.com>
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com
+References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
+ <20220130211838.8382-23-rick.p.edgecombe@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH 22/35] x86/mm: Prevent VM_WRITE shadow stacks
+In-Reply-To: <20220130211838.8382-23-rick.p.edgecombe@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 1/30/22 13:18, Rick Edgecombe wrote:
+> Shadow stack accesses are writes from handle_mm_fault() perspective. So to
+> generate the correct PTE, maybe_mkwrite() will rely on the presence of
+> VM_SHADOW_STACK or VM_WRITE in the vma.
+> 
+> In future patches, when VM_SHADOW_STACK is actually creatable by
+> userspace, a problem could happen if a user calls
+> mprotect( , , PROT_WRITE) on VM_SHADOW_STACK shadow stack memory. The code
+> would then be confused in the event of shadow stack accesses, and create a
+> writable PTE for a shadow stack access. Then the process would fault in a
+> loop.
+> 
+> Prevent this from happening by blocking this kind of memory (VM_WRITE and
+> VM_SHADOW_STACK) from being created, instead of complicating the fault
+> handler logic to handle it.
+> 
+> Add an x86 arch_validate_flags() implementation to handle the check.
+> Rename the uapi/asm/mman.h header guard to be able to use it for
+> arch/x86/include/asm/mman.h where the arch_validate_flags() will be.
 
---JisbnzQp48fIKCGa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It would be great if this also said:
 
-On Fri, Feb 11, 2022 at 09:43:47AM +0800, Potin Lai wrote:
-> Remove redundant i2c1 node.
-> Disable in-chip rtc, use external rtc (pcf85263) instead.
+	There is an existing arch_validate_flags() hook for mmap() and
+	mprotect() which allows architectures to reject unwanted
+	->vm_flags combinations.  Add an implementation for x86.
 
-A bit of "why" on the RTC change might be useful.  I suspect it has to do
-with where battery-backing is for the RTC in hardware.
+That's somewhat implied from what is there already, but making it more
+clear would be nice.  There's a much higher bar to add a new arch hook
+than to just implement an existing one.
 
->=20
-> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
-> ---
->  arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts | 9 +--------
->  1 file changed, 1 insertion(+), 8 deletions(-)
->=20
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts b/arch/a=
-rm/boot/dts/aspeed-bmc-facebook-bletchley.dts
-> index 946107bd8bc7..fb62a67cfeed 100644
-> --- a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
-> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
-> @@ -205,10 +205,6 @@
->  	};
->  };
-> =20
-> -&rtc {
-> -	status =3D "okay";
-> -};
-> -
->  &fmc {
->  	status =3D "okay";
->  	flash@0 {
-> @@ -387,10 +383,6 @@
->  	};
->  };
-> =20
-> -&i2c1 {
-> -	status =3D "okay";
-> -};
-> -
->  &i2c2 {
->  	status =3D "okay";
->  	ina230@45 {
-> @@ -680,6 +672,7 @@
->  	};
-> =20
->  	rtc@51 {
-> +		/* in-chip rtc disabled, use this external rtc instead */
->  		compatible =3D "nxp,pcf85263";
->  		reg =3D <0x51>;
->  	};
-> --=20
-> 2.17.1
->=20
 
---=20
-Patrick Williams
+> diff --git a/arch/x86/include/asm/mman.h b/arch/x86/include/asm/mman.h
+> new file mode 100644
+> index 000000000000..b44fe31deb3a
+> --- /dev/null
+> +++ b/arch/x86/include/asm/mman.h
+> @@ -0,0 +1,21 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _ASM_X86_MMAN_H
+> +#define _ASM_X86_MMAN_H
+> +
+> +#include <linux/mm.h>
+> +#include <uapi/asm/mman.h>
+> +
+> +#ifdef CONFIG_X86_SHADOW_STACK
+> +static inline bool arch_validate_flags(unsigned long vm_flags)
+> +{
+> +	if ((vm_flags & VM_SHADOW_STACK) && (vm_flags & VM_WRITE))
+> +		return false;
+> +
+> +	return true;
+> +}
 
---JisbnzQp48fIKCGa
-Content-Type: application/pgp-signature; name="signature.asc"
+The design decision here seems to be that VM_SHADOW_STACK is itself a
+pseudo-VM_WRITE flag.  Like you said: "Shadow stack accesses are writes
+from handle_mm_fault()".
 
------BEGIN PGP SIGNATURE-----
+Very early on, this series seems to have made the decision that shadow
+stacks are writable and need lots of write handling behavior, *BUT*
+shouldn't have VM_WRITE set.  As a whole, that seems odd.
 
-iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmIG4PgACgkQqwNHzC0A
-wRkWMBAAqRxDw0dBdIcOs4dccrmlv1gPYZ2wzaS8rizHSpKm2gz1IIt7ConmzmSv
-zYlkH4kioV4aBgP59r3CnyKObFARg7pTm4jelLYUoedzAidK6YgmpWDHslS835KG
-OHza3ZFZpjROw+Yxc+Uj4d5SJ2eCva5znFvp1FukcmahTMXJDUT+OT1KeKoq3BoV
-NVNlb1SXuXmJyCmooCiKQSO73xgW5KDUH3pVOzC9OsGc3xHq70uKIBmWd+1DD8ya
-CgLf/s3mk2OKlFfz0tn8nq1oLdXxzjygm+ymXNtmr0NwdGVHoDLA6Irld9xfAjt/
-mggDNLoYBcHw08eAydFYTRDkshEkxYiREWIK1Eb+b0Y7p0SWI8CYFE+eofdscwWt
-RA6889EWvdWffOYJKKfBGHbYFGBbytSuwwyCYYc/wxJ3zgPgzcR/QtOUvVxLi17N
-OpBnlyDZrPbpsVBGYoCL+ml+27UZAfVRtzkXTL05lMdZFVmg8lawiMcTtP7cb1FI
-0JlT4xWFOPRhkr13eOUfHFVa3H9+TuSNAaUroHu0oAd7f77HNt06O85eSo8KndXd
-nXsJkpnybmu29THPv2EHcvP1DUCbEpKL8I7ORwqigkLRnL21G+JwFJg7Y/sCDmpa
-ZiHJoWWpEEnBkPrela3DH/bjBx6cNh8bkmleWg5mSm60K92A3tQ=
-=CihP
------END PGP SIGNATURE-----
+The alternative would be *requiring* VM_WRITE and VM_SHADOW_STACK be set
+together.  I guess the downside is that pte_mkwrite() would need to be
+made to work on shadow stack PTEs.
 
---JisbnzQp48fIKCGa--
+That particular design decision was never discussed.  I think it has a
+really big impact on the rest of the series.  What do you think?  Was it
+a good idea?  Or would the alternative be more complicated than what you
+have now?

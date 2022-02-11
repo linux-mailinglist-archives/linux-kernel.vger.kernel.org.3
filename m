@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ECA24B2336
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:36:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0024B234F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345596AbiBKKfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 05:35:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32876 "EHLO
+        id S1349047AbiBKKfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 05:35:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349025AbiBKKfG (ORCPT
+        with ESMTP id S1349032AbiBKKfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 05:35:06 -0500
+        Fri, 11 Feb 2022 05:35:07 -0500
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCA2EA9
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:35:04 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id f32-20020a25b0a0000000b0061dad37dcd6so17759150ybj.16
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:35:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7961CEB1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:35:06 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id t8-20020a259ac8000000b00619a3b5977fso17999380ybo.5
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:35:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=UGsKZnw8VLef09itDvIN0uubt8K78U8H5noB1akwlYQ=;
-        b=qPFa/BmTnJyKCQj1lQy20izhcI5dZGargFOCnI+uAY7B83o2EeSpwpzuAFk675V0Qo
-         3Z54Lut568TED76lUb08zrruzf054/DvXBr7MF4ScCFfDWIY3KRsVdfdaHajFqZbeUJd
-         HB5JA1EjgjOxhRpdcRtwQydBedorODiwnDwJMYdmI+VTy2WON2yxSGRcyABHsjwN5O3a
-         iJbTmIhZI/WuY+CrT+VzZ/27CfnzjOQVE9kiutiGVFjE2RvnlLsot/UZrFW/45HXC1gD
-         YvdWsISzOZAovUQAFon0Cg6U+ET8QjTQQgipiVDZKpPPKznqia+72sKem2lkyzz6hPhD
-         bM8A==
+        bh=zI7UttEId1m8qD/b8dbgmy1+n+4tYzA6No79RQaEvJg=;
+        b=c95z3s6HerUsvP/6fia6eJdMvptjfAevj7eDXrXgwIk+/Yf1znUfb9oQkMdkukkGxo
+         /NqRN6P/TR/OZgj3LaDZza8AEC1H/0xz/5VKrU72Vfaeze5e9ZGStAeEN7V7WuzLKfU5
+         WOU5qYZ7Q2y0t3BDkFPJ1BMwqNwqlVaVTolLTpGlPMdSst9KaiBCS5Ls0CGq9NIKrkLD
+         skEflOenO7ka0YxTJqL2cSVyBut2gJDQLX9m7BfEhm+xP4MPnl6Yx+ONFzEsTmdYiRT5
+         NdgL+/eiQFsuP5u/4IRBw2MLSecRQ8PbLZlhXTmcvRh8w8NIRYAB2aiK+PXuK4zZ+Rc2
+         zJ6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=UGsKZnw8VLef09itDvIN0uubt8K78U8H5noB1akwlYQ=;
-        b=V/PvQKa7Qb/cVeWEJELedQ5ofWbVwO7etqBkCshT0EITvodbBXUC1ynCYGd2SFGJLo
-         5x9U/m20DCet1xe8+8oRGwrf4sU+MYMgZRoj13/uaBaw8lORkEH0bBQsAcXxglq26v7O
-         uIcm7lIKqdGQjKjkMkpHH3fE9EftQZ6MljlE0qH2w6bgWR2TFClik/YR5wS9PI7GmO80
-         WypxXzTxA/g0ffVZI6eFRscPUPxoVDPHBlTbQC6EOty/2pbq8PcHcAItTPO78Ys4taoC
-         OrJ9VL5j6A8oFZXnMeyiZhyFtpShwVFAEofvb1eeju8E7kpGjyX5gfB3uTHLuM4b2TFS
-         /ynQ==
-X-Gm-Message-State: AOAM531tuqJjiyPTRfmxJ3TiDJe5doMciCwi2wxAcJ2PjkvD1s8+LSfM
-        icBdGajgR32jgpBbGB6F1b2bG46zX20Y
-X-Google-Smtp-Source: ABdhPJz/+t+HivuxKtsdEKQzAx6pkU2BsNGvQZMz7j8W6vRH2iunJxeO0aRX/wl86jEF8P75FWf7m/CFCYR5
+        bh=zI7UttEId1m8qD/b8dbgmy1+n+4tYzA6No79RQaEvJg=;
+        b=tykJOBTyF8Y9lwa7ma+hCc6T8PlHw9rOkp2cv5xiFZ8ZZ2bzIJEyJ2IgLUquNKzVXi
+         U813UM8cQsXGEQEl2y8lXbZluIVFdtQnNyN7WRgl6H2gDR0/Y0+nOsW2mGmijpeL5cRP
+         GmtoOft1UrC4s2uKtlrMQ0RVkOoaTm0RLlIs0TRdfXQOzDLt17HSeZYD04DbtyoZf/ta
+         iX/9CEs3FG4fIC+N69OY7RVxc+yG3m2iex6Mpq4su264GyJSZcegEnm28e0DJ8WDNA1b
+         DWBVzfLqzObikgSZ9e7QrCS+oROkMahy5rrKY8y7GSVY5pgGS0lMaRx58MwDrgPVupz9
+         2CZQ==
+X-Gm-Message-State: AOAM530Qao0YGRmJRC8rsfaDo0PKPfs8RDM1DJYnJxCUyEhgD2Tg7PNG
+        /Ie5oD10mdOLicr/anYmW4DTuSsOsZRC
+X-Google-Smtp-Source: ABdhPJyR3EAY6q+MUpkB9EnOpbAkDmuicacRDgwQL12qDtgndGv3SRuWrd0G2nqwMG5XhpypEUcVLVx/mWE5
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:2d98:3ad9:1d8a:fb9b])
- (user=irogers job=sendgmr) by 2002:a25:4943:: with SMTP id
- w64mr726186yba.619.1644575703290; Fri, 11 Feb 2022 02:35:03 -0800 (PST)
-Date:   Fri, 11 Feb 2022 02:34:10 -0800
+ (user=irogers job=sendgmr) by 2002:a81:3350:: with SMTP id
+ z77mr859862ywz.281.1644575705706; Fri, 11 Feb 2022 02:35:05 -0800 (PST)
+Date:   Fri, 11 Feb 2022 02:34:11 -0800
 In-Reply-To: <20220211103415.2737789-1-irogers@google.com>
-Message-Id: <20220211103415.2737789-18-irogers@google.com>
+Message-Id: <20220211103415.2737789-19-irogers@google.com>
 Mime-Version: 1.0
 References: <20220211103415.2737789-1-irogers@google.com>
 X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH v3 17/22] perf map: Changes to reference counting
+Subject: [PATCH v3 18/22] libperf: Add reference count checking macros.
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -100,509 +100,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a pointer to a map exists do a get, when that pointer is
-overwritten or freed, put the map. This avoids issues with gets and
-puts being inconsistently used causing, use after puts, etc. Reference
-count checking and address sanitizer were used to identify issues.
+The macros serve as a way to debug use of a reference counted struct.
+The macros add a memory allocated pointer that is interposed between
+the reference counted original struct at a get and freed by a put.
+The pointer replaces the original struct, so use of the struct name
+via APIs remains unchanged.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/hists_cumulate.c     | 14 ++++-
- tools/perf/tests/hists_filter.c       | 14 ++++-
- tools/perf/tests/hists_link.c         | 18 +++++-
- tools/perf/tests/hists_output.c       | 12 +++-
- tools/perf/tests/mmap-thread-lookup.c |  3 +-
- tools/perf/util/callchain.c           |  9 +--
- tools/perf/util/event.c               |  8 ++-
- tools/perf/util/hist.c                | 10 ++--
- tools/perf/util/machine.c             | 80 ++++++++++++++++-----------
- 9 files changed, 118 insertions(+), 50 deletions(-)
+ tools/lib/perf/include/internal/rc_check.h | 94 ++++++++++++++++++++++
+ 1 file changed, 94 insertions(+)
+ create mode 100644 tools/lib/perf/include/internal/rc_check.h
 
-diff --git a/tools/perf/tests/hists_cumulate.c b/tools/perf/tests/hists_cumulate.c
-index 17f4fcd6bdce..28f5eb41eed9 100644
---- a/tools/perf/tests/hists_cumulate.c
-+++ b/tools/perf/tests/hists_cumulate.c
-@@ -112,6 +112,7 @@ static int add_hist_entries(struct hists *hists, struct machine *machine)
- 		}
- 
- 		fake_samples[i].thread = al.thread;
-+		map__put(fake_samples[i].map);
- 		fake_samples[i].map = al.map;
- 		fake_samples[i].sym = al.sym;
- 	}
-@@ -147,15 +148,23 @@ static void del_hist_entries(struct hists *hists)
- 	}
- }
- 
-+static void put_fake_samples(void)
-+{
-+	size_t i;
+diff --git a/tools/lib/perf/include/internal/rc_check.h b/tools/lib/perf/include/internal/rc_check.h
+new file mode 100644
+index 000000000000..30d12f9c7b52
+--- /dev/null
++++ b/tools/lib/perf/include/internal/rc_check.h
+@@ -0,0 +1,94 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __LIBPERF_INTERNAL_RC_CHECK_H
++#define __LIBPERF_INTERNAL_RC_CHECK_H
 +
-+	for (i = 0; i < ARRAY_SIZE(fake_samples); i++)
-+		map__put(fake_samples[i].map);
-+}
++#include <stdlib.h>
++#include <linux/zalloc.h>
 +
- typedef int (*test_fn_t)(struct evsel *, struct machine *);
- 
- #define COMM(he)  (thread__comm_str(he->thread))
--#define DSO(he)   (he->ms.map->dso->short_name)
-+#define DSO(he)   (map__dso(he->ms.map)->short_name)
- #define SYM(he)   (he->ms.sym->name)
- #define CPU(he)   (he->cpu)
- #define PID(he)   (he->thread->tid)
- #define DEPTH(he) (he->callchain->max_depth)
--#define CDSO(cl)  (cl->ms.map->dso->short_name)
-+#define CDSO(cl)  (map__dso(cl->ms.map)->short_name)
- #define CSYM(cl)  (cl->ms.sym->name)
- 
- struct result {
-@@ -733,6 +742,7 @@ static int test__hists_cumulate(struct test_suite *test __maybe_unused, int subt
- 	/* tear down everything */
- 	evlist__delete(evlist);
- 	machines__exit(&machines);
-+	put_fake_samples();
- 
- 	return err;
- }
-diff --git a/tools/perf/tests/hists_filter.c b/tools/perf/tests/hists_filter.c
-index 08cbeb9e39ae..bcd46244182a 100644
---- a/tools/perf/tests/hists_filter.c
-+++ b/tools/perf/tests/hists_filter.c
-@@ -89,6 +89,7 @@ static int add_hist_entries(struct evlist *evlist,
- 			}
- 
- 			fake_samples[i].thread = al.thread;
-+			map__put(fake_samples[i].map);
- 			fake_samples[i].map = al.map;
- 			fake_samples[i].sym = al.sym;
- 		}
-@@ -101,6 +102,14 @@ static int add_hist_entries(struct evlist *evlist,
- 	return TEST_FAIL;
- }
- 
-+static void put_fake_samples(void)
-+{
-+	size_t i;
++/*
++ * Shared reference count checking macros.
++ *
++ * Reference count checking is an approach to sanitizing the use of reference
++ * counted structs. It leverages address and leak sanitizers to make sure gets
++ * are paired with a put. Reference count checking adds a malloc-ed layer of
++ * indirection on a get, and frees it on a put. A missed put will be reported as
++ * a memory leak. A double put will be reported as a double free. Accessing
++ * after a put will cause a use-after-free and/or a segfault.
++ */
 +
-+	for (i = 0; i < ARRAY_SIZE(fake_samples); i++)
-+		map__put(fake_samples[i].map);
-+}
++#ifndef REFCNT_CHECKING
++/* Replaces "struct foo" so that the pointer may be interposed. */
++#define DECLARE_RC_STRUCT(struct_name)		\
++	struct struct_name
 +
- static int test__hists_filter(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
- {
- 	int err = TEST_FAIL;
-@@ -194,7 +203,7 @@ static int test__hists_filter(struct test_suite *test __maybe_unused, int subtes
- 		hists__filter_by_thread(hists);
- 
- 		/* now applying dso filter for 'kernel' */
--		hists->dso_filter = fake_samples[0].map->dso;
-+		hists->dso_filter = map__dso(fake_samples[0].map);
- 		hists__filter_by_dso(hists);
- 
- 		if (verbose > 2) {
-@@ -288,7 +297,7 @@ static int test__hists_filter(struct test_suite *test __maybe_unused, int subtes
- 
- 		/* now applying all filters at once. */
- 		hists->thread_filter = fake_samples[1].thread;
--		hists->dso_filter = fake_samples[1].map->dso;
-+		hists->dso_filter = map__dso(fake_samples[1].map);
- 		hists__filter_by_thread(hists);
- 		hists__filter_by_dso(hists);
- 
-@@ -322,6 +331,7 @@ static int test__hists_filter(struct test_suite *test __maybe_unused, int subtes
- 	evlist__delete(evlist);
- 	reset_output_field();
- 	machines__exit(&machines);
-+	put_fake_samples();
- 
- 	return err;
- }
-diff --git a/tools/perf/tests/hists_link.c b/tools/perf/tests/hists_link.c
-index c575e13a850d..060e8731feff 100644
---- a/tools/perf/tests/hists_link.c
-+++ b/tools/perf/tests/hists_link.c
-@@ -6,6 +6,7 @@
- #include "evsel.h"
- #include "evlist.h"
- #include "machine.h"
-+#include "map.h"
- #include "parse-events.h"
- #include "hists_common.h"
- #include "util/mmap.h"
-@@ -94,6 +95,7 @@ static int add_hist_entries(struct evlist *evlist, struct machine *machine)
- 			}
- 
- 			fake_common_samples[k].thread = al.thread;
-+			map__put(fake_common_samples[k].map);
- 			fake_common_samples[k].map = al.map;
- 			fake_common_samples[k].sym = al.sym;
- 		}
-@@ -126,11 +128,24 @@ static int add_hist_entries(struct evlist *evlist, struct machine *machine)
- 	return -1;
- }
- 
-+static void put_fake_samples(void)
-+{
-+	size_t i, j;
++/* Declare a reference counted struct variable. */
++#define RC_STRUCT(struct_name) struct struct_name
 +
-+	for (i = 0; i < ARRAY_SIZE(fake_common_samples); i++)
-+		map__put(fake_common_samples[i].map);
-+	for (i = 0; i < ARRAY_SIZE(fake_samples); i++) {
-+		for (j = 0; j < ARRAY_SIZE(fake_samples[0]); j++)
-+			map__put(fake_samples[i][j].map);
-+	}
-+}
++/*
++ * Interpose the indirection. Result will hold the indirection and object is the
++ * reference counted struct.
++ */
++#define ADD_RC_CHK(result, object) (result = object, object)
 +
- static int find_sample(struct sample *samples, size_t nr_samples,
- 		       struct thread *t, struct map *m, struct symbol *s)
- {
- 	while (nr_samples--) {
--		if (samples->thread == t && samples->map == m &&
-+		if (samples->thread == t &&
-+		    samples->map == m &&
- 		    samples->sym == s)
- 			return 1;
- 		samples++;
-@@ -336,6 +351,7 @@ static int test__hists_link(struct test_suite *test __maybe_unused, int subtest
- 	evlist__delete(evlist);
- 	reset_output_field();
- 	machines__exit(&machines);
-+	put_fake_samples();
- 
- 	return err;
- }
-diff --git a/tools/perf/tests/hists_output.c b/tools/perf/tests/hists_output.c
-index 0bde4a768c15..4af6916491e5 100644
---- a/tools/perf/tests/hists_output.c
-+++ b/tools/perf/tests/hists_output.c
-@@ -78,6 +78,7 @@ static int add_hist_entries(struct hists *hists, struct machine *machine)
- 		}
- 
- 		fake_samples[i].thread = al.thread;
-+		map__put(fake_samples[i].map);
- 		fake_samples[i].map = al.map;
- 		fake_samples[i].sym = al.sym;
- 	}
-@@ -113,10 +114,18 @@ static void del_hist_entries(struct hists *hists)
- 	}
- }
- 
-+static void put_fake_samples(void)
-+{
-+	size_t i;
++/* Strip the indirection layer. */
++#define RC_CHK_ACCESS(object) object
 +
-+	for (i = 0; i < ARRAY_SIZE(fake_samples); i++)
-+		map__put(fake_samples[i].map);
-+}
++/* Frees the object and the indirection layer. */
++#define RC_CHK_FREE(object) free(object)
 +
- typedef int (*test_fn_t)(struct evsel *, struct machine *);
- 
- #define COMM(he)  (thread__comm_str(he->thread))
--#define DSO(he)   (he->ms.map->dso->short_name)
-+#define DSO(he)   (map__dso(he->ms.map)->short_name)
- #define SYM(he)   (he->ms.sym->name)
- #define CPU(he)   (he->cpu)
- #define PID(he)   (he->thread->tid)
-@@ -620,6 +629,7 @@ static int test__hists_output(struct test_suite *test __maybe_unused, int subtes
- 	/* tear down everything */
- 	evlist__delete(evlist);
- 	machines__exit(&machines);
-+	put_fake_samples();
- 
- 	return err;
- }
-diff --git a/tools/perf/tests/mmap-thread-lookup.c b/tools/perf/tests/mmap-thread-lookup.c
-index a4301fc7b770..898eda55b7a8 100644
---- a/tools/perf/tests/mmap-thread-lookup.c
-+++ b/tools/perf/tests/mmap-thread-lookup.c
-@@ -202,7 +202,8 @@ static int mmap_events(synth_cb synth)
- 			break;
- 		}
- 
--		pr_debug("map %p, addr %" PRIx64 "\n", al.map, al.map->start);
-+		pr_debug("map %p, addr %" PRIx64 "\n", al.map, map__start(al.map));
-+		map__put(al.map);
- 	}
- 
- 	machine__delete_threads(machine);
-diff --git a/tools/perf/util/callchain.c b/tools/perf/util/callchain.c
-index a8cfd31a3ff0..ae65b7bc9ab7 100644
---- a/tools/perf/util/callchain.c
-+++ b/tools/perf/util/callchain.c
-@@ -583,7 +583,7 @@ fill_node(struct callchain_node *node, struct callchain_cursor *cursor)
- 		}
- 		call->ip = cursor_node->ip;
- 		call->ms = cursor_node->ms;
--		map__get(call->ms.map);
-+		call->ms.map = map__get(call->ms.map);
- 		call->srcline = cursor_node->srcline;
- 
- 		if (cursor_node->branch) {
-@@ -1061,7 +1061,7 @@ int callchain_cursor_append(struct callchain_cursor *cursor,
- 	node->ip = ip;
- 	map__zput(node->ms.map);
- 	node->ms = *ms;
--	map__get(node->ms.map);
-+	node->ms.map = map__get(node->ms.map);
- 	node->branch = branch;
- 	node->nr_loop_iter = nr_loop_iter;
- 	node->iter_cycles = iter_cycles;
-@@ -1109,7 +1109,8 @@ int fill_callchain_info(struct addr_location *al, struct callchain_cursor_node *
- 	struct machine *machine = maps__machine(node->ms.maps);
- 
- 	al->maps = node->ms.maps;
--	al->map = node->ms.map;
-+	map__put(al->map);
-+	al->map = map__get(node->ms.map);
- 	al->sym = node->ms.sym;
- 	al->srcline = node->srcline;
- 	al->addr = node->ip;
-@@ -1530,7 +1531,7 @@ int callchain_node__make_parent_list(struct callchain_node *node)
- 				goto out;
- 			*new = *chain;
- 			new->has_children = false;
--			map__get(new->ms.map);
-+			new->ms.map = map__get(new->ms.map);
- 			list_add_tail(&new->list, &head);
- 		}
- 		parent = parent->parent;
-diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
-index 54a1d4df5f70..266318d5d006 100644
---- a/tools/perf/util/event.c
-+++ b/tools/perf/util/event.c
-@@ -484,13 +484,14 @@ size_t perf_event__fprintf_text_poke(union perf_event *event, struct machine *ma
- 	if (machine) {
- 		struct addr_location al;
- 
--		al.map = maps__find(machine__kernel_maps(machine), tp->addr);
-+		al.map = map__get(maps__find(machine__kernel_maps(machine), tp->addr));
- 		if (al.map && map__load(al.map) >= 0) {
- 			al.addr = map__map_ip(al.map, tp->addr);
- 			al.sym = map__find_symbol(al.map, al.addr);
- 			if (al.sym)
- 				ret += symbol__fprintf_symname_offs(al.sym, &al, fp);
- 		}
-+		map__put(al.map);
- 	}
- 	ret += fprintf(fp, " old len %u new len %u\n", tp->old_len, tp->new_len);
- 	old = true;
-@@ -581,6 +582,7 @@ struct map *thread__find_map(struct thread *thread, u8 cpumode, u64 addr,
- 	al->filtered = 0;
- 
- 	if (machine == NULL) {
-+		map__put(al->map);
- 		al->map = NULL;
- 		return NULL;
- 	}
-@@ -599,6 +601,7 @@ struct map *thread__find_map(struct thread *thread, u8 cpumode, u64 addr,
- 		al->level = 'u';
- 	} else {
- 		al->level = 'H';
-+		map__put(al->map);
- 		al->map = NULL;
- 
- 		if ((cpumode == PERF_RECORD_MISC_GUEST_USER ||
-@@ -613,7 +616,7 @@ struct map *thread__find_map(struct thread *thread, u8 cpumode, u64 addr,
- 		return NULL;
- 	}
- 
--	al->map = maps__find(maps, al->addr);
-+	al->map = map__get(maps__find(maps, al->addr));
- 	if (al->map != NULL) {
- 		/*
- 		 * Kernel maps might be changed when loading symbols so loading
-@@ -768,6 +771,7 @@ int machine__resolve(struct machine *machine, struct addr_location *al,
-  */
- void addr_location__put(struct addr_location *al)
- {
-+	map__zput(al->map);
- 	thread__zput(al->thread);
- }
- 
-diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
-index f19ac6eb4775..4dbb1dbf3679 100644
---- a/tools/perf/util/hist.c
-+++ b/tools/perf/util/hist.c
-@@ -446,7 +446,7 @@ static int hist_entry__init(struct hist_entry *he,
- 			memset(&he->stat, 0, sizeof(he->stat));
- 	}
- 
--	map__get(he->ms.map);
-+	he->ms.map = map__get(he->ms.map);
- 
- 	if (he->branch_info) {
- 		/*
-@@ -461,13 +461,13 @@ static int hist_entry__init(struct hist_entry *he,
- 		memcpy(he->branch_info, template->branch_info,
- 		       sizeof(*he->branch_info));
- 
--		map__get(he->branch_info->from.ms.map);
--		map__get(he->branch_info->to.ms.map);
-+		he->branch_info->from.ms.map = map__get(he->branch_info->from.ms.map);
-+		he->branch_info->to.ms.map = map__get(he->branch_info->to.ms.map);
- 	}
- 
- 	if (he->mem_info) {
--		map__get(he->mem_info->iaddr.ms.map);
--		map__get(he->mem_info->daddr.ms.map);
-+		he->mem_info->iaddr.ms.map = map__get(he->mem_info->iaddr.ms.map);
-+		he->mem_info->daddr.ms.map = map__get(he->mem_info->daddr.ms.map);
- 	}
- 
- 	if (hist_entry__has_callchains(he) && symbol_conf.use_callchain)
-diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-index 940fb2a50dfd..49e4891e92b7 100644
---- a/tools/perf/util/machine.c
-+++ b/tools/perf/util/machine.c
-@@ -783,33 +783,42 @@ static int machine__process_ksymbol_register(struct machine *machine,
- {
- 	struct symbol *sym;
- 	struct map *map = maps__find(machine__kernel_maps(machine), event->ksymbol.addr);
-+	bool put_map = false;
-+	int err = 0;
- 
- 	if (!map) {
- 		struct dso *dso = dso__new(event->ksymbol.name);
--		int err;
- 
--		if (dso) {
--			dso->kernel = DSO_SPACE__KERNEL;
--			map = map__new2(0, dso);
--			dso__put(dso);
-+		if (!dso) {
-+			err = -ENOMEM;
-+			goto out;
- 		}
--
--		if (!dso || !map) {
--			return -ENOMEM;
-+		dso->kernel = DSO_SPACE__KERNEL;
-+		map = map__new2(0, dso);
-+		dso__put(dso);
-+		if (!map) {
-+			err = -ENOMEM;
-+			goto out;
- 		}
--
-+		/*
-+		 * The inserted map has a get on it, we need to put to release
-+		 * the reference count here, but do it after all accesses are
-+		 * done.
-+		 */
-+		put_map = true;
- 		if (event->ksymbol.ksym_type == PERF_RECORD_KSYMBOL_TYPE_OOL) {
--			map->dso->binary_type = DSO_BINARY_TYPE__OOL;
--			map->dso->data.file_size = event->ksymbol.len;
--			dso__set_loaded(map->dso);
-+			map__dso(map)->binary_type = DSO_BINARY_TYPE__OOL;
-+			map__dso(map)->data.file_size = event->ksymbol.len;
-+			dso__set_loaded(map__dso(map));
- 		}
- 
- 		map->start = event->ksymbol.addr;
--		map->end = map->start + event->ksymbol.len;
-+		map->end = map__start(map) + event->ksymbol.len;
- 		err = maps__insert(machine__kernel_maps(machine), map);
--		map__put(map);
--		if (err)
--			return err;
-+		if (err) {
-+			err = -ENOMEM;
-+			goto out;
-+		}
- 
- 		dso__set_loaded(dso);
- 
-@@ -819,13 +828,18 @@ static int machine__process_ksymbol_register(struct machine *machine,
- 		}
- 	}
- 
--	sym = symbol__new(map->map_ip(map, map->start),
-+	sym = symbol__new(map__map_ip(map, map__start(map)),
- 			  event->ksymbol.len,
- 			  0, 0, event->ksymbol.name);
--	if (!sym)
--		return -ENOMEM;
--	dso__insert_symbol(map->dso, sym);
--	return 0;
-+	if (!sym) {
-+		err = -ENOMEM;
-+		goto out;
-+	}
-+	dso__insert_symbol(map__dso(map), sym);
-+out:
-+	if (put_map)
-+		map__put(map);
-+	return err;
- }
- 
- static int machine__process_ksymbol_unregister(struct machine *machine,
-@@ -925,14 +939,11 @@ static struct map *machine__addnew_module_map(struct machine *machine, u64 start
- 		goto out;
- 
- 	err = maps__insert(machine__kernel_maps(machine), map);
--
--	/* Put the map here because maps__insert already got it */
--	map__put(map);
--
- 	/* If maps__insert failed, return NULL. */
--	if (err)
-+	if (err) {
-+		map__put(map);
- 		map = NULL;
--
-+	}
- out:
- 	/* put the dso here, corresponding to  machine__findnew_module_dso */
- 	dso__put(dso);
-@@ -1228,6 +1239,7 @@ __machine__create_kernel_maps(struct machine *machine, struct dso *kernel)
- 	/* In case of renewal the kernel map, destroy previous one */
- 	machine__destroy_kernel_maps(machine);
- 
-+	map__put(machine->vmlinux_map);
- 	machine->vmlinux_map = map__new2(0, kernel);
- 	if (machine->vmlinux_map == NULL)
- 		return -ENOMEM;
-@@ -1513,6 +1525,7 @@ static int machine__create_module(void *arg, const char *name, u64 start,
- 	map->end = start + size;
- 
- 	dso__kernel_module_get_build_id(map__dso(map), machine->root_dir);
-+	map__put(map);
- 	return 0;
- }
- 
-@@ -1558,16 +1571,18 @@ static void machine__set_kernel_mmap(struct machine *machine,
- static int machine__update_kernel_mmap(struct machine *machine,
- 				     u64 start, u64 end)
- {
--	struct map *map = machine__kernel_map(machine);
-+	struct map *orig, *updated;
- 	int err;
- 
--	map__get(map);
--	maps__remove(machine__kernel_maps(machine), map);
-+	orig = machine->vmlinux_map;
-+	updated = map__get(orig);
- 
-+	machine->vmlinux_map = updated;
- 	machine__set_kernel_mmap(machine, start, end);
-+	maps__remove(machine__kernel_maps(machine), orig);
-+	err = maps__insert(machine__kernel_maps(machine), updated);
-+	map__put(orig);
- 
--	err = maps__insert(machine__kernel_maps(machine), map);
--	map__put(map);
- 	return err;
- }
- 
-@@ -2246,6 +2261,7 @@ static int add_callchain_ip(struct thread *thread,
- 	err = callchain_cursor_append(cursor, ip, &ms,
- 				      branch, flags, nr_loop_iter,
- 				      iter_cycles, branch_from, srcline);
-+	map__put(al.map);
- 	return err;
- }
- 
++/* A get operation adding the indirection layer. */
++#define RC_CHK_GET(result, object) ADD_RC_CHK(result, object)
++
++/* A put operation removing the indirection layer. */
++#define RC_CHK_PUT(object) {}
++
++#else
++
++/* Replaces "struct foo" so that the pointer may be interposed. */
++#define DECLARE_RC_STRUCT(struct_name)			\
++	struct original_##struct_name;			\
++	struct struct_name {				\
++		struct original_##struct_name *orig;	\
++	};						\
++	struct original_##struct_name
++
++/* Declare a reference counted struct variable. */
++#define RC_STRUCT(struct_name) struct original_##struct_name
++
++/*
++ * Interpose the indirection. Result will hold the indirection and object is the
++ * reference counted struct.
++ */
++#define ADD_RC_CHK(result, object)					\
++	(								\
++		object ? (result = malloc(sizeof(*result)),		\
++			result ? (result->orig = object, result)	\
++			: (result = NULL, NULL))			\
++		: (result = NULL, NULL)					\
++		)
++
++/* Strip the indirection layer. */
++#define RC_CHK_ACCESS(object) object->orig
++
++/* Frees the object and the indirection layer. */
++#define RC_CHK_FREE(object)			\
++	do {					\
++		zfree(&object->orig);		\
++		free(object);			\
++	} while(0)
++
++/* A get operation adding the indirection layer. */
++#define RC_CHK_GET(result, object) ADD_RC_CHK(result, (object ? object->orig : NULL))
++
++/* A put operation removing the indirection layer. */
++#define RC_CHK_PUT(object)			\
++	do {					\
++		if (object) {			\
++			object->orig = NULL;	\
++			free(object);		\
++		}				\
++	} while(0)
++
++#endif
++
++#endif /* __LIBPERF_INTERNAL_RC_CHECK_H */
 -- 
 2.35.1.265.g69c8d7142f-goog
 

@@ -2,123 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38064B2EC4
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD314B2EBE
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353405AbiBKUud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 15:50:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44324 "EHLO
+        id S1344630AbiBKUvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 15:51:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244388AbiBKUub (ORCPT
+        with ESMTP id S1353510AbiBKUvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 15:50:31 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61777CEC;
-        Fri, 11 Feb 2022 12:50:30 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 2C5961F42CA0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644612629;
-        bh=titzUSRpLuAl1t9xsbS7kL0F6WrOUiNfN4rZ24f9VYA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ya5jCVBNZbokUY4sj312TkrMPYG1GAKIBpnwiWpY1atBf6gQOesipFr6lHSkDeJaB
-         GCTUraYYy7fFuvzfbKLfgbm1wbShMeeAM0Cvr/nGauxdVCR6pz81OvSQT/nzhJApHv
-         mSaIGogGeZ6RS9J9BfslLcIxQn0LaVJsaacMyTENFQ2fu2jnWOqrL85c9MphHLdNlc
-         Kn4K+KkiDWzdEBJlObOfFC1hpyrQAwa4fit2SoVi1zP/59oh/dzB9lSFP9s2kgT5hf
-         3tCNl4ZA3hrVGkllUQdQlZlL3ToH5toWo/fUt5c/VDjjBm+gOoDWAZZYY3Y8wYjpkH
-         eEL0SBYWS5ixw==
-Received: by mercury (Postfix, from userid 1000)
-        id AC3231060908; Fri, 11 Feb 2022 21:50:26 +0100 (CET)
-Date:   Fri, 11 Feb 2022 21:50:26 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Qing Wang <wangqing@vivo.com>
-Cc:     Support Opensource <support.opensource@diasemi.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: da9150: use div64_u64() instead of
- do_div()
-Message-ID: <20220211205026.6jhtt66wco5ht6i6@mercury.elektranox.org>
-References: <1644395986-4349-1-git-send-email-wangqing@vivo.com>
+        Fri, 11 Feb 2022 15:51:15 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E695FD88;
+        Fri, 11 Feb 2022 12:51:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:References:
+        In-Reply-To:Message-Id:Date:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=FocTTLbGGS2pUrmG79NzHvWl04JBNMr4U1VpELUhKqg=; b=V4zb2Yk+27bWFd+hh6cAAqVSxx
+        9Kf5V5Jf7Lmh22hNtTY3siDvwy7cCQ3lHZ623SmbpuGqCPc2Aw9cV0iPfqsZP1EZLvWwbR6YT5nts
+        BpjROucPPsAap3hVc577g2Pw5FYXCIkxPrRX3e/XJue9vcuPmsWoYDLvpKNMadGePQP4=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:55280 helo=pettiford.lan)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1nIcsf-00067w-8u; Fri, 11 Feb 2022 15:51:02 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     hvilleneuve@dimonoff.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com
+Cc:     hugo@hugovil.com, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 11 Feb 2022 15:50:26 -0500
+Message-Id: <20220211205029.3940756-12-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220211205029.3940756-1-hugo@hugovil.com>
+References: <20220211205029.3940756-1-hugo@hugovil.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tmbpapgwd5xul2x6"
-Content-Disposition: inline
-In-Reply-To: <1644395986-4349-1-git-send-email-wangqing@vivo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v2 11/14] rtc: pcf2127: adapt time/date registers write sequence for PCF2131
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
---tmbpapgwd5xul2x6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The sequence for updating the time/date registers is slightly
+different between PCF2127/29 and PCF2131.
 
-Hi,
+For PCF2127/29, during write operations, the time counting
+circuits (memory locations 03h through 09h) are automatically blocked.
 
-On Wed, Feb 09, 2022 at 12:39:46AM -0800, Qing Wang wrote:
-> From: Wang Qing <wangqing@vivo.com>
->=20
-> do_div() does a 64-by-32 division.
-> When the divisor is u64, do_div() truncates it to 32 bits, this means it
-> can test non-zero and be truncated to zero for division.
->=20
-> fix do_div.cocci warning:
-> do_div() does a 64-by-32 division, please consider using div64_u64 instea=
-d.
->=20
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> ---
+For PCF2131, time/date registers write access requires setting the
+STOP bit and sending the clear prescaler instruction (CPR). STOP then
+needs to be released once write operation is completed.
 
-Thanks, queued.
+Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+---
+ drivers/rtc/rtc-pcf2127.c | 38 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 37 insertions(+), 1 deletion(-)
 
--- Sebastian
+diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+index 8f3b34efff7f..84ec7d5fda59 100644
+--- a/drivers/rtc/rtc-pcf2127.c
++++ b/drivers/rtc/rtc-pcf2127.c
+@@ -39,6 +39,7 @@
+ #define PCF2127_REG_CTRL1		0x00
+ #define PCF2127_BIT_CTRL1_POR_OVRD		BIT(3)
+ #define PCF2127_BIT_CTRL1_TSF1			BIT(4)
++#define PCF2127_BIT_CTRL1_STOP			BIT(5)
+ /* Control register 2 */
+ #define PCF2127_REG_CTRL2		0x01
+ #define PCF2127_BIT_CTRL2_AIE			BIT(1)
+@@ -70,6 +71,7 @@
+ #define PCF2131_REG_SR_RESET		0x05
+ #define PCF2131_SR_RESET_READ_PATTERN	0b00100100 /* Fixed pattern. */
+ #define PCF2131_SR_RESET_RESET_CMD	0x2C /* SR is bit 3. */
++#define PCF2131_SR_RESET_CPR_CMD	0xA4 /* CPR is bit 7. */
+ /* Time and date registers */
+ #define PCF2127_REG_TIME_DATE_BASE	0x03
+ #define PCF2131_REG_TIME_DATE_BASE	0x07 /* Register 0x06 is 100th seconds,
+@@ -307,7 +309,31 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 	/* year */
+ 	buf[i++] = bin2bcd(tm->tm_year - 100);
+ 
+-	/* write register's data */
++	/* Write access to time registers:
++	 * PCF2127/29: no special action required.
++	 * PCF2131:    requires setting the STOP bit. STOP bit needs to
++	 *             be cleared after time registers are updated.
++	 *             It is also recommended to set CPR bit, although
++	 *             write access will work without it.
++	 */
++	if (pcf2127->cfg->has_reset_reg) {
++		err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
++					 PCF2127_BIT_CTRL1_STOP,
++					 PCF2127_BIT_CTRL1_STOP);
++		if (err) {
++			dev_err(dev, "setting STOP bit failed\n");
++			return err;
++		}
++
++		err = regmap_write(pcf2127->regmap, pcf2127->cfg->reg_reset,
++				   PCF2131_SR_RESET_CPR_CMD);
++		if (err) {
++			dev_err(dev, "sending CPR cmd failed\n");
++			return err;
++		}
++	}
++
++	/* write time register's data */
+ 	err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->regs_td_base, buf, i);
+ 	if (err) {
+ 		dev_err(dev,
+@@ -315,6 +341,16 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ 		return err;
+ 	}
+ 
++	if (pcf2127->cfg->has_reset_reg) {
++		/* Clear STOP bit (PCF2131 only) after write is completed. */
++		err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
++					 PCF2127_BIT_CTRL1_STOP, 0);
++		if (err) {
++			dev_err(dev, "clearing STOP bit failed\n");
++			return err;
++		}
++	}
++
+ 	return 0;
+ }
+ 
+-- 
+2.30.2
 
->  drivers/power/supply/da9150-fg.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/supply/da9150-fg.c b/drivers/power/supply/da91=
-50-fg.c
-> index 6e36782..896491a
-> --- a/drivers/power/supply/da9150-fg.c
-> +++ b/drivers/power/supply/da9150-fg.c
-> @@ -250,7 +250,7 @@ static int da9150_fg_current_avg(struct da9150_fg *fg,
->  	div =3D (u64) (sd_gain * shunt_val * 65536ULL);
->  	do_div(div, 1000000);
->  	res =3D (u64) (iavg * 1000000ULL);
-> -	do_div(res, div);
-> +	div64_u64(res, div);
-> =20
->  	val->intval =3D (int) res;
-> =20
-> --=20
-> 2.7.4
->=20
-
---tmbpapgwd5xul2x6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIGzBIACgkQ2O7X88g7
-+pq1RA//amgy7aCdOmD2Kpx2XtE/2DM+vMVocYnQW+uTkFJf1Nlske4UwmTbDphI
-cxNkYnlE+ftdkBpgvoXaGoCADXYbJqfHn4SCZmns7c7ElZM9UZfJIeRn1f/c/lev
-ChCZS8bardkVf7DEwr3apsHEpz0RD4fWpjUqkbV7dRIDif4a8bZUxWakSS7R8LkV
-L2pbun/PmbJUztbGSTb5ulsSlTvoTBU9bO3DOazLrQ8jbIs4jn1wNOtpr3txFfnf
-McSumI/SBeHp2q9iIXhf/YCvGqlfyfZZNIb9HXdtYM5uxuTh+Hf1Gey1ih+YKGzu
-PWVyydYzbm7aBqFD+rUeRzELSqH/EYdiyONkCojr3ONdfqL1SG92OVhZGDdJorRt
-cK/0AFLb3F3AEKRL+TgT93qvywvZJTWFNcS3oThI75n0HI2SmxbEaWPcUsOlgAwc
-a9FwGL1uv88LqHvk7FeUIGhJvujiS3Lbg6SwdtSCQ19WRvu863M+gXOge6pPJV84
-+VKfI9RXQcOm2xRndUkqZIuodUf/Y2KTU89DK2zkRpNCjVNDV2CD8xYb0MV7rp+E
-fmCS3Y+xK0btYXXyDlh5ecI5tpV0vyEwCJhyLyicFi93QDC8lLBxXg9Gq/UM2UBs
-iA5MSl0FbToLrXvFShbVt4uUGsnw/vLwn+MuJgmnyIHauQYR7L8=
-=nub8
------END PGP SIGNATURE-----
-
---tmbpapgwd5xul2x6--

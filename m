@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C6834B2B73
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4504B2B6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:12:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351959AbiBKRMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 12:12:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35744 "EHLO
+        id S1351970AbiBKRMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 12:12:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344689AbiBKRMc (ORCPT
+        with ESMTP id S242158AbiBKRMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 12:12:32 -0500
+        Fri, 11 Feb 2022 12:12:37 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2652621F;
-        Fri, 11 Feb 2022 09:12:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B838DBD6;
+        Fri, 11 Feb 2022 09:12:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
         In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
         :Reply-To:Content-ID:Content-Description;
-        bh=0evjDNoKi99keN6XHrmd5QB7BOODu4KyQguckMpbh8s=; b=ulZ45u0tXlg3DtFL/f3rcFX5Xu
-        wIXyQy4oO6lh0qXb7hlQ4xWdVemLCUl0v9E9mwRNXSOSE4hAblmsgN8mDiRfDtvm2FWnQhGtY3GnL
-        FfA9zyzkXFSXA7lpVm1tyjDwYRR/S3yGWOhgF7SDW7fkiQHJwO39bB27n5OPYL2hiAkFUxCXsXDTH
-        iSS+WrkvXPv62l6HjAUEP5RBT+BHFucIkc6mLZwV40VPD66R4yIOcf5JBfmk1m0UA30iR98cuoTKX
-        1NOBkH4LIRWpy7T52r6crS+3mMyori0oO0enXADk64INILvAR5uEXDWVl69IwEqPZbQirbu1/uZBL
-        91V81p9A==;
+        bh=IAJVndvC2D0wZes8TKvqkXkv156AHKT6iLNSSoGjHCM=; b=IBcTNrW3dnUQdfHlL1i4TFT2FK
+        ZzM4dp4CkSwhVVCIctn7UWQjm5pdv9cIfUSyg0EQvE7zsrj2NVImDvYrymK6ZBMhpzYLa5V+5A29Q
+        T+rjHzYt64BjaVY2UqPZLru6D06FMatJz0hVRUnd1M1EiHNKPk9u7+5wbt9tWRbcEHFBZHAFfLYn0
+        fg9XyyrDPOLDVNgRPk8afJnWNfgWS39QzcTD2X7nD4APdUJbqKNskDZVptut1a5NJhV8vhnooQsd9
+        UoLAFlG94O7uOi/9eKrciA2l4KkJzk/Frz1MkO5ojeamnBdAnVEtZqYStrop2H4HC1QF0A6l3VEoo
+        N3Fax3Qg==;
 Received: from [2601:1c0:6280:3f0::aa0b]
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nIZT0-00AaM3-0L; Fri, 11 Feb 2022 17:12:18 +0000
-Message-ID: <6742c55a-59e5-80db-5490-07cec141f580@infradead.org>
-Date:   Fri, 11 Feb 2022 09:12:13 -0800
+        id 1nIZT4-00AaM7-GV; Fri, 11 Feb 2022 17:12:22 +0000
+Message-ID: <376dd5c9-199c-25af-d431-d1f0541f08c0@infradead.org>
+Date:   Fri, 11 Feb 2022 09:12:18 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.1
-Subject: Re: [PATCH] exec: cleanup comments
+Subject: Re: [PATCH] PM: cleanup comments
 Content-Language: en-US
-To:     trix@redhat.com, ebiederm@xmission.com, keescook@chromium.org,
-        viro@zeniv.linux.org.uk
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220211160940.2516243-1-trix@redhat.com>
+To:     trix@redhat.com, rafael@kernel.org, len.brown@intel.com,
+        pavel@ucw.cz, gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220211161027.2516447-1-trix@redhat.com>
 From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220211160940.2516243-1-trix@redhat.com>
+In-Reply-To: <20220211161027.2516447-1-trix@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -55,12 +55,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2/11/22 08:09, trix@redhat.com wrote:
+On 2/11/22 08:10, trix@redhat.com wrote:
 > From: Tom Rix <trix@redhat.com>
 > 
-> Remove the second 'from'.
-> Replace 'backwords' with 'backwards'.
-> Replace 'visibile' with 'visible'.
+> Remove the second 'the'.
+> Replace the second 'of' with 'the'.
+> Replace 'couter' with 'counter'.
 > 
 > Signed-off-by: Tom Rix <trix@redhat.com>
 
@@ -69,40 +69,45 @@ Acked-by: Randy Dunlap <rdunlap@infradead.org>
 Thanks.
 
 > ---
->  fs/exec.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  drivers/base/power/wakeirq.c | 2 +-
+>  drivers/base/power/wakeup.c  | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/fs/exec.c b/fs/exec.c
-> index 40b1008fb0f7..8256e8bb9ad3 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -118,7 +118,7 @@ bool path_noexec(const struct path *path)
->   * Note that a shared library must be both readable and executable due to
->   * security reasons.
+> diff --git a/drivers/base/power/wakeirq.c b/drivers/base/power/wakeirq.c
+> index 0004db4a9d3b..d487a6bac630 100644
+> --- a/drivers/base/power/wakeirq.c
+> +++ b/drivers/base/power/wakeirq.c
+> @@ -289,7 +289,7 @@ EXPORT_SYMBOL_GPL(dev_pm_disable_wake_irq);
 >   *
-> - * Also note that we take the address to load from from the file itself.
-> + * Also note that we take the address to load from the file itself.
+>   * Enables wakeirq conditionally. We need to enable wake-up interrupt
+>   * lazily on the first rpm_suspend(). This is needed as the consumer device
+> - * starts in RPM_SUSPENDED state, and the the first pm_runtime_get() would
+> + * starts in RPM_SUSPENDED state, and the first pm_runtime_get() would
+>   * otherwise try to disable already disabled wakeirq. The wake-up interrupt
+>   * starts disabled with IRQ_NOAUTOEN set.
+>   *
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index 8666590201c9..a57d469676ca 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -587,7 +587,7 @@ static bool wakeup_source_not_registered(struct wakeup_source *ws)
+>   * @ws: Wakeup source to handle.
+>   *
+>   * Update the @ws' statistics and, if @ws has just been activated, notify the PM
+> - * core of the event by incrementing the counter of of wakeup events being
+> + * core of the event by incrementing the counter of the wakeup events being
+>   * processed.
 >   */
->  SYSCALL_DEFINE1(uselib, const char __user *, library)
->  {
-> @@ -542,7 +542,7 @@ static int copy_strings(int argc, struct user_arg_ptr argv,
->  		if (!valid_arg_len(bprm, len))
->  			goto out;
->  
-> -		/* We're going to work our way backwords. */
-> +		/* We're going to work our way backwards. */
->  		pos = bprm->p;
->  		str += len;
->  		bprm->p -= len;
-> @@ -1275,7 +1275,7 @@ int begin_new_exec(struct linux_binprm * bprm)
+>  static void wakeup_source_activate(struct wakeup_source *ws)
+> @@ -733,7 +733,7 @@ static void wakeup_source_deactivate(struct wakeup_source *ws)
 >  
 >  	/*
->  	 * Must be called _before_ exec_mmap() as bprm->mm is
-> -	 * not visibile until then. This also enables the update
-> +	 * not visible until then. This also enables the update
->  	 * to be lockless.
+>  	 * Increment the counter of registered wakeup events and decrement the
+> -	 * couter of wakeup events in progress simultaneously.
+> +	 * counter of wakeup events in progress simultaneously.
 >  	 */
->  	retval = set_mm_exe_file(bprm->mm, bprm->file);
+>  	cec = atomic_add_return(MAX_IN_PROGRESS, &combined_event_count);
+>  	trace_wakeup_source_deactivate(ws->name, cec);
 
 -- 
 ~Randy

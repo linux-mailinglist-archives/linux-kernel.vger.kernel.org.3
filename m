@@ -2,66 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A5C4B1AFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 02:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E244B1B01
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 02:13:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346687AbiBKBLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 20:11:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50400 "EHLO
+        id S1346695AbiBKBLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 20:11:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241756AbiBKBLJ (ORCPT
+        with ESMTP id S241756AbiBKBLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 20:11:09 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2466B40
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:11:08 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id j2so20717080ybu.0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:11:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xWAtxFOBnLmSYM035NYdRT/JcWj28PeqsxQriuBme8Q=;
-        b=FtK4Te4IWb91V1Vn3LbRCzTDklDYen9d6sDgXkXByFFmubx6ljKSsJPvwMg67kw6tv
-         wYLQm1716CF6qADAGZSDDlhHPLRl2GGrQTbsRPQNmli7SkCnK49NRLklstyVsI+0OuCi
-         1dBwDNzD4+qlfQfJB5Zn5vR2COw0+c5o5YBtP2Kn4saAKWoydQx7p6HYtKqf3a/juzhQ
-         ffB4IHmG4WG+8ovXGYk2xosv39og706wSC5QPzOOkg1Jg0VbAhzKSYqAzExljQ6CVZBu
-         hbzNVjQ9W2tkXFIz+S0eWHkKOZmNPBZ8w7IB6mf2JhcOhJoD1yKRBoJy52D3G1q+fkil
-         3QBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xWAtxFOBnLmSYM035NYdRT/JcWj28PeqsxQriuBme8Q=;
-        b=wrFaIVKIy8dpK7xaZlH677tPYDcYsTg0DUnF9BbI39PxHwBXsx0G25AD1NU/cxMw3O
-         /u5DJfbo55uoL2rA9470cSURxeVknolx+ctDJxHYcy5MHNs3YCc0emyGtdXJBwQVgFeE
-         OTCtCeaAMV4HTFZmgPCzF3765nrE2D+VIRsqq2/Dv/OiE0m7Xu8JJ2y3S5rUVJ4wKKdJ
-         AWC84aVHcPAIf13w4GsztXP9eW8GD172GakZocOgen7Bo4PzZuhcOkrWN85bcymLCy0u
-         L11zBu4XTColPLjAkVsdoOlam8KMhapMmMAvB4BSgrew5vjnp0FzS+uNEnk/hJSWGqnI
-         53Xw==
-X-Gm-Message-State: AOAM532D4iqlvTf2JUWoFnlZsVPyzBmKDMInbEq/Y/oRl0JTCJWcrryb
-        SXNTAKOAkVQfjhq15pp0l0z8S2mGUWhvlAMguxIMVA==
-X-Google-Smtp-Source: ABdhPJx0NDMuKKHpiSyjhCxVZGm2u9pnNLdHss+U+hAwmB8phM3KI4DuksHpnZJQDm77hJ1ypE+Egc3/AdlqSbYf5dE=
-X-Received: by 2002:a25:30d4:: with SMTP id w203mr9347222ybw.511.1644541867928;
- Thu, 10 Feb 2022 17:11:07 -0800 (PST)
+        Thu, 10 Feb 2022 20:11:40 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446A4B4B;
+        Thu, 10 Feb 2022 17:11:37 -0800 (PST)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nIKT8-0004UP-7v; Fri, 11 Feb 2022 02:11:26 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Atish Patra <atishp@atishpatra.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Wei Fu <wefu@redhat.com>,
+        liush <liush@allwinnertech.com>, Guo Ren <guoren@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Drew Fustini <drew@beagleboard.org>,
+        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Greg Favor <gfavor@ventanamicro.com>,
+        Andrea Mondelli <andrea.mondelli@huawei.com>,
+        Jonathan Behrens <behrensj@mit.edu>,
+        Xinhaoqu <xinhaoqu@huawei.com>,
+        Bill Huffman <huffman@cadence.com>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Allen Baum <allen.baum@esperantotech.com>,
+        Josh Scheid <jscheid@ventanamicro.com>,
+        Richard Trauben <rtrauben@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Christoph Muellner <cmuellner@linux.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>
+Subject: Re: [PATCH v6 08/14] riscv: move boot alternatives to a slightly earlier position
+Date:   Fri, 11 Feb 2022 02:11:24 +0100
+Message-ID: <2532021.2vfPgEiFAl@diego>
+In-Reply-To: <CAOnJCULe_5v6cb_JcoPKf-UD3bVze1U=jaYeLTsMu7pFigde+A@mail.gmail.com>
+References: <20220209123800.269774-1-heiko@sntech.de> <20220209123800.269774-9-heiko@sntech.de> <CAOnJCULe_5v6cb_JcoPKf-UD3bVze1U=jaYeLTsMu7pFigde+A@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220204192552.428433-1-massimo.toscanelli@leica-geosystems.com>
- <20220207090443.3710425-1-massimo.toscanelli@leica-geosystems.com> <20220207090443.3710425-2-massimo.toscanelli@leica-geosystems.com>
-In-Reply-To: <20220207090443.3710425-2-massimo.toscanelli@leica-geosystems.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 11 Feb 2022 02:10:56 +0100
-Message-ID: <CACRpkdaERtyiYhJVB536YOgB6JOMTV=eME2Tq6ed3JndZkhq7g@mail.gmail.com>
-Subject: Re: [PATCH 1/2] iio: st_sensors: add always_on flag
-To:     Massimo Toscanelli <massimo.toscanelli@leica-geosystems.com>
-Cc:     linux-kernel@vger.kernel.org, jic23@kernel.org, lars@metafoo.de,
-        caihuoqing@baidu.com, aardelean@deviqon.com,
-        andy.shevchenko@gmail.com, hdegoede@redhat.com,
-        Qing-wu.Li@leica-geosystems.com.cn, stephan@gerhold.net,
-        linux-iio@vger.kernel.org, bsp-development.geo@leica-geosystems.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,48 +64,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 10:05 AM Massimo Toscanelli
-<massimo.toscanelli@leica-geosystems.com> wrote:
+Hi Atish,
 
-> The st_sensors_read_info_raw() implementation allows to get raw data
-> from st_sensors, enabling and disabling the device at every read.
-> This leads to delays in data access, caused by the msleep that waits
-> the hardware to be ready after every read.
->
-> Introduced always_on flag in st_sensor_data, to allow the user to
-> keep the device always enabled. In this way, every data access to the
-> device can be performed with no delays.
->
-> Add always_on sysfs attribute.
->
-> Signed-off-by: Massimo Toscanelli <massimo.toscanelli@leica-geosystems.com>
+Am Donnerstag, 10. Februar 2022, 23:42:35 CET schrieb Atish Patra:
+> On Wed, Feb 9, 2022 at 4:39 AM Heiko Stuebner <heiko@sntech.de> wrote:
+> >
+> > Move the application of boot alternatives to soc_early_init().
+> > This allows to catch more generic cases of code needing patches
+> > than doing it in smp_prepare_boot_cpu() and also makes it actually
+> > work if CONFIG_SMP is disabled for whatever reason.
+> >
+> > The position is chosen mainly as it is before the actual soc early
+> > init runs but also already allows accessing the devicetree
+> > via fdt_* functions.
+> >
+> > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> > ---
+> >  arch/riscv/kernel/head.S    | 2 ++
+> >  arch/riscv/kernel/smpboot.c | 2 --
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+> > index 2363b43312fc..0e1bb97f9749 100644
+> > --- a/arch/riscv/kernel/head.S
+> > +++ b/arch/riscv/kernel/head.S
+> > @@ -10,6 +10,7 @@
+> >  #include <asm/thread_info.h>
+> >  #include <asm/page.h>
+> >  #include <asm/pgtable.h>
+> > +#include <asm/alternative.h>
+> >  #include <asm/csr.h>
+> >  #include <asm/cpu_ops_sbi.h>
+> >  #include <asm/hwcap.h>
+> > @@ -341,6 +342,7 @@ clear_bss_done:
+> >         call kasan_early_init
+> >  #endif
+> >         /* Start the kernel */
+> > +       call apply_boot_alternatives
+> 
+> Do you really need this early ?
+> if non-smp configuration is the only option, Can you do it in
+> setup_arch() after riscv_fill_hwcap() is called ?
 
-This creates special dependencies on sysfs poking etc.
+The issue I see is, we we have the soc_early_init [0] running
+directly after this and the one user I see [1] already wants to
+ioremap io-memory at this stage.
 
-Couldn't the runtime PM solve this problem in a better way?
+So judging by the fact that more early-inits will get added
+in the future I do guess we should've set up the io-memory
+page-type by this point?
 
-If you look in for example:
-drivers/iio/accel/kxsd9.c
-how the different pm_runtime* primitives are used, you get an
-idea.
 
-Especially note
+Heiko
 
-        /*
-         * Set autosuspend to two orders of magnitude larger than the
-         * start-up time. 20ms start-up time means 2000ms autosuspend,
-         * i.e. 2 seconds.
-         */
-        pm_runtime_set_autosuspend_delay(dev, 2000);
+[0] https://elixir.bootlin.com/linux/latest/source/arch/riscv/kernel/soc.c#L14
+[1] https://elixir.bootlin.com/linux/latest/source/drivers/soc/canaan/k210-sysctl.c#L66
 
-This creates a "hysteresis window" around when the device is
-on, so it is not repeatedly shut off and on, but only after 2 seconds
-of inactivity.
+> By doing that, we can unify the cpu feature probing and you don't need
+> a separate DT parsing just for svpbmt.
+> 
+> >         call soc_early_init
+> >         tail start_kernel
+> >
+> > diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+> > index a6d13dca1403..f1e4948a4b52 100644
+> > --- a/arch/riscv/kernel/smpboot.c
+> > +++ b/arch/riscv/kernel/smpboot.c
+> > @@ -32,7 +32,6 @@
+> >  #include <asm/sections.h>
+> >  #include <asm/sbi.h>
+> >  #include <asm/smp.h>
+> > -#include <asm/alternative.h>
+> >
+> >  #include "head.h"
+> >
+> > @@ -41,7 +40,6 @@ static DECLARE_COMPLETION(cpu_running);
+> >  void __init smp_prepare_boot_cpu(void)
+> >  {
+> >         init_cpu_topology();
+> > -       apply_boot_alternatives();
+> >  }
+> >
+> >  void __init smp_prepare_cpus(unsigned int max_cpus)
+> > --
+> > 2.30.2
+> >
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> 
+> 
+> 
+> 
 
-This way no special userspace is needed to achieve what you want,
-and it benefits everyone.
 
-I wanted to fix this for all the ST sensors but never got around to.
 
-Yours,
-Linus Walleij
+

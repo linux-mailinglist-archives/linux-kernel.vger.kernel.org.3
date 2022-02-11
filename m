@@ -2,83 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4814B231C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E68114B231E
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348892AbiBKK3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 05:29:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55412 "EHLO
+        id S1348907AbiBKKbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 05:31:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234595AbiBKK3y (ORCPT
+        with ESMTP id S1348914AbiBKKbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 05:29:54 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4618E88
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:29:52 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 412C921128;
-        Fri, 11 Feb 2022 10:29:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1644575391; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Fri, 11 Feb 2022 05:31:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 69BDCEB4
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:31:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644575474;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=GW7hPp8S196ICKXiVx/9snE9bFc+0wtN2XNyXb5NVwk=;
-        b=x6FCekV0/pdOfIhIB0TMRFA1MHk138uXkTCmK6U2a5LW8ag27HpEf6GcKG9oF3sAL4k+Bv
-        7SNhcZg+t+G14dd8k/iHjB8tFa4ZgPBZFuvG5x+cEJyYen7PbKwAdYmBWU0ORp1Re9Q63U
-        t+hSL3u5UnV+CPHmBeZhz09WI4IJuxo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1644575391;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GW7hPp8S196ICKXiVx/9snE9bFc+0wtN2XNyXb5NVwk=;
-        b=euZCpMrbeYkxcGwbG2R9UA4Z+LKEJIqMjR/Jic1ODwVeJCqhZWTWcoWMcvWCo1bTsLyqIa
-        GkswS8s6WLwZfLAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=iBor/4ctD9Su3Z9/rV8GOGhFf5h1VX6eZd38snr721I=;
+        b=QQHs2iJQkmD+McjJi9afJ46cH62BSn7bIj23Gm8Xv/mvzsXrbKx6Cte2b174sgUGsDaeiM
+        hQe8V4c4Sn3laN8Gt6CeKxMORrJgseSigTU3sczcWxChZX8KORfe6ebnj41PX7oO5TQYA8
+        HAzXvnBP4I3myy8cZcYGYm/7gFIdgpk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-37-VbLescsqPOa17IZbRMefJg-1; Fri, 11 Feb 2022 05:31:11 -0500
+X-MC-Unique: VbLescsqPOa17IZbRMefJg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 07F8D13BD9;
-        Fri, 11 Feb 2022 10:29:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zBwjAZ86BmKHMQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 11 Feb 2022 10:29:51 +0000
-Message-ID: <fc8510c6-f39f-231b-d822-2c5ce4422a60@suse.cz>
-Date:   Fri, 11 Feb 2022 11:29:50 +0100
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9D5C518982B7;
+        Fri, 11 Feb 2022 10:30:39 +0000 (UTC)
+Received: from localhost (ovpn-13-96.pek2.redhat.com [10.72.13.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id AC3AD7D728;
+        Fri, 11 Feb 2022 10:30:37 +0000 (UTC)
+Date:   Fri, 11 Feb 2022 18:30:34 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH v20 3/5] arm64: kdump: reimplement crashkernel=X
+Message-ID: <YgY6yvX7PEeZpdTr@MiWiFi-R3L-srv>
+References: <20220124084708.683-1-thunder.leizhen@huawei.com>
+ <20220124084708.683-4-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 04/13] mm/munlock: rmap call mlock_vma_page()
- munlock_vma_page()
-Content-Language: en-US
-To:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Rik van Riel <riel@surriel.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
- <9f9ca113-ffb9-498e-4bd6-6bfeaaa10b7@google.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <9f9ca113-ffb9-498e-4bd6-6bfeaaa10b7@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220124084708.683-4-thunder.leizhen@huawei.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,40 +78,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/6/22 22:36, Hugh Dickins wrote:
-> Add vma argument to mlock_vma_page() and munlock_vma_page(), make them
-> inline functions which check (vma->vm_flags & VM_LOCKED) before calling
-> mlock_page() and munlock_page() in mm/mlock.c.
-> 
-> Add bool compound to mlock_vma_page() and munlock_vma_page(): this is
-> because we have understandable difficulty in accounting pte maps of THPs,
-> and if passed a PageHead page, mlock_page() and munlock_page() cannot
-> tell whether it's a pmd map to be counted or a pte map to be ignored.
-> 
-> Add vma arg to page_add_file_rmap() and page_remove_rmap(), like the
-> others, and use that to call mlock_vma_page() at the end of the page
-> adds, and munlock_vma_page() at the end of page_remove_rmap() (end or
-> beginning? unimportant, but end was easier for assertions in testing).
-> 
-> No page lock is required (although almost all adds happen to hold it):
-> delete the "Serialize with page migration" BUG_ON(!PageLocked(page))s.
-> Certainly page lock did serialize with page migration, but I'm having
-> difficulty explaining why that was ever important.
-> 
-> Mlock accounting on THPs has been hard to define, differed between anon
-> and file, involved PageDoubleMap in some places and not others, required
-> clear_page_mlock() at some points.  Keep it simple now: just count the
-> pmds and ignore the ptes, there is no reason for ptes to undo pmd mlocks.
-> 
-> page_add_new_anon_rmap() callers unchanged: they have long been calling
-> lru_cache_add_inactive_or_unevictable(), which does its own VM_LOCKED
-> handling (it also checks for not VM_SPECIAL: I think that's overcautious,
-> and inconsistent with other checks, that mmap_region() already prevents
-> VM_LOCKED on VM_SPECIAL; but haven't quite convinced myself to change it).
-> 
-> Signed-off-by: Hugh Dickins <hughd@google.com>
+On 01/24/22 at 04:47pm, Zhen Lei wrote:
+> From: Chen Zhou <chenzhou10@huawei.com>
+......
+> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> index 6c653a2c7cff052..a5d43feac0d7d96 100644
+> --- a/arch/arm64/mm/init.c
+> +++ b/arch/arm64/mm/init.c
+> @@ -71,6 +71,30 @@ phys_addr_t arm64_dma_phys_limit __ro_after_init;
+>  #define CRASH_ADDR_LOW_MAX	arm64_dma_phys_limit
+>  #define CRASH_ADDR_HIGH_MAX	MEMBLOCK_ALLOC_ACCESSIBLE
+>  
+> +static int __init reserve_crashkernel_low(unsigned long long low_size)
+> +{
+> +	unsigned long long low_base;
+> +
+> +	/* passed with crashkernel=0,low ? */
+> +	if (!low_size)
+> +		return 0;
+> +
+> +	low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, 0, CRASH_ADDR_LOW_MAX);
+> +	if (!low_base) {
+> +		pr_err("cannot allocate crashkernel low memory (size:0x%llx).\n", low_size);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	pr_info("crashkernel low memory reserved: 0x%llx - 0x%llx (%lld MB)\n",
+> +		low_base, low_base + low_size, low_size >> 20);
+> +
+> +	crashk_low_res.start = low_base;
+> +	crashk_low_res.end   = low_base + low_size - 1;
+> +	insert_resource(&iomem_resource, &crashk_low_res);
+> +
+> +	return 0;
+> +}
+> +
+>  /*
+>   * reserve_crashkernel() - reserves memory for crash kernel
+>   *
+> @@ -81,29 +105,62 @@ phys_addr_t arm64_dma_phys_limit __ro_after_init;
+>  static void __init reserve_crashkernel(void)
+>  {
+>  	unsigned long long crash_base, crash_size;
+> +	unsigned long long crash_low_size = SZ_256M;
+>  	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
+>  	int ret;
+> +	bool fixed_base;
+> +	char *cmdline = boot_command_line;
+>  
+> -	ret = parse_crashkernel(boot_command_line, memblock_phys_mem_size(),
+> +	/* crashkernel=X[@offset] */
+> +	ret = parse_crashkernel(cmdline, memblock_phys_mem_size(),
+>  				&crash_size, &crash_base);
+> -	/* no crashkernel= or invalid value specified */
+> -	if (ret || !crash_size)
+> -		return;
+> +	if (ret || !crash_size) {
+> +		unsigned long long low_size;
+>  
+> +		/* crashkernel=X,high */
+> +		ret = parse_crashkernel_high(cmdline, 0, &crash_size, &crash_base);
+> +		if (ret || !crash_size)
+> +			return;
+> +
+> +		/* crashkernel=X,low */
+> +		ret = parse_crashkernel_low(cmdline, 0, &low_size, &crash_base);
+> +		if (!ret)
+> +			crash_low_size = low_size;
 
-Yeah, much better when most of the sites are encapsulated in rmap operations
-like this.
+Here, the error case is not checked and handled. But it still gets
+expeced result which is the default SZ_256M. Is this designed on
+purpose?
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+> +
+> +		crash_max = CRASH_ADDR_HIGH_MAX;
+> +	}
+> +
+> +	fixed_base = !!crash_base;
+>  	crash_size = PAGE_ALIGN(crash_size);
+>  
+>  	/* User specifies base address explicitly. */
+>  	if (crash_base)
+>  		crash_max = crash_base + crash_size;
+>  
+> +retry:
+>  	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+>  					       crash_base, crash_max);
+>  	if (!crash_base) {
+> +		/*
+> +		 * Attempt to fully allocate low memory failed, fall back
+> +		 * to high memory, the minimum required low memory will be
+> +		 * reserved later.
+> +		 */
+> +		if (!fixed_base && (crash_max == CRASH_ADDR_LOW_MAX)) {
+> +			crash_max = CRASH_ADDR_HIGH_MAX;
+> +			goto retry;
+> +		}
+> +
+>  		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
+>  			crash_size);
+>  		return;
+>  	}
+>  
+> +	if (crash_base >= SZ_4G && reserve_crashkernel_low(crash_low_size)) {
+> +		memblock_phys_free(crash_base, crash_size);
+> +		return;
+> +	}
+> +
+>  	pr_info("crashkernel reserved: 0x%016llx - 0x%016llx (%lld MB)\n",
+>  		crash_base, crash_base + crash_size, crash_size >> 20);
+>  
+> @@ -112,6 +169,9 @@ static void __init reserve_crashkernel(void)
+>  	 * map. Inform kmemleak so that it won't try to access it.
+>  	 */
+>  	kmemleak_ignore_phys(crash_base);
+> +	if (crashk_low_res.end)
+> +		kmemleak_ignore_phys(crashk_low_res.start);
+> +
+>  	crashk_res.start = crash_base;
+>  	crashk_res.end = crash_base + crash_size - 1;
+>  	insert_resource(&iomem_resource, &crashk_res);
+> -- 
+> 2.25.1
+> 
+

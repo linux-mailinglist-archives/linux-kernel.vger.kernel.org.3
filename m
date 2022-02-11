@@ -2,116 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DE94B292C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 936614B2953
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351407AbiBKPiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 10:38:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52116 "EHLO
+        id S1348285AbiBKPqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 10:46:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351394AbiBKPiM (ORCPT
+        with ESMTP id S234142AbiBKPqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 10:38:12 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D394013A;
-        Fri, 11 Feb 2022 07:38:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZsqYYuB5zPz4U2XvwTMc7Gwvie5cfcQX4xHf1kN4geA=; b=lhI/YJi2qjzHxmqjjPK8JUNboc
-        ELI4IMRWe4IJCl+h4E80XJqj1r2cvVckQdNY7MsZ4rSJcC5OHXZnE17vBcaWvad9TqsQS7uYDMZoc
-        zJdah9V3x6bIlCrd4LnTyHADuZU+AWDPwCmox+GPAwDgNzoVJCHCx+M4/jtduxkjqdOmhpbHeVAhw
-        tNoWavJzu7HFS6IlzQhV9C73xEopKbRU4nHMSiPN9uxoAlZAvJ6zIJDJnFDcRGgzqelEJQMVkvmAx
-        YxbR5s1DYOcCPOo1IqIDqjzmY/2yL9NSDDEAomSd5QGOCwT6y6Sx411ri6MQR4hI56UPRhn4RlCL1
-        wlXfZY8A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nIXyu-0093dN-LI; Fri, 11 Feb 2022 15:37:08 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F341A98630A; Fri, 11 Feb 2022 16:37:06 +0100 (CET)
-Date:   Fri, 11 Feb 2022 16:37:06 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v10 10/15] FG-KASLR: use a scripted approach to handle
- .text.* sections
-Message-ID: <20220211153706.GW23216@worktop.programming.kicks-ass.net>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
- <20220209185752.1226407-11-alexandr.lobakin@intel.com>
+        Fri, 11 Feb 2022 10:46:31 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2168821F;
+        Fri, 11 Feb 2022 07:46:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644594390; x=1676130390;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+oJ6/3w5SLph8vgBKsnG5VB05lSV2gievuHwWZZDctw=;
+  b=HFlRaONArNCXKkxogpDM1F063hWyMaJtTle9l5io3W0pvCxZcbJ3eARU
+   e5DLC4G48gMbGjoi3sKWzNgjahF3C6eTn+3fITMAeY3bd5xLtF7yA0HSZ
+   mIkDJrYEvFhNWgrvVXNT9g+m1hj/V8eFC2lmVRjsesmvqMue20F3icgtP
+   hnB5EvjFZRAqgkjjxv+OmGOnuMJ7GjTJ/N2Nya6uPRjHQb3+0EajHEoiC
+   XkMZ1jtAr7+3vzAmyB2D76Ubh+E+bvPkV2iVxrX3qJqAaKx9ZsAz5qlPo
+   Xr3vQCeUpcAYxM6bkuXpVvnfeGqboDt6+hVlOG/wKjlwYvEfiKwClJ6JR
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="336175088"
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="336175088"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 07:46:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="542134128"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.68])
+  by orsmga008.jf.intel.com with ESMTP; 11 Feb 2022 07:46:26 -0800
+Date:   Fri, 11 Feb 2022 23:38:01 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Lizhi Hou <lizhi.hou@xilinx.com>
+Cc:     devicetree@vger.kernel.org, robh@kernel.org,
+        linux-kernel@vger.kernel.org, maxz@xilinx.com,
+        sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
+        stefanos@xilinx.com, trix@redhat.com, mdf@kernel.org,
+        dwmw2@infradead.org, Max Zhen <max.zhen@xilinx.com>
+Subject: Re: [PATCH V1 Create empty OF root 1/1] of: create empty of root
+Message-ID: <20220211153801.GA1273192@yilunxu-OptiPlex-7050>
+References: <20220126054807.492651-1-lizhi.hou@xilinx.com>
+ <20220126054807.492651-2-lizhi.hou@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220209185752.1226407-11-alexandr.lobakin@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220126054807.492651-2-lizhi.hou@xilinx.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 07:57:47PM +0100, Alexander Lobakin wrote:
-> +sub read_sections {
-> +	open(my $fh, "\"$readelf\" -SW \"$file\" 2>/dev/null |")
-> +		or die "$0: ERROR: failed to execute \"$readelf\": $!";
-> +
-> +	while (<$fh>) {
-> +		my $name;
-> +		my $align;
-> +		chomp;
-> +
-> +		($name, $align) = $_ =~ /^\s*\[[\s0-9]*\]\s*(\.\S*)\s*[A-Z]*\s*[0-9a-f]{16}\s*[0-9a-f]*\s*[0-9a-f]*\s*[0-9a-f]*\s*[0-9a-f]{2}\s*[A-Z]{2}\s*[0-9]\s*[0-9]\s*([0-9]*)$/;
+On Tue, Jan 25, 2022 at 09:48:07PM -0800, Lizhi Hou wrote:
+> Add OF_EMPTY_ROOT config. When it is selected and there is not a device
+> tree, create an empty device tree root node.
 
-Is there really no readable way to write this?
+Maybe add some description about why a empty device tree root node is
+needed. Note that the Patch #0 will not be present in the repo when the
+series will be merged, so add your description here please.
+
+> 
+> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
+> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
+> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
+> ---
+>  drivers/of/Kconfig         |  3 +++
+>  drivers/of/Makefile        |  1 +
+>  drivers/of/of_empty_root.c | 51 ++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 55 insertions(+)
+>  create mode 100644 drivers/of/of_empty_root.c
+> 
+> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+> index 80b5fd44ab1c..42afb126f91a 100644
+> --- a/drivers/of/Kconfig
+> +++ b/drivers/of/Kconfig
+> @@ -94,4 +94,7 @@ config OF_DMA_DEFAULT_COHERENT
+>  	# arches should select this if DMA is coherent by default for OF devices
+>  	bool
+>  
+> +config OF_EMPTY_ROOT
+> +	bool
+
+Also some descriptions for better understanding?
+
+Thanks,
+Yilun
 
 > +
-> +		if (!defined($name)) {
-> +			next;
-> +		}
+>  endif # OF
+> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+> index e0360a44306e..c65364f32935 100644
+> --- a/drivers/of/Makefile
+> +++ b/drivers/of/Makefile
+> @@ -12,6 +12,7 @@ obj-$(CONFIG_OF_RESERVED_MEM) += of_reserved_mem.o
+>  obj-$(CONFIG_OF_RESOLVE)  += resolver.o
+>  obj-$(CONFIG_OF_OVERLAY) += overlay.o
+>  obj-$(CONFIG_OF_NUMA) += of_numa.o
+> +obj-$(CONFIG_OF_EMPTY_ROOT) += of_empty_root.o
+>  
+>  ifdef CONFIG_KEXEC_FILE
+>  ifdef CONFIG_OF_FLATTREE
+> diff --git a/drivers/of/of_empty_root.c b/drivers/of/of_empty_root.c
+> new file mode 100644
+> index 000000000000..5c429c7a27bd
+> --- /dev/null
+> +++ b/drivers/of/of_empty_root.c
+> @@ -0,0 +1,51 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Xilinx, Inc.
+> + */
 > +
-> +		## Clang 13 onwards emits __cfi_check_fail only on final
-> +		## linking, so it won't appear in .o files and will be
-> +		## missing in @sections. Add it manually to prevent
-> +		## spawning orphans.
-> +		if ($name eq ".text.__cfi_check_fail") {
-> +			$has_ccf = 1;
-> +		}
-
-How is that relevant, x86-64 doesn't and won't do clang-cfi.
+> +#include <linux/of.h>
+> +#include <linux/slab.h>
+> +
+> +#include "of_private.h"
+> +
+> +static int __init of_root_init(void)
+> +{
+> +	struct property *prop = NULL;
+> +	struct device_node *node;
+> +	__be32 *val = NULL;
+> +
+> +	if (of_root)
+> +		return 0;
+> +
+> +	pr_info("Create empty OF root node\n");
+> +	node = kzalloc(sizeof(*node), GFP_KERNEL);
+> +	if (!node)
+> +		return -ENOMEM;
+> +	of_node_init(node);
+> +	node->full_name = "/";
+> +
+> +	prop = kcalloc(2, sizeof(*prop), GFP_KERNEL);
+> +	if (!prop)
+> +		return -ENOMEM;
+> +
+> +	val = kzalloc(sizeof(*val), GFP_KERNEL);
+> +	if (!val)
+> +		return -ENOMEM;
+> +	*val = cpu_to_be32(sizeof(void *) / sizeof(u32));
+> +
+> +	prop->name = "#address-cells";
+> +	prop->value = val;
+> +	prop->length = sizeof(u32);
+> +	of_add_property(node, prop);
+> +	prop++;
+> +	prop->name = "#size-cells";
+> +	prop->value = val;
+> +	prop->length = sizeof(u32);
+> +	of_add_property(node, prop);
+> +	of_root = node;
+> +	for_each_of_allnodes(node)
+> +		__of_attach_node_sysfs(node);
+> +
+> +	return 0;
+> +}
+> +pure_initcall(of_root_init);
+> -- 
+> 2.27.0

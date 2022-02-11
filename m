@@ -2,115 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BF84B1AA4
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AF84B1AA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:44:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346491AbiBKAnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:43:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36992 "EHLO
+        id S1346496AbiBKAnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:43:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244965AbiBKAnO (ORCPT
+        with ESMTP id S1346489AbiBKAnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:43:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A3CE6C;
-        Thu, 10 Feb 2022 16:43:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4B29B826B4;
-        Fri, 11 Feb 2022 00:43:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0550FC340EE;
-        Fri, 11 Feb 2022 00:43:11 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hNeMakxO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644540189;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x0vKcGurM+seOaod8eYMcPboMMWynI7lYU57RwZ9U9w=;
-        b=hNeMakxO3qh+47cF2Lt1mr8EFmSRDNSzovhavybEyrc2JnC4Ot1MbLjakT3U80Lqzg+siX
-        smsBhRhrqBemk8QIIA4DI3qoC/qXYbsIIH3BtQOzaapg2WVXiAuVKB9gA6m+P7GqZx/mlf
-        FnUruW7OH71CxCfklgQYKLG4XH0uNuo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 60a78fe7 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 11 Feb 2022 00:43:08 +0000 (UTC)
-Received: by mail-yb1-f175.google.com with SMTP id c6so20424965ybk.3;
-        Thu, 10 Feb 2022 16:43:08 -0800 (PST)
-X-Gm-Message-State: AOAM533q6bFD1PK5M8COLCaWrN/mm/2HR67LEPSftHCjoqvDTh/tiqNK
-        bbdl/flaZa8HvFRo15IOF+Sh4VFZ1sBdwgiI4Dc=
-X-Google-Smtp-Source: ABdhPJy+q+S9ihMnQbr0OcXt7j1ox96Pf685juOhgcRrRAcDLlxCLjLCTTi4D7406d/jjL8Vj3n0zzCRhJquE2YYWnE=
-X-Received: by 2002:a0d:f244:: with SMTP id b65mr9919257ywf.2.1644540187689;
- Thu, 10 Feb 2022 16:43:07 -0800 (PST)
+        Thu, 10 Feb 2022 19:43:51 -0500
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3395F94
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:43:51 -0800 (PST)
+Received: by mail-oo1-xc2a.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso8489170ooi.1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:43:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=peIv1RFotlCgbTarhFLi0yleT6U74UOU0UlSRN43yHs=;
+        b=sgQGKQAWGA48N63ZFsHjuJMQge4WD3VzF3QcEOfMBQlnVQl93uLyEJcqouoqhe0VvZ
+         lwJXuQg9so3eOc0kKP/zoRvBj3tOMygTO/P/HxCsL29Z3aN0QIdyCo9qARxBlpHhbFdt
+         lqbSF/ofPqsTi5hnAiQZCH3SH0cGcX8p36Ca9RBE10MTdECRSHfiwvHGahYTJoQJwnOX
+         r5+qzDgAz0uyODssAnktdXUj8hNBXdVBpdUtLiJDbmG78rYzsl5SFoGz3dRrZQcn2plH
+         S6hpeFPDk/Vi51/d+M7bkbfs9W5UE86rIKkbNzFOVCooOCVcDmj6GWdvujmjm0qLJ6pz
+         fVxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=peIv1RFotlCgbTarhFLi0yleT6U74UOU0UlSRN43yHs=;
+        b=JOzDj9hQPzDAxi0hwHHgVUD3Hn5faBf21nHru6HtAqlBCniZgZgd56BZbHqvw4NmY9
+         PoLOyvkZMQqEfuMymi4MuVednnQwxdINYj9mID4N74AmdnAWXDQo51rtS2W0h4+el89/
+         7oMbkgL9oes6AfbKOFEs2rNyUTV/s2G6bnuFZmEvFJRAEvp6PVj5MXNv4v4Xff4CnOV1
+         gsghtcfC6Yow2r2r609Ic9+vVv7aGXLyAwLtPh/qgVPqxR17ggzaRJsGu8QB0nOKebiJ
+         VMFmOQQk2GurV+yKyVRoS1BJAvuuG3dl/cS9nS9JjHcZXx+KF6Cvg/B5FfituXnrwHlk
+         3oLQ==
+X-Gm-Message-State: AOAM533Ax9UGBZaBbm7Tn76sNLNW4lmV18o36P07VVTfWXp49HFy21eH
+        m0F1AP+r9t2H8oBNeGXexhEVWA==
+X-Google-Smtp-Source: ABdhPJye74c/DJOt1K0YAT2tbR4IdgDDxYX8XW4nFCogk+IMn+j8gnTxxW0JFF4y1ybzr4mm0UP2Rw==
+X-Received: by 2002:a4a:8f14:: with SMTP id e20mr3673292ool.0.1644540230638;
+        Thu, 10 Feb 2022 16:43:50 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id x17sm8572223oop.1.2022.02.10.16.43.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 16:43:50 -0800 (PST)
+Date:   Thu, 10 Feb 2022 18:43:48 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Satya Priya <quic_c_skakit@quicinc.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Das Srinagesh <gurus@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
+        quic_jprakash@quicinc.com
+Subject: Re: [PATCH V5 1/6] dt-bindings: regulator: Add pm8008 regulator
+ bindings
+Message-ID: <YgWxRDeo7vuTBeAo@builder.lan>
+References: <1644331940-18986-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1644331940-18986-2-git-send-email-quic_c_skakit@quicinc.com>
 MIME-Version: 1.0
-References: <20220209125644.533876-1-Jason@zx2c4.com> <20220209125644.533876-3-Jason@zx2c4.com>
- <YgVTpI/sYLecyWa3@linutronix.de>
-In-Reply-To: <YgVTpI/sYLecyWa3@linutronix.de>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Fri, 11 Feb 2022 01:42:56 +0100
-X-Gmail-Original-Message-ID: <CAHmME9pGwyZKu=9yCben-V30hR+zEjb9iZGWr5_RAE-uXt_Ofw@mail.gmail.com>
-Message-ID: <CAHmME9pGwyZKu=9yCben-V30hR+zEjb9iZGWr5_RAE-uXt_Ofw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] random: defer fast pool mixing to worker
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Eric Biggers <ebiggers@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1644331940-18986-2-git-send-email-quic_c_skakit@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
+On Tue 08 Feb 08:52 CST 2022, Satya Priya wrote:
 
-On Thu, Feb 10, 2022 at 7:04 PM Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
-> So.
-> - CPU1 schedules a worker
-> - CPU1 goes offline before the gets on the CPU.
-> - The worker runs CPU2
-> - CPU2 is back online
-> - and now
->    CPU1                                         CPU2
->    new_count =3D ++fast_pool->count;
->     reg =3D fast_pool->count (FAST_POOL_MIX_INFLIGHT | 64)
->     incl reg (FAST_POOL_MIX_INFLIGHT | 65)
->                                                 WRITE_ONCE(fast_pool->cou=
-nt, 0);
->     fast_pool->count =3D reg ((FAST_POOL_MIX_INFLIGHT | 65)
->
-> So we lost the WRITE_ONCE(, 0), FAST_POOL_MIX_INFLIGHT is still set and
-> worker is not scheduled. Not easy to trigger, not by an ordinary user.
-> Just wanted to mention=E2=80=A6
+> Add bindings for pm8008 pmic regulators.
+> 
+> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+> ---
+> Changes in V2:
+>  - Moved this patch before "mfd: pm8008: Add pm8008 regulator node" to
+>    resolve dtschema errors. Removed regulator-min-microvolt and 
+>    regulator-max-microvolt properties.
+> 
+> Changes in V3:
+>  - As per Rob's comments added standard unit suffix for mindropout property,
+>    added blank lines where required and added description for reg property.
+> 
+> Changes in V4:
+>  - Changed compatible string to "com,pm8008-regulators"
+>  - Moved "regulator-min-dropout-voltage-microvolt" to regulator.yaml as
+>    separate patch.
+> 
+> Changes in V5:
+>  - Removed the separate compatible for pm8008 regulator driver.
+>  - Moved the supply nodes to chip level.
+>  - Removed min-dropout property.
+> 
+>  .../bindings/regulator/qcom,pm8008-regulator.yaml  | 31 ++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/qcom,pm8008-regulator.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/regulator/qcom,pm8008-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,pm8008-regulator.yaml
+> new file mode 100644
+> index 0000000..0098845
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/qcom,pm8008-regulator.yaml
+> @@ -0,0 +1,31 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/regulator/qcom,pm8008-regulator.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Technologies, Inc. PM8008 Regulator bindings
+> +
+> +maintainers:
+> +  - Satya Priya <skakit@codeaurora.org>
+> +
+> +description:
+> +  Qualcomm Technologies, Inc. PM8008 is an I2C controlled PMIC
+> +  containing 7 LDO regulators.
+> +
+> +patternProperties:
+> +  "^LDO[1-7]$":
 
-Thanks for pointing this out. I'll actually fix this using atomics,
-and fix another minor issue at the same time the same way, and move to
-making sure the worker is running on the right CPU like we originally
-discussed. I'm going to send that as an additional patch so that we
-can narrow in on the issue there. It's a little bit involved but not
-too bad. I'll have that for you shortly.
+Please make this lower case, to match all other regulator bindings.
 
-> crng_fast_load() does spin_trylock_irqsave() in hardirq context. It does
-> not produce any warning on RT but is still wrong IMHO:
-> If we just could move this, too.
-> I don't know how timing critical this is but the first backtrace from
-> crng_fast_load() came (to my surprise) from hwrng_fillfn() (a kthread)
-> and added 64bytes in one go.
+> +    type: object
+> +    $ref: "regulator.yaml#"
+> +    description: PM8008 regulator peripherals of PM8008 regulator device
+> +
+> +    properties:
+> +      regulator-name: true
+> +
+> +    required:
+> +      - regulator-name
 
-I'll look into seeing if I can do it. On my first pass a few days ago,
-it seemed a bit too tricky, but I'll revisit after this part here
-settles. Thanks for your benchmarks, by the way. That's useful.
+Why is regulator-name a (and the only) required property?
 
-Jason
+Regards,
+Bjorn
+
+> +
+> +    unevaluatedProperties: false
+> +
+> +additionalProperties: false
+> +...
+> -- 
+> 2.7.4
+> 

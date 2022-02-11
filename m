@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF5D4B2D53
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 20:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F684B2D67
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 20:14:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352768AbiBKTNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 14:13:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39698 "EHLO
+        id S1352760AbiBKTNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 14:13:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348720AbiBKTM5 (ORCPT
+        with ESMTP id S1349908AbiBKTM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Feb 2022 14:12:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8C1CEC;
-        Fri, 11 Feb 2022 11:12:55 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DD9CED;
+        Fri, 11 Feb 2022 11:12:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 732F3B82C0E;
-        Fri, 11 Feb 2022 19:12:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA818C340F2;
-        Fri, 11 Feb 2022 19:12:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AC3461F3C;
+        Fri, 11 Feb 2022 19:12:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EC34C340F1;
+        Fri, 11 Feb 2022 19:12:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644606773;
-        bh=z4QJvv5jQOMSoBELgUEfc+t5uAq/ZocWJT4vzhJHC9k=;
+        s=k20201202; t=1644606775;
+        bh=icDAxhIilkMcIBD/iE5/3SiYgSSWiOTuHCkrhxzg/7M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mxR3FEwiw1/IApZN1xx2o1TK2U5T8LLeDp/nMfkHN5Rt7kvQ0Xvy8O+MMaXiDqJ2w
-         aJmZQRzxAgICQrM17BgxiDE1GSDHy3H3ht7MaCXryHOnHF0HzKh7kEm2lHLq4oUFCg
-         21LxHUB53Uqm/orGNYQD0s5cXZomoIrurhEQZB2eUrfEnCJ6vsNp0b3kvfQ8BYeshb
-         PYJt9QQMOl9ZSlDMSyIwJWvc0pKvPmYDQ1kF7qQH7C3zJhGvTf3zdDN1XiXhV0M7Wy
-         IKNMRtztTz5/7oA6WO09ad3Nv3iawWzzuoHMg9VfF7tdoAhEwhwKcJ1+7TUrKbdrw3
-         tYF1Fu7dtqFfg==
+        b=jBzHpQ5pdB0MztPObMedFoQYSkox1wWNSoNrPLoB0nNDR35MVSlsgv+pOSyFpp/IK
+         oM3CSNSjYuenhrlMbUdGwfWp1QC1kkJNnrJdPmUsk8oOPAy+mjMW4pSW3ks6q0sKit
+         NUpq4DZKVxjHKmZdHeqYObqM4XAKvUlUAIYndC1YkKlHgWKzfqtWFSclQWTQXjLLvn
+         oq/DpY3BEyv8vF9lK6ovNagwkYk6rvkT6y9Bbe4if0Bv6PajxQklOvutFvXUUkMw94
+         J65CVQxFaghRpTsGsgsWH2GoiMyNj6juzzFLTWSl6t34AXFPHItlRiTfL/XWfz2pQr
+         K5QmJmhAycRNQ==
 From:   =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
 To:     Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -40,11 +40,10 @@ To:     Stephen Boyd <sboyd@kernel.org>,
 Cc:     =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
         linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
         =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH v8 4/6] dt-bindings: mvebu-uart: update information about UART clock
-Date:   Fri, 11 Feb 2022 20:12:36 +0100
-Message-Id: <20220211191238.2142-5-kabel@kernel.org>
+Subject: [PATCH v8 5/6] arm64: dts: marvell: armada-37xx: add device node for UART clock and use it
+Date:   Fri, 11 Feb 2022 20:12:37 +0100
+Message-Id: <20220211191238.2142-6-kabel@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220211191238.2142-1-kabel@kernel.org>
 References: <20220211191238.2142-1-kabel@kernel.org>
@@ -63,54 +62,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pali Rohár <pali@kernel.org>
 
-Device "marvell,armada-3700-uart" should use
-"marvell,armada-3700-uart-clock" compatible clock.
+Define DT node for UART clock "marvell,armada-3700-uart-clock" and use
+this UART clock as a base clock for all UART devices.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
 Reviewed-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Marek Behún <kabel@kernel.org>
 ---
 Changes since v7:
-- added Reviewed-by tags
+- changed commit message ("This change defines" -> "Define")
+- added Marek's Reviewed-by tag
 ---
- Documentation/devicetree/bindings/serial/mvebu-uart.txt | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/marvell/armada-37xx.dtsi | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/serial/mvebu-uart.txt b/Documentation/devicetree/bindings/serial/mvebu-uart.txt
-index 2d0dbdf32d1d..a062bbca532c 100644
---- a/Documentation/devicetree/bindings/serial/mvebu-uart.txt
-+++ b/Documentation/devicetree/bindings/serial/mvebu-uart.txt
-@@ -14,7 +14,10 @@ Required properties:
-       is provided (possible only with the "marvell,armada-3700-uart"
-       compatible string for backward compatibility), it will only work
-       if the baudrate was initialized by the bootloader and no baudrate
--      change will then be possible.
-+      change will then be possible. When provided it should be UART1-clk
-+      for standard variant of UART and UART2-clk for extended variant
-+      of UART. TBG clock (with UART TBG divisors d1=d2=1) or xtal clock
-+      should not be used and are supported only for backward compatibility.
- - interrupts:
-     - Must contain three elements for the standard variant of the IP
-       (marvell,armada-3700-uart): "uart-sum", "uart-tx" and "uart-rx",
-@@ -34,7 +37,7 @@ Example:
- 	uart0: serial@12000 {
- 		compatible = "marvell,armada-3700-uart";
- 		reg = <0x12000 0x18>;
--		clocks = <&xtalclk>;
-+		clocks = <&uartclk 0>;
- 		interrupts =
- 		<GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
- 		<GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
-@@ -45,7 +48,7 @@ Example:
- 	uart1: serial@12200 {
- 		compatible = "marvell,armada-3700-uart-ext";
- 		reg = <0x12200 0x30>;
--		clocks = <&xtalclk>;
-+		clocks = <&uartclk 1>;
- 		interrupts =
- 		<GIC_SPI 30 IRQ_TYPE_EDGE_RISING>,
- 		<GIC_SPI 31 IRQ_TYPE_EDGE_RISING>;
+diff --git a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+index 673f4906eef9..4cf6c8aa0ac2 100644
+--- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
++++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+@@ -132,10 +132,20 @@ avs: avs@11500 {
+ 				reg = <0x11500 0x40>;
+ 			};
+ 
++			uartclk: clock-controller@12010 {
++				compatible = "marvell,armada-3700-uart-clock";
++				reg = <0x12010 0x4>, <0x12210 0x4>;
++				clocks = <&tbg 0>, <&tbg 1>, <&tbg 2>,
++					 <&tbg 3>, <&xtalclk>;
++				clock-names = "TBG-A-P", "TBG-B-P", "TBG-A-S",
++					      "TBG-B-S", "xtal";
++				#clock-cells = <1>;
++			};
++
+ 			uart0: serial@12000 {
+ 				compatible = "marvell,armada-3700-uart";
+ 				reg = <0x12000 0x18>;
+-				clocks = <&xtalclk>;
++				clocks = <&uartclk 0>;
+ 				interrupts =
+ 				<GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
+ 				<GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
+@@ -147,7 +157,7 @@ uart0: serial@12000 {
+ 			uart1: serial@12200 {
+ 				compatible = "marvell,armada-3700-uart-ext";
+ 				reg = <0x12200 0x30>;
+-				clocks = <&xtalclk>;
++				clocks = <&uartclk 1>;
+ 				interrupts =
+ 				<GIC_SPI 30 IRQ_TYPE_EDGE_RISING>,
+ 				<GIC_SPI 31 IRQ_TYPE_EDGE_RISING>;
 -- 
 2.34.1
 

@@ -2,60 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1504B22D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A53804B22DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348745AbiBKKMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 05:12:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45688 "EHLO
+        id S1348823AbiBKKMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 05:12:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232359AbiBKKMl (ORCPT
+        with ESMTP id S1348813AbiBKKMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 05:12:41 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D5F125
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:12:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644574360; x=1676110360;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=B6JVRlnUPIgo89MVFvwAVoplyYztYEv8R/ryAaiGIro=;
-  b=l16WUYcET0nLiMf9s0J4oLB9wo3+TLgGvPgekdVnZ/O7uBYkHf1/dywC
-   pdWpkv4RQKKwlxvIP2z7FYnASzXefpEUQ3CAvm9rUiCzAnglVtryifC72
-   ccPtLiWBzDF5CronXIGlfUcqKxmXR4UQG9jdywHC4t4uTssWQsRSVpib4
-   9ESpdiK0P//FtprQaU1YZkHanfrqJ4T/NFVeVL76VBh9O9L9Bc2xGqiZn
-   1bbW4OZvTLnEU6wz/nBao18ZEbmg6roGiwKw38TJt4oRA/mAX9sy34a/S
-   GUIvyeOxHC2pIv1R1dzCcAWXddry6iAk2djCFiZx/R1tShZqSTSYBa9yE
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="248537023"
-X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
-   d="scan'208";a="248537023"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 02:12:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
-   d="scan'208";a="568997477"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 11 Feb 2022 02:12:38 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nISur-0004Qf-VP; Fri, 11 Feb 2022 10:12:37 +0000
-Date:   Fri, 11 Feb 2022 18:11:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 34/35] ld.lld:
- error: undefined symbol: xa_store_range
-Message-ID: <202202111814.4NEkwCTo-lkp@intel.com>
+        Fri, 11 Feb 2022 05:12:46 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642D1192;
+        Fri, 11 Feb 2022 02:12:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644574365; x=1676110365;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=UXk5xgeQ8ec7mH4xeCgAgi+Mh3XuQttyFuGdgXBTyBY=;
+  b=OmbULxYJnsslG5dJWx8nYR+fjdkTO5A4tGWzUns1x9oJSVyfzRhcb5ZZ
+   RJWq4hopz9JC4mV85rm2bQgk4UxsD0KqOFI+V9orLyNXxWvTM1KHot5Jm
+   rzfcZi1JcITeUlge28vLuamAFMvHabn8zkbZskQ8WPUSIiy7OlJdu2uAr
+   Q=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 11 Feb 2022 02:12:45 -0800
+X-QCInternal: smtphost
+Received: from nalasex01a.na.qualcomm.com ([10.47.209.196])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 02:12:45 -0800
+Received: from [10.216.7.73] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Fri, 11 Feb
+ 2022 02:12:39 -0800
+Subject: Re: [PATCH V5 3/6] mfd: pm8008: Add mfd cell struct to register LDOs
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Das Srinagesh <gurus@codeaurora.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_collinsd@quicinc.com>,
+        <quic_subbaram@quicinc.com>, <quic_jprakash@quicinc.com>
+References: <1644331940-18986-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1644331940-18986-4-git-send-email-quic_c_skakit@quicinc.com>
+ <CAE-0n52B4heY5fcbz71JPOqvMVvmqsXO94V+Z0qTTw_XXextJw@mail.gmail.com>
+From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
+Message-ID: <bd5636b0-b975-1084-f285-87e458249b1a@quicinc.com>
+Date:   Fri, 11 Feb 2022 15:42:33 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAE-0n52B4heY5fcbz71JPOqvMVvmqsXO94V+Z0qTTw_XXextJw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,33 +72,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   429e2bb6fb190f390ed23afc0d2308e877c43be5
-commit: e9340673baaf1ff587aed3391aa411cf554bc42e [34/35] netfs: Slice a writeback from a dirty region
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220211/202202111814.4NEkwCTo-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f774697c85d6a352dcea013f46a99f9fe31)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/e9340673baaf1ff587aed3391aa411cf554bc42e
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout e9340673baaf1ff587aed3391aa411cf554bc42e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 2/10/2022 7:02 AM, Stephen Boyd wrote:
+> Quoting Satya Priya (2022-02-08 06:52:17)
+>> diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
+>> index c472d7f..e8569cc 100644
+>> --- a/drivers/mfd/qcom-pm8008.c
+>> +++ b/drivers/mfd/qcom-pm8008.c
+>> @@ -8,6 +8,7 @@
+>>   #include <linux/interrupt.h>
+>>   #include <linux/irq.h>
+>>   #include <linux/irqdomain.h>
+>> +#include <linux/mfd/core.h>
+>>   #include <linux/module.h>
+>>   #include <linux/of_device.h>
+>>   #include <linux/of_platform.h>
+>> @@ -27,6 +28,37 @@
+>>   #define INT_EN_CLR_OFFSET              0x16
+>>   #define INT_LATCHED_STS_OFFSET         0x18
+>>
+>> +static const struct mfd_cell pm8008_regulator_devs[] = {
+> Is there some way to not allocate this structure statically forever?
 
-All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: xa_store_range
-   >>> referenced by flush.c:204 (fs/netfs/flush.c:204)
-   >>>               netfs/flush.o:(netfs_flush_get_pages) in archive fs/built-in.a
-   >>> referenced by flush.c:232 (fs/netfs/flush.c:232)
-   >>>               netfs/flush.o:(netfs_flush_get_pages) in archive fs/built-in.a
+I think No.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+I found that some of the drivers are just using one cell with .name to 
+match with regulator driver and then probing regulators using a loop. 
+I'll do that too.
+
+static const struct mfd_cell pm8008_regulator_devs[] = {
+         {
+                 .name = "qcom,pm8008-regulators",
+         },
+  };
+
+>> +       {
+>> +               .name = "qcom,pm8008-regulators",
+>> +               .id = 0,
+>> +       },
+>> +       {
+>> +               .name = "qcom,pm8008-regulators",
+>> +               .id = 1,
+>> +       },
+>> +       {
+>> +               .name = "qcom,pm8008-regulators",
+>> +               .id = 2,
+>> +       },
+>> +       {
+>> +               .name = "qcom,pm8008-regulators",
+>> +               .id = 3,
+>> +       },
+>> +       {
+>> +               .name = "qcom,pm8008-regulators",
+>> +               .id = 4,
+>> +       },
+>> +       {
+>> +               .name = "qcom,pm8008-regulators",
+>> +               .id = 5,
+>> +       },
+>> +       {
+>> +               .name = "qcom,pm8008-regulators",
+>> +               .id = 6,
+>> +       },
+>> +};
+>> +
+>>   enum {
+>>          PM8008_MISC,
+>>          pm8008_temp_alarm,
+>> @@ -35,6 +67,17 @@ enum {
+>>          PM8008_NUM_PERIPHS,
+>>   };
+>>
+>> +enum {
+>> +       PM8008_INFRA,
+>> +       PM8008_REGULATORS,
+>> +};
+>> +
+>> +static const struct of_device_id pm8008_match[] = {
+>> +       { .compatible = "qcom,pm8008", .data = (void *)PM8008_INFRA},
+>> +       { .compatible = "qcom,pm8008-regulators", .data = (void *)PM8008_REGULATORS},
+>> +       { },
+> Nitpick: Drop , on {} so nothing can come after without causing compile
+> error.
+
+
+Okay.
+
+
+>> +};
+>> +
+>>   #define PM8008_PERIPH_0_BASE   0x900
+>>   #define PM8008_PERIPH_1_BASE   0x2400
+>>   #define PM8008_PERIPH_2_BASE   0xC000
+>> @@ -221,6 +264,7 @@ static int pm8008_probe(struct i2c_client *client)
+>>   {
+>>          int rc;
+>>          struct pm8008_data *chip;
+>> +       const struct of_device_id *id;
+>>
+>>          chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
+>>          if (!chip)
+>> @@ -239,14 +283,19 @@ static int pm8008_probe(struct i2c_client *client)
+>>                          dev_err(chip->dev, "Failed to probe irq periphs: %d\n", rc);
+>>          }
+>>
+>> +       id = of_match_node(pm8008_match, chip->dev->of_node);
+> Use device_get_match_data()? And then use (uintptr_t) casts to check for
+> the enum? Using device_get_match_data() allows us to avoid moving the
+> pm8008_match table.
+
+
+Okay.
+
+
+>> +       if (id->data == (void *)PM8008_REGULATORS) {
+> 	enum <your_name_here> dev_type = device_get_match_data(dev);
+>
+> 	if (dev_type == PM8008_REGULATORS)
+>
+>> +               rc = mfd_add_devices(chip->dev, 0, pm8008_regulator_devs,
+> Why not devm_mfd_add_devices()?
+
+
+Okay.
+
+
+>> +                               ARRAY_SIZE(pm8008_regulator_devs), NULL, 0, NULL);
+>> +               if (rc) {
+>> +                       dev_err(chip->dev, "Failed to add children: %d\n", rc);
+>> +                       return rc;
+>> +               }
+>> +       }
+>> +
+>>          return devm_of_platform_populate(chip->dev);
+>>   }
+>>
+>> -static const struct of_device_id pm8008_match[] = {
+>> -       { .compatible = "qcom,pm8008", },
+>> -       { },
+>> -};
+> This should have a MODULE_DEVICE_TABLE(of, pm8008_match) here.
+
+
+Okay.
+
+
+>> -
+>>   static struct i2c_driver pm8008_mfd_driver = {
+>>          .driver = {
+>>                  .name = "pm8008",

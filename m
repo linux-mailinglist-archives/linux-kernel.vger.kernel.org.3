@@ -2,71 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F065B4B2570
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 125F64B2572
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349929AbiBKMPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 07:15:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56672 "EHLO
+        id S1349928AbiBKMPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 07:15:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241636AbiBKMPQ (ORCPT
+        with ESMTP id S1349926AbiBKMPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 07:15:16 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34088F26;
-        Fri, 11 Feb 2022 04:15:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644581716; x=1676117716;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=/9uPAgvddq/OIc20PN1mMJ5/HsF2FnVn3dqQvYZrO/k=;
-  b=GUzsK+Gma1zVOP0dS+X590qob+xADoCO2AdrAYjQAlgJByKmyH/IM/y7
-   4bGo1fXP4M0x4zLAPUPw2MKSaRb7O8r/a9cmIofgfAwqdPCrSEIE3UHwJ
-   eUQlD98iHbAh1jTYe1xOrS/b8ql4dX49QkpZ6/rsvTSx69nIM25PDetH2
-   gfEfJxh/sEisA+0eFCV+juf4+KwZR5cgBgtMAsXmcv0EssKCcFC83Oppp
-   1NjIRLkROOJmY8HQ0Og4GNgHYxiIiQdiRp//i1bJiVC6IDVxBJV/2wtTt
-   sjBg2+qyVNxiktDM83bD3n8HAgKj7WNU+igAo0NaNMeTd5Ys+3riG4C1e
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="249928898"
-X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
-   d="scan'208";a="249928898"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 04:15:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
-   d="scan'208";a="526939904"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.92]) ([10.237.72.92])
-  by orsmga007.jf.intel.com with ESMTP; 11 Feb 2022 04:15:11 -0800
-Message-ID: <3f2938f7-2a9e-60e8-5237-fe7ebc3b4296@intel.com>
-Date:   Fri, 11 Feb 2022 14:15:10 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.0
-Subject: Re: [PATCH v1] scsi: ufs: remove clk_scaling_lock when clkscaling
- isn't supported.
-Content-Language: en-US
-To:     Kiwoong Kim <kwmad.kim@samsung.com>,
-        'Avri Altman' <Avri.Altman@wdc.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alim.akhtar@samsung.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        cang@codeaurora.org, sc.suh@samsung.com, hy50.seo@samsung.com,
-        sh425.lee@samsung.com, bhoon95.kim@samsung.com,
-        vkumar.1997@samsung.com
-References: <CGME20220205074128epcas2p40901c37a7328e825d8697f8d3269edba@epcas2p4.samsung.com>
- <1644046760-83345-1-git-send-email-kwmad.kim@samsung.com>
- <DM6PR04MB657519E60FAFA19434531CE2FC2B9@DM6PR04MB6575.namprd04.prod.outlook.com>
- <007101d81eed$4d120a60$e7361f20$@samsung.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <007101d81eed$4d120a60$e7361f20$@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Fri, 11 Feb 2022 07:15:46 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA588F59
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:15:44 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id p5-20020a170902bd0500b00148cb2d29ecso3217590pls.4
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:15:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=dHcRBMyYOzUwhslp5JRE655B9xCzIebKFjgXEXXATO4=;
+        b=KByLTW8roR7b/NsGCj8KMJC8GU7G4BMRSMdx4gOMyWClsbzAJNpymM1x4Wd1ISttSQ
+         7v+LCjeOaKaoaSqOwYupW16di9rAp5Mcn1DYAh4QvsBrDgilYFcx83J9LAk73ZHTwufX
+         mp8kzHEZeLPFaaVBV/HItgbLfcQVFbCZ7LoN/ewSXazk0x3gZxrtknjG3KmzlI+xT6F0
+         5Fvp4rRdBZj9246kq3sDuBzKtK7bMFoD8RWnkJkz3Gqpin2rcn5VD1rgC7qU1WO91JHx
+         dAKdDhjAalEgEL+RzkfZww5rUWly4cp5y0T+jBsHm5GbsASZ/r/9MrLSgbzg8nmwZxDr
+         U+Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=dHcRBMyYOzUwhslp5JRE655B9xCzIebKFjgXEXXATO4=;
+        b=pf7iAq0qULQ+zHSKt+tGyZ7WaTmiuf29fCEJIKUEWXnhnMW8Ls8gQIlzJrp5WeQtKY
+         s6w/KZkVWLJ7HU65oz/FQTbuPhJRvdu/+IQ4j8zfZMytE/IfglOCp7H09dqqtobRYC5l
+         hyMGqtaj8BYgf7Htgi9As2+YslcHQaVyY+nMfbxF7ZT9dU9eWNdvi7olIdm5yuFBtcMq
+         9LNcbp6CSVP6oPX87c0Z98kmsc4ityPH4rAqYuQhb12ihyiI4vRagDh0HODWTJpAokHq
+         XYXkyQePeRSwVrsWiSqk94jF5z4G1pkqpI7fFf8akGb1+vMIVDLr/97WSaivceIuGdGa
+         0isQ==
+X-Gm-Message-State: AOAM532kEaQmoNsvI7vTSDSNN+HPHdyeIG1a7/EaVbTIFR/jKlNvVHTz
+        VaU59c9ImVM1K90A9vlTNqDCXp68k5q/
+X-Google-Smtp-Source: ABdhPJy7sBPtRxK0skNt82llh8Dm6SEUyT6OPVuRpGC7qERJhH/4cznimN+5yN/os6Q6UDXSavGQkZ2g6g+7
+X-Received: from ezekiel.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:108e])
+ (user=shraash job=sendgmr) by 2002:a17:90a:e7ce:: with SMTP id
+ kb14mr75272pjb.202.1644581744235; Fri, 11 Feb 2022 04:15:44 -0800 (PST)
+Date:   Fri, 11 Feb 2022 12:15:38 +0000
+Message-Id: <20220211121538.1636240-1-shraash@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+Subject: [PATCH] dm crypt: fixed compiler warning in conditional expression
+From:   Aashish Sharma <shraash@google.com>
+To:     Alasdair Kergon <agk@redhat.com>
+Cc:     Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, groeck@chromium.org,
+        Aashish Sharma <shraash@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,39 +64,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/02/2022 04:15, Kiwoong Kim wrote:
->>> I think it looks hardware specific.
->>> If the feature isn't supported, I think there is no reasonto prevent
->>> from
->>                                                                                          ^^^
->> reason to
->>
->>> running other functions, such as ufshcd_queuecommand and
->> It is no longer used in queuecommand since 5675c381ea51 and 8d077ede48c1
-> 
-> Yeah, you're right. It's just an example. I just want to tell that the lock also protects things that are not related with clk scaling directly.
-> 
->>
->>> ufshcd_exec_dev_cmd, concurrently.
->>>
->>> So I add a condition at some points protecting with clk_scaling_lock.
->> But you still need a way to serialize device management commands.
->>
->> Thanks,
->> Avri
-> 
-> The dev cmd execution period is protected by mutex.
-> And actual ringing a doorbell is protected by spin lock.
-> 
-> Is there another reason to need clk_scaling_lock even with it?
-> 
+Explicitly converting unsigned int in the right of the
+conditional expression to int to match the left side operand
+and the return type, fixing the following compiler warning:
 
-The error handler really should have exclusive access.  One
-of the places you change does explain that:
+drivers/md/dm-crypt.c:2593:43: warning: signed and unsigned
+type in conditional expression [-Wsign-compare]
 
- 		 * Hold the scaling lock just in case dev cmds
- 		 * are sent via bsg and/or sysfs.
- 		 */
--		down_write(&hba->clk_scaling_lock);
-+		if (ufshcd_is_clkscaling_supported(hba))
-+			down_write(&hba->clk_scaling_lock);
+Signed-off-by: Aashish Sharma <shraash@google.com>
+---
+ drivers/md/dm-crypt.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
+index d4ae31558826..489b23cb37c3 100644
+--- a/drivers/md/dm-crypt.c
++++ b/drivers/md/dm-crypt.c
+@@ -2590,7 +2590,8 @@ static int crypt_set_keyring_key(struct crypt_config *cc, const char *key_string
+ 
+ static int get_key_size(char **key_string)
+ {
+-	return (*key_string[0] == ':') ? -EINVAL : strlen(*key_string) >> 1;
++	return (*key_string[0] == ':') ? -EINVAL
++				: (int)(strlen(*key_string) >> 1);
+ }
+ 
+ #endif /* CONFIG_KEYS */
+-- 
+2.35.1.265.g69c8d7142f-goog
+

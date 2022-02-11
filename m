@@ -2,294 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AACE4B2994
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:04:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 084CC4B299B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349944AbiBKQDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:03:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36078 "EHLO
+        id S1349885AbiBKQEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:04:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349919AbiBKQDQ (ORCPT
+        with ESMTP id S1349786AbiBKQEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:03:16 -0500
-X-Greylist: delayed 1157 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 08:03:14 PST
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F035BC;
-        Fri, 11 Feb 2022 08:03:14 -0800 (PST)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 1762F240004;
-        Fri, 11 Feb 2022 16:03:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644595393;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9lDiPi/tEXd7VcxvvHOcpDWNMks+EpS4Jkm01UCTlRc=;
-        b=Njwo0Z/T4I/lpemsH+MzNZOgM7d0zCmXm0S2Vs0CNNuRP7kW/I/FZocPzywZz1XRPLYjDN
-        7PL2/kBWbq17PyLzNTbgScLkTgHGh8cSrGC5mFhbH1pEg37umjkj5OMUXhoKVE+X7aPlZe
-        5qp4auB3tAAhRZdDkXVUA4WzSlkN2ZjeYJUUjV/ZHc9ybLhBITyrFvVwL3WgNiajsBsp0l
-        pgalpyzLFd8TmzjtVL9/NXt3cTvBoWLodSUOx8GxYTIUhKmlgOHPB6zQC5Yu51eU9NSha3
-        ZeKb/cbWBzWm1HS7Wegljp9nFB6hRCG4Vu4QwQo52Rz6tLQjmIvOt8uB2w3bDw==
-Date:   Fri, 11 Feb 2022 17:03:09 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 08/66] dt-bindings: media: Add Allwinner A31 MIPI
- CSI-2 bindings documentation
-Message-ID: <YgaIvXr2GfmJUNLD@aptenodytes>
-References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-9-paul.kocialkowski@bootlin.com>
- <YgFELcVluEqr9LAH@pendragon.ideasonboard.com>
+        Fri, 11 Feb 2022 11:04:23 -0500
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607021A8
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:04:20 -0800 (PST)
+Received: by mail-vs1-xe2b.google.com with SMTP id g10so10819924vss.1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:04:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2177MDBPIZL1asiHVf/tsGcpg3hhljXk+Tm8j7/No3k=;
+        b=sA4/Wf+0wntyZPQ6IiqwzByik6CHGmnB7P2zQ8y8/xKYxL226mqIzNt4u7P56H4KIw
+         I3cuY8rCvRlQCeEXc68tbz9TzLj3ZbPH/fUQXnAROZzhEuWOyBd7VtG8AsHR0rAPZ+JT
+         Ngh/w4wAST9XeVQkPNeoMu4FiOQ89EH7W2oUZdA1Ce+iBw9qLOKVZBjEfteK7I1YjUQ5
+         asTzjX2XTf8NG3mJpGQOdbCz+5SXw3h6Mor50ul3uOyqdm0nfK+wWbEt6TJlEKHF4dR/
+         e6pop0pJpiX5Nv82BkrMTivpZUdt5plBXCg9L+inBFXHCFDXaXvrRNkig7q2nlXw7tVI
+         bxYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2177MDBPIZL1asiHVf/tsGcpg3hhljXk+Tm8j7/No3k=;
+        b=cvO7oMct6kOl7afzu83dpOq9KdiODXDya7WKUwmwTxG54ZPfuzeIwrrfaMA+2fVbYl
+         V31SRfvidbZ2qDjjV03KzH0WU3kvhVw/0Sf089arEEKjvkkxloA+FKp9MAdMWkessG1M
+         m1gMN3+F4ah+ynzcoUtOifZFPkLXXGAxXUcRgUzw4rcK0mPYvS1Ga79vZ6ByKues406W
+         dM22qOcJQgI0Xw0wqGb7bRimFSkRlYBsbdhjb2i4P+2jG8st0RRBeQu6QDKgdAx+TnNG
+         o0o2zWHQlncjtIM74j5yPGEo3fnnOrhs3EeHQfyPeSJEBHiOpZNXVnbGr1od6GtV6+O9
+         sxnw==
+X-Gm-Message-State: AOAM531UAkcA6szd7J3homwryHSJZ+XYVsJYuAOdqn1bUj4MOZXchT3K
+        Th3qvyZddF6wGL1aIAk2sZykhlE+ATM3DA5E5XWmWg==
+X-Google-Smtp-Source: ABdhPJxFr2f3s+JC21d1a2/JiNCmvQEsxYrX2tqBKFp8IZsQA6946pHfR8OjMZf27/Y9k04rLB1h6uS7cwBpRlJa+O0=
+X-Received: by 2002:a05:6102:ac8:: with SMTP id m8mr738550vsh.6.1644595459512;
+ Fri, 11 Feb 2022 08:04:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="DLL0Q03AcECBpu52"
-Content-Disposition: inline
-In-Reply-To: <YgFELcVluEqr9LAH@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220208194119.46022-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220208194119.46022-1-krzysztof.kozlowski@canonical.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Fri, 11 Feb 2022 18:04:08 +0200
+Message-ID: <CAPLW+4m9u4yFz84dQaMxNqCPauW6JTsOWRo5iJrkexHXOOsahw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: soc: samsung: usi: refer to dtschema for children
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---DLL0Q03AcECBpu52
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Laurent,
-
-Thanks for the review!
-
-On Mon 07 Feb 22, 18:09, Laurent Pinchart wrote:
-> Hi Paul,
->=20
-> Thank you for the patch.
->=20
-> On Sat, Feb 05, 2022 at 07:53:31PM +0100, Paul Kocialkowski wrote:
-> > This introduces YAML bindings documentation for the Allwinner A31 MIPI
-> > CSI-2 controller.
-> >=20
-> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > Reviewed-by: Maxime Ripard <mripard@kernel.org>
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  .../media/allwinner,sun6i-a31-mipi-csi2.yaml  | 142 ++++++++++++++++++
-> >  1 file changed, 142 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/allwinner,s=
-un6i-a31-mipi-csi2.yaml
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a3=
-1-mipi-csi2.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-=
-a31-mipi-csi2.yaml
-> > new file mode 100644
-> > index 000000000000..09207904b6db
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-=
-csi2.yaml
-> > @@ -0,0 +1,142 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-mipi-csi2=
-=2Eyaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Allwinner A31 MIPI CSI-2 Device Tree Bindings
-> > +
-> > +maintainers:
-> > +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - const: allwinner,sun6i-a31-mipi-csi2
-> > +      - items:
-> > +          - const: allwinner,sun8i-v3s-mipi-csi2
-> > +          - const: allwinner,sun6i-a31-mipi-csi2
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: Bus Clock
-> > +      - description: Module Clock
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: bus
-> > +      - const: mod
-> > +
-> > +  phys:
-> > +    maxItems: 1
-> > +    description: MIPI D-PHY
-> > +
-> > +  phy-names:
-> > +    items:
-> > +      - const: dphy
-> > +
-> > +  resets:
-> > +    maxItems: 1
-> > +
-> > +  ports:
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +
-> > +    properties:
-> > +      port@0:
-> > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > +        description: Input port, connect to a MIPI CSI-2 sensor
-> > +
-> > +        properties:
-> > +          reg:
-> > +            const: 0
-> > +
-> > +          endpoint:
-> > +            $ref: video-interfaces.yaml#
-> > +            unevaluatedProperties: false
-> > +
-> > +            properties:
-> > +              data-lanes:
-> > +                minItems: 1
-> > +                maxItems: 4
-> > +
-> > +            required:
-> > +              - data-lanes
-> > +
-> > +        additionalProperties: false
-> > +
-> > +      port@1:
-> > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > +        description: Output port, connect to a CSI controller
-> > +
-> > +        properties:
-> > +          reg:
-> > +            const: 1
-> > +
-> > +          endpoint:
-> > +            $ref: video-interfaces.yaml#
-> > +            unevaluatedProperties: false
-> > +
-> > +        additionalProperties: false
->=20
-> The two ports should be required.
-
-Agreed.
-
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - clocks
-> > +  - clock-names
-> > +  - phys
-> > +  - phy-names
->=20
-> And ports should be required here.
-
-Sure!
-
-Thanks,
-
-Paul
-
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+On Tue, 8 Feb 2022 at 21:41, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
 >
-> > +  - resets
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
-> > +    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
-> > +
-> > +    mipi_csi2: csi@1cb1000 {
-> > +        compatible =3D "allwinner,sun8i-v3s-mipi-csi2",
-> > +                     "allwinner,sun6i-a31-mipi-csi2";
-> > +        reg =3D <0x01cb1000 0x1000>;
-> > +        interrupts =3D <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
-> > +        clocks =3D <&ccu CLK_BUS_CSI>,
-> > +                 <&ccu CLK_CSI1_SCLK>;
-> > +        clock-names =3D "bus", "mod";
-> > +        resets =3D <&ccu RST_BUS_CSI>;
-> > +
-> > +        phys =3D <&dphy>;
-> > +        phy-names =3D "dphy";
-> > +
-> > +        ports {
-> > +            #address-cells =3D <1>;
-> > +            #size-cells =3D <0>;
-> > +
-> > +            mipi_csi2_in: port@0 {
-> > +                reg =3D <0>;
-> > +
-> > +                mipi_csi2_in_ov5648: endpoint {
-> > +                    data-lanes =3D <1 2 3 4>;
-> > +
-> > +                    remote-endpoint =3D <&ov5648_out_mipi_csi2>;
-> > +                };
-> > +            };
-> > +
-> > +            mipi_csi2_out: port@1 {
-> > +                reg =3D <1>;
-> > +
-> > +                mipi_csi2_out_csi0: endpoint {
-> > +                    remote-endpoint =3D <&csi0_in_mipi_csi2>;
-> > +                };
-> > +            };
-> > +        };
-> > +    };
-> > +
-> > +...
->=20
-> --=20
-> Regards,
->=20
-> Laurent Pinchart
+> Explicitly reference the dtschema for USI children implementing specific
+> serial protocol (I2C, SPI, UART).  The SPI schema is not yet accepted,
+> so it will be provided later.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  .../bindings/soc/samsung/exynos-usi.yaml      | 19 +++++++++++--------
+>  1 file changed, 11 insertions(+), 8 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+> index 58f2e9d8bb0e..f3aae7e0e2e6 100644
+> --- a/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+> +++ b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+> @@ -18,11 +18,7 @@ description: |
+>    selects which particular function will be used.
+>
+>    Refer to next bindings documentation for information on protocol subnodes that
+> -  can exist under USI node:
 
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+This whole paragraph doesn't make much sense now, because the doc
+links it refers to are removed in this patch. Maybe it's better to
+just remove the whole paragraph?
 
---DLL0Q03AcECBpu52
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIGiL0ACgkQ3cLmz3+f
-v9H2kgf/YOpO7HNyL/f7yp3Rt82ZrAhqT1u/hMvsisSPYXG+gdT6t0QV9P8AKXJ6
-jVbnmUXI9XnnLjSt1LyskT3j9xBA+2RwdbM/HwvHJy765Z3Dt5R/TBeY2hPltQgG
-PBDHT4ZYnQdgd7DB4znvO58QNq8vXZaiD37l/aTLQQdjl5NSnc51GoHDlWNR2eEl
-XjWyP7EH4Dwoq68Mx+iRmgJge3sI1Yod6dZ/0++pTMSgW3bqtXLBJLvhD9qBXYry
-vfPD14/6JpNS1c2yImYIe266jNLd/+M5tPJhwVdHfnt1gdZLcASuf3I3P4KjXnqB
-YueHalxGWSqPrxlcWc4RSW2KTpdl1w==
-=8Pob
------END PGP SIGNATURE-----
-
---DLL0Q03AcECBpu52--
+> -
+> -  [1] Documentation/devicetree/bindings/serial/samsung_uart.yaml
+> -  [2] Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
+> -  [3] Documentation/devicetree/bindings/spi/spi-samsung.txt
+> +  can exist under USI node.
+>
+>  properties:
+>    $nodename:
+> @@ -75,10 +71,17 @@ properties:
+>        This property is optional.
+>
+>  patternProperties:
+> -  # All other properties should be child nodes
+> -  "^(serial|spi|i2c)@[0-9a-f]+$":
+> +  "^i2c@[0-9a-f]+$":
+> +    $ref: /schemas/i2c/i2c-exynos5.yaml
+> +    description: Child node describing underlying I2C
+> +
+> +  "^serial@[0-9a-f]+$":
+> +    $ref: /schemas/serial/samsung_uart.yaml
+> +    description: Child node describing underlying UART/serial
+> +
+> +  "^spi@[0-9a-f]+$":
+>      type: object
+> -    description: Child node describing underlying USI serial protocol
+> +    description: Child node describing underlying SPI
+>
+>  required:
+>    - compatible
+> --
+> 2.32.0
+>

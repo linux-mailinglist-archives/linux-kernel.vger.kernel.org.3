@@ -2,81 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4124B1EB9
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7C94B1EBD
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346120AbiBKGtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 01:49:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41696 "EHLO
+        id S1346158AbiBKGt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 01:49:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237729AbiBKGtP (ORCPT
+        with ESMTP id S237729AbiBKGt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 01:49:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0FCA310FF
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 22:49:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644562154;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QqHQIWGXIFVxKI6GDzeMgJSaFCUeRQ0XbIBm2xgz2GI=;
-        b=eIQ6OrmL4dpTIoOMNV7B6wDRTIsttS4kDc5ayJMvQOQ22v89CGja9/tPb9+J1uQPLsBxSx
-        n09ZuJuy8fdmFmS2PAoaDsASoYiZ5YumlWE2ybGiaMeQisUj0cC9t5QOMLmnOCuWcRZcnc
-        De7POG7rUOxPvrv9aMe2Va0Nbtof3Bo=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-120-C19iD_PtMSiOaS2JToafBw-1; Fri, 11 Feb 2022 01:49:13 -0500
-X-MC-Unique: C19iD_PtMSiOaS2JToafBw-1
-Received: by mail-pj1-f69.google.com with SMTP id gj12-20020a17090b108c00b001b89b5f3dd4so7721808pjb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 22:49:12 -0800 (PST)
+        Fri, 11 Feb 2022 01:49:26 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AB2115A
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 22:49:26 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id s73-20020a25aa4f000000b0061d764d3c13so17165785ybi.1
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 22:49:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=7cEUUMm8No+47SEC0UonhOqIuTdbXjwICtqwH1vHhoQ=;
+        b=fb3bmiUsrp8W4YmAG3agpua6xnfwRewOZ8YA8GXSqnYAPC8zDIVx6AoedzrfSysYph
+         zzvjaiNO751h5z4oCLk4zWH107SG09igxaI4HWBb1br4poFMySSL6hi1EE3b+DYhoSkr
+         E8isZ/nwurJsTuixeh5zQ22wHMxuwcRqJYWTA+SlpVkjSTo1VKwRMe+ZUHsup7SwY5XP
+         j0dXPMF/835VLYM3EhP1F/flECnKhOMqisNWuPeE9/Uo+X/0hqoGEnt+lp+mcMd8/d04
+         p1R9iZ10rYSwdyqK3vsqBTfPZ8kYkC+5e/3cs9ufj47kI+7yPQufY7yIHZMwKB5NfcpC
+         ioxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QqHQIWGXIFVxKI6GDzeMgJSaFCUeRQ0XbIBm2xgz2GI=;
-        b=GyFduLEbclu5XRNP8QHCXVrT8awEk8k31FyjKmBdG/BroeD+ozDAdCwMqsEZtzaBXk
-         Bpieo0BPCSIohwddrR4AxXC0kxIVDBOq9D70Msb1C0VtBLux9uVLpsAq9dbW8o0bABxr
-         8R2zb8rLekCCjWzT1LQWx4or5ch2t4oTeyJdg1FrDKuX0Lz/946jbUVJbwa7NjV8I9xI
-         xKcdRStVzqgDohsBKxc2+RUm5XonoTYNka+/qgY2cgsD1cL3E9QE1F6MPt9STHIBK/Ri
-         Ynw/Qeq/QAogQDDVdGDt54zDz22y08QBfwRIOIHvAivMzWrj8FvxWtYpF0x4QBob2a0w
-         pI4w==
-X-Gm-Message-State: AOAM532/D9hYyMgmCYwc7hWJeY8+6LlmLIPsqAf+R6HVFGGJVB2TGJ7S
-        FDOEBsTnB2/R1pG0rBXF42xY3RAoms70bl+0kjsm9Lqt0Gawecj/pgOKREw9AViwcBHXlK7crDW
-        tKaFFIItdWLAcNBaA7Stqv3rq
-X-Received: by 2002:a17:90b:1c81:: with SMTP id oo1mr341212pjb.192.1644562151657;
-        Thu, 10 Feb 2022 22:49:11 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwlp7DVScBoR+0Irx9Zpl3LczX5pbJo/8fIM1kdX/BqalYu4Z3jVejXSwwGCrfFZDw2RLQUBw==
-X-Received: by 2002:a17:90b:1c81:: with SMTP id oo1mr341190pjb.192.1644562151294;
-        Thu, 10 Feb 2022 22:49:11 -0800 (PST)
-Received: from [10.72.13.85] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id f16sm27988160pfa.147.2022.02.10.22.49.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 22:49:10 -0800 (PST)
-Message-ID: <140fc738-3391-5529-dd5a-c46b9e937355@redhat.com>
-Date:   Fri, 11 Feb 2022 14:49:03 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH v4 09/14] virtio: queue_reset: struct virtio_config_ops
- add callbacks for queue_reset
-Content-Language: en-US
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        virtualization@lists.linux-foundation.org
-References: <20220209122901.51790-1-xuanzhuo@linux.alibaba.com>
- <20220209122901.51790-10-xuanzhuo@linux.alibaba.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220209122901.51790-10-xuanzhuo@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=7cEUUMm8No+47SEC0UonhOqIuTdbXjwICtqwH1vHhoQ=;
+        b=vh1W1ZYLgcpA8emjl6tHMpcfQi1xh0cJMfBB0HKhonWv1N4hw1ZXb4IGl6YDMPqNo6
+         rDHYh5uzXSlQj1VlAyUuTZQefYyM2m9klv0Q36MH3nRwbQDwuPYxGQoRWMjvH3W6ykWK
+         izTo6jtsEUHNK9yzYRISLR7Fm7MTCjovNra/vcnITbnsb9/5rBszf8P1uw8x59zC/bXl
+         mTbjvJurODuBxqBIp/92PoCUIoqVi2LL/MayVwr6fE685dLfXyibB9R3Tvee/8owfNxI
+         JXWWE/6v6xC82CK5piBL88wHrPqDMNs7fvo3DNEhXY1xkqIQspsbq445Lv0AQUvs4ykD
+         QU8Q==
+X-Gm-Message-State: AOAM533UuwrhMCSxM/a3/Dzwu55pCmGRUzko3o4fi3zN3QQ1bjS3dkKz
+        vZmbGtHJmm59a9ww9sM/8PJD1GYAVjgGpQ==
+X-Google-Smtp-Source: ABdhPJwjcJt1qNgxSN9vWV7QgR7LvR6l6f8Pvejc675UNvm/3bhAMhZsP+fwGZb5+wH9V5YwUfVByIzNtijgDg==
+X-Received: from shakeelb.svl.corp.google.com ([2620:15c:2cd:202:9a07:ef1a:2fee:57f1])
+ (user=shakeelb job=sendgmr) by 2002:a81:1ec2:: with SMTP id
+ e185mr336741ywe.324.1644562165435; Thu, 10 Feb 2022 22:49:25 -0800 (PST)
+Date:   Thu, 10 Feb 2022 22:49:13 -0800
+Message-Id: <20220211064917.2028469-1-shakeelb@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+Subject: [PATCH v2 0/4] memcg: robust enforcement of memory.high
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>
+Cc:     Chris Down <chris@chrisdown.name>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Shakeel Butt <shakeelb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,89 +66,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Due to the semantics of memory.high enforcement i.e. throttle the
+workload without oom-kill, we are trying to use it for right sizing the
+workloads in our production environment. However we observed the
+mechanism fails for some specific applications which does big chunck of
+allocations in a single syscall. The reason behind this failure is due
+to the limitation of the memory.high enforcement's current
+implementation. This patch series solves this issue by enforcing the
+memory.high synchronously if the current process has accumulated a large
+amount of high overcharge.
 
-在 2022/2/9 下午8:28, Xuan Zhuo 写道:
-> Performing reset on a queue is divided into four steps:
->
-> 1. reset_vq: reset one vq
-> 2. recycle the buffer from vq by virtqueue_detach_unused_buf()
-> 3. release the ring of the vq by vring_release_virtqueue()
-> 4. enable_reset_vq: re-enable the reset queue
->
-> So add two callbacks reset_vq, enable_reset_vq to struct
-> virtio_config_ops.
->
-> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> ---
->   include/linux/virtio_config.h | 13 +++++++++++++
->   1 file changed, 13 insertions(+)
->
-> diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
-> index 4d107ad31149..0d01a64f2576 100644
-> --- a/include/linux/virtio_config.h
-> +++ b/include/linux/virtio_config.h
-> @@ -74,6 +74,17 @@ struct virtio_shm_region {
->    * @set_vq_affinity: set the affinity for a virtqueue (optional).
->    * @get_vq_affinity: get the affinity for a virtqueue (optional).
->    * @get_shm_region: get a shared memory region based on the index.
-> + * @reset_vq: reset a queue individually
+Changes since v1:
+- Based on Roman's comment simply the sync enforcement and only target
+  the extreme cases.
 
+Shakeel Butt (4):
+  memcg: refactor mem_cgroup_oom
+  memcg: unify force charging conditions
+  selftests: memcg: test high limit for single entry allocation
+  memcg: synchronously enforce memory.high for large overcharges
 
-This needs to be marked as optional I think.
+ mm/memcontrol.c                               | 66 +++++++---------
+ tools/testing/selftests/cgroup/cgroup_util.c  | 15 +++-
+ tools/testing/selftests/cgroup/cgroup_util.h  |  1 +
+ .../selftests/cgroup/test_memcontrol.c        | 78 +++++++++++++++++++
+ 4 files changed, 120 insertions(+), 40 deletions(-)
 
-
-> + *	vq: the virtqueue
-> + *	Returns 0 on success or error status
-
-
-It looks to me the caller should also guarantee that the vring is not 
-accsed by any functions e.g NAPI.
-
-
-> + *	After successfully calling this, be sure to call
-> + *	virtqueue_detach_unused_buf() to recycle the buffer in the ring, and
-> + *	then call vring_release_virtqueue() to release the vq ring.
-> + * @enable_reset_vq: enable a reset queue
-> + *	vq: the virtqueue
-> + *	ring_num: specify ring num for the vq to be re-enabled. 0 means use the
-> + *	          default value. MUST be a power of 2.
-
-
-Note that we don't have power of 2 requirement for packed virtqueue.
-
-And I wonder if it's cleaner to have a find_vq() ops instead to dealing 
-with the re-allocation and possible size change, or have a dedicated 
-helper to set vring size so driver can do.
-
-reset_vq()
-
-virtqueue_set_vring_size()
-
-enable_reset_vq()
-
-
-> + *	Returns 0 on success or error status
->    */
->   typedef void vq_callback_t(struct virtqueue *);
->   struct virtio_config_ops {
-> @@ -100,6 +111,8 @@ struct virtio_config_ops {
->   			int index);
->   	bool (*get_shm_region)(struct virtio_device *vdev,
->   			       struct virtio_shm_region *region, u8 id);
-> +	int (*reset_vq)(struct virtqueue *vq);
-> +	int (*enable_reset_vq)(struct virtqueue *vq, u16 ring_num);
-
-
-Note that the current implement is best-effort, so it's not guarantee 
-that we can have a vring with ring_num, we may get less under memory 
-pressure or even fail. We probably need to have a pamater to mandate the 
-ring_num otherwise user may surprise to see a decreased size of the ring 
-when a increasing is actually requested.
-
-Thanks
-
-
->   };
->   
->   /* If driver didn't advertise the feature, it will never appear. */
+-- 
+2.35.1.265.g69c8d7142f-goog
 

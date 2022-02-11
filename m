@@ -2,348 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9274B2F1A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 22:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BECC4B2F1C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 22:09:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351122AbiBKVIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 16:08:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35506 "EHLO
+        id S1352815AbiBKVJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 16:09:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbiBKVIg (ORCPT
+        with ESMTP id S231329AbiBKVJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 16:08:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA03BB3E;
-        Fri, 11 Feb 2022 13:08:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60E1DB82829;
-        Fri, 11 Feb 2022 21:08:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A5E2C340E9;
-        Fri, 11 Feb 2022 21:08:29 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="j6V8Hglu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644613707;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=0qGm9Td4MsVqtPR0gKHAk3OilJ3zgQ8dy0sUDBICrcQ=;
-        b=j6V8HgluD/S2K4fcc9nkFPdBmGZF8hWeElNMN1OOcjDewhNFSqluR/1xhfBmGRtahPo27O
-        tfKdSNum7FxPBt2rpYlnbaUg8fpowFzBvAi8VFzsgaHZ4RvMKeiaMZ/K9LK4Gr5dTdz8/0
-        eebtpAqlfS9d98ekAtCjqY3QJU1P1Cc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bab4ea69 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 11 Feb 2022 21:08:26 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: [PATCH RFC v0] random: block in /dev/urandom
-Date:   Fri, 11 Feb 2022 22:07:57 +0100
-Message-Id: <20220211210757.612595-1-Jason@zx2c4.com>
-MIME-Version: 1.0
+        Fri, 11 Feb 2022 16:09:18 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2072.outbound.protection.outlook.com [40.107.93.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC21BF7
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 13:09:16 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Tl4j6EezmUeQg2GsjzPol9Oelx9M+MO6uk8plmTBfU5wSiO9l8uAeo/IV3keQzR4dv307iVw5z071xRbYNYgvygQlPbqN6Zp4e9SBSMv6O0v5dXp4Rv4CPUv+E0qz99jDauR94rdt5oURMwKMBH6tNgMtSJspgO5r6jIbMzCfg8XNPzfbQhzwXnERQTNNre9uvAmBou8QMboM6puLcG9J7aKH2gA/ESvlI5dr1PxS/bB/dBBzQAt2LaytZ1jGGjvRi7L7tzy/p3vgRBucAlDq5edBnBc+BxopOAhdWs/VlVzMEaKwXzmkVXCH3JMOTFD2CCn2hQ9Dgs5EFqsbH11Cg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7K5TN6f04TuAtGRll6VMHDAboF2w23b0QKVz6vXm6mY=;
+ b=QoIKopjUkmEBr/fog6e9+nNX2QaAmp0cAuFSn03ZANuB9BEjuN2/ZCFmjhqktk8NLrbg/9s+IA6/wRx9mricS4dmL4Cj1VW2m4i5jQCcLVfojLV/n4TsenfFG2CUCIkRF00Mu/0LRBWNCAkNsLiMMgwLVvbgruGV+mrXYgBVSCJcqGPRcrDExDORkmNsEWHO8hqR2Hxl1d0eR2gE4Ghq9OPYkbDwOMYH2yg6nRzsFxHfXZobZpc1M5wOe88VuvgTTs/hUwn1JDm3ub+WFE72Wk+ppLWEz9Og4kjCnDSFVEpT0J9q1TIdXYbMP7jvMwKon2+5xK5PW/ZylQvWP/GD6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7K5TN6f04TuAtGRll6VMHDAboF2w23b0QKVz6vXm6mY=;
+ b=rHE5EARiXfonGtf/ytZF3N+lA7SxVbLnZZVzppCcuDqILwTT7GSFqh57aRah0P6sEAKu+a4L43KkFEbTmHZRkZMq8c6bmWBOCjIZgbtdgg1WK8a26cW8AA5FVpPZyo8q5V8+6M6VD7UC5yJUsh/YJHMk9CTYkV7t3S+pFJjiRRo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by DM6PR12MB2697.namprd12.prod.outlook.com (2603:10b6:5:49::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.16; Fri, 11 Feb
+ 2022 21:09:15 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::ccd7:e520:c726:d0b]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::ccd7:e520:c726:d0b%7]) with mapi id 15.20.4951.019; Fri, 11 Feb 2022
+ 21:09:14 +0000
+Message-ID: <d476d448-cd68-0c93-c98c-4f952d7caef6@amd.com>
+Date:   Fri, 11 Feb 2022 15:09:12 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] x86: Use CPUID 0x8000001f to confirm SME availability
+Content-Language: en-US
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, hughsient@gmail.com,
+        Martin Fernandez <martin.fernandez@eclypsium.com>,
+        linux-kernel@vger.kernel.org
+References: <20220211053652.64655-1-mario.limonciello@amd.com>
+ <568d9945-ed0c-90a7-d9cf-a5662f1dbce2@amd.com>
+ <a52990c0-3e54-a5f2-22c2-3446e92f4294@amd.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <a52990c0-3e54-a5f2-22c2-3446e92f4294@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SN4PR0401CA0040.namprd04.prod.outlook.com
+ (2603:10b6:803:2a::26) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6b746da8-9315-4202-2376-08d9eda2c221
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2697:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB26976E98B39A665E5ECE5C91EC309@DM6PR12MB2697.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cLNQcUQRGyaN/EVFuayeKCwOM+vMD9RccDjEgQWAuuMmJts7YjDbyJbU8pzL2us+QFgjW6b2hNQwKqfMnKMX+xGghfEOfKBUkRQqApYmaWoqhtcHHENmmblCkGhd2Nb+mkgsLHow3BHZhgH9X5QigfXwV2oxXqGAOVbQcGoRBfe+rUNlv2TPum61KxXWU2knR/k4lt2qlIrRSKrSOze8xF7Ni0/Xzpl443SCVlww7iXpHjEFCz0OrgxvqxXLqLmRbVLS/EqLhyMJEnagFFfhQ5hjn1PYOnQ2mwNpH4aTawzOxwQU+3+1MMMYDm0m1QIgOG+P7GGRyoge3xXA0rEJvz6VeA7dd9k2suew4Zag6M571bLQmUUEugNS2wH2r1nzh1vWsTSAxMOt0zipfNfymW+FpJhZjL50skxzSuMXGf02tYqgOpEymAMq6IJaNvXzJAFAJX2fJgc8wkwMFKWrCh0XX0xkGlc87QeyCCkmtTch2Ibl2b6iVvFW+LlkmNxgqZ8fjmcREkzq3yl2LM+x5KM9pZeVnhiS2L42ka90qRnYJV5KHBOxNyGbrLHw1MK88baEh6GW14BiyIdgqevGnVxp6qydLgzGVYRVyTliWOuFwbFSe+38J8lfBYaVCxiuM7Y5UPQr3oC+RRBKm7v1B9ASRG3VZSansjNp+76BIfcahczx4UeqQ0gNqEx3J0jP5J5ylw7XptqmqLieOyhjeXAAAhwhVihpiUnWDtqw6H9BvNwqKfRQoAakogPLhaGr
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(4326008)(4744005)(6506007)(53546011)(6512007)(2616005)(38100700002)(36756003)(26005)(66946007)(8936002)(54906003)(2906002)(5660300002)(8676002)(31696002)(31686004)(110136005)(508600001)(6486002)(86362001)(66556008)(66476007)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VjRxWS9qa3FJZlV2ZllqekIxRnlIUDkrRDRzSXhjc2FRdm44WlhoTjd6d2lM?=
+ =?utf-8?B?YmFFSGpYVUV5cG1QUGZuMDQvNXk5WnZnVkdmbzlJVnp6ZzVrZmhqKzdhcmJH?=
+ =?utf-8?B?ZDNsNG54S3RiMTZoRkVUNXNvUW5IT0JacjZRKzFvSVVGTzExdkt4aG1BSWt0?=
+ =?utf-8?B?bEdQdWNYRTlvWVZHOXZyNld5cGpSYzU0QXdCQTl6ekExbnA0QmVDdGNoSWZh?=
+ =?utf-8?B?di9vQTM2UUh3bmVOKzRoUnhVUkF5OHV4L3FoUVlhaW16RnFySm0wcW9BRC9q?=
+ =?utf-8?B?cmQ4RlhZbDlremtZQm9yOUR4Tk9lSVJWR3I5NWZNT09wa1lPODBmemJwd2lN?=
+ =?utf-8?B?ZDNMSk1FM3V4dDN3N0JReVMvdThOcmFiV2ZHZUVqVjlPM05VSWM1VWdKbWI2?=
+ =?utf-8?B?OEhKMkdBSlFSeFF2WjZ4cFA5Z2J1S0U5eThDK1piM2I3bjBoRjNHbW5PWlNF?=
+ =?utf-8?B?eHExTTFxU0RWRnB6UmM5dVJNdzdwQTNJZFIvVkxRbHVPUlg5b3FzRU51ejlH?=
+ =?utf-8?B?ajVjR0JKUlRCTXVLRGlSSkRDeUIvSFhMTFdQOTdxelBEZ1k2STBCc0o2RW41?=
+ =?utf-8?B?VmROUHhZOFdLZ3JteUltbm5XK3d0WWcwVkVOY1ZQb24wNkh5MVM5WGZiVmE2?=
+ =?utf-8?B?UnhuM3NJaGxxcGVYZlZOM3VEbXZnc202ekxBWUtiUHJuSzAvRmJQd0RJdnRT?=
+ =?utf-8?B?V1Q5SHAzaUNycy8rZEdSWGUva0h2MFpjcXRaY2dIWnB3Vm5VeXdzMlByZmpL?=
+ =?utf-8?B?VXZGd3NzcWtKWmRtQmJvNmw2eVk2SWNLUlowZFZKR1REUCtZVEdFQzkvRFFV?=
+ =?utf-8?B?dUE3S09wRitBMjd6T1daY2xNRFNYakRlYzY1UUpWY1lraURYQzc3eHRCZW1n?=
+ =?utf-8?B?Rnp2b1FDc2hHZUlWMzQxMjZXY1pzaWovV1FpSDVEbTExTWRzL3diRnU5TXE1?=
+ =?utf-8?B?L2FYcnkwTkcvYk50VDdCemNmN0tIRUVtQ2NGTldGb1NWY292d0FicHJEalFw?=
+ =?utf-8?B?M2lBZGFHRHFibkk1WGhXWWMyNldLZHlWelgvdnB6dElSMjlib292cmhXazlB?=
+ =?utf-8?B?QVB3L3lzUmMvc3dXSjdmVDRKNy9JS2V4ajRKSXJZWkJFYVBzS1ZaazFocEF2?=
+ =?utf-8?B?aFZ6YnJTRGp5eGV6UFBaTUQ0NnVaYmk2RFM0T2hNM1VlaEZEQzJINS9NK2dy?=
+ =?utf-8?B?blB3YVcxZGhBZkJlRGNtU2FpSnA2VkkzMHliMXVYcUVmZWlKK1dDYVRSaUxw?=
+ =?utf-8?B?L1E5RUxnV3lheUc3OTRyVFhUZmJvakZpWU1tTU5ka1VRVVFIbFNFL1l6Tmsx?=
+ =?utf-8?B?a0Z3YWxKUVMvVXBOOGo4Y3Y3aHdNd3VId1FuNXJLU0FUZXhrL1JIVml4YW5U?=
+ =?utf-8?B?ZCtHYTdtZW9GVE1wT2h4YStsWmsyeFZ5bVBUNlBseVBuL0VnMGtmRmhTQ1Vj?=
+ =?utf-8?B?VkYvMVdDK2p1WjVrZ3dhRDFWWGEydFBJWlMwNHR5TlRFRFNoOExheDlUbnpG?=
+ =?utf-8?B?R01ZVXlDYjhQZ1QxZDZJeDNtcm1JYmM4dll1NzBJY0lrOTNkWnB5QkVmdDhD?=
+ =?utf-8?B?S3d0c0t1SWIwdW5ZckdVTEhXdmxZN3prUlhZSWQra0UycDF2UklvU2Y5Znl1?=
+ =?utf-8?B?MHRkVWVrTm1BcTZwRFFUM0l1YjdCWHRWd1dFREZkUk5nbVBDTXhlNjQ3dDJi?=
+ =?utf-8?B?Wm9ncnRXY0RXdDhPNHhBSzdSZ01OazhQaEhEOWZQUTRyak9pQjluTXdTMEpY?=
+ =?utf-8?B?SUV2NmVhNm4rUm9QVENYZ2F5cEM5WStMejRKMVlIU0s2VWpEdk1oZ2kzQ1Rs?=
+ =?utf-8?B?VHR4OG1jc2V5dm00elR4bkQweGhoWDhRWHMvUjdKUDEzazhQR3h1ckNnY3Zj?=
+ =?utf-8?B?aXR0ejZIQ1ZIdTZHUW1rd2cwc1BPY2VTTUw4emQxMU5XbGQ0VlZPOXlUdlRC?=
+ =?utf-8?B?U2xDWEZGWHRSenNiNG94OWNmYjJEekNYK3BZNlJUc1B0cGNIaC91NWIyakhX?=
+ =?utf-8?B?MFU5bEtUSG9IbVc2QVJQdXdYcUp4WlRTVC93V0hNWHcySm0rVnFob3V4a29D?=
+ =?utf-8?B?VVgxZ0Z5OHNVZ1JkYlFRL0Rwc1pGeTcybzVJeERFN01tbVozT0lRQUloVVdz?=
+ =?utf-8?B?OG1CNHZwbGRrbWJROFpzWEVxWDFNaDMwS251YWVaWjVxNzRMR2dzTjVtWTNK?=
+ =?utf-8?Q?yzt1PrScaW9OzJ57zYbjSQY=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b746da8-9315-4202-2376-08d9eda2c221
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2022 21:09:14.8341
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Qeytg8k2Mr18p2CF/1RfNgb10lwk1LFlM8gfFN/dbT6udh8TNh8Mzn9zoKAPAQIwtLuBfyKKKHVUlUlEZsYYdQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2697
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is very much an RFC patch, or maybe even an RFG -- request for
-grumbles. This topic has come up a million times, and usually doesn't go
-anywhere. This time I thought I'd bring it up with a slightly narrower
-focus. Before you read further, realize that I do not intend to merge
-this without there being an appropriate amount of consensus for it and
-discussion about it.
+On 2/11/22 13:51, Limonciello, Mario wrote:
+> On 2/11/2022 08:55, Tom Lendacky wrote:
+>> On 2/10/22 23:36, Mario Limonciello wrote:
 
-Ever since Linus' 50ee7529ec45 ("random: try to actively add entropy
-rather than passively wait for it"), the RNG does a haveged-style jitter
-dance around the scheduler, in order to produce entropy (and credit it)
-for the case when we're stuck in wait_for_random_bytes(). How ever you
-feel about the Linus Jitter Dance is beside the point: it's been there
-for three years and usually gets the RNG initialized in a second or so.
+>      1254:       f6 45 d8 01             testb  $0x1,-0x28(%rbp)
+>      1258:       74 02                   je     125c <stop_this_cpu+0x8c>
+>      125a:       0f 09                   wbinvd
+>      125c:       eb 07                   jmp    1265 <stop_this_cpu+0x95>
+>      125e:       0f 00 2d 00 00 00 00    verw   0x0(%rip)        # 1265 
+> <stop_this_cpu+0x95>
+>      1265:       f4                      hlt
+>      1266:       eb f4                   jmp    125c <stop_this_cpu+0x8c>
 
-As a matter of fact, this is what happens currently when people use
-getrandom(2).
+That appears to be the same as today after the WBINVD is issued, so should 
+be good.
 
-So, given that the kernel has grown this mechanism for seeding itself
-from nothing, and that this procedure happens pretty fast, maybe there's
-no point any longer in having /dev/urandom give insecure bytes. In the
-past we didn't want the boot process to deadlock, which was
-understandable. But now, in the worst case, a second goes by, and the
-problem is resolved. It seems like maybe we're finally at a point when
-we can get rid of the infamous "urandom read hole".
+Thanks,
+Tom
 
-Maybe. And this is why this is a request for grumbles patch: the Linus
-Jitter Dance relies on random_get_entropy() returning a cycle counter
-value. The first lines of try_to_generate_entropy() are:
-
-	stack.now = random_get_entropy();
-	/* Slow counter - or none. Don't even bother */
-	if (stack.now == random_get_entropy())
-		return;
-
-So it would appear that what seemed initially like a panacea does not in
-fact work everywhere. Where doesn't it work?
-
-On every platform, random_get_entropy() is connected to get_cycles(),
-except for three: m68k, MIPS, and RISC-V.
-
-On m68k, it looks like this:
-
-        if (mach_random_get_entropy)
-                return mach_random_get_entropy();
-        return 0;
-
-And mach_random_get_entropy seems to be set in amiga/config.c only.
-
-On MIPS, it looks like this:
-
-        if (can_use_mips_counter(prid))
-                return read_c0_count();
-        else if (likely(imp != PRID_IMP_R6000 && imp != PRID_IMP_R6000A))
-                return read_c0_random();
-        else
-                return 0;
-
-So it seems like we're okay except for R6000 and R6000A.
-
-Finally on RISC-V, it looks like this:
-
-        if (unlikely(clint_time_val == NULL))
-                return 0;
-        return get_cycles();
-
-Where clint_time_val is eventually filled in later in boot with
-clint_timer_init_dt(). So I assume that's a case where it _eventually_
-works, which is probably good enough for our purposes.
-
-I think what this adds up to is that this change would positively affect
-everybody, except for _possibly_ negatively affecting poorly configured
-non-Amiga m68k systems and the MIPS R6000 and R6000A. Does that analysis
-seem correct to folks reading, or did I miss something?
-
-Are there other cases where the cycle counter does exist but is simply
-too slow? Perhaps some computer historians can chime in here.
-
-If my general analysis is correct, are these ancient platforms really
-worth holding this back? I halfway expect to receive a few thrown
-tomatoes, an angry fist, and a "get off my lawn!", and if that's _all_ I
-hear, I'll take a hint and we can forget I ever proposed this. As
-mentioned, I do not intend to merge this unless there's broad consensus
-about it. But on the off chance that people feel differently, perhaps
-the Linus Jitter Dance is finally the solution to years of /dev/urandom
-kvetching.
-
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Albert Ou <aou@eecs.berkeley.edu>
-Cc: linux-riscv@lists.infradead.org
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-m68k@lists.linux-m68k.org
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: Eric Biggers <ebiggers@google.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Lennart Poettering <mzxreary@0pointer.de>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/mem.c          |  2 +-
- drivers/char/random.c       | 68 +++++++++----------------------------
- include/uapi/linux/random.h |  2 +-
- 3 files changed, 18 insertions(+), 54 deletions(-)
-
-diff --git a/drivers/char/mem.c b/drivers/char/mem.c
-index cc296f0823bd..9f586025dbe6 100644
---- a/drivers/char/mem.c
-+++ b/drivers/char/mem.c
-@@ -707,7 +707,7 @@ static const struct memdev {
- 	 [5] = { "zero", 0666, &zero_fops, FMODE_NOWAIT },
- 	 [7] = { "full", 0666, &full_fops, 0 },
- 	 [8] = { "random", 0666, &random_fops, 0 },
--	 [9] = { "urandom", 0666, &urandom_fops, 0 },
-+	 [9] = { "urandom", 0666, &random_fops, 0 },
- #ifdef CONFIG_PRINTK
- 	[11] = { "kmsg", 0644, &kmsg_fops, 0 },
- #endif
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index c564f795f68c..868334ea0ce3 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -88,8 +88,6 @@ static LIST_HEAD(random_ready_list);
- /* Control how we warn userspace. */
- static struct ratelimit_state unseeded_warning =
- 	RATELIMIT_STATE_INIT("warn_unseeded_randomness", HZ, 3);
--static struct ratelimit_state urandom_warning =
--	RATELIMIT_STATE_INIT("warn_urandom_randomness", HZ, 3);
- static int ratelimit_disable __read_mostly;
- module_param_named(ratelimit_disable, ratelimit_disable, int, 0644);
- MODULE_PARM_DESC(ratelimit_disable, "Disable random ratelimit suppression");
-@@ -321,11 +319,6 @@ static void crng_reseed(void)
- 				  unseeded_warning.missed);
- 			unseeded_warning.missed = 0;
- 		}
--		if (urandom_warning.missed) {
--			pr_notice("%d urandom warning(s) missed due to ratelimiting\n",
--				  urandom_warning.missed);
--			urandom_warning.missed = 0;
--		}
- 	}
- }
- 
-@@ -978,10 +971,8 @@ int __init rand_initialize(void)
- 		pr_notice("crng init done (trusting CPU's manufacturer)\n");
- 	}
- 
--	if (ratelimit_disable) {
--		urandom_warning.interval = 0;
-+	if (ratelimit_disable)
- 		unseeded_warning.interval = 0;
--	}
- 	return 0;
- }
- 
-@@ -1363,20 +1354,17 @@ static void try_to_generate_entropy(void)
-  * getrandom(2) is the primary modern interface into the RNG and should
-  * be used in preference to anything else.
-  *
-- * Reading from /dev/random has the same functionality as calling
-- * getrandom(2) with flags=0. In earlier versions, however, it had
-- * vastly different semantics and should therefore be avoided, to
-- * prevent backwards compatibility issues.
-- *
-- * Reading from /dev/urandom has the same functionality as calling
-- * getrandom(2) with flags=GRND_INSECURE. Because it does not block
-- * waiting for the RNG to be ready, it should not be used.
-+ * Reading from /dev/random and /dev/urandom both the same effect as
-+ * calling getrandom(2) with flags=0. In earlier versions, however,
-+ * they each had vastly different semantics and should therefore be
-+ * avoided to prevent backwards compatibility issues.
-  *
-  * Writing to either /dev/random or /dev/urandom adds entropy to
-  * the input pool but does not credit it.
-  *
-- * Polling on /dev/random indicates when the RNG is initialized, on
-- * the read side, and when it wants new entropy, on the write side.
-+ * Polling on /dev/random or /dev/urandom indicates when the RNG
-+ * is initialized, on the read side, and when it wants new entropy,
-+ * on the write side.
-  *
-  * Both /dev/random and /dev/urandom have the same set of ioctls for
-  * adding entropy, getting the entropy count, zeroing the count, and
-@@ -1387,6 +1375,8 @@ static void try_to_generate_entropy(void)
- SYSCALL_DEFINE3(getrandom, char __user *, buf, size_t, count, unsigned int,
- 		flags)
- {
-+	int ret;
-+
- 	if (flags & ~(GRND_NONBLOCK | GRND_RANDOM | GRND_INSECURE))
- 		return -EINVAL;
- 
-@@ -1400,15 +1390,13 @@ SYSCALL_DEFINE3(getrandom, char __user *, buf, size_t, count, unsigned int,
- 	if (count > INT_MAX)
- 		count = INT_MAX;
- 
--	if (!(flags & GRND_INSECURE) && !crng_ready()) {
--		int ret;
-+	if ((flags & GRND_NONBLOCK) && !crng_ready())
-+		return -EAGAIN;
-+
-+	ret = wait_for_random_bytes();
-+	if (ret != 0)
-+		return ret;
- 
--		if (flags & GRND_NONBLOCK)
--			return -EAGAIN;
--		ret = wait_for_random_bytes();
--		if (unlikely(ret))
--			return ret;
--	}
- 	return get_random_bytes_user(buf, count);
- }
- 
-@@ -1461,21 +1449,6 @@ static ssize_t random_write(struct file *file, const char __user *buffer,
- 	return (ssize_t)count;
- }
- 
--static ssize_t urandom_read(struct file *file, char __user *buf, size_t nbytes,
--			    loff_t *ppos)
--{
--	static int maxwarn = 10;
--
--	if (!crng_ready() && maxwarn > 0) {
--		maxwarn--;
--		if (__ratelimit(&urandom_warning))
--			pr_notice("%s: uninitialized urandom read (%zd bytes read)\n",
--				  current->comm, nbytes);
--	}
--
--	return get_random_bytes_user(buf, nbytes);
--}
--
- static ssize_t random_read(struct file *file, char __user *buf, size_t nbytes,
- 			   loff_t *ppos)
- {
-@@ -1562,15 +1535,6 @@ const struct file_operations random_fops = {
- 	.llseek = noop_llseek,
- };
- 
--const struct file_operations urandom_fops = {
--	.read = urandom_read,
--	.write = random_write,
--	.unlocked_ioctl = random_ioctl,
--	.compat_ioctl = compat_ptr_ioctl,
--	.fasync = random_fasync,
--	.llseek = noop_llseek,
--};
--
- 
- /********************************************************************
-  *
-diff --git a/include/uapi/linux/random.h b/include/uapi/linux/random.h
-index dcc1b3e6106f..9ec1703f45ad 100644
---- a/include/uapi/linux/random.h
-+++ b/include/uapi/linux/random.h
-@@ -49,7 +49,7 @@ struct rand_pool_info {
-  *
-  * GRND_NONBLOCK	Don't block and return EAGAIN instead
-  * GRND_RANDOM		No effect
-- * GRND_INSECURE	Return non-cryptographic random bytes
-+ * GRND_INSECURE	No effect
-  */
- #define GRND_NONBLOCK	0x0001
- #define GRND_RANDOM	0x0002
--- 
-2.35.0
-
+> 

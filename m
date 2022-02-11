@@ -2,127 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21EBE4B21A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD734B21A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348466AbiBKJW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 04:22:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35090 "EHLO
+        id S1347883AbiBKJWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 04:22:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbiBKJWT (ORCPT
+        with ESMTP id S234323AbiBKJWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 04:22:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 413E4337
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:22:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644571338;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/bi42S9VA+rXZukavob2heYyTf52jS05inWB/COJe28=;
-        b=KHQOcee2iNrMmFYpaA6imqsaJLhUo1uBQEQ48M4EBPYRT3QG/w1kolyxEidwD4kDxzNdYf
-        YZbMF+gmdDY9pLFsGqzhwh4YnSAyRKLacoLVMO5WioFSP2BDglZ5fUVAct05rFLgnleg0l
-        9wPG/V5Vfexeq7Av22HMUhDioQmVOGY=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-168-tJnvhYxoOnqAYGu3YrbsHQ-1; Fri, 11 Feb 2022 04:22:17 -0500
-X-MC-Unique: tJnvhYxoOnqAYGu3YrbsHQ-1
-Received: by mail-wm1-f71.google.com with SMTP id l20-20020a05600c1d1400b0035153bf34c3so5634777wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:22:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/bi42S9VA+rXZukavob2heYyTf52jS05inWB/COJe28=;
-        b=bt1GeuXB9i0Fl9rrYnvux9toU2lGP4U6sNunr2AnjQsx4w6ZjDWPG0mV9qN38eLF3u
-         DUKfT3ZfLVI1cU6fKhNfWwCA8FB2cI3XZSms7Cw2CgUXHk02Kmn9AA3LScFuAP/UzPKx
-         r1T++C7VddwXJ7K8waYpZ9ixatLinWfMQPJ+n/14/cTEq2UNRLNwbdOjnYSFfWd7d07R
-         tBa7FdBpuXzH14VB9ZCew4MxDDtc0rni+RyrZiIIOxPT7jC4LmFshtPIInRr1cLiRnWf
-         G4eoFUFCt+bPv+3dCJiIPrwQWcglkjn4Aag4gUEmqbAB9cZwQlTtz6zXEXvdaVRspQe1
-         qotA==
-X-Gm-Message-State: AOAM531SqD+GInpfvQV/EwnU0PRf91ep09mAKg/IZ1h+sX2mNxY41+VW
-        sTRmpMsdjUhNaODXTQ8yj+igyaMw92kYqmtxL5rVvK5Fs/qZrO2xRsVfw64p59KSiCw2xng6Ttq
-        CrFWhjCGzOdVgFfsg/ZcWE84dpUnOAv4BN8MaSngBV9WEuH4JFXce2Iw6/EZYnvYvJ8fDm2VneS
-        0=
-X-Received: by 2002:a7b:cbd7:: with SMTP id n23mr1369751wmi.76.1644571336010;
-        Fri, 11 Feb 2022 01:22:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxVyNwlqjVh91bNTF7uCkHKI+vxIB6I7J+ATyw7Om9fonGEf2KmhkFvJu7P23thXV+nsQsQLg==
-X-Received: by 2002:a7b:cbd7:: with SMTP id n23mr1369727wmi.76.1644571335738;
-        Fri, 11 Feb 2022 01:22:15 -0800 (PST)
-Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id z5sm4237804wmp.10.2022.02.11.01.22.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 01:22:15 -0800 (PST)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-Subject: [PATCH v4 5/6] MAINTAINERS: Add entry for Solomon SSD130x OLED displays DRM driver
-Date:   Fri, 11 Feb 2022 10:21:57 +0100
-Message-Id: <20220211092157.2988713-1-javierm@redhat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220211091927.2988283-1-javierm@redhat.com>
-References: <20220211091927.2988283-1-javierm@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 11 Feb 2022 04:22:51 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6382DB96
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:22:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644571371; x=1676107371;
+  h=from:to:cc:subject:date:message-id;
+  bh=uA2i1mughdRhhDjbb2ENH21e2dlT+e2Pom7qGofKmI8=;
+  b=qD7Z1YzkDqN4N8QXvdgYyRJjkxsA/984UhSLIfPClqmwtLv4xSfJLhGs
+   LVLvfDEvvJJpPqU6/jQ7FnLo2WdK37I0Nl3Mdtm8d9tPgyXB1QeHe0a/M
+   aszv84mEopDpKHKrHQltAIEsyNJUSPnJ1gRlFS0GK4f68ZFGq1oeTe0hJ
+   c=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 11 Feb 2022 01:22:51 -0800
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 11 Feb 2022 01:22:51 -0800
+X-QCInternal: smtphost
+Received: from c-sbhanu-linux.qualcomm.com ([10.242.50.201])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 11 Feb 2022 14:52:31 +0530
+Received: by c-sbhanu-linux.qualcomm.com (Postfix, from userid 2344807)
+        id B0CB756EE; Fri, 11 Feb 2022 14:52:30 +0530 (IST)
+From:   Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+To:     dianders@chromium.org, tudor.ambarus@microchip.com,
+        michael@walle.cc, p.yadav@ti.com, miquel.raynal@bootlin.com,
+        richard@nod.at, vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     quic_stummala@quicinc.com, quic_vbadigan@quicinc.com,
+        quic_rampraka@quicinc.com, quic_pragalla@quicinc.com,
+        quic_sartgarg@quicinc.com,
+        Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+Subject: [PATCH V6] mtd: spi-nor: winbond: Add support for winbond chip
+Date:   Fri, 11 Feb 2022 14:52:29 +0530
+Message-Id: <1644571349-29649-1-git-send-email-quic_c_sbhanu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To make sure that tools like the get_maintainer.pl script will suggest
-to Cc me if patches are posted for this driver.
+Add support for winbond W25Q512NW-IM chip.
 
-Also include the Device Tree binding for the old ssd1307fb fbdev driver
-since the new DRM driver was made compatible with the existing binding.
-
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
+Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+Reviewed-by: Doug Anderson <dianders@chromium.org>
 ---
+localhost / # cat /sys/bus/platform/devices/soc\@0/88dc000.spi/spi_master/spi16/
+spi16.0/spi-nor/jedec_id
+ef8020
 
-(no changes since v3)
+localhost / # cat /sys/bus/platform/devices/soc\@0/88dc000.spi/spi_master/spi16/
+spi16.0/spi-nor/manufacturer
+winbond
 
-Changes in v3:
-- Adapt MAINTAINERS entry to point to the new drivers/gpu/drm/solomon directory.
+localhost / # cat /sys/bus/platform/devices/soc\@0/88dc000.spi/spi_master/spi16/
+spi16.0/spi-nor/partname
+w25q512nwm
 
-Changes in v2:
-- Add Sam Ravnborg's acked-by to patch adding a MAINTAINERS entry (Sam Ravnborg)
+localhost / # hexdump /sys/bus/platform/devices/soc\@0/88dc000.spi/spi_master/sp
+i16/spi16.0/spi-nor/sfdp
+0000000 4653 5044 0106 ff01 0600 1001 0080 ff00
+0000010 0084 0201 00d0 ff00 ffff ffff ffff ffff
+0000020 6800 6c65 6f6c 7720 726f 646c ffff ffff
+0000030 ffff ffff ffff ffff ffff ffff ffff ffff
+*
+0000080 20e5 fffb ffff 1fff eb44 6b08 3b08 bb42
+0000090 fffe ffff ffff 0000 ffff eb40 200c 520f
+00000a0 d810 0000 0233 00a6 e781 d914 63e9 3376
+00000b0 757a 757a bdf7 5cd5 f719 ff5d 70e9 a5f9
+00000c0 ffff ffff ffff ffff ffff ffff ffff ffff
+00000d0 0aff fff0 ff21 ffdc
+00000d8
 
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+Changes since V1:
+	- Added space before name of the flash part as suggested by Doug.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d03ad8da1f36..05c306986ab0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6102,6 +6102,13 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
- F:	Documentation/devicetree/bindings/display/repaper.txt
- F:	drivers/gpu/drm/tiny/repaper.c
- 
-+DRM DRIVER FOR SOLOMON SSD130X OLED DISPLAYS
-+M:	Javier Martinez Canillas <javierm@redhat.com>
-+S:	Maintained
-+T:	git git://anongit.freedesktop.org/drm/drm-misc
-+F:	Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-+F:	drivers/gpu/drm/solomon/ssd130x*
-+
- DRM DRIVER FOR QEMU'S CIRRUS DEVICE
- M:	Dave Airlie <airlied@redhat.com>
- M:	Gerd Hoffmann <kraxel@redhat.com>
+Changes since V2:
+	- Updated chip name as w25q512nwm as suggested by Doug.
+
+Changes since V3:
+	- Updated flash_info flags passing according to below patch.
+
+Changes since V4:
+	- Added OTP support for SPI card as suggested by Michael Walle.
+	- Updated SFDP flags passing as suggested by Pratyush Yadav.
+
+Changes since V5:
+	- Reordered flags passing info for spi nor as suggested by
+	  Michael Walle.
+	- Added SFDP dump info in commit as suggested by Michael Walle.
+---
+ drivers/mtd/spi-nor/winbond.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
+index 675f32c..315b9f6 100644
+--- a/drivers/mtd/spi-nor/winbond.c
++++ b/drivers/mtd/spi-nor/winbond.c
+@@ -124,6 +124,10 @@ static const struct flash_info winbond_parts[] = {
+ 	{ "w25m512jv", INFO(0xef7119, 0, 64 * 1024, 1024)
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ |
+ 			      SPI_NOR_DUAL_READ) },
++	{ "w25q512nwm", INFO(0xef8020, 0, 64 * 1024, 1024)
++		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB)
++		PARSE_SFDP
++		OTP_INFO(256, 3, 0x1000, 0x1000) },
+ 	{ "w25q512jvq", INFO(0xef4020, 0, 64 * 1024, 1024)
+ 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
+ 			      SPI_NOR_QUAD_READ) },
 -- 
-2.34.1
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
 

@@ -2,226 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B486C4B291D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:31:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DE94B292C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:38:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351391AbiBKPbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 10:31:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50242 "EHLO
+        id S1351407AbiBKPiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 10:38:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235355AbiBKPbI (ORCPT
+        with ESMTP id S1351394AbiBKPiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 10:31:08 -0500
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583951A1;
-        Fri, 11 Feb 2022 07:31:03 -0800 (PST)
-Received: from [192.168.0.2] (ip5f5aebe1.dynamic.kabel-deutschland.de [95.90.235.225])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 20C7A61EA1927;
-        Fri, 11 Feb 2022 16:31:01 +0100 (CET)
-Message-ID: <53069280-73e6-4502-d366-4990b74cf059@molgen.mpg.de>
-Date:   Fri, 11 Feb 2022 16:31:00 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v5 2/6] powerpc/kexec_file: Add KEXEC_SIG support.
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>
-Cc:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
-        Philipp Rudo <prudo@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
-        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Frank van der Linden <fllinden@amazon.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Fri, 11 Feb 2022 10:38:12 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D394013A;
+        Fri, 11 Feb 2022 07:38:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ZsqYYuB5zPz4U2XvwTMc7Gwvie5cfcQX4xHf1kN4geA=; b=lhI/YJi2qjzHxmqjjPK8JUNboc
+        ELI4IMRWe4IJCl+h4E80XJqj1r2cvVckQdNY7MsZ4rSJcC5OHXZnE17vBcaWvad9TqsQS7uYDMZoc
+        zJdah9V3x6bIlCrd4LnTyHADuZU+AWDPwCmox+GPAwDgNzoVJCHCx+M4/jtduxkjqdOmhpbHeVAhw
+        tNoWavJzu7HFS6IlzQhV9C73xEopKbRU4nHMSiPN9uxoAlZAvJ6zIJDJnFDcRGgzqelEJQMVkvmAx
+        YxbR5s1DYOcCPOo1IqIDqjzmY/2yL9NSDDEAomSd5QGOCwT6y6Sx411ri6MQR4hI56UPRhn4RlCL1
+        wlXfZY8A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nIXyu-0093dN-LI; Fri, 11 Feb 2022 15:37:08 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id F341A98630A; Fri, 11 Feb 2022 16:37:06 +0100 (CET)
+Date:   Fri, 11 Feb 2022 16:37:06 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Baoquan He <bhe@redhat.com>,
-        linux-security-module@vger.kernel.org
-References: <cover.1641900831.git.msuchanek@suse.de>
- <d95f7c6865bcad5ee37dcbec240e79aa742f5e1d.1641900831.git.msuchanek@suse.de>
- <b56fe3a2-b145-9d4e-acf2-4991204b3102@molgen.mpg.de>
- <20220209120154.GC3113@kunlun.suse.cz>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20220209120154.GC3113@kunlun.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v10 10/15] FG-KASLR: use a scripted approach to handle
+ .text.* sections
+Message-ID: <20220211153706.GW23216@worktop.programming.kicks-ass.net>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
+ <20220209185752.1226407-11-alexandr.lobakin@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209185752.1226407-11-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Michal,
+On Wed, Feb 09, 2022 at 07:57:47PM +0100, Alexander Lobakin wrote:
+> +sub read_sections {
+> +	open(my $fh, "\"$readelf\" -SW \"$file\" 2>/dev/null |")
+> +		or die "$0: ERROR: failed to execute \"$readelf\": $!";
+> +
+> +	while (<$fh>) {
+> +		my $name;
+> +		my $align;
+> +		chomp;
+> +
+> +		($name, $align) = $_ =~ /^\s*\[[\s0-9]*\]\s*(\.\S*)\s*[A-Z]*\s*[0-9a-f]{16}\s*[0-9a-f]*\s*[0-9a-f]*\s*[0-9a-f]*\s*[0-9a-f]{2}\s*[A-Z]{2}\s*[0-9]\s*[0-9]\s*([0-9]*)$/;
 
+Is there really no readable way to write this?
 
-Am 09.02.22 um 13:01 schrieb Michal Suchánek:
+> +
+> +		if (!defined($name)) {
+> +			next;
+> +		}
+> +
+> +		## Clang 13 onwards emits __cfi_check_fail only on final
+> +		## linking, so it won't appear in .o files and will be
+> +		## missing in @sections. Add it manually to prevent
+> +		## spawning orphans.
+> +		if ($name eq ".text.__cfi_check_fail") {
+> +			$has_ccf = 1;
+> +		}
 
-> On Wed, Feb 09, 2022 at 07:44:15AM +0100, Paul Menzel wrote:
-
->> Am 11.01.22 um 12:37 schrieb Michal Suchanek:
-
-[…]
-
->> How can this be tested?
-> 
-> Apparently KEXEC_SIG_FORCE is x86 only although the use of the option is
-> arch neutral:
-> 
-> arch/x86/Kconfig:config KEXEC_SIG_FORCE
-> kernel/kexec_file.c:            if (IS_ENABLED(CONFIG_KEXEC_SIG_FORCE))
-> {
-> 
-> Maybe it should be moved?
-
-Sounds good.
-
-> I used a patched kernel that enables lockdown in secure boot, and then
-> verified that signed kernel can be loaded by kexec and unsigned not,
-> with KEXEC_SIG enabled and IMA_KEXEC disabled.
-> 
-> The lockdown support can be enabled on any platform, and although I
-> can't find it documented anywhere there appears to be code in kexec_file
-> to take it into account:
-> kernel/kexec.c: result = security_locked_down(LOCKDOWN_KEXEC);
-> kernel/kexec_file.c:                security_locked_down(LOCKDOWN_KEXEC))
-> kernel/module.c:        return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
-> kernel/params.c:            security_locked_down(LOCKDOWN_MODULE_PARAMETERS))
-> and lockdown can be enabled with a buildtime option, a kernel parameter, or a
-> debugfs file.
-> 
-> Still for testing lifting KEXEC_SIG_FORCE to some arch-neutral Kconfig file is
-> probably the simplest option.
-> 
-> kexec -s option should be used to select kexec_file rather than the old
-> style kexec which would either fail always or succeed always regardelss
-> of signature.
-
-Thank you.
-
->>> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
->>> ---
->>> v3: - Philipp Rudo <prudo@redhat.com>: Update the comit message with
->>>         explanation why the s390 code is usable on powerpc.
->>>       - Include correct header for mod_check_sig
->>>       - Nayna <nayna@linux.vnet.ibm.com>: Mention additional IMA features
->>>         in kconfig text
->>> ---
->>>    arch/powerpc/Kconfig        | 16 ++++++++++++++++
->>>    arch/powerpc/kexec/elf_64.c | 36 ++++++++++++++++++++++++++++++++++++
->>>    2 files changed, 52 insertions(+)
->>>
->>> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
->>> index dea74d7717c0..1cde9b6c5987 100644
->>> --- a/arch/powerpc/Kconfig
->>> +++ b/arch/powerpc/Kconfig
->>> @@ -560,6 +560,22 @@ config KEXEC_FILE
->>>    config ARCH_HAS_KEXEC_PURGATORY
->>>    	def_bool KEXEC_FILE
->>> +config KEXEC_SIG
->>> +	bool "Verify kernel signature during kexec_file_load() syscall"
->>> +	depends on KEXEC_FILE && MODULE_SIG_FORMAT
->>> +	help
->>> +	  This option makes kernel signature verification mandatory for
->>> +	  the kexec_file_load() syscall.
->>> +
->>> +	  In addition to that option, you need to enable signature
->>> +	  verification for the corresponding kernel image type being
->>> +	  loaded in order for this to work.
->>> +
->>> +	  Note: on powerpc IMA_ARCH_POLICY also implements kexec'ed kernel
->>> +	  verification. In addition IMA adds kernel hashes to the measurement
->>> +	  list, extends IMA PCR in the TPM, and implements kernel image
->>> +	  blacklist by hash.
->>
->> So, what is the takeaway for the user? IMA_ARCH_POLICY is preferred? What is
->> the disadvantage, and two implementations(?) needed then? More overhead?
-> 
-> IMA_KEXEC does more than KEXEC_SIG. The overhead is probably not big
-> unless you are trying to really minimize the kernel code size.
-> 
-> Arguably the simpler implementation has less potential for bugs, too.
-> Both in code and in user configuration required to enable the feature.
-> 
-> Interestingly IMA_ARCH_POLICY depends on KEXEC_SIG rather than
-> IMA_KEXEC. Just mind-boggling.
-
-I have not looked into that.
-
-> The main problem with IMA_KEXEC from my point of view is it is not portable.
-> To record the measurements TPM support is requireed which is not available on
-> all platforms. It does not support PE so it cannot be used on platforms
-> that use PE kernel signature format.
-
-Could you add that to the comment please?
-
->>> +
->>>    config RELOCATABLE
->>>    	bool "Build a relocatable kernel"
->>>    	depends on PPC64 || (FLATMEM && (44x || FSL_BOOKE))
->>> diff --git a/arch/powerpc/kexec/elf_64.c b/arch/powerpc/kexec/elf_64.c
->>> index eeb258002d1e..98d1cb5135b4 100644
->>> --- a/arch/powerpc/kexec/elf_64.c
->>> +++ b/arch/powerpc/kexec/elf_64.c
->>> @@ -23,6 +23,7 @@
->>>    #include <linux/of_fdt.h>
->>>    #include <linux/slab.h>
->>>    #include <linux/types.h>
->>> +#include <linux/module_signature.h>
->>>    static void *elf64_load(struct kimage *image, char *kernel_buf,
->>>    			unsigned long kernel_len, char *initrd,
->>> @@ -151,7 +152,42 @@ static void *elf64_load(struct kimage *image, char *kernel_buf,
->>>    	return ret ? ERR_PTR(ret) : NULL;
->>>    }
->>> +#ifdef CONFIG_KEXEC_SIG
->>> +int elf64_verify_sig(const char *kernel, unsigned long kernel_len)
->>> +{
->>> +	const unsigned long marker_len = sizeof(MODULE_SIG_STRING) - 1;
->>> +	struct module_signature *ms;
->>> +	unsigned long sig_len;
->>
->> Use size_t to match the signature of `verify_pkcs7_signature()`?
-> 
-> Nope. struct module_signature uses unsigned long, and this needs to be
-> matched to avoid type errors on 32bit.
-
-I meant for `sig_len`.
-
-> Technically using size_t for in-memory buffers is misguided because
-> AFAICT no memory buffer can be bigger than ULONG_MAX, and size_t is
-> non-native type on 32bit.
-> 
-> Sure, the situation with ssize_t/int is different but that's not what we
-> are dealing with here.
-True. In my experience it prevents compiler warnings when building for 
-32 bit or 64 bit. Anyway, not that important.
-
-
-Kind regards,
-
-Paul
+How is that relevant, x86-64 doesn't and won't do clang-cfi.

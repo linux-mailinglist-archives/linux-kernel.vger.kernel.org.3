@@ -2,188 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE08B4B1E35
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BCB4B1E42
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237374AbiBKGLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 01:11:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53562 "EHLO
+        id S1344439AbiBKGN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 01:13:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233561AbiBKGLA (ORCPT
+        with ESMTP id S231996AbiBKGN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 01:11:00 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E06C318
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 22:10:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644559859; x=1676095859;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=njvurMrwL1Bv5tFfoFBQL7gBFyKcylkvil0xA66ogBM=;
-  b=I+RGZYYysmcyNRh+YaKwaPll3l4+bFtDPfWtvejjH71bKmzn2m4oAAdj
-   RYX8PkellOqqZOQtGpDce1KTPOnQ0470OhrmVj3jIVDtcFXFBukWO84vV
-   PbEHo0L/bcPGQZet1atBrftyo3eYbA3300SR9P9eHEmqrnGOs39Sx1pjI
-   umjHYcStZ+CGXjj8PEDrZr7XWkNP8rRE7Gm5HcDPjEOo3Nauiz5JH6G6L
-   3oZenZvOq6jwetqKl8ZQGFceiKZW2hK1dptPVEEJ6RL+CemDInfLsK1Fh
-   LnGQqIt0hOnX6r8JAPgbbON9Jz2ilp0z0IllTaTK8ETFWofo6pawi+B7b
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="312952650"
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="312952650"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 22:10:58 -0800
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="541959412"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 22:10:58 -0800
-Date:   Thu, 10 Feb 2022 22:10:58 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V8 15/44] x86/pkeys: Preserve the PKS MSR on context
- switch
-Message-ID: <20220211061058.GQ785175@iweiny-DESK2.sc.intel.com>
-References: <20220127175505.851391-1-ira.weiny@intel.com>
- <20220127175505.851391-16-ira.weiny@intel.com>
- <3b1ba2fe-5f69-ee2f-ea08-f0b5d145696d@intel.com>
+        Fri, 11 Feb 2022 01:13:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D2225CC;
+        Thu, 10 Feb 2022 22:13:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4ECC561888;
+        Fri, 11 Feb 2022 06:13:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 787EFC340E9;
+        Fri, 11 Feb 2022 06:13:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644560006;
+        bh=BKA5jTy6pTvT/2eTBFcXj02nmCgqitj7KJJ1UiB3EpU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Iu5/Sa4pfkEpR9o0eBTJ1V30YT6bCxpLasszI/CU4T8A42NiY45wXgX3h3GybGgiB
+         NAzGvdsxlLAolhxEa7IsbAiY3JjF3ewzNeuqCqsWmfxz6wc3ZOL7JKTGom90zAEl8N
+         02IlrBVB6LknF2DDc4ILNOZuXFcduDCnLKPlC5KocAJzuYaaARaxYBTpvdGwinClME
+         LQ3TYwsVH/k3NmkATxDZxPMWHcbSMYINM2CkMcygXTpniHEZDxOiqq093qz2s0tLNr
+         sAvQyo3kbKf/HAmxOt+ukiAviUgVZjakrR0xmE5nlVlNkDjZ4k2/fqvceH/ietEPU7
+         N7xrtFLmVK1Jw==
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-xfs@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/7] make statx() return I/O alignment information
+Date:   Thu, 10 Feb 2022 22:11:51 -0800
+Message-Id: <20220211061158.227688-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3b1ba2fe-5f69-ee2f-ea08-f0b5d145696d@intel.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 04:22:42PM -0800, Dave Hansen wrote:
-> On 1/27/22 09:54, ira.weiny@intel.com wrote:
-> > From: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > The PKS MSR (PKRS) is defined as a per-logical-processor register.  This
-> 
-> s/defined as//
+This patchset makes the statx() system call return I/O alignment
+information, roughly following the design that was suggested at
+https://lore.kernel.org/linux-fsdevel/20220120071215.123274-1-ebiggers@kernel.org/T/#u
 
-Done.
+This feature solves two problems: (a) it allows userspace to determine
+when a file supports direct I/O, and with what alignment restrictions;
+and (b) it allows userspace to determine the optimum I/O alignment for a
+file.  For more details, see patch 1.
 
-> 
-> > isolates memory access by logical CPU.  
-> 
-> This second sentence is a bit confusing to me.  I *think* you're trying
-> to say that PKRS only affects accesses from one logical CPU.
+This is an RFC.  I'd greatly appreciate any feedback on the UAPI, as
+that obviously needs to be gotten right from the beginning.  E.g., does
+the proposed set of fields make sense?  Am I including the right
+information in stx_offset_align_optimal?
 
-Yes.
+Patch 1 adds the VFS support for STATX_IOALIGN.  The remaining patches
+wire it up to ext4 and f2fs.  Support for other filesystems can be added
+later.  We could also support this on block device files; however, since
+block device nodes have different inodes from the block devices
+themselves, it wouldn't apply to statx("/dev/$foo") but rather just to
+'fd = open("/dev/foo"); statx(fd)'.  I'm unsure how useful that would be.
 
-> But, it
-> just comes out strangely.  I think I'd just axe the sentence.
+Note, f2fs has one corner case where DIO reads are allowed but not DIO
+writes.  The proposed statx fields can't represent this.  My proposal
+(patch 5) is to just eliminate this case, as it seems much too weird.
+But I'd appreciate any feedback on that part.
 
-Yea done.
+This patchset applies on top of my other patchset
+"[PATCH v11 0/5] add support for direct I/O with fscrypt using blk-crypto"
+(https://lore.kernel.org/linux-fsdevel/20220128233940.79464-1-ebiggers@kernel.org/T/#u),
+which can be retrieved from branch "master" of
+https://git.kernel.org/pub/scm/fs/fscrypt/fscrypt.git.  The statx()
+patchset could be a standalone patchset; however, I wanted to show that
+it will work properly on encrypted files, and the statx() patchset
+probably will take longer due to the new UAPI.
 
-> 
-> > Unfortunately, the MSR is not
-> > managed by XSAVE.  Therefore, tasks must save/restore the MSR value on
-> > context switch.
-> > 
-> > Define pks_saved_pkrs in struct thread_struct.  Initialize all tasks,
-> > including the init_task, with the PKS_INIT_VALUE when created.  Restore
-> > the CPU's MSR to the saved task value on schedule in.
-> > 
-> > pks_write_current() is added to ensures non-supervisor pkey
-> 
-> 				  ^ ensure
+Eric Biggers (7):
+  statx: add I/O alignment information
+  fscrypt: change fscrypt_dio_supported() to prepare for STATX_IOALIGN
+  ext4: support STATX_IOALIGN
+  f2fs: move f2fs_force_buffered_io() into file.c
+  f2fs: don't allow DIO reads but not DIO writes
+  f2fs: simplify f2fs_force_buffered_io()
+  f2fs: support STATX_IOALIGN
 
-Done.
+ fs/crypto/inline_crypt.c  | 48 +++++++++++++++---------------
+ fs/ext4/ext4.h            |  1 +
+ fs/ext4/file.c            | 10 +++----
+ fs/ext4/inode.c           | 31 ++++++++++++++++++++
+ fs/f2fs/f2fs.h            | 45 -----------------------------
+ fs/f2fs/file.c            | 61 ++++++++++++++++++++++++++++++++++++++-
+ fs/stat.c                 |  3 ++
+ include/linux/fscrypt.h   |  7 ++---
+ include/linux/stat.h      |  3 ++
+ include/uapi/linux/stat.h |  9 ++++--
+ 10 files changed, 136 insertions(+), 82 deletions(-)
 
-> 
-> ...
-> > diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-> > index 2c5f12ae7d04..3530a0e50b4f 100644
-> > --- a/arch/x86/include/asm/processor.h
-> > +++ b/arch/x86/include/asm/processor.h
-> > @@ -2,6 +2,8 @@
-> >  #ifndef _ASM_X86_PROCESSOR_H
-> >  #define _ASM_X86_PROCESSOR_H
-> >  
-> > +#include <linux/pks-keys.h>
-> > +
-> >  #include <asm/processor-flags.h>
-> >  
-> >  /* Forward declaration, a strange C thing */
-> > @@ -502,6 +504,12 @@ struct thread_struct {
-> >  	unsigned long		cr2;
-> >  	unsigned long		trap_nr;
-> >  	unsigned long		error_code;
-> > +
-> > +#ifdef	CONFIG_ARCH_ENABLE_SUPERVISOR_PKEYS
-> > +	/* Saved Protection key register for supervisor mappings */
-> > +	u32			pks_saved_pkrs;
-> > +#endif
-> 
-> There are a bunch of other "saved" registers in thread_struct.  They all
-> just have their register name, including pkru.
-> 
-> Can you just stick this next to 'pkru' and call it plain old 'pkrs'?
 
-Sure.  I was trying to use the same 'pks_*' prefix everywhere.  But pkrs makes
-sense too.
+base-commit: cdaa1b1941f667814300799ddb74f3079517cd5a
+-- 
+2.35.1
 
-> That will probably even take up less space than this since the two
-> 32-bit values can be packed together.
-
-Yes done.
-
-[]
-
-> > diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-> > index 3402edec236c..81fc0b638308 100644
-> > --- a/arch/x86/kernel/process_64.c
-> > +++ b/arch/x86/kernel/process_64.c
-> > @@ -59,6 +59,7 @@
-> >  /* Not included via unistd.h */
-> >  #include <asm/unistd_32_ia32.h>
-> >  #endif
-> > +#include <asm/pks.h>
-> >  
-> >  #include "process.h"
-> >  
-> > @@ -657,6 +658,8 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
-> >  	/* Load the Intel cache allocation PQR MSR. */
-> >  	resctrl_sched_in();
-> >  
-> > +	pks_write_current();
-> > +
-> >  	return prev_p;
-> >  }
-> 
-> At least for pkru and fsgsbase, these have the form:
-> 
-> 	x86_<register>_load();
-> 
-> Should this be
-> 
-> 	x86_pkrs_load();
-
-Ok done.
-
-> 
-> and be located next to:
-> 
-> 	x86_pkru_load()?
-
-This presents a problem.  As defined this can't happen until current is loaded.
-For now I've passed in the next thread_struct but I fear that is going to cause
-some bad header dependencies.  I'll see what 0day has to say about it and
-adjust as needed.
-
-Ira

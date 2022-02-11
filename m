@@ -2,83 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A3C4B24D2
+	by mail.lfdr.de (Postfix) with ESMTP id B08404B24D3
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349634AbiBKLyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 06:54:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42578 "EHLO
+        id S233286AbiBKLyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 06:54:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349676AbiBKLy3 (ORCPT
+        with ESMTP id S1348708AbiBKLyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 06:54:29 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1841F4F;
-        Fri, 11 Feb 2022 03:54:28 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 11 Feb 2022 06:54:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B01EBD;
+        Fri, 11 Feb 2022 03:54:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 82D691F385;
-        Fri, 11 Feb 2022 11:54:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1644580467; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y1etk9kWi0O5NdwycnlO0BFYUzATcmm0rxiF8RNzGc8=;
-        b=Pf26MYOO3Jz+DVrD3iRjQQ/ihbMjAgtdzGeIPKqgUJ7j1W9cp4s3HmrVOLr2tQhZclqPcU
-        lzvh+XC1jUxgtLl1VbaNQdm7zpWAvE82ooW8Rkysxb/VGxIGAthdMlhxffUM28ASUpnPVH
-        5lNLO5sVzZ+9N9tzac3CeB4jroebIoE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1644580467;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y1etk9kWi0O5NdwycnlO0BFYUzATcmm0rxiF8RNzGc8=;
-        b=HIAqNt3ia2fSOQ5iGIvGRWshDG4kYev6ACoVqLRipEC9PRWHKkJpRS3S66sk8jdg3/cFUa
-        dtTQyhjDcHJg6NCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 36DF513C27;
-        Fri, 11 Feb 2022 11:54:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id rzhiDHNOBmIbXQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 11 Feb 2022 11:54:27 +0000
-Message-ID: <7560cd10-0a7c-3fda-da83-9008833e3901@suse.de>
-Date:   Fri, 11 Feb 2022 12:54:26 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4095EB81EBC;
+        Fri, 11 Feb 2022 11:54:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8087DC340EE;
+        Fri, 11 Feb 2022 11:54:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644580475;
+        bh=MTGU4iXhl0FG7PdAGYQ1ZOLiIjc5Ud4JmfhvcDFWZA4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DSl6Mw3/Cqd+K54k60X2gVR6hi8Wje/aMfB5u3WPsN4Gi5ec4bn6caTGL1l5pTX7X
+         ZFrlzetacgf/u6hopLWgLODR6iLVI9X75tYrlBMzmgdSlt9hJLWij9yWlPERsxd9PY
+         D8SNWTzbCs++IXeD5amh6TX9r/VWgJJ/C9n8pp9gbH9bCH3iAepi+C4KqM/phwG+pP
+         emtEIKl/LSUIjFPzqQLuS3n+907X77x6Zsw1RQG/dbnEJsEsAfdOmAc42mEQP/TktJ
+         TTkJLvEwPUk4w/rvfzmQ8K9kM6DQSEVLuKmOddimDqXa8U1ACKmL3HXo/70nTjc7+d
+         mUm/oD1ETGIEg==
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: [PATCH v8 02/11] fprobe: Add ftrace based probe APIs
+Date:   Fri, 11 Feb 2022 20:54:29 +0900
+Message-Id: <164458046895.586276.1659702039769364558.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <164458044634.586276.3261555265565111183.stgit@devnote2>
+References: <164458044634.586276.3261555265565111183.stgit@devnote2>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 1/6] drm/format-helper: Add
- drm_fb_xrgb8888_to_gray8_line()
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, Sam Ravnborg <sam@ravnborg.org>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>
-References: <20220211091927.2988283-1-javierm@redhat.com>
- <20220211091927.2988283-2-javierm@redhat.com>
- <YgY6OqN+guBlt/ED@smile.fi.intel.com>
- <4fa465d9-4fac-4199-9a04-d8e09d164308@redhat.com>
- <YgZEuXvJ2ZiOyNS+@smile.fi.intel.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <YgZEuXvJ2ZiOyNS+@smile.fi.intel.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------0xO1K6N2o3kisbYAJxbZXbB0"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,86 +66,406 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------0xO1K6N2o3kisbYAJxbZXbB0
-Content-Type: multipart/mixed; boundary="------------qUmUJ7AssDV84KsRHJz5xQ9D";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Javier Martinez Canillas <javierm@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
- Geert Uytterhoeven <geert@linux-m68k.org>, Maxime Ripard
- <maxime@cerno.tech>, Daniel Vetter <daniel.vetter@ffwll.ch>,
- dri-devel@lists.freedesktop.org, Sam Ravnborg <sam@ravnborg.org>,
- =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
- Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>
-Message-ID: <7560cd10-0a7c-3fda-da83-9008833e3901@suse.de>
-Subject: Re: [PATCH v4 1/6] drm/format-helper: Add
- drm_fb_xrgb8888_to_gray8_line()
-References: <20220211091927.2988283-1-javierm@redhat.com>
- <20220211091927.2988283-2-javierm@redhat.com>
- <YgY6OqN+guBlt/ED@smile.fi.intel.com>
- <4fa465d9-4fac-4199-9a04-d8e09d164308@redhat.com>
- <YgZEuXvJ2ZiOyNS+@smile.fi.intel.com>
-In-Reply-To: <YgZEuXvJ2ZiOyNS+@smile.fi.intel.com>
+The fprobe is a wrapper API for ftrace function tracer.
+Unlike kprobes, this probes only supports the function entry, but this
+can probe multiple functions by one fprobe. The usage is similar, user
+will set their callback to fprobe::entry_handler and call
+register_fprobe*() with probed functions.
+There are 3 registration interfaces,
 
---------------qUmUJ7AssDV84KsRHJz5xQ9D
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+ - register_fprobe() takes filtering patterns of the functin names.
+ - register_fprobe_ips() takes an array of ftrace-location addresses.
+ - register_fprobe_syms() takes an array of function names.
 
-SGkNCg0KQW0gMTEuMDIuMjIgdW0gMTI6MTIgc2NocmllYiBBbmR5IFNoZXZjaGVua286DQo+
-IE9uIEZyaSwgRmViIDExLCAyMDIyIGF0IDExOjQwOjEzQU0gKzAxMDAsIEphdmllciBNYXJ0
-aW5leiBDYW5pbGxhcyB3cm90ZToNCj4+IE9uIDIvMTEvMjIgMTE6MjgsIEFuZHkgU2hldmNo
-ZW5rbyB3cm90ZToNCj4+PiBPbiBGcmksIEZlYiAxMSwgMjAyMiBhdCAxMDoxOToyMkFNICsw
-MTAwLCBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXMgd3JvdGU6DQo+IA0KPiAuLi4NCj4gDQo+
-Pj4+ICtzdGF0aWMgdm9pZCBkcm1fZmJfeHJnYjg4ODhfdG9fZ3JheThfbGluZSh1OCAqZHN0
-LCBjb25zdCB1MzIgKnNyYywgdW5zaWduZWQgaW50IHBpeGVscykNCj4+Pj4gK3sNCj4+Pj4g
-Kwl1bnNpZ25lZCBpbnQgeDsNCj4+Pj4gKw0KPj4+PiArCWZvciAoeCA9IDA7IHggPCBwaXhl
-bHM7IHgrKykgew0KPj4+PiArCQl1OCByID0gKCpzcmMgJiAweDAwZmYwMDAwKSA+PiAxNjsN
-Cj4+Pj4gKwkJdTggZyA9ICgqc3JjICYgMHgwMDAwZmYwMCkgPj4gODsNCj4+Pj4gKwkJdTgg
-YiA9ICAqc3JjICYgMHgwMDAwMDBmZjsNCj4+Pj4gKw0KPj4+PiArCQkvKiBJVFUgQlQuNjAx
-OiBZID0gMC4yOTkgUiArIDAuNTg3IEcgKyAwLjExNCBCICovDQo+Pj4+ICsJCSpkc3QrKyA9
-ICgzICogciArIDYgKiBnICsgYikgLyAxMDsNCj4+Pj4gKwkJc3JjKys7DQo+Pj4+ICsJfQ0K
-Pj4+DQo+Pj4gQ2FuIGJlIGRvbmUgYXMNCj4+Pg0KPj4+IAl3aGlsZSAocGl4ZWxzLS0pIHsN
-Cj4+PiAJCS4uLg0KPj4+IAl9DQo+Pj4NCj4+PiBvcg0KPj4+DQo+Pj4gCWRvIHsNCj4+PiAJ
-CS4uLg0KPj4+IAl9IHdoaWxlICgtLXBpeGVscyk7DQo+Pj4NCj4+DQo+PiBJIGRvbid0IHNl
-ZSB3aHkgYSB3aGlsZSBsb29wIHdvdWxkIGJlIGFuIGltcHJvdmVtZW50IGhlcmUgVEJILg0K
-PiANCj4gTGVzcyBsZXR0ZXJzIHRvIHBhcnNlIHdoZW4gcmVhZGluZyB0aGUgY29kZS4NCg0K
-SXQncyBhIHNpbXBsZSByZWZhY3RvcmluZyBvZiBjb2RlIHRoYXQgaGFzIHdvcmtlZCB3ZWxs
-IHNvIGZhci4gTGV0J3MgDQpsZWF2ZSBpdCBhcy1pcyBmb3Igbm93Lg0KDQpCZXN0IHJlZ2Fy
-ZHMNClRob21hcw0KDQo+IA0KPj4gSW4gYW55IGNhc2UsIEkganVzdCBwdWxsZWQgdGhlIGxp
-bmUgY29udmVyc2lvbiBsb2dpYyBhcyBhIHNlcGFyYXRlDQo+PiBmdW5jdGlvbiB3aXRoIG1p
-bmltYWwgY29kZSBjaGFuZ2VzIHNpbmNlIGRvaW5nIHRoYXQgc2hvdWxkIGJlIGluIGENCj4+
-IHNlcGFyYXRlIHBhdGNoLg0KPiANCj4gDQo+PiBGZWVsIGZyZWUgdG8gcG9zdCBhIHBhdGNo
-IGlmIHlvdSB3YW50IHRvIGNoYW5nZSB0aGF0IHdoaWxlIGxvb3AuDQo+IA0KPiBQZXJoYXBz
-IHNvbWUgZGF5IDotKQ0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3Mg
-RHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJI
-DQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDks
-IEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+The registered fprobes can be unregistered with unregister_fprobe().
+e.g.
 
---------------qUmUJ7AssDV84KsRHJz5xQ9D--
+struct fprobe fp = { .entry_handler = user_handler };
+const char *targets[] = { "func1", "func2", "func3"};
+...
 
---------------0xO1K6N2o3kisbYAJxbZXbB0
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+ret = register_fprobe_syms(&fp, targets, ARRAY_SIZE(targets));
 
------BEGIN PGP SIGNATURE-----
+...
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIGTnIFAwAAAAAACgkQlh/E3EQov+AX
-XQ//QRVvwLs+E6EBTsewgmTs0gsqiBem8AGlHBDXCG7X0k2+MJaQcJs6hCbPs8Qf+Fqd9+YRLWkG
-oT4B8qlellyBKrooec4g1AZ4aogboDZI4Whvp0MLRnmk804Ftu0HzmMUFXtMtXGNwmUDbA1Cl2go
-FIhVr1Nh1KCbUusJcdoiv2669X7GRr/S3nKhu3yrN5jOvl1vKJGuaND66trG9hikUEmSuQqUx58F
-0PNqG/EbdOMF9wfsRDTnWEzzgt8eR/NSaQv+egAGlAGrP4sLIVBFs4pJoaR6AWu6BW6Le2YMA2vO
-K2S3uGZwLvTBpt1H39Q0Mu3uCACw47j+GpogllUU6Ooqe24nb27x/4/JC8DJCEEj2Bnt71MpJMk4
-kjid5FQr1tCOeu8lXYWHNBmf27FfM0EnS6ZrS9UrHCDgGryde0B7L6Du54ul8oEKczrGXiiBvYRc
-h1ZV87XDLrvVSuvnDHNx0zw1N1gEc+5LaW6QsEbcidLHTHwv3btwOyAWRrLkV4oyTHsNsn9gXNEi
-pDP4Lu+rUqW1GR4EN5yt6Ub0k8jj1hhdtaXQJcAnSryjGjiWTAf2t+egvSPMSiHme47+CqX11huv
-1XVQ5ra/83FhNdzhsl4IlWmlg/GN+W33m+KyMchjFoKFn0mLCeTxWBaNPrIVmdSWhuoMortch14F
-wD8=
-=K1oE
------END PGP SIGNATURE-----
+unregister_fprobe(&fp);
 
---------------0xO1K6N2o3kisbYAJxbZXbB0--
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+---
+ Changes in v8:
+  - Remove ftrace_ops if CONFIG_FUNCTION_TRACER=n.
+ Changes in v7:
+  - Fix kerneldoc for the APIs.
+ Changes in v6:
+  - Remove syms, addrs, and nentry fields from struct fprobe.
+  - Introduce 3 variants of registration functions.
+  - Call ftrace_free_filter() at unregistration.
+
+ Changes in v4:
+  - Fix a memory leak when symbol lookup failed.
+  - Use ftrace location address instead of symbol address.
+  - Convert the given symbol address to ftrace location automatically.
+  - Rename fprobe::ftrace to fprobe::ops.
+  - Update the Kconfig description.
+---
+ include/linux/fprobe.h |   87 +++++++++++++++++++
+ kernel/trace/Kconfig   |   12 +++
+ kernel/trace/Makefile  |    1 
+ kernel/trace/fprobe.c  |  218 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 318 insertions(+)
+ create mode 100644 include/linux/fprobe.h
+ create mode 100644 kernel/trace/fprobe.c
+
+diff --git a/include/linux/fprobe.h b/include/linux/fprobe.h
+new file mode 100644
+index 000000000000..2ba099aff041
+--- /dev/null
++++ b/include/linux/fprobe.h
+@@ -0,0 +1,87 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Simple ftrace probe wrapper */
++#ifndef _LINUX_FPROBE_H
++#define _LINUX_FPROBE_H
++
++#include <linux/compiler.h>
++#include <linux/ftrace.h>
++
++/**
++ * struct fprobe - ftrace based probe.
++ * @ops: The ftrace_ops.
++ * @nmissed: The counter for missing events.
++ * @flags: The status flag.
++ * @entry_handler: The callback function for function entry.
++ */
++struct fprobe {
++#ifdef CONFIG_FUNCTION_TRACER
++	/*
++	 * If CONFIG_FUNCTION_TRACER is not set, CONFIG_FPROBE is disabled too.
++	 * But user of fprobe may keep embedding the struct fprobe on their own
++	 * code. To avoid build error, this will keep the fprobe data structure
++	 * defined here, but remove ftrace_ops data structure.
++	 */
++	struct ftrace_ops	ops;
++#endif
++	unsigned long		nmissed;
++	unsigned int		flags;
++	void (*entry_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
++};
++
++#define FPROBE_FL_DISABLED	1
++
++static inline bool fprobe_disabled(struct fprobe *fp)
++{
++	return (fp) ? fp->flags & FPROBE_FL_DISABLED : false;
++}
++
++#ifdef CONFIG_FPROBE
++int register_fprobe(struct fprobe *fp, const char *filter, const char *notfilter);
++int register_fprobe_ips(struct fprobe *fp, unsigned long *addrs, int num);
++int register_fprobe_syms(struct fprobe *fp, const char **syms, int num);
++int unregister_fprobe(struct fprobe *fp);
++#else
++static inline int register_fprobe(struct fprobe *fp, const char *filter, const char *notfilter)
++{
++	return -EOPNOTSUPP;
++}
++static inline int register_fprobe_ips(struct fprobe *fp, unsigned long *addrs, int num)
++{
++	return -EOPNOTSUPP;
++}
++static inline int register_fprobe_syms(struct fprobe *fp, const char **syms, int num)
++{
++	return -EOPNOTSUPP;
++}
++static inline int unregister_fprobe(struct fprobe *fp)
++{
++	return -EOPNOTSUPP;
++}
++#endif
++
++/**
++ * disable_fprobe() - Disable fprobe
++ * @fp: The fprobe to be disabled.
++ *
++ * This will soft-disable @fp. Note that this doesn't remove the ftrace
++ * hooks from the function entry.
++ */
++static inline void disable_fprobe(struct fprobe *fp)
++{
++	if (fp)
++		fp->flags |= FPROBE_FL_DISABLED;
++}
++
++/**
++ * enable_fprobe() - Enable fprobe
++ * @fp: The fprobe to be enabled.
++ *
++ * This will soft-enable @fp.
++ */
++static inline void enable_fprobe(struct fprobe *fp)
++{
++	if (fp)
++		fp->flags &= ~FPROBE_FL_DISABLED;
++}
++
++#endif
+diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+index a5eb5e7fd624..7ce31abc542b 100644
+--- a/kernel/trace/Kconfig
++++ b/kernel/trace/Kconfig
+@@ -236,6 +236,18 @@ config DYNAMIC_FTRACE_WITH_ARGS
+ 	depends on DYNAMIC_FTRACE
+ 	depends on HAVE_DYNAMIC_FTRACE_WITH_ARGS
+ 
++config FPROBE
++	bool "Kernel Function Probe (fprobe)"
++	depends on FUNCTION_TRACER
++	depends on DYNAMIC_FTRACE_WITH_REGS
++	default n
++	help
++	  This option enables kernel function probe (fprobe) based on ftrace,
++	  which is similar to kprobes, but probes only for kernel function
++	  entries and it can probe multiple functions by one fprobe.
++
++	  If unsure, say N.
++
+ config FUNCTION_PROFILER
+ 	bool "Kernel function profiler"
+ 	depends on FUNCTION_TRACER
+diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
+index bedc5caceec7..79255f9de9a4 100644
+--- a/kernel/trace/Makefile
++++ b/kernel/trace/Makefile
+@@ -97,6 +97,7 @@ obj-$(CONFIG_PROBE_EVENTS) += trace_probe.o
+ obj-$(CONFIG_UPROBE_EVENTS) += trace_uprobe.o
+ obj-$(CONFIG_BOOTTIME_TRACING) += trace_boot.o
+ obj-$(CONFIG_FTRACE_RECORD_RECURSION) += trace_recursion_record.o
++obj-$(CONFIG_FPROBE) += fprobe.o
+ 
+ obj-$(CONFIG_TRACEPOINT_BENCHMARK) += trace_benchmark.o
+ 
+diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+new file mode 100644
+index 000000000000..b5d4f8baaf43
+--- /dev/null
++++ b/kernel/trace/fprobe.c
+@@ -0,0 +1,218 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * fprobe - Simple ftrace probe wrapper for function entry.
++ */
++#define pr_fmt(fmt) "fprobe: " fmt
++
++#include <linux/err.h>
++#include <linux/fprobe.h>
++#include <linux/kallsyms.h>
++#include <linux/kprobes.h>
++#include <linux/slab.h>
++#include <linux/sort.h>
++
++static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
++			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
++{
++	struct fprobe *fp;
++	int bit;
++
++	fp = container_of(ops, struct fprobe, ops);
++	if (fprobe_disabled(fp))
++		return;
++
++	bit = ftrace_test_recursion_trylock(ip, parent_ip);
++	if (bit < 0) {
++		fp->nmissed++;
++		return;
++	}
++
++	if (fp->entry_handler)
++		fp->entry_handler(fp, ip, ftrace_get_regs(fregs));
++
++	ftrace_test_recursion_unlock(bit);
++}
++NOKPROBE_SYMBOL(fprobe_handler);
++
++/* Convert ftrace location address from symbols */
++static unsigned long *get_ftrace_locations(const char **syms, int num)
++{
++	unsigned long *addrs, addr, size;
++	int i;
++
++	/* Convert symbols to symbol address */
++	addrs = kcalloc(num, sizeof(*addrs), GFP_KERNEL);
++	if (!addrs)
++		return ERR_PTR(-ENOMEM);
++
++	for (i = 0; i < num; i++) {
++		addrs[i] = kallsyms_lookup_name(syms[i]);
++		if (!addrs[i])	/* Maybe wrong symbol */
++			goto error;
++	}
++
++	/* Convert symbol address to ftrace location. */
++	for (i = 0; i < num; i++) {
++		if (!kallsyms_lookup_size_offset(addrs[i], &size, NULL))
++			size = MCOUNT_INSN_SIZE;
++		addr = ftrace_location_range(addrs[i], addrs[i] + size - 1);
++		if (!addr) /* No dynamic ftrace there. */
++			goto error;
++		addrs[i] = addr;
++	}
++
++	return addrs;
++
++error:
++	kfree(addrs);
++
++	return ERR_PTR(-ENOENT);
++}
++
++static void fprobe_init(struct fprobe *fp)
++{
++	fp->nmissed = 0;
++	fp->ops.func = fprobe_handler;
++	fp->ops.flags |= FTRACE_OPS_FL_SAVE_REGS;
++}
++
++/**
++ * register_fprobe() - Register fprobe to ftrace by pattern.
++ * @fp: A fprobe data structure to be registered.
++ * @filter: A wildcard pattern of probed symbols.
++ * @notfilter: A wildcard pattern of NOT probed symbols.
++ *
++ * Register @fp to ftrace for enabling the probe on the symbols matched to @filter.
++ * If @notfilter is not NULL, the symbols matched the @notfilter are not probed.
++ *
++ * Return 0 if @fp is registered successfully, -errno if not.
++ */
++int register_fprobe(struct fprobe *fp, const char *filter, const char *notfilter)
++{
++	unsigned char *str;
++	int ret, len;
++
++	if (!fp || !filter)
++		return -EINVAL;
++
++	fprobe_init(fp);
++
++	len = strlen(filter);
++	str = kstrdup(filter, GFP_KERNEL);
++	ret = ftrace_set_filter(&fp->ops, str, len, 0);
++	kfree(str);
++	if (ret)
++		return ret;
++
++	if (notfilter) {
++		len = strlen(notfilter);
++		str = kstrdup(notfilter, GFP_KERNEL);
++		ret = ftrace_set_notrace(&fp->ops, str, len, 0);
++		kfree(str);
++		if (ret)
++			goto out;
++	}
++
++	ret = register_ftrace_function(&fp->ops);
++out:
++	if (ret)
++		ftrace_free_filter(&fp->ops);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(register_fprobe);
++
++/**
++ * register_fprobe_ips() - Register fprobe to ftrace by address.
++ * @fp: A fprobe data structure to be registered.
++ * @addrs: An array of target ftrace location addresses.
++ * @num: The number of entries of @addrs.
++ *
++ * Register @fp to ftrace for enabling the probe on the address given by @addrs.
++ * The @addrs must be the addresses of ftrace location address, which may be
++ * the symbol address + arch-dependent offset.
++ * If you unsure what this mean, please use other registration functions.
++ *
++ * Return 0 if @fp is registered successfully, -errno if not.
++ */
++int register_fprobe_ips(struct fprobe *fp, unsigned long *addrs, int num)
++{
++	int ret;
++
++	if (!fp || !addrs || num <= 0)
++		return -EINVAL;
++
++	fprobe_init(fp);
++
++	ret = ftrace_set_filter_ips(&fp->ops, addrs, num, 0, 0);
++	if (!ret)
++		ret = register_ftrace_function(&fp->ops);
++
++	if (ret)
++		ftrace_free_filter(&fp->ops);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(register_fprobe_ips);
++
++/**
++ * register_fprobe_syms() - Register fprobe to ftrace by symbols.
++ * @fp: A fprobe data structure to be registered.
++ * @syms: An array of target symbols.
++ * @num: The number of entries of @syms.
++ *
++ * Register @fp to the symbols given by @syms array. This will be useful if
++ * you are sure the symbols exist in the kernel.
++ *
++ * Return 0 if @fp is registered successfully, -errno if not.
++ */
++int register_fprobe_syms(struct fprobe *fp, const char **syms, int num)
++{
++	unsigned long *addrs;
++	int ret;
++
++	if (!fp || !syms || num <= 0)
++		return -EINVAL;
++
++	fprobe_init(fp);
++
++	addrs = get_ftrace_locations(syms, num);
++	if (IS_ERR(addrs))
++		return PTR_ERR(addrs);
++
++	ret = ftrace_set_filter_ips(&fp->ops, addrs, num, 0, 0);
++	if (ret)
++		goto out;
++	ret = register_ftrace_function(&fp->ops);
++	if (ret)
++		ftrace_free_filter(&fp->ops);
++
++out:
++	kfree(addrs);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(register_fprobe_syms);
++
++/**
++ * unregister_fprobe() - Unregister fprobe from ftrace
++ * @fp: A fprobe data structure to be unregistered.
++ *
++ * Unregister fprobe (and remove ftrace hooks from the function entries).
++ *
++ * Return 0 if @fp is unregistered successfully, -errno if not.
++ */
++int unregister_fprobe(struct fprobe *fp)
++{
++	int ret;
++
++	if (!fp || fp->ops.func != fprobe_handler)
++		return -EINVAL;
++
++	ret = unregister_ftrace_function(&fp->ops);
++
++	if (!ret)
++		ftrace_free_filter(&fp->ops);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(unregister_fprobe);
+

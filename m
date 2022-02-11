@@ -2,59 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6DB4B2226
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A8D94B2232
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234360AbiBKJjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 04:39:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57080 "EHLO
+        id S1348695AbiBKJjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 04:39:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiBKJjW (ORCPT
+        with ESMTP id S1348685AbiBKJja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 04:39:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A07F5B;
-        Fri, 11 Feb 2022 01:39:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8965A61F34;
-        Fri, 11 Feb 2022 09:39:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB456C340E9;
-        Fri, 11 Feb 2022 09:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644572361;
-        bh=YdvJVa1OctIgoaQy0xV0Ubxux8AGjVOaAA3jVzMYpfw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dvTI61ByXBlwe3DsVnSXYdmQ/7HNLlnyeSQrEs+bVUIJdMVdoNKs7hKhiyl66k4/u
-         gpdffEPBAe/bPnpM8/SkBO35YWRiI4SNZkaTeD7sZf0ZJEc3Id4ZVd7e8oA9XiIEcI
-         Gejpcgwa4e/u6l4xuwd79tVEB/FOt7N8zNfaFQ5mD5A6ah/oeIhGgFeTSbWiyRqfFo
-         T0RAsNv8QASOeM2f4LxGcSaTMbQ2QNGVkT/n9aRpal8Y4JYtWUYosQYhKXeIZx0U/C
-         2OO8n97ZCQbz3F/at5n527rLDuvPZoqSxtA+mn1J74I4ntxkz+g8TyNO4oNaRvwcqC
-         ahwqjbOXVtRMw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=hot-poop.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nISOd-00784U-42; Fri, 11 Feb 2022 09:39:19 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Cc:     kernel-team@android.com, Thierry Reding <treding@nvidia.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH] gpio: tegra186: Fix chip_data type confusion
-Date:   Fri, 11 Feb 2022 09:39:04 +0000
-Message-Id: <20220211093904.1112679-1-maz@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Fri, 11 Feb 2022 04:39:30 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A7C109C;
+        Fri, 11 Feb 2022 01:39:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1644572368; x=1676108368;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uab3V4+bIdpYnckUfKm5nPvtJZjxdW5mFoAh+fvhJOc=;
+  b=iIjHRyZJ7VAwLjGnAE0lpG2ck4xXYI7uWP+2lvGYi6WimGv2am7KPCAY
+   KBFI7jAhhoGJ78OSN1UurJ8Gk4rCaPLztP+CIAUbVnWWFmSw/DX4+ZZWg
+   44xZxVTWh84nHcB2DQArN/wAvm7c1aPEeNsdWdqlslNiSTts8goAItYFU
+   vn+xnNCTmadnF5AuoxWKlZ7BJ/1cK4jj8rDVv96zQ7FAMKc0WnQh7kECQ
+   PVFvBGvRv7HB06uhwKUslYgsuPK2OAidzcAoXK8QCa57i6wYhYBHmDbIE
+   XUGBQ5T42yDx7BITHTTha+WGXOuEkNPiEqccIXk/hJFqHtOLXf51STKZs
+   w==;
+IronPort-SDR: MM7bv+IEic80mkET68rgWi5jjnpph61TewMllFa1kTvIW0yuH3AV3h6BVJ14UDZtFsW8j4FP6L
+ ODVUxC7QHCpGYCkWnERSWaLdKfYORgyCWtcCiJNm/0RlmZsbhNRCOeGJxc8f0XnefZojZMLg0m
+ OIIpZQW1Vl7W2wax8QHqYcM2f3OOx763febGHsj7XvXU6Lw7sqWjVq6SxItElmORPw5DZ8YltX
+ mSU/Gkpm3rk3xH90dRLHv682OjZo8mF+1/Zvs4JWler3l8C/V784IdVJ5D46R3qf70Z5YTWtAC
+ G8Ixfxb22zFYksC5u5jhok5k
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="153263758"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Feb 2022 02:39:28 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 11 Feb 2022 02:39:27 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Fri, 11 Feb 2022 02:39:24 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <herbert@gondor.apana.org.au>, <krzysztof.kozlowski@canonical.com>,
+        <robh+dt@kernel.org>
+CC:     <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <linux-crypto@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kavyasree.kotagiri@microchip.com>,
+        <devicetree@vger.kernel.org>,
+        "Tudor Ambarus" <tudor.ambarus@microchip.com>
+Subject: [PACTH v4 0/3] dt-bindings: crypto: Convert atmel-crypto to YAML
+Date:   Fri, 11 Feb 2022 11:39:19 +0200
+Message-ID: <20220211093922.456634-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, kernel-team@android.com, treding@nvidia.com, linus.walleij@linaro.org, bgolaszewski@baylibre.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,76 +70,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The tegra186 GPIO driver makes the assumption that the pointer
-returned by irq_data_get_irq_chip_data() is a pointer to a
-tegra_gpio structure. Unfortunately, it is actually a pointer
-to the inner gpio_chip structure, as mandated by the gpiolib
-infrastructure. Nice try.
+Convert Atmel AES, TDES and SHA documentation to yaml format. There is one
+binding defined per file. Keeping all bindings under the same yaml does
+not make sense, as these are individual IPs. With the conversion the clock
+and clock-names properties are made mandatory, to reflect how the drivers
+treat them: when these properties are not provided, the drivers return
+error.
 
-The saving grace is that the gpio_chip is the first member of
-tegra_gpio, so the bug has gone undetected since... forever.
+v4:
+- fix the AES example: match the node's address with the reg's address
+- collect Krzysztof's R-b tags
 
-Fix it by performing a container_of() on the pointer. This results
-in no additional code, and makes it possible to understand how
-the whole thing works.
+v3:
+- update license to (GPL-2.0-only OR BSD-2-Clause)
+- add "Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries"
+- add Krzysztof's R-b tag on patch 3/3. Chose to keep "maxItems: 1" instead
+of "items" and "description" because that's what the guide at [1] suggests:
+"# Cases that have only a single entry just need to express that with
+maxItems"
 
-Fixes: 5b2b135a87fc ("gpio: Add Tegra186 support")
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Cc: Thierry Reding <treding@nvidia.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
- drivers/gpio/gpio-tegra186.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+[1] https://www.kernel.org/doc/html/latest/devicetree/bindings/writing-schema.html#annotated-example-schema
 
-diff --git a/drivers/gpio/gpio-tegra186.c b/drivers/gpio/gpio-tegra186.c
-index 34b36a8c035f..8d298beffd86 100644
---- a/drivers/gpio/gpio-tegra186.c
-+++ b/drivers/gpio/gpio-tegra186.c
-@@ -343,9 +343,12 @@ static int tegra186_gpio_of_xlate(struct gpio_chip *chip,
- 	return offset + pin;
- }
- 
-+#define to_tegra_gpio(x) container_of((x), struct tegra_gpio, gpio)
-+
- static void tegra186_irq_ack(struct irq_data *data)
- {
--	struct tegra_gpio *gpio = irq_data_get_irq_chip_data(data);
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
-+	struct tegra_gpio *gpio = to_tegra_gpio(gc);
- 	void __iomem *base;
- 
- 	base = tegra186_gpio_get_base(gpio, data->hwirq);
-@@ -357,7 +360,8 @@ static void tegra186_irq_ack(struct irq_data *data)
- 
- static void tegra186_irq_mask(struct irq_data *data)
- {
--	struct tegra_gpio *gpio = irq_data_get_irq_chip_data(data);
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
-+	struct tegra_gpio *gpio = to_tegra_gpio(gc);
- 	void __iomem *base;
- 	u32 value;
- 
-@@ -372,7 +376,8 @@ static void tegra186_irq_mask(struct irq_data *data)
- 
- static void tegra186_irq_unmask(struct irq_data *data)
- {
--	struct tegra_gpio *gpio = irq_data_get_irq_chip_data(data);
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
-+	struct tegra_gpio *gpio = to_tegra_gpio(gc);
- 	void __iomem *base;
- 	u32 value;
- 
-@@ -387,7 +392,8 @@ static void tegra186_irq_unmask(struct irq_data *data)
- 
- static int tegra186_irq_set_type(struct irq_data *data, unsigned int type)
- {
--	struct tegra_gpio *gpio = irq_data_get_irq_chip_data(data);
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
-+	struct tegra_gpio *gpio = to_tegra_gpio(gc);
- 	void __iomem *base;
- 	u32 value;
- 
+v2:
+- use generic "crypto" node name
+- drop redundant status = "okay" - it's the default state anyway
+- introduce empty line for readability
+- be specific and rename the bindings to let room for future possible
+  lines of architectures.
+
+Tudor Ambarus (3):
+  dt-bindings: crypto: Convert Atmel AES to yaml
+  dt-bindings: crypto: Convert Atmel TDES to yaml
+  dt-bindings: crypto: Convert Atmel SHA to yaml
+
+ .../crypto/atmel,at91sam9g46-aes.yaml         | 66 ++++++++++++++++++
+ .../crypto/atmel,at91sam9g46-sha.yaml         | 60 ++++++++++++++++
+ .../crypto/atmel,at91sam9g46-tdes.yaml        | 64 +++++++++++++++++
+ .../bindings/crypto/atmel-crypto.txt          | 68 -------------------
+ 4 files changed, 190 insertions(+), 68 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-aes.yaml
+ create mode 100644 Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
+ create mode 100644 Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-tdes.yaml
+ delete mode 100644 Documentation/devicetree/bindings/crypto/atmel-crypto.txt
+
 -- 
-2.34.1
+2.25.1
 

@@ -2,240 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A596D4B2E10
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 20:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CBB4B2E11
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 20:57:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353006AbiBKT4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 14:56:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36348 "EHLO
+        id S1353025AbiBKT5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 14:57:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240210AbiBKT4I (ORCPT
+        with ESMTP id S235284AbiBKT5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 14:56:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 369FF317
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 11:56:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644609365;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2N7m7wFJBzF+1rFV+wgawzoud82P4PHi3ZJduYH5GBk=;
-        b=cnDXliQ46zPGjRvUvlLjvggay9xa3F9xfjrv5JqliGMPuWG51uEDgGqo+ZpwIR2hZ2xXx2
-        Uw9DX9NvHpcfDQp/7n+JqRlPtSQ53z4FWeWB9U3ZJzQonXQ4RP4GfvhZBcgm3A2vMxrr5n
-        Vzw2FmuBzuiBqWsAglOWoGm+Ns2Ns18=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-533-gUTJ6RFvPXGy-nzaPBGvGQ-1; Fri, 11 Feb 2022 14:56:04 -0500
-X-MC-Unique: gUTJ6RFvPXGy-nzaPBGvGQ-1
-Received: by mail-lj1-f200.google.com with SMTP id b14-20020a2eb90e000000b00243a877827eso4399595ljb.23
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 11:56:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2N7m7wFJBzF+1rFV+wgawzoud82P4PHi3ZJduYH5GBk=;
-        b=uQ6zzxxl1RrnasjRlR74Cj6lS4FhS32ZvzguyX3nuSzbG8oWWF1V5Pf0fVvg0iNO22
-         NziSqRquuVybBbiJN/DIcxEatyPtVYGnlSzNZmoyF0zRvqId2w2MXa5Hdzekh8G3r3Rw
-         s+tCLgbnH8613ocNs1mr+DNOrCG4WGiU3/saNrY+O7WYSj5nHxXO8Qth1xB2xJyYrDPB
-         6f7jy+3iodwwXLptoMvP7YAHv3YRg9QUSxyxqp53UcM/ztZaWueeQ8TlT02SIhtU8hUA
-         Iki3aMO44Y2LRo24O7RGf8WwRnQVSb8cA8bpZSXzIoMyCtfqtuBhO+bB3XEAfnVCVtTx
-         VFbA==
-X-Gm-Message-State: AOAM533A67MCOawQdb0SSZgHOJsf2Vw6gMswDi6txASXVodxyIEW4CLP
-        TGEy/WqugYlcvontlO7DpdjEt1c2a7OI9zitgBMvVOOojEvIOpHupwZ5tvUARkibVHTHxsmZanb
-        641VM53qvv/AbJqjjTtZKqVZZxwG41OjNegHIrlQ=
-X-Received: by 2002:a05:6512:2506:: with SMTP id be6mr2257562lfb.48.1644609361904;
-        Fri, 11 Feb 2022 11:56:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx81qlKPaeiBgwknTMWXeTP1En6LFF4YBNshefuwcMR5Y+XoJ6DDIRWYHSCPg+HmK9tYT0DPy6EUbZoDfYm8Os=
-X-Received: by 2002:a05:6512:2506:: with SMTP id be6mr2257547lfb.48.1644609361659;
- Fri, 11 Feb 2022 11:56:01 -0800 (PST)
+        Fri, 11 Feb 2022 14:57:02 -0500
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD40632D
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 11:57:00 -0800 (PST)
+Received: from in02.mta.xmission.com ([166.70.13.52]:52364)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nIc2M-002ugY-Bt; Fri, 11 Feb 2022 12:56:58 -0700
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:51124 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nIc2J-00A0GN-BV; Fri, 11 Feb 2022 12:56:57 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Alexey Gladkov <legion@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Solar Designer <solar@openwall.com>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        containers@lists.linux.dev,
+        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+References: <87o83e2mbu.fsf@email.froward.int.ebiederm.org>
+        <20220211021324.4116773-6-ebiederm@xmission.com>
+        <20220211113454.socmlrne5heux7q7@example.org>
+        <87sfspz409.fsf@email.froward.int.ebiederm.org>
+        <20220211184041.dlqjk2fgdnkmtpe3@example.org>
+Date:   Fri, 11 Feb 2022 13:56:29 -0600
+In-Reply-To: <20220211184041.dlqjk2fgdnkmtpe3@example.org> (Alexey Gladkov's
+        message of "Fri, 11 Feb 2022 19:40:41 +0100")
+Message-ID: <87zgmxxjma.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220209170814.3268487-1-atomlin@redhat.com> <20220209170814.3268487-3-atomlin@redhat.com>
- <1d6dde1d-e819-b659-0239-5d42ab9bd087@csgroup.eu>
-In-Reply-To: <1d6dde1d-e819-b659-0239-5d42ab9bd087@csgroup.eu>
-From:   Aaron Tomlin <atomlin@redhat.com>
-Date:   Fri, 11 Feb 2022 19:55:49 +0000
-Message-ID: <CANfR36go+eyhkX5rHDps4Re6Z2gt7MS3iGMM0vu6wEsYF1B07w@mail.gmail.com>
-Subject: Re: [PATCH v5 09/13] module: Move kallsyms support into a separate file
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "cl@linux.com" <cl@linux.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "ghalat@redhat.com" <ghalat@redhat.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "void@manifault.com" <void@manifault.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nIc2J-00A0GN-BV;;;mid=<87zgmxxjma.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX19E7a/eaKFtZzvaoEdxpINrDSEu8ypYCyc=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *****;Alexey Gladkov <legion@kernel.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 2407 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 11 (0.5%), b_tie_ro: 10 (0.4%), parse: 1.39
+        (0.1%), extract_message_metadata: 15 (0.6%), get_uri_detail_list: 3.5
+        (0.1%), tests_pri_-1000: 14 (0.6%), tests_pri_-950: 1.27 (0.1%),
+        tests_pri_-900: 1.01 (0.0%), tests_pri_-90: 1912 (79.4%), check_bayes:
+        1910 (79.4%), b_tokenize: 12 (0.5%), b_tok_get_all: 10 (0.4%),
+        b_comp_prob: 3.2 (0.1%), b_tok_touch_all: 1881 (78.1%), b_finish: 1.03
+        (0.0%), tests_pri_0: 438 (18.2%), check_dkim_signature: 0.59 (0.0%),
+        check_dkim_adsp: 2.6 (0.1%), poll_dns_idle: 0.85 (0.0%), tests_pri_10:
+        2.2 (0.1%), tests_pri_500: 7 (0.3%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 6/8] ucounts: Handle inc_rlimit_ucounts wrapping in fork
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-02-10 13:43 +0000, Christophe Leroy wrote:
-> Checkpatch reports:
+Alexey Gladkov <legion@kernel.org> writes:
+
+> On Fri, Feb 11, 2022 at 11:50:46AM -0600, Eric W. Biederman wrote:
+>> Alexey Gladkov <legion@kernel.org> writes:
+>> 
+>> > On Thu, Feb 10, 2022 at 08:13:22PM -0600, Eric W. Biederman wrote:
+>> >> Move inc_rlimit_ucounts from copy_creds into copy_process immediately
+>> >> after copy_creds where it can be called exactly once.  Test for and
+>> >> handle it when inc_rlimit_ucounts returns LONG_MAX indicating the
+>> >> count has wrapped.
+>> >> 
+>> >> This is good hygenine and fixes a theoretical bug.  In practice
+>> >> PID_MAX_LIMIT is at most 2^22 so there is not a chance the number of
+>> >> processes would ever wrap even on an architecture with a 32bit long.
+>> >> 
+>> >> Fixes: 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts")
+>> >> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+>> >> ---
+>> >>  kernel/cred.c | 2 --
+>> >>  kernel/fork.c | 2 ++
+>> >>  2 files changed, 2 insertions(+), 2 deletions(-)
+>> >> 
+>> >> diff --git a/kernel/cred.c b/kernel/cred.c
+>> >> index 229cff081167..96d5fd6ff26f 100644
+>> >> --- a/kernel/cred.c
+>> >> +++ b/kernel/cred.c
+>> >> @@ -358,7 +358,6 @@ int copy_creds(struct task_struct *p, unsigned long clone_flags)
+>> >>  		kdebug("share_creds(%p{%d,%d})",
+>> >>  		       p->cred, atomic_read(&p->cred->usage),
+>> >>  		       read_cred_subscribers(p->cred));
+>> >> -		inc_rlimit_ucounts(task_ucounts(p), UCOUNT_RLIMIT_NPROC, 1);
+>> >>  		return 0;
+>> >>  	}
+>> >>  
+>> >> @@ -395,7 +394,6 @@ int copy_creds(struct task_struct *p, unsigned long clone_flags)
+>> >>  #endif
+>> >>  
+>> >>  	p->cred = p->real_cred = get_cred(new);
+>> >> -	inc_rlimit_ucounts(task_ucounts(p), UCOUNT_RLIMIT_NPROC, 1);
+>> >>  	alter_cred_subscribers(new, 2);
+>> >>  	validate_creds(new);
+>> >>  	return 0;
+>> >> diff --git a/kernel/fork.c b/kernel/fork.c
+>> >> index 6f62d37f3650..69333078259c 100644
+>> >> --- a/kernel/fork.c
+>> >> +++ b/kernel/fork.c
+>> >> @@ -2026,6 +2026,8 @@ static __latent_entropy struct task_struct *copy_process(
+>> >>  		goto bad_fork_free;
+>> >>  
+>> >>  	retval = -EAGAIN;
+>> >> +	if (inc_rlimit_ucounts(task_ucounts(p), UCOUNT_RLIMIT_NPROC, 1) == LONG_MAX)
+>> >> +		goto bad_fork_cleanup_count;
+>> >>  	if (is_ucounts_overlimit(task_ucounts(p), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC))) {
+>> >>  		if ((task_ucounts(p) != &init_ucounts) &&
+>> >>  		    !capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
+>> >
+>> > It might make sense to do something like:
+>> >
+>> > 	if (inc_rlimit_ucounts_overlimit(task_ucounts(p), UCOUNT_RLIMIT_NPROC, 1, rlimit(RLIMIT_NPROC)) == LONG_MAX) {
+>> > 		if ((task_ucounts(p) != &init_ucounts) &&
+>> > 		    !capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
+>> >
+>> > and the new function:
+>> >
+>> > long inc_rlimit_ucounts_overlimit(struct ucounts *ucounts, enum ucount_type type, long v, unsigned long rlimit)
+>> > {
+>> > 	struct ucounts *iter;
+>> > 	long ret = 0;
+>> > 	long max = rlimit;
+>> > 	if (rlimit > LONG_MAX)
+>> > 		max = LONG_MAX;
+>> > 	for (iter = ucounts; iter; iter = iter->ns->ucounts) {
+>> > 		long new = atomic_long_add_return(v, &iter->ucount[type]);
+>> > 		if (new < 0 || new > max)
+>> > 			ret = LONG_MAX;
+>> > 		else if (iter == ucounts)
+>> > 			ret = new;
+>> > 		max = READ_ONCE(iter->ns->ucount_max[type]);
+>> > 	}
+>> > 	return ret;
+>> > }
+>> >
+>> > This will avoid double checking the same userns tree.
+>> >
+>> > Or even modify inc_rlimit_ucounts. This function is used elsewhere like
+>> > this:
+>> >
+>> >
+>> > msgqueue = inc_rlimit_ucounts(info->ucounts, UCOUNT_RLIMIT_MSGQUEUE, mq_bytes);
+>> > if (msgqueue == LONG_MAX || msgqueue > rlimit(RLIMIT_MSGQUEUE)) {
+>> >
+>> >
+>> > memlock = inc_rlimit_ucounts(ucounts, UCOUNT_RLIMIT_MEMLOCK, locked);
+>> > if (!allowed && (memlock == LONG_MAX || memlock > lock_limit) && !capable(CAP_IPC_LOCK)) {
+>> >
+>> >
+>> > In all cases, we have max value for comparison.
+>> 
+>> Good point.   The downside is that it means we can't use the same code
+>> in exec.  The upside is that the code is more idiomatic.
 >
-> total: 3 errors, 1 warnings, 26 checks, 1103 lines checked
-
-Christophe,
-
-> Sparse reports the following:
+> My suggestion was before I saw the 8/8 patch :)
 >
->    CHECK   kernel/module/kallsyms.c
-> kernel/module/kallsyms.c:174:23: warning: incorrect type in assignment
-> (different address spaces)
-> kernel/module/kallsyms.c:174:23:    expected struct mod_kallsyms
-> [noderef] __rcu *kallsyms
-> kernel/module/kallsyms.c:174:23:    got void *
-
-
-Thanks once again for your review and feedback!
-
-Indeed I can see the same via 'make C=2 kernel/module/'. Looking at struct
-'module' declaration we see that field namely "kallsyms" has the __rcu
-marker. So, If I understand correctly, perhaps this can be resolved as
-follows, to be more explicit:
-
-@@ -171,7 +171,7 @@ void add_kallsyms(struct module *mod, const struct
-load_info *info)
-        Elf_Shdr *symsec = &info->sechdrs[info->index.sym];
-
-        /* Set up to point into init section. */
--       mod->kallsyms = mod->init_layout.base + info->mod_kallsyms_init_off;
-+       mod->kallsyms = (struct mod_kallsyms __rcu
-*)mod->init_layout.base + info->mod_kallsyms_init_off;
-
-
-> kernel/module/kallsyms.c:176:12: warning: dereference of noderef expression
-> kernel/module/kallsyms.c:177:12: warning: dereference of noderef expression
-> kernel/module/kallsyms.c:179:12: warning: dereference of noderef expression
-> kernel/module/kallsyms.c:180:12: warning: dereference of noderef expression
-> kernel/module/kallsyms.c:189:18: warning: dereference of noderef expression
-> kernel/module/kallsyms.c:190:35: warning: dereference of noderef expression
-> kernel/module/kallsyms.c:191:20: warning: dereference of noderef expression
-> kernel/module/kallsyms.c:196:32: warning: dereference of noderef expression
-> kernel/module/kallsyms.c:199:45: warning: dereference of noderef expression
-
-I will use rcu_dereference*() for the above since the pointer should not be
-accessed directly.
-
-> >
-> > diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-> > index 62c9fc91d411..868b13c06920 100644
-> > --- a/kernel/module/Makefile
-> > +++ b/kernel/module/Makefile
-> > @@ -12,4 +12,5 @@ obj-$(CONFIG_LIVEPATCH) += livepatch.o
-> >   obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
-> >   obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
-> >   obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
-> > +obj-$(CONFIG_KALLSYMS) += kallsyms.o
-> >   endif
-> > diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-> > index 33d7befd0602..7973666452c3 100644
-> > --- a/kernel/module/internal.h
-> > +++ b/kernel/module/internal.h
-> > @@ -69,6 +69,11 @@ struct load_info {
-> >   };
-> >
-> >   int mod_verify_sig(const void *mod, struct load_info *info);
-> > +struct module *find_module_all(const char *name, size_t len, bool even_unformed);
-> > +unsigned long kernel_symbol_value(const struct kernel_symbol *sym);
+> We can make something like:
 >
-> This function is small enought to be a 'static inline' in internal.h
-
-Fair enough.
-
-> > +int cmp_name(const void *name, const void *sym);
-> > +long get_offset(struct module *mod, unsigned int *size, Elf_Shdr *sechdr,
-> > +               unsigned int section);
+> static inline bool is_nproc_overlimit(struct task_struct *task)
+> {
+> 	return (task_ucounts(task) != &init_ucounts) &&
+> 		!has_capability(task, CAP_SYS_RESOURCE) &&
+> 		!has_capability(task, CAP_SYS_ADMIN);
+> }
 >
-> Having a non static function called get_offset() seems dangerous.
+> In copy_process:
 >
-> There are already several get_offset() functions in the kernel allthough
-> they are all static.
+> if (inc_rlimit_ucounts_overlimit(task_ucounts(p), UCOUNT_RLIMIT_NPROC, 1, rlimit(RLIMIT_NPROC)) == LONG_MAX) {
+> 	if (is_nproc_overlimit(p))
+> 		goto bad_fork_cleanup_count;
+> }
 >
-> It takes a struct module as an argument so it could be called
-> module_get_offset()
-
-The rename is a good idea.
-
-> > +bool sect_empty(const Elf_Shdr *sect);
+> In do_execveat_common:
 >
-> sect_empty() is small enough to remain a static inline.
-
-Yes and moved to kernel/module/internal.h.
-
->
-> > +const char *find_kallsyms_symbol(struct module *mod, unsigned long addr,
-> > +                    unsigned long *size, unsigned long *offset);
->
-> This is not used outside kallsyms.c, no need to have it in internal.h
-
-Agreed.
-
->
-> > +#else /* !CONFIG_KALLSYMS */
-> > +static inline void layout_symtab(struct module *mod, struct load_info *info) { }
-> > +static inline void add_kallsyms(struct module *mod, const struct load_info *info) { }
-> > +static inline char *find_kallsyms_symbol(struct module *mod, unsigned long addr,
-> > +                     unsigned long *size, unsigned long *offset)
->
-> This is not used outside kallsyms.c, no need to have it when
-> !CONFIG_KALLSYMS
-
-Agreed.
-
->
-> > +{
-> > +    return NULL;
-> > +}
-> > +#endif /* CONFIG_KALLSYMS */
-> > diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-> > new file mode 100644
-> > index 000000000000..ed28f6310701
-> > --- /dev/null
-> > +++ b/kernel/module/kallsyms.c
-> > @@ -0,0 +1,502 @@
-> ...
-> > +
-> > +/* Given a module and name of symbol, find and return the symbol's value */
-> > +static unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name)
->
-> This function is called from main.c, it can't be static and must be
-> defined in internal.h
-
-Agreed. This was an unfortunate oversight.
-
-> > -static unsigned long kernel_symbol_value(const struct kernel_symbol *sym)
-> > +unsigned long kernel_symbol_value(const struct kernel_symbol *sym)
->
-> This function is small enought to become a 'static inline' in internal.h
-
-Agreed.
-
-> > +int cmp_name(const void *name, const void *sym)
->
-> This function is small enought to become a 'static inline' in internal.h
-
-Agreed.
+> if ((current->flags & PF_NPROC_CHECK) &&
+>     is_ucounts_overlimit(current_ucounts(), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) &&
+>     is_nproc_overlimit(current)) {
+> 	retval = -EAGAIN;
+> 	goto out_ret;
+> }
 
 
-Kind regards,
+The more I think about it the more I suspect 8/8 is the wrong way to go.
 
--- 
-Aaron Tomlin
+The report is that adding the capability calls in kernel/sys.c which I
+moved into execve broke apache.  As the change was about removing
+inconsistencies I expect I should just start with the revert and keep
+the difference between the two code paths.
+
+My gut feel is that both the capable and the magic exception of a user
+are wrong.  If I am wrong people can report a bug and the code can get
+fixed.
+
+But definitely a bug fix branch is the wrong place to be expanding what
+is allowed without it clearly being a bug.
+
+Eric
 

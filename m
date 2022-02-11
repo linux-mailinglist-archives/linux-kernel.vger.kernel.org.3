@@ -2,115 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02AD84B1F7E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 08:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE304B1F7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 08:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347775AbiBKHnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 02:43:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50940 "EHLO
+        id S1347778AbiBKHnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 02:43:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbiBKHnF (ORCPT
+        with ESMTP id S1347777AbiBKHnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 02:43:05 -0500
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E21250
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 23:43:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1644565382; x=1676101382;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xV1Xt7qZuIJbKdhiwEYGnwXjYuIyIN/x/fsiGnpmYYw=;
-  b=hBTIFGQOCIDqK950L1VYGvpEhrluDe0Rd7dYumDjLVfmBVQkh7Yyw0Tw
-   SbB/C7PyUPOMwjY3gMn544tD0J/utUWrTUGlZrR/4uPC8+gfO/PvgyfQc
-   hNJQ1fqYKYHbnNxEpAHqp84W3ZvDhTm0jatEOX60FWuMoQX/mkbFA1Zyr
-   /HNJFfM2D0PDd1zt1P6ErJE5K/9UuPMEgx/mUXlRAgLDtmWouwX8VSQVc
-   wuBpiVtBONuwVQdNoC5Lys58IPuDSCYwK4PPS6h7alCMUbcNzTq/m5GG7
-   usSJVFTK0Tc1CeVbhW0kt4dzcFWLMVAVmAqrVNVzeeeSn2gHMpJnaoB5d
-   w==;
-X-IronPort-AV: E=Sophos;i="5.88,359,1635177600"; 
-   d="scan'208";a="192675429"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 11 Feb 2022 15:43:02 +0800
-IronPort-SDR: ChvLN9cv0LdMGGm8eqYJxKn44SJa/dCDOSLMvKP+MdQ3RgMtGt7iPHj6d/iBz9dVlj+io0E6ol
- LZTYUiFMETC8zNpMlVrQVss5VpXTkEeQ3GZ+j3cJLlBlhTSpCne03VFRJxiTmq0ZDX8Hzf95Dh
- PAFdQQa42y2vshZ+HUbBKeoz7STA+LcKHBiwxt9fGrNWl9TEIGS75hQR5t5TPiiqZ/gDqHRRtS
- xtPmNbj+AjzPi31fax9sMaAtsb0W/PMbdL+gL7lXdG5d6CccC3ODDkrb+krUoKA/SboRq5TQ5a
- masfetank9gx0NfNpOGf5DDQ
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 23:14:50 -0800
-IronPort-SDR: wMTJ/9eAaF8NEEkQ8yAwYV9+8AztlFrairWrdjGBd61dph5PwVriud5MtQQvFI4OntGBf3RAk4
- 6jgkdQ/s4pxJ1idLolNQt/hKKGynHtpLSZYAH85/mxsq0Np1SV1GfkkLBQyHJVdYJ7J18DpheT
- dBc44Mz2A4McEpwwEqRSzm7p0M5V2VBJYJlcwIl25QvdsqeBEJKoCBf7Wc6m49F7LzUObRkFUt
- AmT64Q/5X75oyW0EdgfzCz/ESiDxGxGGkhX4euFMv+HGtKpRVRxhCSOydLvaQVGslu0zKLzFNE
- PD0=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 23:43:05 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Jw5FN04lWz1SVp1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 23:43:03 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1644565383; x=1647157384; bh=xV1Xt7qZuIJbKdhiwEYGnwXjYuIyIN/x/fs
-        iGnpmYYw=; b=JshSfVVOYE959No6nGQxRVk63PT3RmP6PQaYbL6DMAGcEbn159d
-        J7fyaH3wFhG73FJZng8Cp6a2tocOx8Z8+tHXzJ8yVuW8dNbaY7DlArOW2LLzN5Ba
-        dbQGF08J3JNDzSP+tnvqAwZq05WwsUH/bi/k5bzqxSklFFXoilKZttGp1S62vWE/
-        WVffW6JiKk92wkwsJ7u6IqAPjormbCW/BAcYR86tjoXuPt+EmoS0SvJb9o78SYIW
-        CtaHXBnTEkBurbDsWhNaLIOX08FmNqf1n16YYlbrSvB9RLcLwUmH18iNmQ1qmgPP
-        qhI6xEyGfZKKEObLKgYPeRfqj379FfVaOgQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id PS7BdeZUXC5d for <linux-kernel@vger.kernel.org>;
-        Thu, 10 Feb 2022 23:43:03 -0800 (PST)
-Received: from [10.225.163.67] (unknown [10.225.163.67])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Jw5FL664Gz1SHwl;
-        Thu, 10 Feb 2022 23:43:02 -0800 (PST)
-Message-ID: <ddc1de5f-04b2-19a3-ef95-dad189a66d04@opensource.wdc.com>
-Date:   Fri, 11 Feb 2022 16:43:01 +0900
+        Fri, 11 Feb 2022 02:43:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74A892E9
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 23:43:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644565393;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q+JoBX4dv2Ujy4kHFl4q2D9yIGmIdd5volu8AUosqWE=;
+        b=RdUhG+Hyq2LpweCA5pPN7RiZhctVT43Bxc9M2053mC39yhfl2J1kE3oZc7IPhh9VJJzpvV
+        FzbkkfLl8F+xuoxf3QX3BnU8RtY+zZBT5fDGfoim533yFV6SSX0+JyOeUWwt19CFA4myT/
+        ujPhZ3S8qumHSO+oOJMovj0E8yPh/VU=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-282-S-OgPcbMPEyu1Si4IEHX9A-1; Fri, 11 Feb 2022 02:43:12 -0500
+X-MC-Unique: S-OgPcbMPEyu1Si4IEHX9A-1
+Received: by mail-ej1-f71.google.com with SMTP id ky6-20020a170907778600b0068e4bd99fd1so3725789ejc.15
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 23:43:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Q+JoBX4dv2Ujy4kHFl4q2D9yIGmIdd5volu8AUosqWE=;
+        b=5MXtkSWHEs7XPgENYcgEmFPmnoi+Dv3QDTE9K3ib7RsjXdzzCS3+CwcMl2LHNiNNuB
+         tWlq6CNoeiJMORsTASWyk+/WYpJE8KB7uFLVOlShOHz5oiLV91hc7nNTmjtwDkLUJoTo
+         vN4FfESb9GJlnnBF0QE5ctJicw+uhaQf02+2wtHcAxIqk1ByOkaUgKYrKGP1Z0ic82ou
+         g2huh2KTiTGDTV8oooO5rqL8RI4fomZ3GzNptevxi9SWqbIsJKDWE/5suSotiiVwrpGx
+         YH8fmCekqLrl6WW1Cx7abnw5qfd0MsK4k/INbZ7RjXe5MJ1XRy6wYBvkIZRSEyekkIpW
+         zNFw==
+X-Gm-Message-State: AOAM531d3/HXvwTIdcGDmtWDsr8fJ3HtyCQ7wXZJPGgOlBTLeRXkqTwE
+        NXpq9hCpIk22GYF5zrnqHTEqD2CB+nphIi/sC+LQb+FLhHTTIBcXfOCjca8l9HPrFQa6GfsoKhm
+        pEsHXzDvNrs2J3Efy2NYPXTI/
+X-Received: by 2002:a17:906:5d14:: with SMTP id g20mr322475ejt.37.1644565391013;
+        Thu, 10 Feb 2022 23:43:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwEfQpRtLobU4UAs4SWOVNcJDhEjOkbQmmbly0Xr2tW7hupHSA1QdZZhCzrr2fKvmPOHvfu0w==
+X-Received: by 2002:a17:906:5d14:: with SMTP id g20mr322469ejt.37.1644565390811;
+        Thu, 10 Feb 2022 23:43:10 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id g15sm4632241edz.100.2022.02.10.23.43.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 23:43:10 -0800 (PST)
+Message-ID: <d4425819-78c0-ad53-841d-fd59a59c2736@redhat.com>
+Date:   Fri, 11 Feb 2022 08:43:09 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5/9] pata_mpc52xx: use GFP_KERNEL
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 3/9] ASoC: Intel: bytcr_wm5102: use GFP_KERNEL
 Content-Language: en-US
-To:     Julia Lawall <Julia.Lawall@inria.fr>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc:     kernel-janitors@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Cezary Rojewski <cezary.rojewski@intel.com>
+Cc:     alsa-devel@alsa-project.org, kernel-janitors@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.com>,
+        Jie Yang <yang.jie@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
 References: <20220210204223.104181-1-Julia.Lawall@inria.fr>
- <20220210204223.104181-6-Julia.Lawall@inria.fr>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220210204223.104181-6-Julia.Lawall@inria.fr>
+ <20220210204223.104181-4-Julia.Lawall@inria.fr>
+ <d26561a1-ddd4-aea0-792d-efce104ad44f@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <d26561a1-ddd4-aea0-792d-efce104ad44f@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/11/22 05:42, Julia Lawall wrote:
-> Platform_driver probe functions aren't called with locks held
-> and thus don't need GFP_ATOMIC. Use GFP_KERNEL instead.
+Hi,
+
+On 2/11/22 01:20, Pierre-Louis Bossart wrote:
 > 
-> Problem found with Coccinelle.
 > 
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+> On 2/10/22 14:42, Julia Lawall wrote:
+>> Platform_driver probe functions aren't called with locks held
+>> and thus don't need GFP_ATOMIC. Use GFP_KERNEL instead.
+>>
+>> Problem found with Coccinelle.
+> 
+> Thanks Julia, indeed it's the only case where GFP_ATOMIC is used for
+> machine drivers.
+> 
+> This was already present in the initial Android driver from Intel (2013)
+> [1] and missed in the multiple passes to get this upstream.
+> 
+> Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-Applied to for-5.18. Thanks !
+Yeah I should have caught this when I upstreamed the machine driver:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
 
 
--- 
-Damien Le Moal
-Western Digital Research
+
+> 
+> [1]
+> https://github.com/lenovo-yt2-dev/android_kernel_lenovo_baytrail/blob/cm-12.1/sound/soc/intel/board/byt_bl_wm5102.c
+> 
+>>
+>> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+>>
+>> ---
+>>  sound/soc/intel/boards/bytcr_wm5102.c |    2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/sound/soc/intel/boards/bytcr_wm5102.c b/sound/soc/intel/boards/bytcr_wm5102.c
+>> index 504ef4cab111..8d8e96e3cd2d 100644
+>> --- a/sound/soc/intel/boards/bytcr_wm5102.c
+>> +++ b/sound/soc/intel/boards/bytcr_wm5102.c
+>> @@ -389,7 +389,7 @@ static int snd_byt_wm5102_mc_probe(struct platform_device *pdev)
+>>  	bool sof_parent;
+>>  	int ret;
+>>  
+>> -	priv = devm_kzalloc(dev, sizeof(*priv), GFP_ATOMIC);
+>> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>>  	if (!priv)
+>>  		return -ENOMEM;
+>>  
+>>
+> 
+

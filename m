@@ -2,275 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02014B1B97
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 02:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1834B1B99
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 02:48:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243847AbiBKBre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 20:47:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51980 "EHLO
+        id S1346292AbiBKBsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 20:48:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiBKBrb (ORCPT
+        with ESMTP id S230175AbiBKBsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 20:47:31 -0500
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3AD5F99;
-        Thu, 10 Feb 2022 17:47:31 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:36220)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nIL22-000byL-FN; Thu, 10 Feb 2022 18:47:30 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:51922 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nIL20-00FHr4-Vy; Thu, 10 Feb 2022 18:47:30 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20220210025321.787113-1-keescook@chromium.org>
-        <871r0a8u29.fsf@email.froward.int.ebiederm.org>
-        <202202101033.9C04563D9@keescook>
-        <87pmnu5z28.fsf@email.froward.int.ebiederm.org>
-        <202202101137.B48D02138@keescook>
-        <87k0e249tt.fsf@email.froward.int.ebiederm.org>
-        <202202101710.668EDCDC@keescook>
-Date:   Thu, 10 Feb 2022 19:47:00 -0600
-In-Reply-To: <202202101710.668EDCDC@keescook> (Kees Cook's message of "Thu, 10
-        Feb 2022 17:26:27 -0800")
-Message-ID: <875ypm41kb.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 10 Feb 2022 20:48:50 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3CF1104
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:48:50 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id g14so20726068ybs.8
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:48:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MtclKlVPNmwnTMdbXaKV9k92p96q79s2Kk3rmNWUESA=;
+        b=qUimIxmfcjg0W3N64aSiuhN3eTxdaSR1VL+PTnyfwQjh/27t9ZAheo0dGkDC+ROOEv
+         5wM7dSlcsaD2Pcf1LcsNpIsiq4I+f2r26RenZzRSUAf+QTJEAMlzdQ7+K/Iv12iuAd4/
+         QklsA2TaI3QRD7K846L1m9RqeUINAhNzJo3Ks=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MtclKlVPNmwnTMdbXaKV9k92p96q79s2Kk3rmNWUESA=;
+        b=D54IUOvHzU4LPZcDVCIIBABF2Wm2wOBfILdyYzHmOiM0fVsbxYh1jiy5GzugIaoozS
+         vRx638ZaTlZXk8kDur70sEINm8bTm3HFU48FmzTMBuWC3TgifJbOlvjHcf8Q7XXoMazV
+         cZ/zxRtmK8yH9bfq3ZjrrjLpMjNJ53xI7bBxX2fV+0hb44IGM3Lfu1hBqpb6O3T7E4Sq
+         Lw6ZrD0JoButF+Ecwr101P6W+T9Zbym7xjjN2eIYMCJ/WAEkHvIh/AB+jAaz4Jm1kNcl
+         gq+W0pOl5a9Lzex6WcrmTwCYSjhImiyjgZj0Y/M9oLvtrUYFdFCfSL7ezD805PZCsPCl
+         AgKA==
+X-Gm-Message-State: AOAM533hY9ckJjRePpL5XZ8g3tnTa6bi5zlkqFZR7Ecuep1l/FYLEIa5
+        25wvk17qAIuXIWUypDlERRprWoRVm2+JJdu0e6Zc
+X-Google-Smtp-Source: ABdhPJwh/Kjq3wxUmzIVchUKWgqmk7NfvUUzdnil9CQ4SvT2PKlIimKUyLApJ+kvMumKy/ztXpSwEpOuffVt2o+Prbc=
+X-Received: by 2002:a81:1a0c:: with SMTP id a12mr10438464ywa.271.1644544129465;
+ Thu, 10 Feb 2022 17:48:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nIL20-00FHr4-Vy;;;mid=<875ypm41kb.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/nqHJ51IsUdPOo+T0IvmYOwyxWQ2BNMiM=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220209123800.269774-1-heiko@sntech.de> <CAOnJCUL5w4+_zJvu-BxP+LGN2ohv6arY+uh0DOU586v_5mCE8g@mail.gmail.com>
+In-Reply-To: <CAOnJCUL5w4+_zJvu-BxP+LGN2ohv6arY+uh0DOU586v_5mCE8g@mail.gmail.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Thu, 10 Feb 2022 17:48:38 -0800
+Message-ID: <CAOnJCUKzE3uBfu0Aqpr19b-XB76qY7qtaeK87FF7H4Tw5B+d_Q@mail.gmail.com>
+Subject: Re: [PATCH v6 00/14] riscv: support for Svpbmt and D1 memory types
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Wei Fu <wefu@redhat.com>,
+        liush <liush@allwinnertech.com>, Guo Ren <guoren@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Drew Fustini <drew@beagleboard.org>,
+        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Greg Favor <gfavor@ventanamicro.com>,
+        Andrea Mondelli <andrea.mondelli@huawei.com>,
+        Jonathan Behrens <behrensj@mit.edu>,
+        Xinhaoqu <xinhaoqu@huawei.com>,
+        Bill Huffman <huffman@cadence.com>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Allen Baum <allen.baum@esperantotech.com>,
+        Josh Scheid <jscheid@ventanamicro.com>,
+        Richard Trauben <rtrauben@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Christoph Muellner <cmuellner@linux.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Kees Cook <keescook@chromium.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 798 ms - load_scoreonly_sql: 0.08 (0.0%),
-        signal_user_changed: 14 (1.7%), b_tie_ro: 12 (1.5%), parse: 2.5 (0.3%),
-         extract_message_metadata: 28 (3.5%), get_uri_detail_list: 9 (1.1%),
-        tests_pri_-1000: 23 (2.8%), tests_pri_-950: 1.82 (0.2%),
-        tests_pri_-900: 1.45 (0.2%), tests_pri_-90: 116 (14.5%), check_bayes:
-        112 (14.0%), b_tokenize: 20 (2.5%), b_tok_get_all: 16 (1.9%),
-        b_comp_prob: 5 (0.7%), b_tok_touch_all: 63 (7.9%), b_finish: 1.37
-        (0.2%), tests_pri_0: 596 (74.6%), check_dkim_signature: 1.16 (0.1%),
-        check_dkim_adsp: 4.0 (0.5%), poll_dns_idle: 1.19 (0.1%), tests_pri_10:
-        2.1 (0.3%), tests_pri_500: 7 (0.9%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 0/3] signal: HANDLER_EXIT should clear SIGNAL_UNKILLABLE
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
+On Thu, Feb 10, 2022 at 4:25 PM Atish Patra <atishp@atishpatra.org> wrote:
+>
+> On Wed, Feb 9, 2022 at 4:38 AM Heiko Stuebner <heiko@sntech.de> wrote:
+> >
+> > Svpbmt is an extension defining "Supervisor-mode: page-based memory types"
+> > for things like non-cacheable pages or I/O memory pages.
+> >
+> >
+> > So this is my 2nd try at implementing Svpbmt (and the diverging D1 memory
+> > types) using the alternatives framework.
+> >
+> > This includes a number of changes to the alternatives mechanism itself.
+> > The biggest one being the move to a more central location, as I expect
+> > in the future, nearly every chip needing some sort of patching, be it
+> > either for erratas or for optional features (svpbmt or others).
+> >
+> > The dt-binding for svpbmt itself is of course not finished and is still
+> > using the binding introduced in previous versions, as where to put
+> > a svpbmt-property in the devicetree is still under dicussion.
+> > Atish seems to be working on a framework for extensions [0],
+> >
+>
+> Here is the patch series
+> https://lore.kernel.org/lkml/20220210214018.55739-1-atishp@rivosinc.com/
+>
+> I think we can simplify the cpu feature probing in PATCH 10 with the
+> above series
+> which simply relies on the existing riscv_isa bitmap.
+>
+> We also don't need the separate svpbmt property in DT mmu node.
+> Let me know what you think.
+>
+> > The series also introduces support for the memory types of the D1
+> > which are implemented differently to svpbmt. But when patching anyway
+> > it's pretty clean to add the D1 variant via ALTERNATIVE_2 to the same
+> > location.
+> >
+> > The only slightly bigger difference is that the "normal" type is not 0
+> > as with svpbmt, so kernel patches for this PMA type need to be applied
+> > even before the MMU is brought up, so the series introduces a separate
+> > stage for that.
+> >
+> >
+> > In theory this series is 3 parts:
+> > - sbi cache-flush / null-ptr
+> > - alternatives improvements
+> > - svpbmt+d1
+> >
+> > So expecially patches from the first 2 areas could be applied when
+> > deemed ready, I just thought to keep it together to show-case where
+> > the end-goal is and not requiring jumping between different series.
+> >
+> >
+> > The sbi cache-flush patch is based on Atish's sparse-hartid patch [1],
+> > as it touches a similar area in mm/cacheflush.c
+> >
+> >
+> > I picked the recipient list from the previous version, hopefully
+> > I didn't forget anybody.
+> >
 
-> On Thu, Feb 10, 2022 at 04:48:30PM -0600, Eric W. Biederman wrote:
->> Kees Cook <keescook@chromium.org> writes:
->> 
->> > On Thu, Feb 10, 2022 at 12:58:07PM -0600, Eric W. Biederman wrote:
->> >> Kees Cook <keescook@chromium.org> writes:
->> >> 
->> >> > On Thu, Feb 10, 2022 at 12:17:50PM -0600, Eric W. Biederman wrote:
->> >> >> Kees Cook <keescook@chromium.org> writes:
->> >> >> 
->> >> >> > Hi,
->> >> >> >
->> >> >> > This fixes the signal refactoring to actually kill unkillable processes
->> >> >> > when receiving a fatal SIGSYS from seccomp. Thanks to Robert for the
->> >> >> > report and Eric for the fix! I've also tweaked seccomp internal a bit to
->> >> >> > fail more safely. This was a partial seccomp bypass, in the sense that
->> >> >> > SECCOMP_RET_KILL_* didn't kill the process, but it didn't bypass other
->> >> >> > aspects of the filters. (i.e. the syscall was still blocked, etc.)
->> >> >> 
->> >> >> Any luck on figuring out how to suppress the extra event?
->> >> >
->> >> > I haven't found a good single indicator of a process being in an "I am dying"
->> >> > state, and even if I did, it seems every architecture's exit path would
->> >> > need to add a new test.
->> >> 
->> >> The "I am dying" state for a task is fatal_signal_pending, at least
->> >> before get_signal is reached, for a process there is SIGNAL_GROUP_EXIT.
->> >> Something I am busily cleaning up and making more reliable at the
->> >> moment.
->> >
->> > The state I need to catch is "I am dying and this syscall was
->> > interrupted". fatal_signal_pending() is kind of only the first half
->> > (though it doesn't cover fatal SIGSYS?)
->> >
->> > For example, if a process hits a BUG() in the middle of running a
->> > syscall, that syscall isn't expected to "exit" from the perspective of
->> > userspace. This is similarly true for seccomp's fatal SIGSYS.
->> >
->> >> What is the event that is happening?  Is it
->> >> tracehook_report_syscall_exit or something else?
->> >
->> > Yes, but in more completely, it's these three, which are called in
->> > various fashions from architecture syscall exit code:
->> >
->> > 	audit_syscall_exit()		(audit)
->> > 	trace_sys_exit()		(see "TRACE_EVENT_FN(sys_exit,")
->> > 	tracehook_report_syscall_exit()	(ptrace)
->> >
->> >> From the bits I have seen it seems like something else.
->> >
->> > But yes, the place Robert and I both noticed it was with ptrace from
->> > tracehook_report_syscall_exit(), which is rather poorly named. :)
->> 
->> Speaking of patches I am just about to send out.
->> 
->> > Looking at the results, audit_syscall_exit() and trace_sys_exit() need
->> > to be skipped too, since they would each be reporting potential nonsense.
->> >
->> >> > The best approach seems to be clearing the TIF_*WORK* bits, but that's
->> >> > still a bit arch-specific. And I'm not sure which layer would do that.
->> >> > At what point have we decided the process will not continue? More
->> >> > than seccomp was calling do_exit() in the middle of a syscall, but those
->> >> > appear to have all been either SIGKILL or SIGSEGV?
->> >> 
->> >> This is where I get confused what TIF_WORK bits matter?
->> >
->> > This is where I wish all the architectures were using the common syscall
->> > code. The old do_exit() path would completely skip _everything_ in the
->> > exit path, so it was like never calling anything after the syscall
->> > dispatch table. The only userspace visible things in there are triggered
->> > from having TIF_WORK... flags (but again, it's kind of a per-arch mess).
->> >
->> > Skipping the entire exit path makes a fair bit of sense. For example,
->> > rseq_syscall() is redundant (forcing SIGSEGV).
->> >
->> > Regardless, at least the three places above need to be skipped.
->> >
->> > But just testing fatal_signal_pending() seems wrong: a normal syscall
->> > could be finishing just fine, it just happens to have a fatal signal
->> > ready to be processed.
->> 
->> Yes.  It is really just the HANDLER_EXIT case where this is interesting.
->
-> Right.
->
->> 
->> >
->> > Here's the ordering after a syscall on x86 from do_syscall_64():
->> >
->> > do_syscall_x64()
->> > 	sys_call_table[...](regs)
->> > syscall_exit_to_user_mode()
->> > 	__syscall_exit_to_user_mode_work()
->> > 		syscall_exit_to_user_mode_prepare()
->> > 			syscall_exit_work()
->> > 				arch_syscall_exit_tracehook()
->> > 					tracehook_report_syscall_exit()
->> > 	exit_to_user_mode_prepare()
->> > 		exit_to_user_mode_loop()
->> > 			handle_signal_work()
->> > 				arch_do_signal_or_restart()
->> > 					get_signal()
->> > 						do_group_exit()
->> >
->> > Here's arm64 from el0_svc():
->> >
->> > do_el0_svc()
->> > 	el0_svc_common()
->> > 		invoke_syscall()
->> > 			syscall_table[...](regs)
->> > 		syscall_trace_exit()
->> > 			tracehook_report_syscall()
->> > 				tracehook_report_syscall_exit()
->> > exit_to_user_mode()
->> > 	prepare_exit_to_user_mode()
->> > 		do_notify_resume()
->> > 			do_signal()
->> > 				get_signal()
->> > 					do_group_exit()
->> >
->> > In the past, any do_exit() would short circuit everything after the
->> > syscall table. Now, we do all the exit work before starting the return
->> > to user mode which is what processes the signals. So I guess there's
->> > more precisely a difference between "visible to userspace" and "return
->> > to userspace".
->> 
->> Yes.  I see that now.  I had not had an occasion to look at the order
->> all of these were called in before and my mental model was wrong.
->
-> Yeah, I didn't even have a model of this all the way. I'd really only
-> understood the ptrace side of it.
->
->> It makes a certain kind of sense that the per syscall work happens
->> before we do additional things like process signals.  It simply
->> had not realized that was happening in that order until now.
->> 
->> 
->> > (an aside: where to PF_IO_WORKER threads die?)
->> 
->> They are calling do_exit explicitly.
->
-> Ah-ha, thanks.
->
->> 
->> >> I expect if anything else mattered we would need to change it to
->> >> HANDLER_EXIT.
->> >> 
->> >> I made a mistake conflating to cases and I want to make certain I
->> >> successfully separate those two cases at the end of the day.
->> >
->> > For skipping the exit work, I'm not sure it matters, since all the
->> > signal stuff is "too late"...
->> 
->> The conflation lead me to believe that we could simply and safely cause
->> seccomp to use normal signal delivery to kill the process.  The first
->> part of the conflation I sorted out by introducing HANDLER_EXIT.  The
->> user visible part of the change I am not yet certain what to do with.
->> 
->> My gut reaction is does it matter?  Can you escape the seccomp filter
->> with a stop?  Does it break userspace?
->
-> After fixing UNKILLABLE vs IMMUTABLE, I'm not aware of anything else
-> misbehaving. The new nonsense exit event, though, is bound to be at
-> least confusing to humans. ("Why did this syscall not change any of its
-> registers?", etc.)
->
->> I realize the outcome of that question is that it does matter so we
->> probably need to find a way to supress that situation for HANDLER_EXIT.
->> Both force_exit_sig and force_sig_seccomp appear to be using dumpable
->> signals which makes the problem doubly tricky.
->> 
->> The first tricky bit is fatal_signal_pending isn't set because a
->> coredump is possible, so something else is needed to detect this
->> condition.
->> 
->> The second part is what to do when we detect the condition.
->> 
->> The only solution I can think of quickly is to modify
->> force_sig_info_to_task clear TIF_SYSCALL_WORK on the architectures where
->> that is used and to clear SYSCALL_WORK_EXIT on x86 and s390, and to do
->> whatever the architecture appropriate thing is on the other
->> architectures.
->
-> The common accessors for the bits are set_syscall_work()/clear_syscall_work()
-> but I don't see anything to operate on an entire mask. Maybe it needs to
-> grow something like reset_syscall_work()?
+I am also getting a load access fault while booting this series in Qemu.
 
-Oh.  I hadn't realized SYSCALL_WORK_EXIT and TIF_SYSCALL_WORK were
-masks.  Yes it looks like a simple addition of reset_syscall_work()
-and calling it from force_sig_info when HANDLER_EXIT will hide these
-events.
+<with additional debug message when before sbi_trap_redirect in OpenSBI>
+sbi_trap_error_debug: hart1: trap handler failed (error -2)
+sbi_trap_error_debug: hart1: mcause=0x0000000000000005 mtval=0x0000000080046468
+sbi_trap_error_debug: hart1: mtval2=0x0000000000000000 mtinst=0x0000000000000000
+sbi_trap_error_debug: hart1: mepc=0x000000008080a8b8 mstatus=0x0000000a00000800
+sbi_trap_error_debug: hart1: ra=0x0000000080202b06 sp=0x0000000081203f00
+sbi_trap_error_debug: hart1: gp=0x00000000812d9db8 tp=0x0000000080046000
+sbi_trap_error_debug: hart1: s0=0x0000000081203f80 s1=0x0000000080c1a8a8
+sbi_trap_error_debug: hart1: a0=0x0000000080c1a8a8 a1=0x0000000080c1b0d0
+sbi_trap_error_debug: hart1: a2=0x0000000000000002 a3=0x0000000000000000
+sbi_trap_error_debug: hart1: a4=0x00000000812da902 a5=0x0000000000000000
+sbi_trap_error_debug: hart1: a6=0x0000000000000006 a7=0x0000000000000010
+sbi_trap_error_debug: hart1: s2=0x0000000080c1b0d0 s3=0x0000000000000002
+sbi_trap_error_debug: hart1: s4=0x00000000bf000000 s5=0x0000000000000000
+sbi_trap_error_debug: hart1: s6=0x8000000a00006800 s7=0x000000000000007f
+sbi_trap_error_debug: hart1: s8=0x0000000080018038 s9=0x0000000080039eac
+sbi_trap_error_debug: hart1: s10=0x0000000000000000 s11=0x0000000000000000
+sbi_trap_error_debug: hart1: t0=0x0000000080c04000 t1=0x0000000000000002
+sbi_trap_error_debug: hart1: t2=0x0000000000001000 t3=0x0000000000000010
+sbi_trap_error_debug: hart1: t4=0x00000000800168be t5=0x0000000000000027
+sbi_trap_error_debug: hart1: t6=0x0000000000000001
 
-When you say the events are corrupted did you mean they return wrong data
-to userspace or simply that the events should not fire?
+mepc : 0x000000008080a8b8 - call_function_init (kernel/smp.c)
 
-I am trying to figure out if there is a case to be made that it was a
-bug that these events were missing.
+Kernel - 5.17-rc2 + my patches
+Qemu - Alistairs next tree + my patches
 
-Eric
+I do have some out-of-tree patches but that shouldn't be an issue as I
+am able to boot without your patches.
+Commenting the *_boot_alternatives at both the places works fine as well.
+
+diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+index 0e1bb97f9749..bdeb7ab3e719 100644
+--- a/arch/riscv/kernel/head.S
++++ b/arch/riscv/kernel/head.S
+@@ -342,7 +342,7 @@ clear_bss_done:
+        call kasan_early_init
+ #endif
+        /* Start the kernel */
+-       call apply_boot_alternatives
++       //call apply_boot_alternatives
+        call soc_early_init
+        tail start_kernel
+
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index 7216db5d6a2c..c6bf8f4d3d16 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -819,7 +819,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+        BUG_ON((kernel_map.virt_addr + kernel_map.size) >
+ADDRESS_SPACE_END - SZ_4K);
+ #endif
+
+-       apply_early_boot_alternatives();
++       //apply_early_boot_alternatives();
+        pt_ops_set_early();
+
+        /* Setup early PGD for fixmap */
+
+I am currently debugging it and will let you know if I find the root cause.
+
+> > changes in v6:
+> > - rebase onto 5.17-rc1
+> > - handle sbi null-ptr differently
+> > - improve commit messages
+> > - use riscv,mmu as property name
+> >
+> > changes in v5:
+> > - move to use alternatives for runtime-patching
+> > - add D1 variant
+> >
+> >
+> > [0] https://lore.kernel.org/r/20211224211632.1698523-1-atishp@rivosinc.com
+> > [1] https://lore.kernel.org/r/20220120090918.2646626-1-atishp@rivosinc.com
+> >
+> >
+> > Heiko Stuebner (12):
+> >   riscv: prevent null-pointer dereference with sbi_remote_fence_i
+> >   riscv: integrate alternatives better into the main architecture
+> >   riscv: allow different stages with alternatives
+> >   riscv: implement module alternatives
+> >   riscv: implement ALTERNATIVE_2 macro
+> >   riscv: extend concatenated alternatives-lines to the same length
+> >   riscv: prevent compressed instructions in alternatives
+> >   riscv: move boot alternatives to a slightly earlier position
+> >   riscv: Fix accessing pfn bits in PTEs for non-32bit variants
+> >   riscv: add cpufeature handling via alternatives
+> >   riscv: remove FIXMAP_PAGE_IO and fall back to its default value
+> >   riscv: add memory-type errata for T-Head
+> >
+> > Wei Fu (2):
+> >   dt-bindings: riscv: add MMU Standard Extensions support for Svpbmt
+> >   riscv: add RISC-V Svpbmt extension support
+> >
+> >  .../devicetree/bindings/riscv/cpus.yaml       |  10 ++
+> >  arch/riscv/Kconfig.erratas                    |  29 ++--
+> >  arch/riscv/Kconfig.socs                       |   1 -
+> >  arch/riscv/Makefile                           |   2 +-
+> >  arch/riscv/errata/Makefile                    |   2 +-
+> >  arch/riscv/errata/sifive/errata.c             |  10 +-
+> >  arch/riscv/errata/thead/Makefile              |   1 +
+> >  arch/riscv/errata/thead/errata.c              |  85 +++++++++++
+> >  arch/riscv/include/asm/alternative-macros.h   | 114 ++++++++-------
+> >  arch/riscv/include/asm/alternative.h          |  16 ++-
+> >  arch/riscv/include/asm/errata_list.h          |  52 +++++++
+> >  arch/riscv/include/asm/fixmap.h               |   2 -
+> >  arch/riscv/include/asm/pgtable-32.h           |  17 +++
+> >  arch/riscv/include/asm/pgtable-64.h           |  79 +++++++++-
+> >  arch/riscv/include/asm/pgtable-bits.h         |  10 --
+> >  arch/riscv/include/asm/pgtable.h              |  53 +++++--
+> >  arch/riscv/include/asm/vendorid_list.h        |   1 +
+> >  arch/riscv/kernel/Makefile                    |   1 +
+> >  arch/riscv/{errata => kernel}/alternative.c   |  48 ++++++-
+> >  arch/riscv/kernel/cpufeature.c                | 136 +++++++++++++++++-
+> >  arch/riscv/kernel/head.S                      |   2 +
+> >  arch/riscv/kernel/module.c                    |  29 ++++
+> >  arch/riscv/kernel/sbi.c                       |  10 +-
+> >  arch/riscv/kernel/smpboot.c                   |   4 -
+> >  arch/riscv/kernel/traps.c                     |   2 +-
+> >  arch/riscv/mm/init.c                          |   1 +
+> >  26 files changed, 606 insertions(+), 111 deletions(-)
+> >  create mode 100644 arch/riscv/errata/thead/Makefile
+> >  create mode 100644 arch/riscv/errata/thead/errata.c
+> >  rename arch/riscv/{errata => kernel}/alternative.c (59%)
+> >
+> > --
+> > 2.30.2
+> >
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+>
+>
+>
+> --
+> Regards,
+> Atish
+
+
+
+-- 
+Regards,
+Atish

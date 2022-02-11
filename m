@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F12344B1D1E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 04:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C26F4B1D3B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 04:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240547AbiBKDvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 22:51:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38752 "EHLO
+        id S239315AbiBKDzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 22:55:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240258AbiBKDvJ (ORCPT
+        with ESMTP id S233468AbiBKDzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 22:51:09 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E1D5F75
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 19:51:09 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id k20-20020a5d91d4000000b0061299fad2fdso5453852ior.21
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 19:51:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=sFibFZ2c7JVpUsxAag24//5YclVikx9mwUhyNlC52lY=;
-        b=Eev7XeXLtTWOEes/litwsRj5xkxdxn+4ee8Lmq0VHyqTxTLDZom3MvxZXq5J+Yf96w
-         v40SH/SB16B33EPEzJ3YhHYi6fwbRpoUCbcf24mvN2QBLXCF2ww+3qxRpvKrg8TAvDyo
-         pfMDeYEASWjaPwQQjm9sEFj4DWNoRVnDSlLQwrP24h3nNjL6c+6M9aXdriuIQhBBvAVV
-         iEbMh8WsDXTV4zwNs0wwZTyVf+j76FsXtP+8jO2jmcPm37/ilWVSvRug6UzUbdHje51L
-         p+AlBxtzXUndw+U3JYeeZrA2ONvxU4qHDoSuKjb/O3RMrCHXvint9sRHyIVifZddKs9a
-         wIVg==
-X-Gm-Message-State: AOAM532wuQPCrER3XjOyXHTM+h4vZ3N3ARDqc0lJCCHJT3WnR5lplesx
-        ZTV5NA9dwP+zQK95s/lX0lzO76WovHqLOiIk+bGREjxrB8gh
-X-Google-Smtp-Source: ABdhPJwxguZj4xhw2cCfO1gXWXSzPnSR1JybjtsjtIDM6ox5o8VarmPoCrQWscPGGU0wYr9BA1bjL/AFgdY8vzL1308DYnV0CtN2
+        Thu, 10 Feb 2022 22:55:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16B1E1125
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 19:55:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644551751;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7T3Os6oDYB/2abU0AodlQMxDyRkNZMiJu4SBO/39vec=;
+        b=C3Tx5/vl+NWNbylQcQr5xMpLouTAOkDX013pmLj+lIDug6hLp34tK6ecECUYoDwdwbDE1w
+        FpLLu0WtOqHbvoTAXvT9Rac0rmVNxv2O1OL+i6KNR/Q+kw8Qq5FgMT2d9I02wmYFWl3ZtH
+        sGQkBHmMn3b/9kq/MJ8tsjRdLI2+yOc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-257-emkjnUV6PhSxWFGMnqckIQ-1; Thu, 10 Feb 2022 22:55:48 -0500
+X-MC-Unique: emkjnUV6PhSxWFGMnqckIQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 06D351800D50;
+        Fri, 11 Feb 2022 03:55:47 +0000 (UTC)
+Received: from llong.com (unknown [10.22.19.255])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3A6D84CEE0;
+        Fri, 11 Feb 2022 03:55:35 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Waiman Long <longman@redhat.com>
+Subject: [PATCH 1/2] locking/lockdep: Cleanup reinit_class()
+Date:   Thu, 10 Feb 2022 22:55:25 -0500
+Message-Id: <20220211035526.1329503-1-longman@redhat.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2606:: with SMTP id m6mr5630684jat.93.1644551468636;
- Thu, 10 Feb 2022 19:51:08 -0800 (PST)
-Date:   Thu, 10 Feb 2022 19:51:08 -0800
-In-Reply-To: <0000000000006e988105d72fbe3f@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001a5dc005d7b5fab1@google.com>
-Subject: Re: [syzbot] general protection fault in i2c_setup_smbus_alert
-From:   syzbot <syzbot+0591ccf54ee05344e4eb@syzkaller.appspotmail.com>
-To:     akhilrajeev@nvidia.com, andriy.shevchenko@linux.intel.com,
-        andy.shevchenko@gmail.com, djrscally@gmail.com,
-        gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
-        johan@kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, sakari.ailus@linux.intel.com,
-        syzkaller-bugs@googlegroups.com, wsa@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,25 +59,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+Replace the duplicated WARN_ON_ONCE() tests in reinit_class() with
+BUILD_BUG_ON().
 
-commit a263a84088f689bf0c1552a510b25d0bcc45fcae
-Author: Akhil R <akhilrajeev@nvidia.com>
-Date:   Fri Jan 28 11:44:27 2022 +0000
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ include/linux/lockdep_types.h | 4 ++++
+ kernel/locking/lockdep.c      | 6 +++---
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-    i2c: smbus: Use device_*() functions instead of of_*()
+diff --git a/include/linux/lockdep_types.h b/include/linux/lockdep_types.h
+index d22430840b53..446d981ae3a2 100644
+--- a/include/linux/lockdep_types.h
++++ b/include/linux/lockdep_types.h
+@@ -108,6 +108,10 @@ struct lock_class {
+ 	 */
+ 	struct list_head		locks_after, locks_before;
+ 
++	/*
++	 * All the fields that require re-initialization after being zapped
++	 * must be put after "key".
++	 */
+ 	const struct lockdep_subclass_key *key;
+ 	unsigned int			subclass;
+ 	unsigned int			dep_gen_id;
+diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+index d4252b5c9863..77bbe557d48b 100644
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -6015,10 +6015,10 @@ static void reinit_class(struct lock_class *class)
+ 	WARN_ON_ONCE(!class->lock_entry.next);
+ 	WARN_ON_ONCE(!list_empty(&class->locks_after));
+ 	WARN_ON_ONCE(!list_empty(&class->locks_before));
++	BUILD_BUG_ON(offsetof(struct lock_class, lock_entry) > offset);
++	BUILD_BUG_ON(offsetof(struct lock_class, locks_after) > offset);
++	BUILD_BUG_ON(offsetof(struct lock_class, locks_before) > offset);
+ 	memset(p + offset, 0, sizeof(*class) - offset);
+-	WARN_ON_ONCE(!class->lock_entry.next);
+-	WARN_ON_ONCE(!list_empty(&class->locks_after));
+-	WARN_ON_ONCE(!list_empty(&class->locks_before));
+ }
+ 
+ static inline int within(const void *addr, void *start, unsigned long size)
+-- 
+2.27.0
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=156c8174700000
-start commit:   ef6b35306dd8 Add linux-next specific files for 20220204
-git tree:       linux-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=176c8174700000
-console output: https://syzkaller.appspot.com/x/log.txt?x=136c8174700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e0431e0b00810b4f
-dashboard link: https://syzkaller.appspot.com/bug?extid=0591ccf54ee05344e4eb
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1105f472700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16492aa4700000
-
-Reported-by: syzbot+0591ccf54ee05344e4eb@syzkaller.appspotmail.com
-Fixes: a263a84088f6 ("i2c: smbus: Use device_*() functions instead of of_*()")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection

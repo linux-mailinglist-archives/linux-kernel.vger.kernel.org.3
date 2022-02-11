@@ -2,73 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA554B21C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 838114B21BD
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348658AbiBKJYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 04:24:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39470 "EHLO
+        id S1348574AbiBKJYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 04:24:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348595AbiBKJYk (ORCPT
+        with ESMTP id S1348551AbiBKJY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 04:24:40 -0500
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03381109B;
-        Fri, 11 Feb 2022 01:24:37 -0800 (PST)
+        Fri, 11 Feb 2022 04:24:28 -0500
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3061086
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:24:24 -0800 (PST)
 Received: from localhost.localdomain ([81.221.85.15]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0M7ZR3-1oCV3C3YYh-00xJjX;
- Fri, 11 Feb 2022 10:24:06 +0100
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MVw6g-1npUh631po-00X1WO;
+ Fri, 11 Feb 2022 10:24:09 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Marek Vasut <marek.vasut@gmail.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Song Liu <songliubraving@fb.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Adam Ford <aford173@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Adam Ford <aford173@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
         Enric Balletbo i Serra <enric.balletbo@collabora.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
         Olof Johansson <olof@lixom.net>,
         Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
-        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v6 06/12] arm64: defconfig: enable bpf/cgroup firewalling
-Date:   Fri, 11 Feb 2022 10:23:16 +0100
-Message-Id: <20220211092322.287487-7-marcel@ziswiler.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6 07/12] arm64: defconfig: enable imx8m pcie phy driver
+Date:   Fri, 11 Feb 2022 10:23:17 +0100
+Message-Id: <20220211092322.287487-8-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220211092322.287487-1-marcel@ziswiler.com>
 References: <20220211092322.287487-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:rf0hT0aeHyLIdu2loRx1Zy/Fdh/cjuPMmxMTcXBYZ2EmTPwGFfz
- tyrlZLoxD7OYvX/ct1Z3LsVE0ZXI4eUav9jH7hq55G8ouOcefAA1FtpzYPlUBcrc6YsA0M+
- P6BPQH5zz8UTVpXp6mvkuBI5temNeqzofaby8EXsoHM/lGWz5cN8C2C7pGfR9cBTeBdgJ/v
- fc0nPXmlG9NosgKCSgp6w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:zrql6Y5KADM=:aTsM38AVLTMnEHGDXL5Kt7
- ms9ORCvceNmgrjSAO41QoE3DQO6UnVu+tVC5HCDFQzominrpjUN+BLKhSCTAle78ikUpGIIsj
- n95Tlm82pWsefN0QkMluYZKteSjAnPuixPFlHas1kPqGOTehncV3CYPxBLw+YOH0RvdBciQbT
- ikVSNLlpdi0STQ6bMIpWeUtuGZC2G7RmWumovOOIhxYGcgFFkuo7goKqQCfZGhOnVunjk8qFS
- WL6/2otNIz44uL43Som8sEWAcdED7Kj+SlR404rqAjQwi9MEWX2X6qZW1azerM4NUe9clT7xn
- jRSs3c7P3Bb7X5Y3Mc6GKXJgK8xMNN8qxwwhxIOtKo1bUG0ezrbAv6Om5IBTDjhtisz6rCDUH
- oTHatkSgMOAnCqndtXVcUN4T4g+7i3lwo/Q6K+ggNbi5qOvuVJtO+lz59fMqQKpbluvTD/chg
- wkQ9+X0S5HAA9+uqOspO3rQEIun9SwB/qLhKRbk0biymF+3q7DiNIk6w+VROQEO2QpwfnPTfE
- 0YdtemLYEdxY4vMxDkec3/NdIA8VPdTo86mzrmH5WI28/9CW4rLGfWt8yF9GcG/cDhv0kpcPK
- t6JWVVQjejM3AprUD2EKhO9TPtmplqzOJME7+ll3cPg1D4fFoZCWJrebRbdfLqDUfTkaZHE6K
- +lnwuQ5iFZdi0q6kWQ7JiI6Ug6iONb6rgl7k9mmjG4jOSmxYfyhXwYCzh8HX2VkRYIdPeJHx+
- F4PoYmR+CJokuKFk
+X-Provags-ID: V03:K1:lZM0zeaEIt7IwE3AgtWxZuFrJajI1rhw1So25fjxE3pROObSXug
+ Z6QJAy7H4f9Ecuyg8H3SOHibJ+lZroOTI4HnOjjugmYm6a4CINVvitMJjqHN/n40TG7pHeJ
+ qkHkco/eXi6FNxdc9Two3VI2NNnIG0p7CTT9HDastDcjtLR6EZ1RPzrRv4TJTWB7RpIyMu9
+ t8gf4Ia3reA3HYfyfGwXg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:vOqwhe2kVik=:Km6AHcqmlqc9U0BWGaove2
+ SwMwLc81oIT346Cxpw41ohH2CY9Nk+63VfqQ7dyevcyCRPIT+zrxpw6WMgnp6IyOvJG/yDd/s
+ eogBn0E9UMU6sil4kaRTCXdqV/nMEwBb7dGG7rFLpvy1GQb8Hkt6c0jk1X2jygoQMA32EAqvj
+ segrnK1Ue0SqpYTWMj2tUUukNrDc5Wv2nc6EXxwJ4GFdt8xaFJARPwgyV+2+EjKRW3Oby+/Fn
+ ieDFnoFd1+hPLpr31Pb1fbjQkmtB/KJyPbCGdImTyzT2Xcmp7oPRRSQI9gyKoKuyNb1D37ZWp
+ f9CJr8ELk0fajMGmT7p3nEiQ+XtLFLRpmy9RYwtsQHFudx/BUU0TjllxLzlehHjiIM2u3MTsR
+ SxJ/YE3tZ1qK2unrmxTZxc/KFHnp+009cbwkzIjc3411F34B5PmZ9IWceuLV+0lNIv+Wm8V0h
+ jS0Z/1+34lJyIXlDTFpTcpClJ4PLwRwuzdIs2GGJCD47cSW6PUMFR89+7gEPddMpTt7rSGP66
+ lGRwBiNMG2aZBgkV2P19KOaeYYILBoOLyybRC8tXBQIqaYa+pr6JvLh8eKxo0QHMsXZ6NeI8o
+ CoICM4h1wnnOGi6H72zhVROqDadX1wZb8ooMx4xJQPIlSajiRqnKSeUoJtLGxZUKGlo9ED9Db
+ +mbvOlMCqZQTPcYRkfMu+jpwjeeV4xqLIL7Q7tl62+S7RHqK1ixIUdKipwWNW5g9QKLxwS3Sj
+ SfTXrXjYd7bv90Os
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,50 +67,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-This avoids the following systemd warning:
-
-[    2.618538] systemd[1]: system-getty.slice: unit configures an IP
- firewall, but the local system does not support BPF/cgroup firewalling.
-[    2.630916] systemd[1]: (This warning is only shown for the first
- unit using IP firewalling.)
+This enables the i.MX 8M PCIe PHY driver (CONFIG_PHY_FSL_IMX8M_PCIE)
+required for PCIe functionality.
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Acked-by: Song Liu <songliubraving@fb.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
 ---
 
 (no changes since v3)
 
 Changes in v3:
-- Add Krzysztof's reviewed-by tag.
+- New patch enabling imx8m pcie phy driver in arm64 defconfig.
 
-Changes in v2:
-- Add Song's acked-by tag.
-
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 530ad076b5cb..444fec9ec73a 100644
+index 444fec9ec73a..0fed8477e72e 100644
 --- a/arch/arm64/configs/defconfig
 +++ b/arch/arm64/configs/defconfig
-@@ -3,6 +3,7 @@ CONFIG_POSIX_MQUEUE=y
- CONFIG_AUDIT=y
- CONFIG_NO_HZ_IDLE=y
- CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_BPF_SYSCALL=y
- CONFIG_BPF_JIT=y
- CONFIG_PREEMPT=y
- CONFIG_IRQ_TIME_ACCOUNTING=y
-@@ -22,6 +23,7 @@ CONFIG_CPUSETS=y
- CONFIG_CGROUP_DEVICE=y
- CONFIG_CGROUP_CPUACCT=y
- CONFIG_CGROUP_PERF=y
-+CONFIG_CGROUP_BPF=y
- CONFIG_USER_NS=y
- CONFIG_SCHED_AUTOGROUP=y
- CONFIG_BLK_DEV_INITRD=y
+@@ -1121,6 +1121,7 @@ CONFIG_RESET_TI_SCI=y
+ CONFIG_PHY_XGENE=y
+ CONFIG_PHY_SUN4I_USB=y
+ CONFIG_PHY_MIXEL_MIPI_DPHY=m
++CONFIG_PHY_FSL_IMX8M_PCIE=y
+ CONFIG_PHY_HI6220_USB=y
+ CONFIG_PHY_HISTB_COMBPHY=y
+ CONFIG_PHY_HISI_INNO_USB2=y
 -- 
 2.33.1
 

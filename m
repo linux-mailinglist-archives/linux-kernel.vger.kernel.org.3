@@ -2,136 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED964B2AE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E934B2AE8
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:50:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351738AbiBKQsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:48:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48530 "EHLO
+        id S1351755AbiBKQtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:49:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351722AbiBKQsA (ORCPT
+        with ESMTP id S1351741AbiBKQtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:48:00 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199F7BD3
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:47:59 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E85943F1CA
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 16:47:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644598077;
-        bh=4lswzRVAGMbVN4fxZWJ4W9VwOoIlRM/pZiE0wihHuB4=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=us/gU3pKk5J87Pblr93ix2D+jgvo73/Dr/tZoalVjJXOo8ZG1yG2QfouR3BZzujKM
-         QEDq6b9KIt3QeTZXEzYOIk587GYdmzBPKEYAUqIEQH19878FttW7qmWcp/uSmJa4zL
-         ICZ2hH9bhJhBXYMrkuSfmExx2FPRGUTvLiKg5f1DnS89Gnv5q1rnemmYq4M+k6+13E
-         i48gqu0cze+/TRADulutiYKNWyulxRWR1DfZ6AvFNdk1OCibbkAv1RWXwe405lw1ks
-         dA58ErSCLn49TAK6kq2zqGRBpIEyMNDdjaBHw1EQN+pTUP5Aj4oaaFe4wsl6notxzN
-         K7vamXY+54JbA==
-Received: by mail-ed1-f71.google.com with SMTP id z8-20020a05640240c800b0041003c827edso4026438edb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:47:57 -0800 (PST)
+        Fri, 11 Feb 2022 11:49:15 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5FBFD;
+        Fri, 11 Feb 2022 08:49:14 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id cf2so17300772edb.9;
+        Fri, 11 Feb 2022 08:49:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=yKc5L2zSb0WrgqB8kVdfmUciIdq+he8HTbE3U/mYjn4=;
+        b=hSChiH/iP4H8xwp23NPYrL2UsaNNZpwWauF4qk3/AawBghuYAEcNnzwbzWA9H9tJ8t
+         0c0Ws1U3ajPjnu2WlRhR7tXLLlFEU3GXFSQZUcaQnqvDpAIwGsDsTfAKTFV3vaUrfvYU
+         AXbOr3MidA37HqMfIE5r/czWyrx3MAHN4spUijsyg3PFXx3Tnzdva0jlxNjH5K3gb3r0
+         pXY1IUll3XicSFZjlzREWXFFd4pXPW7iZo65m7CitOUpHAnnrpJRpcXvgERFt98pLNvx
+         C//Ln8+xIIK0HIFxilUDn44iI3Z8fyOaiFR6Fn9fVxkw/KLraQSOmy5ebMe9HX69GTZa
+         KVlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4lswzRVAGMbVN4fxZWJ4W9VwOoIlRM/pZiE0wihHuB4=;
-        b=TJSk4D6TDE2WGoXXzY7BDUUv9qAPtvgFTb28C0sL5iLmopS76EVfSbQWXRxb6xgOKW
-         2fQlwpWMvHuqVZWSQpmU5Rr38vtBWPQjWqt314DPpXYlj2uKET9l4WrJNCMsrhP2gHBV
-         qDJON0EJvDL74AeUWo9OCuhTEF61fqAicfwV+jNgR7zMl4NWbGUQhj4jEpDAw/6rwIMA
-         ZW4zBudtEk9fSnQwi1Yq4cwqHKxsdeiWukU1UEsVIo3R34343LWo0exxDLYufN6ZfmTV
-         763XbN5D956Yi+QugSuK41Jr6a4//XQsQOadunL7D5sQbAKnyh0/ZnGS+A2fV4moG0Mt
-         a2ag==
-X-Gm-Message-State: AOAM531uZlp3XS3Zs2GmUQvnHKy3nZVfX9Lpz8nPGPZ27+IKajF0NhZp
-        lg6mE5MpC8gtjkRzAbeJ98B70rRsfPzK+abj8ehsjMcAOeeypLXuWSIb64crUARt4fOvExqGDj0
-        dgtW2Hd2day5xpXEgPKUQX0rzq3m365QERbV48sb5kA==
-X-Received: by 2002:a17:906:d550:: with SMTP id cr16mr2076697ejc.257.1644598077401;
-        Fri, 11 Feb 2022 08:47:57 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwVaaGgrMK6Xd0ZUKTGZK48foO64fs4vM24QmAKR7PNgLUxAff0uHLt5kCrVQyMq6YcUbvD2Q==
-X-Received: by 2002:a17:906:d550:: with SMTP id cr16mr2076686ejc.257.1644598077198;
-        Fri, 11 Feb 2022 08:47:57 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id n24sm5036951ejb.23.2022.02.11.08.47.56
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=yKc5L2zSb0WrgqB8kVdfmUciIdq+he8HTbE3U/mYjn4=;
+        b=GjKGm4QtYW1HW5VMevljqAURY2+2ePQE13kFDlyLouTT9b1RRiYkoYdppsTEFtdU4e
+         kuwOWpJTEeshI1V4sO2QMSC76XSE34ItA+Lrd1kXjS4s4x8+u9cxOvPq4xjWF5GtjFJt
+         h+Kd1uKZ3vKpiAm92C07pb9fzg7V0xByg4ZnBltC8qQL+P6fFwrob5S00XxszP17E46N
+         zrzR154OFCj9bNJ8VkbqwwzX0n0mg/o51sJsglqqFT8MDymdRQyH41/Py4JswWytpFS6
+         CapUhGRLTCm1kylJAwJYIDgw/e6hKt57ry/++Ekozu/9B/h5fyPT6zHI6zSqBLpl/Zkm
+         xElw==
+X-Gm-Message-State: AOAM5322J3Ic/cwP6uj+uys3W2bIvQq29DxHCkp5IbCIrw1/GwRu3qLz
+        Cq5ZksBK94jQAUGhkTT9UMxpXshRTycJcA==
+X-Google-Smtp-Source: ABdhPJyB4fGVN3crLlj1W8jNEd6upE2WjCCWlV3k9GoGSrWz6pFYONLcnMgwExy6aiS8XqMa5SjWFg==
+X-Received: by 2002:a05:6402:3590:: with SMTP id y16mr2955433edc.386.1644598152788;
+        Fri, 11 Feb 2022 08:49:12 -0800 (PST)
+Received: from tiger.museclub.art (p200300cf9f235800e668694710673d4b.dip0.t-ipconnect.de. [2003:cf:9f23:5800:e668:6947:1067:3d4b])
+        by smtp.googlemail.com with ESMTPSA id x12sm10953972edv.57.2022.02.11.08.49.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 08:47:56 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: soc: samsung: usi: refer to dtschema for children
-Date:   Fri, 11 Feb 2022 17:47:16 +0100
-Message-Id: <20220211164716.120880-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        Fri, 11 Feb 2022 08:49:12 -0800 (PST)
+From:   Eugene Shalygin <eugene.shalygin@gmail.com>
+Cc:     Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Eugene Shalygin <eugene.shalygin@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] hwmon: (asus-ec-sensors) deduce sensor signedness from its type
+Date:   Fri, 11 Feb 2022 17:48:55 +0100
+Message-Id: <20220211164855.265698-1-eugene.shalygin@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220211003641.73111-1-eugene.shalygin@gmail.com>
+References: <20220211003641.73111-1-eugene.shalygin@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Explicitly reference the dtschema for USI children implementing specific
-serial protocol (I2C, SPI, UART).  The SPI schema is not yet accepted,
-so it will be provided later.
+Reading DSDT code for ASUS X470-based boards (the ones served by the
+asus_wmi_Sensors driver), where ASUS put hardware monitoring functions
+into the WMI code, reveals that fan and current sensors data is
+unsigned. For the current sensor that was confirmed by a user who showed
+high enough current value for overflow.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Thus let's assume that the signedness of the sensors is determined by its
+type and that only temperature ones provide signed numbers.
 
+Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
 ---
+ drivers/hwmon/asus-ec-sensors.c | 40 +++++++++++++++++++++++++--------
+ 1 file changed, 31 insertions(+), 9 deletions(-)
 
-Changes since v1:
-1. Drop entire paragraph about USI nodes.
----
- .../bindings/soc/samsung/exynos-usi.yaml      | 20 +++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
-index 58f2e9d8bb0e..a98ed66d092e 100644
---- a/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
-+++ b/Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
-@@ -17,13 +17,6 @@ description: |
-   child nodes, each representing a serial sub-node device. The mode setting
-   selects which particular function will be used.
+diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
+index bfac08a5dc57..d2b84578d2af 100644
+--- a/drivers/hwmon/asus-ec-sensors.c
++++ b/drivers/hwmon/asus-ec-sensors.c
+@@ -266,6 +266,15 @@ static u8 register_index(u16 reg)
+ 	return reg & 0x00ff;
+ }
  
--  Refer to next bindings documentation for information on protocol subnodes that
--  can exist under USI node:
--
--  [1] Documentation/devicetree/bindings/serial/samsung_uart.yaml
--  [2] Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
--  [3] Documentation/devicetree/bindings/spi/spi-samsung.txt
--
- properties:
-   $nodename:
-     pattern: "^usi@[0-9a-f]+$"
-@@ -75,10 +68,17 @@ properties:
-       This property is optional.
- 
- patternProperties:
--  # All other properties should be child nodes
--  "^(serial|spi|i2c)@[0-9a-f]+$":
-+  "^i2c@[0-9a-f]+$":
-+    $ref: /schemas/i2c/i2c-exynos5.yaml
-+    description: Child node describing underlying I2C
++static bool is_sensor_data_signed(const struct ec_sensor_info *si)
++{
++	/*
++	 * guessed from WMI functions in DSDT code for boards
++	 * of the X470 generation
++	 */
++	return si->type == hwmon_temp;
++}
 +
-+  "^serial@[0-9a-f]+$":
-+    $ref: /schemas/serial/samsung_uart.yaml
-+    description: Child node describing underlying UART/serial
-+
-+  "^spi@[0-9a-f]+$":
-     type: object
--    description: Child node describing underlying USI serial protocol
-+    description: Child node describing underlying SPI
+ static const struct ec_sensor_info *
+ get_sensor_info(const struct ec_sensors_data *state, int index)
+ {
+@@ -420,15 +429,28 @@ static int asus_ec_block_read(const struct device *dev,
  
- required:
-   - compatible
+ static inline s32 get_sensor_value(const struct ec_sensor_info *si, u8 *data)
+ {
+-	switch (si->addr.components.size) {
+-	case 1:
+-		return (s8)*data;
+-	case 2:
+-		return (s16)get_unaligned_be16(data);
+-	case 4:
+-		return (s32)get_unaligned_be32(data);
+-	default:
+-		return 0;
++	if (is_sensor_data_signed(si)) {
++		switch (si->addr.components.size) {
++		case 1:
++			return (s8)*data;
++		case 2:
++			return (s16)get_unaligned_be16(data);
++		case 4:
++			return (s32)get_unaligned_be32(data);
++		default:
++			return 0;
++		}
++	} else {
++		switch (si->addr.components.size) {
++		case 1:
++			return *data;
++		case 2:
++			return get_unaligned_be16(data);
++		case 4:
++			return get_unaligned_be32(data);
++		default:
++			return 0;
++		}
+ 	}
+ }
+ 
 -- 
-2.32.0
+2.35.1
 

@@ -2,158 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DCF4B2D7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 20:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BC34B2D82
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 20:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352808AbiBKTZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 14:25:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46910 "EHLO
+        id S1352861AbiBKT2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 14:28:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233172AbiBKTZt (ORCPT
+        with ESMTP id S1352761AbiBKT2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 14:25:49 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DA4CF2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 11:25:48 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id k25so24934193ejp.5
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 11:25:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GD2hJleO+BGH7uHOhMKE9GqyrPE46e0JW2MnbUpSxGM=;
-        b=drfDVDdeD8zFrAGVCcIkHw8cHfErxBrAfhUyN91kJxJKe7SFJCF1p34U300RUKCKXs
-         IsYGGcezgrgOoB2pMWJkGVYIZH1t3Nf9qUroRrLaUJP2QZxM6apgtBrpZC2+QmcgpLLH
-         BD8DCL8/XZztvmMGrPeUUFBlGgIPvar6eCDf/qW0jcwBavP4r176sqNGpI3+zJ8HJf6b
-         YcnRoVVXqfafFaxH9MB2a3CJ9kQdcIWYkfLxOdjlip+Ux+iD13NsD/2y86Jyw+KhmLjX
-         A6Gq5jqdYkVmxjgRrMeXlf4v46aWr5kSthyjIVdiJBf0Z6drQa+3kt33IEpNGLCsuKSI
-         RAew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GD2hJleO+BGH7uHOhMKE9GqyrPE46e0JW2MnbUpSxGM=;
-        b=qbRLqAnMYnb5wYtUAHx3VqiVQqGiA7yTDme8bF+4E6ylSw7p5uSrL4a+JlabSNnnuk
-         1DiKjRjVI12cOaJ7kmSA49AmrD3PIBm2zWrEaI3So/m5/9j3O2farZcnt7ka5iDNsBsL
-         hhug8rBrale5VUpW2/6MM3F98GT3KNr07UUl9rE46O33jZe0TBQfOawIaLQEwftxCS1o
-         EPDBRQoS11UMQmVvZmpOcSRve4hb5b7f4DC4wCqPUuep7EadX6e5ZdB82TUbjretIzpN
-         jEEAJY+fmG8ujstYTK2KtK/jqy0bbyFWKCrT+YbUYLBFWxnX6LTOTMD6YRbcw/7FLHnt
-         ZkLQ==
-X-Gm-Message-State: AOAM531P9P8k3AB3nZQ3IC/IQv4URaRLj/kLCsPFzQHqTtUmRKYdTOdJ
-        3LsD3Q3U7LeEoTKBSWp1MsfuXWs+f1StecRE732h
-X-Google-Smtp-Source: ABdhPJypX/j9HQ9UKdN5Q/EButffbsswHumKPBUPD8F3DELLeUuIF/73MuElgNl5Ate/M9VWPJk6xBwOmP/PC1qeyu4=
-X-Received: by 2002:a17:906:2811:: with SMTP id r17mr2621343ejc.31.1644607546332;
- Fri, 11 Feb 2022 11:25:46 -0800 (PST)
+        Fri, 11 Feb 2022 14:28:08 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3ACD1AF;
+        Fri, 11 Feb 2022 11:28:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=soWypdnW1ec+w+7VziF0ljzkm3YcG0g2Y1CUqz60f/U=; b=E1
+        8yINSOMEzpD3OeoOuT7gbIp+Nj5EI5xzErZMOyGakkUG73QJfqS0KoB/yiqUulDi+uInBLWHTfnaz
+        EBiLOvBplIYDQZERs3qJ9FknOyB7A2Vj+doI3tnqPwQp+7Ctpcna2cuEQDPdJL+OARRJUnmMRC+r+
+        XboAb3r5Kr43iSc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nIbaK-005Vpe-Np; Fri, 11 Feb 2022 20:28:00 +0100
+Date:   Fri, 11 Feb 2022 20:28:00 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
+Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Juergen Borleis <kernel@pengutronix.de>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: dsa: lan9303: fix reset on probe
+Message-ID: <Yga4wD+pkn6B45Iz@lunn.ch>
+References: <20220209145454.19749-1-mans@mansr.com>
+ <YgPlVGclJOkvLZ1i@lunn.ch>
+ <yw1x1r0c5794.fsf@mansr.com>
 MIME-Version: 1.0
-References: <20220204005742.1222997-1-morbo@google.com> <20220210223134.233757-1-morbo@google.com>
- <cb2ff5da9b704a9792549a9433dc0ac8@AcuMS.aculab.com>
-In-Reply-To: <cb2ff5da9b704a9792549a9433dc0ac8@AcuMS.aculab.com>
-From:   Bill Wendling <morbo@google.com>
-Date:   Fri, 11 Feb 2022 11:25:34 -0800
-Message-ID: <CAGG=3QXvSt=d94iqSV-Y9JVNc+pt-WOZGpSeW--fp=w2ttMvUA@mail.gmail.com>
-Subject: Re: [PATCH v4] x86: use builtins to read eflags
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <yw1x1r0c5794.fsf@mansr.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 8:40 AM David Laight <David.Laight@aculab.com> wrote:
-> From: Bill Wendling
-> > Sent: 10 February 2022 22:32
+On Wed, Feb 09, 2022 at 04:34:15PM +0000, Måns Rullgård wrote:
+> Andrew Lunn <andrew@lunn.ch> writes:
+> 
+> > On Wed, Feb 09, 2022 at 02:54:54PM +0000, Mans Rullgard wrote:
+> >> The reset input to the LAN9303 chip is active low, and devicetree
+> >> gpio handles reflect this.  Therefore, the gpio should be requested
+> >> with an initial state of high in order for the reset signal to be
+> >> asserted.  Other uses of the gpio already use the correct polarity.
+> >> 
+> >> Signed-off-by: Mans Rullgard <mans@mansr.com>
+> >> ---
+> >>  drivers/net/dsa/lan9303-core.c | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >> 
+> >> diff --git a/drivers/net/dsa/lan9303-core.c b/drivers/net/dsa/lan9303-core.c
+> >> index aa1142d6a9f5..2de67708bbd2 100644
+> >> --- a/drivers/net/dsa/lan9303-core.c
+> >> +++ b/drivers/net/dsa/lan9303-core.c
+> >> @@ -1301,7 +1301,7 @@ static int lan9303_probe_reset_gpio(struct lan9303 *chip,
+> >>  				     struct device_node *np)
+> >>  {
+> >>  	chip->reset_gpio = devm_gpiod_get_optional(chip->dev, "reset",
+> >> -						   GPIOD_OUT_LOW);
+> >> +						   GPIOD_OUT_HIGH);
+> >>  	if (IS_ERR(chip->reset_gpio))
+> >>  		return PTR_ERR(chip->reset_gpio);
 > >
-> > GCC and Clang both have builtins to read and write the EFLAGS register.
-> > This allows the compiler to determine the best way to generate this
-> > code, which can improve code generation.
-> >
-> > This issue arose due to Clang's issue with the "=rm" constraint.  Clang
-> > chooses to be conservative in these situations, and so uses memory
-> > instead of registers. This is a known issue, which is currently being
-> > addressed.
-> >
-> > However, using builtins is beneficial in general, because it removes the
-> > burden of determining what's the way to read the flags register from the
-> > programmer and places it on to the compiler, which has the information
-> > needed to make that decision.
->
-> Except that neither gcc nor clang attempt to make that decision.
-> They always do pushf; pop ax;
->
-It looks like both GCC and Clang pop into virtual registers. The
-register allocator is then able to determine if it can allocate a
-physical register or if a stack slot is required.
+> > lan9303_handle_reset() does a sleep and then releases the reset. I
+> > don't see anywhere in the driver which asserts the reset first. So is
+> > it actually asserted as part of this getting the GPIO? And if so, does
+> > not this change actually break the reset?
+> 
+> The GPIOD_OUT_xxx flags to gpiod_get() request that the pin be
+> configured as output and set to high/low initially.  The GPIOD_OUT_LOW
+> currently used by the lan9303 driver together with GPIO_ACTIVE_LOW in
+> the devicetrees results in the actual voltage being set high.  The
+> driver then sleeps for a bit before setting the gpio value to zero,
+> again translated to a high output voltage.  That is, the value set after
+> the sleep is the same as it was initially.  This is obviously not the
+> intent.
 
-> ...
-> > v4: - Clang now no longer generates stack frames when using these builtins.
-> >     - Corrected misspellings.
->
-> While clang 'head' has been fixed, it seems a bit premature to say
-> it is 'fixed' enough for all clang builds to use the builtin.
->
-True, but it's been cherry-picked into the clang 14.0.0 branch, which
-is scheduled for release in March.
+Yes, i agree. I'm just wondering how this worked for whoever
+implemented this code. I guess it never actually did a reset, or the
+bootloader left the reset already in the asserted state, so that the
+gpiod_get() actual deasserted the reset?
 
-> Seems better to change it (back) to "=r" and comment that this
-> is currently as good as __builtin_ia32_readeflags_u64() and that
-> clang makes a 'pigs breakfast' of "=rm" - which has only marginal
-> benefit.
->
-That would be okay as far as code generation is concerned, but it does
-place the burden of correctness back on the programmer. Also, it was
-that at some point, but was changed to "=rm" here. :-)
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-commit ab94fcf528d127fcb490175512a8910f37e5b346
-Author: H. Peter Anvin <hpa@zytor.com>
-Date:   Tue Aug 25 16:47:16 2009 -0700
-
-    x86: allow "=rm" in native_save_fl()
-
-    This is a partial revert of f1f029c7bfbf4ee1918b90a431ab823bed812504.
-
-    "=rm" is allowed in this context, because "pop" is explicitly defined
-    to adjust the stack pointer *before* it evaluates its effective
-    address, if it has one.  Thus, we do end up writing to the correct
-    address even if we use an on-stack memory argument.
-
-    The original reporter for f1f029c7bfbf4ee1918b90a431ab823bed812504 was
-    apparently using a broken x86 simulator.
-
-    [ Impact: performance ]
-
-    Signed-off-by: H. Peter Anvin <hpa@zytor.com>
-    Cc: Gabe Black <spamforgabe@umich.edu>
-
-
-> Changing to __builtin_ia32_readeflags_u64() may be worth while
-> if/when the compilers will generate pushf; pop mem; for it.
->
-I was able to come up with an example where GCC generates "pushf ; pop mem":
-
-  https://godbolt.org/z/9rocjdoaK
-
-(Clang generates a variation of "pop mem," and is horrible code, but
-it's meant for demonstration purposes only.) One interesting thing
-about the use of the builtins is that if at all possible, the "pop"
-instruction may be moved away from the "pushf" if it's safe and would
-reduce register pressure.
-
--bw
+    Andrew

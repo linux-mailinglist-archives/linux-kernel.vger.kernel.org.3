@@ -2,74 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C584B1AF7
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 02:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A5C4B1AFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 02:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346682AbiBKBJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 20:09:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49750 "EHLO
+        id S1346687AbiBKBLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 20:11:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346673AbiBKBJX (ORCPT
+        with ESMTP id S241756AbiBKBLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 20:09:23 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0486EB41
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:09:23 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id d187so13375423pfa.10
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:09:22 -0800 (PST)
+        Thu, 10 Feb 2022 20:11:09 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2466B40
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:11:08 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id j2so20717080ybu.0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:11:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5F/YGzVmxucCV2w+SE7XEhbRoXDDpQToobLbIhWaHYc=;
-        b=O7Cni19xFycNNK4IUy1daQ4E99VFUDXm8NRv0PVumWB3oOLgQHBSvi4/VQ3YmmUfKM
-         i1ZA07f5QkAcyXONb8QxwlzHG2SF5Dcy4mwDq1Qo6muqtRFYHUYCLe1JM3RnvTyI3INV
-         RyyyWu81uFVEx/hxuyhPODN9C1WQGzlVWJIMs=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xWAtxFOBnLmSYM035NYdRT/JcWj28PeqsxQriuBme8Q=;
+        b=FtK4Te4IWb91V1Vn3LbRCzTDklDYen9d6sDgXkXByFFmubx6ljKSsJPvwMg67kw6tv
+         wYLQm1716CF6qADAGZSDDlhHPLRl2GGrQTbsRPQNmli7SkCnK49NRLklstyVsI+0OuCi
+         1dBwDNzD4+qlfQfJB5Zn5vR2COw0+c5o5YBtP2Kn4saAKWoydQx7p6HYtKqf3a/juzhQ
+         ffB4IHmG4WG+8ovXGYk2xosv39og706wSC5QPzOOkg1Jg0VbAhzKSYqAzExljQ6CVZBu
+         hbzNVjQ9W2tkXFIz+S0eWHkKOZmNPBZ8w7IB6mf2JhcOhJoD1yKRBoJy52D3G1q+fkil
+         3QBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5F/YGzVmxucCV2w+SE7XEhbRoXDDpQToobLbIhWaHYc=;
-        b=3lZVWiRVoyBOYUD0o60SQ54WK0X7FUvBa2dj/nZVCGh8gGZYC8i19nFgefdpTefhuh
-         PHvEhkDNtf/TTAubdMpKLpd6sWOTEugI5Ob/ARsjwDri1cAEilzC6Ws60cW+K+SBV/s7
-         0/8pSBLb2E/+j3gIIl594LKJMDYfq6vEtnZsAV0iIUmHNwB0lV/BhjeWdP2Mtljca7HK
-         lJGEn+aQt9XuczphMZtO6YfqfIYPLBuSton6fzfDLlre8WGO62VJgNoGVA+HmN6JB019
-         FdutJ+Zrd2n2A8P9RMl2MMekc/cxJizX7RMjb6n5EGb+isSdHCoi0WjpD9g3JPhyzKpA
-         ALjQ==
-X-Gm-Message-State: AOAM531SokftfveetlfsZShGwX/wKdAqa31viDYyzX4Ta7ra/c12LSJZ
-        8Rrj3ugQfVnIW0omC92F86Uc5g==
-X-Google-Smtp-Source: ABdhPJwvw0DfYnLU4ASZ7YxnRfLhjmjJWmRRXYFhu4Zcr1DUaXzi6LQObbQCgkweT4gdbKfWrpGQUQ==
-X-Received: by 2002:aa7:9486:: with SMTP id z6mr10192650pfk.76.1644541762433;
-        Thu, 10 Feb 2022 17:09:22 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 10sm24234252pfm.56.2022.02.10.17.09.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 17:09:22 -0800 (PST)
-Date:   Thu, 10 Feb 2022 17:09:21 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v3 12/12] lkdtm: Add a test for function descriptors
- protection
-Message-ID: <202202101703.993CA9BC@keescook>
-References: <cover.1634457599.git.christophe.leroy@csgroup.eu>
- <67f9545c9ad15048bfe0104278ef9595d051dbc8.1634457599.git.christophe.leroy@csgroup.eu>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xWAtxFOBnLmSYM035NYdRT/JcWj28PeqsxQriuBme8Q=;
+        b=wrFaIVKIy8dpK7xaZlH677tPYDcYsTg0DUnF9BbI39PxHwBXsx0G25AD1NU/cxMw3O
+         /u5DJfbo55uoL2rA9470cSURxeVknolx+ctDJxHYcy5MHNs3YCc0emyGtdXJBwQVgFeE
+         OTCtCeaAMV4HTFZmgPCzF3765nrE2D+VIRsqq2/Dv/OiE0m7Xu8JJ2y3S5rUVJ4wKKdJ
+         AWC84aVHcPAIf13w4GsztXP9eW8GD172GakZocOgen7Bo4PzZuhcOkrWN85bcymLCy0u
+         L11zBu4XTColPLjAkVsdoOlam8KMhapMmMAvB4BSgrew5vjnp0FzS+uNEnk/hJSWGqnI
+         53Xw==
+X-Gm-Message-State: AOAM532D4iqlvTf2JUWoFnlZsVPyzBmKDMInbEq/Y/oRl0JTCJWcrryb
+        SXNTAKOAkVQfjhq15pp0l0z8S2mGUWhvlAMguxIMVA==
+X-Google-Smtp-Source: ABdhPJx0NDMuKKHpiSyjhCxVZGm2u9pnNLdHss+U+hAwmB8phM3KI4DuksHpnZJQDm77hJ1ypE+Egc3/AdlqSbYf5dE=
+X-Received: by 2002:a25:30d4:: with SMTP id w203mr9347222ybw.511.1644541867928;
+ Thu, 10 Feb 2022 17:11:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <67f9545c9ad15048bfe0104278ef9595d051dbc8.1634457599.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220204192552.428433-1-massimo.toscanelli@leica-geosystems.com>
+ <20220207090443.3710425-1-massimo.toscanelli@leica-geosystems.com> <20220207090443.3710425-2-massimo.toscanelli@leica-geosystems.com>
+In-Reply-To: <20220207090443.3710425-2-massimo.toscanelli@leica-geosystems.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 11 Feb 2022 02:10:56 +0100
+Message-ID: <CACRpkdaERtyiYhJVB536YOgB6JOMTV=eME2Tq6ed3JndZkhq7g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] iio: st_sensors: add always_on flag
+To:     Massimo Toscanelli <massimo.toscanelli@leica-geosystems.com>
+Cc:     linux-kernel@vger.kernel.org, jic23@kernel.org, lars@metafoo.de,
+        caihuoqing@baidu.com, aardelean@deviqon.com,
+        andy.shevchenko@gmail.com, hdegoede@redhat.com,
+        Qing-wu.Li@leica-geosystems.com.cn, stephan@gerhold.net,
+        linux-iio@vger.kernel.org, bsp-development.geo@leica-geosystems.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,129 +69,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 17, 2021 at 02:38:25PM +0200, Christophe Leroy wrote:
-> Add WRITE_OPD to check that you can't modify function
-> descriptors.
-> 
-> Gives the following result when function descriptors are
-> not protected:
-> 
-> 	lkdtm: Performing direct entry WRITE_OPD
-> 	lkdtm: attempting bad 16 bytes write at c00000000269b358
-> 	lkdtm: FAIL: survived bad write
-> 	lkdtm: do_nothing was hijacked!
-> 
-> Looks like a standard compiler barrier() is not enough to force
-> GCC to use the modified function descriptor. Had to add a fake empty
-> inline assembly to force GCC to reload the function descriptor.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  drivers/misc/lkdtm/core.c  |  1 +
->  drivers/misc/lkdtm/lkdtm.h |  1 +
->  drivers/misc/lkdtm/perms.c | 22 ++++++++++++++++++++++
->  3 files changed, 24 insertions(+)
-> 
-> diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
-> index fe6fd34b8caf..de092aa03b5d 100644
-> --- a/drivers/misc/lkdtm/core.c
-> +++ b/drivers/misc/lkdtm/core.c
-> @@ -148,6 +148,7 @@ static const struct crashtype crashtypes[] = {
->  	CRASHTYPE(WRITE_RO),
->  	CRASHTYPE(WRITE_RO_AFTER_INIT),
->  	CRASHTYPE(WRITE_KERN),
-> +	CRASHTYPE(WRITE_OPD),
->  	CRASHTYPE(REFCOUNT_INC_OVERFLOW),
->  	CRASHTYPE(REFCOUNT_ADD_OVERFLOW),
->  	CRASHTYPE(REFCOUNT_INC_NOT_ZERO_OVERFLOW),
-> diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
-> index c212a253edde..188bd0fd6575 100644
-> --- a/drivers/misc/lkdtm/lkdtm.h
-> +++ b/drivers/misc/lkdtm/lkdtm.h
-> @@ -105,6 +105,7 @@ void __init lkdtm_perms_init(void);
->  void lkdtm_WRITE_RO(void);
->  void lkdtm_WRITE_RO_AFTER_INIT(void);
->  void lkdtm_WRITE_KERN(void);
-> +void lkdtm_WRITE_OPD(void);
->  void lkdtm_EXEC_DATA(void);
->  void lkdtm_EXEC_STACK(void);
->  void lkdtm_EXEC_KMALLOC(void);
-> diff --git a/drivers/misc/lkdtm/perms.c b/drivers/misc/lkdtm/perms.c
-> index 1cf24c4a79e9..2c6aba3ff32b 100644
-> --- a/drivers/misc/lkdtm/perms.c
-> +++ b/drivers/misc/lkdtm/perms.c
-> @@ -44,6 +44,11 @@ static noinline void do_overwritten(void)
->  	return;
->  }
->  
-> +static noinline void do_almost_nothing(void)
-> +{
-> +	pr_info("do_nothing was hijacked!\n");
-> +}
-> +
->  static void *setup_function_descriptor(func_desc_t *fdesc, void *dst)
->  {
->  	if (!have_function_descriptors())
-> @@ -144,6 +149,23 @@ void lkdtm_WRITE_KERN(void)
->  	do_overwritten();
->  }
->  
-> +void lkdtm_WRITE_OPD(void)
-> +{
-> +	size_t size = sizeof(func_desc_t);
-> +	void (*func)(void) = do_nothing;
-> +
-> +	if (!have_function_descriptors()) {
-> +		pr_info("XFAIL: Platform doesn't use function descriptors.\n");
-> +		return;
-> +	}
-> +	pr_info("attempting bad %zu bytes write at %px\n", size, do_nothing);
-> +	memcpy(do_nothing, do_almost_nothing, size);
-> +	pr_err("FAIL: survived bad write\n");
+On Mon, Feb 7, 2022 at 10:05 AM Massimo Toscanelli
+<massimo.toscanelli@leica-geosystems.com> wrote:
 
-Non-function-descriptor architectures would successfully crash at the
-memcpy too, right? (i.e. for them this is just repeating WRITE_KERN)
+> The st_sensors_read_info_raw() implementation allows to get raw data
+> from st_sensors, enabling and disabling the device at every read.
+> This leads to delays in data access, caused by the msleep that waits
+> the hardware to be ready after every read.
+>
+> Introduced always_on flag in st_sensor_data, to allow the user to
+> keep the device always enabled. In this way, every data access to the
+> device can be performed with no delays.
+>
+> Add always_on sysfs attribute.
+>
+> Signed-off-by: Massimo Toscanelli <massimo.toscanelli@leica-geosystems.com>
 
-I'm pondering the utility of the XFAIL vs just letting is succeed, but I
-think it more accurate to say "hey, no OPD" as you have it.
+This creates special dependencies on sysfs poking etc.
 
-> +
-> +	asm("" : "=m"(func));
-> +	func();
-> +}
-> +
->  void lkdtm_EXEC_DATA(void)
->  {
->  	execute_location(data_area, CODE_WRITE);
-> -- 
-> 2.31.1
-> 
+Couldn't the runtime PM solve this problem in a better way?
 
-One tiny suggestion, since I think you need to respin for the
-EXPORT_SYMBOL_GPL() anyway. Please update the selftests too:
+If you look in for example:
+drivers/iio/accel/kxsd9.c
+how the different pm_runtime* primitives are used, you get an
+idea.
 
-diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-index 6b36b7f5dcf9..243c781f0780 100644
---- a/tools/testing/selftests/lkdtm/tests.txt
-+++ b/tools/testing/selftests/lkdtm/tests.txt
-@@ -44,6 +44,7 @@ ACCESS_NULL
- WRITE_RO
- WRITE_RO_AFTER_INIT
- WRITE_KERN
-+WRITE_OPD
- REFCOUNT_INC_OVERFLOW
- REFCOUNT_ADD_OVERFLOW
- REFCOUNT_INC_NOT_ZERO_OVERFLOW
+Especially note
 
-(Though for the future I've been considering making the selftests an
-opt-out list so the "normal" stuff doesn't need to keep getting added
-there.)
+        /*
+         * Set autosuspend to two orders of magnitude larger than the
+         * start-up time. 20ms start-up time means 2000ms autosuspend,
+         * i.e. 2 seconds.
+         */
+        pm_runtime_set_autosuspend_delay(dev, 2000);
 
-Thanks!
+This creates a "hysteresis window" around when the device is
+on, so it is not repeatedly shut off and on, but only after 2 seconds
+of inactivity.
 
-Acked-by: Kees Cook <keescook@chromium.org>
+This way no special userspace is needed to achieve what you want,
+and it benefits everyone.
 
--Kees
+I wanted to fix this for all the ST sensors but never got around to.
 
--- 
-Kees Cook
+Yours,
+Linus Walleij

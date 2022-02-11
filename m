@@ -2,70 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957AE4B22AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:01:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 199664B22B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:04:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348443AbiBKKBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 05:01:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40814 "EHLO
+        id S240225AbiBKKD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 05:03:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231577AbiBKKBh (ORCPT
+        with ESMTP id S235417AbiBKKD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 05:01:37 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F74A133;
-        Fri, 11 Feb 2022 02:01:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644573697; x=1676109697;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=KXt8RH49BT2ugl4NpxEWl0Nk134PTxSvylNHpuxCxj4=;
-  b=QFexRJs7CN3Z3+k6zBb4fsizDO3SjM0L1emLLXYASaZlAW8UQjjq62x1
-   LuVJR/uByPhHqFR1nW6nragpx0VBsXN5xY/SC4n2DErdsHMjDpMn/qXWx
-   xlohluMB4ijhJTo2zl8Zz9t3irWmtw3U8/NWYL/uUrE9418Gd7fI1293E
-   8=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 11 Feb 2022 02:01:37 -0800
-X-QCInternal: smtphost
-Received: from nalasex01a.na.qualcomm.com ([10.47.209.196])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 02:01:36 -0800
-Received: from [10.216.7.73] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Fri, 11 Feb
- 2022 02:01:31 -0800
-Subject: Re: [PATCH V5 1/6] dt-bindings: regulator: Add pm8008 regulator
- bindings
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Das Srinagesh <gurus@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_collinsd@quicinc.com>,
-        <quic_subbaram@quicinc.com>, <quic_jprakash@quicinc.com>
-References: <1644331940-18986-1-git-send-email-quic_c_skakit@quicinc.com>
- <1644331940-18986-2-git-send-email-quic_c_skakit@quicinc.com>
- <CAE-0n51AYxeWMpgS=Ya-_5Ly_h3uB346aZc9j596iZxQ+ZtcMQ@mail.gmail.com>
-From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
-Message-ID: <8bc29e46-77c4-93e5-db98-f4ed06d31e89@quicinc.com>
-Date:   Fri, 11 Feb 2022 15:31:28 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+        Fri, 11 Feb 2022 05:03:56 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D677DE6E;
+        Fri, 11 Feb 2022 02:03:54 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: shreeya)
+        with ESMTPSA id C68F61F46C0A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644573833;
+        bh=EFWC4KDHDq8iIszJtQjvd2nEkpU5s9EQ1vyKADI1IXg=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=MaCgPIWeVDpK6yQTs4fqczqKXoTBqfoRqIbHrFl36PoVAQ8KJtjxxb4Iw8RcuNw+m
+         RTiAIUzykLbjzQ++TSm38i9TJtJkJ1WkS2ltrq3jg5jR1vkisV4hgkQpIMO9b/0eTI
+         9YFlCUKxQMtUCydgiO28ZA6mi8qmzrxlJFFlOrSuoGyEKdTBSn/0yBZfxGgtqQo1YC
+         FxpOD11Y3MGlNZFvjn4g/Ovtrv5AMfJINjLZPeDm2o3sGA81pba6meEfYyi2iuaYvM
+         jlmqtsbke8p6QyADoqHyfs6UmGuXv0UDAVlDENQJL4DMVtmQO+kQQ8mnxBeWDSePXZ
+         GWHinXtxc3xHw==
+Subject: Re: [PATCH v4] gpio: Return EPROBE_DEFER if gc->to_irq is NULL
+To:     Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        wsa@kernel.org, kernel@collabora.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        kbuild test robot <lkp@intel.com>
+References: <20211116093833.245542-1-shreeya.patel@collabora.com>
+ <874k56znix.fsf@collabora.com>
+ <CAMRc=MdByxO3+hJruvUkULtXAaB7aWewTd=Wv0MbWyX2vykdjA@mail.gmail.com>
+ <87v8xmxkg7.fsf@collabora.com>
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+Message-ID: <fb31ea17-2ec2-4acf-94b8-03e850a4c256@collabora.com>
+Date:   Fri, 11 Feb 2022 15:33:44 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
 MIME-Version: 1.0
-In-Reply-To: <CAE-0n51AYxeWMpgS=Ya-_5Ly_h3uB346aZc9j596iZxQ+ZtcMQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <87v8xmxkg7.fsf@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,43 +64,73 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2/10/2022 6:54 AM, Stephen Boyd wrote:
-> Quoting Satya Priya (2022-02-08 06:52:15)
->> diff --git a/Documentation/devicetree/bindings/regulator/qcom,pm8008-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,pm8008-regulator.yaml
->> new file mode 100644
->> index 0000000..0098845
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/regulator/qcom,pm8008-regulator.yaml
->> @@ -0,0 +1,31 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/regulator/qcom,pm8008-regulator.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm Technologies, Inc. PM8008 Regulator bindings
->> +
->> +maintainers:
->> +  - Satya Priya <skakit@codeaurora.org>
->> +
->> +description:
->> +  Qualcomm Technologies, Inc. PM8008 is an I2C controlled PMIC
->> +  containing 7 LDO regulators.
->> +
->> +patternProperties:
->> +  "^LDO[1-7]$":
-> Any reason it needs to be capitalized vs. lowercase ldo?
+On 11/02/22 6:56 am, Gabriel Krisman Bertazi wrote:
+> Bartosz Golaszewski <brgl@bgdev.pl> writes:
+>
+>> My email address changed in September, that's why I didn't see the
+>> email you sent in November to my old one.
+> Hi Bart,
+>
+> thanks for the prompt reply and sorry for the wrong email address.
+>
+>> gpiod_to_irq() can be used in context other than driver probing, I'm
+>> worried existing users would not know how to handle it. Also: how come
+>> you can get the GPIO descriptor from the provider but its interrupts
+>> are not yet set up?
+> I'm definitely some context here, as its been quite a while.
+> Shreeya, feel free to pitch in. :)
 
 
-I'll change this to lowercase.
+Existing users will probably receive -ENXIO in case to_irq is not
+set and wasn't intended to be set.
+We are trying to solve the race which happens frequently in cases
+where I2C is set as built-in and pinctrl-amd is set as module.
+There is no dependency between I2C and pinctrl-amd, while pinctrl-amd is
+still trying to set the gc irq members through gpiochip_add_irqchip, I2C
+calls gpiod_to_irq() which leads to returning -ENXIO since gc->to_irq is 
+still NULL
 
 
->> +    type: object
->> +    $ref: "regulator.yaml#"
->> +    description: PM8008 regulator peripherals of PM8008 regulator device
->> +
->> +    properties:
->> +      regulator-name: true
->> +
->> +    required:
->> +      - regulator-name
+There have also been cases where gc->to_irq is set successfully but 
+other members
+are yet to be initalized by gpiochip_add_irqchip like the domain 
+variable which is
+being used in .to_irq() and ultimately leads to a NULL pointer 
+dereference as Gabriel
+mentioned. I am working on a fix which would use mutex to not let gc irq 
+members
+be accessed until they all have been completely initialized.
+
+I2C calls gpiod_to_irq through the following stack trace
+
+kernel: Call Trace:
+kernel:  gpiod_to_irq.cold+0x49/0x8f
+kernel:  acpi_dev_gpio_irq_get_by+0x113/0x1f0
+kernel:  i2c_acpi_get_irq+0xc0/0xd0
+kernel:  i2c_device_probe+0x28a/0x2a0
+kernel:  really_probe+0xf2/0x460
+kernel:  driver_probe_device+0xe8/0x160
+
+and pinctrl-amd makes gc visible through gpiochip_add_data_with_key()
+
+
+Thanks,
+Shreeya Patel
+
+
+> This is one of the races we saw in gpiochip_add_irqchip, depending on
+> the probe order.  The gc is already visible while partially initialized,
+> if pinctrl-amd hasn't been probed yet.  Another device being probed can
+> hit an -ENXIO here if to_irq is yet uninitialized or enter .to_irq() and
+> oops.  Shreeya's patch workarounds the first issue, but is not a
+> solution for the second.
+>
+> There is another patch that has been flying around to address the Oops.
+>
+> https://lkml.org/lkml/2021/11/8/900
+>
+> She's been working on a proper solution for that one, which might
+> actually address this too and replace the current patch.  Maybe you
+> could help us get to a proper solution there?  I'm quite unfamiliar with
+> this code myself :)
+>

@@ -2,125 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0824B2C2E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06FBA4B2C2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:55:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352394AbiBKRxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 12:53:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44200 "EHLO
+        id S241935AbiBKRxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 12:53:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241935AbiBKRxk (ORCPT
+        with ESMTP id S1352400AbiBKRxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 12:53:40 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257881AF
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:53:39 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id y7so5283731plp.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:53:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GR8YI4ZUVVkcMkfN5n/I4ApVj24WcUZ3xy5k7vXwB3c=;
-        b=gfNgwwaZGmKRhsYpF5xWdH7KWoDCgT6PqXTPoVSQjk7Uae3en5i8wL5l01rY0Tmppo
-         PShnO2uaKQnjE7BV/+gSCyjo6arwMpRc+7lf+MFcK6/Z97uuQQ7rHBoMK/kMWYOvq1J8
-         pMeqVp0KU0AUdP+yoV+smm6RtZGp3buYqZYX77xk5t/LutQP591p5W/owIkKLg5GkkWM
-         CgELIjfJ3+ICoe+QZe6HDB93aGSRXXntjYV4HC7ujGvtn9JAPgr4di+yKiKoSnnvIzma
-         DZTKT2t0TWEkbfFZNgZDO5LLbpVuHN7j6DkwgMpu9yY5wpTM0mM8YwdMBZ0jNroOMc6P
-         nC/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GR8YI4ZUVVkcMkfN5n/I4ApVj24WcUZ3xy5k7vXwB3c=;
-        b=11zHdJFcBL5r/3rawcpYbe2wjB4aq4dkEEEwSRP3CKnrKjjsa8B/0wPYcAY01cd2yP
-         CzVYS6R3s1XbLFhrlNR8k1v0zmeZ4vTU1EPLzW7AmcPPPXWQ5A/goMaiwEoVPmBKhSQw
-         r1ZJwhjWe60V9U9VkNwqmJusl4oS7ExzB5z277BH1E9KyUfV1JlRegZjY6aDuXUa5B79
-         CtR/Nh+rzfXpJUN1WegLjkBn210e0IxXgxkFscvI6HxHMRREgo7SS5w9K8t0eRLUPEQv
-         KieK7Y8Gcwgq0w/wNnLI7Rrr5/U4yV6qaqN1qMVtbB5FbuU7pAJ/u/FgDJT3cDMfhrw9
-         Np7w==
-X-Gm-Message-State: AOAM533htkgXrWL0wgcs/o0LuKNMXGwbv79Gm7va3hclK4HiDL/tz33O
-        /7UeCKjI74mvc2DcT+E1WPYg3A==
-X-Google-Smtp-Source: ABdhPJzLlfDEU5PO8AgWctvqRPPpzE55qWjOXriCo0/5uHQks2oaJC2d9s8IO8ZGJr2xf8x7e0n8Hw==
-X-Received: by 2002:a17:90b:3a82:: with SMTP id om2mr1586423pjb.58.1644602018334;
-        Fri, 11 Feb 2022 09:53:38 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id z13sm27643393pfe.20.2022.02.11.09.53.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 09:53:37 -0800 (PST)
-Date:   Fri, 11 Feb 2022 17:53:34 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com
-Subject: Re: [PATCH 11/12] KVM: MMU: remove kvm_mmu_calc_root_page_role
-Message-ID: <Ygainod2tgZy1e3c@google.com>
-References: <20220209170020.1775368-1-pbonzini@redhat.com>
- <20220209170020.1775368-12-pbonzini@redhat.com>
+        Fri, 11 Feb 2022 12:53:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80600CE9;
+        Fri, 11 Feb 2022 09:53:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AC6361DA3;
+        Fri, 11 Feb 2022 17:53:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25105C340E9;
+        Fri, 11 Feb 2022 17:53:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644602023;
+        bh=j9io4CjQGVmdKTFgkV+LOFNgAGw4pDMvV9VClqq4hNk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ImbAKQ08m0iW6t5yD2Mda3NMteEnVLoMuQgQ9UKKJBNvanJ3/fCwzKuSQpoxUEkQa
+         ktg9R1F0JLd6e+rr8mc7dTEn04rO2kXUN2uRdwMHVAJE3yMr43XizMt7NuK5G7VH+9
+         8GfrijmzRv8mfDxeW6/TihWh+owSsDtaaDV9sW328/dhe9p1Q/pfHcgL30pWCUn5eR
+         eyY68igzE9qcTQ7gkMtwDz5X0gIvSqFpdcYiDi2we5kkwIcat9jzx2tyMNniWMKx5P
+         kRi8O7OKyWyHl3FkQeV0DdLyBqT0EORI3+MFh3iAGR74ZkAWEOSPYaaDcesD4bdla2
+         vY29d+PAfi+/Q==
+Date:   Fri, 11 Feb 2022 18:53:38 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     conor.dooley@microchip.com
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        jassisinghbrar@gmail.com, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, geert@linux-m68k.org,
+        krzysztof.kozlowski@canonical.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        bin.meng@windriver.com, heiko@sntech.de, lewis.hanly@microchip.com,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        atishp@rivosinc.com, Rob Herring <robh@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: [PATCH v6 03/12] dt-bindings: i2c: add bindings for microchip
+ mpfs i2c
+Message-ID: <YgaiorHf7/Za5vib@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, conor.dooley@microchip.com,
+        linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        jassisinghbrar@gmail.com, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        geert@linux-m68k.org, krzysztof.kozlowski@canonical.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, bin.meng@windriver.com,
+        heiko@sntech.de, lewis.hanly@microchip.com,
+        daire.mcnamara@microchip.com, ivan.griffin@microchip.com,
+        atishp@rivosinc.com, Rob Herring <robh@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+References: <20220207162637.1658677-1-conor.dooley@microchip.com>
+ <20220207162637.1658677-4-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jVl1itNwmbBofVyK"
 Content-Disposition: inline
-In-Reply-To: <20220209170020.1775368-12-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220207162637.1658677-4-conor.dooley@microchip.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IMO, the shortlog is too literal and doesn't help understand the implications of
-the change.  I prefer something like:
 
-  KVM: x86/mmu: Always use current mmu's role when loading new PGD
+--jVl1itNwmbBofVyK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 09, 2022, Paolo Bonzini wrote:
-> Since the guest PGD is now loaded after the MMU has been set up
-> completely, the desired role for a cache hit is simply the current
-> mmu_role.  There is no need to compute it again, so __kvm_mmu_new_pgd
-> can be folded in kvm_mmu_new_pgd.
-> 
-> For the !tdp_enabled case, it would also have been possible to use
-> the role that is already in vcpu->arch.mmu.
-> 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
+On Mon, Feb 07, 2022 at 04:26:29PM +0000, conor.dooley@microchip.com wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+>=20
+> Add device tree bindings for the i2c controller on
+> the Microchip PolarFire SoC.
+>=20
+> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-With a different shortlog and newline,
+Applied to for-next, thanks!
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
 
->  arch/x86/kvm/mmu/mmu.c | 29 ++++-------------------------
->  1 file changed, 4 insertions(+), 25 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index df9e0a43513c..38b40ddcaad7 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -190,8 +190,6 @@ struct kmem_cache *mmu_page_header_cache;
->  static struct percpu_counter kvm_total_used_mmu_pages;
->  
->  static void mmu_spte_set(u64 *sptep, u64 spte);
-> -static union kvm_mmu_page_role
-> -kvm_mmu_calc_root_page_role(struct kvm_vcpu *vcpu);
->  
->  struct kvm_mmu_role_regs {
->  	const unsigned long cr0;
-> @@ -4172,9 +4170,9 @@ static bool fast_pgd_switch(struct kvm_vcpu *vcpu, gpa_t new_pgd,
->  		return cached_root_find_and_replace(vcpu, new_pgd, new_role);
->  }
->  
-> -static void __kvm_mmu_new_pgd(struct kvm_vcpu *vcpu, gpa_t new_pgd,
-> -			      union kvm_mmu_page_role new_role)
-> +void kvm_mmu_new_pgd(struct kvm_vcpu *vcpu, gpa_t new_pgd)
->  {
-> +	union kvm_mmu_page_role new_role = vcpu->arch.mmu->mmu_role.base;
+--jVl1itNwmbBofVyK
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Newline needed.
+-----BEGIN PGP SIGNATURE-----
 
->  	if (!fast_pgd_switch(vcpu, new_pgd, new_role)) {
->  		/* kvm_mmu_ensure_valid_pgd will set up a new root.  */
->  		return;
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIGoqIACgkQFA3kzBSg
+KbY5zBAAky+SkyXA2LOT59kq0mn8oO/pzp+w/OnfTlN/Dn3GgC5ljGVYLc8MECQ/
+Q2KKs+hINDGYIlDYCWxrDTQqNtaK+j35bY4m5uXiWFZWA7p4kMkOeaHfRVrbyg6S
+b7XaVq7myEkDrO+Xfw2MGxyJTLksSq0o7Ql7g4mSZkPyDYNycT/JUTyb5ac+D/pD
+yN/GK6kgiUvWeYrRCueJCTzYzpgwEdGex0wVQaOXDGVwSPZbM/j9RlBrmw4IBEIH
+1gToRHIKoLmbVx+MvyRACu2aRXUXhS7nPg9Yuq3Ftfge4RWzYhlzIITdcpSs+U74
+iuQkSCkKr0J3DvMwDKURl4g1BiPsKODTgvvYp4Fkw1LUad4hNEPrnLbxgZP6HYB6
+svl6Jy9aQoqQx5UeH1WHIBeRqzJlCKrr4HOCwuC+HIQ9//sqwd9OEIah32F1B+AZ
+wl0VhHqHDBUOimTbhr5QrvrTNEn4U5f5+eLToJbaGKEcplkJXlOFQg3xqaYN8hdB
+o/MAbfRWOPDYm/nXM+gK6LbXxCmhEBWgsqOeiOuC13RBOdiLyRNhl/tH0wd+e24K
+IHvmbZwmDhaKQ7U6Al0aeCQDzwULEpRtIhqHR1c+z18q9tA33GDfg0ukH6URjaLa
+PnbVeIhZNqyNmsa4P0nbDSjxqVhzZPiiPyEmAA/t0cFAaad37CA=
+=9qL3
+-----END PGP SIGNATURE-----
+
+--jVl1itNwmbBofVyK--

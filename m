@@ -2,247 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 331E34B1CE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 04:22:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A00DA4B1CE2
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 04:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233974AbiBKDVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 22:21:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45464 "EHLO
+        id S234258AbiBKD2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 22:28:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiBKDVi (ORCPT
+        with ESMTP id S229534AbiBKD2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 22:21:38 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F901105
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 19:21:38 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id o25so7087976qkj.7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 19:21:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=oqHpQ1jA9x8DZY/4tJM8BD66i7X6IhemK1mVygEcjUc=;
-        b=azcko7kQOkANFQZMcnL2nNee6Zngw9DZkEGYSAE868a2GfUVhf6QSs2d/X/gg+IaH5
-         c2ICX+hKH4gHN8nasVyM/HB5f2DGhyIlqdBShF6+aDF0U9r+NPV4lMYW8LtG1Qf+oi+a
-         3B7s9eaz+azr9si6HkgNcIQ/rnZ8HnVVoQoA1wmtcwTpY2qDmY7Ao7foi8R1ykRfaScU
-         VcKeAwhq0p4F4P7fjPZQWnxQTSCC3yiXvd4d/zrtseDhHkKf6td3gYvDyLZgtXjq9sZ2
-         ewTUTQa0/1UnLqJogfV51Jq4eDshovGv21Yp5BpvSGkNvGReVdu58ToKPItAUXfyOYMQ
-         mQ2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=oqHpQ1jA9x8DZY/4tJM8BD66i7X6IhemK1mVygEcjUc=;
-        b=Xpf6VfbaZQA5MNOF9nLMLePTksGrNnZVBub3rj+KLYC4sCtKtfbxe1PGW1ykfGp4g1
-         QzNLcZUiqGRhhr6GPk0EE0oMsam1KQstKyzF5MiMD47J+Fq9HCEkH3w/EoeDto5ZnNj4
-         iG78K/GJL1sd8sESJRhVFT+N+oOn3L3YbHmYdntcu5rowBT2XYDYUtjY4uS+sIaCYBaU
-         /bXqUqsewTCSHE8md5fs1zCXF6DHzSiXweI4437PD6lGt8ge8vgz5GYnTXOYCggxTIpm
-         VyJJGMEfdbVEaZccZ99RbCEU87GcyCnCfk+zshxa4EjvZhYElj8EwvxHQKLxVb/PVzlJ
-         eiIw==
-X-Gm-Message-State: AOAM532mcyKMW44vYRZiiwNEnzeb4k0nns1Ny73Zb93Z7F+KKe4PHaBq
-        Dx+7SGviv3m6DVWolObLjRk=
-X-Google-Smtp-Source: ABdhPJwHUgNco/6G2DsLdY4iAvYP+fbfL1LcJc1zWpzr+xTuLv3QjEKJlGk665TAWuFkHEaxUUbYYA==
-X-Received: by 2002:a05:620a:210b:: with SMTP id l11mr5498256qkl.201.1644549697541;
-        Thu, 10 Feb 2022 19:21:37 -0800 (PST)
-Received: from mail.google.com ([207.246.89.135])
-        by smtp.gmail.com with ESMTPSA id x13sm11408917qko.114.2022.02.10.19.21.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 19:21:37 -0800 (PST)
-Date:   Fri, 11 Feb 2022 11:21:35 +0800
-From:   Changbin Du <changbin.du@gmail.com>
-To:     Jessica Clarke <jrtc27@jrtc27.com>
-Cc:     Jisheng Zhang <jszhang@kernel.org>,
-        Changbin Du <changbin.du@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] riscv: fix oops caused by irq on/off tracer
-Message-ID: <20220211032135.i7jwvtb75pultwsp@mail.google.com>
-References: <20220129004226.32868-1-changbin.du@gmail.com>
- <YgAEb425uqy5/dw1@xhacker>
- <20220207123850.l4r5qjswaegwisbx@mail.google.com>
- <YgE7XRE/Uc6gTCWd@xhacker>
- <20220208003502.62gi5xhyg6bk2t2h@mail.google.com>
- <YgP6y99LWFSoxjHg@xhacker>
- <20220210133758.yzebffln6j76zme6@mail.google.com>
- <YgUuzZp/eiNoXejK@xhacker>
- <0D51738E-C4C0-4D30-BCDF-55786E0CC201@jrtc27.com>
+        Thu, 10 Feb 2022 22:28:10 -0500
+Received: from smtpproxy21.qq.com (smtpbg701.qq.com [203.205.195.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49410337
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 19:28:09 -0800 (PST)
+X-QQ-mid: bizesmtp50t1644550079to65l9oo
+Received: from localhost.localdomain (unknown [123.114.60.34])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 11 Feb 2022 11:27:57 +0800 (CST)
+X-QQ-SSF: 01400000000000B0L000B00A0000000
+X-QQ-FEAT: F3yR32iATbh2oLBgY04bLCEUrugK2eYu4uqKzn4vZXr8M3FhjTaXhTsqQBEGA
+        1bFiRILN7D7WuAlXkxS9K6wuxbIdfTOvRUPUc//342iGA4AzJ2ggNOHQyQjx1WOpFSfWPIB
+        GGlRpicv3TZMkOyuYQSiWFlgtLY9vw69udozN1/DwrdX+yChhQq9zOyjzn2BkEjIJ2z1Sqi
+        r7vsbqLo42piW5VVPu0IQRh6GyHruikoqHcT/Xr4HNvJUOSulO8P+8FF9oE9M9DsW6UGuB9
+        yGbEJuu2gF7uT5B9RxzK4jb12w8Deol0kDfhrhTxBePHSsfuGRryHcQtSIC5aVaOZnvyF7I
+        +eBXrlcM4Y2JsmK3VT4FW26RuQqwyXUlO0hVF4S
+X-QQ-GoodBg: 2
+From:   zhaoxiao <zhaoxiao@uniontech.com>
+To:     jingoohan1@gmail.com, deller@gmx.de
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, zhaoxiao <zhaoxiao@uniontech.com>
+Subject: [PATCH] video: s3c-fb: Use platform_get_irq() to get the interrupt
+Date:   Fri, 11 Feb 2022 11:27:55 +0800
+Message-Id: <20220211032755.2271-1-zhaoxiao@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0D51738E-C4C0-4D30-BCDF-55786E0CC201@jrtc27.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign7
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 03:59:35PM +0000, Jessica Clarke wrote:
-> On 10 Feb 2022, at 15:27, Jisheng Zhang <jszhang@kernel.org> wrote:
-> > On Thu, Feb 10, 2022 at 09:37:58PM +0800, Changbin Du wrote:
-> >> On Thu, Feb 10, 2022 at 01:32:59AM +0800, Jisheng Zhang wrote:
-> >> [snip]
-> >>> Hi Changbin,
-> >>> 
-> >>> I read the code and find that current riscv frame records during
-> >>> exception isn't as completed as other architectures. riscv only
-> >>> records frames from the ret_from_exception(). If we add completed
-> >> What do you mean for 'record'?
-> >> 
-> > 
-> > stack frame record.
-> > 
-> >>> frame records as other arch do, then the issue you saw can also
-> >>> be fixed at the same time.
-> >>> 
-> >> I don't think so. The problem is __builtin_return_address(1) trigger page fault
-> >> here.
-> > 
-> > There's misunderstanding here. I interpret this bug as incomplete
-> > stackframes.
-> > 
-> > This is current riscv stackframe during exception:
-> > 
-> > high
-> > 	----------------
-> > top	|		|  <- ret_from_exception
-> > 	----------------
-> > 	|		|  <- trace_hardirqs_on
-> > 	-----------------
-> > low
-> > 
-> > As you said, the CALLER_ADDR1 a.k.a __builtin_return_address(1) needs
-> > at least two parent call frames. 
-> 
-> No it doesn’t, you’re off by one, it only needs a valid current frame.
-> 
-> Jess
->
-yes, it is two frames not two 'parent' frames. My fault.
- 
-> > If we complete the stackframes during exception as other arch does:
-> > 
-> > high
-> > 	----------------
-> > top	|		|  <- the synthetic stackframe from the interrupted point
-> > 	----------------
-> > 	      .....	      
-> >        ----------------
-> > 	|		|  <- ret_from_exception
-> > 	----------------
-> > 	|		|  <- trace_hardirqs_on
-> > 	-----------------
-> > low
-> > 
-> > 
-> > Then we meet the "at least two parent call frames" requirement. IOW, my
-> > solution solve the problem from the entry.S side. One of the advantages
-> > would be we let interrupted point show up in dump_stack() as other arch
-> > do. What I'm not sure is whether it's safe to do so now since rc3 is
-> > released.
-> > 
-> >> 
-> >>> However, I'm not sure what's the best choice now.
-> >>> 
-> >>> A simple demo to this incomplete frames:
-> >>> add dump_stack() in any ISR, then
-> >>> 
-> >>> in riscv:
-> >>> [    2.961294] Call Trace:
-> >>> [    2.961460] [<ffffffff8000485e>] dump_backtrace+0x1c/0x24
-> >>> [    2.961823] [<ffffffff805ed980>] show_stack+0x2c/0x38
-> >>> [    2.962153] [<ffffffff805f292e>] dump_stack_lvl+0x40/0x58
-> >>> [    2.962483] [<ffffffff805f295a>] dump_stack+0x14/0x1c
-> >>> [    2.962792] [<ffffffff805f31a0>] serial8250_interrupt+0x20/0x82
-> >>> [    2.963139] [<ffffffff80053032>] __handle_irq_event_percpu+0x4c/0x106
-> >>> [    2.963526] [<ffffffff80053170>] handle_irq_event+0x38/0x80
-> >>> [    2.963856] [<ffffffff80056a32>] handle_fasteoi_irq+0x96/0x188
-> >>> [    2.964198] [<ffffffff800526ce>] generic_handle_domain_irq+0x28/0x3a
-> >>> [    2.964567] [<ffffffff802f0ae4>] plic_handle_irq+0x88/0xec
-> >>> [    2.964896] [<ffffffff800526ce>] generic_handle_domain_irq+0x28/0x3a
-> >>> [    2.965264] [<ffffffff802f08e4>] riscv_intc_irq+0x34/0x5c
-> >>> [    2.965584] [<ffffffff805f6dc8>] generic_handle_arch_irq+0x4a/0x74
-> >>> [    2.966068] [<ffffffff80002fe8>] ret_from_exception+0x0/0xc
-> >>> 
-> >>> in x86:
-> >>> [    1.191274] Call Trace:
-> >>> [    1.192223]  <IRQ>
-> >>> [    1.192758]  dump_stack_lvl+0x45/0x59
-> >>> [    1.192982]  serial8250_interrupt+0x24/0x88
-> >>> [    1.193105]  __handle_irq_event_percpu+0x66/0x1b0
-> >>> [    1.193239]  handle_irq_event+0x34/0x70
-> >>> [    1.193345]  handle_edge_irq+0x85/0x1e0
-> >>> [    1.193455]  __common_interrupt+0x38/0x90
-> >>> [    1.193573]  common_interrupt+0x73/0x90
-> >>> [    1.193809]  </IRQ>
-> >>> [    1.193889]  <TASK>
-> >>> [    1.193956]  asm_common_interrupt+0x1b/0x40
-> >>> [    1.194318] RIP: 0010:_raw_spin_unlock_irqrestore+0x1b/0x40
-> >>> [    1.194566] Code: 24 be 01 02 00 00 e9 54 20 bf ff 0f 1f 40 00 0f 1f
-> >>> 44 00 00 f7 c6 00f
-> >>> [    1.195137] RSP: 0000:ffff888000243b68 EFLAGS: 00000246
-> >>> [    1.195314] RAX: 0000000000000000 RBX: ffffffff82025840 RCX:
-> >>> 0000000000000000
-> >>> [    1.195482] RDX: 0000000000000001 RSI: 0000000000000000 RDI:
-> >>> 0000000000000001
-> >>> [    1.195645] RBP: 0000000000000202 R08: ffffffffffffffff R09:
-> >>> 0000000000000000
-> >>> [    1.195808] R10: 00000000000000eb R11: 0000000000000000 R12:
-> >>> 0000000000000000
-> >>> [    1.195972] R13: 0000000000000040 R14: 0000000000000000 R15:
-> >>> ffff888000c39000
-> >>> [    1.196245]  ? _raw_spin_unlock_irqrestore+0x15/0x40
-> >>> [    1.196373]  serial8250_do_startup+0x42d/0x600
-> >>> [    1.196502]  uart_port_startup+0x11b/0x270
-> >>> [    1.196619]  uart_port_activate+0x3f/0x60
-> >>> [    1.196729]  tty_port_open+0x7e/0xd0
-> >>> [    1.196835]  ? _raw_spin_unlock+0x12/0x30
-> >>> [    1.196942]  uart_open+0x1a/0x30
-> >>> [    1.197036]  tty_open+0x153/0x7c0
-> >>> [    1.197144]  chrdev_open+0xbf/0x230
-> >>> [    1.197253]  ? cdev_device_add+0x90/0x90
-> >>> [    1.197359]  do_dentry_open+0x13c/0x360
-> >>> [    1.197470]  path_openat+0xb0c/0xe00
-> >>> [    1.197577]  ? update_load_avg+0x5f/0x640
-> >>> [    1.197691]  ? finish_task_switch.isra.0+0xac/0x240
-> >>> [    1.197821]  do_filp_open+0xb2/0x150
-> >>> [    1.197935]  ? preempt_schedule_thunk+0x16/0x18
-> >>> [    1.198049]  ? preempt_schedule_common+0x90/0xd0
-> >>> [    1.198167]  ? preempt_schedule_thunk+0x16/0x18
-> >>> [    1.198291]  file_open_name+0xf1/0x1b0
-> >>> [    1.198397]  filp_open+0x2c/0x50
-> >>> [    1.198495]  console_on_rootfs+0x19/0x52
-> >>> [    1.198648]  kernel_init_freeable+0x19a/0x1c7
-> >>> [    1.198765]  ? rest_init+0xc0/0xc0
-> >>> [    1.198867]  kernel_init+0x16/0x110
-> >>> [    1.198965]  ret_from_fork+0x1f/0x30
-> >>> [    1.199131]  </TASK>
-> >>> 
-> >> As I said before, this issue is not related to stackdump.
-> >> 
-> >> Besides, you can see more calltrace on x86 that because x86 iterate all stacks
-> >> (kernel, irq or exception) when dumping stacktrace. While RISCV only show
-> >> calltrace of current stack.
-> >> 
-> > 
-> > I'm not sure whether there's misunderstanding. See above.
-> > 
-> > Thanks
-> > 
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
-> 
+platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+allocation of IRQ resources in DT core code, this causes an issue
+when using hierarchical interrupt domains using "interrupts" property
+in the node as this bypassed the hierarchical setup and messed up the
+irq chaining.
 
+In preparation for removal of static setup of IRQ resource from DT core
+code use platform_get_irq().
+
+Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
+---
+ drivers/video/fbdev/s3c-fb.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/video/fbdev/s3c-fb.c b/drivers/video/fbdev/s3c-fb.c
+index 3b134e1bbc38..6ead7d3e2312 100644
+--- a/drivers/video/fbdev/s3c-fb.c
++++ b/drivers/video/fbdev/s3c-fb.c
+@@ -1360,7 +1360,6 @@ static int s3c_fb_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct s3c_fb_platdata *pd;
+ 	struct s3c_fb *sfb;
+-	struct resource *res;
+ 	int win;
+ 	int ret = 0;
+ 	u32 reg;
+@@ -1418,13 +1417,13 @@ static int s3c_fb_probe(struct platform_device *pdev)
+ 		goto err_lcd_clk;
+ 	}
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+-	if (!res) {
++	sfb->irq_no = platform_get_irq(pdev, 0);
++	if (sfb->irq_no < 0) {
+ 		dev_err(dev, "failed to acquire irq resource\n");
+ 		ret = -ENOENT;
+ 		goto err_lcd_clk;
+ 	}
+-	sfb->irq_no = res->start;
++
+ 	ret = devm_request_irq(dev, sfb->irq_no, s3c_fb_irq,
+ 			  0, "s3c_fb", sfb);
+ 	if (ret) {
 -- 
-Cheers,
-Changbin Du
+2.20.1
+
+
+

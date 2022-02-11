@@ -2,122 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221644B1AF9
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 02:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C584B1AF7
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 02:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346670AbiBKBIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 20:08:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49406 "EHLO
+        id S1346682AbiBKBJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 20:09:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239061AbiBKBIx (ORCPT
+        with ESMTP id S1346673AbiBKBJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 20:08:53 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAE9B3F;
-        Thu, 10 Feb 2022 17:08:53 -0800 (PST)
-Date:   Fri, 11 Feb 2022 01:08:49 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644541730;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lJG2K6yK6beclfHEUgTRPm0L+hZjgYhcQ+rfNcW2yCA=;
-        b=ABdioSNRvNJ1NwBmAJkgqVWQSYABc8LKhsFmzstsNIY/sVsAVoi34QylwpKWfqv66Lubf7
-        1c2RhTfRDnJP+kqVip4b5SqnmCnE7JdlFEQjD46DvsAaKOglZpmj5s/hzkYS4FdE4qp5lp
-        vojGVwya2/AUZogY09q0JVeM3SRDOabiT/JDiBesUSm2336ULfUsTTJaGp1ERFy1FEw780
-        +uIo2VUk9PhgEKRV0nC3Myvjp892xRefrzLSIpXjOkUYRCv9AT6xv9xMUEEYufmE8JaMxy
-        LwB9Zqv70UAspG/YAe79wgs4ZdM1FWPyTV0BXolnygeBA2HmCj09y9FzBuN6Uw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644541730;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lJG2K6yK6beclfHEUgTRPm0L+hZjgYhcQ+rfNcW2yCA=;
-        b=glroVRquyhDYs+oEDXrq27+SnCMwxRe1Kxjs1scQvc3aPDCzXSwSZU8LwHGunyV2uJJk5o
-        Qbh8Oza/1zLNy4Dg==
-From:   "tip-bot2 for Reinette Chatre" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/sgx: Silence softlockup detection when
- releasing large enclaves
-Cc:     stable@vger.kernel.org, Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3Cced01cac1e75f900251b0a4ae1150aa8ebd295ec=2E16443?=
- =?utf-8?q?45232=2Egit=2Ereinette=2Echatre=40intel=2Ecom=3E?=
-References: =?utf-8?q?=3Cced01cac1e75f900251b0a4ae1150aa8ebd295ec=2E164434?=
- =?utf-8?q?5232=2Egit=2Ereinette=2Echatre=40intel=2Ecom=3E?=
+        Thu, 10 Feb 2022 20:09:23 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0486EB41
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:09:23 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id d187so13375423pfa.10
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:09:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5F/YGzVmxucCV2w+SE7XEhbRoXDDpQToobLbIhWaHYc=;
+        b=O7Cni19xFycNNK4IUy1daQ4E99VFUDXm8NRv0PVumWB3oOLgQHBSvi4/VQ3YmmUfKM
+         i1ZA07f5QkAcyXONb8QxwlzHG2SF5Dcy4mwDq1Qo6muqtRFYHUYCLe1JM3RnvTyI3INV
+         RyyyWu81uFVEx/hxuyhPODN9C1WQGzlVWJIMs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5F/YGzVmxucCV2w+SE7XEhbRoXDDpQToobLbIhWaHYc=;
+        b=3lZVWiRVoyBOYUD0o60SQ54WK0X7FUvBa2dj/nZVCGh8gGZYC8i19nFgefdpTefhuh
+         PHvEhkDNtf/TTAubdMpKLpd6sWOTEugI5Ob/ARsjwDri1cAEilzC6Ws60cW+K+SBV/s7
+         0/8pSBLb2E/+j3gIIl594LKJMDYfq6vEtnZsAV0iIUmHNwB0lV/BhjeWdP2Mtljca7HK
+         lJGEn+aQt9XuczphMZtO6YfqfIYPLBuSton6fzfDLlre8WGO62VJgNoGVA+HmN6JB019
+         FdutJ+Zrd2n2A8P9RMl2MMekc/cxJizX7RMjb6n5EGb+isSdHCoi0WjpD9g3JPhyzKpA
+         ALjQ==
+X-Gm-Message-State: AOAM531SokftfveetlfsZShGwX/wKdAqa31viDYyzX4Ta7ra/c12LSJZ
+        8Rrj3ugQfVnIW0omC92F86Uc5g==
+X-Google-Smtp-Source: ABdhPJwvw0DfYnLU4ASZ7YxnRfLhjmjJWmRRXYFhu4Zcr1DUaXzi6LQObbQCgkweT4gdbKfWrpGQUQ==
+X-Received: by 2002:aa7:9486:: with SMTP id z6mr10192650pfk.76.1644541762433;
+        Thu, 10 Feb 2022 17:09:22 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 10sm24234252pfm.56.2022.02.10.17.09.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 17:09:22 -0800 (PST)
+Date:   Thu, 10 Feb 2022 17:09:21 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v3 12/12] lkdtm: Add a test for function descriptors
+ protection
+Message-ID: <202202101703.993CA9BC@keescook>
+References: <cover.1634457599.git.christophe.leroy@csgroup.eu>
+ <67f9545c9ad15048bfe0104278ef9595d051dbc8.1634457599.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Message-ID: <164454172947.16921.6907341093129074331.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <67f9545c9ad15048bfe0104278ef9595d051dbc8.1634457599.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Sun, Oct 17, 2021 at 02:38:25PM +0200, Christophe Leroy wrote:
+> Add WRITE_OPD to check that you can't modify function
+> descriptors.
+> 
+> Gives the following result when function descriptors are
+> not protected:
+> 
+> 	lkdtm: Performing direct entry WRITE_OPD
+> 	lkdtm: attempting bad 16 bytes write at c00000000269b358
+> 	lkdtm: FAIL: survived bad write
+> 	lkdtm: do_nothing was hijacked!
+> 
+> Looks like a standard compiler barrier() is not enough to force
+> GCC to use the modified function descriptor. Had to add a fake empty
+> inline assembly to force GCC to reload the function descriptor.
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  drivers/misc/lkdtm/core.c  |  1 +
+>  drivers/misc/lkdtm/lkdtm.h |  1 +
+>  drivers/misc/lkdtm/perms.c | 22 ++++++++++++++++++++++
+>  3 files changed, 24 insertions(+)
+> 
+> diff --git a/drivers/misc/lkdtm/core.c b/drivers/misc/lkdtm/core.c
+> index fe6fd34b8caf..de092aa03b5d 100644
+> --- a/drivers/misc/lkdtm/core.c
+> +++ b/drivers/misc/lkdtm/core.c
+> @@ -148,6 +148,7 @@ static const struct crashtype crashtypes[] = {
+>  	CRASHTYPE(WRITE_RO),
+>  	CRASHTYPE(WRITE_RO_AFTER_INIT),
+>  	CRASHTYPE(WRITE_KERN),
+> +	CRASHTYPE(WRITE_OPD),
+>  	CRASHTYPE(REFCOUNT_INC_OVERFLOW),
+>  	CRASHTYPE(REFCOUNT_ADD_OVERFLOW),
+>  	CRASHTYPE(REFCOUNT_INC_NOT_ZERO_OVERFLOW),
+> diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
+> index c212a253edde..188bd0fd6575 100644
+> --- a/drivers/misc/lkdtm/lkdtm.h
+> +++ b/drivers/misc/lkdtm/lkdtm.h
+> @@ -105,6 +105,7 @@ void __init lkdtm_perms_init(void);
+>  void lkdtm_WRITE_RO(void);
+>  void lkdtm_WRITE_RO_AFTER_INIT(void);
+>  void lkdtm_WRITE_KERN(void);
+> +void lkdtm_WRITE_OPD(void);
+>  void lkdtm_EXEC_DATA(void);
+>  void lkdtm_EXEC_STACK(void);
+>  void lkdtm_EXEC_KMALLOC(void);
+> diff --git a/drivers/misc/lkdtm/perms.c b/drivers/misc/lkdtm/perms.c
+> index 1cf24c4a79e9..2c6aba3ff32b 100644
+> --- a/drivers/misc/lkdtm/perms.c
+> +++ b/drivers/misc/lkdtm/perms.c
+> @@ -44,6 +44,11 @@ static noinline void do_overwritten(void)
+>  	return;
+>  }
+>  
+> +static noinline void do_almost_nothing(void)
+> +{
+> +	pr_info("do_nothing was hijacked!\n");
+> +}
+> +
+>  static void *setup_function_descriptor(func_desc_t *fdesc, void *dst)
+>  {
+>  	if (!have_function_descriptors())
+> @@ -144,6 +149,23 @@ void lkdtm_WRITE_KERN(void)
+>  	do_overwritten();
+>  }
+>  
+> +void lkdtm_WRITE_OPD(void)
+> +{
+> +	size_t size = sizeof(func_desc_t);
+> +	void (*func)(void) = do_nothing;
+> +
+> +	if (!have_function_descriptors()) {
+> +		pr_info("XFAIL: Platform doesn't use function descriptors.\n");
+> +		return;
+> +	}
+> +	pr_info("attempting bad %zu bytes write at %px\n", size, do_nothing);
+> +	memcpy(do_nothing, do_almost_nothing, size);
+> +	pr_err("FAIL: survived bad write\n");
 
-Commit-ID:     8795359e35bc33bf86b6d0765aa7f37431db3b9c
-Gitweb:        https://git.kernel.org/tip/8795359e35bc33bf86b6d0765aa7f37431db3b9c
-Author:        Reinette Chatre <reinette.chatre@intel.com>
-AuthorDate:    Tue, 08 Feb 2022 10:48:07 -08:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Thu, 10 Feb 2022 15:58:14 -08:00
+Non-function-descriptor architectures would successfully crash at the
+memcpy too, right? (i.e. for them this is just repeating WRITE_KERN)
 
-x86/sgx: Silence softlockup detection when releasing large enclaves
+I'm pondering the utility of the XFAIL vs just letting is succeed, but I
+think it more accurate to say "hey, no OPD" as you have it.
 
-Vijay reported that the "unclobbered_vdso_oversubscribed" selftest
-triggers the softlockup detector.
+> +
+> +	asm("" : "=m"(func));
+> +	func();
+> +}
+> +
+>  void lkdtm_EXEC_DATA(void)
+>  {
+>  	execute_location(data_area, CODE_WRITE);
+> -- 
+> 2.31.1
+> 
 
-Actual SGX systems have 128GB of enclave memory or more.  The
-"unclobbered_vdso_oversubscribed" selftest creates one enclave which
-consumes all of the enclave memory on the system. Tearing down such a
-large enclave takes around a minute, most of it in the loop where
-the EREMOVE instruction is applied to each individual 4k enclave page.
+One tiny suggestion, since I think you need to respin for the
+EXPORT_SYMBOL_GPL() anyway. Please update the selftests too:
 
-Spending one minute in a loop triggers the softlockup detector.
+diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
+index 6b36b7f5dcf9..243c781f0780 100644
+--- a/tools/testing/selftests/lkdtm/tests.txt
++++ b/tools/testing/selftests/lkdtm/tests.txt
+@@ -44,6 +44,7 @@ ACCESS_NULL
+ WRITE_RO
+ WRITE_RO_AFTER_INIT
+ WRITE_KERN
++WRITE_OPD
+ REFCOUNT_INC_OVERFLOW
+ REFCOUNT_ADD_OVERFLOW
+ REFCOUNT_INC_NOT_ZERO_OVERFLOW
 
-Add a cond_resched() to give other tasks a chance to run and placate
-the softlockup detector.
+(Though for the future I've been considering making the selftests an
+opt-out list so the "normal" stuff doesn't need to keep getting added
+there.)
 
-Cc: stable@vger.kernel.org
-Fixes: 1728ab54b4be ("x86/sgx: Add a page reclaimer")
-Reported-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-Tested-by: Jarkko Sakkinen <jarkko@kernel.org>  (kselftest as sanity check)
-Link: https://lkml.kernel.org/r/ced01cac1e75f900251b0a4ae1150aa8ebd295ec.1644345232.git.reinette.chatre@intel.com
----
- arch/x86/kernel/cpu/sgx/encl.c | 2 ++
- 1 file changed, 2 insertions(+)
+Thanks!
 
-diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-index 001808e..48afe96 100644
---- a/arch/x86/kernel/cpu/sgx/encl.c
-+++ b/arch/x86/kernel/cpu/sgx/encl.c
-@@ -410,6 +410,8 @@ void sgx_encl_release(struct kref *ref)
- 		}
- 
- 		kfree(entry);
-+		/* Invoke scheduler to prevent soft lockups. */
-+		cond_resched();
- 	}
- 
- 	xa_destroy(&encl->page_array);
+Acked-by: Kees Cook <keescook@chromium.org>
+
+-Kees
+
+-- 
+Kees Cook

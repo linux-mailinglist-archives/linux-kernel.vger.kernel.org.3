@@ -2,138 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D9E4B2EDA
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E38064B2EC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353530AbiBKUvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 15:51:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45376 "EHLO
+        id S1353405AbiBKUud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 15:50:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353508AbiBKUvP (ORCPT
+        with ESMTP id S244388AbiBKUub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 15:51:15 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51C8D81;
-        Fri, 11 Feb 2022 12:51:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=szliCvhlN5Z9BaTB8NpXRzmfXL5JLtC0U/5WIBQHRGk=; b=ekCZc4yQpiC+JEB49fs1dM/ub9
-        tsoZJNGmRWN7YATnaGVHCsq+bjCXt8c38hEdUqHrf+8ej47Ynp/m4xEv5BZld7BUacKY3t9EmCJUj
-        SxdOx3qtztHYVteEn/F7NhVwP72RUgSOWlBdw8sA7XSkCSVM9WJO725+asuD7wWKmMNw=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:55280 helo=pettiford.lan)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1nIcse-00067w-3k; Fri, 11 Feb 2022 15:51:00 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     hvilleneuve@dimonoff.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com
-Cc:     hugo@hugovil.com, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 11 Feb 2022 15:50:25 -0500
-Message-Id: <20220211205029.3940756-11-hugo@hugovil.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220211205029.3940756-1-hugo@hugovil.com>
-References: <20220211205029.3940756-1-hugo@hugovil.com>
+        Fri, 11 Feb 2022 15:50:31 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61777CEC;
+        Fri, 11 Feb 2022 12:50:30 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 2C5961F42CA0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644612629;
+        bh=titzUSRpLuAl1t9xsbS7kL0F6WrOUiNfN4rZ24f9VYA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ya5jCVBNZbokUY4sj312TkrMPYG1GAKIBpnwiWpY1atBf6gQOesipFr6lHSkDeJaB
+         GCTUraYYy7fFuvzfbKLfgbm1wbShMeeAM0Cvr/nGauxdVCR6pz81OvSQT/nzhJApHv
+         mSaIGogGeZ6RS9J9BfslLcIxQn0LaVJsaacMyTENFQ2fu2jnWOqrL85c9MphHLdNlc
+         Kn4K+KkiDWzdEBJlObOfFC1hpyrQAwa4fit2SoVi1zP/59oh/dzB9lSFP9s2kgT5hf
+         3tCNl4ZA3hrVGkllUQdQlZlL3ToH5toWo/fUt5c/VDjjBm+gOoDWAZZYY3Y8wYjpkH
+         eEL0SBYWS5ixw==
+Received: by mercury (Postfix, from userid 1000)
+        id AC3231060908; Fri, 11 Feb 2022 21:50:26 +0100 (CET)
+Date:   Fri, 11 Feb 2022 21:50:26 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Qing Wang <wangqing@vivo.com>
+Cc:     Support Opensource <support.opensource@diasemi.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: da9150: use div64_u64() instead of
+ do_div()
+Message-ID: <20220211205026.6jhtt66wco5ht6i6@mercury.elektranox.org>
+References: <1644395986-4349-1-git-send-email-wangqing@vivo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tmbpapgwd5xul2x6"
+Content-Disposition: inline
+In-Reply-To: <1644395986-4349-1-git-send-email-wangqing@vivo.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v2 10/14] rtc: pcf2127: read and validate PCF2131 device signature
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-Make sure the device we are probing is really the device we are
-interested in.
+--tmbpapgwd5xul2x6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
----
- drivers/rtc/rtc-pcf2127.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+Hi,
 
-diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index 09b3d0ef4eff..8f3b34efff7f 100644
---- a/drivers/rtc/rtc-pcf2127.c
-+++ b/drivers/rtc/rtc-pcf2127.c
-@@ -193,11 +193,13 @@ struct pcf21xx_config {
- 	unsigned int has_nvmem:1;
- 	unsigned int has_bit_wd_ctl_cd0:1;
- 	unsigned int has_int_a_b:1; /* PCF2131 supports two interrupt outputs. */
-+	unsigned int has_reset_reg:1; /* If variant has a reset register. */
- 	u8 regs_td_base; /* Time/data base registers. */
- 	u8 regs_alarm_base; /* Alarm function base registers. */
- 	u8 reg_wd_ctl; /* Watchdog control register. */
- 	u8 reg_wd_val; /* Watchdog value register. */
- 	u8 reg_clkout; /* Clkout register. */
-+	u8 reg_reset;  /* Reset register if available. */
- 	unsigned int ts_count;
- 	struct pcf21xx_ts_config ts[4];
- 	struct attribute_group attribute_group;
-@@ -882,6 +884,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
- 		.has_nvmem = 1,
- 		.has_bit_wd_ctl_cd0 = 1,
- 		.has_int_a_b = 0,
-+		.has_reset_reg = 0,
- 		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
- 		.regs_alarm_base = PCF2127_REG_ALARM_BASE,
- 		.reg_wd_ctl = PCF2127_REG_WD_CTL,
-@@ -906,6 +909,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
- 		.has_nvmem = 0,
- 		.has_bit_wd_ctl_cd0 = 0,
- 		.has_int_a_b = 0,
-+		.has_reset_reg = 0,
- 		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
- 		.regs_alarm_base = PCF2127_REG_ALARM_BASE,
- 		.reg_wd_ctl = PCF2127_REG_WD_CTL,
-@@ -930,11 +934,13 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
- 		.has_nvmem = 0,
- 		.has_bit_wd_ctl_cd0 = 0,
- 		.has_int_a_b = 1,
-+		.has_reset_reg = 1,
- 		.regs_td_base = PCF2131_REG_TIME_DATE_BASE,
- 		.regs_alarm_base = PCF2131_REG_ALARM_BASE,
- 		.reg_wd_ctl = PCF2131_REG_WD_CTL,
- 		.reg_wd_val = PCF2131_REG_WD_VAL,
- 		.reg_clkout = PCF2131_REG_CLKOUT,
-+		.reg_reset  = PCF2131_REG_SR_RESET,
- 		.ts_count = 4,
- 		.ts[0] = {
- 			.regs_base = PCF2131_REG_TS1_BASE,
-@@ -1074,6 +1080,20 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 	pcf2127->rtc->uie_unsupported = 1;
- 	clear_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
- 
-+	/* Read device signature if available. */
-+	if (pcf2127->cfg->has_reset_reg) {
-+		ret = regmap_read(pcf2127->regmap, pcf2127->cfg->reg_reset, &val);
-+		if (ret < 0) {
-+			dev_err(dev, "reading RESET register failed\n");
-+			return ret;
-+		}
-+
-+		if (val != PCF2131_SR_RESET_READ_PATTERN) {
-+			dev_err(dev, "invalid device signature: $%02X\n", (u8)val);
-+			return -ENODEV;
-+		}
-+	}
-+
- 	if (alarm_irq > 0) {
- 		unsigned long flags;
- 
--- 
-2.30.2
+On Wed, Feb 09, 2022 at 12:39:46AM -0800, Qing Wang wrote:
+> From: Wang Qing <wangqing@vivo.com>
+>=20
+> do_div() does a 64-by-32 division.
+> When the divisor is u64, do_div() truncates it to 32 bits, this means it
+> can test non-zero and be truncated to zero for division.
+>=20
+> fix do_div.cocci warning:
+> do_div() does a 64-by-32 division, please consider using div64_u64 instea=
+d.
+>=20
+> Signed-off-by: Wang Qing <wangqing@vivo.com>
+> ---
 
+Thanks, queued.
+
+-- Sebastian
+
+>  drivers/power/supply/da9150-fg.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/da9150-fg.c b/drivers/power/supply/da91=
+50-fg.c
+> index 6e36782..896491a
+> --- a/drivers/power/supply/da9150-fg.c
+> +++ b/drivers/power/supply/da9150-fg.c
+> @@ -250,7 +250,7 @@ static int da9150_fg_current_avg(struct da9150_fg *fg,
+>  	div =3D (u64) (sd_gain * shunt_val * 65536ULL);
+>  	do_div(div, 1000000);
+>  	res =3D (u64) (iavg * 1000000ULL);
+> -	do_div(res, div);
+> +	div64_u64(res, div);
+> =20
+>  	val->intval =3D (int) res;
+> =20
+> --=20
+> 2.7.4
+>=20
+
+--tmbpapgwd5xul2x6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIGzBIACgkQ2O7X88g7
++pq1RA//amgy7aCdOmD2Kpx2XtE/2DM+vMVocYnQW+uTkFJf1Nlske4UwmTbDphI
+cxNkYnlE+ftdkBpgvoXaGoCADXYbJqfHn4SCZmns7c7ElZM9UZfJIeRn1f/c/lev
+ChCZS8bardkVf7DEwr3apsHEpz0RD4fWpjUqkbV7dRIDif4a8bZUxWakSS7R8LkV
+L2pbun/PmbJUztbGSTb5ulsSlTvoTBU9bO3DOazLrQ8jbIs4jn1wNOtpr3txFfnf
+McSumI/SBeHp2q9iIXhf/YCvGqlfyfZZNIb9HXdtYM5uxuTh+Hf1Gey1ih+YKGzu
+PWVyydYzbm7aBqFD+rUeRzELSqH/EYdiyONkCojr3ONdfqL1SG92OVhZGDdJorRt
+cK/0AFLb3F3AEKRL+TgT93qvywvZJTWFNcS3oThI75n0HI2SmxbEaWPcUsOlgAwc
+a9FwGL1uv88LqHvk7FeUIGhJvujiS3Lbg6SwdtSCQ19WRvu863M+gXOge6pPJV84
++VKfI9RXQcOm2xRndUkqZIuodUf/Y2KTU89DK2zkRpNCjVNDV2CD8xYb0MV7rp+E
+fmCS3Y+xK0btYXXyDlh5ecI5tpV0vyEwCJhyLyicFi93QDC8lLBxXg9Gq/UM2UBs
+iA5MSl0FbToLrXvFShbVt4uUGsnw/vLwn+MuJgmnyIHauQYR7L8=
+=nub8
+-----END PGP SIGNATURE-----
+
+--tmbpapgwd5xul2x6--

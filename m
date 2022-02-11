@@ -2,114 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C384B2BAF
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9F94B2BAE
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:24:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237268AbiBKRYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 12:24:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43130 "EHLO
+        id S1352052AbiBKRYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 12:24:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232559AbiBKRYW (ORCPT
+        with ESMTP id S232559AbiBKRYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 12:24:22 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE8DCDB;
-        Fri, 11 Feb 2022 09:24:21 -0800 (PST)
-Date:   Fri, 11 Feb 2022 18:24:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644600259;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xby/277p0PYtQwCatM3qedV1BJVm17l7RSVzLWxr3g8=;
-        b=iUZhNCrzxIYmmcZx0K8FjSwwbpoZejai6BCLy/2SpOPTMwa94R3LPaWhLnFcupF7VJ/9Gm
-        YWRNXFytUMDy6PbAe/KxmzmIC3wP2DkO9qMXOWd0k4nT9gWGDBbkvxQyBcv5qvI50zuZJP
-        2A+UF3bADn3/W1xw8B2Iz6lKYAtxuSFGp1YqRg6apu4i81LddDV2CHraQbIPoqQCokk5PW
-        RSHAz0lJChS75qpyuqjb67BlgUyWkV1EtYw2+HajIPTGJC1M4TsXKOB/504ddWOLWeEZH1
-        7KwCN/p0kZuvN7yUnSdnUIkj5kxBVo6Gg0hB6zvKkQI7GxLLyd4ADGO3A8VxVQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644600259;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xby/277p0PYtQwCatM3qedV1BJVm17l7RSVzLWxr3g8=;
-        b=8RccvtE7jG31F556KgNWkhuPwsfJrW1ooMTxsxJeo7LTGuhNSbTebFq8SCXVj40mN6Th+L
-        NB4p9sT3h7fl72Cg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: Re: [PATCH v7] random: defer fast pool mixing to worker
-Message-ID: <YgabwjHlVnKBLpwV@linutronix.de>
-References: <CAHmME9rC_q4LGq2JaAAeGbtRA2cibTe9bnvhMLng+QnzAy2DVg@mail.gmail.com>
- <20220211170732.571775-1-Jason@zx2c4.com>
+        Fri, 11 Feb 2022 12:24:44 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C13CEB
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:24:43 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id v186so27030827ybg.1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:24:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1f5nHZJ9uVD6/I7NM/ovxfltUAK5E77rKDDs7ab4Xic=;
+        b=hdu4UcvLhoPoj1+nnYpidzG5ybt+SATEc36EIA2F0rim60MDWLZbsC80UkLLFmgXby
+         6I7VzLYSiW5Hapfkc4bxg/0zMn3VeyGHa9/SvKDExmKANfuJfsNd6je7gRTcEAM/wO2E
+         5k/ztc0BzeVqRc/H/3YbHOxS3vgNm34Mbjg/TDoA/kaFo5G8eyLRjuaGUtF9h0KcMX9m
+         fEuLqzzSDlJ0RCRESc6rqHoVWILYakTV0dwZXWrP4312DRfINDk2pgn0Fu7FKQ3rF7x0
+         25wJIFy+QCKBFG07xvaYmccVexj7YtoX+pqqDBPrxZ6At0yiOQT+AwCoJmqV3vTfAtPA
+         QcMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1f5nHZJ9uVD6/I7NM/ovxfltUAK5E77rKDDs7ab4Xic=;
+        b=YEbduahd9FyhJoRvc5NYTjPjeNyjrsrUqnXciyXuGsAFaLQHNyGHD/kVdJ6p+vuOYl
+         GyyWoz1mWUC/HvDq7yxmTeu6fNUxtfc1ZS1/rrnMO9RCh+V6r56Z22j1/IyhTJenFIYD
+         WAJieFIPMVGqflwUmAz0h726jVqJSSxwQBETuhiy9gP5htX2smKw2d8WsfOO79r8aWvC
+         8c4brSRYsP+N+oVXEyytZ+T7L/dOoCKm6V58sLSXf0IQlnSRypRk1xfKl7cWyxnDujTF
+         gsVN8Yp/T3/8adS8pz+/Z7Nl+h0BLQD0xkELMKCTWuJpQ4HQ5gGzzPFSJjACNwozzHCK
+         CtIA==
+X-Gm-Message-State: AOAM532yBHZtJVJFTEqfKXOl3ONM816d2bENcfU/hTmRSxnFbCqn19uB
+        JwvM4uhM37Z9zCRBq36hQINPVBuvCr1WkqiqwJgKAg==
+X-Google-Smtp-Source: ABdhPJxmj9cstWH2lKAb2aiO3OuQbmZ8A5jPVYo/c8dto0k13vNXhpRUa1YxFuZZi/PUuAIxg/HTlYAJuXQSAWRKgDo=
+X-Received: by 2002:a25:8885:: with SMTP id d5mr2268605ybl.383.1644600281921;
+ Fri, 11 Feb 2022 09:24:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220211170732.571775-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220211164026.409225-1-ribalda@chromium.org>
+In-Reply-To: <20220211164026.409225-1-ribalda@chromium.org>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 11 Feb 2022 09:24:30 -0800
+Message-ID: <CANn89i+2idhm3wpGO79RHdCYMfYuKURvBaWmoXmYxBwj5z59yg@mail.gmail.com>
+Subject: Re: [PATCH] net: Fix build when CONFIG_INET is not enabled
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-11 18:07:32 [+0100], Jason A. Donenfeld wrote:
-> On PREEMPT_RT, it's problematic to take spinlocks from hard irq
-> handlers. We can fix this by deferring to a workqueue the dumping of
-> the fast pool into the input pool.
->=20
-> We accomplish this with some careful rules on fast_pool->count:
->=20
->   - When it's incremented to >=3D 64, we schedule the work.
->   - If the top bit is set, we never schedule the work, even if >=3D 64.
->   - The worker is responsible for setting it back to 0 when it's done.
->=20
-> There are two small issues around using workqueues for this purpose that
-> we work around.
->=20
-> The first issue is that mix_interrupt_randomness() might be migrated to
-> another CPU during CPU hotplug. This issue is rectified by checking that
-> it hasn't been migrated (after disabling irqs). If it has been migrated,
-> then we set the count to zero, so that when the CPU comes online again,
-> it can requeue the work. As part of this, we switch to using an
-> atomic_t, so that the increment in the irq handler doesn't wipe out the
-> zeroing if the CPU comes back online while this worker is running.
->=20
-> The second issue is that, though relatively minor in effect, we probably
-> want to make sure we get a consistent view of the pool onto the stack,
-> in case it's interrupted by an irq while reading. To do this, we don't
-> reenable irqs until after the copy. There are only 18 instructions
-> between the cli and sti, so this is a pretty tiny window.
->=20
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Theodore Ts'o <tytso@mit.edu>
-> Cc: Sultan Alsawaf <sultan@kerneltoast.com>
-> Cc: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+On Fri, Feb 11, 2022 at 8:40 AM Ricardo Ribalda <ribalda@chromium.org> wrote:
+>
+> If the kernel is configured with CONFIG_NET, but without CONFIG_INET we
+> get the following error when building:
+>
+> sock.c:(.text+0x4c17): undefined reference to `__sk_defer_free_flush'
+>
+> Lets move __sk_defer_free_flush to sock.c
+>
 
-Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+deja vu ?
 
-> ---
-> Sebastian - as requested, we now disable irqs for a very short 18
-> instructions rather than fishing into migrate_disable() and upsetting
-> PeterZ. Might this be the lucky patch? -Jason
+commit 48cec899e357cfb92d022a9c0df6bbe72a7f6951
+Author: Gal Pressman <gal@nvidia.com>
+Date:   Thu Jan 20 14:34:40 2022 +0200
 
-I think we good. I'm not going to comment on the 90 char wide comment :)
+    tcp: Add a stub for sk_defer_free_flush()
 
-Sebastian
+    When compiling the kernel with CONFIG_INET disabled, the
+    sk_defer_free_flush() should be defined as a nop.
+
+    This resolves the following compilation error:
+      ld: net/core/sock.o: in function `sk_defer_free_flush':
+      ./include/net/tcp.h:1378: undefined reference to `__sk_defer_free_flush'
+
+    Fixes: 79074a72d335 ("net: Flush deferred skb free on socket destroy")
+    Reported-by: kernel test robot <lkp@intel.com>
+    Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+    Signed-off-by: Gal Pressman <gal@nvidia.com>
+    Reviewed-by: Eric Dumazet <edumazet@google.com>
+    Link: https://lore.kernel.org/r/20220120123440.9088-1-gal@nvidia.com
+    Signed-off-by: Jakub Kicinski <kuba@kernel.org>

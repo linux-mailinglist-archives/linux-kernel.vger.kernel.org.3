@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641EC4B25B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D92EC4B25B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:27:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345765AbiBKM1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 07:27:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34478 "EHLO
+        id S238310AbiBKM1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 07:27:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350032AbiBKM1I (ORCPT
+        with ESMTP id S1350036AbiBKM1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 07:27:08 -0500
+        Fri, 11 Feb 2022 07:27:09 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 975DDF50;
-        Fri, 11 Feb 2022 04:27:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42553E77;
+        Fri, 11 Feb 2022 04:27:08 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 59D70139F;
-        Fri, 11 Feb 2022 04:27:06 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 112BA13D5;
+        Fri, 11 Feb 2022 04:27:08 -0800 (PST)
 Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.196.172])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CD3C23F70D;
-        Fri, 11 Feb 2022 04:27:04 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 874E13F70D;
+        Fri, 11 Feb 2022 04:27:06 -0800 (PST)
 From:   Andre Przywara <andre.przywara@arm.com>
 To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>
@@ -29,9 +29,9 @@ Cc:     Rob Herring <robh@kernel.org>, Ondrej Jirman <megous@megous.com>,
         Samuel Holland <samuel@sholland.org>,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v10 09/18] arm64: dts: allwinner: h616: Add OrangePi Zero 2 board support
-Date:   Fri, 11 Feb 2022 12:26:34 +0000
-Message-Id: <20220211122643.1343315-10-andre.przywara@arm.com>
+Subject: [PATCH v10 10/18] arm64: dts: allwinner: h616: Add X96 Mate TV box support
+Date:   Fri, 11 Feb 2022 12:26:35 +0000
+Message-Id: <20220211122643.1343315-11-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220211122643.1343315-1-andre.przywara@arm.com>
 References: <20220211122643.1343315-1-andre.przywara@arm.com>
@@ -46,48 +46,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The OrangePi Zero 2 is a development board with the new H616 SoC. It
-comes with the following features:
+The X96 Mate is an Allwinner H616 based TV box, featuring:
   - Four ARM Cortex-A53 cores, Mali-G31 MP2 GPU
-  - 512MiB/1GiB DDR3 DRAM
-  - AXP305 PMIC
-  - Raspberry-Pi-1 compatible GPIO header
-  - extra 13 pin expansion header, exposing pins for 2x USB 2.0 ports
-  - 1 USB 2.0 host port
-  - 1 USB 2.0 type C port (power supply + OTG)
-  - MicroSD slot
-  - on-board 2MiB bootable SPI NOR flash
-  - 1Gbps Ethernet port (via RTL8211F PHY)
-  - micro-HDMI port
-  - unsupported Allwinner WiFi/BT chip
+  - 2GiB/4GiB RAM (fully usable!)
+  - 16/32/64GiB eMMC
+  - 100Mbps Ethernet (via embedded AC200 EPHY, not yet supported)
+  - Unsupported Allwinner WiFi chip
+  - 2 x USB 2.0 host ports
+  - HDMI port
+  - IR receiver
+  - 5V/2A DC power supply via barrel plug
 
-For more details see: https://linux-sunxi.org/Orange_Pi_Zero_2
+For more information see: https://linux-sunxi.org/X96_Mate
+
+Add a basic devicetree for it, with SD card and eMMC working, as
+well as serial and the essential peripherals, like the AXP PMIC.
+
+This DT is somewhat minimal, and should work on many other similar TV
+boxes with the Allwinner H616 chip.
 
 Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 ---
  arch/arm64/boot/dts/allwinner/Makefile        |   1 +
- .../allwinner/sun50i-h616-orangepi-zero2.dts  | 203 ++++++++++++++++++
- 2 files changed, 204 insertions(+)
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts
+ .../dts/allwinner/sun50i-h616-x96-mate.dts    | 177 ++++++++++++++++++
+ 2 files changed, 178 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts
 
 diff --git a/arch/arm64/boot/dts/allwinner/Makefile b/arch/arm64/boot/dts/allwinner/Makefile
-index 8fa5c060a4fe..df2214e6d946 100644
+index df2214e6d946..6a96494a2e0a 100644
 --- a/arch/arm64/boot/dts/allwinner/Makefile
 +++ b/arch/arm64/boot/dts/allwinner/Makefile
-@@ -38,3 +38,4 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64-model-b.dtb
+@@ -39,3 +39,4 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64-model-b.dtb
  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6.dtb
  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6-mini.dtb
-+dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-orangepi-zero2.dtb
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts b/arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts
+ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-orangepi-zero2.dtb
++dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-x96-mate.dtb
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts b/arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts
 new file mode 100644
-index 000000000000..ca07cae698ce
+index 000000000000..aedb3a3dff38
 --- /dev/null
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h616-orangepi-zero2.dts
-@@ -0,0 +1,203 @@
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts
+@@ -0,0 +1,177 @@
 +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
 +/*
-+ * Copyright (C) 2020 Arm Ltd.
++ * Copyright (C) 2021 Arm Ltd.
 + */
 +
 +/dts-v1/;
@@ -96,14 +98,12 @@ index 000000000000..ca07cae698ce
 +
 +#include <dt-bindings/gpio/gpio.h>
 +#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/leds/common.h>
 +
 +/ {
-+	model = "OrangePi Zero2";
-+	compatible = "xunlong,orangepi-zero2", "allwinner,sun50i-h616";
++	model = "X96 Mate";
++	compatible = "hechuang,x96-mate", "allwinner,sun50i-h616";
 +
 +	aliases {
-+		ethernet0 = &emac0;
 +		serial0 = &uart0;
 +	};
 +
@@ -111,25 +111,8 @@ index 000000000000..ca07cae698ce
 +		stdout-path = "serial0:115200n8";
 +	};
 +
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-0 {
-+			function = LED_FUNCTION_POWER;
-+			color = <LED_COLOR_ID_RED>;
-+			gpios = <&pio 2 12 GPIO_ACTIVE_HIGH>; /* PC12 */
-+			default-state = "on";
-+		};
-+
-+		led-1 {
-+			function = LED_FUNCTION_STATUS;
-+			color = <LED_COLOR_ID_GREEN>;
-+			gpios = <&pio 2 13 GPIO_ACTIVE_HIGH>; /* PC13 */
-+		};
-+	};
-+
 +	reg_vcc5v: vcc5v {
-+		/* board wide 5V supply directly from the USB-C socket */
++		/* board wide 5V supply directly from the DC input */
 +		compatible = "regulator-fixed";
 +		regulator-name = "vcc-5v";
 +		regulator-min-microvolt = <5000000>;
@@ -138,28 +121,25 @@ index 000000000000..ca07cae698ce
 +	};
 +};
 +
-+&emac0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ext_rgmii_pins>;
-+	phy-mode = "rgmii";
-+	phy-handle = <&ext_rgmii_phy>;
-+	phy-supply = <&reg_dcdce>;
-+	allwinner,rx-delay-ps = <3100>;
-+	allwinner,tx-delay-ps = <700>;
++&ir {
 +	status = "okay";
-+};
-+
-+&mdio0 {
-+	ext_rgmii_phy: ethernet-phy@1 {
-+		compatible = "ethernet-phy-ieee802.3-c22";
-+		reg = <1>;
-+	};
 +};
 +
 +&mmc0 {
 +	vmmc-supply = <&reg_dcdce>;
 +	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;	/* PF6 */
 +	bus-width = <4>;
++	status = "okay";
++};
++
++&mmc2 {
++	vmmc-supply = <&reg_dcdce>;
++	vqmmc-supply = <&reg_bldo1>;
++	bus-width = <8>;
++	non-removable;
++	cap-mmc-hw-reset;
++	mmc-ddr-1_8v;
++	mmc-hs200-1_8v;
 +	status = "okay";
 +};
 +
@@ -191,18 +171,20 @@ index 000000000000..ca07cae698ce
 +				regulator-name = "vcc-sys";
 +			};
 +
-+			reg_aldo2: aldo2 {	/* 3.3V on headers */
-+				regulator-always-on;
++			/* Enabled by the Android BSP */
++			reg_aldo2: aldo2 {
 +				regulator-min-microvolt = <3300000>;
 +				regulator-max-microvolt = <3300000>;
 +				regulator-name = "vcc3v3-ext";
++				status = "disabled";
 +			};
 +
-+			reg_aldo3: aldo3 {	/* 3.3V on headers */
-+				regulator-always-on;
++			/* Enabled by the Android BSP */
++			reg_aldo3: aldo3 {
 +				regulator-min-microvolt = <3300000>;
 +				regulator-max-microvolt = <3300000>;
 +				regulator-name = "vcc3v3-ext2";
++				status = "disabled";
 +			};
 +
 +			reg_bldo1: bldo1 {
@@ -212,8 +194,12 @@ index 000000000000..ca07cae698ce
 +				regulator-name = "vcc1v8";
 +			};
 +
-+			bldo2 {
-+				/* unused */
++			/* Enabled by the Android BSP */
++			reg_bldo2: bldo2 {
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-name = "vcc1v8-2";
++				status = "disabled";
 +			};
 +
 +			bldo3 {
@@ -225,7 +211,9 @@ index 000000000000..ca07cae698ce
 +			};
 +
 +			cldo1 {
-+				/* reserved */
++				regulator-min-microvolt = <2500000>;
++				regulator-max-microvolt = <2500000>;
++				regulator-name = "vcc2v5";
 +			};
 +
 +			cldo2 {
@@ -252,8 +240,8 @@ index 000000000000..ca07cae698ce
 +
 +			reg_dcdcd: dcdcd {
 +				regulator-always-on;
-+				regulator-min-microvolt = <1500000>;
-+				regulator-max-microvolt = <1500000>;
++				regulator-min-microvolt = <1360000>;
++				regulator-max-microvolt = <1360000>;
 +				regulator-name = "vdd-dram";
 +			};
 +
@@ -268,18 +256,6 @@ index 000000000000..ca07cae698ce
 +				/* unused */
 +			};
 +		};
-+	};
-+};
-+
-+&spi0  {
-+	status = "okay";
-+
-+	flash@0 {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		compatible = "jedec,spi-nor";
-+		reg = <0>;
-+		spi-max-frequency = <40000000>;
 +	};
 +};
 +

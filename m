@@ -2,122 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6D94B2E79
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 963214B2E82
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343650AbiBKUeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 15:34:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34684 "EHLO
+        id S1351880AbiBKUfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 15:35:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234505AbiBKUeM (ORCPT
+        with ESMTP id S234505AbiBKUfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 15:34:12 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C335CE7;
-        Fri, 11 Feb 2022 12:34:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644611650; x=1676147650;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=sdvyQq1aWWNmYf5/EoZtpb75vjci2pQlXk9QshG3H0I=;
-  b=MOPrNctbYhaawqWO9zLnRPcMcyDHORLop5pfdGn+J49r3G5eeW+WJoU/
-   NDr7gUJv20w0hsJGuimWKEDRjItKwHfCd8dXXlRtzGcWZXRKnjUnT4Dr5
-   sK5N2EAgwTdZmUb5lSNo5iW/vRF+UwKvZUxIvWVVklvRx6CMmJgYnNzK3
-   dgL59JM5Rsny0H5FzhAmp0h0f4OoGvRKDaAHIm5NrHxm+dEfmh3S8lD+c
-   dUANtMC8tfUunebPG5a1jdNJwfVI7cxcc1bJ28GGYpQWZaOuIEEQLTgc4
-   7+9e7vURX6ruCzBX6sry3pfUn8joKu3mOO4nOmiuueuE7a2Xzu9l8Qw9A
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="248636665"
-X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="248636665"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 12:34:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="527090889"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 11 Feb 2022 12:34:07 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nIccJ-00059x-18; Fri, 11 Feb 2022 20:34:07 +0000
-Date:   Sat, 12 Feb 2022 04:33:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>,
-        Sanjay R Mehta <sanju.mehta@amd.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     kbuild-all@lists.01.org,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>
-Subject: Re: [PATCH v2 3/3] spi: amd: Add support for version AMDI0062
-Message-ID: <202202120443.4SkWShjA-lkp@intel.com>
-References: <20220211143155.75513-4-andrealmeid@collabora.com>
+        Fri, 11 Feb 2022 15:35:43 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E5CCE7;
+        Fri, 11 Feb 2022 12:35:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
+        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
+        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+        List-Owner:List-Archive; bh=lpJ4MA+dtr6H4ii799kYmqLrukxPa2paDrP6IBW/K0s=; b=I
+        D37FpuoA9+rUYOxL1LI+2JczR7+/TL2GCU4C7KAP1ROp523ED4IZIfBAbKzQegu3qSmBQbtYXbV7O
+        fpCse/w4wPtEiEzczD4eFOknuW5N5tTEtUKGVMqFLFEzaDWaY9HFL+u6wR+5LpBgaV0UZ/T9Rkw/a
+        gr14+NSm4ANSJwUo=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:55274 helo=pettiford.lan)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1nIcdi-0005vF-MI; Fri, 11 Feb 2022 15:35:35 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     hvilleneuve@dimonoff.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com
+Cc:     hugo@hugovil.com, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 11 Feb 2022 15:35:06 -0500
+Message-Id: <20220211203520.3902374-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220211143155.75513-4-andrealmeid@collabora.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH 00/14] rtc: pcf2127: add PCF2131 driver
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "André,
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-I love your patch! Yet something to improve:
+Hello,
+this patch series adds the driver for the PCF2131 real-time clock.
 
-[auto build test ERROR on broonie-spi/for-next]
-[also build test ERROR on v5.17-rc3 next-20220211]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+This RTC is very similar in functionality to the PCF2127/29 with the
+following differences:
+  -supports two new control registers at offsets 4 and 5
+  -supports a new reset register
+  -supports 4 tamper detection functions instead of 1
+  -has no nvmem (like the PCF2129)
+  -has two output interrupt pins instead of one
+  -has 1/100th seconds capabilities (not supported in this driver)
+  -pcf2127 has watchdog clock sources: 1/60,   1, 64 and 4096Hz
+   pcf2131 has watchdog clock sources: 1/64, 1/4,  4 and   64Hz
+  -watchdog value register cannot be read after being set
 
-url:    https://github.com/0day-ci/linux/commits/Andr-Almeida/spi-amd-Add-support-for-new-controller-version/20220211-223438
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-config: arc-randconfig-r043-20220211 (https://download.01.org/0day-ci/archive/20220212/202202120443.4SkWShjA-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/f9ba9fa1166540cf4dbf3ffbddb96b55699479b5
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Andr-Almeida/spi-amd-Add-support-for-new-controller-version/20220211-223438
-        git checkout f9ba9fa1166540cf4dbf3ffbddb96b55699479b5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/
+Most of the register addresses are very different, although they still
+follow the same layout. For example, the time/date and tamper registers
+have a different base address, but the offsets are all the same.
+Consequently, the source code of the PCF2127 driver can be easily adapted
+to support this new device.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This patch series need the following patch to be applied first:
+[PATCH] rtc: pcf2127: fix bug when reading alarm registers
+Link: https://patchwork.ozlabs.org/project/rtc-linux/patch/20220208162908.3182581-1-hugo@hugovil.com/
 
-All errors (new ones prefixed by >>):
+Patches 1 to 6 modify the existing pcf2127 driver to make it more generic
+and able to support multiple variants, like the PCF2131. This is done
+mostly by using offsets instead of absolute hardcoded register addresses.
 
->> drivers/spi/spi-amd.c:333:37: error: 'spi_acpi_match' undeclared here (not in a function)
-     333 |                 .acpi_match_table = spi_acpi_match,
-         |                                     ^~~~~~~~~~~~~~
+Patch 7 add actual support for the PCF2131.
 
+Patch 8 configures all interrupt sources to go through the INT A pin.
 
-vim +/spi_acpi_match +333 drivers/spi/spi-amd.c
+Patch 9 changes the PWRMNG bits to be the same with the PCF2131 as they
+      are with the PCF2127/29 (different default values).
 
-   329	
-   330	static struct platform_driver amd_spi_driver = {
-   331		.driver = {
-   332			.name = "amd_spi",
- > 333			.acpi_match_table = spi_acpi_match,
-   334		},
-   335		.probe = amd_spi_probe,
-   336	};
-   337	
+Patch 10 allow to confirm PCF2131 device presence by reading the reset
+      register fixed pattern.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Patch 11 adapt the time/date registers write sequence for PCF2131 (STOP and
+      CPR bits).
+
+Patch 12 add support for generic watchdog timing configuration.
+
+Patch 13 add a new flag to identify if device has read support for reading
+      watchdog register value.
+      Since the watchdog value register cannot be read on the PCF2131 after
+      being set, it seems that we cannot detect if watchdog timer was
+      started by bootloader. I am not sure what is the best way to handle
+      this situation, suggestions are welcomed.
+
+Patch 14 add the dt-bindings for the PCF2131.
+
+I have tested the driver using a PCF2131-ARD evaluation board connected to
+an NXP imx8mp evaluation board:
+  - Time get/set ok;
+  - Alarms get/set ok
+  - Timestamp 1 to 4 ok
+  - IRQ alarm ok
+  - Watchdog ok
+  - Also tested successfully with "RTC Driver Test Example" from
+    Documentation/rtc.txt
+
+I have not tested the driver on PCF2127 or PCF2129 hardware as I do not
+have either one of these devices. However, I compared the registers
+read/write access addresses and values before and after modifying the
+driver by simulating I2C read and writes for some operations (probe, read
+time), and they are the same (apart from new read/writes for all variants).
+
+Thank you.
+
+Link: [v1] https://patchwork.ozlabs.org/project/rtc-linux/patch/20220125200009.900660-2-hugo@hugovil.com/
+
+Changes for V2:
+- Add cover letter (in V1, was mailed only to my email address, and not
+  to RTC mailing list and maintainers)
+- In general, fix and improvements after I have tested on real hardware
+- Fix alarm interrupt A/B mask setting for PCF2131:
+  PCF2131_BIT_INT_AIE must be cleared, not set, to enable interrupt.
+- Remove low_reg validation: only check if TS interrupt flag is
+  defined, as low_reg is defined at address 0 for PCF2127/29.
+- Change PWRMNG value for PCF2131: default is different than PCF2127/29.
+- Adapt time/date registers write sequence for PCF2131 (STOP and CPR bits).
+- Map all interrupt sources to INT A pin
+- Read and validate PCF2131 device presence from RESET register
+- Adapt watchdog configuration for PCF2131
+
+Hugo Villeneuve (14):
+  rtc: pcf2127: add variant-specific configuration structure
+  rtc: pcf2127: adapt for time/date registers at any offset
+  rtc: pcf2127: adapt for alarm registers at any offset
+  rtc: pcf2127: adapt for WD registers at any offset
+  rtc: pcf2127: adapt for CLKOUT register at any offset
+  rtc: pcf2127: add support for multiple TS functions
+  rtc: pcf2127: add support for PCF2131 RTC
+  rtc: pcf2127: add support for PCF2131 interrupts on output INT_A
+  rtc: pcf2127: set PWRMNG value for PCF2131
+  rtc: pcf2127: read and validate PCF2131 device signature
+  rtc: pcf2127: adapt time/date registers write sequence for PCF2131
+  rtc: pcf2127: support generic watchdog timing configuration
+  rtc: pcf2127: add flag for watchdog register value read support
+  dt-bindings: rtc: pcf2127: add PCF2131
+
+ .../devicetree/bindings/rtc/nxp,pcf2127.yaml  |  19 +-
+ drivers/rtc/Kconfig                           |   4 +-
+ drivers/rtc/rtc-pcf2127.c                     | 940 ++++++++++++++----
+ 3 files changed, 769 insertions(+), 194 deletions(-)
+
+-- 
+2.30.2
+

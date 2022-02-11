@@ -2,78 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987544B22F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:17:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AAB14B230D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:25:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348836AbiBKKRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 05:17:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48276 "EHLO
+        id S1348868AbiBKKYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 05:24:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiBKKRS (ORCPT
+        with ESMTP id S1346916AbiBKKYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 05:17:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA611B6B;
-        Fri, 11 Feb 2022 02:17:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8419D61E27;
-        Fri, 11 Feb 2022 10:17:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C861C340E9;
-        Fri, 11 Feb 2022 10:17:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644574637;
-        bh=b/ngfDkWDiw92226G+pIpM2EYFAMFZ6kYeblSJjHKcw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X1oYqHjxxMeI0aCEVvuYhGZFdUSQqWrbJrLweRZKnNQIRTIY32yx3KISfiv+s3rnb
-         otFF/DNL2yUw74LDPqu1bXcPLIgVBrvV/p4otbzTGWZUj5etdykV2LbHf/If67tZ92
-         T2/ijeW26wnEOJzyGmb7ULn0BW2TCm2kblySPlN0=
-Date:   Fri, 11 Feb 2022 11:17:14 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: Re: [PATCH v2 3/4] arm64: dts: mediatek: mt8195: add efuse node and
- cells
-Message-ID: <YgY3qvAy5lW1tEdG@kroah.com>
-References: <20220128062902.26273-1-chunfeng.yun@mediatek.com>
- <20220128062902.26273-3-chunfeng.yun@mediatek.com>
+        Fri, 11 Feb 2022 05:24:07 -0500
+X-Greylist: delayed 315 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 02:24:01 PST
+Received: from forward500j.mail.yandex.net (forward500j.mail.yandex.net [5.45.198.250])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C146D220
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:24:01 -0800 (PST)
+Received: from myt6-de4b83149afa.qloud-c.yandex.net (myt6-de4b83149afa.qloud-c.yandex.net [IPv6:2a02:6b8:c12:401e:0:640:de4b:8314])
+        by forward500j.mail.yandex.net (Yandex) with ESMTP id 7C1246CB6BA2;
+        Fri, 11 Feb 2022 13:18:41 +0300 (MSK)
+Received: from 2a02:6b8:c12:1723:0:640:c7c2:e344 (2a02:6b8:c12:1723:0:640:c7c2:e344 [2a02:6b8:c12:1723:0:640:c7c2:e344])
+        by myt6-de4b83149afa.qloud-c.yandex.net (mxback/Yandex) with HTTP id dIYhLv0cJCg1-Iec4T0gI;
+        Fri, 11 Feb 2022 13:18:40 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxt.ru; s=mail; t=1644574720;
+        bh=+QzWvPmQ9CrQg+9DVBPDGn2iMJvpYZnpZYUSGInu5DU=;
+        h=References:Date:Message-Id:Cc:Subject:In-Reply-To:To:From;
+        b=Awe4H7r7545QR/+EprGABpQbh5FZaCRNU9KDR/ioLqCYK/a1mLKNXi3jaQ3D5PN++
+         z3fjCMFCboRoZ2yuZwBWPC5eFqS0a2yXksD8j9h8nxFKpbMwuQR1rV8HuChBo+UYci
+         dSegY4N/LM9B7ol+wFKxSAllsbZM350uQp77JyPg=
+Authentication-Results: myt6-de4b83149afa.qloud-c.yandex.net; dkim=pass header.i=@nxt.ru
+Received: by myt5-c7c2e3441f25.qloud-c.yandex.net with HTTP;
+        Fri, 11 Feb 2022 13:18:40 +0300
+From:   Aleksandr Fedorov <sanekf@nxt.ru>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+In-Reply-To: <b090141f-0822-609f-429d-ea790d7fc828@arm.com>
+References: <5481021644415780@myt5-a5512e99e394.qloud-c.yandex.net> <b090141f-0822-609f-429d-ea790d7fc828@arm.com>
+Subject: Re: [PATCH] iommu: explicitly check for NULL in iommu_dma_get_resv_regions()
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220128062902.26273-3-chunfeng.yun@mediatek.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: Yamail [ http://yandex.ru ] 5.0
+Date:   Fri, 11 Feb 2022 13:18:40 +0300
+Message-Id: <10011281644574720@myt5-c7c2e3441f25.qloud-c.yandex.net>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 02:29:01PM +0800, Chunfeng Yun wrote:
-> Add efuse node and cells used by t-phy to fix the bit shift issue
+> On 2022-02-09 14:09, Aleksandr Fedorov wrote:
+>> iommu_dma_get_resv_regions() assumes that iommu_fwspec field for
+>> corresponding device is set which is not always true. Since
+>> iommu_dma_get_resv_regions() seems to be a future-proof generic API
+>> that can be used by any iommu driver, add an explicit check for NULL.
 > 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
-> v2: use hw auto load for u2phy which has no this issue
+> Except it's not a "generic" interface for drivers to call at random,
+> it's a helper for retrieving common firmware-based information
+> specifically for drivers already using the fwspec mechanism for common
+> firmware bindings. If any driver calls this with a device *without* a
+> valid fwnode, it deserves to crash because it's done something
+> fundamentally wrong.
 > 
-> Note:
-> 
->  depend on the reviewing patch:
-> 
-> [v9,3/3] arm64: dts: Add mediatek SoC mt8195 and evaluation board
-> https://patchwork.kernel.org/patch/12711296
+> I concur that it's not exactly obvious that "non-IOMMU-specific" means
+> "based on common firmware bindings, thus implying fwspec".
 
-As I don't have that in my tree, I can only take the first 2 patches
-here now, thanks.
+Thanks for the explanations, yes, this was the misunderstanding on my
+part. Maybe add a comment?
 
-greg k-h
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index d85d54f2b549..ce5e7d4d054a 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -379,6 +379,9 @@ void iommu_put_dma_cookie(struct iommu_domain *domain)
+  * for general non-IOMMU-specific reservations. Currently, this covers GICv3
+  * ITS region reservation on ACPI based ARM platforms that may require HW MSI
+  * reservation.
++ *
++ * Note that this helper is meant to be used only by drivers that are already
++ * using the fwspec mechanism for common firmware bindings.
+  */
+ void iommu_dma_get_resv_regions(struct device *dev, struct list_head *list)
+ {

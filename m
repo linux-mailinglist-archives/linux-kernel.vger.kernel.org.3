@@ -2,272 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA9B4B2524
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 160E64B2508
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:58:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349816AbiBKMCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 07:02:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49592 "EHLO
+        id S231611AbiBKL5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 06:57:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233806AbiBKMCI (ORCPT
+        with ESMTP id S1349762AbiBKL53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 07:02:08 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2F5F50
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:02:06 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id i14so14797171wrc.10
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:02:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SKg5fgaSRnMfSUuR5qSVwQe2umofrKLlYtM6bnZW0nM=;
-        b=INTwi1N5tH0s4u9PMfQwQ3Yf+GzW5by2wfp+2ny8x/OOnJaeugXwYoCiXTcxHoSanf
-         wJ+BEzQv2Uzugz8U5r0b7ey/Yzd0kGrLIEiuozg5FIpD8YgXdVs+doS98xhJWo0Mba8Q
-         FYHVj/ZkjVAlt/wFto0stFJNRFIgwAw1MX69IQ36xuc4pFVXgzH31TlotcuwnNiXyYDe
-         onDRKXfOMFgNftjCDnj2764DPwCyFmAtig+DyPsAk0V4FoOPofQ6XXrKxDsv4TpIPxA+
-         CxT05NboeOk/3GZvh5nGKubPEzNayXlXoAIPWR3xn+2SuIlIrP7hiF73cfv91UQ/7guX
-         a3gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SKg5fgaSRnMfSUuR5qSVwQe2umofrKLlYtM6bnZW0nM=;
-        b=SXpSOeokdnWJCppjmxfHrUnEZuvRipQLSeEdd+/u5cx5fCwrCW0XF7F0AZvFckZGUK
-         nCLYnglDXUbJoY9MENgVBLvbLD+KFSZ2t5flfFFjPVI9EZ0wAeTKrKNahkPiFUTnzZeb
-         +9qXIQa7HUqb7T+ExsT23mlSdLtO2yUBGUn1/6o/bXotpihILqRIKNDFRpVkx+KMQi9W
-         4sMnC0il/N3p0w5l7jIh5qCJUmvNMnnW1sI+YUCwdwtqmM5B2jGNucgueZyPSaICJnmu
-         6NOJWIrdhyiJyBrObhk1znJfYfcpcYsk5ttggS6twfU2VBQctZi0Kija603i8yIt/ton
-         I8/A==
-X-Gm-Message-State: AOAM531jMmLtHdAr23rBatCkkv6vR26szsDCxC2usIR314Ytyp5xUfEG
-        8J+urHXHaBHJ3s+cKEmzAIqLEA==
-X-Google-Smtp-Source: ABdhPJxOk8Ft1kaaLr9QNpJwth1RnYfwy/lDSjmAiJXSSNiflQ9niPakqGD4UkyB8S4sPm/so3B1/Q==
-X-Received: by 2002:adf:bbc8:: with SMTP id z8mr1134991wrg.476.1644580924528;
-        Fri, 11 Feb 2022 04:02:04 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id h10sm14695606wrt.57.2022.02.11.04.02.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 04:02:04 -0800 (PST)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     damien.lemoal@opensource.wdc.com,
-        krzysztof.kozlowski@canonical.com, robh+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v4] dt-bindings: convert ata/cortina,gemini-sata-bridge to yaml
-Date:   Fri, 11 Feb 2022 12:01:57 +0000
-Message-Id: <20220211120157.3385145-1-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 11 Feb 2022 06:57:29 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4178F6C;
+        Fri, 11 Feb 2022 03:57:13 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.31:58202.55775679
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-123.150.8.43 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id A2F6C10013E;
+        Fri, 11 Feb 2022 19:57:10 +0800 (CST)
+Received: from  ([123.150.8.43])
+        by gateway-153622-dep-749df8664c-cv9r2 with ESMTP id 08b197ad565642579980e12aa57bf63f for johan@kernel.org;
+        Fri, 11 Feb 2022 19:57:12 CST
+X-Transaction-ID: 08b197ad565642579980e12aa57bf63f
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 123.150.8.43
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+From:   Song Chen <chensong_2000@189.cn>
+To:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        lee.jones@linaro.org, greybus-dev@lists.linaro.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+Cc:     Song Chen <chensong_2000@189.cn>
+Subject: [PATCH v2] staging: greybus: introduce pwm_ops::apply
+Date:   Fri, 11 Feb 2022 20:02:27 +0800
+Message-Id: <1644580947-8529-1-git-send-email-chensong_2000@189.cn>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch converts ata/cortina,gemini-sata-bridge binding to yaml
+Introduce apply in pwm_ops to replace legacy operations,
+like enable, disable, config and set_polarity.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Signed-off-by: Song Chen <chensong_2000@189.cn>
+
 ---
-Change since v1:
-- fixed cosmetic nits reported by Damien Le Moal
-Changes since v2:
-- Added blank lines between properties
-- Removed useless quotes and label
-- Re-indented description
-Change since v3:
-- removed MaxItems from syscon
+V2:
+1, define duty_cycle and period as u64 in gb_pwm_config_operation.
+2, define duty and period as u64 in gb_pwm_config_request.
+3, disable before configuring duty and period if the eventual goal
+   is a disabled state.
+---
+ drivers/staging/greybus/pwm.c             | 61 ++++++++++++-----------
+ include/linux/greybus/greybus_protocols.h |  4 +-
+ 2 files changed, 34 insertions(+), 31 deletions(-)
 
- .../ata/cortina,gemini-sata-bridge.txt        |  55 ---------
- .../ata/cortina,gemini-sata-bridge.yaml       | 109 ++++++++++++++++++
- 2 files changed, 109 insertions(+), 55 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt
- create mode 100644 Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
-
-diff --git a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt
-deleted file mode 100644
-index 1c3d3cc70051..000000000000
---- a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.txt
-+++ /dev/null
-@@ -1,55 +0,0 @@
--* Cortina Systems Gemini SATA Bridge
--
--The Gemini SATA bridge in a SoC-internal PATA to SATA bridge that
--takes two Faraday Technology FTIDE010 PATA controllers and bridges
--them in different configurations to two SATA ports.
--
--Required properties:
--- compatible: should be
--  "cortina,gemini-sata-bridge"
--- reg: registers and size for the block
--- resets: phandles to the reset lines for both SATA bridges
--- reset-names: must be "sata0", "sata1"
--- clocks: phandles to the compulsory peripheral clocks
--- clock-names: must be "SATA0_PCLK", "SATA1_PCLK"
--- syscon: a phandle to the global Gemini system controller
--- cortina,gemini-ata-muxmode: tell the desired multiplexing mode for
--  the ATA controller and SATA bridges. Values 0..3:
--  Mode 0: ata0 master <-> sata0
--          ata1 master <-> sata1
--          ata0 slave interface brought out on IDE pads
--  Mode 1: ata0 master <-> sata0
--          ata1 master <-> sata1
--          ata1 slave interface brought out on IDE pads
--  Mode 2: ata1 master <-> sata1
--          ata1 slave  <-> sata0
--          ata0 master and slave interfaces brought out
--               on IDE pads
--  Mode 3: ata0 master <-> sata0
--          ata0 slave  <-> sata1
--          ata1 master and slave interfaces brought out
--               on IDE pads
--
--Optional boolean properties:
--- cortina,gemini-enable-ide-pins: enables the PATA to IDE connection.
--  The muxmode setting decides whether ATA0 or ATA1 is brought out,
--  and whether master, slave or both interfaces get brought out.
--- cortina,gemini-enable-sata-bridge: enables the PATA to SATA bridge
--  inside the Gemnini SoC. The Muxmode decides what PATA blocks will
--  be muxed out and how.
--
--Example:
--
--sata: sata@46000000 {
--	compatible = "cortina,gemini-sata-bridge";
--	reg = <0x46000000 0x100>;
--	resets = <&rcon 26>, <&rcon 27>;
--	reset-names = "sata0", "sata1";
--	clocks = <&gcc GEMINI_CLK_GATE_SATA0>,
--		 <&gcc GEMINI_CLK_GATE_SATA1>;
--	clock-names = "SATA0_PCLK", "SATA1_PCLK";
--	syscon = <&syscon>;
--	cortina,gemini-ata-muxmode = <3>;
--	cortina,gemini-enable-ide-pins;
--	cortina,gemini-enable-sata-bridge;
+diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
+index 891a6a672378..03c69db5b9be 100644
+--- a/drivers/staging/greybus/pwm.c
++++ b/drivers/staging/greybus/pwm.c
+@@ -89,7 +89,7 @@ static int gb_pwm_deactivate_operation(struct gb_pwm_chip *pwmc,
+ }
+ 
+ static int gb_pwm_config_operation(struct gb_pwm_chip *pwmc,
+-				   u8 which, u32 duty, u32 period)
++				   u8 which, u64 duty, u64 period)
+ {
+ 	struct gb_pwm_config_request request;
+ 	struct gbphy_device *gbphy_dev;
+@@ -99,8 +99,8 @@ static int gb_pwm_config_operation(struct gb_pwm_chip *pwmc,
+ 		return -EINVAL;
+ 
+ 	request.which = which;
+-	request.duty = cpu_to_le32(duty);
+-	request.period = cpu_to_le32(period);
++	request.duty = duty;
++	request.period = period;
+ 
+ 	gbphy_dev = to_gbphy_dev(pwmc->chip.dev);
+ 	ret = gbphy_runtime_get_sync(gbphy_dev);
+@@ -204,43 +204,46 @@ static void gb_pwm_free(struct pwm_chip *chip, struct pwm_device *pwm)
+ 	gb_pwm_deactivate_operation(pwmc, pwm->hwpwm);
+ }
+ 
+-static int gb_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
+-			 int duty_ns, int period_ns)
++static int gb_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
++			const struct pwm_state *state)
+ {
++	int err;
++	bool enabled = pwm->state.enabled;
+ 	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
+ 
+-	return gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_ns, period_ns);
 -};
-diff --git a/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
-new file mode 100644
-index 000000000000..21a90975593b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/ata/cortina,gemini-sata-bridge.yaml
-@@ -0,0 +1,109 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/ata/cortina,gemini-sata-bridge.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cortina Systems Gemini SATA Bridge
-+
-+maintainers:
-+  - Linus Walleij <linus.walleij@linaro.org>
-+
-+description: |
-+    The Gemini SATA bridge in a SoC-internal PATA to SATA bridge that
-+    takes two Faraday Technology FTIDE010 PATA controllers and bridges
-+    them in different configurations to two SATA ports.
-+
-+properties:
-+  compatible:
-+    const: cortina,gemini-sata-bridge
-+
-+  reg:
-+    maxItems: 1
-+
-+  resets:
-+    minItems: 2
-+    maxItems: 2
-+    description: phandles to the reset lines for both SATA bridges
-+
-+  reset-names:
-+    items:
-+      - const: sata0
-+      - const: sata1
-+
-+  clocks:
-+    minItems: 2
-+    maxItems: 2
-+    description: phandles to the compulsory peripheral clocks
-+
-+  clock-names:
-+    items:
-+      - const: SATA0_PCLK
-+      - const: SATA1_PCLK
-+
-+  syscon:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: a phandle to the global Gemini system controller
-+
-+  cortina,gemini-ata-muxmode:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum:
-+      - 0
-+      - 1
-+      - 2
-+      - 3
-+    description: |
-+      Tell the desired multiplexing mode for the ATA controller and SATA
-+      bridges.
-+      Mode 0: ata0 master <-> sata0
-+              ata1 master <-> sata1
-+              ata0 slave interface brought out on IDE pads
-+      Mode 1: ata0 master <-> sata0
-+              ata1 master <-> sata1
-+              ata1 slave interface brought out on IDE pads
-+      Mode 2: ata1 master <-> sata1
-+              ata1 slave  <-> sata0
-+              ata0 master and slave interfaces brought out on IDE pads
-+      Mode 3: ata0 master <-> sata0
-+              ata0 slave  <-> sata1
-+              ata1 master and slave interfaces brought out on IDE pads
-+
-+  cortina,gemini-enable-ide-pins:
-+    type: boolean
-+    description: Enables the PATA to IDE connection.
-+      The muxmode setting decides whether ATA0 or ATA1 is brought out,
-+      and whether master, slave or both interfaces get brought out.
-+
-+  cortina,gemini-enable-sata-bridge:
-+    type: boolean
-+    description: Enables the PATA to SATA bridge inside the Gemnini SoC.
-+      The Muxmode decides what PATA blocks will be muxed out and how.
-+
-+required:
-+  - clocks
-+  - clock-names
-+  - cortina,gemini-ata-muxmode
-+  - resets
-+  - reset-names
-+  - compatible
-+  - reg
-+  - syscon
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/cortina,gemini-clock.h>
-+    sata@46000000 {
-+      compatible = "cortina,gemini-sata-bridge";
-+      reg = <0x46000000 0x100>;
-+      resets = <&rcon 26>, <&rcon 27>;
-+      reset-names = "sata0", "sata1";
-+      clocks = <&gcc GEMINI_CLK_GATE_SATA0>,
-+               <&gcc GEMINI_CLK_GATE_SATA1>;
-+      clock-names = "SATA0_PCLK", "SATA1_PCLK";
-+      syscon = <&syscon>;
-+      cortina,gemini-ata-muxmode = <3>;
-+      cortina,gemini-enable-ide-pins;
-+      cortina,gemini-enable-sata-bridge;
-+    };
+-
+-static int gb_pwm_set_polarity(struct pwm_chip *chip, struct pwm_device *pwm,
+-			       enum pwm_polarity polarity)
+-{
+-	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
+-
+-	return gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, polarity);
+-};
++	/* set polarity */
++	if (state->polarity != pwm->state.polarity) {
++		if (enabled) {
++			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
++			enabled = false;
++		}
++		err = gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, state->polarity);
++		if (err)
++			return err;
++	}
+ 
+-static int gb_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
+-{
+-	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
++	if (!state->enabled) {
++		if (enabled)
++			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
++		return 0;
++	}
+ 
+-	return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
+-};
++	/* set period and duty cycle*/
++	err = gb_pwm_config_operation(pwmc, pwm->hwpwm, state->duty_cycle, state->period);
++	if (err)
++		return err;
+ 
+-static void gb_pwm_disable(struct pwm_chip *chip, struct pwm_device *pwm)
+-{
+-	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
++	/* enable/disable */
++	if (!enabled)
++		return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
+ 
+-	gb_pwm_disable_operation(pwmc, pwm->hwpwm);
+-};
++	return 0;
++}
+ 
+ static const struct pwm_ops gb_pwm_ops = {
+ 	.request = gb_pwm_request,
+ 	.free = gb_pwm_free,
+-	.config = gb_pwm_config,
+-	.set_polarity = gb_pwm_set_polarity,
+-	.enable = gb_pwm_enable,
+-	.disable = gb_pwm_disable,
++	.apply = gb_pwm_apply,
+ 	.owner = THIS_MODULE,
+ };
+ 
+diff --git a/include/linux/greybus/greybus_protocols.h b/include/linux/greybus/greybus_protocols.h
+index aeb8f9243545..81a6f16de098 100644
+--- a/include/linux/greybus/greybus_protocols.h
++++ b/include/linux/greybus/greybus_protocols.h
+@@ -812,8 +812,8 @@ struct gb_pwm_deactivate_request {
+ 
+ struct gb_pwm_config_request {
+ 	__u8	which;
+-	__le32	duty;
+-	__le32	period;
++	__u64	duty;
++	__u64	period;
+ } __packed;
+ 
+ struct gb_pwm_polarity_request {
 -- 
-2.34.1
+2.25.1
 

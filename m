@@ -2,154 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F7D4B1E02
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 06:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC4F24B1E06
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 06:55:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237129AbiBKFyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 00:54:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37746 "EHLO
+        id S237167AbiBKFzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 00:55:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237078AbiBKFyg (ORCPT
+        with ESMTP id S235310AbiBKFzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 00:54:36 -0500
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A05102F
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 21:54:36 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id z62so6844876vsz.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 21:54:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=EbSg9QvGTEG7MjQvzrDkvoNELNPgB+85sOLBqpa4AUA=;
-        b=SS0XHSKcCaEsbQ4Wwn5QnKULou7/nRrOZDqvOOMFchl7PA2YkNlTMluAlF78eL3OYQ
-         aqnX2q2M8LhDU64/bBNClIsemboTs0HTNUd+0of+BhXy1fFSemYC+igZDiJz/ZESPzRd
-         beXCsmmRUkop/mDS4598qhe4S6adC9cqK24amqV0AX+xQxm2Mwg/jIz1LZa22h3Y/nZx
-         wgvEK8FFChU2l3ty8WWlxGBgcENp62qqVG56A+1mnDMi+ofrJ/XYlh3CuSczlfeWJFoG
-         Jv84tEFBEvjLuwUJl9lTtwqS6hE3/MtPnZeYync0MbqbWslvenfPrOH2XkqynFA+fi9V
-         QpTw==
+        Fri, 11 Feb 2022 00:55:41 -0500
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7577102F;
+        Thu, 10 Feb 2022 21:55:40 -0800 (PST)
+Received: by mail-lj1-f175.google.com with SMTP id o17so11143142ljp.1;
+        Thu, 10 Feb 2022 21:55:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=EbSg9QvGTEG7MjQvzrDkvoNELNPgB+85sOLBqpa4AUA=;
-        b=vnz2Ww+wE+56LDzjshc6o0u88RKgZ7wIFIBiJBSWByyESra+0XZcl68ZlmoPS6lG0z
-         GDi7T4Ma8m+DPZwcXQdOcTkbBILECgHPoGnnVxC5ni5bXD+X5mcS53BUBzHbmZgrjh2g
-         v531YqU3kfTu0koDfz7pCCpgk/qYG6BV3Zlu3r6jok+CzzIqNzaxjuKFgv8BDLNWdmnF
-         OdJFmthsvudPUfKpXsPyriys4QocLfWeBBxG0oYdu9jZkTRsFq5CLI3tCICN8EtF4JYt
-         WntQ4Z6ReofyM5W7lVAzOoOUV1NyD+m1w8SotK5+zGxjVhDT7kQtr9SGNPFjCKGQJ3ii
-         hs8w==
-X-Gm-Message-State: AOAM530/BK9X/qe95DkesNK8FfzFs81n1llqOcPQRhu4h8bl1fSGnUcP
-        xCi5LGa6vNE4bTz6CowW05eyA4ci11kP1j20vmdUtg==
-X-Google-Smtp-Source: ABdhPJwgbeKVaaw6rh1wRuo14QINWzu6Y2BM87c7I7UpANzVeKUT6VCRWB95+kN7ykQHSH4158pU9USeGcLsab5G/4I=
-X-Received: by 2002:a67:ea8f:: with SMTP id f15mr45351vso.46.1644558875472;
- Thu, 10 Feb 2022 21:54:35 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=nC1KApq7e2Tv1mRrJaVJbGFX4EPFBr5Wq82MxBaNzD0=;
+        b=7kLiSQdB+67poBRL/OG48goLLOYPRN4hM0qliz9Rq72HKkp3z1sBsES/sKySUdj0DJ
+         /shIxVGD3VlnCzaPHwaN+9ToowVByp9Xu/KaGXIvJWS7XtOkjti8OSh4ajo8Sr6EIUg8
+         6iF5o0H/JOlSffKiLmqeGw8TGCCngN+4ElqiE7zQPqtcWSpnHi/ll9Q6U6DlMAE4OY9J
+         2zCy2k2IMReMHZMZ9kIqOinhR7V/1uvyqaKfIxOnKB4d726JLn81tJqaXOU8vbfmFfxy
+         NvdfH+ENthTDdZzwEweChOjZH8Fexp2Ubxih2CimR4VfSlXUwKFVaPGVSU+dqViCQmqb
+         qbGw==
+X-Gm-Message-State: AOAM530Buvtn9WtnBpPB6BZ0tfZBhLZnTA8pWBimqxv/zhm8kbkusLYw
+        3qMXJ5pgg2j+QHltNe7lygHhqgI8h9u2b08wPBc=
+X-Google-Smtp-Source: ABdhPJzbOzw/0zV4IgkYBd1T8G0wbLX3SjAMswL8OAcpI2VPdwnBvfBks/G9AKwLofLucGjL/8xeS4WMPSxifL2SCtI=
+X-Received: by 2002:a05:651c:a04:: with SMTP id k4mr74921ljq.180.1644558938779;
+ Thu, 10 Feb 2022 21:55:38 -0800 (PST)
 MIME-Version: 1.0
-References: <d5dd3f10c144f7150ec508fa8e6d7a78ceabfc10.camel@redhat.com> <20220211040629.23703-1-lina.wang@mediatek.com>
-In-Reply-To: <20220211040629.23703-1-lina.wang@mediatek.com>
-From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Date:   Thu, 10 Feb 2022 21:54:23 -0800
-Message-ID: <CANP3RGc42sobVoq8LCs=9dAgRZmerV7ev_EMi8Qjb+1ZKeO4jQ@mail.gmail.com>
-Subject: Re: [PATCH] net: fix wrong network header length
-To:     Lina Wang <lina.wang@mediatek.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Linux NetDev <netdev@vger.kernel.org>,
-        Kernel hackers <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Willem Bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        zhuoliang.zhang@mediatek.com, chao.song@mediatek.com
+References: <20220208184208.79303-1-namhyung@kernel.org> <20220209090908.GK23216@worktop.programming.kicks-ass.net>
+ <CAM9d7cgq+jxu6FJuKhZkprn7dO4DiG5pDjmYZzneQYTfKOM85g@mail.gmail.com> <YgTXUQ9CBoo3+A+c@hirez.programming.kicks-ass.net>
+In-Reply-To: <YgTXUQ9CBoo3+A+c@hirez.programming.kicks-ass.net>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Thu, 10 Feb 2022 21:55:27 -0800
+Message-ID: <CAM9d7cgPFLjQyopX04MwG6Leq6DwDJF2q6BxOL_Nw6J2LEZF4g@mail.gmail.com>
+Subject: Re: [RFC 00/12] locking: Separate lock tracepoints from
+ lockdep/lock_stat (v1)
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Byungchul Park <byungchul.park@lge.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Radoslaw Burny <rburny@google.com>, Tejun Heo <tj@kernel.org>,
+        rcu <rcu@vger.kernel.org>, cgroups <cgroups@vger.kernel.org>,
+        linux-btrfs <linux-btrfs@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 8:12 PM Lina Wang <lina.wang@mediatek.com> wrote:
+On Thu, Feb 10, 2022 at 1:14 AM Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> On Thu, 2022-02-10 at 17:02 +0100, Paolo Abeni wrote:
->
-> > > @@ -3682,6 +3682,7 @@ struct sk_buff *skb_segment_list(struct
-> > > sk_buff *skb,
-> > >     struct sk_buff *tail =3D NULL;
-> > >     struct sk_buff *nskb, *tmp;
-> > >     int err;
-> > > +   unsigned int len_diff =3D 0;
-> >
-> > Mintor nit: please respect the reverse x-mas tree order.
-> >
->
-> Yes,v2 has change unsigned int to int
-
-Reverse christmas tree, means from longest to shortest, like so:
-
-     struct sk_buff *tail =3D NULL;
-     struct sk_buff *nskb, *tmp;
-+   int len_diff =3D 0;
-     int err;
-
-That said, I think the =3D 0 is not needed, so this can be just
-
-+ int len_diff, err;
-
->
+> On Wed, Feb 09, 2022 at 04:32:58PM -0800, Namhyung Kim wrote:
+> > On Wed, Feb 9, 2022 at 1:09 AM Peter Zijlstra <peterz@infradead.org> wrote:
 > > >
-> > >     skb_push(skb, -skb_network_offset(skb) + offset);
-> > > @@ -3721,9 +3722,11 @@ struct sk_buff *skb_segment_list(struct
-> > > sk_buff *skb,
-> > >             skb_push(nskb, -skb_network_offset(nskb) + offset);
+> > > On Tue, Feb 08, 2022 at 10:41:56AM -0800, Namhyung Kim wrote:
 > > >
-> > >             skb_release_head_state(nskb);
-> > > +           len_diff =3D skb_network_header_len(nskb) -
-> > > skb_network_header_len(skb);
-> > >              __copy_skb_header(nskb, skb);
+> > > > Eventually I'm mostly interested in the contended locks only and I
+> > > > want to reduce the overhead in the fast path.  By moving that, it'd be
+> > > > easy to track contended locks with timing by using two tracepoints.
 > > >
-> > >             skb_headers_offset_update(nskb, skb_headroom(nskb) -
-> > > skb_headroom(skb));
-> > > +           nskb->transport_header +=3D len_diff;
+> > > So why not put in two new tracepoints and call it a day?
+> > >
+> > > Why muck about with all that lockdep stuff just to preserve the name
+> > > (and in the process continue to blow up data structures etc..). This
+> > > leaves distros in a bind, will they enable this config and provide
+> > > tracepoints while bloating the data structures and destroying things
+> > > like lockref (which relies on sizeof(spinlock_t)), or not provide this
+> > > at all.
 > >
-> > This does not look correct ?!? the network hdr position for nskb will
-> > still be uncorrect?!? and even the mac hdr likely?!? possibly you
-> > need
-> > to change the offset in skb_headers_offset_update().
-> >
+> > If it's only lockref, is it possible to change it to use arch_spinlock_t
+> > so that it can remain in 4 bytes?  It'd be really nice if we can keep
+> > spin lock size, but it'd be easier to carry the name with it for
+> > analysis IMHO.
 >
-> Network hdr position and mac hdr are both right, because bpf processing &
-> skb_headers_offset_update have updated them to right position. After bpf
-> loading, the first skb's network header&mac_header became 44, transport
-> header still is 64. After skb_headers_offset_update, fraglist skb's mac
-> header and network header are still 24, the same with original packet.
-> Just fraglist skb's transport header became 44, as original is 64.
-> Only transport header cannot be easily updated the same offset, because
-> 6to4 has different network header.
+> It's just vile and disgusting to blow up the lock size for convenience
+> like this.
 >
-> Actually,at the beginning, I want to change skb_headers_offset_update, bu=
-t
-> it has been called also in other place, maybe a new function should be
-> needed here.
+> And no, there's more of that around. A lot of effort has been spend to
+> make sure spinlocks are 32bit and we're not going to give that up for
+> something as daft as this.
 >
-> Skb_headers_offset_update has other wrong part in my scenary,
-> inner_transport_header\inner_network_header\inner_mac_header shouldnot be
-> changed, but they are been updated because of different headroom. They ar=
-e
-> not used later, so wrong value didnot affect anything.
->
-> > Paolo
-> >
->
-> Thanks!Maciej =C5=BBenczykowski, Kernel Networking Developer @ Google
+> Just think harder on the analysis side. Like said; I'm thinking the
+> caller IP should be good enough most of the time.
+
+Ok, I'll go in this direction then.
+
+So you are ok with adding two new tracepoints, even if they are
+similar to what we already have in lockdep/lock_stat, right?
+
+Thanks,
+Namhyung

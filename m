@@ -2,63 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380E34B2F75
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 22:37:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21ED94B2F71
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 22:36:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353770AbiBKVgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 16:36:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50920 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348044AbiBKVgM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S242027AbiBKVgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 11 Feb 2022 16:36:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550CFC61;
-        Fri, 11 Feb 2022 13:36:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11B48B82C8E;
-        Fri, 11 Feb 2022 21:36:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D1B28C340E9;
-        Fri, 11 Feb 2022 21:36:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644615368;
-        bh=HIzsksC2Y+PVkRniajjV2uvBQ33fNa+wjeVJHIazHjk=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=ebjTRDAiTfVVQeX/FhV5nys5JTl0MvRN5bu9zvqRadvZE9IV9tSrxf/NZ/eeRAPuY
-         5TnSHMsvl1X7YVdANfecXdDfviZAcLUdMZZi8/O/cWsyrn7aTDtDwOQkyuzfFtXF9j
-         mZOJbFIOqbFc/I3AJXdewdDMR8swp47eQ9EUgMo3YcFRTSCtZ+xfcEY1PJuUMNIUXB
-         Q3Gn/maYkWI0EdDz7/5NGVGZ7A+vAjibCu2ZbBQLrOHtB7vqTdOVsL+loov/4H3XSi
-         0v3494OwbjueXmeUwlEix2An9V3mKfO0KM0xh4HSwWjVb3rBVDpPZh3dKi9LfuM+VC
-         PJAiJ3cukFnAA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BFFB5E5CF96;
-        Fri, 11 Feb 2022 21:36:08 +0000 (UTC)
-Subject: Re: [GIT PULL] PCI fixes for v5.17
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220211204005.GA732009@bhelgaas>
-References: <20220211204005.GA732009@bhelgaas>
-X-PR-Tracked-List-Id: <linux-pci.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220211204005.GA732009@bhelgaas>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git tags/pci-v5.17-fixes-4
-X-PR-Tracked-Commit-Id: 075b7d363c675ef7fa03918881caeca3458e2a96
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: adccc16ea3c5fb205bdec0133d08e799aa6cc9ea
-Message-Id: <164461536877.13388.13292671559580408157.pr-tracker-bot@kernel.org>
-Date:   Fri, 11 Feb 2022 21:36:08 +0000
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Joey Corleone <joey.corleone@mail.ru>,
-        Sergiu Deitsch <sergiu.deitsch@gmail.com>,
-        David Spencer <dspencer577@gmail.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348044AbiBKVgK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 11 Feb 2022 16:36:10 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EA1C63
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 13:36:09 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id k5-20020a926f05000000b002be190db91cso6776103ilc.11
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 13:36:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=uZFH8v5hdkuD13HWKXbwlKXOFU1tLj/1KgXaqFsCP+w=;
+        b=nEYOuK5dfdor+NMxD+jhAq0ePTbniTeXbr0jCNixdF+wWy39fWkcQ6kyeO2i9p2uaU
+         oCxmFsogoeCl28SrFJbshBJEZQ89Prn87/oKB3I4JMX/J3Hy7PBpDta5jpR2JhshTxfw
+         lXOd2PyxkTyDqMBiJrTpw5G4B2D6vufc45rWfln+kUiE2k/McvAasbWAt6PCky619Q8k
+         IehEKM/6RHq4Memq4G4dSSB8LRSb8Tuc0Qp0VGWKFLvzMjTgp1K6+2HEG7cA1VgcE4Hj
+         3T6yn+LxGAefxf6wRk3JsGz/KQH5h/c/zjCYavsZ5e9U1sDmFSMCcPhauF+iVCkt4L9y
+         Wsmg==
+X-Gm-Message-State: AOAM5335Rj8is5Hxy/3Pl5zwxIM+WN4h4WOQkYyI6dqj2Ew+PEcxOR8j
+        huxqUiO5oh3T/DyMayg3vXbbURuBMolkA0hqSytdnuz+60QE
+X-Google-Smtp-Source: ABdhPJxIMl3Dj6whKaFjTGnZrRnkr5JcDWjIWAL80oKZ7CA90a6/GGlca6MO6Yn7/LWch5SH1DLI8BFkEEZ5aN7OR35Og6xECnE3
+MIME-Version: 1.0
+X-Received: by 2002:a05:6638:164f:: with SMTP id a15mr1964678jat.272.1644615368382;
+ Fri, 11 Feb 2022 13:36:08 -0800 (PST)
+Date:   Fri, 11 Feb 2022 13:36:08 -0800
+In-Reply-To: <YgbT4uqSIVY9ku10@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d31cac05d7c4da7e@google.com>
+Subject: Re: [syzbot] memory leak in hub_event (3)
+From:   syzbot <syzbot+8caaaec4e7a55d75e243@syzkaller.appspotmail.com>
+To:     benjamin.tissoires@redhat.com, gregkh@linuxfoundation.org,
+        heikki.krogerus@linux.intel.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, noralf@tronnes.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
+        tzimmermann@suse.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,15 +58,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 11 Feb 2022 14:40:05 -0600:
+Hello,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git tags/pci-v5.17-fixes-4
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/adccc16ea3c5fb205bdec0133d08e799aa6cc9ea
+Reported-and-tested-by: syzbot+8caaaec4e7a55d75e243@syzkaller.appspotmail.com
 
-Thank you!
+Tested on:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+commit:         dfd42fac Linux 5.17-rc3
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v5.17-rc3
+kernel config:  https://syzkaller.appspot.com/x/.config?x=48b71604a367da6e
+dashboard link: https://syzkaller.appspot.com/bug?extid=8caaaec4e7a55d75e243
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=121f0f78700000
+
+Note: testing is done by a robot and is best-effort only.

@@ -2,126 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E97594B2BDA
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:36:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F844B2BE5
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352222AbiBKRgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 12:36:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54474 "EHLO
+        id S1352231AbiBKRhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 12:37:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245333AbiBKRga (ORCPT
+        with ESMTP id S245333AbiBKRhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 12:36:30 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E5238F;
-        Fri, 11 Feb 2022 09:36:29 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id j2so27220106ybu.0;
-        Fri, 11 Feb 2022 09:36:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ht7fW7XN0BAh+gkkGIftbM1jepL7WlEtPAVMav2pC54=;
-        b=qpBHbmOH56uBqmz6laAUiecwff8yxOfd+OQpbfUs/4m5i6XY7YOftcQfmrcV3GPi3M
-         ieUWItI8gzpejTSvxM25FLNtkPN/1txl1ksjFZsZedhHSWsmy2PZAl4mjPaxtwSw/S0S
-         QhH2mkq77Ax6u/kY7qlTJN71wgzEdM6U7w+78hy/z5UpBpXYrb7vWLBIF4/ZLOCdQzXE
-         X9t9WuYNYwbNLYUCi8W2QtoqIYuHNP+jF0B4sxErEKSuGAAQm+wV71iScGtEQJnbO/NX
-         shiWcQIP5q+wVbdamVIPHVZPmDKxJcf76qOSx+kBacgpSb3czqk+vJDdghttyY6jcd/Y
-         aLkg==
+        Fri, 11 Feb 2022 12:37:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42703392
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:37:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644601052;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Lb+5m3UkvEcY0i6pZfp3uff/KtF/0biJeSNgO+ZhLKc=;
+        b=B2a7BOywXMwk5FHx9FLZrFWHH9xc11A656TSlLqDMoJqyyIWNpGLfV+HVNYYxshThYT2CS
+        /yA1WR2lZEDrPa9zcnly4KcUZc6uE3eUiEcg0CrUw6t3qcCom4wSWTXEBeBNJUVMs67MsP
+        zjyX3gyj6TePjPXdL8aMKdZuiGG2t3Q=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-663-Mcb-mSvsObWkYov-5woBWg-1; Fri, 11 Feb 2022 12:37:31 -0500
+X-MC-Unique: Mcb-mSvsObWkYov-5woBWg-1
+Received: by mail-ej1-f69.google.com with SMTP id mp5-20020a1709071b0500b0069f2ba47b20so4346567ejc.19
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:37:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ht7fW7XN0BAh+gkkGIftbM1jepL7WlEtPAVMav2pC54=;
-        b=zxgbM7tTThlAkERDcTm/12EfvX0cjboh8D1OvzwbNZHPXxeqk3g+EP/aY5GMqJs+yh
-         csWEVij/U8UvM6Ezf8xppPbDVmhHJh475dE0YCyUoaFEuLEfF7zrOBF1QUS6+1X7/X33
-         OQZONgMO3pC+puIQU5ND0HGuH8CZsC9SYkOKbxBr91BJ+pjSln17M31Znil0UevkCRpi
-         qy04Qq79NAgYNZCpDoSzTxDCIy5B4A5OuSW+kyatp43n/ryL4qyBFvfmRsa7Y7uJWVXL
-         pSeCYoDrNOIemvH3pqqGcyu4DUekCgs6BDCTYsi+9NHs4gzh37COfzX57Y8aopw68d7Z
-         eSMQ==
-X-Gm-Message-State: AOAM531Ri1HU/Ob8IOrWEr4w/zmGoy9oxt4p+UgncECZe0r24z1Oo/Bs
-        icWasU+FW3lHMJ3VT4AtQscC/urqpbXyzJPIy28NkfXS4og1Dw==
-X-Google-Smtp-Source: ABdhPJyduuEfNltVqvgKzwHxtFr8/1XdWQpZ/VYWWTJ8KpKHH3QMuFWjnSjNNL7Xa+kO/QFkpvuPbA0kAeJrmmMq20s=
-X-Received: by 2002:a81:c644:: with SMTP id q4mr2894693ywj.206.1644600988653;
- Fri, 11 Feb 2022 09:36:28 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Lb+5m3UkvEcY0i6pZfp3uff/KtF/0biJeSNgO+ZhLKc=;
+        b=Bh9Odc145+JcBhvJIDRLSbBscGut64eDSplzmjrPSwBM12hJVQ9Iu53rBpynCW7lGl
+         NnqiE128DzddBEE5upnGEwhcV0x905t5wxx4nQA58zTe7EfTDsiJhHBVE5Y74sN9byQa
+         l4w1GrzpEs9hzk/42CvFLcO+MuwKRgqL6KwnPkczP3lNyUIlKgQAg6iNbpTrvlLNl3e+
+         M86tvRqffN6m6dN5Mfvqy2N7uUMRpEAU6exjrOv+TSNqkukbvnn4FIjmti3SiZt22JIu
+         Aex0ztpT6ToKp8+Ha0+6RKeJi2Zva0pBPEW5Qw52ePKUPtwElsFITOOc2bcrRmhaS03l
+         Yo5w==
+X-Gm-Message-State: AOAM532yansXVxjYbEcZUqZBGXLXxdvzKHiZelGwCVammMbT2sbQrQZ8
+        WRaZGe75y9oPE1IlxpW3xeKMHn3O/UcUviCeULwXWUeGDBgrqVqBncwJxtciJWcjDnZHOA4KSz5
+        vib9Cz7CBafnhDz9wF7ey/bw5
+X-Received: by 2002:a17:906:b116:: with SMTP id u22mr2339317ejy.427.1644601049749;
+        Fri, 11 Feb 2022 09:37:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJysRgOQX6h5hRe6xafAimOWoRs3+jppMqkGmJ61EpELY50wNI9nETyBQTfyjx9OM1/mztWdtg==
+X-Received: by 2002:a17:906:b116:: with SMTP id u22mr2339244ejy.427.1644601048751;
+        Fri, 11 Feb 2022 09:37:28 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id e4sm1062414ejm.116.2022.02.11.09.37.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Feb 2022 09:37:28 -0800 (PST)
+Message-ID: <e9f1166d-78a0-1806-42bb-03f2e1671128@redhat.com>
+Date:   Fri, 11 Feb 2022 18:37:24 +0100
 MIME-Version: 1.0
-References: <20220210184340.7eba108a@canb.auug.org.au> <CAA5qM4BKwS9W5UCbnfo_xSTJKBuUEyNzUrg0UfGhoxWK5WK3RQ@mail.gmail.com>
- <20220211124302.7b0f0ec0@canb.auug.org.au>
-In-Reply-To: <20220211124302.7b0f0ec0@canb.auug.org.au>
-From:   Tong Zhang <ztong0001@gmail.com>
-Date:   Fri, 11 Feb 2022 09:36:17 -0800
-Message-ID: <CAA5qM4Der1X+sESjPY0eQ-Qo_x0YEYZLo7d6Xjk6fPc1zXzZcA@mail.gmail.com>
-Subject: Re: linux-next: boottime warning from todays linux-next
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Domenico Andreoli <domenico.andreoli@linux.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V2] selftests: kvm: Remove absent target file
+Content-Language: en-US
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Shuah Khan <shuah@kernel.org>, Peter Gonda <pgonda@google.com>
+Cc:     kernel@collabora.com, kernelci@groups.io,
+        "kernelci.org bot" <bot@kernelci.org>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220210172352.1317554-1-usama.anjum@collabora.com>
+ <f9893f6a-b68b-e759-54f5-eef73e8a9eef@linuxfoundation.org>
+ <eb4e24c6-41d0-4f3a-2af0-3008db408da6@redhat.com>
+ <9198c43b-e5e2-fa58-5862-598dc7019ad6@linuxfoundation.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <9198c43b-e5e2-fa58-5862-598dc7019ad6@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 5:43 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi Tong,
->
-> On Thu, 10 Feb 2022 15:35:30 -0800 Tong Zhang <ztong0001@gmail.com> wrote:
-> >
-> > I am trying to see if I can reproduce this.
-> > Could you share the QEMU command line and pseries_le_defconfig?
-> > Latest kernel does not have pseries_le_defconfig so I assume you have
-> > your own version.
->
-> This is a ARCH=powerpc build and qemu run.
->
-> qemu-system-ppc64 -M pseries -cpu POWER8 -m 2G -vga none -nographic -kernel $vmlinux -initrd $initrd
->
-> I have a simple initrd that just boots to a login prompt.
->
-> Anyway, it seems that the mystery has been solved (hopefully).
-> --
-> Cheers,
-> Stephen Rothwell
+On 2/11/22 18:34, Shuah Khan wrote:
+> On 2/10/22 11:56 AM, Paolo Bonzini wrote:
+>> On 2/10/22 19:02, Shuah Khan wrote:
+>>>
+>>> I am fine with the change itself. For this patch:
+>>>
+>>> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+>>>
+>>> However, are we missing a vmx_pi_mmio_test and that test needs to be 
+>>> added.
+>>>
+>>> Just in case the test didn't make it into the 6a58150859fd and the 
+>>> intent
+>>> was to add it - hence the Makefile addition? This can be addressed in
+>>> another patch. Just want to make sure we aren't missing a test.
+>>
+>> This was probably a rebase resolution issue.  The vmx_pi_mmio_test 
+>> fails in the mainline tree, and is lingering in my tree together with 
+>> the fix because somebody promised a better fix for it.  I included the 
+>> TEST_GEN_PROGS_x86_64 line by mistake when rebasing Peter Gonda's test 
+>> below vmx_pi_mmio_test.
+>>
+>> Thanks for the fix,
+>>
+>> Acked-by: Paolo Bonzini <pbonzini@redhat.com>
+>>
+> 
+> Paolo,
+> 
+> Thank you for explaining the discrepancy. Would you like take
+> this through your tree? This patch depends on
+> 
+> commit: de1956f48543e90f94b1194395f33140898b39b2
 
-Thanks for providing the configuration.
-I tried the same setup and it worked. No crash whatsoever.
+Yes, of course.  Queued now.
 
-As mentioned by Luis, if I enable the line below, the kernel will
-throw out a similar message like in your original mail.
+Paolo
 
-@@ -2773,7 +2761,6 @@ int __init sysctl_init_bases(void)
-{
-register_sysctl_base(kernel);
-register_sysctl_base(vm);
-+ register_sysctl_base(fs);
-register_sysctl_base(debug);
-register_sysctl_base(dev);
-
-[    0.190779][    T1] Call Trace:
-[    0.190836][    T1] [c0000000073e3a90] [c0000000007bc2e0]
-dump_stack_lvl+0x74/0xa8 (unreliable)
-[    0.190940][    T1] [c0000000073e3ad0] [c000000000581d9c]
-__register_sysctl_table+0x59c/0x8f0
-[    0.191054][    T1] [c0000000073e3bd0] [c0000000020416fc]
-init_fs_stat_sysctls+0x48/0x60
-[    0.191110][    T1] [c0000000073e3bf0] [c000000000012190]
-do_one_initcall+0x60/0x2c0
-[    0.191139][    T1] [c0000000073e3cc0] [c000000002004a24]
-kernel_init_freeable+0x33c/0x3dc
-[    0.191189][    T1] [c0000000073e3da0] [c0000000000127a4]
-kernel_init+0x34/0x1a0
-[    0.191231][    T1] [c0000000073e3e10] [c00000000000cd64]
-ret_from_kernel_thread+0x5c/0x64
-
-I believe this issue can be marked as resolved now.
-
-- Tong

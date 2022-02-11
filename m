@@ -2,94 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3354B20B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 09:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53EA84B2099
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 09:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348310AbiBKIyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 03:54:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44118 "EHLO
+        id S1348199AbiBKIvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 03:51:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234120AbiBKIyt (ORCPT
+        with ESMTP id S231985AbiBKIvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 03:54:49 -0500
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18022E7F;
-        Fri, 11 Feb 2022 00:54:48 -0800 (PST)
-Received: by mail-ej1-x642.google.com with SMTP id a8so21346774ejc.8;
-        Fri, 11 Feb 2022 00:54:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=puoZXfWx2DTZk4F00wSFE37CTpFITbctZ1aAVvE89vI=;
-        b=X4Gg1UAhzor8SsWPhDCtxTM/nM7nUCuAI9eD4KFWeeqrF7VRHtLINQhxv/1LOU8zPC
-         HgNr7pbl8ZAtBgOgZ5DXV5+cHW28IvQOw0dbTfOLcJPqVTgN5iJp2zgx7L4oDjQQmabv
-         Drx95HJJ6LUCTOH4ZXXvHoGZZqwgB10k+HrBxSvph+aHplhj/I9jnVRgDneIl+qQMraa
-         pSVRttcWGc/5tyv5dOdz/njJux5AnWO0cC9xEeaYHjCtF6bgXvrQVPZo8A/ek6GdV5mz
-         EnRazfUZeimdnmbGHpDA8sPyxf13W16nF1mj0YIJwK7bf7n/I18p1wAfonVfESMAzYXi
-         obdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=puoZXfWx2DTZk4F00wSFE37CTpFITbctZ1aAVvE89vI=;
-        b=lfy3W59dONol6dyL609KwV5u1MBtuNXvOzkMfsPkBAjyB+W8Q0a02oKw8o1VSbx2KK
-         HyPEP26IJLP8kllG+Stm92PuZD8TWnvjUEPCUBeRQoq93tD9iXL0++sp5h0k5cBXiM1R
-         sCjGHJuOjCEvdrf/tAVHdk+b+WZwrPTgePu5+O0I1Ytn2AEwaVaAks8fpbKFzGk6JNZX
-         MIg6f1bl0v4aNtNPXoBcC5RttRPD1wlkdf/TSnObJNKWVPQPuKXBjTkHK4jGE6IgOh7U
-         dVSV/uiNpEvCf00Gg7J08TBO89ipwESwgIyNG8SFsKAPkmLWVr67ilmuDGr2rxOSMiUG
-         9RQA==
-X-Gm-Message-State: AOAM533CeSjHxs9HLrbnz+FKjhZlRZKUvZS8/cSusdCAzVfLs/3mD2FL
-        UoOmjj4t8drQUeaokT/2LNe3RrCYW+hCxpw22ik=
-X-Google-Smtp-Source: ABdhPJxgs6s2LbMQhDJ87YLKj7uqQY+ce9jhiEVY4StztvWPplSwzOi9SgtbdmhW4Up2me4QRjzDTYSTdMHArB8qeRQ=
-X-Received: by 2002:a17:907:1689:: with SMTP id hc9mr536327ejc.348.1644569686553;
- Fri, 11 Feb 2022 00:54:46 -0800 (PST)
+        Fri, 11 Feb 2022 03:51:38 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D670CE80
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 00:51:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644569497; x=1676105497;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bHJCV8MMzu80z8MF5GnsjtrinDXB2IirHq5wwEWBYgM=;
+  b=ja3iBmfNhiAZuGlNMXkytV6Vjm4kWzC+mt1943NqsYJYDyVXF3ZQkDez
+   n1qbDRtGNWf3GJ3JLiT1GDLGE7L/uDLcpQQR3MF/xvEcohXNelZIzeR3a
+   C5veFaYP08Qm4qTPPLNsfIHhskpapb7S2efcaR5JRquXUbfpb6W5azg3z
+   ppt5ckj5DsZqk5c7LciMXNny2oPna+/T7GnqxsK+12iBZuRImdXkdSs1f
+   rjk86ZXHSqrjcSGshs2LvoxAisMfyfkp5kH8wqnowLLWjokMcE+kTZWuN
+   RWZLiQPgiPRRL8LGyU4lgoT/YNlY9LbNCxT3PcpuVSViGRmOUky2q+OIn
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="248523940"
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="248523940"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 00:51:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="630167207"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 11 Feb 2022 00:51:36 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nIReR-0004MZ-NJ; Fri, 11 Feb 2022 08:51:35 +0000
+Date:   Fri, 11 Feb 2022 16:50:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ramji Jiyani <ramjiyani@google.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:google/android/kernel/common/android-mainline
+ 17/21] kernel/gki_module.c:35:6: warning: no previous prototype for
+ 'gki_is_module_protected_symbol'
+Message-ID: <202202111611.znc1YtAj-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220128073319.1017084-1-imagedong@tencent.com>
- <20220128073319.1017084-2-imagedong@tencent.com> <0029e650-3f38-989b-74a3-58c512d63f6b@gmail.com>
- <CADxym3akuxC_Cr07Vzvv+BD55XgMEx7nqU4qW8WHowGR0jeoOQ@mail.gmail.com>
- <20220209211202.7cddd337@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <CADxym3ZajjCV2EHF6+2xa5ewZuVqxwk6bSqF0KuA+J6sGnShbQ@mail.gmail.com> <20220210081322.566488f6@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220210081322.566488f6@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Fri, 11 Feb 2022 16:49:50 +0800
-Message-ID: <CADxym3b-D-08P_YzQSSP-YdrTcw981MRyAmxNcXrdorWYcJniQ@mail.gmail.com>
-Subject: Re: [PATCH v3 net-next 1/7] net: skb_drop_reason: add document for
- drop reasons
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     David Ahern <dsahern@gmail.com>, David Ahern <dsahern@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, mingo@redhat.com,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        pablo@netfilter.org, kadlec@netfilter.org,
-        Florian Westphal <fw@strlen.de>,
-        Menglong Dong <imagedong@tencent.com>,
-        Eric Dumazet <edumazet@google.com>, alobakin@pm.me,
-        paulb@nvidia.com, Kees Cook <keescook@chromium.org>,
-        talalahmad@google.com, haokexin@gmail.com, memxor@gmail.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, Cong Wang <cong.wang@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 12:13 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Thu, 10 Feb 2022 21:42:14 +0800 Menglong Dong wrote:
-> > How about introducing a field to 'struct sock' for drop reasons? As sk is
-> > locked during the packet process in tcp_v4_do_rcv(), this seems to work.
->
-> I find adding temporary storage to persistent data structures awkward.
-> You can put a structure on the stack and pass it thru the call chain,
-> that's just my subjective preference, tho, others may have better ideas.
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android-mainline
+head:   368cd631746c9d700f41883314865ea3ab05cfb7
+commit: 5ffc4c2275478f8d4c17795dc5f1b552559fff26 [17/21] Revert "Revert "ANDROID: GKI: Add module load time protected symbol lookup""
+config: sparc-buildonly-randconfig-r006-20220211 (https://download.01.org/0day-ci/archive/20220211/202202111611.znc1YtAj-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/5ffc4c2275478f8d4c17795dc5f1b552559fff26
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android-mainline
+        git checkout 5ffc4c2275478f8d4c17795dc5f1b552559fff26
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash
 
-Yes, I also feel it is awkward. I'll try to do this job by passing drop reasons
-through the call chain. Thanks for your help :)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/gki_module.c:35:6: warning: no previous prototype for 'gki_is_module_protected_symbol' [-Wmissing-prototypes]
+      35 | bool gki_is_module_protected_symbol(const char *name)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/gki_module.c:46:6: warning: no previous prototype for 'gki_is_module_exported_symbol' [-Wmissing-prototypes]
+      46 | bool gki_is_module_exported_symbol(const char *name)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for NET_PTP_CLASSIFY
+   Depends on NET
+   Selected by
+   - GKI_HIDDEN_NET_CONFIGS
+   WARNING: unmet direct dependencies detected for HVC_DRIVER
+   Depends on TTY
+   Selected by
+   - GKI_HIDDEN_VIRTUAL_CONFIGS
+   WARNING: unmet direct dependencies detected for PAGE_POOL
+   Depends on NET
+   Selected by
+   - GKI_HIDDEN_NET_CONFIGS
+
+
+vim +/gki_is_module_protected_symbol +35 kernel/gki_module.c
+
+    29	
+    30	/**
+    31	 * gki_is_module_protected_symbol - Is a symbol protected from unsigned module?
+    32	 *
+    33	 * @name:	Symbol being checked against protection from unsigned module
+    34	 */
+  > 35	bool gki_is_module_protected_symbol(const char *name)
+    36	{
+    37		return bsearch(name, gki_protected_symbols, NO_OF_PROTECTED_SYMBOLS,
+    38			       MAX_PROTECTED_NAME_LEN, cmp_name) != NULL;
+    39	}
+    40	
+    41	/**
+    42	 * gki_is_module_exported_symbol - Is a symbol exported from a GKI module?
+    43	 *
+    44	 * @name:	Symbol being checked against exported symbols from GKI modules
+    45	 */
+  > 46	bool gki_is_module_exported_symbol(const char *name)
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

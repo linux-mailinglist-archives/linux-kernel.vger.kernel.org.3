@@ -2,103 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2EA4B2E9B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 350864B2E8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:37:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353346AbiBKUg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 15:36:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35474 "EHLO
+        id S1353321AbiBKUg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 15:36:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353297AbiBKUgG (ORCPT
+        with ESMTP id S240394AbiBKUgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 15:36:06 -0500
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A775ECE7;
-        Fri, 11 Feb 2022 12:36:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=meNhctVqWiZ7bMMAhRsGEJ5/xhPxg/TVlXWUTDDfSJk=; b=EE2n7i9uSaLVtix5ZXvnWQB8zW
-        7PDswhSh857ISrqO6QpH6os6PjpB7Ho+4Ix2Qs0EUXkqsizkWK3uHc5CpvbA5Y9Is/tBxViEfuTht
-        elsFZMLx7f1c9RmYmhrNtsk/jgCNKmWusBXkwglUs6OH3uT3h+dwkC+Bok0Uf2JseYdM=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:55274 helo=pettiford.lan)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1nIce9-0005vF-2E; Fri, 11 Feb 2022 15:36:01 -0500
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     hvilleneuve@dimonoff.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, Rob Herring <robh+dt@kernel.org>
-Cc:     hugo@hugovil.com, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Date:   Fri, 11 Feb 2022 15:35:20 -0500
-Message-Id: <20220211203520.3902374-15-hugo@hugovil.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220211203520.3902374-1-hugo@hugovil.com>
-References: <20220211203520.3902374-1-hugo@hugovil.com>
+        Fri, 11 Feb 2022 15:36:54 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FC5D57
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 12:36:46 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id n24so11361630ljj.10
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 12:36:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CCAsjj+/2EPlyUQtiVo8WDkzcxXnQjrZ0PEqMW7wI0o=;
+        b=ppE7RooPi4WL00e0ZLJbFk100+IS02OV5QywrNLcKaCJbEtR4YxukPIudnLp8SeKMe
+         1NpTHSxW8chgPGf7JOY4Ea15KZrCmewdQuJqeHkqMC3F2oB8XRhcoJdjL6j9/F+7f8WJ
+         uUAPTnA1DepzO0Qt+pe0IQN9d9vuPEWAghF7tyEwP6gcUibW6u7V60dsZ2Om7MgSwh3u
+         hnqtLmgCUXP8KKVYUrxRFdwOov2m9joI3QdDjxk8pE/fUxhg1L3y/BZJCLku2CDajQza
+         5EbbCjrTyKK1IaSFwD9Kfjiz5aTiqTn7xQlm4sYnrDALmXTu3uE6ySHxWdrZ9XJkKkF2
+         1Hdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CCAsjj+/2EPlyUQtiVo8WDkzcxXnQjrZ0PEqMW7wI0o=;
+        b=6jDzjKnmklORNXu3p0AzAz4Ge88/Cc5FC2LeuSBKmZ8mOittddony+S9Mk/dV9u62Z
+         4b28BQweNOBL6I+cCXC76N8HXiFZZe5DeLMSgNA9Gw935hide8WRBnolSsOO4RbYjmz5
+         2v5+T/3svFv8jj3bGxRm6yD230Vja/UO5qJEATrUq8ovvk3mGPdkNG4U2Lg+ZyD3o4/9
+         iF0DGmREdvomqItcabmLPnBDUy94YoMvsx695efKdYIlRoj6K7Vvr4BjREvgzaZ84Uin
+         q1/WNBefeoOoWQXQFtYuSGcMHnzwe8+ElUHwsO9iJpKycBGNC0G1aMqRdDvumOSmN9zY
+         KFAA==
+X-Gm-Message-State: AOAM532qEBxCqpaB5R3mBCIvkdueV6zB1bDTLPy3WgwvH82qZiRUYLd4
+        8XMgWKACmbYT5iYPkgmW/j0A10tza5vhbtQffSxP0g==
+X-Google-Smtp-Source: ABdhPJwVEa48rkJ6G8rmFGKX6ejD7MgqMsPEy2hj6bqYfREd84v21zv7mlJcxID3H7rLs2teXuRiEvkPefLlwn+Djcc=
+X-Received: by 2002:a2e:b16e:: with SMTP id a14mr1959958ljm.35.1644611804994;
+ Fri, 11 Feb 2022 12:36:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+References: <20220211064917.2028469-1-shakeelb@google.com> <20220211064917.2028469-5-shakeelb@google.com>
+ <YgZS+YijLo0/WmEd@chrisdown.name>
+In-Reply-To: <YgZS+YijLo0/WmEd@chrisdown.name>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Fri, 11 Feb 2022 12:36:33 -0800
+Message-ID: <CALvZod6FwcSyi3B-3fkw4e+7BGrjFF2iRLEZVeurLp2+v-k-dg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] memcg: synchronously enforce memory.high for large overcharges
+To:     Chris Down <chris@chrisdown.name>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH 14/14] dt-bindings: rtc: pcf2127: add PCF2131
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+On Fri, Feb 11, 2022 at 4:13 AM Chris Down <chris@chrisdown.name> wrote:
+>
+[...]
+> >To make high limit enforcement more robust, this patch makes the limit
+> >enforcement synchronous only if the accumulated overcharge becomes
+> >larger than MEMCG_CHARGE_BATCH. So, most of the allocations would still
+> >be throttled on the return-to-userspace path but only the extreme
+> >allocations which accumulates large amount of overcharge without
+> >returning to the userspace will be throttled synchronously. The value
+> >MEMCG_CHARGE_BATCH is a bit arbitrary but most of other places in the
+> >memcg codebase uses this constant therefore for now uses the same one.
+>
+> Note that mem_cgroup_handle_over_high() has its own allocator throttling grace
+> period, where it bails out if the penalty to apply is less than 10ms. The
+> reclaim will still happen, though. So throttling might not happen even for
+> roughly MEMCG_CHARGE_BATCH-sized allocations, depending on the overall size of
+> the cgroup and its protection.
+>
 
-Add support for new NXP RTC PCF2131.
+Here by throttling, I meant both reclaim and
+schedule_timeout_killable(). I don't want to say low level details
+which might change in future.
 
-Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
----
- .../devicetree/bindings/rtc/nxp,pcf2127.yaml  | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+[...]
+>
+> Thanks, I was going to comment on v1 that I prefer to keep the implementation
+> of mem_cgroup_handle_over_high if possible since we know that the mechanism has
+> been safe in production over the past few years.
+>
+> One question I have is about throttling. It looks like this new
+> mem_cgroup_handle_over_high callsite may mean that throttling is invoked more
+> than once on a misbehaving workload that's failing to reclaim since the
+> throttling could be invoked both here and in return to userspace, right? That
+> might not be a problem, but we should think about the implications of that,
+> especially in relation to MEMCG_MAX_HIGH_DELAY_JIFFIES.
+>
 
-diff --git a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-index cde7b1675ead..57eb0a58afa3 100644
---- a/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-+++ b/Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml
-@@ -14,7 +14,9 @@ maintainers:
- 
- properties:
-   compatible:
--    const: nxp,pcf2127
-+    enum:
-+      - nxp,pcf2127
-+      - nxp,pcf2131
- 
-   reg:
-     maxItems: 1
-@@ -48,4 +50,19 @@ examples:
-         };
-     };
- 
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        rtc@53 {
-+            compatible = "nxp,pcf2131";
-+            reg = <0x53>;
-+            pinctrl-0 = <&rtc_nint_pins>;
-+            interrupts-extended = <&gpio1 16 IRQ_TYPE_LEVEL_HIGH>;
-+            reset-source;
-+        };
-+    };
-+
- ...
--- 
-2.30.2
+Please note that mem_cgroup_handle_over_high() clears
+memcg_nr_pages_over_high and if on the return-to-userspace path
+mem_cgroup_handle_over_high() finds that memcg_nr_pages_over_high is
+non-zero, then it means the task has further accumulated the charges
+over high limit after a possibly synchronous
+memcg_nr_pages_over_high() call.
 
+> Maybe we should record if throttling happened previously and avoid doing it
+> again for this entry into kernelspace? Not certain that's the right answer, but
+> we should think about what the new semantics should be.
+
+For now, I will keep this as is and will add a comment in the code and
+a mention in the commit message about it. I will wait for others to
+comment before sending the next version and thanks for taking a look.

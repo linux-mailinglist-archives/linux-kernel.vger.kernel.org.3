@@ -2,55 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6254B1ABE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 680124B1AC1
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346559AbiBKAw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:52:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41076 "EHLO
+        id S1346571AbiBKAyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:54:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346528AbiBKAwY (ORCPT
+        with ESMTP id S1345588AbiBKAyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:52:24 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450335F8E;
-        Thu, 10 Feb 2022 16:52:24 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jvw7T67qHz4xdJ;
-        Fri, 11 Feb 2022 11:52:21 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644540742;
-        bh=tM9oSUqc6GihGbZkPvqaIHIZCKY0n+fEMRawOrrTALY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tGQqH+km47OY8CFfKc5FhDlCKoJVSG5GhYpZzJiekmm46QrOtRJ4d+oi6tDM99YnS
-         4N899PZ0reKalNLo/MaYKxsOlq/RZ8bBKvuFfQwZCPN56YKTlySLRvt3z7qOuJTm63
-         8T/pZGsvo2Fmbn4A6U7RtLJ08MYLNMh/qAUI53lQ3rLs0BgLGYkUCSAS2vXUJpjgpQ
-         yWLBwCZKNBIHUa1b+ZEauXePqRQ/SpPpkinJVn4t1dpZ3XwbOL4cQA0sUMWl8cLMq3
-         aFTQvU0biu/DnLBUlBgyaB/xM71zS1/YW2x352PE5gHGKnyGOn5u6R5ctEPcOhWH33
-         3FAWpvB+9moMQ==
-Date:   Fri, 11 Feb 2022 11:52:20 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Networking <netdev@vger.kernel.org>,
-        David Miller <davem@davemloft.net>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Song Liu <song@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the net-next tree (Was:
- Re: linux-next: build failure after merge of the bpf-next tree)
-Message-ID: <20220211115220.4d4746fe@canb.auug.org.au>
-In-Reply-To: <20220209112135.7fec872f@canb.auug.org.au>
-References: <20220209112135.7fec872f@canb.auug.org.au>
+        Thu, 10 Feb 2022 19:54:36 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E14CF24
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:54:37 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id i21so11869694pfd.13
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:54:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gSx28UKeCMp/oRLOiqMvFzHyx/ZVhU1gpNBGY870w4s=;
+        b=gTn6ZDScoBvH/pGmW3TK5xT8a9Hgez9llKDPunKEUTCGGGYm9Ke49V5aBzNJuSDL6j
+         VKGUmJBdSr0LCili5IUypGaVbPqYt74yidh+hr07HSUI+/CfS3UIvZlipnxFOOi4g3Is
+         i2V4lrazCctH1SCM/lsDxsSUz0fuTjH6Ctn9uzDMWkM3R/27da7zmgBfTSKwJdMhduwm
+         aW6VMBM8bN3bLbB9GFLrn6ytXaxyAkRKB8RcF1n62aGANIyKMOna6IXJnEoXlNvN09uq
+         0fXfqBl7W7iC6Gr987ZoMHEGJhDOf87jFBJSitXNyJWqlmEfWmyg8IfpRAoYkGrMjfaW
+         mvRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gSx28UKeCMp/oRLOiqMvFzHyx/ZVhU1gpNBGY870w4s=;
+        b=UMC0qid/fgzh8+r0hXbovhJ+yl3r7nd3eckwWbXeTJIaAHP0LaUtYikUu4xT48KIIh
+         e5qJ4M05gHPMV6jjmay0GSidDpIC7c6vwM+AAZ4pyjtBGY1qdw9r6q6ibam3B0X5RP36
+         0ZSz+tNlq6CyGp7A4sFbA4w6PX0RTf8mzwEYfS/KjuWaxVUhmA9T7X5jdweiKOXcFIam
+         RfQVgnIjw4S0f/PBLQSOI6sZjUrCoFmdQ7gu9hqjVoZT+7knUxLkYbTD9AGkkeTkvTgO
+         2Fh1NyqLOf1kwpJUBvpDJadEfeLLu5oJYzuuAYU8jbjWNwDa8jxqRsHvzoXF/iCX7FIi
+         hvkA==
+X-Gm-Message-State: AOAM533lFb9pQdKoRwweF302G5MRCDbwUT7z2PRMJ7fmmG97xq9tfdMl
+        2TZoYc8D0YJOiYuaqBqDdvfUYw==
+X-Google-Smtp-Source: ABdhPJwMIqBDwfqoiGpu0MHaqps4fYrP/0DFsX46oK5L9gl0Z5pON7Wyrn1x5ew3ygjZ5M2UvVn6wA==
+X-Received: by 2002:a63:1249:: with SMTP id 9mr8333712pgs.417.1644540876576;
+        Thu, 10 Feb 2022 16:54:36 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id nu15sm3625642pjb.5.2022.02.10.16.54.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 16:54:35 -0800 (PST)
+Date:   Fri, 11 Feb 2022 00:54:32 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com
+Subject: Re: [PATCH 08/12] KVM: MMU: do not consult levels when freeing roots
+Message-ID: <YgWzyBbAZe89ljqO@google.com>
+References: <20220209170020.1775368-1-pbonzini@redhat.com>
+ <20220209170020.1775368-9-pbonzini@redhat.com>
+ <YgWwrG+EQgTwyt8v@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ImzMXu3OpUzcrR/0Blb+6dX";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgWwrG+EQgTwyt8v@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,51 +73,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ImzMXu3OpUzcrR/0Blb+6dX
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Feb 11, 2022, Sean Christopherson wrote:
+> On Wed, Feb 09, 2022, Paolo Bonzini wrote:
+> > Right now, PGD caching requires a complicated dance of first computing
+> > the MMU role and passing it to __kvm_mmu_new_pgd, and then separately calling
+> 
+> Nit, adding () after function names helps readers easily recognize when you're
+> taking about a specific function, e.g. as opposed to a concept or whatever.
+> 
+> > kvm_init_mmu.
+> > 
+> > Part of this is due to kvm_mmu_free_roots using mmu->root_level and
+> > mmu->shadow_root_level to distinguish whether the page table uses a single
+> > root or 4 PAE roots.  Because kvm_init_mmu can overwrite mmu->root_level,
+> > kvm_mmu_free_roots must be called before kvm_init_mmu.
+> > 
+> > However, even after kvm_init_mmu there is a way to detect whether the page table
+> > has a single root or four, because the pae_root does not have an associated
+> > struct kvm_mmu_page.
+> 
+> Suggest a reword on the final paragraph, because there's a discrepancy with the
+> code (which handles 0, 1, or 4 "roots", versus just "single or four").
+> 
+>   However, even after kvm_init_mmu() there is a way to detect whether the
+>   page table may hold PAE roots, as root.hpa isn't backed by a shadow when
+>   it points at PAE roots.
+> 
+> > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> > ---
+> >  arch/x86/kvm/mmu/mmu.c | 10 ++++++----
+> >  1 file changed, 6 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 3c3f597ea00d..95d0fa0bb876 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -3219,12 +3219,15 @@ void kvm_mmu_free_roots(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+> >  	struct kvm *kvm = vcpu->kvm;
+> >  	int i;
+> >  	LIST_HEAD(invalid_list);
+> > -	bool free_active_root = roots_to_free & KVM_MMU_ROOT_CURRENT;
+> > +	bool free_active_root;
+> >  
+> >  	BUILD_BUG_ON(KVM_MMU_NUM_PREV_ROOTS >= BITS_PER_LONG);
+> >  
+> >  	/* Before acquiring the MMU lock, see if we need to do any real work. */
+> > -	if (!(free_active_root && VALID_PAGE(mmu->root.hpa))) {
+> > +	free_active_root = (roots_to_free & KVM_MMU_ROOT_CURRENT)
+> > +		&& VALID_PAGE(mmu->root.hpa);
+> 
+> 	free_active_root = (roots_to_free & KVM_MMU_ROOT_CURRENT) &&
+> 			   VALID_PAGE(mmu->root.hpa);
+> 
+> Isn't this a separate bug fix?  E.g. call kvm_mmu_unload() without a valid current
+> root, but with valid previous roots?  In which case we'd try to free garbage, no?
+> 			   
+> > +
+> > +	if (!free_active_root) {
+> >  		for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++)
+> >  			if ((roots_to_free & KVM_MMU_ROOT_PREVIOUS(i)) &&
+> >  			    VALID_PAGE(mmu->prev_roots[i].hpa))
+> > @@ -3242,8 +3245,7 @@ void kvm_mmu_free_roots(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+> >  					   &invalid_list);
+> >  
+> >  	if (free_active_root) {
+> > -		if (mmu->shadow_root_level >= PT64_ROOT_4LEVEL &&
+> > -		    (mmu->root_level >= PT64_ROOT_4LEVEL || mmu->direct_map)) {
+> > +		if (to_shadow_page(mmu->root.hpa)) {
+> >  			mmu_free_root_page(kvm, &mmu->root.hpa, &invalid_list);
+> >  		} else if (mmu->pae_root) {
 
-Hi all,
+Gah, this is technically wrong.  It shouldn't truly matter, but it's wrong.  root.hpa
+will not be backed by shadow page if the root is pml4_root or pml5_root, in which
+case freeing the PAE root is wrong.  They should obviously be invalid already, but
+it's a little confusing because KVM wanders down a path that may not be relevant
+to the current mode.
 
-On Wed, 9 Feb 2022 11:21:35 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> After merging the bpf-next tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
->=20
-> kernel/bpf/core.c:830:23: error: variably modified 'bitmap' at file scope
->   830 |         unsigned long bitmap[BITS_TO_LONGS(BPF_PROG_CHUNK_COUNT)];
->       |                       ^~~~~~
->=20
-> Caused by commit
->=20
->   57631054fae6 ("bpf: Introduce bpf_prog_pack allocator")
->=20
-> I have used the bpf-next tree from next-20220208 for today.
+For clarity, I think it's worth doing:
 
-The net-next tree has inherited this build failure by merging the
-bpf-next tree.
+		} else if (mmu->root.hpa == __pa(mmu->pae_root)) {
 
-I have used the net-next tree from next-20220209 for today.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ImzMXu3OpUzcrR/0Blb+6dX
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIFs0QACgkQAVBC80lX
-0GxsDQgAlns5dBAnb2XaAy4qyu4Br0sM9tPbvnXUPnEH6p9ksbrB4rJg1C0n0md2
-BeM4yujg/8UMC/ohfOB0/UG04DpsiWDtqkvSBFSccGmNAltyBHELL6+fGIsa21Cw
-qhwMDiQguS3pvYasZcx799MM61VsdrCSw9JaAbaM2JQrcBXzveY45USYy01dy1et
-NIeeFgHKffDxtiWMs4gQoLU85snZDvhVdg1TGLZJ+GXsjF7Znr+vjlMo+/02QrJp
-/jRwD8s+axiFleJe63mTvTaYGSCIhkOPtkTVz4m5sF22uIaDPphY/qg8av0I2yRu
-RESHNzJjz5DyR37imUp63kETSd+GyQ==
-=S9bw
------END PGP SIGNATURE-----
-
---Sig_/ImzMXu3OpUzcrR/0Blb+6dX--
+> >  			for (i = 0; i < 4; ++i) {
+> > -- 
+> > 2.31.1
+> > 
+> > 

@@ -2,268 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22EE94B23F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:06:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 781124B2400
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349326AbiBKLGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 06:06:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35734 "EHLO
+        id S1349345AbiBKLKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 06:10:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343765AbiBKLG1 (ORCPT
+        with ESMTP id S234880AbiBKLKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 06:06:27 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE94DDD
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:06:26 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id a11-20020a17090a740b00b001b8b506c42fso11646358pjg.0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:06:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fW7IuBQjL7ot5s2XNwOb0lPZCAyNMYMY9WGVkx7MplM=;
-        b=BBIeZ2kgtc/6SDJXIBQR58F+g1uEH7L8NY9TO/KeVX52BuUXHSn8zjoh5GCqghSp1c
-         Uh3BgcTANITBbkhSsYJEYocXBH4GuEakjrm2OZSlIINMTIhewoJRQD5GuY9/KWwi9Clm
-         lyuRcP7JqNLD3xoFCBZrlHIB+GnOvfrCX8g2Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fW7IuBQjL7ot5s2XNwOb0lPZCAyNMYMY9WGVkx7MplM=;
-        b=8RdFdQ7u9PDUtumcnzI4cDFqNDLtAcQa5h+3riXQUUyq8fxglikyzdLPqtk099SEPi
-         xuFlRDZ//M/x33NgH3VR0RXHvYC+SAJX6H2FuXjmwSJ/+6KQHcxSPe/fNjG5gMnCraWK
-         fgL4kcAwV9YLdqT4a9T3rWJFbdfwzZOzOSq3lCMbtkKin6iK6Yo5W3q6wSPaVB2lWbE9
-         ZvAOzmnCOOdk4XCWE7LCIu647jrIJ2t+G35q+lgdjmIknAJBxRC797vegBg6fBzZUQSE
-         bUbgWnhiext1jRRlOD0cZi255ml+/vm7GE+QVFv6g9whIOTw1YOnwX5viSnbWSokPoF2
-         wY6w==
-X-Gm-Message-State: AOAM531afj8RZIk5mZqf7MwZHz7gRsLuWo0mpgmjjAKVA+3UZZjEdkNg
-        F3XMVrgT9HTlCIiv1vP/unY/GA==
-X-Google-Smtp-Source: ABdhPJxB3kHWd5L92viS8b4mkySdIs5+B3FyMFUnLaO6CG5CVT+YhqgVuy52zrEeUUbKylRNMLt1gw==
-X-Received: by 2002:a17:90a:1d:: with SMTP id 29mr1188822pja.140.1644577586017;
-        Fri, 11 Feb 2022 03:06:26 -0800 (PST)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:c4e0:c7ee:38f6:b6d])
-        by smtp.gmail.com with ESMTPSA id t14sm4410290pgo.19.2022.02.11.03.06.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 03:06:25 -0800 (PST)
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH RFC v2] media: hantro: Implement support for encoder commands
-Date:   Fri, 11 Feb 2022 19:06:17 +0800
-Message-Id: <20220211110617.2202714-1-wenst@chromium.org>
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 11 Feb 2022 06:10:45 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02D3E5E
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:10:43 -0800 (PST)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220211111040epoutp04ba07b4931bd9f87afd4f6cd1b53c0c64~SttU_yIHC2332023320epoutp04P
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 11:10:40 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220211111040epoutp04ba07b4931bd9f87afd4f6cd1b53c0c64~SttU_yIHC2332023320epoutp04P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1644577840;
+        bh=/QqAj4sBooVJtWFQuaex7gP6M60iq909aZ1ni0qhM34=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=TmPHJjXOcDXAmkZtOEBpUXSQf8a0VavCwmwC3dRqeFl2zh3OjXjYQVHwLm0w1rCDK
+         J6F5DfBy40gv/WcSUK7RIhne2lnxa9gynNkIWUdAd47ekJqfok7gmXgT6VNcMMOLSu
+         C4eAn6JnixkpoW/FNf8XLdsBWq8AJLZZOOKe2P3w=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20220211111040epcas2p21ac27e4037466e7bddfd390edc5643df~SttUUWROv2496924969epcas2p2d;
+        Fri, 11 Feb 2022 11:10:40 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.89]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4Jw9rr4PLvz4x9Pt; Fri, 11 Feb
+        2022 11:10:36 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        5E.98.51767.C2446026; Fri, 11 Feb 2022 20:10:36 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220211111036epcas2p49318d038042b4b56d374a11999cc1d64~SttQf4stM2585225852epcas2p4_;
+        Fri, 11 Feb 2022 11:10:36 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220211111036epsmtrp2eb8b5781e25efffb96f272d99cd883f1~SttQe5O_Q2422524225epsmtrp2L;
+        Fri, 11 Feb 2022 11:10:36 +0000 (GMT)
+X-AuditID: b6c32a45-447ff7000000ca37-d5-6206442c1ba0
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        CD.33.29871.B2446026; Fri, 11 Feb 2022 20:10:35 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220211111035epsmtip1a2ef5627ab9f837a7c9d982048a2dfe6~SttQQFFXS0789707897epsmtip1a;
+        Fri, 11 Feb 2022 11:10:35 +0000 (GMT)
+From:   Kiwoong Kim <kwmad.kim@samsung.com>
+To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        cang@codeaurora.org, adrian.hunter@intel.com, sc.suh@samsung.com,
+        hy50.seo@samsung.com, sh425.lee@samsung.com,
+        bhoon95.kim@samsung.com, vkumar.1997@samsung.com
+Cc:     Kiwoong Kim <kwmad.kim@samsung.com>
+Subject: [PATCH v1] scsi: ufs: exclude UECxx from SFR dump list
+Date:   Fri, 11 Feb 2022 20:08:21 +0900
+Message-Id: <1644577701-40884-1-git-send-email-kwmad.kim@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpik+LIzCtJLcpLzFFi42LZdljTQlfHhS3JYMNHSYuTT9awWTyYt43N
+        4uXPq2wWBx92slh8XfqM1eLT+mWsFqsXP2CxWHRjG5PFzS1HWSwu75rDZtF9fQebxfLj/5gs
+        uu7eYLRY+u8ti8Wd+x9ZHPg9Lvf1Mnks3vOSyWPCogOMHt/Xd7B5fHx6i8Wjb8sqRo/Pm+Q8
+        2g90MwVwRGXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl
+        5gBdr6RQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpMC/QK07MLS7NS9fLSy2xMjQw
+        MDIFKkzIzujZfYGt4CZXxYPXMxgbGI9zdDFyckgImEjcntbG1MXIxSEksINR4uLpmSwgCSGB
+        T4wSJy5YQyS+MUrc/rWEEaZjRvtrRojEXkaJW0saodp/MEqc+n+IFaSKTUBT4unNqUwgtojA
+        dSaJedszQGxmAXWJXRNOgMWFBewljpz9zNbFyMHBIqAqcW1hGEiYV8BVovHUaXaIZXISN891
+        MkPYjRwSV7eHQdguEnu2XGaBsIUlXh3fAlUvJfH53V6wkRICxRKb9smDnCYh0MAoseTTZqh6
+        Y4lZz9oZQWqYgc5cv0sfolxZ4sgtFogj+SQ6Dv9lhwjzSnS0CUE0Kkv8mjQZGgqSEjNv3oFa
+        6iEx59gmsIFCArESDyYoTGCUnYUwfgEj4ypGsdSC4tz01GKjAkN4BCXn525iBCdGLdcdjJPf
+        ftA7xMjEwXiIUYKDWUmEd8UN1iQh3pTEyqrUovz4otKc1OJDjKbAsJrILCWanA9MzXkl8YYm
+        lgYmZmaG5kamBuZK4rxeKRsShQTSE0tSs1NTC1KLYPqYODilGphCo34v3WpUeuj4e95Dd96E
+        8G7gdFSYN0sLmD0ucd3UKjUVm565YMF5tZsuj5JqQmZo5vMJPu9YwfuXkXe6pMsPpYOlR+y0
+        9gVMfX2jk+nJnLpoY9eef+7Stx/UTZsmf9/cqaCxYu/BinWcMS2pH3Q3RPMy2B48PcHOZNft
+        dZlKwoZbczb/rFeIaHFXtrjGsjcw0ogz2bHI8Ir154KTC04FT5v0+zgn6w6+XzJ2Hx49Xpbp
+        /Nxocd9KbW2JtuNB4t1f5ITOTYmQOdHz6/ZDEXbetC7+k791g99H6J28wrCBLU3S/Z5t14V/
+        BxfblrB9Y7w1YbLtiqbrUfWbjn2Z3iyi3y6s58HULPDv6YKH+5RYijMSDbWYi4oTAZg60/IV
+        BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGLMWRmVeSWpSXmKPExsWy7bCSnK62C1uSwZ7llhYnn6xhs3gwbxub
+        xcufV9ksDj7sZLH4uvQZq8Wn9ctYLVYvfsBisejGNiaLm1uOslhc3jWHzaL7+g42i+XH/zFZ
+        dN29wWix9N9bFos79z+yOPB7XO7rZfJYvOclk8eERQcYPb6v72Dz+Pj0FotH35ZVjB6fN8l5
+        tB/oZgrgiOKySUnNySxLLdK3S+DK6Nl9ga3gJlfFg9czGBsYj3N0MXJySAiYSMxof83YxcjF
+        ISSwm1Hi/9HNjBAJSYkTO59D2cIS91uOsEIUfWOUuLXkMgtIgk1AU+LpzalMIAkRgZdMEi/m
+        rGEDSTALqEvsmnCCCcQWFrCXOHL2M1Ccg4NFQFXi2sIwkDCvgKtE46nT7BAL5CRunutknsDI
+        s4CRYRWjZGpBcW56brFhgWFearlecWJucWleul5yfu4mRnDQamnuYNy+6oPeIUYmDsZDjBIc
+        zEoivCtusCYJ8aYkVlalFuXHF5XmpBYfYpTmYFES573QdTJeSCA9sSQ1OzW1ILUIJsvEwSnV
+        wLRw0yadEwr+e4WM/kSre3pzCT5bYSP6883OuJXWt8UZVr34rjqRf8c3peKnN53lt1/kPZsR
+        FDppkd4+A6u5ugd2RQQdtz0vuidB2fp94tO4/t/3fheKHDNx57auXR6372F2TchHu8+3bMxi
+        38qlbA5dx1OnzGpsnsXCUv7ngHcQx/4lCkI3zh8W9VOvUqqoNtx45s7Ci2bu6oL5H1s/Cdp6
+        CDCEbJtiYSq07M5U/USFiUE7JhhMTDdZtjYkinvpSr2k0qd5TbbL7fgWyD24GLfloV60wd/c
+        tfn38yZd/Vai3c3yXs5wo0tS3Ee7V2fWfdBcc9i7YnL76bcdYrfkJjjHm28Tymjd+sFROfhV
+        hhJLcUaioRZzUXEiAGNmB4fJAgAA
+X-CMS-MailID: 20220211111036epcas2p49318d038042b4b56d374a11999cc1d64
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220211111036epcas2p49318d038042b4b56d374a11999cc1d64
+References: <CGME20220211111036epcas2p49318d038042b4b56d374a11999cc1d64@epcas2p4.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The V4L2 stateful encoder uAPI specification requires that drivers
-support the ENCODER_CMD ioctl to allow draining of buffers. This
-however was not implemented, and causes issues for some userspace
-applications.
+These are ROC type things that means their values
+are cleared when the SFRs are read.
+They are usually read in ISR when an UIC error occur.
+Thus, their values would be zero at many cases. And
+there might be a little bit risky when they are read to
+be cleared before the ISR reads them, e.g. the case that
+a command is timed-out, ufshcd_dump_regs is called in
+ufshcd_abort and an UIC error occurs at the nearly
+same time. In this case, ISR will be called but UFS error handler
+will not be scheduled.
+This patch is to make UFS driver not read those SFRs in the
+dump function, i.e. ufshcd_dump_regs.
 
-Implement support for the ENCODER_CMD ioctl using v4l2-mem2mem helpers.
-This is entirely based on existing code found in the vicodec test
-driver.
-
-Fixes: 775fec69008d ("media: add Rockchip VPU JPEG encoder driver")
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
 ---
+ drivers/scsi/ufs/ufshcd.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Changes since v1:
-- Correctly handle last buffers that are empty
-- Correctly handle last buffers that just got queued
-- Disable (TRY_)ENCODER_CMD ioctls for hantro decoder
-
-This is based on linux-next-20220208, and was tested on RK3399 with
-Gstreamer running the JPEG encoder. It was also tested on ChromeOS
-5.10 on Kevin with the video encoder used in ChromeOS ARC, which
-requires this. For ChromeOS, both encoder and decoder tests were run
-to check for regressions.
-
-Everything really works OK now, but since I'm not very familiar with
-the mem2mem framework, I might be missing something, causing resource
-leaks. Hence this patch is labeled RFC.
-
-Last, I suppose we could also add support for (TRY_)DECODER_CMD now?
-
----
- drivers/staging/media/hantro/hantro_drv.c  | 17 +++++-
- drivers/staging/media/hantro/hantro_v4l2.c | 68 +++++++++++++++++++++-
- 2 files changed, 81 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index bc9bcb4eaf46..99bc650a5a93 100644
---- a/drivers/staging/media/hantro/hantro_drv.c
-+++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -56,6 +56,10 @@ dma_addr_t hantro_get_ref(struct hantro_ctx *ctx, u64 ts)
- 	return hantro_get_dec_buf_addr(ctx, buf);
- }
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 460d2b4..8b65c081 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -115,8 +115,12 @@ int ufshcd_dump_regs(struct ufs_hba *hba, size_t offset, size_t len,
+ 	if (!regs)
+ 		return -ENOMEM;
  
-+static const struct v4l2_event hantro_eos_event = {
-+	.type = V4L2_EVENT_EOS
-+};
-+
- static void hantro_job_finish_no_pm(struct hantro_dev *vpu,
- 				    struct hantro_ctx *ctx,
- 				    enum vb2_buffer_state result)
-@@ -73,6 +77,12 @@ static void hantro_job_finish_no_pm(struct hantro_dev *vpu,
- 	src->sequence = ctx->sequence_out++;
- 	dst->sequence = ctx->sequence_cap++;
- 
-+	if (v4l2_m2m_is_last_draining_src_buf(ctx->fh.m2m_ctx, src)) {
-+		dst->flags |= V4L2_BUF_FLAG_LAST;
-+		v4l2_event_queue_fh(&ctx->fh, &hantro_eos_event);
-+		v4l2_m2m_mark_stopped(ctx->fh.m2m_ctx);
-+	}
-+
- 	v4l2_m2m_buf_done_and_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx,
- 					 result);
- }
-@@ -807,10 +817,13 @@ static int hantro_add_func(struct hantro_dev *vpu, unsigned int funcid)
- 	snprintf(vfd->name, sizeof(vfd->name), "%s-%s", match->compatible,
- 		 funcid == MEDIA_ENT_F_PROC_VIDEO_ENCODER ? "enc" : "dec");
- 
--	if (funcid == MEDIA_ENT_F_PROC_VIDEO_ENCODER)
-+	if (funcid == MEDIA_ENT_F_PROC_VIDEO_ENCODER) {
- 		vpu->encoder = func;
--	else
-+	} else {
- 		vpu->decoder = func;
-+		v4l2_disable_ioctl(vfd, VIDIOC_TRY_ENCODER_CMD);
-+		v4l2_disable_ioctl(vfd, VIDIOC_ENCODER_CMD);
+-	for (pos = 0; pos < len; pos += 4)
++	for (pos = 0; pos < len; pos += 4) {
++		if (pos >= REG_UIC_ERROR_CODE_PHY_ADAPTER_LAYER	&&
++		    pos <= REG_UIC_ERROR_CODE_DME)
++			continue;
+ 		regs[pos / 4] = ufshcd_readl(hba, offset + pos);
 +	}
  
- 	video_set_drvdata(vfd, vpu);
- 
-diff --git a/drivers/staging/media/hantro/hantro_v4l2.c b/drivers/staging/media/hantro/hantro_v4l2.c
-index 67148ba346f5..777bd3dbd875 100644
---- a/drivers/staging/media/hantro/hantro_v4l2.c
-+++ b/drivers/staging/media/hantro/hantro_v4l2.c
-@@ -628,6 +628,39 @@ static int vidioc_s_selection(struct file *file, void *priv,
- 	return 0;
- }
- 
-+static const struct v4l2_event hantro_eos_event = {
-+	.type = V4L2_EVENT_EOS
-+};
-+
-+static int vidioc_encoder_cmd(struct file *file, void *priv,
-+			      struct v4l2_encoder_cmd *ec)
-+{
-+	struct hantro_ctx *ctx = fh_to_ctx(priv);
-+	int ret;
-+
-+	ret = v4l2_m2m_ioctl_try_encoder_cmd(file, priv, ec);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (!vb2_is_streaming(v4l2_m2m_get_src_vq(ctx->fh.m2m_ctx)) ||
-+	    !vb2_is_streaming(v4l2_m2m_get_dst_vq(ctx->fh.m2m_ctx)))
-+		return 0;
-+
-+	ret = v4l2_m2m_ioctl_encoder_cmd(file, priv, ec);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (ec->cmd == V4L2_ENC_CMD_STOP &&
-+	    v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
-+		v4l2_event_queue_fh(&ctx->fh, &hantro_eos_event);
-+
-+	if (ec->cmd == V4L2_ENC_CMD_START &&
-+	    v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
-+		vb2_clear_last_buffer_dequeued(&ctx->fh.m2m_ctx->cap_q_ctx.q);
-+
-+	return 0;
-+}
-+
- const struct v4l2_ioctl_ops hantro_ioctl_ops = {
- 	.vidioc_querycap = vidioc_querycap,
- 	.vidioc_enum_framesizes = vidioc_enum_framesizes,
-@@ -657,6 +690,9 @@ const struct v4l2_ioctl_ops hantro_ioctl_ops = {
- 
- 	.vidioc_g_selection = vidioc_g_selection,
- 	.vidioc_s_selection = vidioc_s_selection,
-+
-+	.vidioc_try_encoder_cmd = v4l2_m2m_ioctl_try_encoder_cmd,
-+	.vidioc_encoder_cmd = vidioc_encoder_cmd,
- };
- 
- static int
-@@ -733,8 +769,12 @@ static int hantro_buf_prepare(struct vb2_buffer *vb)
- 	 * (for OUTPUT buffers, if userspace passes 0 bytesused, v4l2-core sets
- 	 * it to buffer length).
- 	 */
--	if (V4L2_TYPE_IS_CAPTURE(vq->type))
--		vb2_set_plane_payload(vb, 0, pix_fmt->plane_fmt[0].sizeimage);
-+	if (V4L2_TYPE_IS_CAPTURE(vq->type)) {
-+		if (ctx->is_encoder)
-+			vb2_set_plane_payload(vb, 0, 0);
-+		else
-+			vb2_set_plane_payload(vb, 0, pix_fmt->plane_fmt[0].sizeimage);
-+	}
- 
- 	return 0;
- }
-@@ -744,6 +784,22 @@ static void hantro_buf_queue(struct vb2_buffer *vb)
- 	struct hantro_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
- 	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
- 
-+	if (V4L2_TYPE_IS_CAPTURE(vb->vb2_queue->type) &&
-+	    vb2_is_streaming(vb->vb2_queue) &&
-+	    v4l2_m2m_dst_buf_is_last(ctx->fh.m2m_ctx)) {
-+		unsigned int i;
-+
-+		for (i = 0; i < vb->num_planes; i++)
-+			vb->planes[i].bytesused = 0;
-+
-+		vbuf->field = V4L2_FIELD_NONE;
-+		vbuf->sequence = ctx->sequence_cap++;
-+
-+		v4l2_m2m_last_buffer_done(ctx->fh.m2m_ctx, vbuf);
-+		v4l2_event_queue_fh(&ctx->fh, &hantro_eos_event);
-+		return;
-+	}
-+
- 	v4l2_m2m_buf_queue(ctx->fh.m2m_ctx, vbuf);
- }
- 
-@@ -759,6 +815,8 @@ static int hantro_start_streaming(struct vb2_queue *q, unsigned int count)
- 	struct hantro_ctx *ctx = vb2_get_drv_priv(q);
- 	int ret = 0;
- 
-+	v4l2_m2m_update_start_streaming_state(ctx->fh.m2m_ctx, q);
-+
- 	if (V4L2_TYPE_IS_OUTPUT(q->type))
- 		ctx->sequence_out = 0;
- 	else
-@@ -831,6 +889,12 @@ static void hantro_stop_streaming(struct vb2_queue *q)
- 		hantro_return_bufs(q, v4l2_m2m_src_buf_remove);
- 	else
- 		hantro_return_bufs(q, v4l2_m2m_dst_buf_remove);
-+
-+	v4l2_m2m_update_stop_streaming_state(ctx->fh.m2m_ctx, q);
-+
-+	if (V4L2_TYPE_IS_OUTPUT(q->type) &&
-+	    v4l2_m2m_has_stopped(ctx->fh.m2m_ctx))
-+		v4l2_event_queue_fh(&ctx->fh, &hantro_eos_event);
- }
- 
- static void hantro_buf_request_complete(struct vb2_buffer *vb)
+ 	ufshcd_hex_dump(prefix, regs, len);
+ 	kfree(regs);
 -- 
-2.35.1.265.g69c8d7142f-goog
+2.7.4
 

@@ -2,104 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E954B1F88
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 08:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A444B1F99
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 08:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347801AbiBKHqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 02:46:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52992 "EHLO
+        id S1347846AbiBKHtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 02:49:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiBKHqv (ORCPT
+        with ESMTP id S229961AbiBKHtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 02:46:51 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C742D4;
-        Thu, 10 Feb 2022 23:46:50 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jw5Kh1C1Kz4xcY;
-        Fri, 11 Feb 2022 18:46:48 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1644565608;
-        bh=cOHXs+qw3p5jeWTYUNSQ6a37/cxDtUPz6RdojQhCpH0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eJRgYQbUQYTVEa/SWoTyHjYeYTyjtQFFVVJY9I/L+JaZ058yusb3BSjJBbIL1CJS0
-         fL0TC4ebA3lKSQ0mNGDLIqUdrdz+1YVV6cqH78SxReHJ021qKX0zTgxWOfS76yc9uz
-         AHPb6aT5yf+BnJ12RQqOlGRPm9tu6sE/lRAv6u7XH3pKQlkKukEWLOzUK2oC0jTiDu
-         ytVDy7ZrbFWiVJivHOAqPV0BNlKw4MWLqpevWQFyivDcy553vyzAbLEBruFgBnVasC
-         EZztG1HhcB51abtkRPA1Qf+jU6vwGvLJ47CGxMNHQXgo8EDgMNWBrupEtfKXN7hq3o
-         neDvaA6HfJFqQ==
-Date:   Fri, 11 Feb 2022 18:46:47 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Tong Zhang <ztong0001@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Domenico Andreoli <domenico.andreoli@linux.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: boottime warning from todays linux-next
-Message-ID: <20220211184647.0a62dad4@canb.auug.org.au>
-In-Reply-To: <YgW+DopXpFNZTj4k@bombadil.infradead.org>
-References: <20220210184340.7eba108a@canb.auug.org.au>
-        <20220210193302.686fa61a@canb.auug.org.au>
-        <20220210214125.2b248790@canb.auug.org.au>
-        <20220210222953.6e078d20@canb.auug.org.au>
-        <YgWdbYfWgHP2jBmI@bombadil.infradead.org>
-        <20220211123336.54eff9de@canb.auug.org.au>
-        <YgW+DopXpFNZTj4k@bombadil.infradead.org>
+        Fri, 11 Feb 2022 02:49:07 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DF02B34;
+        Thu, 10 Feb 2022 23:49:05 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.41:55972.1094766472
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-123.150.8.42 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id 42DA81002BB;
+        Fri, 11 Feb 2022 15:48:54 +0800 (CST)
+Received: from  ([123.150.8.42])
+        by gateway-153622-dep-749df8664c-mvcg4 with ESMTP id 819b285c682142cca55d4309680e17f0 for u.kleine-koenig@pengutronix.de;
+        Fri, 11 Feb 2022 15:49:04 CST
+X-Transaction-ID: 819b285c682142cca55d4309680e17f0
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 123.150.8.42
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+Message-ID: <2a74f279-9fed-ac3e-da7d-521b3197c321@189.cn>
+Date:   Fri, 11 Feb 2022 15:48:53 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/52ORiMzXrF8KF4+TuM3QYPH";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] staging: greybus: introduce pwm_ops::apply
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, lee.jones@linaro.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
+References: <1644483902-9200-1-git-send-email-chensong_2000@189.cn>
+ <20220210100342.q2t4ykgyymjzr3fj@pengutronix.de>
+ <6acc4f74-31a1-75b2-f7e8-610aac7b0ec8@189.cn>
+ <20220211071601.4rpfbkit6c6dre2o@pengutronix.de>
+From:   Song Chen <chensong_2000@189.cn>
+In-Reply-To: <20220211071601.4rpfbkit6c6dre2o@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/52ORiMzXrF8KF4+TuM3QYPH
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello Uwe,
 
-Hi Luis,
+Thanks for the explain, now i can understand it better.
 
-On Thu, 10 Feb 2022 17:38:22 -0800 Luis Chamberlain <mcgrof@kernel.org> wro=
-te:
->
-> On Fri, Feb 11, 2022 at 12:33:36PM +1100, Stephen Rothwell wrote:
-> >=20
-> > Thanks for noticing that.  I have removed the old version from my copy
-> > of mmotm today. =20
->=20
-> And ... does that fix your boot?
+So, if redefining period and duty as u64 in gb_pwm_config_request is an 
+acceptable solution, i will send patch v2.
 
-Yes, the messages are all gone.
+BR
 
-Thanks again.
---=20
-Cheers,
-Stephen Rothwell
+Song
 
---Sig_/52ORiMzXrF8KF4+TuM3QYPH
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+在 2022/2/11 15:16, Uwe Kleine-König 写道:
+> Hello ,
+> 
+> On Fri, Feb 11, 2022 at 11:06:33AM +0800, Song Chen wrote:
+>> 在 2022/2/10 18:03, Uwe Kleine-König 写道:
+>>> On Thu, Feb 10, 2022 at 05:05:02PM +0800, Song Chen wrote:
+>>>> Introduce apply in pwm_ops to replace legacy operations,
+>>>> like enable, disable, config and set_polarity.
+>>>>
+>>>> Signed-off-by: Song Chen <chensong_2000@189.cn>
+>>>> ---
+>>>>    drivers/staging/greybus/pwm.c | 46 +++++++++++++++--------------------
+>>>>    1 file changed, 19 insertions(+), 27 deletions(-)
+>>>>
+>>>> diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
+>>>> index 891a6a672378..e1889cf979b2 100644
+>>>> --- a/drivers/staging/greybus/pwm.c
+>>>> +++ b/drivers/staging/greybus/pwm.c
+>>>> @@ -204,43 +204,35 @@ static void gb_pwm_free(struct pwm_chip *chip, struct pwm_device *pwm)
+>>>>    	gb_pwm_deactivate_operation(pwmc, pwm->hwpwm);
+>>>>    }
+>>>> -static int gb_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
+>>>> -			 int duty_ns, int period_ns)
+>>>> -{
+>>>> -	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
+>>>> -
+>>>> -	return gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_ns, period_ns);
+>>>> -};
+>>>> -
+>>>> -static int gb_pwm_set_polarity(struct pwm_chip *chip, struct pwm_device *pwm,
+>>>> -			       enum pwm_polarity polarity)
+>>>> +static int gb_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+>>>> +			const struct pwm_state *state)
+>>>>    {
+>>>> +	int ret;
+>>>>    	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
+>>>> -	return gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, polarity);
+>>>> -};
+>>>> -
+>>>> -static int gb_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
+>>>> -{
+>>>> -	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
+>>>> +	/* set period and duty cycle*/
+>>>> +	ret = gb_pwm_config_operation(pwmc, pwm->hwpwm, state->duty_cycle, state->period);
+>>>
+>>> gb_pwm_config_operation's 3rd parameter is an u32, so you're loosing
+>>> bits here as state->duty_cycle is a u64. Ditto for period.
+>>
+>> originally, pwm_apply_state --> pwm_apply_legacy --> gb_pwm_config -->
+>> gb_pwm_config_operation is also loosing bits, does it mean greybus can live
+>> with that?
+> 
+> This is true, I tried to address that, but Thierry had concerns.
+> (https://lore.kernel.org/all/20210312212119.1342666-1-u.kleine-koenig@pengutronix.de/
+> was the patch I suggested.)
+> 
+>> Or redefine gb_pwm_config_request, switch duty and period to __le64?
+> 
+> Don't use __le64, this is only for representing (little endian) register
+> values. u64 would be the right one.
+> 
+>>> Also it would be nice if you go from
+>>>
+>>> 	.duty_cycle = A, .period = B, .enabled = 1
+>>>
+>>> to
+>>>
+>>> 	.duty_cycle = C, .period = D, .enabled = 0
+>>>
+>>> that C/D wasn't visible on the output pin. So please disable earlier
+>>> (but keep enable at the end).
+>>
+>> sorry, i don't quite understand this part,
+> 
+> To reexplain: If your hardware is configured for
+> 
+> 	.duty_cycle = A, .period = B, .enabled = 1
+> 
+> and pwm_apply is called with
+> 
+> 	.duty_cycle = C, .period = D, .enabled = 0
+> 
+> you configured the registers for .duty_cycle and .period first and only
+> then disable the PWM. This usually results in glitches because the
+> hardware shortly runs with
+> 
+> 	.duty_cycle = C, .period = D, .enabled = 1
+> 
+> . So the idea is, to disable before configuring duty and period if the
+> eventual goal is a disabled state.
 
------BEGIN PGP SIGNATURE-----
+understood, thanks.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIGFGcACgkQAVBC80lX
-0GznrQf9HQBeck5FeKsEabJk1lVTMmUbTO6bviZ8WMCRjANm1bXl1UFxpnkRdBRP
-Kef5LJ01uKyWc78rsbppXsceuauzgG82VeAZEzopD9fuq2Go40GIbW1PkTZWZW8T
-5zpjmsarGCBHSvm0MUsQq0NOkwe9SEvKqHNF/Oh1Z9uP+vjqruE0nCHVrmOAN6VG
-/vg3bJv9oayGXD3eLdrfxRuMzNJkZn9eD8EgwjzgINreUg1U2a4Soa4qJ/sSMpvb
-q5OrMCfufyiJ9Qx2EEctfP0kyXixM0eYiMUPCQdeR1j5bbDan9ga6TOyQp3tVrgm
-873HS2iv0M02b7LD2sFdKH17eGkwnQ==
-=ym7y
------END PGP SIGNATURE-----
-
---Sig_/52ORiMzXrF8KF4+TuM3QYPH--
+> 
+>> but is below code looking good to
+>> you?
+>>
+>> static int gb_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+>> 			const struct pwm_state *state)
+>> {
+>> 	int err;
+>> 	bool enabled = pwm->state.enabled;
+>> 	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
+>>
+>> 	/* set polarity */
+>> 	if (state->polarity != pwm->state.polarity) {
+>> 		if (enabled) {
+>> 			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
+>> 			enabled = false;
+>> 		}
+>> 		err = gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, state->polarity);
+>> 		if (err)
+>> 			return err;
+>> 	}
+>>
+>> 	if (!state->enabled) {
+>> 		if (enabled)
+>> 			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
+>> 		return 0;
+>> 	}
+>>
+>> 	/* set period and duty cycle*/
+>> 	err = gb_pwm_config_operation(pwmc, pwm->hwpwm, state->duty_cycle, state->period);
+>> 	if (err)
+>> 		return err;
+>>
+>> 	/* enable/disable */
+>> 	if (!enabled)
+>> 		return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
+>>
+>> 	return 0;
+>> }
+> 
+> This looks good.
+> 
+> Best regards
+> Uwe
+> 

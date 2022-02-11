@@ -2,140 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152D94B2B9F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:22:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9061D4B2BA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:22:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352031AbiBKRTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 12:19:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40820 "EHLO
+        id S1352023AbiBKRTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 12:19:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350205AbiBKRTn (ORCPT
+        with ESMTP id S244536AbiBKRTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 12:19:43 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF2C9E
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:19:42 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id v4so8703390pjh.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:19:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Soyj3aZvT5q9ejG6zFoQCWtEuSPJG4bJZO5/tkCuRZI=;
-        b=l0dH7pI8n6Rz9X9dAE7DNWfHZHn7mDUiMqKR4VQq/s8FNNCstRZGLzVIpiT2rmqnHQ
-         krJYvyxgZf2HxGGEoZPj39YzLA5hVopgKsaLJHuhJJWPJtryCaHIpcy38+ivlTMBtk0p
-         JqA30MaVBmymqVydgdG8xzvp4Obl7X98ZtWakVALDkRORaxQoJfhaBc9IrtbsURJUnBr
-         kxO6vZuWPghwpV7PYadgVTBsgAJvxxoXaB7g0W9cGBHYE3Pr8ZSa8BM6P3YWwQsLkmWX
-         JsDIBK+N9X1skp7rCrQ7r1CsDK8HKpVBTmtUDCuikPopbJMzGiFzmFADnE6H63HgpgRl
-         2E8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Soyj3aZvT5q9ejG6zFoQCWtEuSPJG4bJZO5/tkCuRZI=;
-        b=naeKBP/R3oAc3+GzfrT7n2bK/zfc3hm1zhk96UQhxXTjud8WknxrS607/MLN+yCApL
-         D21OatFedFvpqZCDqDmP1ZT94Lc/Id8qDcFmCM6OqW5z7ZKYj1LwdEuESO9EdIQZ9ZlR
-         EIznPTgtevfuFwbPSkuwausqmPVLJafSrIcxPcAiNO4Lcc1dQ8ZYnx5osiNHxXKfVbxk
-         3fPuVSTAuT0VuPnde5USuMpAdRFZeJp3VfRHFsx5xQYEdscl9qrZezxgH3dyiaOUakQl
-         DD5TTvTJHAdxMmeP9kCdMZotwmeq1vE+2VNkzcaEnm0BYxaflVminBXv1wsEI+TY16jd
-         LT4A==
-X-Gm-Message-State: AOAM531GySow6m30cOGLzr7XXto/q9sJAY9GjnanqDrp5/EdyHEnnVPc
-        CzqYGD+fqrW8P++0ANMrbWI4AQ==
-X-Google-Smtp-Source: ABdhPJwd2aQOWYn3MhHGc7gq2LezIAgDQzOs9tUl0Uzlbz/oe+1rAzsM4ZCojfexaCnwCPW1e4KgJw==
-X-Received: by 2002:a17:902:b414:: with SMTP id x20mr2505165plr.14.1644599981408;
-        Fri, 11 Feb 2022 09:19:41 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 19sm5828412pjb.42.2022.02.11.09.19.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 09:19:40 -0800 (PST)
-Date:   Fri, 11 Feb 2022 17:19:36 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Laight <David.Laight@aculab.com>,
-        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Subject: Re: [PATCH 07/49] KVM: x86: replace bitmap_weight with bitmap_empty
- where appropriate
-Message-ID: <YgaaqJNPyGvw9uKi@google.com>
-References: <20220210224933.379149-1-yury.norov@gmail.com>
- <20220210224933.379149-8-yury.norov@gmail.com>
- <ea4efad6-a15c-3749-f177-640396b52857@wanadoo.fr>
+        Fri, 11 Feb 2022 12:19:42 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E22C95
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:19:41 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0ED1F1F3AA;
+        Fri, 11 Feb 2022 17:19:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1644599980; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uILjlSDN1FN8OOLhjeaE5XGyYvqt6MKuWO5g9cvdqUI=;
+        b=cnkiRgwT+qCMYd/sM4tBXGuCaPvNwTUHOCuk377e+Ms6STQjzR2ByZIyLm6hgriLLsg7wB
+        L+u5r7awJjmgYs1MOYkOgyeIsKLevomq/XAtyR2GxG8s2JkUX7TfUBOXqURzowofLSgsgV
+        pwSSHfJSV9b1ydfntC1F+zOtvXNvKrk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1644599980;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uILjlSDN1FN8OOLhjeaE5XGyYvqt6MKuWO5g9cvdqUI=;
+        b=Wd1WNoDqiOq4dCFsftayNEyUQ1Z2lq5wdTS3VAaBXv+sWHUpRKGObnFileZh1OXJp+CF0z
+        nomQ+z/bYDQ26NCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BD6E713C97;
+        Fri, 11 Feb 2022 17:19:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LWGdLauaBmKfBwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 11 Feb 2022 17:19:39 +0000
+Message-ID: <8a974112-bfa8-7c48-e429-4ad5ec8e5ac4@suse.cz>
+Date:   Fri, 11 Feb 2022 18:19:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ea4efad6-a15c-3749-f177-640396b52857@wanadoo.fr>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 08/13] mm/migrate: __unmap_and_move() push good newpage to
+ LRU
+Content-Language: en-US
+To:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Rik van Riel <riel@surriel.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
+ <33fb71cf-ea55-123a-bf9d-fdad297cae1@google.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <33fb71cf-ea55-123a-bf9d-fdad297cae1@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022, Christophe JAILLET wrote:
-> Le 10/02/2022 à 23:48, Yury Norov a écrit :
-> > In some places kvm/hyperv.c code calls bitmap_weight() to check if any bit
-> > of a given bitmap is set. It's better to use bitmap_empty() in that case
-> > because bitmap_empty() stops traversing the bitmap as soon as it finds
-> > first set bit, while bitmap_weight() counts all bits unconditionally.
-> > 
-> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> > Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> > ---
-> >   arch/x86/kvm/hyperv.c | 8 ++++----
-> >   1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> > index 6e38a7d22e97..06c2a5603123 100644
-> > --- a/arch/x86/kvm/hyperv.c
-> > +++ b/arch/x86/kvm/hyperv.c
-> > @@ -90,7 +90,7 @@ static void synic_update_vector(struct kvm_vcpu_hv_synic *synic,
-> >   {
-> >   	struct kvm_vcpu *vcpu = hv_synic_to_vcpu(synic);
-> >   	struct kvm_hv *hv = to_kvm_hv(vcpu->kvm);
-> > -	int auto_eoi_old, auto_eoi_new;
-> > +	bool auto_eoi_old, auto_eoi_new;
-> >   	if (vector < HV_SYNIC_FIRST_VALID_VECTOR)
-> >   		return;
-> > @@ -100,16 +100,16 @@ static void synic_update_vector(struct kvm_vcpu_hv_synic *synic,
-> >   	else
-> >   		__clear_bit(vector, synic->vec_bitmap);
-> > -	auto_eoi_old = bitmap_weight(synic->auto_eoi_bitmap, 256);
-> > +	auto_eoi_old = !bitmap_empty(synic->auto_eoi_bitmap, 256);
+On 2/6/22 22:43, Hugh Dickins wrote:
+> Compaction, NUMA page movement, THP collapse/split, and memory failure
+> do isolate unevictable pages from their "LRU", losing the record of
+> mlock_count in doing so (isolators are likely to use page->lru for their
+> own private lists, so mlock_count has to be presumed lost).
 > 
-> I think that you can also remove the "!" here, ...
+> That's unfortunate, and we should put in some work to correct that: one
+> can imagine a function to build up the mlock_count again - but it would
+> require i_mmap_rwsem for read, so be careful where it's called.  Or
+> page_referenced_one() and try_to_unmap_one() might do that extra work.
 > 
-> >   	if (synic_has_vector_auto_eoi(synic, vector))
-> >   		__set_bit(vector, synic->auto_eoi_bitmap);
-> >   	else
-> >   		__clear_bit(vector, synic->auto_eoi_bitmap);
-> > -	auto_eoi_new = bitmap_weight(synic->auto_eoi_bitmap, 256);
-> > +	auto_eoi_new = !bitmap_empty(synic->auto_eoi_bitmap, 256);
+> But one place that can very easily be improved is page migration's
+> __unmap_and_move(): a small adjustment to where the successful new page
+> is put back on LRU, and its mlock_count (if any) is built back up by
+> remove_migration_ptes().
 > 
-> ... and there...
-> 
-> > -	if (!!auto_eoi_old == !!auto_eoi_new)
-> > +	if (auto_eoi_old == auto_eoi_new)
-> 
-> ... because this test would still give the same result.
+> Signed-off-by: Hugh Dickins <hughd@google.com>
 
-It would give the same result, but the variable names would be inverted as they
-track if "auto EOI" is being used.  So yes, it's technically unnecessary, but
-also very deliberate.
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
+
+> ---
+>  mm/migrate.c | 31 +++++++++++++++++++------------
+>  1 file changed, 19 insertions(+), 12 deletions(-)
+> 
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 7c4223ce2500..f4bcf1541b62 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1032,6 +1032,21 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
+>  	if (!page_mapped(page))
+>  		rc = move_to_new_page(newpage, page, mode);
+>  
+> +	/*
+> +	 * When successful, push newpage to LRU immediately: so that if it
+> +	 * turns out to be an mlocked page, remove_migration_ptes() will
+> +	 * automatically build up the correct newpage->mlock_count for it.
+> +	 *
+> +	 * We would like to do something similar for the old page, when
+> +	 * unsuccessful, and other cases when a page has been temporarily
+> +	 * isolated from the unevictable LRU: but this case is the easiest.
+> +	 */
+> +	if (rc == MIGRATEPAGE_SUCCESS) {
+> +		lru_cache_add(newpage);
+> +		if (page_was_mapped)
+> +			lru_add_drain();
+> +	}
+> +
+>  	if (page_was_mapped)
+>  		remove_migration_ptes(page,
+>  			rc == MIGRATEPAGE_SUCCESS ? newpage : page, false);
+> @@ -1045,20 +1060,12 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
+>  	unlock_page(page);
+>  out:
+>  	/*
+> -	 * If migration is successful, decrease refcount of the newpage
+> +	 * If migration is successful, decrease refcount of the newpage,
+>  	 * which will not free the page because new page owner increased
+> -	 * refcounter. As well, if it is LRU page, add the page to LRU
+> -	 * list in here. Use the old state of the isolated source page to
+> -	 * determine if we migrated a LRU page. newpage was already unlocked
+> -	 * and possibly modified by its owner - don't rely on the page
+> -	 * state.
+> +	 * refcounter.
+>  	 */
+> -	if (rc == MIGRATEPAGE_SUCCESS) {
+> -		if (unlikely(!is_lru))
+> -			put_page(newpage);
+> -		else
+> -			putback_lru_page(newpage);
+> -	}
+> +	if (rc == MIGRATEPAGE_SUCCESS)
+> +		put_page(newpage);
+>  
+>  	return rc;
+>  }
+

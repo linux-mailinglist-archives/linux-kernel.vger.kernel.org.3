@@ -2,97 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B074B207A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 09:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FDA4B2084
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 09:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348118AbiBKIqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 03:46:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37280 "EHLO
+        id S244559AbiBKIqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 03:46:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243970AbiBKIqA (ORCPT
+        with ESMTP id S1348131AbiBKIqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 03:46:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6C6CE67
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 00:45:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644569157;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yhiejNdZNc9V7Q57Z4FGfEE9W4EtgIkRByXMCdx4jhQ=;
-        b=jMniQzghdCSnuvlxHcu49FP/Obyx5NWFaPwcyzzfZdjxyooE8BajYvjCf1xUbnQO8F8ju5
-        pcksNg21DA5dsfClrrEk6z6jgEmqdInXVwNh66SXER1+m99CNDJ/6SfYrSzCW5EaaIe6L4
-        OpEEFD18jFoE4lIPWJk3cvN/ondEI+Q=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-573-A-twu_aGMGmlRNfqQ4uQLQ-1; Fri, 11 Feb 2022 03:45:55 -0500
-X-MC-Unique: A-twu_aGMGmlRNfqQ4uQLQ-1
-Received: by mail-wm1-f69.google.com with SMTP id u14-20020a05600c210e00b0037bddd0562eso2250625wml.1
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 00:45:55 -0800 (PST)
+        Fri, 11 Feb 2022 03:46:21 -0500
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56228E80;
+        Fri, 11 Feb 2022 00:46:20 -0800 (PST)
+Received: by mail-vs1-xe2c.google.com with SMTP id m24so9408228vsp.7;
+        Fri, 11 Feb 2022 00:46:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EEi9rjZri+XFBAgqsZ4Dh190lYm+ILIASE0FNRwP8Bc=;
+        b=cFM3Bo93sb4bZ5QWlYpqdSzufSzk0QZyX40jtGtPY8m7paLI35o0hPq9I1jrJy0Wdp
+         iwXU11s96NYMpWRFcxaZOpOc+ZxQ0mzu47f0b9h6rHqrhxNgFoDfstTf8sqqeu1u66Fo
+         hYpFaktZhhi3XifvracAqeotZx87nLuOeEzW79zXtHRbZl9EUYxvE6WVMd4TWE6WaWlV
+         +xcCNM8T1OQpCU7utzg9IvVpiuY83nqcXawNIA1+DZyYfc0lWevHHsLNlS0dVOoJAhHs
+         wlc7F7lpbGHwP79ZlDlcKPAdQmEkxuVkp8Pve0DOVvEm9ffy6dNgXz2aAMl6kQSFHdzE
+         2LUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=yhiejNdZNc9V7Q57Z4FGfEE9W4EtgIkRByXMCdx4jhQ=;
-        b=Eth+WDPVKG+eAoWqO5QDMQmlYHvq1obhtLsiWle8B3ZmCVvTLPc204p7tuAXZgrNev
-         PWhei6TnMs4VoKw4gbqphZntuRR99Ijzmbz+caOllOBWG8lylYS7c5Ew7d+tAujh/jfM
-         uupYOwim5aS0SwIJMFZ9qi/t027Afvf0xYxO2ZeFBlUfHzWevczp9cExaY4C7M/NScfh
-         JK7QzzDjbsEzaxCfbg1hdYNdRP+YqzLCzIIcnGgaKkGSLWKrj0gwna5Zjoe19gY5oa2A
-         MouI3WK7FrRmUIIhmcC2BcIYo8vxHmZ8qmiW7jNxjeORo1w4aEYLFzM1wCA6k+irthY3
-         mxmg==
-X-Gm-Message-State: AOAM533UeBn89s4HxTmWZ/yxs5LxIV/bR+HcJd5Y7HwRwMRsA8lV2+sT
-        TK9IWM0BvErN/wOZhpRKKAZmcutD7ZYbObZArGJ+RZuYhazhQomiSXYMH6LpPsj/vlf1vt0VzPH
-        oHPI5fV7Yf4wUvvvGqj1DZtg3
-X-Received: by 2002:adf:edc9:: with SMTP id v9mr470924wro.135.1644569154550;
-        Fri, 11 Feb 2022 00:45:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJydD7roXdtXZjQWp72Wo5fcJQ6eNKNYHlSPNx2dupK8zLBlB9eyylPxhSvKDBOJgfjPqx/X3w==
-X-Received: by 2002:adf:edc9:: with SMTP id v9mr470898wro.135.1644569154333;
-        Fri, 11 Feb 2022 00:45:54 -0800 (PST)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id az21sm3460772wmb.11.2022.02.11.00.45.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Feb 2022 00:45:53 -0800 (PST)
-Message-ID: <9ee28446-2dda-7015-1a0a-44dc8385002e@redhat.com>
-Date:   Fri, 11 Feb 2022 09:45:52 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EEi9rjZri+XFBAgqsZ4Dh190lYm+ILIASE0FNRwP8Bc=;
+        b=I7tJ7VAx41jO1VC3BW/+xF1JaaqZV94gnsay457QIVjnk3HsuLN1gTaMxvErgrR+ye
+         KbvIFi9UTDVCbP2HB6Pt3M9Bet+NH8DULdRtXQXIXxF/ZJEPoSg19gsO/Elh2Invk/7p
+         XBgdEFpmezEvdfDSVzPKbupFOZnSOM8mgDlXgVAFULGS7nDelYrH2YyA+Lic+eXnHpGb
+         jcg+tcj9/78+p1LT9B2XMGierg8xB78Sd2wZhrKT6iaQY86f/CuauTqpqkCgzGtMGZe1
+         xnFbvBe1sb+bDzgpeO/hsJANrGPbcpwXqYb0v83rQvJe9jIpsIcAvWk/1+IdKnOL1l/N
+         Kwaw==
+X-Gm-Message-State: AOAM532l+xoq9Vuv+//dg6HvwUxWGVdYI1bnIV+v+IPo4zIO2xR2tC3b
+        G7YtOLjSbWOH6FZKnjl3gJ1DjX8H2IO6gLVZIQ==
+X-Google-Smtp-Source: ABdhPJwS3UPkWHoBkGQeoYjm2Fjxk5btkaW/VYsdRqv4tooP2EqAOa4W8SISuMt7dDyz+x3iDwqnPL/QwZ0/R/eV61I=
+X-Received: by 2002:a05:6102:1611:: with SMTP id cu17mr212809vsb.28.1644569179482;
+ Fri, 11 Feb 2022 00:46:19 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 0/7] drm: Add driver for Solomon SSD130X OLED displays
-Content-Language: en-US
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-References: <20220209090314.2511959-1-javierm@redhat.com>
- <CAMuHMdVs750iE=kP1vabwgsGOb8sHc8aC5k=HwCU32CURnYktw@mail.gmail.com>
- <58ebacd2-d44d-c7e9-e752-de7815dd4cc1@redhat.com>
-In-Reply-To: <58ebacd2-d44d-c7e9-e752-de7815dd4cc1@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220211001345.3429572-1-gch981213@gmail.com>
+In-Reply-To: <20220211001345.3429572-1-gch981213@gmail.com>
+From:   Rui Salvaterra <rsalvaterra@gmail.com>
+Date:   Fri, 11 Feb 2022 08:46:08 +0000
+Message-ID: <CALjTZva7fKOzG7u4QYhZ+3ZGN2p5DV+fLh6WbFLFtSSfjKQ-ug@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: ralink: mt7621: do memory detection on KSEG1
+To:     Chuanhong Guo <gch981213@gmail.com>
+Cc:     linux-mips@vger.kernel.org,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,28 +68,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/22 13:37, Javier Martinez Canillas wrote:
+Hi, Guo,
 
-[snip]
-
-> 
->> There is still an issue with the cursor, though.
->> After doing "echo hello > /dev/tty0", the text appears, but the cursor
->> is gone. "clear > /dev/tty0" brings it back.
->>
-> 
-> Hmm, I was able to reproduce this too. Thanks for pointing it out,
-> I'll investigate what the problem is.
+On Fri, 11 Feb 2022 at 00:14, Chuanhong Guo <gch981213@gmail.com> wrote:
 >
+> It's reported that current memory detection code occasionally detects
+> larger memory under some bootloaders.
+> Current memory detection code tests whether address space wraps around
+> on KSEG0, which is unreliable because it's cached.
+>
+> Rewrite memory size detection to perform the same test on KSEG1 instead.
+> While at it, this patch also does the following two things:
+> 1. use a fixed pattern instead of a random function pointer as the magic
+>    value.
+> 2. add an additional memory write and a second comparison as part of the
+>    test to prevent possible smaller memory detection result due to
+>    leftover values in memory.
 
-I still didn't have time to dig on this for v4. But I think that the
-driver works well enough to be merged and we can then fix the issues
-that are still present in the fbdev emulation and fbcon interaction
-as a follow-up.
+[patch snipped]
 
-Best regards,
--- 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+No issues here, and it does seem to have fixed the RAM size detection
+on my Redmi AC2100. It's always been a very sporadic failure here, so
+I'll be keeping an eye on it to see if there are any further
+misdetections. :)
+In any case, feel free to add my
 
+Tested-by: Rui Salvaterra <rsalvaterra@gmail.com>
+
+Thanks,
+Rui

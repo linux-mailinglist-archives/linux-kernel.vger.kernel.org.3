@@ -2,76 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2674B269B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:59:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3334B26A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 14:02:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350334AbiBKM65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 07:58:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35030 "EHLO
+        id S1350351AbiBKNBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 08:01:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239825AbiBKM64 (ORCPT
+        with ESMTP id S236101AbiBKNBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 07:58:56 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C34DC7
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:58:55 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 88CA221138;
-        Fri, 11 Feb 2022 12:58:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1644584334; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tBJzK3Xs58/dlpJBfGVQOczArNiv86+UHyJMSbBZyMM=;
-        b=QUCYi7YabQyrGnLS1xAh+c0yPGGr1mNCY3Ifdqs9DohNrGH0s2/1g6dyylorGOlfGTdmmA
-        HzsJNN0YU/DVCl9BL1J/aQSp2sPxRx/n2vrnjm15VMCJQDT0QWrWhLTeOgFrgDEuADFjJm
-        J561b4rmtrIUTVFGWRVDGmb8AoxvdQg=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 69B78A3B83;
-        Fri, 11 Feb 2022 12:58:54 +0000 (UTC)
-Date:   Fri, 11 Feb 2022 13:58:54 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v1 02/13] printk: cpu sync always disable
- interrupts
-Message-ID: <YgZdjl0C4tPaZJkH@alley>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-3-john.ogness@linutronix.de>
+        Fri, 11 Feb 2022 08:01:47 -0500
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13F5F05;
+        Fri, 11 Feb 2022 05:01:46 -0800 (PST)
+Received: by mail-io1-f43.google.com with SMTP id s18so11187423ioa.12;
+        Fri, 11 Feb 2022 05:01:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=F/lpDU7A/oXQnioj6/dyXZqqVsCqJXhM5thA6Dejkuc=;
+        b=Vw3EfskG9OovUvCVaQnLI1Y42MeiRIiXvYeRBcJI5lPRH/bQkVuIuueTna5qSr3ZyI
+         pMMV8D0R6OKSCIhX8qwIhxwYPO0szRwAWjnI5KK8A13hsz4BkGbvYcQb9DFcXZAGLV6p
+         cchQHIMOPbmAiwyL09BMYXqHeMqFaUWjyxCN8l/zDY6MBUffzJiLeXmF6dDehtgYCytq
+         iCk30oF6usOzWFfvBO4oSjs2MhJTKT8WDqLXHahOWNaVbtrMW5GrbAiVS/DQtj4mXf2J
+         XfBGUVpPDMxUlsm3ZsEqsht9txOw8Kem2KXkc60Bt6ARTKGBOFthfaVd1SZw4HP0dfb9
+         vi+A==
+X-Gm-Message-State: AOAM530b78HJ4bvHy9Sid83g+wTby0Im3k8df5pHJYX9Cpgho+ylsmu2
+        UNu6U+e8SXoKCOrBrhctKc2rVzlQBg==
+X-Google-Smtp-Source: ABdhPJyCsJeoYeMmw5Xm+zi2G97lQ332DHNyc8xG7IhXT7F4vvP93P8LoX/BbSHuiGqUmWKMNyLlsg==
+X-Received: by 2002:a6b:4e18:: with SMTP id c24mr783163iob.179.1644584505910;
+        Fri, 11 Feb 2022 05:01:45 -0800 (PST)
+Received: from robh.at.kernel.org ([172.58.139.71])
+        by smtp.gmail.com with ESMTPSA id x10sm4250461ill.60.2022.02.11.05.01.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 05:01:45 -0800 (PST)
+Received: (nullmailer pid 216466 invoked by uid 1000);
+        Fri, 11 Feb 2022 13:01:42 -0000
+Date:   Fri, 11 Feb 2022 07:01:42 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>, Lee Jones <lee.jones@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>, Michael Walle <michael@walle.cc>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/3] dt-bindings: mfd: add "fsl,ls1028a-qds-qixis-i2c"
+ compatible to sl28cpld
+Message-ID: <YgZeNqAbdisyeT+s@robh.at.kernel.org>
+References: <20220127172105.4085950-1-vladimir.oltean@nxp.com>
+ <20220127172105.4085950-3-vladimir.oltean@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220207194323.273637-3-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220127172105.4085950-3-vladimir.oltean@nxp.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-02-07 20:49:12, John Ogness wrote:
-> The CPU sync functions are a NOP for !CONFIG_SMP. But for
-> !CONFIG_SMP they still need to disable interrupts in order to
-> preserve context within the CPU sync sections.
+On Thu, Jan 27, 2022 at 07:21:04PM +0200, Vladimir Oltean wrote:
+> The LS1028A-QDS QIXIS FPGA has no problem working with the
+> simple-mfd-i2c.c driver, so extend the list of compatible strings to
+> include that part.
 > 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml b/Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
+> index eb3b43547cb6..8c1216eb36ee 100644
+> --- a/Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
+> @@ -16,7 +16,9 @@ description: |
+>  
+>  properties:
+>    compatible:
+> -    const: kontron,sl28cpld
+> +    enum:
+> +      - fsl,ls1028a-qds-qixis-i2c
+> +      - kontron,sl28cpld
 
-Good catch!
+Is there some relationship between these besides happening to use the 
+same driver? Sharing a generic driver is not a reason to have the same 
+binding doc.
 
-It is interesting that the original code did not disable interrupts
-around __dump_stack() on non-SMP, see the commit 766c268bc6d39b8124
-("lib/dump_stack: move cpu lock to printk.c"). But it was rather
-a bug. The patch makes perfect sense.
+Your DT has a mux-controller which is undocuemnted in this binding.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-
-Best Regards,
-Petr
+Rob

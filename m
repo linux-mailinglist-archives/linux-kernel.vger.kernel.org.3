@@ -2,115 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B36794B1CD0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 04:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B00C4B1CCC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 04:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347537AbiBKDHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 22:07:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40250 "EHLO
+        id S242227AbiBKDGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 22:06:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244646AbiBKDG6 (ORCPT
+        with ESMTP id S1347550AbiBKDGQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 22:06:58 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D642647
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 19:06:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644548818; x=1676084818;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=EkJfB7vhORyeNDzWL4R0G1atL9YTI01FB+mAIw3VUYg=;
-  b=DebwYDIOgdpy1g+PFBf2xUOKhnNqGo0ht7iuo5P5XxyYxY4BRGdmyuOD
-   7poi9vBbwOh41J+zA8nYHpZYK8v9nO5RYwEkhghYJuCWySOi5RJ4ntahs
-   NWMC6/XByVB4MQjdmWUePHahRhdwv8AdnBDpiRfshnv82diompu2tDbs6
-   jt78dhjSOUs212yZYBhlAq9Z4d9bFf/5nYSGbMt2myfL4MxXbPyDVUsAs
-   dF3O5RdNut0kuUIfTnLYcHislXCqcQ2wdiSHqGrXQ5hCq2ff2JRQrWj3t
-   n4aShkzjEQ1Fq9nvahKbumH8VjwWTet662tUoBn06WzRzLMUZYIDqXyYr
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="230289523"
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="230289523"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 19:06:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="483062861"
-Received: from allen-box.sh.intel.com ([10.239.159.118])
-  by orsmga003.jf.intel.com with ESMTP; 10 Feb 2022 19:06:56 -0800
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     David Airlie <airlied@linux.ie>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Nathan Myers <ncm@cantrip.org>
-Cc:     Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH 2/2] iommu/vt-d: Remove unnecessary exported symbol
-Date:   Fri, 11 Feb 2022 11:05:31 +0800
-Message-Id: <20220211030531.2398789-3-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220211030531.2398789-1-baolu.lu@linux.intel.com>
-References: <20220211030531.2398789-1-baolu.lu@linux.intel.com>
+        Thu, 10 Feb 2022 22:06:16 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4979D2647
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 19:06:16 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id b5so7686916qtq.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 19:06:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wtoQPG3jIyNhfYs5Ug8GoOsBEXEnyAg/kCZOfo5eUW4=;
+        b=aTQRjBrtMxHqjA8dGQkttGtKl/OvztIJaTGZxxn47YkTNBCFWo7/UTFqTXotHgY3NU
+         1Oeztm+aI3Ay1vO3Xu0GlbBR2/bUyafb2Lz2hwOJFCD6LMAR71oaiepbsNTYIe+zR6Xa
+         ePz7MUEcCGSl7OKEmANSik79EWuo6//V44iBXNsthzF3M4PmN6Xg047/Z516mOCYYwl5
+         bD87MlDZ0DCYGVv49FYerymRfIh0Syil85VX33E8kDOJGGNYfy0fopp8W2fHMPb3KXro
+         7rwUVpRBLaMhZ/SbsD8CcFZmQXvQ7jaLdkWxou2ock+CF3A8DKSJe0GUSA3xlYDzYgDp
+         Scpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wtoQPG3jIyNhfYs5Ug8GoOsBEXEnyAg/kCZOfo5eUW4=;
+        b=yRS+t2qPCzA327IxfQRydgmQ1qh3CNhllH1qzrotB5Fw5lRJ0x7hQvPTp2HN882pRo
+         qp17gbBv8VYcIC9aZ2yOWqTQQwAR/OeZg8OEyX8O3ovCek70vZo0D6L2a1WKkv9qBbet
+         eNqQX15fODZg63QXqsXsXzbJ3h2Luex3dKb7yU8nbyhV80rLBXrTxmummSrI/Kdwt8IX
+         XzdHtIwLELY37MzKVQdzpfCf9ULt4aq93+ZBYpyDCEKKY2OAicA4Mg4rKGuN4b9VNoAB
+         HAAUU6yfnM23dELtExayg7A+cKDAE2oFGSM0Er9UgdKpSWWvhtyGoWlsDgjVjuypgLNd
+         sWqw==
+X-Gm-Message-State: AOAM532dZtBX1f3FICFZ8Asv8xft78TA+fzr6MYhg8gpo8Qr0g8RMMe6
+        VqTGYFRO27LMS502pB5/CX7ErD7d6PHF9xUC
+X-Google-Smtp-Source: ABdhPJxzSUy/I3v5zqlAVtjR5BiaITi+ml5Pkxod3S4XUKthVj3/cIc4iqiu1geQsoWspzLJKjjYVA==
+X-Received: by 2002:a05:622a:11ca:: with SMTP id n10mr7027854qtk.42.1644548775320;
+        Thu, 10 Feb 2022 19:06:15 -0800 (PST)
+Received: from mail.google.com ([207.246.89.135])
+        by smtp.gmail.com with ESMTPSA id u63sm10780528qkh.43.2022.02.10.19.06.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 19:06:14 -0800 (PST)
+Date:   Fri, 11 Feb 2022 11:06:13 +0800
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Changbin Du <changbin.du@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] riscv: fix oops caused by irq on/off tracer
+Message-ID: <20220211030613.s75irqxhflc25t7a@mail.google.com>
+References: <20220129004226.32868-1-changbin.du@gmail.com>
+ <YgAEb425uqy5/dw1@xhacker>
+ <20220207123850.l4r5qjswaegwisbx@mail.google.com>
+ <YgE7XRE/Uc6gTCWd@xhacker>
+ <20220208003502.62gi5xhyg6bk2t2h@mail.google.com>
+ <YgP6y99LWFSoxjHg@xhacker>
+ <20220210133758.yzebffln6j76zme6@mail.google.com>
+ <YgUuzZp/eiNoXejK@xhacker>
+ <YgUxIgMJRhJD6/GP@xhacker>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgUxIgMJRhJD6/GP@xhacker>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The exported symbol intel_iommu_gfx_mapped is not used anywhere in the
-tree. Remove it to avoid dead code.
+I reconsidered the problem and found my previous analysis is flawed. So let's re-explain.
 
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
----
- include/linux/intel-iommu.h | 1 -
- drivers/iommu/intel/iommu.c | 6 ------
- 2 files changed, 7 deletions(-)
+The fault happens on code generated by CALLER_ADDR1 (aka.__builtin_return_address(1)):
+   0xffffffff8011510e <+80>:    ld      a1,-16(s0)
+   0xffffffff80115112 <+84>:    ld      s2,-8(a1)  # <-- paging fault here,a1=0x0000000000000100
 
-diff --git a/include/linux/intel-iommu.h b/include/linux/intel-iommu.h
-index 2f8a4517c929..b8b8be58cb6b 100644
---- a/include/linux/intel-iommu.h
-+++ b/include/linux/intel-iommu.h
-@@ -789,7 +789,6 @@ extern int iommu_calculate_agaw(struct intel_iommu *iommu);
- extern int iommu_calculate_max_sagaw(struct intel_iommu *iommu);
- extern int dmar_disabled;
- extern int intel_iommu_enabled;
--extern int intel_iommu_gfx_mapped;
- #else
- static inline int iommu_calculate_agaw(struct intel_iommu *iommu)
- {
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 4b06f2f365bd..88a53140c7f1 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -311,9 +311,6 @@ static int iommu_skip_te_disable;
- #define IDENTMAP_GFX		2
- #define IDENTMAP_AZALIA		4
- 
--int intel_iommu_gfx_mapped;
--EXPORT_SYMBOL_GPL(intel_iommu_gfx_mapped);
--
- static DEFINE_XARRAY_ALLOC(device_domain_array);
- 
- /* Convert device source ID into the index of device_domain_array. */
-@@ -4070,9 +4067,6 @@ int __init intel_iommu_init(void)
- 	if (list_empty(&dmar_satc_units))
- 		pr_info("No SATC found\n");
- 
--	if (dmar_map_gfx)
--		intel_iommu_gfx_mapped = 1;
--
- 	init_no_remapping_devices();
- 
- 	ret = init_dmars();
+This because the assembly entry code doesn't setup a valid frame pointer, and the fp(aka. s0) register is used for other purpose.
+resume_kernel:
+	REG_L s0, TASK_TI_PREEMPT_COUNT(tp)
+	bnez s0, restore_all
+	REG_L s0, TASK_TI_FLAGS(tp)
+	andi s0, s0, _TIF_NEED_RESCHED
+	beqz s0, restore_all
+	call preempt_schedule_irq
+	j restore_all
+
+So, there is two solutions:
+ 1) Invoke trace_hardirqs_on/off in C function, so the compiler will take care of frame pointer. This what I did.
+ 2) Always setup vaild frame pointer in assembly entry code. I think this is what JiSheng suggested?
+
+I prefer #1 since we don't need to setup frame pointer if irqoff tracer is not enabled.
+
+On Thu, Feb 10, 2022 at 11:37:06PM +0800, Jisheng Zhang wrote:
+> On Thu, Feb 10, 2022 at 11:27:21PM +0800, Jisheng Zhang wrote:
+> > On Thu, Feb 10, 2022 at 09:37:58PM +0800, Changbin Du wrote:
+> > > On Thu, Feb 10, 2022 at 01:32:59AM +0800, Jisheng Zhang wrote:
+> > > [snip]
+> > > > Hi Changbin,
+> > > > 
+> > > > I read the code and find that current riscv frame records during
+> > > > exception isn't as completed as other architectures. riscv only
+> > > > records frames from the ret_from_exception(). If we add completed
+> > > What do you mean for 'record'?
+> > > 
+> > 
+> > stack frame record.
+> > 
+> > > > frame records as other arch do, then the issue you saw can also
+> > > > be fixed at the same time.
+> > > > 
+> > > I don't think so. The problem is __builtin_return_address(1) trigger page fault
+> > > here.
+> > 
+> > There's misunderstanding here. I interpret this bug as incomplete
+> > stackframes.
+> > 
+> > This is current riscv stackframe during exception:
+> > 
+> > high
+> >  	----------------
+> > top	|		|  <- ret_from_exception
+> > 	----------------
+> > 	|		|  <- trace_hardirqs_on
+> > 	-----------------
+> > low
+> 
+> sorry, the "top" is wrongly placed.
+>  high
+>   	----------------
+>  	|		|  <- ret_from_exception
+>  	----------------
+>  	|		|  <- trace_hardirqs_on
+>  	-----------------
+> top
+> 
+>  low
+> 
+> 
+> 
+> > 
+> > As you said, the CALLER_ADDR1 a.k.a __builtin_return_address(1) needs
+> > at least two parent call frames. 
+> > 
+> > If we complete the stackframes during exception as other arch does:
+> > 
+> > high
+> >  	----------------
+> > top	|		|  <- the synthetic stackframe from the interrupted point
+> >  	----------------
+> > 	      .....	      
+> >         ----------------
+> > 	|		|  <- ret_from_exception
+> > 	----------------
+> > 	|		|  <- trace_hardirqs_on
+> > 	-----------------
+> > low
+> 
+> ditto
+> 
+> > 
+> > 
+> > Then we meet the "at least two parent call frames" requirement. IOW, my
+> > solution solve the problem from the entry.S side. One of the advantages
+> > would be we let interrupted point show up in dump_stack() as other arch
+> > do. What I'm not sure is whether it's safe to do so now since rc3 is
+> > released.
+> > 
+
 -- 
-2.25.1
-
+Cheers,
+Changbin Du

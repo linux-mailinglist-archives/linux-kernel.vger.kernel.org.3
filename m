@@ -2,112 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E1B4B2829
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 15:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8174B282D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 15:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350982AbiBKOmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 09:42:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42210 "EHLO
+        id S1350988AbiBKOoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 09:44:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350970AbiBKOml (ORCPT
+        with ESMTP id S238660AbiBKOof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 09:42:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD038FE;
-        Fri, 11 Feb 2022 06:42:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 72C8DB82A7D;
-        Fri, 11 Feb 2022 14:42:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74E30C340E9;
-        Fri, 11 Feb 2022 14:42:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644590558;
-        bh=s/pTecxpwPSj1JZATHAN1IBVXRCtptKD60t3I7oSlqg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=snJW3VzLM7MRYLPyHK6bOjNsF0pJgsZEYVeL2SDXyz0nEq0E2BpVKxFf9iKU05R84
-         CIKst0p0ORyWeHofL0055LQWu6oKhXesdl1+DARzMqkMqXcMHmKasrYIcmaoyoe2MB
-         Y4M5OXbbgVoxzw7pOiEPuoguicEWGR9EMpEkd5lsFH2a1AaGL5C3Z5JJMA0hqF8qG/
-         y3B0dxmg4gR/OhMaDLVC6fJVD2SsV1jKrkroGHNZpEqxfnsTfRKJ68WW90hrPtHZpL
-         KlaOejDBFBjGE7zYqwdAeuAdQ9IqguJ4A/s/eKzNdBZ1rMIwLPhg1+yDeRIhvF3L+1
-         jq37C/BFH6YuA==
-Date:   Fri, 11 Feb 2022 15:42:34 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Terry Bowman <terry.bowman@amd.com>, linux@roeck-us.net,
-        linux-watchdog@vger.kernel.org, linux-i2c@vger.kernel.org,
-        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
-        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
-        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
-        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
-        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
-Subject: Re: [PATCH v5 3/9] i2c: piix4: Move port I/O region request/release
- code into functions
-Message-ID: <YgZ12hCMUlqtLKD3@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Terry Bowman <terry.bowman@amd.com>, linux@roeck-us.net,
-        linux-watchdog@vger.kernel.org, linux-i2c@vger.kernel.org,
-        andy.shevchenko@gmail.com, rafael.j.wysocki@intel.com,
-        linux-kernel@vger.kernel.org, wim@linux-watchdog.org,
-        rrichter@amd.com, thomas.lendacky@amd.com, sudheesh.mavila@amd.com,
-        Nehal-bakulchandra.Shah@amd.com, Basavaraj.Natikar@amd.com,
-        Shyam-sundar.S-k@amd.com, Mario.Limonciello@amd.com
-References: <20220209172717.178813-1-terry.bowman@amd.com>
- <20220209172717.178813-4-terry.bowman@amd.com>
- <20220211105322.180ad89d@endymion.delvare>
+        Fri, 11 Feb 2022 09:44:35 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE047B0;
+        Fri, 11 Feb 2022 06:44:33 -0800 (PST)
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nIX9t-0006Rr-V1; Fri, 11 Feb 2022 15:44:25 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nIX9t-000KZK-Kq; Fri, 11 Feb 2022 15:44:25 +0100
+Subject: Re: [PATCH bpf-next 1/2] bpf: Add some description about
+ BPF_JIT_ALWAYS_ON in Kconfig
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Cc:     Xuefeng Li <lixuefeng@loongson.cn>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1644569851-20859-1-git-send-email-yangtiezhu@loongson.cn>
+ <1644569851-20859-2-git-send-email-yangtiezhu@loongson.cn>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <4b4431d4-4ad4-19b2-dd03-688165e3d470@iogearbox.net>
+Date:   Fri, 11 Feb 2022 15:44:25 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PkwvlxkbgJDsTi5p"
-Content-Disposition: inline
-In-Reply-To: <20220211105322.180ad89d@endymion.delvare>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1644569851-20859-2-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26450/Fri Feb 11 10:24:09 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/11/22 9:57 AM, Tiezhu Yang wrote:
+> When CONFIG_BPF_JIT_ALWAYS_ON is enabled, bpf_jit_enable is permanently
+> set to 1 and setting any other value than that will return in failure.
+> 
+> Add the above description in the help text of BPF_JIT_ALWAYS_ON, and then
+> we can distinguish between BPF_JIT_ALWAYS_ON and BPF_JIT_DEFAULT_ON.
+> 
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>   kernel/bpf/Kconfig | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
+> index d24d518..88409f8 100644
+> --- a/kernel/bpf/Kconfig
+> +++ b/kernel/bpf/Kconfig
+> @@ -58,6 +58,9 @@ config BPF_JIT_ALWAYS_ON
+>   	  Enables BPF JIT and removes BPF interpreter to avoid speculative
+>   	  execution of BPF instructions by the interpreter.
+>   
+> +	  When CONFIG_BPF_JIT_ALWAYS_ON is enabled, bpf_jit_enable is permanently
+> +	  set to 1 and setting any other value than that will return in failure.
 
---PkwvlxkbgJDsTi5p
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Small nit here: lets use the full path (/proc/sys/net/core/bpf_jit_enable) in order
+to be consistent with the other descriptions in this Kconfig.
 
-> > +		if (retval)
->=20
-> Missing curly brace here, breaks the build.
+>   config BPF_JIT_DEFAULT_ON
+>   	def_bool ARCH_WANT_DEFAULT_BPF_JIT || BPF_JIT_ALWAYS_ON
+>   	depends on HAVE_EBPF_JIT && BPF_JIT
+> 
 
-Bummer, need to check why this wasn't found by my build-testing.
-
-I fixed it up and also rebased patch 6 to my change. Terry, please have
-a look that I did everything correctly once I push out later today.
-
-Thanks everyone!
-
-
---PkwvlxkbgJDsTi5p
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIGddUACgkQFA3kzBSg
-KbYvmRAAhUdcWN2s+goYkycnoB8cDn3Ged/czC8TVpwttDTjs+hdb2sMrw+WZE9R
-Tl1mW7AOUZ3HYfLVLOoZr5BAwyrFcBDTgSEk5SZG++Av1ne7swb5T8fvzwz6X/Kg
-L4MK4H7wHNK0lGP+fsn/sGuNbVzmO8bW5LajApo9azHGQQhoSPdmnWsEmNJnodLt
-Hz8BPkmXtw9jxW1enPtztPUR7xJXJyf+KrIivFo57c6SzNGQJZ+5l7QN/lqWoJ1d
-Jz8eNlH6bJCgBNSWPij9VyagyzPc+3wgD163HoYVtAEnOX8HEWt2aLVMcia0tV24
-q2cmK1lc1Tqc5UF8sevvz1ArFopUoaAPALrQmm7ehvtYbfOS7uUSVIZmOH8HosvZ
-giMNF2EKPi/i/t4mfAtJez6359AhpMup20sYZMajS0GfhzmQF4oZh8Fe0czu1qaV
-2v93Uzifvcy1tFtWKquzNHyBBH3jd2qwHyGkKbFmwj7Br279aqg0S1knB+x44e/O
-6Zy7wkoflBDBvoRiSKwMjovE5GFPdWZ2/DWwkcjee6aIvLYnvKTch+PXmDDP2/ul
-aMBQW9o74Wqfvcbn76/W27RRFjoEbTFidWpm2cxpcyQDukjlM7gpl8pB6ij/7K1H
-HdgOIjCB7yx8QE5srVZC++8lj+Ff1PZ2/sEAMj9YCJC3OP7S7rY=
-=5oBw
------END PGP SIGNATURE-----
-
---PkwvlxkbgJDsTi5p--

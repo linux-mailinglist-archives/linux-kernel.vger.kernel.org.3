@@ -2,132 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE734B241A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A56F4B2424
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:18:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349398AbiBKLRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 06:17:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40554 "EHLO
+        id S1349408AbiBKLSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 06:18:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349349AbiBKLRE (ORCPT
+        with ESMTP id S243407AbiBKLSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 06:17:04 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DA8E5E;
-        Fri, 11 Feb 2022 03:17:03 -0800 (PST)
-Date:   Fri, 11 Feb 2022 11:17:01 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644578222;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
+        Fri, 11 Feb 2022 06:18:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C253CDA
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:18:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644578291;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rRgfufVdSUKCP2kKHyjfDkGXkNj1dZAV5GKsRie9cWw=;
-        b=M/WEd5p0pMBVpw3CVRdS4qmdCzqg2LmPnKawKMOmGo7zJ1avbJ8LmCNNpcixKxrIw5ssKR
-        NI90vN2Txb+O9e1HyNUo2wqKNz8GsW4NXdKi5IqVBRkTnRVRRoCnoytNbYG+W4PzaUXPyQ
-        46ukgT5/hVRUpzM08gG+ffrnz+rM0m75PNEbj5jSNE2/McuQcBixdgIXa2G6b2f2azEjOX
-        qN5r/oVmO+crUvt1ePlpNscm3PfMDAoISYwDs1GCleKiY/XcIRNyZBGuNIpFcyfqBVXGqK
-        eu//QssycG4FfOVNI5hcrMWHudAQBUKcBfjgRnk8CbTR6EhOLZuZUU3eOOkEWA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644578222;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rRgfufVdSUKCP2kKHyjfDkGXkNj1dZAV5GKsRie9cWw=;
-        b=TUkKY39eIN4hFuaG1yFNvCSa0cw6a3oGrVgHZaW3ZJnG73ckqm9i3XvZ8cX/A4TDu8HFc2
-        YbxMQv/jOzT1icDQ==
-From:   "tip-bot2 for Minchan Kim" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] locking: Add missing __sched attributes
-Cc:     Minchan Kim <minchan@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220115231657.84828-1-minchan@kernel.org>
-References: <20220115231657.84828-1-minchan@kernel.org>
+        bh=Q7Yj/WHUmr9v6/YtpG86Ztj5f1af9VlUf1YMxG56kZI=;
+        b=VtZ9uV7gdC4SGAAzB2ANnHjs7a/oFjTnbGrS4yGKe5YfEso1teKUy4OnEJ2KQWHpRwQUnq
+        85HAZNkYECsdab3u6Hs85kaQ2YtQjT0yFBndi4vt9AAQeB+pgnmJlswXwBFzu//EcPOo2W
+        kvVgRKKgUZQLHTm0uVQpHekHgpbViHs=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-329-bQZ-hnV_O8a7Xg2Ri6euqA-1; Fri, 11 Feb 2022 06:18:10 -0500
+X-MC-Unique: bQZ-hnV_O8a7Xg2Ri6euqA-1
+Received: by mail-wm1-f69.google.com with SMTP id j39-20020a05600c1c2700b0037becd18addso2379726wms.4
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:18:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Q7Yj/WHUmr9v6/YtpG86Ztj5f1af9VlUf1YMxG56kZI=;
+        b=W8jE0v039K/7NWyJkRzIvUr39iDUYzSu83iEcCyBObL2F9q2BRpYV/mPk9oI8xrRVV
+         7BS18FLZsoDsUArKuNJRxa+hm0RpGAvf1olrgRYBw/YsxoZijywa3PC6btUrmA8U0aQO
+         Xa+BZ4Qpu8mknQPuuS51JP6/1bjtF5VtgHvjl9OeT0kqcHEMbHXLBKQmJiTDnUPiNd7S
+         O4uhJly6PNS0k5Fazk0KZz+Ne8Ddc6f+kIgB0F/FKlJkPaQ+lpUXF5gA1mEjNRnh8S3s
+         OQDmvlPsDVq1jkRcHUdsPHtyWwYcSEkwjbEdVOAMuSZOZzLEgqELOU2sG5Z8yuseFL37
+         +GSA==
+X-Gm-Message-State: AOAM533Bs6sCLQNoCwWgHDsxTVsBtByf9djQC0v4jJNmRA+OMArSYlAD
+        3iCcJbxOVDGtSGW/zgkPczAkYGYezJZAmCPwCKdvnYOKfymLBpiwOvQvtHkGzDyuEh9+YwUDvIc
+        3Jl42blJ8VuEPlpc+/IxnguqY
+X-Received: by 2002:a05:6000:16c5:: with SMTP id h5mr982879wrf.364.1644578288918;
+        Fri, 11 Feb 2022 03:18:08 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyDcgpMTGH6f6BVy2LLyhE/vujiSOoCqg6ifnUovFsPfT65EG9BHiOZVdUE59P/9kZOzEcMIw==
+X-Received: by 2002:a05:6000:16c5:: with SMTP id h5mr982863wrf.364.1644578288694;
+        Fri, 11 Feb 2022 03:18:08 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id r13sm9590084wro.89.2022.02.11.03.18.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Feb 2022 03:18:08 -0800 (PST)
+Message-ID: <94cb12a0-ba01-57b0-0aeb-9b179d89c874@redhat.com>
+Date:   Fri, 11 Feb 2022 12:18:07 +0100
 MIME-Version: 1.0
-Message-ID: <164457822108.16921.12490199519648748991.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 04/12] KVM: MMU: WARN if PAE roots linger after
+ kvm_mmu_unload
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com
+References: <20220209170020.1775368-1-pbonzini@redhat.com>
+ <20220209170020.1775368-5-pbonzini@redhat.com> <YgWdyN3uarajuLdG@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YgWdyN3uarajuLdG@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/core branch of tip:
+On 2/11/22 00:20, Sean Christopherson wrote:
+> On Wed, Feb 09, 2022, Paolo Bonzini wrote:
+>> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+>> ---
+>>   arch/x86/kvm/mmu/mmu.c | 17 +++++++++++++----
+>>   1 file changed, 13 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+>> index e0c0f0bc2e8b..7b5765ced928 100644
+>> --- a/arch/x86/kvm/mmu/mmu.c
+>> +++ b/arch/x86/kvm/mmu/mmu.c
+>> @@ -5065,12 +5065,21 @@ int kvm_mmu_load(struct kvm_vcpu *vcpu)
+>>   	return r;
+>>   }
+>>   
+>> +static void __kvm_mmu_unload(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
+>> +{
+>> +	int i;
+>> +	kvm_mmu_free_roots(vcpu, mmu, KVM_MMU_ROOTS_ALL);
+>> +	WARN_ON(VALID_PAGE(mmu->root_hpa));
+>> +	if (mmu->pae_root) {
+>> +		for (i = 0; i < 4; ++i)
+>> +			WARN_ON(IS_VALID_PAE_ROOT(mmu->pae_root[i]));
+>> +	}
+> 
+> I'm somewhat ambivalent, but if you're at all on the fence, I vote to drop this
+> one.  I've always viewed the WARN on root_hpa as gratuitous.
+> 
+> But, if it helped during development, then why not...
 
-Commit-ID:     c441e934b604a3b5f350a9104124cf6a3ba07a34
-Gitweb:        https://git.kernel.org/tip/c441e934b604a3b5f350a9104124cf6a3ba07a34
-Author:        Minchan Kim <minchan@kernel.org>
-AuthorDate:    Sat, 15 Jan 2022 15:16:57 -08:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 11 Feb 2022 12:13:55 +01:00
+Well, it was not really helping in that the WARN triggered, but rather 
+it was ruling out the more blatant violations of invariants.  The one in 
+patch 5 triggered a lot, though.
 
-locking: Add missing __sched attributes
+Paolo
 
-This patch adds __sched attributes to a few missing places
-to show blocked function rather than locking function
-in get_wchan.
-
-Signed-off-by: Minchan Kim <minchan@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220115231657.84828-1-minchan@kernel.org
----
- kernel/locking/percpu-rwsem.c | 5 +++--
- kernel/locking/rwsem.c        | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/locking/percpu-rwsem.c b/kernel/locking/percpu-rwsem.c
-index 70a32a5..c9fdae9 100644
---- a/kernel/locking/percpu-rwsem.c
-+++ b/kernel/locking/percpu-rwsem.c
-@@ -7,6 +7,7 @@
- #include <linux/rcupdate.h>
- #include <linux/sched.h>
- #include <linux/sched/task.h>
-+#include <linux/sched/debug.h>
- #include <linux/errno.h>
- 
- int __percpu_init_rwsem(struct percpu_rw_semaphore *sem,
-@@ -162,7 +163,7 @@ static void percpu_rwsem_wait(struct percpu_rw_semaphore *sem, bool reader)
- 	__set_current_state(TASK_RUNNING);
- }
- 
--bool __percpu_down_read(struct percpu_rw_semaphore *sem, bool try)
-+bool __sched __percpu_down_read(struct percpu_rw_semaphore *sem, bool try)
- {
- 	if (__percpu_down_read_trylock(sem))
- 		return true;
-@@ -211,7 +212,7 @@ static bool readers_active_check(struct percpu_rw_semaphore *sem)
- 	return true;
- }
- 
--void percpu_down_write(struct percpu_rw_semaphore *sem)
-+void __sched percpu_down_write(struct percpu_rw_semaphore *sem)
- {
- 	might_sleep();
- 	rwsem_acquire(&sem->dep_map, 0, 0, _RET_IP_);
-diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-index 69aba4a..acde5d6 100644
---- a/kernel/locking/rwsem.c
-+++ b/kernel/locking/rwsem.c
-@@ -1048,7 +1048,7 @@ out_nolock:
- /*
-  * Wait until we successfully acquire the write lock
-  */
--static struct rw_semaphore *
-+static struct rw_semaphore __sched *
- rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
- {
- 	long count;

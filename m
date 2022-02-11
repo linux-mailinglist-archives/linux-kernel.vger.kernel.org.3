@@ -2,153 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679974B2D48
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 20:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E84C44B2D4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 20:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241106AbiBKTIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 14:08:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37804 "EHLO
+        id S241959AbiBKTKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 14:10:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234187AbiBKTIw (ORCPT
+        with ESMTP id S234187AbiBKTKf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 14:08:52 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECCBCC8
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 11:08:51 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id w7so12607329ioj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 11:08:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6JLd28e+NLvwE6yBfdYj8gXKTpz4aPz6HX1YLob6zz0=;
-        b=jIFPSDD96puT+vw0LNhv65wJ7YEr8bY0vCv0LpBkiGlx1SUSYLO/sLfHDFyIHImAzG
-         /h9SSrDWWiozdtKRfir2pG3HSAc90J3C/9KERDnq9jG3lTGrtP7aVb3ziTBtGoHdfj/q
-         7LmJIVTzpgc5HNz+bMGjINrAQPe2fKiCjgFUFNXz7yw9a3jgFEbvUsnsRUu8cuh8bZ8K
-         rL2t2vQ3cizHS10jO8/dyGu1UC8D5FYveJq2yDA+rJDK+bfzVc9wryyGK9LlPvHBJyFM
-         6MdgIi1bXRDUPMpUcQjkmrAXjgqi5mhTK9Bk7CBw52FEu+qGUiO32Vq4extSiJGWreYY
-         4Dog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6JLd28e+NLvwE6yBfdYj8gXKTpz4aPz6HX1YLob6zz0=;
-        b=3aicVfjx/eqDan7MtC0I4vjguQWGUcFwz3huznXeoJBSBWrrdNqbxMkoZoIWis8r6m
-         CSKFZaWxXSFbalpEH+BsK4FQvH7DPvGsRaqE0K9IaQkum4/c/Ko1c9jcJ5+S5UbtslOS
-         ReZBvryK/H21eZ1ZGs6veS5Vk5ogH1d9ZzDPnGX+4PiVydAclqAg0yURbtYXlZ3cX6Wd
-         raRYmttPQGol8nnf4KnVbdvEDFxwoSHlLwewFqaIvdy96Gf2gcr+V/eDQpm5vfkJYcJn
-         K6aAzw6HDYQ4fwUUW/0WjgnLqSR/dYRvQIdt7pC/44uM3udn+67GEYXSlfiL8LPbd8KK
-         wjlA==
-X-Gm-Message-State: AOAM530AnW13qu/CMpV2Fl8FdYbu8CzU6NxSxmY8i8FUHZ6bPN3HPNMv
-        8UCGcSBwqRPnAV/XnkWSUNNje3zh9vX+b+j/q1KxQw==
-X-Google-Smtp-Source: ABdhPJwjPPoE2UoJiEd8CP47TnFE6isPn/wYwMgodNPtAkYB93NtYOfaYYWutD3xTmMDsmWURym++djWJJ9Mz1VKR0Y=
-X-Received: by 2002:a5e:a70e:: with SMTP id b14mr1625729iod.171.1644606530262;
- Fri, 11 Feb 2022 11:08:50 -0800 (PST)
+        Fri, 11 Feb 2022 14:10:35 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11hn2212.outbound.protection.outlook.com [52.100.171.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE84CC8;
+        Fri, 11 Feb 2022 11:10:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QJX+6InHg4luQHcK3mWmUAVMbhk61BsQ4UZs4smQsFbHRrz03te7DSk2ZhgKMzO6e7LQQxDGXooaJityM/H1WTXDdnsApqcv5FayaEuoNB6pvbvsJ8n5ZoXI+BCCsaBzo0yIeVoHmgpgSjE3M3i6Go5unNhoGWB+3TFuDgdFIZ9A0OVHy5jqdCu06ITDM++xwHwm8RDIAx69bfCEJLrlCovuCYDML6j2fhNWT5IuMYrbGFuDOJ6XVqpyM7YN0h56Ewod40EWqpzWOw7OeoQt+vnPZ3fKeQ0GNo9xXuW6Zi64wf0zSq7/EcxmfvsQHO6WFYRPsnbjAxylqIfgFgQUsQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=E2H7FsZvlexIms6S2eH+8pVnX5w4204YtMu7/Bk/uAQ=;
+ b=d2elAubck9aA9Ocwh8vs45c7i5fiAnXmtJN1ZUmv/rTMNzUV0ZcB1f/kg0n9NRXPD9uBP2nJHjCRIUGNjQRwNAVKu/ACayT2YmxBVedKi27E9GvcgiaxSxP0IA6KrkqINHnvbozikaZb9l6NCVTYi9qnObEGYWcuaqvEDKLyD03eYxBipX7wbO39jvO1NWDhJ9VScv5svWuP4QVM8LTrDd3me2N8XQLN2RN/l2D0MkytA+uksYEZgRaJrR7pI0aJSg4sjKs7g4QftEBmnCgS1TWFpTTpNbNPV0zDDHFEzHPt3P/IQFzPMsoilNPOFShrMrGnYIVVUUfHsN1PdivP2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=E2H7FsZvlexIms6S2eH+8pVnX5w4204YtMu7/Bk/uAQ=;
+ b=G2uND4Za/nQJWSTxVW0CQyus7TNiGT7OoQGSHvkwuYO/VJv46XycNqujte3F8baF8C/bPGnqIsY9Ejfcory+/KsJuapRPRmFeJ1NY0GzthHHzWfQeDp975uQB1QjWYDjA7lXRI33Mfv8a/mAfgdovknfYQvLk0CUe7dOVN8wo8C1F/tW1OQkGNWCNYv9GXlZKw/THJYXnm8kfd0nk1G3L5dESTYA1Af0XLHWTXYIyRBwoD9ueROAcTWZxyFketaC3jUfgMp+05bYkyQS9/+PJHr2K7zN9cMGFucUcALozmExUWUCfPjU7ohWI+RM4EnBUk22UWqXfuw0kXmzYGy3Uw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by CY4PR12MB1320.namprd12.prod.outlook.com (2603:10b6:903:40::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.12; Fri, 11 Feb
+ 2022 19:10:29 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::e8f4:9793:da37:1bd3%4]) with mapi id 15.20.4975.011; Fri, 11 Feb 2022
+ 19:10:29 +0000
+Date:   Fri, 11 Feb 2022 15:10:27 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        linux-rdma@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>
+Subject: Re: [PATCH 19/49] RDMA/hfi: replace cpumask_weight with
+ cpumask_empty where appropriate
+Message-ID: <20220211191027.GA653986@nvidia.com>
+References: <20220210224933.379149-1-yury.norov@gmail.com>
+ <20220210224933.379149-20-yury.norov@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210224933.379149-20-yury.norov@gmail.com>
+X-ClientProxiedBy: BL1PR13CA0028.namprd13.prod.outlook.com
+ (2603:10b6:208:256::33) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-References: <20220202014034.182008-1-mike.kravetz@oracle.com>
- <20220202014034.182008-2-mike.kravetz@oracle.com> <YgSDcmXya7vTvvZE@xz-m1.local>
- <bf1f7a47-5d57-492a-03dd-e42afe186d47@oracle.com> <YgXJ4VjYBJC9ZfbF@xz-m1.local>
-In-Reply-To: <YgXJ4VjYBJC9ZfbF@xz-m1.local>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Fri, 11 Feb 2022 11:08:14 -0800
-Message-ID: <CAJHvVcg1pFfFSggGjDCNKt6ZzS07HYNHHQMcmguZACECpBGf=Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] mm: enable MADV_DONTNEED for hugetlb mappings
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        David Hildenbrand <david@redhat.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d9ac0650-fe40-4ced-91ab-08d9ed922ad4
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1320:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB1320082D107E5D5F81F155BCC2309@CY4PR12MB1320.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?7L9WwHHOzR1ldXH6Y7eCQ0CwAC+lOr3FrifUTcLKuwPkhqTCLoAUmm8fHIoj?=
+ =?us-ascii?Q?uNLvEbMwpls4pOdZb1Cteo4bKFIrLx6wEijFDZzlmpNlPvewmZw9doUhuFo5?=
+ =?us-ascii?Q?rqJVuZTMqusyPd1oEOJWX2vrNzvdyg1LX7fl3iqo3YYuEvVaQw2RsVUi49PO?=
+ =?us-ascii?Q?65jNgPVB7VqUZBnO3k+HLaS6r5xdPtz7bw+50wJJ+dJ9xSTUmluxTVmes3qh?=
+ =?us-ascii?Q?A9p8sjWmK+FAeyULr0Soq8QQlh6BQIgN+1WX3qqCUbsLsIUR9aZ0Td7vn+50?=
+ =?us-ascii?Q?pYtizjH/3RyZpBLuPjT2nsJR34RWz18EdK34UCxuYtwpPU1DxnCRu+JmmEmx?=
+ =?us-ascii?Q?2ejkHn0Tta85wx5fy1WuAzmxU+rjyaFyFTCEs3b98revSU+VFefjvsyskpGd?=
+ =?us-ascii?Q?RIYp5dxs2aqmhWDGPtPKFZytgjCyO6RgJ9HsYD7rnVtWtNgcrnd62JpGvcs0?=
+ =?us-ascii?Q?k7AWSGeoIC4syOkmSDUJ+cvlhl3XOcSiExBSz/61ExB3veluOv109t77wzRB?=
+ =?us-ascii?Q?HB+BXKEazt9TkkakqEPqovSTTtwjcldTmUqo8aNE9uvCFP12fj4lRz029qqN?=
+ =?us-ascii?Q?XsAKqxeVLEWi6bucqCnu8cdns0tIhVC9sw/hjDN0ov4rGnrXsU96U1vykTLU?=
+ =?us-ascii?Q?2JVUVRzlxUHNRsCKunkXZMd9pKPR4rIqY3MWl0BqNrnB9okL8j5hR3u2ltVE?=
+ =?us-ascii?Q?MgcA+DiM/7GhmgUkZTxxlTUU0kIG/w9vOpx8ImSYtds69S7awTIgBsA7KLgK?=
+ =?us-ascii?Q?quZYGrQpHCEK+8EGfN82FVSDXpXIBDrdVPCgMKwCEOCfdV+621camFU304Vy?=
+ =?us-ascii?Q?Ta8C179h14DPuQhUZ8yHKzsXKoY8zsVHA4I6UhN+PEsjZw96dAah+bloyEaG?=
+ =?us-ascii?Q?jMsTRlz0fJmQk9dVtArHnx7uGhW/Y0cJKml7v5U89XmjVO3jz31m185Pd/VX?=
+ =?us-ascii?Q?bVcBah1kg0qwMvH5kXmdE30JVrrTKa8+cYtstPmGJhUoanla+W9AqPj8HsTI?=
+ =?us-ascii?Q?wX7Ms1PYQ4aevLzFK7UhT3EUtGfnWRTTm48LfhejfDhl4vU=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:OSPM;SFS:(13230001)(4636009)(366004)(186003)(1076003)(26005)(107886003)(2616005)(86362001)(508600001)(6486002)(6512007)(2906002)(36756003)(83380400001)(8936002)(7416002)(8676002)(4326008)(4744005)(33656002)(5660300002)(6506007)(54906003)(66556008)(66476007)(66946007)(316002)(6916009)(38100700002)(27376004)(16393002);DIR:OUT;SFP:1501;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Mqun1SNBF11XtOu2+mj91leW8yLuEItiBhGbE93TQBVUeXEahIN1qtjVe7z6?=
+ =?us-ascii?Q?WWcZkEzJiKySBd2eu3hgJQfGYrMRIPo8cFocaA3sLoDjc44fT18AFqn1yjqj?=
+ =?us-ascii?Q?O5Z6TUALhcjqAOP7W3C17XqLF9ggz2mKLTY8obEZjx7MOS4jbRaBN/JZUiZZ?=
+ =?us-ascii?Q?tYfWyIXDtMnJmnb/KAtWorp3ZhQOibu+11RWCc6CwUYfJ6qqLlSP9E9rtQ+l?=
+ =?us-ascii?Q?h6DAWkSWvtVaxuW0Kz2AwB1MXeizm2zDWUJ31Vm+HojOm1isIVUIZfL5FT2j?=
+ =?us-ascii?Q?DCofWsbv+l6W4hHsC3Q1Qp4BcYp0PCwZAV7oWGl8n19MHn8WHD+QVxZqP814?=
+ =?us-ascii?Q?EdshKupuhIJMWaGCFuPp6e0qfnDZExeGaTNsGn++DjTiZL9GgR6SiYi/ZyO5?=
+ =?us-ascii?Q?9onosGPLBI2ugXGoSXGgc70RG/4iMcb9/ftB4t6YV+dQZEltgxPeTWY9ja1q?=
+ =?us-ascii?Q?cC3O3v97imbRcMPj8kyGbQYETeSiVkOhbMbceTWeg1w09F7q+j+5mJYCL3/v?=
+ =?us-ascii?Q?B2IC0MlMVjpdtqVIEmvD6weVaPvy6pCMURo3gWpCyOSAJmRAMbgaIsdanbSP?=
+ =?us-ascii?Q?6DU96jcIdzmx4C/iQJG3xUl4aAmlhgxySOaTq1mJjPxPzTyOm1KLkHvdpPdJ?=
+ =?us-ascii?Q?p3Q44/Cul1dpxmTmnDI2K923Y3KTdqPfRpl0kNUuLLlkgWHx0ZQGAGVq81cm?=
+ =?us-ascii?Q?ncMgH2XbsGEDB0QgHFKXUs1oLmlIB0VlPNWWgGR6PR+O2Fi+qRDUig4Z+Vft?=
+ =?us-ascii?Q?Sy+5lrhD7yjjYkDB2GxxRw1FdyfQ0N7KacCBK+HOdzGunYGB8zQtE3lUQU/a?=
+ =?us-ascii?Q?Db+gfQIAIs7aIxTf+iF6vvEF4hh53sBJ76piFtoCJ9siQpudZKIFTPVJfXaY?=
+ =?us-ascii?Q?9/chhOGOZUSDDdpKsnwia0GSCJiM09igx1Aq7oQXZQZ9mI2X93QHSAKQ2XNX?=
+ =?us-ascii?Q?BN+r6g8di47kev/RB0cxOj6r81j62qpWxsaXimC5P0jj5NRS7Wpx2WtfKCsU?=
+ =?us-ascii?Q?VzEqjwpmimdriQwg2Z6sAMokxAp1rwpa04ZZK2SJMILv5w6WvoSKF6jXdDp9?=
+ =?us-ascii?Q?8AKtacPLmnoG06WiXCYNDXHDoM7W/DeM84SJPCq/Sb+OuRbL3Jw1jq/nTWkU?=
+ =?us-ascii?Q?6FwvHOu9JdBMcwRdV3F4S4Zn3xajZYid04akDDOM1QSO7J8e5+LDf3h1KSrq?=
+ =?us-ascii?Q?ysyc8JdSP3tjKYL0AXF99wEpq7NyO+YFkO/cqXh77o5SEJLdu/ILAy8ZFU4M?=
+ =?us-ascii?Q?CRvJ9hx7I4VvuE38RWV15gg8b6VjM1V5MDcnZYgYaEiiDiNxq234ISYN9zUp?=
+ =?us-ascii?Q?24LR8BuXcishCQJJc+5PkDMMcm/dcKRvvt9meIXarue/OtylUPeGLtNRxugE?=
+ =?us-ascii?Q?8dBaFxAt2QzIh8vqLEbzdmBOcr7/tyiXpYf0VeBr4US14VBHR8+seJM2gCn4?=
+ =?us-ascii?Q?+c+rikDoyNz2CMl0qzRXN8gJcpqMap5ptuYJSUPRRLFlzBdDEVhuagHxASjT?=
+ =?us-ascii?Q?qv7+cf3qkUry3h6Qz6ltP1GLsNAzJt9j62s2RxsVIcv1g5TO1MPjhjC2gsj4?=
+ =?us-ascii?Q?JKXS+hWVs7Rxxnb2Dgw=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d9ac0650-fe40-4ced-91ab-08d9ed922ad4
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2022 19:10:29.3605
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6Ukk7AabhFipn6yDJy7vBoSPclbCTETqsOhcoaJgFyi0OUSdCzmI8pL0773JqA1a
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1320
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 6:29 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Thu, Feb 10, 2022 at 01:36:57PM -0800, Mike Kravetz wrote:
-> > > Another use case of DONTNEED upon hugetlbfs could be uffd-minor, because afaiu
-> > > this is the only api that can force strip the hugetlb mapped pgtable without
-> > > losing pagecache data.
-> >
-> > Correct.  However, I do not know if uffd-minor users would ever want to
-> > do this.  Perhaps?
+On Thu, Feb 10, 2022 at 02:49:03PM -0800, Yury Norov wrote:
+> drivers/infiniband/hw/hfi1/affinity.c code calls cpumask_weight() to check
+> if any bit of a given cpumask is set. We can do it more efficiently with
+> cpumask_empty() because cpumask_empty() stops traversing the cpumask as
+> soon as it finds first set bit, while cpumask_weight() counts all bits
+> unconditionally.
+> 
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+> ---
+>  drivers/infiniband/hw/hfi1/affinity.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-I talked with some colleagues, and I didn't come up with any
-production *requirement* for it, but it may be a convenience in some
-cases (make certain code cleaner, e.g. not having to unmap-and-remap
-to tear down page tables as Peter mentioned). I think Peter's
-assessment below is right.
+Applied to the rdma tree
 
->
-> My understanding is before this patch uffd-minor upon hugetlbfs requires the
-> huge file to be mapped twice, one to populate the content, then we'll be able
-> to trap MINOR faults via the other mapping.  Or we could munmap() the range and
-> remap it again on the same file offset to drop the pgtables, I think. But that
-> sounds tricky.  MINOR faults only works with pgtables dropped.
->
-> With DONTNEED upon hugetlbfs we can rely on one single mapping of the file,
-> because we can explicitly drop the pgtables of hugetlbfs files without any
-> other tricks.
->
-> However I have no real use case of it.  Initially I thought it could be useful
-> for QEMU because QEMU migration routine is run with the same mm context with
-> the hypervisor, so by default is doesn't have two mappings of the same guest
-> memory.  If QEMU wants to leverage minor faults, DONTNEED could help.).
->
-> However when I was measuring bitmap transfer (assuming that's what minor fault
-> could help with qemu's postcopy) there some months ago I found it's not as slow
-> as I thought at all..  Either I could have missed something, or we're facing
-> different problems with what it is when uffd minor is firstly proposed by Axel.
-
-Re: the bitmap, that matters most on machines with lots of RAM. For
-example, GCE offers some VMs with up to 12 *TB* of RAM
-(https://cloud.google.com/compute/docs/memory-optimized-machines), I
-think with this size of machine we see a significant benefit, as it
-may take some significant time for the bitmap to arrive over the
-network.
-
-But I think that's a bit of an edge case, most machines are not that
-big. :) I think the benefit is more often seen just in avoiding
-copies. E.g. if we find a page is already up-to-date after precopy, we
-just install PTEs, no copying or page allocation needed. And even when
-we have to go fetch a page over the network, one can imagine an RDMA
-setup where we can avoid any copies/allocations at all even in that
-case. I suppose this also has a bigger effect on larger machines, e.g.
-ones that are backed by 1G pages instead of 4k.
-
->
-> This is probably too out of topic, though..  Let me go back..
->
-> Said that, one thing I'm not sure about DONTNEED on hugetlb is whether this
-> could further abuse DONTNEED, as the original POSIX definition is as simple as:
->
->   The application expects that it will not access the specified address range
->   in the near future.
->
-> Linux did it by tearing down pgtable, which looks okay so far.  It could be a
-> bit more weird to apply it to hugetlbfs because from its definition it's a hint
-> to page reclaims, however hugetlbfs is not a target of page reclaim, neither is
-> it LRU-aware.  It goes further into some MADV_ZAP styled syscall.
->
-> I think it could still be fine as posix doesn't define that behavior
-> specifically on hugetlb so it can be defined by Linux, but not sure whether
-> there can be other implications.
->
-> Thanks,
->
-> --
-> Peter Xu
->
+Thanks,
+Jason

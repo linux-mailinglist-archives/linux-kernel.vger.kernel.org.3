@@ -2,240 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFFF74B287A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 15:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE5B4B2870
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 15:56:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351144AbiBKO4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 09:56:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49760 "EHLO
+        id S1351106AbiBKOze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 09:55:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351141AbiBKO4C (ORCPT
+        with ESMTP id S1349983AbiBKOz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 09:56:02 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C77F26D;
-        Fri, 11 Feb 2022 06:55:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644591359; x=1676127359;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=x8kCVH9lmzPkbkPirgSPb/qdJ0SRmbA8XalqtE/YsF8=;
-  b=hRsc2XmtE+vhcdZcKbO2NdnN8QiXvu9EXlHFR6AUp4W70STgGktaqnfx
-   CqtoTtGn01P/L7MkfAqjxhnxR5EmKpnYB3qpKaQBzu904gdL4q1U4jV9j
-   MsKXwkQDBxZx2/mWcyG7L84mJSzjrjHFlphj27ViLxNxrFRPxYO7wnNlF
-   o=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 Feb 2022 06:55:59 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 06:55:58 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 11 Feb 2022 06:55:58 -0800
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Fri, 11 Feb 2022 06:55:54 -0800
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <rohitkr@codeaurora.org>, <srinivas.kandagatla@linaro.org>,
-        <dianders@chromium.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [RESEND v3 2/2] arm64: dts: qcom: sc7280: add lpass lpi pin controller node
-Date:   Fri, 11 Feb 2022 20:25:05 +0530
-Message-ID: <1644591305-6235-3-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1644591305-6235-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1644591305-6235-1-git-send-email-quic_srivasam@quicinc.com>
+        Fri, 11 Feb 2022 09:55:29 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2721A131;
+        Fri, 11 Feb 2022 06:55:28 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1DF131EC03E3;
+        Fri, 11 Feb 2022 15:55:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1644591322;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=cDkjTWDqKQNWnc/zCRpQ/YG8Cct/yEFoBc7JQrQMptw=;
+        b=JuSz00olsVVdWRlZ0j1y2KYv7/pjY9O+lx/jUcm2MLE2qjB8yQXePonn3SHNbDbdw+b92L
+        q8/zE+9levcBrHllOIfG1/b/etAeXOIKwIAZRBCVMm3S1h+8pWO4OEjcSOBWWsX7cIz4NS
+        tl3iyhz39QI5sYRgPGS35NyMFJC7+oI=
+Date:   Fri, 11 Feb 2022 15:55:23 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v10 21/45] x86/mm: Add support to validate memory when
+ changing C-bit
+Message-ID: <YgZ427v95xcdOKSC@zn.tnic>
+References: <20220209181039.1262882-1-brijesh.singh@amd.com>
+ <20220209181039.1262882-22-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220209181039.1262882-22-brijesh.singh@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add LPASS LPI pinctrl node required for Audio functionality on sc7280
-based platforms.
++ Kirill.
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 147 +++++++++++++++++++++++++++++++++++
- 1 file changed, 147 insertions(+)
+On Wed, Feb 09, 2022 at 12:10:15PM -0600, Brijesh Singh wrote:
+> @@ -2012,8 +2013,22 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
+>  	 */
+>  	cpa_flush(&cpa, !this_cpu_has(X86_FEATURE_SME_COHERENT));
+>  
+> +	/*
+> +	 * To maintain the security guarantees of SEV-SNP guests, make sure
+> +	 * to invalidate the memory before clearing the encryption attribute.
+> +	 */
+> +	if (!enc)
+> +		snp_set_memory_shared(addr, numpages);
+> +
+>  	ret = __change_page_attr_set_clr(&cpa, 1);
+>  
+> +	/*
+> +	 * Now that memory is mapped encrypted in the page table, validate it
+> +	 * so that it is consistent with the above page state.
+> +	 */
+> +	if (!ret && enc)
+> +		snp_set_memory_private(addr, numpages);
+> +
+>  	/*
+>  	 * After changing the encryption attribute, we need to flush TLBs again
+>  	 * in case any speculative TLB caching occurred (but no need to flush
+> -- 
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 99d4ce2..daae5bc 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -1757,6 +1757,153 @@
- 			qcom,bcm-voters = <&apps_bcm_voter>;
- 		};
- 
-+		lpass_tlmm: pinctrl@33c0000 {
-+			compatible = "qcom,sc7280-lpass-lpi-pinctrl";
-+			reg = <0 0x33c0000 0x0 0x20000>,
-+				<0 0x3550000 0x0 0x10000>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			gpio-ranges = <&lpass_tlmm 0 0 15>;
-+
-+			#clock-cells = <1>;
-+
-+			dmic01_active: dmic01-active {
-+				clk {
-+					pins = "gpio6";
-+					function = "dmic1_clk";
-+					drive-strength = <8>;
-+					output-high;
-+				};
-+
-+				data {
-+					pins = "gpio7";
-+					function = "dmic1_data";
-+					drive-strength = <8>;
-+				};
-+			};
-+
-+			dmic01_sleep: dmic01-sleep {
-+				clk {
-+					pins = "gpio6";
-+					function = "dmic1_clk";
-+					drive-strength = <2>;
-+					bias-disable;
-+					output-low;
-+				};
-+
-+				data {
-+					pins = "gpio7";
-+					function = "dmic1_data";
-+					drive-strength = <2>;
-+					pull-down;
-+				};
-+			};
-+
-+			dmic23_active: dmic02-active {
-+				clk {
-+					pins = "gpio8";
-+					function = "dmic2_clk";
-+					drive-strength = <8>;
-+					output-high;
-+				};
-+
-+				data {
-+					pins = "gpio9";
-+					function = "dmic2_data";
-+					drive-strength = <8>;
-+				};
-+			};
-+
-+			dmic23_sleep: dmic02-sleep {
-+				clk {
-+					pins = "gpio8";
-+					function = "dmic2_clk";
-+					drive-strength = <2>;
-+					bias-disable;
-+					output-low;
-+				};
-+
-+				data {
-+					pins = "gpio9";
-+					function = "dmic2_data";
-+					drive-strength = <2>;
-+					pull-down;
-+				};
-+			};
-+
-+			rx_swr_active: rx-swr-active {
-+				clk {
-+					pins = "gpio3";
-+					function = "swr_rx_clk";
-+					drive-strength = <2>;
-+					slew-rate = <1>;
-+					bias-disable;
-+				};
-+
-+				data {
-+					pins = "gpio4", "gpio5";
-+					function = "swr_rx_data";
-+					drive-strength = <2>;
-+					slew-rate = <1>;
-+					bias-bus-hold;
-+				};
-+			};
-+
-+			rx_swr_sleep: rx-swr-sleep {
-+				clk {
-+					pins = "gpio3";
-+					function = "swr_rx_clk";
-+					drive-strength = <2>;
-+					input-enable;
-+					bias-pull-down;
-+				};
-+
-+				data {
-+					pins = "gpio4", "gpio5";
-+					function = "swr_rx_data";
-+					drive-strength = <2>;
-+					input-enable;
-+					bias-pull-down;
-+				};
-+			};
-+
-+			tx_swr_active: tx-swr-active {
-+				clk {
-+					pins = "gpio0";
-+					function = "swr_tx_clk";
-+					drive-strength = <2>;
-+					slew-rate = <1>;
-+					bias-disable;
-+				};
-+
-+				data {
-+					pins = "gpio1", "gpio2", "gpio14";
-+					function = "swr_tx_data";
-+					drive-strength = <2>;
-+					slew-rate = <1>;
-+					bias-bus-hold;
-+				};
-+			};
-+
-+			tx_swr_sleep: tx-swr-sleep {
-+				clk {
-+					pins = "gpio0";
-+					function = "swr_tx_clk";
-+					drive-strength = <2>;
-+					input-enable;
-+					bias-pull-down;
-+				};
-+
-+				data {
-+					pins = "gpio1", "gpio2", "gpio14";
-+					function = "swr_tx_data";
-+					drive-strength = <2>;
-+					input-enable;
-+					bias-bus-hold;
-+				};
-+			};
-+		};
-+
- 		gpu: gpu@3d00000 {
- 			compatible = "qcom,adreno-635.0", "qcom,adreno";
- 			reg = <0 0x03d00000 0 0x40000>,
+Right, as tglx rightfully points out here:
+
+https://lore.kernel.org/r/875ypyvz07.ffs@tglx
+
+this piece of code needs careful coordinated design so that it is clean
+for both SEV and TDX.
+
+First, as we've said here:
+
+https://lore.kernel.org/r/1d77e91c-e151-7846-6cd4-6264236ca5ae@intel.com
+
+we'd need generic functions which turn a pgprot into an encrypted or
+decrypted pgprot on both SEV and TDX so we could do:
+
+cc_pgprot_enc()
+cc_pgprot_dec()
+
+which does the required conversion on each guest type.
+
+Also, I think adding required functions to x86_platform.guest. is a very
+nice way to solve the ugly if (guest_type) querying all over the place.
+
+Also, I was thinking of sme_me_mask and the corresponding
+tdx_shared_mask I threw into the mix here:
+
+https://lore.kernel.org/r/YgFIaJ8ijgQQ04Nv@zn.tnic
+
+and we should simply add those without ifdeffery but unconditionally.
+
+Simply have them always present. They will have !0 values on the
+respective guest types and 0 otherwise. This should simplify a lot of
+code and another unconditionally present u64 won't be the end of the
+world.
+
+Any other aspect I'm missing?
+
 -- 
-2.7.4
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

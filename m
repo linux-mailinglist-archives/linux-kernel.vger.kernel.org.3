@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D42684B2B83
+	by mail.lfdr.de (Postfix) with ESMTP id 05E204B2B81
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345371AbiBKRNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 12:13:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36814 "EHLO
+        id S1351961AbiBKROq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 12:14:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352010AbiBKRNv (ORCPT
+        with ESMTP id S1345360AbiBKROo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 12:13:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E208D102;
-        Fri, 11 Feb 2022 09:13:49 -0800 (PST)
+        Fri, 11 Feb 2022 12:14:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC5A2E8;
+        Fri, 11 Feb 2022 09:14:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D2A361ACA;
-        Fri, 11 Feb 2022 17:13:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF387C340E9;
-        Fri, 11 Feb 2022 17:13:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51166B82B0E;
+        Fri, 11 Feb 2022 17:14:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABE74C340E9;
+        Fri, 11 Feb 2022 17:14:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644599628;
-        bh=hLI++bbFRo+eerzKnpdCJJ+7tVu4buscw5+N3RMzt28=;
+        s=k20201202; t=1644599680;
+        bh=rpU93oW9eR2pFieHpUXayDQW9Hf20gDzvibQ0qElxUc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qHk4P2GbzQlNn/ZUxRoQHJpryRsALMrTmeHIKSWAGnlihM2w5iKTImlB4rCtje2gu
-         u/4pYWQUAHg4xMJMuVdJJKyjLE/ujS5lbRArqzOYLn8AGnaeKI78ZykU76Kdg36dsv
-         9prklqqyiFCzH61qs1B0rInPE8EZbWoDMZwPvxVg7d+jVlgIOS+OAN/EL4wb8mSmZu
-         Mr33PSEGu+xLN5ECov7F5Km4yflMAeXew6atvHuvO7uCIm89jS6MRbj9a0/Pa6ISWV
-         mqXHgeeFCTVa+rcDI9OMqcrnQl/OHjn6raD3sPRiOPl8rPebi2xpzDZx6jDBVeMnQx
-         s01crtOQkP38A==
+        b=Rzq58ji20rPeZJfecIlKKJ8tp42cn2Ws+5AWURs9tIII010Ko3J2HX3TTmtuRjG4N
+         ywXP7Q/cw0dqE+3/fhJIoTZ3/AM/A52LTfXVXat78d/8DoaHybuvMsWW8+uKwfr+pS
+         yCdONpAw6VSswxauzGY3roWJe/fEt7wRh1vy5Y5NdaSwI94SzHBwvu0Iy4ruTzSRxR
+         bPyFJSWJ7IGbAp7EsMuDAOPR3V4OCASsZjpYM5yEbwpknwZtXtwEFtv3Sh0+2s2fq/
+         QuoXnrMhqVUwpPeQrNJzvUWCgRZvhOt01+nxfjX8vVmjMb/B4qp3ttyL0e2KTHtU/Q
+         c8hNkhtS/UhKw==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id C944D400FE; Fri, 11 Feb 2022 14:13:46 -0300 (-03)
-Date:   Fri, 11 Feb 2022 14:13:46 -0300
+        id 274FF400FE; Fri, 11 Feb 2022 14:14:38 -0300 (-03)
+Date:   Fri, 11 Feb 2022 14:14:38 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
 To:     Ian Rogers <irogers@google.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -72,14 +72,14 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Eric Dumazet <edumazet@google.com>,
         Dmitry Vyukov <dvyukov@google.com>,
         Hao Luo <haoluo@google.com>, eranian@google.com
-Subject: Re: [PATCH v3 03/22] perf dso: Make lock error check and add BUG_ONs
-Message-ID: <YgaZSk8h6rQ6MgLy@kernel.org>
+Subject: Re: [PATCH v3 04/22] perf dso: Hold lock when accessing nsinfo
+Message-ID: <YgaZfpaIHH9D7PZ8@kernel.org>
 References: <20220211103415.2737789-1-irogers@google.com>
- <20220211103415.2737789-4-irogers@google.com>
+ <20220211103415.2737789-5-irogers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220211103415.2737789-4-irogers@google.com>
+In-Reply-To: <20220211103415.2737789-5-irogers@google.com>
 X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -91,81 +91,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Feb 11, 2022 at 02:33:56AM -0800, Ian Rogers escreveu:
-> Make the pthread mutex on dso use the error check type. This allows
-> deadlock checking via the return type. Assert the returned value from
-> mutex lock is always 0.
+Em Fri, Feb 11, 2022 at 02:33:57AM -0800, Ian Rogers escreveu:
+> There may be threads racing to update dso->nsinfo:
+> https://lore.kernel.org/linux-perf-users/CAP-5=fWZH20L4kv-BwVtGLwR=Em3AOOT+Q4QGivvQuYn5AsPRg@mail.gmail.com/
+> Holding the dso->lock avoids use-after-free, memory leaks and other
+> such bugs. Apply the fix in:
+> https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/
+> of there being a missing nsinfo__put now that the accesses are data race
+> free.
 
-I think this is too blunt/pervasive source code wise, perhaps we should
-wrap this like its done with rwsem in tools/perf/util/rwsem.h to get
-away from pthreads primitives and make the source code look more like
-a kernel one and then, taking advantage of the so far ideologic
-needless indirection, add this BUG_ON if we build with "DEBUG=1" or
-something, wdyt?
+I think this is too source code polluting, see previous comment, that
+would cover this case as well, I think.
 
 - Arnaldo
  
 > Signed-off-by: Ian Rogers <irogers@google.com>
 > ---
->  tools/perf/util/dso.c    | 12 +++++++++---
->  tools/perf/util/symbol.c |  2 +-
->  2 files changed, 10 insertions(+), 4 deletions(-)
+>  tools/perf/builtin-inject.c   | 4 ++++
+>  tools/perf/util/dso.c         | 5 ++++-
+>  tools/perf/util/map.c         | 3 +++
+>  tools/perf/util/probe-event.c | 2 ++
+>  tools/perf/util/symbol.c      | 2 +-
+>  5 files changed, 14 insertions(+), 2 deletions(-)
 > 
-> diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
-> index 9cc8a1772b4b..6beccffeef7b 100644
-> --- a/tools/perf/util/dso.c
-> +++ b/tools/perf/util/dso.c
-> @@ -784,7 +784,7 @@ dso_cache__free(struct dso *dso)
->  	struct rb_root *root = &dso->data.cache;
->  	struct rb_node *next = rb_first(root);
->  
-> -	pthread_mutex_lock(&dso->lock);
-> +	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
->  	while (next) {
->  		struct dso_cache *cache;
->  
-> @@ -830,7 +830,7 @@ dso_cache__insert(struct dso *dso, struct dso_cache *new)
->  	struct dso_cache *cache;
->  	u64 offset = new->offset;
->  
-> -	pthread_mutex_lock(&dso->lock);
-> +	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
->  	while (*p != NULL) {
->  		u64 end;
->  
-> @@ -1259,6 +1259,8 @@ struct dso *dso__new_id(const char *name, struct dso_id *id)
->  	struct dso *dso = calloc(1, sizeof(*dso) + strlen(name) + 1);
->  
->  	if (dso != NULL) {
-> +		pthread_mutexattr_t lock_attr;
-> +
->  		strcpy(dso->name, name);
->  		if (id)
->  			dso->id = *id;
-> @@ -1286,8 +1288,12 @@ struct dso *dso__new_id(const char *name, struct dso_id *id)
->  		dso->root = NULL;
->  		INIT_LIST_HEAD(&dso->node);
->  		INIT_LIST_HEAD(&dso->data.open_entry);
-> -		pthread_mutex_init(&dso->lock, NULL);
-> +		pthread_mutexattr_init(&lock_attr);
-> +		pthread_mutexattr_settype(&lock_attr, PTHREAD_MUTEX_ERRORCHECK);
-> +		pthread_mutex_init(&dso->lock, &lock_attr);
-> +		pthread_mutexattr_destroy(&lock_attr);
->  		refcount_set(&dso->refcnt, 1);
-> +
+> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+> index fbf43a454cba..bede332bf0e2 100644
+> --- a/tools/perf/builtin-inject.c
+> +++ b/tools/perf/builtin-inject.c
+> @@ -363,8 +363,10 @@ static struct dso *findnew_dso(int pid, int tid, const char *filename,
 >  	}
 >  
->  	return dso;
+>  	if (dso) {
+> +		BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
+>  		nsinfo__put(dso->nsinfo);
+>  		dso->nsinfo = nsi;
+> +		pthread_mutex_unlock(&dso->lock);
+>  	} else
+>  		nsinfo__put(nsi);
+>  
+> @@ -547,7 +549,9 @@ static int dso__read_build_id(struct dso *dso)
+>  	if (dso->has_build_id)
+>  		return 0;
+>  
+> +	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
+>  	nsinfo__mountns_enter(dso->nsinfo, &nsc);
+> +	pthread_mutex_unlock(&dso->lock);
+>  	if (filename__read_build_id(dso->long_name, &dso->bid) > 0)
+>  		dso->has_build_id = true;
+>  	nsinfo__mountns_exit(&nsc);
+> diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
+> index 6beccffeef7b..b2f570adba35 100644
+> --- a/tools/perf/util/dso.c
+> +++ b/tools/perf/util/dso.c
+> @@ -548,8 +548,11 @@ static int open_dso(struct dso *dso, struct machine *machine)
+>  	int fd;
+>  	struct nscookie nsc;
+>  
+> -	if (dso->binary_type != DSO_BINARY_TYPE__BUILD_ID_CACHE)
+> +	if (dso->binary_type != DSO_BINARY_TYPE__BUILD_ID_CACHE) {
+> +		BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
+>  		nsinfo__mountns_enter(dso->nsinfo, &nsc);
+> +		pthread_mutex_unlock(&dso->lock);
+> +	}
+>  	fd = __open_dso(dso, machine);
+>  	if (dso->binary_type != DSO_BINARY_TYPE__BUILD_ID_CACHE)
+>  		nsinfo__mountns_exit(&nsc);
+> diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
+> index 8af693d9678c..ae99b52502d5 100644
+> --- a/tools/perf/util/map.c
+> +++ b/tools/perf/util/map.c
+> @@ -192,7 +192,10 @@ struct map *map__new(struct machine *machine, u64 start, u64 len,
+>  			if (!(prot & PROT_EXEC))
+>  				dso__set_loaded(dso);
+>  		}
+> +		BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
+> +		nsinfo__put(dso->nsinfo);
+>  		dso->nsinfo = nsi;
+> +		pthread_mutex_unlock(&dso->lock);
+>  
+>  		if (build_id__is_defined(bid))
+>  			dso__set_build_id(dso, bid);
+> diff --git a/tools/perf/util/probe-event.c b/tools/perf/util/probe-event.c
+> index a834918a0a0d..7444e689ece7 100644
+> --- a/tools/perf/util/probe-event.c
+> +++ b/tools/perf/util/probe-event.c
+> @@ -180,8 +180,10 @@ struct map *get_target_map(const char *target, struct nsinfo *nsi, bool user)
+>  
+>  		map = dso__new_map(target);
+>  		if (map && map->dso) {
+> +			BUG_ON(pthread_mutex_lock(&map->dso->lock) != 0);
+>  			nsinfo__put(map->dso->nsinfo);
+>  			map->dso->nsinfo = nsinfo__get(nsi);
+> +			pthread_mutex_unlock(&map->dso->lock);
+>  		}
+>  		return map;
+>  	} else {
 > diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-> index b2ed3140a1fa..43f47532696f 100644
+> index 43f47532696f..a504346feb05 100644
 > --- a/tools/perf/util/symbol.c
 > +++ b/tools/perf/util/symbol.c
-> @@ -1783,7 +1783,7 @@ int dso__load(struct dso *dso, struct map *map)
+> @@ -1774,6 +1774,7 @@ int dso__load(struct dso *dso, struct map *map)
+>  	char newmapname[PATH_MAX];
+>  	const char *map_path = dso->long_name;
+>  
+> +	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
+>  	perfmap = strncmp(dso->name, "/tmp/perf-", 10) == 0;
+>  	if (perfmap) {
+>  		if (dso->nsinfo && (dso__find_perf_map(newmapname,
+> @@ -1783,7 +1784,6 @@ int dso__load(struct dso *dso, struct map *map)
 >  	}
 >  
 >  	nsinfo__mountns_enter(dso->nsinfo, &nsc);
-> -	pthread_mutex_lock(&dso->lock);
-> +	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
+> -	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
 >  
 >  	/* check again under the dso->lock */
 >  	if (dso__loaded(dso)) {

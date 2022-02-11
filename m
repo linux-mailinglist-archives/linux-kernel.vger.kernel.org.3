@@ -2,59 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D284B2E61
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:24:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE5B4B2E70
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:29:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353204AbiBKUY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 15:24:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59346 "EHLO
+        id S1353216AbiBKU3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 15:29:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239383AbiBKUY2 (ORCPT
+        with ESMTP id S239383AbiBKU3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 15:24:28 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32D9CF1
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 12:24:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rJ8Rr0aYRoZgo11H3udzzloosGSyeuau76fk78CV/RA=; b=wNPAqI3K7RAjqsj5l0aMEIJ0vR
-        U3J4N4JAXSeKdLrEW5MhTEY39aG49n+C/LWkVSRnefcdVJtt33S7MpUNZkc8ESl525YyRg1jVZi/o
-        j25X8oLWL+iqhjeBIDIz/fDOiWsQt+MAQCG8p8YgitFcT/tAAcF1JqfcrJDUhn/ky1g1ZBr1webPC
-        c8zAIxAa6KyS49gOAhKhFqS8fFQxxHYlh0zMhx2PX6gD8JfJkxvj06Ctjp9KYOqf5ZjOii49JZGmX
-        l0eRaLNFG4EEMHxMiouss/0OIRqAhTxzbVRqNiPFwq6tdhgfzoLU5lsE+IuWUnzVfc8UOxiY0a/fy
-        uTc11xOw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nIcSt-00Ai75-Rp; Fri, 11 Feb 2022 20:24:23 +0000
-Date:   Fri, 11 Feb 2022 20:24:23 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 31/75] mm: Add lru_to_folio()
-Message-ID: <YgbF9/RCoZdnYe2j@casper.infradead.org>
-References: <20220204195852.1751729-1-willy@infradead.org>
- <20220204195852.1751729-32-willy@infradead.org>
- <YgDPLh6l2n47DpLE@infradead.org>
+        Fri, 11 Feb 2022 15:29:00 -0500
+Received: from mxout03.lancloud.ru (mxout03.lancloud.ru [45.84.86.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EC7B4;
+        Fri, 11 Feb 2022 12:28:58 -0800 (PST)
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru CEFB320A8A29
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH] sh: avoid using IRQ0 on SH3/4
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+To:     Rich Felker <dalias@libc.org>, <linux-sh@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Yoshinori Sato <ysato@users.sourceforge.jp>
+References: <2f419ed2-66b8-4098-7cd3-0fe698d341c9@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <63f06bf0-fc7b-3c5c-8af9-5adfd7628354@omp.ru>
+Date:   Fri, 11 Feb 2022 23:28:55 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgDPLh6l2n47DpLE@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <2f419ed2-66b8-4098-7cd3-0fe698d341c9@omp.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 06, 2022 at 11:50:06PM -0800, Christoph Hellwig wrote:
-> On Fri, Feb 04, 2022 at 07:58:08PM +0000, Matthew Wilcox (Oracle) wrote:
-> > Since page->lru occupies the same bytes as compound_head, any page
-> > on the LRU list must be a folio.
-> 
-> Any reason to not turn this into an inline function?
+On 2/11/22 11:15 PM, Sergey Shtylyov wrote:
 
-Good idea.  Done.
+> Using IRQ0 by the platform devices is going to be disallowed soon (see [1])
+> and the code supporting SH3/4 SoCs maps the IRQ #s starting at 0 -- modify
+> that code to start the IRQ #s from 16 instead.
+> 
+> [1] https://lore.kernel.org/all/5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru/
+> 
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> 
+> ---
+> The patch is against Linus Torvalds' 'linux.git' repo.
+> 
+>  arch/sh/kernel/cpu/sh3/entry.S |    4 ++--
+>  include/linux/sh_intc.h        |    6 +++---
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> Index: linux/arch/sh/kernel/cpu/sh3/entry.S
+> ===================================================================
+> --- linux.orig/arch/sh/kernel/cpu/sh3/entry.S
+> +++ linux/arch/sh/kernel/cpu/sh3/entry.S
+> @@ -470,9 +470,9 @@ ENTRY(handle_interrupt)
+>  	mov	r4, r0		! save vector->jmp table offset for later
+>  
+>  	shlr2	r4		! vector to IRQ# conversion
+> -	add	#-0x10, r4
+>  
+> -	cmp/pz	r4		! is it a valid IRQ?
+> +	mov	#0x10, r5
+> +	cmp/ge	r5, r4		! is it a valid IRQ?
+
+   Maybe I should've used cmp/hs... my 1st try at SH assembly! :-)
+
+[...]
+
+MBR, Sergey

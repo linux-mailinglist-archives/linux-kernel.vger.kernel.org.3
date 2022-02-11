@@ -2,183 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ACC94B2EE3
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B63BC4B2EEA
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349852AbiBKUwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 15:52:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47742 "EHLO
+        id S1350383AbiBKUxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 15:53:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244413AbiBKUws (ORCPT
+        with ESMTP id S1349812AbiBKUxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 15:52:48 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21029E;
-        Fri, 11 Feb 2022 12:52:46 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DF32193;
-        Fri, 11 Feb 2022 21:52:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644612765;
-        bh=BxJYx5WpikkOQaDeCfmlOlhvMtdE0xfPSmYxMTypAWg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jBbmZdgID2SC/tIzQ7lced2q3lS1rkOJNcm/wmIViBeKep1eX+3/1fe4wrI5EbFIf
-         Mf2koqJBYEAK6bow/JAnKYAYD6BGSwMP3pmJM6ZxBSgPFdhiMrUF9IkMufVaBSQlol
-         oPee4dnpMaBJvUiKUaATdVfp+Dzly6eOgFBb9jBc=
-Date:   Fri, 11 Feb 2022 22:52:40 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 61/66] dt-bindings: media: Add Allwinner A31 ISP
- bindings documentation
-Message-ID: <YgbMmLht/AXb5R1y@pendragon.ideasonboard.com>
-References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-62-paul.kocialkowski@bootlin.com>
- <YgE/+UmP4nJVxtRT@pendragon.ideasonboard.com>
- <YgZ9GjgasiPljg9X@robh.at.kernel.org>
+        Fri, 11 Feb 2022 15:53:18 -0500
+Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283BBCED
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 12:53:16 -0800 (PST)
+Received: from [192.168.1.18] ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id IcumnKiHYAWDQIcunnFclD; Fri, 11 Feb 2022 21:53:14 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 11 Feb 2022 21:53:14 +0100
+X-ME-IP: 90.126.236.122
+Message-ID: <9b563415-f58a-15f1-b375-64ef4e98ca05@wanadoo.fr>
+Date:   Fri, 11 Feb 2022 21:53:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YgZ9GjgasiPljg9X@robh.at.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] power: supply: da9150: use div64_u64() instead of
+ do_div()
+Content-Language: fr
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Qing Wang <wangqing@vivo.com>
+Cc:     Support Opensource <support.opensource@diasemi.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1644395986-4349-1-git-send-email-wangqing@vivo.com>
+ <20220211205026.6jhtt66wco5ht6i6@mercury.elektranox.org>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220211205026.6jhtt66wco5ht6i6@mercury.elektranox.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-
-On Fri, Feb 11, 2022 at 09:13:30AM -0600, Rob Herring wrote:
-> On Mon, Feb 07, 2022 at 05:51:21PM +0200, Laurent Pinchart wrote:
-> > On Sat, Feb 05, 2022 at 07:54:24PM +0100, Paul Kocialkowski wrote:
-> > > This introduces YAML bindings documentation for the Allwinner A31 Image
-> > > Signal Processor (ISP).
-> > > 
-> > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > > ---
-> > >  .../media/allwinner,sun6i-a31-isp.yaml        | 117 ++++++++++++++++++
-> > >  1 file changed, 117 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> > > new file mode 100644
-> > > index 000000000000..2d87022c43ce
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> > > @@ -0,0 +1,117 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-isp.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Allwinner A31 Image Signal Processor Driver (ISP) Device Tree Bindings
-> > > +
-> > > +maintainers:
-> > > +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - allwinner,sun6i-a31-isp
-> > > +      - allwinner,sun8i-v3s-isp
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupts:
-> > > +    maxItems: 1
-> > > +
-> > > +  clocks:
-> > > +    items:
-> > > +      - description: Bus Clock
-> > > +      - description: Module Clock
-> > > +      - description: DRAM Clock
-> > 
-> > That's interesting, does the ISP have a dedicated DRAM ?
-> > 
-> > > +
-> > > +  clock-names:
-> > > +    items:
-> > > +      - const: bus
-> > > +      - const: mod
-> > > +      - const: ram
-> > > +
-> > > +  resets:
-> > > +    maxItems: 1
-> > > +
-> > > +  ports:
-> > > +    $ref: /schemas/graph.yaml#/properties/ports
-> > > +
-> > > +    properties:
-> > > +      port@0:
-> > > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > > +        description: CSI0 input port
-> > > +
-> > > +        properties:
-> > > +          reg:
-> > > +            const: 0
-> > > +
-> > > +          endpoint:
-> > > +            $ref: video-interfaces.yaml#
-> > > +            unevaluatedProperties: false
-> > 
-> > If no other property than remote-endpoint are allowed, I'd write
-> > 
-> >           endpoint:
-> >             $ref: video-interfaces.yaml#
-> > 	    remote-endpoint: true
+Le 11/02/2022 à 21:50, Sebastian Reichel a écrit :
+> Hi,
 > 
-> You just mixed a node and a property...
+> On Wed, Feb 09, 2022 at 12:39:46AM -0800, Qing Wang wrote:
+>> From: Wang Qing <wangqing@vivo.com>
+>>
+>> do_div() does a 64-by-32 division.
+>> When the divisor is u64, do_div() truncates it to 32 bits, this means it
+>> can test non-zero and be truncated to zero for division.
+>>
+>> fix do_div.cocci warning:
+>> do_div() does a 64-by-32 division, please consider using div64_u64 instead.
+>>
+>> Signed-off-by: Wang Qing <wangqing@vivo.com>
+>> ---
+> 
+> Thanks, queued.
 
-Yes, I meant
+All these patches are broken and should be NACKed, fixed or reverted if 
+applied.
 
-           endpoint:
-             $ref: video-interfaces.yaml#
-             properties:
-               remote-endpoint: true
+See [1].
 
-and actually add
+CJ
 
-             additionalProperties: false
+[1]: 
+https://lore.kernel.org/linux-kernel/19b96972-cee7-937f-21ce-c78982ed2048@linaro.org/
 
-> 'remote-endpoint' is always allowed, so need to put it here and every 
-> other user. So 'unevaluatedProperties' is correct. But it would be good 
-> to define what properties from video-interfaces.yaml are used here.
+> 
+> -- Sebastian
+> 
+>>   drivers/power/supply/da9150-fg.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/power/supply/da9150-fg.c b/drivers/power/supply/da9150-fg.c
+>> index 6e36782..896491a
+>> --- a/drivers/power/supply/da9150-fg.c
+>> +++ b/drivers/power/supply/da9150-fg.c
+>> @@ -250,7 +250,7 @@ static int da9150_fg_current_avg(struct da9150_fg *fg,
+>>   	div = (u64) (sd_gain * shunt_val * 65536ULL);
+>>   	do_div(div, 1000000);
+>>   	res = (u64) (iavg * 1000000ULL);
+>> -	do_div(res, div);
+>> +	div64_u64(res, div);
+>>   
+>>   	val->intval = (int) res;
+>>   
+>> -- 
+>> 2.7.4
+>>
 
-I've been looking at this recently. The usual pattern is to write
-
-    endpoint:
-      $ref: video-interfaces.yaml#
-      unevaluatedProperties: false
-      properties:
-        hsync-polarity: true
-        vsync-polarity: true
-
-to express that the hsync-polarity and vsync-polarity properties are
-used. However, this will still validate fine if, for instance,
-data-lanes was specified in the device tree. Shouldn't we use
-additionalProperties instead of unevaluatedProperties here ? If so,
-specifying remote-endpoint: true seems needed.
-
--- 
-Regards,
-
-Laurent Pinchart

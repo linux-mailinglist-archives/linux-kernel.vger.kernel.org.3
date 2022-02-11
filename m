@@ -2,100 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF48C4B21F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A394B21F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348626AbiBKJaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 04:30:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52572 "EHLO
+        id S1348602AbiBKJ2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 04:28:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232075AbiBKJaJ (ORCPT
+        with ESMTP id S233723AbiBKJ2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 04:30:09 -0500
-X-Greylist: delayed 97042 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 01:30:06 PST
-Received: from tkylinode-sdnproxy-1.icoremail.net (tkylinode-sdnproxy-1.icoremail.net [139.162.70.28])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id D049FE18;
-        Fri, 11 Feb 2022 01:30:06 -0800 (PST)
-Received: from jleng.ambarella.net (unknown [180.169.129.130])
-        by mail-app3 (Coremail) with SMTP id cC_KCgA3_0AYLAZiLBUPDQ--.37008S2;
-        Fri, 11 Feb 2022 17:28:00 +0800 (CST)
-From:   3090101217@zju.edu.cn
-To:     masahiroy@kernel.org
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jing Leng <jleng@ambarella.com>
-Subject: [PATCH v2] kconfig: fix failing to generate auto.conf
-Date:   Fri, 11 Feb 2022 17:27:36 +0800
-Message-Id: <20220211092736.7623-1-3090101217@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <CAK7LNASrwE3FcoZGK73-0TeH-omk9Yjp1fjcMCOLPpu_xv9_og@mail.gmail.com>
-References: <CAK7LNASrwE3FcoZGK73-0TeH-omk9Yjp1fjcMCOLPpu_xv9_og@mail.gmail.com>
-X-CM-TRANSID: cC_KCgA3_0AYLAZiLBUPDQ--.37008S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uF17uFW3Kr4kCrW8urykKrg_yoW8Jw1rpa
-        1Yq345GF4UJF1fCayUJas7u345G3sag3ySgas0vw1xAr1Ikr40k39IkryFgFs8WrZ7JrW5
-        CFWFgFWfGw47AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBSb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAac4AC62xK8xCEY4vEwIxC4wAac4AC6xC2jxv24VCS
-        YI8q64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-        WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-        bVWUJVW8JwACjcxG0xvY0x0EwIxGrwAKzVCY07xG64k0F24lc2xSY4AK67AK6r4fMxAIw2
-        8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
-        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrw
-        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
-        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
-        80aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUxWSoDUUUU
-X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwQRBVNG3FHYyQAGsc
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Fri, 11 Feb 2022 04:28:22 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE045CE7;
+        Fri, 11 Feb 2022 01:28:21 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id c8-20020a17090a674800b001b91184b732so8880376pjm.5;
+        Fri, 11 Feb 2022 01:28:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gMqMmpWnTzniWqKEMO7UBChWrAVFntZ90Cuy2eCOt8k=;
+        b=iekSr8ajpH5NTm5HGsXvXjMg2IDKsYie/oY3pGant7hB4r4ijuxhEJUxiPP5axPlYP
+         UxYxVQMGGSBwi+12z+EZHr4lsodIMtXMhsYJO39/YmnQIIkcUGqp/DZMdXbGU7IfM30L
+         hZoLBCqUnkhsgJR1URTWUPxq2jbW5xQ+xx4ul47OGoTKW07h4ptPgwbTAmFfJBSZoL7N
+         LRbo1ELTnZjEGU/6S6eXdVITLLPRAltjIIZBSnSsA/sIqcozSv2COkc2AnjCDs1Z9Z47
+         MzW6Y38pzfnhAEd5JdznOP2BJ/SoAT7Le7p4idSyS4OCK4ays1Hcdlt6wK2HSRVS39NJ
+         hhJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gMqMmpWnTzniWqKEMO7UBChWrAVFntZ90Cuy2eCOt8k=;
+        b=Db3lFDLd+EEUdU3D8NKN/z3W/Z+8WlvQAaSEXKgf8V1IhI8V6dQpaszRqXHqUh97l2
+         2Lq4mfW2wukpg5/4aLOpAcziN4/XPbrmYWFNDoYYgu18GEichA4q48s1lXbzaiYEKPnI
+         R15YFx3UwZljhy1O7k5CuwDq8UMcMhQ2/L2h25cdvB9Qb12XIqRaksSfPmm2pQFd77sc
+         1JF7xq+RdEgWkLQdJSOZ7dWRtPcQuzUi+OMSzPcV2iGtrEmlWs35Mb4XD2f8bOmhK/Ry
+         qxjbb6utFLffjbHCASt9tlEV7vDjEoCi4I/eSCx7bOsTOsDtg2LzXbw/vXlLQqlQpG/e
+         C3ag==
+X-Gm-Message-State: AOAM530BoB4jzk76NkZrkEmYuuh2S17ZAL3iaVqIJedLn+w99OpeUYtp
+        uYeeBTSUS7jcgz/8EjC43Pw=
+X-Google-Smtp-Source: ABdhPJxPq3pxZbwhabvWFyW/mYI43XuCI5oucnUwD/44di+jlx7PcGq16GZcWgE91kDQ8KxiiMCT8A==
+X-Received: by 2002:a17:90b:3ec4:: with SMTP id rm4mr435248pjb.65.1644571700997;
+        Fri, 11 Feb 2022 01:28:20 -0800 (PST)
+Received: from localhost.localdomain (61-231-111-88.dynamic-ip.hinet.net. [61.231.111.88])
+        by smtp.gmail.com with ESMTPSA id 13sm25704040pfm.161.2022.02.11.01.28.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 01:28:20 -0800 (PST)
+From:   Joseph CHAMG <josright123@gmail.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joseph CHANG <josright123@gmail.com>,
+        joseph_chang@davicom.com.tw
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
+        andrew@lunn.ch, leon@kernel.org
+Subject: [PATCH v20, 0/2] ADD DM9051 ETHERNET DRIVER
+Date:   Fri, 11 Feb 2022 17:27:54 +0800
+Message-Id: <20220211092756.27274-1-josright123@gmail.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jing Leng <jleng@ambarella.com>
+DM9051 is a spi interface chip,
+need cs/mosi/miso/clock with an interrupt gpio pin
 
-When the KCONFIG_AUTOCONFIG is specified (e.g. export \
-KCONFIG_AUTOCONFIG=output/config/auto.conf), the directory of
-include/config/ will not be created, so kconfig can't create deps
-files in it and auto.conf can't be generated.
+Joseph CHAMG (2):
+  dt-bindings: net: Add Davicom dm9051 SPI ethernet controller
+  net: Add dm9051 driver
 
-Signed-off-by: Jing Leng <jleng@ambarella.com>
----
- scripts/kconfig/confdata.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ .../bindings/net/davicom,dm9051.yaml          |   62 +
+ drivers/net/ethernet/davicom/Kconfig          |   31 +
+ drivers/net/ethernet/davicom/Makefile         |    1 +
+ drivers/net/ethernet/davicom/dm9051.c         | 1260 +++++++++++++++++
+ drivers/net/ethernet/davicom/dm9051.h         |  162 +++
+ 5 files changed, 1516 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/davicom,dm9051.yaml
+ create mode 100644 drivers/net/ethernet/davicom/dm9051.c
+ create mode 100644 drivers/net/ethernet/davicom/dm9051.h
 
-diff --git a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
-index 59717be31210..974a079e8901 100644
---- a/scripts/kconfig/confdata.c
-+++ b/scripts/kconfig/confdata.c
-@@ -994,14 +994,19 @@ static int conf_write_autoconf_cmd(const char *autoconf_name)
- 
- static int conf_touch_deps(void)
- {
--	const char *name;
-+	const char *name, *tmp;
- 	struct symbol *sym;
- 	int res, i;
- 
--	strcpy(depfile_path, "include/config/");
--	depfile_prefix_len = strlen(depfile_path);
--
- 	name = conf_get_autoconfig_name();
-+	tmp = strrchr(name, '/');
-+	depfile_prefix_len = tmp ? (tmp - name) + 1 : 0;
-+	if (depfile_prefix_len + 1 > sizeof(depfile_path))
-+		return -1;
-+
-+	strncpy(depfile_path, name, depfile_prefix_len);
-+	depfile_path[depfile_prefix_len] = 0;
-+
- 	conf_read_simple(name, S_DEF_AUTO);
- 	sym_calc_value(modules_sym);
- 
+
+base-commit: 9d922f5df53844228b9f7c62f2593f4f06c0b69b
 -- 
-2.17.1
+2.20.1
 

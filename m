@@ -2,299 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7DD94B1EFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 08:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8414D4B1EFC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 08:08:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347569AbiBKHFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 02:05:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53014 "EHLO
+        id S1347583AbiBKHGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 02:06:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347563AbiBKHFw (ORCPT
+        with ESMTP id S1347575AbiBKHGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 02:05:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1197102B
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 23:05:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644563151;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=29k5SYn+mA2h6PNt5GA3x1DjygZEHaQPB/zFFKM7ZMI=;
-        b=VvMBRkEtmyrtW1TZSXNDNCO+pizYBX0tvPsLL+6X3BUT18SEC36cmDmfl6KUWQfXUqO0q4
-        uxtJD7dO/z/1v7rU/HDfCRflkh3Yy/jj7ONrVRUs6lgAGe1T1mxZQ50okMU/I40yvPx7DQ
-        v16cys/qthaQJoQYdLp0cRDTMlSv6us=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-556-wn2F8VcoMyqGhYs8TZxd3g-1; Fri, 11 Feb 2022 02:05:49 -0500
-X-MC-Unique: wn2F8VcoMyqGhYs8TZxd3g-1
-Received: by mail-pl1-f198.google.com with SMTP id w3-20020a170902a70300b0014cced44ad7so2886260plq.6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 23:05:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=29k5SYn+mA2h6PNt5GA3x1DjygZEHaQPB/zFFKM7ZMI=;
-        b=UkXANZwe50/e3DRIsk+D44uZ4pGmv+r9rN+FoDqGlSl2yik2lGhKqeFT/ITcZ5youu
-         VU5FbXDDWKr9LWKqIIRf1c0m9C9RaZRauu8MQVWFEEWKvcz0KTMW1MnOeUV9DwRF51uh
-         U4PB6HmhdqmbCgW1INnsq/SNTuKmAAp9w/yd8Tezncf2lDeqGj25T56Ilzaj4mwn8Iha
-         +VJH6wFPR0B2uq5ySjz7iwh6uRmvgUlmBXaZX/sT5JSnDxq4QksrXuHtXUsQcGwZgHjk
-         CtzEFy280Q1qWwvyaNwZNQ8lUQD7TpgkCgsqnCrufTomNePqdWiNxw6PZQ8n88tCNTkK
-         k3sQ==
-X-Gm-Message-State: AOAM531WcKfkqoX4Wce1505EUxiIQLEOlKTOSkBUUeB4RndMMxOTAbqU
-        vEVt546Epe1EHYz+J4mBoPF0OIJW1zAxnAvKI5NNgUEyDA5D2q6wdWDvdYGORHGiRmKAlXMD+o5
-        pudZPwikwD1WDWuqOo55FUAay
-X-Received: by 2002:a17:902:d34b:: with SMTP id l11mr214257plk.137.1644563148465;
-        Thu, 10 Feb 2022 23:05:48 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwDHdlBppHsgXHm0IvVylBjFkCJT/zhNst3oVLBd1MN7JhCOa6Oc9S27Sj1pihhf2uZcho8kg==
-X-Received: by 2002:a17:902:d34b:: with SMTP id l11mr214242plk.137.1644563148171;
-        Thu, 10 Feb 2022 23:05:48 -0800 (PST)
-Received: from [10.72.13.85] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id mg24sm4105648pjb.4.2022.02.10.23.05.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 23:05:47 -0800 (PST)
-Message-ID: <8b0b5f06-74eb-d6cb-07e2-38249e4cda92@redhat.com>
-Date:   Fri, 11 Feb 2022 15:05:40 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH v4 14/14] virtio_pci: queue_reset: support
- VIRTIO_F_RING_RESET
-Content-Language: en-US
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Fri, 11 Feb 2022 02:06:36 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE141037
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 23:06:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644563195; x=1676099195;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cNkGNTO7lyqemczwGGXCDcdGty6f622nnJU9sCxAnSI=;
+  b=ZpQ5y+lVvTUT1WFZA3q0LPaZ+1f/DwySiGscr5kCoXDTMG+XBK3F3Qrn
+   WqXVzE5fXxZ38PcqXw3JLTPtHzcqVU70E+iCgIYnLl5CLiS7Z0rsYuHka
+   eYH9y4PtYSBiCBqokvENx4VlbDwDPiXia6i8yRAjpcyEs138ln0KlwCY9
+   lUs6t5SSntmKhoIdwEhvVnOOtuyynbficrSngawtQYDfKysCJfkLZz6Tv
+   7W7/lello+AQR8iAhh1vGbs2LBbjSZefyktBRMlk4IlA2MQlsmJebjNzM
+   2mXGFja/pICP2vrb3ccBRTvEXJ4V5qnbOnSj+RdeBe9sNZxu7pygOBs1P
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="237080188"
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="237080188"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 23:06:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="483176474"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 10 Feb 2022 23:06:33 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nIQ0m-0004GC-Ns; Fri, 11 Feb 2022 07:06:32 +0000
+Date:   Fri, 11 Feb 2022 15:06:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        virtualization@lists.linux-foundation.org
-References: <20220209122901.51790-1-xuanzhuo@linux.alibaba.com>
- <20220209122901.51790-15-xuanzhuo@linux.alibaba.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220209122901.51790-15-xuanzhuo@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [jlayton:ceph-fscrypt 57/57] net/ceph/messenger_v2.c:1787:5: error:
+ incomplete definition of type 'struct cepn_connection'
+Message-ID: <202202111558.NeRjba8E-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-fscrypt
+head:   adf69efebc954db1aa7af7b93febbc2a1b51dc6c
+commit: adf69efebc954db1aa7af7b93febbc2a1b51dc6c [57/57] libceph: define a structure to track SPARSE_READ reply processing
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220211/202202111558.NeRjba8E-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f774697c85d6a352dcea013f46a99f9fe31)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=adf69efebc954db1aa7af7b93febbc2a1b51dc6c
+        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
+        git fetch --no-tags jlayton ceph-fscrypt
+        git checkout adf69efebc954db1aa7af7b93febbc2a1b51dc6c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/
 
-在 2022/2/9 下午8:29, Xuan Zhuo 写道:
-> This patch implements virtio pci support for QUEUE RESET.
->
-> Performing reset on a queue is divided into these steps:
->
-> 1. reset_vq: reset one vq
-> 2. recycle the buffer from vq by virtqueue_detach_unused_buf()
-> 3. release the ring of the vq by vring_release_virtqueue()
-> 4. enable_reset_vq: re-enable the reset queue
->
-> This patch implements reset_vq, enable_reset_vq in the pci scenario
->
-> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> ---
->   drivers/virtio/virtio_pci_common.c |  8 +--
->   drivers/virtio/virtio_pci_modern.c | 80 ++++++++++++++++++++++++++++--
->   drivers/virtio/virtio_ring.c       |  2 +
->   include/linux/virtio.h             |  1 +
->   4 files changed, 85 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
-> index cb01eb0cb2e4..303637ac4914 100644
-> --- a/drivers/virtio/virtio_pci_common.c
-> +++ b/drivers/virtio/virtio_pci_common.c
-> @@ -255,9 +255,11 @@ static void vp_del_vq(struct virtqueue *vq)
->   	struct virtio_pci_vq_info *info = vp_dev->vqs[vq->index];
->   	unsigned long flags;
->   
-> -	spin_lock_irqsave(&vp_dev->lock, flags);
-> -	list_del(&info->node);
-> -	spin_unlock_irqrestore(&vp_dev->lock, flags);
-> +	if (!vq->reset) {
-> +		spin_lock_irqsave(&vp_dev->lock, flags);
-> +		list_del(&info->node);
-> +		spin_unlock_irqrestore(&vp_dev->lock, flags);
-> +	}
->   
->   	vp_dev->del_vq(info);
->   	kfree(info);
-> diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
-> index d29d40bf0b45..cc45515eda50 100644
-> --- a/drivers/virtio/virtio_pci_modern.c
-> +++ b/drivers/virtio/virtio_pci_modern.c
-> @@ -34,6 +34,9 @@ static void vp_transport_features(struct virtio_device *vdev, u64 features)
->   	if ((features & BIT_ULL(VIRTIO_F_SR_IOV)) &&
->   			pci_find_ext_capability(pci_dev, PCI_EXT_CAP_ID_SRIOV))
->   		__virtio_set_bit(vdev, VIRTIO_F_SR_IOV);
-> +
-> +	if (features & BIT_ULL(VIRTIO_F_RING_RESET))
-> +		__virtio_set_bit(vdev, VIRTIO_F_RING_RESET);
->   }
->   
->   /* virtio config->finalize_features() implementation */
-> @@ -176,6 +179,70 @@ static void vp_reset(struct virtio_device *vdev)
->   	vp_disable_cbs(vdev);
->   }
->   
-> +static int vp_modern_reset_vq(struct virtqueue *vq)
-> +{
-> +	struct virtio_pci_device *vp_dev = to_vp_device(vq->vdev);
-> +	struct virtio_pci_modern_device *mdev = &vp_dev->mdev;
-> +	struct virtio_pci_vq_info *info;
-> +	unsigned long flags;
-> +	u16 msix_vec;
-> +
-> +	if (!virtio_has_feature(vq->vdev, VIRTIO_F_RING_RESET))
-> +		return -ENOENT;
-> +
-> +	vp_modern_set_queue_reset(mdev, vq->index);
-> +
-> +	info = vp_dev->vqs[vq->index];
-> +	msix_vec = info->msix_vector;
-> +
-> +	/* Disable VQ callback. */
-> +	if (vp_dev->per_vq_vectors && msix_vec != VIRTIO_MSI_NO_VECTOR)
-> +		disable_irq(pci_irq_vector(vp_dev->pci_dev, msix_vec));
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
-I think we need a comment to explain why per_vq_mode needs to be dealt 
-with differently.
+   net/ceph/messenger_v2.c:1783:37: warning: declaration of 'struct cepn_connection' will not be visible outside of this function [-Wvisibility]
+   static int prepare_read_data(struct cepn_connection *con)
+                                       ^
+>> net/ceph/messenger_v2.c:1787:5: error: incomplete definition of type 'struct cepn_connection'
+           con->in_data_crc = -1;
+           ~~~^
+   net/ceph/messenger_v2.c:1783:37: note: forward declaration of 'struct cepn_connection'
+   static int prepare_read_data(struct cepn_connection *con)
+                                       ^
+   net/ceph/messenger_v2.c:1788:47: error: incomplete definition of type 'struct cepn_connection'
+           ret = prepare_read_data_len(con, data_len(con->in_msg));
+                                                     ~~~^
+   net/ceph/messenger_v2.c:1783:37: note: forward declaration of 'struct cepn_connection'
+   static int prepare_read_data(struct cepn_connection *con)
+                                       ^
+   net/ceph/messenger_v2.c:1790:6: error: incomplete definition of type 'struct cepn_connection'
+                   con->v2.in_state = IN_S_PREPARE_READ_DATA_CONT;
+                   ~~~^
+   net/ceph/messenger_v2.c:1783:37: note: forward declaration of 'struct cepn_connection'
+   static int prepare_read_data(struct cepn_connection *con)
+                                       ^
+>> net/ceph/messenger_v2.c:1842:24: error: use of undeclared identifier 'iter'
+           if (!iov_iter_is_bvec(iter))
+                                 ^
+>> net/ceph/messenger_v2.c:1881:10: error: implicit declaration of function 'handle_epilogue' [-Werror,-Wimplicit-function-declaration]
+                   return handle_epilogue(con);
+                          ^
+   net/ceph/messenger_v2.c:1881:10: note: did you mean 'decode_epilogue'?
+   net/ceph/messenger_v2.c:573:12: note: 'decode_epilogue' declared here
+   static int decode_epilogue(void *p, u32 *front_crc, u32 *middle_crc,
+              ^
+   net/ceph/messenger_v2.c:1898:24: error: use of undeclared identifier 'iter'
+           if (!iov_iter_is_kvec(iter))
+                                 ^
+>> net/ceph/messenger_v2.c:1951:28: error: incompatible pointer types passing 'struct ceph_connection *' to parameter of type 'struct cepn_connection *' [-Werror,-Wincompatible-pointer-types]
+                   return prepare_read_data(con);
+                                            ^~~
+   net/ceph/messenger_v2.c:1783:54: note: passing argument to parameter 'con' here
+   static int prepare_read_data(struct cepn_connection *con)
+                                                        ^
+   net/ceph/messenger_v2.c:2938:12: error: static declaration of 'handle_epilogue' follows non-static declaration
+   static int handle_epilogue(struct ceph_connection *con)
+              ^
+   net/ceph/messenger_v2.c:1881:10: note: previous implicit declaration is here
+                   return handle_epilogue(con);
+                          ^
+   net/ceph/messenger_v2.c:3012:28: error: incompatible pointer types passing 'struct ceph_connection *' to parameter of type 'struct cepn_connection *' [-Werror,-Wincompatible-pointer-types]
+                           ret = prepare_read_data(con);
+                                                   ^~~
+   net/ceph/messenger_v2.c:1783:54: note: passing argument to parameter 'con' here
+   static int prepare_read_data(struct cepn_connection *con)
+                                                        ^
+>> net/ceph/messenger_v2.c:3014:8: error: use of undeclared identifier 'IN_S_PREPARE_READ_SPARSE_DATA'
+                   case IN_S_PREPARE_READ_SPARSE_DATA:
+                        ^
+   1 warning and 10 errors generated.
 
 
-> +
-> +	/* delete vq */
-> +	spin_lock_irqsave(&vp_dev->lock, flags);
-> +	list_del(&info->node);
-> +	spin_unlock_irqrestore(&vp_dev->lock, flags);
+vim +1787 net/ceph/messenger_v2.c
 
+  1782	
+  1783	static int prepare_read_data(struct cepn_connection *con)
+  1784	{
+  1785		int ret;
+  1786	
+> 1787		con->in_data_crc = -1;
+  1788		ret = prepare_read_data_len(con, data_len(con->in_msg));
+  1789		if (ret == 0)
+  1790			con->v2.in_state = IN_S_PREPARE_READ_DATA_CONT;
+  1791		return ret;
+  1792	}
+  1793	
+  1794	static void prepare_read_data_cont(struct ceph_connection *con)
+  1795	{
+  1796		struct bio_vec bv;
+  1797	
+  1798		if (ceph_test_opt(from_msgr(con->msgr), RXBOUNCE)) {
+  1799			con->in_data_crc = crc32c(con->in_data_crc,
+  1800						  page_address(con->bounce_page),
+  1801						  con->v2.in_bvec.bv_len);
+  1802	
+  1803			get_bvec_at(&con->v2.in_cursor, &bv);
+  1804			memcpy_to_page(bv.bv_page, bv.bv_offset,
+  1805				       page_address(con->bounce_page),
+  1806				       con->v2.in_bvec.bv_len);
+  1807		} else {
+  1808			con->in_data_crc = ceph_crc32c_page(con->in_data_crc,
+  1809							    con->v2.in_bvec.bv_page,
+  1810							    con->v2.in_bvec.bv_offset,
+  1811							    con->v2.in_bvec.bv_len);
+  1812		}
+  1813	
+  1814		ceph_msg_data_advance(&con->v2.in_cursor, con->v2.in_bvec.bv_len);
+  1815		if (con->v2.in_cursor.total_resid) {
+  1816			get_bvec_at(&con->v2.in_cursor, &bv);
+  1817			if (ceph_test_opt(from_msgr(con->msgr), RXBOUNCE)) {
+  1818				bv.bv_page = con->bounce_page;
+  1819				bv.bv_offset = 0;
+  1820			}
+  1821			set_in_bvec(con, &bv);
+  1822			WARN_ON(con->v2.in_state != IN_S_PREPARE_READ_DATA_CONT);
+  1823			return;
+  1824		}
+  1825	
+  1826		/*
+  1827		 * We've read all data.  Prepare to read epilogue.
+  1828		 */
+  1829		reset_in_kvecs(con);
+  1830		add_in_kvec(con, con->v2.in_buf, CEPH_EPILOGUE_PLAIN_LEN);
+  1831		con->v2.in_state = IN_S_HANDLE_EPILOGUE;
+  1832	}
+  1833	
+  1834	static int prepare_sparse_read_data_cont(struct ceph_connection *con)
+  1835	{
+  1836		int ret;
+  1837		struct bio_vec bv;
+  1838		char *buf = NULL;
+  1839		struct iov_iter *in_iter = &con->v2.in_iter;
+  1840		u64 off = 0, len = 0;
+  1841	
+> 1842		if (!iov_iter_is_bvec(iter))
+  1843			return -EIO;
+  1844	
+  1845		if (ceph_test_opt(from_msgr(con->msgr), RXBOUNCE)) {
+  1846			con->in_data_crc = crc32c(con->in_data_crc,
+  1847						  page_address(con->bounce_page),
+  1848						  con->v2.in_bvec.bv_len);
+  1849	
+  1850			get_bvec_at(&con->v2.in_cursor, &bv);
+  1851			memcpy_to_page(bv.bv_page, bv.bv_offset,
+  1852				       page_address(con->bounce_page),
+  1853				       con->v2.in_bvec.bv_len);
+  1854		} else {
+  1855			con->in_data_crc = ceph_crc32c_page(con->in_data_crc,
+  1856							    con->v2.in_bvec.bv_page,
+  1857							    con->v2.in_bvec.bv_offset,
+  1858							    con->v2.in_bvec.bv_len);
+  1859		}
+  1860	
+  1861		if (con->v2.in_cursor.total_resid) {
+  1862			get_bvec_at(&con->v2.in_cursor, &bv);
+  1863			if (ceph_test_opt(from_msgr(con->msgr), RXBOUNCE)) {
+  1864				bv.bv_page = con->bounce_page;
+  1865				bv.bv_offset = 0;
+  1866			}
+  1867			set_in_bvec(con, &bv);
+  1868			WARN_ON(con->v2.in_state != IN_S_PREPARE_SPARSE_DATA_CONT);
+  1869			return 0;
+  1870		}
+  1871	
+  1872		/* get next extent */
+  1873		ret = con->ops->sparse_read(con, &off, &len, &buf);
+  1874		if (ret <= 0) {
+  1875			if (ret < 0)
+  1876				return ret;
+  1877	
+  1878			reset_in_kvecs(con);
+  1879			add_in_kvec(con, con->v2.in_buf, CEPH_EPILOGUE_PLAIN_LEN);
+  1880			con->v2.in_state = IN_S_HANDLE_EPILOGUE;
+> 1881			return handle_epilogue(con);
+  1882		}
+  1883	
+  1884		ret = prepare_read_data_len(con, off + len);
+  1885		if (!ret)
+  1886			ceph_msg_data_advance(&con->v2.in_cursor, off);
+  1887		return ret;
+  1888	}
+  1889	
+  1890	static int prepare_sparse_read_header(struct ceph_connection *con)
+  1891	{
+  1892		int ret;
+  1893		struct bio_vec bv;
+  1894		char *buf = NULL;
+  1895		struct iov_iter *in_iter = &con->v2.in_iter;
+  1896		u64 off = 0, len = 0;
+  1897	
+  1898		if (!iov_iter_is_kvec(iter))
+  1899			return -EIO;
+  1900	
+  1901		/* On first call, we have no kvec so don't compute crc */
+  1902		if (con->v2.in_kvec_cnt) {
+  1903			WARN_ON_ONCE(con->v2.in_kvec_cnt > 1);
+  1904			con->in_data_crc = crc32c(con->in_data_crc,
+  1905					  con->v2.in_kvecs[0].iov_base,
+  1906					  con->v2.in_kvecs[0].iov_len);
+  1907		}
+  1908	
+  1909		ret = con->ops->sparse_read(con, &off, &len, &buf);
+  1910		if (ret < 0)
+  1911			return ret;
+  1912	
+  1913		/* No actual data? */
+  1914		if (WARN_ON_ONCE(!ret))
+  1915			return -EIO;
+  1916	
+  1917		if (!buf) {
+  1918			ret = prepare_read_data_len(con, off + len);
+  1919			if (!ret) {
+  1920				ceph_msg_data_advance(&con->v2.in_cursor, off);
+  1921				con->v2.in_state = IN_S_PREPARE_SPARSE_DATA_CONT;
+  1922			}
+  1923			return ret;
+  1924		}
+  1925	
+  1926		WARN_ON_ONCE(con->v2.in_state != IN_S_PREPARE_SPARSE_DATA_HDR);
+  1927		reset_in_kvecs(con);
+  1928		add_in_kvec(con, buf, len);
+  1929		return 0;
+  1930	}
+  1931	
+  1932	static int prepare_sparse_read_data(struct ceph_connection *con)
+  1933	{
+  1934		if (WARN_ON_ONCE(!con->ops->sparse_read))
+  1935			return -EOPNOTSUPP;
+  1936	
+  1937		if (!con_secure(con))
+  1938			con->in_data_crc = -1;
+  1939	
+  1940		reset_in_kvecs(con);
+  1941		con->v2.in_state = IN_S_PREPARE_SPARSE_DATA_HDR;
+  1942		return prepare_sparse_read_header(con);
+  1943	}
+  1944	
+  1945	static int prepare_read_tail_plain(struct ceph_connection *con)
+  1946	{
+  1947		struct ceph_msg *msg = con->in_msg;
+  1948	
+  1949		if (!front_len(msg) && !middle_len(msg)) {
+  1950			WARN_ON(!data_len(msg));
+> 1951			return prepare_read_data(con);
+  1952		}
+  1953	
+  1954		reset_in_kvecs(con);
+  1955		if (front_len(msg)) {
+  1956			add_in_kvec(con, msg->front.iov_base, front_len(msg));
+  1957			WARN_ON(msg->front.iov_len != front_len(msg));
+  1958		}
+  1959		if (middle_len(msg)) {
+  1960			add_in_kvec(con, msg->middle->vec.iov_base, middle_len(msg));
+  1961			WARN_ON(msg->middle->vec.iov_len != middle_len(msg));
+  1962		}
+  1963	
+  1964		if (data_len(msg)) {
+  1965			if (msg->sparse_read)
+  1966				con->v2.in_state = IN_S_PREPARE_SPARSE_DATA;
+  1967			else
+  1968				con->v2.in_state = IN_S_PREPARE_READ_DATA;
+  1969		} else {
+  1970			add_in_kvec(con, con->v2.in_buf, CEPH_EPILOGUE_PLAIN_LEN);
+  1971			con->v2.in_state = IN_S_HANDLE_EPILOGUE;
+  1972		}
+  1973		return 0;
+  1974	}
+  1975	
 
-So I don't see where vring is freed and vp_setup_vq() may try to 
-allocate new memory, won't it be a memory leak in this case?
-
-Thanks
-
-
-> +
-> +	vq->reset = true;
-> +
-> +	INIT_LIST_HEAD(&info->node);
-> +
-> +	return 0;
-> +}
-> +
-> +static int vp_modern_enable_reset_vq(struct virtqueue *vq, u16 ring_num)
-> +{
-> +	struct virtio_pci_device *vp_dev = to_vp_device(vq->vdev);
-> +	struct virtio_pci_modern_device *mdev = &vp_dev->mdev;
-> +	struct virtio_pci_vq_info *info;
-> +	struct virtqueue *_vq;
-> +	u16 msix_vec;
-> +
-> +	if (!vq->reset)
-> +		return -EPERM;
-> +
-> +	/* check queue reset status */
-> +	if (vp_modern_get_queue_reset(mdev, vq->index) != 1)
-> +		return -EBUSY;
-> +
-> +	info = vp_dev->vqs[vq->index];
-> +	_vq = vp_setup_vq(vq->vdev, vq->index, NULL, NULL, NULL,
-> +			 info->msix_vector, ring_num);
-> +	if (IS_ERR(_vq)) {
-> +		vq->reset = true;
-> +		return PTR_ERR(_vq);
-> +	}
-> +
-> +	vp_modern_set_queue_enable(&vp_dev->mdev, vq->index, true);
-> +
-> +	msix_vec = vp_dev->vqs[vq->index]->msix_vector;
-> +	if (vp_dev->per_vq_vectors && msix_vec != VIRTIO_MSI_NO_VECTOR)
-> +		enable_irq(pci_irq_vector(vp_dev->pci_dev, msix_vec));
-> +
-> +	return 0;
-> +}
-> +
->   static u16 vp_config_vector(struct virtio_pci_device *vp_dev, u16 vector)
->   {
->   	return vp_modern_config_vector(&vp_dev->mdev, vector);
-> @@ -231,10 +298,13 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
->   				virtqueue_get_avail_addr(vq),
->   				virtqueue_get_used_addr(vq));
->   
-> -	vq->priv = (void __force *)vp_modern_map_vq_notify(mdev, index, NULL);
->   	if (!vq->priv) {
-> -		err = -ENOMEM;
-> -		goto err_map_notify;
-> +		vq->priv = (void __force *)vp_modern_map_vq_notify(mdev, index,
-> +								   NULL);
-> +		if (!vq->priv) {
-> +			err = -ENOMEM;
-> +			goto err_map_notify;
-> +		}
-
-
-This seems unrelated or an artifact of previous patches?
-
-Thanks
-
-
->   	}
->   
->   	if (msix_vec != VIRTIO_MSI_NO_VECTOR) {
-> @@ -402,6 +472,8 @@ static const struct virtio_config_ops virtio_pci_config_nodev_ops = {
->   	.set_vq_affinity = vp_set_vq_affinity,
->   	.get_vq_affinity = vp_get_vq_affinity,
->   	.get_shm_region  = vp_get_shm_region,
-> +	.reset_vq	 = vp_modern_reset_vq,
-> +	.enable_reset_vq = vp_modern_enable_reset_vq,
->   };
->   
->   static const struct virtio_config_ops virtio_pci_config_ops = {
-> @@ -420,6 +492,8 @@ static const struct virtio_config_ops virtio_pci_config_ops = {
->   	.set_vq_affinity = vp_set_vq_affinity,
->   	.get_vq_affinity = vp_get_vq_affinity,
->   	.get_shm_region  = vp_get_shm_region,
-> +	.reset_vq	 = vp_modern_reset_vq,
-> +	.enable_reset_vq = vp_modern_enable_reset_vq,
->   };
->   
->   /* the PCI probing function */
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index b8747df8dc1f..4f6028e1e2d9 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -1731,6 +1731,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
->   	vq->vq.vdev = vdev;
->   	vq->vq.num_free = num;
->   	vq->vq.index = index;
-> +	vq->vq.reset = false;
->   	vq->we_own_ring = true;
->   	vq->notify = notify;
->   	vq->weak_barriers = weak_barriers;
-> @@ -2220,6 +2221,7 @@ static int __vring_init_virtqueue(struct virtqueue *_vq,
->   	vq->vq.vdev = vdev;
->   	vq->vq.num_free = vring.num;
->   	vq->vq.index = index;
-> +	vq->vq.reset = false;
->   	vq->we_own_ring = false;
->   	vq->notify = notify;
->   	vq->weak_barriers = weak_barriers;
-> diff --git a/include/linux/virtio.h b/include/linux/virtio.h
-> index dd1657c3a488..5d4817d79f3f 100644
-> --- a/include/linux/virtio.h
-> +++ b/include/linux/virtio.h
-> @@ -32,6 +32,7 @@ struct virtqueue {
->   	unsigned int index;
->   	unsigned int num_free;
->   	void *priv;
-> +	bool reset;
->   };
->   
->   int virtqueue_add_outbuf(struct virtqueue *vq,
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

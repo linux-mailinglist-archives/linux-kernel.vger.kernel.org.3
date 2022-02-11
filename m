@@ -2,98 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9FA04B2ECA
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:52:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ACC94B2EE3
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353618AbiBKUvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 15:51:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45362 "EHLO
+        id S1349852AbiBKUwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 15:52:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353502AbiBKUv1 (ORCPT
+        with ESMTP id S244413AbiBKUws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 15:51:27 -0500
-Received: from mxout03.lancloud.ru (mxout03.lancloud.ru [45.84.86.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D266D81;
-        Fri, 11 Feb 2022 12:51:25 -0800 (PST)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 8E9F120A91FA
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: [PATCH v2] sh: avoid using IRQ0 on SH3/4
-To:     Rich Felker <dalias@libc.org>, <linux-sh@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Yoshinori Sato <ysato@users.sourceforge.jp>
-Organization: Open Mobile Platform
-Message-ID: <9382f3ca-b49a-e900-7f21-3f10b267ee4a@omp.ru>
-Date:   Fri, 11 Feb 2022 23:51:22 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Fri, 11 Feb 2022 15:52:48 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21029E;
+        Fri, 11 Feb 2022 12:52:46 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DF32193;
+        Fri, 11 Feb 2022 21:52:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1644612765;
+        bh=BxJYx5WpikkOQaDeCfmlOlhvMtdE0xfPSmYxMTypAWg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jBbmZdgID2SC/tIzQ7lced2q3lS1rkOJNcm/wmIViBeKep1eX+3/1fe4wrI5EbFIf
+         Mf2koqJBYEAK6bow/JAnKYAYD6BGSwMP3pmJM6ZxBSgPFdhiMrUF9IkMufVaBSQlol
+         oPee4dnpMaBJvUiKUaATdVfp+Dzly6eOgFBb9jBc=
+Date:   Fri, 11 Feb 2022 22:52:40 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 61/66] dt-bindings: media: Add Allwinner A31 ISP
+ bindings documentation
+Message-ID: <YgbMmLht/AXb5R1y@pendragon.ideasonboard.com>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+ <20220205185429.2278860-62-paul.kocialkowski@bootlin.com>
+ <YgE/+UmP4nJVxtRT@pendragon.ideasonboard.com>
+ <YgZ9GjgasiPljg9X@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YgZ9GjgasiPljg9X@robh.at.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using IRQ0 by the platform devices is going to be disallowed soon (see [1])
-and the code supporting SH3/4 SoCs maps the IRQ #s starting at 0 -- modify
-that code to start the IRQ #s from 16 instead.
+Hi Rob,
 
-[1] https://lore.kernel.org/all/5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru/
+On Fri, Feb 11, 2022 at 09:13:30AM -0600, Rob Herring wrote:
+> On Mon, Feb 07, 2022 at 05:51:21PM +0200, Laurent Pinchart wrote:
+> > On Sat, Feb 05, 2022 at 07:54:24PM +0100, Paul Kocialkowski wrote:
+> > > This introduces YAML bindings documentation for the Allwinner A31 Image
+> > > Signal Processor (ISP).
+> > > 
+> > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > ---
+> > >  .../media/allwinner,sun6i-a31-isp.yaml        | 117 ++++++++++++++++++
+> > >  1 file changed, 117 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> > > new file mode 100644
+> > > index 000000000000..2d87022c43ce
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+> > > @@ -0,0 +1,117 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-isp.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Allwinner A31 Image Signal Processor Driver (ISP) Device Tree Bindings
+> > > +
+> > > +maintainers:
+> > > +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - allwinner,sun6i-a31-isp
+> > > +      - allwinner,sun8i-v3s-isp
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  interrupts:
+> > > +    maxItems: 1
+> > > +
+> > > +  clocks:
+> > > +    items:
+> > > +      - description: Bus Clock
+> > > +      - description: Module Clock
+> > > +      - description: DRAM Clock
+> > 
+> > That's interesting, does the ISP have a dedicated DRAM ?
+> > 
+> > > +
+> > > +  clock-names:
+> > > +    items:
+> > > +      - const: bus
+> > > +      - const: mod
+> > > +      - const: ram
+> > > +
+> > > +  resets:
+> > > +    maxItems: 1
+> > > +
+> > > +  ports:
+> > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > +
+> > > +    properties:
+> > > +      port@0:
+> > > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > > +        description: CSI0 input port
+> > > +
+> > > +        properties:
+> > > +          reg:
+> > > +            const: 0
+> > > +
+> > > +          endpoint:
+> > > +            $ref: video-interfaces.yaml#
+> > > +            unevaluatedProperties: false
+> > 
+> > If no other property than remote-endpoint are allowed, I'd write
+> > 
+> >           endpoint:
+> >             $ref: video-interfaces.yaml#
+> > 	    remote-endpoint: true
+> 
+> You just mixed a node and a property...
 
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Yes, I meant
 
----
-The patch is against Linus Torvalds' 'linux.git' repo.
+           endpoint:
+             $ref: video-interfaces.yaml#
+             properties:
+               remote-endpoint: true
 
-Changes in version 2:
-- changed cmp/ge to cmp/hs in the assembly code.
+and actually add
 
- arch/sh/kernel/cpu/sh3/entry.S |    4 ++--
- include/linux/sh_intc.h        |    6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+             additionalProperties: false
 
-Index: linux/arch/sh/kernel/cpu/sh3/entry.S
-===================================================================
---- linux.orig/arch/sh/kernel/cpu/sh3/entry.S
-+++ linux/arch/sh/kernel/cpu/sh3/entry.S
-@@ -470,9 +470,9 @@ ENTRY(handle_interrupt)
- 	mov	r4, r0		! save vector->jmp table offset for later
- 
- 	shlr2	r4		! vector to IRQ# conversion
--	add	#-0x10, r4
- 
--	cmp/pz	r4		! is it a valid IRQ?
-+	mov	#0x10, r5
-+	cmp/hs	r5, r4		! is it a valid IRQ?
- 	bt	10f
- 
- 	/*
-Index: linux/include/linux/sh_intc.h
-===================================================================
---- linux.orig/include/linux/sh_intc.h
-+++ linux/include/linux/sh_intc.h
-@@ -13,9 +13,9 @@
- /*
-  * Convert back and forth between INTEVT and IRQ values.
-  */
--#ifdef CONFIG_CPU_HAS_INTEVT
--#define evt2irq(evt)		(((evt) >> 5) - 16)
--#define irq2evt(irq)		(((irq) + 16) << 5)
-+#ifdef CONFIG_CPU_HAS_INTEVT	/* Avoid IRQ0 (invalid for platform devices) */
-+#define evt2irq(evt)		((evt) >> 5)
-+#define irq2evt(irq)		((irq) << 5)
- #else
- #define evt2irq(evt)		(evt)
- #define irq2evt(irq)		(irq)
+> 'remote-endpoint' is always allowed, so need to put it here and every 
+> other user. So 'unevaluatedProperties' is correct. But it would be good 
+> to define what properties from video-interfaces.yaml are used here.
+
+I've been looking at this recently. The usual pattern is to write
+
+    endpoint:
+      $ref: video-interfaces.yaml#
+      unevaluatedProperties: false
+      properties:
+        hsync-polarity: true
+        vsync-polarity: true
+
+to express that the hsync-polarity and vsync-polarity properties are
+used. However, this will still validate fine if, for instance,
+data-lanes was specified in the device tree. Shouldn't we use
+additionalProperties instead of unevaluatedProperties here ? If so,
+specifying remote-endpoint: true seems needed.
+
+-- 
+Regards,
+
+Laurent Pinchart

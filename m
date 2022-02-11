@@ -2,304 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9584B4B23AC
+	by mail.lfdr.de (Postfix) with ESMTP id 45E624B23AB
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349096AbiBKKsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 05:48:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53696 "EHLO
+        id S237514AbiBKKsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 05:48:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349196AbiBKKsH (ORCPT
+        with ESMTP id S245739AbiBKKsO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 05:48:07 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA90ACFA
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:48:04 -0800 (PST)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21B9mQEM010454;
-        Fri, 11 Feb 2022 11:47:10 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=2LKI1cpPsscBKI6Hbm/RPny7KyOopIDNybIH8UcBOA8=;
- b=dgyvbmk1J49/2/ru+xBpAWH3AbqM7YpoYQ8mCOFWZcDqRXm0I+dcJQ7jBx0VpZAgoOjU
- tJytmLfCwd1E0SE/sBtmpY68cwp+3EgzXDS0f3e23UunJ6ltvt3NIuNJirkeKSRGtRLV
- r187owzN0ZZ9FROno0KyYFrYLcc3spO7n5F7A6Z7lpQLT9Zzq+kYk6fH6C9+RSxo0ov7
- wjauoPi2WbGXQQN5WS4R6DyMAYqc/wTGOycGbyn/EghzENhdUFJ8v5R7zIc0F9CAYtnM
- olh7aBo2Evs8Z77apjK3QWB5LSUPojjyYlVdJOMsBNAsAhXWOhKMdN5dOw18rKBAiz7s eQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e5ng8ga3a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Feb 2022 11:47:10 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5C79C100040;
-        Fri, 11 Feb 2022 11:47:09 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 494B1217B9C;
-        Fri, 11 Feb 2022 11:47:09 +0100 (CET)
-Received: from localhost (10.75.127.46) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 11 Feb 2022 11:47:08
- +0100
-From:   =?UTF-8?q?Rapha=C3=ABl=20Gallais-Pou?= 
-        <raphael.gallais-pou@foss.st.com>
-To:     Yannick Fertre <yannick.fertre@foss.st.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        Raphael Gallais-Pou <raphael.gallais-pou@st.com>
-Subject: [PATCH] drm/stm: ltdc: add support for CRC hashing feature
-Date:   Fri, 11 Feb 2022 11:46:20 +0100
-Message-ID: <20220211104620.421177-1-raphael.gallais-pou@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 11 Feb 2022 05:48:14 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBE5D56;
+        Fri, 11 Feb 2022 02:48:12 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id m14so14444484wrg.12;
+        Fri, 11 Feb 2022 02:48:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=bCUpXie1BjF5aw3zIaqGdHgYbe3cImW5CK/1os9UVP8=;
+        b=U0RtXGn03HuAqI1zZNVc6wTuuwXNI9w4mWCRySDb5eFW89oTnzj+MmUgzWQWsu9yDz
+         134gUuadTX6SCnqRu82HJSOdEyTIvfPR4npbbuADgbENiT5fzGmPX+CRJ3zVW7pivkmu
+         egad/5qOWZEW01EEABEqSDsuMDxCtXhQsRdjrvWTkWto9cbrQwrhNpwf2ekrAmv4Y3oK
+         Tu5gHvXPfZCKNn7I88O38/NQmgKsCtxi93m/rDsDuUtPmAQUi7Mtn6HU7KjINm2AAuJw
+         LQQazbgj1kuCiRRqHvIJsEuG3iBR9fGOfZXKzQDPRp8xKHK57IqFWMPongB6c/Gy+AJg
+         iEnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=bCUpXie1BjF5aw3zIaqGdHgYbe3cImW5CK/1os9UVP8=;
+        b=5RQj6vLKixHme+ocvnWx0JomZFmNOIgSOuvWvlA6rLW66pGIvZCp7thrP5pLr1j92m
+         0/cqKDX8WcW/cdt7hsjlWz6TWivUkXJse4jN9NmWwIHYXeSiNNHfxlp7GplfuQsTlQdK
+         fxrE8WFdMKK59rByge3ZAFRvViQDp5VgoSviOOXr4QAeTVq50lIinZlNEjK/eaUaZJfn
+         0Kxsac3j9qn+8SXWhSTxJg7cNjWDDzxqOXd4gE89itML0pwzjC+Sh5URU8/5oUQgxrDU
+         1jA18eZvSv1f+0Mrq1i5/ynnLe/Zo5kKjxTS9p8knibz51Qu5uyzJMHih6GHWmGxfkVe
+         BNDg==
+X-Gm-Message-State: AOAM533AX5I1YjS/lL3vM8oM6wxsGV0jI+vtK9dqnRXn1BM2NSEoGXIQ
+        fTyXOiY4ZksUGMmdgsuE5yQ=
+X-Google-Smtp-Source: ABdhPJwOrDq3U69i6BYs7v4S+gIA9HGlNXWo6YcKSuVeDoKdatrErtKkBn9iDuShchuyMPYq26I53A==
+X-Received: by 2002:a5d:4539:: with SMTP id j25mr934418wra.232.1644576491120;
+        Fri, 11 Feb 2022 02:48:11 -0800 (PST)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id n29sm3660426wms.8.2022.02.11.02.48.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 02:48:10 -0800 (PST)
+Date:   Fri, 11 Feb 2022 11:48:07 +0100
+From:   Corentin Labbe <clabbe.montjoie@gmail.com>
+To:     damien.lemoal@opensource.wdc.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com
+Cc:     linux-ide@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: DMA-API: tegra-ahci 70027000.sata: device driver maps memory from
+ kernel text or rodata
+Message-ID: <YgY+57iPSHo+YXHC@Red>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-11_03,2022-02-11_01,2021-12-02_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+Hello
 
-This patch adds the CRC hashing feature supported by some recent hardware
-versions of the LTDC. This is useful for test suite such as IGT-GPU-tools
-[1] where a CRTC output frame can be compared to a test reference frame
-thanks to their respective CRC hash.
+I boot my tegra-jetson-tk1 with some debug enabled and I got:
+[   46.232240] WARNING: CPU: 1 PID: 2144 at kernel/dma/debug.c:1073 check_for_illegal_area+0xec/0x180
+[   46.232255] DMA-API: tegra-ahci 70027000.sata: device driver maps memory from kernel text or rodata [addr=3f4026ed] [len=4096]
+[   46.232262] Modules linked in:
+[   46.232271] CPU: 1 PID: 2144 Comm: containerd Not tainted 5.16.9-dirty #8
+[   46.232277] Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+[   46.232283] [<c0110c24>] (unwind_backtrace) from [<c010b4d4>] (show_stack+0x10/0x14)
+[   46.232294] [<c010b4d4>] (show_stack) from [<c0ce90b0>] (dump_stack_lvl+0x58/0x70)
+[   46.232305] [<c0ce90b0>] (dump_stack_lvl) from [<c0124648>] (__warn+0xd0/0x134)
+[   46.232314] [<c0124648>] (__warn) from [<c0ce2b00>] (warn_slowpath_fmt+0x90/0xb4)
+[   46.232322] [<c0ce2b00>] (warn_slowpath_fmt) from [<c01cdcd8>] (check_for_illegal_area+0xec/0x180)
+[   46.232330] [<c01cdcd8>] (check_for_illegal_area) from [<c01cfab4>] (debug_dma_map_sg+0xa4/0x424)
+[   46.232340] [<c01cfab4>] (debug_dma_map_sg) from [<c01ca4d8>] (__dma_map_sg_attrs+0xc4/0x140)
+[   46.232349] [<c01ca4d8>] (__dma_map_sg_attrs) from [<c01ca568>] (dma_map_sg_attrs+0x14/0x20)
+[   46.232357] [<c01ca568>] (dma_map_sg_attrs) from [<c07cc408>] (ata_qc_issue+0x16c/0x414)
+[   46.232366] [<c07cc408>] (ata_qc_issue) from [<c07d64f4>] (__ata_scsi_queuecmd+0x27c/0x4c4)
+[   46.232376] [<c07d64f4>] (__ata_scsi_queuecmd) from [<c07d679c>] (ata_scsi_queuecmd+0x60/0x90)
+[   46.232385] [<c07d679c>] (ata_scsi_queuecmd) from [<c07b36bc>] (scsi_queue_rq+0x440/0xb98)
+[   46.232397] [<c07b36bc>] (scsi_queue_rq) from [<c05808fc>] (blk_mq_dispatch_rq_list+0x1d0/0x87c)
+[   46.232406] [<c05808fc>] (blk_mq_dispatch_rq_list) from [<c0586628>] (__blk_mq_do_dispatch_sched+0x14c/0x2dc)
+[   46.232415] [<c0586628>] (__blk_mq_do_dispatch_sched) from [<c0586b38>] (__blk_mq_sched_dispatch_requests+0x10c/0x168)
+[   46.232423] [<c0586b38>] (__blk_mq_sched_dispatch_requests) from [<c0586c64>] (blk_mq_sched_dispatch_requests+0x34/0x5c)
+[   46.232432] [<c0586c64>] (blk_mq_sched_dispatch_requests) from [<c057da8c>] (__blk_mq_run_hw_queue+0x5c/0xcc)
+[   46.232442] [<c057da8c>] (__blk_mq_run_hw_queue) from [<c057dc9c>] (__blk_mq_delay_run_hw_queue+0x18c/0x1b4)
+[   46.232451] [<c057dc9c>] (__blk_mq_delay_run_hw_queue) from [<c0586f80>] (blk_mq_sched_insert_requests+0xd0/0x320)
+[   46.232460] [<c0586f80>] (blk_mq_sched_insert_requests) from [<c0581604>] (blk_mq_flush_plug_list+0x1c4/0x434)
+[   46.232468] [<c0581604>] (blk_mq_flush_plug_list) from [<c0573d40>] (blk_flush_plug+0xd4/0x114)
+[   46.232475] [<c0573d40>] (blk_flush_plug) from [<c0573f9c>] (blk_finish_plug+0x1c/0x28)
+[   46.232482] [<c0573f9c>] (blk_finish_plug) from [<c0285740>] (read_pages+0x190/0x2bc)
+[   46.232493] [<c0285740>] (read_pages) from [<c0285c1c>] (page_cache_ra_unbounded+0x164/0x230)
+[   46.232501] [<c0285c1c>] (page_cache_ra_unbounded) from [<c027846c>] (filemap_fault+0x6d4/0xd04)
+[   46.232509] [<c027846c>] (filemap_fault) from [<c02bacd0>] (__do_fault+0x38/0x104)
+[   46.232519] [<c02bacd0>] (__do_fault) from [<c02c0920>] (handle_mm_fault+0xaa0/0xea8)
+[   46.232528] [<c02c0920>] (handle_mm_fault) from [<c011563c>] (do_page_fault+0x15c/0x484)
+[   46.232537] [<c011563c>] (do_page_fault) from [<c0115b2c>] (do_DataAbort+0x3c/0xb0)
+[   46.232544] [<c0115b2c>] (do_DataAbort) from [<c0100e98>] (__dabt_usr+0x58/0x60)
+[   46.232552] Exception stack(0xc6bc9fb0 to 0xc6bc9ff8)
+[   46.232558] 9fa0:                                     00000001 bea726d8 014d40e0 01911fb8
+[   46.232563] 9fc0: 00490000 0004cb15 00523858 006f6b68 00000000 b6f0c9c8 b6f0c9c8 bea72724
+[   46.232569] 9fe0: 00000000 bea72678 b6ee2cbc b6ee41ec 200d0010 ffffffff
+[   46.232573] irq event stamp: 15628
+[   46.232577] hardirqs last  enabled at (15627): [<c01dba64>] ktime_get+0x1a4/0x1c8
+[   46.232585] hardirqs last disabled at (15628): [<c0cfbfb0>] _raw_spin_lock_irqsave+0x68/0x6c
+[   46.232594] softirqs last  enabled at (15332): [<c01015d8>] __do_softirq+0x328/0x590
+[   46.232600] softirqs last disabled at (15327): [<c012cda8>] __irq_exit_rcu+0x128/0x1a8
+[   46.232607] ---[ end trace 8655230c4b3626fb ]---
 
-[1] https://cgit.freedesktop.org/drm/igt-gpu-tools
-
-Signed-off-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
----
- drivers/gpu/drm/stm/ltdc.c | 104 +++++++++++++++++++++++++++++++++++--
- drivers/gpu/drm/stm/ltdc.h |   3 ++
- 2 files changed, 104 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index 5eeb32c9c9ce..b29476aec3a1 100644
---- a/drivers/gpu/drm/stm/ltdc.c
-+++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -77,6 +77,7 @@
- #define LTDC_CPSR	0x0044		/* Current Position Status */
- #define LTDC_CDSR	0x0048		/* Current Display Status */
- #define LTDC_EDCR	0x0060		/* External Display Control */
-+#define LTDC_CCRCR	0x007C		/* Computed CRC value */
- #define LTDC_FUT	0x0090		/* Fifo underrun Threshold */
- 
- /* Layer register offsets */
-@@ -121,6 +122,7 @@
- 
- #define GCR_LTDCEN	BIT(0)		/* LTDC ENable */
- #define GCR_DEN		BIT(16)		/* Dither ENable */
-+#define GCR_CRCEN	BIT(19)		/* CRC ENable */
- #define GCR_PCPOL	BIT(28)		/* Pixel Clock POLarity-Inverted */
- #define GCR_DEPOL	BIT(29)		/* Data Enable POLarity-High */
- #define GCR_VSPOL	BIT(30)		/* Vertical Synchro POLarity-High */
-@@ -227,6 +229,13 @@
- 
- #define NB_PF		8		/* Max nb of HW pixel format */
- 
-+/*
-+ * Skip the first value and the second in case CRC was enabled during
-+ * the thread irq. This is to be sure CRC value is relevant for the
-+ * frame.
-+ */
-+#define CRC_SKIP_FRAMES 2
-+
- enum ltdc_pix_fmt {
- 	PF_NONE,
- 	/* RGB formats */
-@@ -664,6 +673,26 @@ static inline void ltdc_set_ycbcr_coeffs(struct drm_plane *plane)
- 		     ltdc_ycbcr2rgb_coeffs[enc][ran][1]);
- }
- 
-+static inline void ltdc_irq_crc_handle(struct ltdc_device *ldev,
-+				       struct drm_crtc *crtc)
-+{
-+	u32 crc;
-+	int ret;
-+
-+	if (ldev->crc_skip_count < CRC_SKIP_FRAMES) {
-+		ldev->crc_skip_count++;
-+		return;
-+	}
-+
-+	/* Get the CRC of the frame */
-+	ret = regmap_read(ldev->regmap, LTDC_CCRCR, &crc);
-+	if (ret)
-+		return;
-+
-+	/* Report to DRM the CRC (hw dependent feature) */
-+	drm_crtc_add_crc_entry(crtc, true, drm_crtc_accurate_vblank_count(crtc), &crc);
-+}
-+
- static irqreturn_t ltdc_irq_thread(int irq, void *arg)
- {
- 	struct drm_device *ddev = arg;
-@@ -671,9 +700,14 @@ static irqreturn_t ltdc_irq_thread(int irq, void *arg)
- 	struct drm_crtc *crtc = drm_crtc_from_index(ddev, 0);
- 
- 	/* Line IRQ : trigger the vblank event */
--	if (ldev->irq_status & ISR_LIF)
-+	if (ldev->irq_status & ISR_LIF) {
- 		drm_crtc_handle_vblank(crtc);
- 
-+		/* Early return if CRC is not active */
-+		if (ldev->crc_active)
-+			ltdc_irq_crc_handle(ldev, crtc);
-+	}
-+
- 	/* Save FIFO Underrun & Transfer Error status */
- 	mutex_lock(&ldev->err_lock);
- 	if (ldev->irq_status & ISR_FUIF)
-@@ -1079,6 +1113,48 @@ static void ltdc_crtc_disable_vblank(struct drm_crtc *crtc)
- 	regmap_clear_bits(ldev->regmap, LTDC_IER, IER_LIE);
- }
- 
-+static int ltdc_crtc_set_crc_source(struct drm_crtc *crtc, const char *source)
-+{
-+	struct ltdc_device *ldev = crtc_to_ltdc(crtc);
-+	int ret;
-+
-+	DRM_DEBUG_DRIVER("\n");
-+
-+	if (!crtc)
-+		return -ENODEV;
-+
-+	if (source && strcmp(source, "auto") == 0) {
-+		ldev->crc_active = true;
-+		ret = regmap_set_bits(ldev->regmap, LTDC_GCR, GCR_CRCEN);
-+	} else if (!source) {
-+		ldev->crc_active = false;
-+		ret = regmap_clear_bits(ldev->regmap, LTDC_GCR, GCR_CRCEN);
-+	} else {
-+		ret = -EINVAL;
-+	}
-+
-+	ldev->crc_skip_count = 0;
-+	return ret;
-+}
-+
-+static int ltdc_crtc_verify_crc_source(struct drm_crtc *crtc,
-+				       const char *source, size_t *values_cnt)
-+{
-+	DRM_DEBUG_DRIVER("\n");
-+
-+	if (!crtc)
-+		return -ENODEV;
-+
-+	if (source && strcmp(source, "auto") != 0) {
-+		DRM_DEBUG_DRIVER("Unknown CRC source %s for %s\n",
-+				 source, crtc->name);
-+		return -EINVAL;
-+	}
-+
-+	*values_cnt = 1;
-+	return 0;
-+}
-+
- static const struct drm_crtc_funcs ltdc_crtc_funcs = {
- 	.destroy = drm_crtc_cleanup,
- 	.set_config = drm_atomic_helper_set_config,
-@@ -1091,6 +1167,20 @@ static const struct drm_crtc_funcs ltdc_crtc_funcs = {
- 	.get_vblank_timestamp = drm_crtc_vblank_helper_get_vblank_timestamp,
- };
- 
-+static const struct drm_crtc_funcs ltdc_crtc_with_crc_support_funcs = {
-+	.destroy = drm_crtc_cleanup,
-+	.set_config = drm_atomic_helper_set_config,
-+	.page_flip = drm_atomic_helper_page_flip,
-+	.reset = drm_atomic_helper_crtc_reset,
-+	.atomic_duplicate_state = drm_atomic_helper_crtc_duplicate_state,
-+	.atomic_destroy_state = drm_atomic_helper_crtc_destroy_state,
-+	.enable_vblank = ltdc_crtc_enable_vblank,
-+	.disable_vblank = ltdc_crtc_disable_vblank,
-+	.get_vblank_timestamp = drm_crtc_vblank_helper_get_vblank_timestamp,
-+	.set_crc_source = ltdc_crtc_set_crc_source,
-+	.verify_crc_source = ltdc_crtc_verify_crc_source,
-+};
-+
- /*
-  * DRM_PLANE
-  */
-@@ -1478,8 +1568,13 @@ static int ltdc_crtc_init(struct drm_device *ddev, struct drm_crtc *crtc)
- 
- 	drm_plane_create_zpos_immutable_property(primary, 0);
- 
--	ret = drm_crtc_init_with_planes(ddev, crtc, primary, NULL,
--					&ltdc_crtc_funcs, NULL);
-+	/* Init CRTC according to its hardware features */
-+	if (ldev->caps.crc)
-+		ret = drm_crtc_init_with_planes(ddev, crtc, primary, NULL,
-+						&ltdc_crtc_with_crc_support_funcs, NULL);
-+	else
-+		ret = drm_crtc_init_with_planes(ddev, crtc, primary, NULL,
-+						&ltdc_crtc_funcs, NULL);
- 	if (ret) {
- 		DRM_ERROR("Can not initialize CRTC\n");
- 		goto cleanup;
-@@ -1629,6 +1724,7 @@ static int ltdc_get_caps(struct drm_device *ddev)
- 		ldev->caps.ycbcr_input = false;
- 		ldev->caps.ycbcr_output = false;
- 		ldev->caps.plane_reg_shadow = false;
-+		ldev->caps.crc = false;
- 		break;
- 	case HWVER_20101:
- 		ldev->caps.layer_ofs = LAY_OFS_0;
-@@ -1643,6 +1739,7 @@ static int ltdc_get_caps(struct drm_device *ddev)
- 		ldev->caps.ycbcr_input = false;
- 		ldev->caps.ycbcr_output = false;
- 		ldev->caps.plane_reg_shadow = false;
-+		ldev->caps.crc = false;
- 		break;
- 	case HWVER_40100:
- 		ldev->caps.layer_ofs = LAY_OFS_1;
-@@ -1657,6 +1754,7 @@ static int ltdc_get_caps(struct drm_device *ddev)
- 		ldev->caps.ycbcr_input = true;
- 		ldev->caps.ycbcr_output = true;
- 		ldev->caps.plane_reg_shadow = true;
-+		ldev->caps.crc = true;
- 		break;
- 	default:
- 		return -ENODEV;
-diff --git a/drivers/gpu/drm/stm/ltdc.h b/drivers/gpu/drm/stm/ltdc.h
-index 6968d1ca5149..59fc5d1bbbab 100644
---- a/drivers/gpu/drm/stm/ltdc.h
-+++ b/drivers/gpu/drm/stm/ltdc.h
-@@ -27,6 +27,7 @@ struct ltdc_caps {
- 	bool ycbcr_input;	/* ycbcr input converter supported */
- 	bool ycbcr_output;	/* ycbcr output converter supported */
- 	bool plane_reg_shadow;	/* plane shadow registers ability */
-+	bool crc;		/* cyclic redundancy check supported */
- };
- 
- #define LTDC_MAX_LAYER	4
-@@ -46,6 +47,8 @@ struct ltdc_device {
- 	u32 irq_status;
- 	struct fps_info plane_fpsi[LTDC_MAX_LAYER];
- 	struct drm_atomic_state *suspend_state;
-+	int crc_skip_count;
-+	bool crc_active;
- };
- 
- int ltdc_load(struct drm_device *ddev);
--- 
-2.25.1
-
+Regards

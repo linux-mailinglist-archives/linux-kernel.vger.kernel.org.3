@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E266E4B2B06
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 991344B2B0E
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351763AbiBKQxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:53:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52812 "EHLO
+        id S1351817AbiBKQzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:55:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239711AbiBKQxX (ORCPT
+        with ESMTP id S233971AbiBKQzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:53:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C04213A;
-        Fri, 11 Feb 2022 08:53:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8C58B82A7F;
-        Fri, 11 Feb 2022 16:53:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68800C340E9;
-        Fri, 11 Feb 2022 16:53:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644598399;
-        bh=h8vGrWWdgDxMh7yARZuyW39zeC1HQdosKDV2QmqLbmg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=tM2uOSXyewtboLdVFYoraAN+Al951vM+Sj2KEUoFElD1o5peZx9pHa7rojwazc9Tl
-         YmLQE7G2dG1J5mV0VXidKAaa38TS4LsSyqQfBY0fVTW77ALgfQ6y1wn1Kwlt2P3P4/
-         GRwBPXf95iWaSOnwZ6AslWpBcfq601/cBMb0eQ8HQe1sCA9xTucnNc1BovzjcGH1Kj
-         mkwlHHzq3mKXjdOpIORtBjzxsOaZRmG1j+kvjULzEKvqu7bDz32rlRjEIrOxUVDJSX
-         HKcdGJFuhj+g2KROdpVhOnuo0Onmma0aBisANdmebVQoqRJ0jZQuRlDwKSpNhIzv0E
-         Ef40METyGFRxA==
-Date:   Fri, 11 Feb 2022 10:53:18 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Hongxing Zhu <hongxing.zhu@nxp.com>
-Cc:     "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [RFC 2/2] PCI: imx6: Enable imx6qp pcie power management support
-Message-ID: <20220211165318.GA714416@bhelgaas>
+        Fri, 11 Feb 2022 11:55:43 -0500
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7866221F;
+        Fri, 11 Feb 2022 08:55:42 -0800 (PST)
+Received: by mail-qk1-f173.google.com with SMTP id g145so8798477qke.3;
+        Fri, 11 Feb 2022 08:55:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1UwYLCupktfjJ9mUj4/QYlTAZwDMfe5S5C3K0edWIBg=;
+        b=fUdBWbNdCXx8ojtAcgxNl4vXqIy2Os4aHxTwHDyP7r1/U05DTpOubeknxWtZjuOHci
+         UKoaxKwhX8MsrPNibB23ztkNWl2V40PdYb74ozlwtZqR4OBDTb4kISePmdQwijuW35lR
+         9dXo/JXi5rV7xaZ+YQpxZQ2AKdDA9dSEby3CF8epRhn2Eu4tL1RNSuS92+zk1BON5m4t
+         3OF2c3mpOGmO+leBQrwTHGd1OYkMVzpsoRmDZgiLN0b3RPl+22OBefNOdV7kYMHRLDNT
+         /lIERsbOqSJQN5u7sTeV1Kv45M33pf4nLbokjDl8Qri1xfxhxfRsZ8sBBYqd15w7AiCY
+         n1SQ==
+X-Gm-Message-State: AOAM530UaDFAwYsv0O7YPfNNcauHx1q/2LXUYaKNyrD//UtN57fMYOY9
+        KF8xibbKcshahNBufJ8vcjWLg0NOQg==
+X-Google-Smtp-Source: ABdhPJzWhtYP/lUed83bNEhXzwT/Rs7Lt75nHeV6b3tF2GWmTTD5Cck+mTKwvTJDx3LpaD35b0Op9A==
+X-Received: by 2002:a05:620a:d45:: with SMTP id o5mr1221552qkl.731.1644598541587;
+        Fri, 11 Feb 2022 08:55:41 -0800 (PST)
+Received: from robh.at.kernel.org ([2607:fb90:5fee:dfce:b6df:c3e1:b1e5:d6d8])
+        by smtp.gmail.com with ESMTPSA id bk19sm11503188qkb.125.2022.02.11.08.55.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 08:55:40 -0800 (PST)
+Received: (nullmailer pid 512729 invoked by uid 1000);
+        Fri, 11 Feb 2022 16:55:38 -0000
+Date:   Fri, 11 Feb 2022 10:55:38 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Leilk Liu <leilk.liu@mediatek.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/6] dt-bindings: spi: Add compatible for Mediatek IPM IP
+ with single mode
+Message-ID: <YgaVCmizWJfFMK5I@robh.at.kernel.org>
+References: <20220209111938.16137-1-leilk.liu@mediatek.com>
+ <20220209111938.16137-2-leilk.liu@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <AS8PR04MB8676C19FBD01547BDF80CFC68C309@AS8PR04MB8676.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220209111938.16137-2-leilk.liu@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,74 +67,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Rafael, beginning of thread:
-https://lore.kernel.org/r/1644390156-5940-2-git-send-email-hongxing.zhu@nxp.com]
-
-On Fri, Feb 11, 2022 at 02:05:24AM +0000, Hongxing Zhu wrote:
-> > -----Original Message-----
-> > From: Bjorn Helgaas <helgaas@kernel.org>
-> > Sent: 2022年2月11日 6:05
-> > To: Hongxing Zhu <hongxing.zhu@nxp.com>
-> > Cc: l.stach@pengutronix.de; bhelgaas@google.com;
-> > lorenzo.pieralisi@arm.com; shawnguo@kernel.org; linux-pci@vger.kernel.org;
-> > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
-> > kernel@pengutronix.de; dl-linux-imx <linux-imx@nxp.com>
-> > Subject: Re: [RFC 2/2] PCI: imx6: Enable imx6qp pcie power management
-> > support
-> > 
-> > On Thu, Feb 10, 2022 at 03:23:19AM +0000, Hongxing Zhu wrote:
-> > > > -----Original Message-----
-> > > > From: Bjorn Helgaas <helgaas@kernel.org>
-> > > > Sent: 2022年2月9日 23:37
-> > > > To: Hongxing Zhu <hongxing.zhu@nxp.com>
-> > > > Cc: l.stach@pengutronix.de; bhelgaas@google.com;
-> > > > lorenzo.pieralisi@arm.com; shawnguo@kernel.org;
-> > > > linux-pci@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
-> > > > linux-kernel@vger.kernel.org; kernel@pengutronix.de; dl-linux-imx
-> > > > <linux-imx@nxp.com>
-> > > > Subject: Re: [RFC 2/2] PCI: imx6: Enable imx6qp pcie power
-> > > > management support
-> > > >
-> > > > On Wed, Feb 09, 2022 at 03:02:36PM +0800, Richard Zhu wrote:
-> > > > > i.MX6QP PCIe supports the RESET logic, thus it can support the L2
-> > > > > exit by the reset mechanism.
-> > > > > Enable the i.MX6QP PCIe suspend/resume operations support.
-> > 
-> > > > What does "L2 exit by reset mechanism" mean?  Is this an
-> > > > i.MX6-specific thing?  If not, can you point me to the relevant part
-> > > > of the PCIe spec?
-> > >
-> > > No, it's not i.MX6 specific thing. i.MX6Q/DL doesn't have the
-> > > self-reset mechanism.  Thus, it can't reset itself to an initialized
-> > > stat when link exit from the L2 or L3 stats.  i.MX6QP PCIe has the
-> > > self-reset mechanism, and it can reset itself when link exit from L2
-> > > or L3 stats.  The commit description might not accurate.  How about
-> > > change them to "i.MX6QP PCIe supports the RESET logic, thus it can
-> > > reset itself to the initialized stat when exit from L2 or L3 stats."
-> > 
-> > Ugh, I have all sorts of questions now, but I don't think I want
-> > to know much more about this ;)
-> > 
-> > Seems like this device requires software assist when bringing the
-> > link out of L2 or L3.  Is that allowed per PCIe spec, or is this
-> > an erratum?
-> > 
-> > Does this mean the driver needs to be involved when we take a
-> > device out of D3 (where the link was in L2 or L3)?
+On Wed, Feb 09, 2022 at 07:19:33PM +0800, Leilk Liu wrote:
+> This commit adds dt-binding documentation for
+> Mediatek SPI IPM IP with single mode.
 > 
-> Yes, the SW should be involved when bringing the link out of L2 or
-> L3.  I looked through the SPEC, didn't find that they are forbidden
-> by SPEC.  It might be a design limitation, I think.
+> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> ---
+>  Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+> index bfa44acb1bdd..0a2fc0404cb3 100644
+> --- a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+> @@ -41,6 +41,7 @@ properties:
+>                - mediatek,mt8135-spi
+>                - mediatek,mt8173-spi
+>                - mediatek,mt8183-spi
+> +              - mediatek,ipm-spi-single
 
-OK.  I don't understand all the details of L2 and L3, so I'll take
-your word for it that this is allowed by spec.
+Is IPM an SoC? Compatible strings should be SoC specific or whatever 
+granularity could have a unique errata.
 
-The case I was wondering about is when software puts a device in
-D3hot, which can be done via pci_set_power_state(), without any help
-from the imx6 driver.  What state will the link be in, and can we also
-put the device back in D0 without help from imx6?
-
-Sec 5.3.2 says L1 is a permissible link state for D3hot, so maybe L2
-and L3 are not involved in this case.
-
-Bjorn
+Rob

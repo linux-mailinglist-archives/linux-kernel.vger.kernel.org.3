@@ -2,62 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0D14B2103
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:09:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B19B4B2110
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348347AbiBKJIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 04:08:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52312 "EHLO
+        id S1348399AbiBKJJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 04:09:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238422AbiBKJIn (ORCPT
+        with ESMTP id S1348387AbiBKJJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 04:08:43 -0500
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECCDC30;
-        Fri, 11 Feb 2022 01:08:42 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0V48M.tt_1644570517;
-Received: from 30.225.24.58(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0V48M.tt_1644570517)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 11 Feb 2022 17:08:38 +0800
-Message-ID: <ab5a6be2-a678-0149-b2cc-112c40c05b82@linux.alibaba.com>
-Date:   Fri, 11 Feb 2022 17:08:36 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in smc_fback_error_report
-To:     syzbot <syzbot+b425899ed22c6943e00b@syzkaller.appspotmail.com>,
-        davem@davemloft.net, kgraul@linux.ibm.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <00000000000013ca8105d7ae3ada@google.com>
-From:   Wen Gu <guwen@linux.alibaba.com>
-In-Reply-To: <00000000000013ca8105d7ae3ada@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+        Fri, 11 Feb 2022 04:09:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE64103F;
+        Fri, 11 Feb 2022 01:09:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB2DE61451;
+        Fri, 11 Feb 2022 09:09:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C65DC340ED;
+        Fri, 11 Feb 2022 09:09:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644570578;
+        bh=UIxfmZMcrj/zM/st9Omjlnyy7Spqhkm+fojS8BT6aWA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RdXIQgF6aeR5pu8xgbezSfrrlzHgZdWmPoG5Hk6NgTsqnfuKqXQZZvV6DnrzwDCGC
+         mePYMDa7Jxc9fHcgqJWtl/wstQoryCtG9MV65ZWqwnu6vT2Uv9ASyrj+Se7WiDQtIM
+         d6MEl4KgUWIsnlbNTP4RvSgTTBXW5iP8OE7vzMauADe1YPhcGzlq9kWg2M01wYsJTU
+         A3RNu7mtS2jMq9VNSQaMoS/WF4nQBgy3kXz3s1mNcBHhOa6wwImQpVcZz9iwcgnbEC
+         8N9s0i8dhlTLKKWRzmizreplEns637r7ECB1jbbUCed4Qp3Pw8/fbeA+CWF66Rh5vj
+         L49TlAkbHBylg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nIRvr-0077Wg-Rs; Fri, 11 Feb 2022 09:09:36 +0000
+Date:   Fri, 11 Feb 2022 09:08:43 +0000
+Message-ID: <87fsoplqhw.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        kernel-team@android.com
+Subject: Re: [PATCH 03/10] irqchip/gic: Switch to dynamic chip name output
+In-Reply-To: <CACRpkdZkw1efC5viWwr_72V0K_E+txwxGLzwe=NJV3FEdnGinA@mail.gmail.com>
+References: <20220209162607.1118325-1-maz@kernel.org>
+        <20220209162607.1118325-4-maz@kernel.org>
+        <CACRpkdZkw1efC5viWwr_72V0K_E+txwxGLzwe=NJV3FEdnGinA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linus.walleij@linaro.org, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, brgl@bgdev.pl, matthias.bgg@gmail.com, grygorii.strashko@ti.com, ssantosh@kernel.org, khilman@kernel.org, tony@atomide.com, tglx@linutronix.de, vz@mleia.com, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, kernel@esmil.dk, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 10 Feb 2022 23:38:49 +0000,
+Linus Walleij <linus.walleij@linaro.org> wrote:
+> 
+> On Wed, Feb 9, 2022 at 5:26 PM Marc Zyngier <maz@kernel.org> wrote:
+> 
+> > The last dynamic aspect of the GIC's irq_chip structure is the
+> > name that is associated to it.
+> >
+> > Move the output of that name to the relevant callback, which
+> > allows us to do a bit of cleanup and mark the structures const.
+> >
+> > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> 
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> 
+> This naming was once introduced for the ARM PB11MPCore
+> that had two cascaded GICs (commit 58b8964990dc6)
+> so it became a pain to see which one
+> was being used in /proc/interrupts
+> arch/arm/boot/dts/arm-realview-pb11mp.dts
+> 
+> I see it is not appreciated to use /proc/interrupts for this
+> type of diagnostics. Ugh. I suppose people do it for the
+> same reason they keep using the GPIO sysfs, they like
+> it and they know it.
 
+It was sort of fair game to use /proc/interrupts to track these things
+when we only had that. These days, we have a whole interrupt debugging
+infrastructure that is able to track hierarchies, domains and other
+state. And it isn't like we're taking away the /proc/interrupts
+facility at all, we only indirecting the name output it when possible.
 
-On 2022/2/11 2:36 am, syzbot wrote:
-
-
-> BUG: KASAN: slab-out-of-bounds in smc_fback_error_report+0x96/0xa0 net/smc/af_smc.c:664
-> Read of size 8 at addr ffff88801ca31aa8 by task swapper/0/0
-
-Thanks for the report.
-
-I am working on fixing this. It looks like smc_sock has been freed during the
-call to smc_fback_error_report().
-
+There are also a number of advantages in keeping these data structures
+read-only when possible, in addition to the memory saving associated
+with only having a reference to the irq_chip structure.
 
 Thanks,
-Wen Gu
 
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

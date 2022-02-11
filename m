@@ -2,145 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE304B1F7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 08:43:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B504B1F81
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 08:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347778AbiBKHnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 02:43:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51132 "EHLO
+        id S1347788AbiBKHnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 02:43:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347777AbiBKHnP (ORCPT
+        with ESMTP id S243198AbiBKHnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 02:43:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74A892E9
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 23:43:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644565393;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q+JoBX4dv2Ujy4kHFl4q2D9yIGmIdd5volu8AUosqWE=;
-        b=RdUhG+Hyq2LpweCA5pPN7RiZhctVT43Bxc9M2053mC39yhfl2J1kE3oZc7IPhh9VJJzpvV
-        FzbkkfLl8F+xuoxf3QX3BnU8RtY+zZBT5fDGfoim533yFV6SSX0+JyOeUWwt19CFA4myT/
-        ujPhZ3S8qumHSO+oOJMovj0E8yPh/VU=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-282-S-OgPcbMPEyu1Si4IEHX9A-1; Fri, 11 Feb 2022 02:43:12 -0500
-X-MC-Unique: S-OgPcbMPEyu1Si4IEHX9A-1
-Received: by mail-ej1-f71.google.com with SMTP id ky6-20020a170907778600b0068e4bd99fd1so3725789ejc.15
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 23:43:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Q+JoBX4dv2Ujy4kHFl4q2D9yIGmIdd5volu8AUosqWE=;
-        b=5MXtkSWHEs7XPgENYcgEmFPmnoi+Dv3QDTE9K3ib7RsjXdzzCS3+CwcMl2LHNiNNuB
-         tWlq6CNoeiJMORsTASWyk+/WYpJE8KB7uFLVOlShOHz5oiLV91hc7nNTmjtwDkLUJoTo
-         vN4FfESb9GJlnnBF0QE5ctJicw+uhaQf02+2wtHcAxIqk1ByOkaUgKYrKGP1Z0ic82ou
-         g2huh2KTiTGDTV8oooO5rqL8RI4fomZ3GzNptevxi9SWqbIsJKDWE/5suSotiiVwrpGx
-         YH8fmCekqLrl6WW1Cx7abnw5qfd0MsK4k/INbZ7RjXe5MJ1XRy6wYBvkIZRSEyekkIpW
-         zNFw==
-X-Gm-Message-State: AOAM531d3/HXvwTIdcGDmtWDsr8fJ3HtyCQ7wXZJPGgOlBTLeRXkqTwE
-        NXpq9hCpIk22GYF5zrnqHTEqD2CB+nphIi/sC+LQb+FLhHTTIBcXfOCjca8l9HPrFQa6GfsoKhm
-        pEsHXzDvNrs2J3Efy2NYPXTI/
-X-Received: by 2002:a17:906:5d14:: with SMTP id g20mr322475ejt.37.1644565391013;
-        Thu, 10 Feb 2022 23:43:11 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwEfQpRtLobU4UAs4SWOVNcJDhEjOkbQmmbly0Xr2tW7hupHSA1QdZZhCzrr2fKvmPOHvfu0w==
-X-Received: by 2002:a17:906:5d14:: with SMTP id g20mr322469ejt.37.1644565390811;
-        Thu, 10 Feb 2022 23:43:10 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id g15sm4632241edz.100.2022.02.10.23.43.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 23:43:10 -0800 (PST)
-Message-ID: <d4425819-78c0-ad53-841d-fd59a59c2736@redhat.com>
-Date:   Fri, 11 Feb 2022 08:43:09 +0100
+        Fri, 11 Feb 2022 02:43:40 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76AF250;
+        Thu, 10 Feb 2022 23:43:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644565420; x=1676101420;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DSnJteDARUlrsjbSpn5agFSV825dv8HSaJ68vz1hIpc=;
+  b=H/kHE4NQ5ikn8hoUayiwE1jok+YDuiRe2eheyDvZcR4yN+/zmVjV/C1W
+   aabWB1wGOnY7aSlbcpt7431TJ5ewYUMYO1BCayTi5N+qdzc2igKF2OV5z
+   FRQMdN+30VsGAAwz+TF/I+JqaD7pbuoyhcxGcYE1BeSMxsrfl19w/Z1OB
+   U=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 10 Feb 2022 23:43:39 -0800
+X-QCInternal: smtphost
+Received: from nalasex01a.na.qualcomm.com ([10.47.209.196])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 23:43:39 -0800
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 10 Feb 2022 23:43:35 -0800
+Date:   Fri, 11 Feb 2022 13:13:31 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+CC:     Mathias Nyman <mathias.nyman@intel.com>,
+        Jung Daehwan <dh10.jung@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ugoswami@quicinc.com>
+Subject: Re: usb: host: Reduce xhci_handshake timeout in xhci_reset
+Message-ID: <20220211074331.GA12625@hu-pkondeti-hyd.qualcomm.com>
+References: <CGME20210622113915epcas2p284c61291fc9d83487f6dfebb65fd4e9b@epcas2p2.samsung.com>
+ <1624361096-41282-1-git-send-email-dh10.jung@samsung.com>
+ <YNJAZDwuFmEoTJHe@kroah.com>
+ <20210628022548.GA69289@ubuntu>
+ <YNlxzj7KXG43Uyrp@kroah.com>
+ <20210628065553.GA83203@ubuntu>
+ <496c9d86-70d7-1050-5bbb-9f841e4b464a@intel.com>
+ <20220211064630.GA20567@hu-pkondeti-hyd.qualcomm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 3/9] ASoC: Intel: bytcr_wm5102: use GFP_KERNEL
-Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Cezary Rojewski <cezary.rojewski@intel.com>
-Cc:     alsa-devel@alsa-project.org, kernel-janitors@vger.kernel.org,
-        Takashi Iwai <tiwai@suse.com>,
-        Jie Yang <yang.jie@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-References: <20220210204223.104181-1-Julia.Lawall@inria.fr>
- <20220210204223.104181-4-Julia.Lawall@inria.fr>
- <d26561a1-ddd4-aea0-792d-efce104ad44f@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <d26561a1-ddd4-aea0-792d-efce104ad44f@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220211064630.GA20567@hu-pkondeti-hyd.qualcomm.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Sorry for the spam. I have added an incorrect email address in my previous
+email.
 
-On 2/11/22 01:20, Pierre-Louis Bossart wrote:
+On Fri, Feb 11, 2022 at 12:16:30PM +0530, Pavan Kondeti wrote:
+> On Mon, Jun 28, 2021 at 10:49:00AM +0300, Mathias Nyman wrote:
+> > On 28.6.2021 9.55, Jung Daehwan wrote:
+> > > On Mon, Jun 28, 2021 at 08:53:02AM +0200, Greg Kroah-Hartman wrote:
+> > >> On Mon, Jun 28, 2021 at 11:25:48AM +0900, Jung Daehwan wrote:
+> > >>> On Tue, Jun 22, 2021 at 09:56:20PM +0200, Greg Kroah-Hartman wrote:
+> > >>>> On Tue, Jun 22, 2021 at 08:24:56PM +0900, Daehwan Jung wrote:
+> > >>>>> It seems 10 secs timeout is too long in general case. A core would wait for
+> > >>>>> 10 secs without doing other task and it can be happended on every device.
+> > >>>>
+> > >>>> Only if the handshake does not come back sooner, right?
+> > >>>
+> > >>> Yes, right.
+> > >>>
+> > >>>> What is causing your device to timeout here?
+> > >>>
+> > >>> Host Controller doesn't respond handshake. I don't know why and I ask HW team
+> > >>> to debug it.
+> > >>
+> > >> Please work to fix your hardware, that feels like the root of the
+> > >> problem here.  If you require the timeout for xhci_reset() to happen,
+> > >> then how do you know that the hardware really did reset properly in the
+> > >> reduced amount of time you just provided?
+> > >>
+> > > 
+> > > I continue fixing this issue with hardware engineer, but currently just
+> > > host controller can crash whole system and that's why I want to fix it.
+> > > How about adding some error logs in this situation for recognizing this issue?
+> > > We can add error log in xhci_stop as xhci_reset can returns error like below.
+> > > 
+> > > static void xhci_stop(struct usb_hcd *hcd)
+> > > {
+> > >         u32 temp;
+> > >         struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+> > > +       int ret;
+> > > 
+> > >         mutex_lock(&xhci->mutex);
+> > > 
+> > > @@ -733,6 +734,9 @@ static void xhci_stop(struct usb_hcd *hcd)
+> > >         xhci->cmd_ring_state = CMD_RING_STATE_STOPPED;
+> > >         xhci_halt(xhci);
+> > >         xhci_reset(xhci);
+> > > +       if (ret)
+> > > +               xhci_err(xhci, "%s: Error while reset xhci Host controller - ret = %d\n"
+> > > +                       , __func__, ret);
+> > >         spin_unlock_irq(&xhci->lock);
+> > > 
+> > 
+> > We can check the xhci_reset() return value here and print a message, makes sense.
+> > 
+> > The original reason for the 10 second timeout was because a host actually took 9 seconds:
+> > 
+> > commit 22ceac191211cf6688b1bf6ecd93c8b6bf80ed9b
+> > 
+> >     xhci: Increase reset timeout for Renesas 720201 host.
+> >     
+> >     The NEC/Renesas 720201 xHCI host controller does not complete its reset
+> >     within 250 milliseconds.  In fact, it takes about 9 seconds to reset the
+> >     host controller, and 1 second for the host to be ready for doorbell
+> >     rings.  Extend the reset and CNR polling timeout to 10 seconds each.
+> > 
+> Agreed.
 > 
+> We also run into the similar issue (very very rarely reproduced) on
+> our platforms like SM8450. The issue happens when host mode is de-activated
+> (type-c cable disconnected). Since xhci_reset() is called with interrupts
+> disabled, a timeout of 10 seconds is fatal to the system.
 > 
-> On 2/10/22 14:42, Julia Lawall wrote:
->> Platform_driver probe functions aren't called with locks held
->> and thus don't need GFP_ATOMIC. Use GFP_KERNEL instead.
->>
->> Problem found with Coccinelle.
-> 
-> Thanks Julia, indeed it's the only case where GFP_ATOMIC is used for
-> machine drivers.
-> 
-> This was already present in the initial Android driver from Intel (2013)
-> [1] and missed in the multiple passes to get this upstream.
-> 
-> Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-
-Yeah I should have caught this when I upstreamed the machine driver:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-
-> 
-> [1]
-> https://github.com/lenovo-yt2-dev/android_kernel_lenovo_baytrail/blob/cm-12.1/sound/soc/intel/board/byt_bl_wm5102.c
-> 
->>
->> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
->>
->> ---
->>  sound/soc/intel/boards/bytcr_wm5102.c |    2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/sound/soc/intel/boards/bytcr_wm5102.c b/sound/soc/intel/boards/bytcr_wm5102.c
->> index 504ef4cab111..8d8e96e3cd2d 100644
->> --- a/sound/soc/intel/boards/bytcr_wm5102.c
->> +++ b/sound/soc/intel/boards/bytcr_wm5102.c
->> @@ -389,7 +389,7 @@ static int snd_byt_wm5102_mc_probe(struct platform_device *pdev)
->>  	bool sof_parent;
->>  	int ret;
->>  
->> -	priv = devm_kzalloc(dev, sizeof(*priv), GFP_ATOMIC);
->> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
->>  	if (!priv)
->>  		return -ENOMEM;
->>  
->>
-> 
-
+> Thanks,
+> Pavan

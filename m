@@ -2,192 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5FA4B24C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 200F94B24C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349603AbiBKLuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 06:50:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40568 "EHLO
+        id S1349622AbiBKLv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 06:51:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349605AbiBKLuW (ORCPT
+        with ESMTP id S238409AbiBKLv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 06:50:22 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCF0F4F;
-        Fri, 11 Feb 2022 03:50:21 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id B04DC1F46D3E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644580219;
-        bh=YoiosXYfuzCdv75Q/QHeODvcQlcGqCPnisvrlLqIWlM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GTLGC4aXdUu/HNLbQWFHvoE4iM7hofN1vXc9X7vuswhNjFoA+7s1JE0VPabZpHjKP
-         ur3PKD8vtNTjtm7+H3MVyS858xTgldAxBwrE+uHqul1zODaxn3Lkrw2CGShpwj4ryb
-         EH6J9xrmZtiwuTwsfrnnplzsFTcFjpZhwhi0dVd02QBipVGO34lu7IPM9ZlOy6HaX5
-         6eWapx+KB+Av1nl1wFLUB2NPltshUp2Bt+OgAMBY7OJKhxZueS+0DH7kF06nQTv4vf
-         tMFBi/tYTl302CE/ne7Nerj49cWLDBCnexztlPIHPbRx9q1ZTcSHlYNQwopgA9RyBa
-         m1zKHA0aUmgzg==
-Message-ID: <e7cbca18-a343-4058-6a1e-1e6bfb167bd9@collabora.com>
-Date:   Fri, 11 Feb 2022 12:50:09 +0100
+        Fri, 11 Feb 2022 06:51:26 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68DFF4F;
+        Fri, 11 Feb 2022 03:51:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=BHPbXDxWBtuDI9YYnGdugRaUKtQ7K4m6+zQLsPmD+c4=; b=dR8Q5ZU2i/N7HitiOzfANLpiaz
+        5qF/SGYCLXmE3e/dkF3v4vQlXl0pelPeb6ZkNEXzLADKV9kE23rp79jq4mfm03lr+heVNBw6SiiaY
+        6Z1pKGNxXXmfGBcyaBr6PSJcpbz8Sdshm9m2BBMjbHme/kSazx7WqGhKRwogi4Xwnv6NNTZsBkMSl
+        FG16DeaXr1JW6GU+rgKjMw3/dKdJvXb6j/XE3kxeGiExzW4cOIhaKmi9tqzv+Uf1tvOu9gdhNB4qx
+        +LB1CCgDn3ykbmNyqqv+jJyTAUNskEwK3OFdtohRrAqlCJ7QbjcAlAePlTps3tau2u4nzTWSfA3hd
+        HZgeVPvg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nIUSJ-00AN1Y-C0; Fri, 11 Feb 2022 11:51:15 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7C45D9853C7; Fri, 11 Feb 2022 12:51:14 +0100 (CET)
+Date:   Fri, 11 Feb 2022 12:51:14 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Zhen Ni <nizhen@uniontech.com>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, mcgrof@kernel.org,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH] sched: move rr_timeslice sysctls to rt.c
+Message-ID: <20220211115114.GU23216@worktop.programming.kicks-ass.net>
+References: <20220210060831.26689-1-nizhen@uniontech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [V11,PATCH 04/19] soc: mediatek: add driver for dvfsrc support
-Content-Language: en-US
-To:     Dawei Chien <dawei.chien@mediatek.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ryan Case <ryandcase@chromium.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Nicolas Boichat <drinkcat@google.com>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Fan Chen <fan.chen@mediatek.com>,
-        Arvin Wang <arvin.wang@mediatek.com>,
-        James Liao <jamesjj.liao@mediatek.com>,
-        Henry Chen <henryc.chen@mediatek.com>
-References: <20210812085846.2628-1-dawei.chien@mediatek.com>
- <20210812085846.2628-5-dawei.chien@mediatek.com>
- <3d1ba05d-0013-a9ac-1fe1-1d60e510c574@collabora.com>
- <3d30fe7f61b558d3c2c8214e0e936903657f8231.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <3d30fe7f61b558d3c2c8214e0e936903657f8231.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210060831.26689-1-nizhen@uniontech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 11/02/22 04:51, Dawei Chien ha scritto:
-> On Thu, 2022-02-03 at 16:04 +0100, AngeloGioacchino Del Regno wrote:
->> Il 12/08/21 10:58, Dawei Chien ha scritto:
->>> From: Henry Chen <henryc.chen@mediatek.com>
->>>
->>> Add dvfsrc driver for MT6873/MT8183/MT8192
->>>
->>> Signed-off-by: Henry Chen <henryc.chen@mediatek.com>
->>> Signed-off-by: Dawei Chien <dawei.chien@mediatek.com>
->>> ---
->>>    drivers/soc/mediatek/Kconfig            |  11 +
->>>    drivers/soc/mediatek/Makefile           |   1 +
->>>    drivers/soc/mediatek/mtk-dvfsrc.c       | 421
->>> ++++++++++++++++++++++++++++++++
->>>    include/linux/soc/mediatek/mtk_dvfsrc.h |  35 +++
->>>    4 files changed, 468 insertions(+)
->>>    create mode 100644 drivers/soc/mediatek/mtk-dvfsrc.c
->>>    create mode 100644 include/linux/soc/mediatek/mtk_dvfsrc.h
->>>
-
-..snip..
-
->>> diff --git a/drivers/soc/mediatek/mtk-dvfsrc.c
->>> b/drivers/soc/mediatek/mtk-dvfsrc.c
->>> new file mode 100644
->>> index 000000000000..6ef167cf55bd
->>> --- /dev/null
->>> +++ b/drivers/soc/mediatek/mtk-dvfsrc.c
-
-..snip..
-
->>> +static int mtk_dvfsrc_probe(struct platform_device *pdev)
->>> +{
->>> +	struct arm_smccc_res ares;
->>> +	struct resource *res;
->>> +	struct mtk_dvfsrc *dvfsrc;
->>> +	int ret;
->>> +
->>> +	dvfsrc = devm_kzalloc(&pdev->dev, sizeof(*dvfsrc), GFP_KERNEL);
->>> +	if (!dvfsrc)
->>> +		return -ENOMEM;
->>> +
->>> +	dvfsrc->dvd = of_device_get_match_data(&pdev->dev);
->>> +	dvfsrc->dev = &pdev->dev;
->>> +
->>> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->>> +	dvfsrc->regs = devm_ioremap_resource(&pdev->dev, res);
->>> +	if (IS_ERR(dvfsrc->regs))
->>> +		return PTR_ERR(dvfsrc->regs);
->>> +
->>> +	spin_lock_init(&dvfsrc->req_lock);
->>> +	mutex_init(&dvfsrc->pstate_lock);
->>> +
->>> +	arm_smccc_smc(MTK_SIP_VCOREFS_CONTROL, MTK_SIP_DVFSRC_INIT, 0,
->>> 0, 0,
->>> +		0, 0, 0, &ares);
->>> +
->>> +	if (!ares.a0) {
->>> +		dvfsrc->dram_type = ares.a1;
->>> +		dev_info(dvfsrc->dev, "dram_type: %d\n", dvfsrc-
->>>> dram_type);
->>> +	} else {
->>> +		dev_err(dvfsrc->dev, "init fails: %lu\n", ares.a0);
->>> +		return ares.a0;
->>> +	}
->>> +
->>> +	dvfsrc->curr_opps = &dvfsrc->dvd->opps_desc[dvfsrc->dram_type];
->>> +	platform_set_drvdata(pdev, dvfsrc);
->>> +
->>> +	dvfsrc->regulator = platform_device_register_data(dvfsrc->dev,
->>> +			"mtk-dvfsrc-regulator", -1, NULL, 0);
->>
->> Why are you registering platform devices like this?
->>
->> Please use device-tree instead.
->>
+On Thu, Feb 10, 2022 at 02:08:31PM +0800, Zhen Ni wrote:
+> move rr_timeslice sysctls to rt.c and use the new
+> register_sysctl_init() to register the sysctl interface.
 > 
-> Thank you for advisement. Let me just describe history.
-> 
-> Actually, we did use device-tree to probe interconnect/regulator driver
-> in v4, and reviewer had some advisement
-> 
-> 
-> https://patchwork.kernel.org/project/linux-mediatek/patch/1584092066-24425-12-git-send-email-henryc.chen@mediatek.com/#23243049
-> 
-> https://patchwork.kernel.org/project/linux-mediatek/patch/1584092066-24425-9-git-send-email-henryc.chen@mediatek.com/#23236945
-> 
-> so we refer to this driver to use platform_device_register_data after
-> v5.
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/soc/qcom/smd-rpm.c?h=next-20220209#n213
-> 
-> Would you kindly give your advisement, thank you.
-> 
+> Signed-off-by: Zhen Ni <nizhen@uniontech.com>
 
-Hello Dawei,
-I was under the impression that the regulator and EMI were different hardware,
-while effectively they are inside of the DVFS Resource Collector IP, and the
-registers look like being a bit mixed up, so it's impossible to actually
-specify a relative iospace for the regulator, or for the EMI.
+OK, I've had it with this nonsense. Can you *please* redo all of sched
+such that:
 
-In this case, from what I understand right now, the emi and regulator are not
-different hardware, but "features of" the DVFS Resource Collector.
+ - In the Subject:, the first letter after the subsystem prefix (sched:)
+   is capitalized.
+ - the lot actually applies to tip/sched/core (so far not a single one
+   of these patches applied without needing -- mostly trivial --
+   fixups).
+ - Do obvious cleanups.. see below.
+ - Don't have more than a single *sysctl_init() per .c file.
+ - It's a full series that does all instead of random little patches
+   that conflict with one another when applied out of turn.
 
-I've done some research around the kernel and, effectively, the only way that
-makes sense, is to register the feature-drivers (emi/vreg) with
-platform_device_register_data(), as per your current approach, even though I
-have a hunch that it will look a bit confusing in device-tree, as you'd be using
-the same node for both regulator and interconnects...
+> ---
+>  include/linux/sched/sysctl.h |  3 ---
+>  kernel/sched/rt.c            | 28 ++++++++++++++++++++++++++--
+>  kernel/sysctl.c              |  7 -------
+>  3 files changed, 26 insertions(+), 12 deletions(-)
+> 
+> diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
+> index d416d8f45186..f6466040883c 100644
+> --- a/include/linux/sched/sysctl.h
+> +++ b/include/linux/sched/sysctl.h
+> @@ -45,11 +45,8 @@ extern unsigned int sysctl_sched_uclamp_util_min_rt_default;
+>  extern unsigned int sysctl_sched_autogroup_enabled;
+>  #endif
+>  
+> -extern int sysctl_sched_rr_timeslice;
+>  extern int sched_rr_timeslice;
 
-I would exclude doing it as a MFD driver, as I don't see any very clean way to
-actually implement that.
+Why leave sched_rr_timeslice here? It doesn't belong here.
 
-At this point, let's just keep it as it is, or this would probably get a lot
-overcomplicated for no good reasons.
-So, please ignore the device-tree suggestion and go on with the other suggested
-fixes for this driver.
 
-Looking forward to see your v4!
+> +#ifdef CONFIG_SYSCTL
+> +static struct ctl_table sched_rr_sysctls[] = {
+> +	{
+> +		.procname       = "sched_rr_timeslice_ms",
+> +		.data           = &sysctl_sched_rr_timeslice,
+> +		.maxlen         = sizeof(int),
+> +		.mode           = 0644,
+> +		.proc_handler   = sched_rr_handler,
+> +	},
+> +	{}
+> +};
+> +
+> +static void __init sched_rr_sysctl_init(void)
+> +{
+> +	register_sysctl_init("kernel", sched_rr_sysctls);
+> +}
+> +#else
+> +#define sched_rr_sysctl_init() do { } while (0)
+> +#endif
+> +
+>  static int do_sched_rt_period_timer(struct rt_bandwidth *rt_b, int overrun);
+>  
+>  struct rt_bandwidth def_rt_bandwidth;
+> @@ -2471,6 +2494,7 @@ void __init init_sched_rt_class(void)
+>  		zalloc_cpumask_var_node(&per_cpu(local_cpu_mask, i),
+>  					GFP_KERNEL, cpu_to_node(i));
+>  	}
+> +	sched_rr_sysctl_init();
+>  }
 
-Kind regards,
-Angelo
+When I combine this with: patches/zhen_ni-sched-move_rt_period_runtime_sysctls_to_rt_c.patch
+
+That ends up as:
+
+@@ -2471,6 +2535,8 @@ void __init init_sched_rt_class(void)
+                zalloc_cpumask_var_node(&per_cpu(local_cpu_mask, i),
+                                        GFP_KERNEL, cpu_to_node(i));
+        }
++       sched_rt_sysctl_init();
++       sched_rr_sysctl_init();
+ }
+ #endif /* CONFIG_SMP */
+
+Like srsly?
+
+
+So I've dropped the whole lot I had:
+
+patches/zhen_ni-sched-move_energy_aware_sysctls_to_topology_c.patch
+patches/zhen_ni-sched-move_cfs_bandwidth_slice_sysctls_to_fair_c.patch
+patches/zhen_ni-sched-move_uclamp_util_sysctls_to_core_c.patch
+patches/zhen_ni-sched-move_schedstats_sysctls_to_core_c.patch
+patches/zhen_ni-sched-move_deadline_period_sysctls_to_deadline_c.patch
+patches/zhen_ni-sched-move_rt_period_runtime_sysctls_to_rt_c.patch
+patches/zhen_ni-sched-move_rr_timeslice_sysctls_to_rt_c.patch
+
+And I expect a single coherent series or I'll forgo all this.

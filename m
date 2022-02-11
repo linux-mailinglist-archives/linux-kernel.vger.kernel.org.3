@@ -2,90 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1199C4B25EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:38:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E84F4B267B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243075AbiBKMil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 07:38:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44298 "EHLO
+        id S1350321AbiBKMvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 07:51:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbiBKMik (ORCPT
+        with ESMTP id S1350310AbiBKMvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 07:38:40 -0500
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25BD1A4;
-        Fri, 11 Feb 2022 04:38:38 -0800 (PST)
-Received: by mail-oo1-f54.google.com with SMTP id p190-20020a4a2fc7000000b0031820de484aso10071492oop.9;
-        Fri, 11 Feb 2022 04:38:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=marrboxrkvy6rFSJaOQ3G7fIKmfU+2w0NS1Nneww1Eo=;
-        b=iGaB2nUTsgg68j0Z4DPoCVolRERDw72CiQZzEiHojNcnu83cOZ3iidhpRxq83FBI3T
-         6RUHhU+PshJAoRp+/qGlumzbnl8WzZjkDQKBhBRwHhjYrT1lsrLfTIN/iOPQwOvRIzYQ
-         OgsxnIkkM3SnwUJ550LYcHwtH2qN0cnZ8kkGVFCvNrN8ibE83y2+OnDxEHAX718F0loP
-         ygobd8GCiRYxo81pnj6Tq9f46qqZADzwa3GO19CMbnyHz1xNtlOCKY7BP7m5+yKEGFku
-         IckMfJoiCgVKqIZZCbThh2O2t8O+1inNuZHQ80KI4AlyJ5fhAc5662SkbpcqT+OLW7pj
-         gHWg==
-X-Gm-Message-State: AOAM532/jLOdXkT0ifneKDntF9yYbFZ4QUBNZo+V5GAezM4TjRm0xoC5
-        yykAtdgnF5lspB85f4OfTg==
-X-Google-Smtp-Source: ABdhPJztdF3qpCFo97FLt5c6G18W/gBnuWv5aekVuuXR4+Yv1NMOgOAWJVVJKPnXuO4Ks4Xz7CC8Gg==
-X-Received: by 2002:a05:6871:4101:: with SMTP id la1mr48544oab.238.1644583117936;
-        Fri, 11 Feb 2022 04:38:37 -0800 (PST)
-Received: from robh.at.kernel.org ([2607:fb90:20d4:10b7:69a2:33cd:1782:fb47])
-        by smtp.gmail.com with ESMTPSA id 5sm6206333oai.15.2022.02.11.04.38.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 04:38:37 -0800 (PST)
-Received: (nullmailer pid 183082 invoked by uid 1000);
-        Fri, 11 Feb 2022 12:38:34 -0000
-Date:   Fri, 11 Feb 2022 06:38:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 1/3] dt-bindings: nvmem: make "reg" property optional
-Message-ID: <YgZYyl5NsBc/2LeJ@robh.at.kernel.org>
-References: <20220124160300.25131-1-zajec5@gmail.com>
- <20220124160300.25131-2-zajec5@gmail.com>
+        Fri, 11 Feb 2022 07:51:08 -0500
+X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 04:51:04 PST
+Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F17E60;
+        Fri, 11 Feb 2022 04:51:04 -0800 (PST)
+Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
+        by ni.piap.pl (Postfix) with ESMTPSA id A03BFC3F3EF3;
+        Fri, 11 Feb 2022 13:31:08 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl A03BFC3F3EF3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=piap.pl; s=mail;
+        t=1644582669; bh=vrnOCz2NomAXmrx0f/P+Vxs/1qaeoeQZUYqZcethPZM=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=ioDj6vgYLexSO6/P/YS7xj5X+MHUqhZNuyqqDndPm1CEV3MAZON2EKMc8eIr0Zpon
+         jCb8D2vB8Ae5Ic8G+8qbRdXdaqz0MSD1hkfm7kOEk9BbKJnDeZTWucfU4Jm7IyjxLX
+         +Vj4Qe78Vc2PEobT1c8qXg71qAeZm1iSYHdK3oSg=
+From:   =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Koen Vandeputte <koen.vandeputte@citymesh.com>,
+        Dexuan Cui <dexuan.linux@gmail.com>
+Subject: Re: PCI: Race condition in pci_create_sysfs_dev_files (can't boot)
+References: <20220208234023.GA505306@bhelgaas>
+Sender: khalasa@piap.pl
+Date:   Fri, 11 Feb 2022 13:31:08 +0100
+In-Reply-To: <20220208234023.GA505306@bhelgaas> (Bjorn Helgaas's message of
+        "Tue, 8 Feb 2022 17:40:23 -0600")
+Message-ID: <m3o83dvb3n.fsf@t19.piap.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220124160300.25131-2-zajec5@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-KLMS-Rule-ID: 3
+X-KLMS-Message-Action: skipped
+X-KLMS-AntiSpam-Status: not scanned, whitelist
+X-KLMS-AntiPhishing: not scanned, whitelist
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, not scanned, whitelist
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Jan 2022 17:02:58 +0100, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> Most NVMEM providers have cells at hardcoded addresses however there are
-> some exceptions. Some devices store cells layout in internal structs
-> using custom formats.
-> 
-> It's important to allow NVMEM consumers to still reference such NVMEM
-> cells. Making "reg" optional allows defining NVMEM cells by their names
-> only and using them with phandles.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
->  Documentation/devicetree/bindings/nvmem/nvmem.yaml | 3 ---
->  1 file changed, 3 deletions(-)
-> 
+Bjorn,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> Krzysztof, you're running v5.14, which includes Krzysztof W's work,
+> but that shouldn't affect the imx6_pcie_probe()/pci_sysfs_init()
+> ordering.  Your log shows the error in imx6_pcie_probe().
+>
+> Would you mind adding the patch below and attaching a complete dmesg
+> log to the bugzilla?
+
+Sure. In fact I was using 5.16-rc4 (with the media tree) lately, without
+the fix from the other Krzysztof, and, as I can now see, it worked
+without the problem in question.
+
+I switched it to 5.14 I was using previously, reverted the fix, added
+your patch, and tried again. It booted 100+ times without experiencing
+the problem, too.
+
+I will try again with the previous 5.14-rc3+ (which needed the fix) next
+week. Perhaps it was an unrelated bug affecting 5.14-rc only (fixed
+before final 5.14)? I haven't checked back then if 5.14 needed the fix,
+most probably I've simply rebased from rc3+ to final.
+
+The other possibility is changed .config. Or, I don't know, the gcc
+versions. We will see.
+--=20
+Krzysztof "Chris" Ha=C5=82asa
+
+Sie=C4=87 Badawcza =C5=81ukasiewicz
+Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
+Al. Jerozolimskie 202, 02-486 Warszawa

@@ -2,112 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C364B1D3E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 05:01:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF9F44B1D49
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 05:12:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242175AbiBKEA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 23:00:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43746 "EHLO
+        id S242719AbiBKEM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 23:12:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiBKEA0 (ORCPT
+        with ESMTP id S230111AbiBKEM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 23:00:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C5B5F84;
-        Thu, 10 Feb 2022 20:00:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2021B827BA;
-        Fri, 11 Feb 2022 04:00:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF800C340E9;
-        Fri, 11 Feb 2022 04:00:22 +0000 (UTC)
-Date:   Thu, 10 Feb 2022 23:00:21 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     mhiramat@kernel.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 00/12] user_events: Enable user processes to create
- and write to trace events
-Message-ID: <20220210230021.3baf81ce@rorschach.local.home>
-In-Reply-To: <20220118204326.2169-1-beaub@linux.microsoft.com>
-References: <20220118204326.2169-1-beaub@linux.microsoft.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 10 Feb 2022 23:12:27 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA325F97;
+        Thu, 10 Feb 2022 20:12:26 -0800 (PST)
+X-UUID: 79bd38c002254a2183f9557e5681a346-20220211
+X-UUID: 79bd38c002254a2183f9557e5681a346-20220211
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <lina.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 327661395; Fri, 11 Feb 2022 12:12:21 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 11 Feb 2022 12:12:19 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 11 Feb 2022 12:12:18 +0800
+From:   Lina Wang <lina.wang@mediatek.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Alexei Starovoitov" <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "Andrii Nakryiko" <andrii@kernel.org>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, <maze@google.com>,
+        <willemb@google.com>, <edumazet@google.com>,
+        <zhuoliang.zhang@mediatek.com>, <chao.song@mediatek.com>
+Subject: Re: [PATCH] net: fix wrong network header length
+Date:   Fri, 11 Feb 2022 12:06:29 +0800
+Message-ID: <20220211040629.23703-1-lina.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <d5dd3f10c144f7150ec508fa8e6d7a78ceabfc10.camel@redhat.com>
+References: <d5dd3f10c144f7150ec508fa8e6d7a78ceabfc10.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Jan 2022 12:43:14 -0800
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
+On Thu, 2022-02-10 at 17:02 +0100, Paolo Abeni wrote:
 
-> User mode processes that wish to use trace events to get data into
-> ftrace, perf, eBPF, etc are limited to uprobes today. The user events
-> features enables an ABI for user mode processes to create and write to
-> trace events that are isolated from kernel level trace events. This
-> enables a faster path for tracing from user mode data as well as opens
-> managed code to participate in trace events, where stub locations are
-> dynamic.
+> > @@ -3682,6 +3682,7 @@ struct sk_buff *skb_segment_list(struct
+> > sk_buff *skb,
+> >  	struct sk_buff *tail = NULL;
+> >  	struct sk_buff *nskb, *tmp;
+> >  	int err;
+> > +	unsigned int len_diff = 0;
+> 
+> Mintor nit: please respect the reverse x-mas tree order.
+> 
 
-So I finished my review, and I'm currently added it to my queue that
-I'm running through my tests.
+Yes,v2 has change unsigned int to int
 
-Before I accept it though, I would really like you to send patches to
-linux-trace-devel@vger.kernel.org that add an API to libtracefs:
+> >  
+> >  	skb_push(skb, -skb_network_offset(skb) + offset);
+> > @@ -3721,9 +3722,11 @@ struct sk_buff *skb_segment_list(struct
+> > sk_buff *skb,
+> >  		skb_push(nskb, -skb_network_offset(nskb) + offset);
+> >  
+> >  		skb_release_head_state(nskb);
+> > +		len_diff = skb_network_header_len(nskb) -
+> > skb_network_header_len(skb);
+> >  		 __copy_skb_header(nskb, skb);
+> >  
+> >  		skb_headers_offset_update(nskb, skb_headroom(nskb) -
+> > skb_headroom(skb));
+> > +		nskb->transport_header += len_diff;
+> 
+> This does not look correct ?!? the network hdr position for nskb will
+> still be uncorrect?!? and even the mac hdr likely?!? possibly you
+> need
+> to change the offset in skb_headers_offset_update().
+> 
 
-  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/
+Network hdr position and mac hdr are both right, because bpf processing & 
+skb_headers_offset_update have updated them to right position. After bpf
+loading, the first skb's network header&mac_header became 44, transport
+header still is 64. After skb_headers_offset_update, fraglist skb's mac
+header and network header are still 24, the same with original packet.
+Just fraglist skb's transport header became 44, as original is 64. 
+Only transport header cannot be easily updated the same offset, because 
+6to4 has different network header.
 
-Something where users do not need to know about ioctls, or iovecs, etc.
+Actually,at the beginning, I want to change skb_headers_offset_update, but 
+it has been called also in other place, maybe a new function should be 
+needed here.
+ 
+Skb_headers_offset_update has other wrong part in my scenary, 
+inner_transport_header\inner_network_header\inner_mac_header shouldnot be 
+changed, but they are been updated because of different headroom. They are
+not used later, so wrong value didnot affect anything.
 
-struct tracefs_user_event *
-     tracefs_user_event_register(const char *name,
-		enum tracefs_uevent_type type,
-		char *field, ...);
+> Paolo
+>
 
-Where tracefs_uevent_type can be:
-
-enum tracefs_uevent_type {
-	TRACEFS_UEVENT_END,
-	TRACEFS_UEVENT_u8,
-	TRACEFS_UEVENT_s8,
-	TRACEFS_UEVENT_u16,
-	...
-};
-
-  uevent = tracefs_user_event_register("test",
-		TRACEFS_UEVENT_u64, "count",
-		TRACEFS_UEVENT_string, "name",
-		TRACEFS_UEVENT_array, 16, "array",
-		TRACEFS_UEVENT_END);
-
-and that will do the ioctl to register the event, with the given types
-and fields.
-
-  struct tracefs_user_event_status *ustatus;
-
-  ustatus = tracefs_user_event_status();  // does the mmap.
-
-
-Then we could also have:
-
-  if (tracefs_user_event_test(ustatus, uevent))
-	tracefs_user_event_write(uevent, 64, "string", { 16 byte data });
-
-The ustatus will be the mmap and the uevent will have the information
-to know where on the mmap to test for the event.
-
-As for the write, the types are saved, and the write function will have
-variable arguments defined by the tracefs_user_event_register().
-
-I think having that interface in libtracefs, would make this easy to
-use for everyone.
-
--- Steve
-
+Thanks! 

@@ -2,73 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC974B3168
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 00:40:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BCD94B316F
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 00:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354258AbiBKXkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 18:40:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41664 "EHLO
+        id S1354300AbiBKXm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 18:42:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238960AbiBKXkQ (ORCPT
+        with ESMTP id S1354281AbiBKXmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 18:40:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA6ECF9;
-        Fri, 11 Feb 2022 15:40:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10433B82DD0;
-        Fri, 11 Feb 2022 23:40:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B73C340E9;
-        Fri, 11 Feb 2022 23:40:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644622811;
-        bh=qjDhoyLBnjObhE+qaWk23jxLof4n/h4IluDmsF4S+Zc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HxHkOQCy8wBjoXjL70TshCgTZJSE9ew2DxDnJ18jj/4/DZV2JSnnbrH8FYWN5XOpz
-         7Ti0r5fW2KunCYfy9nEiI8B7VECUh3JugBLGRtdOucxqELydi8URSwwK5ypcHOgllo
-         JURaNYZHo4Vvle1HwR+VFcqPtgpSAnhTW53ToVTE6/tophEv+r9/HuKCXdTKs+SzCs
-         XXl3/zxMMecQoDvxqQcHzdXmfIB4/8dL1CNJeB9yr2QyMFVgooY3uJs2SsYqA9Nr/i
-         6cmkPGk37vDLzgx5UttouMfTOmgXCX6jZbciQMJBcUR5bRSeqHpTIXNgrJGAVebGls
-         Ml6ubZ55tvGsw==
-Message-ID: <314affa4-fbcb-2cb9-deb7-f61a2ac99260@kernel.org>
-Date:   Fri, 11 Feb 2022 15:40:09 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 04/12] mm/shmem: Support memfile_notifier
-Content-Language: en-US
-To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, qemu-devel@nongnu.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
+        Fri, 11 Feb 2022 18:42:51 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67105D6C;
+        Fri, 11 Feb 2022 15:42:48 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id k18so1570222ils.11;
+        Fri, 11 Feb 2022 15:42:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EJieVrYw7bGsS/GbDwdyCqkJlHD+DNLeYNU+G9HF0Kw=;
+        b=aJyCdrt6mtHVARW18KLBIZip5IXDQg3a50Kp8xN8UESpGu5Hg8vkgiS7JCTti43+MI
+         YHzD/b+jZuTBWbpTbtgFWzZzikCdZT94HGe2M2cnWMzri3xBEX7c7vaxgRBFerE0rxuM
+         bvcMe9NGtEpqZac2QheDaLEp3CjfrPoYKXTwSLVZ0IWpwd40PEHkzn2/ogEh5iAOw4TL
+         S2Pq8mZCCyop5a3yYxrSOkPKb3vF/s/PW0xtrEEOEqI1qdyA3WmmIZrlfgd4c1rwuzMK
+         kxWYhiAKGA5y8ueqQ8VWfZcTi5r/Z4k3SuxubyaLXnOcnXpxWWN0aL9Wywn91URR+8L1
+         4Oaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EJieVrYw7bGsS/GbDwdyCqkJlHD+DNLeYNU+G9HF0Kw=;
+        b=eTgeOrulndOIdVAyKHHsZBrIv0odvSeXs3hnU9O1iqLB3KvU6B0x4+W3OSxHxiksMn
+         fgyX434kziLJ43eio06YCT4sfLlWzoJzLX/PZ9QqsVIgfbFX8D15/lfbq1peouVKvEId
+         bSZygV2bsRud0W/SPJreuhsIUs1moMKp0fxMB0FHPEhCQr3GH3MT0OZkFi3w9W4uMSbJ
+         6YNGqgg8zd1tlJGjI2b+rV/dRWA+LYraUDZWi9fnPaEJWgHZ5nc9X4OxA7wXkgV/5Fht
+         aIhtXWbTmkHQl47Lz7kjWVXIX3YL/ncRDO3JZrbpldC1T275zNsBMKsY9jA9lx3p/nnd
+         afGw==
+X-Gm-Message-State: AOAM533UgaxCDJN5hr8jXn/ioDB+wuTKRTbKWrxHftQwF9zCBICeAMN3
+        dAyYdvoEPJcSMOcH2N2pQrw=
+X-Google-Smtp-Source: ABdhPJx2/HGyOBckGTxMpiRreSEAJEsNJebRTbV0IbocBugJaSb4aBKID1N0GneyP9liEw2Hu3L3lw==
+X-Received: by 2002:a92:d648:: with SMTP id x8mr2031228ilp.142.1644622967680;
+        Fri, 11 Feb 2022 15:42:47 -0800 (PST)
+Received: from localhost ([12.28.44.171])
+        by smtp.gmail.com with ESMTPSA id h19sm12766856ila.4.2022.02.11.15.42.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 15:42:47 -0800 (PST)
+Date:   Fri, 11 Feb 2022 15:40:36 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com
-References: <20220118132121.31388-1-chao.p.peng@linux.intel.com>
- <20220118132121.31388-5-chao.p.peng@linux.intel.com>
-From:   Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <20220118132121.31388-5-chao.p.peng@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        kernel test robot <lkp@intel.com>, linux-s390@vger.kernel.org
+Subject: Re: [PATCH 39/49] arch/s390: replace cpumask_weight with
+ cpumask_weight_eq where appropriate
+Message-ID: <Ygbz9G3DlPZYQ7Y7@yury-laptop>
+References: <20220210224933.379149-1-yury.norov@gmail.com>
+ <20220210224933.379149-40-yury.norov@gmail.com>
+ <yt9dwni17v19.fsf@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yt9dwni17v19.fsf@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,50 +92,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/18/22 05:21, Chao Peng wrote:
-> It maintains a memfile_notifier list in shmem_inode_info structure and
-> implements memfile_pfn_ops callbacks defined by memfile_notifier. It
-> then exposes them to memfile_notifier via
-> shmem_get_memfile_notifier_info.
+On Fri, Feb 11, 2022 at 07:54:26AM +0100, Sven Schnelle wrote:
+> Hi Yury,
 > 
-> We use SGP_NOALLOC in shmem_get_lock_pfn since the pages should be
-> allocated by userspace for private memory. If there is no pages
-> allocated at the offset then error should be returned so KVM knows that
-> the memory is not private memory.
+> Yury Norov <yury.norov@gmail.com> writes:
 > 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > cfset_all_start() calls cpumask_weight() to compare the weight of cpumask
+> > with a given number. We can do it more efficiently with
+> > cpumask_weight_{eq, ...} because conditional cpumask_weight may stop
+> > traversing the cpumask earlier, as soon as condition is (or can't be) met.
+> >
+> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> > ---
+> >  arch/s390/kernel/perf_cpum_cf.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/arch/s390/kernel/perf_cpum_cf.c b/arch/s390/kernel/perf_cpum_cf.c
+> > index ee8707abdb6a..4d217f7f5ccf 100644
+> > --- a/arch/s390/kernel/perf_cpum_cf.c
+> > +++ b/arch/s390/kernel/perf_cpum_cf.c
+> > @@ -975,7 +975,7 @@ static int cfset_all_start(struct cfset_request *req)
+> >  		return -ENOMEM;
+> >  	cpumask_and(mask, &req->mask, cpu_online_mask);
+> >  	on_each_cpu_mask(mask, cfset_ioctl_on, &p, 1);
+> > -	if (atomic_read(&p.cpus_ack) != cpumask_weight(mask)) {
+> > +	if (!cpumask_weight_eq(mask, atomic_read(&p.cpus_ack))) {
+> >  		on_each_cpu_mask(mask, cfset_ioctl_off, &p, 1);
+> >  		rc = -EIO;
+> >  		debug_sprintf_event(cf_dbg, 4, "%s CPUs missing", __func__);
+> 
+> given that you're adding a bunch of these functions - gt,lt,eq and
+> others, i wonder whether it makes sense to also add cpumask_weight_ne(),
+> so one could just write:
+> 
+> if (cpumask_weight_ne(mask, atomic_read(&p.cpus_ack))) {
+> 	...
+> }
+> 
+> ?
 
->   static int memfile_get_notifier_info(struct inode *inode,
->   				     struct memfile_notifier_list **list,
->   				     struct memfile_pfn_ops **ops)
->   {
-> -	return -EOPNOTSUPP;
-> +	int ret = -EOPNOTSUPP;
-> +#ifdef CONFIG_SHMEM
-> +	ret = shmem_get_memfile_notifier_info(inode, list, ops);
-> +#endif
-> +	return ret;
->   }
+It will have 3 users in cpumask + 1 in nodemask. I have no strong opinion
+whether we need it or not. Let's see what people say.
 
-> +int shmem_get_memfile_notifier_info(struct inode *inode,
-> +				    struct memfile_notifier_list **list,
-> +				    struct memfile_pfn_ops **ops)
-> +{
-> +	struct shmem_inode_info *info;
-> +
-> +	if (!shmem_mapping(inode->i_mapping))
-> +		return -EINVAL;
-> +
-> +	info = SHMEM_I(inode);
-> +	*list = &info->memfile_notifiers;
-> +	if (ops)
-> +		*ops = &shmem_pfn_ops;
-> +
-> +	return 0;
-
-I can't wrap my head around exactly who is supposed to call these 
-functions and when, but there appears to be a missing check that the 
-inode is actually a shmem inode.
-
-What is this code trying to do?  It's very abstract.
+Thanks,
+Yury

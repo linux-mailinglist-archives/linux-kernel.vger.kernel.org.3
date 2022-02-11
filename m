@@ -2,64 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFCC84B2945
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:44:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 340974B294E
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:46:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346142AbiBKPoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 10:44:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55748 "EHLO
+        id S1346719AbiBKPpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 10:45:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243944AbiBKPoC (ORCPT
+        with ESMTP id S236013AbiBKPpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 10:44:02 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8548FD82;
-        Fri, 11 Feb 2022 07:43:59 -0800 (PST)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B8D1D240002;
-        Fri, 11 Feb 2022 15:43:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644594235;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8aMFMOxt3wpyHmG3yssB5XfL03jGxKhpyI3oWsfXL7Y=;
-        b=i4aEFxwFLtu1GXs7z7xfAitkEU3hGcEI+mu83hBlSsl0YRIQugktUhswkyIxTqEbcZzLXZ
-        x39h5ceyKPn8xje/cg/Vm+s8MVXxz6+o57LYVN44VCs6ffEDlLDL4MFPDJBnwSOZ+Yy1MZ
-        K1TYDMG06ztndhrohKC4lSeHy6YQHAir1b++VQJbmjluK2HDsBHntNMEBom2CHIwmHoHhl
-        XMDcGB+ClMTfy40+/kdQxiUng1jvvfnbEapyiWs1WpPJ2jmmf4Lsr+5o+uNe4PEoCCUuDx
-        ++0b15Ag82zDNSnDYRABre6JrCucNWxCSrEzcrE/7gISHB8cyvdW1sTQSh6XFA==
-Date:   Fri, 11 Feb 2022 16:43:51 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 30/66] media: sun6i-csi: Add bridge v4l2 subdev with
- port management
-Message-ID: <YgaEN0ziZx5X7tQe@aptenodytes>
-References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-31-paul.kocialkowski@bootlin.com>
- <20220209092419.i3kver4f2am7mnow@houat>
+        Fri, 11 Feb 2022 10:45:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84BA21F;
+        Fri, 11 Feb 2022 07:45:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8130CB82A9B;
+        Fri, 11 Feb 2022 15:45:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71DAAC340E9;
+        Fri, 11 Feb 2022 15:44:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644594300;
+        bh=Cwb25r5eUpmN7pzfNiEaMUwwtBbCYaIlJyD33yZRuSk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cnUQr0fJQmRQuPfjzWiutxYQ/GwR+5oG+DKxscGILSPm8ewRr421M8pGgTImtxlMQ
+         mN4Y1xhZh8+ydS7KH0p0lwcag1uqzn3EeHmzodBV93yhEu0S+vKTf/kG6knj8u/H2R
+         Vx03SSla3Urnp7cQa0gQt6wmNCkmBiLuAJWmgfvI=
+Date:   Fri, 11 Feb 2022 16:44:49 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] USB-serial fixes for 5.17-rc4
+Message-ID: <YgaEcWf7fCkrt3l4@kroah.com>
+References: <YgZ/dFV1smMu64Bi@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="XHw3N8UqH38RVSoa"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220209092419.i3kver4f2am7mnow@houat>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <YgZ/dFV1smMu64Bi@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,61 +50,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 11, 2022 at 04:23:32PM +0100, Johan Hovold wrote:
+> The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
+> 
+>   Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.17-rc4
 
---XHw3N8UqH38RVSoa
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Pulled and pushed out, thanks.
 
-Hi,
-
-On Wed 09 Feb 22, 10:24, Maxime Ripard wrote:
-> On Sat, Feb 05, 2022 at 07:53:53PM +0100, Paul Kocialkowski wrote:
-> > Introduce a bridge v4l2 subdev to prepare for separation between the
-> > processing part (bridge) and the dma engine, which is required to
-> > properly support ths isp workflow later on.
-> >=20
-> > Currently the bridge just manages fwnode mapping to media pads,
-> > using an async notifier (which was previously in the main code).
-> > The s_stream video op just forwards to the connected v4l2 subdev
-> > (sensor or MIPI CSI-2 bridge).
-> >=20
-> > The video capture device is now registered after the bridge and
-> > attaches to it with a media link.
-> >=20
-> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
->=20
-> There's a bunch of checkpatch --strict warnings that need to be fixed
-
-Yes so it turns out these are adaptations to the existing video code
-which has these warnings already merged. They are cleaned up later on
-in a dedicated commit, but since it's not the topic of this change
-(which is a logic change) I kept the code as it is.
-
-What do you think?
-
-Cheers,
-
-Paul
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---XHw3N8UqH38RVSoa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIGhDcACgkQ3cLmz3+f
-v9HxbggAkL1iOyWpL7H+lZcb/umUFS3DskOwQqsJ28ib87Q2czErTSd1f+9YJdCa
-EHq30lRWyVOiGhNk+e2MzCZEEXWs4uwyrzwreGCK/8qHY7Rc4feneC1McKFsqLAP
-k90LC5AwjohCmVpGl6s4AIwoGuqC3sDYkF+My9u22p5I8uCN7FgScIOA7t89vAz3
-W7c/HZvofFbm94MWHksrFVOckKJHU5Ord3hFLZ9aN2WPTtPCtAwno2hU+lXY73BH
-bc6dopUiS4v4G3loMEQRTLhAq+Ni97+dcBR3avT0uHe01PsAd7ftmED1xuCY9thK
-uqhmv8PCDGd011l8Kb6eLcZ1accYnw==
-=xWX0
------END PGP SIGNATURE-----
-
---XHw3N8UqH38RVSoa--
+greg k-h

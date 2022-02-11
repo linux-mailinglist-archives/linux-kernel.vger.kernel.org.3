@@ -2,118 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 396C04B26CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 14:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4BB4B26D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 14:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350429AbiBKNIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 08:08:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42944 "EHLO
+        id S1350439AbiBKNIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 08:08:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237873AbiBKNII (ORCPT
+        with ESMTP id S1350431AbiBKNIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 08:08:08 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2F6F43
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 05:08:06 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id m14so15116107wrg.12
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 05:08:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=I+k2v7vnbgMhSaU57JWk13mn9hMYpBDkI2h6mlnSApw=;
-        b=QCTfdGUKhNUL0g7+17DFABMk2Fal7ltvf/O5v7hKbvy6X0h4rvk81T2fhM0dCeVdGM
-         IleZArGD5lA5+3npeBX2yf0qzrPnAfO4g2w+hKsxcexcyJrHcejkY2cXi+8961MWn/XX
-         PJsT78uUZWuDP2vguIbVyWb+nCgWq48iOUaF9SDQiFtrobnLTfZmjAKofAIAAgnn2+CM
-         /Cjpyy2Ol3tgdFyC7+NC16AlWNLmiLhoQaH0jmsOkpWh82GGlH2vTqwZYySUPS7o/2Mx
-         mVZBVA/j+dkhEgqvf63Y58L2JUzWZm6A1bv6T5QpmJ0crzuBRQtIGTqLDOp3wlyn/m0J
-         og+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=I+k2v7vnbgMhSaU57JWk13mn9hMYpBDkI2h6mlnSApw=;
-        b=raX+dFQ6WwmP1YXVPd1Oz1cM5ZhTsTOUUUnAkZoTXk8/Wa6w4JzheeDIPa4bXQZgwa
-         I255qySGyPaOTxTo2JYN2kvfcXBGKAmigtmiClSc9Es6TSYBk+k+Rq8Na8QILA/7JfI5
-         MCANvS6fqrwlxIO2FbU/4q0BITcooifyEr3ZEp6mLdmPYMicvGHsj8dlhk/ypRMcpK2r
-         2YQVxfyMA+MMY0OKxQGAFkK6fwvTmCry0HGyDokZZj8Oi2nv/ODmjXzTHgRMgvHWIzEg
-         4kY6G0C6SI/ajPQ7Knea18hksc0RhnH3BxdHjbgXwNDG2p6nMzfyhP5aJoiF/UmHeYr+
-         o+pg==
-X-Gm-Message-State: AOAM530zvZ4/oLuZfZqveRQOvZM3dnyuiEz7GLc95IIp4SjJETb+0sGT
-        kYvubeM1WKXiIjbQMQ6vxrvQuA==
-X-Google-Smtp-Source: ABdhPJyNGbjyagJVMCs0GpGGHe8iuMQr/P3hbA5LSCnv1B0i+lUtSDpTvOEX0k/zAOETavkpDQBdmA==
-X-Received: by 2002:adf:e886:: with SMTP id d6mr1433078wrm.656.1644584884979;
-        Fri, 11 Feb 2022 05:08:04 -0800 (PST)
-Received: from debian-brgl.home ([2a01:cb1d:334:ac00:7d50:ff5:f5c1:e225])
-        by smtp.gmail.com with ESMTPSA id p27sm4161351wms.39.2022.02.11.05.08.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 05:08:04 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [GIT PULL] gpio: fixes for v5.17-rc4
-Date:   Fri, 11 Feb 2022 14:08:01 +0100
-Message-Id: <20220211130801.280029-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.30.1
+        Fri, 11 Feb 2022 08:08:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8DA5D4A;
+        Fri, 11 Feb 2022 05:08:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E18261D76;
+        Fri, 11 Feb 2022 13:08:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEA4CC340EE;
+        Fri, 11 Feb 2022 13:08:13 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="HgDWWlbQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644584892;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jU4QzcZ8hlgj6Zwqoh80fDmlhrxd7vRaHxleEqctUq0=;
+        b=HgDWWlbQxyLuwitCVPKspxpSG47R50FE8l5/NQ8Ixcp/Zmp1tUzw7889ZoXklcy/R2NRAL
+        vS5OiYJJooIEZvo4NOOth6gzfrqw5ULra+zASY63lPVnIZehHGg0JDTcRLbEkiI5XwuMoC
+        OsacWP4qm+xTMYSOVaFiwcVUswDl7uE=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d4a9d0b1 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 11 Feb 2022 13:08:12 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: [PATCH v5] random: defer fast pool mixing to worker
+Date:   Fri, 11 Feb 2022 14:08:07 +0100
+Message-Id: <20220211130807.491750-1-Jason@zx2c4.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On PREEMPT_RT, it's problematic to take spinlocks from hard irq
+handlers. We can fix this by deferring to a workqueue the dumping of
+the fast pool into the input pool.
 
-Please pull the following set of fixes from the GPIO subsystem for the next
-release candidate.
+We accomplish this with some careful rules on fast_pool->count:
 
-Best Regards,
-Bartosz Golaszewski
+  - When it's incremented to >= 64, we schedule the work.
+  - If the top bit is set, we never schedule the work, even if >= 64.
+  - The worker is responsible for setting it back to 0 when it's done.
 
-The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
+There are two small issues around using workqueues for this purpose that
+we work around.
 
-  Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
+The first issue is that mix_interrupt_randomness() might be migrated to
+another CPU during CPU hotplug. This issue is rectified by checking that
+it hasn't been migrated (after disabling migration). If it has been
+migrated, then we set the count to zero, so that when the CPU comes
+online again, it can requeue the work. As part of this, we switch to
+using an atomic_t, so that the increment in the irq handler doesn't wipe
+out the zeroing if the CPU comes back online while this worker is
+running.
 
-are available in the Git repository at:
+The second issue is that, though relatively minor in effect, we probably
+want to make sure we get a consistent view of the pool onto the stack,
+in case it's interrupted by an irq while reading. To do this, we simply
+read count before and after the memcpy and make sure they're the same.
+If they're not, we try again. This isn't a seqlock or anything heavy
+like that because we're guaranteed to be on the same core as the irq
+handler interrupting, which means that interruption either happens in
+full or doesn't at all. The likelihood of actually hitting this is very
+low, as we're talking about a 2 or 4 word mov.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v5.17-rc4
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Sultan Alsawaf <sultan@kerneltoast.com>
+Cc: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Sebastian - I merged the fixes into the base commit and now I'm
+resending this. I also incorporated your nit about the acquire/release
+comments. Let me know if you think this needs further changes.
 
-for you to fetch changes up to c162ca0bcbfb39308c4dff4157e27c751af7032a:
+ drivers/char/random.c | 72 ++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 58 insertions(+), 14 deletions(-)
 
-  gpio: sim: fix hogs with custom chip labels (2022-02-09 11:41:29 +0100)
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index c42c07a7eb56..43c7e6c0a1b7 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1162,10 +1162,12 @@ EXPORT_SYMBOL_GPL(add_bootloader_randomness);
+ 
+ struct fast_pool {
+ 	unsigned long pool[16 / sizeof(long)];
++	struct work_struct mix;
+ 	unsigned long last;
++	atomic_t count;
+ 	u16 reg_idx;
+-	u8 count;
+ };
++#define FAST_POOL_MIX_INFLIGHT (1U << 31)
+ 
+ /*
+  * This is a fast mixing routine used by the interrupt randomness
+@@ -1214,12 +1216,57 @@ static u32 get_reg(struct fast_pool *f, struct pt_regs *regs)
+ 	return *ptr;
+ }
+ 
++static void mix_interrupt_randomness(struct work_struct *work)
++{
++	struct fast_pool *fast_pool = container_of(work, struct fast_pool, mix);
++	unsigned long pool[ARRAY_SIZE(fast_pool->pool)];
++	unsigned int count_snapshot;
++	size_t i;
++
++	/* Check to see if we're running on the wrong CPU due to hotplug. */
++	migrate_disable();
++	if (fast_pool != this_cpu_ptr(&irq_randomness)) {
++		migrate_enable();
++		/*
++		 * If we are unlucky enough to have been moved to another CPU,
++		 * then we set our count to zero atomically so that when the
++		 * CPU comes back online, it can enqueue work again. The
++		 * _release here pairs with the atomic_inc_return_acquire in
++		 * add_interrupt_randomness().
++		 */
++		atomic_set_release(&fast_pool->count, 0);
++		return;
++	}
++
++	/*
++	 * Copy the pool to the stack so that the mixer always has a
++	 * consistent view. It's extremely unlikely but possible that
++	 * this 2 or 4 word read is interrupted by an irq, but in case
++	 * it is, we double check that count stays the same.
++	 */
++	do {
++		count_snapshot = (unsigned int)atomic_read(&fast_pool->count);
++		for (i = 0; i < ARRAY_SIZE(pool); ++i)
++			pool[i] = READ_ONCE(fast_pool->pool[i]);
++	} while (count_snapshot != (unsigned int)atomic_read(&fast_pool->count));
++
++	/* We take care to zero out the count only after we're done reading the pool. */
++	atomic_set(&fast_pool->count, 0);
++	fast_pool->last = jiffies;
++	migrate_enable();
++
++	mix_pool_bytes(pool, sizeof(pool));
++	credit_entropy_bits(1);
++	memzero_explicit(pool, sizeof(pool));
++}
++
+ void add_interrupt_randomness(int irq)
+ {
+ 	struct fast_pool *fast_pool = this_cpu_ptr(&irq_randomness);
+ 	struct pt_regs *regs = get_irq_regs();
+ 	unsigned long now = jiffies;
+ 	cycles_t cycles = random_get_entropy();
++	unsigned int new_count;
+ 
+ 	if (cycles == 0)
+ 		cycles = get_reg(fast_pool, regs);
+@@ -1235,12 +1282,13 @@ void add_interrupt_randomness(int irq)
+ 	}
+ 
+ 	fast_mix((u32 *)fast_pool->pool);
+-	++fast_pool->count;
++	/* The _acquire here pairs with the atomic_set_release in mix_interrupt_randomness(). */
++	new_count = (unsigned int)atomic_inc_return_acquire(&fast_pool->count);
+ 
+ 	if (unlikely(crng_init == 0)) {
+-		if (fast_pool->count >= 64 &&
++		if (new_count >= 64 &&
+ 		    crng_fast_load(fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
+-			fast_pool->count = 0;
++			atomic_set(&fast_pool->count, 0);
+ 			fast_pool->last = now;
+ 
+ 			/*
+@@ -1254,20 +1302,16 @@ void add_interrupt_randomness(int irq)
+ 		return;
+ 	}
+ 
+-	if ((fast_pool->count < 64) && !time_after(now, fast_pool->last + HZ))
++	if (new_count & FAST_POOL_MIX_INFLIGHT)
+ 		return;
+ 
+-	if (!spin_trylock(&input_pool.lock))
++	if (new_count < 64 && !time_after(now, fast_pool->last + HZ))
+ 		return;
+ 
+-	fast_pool->last = now;
+-	_mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
+-	spin_unlock(&input_pool.lock);
+-
+-	fast_pool->count = 0;
+-
+-	/* Award one bit for the contents of the fast pool. */
+-	credit_entropy_bits(1);
++	if (unlikely(!fast_pool->mix.func))
++		INIT_WORK(&fast_pool->mix, mix_interrupt_randomness);
++	atomic_or(FAST_POOL_MIX_INFLIGHT, &fast_pool->count);
++	queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
+ }
+ EXPORT_SYMBOL_GPL(add_interrupt_randomness);
+ 
+-- 
+2.35.0
 
-----------------------------------------------------------------
-gpio fixes for v5.17-rc4
-
-- use sleeping variants of GPIO accessors where needed in gpio-aggregator
-- never return kernel's internal error codes to user-space in gpiolib core
-- use the correct register for reading output values in gpio-sifive
-- fix line hogging in gpio-sim
-
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      gpiolib: Never return internal error codes to user space
-
-Bartosz Golaszewski (1):
-      gpio: sim: fix hogs with custom chip labels
-
-Geert Uytterhoeven (1):
-      gpio: aggregator: Fix calling into sleeping GPIO controllers
-
-Niklas Cassel (1):
-      gpio: sifive: use the correct register to read output values
-
- drivers/gpio/gpio-aggregator.c | 18 ++++++++++++++----
- drivers/gpio/gpio-sifive.c     |  2 +-
- drivers/gpio/gpio-sim.c        | 19 +++++++++++++++----
- drivers/gpio/gpiolib-cdev.c    |  6 +++---
- drivers/gpio/gpiolib-sysfs.c   |  7 ++-----
- drivers/gpio/gpiolib.h         | 12 ++++++++++++
- 6 files changed, 47 insertions(+), 17 deletions(-)

@@ -2,188 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633A14B2236
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:40:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE72A4B225D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244795AbiBKJjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 04:39:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57394 "EHLO
+        id S245565AbiBKJpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 04:45:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344497AbiBKJjj (ORCPT
+        with ESMTP id S237727AbiBKJpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 04:39:39 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E556E4D;
-        Fri, 11 Feb 2022 01:39:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1644572379; x=1676108379;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Vc01hpWMLj0MX7Suyo/gaNp3ZTgeddpPoZAPTjJV1OQ=;
-  b=TvvUMZMavMXqX4ulR6kCZnKwDztadg5kxl/Gt8HTXOAiKxa5fZakU8b/
-   hdNeW0GBcMfgIL4EzOvNSBepOC++ccO2Ym839h5ZuqKAB7zJu/Xx8HwCN
-   YKTGJYYfsaYOb32QoM9Y5WydWdRbSl+kDQh+CuuMQ4IDn3uhLXOVjhvud
-   KyexFDedBgN+6ocM5wy0IL6+LIQyu5t8cvANPyG1JbTAfOhKc1w807m57
-   OzGLU7+dQ+fVI6lqtgDhGJDDoGjLEFqycaGrQhx3e/F+bTrtvDmMPdKSX
-   5yNixBTtJi+CUJ04BMMBQ9r/GLjMxWMCIAj96m1jlyb3KvarBg7Js4Fgp
-   A==;
-IronPort-SDR: xfAmm2XmiOHNPcq++MvYfecbNJBno7ge3ynBF+N+c+hXUHUk3gI8c/gv8MHhSdDjsBHN0TOs2/
- L2ARxgIK9arZe03vQvraNKAqsftWFc0B4+nUarRP1wLXf/LPUwcVYZcrOdFoFrzr0jVhyM+mJN
- 5JciyBEa4xkGcv/cAfcg6gg40ezi54RnDvNdDGPhjkcpDsHuzs5CxVWa+ZLO1HEIChbjBNBf3J
- eQOYtAn53RfQcvMO16P/XMCla33ag57eT1q0UVXVU75JUintNB+vOdppG+LNeK9oYVAJc+iPYr
- B/JHLnts3AHU0nog1D3IuQDV
-X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
-   d="scan'208";a="161908023"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Feb 2022 02:39:38 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 11 Feb 2022 02:39:38 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 11 Feb 2022 02:39:35 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <herbert@gondor.apana.org.au>, <krzysztof.kozlowski@canonical.com>,
-        <robh+dt@kernel.org>
-CC:     <nicolas.ferre@microchip.com>, <claudiu.beznea@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <linux-crypto@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kavyasree.kotagiri@microchip.com>,
-        <devicetree@vger.kernel.org>,
-        "Tudor Ambarus" <tudor.ambarus@microchip.com>
-Subject: [PACTH v4 3/3] dt-bindings: crypto: Convert Atmel SHA to yaml
-Date:   Fri, 11 Feb 2022 11:39:22 +0200
-Message-ID: <20220211093922.456634-4-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220211093922.456634-1-tudor.ambarus@microchip.com>
-References: <20220211093922.456634-1-tudor.ambarus@microchip.com>
+        Fri, 11 Feb 2022 04:45:12 -0500
+X-Greylist: delayed 308 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 01:45:11 PST
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17EFBAA
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:45:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1644572710;
+        bh=NM1bKcmX/dl/5DPV1+dpYflnMkoZbUuMneJ+tJvHcEM=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=Qu0TsK754zEm2zs6RXcbE7TZv2wkUJ8TSxF9qXjH9577evcsYavUbHttmrX/77ssU
+         sGKeYNAg1zLAzE7XAJwq+Eha7IWWS6DV6mjU4Y5gMquq5szuMclSbqhKwi9FRhQNuZ
+         FXjzyqS/Eka4mLuDmCXZwqHsvY8grQ+xvfjHGk3c=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.143.79]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MMGRA-1nYT5Z0T3O-00JM7j; Fri, 11
+ Feb 2022 10:39:55 +0100
+Message-ID: <17f233db-9591-3093-5e63-29e1c8f4b237@gmx.de>
+Date:   Fri, 11 Feb 2022 10:39:49 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] video: s3c-fb: Use platform_get_irq() to get the
+ interrupt
+Content-Language: en-US
+To:     zhaoxiao <zhaoxiao@uniontech.com>, jingoohan1@gmail.com
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220211032755.2271-1-zhaoxiao@uniontech.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220211032755.2271-1-zhaoxiao@uniontech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:rCkG0fxvjucaruFew1umM13DmyIqZn1revwD1+1XenYM/N02t2F
+ lP1ajjY6yqN/CSzhJKFr8CdPiqyL/yp6ZLVx2AItRmNLoN1+xWp5bmBC5r28l/4GtxqKtpm
+ Rx2o1+lxCNXZ2duS5CoAQ0ZqmQWfedfiDuETfsBa49upWXy5rHEGaJVMdfgYx4MsaJr+xv2
+ 5NUZDlIzBT/UUNHAqsILA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5gNyjIadc58=:5DOPWZ/AshOwzaGE3hQ1Rw
+ I2Pmkd4wSZVWFYDmioKiGSNrV1mq+5rxkhSmyagBjpSUfwXweeqLrrYVVXhSG4xwHwKSA03We
+ dTpLx8TBp1kp4iY4/NZRIVz0aeoRFZ+918u4PY+UxYKtd4AF6bm6BPaIac2fZrZZUC1GBzBTR
+ 4cCoPwDpKe7T5V/7jOgz+ueQOoEe4DuVGmt8XdGWdUKnLC2+O5K7hmoVBe3oKOlMUfKuaA7nb
+ u2IH6RAPE3Y2iX8f/4EhPQZdeeNiB4UxxgaQVv2lL7zsxe6LStdDAwOqT7WVHAokaeUWkRpye
+ 36qSZMgcURbh026jJzPw19GzEnreau/QlGcfbcoPlflyQfFf+ItQXubnQAdUhVcBI5kvHSe8+
+ ie2FRzczBQa8ACQCSRk/5rVnT7QgMKvLV6j1H9DS+n99PqQ2O/qoj02ni2SolmQitW8+JErlP
+ 8ZCkYLuKYHtUh8W2/qRIZzkNz8VcJl5SzAqC29R+Ts+85hFrrLZYco1tW02q2BX1GV1h7Pr+S
+ sN18+WTHwJdyQOJA7Wje5RmBafa4MMFPLX3aBHqwrYCEn3GgxR5CFYTmw+b7kXUN44M9gXPpB
+ QwE4w983HXam+mmOnBIHTHdVypnqdYI1kTI+eqySFg2UMu3puUyX6RpADbjD7wrLw0QY/NTNL
+ vsHed/EABmTAIsDdyYoaw9ZQdp0lZuJb0aqGfUoYiK0F0A8BwMnhBriYkA1wMGXXmGMCbb+QB
+ 5X+hBi/3zK1jTAroEFAhF9ev3DgV43Iupkb5EWFS4q+3qubwZ3/v9wjRLKzX7oxEw0yv4wK2B
+ aDNONr9rnEssBI8tW17Vi4sCNGyqiIn+VICztiV3s4C48Gyp2ZjiMHz2TF8FG4QBThICLNyD/
+ IEJo2kV57NG4yZPlDxVO+cFNp4d2nKFdHyglmLbTsMxovXRJu1N40Pzts1AtVh4zC+F+4pSL+
+ gHDxy32LFOqLBKFUYcOC/YWxpM0cozzTtq9wN0VvLCi7fJzUCsf1xy7Q6FjGRyulOEBurkAFw
+ ndLhI4dhkbTd9Z6f2mQ8QrJaRHp22ZhFmXs/QMzv9RK2ZZ5UWPWK8goZwcotZMKvyA==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Atmel SHA documentation to yaml format. With the conversion the
-clock and clock-names properties are made mandatory. The driver returns
--EINVAL if "sha_clk" is not found, reflect that in the bindings and make
-the clock and clock-names properties mandatory. Update the example to
-better describe how one should define the dt node.
+On 2/11/22 04:27, zhaoxiao wrote:
+> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
+> allocation of IRQ resources in DT core code, this causes an issue
+> when using hierarchical interrupt domains using "interrupts" property
+> in the node as this bypassed the hierarchical setup and messed up the
+> irq chaining.
+>
+> In preparation for removal of static setup of IRQ resource from DT core
+> code use platform_get_irq().
+>
+> Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- .../crypto/atmel,at91sam9g46-sha.yaml         | 60 +++++++++++++++++++
- .../bindings/crypto/atmel-crypto.txt          | 25 --------
- 2 files changed, 60 insertions(+), 25 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
- delete mode 100644 Documentation/devicetree/bindings/crypto/atmel-crypto.txt
+applied.
+Thanks!
+Helge
 
-diff --git a/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
-new file mode 100644
-index 000000000000..5163c51b4547
---- /dev/null
-+++ b/Documentation/devicetree/bindings/crypto/atmel,at91sam9g46-sha.yaml
-@@ -0,0 +1,60 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/crypto/atmel,at91sam9g46-sha.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Atmel Secure Hash Algorithm (SHA) HW cryptographic accelerator
-+
-+maintainers:
-+  - Tudor Ambarus <tudor.ambarus@microchip.com>
-+
-+properties:
-+  compatible:
-+    const: atmel,at91sam9g46-sha
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: sha_clk
-+
-+  dmas:
-+    maxItems: 1
-+    description: TX DMA Channel
-+
-+  dma-names:
-+    const: tx
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/at91.h>
-+    #include <dt-bindings/dma/at91.h>
-+
-+    sha: crypto@e1814000 {
-+      compatible = "atmel,at91sam9g46-sha";
-+      reg = <0xe1814000 0x100>;
-+      interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-+      clocks = <&pmc PMC_TYPE_PERIPHERAL 83>;
-+      clock-names = "sha_clk";
-+      dmas = <&dma0 AT91_XDMAC_DT_PERID(48)>;
-+      dma-names = "tx";
-+    };
-diff --git a/Documentation/devicetree/bindings/crypto/atmel-crypto.txt b/Documentation/devicetree/bindings/crypto/atmel-crypto.txt
-deleted file mode 100644
-index 5c6541cfcc4a..000000000000
---- a/Documentation/devicetree/bindings/crypto/atmel-crypto.txt
-+++ /dev/null
-@@ -1,25 +0,0 @@
--* Atmel HW cryptographic accelerators
--
--These are the HW cryptographic accelerators found on some Atmel products.
--
--* Secure Hash Algorithm (SHA)
--
--Required properties:
--- compatible : Should be "atmel,at91sam9g46-sha".
--- reg: Should contain SHA registers location and length.
--- interrupts: Should contain the IRQ line for the SHA.
--
--Optional properties:
--- dmas: One DMA specifiers as described in
--        atmel-dma.txt and dma.txt files.
--- dma-names: Contains one identifier string for each DMA specifier
--             in the dmas property. Only one "tx" string needed.
--
--Example:
--sha@f8034000 {
--	compatible = "atmel,at91sam9g46-sha";
--	reg = <0xf8034000 0x100>;
--	interrupts = <42 4 0>;
--	dmas = <&dma1 2 17>;
--	dma-names = "tx";
--};
--- 
-2.25.1
+> ---
+>  drivers/video/fbdev/s3c-fb.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/video/fbdev/s3c-fb.c b/drivers/video/fbdev/s3c-fb.c
+> index 3b134e1bbc38..6ead7d3e2312 100644
+> --- a/drivers/video/fbdev/s3c-fb.c
+> +++ b/drivers/video/fbdev/s3c-fb.c
+> @@ -1360,7 +1360,6 @@ static int s3c_fb_probe(struct platform_device *pd=
+ev)
+>  	struct device *dev =3D &pdev->dev;
+>  	struct s3c_fb_platdata *pd;
+>  	struct s3c_fb *sfb;
+> -	struct resource *res;
+>  	int win;
+>  	int ret =3D 0;
+>  	u32 reg;
+> @@ -1418,13 +1417,13 @@ static int s3c_fb_probe(struct platform_device *=
+pdev)
+>  		goto err_lcd_clk;
+>  	}
+>
+> -	res =3D platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+> -	if (!res) {
+> +	sfb->irq_no =3D platform_get_irq(pdev, 0);
+> +	if (sfb->irq_no < 0) {
+>  		dev_err(dev, "failed to acquire irq resource\n");
+>  		ret =3D -ENOENT;
+>  		goto err_lcd_clk;
+>  	}
+> -	sfb->irq_no =3D res->start;
+> +
+>  	ret =3D devm_request_irq(dev, sfb->irq_no, s3c_fb_irq,
+>  			  0, "s3c_fb", sfb);
+>  	if (ret) {
+>
 

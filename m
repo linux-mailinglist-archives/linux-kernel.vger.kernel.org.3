@@ -2,159 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37BCA4B1C22
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 03:22:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 819BE4B1C15
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 03:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347259AbiBKCWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 21:22:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39372 "EHLO
+        id S1347240AbiBKCQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 21:16:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238163AbiBKCWK (ORCPT
+        with ESMTP id S244843AbiBKCQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 21:22:10 -0500
-X-Greylist: delayed 365 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 18:22:10 PST
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A4FB33
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 18:22:09 -0800 (PST)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220211021557epoutp0397a07cb1738b65b09f9df986a5865518~SmadJbBKR0340403404epoutp03g
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:15:57 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220211021557epoutp0397a07cb1738b65b09f9df986a5865518~SmadJbBKR0340403404epoutp03g
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1644545757;
-        bh=RzlOp7xQkyQ/B4cTCD1RR/Q2R2KE9RplTKZCwguaoNA=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=JjxuvQ1je9cMwaNEALil8olEtIL+QbgnHQy73fmeQrh3/FguRxVoErf0u5siYoSs3
-         X0CIGEONcYiXadCKTu9ARrvfUJnQ/7bKZZVeCAND56Lz/6227JmQwnRSwkEHgw0HGe
-         BkpYRlV2YV9NdHwDYQhqKc0+tiJw6ZaBZyAhBMrU=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20220211021557epcas2p434a6be1281038c1d1b1ee8eb0de3ce76~SmacvayQw1046710467epcas2p4P;
-        Fri, 11 Feb 2022 02:15:57 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.70]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4Jvxzv3S5yz4x9QG; Fri, 11 Feb
-        2022 02:15:55 +0000 (GMT)
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A9.0F.10014.995C5026; Fri, 11 Feb 2022 11:10:33 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220211021552epcas2p461fd898f8b28fa90982a7c52e2faba14~SmaYXMujD1044710447epcas2p4P;
-        Fri, 11 Feb 2022 02:15:52 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220211021552epsmtrp17a20b7f7d78e00ec8fbd2ebdd8ccfebc~SmaYWPL6q0244802448epsmtrp1S;
-        Fri, 11 Feb 2022 02:15:52 +0000 (GMT)
-X-AuditID: b6c32a47-489ff7000000271e-51-6205c5998434
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        0D.A8.29871.8D6C5026; Fri, 11 Feb 2022 11:15:52 +0900 (KST)
-Received: from KORCO011456 (unknown [10.229.18.123]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220211021552epsmtip219e92a2bce125531c8c25099fab4d6dc~SmaYEqWpF1330013300epsmtip2Q;
-        Fri, 11 Feb 2022 02:15:52 +0000 (GMT)
-From:   "Kiwoong Kim" <kwmad.kim@samsung.com>
-To:     "'Avri Altman'" <Avri.Altman@wdc.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <beanhuo@micron.com>,
-        <cang@codeaurora.org>, <adrian.hunter@intel.com>,
-        <sc.suh@samsung.com>, <hy50.seo@samsung.com>,
-        <sh425.lee@samsung.com>, <bhoon95.kim@samsung.com>,
-        <vkumar.1997@samsung.com>
-In-Reply-To: <DM6PR04MB657519E60FAFA19434531CE2FC2B9@DM6PR04MB6575.namprd04.prod.outlook.com>
-Subject: RE: [PATCH v1] scsi: ufs: remove clk_scaling_lock when clkscaling
- isn't supported.
-Date:   Fri, 11 Feb 2022 11:15:55 +0900
-Message-ID: <007101d81eed$4d120a60$e7361f20$@samsung.com>
+        Thu, 10 Feb 2022 21:16:28 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563D15FB4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 18:16:27 -0800 (PST)
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E274E3F1D8
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:16:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644545784;
+        bh=wr917FetGRB+Dwa6hoOdwfA0a1yOjjIVMUk1tc6Vh2Q=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=OyiG1OzZFpsmzdSBlvW6OsEYtQ1ku232EEFC1tf82iJPl7+L+/iDxpsHM2gdUX1wq
+         YBJW709RMbLuXYDXMHHKsq29AH8rAQCLeeFL63g01r7Qxiq1FiedYNV66nhQLO7+S4
+         5FNjVnHkd4zRLPjIg0OvWBwcWDAq4EtfoLQpXpZ09t3qwn5Q7AEunM51bfSuF5Ng2p
+         Gs4PZEKjVvWYXhD/xZ9W/W3NS/rl2JPb8nZ58NSFqTumqHoh4e43yBbweTA2FdrCx2
+         ExZEgtwynx/dxkcj0NnVPKlRX3e1yXa7mer3xA+Juvb9j2qNQF+CHPwAoJMeyhSC5c
+         8d31vFOwKJ7mQ==
+Received: by mail-il1-f198.google.com with SMTP id h8-20020a056e021b8800b002ba614f7c5dso5204953ili.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 18:16:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=wr917FetGRB+Dwa6hoOdwfA0a1yOjjIVMUk1tc6Vh2Q=;
+        b=OBnljfUyqP3aOp33E3wFAC5EM2aZ/0Jo83oPj0J4Gpdjm7X0OKXr+M7OEy/3gKDlSK
+         Ak02jzxaxYGqV74CjpTz4Nz7Qj00gNJvghUw7IpGVYgQXalRzmf460mFie2hLuL5sXIg
+         Dyl4EZKWvrQowjPl5bxTh3R9dTNk5SXgAKw9mM5HSxcaufIkIDwerkjzNVGsha2OGznI
+         VjjzOD49801WlAuo7k75W3Mn40601tLmqIgSddE6UDdxJTkaRg3PJDCstoEdMrqnovX4
+         AxzFjRASchAs9rD0SprUoiE/NZdFig8+QVX/ZuU4dMzUwF5fqqoDzS2Ep5WCaF41oUNh
+         cFDQ==
+X-Gm-Message-State: AOAM5308ZhcOWDZKOI80BtXnPQ3Z8RaxDUpWvytTml9YyEw6xpyBwGK9
+        2BgK7PRo6+NgM2MCjgHYTsu60bNxidnj513mUd045n8p3a5ruodGQ8DBrBwRQoYAth80+KT+4Rt
+        i0Jv7hxuupOkVYHs5B+jAPFXZssb1vDoVqBgFDnwZSw==
+X-Received: by 2002:a02:c8c8:: with SMTP id q8mr5221361jao.243.1644545783560;
+        Thu, 10 Feb 2022 18:16:23 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyMHhPZZCj8/aMYnFzDF+/epemaAS8yzBkanyfCuHI/zd+71O1cwnboJ+jJrLUY3cVTfwXTzA==
+X-Received: by 2002:a02:c8c8:: with SMTP id q8mr5221351jao.243.1644545783301;
+        Thu, 10 Feb 2022 18:16:23 -0800 (PST)
+Received: from xps13.dannf (c-71-196-238-11.hsd1.co.comcast.net. [71.196.238.11])
+        by smtp.gmail.com with ESMTPSA id d2sm4867105iog.42.2022.02.10.18.16.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 18:16:22 -0800 (PST)
+Date:   Thu, 10 Feb 2022 19:16:19 -0700
+From:   dann frazier <dann.frazier@canonical.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Toan Le <toan@os.amperecomputing.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andrew Murray <amurray@thegoodpenguin.co.uk>,
+        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>,
+        stable <stable@vger.kernel.org>, PCI <linux-pci@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] PCI: xgene: Fix IB window setup
+Message-ID: <YgXG838iMrS1l8SC@xps13.dannf>
+References: <20211129173637.303201-1-robh@kernel.org>
+ <Yf2wTLjmcRj+AbDv@xps13.dannf>
+ <CAL_Jsq+4b4Yy8rJGJv9j9j_TCm6mTAkW5fzcDuuW-jOoiZ2GLg@mail.gmail.com>
+ <CALdTtnuK+D7gNbEDgHbrc29pFFCR3XYAHqrK3=X_hQxUx-Seow@mail.gmail.com>
+ <CAL_JsqJUmjG-SiuR9T7f=5nGcSjTLhuF_382EQDf74kcqdAq_w@mail.gmail.com>
+ <YgHFFIRT6E0j9TlX@xps13.dannf>
+ <CAL_JsqJLTkDm_ZbFWSKwKvVAh0KpxiS9y6LEwmhQ-kejTcLq7A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQI4IgZMS69T+T+3eQm0GbWo6Fi0ygFitYZoAa2Aj1mrtRR/gA==
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCJsWRmVeSWpSXmKPExsWy7bCmqe7Mo6xJBtveW1ucfLKGzeLBvG1s
-        Fi9/XmWzOPiwk8Xi69JnrBaf1i9jtVi9+AGLxaIb25gsLu+aw2bRfX0Hm8Xy4/+YLLru3mC0
-        WPrvLYvFnfsfWRz4PC739TJ5LN7zksljwqIDjB7f13eweXx8eovFo2/LKkaPz5vkPNoPdDMF
-        cERl22SkJqakFimk5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6ZeYAHa6k
-        UJaYUwoUCkgsLlbSt7Mpyi8tSVXIyC8usVVKLUjJKTAv0CtOzC0uzUvXy0stsTI0MDAyBSpM
-        yM54cPEeS8Fx9oqe7VNZGhg3s3YxcnJICJhIPG/fztbFyMUhJLCDUaJ5eycjhPOJUeLyuw/M
-        IFVCAt8YJaZ9yIHpWLtvFlR8L6PEpr4yiIaXjBKdjx+zgSTYBLQlpj3cDbZCRKCVWWL9Pz0Q
-        m1MgVuJ+TxNYjTCQfWP7dTCbRUBV4uuUR2D1vAKWEtPvH2aHsAUlTs58wgJiMwPNXLbwNTPE
-        EQoSP58uA6pnB5rvJLFNCKJCRGJ2ZxszyDkSAhc4JFbPXsEIUe4icenTRSYIW1ji1fEt7BC2
-        lMTL/jYgmwPILpbYtE8eoreBUWLJp80sEDXGErOetTOC1DALaEqs36UPUa4sceQW1GF8Eh2H
-        /0JN4ZXoaBOCaFSW+DVpMtQBkhIzb96BKvGQ6FyUNYFRcRaSD2ch+XAWkl9mIaxdwMiyilEs
-        taA4Nz212KjAGB7Pyfm5mxjByVnLfQfjjLcf9A4xMnEwHmKU4GBWEuE9Vc+cJMSbklhZlVqU
-        H19UmpNafIjRFBjmE5mlRJPzgfkhryTe0MTSwMTMzNDcyNTAXEmc1ytlQ6KQQHpiSWp2ampB
-        ahFMHxMHp1QDk8Oc9qhDurEW/9TDSivyfI7Nftnctq7bQ5Vh2ZHu2fpJcWln39gdYRe8Jsox
-        tWavglG//inx248e3uFeFjxbiH+x1sL6qXFh/+ofThCSm6+QpmGkPvlbs+dN1sUSj4JTfIqn
-        b8pcXfIohz/m4bZ9S/8vNvwzf1HO5V/mq98yfD+y6cfLqF5Nx7YzvFFRE7/VfbnaoS8+L178
-        6/7rk2JaLb4tLlrlcWBqyOdl577u3n3J5tBUKXGtGQcv2H0qu+ldELDGtp5DqfYgg//VC7oO
-        3LdL3fbrzt32jb1AQn2BrpAvd7vJwk6Gqa8j3mnu611+KWeqv8u3xIC3/44+XVD3p1Gilite
-        /Tmf6oNrXr+EfJRYijMSDbWYi4oTAdfsCSVXBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJIsWRmVeSWpSXmKPExsWy7bCSvO6NY6xJBnPPSlicfLKGzeLBvG1s
-        Fi9/XmWzOPiwk8Xi69JnrBaf1i9jtVi9+AGLxaIb25gsLu+aw2bRfX0Hm8Xy4/+YLLru3mC0
-        WPrvLYvFnfsfWRz4PC739TJ5LN7zksljwqIDjB7f13eweXx8eovFo2/LKkaPz5vkPNoPdDMF
-        cERx2aSk5mSWpRbp2yVwZfROOslccIq9YvmdZewNjBtYuxg5OSQETCTW7pvF3MXIxSEksJtR
-        YkfXbWaIhKTEiZ3PGSFsYYn7LUdYIYqeM0pM+HmCHSTBJqAtMe3hbrCEiMBUZoneyV+ZIKpe
-        MEqsXjQPbBSnQKzE/Z4mNhBbWCBaYvuEn0wgNouAqsTXKY/A7uAVsJSYfv8wO4QtKHFy5hMW
-        EJsZaEPvw1ZGGHvZwtdQ5ylI/Hy6DKiXHWizk8Q2IYgKEYnZnW3MExiFZiEZNAvJoFlIBs1C
-        0rKAkWUVo2RqQXFuem6xYYFhXmq5XnFibnFpXrpecn7uJkZwbGpp7mDcvuqD3iFGJg7GQ4wS
-        HMxKIryn6pmThHhTEiurUovy44tKc1KLDzFKc7AoifNe6DoZLySQnliSmp2aWpBaBJNl4uCU
-        amDauHm66t4NK35EFx1tKruZeNWuqbM3wPvD2raFa4RPFXVUzO9py5eY0RtoEfblZ+GpcwxB
-        loW6xy7uL1jt8Hb5q1bN7QrTZj49/6rsR0h6orVxob9iVqKj0Krq7KXdCv8ECmYJqbrrBtrs
-        jv77IbWQ+dHcSZzM5dq6BwofsHasvm1903VSwOnT3HG6Tov+NzU9ebrlie2Wm8G9F85yTfv6
-        IHrbl2WLL15Q6rg/ZwfT/jtxNyduEPKzSsr3EL+kv+62SE7qI4s1aabifBcMums8jpytrlmr
-        +27xtVWz1W7/X7xzuog/y8Lg3bkvs13+3M0IFp3t1c6/I8VjzsQ3B8xXV+gHNsb635WzWXBH
-        lCtWiaU4I9FQi7moOBEAo19tezwDAAA=
-X-CMS-MailID: 20220211021552epcas2p461fd898f8b28fa90982a7c52e2faba14
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220205074128epcas2p40901c37a7328e825d8697f8d3269edba
-References: <CGME20220205074128epcas2p40901c37a7328e825d8697f8d3269edba@epcas2p4.samsung.com>
-        <1644046760-83345-1-git-send-email-kwmad.kim@samsung.com>
-        <DM6PR04MB657519E60FAFA19434531CE2FC2B9@DM6PR04MB6575.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL_JsqJLTkDm_ZbFWSKwKvVAh0KpxiS9y6LEwmhQ-kejTcLq7A@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > I think it looks hardware specific.
-> > If the feature isn't supported, I think there is no reasonto prevent
-> > from
->                                                                          =
-                =5E=5E=5E
-> reason to
->=20
-> > running other functions, such as ufshcd_queuecommand and
-> It is no longer used in queuecommand since 5675c381ea51 and 8d077ede48c1
-
-Yeah, you're right. It's just an example. I just want to tell that the lock=
- also protects things that are not related with clk scaling directly.
-
->=20
-> > ufshcd_exec_dev_cmd, concurrently.
+On Tue, Feb 08, 2022 at 08:34:45AM -0600, Rob Herring wrote:
+> On Mon, Feb 7, 2022 at 7:19 PM dann frazier <dann.frazier@canonical.com> wrote:
 > >
-> > So I add a condition at some points protecting with clk_scaling_lock.
-> But you still need a way to serialize device management commands.
->=20
-> Thanks,
-> Avri
+> > On Mon, Feb 07, 2022 at 10:09:31AM -0600, Rob Herring wrote:
+> > > On Sat, Feb 5, 2022 at 3:13 PM dann frazier <dann.frazier@canonical.com> wrote:
+> > > >
+> > > > On Sat, Feb 5, 2022 at 9:05 AM Rob Herring <robh@kernel.org> wrote:
+> > > > >
+> > > > > On Fri, Feb 4, 2022 at 5:01 PM dann frazier <dann.frazier@canonical.com> wrote:
+> > > > > >
+> > > > > > On Mon, Nov 29, 2021 at 11:36:37AM -0600, Rob Herring wrote:
+> > > > > > > Commit 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup")
+> > > > > > > broke PCI support on XGene. The cause is the IB resources are now sorted
+> > > > > > > in address order instead of being in DT dma-ranges order. The result is
+> > > > > > > which inbound registers are used for each region are swapped. I don't
+> > > > > > > know the details about this h/w, but it appears that IB region 0
+> > > > > > > registers can't handle a size greater than 4GB. In any case, limiting
+> > > > > > > the size for region 0 is enough to get back to the original assignment
+> > > > > > > of dma-ranges to regions.
+> > > > > >
+> > > > > > hey Rob!
+> > > > > >
+> > > > > > I've been seeing a panic on HP Moonshoot m400 cartridges (X-Gene1) -
+> > > > > > only during network installs - that I also bisected down to commit
+> > > > > > 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup"). I was
+> > > > > > hoping that this patch that fixed the issue on Stéphane's X-Gene2
+> > > > > > system would also fix my issue, but no luck. In fact, it seems to just
+> > > > > > makes it fail differently. Reverting both patches is required to get a
+> > > > > > v5.17-rc kernel to boot.
+> > > > > >
+> > > > > > I've collected the following logs - let me know if anything else would
+> > > > > > be useful.
+> > > > > >
+> > > > > > 1) v5.17-rc2+ (unmodified):
+> > > > > >    http://dannf.org/bugs/m400-no-reverts.log
+> > > > > >    Note that the mlx4 driver fails initialization.
+> > > > > >
+> > > > > > 2) v5.17-rc2+, w/o the commit that fixed Stéphane's system:
+> > > > > >    http://dannf.org/bugs/m400-xgene2-fix-reverted.log
+> > > > > >    Note the mlx4 MSI-X timeout, and later panic.
+> > > > > >
+> > > > > > 3) v5.17-rc2+, w/ both commits reverted (works)
+> > > > > >    http://dannf.org/bugs/m400-both-reverted.log
+> > > > >
+> > > > > The ranges and dma-ranges addresses don't appear to match up with any
+> > > > > upstream dts files. Can you send me the DT?
+> > > >
+> > > > Sure: http://dannf.org/bugs/fdt
+> > >
+> > > The first fix certainly is a problem. It's going to need something
+> > > besides size to key off of (originally it was dependent on order of
+> > > dma-ranges entries).
+> > >
+> > > The 2nd issue is the 'dma-ranges' has a second entry that is now ignored:
+> > >
+> > > dma-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00>, <0x00
+> > > 0x79000000 0x00 0x79000000 0x00 0x800000>;
+> > >
+> > > Based on the flags (3rd addr cell: 0x0), we have an inbound config
+> > > space which the kernel now ignores because inbound config space
+> > > accesses make no sense. But clearly some setup is needed. Upstream, in
+> > > contrast, sets up a memory range that includes this region, so the
+> > > setup does happen:
+> > >
+> > > <0x42000000 0x00 0x00000000 0x00 0x00000000 0x80 0x00000000>
+> > >
+> > > Minimally, I suspect it will work if you change dma-ranges 2nd entry to:
+> > >
+> > > <0x42000000 0x79000000 0x00 0x79000000 0x00 0x800000>
+> >
+> > Thanks for looking into this Rob. I tried to test that theory, but it
+> > didn't seem to work. This is what I tried:
+> >
+> > --- m400.dts    2022-02-07 20:16:44.840475323 +0000
+> > +++ m400.dts.dmaonly    2022-02-08 00:17:54.097132000 +0000
+> > @@ -446,7 +446,7 @@
+> >                         reg = <0x00 0x1f2b0000 0x00 0x10000 0xe0 0xd0000000 0x00 0x200000 0x00 0x79e00000 0x00 0x2000000 0x00 0x79000000 0x00 0x800000>;
+> >                         reg-names = "csr\0cfg\0msi_gen\0msi_term";
+> >                         ranges = <0x1000000 0x00 0x00 0xe0 0x10000000 0x00 0x10000 0x2000000 0x00 0x30000000 0xe1 0x30000000 0x00 0x80000000>;
+> > -                       dma-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
+> > +                       dma-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00 0x42000000 0x79000000 0x00 0x79000000 0x00 0x800000>;
+> >                         ib-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
+> >                         ib-ranges-ep = <0x2000000 0x00 0x00 0x00 0x00 0x00 0x400000 0x2000000 0x00 0x00 0x00 0x00 0x00 0x400000 0x2000000 0x00 0x79000000 0x00 0x79000000 0x00 0x100000>;
+> >                         interrupts = <0x00 0x10 0x04>;
+> > @@ -471,7 +471,7 @@
+> >                         reg = <0x00 0x1f2c0000 0x00 0x10000 0xd0 0xd0000000 0x00 0x200000 0x00 0x79e00000 0x00 0x2000000 0x00 0x79000000 0x00 0x800000>;
+> >                         reg-names = "csr\0cfg\0msi_gen\0msi_term";
+> >                         ranges = <0x1000000 0x00 0x00 0xd0 0x10000000 0x00 0x10000 0x2000000 0x00 0x30000000 0xd1 0x30000000 0x00 0x80000000>;
+> > -                       dma-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
+> > +                       dma-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00 0x42000000 0x79000000 0x00 0x79000000 0x00 0x800000>;
+> >                         ib-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
+> >                         ib-ranges-ep = <0x2000000 0x00 0x00 0x00 0x00 0x00 0x400000 0x2000000 0x00 0x00 0x00 0x00 0x00 0x400000 0x2000000 0x00 0x79000000 0x00 0x79000000 0x00 0x100000>;
+> >                         interrupts = <0x00 0x10 0x04>;
+> > @@ -496,7 +496,7 @@
+> >                         reg = <0x00 0x1f2d0000 0x00 0x10000 0x90 0xd0000000 0x00 0x200000 0x00 0x79e00000 0x00 0x2000000 0x00 0x79000000 0x00 0x800000>;
+> >                         reg-names = "csr\0cfg\0msi_gen\0msi_term";
+> >                         ranges = <0x1000000 0x00 0x00 0x90 0x10000000 0x00 0x10000 0x2000000 0x00 0x30000000 0x91 0x30000000 0x00 0x80000000>;
+> > -                       dma-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
+> > +                       dma-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00 0x42000000 0x79000000 0x00 0x79000000 0x00 0x800000>;
+> >                         ib-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
+> >                         ib-ranges-ep = <0x2000000 0x00 0x00 0x00 0x00 0x00 0x400000 0x2000000 0x00 0x00 0x00 0x00 0x00 0x400000 0x2000000 0x00 0x79000000 0x00 0x79000000 0x00 0x100000>;
+> >                         interrupts = <0x00 0x10 0x04>;
+> > @@ -522,7 +522,7 @@
+> >                         reg = <0x00 0x1f500000 0x00 0x10000 0xa0 0xd0000000 0x00 0x200000 0x00 0x79e00000 0x00 0x2000000 0x00 0x79000000 0x00 0x800000>;
+> >                         reg-names = "csr\0cfg\0msi_gen\0msi_term";
+> >                         ranges = <0x2000000 0x00 0x30000000 0xa1 0x30000000 0x00 0x80000000>;
+> > -                       dma-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
+> > +                       dma-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00 0x42000000 0x79000000 0x00 0x79000000 0x00 0x800000>;
+> >                         ib-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
+> >                         ib-ranges-ep = <0x2000000 0x00 0x00 0x00 0x00 0x00 0x400000 0x2000000 0x00 0x00 0x00 0x00 0x00 0x400000 0x2000000 0x00 0x79000000 0x00 0x79000000 0x00 0x100000>;
+> >                         interrupts = <0x00 0x10 0x04>;
+> > @@ -547,7 +547,7 @@
+> >                         reg = <0x00 0x1f510000 0x00 0x10000 0xc0 0xd0000000 0x00 0x200000 0x00 0x79e00000 0x00 0x2000000 0x00 0x79000000 0x00 0x800000>;
+> >                         reg-names = "csr\0cfg\0msi_gen\0msi_term";
+> >                         ranges = <0x1000000 0x00 0x00 0xc0 0x10000000 0x00 0x10000 0x2000000 0x00 0x30000000 0xc1 0x30000000 0x00 0x80000000>;
+> > -                       dma-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
+> > +                       dma-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00 0x42000000 0x79000000 0x00 0x79000000 0x00 0x800000>;
+> >                         ib-ranges = <0x42000000 0x40 0x00 0x40 0x00 0x40 0x00 0x00 0x00 0x79000000 0x00 0x79000000 0x00 0x800000>;
+> >                         ib-ranges-ep = <0x2000000 0x00 0x00 0x00 0x00 0x00 0x400000 0x2000000 0x00 0x00 0x00 0x00 0x00 0x400000 0x2000000 0x00 0x79000000 0x00 0x79000000 0x00 0x100000>;
+> >                         interrupts = <0x00 0x10 0x04>;
+> >
+> > And that failed to boot with a 5.17-rc3. Since dma-ranges was
+> > previously identical to ib-ranges, I also tried making the same change
+> > to ib-ranges, but with no success.
+> 
+> Failed to boot at all or just PCIe still didn't work causing boot to
+> eventually fail?
 
-The dev cmd execution period is protected by mutex.
-And actual ringing a doorbell is protected by spin lock.
+Sorry, I mean PCIe still didn't work, here's the log:
+ http://dannf.org/bugs/m400-tweaked_dtb.log
+(unmodified kernel source w/ above dtb change)
 
-Is there another reason to need clk_scaling_lock even with it?
+> 'ib-ranges' is unknown to the kernel, so the firmware
+> is using it somehow?
+> 
+> You also need to revert the first fix for PCIe to work.
 
-Thanks.
-Kiwoong Kim
+Oh, OK. I misunderstood. I tried reverting commit 6dce5aa59e0b "PCI:
+xgene: Use inbound resources for setup" along with a dtb with the
+dma-ranges change in the diff above, but PCIe still didn't
+work. Here's the log:
 
+http://dannf.org/bugs/m400-6dce5aa5_reverted+tweaked_dtb.log
 
+  -dann
+  
+> 
+> > > While we shouldn't break existing DTs, the moonshot DT doesn't use
+> > > what's documented upstream. There are multiple differences compared to
+> > > what's documented. Is upstream supposed to support upstream DTs,
+> > > downstream DTs, and ACPI for XGene which is an abandoned platform with
+> > > only a handful of users?
+> >
+> > That's a fair question, though it's one of a policy, and I feel I'd be
+> > overstepping by weighing in. I suppose one option I have is to try
+> > and create and upstream a dts for these systems and modify our
+> > boot.scr to always load that over the one provided by firmware. While
+> > we do have some of these systems in production, they are being retired
+> > and replaced with newer kit over time, and it's possible we'll never
+> > need to upgrade them to a modern kernel.
+> >
+> >   -dann

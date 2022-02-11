@@ -2,72 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5294B2E15
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE0EF4B2E17
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:00:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353033AbiBKT7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 14:59:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43022 "EHLO
+        id S1353049AbiBKUAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 15:00:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235284AbiBKT7Q (ORCPT
+        with ESMTP id S235284AbiBKUAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 14:59:16 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381C2C4F;
-        Fri, 11 Feb 2022 11:59:15 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id e79so12669550iof.13;
-        Fri, 11 Feb 2022 11:59:15 -0800 (PST)
+        Fri, 11 Feb 2022 15:00:38 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC45BC4E;
+        Fri, 11 Feb 2022 12:00:36 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id y17so5516485plg.7;
+        Fri, 11 Feb 2022 12:00:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HTE4PEJgiaxf9Zf/XXw3l+Lv6i68wKBWa7Qhu8g2aw0=;
-        b=mdZ2RfvfkYOGhncEE+gl9ZhajEmPkVTE6kBHGZ9GM5S0rphOod6erM0O8MSrAxvvEp
-         rsEejXVhCKnXhV37wdkpTj4C67Z+j/7XCkjbR6QvaJqjLMnLd9TRwdPux3k/OR0xUC2g
-         mboCRfdEiZEhxsxY2TkLBhde38zh+cnF3bfZbjH0oAx0WSteu/QMkA+Vkk19RAIiFlGA
-         +n6kp+PXlzYSHFC2bjjUaDORHuQS7HW0EGCth/oe32KASJ8rUEadTEUkzpJR+jLi9riL
-         t6CvpmV/OLOKVJ3/Jsy4UtjmaDkskQ1zCsZI9ehRh75OdK9K8P2+TxDKpJb3vMNn766N
-         ENlg==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ZAD+P+VJ1MwGt/Eut/YOU5G/gK3K/qVJgmrZH73VLZo=;
+        b=csnYMqMTQMRt7onhd7oLmJvRmzc87upJaCf1A1RF7LcJn+phll8oV8PD15SBOkzXMB
+         BHcJtNQ+cI5YfxDitM69JLVp3pXlqd4cKHet0E7UFAF27qMFLvSfDUtcRujyLXZkq2YQ
+         ebkpYLB+Ih7w7P/AhJ5zSGnGB8t2k/6JGi3aDmlJehwnM1WvtXNmATMcRZWZuZpwARpw
+         EqN6znzbkmtVfT0Jawm04f+rJ6fvrsUSSsCFrQ+2csNPAn97wOBhRXlCvexUcx9XFRlw
+         ajTFXEFsqpxctxYnOg8VIiMhh7wXo6uq3lFjyuaVJi54Gn2L1JuM0RJlmMRckxhS6OaW
+         x5wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HTE4PEJgiaxf9Zf/XXw3l+Lv6i68wKBWa7Qhu8g2aw0=;
-        b=sf4V8h/RZkJldYYUBLwBsoSb6x4oPLa1RL4yqVHN7girNH/5wZKjaTsj3Xi1jC7vJb
-         CW4b1bYGZISttPcoTuT70aRJ/df5DEy9PeaOiRVlz8G9QybjAijctocFs9sW7EgOdx1x
-         GsT+gmwq+JZeTVgXWRJu4pY3V06fjF4o6AeUIBfdTDr6oIZMaRz6jRzV/KbPjzjkE9CS
-         /L7CG5Abz4Yvv0/V3nqFm3BgnlBmYAdhHfcshSovN8Eobfa839y7M2DjZt7xJmwGXKkc
-         s4lQKgKwZr5v3SGgzHr6Jb56uoKBuGgFNGVa0llODfdsk4VDFOIglARewJhrgp4ow94Z
-         rq1Q==
-X-Gm-Message-State: AOAM531LOgc2mJumDWKD6E/srARLiHxTUIKDdYcQedTXLeXGCcVWOtaX
-        2jooqqvVwS6xfBq+4HTzrpbaIhc8tTt1+9HttTI=
-X-Google-Smtp-Source: ABdhPJyvb+nwvs5X64/qk/94eV096UXC73mGwUV+HRI1esH4Rtt5K00hSO8ekx97eTeBjT73BKFLBPzLE5UiUEH/phs=
-X-Received: by 2002:a02:aa09:: with SMTP id r9mr1766480jam.199.1644609554634;
- Fri, 11 Feb 2022 11:59:14 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZAD+P+VJ1MwGt/Eut/YOU5G/gK3K/qVJgmrZH73VLZo=;
+        b=iO3kuYcwO6xnlKopPygXKvP2xX/ZPe0nowD2hfAPNC+coLJ3G4c+OU80E1ktqa8yFu
+         YLg+bx6iignhirYoFdlK5R5xC2Y53vyD4F559J6uW1WIdvaBu/Gtfz32gJK9g/zSCCW1
+         YrFHgLuk1Qypzsvbe9cebeigBSErxzUAZjBR7rKQJWwfEcKjOCslMmDwpurqBZN7lcL6
+         9tmMXCcuaK0cF/5/u8US7lkhdkmbLDfkC+e8dBnWpCZ605d6sDs30srwR8JMWPTAJzYn
+         TlqwLqhk3bzrNdgHShSx2n2Gc35/Quaw0JVKnAvQe/TWFCgG5j3Od/LdT9v4UA0DIadW
+         jKWQ==
+X-Gm-Message-State: AOAM533bwYSdMPa87Xz5CpCOV/gmg03ZRGa4kYErrZA5F14dmfGISvnB
+        s9B95p6bl1x4x0e9RoMvvuL95cOh5q8=
+X-Google-Smtp-Source: ABdhPJxAUVfHNx/9r3Qa/LLDDTz/HxOWTWFwdhPXAgFAwqshVRx9DjzK4lcsdBbtufcssaZs5dKCuA==
+X-Received: by 2002:a17:90b:a06:: with SMTP id gg6mr2011554pjb.153.1644609636090;
+        Fri, 11 Feb 2022 12:00:36 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id kk17sm6017558pjb.21.2022.02.11.12.00.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Feb 2022 12:00:35 -0800 (PST)
+Subject: Re: [PATCH] net: dsa: lan9303: fix reset on probe
+To:     Mans Rullgard <mans@mansr.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Juergen Borleis <kernel@pengutronix.de>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220209145454.19749-1-mans@mansr.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <ac022ba4-7f26-b9b8-2e78-3ca27b400ab6@gmail.com>
+Date:   Fri, 11 Feb 2022 12:00:31 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220211184945.7b2fb872@canb.auug.org.au>
-In-Reply-To: <20220211184945.7b2fb872@canb.auug.org.au>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 11 Feb 2022 20:59:03 +0100
-Message-ID: <CANiq72n6=ovz-gjynqXcdP1=XOt9FovBtVzhRq4rvrQEbnWhdg@mail.gmail.com>
-Subject: Re: linux-next: build warnings after merge of the rust tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Daniel Xu <dxu@dxuuu.xyz>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Wei Liu <wei.liu@kernel.org>, Wu XiangCheng <bobwxc@email.cn>,
-        Yuki Okushi <jtitor@2k36.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220209145454.19749-1-mans@mansr.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,16 +78,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 8:49 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> After merging the rust tree, today's linux-next build (htmldocs) produced
-> these warnings:
->
-> Documentation/rust/coding-guidelines.rst:74: WARNING: Unexpected indentation.
-> Documentation/rust/coding-guidelines.rst:79: WARNING: Definition list ends without a blank line; unexpected unindent.
-> Documentation/rust/coding-guidelines.rst:80: WARNING: Block quote ends without a blank line; unexpected unindent.
+On 2/9/22 6:54 AM, Mans Rullgard wrote:
+> The reset input to the LAN9303 chip is active low, and devicetree
+> gpio handles reflect this.  Therefore, the gpio should be requested
+> with an initial state of high in order for the reset signal to be
+> asserted.  Other uses of the gpio already use the correct polarity.
+> 
+> Signed-off-by: Mans Rullgard <mans@mansr.com>
 
-Thanks Stephen -- fixed.
-
-Cheers,
-Miguel
+Reviewed-by: Florian Fianelil <f.fainelli@gmail.com>
+-- 
+Florian

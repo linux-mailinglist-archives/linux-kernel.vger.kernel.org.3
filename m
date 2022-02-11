@@ -2,107 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B1A4B258A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE044B2592
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:24:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343556AbiBKMXl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 11 Feb 2022 07:23:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60866 "EHLO
+        id S1349969AbiBKMY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 07:24:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235013AbiBKMXh (ORCPT
+        with ESMTP id S1349957AbiBKMY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 07:23:37 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B037DC3
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:23:36 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-34-hvtKQwVGNz2Wx0cG_Tixcw-1; Fri, 11 Feb 2022 12:23:33 +0000
-X-MC-Unique: hvtKQwVGNz2Wx0cG_Tixcw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Fri, 11 Feb 2022 12:23:32 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Fri, 11 Feb 2022 12:23:32 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Kalle Valo' <kvalo@kernel.org>, Qing Wang <wangqing@vivo.com>
-CC:     Maya Erez <merez@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "wil6210@qti.qualcomm.com" <wil6210@qti.qualcomm.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] net: wireless: ath: use div64_u64() instead of do_div()
-Thread-Topic: [PATCH] net: wireless: ath: use div64_u64() instead of do_div()
-Thread-Index: AQHYHngQJL09if2dqkeSlawgaN2aGKyORzbw
-Date:   Fri, 11 Feb 2022 12:23:32 +0000
-Message-ID: <f552799ea07049829e68ea63668cbcc8@AcuMS.aculab.com>
-References: <1644395972-4303-1-git-send-email-wangqing@vivo.com>
- <877da2c3xf.fsf@tynnyri.adurom.net>
-In-Reply-To: <877da2c3xf.fsf@tynnyri.adurom.net>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 11 Feb 2022 07:24:28 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7574ADC3;
+        Fri, 11 Feb 2022 04:24:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644582266; x=1676118266;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=u0NFQSqU8nFRCacBmC6t3+7/vZNIdJqiy1WnYmvJT2E=;
+  b=OnocrvH6198AAB4hbENghshtnMOZ+D+AdohIpYa+TK5WfSBXcM5Xr1kT
+   MAozqHKWNxQMfg8KNrYgri5wZ/YcO5iJ1XFhS/XtrA1HJ3fqIOQ3FIn+r
+   I8qBEBODFlJ85TOfAozQ3TGUXHD4GUJ8+bCBzrMcWSF8eIOCptkX8vNcN
+   U=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 Feb 2022 04:24:26 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 04:24:25 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Fri, 11 Feb 2022 04:24:25 -0800
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 11 Feb 2022 04:24:20 -0800
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
+        <bjorn.andersson@linaro.org>, <greg@kroah.com>, <robh@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
+        <quic_psodagud@quicinc.com>, <quic_satyap@quicinc.com>,
+        <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
+        <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>,
+        <quic_schowdhu@quicinc.com>
+Subject: [PATCH V7] MAINTAINERS: Add maintainer entry for EUD
+Date:   Fri, 11 Feb 2022 17:53:44 +0530
+Message-ID: <b7a9d113f610e2edf67c6a813fc173b1857b9919.1644580972.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kalle Valo
-> Sent: 10 February 2022 12:16
-> 
-> Qing Wang <wangqing@vivo.com> writes:
-> 
-> > From: Wang Qing <wangqing@vivo.com>
-> >
-> > do_div() does a 64-by-32 division.
-> > When the divisor is u64, do_div() truncates it to 32 bits, this means it
-> > can test non-zero and be truncated to zero for division.
-> >
-> > fix do_div.cocci warning:
-> > do_div() does a 64-by-32 division, please consider using div64_u64 instead.
-> >
-> > Signed-off-by: Wang Qing <wangqing@vivo.com>
-> > ---
-> >  drivers/net/wireless/ath/wil6210/debugfs.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/net/wireless/ath/wil6210/debugfs.c b/drivers/net/wireless/ath/wil6210/debugfs.c
-> > index 4c944e5..2cee9dd
-> > --- a/drivers/net/wireless/ath/wil6210/debugfs.c
-> > +++ b/drivers/net/wireless/ath/wil6210/debugfs.c
-> > @@ -1766,7 +1766,7 @@ __acquires(&p->tid_rx_lock) __releases(&p->tid_rx_lock)
-> >  			seq_puts(s, "\n");
-> >  			if (!num_packets)
-> >  				continue;
-> > -			do_div(tx_latency_avg, num_packets);
-> > +			div64_u64(tx_latency_avg, num_packets);
-> 
-> As you have been pointed out in your other patches, do_div() and
-> div64_u64() work differently.
+Add the entry for maintainer for EUD driver
+and other associated files.
 
-And how long does it take for num_packets to exceed 2^32.
+Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
 
-	David
+Changes in V7
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+* Added the Maintainer entry in the sorted order.
+
+Changes in V6
+
+* Added the review tags from V5 and moved qcom_eud.c to drivers/usb/misc.
+
+Changes in V5
+
+* Added the review tags and implemented comments on V4 of the patch.
+
+Changes in V4
+
+* Aligned the device tree node structure of EUD as per discussion.
+
+* Changes to usb-connector.yaml is no longer required and is not
+  included in the patch series.
+
+* Implemented the rest of the comments on Version 3 of the patch.
+
+Changes in V3
+
+* Removed the patch for registration of EUD connector as it is no longer
+  required.
+
+* Added the description to include EUD in usb-connector.yaml
+
+* Implemented comments on V2 of the patch.
+
+Changes in V2
+
+* Fixed the yaml issue and also implemented comments on yaml in V1.
+
+Changes in V1
+
+* EUD has now been mapped as a separate DT node as it is an independent QCOM IP.
+
+* EUD is attached to the connector child of dwc3 via port end point since EUD
+  driver needs the connector for role-switching.
+
+* EUD driver has been moved now to drivers/soc/qcom/qcom_eud.c.
+
+* All the comments from version 0 of the patch has been implemented.
+
+---
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 68f21d4..fe43371 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13981,6 +13981,14 @@ L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
+ S:	Supported
+ F:	sound/soc/qcom/
+
++QCOM EMBEDDED USB DEBUGGER(EUD)
++M:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
++L:	linux-arm-msm@vger.kernel.org
++S:	Maintained
++F:	Documentation/ABI/testing/sysfs-driver-eud
++F:	Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
++F:	drivers/usb/misc/qcom_eud.c
++
+ QCOM IPA DRIVER
+ M:	Alex Elder <elder@kernel.org>
+ L:	netdev@vger.kernel.org
+--
+2.7.4
 

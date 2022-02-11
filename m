@@ -2,171 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829A44B25C2
+	by mail.lfdr.de (Postfix) with ESMTP id 347334B25C1
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245552AbiBKM2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 07:28:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34820 "EHLO
+        id S1350181AbiBKM2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 07:28:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350083AbiBKM1a (ORCPT
+        with ESMTP id S1350168AbiBKM1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 07:27:30 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E60BF57
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:27:29 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D3E291F3A2;
-        Fri, 11 Feb 2022 12:27:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1644582447; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OMTT5iiyjFVPOD3au65s1i3U4tMtMbGOAoi81BKHy10=;
-        b=n/nMaDalA292S13jD0IMDYqoNMoH9n8kldxKj7r9fxHjM/49sIcbCFDArZFVr2CJDyZZ+g
-        R3AqvsZNUVKj9icpY97GAf7Uu3RRK66wSs7IXbeduQ1HoPBsKX/wOO92CFS6GOZMJUDjs8
-        vCVrBLQhdCoEmCOyRp7LtZFEnIOia1c=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1644582447;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OMTT5iiyjFVPOD3au65s1i3U4tMtMbGOAoi81BKHy10=;
-        b=S/YLpLRl7YBreu/bCwbF4OgqcJW6FYEUtlo0MjGKVHUvufGvWyvWVRc/ceEcpyHCxP45gg
-        IF206xDiQWhlJcBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9974613C6D;
-        Fri, 11 Feb 2022 12:27:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6AjUJC9WBmIbbgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 11 Feb 2022 12:27:27 +0000
-Message-ID: <826e69d0-c81c-06c1-c675-b54bd4557ff3@suse.cz>
-Date:   Fri, 11 Feb 2022 13:27:27 +0100
+        Fri, 11 Feb 2022 07:27:51 -0500
+Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D14FE1;
+        Fri, 11 Feb 2022 04:27:42 -0800 (PST)
+Received: by mail-vs1-f42.google.com with SMTP id t22so10043047vsa.4;
+        Fri, 11 Feb 2022 04:27:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Huyy9WHn7ezhBl1tBw8tTsSyyS9994mO5WZfsmLZIXc=;
+        b=D5cJF7VHvQaI7moFa+wU3A5s1I2VvAaZ6qqMrpg3b03hH8ZFqsKS4kATD5m5RTZbhd
+         4M9fnKAUuH5KsKKNxpnlZ49gX6xWS8blZCGUcy2pTZQ2rs9ucgcMOuyYlrGk5QrK5cXo
+         0GZnicyp2qt5pYQK4La5DjBztvo+ILNKJNoNYU2ZrfXVk80x7VyWqpJFrQ5xYJUkOtd/
+         oHvhfk83NyCU5pvwGwM0JJB0gNLg+jHB/mLksXAiz8NBcV5LtMgrE5kP1KLsYxnLYkDZ
+         vaHonNMhagMpD2dK7273zEx6nmC6+ptaEFug99JKW2RhtKWqMkRZ6oeiaL3f+kZtOEDT
+         UiMw==
+X-Gm-Message-State: AOAM533qlzHCTDmQqGNtI/+C5HvIUe1yIT5SK91FRS20xPdSYNMyCmuB
+        kWxnJEnRWe0eTO8jXzNzRpEESwWO753aow==
+X-Google-Smtp-Source: ABdhPJwRzWQeKufyemGP4AbEuDeY3llYXt8ZcjXkvvzOU3ladfypDJxPc1+ORy4wIBq5E5EVJqSZww==
+X-Received: by 2002:a05:6102:b07:: with SMTP id b7mr406459vst.68.1644582461874;
+        Fri, 11 Feb 2022 04:27:41 -0800 (PST)
+Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com. [209.85.221.176])
+        by smtp.gmail.com with ESMTPSA id k204sm4803595vkk.0.2022.02.11.04.27.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Feb 2022 04:27:41 -0800 (PST)
+Received: by mail-vk1-f176.google.com with SMTP id 5so4857374vkq.9;
+        Fri, 11 Feb 2022 04:27:41 -0800 (PST)
+X-Received: by 2002:a1f:2ac3:: with SMTP id q186mr352535vkq.33.1644582461104;
+ Fri, 11 Feb 2022 04:27:41 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Content-Language: en-US
-To:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Rik van Riel <riel@surriel.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
- <3d204af4-664f-e4b0-4781-16718a2efb9c@google.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH 06/13] mm/munlock: maintain page->mlock_count while
- unevictable
-In-Reply-To: <3d204af4-664f-e4b0-4781-16718a2efb9c@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220211091927.2988283-1-javierm@redhat.com> <20220211091927.2988283-2-javierm@redhat.com>
+ <YgY6OqN+guBlt/ED@smile.fi.intel.com> <4fa465d9-4fac-4199-9a04-d8e09d164308@redhat.com>
+ <YgZEuXvJ2ZiOyNS+@smile.fi.intel.com> <7560cd10-0a7c-3fda-da83-9008833e3901@suse.de>
+ <87pmnt7gm3.fsf@intel.com>
+In-Reply-To: <87pmnt7gm3.fsf@intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 11 Feb 2022 13:27:29 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWJ_T5HoWcOuSCDP-uquqpiWGPUmKNaC9U5d=JkGRGP0g@mail.gmail.com>
+Message-ID: <CAMuHMdWJ_T5HoWcOuSCDP-uquqpiWGPUmKNaC9U5d=JkGRGP0g@mail.gmail.com>
+Subject: Re: [PATCH v4 1/6] drm/format-helper: Add drm_fb_xrgb8888_to_gray8_line()
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Sam Ravnborg <sam@ravnborg.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/6/22 22:40, Hugh Dickins wrote:
-> Previous patches have been preparatory: now implement page->mlock_count.
-> The ordering of the "Unevictable LRU" is of no significance, and there is
-> no point holding unevictable pages on a list: place page->mlock_count to
-> overlay page->lru.prev (since page->lru.next is overlaid by compound_head,
-> which needs to be even so as not to satisfy PageTail - though 2 could be
-> added instead of 1 for each mlock, if that's ever an improvement).
-> 
-> But it's only safe to rely on or modify page->mlock_count while lruvec
-> lock is held and page is on unevictable "LRU" - we can save lots of edits
-> by continuing to pretend that there's an imaginary LRU here (there is an
-> unevictable count which still needs to be maintained, but not a list).
-> 
-> The mlock_count technique suffers from an unreliability much like with
-> page_mlock(): while someone else has the page off LRU, not much can
-> be done.  As before, err on the safe side (behave as if mlock_count 0),
-> and let try_to_unlock_one() move the page to unevictable if reclaim finds
-> out later on - a few misplaced pages don't matter, what we want to avoid
-> is imbalancing reclaim by flooding evictable lists with unevictable pages.
-> 
-> I am not a fan of "if (!isolate_lru_page(page)) putback_lru_page(page);":
-> if we have taken lruvec lock to get the page off its present list, then
-> we save everyone trouble (and however many extra atomic ops) by putting
-> it on its destination list immediately.
+Hi Jani,
 
-Good point.
+On Fri, Feb 11, 2022 at 1:06 PM Jani Nikula <jani.nikula@linux.intel.com> wrote:
+> On Fri, 11 Feb 2022, Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> > Am 11.02.22 um 12:12 schrieb Andy Shevchenko:
+> >> On Fri, Feb 11, 2022 at 11:40:13AM +0100, Javier Martinez Canillas wrote:
+> >>> On 2/11/22 11:28, Andy Shevchenko wrote:
+> >>>> On Fri, Feb 11, 2022 at 10:19:22AM +0100, Javier Martinez Canillas wrote:
+> >>
+> >> ...
+> >>
+> >>>>> +static void drm_fb_xrgb8888_to_gray8_line(u8 *dst, const u32 *src, unsigned int pixels)
+> >>>>> +{
+> >>>>> + unsigned int x;
+> >>>>> +
+> >>>>> + for (x = 0; x < pixels; x++) {
+> >>>>> +         u8 r = (*src & 0x00ff0000) >> 16;
+> >>>>> +         u8 g = (*src & 0x0000ff00) >> 8;
+> >>>>> +         u8 b =  *src & 0x000000ff;
+> >>>>> +
+> >>>>> +         /* ITU BT.601: Y = 0.299 R + 0.587 G + 0.114 B */
+> >>>>> +         *dst++ = (3 * r + 6 * g + b) / 10;
+> >>>>> +         src++;
+> >>>>> + }
+> >>>>
+> >>>> Can be done as
+> >>>>
+> >>>>    while (pixels--) {
+> >>>>            ...
+> >>>>    }
+> >>>>
+> >>>> or
+> >>>>
+> >>>>    do {
+> >>>>            ...
+> >>>>    } while (--pixels);
+> >>>>
+> >>>
+> >>> I don't see why a while loop would be an improvement here TBH.
+> >>
+> >> Less letters to parse when reading the code.
+> >
+> > It's a simple refactoring of code that has worked well so far. Let's
+> > leave it as-is for now.
+>
+> IMO *always* prefer a for loop over while or do-while.
 
-> Signed-off-by: Hugh Dickins <hughd@google.com>
+(guess what ;-) I tend to disagree.
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+> The for (i = 0; i < N; i++) is such a strong paradigm in C. You
+> instantly know how many times you're going to loop, at a glance. Not so
+> with with the alternatives, which should be used sparingly.
 
-> ---
->  include/linux/mm_inline.h | 11 +++++--
->  include/linux/mm_types.h  | 19 +++++++++--
->  mm/huge_memory.c          |  5 ++-
->  mm/memcontrol.c           |  3 +-
->  mm/mlock.c                | 68 +++++++++++++++++++++++++++++++--------
->  mm/mmzone.c               |  7 ++++
->  mm/swap.c                 |  1 +
->  7 files changed, 92 insertions(+), 22 deletions(-)
-> 
-> diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
-> index b725839dfe71..884d6f6af05b 100644
-> --- a/include/linux/mm_inline.h
-> +++ b/include/linux/mm_inline.h
-> @@ -99,7 +99,8 @@ void lruvec_add_folio(struct lruvec *lruvec, struct folio *folio)
->  
->  	update_lru_size(lruvec, lru, folio_zonenum(folio),
->  			folio_nr_pages(folio));
-> -	list_add(&folio->lru, &lruvec->lists[lru]);
-> +	if (lru != LRU_UNEVICTABLE)
-> +		list_add(&folio->lru, &lruvec->lists[lru]);
->  }
->  
->  static __always_inline void add_page_to_lru_list(struct page *page,
-> @@ -115,6 +116,7 @@ void lruvec_add_folio_tail(struct lruvec *lruvec, struct folio *folio)
->  
->  	update_lru_size(lruvec, lru, folio_zonenum(folio),
->  			folio_nr_pages(folio));
-> +	/* This is not expected to be used on LRU_UNEVICTABLE */
+In this case it's fairly obvious, and you get rid of the extra variable x.
+Less code, less variables, what can go wrong? ;-)
 
-Felt uneasy about this at first because it's just a _tail version of
-lruvec_add_folio, and there's probably nothing fundamental about the users
-of _tail to not encounter unevictable pages. But if the assumption is ever
-violated, the poisoned list head should make it immediately clear, so I
-guess that's fine.
+> And yes, the do-while suggested above is buggy, and you actually need to
+> stop and think to see why.
 
->  	list_add_tail(&folio->lru, &lruvec->lists[lru]);
->  }
->  
-> @@ -127,8 +129,11 @@ static __always_inline void add_page_to_lru_list_tail(struct page *page,
->  static __always_inline
->  void lruvec_del_folio(struct lruvec *lruvec, struct folio *folio)
->  {
-> -	list_del(&folio->lru);
-> -	update_lru_size(lruvec, folio_lru_list(folio), folio_zonenum(folio),
-> +	enum lru_list lru = folio_lru_list(folio);
-> +
-> +	if (lru != LRU_UNEVICTABLE)
-> +		list_del(&folio->lru);
-> +	update_lru_size(lruvec, lru, folio_zonenum(folio),
->  			-folio_nr_pages(folio));
->  }
->  
+Yes, that one is wrong.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,139 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12994B28BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CECC44B28BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:08:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351230AbiBKPIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 10:08:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57110 "EHLO
+        id S1351253AbiBKPIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 10:08:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351221AbiBKPIT (ORCPT
+        with ESMTP id S1348850AbiBKPIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 10:08:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA042309
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 07:08:17 -0800 (PST)
+        Fri, 11 Feb 2022 10:08:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90C94307
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 07:08:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644592096;
+        s=mimecast20190719; t=1644592113;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xonPRQVnJi+0YPcuDGy+YT0IDKCipuXLPrLPfAZe99w=;
-        b=f2utigNFX2LI6iDXju5xfUTUqtfByLYubq36QkKiXH+CXN1Xp3TZK/G7tfZwWSy5bFYRLs
-        FcBQjEXNFYr3UXoxBIq9qSPPC4Tfc2+I6xy+IiSprruTahtQ2mg3bS4pcs3JaRGotobFRc
-        1VUMwmvL3gaNdt7wAjmsImceGd7pN1Q=
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=kC0WcDsVCz+dXfMK9DX2xP97JJ0YrgpwqjbVOhyQH4w=;
+        b=Y0XUXTzOBc8lCavjhTlFbD53S312I0AhdIqYvum+MqXPlokTx4qp+F3nDJvDicD0HrQNPD
+        yQxNBDp9xeIOwYNA6uDP4i5IJBHnxpijOqmXRanDCDexnKgPf/9ZKmBrjqEprIsdn+bez6
+        sRUbyKSg943Ny/iJAf/9h+4sktEHHOU=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-517-aPzRtt6OPrichVePzjoisw-1; Fri, 11 Feb 2022 10:08:13 -0500
-X-MC-Unique: aPzRtt6OPrichVePzjoisw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+ us-mta-132-seNhwD-lM4GBGbNS_XGhKQ-1; Fri, 11 Feb 2022 10:08:28 -0500
+X-MC-Unique: seNhwD-lM4GBGbNS_XGhKQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5C58E10247AC;
-        Fri, 11 Feb 2022 15:08:08 +0000 (UTC)
-Received: from [10.22.34.66] (unknown [10.22.34.66])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A174F5B28A;
-        Fri, 11 Feb 2022 15:08:07 +0000 (UTC)
-Message-ID: <70ccc7df-d536-5c8f-fd72-0797bb566e07@redhat.com>
-Date:   Fri, 11 Feb 2022 10:08:07 -0500
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 10E051091DA3;
+        Fri, 11 Feb 2022 15:08:26 +0000 (UTC)
+Received: from localhost (unknown [10.22.17.50])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C79BD45C84;
+        Fri, 11 Feb 2022 15:08:24 +0000 (UTC)
+Date:   Fri, 11 Feb 2022 12:08:23 -0300
+From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        stable-rt <stable-rt@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Pavel Machek <pavel@denx.de>,
+        Jeff Brady <jeffreyjbrady@gmail.com>,
+        Luis Goncalves <lgoncalv@redhat.com>
+Subject: [ANNOUNCE] 5.10.90-rt61
+Message-ID: <YgZ75zvhmEzNV4PV@uudg.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] locking/semaphore: Use wake_q to wake up processes
- outside lock critical section
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will.deacon@arm.com>,
-        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
-References: <20220118153254.358748-1-longman@redhat.com>
- <YgTms3tGYeQ4HYFZ@hirez.programming.kicks-ass.net>
- <e30a6464-708b-4946-65f0-c9a1e6bf2b35@redhat.com>
- <20220211105106.GS23216@worktop.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20220211105106.GS23216@worktop.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/11/22 05:51, Peter Zijlstra wrote:
-> On Thu, Feb 10, 2022 at 12:04:59PM -0500, Waiman Long wrote:
->> On 2/10/22 05:19, Peter Zijlstra wrote:
->> I am sorry that I might have stripped out too much for the lockdep splat to
->> make it understandable. Below is the full lockdep splat:
-> Right, so please just transcribe the relevant bits instead of including
-> this massive splat. It really isn't too complicated.
->
-> That can be summarized as:
->
-> 	0:		1:		2:
-> 	pi_lock		rq->lock	console_sem
-> 	  rq->lock	  console_sem	  pi_lock
->
-> Which is *much* shorter and *much* easier to read.
->
-OK, got it. However, I thought the circular dependency has been 
-explained by that part of the lockdep splat:
+Hello RT-list!
 
-[ 9776.459905] Chain exists of:
-[ 9776.459906]   (console_sem).lock --> &p->pi_lock --> &rq->__lock
+I'm pleased to announce the 5.10.90-rt61 stable release.
 
-[ 9776.459911]  Possible unsafe locking scenario:
+You can get this release via the git tree at:
 
-[ 9776.459913]        CPU0                    CPU1
-[ 9776.459914]        ----                    ----
-[ 9776.459914]   lock(&rq->__lock);
-[ 9776.459917] 				lock(&p->pi_lock);
-[ 9776.459919] 				lock(&rq->__lock);
-[ 9776.459921]   lock((console_sem).lock);
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
-This should convey the same information. Though I think I need to describe where those locking sequence happen.
+  branch: v5.10-rt
+  Head SHA1: 8bff2d3a6cbc31ef22f1f24ec4f76ddb48892503
 
->>> More concerning, that ordering is invalid to begin with, so the above
->>> seems like a very poor justification for this patch.
->> Which lock ordering are you considered invalid?
-> 1: above. You cannot take a semaphore inside a (raw) spinlock.
-You may have been confused by the name "console_sem". A semaphore is 
-basically a count protected by a raw spinlock. So console_sem.lock is 
-actually a raw spinlock. It is perfectly legal to take a raw spinlock 
-after holding another raw spinlock.
->
->> The stack trace included in the patch description show the
->> (console_sem).lock --> &p->pi_lock --> &rq->__lock sequence because of the
->> wake_up_process() call while holding the console_sem.lock.
->>
->> The reverse &rq->__lock lock may happen when a printk() statement is called
->> while holding the rq lock.
->>
->> In this case, the printk() is triggered by a SCHED_WARN_ON() statement in
->> update_rq_clock() which don't call printk_deferred and so won't have
->> LOGLEVEL_SCHED set. I guess there is alternative way to work around this
->> issue, but moving the process wakeup out from the semaphore spinlock will
->> solve this problem in case there are other corner cases like that.
->>
->> I will update the patch description to include this additional information.
-> The right solution is to burn printk_deferred at the stake and most of
-> printk along with it (they're working on it).
->
-> Hitting that WARN is the real problem, the rest is collateral damage and
-> I'm really not interested in fixing that.
+Or to build 5.10.90-rt61 directly, the following patches should be applied:
 
-Yes, hitting the WARN is the cause of this lockdep splat. In the v2 
-patch, I list the alternatives as either banning WARN inside rq lock or 
-make a WARN that work with rq lock if we are not going to fix the 
-semaphore. So what is your recommendation about handling that?
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.10.tar.xz
 
-Cheers,
-Longman
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.10.90.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.10/patch-5.10.90-rt61.patch.xz
+
+
+All keys used for the uploads can be found on the following git repository:
+
+   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
+
+
+Enjoy!
+Luis
+
+Changes from v5.10.90-rt60:
+---
+
+Luis Claudio R. Goncalves (1):
+      Linux 5.10.90-rt61
+
+Sebastian Andrzej Siewior (1):
+      stop_machine: Remove this_cpu_ptr() from print_stop_info().
+
+Thomas Gleixner (1):
+      eventfd: Make signal recursion protection a task bit
+
+Xie Yongji (1):
+      aio: Fix incorrect usage of eventfd_signal_allowed()
+---
+fs/aio.c                |  2 +-
+ fs/eventfd.c            | 12 +++++-------
+ include/linux/eventfd.h | 11 +++++------
+ include/linux/sched.h   |  4 ++++
+ kernel/stop_machine.c   |  6 +++++-
+ localversion-rt         |  2 +-
+ 6 files changed, 21 insertions(+), 16 deletions(-)
+---
+diff --git a/fs/aio.c b/fs/aio.c
+index c72b2c51b446c..1a78979663dca 100644
+--- a/fs/aio.c
++++ b/fs/aio.c
+@@ -1761,7 +1761,7 @@ static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, int sync,
+ 		list_del_init(&req->wait.entry);
+ 		list_del(&iocb->ki_list);
+ 		iocb->ki_res.res = mangle_poll(mask);
+-		if (iocb->ki_eventfd && eventfd_signal_count()) {
++		if (iocb->ki_eventfd && !eventfd_signal_allowed()) {
+ 			iocb = NULL;
+ 			INIT_WORK(&req->work, aio_poll_put_work);
+ 			schedule_work(&req->work);
+diff --git a/fs/eventfd.c b/fs/eventfd.c
+index df466ef81dddf..9035ca60bfcf3 100644
+--- a/fs/eventfd.c
++++ b/fs/eventfd.c
+@@ -25,8 +25,6 @@
+ #include <linux/idr.h>
+ #include <linux/uio.h>
+ 
+-DEFINE_PER_CPU(int, eventfd_wake_count);
+-
+ static DEFINE_IDA(eventfd_ida);
+ 
+ struct eventfd_ctx {
+@@ -67,21 +65,21 @@ __u64 eventfd_signal(struct eventfd_ctx *ctx, __u64 n)
+ 	 * Deadlock or stack overflow issues can happen if we recurse here
+ 	 * through waitqueue wakeup handlers. If the caller users potentially
+ 	 * nested waitqueues with custom wakeup handlers, then it should
+-	 * check eventfd_signal_count() before calling this function. If
+-	 * it returns true, the eventfd_signal() call should be deferred to a
++	 * check eventfd_signal_allowed() before calling this function. If
++	 * it returns false, the eventfd_signal() call should be deferred to a
+ 	 * safe context.
+ 	 */
+-	if (WARN_ON_ONCE(this_cpu_read(eventfd_wake_count)))
++	if (WARN_ON_ONCE(current->in_eventfd_signal))
+ 		return 0;
+ 
+ 	spin_lock_irqsave(&ctx->wqh.lock, flags);
+-	this_cpu_inc(eventfd_wake_count);
++	current->in_eventfd_signal = 1;
+ 	if (ULLONG_MAX - ctx->count < n)
+ 		n = ULLONG_MAX - ctx->count;
+ 	ctx->count += n;
+ 	if (waitqueue_active(&ctx->wqh))
+ 		wake_up_locked_poll(&ctx->wqh, EPOLLIN);
+-	this_cpu_dec(eventfd_wake_count);
++	current->in_eventfd_signal = 0;
+ 	spin_unlock_irqrestore(&ctx->wqh.lock, flags);
+ 
+ 	return n;
+diff --git a/include/linux/eventfd.h b/include/linux/eventfd.h
+index dc4fd8a6644dd..836b4c021a0a4 100644
+--- a/include/linux/eventfd.h
++++ b/include/linux/eventfd.h
+@@ -14,6 +14,7 @@
+ #include <linux/err.h>
+ #include <linux/percpu-defs.h>
+ #include <linux/percpu.h>
++#include <linux/sched.h>
+ 
+ /*
+  * CAREFUL: Check include/uapi/asm-generic/fcntl.h when defining
+@@ -42,11 +43,9 @@ __u64 eventfd_signal(struct eventfd_ctx *ctx, __u64 n);
+ int eventfd_ctx_remove_wait_queue(struct eventfd_ctx *ctx, wait_queue_entry_t *wait,
+ 				  __u64 *cnt);
+ 
+-DECLARE_PER_CPU(int, eventfd_wake_count);
+-
+-static inline bool eventfd_signal_count(void)
++static inline bool eventfd_signal_allowed(void)
+ {
+-	return this_cpu_read(eventfd_wake_count);
++	return !current->in_eventfd_signal;
+ }
+ 
+ #else /* CONFIG_EVENTFD */
+@@ -77,9 +76,9 @@ static inline int eventfd_ctx_remove_wait_queue(struct eventfd_ctx *ctx,
+ 	return -ENOSYS;
+ }
+ 
+-static inline bool eventfd_signal_count(void)
++static inline bool eventfd_signal_allowed(void)
+ {
+-	return false;
++	return true;
+ }
+ 
+ #endif
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 409a24036952c..29e6ff1af1df9 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -852,6 +852,10 @@ struct task_struct {
+ 	/* Stalled due to lack of memory */
+ 	unsigned			in_memstall:1;
+ #endif
++#ifdef CONFIG_EVENTFD
++	/* Recursion prevention for eventfd_signal() */
++	unsigned			in_eventfd_signal:1;
++#endif
+ 
+ 	unsigned long			atomic_flags; /* Flags requiring atomic access. */
+ 
+diff --git a/kernel/stop_machine.c b/kernel/stop_machine.c
+index dbf585cf4b9f8..971d8acceaecb 100644
+--- a/kernel/stop_machine.c
++++ b/kernel/stop_machine.c
+@@ -51,7 +51,11 @@ static bool stop_machine_initialized = false;
+ 
+ void print_stop_info(const char *log_lvl, struct task_struct *task)
+ {
+-	struct cpu_stopper *stopper = this_cpu_ptr(&cpu_stopper);
++	/*
++	 * If @task is a stopper task, it cannot migrate and task_cpu() is
++	 * stable.
++	 */
++	struct cpu_stopper *stopper = per_cpu_ptr(&cpu_stopper, task_cpu(task));
+ 
+ 	if (task != stopper->thread)
+ 		return;
+diff --git a/localversion-rt b/localversion-rt
+index 66fa05e70f292..9b7de9345ef4c 100644
+--- a/localversion-rt
++++ b/localversion-rt
+@@ -1 +1 @@
+--rt60
++-rt61
 

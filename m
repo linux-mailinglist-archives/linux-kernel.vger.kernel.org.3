@@ -2,122 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A328F4B2EA9
+	by mail.lfdr.de (Postfix) with ESMTP id 57B894B2EA8
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:43:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353325AbiBKUmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 15:42:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40588 "EHLO
+        id S1353394AbiBKUnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 15:43:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiBKUmm (ORCPT
+        with ESMTP id S1348029AbiBKUnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 15:42:42 -0500
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B539FC55;
-        Fri, 11 Feb 2022 12:42:40 -0800 (PST)
-Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 07AED425;
-        Fri, 11 Feb 2022 12:42:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1644612160;
-        bh=NcOgnI4XVfpjdB5tu79X+6ZPVwodL2Y1hcUhjUhpw9w=;
+        Fri, 11 Feb 2022 15:43:15 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6477F1A2;
+        Fri, 11 Feb 2022 12:43:13 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id F41E41F472E0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644612192;
+        bh=oWgZHE9fHCY/0v/Hzi8mevgHh7lV1HyeByt1kmcVti4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KfUd4S7cGL8zKJd82OGDd1XIqCApewYFWIxJI5wLhD903V4RL8n0s2Cm76sHf6R1i
-         zhGdpyg4u988T8ydyEMqDch6dmqiLAK09eZHet/sISpXXK0wuSY/KRuRSAc634kUEr
-         EQorTx2VE6+tCSUdsTYEdI2WzP5Znhm/gUcMgEtc=
-Date:   Fri, 11 Feb 2022 12:42:38 -0800
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Konstantin Aladyshev <aladyshev22@gmail.com>,
-        Oskar Senft <osk@google.com>, openbmc@lists.ozlabs.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] serial: 8250_aspeed_vuart: add PORT_ASPEED_VUART port
- type
-Message-ID: <YgbKPmZIpfRPKg1k@hatter.bewilderbeest.net>
-References: <20220211004203.14915-1-zev@bewilderbeest.net>
- <YgY4IODZlKTG7yzn@smile.fi.intel.com>
+        b=SEGgezdoKEGTnAoFXxM0aFjBs/4lAZ630dBWRr2F+2e4SsTUxuI3ftGDHxrlfitlf
+         +btqYJbwbX/RQAohFdqqeGYUtMBTgMP28pGU2q8xpVExYEbm77mBcb2H+3N51rKv+y
+         Hif6bW4vOaq1xlc1Syg6fBugIY08HFKs8l0HZbwHeOCPKEzcPXGcG7bKj3SpHrk+Ci
+         shS03z7E/gRJILlF5gcsZanUruO1wVH6PNjafzT5vAYmte4pMPqWu/Y3N/IudJvglJ
+         cKvLGRJM+xw0APetQ3caettSbh+AnpTWEiw078zrXj8ZEDdGqzyVIQj3A7UZdfoCmq
+         fJQSdgX0Q0Vtw==
+Received: by mercury (Postfix, from userid 1000)
+        id 528661060908; Fri, 11 Feb 2022 21:43:09 +0100 (CET)
+Date:   Fri, 11 Feb 2022 21:43:09 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+Subject: Re: [RESEND v2 1/2] power: supply: Introduces bypass charging
+ property
+Message-ID: <20220211204309.apzep7w233vh7iin@mercury.elektranox.org>
+References: <20220210154108.641369-1-rriveram@opensource.cirrus.com>
+ <20220210154108.641369-2-rriveram@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mqjkkptof3zuwwtj"
 Content-Disposition: inline
-In-Reply-To: <YgY4IODZlKTG7yzn@smile.fi.intel.com>
+In-Reply-To: <20220210154108.641369-2-rriveram@opensource.cirrus.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 02:19:12AM PST, Andy Shevchenko wrote:
->On Thu, Feb 10, 2022 at 04:42:03PM -0800, Zev Weiss wrote:
->> Commit 54da3e381c2b ("serial: 8250_aspeed_vuart: use UPF_IOREMAP to
->> set up register mapping") fixed a bug that had, as a side-effect,
->> prevented the 8250_aspeed_vuart driver from enabling the VUART's
->> FIFOs.  However, fixing that (and hence enabling the FIFOs) has in
->> turn revealed what appears to be a hardware bug in the ASPEED VUART in
->> which the host-side THRE bit doesn't get if the BMC-side receive FIFO
->> trigger level is set to anything but one byte.  This causes problems
->> for polled-mode writes from the host -- for example, Linux kernel
->> console writes proceed at a glacial pace (less than 100 bytes per
->> second) because the write path waits for a 10ms timeout to expire
->> after every character instead of being able to continue on to the next
->> character upon seeing THRE asserted.  (GRUB behaves similarly.)
->>
->> As a workaround, introduce a new port type for the ASPEED VUART that's
->> identical to PORT_16550A as it had previously been using, but with
->> UART_FCR_R_TRIG_00 instead to set the receive FIFO trigger level to
->> one byte, which (experimentally) seems to avoid the problematic THRE
->> behavior.
->
->...
->
->> +	[PORT_ASPEED_VUART] = {
->> +		.name		= "ASPEED VUART",
->> +		.fifo_size	= 16,
->> +		.tx_loadsz	= 16,
->> +		.fcr		= UART_FCR_ENABLE_FIFO | UART_FCR_R_TRIG_00,
->> +		.rxtrig_bytes	= {1, 4, 8, 14},
->> +		.flags		= UART_CAP_FIFO,
->> +	},
->
->This is quite similar to AR7 type. Can that be (re-)used?
->
 
-I suppose that could work if there's a strong preference for it, but I'd 
-sort of prefer to keep it as a separate entry if that's alright.
+--mqjkkptof3zuwwtj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Firstly, I haven't yet heard back from ASPEED confirming the nature of 
-the underlying problem, so it seems entirely possible we'll end up 
-wanting to tweak it further if they can suggest a better workaround, and 
-I believe having rxtrig_bytes defined (which AR7 doesn't) enables 
-adjusting the trigger-level FCR bits from userspace via sysfs, which 
-could be useful for experiments relating to that.
+Hi,
 
-Secondly, there are a half-dozen or so other existing entries in the 
-uart_config[] array that differ only in name, so it doesn't seem to be 
-something that's generally been deemed worth optimizing thus far, and 
-now that the constant value has been shifted down it's just filling in a 
-previously-empty slot in the array instead of expanding it further.
+On Thu, Feb 10, 2022 at 09:41:07AM -0600, Ricardo Rivera-Matos wrote:
+> Adds a POWER_SUPPLY_CHARGE_TYPE_BYPASS option to the POWER_SUPPLY_PROP_CH=
+ARGE_TYPE
+> property to facilitate bypass charging operation.
+>=20
+> In bypass charging operation, the charger bypasses the charging path arou=
+nd the
+> integrated converter allowing for a "smart" wall adaptor to perform the p=
+ower
+> conversion externally.
+>=20
+> This operational mode is critical for the USB PPS standard of power adapt=
+ors and is
+> becoming a common feature in modern charging ICs such as:
+>=20
+> - BQ25980
+> - BQ25975
+> - BQ25960
+> - LN8000
+> - LN8410
+>=20
+> Signed-off-by: Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
+> ---
 
-But mostly it strikes me as a bit...gratuitously confusing to label the 
-port as something it ultimately isn't, even if they're functionally 
-"close enough" (calling it an 8250 or 16550A is a bit different, as 
-those are well-established, widely-emulated ones that have become 
-generic nomenclature, which isn't so much the case for AR7).  While in 
-the source code it could be explained with a comment, having 
-/proc/tty/driver/serial (and wherever else that name might end up) 
-referencing a totally unrelated MIPS SoC just seems kind of weird to me.
+Sorry for the wait. This needs to update the sysfs ABI documentation:
 
+Documentation/ABI/testing/sysfs-class-power
 
-Zev
+I think your patch description is a good explanation for that file.
+Also I obviously missed to point this out for the "Long Life" charge
+type, so please also add a sentence for that so that the property
+is properly documented.
 
+(Otherwise the patchset looks fine to me)
+
+Thanks,
+
+-- Sebastian
+
+>  drivers/power/supply/power_supply_sysfs.c | 1 +
+>  include/linux/power_supply.h              | 1 +
+>  2 files changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/su=
+pply/power_supply_sysfs.c
+> index 6ac88fbee3cb..52c909bae457 100644
+> --- a/drivers/power/supply/power_supply_sysfs.c
+> +++ b/drivers/power/supply/power_supply_sysfs.c
+> @@ -89,6 +89,7 @@ static const char * const POWER_SUPPLY_CHARGE_TYPE_TEXT=
+[] =3D {
+>  	[POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE]	=3D "Adaptive",
+>  	[POWER_SUPPLY_CHARGE_TYPE_CUSTOM]	=3D "Custom",
+>  	[POWER_SUPPLY_CHARGE_TYPE_LONGLIFE]	=3D "Long Life",
+> +	[POWER_SUPPLY_CHARGE_TYPE_BYPASS]	=3D "Bypass",
+>  };
+> =20
+>  static const char * const POWER_SUPPLY_HEALTH_TEXT[] =3D {
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index 86b4d5c4dab9..164779bc7e8f 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -49,6 +49,7 @@ enum {
+>  	POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE,	/* dynamically adjusted speed */
+>  	POWER_SUPPLY_CHARGE_TYPE_CUSTOM,	/* use CHARGE_CONTROL_* props */
+>  	POWER_SUPPLY_CHARGE_TYPE_LONGLIFE,	/* slow speed, longer life */
+> +	POWER_SUPPLY_CHARGE_TYPE_BYPASS,	/* bypassing the charger */
+>  };
+> =20
+>  enum {
+> --=20
+> 2.25.1
+>=20
+
+--mqjkkptof3zuwwtj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIGyloACgkQ2O7X88g7
++pq8IQ/9H9mzMXMYF2R4nFAzMTvSf/mLqe5+PnGqRWj/Nfy+LkB4zQoW5sICcdUf
+J9vO64ZNjAgrEIryl9o63pKs09xx+ATdlKdkhSV0rc1N8U0C30/qhewalFGAXHYL
+cTe46ju9nAYegg8bXt/slV0zliokfIBLXUBx7EFxmI6YdXNk6BNsLVWSoRkVycEt
+3wiXjfn3/QcNdRLZpJnkMAnZ4zidaJXu4prDk1suGS0GcQN0M3o2+XyQmeSrPwCy
+to8qGXDEVbM0CSHkjiUyWjzlMV1mkf5pU/uv3Foj8hQu1m6f3WTAkkWqR/snqRqp
+P8DIGoRERkGu53LMAdhgF4lwFd1uHIeHXRN9eEdsCqxJ+OPWH5HKFRn9KV0zvtxb
+0RnJn8Hsj9tJT/axk8HgNG5RXH3BGdSQPwVuBewzUwEC0hz1G8M7Zaqk8arylXnd
+9P2vqhNC015jtO0L7z293Z1rrqwYnN3SW5ehwYT0lSsWOeo6CVAN153+0U9+LW0s
+WhjYYxadYqe1izDzqui6HZ8/YR6WaHyW336po1RbmXe7WW3NdFqk+sOJH1SF9CzQ
+nMhmc5QatzKQr4gEZsZrNNBWKwB9SzO+f2heW/QLzQ8qmbJ0dE1tGReH/59TkGRw
+Awf1zNDBLc0UGniA4jXBawgqNuNVEOqbslCtWUsgKqb5tQ+k7Vk=
+=pWAX
+-----END PGP SIGNATURE-----
+
+--mqjkkptof3zuwwtj--

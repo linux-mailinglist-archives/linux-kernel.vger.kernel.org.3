@@ -2,118 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BCC4B1E77
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:14:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF284B1E3C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345957AbiBKGOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 01:14:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55344 "EHLO
+        id S245687AbiBKGMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 01:12:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345022AbiBKGNs (ORCPT
+        with ESMTP id S234689AbiBKGMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 01:13:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBD45F41;
-        Thu, 10 Feb 2022 22:13:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4B2561888;
-        Fri, 11 Feb 2022 06:13:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23B7CC340F1;
-        Fri, 11 Feb 2022 06:13:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644560009;
-        bh=Ow7M7vV1AuHp/+RVwqkUIet6a1LA8gAucAt2mq8+dcU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SGnqMaSJGnHjoh0tERg9EpNILB/3ExPEM3iLlMu3SSTegfM3Hm1nCjvCZD7KuXt0G
-         +HJzU9YVZswDiCPsycbMB135i2tuEIjmnUA2Uod31uR+9pJS5LpdJLS/2eHWMhR8yf
-         PWbHYz+EE2qHWEFVpGmh8y9tWfQv9pC28bTXNE0sUxMK9wckw2JkKrSp9/74Dk9DPb
-         upM9ljgCO8LUoAE3QQZQ2jC4zXZCany1C5tNCagMqJS0Vbl2R1f1cDJUIuu1AuCOW2
-         NrKgp1GqnECUvhBKeH3phzzhbvbXAKmhMjeGNdXDmwjHfqRw4vGSKo3QwW+OHrDZYm
-         MsLIgQ7lRgOWQ==
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-xfs@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 7/7] f2fs: support STATX_IOALIGN
-Date:   Thu, 10 Feb 2022 22:11:58 -0800
-Message-Id: <20220211061158.227688-8-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220211061158.227688-1-ebiggers@kernel.org>
-References: <20220211061158.227688-1-ebiggers@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Feb 2022 01:12:43 -0500
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A989DBE4;
+        Thu, 10 Feb 2022 22:12:43 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id C303B580151;
+        Fri, 11 Feb 2022 01:12:42 -0500 (EST)
+Received: from imap49 ([10.202.2.99])
+  by compute2.internal (MEProxy); Fri, 11 Feb 2022 01:12:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sladewatkins.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=xsSTeaHpM9YFFq
+        U6y6uqJ8AjtheEyxvj6uUgxbNJlAY=; b=bK3RhqNVq2Lh/QXbC403JpH9CUmRdH
+        2iY2G0f5MtYFb4W9ZrpUPQN3sTHGn06AKlMQgYjkPCK42LzR+dyttCPLhLd5HVTr
+        IheZlCPUwjXM45W5feFOosgq4PHOxtmYHLfsuD+oI7PUkBXqkKPrB87phFIGTvn2
+        h+OSXY4uXWQgI5bgCXMfsj1692PU4j6mD3DOmbAWLnVokk+Buw80woOAwgC20fnU
+        xtBEPdYxjqVArN7BCBkrF1ED99GfV9AQLC1TQOLGunn8pvarobXa1HIXUtoZcZmQ
+        vRekBqbl0sxrCOcchTJCQ4+CzFUlvTNg2BtprrU5NBj9kFBTVy47axLg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=xsSTeaHpM9YFFqU6y
+        6uqJ8AjtheEyxvj6uUgxbNJlAY=; b=H5FmCKpoXz8bUW0NQXR4rvb8FVQlZKWrQ
+        TVK1Cp+zHfvpXrAJShFzt24lym5B05FMQOgJ/7+2JTmhiCyhE+Br0Bmr5tDPI+U8
+        3FxZC+VYqyFZWQE3DZwM96Gv/Rq6+Avf0olVUttFqDl5tp6iv9lF+hRNkRvi883A
+        eJ8S9gBzWtGPeDAwx8Glsq1JKsL5q1cEvhcQxoX/MhqUVbA0YvBsTE+PhcZYTPqC
+        H4ajaMiOf9JGLYyfRSUPjSSgzseOqZigJHzSXE49Q8NDBjG02bRmaDhfkDlV4RmC
+        rNa6WOzNM4hshfT2PxnyMDU/NOOMoPOLT9/WOWU/Ojn5UUHKqQhpg==
+X-ME-Sender: <xms:Wv4FYnE1oBnRdYaSX1z1ckw_-2HK0rr_TI7LrdhPYwOPRgCN9Sj9DA>
+    <xme:Wv4FYkVjXGMvZ3LS2HowkFsNRxcC-DWfI9yd5233l8YpNTlMwio6ISCFMu0gtr17H
+    MUBOaO080XSidzeFbc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddriedvgdekjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhlrggu
+    vgcuhggrthhkihhnshdfuceoshhlrgguvgesshhlrgguvgifrghtkhhinhhsrdgtohhmqe
+    enucggtffrrghtthgvrhhnpeeuieffteejieetgfevteelheevudehteeihffhteehtdet
+    leegtedtvdevvddugeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehslhgruggvsehslhgruggvfigrthhkihhnshdrtghomh
+X-ME-Proxy: <xmx:Wv4FYpKagqBHQ_Qq_D8oYfipQXY-_lKQ6e0fCEq8Ughob9GoenkCXg>
+    <xmx:Wv4FYlFo9g3OMFa3sWUnNziBcRp1XOFbAkLr9z7FcwUJoZt66EyhCg>
+    <xmx:Wv4FYtX0kvgB4OJZ8NJ6Q_Tbhv-XVs1cBItSZrugSfa7tPqlGyfUdw>
+    <xmx:Wv4FYmNmJKR77MiMs6kkQO1PM2Wcg_2zg668J6-k73OYn9NNoTNZNj4FINQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9072EF6007E; Fri, 11 Feb 2022 01:12:42 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4748-g31a5b5f50e-fm-cal2020-20220204.001-g31a5b5f5
+Mime-Version: 1.0
+Message-Id: <2a4cb652-937b-46ce-b335-93722afe50f3@www.fastmail.com>
+In-Reply-To: <20220209191249.980911721@linuxfoundation.org>
+References: <20220209191249.980911721@linuxfoundation.org>
+Date:   Fri, 11 Feb 2022 01:12:39 -0500
+From:   "Slade Watkins" <slade@sladewatkins.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Guenter Roeck" <linux@roeck-us.net>, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        "Pavel Machek" <pavel@denx.de>,
+        "Jon Hunter" <jonathanh@nvidia.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>
+Subject: Re: [PATCH 5.15 0/5] 5.15.23-rc1 review
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+On Wed, Feb 9, 2022, at 2:14 PM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.23 release.
+> There are 5 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
+> Anything received after that time might be too late.
 
-Add support for STATX_IOALIGN to f2fs, so that I/O alignment information
-is exposed to userspace in a consistent and easy-to-use way.
+Compiled and booted 5.15.23-rc1 on my x86_64 test system successfully without errors or regressions.
 
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- fs/f2fs/file.c | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+Tested-by: Slade Watkins <slade@sladewatkins.com>
 
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 9cc985258f17e..334d363a7b8c5 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -835,6 +835,21 @@ static bool f2fs_force_buffered_io(struct inode *inode)
- 	return false;
- }
- 
-+/* Return the maximum value of io_opt across all the filesystem's devices. */
-+static unsigned int f2fs_max_io_opt(struct inode *inode)
-+{
-+	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-+	int io_opt = 0;
-+	int i;
-+
-+	if (!f2fs_is_multi_device(sbi))
-+		return bdev_io_opt(sbi->sb->s_bdev);
-+
-+	for (i = 0; i < sbi->s_ndevs; i++)
-+		io_opt = max(io_opt, bdev_io_opt(FDEV(i).bdev));
-+	return io_opt;
-+}
-+
- int f2fs_getattr(struct user_namespace *mnt_userns, const struct path *path,
- 		 struct kstat *stat, u32 request_mask, unsigned int query_flags)
- {
-@@ -851,6 +866,22 @@ int f2fs_getattr(struct user_namespace *mnt_userns, const struct path *path,
- 		stat->btime.tv_nsec = fi->i_crtime.tv_nsec;
- 	}
- 
-+	/*
-+	 * Return the I/O alignment information if requested.  We only return
-+	 * this information when requested, since on encrypted files it might
-+	 * take a fair bit of work to get if the file wasn't opened recently.
-+	 */
-+	if ((request_mask & STATX_IOALIGN) && S_ISREG(inode->i_mode)) {
-+		unsigned int bsize = i_blocksize(inode);
-+
-+		stat->result_mask |= STATX_IOALIGN;
-+		if (!f2fs_force_buffered_io(inode)) {
-+			stat->mem_align_dio = bsize;
-+			stat->offset_align_dio = bsize;
-+		}
-+		stat->offset_align_optimal = max(f2fs_max_io_opt(inode), bsize);
-+	}
-+
- 	flags = fi->i_flags;
- 	if (flags & F2FS_COMPR_FL)
- 		stat->attributes |= STATX_ATTR_COMPRESSED;
--- 
-2.35.1
-
+Thanks,
+Slade

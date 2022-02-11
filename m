@@ -2,102 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8AD4B250D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 569D94B252A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349784AbiBKL6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 06:58:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47240 "EHLO
+        id S233936AbiBKMDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 07:03:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234144AbiBKL6q (ORCPT
+        with ESMTP id S232442AbiBKL7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 06:58:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E109EAE
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:58:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9D55619D7
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 11:58:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B7CAC340E9;
-        Fri, 11 Feb 2022 11:58:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644580724;
-        bh=pgz5WoyfElnAyzBIovA0IXn76dZ8q1uHsh96lNL+XAI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V5oUialuPGmZ70jHjuFpzC/zncDrcjgmjV/chXHS1MOpvH46ZCdBB6gPoeOwyuDs5
-         S0FH6N6snATeM/uDQ0tOrdbfcbKTZ1zU2Af6fzcN+ZaUq7jdZgk7DlKlcw5n0FfDbN
-         T9TRnHyjoi4SV/Q+VBCw/EJZP+LIz1M9WjOeTqy6LSm7WECz0Pd2t1S7pqGrxxYTYw
-         QFnRyReKldltujYEXPImbvKFMiRzLk9AA6OGOlHau0W9dSk2C/ylZI0gbRxXvZpZba
-         05rjN2QwlljnC++eiK/8VAFO4Hr7bAP/qnsXblASkVmiu258weJTz/VoudFkHcZaIn
-         yoMCanTuXa1nQ==
-Date:   Fri, 11 Feb 2022 11:58:39 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Luiz Sampaio <sampaio.ime@gmail.com>
-Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH 31/31] sound: soc: sof: changing LED_* from enum
- led_brightness to actual value
-Message-ID: <YgZPb39aPMm64gSL@sirena.org.uk>
-References: <20220121165436.30956-1-sampaio.ime@gmail.com>
- <20220121165436.30956-32-sampaio.ime@gmail.com>
+        Fri, 11 Feb 2022 06:59:34 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF35F4E
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:59:33 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id j9-20020a05600c190900b0037bff8a24ebso2693232wmq.4
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:59:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tx8ZFq8JdO/4oUXF/KhCH6Nf7XCVn/8UewteKqP8h1s=;
+        b=qFuJQjxgvlT2bAueQpdORWOfP43xD0e9K9dpxtvEuNkSBmi78JUWnzGS/JJ24WgnT+
+         xmsbEsQQ0PS/X6OwzA7TnNT9C6OfK/X7stRvoYNMAu99/yiDTcgwglSlcBW3kfdbBwyj
+         JVS3vcWbyRWXaFKBO6IwAoi2vUivUvSgdSKP8mrWFN4wD4N7VQ1p82JzooQtWS7GXNWb
+         nzkZ/F+GgntKUs4PqHPwVkdyKnNp5DqeR5rqJyJHhpRqny4w/I9ag2PCyokFPyJEV0Uo
+         azUOZmMvsleKSTM+DBPEiBBBNCcxN3n1iMRxd+cAGLtOyMtvr41E0CBkb14hUsEwA0qH
+         qSfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tx8ZFq8JdO/4oUXF/KhCH6Nf7XCVn/8UewteKqP8h1s=;
+        b=0z3IKcky1VUz03EMpG4vXmmaKP5yfD2W8Mnsk0VO7RqE5QG8She+b5EqMjhk/n+may
+         hHQkd8jpOCUgIRzszRR9zaMdUNPckqLuAKC2erRErPTulKUoHek4RUSTwYiqudrit0g5
+         3WPpV+navgh8Z2zScKshJG1AG5gKFVlDa0FRntVty7APw3KHBxc7g+uak/4ZP/RAMa2G
+         ztujpFyNqKprQJ+e5/4kBGBacSLsfpG9SuvVG4minfHVlUq4qvAd5MvwFnOs8+2IeaQB
+         SJiCx0DLPARrITQpKl/dyt7j1vt8/YuUEi5PFxMLG/c91ovO8jYOmWGyfH+5SvESpYXR
+         siYw==
+X-Gm-Message-State: AOAM5334dtDpx4oCWzw8/WRdpDGkSR0BWjETYVR4YCoeohJedk7qDgOE
+        1OJGXT31if01afZhoL7LhzFaXCnIbFhNJA==
+X-Google-Smtp-Source: ABdhPJwYjEPwR7ld+ZHbxRmJzqFRQ73mz77IVh4ygiFj10b1bK4/nIyP38c85s51FxEHBMDjEn43Bg==
+X-Received: by 2002:a05:600c:4611:: with SMTP id m17mr17712wmo.94.1644580771686;
+        Fri, 11 Feb 2022 03:59:31 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id s187sm4763212wme.14.2022.02.11.03.59.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 03:59:31 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     davem@davemloft.net, heiko@sntech.de, herbert@gondor.apana.org.au,
+        krzysztof.kozlowski@canonical.com, robh+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH v3] dt-bindings: crypto: convert rockchip-crypto to yaml
+Date:   Fri, 11 Feb 2022 11:59:25 +0000
+Message-Id: <20220211115925.3382735-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="plmduE3cU0Ei6ORP"
-Content-Disposition: inline
-In-Reply-To: <20220121165436.30956-32-sampaio.ime@gmail.com>
-X-Cookie: do {
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Convert rockchip-crypto to yaml
 
---plmduE3cU0Ei6ORP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+Changes since v1:
+- fixed example
+- renamed to a new name
+- fixed some maxItems
 
-On Fri, Jan 21, 2022 at 01:54:36PM -0300, Luiz Sampaio wrote:
-> The enum led_brightness, which contains the declaration of LED_OFF,
-> LED_ON, LED_HALF and LED_FULL is obsolete, as the led class now supports
-> max_brightness.
-> ---
+Change since v2:
+- Fixed maintainers section
 
-You've not provided a Signed-off-by for this so I can't do anything with
-it, please see Documentation/process/submitting-patches.rst for details
-on what this is and why it's important.
+ .../crypto/rockchip,rk3288-crypto.yaml        | 66 +++++++++++++++++++
+ .../bindings/crypto/rockchip-crypto.txt       | 28 --------
+ 2 files changed, 66 insertions(+), 28 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml
+ delete mode 100644 Documentation/devicetree/bindings/crypto/rockchip-crypto.txt
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
+diff --git a/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml b/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml
+new file mode 100644
+index 000000000000..2e1e9fa711c4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml
+@@ -0,0 +1,66 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/crypto/rockchip,rk3288-crypto.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Rockchip Electronics And Security Accelerator
++
++maintainers:
++  - Heiko Stuebner <heiko@sntech.de>
++
++properties:
++  compatible:
++    const: rockchip,rk3288-crypto
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: clock data
++      - description: clock data
++      - description: clock crypto accelerator
++      - description: clock dma
++
++  clock-names:
++    items:
++      - const: aclk
++      - const: hclk
++      - const: sclk
++      - const: apb_pclk
++
++  resets:
++    maxItems: 1
++
++  reset-names:
++    const: crypto-rst
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - resets
++  - reset-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/rk3288-cru.h>
++    crypto@ff8a0000 {
++      compatible = "rockchip,rk3288-crypto";
++      reg = <0xff8a0000 0x4000>;
++      interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
++      clocks = <&cru ACLK_CRYPTO>, <&cru HCLK_CRYPTO>,
++               <&cru SCLK_CRYPTO>, <&cru ACLK_DMAC1>;
++      clock-names = "aclk", "hclk", "sclk", "apb_pclk";
++      resets = <&cru SRST_CRYPTO>;
++      reset-names = "crypto-rst";
++    };
+diff --git a/Documentation/devicetree/bindings/crypto/rockchip-crypto.txt b/Documentation/devicetree/bindings/crypto/rockchip-crypto.txt
+deleted file mode 100644
+index 5e2ba385b8c9..000000000000
+--- a/Documentation/devicetree/bindings/crypto/rockchip-crypto.txt
++++ /dev/null
+@@ -1,28 +0,0 @@
+-Rockchip Electronics And Security Accelerator
+-
+-Required properties:
+-- compatible: Should be "rockchip,rk3288-crypto"
+-- reg: Base physical address of the engine and length of memory mapped
+-       region
+-- interrupts: Interrupt number
+-- clocks: Reference to the clocks about crypto
+-- clock-names: "aclk" used to clock data
+-	       "hclk" used to clock data
+-	       "sclk" used to clock crypto accelerator
+-	       "apb_pclk" used to clock dma
+-- resets: Must contain an entry for each entry in reset-names.
+-	  See ../reset/reset.txt for details.
+-- reset-names: Must include the name "crypto-rst".
+-
+-Examples:
+-
+-	crypto: cypto-controller@ff8a0000 {
+-		compatible = "rockchip,rk3288-crypto";
+-		reg = <0xff8a0000 0x4000>;
+-		interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
+-		clocks = <&cru ACLK_CRYPTO>, <&cru HCLK_CRYPTO>,
+-			 <&cru SCLK_CRYPTO>, <&cru ACLK_DMAC1>;
+-		clock-names = "aclk", "hclk", "sclk", "apb_pclk";
+-		resets = <&cru SRST_CRYPTO>;
+-		reset-names = "crypto-rst";
+-	};
+-- 
+2.34.1
 
---plmduE3cU0Ei6ORP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIGT24ACgkQJNaLcl1U
-h9Dligf+M7qs1xkty0Kg+UH9bpC0lH91jFsVPaoq+vPltqshE0VI0JvJryAUdaA3
-040Qmc5PWko17MNBzyf+9ME5bDy+gQzhgiREmqPnNnQQYg6p4/ib9VtPQ01U+juB
-5cSXcNp5YHv/1Ewum9vvSGUDgLnHeTqp8NDF0CyosRL88EvPEcA93jrFh+KzzB7y
-mrSNhEpXNcFaCHpUgN/PjjEpOzgRuwwEihTa5IFoeAoiLqkT0rZUvi3pW3ieyUpN
-0oIMw5VKrUN/q+Ub5yXgZc6qdCtyy9VlHPsk/2jPfw/EwBOb39u1A5JVCmeqP+DL
-/LwIe7ZulmRGqnE02dtCKbujcehWdA==
-=nfQH
------END PGP SIGNATURE-----
-
---plmduE3cU0Ei6ORP--

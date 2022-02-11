@@ -2,167 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8683D4B2C04
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 974824B2C0E
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:51:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352298AbiBKRrV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 11 Feb 2022 12:47:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40130 "EHLO
+        id S1352303AbiBKRtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 12:49:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232454AbiBKRrT (ORCPT
+        with ESMTP id S1345022AbiBKRtR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 12:47:19 -0500
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E3838D;
-        Fri, 11 Feb 2022 09:47:18 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:59888)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nIa0r-002bKF-9q; Fri, 11 Feb 2022 10:47:17 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:47708 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nIa0p-000awb-T4; Fri, 11 Feb 2022 10:47:16 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Robert =?utf-8?B?xZp3acSZY2tp?= <robert@swiecki.net>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20220210025321.787113-1-keescook@chromium.org>
-        <871r0a8u29.fsf@email.froward.int.ebiederm.org>
-        <202202101033.9C04563D9@keescook>
-        <87pmnu5z28.fsf@email.froward.int.ebiederm.org>
-        <202202101137.B48D02138@keescook>
-        <87k0e249tt.fsf@email.froward.int.ebiederm.org>
-        <202202101710.668EDCDC@keescook>
-        <875ypm41kb.fsf@email.froward.int.ebiederm.org>
-        <202202101827.4B16DF54@keescook>
-        <CAP145phAg3ZSPJw7x2kKVQe86puy-XyKatVoByVoM27RP4aw_g@mail.gmail.com>
-Date:   Fri, 11 Feb 2022 11:46:53 -0600
-In-Reply-To: <CAP145phAg3ZSPJw7x2kKVQe86puy-XyKatVoByVoM27RP4aw_g@mail.gmail.com>
-        ("Robert =?utf-8?B?xZp3acSZY2tpIidz?= message of "Fri, 11 Feb 2022 13:54:26
- +0100")
-Message-ID: <87a6ex1ek2.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Fri, 11 Feb 2022 12:49:17 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993DC2C9
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:49:16 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id y84so12411547iof.0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:49:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Ik2y23ex7UvkAohqkU716AwejNLp20RatBHLDCgOFXY=;
+        b=D5A5Exk1ZOsRPNTm5yFWdRYfTdu0wAI6+ohF/3KIUWZ6KEZJRT9EbblyIcggQdsaFF
+         lLKajO4gSLXNMBNG1S2yxebjV3b348F5AENwKg3ghYQuSX890bo3FOzZEuQOGDIxZ6DN
+         mwcAw6Rjb7nGDCyKYdsegEB2Axg1E4iHdRDXj/tKzMhA1UdbWKFBWzu8Q3LYwy16AhGa
+         lwD0MB4vi3d4MP+bx4oGZA2LWBCHFm0Cihqc5z/kwh7WK1hSpaA5zGV0UrzgWEFrJN/5
+         j2P1Q2R06y02OkvNvM8FiHIpstBhp66X9hLEYh73x5gllsddo0egJlIP2LkQ6X1KZ+7n
+         e0Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Ik2y23ex7UvkAohqkU716AwejNLp20RatBHLDCgOFXY=;
+        b=1Ub58wUg0we0Gkg3sIe3wRCba0mEv/o4tHx3YpJF5iYkFW6H/zKtvE1JZxA31ZZ158
+         SPlW4RKBkQDzIXymZG07FbCeyuBHp3m3SvKZJuICzJG3370vZFJMEcFZbqdF9pmO3ueg
+         3NA5jg23icLaf8FdTBx69v3/g3fpqJrZGnnaZbM6ZS0Jf2rhBYFqM4FUo9hH/wGDZCzr
+         9adiUBwdgu13r/C4rropS+HG0n7AouosJJ9fpQjB4JTo+sdOJeogGJbX+0Y4N2YyFwz9
+         aM9MO0ebkRk6/SM81nSVrTYHRNOQePf1MwLpGOSde2gtLvuMuLqTpmsLyzDuVbj8xJh8
+         EX7g==
+X-Gm-Message-State: AOAM533Fr+k2QZdR2z8xV8wusnc08XoWTn+qBroRzmYQR6ivqNLChba6
+        ItrmCSYhRnPLeNEMABkW5bw=
+X-Google-Smtp-Source: ABdhPJyrKXdrO1F+YSAIpLlDPjuyEzL5x1GDfgm89yW+CNfM8kQNdtk//y+pzL4a2D9bgGp9SnOSYw==
+X-Received: by 2002:a02:9429:: with SMTP id a38mr1440857jai.43.1644601754764;
+        Fri, 11 Feb 2022 09:49:14 -0800 (PST)
+Received: from localhost ([12.28.44.171])
+        by smtp.gmail.com with ESMTPSA id p5sm5419030ilo.37.2022.02.11.09.49.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 09:49:14 -0800 (PST)
+Date:   Fri, 11 Feb 2022 09:47:03 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Subject: Re: [PATCH 07/49] KVM: x86: replace bitmap_weight with bitmap_empty
+ where appropriate
+Message-ID: <YgahFz55dJpofbkR@yury-laptop>
+References: <20220210224933.379149-1-yury.norov@gmail.com>
+ <20220210224933.379149-8-yury.norov@gmail.com>
+ <ea4efad6-a15c-3749-f177-640396b52857@wanadoo.fr>
+ <YgaaqJNPyGvw9uKi@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1nIa0p-000awb-T4;;;mid=<87a6ex1ek2.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19jyVwxhC+hd4WN4KzZaWrSUkzBjMUuQTQ=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YgaaqJNPyGvw9uKi@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAD_ENC_HEADER,BAYES_00,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: =?ISO-8859-1?Q?**;Robert =c5=9awi=c4=99cki <robert@swiecki.net>?=
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 690 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 9 (1.3%), b_tie_ro: 8 (1.1%), parse: 1.07 (0.2%),
-        extract_message_metadata: 13 (1.9%), get_uri_detail_list: 2.5 (0.4%),
-        tests_pri_-1000: 12 (1.8%), tests_pri_-950: 1.25 (0.2%),
-        tests_pri_-900: 1.01 (0.1%), tests_pri_-90: 120 (17.4%), check_bayes:
-        116 (16.9%), b_tokenize: 9 (1.3%), b_tok_get_all: 9 (1.4%),
-        b_comp_prob: 3.2 (0.5%), b_tok_touch_all: 91 (13.1%), b_finish: 0.99
-        (0.1%), tests_pri_0: 506 (73.2%), check_dkim_signature: 0.59 (0.1%),
-        check_dkim_adsp: 2.7 (0.4%), poll_dns_idle: 0.51 (0.1%), tests_pri_10:
-        4.1 (0.6%), tests_pri_500: 20 (2.9%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 0/3] signal: HANDLER_EXIT should clear SIGNAL_UNKILLABLE
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Robert ÅšwiÄ™cki <robert@swiecki.net> writes:
+On Fri, Feb 11, 2022 at 05:19:36PM +0000, Sean Christopherson wrote:
+> On Fri, Feb 11, 2022, Christophe JAILLET wrote:
+> > Le 10/02/2022 à 23:48, Yury Norov a écrit :
+> > > In some places kvm/hyperv.c code calls bitmap_weight() to check if any bit
+> > > of a given bitmap is set. It's better to use bitmap_empty() in that case
+> > > because bitmap_empty() stops traversing the bitmap as soon as it finds
+> > > first set bit, while bitmap_weight() counts all bits unconditionally.
+> > > 
+> > > Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> > > Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> > > ---
+> > >   arch/x86/kvm/hyperv.c | 8 ++++----
+> > >   1 file changed, 4 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> > > index 6e38a7d22e97..06c2a5603123 100644
+> > > --- a/arch/x86/kvm/hyperv.c
+> > > +++ b/arch/x86/kvm/hyperv.c
+> > > @@ -90,7 +90,7 @@ static void synic_update_vector(struct kvm_vcpu_hv_synic *synic,
+> > >   {
+> > >   	struct kvm_vcpu *vcpu = hv_synic_to_vcpu(synic);
+> > >   	struct kvm_hv *hv = to_kvm_hv(vcpu->kvm);
+> > > -	int auto_eoi_old, auto_eoi_new;
+> > > +	bool auto_eoi_old, auto_eoi_new;
+> > >   	if (vector < HV_SYNIC_FIRST_VALID_VECTOR)
+> > >   		return;
+> > > @@ -100,16 +100,16 @@ static void synic_update_vector(struct kvm_vcpu_hv_synic *synic,
+> > >   	else
+> > >   		__clear_bit(vector, synic->vec_bitmap);
+> > > -	auto_eoi_old = bitmap_weight(synic->auto_eoi_bitmap, 256);
+> > > +	auto_eoi_old = !bitmap_empty(synic->auto_eoi_bitmap, 256);
+> > 
+> > I think that you can also remove the "!" here, ...
+> > 
+> > >   	if (synic_has_vector_auto_eoi(synic, vector))
+> > >   		__set_bit(vector, synic->auto_eoi_bitmap);
+> > >   	else
+> > >   		__clear_bit(vector, synic->auto_eoi_bitmap);
+> > > -	auto_eoi_new = bitmap_weight(synic->auto_eoi_bitmap, 256);
+> > > +	auto_eoi_new = !bitmap_empty(synic->auto_eoi_bitmap, 256);
+> > 
+> > ... and there...
+> > 
+> > > -	if (!!auto_eoi_old == !!auto_eoi_new)
+> > > +	if (auto_eoi_old == auto_eoi_new)
+> > 
+> > ... because this test would still give the same result.
 
->> It's mainly about the exit stuff having never been run before on these
->> kinds of process states, so things don't make sense. For example, on the
->> SIGSYS death, the registers have been rewound for the coredump, so when
->> the exit trace runs on x86 it sees the syscall return value as equal to
->> the syscall number (since %rax is used for the syscall number on entry
->> and for the syscall result on exit). So when a tracer watches a seccomp
->> fatal SIGSYS, it sees the syscall exit before it sees the child exit
->> (and therefore the signal). For example, x86_64 write (syscall number
->> 1), will return as if it had written 1 byte. :P
->>
->> So, it's not harmful, but it's confusing and weird. :)
->>
->> > I am trying to figure out if there is a case to be made that it was a
->> > bug that these events were missing.
->>
->> I don't think so -- the syscall did not finish, so there isn't a valid
->> return code. The process exited before it completed.
+This is how it was in v3. Vitaly asked to add '!' to keep variables
+names correct.
+https://lore.kernel.org/lkml/CAAH8bW_u6oNOkMsA_jRyWFHkzjMi0CB7gXmvLYAdjNMSqrrY7w@mail.gmail.com/t/#m51d28c03eafed5754a69f95f24c7d0a0510cc5c0
+> 
+> It would give the same result, but the variable names would be inverted as they
+> track if "auto EOI" is being used.  So yes, it's technically unnecessary, but
+> also very deliberate.
 
-With the process state rewound for the coredump it makes sense
-why the syscall exit would be meaningless.  So at least for
-now I am convinced function that clears all syscall_work flags
-is the way to go.
+auto_eoi_old_not_used = bitmap_empty() is worse to me than
+auto_eoi_old = !bitmap_empty().
 
-> A tangential point: please ignore for the purpose of fixing the
-> problem at hand. I'm mostly making it, in case it can be taken into
-> account in case some bigger changes to this code path are to be made -
-> given that it touches the problem of signal delivery.
->
-> When I noticed this problem, I was looking for a way to figure out
-> what syscall caused SIGSYS (via SECCOMP_RET_KILL_*), and there's no
-> easy way to do that programmatically from the perspective of a parent
-> process. There are three ways of doing this that come to mind.
-
-Unless I am misunderstanding what you are looking for
-this information is contained within the SIGSYS siginfo.
-The field si_syscall contains the system call number and
-the field si_errno contains return code from the seccomp filter.
-
-All of that can be read from the core dump of the process that exited.
-
-Looking quickly I don't see a good way to pull that signal information
-out of the kernel other than with a coredump.
-
-It might be possible to persuade PTRACE_EVENT_EXIT to give it to you,
-but I haven't looked at it enough to see if that would be a sensible
-strategy.
-
-
-> 1). Keep reference to /proc/<child>/syscall and read it upon process
-> exiting by SIGSYS (and reading it with wait/id(WNOWAIT) from parent).
-> This used to work a long time ago, but was racy (I reported this
-> problem many years ago), and currently only -1 0 0 is returned (as in,
-> no syscall in progress).
-
-That might be a bug worth fixing.  But it would definitely need a test
-that is run regularly to prevent future regressions.
-
-> 2). Use ptrace - it works but it changes the logic of the signal
-> delivery inside a traced process and requires non-trivial code to make
-> it work correctly: use of PT_INTERRUPT, understanding all signal
-> delivery events, registers and their mapping to syscall arguments per
-> CPU arch.
-
-I guess this works because you can see which syscall occurred before the
-SECCOMP_RET_KILL.  Except for the bugs we are discussing fixing there
-isn't a ptrace_stop after SECCOMP_RET_KILL.
-
-> 3). auditd will print details of failed syscall to kmsg, but the
-> string is not very structured, and auditd might not be always present
-> inside kernels. And reading that data via netlink requires root IIRC.
-
-I assume this is the same you can see which syscall occurred before
-the SECCOMP_RET_KILL.
-
->
-> I think it'd be good to have some way of doing it from the perspective
-> of a parent process - it'd simplify development of sandboxing managers
-> (eg nsjail, minijail, firejail), and creation of good seccomp
-> policies.
-
-By development do you mean debugging sandbox managers?  Or do you mean
-something that sandbox managers can use on a routine basis?
-
-Eric
+Thanks,
+Yury

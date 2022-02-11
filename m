@@ -2,112 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B95E94B2F57
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 22:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3334B2F76
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 22:38:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353734AbiBKVXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 16:23:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46750 "EHLO
+        id S235404AbiBKVhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 16:37:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353697AbiBKVXt (ORCPT
+        with ESMTP id S229770AbiBKVhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 16:23:49 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 4C698C5C
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 13:23:47 -0800 (PST)
-Received: (qmail 646920 invoked by uid 1000); 11 Feb 2022 16:23:46 -0500
-Date:   Fri, 11 Feb 2022 16:23:46 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+8caaaec4e7a55d75e243@syzkaller.appspotmail.com>
-Cc:     gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-input@vger.kernel.org, noralf@tronnes.org,
-        syzkaller-bugs@googlegroups.com, tzimmermann@suse.de
-Subject: Re: [syzbot] memory leak in hub_event (3)
-Message-ID: <YgbT4uqSIVY9ku10@rowland.harvard.edu>
-References: <0000000000005cacef05d7c3c10d@google.com>
+        Fri, 11 Feb 2022 16:37:46 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E40FC62
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 13:37:44 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id f23so19013063lfe.5
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 13:37:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XFzCG6U+gQcN35bNR5ygZp7My/pmsXpJOFlN4wA8faE=;
+        b=Op5mHfi4lkpgsAXFUIEvOb892Ki9UfRvx6Wny8c8GnjgwctkidFgQ18OXWJf376jCc
+         BL/WKzyG/HlMvQ5Fg9rMrnYrcCvA8WOcTMUhjWAiGuoPntTEWvfcefuEHsgqJwwQX7cW
+         NOiWSj++f2uRrGtaz3ZiLzt4iZqukzsD9VZjY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XFzCG6U+gQcN35bNR5ygZp7My/pmsXpJOFlN4wA8faE=;
+        b=hKOr4R8Yk5y1QkjIUqSicwms7oxVNoturZjneIcmK1yzWfuktPj3hWYsDi+jpXWf0R
+         AQPhcy3u31r6RZ2z+qgIYwChmenkgvG8fscYHp/Ou2qD8K0iQ+LDOJj+pBtlYz3viHRT
+         LhRizdZcJMvTe2NStkdr6eEJIleXqTPKSV0FSqF5+gAS4bXlfmTFs8+S6DCKgmSs0MNn
+         LcekEn0IF+IPZY2/7tsh4sLfHJyM2RBfSMcP02R1yKCM1QPKHPTlXQnCexM4FW8DAvOI
+         NFoCUr5Z9vHXHw4rNkX9bbOGv8hLb/dSYoEyYo4frHddwysDUUD2trOJkNgIJf2XUwJ6
+         gqSA==
+X-Gm-Message-State: AOAM533fI5StG2U+vGMTZFYWCE5miEJna/cv2RYjvgHBXFAwKNnk74k4
+        +JpFrkmGQUYALU4CYpIUZrTILcOiKOTpPm+l5L8=
+X-Google-Smtp-Source: ABdhPJyRp1XcQ87hqyIl5BKbcmYevo1/8dsUaJzueJr1eFXyI5UGT8d0DJW/s6LtEmf5dVRdHKT3Ow==
+X-Received: by 2002:a05:6512:2821:: with SMTP id cf33mr2500352lfb.37.1644615462562;
+        Fri, 11 Feb 2022 13:37:42 -0800 (PST)
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
+        by smtp.gmail.com with ESMTPSA id c28sm3254902lfv.211.2022.02.11.13.37.42
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Feb 2022 13:37:42 -0800 (PST)
+Received: by mail-lj1-f169.google.com with SMTP id t14so14201506ljh.8
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 13:37:42 -0800 (PST)
+X-Received: by 2002:a05:6000:1885:: with SMTP id a5mr2667962wri.193.1644614977325;
+ Fri, 11 Feb 2022 13:29:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000005cacef05d7c3c10d@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220211210757.612595-1-Jason@zx2c4.com>
+In-Reply-To: <20220211210757.612595-1-Jason@zx2c4.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 11 Feb 2022 13:29:21 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wh+2jokbr4tpHA=ExebWKr=qp9RJ_uFrG2gYG4ChAjitg@mail.gmail.com>
+Message-ID: <CAHk-=wh+2jokbr4tpHA=ExebWKr=qp9RJ_uFrG2gYG4ChAjitg@mail.gmail.com>
+Subject: Re: [PATCH RFC v0] random: block in /dev/urandom
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Theodore Ts'o" <tytso@mit.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 12:17:26PM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    dfd42facf1e4 Linux 5.17-rc3
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14b4ef7c700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=48b71604a367da6e
-> dashboard link: https://syzkaller.appspot.com/bug?extid=8caaaec4e7a55d75e243
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1396902c700000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1466e662700000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+8caaaec4e7a55d75e243@syzkaller.appspotmail.com
-> 
-> BUG: memory leak
-> unreferenced object 0xffff88810d49e800 (size 2048):
->   comm "kworker/1:1", pid 25, jiffies 4294954629 (age 16.460s)
->   hex dump (first 32 bytes):
->     ff ff ff ff 31 00 00 00 00 00 00 00 00 00 00 00  ....1...........
->     00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00  ................
->   backtrace:
->     [<ffffffff82c87a62>] kmalloc include/linux/slab.h:581 [inline]
->     [<ffffffff82c87a62>] kzalloc include/linux/slab.h:715 [inline]
->     [<ffffffff82c87a62>] usb_alloc_dev+0x32/0x450 drivers/usb/core/usb.c:582
->     [<ffffffff82c91a47>] hub_port_connect drivers/usb/core/hub.c:5260 [inline]
->     [<ffffffff82c91a47>] hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
->     [<ffffffff82c91a47>] port_event drivers/usb/core/hub.c:5660 [inline]
->     [<ffffffff82c91a47>] hub_event+0x1097/0x21a0 drivers/usb/core/hub.c:5742
->     [<ffffffff8126c3ef>] process_one_work+0x2bf/0x600 kernel/workqueue.c:2307
->     [<ffffffff8126ccd9>] worker_thread+0x59/0x5b0 kernel/workqueue.c:2454
->     [<ffffffff81276765>] kthread+0x125/0x160 kernel/kthread.c:377
->     [<ffffffff810022ff>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+On Fri, Feb 11, 2022 at 1:08 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Maybe. And this is why this is a request for grumbles patch: the Linus
+> Jitter Dance relies on random_get_entropy() returning a cycle counter
+> value.
 
-There's a refcount leak in the probe-failure path of the hid-elo driver.  
-(You can see that this is the relevant driver in the console output.)  
-It doesn't need the refcount anyway, because the elo_priv structure is 
-always deallocated synchronously before the elo_remove routine returns.
+Yeah.
 
-(Syzbot isn't always all that great at deducing where the real problem 
-lies when something goes wrong.)
+I think this patch is fine for architectures that do have that cycle
+counter value.
 
-Alan Stern
+Considering that the jitter thing has been there for 2.5 years by now,
+and nobody has really complained about it (*), I think we can call
+that thing a success. And on those architectures where
+try_to_generate_entropy() works, removing the code that then does that
+GRND_INSECURE makes sense. We just don't have any such case any more.
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v5.17-rc3
+BUT.
 
-Index: usb-devel/drivers/hid/hid-elo.c
-===================================================================
---- usb-devel.orig/drivers/hid/hid-elo.c
-+++ usb-devel/drivers/hid/hid-elo.c
-@@ -239,7 +239,7 @@ static int elo_probe(struct hid_device *
- 
- 	INIT_DELAYED_WORK(&priv->work, elo_work);
- 	udev = interface_to_usbdev(to_usb_interface(hdev->dev.parent));
--	priv->usbdev = usb_get_dev(udev);
-+	priv->usbdev = udev;
- 
- 	hid_set_drvdata(hdev, priv);
- 
-@@ -270,8 +270,6 @@ static void elo_remove(struct hid_device
- {
- 	struct elo_priv *priv = hid_get_drvdata(hdev);
- 
--	usb_put_dev(priv->usbdev);
--
- 	hid_hw_stop(hdev);
- 	cancel_delayed_work_sync(&priv->work);
- 	kfree(priv);
+When try_to_generate_entropy() doesn't work, I think you now removed
+the possible fallback for user space to say "yeah, just give me best
+effort". And you might re-introduce a deadlock as a result.
+
+Those systems are arguably broken from a randomness standpoint - what
+the h*ll are you supposed to do if there's nothing generating entropy
+- but broken or not, I suspect they still exists. Those horrendous
+MIPS things were quite common in embedded networking (routers, access
+points - places that *should* care)
+
+Do I have a constructive suggestion for those broken platforms? No, I
+don't. That arguably is the reason for GRND_INSECURE existing, and the
+reason to keep it around.
+
+Long story short: I like your patch, but I worry that it would cause
+problems on broken platforms.
+
+And almost nobody tests those broken platforms: even people who build
+new kernels for those embedded networking things probably end up using
+said kernels with an existing user space setup - where people have
+some existing saved source of pseudo-entropy. So they might not ever
+even trigger the "first boot problem" that tends to be the worst case.
+
+I'd be willing to apply such a thing anyway - at some point "worry
+about broken platforms" ends up being too weak an excuse not to just
+apply it - but I'd like to hear more of a reason for this
+simplification. If it's just "slight cleanup", maybe we should just
+keep the stupid stuff around as a "doesn't hurt good platforms, might
+help broken ones".
+
+               Linus
+
+(*) Honestly, I think all the complaints would have been from the
+theoretical posers that don't have any practical suggestions anyway

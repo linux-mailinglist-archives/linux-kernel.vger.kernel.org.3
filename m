@@ -2,139 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDDD34B1AA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BF84B1AA4
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346483AbiBKAmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:42:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36294 "EHLO
+        id S1346491AbiBKAnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:43:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346470AbiBKAmP (ORCPT
+        with ESMTP id S244965AbiBKAnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:42:15 -0500
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098C45F89;
-        Thu, 10 Feb 2022 16:42:14 -0800 (PST)
-Received: from hatter.bewilderbeest.net (174-21-187-98.tukw.qwest.net [174.21.187.98])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 10 Feb 2022 19:43:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A3CE6C;
+        Thu, 10 Feb 2022 16:43:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 55E2162B;
-        Thu, 10 Feb 2022 16:42:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1644540133;
-        bh=Ta0bKrnVBjEojR4M2PA4jcJfw31PpTOxYdrRpm+5yrU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cQ5QUebwav7+E00VUUvtPQjJwWOFt8RGUU0OwNxWEgWknPhevFmwHsmcVCo5C77y+
-         Q9kK4/TPJp8aMdbqUfEt+ijPkTPg5diOzdgEfakGyWkalKQgeZqpk1xGWob0a4AlYX
-         HJ0uauMmF3rGoTLP3cBEfGexM/imzM0HP+92URj4=
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Zev Weiss <zev@bewilderbeest.net>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Konstantin Aladyshev <aladyshev22@gmail.com>,
-        Oskar Senft <osk@google.com>, openbmc@lists.ozlabs.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] serial: 8250_aspeed_vuart: add PORT_ASPEED_VUART port type
-Date:   Thu, 10 Feb 2022 16:42:03 -0800
-Message-Id: <20220211004203.14915-1-zev@bewilderbeest.net>
-X-Mailer: git-send-email 2.35.1
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4B29B826B4;
+        Fri, 11 Feb 2022 00:43:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0550FC340EE;
+        Fri, 11 Feb 2022 00:43:11 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hNeMakxO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644540189;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x0vKcGurM+seOaod8eYMcPboMMWynI7lYU57RwZ9U9w=;
+        b=hNeMakxO3qh+47cF2Lt1mr8EFmSRDNSzovhavybEyrc2JnC4Ot1MbLjakT3U80Lqzg+siX
+        smsBhRhrqBemk8QIIA4DI3qoC/qXYbsIIH3BtQOzaapg2WVXiAuVKB9gA6m+P7GqZx/mlf
+        FnUruW7OH71CxCfklgQYKLG4XH0uNuo=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 60a78fe7 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 11 Feb 2022 00:43:08 +0000 (UTC)
+Received: by mail-yb1-f175.google.com with SMTP id c6so20424965ybk.3;
+        Thu, 10 Feb 2022 16:43:08 -0800 (PST)
+X-Gm-Message-State: AOAM533q6bFD1PK5M8COLCaWrN/mm/2HR67LEPSftHCjoqvDTh/tiqNK
+        bbdl/flaZa8HvFRo15IOF+Sh4VFZ1sBdwgiI4Dc=
+X-Google-Smtp-Source: ABdhPJy+q+S9ihMnQbr0OcXt7j1ox96Pf685juOhgcRrRAcDLlxCLjLCTTi4D7406d/jjL8Vj3n0zzCRhJquE2YYWnE=
+X-Received: by 2002:a0d:f244:: with SMTP id b65mr9919257ywf.2.1644540187689;
+ Thu, 10 Feb 2022 16:43:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220209125644.533876-1-Jason@zx2c4.com> <20220209125644.533876-3-Jason@zx2c4.com>
+ <YgVTpI/sYLecyWa3@linutronix.de>
+In-Reply-To: <YgVTpI/sYLecyWa3@linutronix.de>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Fri, 11 Feb 2022 01:42:56 +0100
+X-Gmail-Original-Message-ID: <CAHmME9pGwyZKu=9yCben-V30hR+zEjb9iZGWr5_RAE-uXt_Ofw@mail.gmail.com>
+Message-ID: <CAHmME9pGwyZKu=9yCben-V30hR+zEjb9iZGWr5_RAE-uXt_Ofw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] random: defer fast pool mixing to worker
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Eric Biggers <ebiggers@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 54da3e381c2b ("serial: 8250_aspeed_vuart: use UPF_IOREMAP to
-set up register mapping") fixed a bug that had, as a side-effect,
-prevented the 8250_aspeed_vuart driver from enabling the VUART's
-FIFOs.  However, fixing that (and hence enabling the FIFOs) has in
-turn revealed what appears to be a hardware bug in the ASPEED VUART in
-which the host-side THRE bit doesn't get if the BMC-side receive FIFO
-trigger level is set to anything but one byte.  This causes problems
-for polled-mode writes from the host -- for example, Linux kernel
-console writes proceed at a glacial pace (less than 100 bytes per
-second) because the write path waits for a 10ms timeout to expire
-after every character instead of being able to continue on to the next
-character upon seeing THRE asserted.  (GRUB behaves similarly.)
+Hi Sebastian,
 
-As a workaround, introduce a new port type for the ASPEED VUART that's
-identical to PORT_16550A as it had previously been using, but with
-UART_FCR_R_TRIG_00 instead to set the receive FIFO trigger level to
-one byte, which (experimentally) seems to avoid the problematic THRE
-behavior.
+On Thu, Feb 10, 2022 at 7:04 PM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+> So.
+> - CPU1 schedules a worker
+> - CPU1 goes offline before the gets on the CPU.
+> - The worker runs CPU2
+> - CPU2 is back online
+> - and now
+>    CPU1                                         CPU2
+>    new_count =3D ++fast_pool->count;
+>     reg =3D fast_pool->count (FAST_POOL_MIX_INFLIGHT | 64)
+>     incl reg (FAST_POOL_MIX_INFLIGHT | 65)
+>                                                 WRITE_ONCE(fast_pool->cou=
+nt, 0);
+>     fast_pool->count =3D reg ((FAST_POOL_MIX_INFLIGHT | 65)
+>
+> So we lost the WRITE_ONCE(, 0), FAST_POOL_MIX_INFLIGHT is still set and
+> worker is not scheduled. Not easy to trigger, not by an ordinary user.
+> Just wanted to mention=E2=80=A6
 
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-Tested-by: Konstantin Aladyshev <aladyshev22@gmail.com>
-Fixes: 54da3e381c2b ("serial: 8250_aspeed_vuart: use UPF_IOREMAP to set up register mapping")
----
+Thanks for pointing this out. I'll actually fix this using atomics,
+and fix another minor issue at the same time the same way, and move to
+making sure the worker is running on the right CPU like we originally
+discussed. I'm going to send that as an additional patch so that we
+can narrow in on the issue there. It's a little bit involved but not
+too bad. I'll have that for you shortly.
 
-Changes since v1 [0]:
- - Added Fixes: tag
- - Shifted PORT_* constant down into an unused gap
+> crng_fast_load() does spin_trylock_irqsave() in hardirq context. It does
+> not produce any warning on RT but is still wrong IMHO:
+> If we just could move this, too.
+> I don't know how timing critical this is but the first backtrace from
+> crng_fast_load() came (to my surprise) from hwrng_fillfn() (a kthread)
+> and added 64bytes in one go.
 
-[0] https://lore.kernel.org/all/20220209203414.23491-1-zev@bewilderbeest.net/
+I'll look into seeing if I can do it. On my first pass a few days ago,
+it seemed a bit too tricky, but I'll revisit after this part here
+settles. Thanks for your benchmarks, by the way. That's useful.
 
- drivers/tty/serial/8250/8250_aspeed_vuart.c | 2 +-
- drivers/tty/serial/8250/8250_port.c         | 8 ++++++++
- include/uapi/linux/serial_core.h            | 3 +++
- 3 files changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/tty/serial/8250/8250_aspeed_vuart.c b/drivers/tty/serial/8250/8250_aspeed_vuart.c
-index 2350fb3bb5e4..c2cecc6f47db 100644
---- a/drivers/tty/serial/8250/8250_aspeed_vuart.c
-+++ b/drivers/tty/serial/8250/8250_aspeed_vuart.c
-@@ -487,7 +487,7 @@ static int aspeed_vuart_probe(struct platform_device *pdev)
- 	port.port.irq = irq_of_parse_and_map(np, 0);
- 	port.port.handle_irq = aspeed_vuart_handle_irq;
- 	port.port.iotype = UPIO_MEM;
--	port.port.type = PORT_16550A;
-+	port.port.type = PORT_ASPEED_VUART;
- 	port.port.uartclk = clk;
- 	port.port.flags = UPF_SHARE_IRQ | UPF_BOOT_AUTOCONF | UPF_IOREMAP
- 		| UPF_FIXED_PORT | UPF_FIXED_TYPE | UPF_NO_THRE_TEST;
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 3b12bfc1ed67..973870ebff69 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -307,6 +307,14 @@ static const struct serial8250_config uart_config[] = {
- 		.rxtrig_bytes	= {1, 32, 64, 112},
- 		.flags		= UART_CAP_FIFO | UART_CAP_SLEEP,
- 	},
-+	[PORT_ASPEED_VUART] = {
-+		.name		= "ASPEED VUART",
-+		.fifo_size	= 16,
-+		.tx_loadsz	= 16,
-+		.fcr		= UART_FCR_ENABLE_FIFO | UART_FCR_R_TRIG_00,
-+		.rxtrig_bytes	= {1, 4, 8, 14},
-+		.flags		= UART_CAP_FIFO,
-+	},
- };
- 
- /* Uart divisor latch read */
-diff --git a/include/uapi/linux/serial_core.h b/include/uapi/linux/serial_core.h
-index c4042dcfdc0c..8885e69178bd 100644
---- a/include/uapi/linux/serial_core.h
-+++ b/include/uapi/linux/serial_core.h
-@@ -68,6 +68,9 @@
- /* NVIDIA Tegra Combined UART */
- #define PORT_TEGRA_TCU	41
- 
-+/* ASPEED AST2x00 virtual UART */
-+#define PORT_ASPEED_VUART	42
-+
- /* Intel EG20 */
- #define PORT_PCH_8LINE	44
- #define PORT_PCH_2LINE	45
--- 
-2.35.1
-
+Jason

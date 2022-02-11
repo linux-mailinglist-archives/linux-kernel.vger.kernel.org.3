@@ -2,83 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 173D74B27C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 15:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C01244B27BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 15:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350756AbiBKOVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 09:21:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57090 "EHLO
+        id S1350765AbiBKOVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 09:21:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234454AbiBKOVd (ORCPT
+        with ESMTP id S234454AbiBKOVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 09:21:33 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B6D188;
-        Fri, 11 Feb 2022 06:21:32 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id F2E6E1F46F48
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644589290;
-        bh=nPecqjoPg/Wa/ujakqZuIp1Ml6tDHiENrm9NfMMwz70=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=C5NvHNXK9bE8RER/lY869+H+O/Yt8R1BpMU4xgQcZeGB15iIguUrs1cw7VnwAlo+i
-         2pXXGi7w2gtK24JQHyU4IkyG5x7kmcbEGleynQxNzFHgn04ZWyJLhQXWYIseJFcKRO
-         Dxjbvz/1KMFkHRv+gltZeAPyQZUMA9zlTTicR6yt/Z1AUBaZnlYm0w45fFQ1pgLrNV
-         EyuhY3CTc3jIzPJh37J2Tg95V88aThGZ1MKezzF4mHauJpPEbdQcBfXC0y4zB6y+CD
-         jN/C1n5ojpEYgBHCXwKGrm8z6qUExACmaU2U1bCUQPZQR5qGMjA8XZpIy9/EZeRFh8
-         lYZ7qjRyCEfSw==
-Message-ID: <fbdc230c-35f8-01d9-ae26-0bfbd92ffaa6@collabora.com>
-Date:   Fri, 11 Feb 2022 17:21:26 +0300
+        Fri, 11 Feb 2022 09:21:53 -0500
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC799188;
+        Fri, 11 Feb 2022 06:21:52 -0800 (PST)
+Received: by mail-qt1-f182.google.com with SMTP id p14so9182137qtx.0;
+        Fri, 11 Feb 2022 06:21:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hs6Ap8pvv6rLiNRkR68HWZ4eW38QIARNwTh1k3Vr+zU=;
+        b=S91l9tYjFkpsDoNMUINV6I2tPp2DPc9eBl8rmUJyPsvHv7xrfLwIgzOzBDb3OBIR/F
+         qeu3rl/cIy1Olalau+rmS5s3LaZvwnUw5bApZPV2lI+lI+XMKVTHaX3X5QcCsOq3J0EB
+         OLOVEHbwRGJOBlCgw2BqtG+RnpPdcAb/XoxQ2x7ZTsQIhLBoMOfiony2zzripV9WOYZY
+         FF+HwEY3VYKcVb7uBnICjT0BY7SXQvNvZNpGmbw4+gNYQmNHDqQPc5fwDhYeDg8aFh+W
+         5qHE+vLkudn5z8CEbTjKMUu6g52Twcyx3N56nuklqZ2Qv/jFNYhkjOQ1dxpEkIlFnZwA
+         dK6A==
+X-Gm-Message-State: AOAM533FMBws6yHxSxOZh+xMHX3t3IUoufMivcQ+A9fve0FL71dMTTrC
+        9qd5zvwtgaTVAcEy+ssZ4A==
+X-Google-Smtp-Source: ABdhPJx8w0KDh1IldBQXPmdd2nBRtR+3S0tWLeJdA7L6Xc1qSyZsVZjBlhAUfAptuOPx1AI6ExN57A==
+X-Received: by 2002:ac8:5b94:: with SMTP id a20mr1230049qta.270.1644589312029;
+        Fri, 11 Feb 2022 06:21:52 -0800 (PST)
+Received: from robh.at.kernel.org ([2607:fb90:20d7:a802:e6b0:6d9c:32f7:4bd9])
+        by smtp.gmail.com with ESMTPSA id t11sm6372671qkp.82.2022.02.11.06.21.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 06:21:51 -0800 (PST)
+Received: (nullmailer pid 304856 invoked by uid 1000);
+        Fri, 11 Feb 2022 14:21:48 -0000
+Date:   Fri, 11 Feb 2022 08:21:48 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Eugen.Hristev@microchip.com, Nicolas.Ferre@microchip.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, clement.leger@bootlin.com
+Subject: Re: [PATCH] dt-bindings: microchip: atmel,at91rm9200-tcb: remove
+ mandatory interrupts property
+Message-ID: <YgZw/IB1V7NTRUJQ@robh.at.kernel.org>
+References: <20220204081446.474991-1-eugen.hristev@microchip.com>
+ <Yfz15ta50G5WC158@piout.net>
+ <e939a0df-052c-43a6-8be6-51848d3fe5e5@microchip.com>
+ <Yf0Bkh4pXKORmNkG@piout.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 1/4] media: v4l2-ctrls: Add new
- V4L2_H264_DECODE_PARAM_FLAG_P/BFRAME flags
-Content-Language: en-US
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220207141937.13089-1-digetx@gmail.com>
- <20220207141937.13089-2-digetx@gmail.com>
- <d986ab76a7c52a9a2ce62c1edb07f520c9df51c4.camel@ndufresne.ca>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <d986ab76a7c52a9a2ce62c1edb07f520c9df51c4.camel@ndufresne.ca>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yf0Bkh4pXKORmNkG@piout.net>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-11.02.2022 16:29, Nicolas Dufresne пишет:
-> Le lundi 07 février 2022 à 17:19 +0300, Dmitry Osipenko a écrit :
->> Add new V4L2_H264_DECODE_PARAM_FLAG_P/BFRAME flags that are needed by
->> NVIDIA Tegra video decoder. Userspace will have to set these flags in
->> accordance to the type of a decoded frame.
->>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
-> Can you share here (out of commit) a userland implementation that was used to
-> demonstrate the new API ? It does not matter which project (GStreamer, FFMPEG,
-> Chromium, your_test_progtram). Should be fairly straightforward. This is just to
-> be transparent.
+On Fri, Feb 04, 2022 at 11:36:02AM +0100, Alexandre Belloni wrote:
+> On 04/02/2022 10:28:43+0000, Eugen.Hristev@microchip.com wrote:
+> > On 2/4/22 11:46 AM, Alexandre Belloni wrote:
+> > > On 04/02/2022 10:14:46+0200, Eugen Hristev wrote:
+> > >> The timer block can be used only to be read and to measure time in a polling
+> > >> fashion. This can be used by Linux like this for example, or it can be used
+> > >> by different projects which do not have interrupt controllers, or do not
+> > >> wish to enable them (e.g. U-boot).
+> > >> As DT is ABI, the binding should relate to all possible use cases and describe
+> > >> the hardware and the requirements.
+> > >> The interrupt is not a hard requirement for the timer to function in a
+> > >> specific way.
+> > >> Thus, choose to remove the interrupts property from the mandatory list of
+> > >> properties.
+> > >>
+> > > 
+> > > The correct hardware description is that the interrupt is present on the
+> > > IP. Having software behave differently depending on the presence of that
+> > > property is configuration, not hardware description.
+> > 
+> > I agree. The interrupt is present on the IP, thus the property exists 
+> > and it's described.
+> > However, the interrupt is not mandatory for IP operations. Thus it 
+> > should not be in the list of mandatory properties.
+> > 
 > 
+> If the interrupt is always present, it is mandatory, it doesn't matter
+> whether is is used or necessary to get the IP to work.
 
-You may find all the links in the cover letter, please see the
-grate-driver's GStreamer [1] and libvdpau-tegra [2]:
-
-[1] https://github.com/grate-driver/gstreamer/commits/main
-[2] https://github.com/grate-driver/libvdpau-tegra/commits/master
-
+Agreed.

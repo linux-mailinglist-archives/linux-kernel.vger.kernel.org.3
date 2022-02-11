@@ -2,163 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9061D4B2BA7
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:22:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC764B2BA5
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:22:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352023AbiBKRTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 12:19:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40808 "EHLO
+        id S1352037AbiBKRU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 12:20:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244536AbiBKRTm (ORCPT
+        with ESMTP id S236787AbiBKRU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 12:19:42 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E22C95
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:19:41 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0ED1F1F3AA;
-        Fri, 11 Feb 2022 17:19:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1644599980; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uILjlSDN1FN8OOLhjeaE5XGyYvqt6MKuWO5g9cvdqUI=;
-        b=cnkiRgwT+qCMYd/sM4tBXGuCaPvNwTUHOCuk377e+Ms6STQjzR2ByZIyLm6hgriLLsg7wB
-        L+u5r7awJjmgYs1MOYkOgyeIsKLevomq/XAtyR2GxG8s2JkUX7TfUBOXqURzowofLSgsgV
-        pwSSHfJSV9b1ydfntC1F+zOtvXNvKrk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1644599980;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uILjlSDN1FN8OOLhjeaE5XGyYvqt6MKuWO5g9cvdqUI=;
-        b=Wd1WNoDqiOq4dCFsftayNEyUQ1Z2lq5wdTS3VAaBXv+sWHUpRKGObnFileZh1OXJp+CF0z
-        nomQ+z/bYDQ26NCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BD6E713C97;
-        Fri, 11 Feb 2022 17:19:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id LWGdLauaBmKfBwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 11 Feb 2022 17:19:39 +0000
-Message-ID: <8a974112-bfa8-7c48-e429-4ad5ec8e5ac4@suse.cz>
-Date:   Fri, 11 Feb 2022 18:19:39 +0100
+        Fri, 11 Feb 2022 12:20:56 -0500
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF70795;
+        Fri, 11 Feb 2022 09:20:54 -0800 (PST)
+Received: by mail-pf1-f175.google.com with SMTP id i30so17390892pfk.8;
+        Fri, 11 Feb 2022 09:20:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ekIUW5hDwj0MHo/3bOZ5o2l8gislJv8Zv7n+lArEyNc=;
+        b=Q7tVdQ9FuKQnIDcl28OTxfgthpF6H5rX7Q8sVLts7lhmugtacz7SLoidxg/e6ERTqV
+         P9GP6DB44TMDGxO2sCtrN69NYPIhfHs/X55pUJ6a1F2fu6eT28T1gousRKCJjmGKCm4j
+         +IN/PV77NjQ++c7tYjrS/KA52raOi8IUHhbXRWkCjiD9vDR52oGogy07r1shzHERmbv5
+         yCCkn6O9uXq5Lz3GVKBXBuauTA0jo/sfU6LAwv99NvUrFjzFn1vkWdQdkNcsscQ8b39p
+         f1h59XSlyb1j9bYyrZ6xBWoBXvrCTWdLOmufvKgB4LzCsLSmgPZy4jrlZP6nj6jjb0n2
+         H1jQ==
+X-Gm-Message-State: AOAM530joyrTiv2GZBsGQ6fG4oaTsQG/uLlHO3HXKR0XKaL8lv4og6p5
+        Bz4T6Fvho2fdkcJVnCHxe7RFnNheF5A=
+X-Google-Smtp-Source: ABdhPJzJjDohOvhP47JcBas1jDYfHanFwNj76TRXfNhwZQ/9c0i3NfbK2KSe/tIKGaDrfdGDvQkNQw==
+X-Received: by 2002:a63:4b4a:: with SMTP id k10mr2171880pgl.488.1644600054301;
+        Fri, 11 Feb 2022 09:20:54 -0800 (PST)
+Received: from sultan-box.localdomain ([204.152.215.246])
+        by smtp.gmail.com with ESMTPSA id t7sm27183808pfj.138.2022.02.11.09.20.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 09:20:53 -0800 (PST)
+Date:   Fri, 11 Feb 2022 09:20:51 -0800
+From:   Sultan Alsawaf <sultan@kerneltoast.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: Re: [PATCH v7] random: defer fast pool mixing to worker
+Message-ID: <Ygaa89GFi1VAQmsk@sultan-box.localdomain>
+References: <CAHmME9rC_q4LGq2JaAAeGbtRA2cibTe9bnvhMLng+QnzAy2DVg@mail.gmail.com>
+ <20220211170732.571775-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 08/13] mm/migrate: __unmap_and_move() push good newpage to
- LRU
-Content-Language: en-US
-To:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Rik van Riel <riel@surriel.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
- <33fb71cf-ea55-123a-bf9d-fdad297cae1@google.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <33fb71cf-ea55-123a-bf9d-fdad297cae1@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220211170732.571775-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/6/22 22:43, Hugh Dickins wrote:
-> Compaction, NUMA page movement, THP collapse/split, and memory failure
-> do isolate unevictable pages from their "LRU", losing the record of
-> mlock_count in doing so (isolators are likely to use page->lru for their
-> own private lists, so mlock_count has to be presumed lost).
+On Fri, Feb 11, 2022 at 06:07:32PM +0100, Jason A. Donenfeld wrote:
+> On PREEMPT_RT, it's problematic to take spinlocks from hard irq
+> handlers. We can fix this by deferring to a workqueue the dumping of
+> the fast pool into the input pool.
 > 
-> That's unfortunate, and we should put in some work to correct that: one
-> can imagine a function to build up the mlock_count again - but it would
-> require i_mmap_rwsem for read, so be careful where it's called.  Or
-> page_referenced_one() and try_to_unmap_one() might do that extra work.
+> We accomplish this with some careful rules on fast_pool->count:
 > 
-> But one place that can very easily be improved is page migration's
-> __unmap_and_move(): a small adjustment to where the successful new page
-> is put back on LRU, and its mlock_count (if any) is built back up by
-> remove_migration_ptes().
+>   - When it's incremented to >= 64, we schedule the work.
+>   - If the top bit is set, we never schedule the work, even if >= 64.
+>   - The worker is responsible for setting it back to 0 when it's done.
 > 
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-
+> There are two small issues around using workqueues for this purpose that
+> we work around.
+> 
+> The first issue is that mix_interrupt_randomness() might be migrated to
+> another CPU during CPU hotplug. This issue is rectified by checking that
+> it hasn't been migrated (after disabling irqs). If it has been migrated,
+> then we set the count to zero, so that when the CPU comes online again,
+> it can requeue the work. As part of this, we switch to using an
+> atomic_t, so that the increment in the irq handler doesn't wipe out the
+> zeroing if the CPU comes back online while this worker is running.
+> 
+> The second issue is that, though relatively minor in effect, we probably
+> want to make sure we get a consistent view of the pool onto the stack,
+> in case it's interrupted by an irq while reading. To do this, we don't
+> reenable irqs until after the copy. There are only 18 instructions
+> between the cli and sti, so this is a pretty tiny window.
+> 
+> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Theodore Ts'o <tytso@mit.edu>
+> Cc: Sultan Alsawaf <sultan@kerneltoast.com>
+> Cc: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 > ---
->  mm/migrate.c | 31 +++++++++++++++++++------------
->  1 file changed, 19 insertions(+), 12 deletions(-)
-> 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 7c4223ce2500..f4bcf1541b62 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1032,6 +1032,21 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
->  	if (!page_mapped(page))
->  		rc = move_to_new_page(newpage, page, mode);
->  
-> +	/*
-> +	 * When successful, push newpage to LRU immediately: so that if it
-> +	 * turns out to be an mlocked page, remove_migration_ptes() will
-> +	 * automatically build up the correct newpage->mlock_count for it.
-> +	 *
-> +	 * We would like to do something similar for the old page, when
-> +	 * unsuccessful, and other cases when a page has been temporarily
-> +	 * isolated from the unevictable LRU: but this case is the easiest.
-> +	 */
-> +	if (rc == MIGRATEPAGE_SUCCESS) {
-> +		lru_cache_add(newpage);
-> +		if (page_was_mapped)
-> +			lru_add_drain();
-> +	}
-> +
->  	if (page_was_mapped)
->  		remove_migration_ptes(page,
->  			rc == MIGRATEPAGE_SUCCESS ? newpage : page, false);
-> @@ -1045,20 +1060,12 @@ static int __unmap_and_move(struct page *page, struct page *newpage,
->  	unlock_page(page);
->  out:
->  	/*
-> -	 * If migration is successful, decrease refcount of the newpage
-> +	 * If migration is successful, decrease refcount of the newpage,
->  	 * which will not free the page because new page owner increased
-> -	 * refcounter. As well, if it is LRU page, add the page to LRU
-> -	 * list in here. Use the old state of the isolated source page to
-> -	 * determine if we migrated a LRU page. newpage was already unlocked
-> -	 * and possibly modified by its owner - don't rely on the page
-> -	 * state.
-> +	 * refcounter.
->  	 */
-> -	if (rc == MIGRATEPAGE_SUCCESS) {
-> -		if (unlikely(!is_lru))
-> -			put_page(newpage);
-> -		else
-> -			putback_lru_page(newpage);
-> -	}
-> +	if (rc == MIGRATEPAGE_SUCCESS)
-> +		put_page(newpage);
->  
->  	return rc;
->  }
+> Sebastian - as requested, we now disable irqs for a very short 18
+> instructions rather than fishing into migrate_disable() and upsetting
+> PeterZ. Might this be the lucky patch? -Jason
 
+I think this might be the lucky patch.
+
+Reviewed-by: Sultan Alsawaf <sultan@kerneltoast.com>
+
+Sultan

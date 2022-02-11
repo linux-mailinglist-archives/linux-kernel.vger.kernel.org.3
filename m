@@ -2,147 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2DA4B2A3D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C97054B2A4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351468AbiBKQZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:25:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53616 "EHLO
+        id S1351490AbiBKQZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:25:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiBKQZ0 (ORCPT
+        with ESMTP id S1351473AbiBKQZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:25:26 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBBF38C;
-        Fri, 11 Feb 2022 08:25:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644596724; x=1676132724;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=M1mHs7WEgatmlRjx4H6HCF+8F6e5ANVvjld7uTPgqFk=;
-  b=JbHa6SfIrrmKG1LZ84MMoG7JLgIHx3nHidHKyaxsdpXs75fhydMFy7at
-   cKVR+OhQWD2Jd8mJP1WWlZZD2Gg7k04bZO9Ob3cPcRUiYKGLfvFrehPxs
-   Z1F9FCcK02YSeirLueXWPZKuBM87VVN2k+8KThThCv2YXGvRg3p8ELAPq
-   zrXrrEdWLeFbWWc+pbsmZW4YebRdU1mnmaggveanPjCLKI1l0ovsNSRui
-   H7cbwTxWUnaMFwME0GpHXSf65sf2uJFsR/S2d/QX5UQV1QvWxI/3+bOJL
-   dMlqbH/jz9ZCWNJjD8OEWCpzxlPlv6P3qhdFDLs/Cgde6+C5+dMaeaCzK
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="229725979"
-X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="229725979"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 08:25:24 -0800
-X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="527010658"
-Received: from rriverox-mobl.ger.corp.intel.com (HELO localhost) ([10.252.19.108])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 08:25:20 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-fbdev@vger.kernel.org, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Sam Ravnborg <sam@ravnborg.org>
-Subject: Re: [PATCH v4 1/6] drm/format-helper: Add
- drm_fb_xrgb8888_to_gray8_line()
-In-Reply-To: <YgaDj6Wld4b7S6DF@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220211091927.2988283-1-javierm@redhat.com>
- <20220211091927.2988283-2-javierm@redhat.com>
- <YgY6OqN+guBlt/ED@smile.fi.intel.com>
- <4fa465d9-4fac-4199-9a04-d8e09d164308@redhat.com>
- <YgZEuXvJ2ZiOyNS+@smile.fi.intel.com>
- <7560cd10-0a7c-3fda-da83-9008833e3901@suse.de> <87pmnt7gm3.fsf@intel.com>
- <YgaDj6Wld4b7S6DF@smile.fi.intel.com>
-Date:   Fri, 11 Feb 2022 18:25:17 +0200
-Message-ID: <87fsop74lu.fsf@intel.com>
+        Fri, 11 Feb 2022 11:25:36 -0500
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09AD38C;
+        Fri, 11 Feb 2022 08:25:34 -0800 (PST)
+Received: by mail-oi1-f176.google.com with SMTP id 4so10049507oil.11;
+        Fri, 11 Feb 2022 08:25:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LyIkGH+i+hA9lPPeVfs99/FEP7xdwJEwC+hY7kMKZgw=;
+        b=P24+C37Xq0iumMpDIb3A0chDBh3cPgNCZM7xbLzBvpF1sTSfw00LGvv5fGz6BlDqhK
+         k/dA6W9yccLOmZwpQD/FatTKifjUw0CsLaWxuacW9cUX8QrnkSCZfN2sK+0uL5zw7qgy
+         7n7CWyfMtRt8WeF4mWCzyXCIj2GgBH4i/XZ5SbeQJhhtw08B2w9mH0U0UqgETTSk3p2I
+         cVJrx2bwqs1+qNcVwW0KtP+0WN/C862+Jp7QtDBdSL2CMYx/2hWF5WvU05BsuHP1tEa9
+         dARhmNo9FRy5/B84yb53LNc8X54bi14rMItm8dzudpxoeWF0UUiEsmhmhuOnSIc/Jtuv
+         odBg==
+X-Gm-Message-State: AOAM530ARwInzLOok/DguD+flkYVjH1CeEeUH1EqDvkLv+mofBgdB9T8
+        ofF435YIhTmv+3B7NwZyCg==
+X-Google-Smtp-Source: ABdhPJwIS3cLhs0Ugl2Q/THWn5KyvDyZbUsJAm3LnsCtXXjs1D0Hv+qcDll4B534DYp3YV2BwD8obg==
+X-Received: by 2002:a05:6808:bd3:: with SMTP id o19mr540564oik.331.1644596734020;
+        Fri, 11 Feb 2022 08:25:34 -0800 (PST)
+Received: from robh.at.kernel.org ([2607:fb90:5fee:dfce:b6df:c3e1:b1e5:d6d8])
+        by smtp.gmail.com with ESMTPSA id h2sm9278124ots.51.2022.02.11.08.25.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 08:25:33 -0800 (PST)
+Received: (nullmailer pid 466919 invoked by uid 1000);
+        Fri, 11 Feb 2022 16:25:31 -0000
+Date:   Fri, 11 Feb 2022 10:25:31 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Chester Lin <clin@suse.com>
+Cc:     Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Matthias Brugger <mbrugger@suse.com>, s32@nxp.com,
+        Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Radu Nicolae Pirea <radu-nicolae.pirea@oss.nxp.com>,
+        "Ivan T . Ivanov" <iivanov@suse.de>, "Lee, Chun-Yi" <jlee@suse.com>
+Subject: Re: [RFC PATCH 1/3] dt-bindings: clock: Add s32g2 clock binding
+Message-ID: <YgaN+0KJTi0be++F@robh.at.kernel.org>
+References: <20220207132444.3653-1-clin@suse.com>
+ <20220207132444.3653-2-clin@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207132444.3653-2-clin@suse.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Feb 2022, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> On Fri, Feb 11, 2022 at 02:05:56PM +0200, Jani Nikula wrote:
->> On Fri, 11 Feb 2022, Thomas Zimmermann <tzimmermann@suse.de> wrote:
->> > Am 11.02.22 um 12:12 schrieb Andy Shevchenko:
->> >> On Fri, Feb 11, 2022 at 11:40:13AM +0100, Javier Martinez Canillas wrote:
->> >>> On 2/11/22 11:28, Andy Shevchenko wrote:
->> >>>> On Fri, Feb 11, 2022 at 10:19:22AM +0100, Javier Martinez Canillas wrote:
->
-> ...
->
->> >>>>> +static void drm_fb_xrgb8888_to_gray8_line(u8 *dst, const u32 *src, unsigned int pixels)
->> >>>>> +{
->> >>>>> +	unsigned int x;
->> >>>>> +
->> >>>>> +	for (x = 0; x < pixels; x++) {
->> >>>>> +		u8 r = (*src & 0x00ff0000) >> 16;
->> >>>>> +		u8 g = (*src & 0x0000ff00) >> 8;
->> >>>>> +		u8 b =  *src & 0x000000ff;
->> >>>>> +
->> >>>>> +		/* ITU BT.601: Y = 0.299 R + 0.587 G + 0.114 B */
->> >>>>> +		*dst++ = (3 * r + 6 * g + b) / 10;
->> >>>>> +		src++;
->> >>>>> +	}
->> >>>>
->> >>>> Can be done as
->> >>>>
->> >>>> 	while (pixels--) {
->> >>>> 		...
->> >>>> 	}
->> >>>>
->> >>>> or
->> >>>>
->> >>>> 	do {
->> >>>> 		...
->> >>>> 	} while (--pixels);
->> >>>>
->> >>>
->> >>> I don't see why a while loop would be an improvement here TBH.
->> >> 
->> >> Less letters to parse when reading the code.
->> >
->> > It's a simple refactoring of code that has worked well so far. Let's 
->> > leave it as-is for now.
->> 
->> IMO *always* prefer a for loop over while or do-while.
->> 
->> The for (i = 0; i < N; i++) is such a strong paradigm in C. You
->> instantly know how many times you're going to loop, at a glance. Not so
->> with with the alternatives, which should be used sparingly.
->
-> while () {}  _is_ a paradigm, for-loop is syntax sugar on top of it.
+On Mon, Feb 07, 2022 at 09:24:42PM +0800, Chester Lin wrote:
+> Add clock binding for S32G based on SCMI Clock Management Protocol (0x14)
+> 
+> Signed-off-by: Chester Lin <clin@suse.com>
+> ---
+>  include/dt-bindings/clock/s32g2-clock.h | 28 +++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>  create mode 100644 include/dt-bindings/clock/s32g2-clock.h
+> 
+> diff --git a/include/dt-bindings/clock/s32g2-clock.h b/include/dt-bindings/clock/s32g2-clock.h
+> new file mode 100644
+> index 000000000000..6d8606293865
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/s32g2-clock.h
+> @@ -0,0 +1,28 @@
+> +/* SPDX-License-Identifier: BSD-3-Clause */
 
-And while() is just syntax sugar for goto. :p
+Dual license please.
 
-The for loop written as for (i = 0; i < N; i++) is hands down the most
-obvious counting loop pattern there is in C.
-
->> And yes, the do-while suggested above is buggy, and you actually need to
->> stop and think to see why.
->
-> It depends if pixels can be 0 or not and if it's not, then does it contain last
-> or number.
->
-> The do {} while (--pixels); might be buggy iff pixels may be 0.
-
-Yeah. And how long does it take to figure that out?
-
-
-BR,
-Jani.
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
+> +/*
+> + * Copyright 2020-2022 NXP
+> + */
+> +#ifndef __DT_BINDINGS_SCMI_CLOCK_S32G2_H
+> +#define __DT_BINDINGS_SCMI_CLOCK_S32G2_H
+> +
+> +#define S32G2_SCMI_CLK_BASE_ID		0U
+> +#define S32G2_SCMI_CLK(N)		((N) + S32G2_SCMI_CLK_BASE_ID)
+> +
+> +/* GMAC0 - SGMII */
+> +#define S32G2_SCMI_CLK_GMAC0_RX_SGMII	S32G2_SCMI_CLK(16)
+> +#define S32G2_SCMI_CLK_GMAC0_TX_SGMII	S32G2_SCMI_CLK(17)
+> +/* GMAC0 - RGMII */
+> +#define S32G2_SCMI_CLK_GMAC0_RX_RGMII	S32G2_SCMI_CLK(19)
+> +#define S32G2_SCMI_CLK_GMAC0_TX_RGMII	S32G2_SCMI_CLK(20)
+> +/* GMAC0 - RMII */
+> +#define S32G2_SCMI_CLK_GMAC0_RX_RMII	S32G2_SCMI_CLK(22)
+> +#define S32G2_SCMI_CLK_GMAC0_TX_RMII	S32G2_SCMI_CLK(23)
+> +/* GMAC0 - MII */
+> +#define S32G2_SCMI_CLK_GMAC0_RX_MII	S32G2_SCMI_CLK(25)
+> +#define S32G2_SCMI_CLK_GMAC0_TX_MII	S32G2_SCMI_CLK(26)
+> +#define S32G2_SCMI_CLK_GMAC0_AXI	S32G2_SCMI_CLK(28)
+> +/* uSDHC */
+> +#define S32G2_SCMI_CLK_USDHC_AHB	S32G2_SCMI_CLK(35)
+> +#define S32G2_SCMI_CLK_USDHC_MODULE	S32G2_SCMI_CLK(36)
+> +#define S32G2_SCMI_CLK_USDHC_CORE	S32G2_SCMI_CLK(37)
+> +#endif
+> -- 
+> 2.33.1
+> 
+> 

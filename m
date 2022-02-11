@@ -2,135 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A314B2908
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:25:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCFB4B290F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351365AbiBKPYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 10:24:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48152 "EHLO
+        id S1351376AbiBKP0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 10:26:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235355AbiBKPYd (ORCPT
+        with ESMTP id S235355AbiBKP0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 10:24:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695EBD82;
-        Fri, 11 Feb 2022 07:24:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2041CB829EF;
-        Fri, 11 Feb 2022 15:24:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5D89C340E9;
-        Fri, 11 Feb 2022 15:24:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644593069;
-        bh=XDskYT+gPzjRfk5oDbdrltedXVUeMzqmkjFFDGb6NLg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BvpT7Oqvcfj4W8XiGWUycZmHiE3+Etza3fUd5xp8iddyoLealvqndsADzP2UgqpxZ
-         gXh2j2xq76OojNzT7LTqG+HJDWzT7czRxj/id6794sYd6ipF26w03Zvgz8cneDMpGf
-         9D2NV2IqSLW75FxIQQ4JAsazmCe5Lf80UZVOcMuDPfWoJQMUB+9ebkeyXT28ez2uPh
-         zcAM7L1dsH/QiSktz4EXbvfPF27xiI6bG72oKHQsrq10o695oU7PlFeNTBWb7NF2lb
-         yKEeRP8Y2nD1WJCYlf+J9H8pS+MGs+PGZxo9RsGaN6PSuuJ9bMigy/7usBecHoXVyd
-         mD87gCcsvogcw==
-Date:   Fri, 11 Feb 2022 15:24:23 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
-Cc:     lgirdwood@gmail.com, tiwai@suse.com, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, perex@perex.cz, p.zabel@pengutronix.de,
-        geert+renesas@glider.be, trevor.wu@mediatek.com,
-        tzungbi@google.com, zhangqilong3@huawei.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/15] ASoC: mediatek: mt8186: support tdm in platform
- driver
-Message-ID: <YgZ/pzrJqvcAuzmE@sirena.org.uk>
-References: <20220211103818.8266-1-jiaxin.yu@mediatek.com>
- <20220211103818.8266-10-jiaxin.yu@mediatek.com>
+        Fri, 11 Feb 2022 10:26:21 -0500
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8DFD84
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 07:26:18 -0800 (PST)
+Received: by mail-il1-f182.google.com with SMTP id n5so7100197ilk.12
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 07:26:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=cU1wbiGs8aFn2keuukuNU8Ac3nVVJqVPvXktCwMdmio=;
+        b=BaX5Ld8U1aV7lgxtRte1F2EWL2VL0VpaQ+Hnt0qWV79585OscW9t0PSWNh3SLPOsA8
+         IegZNzyb53Q23b/URAdXMwYWTljNnXA+8MzlBFgQNWXp5JA3FSRfNHVaOXUuW1Kf+MOL
+         aCmKqIwGXgF4ckyO1NYvMRnDnDzBaZKUFs3DOyhHFWcJIC3bzPgkT8jHwPXFlUjVmVk7
+         vODr2hHqXYyf2vBeBPHcRoBiwcNG/9V2jyAxP0kOiUCAFktC5IxpSLE4U89hmDFGOgic
+         CMdyg6J7Ei5Pl3INuJaCfLdRv0cNNaWIesnFSz/6Cui3rqk2x9Ny2rxe794oI3uxpPfH
+         5owQ==
+X-Gm-Message-State: AOAM530Y+erGF+sIiBsGKJoQAi1Coi7Wzlqg2h5Vp85WNNHTIhBC+Lsu
+        zQ89uAjjTd9D6+dEDN76Z+YLv4ztRKYS0Yg+wQP+fL6gKA==
+X-Google-Smtp-Source: ABdhPJxXOgoFDNMzUtI2MFQMjWL1Hg/5XGPj42wTB4zUykIZAT8aaoxnULhIO6Bd+bmA2f3lbPhlmRnVCmcuubA3khE=
+X-Received: by 2002:a05:6e02:1be9:: with SMTP id y9mr1194030ilv.221.1644593177605;
+ Fri, 11 Feb 2022 07:26:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="N3h3NzMMytsYzN3d"
-Content-Disposition: inline
-In-Reply-To: <20220211103818.8266-10-jiaxin.yu@mediatek.com>
-X-Cookie: do {
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Martin Knoblauch <knobi@knobisoft.de>
+Date:   Fri, 11 Feb 2022 16:26:06 +0100
+Message-ID: <CAJtcoLbNJrTjjHpFxgXwe+aJaw4=Und37yuym89RKSBCwSyCSQ@mail.gmail.com>
+Subject: Possible regression on suspend (mem/s2idle) between 5.15 and 5.16
+To:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---N3h3NzMMytsYzN3d
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+ sorry for the likely insufficient report. I am running Tumbleweed on
+a Dell Notebook with a TU117GLM gfx, using the Nouveau driver. Kernel
+is homegrown. Ever since going from 5.15.12 to 5.16.x (x now 9),
+suspend stopped working reliably. After a maximum of three
+suspend/resume cycles the box would reboot spontaneously.
 
-On Fri, Feb 11, 2022 at 06:38:12PM +0800, Jiaxin Yu wrote:
+I have found the following in dmesg output:
 
-Again, mostly looks good just fairly small and easily fixable issues:
+# cat > bad-suspend.txt
+[   87.120765] PM: suspend entry (s2idle)
+[   87.124895] Filesystems sync: 0.004 seconds
+[   87.155826] Freezing user space processes ... (elapsed 0.001 seconds) done.
+[   87.157424] OOM killer disabled.
+[   87.157424] Freezing remaining freezable tasks ... (elapsed 0.001
+seconds) done.
+[   87.158520] printk: Suspending console(s) (use no_console_suspend to debug)
+[   87.159501] e1000e: EEE TX LPI TIMER: 00000011
+[   87.164889] sd 4:0:0:0: [sda] Synchronizing SCSI cache
+[   87.164980] sd 4:0:0:0: [sda] Stopping disk
+==> [   87.169576] nouveau 0000:01:00.0: acr: unload binary failed
+[   87.622136] ACPI: EC: interrupt blocked
+[   99.986273] ACPI: EC: interrupt unblocked
+[  102.826726] sd 4:0:0:0: [sda] Starting disk
+[  102.836370] nouveau 0000:01:00.0: fifo: fault 00 [VIRT_READ] at
+0000000000000000 engine 0e [sec2] client 16 [HUB/SEC] reason 00 [PDE]
+on channel -1 [00ffe5d000 unknown]
+[  102.836389] nouveau 0000:01:00.0: fifo: runlist 3: scheduled for recovery
+[  102.836395] nouveau 0000:01:00.0: fifo: engine 3: scheduled for recovery
+[  102.936294] ------------[ cut here ]------------
+[  102.936295] nouveau 0000:01:00.0: timeout
+[  102.936312] WARNING: CPU: 3 PID: 3734 at
+drivers/gpu/drm/nouveau/nvkm/falcon/v1.c:247
+nvkm_falcon_v1_wait_for_halt+0xb7/0xc0 [nouveau]
+[  102.936351] Modules linked in: uvcvideo videobuf2_vmalloc
+snd_usb_audio videobuf2_memops videobuf2_v4l2 snd_usbmidi_lib
+videobuf2_common snd_rawmidi cmac algif_hash algif_skcipher af_alg
+bnep af_packet btusb btrtl btbcm btintel bluetooth ecdh_generic ecc
+vboxnetadp(O) vboxnetflt(O) vboxdrv(O) iwlmvm mac80211 libarc4
+iTCO_wdt iTCO_vendor_support x86_pkg_temp_thermal intel_powerclamp
+coretemp dell_smm_hwmon kvm_intel iwlwifi snd_ctl_led
+snd_hda_codec_realtek kvm snd_hda_codec_generic ledtrig_audio
+snd_hda_codec_hdmi irqbypass sha256_ssse3 sha256_generic libsha256
+pcspkr wmi_bmof snd_hda_intel cfg80211 snd_intel_dspcfg e1000e
+i2c_i801 snd_hda_codec i2c_smbus rfkill snd_hwdep snd_hda_core snd_pcm
+snd_timer mei_me snd mei soundcore thermal battery ac nls_iso8859_1
+nls_cp437 vfat fat squashfs loop fuse configfs crct10dif_pclmul
+crc32_pclmul ghash_clmulni_intel aesni_intel nouveau crypto_simd i915
+cryptd drm_ttm_helper mxm_wmi i2c_algo_bit ttm serio_raw
+drm_kms_helper nvme xhci_pci nvme_core
+[  102.936378]  drm xhci_hcd wmi video button btrfs blake2b_generic
+libcrc32c crc32c_intel xor raid6_pq zstd_compress sg dm_multipath
+dm_mod scsi_dh_rdac scsi_dh_emc scsi_dh_alua
+[  102.936385] CPU: 3 PID: 3734 Comm: kworker/u24:53 Tainted: G
+   O      5.16.9-1-default #1
+[  102.936386] Hardware name: Dell Inc. Precision 7540/0JWGT7, BIOS
+1.7.0 01/07/2020
+[  102.936387] Workqueue: events_unbound async_run_entry_fn
+[  102.936391] RIP: 0010:nvkm_falcon_v1_wait_for_halt+0xb7/0xc0 [nouveau]
+[  102.936422] Code: 8b 40 10 48 8b 78 10 4c 8b 67 50 4d 85 e4 75 03
+4c 8b 27 e8 cb 90 dd e0 4c 89 e2 48 c7 c7 32 35 a7 a0 48 89 c6 e8 e0
+8a 12 e1 <0f> 0b eb a7 e8 40 ee 17 e1 0f 1f 44 00 00 41 54 be 80 96 98
+00 55
+[  102.936422] RSP: 0018:ffffc90002aebb70 EFLAGS: 00010246
+[  102.936424] RAX: 0000000000000000 RBX: ffffffffffffff92 RCX: 0000000000000000
+[  102.936425] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+[  102.936425] RBP: ffff88810bbdfc98 R08: 0000000000000000 R09: 0000000000000000
+[  102.936426] R10: 0000000000000000 R11: 0000000000000000 R12: ffff888101d83bc0
+[  102.936426] R13: 0000000000000000 R14: 0000000000000000 R15: ffff888102f13400
+[  102.936427] FS:  0000000000000000(0000) GS:ffff88887c2c0000(0000)
+knlGS:0000000000000000
+[  102.936428] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  102.936429] CR2: 0000562dd42c70a2 CR3: 000000000560a001 CR4: 00000000003706e0
+[  102.936430] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  102.936430] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[  102.936431] Call Trace:
+[  102.936432]  <TASK>
+[  102.936434]  gm200_acr_hsfw_boot+0xc6/0x170 [nouveau]
+[  102.936466]  nvkm_acr_hsf_boot+0x82/0x100 [nouveau]
+[  102.936496]  tu102_acr_init+0x15/0x30 [nouveau]
+[  102.936526]  nvkm_acr_load+0x3e/0x110 [nouveau]
+[  102.936555]  ? nvkm_notify_get+0x5c/0x70 [nouveau]
+[  102.936583]  ? ktime_get+0x39/0xa0
+[  102.936586]  nvkm_subdev_init+0x97/0xe0 [nouveau]
+[  102.936614]  ? ktime_get+0x39/0xa0
+[  102.936616]  nvkm_device_init+0x127/0x1d0 [nouveau]
+[  102.936664]  nvkm_udevice_init+0x45/0x70 [nouveau]
+[  102.936709]  nvkm_object_init+0x3b/0x130 [nouveau]
+[  102.936738]  nvkm_object_init+0x73/0x130 [nouveau]
+[  102.936766]  nvkm_object_init+0x73/0x130 [nouveau]
+[  102.936795]  nouveau_do_resume+0x2b/0xc0 [nouveau]
+[  102.936842]  nouveau_pmops_resume+0x67/0x90 [nouveau]
+[  102.936888]  ? pci_legacy_resume+0x80/0x80
+[  102.936891]  dpm_run_callback+0x49/0x150
+[  102.936893]  device_resume+0x105/0x280
+[  102.936895]  ? pm_dev_err+0x34/0x34
+[  102.936897]  async_resume+0x19/0x30
+[  102.936899]  async_run_entry_fn+0x2b/0x110
+[  102.936901]  process_one_work+0x1e5/0x3b0
+[  102.936903]  worker_thread+0x4d/0x3e0
+[  102.936904]  ? rescuer_thread+0x3a0/0x3a0
+[  102.936905]  kthread+0x146/0x170
+[  102.936906]  ? set_kthread_struct+0x50/0x50
+[  102.936907]  ret_from_fork+0x1f/0x30
+[  102.936910]  </TASK>
+[  102.936910] ---[ end trace e592260dfc1c79fb ]---
+[  102.936912] nouveau 0000:01:00.0: acr: AHESASC binary failed
+[  102.936913] nouveau 0000:01:00.0: acr: init failed, -110
+[  102.937027] nouveau 0000:01:00.0: init failed with -110
+[  102.937028] nouveau: Xorg.bin[1996]:00000000:00000080: init failed with -110
+[  102.937029] nouveau: DRM-master:00000000:00000000: init failed with -110
+[  102.937029] nouveau: DRM-master:00000000:00000000: init failed with -110
+[  102.937030] nouveau 0000:01:00.0: DRM: Client resume failed with error: -110
+[  102.937032] PM: dpm_run_callback(): pci_pm_resume+0x0/0xe0 returns -110
+[  102.937040] nouveau 0000:01:00.0: PM: failed to resume async: error -110
+[  103.134577] ata5: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
+[  103.137666] ata5.00: ACPI cmd ef/10:06:00:00:00:00 (SET FEATURES) succeeded
+[  103.137670] ata5.00: ACPI cmd f5/00:00:00:00:00:00 (SECURITY FREEZE
+LOCK) filtered out
+[  103.137672] ata5.00: ACPI cmd b1/c1:00:00:00:00:00 (DEVICE
+CONFIGURATION OVERLAY) filtered out
+[  103.137838] ata5.00: ACPI cmd 00/00:00:00:00:00:a0 (NOP) rejected
+by device (Stat=0x51 Err=0x04)
+[  103.138290] ata5.00: supports DRM functions and may not be fully accessible
+[  103.139265] ata5.00: disabling queued TRIM support
+[  103.143959] ata5.00: ACPI cmd ef/10:06:00:00:00:00 (SET FEATURES) succeeded
+[  103.143963] ata5.00: ACPI cmd f5/00:00:00:00:00:00 (SECURITY FREEZE
+LOCK) filtered out
+[  103.143964] ata5.00: ACPI cmd b1/c1:00:00:00:00:00 (DEVICE
+CONFIGURATION OVERLAY) filtered out
+[  103.144103] ata5.00: ACPI cmd 00/00:00:00:00:00:a0 (NOP) rejected
+by device (Stat=0x51 Err=0x04)
+[  103.144532] ata5.00: supports DRM functions and may not be fully accessible
+[  103.145328] ata5.00: disabling queued TRIM support
+[  103.148888] ata5.00: configured for UDMA/133
+[  103.159132] ahci 0000:00:17.0: port does not support device sleep
+[  103.159591] ata5.00: Enabling discard_zeroes_data
+[  103.674691] OOM killer enabled.
+[  103.674692] Restarting tasks ... done.
+[  103.719371] PM: suspend exit
+[  103.992941] [drm:lspcon_init [i915]] *ERROR* Failed to probe lspcon
+[  103.993000] [drm:intel_dp_detect_dpcd [i915]] *ERROR* LSPCON init
+failed on port D
+[  106.221326] e1000e 0000:00:1f.6 em1: NIC Link is Up 1000 Mbps Full
+Duplex, Flow Control: Rx/Tx
 
-> +static int mtk_tdm_hd_en_event(struct snd_soc_dapm_widget *w,
-> +			       struct snd_kcontrol *kcontrol,
-> +			       int event)
-> +{
-> +	struct snd_soc_component *cmpnt = snd_soc_dapm_to_component(w->dapm);
-> +
-> +	dev_info(cmpnt->dev, "%s(), name %s, event 0x%x\n",
-> +		 __func__, w->name, event);
-> +
-> +	return 0;
-> +}
+The unusual thing is the "nouveau 0000:01:00.0: acr: unload binary
+failed" message. This does not happen with 5.15.x kernels. Has anybody
+else seen this with 5.16?
 
-This does nothing, you can just remove it.
-
-> +	switch (fmt & SND_SOC_DAIFMT_INV_MASK) {
-> +	case SND_SOC_DAIFMT_NB_NF:
-> +		tdm_priv->bck_invert = TDM_BCK_NON_INV;
-> +		tdm_priv->lck_invert = TDM_LCK_NON_INV;
-> +		break;
-> +	case SND_SOC_DAIFMT_NB_IF:
-> +		tdm_priv->bck_invert = TDM_BCK_NON_INV;
-> +		tdm_priv->lck_invert = TDM_LCK_INV;
-> +		break;
-> +	case SND_SOC_DAIFMT_IB_NF:
-> +		tdm_priv->bck_invert = TDM_BCK_INV;
-> +		tdm_priv->lck_invert = TDM_LCK_NON_INV;
-> +		break;
-> +	case SND_SOC_DAIFMT_IB_IF:
-> +	default:
-> +		tdm_priv->bck_invert = TDM_BCK_INV;
-> +		tdm_priv->lck_invert = TDM_LCK_INV;
-
-You should return an error in the default case rather than just picking
-one of the behaviours to help spot any configuration errors.
-
-> +	switch (fmt & SND_SOC_DAIFMT_MASTER_MASK) {
-> +	case SND_SOC_DAIFMT_CBM_CFM:
-> +		tdm_priv->slave_mode = false;
-> +		break;
-> +	case SND_SOC_DAIFMT_CBS_CFS:
-> +		tdm_priv->slave_mode = true;
-
-We're trying to move away from these defines and the master/slave
-terminology to talk about clock providers instead - the new defines are
-_PROVIDER_MASK, _DAIFMT_CBP_CFP and _DAIFMT_CBC_CFC.
-
---N3h3NzMMytsYzN3d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIGf6YACgkQJNaLcl1U
-h9DaCQf/cvTLimeQ43iRd7ilDTcJcq6Hgfgbl+cTNCLiaWII83oyeXd7E9t7kCj1
-yTaVBO8XyWDCXM+lr20knToRa/o/RCYIRdIa4LB6fu5N320nPDlo6CVRunRk0mMv
-CEReCuzQdXSuXB5ai3QIwPHSTYE8yPrc3Pf8+bCjJB1ZtyIBnVgk/LWg306IehOt
-Xbu8BhYTof0YFIBtFsP2zpoyoUbchd3qAVlRX6TW3s2bwGDzpufHPKI+Kh6pzsc/
-GBZN69zzjoSbFCCvGEp9E/5oC1DwbooP6sGa3lHTtHOQH9GP6MWJP3nSK0Uw+Qio
-+YgeERJyMEZuXJEFexP5LD4mqotXGA==
-=YiTK
------END PGP SIGNATURE-----
-
---N3h3NzMMytsYzN3d--
+Happy weekend
+Martin
+-- 
+------------------------------------------------------
+Martin Knoblauch
+email: k n o b i AT knobisoft DOT de
+www: http://www.knobisoft.de

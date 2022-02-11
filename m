@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5384B1AB6
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82BD84B1ABA
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346541AbiBKAvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:51:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40506 "EHLO
+        id S1346552AbiBKAwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:52:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346519AbiBKAvW (ORCPT
+        with ESMTP id S1346528AbiBKAwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:51:22 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64895F8D
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:51:20 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id 13so13542032lfp.7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:51:20 -0800 (PST)
+        Thu, 10 Feb 2022 19:52:02 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D5C5F8E
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:52:01 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id w1so3340295plb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:52:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=US4EJyI61Chwwwjh7fTMLFf0K8eLU8HLJNw4j3h5APA=;
-        b=FzIp0sPYDlh2ARdqWPqRObIpKCKhmRMqWrlDWmfa7ZtO4aijq98amCVqJ5QSWU9BWh
-         dC1pf1GpIJaalULogZDQi7AW6ilGaxWvZj8FJIilfP385GYufGkm+yMkloEIv4oNjTIw
-         bneWChfRGwR5FpEhDwJefTgopwjeg9XdJNrAkhjZFU1vHrEtPRvX+4DFtEc9S6NwrVyi
-         4ujOuXJqO0/fNaWJhTqtDx3sTXJraT2DzOl9UaxVDF5zsSlXtzKJv7OWZHcuX/4rNFOO
-         2mNROUZ1rN9iAkqaPcUBALcyK0ormI4G3Jb3Tq6gX3KMGiS3pz1bSwB4FkbrjZEoYSLU
-         LR/w==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=D3EjEoLgjS5BYa16RZ5JcaZGfnj2NCy9e6R/DsxWvD0=;
+        b=mYDb9T7V8vVpb4vvbK6zkA0h1yevImaISwFUxjrIIoz62k/wF/zDHu5zFn6qzE7kUp
+         87hdaz0kZHUo4I24hP9Ypim/bw0UCqkm9B/sqsnXEiXBwa22hYfKiyLvWUhlNNdLK62v
+         jkpZSMR3Qi6h9sWFPRK7ScuIfziA7yI6AE748=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=US4EJyI61Chwwwjh7fTMLFf0K8eLU8HLJNw4j3h5APA=;
-        b=s7nQtZd09v2quxRfkt9+GB3BTogJiAxYC0EL5Y8v+GUlLglbpOxglK+ZEX0d0OUFui
-         JIv7hwPt1IIDC51TjKavoe9YlCyFTPMrOZk0KHxsMqABc+nCN7h0nfCi+DJkUPDONYxM
-         CWJIL+JirWQr04xwYXauSzWFo5nO5TPyJNSdFYTVV37dxXUUqNlo2kqZIuRx/PAQLewh
-         T9wklcfjJY34BqQwuj8QYe7n0DkjGQf31CX7k7DrHlAvKon6YBRMrwMo+ZIJPD4/e32O
-         xn60b5wPN7303ZYWbBhhCV7BVJh8GgOnFuAhyxsJ3XKN2qDwmVl2zm5k5tsOBr2mlqVW
-         SpOw==
-X-Gm-Message-State: AOAM530JoM9KtAlesE17cDhyGAyyoRqTUnJy+OO2duwrkjQ+aZUuUjzN
-        wKziZ8z53B3mHLoFsaTEFWwb7g==
-X-Google-Smtp-Source: ABdhPJxAZ7c6mrEQDtvfnjS/yAfpykqcD4PeognSn9ictkDAmdOvpGT/nlb5H4gDZ3y5MibeXkp5GA==
-X-Received: by 2002:a05:6512:2821:: with SMTP id cf33mr6818251lfb.37.1644540678921;
-        Thu, 10 Feb 2022 16:51:18 -0800 (PST)
-Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
-        by smtp.gmail.com with ESMTPSA id cf26sm2948725lfb.277.2022.02.10.16.51.18
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=D3EjEoLgjS5BYa16RZ5JcaZGfnj2NCy9e6R/DsxWvD0=;
+        b=EyIPLICJS6gEmX+HwuQZyG05iFXUKnzMClHmxTqUmMdMM1NLGrNLklpFXajYr2Rw6q
+         7X1a0VGISQxbXyauwRByKMyrYMc5HWWTfVwEU1XMr4GYN0h/jalbbme/wD8scorSuaVK
+         owebN57rYantjEXlqdPsMFsVZ3E/LjxS3XizD2BvzgYRH0SZ0jN/MmzRzbrwKTGGdV4R
+         GbbqUD8I9seU1y9+FLpksyMBEzL2507d3RA1dJjj5Ys6qL9hoBqKonoIjGAWG+t2eX18
+         OrTfTWUKA6VUYhS8/GwMfk4XBl8D9JOKA65bybFae+c5GMrU+GPeV04aor7yELLoI2Q7
+         ZP9A==
+X-Gm-Message-State: AOAM530d1whSipoMOkB97MnlEq+cO+gK5JbZdkiCBOeiGq8qdkXhCHZD
+        Fa8FKn0k4HP9toTQukeTvMQoGQ==
+X-Google-Smtp-Source: ABdhPJw/vLSGOWe5ccZEegSZ0CyTgYC43nd3Y1R3YkYl+lBMWAImTOS4id0LQup7bw2RNv5XlqIpWQ==
+X-Received: by 2002:a17:90a:5206:: with SMTP id v6mr71812pjh.220.1644540721159;
+        Thu, 10 Feb 2022 16:52:01 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z22sm24478493pfe.42.2022.02.10.16.52.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 16:51:18 -0800 (PST)
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     mpe@ellerman.id.au
-Cc:     christophe.leroy@csgroup.eu, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCHv2] powerpc/lib/sstep: fix 'ptesync' build error
-Date:   Fri, 11 Feb 2022 01:51:13 +0100
-Message-Id: <20220211005113.1361436-1-anders.roxell@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 10 Feb 2022 16:52:00 -0800 (PST)
+Date:   Thu, 10 Feb 2022 16:51:59 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v3 01/12] powerpc: Move and rename func_descr_t
+Message-ID: <202202101651.E6AACB3D4F@keescook>
+References: <cover.1634457599.git.christophe.leroy@csgroup.eu>
+ <637a9a11263afa216fdfa7fb470a54479c67c61c.1634457599.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <637a9a11263afa216fdfa7fb470a54479c67c61c.1634457599.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,45 +76,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Building tinyconfig with gcc (Debian 11.2.0-16) and assembler (Debian
-2.37.90.20220207) the following build error shows up:
+On Sun, Oct 17, 2021 at 02:38:14PM +0200, Christophe Leroy wrote:
+> There are three architectures with function descriptors, try to
+> have common names for the address they contain in order to
+> refactor some functions into generic functions later.
+> 
+> powerpc has 'entry'
+> ia64 has 'ip'
+> parisc has 'addr'
+> 
+> Vote for 'addr' and update 'func_descr_t' accordingly.
+> 
+> Move it in asm/elf.h to have it at the same place on all
+> three architectures, remove the typedef which hides its real
+> type, and change it to a smoother name 'struct func_desc'.
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-{standard input}: Assembler messages:
-{standard input}:2088: Error: unrecognized opcode: `ptesync'
-make[3]: *** [/builds/linux/scripts/Makefile.build:287: arch/powerpc/lib/sstep.o] Error 1
+I like the name. :)
 
-Add the 'ifdef CONFIG_PPC64' around the 'ptesync' in function
-'emulate_update_regs()' to like it is in 'analyse_instr()'. Since it looks like
-it got dropped inadvertently by commit 3cdfcbfd32b9 ("powerpc: Change
-analyse_instr so it doesn't modify *regs").
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Cc: stable@vger.kernel.org # v4.14+
-Fixes: 3cdfcbfd32b9 ("powerpc: Change analyse_instr so it doesn't modify *regs")
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
----
- arch/powerpc/lib/sstep.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/powerpc/lib/sstep.c b/arch/powerpc/lib/sstep.c
-index a94b0cd0bdc5..bd3734d5be89 100644
---- a/arch/powerpc/lib/sstep.c
-+++ b/arch/powerpc/lib/sstep.c
-@@ -3264,12 +3264,14 @@ void emulate_update_regs(struct pt_regs *regs, struct instruction_op *op)
- 		case BARRIER_EIEIO:
- 			eieio();
- 			break;
-+#ifdef CONFIG_PPC64
- 		case BARRIER_LWSYNC:
- 			asm volatile("lwsync" : : : "memory");
- 			break;
- 		case BARRIER_PTESYNC:
- 			asm volatile("ptesync" : : : "memory");
- 			break;
-+#endif
- 		}
- 		break;
- 
 -- 
-2.34.1
-
+Kees Cook

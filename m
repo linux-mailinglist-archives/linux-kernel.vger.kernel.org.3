@@ -2,243 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BAA4B2DC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 20:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA7A4B2DDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 20:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352890AbiBKTfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 14:35:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50776 "EHLO
+        id S1352309AbiBKTgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 14:36:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352906AbiBKTfU (ORCPT
+        with ESMTP id S235772AbiBKTgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 14:35:20 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E46D42
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 11:35:18 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id p19so27948180ybc.6
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 11:35:18 -0800 (PST)
+        Fri, 11 Feb 2022 14:36:54 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFB7CF2
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 11:36:52 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id r19-20020a170902be1300b0014edf03f82eso833820pls.20
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 11:36:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TPp6AoNDxBkfRCJSXj0qQyodttHS7zPVJ6Ce2h9Sr5U=;
-        b=Qfvb7JOp+pwaBeEHLoBDGlG2iOb8GR8VEq0aONvJ4y5KQtA3rqFGfCXFYGfoKTyMOe
-         tVvlKI4HbnxSn6bKMUPKL1/4JQL/cFr/MATcZJPvpz1qfqBoBphdHDwjWCQ+gobtHDso
-         zkWip9egACspNUy0G6XMLSAuVVKWiO81fhGQbmA+JwXvAbFdRSfS3Quv8co7mXGJsE58
-         fFsbm3/J3JjFJ16GgRjuHEJXe3Stm7ga1xpGxDoVxDixtEDEh0kow5/3JfDVeNyGrD0i
-         sRwJOVHxui8WU88xlx22RxRlTBEpfMUgRs9YIpUeyGxhb8j0pVe04N5/7MYL/GFN6A0E
-         +4pg==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=zy8kaC+s0PszdMQxxh4E+7ubC1nD5KHx5j/eMOqBAow=;
+        b=JiCIxl5i3Ow+wOb4bP2eoyQ42zIMIRopdcAT4C7bWYkxWZEFZqp4ZDUyf2t9iW/Idf
+         xqvV6/j//1tjrAH8Sba1HTFqLbAz6iwaXPoDKgTqzc+zF9VVg4b8ssLmmyHYWJunFhHS
+         I1yeBR06BZifoC0AuTTcVjG7ITaNP/WQVrCbdbhGryCNsqLQMXh/qT1OiLio66A2zlRx
+         Xman4rinqMsFSqhrrRu8H8gipBRUB9IRjUvT3UZvFIWlmmcwduNtXnmoWCNbjzVkD7ir
+         WYyglKnisaBJxXc+vnLCc0DJqO/8tDY1ApEizlV24YHHvufEl4baobBWXGT6fwR2hofA
+         1XVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TPp6AoNDxBkfRCJSXj0qQyodttHS7zPVJ6Ce2h9Sr5U=;
-        b=g1mCLdxF4yZ2Wu5OfUzvo/LFU67kT38Om65purhbctjtT+oDlLwQZkTmGBI8GqJVw1
-         PC58LPmqXt+tAb0QUpbC0sRMZ4t3FOcc5EJkY+3iG8bMqWOUmvrUHYZRjwdmzo3Vg5oK
-         EL0EO23roPs4N9StyVl18cv5CkEUvXuaio3UVYNicYkVsSnxWHoYEyRsA3RVni9THmMU
-         qm0Q9CYtfFsPl9oLHoIxyqYRM0IW6OydvK5+BxBL07AryGsxXNdfSa97kcl4mx5pfknE
-         1iC4nCI1QEnWBP701hibronBlk89as3eYmajbrG0qR3I1yfFhCKLxsjk2KouTyS2sU0Y
-         6piQ==
-X-Gm-Message-State: AOAM5304Si7xdfsQeeZ4iydDaK4qnCjVWQ9rYgG6rW5EJpWwj1djahJH
-        Lv1ZC3urFhU0IGN0R+5QlcRe7rHVmTWgffQWgsqW2Q==
-X-Google-Smtp-Source: ABdhPJwNlALJbQ//piIdwmrWVEz0xwTOfNaKu+nly2Z1rkmZiv8cuZOUvv5dPWK2opDkixd6/xqweVo1GZRAfI07i9c=
-X-Received: by 2002:a25:d7d0:: with SMTP id o199mr2840524ybg.34.1644608117621;
- Fri, 11 Feb 2022 11:35:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20220211103415.2737789-1-irogers@google.com> <20220211103415.2737789-4-irogers@google.com>
- <YgaZSk8h6rQ6MgLy@kernel.org> <CAP-5=fWZTmbQpmoXRKt9HdMU-E_B2uo5b4BHOW6RC6w5VkQ0AQ@mail.gmail.com>
- <Yga3JNhTfSBR3btI@kernel.org>
-In-Reply-To: <Yga3JNhTfSBR3btI@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 11 Feb 2022 11:35:05 -0800
-Message-ID: <CAP-5=fVb=1prv6kkUzJRiPNSsudBhU1+YLBqnBrWiut3XQLJqg@mail.gmail.com>
-Subject: Re: [PATCH v3 03/22] perf dso: Make lock error check and add BUG_ONs
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Song Liu <song@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Hao Luo <haoluo@google.com>, eranian@google.com
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=zy8kaC+s0PszdMQxxh4E+7ubC1nD5KHx5j/eMOqBAow=;
+        b=AUQ4UO0fKpUl8W7nRbZo9Rei6DthdACMLnTlaUAD3hL7YAGrNb0mk9v+Bma3JsfnG9
+         OreSPIpDgnq/e8ozUUHDhB2CAnfMDtiUfjJsGCCnf8wtulgBp/O0Ycy+cJC+s/UXhIpk
+         A2LDjkfP9BcjbaVEQkv6+bTdAv7RzXTRu3WZlwbiPHw+JSM1Ns6emfKWHCCNxWh3IN2U
+         w0mNlvu8q8wbDbwcPL1sWjT057uNfZ9EmLnVuTfpSUcwf1af83CnNawqhlkp9dvy26OX
+         FulK2U27gPFZdZjCJcoQkSLj6wBwIxj1WNj4USPH9gvn76e8LcdXZlLZS6UbYkpmOq/W
+         pT6Q==
+X-Gm-Message-State: AOAM531S03/C1pQ2kJo+TVmgMwATuDFXfqJ+plDeLDYZViq43iEgnHl7
+        1FHZywmN3+en8XyAHxS6lHbj33wSjU8=
+X-Google-Smtp-Source: ABdhPJyAMbyL4iI7CoYtgGuNgzIoXiwUTHsNehN1OTYlUO3jvreKcpoidDHRhbggAqc+2qgSEksPGCgd+fY=
+X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:ce5a:31e5:3a1e:6c1f])
+ (user=pgonda job=sendgmr) by 2002:a17:902:b60f:: with SMTP id
+ b15mr2982475pls.88.1644608212269; Fri, 11 Feb 2022 11:36:52 -0800 (PST)
+Date:   Fri, 11 Feb 2022 11:36:34 -0800
+Message-Id: <20220211193634.3183388-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
+Subject: [PATCH v2] KVM: SEV: Allow SEV intra-host migration of VM with mirrors
+From:   Peter Gonda <pgonda@google.com>
+To:     kvm@vger.kernel.org
+Cc:     Peter Gonda <pgonda@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Marc Orr <marcorr@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 11:21 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Fri, Feb 11, 2022 at 09:43:19AM -0800, Ian Rogers escreveu:
-> > On Fri, Feb 11, 2022 at 9:13 AM Arnaldo Carvalho de Melo
-> > <acme@kernel.org> wrote:
-> > >
-> > > Em Fri, Feb 11, 2022 at 02:33:56AM -0800, Ian Rogers escreveu:
-> > > > Make the pthread mutex on dso use the error check type. This allows
-> > > > deadlock checking via the return type. Assert the returned value from
-> > > > mutex lock is always 0.
-> > >
-> > > I think this is too blunt/pervasive source code wise, perhaps we should
-> > > wrap this like its done with rwsem in tools/perf/util/rwsem.h to get
-> > > away from pthreads primitives and make the source code look more like
-> > > a kernel one and then, taking advantage of the so far ideologic
-> > > needless indirection, add this BUG_ON if we build with "DEBUG=1" or
-> > > something, wdyt?
-> >
->
-> > My concern with semaphores is that they are a concurrency primitive
->
-> I'm not suggesting we switch over to semaphores, just to use the same
-> technique of wrapping pthread_mutex_t with some other API that then
-> allows us to add these BUG_ON() calls without polluting the source code
-> in many places.
+For SEV-ES VMs with mirrors to be intra-host migrated they need to be
+able to migrate with the mirror. This is due to that fact that all VMSAs
+need to be added into the VM with LAUNCH_UPDATE_VMSA before
+lAUNCH_FINISH. Allowing migration with mirrors allows users of SEV-ES to
+keep the mirror VMs VMSAs during migration.
 
-Sounds simple enough and would ensure consistency too. I can add it to
-the front of this set of changes. A different approach would be to
-take what's here and then refactor and cleanup as a follow on patch
-set. I'd prefer that as the size of this set of changes is already
-larger than I like - albeit that most of it is just introducing the
-use of functions to access struct variables. Perhaps I just remove the
-BUG_ON and pthread changes here, we work to get this landed and in a
-separate set of patches clean up the pthread mutex code to have better
-bug checking.
+Adds a list of mirror VMs for the original VM iterate through during its
+migration. During the iteration the owner pointers can be updated from
+the source to the destination. This fixes the ASID leaking issue which
+caused the blocking of migration of VMs with mirrors.
 
-Thanks,
-Ian
+Signed-off-by: Peter Gonda <pgonda@google.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Marc Orr <marcorr@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
 
-> - Arnaldo
->
-> > that has more flexibility and power than a mutex. I like a mutex as it
-> > is quite obvious what is going on and that is good from a tooling
-> > point of view. A deadlock with two mutexes is easy to understand. On a
-> > semaphore, were we using it like a condition variable? There's more to
-> > figure out. I also like the idea of compiling the perf command with
-> > emscripten, we could then generate say perf annotate output in your
-> > web browser. Emscripten has implementations of standard posix
-> > libraries including pthreads, but we may need to have two approaches
-> > in the perf code if we want to compile with emscripten and use
-> > semaphores when targeting linux.
-> >
-> > Where this change comes from is that I worried that extending the
-> > locked regions to cover the race that'd been found would then expose
-> > the kind of recursive deadlock that pthread mutexes all too willingly
-> > allow. With this code we at least see the bug and don't just hang. I
-> > don't think we need the change to the mutexes for this change, but we
-> > do need to extend the regions to fix the data race.
-> >
-> > Let me know how you prefer it and I can roll it into a v4 version.
-> >
-> > Thanks,
-> > Ian
-> >
-> > > - Arnaldo
-> > >
-> > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > ---
-> > > >  tools/perf/util/dso.c    | 12 +++++++++---
-> > > >  tools/perf/util/symbol.c |  2 +-
-> > > >  2 files changed, 10 insertions(+), 4 deletions(-)
-> > > >
-> > > > diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
-> > > > index 9cc8a1772b4b..6beccffeef7b 100644
-> > > > --- a/tools/perf/util/dso.c
-> > > > +++ b/tools/perf/util/dso.c
-> > > > @@ -784,7 +784,7 @@ dso_cache__free(struct dso *dso)
-> > > >       struct rb_root *root = &dso->data.cache;
-> > > >       struct rb_node *next = rb_first(root);
-> > > >
-> > > > -     pthread_mutex_lock(&dso->lock);
-> > > > +     BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
-> > > >       while (next) {
-> > > >               struct dso_cache *cache;
-> > > >
-> > > > @@ -830,7 +830,7 @@ dso_cache__insert(struct dso *dso, struct dso_cache *new)
-> > > >       struct dso_cache *cache;
-> > > >       u64 offset = new->offset;
-> > > >
-> > > > -     pthread_mutex_lock(&dso->lock);
-> > > > +     BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
-> > > >       while (*p != NULL) {
-> > > >               u64 end;
-> > > >
-> > > > @@ -1259,6 +1259,8 @@ struct dso *dso__new_id(const char *name, struct dso_id *id)
-> > > >       struct dso *dso = calloc(1, sizeof(*dso) + strlen(name) + 1);
-> > > >
-> > > >       if (dso != NULL) {
-> > > > +             pthread_mutexattr_t lock_attr;
-> > > > +
-> > > >               strcpy(dso->name, name);
-> > > >               if (id)
-> > > >                       dso->id = *id;
-> > > > @@ -1286,8 +1288,12 @@ struct dso *dso__new_id(const char *name, struct dso_id *id)
-> > > >               dso->root = NULL;
-> > > >               INIT_LIST_HEAD(&dso->node);
-> > > >               INIT_LIST_HEAD(&dso->data.open_entry);
-> > > > -             pthread_mutex_init(&dso->lock, NULL);
-> > > > +             pthread_mutexattr_init(&lock_attr);
-> > > > +             pthread_mutexattr_settype(&lock_attr, PTHREAD_MUTEX_ERRORCHECK);
-> > > > +             pthread_mutex_init(&dso->lock, &lock_attr);
-> > > > +             pthread_mutexattr_destroy(&lock_attr);
-> > > >               refcount_set(&dso->refcnt, 1);
-> > > > +
-> > > >       }
-> > > >
-> > > >       return dso;
-> > > > diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-> > > > index b2ed3140a1fa..43f47532696f 100644
-> > > > --- a/tools/perf/util/symbol.c
-> > > > +++ b/tools/perf/util/symbol.c
-> > > > @@ -1783,7 +1783,7 @@ int dso__load(struct dso *dso, struct map *map)
-> > > >       }
-> > > >
-> > > >       nsinfo__mountns_enter(dso->nsinfo, &nsc);
-> > > > -     pthread_mutex_lock(&dso->lock);
-> > > > +     BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
-> > > >
-> > > >       /* check again under the dso->lock */
-> > > >       if (dso__loaded(dso)) {
-> > > > --
-> > > > 2.35.1.265.g69c8d7142f-goog
-> > >
-> > > --
-> > >
-> > > - Arnaldo
->
-> --
->
-> - Arnaldo
+base commit: f6ae04ddb347 
+
+V2:
+ * Remove union have different list head and list entry members. 
+ * Simplify list deletion on destruction.
+ * Added list updating when mirrors are intra-host migrated.
+
+---
+ arch/x86/kvm/svm/sev.c                        | 56 +++++++++++++------
+ arch/x86/kvm/svm/svm.h                        |  3 +-
+ .../selftests/kvm/x86_64/sev_migrate_tests.c  | 47 +++++++++++-----
+ 3 files changed, 73 insertions(+), 33 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index f4d88292f337..d7337d099ece 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -258,6 +258,7 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
+ 		goto e_free;
+ 
+ 	INIT_LIST_HEAD(&sev->regions_list);
++	INIT_LIST_HEAD(&sev->mirror_vms);
+ 
+ 	return 0;
+ 
+@@ -1623,9 +1624,12 @@ static void sev_unlock_vcpus_for_migration(struct kvm *kvm)
+ 	}
+ }
+ 
+-static void sev_migrate_from(struct kvm_sev_info *dst,
+-			      struct kvm_sev_info *src)
++static void sev_migrate_from(struct kvm *dst_kvm, struct kvm *src_kvm)
+ {
++	struct kvm_sev_info *dst = &to_kvm_svm(dst_kvm)->sev_info;
++	struct kvm_sev_info *src = &to_kvm_svm(src_kvm)->sev_info;
++	struct kvm_sev_info *mirror, *tmp;
++
+ 	dst->active = true;
+ 	dst->asid = src->asid;
+ 	dst->handle = src->handle;
+@@ -1639,6 +1643,31 @@ static void sev_migrate_from(struct kvm_sev_info *dst,
+ 	src->enc_context_owner = NULL;
+ 
+ 	list_cut_before(&dst->regions_list, &src->regions_list, &src->regions_list);
++
++	/*
++	 * If this VM has mirrors, "transfer" each mirror's refcount of the
++	 * source to the destination (this KVM).  The caller holds a reference
++	 * to the source, so there's no danger of use-after-free.
++	 */
++	list_cut_before(&dst->mirror_vms, &src->mirror_vms, &src->mirror_vms);
++	list_for_each_entry_safe(mirror, tmp, &dst->mirror_vms,
++				 mirror_entry) {
++		kvm_get_kvm(dst_kvm);
++		kvm_put_kvm(src_kvm);
++		mirror->enc_context_owner = dst_kvm;
++	}
++
++	/*
++	 * If this VM is a mirror, remove the old mirror from the owners list
++	 * and add the new mirror to the list.
++	 */
++	if (is_mirroring_enc_context(dst_kvm)) {
++		struct kvm_sev_info *owner_sev_info =
++			&to_kvm_svm(dst->enc_context_owner)->sev_info;
++
++		list_del(&src->mirror_entry);
++		list_add_tail(&dst->mirror_entry, &owner_sev_info->mirror_vms);
++	}
+ }
+ 
+ static int sev_es_migrate_from(struct kvm *dst, struct kvm *src)
+@@ -1708,15 +1737,6 @@ int sev_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+ 
+ 	src_sev = &to_kvm_svm(source_kvm)->sev_info;
+ 
+-	/*
+-	 * VMs mirroring src's encryption context rely on it to keep the
+-	 * ASID allocated, but below we are clearing src_sev->asid.
+-	 */
+-	if (src_sev->num_mirrored_vms) {
+-		ret = -EBUSY;
+-		goto out_unlock;
+-	}
+-
+ 	dst_sev->misc_cg = get_current_misc_cg();
+ 	cg_cleanup_sev = dst_sev;
+ 	if (dst_sev->misc_cg != src_sev->misc_cg) {
+@@ -1738,7 +1758,8 @@ int sev_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+ 		if (ret)
+ 			goto out_source_vcpu;
+ 	}
+-	sev_migrate_from(dst_sev, src_sev);
++
++	sev_migrate_from(kvm, source_kvm);
+ 	kvm_vm_dead(source_kvm);
+ 	cg_cleanup_sev = src_sev;
+ 	ret = 0;
+@@ -2008,10 +2029,10 @@ int sev_vm_copy_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+ 	 */
+ 	source_sev = &to_kvm_svm(source_kvm)->sev_info;
+ 	kvm_get_kvm(source_kvm);
+-	source_sev->num_mirrored_vms++;
++	mirror_sev = &to_kvm_svm(kvm)->sev_info;
++	list_add_tail(&mirror_sev->mirror_entry, &source_sev->mirror_vms);
+ 
+ 	/* Set enc_context_owner and copy its encryption context over */
+-	mirror_sev = &to_kvm_svm(kvm)->sev_info;
+ 	mirror_sev->enc_context_owner = source_kvm;
+ 	mirror_sev->active = true;
+ 	mirror_sev->asid = source_sev->asid;
+@@ -2019,6 +2040,7 @@ int sev_vm_copy_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+ 	mirror_sev->es_active = source_sev->es_active;
+ 	mirror_sev->handle = source_sev->handle;
+ 	INIT_LIST_HEAD(&mirror_sev->regions_list);
++	INIT_LIST_HEAD(&mirror_sev->mirror_vms);
+ 	ret = 0;
+ 
+ 	/*
+@@ -2041,7 +2063,7 @@ void sev_vm_destroy(struct kvm *kvm)
+ 	struct list_head *head = &sev->regions_list;
+ 	struct list_head *pos, *q;
+ 
+-	WARN_ON(sev->num_mirrored_vms);
++	WARN_ON(!list_empty(&sev->mirror_vms));
+ 
+ 	if (!sev_guest(kvm))
+ 		return;
+@@ -2049,11 +2071,9 @@ void sev_vm_destroy(struct kvm *kvm)
+ 	/* If this is a mirror_kvm release the enc_context_owner and skip sev cleanup */
+ 	if (is_mirroring_enc_context(kvm)) {
+ 		struct kvm *owner_kvm = sev->enc_context_owner;
+-		struct kvm_sev_info *owner_sev = &to_kvm_svm(owner_kvm)->sev_info;
+ 
+ 		mutex_lock(&owner_kvm->lock);
+-		if (!WARN_ON(!owner_sev->num_mirrored_vms))
+-			owner_sev->num_mirrored_vms--;
++		list_del(&sev->mirror_entry);
+ 		mutex_unlock(&owner_kvm->lock);
+ 		kvm_put_kvm(owner_kvm);
+ 		return;
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index 15920d2de2cc..e8db88e9825e 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -79,7 +79,8 @@ struct kvm_sev_info {
+ 	struct list_head regions_list;  /* List of registered regions */
+ 	u64 ap_jump_table;	/* SEV-ES AP Jump Table address */
+ 	struct kvm *enc_context_owner; /* Owner of copied encryption context */
+-	unsigned long num_mirrored_vms; /* Number of VMs sharing this ASID */
++	struct list_head mirror_vms; /* List of VMs mirroring */
++	struct list_head mirror_entry; /* Use as a list entry of mirrors */
+ 	struct misc_cg *misc_cg; /* For misc cgroup accounting */
+ 	atomic_t migration_in_progress;
+ };
+diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+index 80056bbbb003..2e5a42cb470b 100644
+--- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
++++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
+@@ -341,35 +341,54 @@ static void test_sev_mirror_parameters(void)
+ 
+ static void test_sev_move_copy(void)
+ {
+-	struct kvm_vm *dst_vm, *sev_vm, *mirror_vm, *dst_mirror_vm;
+-	int ret;
++	struct kvm_vm *dst_vm, *dst2_vm, *dst3_vm, *sev_vm, *mirror_vm,
++		      *dst_mirror_vm, *dst2_mirror_vm, *dst3_mirror_vm;
+ 
+ 	sev_vm = sev_vm_create(/* es= */ false);
+ 	dst_vm = aux_vm_create(true);
++	dst2_vm = aux_vm_create(true);
++	dst3_vm = aux_vm_create(true);
+ 	mirror_vm = aux_vm_create(false);
+ 	dst_mirror_vm = aux_vm_create(false);
++	dst2_mirror_vm = aux_vm_create(false);
++	dst3_mirror_vm = aux_vm_create(false);
+ 
+ 	sev_mirror_create(mirror_vm->fd, sev_vm->fd);
+-	ret = __sev_migrate_from(dst_vm->fd, sev_vm->fd);
+-	TEST_ASSERT(ret == -1 && errno == EBUSY,
+-		    "Cannot migrate VM that has mirrors. ret %d, errno: %d\n", ret,
+-		    errno);
+ 
+-	/* The mirror itself can be migrated.  */
+ 	sev_migrate_from(dst_mirror_vm->fd, mirror_vm->fd);
+-	ret = __sev_migrate_from(dst_vm->fd, sev_vm->fd);
+-	TEST_ASSERT(ret == -1 && errno == EBUSY,
+-		    "Cannot migrate VM that has mirrors. ret %d, errno: %d\n", ret,
+-		    errno);
++	sev_migrate_from(dst_vm->fd, sev_vm->fd);
++
++	sev_migrate_from(dst2_vm->fd, dst_vm->fd);
++	sev_migrate_from(dst2_mirror_vm->fd, dst_mirror_vm->fd);
++
++	sev_migrate_from(dst3_mirror_vm->fd, dst2_mirror_vm->fd);
++	sev_migrate_from(dst3_vm->fd, dst2_vm->fd);
++
++	kvm_vm_free(dst_vm);
++	kvm_vm_free(sev_vm);
++	kvm_vm_free(dst2_vm);
++	kvm_vm_free(dst3_vm);
++	kvm_vm_free(mirror_vm);
++	kvm_vm_free(dst_mirror_vm);
++	kvm_vm_free(dst2_mirror_vm);
++	kvm_vm_free(dst3_mirror_vm);
+ 
+ 	/*
+-	 * mirror_vm is not a mirror anymore, dst_mirror_vm is.  Thus,
+-	 * the owner can be copied as soon as dst_mirror_vm is gone.
++	 * Run similar test be destroy mirrors before mirrored VMs to ensure
++	 * destruction is done safely.
+ 	 */
+-	kvm_vm_free(dst_mirror_vm);
++	sev_vm = sev_vm_create(/* es= */ false);
++	dst_vm = aux_vm_create(true);
++	mirror_vm = aux_vm_create(false);
++	dst_mirror_vm = aux_vm_create(false);
++
++	sev_mirror_create(mirror_vm->fd, sev_vm->fd);
++
++	sev_migrate_from(dst_mirror_vm->fd, mirror_vm->fd);
+ 	sev_migrate_from(dst_vm->fd, sev_vm->fd);
+ 
+ 	kvm_vm_free(mirror_vm);
++	kvm_vm_free(dst_mirror_vm);
+ 	kvm_vm_free(dst_vm);
+ 	kvm_vm_free(sev_vm);
+ }
+-- 
+2.35.1.265.g69c8d7142f-goog

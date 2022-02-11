@@ -2,78 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F8A4B29B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:11:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFD34B29CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350345AbiBKQJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:09:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39582 "EHLO
+        id S1350581AbiBKQJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:09:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240087AbiBKQJM (ORCPT
+        with ESMTP id S240087AbiBKQJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:09:12 -0500
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052EA188;
-        Fri, 11 Feb 2022 08:09:11 -0800 (PST)
-Received: by mail-oo1-f43.google.com with SMTP id i10-20020a4aab0a000000b002fccf890d5fso10862903oon.5;
-        Fri, 11 Feb 2022 08:09:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UsoFMOUmyD3/19vqiSJa1ovHqD6HuTwko4NFjoImuak=;
-        b=ELqqxq7bTdFkn/3Kux6m0KwWSkakgdEMeHv0SkTti4ZD1JgrgYXE+CFS9F4j+iOMSy
-         Wb4zj3QVFDUyOWAViFtJcAbSCJnYs3gRuglMsnFtvjwyINvRRh7M+0xl+KK+5ECKp54e
-         cW+JOSHxFMkykLNYFKIBcoVM399Sq/h/naI/HxDpELZhbapH7AAPZbny1XY+6DhyxhoO
-         Cl1Mxvklg/Uq1Gz/XZx89Mslj2zwwAPjdKcZ7Or0Rv6AwtNaKhdptV1AOJTU7Ff8isEt
-         9cxT2Li04AlMWnBhammdTEoK0vRi4LHQV/gbEl9UDUAnURkgJaSC5wMYNP4sMamd0nkt
-         rYbQ==
-X-Gm-Message-State: AOAM5312ix2GCVf/v90saohQv8oGlrjyRM5qwo1K1G61ROP6lcW9s9Cs
-        nqXpHwHiAjFbcvInZx22hg==
-X-Google-Smtp-Source: ABdhPJybCMTCupvu4ShRchADwgm07GIoL8sNNVWj2IJOihePiTSfTIUTJ7KX/WJ3F4nfjgcsWoYQdw==
-X-Received: by 2002:a05:6870:7734:: with SMTP id dw52mr370319oab.185.1644595750312;
-        Fri, 11 Feb 2022 08:09:10 -0800 (PST)
-Received: from robh.at.kernel.org ([2607:fb90:5fee:dfce:b6df:c3e1:b1e5:d6d8])
-        by smtp.gmail.com with ESMTPSA id bb16sm10059876oob.42.2022.02.11.08.09.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 08:09:09 -0800 (PST)
-Received: (nullmailer pid 443201 invoked by uid 1000);
-        Fri, 11 Feb 2022 16:09:06 -0000
-Date:   Fri, 11 Feb 2022 10:09:06 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-Cc:     andy.shevchenko@gmail.com, robh+dt@kernel.org, lars@metafoo.de,
-        devicetree@vger.kernel.org, jic23@kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sst@poczta.fm
-Subject: Re: [PATCH 1/2] dt-bindings: iio: potentiometer: Add Maxim DS3502 in
- trivial-devices
-Message-ID: <YgaKInKZ5gK1N3wr@robh.at.kernel.org>
-References: <20220207040408.4273-1-jagathjog1996@gmail.com>
- <20220207040408.4273-2-jagathjog1996@gmail.com>
+        Fri, 11 Feb 2022 11:09:40 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C854E1B5;
+        Fri, 11 Feb 2022 08:09:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644595778; x=1676131778;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TKUUvWtokGbccNbJek5bykAjRoRXtkIpB78T8IUzGac=;
+  b=CZ0+Dg5MZS8IH9ZFWpqTVb8sbcH3UgB+cGakfgC/05zRSMD19EZ93wQt
+   0bqmsnjVCjxpwJ9w0EsXL3gpuXRUXi7OYQSDKyFzVQIK/TwyuRlC/AmdR
+   /UdhPCLTrNhUK//lNGvK19Zvq268MO9M2XakeoxeM1qP24drhiHMiaUbe
+   V1lCbvJzn5vzbk7mv2l+D8UQDmKyMurrz/ZX4o4UJSnZaJuNq7JBPDTyV
+   LcpXuYI9Rkez2EETBzccY7esMFeLrsKyDG2fydIhusmKt1WM3ZU21nmvT
+   ZwNzFoZr5APz88YlBdlqSFcEZ/qRRq0hwnfZAkdk7+UohNqdNztnfFsYK
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="249703803"
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="249703803"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 08:09:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="630393682"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga002.fm.intel.com with ESMTP; 11 Feb 2022 08:09:37 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, lenb@kernel.org
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v4 0/6] ACPI / fan: Add fine grain control
+Date:   Fri, 11 Feb 2022 08:09:26 -0800
+Message-Id: <20220211160932.3221873-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207040408.4273-2-jagathjog1996@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 07 Feb 2022 09:34:07 +0530, Jagath Jog J wrote:
-> Maxim DS3502 is a 7 bit nonvolatile digital potentiometer.
-> Add DS3502 binding into trivial-devices.yaml
-> 
-> Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
-> ---
->  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+This series of changes adds fine grain control for fans. First 3 patches
+are clean up and preparation patches.
 
-Acked-by: Rob Herring <robh@kernel.org>
+v4
+Addressed review comments:
+- Creation of attributes to separate file
+- Handle error in get/set callbacks
+- Fix commit description for current state
+- Remove casting to int by changing fif struct
+- Change fan_get_fps() to acpi_fan_get_fst()
+- Fallback to old method for invalid control value
+- Remove logic to take reminder to adjust to 100
+- Add else if for step size sanity checks
+
+v3
+Added fine_grain_control attribute.
+v2-update
+Change log is missed for v2.
+v2
+Fix for build issue as reported by Reported-by: kernel test robot <lkp@intel.com>
+
+Srinivas Pandruvada (6):
+  ACPI / fan: Fix error reporting to user space
+  ACPI / fan: Separate file for attributes creation
+  ACPI / fan: Optimize struct acpi_fan_fif
+  ACPI / fan: Properly handle fine grain control
+  ACPI / fan: Add additional attributes for fine grain control
+  Documentation/admin-guide/acpi: Add documentation for fine grain
+    control
+
+ .../acpi/fan_performance_states.rst           |  28 +++
+ drivers/acpi/Makefile                         |   3 +
+ drivers/acpi/fan.h                            |  44 ++++
+ drivers/acpi/fan_attr.c                       | 137 ++++++++++++
+ drivers/acpi/{fan.c => fan_core.c}            | 204 ++++++++----------
+ 5 files changed, 298 insertions(+), 118 deletions(-)
+ create mode 100644 drivers/acpi/fan_attr.c
+ rename drivers/acpi/{fan.c => fan_core.c} (75%)
+
+-- 
+2.34.1
+

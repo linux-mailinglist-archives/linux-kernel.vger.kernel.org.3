@@ -2,114 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C514B2D08
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 19:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 712A74B2D0F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 19:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352750AbiBKSfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 13:35:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41670 "EHLO
+        id S240921AbiBKSkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 13:40:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346051AbiBKSfk (ORCPT
+        with ESMTP id S231833AbiBKSku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 13:35:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A028FCD3
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 10:35:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644604536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=J8HfLfxVfcNiEkSEpweyJmi/8GyqJBZOj2yEwh6I5kQ=;
-        b=J1zBuhZ7HO9+tJWbj9vUVD9LgB7gT9h9AUtxbjZgDtWsgVtN6zfTbiKjj5vW2ODYv+1xlw
-        GDyFjgMore1zZcPnDcpyXiN9tvpfhjbuBYqJbGvvZGgnjJCDJ4BjYVaLJLGHqW8iLGl7DM
-        LlZgJzf3fDAtz6SXp4hYmLwO+O81sHI=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-433-Bd2bTdhfNKSEJdflCwdnwA-1; Fri, 11 Feb 2022 13:35:35 -0500
-X-MC-Unique: Bd2bTdhfNKSEJdflCwdnwA-1
-Received: by mail-oi1-f198.google.com with SMTP id ay31-20020a056808301f00b002d06e828c00so2664837oib.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 10:35:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=J8HfLfxVfcNiEkSEpweyJmi/8GyqJBZOj2yEwh6I5kQ=;
-        b=tYyIMkoAYVbULeclHlCVDy1e2opnCtug3hcv+oNoQGmxbIW9uc1G/lIk3rMvnBhscy
-         maD4Kl+BkCuBFZTJIL3vHKqziezkKo/OXb9TL8FfWJ0+hNnuQuhOYZa3ZRalb8eUNbS4
-         2KGUbX1/3KSphWvoDasLKb/pixSvCd3UZk4fazrAHohmqNdvWN04d9pdGp5jYLmqAW4N
-         4ufZe8m7hqKC4HgXwfcNjtVARsjmlHaH66PLqIdPwZM4DP50eQ6Hl/QxBHCY/ZO/BcAF
-         b9kj694kplFzDDuA9ENVM4ApDO9TQK9Sks5nkN5mbJ7/3blK+a3nnVh7lt/oor6qkFol
-         k1Iw==
-X-Gm-Message-State: AOAM5330n0ELPNpg8TDRGbG5+zSHg90DNuu4/e2a/xcO+0FpHN52caxA
-        BcLiIGHNeFpyEcbbNoimklR03Dr/m/bWk+ObZ+YobKEIxjHXZHj0U/eMIEP+zIorp9m1Zai94Y8
-        CHmdkuTdvolYCgjuLRxJZZYIv
-X-Received: by 2002:a05:6830:19ed:: with SMTP id t13mr1078542ott.83.1644604535029;
-        Fri, 11 Feb 2022 10:35:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwvxMA3qcq86xXsncmpwHUMHF94120N5jKw3TA/bT6HNPqEH7OwmhO+43BhJzSDitpUEbLUcg==
-X-Received: by 2002:a05:6830:19ed:: with SMTP id t13mr1078522ott.83.1644604534752;
-        Fri, 11 Feb 2022 10:35:34 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id m7sm9451958ots.32.2022.02.11.10.35.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 10:35:34 -0800 (PST)
-Date:   Fri, 11 Feb 2022 10:35:29 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
- unique-symbol` is available
-Message-ID: <20220211183529.q7qi2qmlyuscxyto@treble>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
- <20220209185752.1226407-3-alexandr.lobakin@intel.com>
- <20220211174130.xxgjoqr2vidotvyw@treble>
- <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
+        Fri, 11 Feb 2022 13:40:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E3B25B
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 10:40:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8AA9EB82BA7
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 18:40:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 386BDC340E9;
+        Fri, 11 Feb 2022 18:40:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644604846;
+        bh=dp5Xm3Cygsp6lCWZSZ9x16Y5ja9te3e+GoMvDD0O2nI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sbqcj4H+LoAsq7DDHy36HVoN91l3JeHrsyRHIqQdphMF3lSpQdJloV4HNk4kG6eky
+         8+YlVrUKRyl+rlwkrHsc3xgheN+n0lftcOvnc/bkukFrevsL+H02cxA1wfKmtRaFVH
+         Hx2xZ3PY9M8WSVYB6NmwvIO8mJMQdU3SfcG93evJ7Hn1MHAmNE860fkkKTe+xllznm
+         XQiAVCJ3v35j7YtibdGuwbz6s638dq4F995++bPmw+IU7CraJUuVovIzB1jh5s5F1e
+         v2OuN4tEd1B5dNhn+Xq+xvHNiDVwhYIjIrddR4HObXPL9actpVxx7YPQJfq/QqvDyq
+         MR91iqUpsMc5Q==
+Date:   Fri, 11 Feb 2022 19:40:41 +0100
+From:   Alexey Gladkov <legion@kernel.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Solar Designer <solar@openwall.com>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        containers@lists.linux.dev,
+        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+Subject: Re: [PATCH 6/8] ucounts: Handle inc_rlimit_ucounts wrapping in fork
+Message-ID: <20220211184041.dlqjk2fgdnkmtpe3@example.org>
+References: <87o83e2mbu.fsf@email.froward.int.ebiederm.org>
+ <20220211021324.4116773-6-ebiederm@xmission.com>
+ <20220211113454.socmlrne5heux7q7@example.org>
+ <87sfspz409.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <87sfspz409.fsf@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -117,57 +62,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 10:05:02AM -0800, Fāng-ruì Sòng wrote:
-> On Fri, Feb 11, 2022 at 9:41 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+On Fri, Feb 11, 2022 at 11:50:46AM -0600, Eric W. Biederman wrote:
+> Alexey Gladkov <legion@kernel.org> writes:
+> 
+> > On Thu, Feb 10, 2022 at 08:13:22PM -0600, Eric W. Biederman wrote:
+> >> Move inc_rlimit_ucounts from copy_creds into copy_process immediately
+> >> after copy_creds where it can be called exactly once.  Test for and
+> >> handle it when inc_rlimit_ucounts returns LONG_MAX indicating the
+> >> count has wrapped.
+> >> 
+> >> This is good hygenine and fixes a theoretical bug.  In practice
+> >> PID_MAX_LIMIT is at most 2^22 so there is not a chance the number of
+> >> processes would ever wrap even on an architecture with a 32bit long.
+> >> 
+> >> Fixes: 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts")
+> >> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> >> ---
+> >>  kernel/cred.c | 2 --
+> >>  kernel/fork.c | 2 ++
+> >>  2 files changed, 2 insertions(+), 2 deletions(-)
+> >> 
+> >> diff --git a/kernel/cred.c b/kernel/cred.c
+> >> index 229cff081167..96d5fd6ff26f 100644
+> >> --- a/kernel/cred.c
+> >> +++ b/kernel/cred.c
+> >> @@ -358,7 +358,6 @@ int copy_creds(struct task_struct *p, unsigned long clone_flags)
+> >>  		kdebug("share_creds(%p{%d,%d})",
+> >>  		       p->cred, atomic_read(&p->cred->usage),
+> >>  		       read_cred_subscribers(p->cred));
+> >> -		inc_rlimit_ucounts(task_ucounts(p), UCOUNT_RLIMIT_NPROC, 1);
+> >>  		return 0;
+> >>  	}
+> >>  
+> >> @@ -395,7 +394,6 @@ int copy_creds(struct task_struct *p, unsigned long clone_flags)
+> >>  #endif
+> >>  
+> >>  	p->cred = p->real_cred = get_cred(new);
+> >> -	inc_rlimit_ucounts(task_ucounts(p), UCOUNT_RLIMIT_NPROC, 1);
+> >>  	alter_cred_subscribers(new, 2);
+> >>  	validate_creds(new);
+> >>  	return 0;
+> >> diff --git a/kernel/fork.c b/kernel/fork.c
+> >> index 6f62d37f3650..69333078259c 100644
+> >> --- a/kernel/fork.c
+> >> +++ b/kernel/fork.c
+> >> @@ -2026,6 +2026,8 @@ static __latent_entropy struct task_struct *copy_process(
+> >>  		goto bad_fork_free;
+> >>  
+> >>  	retval = -EAGAIN;
+> >> +	if (inc_rlimit_ucounts(task_ucounts(p), UCOUNT_RLIMIT_NPROC, 1) == LONG_MAX)
+> >> +		goto bad_fork_cleanup_count;
+> >>  	if (is_ucounts_overlimit(task_ucounts(p), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC))) {
+> >>  		if ((task_ucounts(p) != &init_ucounts) &&
+> >>  		    !capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
 > >
-> > On Wed, Feb 09, 2022 at 07:57:39PM +0100, Alexander Lobakin wrote:
-> > > Position-based search, which means that if there are several symbols
-> > > with the same name, the user needs to additionally provide the
-> > > "index" of a desired symbol, is fragile. For example, it breaks
-> > > when two symbols with the same name are located in different
-> > > sections.
-> > >
-> > > Since a while, LD has a flag `-z unique-symbol` which appends
-> > > numeric suffixes to the functions with the same name (in symtab
-> > > and strtab). It can be used to effectively prevent from having
-> > > any ambiguity when referring to a symbol by its name.
+> > It might make sense to do something like:
 > >
-> > In the patch description can you also give the version of binutils (and
-> > possibly other linkers) which have the flag?
+> > 	if (inc_rlimit_ucounts_overlimit(task_ucounts(p), UCOUNT_RLIMIT_NPROC, 1, rlimit(RLIMIT_NPROC)) == LONG_MAX) {
+> > 		if ((task_ucounts(p) != &init_ucounts) &&
+> > 		    !capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN))
+> >
+> > and the new function:
+> >
+> > long inc_rlimit_ucounts_overlimit(struct ucounts *ucounts, enum ucount_type type, long v, unsigned long rlimit)
+> > {
+> > 	struct ucounts *iter;
+> > 	long ret = 0;
+> > 	long max = rlimit;
+> > 	if (rlimit > LONG_MAX)
+> > 		max = LONG_MAX;
+> > 	for (iter = ucounts; iter; iter = iter->ns->ucounts) {
+> > 		long new = atomic_long_add_return(v, &iter->ucount[type]);
+> > 		if (new < 0 || new > max)
+> > 			ret = LONG_MAX;
+> > 		else if (iter == ucounts)
+> > 			ret = new;
+> > 		max = READ_ONCE(iter->ns->ucount_max[type]);
+> > 	}
+> > 	return ret;
+> > }
+> >
+> > This will avoid double checking the same userns tree.
+> >
+> > Or even modify inc_rlimit_ucounts. This function is used elsewhere like
+> > this:
+> >
+> >
+> > msgqueue = inc_rlimit_ucounts(info->ucounts, UCOUNT_RLIMIT_MSGQUEUE, mq_bytes);
+> > if (msgqueue == LONG_MAX || msgqueue > rlimit(RLIMIT_MSGQUEUE)) {
+> >
+> >
+> > memlock = inc_rlimit_ucounts(ucounts, UCOUNT_RLIMIT_MEMLOCK, locked);
+> > if (!allowed && (memlock == LONG_MAX || memlock > lock_limit) && !capable(CAP_IPC_LOCK)) {
+> >
+> >
+> > In all cases, we have max value for comparison.
 > 
-> GNU ld>=2.36 supports -z unique-symbol. ld.lld doesn't support -z unique-symbol.
-> 
-> I subscribe to llvm@lists.linux.dev and happen to notice this message
-> (can't keep up with the changes...)
-> I am a bit concerned with this option and replied last time on
-> https://lore.kernel.org/r/20220105032456.hs3od326sdl4zjv4@google.com
-> 
-> My full reasoning is on
-> https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
+> Good point.   The downside is that it means we can't use the same code
+> in exec.  The upside is that the code is more idiomatic.
 
-Ah, right.  Also discussed here:
+My suggestion was before I saw the 8/8 patch :)
 
-  https://lore.kernel.org/all/20210123225928.z5hkmaw6qjs2gu5g@google.com/T/#u
-  https://lore.kernel.org/all/20210125172124.awabevkpvq4poqxf@treble/
+We can make something like:
 
-I'm not qualified to comment on LTO/PGO stability issues, but it doesn't
-sound good.  And we want to support livepatch for LTO kernels.
+static inline bool is_nproc_overlimit(struct task_struct *task)
+{
+	return (task_ucounts(task) != &init_ucounts) &&
+		!has_capability(task, CAP_SYS_RESOURCE) &&
+		!has_capability(task, CAP_SYS_ADMIN);
+}
 
-Also I realized that this flag would have a negative effect on
-kpatch-build, as it currently does its analysis on .o files.  So it
-would have to figure out how to properly detect function renames, to
-avoid patching the wrong function for example.
+In copy_process:
 
-And if LLD doesn't plan to support the flag then it will be a headache
-for livepatch (and the kernel in general) to deal with the divergent
-configs.
+if (inc_rlimit_ucounts_overlimit(task_ucounts(p), UCOUNT_RLIMIT_NPROC, 1, rlimit(RLIMIT_NPROC)) == LONG_MAX) {
+	if (is_nproc_overlimit(p))
+		goto bad_fork_cleanup_count;
+}
 
-One idea I mentioned before, it may be worth exploring changing the "F"
-in FGKASLR to "File" instead of "Function".  In other words, only
-shuffle at an object-file granularity.  Then, even with duplicates, the
-<file+function> symbol pair doesn't change in the symbol table.  And as
-a bonus, it should help FGKASLR i-cache performance, significantly.
+In do_execveat_common:
+
+if ((current->flags & PF_NPROC_CHECK) &&
+    is_ucounts_overlimit(current_ucounts(), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) &&
+    is_nproc_overlimit(current)) {
+	retval = -EAGAIN;
+	goto out_ret;
+}
 
 -- 
-Josh
+Rgrds, legion
 

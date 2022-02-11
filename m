@@ -2,85 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313764B1B4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 02:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E324B1B51
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 02:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346902AbiBKBdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 20:33:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43468 "EHLO
+        id S1346839AbiBKBeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 20:34:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346853AbiBKBdM (ORCPT
+        with ESMTP id S235662AbiBKBeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 20:33:12 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BE35582
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:33:12 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id j2so20832260ybu.0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:33:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9GxQrdaGBPDuxmmmn6awLxXmdKGbQSbctZ4L8eSniqE=;
-        b=XVBbuIogdAtT2RcD3LdyEwqn+DMMAVTKAlHtjcPSagoYO2bQpF5/3Pwt9jSh7iDEpq
-         CG3ZUDgCxDMTbYEn+Mx3k0qmo3HtAqy1U0BuzGA7qH5XGbiq6StWARdccws83om0fnqR
-         OVE9zuCt5OMNnNWm5czlswjzSkQgsPkbPCc7lVzDj/9hKoJ9axlyEy7HmkRhd+dsVK5I
-         Z3sCjcEsr91KtepWjHP2hGyEHJrQ6wWXJnC4UQGsm8ITDmgQaSz1BpnB1NC/3DXTw3lw
-         1mybzWR8ABWJ+mWbrBQz15V5H5U0rWlG+dyE42fXAerDaIUJ+8C5sXUkXGBlzHx72EMB
-         Iiug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9GxQrdaGBPDuxmmmn6awLxXmdKGbQSbctZ4L8eSniqE=;
-        b=0YIHhO7Ua/ySCW0xnpXGSX87kKlXB3vozustL48uDZ5LnyBj1nTRoc0SzYLnnW9lRu
-         gmZu512DVKsdgiAmsVRqyf3x5LM8nUmCq2azgBTPpSZ3jQf1c7CD1n+jsDgWeFTWyDbv
-         RkwdbZhShinoE9HzSCHsMCJbULyWGpg9JuifRUm0upNsYckAc56eG2UtGeSjCuilfeMQ
-         T7khHo+n0ZTUpdI3eKt0t+rO8ScQ7arXWGgD+hUWlYqYpfNeR/8pB3yFZc7SLWBqD9Ye
-         kNewQb6Pgp5sdmmaQdd1gPuKXdUX2tVROrjKMMn6kPgPXAMLZDZcHLEkytnNh4QXCLjV
-         Mvcw==
-X-Gm-Message-State: AOAM533sl4BI9OsrNyAveZn/qXvMD0x5Zb5Jd2QHOzLOP0O95u8cERAz
-        BmWEiDcI/Hvf1r/2wZYT9lxI1iVBmhdZK6GL0IOjFA==
-X-Google-Smtp-Source: ABdhPJwjq+GwW3DeD2qB1rO02A6XTTi8Mv9CAwCoEolQhjbTPfAnZ6ISJx8L8JI/dPtRihoxgfO9gb/FtAhfeKf0xcQ=
-X-Received: by 2002:a25:6a55:: with SMTP id f82mr9393142ybc.1.1644543191406;
- Thu, 10 Feb 2022 17:33:11 -0800 (PST)
+        Thu, 10 Feb 2022 20:34:36 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7625582
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:34:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644543276; x=1676079276;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+BVql9j+nSKuX06ape3W050amhEw94XEN/hSBH7FZEM=;
+  b=PSlsCtLDCT3aI+2ogqVTyfasyY6XYDFdoxmu1sJJeWUN9Uei1YquCJgG
+   VnOcvi2e5AvEUOJ0umbcPAKsPbNC6Eq+AeuSfFZsueOdg9PUeM53AjHIr
+   qcCrna2Q+wLRfl/b6VJjcdwsKsUoUQ0hnwPr+cXjjQwZhrG4V5TnmjkzL
+   HbeQCQ9EYYTQUnPYLy/7VrkVzgs7h5rnUKaGM2P9sFzF7FR5f1SZfBHSz
+   d8LD+UPFu8l+C14BkoURxaIy6GK1ntSR6s+RzQBbYTxFkAglrBBWF5Y98
+   sP++HbAMJIrjjfWnnXmnLvkV+1VHWB9m+cWjT9R9a/QLVGQvGvva7Nc9b
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="247223268"
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="247223268"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 17:34:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="679360603"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Feb 2022 17:34:34 -0800
+Message-ID: <532a9259-a1f4-dc1e-acfe-8ac2c6de71b9@linux.intel.com>
+Date:   Fri, 11 Feb 2022 09:33:20 +0800
 MIME-Version: 1.0
-References: <20220210043215.42794-1-surenb@google.com> <YgUHzSqltDp2dr70@dhcp22.suse.cz>
- <CAJuCfpGkW7MoWW=E1tqEib24M3JjxDKF_zgmMnvWo8wJP6cy2g@mail.gmail.com>
- <YgUu0prRt3iu1Cpy@casper.infradead.org> <CAJuCfpHPZNbK2rd95pZAWr0d3vACGzHdiAFv=bM-G8nC+YdYwg@mail.gmail.com>
- <YgVo5HrAhoeoix7a@casper.infradead.org> <CAJuCfpHX22MaU8S0otoRiq8EdLGcdnYFNyxDmp4FZB_eM_+hdg@mail.gmail.com>
-In-Reply-To: <CAJuCfpHX22MaU8S0otoRiq8EdLGcdnYFNyxDmp4FZB_eM_+hdg@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 10 Feb 2022 17:33:00 -0800
-Message-ID: <CAJuCfpHFMJR=X=HY-=go6W85jXgKzaL5+A+gQh_sDBxYJ7J69g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] mm: fix use-after-free when anon vma name is used
- after vma is freed
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Colin Cross <ccross@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>, brauner@kernel.org,
-        legion@kernel.org, ran.xiaokai@zte.com.cn, sashal@kernel.org,
-        Chris Hyser <chris.hyser@oracle.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Peter Collingbourne <pcc@google.com>, caoxiaofeng@yulong.com,
-        David Hildenbrand <david@redhat.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-team <kernel-team@android.com>,
-        syzbot+aa7b3d4b35f9dc46a366@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     baolu.lu@linux.intel.com, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iommu: Remove trivial ops->capable implementations
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org,
+        will@kernel.org
+References: <8413578c6f8a7cf75530b00cba8f10f5b88f8517.1644495614.git.robin.murphy@arm.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <8413578c6f8a7cf75530b00cba8f10f5b88f8517.1644495614.git.robin.murphy@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,71 +64,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 11:52 AM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Thu, Feb 10, 2022 at 11:35 AM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Thu, Feb 10, 2022 at 08:00:15AM -0800, Suren Baghdasaryan wrote:
-> > > On Thu, Feb 10, 2022 at 7:27 AM Matthew Wilcox <willy@infradead.org> wrote:
-> > > >
-> > > > On Thu, Feb 10, 2022 at 07:18:24AM -0800, Suren Baghdasaryan wrote:
-> > > > > On Thu, Feb 10, 2022 at 4:40 AM 'Michal Hocko' via kernel-team
-> > > > > <kernel-team@android.com> wrote:
-> > > > > >
-> > > > > > On Wed 09-02-22 20:32:15, Suren Baghdasaryan wrote:
-> > > > > > > When adjacent vmas are being merged it can result in the vma that was
-> > > > > > > originally passed to madvise_update_vma being destroyed. In the current
-> > > > > > > implementation, the name parameter passed to madvise_update_vma points
-> > > > > > > directly to vma->anon_name->name and it is used after the call to
-> > > > > > > vma_merge. In the cases when vma_merge merges the original vma and
-> > > > > > > destroys it, this will result in use-after-free bug as shown below:
-> > > > > > >
-> > > > > > > madvise_vma_behavior << passes vma->anon_name->name as name param
-> > > > > > >   madvise_update_vma(name)
-> > > > > > >     vma_merge
-> > > > > > >       __vma_adjust
-> > > > > > >         vm_area_free <-- frees the vma
-> > > > > > >     replace_vma_anon_name(name) <-- UAF
-> > > > > > >
-> > > > > > > Fix this by raising the name refcount and stabilizing it. Introduce
-> > > > > > > vma_anon_name_{get/put} API for this purpose.
-> > > > > >
-> > > > > > What is the reason that madvise_update_vma uses the naked name rather
-> > > > > > than the encapsulated anon_vma_name? This really just begs for problems.
-> > > > >
-> > > > > The reason for that is the second place it's being used from the prctl syscall:
-> > > > >
-> > > > > prctl_set_vma
-> > > > >   madvise_set_anon_name
-> > > > >     madvise_vma_anon_name
-> > > > >       madvise_update_vma
-> > > > >
-> > > > > In that case the name parameter is not part of any anon_vma_name
-> > > > > struct and therefore is stable. I can add a comment to
-> > > > > madvise_update_vma indicating that the name parameter has to be stable
-> > > > > if that helps.
-> > > >
-> > > > Seems to me it'd simplify things if replace_vma_anon_name() and
-> > > > madvise_vma_anon_name() took a struct anon_vma_name instead of
-> > > > a bare char *.  You could construct it in madvise_set_anon_name().
-> > >
-> > > Ok, this can be done. However I don't think changing
-> > > replace_vma_anon_name() to accept a struct anon_vma_name would be a
-> > > good idea. Reader might think that the object being passed will become
-> > > the vma->anon_name of the vma, while in reality that's not the case.
-> >
-> > Why woud we not want that to be the case?  It's a refcounted name.
-> > I don't see why it shouldn't be shared between multiple VMAs that
-> > have the same name?
->
-> You are right. After I reworked the code it became apparent that
-> replace_vma_anon_name() should use anon_vma_name. I have made that
-> change and am testing it now. Hopefully no new surprises pop up.
+On 2/10/22 8:29 PM, Robin Murphy wrote:
+> Implementing ops->capable to always return false is pointless since it's
+> the default behaviour anyway. Clean up the unnecessary implementations.
+> 
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+> 
+> Spinning this out of my bus ops stuff (currently 30 patches and
+> counting...) since it would be better off alongside Baolu's cleanup
+> series to avoid conflicts, and I want to depend on those patches for
+> dev_iommu_ops() anyway.
+> 
+>   drivers/iommu/msm_iommu.c  | 6 ------
+>   drivers/iommu/tegra-gart.c | 6 ------
+>   drivers/iommu/tegra-smmu.c | 6 ------
+>   3 files changed, 18 deletions(-)
+> 
+> diff --git a/drivers/iommu/msm_iommu.c b/drivers/iommu/msm_iommu.c
+> index 06bde6b66732..22061ddbd5df 100644
+> --- a/drivers/iommu/msm_iommu.c
+> +++ b/drivers/iommu/msm_iommu.c
+> @@ -558,11 +558,6 @@ static phys_addr_t msm_iommu_iova_to_phys(struct iommu_domain *domain,
+>   	return ret;
+>   }
+>   
+> -static bool msm_iommu_capable(enum iommu_cap cap)
+> -{
+> -	return false;
+> -}
+> -
+>   static void print_ctx_regs(void __iomem *base, int ctx)
+>   {
+>   	unsigned int fsr = GET_FSR(base, ctx);
+> @@ -672,7 +667,6 @@ irqreturn_t msm_iommu_fault_handler(int irq, void *dev_id)
+>   }
+>   
+>   static struct iommu_ops msm_iommu_ops = {
+> -	.capable = msm_iommu_capable,
+>   	.domain_alloc = msm_iommu_domain_alloc,
+>   	.domain_free = msm_iommu_domain_free,
+>   	.attach_dev = msm_iommu_attach_dev,
+> diff --git a/drivers/iommu/tegra-gart.c b/drivers/iommu/tegra-gart.c
+> index 6a358f92c7e5..bbd287d19324 100644
+> --- a/drivers/iommu/tegra-gart.c
+> +++ b/drivers/iommu/tegra-gart.c
+> @@ -238,11 +238,6 @@ static phys_addr_t gart_iommu_iova_to_phys(struct iommu_domain *domain,
+>   	return pte & GART_PAGE_MASK;
+>   }
+>   
+> -static bool gart_iommu_capable(enum iommu_cap cap)
+> -{
+> -	return false;
+> -}
+> -
+>   static struct iommu_device *gart_iommu_probe_device(struct device *dev)
+>   {
+>   	if (!dev_iommu_fwspec_get(dev))
+> @@ -276,7 +271,6 @@ static void gart_iommu_sync(struct iommu_domain *domain,
+>   }
+>   
+>   static const struct iommu_ops gart_iommu_ops = {
+> -	.capable	= gart_iommu_capable,
+>   	.domain_alloc	= gart_iommu_domain_alloc,
+>   	.domain_free	= gart_iommu_domain_free,
+>   	.attach_dev	= gart_iommu_attach_dev,
+> diff --git a/drivers/iommu/tegra-smmu.c b/drivers/iommu/tegra-smmu.c
+> index e900e3c46903..43df44f918a1 100644
+> --- a/drivers/iommu/tegra-smmu.c
+> +++ b/drivers/iommu/tegra-smmu.c
+> @@ -272,11 +272,6 @@ static void tegra_smmu_free_asid(struct tegra_smmu *smmu, unsigned int id)
+>   	clear_bit(id, smmu->asids);
+>   }
+>   
+> -static bool tegra_smmu_capable(enum iommu_cap cap)
+> -{
+> -	return false;
+> -}
+> -
+>   static struct iommu_domain *tegra_smmu_domain_alloc(unsigned type)
+>   {
+>   	struct tegra_smmu_as *as;
+> @@ -967,7 +962,6 @@ static int tegra_smmu_of_xlate(struct device *dev,
+>   }
+>   
+>   static const struct iommu_ops tegra_smmu_ops = {
+> -	.capable = tegra_smmu_capable,
+>   	.domain_alloc = tegra_smmu_domain_alloc,
+>   	.domain_free = tegra_smmu_domain_free,
+>   	.attach_dev = tegra_smmu_attach_dev,
 
-v3 is posted at
-https://lore.kernel.org/all/20220211013032.623763-1-surenb@google.com/
+Looks good to me.
 
-> Thanks,
-> Suren.
->
-> >
+Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+
+Best regards,
+baolu

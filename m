@@ -2,63 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79FC84B2089
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 09:48:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF6C4B2091
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 09:50:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348196AbiBKIsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 03:48:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39068 "EHLO
+        id S1348185AbiBKIuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 03:50:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348187AbiBKIsg (ORCPT
+        with ESMTP id S229462AbiBKIt6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 03:48:36 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8129AE54
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 00:48:35 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4Jw6hx4vY8z9sSM;
-        Fri, 11 Feb 2022 09:48:33 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id klDIzGqmxZ6I; Fri, 11 Feb 2022 09:48:33 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4Jw6hx4Bhzz9sSL;
-        Fri, 11 Feb 2022 09:48:33 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7ED5A8B77D;
-        Fri, 11 Feb 2022 09:48:33 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id rtRKHQ_BcwTx; Fri, 11 Feb 2022 09:48:33 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.6.91])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 36EBB8B764;
-        Fri, 11 Feb 2022 09:48:33 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21B8mNGc936763
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 11 Feb 2022 09:48:23 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21B8mMRd936762;
-        Fri, 11 Feb 2022 09:48:22 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        netdev@vger.kernel.org
-Subject: [PATCH] net: Remove branch in csum_shift()
-Date:   Fri, 11 Feb 2022 09:48:16 +0100
-Message-Id: <efeeb0b9979b0377cd313311ad29cf0ac060ae4b.1644569106.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.34.1
+        Fri, 11 Feb 2022 03:49:58 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6687E8A;
+        Fri, 11 Feb 2022 00:49:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644569397; x=1676105397;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=852yCQeyi6TTe+G3DozY7ao5wBPlsQfmMMcR8YALnuw=;
+  b=JLT4c39Wv9SeFkvfPtKVeByq+Oh0c2jqPumnWvPG3HO6C6s0fcceB/F1
+   xJ+s6PTDnaxrcFetz4b0fduZO3msH0jNgS+weM7SNWxqSQsGEvkhmYCSP
+   Be4Fds4terCg7YWSzC1jSBHUg7k4F8JBBcOg5IkX0ahBajbLGSaUvzuvq
+   EtGJZOZZKoYRZtqs5NZkqM8aeg29MciSQ3Rd5QGliHMya7SUflC1xrV+X
+   O0lvM41z4SSgyP6fMrVAm7eUeJu4mN4p64nOzReupBK4yT6OeV77MQYlL
+   KPh2Wn3QqFM2U9PxpxKZD9wAc1BXMwZuRUEb30mjLAxKimyJY2wvc51T9
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="312974539"
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="312974539"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 00:49:57 -0800
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="630166731"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 00:49:52 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nIRbq-003NFF-R8;
+        Fri, 11 Feb 2022 10:48:54 +0200
+Date:   Fri, 11 Feb 2022 10:48:54 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-kernel@vger.kernel.org, Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
+Subject: Re: [RFC PATCH 05/49] qed: rework qed_rdma_bmap_free()
+Message-ID: <YgYi9p7oeR1NAKzv@smile.fi.intel.com>
+References: <20220210224933.379149-1-yury.norov@gmail.com>
+ <20220210224933.379149-6-yury.norov@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1644569294; l=1792; s=20211009; h=from:subject:message-id; bh=bn4qVlTEECkFmk/D3ReBpu/1ueTQNT/DDGPwdR54bMw=; b=YfWOLv3f7QPdV7JOLEvppeShwBCfk+aGgbZur22GW+m9WX6XeuSeUHvizGFhnuzg3csBcc4Zfcbu MOrUk6ZGDv8PKhpkllz2TJosNNk2sqMNIrrXLeIPI0EXjv6RY/gs
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210224933.379149-6-yury.norov@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,58 +78,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Today's implementation of csum_shift() leads to branching based on
-parity of 'offset'
+On Thu, Feb 10, 2022 at 02:48:49PM -0800, Yury Norov wrote:
+> qed_rdma_bmap_free() is mostly an opencoded version of printk("%*pb").
+> Using %*pb format simplifies the code, and helps to avoid inefficient
+> usage of bitmap_weight().
+> 
+> While here, reorganize logic to avoid calculating bmap weight if check
+> is false.
 
-	000002f8 <csum_block_add>:
-	     2f8:	70 a5 00 01 	andi.   r5,r5,1
-	     2fc:	41 a2 00 08 	beq     304 <csum_block_add+0xc>
-	     300:	54 84 c0 3e 	rotlwi  r4,r4,24
-	     304:	7c 63 20 14 	addc    r3,r3,r4
-	     308:	7c 63 01 94 	addze   r3,r3
-	     30c:	4e 80 00 20 	blr
+I like this kind of patches,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Use first bit of 'offset' directly as input of the rotation instead of
-branching.
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+> 
+> This is RFC because it changes lines printing format to bitmap %*pb. If
+> it hurts userspace, it's better to drop the patch.
 
-	000002f8 <csum_block_add>:
-	     2f8:	54 a5 1f 38 	rlwinm  r5,r5,3,28,28
-	     2fc:	20 a5 00 20 	subfic  r5,r5,32
-	     300:	5c 84 28 3e 	rotlw   r4,r4,r5
-	     304:	7c 63 20 14 	addc    r3,r3,r4
-	     308:	7c 63 01 94 	addze   r3,r3
-	     30c:	4e 80 00 20 	blr
+How? The only way is some strange script that parses dmesg, but dmesg almost
+never was an ABI, moreover, with printk() indexing feature (recently
+introduced) the one who parses such messages can actually find the (new)
+format as well.
 
-And change to left shift instead of right shift to skip one more
-instruction. This has no impact on the final sum.
+>  drivers/net/ethernet/qlogic/qed/qed_rdma.c | 45 +++++++---------------
+>  1 file changed, 14 insertions(+), 31 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/qlogic/qed/qed_rdma.c b/drivers/net/ethernet/qlogic/qed/qed_rdma.c
+> index 23b668de4640..f4c04af9d4dd 100644
+> --- a/drivers/net/ethernet/qlogic/qed/qed_rdma.c
+> +++ b/drivers/net/ethernet/qlogic/qed/qed_rdma.c
+> @@ -319,44 +319,27 @@ static int qed_rdma_alloc(struct qed_hwfn *p_hwfn)
+>  void qed_rdma_bmap_free(struct qed_hwfn *p_hwfn,
+>  			struct qed_bmap *bmap, bool check)
+>  {
+> -	int weight = bitmap_weight(bmap->bitmap, bmap->max_count);
+> -	int last_line = bmap->max_count / (64 * 8);
+> -	int last_item = last_line * 8 +
+> -	    DIV_ROUND_UP(bmap->max_count % (64 * 8), 64);
+> -	u64 *pmap = (u64 *)bmap->bitmap;
+> -	int line, item, offset;
+> -	u8 str_last_line[200] = { 0 };
+> -
+> -	if (!weight || !check)
+> +	unsigned int bit, weight, nbits;
+> +	unsigned long *b;
+> +
+> +	if (!check)
+> +		goto end;
+> +
+> +	weight = bitmap_weight(bmap->bitmap, bmap->max_count);
+> +	if (!weight)
+>  		goto end;
+>  
+>  	DP_NOTICE(p_hwfn,
+>  		  "%s bitmap not free - size=%d, weight=%d, 512 bits per line\n",
+>  		  bmap->name, bmap->max_count, weight);
+>  
+> -	/* print aligned non-zero lines, if any */
+> -	for (item = 0, line = 0; line < last_line; line++, item += 8)
+> -		if (bitmap_weight((unsigned long *)&pmap[item], 64 * 8))
+> +	for (bit = 0; bit < bmap->max_count; bit += 512) {
+> +		b =  bmap->bitmap + BITS_TO_LONGS(bit);
+> +		nbits = min(bmap->max_count - bit, 512);
+> +
+> +		if (!bitmap_empty(b, nbits))
+>  			DP_NOTICE(p_hwfn,
+> -				  "line 0x%04x: 0x%016llx 0x%016llx 0x%016llx 0x%016llx 0x%016llx 0x%016llx 0x%016llx 0x%016llx\n",
+> -				  line,
+> -				  pmap[item],
+> -				  pmap[item + 1],
+> -				  pmap[item + 2],
+> -				  pmap[item + 3],
+> -				  pmap[item + 4],
+> -				  pmap[item + 5],
+> -				  pmap[item + 6], pmap[item + 7]);
+> -
+> -	/* print last unaligned non-zero line, if any */
+> -	if ((bmap->max_count % (64 * 8)) &&
+> -	    (bitmap_weight((unsigned long *)&pmap[item],
+> -			   bmap->max_count - item * 64))) {
+> -		offset = sprintf(str_last_line, "line 0x%04x: ", line);
+> -		for (; item < last_item; item++)
+> -			offset += sprintf(str_last_line + offset,
+> -					  "0x%016llx ", pmap[item]);
+> -		DP_NOTICE(p_hwfn, "%s\n", str_last_line);
+> +				  "line 0x%04x: %*pb\n", bit / 512, nbits, b);
+>  	}
+>  
+>  end:
+> -- 
+> 2.32.0
+> 
 
-	000002f8 <csum_block_add>:
-	     2f8:	54 a5 1f 38 	rlwinm  r5,r5,3,28,28
-	     2fc:	5c 84 28 3e 	rotlw   r4,r4,r5
-	     300:	7c 63 20 14 	addc    r3,r3,r4
-	     304:	7c 63 01 94 	addze   r3,r3
-	     308:	4e 80 00 20 	blr
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- include/net/checksum.h | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/include/net/checksum.h b/include/net/checksum.h
-index 5218041e5c8f..9badcd5532ef 100644
---- a/include/net/checksum.h
-+++ b/include/net/checksum.h
-@@ -83,9 +83,7 @@ static inline __sum16 csum16_sub(__sum16 csum, __be16 addend)
- static inline __wsum csum_shift(__wsum sum, int offset)
- {
- 	/* rotate sum to align it with a 16b boundary */
--	if (offset & 1)
--		return (__force __wsum)ror32((__force u32)sum, 8);
--	return sum;
-+	return (__force __wsum)rol32((__force u32)sum, (offset & 1) << 3);
- }
- 
- static inline __wsum
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 

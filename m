@@ -2,127 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE72A4B225D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:45:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D0A4B224F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245565AbiBKJpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 04:45:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60354 "EHLO
+        id S1348706AbiBKJlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 04:41:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237727AbiBKJpM (ORCPT
+        with ESMTP id S232618AbiBKJlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 04:45:12 -0500
-X-Greylist: delayed 308 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 01:45:11 PST
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17EFBAA
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:45:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1644572710;
-        bh=NM1bKcmX/dl/5DPV1+dpYflnMkoZbUuMneJ+tJvHcEM=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=Qu0TsK754zEm2zs6RXcbE7TZv2wkUJ8TSxF9qXjH9577evcsYavUbHttmrX/77ssU
-         sGKeYNAg1zLAzE7XAJwq+Eha7IWWS6DV6mjU4Y5gMquq5szuMclSbqhKwi9FRhQNuZ
-         FXjzyqS/Eka4mLuDmCXZwqHsvY8grQ+xvfjHGk3c=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.143.79]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MMGRA-1nYT5Z0T3O-00JM7j; Fri, 11
- Feb 2022 10:39:55 +0100
-Message-ID: <17f233db-9591-3093-5e63-29e1c8f4b237@gmx.de>
-Date:   Fri, 11 Feb 2022 10:39:49 +0100
+        Fri, 11 Feb 2022 04:41:44 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B00010A3;
+        Fri, 11 Feb 2022 01:41:44 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id y5so15270628pfe.4;
+        Fri, 11 Feb 2022 01:41:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XrEai599YxaamrkRq48SWPy93iIT1IIuRy8NI79Zo+Y=;
+        b=LsTNIEuvqPTGl3ix7wTQCjwLYF5imHGU4tSEOIY7ZRR2H+doCaFKNKRM/CLry+jcqW
+         DWri0FV6vs0ac5BUohuHUBgR7/+MuMfk+eAixaj7hJVgLqDq0vuNYTgEqPAY0e6B4Zwe
+         akfex4GhCMrEnmjTFPBDcgCidOAkTsvNy90qJLFOsbksNcm6+uqtMN+Ni6TDuyU/nQeY
+         Z4urRPnNGgWtEzwU9zDzZV1IrU/53fGdlE3SU7yPa6LGQ35sJRJ5Kydi1dnPMBVu0ad0
+         +XucxUYq8/mdzHGr/SXSA1nxcth/yG28XwHtr0K7cud4HCX5vahAg2xt0zavht3iAu/v
+         VqhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XrEai599YxaamrkRq48SWPy93iIT1IIuRy8NI79Zo+Y=;
+        b=4Dg+RGfq/tdCxKnmqdIeMoMg/suWFvtQRz1IdiOSAUCs/ZdiU6yNDHOYsE8qyok5Lb
+         pcC4Dx1540QTH70jVKyj3tzOB0OD8mlm+WLiTUZUlMMus82G0aGG6wfmHL7Mb7bsuglB
+         Sm3kN3TVLRBYdMdw3g7o8fC7XEoeCj0GhOI/tYF/Gdd7VUPRclf16YQqXa35gQAN296z
+         cx3mVf1UioK9P/APijXD1mUezajK20M7rw/nlcUGZFR1tHdhupxUhP9ko4WnRQK+pGoA
+         gFrSo79siEpy8T7sdGwfO47yFGWIGwXSGNHOc+oeYP+G2L1j5fXGXvbqgeWgew2U1KKp
+         qFWg==
+X-Gm-Message-State: AOAM533zwwifGegElZR39KyIUpvzWaGpwHxvW575FMP99spap+1e7gB/
+        aG+0vypm7N4Itu7gzPUsLaw=
+X-Google-Smtp-Source: ABdhPJwk54lydLL2kA70IfDAxCRcJE/q6L2tNckyTDbGML9zeATouDwO/q0bIaXlLlZJ1b+kk7i/mw==
+X-Received: by 2002:a05:6a00:b50:: with SMTP id p16mr897170pfo.22.1644572503799;
+        Fri, 11 Feb 2022 01:41:43 -0800 (PST)
+Received: from shinobu (113x37x72x24.ap113.ftth.ucom.ne.jp. [113.37.72.24])
+        by smtp.gmail.com with ESMTPSA id t138sm7525193pfc.66.2022.02.11.01.41.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 01:41:43 -0800 (PST)
+Date:   Fri, 11 Feb 2022 18:41:37 +0900
+From:   William Breathitt Gray <vilhelm.gray@gmail.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        David Jander <david@protonic.nl>,
+        Robin van der Gracht <robin@protonic.nl>,
+        linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>
+Subject: Re: [PATCH v2 0/2] counter: push event on every pulse
+Message-ID: <YgYvUdgkkWixDir4@shinobu>
+References: <20220203135727.2374052-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] video: s3c-fb: Use platform_get_irq() to get the
- interrupt
-Content-Language: en-US
-To:     zhaoxiao <zhaoxiao@uniontech.com>, jingoohan1@gmail.com
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220211032755.2271-1-zhaoxiao@uniontech.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20220211032755.2271-1-zhaoxiao@uniontech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:rCkG0fxvjucaruFew1umM13DmyIqZn1revwD1+1XenYM/N02t2F
- lP1ajjY6yqN/CSzhJKFr8CdPiqyL/yp6ZLVx2AItRmNLoN1+xWp5bmBC5r28l/4GtxqKtpm
- Rx2o1+lxCNXZ2duS5CoAQ0ZqmQWfedfiDuETfsBa49upWXy5rHEGaJVMdfgYx4MsaJr+xv2
- 5NUZDlIzBT/UUNHAqsILA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5gNyjIadc58=:5DOPWZ/AshOwzaGE3hQ1Rw
- I2Pmkd4wSZVWFYDmioKiGSNrV1mq+5rxkhSmyagBjpSUfwXweeqLrrYVVXhSG4xwHwKSA03We
- dTpLx8TBp1kp4iY4/NZRIVz0aeoRFZ+918u4PY+UxYKtd4AF6bm6BPaIac2fZrZZUC1GBzBTR
- 4cCoPwDpKe7T5V/7jOgz+ueQOoEe4DuVGmt8XdGWdUKnLC2+O5K7hmoVBe3oKOlMUfKuaA7nb
- u2IH6RAPE3Y2iX8f/4EhPQZdeeNiB4UxxgaQVv2lL7zsxe6LStdDAwOqT7WVHAokaeUWkRpye
- 36qSZMgcURbh026jJzPw19GzEnreau/QlGcfbcoPlflyQfFf+ItQXubnQAdUhVcBI5kvHSe8+
- ie2FRzczBQa8ACQCSRk/5rVnT7QgMKvLV6j1H9DS+n99PqQ2O/qoj02ni2SolmQitW8+JErlP
- 8ZCkYLuKYHtUh8W2/qRIZzkNz8VcJl5SzAqC29R+Ts+85hFrrLZYco1tW02q2BX1GV1h7Pr+S
- sN18+WTHwJdyQOJA7Wje5RmBafa4MMFPLX3aBHqwrYCEn3GgxR5CFYTmw+b7kXUN44M9gXPpB
- QwE4w983HXam+mmOnBIHTHdVypnqdYI1kTI+eqySFg2UMu3puUyX6RpADbjD7wrLw0QY/NTNL
- vsHed/EABmTAIsDdyYoaw9ZQdp0lZuJb0aqGfUoYiK0F0A8BwMnhBriYkA1wMGXXmGMCbb+QB
- 5X+hBi/3zK1jTAroEFAhF9ev3DgV43Iupkb5EWFS4q+3qubwZ3/v9wjRLKzX7oxEw0yv4wK2B
- aDNONr9rnEssBI8tW17Vi4sCNGyqiIn+VICztiV3s4C48Gyp2ZjiMHz2TF8FG4QBThICLNyD/
- IEJo2kV57NG4yZPlDxVO+cFNp4d2nKFdHyglmLbTsMxovXRJu1N40Pzts1AtVh4zC+F+4pSL+
- gHDxy32LFOqLBKFUYcOC/YWxpM0cozzTtq9wN0VvLCi7fJzUCsf1xy7Q6FjGRyulOEBurkAFw
- ndLhI4dhkbTd9Z6f2mQ8QrJaRHp22ZhFmXs/QMzv9RK2ZZ5UWPWK8goZwcotZMKvyA==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ospNvinesCUFwJ6X"
+Content-Disposition: inline
+In-Reply-To: <20220203135727.2374052-1-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/11/22 04:27, zhaoxiao wrote:
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypassed the hierarchical setup and messed up the
-> irq chaining.
->
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq().
->
-> Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
 
-applied.
-Thanks!
-Helge
+--ospNvinesCUFwJ6X
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  drivers/video/fbdev/s3c-fb.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/video/fbdev/s3c-fb.c b/drivers/video/fbdev/s3c-fb.c
-> index 3b134e1bbc38..6ead7d3e2312 100644
-> --- a/drivers/video/fbdev/s3c-fb.c
-> +++ b/drivers/video/fbdev/s3c-fb.c
-> @@ -1360,7 +1360,6 @@ static int s3c_fb_probe(struct platform_device *pd=
-ev)
->  	struct device *dev =3D &pdev->dev;
->  	struct s3c_fb_platdata *pd;
->  	struct s3c_fb *sfb;
-> -	struct resource *res;
->  	int win;
->  	int ret =3D 0;
->  	u32 reg;
-> @@ -1418,13 +1417,13 @@ static int s3c_fb_probe(struct platform_device *=
-pdev)
->  		goto err_lcd_clk;
->  	}
->
-> -	res =3D platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-> -	if (!res) {
-> +	sfb->irq_no =3D platform_get_irq(pdev, 0);
-> +	if (sfb->irq_no < 0) {
->  		dev_err(dev, "failed to acquire irq resource\n");
->  		ret =3D -ENOENT;
->  		goto err_lcd_clk;
->  	}
-> -	sfb->irq_no =3D res->start;
-> +
->  	ret =3D devm_request_irq(dev, sfb->irq_no, s3c_fb_irq,
->  			  0, "s3c_fb", sfb);
->  	if (ret) {
->
+On Thu, Feb 03, 2022 at 02:57:25PM +0100, Oleksij Rempel wrote:
+> changes v2
+> - rebase against latest kernel and fix some regressions
+> - add COUNTER_EVENT_CHANGE_OF_STATE event
+>=20
+> Add support of push even on every pulse.
+>=20
+> Oleksij Rempel (2):
+>   counter: add new COUNTER_EVENT_CHANGE_OF_STATE
+>   counter: interrupt-cnt: add counter_push_event()
+>=20
+>  drivers/counter/interrupt-cnt.c | 7 +++++--
+>  include/uapi/linux/counter.h    | 2 ++
+>  2 files changed, 7 insertions(+), 2 deletions(-)
+>=20
+> --=20
+> 2.30.2
 
+Thank you Oleksij, I'm picking this up now and I'll submit it with the
+rest of the Counter patches for this cycle.
+
+William Breathitt Gray
+
+--ospNvinesCUFwJ6X
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAmIGL1EACgkQhvpINdm7
+VJLwOBAAsvgnVSxZWHuHqL8JXvacII6IVcSzvO5YEIsy8Gz2Qprj6Dyev6rqQWhe
+8UsJElw0hLI9NLt68S6NA4O+ZHFP4PTdU7Qx86jngwcMCqPrfVd7oq4EgNtTBW1Y
+CHdGZUN8yV9KkpmS7kCyRBo1rQJiOfuVkyw1w/8C1Sb94bmjaK35V4NOmXl59wMs
+Jj7PSZyBIdtOO2ar1IHT9tnhxyA5NuPaWCf0qyG9ztCiAGmSSWZR4jXPGWDHyYB6
+ps9N54AllrCpY6hEP3Y9KZdTFnCUB3L16zTCNBilwLSuhVy9utpAdjxj1HIVCd1N
+KoqDeIU+SqqY6DE4nrRXz1Rwk+HrcihzKUkRreLVfhuTWZJiNIBs1j2befx5h3QJ
+IaXtzmpI5B95KOIAHL0CwwFzAsydkNr8Bhc+ihsiFaBnoI5xY6TMtT03p7kKxxsv
+0eUjP3tBhRjh/3rlzDpIJ+PD2scKjCypIBfp18jxALzkkkA87yjn6BZZMA4zTBmc
++WDaTK1YFfzeF1JVPhxxkEtX2X2DVtdceh8OO+XlSmMGUF+BfG1mv2HxhXiArtIM
+ZP2490zZuv4I+sIV5WmIaZf7zutVP8WyRJpDQ6/JrujXhOSZuONtihP2Fe0W3ZDE
+1gCnChRZrqlCTinBud0Q3wFbTGWBEWb3AnJ8Xb/rXo2mk1h44JQ=
+=loYF
+-----END PGP SIGNATURE-----
+
+--ospNvinesCUFwJ6X--

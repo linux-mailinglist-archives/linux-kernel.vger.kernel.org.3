@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 821BD4B1B47
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 02:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D136E4B1B4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 02:33:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346885AbiBKBaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 20:30:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42332 "EHLO
+        id S1346893AbiBKBdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 20:33:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236803AbiBKBah (ORCPT
+        with ESMTP id S1346853AbiBKBdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 20:30:37 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFB2270E
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:30:37 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id a19-20020a25ca13000000b0061db44646b3so15848786ybg.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:30:37 -0800 (PST)
+        Thu, 10 Feb 2022 20:33:03 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D292E2606
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:33:02 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id h14-20020a17090a130e00b001b88991a305so10418592pja.3
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:33:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=RwWv/SBL/Nyi8PpdOWc2WYYolbunK2i/wwZuLVvrMdU=;
-        b=Z4Gcf5jxsCohz3DzslMLUD9BZ0sfIvdQc/l/pfpYkaUizqSs5vQTWP9KlApyuwnYCr
-         qy247Gemtbao51i9GOoeeVL8rOFfjxRT9wak9oSCVYh+4cQOjBAbpKIqMXGkWbt/zD09
-         msccdqxt52B6jGckc2BsgP1Q6P6Kp0BlzBIkCLJn+KvVbnGKDwfcRlNKv6pRFUoe+//i
-         cTxLOD6/FMIBKG+JKDc254144JQxm1nlu+JM/ra8cOmfS9L3T911IVV6So8v11uPLwJm
-         vZd9G/InsrCn5Gq5EHq0cTvIRB63h3F/h1SDH+GBPkwKJ3HlHxvqNMl3VpNFNPfugBUs
-         0cbg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=86u7Yk1s45yAdaNuHNZmXJLjbjBW6l2gIfCXVJT8/Z4=;
+        b=RrsR7A4XtwL4br8LYXlsw8s9DV6FLbY+HBjKfavqOifKi1HaR5XkB85e4qQ0uo9kv4
+         b8pnMpdv07544nKwyBrPY4LBqx+neSgqcqRfnfHwPOUZ1PiQc1v1rJrME9XFjWoY3GRf
+         mPNBTlLHSR+t+PxCkYd+JVNSDSLiIxywte76S/CvYC0il0KPCSGPMhV6xCdcSyq5eI1s
+         CkxyBRQJ+yCvk+qkDtJRpaA+RH8OXbibP1JQRQMRtZhlY/LH/Q1Dqiw/QlXrGrdOEgjD
+         zrgngkLY41dqJlGNTTKjlsLFPKxwgjmlkozkhL1aAL+jc19qvVhhmd1FY6hYdFxhP6D1
+         CCSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=RwWv/SBL/Nyi8PpdOWc2WYYolbunK2i/wwZuLVvrMdU=;
-        b=aPdJlrr+W3srTFGszHg9DmJ7LmXW235xeCVJZbD5VZsGXoiE6s/2DBAd4GHz05iml2
-         h9E5SCFKR/dH6/WJ3pkaN8mJKFyE0jPvjDStWz3fbwSHstsXfeDCwsfvN2C8jXctsaJv
-         XSf87ss/Gh7870+90PWVJvzW6hLYxmtmdDy961A5hiM7wJac5IDPCNoJDQhJKdEFLc/O
-         9McNEJn6oZhVkfo21JgIaoZ1EL+q0e2/2XQ2DcIbf/fGztCt/GkudwQw74YjeB7gTpB2
-         KhZHERcMPhj0YcV18CnFnDucWlqSHT5XTDjQ8BNBxgmCLNGSNXEJQQV6UVnvnp8grow+
-         4UxA==
-X-Gm-Message-State: AOAM532V0P7wpzfyO1ESELSLMXh1eRgZGcmlkYAmAHdoXGqyqx2CwbAC
-        uulUCtqFjVhDcCT0ZY1Nusy80w7wmho=
-X-Google-Smtp-Source: ABdhPJzj3s6SYcdRagPBA21xyaJguhhzfjpx9zuxrGEaA597KYb2tBxd2wNkgkrtJfb4pye2OSntVUn2lr4=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:cf5c:490c:4286:b6a6])
- (user=surenb job=sendgmr) by 2002:a25:b98c:: with SMTP id r12mr9938344ybg.529.1644543036677;
- Thu, 10 Feb 2022 17:30:36 -0800 (PST)
-Date:   Thu, 10 Feb 2022 17:30:32 -0800
-Message-Id: <20220211013032.623763-1-surenb@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH v3 1/1] mm: fix use-after-free when anon vma name is used
- after vma is freed
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     ccross@google.com, sumit.semwal@linaro.org, mhocko@suse.com,
-        dave.hansen@intel.com, keescook@chromium.org, willy@infradead.org,
-        kirill.shutemov@linux.intel.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, ebiederm@xmission.com, brauner@kernel.org,
-        legion@kernel.org, ran.xiaokai@zte.com.cn, sashal@kernel.org,
-        chris.hyser@oracle.com, dave@stgolabs.net, pcc@google.com,
-        caoxiaofeng@yulong.com, david@redhat.com, gorcunov@gmail.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, surenb@google.com,
-        syzbot+aa7b3d4b35f9dc46a366@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=86u7Yk1s45yAdaNuHNZmXJLjbjBW6l2gIfCXVJT8/Z4=;
+        b=Dp/704mTagRqjRC5dmCe3SEX8OLjgbH2JkqCr24vlVjHAP1w+0kBEBJUmPxN/rEw+G
+         LuYphNe/9ifF3k4tIxa/HsH9Sc6vlwj/hpBBCWsZQeEezsJZ9z/HeGD6Pjf0xV0NVobn
+         mJT9l6VCTX13ChWJMsjA+//ORTuhg1/+MkOhU+W2cfk+1AEagpIkuk3tjpeTpHNxMM21
+         /a/53W/hJESgIBYGGIyHtNY+gohjafYE+13QLlFgj0ol9Qc9q7fO03uoPFG2Mr8Y9dYj
+         yq/m4xPjm4xZJJ7VOG4W6qf1aMQpuMrD+3PHebXFWXJc8HqBeiSTlytSklH5yxLBWpPN
+         Nd5Q==
+X-Gm-Message-State: AOAM531ElKtMr41MmEbQ3Elj+QZVZX9rzDftVdfdcE6ArtFotlOTzquU
+        cj4dFz8MitM0wbld4DlMzOYA8g==
+X-Google-Smtp-Source: ABdhPJyst66gui/O0sfzKXlaPn3TryFHdo+e13zHCHhJjLtFCy6iPVCfEcOyXBcmL5MK6y4TynHKLQ==
+X-Received: by 2002:a17:902:d88e:: with SMTP id b14mr10099564plz.4.1644543181882;
+        Thu, 10 Feb 2022 17:33:01 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id il18sm3723408pjb.27.2022.02.10.17.33.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 17:33:01 -0800 (PST)
+Date:   Fri, 11 Feb 2022 01:32:57 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com
+Subject: Re: [PATCH 09/12] KVM: MMU: look for a cached PGD when going from
+ 32-bit to 64-bit
+Message-ID: <YgW8ySdRSWjPvOQx@google.com>
+References: <20220209170020.1775368-1-pbonzini@redhat.com>
+ <20220209170020.1775368-10-pbonzini@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209170020.1775368-10-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,239 +73,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When adjacent vmas are being merged it can result in the vma that was
-originally passed to madvise_update_vma being destroyed. In the current
-implementation, the name parameter passed to madvise_update_vma points
-directly to vma->anon_name->name and it is used after the call to
-vma_merge. In the cases when vma_merge merges the original vma and
-destroys it, this will result in use-after-free bug as shown below:
+On Wed, Feb 09, 2022, Paolo Bonzini wrote:
+> Right now, PGD caching avoids placing a PAE root in the cache by using the
+> old value of mmu->root_level and mmu->shadow_root_level; it does not look
+> for a cached PGD if the old root is a PAE one, and then frees it using
+> kvm_mmu_free_roots.
+> 
+> Change the logic instead to free the uncacheable root early.
+> This way, __kvm_new_mmu_pgd is able to look up the cache when going from
+> 32-bit to 64-bit (if there is a hit, the invalid root becomes the least
+> recently used).  An example of this is nested virtualization with shadow
+> paging, when a 64-bit L1 runs a 32-bit L2.
+> 
+> As a side effect (which is actually the reason why this patch was
+> written), PGD caching does not use the old value of mmu->root_level
+> and mmu->shadow_root_level anymore.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 71 ++++++++++++++++++++++++++++++++----------
+>  1 file changed, 54 insertions(+), 17 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 95d0fa0bb876..f61208ccce43 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -4087,20 +4087,20 @@ static inline bool is_root_usable(struct kvm_mmu_root_info *root, gpa_t pgd,
+>  				  union kvm_mmu_page_role role)
+>  {
+>  	return (role.direct || pgd == root->pgd) &&
+> -	       VALID_PAGE(root->hpa) && to_shadow_page(root->hpa) &&
+> +	       VALID_PAGE(root->hpa) &&
+>  	       role.word == to_shadow_page(root->hpa)->role.word;
+>  }
+>  
+>  /*
+>   * Find out if a previously cached root matching the new pgd/role is available.
+> - * The current root is also inserted into the cache.
+> - * If a matching root was found, it is assigned to kvm_mmu->root.hpa and true is
+> - * returned.
+> - * Otherwise, the LRU root from the cache is assigned to kvm_mmu->root.hpa and
+> - * false is returned. This root should now be freed by the caller.
+> + * If a matching root is found, it is assigned to kvm_mmu->root and
+> + * true is returned.
+> + * If no match is found, the current root becomes the MRU of the cache
 
-madvise_vma_behavior << passes vma->anon_name->name as name param
-  madvise_update_vma(name)
-    vma_merge
-      __vma_adjust
-        vm_area_free <-- frees the vma
-    replace_vma_anon_name(name) <-- UAF
+This is misleading, the current root _always_ becomes the MRU of the cache, i.e.
+the explanation about rotating the cache to do LRU/MRU updates happens regardless
+of whether or not a root is found.
 
-Fix this by raising the name refcount and stabilizing it. Introduce
-vma_anon_name_{get/put} API for this purpose.
+> + * if valid (thus evicting the LRU root), kvm_mmu->root is left invalid,
 
-Fixes: 9a10064f5625 ("mm: add a field to store names for private anonymous memory")
-Reported-by: syzbot+aa7b3d4b35f9dc46a366@syzkaller.appspotmail.com
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
----
-changes in v3:
-- Change madvise_vma_anon_name and replace_vma_anon_name to accept struct
-anon_vma_name* instead of char*, per Michal Hocko and Matthew Wilcox
+The "if valid" part is also misleading, this function is called iff the current
+root is valid.
 
- include/linux/mm_inline.h | 13 ++++++++
- mm/madvise.c              | 67 +++++++++++++++++++++++++++++----------
- 2 files changed, 63 insertions(+), 17 deletions(-)
+> + * and false is returned.
+>   */
+> -static bool cached_root_available(struct kvm_vcpu *vcpu, gpa_t new_pgd,
+> -				  union kvm_mmu_page_role new_role)
+> +static bool cached_root_find_and_promote(struct kvm_vcpu *vcpu, gpa_t new_pgd,
+> +					 union kvm_mmu_page_role new_role)
 
-diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
-index b725839dfe71..2ad9b28499b1 100644
---- a/include/linux/mm_inline.h
-+++ b/include/linux/mm_inline.h
-@@ -145,6 +145,11 @@ static __always_inline void del_page_from_lru_list(struct page *page,
-  */
- extern const char *vma_anon_name(struct vm_area_struct *vma);
- 
-+/* mmap_lock should be read-locked */
-+extern struct anon_vma_name *vma_anon_name_get(struct vm_area_struct *vma);
-+
-+extern void vma_anon_name_put(struct anon_vma_name *anon_name);
-+
- /*
-  * mmap_lock should be read-locked for orig_vma->vm_mm.
-  * mmap_lock should be write-locked for new_vma->vm_mm or new_vma should be
-@@ -176,6 +181,14 @@ static inline const char *vma_anon_name(struct vm_area_struct *vma)
- {
- 	return NULL;
- }
-+
-+static inline
-+struct anon_vma_name *vma_anon_name_get(struct vm_area_struct *vma)
-+{
-+	return NULL;
-+}
-+
-+static inline void vma_anon_name_put(struct anon_vma_name *anon_name) {}
- static inline void dup_vma_anon_name(struct vm_area_struct *orig_vma,
- 			      struct vm_area_struct *new_vma) {}
- static inline void free_vma_anon_name(struct vm_area_struct *vma) {}
-diff --git a/mm/madvise.c b/mm/madvise.c
-index 5604064df464..1807778a5f70 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -70,6 +70,9 @@ static struct anon_vma_name *anon_vma_name_alloc(const char *name)
- 	struct anon_vma_name *anon_name;
- 	size_t count;
- 
-+	if (!name)
-+		return NULL;
-+
- 	/* Add 1 for NUL terminator at the end of the anon_name->name */
- 	count = strlen(name) + 1;
- 	anon_name = kmalloc(struct_size(anon_name, name, count), GFP_KERNEL);
-@@ -103,6 +106,23 @@ const char *vma_anon_name(struct vm_area_struct *vma)
- 	return vma->anon_name->name;
- }
- 
-+struct anon_vma_name *vma_anon_name_get(struct vm_area_struct *vma)
-+{
-+	if (!has_vma_anon_name(vma))
-+		return NULL;
-+
-+	mmap_assert_locked(vma->vm_mm);
-+
-+	kref_get(&vma->anon_name->kref);
-+	return vma->anon_name;
-+}
-+
-+void vma_anon_name_put(struct anon_vma_name *anon_name)
-+{
-+	if (anon_name)
-+		kref_put(&anon_name->kref, vma_anon_name_free);
-+}
-+
- void dup_vma_anon_name(struct vm_area_struct *orig_vma,
- 		       struct vm_area_struct *new_vma)
- {
-@@ -126,33 +146,34 @@ void free_vma_anon_name(struct vm_area_struct *vma)
- }
- 
- /* mmap_lock should be write-locked */
--static int replace_vma_anon_name(struct vm_area_struct *vma, const char *name)
-+static int replace_vma_anon_name(struct vm_area_struct *vma,
-+				 struct anon_vma_name *anon_name)
- {
--	const char *anon_name;
-+	const char *orig_name;
- 
--	if (!name) {
-+	if (!anon_name) {
- 		free_vma_anon_name(vma);
- 		return 0;
- 	}
- 
--	anon_name = vma_anon_name(vma);
--	if (anon_name) {
-+	orig_name = vma_anon_name(vma);
-+	if (orig_name) {
- 		/* Same name, nothing to do here */
--		if (!strcmp(name, anon_name))
-+		if (!strcmp(anon_name->name, orig_name))
- 			return 0;
- 
- 		free_vma_anon_name(vma);
- 	}
--	vma->anon_name = anon_vma_name_alloc(name);
--	if (!vma->anon_name)
--		return -ENOMEM;
-+	kref_get(&anon_name->kref);
-+	vma->anon_name = anon_name;
- 
- 	return 0;
- }
- #else /* CONFIG_ANON_VMA_NAME */
--static int replace_vma_anon_name(struct vm_area_struct *vma, const char *name)
-+static int replace_vma_anon_name(struct vm_area_struct *vma,
-+				 struct anon_vma_name *anon_name)
- {
--	if (name)
-+	if (anon_name)
- 		return -EINVAL;
- 
- 	return 0;
-@@ -161,12 +182,15 @@ static int replace_vma_anon_name(struct vm_area_struct *vma, const char *name)
- /*
-  * Update the vm_flags on region of a vma, splitting it or merging it as
-  * necessary.  Must be called with mmap_sem held for writing;
-+ * Caller should ensure anon_name stability by raising its refcount even when
-+ * anon_name belongs to a valid vma because this function might free that vma.
-  */
- static int madvise_update_vma(struct vm_area_struct *vma,
- 			      struct vm_area_struct **prev, unsigned long start,
- 			      unsigned long end, unsigned long new_flags,
--			      const char *name)
-+			      struct anon_vma_name *anon_name)
- {
-+	const char *name = anon_name ? anon_name->name : NULL;
- 	struct mm_struct *mm = vma->vm_mm;
- 	int error;
- 	pgoff_t pgoff;
-@@ -209,7 +233,7 @@ static int madvise_update_vma(struct vm_area_struct *vma,
- 	 */
- 	vma->vm_flags = new_flags;
- 	if (!vma->vm_file) {
--		error = replace_vma_anon_name(vma, name);
-+		error = replace_vma_anon_name(vma, anon_name);
- 		if (error)
- 			return error;
- 	}
-@@ -976,6 +1000,7 @@ static int madvise_vma_behavior(struct vm_area_struct *vma,
- {
- 	int error;
- 	unsigned long new_flags = vma->vm_flags;
-+	struct anon_vma_name *anon_name;
- 
- 	switch (behavior) {
- 	case MADV_REMOVE:
-@@ -1040,8 +1065,10 @@ static int madvise_vma_behavior(struct vm_area_struct *vma,
- 		break;
- 	}
- 
-+	anon_name = vma_anon_name_get(vma);
- 	error = madvise_update_vma(vma, prev, start, end, new_flags,
--				   vma_anon_name(vma));
-+				   anon_name);
-+	vma_anon_name_put(anon_name);
- 
- out:
- 	/*
-@@ -1225,7 +1252,7 @@ int madvise_walk_vmas(struct mm_struct *mm, unsigned long start,
- static int madvise_vma_anon_name(struct vm_area_struct *vma,
- 				 struct vm_area_struct **prev,
- 				 unsigned long start, unsigned long end,
--				 unsigned long name)
-+				 unsigned long anon_name)
- {
- 	int error;
- 
-@@ -1234,7 +1261,7 @@ static int madvise_vma_anon_name(struct vm_area_struct *vma,
- 		return -EBADF;
- 
- 	error = madvise_update_vma(vma, prev, start, end, vma->vm_flags,
--				   (const char *)name);
-+				   (struct anon_vma_name *)anon_name);
- 
- 	/*
- 	 * madvise() returns EAGAIN if kernel resources, such as
-@@ -1248,8 +1275,10 @@ static int madvise_vma_anon_name(struct vm_area_struct *vma,
- int madvise_set_anon_name(struct mm_struct *mm, unsigned long start,
- 			  unsigned long len_in, const char *name)
- {
-+	struct anon_vma_name *anon_name;
- 	unsigned long end;
- 	unsigned long len;
-+	int ret;
- 
- 	if (start & ~PAGE_MASK)
- 		return -EINVAL;
-@@ -1266,8 +1295,12 @@ int madvise_set_anon_name(struct mm_struct *mm, unsigned long start,
- 	if (end == start)
- 		return 0;
- 
--	return madvise_walk_vmas(mm, start, end, (unsigned long)name,
-+	anon_name = anon_vma_name_alloc(name);
-+	ret = madvise_walk_vmas(mm, start, end, (unsigned long)anon_name,
- 				 madvise_vma_anon_name);
-+	vma_anon_name_put(anon_name);
-+
-+	return ret;
- }
- #endif /* CONFIG_ANON_VMA_NAME */
- /*
--- 
-2.35.1.265.g69c8d7142f-goog
+I'm not entirely understand what you mean by "promote", but regardless of what
+is meant, I find it confusing.
 
+If you mean the root that's found is promoted to the current root, then it's
+confusing because cached_root_find_and_replace() also promotes the root it finds.
+
+If you mean something else, then it's obviously confusing, because I don't know
+what you mean :-)  If you're referring to the cached roots, that's arguably wrong
+because any non-matching root, including the current root, is demoted, not promoted.
+
+Maybe cached_root_find_and_rotate() or cached_root_find_and_age()?
+
+>  {
+>  	uint i;
+>  	struct kvm_mmu *mmu = vcpu->arch.mmu;
+> @@ -4109,13 +4109,48 @@ static bool cached_root_available(struct kvm_vcpu *vcpu, gpa_t new_pgd,
+>  		return true;
+>  
+>  	for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++) {
+> +		/*
+> +		 * The swaps end up rotating the cache like this:
+> +		 *   C   0 1 2 3   (on entry to the function)
+> +		 *   0   C 1 2 3
+> +		 *   1   C 0 2 3
+> +		 *   2   C 0 1 3
+> +		 *   3   C 0 1 2   (on exit from the loop)
+
+Woot!  I've written this down on my whiteboard sooo many times.  This defintely
+warrants a virtual gold star.  :-)
+
+        .
+       ,O,
+      ,OOO,
+'oooooOOOOOooooo'
+  `OOOOOOOOOOO`
+    `OOOOOOO`
+    OOOO'OOOO
+   OOO'   'OOO
+  O'         'O
+
+> +		 */
+>  		swap(mmu->root, mmu->prev_roots[i]);
+> -
+>  		if (is_root_usable(&mmu->root, new_pgd, new_role))
+> -			break;
+> +			return true;
+>  	}
+>  
+> -	return i < KVM_MMU_NUM_PREV_ROOTS;
+> +	kvm_mmu_free_roots(vcpu, vcpu->arch.mmu, KVM_MMU_ROOT_CURRENT);
+> +	return false;
+> +}
+> +
+> +/*
+> + * Find out if a previously cached root matching the new pgd/role is available.
+> + * If a matching root is found, it is assigned to kvm_mmu->root and true
+> + * is returned.  The current, invalid root goes to the bottom of the cache.
+
+Can you phrase this as LRU instead of "bottom of the cache"?  E.g. seomthing like
+"The current, invalid root becomes the LRU entry in the cache."
+
+> + * If no match is found, kvm_mmu->root is left invalid and false is returned.
+> + */
+> +static bool cached_root_find_and_replace(struct kvm_vcpu *vcpu, gpa_t new_pgd,
+> +					 union kvm_mmu_page_role new_role)
+> +{
+> +	uint i;
+> +	struct kvm_mmu *mmu = vcpu->arch.mmu;
+
+Hmm, while we're refactoring this, I'd really prefer we not grab vcpu->arch.mmu
+way down in the helpers.  @vcpu is needed only for the request, so what about
+doing this?
+
+	if (!fast_pgd_switch(vcpu, new_pgd, new_role)) {
+		/*
+		 * <whatever kvm_mmu_reload() becomes> will set up a new root
+		 * prior to the next VM-Enter.  Free the current root if it's
+		 * valid, i.e. if a valid root was evicted from the cache.
+		 */
+		if (VALID_PAGE(vcpu->arch.mmu->root.hpa))
+			kvm_mmu_free_roots(vcpu, vcpu->arch.mmu, KVM_MMU_ROOT_CURRENT);
+		return;
+	}
+
+Then the low level helpers can take @mmu, not @vcpu.
+
+> +
+> +	for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++)
+
+Needs curly braces.
+> +		if (is_root_usable(&mmu->prev_roots[i], new_pgd, new_role))
+> +			goto hit;
+> +
+> +	return false;
+> +
+> +hit:
+> +	swap(mmu->root, mmu->prev_roots[i]);
+> +	/* Bubble up the remaining roots.  */
+> +	for (; i < KVM_MMU_NUM_PREV_ROOTS - 1; i++)
+> +		mmu->prev_roots[i] = mmu->prev_roots[i + 1];
+> +	mmu->prev_roots[i].hpa = INVALID_PAGE;
+
+This looks wrong.
+
+> +	return true;
+>  }
+>  
+>  static bool fast_pgd_switch(struct kvm_vcpu *vcpu, gpa_t new_pgd,
+> @@ -4124,22 +4159,24 @@ static bool fast_pgd_switch(struct kvm_vcpu *vcpu, gpa_t new_pgd,
+>  	struct kvm_mmu *mmu = vcpu->arch.mmu;
+>  
+>  	/*
+> -	 * For now, limit the fast switch to 64-bit hosts+VMs in order to avoid
+> +	 * For now, limit the caching to 64-bit hosts+VMs in order to avoid
+>  	 * having to deal with PDPTEs. We may add support for 32-bit hosts/VMs
+>  	 * later if necessary.
+
+Probably worth explicitly calling out that the current root needs to be nuked to
+avoid shoving it into the cache, that's somewhat subtle.
+
+>  	 */
+> -	if (mmu->shadow_root_level >= PT64_ROOT_4LEVEL &&
+> -	    mmu->root_level >= PT64_ROOT_4LEVEL)
+> -		return cached_root_available(vcpu, new_pgd, new_role);
+> +	if (VALID_PAGE(mmu->root.hpa) && !to_shadow_page(mmu->root.hpa))
+
+Hmm, so it doesn't matter (yet) because shadowing 4-level NPT with 5-level NPT
+is fubar anyways[1], but this will prevent caching roots when shadowing 4-level
+NPT with 5-level NPT (have I mentioned how much I love NPT?).  This can be:
+
+	if (VALID_PAGE(mmu->root.hpa) && mmu->root.hpa == __pa(mmu->pae_root))
+
+This should also Just Work when all roots are backed by shadow pages[2], which I
+really hope we can make happen (it's by far the easiest way to deal with nested NPT).
+
+[1] https://lore.kernel.org/lkml/YbFY533IT3XSIqAK@google.com
+[2] https://lore.kernel.org/all/20211210092508.7185-1-jiangshanlai@gmail.com
+
+> +		kvm_mmu_free_roots(vcpu, vcpu->arch.mmu, KVM_MMU_ROOT_CURRENT);
+>  
+> -	return false;
+> +	if (VALID_PAGE(mmu->root.hpa))
+> +		return cached_root_find_and_promote(vcpu, new_pgd, new_role);
+> +	else
+> +		return cached_root_find_and_replace(vcpu, new_pgd, new_role);
+>  }
+>  
+>  static void __kvm_mmu_new_pgd(struct kvm_vcpu *vcpu, gpa_t new_pgd,
+>  			      union kvm_mmu_page_role new_role)
+>  {
+>  	if (!fast_pgd_switch(vcpu, new_pgd, new_role)) {
+> -		kvm_mmu_free_roots(vcpu, vcpu->arch.mmu, KVM_MMU_ROOT_CURRENT);
+> +		/* kvm_mmu_ensure_valid_pgd will set up a new root.  */
+>  		return;
+>  	}
+>  
+> -- 
+> 2.31.1
+> 
+> 

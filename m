@@ -2,100 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ECF84B2A92
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87654B2A95
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351609AbiBKQkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:40:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42930 "EHLO
+        id S1351616AbiBKQkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:40:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbiBKQkI (ORCPT
+        with ESMTP id S230040AbiBKQkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:40:08 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C03DFD
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:40:06 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-160-wZ1-VjIMOoK4So3RgiPxRg-1; Fri, 11 Feb 2022 16:40:03 +0000
-X-MC-Unique: wZ1-VjIMOoK4So3RgiPxRg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Fri, 11 Feb 2022 16:40:01 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Fri, 11 Feb 2022 16:40:01 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Bill Wendling' <morbo@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        Juergen Gross <jgross@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v4] x86: use builtins to read eflags
-Thread-Topic: [PATCH v4] x86: use builtins to read eflags
-Thread-Index: AQHYHs4TBErQZHLpBUiy6+9ZW5FRHqyOjNCA
-Date:   Fri, 11 Feb 2022 16:40:01 +0000
-Message-ID: <cb2ff5da9b704a9792549a9433dc0ac8@AcuMS.aculab.com>
-References: <20220204005742.1222997-1-morbo@google.com>
- <20220210223134.233757-1-morbo@google.com>
-In-Reply-To: <20220210223134.233757-1-morbo@google.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 11 Feb 2022 11:40:31 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F8A102
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:40:30 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id y22so12169602eju.9
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:40:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ekc7Tn7BClDcaiwZG8Yr7X/WoQx2hyzA+9mP7+Tb9Iw=;
+        b=afCuEy6Av7E0JVwRWduZBNc4FeWRqu37aNR+Qf+u2ykSinUNiOgppx79vQDsHGDWBF
+         NOzGqNAotlD8xWBfWY+Oj4wE03KNIcbs+yGE8k8ubJSZagWi9lUBFHV79pyFnvhHydtX
+         0RhzDkrWxuOEIsOhirb9SFIl/IDRN8mnBZaoA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ekc7Tn7BClDcaiwZG8Yr7X/WoQx2hyzA+9mP7+Tb9Iw=;
+        b=skG7/5f27T79VN7uzWOBMCR5gOPVD/bCAHSqD1koRyudzCZQH+ymhQyj1VUJOpp9GY
+         oQxjBC6aI59Tq4yglX3+CsTMttt7UVfAnKCo3LfNElA7MmYvRtym9CrMOU3Fh6FMpOn2
+         GqGdX538Hn7JIVfLySYbkxDQ9ZL3K8Hsfocc8h+8Le0tmhd871uVuzt+Cde7OsU9KaSQ
+         18GUV6jHFJCMeF/Nt4ZXa8VRPsOcbYMg9ddH3XNTSZdW1nLLOB8aWOYUdcKmLYBSEZZM
+         mipjdik7Fk+I/G5qLGHvpOnHoGonywSigJyAfXOwudrsuLQO2Qf+x5GimA0r20547cs2
+         frQg==
+X-Gm-Message-State: AOAM530Qv7ExFR3oD2rNJErQGJRO6AYQEZwbPptTxBkgFkQuN7c3B8rc
+        jqpPeG4jCaaR56pFgtjO5j3sJg==
+X-Google-Smtp-Source: ABdhPJxNPMirbZYD7tbQa8VZgVK5jhoaL6/AGf6cwux9qoFbkYtUvR2SMxUg759pPkK/F6mXUhGHVQ==
+X-Received: by 2002:a17:907:a428:: with SMTP id sg40mr2165519ejc.128.1644597628508;
+        Fri, 11 Feb 2022 08:40:28 -0800 (PST)
+Received: from alco.lan (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id cn15sm5818965edb.37.2022.02.11.08.40.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 08:40:28 -0800 (PST)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH] net: Fix build when CONFIG_INET is not enabled
+Date:   Fri, 11 Feb 2022 17:40:26 +0100
+Message-Id: <20220211164026.409225-1-ribalda@chromium.org>
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQmlsbCBXZW5kbGluZw0KPiBTZW50OiAxMCBGZWJydWFyeSAyMDIyIDIyOjMyDQo+IA0K
-PiBHQ0MgYW5kIENsYW5nIGJvdGggaGF2ZSBidWlsdGlucyB0byByZWFkIGFuZCB3cml0ZSB0aGUg
-RUZMQUdTIHJlZ2lzdGVyLg0KPiBUaGlzIGFsbG93cyB0aGUgY29tcGlsZXIgdG8gZGV0ZXJtaW5l
-IHRoZSBiZXN0IHdheSB0byBnZW5lcmF0ZSB0aGlzDQo+IGNvZGUsIHdoaWNoIGNhbiBpbXByb3Zl
-IGNvZGUgZ2VuZXJhdGlvbi4NCj4gDQo+IFRoaXMgaXNzdWUgYXJvc2UgZHVlIHRvIENsYW5nJ3Mg
-aXNzdWUgd2l0aCB0aGUgIj1ybSIgY29uc3RyYWludC4gIENsYW5nDQo+IGNob29zZXMgdG8gYmUg
-Y29uc2VydmF0aXZlIGluIHRoZXNlIHNpdHVhdGlvbnMsIGFuZCBzbyB1c2VzIG1lbW9yeQ0KPiBp
-bnN0ZWFkIG9mIHJlZ2lzdGVycy4gVGhpcyBpcyBhIGtub3duIGlzc3VlLCB3aGljaCBpcyBjdXJy
-ZW50bHkgYmVpbmcNCj4gYWRkcmVzc2VkLg0KPiANCj4gSG93ZXZlciwgdXNpbmcgYnVpbHRpbnMg
-aXMgYmVuZWZpY2lhbCBpbiBnZW5lcmFsLCBiZWNhdXNlIGl0IHJlbW92ZXMgdGhlDQo+IGJ1cmRl
-biBvZiBkZXRlcm1pbmluZyB3aGF0J3MgdGhlIHdheSB0byByZWFkIHRoZSBmbGFncyByZWdpc3Rl
-ciBmcm9tIHRoZQ0KPiBwcm9ncmFtbWVyIGFuZCBwbGFjZXMgaXQgb24gdG8gdGhlIGNvbXBpbGVy
-LCB3aGljaCBoYXMgdGhlIGluZm9ybWF0aW9uDQo+IG5lZWRlZCB0byBtYWtlIHRoYXQgZGVjaXNp
-b24uDQoNCkV4Y2VwdCB0aGF0IG5laXRoZXIgZ2NjIG5vciBjbGFuZyBhdHRlbXB0IHRvIG1ha2Ug
-dGhhdCBkZWNpc2lvbi4NClRoZXkgYWx3YXlzIGRvIHB1c2hmOyBwb3AgYXg7DQoNCi4uLg0KPiB2
-NDogLSBDbGFuZyBub3cgbm8gbG9uZ2VyIGdlbmVyYXRlcyBzdGFjayBmcmFtZXMgd2hlbiB1c2lu
-ZyB0aGVzZSBidWlsdGlucy4NCj4gICAgIC0gQ29ycmVjdGVkIG1pc3NwZWxsaW5ncy4NCg0KV2hp
-bGUgY2xhbmcgJ2hlYWQnIGhhcyBiZWVuIGZpeGVkLCBpdCBzZWVtcyBhIGJpdCBwcmVtYXR1cmUg
-dG8gc2F5DQppdCBpcyAnZml4ZWQnIGVub3VnaCBmb3IgYWxsIGNsYW5nIGJ1aWxkcyB0byB1c2Ug
-dGhlIGJ1aWx0aW4uDQoNClNlZW1zIGJldHRlciB0byBjaGFuZ2UgaXQgKGJhY2spIHRvICI9ciIg
-YW5kIGNvbW1lbnQgdGhhdCB0aGlzDQppcyBjdXJyZW50bHkgYXMgZ29vZCBhcyBfX2J1aWx0aW5f
-aWEzMl9yZWFkZWZsYWdzX3U2NCgpIGFuZCB0aGF0DQpjbGFuZyBtYWtlcyBhICdwaWdzIGJyZWFr
-ZmFzdCcgb2YgIj1ybSIgLSB3aGljaCBoYXMgb25seSBtYXJnaW5hbA0KYmVuZWZpdC4NCg0KQ2hh
-bmdpbmcgdG8gX19idWlsdGluX2lhMzJfcmVhZGVmbGFnc191NjQoKSBtYXkgYmUgd29ydGggd2hp
-bGUNCmlmL3doZW4gdGhlIGNvbXBpbGVycyB3aWxsIGdlbmVyYXRlIHB1c2hmOyBwb3AgbWVtOyBm
-b3IgaXQuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1s
-ZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJh
-dGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+If the kernel is configured with CONFIG_NET, but without CONFIG_INET we
+get the following error when building:
+
+sock.c:(.text+0x4c17): undefined reference to `__sk_defer_free_flush'
+
+Lets move __sk_defer_free_flush to sock.c
+
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+ net/core/sock.c | 14 ++++++++++++++
+ net/ipv4/tcp.c  | 14 --------------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 4ff806d71921..b93b93497e7e 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -2045,6 +2045,20 @@ static void __sk_destruct(struct rcu_head *head)
+ 	sk_prot_free(sk->sk_prot_creator, sk);
+ }
+ 
++void __sk_defer_free_flush(struct sock *sk)
++{
++	struct llist_node *head;
++	struct sk_buff *skb, *n;
++
++	head = llist_del_all(&sk->defer_list);
++	llist_for_each_entry_safe(skb, n, head, ll_node) {
++		prefetch(n);
++		skb_mark_not_on_list(skb);
++		__kfree_skb(skb);
++	}
++}
++EXPORT_SYMBOL(__sk_defer_free_flush);
++
+ void sk_destruct(struct sock *sk)
+ {
+ 	bool use_call_rcu = sock_flag(sk, SOCK_RCU_FREE);
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 02cb275e5487..bc5b5c29d5c4 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -1589,20 +1589,6 @@ void tcp_cleanup_rbuf(struct sock *sk, int copied)
+ 		tcp_send_ack(sk);
+ }
+ 
+-void __sk_defer_free_flush(struct sock *sk)
+-{
+-	struct llist_node *head;
+-	struct sk_buff *skb, *n;
+-
+-	head = llist_del_all(&sk->defer_list);
+-	llist_for_each_entry_safe(skb, n, head, ll_node) {
+-		prefetch(n);
+-		skb_mark_not_on_list(skb);
+-		__kfree_skb(skb);
+-	}
+-}
+-EXPORT_SYMBOL(__sk_defer_free_flush);
+-
+ static void tcp_eat_recv_skb(struct sock *sk, struct sk_buff *skb)
+ {
+ 	__skb_unlink(skb, &sk->sk_receive_queue);
+-- 
+2.35.1.265.g69c8d7142f-goog
 

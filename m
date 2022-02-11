@@ -2,205 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2DC4B2272
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E20B84B227D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:54:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345745AbiBKJvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 04:51:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34546 "EHLO
+        id S1348712AbiBKJx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 04:53:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiBKJvk (ORCPT
+        with ESMTP id S232289AbiBKJx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 04:51:40 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780DFE51
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:51:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644573099; x=1676109099;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0mXqDOwW22bUhnQUeJtpNRx2NwBK4pzkw0tnt/i07uw=;
-  b=VXmRE4J1ZWGHw7TI9bAdgBDYhe6geHv1G0XKAGJwxkIYqd4Qib8jzK7W
-   hvfFiP/WIvZzQladJJcfIxIy8jGiDXhEW5mPKuoz3ZvohOPH1clo3sa1W
-   6quIuBNtyXp0zxEV1j1kzpN2kMXg7L8zNBO4g6/6+sepgAiSNSrAZ6DNN
-   gpJtcQhOofkHLOhTkQPfpekusCELYf0yGo73fvCXYLplJt7pCVLVpWtaj
-   Gh6LWgsRJ+vANmgU1811wi01nG0QomawBeNUuF7wrbrVvCAJAiWy+6YJb
-   YN41cDNi02iOboQ9MBMnmVBEBz9g6vDgN7PvDwonegYPBf+nLPbAnuOuZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="230345102"
-X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
-   d="scan'208";a="230345102"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 01:51:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
-   d="scan'208";a="602332572"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 11 Feb 2022 01:51:38 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nISaX-0004PT-BT; Fri, 11 Feb 2022 09:51:37 +0000
-Date:   Fri, 11 Feb 2022 17:51:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <anup.patel@wdc.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [avpatel:riscv_sbi_hsm_suspend_v11 6/8]
- drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: error: implicit declaration of
- function 'cpuid_to_hartid_map'
-Message-ID: <202202111718.2xBAlFri-lkp@intel.com>
+        Fri, 11 Feb 2022 04:53:26 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801FEC4F;
+        Fri, 11 Feb 2022 01:53:25 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 333EB1F3A2;
+        Fri, 11 Feb 2022 09:53:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644573204; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W62L88+zcZHOeh2jlIvhoTBCBvPlWiH1lU+vLtZUc/k=;
+        b=KfZxou1t9z35AvGMqZANlog57oVxaQtBtsvqwxztAB1fhwLWbGh7WM+5ECf9wq+nAXyTve
+        cFBOAHWHU7MrfxKBSaR9sGrpWv+sF25DH+hBtJhjSl+IXbg7iERdRAGsd9WaH8PyGtyicY
+        AJvuBg9EmIS0t2QFry9FgeQYghC2xiY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644573204;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W62L88+zcZHOeh2jlIvhoTBCBvPlWiH1lU+vLtZUc/k=;
+        b=6SzhxnS+9p6k94x5ix65ydYlTHFzYd+EVX0laWZF+8PPAbMYbkGK3XzaJ/skfzahZJkaTX
+        cP+G+Y/coJsswMBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AD8A313BC3;
+        Fri, 11 Feb 2022 09:53:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 65POKBMyBmKBIAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Fri, 11 Feb 2022 09:53:23 +0000
+Date:   Fri, 11 Feb 2022 10:53:22 +0100
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Terry Bowman <terry.bowman@amd.com>
+Cc:     <linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <wsa@kernel.org>,
+        <andy.shevchenko@gmail.com>, <rafael.j.wysocki@intel.com>,
+        <linux-kernel@vger.kernel.org>, <wim@linux-watchdog.org>,
+        <rrichter@amd.com>, <thomas.lendacky@amd.com>,
+        <sudheesh.mavila@amd.com>, <Nehal-bakulchandra.Shah@amd.com>,
+        <Basavaraj.Natikar@amd.com>, <Shyam-sundar.S-k@amd.com>,
+        <Mario.Limonciello@amd.com>
+Subject: Re: [PATCH v5 3/9] i2c: piix4: Move port I/O region request/release
+ code into functions
+Message-ID: <20220211105322.180ad89d@endymion.delvare>
+In-Reply-To: <20220209172717.178813-4-terry.bowman@amd.com>
+References: <20220209172717.178813-1-terry.bowman@amd.com>
+        <20220209172717.178813-4-terry.bowman@amd.com>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_sbi_hsm_suspend_v11
-head:   23c200d61b016e3b70c0f352ee89d8ff0511ba82
-commit: 64abac12078cac4dcf481c1cb8f4bc72d9049bae [6/8] cpuidle: Add RISC-V SBI CPU idle driver
-config: riscv-randconfig-r016-20220211 (https://download.01.org/0day-ci/archive/20220211/202202111718.2xBAlFri-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f774697c85d6a352dcea013f46a99f9fe31)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/avpatel/linux/commit/64abac12078cac4dcf481c1cb8f4bc72d9049bae
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_sbi_hsm_suspend_v11
-        git checkout 64abac12078cac4dcf481c1cb8f4bc72d9049bae
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/
+On Wed, 09 Feb 2022 11:27:11 -0600, Terry Bowman wrote:
+> Move duplicated region request and release code into a function. Move is
+> in preparation for following MMIO changes.
+> 
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Reviewed-by: Jean Delvare <jdelvare@suse.de>
+> ---
+>  drivers/i2c/busses/i2c-piix4.c | 48 ++++++++++++++++++++++------------
+>  1 file changed, 31 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
+> index 3ff68967034e..cc488b1e92c3 100644
+> --- a/drivers/i2c/busses/i2c-piix4.c
+> +++ b/drivers/i2c/busses/i2c-piix4.c
+> @@ -165,6 +165,24 @@ struct i2c_piix4_adapdata {
+>  	u8 port;		/* Port number, shifted */
+>  };
+>  
+> +static int piix4_sb800_region_request(struct device *dev)
+> +{
+> +	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
+> +				  "sb800_piix4_smb")) {
+> +		dev_err(dev,
+> +			"SMBus base address index region 0x%x already in use.\n",
+> +			SB800_PIIX4_SMB_IDX);
+> +		return -EBUSY;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void piix4_sb800_region_release(struct device *dev)
+> +{
+> +	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
+> +}
+> +
+>  static int piix4_setup(struct pci_dev *PIIX4_dev,
+>  		       const struct pci_device_id *id)
+>  {
+> @@ -270,6 +288,7 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
+>  	unsigned short piix4_smba;
+>  	u8 smba_en_lo, smba_en_hi, smb_en, smb_en_status, port_sel;
+>  	u8 i2ccfg, i2ccfg_offset = 0x10;
+> +	int retval;
+>  
+>  	/* SB800 and later SMBus does not support forcing address */
+>  	if (force || force_addr) {
+> @@ -291,20 +310,16 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
+>  	else
+>  		smb_en = (aux) ? 0x28 : 0x2c;
+>  
+> -	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
+> -				  "sb800_piix4_smb")) {
+> -		dev_err(&PIIX4_dev->dev,
+> -			"SMB base address index region 0x%x already in use.\n",
+> -			SB800_PIIX4_SMB_IDX);
+> -		return -EBUSY;
+> -	}
+> +	retval = piix4_sb800_region_request(&PIIX4_dev->dev);
+> +	if (retval)
+> +		return retval;
+>  
+>  	outb_p(smb_en, SB800_PIIX4_SMB_IDX);
+>  	smba_en_lo = inb_p(SB800_PIIX4_SMB_IDX + 1);
+>  	outb_p(smb_en + 1, SB800_PIIX4_SMB_IDX);
+>  	smba_en_hi = inb_p(SB800_PIIX4_SMB_IDX + 1);
+>  
+> -	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
+> +	piix4_sb800_region_release(&PIIX4_dev->dev);
+>  
+>  	if (!smb_en) {
+>  		smb_en_status = smba_en_lo & 0x10;
+> @@ -373,11 +388,10 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
+>  			piix4_port_shift_sb800 = SB800_PIIX4_PORT_IDX_SHIFT;
+>  		}
+>  	} else {
+> -		if (!request_muxed_region(SB800_PIIX4_SMB_IDX,
+> -					  SB800_PIIX4_SMB_MAP_SIZE,
+> -					  "sb800_piix4_smb")) {
+> +		retval = piix4_sb800_region_request(&PIIX4_dev->dev);
+> +		if (retval)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Missing curly brace here, breaks the build.
 
-All errors (new ones prefixed by >>):
-
->> drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
-                            cpuid_to_hartid_map(cpu));
-                            ^
-   drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                            cpuid_to_hartid_map(cpu));
-                            ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:576:38: note: expanded from macro 'pr_debug'
-           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-                                       ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/cpuidle/cpuidle-riscv-sbi.c:359:10: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
-                          cpuid_to_hartid_map(cpu));
-                          ^
-   drivers/cpuidle/cpuidle-riscv-sbi.c:359:10: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                          cpuid_to_hartid_map(cpu));
-                          ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:489:33: note: expanded from macro 'pr_err'
-           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-                                  ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/cpuidle/cpuidle-riscv-sbi.c:567:6: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
-                                    cpuid_to_hartid_map(cpu));
-                                    ^
-   drivers/cpuidle/cpuidle-riscv-sbi.c:567:6: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                                    cpuid_to_hartid_map(cpu));
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:576:38: note: expanded from macro 'pr_debug'
-           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-                                       ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   3 warnings and 3 errors generated.
+>  			release_region(piix4_smba, SMBIOSIZE);
+> -			return -EBUSY;
+> +			return retval;
+>  		}
+>  
+>  		outb_p(SB800_PIIX4_PORT_IDX_SEL, SB800_PIIX4_SMB_IDX);
+> @@ -387,7 +401,7 @@ static int piix4_setup_sb800(struct pci_dev *PIIX4_dev,
+>  				       SB800_PIIX4_PORT_IDX;
+>  		piix4_port_mask_sb800 = SB800_PIIX4_PORT_IDX_MASK;
+>  		piix4_port_shift_sb800 = SB800_PIIX4_PORT_IDX_SHIFT;
+> -		release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
+> +		piix4_sb800_region_release(&PIIX4_dev->dev);
+>  	}
+>  
+>  	dev_info(&PIIX4_dev->dev,
+> @@ -685,9 +699,9 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
+>  	u8 port;
+>  	int retval;
+>  
+> -	if (!request_muxed_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE,
+> -				  "sb800_piix4_smb"))
+> -		return -EBUSY;
+> +	retval = piix4_sb800_region_request(&adap->dev);
+> +	if (retval)
+> +		return retval;
+>  
+>  	/* Request the SMBUS semaphore, avoid conflicts with the IMC */
+>  	smbslvcnt  = inb_p(SMBSLVCNT);
+> @@ -762,7 +776,7 @@ static s32 piix4_access_sb800(struct i2c_adapter *adap, u16 addr,
+>  		piix4_imc_wakeup();
+>  
+>  release:
+> -	release_region(SB800_PIIX4_SMB_IDX, SB800_PIIX4_SMB_MAP_SIZE);
+> +	piix4_sb800_region_release(&adap->dev);
+>  	return retval;
+>  }
+>  
 
 
-vim +/cpuid_to_hartid_map +350 drivers/cpuidle/cpuidle-riscv-sbi.c
-
-   317	
-   318	static int sbi_cpuidle_init_cpu(struct device *dev, int cpu)
-   319	{
-   320		struct cpuidle_driver *drv;
-   321		unsigned int state_count = 0;
-   322		int ret = 0;
-   323	
-   324		drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
-   325		if (!drv)
-   326			return -ENOMEM;
-   327	
-   328		drv->name = "sbi_cpuidle";
-   329		drv->owner = THIS_MODULE;
-   330		drv->cpumask = (struct cpumask *)cpumask_of(cpu);
-   331	
-   332		/* RISC-V architectural WFI to be represented as state index 0. */
-   333		drv->states[0].enter = sbi_cpuidle_enter_state;
-   334		drv->states[0].exit_latency = 1;
-   335		drv->states[0].target_residency = 1;
-   336		drv->states[0].power_usage = UINT_MAX;
-   337		strcpy(drv->states[0].name, "WFI");
-   338		strcpy(drv->states[0].desc, "RISC-V WFI");
-   339	
-   340		/*
-   341		 * If no DT idle states are detected (ret == 0) let the driver
-   342		 * initialization fail accordingly since there is no reason to
-   343		 * initialize the idle driver if only wfi is supported, the
-   344		 * default archictectural back-end already executes wfi
-   345		 * on idle entry.
-   346		 */
-   347		ret = dt_init_idle_driver(drv, sbi_cpuidle_state_match, 1);
-   348		if (ret <= 0) {
-   349			pr_debug("HART%ld: failed to parse DT idle states\n",
- > 350				 cpuid_to_hartid_map(cpu));
-   351			return ret ? : -ENODEV;
-   352		}
-   353		state_count = ret + 1; /* Include WFI state as well */
-   354	
-   355		/* Initialize idle states from DT. */
-   356		ret = sbi_cpuidle_dt_init_states(dev, drv, cpu, state_count);
-   357		if (ret) {
-   358			pr_err("HART%ld: failed to init idle states\n",
-   359			       cpuid_to_hartid_map(cpu));
-   360			return ret;
-   361		}
-   362	
-   363		ret = cpuidle_register(drv, NULL);
-   364		if (ret)
-   365			goto deinit;
-   366	
-   367		cpuidle_cooling_register(drv);
-   368	
-   369		return 0;
-   370	deinit:
-   371		sbi_cpuidle_deinit_cpu(cpu);
-   372		return ret;
-   373	}
-   374	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Jean Delvare
+SUSE L3 Support

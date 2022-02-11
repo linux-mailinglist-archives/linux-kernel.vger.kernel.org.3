@@ -2,72 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C3F4B26D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 14:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F884B26E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 14:13:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350458AbiBKNMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 08:12:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44586 "EHLO
+        id S1350461AbiBKNMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 08:12:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350454AbiBKNMB (ORCPT
+        with ESMTP id S240227AbiBKNMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 08:12:01 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBA8F6B
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 05:11:59 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id e8so6788467ilm.13
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 05:11:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7Y2G8AlF6Ncyxq64QoVe4HHceu9Q6Y6j+1knE8xr79k=;
-        b=PDd/NUgnyMl0IPdr2l+PEy0J+VSrp+cpJ/egTOtYonQ6B6I8pU4OrlhS00SJXlRXZI
-         Qeq2qepgDTaSC0OO/FPfTgdS1vIgmYmpR8xO4kIgb/jcOGKx2wIRWjFmW5oIK8Krv6aR
-         rwCgv6ZnlgjIMkGy+f2OKP1+ypX4xS1caGo4k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7Y2G8AlF6Ncyxq64QoVe4HHceu9Q6Y6j+1knE8xr79k=;
-        b=LzPcB56pHGPEtTPCvnlz0r6heKCwnfhm5Sk1q4qyGLekR5UPUqf7Me/M+WHPOjto98
-         Di7ZFAoLD9Ue0zSWnbCQjN8Pahhf4yl4eICL2ZsWGnbrXpD2aDM3tixWWFIFqUfXcUwA
-         oLa/oddXMyidnGTSh5xWazW8m/in0JjGRGQLHdullHUAC+RDzLrMI6qguvFk4Be96/js
-         uUIESxXl6z7P8zQB7MK5gQXPzf2wzR8o5WZQOEa/cpkoQE5uC+OS8dxt/yZowXkCd979
-         yxr1cylISPpfCpnx7RjlJsbNuv8b3gznnfeLhkOkTLaKNZDyWdg9tYwXPkkhLJtLbJY2
-         tIZg==
-X-Gm-Message-State: AOAM532DfKsz2sxk0crarpLGPlnmmlBzQh4bAYIp79+VSWo/S4oeNt1t
-        g3rhr3eRUi0qgR1/h7L4/tHG9GguzP/Gq3ykPdEb7Q==
-X-Google-Smtp-Source: ABdhPJwcC9ywc3Spihk7RbD5O7xNxHxMEcbEIUGne7QB9t2HjV1Twx1cR0RDE3cDFxfvXUapBKqnsYZ3Nn30iAF9rhA=
-X-Received: by 2002:a05:6e02:1a47:: with SMTP id u7mr896831ilv.33.1644585118126;
- Fri, 11 Feb 2022 05:11:58 -0800 (PST)
+        Fri, 11 Feb 2022 08:12:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C5212C;
+        Fri, 11 Feb 2022 05:12:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE28C61E55;
+        Fri, 11 Feb 2022 13:12:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48B75C340E9;
+        Fri, 11 Feb 2022 13:12:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644585165;
+        bh=mxPPHCFOv9wOqSJ+SKD7smQ5QOZ5zf1PCwR9hM57WiE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SrdpEBXGjpXGCE1/I22U/bhwSgvIVifVhrGZcXx+2Bx5fldw8oE+99TGhztEcMZee
+         gCceMWSfCKqYd20VeyRNb5Lj9oIZO9Qne588kkxSVBP6ZXkBdme/dxEvd+Vl/3I+E9
+         7uPDrliKfMD5myPHEgq5MmM/97R4+xDyd+q57hYgCGGLFWu1wbYhg/euMgIqG3GIWC
+         Hl0T3OJtuahsIXrfzEd0Nm+rgw5Q35v6pDB5y+2o4aDVbSTdIlSSAd8/2L2Mo4yPNz
+         4ZY6xuTH16dESAr5c/txEju5evKmdeJ6tlJKUY6vXDn7bp+djDIWdGz2hrtaE5E700
+         CoBakB84ijVoA==
+Date:   Fri, 11 Feb 2022 21:12:37 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Robin van der Gracht <robin@protonic.nl>,
+        devicetree@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        David Jander <david@protonic.nl>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 2/5] ARM: dts: imx6dl-prtvt7: Add missing tvp5150
+ video decoder node
+Message-ID: <20220211131237.GW4909@dragon>
+References: <20220131102841.1955032-1-o.rempel@pengutronix.de>
+ <20220131102841.1955032-3-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-References: <20220211104828.4061334-1-roberto.sassu@huawei.com>
- <f9ccc9be6cc084e9cab6cd75e87735492d120002.camel@linux.ibm.com> <3d0bdb4599e340a78b06094797e42bc9@huawei.com>
-In-Reply-To: <3d0bdb4599e340a78b06094797e42bc9@huawei.com>
-From:   Florent Revest <revest@chromium.org>
-Date:   Fri, 11 Feb 2022 14:11:47 +0100
-Message-ID: <CABRcYm+Mdtgqo-8uf3ys4XnuVrJ0xgsSwFD9VKeJdHJwxmN7Sg@mail.gmail.com>
-Subject: Re: [PATCH] ima: Calculate digest in ima_inode_hash() if not available
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Florent Revest <revest@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220131102841.1955032-3-o.rempel@pengutronix.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,55 +69,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 1:58 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
->
-> > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
-> > Sent: Friday, February 11, 2022 1:41 PM
-> > Hi Roberto,
-> >
-> > On Fri, 2022-02-11 at 11:48 +0100, Roberto Sassu wrote:
-> > > __ima_inode_hash() checks if a digest has been already calculated by
-> > > looking for the integrity_iint_cache structure associated to the passed
-> > > inode.
-> > >
-> > > Users of ima_file_hash() and ima_inode_hash() (e.g. eBPF) might be
-> > > interested in obtaining the information without having to setup an IMA
-> > > policy so that the digest is always available at the time they call one of
-> > > those functions.
-> >
-> > Things obviously changed, but the original use case for this interface,
-> > as I recall, was a quick way to determine if a file had been accessed
-> > on the system.
+On Mon, Jan 31, 2022 at 11:28:38AM +0100, Oleksij Rempel wrote:
+> From: Robin van der Gracht <robin@protonic.nl>
+> 
+> Signed-off-by: Robin van der Gracht <robin@protonic.nl>
 
-I believe we were the main users of this and I can confirm we are no
-longer using this interface to determine if a file has been accessed.
+Please write up some commit log.  Also your SoB is missing.
 
-> Hi Mimi
->
-> thanks for the info. I was not sure if I should export a new
-> function or reuse the existing one. In my use case, just calculating
-> the digest would be sufficient.
+Shawn
 
-It would actually be nice for us too, sometimes we attach to hooks
-just before the hash is calculated and being able to calculate the
-hash would be helpful.
-
-> For finding whether a file was accessed (assuming that it matches
-> the policy), probably bpf_ima_inode_hash() is not anyway too reliable.
-> If integrity_iint_cache is evicted from the memory, it would report
-> that the inode was not accessed even if it was.
-
-I agree indeed, we'd have better ways to do this now.
-
-> Thanks
->
-> Roberto
->
-> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-> Managing Director: Li Peng, Zhong Ronghua
->
-> > --
-> > thanks,
-> >
-> > Mimi
->
+> ---
+>  arch/arm/boot/dts/imx6dl-prtvt7.dts | 42 +++++++++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/imx6dl-prtvt7.dts b/arch/arm/boot/dts/imx6dl-prtvt7.dts
+> index be7c4cb339e7..baaa6ffc4df9 100644
+> --- a/arch/arm/boot/dts/imx6dl-prtvt7.dts
+> +++ b/arch/arm/boot/dts/imx6dl-prtvt7.dts
+> @@ -6,6 +6,7 @@
+>  /dts-v1/;
+>  #include "imx6dl.dtsi"
+>  #include "imx6qdl-prti6q.dtsi"
+> +#include <dt-bindings/display/sdtv-standards.h>
+>  #include <dt-bindings/input/input.h>
+>  #include <dt-bindings/leds/common.h>
+>  #include <dt-bindings/sound/fsl-imx-audmux.h>
+> @@ -171,6 +172,18 @@ panel_in: endpoint {
+>  		};
+>  	};
+>  
+> +	connector {
+> +		compatible = "composite-video-connector";
+> +		label = "Composite0";
+> +		sdtv-standards = <SDTV_STD_PAL_B>;
+> +
+> +		port {
+> +			comp0_out: endpoint {
+> +				remote-endpoint = <&tvp5150_comp0_in>;
+> +			};
+> +		};
+> +	};
+> +
+>  	reg_bl_12v0: regulator-bl-12v0 {
+>  		compatible = "regulator-fixed";
+>  		pinctrl-names = "default";
+> @@ -295,6 +308,31 @@ sgtl5000: audio-codec@a {
+>  		VDDIO-supply = <&reg_3v3>;
+>  		VDDD-supply = <&reg_1v8>;
+>  	};
+> +
+> +	video@5c {
+> +		compatible = "ti,tvp5150";
+> +		reg = <0x5c>;
+> +
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		port@0 {
+> +			reg = <0>;
+> +
+> +			tvp5150_comp0_in: endpoint {
+> +				remote-endpoint = <&comp0_out>;
+> +			};
+> +		};
+> +
+> +		/* Output port 2 is video output pad */
+> +		port@2 {
+> +			reg = <2>;
+> +
+> +			tvp5151_to_ipu1_csi0_mux: endpoint {
+> +				remote-endpoint = <&ipu1_csi0_mux_from_parallel_sensor>;
+> +			};
+> +		};
+> +	};
+>  };
+>  
+>  &i2c3 {
+> @@ -322,6 +360,10 @@ &ipu1_di0_disp0 {
+>  	remote-endpoint = <&display_in>;
+>  };
+>  
+> +&ipu1_csi0_mux_from_parallel_sensor {
+> +	remote-endpoint = <&tvp5151_to_ipu1_csi0_mux>;
+> +};
+> +
+>  &pwm1 {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&pinctrl_pwm1>;
+> -- 
+> 2.30.2
+> 

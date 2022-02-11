@@ -2,53 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCC64B28FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 830D04B28FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:20:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbiBKPSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 10:18:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38768 "EHLO
+        id S1351344AbiBKPUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 10:20:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351336AbiBKPR4 (ORCPT
+        with ESMTP id S243420AbiBKPUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 10:17:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D76AD;
-        Fri, 11 Feb 2022 07:17:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C6E8B82A80;
-        Fri, 11 Feb 2022 15:17:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DCEEC340E9;
-        Fri, 11 Feb 2022 15:17:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644592673;
-        bh=Ws0enUbi4c/3fRwV8HT3WSmmmPjd2OSnRT28xJ7K5vI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oZx3H3RF6ZgmhGjP7zs+qUW3WzO4KaXwPj2mmoxVS5D1Cqz5l61wN04/2Q5V/QDX7
-         5VGnVqIoYwaHMXlx3honnuE4URE0Vj2P8Zcyki0+Ch4B0mxV3r9rQnUiFw/BoVTk6i
-         b5DLrulnT3B+oli22kla1GZG5GMQDh9TK05cL6Z8W5ZK0p0zkeJJLwHSyRcehov56m
-         xEz4ZS5nO9zNWFJpkP6sK0OHmHBvOQCombNWuiowtQjOwgK1FV/Mke5WZMGI/dNSmD
-         OxtZvSaJVyAPeGZb4d522ikeVyMK1VJxbedwflhim073s73jrhkIIrCncYCaR6jTPl
-         4S2KK5stQGCMw==
-Date:   Fri, 11 Feb 2022 16:17:50 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, rostedt@goodmis.org,
-        Yury Norov <yury.norov@gmail.com>
-Subject: Re: [PATCH rcu 9/9] rcu: Replace cpumask_weight with cpumask_empty
- where appropriate
-Message-ID: <20220211151750.GC588079@lothringen>
-References: <20220204230751.GA4193671@paulmck-ThinkPad-P17-Gen-1>
- <20220204230805.4193767-9-paulmck@kernel.org>
+        Fri, 11 Feb 2022 10:20:39 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CD0CE1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 07:20:38 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id eg42so16951579edb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 07:20:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=A+pYq3gAvDRIBXzI8fOr1NWPq9Ez2hj6zeRc/MxGX5U=;
+        b=XmIhBe0BW8s4Ne/ySLnWsQWfdi8M/ADrEQJrnY9xyXzT/oeRrWbnAaaPbsZsd/Thon
+         ApfBEUIWpk/fY9kPrV0o6nd6jPQLWWBw5Kb5l53H/Ue7VgF97ZNjLGIObcxM8mdRlH97
+         wGJD4a9OGsNDKB7gVIjnbWaGxtBmyq5EvSVmighL+7lYdWSu/0unIakZ+57yS2ZcwfD7
+         kKRbwxmymXMhHSr9ppVsNcYIuudAD74mlMib6g0ZsTWNBoDOYCEPU5m5hlzFfOLeZvW8
+         4m965OzMozN2Uk8O9QpZQ3AyuQPrtCFir0JktrAdzv1JLXdowNN1TR1nVn7criYg/kPL
+         TOfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=A+pYq3gAvDRIBXzI8fOr1NWPq9Ez2hj6zeRc/MxGX5U=;
+        b=KowyQyAggdFc0PLYEuK8DlmpaCfpTR8e6ix+rqAActly6PGIxf3c4BJDxc5ZoaoxkY
+         9d6ufCLfRe8h845KvfBOQGtzZQgY504H6TxoUT/dVAW2YEm4AiYcccLXG7yeaBDGxGNM
+         3ES+afOKHgKETK2rJMZU6CeF8iNwXPoRc/XYFHOU0ry3LC6WRc/idjeG3rJ33Y/O2jbN
+         Qqlt0VMjitqFyVA21aRgcN5La7xBw2YFtdpsDl+5m2+ket1g4G9c3C1HmN2c7JjnuE9s
+         iZC0p05DaaALNl56708eERMuJBmoeGanrknqWTB4zlNrEtgLFIXzleeN2Rjrm9c5jjQB
+         U/5w==
+X-Gm-Message-State: AOAM530HdKQNKEpcB3xts3Eua9GxB3iwlEDUgONKyqojGgCZuBrL9W//
+        VY3aBq1v/EprsFf2H1ewohBCKrGFy4INd9y+Qys=
+X-Google-Smtp-Source: ABdhPJwszJf8Sr9G+6mqytFUQlGUOUee0R8RNKRV/mCvOx3IsJhsrx0miYsUPgVbSRRKz/HPV1lxVg==
+X-Received: by 2002:a05:6402:2284:: with SMTP id cw4mr2458951edb.436.1644592836609;
+        Fri, 11 Feb 2022 07:20:36 -0800 (PST)
+Received: from leoy-ThinkPad-X240s ([104.245.96.223])
+        by smtp.gmail.com with ESMTPSA id z8sm7909941ejc.151.2022.02.11.07.20.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 07:20:35 -0800 (PST)
+Date:   Fri, 11 Feb 2022 23:20:26 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     acme@kernel.org, linux-perf-users@vger.kernel.org,
+        mathieu.poirier@linaro.org, coresight@lists.linaro.org,
+        Mike Leach <mike.leach@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] perf: cs-etm: No-op refactor of synth opt usage
+Message-ID: <20220211152026.GC475776@leoy-ThinkPad-X240s>
+References: <20220210200620.1227232-1-james.clark@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220204230805.4193767-9-paulmck@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220210200620.1227232-1-james.clark@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,15 +78,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 04, 2022 at 03:08:05PM -0800, Paul E. McKenney wrote:
-> From: Yury Norov <yury.norov@gmail.com>
+On Thu, Feb 10, 2022 at 08:06:19PM +0000, James Clark wrote:
+> sample_branches and sample_instructions are already saved in the
+> synth_opts struct. Other usages like synth_opts.last_branch don't save
+> a value, so make this more consistent by always going through synth_opts
+> and not saving duplicate values.
 > 
-> In some places, RCU code calls cpumask_weight() to check if any bit of a
-> given cpumask is set. We can do it more efficiently with cpumask_empty()
-> because cpumask_empty() stops traversing the cpumask as soon as it finds
-> first set bit, while cpumask_weight() counts all bits unconditionally.
-> 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Signed-off-by: James Clark <james.clark@arm.com>
 
-Acked-by: Frederic Weisbecker <frederic@kernel.org>
+The patch looks good to me:
+
+Reviewed-by: Leo Yan <leo.yan@linaro.org>

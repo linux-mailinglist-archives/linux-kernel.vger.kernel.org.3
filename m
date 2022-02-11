@@ -2,88 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AAB14B230D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:25:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0494B22F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:20:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348868AbiBKKYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 05:24:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51280 "EHLO
+        id S240124AbiBKKU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 05:20:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346916AbiBKKYH (ORCPT
+        with ESMTP id S229671AbiBKKUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 05:24:07 -0500
-X-Greylist: delayed 315 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 02:24:01 PST
-Received: from forward500j.mail.yandex.net (forward500j.mail.yandex.net [5.45.198.250])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C146D220
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:24:01 -0800 (PST)
-Received: from myt6-de4b83149afa.qloud-c.yandex.net (myt6-de4b83149afa.qloud-c.yandex.net [IPv6:2a02:6b8:c12:401e:0:640:de4b:8314])
-        by forward500j.mail.yandex.net (Yandex) with ESMTP id 7C1246CB6BA2;
-        Fri, 11 Feb 2022 13:18:41 +0300 (MSK)
-Received: from 2a02:6b8:c12:1723:0:640:c7c2:e344 (2a02:6b8:c12:1723:0:640:c7c2:e344 [2a02:6b8:c12:1723:0:640:c7c2:e344])
-        by myt6-de4b83149afa.qloud-c.yandex.net (mxback/Yandex) with HTTP id dIYhLv0cJCg1-Iec4T0gI;
-        Fri, 11 Feb 2022 13:18:40 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxt.ru; s=mail; t=1644574720;
-        bh=+QzWvPmQ9CrQg+9DVBPDGn2iMJvpYZnpZYUSGInu5DU=;
-        h=References:Date:Message-Id:Cc:Subject:In-Reply-To:To:From;
-        b=Awe4H7r7545QR/+EprGABpQbh5FZaCRNU9KDR/ioLqCYK/a1mLKNXi3jaQ3D5PN++
-         z3fjCMFCboRoZ2yuZwBWPC5eFqS0a2yXksD8j9h8nxFKpbMwuQR1rV8HuChBo+UYci
-         dSegY4N/LM9B7ol+wFKxSAllsbZM350uQp77JyPg=
-Authentication-Results: myt6-de4b83149afa.qloud-c.yandex.net; dkim=pass header.i=@nxt.ru
-Received: by myt5-c7c2e3441f25.qloud-c.yandex.net with HTTP;
-        Fri, 11 Feb 2022 13:18:40 +0300
-From:   Aleksandr Fedorov <sanekf@nxt.ru>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-In-Reply-To: <b090141f-0822-609f-429d-ea790d7fc828@arm.com>
-References: <5481021644415780@myt5-a5512e99e394.qloud-c.yandex.net> <b090141f-0822-609f-429d-ea790d7fc828@arm.com>
-Subject: Re: [PATCH] iommu: explicitly check for NULL in iommu_dma_get_resv_regions()
+        Fri, 11 Feb 2022 05:20:25 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146F82A5;
+        Fri, 11 Feb 2022 02:20:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644574823; x=1676110823;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RJ+0ZmlVTd1NI8J1ND1o+WTJfa5qruEZ7EtRTsDra1o=;
+  b=nbCIxheDepA12YuGBuiLfifyx6PXQOa49hfOofMdqt6bI4D44jGHmDQI
+   wlgpDGiXK13XFEw1qidcsCmSnbI63f/3iikT4b91xpgnY/G4039m0OlpQ
+   hsKxRmNIm31f93u/xWrTg/Ccamg/2SO9awkF41q0lRRwzkGhRSx9TSost
+   q69Pj/V4/HQwDOtigVUYAG2rvbYVHTkjTgg28r5LPsiiz5Xk9maZ+HjTZ
+   cLBg9SSBCAg1xSFvdLfazTJdsEBHfYIsFKxDwv/jqwdJJZVHDt6MepHGJ
+   QMattY31J7bAU27APUgpgKQwLleGdOhWj4u/oYE9A1VGMtQAvmvGLxHwc
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="248538209"
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="248538209"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 02:20:13 -0800
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="568999001"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 02:20:10 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nIT1F-003PAX-4u;
+        Fri, 11 Feb 2022 12:19:13 +0200
+Date:   Fri, 11 Feb 2022 12:19:12 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Konstantin Aladyshev <aladyshev22@gmail.com>,
+        Oskar Senft <osk@google.com>, openbmc@lists.ozlabs.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] serial: 8250_aspeed_vuart: add PORT_ASPEED_VUART port
+ type
+Message-ID: <YgY4IODZlKTG7yzn@smile.fi.intel.com>
+References: <20220211004203.14915-1-zev@bewilderbeest.net>
 MIME-Version: 1.0
-X-Mailer: Yamail [ http://yandex.ru ] 5.0
-Date:   Fri, 11 Feb 2022 13:18:40 +0300
-Message-Id: <10011281644574720@myt5-c7c2e3441f25.qloud-c.yandex.net>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220211004203.14915-1-zev@bewilderbeest.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On 2022-02-09 14:09, Aleksandr Fedorov wrote:
->> iommu_dma_get_resv_regions() assumes that iommu_fwspec field for
->> corresponding device is set which is not always true. Since
->> iommu_dma_get_resv_regions() seems to be a future-proof generic API
->> that can be used by any iommu driver, add an explicit check for NULL.
+On Thu, Feb 10, 2022 at 04:42:03PM -0800, Zev Weiss wrote:
+> Commit 54da3e381c2b ("serial: 8250_aspeed_vuart: use UPF_IOREMAP to
+> set up register mapping") fixed a bug that had, as a side-effect,
+> prevented the 8250_aspeed_vuart driver from enabling the VUART's
+> FIFOs.  However, fixing that (and hence enabling the FIFOs) has in
+> turn revealed what appears to be a hardware bug in the ASPEED VUART in
+> which the host-side THRE bit doesn't get if the BMC-side receive FIFO
+> trigger level is set to anything but one byte.  This causes problems
+> for polled-mode writes from the host -- for example, Linux kernel
+> console writes proceed at a glacial pace (less than 100 bytes per
+> second) because the write path waits for a 10ms timeout to expire
+> after every character instead of being able to continue on to the next
+> character upon seeing THRE asserted.  (GRUB behaves similarly.)
 > 
-> Except it's not a "generic" interface for drivers to call at random,
-> it's a helper for retrieving common firmware-based information
-> specifically for drivers already using the fwspec mechanism for common
-> firmware bindings. If any driver calls this with a device *without* a
-> valid fwnode, it deserves to crash because it's done something
-> fundamentally wrong.
-> 
-> I concur that it's not exactly obvious that "non-IOMMU-specific" means
-> "based on common firmware bindings, thus implying fwspec".
+> As a workaround, introduce a new port type for the ASPEED VUART that's
+> identical to PORT_16550A as it had previously been using, but with
+> UART_FCR_R_TRIG_00 instead to set the receive FIFO trigger level to
+> one byte, which (experimentally) seems to avoid the problematic THRE
+> behavior.
 
-Thanks for the explanations, yes, this was the misunderstanding on my
-part. Maybe add a comment?
+...
 
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index d85d54f2b549..ce5e7d4d054a 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -379,6 +379,9 @@ void iommu_put_dma_cookie(struct iommu_domain *domain)
-  * for general non-IOMMU-specific reservations. Currently, this covers GICv3
-  * ITS region reservation on ACPI based ARM platforms that may require HW MSI
-  * reservation.
-+ *
-+ * Note that this helper is meant to be used only by drivers that are already
-+ * using the fwspec mechanism for common firmware bindings.
-  */
- void iommu_dma_get_resv_regions(struct device *dev, struct list_head *list)
- {
+> +	[PORT_ASPEED_VUART] = {
+> +		.name		= "ASPEED VUART",
+> +		.fifo_size	= 16,
+> +		.tx_loadsz	= 16,
+> +		.fcr		= UART_FCR_ENABLE_FIFO | UART_FCR_R_TRIG_00,
+> +		.rxtrig_bytes	= {1, 4, 8, 14},
+> +		.flags		= UART_CAP_FIFO,
+> +	},
+
+This is quite similar to AR7 type. Can that be (re-)used?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

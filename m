@@ -2,92 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08734B2B55
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B033F4B2B5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351936AbiBKRIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 12:08:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32938 "EHLO
+        id S241504AbiBKRIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 12:08:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351922AbiBKRIF (ORCPT
+        with ESMTP id S1351944AbiBKRIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 12:08:05 -0500
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2792E8;
-        Fri, 11 Feb 2022 09:08:04 -0800 (PST)
-Received: by mail-oi1-f174.google.com with SMTP id s24so10251456oic.6;
-        Fri, 11 Feb 2022 09:08:04 -0800 (PST)
+        Fri, 11 Feb 2022 12:08:21 -0500
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DF5C02;
+        Fri, 11 Feb 2022 09:08:20 -0800 (PST)
+Received: by mail-ot1-f42.google.com with SMTP id s6-20020a0568301e0600b0059ea5472c98so6505191otr.11;
+        Fri, 11 Feb 2022 09:08:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=R7TWwHQgq/gUi7lhU9NsZIWS2INPHgAbX9uQVxuU8C8=;
-        b=Fepv0LqUzFUydBeBplvgfZ7Y4fkMAnrFomcsfjzIusUtavw9N05rl2ZYVvENGMHKN8
-         ZitD2EjrUyUMJoEmuNOeSJbuqNhJX2JqfnVPWv6sOcnf5SxXqt/mtGAn1ILVHc50+I9A
-         m9JCIN/Gtlh6M4YxE15mj68c5FHzzwfDkGc8w+Tttm+IWg5cZp5bg+IheDp5lJWh9ind
-         rdwgvoBFEtXWPois/G4cLEzCL1ooLWf4Ci+uHATiwUGMEg1j1EX4f3AmLrvl4E5MLjYj
-         0gFlnuB0SAeUsI/Q0gKDW8LWZJvPO0ccxvWdILoPLNknK9ka6pF6s6R6sJIGgDAjsGB6
-         JbLg==
-X-Gm-Message-State: AOAM53103ssEfAzS6SFtki3cg+53EaTuKptP8k87iMkkYXAAIvvTvfhP
-        gXqgLv2xwR12Gb1bPSVF4+pFRUuMVQ==
-X-Google-Smtp-Source: ABdhPJyxSa9G6VEbAaX4cveou0lyE+/EhRjxN4fbYgq4kSA+bQ00S52Xggx1BCfmuOEo2hhcrNR4DA==
-X-Received: by 2002:a05:6808:221d:: with SMTP id bd29mr675535oib.63.1644599283411;
-        Fri, 11 Feb 2022 09:08:03 -0800 (PST)
+        bh=UP82tZK0mR8kf+RIcXUHEFVtVvjNxQjI8M9cf8aM7EA=;
+        b=Gf6FRuf8YyOudckEiEDv/7Tpj8Qh+VKWT7/GfT1/eWuu7dcgnbQLj6mzBR3Nnd3z7W
+         Qs2vsS5sVivlwupO1R1g5tq13srF6zotCkvTK3Dvc6PLvFPR1UC5GRZ5TP/VA1tTUOyo
+         n3qWLbuXPq6fxgts2OrthOhuOFfCeChzjnHZoaCAKy6P6g5oCR4aPcWaKcrNWR8OU0js
+         PMXYRgNAsI6k+wz0nb7Iu5GRTYMgsy/8BpdSJTa2XAoR52l8zyQsp1SZtKnlnjd4+/f4
+         BL9pUkq64JQ6yncczZAn9TJEcu2JNJkIE/ElzAMEBNHTJCWd4jMZR0dtb8LId1sD7LrK
+         ShTg==
+X-Gm-Message-State: AOAM5325UbpzQ8GC7TuzGmA7QIgoICyDAlTqnjRPMKTE+V4HyrkWEX0F
+        Tn1qp0U1CfsKeG46OKzA1rywIoDDTw==
+X-Google-Smtp-Source: ABdhPJxZQdbH8VWoY++MFQ5YEvKMcvExNGQkuMa365b4w3lrJpxTmRIndhtiT0EQKribgxgz7bG85A==
+X-Received: by 2002:a9d:4806:: with SMTP id c6mr903303otf.317.1644599299563;
+        Fri, 11 Feb 2022 09:08:19 -0800 (PST)
 Received: from robh.at.kernel.org ([2607:fb90:5fee:dfce:b6df:c3e1:b1e5:d6d8])
-        by smtp.gmail.com with ESMTPSA id z4sm9269527ota.7.2022.02.11.09.08.00
+        by smtp.gmail.com with ESMTPSA id 79sm9280615otc.56.2022.02.11.09.08.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 09:08:02 -0800 (PST)
-Received: (nullmailer pid 530607 invoked by uid 1000);
-        Fri, 11 Feb 2022 17:07:59 -0000
-Date:   Fri, 11 Feb 2022 11:07:59 -0600
+        Fri, 11 Feb 2022 09:08:18 -0800 (PST)
+Received: (nullmailer pid 531058 invoked by uid 1000);
+        Fri, 11 Feb 2022 17:08:16 -0000
+Date:   Fri, 11 Feb 2022 11:08:16 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Liang Chen <cl@rock-chips.com>, devicetree@vger.kernel.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alex Bee <knaerzche@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        linux-rockchip@lists.infradead.org,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [PATCH v6 1/5] dt-bindings: gpu: mali-bifrost: describe clocks
- for the rk356x gpu
-Message-ID: <YgaX7ze76nFtEcN9@robh.at.kernel.org>
-References: <20220209215549.94524-1-michael.riesch@wolfvision.net>
- <20220209215549.94524-2-michael.riesch@wolfvision.net>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        paul@crapouillou.net, robh+dt@kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: timer: Add PWM compatible for X1000 SoC
+Message-ID: <YgaYAOmej5V4yRWo@robh.at.kernel.org>
+References: <20220209231141.20184-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220209215549.94524-2-michael.riesch@wolfvision.net>
+In-Reply-To: <20220209231141.20184-1-aidanmacdonald.0x0@gmail.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 09 Feb 2022 22:55:45 +0100, Michael Riesch wrote:
-> From: Alex Bee <knaerzche@gmail.com>
+On Wed, 09 Feb 2022 23:11:41 +0000, Aidan MacDonald wrote:
+> The PWM hardware on the X1000 SoC is almost identical to other
+> Ingenic SoCs, so it can be used with only minor driver changes.
 > 
-> The Bifrost GPU in Rockchip RK356x SoCs has a core and a bus clock.
-> Reflect this in the SoC specific part of the binding.
-> 
-> Signed-off-by: Alex Bee <knaerzche@gmail.com>
-> [move the changes to the SoC section]
-> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 > ---
->  .../devicetree/bindings/gpu/arm,mali-bifrost.yaml | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
+>  Documentation/devicetree/bindings/timer/ingenic,tcu.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>

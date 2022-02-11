@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0853A4B1E8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC954B1E96
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242914AbiBKGaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 01:30:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34254 "EHLO
+        id S245324AbiBKGeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 01:34:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235580AbiBKGaU (ORCPT
+        with ESMTP id S244565AbiBKGee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 01:30:20 -0500
+        Fri, 11 Feb 2022 01:34:34 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E22E2BF;
-        Thu, 10 Feb 2022 22:30:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4FBE56;
+        Thu, 10 Feb 2022 22:34:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
         :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=l2WBiCb5duYJRA9nKpihqrJOH1Qjg6utSrFiu8qAdtc=; b=AnKnKE0NJUwU4fWLsFwK5P4vKv
-        Nlnff4sgxHX4kIet7nohl+ovUiBsRaxuklG3qM8nFuIOSe2F7/CKPBYOv/uf7QI5xdtYk+wld+Nqt
-        4Rdp5nhiJAf+iAm0+3V9xvrwNTCTYkWET5ToSjZ7irdMc3V/fGhqRZI/CkHy8Uwxc1AURkpns3P/C
-        D6ZqNIwlF5cQfYW0E/kwj1iWhKJ+lMY5+br/nch+ozqvbziT8ycMp6b7O7EZEeWa1eYKVSp42U57Y
-        fowlDQ+r6xw8NWCx0h+cW+gnRpDLjZCiHDvP+7yXgBpxnLFpyqap+R8pjoaqtNhg0CFWp9XM4VUsg
-        6cCcyABg==;
+        bh=wmT7NdpIIaZIZ4RJN8MppwRUgJ7HrGVSC4APn17UeMY=; b=29czAqJRGXG9/3d5XsS3Qn5xPf
+        msIroF9kN5cnhhZVwC1VEpMYxztAzu1w/QoGaORO9AXhwrQe3iWqmu1mjrO96HH2IGf+78L9I1Y/e
+        uZLVt2DNRlf69kviZF0Ma3rimb3FJwKlx7aNodiI0EmLI13WwMokZVpM7Bgvib9L+I1yVXpIf/0bQ
+        N5qs8K2lzHviDpdOG8zebJc+reU+Ku7krq5ulnVBeYjeZipiricP1UYVBV15nj+oSC6+J9VzCgUuV
+        t7+rQ1LJz66kZsUg2SDPckzpjChVwEs6GM33uzdUlnsWXdKnTrwZPt+IPiXkxYStH55wVdTBp5wDG
+        J4g6aMEQ==;
 Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nIPRe-005zUu-JS; Fri, 11 Feb 2022 06:30:14 +0000
-Date:   Thu, 10 Feb 2022 22:30:14 -0800
+        id 1nIPVo-005zmJ-3R; Fri, 11 Feb 2022 06:34:32 +0000
+Date:   Thu, 10 Feb 2022 22:34:32 -0800
 From:   Christoph Hellwig <hch@infradead.org>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     axboe@kernel.dk, hch@infradead.org, rostedt@goodmis.org,
-        kch@nvidia.com, xiyou.wangcong@gmail.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [v8 PATCH] block: introduce block_rq_error tracepoint
-Message-ID: <YgYCdhgQ+PoudJvv@infradead.org>
-References: <20220210225222.260069-1-shy828301@gmail.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH REPOST] irq_poll: Add local_bh_disable() in cpu_dead
+ notifier
+Message-ID: <YgYDePJLsVLXKqEP@infradead.org>
+References: <YgJ/XWVxxWDVBBVA@linutronix.de>
+ <YgNzsnIE9bwQZ1Zg@infradead.org>
+ <YgUGI9qAKUh4AOUY@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220210225222.260069-1-shy828301@gmail.com>
+In-Reply-To: <YgUGI9qAKUh4AOUY@linutronix.de>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -51,6 +57,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good,
+On Thu, Feb 10, 2022 at 01:33:39PM +0100, Sebastian Andrzej Siewior wrote:
+> You need to handle the pending softirqs. If you don't handle them
+> immediately or in a deterministic say (like on IRQ exit) then they will
+> be handled at a random point.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Yes.  Just like regular interrupts.

@@ -2,133 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 465924B296B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:50:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E35984B2971
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349373AbiBKPuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 10:50:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59236 "EHLO
+        id S1349399AbiBKPzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 10:55:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiBKPuL (ORCPT
+        with ESMTP id S240763AbiBKPzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 10:50:11 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F9521F;
-        Fri, 11 Feb 2022 07:50:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644594609; x=1676130609;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6+rMHPS4MzlHYwF2LNkcbdQXAv9bTBqR5fbIX4yipko=;
-  b=F5fMBW/BP+c7orAvtr93n1Cg6cU5LlUFXjw3BQmsodWLQtwL/S56/zRL
-   TSSUFAWIsVp06zyt6r4jVLFXQlHF40cKQTWMOQZLuF7dPlOA2hK91qJGo
-   8nEBm1aJ1vvFEX1D8xC2BAK8KdnfvTK6nQHSbRZB9IkSTD/CFrLvZjdL8
-   2jHZUmJ6i7iEzLmM7CJDY3u0RyN6JHW/wqVe3xqkHZi4EuRn8BqXQ+dMT
-   6k66d6iBx7T8UlXJ0ViqtiV0v/SfBye3lnNolR5gQ6y/YjPqh+aN3htxs
-   A4RMSsdsbIQ1KX8pfm6hXadwbfwzKtocP+P1nc3giZBfnT9VcNNSBvlXF
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="336175556"
-X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="336175556"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 07:50:09 -0800
-X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="772124467"
-Received: from smile.fi.intel.com ([10.237.72.61])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 07:50:05 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nIYAV-003UjX-Jt;
-        Fri, 11 Feb 2022 17:49:07 +0200
-Date:   Fri, 11 Feb 2022 17:49:07 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Lee Jones <lee.jones@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org
-Subject: Re: [PATCH v4 3/6] drm: Add driver for Solomon SSD130x OLED displays
-Message-ID: <YgaFc++EP3/hv+iA@smile.fi.intel.com>
-References: <20220211091927.2988283-1-javierm@redhat.com>
- <20220211091927.2988283-4-javierm@redhat.com>
- <YgZJpi4llqr93U9Y@smile.fi.intel.com>
- <eed8200c-7716-ce4f-dac5-bd6f0345b631@redhat.com>
+        Fri, 11 Feb 2022 10:55:07 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FD6196;
+        Fri, 11 Feb 2022 07:55:05 -0800 (PST)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21B8ORS3012985;
+        Fri, 11 Feb 2022 07:54:58 -0800
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2105.outbound.protection.outlook.com [104.47.70.105])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3e5134e95r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Feb 2022 07:54:58 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BhvKYRf6R7kZFeTzw0caD9a7DBiX+W6rh+vUyZyTC3wOs9XPK01YTaqEVXnlsrvm+3kTVnUEX895S/sFTE53Qn2YpiKkeMXqq0XZQvqMueMrPO4a9opjCQ1463v+fFD28m5pK6PIQqo1DPRPwiOTZCCoSUzt5XVOQVkglV+xJbSEdY8jjpeqBULWVGUPuDKjMG7UfNHGMPPLF5gFiNv+iR8PYzPAIglIYNmefCUrRjHz4ZSk5I9A/U+LhbRCLfJwrXT4CJkH6yWyeiJAmRccMvVb91pDOcYkJe/eSj23UFwAKrlkyosUOi5Ni8LaDhh4NRuwPnQjz5bu/K1YmM6wsg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=o+WSl8uByVzxK6cxrdD9STCFMLNuDxx8QfNsYJ+Li8I=;
+ b=L7e/WA2hDVl+12LYbleTEdPfDqpkzJ132UfHw6e+N9KnTVzwSZBfeYgUFeWB6/gHF30T+nbEjb6emmU8EK/n65yd/K8yUhYUcgXBsvR4vTMUaKEKjLQeNg6ghW5CtEbUWFSlors1VxA9vwruh8gbGEdokAJ2YnKcYOgCQmlZE6vAkFXCFYmVZIiO+fBIXUHJCI1CucrQBzXWprHJ12Pnw8NrSdrRtL+mMyrxnFlEqbAnz2vtt02iUZeXsHOzsA1GMZ1h7fMOLPKqV1xcWxZesVmK09/EGt96KUs7Qk7gj1vklnGO1MRNpEr/w/BfgcFskPwOJ1t+Hhj7mLBiN1GkQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=o+WSl8uByVzxK6cxrdD9STCFMLNuDxx8QfNsYJ+Li8I=;
+ b=l168qkCP7/C0m/F7GGm6kPsnz7xIrpq6XNJNnxU0MAki1HEtysiw2BKojBApl7jyarrFeIvmOIK2jONQL9by3QsaXIXuKWJdCkSQE6aR/H9TofjVspfYW/XmPMs7mTtSF5RPsGl7LkJ0EgpCXqmE33zi8//60TI/fNG3sGs+vsA=
+Received: from PH0PR18MB4474.namprd18.prod.outlook.com (2603:10b6:510:ea::22)
+ by BYAPR18MB2597.namprd18.prod.outlook.com (2603:10b6:a03:12e::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.12; Fri, 11 Feb
+ 2022 15:54:56 +0000
+Received: from PH0PR18MB4474.namprd18.prod.outlook.com
+ ([fe80::d0b1:c7fa:d04f:f8bc]) by PH0PR18MB4474.namprd18.prod.outlook.com
+ ([fe80::d0b1:c7fa:d04f:f8bc%5]) with mapi id 15.20.4975.014; Fri, 11 Feb 2022
+ 15:54:55 +0000
+From:   Hariprasad Kelam <hkelam@marvell.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
+        Linu Cherian <lcherian@marvell.com>,
+        Geethasowjanya Akula <gakula@marvell.com>,
+        Jerin Jacob Kollanukkaran <jerinj@marvell.com>,
+        Subbaraya Sundeep Bhatta <sbhatta@marvell.com>
+Subject: Re: [net-next PATCH] octeontx2-af: fix array bound error
+Thread-Topic: [net-next PATCH] octeontx2-af: fix array bound error
+Thread-Index: AdgfX51L/rhUbjOQRimZXX7hDwIsyA==
+Date:   Fri, 11 Feb 2022 15:54:55 +0000
+Message-ID: <PH0PR18MB4474F41E53AA9F2D557088FBDE309@PH0PR18MB4474.namprd18.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b7f3a3ef-6aa2-4f30-9d4a-08d9ed76d96c
+x-ms-traffictypediagnostic: BYAPR18MB2597:EE_
+x-microsoft-antispam-prvs: <BYAPR18MB2597E973F74D073CBB5939AADE309@BYAPR18MB2597.namprd18.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: awDA43G3hjXjPhd+qPus5H6V3NvjuFYK/rudR2M6m2X0Zo4DjKq22iznbQb3FXgFrWtEaIRmaIgCWis3R5JDZAOLMsOKB6j45FI41o+sTI5B0iu0kklcgr66HnNZ0KFpSOTduY90MqoF4tOo2GKlINJsEiOjnGlcBI+W0RL7V4VdJ3UH7+j5qhMUlF+ggpj7yDryvqWP+rzBu008leUoSX9WrO+zd2j8PfdodCeBdQepUVlK/DLdufHfa5cvjioWx7MoWFyxjljW0t7d5ru29s1OIqB+kiFDmXQAdEFNeNudK1uy6m5ZoglFuB1YKn3d+szjEbmHflzw7zYZeKhzhe95HnxeIn0Eo5Tq8lWgFEAI272RJpv433JIsLrUjUBY8Y0OiDZXNSDkLBpXMYltjhHiJAQbxy5XanXK87/1Hrc9YgW540IK8J2SLGfBSWkyIBcw7yaMQHWvkMjBmIxbruZAd0DIwUM9w2ffh7VTSCJBlIV9ca6Xt7od0wFkQiMBTTN6IX6XGIKC6teYV+yoZ1Zux/W6aefbL2pqjkLzkkYERSFoCVtRAl+epq178R2Xyd8Q54pAOs0dOnuLxv/MMzeDL/dWDQ7z7DKL1wj07+HZyolm/2YCYMB0MphvdxrmFh/rfEfRkCLvSYwdHmzj/Yi8+3KdP1kSpl0GhynPoNCcYzE023SFI1elCmv8xhHQINOIdE8AK+Xzo4qe5548Nw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR18MB4474.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4744005)(38100700002)(71200400001)(122000001)(2906002)(38070700005)(508600001)(6506007)(7696005)(9686003)(54906003)(66476007)(66556008)(66446008)(64756008)(66946007)(8676002)(4326008)(316002)(6916009)(107886003)(8936002)(5660300002)(52536014)(186003)(76116006)(55016003)(86362001)(33656002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?R/PuGfbMAMh/Zxj7VSqT7Q/o6EO+so2OTxNpHmfLpKnpGWmbDp/aXJEsQtvU?=
+ =?us-ascii?Q?1OCHToSynknb5I0W77tcTuzADkrcP9b+PmsuexJiyuJ2aeCdk21GAn7efTsy?=
+ =?us-ascii?Q?dYgVtEEnicDps/u0IXQBok7T23t1ywE5YdYZgSMPfKztmXfPFQ5kx2c8WdIA?=
+ =?us-ascii?Q?sfcWz/hhbW/SM3GhPhZM+95SdJcslpnTn7mSj7Q3BCiNfoukNOYEabEXdvB9?=
+ =?us-ascii?Q?XWddREc+51Wj/fvOUngEu8MHsSz3aS8Tb7GFiR0WCllSR+LcFzriZgH/+msz?=
+ =?us-ascii?Q?3JIVIyb+0MIc3tL5f27nXkeEjoh1//zjmWWbAv9RX5dXTBS8ikoFrJmAiWiJ?=
+ =?us-ascii?Q?L73pGEvZ0voZfdZKXu/gsYLXQrzVtgx6ik4zxcEoH+uy98/qrsJtCSRfXK8z?=
+ =?us-ascii?Q?TxYDvCuPV+uqC0ivMDsOqsQLqkKq5wK2TiefLTBMV3NM9b4rlX5DuJ1XqJQ7?=
+ =?us-ascii?Q?HLCZjV+msWqEFFQv7LS+E6kRq2+VYgeD7KDrKPfLqWf2sKeCFVdWPEI8ggYs?=
+ =?us-ascii?Q?MVcA9euxwsbDnMNA8JjWJq6sHRTt6eKIh63v+YqqDox5mPR0ZspNGTxSgdy2?=
+ =?us-ascii?Q?jMDPPOg7tS/mrXE6y1mOZhP3vqgloq7+oxzvdiyzYbTb6B5p19PMfpwy1iGY?=
+ =?us-ascii?Q?pNL4t82PpJ0QN2KBwLGFH0lONaYSyqvWY2yycul73uSdaFMa920Uc5t0uRju?=
+ =?us-ascii?Q?gj1BoPwteK5FiXenHr1qE6Dl8OWZbMCN0tsmxRzJlCnVhFYiqz/+89EdnxWI?=
+ =?us-ascii?Q?uCJ2VDWRhWZYP+oCJhOCuJS1xbb4jJuh5j7Rn1wwiXXrxg11PNmjbVSw54py?=
+ =?us-ascii?Q?1GL2j6oU320ejsbWmzooiScTo+iNaCbkoNJLTUjpLKlk+XiUGpr60Y5IAfnk?=
+ =?us-ascii?Q?qKHJso+/31Ekys1PVJ2wdK6m0Dd0gm0R2PWlnOxBgOAxxsXxojEUr7SzCpn+?=
+ =?us-ascii?Q?9a32h+7V7+PRm06YsAeF1MOPuaE1Mwfc8/2QzsK5/eI0z8u336Cf8DHscJAS?=
+ =?us-ascii?Q?e+awDaRUOshzEcK1gWmOO7bDtVBm6txlhGJStaKdqszBgZP3XG1Pt2BK/ty0?=
+ =?us-ascii?Q?pNLNEIHI9j/Cd0ApV0dBo0Dq74adIxus18viAsOd3V+ei23c1J5Mefid/8K7?=
+ =?us-ascii?Q?w84D+gnCWFDs86n/zX/DRpLuqvvC7oFUiIiZSgCGFB0lVAK9XgIrESGVDHRM?=
+ =?us-ascii?Q?QD72Ftu8LmIPqEqzfWlqhS0LzvQxy//+8DgyH+3oeRIownRw2nrNqIilPD/K?=
+ =?us-ascii?Q?mriW+hkH3fK2c0amwrN9NUAVCxrejKiuoppEkGFz2LlgN2p2TFP4JhuE30Z3?=
+ =?us-ascii?Q?BVR0XMiRI3ZJ1SjYQIoAq5j24p8T8Er/OE2GAnVZSjEkARzhW+W98rmlGCiW?=
+ =?us-ascii?Q?3oEGIN87L95humx2HZHwbqQ5efYMic40beIyNEeq2BCOu513vd26jrx4ifGV?=
+ =?us-ascii?Q?S7Rzqih461tW4GsI0sYYtifzgwT7egNPkbnmJfH7vzBSEXsaB5+U865QIA4n?=
+ =?us-ascii?Q?dYG0FeVKcI7gVnpjHw7UNm+Y/P9FBMXTfnYlCg7Ks1ej3Fbwk4bwKc3Bgr2R?=
+ =?us-ascii?Q?lZ9hqHfgEHaRWo7gGYpiKiz4o84axsMiuktuQ5NnRx8YfcKIVy3Jmif31vQq?=
+ =?us-ascii?Q?Lq9XoLnYDZIhS7qqStEPaPA7AfcUO1Uv8Mv9wJVIT/ZWq8zPDcHvmpBzvnME?=
+ =?us-ascii?Q?z0eTfCCpkt1nXnvcrGeXdUbIGDI=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eed8200c-7716-ce4f-dac5-bd6f0345b631@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: marvell.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR18MB4474.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b7f3a3ef-6aa2-4f30-9d4a-08d9ed76d96c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Feb 2022 15:54:55.8396
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: sEkGbpOed2JXkNVy+HT7VGW51s5W3obIhEAxf6ACTeG4J2FK3TZmouHTUAndGFe3yRQjrB2VoZshipu81UYgWQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR18MB2597
+X-Proofpoint-GUID: JtIi60BYASbFwvNU80a30ShMyaAUGEWd
+X-Proofpoint-ORIG-GUID: JtIi60BYASbFwvNU80a30ShMyaAUGEWd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-11_05,2022-02-11_01,2021-12-02_01
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 01:05:57PM +0100, Javier Martinez Canillas wrote:
-> On 2/11/22 12:33, Andy Shevchenko wrote:
-> > On Fri, Feb 11, 2022 at 10:19:24AM +0100, Javier Martinez Canillas wrote:
-
-...
-
-> >> + * Helper to write command (SSD130X_COMMAND). The fist variadic argument
-> >> + * is the command to write and the following are the command options.
-> > 
-> > This is not correct explanation. Please, rephrase to show that _each_ of the
-> > options is sent with a preceding command.
-> >
-> 
-> It's a correct explanation IMO from the caller point of view. The first argument
-> is the command sent (i.e: SSD130X_SET_ADDRESS_MODE) and the next ones are the
-> the command options (i.e: SSD130X_SET_ADDRESS_MODE_HORIZONTAL).
-> 
-> The fact that each command and options are preceding with a SSD130X_COMMAND
-> value is part of the protocol of the device and a detail that's abstracted
-> away by this helper function to the callers.
-
-My previous suggestion about bulk transaction was purely based on this
-(misinterpreted) description. Can we make sure somehow that another reader
-don't trap into the same?
-
-...
 
 
-> >> +	bl = devm_backlight_device_register(dev, dev_name(dev), dev, ssd130x,
-> >> +					    &ssd130xfb_bl_ops, NULL);
-> >> +	if (IS_ERR(bl)) {
-> > 
-> >> +		ret = PTR_ERR(bl);
-> >> +		dev_err_probe(dev, ret, "Unable to register backlight device\n");
-> >> +		return ERR_PTR(ret);
-> > 
-> > 		dev_err_probe(dev, PTR_ERR(bl), "Unable to register backlight device\n");
-> > 		return bl;
-> > 
-> > ?
-> 
-> No, because this function's return value is a struct ssd130x_device pointer,
-> not a struct backlight_device pointer.
+On Thu, 10 Feb 2022 22:05:57 +0530 Hariprasad Kelam wrote:
+> This patch fixes below error by using proper data type.
+>=20
+> drivers/net/ethernet/marvell/octeontx2/af/rpm.c: In function
+> 'rpm_cfg_pfc_quanta_thresh':
+> include/linux/find.h:40:23: error: array subscript 'long unsigned=20
+> int[0]' is partly outside array bounds of 'u16[1]' {aka 'short=20
+> unsigned int[1]'} [-Werror=3Darray-bounds]
+>    40 |                 val =3D *addr & GENMASK(size - 1, offset);
+>=20
+> Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
 
-	return ERR_CAST(bl);
+Could you send the Reported-by: tag? Was it repored by the kernel build bot=
+?=20
 
--- 
-With Best Regards,
-Andy Shevchenko
+No its reported by Stephen Rothwell <sfr@canb.auug.org.au>=20
+I have added Reported-by tag in V2
 
-
+Thanks,
+Hariprasad k

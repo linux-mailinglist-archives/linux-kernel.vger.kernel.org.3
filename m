@@ -2,125 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9904B28FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:17:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCC64B28FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:19:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345292AbiBKPRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 10:17:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37432 "EHLO
+        id S232484AbiBKPSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 10:18:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241409AbiBKPRa (ORCPT
+        with ESMTP id S1351336AbiBKPR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 10:17:30 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE8EB08;
-        Fri, 11 Feb 2022 07:17:27 -0800 (PST)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E31931C0010;
-        Fri, 11 Feb 2022 15:17:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644592646;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VXF0Q98TnY0VF6LJAgT1z6iuK0gMwIZwwneiqBq9XCk=;
-        b=G8KjfCt1YjfMmLzINgPygwXjdiDJuTBXGcWdih6FT3BH8KxHmLHoIySqIwrDwRTnJqFzrH
-        CI8LuS6bc5QZYy6LUti6DoVkMDbGujFz2h5EusKBgKQ8fdsJQd/CesNJIXQMkXP0sOSsMc
-        Gqk0pXSP1BufwkzJbeQlNiQSB9QGEjEd6i3c7x151zt8HSGGhlotI0wxsr2ZlCWArCjgRu
-        VcldH6O2ZkPYE47GF7YdHqeLsoQownp3RBGOPZkpCX/Yidwzj3adVOOiVhqBY+/xPGeW3s
-        rbK9hv/QMEfMZwR0u+MwX0ZefOVSbjnSmfKE/CgcmmvB8Y6JcGFBcvpw1S72lw==
-Date:   Fri, 11 Feb 2022 16:17:22 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 33/66] media: sun6i-csi: Rework register definitions,
- invert misleading fields
-Message-ID: <YgZ+AgGD4n1ELpcA@aptenodytes>
-References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-34-paul.kocialkowski@bootlin.com>
- <20220209093945.uertj7wut72tximz@houat>
+        Fri, 11 Feb 2022 10:17:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D76AD;
+        Fri, 11 Feb 2022 07:17:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C6E8B82A80;
+        Fri, 11 Feb 2022 15:17:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DCEEC340E9;
+        Fri, 11 Feb 2022 15:17:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644592673;
+        bh=Ws0enUbi4c/3fRwV8HT3WSmmmPjd2OSnRT28xJ7K5vI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oZx3H3RF6ZgmhGjP7zs+qUW3WzO4KaXwPj2mmoxVS5D1Cqz5l61wN04/2Q5V/QDX7
+         5VGnVqIoYwaHMXlx3honnuE4URE0Vj2P8Zcyki0+Ch4B0mxV3r9rQnUiFw/BoVTk6i
+         b5DLrulnT3B+oli22kla1GZG5GMQDh9TK05cL6Z8W5ZK0p0zkeJJLwHSyRcehov56m
+         xEz4ZS5nO9zNWFJpkP6sK0OHmHBvOQCombNWuiowtQjOwgK1FV/Mke5WZMGI/dNSmD
+         OxtZvSaJVyAPeGZb4d522ikeVyMK1VJxbedwflhim073s73jrhkIIrCncYCaR6jTPl
+         4S2KK5stQGCMw==
+Date:   Fri, 11 Feb 2022 16:17:50 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Yury Norov <yury.norov@gmail.com>
+Subject: Re: [PATCH rcu 9/9] rcu: Replace cpumask_weight with cpumask_empty
+ where appropriate
+Message-ID: <20220211151750.GC588079@lothringen>
+References: <20220204230751.GA4193671@paulmck-ThinkPad-P17-Gen-1>
+ <20220204230805.4193767-9-paulmck@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="nAZiK7IJGde0Oma+"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220209093945.uertj7wut72tximz@houat>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220204230805.4193767-9-paulmck@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 04, 2022 at 03:08:05PM -0800, Paul E. McKenney wrote:
+> From: Yury Norov <yury.norov@gmail.com>
+> 
+> In some places, RCU code calls cpumask_weight() to check if any bit of a
+> given cpumask is set. We can do it more efficiently with cpumask_empty()
+> because cpumask_empty() stops traversing the cpumask as soon as it finds
+> first set bit, while cpumask_weight() counts all bits unconditionally.
+> 
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
---nAZiK7IJGde0Oma+
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Wed 09 Feb 22, 10:39, Maxime Ripard wrote:
-> On Sat, Feb 05, 2022 at 07:53:56PM +0100, Paul Kocialkowski wrote:
-> > This cleans up the register definitions a bit, adds a prefix, remove ma=
-sks.
-> > Registers are now fully defined, some additional fields were added when
-> > needed. New format definitions are added for future use.
-> >=20
-> > Some fields are wrongly defined (inverted) in Allwinner litterature
-> > (e.g. field vs frame prefixes), which is quite misleading. They are
-> > now corrected to reflect their actual behavior.
->=20
-> How was it tested?
->=20
-> In particular, see
-> https://lore.kernel.org/all/20180305093535.11801-7-maxime.ripard@bootlin.=
-com/
-
-No oscilloscope testing on my side to investigate the matter in depth,
-so the polarities inversion is based on what you changed in the driver.
-
-The idea is to change the register definitions to match what the hardware
-appears to be doing (based on your good look at the oscilloscope) to avoid
-the confusion of setting register fields that look contradictory.
-It's just a rename and the behavior remains the same.
-
-Paul
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---nAZiK7IJGde0Oma+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIGfgIACgkQ3cLmz3+f
-v9EnTAgAhApdzmVhN+9E++U4/kVhkozTecPPIQB7VC2eBNFFzHUCTDxUeNLba3bZ
-xSc4Hhkj5k1i34BXCJQr7fn4EJ65pEiT4cwzC66oPzS+xsEtguAiOPAWfRKPACdv
-PXhdORHKu5tYfhCHuUcT4OOe+Bq5ug0sERvnkpeMvxmVOHmheguf1USya8NKz0DS
-xKGn4Y8//yY1h3Ho2We4t9aTCG6W1MnpW5N45tb8vAK2y0+cOsObQvSRfEDkPvyA
-BfE7zj7LWmdXO3KPEqycnULT0NtLKYzH7Qqj4bMxZYnNxSCq8k8rXbNUd0d+A3AF
-NIXeKTJBhwrrsnAvBfNFkLSFfGS6tQ==
-=dcHQ
------END PGP SIGNATURE-----
-
---nAZiK7IJGde0Oma+--
+Acked-by: Frederic Weisbecker <frederic@kernel.org>

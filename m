@@ -2,203 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C483C4B2C67
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 19:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 383774B2C6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 19:09:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347134AbiBKSFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 13:05:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51718 "EHLO
+        id S245487AbiBKSHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 13:07:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbiBKSFQ (ORCPT
+        with ESMTP id S231338AbiBKSHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 13:05:16 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800ACD4B
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 10:05:14 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id j12so5061416ybh.8
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 10:05:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=bQCacAqu6AD3L5T1l4m/Dw/zcsi+Jlaw1qBbQHQJ5n8=;
-        b=kLbjkhoYZDNiub72bMg9ZqtXNwhvLpNO+yW5ASu4uizUywougb5IgTN3A9j7vUzPCV
-         ilbbSa1H6KXx7RaT+aD1shRHdR+F7jQhMY0UN+PZf0soTx4mDFCLBkN12LSn14MUXJMC
-         bNY8Rs4cIcMre3iQE1bY1Ur1vW/u69KzewdCW2nJGe9IgAG6nvcuHwrTzvL46TewNu1r
-         U+zUpHn0Hef8B9vTL4zTS59BQuQ6aJP1KPP4mXq58IjfIWdD1mYgt7ZNd5gv/gf0TIGs
-         jwIuFW4tMTPcYA5dGPBW7M+tfiAM/VQkuwm1hqfpeOplL17TdnC+4+tTNbwqFwdIJkQ3
-         7MlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bQCacAqu6AD3L5T1l4m/Dw/zcsi+Jlaw1qBbQHQJ5n8=;
-        b=Pc0dyvAYlKfhiPfU87s0nvDN2Vj4t/Rc5kdutjvvd6z6DnxgmwVpEkVQhmIwjPxTTh
-         rOtT00WqTqKz7kss1i5sErYLT9rqNDUeu6f9nkX8KnPCBlP5k3DKWsK2sVYQJGrs4Oyq
-         Ap9F4vNRTTFw0roKPHKzD5IKWOIJHqaXzsLDYD6p6yTgH7EXSsFlkySlgGW1IaCzYYp7
-         F0nm0mPQ1tVTRP4Vqod2oFoVhQyuWPj4wIPMsj4043PKHlyXi+FCGpgFJkAhqF5O4ZnR
-         ykHElDWr8cAq9SqNp0JhvdrdpZRbCwmCGfLCEuxqGlF1Dnc3JLtuP8oFkKpHZCw9IVYg
-         N00g==
-X-Gm-Message-State: AOAM532D0tyUXGCnntGjR0y0q7QQMFJV6endAF7/wLCNcjsfma35gLYD
-        giErcmB038KKvKHWfh9jgQEVzWze7FOylOh7nP1cCQ==
-X-Google-Smtp-Source: ABdhPJwqwn2kG4R0P3X04f1gmCys5jwU2Zxegllqb4PCZmn/bHZrdEndwiA5mCsWiE6z6c7BUFdhF4f1GQkwwBkxWBE=
-X-Received: by 2002:a81:ce09:: with SMTP id t9mr2890290ywi.254.1644602713368;
- Fri, 11 Feb 2022 10:05:13 -0800 (PST)
+        Fri, 11 Feb 2022 13:07:18 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B89ED48
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 10:07:17 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 065A121138;
+        Fri, 11 Feb 2022 18:07:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1644602836; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nfCjCvHMDToNcN74EaLVeN2Qevm9EI2WuXryd6EYo3E=;
+        b=iJjYScGeXDJdKrGbIVkZpBpOs2NTmGhcEVuHTR2ybi1juN+y3MRLMI+ZGahy85llW2vVDZ
+        84nSORebjkLF3zaVBkk86m0anx2xRqikbawBWCoUV3tWhArkp7azzkK2Qllvpj52BCD6WZ
+        xZ1LHWx7fm7hXRS8oOn8u3BeZwcybtE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1644602836;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nfCjCvHMDToNcN74EaLVeN2Qevm9EI2WuXryd6EYo3E=;
+        b=vbjv1NEdRR6wadZfog0v/LSzN+verwvr/Fi+FlO71jxMaIO9pcr2e8TQSdRlujmUpJP+uB
+        plPOZ6sgKAZqgMBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BB0FB13C9E;
+        Fri, 11 Feb 2022 18:07:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 2UK0LNOlBmKrGQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 11 Feb 2022 18:07:15 +0000
+Message-ID: <0e2dbdf3-f831-abbb-5ca8-02c8d1ab1a01@suse.cz>
+Date:   Fri, 11 Feb 2022 19:07:15 +0100
 MIME-Version: 1.0
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
- <20220209185752.1226407-3-alexandr.lobakin@intel.com> <20220211174130.xxgjoqr2vidotvyw@treble>
-In-Reply-To: <20220211174130.xxgjoqr2vidotvyw@treble>
-From:   =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
-Date:   Fri, 11 Feb 2022 10:05:02 -0800
-Message-ID: <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
-Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
- unique-symbol` is available
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 06/13] mm/munlock: maintain page->mlock_count while
+ unevictable
+Content-Language: en-US
+To:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Rik van Riel <riel@surriel.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
+ <3d204af4-664f-e4b0-4781-16718a2efb9c@google.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <3d204af4-664f-e4b0-4781-16718a2efb9c@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 9:41 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
->
-> On Wed, Feb 09, 2022 at 07:57:39PM +0100, Alexander Lobakin wrote:
-> > Position-based search, which means that if there are several symbols
-> > with the same name, the user needs to additionally provide the
-> > "index" of a desired symbol, is fragile. For example, it breaks
-> > when two symbols with the same name are located in different
-> > sections.
-> >
-> > Since a while, LD has a flag `-z unique-symbol` which appends
-> > numeric suffixes to the functions with the same name (in symtab
-> > and strtab). It can be used to effectively prevent from having
-> > any ambiguity when referring to a symbol by its name.
->
-> In the patch description can you also give the version of binutils (and
-> possibly other linkers) which have the flag?
+On 2/6/22 22:40, Hugh Dickins wrote:
+> @@ -72,19 +91,40 @@ void mlock_page(struct page *page)
+>   */
+>  void munlock_page(struct page *page)
+>  {
+> +	struct lruvec *lruvec;
+> +	int nr_pages = thp_nr_pages(page);
+> +
+>  	VM_BUG_ON_PAGE(PageTail(page), page);
+>  
+> +	lock_page_memcg(page);
 
-GNU ld>=3D2.36 supports -z unique-symbol. ld.lld doesn't support -z unique-=
-symbol.
+Hm this (and unlock_page_memcg() below) didn't catch my attention until I
+see patch 10/13 removes it again. It also AFAICS wasn't present in the code
+removed by patch 1. Am I missing something or it wasn't necessary to add it
+in the first place?
 
-I subscribe to llvm@lists.linux.dev and happen to notice this message
-(can't keep up with the changes...)
-I am a bit concerned with this option and replied last time on
-https://lore.kernel.org/r/20220105032456.hs3od326sdl4zjv4@google.com
-
-My full reasoning is on
-https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symb=
-ol
-
-> > Check for its availability and always prefer when the livepatching
-> > is on. It can be used unconditionally later on after broader testing
-> > on a wide variety of machines, but for now let's stick to the actual
-> > CONFIG_LIVEPATCH=3Dy case, which is true for most of distro configs
-> > anyways.
->
-> Has anybody objected to just enabling it for *all* configs, not just for
-> livepatch?
->
-> I'd much prefer that: the less "special" livepatch is (and the distros
-> which enable it), the better.  And I think having unique symbols would
-> benefit some other components.
->
-> > +++ b/kernel/livepatch/core.c
-> > @@ -143,11 +143,13 @@ static int klp_find_callback(void *data, const ch=
-ar *name,
-> >       args->count++;
-> >
-> >       /*
-> > -      * Finish the search when the symbol is found for the desired pos=
-ition
-> > -      * or the position is not defined for a non-unique symbol.
-> > +      * Finish the search when unique symbol names are enabled
-> > +      * or the symbol is found for the desired position or the
-> > +      * position is not defined for a non-unique symbol.
-> >        */
-> > -     if ((args->pos && (args->count =3D=3D args->pos)) ||
-> > -         (!args->pos && (args->count > 1)))
-> > +     if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL) ||
-> > +         (args->pos && args->count =3D=3D args->pos) ||
-> > +         (!args->pos && args->count > 1))
-> >               return 1;
->
-> There's no real need to do this.  The code already works as-is, even if
-> there are no unique symbols.
->
-> Even if there are no duplicates, there's little harm in going through
-> all the symbols anyway, to check for errors just in case something
-> unexpected happened with the linking (unexpected duplicate) or the patch
-> creation (unexpected sympos).  It's not a hot path, so performance isn't
-> really a concern.
->
-> When the old linker versions eventually age out, we can then go strip
-> out all the sympos stuff.
->
-> > @@ -169,6 +171,13 @@ static int klp_find_object_symbol(const char *objn=
-ame, const char *name,
-> >       else
-> >               kallsyms_on_each_symbol(klp_find_callback, &args);
-> >
-> > +     /*
-> > +      * If the LD's `-z unique-symbol` flag is available and enabled,
-> > +      * sympos checks are not relevant.
-> > +      */
-> > +     if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL))
-> > +             sympos =3D 0;
-> > +
->
-> Similarly, I don't see a need for this.  If the patch is legit then
-> sympos should already be zero.  If not, an error gets reported and the
-> patch fails to load.
->
-> --
-> Josh
->
->
-
-
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+> +	lruvec = folio_lruvec_lock_irq(page_folio(page));
+> +	if (PageLRU(page) && PageUnevictable(page)) {
+> +		/* Then mlock_count is maintained, but might undercount */
+> +		if (page->mlock_count)
+> +			page->mlock_count--;
+> +		if (page->mlock_count)
+> +			goto out;
+> +	}
+> +	/* else assume that was the last mlock: reclaim will fix it if not */
+> +
+>  	if (TestClearPageMlocked(page)) {
+> -		int nr_pages = thp_nr_pages(page);
+> -
+> -		mod_zone_page_state(page_zone(page), NR_MLOCK, -nr_pages);
+> -		if (!isolate_lru_page(page)) {
+> -			putback_lru_page(page);
+> -			count_vm_events(UNEVICTABLE_PGMUNLOCKED, nr_pages);
+> -		} else if (PageUnevictable(page)) {
+> -			count_vm_events(UNEVICTABLE_PGSTRANDED, nr_pages);
+> -		}
+> +		__mod_zone_page_state(page_zone(page), NR_MLOCK, -nr_pages);
+> +		if (PageLRU(page) || !PageUnevictable(page))
+> +			__count_vm_events(UNEVICTABLE_PGMUNLOCKED, nr_pages);
+> +		else
+> +			__count_vm_events(UNEVICTABLE_PGSTRANDED, nr_pages);
+> +	}
+> +
+> +	/* page_evictable() has to be checked *after* clearing Mlocked */
+> +	if (PageLRU(page) && PageUnevictable(page) && page_evictable(page)) {
+> +		del_page_from_lru_list(page, lruvec);
+> +		ClearPageUnevictable(page);
+> +		add_page_to_lru_list(page, lruvec);
+> +		__count_vm_events(UNEVICTABLE_PGRESCUED, nr_pages);
+>  	}
+> +out:
+> +	unlock_page_lruvec_irq(lruvec);
+> +	unlock_page_memcg(page);
+>  }
+>  
+>  /*

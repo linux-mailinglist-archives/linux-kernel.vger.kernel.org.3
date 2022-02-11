@@ -2,213 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05E204B2B81
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 133FD4B2B87
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:16:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351961AbiBKROq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 12:14:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37508 "EHLO
+        id S1351962AbiBKRPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 12:15:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345360AbiBKROo (ORCPT
+        with ESMTP id S235254AbiBKRPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 12:14:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC5A2E8;
-        Fri, 11 Feb 2022 09:14:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51166B82B0E;
-        Fri, 11 Feb 2022 17:14:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABE74C340E9;
-        Fri, 11 Feb 2022 17:14:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644599680;
-        bh=rpU93oW9eR2pFieHpUXayDQW9Hf20gDzvibQ0qElxUc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Rzq58ji20rPeZJfecIlKKJ8tp42cn2Ws+5AWURs9tIII010Ko3J2HX3TTmtuRjG4N
-         ywXP7Q/cw0dqE+3/fhJIoTZ3/AM/A52LTfXVXat78d/8DoaHybuvMsWW8+uKwfr+pS
-         yCdONpAw6VSswxauzGY3roWJe/fEt7wRh1vy5Y5NdaSwI94SzHBwvu0Iy4ruTzSRxR
-         bPyFJSWJ7IGbAp7EsMuDAOPR3V4OCASsZjpYM5yEbwpknwZtXtwEFtv3Sh0+2s2fq/
-         QuoXnrMhqVUwpPeQrNJzvUWCgRZvhOt01+nxfjX8vVmjMb/B4qp3ttyL0e2KTHtU/Q
-         c8hNkhtS/UhKw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 274FF400FE; Fri, 11 Feb 2022 14:14:38 -0300 (-03)
-Date:   Fri, 11 Feb 2022 14:14:38 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
+        Fri, 11 Feb 2022 12:15:41 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCEF102;
+        Fri, 11 Feb 2022 09:15:40 -0800 (PST)
+Date:   Fri, 11 Feb 2022 18:15:37 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644599738;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PJyDYqDoqp3BOO8EG/GCK9HSjsIr9kXicPv+GzkWx1A=;
+        b=ebryZ/ovTvyftldBlOHY/pFQryX7LYnwAp4COiGEEXAX7bZl2X1U4ggtgMm4IPwogJ8toy
+        GSUNkza8AaP8Yn/i6tGZT2ymAVH5ZuvHGdB9K4qxneXQX6fRAwgS8AeduKqqxWwSmvw8bk
+        v/O4GBNF0aO5TjJjeTSk5cm2/RNzdVmmkeUUKRy0/SwB3+ok20thXVpcwPBNTuVxG1Odlm
+        c7u1rFkpksOSdHqFFBPhcxQhLLeZ+iBK2hF67Gvm8oHlUSO+CGIKz6QIm0xKZ7+tyExyom
+        9tBj7VUN+q9bf9D/8el8jUwESzTm13y2/Jq8vNQnGeVtzvPKjvy2YAAGs8QCJw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644599738;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PJyDYqDoqp3BOO8EG/GCK9HSjsIr9kXicPv+GzkWx1A=;
+        b=0CWjWOEnQbWaB3Z4tTafewf+JVbcOzU/wcNrqdku2B6LXM7m5MNTlF6sBPbTCy0zz/9/xV
+        YQ9T13Gvj2NipCBw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Song Liu <song@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Hao Luo <haoluo@google.com>, eranian@google.com
-Subject: Re: [PATCH v3 04/22] perf dso: Hold lock when accessing nsinfo
-Message-ID: <YgaZfpaIHH9D7PZ8@kernel.org>
-References: <20220211103415.2737789-1-irogers@google.com>
- <20220211103415.2737789-5-irogers@google.com>
+        Peter Zijlstra <peterz@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: Re: [PATCH v6] random: defer fast pool mixing to worker
+Message-ID: <YgaZuShru2HQiFXg@linutronix.de>
+References: <YgZ6IEbiDgz5X1ON@linutronix.de>
+ <20220211162515.554867-1-Jason@zx2c4.com>
+ <YgaSYlVEBOxfJbSD@linutronix.de>
+ <CAHmME9rC_q4LGq2JaAAeGbtRA2cibTe9bnvhMLng+QnzAy2DVg@mail.gmail.com>
+ <YgaV0UZO1KfmtLLh@linutronix.de>
+ <CAHmME9qR02XCX48D+AoT1rOFyNo_GXubyHPzoX01BYkJDX7p1A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220211103415.2737789-5-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHmME9qR02XCX48D+AoT1rOFyNo_GXubyHPzoX01BYkJDX7p1A@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Feb 11, 2022 at 02:33:57AM -0800, Ian Rogers escreveu:
-> There may be threads racing to update dso->nsinfo:
-> https://lore.kernel.org/linux-perf-users/CAP-5=fWZH20L4kv-BwVtGLwR=Em3AOOT+Q4QGivvQuYn5AsPRg@mail.gmail.com/
-> Holding the dso->lock avoids use-after-free, memory leaks and other
-> such bugs. Apply the fix in:
-> https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/
-> of there being a missing nsinfo__put now that the accesses are data race
-> free.
+On 2022-02-11 18:00:21 [+0100], Jason A. Donenfeld wrote:
+> Hi Sebastian,
+Hi Jason,
 
-I think this is too source code polluting, see previous comment, that
-would cover this case as well, I think.
-
-- Arnaldo
- 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/builtin-inject.c   | 4 ++++
->  tools/perf/util/dso.c         | 5 ++++-
->  tools/perf/util/map.c         | 3 +++
->  tools/perf/util/probe-event.c | 2 ++
->  tools/perf/util/symbol.c      | 2 +-
->  5 files changed, 14 insertions(+), 2 deletions(-)
+> On Fri, Feb 11, 2022 at 5:59 PM Sebastian Andrzej Siewior
+> <bigeasy@linutronix.de> wrote:
+> > > Okay, I'll do that then, and then in the process get rid of the
+> > > cmpxchg loop since it's no longer required.
+> >
+> > So the only reason why we have that atomic_t is for rare case where run
+> > on the remote CPU and need to remove the upper bit in the counter?
 > 
-> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-> index fbf43a454cba..bede332bf0e2 100644
-> --- a/tools/perf/builtin-inject.c
-> +++ b/tools/perf/builtin-inject.c
-> @@ -363,8 +363,10 @@ static struct dso *findnew_dso(int pid, int tid, const char *filename,
->  	}
->  
->  	if (dso) {
-> +		BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
->  		nsinfo__put(dso->nsinfo);
->  		dso->nsinfo = nsi;
-> +		pthread_mutex_unlock(&dso->lock);
->  	} else
->  		nsinfo__put(nsi);
->  
-> @@ -547,7 +549,9 @@ static int dso__read_build_id(struct dso *dso)
->  	if (dso->has_build_id)
->  		return 0;
->  
-> +	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
->  	nsinfo__mountns_enter(dso->nsinfo, &nsc);
-> +	pthread_mutex_unlock(&dso->lock);
->  	if (filename__read_build_id(dso->long_name, &dso->bid) > 0)
->  		dso->has_build_id = true;
->  	nsinfo__mountns_exit(&nsc);
-> diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
-> index 6beccffeef7b..b2f570adba35 100644
-> --- a/tools/perf/util/dso.c
-> +++ b/tools/perf/util/dso.c
-> @@ -548,8 +548,11 @@ static int open_dso(struct dso *dso, struct machine *machine)
->  	int fd;
->  	struct nscookie nsc;
->  
-> -	if (dso->binary_type != DSO_BINARY_TYPE__BUILD_ID_CACHE)
-> +	if (dso->binary_type != DSO_BINARY_TYPE__BUILD_ID_CACHE) {
-> +		BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
->  		nsinfo__mountns_enter(dso->nsinfo, &nsc);
-> +		pthread_mutex_unlock(&dso->lock);
-> +	}
->  	fd = __open_dso(dso, machine);
->  	if (dso->binary_type != DSO_BINARY_TYPE__BUILD_ID_CACHE)
->  		nsinfo__mountns_exit(&nsc);
-> diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
-> index 8af693d9678c..ae99b52502d5 100644
-> --- a/tools/perf/util/map.c
-> +++ b/tools/perf/util/map.c
-> @@ -192,7 +192,10 @@ struct map *map__new(struct machine *machine, u64 start, u64 len,
->  			if (!(prot & PROT_EXEC))
->  				dso__set_loaded(dso);
->  		}
-> +		BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
-> +		nsinfo__put(dso->nsinfo);
->  		dso->nsinfo = nsi;
-> +		pthread_mutex_unlock(&dso->lock);
->  
->  		if (build_id__is_defined(bid))
->  			dso__set_build_id(dso, bid);
-> diff --git a/tools/perf/util/probe-event.c b/tools/perf/util/probe-event.c
-> index a834918a0a0d..7444e689ece7 100644
-> --- a/tools/perf/util/probe-event.c
-> +++ b/tools/perf/util/probe-event.c
-> @@ -180,8 +180,10 @@ struct map *get_target_map(const char *target, struct nsinfo *nsi, bool user)
->  
->  		map = dso__new_map(target);
->  		if (map && map->dso) {
-> +			BUG_ON(pthread_mutex_lock(&map->dso->lock) != 0);
->  			nsinfo__put(map->dso->nsinfo);
->  			map->dso->nsinfo = nsinfo__get(nsi);
-> +			pthread_mutex_unlock(&map->dso->lock);
->  		}
->  		return map;
->  	} else {
-> diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-> index 43f47532696f..a504346feb05 100644
-> --- a/tools/perf/util/symbol.c
-> +++ b/tools/perf/util/symbol.c
-> @@ -1774,6 +1774,7 @@ int dso__load(struct dso *dso, struct map *map)
->  	char newmapname[PATH_MAX];
->  	const char *map_path = dso->long_name;
->  
-> +	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
->  	perfmap = strncmp(dso->name, "/tmp/perf-", 10) == 0;
->  	if (perfmap) {
->  		if (dso->nsinfo && (dso__find_perf_map(newmapname,
-> @@ -1783,7 +1784,6 @@ int dso__load(struct dso *dso, struct map *map)
->  	}
->  
->  	nsinfo__mountns_enter(dso->nsinfo, &nsc);
-> -	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
->  
->  	/* check again under the dso->lock */
->  	if (dso__loaded(dso)) {
-> -- 
-> 2.35.1.265.g69c8d7142f-goog
+> Yes. That's the only remaining reason. Annoying, but whatareyagonnado?
 
--- 
+A CPU hotplug notifier which removes unconditionally that bit when the
+CPU goes down or sets it to 0.
+We can keep it as it. Just an idea for later maybe ;)
 
-- Arnaldo
+> Jason
+
+Sebastian

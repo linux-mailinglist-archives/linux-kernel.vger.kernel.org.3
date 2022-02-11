@@ -2,160 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 680124B1AC1
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF8C4B1AC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:55:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346571AbiBKAyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:54:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42546 "EHLO
+        id S1346583AbiBKAyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:54:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345588AbiBKAyg (ORCPT
+        with ESMTP id S1346579AbiBKAyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:54:36 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E14CF24
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:54:37 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id i21so11869694pfd.13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:54:37 -0800 (PST)
+        Thu, 10 Feb 2022 19:54:54 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1825F68
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:54:54 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id l19so7548254pfu.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:54:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=gSx28UKeCMp/oRLOiqMvFzHyx/ZVhU1gpNBGY870w4s=;
-        b=gTn6ZDScoBvH/pGmW3TK5xT8a9Hgez9llKDPunKEUTCGGGYm9Ke49V5aBzNJuSDL6j
-         VKGUmJBdSr0LCili5IUypGaVbPqYt74yidh+hr07HSUI+/CfS3UIvZlipnxFOOi4g3Is
-         i2V4lrazCctH1SCM/lsDxsSUz0fuTjH6Ctn9uzDMWkM3R/27da7zmgBfTSKwJdMhduwm
-         aW6VMBM8bN3bLbB9GFLrn6ytXaxyAkRKB8RcF1n62aGANIyKMOna6IXJnEoXlNvN09uq
-         0fXfqBl7W7iC6Gr987ZoMHEGJhDOf87jFBJSitXNyJWqlmEfWmyg8IfpRAoYkGrMjfaW
-         mvRg==
+        bh=uzcyDJDNi5GmBv4U03eJWryB2XjhMP5736i1b/gjtS0=;
+        b=OJcJvg1lIs62N3GjVa8/LTlfS7upa/xr+/yqej93ZLvKvNvWRieu71wpl5TeXuyvcg
+         R6bQb60X5tmf18alMuGNwUqhlONmwHDA1MWkfgookl0SVxVUgxt0PFdERfjV9Qp+8wzS
+         BHxJC5W6t1DrtJBHsXc1qgwdpV2s1Efulp2PI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=gSx28UKeCMp/oRLOiqMvFzHyx/ZVhU1gpNBGY870w4s=;
-        b=UMC0qid/fgzh8+r0hXbovhJ+yl3r7nd3eckwWbXeTJIaAHP0LaUtYikUu4xT48KIIh
-         e5qJ4M05gHPMV6jjmay0GSidDpIC7c6vwM+AAZ4pyjtBGY1qdw9r6q6ibam3B0X5RP36
-         0ZSz+tNlq6CyGp7A4sFbA4w6PX0RTf8mzwEYfS/KjuWaxVUhmA9T7X5jdweiKOXcFIam
-         RfQVgnIjw4S0f/PBLQSOI6sZjUrCoFmdQ7gu9hqjVoZT+7knUxLkYbTD9AGkkeTkvTgO
-         2Fh1NyqLOf1kwpJUBvpDJadEfeLLu5oJYzuuAYU8jbjWNwDa8jxqRsHvzoXF/iCX7FIi
-         hvkA==
-X-Gm-Message-State: AOAM533lFb9pQdKoRwweF302G5MRCDbwUT7z2PRMJ7fmmG97xq9tfdMl
-        2TZoYc8D0YJOiYuaqBqDdvfUYw==
-X-Google-Smtp-Source: ABdhPJwMIqBDwfqoiGpu0MHaqps4fYrP/0DFsX46oK5L9gl0Z5pON7Wyrn1x5ew3ygjZ5M2UvVn6wA==
-X-Received: by 2002:a63:1249:: with SMTP id 9mr8333712pgs.417.1644540876576;
-        Thu, 10 Feb 2022 16:54:36 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id nu15sm3625642pjb.5.2022.02.10.16.54.35
+        bh=uzcyDJDNi5GmBv4U03eJWryB2XjhMP5736i1b/gjtS0=;
+        b=NwGgEtvZwsB8/mYu8hWNjbMws9+8qCHYx7Y6lQMhSwoyKR43LZ3PrX2AzSt3IEwMZl
+         Ha4ru7w0igJep+CA04Ufnt0E+cAuscv8uyQznnR632hipt8yt3w2/kWHYwUqgmn/44cO
+         YG4MKIxataB5nBlgtTu712yZTD1q8sN/toJkGqy0oY928QbkhjJTd4urVULFk+mRsrSP
+         Ayj5Gv0UWwbYtIp4BUy39vfomyZ8EJno9f2OW41hR3bL/h9zD+Z4OvdovDX/Qe9qntNO
+         ea3sQBfEItyRDHmSVVH2nGaBT3sTDOcegrcFkaH4vjcRYq5auBiLUPp4gsAJy4eKaKz8
+         s3mg==
+X-Gm-Message-State: AOAM5332zBHRR0WJfL7LptttIwCiYCxiYvAQD/k78bcxZ8nnSB0Fcjos
+        m/Nb6djpyJaI3/d/4Vhs1BfGWA==
+X-Google-Smtp-Source: ABdhPJy4Ogb4My/UrDG5DujzJYCV/hk5yDp0cjrcj7xH+goA5f18ojJcRJubslgwxb7Z2pArOua10A==
+X-Received: by 2002:a05:6a00:178d:: with SMTP id s13mr9977850pfg.47.1644540893586;
+        Thu, 10 Feb 2022 16:54:53 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x23sm24719940pfh.216.2022.02.10.16.54.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 16:54:35 -0800 (PST)
-Date:   Fri, 11 Feb 2022 00:54:32 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com
-Subject: Re: [PATCH 08/12] KVM: MMU: do not consult levels when freeing roots
-Message-ID: <YgWzyBbAZe89ljqO@google.com>
-References: <20220209170020.1775368-1-pbonzini@redhat.com>
- <20220209170020.1775368-9-pbonzini@redhat.com>
- <YgWwrG+EQgTwyt8v@google.com>
+        Thu, 10 Feb 2022 16:54:53 -0800 (PST)
+Date:   Thu, 10 Feb 2022 16:54:52 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v3 04/12] powerpc: Prepare func_desc_t for refactorisation
+Message-ID: <202202101653.9128E58B84@keescook>
+References: <cover.1634457599.git.christophe.leroy@csgroup.eu>
+ <86c393ce0a6f603f94e6d2ceca08d535f654bb23.1634457599.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YgWwrG+EQgTwyt8v@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <86c393ce0a6f603f94e6d2ceca08d535f654bb23.1634457599.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022, Sean Christopherson wrote:
-> On Wed, Feb 09, 2022, Paolo Bonzini wrote:
-> > Right now, PGD caching requires a complicated dance of first computing
-> > the MMU role and passing it to __kvm_mmu_new_pgd, and then separately calling
+On Sun, Oct 17, 2021 at 02:38:17PM +0200, Christophe Leroy wrote:
+> In preparation of making func_desc_t generic, change the ELFv2
+> version to a struct containing 'addr' element.
 > 
-> Nit, adding () after function names helps readers easily recognize when you're
-> taking about a specific function, e.g. as opposed to a concept or whatever.
+> This allows using single helpers common to ELFv1 and ELFv2.
 > 
-> > kvm_init_mmu.
-> > 
-> > Part of this is due to kvm_mmu_free_roots using mmu->root_level and
-> > mmu->shadow_root_level to distinguish whether the page table uses a single
-> > root or 4 PAE roots.  Because kvm_init_mmu can overwrite mmu->root_level,
-> > kvm_mmu_free_roots must be called before kvm_init_mmu.
-> > 
-> > However, even after kvm_init_mmu there is a way to detect whether the page table
-> > has a single root or four, because the pae_root does not have an associated
-> > struct kvm_mmu_page.
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  arch/powerpc/kernel/module_64.c | 32 ++++++++++++++------------------
+>  1 file changed, 14 insertions(+), 18 deletions(-)
 > 
-> Suggest a reword on the final paragraph, because there's a discrepancy with the
-> code (which handles 0, 1, or 4 "roots", versus just "single or four").
-> 
->   However, even after kvm_init_mmu() there is a way to detect whether the
->   page table may hold PAE roots, as root.hpa isn't backed by a shadow when
->   it points at PAE roots.
-> 
-> > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> > ---
-> >  arch/x86/kvm/mmu/mmu.c | 10 ++++++----
-> >  1 file changed, 6 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 3c3f597ea00d..95d0fa0bb876 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -3219,12 +3219,15 @@ void kvm_mmu_free_roots(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
-> >  	struct kvm *kvm = vcpu->kvm;
-> >  	int i;
-> >  	LIST_HEAD(invalid_list);
-> > -	bool free_active_root = roots_to_free & KVM_MMU_ROOT_CURRENT;
-> > +	bool free_active_root;
-> >  
-> >  	BUILD_BUG_ON(KVM_MMU_NUM_PREV_ROOTS >= BITS_PER_LONG);
-> >  
-> >  	/* Before acquiring the MMU lock, see if we need to do any real work. */
-> > -	if (!(free_active_root && VALID_PAGE(mmu->root.hpa))) {
-> > +	free_active_root = (roots_to_free & KVM_MMU_ROOT_CURRENT)
-> > +		&& VALID_PAGE(mmu->root.hpa);
-> 
-> 	free_active_root = (roots_to_free & KVM_MMU_ROOT_CURRENT) &&
-> 			   VALID_PAGE(mmu->root.hpa);
-> 
-> Isn't this a separate bug fix?  E.g. call kvm_mmu_unload() without a valid current
-> root, but with valid previous roots?  In which case we'd try to free garbage, no?
-> 			   
-> > +
-> > +	if (!free_active_root) {
-> >  		for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++)
-> >  			if ((roots_to_free & KVM_MMU_ROOT_PREVIOUS(i)) &&
-> >  			    VALID_PAGE(mmu->prev_roots[i].hpa))
-> > @@ -3242,8 +3245,7 @@ void kvm_mmu_free_roots(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
-> >  					   &invalid_list);
-> >  
-> >  	if (free_active_root) {
-> > -		if (mmu->shadow_root_level >= PT64_ROOT_4LEVEL &&
-> > -		    (mmu->root_level >= PT64_ROOT_4LEVEL || mmu->direct_map)) {
-> > +		if (to_shadow_page(mmu->root.hpa)) {
-> >  			mmu_free_root_page(kvm, &mmu->root.hpa, &invalid_list);
-> >  		} else if (mmu->pae_root) {
+> diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
+> index a89da0ee25e2..b687ef88c4c4 100644
+> --- a/arch/powerpc/kernel/module_64.c
+> +++ b/arch/powerpc/kernel/module_64.c
+> @@ -33,19 +33,13 @@
+>  #ifdef PPC64_ELF_ABI_v2
+>  
+>  /* An address is simply the address of the function. */
+> -typedef unsigned long func_desc_t;
+> +typedef struct {
+> +	unsigned long addr;
+> +} func_desc_t;
+>  
+>  static func_desc_t func_desc(unsigned long addr)
+>  {
+> -	return addr;
+> -}
+> -static unsigned long func_addr(unsigned long addr)
+> -{
+> -	return addr;
+> -}
+> -static unsigned long stub_func_addr(func_desc_t func)
+> -{
+> -	return func;
+> +	return (func_desc_t){addr};
 
-Gah, this is technically wrong.  It shouldn't truly matter, but it's wrong.  root.hpa
-will not be backed by shadow page if the root is pml4_root or pml5_root, in which
-case freeing the PAE root is wrong.  They should obviously be invalid already, but
-it's a little confusing because KVM wanders down a path that may not be relevant
-to the current mode.
+There's only 1 element in the struct, so okay, but it hurt my eyes a
+little. I would have been happier with:
 
-For clarity, I think it's worth doing:
+	return (func_desc_t){ .addr = addr; };
 
-		} else if (mmu->root.hpa == __pa(mmu->pae_root)) {
+But of course that also looks bonkers because it starts with "return".
+So no matter what I do my eyes bug out. ;)
+
+So it's fine either way. :)
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 
-> >  			for (i = 0; i < 4; ++i) {
-> > -- 
-> > 2.31.1
-> > 
-> > 
+>  }
+>  
+>  /* PowerPC64 specific values for the Elf64_Sym st_other field.  */
+> @@ -70,14 +64,6 @@ static func_desc_t func_desc(unsigned long addr)
+>  {
+>  	return *(struct func_desc *)addr;
+>  }
+> -static unsigned long func_addr(unsigned long addr)
+> -{
+> -	return func_desc(addr).addr;
+> -}
+> -static unsigned long stub_func_addr(func_desc_t func)
+> -{
+> -	return func.addr;
+> -}
+>  static unsigned int local_entry_offset(const Elf64_Sym *sym)
+>  {
+>  	return 0;
+> @@ -93,6 +79,16 @@ void *dereference_module_function_descriptor(struct module *mod, void *ptr)
+>  }
+>  #endif
+>  
+> +static unsigned long func_addr(unsigned long addr)
+> +{
+> +	return func_desc(addr).addr;
+> +}
+> +
+> +static unsigned long stub_func_addr(func_desc_t func)
+> +{
+> +	return func.addr;
+> +}
+> +
+>  #define STUB_MAGIC 0x73747562 /* stub */
+>  
+>  /* Like PPC32, we need little trampolines to do > 24-bit jumps (into
+> -- 
+> 2.31.1
+> 
+
+-- 
+Kees Cook

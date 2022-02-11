@@ -2,185 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A12D14B2211
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C53F4B2261
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348655AbiBKJeq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 11 Feb 2022 04:34:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54634 "EHLO
+        id S1347445AbiBKJp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 04:45:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245382AbiBKJep (ORCPT
+        with ESMTP id S1343993AbiBKJp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 04:34:45 -0500
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E86CF5B;
-        Fri, 11 Feb 2022 01:34:43 -0800 (PST)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nISK5-0006hE-Rr; Fri, 11 Feb 2022 10:34:37 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Wei Fu <wefu@redhat.com>,
-        liush <liush@allwinnertech.com>, Guo Ren <guoren@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Drew Fustini <drew@beagleboard.org>,
-        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Greg Favor <gfavor@ventanamicro.com>,
-        Andrea Mondelli <andrea.mondelli@huawei.com>,
-        Jonathan Behrens <behrensj@mit.edu>,
-        Xinhaoqu <xinhaoqu@huawei.com>,
-        Bill Huffman <huffman@cadence.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Allen Baum <allen.baum@esperantotech.com>,
-        Josh Scheid <jscheid@ventanamicro.com>,
-        Richard Trauben <rtrauben@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Christoph Muellner <cmuellner@linux.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>
-Subject: Re: [PATCH v6 08/14] riscv: move boot alternatives to a slightly earlier position
-Date:   Fri, 11 Feb 2022 10:34:36 +0100
-Message-ID: <3955255.SSjG0rkiDu@diego>
-In-Reply-To: <CAOnJCUJJaPS_U3Hqg-YHT2gVMJ243L=070E7HRXEpt3uPga+cQ@mail.gmail.com>
-References: <20220209123800.269774-1-heiko@sntech.de> <2532021.2vfPgEiFAl@diego> <CAOnJCUJJaPS_U3Hqg-YHT2gVMJ243L=070E7HRXEpt3uPga+cQ@mail.gmail.com>
+        Fri, 11 Feb 2022 04:45:27 -0500
+X-Greylist: delayed 499 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 01:45:25 PST
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258D91092
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:45:24 -0800 (PST)
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220211093659epoutp010b5619a2f59ea0e233a116c2df4dc1ea~Ssbh6nGfA1809918099epoutp01J
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:36:59 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220211093659epoutp010b5619a2f59ea0e233a116c2df4dc1ea~Ssbh6nGfA1809918099epoutp01J
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1644572219;
+        bh=fFD6K75pV0FoAeiQKIrWAZBJ447zH2tIfbwBG9t0c0Q=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=tYueUmDAJr56I7Sqr2HdyYvxVAts3nT9VDRWQJUKGLckvgG7X8ABC8vAijcXfUTVF
+         Ztb1CPBFjrc0opR0TUG8S7Rt24WR802TAHFNKh4Z7pEp6XafgGoc/RIhX4+3Zy2KqU
+         Eawj4W6T/uPAc6ZLbp7jJEat4yPVDT6fy9sZl79A=
+Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20220211093658epcas5p2e91920ad986e5a6b1e575f509e5ffa0b~SsbhFV3Ka1874218742epcas5p2M;
+        Fri, 11 Feb 2022 09:36:58 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        BA.AA.05590.A3E26026; Fri, 11 Feb 2022 18:36:58 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220211093501epcas5p236bca7c55627ef90c7518a34acf6e996~SsZzX9feb1760017600epcas5p24;
+        Fri, 11 Feb 2022 09:35:01 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220211093501epsmtrp223638b2014a9b01907bb0573daa04c6f~SsZzXQHna3227732277epsmtrp2Q;
+        Fri, 11 Feb 2022 09:35:01 +0000 (GMT)
+X-AuditID: b6c32a4b-723ff700000015d6-e5-62062e3a8c69
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        49.0D.29871.4CD26026; Fri, 11 Feb 2022 18:35:00 +0900 (KST)
+Received: from localhost.localdomain (unknown [107.109.224.44]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220211093459epsmtip1c03f8c05ca96a33e12e3731916a032b5~SsZyOR_141656616566epsmtip1K;
+        Fri, 11 Feb 2022 09:34:59 +0000 (GMT)
+From:   Onkarnath <onkarnath.1@samsung.com>
+To:     robh@kernel.org
+Cc:     linux-kernel@vger.kernel.org, maninder1.s@samsung.com,
+        v.narang@samsung.com, maennich@google.com,
+        Onkarnath <onkarnath.1@samsung.com>
+Subject: [PATCH 1/1] android-recommended.config: change
+ BACKLIGHT_LCD_SUPPORT to LCD_CLASS_DEVICE
+Date:   Fri, 11 Feb 2022 15:04:44 +0530
+Message-Id: <20220211093444.661285-1-onkarnath.1@samsung.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrLIsWRmVeSWpSXmKPExsWy7bCmhq6VHluSwZ4X6haXd81hs/i29w27
+        xeH5bSwWK3o+sFr837OD3eLQybmMDmweCzaVemxa1cnm0bdlFaPH501yASxRXDYpqTmZZalF
+        +nYJXBl/Tz5jLDjCUXHv2EXGBsZd7F2MnBwSAiYSL/+eArK5OIQEdjNKHPyxghHC+cQo8aZ3
+        GlTmG6PEs2MTmWBaZu0BsUESexklHu9bxAzhfGGU2PT6EwtIFZuApsSf5U/BlogICEsc+dYG
+        NpdZoJdRovnIAbCEsECyxM9nPWANLAKqEh82vgCaxMHBK2ArsWcDM8Q2eYmZl76DlfMKCEqc
+        nPkErJwZKN68dTZUzT52iX27TSBsF4kfu/qgLhWWeHV8C9SjUhKf3+1lg7CrJaZvvA12tIRA
+        C9CfO1dBFdlLPLm4kBXkBmagB9bv0ocIy0pMPbWOCWIvn0Tv7ydQ83kldsyDsVUlfk2ZygJh
+        S0vc/z0XapeHxKqTU8BGCgnESnQdYp/AKD8LyTezkHwzC2HxAkbmVYySqQXFuempxaYFxnmp
+        5XrFibnFpXnpesn5uZsYwSlEy3sH46MHH/QOMTJxMB5ilOBgVhLhXXGDNUmINyWxsiq1KD++
+        qDQntfgQozQHi5I476n0DYlCAumJJanZqakFqUUwWSYOTqkGJq4g+W0fTpl0Ky7f0ZmeyqZ2
+        zv/DN50DM87xv7kR3Vln80M5rD9aYNrE4MWx0xYV3Sj7xPyLxUkv+CbfhMYZN2NSlPYvdZho
+        fDlM/3l677kNNab7Yll8Vk/g7XNI5ZIK84yfV7VpR5vzuc+ZoadKs6Nfhi7XYnxeYrcs1PJV
+        7iNFvp+bzh3kOHv66/4XsRYfVlZKfTAJEuLw2O3Hur1K11JlTcRUuev6rPlJ06pny9Zm7G5N
+        aMhLdPmvNMVMyYpV5Uyn9b880fwX8h9lG5K+ugX+vZ/ReJB1xoVzs287FMdx3iqbOzF/w/yE
+        1OrDn3dvniI410z+Vt3qk4EPj92fpLB4c0CENR/bhvnuP3a0K7EUZyQaajEXFScCANc6lAmQ
+        AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCLMWRmVeSWpSXmKPExsWy7bCSnO4RXbYkg0nHbSwu75rDZvFt7xt2
+        i8Pz21gsVvR8YLX4v2cHu8Whk3MZHdg8Fmwq9di0qpPNo2/LKkaPz5vkAliiuGxSUnMyy1KL
+        9O0SuDL+nnzGWHCEo+LesYuMDYy72LsYOTkkBEwkZu2ZyNTFyMUhJLCbUWJP03dmiIS0xKfL
+        c6CKhCVW/nvODlH0iVHi0vT1YAk2AU2JP8ufgtkiQEVHvrUxghQxC0xklNi0ci1YQlggUeLl
+        5l9sIDaLgKrEh40vgDZwcPAK2Ers2QC1TF5i5qXvYOW8AoISJ2c+YQGxmYHizVtnM09g5JuF
+        JDULSWoBI9MqRsnUguLc9NxiwwLDvNRyveLE3OLSvHS95PzcTYzggNTS3MG4fdUHvUOMTByM
+        hxglOJiVRHhX3GBNEuJNSaysSi3Kjy8qzUktPsQozcGiJM57oetkvJBAemJJanZqakFqEUyW
+        iYNTqoFpu0ysbEqkxDITya7sqm/u36b+ePCn4smZOybq1S/msfnOvbR/184L5efapqnWrHVz
+        /mvy6seRjWs6TkrMnLfkyNQOLZO9PVcvLPKKNFLcp/EzdFPko7Lwi5k1h3j/5oTIb5nu4phg
+        E+n9OLZZljth/+/sHVk3cg8v4knZ+8HPNLggx3DhN+G6skNiXfJ5KqFtv6R4Ig0uafCdnHTw
+        1hqpwHu8VbddI3Yw3jMJtGj9f/bHw3OtFW+X8q5uOrFa46ZCu+kt2eBmmTZtveBjnys0vDuj
+        bkcv4/X6uEtoprzku8M9TxYx6Sncn3jsSJn9WoXvJ0Scdneo3ufSc9KdnBrO/CewK7JR2n3K
+        ddPYhVVKLMUZiYZazEXFiQCesIl4twIAAA==
+X-CMS-MailID: 20220211093501epcas5p236bca7c55627ef90c7518a34acf6e996
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20220211093501epcas5p236bca7c55627ef90c7518a34acf6e996
+References: <CGME20220211093501epcas5p236bca7c55627ef90c7518a34acf6e996@epcas5p2.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, 11. Februar 2022, 02:57:19 CET schrieb Atish Patra:
-> On Thu, Feb 10, 2022 at 5:11 PM Heiko Stübner <heiko@sntech.de> wrote:
-> >
-> > Hi Atish,
-> >
-> > Am Donnerstag, 10. Februar 2022, 23:42:35 CET schrieb Atish Patra:
-> > > On Wed, Feb 9, 2022 at 4:39 AM Heiko Stuebner <heiko@sntech.de> wrote:
-> > > >
-> > > > Move the application of boot alternatives to soc_early_init().
-> > > > This allows to catch more generic cases of code needing patches
-> > > > than doing it in smp_prepare_boot_cpu() and also makes it actually
-> > > > work if CONFIG_SMP is disabled for whatever reason.
-> > > >
-> > > > The position is chosen mainly as it is before the actual soc early
-> > > > init runs but also already allows accessing the devicetree
-> > > > via fdt_* functions.
-> > > >
-> > > > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> > > > ---
-> > > >  arch/riscv/kernel/head.S    | 2 ++
-> > > >  arch/riscv/kernel/smpboot.c | 2 --
-> > > >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-> > > > index 2363b43312fc..0e1bb97f9749 100644
-> > > > --- a/arch/riscv/kernel/head.S
-> > > > +++ b/arch/riscv/kernel/head.S
-> > > > @@ -10,6 +10,7 @@
-> > > >  #include <asm/thread_info.h>
-> > > >  #include <asm/page.h>
-> > > >  #include <asm/pgtable.h>
-> > > > +#include <asm/alternative.h>
-> > > >  #include <asm/csr.h>
-> > > >  #include <asm/cpu_ops_sbi.h>
-> > > >  #include <asm/hwcap.h>
-> > > > @@ -341,6 +342,7 @@ clear_bss_done:
-> > > >         call kasan_early_init
-> > > >  #endif
-> > > >         /* Start the kernel */
-> > > > +       call apply_boot_alternatives
-> > >
-> > > Do you really need this early ?
-> > > if non-smp configuration is the only option, Can you do it in
-> > > setup_arch() after riscv_fill_hwcap() is called ?
-> >
-> > The issue I see is, we we have the soc_early_init [0] running
-> > directly after this and the one user I see [1] already wants to
-> > ioremap io-memory at this stage.
-> >
-> 
-> Kendryte is always a special case. IIRC, ioremap is done so early
-> so that it can use all 8MB of SRAM.
-> 
-> > So judging by the fact that more early-inits will get added
-> > in the future I do guess we should've set up the io-memory
-> > page-type by this point?
-> >
-> 
-> I hope there won't be :). For any normal mmu capable SoC, I don't
-> see why that would be required.
+with commit '8c5dc8d9f19c ("video: backlight: Remove useless
+BACKLIGHT_LCD_SUPPORT kernel symbol")'code of BACKLIGHT_LCD_SUPPORT
+is removed from kernel, and control shifted to LCD_CLASS_DEVICE only
+thus updating android recommended config also.
 
-ok, so we'll assume there won't be another special-special case SoC
-forthcoming and hope for the best - works for me :-D
+Signed-off-by: Onkarnath <onkarnath.1@samsung.com>
+---
+ kernel/configs/android-recommended.config | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks
-Heiko
-
-
-> > [0] https://elixir.bootlin.com/linux/latest/source/arch/riscv/kernel/soc.c#L14
-> > [1] https://elixir.bootlin.com/linux/latest/source/drivers/soc/canaan/k210-sysctl.c#L66
-> >
-> > > By doing that, we can unify the cpu feature probing and you don't need
-> > > a separate DT parsing just for svpbmt.
-> > >
-> > > >         call soc_early_init
-> > > >         tail start_kernel
-> > > >
-> > > > diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
-> > > > index a6d13dca1403..f1e4948a4b52 100644
-> > > > --- a/arch/riscv/kernel/smpboot.c
-> > > > +++ b/arch/riscv/kernel/smpboot.c
-> > > > @@ -32,7 +32,6 @@
-> > > >  #include <asm/sections.h>
-> > > >  #include <asm/sbi.h>
-> > > >  #include <asm/smp.h>
-> > > > -#include <asm/alternative.h>
-> > > >
-> > > >  #include "head.h"
-> > > >
-> > > > @@ -41,7 +40,6 @@ static DECLARE_COMPLETION(cpu_running);
-> > > >  void __init smp_prepare_boot_cpu(void)
-> > > >  {
-> > > >         init_cpu_topology();
-> > > > -       apply_boot_alternatives();
-> > > >  }
-> > > >
-> > > >  void __init smp_prepare_cpus(unsigned int max_cpus)
-> > > > --
-> > > > 2.30.2
-> > > >
-> > > >
-> > > > _______________________________________________
-> > > > linux-riscv mailing list
-> > > > linux-riscv@lists.infradead.org
-> > > > http://lists.infradead.org/mailman/listinfo/linux-riscv
-> > >
-> > >
-> > >
-> > >
-> >
-> >
-> >
-> >
-> 
-> 
-> 
-
-
-
+diff --git a/kernel/configs/android-recommended.config b/kernel/configs/android-recommended.config
+index eb0029c9a6a6..0869095ff345 100644
+--- a/kernel/configs/android-recommended.config
++++ b/kernel/configs/android-recommended.config
+@@ -7,7 +7,6 @@
+ # CONFIG_PM_WAKELOCKS_GC is not set
+ # CONFIG_VT is not set
+ CONFIG_ARM64_SW_TTBR0_PAN=y
+-CONFIG_BACKLIGHT_LCD_SUPPORT=y
+ CONFIG_BLK_DEV_DM=y
+ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_BLK_DEV_RAM=y
+@@ -86,6 +85,7 @@ CONFIG_JOYSTICK_XPAD_FF=y
+ CONFIG_JOYSTICK_XPAD_LEDS=y
+ CONFIG_KALLSYMS_ALL=y
+ CONFIG_KSM=y
++CONFIG_LCD_CLASS_DEVICE=y
+ CONFIG_LOGIG940_FF=y
+ CONFIG_LOGIRUMBLEPAD2_FF=y
+ CONFIG_LOGITECH_FF=y
+-- 
+2.17.1
 

@@ -2,63 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 340974B294E
+	by mail.lfdr.de (Postfix) with ESMTP id D2F9A4B2950
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:46:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346719AbiBKPpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 10:45:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56406 "EHLO
+        id S1347911AbiBKPp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 10:45:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236013AbiBKPpE (ORCPT
+        with ESMTP id S234142AbiBKPpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 10:45:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84BA21F;
-        Fri, 11 Feb 2022 07:45:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8130CB82A9B;
-        Fri, 11 Feb 2022 15:45:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71DAAC340E9;
-        Fri, 11 Feb 2022 15:44:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644594300;
-        bh=Cwb25r5eUpmN7pzfNiEaMUwwtBbCYaIlJyD33yZRuSk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cnUQr0fJQmRQuPfjzWiutxYQ/GwR+5oG+DKxscGILSPm8ewRr421M8pGgTImtxlMQ
-         mN4Y1xhZh8+ydS7KH0p0lwcag1uqzn3EeHmzodBV93yhEu0S+vKTf/kG6knj8u/H2R
-         Vx03SSla3Urnp7cQa0gQt6wmNCkmBiLuAJWmgfvI=
-Date:   Fri, 11 Feb 2022 16:44:49 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] USB-serial fixes for 5.17-rc4
-Message-ID: <YgaEcWf7fCkrt3l4@kroah.com>
-References: <YgZ/dFV1smMu64Bi@hovoldconsulting.com>
+        Fri, 11 Feb 2022 10:45:54 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE48D83;
+        Fri, 11 Feb 2022 07:45:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=D4ssCnbjOmNx384cUCrIrcB0A0RSUiH80NWH2bqiycM=; b=fWCZewgQBtczZ5rQ18W9dGavBq
+        WsPEEA/EumPa5pCR08AiIjkpkUkAZxC72NFzZ0YpEzqv1lSCm5DJzhLPql8GKpProhdkTIRMlEOJB
+        W9trXGDv0a1Pm877onXAxSun4yukfD0kQccuY09LBWaHZQT5gCvPVgSYDoYYtGb2QRUD+moxXuLtQ
+        SmYmYiEGsczGASUBctESrAVeejE2JiV9TkeR5OwkJf4dtG3XygJEZ/m4h+o8aldGWhTARDjLKtzwL
+        GLdQSC5qL6HKX1mtdEEFdTTadVDQvEPqb1HPyc93cPdaqB8L+iSMt7ZM+Hz8VGK9Anu+uvBhXZ6uX
+        fi8sFVJg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nIY6u-0093nF-P9; Fri, 11 Feb 2022 15:45:24 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6075C98630A; Fri, 11 Feb 2022 16:45:24 +0100 (CET)
+Date:   Fri, 11 Feb 2022 16:45:24 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v10 05/15] x86: support asm function sections
+Message-ID: <20220211154524.GX23216@worktop.programming.kicks-ass.net>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
+ <20220209185752.1226407-6-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YgZ/dFV1smMu64Bi@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220209185752.1226407-6-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 04:23:32PM +0100, Johan Hovold wrote:
-> The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
+On Wed, Feb 09, 2022 at 07:57:42PM +0100, Alexander Lobakin wrote:
+> Address places which need special care and enable
+> CONFIG_ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS.
 > 
->   Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
+> Notably:
+>  - propagate `--sectname-subst` to KBUILD_AFLAGS in
+>    x86/boot/Makefile and x86/boot/compressed/Makefile as both
+>    override them;
+>  - symbols starting with a dot (like ".Lrelocated") should be
+>    handled manually with SYM_*_START_SECT(.Lrelocated, relocated)
+>    as "two dots" is a special (and CPP doesn't want to concatenate
+>    two dots in general);
+>  - some symbols explicitly need to reside in one section (like
+>    kexec control code, hibernation page etc.);
+>  - macros creating aliases for functions (like __memcpy() for
+>    memcpy() etc.) should go after the main declaration (as
+>    aliases should be declared in the same section and they
+>    don't have SYM_PUSH_SECTION() inside);
+>  - things like ".org", ".align" should be manually pushed to
+>    the same section the next symbol goes to;
+>  - expand indirect_thunk wildcards in vmlinux.lds.S to catch
+>    symbols back into the "main" section;
+>  - inline ASM functions like __raw_callee*() should be pushed
+>    manually as well.
 > 
-> are available in the Git repository at:
+> With these changes and `-ffunction-sections` enabled, "plain"
+> ".text" section is empty which means that everything works
+> right as expected.
 > 
->   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.17-rc4
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> ---
+>  arch/x86/Kconfig                              |  1 +
+>  arch/x86/boot/Makefile                        |  1 +
+>  arch/x86/boot/compressed/Makefile             |  1 +
+>  arch/x86/boot/compressed/head_32.S            |  2 +-
+>  arch/x86/boot/compressed/head_64.S            | 32 ++++++++++++-------
+>  arch/x86/boot/pmjump.S                        |  2 +-
+>  arch/x86/crypto/aesni-intel_asm.S             |  4 +--
+>  arch/x86/crypto/poly1305-x86_64-cryptogams.pl |  4 +++
+>  arch/x86/include/asm/paravirt.h               |  2 ++
+>  arch/x86/include/asm/qspinlock_paravirt.h     |  2 ++
+>  arch/x86/kernel/head_32.S                     |  4 +--
+>  arch/x86/kernel/head_64.S                     |  4 +--
+>  arch/x86/kernel/kprobes/core.c                |  2 ++
+>  arch/x86/kernel/kvm.c                         |  2 ++
+>  arch/x86/kernel/relocate_kernel_32.S          | 10 +++---
+>  arch/x86/kernel/relocate_kernel_64.S          | 12 ++++---
+>  arch/x86/kernel/vmlinux.lds.S                 |  2 +-
+>  arch/x86/kvm/emulate.c                        |  7 +++-
+>  arch/x86/lib/copy_user_64.S                   |  2 +-
+>  arch/x86/lib/error-inject.c                   |  2 ++
+>  arch/x86/lib/getuser.S                        |  5 ++-
+>  arch/x86/lib/memcpy_64.S                      |  4 +--
+>  arch/x86/lib/memmove_64.S                     |  5 ++-
+>  arch/x86/lib/memset_64.S                      |  5 +--
+>  arch/x86/lib/putuser.S                        |  2 +-
+>  arch/x86/power/hibernate_asm_32.S             | 10 +++---
+>  arch/x86/power/hibernate_asm_64.S             | 10 +++---
+>  27 files changed, 89 insertions(+), 50 deletions(-)
 
-Pulled and pushed out, thanks.
+Urgh, how much of that can you avoid by (ab)using __DISABLE_EXPORTS
+like:
 
-greg k-h
+  https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?h=x86/wip.ibt&id=ab74f54f2b1f6cfeaf2b3ba6999bde7cabada9ca
+

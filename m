@@ -2,84 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 748F74B1BB1
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 02:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF08C4B1BC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 02:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347052AbiBKB5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 20:57:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55796 "EHLO
+        id S1347068AbiBKB6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 20:58:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347045AbiBKB5b (ORCPT
+        with ESMTP id S1347045AbiBKB6M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 20:57:31 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CC15F9D
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:57:30 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id y6so20798212ybc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:57:30 -0800 (PST)
+        Thu, 10 Feb 2022 20:58:12 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B59B44
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:58:12 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id bu29so8545334lfb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 17:58:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=AfM/0Cb58q6GUcC0GUIZYtPjVsr66lYC74fJRtgxODI=;
-        b=EnNCJZyXUquzo2MhBkvCK0qbobE9W87IWecoDS+rL4un+opt85eXFhJHJdCsslAAjx
-         vElioYlY8OIHwQO4p5btZ0Q4jHrOejB0Y80AOqNDO2Yc+hxPN32LOA3Im7+SIOIunSkW
-         qf7JLLSDFXR1SDKGYc27cZntGo/Mldylw6Pg0=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gamHH2XRTylhvnpesSgZb4MLgHOJXtNvgSBoVlaZkEI=;
+        b=axTit6MZ8JevfejidD0uuSMhoc6TK0NFsQLJ0jrYJvdvFiGqCFO8wqcQiomHy1yhzh
+         xTdbz8AvRF/U6lD92A0I2bWKuEKexGffBNam4Xsu8sh5OAlMVqgG0OY/YN9OjxYXJIra
+         FYwOlLO8xVSyXZaYbLLN40HfOzX8/8L5nmZfKqsy+/2Q/aDxRNAgoGM1Vv8qdlRqp1VR
+         IvhvnDGqBy6ytxSrGECCOX18B4KCVqLYEmh5o8zA10Ivj4xEA775Oyv4EQVfCEPn03Bf
+         af5wDQcXoEI5STOF7rv1MF6gwZERigtsexXX2J2aOCFdHaKPktTsiD8S71NzmH9TgWym
+         HYoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=AfM/0Cb58q6GUcC0GUIZYtPjVsr66lYC74fJRtgxODI=;
-        b=3mSgik05OY403JGZ3iottqn5XwCt5rmNytv2sCuHBDob5o1fRdjJAGA7/FCJYvjNAs
-         7iJ61TSBWzlCcV47Cxumv1Bx4iboth1U9ew2I/9l0knGcZ8RBpX0YgWx1utz9eJGH75S
-         LxwaP0jA3LACNV7U0rzzdzHvlUtD0Zpj1Qzw1T01wStRc6Xi8e378i4KF1CjW1xItqa7
-         MlfycWvbjwIzQWjSK3wcrpuUTBRmPk4uIX0Q8eIEWUXjud8uVvGYbxHNpg9B7sakJ/ns
-         U6A3Y6bWy1p0d5u5Tes1hjc2nyc6VHfPsqIZgSAvRnyeL3VqBT5nLASDFxVLjnHVfkmS
-         Rzcw==
-X-Gm-Message-State: AOAM5312HrbdFKuFqf2/AqDgcoExLaxb2t8Lg5hIFnytHU+iWJ+7Qqa5
-        wtCM3OHXz79Hr3oqaOzBvgSDqvqU1on2y5q5WYQG
-X-Google-Smtp-Source: ABdhPJyiFZ6T4FoqoVQz/JR5+sOYmy012dRZdQn9sj6qa2V2tvtDR13uVkUFSQMHhHHw5byKl0LHTAU/kbr5o1PY5uc=
-X-Received: by 2002:a81:b148:: with SMTP id p69mr10549545ywh.402.1644544649729;
- Thu, 10 Feb 2022 17:57:29 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gamHH2XRTylhvnpesSgZb4MLgHOJXtNvgSBoVlaZkEI=;
+        b=V9RrLwP5+hRqXSWYgI17+hr1/uVhPdsQxHMxSQzDDn8/2DhPF5MFAvS2qYCglsOhSw
+         VgQMzFAlsCkIWRCT3ZmUnVR5r2bfUw8Z0Px4r+ccqK+DL0jSfsX0/k/d0CiTFu0eC8Bm
+         I1G3ulu6/jf+zQlXO+bi2O4XoKczB2ZXpfMGTZVY6LuzYZ1lqmF6wNCFRFS7CZX9lr6r
+         FbWGU5AUTdWai5AtrkU+k/ETWaRybweaq/NwC5NLyzxNHHVAIP4DxfRjxJg9OvLlipS1
+         gKe9jyfraJTy/8wQboFMAHscSoz0hlecjAvM8X7/zu2SRyf5p4jjQdnLOScMAEu6Ff9L
+         Pa2g==
+X-Gm-Message-State: AOAM532jtUfIm2sexYxQMZVVp+Lkp9CCVGXF4qIzxCfqZWWHtRN8PVog
+        +FlAbrVyrijpmUa3vUuwdpSixg==
+X-Google-Smtp-Source: ABdhPJyNVF6EHpX/FJ4wtTo5mfa3zXeG+RA9WaRc4cptEen5cejv2SgQ4zqhUXKN8rip2gX3CTeGqw==
+X-Received: by 2002:a05:6512:158a:: with SMTP id bp10mr6949684lfb.407.1644544690570;
+        Thu, 10 Feb 2022 17:58:10 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id bt2sm1206999lfb.93.2022.02.10.17.58.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 17:58:10 -0800 (PST)
+Message-ID: <16278118-e33b-44f6-e815-fdcab44641bd@linaro.org>
+Date:   Fri, 11 Feb 2022 04:58:09 +0300
 MIME-Version: 1.0
-References: <20220209123800.269774-1-heiko@sntech.de> <20220209123800.269774-9-heiko@sntech.de>
- <CAOnJCULe_5v6cb_JcoPKf-UD3bVze1U=jaYeLTsMu7pFigde+A@mail.gmail.com> <2532021.2vfPgEiFAl@diego>
-In-Reply-To: <2532021.2vfPgEiFAl@diego>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Thu, 10 Feb 2022 17:57:19 -0800
-Message-ID: <CAOnJCUJJaPS_U3Hqg-YHT2gVMJ243L=070E7HRXEpt3uPga+cQ@mail.gmail.com>
-Subject: Re: [PATCH v6 08/14] riscv: move boot alternatives to a slightly
- earlier position
-To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Wei Fu <wefu@redhat.com>,
-        liush <liush@allwinnertech.com>, Guo Ren <guoren@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Drew Fustini <drew@beagleboard.org>,
-        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Greg Favor <gfavor@ventanamicro.com>,
-        Andrea Mondelli <andrea.mondelli@huawei.com>,
-        Jonathan Behrens <behrensj@mit.edu>,
-        Xinhaoqu <xinhaoqu@huawei.com>,
-        Bill Huffman <huffman@cadence.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Allen Baum <allen.baum@esperantotech.com>,
-        Josh Scheid <jscheid@ventanamicro.com>,
-        Richard Trauben <rtrauben@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Christoph Muellner <cmuellner@linux.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 1/3] drm/msm/dpu: Remove set but unused variables
+Content-Language: en-GB
+To:     Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kalyan Thota <quic_kalyant@quicinc.com>,
+        Mark Yacoub <markyacoub@google.com>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20220210114106.290669-1-vkoul@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220210114106.290669-1-vkoul@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,119 +85,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 5:11 PM Heiko St=C3=BCbner <heiko@sntech.de> wrote:
->
-> Hi Atish,
->
-> Am Donnerstag, 10. Februar 2022, 23:42:35 CET schrieb Atish Patra:
-> > On Wed, Feb 9, 2022 at 4:39 AM Heiko Stuebner <heiko@sntech.de> wrote:
-> > >
-> > > Move the application of boot alternatives to soc_early_init().
-> > > This allows to catch more generic cases of code needing patches
-> > > than doing it in smp_prepare_boot_cpu() and also makes it actually
-> > > work if CONFIG_SMP is disabled for whatever reason.
-> > >
-> > > The position is chosen mainly as it is before the actual soc early
-> > > init runs but also already allows accessing the devicetree
-> > > via fdt_* functions.
-> > >
-> > > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> > > ---
-> > >  arch/riscv/kernel/head.S    | 2 ++
-> > >  arch/riscv/kernel/smpboot.c | 2 --
-> > >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-> > > index 2363b43312fc..0e1bb97f9749 100644
-> > > --- a/arch/riscv/kernel/head.S
-> > > +++ b/arch/riscv/kernel/head.S
-> > > @@ -10,6 +10,7 @@
-> > >  #include <asm/thread_info.h>
-> > >  #include <asm/page.h>
-> > >  #include <asm/pgtable.h>
-> > > +#include <asm/alternative.h>
-> > >  #include <asm/csr.h>
-> > >  #include <asm/cpu_ops_sbi.h>
-> > >  #include <asm/hwcap.h>
-> > > @@ -341,6 +342,7 @@ clear_bss_done:
-> > >         call kasan_early_init
-> > >  #endif
-> > >         /* Start the kernel */
-> > > +       call apply_boot_alternatives
-> >
-> > Do you really need this early ?
-> > if non-smp configuration is the only option, Can you do it in
-> > setup_arch() after riscv_fill_hwcap() is called ?
->
-> The issue I see is, we we have the soc_early_init [0] running
-> directly after this and the one user I see [1] already wants to
-> ioremap io-memory at this stage.
->
+On 10/02/2022 14:41, Vinod Koul wrote:
+> We get warning:
+> 
+> In function ‘dpu_encoder_virt_enable’: drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c:1145:33:
+> warning: variable ‘priv’ set but not used [-Wunused-but-set-variable]
+>   1145 |         struct msm_drm_private *priv;
+> 
+> In function ‘dpu_encoder_virt_disable’: drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c:1182:33:
+> warning: variable ‘priv’ set but not used [-Wunused-but-set-variable]
+>   1182 |         struct msm_drm_private *priv;
+> 
+> Remove these unused but set variables
+> 
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
 
-Kendryte is always a special case. IIRC, ioremap is done so early
-so that it can use all 8MB of SRAM.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-> So judging by the fact that more early-inits will get added
-> in the future I do guess we should've set up the io-memory
-> page-type by this point?
->
-
-I hope there won't be :). For any normal mmu capable SoC, I don't
-see why that would be required.
-
->
-> Heiko
->
-> [0] https://elixir.bootlin.com/linux/latest/source/arch/riscv/kernel/soc.=
-c#L14
-> [1] https://elixir.bootlin.com/linux/latest/source/drivers/soc/canaan/k21=
-0-sysctl.c#L66
->
-> > By doing that, we can unify the cpu feature probing and you don't need
-> > a separate DT parsing just for svpbmt.
-> >
-> > >         call soc_early_init
-> > >         tail start_kernel
-> > >
-> > > diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.=
-c
-> > > index a6d13dca1403..f1e4948a4b52 100644
-> > > --- a/arch/riscv/kernel/smpboot.c
-> > > +++ b/arch/riscv/kernel/smpboot.c
-> > > @@ -32,7 +32,6 @@
-> > >  #include <asm/sections.h>
-> > >  #include <asm/sbi.h>
-> > >  #include <asm/smp.h>
-> > > -#include <asm/alternative.h>
-> > >
-> > >  #include "head.h"
-> > >
-> > > @@ -41,7 +40,6 @@ static DECLARE_COMPLETION(cpu_running);
-> > >  void __init smp_prepare_boot_cpu(void)
-> > >  {
-> > >         init_cpu_topology();
-> > > -       apply_boot_alternatives();
-> > >  }
-> > >
-> > >  void __init smp_prepare_cpus(unsigned int max_cpus)
-> > > --
-> > > 2.30.2
-> > >
-> > >
-> > > _______________________________________________
-> > > linux-riscv mailing list
-> > > linux-riscv@lists.infradead.org
-> > > http://lists.infradead.org/mailman/listinfo/linux-riscv
-> >
-> >
-> >
-> >
->
->
->
->
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 5 -----
+>   1 file changed, 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index 1e648db439f9..132844801e92 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -1142,14 +1142,12 @@ static void dpu_encoder_virt_enable(struct drm_encoder *drm_enc)
+>   {
+>   	struct dpu_encoder_virt *dpu_enc = NULL;
+>   	int ret = 0;
+> -	struct msm_drm_private *priv;
+>   	struct drm_display_mode *cur_mode = NULL;
+>   
+>   	dpu_enc = to_dpu_encoder_virt(drm_enc);
+>   
+>   	mutex_lock(&dpu_enc->enc_lock);
+>   	cur_mode = &dpu_enc->base.crtc->state->adjusted_mode;
+> -	priv = drm_enc->dev->dev_private;
+>   
+>   	trace_dpu_enc_enable(DRMID(drm_enc), cur_mode->hdisplay,
+>   			     cur_mode->vdisplay);
+> @@ -1179,7 +1177,6 @@ static void dpu_encoder_virt_enable(struct drm_encoder *drm_enc)
+>   static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
+>   {
+>   	struct dpu_encoder_virt *dpu_enc = NULL;
+> -	struct msm_drm_private *priv;
+>   	int i = 0;
+>   
+>   	dpu_enc = to_dpu_encoder_virt(drm_enc);
+> @@ -1188,8 +1185,6 @@ static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
+>   	mutex_lock(&dpu_enc->enc_lock);
+>   	dpu_enc->enabled = false;
+>   
+> -	priv = drm_enc->dev->dev_private;
+> -
+>   	trace_dpu_enc_disable(DRMID(drm_enc));
+>   
+>   	/* wait for idle */
 
 
---=20
-Regards,
-Atish
+-- 
+With best wishes
+Dmitry

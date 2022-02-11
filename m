@@ -2,55 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21ED94B2F71
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 22:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EFB44B2F73
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 22:37:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242027AbiBKVgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 16:36:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50904 "EHLO
+        id S1353773AbiBKVgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 16:36:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348044AbiBKVgK (ORCPT
+        with ESMTP id S1348044AbiBKVgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 16:36:10 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EA1C63
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 13:36:09 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id k5-20020a926f05000000b002be190db91cso6776103ilc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 13:36:08 -0800 (PST)
+        Fri, 11 Feb 2022 16:36:35 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B454C62
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 13:36:33 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id o24so14645749wro.3
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 13:36:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=algolia.com; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=QoHkcZvCmcHF62oRV/Hm9AoyHlp+75nzlQs0pgmwqUI=;
+        b=s8v8rMvQoML6oAH/jNhMegfoUndT2JSIU3CERlBOF4Oi6fm+u54Ix6EuMuVg+cksOH
+         tKXO81zID1PUPvvqlxPXARkYJON2MJJRdri9oSaKO1Fw3+iVHcmmPwOyFrt8m9iALg7c
+         GiqaZrocgto3SuwzrfUiTNa0NWRi/hcxIAxPw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=uZFH8v5hdkuD13HWKXbwlKXOFU1tLj/1KgXaqFsCP+w=;
-        b=nEYOuK5dfdor+NMxD+jhAq0ePTbniTeXbr0jCNixdF+wWy39fWkcQ6kyeO2i9p2uaU
-         oCxmFsogoeCl28SrFJbshBJEZQ89Prn87/oKB3I4JMX/J3Hy7PBpDta5jpR2JhshTxfw
-         lXOd2PyxkTyDqMBiJrTpw5G4B2D6vufc45rWfln+kUiE2k/McvAasbWAt6PCky619Q8k
-         IehEKM/6RHq4Memq4G4dSSB8LRSb8Tuc0Qp0VGWKFLvzMjTgp1K6+2HEG7cA1VgcE4Hj
-         3T6yn+LxGAefxf6wRk3JsGz/KQH5h/c/zjCYavsZ5e9U1sDmFSMCcPhauF+iVCkt4L9y
-         Wsmg==
-X-Gm-Message-State: AOAM5335Rj8is5Hxy/3Pl5zwxIM+WN4h4WOQkYyI6dqj2Ew+PEcxOR8j
-        huxqUiO5oh3T/DyMayg3vXbbURuBMolkA0hqSytdnuz+60QE
-X-Google-Smtp-Source: ABdhPJxIMl3Dj6whKaFjTGnZrRnkr5JcDWjIWAL80oKZ7CA90a6/GGlca6MO6Yn7/LWch5SH1DLI8BFkEEZ5aN7OR35Og6xECnE3
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=QoHkcZvCmcHF62oRV/Hm9AoyHlp+75nzlQs0pgmwqUI=;
+        b=WrGLJoRHh84yW2NIr6+JvJkfodE81aAk0M3zThq8aDZZgaH1Zi5NYRJi5ysOo1fYCW
+         NSlKovxHGZtOsBwX1dFslfRnZmOQgvOcO8dJjYrIeTY5r70gNRc3x+2SfeloeOvjzlkF
+         hh6I5GYXZwehmnqW9UZsQ+52NaSlxsJafBQWmC1tsf+mCYwSc4JHk6Dw7BYmim0V2bhC
+         bRIGzBVdGRv/jp7xf9PPCVQBmpLBmYvlOPoB9bsC7jmGcf1KqELdPMexlKBr6CH2Lu32
+         WdC2pSJJ0olBKM9TWatsRfk2VkHzbMWoXPZ6x1WbaC5OJrttS7QovnmdUKK5YZIIG8zG
+         TScA==
+X-Gm-Message-State: AOAM531XLcZJHeOq00Tw4yxVhoeHZf3lxgXspk5OduxVnmo7euwACQ8z
+        Vj2sZo983TwOY5PmgabjKMcuIaUEYvifeA==
+X-Google-Smtp-Source: ABdhPJwKq1doCFiVgUnyUmItCSHDL6e7xpBEp05K5zavzokjOh6gztQvmlDI3nsM1kotmCw6/9CABQ==
+X-Received: by 2002:a5d:64ad:: with SMTP id m13mr2785015wrp.671.1644615391604;
+        Fri, 11 Feb 2022 13:36:31 -0800 (PST)
+Received: from xavier-xps ([2a01:e0a:830:d971:752e:e19b:a691:2171])
+        by smtp.gmail.com with ESMTPSA id r2sm13133308wrt.65.2022.02.11.13.36.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 13:36:30 -0800 (PST)
+Date:   Fri, 11 Feb 2022 22:36:28 +0100
+From:   Xavier Roche <xavier.roche@algolia.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Xavier Roche <xavier.roche@algolia.com>, linux-mm@kvack.org
+Subject: [PATCH v2] tmpfs: support for file creation time
+Message-ID: <20220211213628.GA1919658@xavier-xps>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:164f:: with SMTP id a15mr1964678jat.272.1644615368382;
- Fri, 11 Feb 2022 13:36:08 -0800 (PST)
-Date:   Fri, 11 Feb 2022 13:36:08 -0800
-In-Reply-To: <YgbT4uqSIVY9ku10@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d31cac05d7c4da7e@google.com>
-Subject: Re: [syzbot] memory leak in hub_event (3)
-From:   syzbot <syzbot+8caaaec4e7a55d75e243@syzkaller.appspotmail.com>
-To:     benjamin.tissoires@redhat.com, gregkh@linuxfoundation.org,
-        heikki.krogerus@linux.intel.com, jikos@kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, noralf@tronnes.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
-        tzimmermann@suse.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,19 +66,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Various filesystems (including ext4) now support file creation time.
+This patch adds such support for tmpfs-based filesystems.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Signed-off-by: Xavier Roche <xavier.roche@algolia.com>
+Tested-by: Jean Delvare <jdelvare@suse.de>
+Reviewed-by: Jean Delvare <jdelvare@suse.de>
+---
+ include/linux/shmem_fs.h |  1 +
+ mm/shmem.c               | 11 +++++++++++
+ 2 files changed, 12 insertions(+)
 
-Reported-and-tested-by: syzbot+8caaaec4e7a55d75e243@syzkaller.appspotmail.com
+diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
+index e65b80ed09e7..29787767c3b9 100644
+--- a/include/linux/shmem_fs.h
++++ b/include/linux/shmem_fs.h
+@@ -25,6 +25,7 @@ struct shmem_inode_info {
+ 	struct simple_xattrs	xattrs;		/* list of xattrs */
+ 	atomic_t		stop_eviction;	/* hold when working on inode */
+ 	struct inode		vfs_inode;
++	struct timespec64	i_crtime;	/* file creation time */
+ };
+ 
+ struct shmem_sb_info {
+diff --git a/mm/shmem.c b/mm/shmem.c
+index a09b29ec2b45..5a3907712c4f 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -1061,6 +1061,12 @@ static int shmem_getattr(struct user_namespace *mnt_userns,
+ 	if (shmem_is_huge(NULL, inode, 0))
+ 		stat->blksize = HPAGE_PMD_SIZE;
+ 
++	if ((request_mask & STATX_BTIME)) {
++		stat->result_mask |= STATX_BTIME;
++		stat->btime.tv_sec = info->i_crtime.tv_sec;
++		stat->btime.tv_nsec = info->i_crtime.tv_nsec;
++	}
++
+ 	return 0;
+ }
+ 
+@@ -2265,6 +2271,7 @@ static struct inode *shmem_get_inode(struct super_block *sb, const struct inode
+ 		atomic_set(&info->stop_eviction, 0);
+ 		info->seals = F_SEAL_SEAL;
+ 		info->flags = flags & VM_NORESERVE;
++		info->i_crtime = inode->i_mtime;
+ 		INIT_LIST_HEAD(&info->shrinklist);
+ 		INIT_LIST_HEAD(&info->swaplist);
+ 		simple_xattrs_init(&info->xattrs);
+@@ -3196,6 +3203,7 @@ static ssize_t shmem_listxattr(struct dentry *dentry, char *buffer, size_t size)
+ #endif /* CONFIG_TMPFS_XATTR */
+ 
+ static const struct inode_operations shmem_short_symlink_operations = {
++	.getattr	= shmem_getattr,
+ 	.get_link	= simple_get_link,
+ #ifdef CONFIG_TMPFS_XATTR
+ 	.listxattr	= shmem_listxattr,
+@@ -3203,6 +3211,7 @@ static const struct inode_operations shmem_short_symlink_operations = {
+ };
+ 
+ static const struct inode_operations shmem_symlink_inode_operations = {
++	.getattr	= shmem_getattr,
+ 	.get_link	= shmem_get_link,
+ #ifdef CONFIG_TMPFS_XATTR
+ 	.listxattr	= shmem_listxattr,
+@@ -3790,6 +3799,7 @@ static const struct inode_operations shmem_inode_operations = {
+ 
+ static const struct inode_operations shmem_dir_inode_operations = {
+ #ifdef CONFIG_TMPFS
++	.getattr	= shmem_getattr,
+ 	.create		= shmem_create,
+ 	.lookup		= simple_lookup,
+ 	.link		= shmem_link,
+@@ -3811,6 +3821,7 @@ static const struct inode_operations shmem_dir_inode_operations = {
+ };
+ 
+ static const struct inode_operations shmem_special_inode_operations = {
++	.getattr	= shmem_getattr,
+ #ifdef CONFIG_TMPFS_XATTR
+ 	.listxattr	= shmem_listxattr,
+ #endif
+-- 
+2.25.1
 
-Tested on:
-
-commit:         dfd42fac Linux 5.17-rc3
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v5.17-rc3
-kernel config:  https://syzkaller.appspot.com/x/.config?x=48b71604a367da6e
-dashboard link: https://syzkaller.appspot.com/bug?extid=8caaaec4e7a55d75e243
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=121f0f78700000
-
-Note: testing is done by a robot and is best-effort only.

@@ -2,135 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A39294B2AEE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:50:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2A54B2B05
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:54:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351673AbiBKQtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:49:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49538 "EHLO
+        id S1351715AbiBKQu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:50:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiBKQtw (ORCPT
+        with ESMTP id S229479AbiBKQu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:49:52 -0500
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EC58D;
-        Fri, 11 Feb 2022 08:49:50 -0800 (PST)
-Received: by mail-qt1-f172.google.com with SMTP id b5so9523989qtq.11;
-        Fri, 11 Feb 2022 08:49:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+tFu3vkbTQIySarpIIX7Tezye9s6YZGK6OMSaOHlyY4=;
-        b=jknmwU3KP7JlR+SE4RCbBxJuYmfXJSR1M11ajJzjA8+EVuWWCk2hqKZ6MgilfNC787
-         t4aLhW9y9ksUARTmHkptVvoGatrGQgEHGS5od2RRp40G9RYz33UvY3xv1rPec72pajEO
-         0N4bnaTq9mYLonVWlKRRhenPnpCGwYjpNMzrtQp8DZB8DFtXlSF2iWkh8MYV9wZ9Pw9G
-         +Uxy0ZiioPYEoLx3XFnyLrFr1Zrn/x6zrmZ4lrI8XmrHgqW1YBCWimeJVtEmPtPQvasz
-         dsWYToTr/BIPlTeM5+2LdbolLaAmKBKWyOy0iMfzh4AiH6DYtAuI37hufZpDkL8ZuQeW
-         f7/w==
-X-Gm-Message-State: AOAM532zmzA8YSzI/unCdLn/XzhtewxUxrFjBVhafxOP9nOwtFbCIvx9
-        Dm0LGWFVTU6imVly7Vxmpw==
-X-Google-Smtp-Source: ABdhPJwrK4i0id3TCyebwPom3Nt5279eNZ7MttB2p50A+Y+8mKUPs7WBlXNbYfUW8gLI0GKtfduj8g==
-X-Received: by 2002:ac8:5950:: with SMTP id 16mr1742609qtz.104.1644598189334;
-        Fri, 11 Feb 2022 08:49:49 -0800 (PST)
-Received: from robh.at.kernel.org ([2607:fb90:5fee:dfce:b6df:c3e1:b1e5:d6d8])
-        by smtp.gmail.com with ESMTPSA id g17sm10065226qkl.122.2022.02.11.08.49.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 08:49:48 -0800 (PST)
-Received: (nullmailer pid 503767 invoked by uid 1000);
-        Fri, 11 Feb 2022 16:49:46 -0000
-Date:   Fri, 11 Feb 2022 10:49:46 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     netdev <netdev@vger.kernel.org>, devicetree@vger.kernel.org,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v2 2/2] dt-bindings: net: add schema for
- Microchip/SMSC LAN95xx USB Ethernet controllers
-Message-ID: <YgaTqpmmb67mCdlc@robh.at.kernel.org>
-References: <20220209081025.2178435-1-o.rempel@pengutronix.de>
- <20220209081025.2178435-3-o.rempel@pengutronix.de>
- <1644420908.431570.391820.nullmailer@robh.at.kernel.org>
- <CAL_JsqL1AAMq4u3Ruj2d5AUe-JnP8FDp8bUE0KcY_8fusxC9dg@mail.gmail.com>
- <20220209160252.GB26024@pengutronix.de>
+        Fri, 11 Feb 2022 11:50:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A688D;
+        Fri, 11 Feb 2022 08:50:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EECEFB82ADF;
+        Fri, 11 Feb 2022 16:50:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 368EEC340EF;
+        Fri, 11 Feb 2022 16:50:51 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="KJ2fvHFm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644598247;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VRUkqAEiizSu43BjAMCLBt08gHzXkwUfIwopzZR9DWk=;
+        b=KJ2fvHFmvAueMObxSInqANaPBgh+1o082OX5TfXNcenXTveHp2z2lac/0duvRACKAF0tgn
+        F7VoDdr7EBSEw4nRNjaHZesIrN5eWqNton7cjILhvJrpNJXR5+nm89sb2Ul7Z8pNdzZppj
+        RtzVLxKVn4xT2gmlywVyAE+cO3W1yGU=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c9db0223 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 11 Feb 2022 16:50:47 +0000 (UTC)
+Received: by mail-yb1-f178.google.com with SMTP id c6so26682348ybk.3;
+        Fri, 11 Feb 2022 08:50:46 -0800 (PST)
+X-Gm-Message-State: AOAM532BH+10LdoBS/4s0Fml7IP+IsAvrrxATJet6MJJL+/a9E2HohAo
+        EVKSQb7cMeI+Gp6mfoJKUfQ7Do3NMcj9sL67F9A=
+X-Google-Smtp-Source: ABdhPJwsxBoz8X10lIX0T70GJP92VKKL38BL7O56lyySq+NtpTS6jqgAhPDxLDLt0kjs5/lJNM3Cut/X0Lboor0uMpM=
+X-Received: by 2002:a25:c006:: with SMTP id c6mr2119755ybf.457.1644598245946;
+ Fri, 11 Feb 2022 08:50:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209160252.GB26024@pengutronix.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <YgZ6IEbiDgz5X1ON@linutronix.de> <20220211162515.554867-1-Jason@zx2c4.com>
+ <YgaSYlVEBOxfJbSD@linutronix.de>
+In-Reply-To: <YgaSYlVEBOxfJbSD@linutronix.de>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Fri, 11 Feb 2022 17:50:34 +0100
+X-Gmail-Original-Message-ID: <CAHmME9rC_q4LGq2JaAAeGbtRA2cibTe9bnvhMLng+QnzAy2DVg@mail.gmail.com>
+Message-ID: <CAHmME9rC_q4LGq2JaAAeGbtRA2cibTe9bnvhMLng+QnzAy2DVg@mail.gmail.com>
+Subject: Re: [PATCH v6] random: defer fast pool mixing to worker
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 05:02:52PM +0100, Oleksij Rempel wrote:
-> On Wed, Feb 09, 2022 at 09:38:57AM -0600, Rob Herring wrote:
-> > On Wed, Feb 9, 2022 at 9:35 AM Rob Herring <robh@kernel.org> wrote:
-> > >
-> > > On Wed, 09 Feb 2022 09:10:25 +0100, Oleksij Rempel wrote:
-> > > > Create initial schema for Microchip/SMSC LAN95xx USB Ethernet controllers and
-> > > > import all currently supported USB IDs form drivers/net/usb/smsc95xx.c
-> > > >
-> > > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > > > ---
-> > > >  .../bindings/net/microchip,lan95xx.yaml       | 80 +++++++++++++++++++
-> > > >  1 file changed, 80 insertions(+)
-> > > >  create mode 100644 Documentation/devicetree/bindings/net/microchip,lan95xx.yaml
-> > > >
-> > >
-> > > Running 'make dtbs_check' with the schema in this patch gives the
-> > > following warnings. Consider if they are expected or the schema is
-> > > incorrect. These may not be new warnings.
-> > >
-> > > Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> > > This will change in the future.
-> > >
-> > > Full log is available here: https://patchwork.ozlabs.org/patch/1590223
-> > >
-> > >
-> > > smsc@2: $nodename:0: 'smsc@2' does not match '^ethernet(@.*)?$'
-> > >         arch/arm/boot/dts/tegra30-ouya.dt.yaml
-> > >
-> > > usbether@1: $nodename:0: 'usbether@1' does not match '^ethernet(@.*)?$'
-> > >         arch/arm64/boot/dts/broadcom/bcm2837-rpi-3-b.dt.yaml
-> > >         arch/arm64/boot/dts/freescale/imx8mm-kontron-n801x-s.dt.yaml
-> > >         arch/arm/boot/dts/bcm2835-rpi-b.dt.yaml
-> > >         arch/arm/boot/dts/bcm2835-rpi-b-plus.dt.yaml
-> > >         arch/arm/boot/dts/bcm2835-rpi-b-rev2.dt.yaml
-> > >         arch/arm/boot/dts/bcm2836-rpi-2-b.dt.yaml
-> > >         arch/arm/boot/dts/bcm2837-rpi-3-b.dt.yaml
-> > >         arch/arm/boot/dts/omap3-beagle-xm-ab.dt.yaml
-> > >         arch/arm/boot/dts/omap3-beagle-xm.dt.yaml
-> > >         arch/arm/boot/dts/omap4-panda-a4.dt.yaml
-> > >         arch/arm/boot/dts/omap4-panda.dt.yaml
-> > >         arch/arm/boot/dts/omap4-panda-es.dt.yaml
-> > >
-> > > usbether@3: $nodename:0: 'usbether@3' does not match '^ethernet(@.*)?$'
-> > >         arch/arm/boot/dts/omap5-uevm.dt.yaml
-> > 
-> > So this binding is already in use, but was undocumented?
-> 
-> Ack.
-> 
-> > Or did you forget to remove the .txt file?
-> 
-> No, there was no documentation.
-> 
-> > The commit message should highlight all this.
-> > 
-> > (I don't expect you to fix all these warnings, I was just surprised to
-> > see them given this is an 'initial schema'.)
-> 
-> This patches was create before I needed to use it. Should I resent it
-> with new commit message?
+Hi Sebastian,
 
-Yes, please.
+On Fri, Feb 11, 2022 at 5:44 PM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+> > +
+> > +     /* Check to see if we're running on the wrong CPU due to hotplug. */
+> > +     migrate_disable();
+> > +     if (fast_pool != this_cpu_ptr(&irq_randomness)) {
+> > +             migrate_enable();
+> > +             /*
+> > +              * If we are unlucky enough to have been moved to another CPU,
+>
+> + "during CPU hotplug while the CPU was shutdown". It should not look
+> like the worker can be migrated on system without CPU-hotplug involved.
 
-Rob
+Will adjust comment.
+
+> I *think* we could drop that "fast_pool !=
+> this_cpu_ptr(&irq_randomness)" check at the top since that cmpxchg will
+> save us and redo the loop. But if I remember correctly you worried about
+> fast_pool->pool being modified (which is only a corner case if we are on
+> the other CPU while the orig CPU is back again). Either way, it would be
+> random and we would not consume more entropy.
+
+No, we cannot, and "it's all random anyway so who cares if we corrupt
+things!" is not rigorous, as entropy may actually be thrown away as
+it's moved between words on each mix. If we're not running on the same
+CPU, one CPU can corrupt the other's view of fast pool before updating
+count. We must keep this.
+
+> So if we have to keep this then please swap that migrate_disable() with
+> local_irq_disable(). Otherwise PeterZ will yell at me.
+
+Okay, I'll do that then, and then in the process get rid of the
+cmpxchg loop since it's no longer required.
+
+> >       if (unlikely(crng_init == 0)) {
+> > -             if (fast_pool->count >= 64 &&
+> > +             if (new_count >= 64 &&
+> >                   crng_fast_load(fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
+> > -                     fast_pool->count = 0;
+> > +                     atomic_set(&fast_pool->count, 0);
+> >                       fast_pool->last = now;
+>
+> I'm fine if we keep this as is for now.
+> What do we do here vs RT? I suggested this
+>   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/commit/?id=a2d2d54409481aa23a3e11ab9559a843e36a79ec
+>
+> Is this doable?
+
+It might be, but last time I checked it seemed problematic. As I
+mentioned in an earlier thread, I'll take a look again at that next
+week after this patch here settles. Haven't forgotten.
+
+v+1 coming up with irqs disabled.
+
+Jason

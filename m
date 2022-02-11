@@ -2,151 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 200F94B24C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A521C4B252D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:04:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349622AbiBKLv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 06:51:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41204 "EHLO
+        id S232442AbiBKMDV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 11 Feb 2022 07:03:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238409AbiBKLv0 (ORCPT
+        with ESMTP id S1349875AbiBKMDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 06:51:26 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68DFF4F;
-        Fri, 11 Feb 2022 03:51:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=BHPbXDxWBtuDI9YYnGdugRaUKtQ7K4m6+zQLsPmD+c4=; b=dR8Q5ZU2i/N7HitiOzfANLpiaz
-        5qF/SGYCLXmE3e/dkF3v4vQlXl0pelPeb6ZkNEXzLADKV9kE23rp79jq4mfm03lr+heVNBw6SiiaY
-        6Z1pKGNxXXmfGBcyaBr6PSJcpbz8Sdshm9m2BBMjbHme/kSazx7WqGhKRwogi4Xwnv6NNTZsBkMSl
-        FG16DeaXr1JW6GU+rgKjMw3/dKdJvXb6j/XE3kxeGiExzW4cOIhaKmi9tqzv+Uf1tvOu9gdhNB4qx
-        +LB1CCgDn3ykbmNyqqv+jJyTAUNskEwK3OFdtohRrAqlCJ7QbjcAlAePlTps3tau2u4nzTWSfA3hd
-        HZgeVPvg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nIUSJ-00AN1Y-C0; Fri, 11 Feb 2022 11:51:15 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7C45D9853C7; Fri, 11 Feb 2022 12:51:14 +0100 (CET)
-Date:   Fri, 11 Feb 2022 12:51:14 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Zhen Ni <nizhen@uniontech.com>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, mcgrof@kernel.org,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH] sched: move rr_timeslice sysctls to rt.c
-Message-ID: <20220211115114.GU23216@worktop.programming.kicks-ass.net>
-References: <20220210060831.26689-1-nizhen@uniontech.com>
+        Fri, 11 Feb 2022 07:03:06 -0500
+X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 04:03:02 PST
+Received: from hp0.dsonivx.sbs (unknown [157.230.15.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCFEBE4
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:03:02 -0800 (PST)
+From:   mailing@kaizenprofits.cc
+To:     linux-kernel@vger.kernel.org
+Subject: join crypto today
+Date:   11 Feb 2022 11:53:00 +0000
+Message-ID: <20220211115300.4BC5D0BFA5FBAA1A@kaizenprofits.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220210060831.26689-1-nizhen@uniontech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_50,LOTS_OF_MONEY,
+        RCVD_IN_XBL,SPF_HELO_NONE,SPF_SOFTFAIL,T_MONEY_PERCENT,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 02:08:31PM +0800, Zhen Ni wrote:
-> move rr_timeslice sysctls to rt.c and use the new
-> register_sysctl_init() to register the sysctl interface.
-> 
-> Signed-off-by: Zhen Ni <nizhen@uniontech.com>
+Bitcoin Turns Lower, Why BTC Could Extend Losses Below $42.5K
+https://www.kaizenprofits.cc
 
-OK, I've had it with this nonsense. Can you *please* redo all of sched
-such that:
+Bitcoin failed again to clear the $45,500 resistance zone against 
+the US Dollar. BTC is declining and remains at a risk of more 
+losses below $42,500. Bitcoin attempted another upside break 
+above $45,500 but failed. The price is trading below $43,500 and 
+the 100 hourly simple moving average. There was a break below a 
+key bullish trend line with support near $43,500 on the hourly 
+chart of the BTC/USD pair (data feed from Kraken). The pair could 
+decline sharply if there is a clear move below the $42,500 
+support zone. Bitcoin Price Corrects Gains Bitcoin price 
+attempted an upside break above the $45,500 resistance zone. 
+However, BTC struggled to gain pace above the $45,500 level. A 
+high was formed near $45,900 and the price started a fresh 
+decline. The price moved below the $45,000 and $44,500 support 
+levels. Besides, there was a break below a key bullish trend line 
+with support near $43,500 on the hourly chart of the BTC/USD 
+pair. The pair is now trading below $43,500 and the 100 hourly 
+simple moving average. Bitcoin is now finding bids near the 
+$42,600 level. A low is formed near $42,664 and the price is now 
+consolidating losses. An immediate resistance is near the $43,450 
+level. It is near the 23.6% Fib retracement level of the recent 
+decline from the $45,900 high to $42,664 low. The first major 
+resistance is near the $44,000 level and the 100 hourly simple 
+moving average. The next key resistance is near the $44,250 
+level. It is near the 50% Fib retracement level of the recent 
+decline from the $45,900 high to $42,664 low. Source: BTCUSD on 
+https://www.kaizenprofits.cc A clear upside break above the 
+$44,250 level might open the doors for more upsides. The main 
+resistance on the upside is still near the $45,500 level. More 
+Losses in BTC? If bitcoin fails to start a fresh increase above 
+$44,250, it could continue to move down. An immediate support on 
+the downside is near the $42,600 zone. The next major support is 
+seen near the $42,500 level. If there is a downside break below 
+the $42,500 support, the price could start a major decline 
+towards the $41,200 level. Technical indicators: Hourly MACD â€“ 
+The MACD is now gaining pace in the bearish zone. Hourly RSI 
+(Relative Strength Index) â€“ The RSI for BTC/USD is now below the 
+50 level. Major Support Levels â€“ $42,500, followed by $41,200. 
+Major Resistance Levels â€“ $44,000, $44,250 and $45,500.
 
- - In the Subject:, the first letter after the subsystem prefix (sched:)
-   is capitalized.
- - the lot actually applies to tip/sched/core (so far not a single one
-   of these patches applied without needing -- mostly trivial --
-   fixups).
- - Do obvious cleanups.. see below.
- - Don't have more than a single *sysctl_init() per .c file.
- - It's a full series that does all instead of random little patches
-   that conflict with one another when applied out of turn.
-
-> ---
->  include/linux/sched/sysctl.h |  3 ---
->  kernel/sched/rt.c            | 28 ++++++++++++++++++++++++++--
->  kernel/sysctl.c              |  7 -------
->  3 files changed, 26 insertions(+), 12 deletions(-)
-> 
-> diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
-> index d416d8f45186..f6466040883c 100644
-> --- a/include/linux/sched/sysctl.h
-> +++ b/include/linux/sched/sysctl.h
-> @@ -45,11 +45,8 @@ extern unsigned int sysctl_sched_uclamp_util_min_rt_default;
->  extern unsigned int sysctl_sched_autogroup_enabled;
->  #endif
->  
-> -extern int sysctl_sched_rr_timeslice;
->  extern int sched_rr_timeslice;
-
-Why leave sched_rr_timeslice here? It doesn't belong here.
-
-
-> +#ifdef CONFIG_SYSCTL
-> +static struct ctl_table sched_rr_sysctls[] = {
-> +	{
-> +		.procname       = "sched_rr_timeslice_ms",
-> +		.data           = &sysctl_sched_rr_timeslice,
-> +		.maxlen         = sizeof(int),
-> +		.mode           = 0644,
-> +		.proc_handler   = sched_rr_handler,
-> +	},
-> +	{}
-> +};
-> +
-> +static void __init sched_rr_sysctl_init(void)
-> +{
-> +	register_sysctl_init("kernel", sched_rr_sysctls);
-> +}
-> +#else
-> +#define sched_rr_sysctl_init() do { } while (0)
-> +#endif
-> +
->  static int do_sched_rt_period_timer(struct rt_bandwidth *rt_b, int overrun);
->  
->  struct rt_bandwidth def_rt_bandwidth;
-> @@ -2471,6 +2494,7 @@ void __init init_sched_rt_class(void)
->  		zalloc_cpumask_var_node(&per_cpu(local_cpu_mask, i),
->  					GFP_KERNEL, cpu_to_node(i));
->  	}
-> +	sched_rr_sysctl_init();
->  }
-
-When I combine this with: patches/zhen_ni-sched-move_rt_period_runtime_sysctls_to_rt_c.patch
-
-That ends up as:
-
-@@ -2471,6 +2535,8 @@ void __init init_sched_rt_class(void)
-                zalloc_cpumask_var_node(&per_cpu(local_cpu_mask, i),
-                                        GFP_KERNEL, cpu_to_node(i));
-        }
-+       sched_rt_sysctl_init();
-+       sched_rr_sysctl_init();
- }
- #endif /* CONFIG_SMP */
-
-Like srsly?
-
-
-So I've dropped the whole lot I had:
-
-patches/zhen_ni-sched-move_energy_aware_sysctls_to_topology_c.patch
-patches/zhen_ni-sched-move_cfs_bandwidth_slice_sysctls_to_fair_c.patch
-patches/zhen_ni-sched-move_uclamp_util_sysctls_to_core_c.patch
-patches/zhen_ni-sched-move_schedstats_sysctls_to_core_c.patch
-patches/zhen_ni-sched-move_deadline_period_sysctls_to_deadline_c.patch
-patches/zhen_ni-sched-move_rt_period_runtime_sysctls_to_rt_c.patch
-patches/zhen_ni-sched-move_rr_timeslice_sysctls_to_rt_c.patch
-
-And I expect a single coherent series or I'll forgo all this.
+Register with us now:
+í ½í±‡í ½í±‡í ½í±‡í ½í±‡í ½í±‡
+https://www.kaizenprofits.cc

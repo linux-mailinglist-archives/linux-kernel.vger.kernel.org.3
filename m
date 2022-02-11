@@ -2,70 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91564B1A50
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D584B1A52
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245234AbiBKAUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:20:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52668 "EHLO
+        id S242748AbiBKAUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:20:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346054AbiBKAUM (ORCPT
+        with ESMTP id S240966AbiBKAUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:20:12 -0500
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826E45594
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:20:12 -0800 (PST)
-Received: by mail-oo1-xc31.google.com with SMTP id 189-20020a4a03c6000000b003179d7b30d8so8447471ooi.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:20:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MwxbqAdEkZ6Sl6Mr4U5PKeV2CJ4YFO38+JRFL6HkmUs=;
-        b=ivkTs9VLGEN6yiftiZ7xyV0BR+b9W4At1QeWBx6knNXPvShsUdSHTSDTKn0W79v8ZO
-         xpGs6zqmYZhAF2KLGbZH3Ia/3qZjk61YEGp7jpngI5zXMdgcwftZpEJcbUU3Kkz3wc4E
-         W1p/kdaHWp+KJylRcdP0KBXjKrEk2ktg2M2JgXkDXzAuMZLpQhspsUNPnTJc2FAxZ/qA
-         NzX9HWMEemt+y/J3NMT0wbwxL42lP21qyM61O2bjL1QxaXhbIbR9SjfeXZbeJ+oMLlNF
-         XLpmTopxrQRqTV5YuQ3zCsLWFeLJC1m044NRMNcfWquupwarOvivkac3huprdl6/fFFY
-         opWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MwxbqAdEkZ6Sl6Mr4U5PKeV2CJ4YFO38+JRFL6HkmUs=;
-        b=kMC5dFpSc9DKI714+CsGz59SrWkmlE+rQRKLp5yBPRIqAg0AtGhlyr/ckYdX0sJx+9
-         rqa1Xt655k99fLJKNEr4kcI+jSiZrSkiPMHg7fzBZqDzCkewKW8FcO0EH4bOY94zjcn7
-         hzJOtu7YYlpichGDS3+WSNxDQlz9PAHNXSGRgguEQURgtdKjETyWZ7SQKm64GYlaGw5z
-         Ux/aPxLGZT7liR5yV8VF0JsQtc3dwOXXb2+jt56P+57dHzg+tAmvY33ClwUMBMDfv6O9
-         go7rwjwyWRrgmTxZFeMupR/NEYLZJmIRlyYyRnLpuMDOd1m51iFL1uATnucm9rbqf8Iu
-         AimA==
-X-Gm-Message-State: AOAM533613TWl/RMDuiC4SnlZXamcV7E1AN89cLzY+GWj/yDidakPYnl
-        AKssz2ETPSGDQs/kWVJf7BqEPQ==
-X-Google-Smtp-Source: ABdhPJwmuglMyj8JWI40ASfUcyZh8vsscGz4rztyMuEyYtVpPtEXRixA6bBNoGJbI0DN0bk+1tZPSw==
-X-Received: by 2002:a05:6870:3a0e:: with SMTP id du14mr1567723oab.25.1644538811862;
-        Thu, 10 Feb 2022 16:20:11 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id n66sm8694763oif.35.2022.02.10.16.20.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 16:20:11 -0800 (PST)
-Date:   Thu, 10 Feb 2022 18:20:09 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v3 0/7] dt-bindings: Convert multiple Qualcomm OPP
- and CPUFreq bindings to DT schema
-Message-ID: <YgWrufkNy3OfmV4o@builder.lan>
-References: <20220203072226.51482-1-y.oudjana@protonmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220203072226.51482-1-y.oudjana@protonmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Thu, 10 Feb 2022 19:20:48 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6962C7;
+        Thu, 10 Feb 2022 16:20:48 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21ALpFdd021812;
+        Fri, 11 Feb 2022 00:20:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=EBGSsOWS/PPAqu6i6+6YCHl6NifmZUaWgBhLauUDJzQ=;
+ b=URgRZOKIFcLRQ+oc//YKMpeWhHDcGUDXFubsZiF1dNaoA4nwPpVn6mPEC8Wg/lrRh1G5
+ NZGkEbrIR7a1S/veWIzqukctRnwLod2Py44S1/0C/REVmqevqsCjYgFQurDzujtEdOeq
+ 9yYKeypEsPahE4ZHAgwQVYw7yHI8XzF5M+D74kimK5hdw+xcxoaHT0Hng4FVFKZy1WzU
+ 5kC11a45TvJeqoqn0xXenszx+nBS9pM2FjC+Lg1wZeeAML+AsII/GuJcJMjd0qJ9Yj6q
+ /PViGTEwcxIwBneBLQO1mhH8j+icUa/TZQG5ECmyoeJg/njAS2Yk2cNkuNjT+ItQycUy Kg== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e50hj26vd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Feb 2022 00:20:45 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21B0DTu7008631;
+        Fri, 11 Feb 2022 00:20:44 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma01fra.de.ibm.com with ESMTP id 3e1gva32rc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Feb 2022 00:20:43 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21B0Kf6K29295052
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Feb 2022 00:20:41 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 313DC52051;
+        Fri, 11 Feb 2022 00:20:41 +0000 (GMT)
+Received: from sig-9-65-92-50.ibm.com (unknown [9.65.92.50])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 239C752050;
+        Fri, 11 Feb 2022 00:20:40 +0000 (GMT)
+Message-ID: <ea2a11b0b55ee34c7edc16f32928a81f21be461f.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 7/8] ima: support fs-verity file digest based version
+ 3 signatures
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Stefan Berger <stefanb@linux.ibm.com>,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 10 Feb 2022 19:20:37 -0500
+In-Reply-To: <20220208014140.483447-8-zohar@linux.ibm.com>
+References: <20220208014140.483447-1-zohar@linux.ibm.com>
+         <20220208014140.483447-8-zohar@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 9n7eW2Sk8_o682RKH0HAk_FiOKGmzI0T
+X-Proofpoint-ORIG-GUID: 9n7eW2Sk8_o682RKH0HAk_FiOKGmzI0T
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-10_11,2022-02-09_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 adultscore=0
+ suspectscore=0 mlxlogscore=999 impostorscore=0 clxscore=1015 phishscore=0
+ malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202100123
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,79 +85,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 03 Feb 01:24 CST 2022, Yassine Oudjana wrote:
+On Mon, 2022-02-07 at 20:41 -0500, Mimi Zohar wrote:
+> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+> index 28aca1f9633b..576cbe790e27 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -1728,10 +1728,13 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+>                         break;
+>                 case Opt_digest_type:
+>                         ima_log_string(ab, "digest_type", args[0].from);
+> -                       if ((strcmp(args[0].from, "verity")) == 0)
+> +                       if ((strcmp(args[0].from, "verity")) == 0) {
+>                                 entry->flags |= IMA_VERITY_REQUIRED;
+> -                       else
+> +                               if (entry->action == APPRAISE)
+> +                                       entry->flags |= IMA_DIGSIG_REQUIRED;
 
-> This series is a compilation of DT schema conversions of multiple Qualcomm
-> OPP and CPUFreq bindings:
-> - qcom-cpufreq-nvmem (operating-points-v2-kryo-cpu)
-> - qcom-opp (operating-points-v2-qcom-level)
-> - qcom,cpr
+Instead of overloading the "digest_type=verity" to require a signature,
+extend the existing "appraise_type" to support signature v3 (e.g.
+appraise_type=sigv3).  This will simplify IMA signature v3 support in
+the future.
+
+> +                       } else {
+>                                 result = -EINVAL;
+> +                       }
+>                         break;
+>                 case Opt_appraise_type:
+>                         ima_log_string(ab, "appraise_type", args[0].from);
 > 
 
-Really nice to see these updates!
+-- 
+thanks,
 
-I'm going to pick up the patches that goes through the Qualcomm tree,
-but patch 3,4 and 7 would be better to take through Viresh's tree, so
-I've looped him in on this reply.
+Mimi
 
-Thanks,
-Bjorn
-
-> Converting each one to DT schema introduces new dt_binding_check and
-> dtbs_check errors to the others, so it was better to combine them into
-> a series. Some errors were also caused by a couple of device trees having
-> OPP tables with names that do not follow opp-v2-base, so these got fixed
-> in this series as well. Finally, the lack of MSM8996 compatibles in
-> arm/qcom.yaml caused an error in the opp-v2-kryo-cpu example, so they were
-> added to the schema as well as to the msm8996-mtp device tree, which only
-> had qcom,msm8996-mtp as its compatible.
-> 
-> PATCH 4/7 is a new version of a patch[1] that was sent as part of
-> a different series before, and PATCH 7/7 is a new version of a patch[2]
-> that was sent alone.
-> 
-> Changes in v3:
->  - Resend with unified version for all patches
-> 
-> Changes since v1 (PATCH v2 4/7):
->  - Split the schema into an OPP schema and a CPUFreq schema. 
-> 
-> Changes since v1 (PATCH v2 7/7):
->  - Remove allOf from compatible.
-> 
-> Yassine Oudjana (7):
->   dt-bindings: arm: qcom: Add msm8996 and apq8096 compatibles
->   arm64: dts: qcom: msm8996-mtp: Add msm8996 compatible
->   dt-bindings: opp: qcom-opp: Convert to DT schema
->   dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema
->   arm64: dts: qcom: msm8996: Rename cluster OPP tables
->   arm64: dts: qcom: qcs404: Rename CPU and CPR OPP tables
->   dt-bindings: power: avs: qcom,cpr: Convert to DT schema
-> 
->  .../devicetree/bindings/arm/qcom.yaml         |  16 +-
->  .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 166 ++++
->  .../bindings/opp/opp-v2-kryo-cpu.yaml         | 257 ++++++
->  .../bindings/opp/opp-v2-qcom-level.yaml       |  60 ++
->  .../bindings/opp/qcom-nvmem-cpufreq.txt       | 796 ------------------
->  .../devicetree/bindings/opp/qcom-opp.txt      |  19 -
->  .../bindings/power/avs/qcom,cpr.txt           | 130 ---
->  .../bindings/power/avs/qcom,cpr.yaml          | 160 ++++
->  MAINTAINERS                                   |   5 +-
->  arch/arm64/boot/dts/qcom/msm8996-mtp.dts      |   2 +-
->  arch/arm64/boot/dts/qcom/msm8996.dtsi         |   4 +-
->  arch/arm64/boot/dts/qcom/qcs404.dtsi          |   4 +-
->  12 files changed, 666 insertions(+), 953 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
->  create mode 100644 Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
->  create mode 100644 Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
->  delete mode 100644 Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
->  delete mode 100644 Documentation/devicetree/bindings/opp/qcom-opp.txt
->  delete mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
->  create mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
-> 
-> [1] https://lore.kernel.org/linux-arm-msm/20211014083016.137441-6-y.oudjana@protonmail.com/
-> [2] https://lore.kernel.org/linux-arm-msm/20211221133937.173618-1-y.oudjana@protonmail.com/
-> -- 
-> 2.34.1
-> 
-> 

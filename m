@@ -2,121 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D82854B2309
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:25:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5524B2310
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348877AbiBKKZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 05:25:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52032 "EHLO
+        id S1348882AbiBKKZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 05:25:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbiBKKZG (ORCPT
+        with ESMTP id S239028AbiBKKZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 05:25:06 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B198BE5A;
-        Fri, 11 Feb 2022 02:25:05 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4Jw8rJ0vXkz9sSQ;
-        Fri, 11 Feb 2022 11:25:04 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xBMWOrU8Izvi; Fri, 11 Feb 2022 11:25:04 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4Jw8rJ07xLz9sSL;
-        Fri, 11 Feb 2022 11:25:04 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E78998B780;
-        Fri, 11 Feb 2022 11:25:03 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 1ZAD8N-JTl7t; Fri, 11 Feb 2022 11:25:03 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.6.91])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id A3A568B77D;
-        Fri, 11 Feb 2022 11:25:03 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21BAOtqD946512
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 11 Feb 2022 11:24:55 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21BAOtsG946511;
-        Fri, 11 Feb 2022 11:24:55 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        netdev@vger.kernel.org
-Subject: [PATCH 2/2] powerpc/32: Implement csum_sub
-Date:   Fri, 11 Feb 2022 11:24:49 +0100
-Message-Id: <c2a3f87d97f0903fdef3bbcb84661f75619301bf.1644574987.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <0c8eaab8f0685d2a70d125cf876238c70afd4fb6.1644574987.git.christophe.leroy@csgroup.eu>
-References: <0c8eaab8f0685d2a70d125cf876238c70afd4fb6.1644574987.git.christophe.leroy@csgroup.eu>
+        Fri, 11 Feb 2022 05:25:41 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62289E5A
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:25:40 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 04150106F;
+        Fri, 11 Feb 2022 02:25:40 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.87.94])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4C2803F73B;
+        Fri, 11 Feb 2022 02:25:34 -0800 (PST)
+Date:   Fri, 11 Feb 2022 10:25:23 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Yury Norov <yury.norov@gmail.com>, Will Deacon <will@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Qi Liu <liuqi115@huawei.com>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 12/49] perf: replace bitmap_weight with bitmap_empty
+ where appropriate
+Message-ID: <YgY5k0tNy7zztpMk@FVFF77S0Q05N>
+References: <20220210224933.379149-1-yury.norov@gmail.com>
+ <20220210224933.379149-13-yury.norov@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1644575088; l=1588; s=20211009; h=from:subject:message-id; bh=pXcr+Jwxdt7vu5J4mP6ZswUtbWBzwIEJ1PdZV31QSE0=; b=HSZVvXJkPmCF8TxbXSiWKLDoI7psAxRjgWG87bMYX2pCsi30PB7LXU1q5qLFV51bzViRqYFS/GZw ZhVN0EtRBTO0QIYTyu3aBjMk6XMUkzaYl4DbtnndhKhdeIBqjSD8
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210224933.379149-13-yury.norov@gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building kernel with CONFIG_CC_OPTIMISE_FOR_SIZE, several
-copies of csum_sub() are generated, with the following code:
+Hi Yury,
 
-	00000170 <csum_sub>:
-	     170:	7c 84 20 f8 	not     r4,r4
-	     174:	7c 63 20 14 	addc    r3,r3,r4
-	     178:	7c 63 01 94 	addze   r3,r3
-	     17c:	4e 80 00 20 	blr
+On Thu, Feb 10, 2022 at 02:48:56PM -0800, Yury Norov wrote:
+> In some places, drivers/perf code calls bitmap_weight() to check if any
+> bit of a given bitmap is set. It's better to use bitmap_empty() in that
+> case because bitmap_empty() stops traversing the bitmap as soon as it
+> finds first set bit, while bitmap_weight() counts all bits unconditionally.
+> 
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
 
-Let's define a PPC32 version with subc/addme, and for it's inlining.
+This looks like a nice semantic cleanup to me, so FWIW:
 
-It will return 0 instead of 0xffffffff when subtracting 0x80000000 to itself,
-this is not an issue as 0 and ~0 are equivalent, refer to RFC 1624.
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/include/asm/checksum.h | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+How are you expecting to queue all of this? Should Will and I pick this patch?
 
-diff --git a/arch/powerpc/include/asm/checksum.h b/arch/powerpc/include/asm/checksum.h
-index 350de8f90250..3288a1bf5e8d 100644
---- a/arch/powerpc/include/asm/checksum.h
-+++ b/arch/powerpc/include/asm/checksum.h
-@@ -112,6 +112,22 @@ static __always_inline __wsum csum_add(__wsum csum, __wsum addend)
- #endif
- }
- 
-+#ifdef CONFIG_PPC32
-+#define HAVE_ARCH_CSUM_SUB
-+static __always_inline __wsum csum_sub(__wsum csum, __wsum addend)
-+{
-+	if (__builtin_constant_p(csum) && (csum == 0 || csum == ~0))
-+		return ~addend;
-+	if (__builtin_constant_p(addend) && (addend == 0 || addend == ~0))
-+		return csum;
-+
-+	asm("subc %0,%0,%1;"
-+	    "addme %0,%0;"
-+	    : "+r" (csum) : "r" (addend) : "xer");
-+	return csum;
-+}
-+#endif
-+
- /*
-  * This is a version of ip_compute_csum() optimized for IP headers,
-  * which always checksum on 4 octet boundaries.  ihl is the number
--- 
-2.34.1
+Thanks,
+Mark.
 
+> ---
+>  drivers/perf/arm-cci.c                   | 2 +-
+>  drivers/perf/arm_pmu.c                   | 4 ++--
+>  drivers/perf/hisilicon/hisi_uncore_pmu.c | 2 +-
+>  drivers/perf/xgene_pmu.c                 | 2 +-
+>  4 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/perf/arm-cci.c b/drivers/perf/arm-cci.c
+> index 54aca3a62814..96e09fa40909 100644
+> --- a/drivers/perf/arm-cci.c
+> +++ b/drivers/perf/arm-cci.c
+> @@ -1096,7 +1096,7 @@ static void cci_pmu_enable(struct pmu *pmu)
+>  {
+>  	struct cci_pmu *cci_pmu = to_cci_pmu(pmu);
+>  	struct cci_pmu_hw_events *hw_events = &cci_pmu->hw_events;
+> -	int enabled = bitmap_weight(hw_events->used_mask, cci_pmu->num_cntrs);
+> +	bool enabled = !bitmap_empty(hw_events->used_mask, cci_pmu->num_cntrs);
+>  	unsigned long flags;
+>  
+>  	if (!enabled)
+> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
+> index 295cc7952d0e..a31b302b0ade 100644
+> --- a/drivers/perf/arm_pmu.c
+> +++ b/drivers/perf/arm_pmu.c
+> @@ -524,7 +524,7 @@ static void armpmu_enable(struct pmu *pmu)
+>  {
+>  	struct arm_pmu *armpmu = to_arm_pmu(pmu);
+>  	struct pmu_hw_events *hw_events = this_cpu_ptr(armpmu->hw_events);
+> -	int enabled = bitmap_weight(hw_events->used_mask, armpmu->num_events);
+> +	bool enabled = !bitmap_empty(hw_events->used_mask, armpmu->num_events);
+>  
+>  	/* For task-bound events we may be called on other CPUs */
+>  	if (!cpumask_test_cpu(smp_processor_id(), &armpmu->supported_cpus))
+> @@ -785,7 +785,7 @@ static int cpu_pm_pmu_notify(struct notifier_block *b, unsigned long cmd,
+>  {
+>  	struct arm_pmu *armpmu = container_of(b, struct arm_pmu, cpu_pm_nb);
+>  	struct pmu_hw_events *hw_events = this_cpu_ptr(armpmu->hw_events);
+> -	int enabled = bitmap_weight(hw_events->used_mask, armpmu->num_events);
+> +	bool enabled = !bitmap_empty(hw_events->used_mask, armpmu->num_events);
+>  
+>  	if (!cpumask_test_cpu(smp_processor_id(), &armpmu->supported_cpus))
+>  		return NOTIFY_DONE;
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pmu.c
+> index a738aeab5c04..358e4e284a62 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.c
+> @@ -393,7 +393,7 @@ EXPORT_SYMBOL_GPL(hisi_uncore_pmu_read);
+>  void hisi_uncore_pmu_enable(struct pmu *pmu)
+>  {
+>  	struct hisi_pmu *hisi_pmu = to_hisi_pmu(pmu);
+> -	int enabled = bitmap_weight(hisi_pmu->pmu_events.used_mask,
+> +	bool enabled = !bitmap_empty(hisi_pmu->pmu_events.used_mask,
+>  				    hisi_pmu->num_counters);
+>  
+>  	if (!enabled)
+> diff --git a/drivers/perf/xgene_pmu.c b/drivers/perf/xgene_pmu.c
+> index 5283608dc055..0c32dffc7ede 100644
+> --- a/drivers/perf/xgene_pmu.c
+> +++ b/drivers/perf/xgene_pmu.c
+> @@ -867,7 +867,7 @@ static void xgene_perf_pmu_enable(struct pmu *pmu)
+>  {
+>  	struct xgene_pmu_dev *pmu_dev = to_pmu_dev(pmu);
+>  	struct xgene_pmu *xgene_pmu = pmu_dev->parent;
+> -	int enabled = bitmap_weight(pmu_dev->cntr_assign_mask,
+> +	bool enabled = !bitmap_empty(pmu_dev->cntr_assign_mask,
+>  			pmu_dev->max_counters);
+>  
+>  	if (!enabled)
+> -- 
+> 2.32.0
+> 

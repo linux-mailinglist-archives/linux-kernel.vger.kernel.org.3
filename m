@@ -2,120 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D1B4B3142
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 00:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCB34B3148
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 00:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345056AbiBKXbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 18:31:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34406 "EHLO
+        id S1354171AbiBKXdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 18:33:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354119AbiBKXbs (ORCPT
+        with ESMTP id S243430AbiBKXdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 18:31:48 -0500
-Received: from hs01.dk-develop.de (hs01.dk-develop.de [IPv6:2a02:c207:3002:6234::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF7DCF8;
-        Fri, 11 Feb 2022 15:31:46 -0800 (PST)
-From:   Danilo Krummrich <danilokrummrich@dk-develop.de>
-To:     dmitry.torokhov@gmail.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linus.walleij@linaro.org,
-        Danilo Krummrich <danilokrummrich@dk-develop.de>
-Subject: [PATCH 2/2] input: ps2-gpio: enforce and document open drain
-Date:   Sat, 12 Feb 2022 00:31:37 +0100
-Message-Id: <20220211233137.99624-3-danilokrummrich@dk-develop.de>
-In-Reply-To: <20220211233137.99624-1-danilokrummrich@dk-develop.de>
-References: <20220211233137.99624-1-danilokrummrich@dk-develop.de>
+        Fri, 11 Feb 2022 18:33:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CC0C66;
+        Fri, 11 Feb 2022 15:33:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06EF061AB8;
+        Fri, 11 Feb 2022 23:33:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6308C340E9;
+        Fri, 11 Feb 2022 23:33:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644622418;
+        bh=NcXN/ZExFBWEE/4j7wW8A6WXqsCsTCy55XEhj/QVImY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MD/s1KgbDdFqUM3Vb1BzoByXZiIGv1RlMk7utUYwSOUf2JBAZFlRXxt4ECnUyYqy2
+         W2P/xae6UgnONaMt/yfHTrkcp/Ewnkisg3q/XL2qGzszRkrYQfhNfDKBUVkaTyjKiI
+         TMeacNN8OOe3NX8ZpbtDEriWYxrQhsGFC7y9uGqj0S7moAb1kWthU5wOueV/EfmDja
+         96CZMpWUQRSafptUAWevRxcbiJHzmf1Bt5DG3KdDxxX9JAXkqI6HsnPE0GyAOsixEF
+         V+mxb58acULwgB8+JZQHVywpmh7FewNQBkD25shtBrNaMabuc4v6KV0+VFfKIvJZXJ
+         fcZZKVqrIZMqg==
+Message-ID: <619547ad-de96-1be9-036b-a7b4e99b09a6@kernel.org>
+Date:   Fri, 11 Feb 2022 15:33:35 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 01/12] mm/shmem: Introduce F_SEAL_INACCESSIBLE
+Content-Language: en-US
+To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, qemu-devel@nongnu.org,
+        Linux API <linux-api@vger.kernel.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com
+References: <20220118132121.31388-1-chao.p.peng@linux.intel.com>
+ <20220118132121.31388-2-chao.p.peng@linux.intel.com>
+From:   Andy Lutomirski <luto@kernel.org>
+In-Reply-To: <20220118132121.31388-2-chao.p.peng@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PS/2 bus defines the data and clock line be open drain, therefore
-document this in the dt-binding and enforce the particular flag in the
-driver.
+On 1/18/22 05:21, Chao Peng wrote:
+> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> 
+> Introduce a new seal F_SEAL_INACCESSIBLE indicating the content of
+> the file is inaccessible from userspace through ordinary MMU access
+> (e.g., read/write/mmap). However, the file content can be accessed
+> via a different mechanism (e.g. KVM MMU) indirectly.
+> 
+> It provides semantics required for KVM guest private memory support
+> that a file descriptor with this seal set is going to be used as the
+> source of guest memory in confidential computing environments such
+> as Intel TDX/AMD SEV but may not be accessible from host userspace.
+> 
+> At this time only shmem implements this seal.
+> 
 
-Without enforcing to flag at least the clock gpio as open drain we run
-into the following warning:
+I don't dislike this *that* much, but I do dislike this. 
+F_SEAL_INACCESSIBLE essentially transmutes a memfd into a different type 
+of object.  While this can apparently be done successfully and without 
+races (as in this code), it's at least awkward.  I think that either 
+creating a special inaccessible memfd should be a single operation that 
+create the correct type of object or there should be a clear 
+justification for why it's a two-step process.
 
-WARNING: CPU: 1 PID: 40 at drivers/gpio/gpiolib.c:3175 gpiochip_enable_irq+0x54/0x90
-
-gpiochip_enable_irq() warns on a GPIO being configured as output and
-using IRQ without being flagged as open drain.
-
-Signed-off-by: Danilo Krummrich <danilokrummrich@dk-develop.de>
----
- .../devicetree/bindings/serio/ps2-gpio.yaml        | 14 ++++++++++----
- drivers/input/serio/ps2-gpio.c                     |  9 +++++++--
- 2 files changed, 17 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/serio/ps2-gpio.yaml b/Documentation/devicetree/bindings/serio/ps2-gpio.yaml
-index ec6fa7b40851..5e1951b4f511 100644
---- a/Documentation/devicetree/bindings/serio/ps2-gpio.yaml
-+++ b/Documentation/devicetree/bindings/serio/ps2-gpio.yaml
-@@ -16,12 +16,18 @@ properties:
- 
-   data-gpios:
-     description:
--      the gpio used for the data signal
-+      the gpio used for the data signal - this should be flagged as
-+      active high using open drain with (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)
-+      from <dt-bindings/gpio/gpio.h> since the signal is open drain by
-+      definition
-     maxItems: 1
- 
-   clk-gpios:
-     description:
--      the gpio used for the clock signal
-+      the gpio used for the clock signal - this should be flagged as
-+      active high using open drain with (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)
-+      from <dt-bindings/gpio/gpio.h> since the signal is open drain by
-+      definition
-     maxItems: 1
- 
-   interrupts:
-@@ -46,7 +52,7 @@ examples:
-         compatible = "ps2-gpio";
-         interrupt-parent = <&gpio>;
-         interrupts = <23 IRQ_TYPE_EDGE_FALLING>;
--        data-gpios = <&gpio 24 GPIO_ACTIVE_HIGH>;
--        clk-gpios = <&gpio 23 GPIO_ACTIVE_HIGH>;
-+        data-gpios = <&gpio 24 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+        clk-gpios = <&gpio 23 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-         write-enable;
-     };
-diff --git a/drivers/input/serio/ps2-gpio.c b/drivers/input/serio/ps2-gpio.c
-index 460d520ac865..fdaff7a415cd 100644
---- a/drivers/input/serio/ps2-gpio.c
-+++ b/drivers/input/serio/ps2-gpio.c
-@@ -362,14 +362,19 @@ static irqreturn_t ps2_gpio_irq(int irq, void *dev_id)
- static int ps2_gpio_get_props(struct device *dev,
- 				 struct ps2_gpio_data *drvdata)
- {
--	drvdata->gpio_data = devm_gpiod_get(dev, "data", GPIOD_IN);
-+	enum gpiod_flags gflags;
-+
-+	/* Enforce open drain, since this is required by the PS/2 bus. */
-+	gflags = GPIOD_IN | GPIOD_FLAGS_BIT_OPEN_DRAIN;
-+
-+	drvdata->gpio_data = devm_gpiod_get(dev, "data", gflags);
- 	if (IS_ERR(drvdata->gpio_data)) {
- 		dev_err(dev, "failed to request data gpio: %ld",
- 			PTR_ERR(drvdata->gpio_data));
- 		return PTR_ERR(drvdata->gpio_data);
- 	}
- 
--	drvdata->gpio_clk = devm_gpiod_get(dev, "clk", GPIOD_IN);
-+	drvdata->gpio_clk = devm_gpiod_get(dev, "clk", gflags);
- 	if (IS_ERR(drvdata->gpio_clk)) {
- 		dev_err(dev, "failed to request clock gpio: %ld",
- 			PTR_ERR(drvdata->gpio_clk));
--- 
-2.34.1
-
+(Imagine if the way to create an eventfd would be to call 
+timerfd_create() and then do a special fcntl to turn it into an eventfd 
+but only if it's not currently armed.  This would be weird.)

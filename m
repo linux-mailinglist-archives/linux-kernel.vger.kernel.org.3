@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CFC4B1EC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4BE4B1EC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346675AbiBKGtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 01:49:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42054 "EHLO
+        id S1346792AbiBKGty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 01:49:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346439AbiBKGto (ORCPT
+        with ESMTP id S1346439AbiBKGtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 01:49:44 -0500
-Received: from mail-oi1-x249.google.com (mail-oi1-x249.google.com [IPv6:2607:f8b0:4864:20::249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278121120
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 22:49:44 -0800 (PST)
-Received: by mail-oi1-x249.google.com with SMTP id be36-20020a05680821a400b002cf968c0889so2194411oib.14
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 22:49:44 -0800 (PST)
+        Fri, 11 Feb 2022 01:49:52 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486FA1120
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 22:49:52 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id t8-20020a259ac8000000b00619a3b5977fso17115118ybo.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 22:49:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Gp3MzKjywklApxzwU7bA0E+IdrMiraVuIp3bbtkpPwY=;
-        b=pZFidtCwL5VMsnJRP/9b9wHwk02Whf8q/difXoIKsdZUTOmtfykRIOjUqweW4jqnAY
-         8AEQsIf7BJ3qv1w8Ny3VBvWoNOmFTRKN3MfOMCY09iJzuIfqwdWFh7mMh1dOoqJ4ANRG
-         kk6Yyu5VN4IsdIxQHdbPDB8jrS384vnBeQ0zTXmINULyixuihlw86O9M7+bkOQkq5FCF
-         Lrhhz8wMvYt8tbAjV4cuO7v+/OfmJKzHuP1Xt8E8P3AuoqUne3R/7i1gblDPs3CiLF4I
-         Lu2aeoDUQLQNqiMdUjzemZ+fOLmEn6qSvVpIVsT10mL7z1OHdnOzDR/O/QikLdqga1Ns
-         Ahuw==
+        bh=wSeYGbecgd4wcC85bjYc+Wf+OozOTN6ZFdjrqmxfx+w=;
+        b=kgBNOs1WBseAbsRFMyzbv5MpUWXKAyzUAXftaQWeiVTYBMreznuOjzljFOI2hrN1yk
+         aHQaCo+UhNqqwVRVTPBr7NM6NjjOEyVjuGyn+/MKv8P8ZNfn9x9nZJdD56raIihE0qyl
+         cW+hk+/99lgXtJF1xLanqpAjJOO5g1YltZrYCaTDb+a2pqp7OAkhVEBR4eWnfXN+2ezT
+         bDpg5N6KoEKtlQPiLB0AZhqLQR2bCasbsdIbjhbtS7a5XPCObdJ8Qbf6KIpdngCRFy4O
+         yT/VmCbaWYaftIYqDgJzRfXpr9DXGJdeGzjvHXl9HegA/BTq6/R6BBz32ycj+VoCOw/2
+         UF1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Gp3MzKjywklApxzwU7bA0E+IdrMiraVuIp3bbtkpPwY=;
-        b=uDO1f3kJMdy/WO9CkFVxN5zopRFygZqqKmdouXboua2adJCJwtohrd09bX3Nq7niUv
-         64mpLCCxhQxEgJaHyP/fKRJSiKLeIe5GzvqLuMmU6ocK4GtzBnd02QBTEcrOrO+3E3VS
-         +WcBUrmRZYgv08rpzdVTZk4xil8sJJZKqB8EALotUvfYDgVkRT9wvhcj3RNSGl+nUc+R
-         0xtEq8dEiKxT6hmY+Dj5CSRjSl/M7+vWVmmXJHmWLXOVK6FSSreCebp6P/KzeRrQGcqP
-         /WulGN7NBSkDbtHTJQ5NPXytKlj2RbUn5j1DTkMNgdFJGdOpQ02Ld2LsVyEJs05Zi9eS
-         pg/w==
-X-Gm-Message-State: AOAM532dU5VtFvYawzlZ/lps3CZ43bN37Na5fp1nkqFcwiKz4w+oWPko
-        3GEeG8p12e3aZ2oxTAgEZhGKmymVe9CgSQ==
-X-Google-Smtp-Source: ABdhPJw3ASDB+yZZwSrQEVhj4dACHJ86v54Lv8O291KKTat+VzaAivyC/3ZBnBIy1wraZJwv+qm5+0amn6FRHw==
+        bh=wSeYGbecgd4wcC85bjYc+Wf+OozOTN6ZFdjrqmxfx+w=;
+        b=2DNb9fFLJ1zsxvmFM5lHVJTmUb0Fj4En02Ru1Ay1UueppOBd/EhVUxqb463D7R70Ml
+         V4JzK6wdipyoqxmrnHdGAkzrwy1BV6VXEVx4eWu4bZT57GPcIIO+RSRgw9sVSRrj/fLz
+         9Ka+L3aNXjjwonqpXhj8HuLLH7/mNwLfUVzHt2RAnoG4kQg2BEusaY6ZKjboacewZo4I
+         rtXUu9BJtpOAEJUS9ABI+VLSkSGOebsvROfCG6iuNJXAY/b6h1gIOmbz/zz4CtRp8ms4
+         CPwCy637NzhhIjoq2f3lPUj2jVwdNRDw1ejBIIg15H5fRoRS0/WeQXUc0UdblrHQliHP
+         sZyg==
+X-Gm-Message-State: AOAM530hUvN5cu5FQY6nEKivxMR+vjyOlO1H5TICyw/nsyZhjxcsYX/0
+        Iz3VEpLBkoTI0jkI+WGVzKr87ENxGVH6Xg==
+X-Google-Smtp-Source: ABdhPJwKpmkurBJZDlS/fuYlvpdKg9WPvDaf+agCb8KXEOQoRBet3SsqP1VSya2bsK2552ZipDH4CRMFgYBezw==
 X-Received: from shakeelb.svl.corp.google.com ([2620:15c:2cd:202:9a07:ef1a:2fee:57f1])
- (user=shakeelb job=sendgmr) by 2002:a05:6808:1918:: with SMTP id
- bf24mr473270oib.253.1644562183473; Thu, 10 Feb 2022 22:49:43 -0800 (PST)
-Date:   Thu, 10 Feb 2022 22:49:15 -0800
+ (user=shakeelb job=sendgmr) by 2002:a81:a304:: with SMTP id
+ a4mr337510ywh.516.1644562191536; Thu, 10 Feb 2022 22:49:51 -0800 (PST)
+Date:   Thu, 10 Feb 2022 22:49:16 -0800
 In-Reply-To: <20220211064917.2028469-1-shakeelb@google.com>
-Message-Id: <20220211064917.2028469-3-shakeelb@google.com>
+Message-Id: <20220211064917.2028469-4-shakeelb@google.com>
 Mime-Version: 1.0
 References: <20220211064917.2028469-1-shakeelb@google.com>
 X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH v2 2/4] memcg: unify force charging conditions
+Subject: [PATCH v2 3/4] selftests: memcg: test high limit for single entry allocation
 From:   Shakeel Butt <shakeelb@google.com>
 To:     Johannes Weiner <hannes@cmpxchg.org>,
         Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>
@@ -70,66 +70,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the kernel force charges the allocations which have __GFP_HIGH
-flag without triggering the memory reclaim. __GFP_HIGH indicates that
-the caller is high priority and since commit 869712fd3de5 ("mm:
-memcontrol: fix network errors from failing __GFP_ATOMIC charges") the
-kernel lets such allocations do force charging. Please note that
-__GFP_ATOMIC has been replaced by __GFP_HIGH.
-
-__GFP_HIGH does not tell if the caller can block or can trigger reclaim.
-There are separate checks to determine that. So, there is no need to
-skip reclaiming for __GFP_HIGH allocations. So, handle __GFP_HIGH
-together with __GFP_NOFAIL which also does force charging.
-
-Please note that this is a noop change as there are no __GFP_HIGH
-allocators in the kernel which also have __GFP_ACCOUNT (or SLAB_ACCOUNT)
-and does not allow reclaim for now.
+Test the enforcement of memory.high limit for large amount of memory
+allocation within a single kernel entry. There are valid use-cases
+where the application can trigger large amount of memory allocation
+within a single syscall e.g. mlock() or mmap(MAP_POPULATE). Make sure
+memory.high limit enforcement works for such use-cases.
 
 Signed-off-by: Shakeel Butt <shakeelb@google.com>
-Reviewed-by: Roman Gushchin <guro@fb.com>
 ---
 Changes since v1:
 - None
 
- mm/memcontrol.c | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+ tools/testing/selftests/cgroup/cgroup_util.c  | 15 +++-
+ tools/testing/selftests/cgroup/cgroup_util.h  |  1 +
+ .../selftests/cgroup/test_memcontrol.c        | 78 +++++++++++++++++++
+ 3 files changed, 91 insertions(+), 3 deletions(-)
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index f12e489ba9b8..292b0b99a2c7 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -2564,15 +2564,6 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
- 		goto retry;
- 	}
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+index 0cf7e90c0052..dbaa7aabbb4a 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.c
++++ b/tools/testing/selftests/cgroup/cgroup_util.c
+@@ -583,7 +583,7 @@ int clone_into_cgroup_run_wait(const char *cgroup)
+ 	return 0;
+ }
  
--	/*
--	 * Memcg doesn't have a dedicated reserve for atomic
--	 * allocations. But like the global atomic pool, we need to
--	 * put the burden of reclaim on regular allocation requests
--	 * and let these go through as privileged allocations.
--	 */
--	if (gfp_mask & __GFP_HIGH)
--		goto force;
--
- 	/*
- 	 * Prevent unbounded recursion when reclaim operations need to
- 	 * allocate memory. This might exceed the limits temporarily,
-@@ -2646,7 +2637,13 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
- 		goto retry;
- 	}
- nomem:
--	if (!(gfp_mask & __GFP_NOFAIL))
-+	/*
-+	 * Memcg doesn't have a dedicated reserve for atomic
-+	 * allocations. But like the global atomic pool, we need to
-+	 * put the burden of reclaim on regular allocation requests
-+	 * and let these go through as privileged allocations.
-+	 */
-+	if (!(gfp_mask & (__GFP_NOFAIL | __GFP_HIGH)))
- 		return -ENOMEM;
- force:
- 	/*
+-int cg_prepare_for_wait(const char *cgroup)
++static int __prepare_for_wait(const char *cgroup, const char *filename)
+ {
+ 	int fd, ret = -1;
+ 
+@@ -591,8 +591,7 @@ int cg_prepare_for_wait(const char *cgroup)
+ 	if (fd == -1)
+ 		return fd;
+ 
+-	ret = inotify_add_watch(fd, cg_control(cgroup, "cgroup.events"),
+-				IN_MODIFY);
++	ret = inotify_add_watch(fd, cg_control(cgroup, filename), IN_MODIFY);
+ 	if (ret == -1) {
+ 		close(fd);
+ 		fd = -1;
+@@ -601,6 +600,16 @@ int cg_prepare_for_wait(const char *cgroup)
+ 	return fd;
+ }
+ 
++int cg_prepare_for_wait(const char *cgroup)
++{
++	return __prepare_for_wait(cgroup, "cgroup.events");
++}
++
++int memcg_prepare_for_wait(const char *cgroup)
++{
++	return __prepare_for_wait(cgroup, "memory.events");
++}
++
+ int cg_wait_for(int fd)
+ {
+ 	int ret = -1;
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.h b/tools/testing/selftests/cgroup/cgroup_util.h
+index 4f66d10626d2..628738532ac9 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.h
++++ b/tools/testing/selftests/cgroup/cgroup_util.h
+@@ -55,4 +55,5 @@ extern int clone_reap(pid_t pid, int options);
+ extern int clone_into_cgroup_run_wait(const char *cgroup);
+ extern int dirfd_open_opath(const char *dir);
+ extern int cg_prepare_for_wait(const char *cgroup);
++extern int memcg_prepare_for_wait(const char *cgroup);
+ extern int cg_wait_for(int fd);
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index c19a97dd02d4..36ccf2322e21 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -16,6 +16,7 @@
+ #include <netinet/in.h>
+ #include <netdb.h>
+ #include <errno.h>
++#include <sys/mman.h>
+ 
+ #include "../kselftest.h"
+ #include "cgroup_util.h"
+@@ -628,6 +629,82 @@ static int test_memcg_high(const char *root)
+ 	return ret;
+ }
+ 
++static int alloc_anon_mlock(const char *cgroup, void *arg)
++{
++	size_t size = (size_t)arg;
++	void *buf;
++
++	buf = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON,
++		   0, 0);
++	if (buf == MAP_FAILED)
++		return -1;
++
++	mlock(buf, size);
++	munmap(buf, size);
++	return 0;
++}
++
++/*
++ * This test checks that memory.high is able to throttle big single shot
++ * allocation i.e. large allocation within one kernel entry.
++ */
++static int test_memcg_high_sync(const char *root)
++{
++	int ret = KSFT_FAIL, pid, fd = -1;
++	char *memcg;
++	long pre_high, pre_max;
++	long post_high, post_max;
++
++	memcg = cg_name(root, "memcg_test");
++	if (!memcg)
++		goto cleanup;
++
++	if (cg_create(memcg))
++		goto cleanup;
++
++	pre_high = cg_read_key_long(memcg, "memory.events", "high ");
++	pre_max = cg_read_key_long(memcg, "memory.events", "max ");
++	if (pre_high < 0 || pre_max < 0)
++		goto cleanup;
++
++	if (cg_write(memcg, "memory.swap.max", "0"))
++		goto cleanup;
++
++	if (cg_write(memcg, "memory.high", "30M"))
++		goto cleanup;
++
++	if (cg_write(memcg, "memory.max", "140M"))
++		goto cleanup;
++
++	fd = memcg_prepare_for_wait(memcg);
++	if (fd < 0)
++		goto cleanup;
++
++	pid = cg_run_nowait(memcg, alloc_anon_mlock, (void *)MB(200));
++	if (pid < 0)
++		goto cleanup;
++
++	cg_wait_for(fd);
++
++	post_high = cg_read_key_long(memcg, "memory.events", "high ");
++	post_max = cg_read_key_long(memcg, "memory.events", "max ");
++	if (post_high < 0 || post_max < 0)
++		goto cleanup;
++
++	if (pre_high == post_high || pre_max != post_max)
++		goto cleanup;
++
++	ret = KSFT_PASS;
++
++cleanup:
++	if (fd >= 0)
++		close(fd);
++	cg_destroy(memcg);
++	free(memcg);
++
++	return ret;
++}
++
+ /*
+  * This test checks that memory.max limits the amount of
+  * memory which can be consumed by either anonymous memory
+@@ -1180,6 +1257,7 @@ struct memcg_test {
+ 	T(test_memcg_min),
+ 	T(test_memcg_low),
+ 	T(test_memcg_high),
++	T(test_memcg_high_sync),
+ 	T(test_memcg_max),
+ 	T(test_memcg_oom_events),
+ 	T(test_memcg_swap_max),
 -- 
 2.35.1.265.g69c8d7142f-goog
 

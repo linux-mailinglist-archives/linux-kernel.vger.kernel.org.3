@@ -2,82 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D55A4B1FC1
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 08:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4A24B1FCF
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 09:04:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347866AbiBKH64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 02:58:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58656 "EHLO
+        id S1347907AbiBKIDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 03:03:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235256AbiBKH6z (ORCPT
+        with ESMTP id S1346181AbiBKIDd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 02:58:55 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A203E2D0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 23:58:54 -0800 (PST)
-Received: from [192.168.1.111] (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 718D793;
-        Fri, 11 Feb 2022 08:58:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1644566333;
-        bh=qLsGQ42ziV/GKSsffI76B9tGz3eMgBrcEnLOapSGr3c=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YiydTFg1Remf3/R5YD6qkCM4v7QiZw2mw8pjzPXvgrhDjQz6ZbFP924wLl0H38MG1
-         GIoNuNN45wDtlxj+T57f6Z1g33lsAL8prmvR5tCb+xHCGvpVEyd2Q4ggq9+f3QOQ0d
-         uWqzQ6T/rCJ8m+T204AwEB8Hwtt867Q4zSBrCam0=
-Message-ID: <2c534402-3302-047f-a362-18dfc2db2a39@ideasonboard.com>
-Date:   Fri, 11 Feb 2022 09:58:49 +0200
+        Fri, 11 Feb 2022 03:03:33 -0500
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0094BBF
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 00:03:31 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V4890vr_1644566603;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V4890vr_1644566603)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 11 Feb 2022 16:03:29 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     Larry.Finger@lwfinger.net
+Cc:     phil@philpotter.co.uk, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] staging: r8188eu: remove useless if else
+Date:   Fri, 11 Feb 2022 16:03:22 +0800
+Message-Id: <20220211080322.80388-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] drm/panel: simple: Initialize bpc in RK101II01D-CT panel
- descriptor
-Content-Language: en-US
-To:     Rahul T R <r-ravikumar@ti.com>, thierry.reding@gmail.com
-Cc:     sam@ravnborg.org, airlied@linux.ie, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nikhil.nd@ti.com, laurent.pinchart@ideasonboard.com
-References: <20220210140300.11900-1-r-ravikumar@ti.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20220210140300.11900-1-r-ravikumar@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/2022 16:03, Rahul T R wrote:
-> Initialize bpc while creating panel_desc structure for RK101II01D-CT
-> 
-> Below warning is triggered since bpc is not being initialized
-> 
-> WARNING: CPU: 2 PID: 47 at drivers/gpu/drm/panel/panel-simple.c:614
-> panel_simple_probe+0x1b0/0x3c8
-> 
-> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
-> ---
->   drivers/gpu/drm/panel/panel-simple.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-> index c324a3ed34b9..c09eb5ad65fc 100644
-> --- a/drivers/gpu/drm/panel/panel-simple.c
-> +++ b/drivers/gpu/drm/panel/panel-simple.c
-> @@ -3058,6 +3058,7 @@ static const struct drm_display_mode rocktech_rk101ii01d_ct_mode = {
->   
->   static const struct panel_desc rocktech_rk101ii01d_ct = {
->   	.modes = &rocktech_rk101ii01d_ct_mode,
-> +	.bpc = 8,
->   	.num_modes = 1,
->   	.size = {
->   		.width = 217,
+Eliminate the follow coccicheck warning:
 
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+./drivers/staging/r8188eu/hal/usb_halinit.c:1105:3-5: WARNING: possible
+condition with no effect (if == else).
 
-  Tomi
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/staging/r8188eu/hal/usb_halinit.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
+index 659e0f26db29..9bcbc275f043 100644
+--- a/drivers/staging/r8188eu/hal/usb_halinit.c
++++ b/drivers/staging/r8188eu/hal/usb_halinit.c
+@@ -1102,11 +1102,7 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
+ 				/* enable update TSF */
+ 				rtw_write8(Adapter, REG_BCN_CTRL, rtw_read8(Adapter, REG_BCN_CTRL) & (~BIT(4)));
+ 			}
+-			if ((pmlmeinfo->state & 0x03) == WIFI_FW_AP_STATE) {
+-				rtw_write32(Adapter, REG_RCR, rtw_read32(Adapter, REG_RCR) | RCR_CBSSID_BCN);
+-			} else {
+-				rtw_write32(Adapter, REG_RCR, rtw_read32(Adapter, REG_RCR) | RCR_CBSSID_BCN);
+-			}
++			rtw_write32(Adapter, REG_RCR, rtw_read32(Adapter, REG_RCR) | RCR_CBSSID_BCN);
+ 		}
+ 		break;
+ 	case HW_VAR_MLME_JOIN:
+-- 
+2.20.1.7.g153144c
+

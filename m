@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08CB34B233D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECA24B2336
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349025AbiBKKfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 05:35:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32804 "EHLO
+        id S1345596AbiBKKfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 05:35:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348976AbiBKKfG (ORCPT
+        with ESMTP id S1349025AbiBKKfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Feb 2022 05:35:06 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A076DF09
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:35:01 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id s133-20020a252c8b000000b0062112290d0bso2930924ybs.23
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:35:01 -0800 (PST)
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCA2EA9
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:35:04 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id f32-20020a25b0a0000000b0061dad37dcd6so17759150ybj.16
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:35:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=G677aq/uRJQFlNf2MOfZhMeeR+Ww2WAIN6eR7wWAbxk=;
-        b=bUSLQ0bmmnsf8LyD0oerPrqmx9F06nj76AZL+2Kohv4lJmWs35/U9aB8laEaprIYcO
-         EFWciz9LYvzUTG6EvUzn0IGrHO9xkmo6R2u/dDtuqpYFdrp+59B0IOR7cV3oeQ319BmO
-         MRaqcnPJuGzeJ33HD+hLT6edOfMx085pat4x7HJRqneh6FmCc678fNssBnmyUAKK5RIj
-         1KXK9Ef939OQ0PY4yMyCbSkjksRjTLIib92HsYB//+3mcelcrOcNaNVXSoz0Wg4NKkIj
-         Mvzhs2qoZZK0gmuFAyjRW715QTGakOanIKSSS340ZpcLN095CxgrmwiangOqERPdwds1
-         LkhQ==
+        bh=UGsKZnw8VLef09itDvIN0uubt8K78U8H5noB1akwlYQ=;
+        b=qPFa/BmTnJyKCQj1lQy20izhcI5dZGargFOCnI+uAY7B83o2EeSpwpzuAFk675V0Qo
+         3Z54Lut568TED76lUb08zrruzf054/DvXBr7MF4ScCFfDWIY3KRsVdfdaHajFqZbeUJd
+         HB5JA1EjgjOxhRpdcRtwQydBedorODiwnDwJMYdmI+VTy2WON2yxSGRcyABHsjwN5O3a
+         iJbTmIhZI/WuY+CrT+VzZ/27CfnzjOQVE9kiutiGVFjE2RvnlLsot/UZrFW/45HXC1gD
+         YvdWsISzOZAovUQAFon0Cg6U+ET8QjTQQgipiVDZKpPPKznqia+72sKem2lkyzz6hPhD
+         bM8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=G677aq/uRJQFlNf2MOfZhMeeR+Ww2WAIN6eR7wWAbxk=;
-        b=zXuTz9mv0c+H2dy4wPjoAmqcex/lPt1IRPCW5GLFJfLeT7/UMW0B4htHdYS+O0o8v/
-         rKBWk8aO5gy6IVQ6r/2h6V2DXvxbocGyZhJ3QITAhvhVq7DFF+WxtWkIVZzHIPbJYeoz
-         dP/RblJnBpOobj5smZp8LRwoWFkULWIjxb1wPRSvTwNwtCYeLhPnL4VpAjVRdhRz4UOv
-         5rXdVHIIltBpeWUOyyj1LrI4HGHZ5rfs2x6f5KYxO2py1oT14O8i1QZXSb04jL+2Si31
-         /aV0EkRR4ggBiMStn7WiZJ+yVs4/PCBImnhT4R4AwNdtdWdum1a6SFzIhXqEuQT4Fe8r
-         GXKg==
-X-Gm-Message-State: AOAM532l5ZkWPQi55eZfbtqojXjoNo3QK3pCd7ftW7hY2+WOhjknSKM+
-        kQUiyTV5N8s3byR06fuU0+4WK8P1+dLD
-X-Google-Smtp-Source: ABdhPJxghSrSMMpEZbAslxqwwvel4CRcbGbXVSy/h5IKRrBTgZcWz+X77CZE8W6GCJva3K6YdMGmuIS7lreQ
+        bh=UGsKZnw8VLef09itDvIN0uubt8K78U8H5noB1akwlYQ=;
+        b=V/PvQKa7Qb/cVeWEJELedQ5ofWbVwO7etqBkCshT0EITvodbBXUC1ynCYGd2SFGJLo
+         5x9U/m20DCet1xe8+8oRGwrf4sU+MYMgZRoj13/uaBaw8lORkEH0bBQsAcXxglq26v7O
+         uIcm7lIKqdGQjKjkMkpHH3fE9EftQZ6MljlE0qH2w6bgWR2TFClik/YR5wS9PI7GmO80
+         WypxXzTxA/g0ffVZI6eFRscPUPxoVDPHBlTbQC6EOty/2pbq8PcHcAItTPO78Ys4taoC
+         OrJ9VL5j6A8oFZXnMeyiZhyFtpShwVFAEofvb1eeju8E7kpGjyX5gfB3uTHLuM4b2TFS
+         /ynQ==
+X-Gm-Message-State: AOAM531tuqJjiyPTRfmxJ3TiDJe5doMciCwi2wxAcJ2PjkvD1s8+LSfM
+        icBdGajgR32jgpBbGB6F1b2bG46zX20Y
+X-Google-Smtp-Source: ABdhPJz/+t+HivuxKtsdEKQzAx6pkU2BsNGvQZMz7j8W6vRH2iunJxeO0aRX/wl86jEF8P75FWf7m/CFCYR5
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:2d98:3ad9:1d8a:fb9b])
- (user=irogers job=sendgmr) by 2002:a81:d00d:: with SMTP id
- v13mr908075ywi.179.1644575700833; Fri, 11 Feb 2022 02:35:00 -0800 (PST)
-Date:   Fri, 11 Feb 2022 02:34:09 -0800
+ (user=irogers job=sendgmr) by 2002:a25:4943:: with SMTP id
+ w64mr726186yba.619.1644575703290; Fri, 11 Feb 2022 02:35:03 -0800 (PST)
+Date:   Fri, 11 Feb 2022 02:34:10 -0800
 In-Reply-To: <20220211103415.2737789-1-irogers@google.com>
-Message-Id: <20220211103415.2737789-17-irogers@google.com>
+Message-Id: <20220211103415.2737789-18-irogers@google.com>
 Mime-Version: 1.0
 References: <20220211103415.2737789-1-irogers@google.com>
 X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH v3 16/22] perf test: Add extra diagnostics to maps test
+Subject: [PATCH v3 17/22] perf map: Changes to reference counting
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -93,88 +93,516 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dump the resultant and comparison maps on failure.
+When a pointer to a map exists do a get, when that pointer is
+overwritten or freed, put the map. This avoids issues with gets and
+puts being inconsistently used causing, use after puts, etc. Reference
+count checking and address sanitizer were used to identify issues.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/maps.c | 51 +++++++++++++++++++++++++++++------------
- 1 file changed, 36 insertions(+), 15 deletions(-)
+ tools/perf/tests/hists_cumulate.c     | 14 ++++-
+ tools/perf/tests/hists_filter.c       | 14 ++++-
+ tools/perf/tests/hists_link.c         | 18 +++++-
+ tools/perf/tests/hists_output.c       | 12 +++-
+ tools/perf/tests/mmap-thread-lookup.c |  3 +-
+ tools/perf/util/callchain.c           |  9 +--
+ tools/perf/util/event.c               |  8 ++-
+ tools/perf/util/hist.c                | 10 ++--
+ tools/perf/util/machine.c             | 80 ++++++++++++++++-----------
+ 9 files changed, 118 insertions(+), 50 deletions(-)
 
-diff --git a/tools/perf/tests/maps.c b/tools/perf/tests/maps.c
-index a58274598587..38c1ec0074d1 100644
---- a/tools/perf/tests/maps.c
-+++ b/tools/perf/tests/maps.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include <inttypes.h>
- #include <linux/compiler.h>
- #include <linux/kernel.h>
- #include "tests.h"
-@@ -17,22 +18,42 @@ static int check_maps(struct map_def *merged, unsigned int size, struct maps *ma
- {
- 	struct map_rb_node *rb_node;
- 	unsigned int i = 0;
--
--	maps__for_each_entry(maps, rb_node) {
--		struct map *map = rb_node->map;
--
--		if (i > 0)
--			TEST_ASSERT_VAL("less maps expected", (map && i < size) || (!map && i == size));
--
--		TEST_ASSERT_VAL("wrong map start",  map->start == merged[i].start);
--		TEST_ASSERT_VAL("wrong map end",    map->end == merged[i].end);
--		TEST_ASSERT_VAL("wrong map name",  !strcmp(map->dso->name, merged[i].name));
--		TEST_ASSERT_VAL("wrong map refcnt", refcount_read(&map->refcnt) == 1);
--
--		i++;
-+	bool failed = false;
-+
-+	if (maps__nr_maps(maps) != size) {
-+		pr_debug("Expected %d maps, got %d", size, maps__nr_maps(maps));
-+		failed = true;
-+	} else {
-+		maps__for_each_entry(maps, rb_node) {
-+			struct map *map = rb_node->map;
-+
-+			if (map__start(map) != merged[i].start ||
-+			    map__end(map) != merged[i].end ||
-+			    strcmp(map__dso(map)->name, merged[i].name) ||
-+			    refcount_read(&map->refcnt) != 1) {
-+				failed = true;
-+			}
-+			i++;
-+		}
+diff --git a/tools/perf/tests/hists_cumulate.c b/tools/perf/tests/hists_cumulate.c
+index 17f4fcd6bdce..28f5eb41eed9 100644
+--- a/tools/perf/tests/hists_cumulate.c
++++ b/tools/perf/tests/hists_cumulate.c
+@@ -112,6 +112,7 @@ static int add_hist_entries(struct hists *hists, struct machine *machine)
+ 		}
+ 
+ 		fake_samples[i].thread = al.thread;
++		map__put(fake_samples[i].map);
+ 		fake_samples[i].map = al.map;
+ 		fake_samples[i].sym = al.sym;
  	}
--
--	return TEST_OK;
-+	if (failed) {
-+		pr_debug("Expected:\n");
-+		for (i = 0; i < size; i++) {
-+			pr_debug("\tstart: %" PRIu64 " end: %" PRIu64 " name: '%s' refcnt: 1\n",
-+				merged[i].start, merged[i].end, merged[i].name);
-+		}
-+		pr_debug("Got:\n");
-+		maps__for_each_entry(maps, rb_node) {
-+			struct map *map = rb_node->map;
-+
-+			pr_debug("\tstart: %" PRIu64 " end: %" PRIu64 " name: '%s' refcnt: %d\n",
-+				map__start(map),
-+				map__end(map),
-+				map__dso(map)->name,
-+				refcount_read(&map->refcnt));
-+		}
-+	}
-+	return failed ? TEST_FAIL : TEST_OK;
+@@ -147,15 +148,23 @@ static void del_hist_entries(struct hists *hists)
+ 	}
  }
  
- static int test__maps__merge_in(struct test_suite *t __maybe_unused, int subtest __maybe_unused)
++static void put_fake_samples(void)
++{
++	size_t i;
++
++	for (i = 0; i < ARRAY_SIZE(fake_samples); i++)
++		map__put(fake_samples[i].map);
++}
++
+ typedef int (*test_fn_t)(struct evsel *, struct machine *);
+ 
+ #define COMM(he)  (thread__comm_str(he->thread))
+-#define DSO(he)   (he->ms.map->dso->short_name)
++#define DSO(he)   (map__dso(he->ms.map)->short_name)
+ #define SYM(he)   (he->ms.sym->name)
+ #define CPU(he)   (he->cpu)
+ #define PID(he)   (he->thread->tid)
+ #define DEPTH(he) (he->callchain->max_depth)
+-#define CDSO(cl)  (cl->ms.map->dso->short_name)
++#define CDSO(cl)  (map__dso(cl->ms.map)->short_name)
+ #define CSYM(cl)  (cl->ms.sym->name)
+ 
+ struct result {
+@@ -733,6 +742,7 @@ static int test__hists_cumulate(struct test_suite *test __maybe_unused, int subt
+ 	/* tear down everything */
+ 	evlist__delete(evlist);
+ 	machines__exit(&machines);
++	put_fake_samples();
+ 
+ 	return err;
+ }
+diff --git a/tools/perf/tests/hists_filter.c b/tools/perf/tests/hists_filter.c
+index 08cbeb9e39ae..bcd46244182a 100644
+--- a/tools/perf/tests/hists_filter.c
++++ b/tools/perf/tests/hists_filter.c
+@@ -89,6 +89,7 @@ static int add_hist_entries(struct evlist *evlist,
+ 			}
+ 
+ 			fake_samples[i].thread = al.thread;
++			map__put(fake_samples[i].map);
+ 			fake_samples[i].map = al.map;
+ 			fake_samples[i].sym = al.sym;
+ 		}
+@@ -101,6 +102,14 @@ static int add_hist_entries(struct evlist *evlist,
+ 	return TEST_FAIL;
+ }
+ 
++static void put_fake_samples(void)
++{
++	size_t i;
++
++	for (i = 0; i < ARRAY_SIZE(fake_samples); i++)
++		map__put(fake_samples[i].map);
++}
++
+ static int test__hists_filter(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+ {
+ 	int err = TEST_FAIL;
+@@ -194,7 +203,7 @@ static int test__hists_filter(struct test_suite *test __maybe_unused, int subtes
+ 		hists__filter_by_thread(hists);
+ 
+ 		/* now applying dso filter for 'kernel' */
+-		hists->dso_filter = fake_samples[0].map->dso;
++		hists->dso_filter = map__dso(fake_samples[0].map);
+ 		hists__filter_by_dso(hists);
+ 
+ 		if (verbose > 2) {
+@@ -288,7 +297,7 @@ static int test__hists_filter(struct test_suite *test __maybe_unused, int subtes
+ 
+ 		/* now applying all filters at once. */
+ 		hists->thread_filter = fake_samples[1].thread;
+-		hists->dso_filter = fake_samples[1].map->dso;
++		hists->dso_filter = map__dso(fake_samples[1].map);
+ 		hists__filter_by_thread(hists);
+ 		hists__filter_by_dso(hists);
+ 
+@@ -322,6 +331,7 @@ static int test__hists_filter(struct test_suite *test __maybe_unused, int subtes
+ 	evlist__delete(evlist);
+ 	reset_output_field();
+ 	machines__exit(&machines);
++	put_fake_samples();
+ 
+ 	return err;
+ }
+diff --git a/tools/perf/tests/hists_link.c b/tools/perf/tests/hists_link.c
+index c575e13a850d..060e8731feff 100644
+--- a/tools/perf/tests/hists_link.c
++++ b/tools/perf/tests/hists_link.c
+@@ -6,6 +6,7 @@
+ #include "evsel.h"
+ #include "evlist.h"
+ #include "machine.h"
++#include "map.h"
+ #include "parse-events.h"
+ #include "hists_common.h"
+ #include "util/mmap.h"
+@@ -94,6 +95,7 @@ static int add_hist_entries(struct evlist *evlist, struct machine *machine)
+ 			}
+ 
+ 			fake_common_samples[k].thread = al.thread;
++			map__put(fake_common_samples[k].map);
+ 			fake_common_samples[k].map = al.map;
+ 			fake_common_samples[k].sym = al.sym;
+ 		}
+@@ -126,11 +128,24 @@ static int add_hist_entries(struct evlist *evlist, struct machine *machine)
+ 	return -1;
+ }
+ 
++static void put_fake_samples(void)
++{
++	size_t i, j;
++
++	for (i = 0; i < ARRAY_SIZE(fake_common_samples); i++)
++		map__put(fake_common_samples[i].map);
++	for (i = 0; i < ARRAY_SIZE(fake_samples); i++) {
++		for (j = 0; j < ARRAY_SIZE(fake_samples[0]); j++)
++			map__put(fake_samples[i][j].map);
++	}
++}
++
+ static int find_sample(struct sample *samples, size_t nr_samples,
+ 		       struct thread *t, struct map *m, struct symbol *s)
+ {
+ 	while (nr_samples--) {
+-		if (samples->thread == t && samples->map == m &&
++		if (samples->thread == t &&
++		    samples->map == m &&
+ 		    samples->sym == s)
+ 			return 1;
+ 		samples++;
+@@ -336,6 +351,7 @@ static int test__hists_link(struct test_suite *test __maybe_unused, int subtest
+ 	evlist__delete(evlist);
+ 	reset_output_field();
+ 	machines__exit(&machines);
++	put_fake_samples();
+ 
+ 	return err;
+ }
+diff --git a/tools/perf/tests/hists_output.c b/tools/perf/tests/hists_output.c
+index 0bde4a768c15..4af6916491e5 100644
+--- a/tools/perf/tests/hists_output.c
++++ b/tools/perf/tests/hists_output.c
+@@ -78,6 +78,7 @@ static int add_hist_entries(struct hists *hists, struct machine *machine)
+ 		}
+ 
+ 		fake_samples[i].thread = al.thread;
++		map__put(fake_samples[i].map);
+ 		fake_samples[i].map = al.map;
+ 		fake_samples[i].sym = al.sym;
+ 	}
+@@ -113,10 +114,18 @@ static void del_hist_entries(struct hists *hists)
+ 	}
+ }
+ 
++static void put_fake_samples(void)
++{
++	size_t i;
++
++	for (i = 0; i < ARRAY_SIZE(fake_samples); i++)
++		map__put(fake_samples[i].map);
++}
++
+ typedef int (*test_fn_t)(struct evsel *, struct machine *);
+ 
+ #define COMM(he)  (thread__comm_str(he->thread))
+-#define DSO(he)   (he->ms.map->dso->short_name)
++#define DSO(he)   (map__dso(he->ms.map)->short_name)
+ #define SYM(he)   (he->ms.sym->name)
+ #define CPU(he)   (he->cpu)
+ #define PID(he)   (he->thread->tid)
+@@ -620,6 +629,7 @@ static int test__hists_output(struct test_suite *test __maybe_unused, int subtes
+ 	/* tear down everything */
+ 	evlist__delete(evlist);
+ 	machines__exit(&machines);
++	put_fake_samples();
+ 
+ 	return err;
+ }
+diff --git a/tools/perf/tests/mmap-thread-lookup.c b/tools/perf/tests/mmap-thread-lookup.c
+index a4301fc7b770..898eda55b7a8 100644
+--- a/tools/perf/tests/mmap-thread-lookup.c
++++ b/tools/perf/tests/mmap-thread-lookup.c
+@@ -202,7 +202,8 @@ static int mmap_events(synth_cb synth)
+ 			break;
+ 		}
+ 
+-		pr_debug("map %p, addr %" PRIx64 "\n", al.map, al.map->start);
++		pr_debug("map %p, addr %" PRIx64 "\n", al.map, map__start(al.map));
++		map__put(al.map);
+ 	}
+ 
+ 	machine__delete_threads(machine);
+diff --git a/tools/perf/util/callchain.c b/tools/perf/util/callchain.c
+index a8cfd31a3ff0..ae65b7bc9ab7 100644
+--- a/tools/perf/util/callchain.c
++++ b/tools/perf/util/callchain.c
+@@ -583,7 +583,7 @@ fill_node(struct callchain_node *node, struct callchain_cursor *cursor)
+ 		}
+ 		call->ip = cursor_node->ip;
+ 		call->ms = cursor_node->ms;
+-		map__get(call->ms.map);
++		call->ms.map = map__get(call->ms.map);
+ 		call->srcline = cursor_node->srcline;
+ 
+ 		if (cursor_node->branch) {
+@@ -1061,7 +1061,7 @@ int callchain_cursor_append(struct callchain_cursor *cursor,
+ 	node->ip = ip;
+ 	map__zput(node->ms.map);
+ 	node->ms = *ms;
+-	map__get(node->ms.map);
++	node->ms.map = map__get(node->ms.map);
+ 	node->branch = branch;
+ 	node->nr_loop_iter = nr_loop_iter;
+ 	node->iter_cycles = iter_cycles;
+@@ -1109,7 +1109,8 @@ int fill_callchain_info(struct addr_location *al, struct callchain_cursor_node *
+ 	struct machine *machine = maps__machine(node->ms.maps);
+ 
+ 	al->maps = node->ms.maps;
+-	al->map = node->ms.map;
++	map__put(al->map);
++	al->map = map__get(node->ms.map);
+ 	al->sym = node->ms.sym;
+ 	al->srcline = node->srcline;
+ 	al->addr = node->ip;
+@@ -1530,7 +1531,7 @@ int callchain_node__make_parent_list(struct callchain_node *node)
+ 				goto out;
+ 			*new = *chain;
+ 			new->has_children = false;
+-			map__get(new->ms.map);
++			new->ms.map = map__get(new->ms.map);
+ 			list_add_tail(&new->list, &head);
+ 		}
+ 		parent = parent->parent;
+diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
+index 54a1d4df5f70..266318d5d006 100644
+--- a/tools/perf/util/event.c
++++ b/tools/perf/util/event.c
+@@ -484,13 +484,14 @@ size_t perf_event__fprintf_text_poke(union perf_event *event, struct machine *ma
+ 	if (machine) {
+ 		struct addr_location al;
+ 
+-		al.map = maps__find(machine__kernel_maps(machine), tp->addr);
++		al.map = map__get(maps__find(machine__kernel_maps(machine), tp->addr));
+ 		if (al.map && map__load(al.map) >= 0) {
+ 			al.addr = map__map_ip(al.map, tp->addr);
+ 			al.sym = map__find_symbol(al.map, al.addr);
+ 			if (al.sym)
+ 				ret += symbol__fprintf_symname_offs(al.sym, &al, fp);
+ 		}
++		map__put(al.map);
+ 	}
+ 	ret += fprintf(fp, " old len %u new len %u\n", tp->old_len, tp->new_len);
+ 	old = true;
+@@ -581,6 +582,7 @@ struct map *thread__find_map(struct thread *thread, u8 cpumode, u64 addr,
+ 	al->filtered = 0;
+ 
+ 	if (machine == NULL) {
++		map__put(al->map);
+ 		al->map = NULL;
+ 		return NULL;
+ 	}
+@@ -599,6 +601,7 @@ struct map *thread__find_map(struct thread *thread, u8 cpumode, u64 addr,
+ 		al->level = 'u';
+ 	} else {
+ 		al->level = 'H';
++		map__put(al->map);
+ 		al->map = NULL;
+ 
+ 		if ((cpumode == PERF_RECORD_MISC_GUEST_USER ||
+@@ -613,7 +616,7 @@ struct map *thread__find_map(struct thread *thread, u8 cpumode, u64 addr,
+ 		return NULL;
+ 	}
+ 
+-	al->map = maps__find(maps, al->addr);
++	al->map = map__get(maps__find(maps, al->addr));
+ 	if (al->map != NULL) {
+ 		/*
+ 		 * Kernel maps might be changed when loading symbols so loading
+@@ -768,6 +771,7 @@ int machine__resolve(struct machine *machine, struct addr_location *al,
+  */
+ void addr_location__put(struct addr_location *al)
+ {
++	map__zput(al->map);
+ 	thread__zput(al->thread);
+ }
+ 
+diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
+index f19ac6eb4775..4dbb1dbf3679 100644
+--- a/tools/perf/util/hist.c
++++ b/tools/perf/util/hist.c
+@@ -446,7 +446,7 @@ static int hist_entry__init(struct hist_entry *he,
+ 			memset(&he->stat, 0, sizeof(he->stat));
+ 	}
+ 
+-	map__get(he->ms.map);
++	he->ms.map = map__get(he->ms.map);
+ 
+ 	if (he->branch_info) {
+ 		/*
+@@ -461,13 +461,13 @@ static int hist_entry__init(struct hist_entry *he,
+ 		memcpy(he->branch_info, template->branch_info,
+ 		       sizeof(*he->branch_info));
+ 
+-		map__get(he->branch_info->from.ms.map);
+-		map__get(he->branch_info->to.ms.map);
++		he->branch_info->from.ms.map = map__get(he->branch_info->from.ms.map);
++		he->branch_info->to.ms.map = map__get(he->branch_info->to.ms.map);
+ 	}
+ 
+ 	if (he->mem_info) {
+-		map__get(he->mem_info->iaddr.ms.map);
+-		map__get(he->mem_info->daddr.ms.map);
++		he->mem_info->iaddr.ms.map = map__get(he->mem_info->iaddr.ms.map);
++		he->mem_info->daddr.ms.map = map__get(he->mem_info->daddr.ms.map);
+ 	}
+ 
+ 	if (hist_entry__has_callchains(he) && symbol_conf.use_callchain)
+diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+index 940fb2a50dfd..49e4891e92b7 100644
+--- a/tools/perf/util/machine.c
++++ b/tools/perf/util/machine.c
+@@ -783,33 +783,42 @@ static int machine__process_ksymbol_register(struct machine *machine,
+ {
+ 	struct symbol *sym;
+ 	struct map *map = maps__find(machine__kernel_maps(machine), event->ksymbol.addr);
++	bool put_map = false;
++	int err = 0;
+ 
+ 	if (!map) {
+ 		struct dso *dso = dso__new(event->ksymbol.name);
+-		int err;
+ 
+-		if (dso) {
+-			dso->kernel = DSO_SPACE__KERNEL;
+-			map = map__new2(0, dso);
+-			dso__put(dso);
++		if (!dso) {
++			err = -ENOMEM;
++			goto out;
+ 		}
+-
+-		if (!dso || !map) {
+-			return -ENOMEM;
++		dso->kernel = DSO_SPACE__KERNEL;
++		map = map__new2(0, dso);
++		dso__put(dso);
++		if (!map) {
++			err = -ENOMEM;
++			goto out;
+ 		}
+-
++		/*
++		 * The inserted map has a get on it, we need to put to release
++		 * the reference count here, but do it after all accesses are
++		 * done.
++		 */
++		put_map = true;
+ 		if (event->ksymbol.ksym_type == PERF_RECORD_KSYMBOL_TYPE_OOL) {
+-			map->dso->binary_type = DSO_BINARY_TYPE__OOL;
+-			map->dso->data.file_size = event->ksymbol.len;
+-			dso__set_loaded(map->dso);
++			map__dso(map)->binary_type = DSO_BINARY_TYPE__OOL;
++			map__dso(map)->data.file_size = event->ksymbol.len;
++			dso__set_loaded(map__dso(map));
+ 		}
+ 
+ 		map->start = event->ksymbol.addr;
+-		map->end = map->start + event->ksymbol.len;
++		map->end = map__start(map) + event->ksymbol.len;
+ 		err = maps__insert(machine__kernel_maps(machine), map);
+-		map__put(map);
+-		if (err)
+-			return err;
++		if (err) {
++			err = -ENOMEM;
++			goto out;
++		}
+ 
+ 		dso__set_loaded(dso);
+ 
+@@ -819,13 +828,18 @@ static int machine__process_ksymbol_register(struct machine *machine,
+ 		}
+ 	}
+ 
+-	sym = symbol__new(map->map_ip(map, map->start),
++	sym = symbol__new(map__map_ip(map, map__start(map)),
+ 			  event->ksymbol.len,
+ 			  0, 0, event->ksymbol.name);
+-	if (!sym)
+-		return -ENOMEM;
+-	dso__insert_symbol(map->dso, sym);
+-	return 0;
++	if (!sym) {
++		err = -ENOMEM;
++		goto out;
++	}
++	dso__insert_symbol(map__dso(map), sym);
++out:
++	if (put_map)
++		map__put(map);
++	return err;
+ }
+ 
+ static int machine__process_ksymbol_unregister(struct machine *machine,
+@@ -925,14 +939,11 @@ static struct map *machine__addnew_module_map(struct machine *machine, u64 start
+ 		goto out;
+ 
+ 	err = maps__insert(machine__kernel_maps(machine), map);
+-
+-	/* Put the map here because maps__insert already got it */
+-	map__put(map);
+-
+ 	/* If maps__insert failed, return NULL. */
+-	if (err)
++	if (err) {
++		map__put(map);
+ 		map = NULL;
+-
++	}
+ out:
+ 	/* put the dso here, corresponding to  machine__findnew_module_dso */
+ 	dso__put(dso);
+@@ -1228,6 +1239,7 @@ __machine__create_kernel_maps(struct machine *machine, struct dso *kernel)
+ 	/* In case of renewal the kernel map, destroy previous one */
+ 	machine__destroy_kernel_maps(machine);
+ 
++	map__put(machine->vmlinux_map);
+ 	machine->vmlinux_map = map__new2(0, kernel);
+ 	if (machine->vmlinux_map == NULL)
+ 		return -ENOMEM;
+@@ -1513,6 +1525,7 @@ static int machine__create_module(void *arg, const char *name, u64 start,
+ 	map->end = start + size;
+ 
+ 	dso__kernel_module_get_build_id(map__dso(map), machine->root_dir);
++	map__put(map);
+ 	return 0;
+ }
+ 
+@@ -1558,16 +1571,18 @@ static void machine__set_kernel_mmap(struct machine *machine,
+ static int machine__update_kernel_mmap(struct machine *machine,
+ 				     u64 start, u64 end)
+ {
+-	struct map *map = machine__kernel_map(machine);
++	struct map *orig, *updated;
+ 	int err;
+ 
+-	map__get(map);
+-	maps__remove(machine__kernel_maps(machine), map);
++	orig = machine->vmlinux_map;
++	updated = map__get(orig);
+ 
++	machine->vmlinux_map = updated;
+ 	machine__set_kernel_mmap(machine, start, end);
++	maps__remove(machine__kernel_maps(machine), orig);
++	err = maps__insert(machine__kernel_maps(machine), updated);
++	map__put(orig);
+ 
+-	err = maps__insert(machine__kernel_maps(machine), map);
+-	map__put(map);
+ 	return err;
+ }
+ 
+@@ -2246,6 +2261,7 @@ static int add_callchain_ip(struct thread *thread,
+ 	err = callchain_cursor_append(cursor, ip, &ms,
+ 				      branch, flags, nr_loop_iter,
+ 				      iter_cycles, branch_from, srcline);
++	map__put(al.map);
+ 	return err;
+ }
+ 
 -- 
 2.35.1.265.g69c8d7142f-goog
 

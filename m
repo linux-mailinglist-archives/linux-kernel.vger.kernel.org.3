@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682604B2484
+	by mail.lfdr.de (Postfix) with ESMTP id B3B574B2485
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349486AbiBKLgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 06:36:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50702 "EHLO
+        id S1349509AbiBKLhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 06:37:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343573AbiBKLgS (ORCPT
+        with ESMTP id S240820AbiBKLhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 06:36:18 -0500
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34461E9B
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:36:18 -0800 (PST)
-Received: by mail-qk1-x72f.google.com with SMTP id 200so8039960qki.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:36:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=z2gFosycv/4d8F4IH6M5EFvOMVfX/xiPl+lWjQfsKQI=;
-        b=GH6rnxlQa7pKNjEQnolaZU35YnXATMMaIEv/EgjGDcfLKG6UJ9EBOr2pcjSc4J1VJO
-         BTqltSgJL8G2aCptNRD0PVpBJ7WDQReVx0z66wzwhKe1s4Vt/sIDaYiQgVUzRb7k8kuE
-         vjAyQoHdlml/JUxTC7qSd4vz5P3Q+AtcJ8H5TCc+zQ6OPY8EA06JQtcoCgJfZDYHYC7J
-         TKdbr1QDS+LKGe67wERxIX03UxuSYv0cghWefW90yg789TT9rg+6mN7uGCCHRbh+exq/
-         234G/GEHxEkAa5ieM2CvmTwo2o27Aw6X02yT0PEQZPZ+YIpLqrupYGZaS800V15pHF0V
-         ocGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=z2gFosycv/4d8F4IH6M5EFvOMVfX/xiPl+lWjQfsKQI=;
-        b=3y3E8P2X5G0jfoWs8jXz/w44fAXl0A4Ks/6Dk0uVTqtteIsO5P1qaHBJdZVZtmvll/
-         uRLvcFIMslR1VIsjliHgACsJumZ7GQ+gc0j1rS2t9ybcUqBlv97N525I2cRYSM3EdP5K
-         ISCn+KjwFF6ThbITyhYs6v2gDZX9E6fqeSqiUUe2sKkPpKIJJxkAJbhVtv9rXGxZTeiK
-         bEnfnkkihZ/pV1DYJjEo7EXVYKayyLCx24m472QtNIhoC8XlvLvwokb7qFzhsOTafHOI
-         2JJyta6ZxLoo7gil/EXKFuNlV9eYP673usQRq2+GE+FMHEJLxbuhTBY1E1L1gS/05lzk
-         Uwrg==
-X-Gm-Message-State: AOAM532eaVTuw0ZAxmqSOY4FiZo+2XgZSO6HK5pAXiELMSPVPzerutVd
-        SNR0NG7fsfBl/VAiFoDwgNCKIZ63uyyNsE0kUNovm3mdocinvqY1
-X-Google-Smtp-Source: ABdhPJw+zRKiCGuV/1ZWcPlYBvRrQjpU5Z6uQC8o9T0TfxgGs2cdTfNB2ENGcWUcVcMRirXpB/llqb3XudKxcG/4gOo=
-X-Received: by 2002:a05:620a:254a:: with SMTP id s10mr473911qko.724.1644579377319;
- Fri, 11 Feb 2022 03:36:17 -0800 (PST)
+        Fri, 11 Feb 2022 06:37:01 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D106E9B;
+        Fri, 11 Feb 2022 03:36:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=75NWpP1F3muQ7eU77nN0HqewB2XELKQjhwajLBBcmi4=; b=PSN+UiFDV4kXfaO/wz7emyjBKj
+        k23Ik9QPVvS3SLNFogCYSikiE7DGGSJHir26m6VUCwHZfVbG4JYkv+wdDf4HhBJ2mGt/PbF4DceIo
+        gxAAIsuysAEz+lx8/wv8UO+1fW3FAJA03zGAm2WtR4Wg53ioRsCcbGYnWbloETzZr7H0QWnwp/xlq
+        6YeHeMC4s55AlC32NStEhjdxlulhtn5NcSPiRVGG2tOOpoR0xDu6DYsNdyV8Z/tHT8Mx95o9IjHCA
+        r5V9bmOCDdcfZqL8u5lb8vfG7uR3qLB+EODQrfE7h0DdQEW/viB9+HXxhGl1WIOdkKnx+pLJhL2Eu
+        q+DZThWA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nIUEG-00AMT3-DH; Fri, 11 Feb 2022 11:36:44 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 66C149853C7; Fri, 11 Feb 2022 12:36:43 +0100 (CET)
+Date:   Fri, 11 Feb 2022 12:36:43 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Wen Yang <simon.wy@alibaba-inc.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] perf/x86: improve the event scheduling to avoid
+ unnecessary pmu_stop/start
+Message-ID: <20220211113643.GT23216@worktop.programming.kicks-ass.net>
+References: <20220210043930.34311-1-simon.wy@alibaba-inc.com>
 MIME-Version: 1.0
-From:   Du Dengke <pinganddu90@gmail.com>
-Date:   Fri, 11 Feb 2022 19:36:06 +0800
-Message-ID: <CAKHP1dtwQRD4Q6poVopyZ1WXtBL5kavw1BYQZBU1_LP1VNtJMA@mail.gmail.com>
-Subject: 
-To:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        TVD_SPACE_RATIO,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210043930.34311-1-simon.wy@alibaba-inc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,4 +61,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-unsubscribe linux-kernel
+On Thu, Feb 10, 2022 at 12:39:30PM +0800, Wen Yang wrote:
+> This issue has been there for a long time, we could reproduce it as follows:
+> 
+> 1, run a script that periodically collects perf data, eg:
+> while true
+> do
+>     perf stat -e cache-misses,cache-misses,cache-misses -C 1 sleep 2
+>     perf stat -e cache-misses -C 1 sleep 2
+>     sleep 1
+> done
+> 
+> 2, run another one to capture the IPC, eg:
+> perf stat -e cycles:D,instructions:D  -C 1 -I 1000
+> 
+> Then we could observe that the counter used by cycles:D changes frequently:
+> crash> struct  cpu_hw_events.n_events,assign,event_list,events  ffff88bf7f44f420
+>   n_events = 3
+>   assign = {33, 1, 32, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+>   event_list = {0xffff88bf77b85000, 0xffff88b72db82000, 0xffff88b72db85800, 0xffff88ff6cfcb000, 0xffff88ff609f1800, 0xffff88ff609f1800, 0xffff88ff5f46a800, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
+>   events = {0x0, 0xffff88b72db82000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xffff88b72db85800, 0xffff88bf77b85000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
+> 
+> crash> struct  cpu_hw_events.n_events,assign,event_list,events  ffff88bf7f44f420
+>   n_events = 6
+>   assign = {33, 3, 32, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+>   event_list = {0xffff88bf77b85000, 0xffff88b72db82000, 0xffff88b72db85800, 0xffff88bf46c34000, 0xffff88bf46c35000, 0xffff88bf46c30000, 0xffff88ff5f46a800, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
+>   events = {0xffff88bf46c34000, 0xffff88bf46c35000, 0xffff88bf46c30000, 0xffff88b72db82000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xffff88b72db85800, 0xffff88bf77b85000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
+
+The above is unreadable; consider rewriting it in something other than a
+raw data dump.
+
+> The reason is that NMI watchdog permanently consumes one FP,
+> so cycles can only use one GP, and its hweight is 5,
+> but the hweight of other events (cache misses) is 4,
+> so the counter used by cycles will be frequently taken away,
+> resulting in unnecessary pmu_stop/start.
+
+And the solution..... ? Or should I try and reverse engineer from the
+proposed patch? If I do, how do I know it is what you intended?

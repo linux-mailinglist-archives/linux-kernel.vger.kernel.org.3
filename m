@@ -2,236 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 184CF4B2A3F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2DA4B2A3D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:28:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239821AbiBKQZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:25:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53714 "EHLO
+        id S1351468AbiBKQZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:25:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiBKQZf (ORCPT
+        with ESMTP id S229522AbiBKQZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:25:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC283AD;
-        Fri, 11 Feb 2022 08:25:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E6CDB82AA1;
-        Fri, 11 Feb 2022 16:25:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0B8FC340E9;
-        Fri, 11 Feb 2022 16:25:29 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GmxCwiDz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644596728;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7EXC8K8wOgW31q4Pw0Qifm1YesO2QCtqoy6VbXyzlM4=;
-        b=GmxCwiDzd0WShH4VhSmVNQBWyXTAbqkfz3pVytLPQZhFduG2PsX0qnQqWwP65gAzNCz4xs
-        /QMVxA/mjrWh1xwtkCql34lX9JuJYHeAijhn9vu4uJHzrFQyKvqr5WALTOCNf8/M1oPPF7
-        AqrrZPZ5UFmWbMj/BOY5wrhFtqCxwcY=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id efc9f969 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 11 Feb 2022 16:25:26 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: [PATCH v6] random: defer fast pool mixing to worker
-Date:   Fri, 11 Feb 2022 17:25:15 +0100
-Message-Id: <20220211162515.554867-1-Jason@zx2c4.com>
-In-Reply-To: <YgZ6IEbiDgz5X1ON@linutronix.de>
-References: <YgZ6IEbiDgz5X1ON@linutronix.de>
+        Fri, 11 Feb 2022 11:25:26 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBBF38C;
+        Fri, 11 Feb 2022 08:25:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644596724; x=1676132724;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=M1mHs7WEgatmlRjx4H6HCF+8F6e5ANVvjld7uTPgqFk=;
+  b=JbHa6SfIrrmKG1LZ84MMoG7JLgIHx3nHidHKyaxsdpXs75fhydMFy7at
+   cKVR+OhQWD2Jd8mJP1WWlZZD2Gg7k04bZO9Ob3cPcRUiYKGLfvFrehPxs
+   Z1F9FCcK02YSeirLueXWPZKuBM87VVN2k+8KThThCv2YXGvRg3p8ELAPq
+   zrXrrEdWLeFbWWc+pbsmZW4YebRdU1mnmaggveanPjCLKI1l0ovsNSRui
+   H7cbwTxWUnaMFwME0GpHXSf65sf2uJFsR/S2d/QX5UQV1QvWxI/3+bOJL
+   dMlqbH/jz9ZCWNJjD8OEWCpzxlPlv6P3qhdFDLs/Cgde6+C5+dMaeaCzK
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="229725979"
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="229725979"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 08:25:24 -0800
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="527010658"
+Received: from rriverox-mobl.ger.corp.intel.com (HELO localhost) ([10.252.19.108])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 08:25:20 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-fbdev@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Sam Ravnborg <sam@ravnborg.org>
+Subject: Re: [PATCH v4 1/6] drm/format-helper: Add
+ drm_fb_xrgb8888_to_gray8_line()
+In-Reply-To: <YgaDj6Wld4b7S6DF@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220211091927.2988283-1-javierm@redhat.com>
+ <20220211091927.2988283-2-javierm@redhat.com>
+ <YgY6OqN+guBlt/ED@smile.fi.intel.com>
+ <4fa465d9-4fac-4199-9a04-d8e09d164308@redhat.com>
+ <YgZEuXvJ2ZiOyNS+@smile.fi.intel.com>
+ <7560cd10-0a7c-3fda-da83-9008833e3901@suse.de> <87pmnt7gm3.fsf@intel.com>
+ <YgaDj6Wld4b7S6DF@smile.fi.intel.com>
+Date:   Fri, 11 Feb 2022 18:25:17 +0200
+Message-ID: <87fsop74lu.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On PREEMPT_RT, it's problematic to take spinlocks from hard irq
-handlers. We can fix this by deferring to a workqueue the dumping of
-the fast pool into the input pool.
+On Fri, 11 Feb 2022, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> On Fri, Feb 11, 2022 at 02:05:56PM +0200, Jani Nikula wrote:
+>> On Fri, 11 Feb 2022, Thomas Zimmermann <tzimmermann@suse.de> wrote:
+>> > Am 11.02.22 um 12:12 schrieb Andy Shevchenko:
+>> >> On Fri, Feb 11, 2022 at 11:40:13AM +0100, Javier Martinez Canillas wrote:
+>> >>> On 2/11/22 11:28, Andy Shevchenko wrote:
+>> >>>> On Fri, Feb 11, 2022 at 10:19:22AM +0100, Javier Martinez Canillas wrote:
+>
+> ...
+>
+>> >>>>> +static void drm_fb_xrgb8888_to_gray8_line(u8 *dst, const u32 *src, unsigned int pixels)
+>> >>>>> +{
+>> >>>>> +	unsigned int x;
+>> >>>>> +
+>> >>>>> +	for (x = 0; x < pixels; x++) {
+>> >>>>> +		u8 r = (*src & 0x00ff0000) >> 16;
+>> >>>>> +		u8 g = (*src & 0x0000ff00) >> 8;
+>> >>>>> +		u8 b =  *src & 0x000000ff;
+>> >>>>> +
+>> >>>>> +		/* ITU BT.601: Y = 0.299 R + 0.587 G + 0.114 B */
+>> >>>>> +		*dst++ = (3 * r + 6 * g + b) / 10;
+>> >>>>> +		src++;
+>> >>>>> +	}
+>> >>>>
+>> >>>> Can be done as
+>> >>>>
+>> >>>> 	while (pixels--) {
+>> >>>> 		...
+>> >>>> 	}
+>> >>>>
+>> >>>> or
+>> >>>>
+>> >>>> 	do {
+>> >>>> 		...
+>> >>>> 	} while (--pixels);
+>> >>>>
+>> >>>
+>> >>> I don't see why a while loop would be an improvement here TBH.
+>> >> 
+>> >> Less letters to parse when reading the code.
+>> >
+>> > It's a simple refactoring of code that has worked well so far. Let's 
+>> > leave it as-is for now.
+>> 
+>> IMO *always* prefer a for loop over while or do-while.
+>> 
+>> The for (i = 0; i < N; i++) is such a strong paradigm in C. You
+>> instantly know how many times you're going to loop, at a glance. Not so
+>> with with the alternatives, which should be used sparingly.
+>
+> while () {}  _is_ a paradigm, for-loop is syntax sugar on top of it.
 
-We accomplish this with some careful rules on fast_pool->count:
+And while() is just syntax sugar for goto. :p
 
-  - When it's incremented to >= 64, we schedule the work.
-  - If the top bit is set, we never schedule the work, even if >= 64.
-  - The worker is responsible for setting it back to 0 when it's done.
+The for loop written as for (i = 0; i < N; i++) is hands down the most
+obvious counting loop pattern there is in C.
 
-There are two small issues around using workqueues for this purpose that
-we work around.
+>> And yes, the do-while suggested above is buggy, and you actually need to
+>> stop and think to see why.
+>
+> It depends if pixels can be 0 or not and if it's not, then does it contain last
+> or number.
+>
+> The do {} while (--pixels); might be buggy iff pixels may be 0.
 
-The first issue is that mix_interrupt_randomness() might be migrated to
-another CPU during CPU hotplug. This issue is rectified by checking that
-it hasn't been migrated (after disabling migration). If it has been
-migrated, then we set the count to zero, so that when the CPU comes
-online again, it can requeue the work. As part of this, we switch to
-using an atomic_t, so that the increment in the irq handler doesn't wipe
-out the zeroing if the CPU comes back online while this worker is
-running.
+Yeah. And how long does it take to figure that out?
 
-The second issue is that, though relatively minor in effect, we probably
-want to make sure we get a consistent view of the pool onto the stack,
-in case it's interrupted by an irq while reading. To do this, we simply
-read count before and after the memcpy and make sure they're the same.
-If they're not, we try again. This isn't a seqlock or anything heavy
-like that because we're guaranteed to be on the same core as the irq
-handler interrupting, which means that interruption either happens in
-full or doesn't at all. The likelihood of actually hitting this is very
-low, as we're talking about a 2 or 4 word mov.
 
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Sultan Alsawaf <sultan@kerneltoast.com>
-Cc: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-Sebastian - this now uses cmpxchg as you suggested, and has comments on
-its various atomic uses. I think we should be finally good to go! PTAL.
-Thanks again for looking at this hairy patch.
+BR,
+Jani.
 
- drivers/char/random.c | 73 ++++++++++++++++++++++++++++++++++---------
- 1 file changed, 59 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index c42c07a7eb56..20b11a4b6559 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1162,9 +1162,10 @@ EXPORT_SYMBOL_GPL(add_bootloader_randomness);
- 
- struct fast_pool {
- 	unsigned long pool[16 / sizeof(long)];
-+	struct work_struct mix;
- 	unsigned long last;
-+	atomic_t count;
- 	u16 reg_idx;
--	u8 count;
- };
- 
- /*
-@@ -1214,12 +1215,59 @@ static u32 get_reg(struct fast_pool *f, struct pt_regs *regs)
- 	return *ptr;
- }
- 
-+static void mix_interrupt_randomness(struct work_struct *work)
-+{
-+	struct fast_pool *fast_pool = container_of(work, struct fast_pool, mix);
-+	unsigned long pool[ARRAY_SIZE(fast_pool->pool)];
-+	int count;
-+
-+	/* Check to see if we're running on the wrong CPU due to hotplug. */
-+	migrate_disable();
-+	if (fast_pool != this_cpu_ptr(&irq_randomness)) {
-+		migrate_enable();
-+		/*
-+		 * If we are unlucky enough to have been moved to another CPU,
-+		 * then we set our count to zero atomically so that when the
-+		 * CPU comes back online, it can enqueue work again. The
-+		 * _release here pairs with the atomic_inc_return_acquire in
-+		 * add_interrupt_randomness().
-+		 */
-+		atomic_set_release(&fast_pool->count, 0);
-+		return;
-+	}
-+
-+	/*
-+	 * Copy the pool to the stack so that the mixer always has a
-+	 * consistent view. It's extremely unlikely but possible that
-+	 * this 2 or 4 word read is interrupted by an irq, but in case
-+	 * it is, we double check that count stays the same.
-+	 *
-+	 * We set the count to 0 so that irqs can immediately begin to
-+	 * accumulate again after. Since any possible interruptions
-+	 * at this stage are guaranteed to be on the same CPU, we can
-+	 * use cmpxchg_relaxed.
-+	 */
-+	count = atomic_read(&fast_pool->count);
-+	do {
-+		memcpy(pool, fast_pool->pool, sizeof(pool));
-+	} while (atomic_try_cmpxchg_relaxed(&fast_pool->count, &count, 0));
-+
-+	fast_pool->last = jiffies;
-+	migrate_enable();
-+
-+	mix_pool_bytes(pool, sizeof(pool));
-+	credit_entropy_bits(1);
-+	memzero_explicit(pool, sizeof(pool));
-+}
-+
- void add_interrupt_randomness(int irq)
- {
-+	enum { MIX_INFLIGHT = 1U << 31 };
- 	struct fast_pool *fast_pool = this_cpu_ptr(&irq_randomness);
- 	struct pt_regs *regs = get_irq_regs();
- 	unsigned long now = jiffies;
- 	cycles_t cycles = random_get_entropy();
-+	unsigned int new_count;
- 
- 	if (cycles == 0)
- 		cycles = get_reg(fast_pool, regs);
-@@ -1235,12 +1283,13 @@ void add_interrupt_randomness(int irq)
- 	}
- 
- 	fast_mix((u32 *)fast_pool->pool);
--	++fast_pool->count;
-+	/* The _acquire here pairs with the atomic_set_release in mix_interrupt_randomness(). */
-+	new_count = (unsigned int)atomic_inc_return_acquire(&fast_pool->count);
- 
- 	if (unlikely(crng_init == 0)) {
--		if (fast_pool->count >= 64 &&
-+		if (new_count >= 64 &&
- 		    crng_fast_load(fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
--			fast_pool->count = 0;
-+			atomic_set(&fast_pool->count, 0);
- 			fast_pool->last = now;
- 
- 			/*
-@@ -1254,20 +1303,16 @@ void add_interrupt_randomness(int irq)
- 		return;
- 	}
- 
--	if ((fast_pool->count < 64) && !time_after(now, fast_pool->last + HZ))
-+	if (new_count & MIX_INFLIGHT)
- 		return;
- 
--	if (!spin_trylock(&input_pool.lock))
-+	if (new_count < 64 && !time_after(now, fast_pool->last + HZ))
- 		return;
- 
--	fast_pool->last = now;
--	_mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
--	spin_unlock(&input_pool.lock);
--
--	fast_pool->count = 0;
--
--	/* Award one bit for the contents of the fast pool. */
--	credit_entropy_bits(1);
-+	if (unlikely(!fast_pool->mix.func))
-+		INIT_WORK(&fast_pool->mix, mix_interrupt_randomness);
-+	atomic_or(MIX_INFLIGHT, &fast_pool->count);
-+	queue_work_on(raw_smp_processor_id(), system_highpri_wq, &fast_pool->mix);
- }
- EXPORT_SYMBOL_GPL(add_interrupt_randomness);
- 
 -- 
-2.35.0
-
+Jani Nikula, Intel Open Source Graphics Center

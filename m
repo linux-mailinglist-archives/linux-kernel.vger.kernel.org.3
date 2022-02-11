@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614474B2333
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:36:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D72E14B234C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 11:36:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235961AbiBKKfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 05:35:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60876 "EHLO
+        id S1348917AbiBKKfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 05:35:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348978AbiBKKeo (ORCPT
+        with ESMTP id S1349002AbiBKKe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 05:34:44 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEFFEA8
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:34:43 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id f32-20020a25b0a0000000b0061dad37dcd6so17757870ybj.16
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:34:43 -0800 (PST)
+        Fri, 11 Feb 2022 05:34:58 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5446EEB0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:34:46 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id h6-20020a253a06000000b0061de83305f2so17835365yba.19
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 02:34:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=v/iVwWwVZ57NlyJcDZTSYN4OejpmhBwgHB1+GcNUvds=;
-        b=SS4GGPur+8C8MhWOAfUpC++73BZ9x4vvPHZZvzTQ8+TevlAupjKwjyXhJQhlHRfhs5
-         UPycDJ/IMAzAWlMGtZP9x1VNCODHQIKGk4OqBDTn96LxeDV65HSAk7VupIgcdLF/Af+u
-         vQl22zYp2B44p0i1mrPqULatJPeo+50/U0YmcMNnizTsEAxrFIRx8bLzFp7UFNWPz41V
-         89ME3ox7joS7WyicJSXOU/CFKuXeZZdknpDWkd8QNhhKzpr05y/kA3+rAep/vmpGwAKY
-         fV+kfLdHQhYDh42Hl0NWrDMRhOxzSHh+3cewa5hBvTO2KazQMP1/tBbJcpFspHorxiMv
-         hDVw==
+        bh=S56WfI2GmhqdGh7gnwplme1j2hJlUSzhW1pk4BgzSzk=;
+        b=mBkM8iq3Hm5tOajbE77+PviE5ArQ7pZGE+5Ugb0NOHm0qOpTY+9CzOUeDRPjsBJZa2
+         XJAyZiH/DGLk/fw3OkYbhHRo3Nx0liPl4cSn3x0QdlwM0c0KpMjrtdDGyGa1EMkpIqME
+         9Jx1vrj11uenDjxwXLm/INJHnwFHZ5Ia4t5dTqw5hgpfyeERydmin5IUyHNvdxqbhAeK
+         hXvaHL/HrL+JzFLtcVIcGrfojqASbRU9DWQ3sQd3f8jWVZddxTXnYlKGD1w/4b6xqbPS
+         tHkgYuRdz76CtqpUZ3Gn+T3ujyG6QqmtyezxT5mZc4up9glakdspspm5XNcUt3pzDfPL
+         VKjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=v/iVwWwVZ57NlyJcDZTSYN4OejpmhBwgHB1+GcNUvds=;
-        b=OoCAGdC7KuToFPLw+gD7XVRU53B9bXsm81yg/REFesE555v11QP+IE+L9jnhSjKxac
-         wkXC1ybnFO3hoDwZqRtjMXR9bS8kYWsZrw48kMzVCyhwqkIyZ2bbSxKggSGWH+cNSou6
-         tqUNgY6MzYIUKmSjtvhqSG2764iyNt/d6jrBnp2aVzCpxDciAMYO4MrSYvqAnUXhXUuv
-         UC0aPyzvHBr2BDunGns6tTVeE085WtIxg2J4TpfoqMmgrxw2mIlTbz4Y2Yl72wYazcKb
-         Lb0rXmkY+IoPXshQQ4laU7vVhqziew4KX5x7dFvuePI8cqPWyhJfVPhdPYs0QCW49Piv
-         Jcyw==
-X-Gm-Message-State: AOAM533UIgtGlcgbFeRYPfkO375tOe0bCGtXYW2cTOjbzt6qVAujiqpv
-        fkJO/omOxdyxyuQkHv/CJFUAdj5eyE1r
-X-Google-Smtp-Source: ABdhPJwYNGXn+AssFsFdcI8ZqXlyNvl2Eh8f07LSi+lLqPFZ5RtMlLLP8Jv5Zzv/mrATVgq8k0FuiMjoP50x
+        bh=S56WfI2GmhqdGh7gnwplme1j2hJlUSzhW1pk4BgzSzk=;
+        b=DFiglBt0VpNU9DQAmQz3xlvY6WM+U54zONhgGpV7DoOepDQlbLY8PWdTgp9R/eU2lb
+         /ZiGyxiIqexcZM7QR941L3jKRVjosXgZuU7BsNC7F6TEfe2MGoSOpEF13dvcD6GI/jVf
+         rXMIrcwMy/xJ+4tVwMBQOQbVwJuuG+ggMX0nECcPFCQtQ3ioXWGy5nx+CPVGc4zpsyII
+         ppHLSzxmHaLozRhW24KMIH52fNtYpVxvZU3SmTVDx+nVTdcbo9YpI0dqlLW8Sy6a5AcG
+         iAQ/jCovHs4nqhtQatckIdpqUVl/SVTagWgmeQBC7Lk/4TYTBOxy7hTiHewTRP80Filv
+         vdbw==
+X-Gm-Message-State: AOAM532zbsUm3IVnu9kg9KboMofrC+4iJro43wvuJ8Deae5Gy79xdvIL
+        3402/6WSzuBvVrnFVbT/+NUYiU2t8LVA
+X-Google-Smtp-Source: ABdhPJwprkLTWbcxJ/B2s7VtdaP+tgOQI2HcM/4+/pcP3Xw9gTr6wdo4zZnOZa29xxTuN1Ogb2EvP4dhCDHL
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:2d98:3ad9:1d8a:fb9b])
- (user=irogers job=sendgmr) by 2002:a25:cb90:: with SMTP id
- b138mr674042ybg.33.1644575682916; Fri, 11 Feb 2022 02:34:42 -0800 (PST)
-Date:   Fri, 11 Feb 2022 02:34:02 -0800
+ (user=irogers job=sendgmr) by 2002:a05:6902:49:: with SMTP id
+ m9mr660615ybh.104.1644575685585; Fri, 11 Feb 2022 02:34:45 -0800 (PST)
+Date:   Fri, 11 Feb 2022 02:34:03 -0800
 In-Reply-To: <20220211103415.2737789-1-irogers@google.com>
-Message-Id: <20220211103415.2737789-10-irogers@google.com>
+Message-Id: <20220211103415.2737789-11-irogers@google.com>
 Mime-Version: 1.0
 References: <20220211103415.2737789-1-irogers@google.com>
 X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH v3 09/22] perf map: Add const to map_ip and unmap_ip
+Subject: [PATCH v3 10/22] perf map: Make map__contains_symbol args const
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -100,82 +100,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Functions purely determine a value from the map and don't need to modify
-it. Move functions to C file as they are most commonly used via a
-function pointer.
+Now unmap_ip is const, make contains symbol const.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/map.c | 15 +++++++++++++++
- tools/perf/util/map.h | 24 ++++++++----------------
- 2 files changed, 23 insertions(+), 16 deletions(-)
+ tools/perf/util/map.c | 2 +-
+ tools/perf/util/map.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
-index 2cfe5744b86c..b98fb000eb5c 100644
+index b98fb000eb5c..8bbf9246a3cf 100644
 --- a/tools/perf/util/map.c
 +++ b/tools/perf/util/map.c
-@@ -563,3 +563,18 @@ struct maps *map__kmaps(struct map *map)
- 	}
- 	return kmap->kmaps;
+@@ -516,7 +516,7 @@ u64 map__objdump_2mem(struct map *map, u64 ip)
+ 	return ip + map->reloc;
  }
-+
-+u64 map__map_ip(const struct map *map, u64 ip)
-+{
-+	return ip - map->start + map->pgoff;
-+}
-+
-+u64 map__unmap_ip(const struct map *map, u64 ip)
-+{
-+	return ip + map->start - map->pgoff;
-+}
-+
-+u64 identity__map_ip(const struct map *map __maybe_unused, u64 ip)
-+{
-+	return ip;
-+}
+ 
+-bool map__contains_symbol(struct map *map, struct symbol *sym)
++bool map__contains_symbol(const struct map *map, const struct symbol *sym)
+ {
+ 	u64 ip = map->unmap_ip(map, sym->start);
+ 
 diff --git a/tools/perf/util/map.h b/tools/perf/util/map.h
-index 973dce27b253..212a9468d5e1 100644
+index 212a9468d5e1..3dcfe06db6b3 100644
 --- a/tools/perf/util/map.h
 +++ b/tools/perf/util/map.h
-@@ -29,9 +29,9 @@ struct map {
- 	u64			reloc;
+@@ -152,7 +152,7 @@ static inline bool __map__is_kmodule(const struct map *map)
  
- 	/* ip -> dso rip */
--	u64			(*map_ip)(struct map *, u64);
-+	u64			(*map_ip)(const struct map *, u64);
- 	/* dso rip -> ip */
--	u64			(*unmap_ip)(struct map *, u64);
-+	u64			(*unmap_ip)(const struct map *, u64);
+ bool map__has_symbols(const struct map *map);
  
- 	struct dso		*dso;
- 	refcount_t		refcnt;
-@@ -44,20 +44,12 @@ struct kmap *__map__kmap(struct map *map);
- struct kmap *map__kmap(struct map *map);
- struct maps *map__kmaps(struct map *map);
+-bool map__contains_symbol(struct map *map, struct symbol *sym);
++bool map__contains_symbol(const struct map *map, const struct symbol *sym);
  
--static inline u64 map__map_ip(struct map *map, u64 ip)
--{
--	return ip - map->start + map->pgoff;
--}
--
--static inline u64 map__unmap_ip(struct map *map, u64 ip)
--{
--	return ip + map->start - map->pgoff;
--}
--
--static inline u64 identity__map_ip(struct map *map __maybe_unused, u64 ip)
--{
--	return ip;
--}
-+/* ip -> dso rip */
-+u64 map__map_ip(const struct map *map, u64 ip);
-+/* dso rip -> ip */
-+u64 map__unmap_ip(const struct map *map, u64 ip);
-+/* Returns ip */
-+u64 identity__map_ip(const struct map *map __maybe_unused, u64 ip);
+ #define ENTRY_TRAMPOLINE_NAME "__entry_SYSCALL_64_trampoline"
  
- static inline size_t map__size(const struct map *map)
- {
 -- 
 2.35.1.265.g69c8d7142f-goog
 

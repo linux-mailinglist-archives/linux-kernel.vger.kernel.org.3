@@ -2,225 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4744B2E56
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAECD4B2E5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:20:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353051AbiBKUTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 15:19:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57060 "EHLO
+        id S1353166AbiBKUUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 15:20:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbiBKUTN (ORCPT
+        with ESMTP id S239383AbiBKUUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 15:19:13 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8B1CF9;
-        Fri, 11 Feb 2022 12:19:11 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 9C92B1F47311
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644610750;
-        bh=EzaDXvqdw0zFvLGugqrrMbUDVyUEyIv5cYRWfdMfW0o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WHAu+XxKXjrxfTS2QKS4rXQ9FEVCvXv5/zeErfUvt9BZV8O2quH2XsQ5VkqrQNHKC
-         gYdhT98yLK5UQ0KPC3486MLGz5vFv11gn74UI4BuQYdESycVrvz6ox/LUIaLa0umrO
-         e0JxXg+p9HvZIpom5gCWGAuFG96C19DHSV8uafdWtLI0VUkyB2FOf8HI3fJk9N4V4K
-         vI6YH2RldYy5BYfQ8b+CleNkPVk3QRVhcP8ExqU9VclIOZhhrvF2WvjQHveNL/6fRs
-         v+uXPk6L/D+d3CM0yg+WceAtDTIshaySCD9jBjVHvFU41GNXo9HbrN7oiq2jCSCos4
-         3XwvLCSikVjWw==
-Received: by mercury (Postfix, from userid 1000)
-        id D73381060908; Fri, 11 Feb 2022 21:19:07 +0100 (CET)
-Date:   Fri, 11 Feb 2022 21:19:07 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] power: supply: ltc2941: clean up error messages
-Message-ID: <20220211201907.w6r33usasb2r2khm@mercury.elektranox.org>
-References: <680a4c737950f59e787f64887402e3ae247e89dd.1641868274.git.mirq-linux@rere.qmqm.pl>
- <3eede91c6484c6626f2a727bf1837ee93939155a.1641868274.git.mirq-linux@rere.qmqm.pl>
+        Fri, 11 Feb 2022 15:20:12 -0500
+Received: from mxout03.lancloud.ru (mxout03.lancloud.ru [45.84.86.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA87CF9
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 12:20:10 -0800 (PST)
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 8728320A8995
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH] platform: finally disallow IRQ0 in platform_get_irq() and
+ its ilk
+To:     Marc Zyngier <maz@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <5e001ec1-d3f1-bcb8-7f30-a6301fd9930c@omp.ru>
+ <87pmp7volh.wl-maz@kernel.org> <9c3f9a6e-89b6-b73b-032f-e4b4ee6f72ac@omp.ru>
+ <58caf8b54828bcc25cfc65220d29b68f@kernel.org>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <394a53e7-ef96-b99d-e7ee-764e6d89bfb5@omp.ru>
+Date:   Fri, 11 Feb 2022 23:20:07 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dmvodvu6yemwylcn"
-Content-Disposition: inline
-In-Reply-To: <3eede91c6484c6626f2a727bf1837ee93939155a.1641868274.git.mirq-linux@rere.qmqm.pl>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <58caf8b54828bcc25cfc65220d29b68f@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 1/12/22 9:08 PM, Marc Zyngier wrote:
 
---dmvodvu6yemwylcn
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[...]
+>>>> The commit a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is
+>>>> invalid") only calls WARN() when IRQ0 is about to be returned, however
+>>>> using IRQ0 is considered invalid (according to Linus) outside the arch/
+>>>> code where it's used by the i8253 drivers. Many driver subsystems treat
+>>>> 0 specially (e.g. as an indication of the polling mode by libata), so
+>>>> the users of platform_get_irq[_byname]() in them would have to filter
+>>>> out IRQ0 explicitly and this (quite obviously) doesn't scale...
+>>>> Let's finally get this straight and return -EINVAL instead of IRQ0!
+>>>>
+>>>> Fixes: a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is invalid")
+>>>> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+>>>>
+>>>> ---
+>>>> The patch is against the 'driver-core-linus' branch of Greg Kroah-Hartman's
+>>>> 'driver-core.git' repo.
+>>>>
+>>>>  drivers/base/platform.c |    6 ++++--
+>>>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>>>
+>>>> Index: driver-core/drivers/base/platform.c
+>>>> ===================================================================
+>>>> --- driver-core.orig/drivers/base/platform.c
+>>>> +++ driver-core/drivers/base/platform.c
+>>>> @@ -231,7 +231,8 @@ int platform_get_irq_optional(struct pla
+>>>>  out_not_found:
+>>>>      ret = -ENXIO;
+>>>>  out:
+>>>> -    WARN(ret == 0, "0 is an invalid IRQ number\n");
+>>>> +    if (WARN(!ret, "0 is an invalid IRQ number\n"))
+>>>> +        return -EINVAL;
+>>>>      return ret;
+>>>>  }
+>>>>  EXPORT_SYMBOL_GPL(platform_get_irq_optional);
+>>>> @@ -445,7 +446,8 @@ static int __platform_get_irq_byname(str
+>>>>
+>>>>      r = platform_get_resource_byname(dev, IORESOURCE_IRQ, name);
+>>>>      if (r) {
+>>>> -        WARN(r->start == 0, "0 is an invalid IRQ number\n");
+>>>> +        if (WARN(!r->start, "0 is an invalid IRQ number\n"))
+>>>> +            return -EINVAL;
+>>>>          return r->start;
+>>>>      }
+>>>
+>>> Geert recently mentioned that a few architectures (such as sh?) still
+>>> use IRQ0 as something valid in limited cases.
+>>>
+>>> From my PoV, this patch is fine, but please be prepared to fix things
+>>> in a couple of years when someone decides to boot a recent kernel on
+>>> their pet dinosaur. With that in mind:
+>>>
+>>> Acked-by: Marc Zyngier <maz@kernel.org>
+>>
+>>    Greg, so would that ACK be enough? Is there a chance this patch
+>> gets finally included
+>> into 5.17-rc1? Or should I look into fixing the recently found
+>> arch/sh/ issue 1st (as you
+>> can see, just WARN()'ing about IRQ0 wasn't enough to get this fixed)?
+> 
+> Fixing SH would be a good thing.
 
-Hi,
+   Patch posted now, see:
 
-On Tue, Jan 11, 2022 at 03:32:41AM +0100, Micha=C5=82 Miros=C5=82aw wrote:
-> Replace dev_err() with dev_err_probe() in probe() and extend register
-> access failure messages. dev_err()s in _reset() are removed as they
-> are redundant: register access wrappers already log the error.
->=20
-> Signed-off-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
-> ---
+https://lore.kernel.org/all/2f419ed2-66b8-4098-7cd3-0fe698d341c9@omp.ru/.
 
-Thanks, queued.
+> Thanks,
+> 
+>         M.
 
--- Sebastian
-
->  drivers/power/supply/ltc2941-battery-gauge.c | 53 ++++++++------------
->  1 file changed, 20 insertions(+), 33 deletions(-)
->=20
-> diff --git a/drivers/power/supply/ltc2941-battery-gauge.c b/drivers/power=
-/supply/ltc2941-battery-gauge.c
-> index c0cbf4cd59ee..657305214d68 100644
-> --- a/drivers/power/supply/ltc2941-battery-gauge.c
-> +++ b/drivers/power/supply/ltc2941-battery-gauge.c
-> @@ -112,7 +112,8 @@ static int ltc294x_read_regs(struct i2c_client *clien=
-t,
-> =20
->  	ret =3D i2c_transfer(client->adapter, &msgs[0], 2);
->  	if (ret < 0) {
-> -		dev_err(&client->dev, "ltc2941 read_reg failed!\n");
-> +		dev_err(&client->dev, "ltc2941 read_reg(0x%x[%d]) failed: %pe\n",
-> +			reg, num_regs, ERR_PTR(ret));
->  		return ret;
->  	}
-> =20
-> @@ -130,7 +131,8 @@ static int ltc294x_write_regs(struct i2c_client *clie=
-nt,
-> =20
->  	ret =3D i2c_smbus_write_i2c_block_data(client, reg_start, num_regs, buf=
-);
->  	if (ret < 0) {
-> -		dev_err(&client->dev, "ltc2941 write_reg failed!\n");
-> +		dev_err(&client->dev, "ltc2941 write_reg(0x%x[%d]) failed: %pe\n",
-> +			reg, num_regs, ERR_PTR(ret));
->  		return ret;
->  	}
-> =20
-> @@ -148,11 +150,8 @@ static int ltc294x_reset(const struct ltc294x_info *=
-info, int prescaler_exp)
-> =20
->  	/* Read status and control registers */
->  	ret =3D ltc294x_read_regs(info->client, LTC294X_REG_CONTROL, &value, 1);
-> -	if (ret < 0) {
-> -		dev_err(&info->client->dev,
-> -			"Could not read registers from device\n");
-> -		goto error_exit;
-> -	}
-> +	if (ret < 0)
-> +		return ret;
-> =20
->  	control =3D LTC294X_REG_CONTROL_PRESCALER_SET(prescaler_exp) |
->  				LTC294X_REG_CONTROL_ALCC_CONFIG_DISABLED;
-> @@ -172,17 +171,11 @@ static int ltc294x_reset(const struct ltc294x_info =
-*info, int prescaler_exp)
->  	if (value !=3D control) {
->  		ret =3D ltc294x_write_regs(info->client,
->  			LTC294X_REG_CONTROL, &control, 1);
-> -		if (ret < 0) {
-> -			dev_err(&info->client->dev,
-> -				"Could not write register\n");
-> -			goto error_exit;
-> -		}
-> +		if (ret < 0)
-> +			return ret;
->  	}
-> =20
->  	return 0;
-> -
-> -error_exit:
-> -	return ret;
->  }
-> =20
->  static int ltc294x_read_charge_register(const struct ltc294x_info *info,
-> @@ -472,11 +465,9 @@ static int ltc294x_i2c_probe(struct i2c_client *clie=
-nt,
->  	/* r_sense can be negative, when sense+ is connected to the battery
->  	 * instead of the sense-. This results in reversed measurements. */
->  	ret =3D of_property_read_u32(np, "lltc,resistor-sense", &r_sense);
-> -	if (ret < 0) {
-> -		dev_err(&client->dev,
-> +	if (ret < 0)
-> +		return dev_err_probe(&client->dev, ret,
->  			"Could not find lltc,resistor-sense in devicetree\n");
-> -		return ret;
-> -	}
->  	info->r_sense =3D r_sense;
-> =20
->  	ret =3D of_property_read_u32(np, "lltc,prescaler-exponent",
-> @@ -502,11 +493,9 @@ static int ltc294x_i2c_probe(struct i2c_client *clie=
-nt,
->  	/* Read status register to check for LTC2942 */
->  	if (info->id =3D=3D LTC2941_ID || info->id =3D=3D LTC2942_ID) {
->  		ret =3D ltc294x_read_regs(client, LTC294X_REG_STATUS, &status, 1);
-> -		if (ret < 0) {
-> -			dev_err(&client->dev,
-> +		if (ret < 0)
-> +			return dev_err_probe(&client->dev, ret,
->  				"Could not read status register\n");
-> -			return ret;
-> -		}
->  		if (status & LTC2941_REG_STATUS_CHIP_ID)
->  			info->id =3D LTC2941_ID;
->  		else
-> @@ -545,19 +534,17 @@ static int ltc294x_i2c_probe(struct i2c_client *cli=
-ent,
->  		return ret;
-> =20
->  	ret =3D ltc294x_reset(info, prescaler_exp);
-> -	if (ret < 0) {
-> -		dev_err(&client->dev, "Communication with chip failed\n");
-> -		return ret;
-> -	}
-> +	if (ret < 0)
-> +		return dev_err_probe(&client->dev, ret,
-> +			"Communication with chip failed\n");
-> =20
->  	info->supply =3D devm_power_supply_register(&client->dev,
->  						  &info->supply_desc, &psy_cfg);
-> -	if (IS_ERR(info->supply)) {
-> -		dev_err(&client->dev, "failed to register ltc2941\n");
-> -		return PTR_ERR(info->supply);
-> -	} else {
-> -		schedule_delayed_work(&info->work, LTC294X_WORK_DELAY * HZ);
-> -	}
-> +	if (IS_ERR(info->supply))
-> +		return dev_err_probe(&client->dev, PTR_ERR(info->supply),
-> +			"failed to register ltc2941\n");
-> +
-> +	schedule_delayed_work(&info->work, LTC294X_WORK_DELAY * HZ);
-> =20
->  	return 0;
->  }
-> --=20
-> 2.30.2
->=20
-
---dmvodvu6yemwylcn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIGxLsACgkQ2O7X88g7
-+poQ8g/7Bo8XzL0g0Hxe0ZdqrD3SA1X+DOpzXD/y5h4JADfwQq+MK52lv7ZmWij7
-wqD+9/l0N+MJYjtQo9bk5nrKtur1C6sN+zgPaWDBj3XoYw0bROPJe9QO8yQghan/
-iegn8GBoRnrErpP+aShg1EEKGs3e/7X+H6C7V5n809uYFZhIKVcnsVNqhLoFDhVV
-JEBWll2Luvz+AEBD8z117In1ouhXPOpSib+t344DSKgYXT6+YAX8SIfooSFtEmyw
-VwFBnm8c9y0z7ONBWXmocQCc0vC9R81GWqsU2Lrk0j5cQUv43n2723iBsa1Wh0xt
-RWlO1GKxvuGUmKNi5N1MSXPXNoyJnUL2/dURan3+Fxuo51dibo8XIDV3dvZFTxU8
-Oon5iCpiC2Lsrw3oUqg66RhGqQmVdwnxcnKlhseo6jaK2mtP/CU7j/jDPSu48TMe
-hqyVX7HSgSMDg3mdfV7Arfd3H8NP+D8rN3UpWknrhYe7VsmShdPJVRxQHMtBgBRv
-gcBDAee1a3e1m7K/PJHqHEvYEnnmWyT4t31Tpdqhin+QAP3fNmZPkYdr2CfvFEL4
-0qbsIRxqO3l+iXiMQk0VhtR93I0ZaBk7Zo8REJe4+Lk/Zn7FcnEvvp/FUMYd2Eb0
-wOYZI51sTabom88Mp4siOHwcbtas0W52uOXuDP9m2Jsg3wBHxZQ=
-=LjCT
------END PGP SIGNATURE-----
-
---dmvodvu6yemwylcn--
+MBR, Sergey

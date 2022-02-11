@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4311B4B2059
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 09:43:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B844B205D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 09:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348090AbiBKImj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 03:42:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35024 "EHLO
+        id S1348098AbiBKImq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 03:42:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240464AbiBKImi (ORCPT
+        with ESMTP id S1348100AbiBKImp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 03:42:38 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75581E5E
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 00:42:38 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id x15so12626054pfr.5
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 00:42:38 -0800 (PST)
+        Fri, 11 Feb 2022 03:42:45 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244E1E5A
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 00:42:43 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id om7so7463498pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 00:42:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HXaTm9zy9W/Fk6sBxh9XpKvs2j0diA8uf4CSWloZl88=;
-        b=ZtNN+pwUXhbiBI06+s9oYlR4i6za0OUa9R7GlHnn+4GqxABwPRVmaRF5ri+9lXYJPK
-         HLyHzYTxO7EHc2mOcMvsZ34WU71pUl7982FTqWh4jttvulqlX3xzyAZkgvO0uUDILprP
-         xAEntQJvx0jfHHaPZhafWF2DmrIW1fD8NUPWmYXf2OmkE4sLtEpIYXlMbe10kb7OoEwO
-         TfeMk3tjDlAzEl5DLz9lInToE36S5+UfjpkLoOYfcrZ/ehwM/HQtuFX/Bjhd6tcbMu0+
-         jKhheTqY6O9ApVLimMn///QayiwA08eEZOwVZ9BiryCZw8+abHDQIfbHW70ywoF2EKeC
-         a09A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=CGAayov/+ln4jw241yuyUW4Ct9nFUZ87co88ghlbBxs=;
+        b=JBTQjbSXF3YPniG9xLJNKSrGKXFx1bLPF+uqoUTCBbIf01mDmIvu56ZNTesVGlXjcZ
+         o1yVHu32Fa5TOQjqIIKEE6qRYIn9uy9FgF+Hkm1uSdbubJtor7F12mVSIU9IDX57Scgy
+         xmGHxw7Dm+YRWla98b2TSZJ9GDCnajM7eXlzn+Sfe1sYow7OEOTT2IyfFgm4C86AsK74
+         QHN+zQBUQqcfwtTQBviyN3+UNhBPe9N610Y7CeMlICwpHzcOPGZCCNs9WePO1D5pVzU+
+         BThx9BjjfzYmGvpEOnhBYE5PG+HoXwPkigro/bJAfj3E4ioSEgWZOw5gbblsopqgnSm7
+         Y/1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HXaTm9zy9W/Fk6sBxh9XpKvs2j0diA8uf4CSWloZl88=;
-        b=XEYGTSLwz8s5tDIZhjwGmLQgnVz/3ygtOMILea3pSGy0m2W06H87KAcLLYfoUWYrAc
-         ET98/YC4kS1rxycJuosr5pEsY4CLhtwr3sXMKmrpo1CHpfMgdxFEyCpwKCKzZk8JoO92
-         5Ul7U7bUKQNztkafYYQLrA1v/A7CT9o2Ls0wJE1aw3hL7uEH87qksKVrl3qSWIq4lrym
-         rguO8O3DUuwfn27dkWJbRs8pLLFIJCAI4K+cx1Bk6bdjfrxCQDRlWGcOzzz8p1mxGUOo
-         nf8mZMkaNnweObIEGSzaJsCL0OwUueeJHquzmZ3TynCYTKyDA8TdskNFWIrOHwANiyVS
-         XjRg==
-X-Gm-Message-State: AOAM531wVCyDWyh+3xFDNHd+C+xjfJcEJbHOFwoAVGHkX6I9Meqc+Hbo
-        y5DeoIMM9KbnFqzGYMVO11cLUg==
-X-Google-Smtp-Source: ABdhPJzteqwv0pPYrb+FP+UMxU2H2Cxr4mmWBjR561lIMjdAoQSPgdgi2I6VDtwQVm5+Fr4/fkpeZg==
-X-Received: by 2002:a63:8543:: with SMTP id u64mr463644pgd.624.1644568957934;
-        Fri, 11 Feb 2022 00:42:37 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=CGAayov/+ln4jw241yuyUW4Ct9nFUZ87co88ghlbBxs=;
+        b=PBsZd85nQcK9UG1kwDOUDo2wEDzBpRn0+eqEjyPdsEk9+XteX3SArpSTtpOwdMrTQ5
+         aMu+KmgwC87GDs+Imjs6BsMQ4DJRO2TqZSihQiaSkkneELV9DXcr0B6IGbO2HIbQUyID
+         HcUM6kjsPL6pDqvcUQ4U4UW18pCp6weuJGHpyPZhEn4vlnXtjfmyQXYe/RBlEZC1EfTz
+         hoF7kwDvgmlb9Pu95JksLLA77FrVd3oD2p08bZFaN0GIh1GfZQOzL1UQ7PXRJ09pT9Rn
+         ILz87ZFVLSpwaQRMFemYDCgna+AEDWF7FunE6dPBi1jrmrQOBmUCYQHIcaItYCcNDEKs
+         EjDg==
+X-Gm-Message-State: AOAM531lRtfj+3gOh62xzqKvx5N7W+4EMlv+5G7EhuR5qRxmWw+OAaJ0
+        Weeq6J1lGRgDmsHNJObUrB3T4eUlh2QjQg==
+X-Google-Smtp-Source: ABdhPJytPoIyffxZ0megHXcbWD5+PkOjOTyQ9qJOzHAP2lML9ZVoHZrvfB46L3enU00p8a1n8YykHQ==
+X-Received: by 2002:a17:90b:3e8e:: with SMTP id rj14mr673323pjb.38.1644568962619;
+        Fri, 11 Feb 2022 00:42:42 -0800 (PST)
 Received: from libai.bytedance.net ([61.120.150.72])
-        by smtp.gmail.com with ESMTPSA id p21sm13368481pfo.97.2022.02.11.00.42.33
+        by smtp.gmail.com with ESMTPSA id p21sm13368481pfo.97.2022.02.11.00.42.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 00:42:37 -0800 (PST)
+        Fri, 11 Feb 2022 00:42:41 -0800 (PST)
 From:   zhenwei pi <pizhenwei@bytedance.com>
 To:     arei.gonglei@huawei.com, mst@redhat.com
 Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         helei.sig11@bytedance.com, herbert@gondor.apana.org.au,
         zhenwei pi <pizhenwei@bytedance.com>
-Subject: [PATCH v2 0/3] Introduce akcipher service for virtio-crypto
-Date:   Fri, 11 Feb 2022 16:41:05 +0800
-Message-Id: <20220211084108.1254218-1-pizhenwei@bytedance.com>
+Subject: [PATCH v2 1/3] virtio_crypto: Introduce VIRTIO_CRYPTO_NOSPC
+Date:   Fri, 11 Feb 2022 16:41:06 +0800
+Message-Id: <20220211084108.1254218-2-pizhenwei@bytedance.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220211084108.1254218-1-pizhenwei@bytedance.com>
+References: <20220211084108.1254218-1-pizhenwei@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,35 +71,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v1 -> v2:
-- Fix 1 compiling warning reported by kernel test robot <lkp@intel.com>
-- Put "__le32 akcipher_algo;" instead of "__le32 reserve;" field of
-   struct virtio_crypto_config directly without size change.
-- Add padding in struct virtio_crypto_ecdsa_session_para to keep
-   64-bit alignment.
-- Remove irrelevant change by code format alignment.
+Base on the lastest virtio crypto spec, define VIRTIO_CRYPTO_NOSPC.
 
-- Also CC crypto gurus Herbert and linux-crypto@vger.kernel.org.
+Reviewed-by: Gonglei <arei.gonglei@huawei.com>
+Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
+---
+ include/uapi/linux/virtio_crypto.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-- Test with QEMU(patched by the v2 version), works fine.
-
-v1:
-- Introduce akcipher service, implement RSA algorithm, and a minor fix.
-
-zhenwei pi (3):
-  virtio_crypto: Introduce VIRTIO_CRYPTO_NOSPC
-  virtio-crypto: introduce akcipher service
-  virtio-crypto: implement RSA algorithm
-
- drivers/crypto/virtio/Makefile                |   1 +
- .../virtio/virtio_crypto_akcipher_algo.c      | 584 ++++++++++++++++++
- drivers/crypto/virtio/virtio_crypto_common.h  |   3 +
- drivers/crypto/virtio/virtio_crypto_core.c    |   6 +-
- drivers/crypto/virtio/virtio_crypto_mgr.c     |  11 +
- include/uapi/linux/virtio_crypto.h            |  82 ++-
- 6 files changed, 685 insertions(+), 2 deletions(-)
- create mode 100644 drivers/crypto/virtio/virtio_crypto_akcipher_algo.c
-
+diff --git a/include/uapi/linux/virtio_crypto.h b/include/uapi/linux/virtio_crypto.h
+index a03932f10565..1166a49084b0 100644
+--- a/include/uapi/linux/virtio_crypto.h
++++ b/include/uapi/linux/virtio_crypto.h
+@@ -408,6 +408,7 @@ struct virtio_crypto_op_data_req {
+ #define VIRTIO_CRYPTO_BADMSG    2
+ #define VIRTIO_CRYPTO_NOTSUPP   3
+ #define VIRTIO_CRYPTO_INVSESS   4 /* Invalid session id */
++#define VIRTIO_CRYPTO_NOSPC     5 /* no free session ID */
+ 
+ /* The accelerator hardware is ready */
+ #define VIRTIO_CRYPTO_S_HW_READY  (1 << 0)
 -- 
 2.20.1
 

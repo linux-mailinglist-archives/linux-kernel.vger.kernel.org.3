@@ -2,66 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 273D94B2B01
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A63194B2B00
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351761AbiBKQvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:51:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51022 "EHLO
+        id S1351764AbiBKQwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:52:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351834AbiBKQvc (ORCPT
+        with ESMTP id S231825AbiBKQwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:51:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9CBD89
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 08:51:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A49761722
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 16:51:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DD57C340E9;
-        Fri, 11 Feb 2022 16:51:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644598278;
-        bh=eqJp5kusit163YSRYDtIcvv2sDK0KRwBffqeDOeE/Vc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lbLr6Dojm2iW6wMKQqFRGiQWXwAVcG+lzh26HmIPCC40Nc/qMYxBQTO8Ws1/2lFuy
-         fQCakb28wf4i5sMuMz6vR9yukjGyHWtnqOCufDFE9OVnNrI1f3NSm7wHw2Yh7UTxsk
-         rpnjDyG+BR/BKRatCdR5daAC3K87GJgemHuUaxyK1rQHMctGhtiOZqzQQiwkYfZoVO
-         Ry1QPN9CSoko+Lj0iGfTIr8B2JNrzKvvEZUQWsubYwzO9SY4CfuRr5qcv03U8JovbW
-         rjl7Lc2afNRsQkgnCCQVZNdl1odbaDmUYKlKC1+OQizA0AZE85gjTH93R2LDnjn/Vg
-         prILrao0rlxSw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 0A98D400FE; Fri, 11 Feb 2022 13:51:16 -0300 (-03)
-Date:   Fri, 11 Feb 2022 13:51:15 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        Alexei Budankov <abudankov@huawei.com>,
-        Riccardo Mancini <rickyman7@gmail.com>
-Subject: Re: [PATCH v13 03/16] perf record: Introduce thread specific data
- array
-Message-ID: <YgaUA4O2wvFFeeQJ@kernel.org>
-References: <cover.1642440724.git.alexey.v.bayduraev@linux.intel.com>
- <fc9f74af6f822d9c0fa0e145c3564a760dbe3d4b.1642440724.git.alexey.v.bayduraev@linux.intel.com>
- <YfhXG5yEHhrGDjvl@kernel.org>
- <Yfhg1zH9rQ3lBP9N@kernel.org>
+        Fri, 11 Feb 2022 11:52:13 -0500
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14F1FD;
+        Fri, 11 Feb 2022 08:52:12 -0800 (PST)
+Received: by mail-qv1-f49.google.com with SMTP id p7so8991925qvk.11;
+        Fri, 11 Feb 2022 08:52:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=atvNZwIQCcyeotnR4MVlumAm6zVSdFMZVQqvJ2jf9G8=;
+        b=V9dXeeaElbWza+WOilx4ZARYeiTz2g0Xn5lmyCWOO4CMMahSSFRHaKzbOco36JOIFu
+         pkq4u66D81ktUyNa3uX0Y38aRn87Y4HJCiMTwJnkoWkTRSLFH4IKvt1Fw22U+Be/awax
+         CvETsGRWr2gkEGYU81pwpT29K4D4UhbXsjjC4Ruk0PT/oJJCB/x5vNOyGw5lrnECX/dv
+         ebtXFRq6mCVexFVKwIq5qQ5dXwSzL6mA9z3dxigGto6WNcsD26Q0n4raUqYgc/c1cirl
+         bvvZI8T5Xy9+oPNwPwXzSx7lVW0YB7oeYIgUKPKTzXZPx3Zh4IMP7eaf0a+nvRQG47hW
+         5Otw==
+X-Gm-Message-State: AOAM533WQCs7k1Sxh7E3NNH3PIo/GbrqePJZj0gzy1t8ZwcUzJvFI4UF
+        215Gace+k1j0a12u+MuFfg==
+X-Google-Smtp-Source: ABdhPJwzNwIX3jrsW/qzdAI57QC+AEVsdKCKvRbKpNjMkItzuUkspsIaa/83KsPN1yyzXm9Pf+6xVw==
+X-Received: by 2002:ad4:5ba6:: with SMTP id 6mr1735942qvq.112.1644598331877;
+        Fri, 11 Feb 2022 08:52:11 -0800 (PST)
+Received: from robh.at.kernel.org ([2607:fb90:5fee:dfce:b6df:c3e1:b1e5:d6d8])
+        by smtp.gmail.com with ESMTPSA id c14sm13003698qtc.31.2022.02.11.08.52.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 08:52:11 -0800 (PST)
+Received: (nullmailer pid 507445 invoked by uid 1000);
+        Fri, 11 Feb 2022 16:52:09 -0000
+Date:   Fri, 11 Feb 2022 10:52:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        kernel@pengutronix.de, "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH net-next v1] dt-bindings: net: ethernet-controller:
+ document label property
+Message-ID: <YgaUORqDhoUoOJe8@robh.at.kernel.org>
+References: <20220209082820.2210753-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yfhg1zH9rQ3lBP9N@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220209082820.2210753-1-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,37 +65,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jan 31, 2022 at 07:21:11PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Mon, Jan 31, 2022 at 06:39:39PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Some changes to reduce patch size, I have them in my local tree, will
-> > publish later.
+On Wed, 09 Feb 2022 09:28:20 +0100, Oleksij Rempel wrote:
+> "label" provides human readable name used on a box, board or schematic
+> to identify Ethernet port.
 > 
-> Its in perf/threaded at:
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  .../devicetree/bindings/net/ethernet-controller.yaml          | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git
-> 
-> Will continue tomorrow, testing it and checking the speedups on my
-> 5950x, I think the things I found so far can be fixed in follow up
-> patches, to make progress and have this merged sooner.
-> 
-> I'll try and add committer notes with the test for some 'perf bench'
-> workload without/with parallel recording, something I missed in your
-> patch descriptions.
 
-Didn't manage to do that, but my considerations are minor at this point
-and plenty of informed people acked, reviewed, tested, so I'm not going
-to be the one to prevent this from going upstream.
-
-If we find problems (oh well), we'll fix it and progress.
-
-Thank you, Alexei Budankov, Jiri, Namhyung and Riccardo for working on
-making perf scale at the record phase for so long,
-
-I'm pushing this to perf/core, that should get into 5.18.
-
-Also, as a heads up, I'll change 'perf/core' to 'perf/next', to align
-with the kool kids out there,
-
-Thanks,
-
-- Arnaldo
+Applied, thanks!

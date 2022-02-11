@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE12A4B2CA3
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 19:20:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3B24B2CA0
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 19:20:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352536AbiBKSQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 13:16:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57570 "EHLO
+        id S1352589AbiBKSQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 13:16:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245125AbiBKSQp (ORCPT
+        with ESMTP id S1352541AbiBKSQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 13:16:45 -0500
-Received: from st43p00im-ztfb10071701.me.com (st43p00im-ztfb10071701.me.com [17.58.63.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFFFD50
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 10:16:41 -0800 (PST)
+        Fri, 11 Feb 2022 13:16:49 -0500
+Received: from st43p00im-zteg10062001.me.com (st43p00im-zteg10062001.me.com [17.58.63.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6E9CEC
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 10:16:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1644603401; bh=76mruFJ49IAr5T04xlb/bYwFlY2+homydb38Elm0URU=;
+        t=1644603407; bh=atvEIvkseRjsmGEEzVE2oDHcH5g5sH01wgK74hwKLOs=;
         h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=T2ZKsYChS91UXye9hoq64FHSt0Y3gDIlAya8kK5f/5d+qVF1Y2zWSZTy0uCXxGouv
-         x0owX7Sg7aIBYRGbWLrO8xUrocfX4A6kCROPC4l9LRxbjqLejIoZfk84sSrqslv81U
-         p8HMt8m+lc3oQBVOiWKedS0Nr0mtLVewdLpyFGH9yrO4IUhP38COe66nCxGpyMIHdI
-         XYBjbEQ9w0ismBQM/PlWLKr4lvt9EJQjrY/oPuOmfNXDS6X5qFvgu86qkmYii8Hy+0
-         uBR5tm7czjHi9WyPnp1+lTsPIqvJdNZcT8jptgVKie9okVUIiprD+U9EbIJm8ZVR4p
-         A3q/j0C96t7Ow==
+        b=NQRvRJT6OrMayIZOWqm3YIyC7dCheiqTJm8Y/HQMN1aXbrM2Ph8eU2ehUo+8ZOVOB
+         zgg6mTAU5LvjYuyjQPlP3jgLln0/y0HeH5ZszB2UlKXlhhFJB/maqD/L+yZTGVKh2X
+         rqjDf07lYT8WterXe8Rcm1UMrwDNQ/9xFqHdKkrMHlDXpKkEwBXJwIo7HxXnJ8WIDx
+         +Hu7CarE4wnwVlPzTECYeLfi1mDOkBSjhNJv2qfBAL+D+pH+re68YCTICT0Anz85Up
+         TeTL8mLttUjxmwDuXTvbr9WPKuJ5V9Gf8gJgR+AbIA8tg67Shf0x0I7DCo83rtSNDS
+         s0cXxUw5eKJvg==
 Received: from localhost (lfbn-lyo-1-306-208.w2-7.abo.wanadoo.fr [2.7.142.208])
-        by st43p00im-ztfb10071701.me.com (Postfix) with ESMTPSA id 22257A03FD;
-        Fri, 11 Feb 2022 18:16:39 +0000 (UTC)
+        by st43p00im-zteg10062001.me.com (Postfix) with ESMTPSA id 95FA3801129;
+        Fri, 11 Feb 2022 18:16:43 +0000 (UTC)
 From:   Alain Volmat <avolmat@me.com>
 To:     Patrice Chotard <patrice.chotard@foss.st.com>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, avolmat@me.com
-Subject: [PATCH v2 2/7] ARM: dts: sti: ensure unique unit-address in stih410-clock
-Date:   Fri, 11 Feb 2022 19:16:09 +0100
-Message-Id: <20220211181614.683497-3-avolmat@me.com>
+Subject: [PATCH v2 3/7] ARM: dts: sti: ensure unique unit-address in stih418-clock
+Date:   Fri, 11 Feb 2022 19:16:10 +0100
+Message-Id: <20220211181614.683497-4-avolmat@me.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220211181614.683497-1-avolmat@me.com>
 References: <20220211181614.683497-1-avolmat@me.com>
@@ -50,8 +50,7 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 ma
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,13 +63,13 @@ ensure only one node has the address.
 
 Signed-off-by: Alain Volmat <avolmat@me.com>
 ---
- arch/arm/boot/dts/stih410-clock.dtsi | 100 +++++++++++++--------------
- 1 file changed, 48 insertions(+), 52 deletions(-)
+ arch/arm/boot/dts/stih418-clock.dtsi | 101 +++++++++++++--------------
+ 1 file changed, 48 insertions(+), 53 deletions(-)
 
-diff --git a/arch/arm/boot/dts/stih410-clock.dtsi b/arch/arm/boot/dts/stih410-clock.dtsi
-index 6b0e6d4477a3..abac98a1810b 100644
---- a/arch/arm/boot/dts/stih410-clock.dtsi
-+++ b/arch/arm/boot/dts/stih410-clock.dtsi
+diff --git a/arch/arm/boot/dts/stih418-clock.dtsi b/arch/arm/boot/dts/stih418-clock.dtsi
+index e84c476b83ed..e1749e92a2e7 100644
+--- a/arch/arm/boot/dts/stih418-clock.dtsi
++++ b/arch/arm/boot/dts/stih418-clock.dtsi
 @@ -32,7 +32,7 @@ clocks {
  		 */
  		clockgen-a9@92b0000 {
@@ -80,12 +79,12 @@ index 6b0e6d4477a3..abac98a1810b 100644
  
  			clockgen_a9_pll: clockgen-a9-pll {
  				#clock-cells = <1>;
-@@ -40,29 +40,29 @@ clockgen_a9_pll: clockgen-a9-pll {
+@@ -40,30 +40,29 @@ clockgen_a9_pll: clockgen-a9-pll {
  
  				clocks = <&clk_sysin>;
  			};
 -		};
- 
+-
 -		/*
 -		 * ARM CPU related clocks.
 -		 */
@@ -98,6 +97,7 @@ index 6b0e6d4477a3..abac98a1810b 100644
 -				 <&clockgen_a9_pll 0>,
 -				 <&clk_s_c0_flexgen 13>,
 -				 <&clk_m_a9_ext2f_div2>;
+ 
  			/*
 -			 * ARM Peripheral clock for timers
 +			 * ARM CPU related clocks.
@@ -129,7 +129,7 @@ index 6b0e6d4477a3..abac98a1810b 100644
  			};
  		};
  
-@@ -87,14 +87,6 @@ clk_s_a0_flexgen: clk-s-a0-flexgen {
+@@ -88,14 +87,6 @@ clk_s_a0_flexgen: clk-s-a0-flexgen {
  			};
  		};
  
@@ -144,7 +144,7 @@ index 6b0e6d4477a3..abac98a1810b 100644
  		clk_s_c0: clockgen-c@9103000 {
  			compatible = "st,clkgen-c32";
  			reg = <0x9103000 0x1000>;
-@@ -113,6 +105,13 @@ clk_s_c0_pll1: clk-s-c0-pll1 {
+@@ -114,6 +105,13 @@ clk_s_c0_pll1: clk-s-c0-pll1 {
  				clocks = <&clk_sysin>;
  			};
  
@@ -157,8 +157,8 @@ index 6b0e6d4477a3..abac98a1810b 100644
 +
  			clk_s_c0_flexgen: clk-s-c0-flexgen {
  				#clock-cells = <1>;
- 				compatible = "st,flexgen", "st,flexgen-stih410-c0";
-@@ -142,18 +141,17 @@ clk_m_a9_ext2f_div2: clk-m-a9-ext2f-div2s {
+ 				compatible = "st,flexgen", "st,flexgen-stih418-c0";
+@@ -143,18 +141,17 @@ clk_m_a9_ext2f_div2: clk-m-a9-ext2f-div2s {
  			};
  		};
  
@@ -184,7 +184,7 @@ index 6b0e6d4477a3..abac98a1810b 100644
  			clk_s_d0_flexgen: clk-s-d0-flexgen {
  				#clock-cells = <1>;
  				compatible = "st,flexgen", "st,flexgen-stih410-d0";
-@@ -166,18 +164,17 @@ clk_s_d0_flexgen: clk-s-d0-flexgen {
+@@ -167,18 +164,17 @@ clk_s_d0_flexgen: clk-s-d0-flexgen {
  			};
  		};
  
@@ -209,8 +209,8 @@ index 6b0e6d4477a3..abac98a1810b 100644
 +
  			clk_s_d2_flexgen: clk-s-d2-flexgen {
  				#clock-cells = <1>;
- 				compatible = "st,flexgen", "st,flexgen-stih407-d2";
-@@ -192,18 +189,17 @@ clk_s_d2_flexgen: clk-s-d2-flexgen {
+ 				compatible = "st,flexgen", "st,flexgen-stih418-d2";
+@@ -193,18 +189,17 @@ clk_s_d2_flexgen: clk-s-d2-flexgen {
  			};
  		};
  

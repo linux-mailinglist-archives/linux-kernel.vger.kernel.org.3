@@ -2,48 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946FF4B244F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:32:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7A94B2454
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349455AbiBKLck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 06:32:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48594 "EHLO
+        id S1349491AbiBKLdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 06:33:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234009AbiBKLci (ORCPT
+        with ESMTP id S234009AbiBKLdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 06:32:38 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 691AEE86
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:32:37 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D23A51042;
-        Fri, 11 Feb 2022 03:32:36 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.87.94])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 54B423F73B;
-        Fri, 11 Feb 2022 03:32:32 -0800 (PST)
-Date:   Fri, 11 Feb 2022 11:32:27 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>, acme@redhat.com,
-        ardb@kernel.org, bp@alien8.de, broonie@kernel.org,
-        catalin.marinas@arm.com, dave.hansen@linux.intel.com,
-        jpoimboe@redhat.com, jslaby@suse.cz,
-        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
-        mingo@redhat.com, peterz@infradead.org, tglx@linutronix.de,
-        will@kernel.org, llvm@lists.linux.dev,
-        James Y Knight <jyknight@google.com>
-Subject: Re: [PATCH v2 2/7] linkage: add SYM_{ENTRY,START,END}_AT()
-Message-ID: <YgZJS6mDoAgVqC4l@FVFF77S0Q05N>
-References: <20220125113200.3829108-1-mark.rutland@arm.com>
- <20220125113200.3829108-3-mark.rutland@arm.com>
- <YgUmvuJYfycnhODA@FVFF77S0Q05N>
- <CAKwvOdmWV6AL2RM2SQNYQ7fu3kQwPf+W57LZ_szrfZm2eLtBcw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdmWV6AL2RM2SQNYQ7fu3kQwPf+W57LZ_szrfZm2eLtBcw@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        Fri, 11 Feb 2022 06:33:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035B9B3B;
+        Fri, 11 Feb 2022 03:33:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9172D61880;
+        Fri, 11 Feb 2022 11:33:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F027AC340E9;
+        Fri, 11 Feb 2022 11:33:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644579197;
+        bh=msKcb0RndZ12+vVaLK7an78KdGVqce9K77/Gi6nEqrw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sVEMcA5CAW3nFHt5iIl85Vamh8nGFsN3fzHTiuSQzJ2NbpQEwMgZnfo/+dhEoasL9
+         8WTwRkXnF9cUkVGXOHTWV3xzq5M9d8v/FD7XJVTWkqwKUYwMWmXoxEvdOMqgOVbhSp
+         /4K80Aam5kTJTMws2GxKWhmfMy3evXdpMFh5N+Laqnc5hUksjKyNUw5LZc0qx8fXG7
+         TfgCx0WZBMHLudBuTC2gCjoPFGpBBhk6IVz+fqrJJPWr04YINhLACkN2CEX9RlP8b2
+         A85bZe9BNvn+ArwYEh3fOFJ0cjIkKErYpRJkUge+oA9fqRHDs0sHC84M9VIN8d59KQ
+         CB/j8dOr+ICJg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nIUAs-0079XQ-VF; Fri, 11 Feb 2022 11:33:15 +0000
+Date:   Fri, 11 Feb 2022 11:33:14 +0000
+Message-ID: <87bkzdljt1.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Nishanth Menon <nm@ti.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/5] arm64: dts: ti: Introduce base support for AM62x SoC
+In-Reply-To: <20220210193459.nl6baranvmqs46bi@coastal>
+References: <20220208131827.1430086-1-vigneshr@ti.com>
+        <20220208131827.1430086-5-vigneshr@ti.com>
+        <bc6cb6e1adcf6860a595b71246778733@kernel.org>
+        <20220210193459.nl6baranvmqs46bi@coastal>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: nm@ti.com, vigneshr@ti.com, kristo@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski@canonical.com, ssantosh@kernel.org, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,143 +73,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 05:20:10PM -0800, Nick Desaulniers wrote:
-> On Thu, Feb 10, 2022 at 6:52 AM Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > Both GCC and clang are happy to treat labels as constant expressions:
-> >
-> > | [mark@lakrids:~/asm-test]% cat test-label.S
-> > |         .text
-> > |
-> > | start:
-> > |         nop
-> > | end:
-> > |
-> > |         .if (end - start) == 0
-> > |         .err
-> > |         .endif
-> > |
-> > | [mark@lakrids:~/asm-test]% usekorg 11.1.0 aarch64-linux-gcc -c test-label.S
-> > | [mark@lakrids:~/asm-test]% usellvm 13.0.0 clang --target=aarch64-linux -c test-label.S
-> >
-> > ... but only GCC is happy to treat symbol definitions as constants:
-> >
-> > | [mark@lakrids:~/asm-test]% cat test-symbol.S
-> > |         .text
-> > |
-> > | .set start, .;
-> > |         nop
-> > | .set end, .;
-> > |
-> > |         .if (end - start) == 0
-> > |         .err
-> > |         .endif
-> > |
-> > | [mark@lakrids:~/asm-test]% usekorg 11.1.0 aarch64-linux-gcc -c test-symbol.S
-> > | [mark@lakrids:~/asm-test]% usellvm 13.0.0 clang --target=aarch64-linux -c test-symbol.S
-> > | test-symbol.S:7:6: error: expected absolute expression
-> > |  .if (end - start) == 0
-> > |      ^
-> > | test-symbol.S:8:2: error: .err encountered
-> > |  .err
-> > |  ^
-> >
-> > This is obviously a behavioural difference, but I'm not sure whether it's
-> > intentional, or just an artifact of the differing implementation of GNU as and
-> > LLVM's integrated assembler. Nich, Nathan, any thoughts on that?
-> >
-> > Does clang have any mechanism other than labels to define location constants
-> > that can be used as absolute expressions? e.g. is there any mechanism to alias
-> > a label which results in the alias also being a constant?
+On Thu, 10 Feb 2022 19:34:59 +0000,
+Nishanth Menon <nm@ti.com> wrote:
 > 
-> s/constant/absolute/
-
-Sorry, yes. I wasn't clear on the terminology when I wrote this, and I realise
-now what I said was a bit confused.
-
-IIUC the symbols themselves are relocatable (rather than absolute) whether
-they're labels or created via `.set`, since the base of the section hasn't been
-set yet. The difference between the two *should* be absolute (since they're
-both relocatable relative to the same base), and LLVM can figure that out for
-two labels, but not when either is created via `.set`, so it seems some
-information is tracked differently for labels and othey symbols?
-
-I note LLVM *can* treat the result of a `.set` as absolute, eg. if I do:
-
-	.set sym_offset (label_end - label_start)
-	.if sym_offset == 0
-	.err
-	.endif
-
-... LLVM treats `sym_offset` as an absolute value.
-
-> Nothing off the top of my head comes to mind as a substitute that will
-> work as expected today.
+> On 19:10-20220209, Marc Zyngier wrote:
+> [...]
 > 
-> I've filed https://github.com/llvm/llvm-project/issues/53728 to
-> discuss more with folks that understand our AsmParser better.
-
-Thanks!
-
-> From what I can tell, our AsmParser is falling down because the
-> operands of the binary expression themselves are not considered
-> absolute.
-
-IIUC even in the label case the operands aren't absolute, but rather that
-they're relocatable relative to the same base, and hence the expression can be
-evaluate to be absolute (since the base gets cancelled out, removing the
-relocation).
-
-So is there something that gets tracked differently for labels and other
-symbols?
-
-> I doubt we will be able to handle the general case of symbol
-> differencing; the symbol reference operands could refer to symbols in
-> different sections that haven't been laid out yet (or whose order
-> could be shuffled by the linker).  But if they're in the same section
-> (or "fragment" of a section), we might be able to special case this.
-
-Sure, I think the only case that needs to work (or can work conceptually) is
-when they're in the same section (of fragment thereof), and that's all the GNU
-assembler supports.
-
-> For the expression
+> > > +&cbass_main {
+> > > +	gic500: interrupt-controller@1800000 {
+> > > +		compatible = "arm,gic-v3";
+> > > +		#address-cells = <2>;
+> > > +		#size-cells = <2>;
+> > > +		ranges;
+> > > +		#interrupt-cells = <3>;
+> > > +		interrupt-controller;
+> > > +		reg = <0x00 0x01800000 0x00 0x10000>,	/* GICD */
+> > > +		      <0x00 0x01880000 0x00 0xC0000>;	/* GICR */
+> > 
+> > Usual rant: you are missing the GICC, GICH and GICV regions
+> > that are implemented by the CPU. Cortex-A53 implements them
+> > (they are not optional), so please describe them.
+> > 
 > 
-> > .if (qwerty_fiqin_end - qwerty_fiqin_start) > (0x200 - 0x1c)
 > 
-> can you use local labels (`.L` prefix) rather than symbolic
-> references? or is there a risk of them not being unique per TU?
+> -ECONFUSED. TRM for GIC500 refers to just GICD, GICR and ITS range[1].
 
-For the problem in this patch I might be able to do something of that shape,
-but I'll need to factor the SYM_*() helpers differently so that I can use
-labels for the primary definition.
+And I'm not talking about the GIC, but of the CPU interface. The fact
+that we describe both in the GIC binding doesn't mean they are
+implemented by the same IP block (and the architecture is quite clear
+about that).
 
-I can't do that for the aliases, since I don't know the set of aliases until
-after the primary definition is created. Since there's no label aliasing
-mechanism, I must use symbol references. However, I think I can propagate the
-size by calculating alongside the primary definition, e.g.
+> Same thing is indicated by Generic Interrupt Controller Architecture
+> Specification[2] See table 1-1 (page 23).
+> 
+> I think you are expecting GICV3's backward compatibility mode (Table 1-2
+> in page 24), But in K3 architecture, are_option meant for backward
+> compatibility is set to true (aka no backward compatibility). I think
+> this did popup sometime back as well (first k3 SoC)[3]. I think the more
+> clearer description is available in [4].
 
-	primary_start:
-		nop
-	primary_end:
-	.set primary_size, (primary_end - primary_start)
+No, this description is for the architecture as a whole. ARE being
+disabled *int the GIC* doesn't mean it is disabled overall, and the
+CPU is free to implement the CPU interface by any mean it wants as
+long as it communicates with the GIC using the Stream Protocol.
+Cortex-A32, A34, 35, A53, A57, A72 and A73 all implement both the
+sysreg and MMIO CPU interfaces. Later ARM CPUs don't. Both can work
+with GIC500.
 
-	.set alias_start, primary_start
-	.set alias_end,   primary_end
-	.set alias_size,  primary_size
+> I believe the argumentation that GICC/H/V is mandatory for A53 if GIC500
+> is used is not accurate. Please correct me if I am mistaken.
 
-... so I'll have a go at that.
+GIC500 is not involved at all, and A53 always implements both the
+system register and MMIO interfaces. See the A53 TRM, chapter 9. The
+only way to disable this interface is to assert GICCDISABLE, which
+disables the whole of the CPU interface. Given that you have a (more
+or less) functional system, it probably isn't the case.
 
-However, that still means I can't treat aliases as entirely equivalent to the
-primary definition, e.g.
-
-	.if (alias_end - alias_start) == 0
-	.err
-	.endif
-
-... and there might be more things of that sort of shape, so it'd be good if
-LLVM could handle this for symbol references (in the same section or fragment
-thereof), so that we have the chance to use that in future.
+See Table 9-1, which tells you where these registers are as an offset
+from PERIPHBASE. Dumping these registers should show you that they are
+indeed implemented and not solely a figment of my own imagination.
 
 Thanks,
-Mark.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

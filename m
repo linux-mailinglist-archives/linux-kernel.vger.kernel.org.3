@@ -2,144 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3334B2F76
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 22:38:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C244B2F68
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 22:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235404AbiBKVhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 16:37:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52120 "EHLO
+        id S1353735AbiBKVct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 16:32:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiBKVhq (ORCPT
+        with ESMTP id S1353715AbiBKVct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 16:37:46 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E40FC62
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 13:37:44 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id f23so19013063lfe.5
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 13:37:44 -0800 (PST)
+        Fri, 11 Feb 2022 16:32:49 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC699C61
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 13:32:46 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id c6so28756278ybk.3
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 13:32:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=XFzCG6U+gQcN35bNR5ygZp7My/pmsXpJOFlN4wA8faE=;
-        b=Op5mHfi4lkpgsAXFUIEvOb892Ki9UfRvx6Wny8c8GnjgwctkidFgQ18OXWJf376jCc
-         BL/WKzyG/HlMvQ5Fg9rMrnYrcCvA8WOcTMUhjWAiGuoPntTEWvfcefuEHsgqJwwQX7cW
-         NOiWSj++f2uRrGtaz3ZiLzt4iZqukzsD9VZjY=
+        bh=nlMNdPedHPycBXQ85x4bFGxtLOLbRfBW7nz64ipbjBY=;
+        b=R7+8WmZ8z5W8QeBvnhcVZ9ocPoXPI4IfaWnDSFcyXbagwpzAg5QoJWGBcQQg4gg9fN
+         37CodB/qEUvKwV+uvKXESNth5g8mJ0DTtf5mxdzJeJcXuwJmbZ/axGotqDdWbrFB3UR+
+         S6nOx8DCf7bOcLL5M9iyQv/IqY0FCH3Ow15F0CVHiOvYKlSeAEXYYh1hvgGdmZsxdDK8
+         udCxlM79RY0G3/7HTCxNPYex8uJf18qSsKx+od7ygwGnPTymwfUW/1V7JM0R5u4FS3DV
+         c/XWdiOymV3d2+e7RWsbqDAm7omrwEeZo88/Nw/nRfTU0DO3vIBqwN0S282EFs5il9Ma
+         YFVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=XFzCG6U+gQcN35bNR5ygZp7My/pmsXpJOFlN4wA8faE=;
-        b=hKOr4R8Yk5y1QkjIUqSicwms7oxVNoturZjneIcmK1yzWfuktPj3hWYsDi+jpXWf0R
-         AQPhcy3u31r6RZ2z+qgIYwChmenkgvG8fscYHp/Ou2qD8K0iQ+LDOJj+pBtlYz3viHRT
-         LhRizdZcJMvTe2NStkdr6eEJIleXqTPKSV0FSqF5+gAS4bXlfmTFs8+S6DCKgmSs0MNn
-         LcekEn0IF+IPZY2/7tsh4sLfHJyM2RBfSMcP02R1yKCM1QPKHPTlXQnCexM4FW8DAvOI
-         NFoCUr5Z9vHXHw4rNkX9bbOGv8hLb/dSYoEyYo4frHddwysDUUD2trOJkNgIJf2XUwJ6
-         gqSA==
-X-Gm-Message-State: AOAM533fI5StG2U+vGMTZFYWCE5miEJna/cv2RYjvgHBXFAwKNnk74k4
-        +JpFrkmGQUYALU4CYpIUZrTILcOiKOTpPm+l5L8=
-X-Google-Smtp-Source: ABdhPJyRp1XcQ87hqyIl5BKbcmYevo1/8dsUaJzueJr1eFXyI5UGT8d0DJW/s6LtEmf5dVRdHKT3Ow==
-X-Received: by 2002:a05:6512:2821:: with SMTP id cf33mr2500352lfb.37.1644615462562;
-        Fri, 11 Feb 2022 13:37:42 -0800 (PST)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
-        by smtp.gmail.com with ESMTPSA id c28sm3254902lfv.211.2022.02.11.13.37.42
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Feb 2022 13:37:42 -0800 (PST)
-Received: by mail-lj1-f169.google.com with SMTP id t14so14201506ljh.8
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 13:37:42 -0800 (PST)
-X-Received: by 2002:a05:6000:1885:: with SMTP id a5mr2667962wri.193.1644614977325;
- Fri, 11 Feb 2022 13:29:37 -0800 (PST)
+        bh=nlMNdPedHPycBXQ85x4bFGxtLOLbRfBW7nz64ipbjBY=;
+        b=G1qsngiuRmDsX3z79A8wdXIa7IaB7Rz1AmQqD7KVdXXdz1LF353TyN9H82KZfPeJOJ
+         4nau5ya/3b0pc+3VIoAx5N8X0No8dBhpRO4GjDBRVvdYNcc1wuW7BwUAtx7z7pW3eFPb
+         jSSjTv4oCetMV+Tz5P5Nd2N/9FCS9le4/lGJe0SSATbCZyCBYcwhQPFWlDC1AOI4BYtW
+         R+qlraMm/POzWPUjtb719za9GfcshZoSY/0n2y+9FAKqCPG6n4UOe4OSPPFelI6qsqWa
+         KQxZRfyoxz0tJTbgVBjlALxthtoyFfpm9ADBW/DKeRtE5ra9i7rHwlf5z6tg4Xc4V22X
+         ZjDw==
+X-Gm-Message-State: AOAM531Z7OspoguIHmTkh0+f6UeRZf0VKd78YGecqiXcaftZGUhV1BRN
+        uWMmtFAgRzpZcPTRDEz3rAvvGCuPp8EBdmt+rcvNIw==
+X-Google-Smtp-Source: ABdhPJwxt/ccwzQXgeYQSdW1n8H1uNZN4bQTPzzBDg4pfrNxnshkiT6JI3ZaakqbnLo8Pph2JwGiM91mGnY6+KkRScA=
+X-Received: by 2002:a25:684a:: with SMTP id d71mr3340888ybc.284.1644615166048;
+ Fri, 11 Feb 2022 13:32:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20220211210757.612595-1-Jason@zx2c4.com>
-In-Reply-To: <20220211210757.612595-1-Jason@zx2c4.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 11 Feb 2022 13:29:21 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wh+2jokbr4tpHA=ExebWKr=qp9RJ_uFrG2gYG4ChAjitg@mail.gmail.com>
-Message-ID: <CAHk-=wh+2jokbr4tpHA=ExebWKr=qp9RJ_uFrG2gYG4ChAjitg@mail.gmail.com>
-Subject: Re: [PATCH RFC v0] random: block in /dev/urandom
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Theodore Ts'o" <tytso@mit.edu>
+References: <20220124131346.12571-1-linmq006@gmail.com> <20220211200404.ywlfdj2pybtnmezp@mercury.elektranox.org>
+In-Reply-To: <20220211200404.ywlfdj2pybtnmezp@mercury.elektranox.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 11 Feb 2022 22:32:34 +0100
+Message-ID: <CACRpkdbOdVbsFPEJ3vScG83Uyd8cGYNcRU9o11WHbjkZ07neNg@mail.gmail.com>
+Subject: Re: [PATCH] power: supply: ab8500: Fix memory leak in ab8500_fg_sysfs_init
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Miaoqian Lin <linmq006@gmail.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 1:08 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+On Fri, Feb 11, 2022 at 9:04 PM Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
+
+> > Fixes: 8c0984e5a753 ("power: move power supply drivers to power/supply")
+> > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> > ---
 >
-> Maybe. And this is why this is a request for grumbles patch: the Linus
-> Jitter Dance relies on random_get_entropy() returning a cycle counter
-> value.
+> Thanks, queued power-supply's for-next branch.
+>
+> Linus, if I'm not mistaken the custom sysfs ABI (i.e. everything related
+> to ab8500_fg_sysfs_init() can just be removed since the same thing is
+> already exposed standardized via POWER_SUPPLY_PROP_CHARGE_FULL and
+> POWER_SUPPLY_PROP_CHARGE_NOW?
 
-Yeah.
+Yes, I delete other weird custom sysfs, so I'll cook a patch to
+get rid of this too.
 
-I think this patch is fine for architectures that do have that cycle
-counter value.
-
-Considering that the jitter thing has been there for 2.5 years by now,
-and nobody has really complained about it (*), I think we can call
-that thing a success. And on those architectures where
-try_to_generate_entropy() works, removing the code that then does that
-GRND_INSECURE makes sense. We just don't have any such case any more.
-
-BUT.
-
-When try_to_generate_entropy() doesn't work, I think you now removed
-the possible fallback for user space to say "yeah, just give me best
-effort". And you might re-introduce a deadlock as a result.
-
-Those systems are arguably broken from a randomness standpoint - what
-the h*ll are you supposed to do if there's nothing generating entropy
-- but broken or not, I suspect they still exists. Those horrendous
-MIPS things were quite common in embedded networking (routers, access
-points - places that *should* care)
-
-Do I have a constructive suggestion for those broken platforms? No, I
-don't. That arguably is the reason for GRND_INSECURE existing, and the
-reason to keep it around.
-
-Long story short: I like your patch, but I worry that it would cause
-problems on broken platforms.
-
-And almost nobody tests those broken platforms: even people who build
-new kernels for those embedded networking things probably end up using
-said kernels with an existing user space setup - where people have
-some existing saved source of pseudo-entropy. So they might not ever
-even trigger the "first boot problem" that tends to be the worst case.
-
-I'd be willing to apply such a thing anyway - at some point "worry
-about broken platforms" ends up being too weak an excuse not to just
-apply it - but I'd like to hear more of a reason for this
-simplification. If it's just "slight cleanup", maybe we should just
-keep the stupid stuff around as a "doesn't hurt good platforms, might
-help broken ones".
-
-               Linus
-
-(*) Honestly, I think all the complaints would have been from the
-theoretical posers that don't have any practical suggestions anyway
+Yours,
+Linus Walleij

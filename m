@@ -2,61 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF6B4B1BDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 03:04:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 970054B1BDF
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 03:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347121AbiBKCEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 21:04:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59058 "EHLO
+        id S239987AbiBKCE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 21:04:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344360AbiBKCEv (ORCPT
+        with ESMTP id S1344360AbiBKCEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 21:04:51 -0500
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C7B5F9B;
-        Thu, 10 Feb 2022 18:04:49 -0800 (PST)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nILIc-0004k8-Ic; Fri, 11 Feb 2022 03:04:38 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Wei Fu <wefu@redhat.com>,
-        liush <liush@allwinnertech.com>, Guo Ren <guoren@kernel.org>,
-        Anup Patel <anup@brainfault.org>,
-        Drew Fustini <drew@beagleboard.org>,
-        Christoph Hellwig <hch@lst.de>, Arnd Bergmann <arnd@arndb.de>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Greg Favor <gfavor@ventanamicro.com>,
-        Andrea Mondelli <andrea.mondelli@huawei.com>,
-        Jonathan Behrens <behrensj@mit.edu>,
-        Xinhaoqu <xinhaoqu@huawei.com>,
-        Bill Huffman <huffman@cadence.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Allen Baum <allen.baum@esperantotech.com>,
-        Josh Scheid <jscheid@ventanamicro.com>,
-        Richard Trauben <rtrauben@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Christoph Muellner <cmuellner@linux.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>
-Subject: Re: [PATCH v6 00/14] riscv: support for Svpbmt and D1 memory types
-Date:   Fri, 11 Feb 2022 03:04:37 +0100
-Message-ID: <2177281.3HUnQTRebA@diego>
-In-Reply-To: <CAOnJCUKzE3uBfu0Aqpr19b-XB76qY7qtaeK87FF7H4Tw5B+d_Q@mail.gmail.com>
-References: <20220209123800.269774-1-heiko@sntech.de> <CAOnJCUL5w4+_zJvu-BxP+LGN2ohv6arY+uh0DOU586v_5mCE8g@mail.gmail.com> <CAOnJCUKzE3uBfu0Aqpr19b-XB76qY7qtaeK87FF7H4Tw5B+d_Q@mail.gmail.com>
+        Thu, 10 Feb 2022 21:04:53 -0500
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90585F9B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 18:04:53 -0800 (PST)
+Received: by mail-oo1-xc2a.google.com with SMTP id 189-20020a4a03c6000000b003179d7b30d8so8673351ooi.2
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 18:04:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=ckXTKi5wrQ12rsy1drWcexp/vZy9HXxvAT6VdDX39mA=;
+        b=G0KBhkL5dswwE9ogGoP/YzevamYiCcVJw2jhHM2I/yQ1Xlc+hMCFSS9VyR/TQJoRK0
+         JV142KMhTczzCOUOlPZHLr9VqNoEJ5DxteB0dcaqGeP1a2gIHVgGXBUL1gXUl6+3TSxn
+         IfXY6Zi6qCRXYTybnbe4lmN5IpHQaobPmyA0A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=ckXTKi5wrQ12rsy1drWcexp/vZy9HXxvAT6VdDX39mA=;
+        b=m9toAjchWifffCkAOVqLCTikxBjmzDTYRZntd7NdJUg9GntQsYlMt/+hCxggHjLvj3
+         QB1KtDpvMnvp9/clc8i8AhyQCpiCUG0v/IRNJAgT5h1ZIXuMG9yXv91O877YJwihc5kN
+         QqjpwmvG8BjNJFtZR3gV9KX7l7WJxpq/KfaQLmF8rQLif1Rb65n6pDsiarUngnZx0Ylb
+         gFchSkusxLjca6T81zbNfrJAINEj8uMNIvKm6JD9iatFInLtcRws+ypBGHIOSHPJ41f6
+         WHBajOx8ZL8/YO92eHkrrLaPEAW113yEfs4zrM9HUtq3+Bfq+9E1YSrEAESM66ooCN2A
+         BRCw==
+X-Gm-Message-State: AOAM533VyMWobOMrM+U0rXGexqf6ulhKVImksBOsicce1X66CMQkAjgN
+        BAfXqmuOYNZkQN5UPsz4181PtvBGOn+nyuDYq+2P+A==
+X-Google-Smtp-Source: ABdhPJxq4nfeeCfBWTKHOc4ecxgYoSuUG37YTIEnWQO+blgjdb1baXIsHJRAckIH92DctYWp5BmP6w+x7bfNWc6wpaY=
+X-Received: by 2002:a05:6870:d413:: with SMTP id i19mr78933oag.54.1644545092930;
+ Thu, 10 Feb 2022 18:04:52 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 10 Feb 2022 18:04:52 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+In-Reply-To: <YgJn57s8u2OsBGnW@phenom.ffwll.local>
+References: <20220127200141.1295328-1-swboyd@chromium.org> <20220127200141.1295328-3-swboyd@chromium.org>
+ <YffoqgmeUdxZ56zB@kroah.com> <CAKMK7uFYyQ9siB5ENHku+yVPWWM1H=TEn-NZofEKqpJnuEvMmw@mail.gmail.com>
+ <YfgPkliOLorgXwVE@kroah.com> <YgJn57s8u2OsBGnW@phenom.ffwll.local>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 10 Feb 2022 18:04:52 -0800
+Message-ID: <CAE-0n51_RPmS+yuMKTGczA4J6SAE7xddMsjtNk88jtax9QX_EA@mail.gmail.com>
+Subject: Re: [PATCH v6 02/35] component: Introduce the aggregate bus_type
+To:     Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Saravana Kannan <saravanak@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,230 +75,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Freitag, 11. Februar 2022, 02:48:38 CET schrieb Atish Patra:
-> On Thu, Feb 10, 2022 at 4:25 PM Atish Patra <atishp@atishpatra.org> wrote:
+Quoting Daniel Vetter (2022-02-08 04:53:59)
+> On Mon, Jan 31, 2022 at 05:34:26PM +0100, Greg Kroah-Hartman wrote:
+> > On Mon, Jan 31, 2022 at 04:15:09PM +0100, Daniel Vetter wrote:
+> > > On Mon, Jan 31, 2022 at 2:48 PM Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > On Thu, Jan 27, 2022 at 12:01:08PM -0800, Stephen Boyd wrote:
+> > > > > The component framework only provides 'bind' and 'unbind' callbacks to
+> > > > > tell the host driver that it is time to assemble the aggregate driver
+> > > > > now that all the components have probed. The component framework doesn't
+> > > > > attempt to resolve runtime PM or suspend/resume ordering, and explicitly
+> > > > > mentions this in the code. This lack of support leads to some pretty
+> > > > > gnarly usages of the 'prepare' and 'complete' power management hooks in
+> > > > > drivers that host the aggregate device, and it fully breaks down when
+> > > > > faced with ordering shutdown between the various components, the
+> > > > > aggregate driver, and the host driver that registers the whole thing.
+> > > > >
+> > > > > In a concrete example, the MSM display driver at drivers/gpu/drm/msm is
+> > > > > using 'prepare' and 'complete' to call the drm helpers
+> > > > > drm_mode_config_helper_suspend() and drm_mode_config_helper_resume()
+> > > > > respectively, so that it can move the aggregate driver suspend/resume
+> > > > > callbacks to be before and after the components that make up the drm
+> > > > > device call any suspend/resume hooks they have. This only works as long
+> > > > > as the component devices don't do anything in their own 'prepare' and
+> > > > > 'complete' callbacks. If they did, then the ordering would be incorrect
+> > > > > and we would be doing something in the component drivers before the
+> > > > > aggregate driver could do anything. Yuck!
+> > > > >
+> > > > > Similarly, when trying to add shutdown support to the MSM driver we run
+> > > > > across a problem where we're trying to shutdown the drm device via
+> > > > > drm_atomic_helper_shutdown(), but some of the devices in the encoder
+> > > > > chain have already been shutdown. This time, the component devices
+> > > > > aren't the problem (although they could be if they did anything in their
+> > > > > shutdown callbacks), but there's a DSI to eDP bridge in the encoder
+> > > > > chain that has already been shutdown before the driver hosting the
+> > > > > aggregate device runs shutdown. The ordering of driver probe is like
+> > > > > this:
+> > > > >
+> > > > >  1. msm_pdev_probe() (host driver)
+> > > > >  2. DSI bridge
+> > > > >  3. aggregate bind
+> > > > >
+> > > > > When it comes to shutdown we have this order:
+> > > > >
+> > > > >  1. DSI bridge
+> > > > >  2. msm_pdev_shutdown() (host driver)
+> > > > >
+> > > > > and so the bridge is already off, but we want to communicate to it to
+> > > > > turn things off on the display during msm_pdev_shutdown(). Double yuck!
+> > > > > Unfortunately, this time we can't split shutdown into multiple phases
+> > > > > and swap msm_pdev_shutdown() with the DSI bridge.
+> > > > >
+> > > > > Let's make the component_master_ops into an actual device driver that has
+> > > > > probe/remove/shutdown functions. The driver will only be bound to the
+> > > > > aggregate device once all component drivers have called component_add()
+> > > > > to indicate they're ready to assemble the aggregate driver. This allows
+> > > > > us to attach shutdown logic (and in the future runtime PM logic) to the
+> > > > > aggregate driver so that it runs the hooks in the correct order.
+> > > >
+> > > > I know I asked before, but I can not remember the answer.
+> > > >
+> > > > This really looks like it is turning into the aux bus code.  Why can't
+> > > > you just use that instead here for this type of thing?  You are creating
+> > > > another bus and drivers for that bus that are "fake" which is great, but
+> > > > that's what the aux bus code was supposed to help out with, so we
+> > > > wouldn't have to write more of these.
+> > > >
+> > > > So, if this really is different, can you document it here so I remember
+> > > > next time you resend this patch series?
+> > >
+> > > aux takes a device and splits it into a lot of sub-devices, each with
+> > > their own driver.
+> > >
+> > > This takes a pile of devices, and turns it into a single logical
+> > > device with a single driver.
+> > >
+> > > So aux is 1:N, component is N:1.
+> > >
+> > > And yes you asked this already, I typed this up already :-)
 > >
-> > On Wed, Feb 9, 2022 at 4:38 AM Heiko Stuebner <heiko@sntech.de> wrote:
-> > >
-> > > Svpbmt is an extension defining "Supervisor-mode: page-based memory types"
-> > > for things like non-cacheable pages or I/O memory pages.
-> > >
-> > >
-> > > So this is my 2nd try at implementing Svpbmt (and the diverging D1 memory
-> > > types) using the alternatives framework.
-> > >
-> > > This includes a number of changes to the alternatives mechanism itself.
-> > > The biggest one being the move to a more central location, as I expect
-> > > in the future, nearly every chip needing some sort of patching, be it
-> > > either for erratas or for optional features (svpbmt or others).
-> > >
-> > > The dt-binding for svpbmt itself is of course not finished and is still
-> > > using the binding introduced in previous versions, as where to put
-> > > a svpbmt-property in the devicetree is still under dicussion.
-> > > Atish seems to be working on a framework for extensions [0],
-> > >
-> >
-> > Here is the patch series
-> > https://lore.kernel.org/lkml/20220210214018.55739-1-atishp@rivosinc.com/
-> >
-> > I think we can simplify the cpu feature probing in PATCH 10 with the
-> > above series
-> > which simply relies on the existing riscv_isa bitmap.
-> >
-> > We also don't need the separate svpbmt property in DT mmu node.
-> > Let me know what you think.
-> >
-> > > The series also introduces support for the memory types of the D1
-> > > which are implemented differently to svpbmt. But when patching anyway
-> > > it's pretty clean to add the D1 variant via ALTERNATIVE_2 to the same
-> > > location.
-> > >
-> > > The only slightly bigger difference is that the "normal" type is not 0
-> > > as with svpbmt, so kernel patches for this PMA type need to be applied
-> > > even before the MMU is brought up, so the series introduces a separate
-> > > stage for that.
-> > >
-> > >
-> > > In theory this series is 3 parts:
-> > > - sbi cache-flush / null-ptr
-> > > - alternatives improvements
-> > > - svpbmt+d1
-> > >
-> > > So expecially patches from the first 2 areas could be applied when
-> > > deemed ready, I just thought to keep it together to show-case where
-> > > the end-goal is and not requiring jumping between different series.
-> > >
-> > >
-> > > The sbi cache-flush patch is based on Atish's sparse-hartid patch [1],
-> > > as it touches a similar area in mm/cacheflush.c
-> > >
-> > >
-> > > I picked the recipient list from the previous version, hopefully
-> > > I didn't forget anybody.
-> > >
-> 
-> I am also getting a load access fault while booting this series in Qemu.
-> 
-> <with additional debug message when before sbi_trap_redirect in OpenSBI>
-> sbi_trap_error_debug: hart1: trap handler failed (error -2)
-> sbi_trap_error_debug: hart1: mcause=0x0000000000000005 mtval=0x0000000080046468
-> sbi_trap_error_debug: hart1: mtval2=0x0000000000000000 mtinst=0x0000000000000000
-> sbi_trap_error_debug: hart1: mepc=0x000000008080a8b8 mstatus=0x0000000a00000800
-> sbi_trap_error_debug: hart1: ra=0x0000000080202b06 sp=0x0000000081203f00
-> sbi_trap_error_debug: hart1: gp=0x00000000812d9db8 tp=0x0000000080046000
-> sbi_trap_error_debug: hart1: s0=0x0000000081203f80 s1=0x0000000080c1a8a8
-> sbi_trap_error_debug: hart1: a0=0x0000000080c1a8a8 a1=0x0000000080c1b0d0
-> sbi_trap_error_debug: hart1: a2=0x0000000000000002 a3=0x0000000000000000
-> sbi_trap_error_debug: hart1: a4=0x00000000812da902 a5=0x0000000000000000
-> sbi_trap_error_debug: hart1: a6=0x0000000000000006 a7=0x0000000000000010
-> sbi_trap_error_debug: hart1: s2=0x0000000080c1b0d0 s3=0x0000000000000002
-> sbi_trap_error_debug: hart1: s4=0x00000000bf000000 s5=0x0000000000000000
-> sbi_trap_error_debug: hart1: s6=0x8000000a00006800 s7=0x000000000000007f
-> sbi_trap_error_debug: hart1: s8=0x0000000080018038 s9=0x0000000080039eac
-> sbi_trap_error_debug: hart1: s10=0x0000000000000000 s11=0x0000000000000000
-> sbi_trap_error_debug: hart1: t0=0x0000000080c04000 t1=0x0000000000000002
-> sbi_trap_error_debug: hart1: t2=0x0000000000001000 t3=0x0000000000000010
-> sbi_trap_error_debug: hart1: t4=0x00000000800168be t5=0x0000000000000027
-> sbi_trap_error_debug: hart1: t6=0x0000000000000001
-> 
-> mepc : 0x000000008080a8b8 - call_function_init (kernel/smp.c)
-> 
-> Kernel - 5.17-rc2 + my patches
-> Qemu - Alistairs next tree + my patches
+> > Ok, thanks.  But then why is a bus needed if there's a single driver?
+> > I guess a bus for that driver?  So one bus, one driver, and one device?
+>
+> Maybe? I have honestly no idea how this should be best modelled in the
+> linux device model.
 
-very strange. I was testing of course with Qemu as well, though never saw
-anything like this.
+There can be one driver and multiple aggregate devices attached to that
+driver. This happens for the MediaTek SMMU (IOMMU) code that has two
+aggregate devices.
 
-But of course it was Qemu master + the then still pending svpbmt patchset [0]
-[looks like Alistair applied this today] + a patch that made qemu insert the
-svpbmt dt-property for the virt machine.
+We need a bus to have a driver and attach power management operations
+and a shutdown hook to that driver that knows about the entire graphics
+card/encoder chain. Otherwise there's not a good place to insert the
+function call that walks the display hardware and shuts down devices,
+drm_atomic_helper_shutdown(). We have a problem where an i2c device for
+a display bridge can't be turned off because we've already shut down the
+whole i2c bus before we call drm_atomic_helper_shutdown() due to the
+platform device that calls it probing far before the i2c bridge probes.
 
-Oh ... just to make sure, did you enable the svpbmt parameter when starting
-Qemu? (-cpu ...,svpbmt=true)
+Could we attach a shutdown hook and dev_pm_ops to the drm class
+structure and then have some DRM API that lets us opt into using the
+simple shutdown helper? That would avoid making yet another bus and
+driver as my high level understanding of 'struct class drm_class' is
+that it represents the graphics card and it isn't created until the
+entire display pipeline devices have probed and checked in with the
+component layer.
 
+>
+> > I think we need better documentation here...
+>
+> https://dri.freedesktop.org/docs/drm/driver-api/component.html?highlight=component_del#component-helper-for-aggregate-drivers
+>
+> There's a kerneldoc overview for component, but it's for driver authors
+> that want to use component to glue different hw pieces into a logical
+> driver, so it skips over these internals.
+>
+> And I'm honestly not sure how we want to leak implementation internals
+> like the bus/driver/device structure ot users of component.c.
 
-Heiko
-
-[0] http://lore.kernel.org/r/20220204022658.18097-1-liweiwei@iscas.ac.cn
-
-
-> I do have some out-of-tree patches but that shouldn't be an issue as I
-> am able to boot without your patches.
-> Commenting the *_boot_alternatives at both the places works fine as well.
-> 
-> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-> index 0e1bb97f9749..bdeb7ab3e719 100644
-> --- a/arch/riscv/kernel/head.S
-> +++ b/arch/riscv/kernel/head.S
-> @@ -342,7 +342,7 @@ clear_bss_done:
->         call kasan_early_init
->  #endif
->         /* Start the kernel */
-> -       call apply_boot_alternatives
-> +       //call apply_boot_alternatives
->         call soc_early_init
->         tail start_kernel
-> 
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index 7216db5d6a2c..c6bf8f4d3d16 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -819,7 +819,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
->         BUG_ON((kernel_map.virt_addr + kernel_map.size) >
-> ADDRESS_SPACE_END - SZ_4K);
->  #endif
-> 
-> -       apply_early_boot_alternatives();
-> +       //apply_early_boot_alternatives();
->         pt_ops_set_early();
-> 
->         /* Setup early PGD for fixmap */
-> 
-> I am currently debugging it and will let you know if I find the root cause.
-> 
-> > > changes in v6:
-> > > - rebase onto 5.17-rc1
-> > > - handle sbi null-ptr differently
-> > > - improve commit messages
-> > > - use riscv,mmu as property name
-> > >
-> > > changes in v5:
-> > > - move to use alternatives for runtime-patching
-> > > - add D1 variant
-> > >
-> > >
-> > > [0] https://lore.kernel.org/r/20211224211632.1698523-1-atishp@rivosinc.com
-> > > [1] https://lore.kernel.org/r/20220120090918.2646626-1-atishp@rivosinc.com
-> > >
-> > >
-> > > Heiko Stuebner (12):
-> > >   riscv: prevent null-pointer dereference with sbi_remote_fence_i
-> > >   riscv: integrate alternatives better into the main architecture
-> > >   riscv: allow different stages with alternatives
-> > >   riscv: implement module alternatives
-> > >   riscv: implement ALTERNATIVE_2 macro
-> > >   riscv: extend concatenated alternatives-lines to the same length
-> > >   riscv: prevent compressed instructions in alternatives
-> > >   riscv: move boot alternatives to a slightly earlier position
-> > >   riscv: Fix accessing pfn bits in PTEs for non-32bit variants
-> > >   riscv: add cpufeature handling via alternatives
-> > >   riscv: remove FIXMAP_PAGE_IO and fall back to its default value
-> > >   riscv: add memory-type errata for T-Head
-> > >
-> > > Wei Fu (2):
-> > >   dt-bindings: riscv: add MMU Standard Extensions support for Svpbmt
-> > >   riscv: add RISC-V Svpbmt extension support
-> > >
-> > >  .../devicetree/bindings/riscv/cpus.yaml       |  10 ++
-> > >  arch/riscv/Kconfig.erratas                    |  29 ++--
-> > >  arch/riscv/Kconfig.socs                       |   1 -
-> > >  arch/riscv/Makefile                           |   2 +-
-> > >  arch/riscv/errata/Makefile                    |   2 +-
-> > >  arch/riscv/errata/sifive/errata.c             |  10 +-
-> > >  arch/riscv/errata/thead/Makefile              |   1 +
-> > >  arch/riscv/errata/thead/errata.c              |  85 +++++++++++
-> > >  arch/riscv/include/asm/alternative-macros.h   | 114 ++++++++-------
-> > >  arch/riscv/include/asm/alternative.h          |  16 ++-
-> > >  arch/riscv/include/asm/errata_list.h          |  52 +++++++
-> > >  arch/riscv/include/asm/fixmap.h               |   2 -
-> > >  arch/riscv/include/asm/pgtable-32.h           |  17 +++
-> > >  arch/riscv/include/asm/pgtable-64.h           |  79 +++++++++-
-> > >  arch/riscv/include/asm/pgtable-bits.h         |  10 --
-> > >  arch/riscv/include/asm/pgtable.h              |  53 +++++--
-> > >  arch/riscv/include/asm/vendorid_list.h        |   1 +
-> > >  arch/riscv/kernel/Makefile                    |   1 +
-> > >  arch/riscv/{errata => kernel}/alternative.c   |  48 ++++++-
-> > >  arch/riscv/kernel/cpufeature.c                | 136 +++++++++++++++++-
-> > >  arch/riscv/kernel/head.S                      |   2 +
-> > >  arch/riscv/kernel/module.c                    |  29 ++++
-> > >  arch/riscv/kernel/sbi.c                       |  10 +-
-> > >  arch/riscv/kernel/smpboot.c                   |   4 -
-> > >  arch/riscv/kernel/traps.c                     |   2 +-
-> > >  arch/riscv/mm/init.c                          |   1 +
-> > >  26 files changed, 606 insertions(+), 111 deletions(-)
-> > >  create mode 100644 arch/riscv/errata/thead/Makefile
-> > >  create mode 100644 arch/riscv/errata/thead/errata.c
-> > >  rename arch/riscv/{errata => kernel}/alternative.c (59%)
-> > >
-> > > --
-> > > 2.30.2
-> > >
-> > >
-> > > _______________________________________________
-> > > linux-riscv mailing list
-> > > linux-riscv@lists.infradead.org
-> > > http://lists.infradead.org/mailman/listinfo/linux-riscv
-> >
-> >
-> >
-> > --
-> > Regards,
-> > Atish
-> 
-> 
-> 
-> 
-
-
-
-
+What are the next steps here? Do I need to document the component code
+further in kernel-doc? I can add kernel-doc for the things like
+component_match_array and aggregate_device structure and highlight how
+it is different from the aux bus.

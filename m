@@ -2,105 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 340BC4B1E3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:13:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C10084B1E6E
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:14:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343932AbiBKGNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 01:13:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54678 "EHLO
+        id S1344170AbiBKGOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 01:14:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234689AbiBKGNL (ORCPT
+        with ESMTP id S1345814AbiBKGNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 01:13:11 -0500
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D543B25CC;
-        Thu, 10 Feb 2022 22:13:10 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id EBB865801CE;
-        Fri, 11 Feb 2022 01:13:09 -0500 (EST)
-Received: from imap49 ([10.202.2.99])
-  by compute2.internal (MEProxy); Fri, 11 Feb 2022 01:13:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        sladewatkins.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; bh=hw8XwxUa3faDPm
-        MGDrpUyGNrmixSLr/NruIMilhhvks=; b=Zp1KTUo2UhGSqJl4hU3I4HwDC/9OA7
-        v39wkw8ZkjA3pOjLfgklDlMG2O2Fz3sPPqaxDzL3H/X7t/YfLsXmOUpOtVhcreyz
-        1LHZncbepuarcCWvnRgEo6cHtRz0By45eGlG6fEYAKkbS9ftG0xFFBgSpwPf7Q0L
-        xFR1Q24hYgZzbBUd4uOtebhyBQ3qISaLTvscEZmVnqijo4HMpDwiBk78PEvk1zbk
-        yyUk8/Xeto8YaMdrO1Z1lQItCsfg8thL5WrKgceRWH/Gs+3R5UYZ8joO+VAoQD2s
-        0AtsAblVZjcSwXhJxWYdxYUh0LBBCHagXVC3IK6TQ4tKr10yoSLnPEGA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=hw8XwxUa3faDPmMGD
-        rpUyGNrmixSLr/NruIMilhhvks=; b=fCSMWrNGQOrWZFyHY5yPEADcRluciTsxD
-        mjATn1o6uWuDMEg6qw/Wq23dpahaCSVPxoD//PbH5VAuJLd4pXiBI8qJXCM9cGvH
-        wv+YVvjNHMHHJlbF0G/dxTqpbax4ou7w3yNoR/G+2Zw0YegRboImf7SZLFX9ZvJ9
-        AShIPenn7p4/AZSi+kxqgBDf36Vx9KjDZXq+KbC35t5WPlwiJwvttS4k80nDjgAI
-        X/G9sjjljbsoqS3R06yAN/a0kAGIc15/L8VrIo5+rXhcRGoRew+6GkrQEoSCIT62
-        fbZ8mM+WyyuJjNMZ0K7lkLVWur5ofMPS3BNcIvuKxx2/Ii4ECQbaQ==
-X-ME-Sender: <xms:df4FYjyZh97A6Qv9-a7-w-ghdXIbRv2WG1Dj4hTI26lcMgquJPSZzw>
-    <xme:df4FYrRCriZQORvGyXx-uLA6eUipsGpM0sVvW34oChFy61z-huvTqidcQCE4pWWFq
-    YwFQbgLrP5E2G_RKeE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddriedvgdekjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhlrggu
-    vgcuhggrthhkihhnshdfuceoshhlrgguvgesshhlrgguvgifrghtkhhinhhsrdgtohhmqe
-    enucggtffrrghtthgvrhhnpeeuieffteejieetgfevteelheevudehteeihffhteehtdet
-    leegtedtvdevvddugeenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehslhgruggvsehslhgruggvfigrthhkihhnshdrtghomh
-X-ME-Proxy: <xmx:df4FYtV2cJVHovnmE5E2oBW71vbw8FwFgcPE1_VDMoGsi6YvrN_Irw>
-    <xmx:df4FYthi5TJuvABz04O44R0Krp3hR4uwZ5ck0J2T6GeqAnIxGppCdA>
-    <xmx:df4FYlDq3G2npx0CQplopqcKPG0rGlRasRVbvZwDaLfKBkSIYSwlGQ>
-    <xmx:df4FYp6wkltfoJlQC-TyCCYAJQVqOCFG1kSDoKiqVJvKpmhTDgkwJwPcEg0>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A8058F6007E; Fri, 11 Feb 2022 01:13:09 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4748-g31a5b5f50e-fm-cal2020-20220204.001-g31a5b5f5
-Mime-Version: 1.0
-Message-Id: <81f1a5c7-1080-40f7-9716-3111debf7d7a@www.fastmail.com>
-In-Reply-To: <20220209191249.887150036@linuxfoundation.org>
-References: <20220209191249.887150036@linuxfoundation.org>
-Date:   Fri, 11 Feb 2022 01:13:07 -0500
-From:   "Slade Watkins" <slade@sladewatkins.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Fri, 11 Feb 2022 01:13:52 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA4D5F9C
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 22:13:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644560013; x=1676096013;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PmHqyQPi2g+O0hYtOvmp0RaWuS5vyYozzAUJzLC6fcU=;
+  b=ZDhoueLz1yn0T3oXKISIUg3utSKNK52TyRPv35p2HNQ8dG2jnDyxZECP
+   SCZsQko1iWOT91/4V1mNaNa14qkOIYJ8Pvpex6kz/3S+dFWxmtLXV25Ge
+   fzOQH/S2LXEN0FGdEQaH+rT3erFavjuLer1zdzDbY2dzdI5DQbGJUz+mC
+   ILPQ1sJJJEZBA+oDEe3fYXb1yNlq2pFvyOXnTAAdahyTf5Q3DoTuZq+dc
+   LZIDGO3yclKr4X16GlpmikvJZZMGw6B9EIU1muxUZjHXxb/4cgEm/u26S
+   uMwS6/1kPZ1gyK27pqtAbjdfqkv7nuxKEJLoAioCIEQ3u03FTAgX6PAG6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="312952970"
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="312952970"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 22:13:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="679416565"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Feb 2022 22:13:32 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nIPBT-0004DE-Bt; Fri, 11 Feb 2022 06:13:31 +0000
+Date:   Fri, 11 Feb 2022 14:13:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Guenter Roeck" <linux@roeck-us.net>, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        "Pavel Machek" <pavel@denx.de>,
-        "Jon Hunter" <jonathanh@nvidia.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>
-Subject: Re: [PATCH 5.16 0/5] 5.16.9-rc1 review
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: [jlayton:ceph-fscrypt 55/57] net/ceph/messenger.c:1126:16: warning:
+ comparison of distinct pointer types ('typeof (bytes) *' (aka 'unsigned int
+ *') and 'typeof (((1UL) << (12))) *' (aka 'unsigned long *'))
+Message-ID: <202202111436.oS410AKW-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 9, 2022, at 2:14 PM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.9 release.
-> There are 5 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 11 Feb 2022 19:12:41 +0000.
-> Anything received after that time might be too late.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-fscrypt
+head:   adf69efebc954db1aa7af7b93febbc2a1b51dc6c
+commit: 8647843c1c4c4ebffb864d049176b4d847ef3a4b [55/57] libceph: allow ceph_msg_data_advance to advance more than a page
+config: riscv-randconfig-r016-20220211 (https://download.01.org/0day-ci/archive/20220211/202202111436.oS410AKW-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project f6685f774697c85d6a352dcea013f46a99f9fe31)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=8647843c1c4c4ebffb864d049176b4d847ef3a4b
+        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
+        git fetch --no-tags jlayton ceph-fscrypt
+        git checkout 8647843c1c4c4ebffb864d049176b4d847ef3a4b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/cpuidle/ net/ceph/
 
-Compiled and booted 5.16.9-rc1 on my x86_64 test system successfully without errors or regressions.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Slade Watkins <slade@sladewatkins.com>
+All warnings (new ones prefixed by >>):
 
-Thanks,
-Slade
+   net/ceph/messenger.c:178:5: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+                            ntohs(in4->sin_port));
+                            ^~~~~~~~~~~~~~~~~~~~
+   include/linux/byteorder/generic.h:142:18: note: expanded from macro 'ntohs'
+   #define ntohs(x) ___ntohs(x)
+                    ^~~~~~~~~~~
+   include/linux/byteorder/generic.h:137:21: note: expanded from macro '___ntohs'
+   #define ___ntohs(x) __be16_to_cpu(x)
+                       ^~~~~~~~~~~~~~~~
+   include/uapi/linux/byteorder/little_endian.h:43:26: note: expanded from macro '__be16_to_cpu'
+   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
+           (__builtin_constant_p((__u16)(x)) ?     \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/ceph/messenger.c:184:5: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+                            ntohs(in6->sin6_port));
+                            ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/byteorder/generic.h:142:18: note: expanded from macro 'ntohs'
+   #define ntohs(x) ___ntohs(x)
+                    ^~~~~~~~~~~
+   include/linux/byteorder/generic.h:137:21: note: expanded from macro '___ntohs'
+   #define ___ntohs(x) __be16_to_cpu(x)
+                       ^~~~~~~~~~~~~~~~
+   include/uapi/linux/byteorder/little_endian.h:43:26: note: expanded from macro '__be16_to_cpu'
+   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
+           (__builtin_constant_p((__u16)(x)) ?     \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> net/ceph/messenger.c:1126:16: warning: comparison of distinct pointer types ('typeof (bytes) *' (aka 'unsigned int *') and 'typeof (((1UL) << (12))) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+                   size_t cur = min(bytes, PAGE_SIZE);
+                                ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:45:19: note: expanded from macro 'min'
+   #define min(x, y)       __careful_cmp(x, y, <)
+                           ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
+           __builtin_choose_expr(__safe_cmp(x, y), \
+                                 ^~~~~~~~~~~~~~~~
+   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
+                   (__typecheck(x, y) && __no_side_effects(x, y))
+                    ^~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
+           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
+   3 warnings generated.
+
+
+vim +1126 net/ceph/messenger.c
+
+  1122	
+  1123	void ceph_msg_data_advance(struct ceph_msg_data_cursor *cursor, size_t bytes)
+  1124	{
+  1125		while (bytes) {
+> 1126			size_t cur = min(bytes, PAGE_SIZE);
+  1127	
+  1128			__ceph_msg_data_advance(cursor, cur);
+  1129			bytes -= cur;
+  1130		}
+  1131	}
+  1132	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

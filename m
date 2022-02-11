@@ -2,66 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 568034B1A0E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:06:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 898934B1A16
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:07:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346031AbiBKAGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:06:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35944 "EHLO
+        id S1346099AbiBKAHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:07:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242517AbiBKAGW (ORCPT
+        with ESMTP id S1346126AbiBKAHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:06:22 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64954270A
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:06:22 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id j2so20410160ybu.0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:06:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6V1dY7qH4XL0CAYuK2Vnpgq4jGgOMChN5apsqSbEVz4=;
-        b=I4KkwcTzPrUS5XBCJI5mclWxp/zgGo5+AgOEvrnHlHoZoB9A1klt91o4yKWAgYkr92
-         NScV0bFUW+pJxPlfWIgg+G6HQnWRbd1MMGot90IFSMfkJzq2qZZyJGk4Zl876Cu60n4F
-         D/n/731FNUlaCnhgn6fjzIILLjhiyldwlz9Sl3/P9rcNYmABUjdR6mz2OIcoEryA4Hop
-         3IxObDYSSEez3eHVT0QhkMY0vjTrGGPnlkoRIk/rJoQw7A8hkIr0oxoK5PmtkdgRZ+8S
-         p/7ThnZyIEVN3rzhj6HoORXIWDc7k7Oc5RnCUHvqGrxujkXTP3leAkGk/GY+ABX4VFth
-         OD1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6V1dY7qH4XL0CAYuK2Vnpgq4jGgOMChN5apsqSbEVz4=;
-        b=d7YuJh833Wq7OKBlttm1PZE084HfbGcPhyEL5EGMBHjmQ1+dlctw4KnYrz/PoviodG
-         D8P5dUEB/VvTuCaTy6wgdXomSSDmTLKXP8NjlF6bFUOm9sTngtYdqEcRpp57h+z/dTm8
-         PRUlsRkLD126pWJQ7bBo3r+V5npZe4uEwd+uJrSkTO0VV+QeDbLAW6pHx4946ukSn1R4
-         Z1Kzzv9m1BtofzAIaj0BtftWG5nZi9HzbE93FsvlxZ4PA55jPwW1qOPVC7AqhNR7mHVR
-         0DAalTPIXSmGw/XiUXphujCjC1ZgrzJD44wqDcgG8TUXKLXmEps8MmmvxcTtus2aT8a1
-         ogIg==
-X-Gm-Message-State: AOAM530EpXz8sIIpEZbWuQPxMgqCxgVzgHQ2RGXOYDMZTqx8SfuzXIKg
-        qNe9yHytrqvyXFYlwFYBmwS7U520rIpSmDFOf2nPEw==
-X-Google-Smtp-Source: ABdhPJz+jjvVDAMnJAeqVCkF3QOXGnhLDGmaiuRR3lJzsVoxuZ87a7x5HWn4GRjaO1r1yECcDxpqMOwKzaMCxaaBxLU=
-X-Received: by 2002:a0d:f903:: with SMTP id j3mr9686393ywf.118.1644537981686;
- Thu, 10 Feb 2022 16:06:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20220112194118.178026-1-luca@z3ntu.xyz> <20220112194118.178026-9-luca@z3ntu.xyz>
-In-Reply-To: <20220112194118.178026-9-luca@z3ntu.xyz>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 11 Feb 2022 01:06:10 +0100
-Message-ID: <CACRpkdZCdEGdAPXfNsFxN+mH=J8-23Hdq+EXp=uuihwiqjbufw@mail.gmail.com>
-Subject: Re: [PATCH 08/15] dt-bindings: pinctrl: qcom: msm8953: allow gpio-reserved-ranges
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Thu, 10 Feb 2022 19:07:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEAD270A;
+        Thu, 10 Feb 2022 16:07:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28D6BB827DC;
+        Fri, 11 Feb 2022 00:07:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E86C3C004E1;
+        Fri, 11 Feb 2022 00:07:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644538034;
+        bh=fJnsFUrYP3Dw+LYdPUUB3Db1DAxhyValeRchLkMaP4s=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Sz+OT0GsaIS2mk5D2QiYDaLXr6RlIr3N6n3VHoO+OFiQ6Ez+ACuNptCOD4hBlg9KY
+         HDCIPkzeK8zOj+kW4BOXCZKOP3xxDWiUNC1fV/8SLIP0HwoJvHhPzONlza5hPqsAXb
+         a2eF4O44lv0+pqVT0C3s2U+dRB+xEowsugxMjs8xQv6rzwuDI3WdSB1FqOBI5eV16Z
+         MpkdEID+AA+pvLhQx/HZIbV2/Af7gLEDX99c84yRYXJPRVeHSj9CK4s/NCD0uYmmQo
+         I0Djnzzi6M5n3ZRdUyxMwBn0sr2FAm3qm9O1fcFixPrPtpus+OQnxtK9nonqr9brlF
+         ZxpvQQX6ujcUQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D34B1E6D447;
+        Fri, 11 Feb 2022 00:07:13 +0000 (UTC)
+Subject: Re: [GIT PULL] Networking for 5.17-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220210203258.2596078-1-kuba@kernel.org>
+References: <20220210203258.2596078-1-kuba@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220210203258.2596078-1-kuba@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.17-rc4
+X-PR-Tracked-Commit-Id: 51a04ebf21122d5c76a716ecd9bfc33ea44b2b39
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f1baf68e1383f6ed93eb9cff2866d46562607a43
+Message-Id: <164453803386.1838.3327470308962393028.pr-tracker-bot@kernel.org>
+Date:   Fri, 11 Feb 2022 00:07:13 +0000
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,14 +62,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 12, 2022 at 8:42 PM Luca Weiss <luca@z3ntu.xyz> wrote:
+The pull request you sent on Thu, 10 Feb 2022 12:32:58 -0800:
 
-> Allow the gpio-reserved-ranges property to be used in dts.
->
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.17-rc4
 
-This patch applied to the pinctrl tree.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f1baf68e1383f6ed93eb9cff2866d46562607a43
 
-Yours,
-Linus Walleij
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

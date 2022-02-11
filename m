@@ -2,71 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7094B300B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 23:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F13414B3037
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 23:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353926AbiBKWF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 17:05:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37970 "EHLO
+        id S1354003AbiBKWO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 17:14:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353942AbiBKWF1 (ORCPT
+        with ESMTP id S235316AbiBKWO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 17:05:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E905CD3
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 14:05:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBD02611D1
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 22:05:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A59DC340E9;
-        Fri, 11 Feb 2022 22:05:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1644617124;
-        bh=XZxFtq91HVzLBZH6xp0D5spzcV3vgAheiQj938eNV+w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fXTuwTxuEhcqJBoInAB0ySvn5O7z/o1wPMzUwmhn2osAMoQXdx7TZkyPc7YZCkIEI
-         Daw5yAroeUoZdshqxSh4j8N80tbhv/pj8owfET1Eq/VNHFaACVzXGJZZMY/MRUiu2K
-         HjPRmbKlf1s5qT3AAGpXI1gjCOp1JnzNg62AlZt0=
-Date:   Fri, 11 Feb 2022 14:05:23 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH] container_of.h: make container_of const-aware
-Message-Id: <20220211140523.738c14327b03647f535c4df8@linux-foundation.org>
-In-Reply-To: <20220210170434.3924169-1-dmitry.baryshkov@linaro.org>
-References: <20220210170434.3924169-1-dmitry.baryshkov@linaro.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
+        Fri, 11 Feb 2022 17:14:56 -0500
+X-Greylist: delayed 524 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 14:14:54 PST
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8ADDD42
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 14:14:54 -0800 (PST)
+Received: from [2603:3005:d05:2b00:6e0b:84ff:fee2:98bb] (helo=imladris.surriel.com)
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1nIe3F-0004nV-QK; Fri, 11 Feb 2022 17:06:01 -0500
+Date:   Fri, 11 Feb 2022 17:05:57 -0500
+From:   Rik van Riel <riel@surriel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     kernel-team@fb.com, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: [PATCH] mm: clean up hwpoison page cache page in fault path
+Message-ID: <20220211170557.7964a301@imladris.surriel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: riel@shelob.surriel.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Feb 2022 20:04:34 +0300 Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
+Sometimes the page offlining code can leave behind a hwpoisoned clean
+page cache page. This can lead to programs being killed over and over
+and over again as they fault in the hwpoisoned page, get killed, and
+then get re-spawned by whatever wanted to run them.
+    
+This is particularly embarrassing when the page was offlined due to
+having too many corrected memory errors. Now we are killing tasks
+due to them trying to access memory that probably isn't even corrupted.
+    
+This problem can be avoided by invalidating the page from the page
+fault handler, which already has a branch for dealing with these
+kinds of pages. With this patch we simply pretend the page fault
+was successful if the page was invalidated, return to userspace,
+incur another page fault, read in the file from disk (to a new
+memory page), and then everything works again.
+    
+Signed-off-by: Rik van Riel <riel@surriel.com>
 
-> container_of() macro has one major drawback. It does not check whether
-> the passed ptr has a const pointer, the result will always be a
-> non-const pointer. Use a _Generic() construct (supported since gcc 4.9
-> and Clang 3.0) to teach container_of that if converting a const pointer,
-> the returned pointer should also have the const modifier.
-> 
+diff --git a/mm/memory.c b/mm/memory.c
+index c125c4969913..2300358e268c 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -3871,11 +3871,16 @@ static vm_fault_t __do_fault(struct vm_fault *vmf)
+ 		return ret;
+ 
+ 	if (unlikely(PageHWPoison(vmf->page))) {
+-		if (ret & VM_FAULT_LOCKED)
++		int poisonret = VM_FAULT_HWPOISON;
++		if (ret & VM_FAULT_LOCKED) {
++			/* Retry if a clean page was removed from the cache. */
++			if (invalidate_inode_page(vmf->page))
++				poisonret = 0;
+ 			unlock_page(vmf->page);
++		}
+ 		put_page(vmf->page);
+ 		vmf->page = NULL;
+-		return VM_FAULT_HWPOISON;
++		return poisonret;
+ 	}
+ 
+ 	if (unlikely(!(ret & VM_FAULT_LOCKED)))
 
-Nice idea, but my x86_64 allnoconfig build explodes with zillions of
-warnings.
 
-In file included from ./include/linux/list.h:5,
-                 from ./include/linux/module.h:12,
-                 from init/do_mounts.c:2:
-./include/net/sock.h: In function 'sk_entry':
-./include/linux/container_of.h:17:42: warning: return discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-
+-- 
+All rights reversed.

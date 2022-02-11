@@ -2,156 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C95BB4B1A3A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BFF4B1A3F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346203AbiBKAO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:14:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49386 "EHLO
+        id S1346222AbiBKAPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:15:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346196AbiBKAO0 (ORCPT
+        with ESMTP id S1346214AbiBKAPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:14:26 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B8E272E;
-        Thu, 10 Feb 2022 16:14:25 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id w20so3266365plq.12;
-        Thu, 10 Feb 2022 16:14:25 -0800 (PST)
+        Thu, 10 Feb 2022 19:15:37 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017F22735
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:15:38 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id 192so20182950ybd.10
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:15:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9fDAF8X8Fc16BM/UGlkxTgN+MKXCULAYOKP8eqzMERk=;
-        b=dBIv+vQgH8sLnxQcKrIIiMMmHs2a93SjcNMIG0txbKJAxMwZShzuAIGy+6osS/9eYh
-         3quuI2z1PaGEcJ4vJ/Q06qdYJ6nur0HMtKfgZJKgW7Hvgl782TVmTF0uzewIvKL8vlNM
-         imw1QH16+a4mH9J63KyEayApZhtzrt6GbDvCtHKMBrA2J2Q/ux5AnLSF6TfJgNw1A4Bn
-         0fyIe/EAQfpr0VhavoJFwZoVHexxT6w3vcXBCKWkUE93DunAAHU+mErcEhQaGshSAixx
-         Qak7LtHPk2HQdcvG86KTiz1e7e4LhSyo9RH28WOEDI+4wQDtmZ1OmNl83fTo4GknVThk
-         RhAw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E7OoL04aP+MZeQy8gEUASlkgu2toqHuHNgEWJOzWKkI=;
+        b=STyD92iMRI0ITMeRrZZIgrsOTqWv1OtmvKboQgkN8aHCeb6qmGBZytZN5kIu8+b5AB
+         FM95HInfiaDAapUiv/80ZCTLvpJgeTC/hvl1gCpJ08wK35dPxUz2ctLpohgB7m3nIj0Y
+         WmO+83UiTjZSSEygrYn1m1c2lMnsa1k7yzX57aoMAgU82rQg1S9T46OlWV3M8urvhhGD
+         7okaYEU+fobCrAf3l6IwhUznoZR4ZQdjP7Z8hsI0Nar2PJGrmalR7C581w0B/kPRqvQ7
+         k8tgqGsGgyRu+J7ohCT3R4zi1SdWCWAyUAolivGpxAaxiG376F6K5TYtIjaM4xR+ZN9c
+         SAfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9fDAF8X8Fc16BM/UGlkxTgN+MKXCULAYOKP8eqzMERk=;
-        b=3sWy8QLiRzhU4AIZ6RvxpFs0xAoi/aRnsziZ079BLkDgcMqzt/+vH9ohszgog579sz
-         rANmUJxFApPtoivxHdDRuaAGNPct8o+EyAU4yv6fzIlAYVHNI3NbOaDGUes5yYo0QEvs
-         VhB+iKbZWS61Ly61CG/D8QgF5JMqEGykYM/m5J+5XRmrpMlBzL6OpIAWf4alWBgbMkQy
-         K12tqhg2txKocRlRv9KS4xbh8zN8lh6xt3j/kRpHs4CRrTX3uHhv+340mrMjos17wKd2
-         7IW8vG/cU3ISvtGu14/ZO3mT45pdBrIlkNXwVjI2E0yHKXyV9b+TDdhHopJimASKfwhy
-         Q6Hg==
-X-Gm-Message-State: AOAM530z6DbinQbZbkCXDZmiBqMf51nvnOczS9uSbsLQgnRiyOJKjPFx
-        7cd1axA0XHAu/CCOpUVpB7p3YSybHD8L4448m6c=
-X-Google-Smtp-Source: ABdhPJyTW1FzA/TJ0begPk8qu38cqR9Y8WG85GOzhLikIoWO5rSMey4rPwSgG3ZC8JXPYfcazfkUtQ==
-X-Received: by 2002:a17:90b:1d84:: with SMTP id pf4mr5403535pjb.106.1644538465112;
-        Thu, 10 Feb 2022 16:14:25 -0800 (PST)
-Received: from guoguo-omen.lan ([240e:379:96b:fc59:8af:1020:18bc:afc2])
-        by smtp.gmail.com with ESMTPSA id h6sm25553351pfc.96.2022.02.10.16.14.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 16:14:24 -0800 (PST)
-From:   Chuanhong Guo <gch981213@gmail.com>
-To:     linux-mips@vger.kernel.org
-Cc:     Chuanhong Guo <gch981213@gmail.com>,
-        Rui Salvaterra <rsalvaterra@gmail.com>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: ralink: mt7621: do memory detection on KSEG1
-Date:   Fri, 11 Feb 2022 08:13:44 +0800
-Message-Id: <20220211001345.3429572-1-gch981213@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E7OoL04aP+MZeQy8gEUASlkgu2toqHuHNgEWJOzWKkI=;
+        b=6YQX1J82Ez52nlzYnCkQnI9Z7sjITxXlHjDJ726d2nOACAz/HJQi6+TVTKIC2nYxz6
+         f3mytEGdhX2jn6HUptdkYOPoPkOW5vzw2ps/KFp509BIeHBa5DKmHYpvb/G5wl30aTy9
+         WnFjx5ue3mvvrcjaGImYgxzftOiy+KMrfderBS3DIV2hJxxw23Xw0Y1Hd6QMdGB3Gjhv
+         k+n881mpLGRXXTKv0h0dp2M98AbPhurgRNq3qcIVw4neKQaotrS0YjECzxcfA1vIL8UJ
+         WtJ4bObD4jRLM3hd5hg8v1MPWH+0DYxz2u7qtK7WMbYE8qV8RjNzTEeibiBWyQAPoewI
+         495g==
+X-Gm-Message-State: AOAM5323Zb12GhfIFETJhJK9l/EhOC90bve9sFiBl8qK9ntA4/k83e3O
+        z1rzentQo01Z62Dlr1VBb7Oa/s48OgMNHTlTVJB52Q==
+X-Google-Smtp-Source: ABdhPJy/Q5Zr/NTFpZq1apn9uDiuLsg2WFOhJqeZ3lViKWsIgjSwTxtM1oZy17C+JIqGLVdKS7iawzFxAzRAsAjiNVk=
+X-Received: by 2002:a25:103:: with SMTP id 3mr9355820ybb.110.1644538537279;
+ Thu, 10 Feb 2022 16:15:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220209162607.1118325-1-maz@kernel.org> <20220209162607.1118325-11-maz@kernel.org>
+ <CANBLGcwKeLn7Q1Ra8pCw=cXy=kJeEFRmBjOxjds10+k70LvzXA@mail.gmail.com> <87zgmz3xbf.wl-maz@kernel.org>
+In-Reply-To: <87zgmz3xbf.wl-maz@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 11 Feb 2022 01:15:25 +0100
+Message-ID: <CACRpkdbo4seF6t6iFgKhaTZ_PKMdCt+2gSmdCaM+vDeHGZfHcQ@mail.gmail.com>
+Subject: Re: [PATCH 10/10] pinctrl: starfive: Switch to dynamic chip name output
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Emil Renner Berthing <kernel@esmil.dk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's reported that current memory detection code occasionally detects
-larger memory under some bootloaders.
-Current memory detection code tests whether address space wraps around
-on KSEG0, which is unreliable because it's cached.
+On Thu, Feb 10, 2022 at 10:06 AM Marc Zyngier <maz@kernel.org> wrote:
+> On Wed, 09 Feb 2022 23:30:55 +0000,
+> Emil Renner Berthing <kernel@esmil.dk> wrote:
 
-Rewrite memory size detection to perform the same test on KSEG1 instead.
-While at it, this patch also does the following two things:
-1. use a fixed pattern instead of a random function pointer as the magic
-   value.
-2. add an additional memory write and a second comparison as part of the
-   test to prevent possible smaller memory detection result due to
-   leftover values in memory.
+> > The gpio framework seems to fill in default handlers in the struct
+> > above, so unfortunately it can't yet be made const. Is this something
+> > you intend to fix in the future?
+>
+> This is next on my list of things to address. The whole 'let's copy a
+> whole irqchip structure and hijack random pointers' should not have
+> happened, and it certainly is going to be an interesting ride.
 
-Fixes: 139c949f7f0a MIPS: ("ralink: mt7621: add memory detection support")
-Reported-by: Rui Salvaterra <rsalvaterra@gmail.com>
-Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
----
- arch/mips/ralink/mt7621.c | 36 +++++++++++++++++++++++-------------
- 1 file changed, 23 insertions(+), 13 deletions(-)
+Sorry about that... Probably my bad idea. The only upside is that the
+things that are ugly are centralized to one spot.
 
-diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
-index d6efffd4dd20..12c8808e0dea 100644
---- a/arch/mips/ralink/mt7621.c
-+++ b/arch/mips/ralink/mt7621.c
-@@ -22,7 +22,9 @@
- 
- #include "common.h"
- 
--static void *detect_magic __initdata = detect_memory_region;
-+#define MT7621_MEM_TEST_PATTERN         0xaa5555aa
-+
-+static u32 detect_magic __initdata;
- 
- int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
- {
-@@ -58,24 +60,32 @@ phys_addr_t mips_cpc_default_phys_base(void)
- 	panic("Cannot detect cpc address");
- }
- 
-+static bool __init mt7621_addr_wraparound_test(phys_addr_t size)
-+{
-+	void *dm = (void *)KSEG1ADDR(&detect_magic);
-+
-+	if (CPHYSADDR(dm + size) >= MT7621_LOWMEM_MAX_SIZE)
-+		return true;
-+	__raw_writel(MT7621_MEM_TEST_PATTERN, dm);
-+	if (__raw_readl(dm) != __raw_readl(dm + size))
-+		return false;
-+	__raw_writel(!MT7621_MEM_TEST_PATTERN, dm);
-+	return __raw_readl(dm) == __raw_readl(dm + size);
-+}
-+
- static void __init mt7621_memory_detect(void)
- {
--	void *dm = &detect_magic;
- 	phys_addr_t size;
- 
--	for (size = 32 * SZ_1M; size < 256 * SZ_1M; size <<= 1) {
--		if (!__builtin_memcmp(dm, dm + size, sizeof(detect_magic)))
--			break;
-+	for (size = 32 * SZ_1M; size <= 256 * SZ_1M; size <<= 1) {
-+		if (mt7621_addr_wraparound_test(size)) {
-+			memblock_add(MT7621_LOWMEM_BASE, size);
-+			return;
-+		}
- 	}
- 
--	if ((size == 256 * SZ_1M) &&
--	    (CPHYSADDR(dm + size) < MT7621_LOWMEM_MAX_SIZE) &&
--	    __builtin_memcmp(dm, dm + size, sizeof(detect_magic))) {
--		memblock_add(MT7621_LOWMEM_BASE, MT7621_LOWMEM_MAX_SIZE);
--		memblock_add(MT7621_HIGHMEM_BASE, MT7621_HIGHMEM_SIZE);
--	} else {
--		memblock_add(MT7621_LOWMEM_BASE, size);
--	}
-+	memblock_add(MT7621_LOWMEM_BASE, MT7621_LOWMEM_MAX_SIZE);
-+	memblock_add(MT7621_HIGHMEM_BASE, MT7621_HIGHMEM_SIZE);
- }
- 
- void __init ralink_of_remap(void)
--- 
-2.34.1
-
+Yours,
+Linus Walleij

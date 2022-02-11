@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBAE14B2683
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:54:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 562C74B2686
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350363AbiBKMxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 07:53:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56162 "EHLO
+        id S1350326AbiBKMym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 07:54:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350360AbiBKMxd (ORCPT
+        with ESMTP id S244509AbiBKMyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 07:53:33 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A6DE62
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:53:32 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id i34so16399506lfv.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:53:32 -0800 (PST)
+        Fri, 11 Feb 2022 07:54:38 -0500
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EEBE5E
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:54:37 -0800 (PST)
+Received: by mail-oo1-xc2a.google.com with SMTP id p190-20020a4a2fc7000000b0031820de484aso10123015oop.9
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:54:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=swiecki.net; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=HeUXG/zAHXDhKnRgHynhqcN3oTgfihFwSnaqKBQhHAY=;
-        b=hJsVC6/8BOKl9j0kcNoT+u3oj69fku4ThvVdDApzZNeN0VsguxOaXUtxMWrzTN/4iy
-         Zkw9YNFUubF6wbjLQCCIGxKNZJlN56D03cmgLPz8PmIhkbild7zc6FIZ4Fg7uChhFCSm
-         Pwtlsa/ciT+IwwIBcybwQw96AqVKAliyRVcAdsSVdQL5oFXsX81/B1DYEsD5yEodl0jV
-         DZtjbrZYW7KFS7ZgClSDkKP8BSnagPNrRpLwNmYDwd/hf7kM6kqprA9wGWTcTN2L2H87
-         2GkU0aMyPpgDJw3A6carTLEeEmfe5o2u4HaSKjyrOwhKppWtvp2VYs7bJm1zyoMxbf8L
-         1z7g==
+         :cc;
+        bh=6ARFSsbWyOdD6EMO2DQy2Ws/csG1j53wTkmfHHdDFXY=;
+        b=Jkshpjqe1FTAHoJawiFQhz9yzN0NpI9FvO/qjTRn08FgZgcQ5HA+Ush/Ai2Vyzbdn+
+         rCSlVh4dWpG6MiPoiRYhkDDaZTqOQOUJUnKkO71u8+Gg4+x25NOgSS5214ix2N2FyxH6
+         qFYkARezeP6Oy8q3v726X20mHNEIXMs36eI/o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HeUXG/zAHXDhKnRgHynhqcN3oTgfihFwSnaqKBQhHAY=;
-        b=WCMlkyJBGv36nSEm8Ynry7yLanCENnEMpotFVgJ8oDGPHOgWUMpAFtu0ZwRE3c9rdK
-         h/5xWaZIpMsEA7GZX++si1oNo8aQr52QLMMzkcKmPhMK28gzbT/LdrKrO/q79ffetTM7
-         r7cFDeXxzHt+C9aQvHH0/mN10f+FS6gZo3oFjcdHLZWYCZoRKvx8ep5GujMADxFn5MAM
-         F0vY0D7K20B6VffITqkR33vKcqf45IcK444mQGvQqgURZNc06r9VksxoWAGHqsOKE5Up
-         Ttrm3YG8+P0ZQRkz7sirRhEWGfgnqzhVJrT4TzxXEJexb7C9IuJ1ag8F1PlbejpFI6Sz
-         ithw==
-X-Gm-Message-State: AOAM530+32Uv2c7DhKV45Izm8bqHD4qfCm9nNkxqy9i5Zg8jJu4vrYzW
-        wgImBZagMsXZlsPMXXAO9Nb/WeZjHVAbp+UQQoTAig==
-X-Google-Smtp-Source: ABdhPJydaTxnrzMaWAYDCxiukFYx4B5EuZnJYoUhf1LLpPRdkKI8SwjczRNFDSCvL8NTM3YLYjWlmY4Z5Mb90aCl2Wg=
-X-Received: by 2002:a05:6512:3b9a:: with SMTP id g26mr1130306lfv.71.1644584010394;
- Fri, 11 Feb 2022 04:53:30 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=6ARFSsbWyOdD6EMO2DQy2Ws/csG1j53wTkmfHHdDFXY=;
+        b=fSJYUzc+2ED8J3f3pHzFNOQTSrGVVLLH0o0IStvwSn0pO7TmzWKjcKwDL58ICV1362
+         TvYVTbZAMj/zIMyvdjGOO9AMUDQNKsBXYENgL1AatJzH647wWGe5ovwJMUsUEvkTbsG+
+         QuIIuALvrKRE+kljn5pvDRRkZnEAEJ81knGRMAxpAu9xDn/tKK6X+AqEW68PQyvaKkpK
+         +8XBBE2j27EL/9lVmSWZ0btMoa6/CoAaPQv2CswZfFREk9DjxSRmKZpMyKlLwQpn3Dpm
+         Y8EBkXPpbNXlbDBRpfNQi1MXrzIH4j+QuR6//8JNzY3zBVT4SFN8rpnCogNDPS/VPnw5
+         2Zmg==
+X-Gm-Message-State: AOAM531C4izpK5LCym6eHEXpaFhFbnCsN60a2fgzsE0EEUpnFxIwuYuH
+        cSewte/WzZwzrUTKpIxtOkvU7YPxl8aMZovWjp/8YA==
+X-Google-Smtp-Source: ABdhPJycTC6S1obSOSqlJkcCCMqLgeX+Z0N2ENm2rG5bJFgvf8vbjfUK0WI9KAZNGfsCwuNWO3LYwP7aBsccMpeLNeE=
+X-Received: by 2002:a05:6870:8c13:: with SMTP id ec19mr71565oab.262.1644584077154;
+ Fri, 11 Feb 2022 04:54:37 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1644398657.git.tonyhuang.sunplus@gmail.com>
- <f8b89f9981e17c023ce530afedb1f2b599edec0f.1644398657.git.tonyhuang.sunplus@gmail.com>
- <YgQQ2nJa12xblXBX@robh.at.kernel.org> <40d202104eec46d2a35445e0128a124f@sphcmbx02.sunplus.com.tw>
-In-Reply-To: <40d202104eec46d2a35445e0128a124f@sphcmbx02.sunplus.com.tw>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 11 Feb 2022 13:52:54 +0100
-Message-ID: <CAPDyKFqPcpVr-JZF-9-4Jxq9fbsVbLYsh8TjEJffRfueczq=uQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-binding: mmc: Add mmc yaml file for Sunplus SP7021
-To:     =?UTF-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     Tony Huang <tonyhuang.sunplus@gmail.com>,
-        "lhjeff911@gmail.com" <lhjeff911@gmail.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        =?UTF-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.kuo@sunplus.com>
+References: <20220210025321.787113-1-keescook@chromium.org>
+ <871r0a8u29.fsf@email.froward.int.ebiederm.org> <202202101033.9C04563D9@keescook>
+ <87pmnu5z28.fsf@email.froward.int.ebiederm.org> <202202101137.B48D02138@keescook>
+ <87k0e249tt.fsf@email.froward.int.ebiederm.org> <202202101710.668EDCDC@keescook>
+ <875ypm41kb.fsf@email.froward.int.ebiederm.org> <202202101827.4B16DF54@keescook>
+In-Reply-To: <202202101827.4B16DF54@keescook>
+From:   =?UTF-8?B?Um9iZXJ0IMWad2nEmWNraQ==?= <robert@swiecki.net>
+Date:   Fri, 11 Feb 2022 13:54:26 +0100
+Message-ID: <CAP145phAg3ZSPJw7x2kKVQe86puy-XyKatVoByVoM27RP4aw_g@mail.gmail.com>
+Subject: Re: [PATCH 0/3] signal: HANDLER_EXIT should clear SIGNAL_UNKILLABLE
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,81 +68,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Feb 2022 at 09:56, Tony Huang =E9=BB=83=E6=87=B7=E5=8E=9A <tony.=
-huang@sunplus.com> wrote:
+> It's mainly about the exit stuff having never been run before on these
+> kinds of process states, so things don't make sense. For example, on the
+> SIGSYS death, the registers have been rewound for the coredump, so when
+> the exit trace runs on x86 it sees the syscall return value as equal to
+> the syscall number (since %rax is used for the syscall number on entry
+> and for the syscall result on exit). So when a tracer watches a seccomp
+> fatal SIGSYS, it sees the syscall exit before it sees the child exit
+> (and therefore the signal). For example, x86_64 write (syscall number
+> 1), will return as if it had written 1 byte. :P
 >
-> Dear Robh:
+> So, it's not harmful, but it's confusing and weird. :)
 >
-> > Subject: Re: [PATCH v3 1/2] dt-binding: mmc: Add mmc yaml file for Sunp=
-lus
-> > SP7021
-> >
-> > On Wed, Feb 09, 2022 at 06:41:06PM +0800, Tony Huang wrote:
-> > > Add mmc yaml file for Sunplus SP7021
-> > >
-> > > Signed-off-by: Tony Huang <tonyhuang.sunplus@gmail.com>
-> > > ---
-> > > Changes in v3:
-> > >  - combine sdcard and eMMC into one driver.
-> > >
-> > >  .../devicetree/bindings/mmc/sunplus-mmc.yaml       | 76
-> > ++++++++++++++++++++++
-> > >  MAINTAINERS                                        |  6 ++
-> > >  2 files changed, 82 insertions(+)
-> > >  create mode 100644
-> > > Documentation/devicetree/bindings/mmc/sunplus-mmc.yaml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/mmc/sunplus-mmc.yaml
-> > > b/Documentation/devicetree/bindings/mmc/sunplus-mmc.yaml
-> > > new file mode 100644
-> > > index 0000000..8f44d13
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/mmc/sunplus-mmc.yaml
-> > > @@ -0,0 +1,76 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) # Copyrigh=
-t
-> > > +(C) Sunplus Ltd. Co. 2021 %YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/mmc/sunplus-mmc.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: sunplus MMC controller
-> > > +
-> > > +allOf:
-> > > +  - $ref: "mmc-controller.yaml"
-> > > +
-> > > +maintainers:
-> > > +  - Tony Huang <tonyhuang.sunplus@gmail.com>
-> > > +  - Li-hao Kuo <lhjeff911@gmail.com>
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - sunplus,sp7021-emmc
-> > > +      - sunplus,sp7021-sdhci
-> >
-> > Why are these still different? Looking at the driver, it seems the sett=
-ings are
-> > the same for both. And for clock speeds, we have properties to control =
-them as
-> > they can be board specific.
-> >
+> > I am trying to figure out if there is a case to be made that it was a
+> > bug that these events were missing.
 >
-> The register base address of emmc and sd card are different.
-> eMMC and sdcard are individual hardware settings
+> I don't think so -- the syscall did not finish, so there isn't a valid
+> return code. The process exited before it completed.
 
-When I looked at the previous version of the driver(s) that was
-posted, I got the impression that you have some registers in the
-controller that are specific for eMMC, SD or SDIO.
+A tangential point: please ignore for the purpose of fixing the
+problem at hand. I'm mostly making it, in case it can be taken into
+account in case some bigger changes to this code path are to be made -
+given that it touches the problem of signal delivery.
 
-So, depending on how the controller is going to be used (for eMMC, SD
-or SDIO) it's needs to be configured differently. Right?
+When I noticed this problem, I was looking for a way to figure out
+what syscall caused SIGSYS (via SECCOMP_RET_KILL_*), and there's no
+easy way to do that programmatically from the perspective of a parent
+process. There are three ways of doing this that come to mind.
 
-If I got this right, I think you can instead use the existing common
-DT properties, "no-sd", "no-sdio", "no-mmc" to explain how each
-controller is configured.
+1). Keep reference to /proc/<child>/syscall and read it upon process
+exiting by SIGSYS (and reading it with wait/id(WNOWAIT) from parent).
+This used to work a long time ago, but was racy (I reported this
+problem many years ago), and currently only -1 0 0 is returned (as in,
+no syscall in progress).
+2). Use ptrace - it works but it changes the logic of the signal
+delivery inside a traced process and requires non-trivial code to make
+it work correctly: use of PT_INTERRUPT, understanding all signal
+delivery events, registers and their mapping to syscall arguments per
+CPU arch.
+3). auditd will print details of failed syscall to kmsg, but the
+string is not very structured, and auditd might not be always present
+inside kernels. And reading that data via netlink requires root IIRC.
 
-Does this make sense to you?
-
-Kind regards
-Uffe
+I think it'd be good to have some way of doing it from the perspective
+of a parent process - it'd simplify development of sandboxing managers
+(eg nsjail, minijail, firejail), and creation of good seccomp
+policies.

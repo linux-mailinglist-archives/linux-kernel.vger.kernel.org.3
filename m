@@ -2,182 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 160E64B2508
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:58:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B92C4B2533
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbiBKL5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 06:57:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45538 "EHLO
+        id S1347492AbiBKMGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 07:06:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349762AbiBKL53 (ORCPT
+        with ESMTP id S234432AbiBKMGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 06:57:29 -0500
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4178F6C;
-        Fri, 11 Feb 2022 03:57:13 -0800 (PST)
-HMM_SOURCE_IP: 10.64.8.31:58202.55775679
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-123.150.8.43 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id A2F6C10013E;
-        Fri, 11 Feb 2022 19:57:10 +0800 (CST)
-Received: from  ([123.150.8.43])
-        by gateway-153622-dep-749df8664c-cv9r2 with ESMTP id 08b197ad565642579980e12aa57bf63f for johan@kernel.org;
-        Fri, 11 Feb 2022 19:57:12 CST
-X-Transaction-ID: 08b197ad565642579980e12aa57bf63f
-X-Real-From: chensong_2000@189.cn
-X-Receive-IP: 123.150.8.43
-X-MEDUSA-Status: 0
-Sender: chensong_2000@189.cn
-From:   Song Chen <chensong_2000@189.cn>
-To:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
-        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
-        lee.jones@linaro.org, greybus-dev@lists.linaro.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org
-Cc:     Song Chen <chensong_2000@189.cn>
-Subject: [PATCH v2] staging: greybus: introduce pwm_ops::apply
-Date:   Fri, 11 Feb 2022 20:02:27 +0800
-Message-Id: <1644580947-8529-1-git-send-email-chensong_2000@189.cn>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Fri, 11 Feb 2022 07:06:17 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5866F65;
+        Fri, 11 Feb 2022 04:06:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644581176; x=1676117176;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=oPJ3HrbBkuSthMTs0EG6JJSdCgStR5rAPs5DdmwBg3c=;
+  b=Yk+/i2VuJC1i8OUxoy1XV8p+tD2QHhzMvAf6SrqtTFYGWnrDrB6gCdgb
+   anhb4py3iX4Gcbav18+Rshi+iardKcZklyEHUNf2fUYDQLh7KpYdfpeZS
+   s8w6R4r/ZCOqj2TVGkfI25VADPus25bfEaml5em2xcDxBQDmWH/gKNebO
+   tVx9r2xCltZi/AtfZpc0kZJIulbnmpc+0hFEVjXIwF4PU7Rz3RdgLjbwz
+   CAj7ROjcDDL25f0l71HLHwTezzkEmOqGp3TPJ6Wc9xSZu+kbtpnYWsyoV
+   NHyPIsFElT4ZzHLVrIe/0IHhAUPm38IJ7oJUP9J6OKBEJFy9OqixC4mcE
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="313001726"
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="313001726"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 04:06:02 -0800
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="526937460"
+Received: from rriverox-mobl.ger.corp.intel.com (HELO localhost) ([10.252.19.108])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 04:05:58 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-fbdev@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Sam Ravnborg <sam@ravnborg.org>
+Subject: Re: [PATCH v4 1/6] drm/format-helper: Add
+ drm_fb_xrgb8888_to_gray8_line()
+In-Reply-To: <7560cd10-0a7c-3fda-da83-9008833e3901@suse.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220211091927.2988283-1-javierm@redhat.com>
+ <20220211091927.2988283-2-javierm@redhat.com>
+ <YgY6OqN+guBlt/ED@smile.fi.intel.com>
+ <4fa465d9-4fac-4199-9a04-d8e09d164308@redhat.com>
+ <YgZEuXvJ2ZiOyNS+@smile.fi.intel.com>
+ <7560cd10-0a7c-3fda-da83-9008833e3901@suse.de>
+Date:   Fri, 11 Feb 2022 14:05:56 +0200
+Message-ID: <87pmnt7gm3.fsf@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce apply in pwm_ops to replace legacy operations,
-like enable, disable, config and set_polarity.
+On Fri, 11 Feb 2022, Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> Hi
+>
+> Am 11.02.22 um 12:12 schrieb Andy Shevchenko:
+>> On Fri, Feb 11, 2022 at 11:40:13AM +0100, Javier Martinez Canillas wrote:
+>>> On 2/11/22 11:28, Andy Shevchenko wrote:
+>>>> On Fri, Feb 11, 2022 at 10:19:22AM +0100, Javier Martinez Canillas wrote:
+>> 
+>> ...
+>> 
+>>>>> +static void drm_fb_xrgb8888_to_gray8_line(u8 *dst, const u32 *src, unsigned int pixels)
+>>>>> +{
+>>>>> +	unsigned int x;
+>>>>> +
+>>>>> +	for (x = 0; x < pixels; x++) {
+>>>>> +		u8 r = (*src & 0x00ff0000) >> 16;
+>>>>> +		u8 g = (*src & 0x0000ff00) >> 8;
+>>>>> +		u8 b =  *src & 0x000000ff;
+>>>>> +
+>>>>> +		/* ITU BT.601: Y = 0.299 R + 0.587 G + 0.114 B */
+>>>>> +		*dst++ = (3 * r + 6 * g + b) / 10;
+>>>>> +		src++;
+>>>>> +	}
+>>>>
+>>>> Can be done as
+>>>>
+>>>> 	while (pixels--) {
+>>>> 		...
+>>>> 	}
+>>>>
+>>>> or
+>>>>
+>>>> 	do {
+>>>> 		...
+>>>> 	} while (--pixels);
+>>>>
+>>>
+>>> I don't see why a while loop would be an improvement here TBH.
+>> 
+>> Less letters to parse when reading the code.
+>
+> It's a simple refactoring of code that has worked well so far. Let's 
+> leave it as-is for now.
 
-Signed-off-by: Song Chen <chensong_2000@189.cn>
+IMO *always* prefer a for loop over while or do-while.
 
----
-V2:
-1, define duty_cycle and period as u64 in gb_pwm_config_operation.
-2, define duty and period as u64 in gb_pwm_config_request.
-3, disable before configuring duty and period if the eventual goal
-   is a disabled state.
----
- drivers/staging/greybus/pwm.c             | 61 ++++++++++++-----------
- include/linux/greybus/greybus_protocols.h |  4 +-
- 2 files changed, 34 insertions(+), 31 deletions(-)
+The for (i = 0; i < N; i++) is such a strong paradigm in C. You
+instantly know how many times you're going to loop, at a glance. Not so
+with with the alternatives, which should be used sparingly.
 
-diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
-index 891a6a672378..03c69db5b9be 100644
---- a/drivers/staging/greybus/pwm.c
-+++ b/drivers/staging/greybus/pwm.c
-@@ -89,7 +89,7 @@ static int gb_pwm_deactivate_operation(struct gb_pwm_chip *pwmc,
- }
- 
- static int gb_pwm_config_operation(struct gb_pwm_chip *pwmc,
--				   u8 which, u32 duty, u32 period)
-+				   u8 which, u64 duty, u64 period)
- {
- 	struct gb_pwm_config_request request;
- 	struct gbphy_device *gbphy_dev;
-@@ -99,8 +99,8 @@ static int gb_pwm_config_operation(struct gb_pwm_chip *pwmc,
- 		return -EINVAL;
- 
- 	request.which = which;
--	request.duty = cpu_to_le32(duty);
--	request.period = cpu_to_le32(period);
-+	request.duty = duty;
-+	request.period = period;
- 
- 	gbphy_dev = to_gbphy_dev(pwmc->chip.dev);
- 	ret = gbphy_runtime_get_sync(gbphy_dev);
-@@ -204,43 +204,46 @@ static void gb_pwm_free(struct pwm_chip *chip, struct pwm_device *pwm)
- 	gb_pwm_deactivate_operation(pwmc, pwm->hwpwm);
- }
- 
--static int gb_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
--			 int duty_ns, int period_ns)
-+static int gb_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
-+			const struct pwm_state *state)
- {
-+	int err;
-+	bool enabled = pwm->state.enabled;
- 	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
- 
--	return gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_ns, period_ns);
--};
--
--static int gb_pwm_set_polarity(struct pwm_chip *chip, struct pwm_device *pwm,
--			       enum pwm_polarity polarity)
--{
--	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
--
--	return gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, polarity);
--};
-+	/* set polarity */
-+	if (state->polarity != pwm->state.polarity) {
-+		if (enabled) {
-+			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
-+			enabled = false;
-+		}
-+		err = gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, state->polarity);
-+		if (err)
-+			return err;
-+	}
- 
--static int gb_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
--{
--	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
-+	if (!state->enabled) {
-+		if (enabled)
-+			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
-+		return 0;
-+	}
- 
--	return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
--};
-+	/* set period and duty cycle*/
-+	err = gb_pwm_config_operation(pwmc, pwm->hwpwm, state->duty_cycle, state->period);
-+	if (err)
-+		return err;
- 
--static void gb_pwm_disable(struct pwm_chip *chip, struct pwm_device *pwm)
--{
--	struct gb_pwm_chip *pwmc = pwm_chip_to_gb_pwm_chip(chip);
-+	/* enable/disable */
-+	if (!enabled)
-+		return gb_pwm_enable_operation(pwmc, pwm->hwpwm);
- 
--	gb_pwm_disable_operation(pwmc, pwm->hwpwm);
--};
-+	return 0;
-+}
- 
- static const struct pwm_ops gb_pwm_ops = {
- 	.request = gb_pwm_request,
- 	.free = gb_pwm_free,
--	.config = gb_pwm_config,
--	.set_polarity = gb_pwm_set_polarity,
--	.enable = gb_pwm_enable,
--	.disable = gb_pwm_disable,
-+	.apply = gb_pwm_apply,
- 	.owner = THIS_MODULE,
- };
- 
-diff --git a/include/linux/greybus/greybus_protocols.h b/include/linux/greybus/greybus_protocols.h
-index aeb8f9243545..81a6f16de098 100644
---- a/include/linux/greybus/greybus_protocols.h
-+++ b/include/linux/greybus/greybus_protocols.h
-@@ -812,8 +812,8 @@ struct gb_pwm_deactivate_request {
- 
- struct gb_pwm_config_request {
- 	__u8	which;
--	__le32	duty;
--	__le32	period;
-+	__u64	duty;
-+	__u64	period;
- } __packed;
- 
- struct gb_pwm_polarity_request {
+And yes, the do-while suggested above is buggy, and you actually need to
+stop and think to see why.
+
+
+BR,
+Jani.
+
+
+
+>
+> Best regards
+> Thomas
+>
+>> 
+>>> In any case, I just pulled the line conversion logic as a separate
+>>> function with minimal code changes since doing that should be in a
+>>> separate patch.
+>> 
+>> 
+>>> Feel free to post a patch if you want to change that while loop.
+>> 
+>> Perhaps some day :-)
+>> 
+
 -- 
-2.25.1
-
+Jani Nikula, Intel Open Source Graphics Center

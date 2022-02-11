@@ -2,123 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25FBA4B1EBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C6B4B1ECA
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346921AbiBKGuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 01:50:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42174 "EHLO
+        id S1347155AbiBKGus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 01:50:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346827AbiBKGt7 (ORCPT
+        with ESMTP id S231983AbiBKGup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 01:49:59 -0500
-Received: from mail-ot1-x34a.google.com (mail-ot1-x34a.google.com [IPv6:2607:f8b0:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9D02188
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 22:49:59 -0800 (PST)
-Received: by mail-ot1-x34a.google.com with SMTP id h5-20020a9d5545000000b0059ecbfae94eso4812835oti.17
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 22:49:59 -0800 (PST)
+        Fri, 11 Feb 2022 01:50:45 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267951120;
+        Thu, 10 Feb 2022 22:50:45 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id d9-20020a17090a498900b001b8bb1d00e7so7941212pjh.3;
+        Thu, 10 Feb 2022 22:50:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=+8rN+YKf6ok+x08l31cPg9Z1f+kTrw1cXJDsx6RQzpQ=;
-        b=BSR393aKc6QG8wWOZWMfrPQRJdGzUlEYw+Xm72Fj+l1HA0QTOlh+tjEKyBgFzMW5dh
-         yMc5fn9Y/A3FfgNSdOvbIJTLWXMoYdbIp/vvqzQXMLbWsG9nJxhfo+fKE3NGJifj+L55
-         3LoH8v37N4wzh6cZ6ZelxTm1tTnyY0hKMYUvTMKIKyIycqhn6OLw7MJT5WtKpDt36DPf
-         wCMwOA8QiMTaXEP2zn6vCRFegcEHws0MuunzFrr6o1UAxCnt9V9kQaR9FJs/brjoGool
-         gPl1ffvPeA1Ff7JE3BrPzFA4t8pldf9Fk2M0Op9O4qxcn/XyTm8w2rz+eUBX0/iLhkxa
-         f4vA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0QK+l7rHXU3PT/N2JWyDQzzRxR1HXLB6Sj1tRivvxqc=;
+        b=cbJkopy9cebFp9fOjClchpixRdtd7Uu7G5tx4TfOHWUElDf9ka6z1Xzwb3WhfvwLdr
+         Uo3EPeoeri05hFHFISa4yiDFKoiUXJ8PDNk1mIWsv0L5JDYLaLDNXVN8WlTdsSqf4yUv
+         ptxIXHNuedxnPk2g/+lZSAtNaSqY4br6Fld7cpk5CAm4RYIdf95+MH2Gjel22kUVE59k
+         huK/qAYxYIz/4BOQpJXO/BxOVFypExASzs5Kus74l6LrM3fzpa6HiygnUfvpwf7T76Uw
+         49DpdCXnJ8rMWvRJ5vlRO12viiWnpOJpj5B/2/F2W3OMX7uHnm9bwGJDVJ+GergYous5
+         mRVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=+8rN+YKf6ok+x08l31cPg9Z1f+kTrw1cXJDsx6RQzpQ=;
-        b=Tz3P6XYOBoBRgpbiULI0Uer2UAFnN2OG2D3no6wWncWo7tntY9lWWioChKFRvj+BJM
-         3hwLIPWTE7iEYQ6OicBwaRT+Mykyx85mBW0iCyVknIc1qi4rV5HSPgyxIgOxYw7HO252
-         lPQd9ifwAWxy8FLTt5PCbnD6iGMUMIQDV6yfdW0Jesld47SFeMmKmnhaZe7KEWCKWNLx
-         lwM28+hFXJeQM3IjhSIwm6saqPKzEqLAQEDvWOy6F9qBrZA+rWXEJShmUb9seO7IgSrF
-         KwZDocCypI4JCI+bbIT2HomqSKJixnvgbqen7YTINNZKyx558Z+JTtK2RvTpz04Xxkl7
-         Mh6A==
-X-Gm-Message-State: AOAM533ffr8YgM3Y04FYGmOwbOleIs1Kb4dLIg+HZ6fcaBu9AnnZGbZz
-        2XmDz+nbHTGHWRDq95etPB29tlhhR8v1Lw==
-X-Google-Smtp-Source: ABdhPJx+FPelF0U4y0S0ru7GypuLQN66L/vIwUT5nqHv0csa/+RSKZQiVXDUKNso1ijCAHAvOmABsg8qgMR59A==
-X-Received: from shakeelb.svl.corp.google.com ([2620:15c:2cd:202:9a07:ef1a:2fee:57f1])
- (user=shakeelb job=sendgmr) by 2002:a05:6870:8682:: with SMTP id
- p2mr257108oam.205.1644562198389; Thu, 10 Feb 2022 22:49:58 -0800 (PST)
-Date:   Thu, 10 Feb 2022 22:49:17 -0800
-In-Reply-To: <20220211064917.2028469-1-shakeelb@google.com>
-Message-Id: <20220211064917.2028469-5-shakeelb@google.com>
-Mime-Version: 1.0
-References: <20220211064917.2028469-1-shakeelb@google.com>
-X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
-Subject: [PATCH v2 4/4] memcg: synchronously enforce memory.high for large overcharges
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>
-Cc:     Chris Down <chris@chrisdown.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Shakeel Butt <shakeelb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0QK+l7rHXU3PT/N2JWyDQzzRxR1HXLB6Sj1tRivvxqc=;
+        b=Ivp+iD5bRCyVXYT5h1AWIhpKBUFUJlklCNE4hAYESGPwKM6PxrMpFNUqacuFV168id
+         pg8mKp7BzraRUJIO7kM8Ns30nJ28sgiiTe3Shk17rsescTtdFx3rTrxEDhJqUjM2ez2j
+         wfSBkTQIogGbI1A3DYQx3gkEr3FRqI4Km4JDdfV/PLhS/ObDUkPFNF1dVU0mb2hiWuLs
+         CKoW3WRDm4CtuA5NIoypukP29XVw8mZEJ1IcnSLqLZrs4e3pWBku0fN72Q0DK9BOnhg9
+         aLBe1kOVmOGrmVOjaDAwHH9MZCH76fo9tg6gQ9Uec28RRgzFyA1fqgjwC0RmkTr6UqRV
+         ErmA==
+X-Gm-Message-State: AOAM5318evuWWuO5l7HDDDe2z0nTmRXjvOLQZLVYW/C5yTBGz0hmpPZK
+        FsW65DoveWVjRjUTe4lPMMs=
+X-Google-Smtp-Source: ABdhPJz97NFh99hzwYGctR2BCBnHvNL6oO5CtyLyDLlnc5SQkoYi59g8D4yhwcp4cyNW5lZ7TDVU8w==
+X-Received: by 2002:a17:90a:5a48:: with SMTP id m8mr1195425pji.97.1644562244190;
+        Thu, 10 Feb 2022 22:50:44 -0800 (PST)
+Received: from localhost.localdomain (61-231-111-88.dynamic-ip.hinet.net. [61.231.111.88])
+        by smtp.gmail.com with ESMTPSA id o1sm28171257pfu.88.2022.02.10.22.50.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 22:50:43 -0800 (PST)
+From:   Joseph CHAMG <josright123@gmail.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joseph CHANG <josright123@gmail.com>,
+        joseph_chang@davicom.com.tw
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
+        andrew@lunn.ch, leon@kernel.org
+Subject: [PATCH v19, 0/2] ADD DM9051 ETHERNET DRIVER
+Date:   Fri, 11 Feb 2022 14:50:02 +0800
+Message-Id: <20220211065004.25444-1-josright123@gmail.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The high limit is used to throttle the workload without invoking the
-oom-killer. Recently we tried to use the high limit to right size our
-internal workloads. More specifically dynamically adjusting the limits
-of the workload without letting the workload get oom-killed. However due
-to the limitation of the implementation of high limit enforcement, we
-observed the mechanism fails for some real workloads.
+DM9051 is a spi interface chip,
+need cs/mosi/miso/clock with an interrupt gpio pin
 
-The high limit is enforced on return-to-userspace i.e. the kernel let
-the usage goes over the limit and when the execution returns to
-userspace, the high reclaim is triggered and the process can get
-throttled as well. However this mechanism fails for workloads which do
-large allocations in a single kernel entry e.g. applications that
-mlock() a large chunk of memory in a single syscall. Such applications
-bypass the high limit and can trigger the oom-killer.
+Joseph CHAMG (2):
+  dt-bindings: net: Add Davicom dm9051 SPI ethernet controller
+  net: Add dm9051 driver
 
-To make high limit enforcement more robust, this patch makes the limit
-enforcement synchronous only if the accumulated overcharge becomes
-larger than MEMCG_CHARGE_BATCH. So, most of the allocations would still
-be throttled on the return-to-userspace path but only the extreme
-allocations which accumulates large amount of overcharge without
-returning to the userspace will be throttled synchronously. The value
-MEMCG_CHARGE_BATCH is a bit arbitrary but most of other places in the
-memcg codebase uses this constant therefore for now uses the same one.
+ .../bindings/net/davicom,dm9051.yaml          |   62 +
+ drivers/net/ethernet/davicom/Kconfig          |   31 +
+ drivers/net/ethernet/davicom/Makefile         |    1 +
+ drivers/net/ethernet/davicom/dm9051.c         | 1239 +++++++++++++++++
+ drivers/net/ethernet/davicom/dm9051.h         |  162 +++
+ 5 files changed, 1495 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/davicom,dm9051.yaml
+ create mode 100644 drivers/net/ethernet/davicom/dm9051.c
+ create mode 100644 drivers/net/ethernet/davicom/dm9051.h
 
-Signed-off-by: Shakeel Butt <shakeelb@google.com>
----
-Changes since v1:
-- Based on Roman's comment simply the sync enforcement and only target
-  the extreme cases.
 
- mm/memcontrol.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 292b0b99a2c7..0da4be4798e7 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -2703,6 +2703,11 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
- 		}
- 	} while ((memcg = parent_mem_cgroup(memcg)));
- 
-+	if (current->memcg_nr_pages_over_high > MEMCG_CHARGE_BATCH &&
-+	    !(current->flags & PF_MEMALLOC) &&
-+	    gfpflags_allow_blocking(gfp_mask)) {
-+		mem_cgroup_handle_over_high();
-+	}
- 	return 0;
- }
- 
+base-commit: 9d922f5df53844228b9f7c62f2593f4f06c0b69b
 -- 
-2.35.1.265.g69c8d7142f-goog
+2.20.1
 

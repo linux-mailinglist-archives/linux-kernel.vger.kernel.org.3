@@ -2,55 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFAE4B1A83
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 020664B1A87
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:38:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346415AbiBKAhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:37:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33306 "EHLO
+        id S1346424AbiBKAiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:38:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243518AbiBKAhV (ORCPT
+        with ESMTP id S1346419AbiBKAiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:37:21 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA165F83
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:37:20 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id b3-20020a056e020c8300b002be19f9e043so5028397ile.13
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:37:20 -0800 (PST)
+        Thu, 10 Feb 2022 19:38:04 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E9F5F82
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:38:04 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id o19so20238608ybc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:38:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XMPnzVxfJj1VtWTKMGbAXwIHqAsV1gKtRJCewjERM4o=;
+        b=KMgLDpZeT1TiAZkobVZRBrLvYCitxb2nXD8+LrvXlEK6Ryd4AR1qebBV1HaGNu2AxT
+         hlSL8P8FvZ8fDGvXYFhNuA6q+xJM6DsbrnHPRTnc8Fxa1Cj6ShaV6Gi8/taglJubZgM7
+         BNPi9No+g/EEzxIUrxPW0FqcCer80iik4/Cp+c5eBjKXV5mXNPyW8koyDU+3DeXbvJHp
+         a008QsQlAAMA5en1KfYTmX4cxwxdS2J5bI62mn0/AaKM3LcZLH7yXn2ZiE7QZB3/ej/I
+         d8CTEii3KS5ft417PgFehcsnZewlKzq2fJNM7G8bdGUn+spm7ehuNcro3VW+zOW25yNn
+         28lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=qKOR0YTQopKhjgaydg7pJg6t8RNb5M2L3oCxp86sxFs=;
-        b=HcGcztcp32jFYGF9qKV0FGMO9q6SfqCcrnCddE8uosDF+uPRlpvGc6JUliBvofvCM5
-         RpRf1z181nSEy90WrKOw6BuvS6JT787ut06c/yH5OYNuLhJ0WboVNfK9B4AURJIVcect
-         gWlhKt1/fx//efXElRSylMp0CglviiDvSOPYFgyzqX41A6NmdQn0QjOIJk0FCXUB0Z34
-         71egmt2tjXsEsojrYBmqpRmFaR62m15TulZi3CueZe9392xtN9tIVSefplqOAS3/AnlZ
-         RfToqRoIr4uWWEx+NoAU8Uz4YQeEba5LKKiMxhD1b/NY13NbBujJu0TgteTNn33ksScN
-         u4IA==
-X-Gm-Message-State: AOAM5317iyIQJnjBXL9F+B0Uy+H6aFPEQNaMzEmswV3Ky4T3j+GuetqJ
-        M+NjPaIlsjtj5kzY+8qgphe/SvaUYOAeDOE3FvIq5c3P8hOO
-X-Google-Smtp-Source: ABdhPJxwlS+TIQvVCR4ovg6MqayjzHSbXF78sTlhdePS73FpubtTibEgU62JeXbKJyyBP4WsavUFURRggUkVBGZvA1ibmkjYrRzT
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XMPnzVxfJj1VtWTKMGbAXwIHqAsV1gKtRJCewjERM4o=;
+        b=c/iHwahgx1G/VPbyDzna8fhjTECXhYnjW6GPi8Zj/iuYUOH31W29pb8hUJt6j4Onhu
+         tQtIWtkuN7BcvKjgXvddgQy8hcZv06KApJXNzIvg1PdXfRp9XuXWRTuuWhd8F5OETJzv
+         5sdqTgrJF5muKTxC7jRNJV+1AaAGcARyCRLMdlBlbFysCllrG192BR9Q3iPhijoFOxF2
+         okwNM8imvxC02l9TzHkefFMMZe2CGW9km7crSz5VKmGPwTGyd26OHOgoORsFLll4u0ky
+         hcZV60C6XYzuxSFZcRuJFgGanQ0HekvvsKd4yObrUTCsb4y1SJlECbUlWZApFb/Bef5x
+         sT5A==
+X-Gm-Message-State: AOAM531wlHpDx62l9CMirZckK8zNtlCb/JWEqStPfqeVHBFCfEsjlkxG
+        KkFHxATHajA8S+ELE9jhYR7qju+dp4ptvLs5bq+7Yg==
+X-Google-Smtp-Source: ABdhPJxtLNtj+oHf1hWTBuWFp8z77OAm27bFXeZexh7vNq4cq9fNWD41AmYJQ48zxflbuwNpWT6w5W9TceuKoey2hhw=
+X-Received: by 2002:a81:b624:: with SMTP id u36mr10535176ywh.437.1644539883886;
+ Thu, 10 Feb 2022 16:38:03 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a92:bf01:: with SMTP id z1mr5044624ilh.18.1644539839598;
- Thu, 10 Feb 2022 16:37:19 -0800 (PST)
-Date:   Thu, 10 Feb 2022 16:37:19 -0800
-In-Reply-To: <0000000000006e988105d72fbe3f@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f5549005d7b3440a@google.com>
-Subject: Re: [syzbot] general protection fault in i2c_setup_smbus_alert
-From:   syzbot <syzbot+0591ccf54ee05344e4eb@syzkaller.appspotmail.com>
-To:     andriy.shevchenko@linux.intel.com, djrscally@gmail.com,
-        gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
-        johan@kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, sakari.ailus@linux.intel.com,
-        syzkaller-bugs@googlegroups.com, wsa@kernel.org
+References: <1643376903-18623-1-git-send-email-hayashi.kunihiko@socionext.com>
+In-Reply-To: <1643376903-18623-1-git-send-email-hayashi.kunihiko@socionext.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 11 Feb 2022 01:37:52 +0100
+Message-ID: <CACRpkdbEBF0Q028GrRuKA2jB2R+Qx4m8eR_vScQqcAtcsDuPMQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] pinctrl: uniphier: Add some more pinmux settings
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,103 +65,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Fri, Jan 28, 2022 at 2:35 PM Kunihiko Hayashi
+<hayashi.kunihiko@socionext.com> wrote:
 
-HEAD commit:    ef6b35306dd8 Add linux-next specific files for 20220204
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=15e40d84700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e0431e0b00810b4f
-dashboard link: https://syzkaller.appspot.com/bug?extid=0591ccf54ee05344e4eb
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1105f472700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16492aa4700000
+> This series includes changes to audio I/O pinmux settings and addition
+> to USB device pinmux settings.
+>
+> - Divide audio I/O pinmux groups so that 1/2/4ch can be specified.
+>   The audio I/O function is available for LD11, LD20, PXs2 and PXs3 SoCs.
+>   In addition, add the missing pinmux settings for PXs2.
+>
+> - Add USB device pinmux settings. The USB device function is available
+>   for PXs2 and PXs3 SoCs.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0591ccf54ee05344e4eb@syzkaller.appspotmail.com
+This v2 patch set applied!
 
-usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-usb 1-1: Product: syz
-usb 1-1: Manufacturer: syz
-usb 1-1: SerialNumber: syz
-usb 1-1: config 0 descriptor??
-general protection fault, probably for non-canonical address 0xdffffc000000008a: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000450-0x0000000000000457]
-CPU: 1 PID: 35 Comm: kworker/1:1 Not tainted 5.17.0-rc2-next-20220204-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:dev_fwnode drivers/base/property.c:22 [inline]
-RIP: 0010:device_property_match_string+0x2c/0xa0 drivers/base/property.c:224
-Code: 49 89 d5 41 54 49 89 f4 55 53 48 89 fb e8 bc 01 fa fc 48 8d bb 50 04 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75 5a 48 8b ab 50 04 00 00 48 85 ed 74 22 e8 8d 01 fa
-RSP: 0018:ffffc900010befd8 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 000000000000008a RSI: ffffffff847ea734 RDI: 0000000000000450
-RBP: ffff8880127ec038 R08: 0000000000000000 R09: ffff8880127ec1a3
-R10: ffffffff85ea3a99 R11: 0000000000000000 R12: ffffffff8a658720
-R13: ffffffff8a6586e0 R14: ffff8880127ec660 R15: ffff8880127ec664
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffd0b1f0910 CR3: 000000007f0f9000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- i2c_setup_smbus_alert+0x9c/0x1a0 drivers/i2c/i2c-core-smbus.c:710
- i2c_register_adapter+0x32f/0x1150 drivers/i2c/i2c-core-base.c:1482
- i2c_add_adapter+0x11a/0x1c0 drivers/i2c/i2c-core-base.c:1587
- osif_probe+0x2ae/0x500 drivers/i2c/busses/i2c-robotfuzz-osif.c:164
- usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:517 [inline]
- really_probe+0x245/0xcc0 drivers/base/dd.c:596
- __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:752
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:782
- __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:899
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x228/0x4a0 drivers/base/dd.c:970
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xc17/0x1ee0 drivers/base/core.c:3405
- usb_set_configuration+0x101e/0x1900 drivers/usb/core/message.c:2170
- usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
- usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
- call_driver_probe drivers/base/dd.c:517 [inline]
- really_probe+0x245/0xcc0 drivers/base/dd.c:596
- __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:752
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:782
- __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:899
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
- __device_attach+0x228/0x4a0 drivers/base/dd.c:970
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
- device_add+0xc17/0x1ee0 drivers/base/core.c:3405
- usb_new_device.cold+0x63f/0x108e drivers/usb/core/hub.c:2566
- hub_port_connect drivers/usb/core/hub.c:5362 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5506 [inline]
- port_event drivers/usb/core/hub.c:5664 [inline]
- hub_event+0x25c6/0x4680 drivers/usb/core/hub.c:5746
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-Modules linked in:
-----------------
-Code disassembly (best guess):
-   0:	49 89 d5             	mov    %rdx,%r13
-   3:	41 54                	push   %r12
-   5:	49 89 f4             	mov    %rsi,%r12
-   8:	55                   	push   %rbp
-   9:	53                   	push   %rbx
-   a:	48 89 fb             	mov    %rdi,%rbx
-   d:	e8 bc 01 fa fc       	callq  0xfcfa01ce
-  12:	48 8d bb 50 04 00 00 	lea    0x450(%rbx),%rdi
-  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  20:	fc ff df
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2e:	75 5a                	jne    0x8a
-  30:	48 8b ab 50 04 00 00 	mov    0x450(%rbx),%rbp
-  37:	48 85 ed             	test   %rbp,%rbp
-  3a:	74 22                	je     0x5e
-  3c:	e8                   	.byte 0xe8
-  3d:	8d 01                	lea    (%rcx),%eax
-  3f:	fa                   	cli
-
+Yours,
+Linus Walleij

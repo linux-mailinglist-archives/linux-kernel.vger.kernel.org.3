@@ -2,107 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3194B1C94
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 03:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF6E4B1CAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 03:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347409AbiBKCc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 21:32:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56028 "EHLO
+        id S1347608AbiBKCiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 21:38:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347425AbiBKCcZ (ORCPT
+        with ESMTP id S1347581AbiBKCiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 21:32:25 -0500
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782415FCD;
-        Thu, 10 Feb 2022 18:32:20 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R741e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=tonylu@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V46drYP_1644546737;
-Received: from localhost(mailfrom:tonylu@linux.alibaba.com fp:SMTPD_---0V46drYP_1644546737)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 11 Feb 2022 10:32:18 +0800
-Date:   Fri, 11 Feb 2022 10:32:16 +0800
-From:   Tony Lu <tonylu@linux.alibaba.com>
-To:     Wen Gu <guwen@linux.alibaba.com>
-Cc:     kgraul@linux.ibm.com, davem@davemloft.net, kuba@kernel.org,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net/smc: Avoid overwriting the copies of clcsock
- callback functions
-Message-ID: <YgXKsNIdJIgEhEkd@TonyMac-Alibaba>
-Reply-To: Tony Lu <tonylu@linux.alibaba.com>
-References: <1644415853-46641-1-git-send-email-guwen@linux.alibaba.com>
- <YgR9XrT8cATDP4Zx@TonyMac-Alibaba>
- <fb71bcc5-77ad-698c-b025-36e1910f868f@linux.alibaba.com>
+        Thu, 10 Feb 2022 21:38:20 -0500
+X-Greylist: delayed 61944 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 18:38:19 PST
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6885D55AD
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 18:38:19 -0800 (PST)
+X-QQ-mid: bizesmtp35t1644547068t7uhb17w
+Received: from localhost.localdomain (unknown [123.114.60.34])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 11 Feb 2022 10:37:46 +0800 (CST)
+X-QQ-SSF: 01400000000000B0L000000A0000000
+X-QQ-FEAT: ssdqv2V8ieI4r0S/p/YIMoSud1356wu151e25RfpCyjzft2pptpo8AIv5mrI4
+        Sz02K8iYTa8le6LOEpsZDZ4D68OqmW1R+ji4QFcTTcMOwgyou/aJtEJdMYQkBvNuIEZEfQ4
+        JBH8JtMoiX3Ty12FxOMHQoV4I/cpNxYCvFfr5lCrhGYHr2QBSBxRTW7pXNd/1OlXRTXLifR
+        DOmy8sC8Bt/lwoFA1FHSULOrmbWX/cQRiG5hLK1UFMvwv3UuT3IdHAxMRcvG0Ux0vulkGDx
+        NvcrA45edZnwni8P50Eto5c4WKfZaDkWNSrJJGSrxM5qVcDgEv7wqWVUj1hQ6srF2k3MI5C
+        MXucQWSbw/f7uz/6OAh8OZJBdkp4w==
+X-QQ-GoodBg: 1
+From:   zhaoxiao <zhaoxiao@uniontech.com>
+To:     thierry.reding@gmail.com, lee.jones@linaro.org
+Cc:     u.kleine-koenig@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhaoxiao <zhaoxiao@uniontech.com>
+Subject: [PATCH v2] pwm: vt8500: Rename variable pointing to driver private data
+Date:   Fri, 11 Feb 2022 10:37:41 +0800
+Message-Id: <20220211023741.24061-1-zhaoxiao@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fb71bcc5-77ad-698c-b025-36e1910f868f@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign5
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 04:56:00PM +0800, Wen Gu wrote:
-> 
-> 
-> On 2022/2/10 10:50 am, Tony Lu wrote:
-> 
-> > I am wondering that there is a potential racing. If ->use_fallback is
-> > setted to true, but the rest of replacing process is on the way, others
-> > who tested and passed ->use_fallback, they would get old value before
-> > replacing.
-> > 
-> 
-> Thanks for your comments.
-> 
-> I understand your concern. But when I went through all the places that
-> check for smc->use_fallback, I haven't found the exact potential racing
-> point. Please point out if I missed something. Thank you.
-> 
-> In my humble opinion, most of the operations after smc->use_fallback check
-> have no direct relationship with what did in smc_switch_to_fallback() (the
-> replacement of clcsock callback functions), except for which in smc_sendmsg(),
-> smc_recvmsg() and smc_sendpage():
-> 
-> smc_sendmsg():
-> 
-> 	if (smc->use_fallback) {
-> 		rc = smc->clcsock->ops->sendmsg(smc->clcsock, msg, len);
-> 	}
-> 
-> smc_recvmsg():
-> 
-> 	if (smc->use_fallback) {
-> 		rc = smc->clcsock->ops->recvmsg(smc->clcsock, msg, len, flags);
-> 	}
-> 
-> smc_sendpage():
-> 
-> 	if (smc->use_fallback) {
-> 		rc = kernel_sendpage(smc->clcsock, page, offset,
-> 				     size, flags);
-> 	}
-> 
-> If smc->use_fallback is set to true, but callback functions (sk_data_ready ...)
-> of clcsock haven't been replaced yet at this moment, there may be a racing as
-> you described.
-> 
-> But it won't happen, because fallback must already be done before sending and receiving.
-> 
-> What do you think about it?
-> 
-I am concerning about the non-blocking work in workqueue. If we can make
-sure the order of fallback is determined, it would be safe. From your
-analysis, I think it is safe for now.
+Status quo is that variables of type struct vt8500_chip * are named
+"vt8500", "chip". Because usually only struct pwm_device * variables
+are named "pwm" and "chip" is usually used for variabled of type
+struct pwm_chip *.
 
-Let's back to the patch, the original version of switch_to_fallback()
-has a implicit reentrant semantics. This fixes should work, thanks.
+So consistently use the same and non-conflicting name "vt8500".
 
-Thanks for your detailed investigation.
+Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
+---
+ v2: Rename the "chip" to "vt8500" for variable of type struct vt8500_chip *.
+ drivers/pwm/pwm-vt8500.c | 38 +++++++++++++++++++-------------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
-Best regards,
-Tony Lu
+diff --git a/drivers/pwm/pwm-vt8500.c b/drivers/pwm/pwm-vt8500.c
+index 7170a315535b..f1ff9940b37c 100644
+--- a/drivers/pwm/pwm-vt8500.c
++++ b/drivers/pwm/pwm-vt8500.c
+@@ -235,7 +235,7 @@ MODULE_DEVICE_TABLE(of, vt8500_pwm_dt_ids);
+ 
+ static int vt8500_pwm_probe(struct platform_device *pdev)
+ {
+-	struct vt8500_chip *chip;
++	struct vt8500_chip *vt8500;
+ 	struct device_node *np = pdev->dev.of_node;
+ 	int ret;
+ 
+@@ -244,48 +244,48 @@ static int vt8500_pwm_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	}
+ 
+-	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
+-	if (chip == NULL)
++	vt8500 = devm_kzalloc(&pdev->dev, sizeof(*vt8500), GFP_KERNEL);
++	if (vt8500 == NULL)
+ 		return -ENOMEM;
+ 
+-	chip->chip.dev = &pdev->dev;
+-	chip->chip.ops = &vt8500_pwm_ops;
+-	chip->chip.npwm = VT8500_NR_PWMS;
++	vt8500->chip.dev = &pdev->dev;
++	vt8500->chip.ops = &vt8500_pwm_ops;
++	vt8500->chip.npwm = VT8500_NR_PWMS;
+ 
+-	chip->clk = devm_clk_get(&pdev->dev, NULL);
+-	if (IS_ERR(chip->clk)) {
++	vt8500->clk = devm_clk_get(&pdev->dev, NULL);
++	if (IS_ERR(vt8500->clk)) {
+ 		dev_err(&pdev->dev, "clock source not specified\n");
+-		return PTR_ERR(chip->clk);
++		return PTR_ERR(vt8500->clk);
+ 	}
+ 
+-	chip->base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(chip->base))
+-		return PTR_ERR(chip->base);
++	vt8500->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(vt8500->base))
++		return PTR_ERR(vt8500->base);
+ 
+-	ret = clk_prepare(chip->clk);
++	ret = clk_prepare(vt8500->clk);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "failed to prepare clock\n");
+ 		return ret;
+ 	}
+ 
+-	ret = pwmchip_add(&chip->chip);
++	ret = pwmchip_add(&vt8500->chip);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "failed to add PWM chip\n");
+-		clk_unprepare(chip->clk);
++		clk_unprepare(vt8500->clk);
+ 		return ret;
+ 	}
+ 
+-	platform_set_drvdata(pdev, chip);
++	platform_set_drvdata(pdev, vt8500);
+ 	return ret;
+ }
+ 
+ static int vt8500_pwm_remove(struct platform_device *pdev)
+ {
+-	struct vt8500_chip *chip = platform_get_drvdata(pdev);
++	struct vt8500_chip *vt8500 = platform_get_drvdata(pdev);
+ 
+-	pwmchip_remove(&chip->chip);
++	pwmchip_remove(&vt8500->chip);
+ 
+-	clk_unprepare(chip->clk);
++	clk_unprepare(vt8500->clk);
+ 
+ 	return 0;
+ }
+-- 
+2.20.1
+
+
+

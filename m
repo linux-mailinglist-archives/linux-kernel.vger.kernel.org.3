@@ -2,84 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BEF4B1FE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 09:07:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DBF04B1F6A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 08:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347948AbiBKIF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 03:05:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34518 "EHLO
+        id S1347735AbiBKHjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 02:39:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232328AbiBKIFw (ORCPT
+        with ESMTP id S237700AbiBKHjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 03:05:52 -0500
-X-Greylist: delayed 1080 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 00:05:50 PST
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2FC9D69;
-        Fri, 11 Feb 2022 00:05:50 -0800 (PST)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 21B7dKQZ012095;
-        Fri, 11 Feb 2022 01:39:21 -0600
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 21B7dJjv012092;
-        Fri, 11 Feb 2022 01:39:19 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Fri, 11 Feb 2022 01:39:19 -0600
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-parisc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        linux-mm@kvack.org, Paul Mackerras <paulus@samba.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v3 04/12] powerpc: Prepare func_desc_t for refactorisation
-Message-ID: <20220211073919.GW614@gate.crashing.org>
-References: <cover.1634457599.git.christophe.leroy@csgroup.eu> <86c393ce0a6f603f94e6d2ceca08d535f654bb23.1634457599.git.christophe.leroy@csgroup.eu> <202202101653.9128E58B84@keescook>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202202101653.9128E58B84@keescook>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 11 Feb 2022 02:39:49 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DF31A4;
+        Thu, 10 Feb 2022 23:39:49 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id x4so4014220plb.4;
+        Thu, 10 Feb 2022 23:39:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=+ebSMBokgiae6CJ5gH8PB6DHwwDMjURK1ERUiTJclcI=;
+        b=cZ+bUsA406+qaEEeJG4Lk3aTkio+IuE+cyQt7Q4Mw4MOtjLFXpMEdj3ETxfEmp0I7V
+         FogTLiWVPpjuDCJRE/5RDC8QXkHUdpvvLIiWCnY+a2ScwkOKyGWL+KHSHP6IRoyQG3aF
+         /Ju3s8fNTNAn62/ENUdpDpWY7GV2qvUDddu4JKcTwdPMKCraduzMfMRHErg8LuTwKjfh
+         lNs1xVBAI6eG3oLpxKywphtujjX3VVOTYriKRl+5d0LlY8q+1PwdrgKst08k5AZeE0WS
+         JOmAwOHI6IUfIWjmbAUGvfIO8rMStggFMqqlIs8xuAOKCab+zywRhiw7rDRtwOGpMidy
+         qKkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=+ebSMBokgiae6CJ5gH8PB6DHwwDMjURK1ERUiTJclcI=;
+        b=A5FbCcdjbexi0zDYiEZx+mERzzSQtmSKxt5vqTXEpZqX7bUnIHJWUnKoQCGJXsCxyr
+         Ab6uAjkdbgCpIvIf+s1MWeNNHEC3mnedmMPib6DEuRdF9qgV8l5u4maeseTBBFfrl6wB
+         uTpmI8f4P/WD3k1xOEParOvm1hrizxiu+CPTKxh85jMyGrp2kpg5rmm/WO6nd8vIaaVJ
+         feCWT3KCh3hmMSu8y6rSOdxvxpxe3p1QBnfbi3jIym4b7QxRICS2w+SA39fqckHJ//kR
+         KhkEx9tnTsYV8g9500xNTqObzmDrIjoaQrZAhEXd4HLyanvXbvA/+k2/hT+O9oqWi5E0
+         rjEw==
+X-Gm-Message-State: AOAM531zOnPlXxpyJtKVrokECDZq0pxYwEtqhpdWLiw6yscpB3qwovJ+
+        4hRlPeesKQA1wJwmn8epKDE=
+X-Google-Smtp-Source: ABdhPJzJzd1ESF/pMfu5F/QYgJD82aXJA2+YgaGQLVxUuJ0UZGChBRe3ZhsrsImca4RRa4AP8aSs+g==
+X-Received: by 2002:a17:90a:343:: with SMTP id 3mr484123pjf.224.1644565189125;
+        Thu, 10 Feb 2022 23:39:49 -0800 (PST)
+Received: from [192.168.43.80] (subs02-180-214-232-21.three.co.id. [180.214.232.21])
+        by smtp.gmail.com with ESMTPSA id h17sm26288465pfv.198.2022.02.10.23.39.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 23:39:48 -0800 (PST)
+Message-ID: <11d84e6d-bfd0-d82f-6e57-5d7290f354b5@gmail.com>
+Date:   Fri, 11 Feb 2022 14:39:43 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH 5.16 0/5] 5.16.9-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220209191249.887150036@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20220209191249.887150036@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 04:54:52PM -0800, Kees Cook wrote:
-> On Sun, Oct 17, 2021 at 02:38:17PM +0200, Christophe Leroy wrote:
-(edited:)
-> > +typedef struct {
-> > +	unsigned long addr;
-> > +} func_desc_t;
-> >  
-> >  static func_desc_t func_desc(unsigned long addr)
-> >  {
-> > +	return (func_desc_t){addr};
-
-> There's only 1 element in the struct, so okay, but it hurt my eyes a
-> little. I would have been happier with:
+On 10/02/22 02.14, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.9 release.
+> There are 5 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> 	return (func_desc_t){ .addr = addr; };
-> 
-> But of course that also looks bonkers because it starts with "return".
-> So no matter what I do my eyes bug out. ;)
 
-The usual way to avoid convoluted constructs is to name more factors.
-So:
+Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0)
+and powerpc (ps3_defconfig, gcc 11.2.0).
 
-static func_desc_t func_desc(unsigned long addr)
-{
-	func_desc_t desc = {};
-	desc.addr = addr;
-	return desc;
-}
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-
-Segher
+-- 
+An old man doll... just what I always wanted! - Clara

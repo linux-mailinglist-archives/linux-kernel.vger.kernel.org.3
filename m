@@ -2,84 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 349D14B1D72
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 05:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A03604B1D77
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 05:52:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244263AbiBKEuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 23:50:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41922 "EHLO
+        id S244659AbiBKEvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 23:51:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiBKEuF (ORCPT
+        with ESMTP id S229540AbiBKEvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 23:50:05 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E01A25D7
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 20:50:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644555003;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dTN6FickAcVPgVjW2UUCx0PlKyGKDjTzkZ/0MQ6fTqs=;
-        b=Z8i4tThqiQM0z95hsb0AunDuM5bg4X/wlrSmZTeI5ZJ30zcLG+HfpWjIqrdLnCZMkUdHqx
-        UBtAG+Rl0P1usA4GNdnJ4Jbd/R2gFxinmha9gAp7oeQtxh9sww9p5QLeBzqbynC8SnfvAK
-        Pswz0i4BA9C9Js/++FUG/ghdHw07nHc=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-501-rjBgemJ0OxeCLx6C97nC0g-1; Thu, 10 Feb 2022 23:50:02 -0500
-X-MC-Unique: rjBgemJ0OxeCLx6C97nC0g-1
-Received: by mail-qt1-f199.google.com with SMTP id a28-20020ac84d9c000000b002d05c958a84so6065072qtw.0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 20:50:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=dTN6FickAcVPgVjW2UUCx0PlKyGKDjTzkZ/0MQ6fTqs=;
-        b=cSoxoMAu02hroCqCSuRdPtBwR6VLOC0pnG21xrL7Q8d+gYe5rToNGGGS2NU17BeNzD
-         P4v2IEkXv94Zj3W+9tldu/ox3owyRNTV8yEoXoVL/2mFP6ABqEgbDLhVwyBSrjxskyMt
-         th9aHo1RlG7loibQmfV6MokGvPvyxf7LbNg7RkbgjsUekNDw22wH36yueyKfx8r6U1cw
-         r3JcADaYuvtXRBZLZb41e2JmVdw2YbahBwfeBS9SrKbiFl1yWm9Bdjy98PzyZd4QsKeQ
-         Kk7Jxr5v71CG/C9pUiJ8BNK6GgCgLATZn1Bz6W6dIl1atCcvwgKn1hiwyu1qXTUZ2Ptp
-         Y8Jw==
-X-Gm-Message-State: AOAM530LUJcSxurC5uUIpYDJflghOYUi7D5CtpWi+9LpEbrYueFDpixS
-        ZVnMnaj08xcUhA3+u47/0aBt0s164Uwn6NHRm9x1KeWaEd/YUUX5/hQYNSCD4fMoI6zN3tn2bzM
-        vsVF7E1J9Abjne+39c0uUiwrB
-X-Received: by 2002:a05:622a:5ce:: with SMTP id d14mr7366625qtb.7.1644555001917;
-        Thu, 10 Feb 2022 20:50:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx7bVqaMXRkOzVf++7UD3m0x4aXle0i8TevJDeQKqz/0UREQhvZ7AVvKjH9oIg1JO06qDwrkA==
-X-Received: by 2002:a05:622a:5ce:: with SMTP id d14mr7366622qtb.7.1644555001709;
-        Thu, 10 Feb 2022 20:50:01 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id bp18sm3323284qtb.72.2022.02.10.20.49.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 20:50:01 -0800 (PST)
-Subject: Re: [PATCH] spi: Fix warning for Clang build
-To:     =?UTF-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>,
-        Mark Brown <broonie@kernel.org>,
-        Li-hao Kuo <lhjeff911@gmail.com>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-References: <691d52b72f978f562136c587319852f5c65f08fe.1644460444.git.lhjeff911@gmail.com>
- <YgT0LMcDpCEYHFYg@sirena.org.uk>
- <99ab624e2af4414bb2a785f64f35bd95@sphcmbx02.sunplus.com.tw>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <aaaefa2b-e043-2bf8-28aa-d89deb3fbc2a@redhat.com>
-Date:   Thu, 10 Feb 2022 20:49:58 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
-MIME-Version: 1.0
-In-Reply-To: <99ab624e2af4414bb2a785f64f35bd95@sphcmbx02.sunplus.com.tw>
-Content-Type: text/plain; charset=big5; format=flowed
-Content-Transfer-Encoding: 8bit
+        Thu, 10 Feb 2022 23:51:32 -0500
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2067.outbound.protection.outlook.com [40.92.103.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0099725D7;
+        Thu, 10 Feb 2022 20:51:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Frp9qhuIDdDdaXzd0o+o3bWJEGfsu/kyGwi2+jggVIOnd/A9JOTPQ+1kfD4+NHFj6gA0n++I2tQfT/15NBpxZsQEqoWMhtQzO+bamFJpbDlyPdpRxmr+cuGKv37Ur5NWsF/uz4J+umXcAnMoSBVDfnAGhBs9EYrUOHR9sSELysQ2JgL028+KMf5RhxOs+lZjiChB0r/JRyfEYtrK1faV5wtpjQwxCl94ko8MTkIy738PP8hiYtrh9wBD1THZ90LmR79vPy4vh4R1fVJpx9q0uV/aUH09btnhFdfWmh9bx+ZcZRPIwJth0jOjXVxfdF/2eS2hTTEHbxbz6LFXuKJ8Yg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PHWL3RkOCaKZtr+FJDWPqHlV39WQXqBUx8ROmYfRmIA=;
+ b=Ddw+GGoYsmhPpTjGEbgLp1h8xSS8KMYab3bWCUCwp4vwJw4e/hc/Ga9ZAjC0qvByD6iEz1ZhYI9W2Fa2F4o65lHeYHK9C498r+11mZCkPNHhPRF7YIT+bMdVOj311rSARU6AvDM1ITx65UFvQN4PDsohlMeJUJ3TgzS/CiDLNLeeijvJAoT/Lj35VL5XJb0HF1hPYhhVojnzOb7WOXgifzk3SXhJGGSXCny4tKY3ESkYfizXu6BDIjADlxNZ8L6ivPpfj9Meyg6tUwLOJ9g3E820WCRwYz5ilfLiwRjqxpscz60D+N2kTf3kiusJZU3FBNMj1A7TeEQ6sT/K8zXnwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PHWL3RkOCaKZtr+FJDWPqHlV39WQXqBUx8ROmYfRmIA=;
+ b=f4oOS21U67OHSVtcBPWj3R5uX/FGgdyleJ66DY98y+4zTQwvJTNNogtfOCzrjWjiE0lpvq4tAZzPHireVB5Vgu6P3QB0SW55BP3LiiLa4dRPLcjISDW2lIN5lfBdMF8A7yng8o1y1d8FbaHK06FPehjjsiYkaj9VTNOz3s10naVou8hC0s90avedFOftEZ/2zxMLr7+ocnezg+58NWDrcjQkTRU4gTiy+LZYodPYtgtZ7aCvg1QBCjFqjUpspPRQJ634i509Bnd5decYox+LRdu2z5Vdctqj7x1zGPWc76puV7DFi59tpai7E+PWlL3OXkNj79I297f57HCU5QNTtg==
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
+ by PN2PR01MB4361.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4975.14; Fri, 11 Feb 2022 04:51:22 +0000
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::d19b:7cd1:3760:b055]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::d19b:7cd1:3760:b055%9]) with mapi id 15.20.4975.011; Fri, 11 Feb 2022
+ 04:51:22 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Matthew Garrett <mjg59@srcf.ucam.org>
+CC:     Ard Biesheuvel <ardb@kernel.org>, Jeremy Kerr <jk@ozlabs.org>,
+        "joeyli.kernel@gmail.com" <joeyli.kernel@gmail.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "eric.snowberg@oracle.com" <eric.snowberg@oracle.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "jlee@suse.com" <jlee@suse.com>,
+        "James.Bottomley@hansenpartnership.com" 
+        <James.Bottomley@HansenPartnership.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "mic@digikod.net" <mic@digikod.net>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>
+Subject: Re: [PATCH] efi: Do not import certificates from UEFI Secure Boot for
+ T2 Macs
+Thread-Topic: [PATCH] efi: Do not import certificates from UEFI Secure Boot
+ for T2 Macs
+Thread-Index: AQHYHcE4ht34Z1CESEaNjR8+yzmieayLbqGAgAAURwCAAAlIgIAAESOAgACrMQCAAM6NgIAAs3IA
+Date:   Fri, 11 Feb 2022 04:51:22 +0000
+Message-ID: <99BB011C-71DE-49FA-81CB-BE2AC9613030@live.com>
+References: <9D0C961D-9999-4C41-A44B-22FEAF0DAB7F@live.com>
+ <20220209164957.GB12763@srcf.ucam.org>
+ <5A3C2EBF-13FF-4C37-B2A0-1533A818109F@live.com>
+ <20220209183545.GA14552@srcf.ucam.org> <20220209193705.GA15463@srcf.ucam.org>
+ <2F1CC5DE-5A03-46D2-95E7-DD07A4EF2766@live.com>
+ <20220210180905.GB18445@srcf.ucam.org>
+In-Reply-To: <20220210180905.GB18445@srcf.ucam.org>
+Accept-Language: en-US
 Content-Language: en-US
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [yZA/DGOyESbG5o3D8r1SuhFdfL3lA8xALCuWaamire3Xe+wG+tiI680FbAnCRFs+]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fe319675-92a0-48fc-8ea7-08d9ed1a2706
+x-ms-traffictypediagnostic: PN2PR01MB4361:EE_
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: P4Yi7ScuYmDjcqWAcLDPCvtIcwSKFGNWDGrc8qA4qG1pDji5HiEkspakdYZ6vmnGhO/3B3SYsiblb8hyLc9J84/z12e4pWCEp69506rgybMXG8uXX/4BL+noAVQkk10HkqBY1KwMSp4gIqHwKvVYnqQZ4pyEtlABR0EX36Fm5h6XqPh+4eoUIGWEPIMDMRVXSIneorZ8yS6wAHFndtxIVtVPgFyZ+6WCEXD/S58sJWe35xq8igsaJx2dPcv7cpWISsM4A7DcvdvaULYo/QZ6MxIrOyW57NrFFc3bqvjweafHDUq8cvTiKyPBurUezEwASjQKy9Su3su862YVUOUPcKUMmBUXOm5P8Wnu82Wqji8rMx6/4rsQ5Ur2WOZFWSsJzi6WU/DDj3xs/rBNsCJJXlDAIbget7EQToEbN/aF98GQ3EHs9gjoR07vgGH7UeKAz3q6l6k7C6dZMKN67oZOciElfkcEx9BJLBQPDUDr7oXQoxngqXY4GkG8HotEiScFv5JDtdlgBFiIJU73dpy6Q1v5cioE3uAgl3xR1vwMrZMzmKy30qDgGFUfaRQihd6xO9kbGfsxZTVJ6d4IQhHAKw4jEUANd8wyERhIeyu2fe2vz4CT5teMC2QH/6hwJuPM
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8r2JYH0jnBtJL4U0heP896Qmk59HA+lCNjujpOgpOg5Dta6Spulu7mF0izMg?=
+ =?us-ascii?Q?K6dmMvXieRs48+zMElwsKoP0qpUDnE0J94IUDO/5LyOwkpwxxFFLZovwg0xY?=
+ =?us-ascii?Q?M6pmfhzhZJIMYWuUU0pulJF0PlFZtxc3GOX85CPMo3OLhD2sVGswQCw8EWui?=
+ =?us-ascii?Q?yLkFZ6EYSmJC1snQtumg89pAYZLMr/OsgUp/EDBqQI75V7APxNEUWjZaQbjP?=
+ =?us-ascii?Q?i+uJxaGYQ7WDJeYEcEPIZ2dlzYdtP3HDSm0b9oUsitRDRMVlp2cVlSZgwCBL?=
+ =?us-ascii?Q?6NakrWsxaIGvZMiCQvklR9wGuEwtGwZHqKmLDQWMAKvc7phfI/QyGqAtSbiy?=
+ =?us-ascii?Q?OdPRgqcfhrvGa/z7U4VeCaXHjKoOubS/MBOTlrvtUjx5SfeUwSXJypCFeyXK?=
+ =?us-ascii?Q?dygN9kq4gx00bUQNDR6fYKu/Fy6OZ9B4HJ1NglYOQh25f16q1DzvIgtueqnK?=
+ =?us-ascii?Q?ntdKdMcexq7m+yVeKMBfF6SnAJ+VeJuQcabYSdReXKeSxyvFb5nn8wTCCGCv?=
+ =?us-ascii?Q?QDNKLsjZpTSST5TTm4fwPlelb/qoVbJAaRFwpHIiivUEvZt5VRMdcU8XzGE3?=
+ =?us-ascii?Q?zIhCKOdWeZ1LD4Xj/K80o9UYTGR9U8qWYun9Xksw7Ve4p5ksAlAcdgjtcRMQ?=
+ =?us-ascii?Q?mtfa6uX5Wi+l8qOQUNAGZ6egYSluQ9w37Ox3+BC2MuCnm+oBI74HeFXgsQad?=
+ =?us-ascii?Q?dKOhORGgkmznqtFxdMSQca6kd0fICFmoAdrqg6MJG9vlb8TTFseVqD7MTW9J?=
+ =?us-ascii?Q?jAiIbnQaNVQ6Npv00vau+7YOsyc4bKtdjEEqd4QhVlzRbw5f/WZKR0Cg8pmQ?=
+ =?us-ascii?Q?OZRSOVmTvpbjwf4UedG7CKbJefyC3B7w4sEvgqoAKA9bMYt7QNZF8tS8J6Ql?=
+ =?us-ascii?Q?/dXTZVyZrnWXuBnK1C9B9d8oVV/nnGfLe/178O479GrmQ1dBQ+jUUyWoMJ7N?=
+ =?us-ascii?Q?aMlaw0sanMbSnioRC+ETGNebv84nC5YqQp5XKAKT3tVqbSNGApztOfkSvZo0?=
+ =?us-ascii?Q?cnhMSODtvP/zZSfhvuqT3qBnuA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <C85B47D04F07CB43933C5B0A4CBB4230@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe319675-92a0-48fc-8ea7-08d9ed1a2706
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Feb 2022 04:51:22.8528
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN2PR01MB4361
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,TRACKER_ID,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,21 +129,31 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2/10/22 7:32 PM, Lh Kuo ³¢¤O»¨ wrote:
->> The return here means that the initialization is now redundant and will stop the compiler spotting any
->> future similar issues which isn't ideal.
-> I got it, so do I need to submit a new patch?
 
-Assuming yes, so something else..
+>=20
+> I'm sorry, I'd build tested it here but clearly screwed that up. Try=20
+> this one?
+>=20
+>=20
+With this patch, I built 2 kernels, one with CONFIG_LOAD_UEFI_KEYS=3Dy and =
+other with CONFIG_LOAD_UEFI_KEYS=3Dn. I have got different variables causin=
+g panics in both cases. The logs couldn't get saved in journalctl so, I cli=
+cked a picture of the same. The kernel anyways was refusing to boot after t=
+hese logs.
 
-Looking again at the function, there are 3 sets of if-check blocks these 
-could be combined into the first one.
+With CONFIG_LOAD_UEFI_KEYS=3Dy, this variable seems to be causing panics
 
-The later two are variations on is this an rx or a tx, the first check 
-does that.
+MokIgnoreDB-605dab50-e046-4300-abb6-3dd810dd8b23
 
-T
+The link of the logs :- https://gist.githubusercontent.com/AdityaGarg8/8e82=
+0c2724a65fb4bbb5deae2b358dc8/raw/2d3ef24c2b5025d500c5bebd418db5c185a47328/C=
+ONFIG_LOAD_UEFI_KEYS=3Dy.jpeg
 
->
->
+With CONFIG_LOAD_UEFI_KEYS=3Dn, this variable seems to be causing panics
+
+AppleSecureBootPolicy-94b73556-2197-4702-82a8-3e1337dafbfb
+
+The link of the logs :- https://gist.githubusercontent.com/AdityaGarg8/8e82=
+0c2724a65fb4bbb5deae2b358dc8/raw/2d3ef24c2b5025d500c5bebd418db5c185a47328/C=
+ONFIG_LOAD_UEFI_KEYS=3Dn.jpeg
 

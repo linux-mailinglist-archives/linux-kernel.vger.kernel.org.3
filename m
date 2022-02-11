@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657914B2ED6
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:52:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 959224B2EC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 21:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345852AbiBKUv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 15:51:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45418 "EHLO
+        id S1353495AbiBKUv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 15:51:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353529AbiBKUvP (ORCPT
+        with ESMTP id S1353528AbiBKUvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Feb 2022 15:51:15 -0500
 Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D24D98;
-        Fri, 11 Feb 2022 12:51:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A65CFE;
+        Fri, 11 Feb 2022 12:51:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
         ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:References:
         In-Reply-To:Message-Id:Date:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=K2AaiHeuAPOhUIx+banJClIWKx7DCqmxRbmOpC7PYoY=; b=AdkkNlLnGpF96EFRIU/3tdeQFS
-        ITPHTAksVBNQhSzw3c5YrPJY/2cuEj+8Ga0ggADELbUbpU4DGuYgQ/stNP2bkYNRn5da81oh2GILK
-        MLtjyn+9BC1XfJqWsg2WlZFgS1oLb+0GmExxmvYMIXzzgzUcqq2OwjN7iFB/VhFfL+JA=;
+        bh=bXIdQJ/4ESH6YhgujxY4yyNTtX8QtVpyBZQqoqBhJLo=; b=EP/AwTVRkHmcR90zR+btbCsSbF
+        3vkLeb7/d0pHeDHWhKJqzQDUqPfw0htFnBj7ORSmcVaNI/IFzPj80JdLJjh25nDDkOUL12gnjnwSO
+        N4Zz3hbT4KxdA2QC/V/lc2i8a5h/DT4AVx2D5TPaSV7t34hWyXgptwXiS5RQbVw5rl1I=;
 Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:55280 helo=pettiford.lan)
         by mail.hugovil.com with esmtpa (Exim 4.92)
         (envelope-from <hugo@hugovil.com>)
-        id 1nIcsg-00067w-LQ; Fri, 11 Feb 2022 15:51:03 -0500
+        id 1nIcsi-00067w-7T; Fri, 11 Feb 2022 15:51:04 -0500
 From:   Hugo Villeneuve <hugo@hugovil.com>
 To:     hvilleneuve@dimonoff.com, a.zummo@towertech.it,
         alexandre.belloni@bootlin.com
 Cc:     hugo@hugovil.com, linux-rtc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Date:   Fri, 11 Feb 2022 15:50:27 -0500
-Message-Id: <20220211205029.3940756-13-hugo@hugovil.com>
+Date:   Fri, 11 Feb 2022 15:50:28 -0500
+Message-Id: <20220211205029.3940756-14-hugo@hugovil.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220211205029.3940756-1-hugo@hugovil.com>
 References: <20220211205029.3940756-1-hugo@hugovil.com>
@@ -48,7 +48,7 @@ X-Spam-Level:
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v2 12/14] rtc: pcf2127: support generic watchdog timing configuration
+Subject: [PATCH v2 13/14] rtc: pcf2127: add flag for watchdog register value read support
 X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
 X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
@@ -57,137 +57,85 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-Introduce in the configuration structure two new values to hold the
-watchdog clock source and the min_hw_heartbeat_ms value.
+The watchdog value register cannot be read on the PCF2131 after being
+set.
 
-The minimum and maximum timeout values are automatically computed from
-the watchdog clock source value for each variant.
-
-The PCF2131 has no 1Hz watchdog clock source, as is the case for
-PCF2127/29.
-
-The next best choice is using a 1/4Hz clock, giving a watchdog timeout
-range between 4 and 1016s. By using the same register configuration as
-for the PCF2127/29, the 1/4Hz clock source is selected.
-
-Note: the PCF2127 datasheet gives a min/max range between 1 and 255s,
-but it should be between 2 and 254s, because the watchdog is triggered
-when the timer value reaches 1, not 0.
+Add a new flag to identify which variant has read access to this
+register, and use this flag to selectively test if watchdog timer was
+started by bootloader.
 
 Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 ---
- drivers/rtc/rtc-pcf2127.c | 56 +++++++++++++++++++++++++++++++++------
- 1 file changed, 48 insertions(+), 8 deletions(-)
+ drivers/rtc/rtc-pcf2127.c | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index 84ec7d5fda59..7733122ac971 100644
+index 7733122ac971..8accdece7d51 100644
 --- a/drivers/rtc/rtc-pcf2127.c
 +++ b/drivers/rtc/rtc-pcf2127.c
-@@ -157,9 +157,29 @@
+@@ -214,6 +214,7 @@ struct pcf21xx_config {
+ 	int max_register;
+ 	unsigned int has_nvmem:1;
+ 	unsigned int has_bit_wd_ctl_cd0:1;
++	unsigned int wd_val_reg_readable:1; /* If watchdog value register can be read. */
+ 	unsigned int has_int_a_b:1; /* PCF2131 supports two interrupt outputs. */
+ 	unsigned int has_reset_reg:1; /* If variant has a reset register. */
+ 	u8 regs_td_base; /* Time/data base registers. */
+@@ -511,7 +512,6 @@ static const struct watchdog_ops pcf2127_watchdog_ops = {
  
- /* Watchdog timer value constants */
- #define PCF2127_WD_VAL_STOP		0
--#define PCF2127_WD_VAL_MIN		2
--#define PCF2127_WD_VAL_MAX		255
--#define PCF2127_WD_VAL_DEFAULT		60
-+#define PCF2127_WD_VAL_DEFAULT		60 /* In seconds. */
-+/* PCF2127/29 watchdog timer value constants */
-+#define PCF2127_WD_CLOCK_HZ_X1000	1000 /* 1Hz */
-+#define PCF2127_WD_MIN_HW_HEARTBEAT_MS	500
-+/* PCF2131 watchdog timer value constants */
-+#define PCF2131_WD_CLOCK_HZ_X1000	250  /* 1/4Hz */
-+#define PCF2131_WD_MIN_HW_HEARTBEAT_MS	4000
-+/*
-+ * Compute watchdog period, t, in seconds, from the WATCHDG_TIM_VAL register
-+ * value, n, and the clock frequency, f, in Hz.
-+ *
-+ * The PCF2127/29 datasheet gives t as:
-+ *   t = n / f
-+ * The PCF2131 datasheet gives t as:
-+ *   t = (n - 1) / f
-+ * For both variants, the watchdog is triggered when the WATCHDG_TIM_VAL reaches
-+ * the value 1, and not zero. Consequently, the equation from the PCF2131
-+ * datasheet seems to be the correct one for both variants.
-+ */
-+#define WD_PERIOD_S(_n_, _f1000_) ((1000 * ((_n_) - 1)) / (_f1000_))
-+
-+/* Compute value of WATCHDG_TIM_VAL to obtain period t, in seconds. */
-+#define WD_COUNTER(_t_, _f1000_) ((((_t_) * (_f1000_)) / 1000) + 1)
+ static int pcf2127_watchdog_init(struct device *dev, struct pcf2127 *pcf2127)
+ {
+-	u32 wdd_timeout;
+ 	int ret;
  
- /* Mask for currently enabled interrupts */
- #define PCF2127_CTRL1_IRQ_MASK (PCF2127_BIT_CTRL1_TSF1)
-@@ -202,6 +222,11 @@ struct pcf21xx_config {
- 	u8 reg_wd_val; /* Watchdog value register. */
- 	u8 reg_clkout; /* Clkout register. */
- 	u8 reg_reset;  /* Reset register if available. */
-+
-+	/* Watchdog configuration. */
-+	int wdd_clock_hz_x1000; /* Value in Hz multiplicated by 1000 */
-+	int wdd_min_hw_heartbeat_ms;
-+
- 	unsigned int ts_count;
- 	struct pcf21xx_ts_config ts[4];
- 	struct attribute_group attribute_group;
-@@ -496,10 +521,19 @@ static int pcf2127_watchdog_init(struct device *dev, struct pcf2127 *pcf2127)
- 	pcf2127->wdd.parent = dev;
- 	pcf2127->wdd.info = &pcf2127_wdt_info;
- 	pcf2127->wdd.ops = &pcf2127_watchdog_ops;
--	pcf2127->wdd.min_timeout = PCF2127_WD_VAL_MIN;
--	pcf2127->wdd.max_timeout = PCF2127_WD_VAL_MAX;
--	pcf2127->wdd.timeout = PCF2127_WD_VAL_DEFAULT;
--	pcf2127->wdd.min_hw_heartbeat_ms = 500;
-+
-+	pcf2127->wdd.min_timeout =
-+		WD_PERIOD_S(2, pcf2127->cfg->wdd_clock_hz_x1000);
-+	pcf2127->wdd.max_timeout =
-+		WD_PERIOD_S(255, pcf2127->cfg->wdd_clock_hz_x1000);
-+	pcf2127->wdd.timeout = WD_COUNTER(PCF2127_WD_VAL_DEFAULT,
-+					  pcf2127->cfg->wdd_clock_hz_x1000);
-+
-+	dev_dbg(dev, "%s min = %ds\n", __func__, pcf2127->wdd.min_timeout);
-+	dev_dbg(dev, "%s max = %ds\n", __func__, pcf2127->wdd.max_timeout);
-+	dev_dbg(dev, "%s def = %d\n", __func__, pcf2127->wdd.timeout);
-+
-+	pcf2127->wdd.min_hw_heartbeat_ms = pcf2127->cfg->wdd_min_hw_heartbeat_ms;
- 	pcf2127->wdd.status = WATCHDOG_NOWAYOUT_INIT_STATUS;
- 
+ 	if (!IS_ENABLED(CONFIG_WATCHDOG) ||
+@@ -539,12 +539,17 @@ static int pcf2127_watchdog_init(struct device *dev, struct pcf2127 *pcf2127)
  	watchdog_set_drvdata(&pcf2127->wdd, pcf2127);
-@@ -926,6 +960,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
- 		.reg_wd_ctl = PCF2127_REG_WD_CTL,
- 		.reg_wd_val = PCF2127_REG_WD_VAL,
- 		.reg_clkout = PCF2127_REG_CLKOUT,
-+		.wdd_clock_hz_x1000 = PCF2127_WD_CLOCK_HZ_X1000,
-+		.wdd_min_hw_heartbeat_ms = PCF2127_WD_MIN_HW_HEARTBEAT_MS,
- 		.ts_count = 1,
- 		.ts[0] = {
- 			.regs_base = PCF2127_REG_TS1_BASE,
-@@ -951,6 +987,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
- 		.reg_wd_ctl = PCF2127_REG_WD_CTL,
- 		.reg_wd_val = PCF2127_REG_WD_VAL,
- 		.reg_clkout = PCF2127_REG_CLKOUT,
-+		.wdd_clock_hz_x1000 = PCF2127_WD_CLOCK_HZ_X1000,
-+		.wdd_min_hw_heartbeat_ms = PCF2127_WD_MIN_HW_HEARTBEAT_MS,
- 		.ts_count = 1,
- 		.ts[0] = {
- 			.regs_base = PCF2127_REG_TS1_BASE,
-@@ -977,6 +1015,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
- 		.reg_wd_val = PCF2131_REG_WD_VAL,
- 		.reg_clkout = PCF2131_REG_CLKOUT,
- 		.reg_reset  = PCF2131_REG_SR_RESET,
-+		.wdd_clock_hz_x1000 = PCF2131_WD_CLOCK_HZ_X1000,
-+		.wdd_min_hw_heartbeat_ms = PCF2131_WD_MIN_HW_HEARTBEAT_MS,
- 		.ts_count = 4,
- 		.ts[0] = {
- 			.regs_base = PCF2131_REG_TS1_BASE,
-@@ -1214,7 +1254,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
  
- 	/*
- 	 * Watchdog timer enabled and reset pin /RST activated when timed out.
--	 * Select 1Hz clock source for watchdog timer.
-+	 * Select 1Hz clock source for watchdog timer (1/4Hz for PCF2131).
- 	 * Note: Countdown timer disabled and not available.
- 	 * For pca2129, pcf2129 and pcf2131, only bit[7] is for Symbol WD_CD
- 	 * of register watchdg_tim_ctl. The bit[6] is labeled
+ 	/* Test if watchdog timer is started by bootloader */
+-	ret = regmap_read(pcf2127->regmap, pcf2127->cfg->reg_wd_val, &wdd_timeout);
+-	if (ret)
+-		return ret;
++	if (pcf2127->cfg->wd_val_reg_readable) {
++		u32 wdd_timeout;
++
++		ret = regmap_read(pcf2127->regmap, pcf2127->cfg->reg_wd_val,
++				  &wdd_timeout);
++		if (ret)
++			return ret;
+ 
+-	if (wdd_timeout)
+-		set_bit(WDOG_HW_RUNNING, &pcf2127->wdd.status);
++		if (wdd_timeout)
++			set_bit(WDOG_HW_RUNNING, &pcf2127->wdd.status);
++	}
+ 
+ 	return devm_watchdog_register_device(dev, &pcf2127->wdd);
+ }
+@@ -953,6 +958,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+ 		.max_register = 0x1d,
+ 		.has_nvmem = 1,
+ 		.has_bit_wd_ctl_cd0 = 1,
++		.wd_val_reg_readable = 1,
+ 		.has_int_a_b = 0,
+ 		.has_reset_reg = 0,
+ 		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
+@@ -980,6 +986,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+ 		.max_register = 0x19,
+ 		.has_nvmem = 0,
+ 		.has_bit_wd_ctl_cd0 = 0,
++		.wd_val_reg_readable = 1,
+ 		.has_int_a_b = 0,
+ 		.has_reset_reg = 0,
+ 		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
+@@ -1007,6 +1014,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+ 		.max_register = 0x36,
+ 		.has_nvmem = 0,
+ 		.has_bit_wd_ctl_cd0 = 0,
++		.wd_val_reg_readable = 0,
+ 		.has_int_a_b = 1,
+ 		.has_reset_reg = 1,
+ 		.regs_td_base = PCF2131_REG_TIME_DATE_BASE,
 -- 
 2.30.2
 

@@ -2,97 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458B74B2CB1
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 19:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04CAD4B2CA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 19:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242142AbiBKSQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 13:16:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57334 "EHLO
+        id S1348146AbiBKSQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 13:16:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343636AbiBKSQh (ORCPT
+        with ESMTP id S245125AbiBKSQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 13:16:37 -0500
-X-Greylist: delayed 194 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 10:16:35 PST
-Received: from st43p00im-ztbu10073601.me.com (st43p00im-ztbu10073601.me.com [17.58.63.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850C3D4F
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 10:16:35 -0800 (PST)
+        Fri, 11 Feb 2022 13:16:40 -0500
+Received: from st43p00im-ztbu10063701.me.com (st43p00im-ztbu10063701.me.com [17.58.63.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8E3CEC
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 10:16:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1644603394; bh=5BSwyJv82sZwTHNuaRP1rRbMvUJ08vkgvnKFa9JwMmo=;
+        t=1644603397; bh=mgjRMc/t3hJSZuo+CfZ8yOM9oXgwhCun+n3Gpc9EK2w=;
         h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=vDt/4C0ud2P9NGxudzEpnpHDu4gk/4DOHCttYSCmvYtwAw4mejZYGJFoYp1d74kKI
-         bWQBL1BU4b7ZVwuTEAi/D9JjCge+j3/e1s/ecy+pcthLny0yiI0eU7BGu6binG/v0b
-         5CgYSmeIG+g1/JBgWUhI0K9gcW/b4UtzKt6yEWIIJ68t7K/v/EdlpfsUxXRmf9HRoT
-         z+MuwWXYYB+i0Y3WXlGk7K148ko66cwr2x2VE4MOnbZaZ23gOHDDDrDQHSQF7Zge8d
-         b2MAswppuCMqwWQtpIItMZAcKZb41kl0TbVcNVc7uuU7jBneubnYDjvJlQRWv+EEie
-         vSOB6q0wYboFA==
+        b=IFiRMxDjhsRIObQc1EMdp/R3qCT9vRgO9DG+fDHnqu47Vxtq3Wmg0mTKGd9lQtBlg
+         IHYXiRZ2FgPhkhIKlUZT+4XA7G9yvxDQ1LcEw7RN0DBN7zFkci1l5GJRJUnlMtvrdl
+         zveBP9nmfbRFTkvuka3p+20cQwmY1+UZbnLpD7bh833mcIOdsM78MTWmPnOonjnST8
+         aLOEvIwpn6zqg/rcsS1LiMGpEJMJGVOVd+KuaDsZz7xyT65knWgECbe5nXDNJsnfgt
+         OgydQBlk1Tg0JbIPZqKrWyDNZtDbumkvSaBQvhJcKZJZauQTAZdJ5SCAnH8PJ1+bV+
+         laq0D9F+DSQAA==
 Received: from localhost (lfbn-lyo-1-306-208.w2-7.abo.wanadoo.fr [2.7.142.208])
-        by st43p00im-ztbu10073601.me.com (Postfix) with ESMTPSA id A651E5A05C3;
-        Fri, 11 Feb 2022 18:16:30 +0000 (UTC)
+        by st43p00im-ztbu10063701.me.com (Postfix) with ESMTPSA id 45C97D006D2;
+        Fri, 11 Feb 2022 18:16:37 +0000 (UTC)
 From:   Alain Volmat <avolmat@me.com>
 To:     Patrice Chotard <patrice.chotard@foss.st.com>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, avolmat@me.com
-Subject: [PATCH v2 0/7] ARM: dts: sti: various DT fixes to avoid warnings
-Date:   Fri, 11 Feb 2022 19:16:07 +0100
-Message-Id: <20220211181614.683497-1-avolmat@me.com>
+Subject: [PATCH v2 1/7] ARM: dts: sti: ensure unique unit-address in stih407-clock
+Date:   Fri, 11 Feb 2022 19:16:08 +0100
+Message-Id: <20220211181614.683497-2-avolmat@me.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220211181614.683497-1-avolmat@me.com>
+References: <20220211181614.683497-1-avolmat@me.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
  =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.572,17.0.605.474.0000000_definitions?=
  =?UTF-8?Q?=3D2022-01-14=5F01:2022-01-14=5F01,2020-02-14=5F11,2020-01-23?=
  =?UTF-8?Q?=5F02_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=534
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=726
  clxscore=1015 bulkscore=0 adultscore=0 spamscore=0 malwarescore=0
  mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2202110099
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A first serie to correct a large amount of DT warnings seen when
-building with the W=1 option and mainly due to having several time
-the same reg property (clock) or having unnecessary reg value.
+Move quadfs and a9-mux clocks nodes into clockgen nodes so
+that they can get the reg property from the parent node and
+ensure only one node has the address.
 
-The first 3 patches related to clocks require that recent serie [1] of
-clock drivers improvements be first merged.
+Signed-off-by: Alain Volmat <avolmat@me.com>
+---
+ arch/arm/boot/dts/stih407-clock.dtsi | 101 ++++++++++++---------------
+ 1 file changed, 46 insertions(+), 55 deletions(-)
 
-[1] https://lore.kernel.org/linux-clk/20211202072850.194314-1-avolmat@me.com/T/#t
-
-v2: squash together several patches from the previous serie in order to
-    avoid compilation issues
-
-Alain Volmat (7):
-  ARM: dts: sti: ensure unique unit-address in stih407-clock
-  ARM: dts: sti: ensure unique unit-address in stih410-clock
-  ARM: dts: sti: ensure unique unit-address in stih418-clock
-  ARM: dts: sti: move some nodes out of the soc section in
-    stih407-family.dtsi
-  ARM: dts: sti: remove delta node from stih410.dtsi
-  ARM: dts: sti: move usb picophy nodes out of soc in stih410.dtsi
-  ARM: dts: sti: move usb picophy nodes out of soc in stih418.dtsi
-
- arch/arm/boot/dts/stih407-clock.dtsi  | 101 +++++-----
- arch/arm/boot/dts/stih407-family.dtsi | 262 +++++++++++++-------------
- arch/arm/boot/dts/stih410-b2120.dts   |  16 +-
- arch/arm/boot/dts/stih410-b2260.dts   |  30 +--
- arch/arm/boot/dts/stih410-clock.dtsi  | 100 +++++-----
- arch/arm/boot/dts/stih410.dtsi        |  52 ++---
- arch/arm/boot/dts/stih418-b2199.dts   |  22 +--
- arch/arm/boot/dts/stih418-clock.dtsi  | 101 +++++-----
- arch/arm/boot/dts/stih418.dtsi        |  38 ++--
- arch/arm/boot/dts/stihxxx-b2120.dtsi  |  22 +--
- 10 files changed, 351 insertions(+), 393 deletions(-)
-
+diff --git a/arch/arm/boot/dts/stih407-clock.dtsi b/arch/arm/boot/dts/stih407-clock.dtsi
+index 9cce9541e26b..350bcfcf498b 100644
+--- a/arch/arm/boot/dts/stih407-clock.dtsi
++++ b/arch/arm/boot/dts/stih407-clock.dtsi
+@@ -29,7 +29,7 @@ clocks {
+ 		 */
+ 		clockgen-a9@92b0000 {
+ 			compatible = "st,clkgen-c32";
+-			reg = <0x92b0000 0xffff>;
++			reg = <0x92b0000 0x10000>;
+ 
+ 			clockgen_a9_pll: clockgen-a9-pll {
+ 				#clock-cells = <1>;
+@@ -37,32 +37,27 @@ clockgen_a9_pll: clockgen-a9-pll {
+ 
+ 				clocks = <&clk_sysin>;
+ 			};
+-		};
+ 
+-		/*
+-		 * ARM CPU related clocks.
+-		 */
+-		clk_m_a9: clk-m-a9@92b0000 {
+-			#clock-cells = <0>;
+-			compatible = "st,stih407-clkgen-a9-mux";
+-			reg = <0x92b0000 0x10000>;
+-
+-			clocks = <&clockgen_a9_pll 0>,
+-				 <&clockgen_a9_pll 0>,
+-				 <&clk_s_c0_flexgen 13>,
+-				 <&clk_m_a9_ext2f_div2>;
++			clk_m_a9: clk-m-a9 {
++				#clock-cells = <0>;
++				compatible = "st,stih407-clkgen-a9-mux";
+ 
++				clocks = <&clockgen_a9_pll 0>,
++					 <&clockgen_a9_pll 0>,
++					 <&clk_s_c0_flexgen 13>,
++					 <&clk_m_a9_ext2f_div2>;
+ 
+-			/*
+-			 * ARM Peripheral clock for timers
+-			 */
+-			arm_periph_clk: clk-m-a9-periphs {
+-				#clock-cells = <0>;
+-				compatible = "fixed-factor-clock";
++				/*
++				 * ARM Peripheral clock for timers
++				 */
++				arm_periph_clk: clk-m-a9-periphs {
++					#clock-cells = <0>;
++					compatible = "fixed-factor-clock";
+ 
+-				clocks = <&clk_m_a9>;
+-				clock-div = <2>;
+-				clock-mult = <1>;
++					clocks = <&clk_m_a9>;
++					clock-div = <2>;
++					clock-mult = <1>;
++				};
+ 			};
+ 		};
+ 
+@@ -87,14 +82,6 @@ clk_s_a0_flexgen: clk-s-a0-flexgen {
+ 			};
+ 		};
+ 
+-		clk_s_c0_quadfs: clk-s-c0-quadfs@9103000 {
+-			#clock-cells = <1>;
+-			compatible = "st,quadfs-pll";
+-			reg = <0x9103000 0x1000>;
+-
+-			clocks = <&clk_sysin>;
+-		};
+-
+ 		clk_s_c0: clockgen-c@9103000 {
+ 			compatible = "st,clkgen-c32";
+ 			reg = <0x9103000 0x1000>;
+@@ -113,6 +100,13 @@ clk_s_c0_pll1: clk-s-c0-pll1 {
+ 				clocks = <&clk_sysin>;
+ 			};
+ 
++			clk_s_c0_quadfs: clk-s-c0-quadfs {
++				#clock-cells = <1>;
++				compatible = "st,quadfs-pll";
++
++				clocks = <&clk_sysin>;
++			};
++
+ 			clk_s_c0_flexgen: clk-s-c0-flexgen {
+ 				#clock-cells = <1>;
+ 				compatible = "st,flexgen", "st,flexgen-stih407-c0";
+@@ -142,18 +136,17 @@ clk_m_a9_ext2f_div2: clk-m-a9-ext2f-div2s {
+ 			};
+ 		};
+ 
+-		clk_s_d0_quadfs: clk-s-d0-quadfs@9104000 {
+-			#clock-cells = <1>;
+-			compatible = "st,quadfs-d0";
+-			reg = <0x9104000 0x1000>;
+-
+-			clocks = <&clk_sysin>;
+-		};
+-
+ 		clockgen-d0@9104000 {
+ 			compatible = "st,clkgen-c32";
+ 			reg = <0x9104000 0x1000>;
+ 
++			clk_s_d0_quadfs: clk-s-d0-quadfs {
++				#clock-cells = <1>;
++				compatible = "st,quadfs-d0";
++
++				clocks = <&clk_sysin>;
++			};
++
+ 			clk_s_d0_flexgen: clk-s-d0-flexgen {
+ 				#clock-cells = <1>;
+ 				compatible = "st,flexgen", "st,flexgen-stih407-d0";
+@@ -166,18 +159,17 @@ clk_s_d0_flexgen: clk-s-d0-flexgen {
+ 			};
+ 		};
+ 
+-		clk_s_d2_quadfs: clk-s-d2-quadfs@9106000 {
+-			#clock-cells = <1>;
+-			compatible = "st,quadfs-d2";
+-			reg = <0x9106000 0x1000>;
+-
+-			clocks = <&clk_sysin>;
+-		};
+-
+ 		clockgen-d2@9106000 {
+ 			compatible = "st,clkgen-c32";
+ 			reg = <0x9106000 0x1000>;
+ 
++			clk_s_d2_quadfs: clk-s-d2-quadfs {
++				#clock-cells = <1>;
++				compatible = "st,quadfs-d2";
++
++				clocks = <&clk_sysin>;
++			};
++
+ 			clk_s_d2_flexgen: clk-s-d2-flexgen {
+ 				#clock-cells = <1>;
+ 				compatible = "st,flexgen", "st,flexgen-stih407-d2";
+@@ -192,18 +184,17 @@ clk_s_d2_flexgen: clk-s-d2-flexgen {
+ 			};
+ 		};
+ 
+-		clk_s_d3_quadfs: clk-s-d3-quadfs@9107000 {
+-			#clock-cells = <1>;
+-			compatible = "st,quadfs-d3";
+-			reg = <0x9107000 0x1000>;
+-
+-			clocks = <&clk_sysin>;
+-		};
+-
+ 		clockgen-d3@9107000 {
+ 			compatible = "st,clkgen-c32";
+ 			reg = <0x9107000 0x1000>;
+ 
++			clk_s_d3_quadfs: clk-s-d3-quadfs {
++				#clock-cells = <1>;
++				compatible = "st,quadfs-d3";
++
++				clocks = <&clk_sysin>;
++			};
++
+ 			clk_s_d3_flexgen: clk-s-d3-flexgen {
+ 				#clock-cells = <1>;
+ 				compatible = "st,flexgen", "st,flexgen-stih407-d3";
 -- 
 2.25.1
 

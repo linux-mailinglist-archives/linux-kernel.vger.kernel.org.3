@@ -2,93 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689BB4B2040
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 09:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D22FF4B2049
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 09:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347620AbiBKIhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 03:37:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60594 "EHLO
+        id S1348061AbiBKIkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 03:40:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiBKIhk (ORCPT
+        with ESMTP id S1344089AbiBKIkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 03:37:40 -0500
-X-Greylist: delayed 68 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 00:37:38 PST
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA15EE59;
-        Fri, 11 Feb 2022 00:37:38 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.94)
-          with esmtps (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1nIRQv-001oqN-BL; Fri, 11 Feb 2022 09:37:37 +0100
-Received: from p5b13a545.dip0.t-ipconnect.de ([91.19.165.69] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.94)
-          with esmtpsa (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1nIRQv-000jOQ-3s; Fri, 11 Feb 2022 09:37:37 +0100
-Message-ID: <4592b3f4-5213-72e7-e135-7e43c04fedc7@physik.fu-berlin.de>
-Date:   Fri, 11 Feb 2022 09:37:36 +0100
+        Fri, 11 Feb 2022 03:40:02 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B20E1BF;
+        Fri, 11 Feb 2022 00:40:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644568801; x=1676104801;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gjIsbK9GNfLO3HPtKpVD2XLjkjlVZ/05OE5660HJOlc=;
+  b=Oh9O/skcwl7CTvUYojN4Hh2STIXlPeLqhh07JsdDDd/HRfZ8Vm92o0yW
+   qldVvDCA/q5XJBfp6sxZPU566HXuHcpRTvargAauihKwbH3TchjlP6c14
+   1+k9x66awqdDTeLclXhvkug/Spn51KD1cCIU4GD0la+gHVZtn97Ycaigm
+   +HgsiN65KqMqmPynBw25n7S9gFn62HFlLc8ZYBxieDEwyAzBUrWEQdHp0
+   jCiEocHUVKdIkeR7Oj88zsW0LvHbIdfsGjyKhcTti1awbfnkaTHaxSpLp
+   0HLG1MNlJre7VDXn8toWyaSCVAx4DRstqVXVkmBOf4PoXhqQSmv8iKWBY
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="230332659"
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="230332659"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 00:39:55 -0800
+X-IronPort-AV: E=Sophos;i="5.88,360,1635231600"; 
+   d="scan'208";a="634008657"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 00:39:52 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nIRSA-003N6D-J2;
+        Fri, 11 Feb 2022 10:38:54 +0200
+Date:   Fri, 11 Feb 2022 10:38:54 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     syzbot <syzbot+0591ccf54ee05344e4eb@syzkaller.appspotmail.com>
+Cc:     akhilrajeev@nvidia.com, djrscally@gmail.com,
+        gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
+        johan@kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, sakari.ailus@linux.intel.com,
+        syzkaller-bugs@googlegroups.com, wsa@kernel.org
+Subject: Re: [syzbot] general protection fault in i2c_setup_smbus_alert
+Message-ID: <YgYgnqnBqRe/pRoo@smile.fi.intel.com>
+References: <0000000000006e988105d72fbe3f@google.com>
+ <0000000000001a5dc005d7b5fab1@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v14 4/5] clocksource/drivers: Add a goldfish-timer
- clocksource
-Content-Language: en-US
-To:     Laurent Vivier <laurent@vivier.eu>, linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20220130143333.552646-1-laurent@vivier.eu>
- <20220130143333.552646-5-laurent@vivier.eu>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <20220130143333.552646-5-laurent@vivier.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 91.19.165.69
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000001a5dc005d7b5fab1@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+On Thu, Feb 10, 2022 at 07:51:08PM -0800, syzbot wrote:
+> syzbot has bisected this issue to:
+> 
+> commit a263a84088f689bf0c1552a510b25d0bcc45fcae
+> Author: Akhil R <akhilrajeev@nvidia.com>
+> Date:   Fri Jan 28 11:44:27 2022 +0000
+> 
+>     i2c: smbus: Use device_*() functions instead of of_*()
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=156c8174700000
+> start commit:   ef6b35306dd8 Add linux-next specific files for 20220204
+> git tree:       linux-next
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=176c8174700000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=136c8174700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=e0431e0b00810b4f
+> dashboard link: https://syzkaller.appspot.com/bug?extid=0591ccf54ee05344e4eb
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1105f472700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16492aa4700000
+> 
+> Reported-by: syzbot+0591ccf54ee05344e4eb@syzkaller.appspotmail.com
+> Fixes: a263a84088f6 ("i2c: smbus: Use device_*() functions instead of of_*()")
+> 
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-On 1/30/22 15:33, Laurent Vivier wrote:
-> Add a clocksource based on the goldfish-rtc device.
-> 
-> Move the timer register definition to <clocksource/timer-goldfish.h>
-> 
-> This kernel implementation is based on the QEMU upstream implementation:
-> 
->    https://git.qemu.org/?p=qemu.git;a=blob_plain;f=hw/rtc/goldfish_rtc.c
-> 
-> Details related to Goldfish devices can be found in:
-> 
->   https://android.googlesource.com/platform/external/qemu/+/master/docs/GOLDFISH-VIRTUAL-HARDWARE.TXT
-> 
-> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+I was faster :-)
 
-It looks like this is the only patch in the series which has not been approved yet.
-
-Adrian
+https://lore.kernel.org/all/20220204155920.13364-1-andriy.shevchenko@linux.intel.com/
 
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer - glaubitz@debian.org
-`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+With Best Regards,
+Andy Shevchenko
+
 

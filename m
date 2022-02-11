@@ -2,97 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 589FA4B1B3C
+	by mail.lfdr.de (Postfix) with ESMTP id 0C0E04B1B3B
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 02:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346821AbiBKB0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 20:26:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40076 "EHLO
+        id S1346833AbiBKB0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 20:26:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344042AbiBKB0V (ORCPT
+        with ESMTP id S1346084AbiBKB0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 20:26:21 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80781120;
-        Thu, 10 Feb 2022 17:26:21 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: krisman)
-        with ESMTPSA id C08D71F469ED
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644542780;
-        bh=x9xd9mW3dxu6WXXxYBXdKYFMuDvhWWT9wcjasq9vcU0=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=btM3SLYO20KSjlJdecdJBFp7bs8l9yvod527TSzWny/udp4o+vZQ0cewI15y72qU9
-         V0sBnk1rmuynSVuYSSjcaMSH8hkIcLdZkmFKh6WzS1H38a5xOU0xNoo2KYLYXkjK/v
-         TSdK0Lqmkzi4jPY5mUeOSNleXyvWQqAuZcoWKGbAysG/qsJ4ab/0532wMMJn8LcGMB
-         w17wLdrvL/Rg7RoEdGmzuUZrKDBy+jTC/7CRBP4rFAMoDgkSY25wf0gO4pI6fI9HX9
-         SfUlVU+AHVFknV2AvIXorzddhhr1AIiHNOACISCVI2yWZ87zGnydqOK20m63qbmovb
-         8T79jjpDG2lEg==
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        wsa@kernel.org, kernel@collabora.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        kbuild test robot <lkp@intel.com>
-Subject: Re: [PATCH v4] gpio: Return EPROBE_DEFER if gc->to_irq is NULL
-Organization: Collabora
-References: <20211116093833.245542-1-shreeya.patel@collabora.com>
-        <874k56znix.fsf@collabora.com>
-        <CAMRc=MdByxO3+hJruvUkULtXAaB7aWewTd=Wv0MbWyX2vykdjA@mail.gmail.com>
-Date:   Thu, 10 Feb 2022 20:26:16 -0500
-In-Reply-To: <CAMRc=MdByxO3+hJruvUkULtXAaB7aWewTd=Wv0MbWyX2vykdjA@mail.gmail.com>
-        (Bartosz Golaszewski's message of "Thu, 10 Feb 2022 19:00:07 +0100")
-Message-ID: <87v8xmxkg7.fsf@collabora.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 10 Feb 2022 20:26:22 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BED267F;
+        Thu, 10 Feb 2022 17:26:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E0095CE25E4;
+        Fri, 11 Feb 2022 01:26:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 078B3C004E1;
+        Fri, 11 Feb 2022 01:26:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644542779;
+        bh=RIkLyIEnDnAtAvgTMBO+mKp45fPhtgteavEWXrg4euw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=aB890eTXzZCpBszQDfR46CLeerYfBHc5bLDOkAywlVEA1WljJIWndIonbdQAIba26
+         xG113oP2lThwHHoe3M83ctVw/pUHspye+lYttVTGEciEE2qKeAGQt44DX6MWPK76bC
+         4bZ8cY/axNQM1EhhtLpK2pntYohJevqYDVeVvtfsH7p2kD769D1r9BY/9qwzgqILWH
+         9T7CxFLnujhP2sBHaTeXDX5N9xS8K6GbyialzD4zrGZUz7UbVP8LMbXNoU0eR/VpOi
+         gMM1QtiUldaL3aWS5FPDP+KW+DUfS/OGszuunc33ihXBpbbiqy0yewrE2xupzGc9Mi
+         W+nVS9hpc6EHA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A8E2E5C0165; Thu, 10 Feb 2022 17:26:18 -0800 (PST)
+Date:   Thu, 10 Feb 2022 17:26:18 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
+Cc:     daniel@ffwll.ch, deller@gmx.de, sam@ravnborg.org,
+        linux@roeck-us.net, willy@infradead.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+        pmenzel@molgen.mpg.de
+Subject: Re: [PATCH linux-next] video: fbdev: fbmem: fix pointer reference to
+ null device field
+Message-ID: <20220211012618.GA4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220210065824.368355-1-zhouzhouyi@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220210065824.368355-1-zhouzhouyi@gmail.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bartosz Golaszewski <brgl@bgdev.pl> writes:
+On Thu, Feb 10, 2022 at 02:58:24PM +0800, Zhouyi Zhou wrote:
+> In function do_remove_conflicting_framebuffers, if device is NULL, there
+> will be null pointer reference. The patch add a check to the if expression.
+> 
+> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> ---
+> Dear Linux folks
+> 
+> I discover this bug in the PowerPC VM provided by
+> Open source lab of Oregon State University:
+> 
+> https://lkml.org/lkml/2022/2/8/1145
+> 
+> I found that the root cause of null device field is in offb_init_fb:
+> info = framebuffer_alloc(sizeof(u32) * 16, NULL);
+> 
+> I have tested the patch in the PowerPC VM. Hope my patch can be correct.
 
-> My email address changed in September, that's why I didn't see the
-> email you sent in November to my old one.
+This looks plausible to me, but I am quite unfamiliar with this code.
 
-Hi Bart,
+						Thanx, Paul
 
-thanks for the prompt reply and sorry for the wrong email address.
-
-> gpiod_to_irq() can be used in context other than driver probing, I'm
-> worried existing users would not know how to handle it. Also: how come
-> you can get the GPIO descriptor from the provider but its interrupts
-> are not yet set up?
-
-I'm definitely some context here, as its been quite a while.
-Shreeya, feel free to pitch in. :)
-
-This is one of the races we saw in gpiochip_add_irqchip, depending on
-the probe order.  The gc is already visible while partially initialized,
-if pinctrl-amd hasn't been probed yet.  Another device being probed can
-hit an -ENXIO here if to_irq is yet uninitialized or enter .to_irq() and
-oops.  Shreeya's patch workarounds the first issue, but is not a
-solution for the second.
-
-There is another patch that has been flying around to address the Oops.
-
-https://lkml.org/lkml/2021/11/8/900
-
-She's been working on a proper solution for that one, which might
-actually address this too and replace the current patch.  Maybe you
-could help us get to a proper solution there?  I'm quite unfamiliar with
-this code myself :)
-
--- 
-Gabriel Krisman Bertazi
+> Many Thanks
+> Zhouyi
+> --
+>  drivers/video/fbdev/core/fbmem.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
+> index 34d6bb1bf82e..422b1fc01722 100644
+> --- a/drivers/video/fbdev/core/fbmem.c
+> +++ b/drivers/video/fbdev/core/fbmem.c
+> @@ -1579,7 +1579,7 @@ static void do_remove_conflicting_framebuffers(struct apertures_struct *a,
+>  			 * If it's not a platform device, at least print a warning. A
+>  			 * fix would add code to remove the device from the system.
+>  			 */
+> -			if (dev_is_platform(device)) {
+> +			if (device && dev_is_platform(device)) {
+>  				registered_fb[i]->forced_out = true;
+>  				platform_device_unregister(to_platform_device(device));
+>  			} else {
+> -- 
+> 2.25.1
+> 

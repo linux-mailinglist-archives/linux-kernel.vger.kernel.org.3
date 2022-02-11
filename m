@@ -2,149 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C310C4B256F
+	by mail.lfdr.de (Postfix) with ESMTP id 440484B256E
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:15:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349886AbiBKMNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 07:13:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55920 "EHLO
+        id S1349920AbiBKMOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 07:14:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236946AbiBKMNu (ORCPT
+        with ESMTP id S237296AbiBKMO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 07:13:50 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBAE1E9
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:13:48 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id fj5so19598138ejc.4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:13:48 -0800 (PST)
+        Fri, 11 Feb 2022 07:14:28 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BB4E77;
+        Fri, 11 Feb 2022 04:14:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=OZFYLN+S6IkbZKtWQGnLOGDHtfELHim7rgW7KJNl2oA=;
-        b=GgzQiLfzSmdOrEWpzLCjSq3QC0hcb9rDCloigLalwdcFW/g9GKJ3a3Z0+28hLH8wbK
-         xp8IGtFCVCVQSyA9ZhpEaqrHjiShC/ZCizU4JmHjIzZ1F66JmvkQELHdJPnjFBAkJI3Q
-         hXYU9/IjNZR9rTRX5wDuSaFBFFg905KXUmqWg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=OZFYLN+S6IkbZKtWQGnLOGDHtfELHim7rgW7KJNl2oA=;
-        b=XkP5eWwTuDzjLXUpe5Crx0ZyZoHUCYaMQ95waOiIhosINJRckptjYpCDZotWVv07yP
-         dLlEBwFDTB4/Q2UaeE8fohUINQdDGN5duInxlx4BBQmZgDOcn9/wYTaLsjkGJURzDaGQ
-         27hJlV3i6vaLzjVExArje9x3O8rXx9eJb089ffiVsKQOY2uruR6Jn1xncEvniRX/NQ4L
-         PvH+BXebwetKbBvOYqLCo8sC67XltJrs2Sq/AX79Fzl7Qxp9+1H9720Pq5PDyGSUPrYH
-         nRKFKl0YV2R5ZqcyXSLDOB5EsumqnRVZn3JlETPg/TUGFNCU7uMMZkhQF92QFJC71PjJ
-         ik4g==
-X-Gm-Message-State: AOAM531NoI3xf4ANMD0k9LL4LT3b7R+4cJ8QJYayYICmZcj7vyVLrN+M
-        rJKwww4uxkcqlrmT7pF/0cqdKQ==
-X-Google-Smtp-Source: ABdhPJyRtqUrUs+M3S+hu6tQUEiRGJ5QkqmMDrFjSkY5y8JkhDvsNhfxzQOQjlNJnDEFjbBJjNU4UA==
-X-Received: by 2002:a17:906:3b42:: with SMTP id h2mr1147665ejf.647.1644581626601;
-        Fri, 11 Feb 2022 04:13:46 -0800 (PST)
-Received: from localhost ([2620:10d:c093:400::5:bc0d])
-        by smtp.gmail.com with ESMTPSA id i22sm5828777ejx.128.2022.02.11.04.13.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 04:13:45 -0800 (PST)
-Date:   Fri, 11 Feb 2022 12:13:45 +0000
-From:   Chris Down <chris@chrisdown.name>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] memcg: synchronously enforce memory.high for
- large overcharges
-Message-ID: <YgZS+YijLo0/WmEd@chrisdown.name>
-References: <20220211064917.2028469-1-shakeelb@google.com>
- <20220211064917.2028469-5-shakeelb@google.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644581668; x=1676117668;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=HAN8WqKwHhJw+Ev12W6Yi3/FMUqiwnIYY4bNw0vnbp0=;
+  b=wTmHsmW932AuRiESAgopoah323VAWzof+ltahGwz8SSADTEh7g6YERCh
+   jKFSSiq+38eIgIwo3ynNBSWXy8KvA4PfmApuAkjq91hKrjmkFFc4Um9tN
+   BDPeaKZ8FEHteFy0KXF2uS4wbAA0cWRivpN2fm+i0Qcfiw/I3w5O7DS2T
+   o=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 Feb 2022 04:14:27 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 04:14:27 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Fri, 11 Feb 2022 04:14:27 -0800
+Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Fri, 11 Feb 2022 04:14:24 -0800
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>, <varada@codeaurora.org>,
+        <mraghava@codeaurora.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <stable@vger.kernel.org>, Kathiravan T <quic_kathirav@quicinc.com>
+Subject: [PATCH] arm64: dts: qcom: ipq8074: fix the sleep clock frequency
+Date:   Fri, 11 Feb 2022 17:44:15 +0530
+Message-ID: <1644581655-11568-1-git-send-email-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220211064917.2028469-5-shakeelb@google.com>
-User-Agent: Mutt/2.1.5 (31b18ae9) (2021-12-30)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shakeel Butt writes:
->The high limit is used to throttle the workload without invoking the
->oom-killer. Recently we tried to use the high limit to right size our
->internal workloads. More specifically dynamically adjusting the limits
->of the workload without letting the workload get oom-killed. However due
->to the limitation of the implementation of high limit enforcement, we
->observed the mechanism fails for some real workloads.
->
->The high limit is enforced on return-to-userspace i.e. the kernel let
->the usage goes over the limit and when the execution returns to
->userspace, the high reclaim is triggered and the process can get
->throttled as well. However this mechanism fails for workloads which do
->large allocations in a single kernel entry e.g. applications that
->mlock() a large chunk of memory in a single syscall. Such applications
->bypass the high limit and can trigger the oom-killer.
->
->To make high limit enforcement more robust, this patch makes the limit
->enforcement synchronous only if the accumulated overcharge becomes
->larger than MEMCG_CHARGE_BATCH. So, most of the allocations would still
->be throttled on the return-to-userspace path but only the extreme
->allocations which accumulates large amount of overcharge without
->returning to the userspace will be throttled synchronously. The value
->MEMCG_CHARGE_BATCH is a bit arbitrary but most of other places in the
->memcg codebase uses this constant therefore for now uses the same one.
+Sleep clock frequency should be 32768Hz. Lets fix it.
 
-Note that mem_cgroup_handle_over_high() has its own allocator throttling grace 
-period, where it bails out if the penalty to apply is less than 10ms. The 
-reclaim will still happen, though. So throttling might not happen even for 
-roughly MEMCG_CHARGE_BATCH-sized allocations, depending on the overall size of 
-the cgroup and its protection.
+Cc: stable@vger.kernel.org
+Fixes: 41dac73e243d ("arm64: dts: Add ipq8074 SoC and HK01 board support")
+Link: https://lore.kernel.org/all/e2a447f8-6024-0369-f698-2027b6edcf9e@codeaurora.org/
+Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+---
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->Signed-off-by: Shakeel Butt <shakeelb@google.com>
->---
->Changes since v1:
->- Based on Roman's comment simply the sync enforcement and only target
->  the extreme cases.
->
-> mm/memcontrol.c | 5 +++++
-> 1 file changed, 5 insertions(+)
->
->diff --git a/mm/memcontrol.c b/mm/memcontrol.c
->index 292b0b99a2c7..0da4be4798e7 100644
->--- a/mm/memcontrol.c
->+++ b/mm/memcontrol.c
->@@ -2703,6 +2703,11 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
-> 		}
-> 	} while ((memcg = parent_mem_cgroup(memcg)));
->
->+	if (current->memcg_nr_pages_over_high > MEMCG_CHARGE_BATCH &&
->+	    !(current->flags & PF_MEMALLOC) &&
->+	    gfpflags_allow_blocking(gfp_mask)) {
->+		mem_cgroup_handle_over_high();
+diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+index 26ba7ce9222c..b6287355ad08 100644
+--- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+@@ -13,7 +13,7 @@
+ 	clocks {
+ 		sleep_clk: sleep_clk {
+ 			compatible = "fixed-clock";
+-			clock-frequency = <32000>;
++			clock-frequency = <32768>;
+ 			#clock-cells = <0>;
+ 		};
+ 
+-- 
+2.7.4
 
-Thanks, I was going to comment on v1 that I prefer to keep the implementation 
-of mem_cgroup_handle_over_high if possible since we know that the mechanism has 
-been safe in production over the past few years.
-
-One question I have is about throttling. It looks like this new 
-mem_cgroup_handle_over_high callsite may mean that throttling is invoked more 
-than once on a misbehaving workload that's failing to reclaim since the 
-throttling could be invoked both here and in return to userspace, right? That 
-might not be a problem, but we should think about the implications of that, 
-especially in relation to MEMCG_MAX_HIGH_DELAY_JIFFIES.
-
-Maybe we should record if throttling happened previously and avoid doing it 
-again for this entry into kernelspace? Not certain that's the right answer, but 
-we should think about what the new semantics should be.
-
->+	}
-> 	return 0;
-> }
->
->-- 
->2.35.1.265.g69c8d7142f-goog
->

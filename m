@@ -2,154 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E07974B2BF9
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:44:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C82114B2BFD
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 18:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352260AbiBKRnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 12:43:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37938 "EHLO
+        id S1352274AbiBKRor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 12:44:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352261AbiBKRnl (ORCPT
+        with ESMTP id S243899AbiBKRop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 12:43:41 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A03CFE
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:43:38 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0401621138;
-        Fri, 11 Feb 2022 17:43:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1644601417; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vj/Ol/hZTbE5apgmIaAmhVjsuurc9KldGUO8mmrGwvA=;
-        b=eluiWHfTkrA40pLxrXbxFdqoQhZWiksAhdnWjtoo3YMM+lVri+p8cLNKFjz7EvHRuMRkvl
-        +93ov6g7GGrZuR52jZe8s1pbrFOXxBgxBz8TjcSBx6T+yZTu5ZeURt4GPdS+s4lZEv4jAD
-        9qHLLLm7xdbkvAQOYDuoT3AF0u95EUA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1644601417;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vj/Ol/hZTbE5apgmIaAmhVjsuurc9KldGUO8mmrGwvA=;
-        b=91/DtaYamMw5ZQJYiCN+N6ADznO1/JwXV5As6lNF0eo+nzjWwH3GPna5Ppjw1UuCJtXRAg
-        bUA6/vBaSBOdz0Cw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C072513CA2;
-        Fri, 11 Feb 2022 17:43:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id WSdULkigBmIeEQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 11 Feb 2022 17:43:36 +0000
-Message-ID: <e6b6c076-3826-b960-78c4-ccbbd686fc65@suse.cz>
-Date:   Fri, 11 Feb 2022 18:43:36 +0100
+        Fri, 11 Feb 2022 12:44:45 -0500
+Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBDD38D
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 09:44:44 -0800 (PST)
+Received: from [192.168.1.18] ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id IZyJniOQGeHnVIZyJnZhrl; Fri, 11 Feb 2022 18:44:42 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Fri, 11 Feb 2022 18:44:42 +0100
+X-ME-IP: 90.126.236.122
+Message-ID: <65ab6b3e-82b4-0a4e-bd6e-5869f735a8f7@wanadoo.fr>
+Date:   Fri, 11 Feb 2022 18:44:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH 09/13] mm/munlock: delete smp_mb() from
- __pagevec_lru_add_fn()
-Content-Language: en-US
-To:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Rik van Riel <riel@surriel.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 46/49] mm/mempolicy: replace nodes_weight with
+ nodes_weight_eq
+Content-Language: en-GB
+To:     Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joe Perches <joe@perches.com>, Dennis Zhou <dennis@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Alexey Klimov <aklimov@redhat.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
- <9121d34d-4889-51f1-56c7-255138f43b8d@google.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <9121d34d-4889-51f1-56c7-255138f43b8d@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220210224933.379149-1-yury.norov@gmail.com>
+ <20220210224933.379149-47-yury.norov@gmail.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220210224933.379149-47-yury.norov@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/6/22 22:45, Hugh Dickins wrote:
-> My reading of comment on smp_mb__after_atomic() in __pagevec_lru_add_fn()
-> says that it can now be deleted; and that remains so when the next patch
-> is added.
-
-Agree with moderate certainty.
-
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-
-> ---
->  mm/swap.c | 37 +++++++++----------------------------
->  1 file changed, 9 insertions(+), 28 deletions(-)
+Le 10/02/2022 à 23:49, Yury Norov a écrit :
+> do_migrate_pages() calls nodes_weight() to compare the weight
+> of nodemask with a given number. We can do it more efficiently with
+> nodes_weight_eq() because conditional nodes_weight() may stop
+> traversing the nodemask earlier, as soon as condition is (or is not)
+> met.
 > 
-> diff --git a/mm/swap.c b/mm/swap.c
-> index 682a03301a2c..3f770b1ea2c1 100644
-> --- a/mm/swap.c
-> +++ b/mm/swap.c
-> @@ -1025,37 +1025,18 @@ static void __pagevec_lru_add_fn(struct folio *folio, struct lruvec *lruvec)
->  
->  	VM_BUG_ON_FOLIO(folio_test_lru(folio), folio);
->  
-> +	folio_set_lru(folio);
->  	/*
-> -	 * A folio becomes evictable in two ways:
-> -	 * 1) Within LRU lock [munlock_vma_page() and __munlock_pagevec()].
-> -	 * 2) Before acquiring LRU lock to put the folio on the correct LRU
-> -	 *    and then
-> -	 *   a) do PageLRU check with lock [check_move_unevictable_pages]
-> -	 *   b) do PageLRU check before lock [clear_page_mlock]
-> -	 *
-> -	 * (1) & (2a) are ok as LRU lock will serialize them. For (2b), we need
-> -	 * following strict ordering:
-> -	 *
-> -	 * #0: __pagevec_lru_add_fn		#1: clear_page_mlock
-> -	 *
-> -	 * folio_set_lru()			folio_test_clear_mlocked()
-> -	 * smp_mb() // explicit ordering	// above provides strict
-> -	 *					// ordering
-> -	 * folio_test_mlocked()			folio_test_lru()
-> +	 * Is an smp_mb__after_atomic() still required here, before
-> +	 * folio_evictable() tests PageMlocked, to rule out the possibility
-> +	 * of stranding an evictable folio on an unevictable LRU?  I think
-> +	 * not, because munlock_page() only clears PageMlocked while the LRU
-> +	 * lock is held.
->  	 *
-> -	 *
-> -	 * if '#1' does not observe setting of PG_lru by '#0' and
-> -	 * fails isolation, the explicit barrier will make sure that
-> -	 * folio_evictable check will put the folio on the correct
-> -	 * LRU. Without smp_mb(), folio_set_lru() can be reordered
-> -	 * after folio_test_mlocked() check and can make '#1' fail the
-> -	 * isolation of the folio whose mlocked bit is cleared (#0 is
-> -	 * also looking at the same folio) and the evictable folio will
-> -	 * be stranded on an unevictable LRU.
-> +	 * (That is not true of __page_cache_release(), and not necessarily
-> +	 * true of release_pages(): but those only clear PageMlocked after
-> +	 * put_page_testzero() has excluded any other users of the page.)
->  	 */
-> -	folio_set_lru(folio);
-> -	smp_mb__after_atomic();
-> -
->  	if (folio_evictable(folio)) {
->  		if (was_unevictable)
->  			__count_vm_events(UNEVICTABLE_PGRESCUED, nr_pages);
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> ---
+>   mm/mempolicy.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+> index 7c852793d9e8..56efd00b1b6e 100644
+> --- a/mm/mempolicy.c
+> +++ b/mm/mempolicy.c
+> @@ -1154,7 +1154,7 @@ int do_migrate_pages(struct mm_struct *mm, const nodemask_t *from,
+>   			 *          [0-7] - > [3,4,5] moves only 0,1,2,6,7.
+>   			 */
+>   
+> -			if ((nodes_weight(*from) != nodes_weight(*to)) &&
+> +			if (!nodes_weight_eq(*from, nodes_weight(*to)) &&
+>   						(node_isset(s, *to)))
+
+Hi,
+
+I've not looked in details, but would it make sense to hoist the 
+"(nodes_weight(*from) != nodes_weight(*to))" test out of the 
+for_each_node_mask() to compute it only once?
+
+'from' and 'to' look unmodified in the loop.
+
+Just my 2c,
+CJ
+
+>   				continue;
+>   
 

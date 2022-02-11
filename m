@@ -2,69 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B544B249E
+	by mail.lfdr.de (Postfix) with ESMTP id 80EDB4B249F
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:43:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349536AbiBKLlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 06:41:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53688 "EHLO
+        id S1349540AbiBKLmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 06:42:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232547AbiBKLlq (ORCPT
+        with ESMTP id S232547AbiBKLmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 06:41:46 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72685E9B
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:41:45 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id c8-20020a17090a674800b001b91184b732so9183924pjm.5
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:41:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Q8UopWdsOFlzJ+Z3GOtI+FpDIRhnoSpt3FpppfjbAIA=;
-        b=nbfWsHZW1l6ukplYAjrYNpBC9AZ/xqfLumN5+l15rN+Nm7KBdBsMuvxj12fTwueg1E
-         ZKANUYOAz7b5dB3wbInFyHvvXIs/ZGUE+sAnZ5DEK9UY+X/a/H4eljBmuS863I8dTxJQ
-         CYOZHqA7WX8JixUOi6Q1fbz1v3D8C8rbH0F+p7/bPp4umFfLXuT0C4KKM6V8x2mGOqZA
-         YlcbjWQ54LIspbn7iW4Bue1dwEBYRKKRnSxIj3D6sWsWITR0okXKcy+OnHl4i4FPyV1+
-         3pNIpKs2/zzSSrMD3Pfm9D5g2Zz7u7I7vBL1h0RU0xEis7p1YuWlhADL/syVncL475Ps
-         MUXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Q8UopWdsOFlzJ+Z3GOtI+FpDIRhnoSpt3FpppfjbAIA=;
-        b=DOfLJJaRY3vBzB1VkiXW//PlepEA8R1QkmsiHoajIQWEye+jwBSxUBrUUAgWL46D7l
-         +fhPn2071fGVv4yhsNcQLtXAIEk9+Q9EEN/Khf02ItJDG6yd1KOcLAmWS5T8L6nxxvcB
-         KDS0A+/01MI6b8vZYdylJzV8IQR6tWrof8AUNJuMZstYrShWzAAYRM8qzwMl0gfG5pVK
-         I9+xt5USqgHsaeuBDbybu/xZhW3hl23jSvWQmVHBwKhtjhubGgLFZ6a0Z3Siy+VXfR8Z
-         jIHxniEtzYtGZ99b5W13aq0s22kS1F0/+2b5jrgvRff+Jx35AAqguO6tsEl7Pq0hFP95
-         xwVw==
-X-Gm-Message-State: AOAM532NTjJAW3OJDNaTNojYhxzRSAUPxcYvzLts/WsQLh1UYy+Nbii+
-        uR6QXFlnflrJQ0j06hqiVbJm
-X-Google-Smtp-Source: ABdhPJzbceK6B1tYas22862Se5sBLDRo1iyWFmOzBM3aFc1AjqNXDFc1QnMwIlNa6qhp1jataBXmVQ==
-X-Received: by 2002:a17:902:7ec2:: with SMTP id p2mr1203636plb.168.1644579704895;
-        Fri, 11 Feb 2022 03:41:44 -0800 (PST)
-Received: from thinkpad ([27.111.75.38])
-        by smtp.gmail.com with ESMTPSA id w11sm26946300pfu.50.2022.02.11.03.41.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 03:41:44 -0800 (PST)
-Date:   Fri, 11 Feb 2022 17:11:39 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     bhelgaas@google.com, bjorn.andersson@linaro.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: pciehp: Add Qualcomm bridge (0x0110) to the command
- completed quirk
-Message-ID: <20220211114139.GC3223@thinkpad>
-References: <20220210145003.135907-1-manivannan.sadhasivam@linaro.org>
- <20220210224930.GA660547@bhelgaas>
+        Fri, 11 Feb 2022 06:42:13 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA7BE9B
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 03:42:12 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EFA9221128;
+        Fri, 11 Feb 2022 11:42:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1644579730; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tQFbjKgXBQhPR1Tis7coIjTSRK1bvjGaqsCPLGRRs2w=;
+        b=ajC8L4bjMIOFXlm633Vg06ax2yH6r+JQjoEQd38cJrC2URPQY/LL1fv1igh+7mER1s5Xa8
+        a6Qx1kGcPad31jSeUapRmGo5Z0Op9ZnjubZ/tz07gnmSxQZmZyD7MBcTPadTEkfdaCF0lU
+        RObcoBY54sstDi4i8iovXUPfcjAhfAg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1644579730;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tQFbjKgXBQhPR1Tis7coIjTSRK1bvjGaqsCPLGRRs2w=;
+        b=pp55ioSBqvxbC9xkV/TpcKn6H7qtt01rU1bsZiLcWq+5deuq7VEjei0hABqJgfdSVbAuGJ
+        B11kefL2UMPzuNDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C04FF13C03;
+        Fri, 11 Feb 2022 11:42:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id MC0+LpJLBmJ2VgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 11 Feb 2022 11:42:10 +0000
+Message-ID: <e7fbbdca-6590-7e45-3efd-279fba7f8376@suse.cz>
+Date:   Fri, 11 Feb 2022 12:42:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220210224930.GA660547@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 05/13] mm/munlock: replace clear_page_mlock() by final
+ clearance
+Content-Language: en-US
+To:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Rik van Riel <riel@surriel.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <8e4356d-9622-a7f0-b2c-f116b5f2efea@google.com>
+ <652a918-8a11-c1e9-a760-854873841bc@google.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <652a918-8a11-c1e9-a760-854873841bc@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,53 +86,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 04:49:30PM -0600, Bjorn Helgaas wrote:
-> On Thu, Feb 10, 2022 at 08:20:03PM +0530, Manivannan Sadhasivam wrote:
-> > The Qualcomm PCI bridge device (0x0110) found in chipsets such as SM8450
-> > does not set the command completed bit unless writes to the Slot Command
-> > register change "Control" bits.
-> > 
-> > This results in timeouts like below:
-> > 
-> > pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2020 msec ago)
-> > 
-> > Hence, add the device to the command completed quirk to mark commands
-> > "completed" immediately unless they change the "Control" bits.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+On 2/6/22 22:38, Hugh Dickins wrote:
+> Placing munlock_vma_page() at the end of page_remove_rmap() shifts most
+> of the munlocking to clear_page_mlock(), since PageMlocked is typically
+> still set when mapcount has fallen to 0.  That is not what we want: we
+> want /proc/vmstat's unevictable_pgs_cleared to remain as a useful check
+> on the integrity of of the mlock/munlock protocol - small numbers are
+> not surprising, but big numbers mean the protocol is not working.
 > 
-> Applied to pci/hotplug for v5.18, thanks!
->
-
-Thanks!
-
-> Should we assume that this erratum will be fixed in future Qualcomm
-> devices?  Or should we apply the quirk for all Qualcomm hotplug
-> bridges, as we do for Intel?
+> That could be easily fixed by placing munlock_vma_page() at the start of
+> page_remove_rmap(); but later in the series we shall want to batch the
+> munlocking, and that too would tend to leave PageMlocked still set at
+> the point when it is checked.
 > 
+> So delete clear_page_mlock() now: leave it instead to release_pages()
+> (and __page_cache_release()) to do this backstop clearing of Mlocked,
+> when page refcount has fallen to 0.  If a pinned page occasionally gets
+> counted as Mlocked and Unevictable until it is unpinned, that's okay.
+> 
+> A slightly regrettable side-effect of this change is that, since
+> release_pages() and __page_cache_release() may be called at interrupt
+> time, those places which update NR_MLOCK with interrupts enabled
+> had better use mod_zone_page_state() than __mod_zone_page_state()
+> (but holding the lruvec lock always has interrupts disabled).
+> 
+> This change, forcing Mlocked off when refcount 0 instead of earlier
+> when mapcount 0, is not fundamental: it can be reversed if performance
+> or something else is found to suffer; but this is the easiest way to
+> separate the stats - let's not complicate that without good reason.
+> 
+> Signed-off-by: Hugh Dickins <hughd@google.com>
 
-I'll check with the Qualcomm hardware folks and update here.
-
-Regards,
-Mani
-
-> > ---
-> >  drivers/pci/hotplug/pciehp_hpc.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/pci/hotplug/pciehp_hpc.c b/drivers/pci/hotplug/pciehp_hpc.c
-> > index 1c1ebf3dad43..4e4ccf3afbe3 100644
-> > --- a/drivers/pci/hotplug/pciehp_hpc.c
-> > +++ b/drivers/pci/hotplug/pciehp_hpc.c
-> > @@ -1084,6 +1084,8 @@ static void quirk_cmd_compl(struct pci_dev *pdev)
-> >  }
-> >  DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_INTEL, PCI_ANY_ID,
-> >  			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
-> > +DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0110,
-> > +			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
-> >  DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0400,
-> >  			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
-> >  DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0401,
-> > -- 
-> > 2.25.1
-> > 
+Acked-by: Vlastimil Babka <vbabka@suse.cz>

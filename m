@@ -2,104 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D91C4B2568
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:15:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C310C4B256F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:15:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349905AbiBKMOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 07:14:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55984 "EHLO
+        id S1349886AbiBKMNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 07:13:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349888AbiBKMN6 (ORCPT
+        with ESMTP id S236946AbiBKMNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 07:13:58 -0500
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F19DA8;
-        Fri, 11 Feb 2022 04:13:57 -0800 (PST)
-Received: by mail-vs1-f44.google.com with SMTP id w6so9576960vsf.3;
-        Fri, 11 Feb 2022 04:13:57 -0800 (PST)
+        Fri, 11 Feb 2022 07:13:50 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBAE1E9
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:13:48 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id fj5so19598138ejc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:13:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chrisdown.name; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=OZFYLN+S6IkbZKtWQGnLOGDHtfELHim7rgW7KJNl2oA=;
+        b=GgzQiLfzSmdOrEWpzLCjSq3QC0hcb9rDCloigLalwdcFW/g9GKJ3a3Z0+28hLH8wbK
+         xp8IGtFCVCVQSyA9ZhpEaqrHjiShC/ZCizU4JmHjIzZ1F66JmvkQELHdJPnjFBAkJI3Q
+         hXYU9/IjNZR9rTRX5wDuSaFBFFg905KXUmqWg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ulYLaVXldSoI4tDDRxPqxlHj4drX158bChWih8XppYk=;
-        b=H7jTd4dGwOHJeB8IFqS+Z19tuXaok6mNx3fXVmuXQxTyxr/mGePHyncLyvmTcPcz86
-         6dYInzawnH0ZosYxamOME6xLQM7kBLfF87xueADBh+t/hvZHLnbEoQYjUJk21Ui+nS+A
-         qyN5iwhc8K3orQlbHKxopHWCxs1xTm3WG2BRHU52K0JIHqR5HtMq0nt4SbXawDw/VrPQ
-         aeSu1qAyH4WwBM+yYKzqjop8V0ChWV9KhvqtsAnjXceHkCzg7S3bBddtbQcgu03cjbh1
-         v6o7eVHh2LNdTRvHBct0E4ZHwRUhNb8aObEqBs+qhGzgDpuRB9YR+MEtpjFCtkaljaqB
-         28pQ==
-X-Gm-Message-State: AOAM533JYshnlnUk0qiXikAnF4xrn9ZAlaJz31GP0PdAAQYAPA7R2AdZ
-        OPycLulzO/Z1z+2q5h609IKEm2n6EnD1SQ==
-X-Google-Smtp-Source: ABdhPJxsf3l7v/aOhtds1muYkZEaJkvsq2pGOeHnHeyHuFoS0A/hW+zuhlsxC5W+w81SYw+CmFHJXg==
-X-Received: by 2002:a05:6102:a39:: with SMTP id 25mr372146vsb.84.1644581636726;
-        Fri, 11 Feb 2022 04:13:56 -0800 (PST)
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com. [209.85.217.43])
-        by smtp.gmail.com with ESMTPSA id k204sm4798871vkk.0.2022.02.11.04.13.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Feb 2022 04:13:55 -0800 (PST)
-Received: by mail-vs1-f43.google.com with SMTP id j26so8546789vso.12;
-        Fri, 11 Feb 2022 04:13:54 -0800 (PST)
-X-Received: by 2002:a05:6102:34d9:: with SMTP id a25mr377312vst.68.1644581634672;
- Fri, 11 Feb 2022 04:13:54 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=OZFYLN+S6IkbZKtWQGnLOGDHtfELHim7rgW7KJNl2oA=;
+        b=XkP5eWwTuDzjLXUpe5Crx0ZyZoHUCYaMQ95waOiIhosINJRckptjYpCDZotWVv07yP
+         dLlEBwFDTB4/Q2UaeE8fohUINQdDGN5duInxlx4BBQmZgDOcn9/wYTaLsjkGJURzDaGQ
+         27hJlV3i6vaLzjVExArje9x3O8rXx9eJb089ffiVsKQOY2uruR6Jn1xncEvniRX/NQ4L
+         PvH+BXebwetKbBvOYqLCo8sC67XltJrs2Sq/AX79Fzl7Qxp9+1H9720Pq5PDyGSUPrYH
+         nRKFKl0YV2R5ZqcyXSLDOB5EsumqnRVZn3JlETPg/TUGFNCU7uMMZkhQF92QFJC71PjJ
+         ik4g==
+X-Gm-Message-State: AOAM531NoI3xf4ANMD0k9LL4LT3b7R+4cJ8QJYayYICmZcj7vyVLrN+M
+        rJKwww4uxkcqlrmT7pF/0cqdKQ==
+X-Google-Smtp-Source: ABdhPJyRtqUrUs+M3S+hu6tQUEiRGJ5QkqmMDrFjSkY5y8JkhDvsNhfxzQOQjlNJnDEFjbBJjNU4UA==
+X-Received: by 2002:a17:906:3b42:: with SMTP id h2mr1147665ejf.647.1644581626601;
+        Fri, 11 Feb 2022 04:13:46 -0800 (PST)
+Received: from localhost ([2620:10d:c093:400::5:bc0d])
+        by smtp.gmail.com with ESMTPSA id i22sm5828777ejx.128.2022.02.11.04.13.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 04:13:45 -0800 (PST)
+Date:   Fri, 11 Feb 2022 12:13:45 +0000
+From:   Chris Down <chris@chrisdown.name>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] memcg: synchronously enforce memory.high for
+ large overcharges
+Message-ID: <YgZS+YijLo0/WmEd@chrisdown.name>
+References: <20220211064917.2028469-1-shakeelb@google.com>
+ <20220211064917.2028469-5-shakeelb@google.com>
 MIME-Version: 1.0
-References: <20220129184225.407100-1-laurent@vivier.eu> <20220129184225.407100-2-laurent@vivier.eu>
- <CAMuHMdVmCV4v=LhGRB3d3hbyL4Etv_Wbb2VPhK5G9a2xB1Pm2A@mail.gmail.com> <0b488b58-3d13-e987-37c7-16bac7a313e0@physik.fu-berlin.de>
-In-Reply-To: <0b488b58-3d13-e987-37c7-16bac7a313e0@physik.fu-berlin.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 11 Feb 2022 13:13:43 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX53by9-5L5UWnjtpsUOX7LJMG+ySbFqO+QtsSST_iXKA@mail.gmail.com>
-Message-ID: <CAMuHMdX53by9-5L5UWnjtpsUOX7LJMG+ySbFqO+QtsSST_iXKA@mail.gmail.com>
-Subject: Re: [PATCH v13 1/5] m68k: add asm/config.h
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Laurent Vivier <laurent@vivier.eu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-rtc@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        John Stultz <john.stultz@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220211064917.2028469-5-shakeelb@google.com>
+User-Agent: Mutt/2.1.5 (31b18ae9) (2021-12-30)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
-
-On Fri, Feb 11, 2022 at 9:36 AM John Paul Adrian Glaubitz
-<glaubitz@physik.fu-berlin.de> wrote:
-> On 1/29/22 20:05, Geert Uytterhoeven wrote:
-> > On Sat, Jan 29, 2022 at 7:42 PM Laurent Vivier <laurent@vivier.eu> wrote:
-> >> To avoid 'warning: no previous prototype for' error, declare all
-> >> the parse_bootinfo and config functions prototypes into asm/config.h
-> >> and include it in arch/m68k/kernel/setup_mm.c and arch/m68k/*/config.c
-> >>
-> >> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
-> >> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> >
-> > I have already queued v12.
+Shakeel Butt writes:
+>The high limit is used to throttle the workload without invoking the
+>oom-killer. Recently we tried to use the high limit to right size our
+>internal workloads. More specifically dynamically adjusting the limits
+>of the workload without letting the workload get oom-killed. However due
+>to the limitation of the implementation of high limit enforcement, we
+>observed the mechanism fails for some real workloads.
 >
-> I assume you're talking about this particular patch only and not the whole
-> series, correct?
+>The high limit is enforced on return-to-userspace i.e. the kernel let
+>the usage goes over the limit and when the execution returns to
+>userspace, the high reclaim is triggered and the process can get
+>throttled as well. However this mechanism fails for workloads which do
+>large allocations in a single kernel entry e.g. applications that
+>mlock() a large chunk of memory in a single syscall. Such applications
+>bypass the high limit and can trigger the oom-killer.
+>
+>To make high limit enforcement more robust, this patch makes the limit
+>enforcement synchronous only if the accumulated overcharge becomes
+>larger than MEMCG_CHARGE_BATCH. So, most of the allocations would still
+>be throttled on the return-to-userspace path but only the extreme
+>allocations which accumulates large amount of overcharge without
+>returning to the userspace will be throttled synchronously. The value
+>MEMCG_CHARGE_BATCH is a bit arbitrary but most of other places in the
+>memcg codebase uses this constant therefore for now uses the same one.
 
-Exactly.
+Note that mem_cgroup_handle_over_high() has its own allocator throttling grace 
+period, where it bails out if the penalty to apply is less than 10ms. The 
+reclaim will still happen, though. So throttling might not happen even for 
+roughly MEMCG_CHARGE_BATCH-sized allocations, depending on the overall size of 
+the cgroup and its protection.
 
-Gr{oetje,eeting}s,
+>Signed-off-by: Shakeel Butt <shakeelb@google.com>
+>---
+>Changes since v1:
+>- Based on Roman's comment simply the sync enforcement and only target
+>  the extreme cases.
+>
+> mm/memcontrol.c | 5 +++++
+> 1 file changed, 5 insertions(+)
+>
+>diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+>index 292b0b99a2c7..0da4be4798e7 100644
+>--- a/mm/memcontrol.c
+>+++ b/mm/memcontrol.c
+>@@ -2703,6 +2703,11 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+> 		}
+> 	} while ((memcg = parent_mem_cgroup(memcg)));
+>
+>+	if (current->memcg_nr_pages_over_high > MEMCG_CHARGE_BATCH &&
+>+	    !(current->flags & PF_MEMALLOC) &&
+>+	    gfpflags_allow_blocking(gfp_mask)) {
+>+		mem_cgroup_handle_over_high();
 
-                        Geert
+Thanks, I was going to comment on v1 that I prefer to keep the implementation 
+of mem_cgroup_handle_over_high if possible since we know that the mechanism has 
+been safe in production over the past few years.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+One question I have is about throttling. It looks like this new 
+mem_cgroup_handle_over_high callsite may mean that throttling is invoked more 
+than once on a misbehaving workload that's failing to reclaim since the 
+throttling could be invoked both here and in return to userspace, right? That 
+might not be a problem, but we should think about the implications of that, 
+especially in relation to MEMCG_MAX_HIGH_DELAY_JIFFIES.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Maybe we should record if throttling happened previously and avoid doing it 
+again for this entry into kernelspace? Not certain that's the right answer, but 
+we should think about what the new semantics should be.
+
+>+	}
+> 	return 0;
+> }
+>
+>-- 
+>2.35.1.265.g69c8d7142f-goog
+>

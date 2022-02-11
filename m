@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C025E4B27A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 15:17:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 707084B27AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 15:19:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238695AbiBKORK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 09:17:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54912 "EHLO
+        id S1350750AbiBKOS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 09:18:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiBKORJ (ORCPT
+        with ESMTP id S229781AbiBKOSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 09:17:09 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCABA21F
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 06:17:06 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4JwG011dw5z9sRw;
-        Fri, 11 Feb 2022 15:17:05 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id HZT9oE91O7UG; Fri, 11 Feb 2022 15:17:05 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4JwG006MCNz9sSB;
-        Fri, 11 Feb 2022 15:17:04 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id BF5198B77D;
-        Fri, 11 Feb 2022 15:17:04 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id bHkdPldf_hbx; Fri, 11 Feb 2022 15:17:04 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.6.91])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 834FB8B764;
-        Fri, 11 Feb 2022 15:17:04 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21BEGsgZ1222519
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 11 Feb 2022 15:16:54 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21BEGqk71222518;
-        Fri, 11 Feb 2022 15:16:52 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH] powerpc/64: Force inlining of prevent_user_access() and set_kuap()
-Date:   Fri, 11 Feb 2022 15:16:51 +0100
-Message-Id: <eff9b2b211957fa2e8707e46f31674097fd563a3.1644588972.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.34.1
+        Fri, 11 Feb 2022 09:18:25 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD14188;
+        Fri, 11 Feb 2022 06:18:24 -0800 (PST)
+Date:   Fri, 11 Feb 2022 15:18:20 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644589101;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0cpXkqDGW3JQTmb6djLKzXDglKrwfkZ8bupjlc3z/TQ=;
+        b=ax7fuI2IZlUWXX6X3GQhGkOp5AxIei3vjDU5l0iw7Uu1jSRR0GsX7YmTOyDZ8mxqDsRtx6
+        AAuwiBpkrtZZuD7olqj5XclYVqaiHCE6qevf3ZRKkgYjK6BrS2o1ml6Dlu8BiSW8YFbd1Y
+        ipXOFQF+SYBThdoRMXtVgawRX1Owh6R3wtE2R9AcPnRcX3oATLqPfu6jQyHBSr/B+/vU8k
+        j7MBrTP/9Ps8ZOfNOhVG/sOxi9wVpokUUtYtyrKpLnYMY6BEuXVkSX/Ssz+AztkuSVZXNU
+        OzrQZVPe/kIwGujtz7WqcPrWm8ykg7LmkLO8Gt95uPztSaonebKOCrT2aJE0xg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644589101;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0cpXkqDGW3JQTmb6djLKzXDglKrwfkZ8bupjlc3z/TQ=;
+        b=09CLKclCQ9Q++DBefs4Ff4baJZD3lSRtcn+qkPYoogjtnnn5ljfzZU8BcL9NT7mQ+/VWNl
+        A3ivc2XZK8CoTNAA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Sultan Alsawaf <sultan@kerneltoast.com>,
+        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Eric Biggers <ebiggers@kernel.org>
+Subject: Re: [PATCH v4 2/2] random: defer fast pool mixing to worker
+Message-ID: <YgZwLM9hhcUHYT0P@linutronix.de>
+References: <20220209125644.533876-1-Jason@zx2c4.com>
+ <20220209125644.533876-3-Jason@zx2c4.com>
+ <YgVTpI/sYLecyWa3@linutronix.de>
+ <YgYdXLg4bo6E7Bit@owl.dominikbrodowski.net>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1644589010; l=4649; s=20211009; h=from:subject:message-id; bh=XrCDeAP4/Azx/7fNFKAhTR51cLiMLmTo9ZiA/wTB8ek=; b=/SDkwx2AgbWZDY0kFyXfMFNomKERjDG1jekOQl0RP7IWfyHQn5G0CjxuDem8kAJrlXgjmwXIArFI jakEEfTsAiRiJWDtcNoKl7AiYFOtlWED8wIESa9PnTjqjtRjiKgY
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YgYdXLg4bo6E7Bit@owl.dominikbrodowski.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,85 +68,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A ppc64_defconfig build exhibits about 10 copied of
-prevent_user_access(). It also have one copy of set_kuap().
+On 2022-02-11 09:25:00 [+0100], Dominik Brodowski wrote:
+> That's a hw rng (such as a tpm chip or the virtio-rng driver) providing s=
+ome
+> entropy; if it's 64 bytes of input, crng_init progresses to 1, and
+> crng_fast_load() should never be called again.[*] I'm a bit suprised that=
+ the
+> hw_rng input occurred so early (it's only at device_initcall() level), and
+> earlier than 64 interrupts. But that may differ from system to system.
+>=20
+> Note that crng_fast_load() will also never be called from
+> add_interrupt_randomness() if
+>=20
+> 	EFI, DT or kexec provides bootloader entropy of at least 64 bytes,
+> 	and CONFIG_RANDOM_TRUST_BOOTLOADER is set
+>=20
+> and/or	CONFIG_RANDOM_TRUST_CPU is set and the RDRAND/RDSEED instructions =
+do
+> 	not fail.
+>=20
+> If neither of these three conditions (hw_rng is run early, bootloader or =
+CPU
+> randomness) are met, the initial and early seeding of the base_crng depen=
+ds
+> on add_interrupt_randomness(), and should happen rather quickly.
 
-	c000000000017340 <.prevent_user_access.constprop.0>:
-	c00000000001a038:	4b ff d3 09 	bl      c000000000017340 <.prevent_user_access.constprop.0>
-	c00000000001aabc:	4b ff c8 85 	bl      c000000000017340 <.prevent_user_access.constprop.0>
-	c00000000001ab38:	4b ff c8 09 	bl      c000000000017340 <.prevent_user_access.constprop.0>
-	c00000000001ade0:	4b ff c5 61 	bl      c000000000017340 <.prevent_user_access.constprop.0>
-	c000000000039b90 <.prevent_user_access.constprop.0>:
-	c00000000003ac08:	4b ff ef 89 	bl      c000000000039b90 <.prevent_user_access.constprop.0>
-	c00000000003b9d0:	4b ff e1 c1 	bl      c000000000039b90 <.prevent_user_access.constprop.0>
-	c00000000003ba54:	4b ff e1 3d 	bl      c000000000039b90 <.prevent_user_access.constprop.0>
-	c00000000003bbfc:	4b ff df 95 	bl      c000000000039b90 <.prevent_user_access.constprop.0>
-	c00000000015dde0 <.prevent_user_access.constprop.0>:
-	c0000000001612c0:	4b ff cb 21 	bl      c00000000015dde0 <.prevent_user_access.constprop.0>
-	c000000000161b54:	4b ff c2 8d 	bl      c00000000015dde0 <.prevent_user_access.constprop.0>
-	c000000000188cf0 <.prevent_user_access.constprop.0>:
-	c00000000018d658:	4b ff b6 99 	bl      c000000000188cf0 <.prevent_user_access.constprop.0>
-	c00000000030fe20 <.prevent_user_access.constprop.0>:
-	c0000000003123d4:	4b ff da 4d 	bl      c00000000030fe20 <.prevent_user_access.constprop.0>
-	c000000000313970:	4b ff c4 b1 	bl      c00000000030fe20 <.prevent_user_access.constprop.0>
-	c0000000005e6bd0 <.prevent_user_access.constprop.0>:
-	c0000000005e7d8c:	4b ff ee 45 	bl      c0000000005e6bd0 <.prevent_user_access.constprop.0>
-	c0000000007bcae0 <.prevent_user_access.constprop.0>:
-	c0000000007bda10:	4b ff f0 d1 	bl      c0000000007bcae0 <.prevent_user_access.constprop.0>
-	c0000000007bda54:	4b ff f0 8d 	bl      c0000000007bcae0 <.prevent_user_access.constprop.0>
-	c0000000007bdd28:	4b ff ed b9 	bl      c0000000007bcae0 <.prevent_user_access.constprop.0>
-	c0000000007c0390:	4b ff c7 51 	bl      c0000000007bcae0 <.prevent_user_access.constprop.0>
-	c00000000094e4f0 <.prevent_user_access.constprop.0>:
-	c000000000950e40:	4b ff d6 b1 	bl      c00000000094e4f0 <.prevent_user_access.constprop.0>
-	c00000000097d2d0 <.prevent_user_access.constprop.0>:
-	c0000000009813fc:	4b ff be d5 	bl      c00000000097d2d0 <.prevent_user_access.constprop.0>
-	c000000000acd540 <.prevent_user_access.constprop.0>:
-	c000000000ad1d60:	4b ff b7 e1 	bl      c000000000acd540 <.prevent_user_access.constprop.0>
-	c000000000e5d680 <.prevent_user_access.constprop.0>:
-	c000000000e64b60:	4b ff 8b 21 	bl      c000000000e5d680 <.prevent_user_access.constprop.0>
-	c000000000e64b6c:	4b ff 8b 15 	bl      c000000000e5d680 <.prevent_user_access.constprop.0>
-	c000000000e64c38:	4b ff 8a 49 	bl      c000000000e5d680 <.prevent_user_access.constprop.0>
+Right.
 
-When building signal_64.c with -Winline the following messages appear:
+> > I did move that crng_fast_load() into the worker and did made some
+> > numbers:
+> >            <idle>-0       [000] d..h1..     2.069924: add_interrupt_ran=
+domness: Tick
+> >=20
+> > first interrupt
+> > =E2=80=A6
+> >         swapper/0-1       [000] d..h.11     2.341938: add_interrupt_ran=
+domness: Tick
+> >         swapper/0-1       [000] d..h.11     2.341938: add_interrupt_ran=
+domness: work
+> >=20
+> > the 64th interrupt, scheduling the worker.
+> >=20
+> >         swapper/0-1       [000] d..h.11     2.345937: add_interrupt_ran=
+domness: Tick
+> >         swapper/0-1       [000] d..h111     2.349938: add_interrupt_ran=
+domness: Tick
+> >         swapper/0-1       [000] d..h.11     2.353939: add_interrupt_ran=
+domness: Tick
+> >         swapper/0-1       [000] d..h.11     2.357940: add_interrupt_ran=
+domness: Tick
+> >         swapper/0-1       [000] d..h111     2.361939: add_interrupt_ran=
+domness: Tick
+> >         swapper/0-1       [000] d..h111     2.365939: add_interrupt_ran=
+domness: Tick
+> >         swapper/0-1       [000] d..h.11     2.369941: add_interrupt_ran=
+domness: Tick
+> >      kworker/0:0H-6       [000] .......     2.384714: mix_interrupt_ran=
+domness: load
+> >      kworker/0:0H-6       [000] .......     2.384715: crng_fast_load: 16
+> >            <idle>-0       [001] dn.h1..     3.205766: add_interrupt_ran=
+domness: Tick
+> >            <idle>-0       [019] dn.h1..     6.771047: add_interrupt_ran=
+domness: Tick
+> >=20
+> > 7 interrupts got lost before the worker could run & load first 16 bytes.
+> > The workqueue core gets initialized at that point and spawns first
+> > worker.
+>=20
+> So the reason for the longer delay here is that the workqueue core had not
+> been initialized beforehand?
 
-	./arch/powerpc/include/asm/book3s/64/kup.h:331:20: error: inlining failed in call to 'set_kuap': call is unlikely and code size would grow [-Werror=inline]
-	./arch/powerpc/include/asm/book3s/64/kup.h:401:20: error: inlining failed in call to 'prevent_user_access.constprop': call is unlikely and code size would grow [-Werror=inline]
+Kind of, yes. workqueue_init_early() happens quite early so we don't
+have to worry about NULL pointer for system_highpri_wq. The worker
+started after workqueue_init() populated the worker pools.
 
-Those functions are used on hot pathes and have been
-expected to be inlined at all time.
+> > After that the interrupts took a break.
+> > And then the work-to-load delay was quite low:
+> >=20
+> >            <idle>-0       [019] dn.h1..     7.586234: add_interrupt_ran=
+domness: Tick
+> >            <idle>-0       [019] dn.h1..     7.586234: add_interrupt_ran=
+domness: work
+> >     kworker/19:0H-175     [019] .......     7.586504: mix_interrupt_ran=
+domness: load
+> >     kworker/19:0H-175     [019] .......     7.586507: crng_fast_load: 16
+> >            <idle>-0       [020] dn.h1..     7.614649: add_interrupt_ran=
+domness: Tick
+> >            <idle>-0       [020] dn.h1..     7.614651: add_interrupt_ran=
+domness: work
+> >            <idle>-0       [020] dn.h1..     7.614736: add_interrupt_ran=
+domness: Tick
+> >     kworker/20:0H-183     [020] dn.h...     7.614859: add_interrupt_ran=
+domness: Tick
+> >     kworker/20:0H-183     [020] .......     7.614871: mix_interrupt_ran=
+domness: load
+> >     kworker/20:0H-183     [020] .......     7.614872: crng_fast_load: 16
+> >            <idle>-0       [018] dn.h1..     8.352423: add_interrupt_ran=
+domness: Tick
+> >            <idle>-0       [018] dn.h1..     8.352423: add_interrupt_ran=
+domness: work
+> >     kworker/18:0H-167     [018] dn.h1..     8.352438: add_interrupt_ran=
+domness: Tick
+> >     kworker/18:0H-167     [018] dn.h1..     8.352448: add_interrupt_ran=
+domness: Tick
+> >     kworker/18:0H-167     [018] dn.h1..     8.352459: add_interrupt_ran=
+domness: Tick
+> >     kworker/18:0H-167     [018] dn.h1..     8.352491: add_interrupt_ran=
+domness: Tick
+> >     kworker/18:0H-167     [018] .......     8.352505: mix_interrupt_ran=
+domness: load
+> >     kworker/18:0H-167     [018] .......     8.352506: crng_fast_load: 16
+> >=20
+> > In total we lost 13 ticks.
+>=20
+> Was this still way before the initramfs was up and running?
 
-Force them inline.
+After unpacked initramfs. From current boot:
 
-This patch reduces the kernel text size by 700 bytes, confirming
-that not inlining those functions is not worth it.
+| [    5.901462] Unpacking initramfs...
+| [    6.758747] sd 1:0:0:0: [sda] Attached SCSI disk
+| [    7.886651] Freeing initrd memory: 9532K
+| [    7.893753] Freeing unused kernel image (initmem) memory: 2184K
+| [    7.963519] Write protecting the kernel read-only data: 20480k
+| [    7.971465] Freeing unused kernel image (text/rodata gap) memory: 2032K
+| [    7.979711] Freeing unused kernel image (rodata/data gap) memory: 1980K
+| [    7.987132] Run /init as init process
+| Loading, please wait...
+|=20
+| Starting version 250.3-2
+| [    8.157529] igb 0000:07:00.0 eno0: renamed from eth0
+| [    8.203836] igb 0000:07:00.1 enp7s0f1: renamed from eth1
+| [    8.219489] random: fast init done
+| Begin: Loading essential drivers ... done.
+| Begin: Running /scripts/init-premount ... done.
+| Begin: Mounting root file system ... Begin: Running /scripts/local-top ..=
+=2E done.
+| Begin: Running /scripts/local-premount ... done.
+| Warning: fsck not present, so skipping root file[    8.337554] XFS (sda2)=
+: Mounting V5 Filesystem
+| [    8.392151] XFS (sda2): Ending clean mount
+| done.
+| Begin: Running /scripts/local-bottom ... done.
+| Begin: Running /scripts/init-bottom ... done.
+| [    8.540708] systemd[1]: systemd 250.3-2 running in system mode =E2=80=
+=A6
+| [   12.207227] random: crng init done
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/include/asm/book3s/64/kup.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I have to note that on this system there is a initramfs but all drivers
+are built-in (you see sd, net _after_ "Unpacking initramfs" but there
+are not drivers to load).
 
-diff --git a/arch/powerpc/include/asm/book3s/64/kup.h b/arch/powerpc/include/asm/book3s/64/kup.h
-index 69fcf63eec94..54cf46808157 100644
---- a/arch/powerpc/include/asm/book3s/64/kup.h
-+++ b/arch/powerpc/include/asm/book3s/64/kup.h
-@@ -328,7 +328,7 @@ static inline unsigned long get_kuap(void)
- 	return mfspr(SPRN_AMR);
- }
- 
--static inline void set_kuap(unsigned long value)
-+static __always_inline void set_kuap(unsigned long value)
- {
- 	if (!mmu_has_feature(MMU_FTR_BOOK3S_KUAP))
- 		return;
-@@ -398,7 +398,7 @@ static __always_inline void allow_user_access(void __user *to, const void __user
- 
- #endif /* !CONFIG_PPC_KUAP */
- 
--static inline void prevent_user_access(unsigned long dir)
-+static __always_inline void prevent_user_access(unsigned long dir)
- {
- 	set_kuap(AMR_KUAP_BLOCKED);
- 	if (static_branch_unlikely(&uaccess_flush_key))
--- 
-2.34.1
+> Thanks,
+> 	Dominik
 
+Sebastian

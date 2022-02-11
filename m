@@ -2,287 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F624B1F43
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 08:24:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3544B1F3F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 08:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347683AbiBKHYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 02:24:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42390 "EHLO
+        id S1347677AbiBKHWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 02:22:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235819AbiBKHYw (ORCPT
+        with ESMTP id S240237AbiBKHWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 02:24:52 -0500
-Received: from out199-10.us.a.mail.aliyun.com (out199-10.us.a.mail.aliyun.com [47.90.199.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559F6B3D
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 23:24:51 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R541e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V47qv8-_1644564287;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V47qv8-_1644564287)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 11 Feb 2022 15:24:47 +0800
-Message-ID: <1644564073.3777697-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH v4 14/14] virtio_pci: queue_reset: support VIRTIO_F_RING_RESET
-Date:   Fri, 11 Feb 2022 15:21:13 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-References: <20220209122901.51790-1-xuanzhuo@linux.alibaba.com>
- <20220209122901.51790-15-xuanzhuo@linux.alibaba.com>
- <8b0b5f06-74eb-d6cb-07e2-38249e4cda92@redhat.com>
-In-Reply-To: <8b0b5f06-74eb-d6cb-07e2-38249e4cda92@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 11 Feb 2022 02:22:36 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75041110B
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 23:22:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644564155; x=1676100155;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jcYJIGxQp0jOw4ZVFK7KkNfQ1kjEHbqar2Rctm9LRwU=;
+  b=Hbe3/24Xb/Kp6+iFI3vzgNTVqJDHwD7NEsOnWHje0nGum+JU2wMvH2w8
+   OxtuSdB+6ovSPCGXPI2QyF0saql6lLgvCJe+hib73Ufo7mPlg/Qlgvmyi
+   P6/ObZJCw3NLFPbfMdhC3v+Qm+zbErQFc3tLTxtFiibifkFNrcorb+tIE
+   s7vm9+WqTPX97LGHivL6a+PcvQXWWxXMmALEuBwM3k1LLb46E7C8QvT0X
+   +iVnELYhKbvV2NANrkdci2W/c+Y8l+af6Mb5eQD62GZubUglEUNZNbWJN
+   X8rM2HIdCGST5aMWdOlNyYCFBVuGlXFZ0aHVWGT9K1G1PAI4yZoBvshAw
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="249887042"
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="249887042"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 23:22:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
+   d="scan'208";a="679429579"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Feb 2022 23:22:34 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nIQGH-0004Hp-D2; Fri, 11 Feb 2022 07:22:33 +0000
+Date:   Fri, 11 Feb 2022 15:22:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
+ 0ba8896d2fd75c330cb52294b82da2a1538de0ce
+Message-ID: <62060eae.6FTO3Ym9tMj9LGAL%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Feb 2022 15:05:40 +0800, Jason Wang <jasowang@redhat.com> wrote:
->
-> =E5=9C=A8 2022/2/9 =E4=B8=8B=E5=8D=888:29, Xuan Zhuo =E5=86=99=E9=81=93:
-> > This patch implements virtio pci support for QUEUE RESET.
-> >
-> > Performing reset on a queue is divided into these steps:
-> >
-> > 1. reset_vq: reset one vq
-> > 2. recycle the buffer from vq by virtqueue_detach_unused_buf()
-> > 3. release the ring of the vq by vring_release_virtqueue()
-> > 4. enable_reset_vq: re-enable the reset queue
-> >
-> > This patch implements reset_vq, enable_reset_vq in the pci scenario
-> >
-> > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> > ---
-> >   drivers/virtio/virtio_pci_common.c |  8 +--
-> >   drivers/virtio/virtio_pci_modern.c | 80 ++++++++++++++++++++++++++++--
-> >   drivers/virtio/virtio_ring.c       |  2 +
-> >   include/linux/virtio.h             |  1 +
-> >   4 files changed, 85 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio=
-_pci_common.c
-> > index cb01eb0cb2e4..303637ac4914 100644
-> > --- a/drivers/virtio/virtio_pci_common.c
-> > +++ b/drivers/virtio/virtio_pci_common.c
-> > @@ -255,9 +255,11 @@ static void vp_del_vq(struct virtqueue *vq)
-> >   	struct virtio_pci_vq_info *info =3D vp_dev->vqs[vq->index];
-> >   	unsigned long flags;
-> >
-> > -	spin_lock_irqsave(&vp_dev->lock, flags);
-> > -	list_del(&info->node);
-> > -	spin_unlock_irqrestore(&vp_dev->lock, flags);
-> > +	if (!vq->reset) {
-> > +		spin_lock_irqsave(&vp_dev->lock, flags);
-> > +		list_del(&info->node);
-> > +		spin_unlock_irqrestore(&vp_dev->lock, flags);
-> > +	}
-> >
-> >   	vp_dev->del_vq(info);
-> >   	kfree(info);
-> > diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio=
-_pci_modern.c
-> > index d29d40bf0b45..cc45515eda50 100644
-> > --- a/drivers/virtio/virtio_pci_modern.c
-> > +++ b/drivers/virtio/virtio_pci_modern.c
-> > @@ -34,6 +34,9 @@ static void vp_transport_features(struct virtio_devic=
-e *vdev, u64 features)
-> >   	if ((features & BIT_ULL(VIRTIO_F_SR_IOV)) &&
-> >   			pci_find_ext_capability(pci_dev, PCI_EXT_CAP_ID_SRIOV))
-> >   		__virtio_set_bit(vdev, VIRTIO_F_SR_IOV);
-> > +
-> > +	if (features & BIT_ULL(VIRTIO_F_RING_RESET))
-> > +		__virtio_set_bit(vdev, VIRTIO_F_RING_RESET);
-> >   }
-> >
-> >   /* virtio config->finalize_features() implementation */
-> > @@ -176,6 +179,70 @@ static void vp_reset(struct virtio_device *vdev)
-> >   	vp_disable_cbs(vdev);
-> >   }
-> >
-> > +static int vp_modern_reset_vq(struct virtqueue *vq)
-> > +{
-> > +	struct virtio_pci_device *vp_dev =3D to_vp_device(vq->vdev);
-> > +	struct virtio_pci_modern_device *mdev =3D &vp_dev->mdev;
-> > +	struct virtio_pci_vq_info *info;
-> > +	unsigned long flags;
-> > +	u16 msix_vec;
-> > +
-> > +	if (!virtio_has_feature(vq->vdev, VIRTIO_F_RING_RESET))
-> > +		return -ENOENT;
-> > +
-> > +	vp_modern_set_queue_reset(mdev, vq->index);
-> > +
-> > +	info =3D vp_dev->vqs[vq->index];
-> > +	msix_vec =3D info->msix_vector;
-> > +
-> > +	/* Disable VQ callback. */
-> > +	if (vp_dev->per_vq_vectors && msix_vec !=3D VIRTIO_MSI_NO_VECTOR)
-> > +		disable_irq(pci_irq_vector(vp_dev->pci_dev, msix_vec));
->
->
-> I think we need a comment to explain why per_vq_mode needs to be dealt
-> with differently.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: 0ba8896d2fd75c330cb52294b82da2a1538de0ce  lib/irq_poll: Declare IRQ_POLL softirq vector as ksoftirqd-parking safe
 
-OK.
+elapsed time: 901m
 
->
->
-> > +
-> > +	/* delete vq */
-> > +	spin_lock_irqsave(&vp_dev->lock, flags);
-> > +	list_del(&info->node);
-> > +	spin_unlock_irqrestore(&vp_dev->lock, flags);
->
->
-> So I don't see where vring is freed and vp_setup_vq() may try to
-> allocate new memory, won't it be a memory leak in this case?
+configs tested: 202
+configs skipped: 4
 
-1. reset_vq: reset one vq
-2. recycle the buffer from vq by virtqueue_detach_unused_buf()
-3. release the ring of the vq by vring_release_virtqueue()
-4. enable_reset_vq: re-enable the reset queue
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-vring_release_virtqueue() (#8 patch) will release the vring.
-That is called by the driver.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                          randconfig-c001
+xtensa                         virt_defconfig
+powerpc64                           defconfig
+powerpc                     sequoia_defconfig
+arm                          iop32x_defconfig
+h8300                               defconfig
+sh                           se7722_defconfig
+alpha                               defconfig
+sh                         ecovec24_defconfig
+powerpc                     ep8248e_defconfig
+arc                            hsdk_defconfig
+m68k                         amcore_defconfig
+mips                        vocore2_defconfig
+arm                         lpc18xx_defconfig
+powerpc                       ppc64_defconfig
+arm                        mini2440_defconfig
+arm                       multi_v4t_defconfig
+openrisc                 simple_smp_defconfig
+nios2                            alldefconfig
+powerpc                      pasemi_defconfig
+sh                        sh7785lcr_defconfig
+sh                          lboxre2_defconfig
+sh                           se7206_defconfig
+sh                            hp6xx_defconfig
+openrisc                            defconfig
+sparc64                          alldefconfig
+powerpc                     mpc83xx_defconfig
+m68k                           sun3_defconfig
+parisc                generic-64bit_defconfig
+arm                        shmobile_defconfig
+mips                           ip32_defconfig
+riscv                    nommu_k210_defconfig
+powerpc                 mpc834x_itx_defconfig
+arm                             ezx_defconfig
+arm                        cerfcube_defconfig
+sh                          urquell_defconfig
+arc                 nsimosci_hs_smp_defconfig
+m68k                       m5249evb_defconfig
+arm                          simpad_defconfig
+m68k                          multi_defconfig
+arm                         s3c6400_defconfig
+csky                             alldefconfig
+xtensa                          iss_defconfig
+powerpc                      ep88xc_defconfig
+mips                             allmodconfig
+ia64                         bigsur_defconfig
+sh                        dreamcast_defconfig
+arc                     nsimosci_hs_defconfig
+arm                     eseries_pxa_defconfig
+alpha                            alldefconfig
+mips                            gpr_defconfig
+h8300                     edosk2674_defconfig
+parisc                              defconfig
+sh                                  defconfig
+m68k                        m5407c3_defconfig
+sh                   sh7770_generic_defconfig
+arm                             pxa_defconfig
+s390                          debug_defconfig
+sh                          r7785rp_defconfig
+arm                      footbridge_defconfig
+alpha                            allyesconfig
+m68k                          hp300_defconfig
+powerpc                     tqm8555_defconfig
+xtensa                              defconfig
+arm                      jornada720_defconfig
+arm                           sunxi_defconfig
+parisc                           alldefconfig
+m68k                          amiga_defconfig
+powerpc                      makalu_defconfig
+powerpc                 linkstation_defconfig
+sh                         microdev_defconfig
+arc                    vdk_hs38_smp_defconfig
+arm                        multi_v7_defconfig
+sh                           se7750_defconfig
+openrisc                         alldefconfig
+sh                           se7724_defconfig
+mips                     loongson1b_defconfig
+m68k                       m5275evb_defconfig
+powerpc                      arches_defconfig
+powerpc                 mpc837x_rdb_defconfig
+arm                  randconfig-c002-20220211
+arm                  randconfig-c002-20220210
+arm                  randconfig-c002-20220209
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                               defconfig
+sparc                            allyesconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+i386                          randconfig-a003
+i386                          randconfig-a001
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+x86_64                        randconfig-a011
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+s390                 randconfig-r044-20220209
+arc                  randconfig-r043-20220208
+arc                  randconfig-r043-20220209
+riscv                randconfig-r042-20220210
+riscv                randconfig-r042-20220209
+arc                  randconfig-r043-20220210
+s390                 randconfig-r044-20220210
+arc                  randconfig-r043-20220211
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-I think I should add a check to vp_modern_enable_reset_vq() that
-vring_release_virtqueue() has already been called.
+clang tested configs:
+riscv                randconfig-c006-20220209
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220209
+i386                          randconfig-c001
+mips                 randconfig-c004-20220209
+arm                  randconfig-c002-20220209
+riscv                randconfig-c006-20220210
+powerpc              randconfig-c003-20220210
+arm                  randconfig-c002-20220210
+mips                 randconfig-c004-20220210
+riscv                randconfig-c006-20220211
+powerpc              randconfig-c003-20220211
+arm                  randconfig-c002-20220211
+mips                 randconfig-c004-20220211
+mips                            e55_defconfig
+x86_64                           allyesconfig
+arm                          ep93xx_defconfig
+powerpc                    gamecube_defconfig
+powerpc                     ksi8560_defconfig
+arm                        mvebu_v5_defconfig
+powerpc                      katmai_defconfig
+powerpc                     mpc5200_defconfig
+powerpc                     akebono_defconfig
+mips                       rbtx49xx_defconfig
+hexagon                             defconfig
+powerpc                 mpc836x_mds_defconfig
+mips                         tb0219_defconfig
+arm                         lpc32xx_defconfig
+arm                           omap1_defconfig
+powerpc                      ppc44x_defconfig
+powerpc                        icon_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220210
+hexagon              randconfig-r045-20220208
+hexagon              randconfig-r041-20220210
+hexagon              randconfig-r041-20220208
+hexagon              randconfig-r045-20220211
+hexagon              randconfig-r041-20220211
+riscv                randconfig-r042-20220211
+hexagon              randconfig-r045-20220209
+hexagon              randconfig-r041-20220209
+riscv                randconfig-r042-20220208
+s390                 randconfig-r044-20220211
+s390                 randconfig-r044-20220208
 
-Thanks
-
->
-> Thanks
->
->
-> > +
-> > +	vq->reset =3D true;
-> > +
-> > +	INIT_LIST_HEAD(&info->node);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int vp_modern_enable_reset_vq(struct virtqueue *vq, u16 ring_nu=
-m)
-> > +{
-> > +	struct virtio_pci_device *vp_dev =3D to_vp_device(vq->vdev);
-> > +	struct virtio_pci_modern_device *mdev =3D &vp_dev->mdev;
-> > +	struct virtio_pci_vq_info *info;
-> > +	struct virtqueue *_vq;
-> > +	u16 msix_vec;
-> > +
-> > +	if (!vq->reset)
-> > +		return -EPERM;
-> > +
-> > +	/* check queue reset status */
-> > +	if (vp_modern_get_queue_reset(mdev, vq->index) !=3D 1)
-> > +		return -EBUSY;
-> > +
-> > +	info =3D vp_dev->vqs[vq->index];
-> > +	_vq =3D vp_setup_vq(vq->vdev, vq->index, NULL, NULL, NULL,
-> > +			 info->msix_vector, ring_num);
-> > +	if (IS_ERR(_vq)) {
-> > +		vq->reset =3D true;
-> > +		return PTR_ERR(_vq);
-> > +	}
-> > +
-> > +	vp_modern_set_queue_enable(&vp_dev->mdev, vq->index, true);
-> > +
-> > +	msix_vec =3D vp_dev->vqs[vq->index]->msix_vector;
-> > +	if (vp_dev->per_vq_vectors && msix_vec !=3D VIRTIO_MSI_NO_VECTOR)
-> > +		enable_irq(pci_irq_vector(vp_dev->pci_dev, msix_vec));
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >   static u16 vp_config_vector(struct virtio_pci_device *vp_dev, u16 vec=
-tor)
-> >   {
-> >   	return vp_modern_config_vector(&vp_dev->mdev, vector);
-> > @@ -231,10 +298,13 @@ static struct virtqueue *setup_vq(struct virtio_p=
-ci_device *vp_dev,
-> >   				virtqueue_get_avail_addr(vq),
-> >   				virtqueue_get_used_addr(vq));
-> >
-> > -	vq->priv =3D (void __force *)vp_modern_map_vq_notify(mdev, index, NUL=
-L);
-> >   	if (!vq->priv) {
-> > -		err =3D -ENOMEM;
-> > -		goto err_map_notify;
-> > +		vq->priv =3D (void __force *)vp_modern_map_vq_notify(mdev, index,
-> > +								   NULL);
-> > +		if (!vq->priv) {
-> > +			err =3D -ENOMEM;
-> > +			goto err_map_notify;
-> > +		}
->
->
-> This seems unrelated or an artifact of previous patches?
->
-> Thanks
->
->
-> >   	}
-> >
-> >   	if (msix_vec !=3D VIRTIO_MSI_NO_VECTOR) {
-> > @@ -402,6 +472,8 @@ static const struct virtio_config_ops virtio_pci_co=
-nfig_nodev_ops =3D {
-> >   	.set_vq_affinity =3D vp_set_vq_affinity,
-> >   	.get_vq_affinity =3D vp_get_vq_affinity,
-> >   	.get_shm_region  =3D vp_get_shm_region,
-> > +	.reset_vq	 =3D vp_modern_reset_vq,
-> > +	.enable_reset_vq =3D vp_modern_enable_reset_vq,
-> >   };
-> >
-> >   static const struct virtio_config_ops virtio_pci_config_ops =3D {
-> > @@ -420,6 +492,8 @@ static const struct virtio_config_ops virtio_pci_co=
-nfig_ops =3D {
-> >   	.set_vq_affinity =3D vp_set_vq_affinity,
-> >   	.get_vq_affinity =3D vp_get_vq_affinity,
-> >   	.get_shm_region  =3D vp_get_shm_region,
-> > +	.reset_vq	 =3D vp_modern_reset_vq,
-> > +	.enable_reset_vq =3D vp_modern_enable_reset_vq,
-> >   };
-> >
-> >   /* the PCI probing function */
-> > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> > index b8747df8dc1f..4f6028e1e2d9 100644
-> > --- a/drivers/virtio/virtio_ring.c
-> > +++ b/drivers/virtio/virtio_ring.c
-> > @@ -1731,6 +1731,7 @@ static struct virtqueue *vring_create_virtqueue_p=
-acked(
-> >   	vq->vq.vdev =3D vdev;
-> >   	vq->vq.num_free =3D num;
-> >   	vq->vq.index =3D index;
-> > +	vq->vq.reset =3D false;
-> >   	vq->we_own_ring =3D true;
-> >   	vq->notify =3D notify;
-> >   	vq->weak_barriers =3D weak_barriers;
-> > @@ -2220,6 +2221,7 @@ static int __vring_init_virtqueue(struct virtqueu=
-e *_vq,
-> >   	vq->vq.vdev =3D vdev;
-> >   	vq->vq.num_free =3D vring.num;
-> >   	vq->vq.index =3D index;
-> > +	vq->vq.reset =3D false;
-> >   	vq->we_own_ring =3D false;
-> >   	vq->notify =3D notify;
-> >   	vq->weak_barriers =3D weak_barriers;
-> > diff --git a/include/linux/virtio.h b/include/linux/virtio.h
-> > index dd1657c3a488..5d4817d79f3f 100644
-> > --- a/include/linux/virtio.h
-> > +++ b/include/linux/virtio.h
-> > @@ -32,6 +32,7 @@ struct virtqueue {
-> >   	unsigned int index;
-> >   	unsigned int num_free;
-> >   	void *priv;
-> > +	bool reset;
-> >   };
-> >
-> >   int virtqueue_add_outbuf(struct virtqueue *vq,
->
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,95 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C41A94B1FDB
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 09:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E0D4B1FE0
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 09:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347867AbiBKIE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 03:04:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32962 "EHLO
+        id S1347937AbiBKIFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 03:05:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237830AbiBKIE0 (ORCPT
+        with ESMTP id S232830AbiBKIE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 03:04:26 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4087DBC4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 00:04:25 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id s10so246601wrb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 00:04:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/lcEOr4uqjKNofumghLHP70Sk12EtIo5iskvCPhpIT8=;
-        b=0EqUeIzqvPaZiaFn1tjWOUcGQ8QzV+DdWjPdiPzg+cAQtuKSAt6ufW+5FT8PvmmRrN
-         5burrJjB5mpE0DsAkSCwsf2cggLbJgOREIPMNCnQIHioY72CF9jLttI9vQS+rmj3UI+9
-         nlP/YeKxTNFHGNaq03tBkO8U6z/LAeI0ti2JXyYZjungMfE68JHIwQoFFuSMP43fW4z4
-         vSjoNa96xCS657CO+J2Pr/zzLuqkhJLNPKDpXacY97H8sXCcIxQ1zANtRmRwcs8/z3Ux
-         vbgGjVp1tjj1NlHGWy3bw1ETpJWnkYzpIKi2/M2D7YrY3MalKhPAL6iJ7AbDhihvCuLa
-         JNOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/lcEOr4uqjKNofumghLHP70Sk12EtIo5iskvCPhpIT8=;
-        b=0br0/oE15zbIR5lIAF8vumBq9tBq1zO6+h0Aa1uFdntNQDrKsSxsChdw1r+4+NkBgW
-         nzmAQF7XNh54QBlX9H2STv8XRvMxHEkfnEcVED6wE2JqAtcD+iB/E6SJgmJTGAPPVWKx
-         FMNPA4w+I3JB9MHe57scz0Ta6VA0lC2YwskeXSGX/UkUCXe5IufHSIlXULItiqzyf92m
-         Z1BHqQ6vmEQCbHq5ZZ+pL7AX8BTc5zFBb02YqP05I74qMHabGs0UREGp9CuxfIcx5B+S
-         jfGDNN1TnMgMk+ILhkjq35Pp5/zG4RDq5lYPwbF1JHeUmatJfwwtsYe3Ky/ya7l7YdWI
-         KYjw==
-X-Gm-Message-State: AOAM531bwsIGlGTSu2MoHSlpuawuQd3YGAU5pCUhE0LgON8dN4xXZsOe
-        fcjb2BCjER86sHe03u0RBIv8cEgJTAIThuFY
-X-Google-Smtp-Source: ABdhPJwUaPbV+hpspCv+07XTweqV+qV7F9YlImFo8czFokOghyZPvgvkNPEvIXv29cTCyqj5fGceyw==
-X-Received: by 2002:a05:6000:1363:: with SMTP id q3mr365638wrz.468.1644566663486;
-        Fri, 11 Feb 2022 00:04:23 -0800 (PST)
-Received: from localhost.localdomain ([2001:861:44c0:66c0:97e4:3830:c79:136e])
-        by smtp.gmail.com with ESMTPSA id u7sm12601533wrq.112.2022.02.11.00.04.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 00:04:22 -0800 (PST)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>, robert.foss@linaro.org
-Cc:     biju.das.jz@bp.renesas.com, Laurent.pinchart@ideasonboard.com,
-        jernej.skrabec@gmail.com, kieran.bingham@ideasonboard.com,
-        dri-devel@lists.freedesktop.org,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, jonas@kwiboo.se
-Subject: Re: [PATCH v3] drm/bridge: dw-hdmi: use safe format when first in bridge chain
-Date:   Fri, 11 Feb 2022 09:04:21 +0100
-Message-Id: <164456659389.920211.13712775936606850365.b4-ty@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220204143337.89221-1-narmstrong@baylibre.com>
-References: <20220204143337.89221-1-narmstrong@baylibre.com>
+        Fri, 11 Feb 2022 03:04:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A269BD2;
+        Fri, 11 Feb 2022 00:04:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0DE1BB82460;
+        Fri, 11 Feb 2022 08:04:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C6E5C340E9;
+        Fri, 11 Feb 2022 08:04:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644566696;
+        bh=EvZx0hPGNr7WhzzF6zfcEjl+rm+0wcT7PDP5rXEhoT0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G668fAVy/mmFRiG3NNwK0RRvNbwbvLzzW7b3dKcOaYoiz/0vYGm+O0HkNI+Jfn1JK
+         SsY7JNbENx3Gb28wL/1R64G64QUiIcDvwD067oZ2fnn7mupZkUtAqXCGyZrr5ccBXA
+         1lbPqWQ//8wnRu+4qGJrQLrrU/OC8V8iJSpaWl/SZaYSuXsO4qEei8/dA40U5HjbAQ
+         4bjyixShCHvpdkrBmCHaY6LLzSJpImJmi7ctymB8o7RRQfOjEpoLxZAzU4gChIVUs9
+         jDpJQsmcMbLg7lkvciho7BRTMKyATFCroGVcdwXs3DXojexuijzFbcQ4K4WUqhIXV7
+         dnTHFfZzfxUvQ==
+Date:   Fri, 11 Feb 2022 10:04:38 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "avagin@gmail.com" <avagin@gmail.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "adrian@lisas.de" <adrian@lisas.de>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Dave.Martin@arm.com" <Dave.Martin@arm.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: Re: [PATCH 00/35] Shadow stacks for userspace
+Message-ID: <YgYYllWRJ6znI4AU@kernel.org>
+References: <YgAWVSGQg8FPCeba@kernel.org>
+ <YgDIIpCm3UITk896@lisas.de>
+ <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
+ <YgI1A0CtfmT7GMIp@kernel.org>
+ <YgI37n+3JfLSNQCQ@grain>
+ <357664de-b089-4617-99d1-de5098953c80@www.fastmail.com>
+ <YgKiKEcsNt7mpMHN@grain>
+ <8e36f20723ca175db49ed3cc73e42e8aa28d2615.camel@intel.com>
+ <9d664c91-2116-42cc-ef8d-e6d236de43d0@kernel.org>
+ <YgYTHLfnOvkK5FUu@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgYTHLfnOvkK5FUu@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Fri, 4 Feb 2022 15:33:37 +0100, Neil Armstrong wrote:
-> When the dw-hdmi bridge is in first place of the bridge chain, this
-> means there is no way to select an input format of the dw-hdmi HW
-> component.
+On Thu, Feb 10, 2022 at 11:41:16PM -0800, avagin@gmail.com wrote:
+> On Wed, Feb 09, 2022 at 06:37:53PM -0800, Andy Lutomirski wrote:
+> >
+> > An alternative would be to add a bona fide ptrace call-a-function mechanism.
+> > I can think of two potentially usable variants:
+> > 
+> > 1. Straight call.  PTRACE_CALL_FUNCTION(addr) just emulates CALL addr,
+> > shadow stack push and all.
+> > 
+> > 2. Signal-style.  PTRACE_CALL_FUNCTION_SIGFRAME injects an actual signal
+> > frame just like a real signal is being delivered with the specified handler.
+> > There could be a variant to opt-in to also using a specified altstack and
+> > altshadowstack.
 > 
-> Since introduction of display-connector, negotiation was broken since
-> the dw-hdmi negotiation code only worked when the dw-hdmi bridge was
-> in last position of the bridge chain or behind another bridge also
-> supporting input & output format negotiation.
+> I think this would be ideal. In CRIU, the parasite code is executed in
+> the "daemon" mode and returns back via sigreturn.  Right now, CRIU needs
+> to generate a signal frame. If I understand your idea right, the signal
+> frame will be generated by the kernel.
 > 
-> [...]
+> > 
+> > 2 would be more expensive but would avoid the need for much in the way of
+> > asm magic.  The injected code could be plain C (or Rust or Zig or whatever).
+> > 
+> > All of this only really handles save, not restore.  I don't understand
+> > restore enough to fully understand the issue.
+> 
+> In a few words, it works like this: CRIU restores all required resources
+> and prepares a signal frame with a target process state, then it
+> switches to a small PIE blob, where it restores vma-s and calls
+> rt_sigreturn.
 
-Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
-
-[1/1] drm/bridge: dw-hdmi: use safe format when first in bridge chain
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=1528038385c0a706aac9ac165eeb24044fef6825
+I think it's also important to note that the stack is restored as a part of
+the process memory, i.e. its contents is read from the images.
+ 
+> > 
+> > --Andy
 
 -- 
-Neil
+Sincerely yours,
+Mike.

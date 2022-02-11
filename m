@@ -2,100 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82BD84B1ABA
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6254B1ABE
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 01:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346552AbiBKAwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Feb 2022 19:52:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40908 "EHLO
+        id S1346559AbiBKAw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Feb 2022 19:52:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346528AbiBKAwC (ORCPT
+        with ESMTP id S1346528AbiBKAwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Feb 2022 19:52:02 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D5C5F8E
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:52:01 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id w1so3340295plb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Feb 2022 16:52:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=D3EjEoLgjS5BYa16RZ5JcaZGfnj2NCy9e6R/DsxWvD0=;
-        b=mYDb9T7V8vVpb4vvbK6zkA0h1yevImaISwFUxjrIIoz62k/wF/zDHu5zFn6qzE7kUp
-         87hdaz0kZHUo4I24hP9Ypim/bw0UCqkm9B/sqsnXEiXBwa22hYfKiyLvWUhlNNdLK62v
-         jkpZSMR3Qi6h9sWFPRK7ScuIfziA7yI6AE748=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=D3EjEoLgjS5BYa16RZ5JcaZGfnj2NCy9e6R/DsxWvD0=;
-        b=EyIPLICJS6gEmX+HwuQZyG05iFXUKnzMClHmxTqUmMdMM1NLGrNLklpFXajYr2Rw6q
-         7X1a0VGISQxbXyauwRByKMyrYMc5HWWTfVwEU1XMr4GYN0h/jalbbme/wD8scorSuaVK
-         owebN57rYantjEXlqdPsMFsVZ3E/LjxS3XizD2BvzgYRH0SZ0jN/MmzRzbrwKTGGdV4R
-         GbbqUD8I9seU1y9+FLpksyMBEzL2507d3RA1dJjj5Ys6qL9hoBqKonoIjGAWG+t2eX18
-         OrTfTWUKA6VUYhS8/GwMfk4XBl8D9JOKA65bybFae+c5GMrU+GPeV04aor7yELLoI2Q7
-         ZP9A==
-X-Gm-Message-State: AOAM530d1whSipoMOkB97MnlEq+cO+gK5JbZdkiCBOeiGq8qdkXhCHZD
-        Fa8FKn0k4HP9toTQukeTvMQoGQ==
-X-Google-Smtp-Source: ABdhPJw/vLSGOWe5ccZEegSZ0CyTgYC43nd3Y1R3YkYl+lBMWAImTOS4id0LQup7bw2RNv5XlqIpWQ==
-X-Received: by 2002:a17:90a:5206:: with SMTP id v6mr71812pjh.220.1644540721159;
-        Thu, 10 Feb 2022 16:52:01 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z22sm24478493pfe.42.2022.02.10.16.52.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 16:52:00 -0800 (PST)
-Date:   Thu, 10 Feb 2022 16:51:59 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v3 01/12] powerpc: Move and rename func_descr_t
-Message-ID: <202202101651.E6AACB3D4F@keescook>
-References: <cover.1634457599.git.christophe.leroy@csgroup.eu>
- <637a9a11263afa216fdfa7fb470a54479c67c61c.1634457599.git.christophe.leroy@csgroup.eu>
+        Thu, 10 Feb 2022 19:52:24 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450335F8E;
+        Thu, 10 Feb 2022 16:52:24 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Jvw7T67qHz4xdJ;
+        Fri, 11 Feb 2022 11:52:21 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1644540742;
+        bh=tM9oSUqc6GihGbZkPvqaIHIZCKY0n+fEMRawOrrTALY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tGQqH+km47OY8CFfKc5FhDlCKoJVSG5GhYpZzJiekmm46QrOtRJ4d+oi6tDM99YnS
+         4N899PZ0reKalNLo/MaYKxsOlq/RZ8bBKvuFfQwZCPN56YKTlySLRvt3z7qOuJTm63
+         8T/pZGsvo2Fmbn4A6U7RtLJ08MYLNMh/qAUI53lQ3rLs0BgLGYkUCSAS2vXUJpjgpQ
+         yWLBwCZKNBIHUa1b+ZEauXePqRQ/SpPpkinJVn4t1dpZ3XwbOL4cQA0sUMWl8cLMq3
+         aFTQvU0biu/DnLBUlBgyaB/xM71zS1/YW2x352PE5gHGKnyGOn5u6R5ctEPcOhWH33
+         3FAWpvB+9moMQ==
+Date:   Fri, 11 Feb 2022 11:52:20 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Networking <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Song Liu <song@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the net-next tree (Was:
+ Re: linux-next: build failure after merge of the bpf-next tree)
+Message-ID: <20220211115220.4d4746fe@canb.auug.org.au>
+In-Reply-To: <20220209112135.7fec872f@canb.auug.org.au>
+References: <20220209112135.7fec872f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <637a9a11263afa216fdfa7fb470a54479c67c61c.1634457599.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ImzMXu3OpUzcrR/0Blb+6dX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 17, 2021 at 02:38:14PM +0200, Christophe Leroy wrote:
-> There are three architectures with function descriptors, try to
-> have common names for the address they contain in order to
-> refactor some functions into generic functions later.
-> 
-> powerpc has 'entry'
-> ia64 has 'ip'
-> parisc has 'addr'
-> 
-> Vote for 'addr' and update 'func_descr_t' accordingly.
-> 
-> Move it in asm/elf.h to have it at the same place on all
-> three architectures, remove the typedef which hides its real
-> type, and change it to a smoother name 'struct func_desc'.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+--Sig_/ImzMXu3OpUzcrR/0Blb+6dX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I like the name. :)
+Hi all,
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+On Wed, 9 Feb 2022 11:21:35 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> After merging the bpf-next tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+>=20
+> kernel/bpf/core.c:830:23: error: variably modified 'bitmap' at file scope
+>   830 |         unsigned long bitmap[BITS_TO_LONGS(BPF_PROG_CHUNK_COUNT)];
+>       |                       ^~~~~~
+>=20
+> Caused by commit
+>=20
+>   57631054fae6 ("bpf: Introduce bpf_prog_pack allocator")
+>=20
+> I have used the bpf-next tree from next-20220208 for today.
 
--- 
-Kees Cook
+The net-next tree has inherited this build failure by merging the
+bpf-next tree.
+
+I have used the net-next tree from next-20220209 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ImzMXu3OpUzcrR/0Blb+6dX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmIFs0QACgkQAVBC80lX
+0GxsDQgAlns5dBAnb2XaAy4qyu4Br0sM9tPbvnXUPnEH6p9ksbrB4rJg1C0n0md2
+BeM4yujg/8UMC/ohfOB0/UG04DpsiWDtqkvSBFSccGmNAltyBHELL6+fGIsa21Cw
+qhwMDiQguS3pvYasZcx799MM61VsdrCSw9JaAbaM2JQrcBXzveY45USYy01dy1et
+NIeeFgHKffDxtiWMs4gQoLU85snZDvhVdg1TGLZJ+GXsjF7Znr+vjlMo+/02QrJp
+/jRwD8s+axiFleJe63mTvTaYGSCIhkOPtkTVz4m5sF22uIaDPphY/qg8av0I2yRu
+RESHNzJjz5DyR37imUp63kETSd+GyQ==
+=S9bw
+-----END PGP SIGNATURE-----
+
+--Sig_/ImzMXu3OpUzcrR/0Blb+6dX--

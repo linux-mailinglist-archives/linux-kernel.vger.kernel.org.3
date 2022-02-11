@@ -2,265 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DB74B29C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9AE74B29D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 17:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351447AbiBKQK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 11:10:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40270 "EHLO
+        id S1350185AbiBKQKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 11:10:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240987AbiBKQKR (ORCPT
+        with ESMTP id S1351110AbiBKQKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 11:10:17 -0500
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD3FD88;
-        Fri, 11 Feb 2022 08:10:02 -0800 (PST)
-Received: from [192.168.0.2] (ip5f5aebe1.dynamic.kabel-deutschland.de [95.90.235.225])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id E503961E6478B;
-        Fri, 11 Feb 2022 17:10:00 +0100 (CET)
-Message-ID: <63d42855-8d9e-7dcf-a573-6605ebfce658@molgen.mpg.de>
-Date:   Fri, 11 Feb 2022 17:10:00 +0100
+        Fri, 11 Feb 2022 11:10:22 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37066E06;
+        Fri, 11 Feb 2022 08:10:09 -0800 (PST)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id BDB041BF20E;
+        Fri, 11 Feb 2022 16:10:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1644595808;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RUSzj3TUbMF7TmKv+bJklm/0kDLCRAw90iHxpF7FAk4=;
+        b=oG0Nb1UueRz+/N3muogT9xtwBmkNo0QOCIq29+GWycUIpNnSFeefb4J/MbfnHYuTGx8NNK
+        jWvPNJ2WjFEI+sClRGGThmR8P5QGosuLIaQmDikc6BAuoUY32F7klJuNWQnfecNZXaxuop
+        8x3A9o9q0baiyhGQx7uxh2TQcR9C9a1i35V25YIjQvv3dHVrxCUjxIRx+KMesaOMmBHpyc
+        zxSrQN07BFiopT4jQZCMXyqVl8ulBmNkFWxTp1vpeuAc0CkfPw0Nms7pasztSEwq+TWOtG
+        nP+GDVcx5fVQCaw2EwJYMbg/vMEQe6ecyf9EByGBvOM8XVRX4tYJwclzHa7+1g==
+Date:   Fri, 11 Feb 2022 17:10:06 +0100
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 07/66] dt-bindings: media: sun6i-a31-csi: Add MIPI
+ CSI-2 input port
+Message-ID: <YgaKXvP3rLOLR9VR@aptenodytes>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+ <20220205185429.2278860-8-paul.kocialkowski@bootlin.com>
+ <YgFCuaf007wd8sJy@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: Unable to transfer big files to Nokia N9
-Content-Language: en-US
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-bluetooth@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Takashi Iwai <tiwai@suse.com>
-References: <eb6d86eb-d156-d7ac-0965-181719023d51@molgen.mpg.de>
- <CABBYNZLENxvXMCh6XbBSnu0jasV1F0QestEK5v2mnNUpJdw3Vw@mail.gmail.com>
- <cf71bdea-ec22-e4c9-016c-69e94a130607@molgen.mpg.de>
- <a93c0fa7-7b84-6aea-265b-c913e0c84678@molgen.mpg.de>
- <d7206e12-1b99-c3be-84f4-df22af427ef5@molgen.mpg.de>
-In-Reply-To: <d7206e12-1b99-c3be-84f4-df22af427ef5@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="N1FE44kMl1ZRScRS"
+Content-Disposition: inline
+In-Reply-To: <YgFCuaf007wd8sJy@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Luiz,
 
+--N1FE44kMl1ZRScRS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Am 16.01.22 um 14:27 schrieb Paul Menzel:
+Hi Laurent,
 
-[…]
+Thanks for the review!
 
-> It turns out there was a regression in Linux 5.16-rc1.
-> 
-> 
-> Am 20.12.21 um 22:31 schrieb Paul Menzel:
-> 
->> Am 01.12.21 um 23:07 schrieb Paul Menzel:
->>
->>> Am 01.12.21 um 19:29 schrieb Luiz Augusto von Dentz:
->>>
->>>> On Wed, Dec 1, 2021 at 9:39 AM Paul Menzel <pmenzel@molgen.mpg.de> 
->>>> wrote:
->>>
->>>>> For the first time, I wanted to transfer a 2 MB PDF file from a Dell
->>>>> Latitude E7250 with Debian sid/unstable with Linux 5.16-rc1 to a Nokia
->>>>> N9 (MeeGo/Harmattan). Using the package *bluez-obexd* 5.61-1 and GNOME
->>>>> 41, the device was found, and paired fine. Then I selected to transfer
->>>>> the 2 MB file, and after starting for a second, it timed out after the
->>>>> progress bar moves forward ones and failed.
->>>>>
->>>>> The systemd journal contains:
->>>>>
->>>>>       obexd[21139]: Transfer(0x56243fe4f790) Error: Timed out 
->>>>> waiting for response
->>>>>
->>>>> Testing with a a 5 byte test text file, worked fine. Also testing 
->>>>> with a
->>>>> Galaly M32, both files were transferred without problems (though 
->>>>> slowly
->>>>> with 32 KB/s.)
->>>>>
->>>>> Trying to connect to the device with bluetoothctl failed for me, 
->>>>> and the
->>>>> journal contained, it failed.
->>>>>
->>>>>       $ bluetoothctl
->>>>>       Agent registered
->>>>>       [bluetooth]# connect 40:98:4E:5B:CE:XX
->>>>>       Attempting to connect to 40:98:4E:5B:CE:XX
->>>>>       Failed to connect: org.bluez.Error.Failed
->>>>>
->>>>>       bluetoothd[21104]: src/service.c:btd_service_connect() 
->>>>> a2dp-source profile connect failed for 40:98:4E:5B:CE:B3: Protocol 
->>>>> not available
->>>>>
->>>>> As the Nokia N9 was once pretty popular in the Linux community, I am
->>>>> pretty sure, it used to work fine in the past, and there is some
->>>>> regression. It’d be great, if you could give me some hints how to
->>>>> further debug the issue.
->>>>
->>>> We will need some logs, obexd and btmon, if possible.
->>>
->>> I only managed to get the btmon trace [1]. I did `sudo modprobe -r 
->>> btusb` and `sudo btmon -w /dev/shm/trace.log`.
->>>
->>> Linux messages:
->>>
->>>      [29880.100381] calling  btusb_driver_init+0x0/0x1000 [btusb] @ 
->>> 28716
->>>      [29880.239603] usbcore: registered new interface driver btusb
->>>      [29880.239608] initcall btusb_driver_init+0x0/0x1000 [btusb] 
->>> returned 0 after 135952 usecs
->>>      [29880.240706] Bluetooth: hci0: unexpected event for opcode 0x0500
->>>      [29880.241598] Bluetooth: hci0: Legacy ROM 2.5 revision 1.0 
->>> build 3 week 17 2014
->>>      [29880.241605] Bluetooth: hci0: Intel device is already patched. 
->>> patch num: 32
->>>
->>>  From the system journal:
->>>
->>>      Dez 01 22:52:19 ersatz obexd[21139]: Transfer(0x56243fe53dd0) 
->>> Error: Timed out waiting for response
->>
->> Were you able to see anything in the attached logs? If the obexd logs 
->> are missing, can you please tell how I should capture them?
->>
->> I also tested with Ubuntu 20.04 (*linux-image-5.11.0-27-generic*) and 
->> 21.10 (*linux-image-5.13.0-19-generic*) live systems booted from a USB 
->> storage device, and transferring `/usr/bin/systemctl` 
->> (`/lib/systemd/systemd`) with size of 1.8 MB worked fine.
->>
->> Could there be a regression in that area? Unfortunately, it’s not easy 
->> for me to do a bisection on the device at hand.
->>
->> (Would it be possible to do with QEMU and USB controller and Bluetooth 
->> device passthrough? How can I transfer the file on the command line so 
->> I wouldn’t need to install a desktop environment?)
-> 
-> Turns out, that is indeed possible [2], but turned out to be cumbersome, 
-> as I hit the regression [3], which seems to have been fixed by commit 
-> 95655456e7ce (Bluetooth: btintel: Fix broken LED quirk for legacy ROM 
-> devices) merged in the current Linux 5.17 cycle this week.
-> 
-> As a work around, I applied a hunk from Takashi’s patch.
-> 
-> -       { USB_DEVICE(0x8087, 0x0a2a), .driver_info = 
-> BTUSB_INTEL_COMBINED },
-> +       { USB_DEVICE(0x8087, 0x0a2a), .driver_info = BTUSB_INTEL_COMBINED |
-> + BTUSB_INTEL_BROKEN_INITIAL_NCMD },
-> 
-> My problem with the Nokia N9 is still present in Linus’ master branch.
-> 
-> Then I built a minimal Linux kernel for QEMU, and ran:
-> 
->      qemu-system-x86_64 -cpu host -m 2G -enable-kvm \
->        -usb -device usb-host,vendorid=0x8087,productid=0x0a2a \
->        -drive file=/dev/shm/debian-64.img,format=raw,if=virtio \
->        -net nic -net user,hostfwd=tcp::22223-:22 \
->        -kernel /dev/shm/bzImage -append "root=/dev/vda1 rw quiet"
-> 
-> In the Debian sid/unstable VM, I used
-> 
->      ssh root@localhost -p 22223
-> 
-> I once had to pair the VM with the Nokia N9 in bluetoothctl, and then 
-> started `/usr/libexec/bluetooth/obexd`, and ran `obexctl`, and connected 
-> first with `connect`, and then ran `send /lib/systemd/systemd` to 
-> transfer the file. In the problematic cases it stopped/hung after the 
-> first progress message.
-> 
->      # obexctl
->      [NEW] Client /org/bluez/obex
->      [obex]# connect 40:98:4E:5B:CE:XX
->      Attempting to connect to 40:98:4E:5B:CE:XX
->      [NEW] Session /org/bluez/obex/client/session0 [default]
->      [NEW] ObjectPush /org/bluez/obex/client/session0
->      Connection successful
->      [40:98:4E:5B:CE:XX]# send /lib/systemd/systemd
->      Attempting to send /lib/systemd/systemd to /org/bluez/obex/client/session0
->      [NEW] Transfer /org/bluez/obex/client/session0/transfer0
->      Transfer /org/bluez/obex/client/session0/transfer0
->          Status: queued
->          Name: systemd
->          Size: 1841712
->          Filename: /lib/systemd/systemd
->          Session: /org/bluez/obex/client/session0
->      [CHG] Transfer /org/bluez/obex/client/session0/transfer0 Status: active
->      [CHG] Transfer /org/bluez/obex/client/session0/transfer0 Transferred: 32737 (@32KB/s 00:55)
->      [CHG] Transfer /org/bluez/obex/client/session0/transfer0 Status: error
->      [DEL] Transfer /org/bluez/obex/client/session0/transfer0
-> 
-> Some manual bisection of Linux releases, verified, that the regression 
-> was introduced in Linux 5.16-rc1. (Lucky me, I started using Bluetooth 
-> with the Nokia with Linux 5.16-rc1.) Then I verified it was introduced 
-> by the Bluetooth pull request for Linux 5.16. Then I picked commit 
-> 81be03e026dc0c16dc1c64e088b2a53b73caa895 due to the commit message, and 
-> bisected from there, and it turns out, that this commit is actually 
-> introducing the regression.
-> 
->      $ git bisect good
->      81be03e026dc0c16dc1c64e088b2a53b73caa895 is the first bad commit
->      commit 81be03e026dc0c16dc1c64e088b2a53b73caa895
->      Author: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
->      Date:   Fri Sep 3 15:27:32 2021 -0700
-> 
->          Bluetooth: RFCOMM: Replace use of memcpy_from_msg with bt_skb_sendmmsg
-> 
->          This makes use of bt_skb_sendmmsg instead using memcpy_from_msg which
->          is not considered safe to be used when lock_sock is held.
-> 
->          Also make rfcomm_dlc_send handle skb with fragments and queue them all
->          atomically.
-> 
->          Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
->          Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
-> 
->       net/bluetooth/rfcomm/core.c | 50 ++++++++++++++++++++++++++++++++++++++-------
->       net/bluetooth/rfcomm/sock.c | 46 +++++++++--------------------------------
->       2 files changed, 53 insertions(+), 43 deletions(-)
-> 
-> Unfortunately, the patch does not cleanly revert, so users have to wait 
-> until an expert can take a look, and come up with a fix.
+On Mon 07 Feb 22, 18:03, Laurent Pinchart wrote:
+> Hi Paul,
+>=20
+> Thank you for the patch.
+>=20
+> On Sat, Feb 05, 2022 at 07:53:30PM +0100, Paul Kocialkowski wrote:
+> > The A31 CSI controller supports two distinct input interfaces:
+> > parallel and an external MIPI CSI-2 bridge. The parallel interface
+> > is often connected to a set of hardware pins while the MIPI CSI-2
+> > bridge is an internal FIFO-ish link. As a result, these two inputs
+> > are distinguished as two different ports.
+> >=20
+> > Note that only one of the two may be present on a controller instance.
+> > For example, the V3s has one controller dedicated to MIPI-CSI2 and one
+> > dedicated to parallel.
+>=20
+> Is it that only one of the two is present, or only one of the two is
+> connected ? In the latter case I'd make both ports required, but with
+> only one of them connected.
 
-The revert required one more revert [4]. You asked for logs, which I had 
-already provided in my response to your request. I tried it again, and 
-attached it to [5]. As written there, I failed to get logs for obexd.
+There are situations where the actual pins for parallel (port@0) are missing
+and the controller is dedicated to its mipi csi-2 bridge (port@1), cases wh=
+ere
+the two are present and cases where the mipi csi-2 bridge doesn't exist.
+So all in all it's really legit that only one port may be defined.
 
+> > Update the binding with an explicit ports node that holds two distinct
+> > port nodes: one for parallel input and one for MIPI CSI-2.
+> >=20
+> > This is backward-compatible with the single-port approach that was
+> > previously taken for representing the parallel interface port, which
+> > stays enumerated as fwnode port 0.
+> >=20
+> > Note that additional ports may be added in the future, especially to
+> > support feeding the CSI controller's output to the ISP.
+> >=20
+> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > Acked-by: Maxime Ripard <mripard@kernel.org>
+> > ---
+> >  .../media/allwinner,sun6i-a31-csi.yaml        | 60 +++++++++++++++----
+> >  1 file changed, 47 insertions(+), 13 deletions(-)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a3=
+1-csi.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-cs=
+i.yaml
+> > index 8b568072a069..3cc61866ea89 100644
+> > --- a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.y=
+aml
+> > +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.y=
+aml
+> > @@ -61,6 +61,34 @@ properties:
+> > =20
+> >      additionalProperties: false
+> > =20
+> > +  ports:
+> > +    $ref: /schemas/graph.yaml#/properties/ports
+> > +
+> > +    properties:
+> > +      port@0:
+> > +        $ref: "#/properties/port"
+> > +        unevaluatedProperties: false
+> > +
+> > +      port@1:
+> > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > +        description: MIPI CSI-2 bridge input port
+> > +
+> > +        properties:
+> > +          reg:
+> > +            const: 1
+> > +
+> > +          endpoint:
+> > +            $ref: video-interfaces.yaml#
+> > +            unevaluatedProperties: false
+> > +
+> > +        additionalProperties: false
+> > +
+> > +    anyOf:
+> > +      - required:
+> > +        - port@0
+> > +      - required:
+> > +        - port@1
+> > +
+> >  required:
+> >    - compatible
+> >    - reg
+>=20
+> Shouldn't you specify that either port or ports is required, but not
+> both ? I'd also add a comment in the port node to tell it's deprecated,
+> and that ports should be used instead.
 
-Kind regards,
+Yes I agree on both points. I guess that should be a:
+
+oneOf:
+  - required:
+    - ports
+  - required:
+    - port
+
+(but feel free to correct me).
+
+> > @@ -89,19 +117,25 @@ examples:
+> >                        "ram";
+> >          resets =3D <&ccu RST_BUS_CSI>;
+> > =20
+> > -        port {
+> > -            /* Parallel bus endpoint */
+> > -            csi1_ep: endpoint {
+> > -                remote-endpoint =3D <&adv7611_ep>;
+> > -                bus-width =3D <16>;
+> > -
+> > -                /*
+> > -                 * If hsync-active/vsync-active are missing,
+> > -                 * embedded BT.656 sync is used.
+> > -                 */
+> > -                 hsync-active =3D <0>; /* Active low */
+> > -                 vsync-active =3D <0>; /* Active low */
+> > -                 pclk-sample =3D <1>;  /* Rising */
+> > +        ports {
+> > +            #address-cells =3D <1>;
+> > +            #size-cells =3D <0>;
+> > +
+> > +            port@0 {
+> > +                reg =3D <0>;
+> > +                /* Parallel bus endpoint */
+> > +                csi1_ep: endpoint {
+> > +                    remote-endpoint =3D <&adv7611_ep>;
+> > +                    bus-width =3D <16>;
+> > +
+> > +                    /*
+> > +                     * If hsync-active/vsync-active are missing,
+> > +                     * embedded BT.656 sync is used.
+> > +                     */
+> > +                     hsync-active =3D <0>; /* Active low */
+> > +                     vsync-active =3D <0>; /* Active low */
+> > +                     pclk-sample =3D <1>;  /* Rising */
+>=20
+> Wrong indentation.
+
+The double-space before /* Rising */ or something with the heading indent?
+
+Thanks,
 
 Paul
 
+> > +                };
+> >              };
+> >          };
+> >      };
+>=20
+> --=20
+> Regards,
+>=20
+> Laurent Pinchart
 
-> PS: For the records:
-> 
->      $ git bisect log
->      # bad: [81be03e026dc0c16dc1c64e088b2a53b73caa895] Bluetooth: RFCOMM: Replace use of memcpy_from_msg with bt_skb_sendmmsg
->      # good: [49d8a5606428ca0962d09050a5af81461ff90fbb] Bluetooth: fix init and cleanup of sco_conn.timeout_work
->      git bisect start '81be03e026dc0' 'HEAD^'
->      # good: [904c139a2517191e48f9cb1bb2d611ae59434009] Bluetooth: Add support for msbc coding format
->      git bisect good 904c139a2517191e48f9cb1bb2d611ae59434009
->      # good: [8bba13b1d08d42e2e8308924fa5c1551a7b2b011] Bluetooth: btintel: Fix incorrect out of memory check
->      git bisect good 8bba13b1d08d42e2e8308924fa5c1551a7b2b011
->      # good: [38f64f650dc0e44c146ff88d15a7339efa325918] Bluetooth: Add bt_skb_sendmsg helper
->      git bisect good 38f64f650dc0e44c146ff88d15a7339efa325918
->      # good: [0771cbb3b97d3c1d68eecd7f00055f599954c34e] Bluetooth: SCO: Replace use of memcpy_from_msg with bt_skb_sendmsg
->      git bisect good 0771cbb3b97d3c1d68eecd7f00055f599954c34e
->      # first bad commit: [81be03e026dc0c16dc1c64e088b2a53b73caa895] Bluetooth: RFCOMM: Replace use of memcpy_from_msg with bt_skb_sendmmsg
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
 
+--N1FE44kMl1ZRScRS
+Content-Type: application/pgp-signature; name="signature.asc"
 
->>> [1]: https://owww.molgen.mpg.de/~pmenzel/trace.log.7z
-> [2]: https://lore.kernel.org/linux-bluetooth/5891f0d5-8d51-9da5-7663-718f301490b1@molgen.mpg.de/T/#u
-> [3]: https://lore.kernel.org/linux-bluetooth/20211202162256.31837-1-tiwai@suse.de/ [4]: 
-https://lore.kernel.org/linux-bluetooth/20220208221911.57058-1-pmenzel@molgen.mpg.de/
-[5]: https://bugzilla.kernel.org/show_bug.cgi?id=215594
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIGil4ACgkQ3cLmz3+f
+v9E2OAf+M59HqYo3WH2kb71DPc2RBTe6OgFa2D6dEM/0E8JL5wiYWvOSJADrYUh3
+ym1oUzOSoUsA8YlBPzSQ3oXMtRN3Hzc9sVL8RDmHw1+JhEqFo0nasFjA3UvgFCMp
+frR0s8rvSu4r5bpPQheC1uMcfA0aSHT4W8w8oYJRdGK6nlkPJbQUbg+3jLDvd7pT
+HwJoBd0+0oMuqFg6FdGP/vKt89mqIyl6AmZYnTSeofyX7/x40i1Zdtbvd/pMdYtv
+C9kXGkP5WrXGVwKa3Mn9CMnOFPjNXmL2D56NHzwSagDzZLbscRablKBDBglxfuGa
+dlRvMsPlp7qvlnv9J8aKV9hj/aVIHw==
+=8dSa
+-----END PGP SIGNATURE-----
+
+--N1FE44kMl1ZRScRS--

@@ -2,310 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8237F4B2105
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2BB4B210F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348362AbiBKJJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 04:09:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52624 "EHLO
+        id S1348374AbiBKJJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 04:09:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243541AbiBKJJA (ORCPT
+        with ESMTP id S1348370AbiBKJJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 04:09:00 -0500
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A0B1028
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:08:58 -0800 (PST)
-Received: by mail-vs1-xe2e.google.com with SMTP id i26so5863345vso.9
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:08:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0KOVwirQQBNGOX4G5quJ1fMnOjQ7Nk3bktohVFnVL9Q=;
-        b=isShAkpIaF4YVuBMEixjDdC5hD9AGNT70itg07YA9zsSXOYnfLMg5K9Q17+pArRtat
-         dUBjpYQ+vd/hd67cELBAHuOkQXluTpK5BsAo1BLpxQseIJ/B96lGhZlfUz6gFU3SkTTD
-         P8lfthBKMnTf2QYozzCgQ2MTW6+3r8Yzkbjpk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0KOVwirQQBNGOX4G5quJ1fMnOjQ7Nk3bktohVFnVL9Q=;
-        b=1lUDHVYSSY6rGW87bDpo+1HKA7OaZ1lcdnrRC+ADdnFZC07pXCZmEvxad7naJck/ka
-         TbOBlez5MAZgZZziypTDcadVvnprn28xsBq5wOn/kFG9mRJraCYbEqBi06JDgye6r9cm
-         6tCnCeF32jKSh9B9IVaIydIZXnN1fAds/VL48dcwrNB0bWCYCIeNZh9UYxlmvtj/+ehm
-         DnIJz0WFhYTqZ56K63RRnWuF500QtA0pLEIAYowd1LMgsqv8NkF+/IxFmiSZkM6p+nAQ
-         +TrYL5sZU+LKupLV3BxNiHEN18Q/hkeBYwpQBEaf+UNVwuRlWUlfsN3aBnWZ/8z70HBm
-         pNQg==
-X-Gm-Message-State: AOAM531yXi40kehDGr0TsWsnNB45ISQc7QcjLZtdXqjPM6VezPVCRMzA
-        lmojMsZ/bu2TrrtAsghiRkEmmBLuMP4r0E6jfkR0vg==
-X-Google-Smtp-Source: ABdhPJx3B1s2gkSrrBvmi6Jh+td1qANZQnuqD9w7VsCLiznoyrWYK+MIfdrAwq989w77OZclxt9gMCDS70+TlPQ1w0E=
-X-Received: by 2002:a67:b00e:: with SMTP id z14mr221962vse.57.1644570536901;
- Fri, 11 Feb 2022 01:08:56 -0800 (PST)
+        Fri, 11 Feb 2022 04:09:07 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2060.outbound.protection.outlook.com [40.107.94.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265E21024;
+        Fri, 11 Feb 2022 01:09:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gRZ5Jk/ThAqudJ/vKZycsWculex3jEAp9xp8MBT/StcZUFdF3JMfry4G4HhtTtu2jTVmc4feJSZ1kDgTY+rC2wLnaduNJahlMEU/5tsa4EZLp5JYDIdKxaI7C0NJ3Bu4+LwITmS/wEttok/fEu2nfZvhGvSC7wLuMCLDaUVLzQl3+BzpcYoW0WqVuQPN3d0cu/7ij+ootyN6J3Cedwl9bipJEMIvz/wnFePiGIKzRdvkxWbtsKugZ/N4hvBtyWe7yEyy4xHP/qCXRKaUK0RBuLumYPZi6oBwSbQ0PgN9IL4kagjab0K5KOAPzjZZQEpfDlvZiyc5G9x3gss2KPMu9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3UdfA+qVU2bvQXUeytNcqDVOtPYU4y5ETZpWjv0eDGo=;
+ b=a9aKYpm5TidgaIflZvAlZNFb4o2bO2nh89g3gmGtJBzzzbNO72ltiG3p9acYpKS9YCeG2oY5RW+s5u3MrLsbl53ZSAoCJUj7WOJ2KSNoZFL8Rl6DAPS2p2kPsLoPHeBsfcT9J/KKGugT+D0bgfQgyYI+UBiKym4K/PcZi/ZgZrNY3Fl/eBN+5LENEqJbTH8rk9aRhKTm2PjD7Y0oyqrvepZkRv3IQTzVIaq3zpht9eNR4AtX0GA1uvT/EY06f/0Ot4YAyGAUU8blN+TNoBUuGEXThY3q5iWWQKs7Yjprh+805qJh0sPukiICIR86YWItzlyFLgHBBEo20RsKkbOuPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3UdfA+qVU2bvQXUeytNcqDVOtPYU4y5ETZpWjv0eDGo=;
+ b=HNGS+J91FDdiHntFGagSFaejP7aErrsEcX49dBQZ5MvCYmwZggr579Dje0kpjKzTg/h7LvYMMPtAaW8UivGyU9oz/1FTiWmEUlMvYNwbAc39bz3NjV0rlTNyCPe8+DUDXm95JFyBBLeC7C2g+t7f33dbMGCnOsgm2K5HMiq+UUU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM5PR12MB2470.namprd12.prod.outlook.com (2603:10b6:4:b4::39) by
+ MN2PR12MB3501.namprd12.prod.outlook.com (2603:10b6:208:c7::33) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4975.15; Fri, 11 Feb 2022 09:09:03 +0000
+Received: from DM5PR12MB2470.namprd12.prod.outlook.com
+ ([fe80::19bf:2e9b:64c3:b04b]) by DM5PR12MB2470.namprd12.prod.outlook.com
+ ([fe80::19bf:2e9b:64c3:b04b%7]) with mapi id 15.20.4975.011; Fri, 11 Feb 2022
+ 09:09:02 +0000
+Message-ID: <9871bfc0-42e8-c485-687f-dd111224fbe6@amd.com>
+Date:   Fri, 11 Feb 2022 14:38:48 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Cc:     vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com,
+        seanjc@google.com
+Subject: Re: [PATCH 12/12] KVM: x86: do not unload MMU roots on all role
+ changes
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20220209170020.1775368-1-pbonzini@redhat.com>
+ <20220209170020.1775368-13-pbonzini@redhat.com>
+From:   "Nikunj A. Dadhania" <nikunj@amd.com>
+In-Reply-To: <20220209170020.1775368-13-pbonzini@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BMXPR01CA0048.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:b00:c::34) To DM5PR12MB2470.namprd12.prod.outlook.com
+ (2603:10b6:4:b4::39)
 MIME-Version: 1.0
-References: <20220207013613.1150783-1-skyostil@chromium.org>
- <20220207013613.1150783-2-skyostil@chromium.org> <YgSli/6HuZ+i+2gb@google.com>
-In-Reply-To: <YgSli/6HuZ+i+2gb@google.com>
-From:   Sami Kyostila <skyostil@chromium.org>
-Date:   Fri, 11 Feb 2022 20:08:45 +1100
-Message-ID: <CAPuLczuizJkwHsKo+W3MEjX7T_fHXApVyou3BuMH_aAQfyk1Vg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] platform/chrome: add a driver for HPS
-To:     Tzung-Bi Shih <tzungbi@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, bleung@chromium.org,
-        arnd@arndb.de, gregkh@linuxfoundation.org, evanbenn@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f79853bf-e482-4ae4-3bec-08d9ed3e2509
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3501:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB3501AC8006A087876119320AE2309@MN2PR12MB3501.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3383;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zMIPpucnIbCg8R/gnL4JJBIC2/uzEPiWpLCXaXls04w6y1IdmpLpRau0yYRTyF+A5SmC1TOF6uIN73alLLxaOEjz7DPJaCM5O0UTJblgWINKneTI5RVvmtDBnaC7HUlpEu7r5fNVzRzL6gPTIjTl1zIw9Z5mRoNNlMmz9oW7BuzBQaQNNF92Q04sBSDS6lkrbBCjlXxFKnYQrz2AlfjH/l9Hn+jeZuuPXGLxbJcFog2PjmrFuod0+W2nRct9moN3M9X1ESoS0GejsuAFdWB4BA5AE14J3MIThJHDNiOV5h3TEaXo1vxwwNVBNV6oLL5GACs9gcXBSFyFRARlZPrtJVxFhWXpHZQTmAYQxXW5S0RBdloz5ylzl0dhuDMlrbNLIvvs0odwVba6FXLMgvr2381JqCxpQLEq0zh+H4zUsxj89JYNAEx+loFfTyriUEZbLX6bb7IegHogeSv58xoUNmlx0yJQKJBqdTndci0udA96d79Lm2pXWElztYHaLIYSAPfPqah3z1QlGScmeBVcfpcn+W9EnMss+skdq+KldsovvvvCBM+I0D/SJZRy4aJZJviEoJgkiCoRLXkJ7EbJG1pRWF0mQiCV19Hl788p+3Ixr+AEGWaUxSP4rxrKg907RayZ3w6BW+SwAPiCWLwbWYzI+2YNsNIuNP7zW6JmbpH3MGiYLwHPzMwWPZjlyXrRTMtT85Ii5X/y3s1LSKdh82g7unuS0d0i/jTodRPpNi4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2470.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(316002)(8676002)(66476007)(66946007)(66556008)(4326008)(38100700002)(31686004)(6512007)(508600001)(31696002)(8936002)(5660300002)(2616005)(6486002)(36756003)(26005)(186003)(6506007)(53546011)(4744005)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YTFDYWJIT2w0b3I1dUF3SDJ1bW81R1QzZThWc2loSUQ1ZWdvV25TQkFoYkli?=
+ =?utf-8?B?elN1dldTSUJpWUNUaVp6dTZNdS9TczlrOHVnMWZnRjdDUDBmOHcrWDVOUnEv?=
+ =?utf-8?B?MVE5MHRKNEw1V3lQZGowdDBLalNlTlZhaC9WZlZETzl2QnJUUVIzUmN6c0dL?=
+ =?utf-8?B?Uks0Nk5USFBlbm9zd2tSZzVNdE9sQjFVK1BZOXJtd1BacTV2MFBUSWJSckFV?=
+ =?utf-8?B?N2RwK2N5ZmxkR0FJSmpzcENyR04weUM2Rit0aUJjTEg1S2FaTkVSbDFIVG5p?=
+ =?utf-8?B?eFJENmhFZ3piYzNaTGhmQld0aTRkWDR0a3hiSExFNGt4NTJwZFZmZmxQaEtL?=
+ =?utf-8?B?SnlndHFXUytzd1JTcG12eThqaDBlTnhpaDdTMkpFU1hQZ1lQVCsxOGltenhM?=
+ =?utf-8?B?dmc5OC9aSFFXNGFjU2p4ZXh5VFMwaXJYdWVLeW1Ja3BjY3BiMWlTanc2YjBU?=
+ =?utf-8?B?MjFNaUcyb3BGQktEWlczVDFHZGdDbFVQQXUyL09mYWRDamxlaU0xbU04QndB?=
+ =?utf-8?B?blI3R3lLem5EZmJFZnR4SGYxT1ZVREpHTXo1a3IvU2owbDd6WTJuRkd0ZkpC?=
+ =?utf-8?B?cnBEc2VCOUFzNzQ1cGJFa0tocEgwVDlobXJXbDBWR0w1YTlldEh3YmNjTyt3?=
+ =?utf-8?B?WGU1dGIvMXBpckl6d0VoR3VmNjJGRW9SRi9pZmloaUdiQjZqZDJlVmE5a3N1?=
+ =?utf-8?B?ZEkxaXM4QWVWU3d1WllGbUx4d3ZrZUpIQzFaQW12WkNmVnQrM3lLTlJRZm1t?=
+ =?utf-8?B?YnJ2ZFQyZnVUeG14K3R6bXVySVI3eEl5TmZyNmhPaGw0bldhZVNFMHB5c09S?=
+ =?utf-8?B?UnRxKzZtV0tnVEZVMnFJQzZlc1M0Z1F3aFNzOE1DeEU3aTVuZXpESnpQRHl5?=
+ =?utf-8?B?SW5Pb0ZnNGhiVnFGck9FUnQrbm4rcVlZcFdWVWxhelpENzZGVk03emFCaTRE?=
+ =?utf-8?B?ZjFLRWVsQ3JlbkJodldpdFRRa0ZoRktLNjhQODNLWEVyVXZWbVFSOEcvb3hM?=
+ =?utf-8?B?RkVhL1MwamdzekVMWkY2WFNLWWhhQTc1MWRZN1d4Z1RzcnBBWWZJeVpyMmhB?=
+ =?utf-8?B?MlU3ZEV6UThOVmEyLytyanlQSUlobDFFeWlvT3RhODM0a0ZvZ0laM2xPZnpM?=
+ =?utf-8?B?Y1JmNkFxUzhWRnZnWGpRNGlETGF0dDV4RjRZMFU1WXhQZDlid2FaT1VyM1A4?=
+ =?utf-8?B?aHRKTzVGdmpiaXVUbVlYRWRVdHUzMUpIOENPa0NuM0R6bFZ1eWZqVjJvVXBD?=
+ =?utf-8?B?aU96eldiNzU1UUh0bTVRQjhpMkNtQjcya09VTVlzZlhCN0l4UnVKRHNndHYw?=
+ =?utf-8?B?L1VXdmtHdWowa2g0MXd2N2ZnVVY2MCt0Q3o1c2haSFlZL3o2TUp2ZjRjVUY1?=
+ =?utf-8?B?SlEvNnN2dTRjbDBBMExuV3RVa1BIUDhwUVhiaTE1cUdIR2x1Qmt6Nks2S3lZ?=
+ =?utf-8?B?M3Z0QkQ2ZlZNbG8xQ1lSRE1STjUyMTdkbFFSQlFhTitYKzh4U3JUUUdLNExT?=
+ =?utf-8?B?TDR5SFB2L3Y1dElXaDJzSVFNVnAxcDd2bGFhRTgzWTFDRVFoMFlEUVh3SEwv?=
+ =?utf-8?B?WmNWeGlEVVQvQ3lHZmZLSzlzQ1RzOFNkZ29kUmh2aXp6YzlkUDVDTmJtZ3hE?=
+ =?utf-8?B?TjdlZlE1VjNTS0lIYWgvUDhFNGdsdjJQUE1veS84Z2hFRGhzVzRxSXVYSVZr?=
+ =?utf-8?B?MVBRUmNndjJPVXZ5OFJMWGhOUlF1RDZFWWdRZkkwQ1VlQlVvR1E2alR0VzB1?=
+ =?utf-8?B?WXBkRWhCY0YyYnJ1cVEwOEh2aWVOdHBxbzNyTEw2ZzdWTnZTekdBWkswa1Ni?=
+ =?utf-8?B?cXU5eTlKVXh1SERHVHlRRllBenFMRDcwZ2trMU02ZGxrV2g0SVZQN2NHaVNO?=
+ =?utf-8?B?UVVTOW9UOTd0d2hrL1A5OGlKYnJHK2x0OGtCb1dWZ3NIU1NTKzRINHlsNm40?=
+ =?utf-8?B?QTBBY0NKK293c3ZnTzhnd1lvWVRyQ0hLbmVvc01CRFgrWmsyUEQ5UXdpVjho?=
+ =?utf-8?B?eUlKazUwNHdsU0U3WEhIdHBCYWJ2d1VDb3pUMzJTWVBBaE8wbU9iSDVNY3Vj?=
+ =?utf-8?B?bThBS3RXZitHaXZydElzcnAxcG9aRTZ3c0NVdjFPZi9IM09paUVLbjhiQTll?=
+ =?utf-8?B?RzJCNkhuajhUbGtvR0orNnZiNVI4VXVtQldDakJQMlh3bk0yY3JPQk1rb2Rp?=
+ =?utf-8?Q?HvnH8Sf5wUltJYyXgXXxz6I=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f79853bf-e482-4ae4-3bec-08d9ed3e2509
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2470.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2022 09:09:02.8502
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: P/3GkiSsOQTqaZTj8POF7IZqrNxn8+i9Uyux1wn/sNBCtmWgVAVuKQC8XrtwEcqZkb5OsYfbNUOOopcIK0aGhg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3501
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-( to 10. helmik. 2022 klo 16.41 Tzung-Bi Shih (tzungbi@google.com) kirjoitt=
-i:
->
-> On Mon, Feb 07, 2022 at 12:36:13PM +1100, Sami Ky=C3=B6stil=C3=A4 wrote:
-> > This patch introduces a driver for the ChromeOS screen privacy
-> > sensor (aka. HPS). The driver supports a sensor connected to the I2C bu=
-s
-> > and identified as "GOOG0020" in the ACPI tables.
+On 2/9/2022 10:30 PM, Paolo Bonzini wrote:
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 0d3646535cc5..97c4f5fc291f 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -873,8 +873,12 @@ void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned lon
+>  		kvm_async_pf_hash_reset(vcpu);
+>  	}
+>  
+> -	if ((cr0 ^ old_cr0) & KVM_MMU_CR0_ROLE_BITS)
+> +	if ((cr0 ^ old_cr0) & KVM_MMU_CR0_ROLE_BITS) {
+> +		/* Flush the TLB if CR0 is changed 1 -> 0.  */
 
-Thanks for the review!
+                                      ^^ CR0.PG here ?
 
-> The patch uses HPS instead of SPS everywhere.  Would you consider to use
-> "human presence sensor" when referring it?
+> +		if ((old_cr0 & X86_CR0_PG) && !(cr0 & X86_CR0_PG))
+> +			kvm_mmu_unload(vcpu);
+>  		kvm_mmu_reset_context(vcpu);
+> +	}
 
-Sure thing, I'll unify the terminology. There are a few different
-names going around for the user-facing features powered by the sensor
-which makes this a bit confusing.
+Regards
+Nikunj
 
-> > When loaded, the driver exports the sensor to userspace through a
-> > character device. This device only supports power management, i.e.,
-> > communication with the sensor must be done through regular I2C
-> > transmissions from userspace.
-> >
-> > Power management is implemented by enabling the respective power GPIO
-> > while at least one userspace process holds an open fd on the character
-> > device. By default, the device is powered down if there are no active
-> > clients.
-> >
-> > Note that the driver makes no effort to preserve the state of the senso=
-r
-> > between power down and power up events. Userspace is responsible for
-> > reinitializing any needed state once power has been restored.
->
-> It's weird.  If most of the thing is done by userspace programs, couldn't=
- it
-> set the power GPIO via userspace interface (e.g. [1]) too?
-
-I agree that's a little unusual, but there are some good reasons for
-this to be in the kernel. First, it lets us turn HPS off during system
-suspend -- which I'm not sure how you'd do from userspace. Second, it
-avoids the need to give write access to the entire GPIO chip to the
-hpsd userspace daemon. We just need a single line, while the
-controller in this case has a total of 360 gpios. Finally, HPS also
-has an interrupt line, and we're planning to let it wake up the host,
-which I also believe needs to be done in the kernel.
-
->
-> [1]: https://embeddedbits.org/new-linux-kernel-gpio-user-space-interface/
->
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> [...]
-> > +HPS (ChromeOS screen privacy sensor) DRIVER
->
-> Does it make more sense to use "CHROMEOS HPS DRIVER" title?
-
-Good idea, done.
-
-> > diff --git a/drivers/platform/chrome/cros_hps_i2c.c b/drivers/platform/=
-chrome/cros_hps_i2c.c
-> [...]
-> > +static void hps_set_power(struct hps_drvdata *hps, bool state)
-> > +{
-> > +     if (!IS_ERR_OR_NULL(hps->enable_gpio))
->
-> Could it get rid of the check?  Does the function get called if device pr=
-obe
-> fails?
-
-True, done.
-
-> > +static void hps_unload(void *drv_data)
-> > +{
-> > +     struct hps_drvdata *hps =3D drv_data;
-> > +
-> > +     hps_set_power(hps, true);
->
-> Why does it need to set to true when device removing?
-
-By default, HPS is powered on when the system starts and before the
-driver is loaded. We want to restore it to that default state here.
-This is needed for example for automated testing, where we can unbind
-the driver to make sure HPS stays powered.
-
-> > +static int hps_open(struct inode *inode, struct file *file)
-> > +{
-> > +     struct hps_drvdata *hps =3D container_of(file->private_data,
-> > +                                            struct hps_drvdata, misc_d=
-evice);
-> > +     struct device *dev =3D &hps->client->dev;
-> > +     int ret;
-> > +
-> > +     ret =3D pm_runtime_get_sync(dev);
-> > +     if (ret < 0)
-> > +             goto pm_get_fail;
-> > +     return 0;
-> > +
-> > +pm_get_fail:
-> > +     pm_runtime_put(dev);
-> > +     pm_runtime_disable(dev);
->
-> The two functions are not effectively symmetric if pm_runtime_get_sync()
-> fails.
-> - It doesn't need to call pm_runtime_put() if pm_runtime_get_sync() fails=
-.
-> - I guess it wouldn't want to pm_runtime_disable() here.  The capability =
-is
->   controlled when the device probing and removing.
-
-According to the documentation, pm_runtime_get_sync() always bumps the
-usage count, including in failure cases. However there's
-pm_runtime_resume_and_get() which doesn't increment the counter for
-failures, so I've switched to that so that we don't have to handle the
-error case here. I agree that pm_runtime_disable() isn't really
-necessary here -- removed.
-
-> > +static int hps_release(struct inode *inode, struct file *file)
-> > +{
-> > +     struct hps_drvdata *hps =3D container_of(file->private_data,
-> > +                                            struct hps_drvdata, misc_d=
-evice);
-> > +     struct device *dev =3D &hps->client->dev;
-> > +     int ret;
-> > +
-> > +     ret =3D pm_runtime_put(dev);
-> > +     if (ret < 0)
-> > +             goto pm_put_fail;
-> > +     return 0;
-> > +
-> > +pm_put_fail:
-> > +     pm_runtime_disable(dev);
->
-> Same here.
-
-Removed.
-
->
-> > +const struct file_operations hps_fops =3D {
-> > +     .owner =3D THIS_MODULE,
-> > +     .open =3D hps_open,
-> > +     .release =3D hps_release,
-> > +};
->
-> The struct can be static.
-
-Done.
-
->
-> > +static int hps_i2c_probe(struct i2c_client *client)
-> > +{
-> > +     struct hps_drvdata *hps;
-> > +     int ret =3D 0;
->
-> It doesn't need to be initialized.  It's going to be overridden soon.
-
-Fixed.
-
-> > +     memset(&hps->misc_device, 0, sizeof(hps->misc_device));
-> > +     hps->misc_device.parent =3D &client->dev;
-> > +     hps->misc_device.minor =3D MISC_DYNAMIC_MINOR;
-> > +     hps->misc_device.name =3D "hps";
->
-> Does "cros_hps_i2c" or "cros_hps" make more sense?
-
-Changed to "cros-hps" to better match the driver's name (and the
-naming convention of other Chrome OS drivers).
-
-> > +     ret =3D devm_add_action(&client->dev, &hps_unload, hps);
-> > +     if (ret) {
-> > +             dev_err(&client->dev,
-> > +                     "failed to install unload action: %d\n", ret);
-> > +             return ret;
-> > +     }
->
-> Why does it need to call hps_unload() when device removing?  Couldn't it =
-put
-> the code in hps_i2c_remove()?
-
-Ah, this was left over from an earlier version where the
-setup/teardown sequence was a little more complex. Agreed and moved to
-hps_i2c_remove.
-
->
-> > +     hps_set_power(hps, false);
-> > +     pm_runtime_enable(&client->dev);
-> > +     return ret;
->
-> Using `return 0;` makes it clear.
-
-Done.
-
-> > +static int hps_suspend(struct device *dev)
-> > +{
-> > +     struct i2c_client *client =3D to_i2c_client(dev);
-> > +     struct hps_drvdata *hps =3D i2c_get_clientdata(client);
-> > +
-> > +     hps_set_power(hps, false);
-> > +     return 0;
-> > +}
-> > +
-> > +static int hps_resume(struct device *dev)
-> > +{
-> > +     struct i2c_client *client =3D to_i2c_client(dev);
-> > +     struct hps_drvdata *hps =3D i2c_get_clientdata(client);
-> > +
-> > +     hps_set_power(hps, true);
-> > +     return 0;
-> > +}
->
-> Does it need to save the old state before suspending?  Instead of turning=
- on
-> the power after every resumes.
-
-No, the runtime pm system makes sure suspend and resume are only
-called when needed. For example, if someone has an open reference to
-the device when the system goes to sleep, suspend and resume are
-called appropriately. If HPS was already suspended, then neither
-entrypoint gets called when going to sleep or waking up.
-
-> > +static const struct i2c_device_id hps_i2c_id[] =3D {
-> > +     { "hps", 0 },
->
-> Does "cros_hps_i2c" or "cros_hps" make more sense?
-
-Went with "cros-hps".
-
-> > +static struct i2c_driver hps_i2c_driver =3D {
-> > +     .probe_new =3D hps_i2c_probe,
-> > +     .remove =3D hps_i2c_remove,
-> > +     .id_table =3D hps_i2c_id,
-> > +     .driver =3D {
-> > +             .name =3D "hps",
->
-> Does "cros_hps_i2c" or "cros_hps" make more sense?
-
-Ditto.
-
-> > +#ifdef CONFIG_ACPI
-> > +             .acpi_match_table =3D ACPI_PTR(hps_acpi_id),
-> > +#endif
->
-> It doesn't need the guard as ACPI_PTR() already does.
-
-Ah, good to know!
-
-- Sami

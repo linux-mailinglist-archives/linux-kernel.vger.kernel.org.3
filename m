@@ -2,144 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE044B2592
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B6C34B2591
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:24:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349969AbiBKMY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 07:24:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33264 "EHLO
+        id S1349954AbiBKMYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 07:24:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349957AbiBKMY2 (ORCPT
+        with ESMTP id S229863AbiBKMYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 07:24:28 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7574ADC3;
-        Fri, 11 Feb 2022 04:24:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644582266; x=1676118266;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=u0NFQSqU8nFRCacBmC6t3+7/vZNIdJqiy1WnYmvJT2E=;
-  b=OnocrvH6198AAB4hbENghshtnMOZ+D+AdohIpYa+TK5WfSBXcM5Xr1kT
-   MAozqHKWNxQMfg8KNrYgri5wZ/YcO5iJ1XFhS/XtrA1HJ3fqIOQ3FIn+r
-   I8qBEBODFlJ85TOfAozQ3TGUXHD4GUJ8+bCBzrMcWSF8eIOCptkX8vNcN
-   U=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 Feb 2022 04:24:26 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 04:24:25 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 11 Feb 2022 04:24:25 -0800
-Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Fri, 11 Feb 2022 04:24:20 -0800
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
-        <bjorn.andersson@linaro.org>, <greg@kroah.com>, <robh@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
-        <quic_psodagud@quicinc.com>, <quic_satyap@quicinc.com>,
-        <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
-        <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>,
-        <quic_schowdhu@quicinc.com>
-Subject: [PATCH V7] MAINTAINERS: Add maintainer entry for EUD
-Date:   Fri, 11 Feb 2022 17:53:44 +0530
-Message-ID: <b7a9d113f610e2edf67c6a813fc173b1857b9919.1644580972.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Fri, 11 Feb 2022 07:24:08 -0500
+Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94B5DC3;
+        Fri, 11 Feb 2022 04:24:07 -0800 (PST)
+Received: by mail-vs1-f52.google.com with SMTP id u134so5221540vsu.8;
+        Fri, 11 Feb 2022 04:24:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Sjk1d99Bi6DMu1w/ZtC6Jgj+o43T7072qer7CkYT+IA=;
+        b=IDABzAEuvUOqXcg6I85tbruXJ19fIP61nHjenawqclCfSdCmqPTMNw/3hr2NW0fSHS
+         ImFmewrguVdCj9iXeA/nAUwjeTLNckHcpJoKYpej2DaXMETwrx7kUD6URnuQstRcUr/w
+         KiKqcuWY5M2QcwJkVag29Lkqq7EQS9lmvPzkalau29ucOaM8l13pyiM6zEYXorVGuu1I
+         UmtHHiqzzQRT48QecoiaX4dmTxWIiCahwZ3lmDGBbxgCi2E0JIgsbmGcFB3mvKzVUYsq
+         yWtEIoMoqtAFNKERrMj2lmBq1EKAxOyBEWIo7wAyrDLdA+dehdCR0So8N6+BknmrOUfT
+         tZPQ==
+X-Gm-Message-State: AOAM532H3N22AfzrYdtCKIjoHVPm2IXXejYiypJIgLVgJmSM8AUqac3i
+        i3JD0H0kl6tR0aa7Cpsu9CqngZbP2OUf7w==
+X-Google-Smtp-Source: ABdhPJwVHpEBkAd9vScaAcxXnkM22TrJn7k/6UfPWEbnsOWwSM3nT0qh/PIGbcQvFVQPmV+ukuFBEA==
+X-Received: by 2002:a67:d704:: with SMTP id p4mr405397vsj.4.1644582246736;
+        Fri, 11 Feb 2022 04:24:06 -0800 (PST)
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
+        by smtp.gmail.com with ESMTPSA id i17sm146214vkk.35.2022.02.11.04.24.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Feb 2022 04:24:06 -0800 (PST)
+Received: by mail-ua1-f48.google.com with SMTP id g18so4602748uak.5;
+        Fri, 11 Feb 2022 04:24:05 -0800 (PST)
+X-Received: by 2002:ab0:384c:: with SMTP id h12mr396518uaw.122.1644582245661;
+ Fri, 11 Feb 2022 04:24:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220211091927.2988283-1-javierm@redhat.com> <20220211091927.2988283-4-javierm@redhat.com>
+ <YgZJpi4llqr93U9Y@smile.fi.intel.com> <eed8200c-7716-ce4f-dac5-bd6f0345b631@redhat.com>
+In-Reply-To: <eed8200c-7716-ce4f-dac5-bd6f0345b631@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 11 Feb 2022 13:23:54 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVLmUwgCWui4OiZqvqpVWzA-d9QhjZLa_idgC19XeEEjA@mail.gmail.com>
+Message-ID: <CAMuHMdVLmUwgCWui4OiZqvqpVWzA-d9QhjZLa_idgC19XeEEjA@mail.gmail.com>
+Subject: Re: [PATCH v4 3/6] drm: Add driver for Solomon SSD130x OLED displays
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Lee Jones <lee.jones@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Linux PWM List <linux-pwm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the entry for maintainer for EUD driver
-and other associated files.
+Hi Javier,
 
-Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
+On Fri, Feb 11, 2022 at 1:06 PM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+> On 2/11/22 12:33, Andy Shevchenko wrote:
+> > On Fri, Feb 11, 2022 at 10:19:24AM +0100, Javier Martinez Canillas wrote:
+> >> This adds a DRM driver for SSD1305, SSD1306, SSD1307 and SSD1309 Solomon
+> >> OLED display controllers.
+> >>
+> >> It's only the core part of the driver and a bus specific driver is needed
+> >> for each transport interface supported by the display controllers.
 
-Changes in V7
+> >> +    bl = devm_backlight_device_register(dev, dev_name(dev), dev, ssd130x,
+> >> +                                        &ssd130xfb_bl_ops, NULL);
+> >> +    if (IS_ERR(bl)) {
+> >
+> >> +            ret = PTR_ERR(bl);
+> >> +            dev_err_probe(dev, ret, "Unable to register backlight device\n");
+> >> +            return ERR_PTR(ret);
+> >
+> >               dev_err_probe(dev, PTR_ERR(bl), "Unable to register backlight device\n");
+> >               return bl;
+> >
+> > ?
+>
+> No, because this function's return value is a struct ssd130x_device pointer,
+> not a struct backlight_device pointer.
 
-* Added the Maintainer entry in the sorted order.
+Hence
 
-Changes in V6
+    return ERR_PTR(dev_err_probe(dev, PTR_ERR(bl),
+                                 "Unable to register backlight device\n"));
 
-* Added the review tags from V5 and moved qcom_eud.c to drivers/usb/misc.
+?
 
-Changes in V5
+Gr{oetje,eeting}s,
 
-* Added the review tags and implemented comments on V4 of the patch.
+                        Geert
 
-Changes in V4
-
-* Aligned the device tree node structure of EUD as per discussion.
-
-* Changes to usb-connector.yaml is no longer required and is not
-  included in the patch series.
-
-* Implemented the rest of the comments on Version 3 of the patch.
-
-Changes in V3
-
-* Removed the patch for registration of EUD connector as it is no longer
-  required.
-
-* Added the description to include EUD in usb-connector.yaml
-
-* Implemented comments on V2 of the patch.
-
-Changes in V2
-
-* Fixed the yaml issue and also implemented comments on yaml in V1.
-
-Changes in V1
-
-* EUD has now been mapped as a separate DT node as it is an independent QCOM IP.
-
-* EUD is attached to the connector child of dwc3 via port end point since EUD
-  driver needs the connector for role-switching.
-
-* EUD driver has been moved now to drivers/soc/qcom/qcom_eud.c.
-
-* All the comments from version 0 of the patch has been implemented.
-
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 68f21d4..fe43371 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13981,6 +13981,14 @@ L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
- S:	Supported
- F:	sound/soc/qcom/
-
-+QCOM EMBEDDED USB DEBUGGER(EUD)
-+M:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-+L:	linux-arm-msm@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/ABI/testing/sysfs-driver-eud
-+F:	Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
-+F:	drivers/usb/misc/qcom_eud.c
-+
- QCOM IPA DRIVER
- M:	Alex Elder <elder@kernel.org>
- L:	netdev@vger.kernel.org
 --
-2.7.4
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

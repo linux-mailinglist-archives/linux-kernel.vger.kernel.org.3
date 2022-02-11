@@ -2,81 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A521C4B252D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37CFF4B24CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 12:54:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232442AbiBKMDV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 11 Feb 2022 07:03:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50148 "EHLO
+        id S1349660AbiBKLyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 06:54:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349875AbiBKMDG (ORCPT
+        with ESMTP id S1345558AbiBKLyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 07:03:06 -0500
-X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 04:03:02 PST
-Received: from hp0.dsonivx.sbs (unknown [157.230.15.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCFEBE4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:03:02 -0800 (PST)
-From:   mailing@kaizenprofits.cc
-To:     linux-kernel@vger.kernel.org
-Subject: join crypto today
-Date:   11 Feb 2022 11:53:00 +0000
-Message-ID: <20220211115300.4BC5D0BFA5FBAA1A@kaizenprofits.cc>
+        Fri, 11 Feb 2022 06:54:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F62EB0;
+        Fri, 11 Feb 2022 03:54:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0317A618CF;
+        Fri, 11 Feb 2022 11:54:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A932C340E9;
+        Fri, 11 Feb 2022 11:54:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644580452;
+        bh=WDr1wYMBqsy40Pudk1eNzGhiianFBoaG1uB42EhH/Yc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=u49P4uxiQ8AM049ZlWIPnkLHjZ67u6iifufSVkM+/VCa2CGf6B2KIGa8bO7R8XMkB
+         4117f4S7/Gph1wsIv/zM+IZVIcnUsisEtKgbws39L0sauD6MwyDF0ctJ4rsjfTZRVW
+         TbDIxa565YhCP84rZ4IuLAIWSes88H8CD2E0HcnD9xVO6Aene4TXKLrDPNolK0wF3z
+         XfA4bWdqPEF2mM+UFvic6IENeDs4jS9uXWK6GmG27VfFia34d+ozJX6THND1O8qBCX
+         PdOhsbTyDAHABTiJKmO1tw4LJkHuaSyiHFGJzg+/7cENP753NJxHEwKtqZUo/HU+CF
+         3IW5kocrVanZw==
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: [PATCH v8 00/11] fprobe: Introduce fprobe function entry/exit probe 
+Date:   Fri, 11 Feb 2022 20:54:06 +0900
+Message-Id: <164458044634.586276.3261555265565111183.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_50,LOTS_OF_MONEY,
-        RCVD_IN_XBL,SPF_HELO_NONE,SPF_SOFTFAIL,T_MONEY_PERCENT,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bitcoin Turns Lower, Why BTC Could Extend Losses Below $42.5K
-https://www.kaizenprofits.cc
+Hi,
 
-Bitcoin failed again to clear the $45,500 resistance zone against 
-the US Dollar. BTC is declining and remains at a risk of more 
-losses below $42,500. Bitcoin attempted another upside break 
-above $45,500 but failed. The price is trading below $43,500 and 
-the 100 hourly simple moving average. There was a break below a 
-key bullish trend line with support near $43,500 on the hourly 
-chart of the BTC/USD pair (data feed from Kraken). The pair could 
-decline sharply if there is a clear move below the $42,500 
-support zone. Bitcoin Price Corrects Gains Bitcoin price 
-attempted an upside break above the $45,500 resistance zone. 
-However, BTC struggled to gain pace above the $45,500 level. A 
-high was formed near $45,900 and the price started a fresh 
-decline. The price moved below the $45,000 and $44,500 support 
-levels. Besides, there was a break below a key bullish trend line 
-with support near $43,500 on the hourly chart of the BTC/USD 
-pair. The pair is now trading below $43,500 and the 100 hourly 
-simple moving average. Bitcoin is now finding bids near the 
-$42,600 level. A low is formed near $42,664 and the price is now 
-consolidating losses. An immediate resistance is near the $43,450 
-level. It is near the 23.6% Fib retracement level of the recent 
-decline from the $45,900 high to $42,664 low. The first major 
-resistance is near the $44,000 level and the 100 hourly simple 
-moving average. The next key resistance is near the $44,250 
-level. It is near the 50% Fib retracement level of the recent 
-decline from the $45,900 high to $42,664 low. Source: BTCUSD on 
-https://www.kaizenprofits.cc A clear upside break above the 
-$44,250 level might open the doors for more upsides. The main 
-resistance on the upside is still near the $45,500 level. More 
-Losses in BTC? If bitcoin fails to start a fresh increase above 
-$44,250, it could continue to move down. An immediate support on 
-the downside is near the $42,600 zone. The next major support is 
-seen near the $42,500 level. If there is a downside break below 
-the $42,500 support, the price could start a major decline 
-towards the $41,200 level. Technical indicators: Hourly MACD â€“ 
-The MACD is now gaining pace in the bearish zone. Hourly RSI 
-(Relative Strength Index) â€“ The RSI for BTC/USD is now below the 
-50 level. Major Support Levels â€“ $42,500, followed by $41,200. 
-Major Resistance Levels â€“ $44,000, $44,250 and $45,500.
+Here is the 8th version of fprobe. This version fixes a build error
+when CONFIG_FUNCTION_TRACER=n, and add a KUnit based selftest.
 
-Register with us now:
-í ½í±‡í ½í±‡í ½í±‡í ½í±‡í ½í±‡
-https://www.kaizenprofits.cc
+The previous version is here[1];
+
+[1] https://lore.kernel.org/all/164360522462.65877.1891020292202285106.stgit@devnote2/T/#u
+
+This series introduces the fprobe, the function entry/exit probe
+with multiple probe point support. This also introduces the rethook
+for hooking function return as same as the kretprobe does. This
+abstraction will help us to generalize the fgraph tracer,
+because we can just switch to it from the rethook in fprobe,
+depending on the kernel configuration.
+
+The patch [1/10] is from Jiri's series[2].
+
+[2] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#u
+
+And the patch [9/10] adds the FPROBE_FL_KPROBE_SHARED flag for the case
+if user wants to share the same code (or share a same resource) on the
+fprobe and the kprobes.
+
+I forcibly updated my kprobes/fprobe branch, you can pull this series
+from:
+
+ https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git kprobes/fprobe
+
+Thank you,
+
+---
+
+Jiri Olsa (1):
+      ftrace: Add ftrace_set_filter_ips function
+
+Masami Hiramatsu (10):
+      fprobe: Add ftrace based probe APIs
+      rethook: Add a generic return hook
+      rethook: x86: Add rethook x86 implementation
+      ARM: rethook: Add rethook arm implementation
+      arm64: rethook: Add arm64 rethook implementation
+      fprobe: Add exit_handler support
+      fprobe: Add sample program for fprobe
+      fprobe: Introduce FPROBE_FL_KPROBE_SHARED flag for fprobe
+      docs: fprobe: Add fprobe description to ftrace-use.rst
+      fprobe: Add a selftest for fprobe
+
+
+ Documentation/trace/fprobe.rst                |  171 +++++++++++++
+ Documentation/trace/index.rst                 |    1 
+ arch/arm/Kconfig                              |    1 
+ arch/arm/include/asm/stacktrace.h             |    4 
+ arch/arm/kernel/stacktrace.c                  |    6 
+ arch/arm/probes/Makefile                      |    1 
+ arch/arm/probes/rethook.c                     |   71 +++++
+ arch/arm64/Kconfig                            |    1 
+ arch/arm64/include/asm/stacktrace.h           |    2 
+ arch/arm64/kernel/probes/Makefile             |    1 
+ arch/arm64/kernel/probes/rethook.c            |   25 ++
+ arch/arm64/kernel/probes/rethook_trampoline.S |   87 ++++++
+ arch/arm64/kernel/stacktrace.c                |    7 -
+ arch/x86/Kconfig                              |    1 
+ arch/x86/include/asm/unwind.h                 |    8 +
+ arch/x86/kernel/Makefile                      |    1 
+ arch/x86/kernel/kprobes/common.h              |    1 
+ arch/x86/kernel/rethook.c                     |  115 ++++++++
+ include/linux/fprobe.h                        |  105 ++++++++
+ include/linux/ftrace.h                        |    3 
+ include/linux/kprobes.h                       |    3 
+ include/linux/rethook.h                       |  100 +++++++
+ include/linux/sched.h                         |    3 
+ kernel/exit.c                                 |    2 
+ kernel/fork.c                                 |    3 
+ kernel/trace/Kconfig                          |   26 ++
+ kernel/trace/Makefile                         |    2 
+ kernel/trace/fprobe.c                         |  341 +++++++++++++++++++++++++
+ kernel/trace/ftrace.c                         |   58 ++++
+ kernel/trace/rethook.c                        |  313 +++++++++++++++++++++++
+ lib/Kconfig.debug                             |   12 +
+ lib/Makefile                                  |    2 
+ lib/test_fprobe.c                             |  125 +++++++++
+ samples/Kconfig                               |    7 +
+ samples/Makefile                              |    1 
+ samples/fprobe/Makefile                       |    3 
+ samples/fprobe/fprobe_example.c               |  120 +++++++++
+ 37 files changed, 1719 insertions(+), 14 deletions(-)
+ create mode 100644 Documentation/trace/fprobe.rst
+ create mode 100644 arch/arm/probes/rethook.c
+ create mode 100644 arch/arm64/kernel/probes/rethook.c
+ create mode 100644 arch/arm64/kernel/probes/rethook_trampoline.S
+ create mode 100644 arch/x86/kernel/rethook.c
+ create mode 100644 include/linux/fprobe.h
+ create mode 100644 include/linux/rethook.h
+ create mode 100644 kernel/trace/fprobe.c
+ create mode 100644 kernel/trace/rethook.c
+ create mode 100644 lib/test_fprobe.c
+ create mode 100644 samples/fprobe/Makefile
+ create mode 100644 samples/fprobe/fprobe_example.c
+
+--
+Masami Hiramatsu (Linaro) <mhiramat@kernel.org>

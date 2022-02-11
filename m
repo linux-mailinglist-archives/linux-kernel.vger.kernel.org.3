@@ -2,113 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 600834B1E9C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5784B1EAE
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 07:46:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343827AbiBKGgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 01:36:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36598 "EHLO
+        id S1345966AbiBKGqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 01:46:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243174AbiBKGga (ORCPT
+        with ESMTP id S1345608AbiBKGqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 01:36:30 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254EDE56;
-        Thu, 10 Feb 2022 22:36:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644561390; x=1676097390;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=vvaAaRgq6EsdB48AtN0e/kt285sXi+0TKs83/n1Uo5k=;
-  b=T7PMGyXyd0sYZM8uU6+DVhljhkr7Iw3YvmZBnttwFclSP8nZfVeXBnmb
-   sRH/ww251xUYUznfaXqz0Bcz3J6gpzi3ondK43B0f8jDJ9LD4gbJMYsyp
-   k78v8XJdZPW6sVtiI4ywtMEpKfRGIuM2P12FjhhVmodcp+3/tEjxhhrvI
-   eu61WsHa83IhyePYOBEm9sya41MX6I+R8qW8D0pxwfflfp2/lMq59HNKt
-   p/IQcF6PUpuzjQtUTgWTc96RktJp0D7Wer+Ij2DIo3SglRM6ipsvB3V3Y
-   iaOjGbYyf0t1FFK8ZJedjjxuBhgYbdz9FvBGnZSQ5mnCjoumzdTBy2pYQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="312955617"
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="312955617"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 22:36:29 -0800
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="486910936"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.28.229]) ([10.255.28.229])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 22:36:24 -0800
-Subject: Re: [kbuild-all] Re: [PATCH] net: dsa: qca8k: fix noderef.cocci
- warnings
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <202202100634.l8CtrpzE-lkp@intel.com>
- <20220209221304.GA17529@d2214a582157>
- <6c74b2f8-dd83-c4f2-cadd-07794a37dfac@gmail.com>
- <20220210105956.336c9e6a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <161e2399-222e-b675-36e1-ec39eb96da4e@intel.com>
-Date:   Fri, 11 Feb 2022 14:36:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        Fri, 11 Feb 2022 01:46:37 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714B810B7;
+        Thu, 10 Feb 2022 22:46:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644561997; x=1676097997;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PVZLA0aEbhns4yH10ABE/XO+pR3FihHbzDXxQT0ER1E=;
+  b=sDLG8civCegV0BJ5/nn6egJhcQdvyg4nVZkOLnTwAxZ5ZerFgzjWJ+3e
+   wa3wLJ4a5IlPrWtvuoQUD1zZR430vLBFBG8p1Svdud+SOB7xZD1BQBHMN
+   xmA6RqyjnoCHvI5wA6JT4yR2RUZ/VbYrYQqSoQygiLKYxc72M6wrR77MC
+   0=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 10 Feb 2022 22:46:37 -0800
+X-QCInternal: smtphost
+Received: from nalasex01a.na.qualcomm.com ([10.47.209.196])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 22:46:37 -0800
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 10 Feb 2022 22:46:34 -0800
+Date:   Fri, 11 Feb 2022 12:16:30 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>
+CC:     Jung Daehwan <dh10.jung@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_udipto@quicinc.com>
+Subject: Re: usb: host: Reduce xhci_handshake timeout in xhci_reset
+Message-ID: <20220211064630.GA20567@hu-pkondeti-hyd.qualcomm.com>
+References: <CGME20210622113915epcas2p284c61291fc9d83487f6dfebb65fd4e9b@epcas2p2.samsung.com>
+ <1624361096-41282-1-git-send-email-dh10.jung@samsung.com>
+ <YNJAZDwuFmEoTJHe@kroah.com>
+ <20210628022548.GA69289@ubuntu>
+ <YNlxzj7KXG43Uyrp@kroah.com>
+ <20210628065553.GA83203@ubuntu>
+ <496c9d86-70d7-1050-5bbb-9f841e4b464a@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220210105956.336c9e6a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <496c9d86-70d7-1050-5bbb-9f841e4b464a@intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/11/2022 2:59 AM, Jakub Kicinski wrote:
-> On Wed, 9 Feb 2022 19:30:48 -0800 Florian Fainelli wrote:
->> On 2/9/2022 2:13 PM, kernel test robot wrote:
->>> From: kernel test robot <lkp@intel.com>
->>>
->>> drivers/net/dsa/qca8k.c:422:37-43: ERROR: application of sizeof to pointer
->>>
->>>    sizeof when applied to a pointer typed expression gives the size of
->>>    the pointer
->>>
->>> Generated by: scripts/coccinelle/misc/noderef.cocci
->>>
->>> Fixes: 90386223f44e ("net: dsa: qca8k: add support for larger read/write size with mgmt Ethernet")
->>> CC: Ansuel Smith <ansuelsmth@gmail.com>
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Signed-off-by: kernel test robot <lkp@intel.com>
->>
->>> qca8k.c |    2 +-
->>> 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, Jun 28, 2021 at 10:49:00AM +0300, Mathias Nyman wrote:
+> On 28.6.2021 9.55, Jung Daehwan wrote:
+> > On Mon, Jun 28, 2021 at 08:53:02AM +0200, Greg Kroah-Hartman wrote:
+> >> On Mon, Jun 28, 2021 at 11:25:48AM +0900, Jung Daehwan wrote:
+> >>> On Tue, Jun 22, 2021 at 09:56:20PM +0200, Greg Kroah-Hartman wrote:
+> >>>> On Tue, Jun 22, 2021 at 08:24:56PM +0900, Daehwan Jung wrote:
+> >>>>> It seems 10 secs timeout is too long in general case. A core would wait for
+> >>>>> 10 secs without doing other task and it can be happended on every device.
+> >>>>
+> >>>> Only if the handshake does not come back sooner, right?
+> >>>
+> >>> Yes, right.
+> >>>
+> >>>> What is causing your device to timeout here?
+> >>>
+> >>> Host Controller doesn't respond handshake. I don't know why and I ask HW team
+> >>> to debug it.
+> >>
+> >> Please work to fix your hardware, that feels like the root of the
+> >> problem here.  If you require the timeout for xhci_reset() to happen,
+> >> then how do you know that the hardware really did reset properly in the
+> >> reduced amount of time you just provided?
+> >>
+> > 
+> > I continue fixing this issue with hardware engineer, but currently just
+> > host controller can crash whole system and that's why I want to fix it.
+> > How about adding some error logs in this situation for recognizing this issue?
+> > We can add error log in xhci_stop as xhci_reset can returns error like below.
+> > 
+> > static void xhci_stop(struct usb_hcd *hcd)
+> > {
+> >         u32 temp;
+> >         struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+> > +       int ret;
+> > 
+> >         mutex_lock(&xhci->mutex);
+> > 
+> > @@ -733,6 +734,9 @@ static void xhci_stop(struct usb_hcd *hcd)
+> >         xhci->cmd_ring_state = CMD_RING_STATE_STOPPED;
+> >         xhci_halt(xhci);
+> >         xhci_reset(xhci);
+> > +       if (ret)
+> > +               xhci_err(xhci, "%s: Error while reset xhci Host controller - ret = %d\n"
+> > +                       , __func__, ret);
+> >         spin_unlock_irq(&xhci->lock);
+> > 
 > 
-> kbuild folks, would it be easy to switch to including full path here?
-> It seems like our CI expects that and ignores this patch.
-
-Hi Jakub,
-
-Thanks for the advice, will change it.
-
-Best Regards,
-Rong Chen
-
+> We can check the xhci_reset() return value here and print a message, makes sense.
 > 
->> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> The original reason for the 10 second timeout was because a host actually took 9 seconds:
 > 
-> Applied, thanks!
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+> commit 22ceac191211cf6688b1bf6ecd93c8b6bf80ed9b
 > 
+>     xhci: Increase reset timeout for Renesas 720201 host.
+>     
+>     The NEC/Renesas 720201 xHCI host controller does not complete its reset
+>     within 250 milliseconds.  In fact, it takes about 9 seconds to reset the
+>     host controller, and 1 second for the host to be ready for doorbell
+>     rings.  Extend the reset and CNR polling timeout to 10 seconds each.
+> 
+Agreed.
+
+We also run into the similar issue (very very rarely reproduced) on
+our platforms like SM8450. The issue happens when host mode is de-activated
+(type-c cable disconnected). Since xhci_reset() is called with interrupts
+disabled, a timeout of 10 seconds is fatal to the system.
+
+Thanks,
+Pavan

@@ -2,76 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5722B4B2565
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D91C4B2568
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 13:15:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349902AbiBKMNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 07:13:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55346 "EHLO
+        id S1349905AbiBKMOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 07:14:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349885AbiBKMM7 (ORCPT
+        with ESMTP id S1349888AbiBKMN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 07:12:59 -0500
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F121E9
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:12:55 -0800 (PST)
-Received: by mail-vk1-xa31.google.com with SMTP id t19so3523103vkl.0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 04:12:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=pbCVlee58SNRljTVR7wTvz7D3A0MvcLCtUjVncuzsEg=;
-        b=VCy5pLs9VsGDwyQ4hfai46UAoZM5FEVwAyVbdK/rZv0+7CHZPlgE+FNoxTDjcVOLBJ
-         4Rq9G3RgHpjLwZaRR6eg0HTXYKJPfn2TwsEr3CofywT3kTeJ4NoXoHQItp9/UsoA/EaD
-         RYo4r7mwI3vah0IpSKASS1RVMVAnO7sqlbDVdIStjJYeqd221+qH8GPjcY+kPCyhhfEj
-         c0aWYQRhpW31qnmWwwfrnwb2B849MfxSslkoPc0uSAqosxK3YSM5e4aHCBfxsfeIhTd3
-         AnE+NKKJV/oG6MOlbi8xKA4DPFWVRlgKoq8P4IHuJscvdQUiME8bGCLA5cFc67l0Y5l3
-         YRPw==
+        Fri, 11 Feb 2022 07:13:58 -0500
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F19DA8;
+        Fri, 11 Feb 2022 04:13:57 -0800 (PST)
+Received: by mail-vs1-f44.google.com with SMTP id w6so9576960vsf.3;
+        Fri, 11 Feb 2022 04:13:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=pbCVlee58SNRljTVR7wTvz7D3A0MvcLCtUjVncuzsEg=;
-        b=f8pGFD9hwXkVqX9PhIPA5DswZJdbRHO9WlyZsPL154/hIfmYQMjsuPeGLIAVTZlgXb
-         tj2qo85d63k3ec8j9ix+sz/vRezLvwk4HFvxvC6ucWYfheDhKJafH3iSCIwI1fdJly8x
-         SEUsoDhuEwpCAbLdq24ZlIG9H9i+A2CxSpes3PgWn9PT935EVaLN/YxbGQrE/MKMx1O4
-         bEFsLGs1hU1SmEp5uFYG2UXpylW1jjK35CuLLOg1qaXVo+Q7LCpgdIG9Pq+7vISkYFE4
-         W2JPOPEXj6W7Nt61zMvTgzZziMWJWvAQvRw5xJ0IZmVaWF81hj9ABg3A5vg6IZN568Us
-         fCJQ==
-X-Gm-Message-State: AOAM530r0FngaIZLoLfLmRVCaURZQx9Am9isKyCm1AeQFmrH/IWSzl41
-        gVp2ofwR0LL/PcJTg+5ifURn8MdXPXmL3BfMo5s=
-X-Google-Smtp-Source: ABdhPJz5otK9D/K3Cjngea/6yI4dVjNgjIot/D0crqlaaO69dySg31Y/l4xGRmFqBWzTGSWa8GEBexP3QF+YYMvanVI=
-X-Received: by 2002:a1f:31c7:: with SMTP id x190mr369593vkx.22.1644581574351;
- Fri, 11 Feb 2022 04:12:54 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ulYLaVXldSoI4tDDRxPqxlHj4drX158bChWih8XppYk=;
+        b=H7jTd4dGwOHJeB8IFqS+Z19tuXaok6mNx3fXVmuXQxTyxr/mGePHyncLyvmTcPcz86
+         6dYInzawnH0ZosYxamOME6xLQM7kBLfF87xueADBh+t/hvZHLnbEoQYjUJk21Ui+nS+A
+         qyN5iwhc8K3orQlbHKxopHWCxs1xTm3WG2BRHU52K0JIHqR5HtMq0nt4SbXawDw/VrPQ
+         aeSu1qAyH4WwBM+yYKzqjop8V0ChWV9KhvqtsAnjXceHkCzg7S3bBddtbQcgu03cjbh1
+         v6o7eVHh2LNdTRvHBct0E4ZHwRUhNb8aObEqBs+qhGzgDpuRB9YR+MEtpjFCtkaljaqB
+         28pQ==
+X-Gm-Message-State: AOAM533JYshnlnUk0qiXikAnF4xrn9ZAlaJz31GP0PdAAQYAPA7R2AdZ
+        OPycLulzO/Z1z+2q5h609IKEm2n6EnD1SQ==
+X-Google-Smtp-Source: ABdhPJxsf3l7v/aOhtds1muYkZEaJkvsq2pGOeHnHeyHuFoS0A/hW+zuhlsxC5W+w81SYw+CmFHJXg==
+X-Received: by 2002:a05:6102:a39:: with SMTP id 25mr372146vsb.84.1644581636726;
+        Fri, 11 Feb 2022 04:13:56 -0800 (PST)
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com. [209.85.217.43])
+        by smtp.gmail.com with ESMTPSA id k204sm4798871vkk.0.2022.02.11.04.13.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Feb 2022 04:13:55 -0800 (PST)
+Received: by mail-vs1-f43.google.com with SMTP id j26so8546789vso.12;
+        Fri, 11 Feb 2022 04:13:54 -0800 (PST)
+X-Received: by 2002:a05:6102:34d9:: with SMTP id a25mr377312vst.68.1644581634672;
+ Fri, 11 Feb 2022 04:13:54 -0800 (PST)
 MIME-Version: 1.0
-Sender: acw.charles12@gmail.com
-Received: by 2002:ab0:32cf:0:0:0:0:0 with HTTP; Fri, 11 Feb 2022 04:12:54
- -0800 (PST)
-From:   Charles Anthony <banthonylawfirm21@gmail.com>
-Date:   Fri, 11 Feb 2022 12:12:54 +0000
-X-Google-Sender-Auth: -Fm6szCQce9wjJQM2q_1leUtxHU
-Message-ID: <CAGgrmKp9qNrs9=m_RW_tZiqGCnQFSucO8bbpx+Y6hF5+1uh2ZA@mail.gmail.com>
-Subject: My Dear
-To:     undisclosed-recipients:;
+References: <20220129184225.407100-1-laurent@vivier.eu> <20220129184225.407100-2-laurent@vivier.eu>
+ <CAMuHMdVmCV4v=LhGRB3d3hbyL4Etv_Wbb2VPhK5G9a2xB1Pm2A@mail.gmail.com> <0b488b58-3d13-e987-37c7-16bac7a313e0@physik.fu-berlin.de>
+In-Reply-To: <0b488b58-3d13-e987-37c7-16bac7a313e0@physik.fu-berlin.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 11 Feb 2022 13:13:43 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX53by9-5L5UWnjtpsUOX7LJMG+ySbFqO+QtsSST_iXKA@mail.gmail.com>
+Message-ID: <CAMuHMdX53by9-5L5UWnjtpsUOX7LJMG+ySbFqO+QtsSST_iXKA@mail.gmail.com>
+Subject: Re: [PATCH v13 1/5] m68k: add asm/config.h
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Laurent Vivier <laurent@vivier.eu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-rtc@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        John Stultz <john.stultz@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello
+Hi Adrian,
 
-My Dear, I am Barrister Charles Anthony, I am contacting you to assist
-retrieve his huge deposit Mr. Alexander left in the bank $10.5
-million, before its get confiscated by the bank. please get back to me
-for more details.
+On Fri, Feb 11, 2022 at 9:36 AM John Paul Adrian Glaubitz
+<glaubitz@physik.fu-berlin.de> wrote:
+> On 1/29/22 20:05, Geert Uytterhoeven wrote:
+> > On Sat, Jan 29, 2022 at 7:42 PM Laurent Vivier <laurent@vivier.eu> wrote:
+> >> To avoid 'warning: no previous prototype for' error, declare all
+> >> the parse_bootinfo and config functions prototypes into asm/config.h
+> >> and include it in arch/m68k/kernel/setup_mm.c and arch/m68k/*/config.c
+> >>
+> >> Signed-off-by: Laurent Vivier <laurent@vivier.eu>
+> >> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> >
+> > I have already queued v12.
+>
+> I assume you're talking about this particular patch only and not the whole
+> series, correct?
 
-Barrister. Charles Anthony
+Exactly.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

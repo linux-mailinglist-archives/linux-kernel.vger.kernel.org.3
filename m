@@ -2,292 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A654B215F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:17:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC754B217A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 10:19:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348425AbiBKJRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 04:17:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58124 "EHLO
+        id S1345116AbiBKJTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 04:19:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237952AbiBKJRW (ORCPT
+        with ESMTP id S1348442AbiBKJTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 04:17:22 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BBE102D;
-        Fri, 11 Feb 2022 01:17:20 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21B8ciEo015018;
-        Fri, 11 Feb 2022 09:17:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : references : from : subject : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=BepGLEN3A2hawUn04CXKRhRJv1ry5IbqIi7zt/wNAU8=;
- b=O4q6xEeSFvGDsoiENhHdkGvPlKTM89FhIc7OwjdX5zOLpCIjooKPYNddQyX33lwrFbd5
- ZTBaBiaP6wYsDCgW/2NTYvQFjOMhNti26hkYg/nOddD4Y64w5hurGLTUB1UqVOuDbFKL
- PXCZZ3+R7tmXSO3/y+CBJiC3frqh3pomvRkyQ6D3c/dJXKTT9hlcxQxWVBuoF+qeqyUe
- 5as+HjrDJ0MiF3Arpwfv0T/2pGrOdH7BpyPiCbO14SHH0uxS+PtG5oScXfDbBjeQdQf5
- SaS/ig231ECgb+sRqGMbsuSVNeT1PnebCjBORs4BOK1j6zpscQlPlCMPmsBaBSynGoOt Dg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e5gt84dba-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Feb 2022 09:17:20 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21B90FYu020099;
-        Fri, 11 Feb 2022 09:17:19 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e5gt84daj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Feb 2022 09:17:19 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21B990xj025512;
-        Fri, 11 Feb 2022 09:17:17 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3e1gva8099-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Feb 2022 09:17:17 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21B9HCXm39649560
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Feb 2022 09:17:12 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AC7D0A4059;
-        Fri, 11 Feb 2022 09:17:12 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2780FA405E;
-        Fri, 11 Feb 2022 09:17:12 +0000 (GMT)
-Received: from [9.145.74.171] (unknown [9.145.74.171])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 11 Feb 2022 09:17:12 +0000 (GMT)
-Message-ID: <95cd44de-f035-4371-812f-5d6bad68cd7b@linux.ibm.com>
-Date:   Fri, 11 Feb 2022 10:17:11 +0100
+        Fri, 11 Feb 2022 04:19:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06A35102A
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:19:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644571178;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=pbRMjrOYXoV30kR7B4cKGNrPjuiwGwQkUxB9k4BkJUQ=;
+        b=JQ2rRqO203NR4XIYoWi6bLLA9sWrbz5uCAZ+EPyZVRqwcIC+yYjKx5IhYParcsK2lXVMy8
+        KyW1slVGRYXOlY3oPJaHSSWqmPymi4gIcDiMHViGIFUHHvs4vTWnbggO+gxQ9OJZV7ZrnZ
+        6glId1z8yUB5PwmXnI0tzBOZhnDKZEk=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-398-23Y8WZHDOGGAzpuMy5WN4w-1; Fri, 11 Feb 2022 04:19:37 -0500
+X-MC-Unique: 23Y8WZHDOGGAzpuMy5WN4w-1
+Received: by mail-wm1-f70.google.com with SMTP id t2-20020a7bc3c2000000b003528fe59cb9so2264086wmj.5
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 01:19:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pbRMjrOYXoV30kR7B4cKGNrPjuiwGwQkUxB9k4BkJUQ=;
+        b=1UZqiTG4ZxQ3ByeAcYN7glMRwlJKrR5WY1LtEAJ2MRPmziaVAVVdfVYXM0k/XLOCri
+         syMZk3zdir0M79meaLC1XJgQYqj1pNQYfT0vhCZZVBrhsuWx4b+7kKLnOkddHXc4pT+k
+         LYGoF+vcppwamhcKBmHNqgc1QZQ/c8syP003NAcMn3kvtL5Oo7XkuoPEVloI+dmaMLBv
+         9m3SKEPEJ/KL4eF9xBPSnnemOj3bXuGGqPvm4yndE4O995mDIOLN+rItiC8F6bmOpqvn
+         uv5MIGdAv9HRLQeyeLIPDE25ZNtL5EemXK51KQd3994G8k4Vq4Ro49T9qDIRKBah3xh5
+         BNpg==
+X-Gm-Message-State: AOAM5333vR1gkAb7DgMg2C3PZCWqN0vjTnZJNG9/+x4nvlTOrzE6cT9P
+        iPPj9Y3Vrq246jsNi0NYhZotBq8N2nfMI09G3t/3Vq/MmBaTMxM5BPWlYSxyA6LhrpEHvWcV54E
+        fNi5FgK90mvBQONfsYsvqr+biGTN/10vePag9/BzEdQTWmnQJ3OOl6kA6lWI2VT3lVFp/utSS2b
+        s=
+X-Received: by 2002:a05:600c:4f02:: with SMTP id l2mr648799wmq.115.1644571175608;
+        Fri, 11 Feb 2022 01:19:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxr0lW6hjWm3pVsSHTDsgb5mYafMoI0gJsI8Msc0Qhi547hDX6MT3H3LfS8grRnbdz9dc86hw==
+X-Received: by 2002:a05:600c:4f02:: with SMTP id l2mr648757wmq.115.1644571175124;
+        Fri, 11 Feb 2022 01:19:35 -0800 (PST)
+Received: from minerva.home ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id r17sm3805578wmq.33.2022.02.11.01.19.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 01:19:34 -0800 (PST)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-fbdev@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Lee Jones <lee.jones@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, devicetree@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+Subject: [PATCH v4 0/6] drm: Add driver for Solomon SSD130x OLED displays
+Date:   Fri, 11 Feb 2022 10:19:21 +0100
+Message-Id: <20220211091927.2988283-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-References: <20220209170422.1910690-1-scgl@linux.ibm.com>
- <20220209170422.1910690-10-scgl@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-Subject: Re: [PATCH v3 09/10] KVM: s390: Update api documentation for memop
- ioctl
-In-Reply-To: <20220209170422.1910690-10-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 5rSCGnlk0XX_Vi0IZ2nqSi2CuhLASZHe
-X-Proofpoint-ORIG-GUID: GZNDZloHbp0U3jss8-w8KJATKjPfIo8q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-11_03,2022-02-09_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- mlxscore=0 spamscore=0 priorityscore=1501 mlxlogscore=999 bulkscore=0
- clxscore=1015 lowpriorityscore=0 suspectscore=0 malwarescore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202110051
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/22 18:04, Janis Schoetterl-Glausch wrote:
-> Document all currently existing operations, flags and explain under
-> which circumstances they are available. Document the recently
-> introduced absolute operations and the storage key protection flag,
-> as well as the existing SIDA operations.
-> 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+This patch series adds a DRM driver for the Solomon OLED SSD1305, SSD1306,
+SSD1307 and SSD1309 displays. It is a port of the ssd1307fb fbdev driver.
 
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+Using the DRM fbdev emulation, all the tests from Geert Uytterhoeven repo
+(https://git.kernel.org/pub/scm/linux/kernel/git/geert/fbtest.git) passes.
 
-Minor nits below
+I've also tested it using the display as a VT output and even though fbcon
+seems to work, it is mostly unusable on a 128x64 SSD1306 display.
 
-> ---
->   Documentation/virt/kvm/api.rst | 112 ++++++++++++++++++++++++++-------
->   include/uapi/linux/kvm.h       |   2 +-
->   2 files changed, 91 insertions(+), 23 deletions(-)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index a4267104db50..2d131af44576 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -3683,15 +3683,17 @@ The fields in each entry are defined as follows:
->   4.89 KVM_S390_MEM_OP
->   --------------------
->   
-> -:Capability: KVM_CAP_S390_MEM_OP
-> +:Capability: KVM_CAP_S390_MEM_OP, KVM_CAP_S390_PROTECTED, KVM_CAP_S390_MEM_OP_EXTENSION
->   :Architectures: s390
-> -:Type: vcpu ioctl
-> +:Type: vm ioctl, vcpu ioctl
->   :Parameters: struct kvm_s390_mem_op (in)
->   :Returns: = 0 on success,
->             < 0 on generic error (e.g. -EFAULT or -ENOMEM),
->             > 0 if an exception occurred while walking the page tables
->   
-> -Read or write data from/to the logical (virtual) memory of a VCPU.
-> +Read or write data from/to the VM's memory.
-> +The KVM_CAP_S390_MEM_OP_EXTENSION capability specifies what functionality is
-> +supported.
->   
->   Parameters are specified via the following structure::
->   
-> @@ -3701,33 +3703,99 @@ Parameters are specified via the following structure::
->   	__u32 size;		/* amount of bytes */
->   	__u32 op;		/* type of operation */
->   	__u64 buf;		/* buffer in userspace */
-> -	__u8 ar;		/* the access register number */
-> -	__u8 reserved[31];	/* should be set to 0 */
-> +	union {
-> +		struct {
-> +			__u8 ar;	/* the access register number */
-> +			__u8 key;	/* access key, ignored if flag unset */
-> +		};
-> +		__u32 sida_offset; /* offset into the sida */
-> +		__u8 reserved[32]; /* ignored */
-> +	};
->     };
->   
-> -The type of operation is specified in the "op" field. It is either
-> -KVM_S390_MEMOP_LOGICAL_READ for reading from logical memory space or
-> -KVM_S390_MEMOP_LOGICAL_WRITE for writing to logical memory space. The
-> -KVM_S390_MEMOP_F_CHECK_ONLY flag can be set in the "flags" field to check
-> -whether the corresponding memory access would create an access exception
-> -(without touching the data in the memory at the destination). In case an
-> -access exception occurred while walking the MMU tables of the guest, the
-> -ioctl returns a positive error number to indicate the type of exception.
-> -This exception is also raised directly at the corresponding VCPU if the
-> -flag KVM_S390_MEMOP_F_INJECT_EXCEPTION is set in the "flags" field.
-> -
->   The start address of the memory region has to be specified in the "gaddr"
->   field, and the length of the region in the "size" field (which must not
->   be 0). The maximum value for "size" can be obtained by checking the
->   KVM_CAP_S390_MEM_OP capability. "buf" is the buffer supplied by the
->   userspace application where the read data should be written to for
-> -KVM_S390_MEMOP_LOGICAL_READ, or where the data that should be written is
-> -stored for a KVM_S390_MEMOP_LOGICAL_WRITE. When KVM_S390_MEMOP_F_CHECK_ONLY
-> -is specified, "buf" is unused and can be NULL. "ar" designates the access
-> -register number to be used; the valid range is 0..15.
-> +a read access, or where the data that should be written is stored for
-> +a write access.  The "reserved" field is meant for future extensions.
-> +Reserved and unused values are ignored. Future extension that add members must
-> +introduce new flags.
-> +
-> +The type of operation is specified in the "op" field. Flags modifying
-> +their behavior can be set in the "flags" field. Undefined flag bits must
-> +be set to 0.
-> +
-> +Possible operations are:
-> +  * ``KVM_S390_MEMOP_LOGICAL_READ``
-> +  * ``KVM_S390_MEMOP_LOGICAL_WRITE``
-> +  * ``KVM_S390_MEMOP_ABSOLUTE_READ``
-> +  * ``KVM_S390_MEMOP_ABSOLUTE_WRITE``
-> +  * ``KVM_S390_MEMOP_SIDA_READ``
-> +  * ``KVM_S390_MEMOP_SIDA_WRITE``
-> +
-> +Logical read/write:
-> +^^^^^^^^^^^^^^^^^^^
-> +
-> +Access logical memory, i.e. translate the given guest address to an absolute
-> +address given the state of the VCPU and use the absolute address as target of
-> +the access. "ar" designates the access register number to be used; the valid
-> +range is 0..15.
-> +Logical accesses are permitted for the VCPU ioctl only.
-> +Logical accesses are permitted for non secure guests only.
+This is a v4 that addresses the issues pointed in v3. Thanks a lot to all
+reviewers that gave me feedback and comments.
 
-s/secure/protected/
+I didn't include the patch that adds the SPI support this time, because it
+will require changes in the existing Device Tree binding. And I wanted to
+avoid that bikesheeding for now, to focus on the core and I2C parts.
 
-> +
-> +Supported flags:
-> +  * ``KVM_S390_MEMOP_F_CHECK_ONLY``
-> +  * ``KVM_S390_MEMOP_F_INJECT_EXCEPTION``
-> +  * ``KVM_S390_MEMOP_F_SKEY_PROTECTION``
-> +
-> +The KVM_S390_MEMOP_F_CHECK_ONLY flag can be set to check whether the
-> +corresponding memory access would cause an access exception, without touching
+Once this series land, I'll post patches for the SPI support. But the WIP
+patch posted in v3 should still apply cleanly on top of this v4:
 
-I think the comma needs to be removed.
+https://patchwork.kernel.org/project/dri-devel/patch/20220209091204.2513437-1-javierm@redhat.com/
 
-> +the data in memory at the destination.
-> +In this case, "buf" is unused and can be NULL.
-> +
-> +In case an access exception occurred during the access (or would occur
-> +in case of KVM_S390_MEMOP_F_CHECK_ONLY), the ioctl returns a positive
-> +error number indicating the type of exception. This exception is also
-> +raised directly at the corresponding VCPU if the flag
-> +KVM_S390_MEMOP_F_INJECT_EXCEPTION is set.
-> +
-> +If the KVM_S390_MEMOP_F_SKEY_PROTECTION flag is set, storage key
-> +protection is also in effect and may cause exceptions if accesses are
-> +prohibited given the access key passed in "key".
-> +KVM_S390_MEMOP_F_SKEY_PROTECTION is available if KVM_CAP_S390_MEM_OP_EXTENSION
-> +is > 0.
-> +
-> +Absolute read/write:
-> +^^^^^^^^^^^^^^^^^^^^
-> +
-> +Access absolute memory. This operation is intended to be used with the
-> +KVM_S390_MEMOP_F_SKEY_PROTECTION flag, to allow accessing memory and performing
-> +the checks required for storage key protection as one operation (as opposed to
-> +user space getting the storage keys, performing the checks, and accessing
-> +memory thereafter, which could lead to a delay between check and access).
-> +Absolute accesses are permitted for the VM ioctl if KVM_CAP_S390_MEM_OP_EXTENSION
-> +is > 0.
-> +Currently absolute accesses are not permitted for VCPU ioctls.
-> +Absolute accesses are permitted for non secure guests only.
+Patch #1 splits per-line conversion logic in drm_fb_xrgb8888_to_gray8() to
+a separate drm_fb_xrgb8888_to_gray8_line() helper function.
 
-s/secure/protected/
+Patch #2 adds a new drm_fb_xrgb8888_to_mono_reversed() helper function to
+convert from XR24 to reversed monochrome. The latter internally converts
+each line first to 8-bit grayscale and then to 1-bit reversed monochrome.
 
-> +
-> +Supported flags:
-> +  * ``KVM_S390_MEMOP_F_CHECK_ONLY``
-> +  * ``KVM_S390_MEMOP_F_SKEY_PROTECTION``
-> +
-> +The semantics of the flags are as for logical accesses.
-> +
-> +SIDA read/write:
-> +^^^^^^^^^^^^^^^^
-> +
-> +Access the secure instruction data area which contains memory operands necessary
-> +for instruction emulation for secure guests.
-> +SIDA accesses are available if the KVM_CAP_S390_PROTECTED capability is available.
-> +SIDA accesses are permitted for the VCPU ioctl only.
-> +SIDA accesses are permitted for secure guests only.
+Patch #3 adds the driver. This only has the core support and doesn't have
+any bus specific code, separate drivers are needed for the transport used.
 
-s/secure/protected/
+Patch #4 adds a driver to use the I2C bus to communicate with the device.
 
->   
-> -The "reserved" field is meant for future extensions. It is not used by
-> -KVM with the currently defined set of flags.
-> +No flags are supported.
->   
->   4.90 KVM_S390_GET_SKEYS
->   -----------------------
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 26bff414f1a0..fd01fe04a183 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -567,7 +567,7 @@ struct kvm_s390_mem_op {
->   			__u8 key;	/* access key, ignored if flag unset */
->   		};
->   		__u32 sida_offset; /* offset into the sida */
-> -		__u8 reserved[32]; /* should be set to 0 */
-> +		__u8 reserved[32]; /* ignored */
->   	};
->   };
->   /* types for kvm_s390_mem_op->op */
+Patch #5 adds a MAINTAINERS entry for the DRM driver and patch #6 adds
+myself as co-maintainer of the existing DT binding for the ssd1307fb,
+since the same DT binding is used for both the fbdev and DRM drivers.
+
+Best regards,
+Javier
+
+Changes in v4:
+- Rename end_offset to end_len (Thomas Zimmermann)
+- Warn once if dst_pitch is not a multiple of 8 (Thomas Zimmermann)
+- Drop drm_fb_gray8_to_mono_reversed() that's not used (Thomas Zimmermann)
+- Allocate single buffer for both copy cma memory and gray8 (Thomas Zimmermann)
+- Add Thomas Zimmermann Reviewed-by tag to patch adding XR24 -> mono helper.
+- Rename vbat supply to vcc since is how's labeled in the device (Mark Brown)
+- Don't make the regulator option since is always needed (Mark Brown)
+- Add solomon Kconfig source and directory inclusion sorted (Andy Shevchenko)
+- Use SSD130x instead of SSD130X to denote is not a model name (Andy Shevchenko)
+- Check if there's a reset pin in the callee and not the caller (Andy Shevchenko)
+- Define missing commands instead of using magic numbers (Andy Shevchenko)
+- Use GENMASK() and FIELD_PREP() macros when possible (Andy Shevchenko)
+- Avoid using ternary operators to ease code readablity (Andy Shevchenko)
+- Use i++ instead of --i on some for loops (Andy Shevchenko)
+- Remove redundant blank lines (Andy Shevchenko)
+- Rename power_off label to out_power_off (Andy Shevchenko)
+- Use dev_err_probe() even if no -EPROBE_DEFER (Andy Shevchenko)
+- Don't use plural Authors if there's only one (Andy Shevchenko)
+- Remove unnecessary casting (Geert Uytterhoeven)
+- Remove redundant blank lines (Andy Shevchenko)
+- Remove comma after of_device_id table terminator (Andy Shevchenko)
+- Add Rob Herring Acked-by tag to patch adding as DT binding co-maintainer.
+
+Changes in v3:
+- Add a drm_fb_xrgb8888_to_gray8_line() helper function (Thomas Zimmermann)
+- Also add a drm_fb_xrgb8888_to_mono_reversed() helper (Thomas Zimmermann)
+- Split lines copy to drm_fb_gray8_to_mono_reversed_line() (Thomas Zimmermann)
+- Handle case where the source buffer is not aligned to 8 (Thomas Zimmermann)
+- Move driver from tiny sub-dir to drivers/gpu/drm/solomon (Sam Ravnborg)
+- Split driver in a bus agnostic core and bus specific (Andy Shevchenko)
+- Use regmap to access the chip registers (Andy Shevchenko)
+- Remove unnecessary blank lines (Andy Shevchenko)
+- Remove unneeded inline specifier in functions (Andy Shevchenko)
+- Add a comment about always returning a single mode (Andy Shevchenko)
+- Change write command logic to use do while loop (Andy Shevchenko)
+- Use "firmware description" instead of "device tree" (Andy Shevchenko)
+- Use return foo() instead of returning the return value (Andy Shevchenko)
+- Don't split lines longer than 80 chars if makes less readable (Andy Shevchenko)
+- Remove redundant else statements in .mode_valid callback (Andy Shevchenko)
+- Rename powero{n,ff}() functions to power_o{n,ff)() (Andy Shevchenko)
+- Use dev_err_probe() to prevent spam logs on probe deferral (Andy Shevchenko)
+- Remove ',' after sentinel terminator in array (Andy Shevchenko)
+- Fix a bug when doing partial updates (Geert Uytterhoeven)
+- Add a separate driver for SSD130X chips I2C support (Andy Shevchenko)
+- Adapt MAINTAINERS entry to point to the new drivers/gpu/drm/solomon directory.
+
+Changes in v2:
+- Drop patch that was adding a DRM_MODE_CONNECTOR_I2C type.
+- Invert order of backlight {en,dis}able and display {on,off} (Sam Ravnborg)
+- Don't clear the screen and turn on display on probe (Sam Ravnborg)
+- Use backlight_get_brightness() macro to get BL brightness (Sam Ravnborg)
+- Use dev managed version of devm_backlight_device_register() (Sam Ravnborg)
+- Use dev_name(dev) for backlight name instead of an array (Sam Ravnborg)
+- Drop the .get_brightness callback since isn't needed  (Sam Ravnborg)
+- Rename driver to ssd130x since supports a display family (Thomas Zimmermann)
+- Drop the TINY prefix from the Kconfig symbol (Thomas Zimmermann)
+- Sort the Kconfig symbol dependencies alphabetically (Thomas Zimmermann)
+- Rename struct ssd130x_array to struct ssd130x_i2c_msg (Thomas Zimmermann)
+- Rename struct ssd130x_i2c_msg .type member to .cmd (Thomas Zimmermann)
+- Use sizeof(*foo) instead of sizeof(struct foo) (Thomas Zimmermann)
+- Use struct_size() macro to calculate sizeof(*foo) + len (Thomas Zimmermann)
+- Use kcalloc() instead of kmalloc_array() + memset() (Thomas Zimmermann)
+- Use shadow plane helpers virtual screen support (Thomas Zimmermann)
+- Remove unused goto label in ssd1307_fb_blit_rect() (Thomas Zimmermann)
+- Use drm_set_preferred_mode() inset of manually set (Thomas Zimmermann)
+- Use shadow plane helpers virtual screen support (Thomas Zimmermann)
+- Remove unused goto label in ssd1307_fb_blit_rect() (Thomas Zimmermann)
+- Use drm_set_preferred_mode() inset of manually set (Thomas Zimmermann)
+- Reorganize code in probe to make it more legible (Thomas Zimmermann)
+- ssd130x_write_cmd() uses varargs to simplify I2C code (Thomas Zimmermann)
+- Move regulator/pwm init logic to display pipe enable callback.
+- Add Sam Ravnborg's acked-by to patch adding a MAINTAINERS entry (Sam Ravnborg)
+- Add myself as co-maintainer of the ssd1370fb DT binding (Sam Ravnborg).
+
+Javier Martinez Canillas (6):
+  drm/format-helper: Add drm_fb_xrgb8888_to_gray8_line()
+  drm/format-helper: Add drm_fb_xrgb8888_to_mono_reversed()
+  drm: Add driver for Solomon SSD130x OLED displays
+  drm/solomon: Add SSD130x OLED displays I2C support
+  MAINTAINERS: Add entry for Solomon SSD130x OLED displays DRM driver
+  dt-bindings: display: ssd1307fb: Add myself as binding co-maintainer
+
+ .../bindings/display/solomon,ssd1307fb.yaml   |   1 +
+ MAINTAINERS                                   |   7 +
+ drivers/gpu/drm/Kconfig                       |   2 +
+ drivers/gpu/drm/Makefile                      |   1 +
+ drivers/gpu/drm/drm_format_helper.c           | 138 ++-
+ drivers/gpu/drm/solomon/Kconfig               |  21 +
+ drivers/gpu/drm/solomon/Makefile              |   2 +
+ drivers/gpu/drm/solomon/ssd130x-i2c.c         | 116 +++
+ drivers/gpu/drm/solomon/ssd130x.c             | 852 ++++++++++++++++++
+ drivers/gpu/drm/solomon/ssd130x.h             |  76 ++
+ include/drm/drm_format_helper.h               |   4 +
+ 11 files changed, 1208 insertions(+), 12 deletions(-)
+ create mode 100644 drivers/gpu/drm/solomon/Kconfig
+ create mode 100644 drivers/gpu/drm/solomon/Makefile
+ create mode 100644 drivers/gpu/drm/solomon/ssd130x-i2c.c
+ create mode 100644 drivers/gpu/drm/solomon/ssd130x.c
+ create mode 100644 drivers/gpu/drm/solomon/ssd130x.h
+
+-- 
+2.34.1
 

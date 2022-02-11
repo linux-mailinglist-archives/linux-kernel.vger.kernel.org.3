@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6099B4B28E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D08FD4B28E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Feb 2022 16:16:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351289AbiBKPOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 10:14:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35058 "EHLO
+        id S1351300AbiBKPPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 10:15:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240001AbiBKPOx (ORCPT
+        with ESMTP id S240001AbiBKPO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 10:14:53 -0500
+        Fri, 11 Feb 2022 10:14:56 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EC781A3
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 07:14:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B23AB08
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 07:14:55 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2CD08106F;
-        Fri, 11 Feb 2022 07:14:52 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D30D311D4;
+        Fri, 11 Feb 2022 07:14:54 -0800 (PST)
 Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3F4453F718;
-        Fri, 11 Feb 2022 07:14:50 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id ED67C3F718;
+        Fri, 11 Feb 2022 07:14:52 -0800 (PST)
 From:   Mark Rutland <mark.rutland@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     acme@redhat.com, ardb@kernel.org, bp@alien8.de, broonie@kernel.org,
@@ -29,10 +29,12 @@ Cc:     acme@redhat.com, ardb@kernel.org, bp@alien8.de, broonie@kernel.org,
         linux-arm-kernel@lists.infradead.org, mark.rutland@arm.com,
         mingo@redhat.com, ndesaulniers@google.com, peterz@infradead.org,
         tglx@linutronix.de, will@kernel.org
-Subject: [PATCH v3 0/5] linkage: better symbol aliasing
-Date:   Fri, 11 Feb 2022 15:14:40 +0000
-Message-Id: <20220211151445.2027553-1-mark.rutland@arm.com>
+Subject: [PATCH v3 1/5] linkage: add SYM_FUNC_ALIAS{,_LOCAL,_WEAK}()
+Date:   Fri, 11 Feb 2022 15:14:41 +0000
+Message-Id: <20220211151445.2027553-2-mark.rutland@arm.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220211151445.2027553-1-mark.rutland@arm.com>
+References: <20220211151445.2027553-1-mark.rutland@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
@@ -44,112 +46,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series aims to make symbol aliasing simpler and more consistent.
-The basic idea is to replace SYM_FUNC_START_ALIAS(alias) and
-SYM_FUNC_END_ALIAS(alias) with a new SYM_FUNC_ALIAS(alias, name), so
-that e.g.
+Currently aliasing an asm function requires adding START and END
+annotations for each name, as per Documentation/asm-annotations.rst:
 
-    SYM_FUNC_START(func)
-    SYM_FUNC_START_ALIAS(alias1)
-    SYM_FUNC_START_ALIAS(alias2)
-        ... asm insns ...
-    SYM_FUNC_END(func)
-    SYM_FUNC_END_ALIAS(alias1)
-    SYM_FUNC_END_ALIAS(alias2)
-    EXPORT_SYMBOL(alias1)
-    EXPORT_SYMBOL(alias2)
+	SYM_FUNC_START_ALIAS(__memset)
+	SYM_FUNC_START(memset)
+	    ... asm insns ...
+	SYM_FUNC_END(memset)
+	SYM_FUNC_END_ALIAS(__memset)
 
-... can become:
+This is more painful than necessary to maintain, especially where a
+function has many aliases, some of which we may wish to define
+conditionally. For example, arm64's memcpy/memmove implementation (which
+uses some arch-specific SYM_*() helpers) has:
 
-    SYM_FUNC_START(name)
-        ... asm insns ...
-    SYM_FUNC_END(name)
+	SYM_FUNC_START_ALIAS(__memmove)
+	SYM_FUNC_START_ALIAS_WEAK_PI(memmove)
+	SYM_FUNC_START_ALIAS(__memcpy)
+	SYM_FUNC_START_WEAK_PI(memcpy)
+	    ... asm insns ...
+	SYM_FUNC_END_PI(memcpy)
+	EXPORT_SYMBOL(memcpy)
+	SYM_FUNC_END_ALIAS(__memcpy)
+	EXPORT_SYMBOL(__memcpy)
+	SYM_FUNC_END_ALIAS_PI(memmove)
+	EXPORT_SYMBOL(memmove)
+	SYM_FUNC_END_ALIAS(__memmove)
+	EXPORT_SYMBOL(__memmove)
+	SYM_FUNC_START(name)
 
-    SYM_FUNC_ALIAS(alias1, func)
-    EXPORT_SYMBOL(alias1)
+It would be much nicer if we could define the aliases *after* the
+standard function definition. This would avoid the need to specify each
+symbol name twice, and would make it easier to spot the canonical
+function definition.
 
-    SYM_FUNC_ALIAS(alias2, func)
-    EXPORT_SYMBOL(alias2)
+This patch adds new macros to allow us to do so, which allows the above
+example to be rewritten more succinctly as:
 
-This avoids repetition and hopefully make it easier to ensure
-consistency (e.g. so each function has a single canonical name and
-associated metadata).
+	SYM_FUNC_START(__pi_memcpy)
+	    ... asm insns ...
+	SYM_FUNC_END(__pi_memcpy)
 
-I've build-tested the following with both GCC 10.3.0 and LLVM 13.0.0
-without issues (ignoring any existing warnings):
+	SYM_FUNC_ALIAS(__memcpy, __pi_memcpy)
+	EXPORT_SYMBOL(__memcpy)
+	SYM_FUNC_ALIAS_WEAK(memcpy, __memcpy)
+	EXPORT_SYMBOL(memcpy)
 
-* arm omap1_defconfig (v2 broke with LLVM here)
-* arm multi_v7_defconfig
-* arm64 defconfig
-* i386 defconfig
-* x86_64 defconfig
+	SYM_FUNC_ALIAS(__pi_memmove, __pi_memcpy)
+	SYM_FUNC_ALIAS(__memmove, __pi_memmove)
+	EXPORT_SYMBOL(__memmove)
+	SYM_FUNC_ALIAS_WEAK(memmove, __memmove)
+	EXPORT_SYMBOL(memmove)
 
-I've boot-tested the arm64 Images.
+The reduction in duplication will also make it possible to replace some
+uses of WEAK with more accurate Kconfig guards, e.g.
 
-I've pushed the series to my `linkage/alias-rework` branch on git.kernel.org,
-atop v5.17-rc2:
+	#ifndef CONFIG_KASAN
+	SYM_FUNC_ALIAS(memmove, __memmove)
+	EXPORT_SYMBOL(memmove)
+	#endif
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git linkage/alias-rework
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=linkage/alias-rework
+... which should make it easier to ensure that symbols are neither used
+nor overidden unexpectedly.
 
-Since RFCv1 [1]:
-* Drop arm64 dma alias removal (taken via arm64 for v5.17-rc1)
-* Rename SYM_FUNC_LOCAL_ALIAS() -> SYM_FUNC_ALIAS_LOCAL()
-* Update the tools/ copies of x86 routines
-* Add preparatory fix for 32-bit arm
-* Rebase to v5.17-rc1
+The existing SYM_FUNC_START_ALIAS() and SYM_FUNC_START_LOCAL_ALIAS() are
+marked as deprecated, and will be removed once existing users are moved
+over to the new scheme.
 
-Since v2 [2]:
-* Rework to be LLVM-compatible
-  - Drop SYM_ENTRY_AT() / SYM_END_AT()
-  - Drop unnecessary local symbols
-  - Calculate size in SYM_END()
-  - Use common SYM_ALIAS()
-* Drop newly redundant arch/arm changes
-* Clarify commit message wording
-* Fix typos
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Acked-by: Mark Brown <broonie@kernel.org>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Jiri Slaby <jslaby@suse.cz>
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+---
+ Documentation/asm-annotations.rst | 16 +++++++++++--
+ include/linux/linkage.h           | 37 ++++++++++++++++++++++++++++++-
+ 2 files changed, 50 insertions(+), 3 deletions(-)
 
-[1] https://lore.kernel.org/r/20211206124715.4101571-1-mark.rutland@arm.com/
-[2] https://lore.kernel.org/r/20220125113200.3829108-1-mark.rutland@arm.com/
-
-Thanks,
-Mark.
-
-Mark Rutland (5):
-  linkage: add SYM_FUNC_ALIAS{,_LOCAL,_WEAK}()
-  arm64: clean up symbol aliasing
-  x86: clean up symbol aliasing
-  linkage: remove SYM_FUNC_{START,END}_ALIAS()
-  tools: update x86 string routines
-
- Documentation/asm-annotations.rst       | 11 ++--
- arch/arm64/include/asm/linkage.h        | 24 ---------
- arch/arm64/kvm/hyp/nvhe/cache.S         |  5 +-
- arch/arm64/lib/clear_page.S             |  5 +-
- arch/arm64/lib/copy_page.S              |  5 +-
- arch/arm64/lib/memchr.S                 |  5 +-
- arch/arm64/lib/memcmp.S                 |  6 +--
- arch/arm64/lib/memcpy.S                 | 21 ++++----
- arch/arm64/lib/memset.S                 | 12 +++--
- arch/arm64/lib/strchr.S                 |  6 ++-
- arch/arm64/lib/strcmp.S                 |  6 +--
- arch/arm64/lib/strlen.S                 |  6 +--
- arch/arm64/lib/strncmp.S                |  6 +--
- arch/arm64/lib/strnlen.S                |  6 ++-
- arch/arm64/lib/strrchr.S                |  5 +-
- arch/arm64/mm/cache.S                   | 35 +++++++------
- arch/x86/boot/compressed/head_32.S      |  3 +-
- arch/x86/boot/compressed/head_64.S      |  3 +-
- arch/x86/crypto/aesni-intel_asm.S       |  4 +-
- arch/x86/lib/memcpy_64.S                | 10 ++--
- arch/x86/lib/memmove_64.S               |  4 +-
- arch/x86/lib/memset_64.S                |  6 +--
- include/linux/linkage.h                 | 67 +++++++++++++------------
- tools/arch/x86/lib/memcpy_64.S          | 10 ++--
- tools/arch/x86/lib/memset_64.S          |  6 +--
- tools/perf/util/include/linux/linkage.h | 46 ++++++++++++-----
- 26 files changed, 169 insertions(+), 154 deletions(-)
-
+diff --git a/Documentation/asm-annotations.rst b/Documentation/asm-annotations.rst
+index f4bf0f6395fb..4868b58c60fb 100644
+--- a/Documentation/asm-annotations.rst
++++ b/Documentation/asm-annotations.rst
+@@ -130,8 +130,20 @@ denoting a range of code via ``SYM_*_START/END`` annotations.
+   In fact, this kind of annotation corresponds to the now deprecated ``ENTRY``
+   and ``ENDPROC`` macros.
+ 
+-* ``SYM_FUNC_START_ALIAS`` and ``SYM_FUNC_START_LOCAL_ALIAS`` serve for those
+-  who decided to have two or more names for one function. The typical use is::
++* ``SYM_FUNC_ALIAS``, ``SYM_FUNC_ALIAS_LOCAL``, and ``SYM_FUNC_ALIAS_WEAK`` can
++  be used to define multiple names for a function. The typical use is::
++
++    SYM_FUNC_START(__memset)
++        ... asm insns ...
++    SYN_FUNC_END(__memset)
++    SYM_FUNC_ALIAS(memset, __memset)
++
++  In this example, one can call ``__memset`` or ``memset`` with the same
++  result, except the debug information for the instructions is generated to
++  the object file only once -- for the non-``ALIAS`` case.
++
++* ``SYM_FUNC_START_ALIAS`` and ``SYM_FUNC_START_LOCAL_ALIAS`` are deprecated
++    ways to define two or more names for one function. The typical use is::
+ 
+     SYM_FUNC_START_ALIAS(__memset)
+     SYM_FUNC_START(memset)
+diff --git a/include/linux/linkage.h b/include/linux/linkage.h
+index dbf8506decca..aca8f5cb9c3c 100644
+--- a/include/linux/linkage.h
++++ b/include/linux/linkage.h
+@@ -165,7 +165,18 @@
+ #ifndef SYM_END
+ #define SYM_END(name, sym_type)				\
+ 	.type name sym_type ASM_NL			\
+-	.size name, .-name
++	.set .L__sym_size_##name, .-name ASM_NL		\
++	.size name, .L__sym_size_##name
++#endif
++
++/* SYM_ALIAS -- use only if you have to */
++#ifndef SYM_ALIAS
++#define SYM_ALIAS(alias, name, sym_type, linkage)			\
++	linkage(alias) ASM_NL						\
++	.set alias, name ASM_NL						\
++	.type alias sym_type ASM_NL					\
++	.set .L__sym_size_##alias, .L__sym_size_##name ASM_NL		\
++	.size alias, .L__sym_size_##alias
+ #endif
+ 
+ /* === code annotations === */
+@@ -275,6 +286,30 @@
+ 	SYM_END(name, SYM_T_FUNC)
+ #endif
+ 
++/*
++ * SYM_FUNC_ALIAS_LOCAL -- define a local alias for an existing function
++ */
++#ifndef SYM_FUNC_ALIAS_LOCAL
++#define SYM_FUNC_ALIAS_LOCAL(alias, name)				\
++	SYM_ALIAS(alias, name, SYM_T_FUNC, SYM_L_LOCAL)
++#endif
++
++/*
++ * SYM_FUNC_ALIAS -- define a global alias for an existing function
++ */
++#ifndef SYM_FUNC_ALIAS
++#define SYM_FUNC_ALIAS(alias, name)					\
++	SYM_ALIAS(alias, name, SYM_T_FUNC, SYM_L_GLOBAL)
++#endif
++
++/*
++ * SYM_FUNC_ALIAS_WEAK -- define a weak global alias for an existing function
++ */
++#ifndef SYM_FUNC_ALIAS_WEAK
++#define SYM_FUNC_ALIAS_WEAK(alias, name)				\
++	SYM_ALIAS(alias, name, SYM_T_FUNC, SYM_L_WEAK)
++#endif
++
+ /* SYM_CODE_START -- use for non-C (special) functions */
+ #ifndef SYM_CODE_START
+ #define SYM_CODE_START(name)				\
 -- 
 2.30.2
 

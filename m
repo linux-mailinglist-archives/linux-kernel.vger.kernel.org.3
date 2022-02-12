@@ -2,124 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 410B64B31CE
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 01:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 269684B31D6
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 01:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354355AbiBLAP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 19:15:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54656 "EHLO
+        id S1354365AbiBLASh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 19:18:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234135AbiBLAP4 (ORCPT
+        with ESMTP id S231252AbiBLASf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 19:15:56 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DEE9D41;
-        Fri, 11 Feb 2022 16:15:55 -0800 (PST)
-Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 8CEA920B92C8;
-        Fri, 11 Feb 2022 16:15:54 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8CEA920B92C8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1644624954;
-        bh=UDYtHia4Ue2d91o49LLvuQwerdlbSmBiDrISgm+Ptr4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ckaFWrRj40fP0qKwMg2LQZhpqRnItjvTj2KOZMndZM48SD06TG1meKtqbDEsBhGXq
-         5EjwEqUaCIepfZmOFcUk9ugI+pJdy1d1gxINN1zYnAKNHUG3nDN3TmWGTjqJm7HG4d
-         0gHS6BYsGZd4gC6wJLtAs+4Bf/hXpVuWZsuH37O0=
-Date:   Fri, 11 Feb 2022 16:15:49 -0800
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     mhiramat@kernel.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 00/12] user_events: Enable user processes to create
- and write to trace events
-Message-ID: <20220212001549.GA10191@kbox>
-References: <20220118204326.2169-1-beaub@linux.microsoft.com>
- <20220210230021.3baf81ce@rorschach.local.home>
+        Fri, 11 Feb 2022 19:18:35 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E619ECF9;
+        Fri, 11 Feb 2022 16:18:33 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AF345ED1;
+        Fri, 11 Feb 2022 16:18:33 -0800 (PST)
+Received: from [192.168.122.164] (U203867.austin.arm.com [10.118.30.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5969F3F70D;
+        Fri, 11 Feb 2022 16:18:33 -0800 (PST)
+Message-ID: <0e5f1807-22f1-ec5b-0b18-8bc02ad99760@arm.com>
+Date:   Fri, 11 Feb 2022 18:18:22 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220210230021.3baf81ce@rorschach.local.home>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] net: mvpp2: Check for null pcs in mvpp2_acpi_start()
+Content-Language: en-US
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     netdev@vger.kernel.org, mw@semihalf.com, davem@davemloft.net,
+        kuba@kernel.org, linux-kernel@vger.kernel.org
+References: <20220211234235.3180025-1-jeremy.linton@arm.com>
+ <Ygb2E1DGYVBO+mNP@shell.armlinux.org.uk>
+From:   Jeremy Linton <jeremy.linton@arm.com>
+In-Reply-To: <Ygb2E1DGYVBO+mNP@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 11:00:21PM -0500, Steven Rostedt wrote:
-> On Tue, 18 Jan 2022 12:43:14 -0800
-> Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> 
-> > User mode processes that wish to use trace events to get data into
-> > ftrace, perf, eBPF, etc are limited to uprobes today. The user events
-> > features enables an ABI for user mode processes to create and write to
-> > trace events that are isolated from kernel level trace events. This
-> > enables a faster path for tracing from user mode data as well as opens
-> > managed code to participate in trace events, where stub locations are
-> > dynamic.
-> 
-> So I finished my review, and I'm currently added it to my queue that
-> I'm running through my tests.
-> 
-> Before I accept it though, I would really like you to send patches to
-> linux-trace-devel@vger.kernel.org that add an API to libtracefs:
-> 
->   https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/
-> 
-> Something where users do not need to know about ioctls, or iovecs, etc.
-> 
-> struct tracefs_user_event *
->      tracefs_user_event_register(const char *name,
-> 		enum tracefs_uevent_type type,
-> 		char *field, ...);
-> 
-> Where tracefs_uevent_type can be:
-> 
-> enum tracefs_uevent_type {
-> 	TRACEFS_UEVENT_END,
-> 	TRACEFS_UEVENT_u8,
-> 	TRACEFS_UEVENT_s8,
-> 	TRACEFS_UEVENT_u16,
-> 	...
-> };
-> 
->   uevent = tracefs_user_event_register("test",
-> 		TRACEFS_UEVENT_u64, "count",
-> 		TRACEFS_UEVENT_string, "name",
-> 		TRACEFS_UEVENT_array, 16, "array",
-> 		TRACEFS_UEVENT_END);
-> 
-> and that will do the ioctl to register the event, with the given types
-> and fields.
-> 
->   struct tracefs_user_event_status *ustatus;
-> 
->   ustatus = tracefs_user_event_status();  // does the mmap.
-> 
-> 
-> Then we could also have:
-> 
->   if (tracefs_user_event_test(ustatus, uevent))
-> 	tracefs_user_event_write(uevent, 64, "string", { 16 byte data });
-> 
-> The ustatus will be the mmap and the uevent will have the information
-> to know where on the mmap to test for the event.
-> 
-> As for the write, the types are saved, and the write function will have
-> variable arguments defined by the tracefs_user_event_register().
-> 
-> I think having that interface in libtracefs, would make this easy to
-> use for everyone.
+Hi,
 
-Agreed, I'll get going on this.
+On 2/11/22 17:49, Russell King (Oracle) wrote:
+> On Fri, Feb 11, 2022 at 05:42:35PM -0600, Jeremy Linton wrote:
+>> Booting a MACCHIATObin with 5.17 the system OOPs with
+>> a null pointer deref when the network is started. This
+>> is caused by the pcs->ops structure being null on this
+>> particular platform/firmware.
+> 
+> pcs->ops should never be NULL. I'm surprised this fix results in any
+> kind of working networking.
+> 
+> Instead, the initialilsation of port->pcs_*.ops needs to be moved out
+> of the if (!mvpp2_use_acpi_compat_mode(..)) block. Please try this:
 
-For performance I'm likely going to be play around with the shape of the
-API. But it will look similar to the above.
+That appears to fix it as well, shall I re-post this with your fix, or 
+will you?
 
-Thanks,
--Beau
+> 
+> diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> index b45cc7bfcdb5..0fb65940c0a5 100644
+> --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+> @@ -7036,6 +7036,9 @@ static int mvpp2_port_probe(struct platform_device *pdev,
+>   	dev->max_mtu = MVPP2_BM_JUMBO_PKT_SIZE;
+>   	dev->dev.of_node = port_node;
+>   
+> +	port->pcs_gmac.ops = &mvpp2_phylink_gmac_pcs_ops;
+> +	port->pcs_xlg.ops = &mvpp2_phylink_xlg_pcs_ops;
+> +
+>   	if (!mvpp2_use_acpi_compat_mode(port_fwnode)) {
+>   		port->phylink_config.dev = &dev->dev;
+>   		port->phylink_config.type = PHYLINK_NETDEV;
+> @@ -7106,9 +7109,6 @@ static int mvpp2_port_probe(struct platform_device *pdev,
+>   				  port->phylink_config.supported_interfaces);
+>   		}
+>   
+> -		port->pcs_gmac.ops = &mvpp2_phylink_gmac_pcs_ops;
+> -		port->pcs_xlg.ops = &mvpp2_phylink_xlg_pcs_ops;
+> -
+>   		phylink = phylink_create(&port->phylink_config, port_fwnode,
+>   					 phy_mode, &mvpp2_phylink_ops);
+>   		if (IS_ERR(phylink)) {
+> 
+> Thanks.
+> 
+
+I did a bit more testing and as a side note, it seems ethtool tosses 
+these errors too.
+
+
+netlink error: failed to retrieve link settings
+netlink error: Unknown error 524
+netlink error: failed to retrieve link settings
+netlink error: Unknown error 524
+Settings for enamrvl110i0:
+         Link detected: no

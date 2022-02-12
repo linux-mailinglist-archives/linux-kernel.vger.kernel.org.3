@@ -2,136 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA2E4B329D
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 03:20:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6E34B32AC
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 03:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiBLCUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 21:20:13 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47902 "EHLO
+        id S229984AbiBLCbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 21:31:03 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiBLCUM (ORCPT
+        with ESMTP id S229471AbiBLCbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 21:20:12 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC211303;
-        Fri, 11 Feb 2022 18:20:08 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id y9so9612933pjf.1;
-        Fri, 11 Feb 2022 18:20:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=17pyCMYUdJRs5/I+oAtbnvmljOFXa0XqjKCSqRSFssE=;
-        b=hIJSwGBwjoV1eeu9VKbrhLXYQVHUKfUJMEUxxRM7j/NivoJdv1LcivbeCfvsutaamV
-         rkOwlNdGExHun9L1H76LddAZKpjTyBwnQolusGJzdpjN9erMbHEhfOqlVNUB/nQUjTq9
-         +ANO1PrL77t+7ybRtncF5aqrPZlCQ5nsRXoT9OHEqD1VJj+wmndJ37nv3z8uXpczcNX9
-         KtTgS4vNSdei4DX49SbQdEXTibSFk/6egZ0YWeLWxCrSYay5IHpvoSxcX1XpTX4CnVA7
-         QoptaQAFV9zWyZ+iC6QMrgPj76CNMpXochr3Q/WgVYcEu4QHiD7hX4irno+mTtWyBhEa
-         ZGvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=17pyCMYUdJRs5/I+oAtbnvmljOFXa0XqjKCSqRSFssE=;
-        b=1f8uVKWSfFKhuu47XwccN+3iGRMnCBF86bpdII5ebUiveRNKqhhqbONhVyeJ7WyAED
-         iOXZi9+y/2S4wNIfXohM6GJc2r0iBZRvPoQwJR2cHuPmd0kzeB0RRToN8ul6pUbYiQyy
-         K8c+MzDBb0fqGWNvFgvzo5HJgD3jsqfaeVdIlBiVA7k4vmBX7GpKx/rAC/aNcH+5Z6JY
-         vfdFV/UQWhu6/j4AQPlPt1IK1u873gO8EsDxiqzVhkgtBqawtwoGD15MChT00k6aSbj+
-         MFym4unbJRtvFgU/2iF10aBpVB1NqrFGApAuK4LiACd7mudccHf2+Ab4AbycKdygLrMb
-         A+4g==
-X-Gm-Message-State: AOAM5312SqazKK1aheInfBcibzrFe8cOSqaih9f66LDg7XfQ7yrl1j7d
-        2/8u+TMwcpEDybUbY3r9xeA=
-X-Google-Smtp-Source: ABdhPJw1CgpJG8g9VxdycjemQbXKY+xXFw3BFj2mihwtdK2c44cuKTYH/q9r0w+1w9kHJvQFEuTQEQ==
-X-Received: by 2002:a17:90a:e549:: with SMTP id ei9mr3280517pjb.190.1644632408124;
-        Fri, 11 Feb 2022 18:20:08 -0800 (PST)
-Received: from localhost.localdomain (192.243.120.166.16clouds.com. [192.243.120.166])
-        by smtp.gmail.com with ESMTPSA id a17sm6429806pju.15.2022.02.11.18.20.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 18:20:07 -0800 (PST)
-From:   davidcomponentone@gmail.com
-To:     gregkh@linuxfoundation.org
-Cc:     davidcomponentone@gmail.com, jirislaby@kernel.org, joel@jms.id.au,
-        andrew@aj.id.au, zev@bewilderbeest.net, johan@kernel.org,
-        yang.guang5@zte.com.cn, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH v3] serial: 8250_aspeed_vuart: replace snprintf with sysfs_emit
-Date:   Sat, 12 Feb 2022 10:19:48 +0800
-Message-Id: <fed40753603dac4d14b17970c88e6f5f936348c1.1644541843.git.yang.guang5@zte.com.cn>
-X-Mailer: git-send-email 2.30.2
+        Fri, 11 Feb 2022 21:31:02 -0500
+X-Greylist: delayed 555 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 18:30:55 PST
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD3022527
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 18:30:55 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 96AB93201D2D;
+        Fri, 11 Feb 2022 21:21:38 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Fri, 11 Feb 2022 21:21:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=cRHm2GhJlaNLqABTQI1t1w+2bCz5SKGqO3g6bK
+        8UMd4=; b=pBtajA1I6pgzKR1auvViNuflvfBpKlGJA+6ZOMnvWsFSojrf9yTndH
+        Rs+dggcqIrPR8MR/wFbhVI76wgH+erlYODcQRTStY02J/BWsIgjf8o2CEpUv7OrO
+        sfoT+aK4Cgf3/m+Ux60+okacv16itS37WDhd1Ln62ppLnEmqnDBHjxIH2vUnY8Gf
+        QuK0x0+4/nlsXhw5T/VUWG2IK0MvcnCRBYvEHwB+ciFeYhvSJl6+TgbNfmqyI2La
+        xr30/ONmnd6Cq+it3tr0EovXyRU7rLlgXDcWKDu0jqIQf1VIPSmmMksguuM6TC2S
+        4pvu5Tybauka/YKn7S5T9tNPgJKIFivw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; bh=cRHm2GhJlaNLqABTQI1t1w+2bCz5S
+        KGqO3g6bK8UMd4=; b=KTfgNKpHZkoGuLnUmQGBMpY7UkQIQYNwznMvIeJHpTpkL
+        IgiPW/NHb99aG1u+TQ8Avv7pbYzlkWr/p13JdrYgvndD2ycI4Xlld3CE3mV9AgGH
+        QIfhN3WG/lmAsQKMkJl0WEev8cU8UN0xoe9LfcZN9KPoSwNhMBx99pQ0DokOXR3i
+        tK/RcZgWZS6rYRc+Qg9P9oDODGLFXiT7F2RUcmvcZfOdV9fEs3FXm6ZLeKgO+maY
+        YxUV9Vjqm6OlNmAFFFz1RkOeTLV5vX0XxqzhBqHIEpGYz/5KCYKgLVK4onVyrysJ
+        fLlk2nYX4V5GKgmcafyk3dxdfqjchDgRhXoTrESDA==
+X-ME-Sender: <xms:sBkHYqcK7qMNW5nbufNxoz4YgG4E3MwBqISt-gWDzMHF3xeQspdgKQ>
+    <xme:sBkHYkOv1pVt7sp9_SuAl_yXYUqxlsTekI4do0Pam0N-ufKH6z8NTh8ir2QdsVz2i
+    OXa6ilPffY6yUJvshc>
+X-ME-Received: <xmr:sBkHYrgpA1Gy5YcgvZl2OT21B1JvP_0TKYo9JsfrU0ycfsV1VprjA8_PkQoMPUA8iFn0qOfsdtGoY-qmBpFSAQO2IXo5YCHKJjpQsJKAWS6FrThZlFCz>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrieeggdeghecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffoggfgsedtkeertdertd
+    dtnecuhfhrohhmpefvrghkrghshhhiucfurghkrghmohhtohcuoehoqdhtrghkrghshhhi
+    sehsrghkrghmohgttghhihdrjhhpqeenucggtffrrghtthgvrhhnpeetieeuhfejkeekfe
+    ehteeikedvgeefhffggfdvieehhefhheeivdfhgfejjeduudenucffohhmrghinhepkhgv
+    rhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
+X-ME-Proxy: <xmx:sBkHYn9_V6CgeO3i4WDnsRF2Gve6FOfGKHpUIGNyuHTjQoxgSZE0FA>
+    <xmx:sBkHYmsnJcngHTFp3qAOQe5obyH7Kyqj2i7QUXKrTUwnYGZhB9h5ZQ>
+    <xmx:sBkHYuGGxqfR9EMbg0JMIGF8AtY0VA4APGJBsqDaYTXjm46UKOgv7g>
+    <xmx:shkHYqKHihHg8ePsurbu1UjYVnN7weHcc0TrNzIURrz_xVLjHAW3lw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 11 Feb 2022 21:21:35 -0500 (EST)
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     stefanr@s5r6.in-berlin.de
+Cc:     linux1394-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, clemens@ladisch.de,
+        alsa-devel@alsa-project.org
+Subject: [PATCH v2 0/3] firewire: assist unit driver to compute packet time stamp
+Date:   Sat, 12 Feb 2022 11:21:28 +0900
+Message-Id: <20220212022131.199855-1-o-takashi@sakamocchi.jp>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Guang <yang.guang5@zte.com.cn>
+Hi,
 
-coccinelle report:
-./drivers/tty/serial/8250/8250_aspeed_vuart.c:85:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/tty/serial/8250/8250_aspeed_vuart.c:174:8-16:
-WARNING: use scnprintf or sprintf
-./drivers/tty/serial/8250/8250_aspeed_vuart.c:127:8-16:
-WARNING: use scnprintf or sprintf
+Current implementation of Linux FireWire subsystem doesn't allow unit
+driver to operate content of packet in IR context according to
+time stamp. Additionally it doesn't allow unit driver to read current value
+of CYCLE_TIME register in OHCI 1394 controller. It brings disadvantages to
+drivers in Linux sound subsystem in regards of handling time for sampled
+data such as PCM frames and MIDI messages.
 
-Use sysfs_emit instead of scnprintf or sprintf makes more sense.
+This rerolled patchset is first step to improve the situation.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
-Signed-off-by: David Yang <davidcomponentone@gmail.com>
+Changes in v2:
+ * Rebase v1 patchset to v5.16 release
 
----
-Change from v1-v2:
-- Modify the patch title
-- Use the CC for patch sender
+V1:
+ * https://lore.kernel.org/lkml/20211202113457.24011-1-o-takashi@sakamocchi.jp/
 
-Change from v2-v3:
-- Fix the patch subject prefix typo ("8250")
-- Change back the SoB for patch submitter
 
----
- drivers/tty/serial/8250/8250_aspeed_vuart.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Hector Martin (1):
+  firewire: Add dummy read_csr/write_csr functions
 
-diff --git a/drivers/tty/serial/8250/8250_aspeed_vuart.c b/drivers/tty/serial/8250/8250_aspeed_vuart.c
-index 2350fb3bb5e4..36c39b8ea7af 100644
---- a/drivers/tty/serial/8250/8250_aspeed_vuart.c
-+++ b/drivers/tty/serial/8250/8250_aspeed_vuart.c
-@@ -82,7 +82,7 @@ static ssize_t lpc_address_show(struct device *dev,
- 	addr = (aspeed_vuart_readb(vuart, ASPEED_VUART_ADDRH) << 8) |
- 		(aspeed_vuart_readb(vuart, ASPEED_VUART_ADDRL));
- 
--	return snprintf(buf, PAGE_SIZE - 1, "0x%x\n", addr);
-+	return sysfs_emit(buf, "0x%x\n", addr);
- }
- 
- static int aspeed_vuart_set_lpc_address(struct aspeed_vuart *vuart, u32 addr)
-@@ -124,7 +124,7 @@ static ssize_t sirq_show(struct device *dev,
- 	reg &= ASPEED_VUART_GCRB_HOST_SIRQ_MASK;
- 	reg >>= ASPEED_VUART_GCRB_HOST_SIRQ_SHIFT;
- 
--	return snprintf(buf, PAGE_SIZE - 1, "%u\n", reg);
-+	return sysfs_emit(buf, "%u\n", reg);
- }
- 
- static int aspeed_vuart_set_sirq(struct aspeed_vuart *vuart, u32 sirq)
-@@ -171,7 +171,7 @@ static ssize_t sirq_polarity_show(struct device *dev,
- 	reg = aspeed_vuart_readb(vuart, ASPEED_VUART_GCRA);
- 	reg &= ASPEED_VUART_GCRA_HOST_SIRQ_POLARITY;
- 
--	return snprintf(buf, PAGE_SIZE - 1, "%u\n", reg ? 1 : 0);
-+	return sysfs_emit(buf, "%u\n", reg ? 1 : 0);
- }
- 
- static void aspeed_vuart_set_sirq_polarity(struct aspeed_vuart *vuart,
+Takashi Sakamoto (2):
+  firewire: add kernel API to access CYCLE_TIME register
+  firewire: add kernel API to access packet structure in request
+    structure for AR context
+
+ drivers/firewire/core-card.c        | 39 +++++++++++++++++++++++++++++
+ drivers/firewire/core-cdev.c        |  6 +++--
+ drivers/firewire/core-transaction.c | 18 +++++++++++++
+ include/linux/firewire.h            |  3 +++
+ 4 files changed, 64 insertions(+), 2 deletions(-)
+
 -- 
-2.30.2
+2.32.0
 

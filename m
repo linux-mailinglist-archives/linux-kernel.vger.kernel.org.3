@@ -2,135 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BE44B35C7
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 16:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CFE04B35D0
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 16:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236336AbiBLPG0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 12 Feb 2022 10:06:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59760 "EHLO
+        id S236383AbiBLPJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 10:09:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbiBLPGZ (ORCPT
+        with ESMTP id S229960AbiBLPJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 10:06:25 -0500
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD5A214;
-        Sat, 12 Feb 2022 07:06:21 -0800 (PST)
-Date:   Sat, 12 Feb 2022 15:06:07 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v14 5/9] drm/bridge: dw-hdmi: repair interworking with
- hdmi-connector for jz4780
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org
-Message-Id: <7Y577R.WAL64FW8KJZJ1@crapouillou.net>
-In-Reply-To: <8703a3e48574c09e8756b79e8f69be7d84926fe9.1644675566.git.hns@goldelico.com>
-References: <cover.1644675566.git.hns@goldelico.com>
-        <8703a3e48574c09e8756b79e8f69be7d84926fe9.1644675566.git.hns@goldelico.com>
+        Sat, 12 Feb 2022 10:09:54 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4943F214;
+        Sat, 12 Feb 2022 07:09:50 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id x3-20020a05600c21c300b0037c01ad715bso5006442wmj.2;
+        Sat, 12 Feb 2022 07:09:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w4oJBB1iQ3jXfwvtZfxmVO4BCVeU0b4Dxjp4jQuS4LA=;
+        b=EN0CBr7TkAOT5wI9D+VTki2rVGNhSiFlnU8uZcFivC6dzqXYLwsozAtIn0XyB2fmOn
+         HSoDZp7ouQHaT1QD5WzDQztebXyKfq90n3zzZlclFO4juArW1ILS6HqogYLugwvjr/tc
+         O83E8utMm4nQo0wt9jENI1TFZetaRBBXZrIIjT54l+7ns7DXvF/cEay2mFSnSOC6Wzg+
+         I4vX7Ym7LjsLFTX+b4/+ZniGFnItdlZ3aIRzEk/UHOuAmLIbgZNWPsgyFeXdXfOaIPlG
+         9DEXNEAMsQsH1RMlM9kIKaVLtEuK9Wnynphl2MKk7xZ4FpY+8AbfR6bkxmLLe8A1VqIr
+         QYhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w4oJBB1iQ3jXfwvtZfxmVO4BCVeU0b4Dxjp4jQuS4LA=;
+        b=OSB+jKa/jCHeo4W9VKevtnUCgzV/8EJHbtzK7QOG8IgZdUMcpmnrHrxXIbA2XvQa9e
+         jm46JQa+7s537TFHj0pRTzvOgfr0u+xB23tZj8kXrBYNV4vVyX9fiQhzRqXHS6SaM+YH
+         YHEBTqhKZ2SrozdaRq+nkwc19/rUQvY8P5KSgiYw9H579gTnC4I0UcEsPDi2hdzKuFqM
+         f9EHm5839NJG544rT7SiPoaclV28qSJbB9zSUj109tb4zoNNyFj2SBHXulBPQk9h9hMq
+         uq7qH43IgOiAC9AXpXyzrov/WDNmnAuixx9FhC4ZfIqNInxxvMmqyOmfJfl5p+p8qB6K
+         ZLtw==
+X-Gm-Message-State: AOAM533/IaR3KDG4LonnmugKnT4Xjjygbyag0qtfteJg0EnOXyttKBO/
+        a7wjX13bMCtAWZ0iJP4X86Q=
+X-Google-Smtp-Source: ABdhPJxWPICHL46SoAErCtd1MENUNuoP9hQwMONMogsMSXSliP+22OKiWAobCME0X2uu3G2cUAKvHg==
+X-Received: by 2002:a05:600c:3641:: with SMTP id y1mr4409429wmq.44.1644678588769;
+        Sat, 12 Feb 2022 07:09:48 -0800 (PST)
+Received: from localhost (92.40.203.136.threembb.co.uk. [92.40.203.136])
+        by smtp.gmail.com with ESMTPSA id o4sm4582459wms.9.2022.02.12.07.09.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Feb 2022 07:09:48 -0800 (PST)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     paul@crapouillou.net, robh+dt@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org
+Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] dts: x1000: Fix missing TCU clock in tcu device node
+Date:   Sat, 12 Feb 2022 15:09:27 +0000
+Message-Id: <20220212150927.39513-1-aidanmacdonald.0x0@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nikolaus,
+This should've been present all along, but was omitted due to
+a mistake in the TCU driver.
 
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+---
+v1 -> v2: https://lore.kernel.org/linux-mips/20220209230145.18943-1-aidanmacdonald.0x0@gmail.com/
 
-Le sam., févr. 12 2022 at 15:19:23 +0100, H. Nikolaus Schaller 
-<hns@goldelico.com> a écrit :
-> Commit 7cd70656d1285b ("drm/bridge: display-connector: implement bus 
-> fmts callbacks")
-> 
-> introduced a new mechanism to negotiate bus formats between hdmi 
-> connector
-> and the synopsys hdmi driver inside the jz4780.
-> 
-> By this, the dw-hdmi is no longer the only bridge and sets up a list
-> of formats in dw_hdmi_bridge_atomic_get_output_bus_fmts().
-> 
-> This includes MEDIA_BUS_FMT_UYVY8_1X16 which is chosen for the jz4780 
-> but only
-> produces a black screen.
+ * Split DTS changes to separate patch.
 
-Neil pushed a fix yesterday that looks like it could fix your issue.
-The fix is: 1528038385c0 ("drm/bridge: dw-hdmi: use safe format when 
-first in bridge chain")
+ arch/mips/boot/dts/ingenic/x1000.dtsi | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Could you try if it does indeed fix your issue?
-
-Cheers,
--Paul
-
-> This fix is based on the observation that max_bpc = 0 when running 
-> this
-> function while info->bpc = 8. Since the formats checks before this 
-> always test
-> for max_bpc >= info->pbc indirectly my assumption is that we must 
-> check it
-> here as well.
-> 
-> Adding the proposed patch makes the CI20/jz4780 panel work again in
-> MEDIA_BUS_FMT_RGB888_1X24 mode.
-> 
-> Fixes: 7cd70656d1285b ("drm/bridge: display-connector: implement bus 
-> fmts callbacks")
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> ---
->  drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c 
-> b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> index b0d8110dd412c..826a055a7a273 100644
-> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> @@ -2620,10 +2620,10 @@ static u32 
-> *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
->  		output_fmts[i++] = MEDIA_BUS_FMT_RGB101010_1X30;
->  	}
-> 
-> -	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
-> +	if (max_bpc >= info->bpc && info->color_formats & 
-> DRM_COLOR_FORMAT_YCBCR422)
->  		output_fmts[i++] = MEDIA_BUS_FMT_UYVY8_1X16;
-> 
-> -	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
-> +	if (max_bpc >= info->bpc && info->color_formats & 
-> DRM_COLOR_FORMAT_YCBCR444)
->  		output_fmts[i++] = MEDIA_BUS_FMT_YUV8_1X24;
-> 
->  	/* Default 8bit RGB fallback */
-> --
-> 2.33.0
-> 
-
+diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
+index 8bd27edef216..c69df8eb158e 100644
+--- a/arch/mips/boot/dts/ingenic/x1000.dtsi
++++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+@@ -111,8 +111,9 @@ tcu: timer@10002000 {
+ 
+ 		clocks = <&cgu X1000_CLK_RTCLK>,
+ 			 <&cgu X1000_CLK_EXCLK>,
+-			 <&cgu X1000_CLK_PCLK>;
+-		clock-names = "rtc", "ext", "pclk";
++			 <&cgu X1000_CLK_PCLK>,
++			 <&cgu X1000_CLK_TCU>;
++		clock-names = "rtc", "ext", "pclk", "tcu";
+ 
+ 		interrupt-controller;
+ 		#interrupt-cells = <1>;
+-- 
+2.34.1
 

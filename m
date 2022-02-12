@@ -2,142 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A674B38C6
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 01:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C38C74B38DE
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 03:04:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232709AbiBMAib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 19:38:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45358 "EHLO
+        id S232861AbiBMCE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 21:04:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232696AbiBMAi2 (ORCPT
+        with ESMTP id S230179AbiBMCE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 19:38:28 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2827360054
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 16:38:24 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id q7so21059919wrc.13
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 16:38:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version:organization
-         :content-transfer-encoding;
-        bh=bT2Te+Kg9SQlga08Bc5dZ+XNGd8nQG47I/LjRlS+lTA=;
-        b=izpzK2aptidswgj+IrD8bsq0MTZ2eEsoQQF6NZBWOjfHyo+7uJl0c17wn6Y3LgvVLJ
-         P1upGmuHjQ5GC28vYiOQDDvNz1BLKZqI4nAQFMFijNr2jd6L1Zs7d2sBu8RqFy2EPPwE
-         kTIPDtZjqDCypTGpf0xXxo1LRVxVhhGp6W3rFP8lOmOrXM+beXE2OYRTwFmtZJ/P+Esf
-         xVRFB8C+lZ950y6MuLNSWKUSmz3HrBNIELZ9QP6e9KWCtPaV+AqsycFEZEkDqGbiJtjD
-         3gQLDIr3BE8LtfOHc8ycvM2xoe7hOqHKrbam6NEsM6sCt3h1nF4peM78dlXHGCPRimmO
-         Q82g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :organization:content-transfer-encoding;
-        bh=bT2Te+Kg9SQlga08Bc5dZ+XNGd8nQG47I/LjRlS+lTA=;
-        b=M6eULHjfi0xuFFjzgMuN8uHjKIJwiyEjl2Odj/supF9Xw12+QsykOWxiZ8lmQuMrUj
-         fcJ94pCTzsQoXS9/xZvn+pF21pLWFBsVGQHFxLI9Nxhsp+Uq5gjbKovYKYnVZhc/ywKK
-         lrQXaBdHRuIYYffKtQhAlJUQ76yt+s6QX4TAUZTR5q71tD5oOa1bM2w1ADQL8Batc9B8
-         9vVYMX45ceNvZin51aGklBQPJ7ydU+czRwwAtMzDlaQPa+KQ4AMCviBMXRi3U2vIm5ew
-         TpUItp19QkgT1ACVHCVfN5n+bgA7jCGO+0I9NKpJ0Z2tDDL2LEDYhZVQFfgaqtzO0Q0S
-         yQoQ==
-X-Gm-Message-State: AOAM532hZDAtXOsl/nq6nkgSe8n63P2OpiBUvX5nWEX7r/4LzabcP/8r
-        633oeVYFIoMNeLXEXUqHXx643Q==
-X-Google-Smtp-Source: ABdhPJwvun1U+g/rmYkWGOIuPnc/4//mZOAHrhni/PE25GNEMCqB4AeM286Hqez96qRO44bfGOIGpg==
-X-Received: by 2002:adf:908f:: with SMTP id i15mr6531238wri.256.1644712701925;
-        Sat, 12 Feb 2022 16:38:21 -0800 (PST)
-Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
-        by smtp.gmail.com with ESMTPSA id s7sm8676472wrw.71.2022.02.12.16.38.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Feb 2022 16:38:21 -0800 (PST)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] net: dsa: mv88e6xxx: Fix validation of built-in PHYs on 6095/6097
-Date:   Sun, 13 Feb 2022 01:37:01 +0100
-Message-Id: <20220213003702.2440875-1-tobias@waldekranz.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 12 Feb 2022 21:04:56 -0500
+Received: from smtprelay02.ispgateway.de (smtprelay02.ispgateway.de [80.67.18.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DB65FF1C;
+        Sat, 12 Feb 2022 18:04:51 -0800 (PST)
+Received: from [92.206.166.137] (helo=note-book.lan)
+        by smtprelay02.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <git@apitzsch.eu>)
+        id 1nIwqp-0000Mn-QE; Sat, 12 Feb 2022 19:10:27 +0100
+From:   =?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>
+To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?q?Andr=C3=A9=20Apitzsch?= <git@apitzsch.eu>
+Subject: [PATCH v3 3/3] leds: sgm3140: Add ocs,ocp8110 compatible
+Date:   Sat, 12 Feb 2022 19:09:42 +0100
+Message-Id: <20220212180942.8241-3-git@apitzsch.eu>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20211117091405.7412-1-git@apitzsch.eu>
+References: <20211117091405.7412-1-git@apitzsch.eu>
 MIME-Version: 1.0
-Organization: Westermo
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Df-Sender: YW5kcmVAYXBpdHpzY2guZXU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These chips have 8 built-in FE PHYs and 3 SERDES interfaces that can
-run at 1G. With the blamed commit, the built-in PHYs could no longer
-be connected to, using an MII PHY interface mode.
+Orient-Chip's ocp8110 has the same pin configuration as the sgm3140.
+The data sheet can be found at:
+https://cdn.datasheetspdf.com/pdf-down/O/C/P/OCP8110-OrientChip.pdf
 
-Create a separate .phylink_get_caps callback for these chips, which
-takes the FE/GE split into consideration.
-
-Fixes: 2ee84cfefb1e ("net: dsa: mv88e6xxx: convert to phylink_generic_validate()")
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+Signed-off-by: André Apitzsch <git@apitzsch.eu>
 ---
- drivers/net/dsa/mv88e6xxx/chip.c | 25 +++++++++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+ drivers/leds/flash/leds-sgm3140.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 85527fe4fcc8..622b3b4ed513 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -580,6 +580,27 @@ static const u8 mv88e6185_phy_interface_modes[] = {
- 	[MV88E6185_PORT_STS_CMODE_PHY]		 = PHY_INTERFACE_MODE_SGMII,
- };
+diff --git a/drivers/leds/flash/leds-sgm3140.c b/drivers/leds/flash/leds-sgm3140.c
+index f4f831570f11..d3a30ad94ac4 100644
+--- a/drivers/leds/flash/leds-sgm3140.c
++++ b/drivers/leds/flash/leds-sgm3140.c
+@@ -290,6 +290,7 @@ static int sgm3140_remove(struct platform_device *pdev)
+ }
  
-+static void mv88e6095_phylink_get_caps(struct mv88e6xxx_chip *chip, int port,
-+				       struct phylink_config *config)
-+{
-+	u8 cmode = chip->ports[port].cmode;
-+
-+	config->mac_capabilities = MAC_SYM_PAUSE | MAC_10 | MAC_100;
-+
-+	if (mv88e6xxx_phy_is_internal(chip->ds, port)) {
-+		if (cmode == MV88E6185_PORT_STS_CMODE_PHY)
-+			__set_bit(PHY_INTERFACE_MODE_MII,
-+				  config->supported_interfaces);
-+	} else {
-+		if (cmode < ARRAY_SIZE(mv88e6185_phy_interface_modes) &&
-+		    mv88e6185_phy_interface_modes[cmode])
-+			__set_bit(mv88e6185_phy_interface_modes[cmode],
-+				  config->supported_interfaces);
-+
-+		config->mac_capabilities |= MAC_1000FD;
-+	}
-+}
-+
- static void mv88e6185_phylink_get_caps(struct mv88e6xxx_chip *chip, int port,
- 				       struct phylink_config *config)
- {
-@@ -3803,7 +3824,7 @@ static const struct mv88e6xxx_ops mv88e6095_ops = {
- 	.reset = mv88e6185_g1_reset,
- 	.vtu_getnext = mv88e6185_g1_vtu_getnext,
- 	.vtu_loadpurge = mv88e6185_g1_vtu_loadpurge,
--	.phylink_get_caps = mv88e6185_phylink_get_caps,
-+	.phylink_get_caps = mv88e6095_phylink_get_caps,
- 	.set_max_frame_size = mv88e6185_g1_set_max_frame_size,
+ static const struct of_device_id sgm3140_dt_match[] = {
++	{ .compatible = "ocs,ocp8110" },
+ 	{ .compatible = "sgmicro,sgm3140" },
+ 	{ /* sentinel */ }
  };
- 
-@@ -3850,7 +3871,7 @@ static const struct mv88e6xxx_ops mv88e6097_ops = {
- 	.rmu_disable = mv88e6085_g1_rmu_disable,
- 	.vtu_getnext = mv88e6352_g1_vtu_getnext,
- 	.vtu_loadpurge = mv88e6352_g1_vtu_loadpurge,
--	.phylink_get_caps = mv88e6185_phylink_get_caps,
-+	.phylink_get_caps = mv88e6095_phylink_get_caps,
- 	.set_max_frame_size = mv88e6185_g1_set_max_frame_size,
- };
- 
 -- 
-2.25.1
+2.35.1
 

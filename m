@@ -2,165 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373F74B35A7
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 15:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74E1C4B35B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 15:45:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236144AbiBLOg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 09:36:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51526 "EHLO
+        id S236216AbiBLOpV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 12 Feb 2022 09:45:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiBLOg4 (ORCPT
+        with ESMTP id S229551AbiBLOpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 09:36:56 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0474720F;
-        Sat, 12 Feb 2022 06:36:53 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id s7so20571618edd.3;
-        Sat, 12 Feb 2022 06:36:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fNVtGj2HlwN1t95oRwbX7m9qgYlxgxLGOkN+c8cOGws=;
-        b=PFReLFuS9ZMwPZ3FYSl4edpXkzUzLQtYO8nz/FObDG9k8yQNHvUIKpt8BSKuegk+Qz
-         URLWLVSAthB9vRGw3F1hKQR41+mjgGkdJ/tClO052v4vI7sp1qVwBspsNnn0LNcavv1q
-         2TPq/tdMi4U4iqLaOi6hC6ChcjUkbhNOnVooIV1273/wseBqAtvnFOEoZVjM9lPlUXNw
-         9djtWzil1652IT6SVM7VIg5ugD2fOR46xWkoeUZRMNPGhSJi/dglHFopinDR00ElFzDC
-         XWyzzawbTtcQWfG2ylh6u22XtRoGcNvNb/qY4qTwr/xWSPJbo5gV5bseO0+s4Iii+QOj
-         ewaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fNVtGj2HlwN1t95oRwbX7m9qgYlxgxLGOkN+c8cOGws=;
-        b=iufiu2Dyr+52CC9JRoJjFm9uSETJtn43nc4Idgk8QTpaedgxsNQTVA5Rxy+fSYN9s6
-         yiW11bSPBPdTvFJhskqP0iPMy/NRJlRW6L3OvUVMEKimWM/Ea/IEusbirGL7ue5Z7c4i
-         Oz2tH3VINgDVmCke6nwr9LP6iB5rauAa7m2tIM6Z1mBPckx80knKtCVvIXGGAZAyRmxs
-         HNylxMNh5Q8TRSruhdjayIT8PVuZ33U2RWoNUgZU3G7e9+4lykXVJY01nO4ef/QH/Ehn
-         SQphUqJhpCwSw+N90ll050n1hE2AqWJIptMsl0bf9q1hPtmCctY2ijSaOHvIDZodT6kY
-         3FQw==
-X-Gm-Message-State: AOAM533rkgt7WANAmm5LqiyZ4vAkEvkcjv2V7s6JE9vHLOp3WdlNa3UB
-        aU58lCBrzHN6j6LEzYChVnWaiHMIIbCSejq0d+0=
-X-Google-Smtp-Source: ABdhPJz5lyeOKwpjBCZn6+Mov6KD2nS/waJD+PZ2ykYAukvMfSAgZnKNiBl8E/8nTVAcDZUoXe8dbS79s7Q3VO/YJKM=
-X-Received: by 2002:aa7:c395:: with SMTP id k21mr4401538edq.436.1644676611377;
- Sat, 12 Feb 2022 06:36:51 -0800 (PST)
+        Sat, 12 Feb 2022 09:45:19 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63E9214;
+        Sat, 12 Feb 2022 06:45:13 -0800 (PST)
+Date:   Sat, 12 Feb 2022 14:44:56 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v14 1/9] drm/ingenic: Add support for JZ4780 and HDMI
+ output
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Message-Id: <WY477R.1XWC44S25QIN3@crapouillou.net>
+In-Reply-To: <31eff2819f94fefcb01aa5cb23c79ccf302d9238.1644675566.git.hns@goldelico.com>
+References: <cover.1644675566.git.hns@goldelico.com>
+        <31eff2819f94fefcb01aa5cb23c79ccf302d9238.1644675566.git.hns@goldelico.com>
 MIME-Version: 1.0
-References: <alpine.DEB.2.21.2202100424280.34636@angie.orcam.me.uk> <alpine.DEB.2.21.2202111127200.34636@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2202111127200.34636@angie.orcam.me.uk>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 12 Feb 2022 16:36:15 +0200
-Message-ID: <CAHp75VdxUv-807W9OajsM95OVpbwtZ4ts-uJKt+X9e4fXHHuyg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] serial: 8250: Add proper clock handling for OxSemi
- PCIe devices
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Mike Skoog <mskoog@endruntechnologies.com>,
-        Mike Korreng <mkorreng@endruntechnologies.com>,
-        info@endruntechnologies.com,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 12, 2022 at 10:41 AM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
->
-> Oxford Semiconductor PCIe (Tornado) 950 serial port devices are driven
-> by a fixed 62.5MHz clock input derived from the 100MHz PCI Express clock.
->
-> We currently drive the device using its default oversampling rate of 16
-> and the clock prescaler disabled, consequently yielding the baud base of
-> 3906250.  This base is inadequate for some of the high-speed baud rates
-> such as 460800bps, for which the closest rate possible can be obtained
-> by dividing the baud base by 8, yielding the baud rate of 488281.25bps,
-> which is off by 5.9638%.  This is enough for data communication to break
-> with the remote end talking actual 460800bps where missed stop bits have
-> been observed.
->
-> We can do better however, by taking advantage of a reduced oversampling
-> rate, which can be set to any integer value from 4 to 16 inclusive by
-> programming the TCR register, and by using the clock prescaler, which
-> can be set to any value from 1 to 63.875 in increments of 0.125 in the
-> CPR/CPR2 register pair.  The prescaler has to be explicitly enabled
-> though by setting bit 7 in the MCR or otherwise it is bypassed (in the
-> enhanced mode that we enable) as if the value of 1 was used.
->
-> Make use of these features then as follows:
->
-> - Set the baud base to 15625000, reflecting the minimum oversampling
->   rate of 4 with the clock prescaler and divisor both set to 1.
->
-> - Override the `set_mctrl' and set the MCR shadow there so as to have
->   MCR[7] always set and have the 8250 core propagate this settings; also
->   make the console restorer use this shadow.
->
-> - Override the `get_divisor' handler and determine a good combination of
->   parameters by using a lookup table with predetermined value pairs of
->   the oversampling rate and the clock prescaler and finding a pair that
->   divides the input clock such that the quotient, when rounded to the
->   nearest integer, deviates the least from the exact result.  Calculate
->   the clock divisor accordingly.
->
->   Scale the resulting oversampling rate (only by powers of two) if
->   possible so as to maximise it, reducing the divisor accordingly, and
->   avoid a divisor overflow for very low baud rates by scaling the
->   oversampling rate and/or the prescaler even if that causes some
->   accuracy loss.
->
->   Also handle the historic spd_cust feature so as to allow one to set
->   all the three parameters manually to arbitrary values, by keeping the
->   low 16 bits for the divisor and then putting TCR in bits 19:16 and
->   CPR/CPR2 in bits 28:20, sanitising the bit pattern supplied such as
->   to clamp CPR/CPR2 values between 0.000 and 0.875 inclusive to 33.875.
->   This preserves compatibility with any existing setups, that is where
->   requesting a custom divisor that only has any bits set among the low
->   16 the oversampling rate of 16 and the clock prescaler of 33.875 will
->   be used as with the original 8250.
->
->   Finally abuse the `frac' argument to store the determined bit patterns
->   for the TCR, CPR and CPR2 registers.
->
-> - Override the `set_divisor' handler so as to set the TCR, CPR and CPR2
->   registers from the `frac' value supplied.  Set the divisor as usually.
->
-> With the baud base set to 15625000 and the unsigned 16-bit UART_DIV_MAX
-> limitation imposed by `serial8250_get_baud_rate' standard baud rates
-> below 300bps become unavailable in the regular way, e.g. the rate of
-> 200bps requires the baud base to be divided by 78125 and that is beyond
-> the unsigned 16-bit range.  The historic spd_cust feature can still be
-> used to obtain such rates if so required.
->
-> See Documentation/tty/device_drivers/oxsemi-tornado.rst for more details.
+Hi Nikolaus,
 
-...
+Le sam., févr. 12 2022 at 15:19:19 +0100, H. Nikolaus Schaller 
+<hns@goldelico.com> a écrit :
+> From: Paul Boddie <paul@boddie.org.uk>
+> 
+> Add support for the LCD controller present on JZ4780 SoCs.
+> This SoC uses 8-byte descriptors which extend the current
+> 4-byte descriptors used for other Ingenic SoCs.
+> 
+> Note that plane f0 is not working and disabled to be
+> seen from user-space.
+> 
+> Tested on MIPS Creator CI20 board.
 
-> +       /* Old custom speed handling.  */
+That's not really what the patch does though. It's a fix for a commit 
+that has the exact same title and description, and is already merged: 
+b807fd2c43fe ("drm/ingenic: Add support for JZ4780 and HDMI output").
 
-Exactly and we do not want to see this in the new code.
+Please rewrite the patch's title and description to actually describe 
+its purpose.
 
-> +       if (baud == 38400 && (port->flags & UPF_SPD_MASK) == UPF_SPD_CUST) {
-> +               unsigned int cust_div = port->custom_divisor;
-> +
-> +               quot = cust_div & UART_DIV_MAX;
-> +               tcr = (cust_div >> 16) & OXSEMI_TORNADO_TCR_MASK;
-> +               cpr = (cust_div >> 20) & OXSEMI_TORNADO_CPR_MASK;
-> +               if (cpr < OXSEMI_TORNADO_CPR_MIN)
-> +                       cpr = OXSEMI_TORNADO_CPR_DEF;
-> +       } else {
+Cheers,
+-Paul
 
-I'll read and comment on the rest later on (hopefully next week).
+> 
+> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> ---
+>  drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c 
+> b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> index 7f10d6eed549d..dcf44cb00821f 100644
+> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> @@ -65,8 +65,10 @@ struct ingenic_dma_hwdescs {
+>  struct jz_soc_info {
+>  	bool needs_dev_clk;
+>  	bool has_osd;
+> +	bool has_alpha;
+>  	bool map_noncoherent;
+>  	bool use_extended_hwdesc;
+> +	bool plane_f0_not_working;
+>  	unsigned int max_width, max_height;
+>  	const u32 *formats_f0, *formats_f1;
+>  	unsigned int num_formats_f0, num_formats_f1;
+> @@ -453,7 +455,7 @@ static int ingenic_drm_plane_atomic_check(struct 
+> drm_plane *plane,
+>  	if (!crtc)
+>  		return 0;
+> 
+> -	if (plane == &priv->f0)
+> +	if (priv->soc_info->plane_f0_not_working && plane == &priv->f0)
+>  		return -EINVAL;
+> 
+>  	crtc_state = drm_atomic_get_existing_crtc_state(state,
+> @@ -1055,6 +1057,7 @@ static int ingenic_drm_bind(struct device *dev, 
+> bool has_components)
+>  	long parent_rate;
+>  	unsigned int i, clone_mask = 0;
+>  	int ret, irq;
+> +	u32 osdc = 0;
+> 
+>  	soc_info = of_device_get_match_data(dev);
+>  	if (!soc_info) {
+> @@ -1312,7 +1315,10 @@ static int ingenic_drm_bind(struct device 
+> *dev, bool has_components)
+> 
+>  	/* Enable OSD if available */
+>  	if (soc_info->has_osd)
+> -		regmap_write(priv->map, JZ_REG_LCD_OSDC, JZ_LCD_OSDC_OSDEN);
+> +		osdc |= JZ_LCD_OSDC_OSDEN;
+> +	if (soc_info->has_alpha)
+> +		osdc |= JZ_LCD_OSDC_ALPHAEN;
+> +	regmap_write(priv->map, JZ_REG_LCD_OSDC, osdc);
+> 
+>  	mutex_init(&priv->clk_mutex);
+>  	priv->clock_nb.notifier_call = ingenic_drm_update_pixclk;
+> @@ -1511,7 +1517,9 @@ static const struct jz_soc_info jz4770_soc_info 
+> = {
+>  static const struct jz_soc_info jz4780_soc_info = {
+>  	.needs_dev_clk = true,
+>  	.has_osd = true,
+> +	.has_alpha = true,
+>  	.use_extended_hwdesc = true,
+> +	.plane_f0_not_working = true,	/* REVISIT */
+>  	.max_width = 4096,
+>  	.max_height = 2048,
+>  	.formats_f1 = jz4770_formats_f1,
+> --
+> 2.33.0
+> 
 
-P.S. I still think that overloading 8250_pci with custom quirks is not
-a good idea.
 
--- 
-With Best Regards,
-Andy Shevchenko

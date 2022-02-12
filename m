@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E794B34AA
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 12:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1AA4B34AD
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 12:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234360AbiBLL2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 06:28:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42282 "EHLO
+        id S234474AbiBLL2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 06:28:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234312AbiBLL2U (ORCPT
+        with ESMTP id S230111AbiBLL2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 06:28:20 -0500
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B17C26AEA;
-        Sat, 12 Feb 2022 03:28:15 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V4DXVLp_1644665291;
-Received: from 30.240.120.83(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V4DXVLp_1644665291)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 12 Feb 2022 19:28:13 +0800
-Message-ID: <d26e3f1f-86b0-3638-0e9d-66d893a980b9@linux.alibaba.com>
-Date:   Sat, 12 Feb 2022 19:28:10 +0800
+        Sat, 12 Feb 2022 06:28:42 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E502F26AEA;
+        Sat, 12 Feb 2022 03:28:39 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 9EE661C0B80; Sat, 12 Feb 2022 12:28:38 +0100 (CET)
+Date:   Sat, 12 Feb 2022 12:28:38 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     =?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-leds@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2 0/3] Add support for ocp8110 flash
+Message-ID: <20220212112838.GC20866@duo.ucw.cz>
+References: <20211117091405.7412-1-git@apitzsch.eu>
+ <20220207230638.56730-1-git@apitzsch.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH v5 2/2] EDAC/ghes: use cper functions to avoid code
- duplication
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     rric@kernel.org, mchehab@kernel.org, tony.luck@intel.com,
-        james.morse@arm.com, ardb@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
-References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
- <20220126081702.55167-3-xueshuai@linux.alibaba.com>
- <YfU8fW+lLiAgJ9D4@zn.tnic>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <YfU8fW+lLiAgJ9D4@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="/e2eDi0V/xtL+Mc8"
+Content-Disposition: inline
+In-Reply-To: <20220207230638.56730-1-git@apitzsch.eu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Borislav,
 
-在 2022/1/29 PM9:09, Borislav Petkov 写道:
-> On Wed, Jan 26, 2022 at 04:17:02PM +0800, Shuai Xue wrote:
->> The memory error location processing in ghes_edac_report_mem_error() have
-> 
-> I will look at this patch again after you have incorporated in all
-> review comments from last time:
-> 
-> https://lore.kernel.org/r/YctFli9oMBYTlf7h@zn.tnic
-> 
+--/e2eDi0V/xtL+Mc8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Happy Chinese New Year. Sorry for getting back to you late. I was on holiday
-last weak.
+Hi!
 
-I have try to address your comments in this version. If I missed your comments,
-please let me know, thank you.
+> The led is used as front flash of BQ Aquaris M5.
+>=20
+> https://github.com/bq/aquaris-M5/blob/901d0b2ca05c0b0af49786fb548eb0fc289=
+867ff/arch/arm/boot/dts/qcom/piccolo-msm8939-camera-sensor-qrd.dtsi#L16
 
-Best Regards,
-Shuai
+Thanks for patches, I took 1 and 3/3, waiting for some kind of
+changelog on 2/.
 
+Best regards,
+							Pavel
+--=20
+http://www.livejournal.com/~pavelmachek
 
+--/e2eDi0V/xtL+Mc8
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYgeZ5gAKCRAw5/Bqldv6
+8iP9AJ9X66xk2Tg9z/6xysk98CrX+rL9iQCdGONCiSyzNt3AtW+0Kv2GAxh4PzE=
+=kAce
+-----END PGP SIGNATURE-----
+
+--/e2eDi0V/xtL+Mc8--

@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5D34B365C
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4B84B365D
 	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 17:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237220AbiBLQSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 11:18:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37892 "EHLO
+        id S237643AbiBLQSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 11:18:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237047AbiBLQR7 (ORCPT
+        with ESMTP id S237145AbiBLQSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 11:17:59 -0500
+        Sat, 12 Feb 2022 11:18:07 -0500
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1AF240A6
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 08:17:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609BB240A6
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 08:17:57 -0800 (PST)
 Received: from dslb-188-097-215-215.188.097.pools.vodafone-ip.de ([188.97.215.215] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1nIv5s-0007YM-7b; Sat, 12 Feb 2022 17:17:52 +0100
+        id 1nIv5t-0007YM-7U; Sat, 12 Feb 2022 17:17:53 +0100
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -27,9 +27,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Michael Straube <straube.linux@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 09/10] staging: r8188eu: remove path parameter from phy_RFSerialRead
-Date:   Sat, 12 Feb 2022 17:17:36 +0100
-Message-Id: <20220212161737.381841-10-martin@kaiser.cx>
+Subject: [PATCH 10/10] staging: r8188eu: we only need one struct bb_reg_def for path a
+Date:   Sat, 12 Feb 2022 17:17:37 +0100
+Message-Id: <20220212161737.381841-11-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220212161737.381841-1-martin@kaiser.cx>
 References: <20220212161737.381841-1-martin@kaiser.cx>
@@ -44,83 +44,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All callers of phy_RFSerialRead set the eRFPath parameter to
-RF_PATH_A. Remove the parameter and use RF_PATH_A directly.
+The r8188eu driver does no longer access rf path b registers via
+PHYRegDef.
+
+Change the PHYRegDef array in struct hal_data_8188e to a single
+variable that holds the register addresses for rf path a. Remove
+the initialisation of path b register addresses.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/hal/rtl8188e_phycfg.c | 18 +++++-------------
- 1 file changed, 5 insertions(+), 13 deletions(-)
+ drivers/staging/r8188eu/hal/rtl8188e_phycfg.c | 58 +++++++------------
+ drivers/staging/r8188eu/hal/rtl8188e_rf6052.c |  2 +-
+ .../staging/r8188eu/include/rtl8188e_hal.h    |  2 +-
+ 3 files changed, 22 insertions(+), 40 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-index 2dcd1df58aaa..e2e4443b7414 100644
+index e2e4443b7414..b0e5b9f6a005 100644
 --- a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
 +++ b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-@@ -104,7 +104,6 @@ void rtl8188e_PHY_SetBBReg(struct adapter *Adapter, u32 RegAddr, u32 BitMask, u3
- *
- * Input:
- *			struct adapter *Adapter,
--*			enum rf_radio_path eRFPath,	Radio path of A/B/C/D
- *			u32			Offset,		The target address to be read
- *
- * Output:	None
-@@ -119,13 +118,12 @@ void rtl8188e_PHY_SetBBReg(struct adapter *Adapter, u32 RegAddr, u32 BitMask, u3
- static	u32
- phy_RFSerialRead(
- 		struct adapter *Adapter,
--		enum rf_radio_path eRFPath,
- 		u32 Offset
- 	)
+@@ -123,7 +123,7 @@ phy_RFSerialRead(
  {
  	u32 retValue = 0;
  	struct hal_data_8188e *pHalData = &Adapter->haldata;
--	struct bb_reg_def *pPhyReg = &pHalData->PHYRegDef[eRFPath];
-+	struct bb_reg_def *pPhyReg = &pHalData->PHYRegDef[RF_PATH_A];
+-	struct bb_reg_def *pPhyReg = &pHalData->PHYRegDef[RF_PATH_A];
++	struct bb_reg_def *pPhyReg = &pHalData->PHYRegDef;
  	u32 NewOffset;
  	u32 tmplong, tmplong2;
  	u8 	RfPiEnable = 0;
-@@ -143,10 +141,7 @@ phy_RFSerialRead(
- 	/*  For RF A/B write 0x824/82c(does not work in the future) */
- 	/*  We must use 0x824 for RF A and B to execute read trigger */
- 	tmplong = rtl8188e_PHY_QueryBBReg(Adapter, rFPGA0_XA_HSSIParameter2, bMaskDWord);
--	if (eRFPath == RF_PATH_A)
--		tmplong2 = tmplong;
--	else
--		tmplong2 = rtl8188e_PHY_QueryBBReg(Adapter, pPhyReg->rfHSSIPara2, bMaskDWord);
-+	tmplong2 = tmplong;
- 
- 	tmplong2 = (tmplong2 & (~bLSSIReadAddress)) | (NewOffset << 23) | bLSSIReadEdge;	/* T65 RF */
- 
-@@ -158,10 +153,7 @@ phy_RFSerialRead(
- 
- 	udelay(10);/* PlatformStallExecution(10); */
- 
--	if (eRFPath == RF_PATH_A)
--		RfPiEnable = (u8)rtl8188e_PHY_QueryBBReg(Adapter, rFPGA0_XA_HSSIParameter1, BIT(8));
--	else if (eRFPath == RF_PATH_B)
--		RfPiEnable = (u8)rtl8188e_PHY_QueryBBReg(Adapter, rFPGA0_XB_HSSIParameter1, BIT(8));
-+	RfPiEnable = (u8)rtl8188e_PHY_QueryBBReg(Adapter, rFPGA0_XA_HSSIParameter1, BIT(8));
- 
- 	if (RfPiEnable) {	/*  Read from BBreg8b8, 12 bits for 8190, 20bits for T65 RF */
- 		retValue = rtl8188e_PHY_QueryBBReg(Adapter, pPhyReg->rfLSSIReadBackPi, bLSSIReadBackData);
-@@ -265,7 +257,7 @@ u32 rtl8188e_PHY_QueryRFReg(struct adapter *Adapter, u32 RegAddr, u32 BitMask)
+@@ -215,7 +215,7 @@ phy_RFSerialWrite(
  {
- 	u32 Original_Value, Readback_Value, BitShift;
+ 	u32 DataAndAddr = 0;
+ 	struct hal_data_8188e *pHalData = &Adapter->haldata;
+-	struct bb_reg_def *pPhyReg = &pHalData->PHYRegDef[RF_PATH_A];
++	struct bb_reg_def *pPhyReg = &pHalData->PHYRegDef;
+ 	u32 NewOffset;
  
--	Original_Value = phy_RFSerialRead(Adapter, RF_PATH_A, RegAddr);
-+	Original_Value = phy_RFSerialRead(Adapter, RegAddr);
+ 	/*  2009/06/17 MH We can not execute IO for power save or other accident mode. */
+@@ -358,76 +358,58 @@ phy_InitBBRFRegisterDefinition(
+ 	struct hal_data_8188e *pHalData = &Adapter->haldata;
  
- 	BitShift =  phy_CalculateBitShift(BitMask);
- 	Readback_Value = (Original_Value & BitMask) >> BitShift;
-@@ -301,7 +293,7 @@ rtl8188e_PHY_SetRFReg(
+ 	/*  RF Interface Sowrtware Control */
+-	pHalData->PHYRegDef[RF_PATH_A].rfintfs = rFPGA0_XAB_RFInterfaceSW; /*  16 LSBs if read 32-bit from 0x870 */
+-	pHalData->PHYRegDef[RF_PATH_B].rfintfs = rFPGA0_XAB_RFInterfaceSW; /*  16 MSBs if read 32-bit from 0x870 (16-bit for 0x872) */
++	pHalData->PHYRegDef.rfintfs = rFPGA0_XAB_RFInterfaceSW; /*  16 LSBs if read 32-bit from 0x870 */
  
- 	/*  RF data is 12 bits only */
- 	if (BitMask != bRFRegOffsetMask) {
--		Original_Value = phy_RFSerialRead(Adapter, RF_PATH_A, RegAddr);
-+		Original_Value = phy_RFSerialRead(Adapter, RegAddr);
- 		BitShift =  phy_CalculateBitShift(BitMask);
- 		Data = ((Original_Value & (~BitMask)) | (Data << BitShift));
- 	}
+ 	/*  RF Interface Readback Value */
+-	pHalData->PHYRegDef[RF_PATH_A].rfintfi = rFPGA0_XAB_RFInterfaceRB; /*  16 LSBs if read 32-bit from 0x8E0 */
+-	pHalData->PHYRegDef[RF_PATH_B].rfintfi = rFPGA0_XAB_RFInterfaceRB;/*  16 MSBs if read 32-bit from 0x8E0 (16-bit for 0x8E2) */
++	pHalData->PHYRegDef.rfintfi = rFPGA0_XAB_RFInterfaceRB; /*  16 LSBs if read 32-bit from 0x8E0 */
+ 
+ 	/*  RF Interface Output (and Enable) */
+-	pHalData->PHYRegDef[RF_PATH_A].rfintfo = rFPGA0_XA_RFInterfaceOE; /*  16 LSBs if read 32-bit from 0x860 */
+-	pHalData->PHYRegDef[RF_PATH_B].rfintfo = rFPGA0_XB_RFInterfaceOE; /*  16 LSBs if read 32-bit from 0x864 */
++	pHalData->PHYRegDef.rfintfo = rFPGA0_XA_RFInterfaceOE; /*  16 LSBs if read 32-bit from 0x860 */
+ 
+ 	/*  RF Interface (Output and)  Enable */
+-	pHalData->PHYRegDef[RF_PATH_A].rfintfe = rFPGA0_XA_RFInterfaceOE; /*  16 MSBs if read 32-bit from 0x860 (16-bit for 0x862) */
+-	pHalData->PHYRegDef[RF_PATH_B].rfintfe = rFPGA0_XB_RFInterfaceOE; /*  16 MSBs if read 32-bit from 0x864 (16-bit for 0x866) */
++	pHalData->PHYRegDef.rfintfe = rFPGA0_XA_RFInterfaceOE; /*  16 MSBs if read 32-bit from 0x860 (16-bit for 0x862) */
+ 
+ 	/* Addr of LSSI. Wirte RF register by driver */
+-	pHalData->PHYRegDef[RF_PATH_A].rf3wireOffset = rFPGA0_XA_LSSIParameter; /* LSSI Parameter */
+-	pHalData->PHYRegDef[RF_PATH_B].rf3wireOffset = rFPGA0_XB_LSSIParameter;
++	pHalData->PHYRegDef.rf3wireOffset = rFPGA0_XA_LSSIParameter; /* LSSI Parameter */
+ 
+ 	/*  RF parameter */
+-	pHalData->PHYRegDef[RF_PATH_A].rfLSSI_Select = rFPGA0_XAB_RFParameter;  /* BB Band Select */
+-	pHalData->PHYRegDef[RF_PATH_B].rfLSSI_Select = rFPGA0_XAB_RFParameter;
++	pHalData->PHYRegDef.rfLSSI_Select = rFPGA0_XAB_RFParameter;  /* BB Band Select */
+ 
+ 	/*  Tx AGC Gain Stage (same for all path. Should we remove this?) */
+-	pHalData->PHYRegDef[RF_PATH_A].rfTxGainStage = rFPGA0_TxGainStage; /* Tx gain stage */
+-	pHalData->PHYRegDef[RF_PATH_B].rfTxGainStage = rFPGA0_TxGainStage; /* Tx gain stage */
++	pHalData->PHYRegDef.rfTxGainStage = rFPGA0_TxGainStage; /* Tx gain stage */
+ 
+ 	/*  Tranceiver A~D HSSI Parameter-1 */
+-	pHalData->PHYRegDef[RF_PATH_A].rfHSSIPara1 = rFPGA0_XA_HSSIParameter1;  /* wire control parameter1 */
+-	pHalData->PHYRegDef[RF_PATH_B].rfHSSIPara1 = rFPGA0_XB_HSSIParameter1;  /* wire control parameter1 */
++	pHalData->PHYRegDef.rfHSSIPara1 = rFPGA0_XA_HSSIParameter1;  /* wire control parameter1 */
+ 
+ 	/*  Tranceiver A~D HSSI Parameter-2 */
+-	pHalData->PHYRegDef[RF_PATH_A].rfHSSIPara2 = rFPGA0_XA_HSSIParameter2;  /* wire control parameter2 */
+-	pHalData->PHYRegDef[RF_PATH_B].rfHSSIPara2 = rFPGA0_XB_HSSIParameter2;  /* wire control parameter2 */
++	pHalData->PHYRegDef.rfHSSIPara2 = rFPGA0_XA_HSSIParameter2;  /* wire control parameter2 */
+ 
+ 	/*  RF switch Control */
+-	pHalData->PHYRegDef[RF_PATH_A].rfSwitchControl = rFPGA0_XAB_SwitchControl; /* TR/Ant switch control */
+-	pHalData->PHYRegDef[RF_PATH_B].rfSwitchControl = rFPGA0_XAB_SwitchControl;
++	pHalData->PHYRegDef.rfSwitchControl = rFPGA0_XAB_SwitchControl; /* TR/Ant switch control */
+ 
+ 	/*  AGC control 1 */
+-	pHalData->PHYRegDef[RF_PATH_A].rfAGCControl1 = rOFDM0_XAAGCCore1;
+-	pHalData->PHYRegDef[RF_PATH_B].rfAGCControl1 = rOFDM0_XBAGCCore1;
++	pHalData->PHYRegDef.rfAGCControl1 = rOFDM0_XAAGCCore1;
+ 
+ 	/*  AGC control 2 */
+-	pHalData->PHYRegDef[RF_PATH_A].rfAGCControl2 = rOFDM0_XAAGCCore2;
+-	pHalData->PHYRegDef[RF_PATH_B].rfAGCControl2 = rOFDM0_XBAGCCore2;
++	pHalData->PHYRegDef.rfAGCControl2 = rOFDM0_XAAGCCore2;
+ 
+ 	/*  RX AFE control 1 */
+-	pHalData->PHYRegDef[RF_PATH_A].rfRxIQImbalance = rOFDM0_XARxIQImbalance;
+-	pHalData->PHYRegDef[RF_PATH_B].rfRxIQImbalance = rOFDM0_XBRxIQImbalance;
++	pHalData->PHYRegDef.rfRxIQImbalance = rOFDM0_XARxIQImbalance;
+ 
+ 	/*  RX AFE control 1 */
+-	pHalData->PHYRegDef[RF_PATH_A].rfRxAFE = rOFDM0_XARxAFE;
+-	pHalData->PHYRegDef[RF_PATH_B].rfRxAFE = rOFDM0_XBRxAFE;
++	pHalData->PHYRegDef.rfRxAFE = rOFDM0_XARxAFE;
+ 
+ 	/*  Tx AFE control 1 */
+-	pHalData->PHYRegDef[RF_PATH_A].rfTxIQImbalance = rOFDM0_XATxIQImbalance;
+-	pHalData->PHYRegDef[RF_PATH_B].rfTxIQImbalance = rOFDM0_XBTxIQImbalance;
++	pHalData->PHYRegDef.rfTxIQImbalance = rOFDM0_XATxIQImbalance;
+ 
+ 	/*  Tx AFE control 2 */
+-	pHalData->PHYRegDef[RF_PATH_A].rfTxAFE = rOFDM0_XATxAFE;
+-	pHalData->PHYRegDef[RF_PATH_B].rfTxAFE = rOFDM0_XBTxAFE;
++	pHalData->PHYRegDef.rfTxAFE = rOFDM0_XATxAFE;
+ 
+ 	/*  Tranceiver LSSI Readback SI mode */
+-	pHalData->PHYRegDef[RF_PATH_A].rfLSSIReadBack = rFPGA0_XA_LSSIReadBack;
+-	pHalData->PHYRegDef[RF_PATH_B].rfLSSIReadBack = rFPGA0_XB_LSSIReadBack;
++	pHalData->PHYRegDef.rfLSSIReadBack = rFPGA0_XA_LSSIReadBack;
+ 
+ 	/*  Tranceiver LSSI Readback PI mode */
+-	pHalData->PHYRegDef[RF_PATH_A].rfLSSIReadBackPi = TransceiverA_HSPI_Readback;
+-	pHalData->PHYRegDef[RF_PATH_B].rfLSSIReadBackPi = TransceiverB_HSPI_Readback;
++	pHalData->PHYRegDef.rfLSSIReadBackPi = TransceiverA_HSPI_Readback;
+ }
+ 
+ void storePwrIndexDiffRateOffset(struct adapter *Adapter, u32 RegAddr, u32 BitMask, u32 Data)
+diff --git a/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c b/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c
+index 4a7a877e4017..d043b7bc4142 100644
+--- a/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c
++++ b/drivers/staging/r8188eu/hal/rtl8188e_rf6052.c
+@@ -375,7 +375,7 @@ static int phy_RF6052_Config_ParaFile(struct adapter *Adapter)
+ 
+ 	/* Initialize RF */
+ 
+-	pPhyReg = &pHalData->PHYRegDef[0];
++	pPhyReg = &pHalData->PHYRegDef;
+ 
+ 	/*----Store original RFENV control type----*/
+ 	u4RegValue = rtl8188e_PHY_QueryBBReg(Adapter, pPhyReg->rfintfs, bRFSI_RFENV);
+diff --git a/drivers/staging/r8188eu/include/rtl8188e_hal.h b/drivers/staging/r8188eu/include/rtl8188e_hal.h
+index 5b27bae97e91..44321a53a345 100644
+--- a/drivers/staging/r8188eu/include/rtl8188e_hal.h
++++ b/drivers/staging/r8188eu/include/rtl8188e_hal.h
+@@ -141,7 +141,7 @@ struct hal_data_8188e {
+ 
+ 	u32	AcParam_BE; /* Original parameter for BE, use for EDCA turbo. */
+ 
+-	struct bb_reg_def PHYRegDef[2];	/* Radio A/B */
++	struct bb_reg_def PHYRegDef;
+ 
+ 	u32	RfRegChnlVal;
+ 
 -- 
 2.30.2
 

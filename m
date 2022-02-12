@@ -2,124 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B094B33AD
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 08:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7083E4B33B8
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 09:07:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbiBLHww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 02:52:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56316 "EHLO
+        id S232593AbiBLIHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 03:07:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiBLHwv (ORCPT
+        with ESMTP id S229559AbiBLIHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 02:52:51 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8D626AF3;
-        Fri, 11 Feb 2022 23:52:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644652368; x=1676188368;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=yxbfpTwDj2fKjhn3UC9YcnQJ7zw3V2Fz0h2ixyRxOPI=;
-  b=saELgblZ4XZLProefbBffMUAh7OdmAnioSu1QFdWveKiXJ6iRO59+2m5
-   QkW5UnoT3uI2cR3pR0gtISjDL1QTUFfOp01Br6JqTKfHQPEHfOABUz845
-   LM8xc4qRNSwb9EdkQEqza3TR4/bowoRcY8CG0Mawm621LWBffK/FWicKK
-   w=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 11 Feb 2022 23:52:48 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 23:52:47 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 11 Feb 2022 23:52:47 -0800
-Received: from [10.38.246.233] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Fri, 11 Feb
- 2022 23:52:44 -0800
-Message-ID: <b9156bde-137c-2fac-19e0-b205ab4d6016@quicinc.com>
-Date:   Fri, 11 Feb 2022 23:52:41 -0800
+        Sat, 12 Feb 2022 03:07:30 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44B426AEF;
+        Sat, 12 Feb 2022 00:07:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=iHhueysbCF7cZjZhCX5TgtZT8UQe1Vger0YteybGiHM=; b=KZ7FrHGXWuM3vnsfygdkKvajuH
+        HuXE9S5PDDVjtgv6hUCvHtMGYSY+2zIHQcfSewF1XUBn+bHq43Ke6pLvf2GXejVcdNm1FRlkezyfX
+        L6rzJ8TapkKwrrt03ZG6XcJlXdM5kdTGaiMtsUX2Gv8fmwuga3U4UZ47wxOauG4dbJ9jsYe2M1CEm
+        1L+LaBoGdG4As0KICqso/EpU/rIyRtgCJPjBwCHs0nOdx7IHLngoXektapvUKMgUgcUSHCFl2D/2z
+        TsBjmjtoT4Jv6hc4ro4Q7IUetKgvTmjSHTXoHXHL6vvZ6eTk9eZJKG3PpqCB+NDBLW/9rD/Q7dt32
+        JlxLz67g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nInQi-00B6RH-1w; Sat, 12 Feb 2022 08:06:52 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3F5B53002C5;
+        Sat, 12 Feb 2022 09:06:49 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 115DD201C872D; Sat, 12 Feb 2022 09:06:49 +0100 (CET)
+Date:   Sat, 12 Feb 2022 09:06:49 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: mmotm 2022-02-11-15-07 uploaded (objtool: ftrace_likely_update)
+Message-ID: <YgdqmbK7Irwa2Ryh@hirez.programming.kicks-ass.net>
+References: <20220211230819.191B1C340E9@smtp.kernel.org>
+ <8074da01-7aa3-9913-1a1e-2ce307ccdbbd@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] devcoredump: increase the device delete timeout to 10
- mins
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <johannes@sipsolutions.net>, <linux-kernel@vger.kernel.org>,
-        <rafael@kernel.org>, <robdclark@gmail.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <freedreno@lists.freedesktop.org>, <seanpaul@chromium.org>,
-        <swboyd@chromium.org>, <nganji@codeaurora.org>,
-        <aravindh@codeaurora.org>, <khsieh@codeaurora.org>,
-        <daniel@ffwll.ch>, <dmitry.baryshkov@linaro.org>
-References: <1644349472-31077-1-git-send-email-quic_abhinavk@quicinc.com>
- <YgZD8vPqB7ISpRpZ@kroah.com>
- <654d620b-9e14-c47f-b48c-762dc0bd32a1@quicinc.com>
- <Ygdb63FrorUsX/Hg@kroah.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <Ygdb63FrorUsX/Hg@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8074da01-7aa3-9913-1a1e-2ce307ccdbbd@infradead.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
-
-On 2/11/2022 11:04 PM, Greg KH wrote:
-> On Fri, Feb 11, 2022 at 10:59:39AM -0800, Abhinav Kumar wrote:
->> Hi Greg
->>
->> Thanks for the response.
->>
->> On 2/11/2022 3:09 AM, Greg KH wrote:
->>> On Tue, Feb 08, 2022 at 11:44:32AM -0800, Abhinav Kumar wrote:
->>>> There are cases where depending on the size of the devcoredump and the speed
->>>> at which the usermode reads the dump, it can take longer than the current 5 mins
->>>> timeout.
->>>>
->>>> This can lead to incomplete dumps as the device is deleted once the timeout expires.
->>>>
->>>> One example is below where it took 6 mins for the devcoredump to be completely read.
->>>>
->>>> 04:22:24.668 23916 23994 I HWDeviceDRM::DumpDebugData: Opening /sys/class/devcoredump/devcd6/data
->>>> 04:28:35.377 23916 23994 W HWDeviceDRM::DumpDebugData: Freeing devcoredump node
->>>
->>> What makes this so slow?  Reading from the kernel shouldn't be the
->>> limit, is it where the data is being sent to?
->>
->> We are still checking this. We are seeing better read times when we bump up
->> the thread priority of the thread which was reading this.
+On Fri, Feb 11, 2022 at 06:32:06PM -0800, Randy Dunlap wrote:
+> on x86_64:
 > 
-> Where is the thread sending the data to?
-
-The thread is writing the data to a file in local storage. From our 
-profiling, the read is the one taking the time not the write.
-
+> $ gcc --version
+> gcc (SUSE Linux) 7.5.0
 > 
->> We are also trying to check if bumping up CPU speed is helping.
->> But, results have not been consistently good enough. So we thought we should
->> also increase the timeout to be safe.
 > 
-> Why would 10 minutes be better than 30?  What should the limit be?  :)
+> vmlinux.o: warning: objtool: fixup_bad_iret()+0x72: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: noist_exc_debug()+0x30: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: exc_nmi()+0x14e: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: poke_int3_handler()+0x55: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: __sev_get_ghcb()+0x1b: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: __sev_put_ghcb()+0x18: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: __sev_es_ist_exit()+0x2b: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: kernel_exc_vmm_communication()+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit()+0x2c: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter()+0x29: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: rcu_eqs_exit.constprop.62()+0x1a: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: rcu_eqs_enter.constprop.63()+0x23: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: rcu_nmi_enter()+0x17: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: irqentry_nmi_enter()+0x36: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: irqentry_nmi_exit()+0xa1: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: enter_from_user_mode()+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: syscall_enter_from_user_mode()+0x53: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare()+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: irqentry_enter_from_user_mode()+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: context_tracking_recursion_enter()+0x67: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: __context_tracking_enter()+0x2c: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: fixup_bad_iret()+0x72: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: noist_exc_debug()+0x30: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: exc_nmi()+0x14e: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: poke_int3_handler()+0x55: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: __sev_get_ghcb()+0x1b: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: __sev_put_ghcb()+0x18: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: __sev_es_ist_exit()+0x2b: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: kernel_exc_vmm_communication()+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: rcu_dynticks_eqs_exit()+0x2c: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: rcu_dynticks_eqs_enter()+0x29: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: rcu_eqs_exit.constprop.62()+0x1a: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: rcu_eqs_enter.constprop.63()+0x23: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: rcu_nmi_enter()+0x17: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: irqentry_nmi_enter()+0x36: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: irqentry_nmi_exit()+0xa1: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: enter_from_user_mode()+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: syscall_enter_from_user_mode()+0x53: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare()+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: irqentry_enter_from_user_mode()+0x4f: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: context_tracking_recursion_enter()+0x67: call to ftrace_likely_update() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: __context_tracking_enter()+0x2c: call to ftrace_likely_update() leaves .noinstr.text section
 
-Again, this is from our profiling. We are seeing a worst case time of 7 
-mins to finish the read for our data. Thats where the 10mins came from. 
-Just doubling what we have currently. I am not sure how the current 5 
-mins timeout came from.
+Yes, TRACE_BRANCH_PROFILING and PROFILE_ALL_BRANCHES are fundamentally
+broken and I have no intention of trying to fix them.
 
-> 
-> thanks,
-> 
-> greg k-h
+The moment we pull PTI into noinstr C code this will result in insta
+boot fail.

@@ -2,95 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151C44B3519
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 14:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 865EF4B353A
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 14:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235181AbiBLNFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 08:05:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55016 "EHLO
+        id S235216AbiBLNIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 08:08:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235157AbiBLNE6 (ORCPT
+        with ESMTP id S235866AbiBLNII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 08:04:58 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4B926543;
-        Sat, 12 Feb 2022 05:04:53 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id y7so6823539plp.2;
-        Sat, 12 Feb 2022 05:04:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Htr9RxdeLjFIZPTJ97Vma8YsNeZOTaEf0nGAdLmzKEw=;
-        b=W+jHBfgysMFj725GDWlUkGdkV3URmuShiEPFeTQbRPYgrnqewta1eqjml4p8lhUPL4
-         s4nOqTeKNlYRK/J78WwEEh8p2/3j9fMw4y1riBK8lHcoFkevS1CWDwBEHP/GPXhShm57
-         Pcwl33LxHq0jBAhsQR/4DGOfBVuuwCZSy1jRla73BDZoeCg/ntCS5zANNfzlTcqQnVy/
-         o63CoE4srgTZHzAdYplS8KpAUSZc2ufiRbF25DNy+WUMv9nA8ioYyPqGr78/dD+9ccqr
-         U8YhyAsW5jll8krGl1n4On61g53dwh9Aehv/vKBxXI96AfUmTA9wTE8dYzYU1wU2TncT
-         kKkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Htr9RxdeLjFIZPTJ97Vma8YsNeZOTaEf0nGAdLmzKEw=;
-        b=1fLmVvugmCC96GrzGF6+JmCJoouTzSqq68rUtOTh5E0enEuSc4+VjZTU/++cZuj8TL
-         HYBz+Lx+7MAuyqjCnfFSeCHfXbfJvGQYWnWfhNbAGUaAOvW46oQM06sDmJ0Nh1RN/zhK
-         QkIGqxq4iSzuZhPuAVJ5Qb0LPffYceHvqQiRkVRQM+DQA/K6DdOvt3m5pr12HAVicUNG
-         D9eDiFc6IQdI7lEiVZH3mulNd2MIJ2oZ5QUvcPEgyflbP/rltGZW7sKP/qebELG+ln0C
-         MlhyimZDNUIR9YfkPHZzeiVAgc8DkUYhAFL+K7ukKx5j+c1iDIi8iHADAa37gHisUCoS
-         hShg==
-X-Gm-Message-State: AOAM531sLcFmP8vJuou9u+XJ/PYg+tRFL+fbc4qy2TOtP3igqNXybAFQ
-        e7qKZnf1LUbhcSm8LEmRWBs=
-X-Google-Smtp-Source: ABdhPJyDib6YwgUQVwXX2lSBrfldvstQ60Nk6SZeBTDTIhe0B1qTUW/BbE7Gu4/XhdZRFdw6l/1DrQ==
-X-Received: by 2002:a17:902:8205:: with SMTP id x5mr5830233pln.40.1644671092630;
-        Sat, 12 Feb 2022 05:04:52 -0800 (PST)
-Received: from localhost.localdomain ([2402:4000:2380:2a17:a7f8:71f:713f:850b])
-        by smtp.gmail.com with ESMTPSA id me18sm5584106pjb.39.2022.02.12.05.04.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Feb 2022 05:04:52 -0800 (PST)
-From:   Husni Faiz <ahamedhusni73@gmail.com>
-To:     b-liu@ti.com, gregkh@linuxfoundation.org
-Cc:     Husni Faiz <ahamedhusni73@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] usb: Fix Trailing Whitespace Coding Style Error
-Date:   Sat, 12 Feb 2022 18:34:45 +0530
-Message-Id: <20220212130445.503294-1-ahamedhusni73@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 12 Feb 2022 08:08:08 -0500
+Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2272982D
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 05:08:04 -0800 (PST)
+Received: from localhost.localdomain ([124.33.176.97])
+        by smtp.orange.fr with ESMTPA
+        id Is7sniOlvu3WEIs80n92xc; Sat, 12 Feb 2022 14:07:55 +0100
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
+X-ME-Date: Sat, 12 Feb 2022 14:07:55 +0100
+X-ME-IP: 124.33.176.97
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     netdev@vger.kernel.org, linux-can@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH] can: etas_es58x: use BITS_PER_TYPE() instead of manual calculation
+Date:   Sat, 12 Feb 2022 22:07:37 +0900
+Message-Id: <20220212130737.3008-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Removed Trailing whitespace.
+The input to the GENMASK() macro was calculated by hand. Replaced it
+with a dedicated macro: BITS_PER_TYPE() which does the exact same job.
 
-Signed-off-by: Husni Faiz <ahamedhusni73@gmail.com>
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
-V2 -> V3: describe what has changed between the V1 and V2 patch.
-V1 -> V2: Added descriptive commit message.
+ drivers/net/can/usb/etas_es58x/es58x_fd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- drivers/usb/musb/musb_host.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_host.c
-index 9ff7d891b4b7..cf25a2b7e3bb 100644
---- a/drivers/usb/musb/musb_host.c
-+++ b/drivers/usb/musb/musb_host.c
-@@ -563,7 +563,7 @@ musb_rx_reinit(struct musb *musb, struct musb_qh *qh, u8 epnum)
- 	ep->rx_reinit = 0;
- }
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.c b/drivers/net/can/usb/etas_es58x/es58x_fd.c
+index ec87126e1a7d..88d2540abbbe 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_fd.c
++++ b/drivers/net/can/usb/etas_es58x/es58x_fd.c
+@@ -69,7 +69,8 @@ static int es58x_fd_echo_msg(struct net_device *netdev,
+ 	int i, num_element;
+ 	u32 rcv_packet_idx;
  
--static void musb_tx_dma_set_mode_mentor(struct musb_hw_ep *hw_ep, 
-+static void musb_tx_dma_set_mode_mentor(struct musb_hw_ep *hw_ep,
- 					struct musb_qh *qh,
- 					u32 *length, u8 *mode)
- {
+-	const u32 mask = GENMASK(31, sizeof(echo_msg->packet_idx) * 8);
++	const u32 mask = GENMASK(BITS_PER_TYPE(mask) - 1,
++				 BITS_PER_TYPE(echo_msg->packet_idx));
+ 
+ 	num_element = es58x_msg_num_element(es58x_dev->dev,
+ 					    es58x_fd_urb_cmd->echo_msg,
 -- 
-2.25.1
+2.34.1
 

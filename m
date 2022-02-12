@@ -2,68 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 865EF4B353A
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 14:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD3C4B3541
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 14:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235216AbiBLNIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 08:08:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59140 "EHLO
+        id S235568AbiBLNNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 08:13:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235866AbiBLNII (ORCPT
+        with ESMTP id S231276AbiBLNNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 08:08:08 -0500
-Received: from smtp.smtpout.orange.fr (smtp01.smtpout.orange.fr [80.12.242.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2272982D
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 05:08:04 -0800 (PST)
-Received: from localhost.localdomain ([124.33.176.97])
-        by smtp.orange.fr with ESMTPA
-        id Is7sniOlvu3WEIs80n92xc; Sat, 12 Feb 2022 14:07:55 +0100
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
-X-ME-Date: Sat, 12 Feb 2022 14:07:55 +0100
-X-ME-IP: 124.33.176.97
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     netdev@vger.kernel.org, linux-can@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH] can: etas_es58x: use BITS_PER_TYPE() instead of manual calculation
-Date:   Sat, 12 Feb 2022 22:07:37 +0900
-Message-Id: <20220212130737.3008-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sat, 12 Feb 2022 08:13:47 -0500
+Received: from smtprelay03.ispgateway.de (smtprelay03.ispgateway.de [80.67.18.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B6D2656A;
+        Sat, 12 Feb 2022 05:13:38 -0800 (PST)
+Received: from [92.206.166.137] (helo=note-book.lan)
+        by smtprelay03.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <git@apitzsch.eu>)
+        id 1nIsDb-0002iA-PA; Sat, 12 Feb 2022 14:13:39 +0100
+Message-ID: <9a89a99872ff2fd67f097224584121e50b8a2f07.camel@apitzsch.eu>
+Subject: Re: [PATCH v2 2/3] dt-bindings: leds: sgm3140: Document ocp8110
+ compatible
+From:   =?ISO-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 12 Feb 2022 14:13:32 +0100
+In-Reply-To: <YgaQAwfYnt6E9buG@robh.at.kernel.org>
+References: <20211117091405.7412-1-git@apitzsch.eu>
+         <20220207230638.56730-1-git@apitzsch.eu>
+         <20220207230638.56730-3-git@apitzsch.eu>
+         <YgaQAwfYnt6E9buG@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.3 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Df-Sender: YW5kcmVAYXBpdHpzY2guZXU=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The input to the GENMASK() macro was calculated by hand. Replaced it
-with a dedicated macro: BITS_PER_TYPE() which does the exact same job.
+Am Freitag, dem 11.02.2022 um 10:34 -0600 schrieb Rob Herring:
+> On Tue, Feb 08, 2022 at 12:06:37AM +0100, André Apitzsch wrote:
+> > Signed-off-by: André Apitzsch <git@apitzsch.eu>
+> 
+> Commit msg? What's this h/w?
+> 
+Thanks for the feedback.
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- drivers/net/can/usb/etas_es58x/es58x_fd.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Would the following message be sufficient?
 
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.c b/drivers/net/can/usb/etas_es58x/es58x_fd.c
-index ec87126e1a7d..88d2540abbbe 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_fd.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_fd.c
-@@ -69,7 +69,8 @@ static int es58x_fd_echo_msg(struct net_device *netdev,
- 	int i, num_element;
- 	u32 rcv_packet_idx;
- 
--	const u32 mask = GENMASK(31, sizeof(echo_msg->packet_idx) * 8);
-+	const u32 mask = GENMASK(BITS_PER_TYPE(mask) - 1,
-+				 BITS_PER_TYPE(echo_msg->packet_idx));
- 
- 	num_element = es58x_msg_num_element(es58x_dev->dev,
- 					    es58x_fd_urb_cmd->echo_msg,
--- 
-2.34.1
+"""
+dt-bindings: leds: sgm3140: Document ocp8110 compatible
+
+Add devicetree binding for Orient Chip OCP8110 charge pump used for
+camera flash LEDs.
+"""
+
+> > ---
+> >  Documentation/devicetree/bindings/leds/leds-sgm3140.yaml | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml b/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml
+> > index f68259619488..1c345cf16d08 100644
+> > --- a/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml
+> > +++ b/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml
+> > @@ -18,7 +18,9 @@ description: |
+> >  
+> >  properties:
+> >    compatible:
+> > -    const: sgmicro,sgm3140
+> > +    enum:
+> > +      - ocs,ocp8110
+> > +      - sgmicro,sgm3140
+> >  
+> >    enable-gpios:
+> >      maxItems: 1
+> > -- 
+> > 2.35.1
+> > 
+> > 
 

@@ -2,147 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 331AD4B33A8
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 08:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B094B33AD
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 08:53:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232514AbiBLHuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 02:50:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55590 "EHLO
+        id S232545AbiBLHww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 02:52:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiBLHub (ORCPT
+        with ESMTP id S229824AbiBLHwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 02:50:31 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C70B26AED
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 23:50:28 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4JwjMQ4jXpz9sSl;
-        Sat, 12 Feb 2022 08:50:26 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Nb9w7EdK4pL0; Sat, 12 Feb 2022 08:50:26 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4JwjMQ3nC7z9sSf;
-        Sat, 12 Feb 2022 08:50:26 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6E75E8B766;
-        Sat, 12 Feb 2022 08:50:26 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 7MDYGyNy2vlq; Sat, 12 Feb 2022 08:50:26 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.6.139])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2B34D8B763;
-        Sat, 12 Feb 2022 08:50:26 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21C7oFGu1601739
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Sat, 12 Feb 2022 08:50:15 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21C7oEo11601738;
-        Sat, 12 Feb 2022 08:50:14 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v4] mm: Uninline copy_overflow()
-Date:   Sat, 12 Feb 2022 08:50:08 +0100
-Message-Id: <d9f56381986fa74ba70ed176735fe40c1cfc4026.1644652199.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.34.1
+        Sat, 12 Feb 2022 02:52:51 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8D626AF3;
+        Fri, 11 Feb 2022 23:52:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644652368; x=1676188368;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=yxbfpTwDj2fKjhn3UC9YcnQJ7zw3V2Fz0h2ixyRxOPI=;
+  b=saELgblZ4XZLProefbBffMUAh7OdmAnioSu1QFdWveKiXJ6iRO59+2m5
+   QkW5UnoT3uI2cR3pR0gtISjDL1QTUFfOp01Br6JqTKfHQPEHfOABUz845
+   LM8xc4qRNSwb9EdkQEqza3TR4/bowoRcY8CG0Mawm621LWBffK/FWicKK
+   w=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 11 Feb 2022 23:52:48 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 23:52:47 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Fri, 11 Feb 2022 23:52:47 -0800
+Received: from [10.38.246.233] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Fri, 11 Feb
+ 2022 23:52:44 -0800
+Message-ID: <b9156bde-137c-2fac-19e0-b205ab4d6016@quicinc.com>
+Date:   Fri, 11 Feb 2022 23:52:41 -0800
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1644652206; l=2758; s=20211009; h=from:subject:message-id; bh=7TVKY/dJ9wrPb4tk6xz86KxUdLAhwPswoicWeQ+B4oU=; b=NzF3X/kVFWCdAUbpXShZmkG3T3gKVkNyXNJHmpdyQwq1LxFVOt0Bg96pZdhkofjKYXf6cuG4g2Un JlMAg7G5DpGcBlgHZbatYqDjGw7Sl9EjxJSQgfv3gdAGFvOPkYWt
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] devcoredump: increase the device delete timeout to 10
+ mins
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <johannes@sipsolutions.net>, <linux-kernel@vger.kernel.org>,
+        <rafael@kernel.org>, <robdclark@gmail.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <freedreno@lists.freedesktop.org>, <seanpaul@chromium.org>,
+        <swboyd@chromium.org>, <nganji@codeaurora.org>,
+        <aravindh@codeaurora.org>, <khsieh@codeaurora.org>,
+        <daniel@ffwll.ch>, <dmitry.baryshkov@linaro.org>
+References: <1644349472-31077-1-git-send-email-quic_abhinavk@quicinc.com>
+ <YgZD8vPqB7ISpRpZ@kroah.com>
+ <654d620b-9e14-c47f-b48c-762dc0bd32a1@quicinc.com>
+ <Ygdb63FrorUsX/Hg@kroah.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <Ygdb63FrorUsX/Hg@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While building a small config with CONFIG_CC_OPTIMISE_FOR_SIZE,
-I ended up with more than 50 times the following function in vmlinux
-because GCC doesn't honor the 'inline' keyword:
+Hi Greg
 
-	c00243bc <copy_overflow>:
-	c00243bc:	94 21 ff f0 	stwu    r1,-16(r1)
-	c00243c0:	7c 85 23 78 	mr      r5,r4
-	c00243c4:	7c 64 1b 78 	mr      r4,r3
-	c00243c8:	3c 60 c0 62 	lis     r3,-16286
-	c00243cc:	7c 08 02 a6 	mflr    r0
-	c00243d0:	38 63 5e e5 	addi    r3,r3,24293
-	c00243d4:	90 01 00 14 	stw     r0,20(r1)
-	c00243d8:	4b ff 82 45 	bl      c001c61c <__warn_printk>
-	c00243dc:	0f e0 00 00 	twui    r0,0
-	c00243e0:	80 01 00 14 	lwz     r0,20(r1)
-	c00243e4:	38 21 00 10 	addi    r1,r1,16
-	c00243e8:	7c 08 03 a6 	mtlr    r0
-	c00243ec:	4e 80 00 20 	blr
+On 2/11/2022 11:04 PM, Greg KH wrote:
+> On Fri, Feb 11, 2022 at 10:59:39AM -0800, Abhinav Kumar wrote:
+>> Hi Greg
+>>
+>> Thanks for the response.
+>>
+>> On 2/11/2022 3:09 AM, Greg KH wrote:
+>>> On Tue, Feb 08, 2022 at 11:44:32AM -0800, Abhinav Kumar wrote:
+>>>> There are cases where depending on the size of the devcoredump and the speed
+>>>> at which the usermode reads the dump, it can take longer than the current 5 mins
+>>>> timeout.
+>>>>
+>>>> This can lead to incomplete dumps as the device is deleted once the timeout expires.
+>>>>
+>>>> One example is below where it took 6 mins for the devcoredump to be completely read.
+>>>>
+>>>> 04:22:24.668 23916 23994 I HWDeviceDRM::DumpDebugData: Opening /sys/class/devcoredump/devcd6/data
+>>>> 04:28:35.377 23916 23994 W HWDeviceDRM::DumpDebugData: Freeing devcoredump node
+>>>
+>>> What makes this so slow?  Reading from the kernel shouldn't be the
+>>> limit, is it where the data is being sent to?
+>>
+>> We are still checking this. We are seeing better read times when we bump up
+>> the thread priority of the thread which was reading this.
+> 
+> Where is the thread sending the data to?
 
-With -Winline, GCC tells:
+The thread is writing the data to a file in local storage. From our 
+profiling, the read is the one taking the time not the write.
 
-	/include/linux/thread_info.h:212:20: warning: inlining failed in call to 'copy_overflow': call is unlikely and code size would grow [-Winline]
+> 
+>> We are also trying to check if bumping up CPU speed is helping.
+>> But, results have not been consistently good enough. So we thought we should
+>> also increase the timeout to be safe.
+> 
+> Why would 10 minutes be better than 30?  What should the limit be?  :)
 
-copy_overflow() is a non conditional warning called by
-check_copy_size() on an error path.
+Again, this is from our profiling. We are seeing a worst case time of 7 
+mins to finish the read for our data. Thats where the 10mins came from. 
+Just doubling what we have currently. I am not sure how the current 5 
+mins timeout came from.
 
-check_copy_size() have to remain inlined in order to benefit
-from constant folding, but copy_overflow() is not worth inlining.
-
-Uninline it when CONFIG_BUG is selected.
-
-When CONFIG_BUG is not selected, WARN() does nothing so skip it.
-
-This reduces the size of vmlinux by almost 4kbytes.
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-v4: Make copy_overflow() a no-op when CONFIG_BUG is not selected
-
-v3: Added missing ; after EXPORT_SYMBOL()
-
-v2: Added missing EXPORT_SYMBOL() and enhanced commit message
----
- include/linux/thread_info.h | 5 ++++-
- mm/maccess.c                | 6 ++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/thread_info.h b/include/linux/thread_info.h
-index 73a6f34b3847..9f392ec76f2b 100644
---- a/include/linux/thread_info.h
-+++ b/include/linux/thread_info.h
-@@ -209,9 +209,12 @@ __bad_copy_from(void);
- extern void __compiletime_error("copy destination size is too small")
- __bad_copy_to(void);
- 
-+void __copy_overflow(int size, unsigned long count);
-+
- static inline void copy_overflow(int size, unsigned long count)
- {
--	WARN(1, "Buffer overflow detected (%d < %lu)!\n", size, count);
-+	if (IS_ENABLED(CONFIG_BUG))
-+		__copy_overflow(size, count);
- }
- 
- static __always_inline __must_check bool
-diff --git a/mm/maccess.c b/mm/maccess.c
-index d3f1a1f0b1c1..4d46708c9a0d 100644
---- a/mm/maccess.c
-+++ b/mm/maccess.c
-@@ -335,3 +335,9 @@ long strnlen_user_nofault(const void __user *unsafe_addr, long count)
- 
- 	return ret;
- }
-+
-+void __copy_overflow(int size, unsigned long count)
-+{
-+	WARN(1, "Buffer overflow detected (%d < %lu)!\n", size, count);
-+}
-+EXPORT_SYMBOL_GPL(__copy_overflow);
--- 
-2.34.1
-
+> 
+> thanks,
+> 
+> greg k-h

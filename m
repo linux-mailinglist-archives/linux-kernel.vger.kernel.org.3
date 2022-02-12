@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 507294B38AD
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 00:34:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FCAC4B38B3
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 00:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232590AbiBLXev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 18:34:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47024 "EHLO
+        id S232618AbiBLXhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 18:37:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232009AbiBLXet (ORCPT
+        with ESMTP id S232009AbiBLXhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 18:34:49 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51A85FF2B;
-        Sat, 12 Feb 2022 15:34:44 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id d27so21045862wrc.6;
-        Sat, 12 Feb 2022 15:34:44 -0800 (PST)
+        Sat, 12 Feb 2022 18:37:37 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D565FF2D;
+        Sat, 12 Feb 2022 15:37:32 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id x3-20020a05600c21c300b0037c01ad715bso5487590wmj.2;
+        Sat, 12 Feb 2022 15:37:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=5jgdcp0ayEZuo3C2MvhANngRDpudrMRaNowCUHa/s98=;
-        b=gaGvQU2iy5bu2YFQH5CbfCX30I+jKNOIrxtedwM2uyEe0HPxXum0flrmpVAFJLPDZR
-         CQjs7zdFZuGCc2bmC/CWUxJcAUGK/wm/bO/nU4pdcNh8ssLtvXMfY6GNHZZINDUgfcof
-         yAeCiQXTDP09onQvHSAw7mrm0Vl49cm2uIkFt6v6qlWJie6h0CA0LoTjhBgWGaTyHlp6
-         CxFWEdY6TALaBz3f6zA31Us3CoM27/SKGFyNoSlI1Gp4pSpAyDl2hAwuiosBZA+SpXWd
-         pN2BxR//PeOK9ZdC+k4ITuKIJIim21bmASn/Iam7SDv8psnbc1e8/7Grx61gc838+gdO
-         mNig==
+        bh=H3qL4EvCzkwRh/Z9xEpXSexUuSFqiqriVJEg3zbCkE4=;
+        b=KtTOUKpClQMuNg6GgkrINc7OSYQCiT/0VEjxLucHg/Fx5kSl/B3TsEUzoUYPgEzG6Y
+         zKR5f176F3djlXqKqkCLY2TV+8Xp8ND+ha/40KCIXodivtldme3KKAuz1zD+k/WlX5En
+         sYttZ6L+q1B8MPf+/uJoc+MmFbhjYBN4Um7VEz+haN5PW1wXzL2Kc3qXM0+lruem5uYf
+         GHZ2hVSDmz2Sq0/nveGjRAQDJSUwkG8wZxZf7/n/4E3LImrMZQu4crhOGP0TYvXAPSt7
+         h4Zjhq1NwbsRU8JMN2YHIT/zLI5js9KLFLMUWbeoJVslseO/z3PN6QyFMsGTqziCvfat
+         cspQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5jgdcp0ayEZuo3C2MvhANngRDpudrMRaNowCUHa/s98=;
-        b=Rt+9KRNrWSs1b6bMgZNnHFJc9g0IBt0NinvAN+1ZfCFtZtPEy044oofT+zfRTtc1w6
-         gv2g+O+xebNkVgyPqeny24nTySH2DMVVW79zVYzwtz4n8/zhVxxVCBGVquy/qcHmGZlf
-         XrbnTfHpzE1c8j1tn8yEOImjvXBn1XqR1WRqMqENK+tosPwFVLO5yKrGi789+I6nm6eX
-         gGIATl2MEdDUWBx78Uz8bVqqWC+9VQo5dW5NXKUYRE11kEIf3oVysopHzMIhr66+ftFT
-         YPkmf7LIMR6Zc1Keqf6vMk0w/BIDsSTp9QABfnGrDRfHEFewp5nRernJCWdC2oM2S5OY
-         bnkg==
-X-Gm-Message-State: AOAM532/BL88n5PC3HlnzOfE+C/5QHwnyzobm3pYdQ6c0hI/zxxKs+8E
-        9GRu1/EuU2aeS4GxSUf58GmgbIxIjCCH4R6L8fA=
-X-Google-Smtp-Source: ABdhPJwSbzFO/sSyhmPRbS6SS1nGVIGFiQPghmGPMK0UgPOW6IT0Bgn165Uzk/Ted8qLRgT+DG5lPidMXZMSp0Ahob0=
-X-Received: by 2002:a5d:43c4:: with SMTP id v4mr6087474wrr.181.1644708883269;
- Sat, 12 Feb 2022 15:34:43 -0800 (PST)
+        bh=H3qL4EvCzkwRh/Z9xEpXSexUuSFqiqriVJEg3zbCkE4=;
+        b=dTS8vwqiidIX3JTEu2YdAwkhitasvLxhceGrbUE8ydMPH27J9PaEnPd6rpEXItMgjH
+         8MtxRGIgYKPVGKWA8lTqy6/mCAMkIwCIWI2GIZRnD7S54K00HrEUVCNh9WCdqGpgOPSm
+         +OLRGxNUozTPi0HI8c9hkDm11dg7KLzExLUROXz+8yl51r7UIgby77QhU47Vbd5X92cH
+         9tVyu7CJiO+TzFbbjLsiyJsWOhvByBRrCpbQ5XBSDxoQcpMF42WT5woycQL/Z6GEo12f
+         1sf6JbdWc/fqTtWhOMRTThZHupDelc+rpEMvVfZd9LXZYgYKDCzU0gKT0VTIO48n+QDd
+         f+xA==
+X-Gm-Message-State: AOAM5327xtopwYNx5GVKbTrlmRYjTEqLNdeW/vsY+LEYi8WPX2M+TBB2
+        gyOxhccbKXUWCgTawNNnhfeIFuKB+SnlAlSN4oIsyW14
+X-Google-Smtp-Source: ABdhPJwiauaVYLu/tCgy1jyc/SkzM1Lo5dz3EpoewmbwGRc4XlPyU9qQ6gisjTivTZGEYr9GgVZaiQjld4z493D3QNE=
+X-Received: by 2002:a05:600c:4204:: with SMTP id x4mr5245713wmh.123.1644709051504;
+ Sat, 12 Feb 2022 15:37:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20220206022023.376142-1-andrew.smirnov@gmail.com> <258c224c-c543-1756-4c1e-fe9d81e24e4c@roeck-us.net>
-In-Reply-To: <258c224c-c543-1756-4c1e-fe9d81e24e4c@roeck-us.net>
+References: <20220206022023.376142-1-andrew.smirnov@gmail.com> <YgIu+Lrt0p85yog1@kroah.com>
+In-Reply-To: <YgIu+Lrt0p85yog1@kroah.com>
 From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-Date:   Sat, 12 Feb 2022 15:34:31 -0800
-Message-ID: <CAHQ1cqHysnfmJif4FqKeO2NV1H9euBq4jtMgeHZ1ihkFfQ8w3w@mail.gmail.com>
+Date:   Sat, 12 Feb 2022 15:37:19 -0800
+Message-ID: <CAHQ1cqE_iA0gKmqxS21JMAoFpz-ebhG+axVuUT9P62_JTB9kZQ@mail.gmail.com>
 Subject: Re: [PATCH] platform/x86: Add Steam Deck driver
-To:     Guenter Roeck <linux@roeck-us.net>
+To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     platform-driver-x86@vger.kernel.org,
         Hans de Goede <hdegoede@redhat.com>,
         Mark Gross <markgross@kernel.org>,
         Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         linux-kernel <linux-kernel@vger.kernel.org>,
         linux-hwmon@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -69,167 +70,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 6, 2022 at 9:51 AM Guenter Roeck <linux@roeck-us.net> wrote:
+On Tue, Feb 8, 2022 at 12:51 AM Greg KH <gregkh@linuxfoundation.org> wrote:
 >
-> On 2/5/22 18:20, Andrey Smirnov wrote:
-> > Add a driver exposing various bits and pieces of functionality
-> > provided by Steam Deck specific VLV0100 device presented by EC
-> > firmware. This includes but not limited to:
-> >
-> >      - CPU/device's fan control
-> >      - Read-only access to DDIC registers
-> >      - Battery tempreature measurements
-> >      - Various display related control knobs
-> >      - USB Type-C connector event notification
-> >
-> > Cc: Hans de Goede <hdegoede@redhat.com>
-> > Cc: Mark Gross <markgross@kernel.org>
-> > Cc: Jean Delvare <jdelvare@suse.com>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Cc: linux-kernel@vger.kernel.org (open list)
-> > Cc: platform-driver-x86@vger.kernel.org
-> > Cc: linux-hwmon@vger.kernel.org
-> > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-> > ---
-> >
-> ...
+> On Sat, Feb 05, 2022 at 06:20:23PM -0800, Andrey Smirnov wrote:
+> > +#define STEAMDECK_ATTR_RO(_name, _method)                            \
+> > +     static ssize_t _name##_show(struct device *dev,                 \
+> > +                                 struct device_attribute *attr,      \
+> > +                                 char *buf)                          \
+> > +     {                                                               \
+> > +             struct steamdeck *jup = dev_get_drvdata(dev);           \
+> > +             unsigned long long val;                                 \
+> > +                                                                     \
+> > +             if (ACPI_FAILURE(acpi_evaluate_integer(                 \
+> > +                                      jup->adev->handle,             \
+> > +                                      _method, NULL, &val)))         \
+> > +                     return -EIO;                                    \
+> > +                                                                     \
+> > +             return sprintf(buf, "%llu\n", val);                     \
 >
->  > +config STEAMDECK
->  > +       tristate "Valve Steam Deck platform driver"
->  > +       depends on X86_64
->  > +       help
->  > +         Driver exposing various bits and pieces of functionality
->  > +     provided by Steam Deck specific VLV0100 device presented by
->  > +     EC firmware. This includes but not limited to:
->
-> There seems to be some indentation issue.
->
->  > +         - CPU/device's fan control
->  > +         - Read-only access to DDIC registers
->  > +         - Battery tempreature measurements
->  > +         - Various display related control knobs
->  > +         - USB Type-C connector event notification
->  > +
->  > +     Say N unless you are running on a Steam Deck.
->  > +
->
-> This doesn't depend on hwmon, yet it fails if devm_hwmon_device_register_with_info()
-> returns an eror. That has a couple of problems: if HWMON=n, it won't compile,
-> and if STEAMDECK=y and HWMON=m it won't compile either. You'll have to provide
-> some dependency against HWMON to make this work.
->
-> ...
+> Please use sysfs_emit() for this and any other sysfs show functions.
 >
 
-Yeah, my bad, will fix.
+Will fix, thanks.
 
+> Also, you have no Documenation/ABI/ entries for all of these new sysfs
+> files you are creating.  How do we know what these entries are for, and
+> what they contain?  Please add that in future versions of this commit,
+> as-is we can't take this :(
+>
+
+Yeah, my bad, will add in v2.
+
+>
+> > +     }                                                               \
+> > +     static DEVICE_ATTR_RO(_name)
 > > +
-> > +static int steamdeck_read_fan_speed(struct steamdeck *jup, long *speed)
+> > +STEAMDECK_ATTR_RO(firmware_version, "PDFW");
+> > +STEAMDECK_ATTR_RO(board_id, "BOID");
+> > +STEAMDECK_ATTR_RO(pdcs, "PDCS");
+> > +
+> > +static umode_t
+> > +steamdeck_is_visible(struct kobject *kobj, struct attribute *attr, int index)
 > > +{
-> > +     unsigned long long val;
-> > +
-> > +     if (ACPI_FAILURE(acpi_evaluate_integer(jup->adev->handle,
-> > +                                            "FANR", NULL, &val)))
-> > +             return -EIO;
-> > +
-> > +     *speed = val;
-> > +     return 0;
+> > +     return attr->mode;
 > > +}
-> > +
-> > +static int
-> > +steamdeck_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
-> > +                  u32 attr, int channel, long *out)
-> > +{
-> > +     struct steamdeck *sd = dev_get_drvdata(dev);
-> > +     unsigned long long val;
-> > +
-> > +     switch (type) {
-> > +     case hwmon_temp:
-> > +             if (attr != hwmon_temp_input)
-> > +                     return -EOPNOTSUPP;
-> > +
-> > +             if (ACPI_FAILURE(acpi_evaluate_integer(sd->adev->handle,
-> > +                                                    "BATT", NULL, &val)))
-> > +                     return -EIO;
-> > +             /*
-> > +              * Assuming BATT returns deg C we need to mutiply it
-> > +              * by 1000 to convert to mC
-> > +              */
-> > +             *out = val * 1000;
-> > +             break;
-> > +     case hwmon_fan:
-> > +             switch (attr) {
-> > +             case hwmon_fan_input:
-> > +                     return steamdeck_read_fan_speed(sd, out);
 >
-> There is a bit of inconsistency here: All other atributes are handled directly,
-> except for this one, yet there isn't really a difference in the actual operation.
-> Maybe I am missing something. What is the reason for using a function here
-> but not for the other attributes ?
+> As Guenter pointed out, this is not needed.
 >
 
-It is also used to initialize "fan_target" to its initial value in
-steamdeck_probe(). There's no ACPI method to read set fan target
-speed, so I have to cache it in "fan_target".
+Yup, will drop.
 
-> > +             case hwmon_fan_target:
-> > +                     *out = sd->fan_target;
-> > +                     break;
-> > +             case hwmon_fan_fault:
-> > +                     if (ACPI_FAILURE(acpi_evaluate_integer(
-> > +                                              sd->adev->handle,
-> > +                                              "FANC", NULL, &val)))
-> > +                             return -EIO;
-> > +                     /*
-> > +                      * FANC (Fan check):
-> > +                      * 0: Abnormal
-> > +                      * 1: Normal
-> > +                      */
-> > +                     *out = !val;
-> > +                     break;
-> > +             default:
-> > +                     return -EOPNOTSUPP;
-> > +             }
-> > +             break;
-> > +     default:
-> > +             return -EOPNOTSUPP;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int
-> > +steamdeck_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
-> > +                         u32 attr, int channel, const char **str)
-> > +{
-> > +     switch (type) {
-> > +     case hwmon_temp:
-> > +             *str = "Battery Temp";
-> > +             break;
-> > +     case hwmon_fan:
-> > +             *str = "System Fan";
-> > +             break;
-> > +     default:
-> > +             return -EOPNOTSUPP;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int
-> > +steamdeck_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
-> > +                   u32 attr, int channel, long val)
-> > +{
-> > +     struct steamdeck *sd = dev_get_drvdata(dev);
-> > +
-> > +     if (type != hwmon_fan ||
-> > +         attr != hwmon_fan_target)
-> > +             return -EOPNOTSUPP;
-> > +
-> > +     if (val > U16_MAX)
-> > +             return -EINVAL;
 >
-> This accepts negative values, and it expects the user to find
-> valid ranges. I suggest to use clamp_val() instead.
+> > +
+> > +static struct attribute *steamdeck_attributes[] = {
+> > +     &dev_attr_target_cpu_temp.attr,
+> > +     &dev_attr_gain.attr,
+> > +     &dev_attr_ramp_rate.attr,
+> > +     &dev_attr_hysteresis.attr,
+> > +     &dev_attr_maximum_battery_charge_rate.attr,
+> > +     &dev_attr_recalculate.attr,
+> > +     &dev_attr_power_cycle_display.attr,
+> > +
+> > +     &dev_attr_led_brightness.attr,
+> > +     &dev_attr_content_adaptive_brightness.attr,
+> > +     &dev_attr_gamma_set.attr,
+> > +     &dev_attr_display_brightness.attr,
+> > +     &dev_attr_ctrl_display.attr,
+> > +     &dev_attr_cabc_minimum_brightness.attr,
+> > +     &dev_attr_memory_data_access_control.attr,
+> > +
+> > +     &dev_attr_display_normal_mode_on.attr,
+> > +     &dev_attr_display_inversion_off.attr,
+> > +     &dev_attr_display_inversion_on.attr,
+> > +     &dev_attr_idle_mode_on.attr,
+> > +
+> > +     &dev_attr_firmware_version.attr,
+> > +     &dev_attr_board_id.attr,
+> > +     &dev_attr_pdcs.attr,
+> > +
+> > +     NULL
+> > +};
+> > +
+> > +static const struct attribute_group steamdeck_group = {
+> > +     .attrs = steamdeck_attributes,
+> > +     .is_visible = steamdeck_is_visible,
+> > +};
+> > +
+> > +static const struct attribute_group *steamdeck_groups[] = {
+> > +     &steamdeck_group,
+> > +     NULL
+> > +};
+>
+> ATTRIBUTE_GROUPS()?
+>
 
-Will do.
+Yes! Thank you.
+
+> thanks,
+>
+> greg k-h

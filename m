@@ -2,52 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF3C4B3624
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 16:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 343504B3629
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 17:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236737AbiBLP5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 10:57:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58736 "EHLO
+        id S236769AbiBLQBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 11:01:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233997AbiBLP5r (ORCPT
+        with ESMTP id S230296AbiBLQBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 10:57:47 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFE3B9
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 07:57:43 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nIumI-00036C-9A; Sat, 12 Feb 2022 16:57:38 +0100
-Received: from pengutronix.de (unknown [195.138.59.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 9D0DB31CE4;
-        Sat, 12 Feb 2022 15:57:36 +0000 (UTC)
-Date:   Sat, 12 Feb 2022 16:57:33 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: Re: [PATCH] can: etas_es58x: change opened_channel_cnt's type from
- atomic_t to u8
-Message-ID: <20220212155733.gfwkcs7xcwlqzi6r@pengutronix.de>
-References: <20220212112713.577957-1-mailhol.vincent@wanadoo.fr>
+        Sat, 12 Feb 2022 11:01:13 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5963BB9
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 08:01:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=+ZVBu0+pgU5WOFB3KOX6oQDUqUS9DuABscJXA+HoUno=; b=Yhr1S0H17buG4QnziENYKKrWrT
+        eEq0vsvr3ELMp4XZQ+w4rI3c8W1Xmmd7WwRCRRyN7r+Kp2bTalCY+gf3mxx2zNZflHZ0VeOCODZ4O
+        73YnLCHc3WEvuS4OE9M/2ImpVqtxQzuLC5REah+9vipj//IfuYeqzhk0DHPz4qdynd5kyPRmaGnB2
+        Iryl31gS7/BA2UikPXUHg14UsJPEJeEYybIHXrlkcwPdGQHBDzFANDbLYXjzgfZWrH5u735+RtVN1
+        7Q+hr8EoABhYK40Mxraz0zVhkNoI0Inlu6lvkYVeOEoxw0zNkpvfrnotMndX3BCHcq8cI9ZckYrxJ
+        ghQoQcfw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nIupY-009LX8-E4; Sat, 12 Feb 2022 16:01:00 +0000
+Message-ID: <8ad7556a-cfdc-dae7-da58-89e973ca1179@infradead.org>
+Date:   Sat, 12 Feb 2022 08:00:54 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="or7bahfvzj2pyh3l"
-Content-Disposition: inline
-In-Reply-To: <20220212112713.577957-1-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] regmap: irq: cleanup comments
+Content-Language: en-US
+To:     trix@redhat.com, broonie@kernel.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220212143144.2648689-1-trix@redhat.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220212143144.2648689-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,79 +54,45 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---or7bahfvzj2pyh3l
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 12.02.2022 20:27:13, Vincent Mailhol wrote:
-> The driver uses an atomic_t variable: es58x_device:opened_channel_cnt
-> to keep track of the number of opened channels in order to only
-> allocate memory for the URBs when this count changes from zero to one.
->=20
-> While the intent was to prevent race conditions, the choice of an
-> atomic_t turns out to be a bad idea for several reasons:
->=20
->   - implementation is incorrect and fails to decrement
->     opened_channel_cnt when the URB allocation fails as reported in
->     [1].
->=20
->   - even if opened_channel_cnt were to be correctly decremented,
->     atomic_t is insufficient to cover edge cases: there can be a race
->     condition in which 1/ a first process fails to allocate URBs
->     memory 2/ a second process enters es58x_open() before the first
->     process does its cleanup and decrements opened_channed_cnt. In
->     which case, the second process would successfully return despite
->     the URBs memory not being allocated.
->=20
->   - actually, any kind of locking mechanism was useless here because
->     it is redundant with the network stack big kernel lock
->     (a.k.a. rtnl_lock) which is being hold by all the callers of
->     net_device_ops:ndo_open() and net_device_ops:ndo_close(). c.f. the
->     ASSERST_RTNL() calls in __dev_open() [2] and __dev_close_many()
->     [3].
->=20
-> The atmomic_t is thus replaced by a simple u8 type and the logic to
-> increment and decrement es58x_device:opened_channel_cnt is simplified
-> accordingly fixing the bug reported in [1]. We do not check again for
-> ASSERST_RTNL() as this is already done by the callers.
->=20
-> [1] https://lore.kernel.org/linux-can/20220201140351.GA2548@kili/T/#u
-> [2] https://elixir.bootlin.com/linux/v5.16/source/net/core/dev.c#L1463
-> [3] https://elixir.bootlin.com/linux/v5.16/source/net/core/dev.c#L1541
->=20
-> Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X
-> CAN USB interfaces")
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+On 2/12/22 06:31, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> Replace the second 'which' with 'the'.
+> Change 'acknowleding' to 'acknowledging'.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Applied to can/testing.
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-I you (or someone else) wants to increase their patch count feel free to
-convert the other USB CAN drivers from atomic_t to u8, too.
+Thanks.
 
-Thanks,
-Marc
+> ---
+>  drivers/base/regmap/regmap-irq.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
+> index d5604f497296..81f6356f0589 100644
+> --- a/drivers/base/regmap/regmap-irq.c
+> +++ b/drivers/base/regmap/regmap-irq.c
+> @@ -537,7 +537,7 @@ static irqreturn_t regmap_irq_thread(int irq, void *d)
+>  
+>  	/*
+>  	 * Ignore masked IRQs and ack if we need to; we ack early so
+> -	 * there is no race between handling and acknowleding the
+> +	 * there is no race between handling and acknowledging the
+>  	 * interrupt.  We assume that typically few of the interrupts
+>  	 * will fire simultaneously so don't worry about overhead from
+>  	 * doing a write per register.
+> @@ -1082,7 +1082,7 @@ EXPORT_SYMBOL_GPL(devm_regmap_add_irq_chip);
+>  /**
+>   * devm_regmap_del_irq_chip() - Resource managed regmap_del_irq_chip()
+>   *
+> - * @dev: Device for which which resource was allocated.
+> + * @dev: Device for which the resource was allocated.
+>   * @irq: Primary IRQ for the device.
+>   * @data: &regmap_irq_chip_data allocated by regmap_add_irq_chip().
+>   *
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---or7bahfvzj2pyh3l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmIH2OoACgkQrX5LkNig
-010rfQf/Ypr0HCUdEvv9P+qkSUewRSnI68KG9s7/aL3RUX3UJIbUXufDK0Ktgx9h
-sMjEqlxMXT+6ED6FRSVo90sIdnAla4QY9+qmYkXSr7UeWBmFWGk1ctjg6ZOFeXCb
-5rxy1S+bM9IGoicut5gJQkg981C+Bh2P99FQsZ7sKWrlQUUEdv3HIFAB7PrMVMTG
-il5dE+QAk1HwFR0DXk7lyKmYtM7pvdSAhdzhIx8ndUPwHx0xP1ZhzSrGfK0rQN+d
-ccma9L/1AejOf9IRJPI0jxbKtVElfyiMRQAKsVSgrIRb9uJ+I2jBC56j8khgdQUm
-Nag0SzvYY4jMrQwJ4zywAxwd0qq95g==
-=1A7l
------END PGP SIGNATURE-----
-
---or7bahfvzj2pyh3l--
+-- 
+~Randy

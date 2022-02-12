@@ -2,58 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FC9F4B31E2
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 01:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1330B4B31E9
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 01:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354377AbiBLAUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 19:20:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56210 "EHLO
+        id S1354328AbiBLAYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 19:24:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242447AbiBLAUN (ORCPT
+        with ESMTP id S236867AbiBLAYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 19:20:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF49D77;
-        Fri, 11 Feb 2022 16:20:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB11461C65;
-        Sat, 12 Feb 2022 00:20:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2E48FC340EB;
-        Sat, 12 Feb 2022 00:20:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644625210;
-        bh=0zIZnmg6cx0oOGvsLFwIZcbJ3GzQws/5gbITP1ynZxE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=tqAQVvhvpFhnlB/uIOph5mZq3c5vOEOHwkETa7oGTI6aouf7MhFfm95BvE3TwEcYK
-         rsl2FGF7Sayyn0kfvfFT5fbb4L4UxUkI+f6Fn8Xd64nH3ld/qz8ucxOTbCYvBEdjie
-         HkPK3VTza3Im7akOiPU74OZkW6PiX4MXdsfPUq8F0FRilCFmOlHYV8hQ7elzHzRcaN
-         IdnXI9pPm8thVlM5st8fzcCe3l1OjE2Tt/XG64mHhjYWfKcWkEOLUuH6MdPDnfCuud
-         tm13iz21ysklrmpqFeHXWwc2C7n1Ws1gnQSjrNjjAFRzAp2wN8/jGxH04rx8iggaAG
-         kxUXGY6LwrVMQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 13B25E5D09D;
-        Sat, 12 Feb 2022 00:20:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 11 Feb 2022 19:24:04 -0500
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2565C55;
+        Fri, 11 Feb 2022 16:24:00 -0800 (PST)
+Received: from p508fd6ee.dip0.t-ipconnect.de ([80.143.214.238] helo=phil.fritz.box)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nIgCQ-0003C9-1p; Sat, 12 Feb 2022 01:23:38 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Tianling Shen <cnsztl@gmail.com>,
+        Levin Du <djw@t-chip.com.cn>,
+        linux-rockchip@lists.infradead.org, Alex Bee <knaerzche@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Liang Chen <cl@rock-chips.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        linux-kernel@vger.kernel.org, Peter Geis <pgwipeout@gmail.com>
+Subject: Re: [PATCH 1/3] dt-bindings: arm: rockchip: Add Pine64 PineNote board
+Date:   Sat, 12 Feb 2022 01:23:36 +0100
+Message-Id: <164462530187.853991.5366752507698485779.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220130053803.43660-1-samuel@sholland.org>
+References: <20220130053803.43660-1-samuel@sholland.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/9] use GFP_KERNEL
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164462521007.28025.17507178732984421339.git-patchwork-notify@kernel.org>
-Date:   Sat, 12 Feb 2022 00:20:10 +0000
-References: <20220210204223.104181-1-Julia.Lawall@inria.fr>
-In-Reply-To: <20220210204223.104181-1-Julia.Lawall@inria.fr>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        MPT-FusionLinux.pdl@broadcom.com, linux-crypto@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        s.shtylyov@omp.ru, linux-ide@vger.kernel.org,
-        linux-mtd@lists.infradead.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,28 +48,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Sat, 29 Jan 2022 23:38:01 -0600, Samuel Holland wrote:
+> The PineNote is a tablet from Pine64 based on the RK3566 SoC. There are
+> two existing variants of the board. v1.1 was contained in some early
+> samples, and v1.2 was sold as the "PineNote Developer Edition".
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Applied, thanks!
 
-On Thu, 10 Feb 2022 21:42:14 +0100 you wrote:
-> Platform_driver and pci_driver probe functions aren't called with
-> locks held and thus don't need GFP_ATOMIC. Use GFP_KERNEL instead.
-> 
-> All changes have been compile-tested.
-> 
-> ---
-> 
-> [...]
+[1/3] dt-bindings: arm: rockchip: Add Pine64 PineNote board
+      commit: a7c9013216f399791ca354cc2e0f4a444837fe39
+[2/3] arm64: dts: rockchip: rk356x: Add pdm node
+      commit: 79c5f0e52d29a688a951fc818394b529e7e77e3e
 
-Here is the summary with links:
-  - [1/9] net: moxa: use GFP_KERNEL
-    https://git.kernel.org/netdev/net-next/c/c9ac080b25d9
+-> change ordering for pinctrl properties, as suggested by Michael
 
-You are awesome, thank you!
+[3/3] arm64: dts: rockchip: Add Pine64 PineNote board
+      commit: d449121e5e8addcee654250cec298c887ecafb32
+
+-> folded in Johan's review comments
+   Though mmc0 can stay at sdhci. I don't think we _need_
+   aliases for all, but fixing mmc0 for the internal emmc makes
+   a lot of sense.
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Heiko Stuebner <heiko@sntech.de>

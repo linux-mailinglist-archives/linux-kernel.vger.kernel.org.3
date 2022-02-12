@@ -2,889 +2,648 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066FD4B33EE
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 09:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B824B33F0
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 09:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232944AbiBLImI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 03:42:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53668 "EHLO
+        id S232896AbiBLIqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 03:46:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232878AbiBLImD (ORCPT
+        with ESMTP id S229726AbiBLIqL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 03:42:03 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 53AA02613F;
-        Sat, 12 Feb 2022 00:41:59 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id AF09192009C; Sat, 12 Feb 2022 09:41:58 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id A8AF292009B;
-        Sat, 12 Feb 2022 08:41:58 +0000 (GMT)
-Date:   Sat, 12 Feb 2022 08:41:58 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Mike Skoog <mskoog@endruntechnologies.com>,
-        Mike Korreng <mkorreng@endruntechnologies.com>,
-        info@endruntechnologies.com, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] serial: 8250: Add proper clock handling for OxSemi
- PCIe devices
-In-Reply-To: <alpine.DEB.2.21.2202100424280.34636@angie.orcam.me.uk>
-Message-ID: <alpine.DEB.2.21.2202111127200.34636@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2202100424280.34636@angie.orcam.me.uk>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
-MIME-Version: 1.0
+        Sat, 12 Feb 2022 03:46:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60382613F;
+        Sat, 12 Feb 2022 00:46:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29533B80011;
+        Sat, 12 Feb 2022 08:46:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A2BFC340E7;
+        Sat, 12 Feb 2022 08:45:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644655561;
+        bh=ZD0wqzLQ1TM8QfacBwPUkDYzFa1fO8DrkSC/WluGzr8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jRZn68rTUr3aKtYr3hBd41AcViq+SNDk8NZB1TN1yqaABtbi4jtP9AAKOcCpXoK1E
+         wUQd5O/3e1FRnlj34Qrd6Efpgy4GMWatb2/oiJ34vgNm/+Q9D67nCp3z3UX6tThLma
+         p4hze7qUPI/8bamcLxGGxfxtuJcYboPVhFfo6aXfOrccCoVpybgr8PH4hJoAL5fGkR
+         4znd7UL0Kh9hyHcoY74VUlK2/DTh1peSIlkvEUmyvWQtGV8HDgmrbaMykGjiljGmGX
+         Wr04X7IHXlBBm/kn9QUuTD+8AfuoRQPlj8fMXZMma41lqMNddy5PmJOo/IWwUM7tWA
+         leAvvQYdh4+Vw==
+Date:   Sat, 12 Feb 2022 17:45:50 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?B?IkFuZHLDqSBBbG1laWRhIg==?= <andrealmeid@collabora.com>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Song Liu <song@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Hao Luo <haoluo@google.com>, eranian@google.com
+Subject: Re: [PATCH v3 17/22] perf map: Changes to reference counting
+Message-Id: <20220212174550.7ff16e7fb08a2fca00bde35e@kernel.org>
+In-Reply-To: <20220211103415.2737789-18-irogers@google.com>
+References: <20220211103415.2737789-1-irogers@google.com>
+        <20220211103415.2737789-18-irogers@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oxford Semiconductor PCIe (Tornado) 950 serial port devices are driven
-by a fixed 62.5MHz clock input derived from the 100MHz PCI Express clock.
+Hi Ian,
 
-We currently drive the device using its default oversampling rate of 16
-and the clock prescaler disabled, consequently yielding the baud base of
-3906250.  This base is inadequate for some of the high-speed baud rates
-such as 460800bps, for which the closest rate possible can be obtained
-by dividing the baud base by 8, yielding the baud rate of 488281.25bps,
-which is off by 5.9638%.  This is enough for data communication to break
-with the remote end talking actual 460800bps where missed stop bits have
-been observed.
+On Fri, 11 Feb 2022 02:34:10 -0800
+Ian Rogers <irogers@google.com> wrote:
 
-We can do better however, by taking advantage of a reduced oversampling
-rate, which can be set to any integer value from 4 to 16 inclusive by
-programming the TCR register, and by using the clock prescaler, which
-can be set to any value from 1 to 63.875 in increments of 0.125 in the
-CPR/CPR2 register pair.  The prescaler has to be explicitly enabled
-though by setting bit 7 in the MCR or otherwise it is bypassed (in the
-enhanced mode that we enable) as if the value of 1 was used.
+> When a pointer to a map exists do a get, when that pointer is
+> overwritten or freed, put the map. This avoids issues with gets and
+> puts being inconsistently used causing, use after puts, etc. Reference
+> count checking and address sanitizer were used to identify issues.
 
-Make use of these features then as follows:
+OK, and please add comments in the code what should be actually done
+so the others can understand it correctly, since this changes the
+map object handling model.
 
-- Set the baud base to 15625000, reflecting the minimum oversampling
-  rate of 4 with the clock prescaler and divisor both set to 1.
+Previously;
 
-- Override the `set_mctrl' and set the MCR shadow there so as to have
-  MCR[7] always set and have the 8250 core propagate this settings; also
-  make the console restorer use this shadow.
+  map__get(map);
+  map_operations(map);
+  map__put(map);
 
-- Override the `get_divisor' handler and determine a good combination of
-  parameters by using a lookup table with predetermined value pairs of
-  the oversampling rate and the clock prescaler and finding a pair that
-  divides the input clock such that the quotient, when rounded to the
-  nearest integer, deviates the least from the exact result.  Calculate
-  the clock divisor accordingly.
+Now, we have to use the object returned from get() ops.
+This is more likely to the memdup()/free().
 
-  Scale the resulting oversampling rate (only by powers of two) if
-  possible so as to maximise it, reducing the divisor accordingly, and
-  avoid a divisor overflow for very low baud rates by scaling the
-  oversampling rate and/or the prescaler even if that causes some
-  accuracy loss.
+  new = map__get(map);
+  map_operations(new);
+  map__put(new);
 
-  Also handle the historic spd_cust feature so as to allow one to set
-  all the three parameters manually to arbitrary values, by keeping the
-  low 16 bits for the divisor and then putting TCR in bits 19:16 and
-  CPR/CPR2 in bits 28:20, sanitising the bit pattern supplied such as
-  to clamp CPR/CPR2 values between 0.000 and 0.875 inclusive to 33.875.
-  This preserves compatibility with any existing setups, that is where
-  requesting a custom divisor that only has any bits set among the low
-  16 the oversampling rate of 16 and the clock prescaler of 33.875 will
-  be used as with the original 8250.
+To update the object in the other object (e.g. machine__update_kernel_mmap())
+The original one must be put because it has the old copy.
 
-  Finally abuse the `frac' argument to store the determined bit patterns
-  for the TCR, CPR and CPR2 registers.
+Previous;
 
-- Override the `set_divisor' handler so as to set the TCR, CPR and CPR2
-  registers from the `frac' value supplied.  Set the divisor as usually.
+  map__get(parent_obj->map);
+  update_operation(parent_obj->map);
+  map__put(parent_obj->map;
 
-With the baud base set to 15625000 and the unsigned 16-bit UART_DIV_MAX
-limitation imposed by `serial8250_get_baud_rate' standard baud rates
-below 300bps become unavailable in the regular way, e.g. the rate of
-200bps requires the baud base to be divided by 78125 and that is beyond
-the unsigned 16-bit range.  The historic spd_cust feature can still be
-used to obtain such rates if so required.
+Is now;
 
-See Documentation/tty/device_drivers/oxsemi-tornado.rst for more details.
+  orig = parent_obj->map;
+  new = map__get(orig);
+  update_operation(new);
+  parent_obj->map = new;
+  map__put(orig);
 
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
----
-Changes from v2:
+I think this change also should be documented with some concrete example
+patterns so that someone can program it correctly. :-)
 
-- Rework for commit b4a29b94804c ("serial: 8250: Move Alpha-specific
-  quirk out of the core"), also meaning the `-Woverflow' hack is not
-  needed anymore.
+(This is the reason why I asked you to introduce object-token instead
+ of modifying object pointer itself.)
 
-- Adjust `serial8250_console_restore' to OR in `up->mcr' like in
-  `serial8250_do_set_mctrl'.
+Thank you,
 
-- Default to the prescaler of 33.875 for values requested below 1 via
-  the spd_cust feature for 8250 compatibility.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/tests/hists_cumulate.c     | 14 ++++-
+>  tools/perf/tests/hists_filter.c       | 14 ++++-
+>  tools/perf/tests/hists_link.c         | 18 +++++-
+>  tools/perf/tests/hists_output.c       | 12 +++-
+>  tools/perf/tests/mmap-thread-lookup.c |  3 +-
+>  tools/perf/util/callchain.c           |  9 +--
+>  tools/perf/util/event.c               |  8 ++-
+>  tools/perf/util/hist.c                | 10 ++--
+>  tools/perf/util/machine.c             | 80 ++++++++++++++++-----------
+>  9 files changed, 118 insertions(+), 50 deletions(-)
+> 
+> diff --git a/tools/perf/tests/hists_cumulate.c b/tools/perf/tests/hists_cumulate.c
+> index 17f4fcd6bdce..28f5eb41eed9 100644
+> --- a/tools/perf/tests/hists_cumulate.c
+> +++ b/tools/perf/tests/hists_cumulate.c
+> @@ -112,6 +112,7 @@ static int add_hist_entries(struct hists *hists, struct machine *machine)
+>  		}
+>  
+>  		fake_samples[i].thread = al.thread;
+> +		map__put(fake_samples[i].map);
+>  		fake_samples[i].map = al.map;
+>  		fake_samples[i].sym = al.sym;
+>  	}
+> @@ -147,15 +148,23 @@ static void del_hist_entries(struct hists *hists)
+>  	}
+>  }
+>  
+> +static void put_fake_samples(void)
+> +{
+> +	size_t i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(fake_samples); i++)
+> +		map__put(fake_samples[i].map);
+> +}
+> +
+>  typedef int (*test_fn_t)(struct evsel *, struct machine *);
+>  
+>  #define COMM(he)  (thread__comm_str(he->thread))
+> -#define DSO(he)   (he->ms.map->dso->short_name)
+> +#define DSO(he)   (map__dso(he->ms.map)->short_name)
+>  #define SYM(he)   (he->ms.sym->name)
+>  #define CPU(he)   (he->cpu)
+>  #define PID(he)   (he->thread->tid)
+>  #define DEPTH(he) (he->callchain->max_depth)
+> -#define CDSO(cl)  (cl->ms.map->dso->short_name)
+> +#define CDSO(cl)  (map__dso(cl->ms.map)->short_name)
+>  #define CSYM(cl)  (cl->ms.sym->name)
+>  
+>  struct result {
+> @@ -733,6 +742,7 @@ static int test__hists_cumulate(struct test_suite *test __maybe_unused, int subt
+>  	/* tear down everything */
+>  	evlist__delete(evlist);
+>  	machines__exit(&machines);
+> +	put_fake_samples();
+>  
+>  	return err;
+>  }
+> diff --git a/tools/perf/tests/hists_filter.c b/tools/perf/tests/hists_filter.c
+> index 08cbeb9e39ae..bcd46244182a 100644
+> --- a/tools/perf/tests/hists_filter.c
+> +++ b/tools/perf/tests/hists_filter.c
+> @@ -89,6 +89,7 @@ static int add_hist_entries(struct evlist *evlist,
+>  			}
+>  
+>  			fake_samples[i].thread = al.thread;
+> +			map__put(fake_samples[i].map);
+>  			fake_samples[i].map = al.map;
+>  			fake_samples[i].sym = al.sym;
+>  		}
+> @@ -101,6 +102,14 @@ static int add_hist_entries(struct evlist *evlist,
+>  	return TEST_FAIL;
+>  }
+>  
+> +static void put_fake_samples(void)
+> +{
+> +	size_t i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(fake_samples); i++)
+> +		map__put(fake_samples[i].map);
+> +}
+> +
+>  static int test__hists_filter(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+>  {
+>  	int err = TEST_FAIL;
+> @@ -194,7 +203,7 @@ static int test__hists_filter(struct test_suite *test __maybe_unused, int subtes
+>  		hists__filter_by_thread(hists);
+>  
+>  		/* now applying dso filter for 'kernel' */
+> -		hists->dso_filter = fake_samples[0].map->dso;
+> +		hists->dso_filter = map__dso(fake_samples[0].map);
+>  		hists__filter_by_dso(hists);
+>  
+>  		if (verbose > 2) {
+> @@ -288,7 +297,7 @@ static int test__hists_filter(struct test_suite *test __maybe_unused, int subtes
+>  
+>  		/* now applying all filters at once. */
+>  		hists->thread_filter = fake_samples[1].thread;
+> -		hists->dso_filter = fake_samples[1].map->dso;
+> +		hists->dso_filter = map__dso(fake_samples[1].map);
+>  		hists__filter_by_thread(hists);
+>  		hists__filter_by_dso(hists);
+>  
+> @@ -322,6 +331,7 @@ static int test__hists_filter(struct test_suite *test __maybe_unused, int subtes
+>  	evlist__delete(evlist);
+>  	reset_output_field();
+>  	machines__exit(&machines);
+> +	put_fake_samples();
+>  
+>  	return err;
+>  }
+> diff --git a/tools/perf/tests/hists_link.c b/tools/perf/tests/hists_link.c
+> index c575e13a850d..060e8731feff 100644
+> --- a/tools/perf/tests/hists_link.c
+> +++ b/tools/perf/tests/hists_link.c
+> @@ -6,6 +6,7 @@
+>  #include "evsel.h"
+>  #include "evlist.h"
+>  #include "machine.h"
+> +#include "map.h"
+>  #include "parse-events.h"
+>  #include "hists_common.h"
+>  #include "util/mmap.h"
+> @@ -94,6 +95,7 @@ static int add_hist_entries(struct evlist *evlist, struct machine *machine)
+>  			}
+>  
+>  			fake_common_samples[k].thread = al.thread;
+> +			map__put(fake_common_samples[k].map);
+>  			fake_common_samples[k].map = al.map;
+>  			fake_common_samples[k].sym = al.sym;
+>  		}
+> @@ -126,11 +128,24 @@ static int add_hist_entries(struct evlist *evlist, struct machine *machine)
+>  	return -1;
+>  }
+>  
+> +static void put_fake_samples(void)
+> +{
+> +	size_t i, j;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(fake_common_samples); i++)
+> +		map__put(fake_common_samples[i].map);
+> +	for (i = 0; i < ARRAY_SIZE(fake_samples); i++) {
+> +		for (j = 0; j < ARRAY_SIZE(fake_samples[0]); j++)
+> +			map__put(fake_samples[i][j].map);
+> +	}
+> +}
+> +
+>  static int find_sample(struct sample *samples, size_t nr_samples,
+>  		       struct thread *t, struct map *m, struct symbol *s)
+>  {
+>  	while (nr_samples--) {
+> -		if (samples->thread == t && samples->map == m &&
+> +		if (samples->thread == t &&
+> +		    samples->map == m &&
+>  		    samples->sym == s)
+>  			return 1;
+>  		samples++;
+> @@ -336,6 +351,7 @@ static int test__hists_link(struct test_suite *test __maybe_unused, int subtest
+>  	evlist__delete(evlist);
+>  	reset_output_field();
+>  	machines__exit(&machines);
+> +	put_fake_samples();
+>  
+>  	return err;
+>  }
+> diff --git a/tools/perf/tests/hists_output.c b/tools/perf/tests/hists_output.c
+> index 0bde4a768c15..4af6916491e5 100644
+> --- a/tools/perf/tests/hists_output.c
+> +++ b/tools/perf/tests/hists_output.c
+> @@ -78,6 +78,7 @@ static int add_hist_entries(struct hists *hists, struct machine *machine)
+>  		}
+>  
+>  		fake_samples[i].thread = al.thread;
+> +		map__put(fake_samples[i].map);
+>  		fake_samples[i].map = al.map;
+>  		fake_samples[i].sym = al.sym;
+>  	}
+> @@ -113,10 +114,18 @@ static void del_hist_entries(struct hists *hists)
+>  	}
+>  }
+>  
+> +static void put_fake_samples(void)
+> +{
+> +	size_t i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(fake_samples); i++)
+> +		map__put(fake_samples[i].map);
+> +}
+> +
+>  typedef int (*test_fn_t)(struct evsel *, struct machine *);
+>  
+>  #define COMM(he)  (thread__comm_str(he->thread))
+> -#define DSO(he)   (he->ms.map->dso->short_name)
+> +#define DSO(he)   (map__dso(he->ms.map)->short_name)
+>  #define SYM(he)   (he->ms.sym->name)
+>  #define CPU(he)   (he->cpu)
+>  #define PID(he)   (he->thread->tid)
+> @@ -620,6 +629,7 @@ static int test__hists_output(struct test_suite *test __maybe_unused, int subtes
+>  	/* tear down everything */
+>  	evlist__delete(evlist);
+>  	machines__exit(&machines);
+> +	put_fake_samples();
+>  
+>  	return err;
+>  }
+> diff --git a/tools/perf/tests/mmap-thread-lookup.c b/tools/perf/tests/mmap-thread-lookup.c
+> index a4301fc7b770..898eda55b7a8 100644
+> --- a/tools/perf/tests/mmap-thread-lookup.c
+> +++ b/tools/perf/tests/mmap-thread-lookup.c
+> @@ -202,7 +202,8 @@ static int mmap_events(synth_cb synth)
+>  			break;
+>  		}
+>  
+> -		pr_debug("map %p, addr %" PRIx64 "\n", al.map, al.map->start);
+> +		pr_debug("map %p, addr %" PRIx64 "\n", al.map, map__start(al.map));
+> +		map__put(al.map);
+>  	}
+>  
+>  	machine__delete_threads(machine);
+> diff --git a/tools/perf/util/callchain.c b/tools/perf/util/callchain.c
+> index a8cfd31a3ff0..ae65b7bc9ab7 100644
+> --- a/tools/perf/util/callchain.c
+> +++ b/tools/perf/util/callchain.c
+> @@ -583,7 +583,7 @@ fill_node(struct callchain_node *node, struct callchain_cursor *cursor)
+>  		}
+>  		call->ip = cursor_node->ip;
+>  		call->ms = cursor_node->ms;
+> -		map__get(call->ms.map);
+> +		call->ms.map = map__get(call->ms.map);
+>  		call->srcline = cursor_node->srcline;
+>  
+>  		if (cursor_node->branch) {
+> @@ -1061,7 +1061,7 @@ int callchain_cursor_append(struct callchain_cursor *cursor,
+>  	node->ip = ip;
+>  	map__zput(node->ms.map);
+>  	node->ms = *ms;
+> -	map__get(node->ms.map);
+> +	node->ms.map = map__get(node->ms.map);
+>  	node->branch = branch;
+>  	node->nr_loop_iter = nr_loop_iter;
+>  	node->iter_cycles = iter_cycles;
+> @@ -1109,7 +1109,8 @@ int fill_callchain_info(struct addr_location *al, struct callchain_cursor_node *
+>  	struct machine *machine = maps__machine(node->ms.maps);
+>  
+>  	al->maps = node->ms.maps;
+> -	al->map = node->ms.map;
+> +	map__put(al->map);
+> +	al->map = map__get(node->ms.map);
+>  	al->sym = node->ms.sym;
+>  	al->srcline = node->srcline;
+>  	al->addr = node->ip;
+> @@ -1530,7 +1531,7 @@ int callchain_node__make_parent_list(struct callchain_node *node)
+>  				goto out;
+>  			*new = *chain;
+>  			new->has_children = false;
+> -			map__get(new->ms.map);
+> +			new->ms.map = map__get(new->ms.map);
+>  			list_add_tail(&new->list, &head);
+>  		}
+>  		parent = parent->parent;
+> diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
+> index 54a1d4df5f70..266318d5d006 100644
+> --- a/tools/perf/util/event.c
+> +++ b/tools/perf/util/event.c
+> @@ -484,13 +484,14 @@ size_t perf_event__fprintf_text_poke(union perf_event *event, struct machine *ma
+>  	if (machine) {
+>  		struct addr_location al;
+>  
+> -		al.map = maps__find(machine__kernel_maps(machine), tp->addr);
+> +		al.map = map__get(maps__find(machine__kernel_maps(machine), tp->addr));
+>  		if (al.map && map__load(al.map) >= 0) {
+>  			al.addr = map__map_ip(al.map, tp->addr);
+>  			al.sym = map__find_symbol(al.map, al.addr);
+>  			if (al.sym)
+>  				ret += symbol__fprintf_symname_offs(al.sym, &al, fp);
+>  		}
+> +		map__put(al.map);
+>  	}
+>  	ret += fprintf(fp, " old len %u new len %u\n", tp->old_len, tp->new_len);
+>  	old = true;
+> @@ -581,6 +582,7 @@ struct map *thread__find_map(struct thread *thread, u8 cpumode, u64 addr,
+>  	al->filtered = 0;
+>  
+>  	if (machine == NULL) {
+> +		map__put(al->map);
+>  		al->map = NULL;
+>  		return NULL;
+>  	}
+> @@ -599,6 +601,7 @@ struct map *thread__find_map(struct thread *thread, u8 cpumode, u64 addr,
+>  		al->level = 'u';
+>  	} else {
+>  		al->level = 'H';
+> +		map__put(al->map);
+>  		al->map = NULL;
+>  
+>  		if ((cpumode == PERF_RECORD_MISC_GUEST_USER ||
+> @@ -613,7 +616,7 @@ struct map *thread__find_map(struct thread *thread, u8 cpumode, u64 addr,
+>  		return NULL;
+>  	}
+>  
+> -	al->map = maps__find(maps, al->addr);
+> +	al->map = map__get(maps__find(maps, al->addr));
+>  	if (al->map != NULL) {
+>  		/*
+>  		 * Kernel maps might be changed when loading symbols so loading
+> @@ -768,6 +771,7 @@ int machine__resolve(struct machine *machine, struct addr_location *al,
+>   */
+>  void addr_location__put(struct addr_location *al)
+>  {
+> +	map__zput(al->map);
+>  	thread__zput(al->thread);
+>  }
+>  
+> diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
+> index f19ac6eb4775..4dbb1dbf3679 100644
+> --- a/tools/perf/util/hist.c
+> +++ b/tools/perf/util/hist.c
+> @@ -446,7 +446,7 @@ static int hist_entry__init(struct hist_entry *he,
+>  			memset(&he->stat, 0, sizeof(he->stat));
+>  	}
+>  
+> -	map__get(he->ms.map);
+> +	he->ms.map = map__get(he->ms.map);
+>  
+>  	if (he->branch_info) {
+>  		/*
+> @@ -461,13 +461,13 @@ static int hist_entry__init(struct hist_entry *he,
+>  		memcpy(he->branch_info, template->branch_info,
+>  		       sizeof(*he->branch_info));
+>  
+> -		map__get(he->branch_info->from.ms.map);
+> -		map__get(he->branch_info->to.ms.map);
+> +		he->branch_info->from.ms.map = map__get(he->branch_info->from.ms.map);
+> +		he->branch_info->to.ms.map = map__get(he->branch_info->to.ms.map);
+>  	}
+>  
+>  	if (he->mem_info) {
+> -		map__get(he->mem_info->iaddr.ms.map);
+> -		map__get(he->mem_info->daddr.ms.map);
+> +		he->mem_info->iaddr.ms.map = map__get(he->mem_info->iaddr.ms.map);
+> +		he->mem_info->daddr.ms.map = map__get(he->mem_info->daddr.ms.map);
+>  	}
+>  
+>  	if (hist_entry__has_callchains(he) && symbol_conf.use_callchain)
+> diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+> index 940fb2a50dfd..49e4891e92b7 100644
+> --- a/tools/perf/util/machine.c
+> +++ b/tools/perf/util/machine.c
+> @@ -783,33 +783,42 @@ static int machine__process_ksymbol_register(struct machine *machine,
+>  {
+>  	struct symbol *sym;
+>  	struct map *map = maps__find(machine__kernel_maps(machine), event->ksymbol.addr);
+> +	bool put_map = false;
+> +	int err = 0;
+>  
+>  	if (!map) {
+>  		struct dso *dso = dso__new(event->ksymbol.name);
+> -		int err;
+>  
+> -		if (dso) {
+> -			dso->kernel = DSO_SPACE__KERNEL;
+> -			map = map__new2(0, dso);
+> -			dso__put(dso);
+> +		if (!dso) {
+> +			err = -ENOMEM;
+> +			goto out;
+>  		}
+> -
+> -		if (!dso || !map) {
+> -			return -ENOMEM;
+> +		dso->kernel = DSO_SPACE__KERNEL;
+> +		map = map__new2(0, dso);
+> +		dso__put(dso);
+> +		if (!map) {
+> +			err = -ENOMEM;
+> +			goto out;
+>  		}
+> -
+> +		/*
+> +		 * The inserted map has a get on it, we need to put to release
+> +		 * the reference count here, but do it after all accesses are
+> +		 * done.
+> +		 */
+> +		put_map = true;
+>  		if (event->ksymbol.ksym_type == PERF_RECORD_KSYMBOL_TYPE_OOL) {
+> -			map->dso->binary_type = DSO_BINARY_TYPE__OOL;
+> -			map->dso->data.file_size = event->ksymbol.len;
+> -			dso__set_loaded(map->dso);
+> +			map__dso(map)->binary_type = DSO_BINARY_TYPE__OOL;
+> +			map__dso(map)->data.file_size = event->ksymbol.len;
+> +			dso__set_loaded(map__dso(map));
+>  		}
+>  
+>  		map->start = event->ksymbol.addr;
+> -		map->end = map->start + event->ksymbol.len;
+> +		map->end = map__start(map) + event->ksymbol.len;
+>  		err = maps__insert(machine__kernel_maps(machine), map);
+> -		map__put(map);
+> -		if (err)
+> -			return err;
+> +		if (err) {
+> +			err = -ENOMEM;
+> +			goto out;
+> +		}
+>  
+>  		dso__set_loaded(dso);
+>  
+> @@ -819,13 +828,18 @@ static int machine__process_ksymbol_register(struct machine *machine,
+>  		}
+>  	}
+>  
+> -	sym = symbol__new(map->map_ip(map, map->start),
+> +	sym = symbol__new(map__map_ip(map, map__start(map)),
+>  			  event->ksymbol.len,
+>  			  0, 0, event->ksymbol.name);
+> -	if (!sym)
+> -		return -ENOMEM;
+> -	dso__insert_symbol(map->dso, sym);
+> -	return 0;
+> +	if (!sym) {
+> +		err = -ENOMEM;
+> +		goto out;
+> +	}
+> +	dso__insert_symbol(map__dso(map), sym);
+> +out:
+> +	if (put_map)
+> +		map__put(map);
+> +	return err;
+>  }
+>  
+>  static int machine__process_ksymbol_unregister(struct machine *machine,
+> @@ -925,14 +939,11 @@ static struct map *machine__addnew_module_map(struct machine *machine, u64 start
+>  		goto out;
+>  
+>  	err = maps__insert(machine__kernel_maps(machine), map);
+> -
+> -	/* Put the map here because maps__insert already got it */
+> -	map__put(map);
+> -
+>  	/* If maps__insert failed, return NULL. */
+> -	if (err)
+> +	if (err) {
+> +		map__put(map);
+>  		map = NULL;
+> -
+> +	}
+>  out:
+>  	/* put the dso here, corresponding to  machine__findnew_module_dso */
+>  	dso__put(dso);
+> @@ -1228,6 +1239,7 @@ __machine__create_kernel_maps(struct machine *machine, struct dso *kernel)
+>  	/* In case of renewal the kernel map, destroy previous one */
+>  	machine__destroy_kernel_maps(machine);
+>  
+> +	map__put(machine->vmlinux_map);
+>  	machine->vmlinux_map = map__new2(0, kernel);
+>  	if (machine->vmlinux_map == NULL)
+>  		return -ENOMEM;
+> @@ -1513,6 +1525,7 @@ static int machine__create_module(void *arg, const char *name, u64 start,
+>  	map->end = start + size;
+>  
+>  	dso__kernel_module_get_build_id(map__dso(map), machine->root_dir);
+> +	map__put(map);
+>  	return 0;
+>  }
+>  
+> @@ -1558,16 +1571,18 @@ static void machine__set_kernel_mmap(struct machine *machine,
+>  static int machine__update_kernel_mmap(struct machine *machine,
+>  				     u64 start, u64 end)
+>  {
+> -	struct map *map = machine__kernel_map(machine);
+> +	struct map *orig, *updated;
+>  	int err;
+>  
+> -	map__get(map);
+> -	maps__remove(machine__kernel_maps(machine), map);
+> +	orig = machine->vmlinux_map;
+> +	updated = map__get(orig);
+>  
+> +	machine->vmlinux_map = updated;
+>  	machine__set_kernel_mmap(machine, start, end);
+> +	maps__remove(machine__kernel_maps(machine), orig);
+> +	err = maps__insert(machine__kernel_maps(machine), updated);
+> +	map__put(orig);
+>  
+> -	err = maps__insert(machine__kernel_maps(machine), map);
+> -	map__put(map);
+>  	return err;
+>  }
+>  
+> @@ -2246,6 +2261,7 @@ static int add_callchain_ip(struct thread *thread,
+>  	err = callchain_cursor_append(cursor, ip, &ms,
+>  				      branch, flags, nr_loop_iter,
+>  				      iter_cycles, branch_from, srcline);
+> +	map__put(al.map);
+>  	return err;
+>  }
+>  
+> -- 
+> 2.35.1.265.g69c8d7142f-goog
+> 
 
-- Follow the arrangement from `pci_oxsemi_tornado_init' to also correctly
-  handle non-OxSemi PCI vendor:device IDs in `pci_oxsemi_tornado_setup';
-  NB these IDs are fully customer-programmable in OxSemi devices and ones
-  based on the OxSemi vendor IDs are only the device defaults.
 
-- Factor in EndRun device handling unification.
-
-- Move figures to Documentation/tty/device_drivers/oxsemi-tornado.rst.
-
-Changes from v1:
-
-- Kill a silly `-Woverflow' warning.
----
- Documentation/tty/device_drivers/oxsemi-tornado.rst |  129 +++++++
- drivers/tty/serial/8250/8250.h                      |   23 +
- drivers/tty/serial/8250/8250_pci.c                  |  338 +++++++++++++++-----
- drivers/tty/serial/8250/8250_port.c                 |   23 -
- 4 files changed, 423 insertions(+), 90 deletions(-)
-
-Index: linux-macro/Documentation/tty/device_drivers/oxsemi-tornado.rst
-===================================================================
---- /dev/null
-+++ linux-macro/Documentation/tty/device_drivers/oxsemi-tornado.rst
-@@ -0,0 +1,129 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+====================================================================
-+Notes on Oxford Semiconductor PCIe (Tornado) 950 serial port devices
-+====================================================================
-+
-+Oxford Semiconductor PCIe (Tornado) 950 serial port devices are driven
-+by a fixed 62.5MHz clock input derived from the 100MHz PCI Express clock.
-+
-+The baud rate produced by the baud generator is obtained from this input
-+frequency by dividing it by the clock prescaler, which can be set to any
-+value from 1 to 63.875 in increments of 0.125, and then the usual 16-bit
-+divisor is used as with the original 8250, to divide the frequency by a
-+value from 1 to 65535.  Finally a programmable oversampling rate is used
-+that can take any value from 4 to 16 to divide the frequency further and
-+determine the actual baud rate used.  Baud rates from 15625000bps down
-+to 0.933bps can be obtained this way.
-+
-+By default the oversampling rate is set to 16 and the clock prescaler is
-+set to 33.875, meaning that the frequency to be used as the reference
-+for the usual 16-bit divisor is 115313.653, which is close enough to the
-+frequency of 115200 used by the original 8250 for the same values to be
-+used for the divisor to obtain the requested baud rates by software that
-+is unaware of the extra clock controls available.
-+
-+The oversampling rate is programmed with the TCR register and the clock
-+prescaler is programmed with the CPR/CPR2 register pair[1][2][3][4].
-+To switch away from the default value of 33.875 for the prescaler the
-+the enhanced mode has to be explicitly enabled though, by setting bit 4
-+of the EFR.  In that mode setting bit 7 in the MCR enables the prescaler
-+or otherwise it is bypassed as if the value of 1 was used.  Additionally
-+writing any value to CPR clears CPR2 for compatibility with old software
-+written for older conventional PCI Oxford Semiconductor devices that do
-+not have the extra prescaler's 9th bit in CPR2, so the CPR/CPR2 register
-+pair has to be programmed in the right order.
-+
-+By using these parameters rates from 15625000bps down to 1bps can be
-+obtained, with either exact or highly-accurate actual bit rates for
-+standard and many non-standard rates.
-+
-+Here are the figures for the standard and some non-standard baud rates
-+(including those quoted in Oxford Semiconductor documentation), giving
-+the requested rate (r), the actual rate yielded (a) and its deviation
-+from the requested rate (d), and the values of the oversampling rate
-+(tcr), the clock prescaler (cpr) and the divisor (div) produced by the
-+new `get_divisor' handler:
-+
-+r: 15625000, a: 15625000.00, d:  0.0000%, tcr:  4, cpr:  1.000, div:     1
-+r: 12500000, a: 12500000.00, d:  0.0000%, tcr:  5, cpr:  1.000, div:     1
-+r: 10416666, a: 10416666.67, d:  0.0000%, tcr:  6, cpr:  1.000, div:     1
-+r:  8928571, a:  8928571.43, d:  0.0000%, tcr:  7, cpr:  1.000, div:     1
-+r:  7812500, a:  7812500.00, d:  0.0000%, tcr:  8, cpr:  1.000, div:     1
-+r:  4000000, a:  4000000.00, d:  0.0000%, tcr:  5, cpr:  3.125, div:     1
-+r:  3686400, a:  3676470.59, d: -0.2694%, tcr:  8, cpr:  2.125, div:     1
-+r:  3500000, a:  3496503.50, d: -0.0999%, tcr: 13, cpr:  1.375, div:     1
-+r:  3000000, a:  2976190.48, d: -0.7937%, tcr: 14, cpr:  1.500, div:     1
-+r:  2500000, a:  2500000.00, d:  0.0000%, tcr: 10, cpr:  2.500, div:     1
-+r:  2000000, a:  2000000.00, d:  0.0000%, tcr: 10, cpr:  3.125, div:     1
-+r:  1843200, a:  1838235.29, d: -0.2694%, tcr: 16, cpr:  2.125, div:     1
-+r:  1500000, a:  1492537.31, d: -0.4975%, tcr:  5, cpr:  8.375, div:     1
-+r:  1152000, a:  1152073.73, d:  0.0064%, tcr: 14, cpr:  3.875, div:     1
-+r:   921600, a:   919117.65, d: -0.2694%, tcr: 16, cpr:  2.125, div:     2
-+r:   576000, a:   576036.87, d:  0.0064%, tcr: 14, cpr:  3.875, div:     2
-+r:   460800, a:   460829.49, d:  0.0064%, tcr:  7, cpr:  3.875, div:     5
-+r:   230400, a:   230414.75, d:  0.0064%, tcr: 14, cpr:  3.875, div:     5
-+r:   115200, a:   115207.37, d:  0.0064%, tcr: 14, cpr:  1.250, div:    31
-+r:    57600, a:    57603.69, d:  0.0064%, tcr:  8, cpr:  3.875, div:    35
-+r:    38400, a:    38402.46, d:  0.0064%, tcr: 14, cpr:  3.875, div:    30
-+r:    19200, a:    19201.23, d:  0.0064%, tcr:  8, cpr:  3.875, div:   105
-+r:     9600, a:     9600.06, d:  0.0006%, tcr:  9, cpr:  1.125, div:   643
-+r:     4800, a:     4799.98, d: -0.0004%, tcr:  7, cpr:  2.875, div:   647
-+r:     2400, a:     2400.02, d:  0.0008%, tcr:  9, cpr:  2.250, div:  1286
-+r:     1200, a:     1200.00, d:  0.0000%, tcr: 14, cpr:  2.875, div:  1294
-+r:      300, a:      300.00, d:  0.0000%, tcr: 11, cpr:  2.625, div:  7215
-+r:      200, a:      200.00, d:  0.0000%, tcr: 16, cpr:  1.250, div: 15625
-+r:      150, a:      150.00, d:  0.0000%, tcr: 13, cpr:  2.250, div: 14245
-+r:      134, a:      134.00, d:  0.0000%, tcr: 11, cpr:  2.625, div: 16153
-+r:      110, a:      110.00, d:  0.0000%, tcr: 12, cpr:  1.000, div: 47348
-+r:       75, a:       75.00, d:  0.0000%, tcr:  4, cpr:  5.875, div: 35461
-+r:       50, a:       50.00, d:  0.0000%, tcr: 16, cpr:  1.250, div: 62500
-+r:       25, a:       25.00, d:  0.0000%, tcr: 16, cpr:  2.500, div: 62500
-+r:        4, a:        4.00, d:  0.0000%, tcr: 16, cpr: 20.000, div: 48828
-+r:        2, a:        2.00, d:  0.0000%, tcr: 16, cpr: 40.000, div: 48828
-+r:        1, a:        1.00, d:  0.0000%, tcr: 16, cpr: 63.875, div: 61154
-+
-+With the baud base set to 15625000 and the unsigned 16-bit UART_DIV_MAX
-+limitation imposed by `serial8250_get_baud_rate' standard baud rates
-+below 300bps become unavailable in the regular way, e.g. the rate of
-+200bps requires the baud base to be divided by 78125 and that is beyond
-+the unsigned 16-bit range.  The historic spd_cust feature can still be
-+used by encoding the values for, the prescaler, the oversampling rate
-+and the clock divisor (DLM/DLL) as follows to obtain such rates if so
-+required:
-+
-+ 31 29 28             20 19   16 15                            0
-++-----+-----------------+-------+-------------------------------+
-+|0 0 0|    CPR2:CPR     |  TCR  |            DLM:DLL            |
-++-----+-----------------+-------+-------------------------------+
-+
-+Use a value such encoded for the `custom_divisor' field along with the
-+ASYNC_SPD_CUST flag set in the `flags' field in `struct serial_struct'
-+passed with the TIOCSSERIAL ioctl(2), such as with the setserial(8)
-+utility and its `divisor' and `spd_cust' parameters, and the select
-+the baud rate of 38400bps.  Note that the value of 0 in TCR sets the
-+oversampling rate to 16 and prescaler values below 1 in CPR2/CPR are
-+clamped by the driver to 1.
-+
-+For example the value of 0x1f4004e2 will set CPR2/CPR, TCR and DLM/DLL
-+respectively to 0x1f4, 0x0 and 0x04e2, choosing the prescaler value,
-+the oversampling rate and the clock divisor of 62.500, 16 and 1250
-+respectively.  These parameters will set the baud rate for the serial
-+port to 62500000 / 62.500 / 1250 / 16 = 50bps.
-+
-+References:
-+
-+[1] "OXPCIe200 PCI Express Multi-Port Bridge", Oxford Semiconductor,
-+    Inc., DS-0045, 10 Nov 2008, Section "950 Mode", pp. 64-65
-+
-+[2] "OXPCIe952 PCI Express Bridge to Dual Serial & Parallel Port",
-+    Oxford Semiconductor, Inc., DS-0046, Mar 06 08, Section "950 Mode",
-+    p. 20
-+
-+[3] "OXPCIe954 PCI Express Bridge to Quad Serial Port", Oxford
-+    Semiconductor, Inc., DS-0047, Feb 08, Section "950 Mode", p. 20
-+
-+[4] "OXPCIe958 PCI Express Bridge to Octal Serial Port", Oxford
-+    Semiconductor, Inc., DS-0048, Feb 08, Section "950 Mode", p. 20
-+
-+Maciej W. Rozycki  <macro@orcam.me.uk>
-Index: linux-macro/drivers/tty/serial/8250/8250.h
-===================================================================
---- linux-macro.orig/drivers/tty/serial/8250/8250.h
-+++ linux-macro/drivers/tty/serial/8250/8250.h
-@@ -120,6 +120,29 @@ static inline void serial_out(struct uar
- 	up->port.serial_out(&up->port, offset, value);
- }
- 
-+/*
-+ * For the 16C950
-+ */
-+static inline void serial_icr_write(struct uart_8250_port *up,
-+				    int offset, int value)
-+{
-+	serial_out(up, UART_SCR, offset);
-+	serial_out(up, UART_ICR, value);
-+}
-+
-+static inline unsigned int serial_icr_read(struct uart_8250_port *up,
-+					   int offset)
-+{
-+	unsigned int value;
-+
-+	serial_icr_write(up, UART_ACR, up->acr | UART_ACR_ICRRD);
-+	serial_out(up, UART_SCR, offset);
-+	value = serial_in(up, UART_ICR);
-+	serial_icr_write(up, UART_ACR, up->acr);
-+
-+	return value;
-+}
-+
- void serial8250_clear_and_reinit_fifos(struct uart_8250_port *p);
- 
- static inline int serial_dl_read(struct uart_8250_port *up)
-Index: linux-macro/drivers/tty/serial/8250/8250_pci.c
-===================================================================
---- linux-macro.orig/drivers/tty/serial/8250/8250_pci.c
-+++ linux-macro/drivers/tty/serial/8250/8250_pci.c
-@@ -1041,6 +1041,208 @@ static int pci_oxsemi_tornado_init(struc
- 	return number_uarts;
- }
- 
-+/* Tornado-specific constants for the TCR and CPR registers; see below.  */
-+#define OXSEMI_TORNADO_TCR_MASK	0xf
-+#define OXSEMI_TORNADO_CPR_MASK	0x1ff
-+#define OXSEMI_TORNADO_CPR_MIN	0x008
-+#define OXSEMI_TORNADO_CPR_DEF	0x10f
-+
-+/*
-+ * Determine the oversampling rate, the clock prescaler, and the clock
-+ * divisor for the requested baud rate.  The clock rate is 62.5 MHz,
-+ * which is four times the baud base, and the prescaler increments in
-+ * steps of 1/8.  Therefore to make calculations on integers we need
-+ * to use a scaled clock rate, which is the baud base multiplied by 32
-+ * (or our assumed UART clock rate multiplied by 2).
-+ *
-+ * The allowed oversampling rates are from 4 up to 16 inclusive (values
-+ * from 0 to 3 inclusive map to 16).  Likewise the clock prescaler allows
-+ * values between 1.000 and 63.875 inclusive (operation for values from
-+ * 0.000 to 0.875 has not been specified).  The clock divisor is the usual
-+ * unsigned 16-bit integer.
-+ *
-+ * For the most accurate baud rate we use a table of predetermined
-+ * oversampling rates and clock prescalers that records all possible
-+ * products of the two parameters in the range from 4 up to 255 inclusive,
-+ * and additionally 335 for the 1500000bps rate, with the prescaler scaled
-+ * by 8.  The table is sorted by the decreasing value of the oversampling
-+ * rate and ties are resolved by sorting by the decreasing value of the
-+ * product.  This way preference is given to higher oversampling rates.
-+ *
-+ * We iterate over the table and choose the product of an oversampling
-+ * rate and a clock prescaler that gives the lowest integer division
-+ * result deviation, or if an exact integer divider is found we stop
-+ * looking for it right away.  We do some fixup if the resulting clock
-+ * divisor required would be out of its unsigned 16-bit integer range.
-+ *
-+ * Finally we abuse the supposed fractional part returned to encode the
-+ * 4-bit value of the oversampling rate and the 9-bit value of the clock
-+ * prescaler which will end up in the TCR and CPR/CPR2 registers.
-+ */
-+static unsigned int pci_oxsemi_tornado_get_divisor(struct uart_port *port,
-+						   unsigned int baud,
-+						   unsigned int *frac)
-+{
-+	static u8 p[][2] = {
-+		{ 16, 14, }, { 16, 13, }, { 16, 12, }, { 16, 11, },
-+		{ 16, 10, }, { 16,  9, }, { 16,  8, }, { 15, 17, },
-+		{ 15, 16, }, { 15, 15, }, { 15, 14, }, { 15, 13, },
-+		{ 15, 12, }, { 15, 11, }, { 15, 10, }, { 15,  9, },
-+		{ 15,  8, }, { 14, 18, }, { 14, 17, }, { 14, 14, },
-+		{ 14, 13, }, { 14, 12, }, { 14, 11, }, { 14, 10, },
-+		{ 14,  9, }, { 14,  8, }, { 13, 19, }, { 13, 18, },
-+		{ 13, 17, }, { 13, 13, }, { 13, 12, }, { 13, 11, },
-+		{ 13, 10, }, { 13,  9, }, { 13,  8, }, { 12, 19, },
-+		{ 12, 18, }, { 12, 17, }, { 12, 11, }, { 12,  9, },
-+		{ 12,  8, }, { 11, 23, }, { 11, 22, }, { 11, 21, },
-+		{ 11, 20, }, { 11, 19, }, { 11, 18, }, { 11, 17, },
-+		{ 11, 11, }, { 11, 10, }, { 11,  9, }, { 11,  8, },
-+		{ 10, 25, }, { 10, 23, }, { 10, 20, }, { 10, 19, },
-+		{ 10, 17, }, { 10, 10, }, { 10,  9, }, { 10,  8, },
-+		{  9, 27, }, {  9, 23, }, {  9, 21, }, {  9, 19, },
-+		{  9, 18, }, {  9, 17, }, {  9,  9, }, {  9,  8, },
-+		{  8, 31, }, {  8, 29, }, {  8, 23, }, {  8, 19, },
-+		{  8, 17, }, {  8,  8, }, {  7, 35, }, {  7, 31, },
-+		{  7, 29, }, {  7, 25, }, {  7, 23, }, {  7, 21, },
-+		{  7, 19, }, {  7, 17, }, {  7, 15, }, {  7, 14, },
-+		{  7, 13, }, {  7, 12, }, {  7, 11, }, {  7, 10, },
-+		{  7,  9, }, {  7,  8, }, {  6, 41, }, {  6, 37, },
-+		{  6, 31, }, {  6, 29, }, {  6, 23, }, {  6, 19, },
-+		{  6, 17, }, {  6, 13, }, {  6, 11, }, {  6, 10, },
-+		{  6,  9, }, {  6,  8, }, {  5, 67, }, {  5, 47, },
-+		{  5, 43, }, {  5, 41, }, {  5, 37, }, {  5, 31, },
-+		{  5, 29, }, {  5, 25, }, {  5, 23, }, {  5, 19, },
-+		{  5, 17, }, {  5, 15, }, {  5, 13, }, {  5, 11, },
-+		{  5, 10, }, {  5,  9, }, {  5,  8, }, {  4, 61, },
-+		{  4, 59, }, {  4, 53, }, {  4, 47, }, {  4, 43, },
-+		{  4, 41, }, {  4, 37, }, {  4, 31, }, {  4, 29, },
-+		{  4, 23, }, {  4, 19, }, {  4, 17, }, {  4, 13, },
-+		{  4,  9, }, {  4,  8, },
-+	};
-+	/* Scale the quotient for comparison to get the fractional part.  */
-+	const unsigned int quot_scale = 65536;
-+	unsigned int sclk = port->uartclk * 2;
-+	unsigned int sdiv = (sclk + (baud / 2)) / baud;
-+	unsigned int best_squot;
-+	unsigned int squot;
-+	unsigned int quot;
-+	u16 cpr;
-+	u8 tcr;
-+	int i;
-+
-+	/* Old custom speed handling.  */
-+	if (baud == 38400 && (port->flags & UPF_SPD_MASK) == UPF_SPD_CUST) {
-+		unsigned int cust_div = port->custom_divisor;
-+
-+		quot = cust_div & UART_DIV_MAX;
-+		tcr = (cust_div >> 16) & OXSEMI_TORNADO_TCR_MASK;
-+		cpr = (cust_div >> 20) & OXSEMI_TORNADO_CPR_MASK;
-+		if (cpr < OXSEMI_TORNADO_CPR_MIN)
-+			cpr = OXSEMI_TORNADO_CPR_DEF;
-+	} else {
-+		best_squot = quot_scale;
-+		for (i = 0; i < ARRAY_SIZE(p); i++) {
-+			unsigned int spre;
-+			unsigned int srem;
-+			u8 cp;
-+			u8 tc;
-+
-+			tc = p[i][0];
-+			cp = p[i][1];
-+			spre = tc * cp;
-+
-+			srem = sdiv % spre;
-+			if (srem > spre / 2)
-+				srem = spre - srem;
-+			squot = (srem * quot_scale + spre / 2) / spre;
-+
-+			if (srem == 0) {
-+				tcr = tc;
-+				cpr = cp;
-+				quot = sdiv / spre;
-+				break;
-+			} else if (squot < best_squot) {
-+				best_squot = squot;
-+				tcr = tc;
-+				cpr = cp;
-+				quot = (sdiv + spre / 2) / spre;
-+			}
-+		}
-+		while (tcr <= (OXSEMI_TORNADO_TCR_MASK + 1) >> 1 &&
-+		       quot % 2 == 0) {
-+			quot >>= 1;
-+			tcr <<= 1;
-+		}
-+		while (quot > UART_DIV_MAX) {
-+			if (tcr <= (OXSEMI_TORNADO_TCR_MASK + 1) >> 1) {
-+				quot >>= 1;
-+				tcr <<= 1;
-+			} else if (cpr <= OXSEMI_TORNADO_CPR_MASK >> 1) {
-+				quot >>= 1;
-+				cpr <<= 1;
-+			} else {
-+				quot = quot * cpr / OXSEMI_TORNADO_CPR_MASK;
-+				cpr = OXSEMI_TORNADO_CPR_MASK;
-+			}
-+		}
-+	}
-+
-+	*frac = (cpr << 8) | (tcr & OXSEMI_TORNADO_TCR_MASK);
-+	return quot;
-+}
-+
-+/*
-+ * Set the oversampling rate in the transmitter clock cycle register (TCR),
-+ * the clock prescaler in the clock prescaler register (CPR and CPR2), and
-+ * the clock divisor in the divisor latch (DLL and DLM).  Note that for
-+ * backwards compatibility any write to CPR clears CPR2 and therefore CPR
-+ * has to be written first, followed by CPR2, which occupies the location
-+ * of CKS used with earlier UART designs.
-+ */
-+static void pci_oxsemi_tornado_set_divisor(struct uart_port *port,
-+					   unsigned int baud,
-+					   unsigned int quot,
-+					   unsigned int quot_frac)
-+{
-+	struct uart_8250_port *up = up_to_u8250p(port);
-+	u8 cpr2 = quot_frac >> 16;
-+	u8 cpr = quot_frac >> 8;
-+	u8 tcr = quot_frac;
-+
-+	serial_icr_write(up, UART_TCR, tcr);
-+	serial_icr_write(up, UART_CPR, cpr);
-+	serial_icr_write(up, UART_CKS, cpr2);
-+	serial8250_do_set_divisor(port, baud, quot, 0);
-+}
-+
-+/*
-+ * For Tornado devices we force MCR[7] set for the Divide-by-M N/8 baud rate
-+ * generator prescaler (CPR and CPR2).  Otherwise no prescaler would be used.
-+ */
-+static void pci_oxsemi_tornado_set_mctrl(struct uart_port *port,
-+					 unsigned int mctrl)
-+{
-+	struct uart_8250_port *up = up_to_u8250p(port);
-+
-+	up->mcr |= UART_MCR_CLKSEL;
-+	serial8250_do_set_mctrl(port, mctrl);
-+}
-+
-+static int pci_oxsemi_tornado_setup(struct serial_private *priv,
-+				    const struct pciserial_board *board,
-+				    struct uart_8250_port *up, int idx)
-+{
-+	struct pci_dev *dev = priv->dev;
-+
-+	if (pci_oxsemi_tornado_p(dev)) {
-+		up->port.get_divisor = pci_oxsemi_tornado_get_divisor;
-+		up->port.set_divisor = pci_oxsemi_tornado_set_divisor;
-+		up->port.set_mctrl = pci_oxsemi_tornado_set_mctrl;
-+	}
-+
-+	return pci_default_setup(priv, board, up, idx);
-+}
-+
- static int pci_asix_setup(struct serial_private *priv,
- 		  const struct pciserial_board *board,
- 		  struct uart_8250_port *port, int idx)
-@@ -2242,7 +2444,7 @@ static struct pci_serial_quirk pci_seria
- 		.subvendor	= PCI_ANY_ID,
- 		.subdevice	= PCI_ANY_ID,
- 		.init		= pci_oxsemi_tornado_init,
--		.setup		= pci_default_setup,
-+		.setup		= pci_oxsemi_tornado_setup,
- 	},
- 	{
- 		.vendor		= PCI_VENDOR_ID_MAINPINE,
-@@ -2250,7 +2452,7 @@ static struct pci_serial_quirk pci_seria
- 		.subvendor	= PCI_ANY_ID,
- 		.subdevice	= PCI_ANY_ID,
- 		.init		= pci_oxsemi_tornado_init,
--		.setup		= pci_default_setup,
-+		.setup		= pci_oxsemi_tornado_setup,
- 	},
- 	{
- 		.vendor		= PCI_VENDOR_ID_DIGI,
-@@ -2258,7 +2460,7 @@ static struct pci_serial_quirk pci_seria
- 		.subvendor		= PCI_SUBVENDOR_ID_IBM,
- 		.subdevice		= PCI_ANY_ID,
- 		.init			= pci_oxsemi_tornado_init,
--		.setup		= pci_default_setup,
-+		.setup		= pci_oxsemi_tornado_setup,
- 	},
- 	{
- 		.vendor         = PCI_VENDOR_ID_INTEL,
-@@ -2575,7 +2777,7 @@ enum pci_board_num_t {
- 	pbn_b0_2_1843200,
- 	pbn_b0_4_1843200,
- 
--	pbn_b0_1_3906250,
-+	pbn_b0_1_15625000,
- 
- 	pbn_b0_bt_1_115200,
- 	pbn_b0_bt_2_115200,
-@@ -2654,10 +2856,10 @@ enum pci_board_num_t {
- 	pbn_panacom4,
- 	pbn_plx_romulus,
- 	pbn_oxsemi,
--	pbn_oxsemi_1_3906250,
--	pbn_oxsemi_2_3906250,
--	pbn_oxsemi_4_3906250,
--	pbn_oxsemi_8_3906250,
-+	pbn_oxsemi_1_15625000,
-+	pbn_oxsemi_2_15625000,
-+	pbn_oxsemi_4_15625000,
-+	pbn_oxsemi_8_15625000,
- 	pbn_intel_i960,
- 	pbn_sgi_ioc3,
- 	pbn_computone_4,
-@@ -2800,10 +3002,10 @@ static struct pciserial_board pci_boards
- 		.uart_offset	= 8,
- 	},
- 
--	[pbn_b0_1_3906250] = {
-+	[pbn_b0_1_15625000] = {
- 		.flags		= FL_BASE0,
- 		.num_ports	= 1,
--		.base_baud	= 3906250,
-+		.base_baud	= 15625000,
- 		.uart_offset	= 8,
- 	},
- 
-@@ -3184,31 +3386,31 @@ static struct pciserial_board pci_boards
- 		.base_baud	= 115200,
- 		.uart_offset	= 8,
- 	},
--	[pbn_oxsemi_1_3906250] = {
-+	[pbn_oxsemi_1_15625000] = {
- 		.flags		= FL_BASE0,
- 		.num_ports	= 1,
--		.base_baud	= 3906250,
-+		.base_baud	= 15625000,
- 		.uart_offset	= 0x200,
- 		.first_offset	= 0x1000,
- 	},
--	[pbn_oxsemi_2_3906250] = {
-+	[pbn_oxsemi_2_15625000] = {
- 		.flags		= FL_BASE0,
- 		.num_ports	= 2,
--		.base_baud	= 3906250,
-+		.base_baud	= 15625000,
- 		.uart_offset	= 0x200,
- 		.first_offset	= 0x1000,
- 	},
--	[pbn_oxsemi_4_3906250] = {
-+	[pbn_oxsemi_4_15625000] = {
- 		.flags		= FL_BASE0,
- 		.num_ports	= 4,
--		.base_baud	= 3906250,
-+		.base_baud	= 15625000,
- 		.uart_offset	= 0x200,
- 		.first_offset	= 0x1000,
- 	},
--	[pbn_oxsemi_8_3906250] = {
-+	[pbn_oxsemi_8_15625000] = {
- 		.flags		= FL_BASE0,
- 		.num_ports	= 8,
--		.base_baud	= 3906250,
-+		.base_baud	= 15625000,
- 		.uart_offset	= 0x200,
- 		.first_offset	= 0x1000,
- 	},
-@@ -4202,165 +4404,165 @@ static const struct pci_device_id serial
- 	 */
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc101,    /* OXPCIe952 1 Legacy UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_b0_1_3906250 },
-+		pbn_b0_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc105,    /* OXPCIe952 1 Legacy UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_b0_1_3906250 },
-+		pbn_b0_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc11b,    /* OXPCIe952 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc11f,    /* OXPCIe952 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc120,    /* OXPCIe952 1 Legacy UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_b0_1_3906250 },
-+		pbn_b0_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc124,    /* OXPCIe952 1 Legacy UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_b0_1_3906250 },
-+		pbn_b0_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc138,    /* OXPCIe952 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc13d,    /* OXPCIe952 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc140,    /* OXPCIe952 1 Legacy UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_b0_1_3906250 },
-+		pbn_b0_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc141,    /* OXPCIe952 1 Legacy UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_b0_1_3906250 },
-+		pbn_b0_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc144,    /* OXPCIe952 1 Legacy UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_b0_1_3906250 },
-+		pbn_b0_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc145,    /* OXPCIe952 1 Legacy UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_b0_1_3906250 },
-+		pbn_b0_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc158,    /* OXPCIe952 2 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_2_3906250 },
-+		pbn_oxsemi_2_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc15d,    /* OXPCIe952 2 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_2_3906250 },
-+		pbn_oxsemi_2_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc208,    /* OXPCIe954 4 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_4_3906250 },
-+		pbn_oxsemi_4_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc20d,    /* OXPCIe954 4 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_4_3906250 },
-+		pbn_oxsemi_4_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc308,    /* OXPCIe958 8 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_8_3906250 },
-+		pbn_oxsemi_8_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc30d,    /* OXPCIe958 8 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_8_3906250 },
-+		pbn_oxsemi_8_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc40b,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc40f,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc41b,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc41f,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc42b,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc42f,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc43b,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc43f,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc44b,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc44f,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc45b,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc45f,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc46b,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc46f,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc47b,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc47f,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc48b,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc48f,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc49b,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc49f,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc4ab,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc4af,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc4bb,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc4bf,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc4cb,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_OXSEMI, 0xc4cf,    /* OXPCIe200 1 Native UART */
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	/*
- 	 * Mainpine Inc. IQ Express "Rev3" utilizing OxSemi Tornado
- 	 */
- 	{	PCI_VENDOR_ID_MAINPINE, 0x4000,	/* IQ Express 1 Port V.34 Super-G3 Fax */
- 		PCI_VENDOR_ID_MAINPINE, 0x4001, 0, 0,
--		pbn_oxsemi_1_3906250 },
-+		pbn_oxsemi_1_15625000 },
- 	{	PCI_VENDOR_ID_MAINPINE, 0x4000,	/* IQ Express 2 Port V.34 Super-G3 Fax */
- 		PCI_VENDOR_ID_MAINPINE, 0x4002, 0, 0,
--		pbn_oxsemi_2_3906250 },
-+		pbn_oxsemi_2_15625000 },
- 	{	PCI_VENDOR_ID_MAINPINE, 0x4000,	/* IQ Express 4 Port V.34 Super-G3 Fax */
- 		PCI_VENDOR_ID_MAINPINE, 0x4004, 0, 0,
--		pbn_oxsemi_4_3906250 },
-+		pbn_oxsemi_4_15625000 },
- 	{	PCI_VENDOR_ID_MAINPINE, 0x4000,	/* IQ Express 8 Port V.34 Super-G3 Fax */
- 		PCI_VENDOR_ID_MAINPINE, 0x4008, 0, 0,
--		pbn_oxsemi_8_3906250 },
-+		pbn_oxsemi_8_15625000 },
- 
- 	/*
- 	 * Digi/IBM PCIe 2-port Async EIA-232 Adapter utilizing OxSemi Tornado
- 	 */
- 	{	PCI_VENDOR_ID_DIGI, PCIE_DEVICE_ID_NEO_2_OX_IBM,
- 		PCI_SUBVENDOR_ID_IBM, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_2_3906250 },
-+		pbn_oxsemi_2_15625000 },
- 	/*
- 	 * EndRun Technologies. PCI express device range.
- 	 * EndRun PTP/1588 has 2 Native UARTs utilizing OxSemi 952.
- 	 */
- 	{	PCI_VENDOR_ID_ENDRUN, PCI_DEVICE_ID_ENDRUN_1588,
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_oxsemi_2_3906250 },
-+		pbn_oxsemi_2_15625000 },
- 
- 	/*
- 	 * SBS Technologies, Inc. P-Octal and PMC-OCTPRO cards,
-Index: linux-macro/drivers/tty/serial/8250/8250_port.c
-===================================================================
---- linux-macro.orig/drivers/tty/serial/8250/8250_port.c
-+++ linux-macro/drivers/tty/serial/8250/8250_port.c
-@@ -530,27 +530,6 @@ serial_port_out_sync(struct uart_port *p
- }
- 
- /*
-- * For the 16C950
-- */
--static void serial_icr_write(struct uart_8250_port *up, int offset, int value)
--{
--	serial_out(up, UART_SCR, offset);
--	serial_out(up, UART_ICR, value);
--}
--
--static unsigned int serial_icr_read(struct uart_8250_port *up, int offset)
--{
--	unsigned int value;
--
--	serial_icr_write(up, UART_ACR, up->acr | UART_ACR_ICRRD);
--	serial_out(up, UART_SCR, offset);
--	value = serial_in(up, UART_ICR);
--	serial_icr_write(up, UART_ACR, up->acr);
--
--	return value;
--}
--
--/*
-  * FIFO support.
-  */
- static void serial8250_clear_fifos(struct uart_8250_port *p)
-@@ -3322,7 +3301,7 @@ static void serial8250_console_restore(s
- 
- 	serial8250_set_divisor(port, baud, quot, frac);
- 	serial_port_out(port, UART_LCR, up->lcr);
--	serial8250_out_MCR(up, UART_MCR_DTR | UART_MCR_RTS);
-+	serial8250_out_MCR(up, up->mcr | UART_MCR_DTR | UART_MCR_RTS);
- }
- 
- /*
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

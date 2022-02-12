@@ -2,168 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 544D14B379C
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 20:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 662894B37A1
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 20:41:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbiBLTSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 14:18:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49462 "EHLO
+        id S231154AbiBLTcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 14:32:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiBLTSF (ORCPT
+        with ESMTP id S230072AbiBLTcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 14:18:05 -0500
-X-Greylist: delayed 429 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 12 Feb 2022 11:18:01 PST
-Received: from box.fidei.email (box.fidei.email [IPv6:2605:2700:0:2:a800:ff:feba:dc44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783F7606C4;
-        Sat, 12 Feb 2022 11:18:01 -0800 (PST)
-Received: from authenticated-user (box.fidei.email [71.19.144.250])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by box.fidei.email (Postfix) with ESMTPSA id E8C5280382;
-        Sat, 12 Feb 2022 14:10:51 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dorminy.me; s=mail;
-        t=1644693052; bh=txZS8eXu8kt+0fauTv33PdZYC897WdlzL1mtCypvBWI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=LtNiPXqy/7xFiJe4+PEeaVZL1S1V2Alsu9Q4eheH57UWChPSvxGqEmTr8EA3hhwe4
-         uAHOAKv9Iq0v7ZF9T/qYq4tBIJ6qKakL2yEZmGCuMgdKNgcsUwq328ZeY23NljbqO8
-         B2/ha+6sflm0AP5TKDS+cY0wi+/TDaDOdr9n2UKscQaNmz1jaXFj1zHgK4Ng/BasEz
-         ZBjgMJwZMlvORiT3qhN2ZcZLjUczKpIY/45cDqZS1uJBLl3iYQb7BXHx1gbpQrnAmG
-         qmEXe9a4fYKv6SUE/TGfOZwfy2hA7I9tdtraYdKMcBcIpTh31ohkvk6HIT5o/xHdjN
-         Lq6U7yEcKpsAg==
-From:   Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-Subject: [PATCH] btrfs: add fs state details to error messages.
-Date:   Sat, 12 Feb 2022 14:10:42 -0500
-Message-Id: <20220212191042.94954-1-sweettea-kernel@dorminy.me>
+        Sat, 12 Feb 2022 14:32:15 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40B4606CA;
+        Sat, 12 Feb 2022 11:32:10 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id h7so15453309iof.3;
+        Sat, 12 Feb 2022 11:32:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=85D+ZVI6xZrOi9juV+VxGoOsdsJITQcvDoo7mAoBhBk=;
+        b=o2xlZHtKuJ+sQSrpo4104Wn5qXEyFjP81rSzZosACHuhu7La39FOi6DG6IBK0Qqa3X
+         DZzeoD7kVwnHjUHu30Gw0VRBDaa1dLAYeHgGgk7VhBADUsyN3SAZZgwXnEC9iFxjD+K3
+         u4wuVWS6nRjEMw3TW798y7Kd8lEPJDNAD8kT5SjP0ed8+ajd78p1xgceaHpuu47zyzPL
+         8UoM5qKIJVrTzIpKrPcoEfhN/rxfFzPVbC3/Qth5jG2fMVWFq9gbeRZiur7YCuFq9Hin
+         h+VtHNWPC8U9w3PvgR/0DKBVWP+rBulp7Y7+8NzKlLVfwaWJ+qqUGNVNAHi1Vj8k1lv/
+         iKwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=85D+ZVI6xZrOi9juV+VxGoOsdsJITQcvDoo7mAoBhBk=;
+        b=hbKbDEwKDnGQAncNTyFMmY0tdMc1EzXRH5n9qZx6/yxPzHTeOfY6y+E+i3ugl7VupA
+         spwM9efAAdWqusklveH8VZn89bFbYX/KKj871mO7+ZBf/GyPaQ7gJKmzUUUTPNIv3a2W
+         RHR/HTxrA1pSAV11lXAID5EsPOwSEMJ1Ip9CJK68y8/qQXdQNO0zFtPUpYP2VFxqfeB+
+         a0qZzCtjH19zlXCrILB0s0s5ioKEcqWsPp/9RFB5cQb0OYODQWDrn+4KsxK/vQua6aMC
+         yy4DMDieGQfjX347lxuSsV/9t4IMVztX+bE7qA9UlAf20Tdx2rf40Ou9yyctgdHHT8Ek
+         jdOw==
+X-Gm-Message-State: AOAM533o7xtDez+rplmxlulWgwH7myJsQkAGis39JmZE+EYDO2RTayS1
+        oKtWfdDIXN/n2VAED4Ic7eDMhScqPGA=
+X-Google-Smtp-Source: ABdhPJzIZMIYeRJzPAoQ3rU2xH/WSkkt1G7PR0grk4Iu+BoXsr/Nkf1XpAzNYFhvVEq7NLdwXikz6Q==
+X-Received: by 2002:a5d:8052:: with SMTP id b18mr3648023ior.62.1644694330139;
+        Sat, 12 Feb 2022 11:32:10 -0800 (PST)
+Received: from ?IPV6:2601:282:800:dc80:b5fd:e5f4:5f5e:6650? ([2601:282:800:dc80:b5fd:e5f4:5f5e:6650])
+        by smtp.googlemail.com with ESMTPSA id g7sm5633445ild.40.2022.02.12.11.32.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Feb 2022 11:32:09 -0800 (PST)
+Message-ID: <4287b4dc-83b6-5c27-7df1-542a76ff3451@gmail.com>
+Date:   Sat, 12 Feb 2022 12:32:05 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [PATCH v2] Generate netlink notification when default IPv6 route
+ preference changes
+Content-Language: en-US
+To:     Kalash Nainwal <kalash@arista.com>, netdev@vger.kernel.org
+Cc:     fruggeri@arista.com, "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+References: <20220210220935.21139-1-kalash@arista.com>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20220210220935.21139-1-kalash@arista.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a filesystem goes read-only due to an error, multiple errors tend
-to be reported, some of which are knock-on failures. Logging some
-fs_states, if any, in btrfs_handle_fs_error() and btrfs_printk()
-helps distinguish the first error from subsequent messages which may
-only exist due to an error state.
+On 2/10/22 2:09 PM, Kalash Nainwal wrote:
+>  Generate RTM_NEWROUTE netlink notification when the route preference
+>  changes on an existing kernel generated default route in response to
+>  RA messages. Currently netlink notifications are generated only when
+>  this route is added or deleted but not when the route preference
+>  changes, which can cause userspace routing application state to go
+>  out of sync with kernel.
+> 
+> Signed-off-by: Kalash Nainwal <kalash@arista.com>
+> ---
+>  net/ipv6/ndisc.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
 
-Under the new format, most initial errors will look like:
-`BTRFS: error (device loop0) in ...`
-while subsequent errors will begin with:
-`error (device loop0: state E) in ...`
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
-An initial transaction abort error will look like
-`error (device loop0: state X) in ...`
-and subsequent messages will contain
-`(device loop0: state EX) in ...`
-
-Signed-off-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
----
- fs/btrfs/super.c | 49 +++++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 40 insertions(+), 9 deletions(-)
-
-diff --git a/fs/btrfs/super.c b/fs/btrfs/super.c
-index 33cfc9e27451..d0e81eb48eac 100644
---- a/fs/btrfs/super.c
-+++ b/fs/btrfs/super.c
-@@ -66,6 +66,31 @@ static struct file_system_type btrfs_root_fs_type;
- 
- static int btrfs_remount(struct super_block *sb, int *flags, char *data);
- 
-+#define STATE_STRING_PREFACE ": state "
-+#define MAX_STATE_CHARS 2
-+
-+static void btrfs_state_to_string(const struct btrfs_fs_info *info, char *buf)
-+{
-+	unsigned long state = info->fs_state;
-+	char *curr = buf;
-+
-+	memcpy(curr, STATE_STRING_PREFACE, sizeof(STATE_STRING_PREFACE));
-+	curr += sizeof(STATE_STRING_PREFACE) - 1;
-+
-+	/* If more states are reported, update MAX_STATE_CHARS also */
-+	if (test_and_clear_bit(BTRFS_FS_STATE_ERROR, &state))
-+		*curr++ = 'E';
-+
-+	if (test_and_clear_bit(BTRFS_FS_STATE_TRANS_ABORTED, &state))
-+		*curr++ = 'X';
-+
-+	/* If no states were printed, reset the buffer */
-+	if (state == info->fs_state)
-+		curr = buf;
-+
-+	*curr++ = '\0';
-+}
-+
- /*
-  * Generally the error codes correspond to their respective errors, but there
-  * are a few special cases.
-@@ -128,6 +153,7 @@ void __btrfs_handle_fs_error(struct btrfs_fs_info *fs_info, const char *function
- {
- 	struct super_block *sb = fs_info->sb;
- #ifdef CONFIG_PRINTK
-+	char statestr[sizeof(STATE_STRING_PREFACE) + MAX_STATE_CHARS];
- 	const char *errstr;
- #endif
- 
-@@ -136,10 +162,11 @@ void __btrfs_handle_fs_error(struct btrfs_fs_info *fs_info, const char *function
- 	 * under SB_RDONLY, then it is safe here.
- 	 */
- 	if (errno == -EROFS && sb_rdonly(sb))
--  		return;
-+		return;
- 
- #ifdef CONFIG_PRINTK
- 	errstr = btrfs_decode_error(errno);
-+	btrfs_state_to_string(fs_info, statestr);
- 	if (fmt) {
- 		struct va_format vaf;
- 		va_list args;
-@@ -148,12 +175,12 @@ void __btrfs_handle_fs_error(struct btrfs_fs_info *fs_info, const char *function
- 		vaf.fmt = fmt;
- 		vaf.va = &args;
- 
--		pr_crit("BTRFS: error (device %s) in %s:%d: errno=%d %s (%pV)\n",
--			sb->s_id, function, line, errno, errstr, &vaf);
-+		pr_crit("BTRFS: error (device %s%s) in %s:%d: errno=%d %s (%pV)\n",
-+			sb->s_id, statestr, function, line, errno, errstr, &vaf);
- 		va_end(args);
- 	} else {
--		pr_crit("BTRFS: error (device %s) in %s:%d: errno=%d %s\n",
--			sb->s_id, function, line, errno, errstr);
-+		pr_crit("BTRFS: error (device %s%s) in %s:%d: errno=%d %s\n",
-+			sb->s_id, statestr, function, line, errno, errstr);
- 	}
- #endif
- 
-@@ -240,11 +267,15 @@ void __cold btrfs_printk(const struct btrfs_fs_info *fs_info, const char *fmt, .
- 	vaf.va = &args;
- 
- 	if (__ratelimit(ratelimit)) {
--		if (fs_info)
--			printk("%sBTRFS %s (device %s): %pV\n", lvl, type,
--				fs_info->sb->s_id, &vaf);
--		else
-+		if (fs_info) {
-+			char statestr[sizeof(STATE_STRING_PREFACE) + MAX_STATE_CHARS];
-+
-+			btrfs_state_to_string(fs_info, statestr);
-+			printk("%sBTRFS %s (device %s%s): %pV\n", lvl, type,
-+				fs_info->sb->s_id, statestr, &vaf);
-+		} else {
- 			printk("%sBTRFS %s: %pV\n", lvl, type, &vaf);
-+		}
- 	}
- 
- 	va_end(args);
--- 
-2.30.2
 

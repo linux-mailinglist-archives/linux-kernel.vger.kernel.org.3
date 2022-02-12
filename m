@@ -2,191 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED754B34C4
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 12:44:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2245F4B34D4
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 13:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234720AbiBLLop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 06:44:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47844 "EHLO
+        id S234412AbiBLMAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 07:00:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232024AbiBLLom (ORCPT
+        with ESMTP id S232024AbiBLMAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 06:44:42 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8048626AD4;
-        Sat, 12 Feb 2022 03:44:39 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21C9vf1G032620;
-        Sat, 12 Feb 2022 11:44:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : content-type : mime-version; s=pp1;
- bh=/0i+ZkumCuw7l750dUX0MCbyV6L+zIkPOoRsbv3am4s=;
- b=V6QM05LQWxdJCm1yrGrvE72c52zBwVlsQY+zLjJOpjmr0s3Sy9yxGsgil5GJPevUo4Ei
- 0lmlAnPSe0sqGTVDbA4UN9AxiFQGrEoCDInfuTDBeRqG7+QpMw93xXK98umEGow5h6ul
- KghPEFw5SNrWDQz/4mO/hrxo/USES/OXUNHAvPN3MF4Q4f5t4+MzXNxUdAEtOU4JS04t
- 2NMci02CtgcaxjUhDYMgNzZUCaNgRVid9JSxFFu7J6EaM9DJlG24BDKybh2AxoxXAFYh
- k6BOljnbVyYKG5iExnMtHGGaIB9Ty2chsyPa0qKX8ZhcZC6s803+DcZPgvBHWk/v0zJD vw== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e6a9h9v2a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 12 Feb 2022 11:44:37 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21CBh8n0001790;
-        Sat, 12 Feb 2022 11:44:35 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3e64h99yc1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 12 Feb 2022 11:44:35 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21CBiWtO45875544
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 12 Feb 2022 11:44:32 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5BB384C046;
-        Sat, 12 Feb 2022 11:44:32 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 15DEC4C040;
-        Sat, 12 Feb 2022 11:44:32 +0000 (GMT)
-Received: from localhost (unknown [9.171.57.218])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Sat, 12 Feb 2022 11:44:32 +0000 (GMT)
-Date:   Sat, 12 Feb 2022 12:44:30 +0100
-From:   Vasily Gorbik <gor@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [GIT PULL] s390 updates for 5.17-rc4
-Message-ID: <your-ad-here.call-01644666270-ext-6500@work.hours>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: f_Z4JoK9AtEUm-VtL3kWyC66hvSYRVMt
-X-Proofpoint-ORIG-GUID: f_Z4JoK9AtEUm-VtL3kWyC66hvSYRVMt
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Sat, 12 Feb 2022 07:00:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAAE92613A
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 04:00:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644667202;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jK813oefzdJ0/6NSnx2Rn+uJkfooQvk/5JjGhJEhjG4=;
+        b=M5cSn+lbzAwUUNA3X6M13PUh/jnYhepGRkA+ttNY2lxgINVLH3yg8r2U1KUP5SwVTiqR8i
+        zL+GZdyLUpvidUzgtq+Gi93FZOgOI6qrLiUs4LHAN8HkxxXrt0nwXmXgl5ZK5Bg4z3tke6
+        V6L5+LqTQLj0LN0HN3LVnmehDhoQeCM=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-489-ARBEr49ePBed4jZwyaRtLg-1; Sat, 12 Feb 2022 07:00:00 -0500
+X-MC-Unique: ARBEr49ePBed4jZwyaRtLg-1
+Received: by mail-wr1-f70.google.com with SMTP id m8-20020adfa3c8000000b001e3381fdf45so4660788wrb.4
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 04:00:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=jK813oefzdJ0/6NSnx2Rn+uJkfooQvk/5JjGhJEhjG4=;
+        b=Fuv4/Sh/ksyxD3Gpd9PuRq9QMGxw4BgjgnVLvv5A2JYFXF9PgTyleF0cTyEJwNzMvv
+         ShIAy3TNs57VVnyhvIRDmM9O9I7VD75LuQD+qxMYN5/TvXVscAXSLvomdu/0wu4vmp2S
+         who+gUNdu73IbabsxwrxowpcDBAehRGJDt6U9n8XJx8lNiowOCng2TogoUbAUXGew3ok
+         YIYgDX+IqkKlNLHfZE6dCqT+C/qnNALS0f2GQK6Z5jlTSHsZtwL2sAnqOx4romqD8sbG
+         qY267qFgOov8Och50TQ7qfKPKxciQsyadpqejQqYWnF6lZQcuE1Eq5Ct5tQtWDCQQ0k9
+         0STA==
+X-Gm-Message-State: AOAM531TkVkrAVRmM7Q0cZ/k4PPb4S9rUTks/FgZ7M+ONRAUOSjLbxre
+        vXdN2f5BUy6rkBNhevjnBB1IWnOG9g/YDkWPALg1ph5XE7REbRrS85mvH3I6qSL/lanyCXgnREZ
+        cNZJnp0nBLy12nzL6zcO/EnYV
+X-Received: by 2002:a1c:f719:: with SMTP id v25mr4009096wmh.76.1644667199561;
+        Sat, 12 Feb 2022 03:59:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxqcd4dGlKYOI049Do/ZHhERD6/7Hy1dVWu5MU99kNymZnm7xY+hxKOCJB2SsFLPO7HLwF65A==
+X-Received: by 2002:a1c:f719:: with SMTP id v25mr4009079wmh.76.1644667199249;
+        Sat, 12 Feb 2022 03:59:59 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id m6sm27501060wrw.54.2022.02.12.03.59.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Feb 2022 03:59:58 -0800 (PST)
+Message-ID: <3e749d3b-a307-2c9e-be0a-2d2fc4647dd5@redhat.com>
+Date:   Sat, 12 Feb 2022 12:59:56 +0100
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-12_04,2022-02-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 mlxscore=0 priorityscore=1501 suspectscore=0
- lowpriorityscore=0 clxscore=1015 bulkscore=0 mlxlogscore=999 adultscore=0
- spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202120069
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 3/6] drm: Add driver for Solomon SSD130x OLED displays
+Content-Language: en-US
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-fbdev@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        dri-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Lee Jones <lee.jones@linaro.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        linux-pwm@vger.kernel.org
+References: <20220211143358.3112958-1-javierm@redhat.com>
+ <20220211143358.3112958-4-javierm@redhat.com>
+ <YgaLGDVscXlANxcZ@smile.fi.intel.com>
+ <001ee392-d457-31e5-0087-272ef82afd12@redhat.com>
+In-Reply-To: <001ee392-d457-31e5-0087-272ef82afd12@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+On 2/11/22 20:19, Javier Martinez Canillas wrote:
 
-please pull s390 changes for 5.17-rc4.
+[snip]
 
-Thank you,
-Vasily
+>> I would put GENMASK() directly into FIELD(), but it's up to you
+>> (and I haven't checked the use of *_MASK anyway).
+>>
+> 
+> Same. I also considered just using GENMASK() directly, but since I was
+> already reworking these, I thought that having the _MASK constant macros
+> would make the code more explicit about these being masks and what for.
+>
 
-The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
+Just to make clear, I prefer to keep the GENMASK(n, n) and *_MASK here.
 
-  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
+[snip]
 
-are available in the Git repository at:
+>>
+>>> +	bl = devm_backlight_device_register(dev, dev_name(dev), dev, ssd130x,
+>>> +					    &ssd130xfb_bl_ops, NULL);
+>>> +	if (IS_ERR(bl))
+>>> +		return ERR_PTR(dev_err_probe(dev, PTR_ERR(bl),
+>>> +					     "Unable to register backlight device\n"));
+>>
+>> Can be consistent with this then.
+>>
+> 
+> Yes. I meant to change it everywhere but seems that one slipped it through.
+> 
+> It's not worth to send a v6 just for the changes you mentioned but I can do
+> them before pushing the patches to drm-misc (once I get ack for this patch).
+> 
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-5.17-4
+Another option is to post a v6 only for patch 3/6 instead of all the patch-set.
+Let me know what you prefer.
 
-for you to fetch changes up to dd9cb842fa9d90653a9b48aba52f89c069f3bc50:
+Best regards,
+-- 
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 
-  s390/cio: verify the driver availability for path_event call (2022-02-09 22:55:01 +0100)
-
-----------------------------------------------------------------
-s390 updates for 5.17-rc4
-
-- Maintainers and reviewers changes:
-  - Add Alexander Gordeev as maintainer for s390.
-  - Christian Borntraeger will focus on s390 KVM maintainership and
-    stays as s390 reviewer.
-
-- Fix clang build of modules loader KUnit test.
-
-- Fix kernel panic in CIO code on FCES path-event when no driver is
-  attached to a device or the driver does not provide the path_event
-  function.
-
-----------------------------------------------------------------
-Christian Borntraeger (1):
-      MAINTAINERS: downgrade myself to Reviewer for s390
-
-Heiko Carstens (1):
-      MAINTAINERS: add Alexander Gordeev as maintainer for s390
-
-Ilya Leoshkevich (1):
-      s390/module: fix building test_modules_helpers.o with clang
-
-Vineeth Vijayan (1):
-      s390/cio: verify the driver availability for path_event call
-
- MAINTAINERS                  | 4 ++--
- arch/s390/lib/test_modules.c | 3 ---
- arch/s390/lib/test_modules.h | 3 +++
- drivers/s390/cio/device.c    | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 69a2935daf6c..5c56a172ce11 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16817,8 +16817,8 @@ F:	drivers/video/fbdev/savage/
- S390
- M:	Heiko Carstens <hca@linux.ibm.com>
- M:	Vasily Gorbik <gor@linux.ibm.com>
--M:	Christian Borntraeger <borntraeger@linux.ibm.com>
--R:	Alexander Gordeev <agordeev@linux.ibm.com>
-+M:	Alexander Gordeev <agordeev@linux.ibm.com>
-+R:	Christian Borntraeger <borntraeger@linux.ibm.com>
- R:	Sven Schnelle <svens@linux.ibm.com>
- L:	linux-s390@vger.kernel.org
- S:	Supported
-diff --git a/arch/s390/lib/test_modules.c b/arch/s390/lib/test_modules.c
-index d056baa8fbb0..9894009fc1f2 100644
---- a/arch/s390/lib/test_modules.c
-+++ b/arch/s390/lib/test_modules.c
-@@ -5,9 +5,6 @@
- 
- #include "test_modules.h"
- 
--#define DECLARE_RETURN(i) int test_modules_return_ ## i(void)
--REPEAT_10000(DECLARE_RETURN);
--
- /*
-  * Test that modules with many relocations are loaded properly.
-  */
-diff --git a/arch/s390/lib/test_modules.h b/arch/s390/lib/test_modules.h
-index 43b5e4b4af3e..6371fcf17684 100644
---- a/arch/s390/lib/test_modules.h
-+++ b/arch/s390/lib/test_modules.h
-@@ -47,4 +47,7 @@
- 	__REPEAT_10000_1(f, 8); \
- 	__REPEAT_10000_1(f, 9)
- 
-+#define DECLARE_RETURN(i) int test_modules_return_ ## i(void)
-+REPEAT_10000(DECLARE_RETURN);
-+
- #endif
-diff --git a/drivers/s390/cio/device.c b/drivers/s390/cio/device.c
-index cd938a26b76c..3b1cd0c96a74 100644
---- a/drivers/s390/cio/device.c
-+++ b/drivers/s390/cio/device.c
-@@ -1180,7 +1180,7 @@ static int io_subchannel_chp_event(struct subchannel *sch,
- 			else
- 				path_event[chpid] = PE_NONE;
- 		}
--		if (cdev)
-+		if (cdev && cdev->drv && cdev->drv->path_event)
- 			cdev->drv->path_event(cdev, path_event);
- 		break;
- 	}

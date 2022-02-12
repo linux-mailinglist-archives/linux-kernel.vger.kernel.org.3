@@ -2,201 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F244B36F6
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 19:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F288E4B3710
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 19:18:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229455AbiBLSLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 13:11:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57184 "EHLO
+        id S229527AbiBLSST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 13:18:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiBLSLt (ORCPT
+        with ESMTP id S229469AbiBLSSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 13:11:49 -0500
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA2504B405;
-        Sat, 12 Feb 2022 10:11:41 -0800 (PST)
-HMM_SOURCE_IP: 10.64.8.41:60616.1189609616
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 611C3100139;
-        Sun, 13 Feb 2022 02:11:33 +0800 (CST)
-Received: from  ([172.27.8.53])
-        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 30291ab50f664b3aaf0ab2bf57b87b99 for maxime@cerno.tech;
-        Sun, 13 Feb 2022 02:11:40 CST
-X-Transaction-ID: 30291ab50f664b3aaf0ab2bf57b87b99
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 172.27.8.53
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <8b7bcb57-4450-ed67-bd5f-d8e8f2e74510@189.cn>
-Date:   Sun, 13 Feb 2022 02:11:30 +0800
+        Sat, 12 Feb 2022 13:18:16 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355B85E767
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 10:18:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644689893; x=1676225893;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FVcgXrZ+Du2fSN7o3UgBvON225zfZCAjiMSNYgbiPfE=;
+  b=EmhTf8qrEQ14WPF0PqcXdHJEbpVHDgutOsWi7tQnYFp3q8Xey/T34Rp6
+   Zc+8jdTZnuJam7ZLy3r/tI3iPUMmdMkAisM1JZ4fLa/Uv81gFGMKe0hiH
+   QPc3xp+n9mQgELmRYR/S+IMlH2IjKlqPf56f5LfhuDHOxFnWtFpUnaUzZ
+   jOe2l4fiXZwVmN6SQgm99B7laMIgqOE3BEf4fN8gFb9NLnD3noHFgvWYS
+   KDZTNok4/2f9E8IsjhvMqx27k7ZH4UQuqdGBOGpVmhkgYSVZhDUA2r8PP
+   +r5HoAWbe2UMmzUiIpies30btkxIWyt0Y9ETHHk1443/gDv9jTD3mlZQL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10256"; a="233448219"
+X-IronPort-AV: E=Sophos;i="5.88,364,1635231600"; 
+   d="scan'208";a="233448219"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2022 10:18:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,364,1635231600"; 
+   d="scan'208";a="491319262"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 12 Feb 2022 10:18:10 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nIwyH-0006UH-TS; Sat, 12 Feb 2022 18:18:09 +0000
+Date:   Sun, 13 Feb 2022 02:17:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rik van Riel <riel@surriel.com>, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, kernel-team@fb.com, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH] mm: clean up hwpoison page cache page in fault path
+Message-ID: <202202122306.S9ByO64R-lkp@intel.com>
+References: <20220211170557.7964a301@imladris.surriel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v6 1/3] drm/lsdc: add drm driver for loongson display
- controller
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20220203082546.3099-1-15330273260@189.cn>
- <20220203082546.3099-2-15330273260@189.cn>
- <20220203085851.yqstkfgt4dz7rcnw@houat>
- <11ac5696-29e3-fefa-31c0-b7b86c88bbdc@189.cn>
- <20220209084908.kub4bs64rzhvpvon@houat>
- <84bfb2fc-595c-3bae-e8a0-c19ccbcfcfd8@189.cn>
- <20220209161624.42ijbnhanaaari46@houat>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <20220209161624.42ijbnhanaaari46@houat>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220211170557.7964a301@imladris.surriel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Rik,
 
-On 2022/2/10 00:16, Maxime Ripard wrote:
-> On Wed, Feb 09, 2022 at 10:38:41PM +0800, Sui Jingfeng wrote:
->> On 2022/2/9 16:49, Maxime Ripard wrote:
->>> On Fri, Feb 04, 2022 at 12:04:19AM +0800, Sui Jingfeng wrote:
->>>>>> +/* Get the simple EDID data from the device tree
->>>>>> + * the length must be EDID_LENGTH, since it is simple.
->>>>>> + *
->>>>>> + * @np: device node contain edid data
->>>>>> + * @edid_data: where the edid data to store to
->>>>>> + */
->>>>>> +static bool lsdc_get_edid_from_dtb(struct device_node *np,
->>>>>> +				   unsigned char *edid_data)
->>>>>> +{
->>>>>> +	int length;
->>>>>> +	const void *prop;
->>>>>> +
->>>>>> +	if (np == NULL)
->>>>>> +		return false;
->>>>>> +
->>>>>> +	prop = of_get_property(np, "edid", &length);
->>>>>> +	if (prop && (length == EDID_LENGTH)) {
->>>>>> +		memcpy(edid_data, prop, EDID_LENGTH);
->>>>>> +		return true;
->>>>>> +	}
->>>>>> +
->>>>>> +	return false;
->>>>>> +}
->>>>> You don't have a device tree binding for that driver, this is something
->>>>> that is required. And it's not clear to me why you'd want EDID in the
->>>>> DTB?
->>>> 1) It is left to the end user of this driver.
->>>>
->>>> The downstream motherboard maker may use a dpi(XRGB888) or LVDS panel
->>>> which don't have DDC support either, doing this way allow them put a
->>>> EDID property into the dc device node in the DTS. Then the entire system works.
->>>> Note those panel usually support only one display mode.
->>> I guess it depends on what we mean exactly by the user, but the DTB
->>> usually isn't under the (end) user control. And the drm.edid_firmware is
->>> here already to address exactly this issue.
->>>
->>> On the other end, if the board has a static panel without any DDC lines,
->>> then just put the timings in the device tree, there's no need for an
->>> EDID blob.
->> Loongson have a long history of using PMON firmware, The PMON firmware
->> support flush the dtb into the the firmware before grub loading the kernel.
->> You press 'c' key, then the PMON will give you a shell. it is much like a
->> UEFI shell. Suppose foo.dtb is what you want to pass to the vmlinuz.
->> Then type the follow single command can flush the dtb into the PMON firmware.
->>
->> |load_dtb /dev/fs/fat@usb0/foo.dtb|
->>
->> For our PMON firmware, it**is**  totally under developer/pc board maker's control.
->> You can flush whatever dtb every time you bootup until you satisfied.
->> It(the pmon firmware) is designed to let downstream motherboard maker and/or
->> customers to play easily.
->>
->> Support of reading EDID from the dtb is really a feature which downstream
->> motherboard maker or customer wanted. They sometimes using eDP also whose
->> resolution is not 1024x768. This is out of control for a graphic driver
->> developer like me.
-> And, to reinstate, we already have a mechanism to set an EDID, and if it
-> wasn't an option, the DT is not the place to store an EDID blob.
+Thank you for the patch! Perhaps something to improve:
 
-I know, put edid blob in the dts maybe abuse, but i am not push dts with edid blob either.
+[auto build test WARNING on hnaz-mm/master]
 
-It is left to other people, and the ./arch/powerpc/boot/dts/ac14xx.dts already have edid blob.
+url:    https://github.com/0day-ci/linux/commits/Rik-van-Riel/mm-clean-up-hwpoison-page-cache-page-in-fault-path/20220212-060643
+base:   https://github.com/hnaz/linux-mm master
+config: sparc-randconfig-s031-20220211 (https://download.01.org/0day-ci/archive/20220212/202202122306.S9ByO64R-lkp@intel.com/config)
+compiler: sparc-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/abd960cdbc9487dbf0a0dc3b2395825a38f8fa44
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Rik-van-Riel/mm-clean-up-hwpoison-page-cache-page-in-fault-path/20220212-060643
+        git checkout abd960cdbc9487dbf0a0dc3b2395825a38f8fa44
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc SHELL=/bin/bash
 
->> And drm.edid_firmware have only a few limited resolution which is weak.
-> You're wrong. There's no limitation, it's just as limited as your
-> solution. You put the same thing, you get the same thing out of it. The
-> only difference is where the data are coming from.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-It is extremely difficult to use, it have difficulty to specify which firmware edid is for which connector.
-because we have a 1024x600 panel and a 1920x1080 monitor.
 
-It require you to know the connector's name at first, it is not as intuitive as my method.
-I am exhausted by it.
+sparse warnings: (new ones prefixed by >>)
+>> mm/memory.c:3913:33: sparse: sparse: incorrect type in initializer (different base types) @@     expected int poisonret @@     got restricted vm_fault_t @@
+   mm/memory.c:3913:33: sparse:     expected int poisonret
+   mm/memory.c:3913:33: sparse:     got restricted vm_fault_t
+>> mm/memory.c:3922:24: sparse: sparse: incorrect type in return expression (different base types) @@     expected restricted vm_fault_t @@     got int [assigned] poisonret @@
+   mm/memory.c:3922:24: sparse:     expected restricted vm_fault_t
+   mm/memory.c:3922:24: sparse:     got int [assigned] poisonret
+   mm/memory.c:1024:17: sparse: sparse: context imbalance in 'copy_pte_range' - different lock contexts for basic block
+   mm/memory.c:1740:16: sparse: sparse: context imbalance in '__get_locked_pte' - different lock contexts for basic block
+   mm/memory.c:1788:9: sparse: sparse: context imbalance in 'insert_page' - different lock contexts for basic block
+   mm/memory.c:2290:17: sparse: sparse: context imbalance in 'remap_pte_range' - different lock contexts for basic block
+   mm/memory.c:2546:17: sparse: sparse: context imbalance in 'apply_to_pte_range' - unexpected unlock
+   mm/memory.c:2834:17: sparse: sparse: context imbalance in 'wp_page_copy' - unexpected unlock
+   mm/memory.c:3173:17: sparse: sparse: context imbalance in 'wp_pfn_shared' - unexpected unlock
+   mm/memory.c:3236:19: sparse: sparse: context imbalance in 'do_wp_page' - different lock contexts for basic block
+   mm/memory.c:4939:5: sparse: sparse: context imbalance in 'follow_invalidate_pte' - different lock contexts for basic block
+   mm/memory.c: note: in included file (through arch/sparc/include/asm/pgtable.h, include/linux/pgtable.h, include/linux/mm.h):
+   arch/sparc/include/asm/pgtable_32.h:275:29: sparse: sparse: context imbalance in 'follow_pfn' - unexpected unlock
 
->> I will consider to adding drm.edid_firmware support, thanks.
-> It just works if you use drm_get_edid.
->
->>>> 2) That is for the display controller in ls2k1000 SoC.
->>>>
->>>> Currently, the upstream kernel still don't have GPIO, PWM and I2C driver support
->>>> for LS2K1000 SoC.
->>>>
->>>> How dose you read EDID from the monitor without a I2C driver?
->>>>
->>>> without reading EDID the device tree support, the screen just black,
->>>> the lsdc driver just stall. With reading EDID from device tree support
->>>> we do not need a i2c driver to light up the monitor.
->>>>
->>>> This make lsdc drm driver work on various ls2k1000 development board
->>>> before I2C driver and GPIO driver and PWM backlight driver is upstream.
->>>>
->>>> I have many local private dts with the bindings, those local change just can not
->>>> upstream at this time, below is an example.
->>>>
->>>> The device tree is a platform description language. It's there to let
->>>> the OS know what the hardware is, but the state of hardware support in
->>>> the said OS isn't a parameter we have to take into account for a new
->>>> binding.
->>>>
->>>> If you don't have any DDC support at the moment, use the firmware
->>>> mechanism above, or add fixed modes using drm_add_modes_noedid in the
->>>> driver, and leave the DT out of it. Once you'll gain support for the
->>>> EDID readout in the driver, then it'll just work and you won't need to
->>>> change the DT again.
->>>>
->> The resolution will be 1024x768, it will also add a lot modes which may
->> not supported by the specific panel. Take 1024x600 as an example,
->> Both drm_add_modes_noedid() and firmware mechanism above will fail.
->>
->> Because the user supply EDID only and manufacturer of some strange panel
->> supply EDID only.
-> It's fairly easy to address: if the panel has some EDID, make the driver
-> able to read it; if it doesn't, describe the mode in the DT.
->
-> And if you want to be nice to your users, the firmware can even patch
-> the DT at boot time to add the necessary bits based on whatever info it
-> has, it doesn't have to be static.
->
-> Maxime
+vim +3913 mm/memory.c
+
+  3875	
+  3876	/*
+  3877	 * The mmap_lock must have been held on entry, and may have been
+  3878	 * released depending on flags and vma->vm_ops->fault() return value.
+  3879	 * See filemap_fault() and __lock_page_retry().
+  3880	 */
+  3881	static vm_fault_t __do_fault(struct vm_fault *vmf)
+  3882	{
+  3883		struct vm_area_struct *vma = vmf->vma;
+  3884		vm_fault_t ret;
+  3885	
+  3886		/*
+  3887		 * Preallocate pte before we take page_lock because this might lead to
+  3888		 * deadlocks for memcg reclaim which waits for pages under writeback:
+  3889		 *				lock_page(A)
+  3890		 *				SetPageWriteback(A)
+  3891		 *				unlock_page(A)
+  3892		 * lock_page(B)
+  3893		 *				lock_page(B)
+  3894		 * pte_alloc_one
+  3895		 *   shrink_page_list
+  3896		 *     wait_on_page_writeback(A)
+  3897		 *				SetPageWriteback(B)
+  3898		 *				unlock_page(B)
+  3899		 *				# flush A, B to clear the writeback
+  3900		 */
+  3901		if (pmd_none(*vmf->pmd) && !vmf->prealloc_pte) {
+  3902			vmf->prealloc_pte = pte_alloc_one(vma->vm_mm);
+  3903			if (!vmf->prealloc_pte)
+  3904				return VM_FAULT_OOM;
+  3905		}
+  3906	
+  3907		ret = vma->vm_ops->fault(vmf);
+  3908		if (unlikely(ret & (VM_FAULT_ERROR | VM_FAULT_NOPAGE | VM_FAULT_RETRY |
+  3909				    VM_FAULT_DONE_COW)))
+  3910			return ret;
+  3911	
+  3912		if (unlikely(PageHWPoison(vmf->page))) {
+> 3913			int poisonret = VM_FAULT_HWPOISON;
+  3914			if (ret & VM_FAULT_LOCKED) {
+  3915				/* Retry if a clean page was removed from the cache. */
+  3916				if (invalidate_inode_page(vmf->page))
+  3917					poisonret = 0;
+  3918				unlock_page(vmf->page);
+  3919			}
+  3920			put_page(vmf->page);
+  3921			vmf->page = NULL;
+> 3922			return poisonret;
+  3923		}
+  3924	
+  3925		if (unlikely(!(ret & VM_FAULT_LOCKED)))
+  3926			lock_page(vmf->page);
+  3927		else
+  3928			VM_BUG_ON_PAGE(!PageLocked(vmf->page), vmf->page);
+  3929	
+  3930		return ret;
+  3931	}
+  3932	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

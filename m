@@ -2,95 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 662894B37A1
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 20:41:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DB64B37AB
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 20:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbiBLTcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 14:32:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52810 "EHLO
+        id S231200AbiBLTmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 14:42:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiBLTcP (ORCPT
+        with ESMTP id S230072AbiBLTmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 14:32:15 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40B4606CA;
-        Sat, 12 Feb 2022 11:32:10 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id h7so15453309iof.3;
-        Sat, 12 Feb 2022 11:32:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=85D+ZVI6xZrOi9juV+VxGoOsdsJITQcvDoo7mAoBhBk=;
-        b=o2xlZHtKuJ+sQSrpo4104Wn5qXEyFjP81rSzZosACHuhu7La39FOi6DG6IBK0Qqa3X
-         DZzeoD7kVwnHjUHu30Gw0VRBDaa1dLAYeHgGgk7VhBADUsyN3SAZZgwXnEC9iFxjD+K3
-         u4wuVWS6nRjEMw3TW798y7Kd8lEPJDNAD8kT5SjP0ed8+ajd78p1xgceaHpuu47zyzPL
-         8UoM5qKIJVrTzIpKrPcoEfhN/rxfFzPVbC3/Qth5jG2fMVWFq9gbeRZiur7YCuFq9Hin
-         h+VtHNWPC8U9w3PvgR/0DKBVWP+rBulp7Y7+8NzKlLVfwaWJ+qqUGNVNAHi1Vj8k1lv/
-         iKwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=85D+ZVI6xZrOi9juV+VxGoOsdsJITQcvDoo7mAoBhBk=;
-        b=hbKbDEwKDnGQAncNTyFMmY0tdMc1EzXRH5n9qZx6/yxPzHTeOfY6y+E+i3ugl7VupA
-         spwM9efAAdWqusklveH8VZn89bFbYX/KKj871mO7+ZBf/GyPaQ7gJKmzUUUTPNIv3a2W
-         RHR/HTxrA1pSAV11lXAID5EsPOwSEMJ1Ip9CJK68y8/qQXdQNO0zFtPUpYP2VFxqfeB+
-         a0qZzCtjH19zlXCrILB0s0s5ioKEcqWsPp/9RFB5cQb0OYODQWDrn+4KsxK/vQua6aMC
-         yy4DMDieGQfjX347lxuSsV/9t4IMVztX+bE7qA9UlAf20Tdx2rf40Ou9yyctgdHHT8Ek
-         jdOw==
-X-Gm-Message-State: AOAM533o7xtDez+rplmxlulWgwH7myJsQkAGis39JmZE+EYDO2RTayS1
-        oKtWfdDIXN/n2VAED4Ic7eDMhScqPGA=
-X-Google-Smtp-Source: ABdhPJzIZMIYeRJzPAoQ3rU2xH/WSkkt1G7PR0grk4Iu+BoXsr/Nkf1XpAzNYFhvVEq7NLdwXikz6Q==
-X-Received: by 2002:a5d:8052:: with SMTP id b18mr3648023ior.62.1644694330139;
-        Sat, 12 Feb 2022 11:32:10 -0800 (PST)
-Received: from ?IPV6:2601:282:800:dc80:b5fd:e5f4:5f5e:6650? ([2601:282:800:dc80:b5fd:e5f4:5f5e:6650])
-        by smtp.googlemail.com with ESMTPSA id g7sm5633445ild.40.2022.02.12.11.32.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Feb 2022 11:32:09 -0800 (PST)
-Message-ID: <4287b4dc-83b6-5c27-7df1-542a76ff3451@gmail.com>
-Date:   Sat, 12 Feb 2022 12:32:05 -0700
+        Sat, 12 Feb 2022 14:42:49 -0500
+Received: from cavan.codon.org.uk (irc.codon.org.uk [IPv6:2a00:1098:84:22e::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53FA606CC;
+        Sat, 12 Feb 2022 11:42:42 -0800 (PST)
+Received: by cavan.codon.org.uk (Postfix, from userid 1000)
+        id 4E74840A64; Sat, 12 Feb 2022 19:42:40 +0000 (GMT)
+Date:   Sat, 12 Feb 2022 19:42:40 +0000
+From:   Matthew Garrett <mjg59@srcf.ucam.org>
+To:     Aditya Garg <gargaditya08@live.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Jeremy Kerr <jk@ozlabs.org>,
+        "joeyli.kernel@gmail.com" <joeyli.kernel@gmail.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "eric.snowberg@oracle.com" <eric.snowberg@oracle.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "jlee@suse.com" <jlee@suse.com>,
+        "James.Bottomley@hansenpartnership.com" 
+        <James.Bottomley@HansenPartnership.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "mic@digikod.net" <mic@digikod.net>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>
+Subject: Re: [PATCH] efi: Do not import certificates from UEFI Secure Boot
+ for T2 Macs
+Message-ID: <20220212194240.GA4131@srcf.ucam.org>
+References: <9D0C961D-9999-4C41-A44B-22FEAF0DAB7F@live.com>
+ <20220209164957.GB12763@srcf.ucam.org>
+ <5A3C2EBF-13FF-4C37-B2A0-1533A818109F@live.com>
+ <20220209183545.GA14552@srcf.ucam.org>
+ <20220209193705.GA15463@srcf.ucam.org>
+ <2F1CC5DE-5A03-46D2-95E7-DD07A4EF2766@live.com>
+ <20220210180905.GB18445@srcf.ucam.org>
+ <99BB011C-71DE-49FA-81CB-BE2AC9613030@live.com>
+ <20220211162857.GB10606@srcf.ucam.org>
+ <F078BEBE-3DED-4EE3-A2B8-2C5744B5454C@live.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH v2] Generate netlink notification when default IPv6 route
- preference changes
-Content-Language: en-US
-To:     Kalash Nainwal <kalash@arista.com>, netdev@vger.kernel.org
-Cc:     fruggeri@arista.com, "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-References: <20220210220935.21139-1-kalash@arista.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <20220210220935.21139-1-kalash@arista.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <F078BEBE-3DED-4EE3-A2B8-2C5744B5454C@live.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,KHOP_HELO_FCRDNS,SPF_HELO_NEUTRAL,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/10/22 2:09 PM, Kalash Nainwal wrote:
->  Generate RTM_NEWROUTE netlink notification when the route preference
->  changes on an existing kernel generated default route in response to
->  RA messages. Currently netlink notifications are generated only when
->  this route is added or deleted but not when the route preference
->  changes, which can cause userspace routing application state to go
->  out of sync with kernel.
-> 
-> Signed-off-by: Kalash Nainwal <kalash@arista.com>
-> ---
->  net/ipv6/ndisc.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
+On Sat, Feb 12, 2022 at 05:53:47AM +0000, Aditya Garg wrote:
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
+> Feb 12 11:01:52 MacBook kernel: Reading EFI variable db-d719b2cb-3d3a-4596-a3bc-dad00e67656f
 
+Ok. With CONFIG_LOAD_UEFI_KEYS=n, can you run:
 
+cat /sys/firmware/efi/efivars/db-d719b2cb-3d3a-4596-a3bc-dad00e67656f
+
+and see whether it generates the same failure? If so then my (handwavy) 
+guess is that something's going wrong with a firmware codepath for the 
+d719b2cb-3d3a-4596-a3bc-dad00e67656f GUID. Someone could potentially 
+then figure out whether the same happens under Windows, but the easiest 
+thing is probably to just return a failure on Apple hardware when 
+someone tries to access anything with that GUID.

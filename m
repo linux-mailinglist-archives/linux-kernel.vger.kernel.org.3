@@ -2,171 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF3D4B33A7
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 08:48:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 331AD4B33A8
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 08:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbiBLHsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 02:48:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54430 "EHLO
+        id S232514AbiBLHuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 02:50:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiBLHsB (ORCPT
+        with ESMTP id S229824AbiBLHub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 02:48:01 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2B626AEC
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 23:47:57 -0800 (PST)
-X-UUID: 64064257b6e3476aa952be279817ef89-20220212
-X-UUID: 64064257b6e3476aa952be279817ef89-20220212
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <lecopzer.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 123026892; Sat, 12 Feb 2022 15:47:54 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 12 Feb 2022 15:47:53 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 12 Feb 2022 15:47:53 +0800
-From:   Lecopzer Chen <lecopzer.chen@mediatek.com>
-To:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <lecopzer.chen@mediatek.com>, <andreyknvl@gmail.com>,
-        <anshuman.khandual@arm.com>, <ardb@kernel.org>, <arnd@arndb.de>,
-        <dvyukov@google.com>, <geert+renesas@glider.be>,
-        <glider@google.com>, <kasan-dev@googlegroups.com>,
-        <linus.walleij@linaro.org>, <linux@armlinux.org.uk>,
-        <lukas.bulwahn@gmail.com>, <mark.rutland@arm.com>,
-        <masahiroy@kernel.org>, <matthias.bgg@gmail.com>,
-        <rmk+kernel@armlinux.org.uk>, <ryabinin.a.a@gmail.com>,
-        <yj.chiang@mediatek.com>
-Subject: [PATCH v2 2/2] arm: kconfig: fix MODULE_PLTS for KASAN with KASAN_VMALLOC
-Date:   Sat, 12 Feb 2022 15:47:47 +0800
-Message-ID: <20220212074747.10849-3-lecopzer.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220212074747.10849-1-lecopzer.chen@mediatek.com>
-References: <20220212074747.10849-1-lecopzer.chen@mediatek.com>
+        Sat, 12 Feb 2022 02:50:31 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C70B26AED
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 23:50:28 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4JwjMQ4jXpz9sSl;
+        Sat, 12 Feb 2022 08:50:26 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Nb9w7EdK4pL0; Sat, 12 Feb 2022 08:50:26 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4JwjMQ3nC7z9sSf;
+        Sat, 12 Feb 2022 08:50:26 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6E75E8B766;
+        Sat, 12 Feb 2022 08:50:26 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 7MDYGyNy2vlq; Sat, 12 Feb 2022 08:50:26 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.6.139])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2B34D8B763;
+        Sat, 12 Feb 2022 08:50:26 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21C7oFGu1601739
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sat, 12 Feb 2022 08:50:15 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21C7oEo11601738;
+        Sat, 12 Feb 2022 08:50:14 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v4] mm: Uninline copy_overflow()
+Date:   Sat, 12 Feb 2022 08:50:08 +0100
+Message-Id: <d9f56381986fa74ba70ed176735fe40c1cfc4026.1644652199.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1644652206; l=2758; s=20211009; h=from:subject:message-id; bh=7TVKY/dJ9wrPb4tk6xz86KxUdLAhwPswoicWeQ+B4oU=; b=NzF3X/kVFWCdAUbpXShZmkG3T3gKVkNyXNJHmpdyQwq1LxFVOt0Bg96pZdhkofjKYXf6cuG4g2Un JlMAg7G5DpGcBlgHZbatYqDjGw7Sl9EjxJSQgfv3gdAGFvOPkYWt
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we run out of module space address with ko insertion,
-and with MODULE_PLTS, module would turn to try to find memory
-from VMALLOC address space.
+While building a small config with CONFIG_CC_OPTIMISE_FOR_SIZE,
+I ended up with more than 50 times the following function in vmlinux
+because GCC doesn't honor the 'inline' keyword:
 
-Unfortunately, with KASAN enabled, VMALLOC doesn't work without
-KASAN_VMALLOC, thus select KASAN_VMALLOC by default.
+	c00243bc <copy_overflow>:
+	c00243bc:	94 21 ff f0 	stwu    r1,-16(r1)
+	c00243c0:	7c 85 23 78 	mr      r5,r4
+	c00243c4:	7c 64 1b 78 	mr      r4,r3
+	c00243c8:	3c 60 c0 62 	lis     r3,-16286
+	c00243cc:	7c 08 02 a6 	mflr    r0
+	c00243d0:	38 63 5e e5 	addi    r3,r3,24293
+	c00243d4:	90 01 00 14 	stw     r0,20(r1)
+	c00243d8:	4b ff 82 45 	bl      c001c61c <__warn_printk>
+	c00243dc:	0f e0 00 00 	twui    r0,0
+	c00243e0:	80 01 00 14 	lwz     r0,20(r1)
+	c00243e4:	38 21 00 10 	addi    r1,r1,16
+	c00243e8:	7c 08 03 a6 	mtlr    r0
+	c00243ec:	4e 80 00 20 	blr
 
-8<--- cut here ---
- Unable to handle kernel paging request at virtual address bd300860
- [bd300860] *pgd=41cf1811, *pte=41cf26df, *ppte=41cf265f
- Internal error: Oops: 80f [#1] PREEMPT SMP ARM
- Modules linked in: hello(O+)
- CPU: 0 PID: 89 Comm: insmod Tainted: G           O      5.16.0-rc6+ #19
- Hardware name: Generic DT based system
- PC is at mmioset+0x30/0xa8
- LR is at 0x0
- pc : [<c077ed30>]    lr : [<00000000>]    psr: 20000013
- sp : c451fc18  ip : bd300860  fp : c451fc2c
- r10: f18042cc  r9 : f18042d0  r8 : 00000000
- r7 : 00000001  r6 : 00000003  r5 : 01312d00  r4 : f1804300
- r3 : 00000000  r2 : 00262560  r1 : 00000000  r0 : bd300860
- Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
- Control: 10c5387d  Table: 43e9406a  DAC: 00000051
- Register r0 information: non-paged memory
- Register r1 information: NULL pointer
- Register r2 information: non-paged memory
- Register r3 information: NULL pointer
- Register r4 information: 4887-page vmalloc region starting at 0xf1802000 allocated at load_module+0x14f4/0x32a8
- Register r5 information: non-paged memory
- Register r6 information: non-paged memory
- Register r7 information: non-paged memory
- Register r8 information: NULL pointer
- Register r9 information: 4887-page vmalloc region starting at 0xf1802000 allocated at load_module+0x14f4/0x32a8
- Register r10 information: 4887-page vmalloc region starting at 0xf1802000 allocated at load_module+0x14f4/0x32a8
- Register r11 information: non-slab/vmalloc memory
- Register r12 information: non-paged memory
- Process insmod (pid: 89, stack limit = 0xc451c000)
- Stack: (0xc451fc18 to 0xc4520000)
- fc00:                                                       f18041f0 c04803a4
- fc20: c451fc44 c451fc30 c048053c c0480358 f1804030 01312cff c451fc64 c451fc48
- fc40: c047f330 c0480500 f18040c0 c1b52ccc 00000001 c5be7700 c451fc74 c451fc68
- fc60: f1802098 c047f300 c451fcb4 c451fc78 c026106c f180208c c4880004 00000000
- fc80: c451fcb4 bf001000 c044ff48 c451fec0 f18040c0 00000000 c1b54cc4 00000000
- fca0: c451fdf0 f1804268 c451fe64 c451fcb8 c0264e88 c0260d48 ffff8000 00007fff
- fcc0: f18040c0 c025cd00 c451fd14 00000003 0157f008 f1804258 f180425c f1804174
- fce0: f1804154 f180424c f18041f0 f180414c f1804178 f18041c0 bf0025d4 188a3fa8
- fd00: 0000009e f1804170 f2b18000 c451ff10 c0d92e40 f180416c c451feec 00000001
- fd20: 00000000 c451fec8 c451fe20 c451fed0 f18040cc 00000000 f17ea000 c451fdc0
- fd40: 41b58ab3 c1387729 c0261c28 c047fb5c c451fe2c c451fd60 c0525308 c048033c
- fd60: 188a3fb4 c3ccb090 c451fe00 c3ccb080 00000000 00000000 00016920 00000000
- fd80: c02d0388 c047f55c c02d0388 00000000 c451fddc c451fda0 c02d0388 00000000
- fda0: 41b58ab3 c13a72d0 c0524ff0 c1705f48 c451fdfc c451fdc0 c02d0388 c047f55c
- fdc0: 00016920 00000000 00000003 c1bb2384 c451fdfc c3ccb080 c1bb2384 00000000
- fde0: 00000000 00000000 00000000 00000000 c451fe1c c451fe00 c04e9d70 c1705f48
- fe00: c1b54cc4 c1bbc71c c3ccb080 00000000 c3ccb080 00000000 00000003 c451fec0
- fe20: c451fe64 c451fe30 c0525918 c0524ffc c451feb0 c1705f48 00000000 c1b54cc4
- fe40: b78a3fd0 c451ff60 00000000 0157f008 00000003 c451fec0 c451ffa4 c451fe68
- fe60: c0265480 c0261c34 c451feb0 7fffffff 00000000 00000002 00000000 c4880000
- fe80: 41b58ab3 c138777b c02652cc c04803ec 000a0000 c451ff00 ffffff9c b6ac9f60
- fea0: c451fed4 c1705f48 c04a4a90 b78a3fdc f17ea000 ffffff9c b6ac9f60 c0100244
- fec0: f17ea21a f17ea300 f17ea000 00016920 f1800240 f18000ac f17fb7dc 01316000
- fee0: 013161b0 00002590 01316250 00000000 00000000 00000000 00002580 00000029
- ff00: 0000002a 00000013 00000000 0000000c 00000000 00000000 0157f004 c451ffb0
- ff20: c1719be0 aed6f410 c451ff74 c451ff38 c0c4103c c0c407d0 c451ff84 c451ff48
- ff40: 00000805 c02c8658 c1604230 c1719c30 00000805 0157f004 00000005 c451ffb0
- ff60: c1719be0 aed6f410 c451ffac c451ff78 c0122130 c1705f48 c451ffac 0157f008
- ff80: 00000006 0000005f 0000017b c0100244 c4880000 0000017b 00000000 c451ffa8
- ffa0: c0100060 c02652d8 0157f008 00000006 00000003 0157f008 00000000 b6ac9f60
- ffc0: 0157f008 00000006 0000005f 0000017b 00000000 00000000 aed85f74 00000000
- ffe0: b6ac9cd8 b6ac9cc8 00030200 aecf2d60 a0000010 00000003 00000000 00000000
- Backtrace:
- [<c048034c>] (kasan_poison) from [<c048053c>] (kasan_unpoison+0x48/0x5c)
- [<c04804f4>] (kasan_unpoison) from [<c047f330>] (__asan_register_globals+0x3c/0x64)
-  r5:01312cff r4:f1804030
- [<c047f2f4>] (__asan_register_globals) from [<f1802098>] (_sub_I_65535_1+0x18/0xf80 [hello])
-  r7:c5be7700 r6:00000001 r5:c1b52ccc r4:f18040c0
- [<f1802080>] (_sub_I_65535_1 [hello]) from [<c026106c>] (do_init_module+0x330/0x72c)
- [<c0260d3c>] (do_init_module) from [<c0264e88>] (load_module+0x3260/0x32a8)
-  r10:f1804268 r9:c451fdf0 r8:00000000 r7:c1b54cc4 r6:00000000 r5:f18040c0
-  r4:c451fec0
- [<c0261c28>] (load_module) from [<c0265480>] (sys_finit_module+0x1b4/0x1e8)
-  r10:c451fec0 r9:00000003 r8:0157f008 r7:00000000 r6:c451ff60 r5:b78a3fd0
-  r4:c1b54cc4
- [<c02652cc>] (sys_finit_module) from [<c0100060>] (ret_fast_syscall+0x0/0x1c)
- Exception stack(0xc451ffa8 to 0xc451fff0)
- ffa0:                   0157f008 00000006 00000003 0157f008 00000000 b6ac9f60
- ffc0: 0157f008 00000006 0000005f 0000017b 00000000 00000000 aed85f74 00000000
- ffe0: b6ac9cd8 b6ac9cc8 00030200 aecf2d60
-  r10:0000017b r9:c4880000 r8:c0100244 r7:0000017b r6:0000005f r5:00000006
-  r4:0157f008
- Code: e92d4100 e1a08001 e1a0e003 e2522040 (a8ac410a)
- ---[ end trace df6e12843197b6f5 ]---
+With -Winline, GCC tells:
 
-Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
+	/include/linux/thread_info.h:212:20: warning: inlining failed in call to 'copy_overflow': call is unlikely and code size would grow [-Winline]
+
+copy_overflow() is a non conditional warning called by
+check_copy_size() on an error path.
+
+check_copy_size() have to remain inlined in order to benefit
+from constant folding, but copy_overflow() is not worth inlining.
+
+Uninline it when CONFIG_BUG is selected.
+
+When CONFIG_BUG is not selected, WARN() does nothing so skip it.
+
+This reduces the size of vmlinux by almost 4kbytes.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- arch/arm/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+v4: Make copy_overflow() a no-op when CONFIG_BUG is not selected
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 78250e246cc6..d797a3699959 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -1515,6 +1515,7 @@ config ARCH_WANT_GENERAL_HUGETLB
- config ARM_MODULE_PLTS
- 	bool "Use PLTs to allow module memory to spill over into vmalloc area"
- 	depends on MODULES
-+	select KASAN_VMALLOC if KASAN
- 	default y
- 	help
- 	  Allocate PLTs when loading modules so that jumps and calls whose
+v3: Added missing ; after EXPORT_SYMBOL()
+
+v2: Added missing EXPORT_SYMBOL() and enhanced commit message
+---
+ include/linux/thread_info.h | 5 ++++-
+ mm/maccess.c                | 6 ++++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/thread_info.h b/include/linux/thread_info.h
+index 73a6f34b3847..9f392ec76f2b 100644
+--- a/include/linux/thread_info.h
++++ b/include/linux/thread_info.h
+@@ -209,9 +209,12 @@ __bad_copy_from(void);
+ extern void __compiletime_error("copy destination size is too small")
+ __bad_copy_to(void);
+ 
++void __copy_overflow(int size, unsigned long count);
++
+ static inline void copy_overflow(int size, unsigned long count)
+ {
+-	WARN(1, "Buffer overflow detected (%d < %lu)!\n", size, count);
++	if (IS_ENABLED(CONFIG_BUG))
++		__copy_overflow(size, count);
+ }
+ 
+ static __always_inline __must_check bool
+diff --git a/mm/maccess.c b/mm/maccess.c
+index d3f1a1f0b1c1..4d46708c9a0d 100644
+--- a/mm/maccess.c
++++ b/mm/maccess.c
+@@ -335,3 +335,9 @@ long strnlen_user_nofault(const void __user *unsafe_addr, long count)
+ 
+ 	return ret;
+ }
++
++void __copy_overflow(int size, unsigned long count)
++{
++	WARN(1, "Buffer overflow detected (%d < %lu)!\n", size, count);
++}
++EXPORT_SYMBOL_GPL(__copy_overflow);
 -- 
-2.25.1
+2.34.1
 

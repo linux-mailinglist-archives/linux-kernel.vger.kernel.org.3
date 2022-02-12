@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D1E4B38A9
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 00:32:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 507294B38AD
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 00:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232574AbiBLXcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 18:32:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46148 "EHLO
+        id S232590AbiBLXev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 18:34:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232277AbiBLXcu (ORCPT
+        with ESMTP id S232009AbiBLXet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 18:32:50 -0500
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1515FF23
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 15:32:46 -0800 (PST)
-Received: by mail-oo1-xc2b.google.com with SMTP id u47-20020a4a9732000000b00316d0257de0so14942695ooi.7
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 15:32:46 -0800 (PST)
+        Sat, 12 Feb 2022 18:34:49 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51A85FF2B;
+        Sat, 12 Feb 2022 15:34:44 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id d27so21045862wrc.6;
+        Sat, 12 Feb 2022 15:34:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=vmaSptng9jreS1XXMbr6KSYdnJ6+9nuFAm8sfmi6BQE=;
-        b=T84POPRan5/lU9yCOzviw+LOlorxyZIrfQqfsOAJjsfkEiSLm3LpMSQRs5ae6Lb7Jc
-         82X+0xh8ZABAho8YYHYlBDZrqbP3TZakeCnsoXgGif18g42KJ0RhHwKTEy8LlnSrPhIi
-         nf9tzZLJCIhxR29e8hXScHtnxc9j8tUZCc1snPxjqIJKEf+Ys7wRfT+aauvGD9lGUTZF
-         tm8Yj8MEWokKzwZOx2QYeHswuo2pARy2IEpF/OCkZdQwmPTa741IiZoIB67ZYQAo8XJQ
-         VP1irJOvWdLwQ37BYLmwoDgEyDFvZYKRFuhxup4qsKOGjYzGyDSLh1/3VrwgJYi7Dfg9
-         +AHw==
+        bh=5jgdcp0ayEZuo3C2MvhANngRDpudrMRaNowCUHa/s98=;
+        b=gaGvQU2iy5bu2YFQH5CbfCX30I+jKNOIrxtedwM2uyEe0HPxXum0flrmpVAFJLPDZR
+         CQjs7zdFZuGCc2bmC/CWUxJcAUGK/wm/bO/nU4pdcNh8ssLtvXMfY6GNHZZINDUgfcof
+         yAeCiQXTDP09onQvHSAw7mrm0Vl49cm2uIkFt6v6qlWJie6h0CA0LoTjhBgWGaTyHlp6
+         CxFWEdY6TALaBz3f6zA31Us3CoM27/SKGFyNoSlI1Gp4pSpAyDl2hAwuiosBZA+SpXWd
+         pN2BxR//PeOK9ZdC+k4ITuKIJIim21bmASn/Iam7SDv8psnbc1e8/7Grx61gc838+gdO
+         mNig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vmaSptng9jreS1XXMbr6KSYdnJ6+9nuFAm8sfmi6BQE=;
-        b=BBpz1WJ+ToF+Jp6lT85ea8AFotTeo8y8kcu17t8v5hdh72e9p2BfNU9MOL+QLc3KUc
-         wFzmODEbr5XIFav4lT1S5FODU+RIO7hYIwsIFAT/SZFG9qVlHJNCY7yf4FGvM0jaQtoR
-         27Pk8U7OhcvdhXiSFkhiu5CBPKXDIrhXLrqM4SmFfQF7KeZO1VwRtqyBo+soI5dJ9jvj
-         X7121MNH6EnKnf10rqbHX003lV1TN363YDbzTWKY3NRNDqhCn7Tyvmeq6UuT0W9vAkcP
-         v0hs3pVSW2K/832TkeW53s1/ONQnHjvY5DFVVnNkgvEsN+sAq1X1m6BkSl8SHBKwFKO4
-         KmvQ==
-X-Gm-Message-State: AOAM531ME/KPXd11YZxHORl/7mMBtJeZurf/TM1yOSh575awq7j6gDmb
-        gRib1h6tV0+eetjNCjpdmUX8vFa1lvRCVPXiBxGfEg==
-X-Google-Smtp-Source: ABdhPJyoQOtsaws9OAJx+h1f1VrsgKqQm5BCWA6ItvT/d8OJ70TWXOyhJMtmV5Ssp7XFZApO052VF/6vooyEZ0RrDK0=
-X-Received: by 2002:a05:6871:581:: with SMTP id u1mr2068039oan.139.1644708765547;
- Sat, 12 Feb 2022 15:32:45 -0800 (PST)
+        bh=5jgdcp0ayEZuo3C2MvhANngRDpudrMRaNowCUHa/s98=;
+        b=Rt+9KRNrWSs1b6bMgZNnHFJc9g0IBt0NinvAN+1ZfCFtZtPEy044oofT+zfRTtc1w6
+         gv2g+O+xebNkVgyPqeny24nTySH2DMVVW79zVYzwtz4n8/zhVxxVCBGVquy/qcHmGZlf
+         XrbnTfHpzE1c8j1tn8yEOImjvXBn1XqR1WRqMqENK+tosPwFVLO5yKrGi789+I6nm6eX
+         gGIATl2MEdDUWBx78Uz8bVqqWC+9VQo5dW5NXKUYRE11kEIf3oVysopHzMIhr66+ftFT
+         YPkmf7LIMR6Zc1Keqf6vMk0w/BIDsSTp9QABfnGrDRfHEFewp5nRernJCWdC2oM2S5OY
+         bnkg==
+X-Gm-Message-State: AOAM532/BL88n5PC3HlnzOfE+C/5QHwnyzobm3pYdQ6c0hI/zxxKs+8E
+        9GRu1/EuU2aeS4GxSUf58GmgbIxIjCCH4R6L8fA=
+X-Google-Smtp-Source: ABdhPJwSbzFO/sSyhmPRbS6SS1nGVIGFiQPghmGPMK0UgPOW6IT0Bgn165Uzk/Ted8qLRgT+DG5lPidMXZMSp0Ahob0=
+X-Received: by 2002:a5d:43c4:: with SMTP id v4mr6087474wrr.181.1644708883269;
+ Sat, 12 Feb 2022 15:34:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20220117085307.93030-1-likexu@tencent.com> <20220117085307.93030-3-likexu@tencent.com>
- <20220202144308.GB20638@worktop.programming.kicks-ass.net>
- <CALMp9eRBOmwz=mspp0m5Q093K3rMUeAsF3vEL39MGV5Br9wEQQ@mail.gmail.com>
- <YgO/3usazae9rCEh@hirez.programming.kicks-ass.net> <69c0fc41-a5bd-fea9-43f6-4724368baf66@intel.com>
- <CALMp9eS=1U7T39L-vL_cTXTNN2Li8epjtAPoP_+Hwefe9d+teQ@mail.gmail.com> <67a731dd-53ba-0eb8-377f-9707e5c9be1b@intel.com>
-In-Reply-To: <67a731dd-53ba-0eb8-377f-9707e5c9be1b@intel.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Sat, 12 Feb 2022 15:32:34 -0800
-Message-ID: <CALMp9eRX3nTLs4gcy3wnSUSOPO7xzDpMvDLGauue9o0PwBAmbA@mail.gmail.com>
-Subject: Re: [PATCH kvm/queue v2 2/3] perf: x86/core: Add interface to query
- perfmon_event_map[] directly
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>,
-        Stephane Eranian <eranian@google.com>,
-        David Dunn <daviddunn@google.com>
+References: <20220206022023.376142-1-andrew.smirnov@gmail.com> <258c224c-c543-1756-4c1e-fe9d81e24e4c@roeck-us.net>
+In-Reply-To: <258c224c-c543-1756-4c1e-fe9d81e24e4c@roeck-us.net>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Sat, 12 Feb 2022 15:34:31 -0800
+Message-ID: <CAHQ1cqHysnfmJif4FqKeO2NV1H9euBq4jtMgeHZ1ihkFfQ8w3w@mail.gmail.com>
+Subject: Re: [PATCH] platform/x86: Add Steam Deck driver
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     platform-driver-x86@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,12 +69,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 10:57 AM Dave Hansen <dave.hansen@intel.com> wrote:
-
-> Does SGX cause problem for these people?  It can create some of the same
-> collection gaps:
+On Sun, Feb 6, 2022 at 9:51 AM Guenter Roeck <linux@roeck-us.net> wrote:
 >
->         performance monitoring activities are suppressed when entering
->         an opt-out (of performance monitoring) enclave.
+> On 2/5/22 18:20, Andrey Smirnov wrote:
+> > Add a driver exposing various bits and pieces of functionality
+> > provided by Steam Deck specific VLV0100 device presented by EC
+> > firmware. This includes but not limited to:
+> >
+> >      - CPU/device's fan control
+> >      - Read-only access to DDIC registers
+> >      - Battery tempreature measurements
+> >      - Various display related control knobs
+> >      - USB Type-C connector event notification
+> >
+> > Cc: Hans de Goede <hdegoede@redhat.com>
+> > Cc: Mark Gross <markgross@kernel.org>
+> > Cc: Jean Delvare <jdelvare@suse.com>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Cc: linux-kernel@vger.kernel.org (open list)
+> > Cc: platform-driver-x86@vger.kernel.org
+> > Cc: linux-hwmon@vger.kernel.org
+> > Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+> > ---
+> >
+> ...
+>
+>  > +config STEAMDECK
+>  > +       tristate "Valve Steam Deck platform driver"
+>  > +       depends on X86_64
+>  > +       help
+>  > +         Driver exposing various bits and pieces of functionality
+>  > +     provided by Steam Deck specific VLV0100 device presented by
+>  > +     EC firmware. This includes but not limited to:
+>
+> There seems to be some indentation issue.
+>
+>  > +         - CPU/device's fan control
+>  > +         - Read-only access to DDIC registers
+>  > +         - Battery tempreature measurements
+>  > +         - Various display related control knobs
+>  > +         - USB Type-C connector event notification
+>  > +
+>  > +     Say N unless you are running on a Steam Deck.
+>  > +
+>
+> This doesn't depend on hwmon, yet it fails if devm_hwmon_device_register_with_info()
+> returns an eror. That has a couple of problems: if HWMON=n, it won't compile,
+> and if STEAMDECK=y and HWMON=m it won't compile either. You'll have to provide
+> some dependency against HWMON to make this work.
+>
+> ...
+>
 
-There's our precedent!
+Yeah, my bad, will fix.
+
+> > +
+> > +static int steamdeck_read_fan_speed(struct steamdeck *jup, long *speed)
+> > +{
+> > +     unsigned long long val;
+> > +
+> > +     if (ACPI_FAILURE(acpi_evaluate_integer(jup->adev->handle,
+> > +                                            "FANR", NULL, &val)))
+> > +             return -EIO;
+> > +
+> > +     *speed = val;
+> > +     return 0;
+> > +}
+> > +
+> > +static int
+> > +steamdeck_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+> > +                  u32 attr, int channel, long *out)
+> > +{
+> > +     struct steamdeck *sd = dev_get_drvdata(dev);
+> > +     unsigned long long val;
+> > +
+> > +     switch (type) {
+> > +     case hwmon_temp:
+> > +             if (attr != hwmon_temp_input)
+> > +                     return -EOPNOTSUPP;
+> > +
+> > +             if (ACPI_FAILURE(acpi_evaluate_integer(sd->adev->handle,
+> > +                                                    "BATT", NULL, &val)))
+> > +                     return -EIO;
+> > +             /*
+> > +              * Assuming BATT returns deg C we need to mutiply it
+> > +              * by 1000 to convert to mC
+> > +              */
+> > +             *out = val * 1000;
+> > +             break;
+> > +     case hwmon_fan:
+> > +             switch (attr) {
+> > +             case hwmon_fan_input:
+> > +                     return steamdeck_read_fan_speed(sd, out);
+>
+> There is a bit of inconsistency here: All other atributes are handled directly,
+> except for this one, yet there isn't really a difference in the actual operation.
+> Maybe I am missing something. What is the reason for using a function here
+> but not for the other attributes ?
+>
+
+It is also used to initialize "fan_target" to its initial value in
+steamdeck_probe(). There's no ACPI method to read set fan target
+speed, so I have to cache it in "fan_target".
+
+> > +             case hwmon_fan_target:
+> > +                     *out = sd->fan_target;
+> > +                     break;
+> > +             case hwmon_fan_fault:
+> > +                     if (ACPI_FAILURE(acpi_evaluate_integer(
+> > +                                              sd->adev->handle,
+> > +                                              "FANC", NULL, &val)))
+> > +                             return -EIO;
+> > +                     /*
+> > +                      * FANC (Fan check):
+> > +                      * 0: Abnormal
+> > +                      * 1: Normal
+> > +                      */
+> > +                     *out = !val;
+> > +                     break;
+> > +             default:
+> > +                     return -EOPNOTSUPP;
+> > +             }
+> > +             break;
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int
+> > +steamdeck_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
+> > +                         u32 attr, int channel, const char **str)
+> > +{
+> > +     switch (type) {
+> > +     case hwmon_temp:
+> > +             *str = "Battery Temp";
+> > +             break;
+> > +     case hwmon_fan:
+> > +             *str = "System Fan";
+> > +             break;
+> > +     default:
+> > +             return -EOPNOTSUPP;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int
+> > +steamdeck_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+> > +                   u32 attr, int channel, long val)
+> > +{
+> > +     struct steamdeck *sd = dev_get_drvdata(dev);
+> > +
+> > +     if (type != hwmon_fan ||
+> > +         attr != hwmon_fan_target)
+> > +             return -EOPNOTSUPP;
+> > +
+> > +     if (val > U16_MAX)
+> > +             return -EINVAL;
+>
+> This accepts negative values, and it expects the user to find
+> valid ranges. I suggest to use clamp_val() instead.
+
+Will do.

@@ -2,225 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFD54B34B4
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 12:31:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B85DA4B34BD
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 12:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234588AbiBLLas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 06:30:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43648 "EHLO
+        id S234662AbiBLLkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 06:40:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiBLLao (ORCPT
+        with ESMTP id S232024AbiBLLkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 06:30:44 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB5F26AF7;
-        Sat, 12 Feb 2022 03:30:41 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id b13so20209282edn.0;
-        Sat, 12 Feb 2022 03:30:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jv0WkmIUjrG0tZLaVODfh5nXkUsmipBvXV3pTw4nVB4=;
-        b=flKURlaklL4NiuZTeoLBvt76QwlB9aUz+yVSmZVdD+ujOuGBev2+8jiYhcg4Qxxv8X
-         IhPLBNq43kCL8RH1LIds83VioghMFPaaRJ/MW9coKEj4zChgrV1FvNKNZjOi1tXFIeD/
-         gYP1hQneiXzyBIVI0evC57kstrM3czOu6eKTleaur99LTZF2bkvmJ7zFuV9Rb8FDItQK
-         3gb2PEvDlZ2p1U4js227dEtN8EzG5sWqCFCnse4QR45xCejpfC7thmzDjrtz9pRzec9G
-         fY4WCSF/8yMvYUXatkE30oGatZkQ1vz1fpU3eLDLR1NMO8B4k30oVQf2Vh2SUi36XnXz
-         cljQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jv0WkmIUjrG0tZLaVODfh5nXkUsmipBvXV3pTw4nVB4=;
-        b=BZphEo8pJ1lG2q7OH49jtmH+ANd1QgsJ6Xz/omx7fcdjqmtr2ZV29JeMae2x6f4Ca1
-         eBOuwJiwmKwgS9LIzL7DDzdgxl83Hby37unTywEdY0sCiUONC+aCtIk8zwCL03v1Z3Ll
-         qgrLBzuPQNyE09K2/H/Thptf4BP16PBfglPOF/ZGG951i9FzkEd7pZI1NZp+QKi5pPWt
-         99o2pWrwZ9sWxVY8xfjOOXhHleQytFpt+i5w2PgLX/ai90CATVGW7ROMv6L9t46hFsb6
-         Qd1FWLKbCo4f9bLG8QnfMNyXIK2GMCW4l5cDTmQKQjrPPRQKg/b7Ww8yo2v+jXQTn3Lw
-         maeg==
-X-Gm-Message-State: AOAM530a6uWvC7bi5TQFKoEVbRSQbxEL9t4XQ7Zc0p1dv3tauPN3ZnQ8
-        sOUccteO/trKgrNDhYEkpgw=
-X-Google-Smtp-Source: ABdhPJznHyQt9g/DcKeFUCs3n8YJ/YRlv6aOnl4GQ/sq9iWdPX9RtG4L7QYgO0K/y8pFU8zyXQIP6g==
-X-Received: by 2002:a05:6402:3514:: with SMTP id b20mr6262194edd.65.1644665439686;
-        Sat, 12 Feb 2022 03:30:39 -0800 (PST)
-Received: from krava ([83.240.63.12])
-        by smtp.gmail.com with ESMTPSA id q7sm5608620ejj.8.2022.02.12.03.30.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Feb 2022 03:30:39 -0800 (PST)
-Date:   Sat, 12 Feb 2022 12:30:35 +0100
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Song Liu <song@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Hao Luo <haoluo@google.com>, eranian@google.com
-Subject: Re: [PATCH v3 04/22] perf dso: Hold lock when accessing nsinfo
-Message-ID: <YgeaW4K5XY/66afx@krava>
-References: <20220211103415.2737789-1-irogers@google.com>
- <20220211103415.2737789-5-irogers@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220211103415.2737789-5-irogers@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 12 Feb 2022 06:40:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E32B26AD4;
+        Sat, 12 Feb 2022 03:40:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3232260C44;
+        Sat, 12 Feb 2022 11:40:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 657CAC340E7;
+        Sat, 12 Feb 2022 11:40:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644666045;
+        bh=O/FHTLknGUukRnUAtCoeQ0TR0+1juaOL+1VA6H6LuhQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cRfTp/DezaVUrSzytLwk5ZsqkA74a//NftbGbBznRSWPUlrCzTXwrh/X2evpoSr05
+         rSSgLDUySTuthGkmf7ARdbo4UJhdC2ceSX8rv+MKzhpQfzzxb6MTV/NaxSliVtUSXV
+         nm02gmKjc+lGF6fQN3jBKjlfFlDYpFWnzhtB6m3uA1rA+txfHfK7TcnHkQ4vqGKEch
+         t7WxxgX9zjZ1MJuP+cUYMw8FN9PufwR8pPTZy+jfw+yxw2w9qp4IRhNdhacSFZhfEN
+         wjProJ2NQMDw9N5X319l3y6LZBQCGf14HSaUxZO6RVw7HwLH2Bi+gd0wZtNWU5XPG1
+         ZqKQJn3CACXJA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nIqlf-007M6x-C9; Sat, 12 Feb 2022 11:40:43 +0000
+Date:   Sat, 12 Feb 2022 11:40:35 +0000
+Message-ID: <87k0e0tirw.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Nishanth Menon <nm@ti.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/5] arm64: dts: ti: Introduce base support for AM62x SoC
+In-Reply-To: <20220211235513.cplmvgfuwe3dhzbs@nearby>
+References: <20220208131827.1430086-1-vigneshr@ti.com>
+        <20220208131827.1430086-5-vigneshr@ti.com>
+        <bc6cb6e1adcf6860a595b71246778733@kernel.org>
+        <20220210193459.nl6baranvmqs46bi@coastal>
+        <87bkzdljt1.wl-maz@kernel.org>
+        <20220211235513.cplmvgfuwe3dhzbs@nearby>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: nm@ti.com, vigneshr@ti.com, kristo@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski@canonical.com, ssantosh@kernel.org, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 02:33:57AM -0800, Ian Rogers wrote:
-> There may be threads racing to update dso->nsinfo:
-> https://lore.kernel.org/linux-perf-users/CAP-5=fWZH20L4kv-BwVtGLwR=Em3AOOT+Q4QGivvQuYn5AsPRg@mail.gmail.com/
-> Holding the dso->lock avoids use-after-free, memory leaks and other
-> such bugs. Apply the fix in:
-> https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/
-> of there being a missing nsinfo__put now that the accesses are data race
-> free.
+On Fri, 11 Feb 2022 23:55:13 +0000,
+Nishanth Menon <nm@ti.com> wrote:
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/builtin-inject.c   | 4 ++++
->  tools/perf/util/dso.c         | 5 ++++-
->  tools/perf/util/map.c         | 3 +++
->  tools/perf/util/probe-event.c | 2 ++
->  tools/perf/util/symbol.c      | 2 +-
->  5 files changed, 14 insertions(+), 2 deletions(-)
+> On 11:33-20220211, Marc Zyngier wrote:
+> > On Thu, 10 Feb 2022 19:34:59 +0000,
+> > Nishanth Menon <nm@ti.com> wrote:
+> > > 
+> > > On 19:10-20220209, Marc Zyngier wrote:
+> > > [...]
+> > > 
+> > > > > +&cbass_main {
+> > > > > +	gic500: interrupt-controller@1800000 {
+> > > > > +		compatible = "arm,gic-v3";
+> > > > > +		#address-cells = <2>;
+> > > > > +		#size-cells = <2>;
+> > > > > +		ranges;
+> > > > > +		#interrupt-cells = <3>;
+> > > > > +		interrupt-controller;
+> > > > > +		reg = <0x00 0x01800000 0x00 0x10000>,	/* GICD */
+> > > > > +		      <0x00 0x01880000 0x00 0xC0000>;	/* GICR */
+> > > > 
+> > > > Usual rant: you are missing the GICC, GICH and GICV regions
+> > > > that are implemented by the CPU. Cortex-A53 implements them
+> > > > (they are not optional), so please describe them.
+> > > > 
+> > > 
+> > > 
+> > > -ECONFUSED. TRM for GIC500 refers to just GICD, GICR and ITS range[1].
+> > 
+> > And I'm not talking about the GIC, but of the CPU interface. The fact
+> > that we describe both in the GIC binding doesn't mean they are
+> > implemented by the same IP block (and the architecture is quite clear
+> > about that).
+> > 
+> > > Same thing is indicated by Generic Interrupt Controller Architecture
+> > > Specification[2] See table 1-1 (page 23).
+> > > 
+> > > I think you are expecting GICV3's backward compatibility mode (Table 1-2
+> > > in page 24), But in K3 architecture, are_option meant for backward
+> > > compatibility is set to true (aka no backward compatibility). I think
+> > > this did popup sometime back as well (first k3 SoC)[3]. I think the more
+> > > clearer description is available in [4].
+> > 
+> > No, this description is for the architecture as a whole. ARE being
+> > disabled *int the GIC* doesn't mean it is disabled overall, and the
+> > CPU is free to implement the CPU interface by any mean it wants as
+> > long as it communicates with the GIC using the Stream Protocol.
+> > Cortex-A32, A34, 35, A53, A57, A72 and A73 all implement both the
+> > sysreg and MMIO CPU interfaces. Later ARM CPUs don't. Both can work
+> > with GIC500.
+> > 
+> > > I believe the argumentation that GICC/H/V is mandatory for A53 if GIC500
+> > > is used is not accurate. Please correct me if I am mistaken.
+> > 
+> > GIC500 is not involved at all, and A53 always implements both the
+> > system register and MMIO interfaces. See the A53 TRM, chapter 9. The
+> > only way to disable this interface is to assert GICCDISABLE, which
+> > disables the whole of the CPU interface. Given that you have a (more
+> > or less) functional system, it probably isn't the case.
+> > 
+> > See Table 9-1, which tells you where these registers are as an offset
+> > from PERIPHBASE. Dumping these registers should show you that they are
+> > indeed implemented and not solely a figment of my own imagination.
 > 
-> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-> index fbf43a454cba..bede332bf0e2 100644
-> --- a/tools/perf/builtin-inject.c
-> +++ b/tools/perf/builtin-inject.c
-> @@ -363,8 +363,10 @@ static struct dso *findnew_dso(int pid, int tid, const char *filename,
->  	}
->  
->  	if (dso) {
-> +		BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
->  		nsinfo__put(dso->nsinfo);
->  		dso->nsinfo = nsi;
-> +		pthread_mutex_unlock(&dso->lock);
->  	} else
->  		nsinfo__put(nsi);
->  
-> @@ -547,7 +549,9 @@ static int dso__read_build_id(struct dso *dso)
->  	if (dso->has_build_id)
->  		return 0;
->  
-> +	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
->  	nsinfo__mountns_enter(dso->nsinfo, &nsc);
-> +	pthread_mutex_unlock(&dso->lock);
-
-so this separates nsinfo__mountns_enter and nsinfo__put,
-should we care also about nsinfo__mountns_exit?
-
-jirka
-
->  	if (filename__read_build_id(dso->long_name, &dso->bid) > 0)
->  		dso->has_build_id = true;
->  	nsinfo__mountns_exit(&nsc);
-> diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
-> index 6beccffeef7b..b2f570adba35 100644
-> --- a/tools/perf/util/dso.c
-> +++ b/tools/perf/util/dso.c
-> @@ -548,8 +548,11 @@ static int open_dso(struct dso *dso, struct machine *machine)
->  	int fd;
->  	struct nscookie nsc;
->  
-> -	if (dso->binary_type != DSO_BINARY_TYPE__BUILD_ID_CACHE)
-> +	if (dso->binary_type != DSO_BINARY_TYPE__BUILD_ID_CACHE) {
-> +		BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
->  		nsinfo__mountns_enter(dso->nsinfo, &nsc);
-> +		pthread_mutex_unlock(&dso->lock);
-> +	}
->  	fd = __open_dso(dso, machine);
->  	if (dso->binary_type != DSO_BINARY_TYPE__BUILD_ID_CACHE)
->  		nsinfo__mountns_exit(&nsc);
-> diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
-> index 8af693d9678c..ae99b52502d5 100644
-> --- a/tools/perf/util/map.c
-> +++ b/tools/perf/util/map.c
-> @@ -192,7 +192,10 @@ struct map *map__new(struct machine *machine, u64 start, u64 len,
->  			if (!(prot & PROT_EXEC))
->  				dso__set_loaded(dso);
->  		}
-> +		BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
-> +		nsinfo__put(dso->nsinfo);
->  		dso->nsinfo = nsi;
-> +		pthread_mutex_unlock(&dso->lock);
->  
->  		if (build_id__is_defined(bid))
->  			dso__set_build_id(dso, bid);
-> diff --git a/tools/perf/util/probe-event.c b/tools/perf/util/probe-event.c
-> index a834918a0a0d..7444e689ece7 100644
-> --- a/tools/perf/util/probe-event.c
-> +++ b/tools/perf/util/probe-event.c
-> @@ -180,8 +180,10 @@ struct map *get_target_map(const char *target, struct nsinfo *nsi, bool user)
->  
->  		map = dso__new_map(target);
->  		if (map && map->dso) {
-> +			BUG_ON(pthread_mutex_lock(&map->dso->lock) != 0);
->  			nsinfo__put(map->dso->nsinfo);
->  			map->dso->nsinfo = nsinfo__get(nsi);
-> +			pthread_mutex_unlock(&map->dso->lock);
->  		}
->  		return map;
->  	} else {
-> diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-> index 43f47532696f..a504346feb05 100644
-> --- a/tools/perf/util/symbol.c
-> +++ b/tools/perf/util/symbol.c
-> @@ -1774,6 +1774,7 @@ int dso__load(struct dso *dso, struct map *map)
->  	char newmapname[PATH_MAX];
->  	const char *map_path = dso->long_name;
->  
-> +	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
->  	perfmap = strncmp(dso->name, "/tmp/perf-", 10) == 0;
->  	if (perfmap) {
->  		if (dso->nsinfo && (dso__find_perf_map(newmapname,
-> @@ -1783,7 +1784,6 @@ int dso__load(struct dso *dso, struct map *map)
->  	}
->  
->  	nsinfo__mountns_enter(dso->nsinfo, &nsc);
-> -	BUG_ON(pthread_mutex_lock(&dso->lock) != 0);
->  
->  	/* check again under the dso->lock */
->  	if (dso__loaded(dso)) {
-> -- 
-> 2.35.1.265.g69c8d7142f-goog
+> Thanks for explaining.. I don't see this is working in practise.. Let me
+> know if I am making a mistake in my interpretation.
 > 
+> Quote from our internal integration spec (yep it leaves it to ARM cluster's
+> use):
+> ""
+> Note: GIC periphery base tieoff to ARM corepacs for GIC v2 compatibility
+> requires a dedicated unallocated space to be passed as input to ARM corepac.
+> The CC internal region 0F00_0000-0x0F03_FFFF is assigned as GIC periphery
+> base tieoff to the corepac.
+> When GIC-500 is in v3 mode, and A72 with GICCDISABLE=0 and PERIPHBASE set:
+> - the CPU interface registers are accessed via ICC* system register.
+> - the GICC* regions (PERIPHBASE - PERIPHBASE+0x3FFFF) are reserved
+>   and access will be Read as Zero / Write Ignored.
+> So any writes/reads to this region would be trapped by ARM corepacs.
+> ""
+
+Not sure what the 'corepacs' are (the CPU cluster?). But what I
+understand is that accesses to the GIC regions are kept internal to
+the 'corepacs', which is exactly what is expected.
+
+> 
+> Anyways, Here is my report. I checked across all K3 devices (a72 and
+> a53)
+> AM65x: PERIPH_BASE = 0x6f000000 (a53)
+> j721e: PERIPH_BASE = 0x6f000000 (a72)
+> J7200: PERIPH_BASE = 0x6f000000 (a72)
+> j721s2: PERIPH_BASE = 0x6f000000 (a72)
+> AM64: PERIPH_BASE = 0x100000000 (a53)
+> AM62: PERIPH_BASE = 0x100000000 (a53)
+> 
+> (side note: am64/62 needed the 0x6f.. address space for PCIe stuff.. but
+> the address chosen has nothing in SoC fabric)
+> 
+> Tested at u-boot shell prompt (running at EL2):
+> 
+> If I understood the expectation correctly..I should be seeing offsets
+> off [1]. Taking 'CPU Interface'/GICC as an example, [2] should be the
+> registers I should be seeing. aka, at offset 0xfc from PERIPHBASE, i
+> should see 0x0034443B.
+
+If ICC_SRE_EL3.SRE is 1, this is more or less expected. You can only
+use one or the other at any given time, not both.
+
+The more important thing is that GICV is what we give to a VM running
+in compat mode. With HCR_EL2.{AMO,FMO,IMO}={1,1,1} and
+ICC_SRE_EL1.SRE==0, the guest can access a MMIO virtual GIC interface,
+and the hypervisor does its magic.
+
+> 
+> Note: on K3 devices (in the 32bit address space), as in the
+> description above, we have a null endpoint handler in the bus fabric
+> that responds with 0x0 for read requests for invalid/reserved addresses.
+> 
+> What I see is 0x0 (and not IIDR) in all the address ranges - which matches ARM
+> sending that region requests straight down to SoC level and SoC
+> returning "ignore"..
+> 
+> On AM62, I attached Lauterbach. and tried to look at the addresses: [3]
+> from cpu view and from bus view.
+> 
+> I also checked from kernel side with devmem to make sure to dump while
+> kernel GICV3 is active.. I see the same thing as well..
+> 
+> Is there something TFA or someone has to do to "enable" this? I tried
+> re-reading porting-guide.rst yet again to make sure we have'nt missed
+> anything.
+
+I expect the SRE settings to control all of this, most of which are
+under NS control. You could easily check this by advertising the 3
+missing regions in DT, booting an upstream kernel with KVM and boot a
+GICv2 guest. KVM will also warn if the DT regions are advertised but
+the HW doesn't actually support the MMIO accesses. Feel free to ping
+me offline if you need the runs for this,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

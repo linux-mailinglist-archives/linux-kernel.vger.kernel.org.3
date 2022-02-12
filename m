@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8514B345D
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 11:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3AD4B3460
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 11:59:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233954AbiBLKwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 05:52:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46700 "EHLO
+        id S233920AbiBLK7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 05:59:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233843AbiBLKws (ORCPT
+        with ESMTP id S230370AbiBLK7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 05:52:48 -0500
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335F126543;
-        Sat, 12 Feb 2022 02:52:45 -0800 (PST)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21C9spM0018801;
-        Sat, 12 Feb 2022 05:52:38 -0500
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3e6ap9g3t3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 12 Feb 2022 05:52:38 -0500
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 21CAqbnM064715
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 12 Feb 2022 05:52:37 -0500
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Sat, 12 Feb 2022 05:52:35 -0500
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Sat, 12 Feb 2022 05:52:35 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Sat, 12 Feb 2022 05:52:35 -0500
-Received: from amiclaus-VirtualBox.ad.analog.com ([10.65.37.22])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 21CAqONf001965;
-        Sat, 12 Feb 2022 05:52:31 -0500
-From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
-To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Subject: [PATCH v2 3/3] MAINTAINERS: add maintainer for ADA4250 driver
-Date:   Sat, 12 Feb 2022 12:51:53 +0200
-Message-ID: <20220212105153.19748-3-antoniu.miclaus@analog.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220212105153.19748-1-antoniu.miclaus@analog.com>
-References: <20220212105153.19748-1-antoniu.miclaus@analog.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: Bvvt3RXtWGj-z34fuSXZ1FlRT_OtkSZD
-X-Proofpoint-GUID: Bvvt3RXtWGj-z34fuSXZ1FlRT_OtkSZD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-12_03,2022-02-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- phishscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
- priorityscore=1501 mlxlogscore=809 adultscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202120065
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        Sat, 12 Feb 2022 05:59:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DA824BD6;
+        Sat, 12 Feb 2022 02:59:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0FF01B802BD;
+        Sat, 12 Feb 2022 10:59:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C155DC340E7;
+        Sat, 12 Feb 2022 10:59:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644663579;
+        bh=CEMuvy2r1KPNQwE5XFJkNJGu4R8eD6T2pmx2Vd1YYOs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e3GL42LcXKYTWMdPP6WeRXd5zHkyvrTIPqdOzvCElBMswHLZciV3hzpMnL7Pu9b8l
+         5OboDCWvEronnqPUvrSXmYtKbzYulA/5D8Wk5CATxkR0jyru02yYYyLhkvbTU1DnL3
+         UxPC18BUtVVZjzBTurGq7MI4s+KTCwtLqh8ggnE5w+Rq5J0QoOTbsLHlfZ2sODS3du
+         /q6c1uKR38ZLODTkRpdFnezEId1Ahmjz2wx59SlsgaypT/0nXi9UQm46VyO3z9mxV8
+         P3/ZY6PZjtwRb7ImblUKa/djrmNp4UreU4lm63LdzJzScJJyL8NqRIUf3jMYPdWItq
+         GEhCVQ+c77DFg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nIq7t-007Lli-IC; Sat, 12 Feb 2022 10:59:37 +0000
+Date:   Sat, 12 Feb 2022 10:59:37 +0000
+Message-ID: <87a6ewl59i.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>, robh+dt@kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 10/11] PCI: mvebu: Implement support for legacy INTx interrupts
+In-Reply-To: <20220211182137.GA2492@lpieralisi>
+References: <20220105150239.9628-1-pali@kernel.org>
+        <20220112151814.24361-1-pali@kernel.org>
+        <20220112151814.24361-11-pali@kernel.org>
+        <20220211171917.GA740@lpieralisi>
+        <20220211175202.gku5pkwn5wmjo5al@pali>
+        <20220211182137.GA2492@lpieralisi>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lorenzo.pieralisi@arm.com, pali@kernel.org, robh+dt@kernel.org, bhelgaas@google.com, thomas.petazzoni@bootlin.com, kw@linux.com, kabel@kernel.org, rmk+kernel@armlinux.org.uk, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,32 +77,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add myself as maintainer for the ADA4250 driver.
+On Fri, 11 Feb 2022 18:21:37 +0000,
+Lorenzo Pieralisi <lorenzo.pieralisi@arm.com> wrote:
+>=20
+> On Fri, Feb 11, 2022 at 06:52:02PM +0100, Pali Roh=C3=A1r wrote:
+>=20
+> [...]
+>=20
+> > > > @@ -1121,6 +1247,21 @@ static int mvebu_pcie_parse_port(struct mveb=
+u_pcie *pcie,
+> > > >  		port->io_attr =3D -1;
+> > > >  	}
+> > > > =20
+> > > > +	/*
+> > > > +	 * Old DT bindings do not contain "intx" interrupt
+> > > > +	 * so do not fail probing driver when interrupt does not exist.
+> > > > +	 */
+> > > > +	port->intx_irq =3D of_irq_get_byname(child, "intx");
+> > > > +	if (port->intx_irq =3D=3D -EPROBE_DEFER) {
+> > > > +		ret =3D port->intx_irq;
+> > > > +		goto err;
+> > > > +	}
+> > > > +	if (port->intx_irq <=3D 0) {
+> > > > +		dev_warn(dev, "%s: legacy INTx interrupts cannot be masked indiv=
+idually, "
+> > > > +			      "%pOF does not contain intx interrupt\n",
+> > > > +			 port->name, child);
+> > >=20
+> > > Here you end up with a new warning on existing firmware. Is it
+> > > legitimate ? I would remove the dev_warn().
+> >=20
+> > I added this warning in v2 because Marc wanted it.
+> >=20
+> > Should I (again) remove it in v3?
+>=20
+> No, I asked a question and gave an opinion, I appreciate Marc's concern
+> so leave it (ie not everyone running a new kernel with new warnings on
+> existing firmware would be happy - maybe it is a good way of forcing a
+> firmware upgrade, you will tell me).
 
-Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+My concern is that short of being able to mask these interrupts, it is
+possible for a device to assert an interrupt that no driver handles,
+and the kernel spurious interrupt detector won't be able to shut it
+up. At this stage, the machine is totally dead (screaming *level*
+interrupt).
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fb18ce7168aa..0410054a7bf5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1075,6 +1075,14 @@ L:	linux-media@vger.kernel.org
- S:	Maintained
- F:	drivers/media/i2c/ad9389b*
- 
-+ANALOG DEVICES INC ADA4250 DRIVER
-+M:	Antoniu Miclaus <antoniu.miclaus@analog.com>
-+L:	linux-iio@vger.kernel.org
-+S:	Supported
-+W:	https://ez.analog.com/linux-software-drivers
-+F:	Documentation/devicetree/bindings/iio/amplifiers/adi,ada4250.yaml
-+F:	drivers/iio/amplifiers/ada4250.c
-+
- ANALOG DEVICES INC ADGS1408 DRIVER
- M:	Mircea Caprioru <mircea.caprioru@analog.com>
- S:	Supported
--- 
-2.35.1
+The dev_warn() could toned down to a dev_warn_once() though.
 
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.

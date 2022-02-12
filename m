@@ -2,81 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE564B3685
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 17:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EB04B3687
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 17:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237459AbiBLQhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 11:37:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46024 "EHLO
+        id S237481AbiBLQiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 11:38:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231560AbiBLQhR (ORCPT
+        with ESMTP id S231560AbiBLQiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 11:37:17 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3E320F
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 08:37:14 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 46298402D3
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 16:37:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644683833;
-        bh=7ys9/qjzPiU3SC/qBsUq9U2CJFdyL7K5ET3RMyCWmA0=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=ROUv8aLzhoTOJEDA7rN4kRKkSVduuiAXqIxLE85zeM3FC+0CgPfXm4XJOA5timhnK
-         3urM2MjgwFYRGHa05vccgYpMhg+EcPlDRuefwzCPVhh9V/3i9eTeqUY/anHy5H7DJL
-         qOnGZQ7VSC58cxciYrSdteO9vFsF7HDFdAGJ6AHVTk3b/XX0wm9KokF4GZW7n4TZDs
-         fTQkRb52OHYzZXeGfRak8Kv5DAGZTqxdJbI3CLZ6RBlPAqmszn6jitlzVoIuAvR6Yg
-         f0DkTcR4pIsLZt5JdxeT9jjgTIyLeiUL0gd9hBzQ+G2MezG59/PGbz/k9Jv0O5iPIR
-         2PPkMGi5yeuTQ==
-Received: by mail-ed1-f71.google.com with SMTP id k5-20020a508ac5000000b00408dec8390aso7262017edk.13
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 08:37:13 -0800 (PST)
+        Sat, 12 Feb 2022 11:38:02 -0500
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3BB212;
+        Sat, 12 Feb 2022 08:37:59 -0800 (PST)
+Received: by mail-pj1-f46.google.com with SMTP id n19-20020a17090ade9300b001b9892a7bf9so2425062pjv.5;
+        Sat, 12 Feb 2022 08:37:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7ys9/qjzPiU3SC/qBsUq9U2CJFdyL7K5ET3RMyCWmA0=;
-        b=MhXYH73ZYFDE/GMIaSi7LN+lUFz6SPnP8HAY5amBYrHN6iRWjSuxT9JjrBd0ZUnYXA
-         BWZRETAt90ZCkOuJ7fjnfyaoB7UEQ0S/c1wp9MFjqNTGXsCX0sPU4WsskKaENezSv0My
-         nd3Oi6qf4YXeZrvaRcKAefA7e0EItgq1hXrRTsJBeGTCVae5jT7hNtzKE7v/95uKlonF
-         4UzqZGzjpXTtYvYQ4XFG/5wi1gH/DIlmc7QEmrAXMW5KCnhWoIzCDPDR99dYK9CzKbMC
-         s9N7hsm3mdNYuHK935/GB3ZRIQtKENYZ9UYoAPObnLqMJk8ROR8oRHiO4QTlw3S6DjIc
-         Ua+w==
-X-Gm-Message-State: AOAM533XxZmWQq4ex6H1rkE2668+0EDRUslIf195wMYZ6xxf50Gz+7iw
-        4BlFpNkZgZuhxDGD1ouhSObw1XfIIj3YlkFLEhUrNKTtpZ0JBw+LOni5TbSHsFiamo25MCbA9jM
-        myyDbA4j9AI6iV8/3QKtLdvdHNvm2Lj5estFZUMQ5TQ==
-X-Received: by 2002:a05:6402:280b:: with SMTP id h11mr7446509ede.402.1644683833016;
-        Sat, 12 Feb 2022 08:37:13 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwUIS5XZJwcH/oXPkDCwlaYXgS9xWXGSa3hZYgN6Ichr2oZbBytnhatpKpWIWOfF2w+YAttqg==
-X-Received: by 2002:a05:6402:280b:: with SMTP id h11mr7446498ede.402.1644683832858;
-        Sat, 12 Feb 2022 08:37:12 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id x10sm2494443edd.20.2022.02.12.08.37.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Feb 2022 08:37:11 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     linux-arm-kernel@lists.infradead.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Sam Protsenko <semen.protsenko@linaro.org>
-Subject: Re: [PATCH v2] dt-bindings: soc: samsung: usi: refer to dtschema for children
-Date:   Sat, 12 Feb 2022 17:37:05 +0100
-Message-Id: <164468382250.54495.10506365677169420285.b4-ty@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220211164716.120880-1-krzysztof.kozlowski@canonical.com>
-References: <20220211164716.120880-1-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lWvUkwk07Cqv8ZgRYz64+Y6IpvTasbWoniI+uoJ1w1A=;
+        b=kb+MWWieieJ4S6teqZRTZK/Alw3g9agSrJRupSodtBsPXCxSvvG/m9uA2X6uQIsYAz
+         dXxVxOKs+UPKdTqyqrdS4+VtN7bZ/l42kNwyOSWbIdv0wGiN5LbxwZj5KWEGQpm5jr9Y
+         dYYgc546n3Zw5uHExMPych7JWpbd9YSA7vmx3rAermPM8H/xvYCRleDL6ZJIx0UQEnvD
+         Qqua95Pp9VmPKY2uRLLFd22e04DZkACJ7s2Ah9pGF/3FB3msI2eaVbuJk9qJCPi3VFoL
+         vHxBFY2nt8TrwSdXqS5Gtw//pST0ndSJlLMVNXfz4GvrGZ1aIW8kNMhF1LRdw5KQzt4L
+         IUqg==
+X-Gm-Message-State: AOAM531ds4FiZd5YpJM6XgC1V3hbPIGhjS/ICDwe+rD/OQWVrKuHa+GT
+        56Mq4+jg+ysdfJzP2wC+SoU=
+X-Google-Smtp-Source: ABdhPJyhIL2ILPjKpDpGa5afSF+31xQdglUdqqIFTa4eFiuVp5UuUKZgM5IE7j3FX+AOr1US7QWP6Q==
+X-Received: by 2002:a17:902:d501:: with SMTP id b1mr6711030plg.120.1644683878329;
+        Sat, 12 Feb 2022 08:37:58 -0800 (PST)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id c3sm536994pfd.129.2022.02.12.08.37.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Feb 2022 08:37:57 -0800 (PST)
+Message-ID: <71d6f14e-46af-cc5a-bc70-af1cdc6de8d5@acm.org>
+Date:   Sat, 12 Feb 2022 08:37:55 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [syzbot] possible deadlock in worker_thread
+Content-Language: en-US
+To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        syzbot <syzbot+831661966588c802aae9@syzkaller.appspotmail.com>,
+        jgg@ziepe.ca, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+References: <0000000000005975a605d7aef05e@google.com>
+ <8ea57ddf-a09c-43f2-4285-4dfb908ad967@acm.org>
+ <ccd04d8a-154b-543e-e1c3-84bc655508d1@I-love.SAKURA.ne.jp>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <ccd04d8a-154b-543e-e1c3-84bc655508d1@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,18 +69,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Feb 2022 17:47:16 +0100, Krzysztof Kozlowski wrote:
-> Explicitly reference the dtschema for USI children implementing specific
-> serial protocol (I2C, SPI, UART).  The SPI schema is not yet accepted,
-> so it will be provided later.
-> 
-> 
+On 2/11/22 21:31, Tetsuo Handa wrote:
+> But this report might be suggesting us that we should consider
+> deprecating (and eventually getting rid of) system-wide workqueues
+> (declared in include/linux/workqueue.h), for since flush_workqueue()
+> synchronously waits for completion, sharing system-wide workqueues
+> among multiple modules can generate unexpected locking dependency
+> chain (like this report).
 
-Applied, thanks!
+I do not agree with deprecating system-wide workqueues. I think that all 
+flush_workqueue(system_long_wq) calls should be reviewed since these are 
+deadlock-prone.
 
-[1/1] dt-bindings: soc: samsung: usi: refer to dtschema for children
-      commit: e465ea5cc05d1d0b45c315fca0254bd2ee04b661
+Thanks,
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Bart.

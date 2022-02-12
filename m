@@ -2,95 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9164B3767
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 19:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5874B377D
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 19:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbiBLSc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 13:32:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53644 "EHLO
+        id S230363AbiBLS5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 13:57:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbiBLSc0 (ORCPT
+        with ESMTP id S230023AbiBLS5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 13:32:26 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A35D6007E;
-        Sat, 12 Feb 2022 10:32:22 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id q204so15308898iod.8;
-        Sat, 12 Feb 2022 10:32:22 -0800 (PST)
+        Sat, 12 Feb 2022 13:57:19 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F0F6007A;
+        Sat, 12 Feb 2022 10:57:15 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id y84so15462593iof.0;
+        Sat, 12 Feb 2022 10:57:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1ZU/xBo4v5syghhPRoThoLn4tvhr/EqUMFObZCi2t6k=;
-        b=Kd9daEZTG01vUunj9KpOq4Tlqe0AR4jwzTryhBoDOCJdLk42Frgjx5QOJZwOdTvdN+
-         5w6brYZzwx55wGfNgrwE5v2ZviNe+FwzOcEXZPCCTgxQWcbXWgChRoh9HLPVEVDETjmk
-         d9NsqcqbTXHDOtZwjLE4n7UUOIUFvneVQT9KKksB5OsjSpk+CJtKwm0ffErWL3d2MpWN
-         On531QRK/Woo9hRSZ7uKcmAR96JfoYJd8xqRGQzqkPPWOgOCuepjsbD/2jefhJ/MmnQc
-         IukF4P2PM+zgNqEx4bpvhAl9Kl8kSD/iYMM6o+K44UEiQElLwa5b9FHlYd9VVslmOe1J
-         G1yw==
+        bh=PW5bHK7lbz8mAfQVLbpabS9JQmvxuuP5i13vS9JUmWQ=;
+        b=n5D8bwCKZRUGpl68+OwDfJK+AQroTXijhLf+Ev2Dbodadyb6WRz6/fX9TzoLv5JY44
+         vKXzGhsqvNG0b1NNUEa1R2yJntFRgZVvW8w2wrpRBfSWda7h6ZxvPtJrBrf7yYHVOrwG
+         vAfadKq2gwnHNR05HepbxldrYBHyblxQyutjIhO/hkKuz8jVpizo184RCyuaFwUdEEMB
+         gDMdiJYy6LOQ+V5N1zvv/KQitEvAl4D/B6TT8xoaot76ok9JaRjP2+PcQoyjgjVx3f6a
+         lXTyQk2kypAbwHMmpvW3hdXfwbXpl8GXVhdG++7HxqqIr3Iu7+Tp6uJUOhRFTYsDQXUJ
+         gPwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1ZU/xBo4v5syghhPRoThoLn4tvhr/EqUMFObZCi2t6k=;
-        b=5XNTylL2/JaBwvZWdNDikJycYOa8m3ncQRkr4B/+LESzc6bi59LRu8bY8pdQ/ioAqG
-         9ZLv/JPczqx0W7dnBEeKQAa7x2N1QtZajx+yOmu+bc+dyHNerN3uDqYllHDKC+9ozbFs
-         qWpE9Z+5cU8InhNicm4/H96+/Q9x2M5e6V80BLL64tiyqNnSct31Go3+0N+CpRamoiLj
-         eoTtfvv1q296tgbHOLYxLnKB3AA/6eEmWu+1vu1oTjUqq+Hla3pK9jFVvsNK5E4RWW1a
-         LOCZGfxJ9zduFoMe+0ilYQW1R3LMw+3k/ZIZqrWP2Tse/Srf89BS4k1c4Tec+0JtLSUv
-         8u/w==
-X-Gm-Message-State: AOAM53222kuZ/i6i89ntilOVGSXOtOGRl/3armkI7oQuN1q1Zcb4TIx4
-        5OhaQDWkKu2iKHqeHpujAHYoZVwpSXxG7LI+3eA=
-X-Google-Smtp-Source: ABdhPJxhKfrcH+lK8uelMajrMeOApGW6jMfAwT6cR0dIvA+JEuKlkp7IRqBjao43DlOrigol+LGAzUNojko+nvrOueg=
-X-Received: by 2002:a05:6638:4105:: with SMTP id ay5mr4155184jab.186.1644690741790;
- Sat, 12 Feb 2022 10:32:21 -0800 (PST)
+        bh=PW5bHK7lbz8mAfQVLbpabS9JQmvxuuP5i13vS9JUmWQ=;
+        b=ifwJDKTuDW61XfQ4Zj/fUYTgvSwgDFYp8LdRjp2HkMr3YKISmpmqUKnqnpTpMLuCez
+         tn/11jwSk/upfauLB53HtS3WH870IeH8KVRk5yu67uOhcS8zjUDKOQcfWGJhdzNH0MU2
+         cdT+x5HT4NGKxfS1s+TxhzYd44CLBKgouq7dzAfpRRUCwPo7JKtb7KcA5xB1yU7kd2nd
+         XUnrvSHQTkELu3eNtR6WOgcYL12l0lOH8QcIMqcG00kgIc/xiJoJI8ubavwcHAskPZnr
+         uIvyo2tPxl2OLASHokVSkunCpn5kYKBmGV3mEa9ZU4eonY5SoYS1S2Or4binrNCkmLQe
+         uz9g==
+X-Gm-Message-State: AOAM531monzUkjtiQqsqJkSuJyqkLrXAuPqQ10lUtj5riqQXkBiUBOEv
+        ro0b/Bntkhj+jrPh8G9xM0yDOkBYIB5p/jhsb0g=
+X-Google-Smtp-Source: ABdhPJzk7Y0eW6BAf4q+QY2CyD1I+LhA8kHRLDkHhRJc6kXcI3wPehj/4lCy3W2LRh5ctFx5JYUIvMk52bxjHJ2CH2Q=
+X-Received: by 2002:a5d:941a:: with SMTP id v26mr3564701ion.64.1644692234068;
+ Sat, 12 Feb 2022 10:57:14 -0800 (PST)
 MIME-Version: 1.0
-References: <20220212130410.6901-1-ojeda@kernel.org> <20220212130410.6901-17-ojeda@kernel.org>
- <YgfBUhYdLXA46kOX@shell.armlinux.org.uk> <CANiq72nMhUH1s0HMeLb+hfp5=u3h20ryC4uqAgB1Znuq52e=Pw@mail.gmail.com>
- <Ygfd82QN/wmSmlHa@shell.armlinux.org.uk>
-In-Reply-To: <Ygfd82QN/wmSmlHa@shell.armlinux.org.uk>
+References: <20220212130410.6901-17-ojeda@kernel.org> <0396e38b-f681-a035-b6ea-21127fdf5615@physik.fu-berlin.de>
+In-Reply-To: <0396e38b-f681-a035-b6ea-21127fdf5615@physik.fu-berlin.de>
 From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sat, 12 Feb 2022 19:32:10 +0100
-Message-ID: <CANiq72mdru-MyP_QoRSpKu1bhB8v5sZNs8mvGdWsJp7NfXE+bQ@mail.gmail.com>
+Date:   Sat, 12 Feb 2022 19:57:02 +0100
+Message-ID: <CANiq72=U3A-5LfbOThPoex9PfFg+UsHuMY33nbtLH=aK=odh0Q@mail.gmail.com>
 Subject: Re: [PATCH v4 16/20] Kbuild: add Rust support
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
-        Finn Behrens <me@kloenk.de>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Boris-Chengbiao Zhou <bobo1239@web.de>,
         Boqun Feng <boqun.feng@gmail.com>,
-        Douglas Su <d0u9.su@outlook.com>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Daniel Xu <dxu@dxuuu.xyz>, Miguel Cano <macanroj@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+        Borislav Petkov <bp@alien8.de>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Douglas Su <d0u9.su@outlook.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Daniel Xu <dxu@dxuuu.xyz>, Gary Guo <gary@garyguo.net>,
+        Greg KH <gregkh@linuxfoundation.org>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Russell King - ARM Linux admin <linux@armlinux.org.uk>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
+        =?UTF-8?B?TWlndWVsIENhw7Fv?= <macanroj@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Finn Behrens <me@kloenk.de>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Paul Mackerras <paulus@samba.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Will Deacon <will@kernel.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -102,66 +102,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 12, 2022 at 5:19 PM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
+Hi John Paul,
+
+On Sat, Feb 12, 2022 at 7:27 PM John Paul Adrian Glaubitz
+<glaubitz@physik.fu-berlin.de> wrote:
 >
-> Right, so why made it dependent on CPU_32v6 || CPU_32v6K if ARMv7 is
-> supported? What about CPU_32v7? What about CPU_32v7M?
->
-> I think it would be saner to use the CPU_V6, CPU_V6K, CPU_V7 and maybe
-> CPU_V7M here - even bettern to select "HAVE_RUST" from these symbols,
-> since I'm sure you'd start to see the issue behind my "HAVE_RUST"
-> suggestion as it means having four symbols just for 32-bit ARM on your
-> dependency line.
+> Is there any particular reason why this list excludes MIPS*, i386, big-endian
+> PowerPC and SPARC targets which are already supported by the Rust programming
+> language?
 
-To support arch variations properly we also have to configure the
-compiler via filling a target spec on the fly, but so far we only have
-a few static variations as an example. This is one of the missing
-parts of the arch support. I will let you know when we have something
-ready.
+The variations we have so far were intended to showcase the Rust
+support in several major architectures, rather than cover everything.
+But as long as LLVM (& the kernel, i.e. ClangBuiltLinux) supports the
+target (and as long there are no compiler/toolchain issues), you
+should be able to try it.
 
-> Interestingly, it does not list arm-unknown-linux-gnueabihf, which
-> is the "tuple" commonly used to build 32-bit ARM kernels.
+> Are the arch/$ARCH/rust/target.json files everything that's needed for supporting
+> the other targets?
 
-I see it there (Tier 2).
+Mostly -- there is also `rust/kernel/c_types.rs` and you may need to
+tweak `rust/compiler_builtins.rs`, but not much more.
 
-> Probably because people incorrectly think it's required or some other
-> minor reason. As I say:
-
-In that case, we should remove them and warn about those instances,
-assuming the preferred style is to not have it.
-
-> so using the argument
-> that there are "500+ instances" and therefore should be seen as
-> correct is completely misguided.
-
-I did not use any such argument.
-
-> I mean, if we end up with, e.g. a filesystem coded in Rust, that
-> filesystem will not be available on architectures that the kernel
-
-As long as that filesystem is an optional feature (or as long as there
-is a C version), it should be fine.
-
-> supports until either (a) Rust gains support for that architecture
-
-For this, it would be ideal if entities behind some of the
-architectures could support LLVM & ClangBuiltLinux, or the GCC Rust
-frontend, or the GCC backend for `rustc`.
-
-For instance, Arm is supporting both LLVM and the Rust project.
-
-> or (b) someone re-codes the filesystem in C - at which point, what
-> is the point of having Rust in the kernel?
-
-Having a C version of some system does not mean a Rust version would
-not offer advantages. In fact, we are adding Rust precisely because we
-believe it offers some advantages over C, for both end users and
-maintainers.
-
-(Please see the RFC [1], previous discussions, etc.)
-
-[1] https://lore.kernel.org/lkml/20210414184604.23473-1-ojeda@kernel.org/
+Note that for the target spec files, the short-term plan is to
+generate dynamically the target spec file according to what the
+architecture requests, instead of using these static files. Longer
+term, we need a Rust-stable way to setup custom targets from upstream
+`rustc` (though it is not clear yet how it will look, e.g. it could be
+via command-line flags).
 
 Cheers,
 Miguel

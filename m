@@ -2,74 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A757A4B36C9
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0F44B36C8
 	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 18:18:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237581AbiBLRO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 12:14:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40740 "EHLO
+        id S237601AbiBLRRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 12:17:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237472AbiBLROz (ORCPT
+        with ESMTP id S237614AbiBLRRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 12:14:55 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03861240AA
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 09:14:52 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id t36so10935844pfg.0
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 09:14:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=84mi4sLZdI2m5nZb9aKeXn47eOTNcMjjceH3JrENpfA=;
-        b=D1fo4FZcekytY1ykZ6KutYWYi4KcPkuDtWLBJuhG9KnuEPMOMP5iMk0V0k7gTGlfm/
-         YfXo9kXf3qYGek+2cN2RUK45TiDfzvbiKAuGn2sKhH28qFUUwxUuOSks6wOjqXMcVajy
-         hejgEGHo4uYczkQKP1hNC0hmJ6yAoB97pUSs0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=84mi4sLZdI2m5nZb9aKeXn47eOTNcMjjceH3JrENpfA=;
-        b=Ga6Qu5iKA6U5BSosHAEF7x7RiToIWOldV60ck/BUcAD0VtR+Sjxj9tQJN8BL+4vfma
-         2ErogwMaH9RIjs7WrCQzWIDeJkGndiwUAwsbjabg/6L76W8ScWQX3j30YH73i7GH6ZJf
-         eOESwGPZ35oZH6/qxcgBBReRLJ620ZZ4X3hYauKpmrCCxlDHq13PtiZvWFLR/m30ksBq
-         y5Qtf/cPlBcEPR8ODdIxaaUTHGchJUWMgZbWW85jUlFeqcSHh2X2XMLoxdlGR4cvXedu
-         fl7jaycYTjKH0dacbTLENZCXOo/1uZrDeMce0SMgzEb3D9eS8Tde4CmmiNDrLPpwlyfg
-         DbVw==
-X-Gm-Message-State: AOAM530xBLWMcianZqfHP/ASqAP2U/lUABGL8abWJbTyJy6zqIj/jca0
-        kPJ4/PhaDJjwsovQw7sq/XWhAA==
-X-Google-Smtp-Source: ABdhPJzUu40GXOLbD0dD0jWT1NYlbt8YUZ19HsUk/i+9HXc+CU3hO289jMej1GMKD1Amt0ktiMcrAQ==
-X-Received: by 2002:a63:6116:: with SMTP id v22mr5486761pgb.474.1644686091427;
-        Sat, 12 Feb 2022 09:14:51 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id ls14sm6239286pjb.0.2022.02.12.09.14.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Feb 2022 09:14:51 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] etherdevice: Adjust ether_addr* prototypes to silence -Wstringop-overead
-Date:   Sat, 12 Feb 2022 09:14:49 -0800
-Message-Id: <20220212171449.3000885-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2660; h=from:subject; bh=eVRNZb9+/scN9PRdT1Roirs8n4TTSE7XSUI757xJXEg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiB+sIVUHseDW+2l3grw1ne1EWyqjHGcHHhXf+atvk CB/an1KJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYgfrCAAKCRCJcvTf3G3AJhs7D/ 443r8N7ZVCj+oC03dpcpCQpU9ac1ACqyZ9F+kU1vzi/Xba89SWTuaXrLQigr/9sinBhdsw9U4c9izS aErYdxXKko/9gLWHfjefU7EGgD1oyxii6K3YT0dwZnu2jPZ4RCzEqX6S1Y8D3gmWgSOEVLi7w/CA6J AAZ9WaQFEAyRbMyxm7XuT136wmilqpdt4+iH7jDoN4erjeF8FKU//m7GmVdaw/w8cDTz0+AEbZWZMT X5I65NUIHLa+ERT7uJ4qnwpM5OsJlmL/Ihat1ZPJUTx/Pxge3a2L8qOyhVPGfLR/1BkGRtAd3//c/d l5fzHgSW7tzHcHVy8p8v+v83q0wYHVcArkUlH+R8CjC0Knkgfxk+gDMeN3sz7YkR3/a35EZbYAunOb 6IpS8dCrMgiUgFNMyCToj+9TpLFSO29VUqXUuvfVl2/Ksw95IZdDpwCoibGjpQ5OvAz22wYwyH1ku3 HJQ6RlcUbjWbSuGFlyrBPc+PcNsDGm212Kld6//3CK/expJ6WlcO+xIrfMWyVF35bIyOwSQfE3LXVm 1LUW6E8SNahsfuMGkz4sXWwW4vOruDhb0WYccJqyQmOWqwiFscTaYcjYTXWvT/RhnM2DKBldJbpRzJ d68iGuY4StYQpqQnIRKBRmpfIj1bUfGW56ZDNNN8SGhojG/yZzXZJaEmW4Yg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Sat, 12 Feb 2022 12:17:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804D3240A4
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 09:17:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EC7361134
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 17:17:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8AAD6C340ED;
+        Sat, 12 Feb 2022 17:17:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644686232;
+        bh=K9FxhrDSiUEfPIdtyrZQqRS7/xd1SjAvYu9qrqtjRFM=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=IwQPEdhOPywW3Jsg6ZA196lwmukcmkusvnsvjebABmWwagXViKLE5j71nVcECbJjH
+         7kPKWGUlGawJbySO2qemnX8zHyBVK0THD/NjyUeDjq6w5wagB4xdHjTALUxIWKpM5t
+         erKG2HG9gx2YQghwcJz4zfm9WmWiaArk+9CTUHSSjZ8NeJ0u7x4zO0BPzgX/Tj0nYO
+         /gYlYz3oq/Bhf7+YsB4Z8aBTdeOoV4Ul8E5tPtYzAZYMh/LfppOxqpz943hNFulzfn
+         sPP6QBYnX4da6ykk9Vb2XU1YLFC2Eh9skY5Kv1hVAA6qk3Z/6LAfLjEBKHQMGA14SA
+         cxZ0spG0HWoWA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 75161E6BB38;
+        Sat, 12 Feb 2022 17:17:12 +0000 (UTC)
+Subject: Re: [GIT PULL] xen: branch for v5.17-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220212102509.24629-1-jgross@suse.com>
+References: <20220212102509.24629-1-jgross@suse.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220212102509.24629-1-jgross@suse.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-5.17a-rc4-tag
+X-PR-Tracked-Commit-Id: f66edf684edcb85c1db0b0aa8cf1a9392ba68a9d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4a387c98b3abc7cf9a2281f01f9b4dd7dbc48f65
+Message-Id: <164468623247.20961.11131810270936389812.pr-tracker-bot@kernel.org>
+Date:   Sat, 12 Feb 2022 17:17:12 +0000
+To:     Juergen Gross <jgross@suse.com>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org, boris.ostrovsky@oracle.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,55 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With GCC 12, -Wstringop-overread was warning about an implicit cast from
-char[6] to char[8]. However, the extra 2 bytes are always thrown away,
-alignment doesn't matter, and the risk of hitting the edge of unallocated
-memory has been accepted, so this prototype can just be converted to a
-regular char *. Silences:
+The pull request you sent on Sat, 12 Feb 2022 11:25:09 +0100:
 
-net/core/dev.c: In function ‘bpf_prog_run_generic_xdp’: net/core/dev.c:4618:21: warning: ‘ether_addr_equal_64bits’ reading 8 bytes from a region of size 6 [-Wstringop-overread]
- 4618 |         orig_host = ether_addr_equal_64bits(eth->h_dest, > skb->dev->dev_addr);
-      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-net/core/dev.c:4618:21: note: referencing argument 1 of type ‘const u8[8]’ {aka ‘const unsigned char[8]’}
-net/core/dev.c:4618:21: note: referencing argument 2 of type ‘const u8[8]’ {aka ‘const unsigned char[8]’}
-In file included from net/core/dev.c:91: include/linux/etherdevice.h:375:20: note: in a call to function ‘ether_addr_equal_64bits’
-  375 | static inline bool ether_addr_equal_64bits(const u8 addr1[6+2],
-      |                    ^~~~~~~~~~~~~~~~~~~~~~~
+> git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-5.17a-rc4-tag
 
-Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Tested-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Link: https://lore.kernel.org/netdev/20220212090811.uuzk6d76agw2vv73@pengutronix.de
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/linux/etherdevice.h | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4a387c98b3abc7cf9a2281f01f9b4dd7dbc48f65
 
-diff --git a/include/linux/etherdevice.h b/include/linux/etherdevice.h
-index 2ad71cc90b37..92b10e67d5f8 100644
---- a/include/linux/etherdevice.h
-+++ b/include/linux/etherdevice.h
-@@ -134,7 +134,7 @@ static inline bool is_multicast_ether_addr(const u8 *addr)
- #endif
- }
- 
--static inline bool is_multicast_ether_addr_64bits(const u8 addr[6+2])
-+static inline bool is_multicast_ether_addr_64bits(const u8 *addr)
- {
- #if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && BITS_PER_LONG == 64
- #ifdef __BIG_ENDIAN
-@@ -372,8 +372,7 @@ static inline bool ether_addr_equal(const u8 *addr1, const u8 *addr2)
-  * Please note that alignment of addr1 & addr2 are only guaranteed to be 16 bits.
-  */
- 
--static inline bool ether_addr_equal_64bits(const u8 addr1[6+2],
--					   const u8 addr2[6+2])
-+static inline bool ether_addr_equal_64bits(const u8 *addr1, const u8 *addr2)
- {
- #if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && BITS_PER_LONG == 64
- 	u64 fold = (*(const u64 *)addr1) ^ (*(const u64 *)addr2);
+Thank you!
+
 -- 
-2.30.2
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

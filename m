@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46CC84B35C0
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 15:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96BE44B35C7
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 16:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236307AbiBLO6i convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 12 Feb 2022 09:58:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57788 "EHLO
+        id S236336AbiBLPG0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 12 Feb 2022 10:06:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231777AbiBLO6g (ORCPT
+        with ESMTP id S229960AbiBLPGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 09:58:36 -0500
+        Sat, 12 Feb 2022 10:06:25 -0500
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61ECF214;
-        Sat, 12 Feb 2022 06:58:32 -0800 (PST)
-Date:   Sat, 12 Feb 2022 14:58:12 +0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD5A214;
+        Sat, 12 Feb 2022 07:06:21 -0800 (PST)
+Date:   Sat, 12 Feb 2022 15:06:07 +0000
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v14 8/9] [already applied to mips-fixes] MIPS: DTS: CI20:
- fix how ddc power is enabled
+Subject: Re: [PATCH v14 5/9] drm/bridge: dw-hdmi: repair interworking with
+ hdmi-connector for jz4780
 To:     "H. Nikolaus Schaller" <hns@goldelico.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -46,10 +46,10 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
         Jonas Karlman <jonas@kwiboo.se>,
         dri-devel@lists.freedesktop.org
-Message-Id: <0L577R.CVAM5NCZN3F72@crapouillou.net>
-In-Reply-To: <6722afd4a89d2bf0d95e49e6738ff50bf9f26245.1644675567.git.hns@goldelico.com>
+Message-Id: <7Y577R.WAL64FW8KJZJ1@crapouillou.net>
+In-Reply-To: <8703a3e48574c09e8756b79e8f69be7d84926fe9.1644675566.git.hns@goldelico.com>
 References: <cover.1644675566.git.hns@goldelico.com>
-        <6722afd4a89d2bf0d95e49e6738ff50bf9f26245.1644675567.git.hns@goldelico.com>
+        <8703a3e48574c09e8756b79e8f69be7d84926fe9.1644675566.git.hns@goldelico.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: 8BIT
@@ -62,71 +62,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Nikolaus,
 
-Le sam., févr. 12 2022 at 15:19:26 +0100, H. Nikolaus Schaller 
+
+Le sam., févr. 12 2022 at 15:19:23 +0100, H. Nikolaus Schaller 
 <hns@goldelico.com> a écrit :
-> Originally we proposed a new hdmi-5v-supply regulator reference
-> for CI20 device tree but that was superseded by a better idea to use
-> the already defined "ddc-en-gpios" property of the "hdmi-connector".
+> Commit 7cd70656d1285b ("drm/bridge: display-connector: implement bus 
+> fmts callbacks")
 > 
-> Since "MIPS: DTS: CI20: Add DT nodes for HDMI setup" has already
-> been applied to v5.17-rc1, we add this on top.
+> introduced a new mechanism to negotiate bus formats between hdmi 
+> connector
+> and the synopsys hdmi driver inside the jz4780.
 > 
-> Fixes: ae1b8d2c2de9 ("MIPS: DTS: CI20: Add DT nodes for HDMI setup")
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+> By this, the dw-hdmi is no longer the only bridge and sets up a list
+> of formats in dw_hdmi_bridge_atomic_get_output_bus_fmts().
+> 
+> This includes MEDIA_BUS_FMT_UYVY8_1X16 which is chosen for the jz4780 
+> but only
+> produces a black screen.
 
-Since it's already applied you don't have to send this patch anymore.
+Neil pushed a fix yesterday that looks like it could fix your issue.
+The fix is: 1528038385c0 ("drm/bridge: dw-hdmi: use safe format when 
+first in bridge chain")
+
+Could you try if it does indeed fix your issue?
 
 Cheers,
 -Paul
 
+> This fix is based on the observation that max_bpc = 0 when running 
+> this
+> function while info->bpc = 8. Since the formats checks before this 
+> always test
+> for max_bpc >= info->pbc indirectly my assumption is that we must 
+> check it
+> here as well.
+> 
+> Adding the proposed patch makes the CI20/jz4780 panel work again in
+> MEDIA_BUS_FMT_RGB888_1X24 mode.
+> 
+> Fixes: 7cd70656d1285b ("drm/bridge: display-connector: implement bus 
+> fmts callbacks")
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 > ---
->  arch/mips/boot/dts/ingenic/ci20.dts | 15 ++-------------
->  1 file changed, 2 insertions(+), 13 deletions(-)
+>  drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts 
-> b/arch/mips/boot/dts/ingenic/ci20.dts
-> index 3e336b3dbb109..ab6e3dc0bc1d0 100644
-> --- a/arch/mips/boot/dts/ingenic/ci20.dts
-> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
-> @@ -83,6 +83,8 @@ hdmi_out: connector {
->  		label = "HDMI OUT";
->  		type = "a";
+> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c 
+> b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> index b0d8110dd412c..826a055a7a273 100644
+> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> @@ -2620,10 +2620,10 @@ static u32 
+> *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+>  		output_fmts[i++] = MEDIA_BUS_FMT_RGB101010_1X30;
+>  	}
 > 
-> +		ddc-en-gpios = <&gpa 25 GPIO_ACTIVE_HIGH>;
-> +
->  		port {
->  			hdmi_con: endpoint {
->  				remote-endpoint = <&dw_hdmi_out>;
-> @@ -114,17 +116,6 @@ otg_power: fixedregulator@2 {
->  		gpio = <&gpf 14 GPIO_ACTIVE_LOW>;
->  		enable-active-high;
->  	};
-> -
-> -	hdmi_power: fixedregulator@3 {
-> -		compatible = "regulator-fixed";
-> -
-> -		regulator-name = "hdmi_power";
-> -		regulator-min-microvolt = <5000000>;
-> -		regulator-max-microvolt = <5000000>;
-> -
-> -		gpio = <&gpa 25 0>;
-> -		enable-active-high;
-> -	};
->  };
+> -	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
+> +	if (max_bpc >= info->bpc && info->color_formats & 
+> DRM_COLOR_FORMAT_YCBCR422)
+>  		output_fmts[i++] = MEDIA_BUS_FMT_UYVY8_1X16;
 > 
->  &ext {
-> @@ -576,8 +567,6 @@ &hdmi {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&pins_hdmi_ddc>;
+> -	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+> +	if (max_bpc >= info->bpc && info->color_formats & 
+> DRM_COLOR_FORMAT_YCBCR444)
+>  		output_fmts[i++] = MEDIA_BUS_FMT_YUV8_1X24;
 > 
-> -	hdmi-5v-supply = <&hdmi_power>;
-> -
->  	ports {
->  		#address-cells = <1>;
->  		#size-cells = <0>;
+>  	/* Default 8bit RGB fallback */
 > --
 > 2.33.0
 > 

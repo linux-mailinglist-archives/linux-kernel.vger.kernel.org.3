@@ -2,540 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E00794B349F
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 12:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FA84B347E
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 12:26:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234489AbiBLL0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 06:26:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40434 "EHLO
+        id S234341AbiBLLZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 06:25:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234599AbiBLL0U (ORCPT
+        with ESMTP id S231990AbiBLLZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 06:26:20 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD9027174;
-        Sat, 12 Feb 2022 03:26:12 -0800 (PST)
+        Sat, 12 Feb 2022 06:25:40 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D3126AD6;
+        Sat, 12 Feb 2022 03:25:37 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id p15so27757398ejc.7;
+        Sat, 12 Feb 2022 03:25:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644665172; x=1676201172;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=DUMRWEom12SBvjmB0sFJaBBT+LMJjsPnggYjE97qxpo=;
-  b=MOfKEQAysHVHHHRX8EcjzUjtOM/FENTWB2D9P7fvpnFzG17sIZ+5idkI
-   oDZ6IZDF26qnS96EHl48BrgtPoDJYgT1Vwm5GqY5DDQMkg7BDBMbqUoN8
-   bG2cl07GfF63rmnMs0omOgc2bG6OItmo/GVN8KcSAg+NitOlnG5332Zms
-   c=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 12 Feb 2022 03:26:12 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2022 03:26:11 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Sat, 12 Feb 2022 03:26:10 -0800
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Sat, 12 Feb 2022 03:26:05 -0800
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@codeaurora.org>,
-        <perex@perex.cz>, <tiwai@suse.com>,
-        <srinivas.kandagatla@linaro.org>, <rohitkr@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [PATCH v11 10/10] ASoC: qcom: lpass-sc7280: Add platform driver for lpass audio
-Date:   Sat, 12 Feb 2022 16:54:53 +0530
-Message-ID: <1644665093-4695-11-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1644665093-4695-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1644665093-4695-1-git-send-email-quic_srivasam@quicinc.com>
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7SIhUeX2yt0idUDRJKKmAw5gfuLEHOZUKxZ0CAvnkKQ=;
+        b=qzXx3csd9RNDf0yA1DYYLijDmM6LWSt/oPmlFdym5v/OM3V1zPhchWwPa4FyV6QfXZ
+         tFGPnBmObMu62ZBqHpaOCv+h2oia9kLoD/3sBusLQJCueZ79z/JcOCxuwitF6EMjqInY
+         CEgZ2LzNfRsUy9PG2EFccy3NbMcPQ91SxZcheGi+BqXjbho2X651GeAvEaIJjFthHiMJ
+         4xGhc2fg3IcpDPICRzRBUaIZvLlOT2QodI6qSpRNi2Z8qEVy+GweK0PAVYUokpBkLkHA
+         N9zhB5hwVJV9b7G6vNdQgAnn2riQqiWjEjGknz/ya1x98y5XXKTylVzuOUPGBuaf1Jco
+         h8Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7SIhUeX2yt0idUDRJKKmAw5gfuLEHOZUKxZ0CAvnkKQ=;
+        b=5GX3FYDj4yT6ET9ZeytBNMmfrq366HHu61XzKjkEkBY9qg7HgB8UqzFjUEcxU6nHNt
+         8j4DD2rk8Z8xPvFyUkZenFUNtNZIsWX6L43YkJxNjEvTc05QUz0yciwQTvyTVZZBUH98
+         cxlnPhwwS6YctKmnPhTOu5YrgpeflpVYBM0DiBfc2DavQCYZUV7mXpSetYSVbafJu4N4
+         h85WUl02IopHahNmHzL+BY30ORTwc4KBiAJ7KlFkWKxYQFDak++cGfBYpNzar0ZEMYea
+         +igIfGFR0xR5BCMoHkZ5kdhedoVMr3Xtfe9eOCIgJ2J77IFtAXtPBJYBysCxOC6ETgUN
+         bexg==
+X-Gm-Message-State: AOAM530lYpgCBnl/iYoW5GXOROT8uor9UiCz4DUE2AVzdiC2f/dJSEkl
+        czvdTOdecmowtmJm85brL0s=
+X-Google-Smtp-Source: ABdhPJzWitD0hfjXJ8eX/JHLhmT7VkMjcrS0EcKXiLjXUzIVCfyLkx6hDe7qD20rW2rzZQuz4QDvDg==
+X-Received: by 2002:a17:907:970d:: with SMTP id jg13mr4424600ejc.418.1644665135450;
+        Sat, 12 Feb 2022 03:25:35 -0800 (PST)
+Received: from [192.168.178.40] (ipbcc1fa42.dynamic.kabel-deutschland.de. [188.193.250.66])
+        by smtp.gmail.com with ESMTPSA id b15sm500132edd.60.2022.02.12.03.25.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Feb 2022 03:25:34 -0800 (PST)
+Message-ID: <0428d955-e9c7-b632-cb19-102e49cef387@gmail.com>
+Date:   Sat, 12 Feb 2022 12:25:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] scsi: target: tcmu: Make cmd_ring_size changeable via
+ configfs.
+Content-Language: en-US
+To:     Guixin Liu <kanie@linux.alibaba.com>, martin.petersen@oracle.com
+Cc:     xiaoguang.wang@linux.alibaba.com, xlpang@linux.alibaba.com,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1644291974-73531-1-git-send-email-kanie@linux.alibaba.com>
+From:   Bodo Stroesser <bostroesser@gmail.com>
+In-Reply-To: <1644291974-73531-1-git-send-email-kanie@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add platform driver for configuring sc7280 lpass core I2S and
-DMA configuration to support playback & capture to external codecs
-connected over secondary MI2S interface and soundwire interface.
+On 08.02.22 04:46, Guixin Liu wrote:
+> Make cmd_ring_size changeable similar to the way it is done for
+> max_data_area_mb, the reason is that our tcmu client will create
+> thousands of tcmu instances, and this will consume lots of mem with
+> default 8Mb cmd ring size for every backstore.
+> 
+> One can change the value by typing:
+>      echo "cmd_ring_size_mb=N" > control
+> The "N" is a integer between 1 to 8, if set 1, the cmd ring can hold
+> about 6k cmds(tcmu_cmd_entry about 176 byte) at least.
+> 
+> The value is printed when doing:
+>      cat info
+> In addition, a new readonly attribute 'cmd_ring_size_mb' returns the
+> value in read.
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- sound/soc/qcom/lpass-sc7280.c | 447 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 447 insertions(+)
- create mode 100644 sound/soc/qcom/lpass-sc7280.c
+Thank you for the patch. This was on my todo list also.
 
-diff --git a/sound/soc/qcom/lpass-sc7280.c b/sound/soc/qcom/lpass-sc7280.c
-new file mode 100644
-index 0000000..61a445c
---- /dev/null
-+++ b/sound/soc/qcom/lpass-sc7280.c
-@@ -0,0 +1,447 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-+ *
-+ * lpass-sc7180.c -- ALSA SoC platform-machine driver for QTi LPASS
-+ */
-+
-+#include <linux/module.h>
-+#include <sound/pcm.h>
-+#include <sound/soc.h>
-+#include <linux/pm_runtime.h>
-+
-+#include <dt-bindings/sound/sc7180-lpass.h>
-+
-+#include "lpass-lpaif-reg.h"
-+#include "lpass.h"
-+
-+static struct snd_soc_dai_driver sc7280_lpass_cpu_dai_driver[] = {
-+	{
-+		.id = MI2S_PRIMARY,
-+		.name = "Primary MI2S",
-+		.playback = {
-+			.stream_name = "Primary Playback",
-+			.formats	= SNDRV_PCM_FMTBIT_S16,
-+			.rates = SNDRV_PCM_RATE_48000,
-+			.rate_min	= 48000,
-+			.rate_max	= 48000,
-+			.channels_min	= 2,
-+			.channels_max	= 2,
-+		},
-+		.capture = {
-+			.stream_name = "Primary Capture",
-+			.formats = SNDRV_PCM_FMTBIT_S16 |
-+				SNDRV_PCM_FMTBIT_S32,
-+			.rates = SNDRV_PCM_RATE_48000,
-+			.rate_min	= 48000,
-+			.rate_max	= 48000,
-+			.channels_min	= 2,
-+			.channels_max	= 2,
-+		},
-+		.probe	= &asoc_qcom_lpass_cpu_dai_probe,
-+		.ops    = &asoc_qcom_lpass_cpu_dai_ops,
-+	}, {
-+		.id = MI2S_SECONDARY,
-+		.name = "Secondary MI2S",
-+		.playback = {
-+			.stream_name = "Secondary MI2S Playback",
-+			.formats = SNDRV_PCM_FMTBIT_S16,
-+			.rates = SNDRV_PCM_RATE_48000,
-+			.rate_min	= 48000,
-+			.rate_max	= 48000,
-+			.channels_min	= 2,
-+			.channels_max	= 2,
-+		},
-+		.probe	= &asoc_qcom_lpass_cpu_dai_probe,
-+		.ops	= &asoc_qcom_lpass_cpu_dai_ops,
-+	}, {
-+		.id = LPASS_DP_RX,
-+		.name = "Hdmi",
-+		.playback = {
-+			.stream_name = "DP Playback",
-+			.formats = SNDRV_PCM_FMTBIT_S24,
-+			.rates = SNDRV_PCM_RATE_48000,
-+			.rate_min	= 48000,
-+			.rate_max	= 48000,
-+			.channels_min	= 2,
-+			.channels_max	= 2,
-+		},
-+		.ops	= &asoc_qcom_lpass_hdmi_dai_ops,
-+	}, {
-+		.id = LPASS_CDC_DMA_RX0,
-+		.name = "CDC DMA RX",
-+		.playback = {
-+			.stream_name = "WCD Playback",
-+			.formats = SNDRV_PCM_FMTBIT_S16,
-+			.rates = SNDRV_PCM_RATE_48000,
-+			.rate_min	= 48000,
-+			.rate_max	= 48000,
-+			.channels_min	= 2,
-+			.channels_max	= 2,
-+		},
-+		.ops	= &asoc_qcom_lpass_cdc_dma_dai_ops,
-+	}, {
-+		.id = LPASS_CDC_DMA_TX3,
-+		.name = "CDC DMA TX",
-+		.capture = {
-+			.stream_name = "WCD Capture",
-+			.formats = SNDRV_PCM_FMTBIT_S16,
-+			.rates = SNDRV_PCM_RATE_48000,
-+			.rate_min	= 48000,
-+			.rate_max	= 48000,
-+			.channels_min	= 1,
-+			.channels_max	= 1,
-+		},
-+		.ops	= &asoc_qcom_lpass_cdc_dma_dai_ops,
-+	}, {
-+		.id = LPASS_CDC_DMA_VA_TX0,
-+		.name = "CDC DMA VA",
-+		.capture = {
-+			.stream_name = "DMIC Capture",
-+			.formats = SNDRV_PCM_FMTBIT_S16,
-+			.rates = SNDRV_PCM_RATE_48000,
-+			.rate_min	= 48000,
-+			.rate_max	= 48000,
-+			.channels_min	= 2,
-+			.channels_max	= 4,
-+		},
-+		.ops	= &asoc_qcom_lpass_cdc_dma_dai_ops,
-+	},
-+};
-+
-+static int sc7280_lpass_alloc_dma_channel(struct lpass_data *drvdata,
-+					  int direction, unsigned int dai_id)
-+{
-+	struct lpass_variant *v = drvdata->variant;
-+	int chan = 0;
-+
-+	switch (dai_id) {
-+	case MI2S_PRIMARY ... MI2S_QUINARY:
-+		if (direction == SNDRV_PCM_STREAM_PLAYBACK) {
-+			chan = find_first_zero_bit(&drvdata->dma_ch_bit_map,
-+						   v->rdma_channels);
-+
-+			if (chan >= v->rdma_channels)
-+				return -EBUSY;
-+		} else {
-+			chan = find_next_zero_bit(&drvdata->dma_ch_bit_map,
-+						  v->wrdma_channel_start +
-+						  v->wrdma_channels,
-+						  v->wrdma_channel_start);
-+
-+			if (chan >= v->wrdma_channel_start + v->wrdma_channels)
-+				return -EBUSY;
-+		}
-+		set_bit(chan, &drvdata->dma_ch_bit_map);
-+		break;
-+	case LPASS_DP_RX:
-+		chan = find_first_zero_bit(&drvdata->hdmi_dma_ch_bit_map,
-+					   v->hdmi_rdma_channels);
-+		if (chan >= v->hdmi_rdma_channels)
-+			return -EBUSY;
-+		set_bit(chan, &drvdata->hdmi_dma_ch_bit_map);
-+		break;
-+	case LPASS_CDC_DMA_RX0 ... LPASS_CDC_DMA_RX9:
-+		chan = find_first_zero_bit(&drvdata->rxtx_dma_ch_bit_map,
-+					   v->rxtx_rdma_channels);
-+		if (chan >= v->rxtx_rdma_channels)
-+			return -EBUSY;
-+		break;
-+	case LPASS_CDC_DMA_TX0 ... LPASS_CDC_DMA_TX8:
-+		chan = find_next_zero_bit(&drvdata->rxtx_dma_ch_bit_map,
-+					  v->rxtx_wrdma_channel_start +
-+					  v->rxtx_wrdma_channels,
-+					  v->rxtx_wrdma_channel_start);
-+		if (chan >= v->rxtx_wrdma_channel_start + v->rxtx_wrdma_channels)
-+			return -EBUSY;
-+		set_bit(chan, &drvdata->rxtx_dma_ch_bit_map);
-+		break;
-+	case LPASS_CDC_DMA_VA_TX0 ... LPASS_CDC_DMA_VA_TX8:
-+		chan = find_next_zero_bit(&drvdata->va_dma_ch_bit_map,
-+					  v->va_wrdma_channel_start +
-+					  v->va_wrdma_channels,
-+					  v->va_wrdma_channel_start);
-+		if (chan >= v->va_wrdma_channel_start + v->va_wrdma_channels)
-+			return -EBUSY;
-+		set_bit(chan, &drvdata->va_dma_ch_bit_map);
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return chan;
-+}
-+
-+static int sc7280_lpass_free_dma_channel(struct lpass_data *drvdata, int chan, unsigned int dai_id)
-+{
-+	switch (dai_id) {
-+	case MI2S_PRIMARY ... MI2S_QUINARY:
-+		clear_bit(chan, &drvdata->dma_ch_bit_map);
-+		break;
-+	case LPASS_DP_RX:
-+		clear_bit(chan, &drvdata->hdmi_dma_ch_bit_map);
-+		break;
-+	case LPASS_CDC_DMA_RX0 ... LPASS_CDC_DMA_RX9:
-+	case LPASS_CDC_DMA_TX0 ... LPASS_CDC_DMA_TX8:
-+		clear_bit(chan, &drvdata->rxtx_dma_ch_bit_map);
-+		break;
-+	case LPASS_CDC_DMA_VA_TX0 ... LPASS_CDC_DMA_VA_TX8:
-+		clear_bit(chan, &drvdata->va_dma_ch_bit_map);
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static int sc7280_lpass_init(struct platform_device *pdev)
-+{
-+	struct lpass_data *drvdata = platform_get_drvdata(pdev);
-+	struct lpass_variant *variant = drvdata->variant;
-+	struct device *dev = &pdev->dev;
-+	int ret, i;
-+
-+	drvdata->clks = devm_kcalloc(dev, variant->num_clks,
-+				     sizeof(*drvdata->clks), GFP_KERNEL);
-+	if (!drvdata->clks)
-+		return -ENOMEM;
-+
-+	drvdata->num_clks = variant->num_clks;
-+
-+	for (i = 0; i < drvdata->num_clks; i++)
-+		drvdata->clks[i].id = variant->clk_name[i];
-+
-+	ret = devm_clk_bulk_get(dev, drvdata->num_clks, drvdata->clks);
-+	if (ret) {
-+		dev_err(dev, "Failed to get clocks %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = clk_bulk_prepare_enable(drvdata->num_clks, drvdata->clks);
-+	if (ret) {
-+		dev_err(dev, "sc7280 clk_enable failed\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int sc7280_lpass_exit(struct platform_device *pdev)
-+{
-+	struct lpass_data *drvdata = platform_get_drvdata(pdev);
-+
-+	clk_bulk_disable_unprepare(drvdata->num_clks, drvdata->clks);
-+
-+	return 0;
-+}
-+
-+static struct lpass_variant sc7280_data = {
-+	.i2sctrl_reg_base		= 0x1000,
-+	.i2sctrl_reg_stride		= 0x1000,
-+	.i2s_ports			= 3,
-+	.irq_reg_base			= 0x9000,
-+	.irq_reg_stride			= 0x1000,
-+	.irq_ports			= 3,
-+	.rdma_reg_base			= 0xC000,
-+	.rdma_reg_stride		= 0x1000,
-+	.rdma_channels			= 5,
-+	.rxtx_rdma_reg_base		= 0xC000,
-+	.rxtx_rdma_reg_stride		= 0x1000,
-+	.rxtx_rdma_channels		= 8,
-+	.hdmi_rdma_reg_base		= 0x64000,
-+	.hdmi_rdma_reg_stride		= 0x1000,
-+	.hdmi_rdma_channels		= 4,
-+	.dmactl_audif_start		= 1,
-+	.wrdma_reg_base			= 0x18000,
-+	.wrdma_reg_stride		= 0x1000,
-+	.wrdma_channel_start		= 5,
-+	.wrdma_channels			= 4,
-+	.rxtx_irq_reg_base		= 0x9000,
-+	.rxtx_irq_reg_stride		= 0x1000,
-+	.rxtx_irq_ports			= 3,
-+	.rxtx_wrdma_reg_base		= 0x18000,
-+	.rxtx_wrdma_reg_stride		= 0x1000,
-+	.rxtx_wrdma_channel_start	= 5,
-+	.rxtx_wrdma_channels		= 6,
-+	.va_wrdma_reg_base		= 0x18000,
-+	.va_wrdma_reg_stride		= 0x1000,
-+	.va_wrdma_channel_start		= 5,
-+	.va_wrdma_channels		= 3,
-+	.va_irq_reg_base		= 0x9000,
-+	.va_irq_reg_stride		= 0x1000,
-+	.va_irq_ports			= 3,
-+
-+	.loopback			= REG_FIELD_ID(0x1000, 17, 17, 3, 0x1000),
-+	.spken				= REG_FIELD_ID(0x1000, 16, 16, 3, 0x1000),
-+	.spkmode			= REG_FIELD_ID(0x1000, 11, 15, 3, 0x1000),
-+	.spkmono			= REG_FIELD_ID(0x1000, 10, 10, 3, 0x1000),
-+	.micen				= REG_FIELD_ID(0x1000, 9, 9, 3, 0x1000),
-+	.micmode			= REG_FIELD_ID(0x1000, 4, 8, 3, 0x1000),
-+	.micmono			= REG_FIELD_ID(0x1000, 3, 3, 3, 0x1000),
-+	.wssrc				= REG_FIELD_ID(0x1000, 2, 2, 3, 0x1000),
-+	.bitwidth			= REG_FIELD_ID(0x1000, 0, 1, 3, 0x1000),
-+
-+	.rdma_dyncclk			= REG_FIELD_ID(0xC000, 21, 21, 5, 0x1000),
-+	.rdma_bursten			= REG_FIELD_ID(0xC000, 20, 20, 5, 0x1000),
-+	.rdma_wpscnt			= REG_FIELD_ID(0xC000, 16, 19, 5, 0x1000),
-+	.rdma_intf			= REG_FIELD_ID(0xC000, 12, 15, 5, 0x1000),
-+	.rdma_fifowm			= REG_FIELD_ID(0xC000, 1, 5, 5, 0x1000),
-+	.rdma_enable			= REG_FIELD_ID(0xC000, 0, 0, 5, 0x1000),
-+
-+	.wrdma_dyncclk			= REG_FIELD_ID(0x18000, 22, 22, 4, 0x1000),
-+	.wrdma_bursten			= REG_FIELD_ID(0x18000, 21, 21, 4, 0x1000),
-+	.wrdma_wpscnt			= REG_FIELD_ID(0x18000, 17, 20, 4, 0x1000),
-+	.wrdma_intf			= REG_FIELD_ID(0x18000, 12, 16, 4, 0x1000),
-+	.wrdma_fifowm			= REG_FIELD_ID(0x18000, 1, 5, 4, 0x1000),
-+	.wrdma_enable			= REG_FIELD_ID(0x18000, 0, 0, 4, 0x1000),
-+
-+	.rxtx_rdma_enable		= REG_FIELD_ID(0xC000, 0, 0, 7, 0x1000),
-+	.rxtx_rdma_fifowm		= REG_FIELD_ID(0xC000, 1, 11, 7, 0x1000),
-+	.rxtx_rdma_intf			= REG_FIELD_ID(0xC000, 12, 15, 7, 0x1000),
-+	.rxtx_rdma_wpscnt		= REG_FIELD_ID(0xC000, 16, 19, 7, 0x1000),
-+	.rxtx_rdma_bursten		= REG_FIELD_ID(0xC000, 20, 20, 7, 0x1000),
-+	.rxtx_rdma_dyncclk		= REG_FIELD_ID(0xC000, 21, 21, 7, 0x1000),
-+
-+	.rxtx_rdma_codec_ch		= REG_FIELD_ID(0xC050, 0, 7, 7, 0x1000),
-+	.rxtx_rdma_codec_intf		= REG_FIELD_ID(0xC050, 16, 19, 7, 0x1000),
-+	.rxtx_rdma_codec_fs_delay	= REG_FIELD_ID(0xC050, 21, 24, 7, 0x1000),
-+	.rxtx_rdma_codec_fs_sel		= REG_FIELD_ID(0xC050, 25, 27, 7, 0x1000),
-+	.rxtx_rdma_codec_pack		= REG_FIELD_ID(0xC050, 29, 29, 5, 0x1000),
-+	.rxtx_rdma_codec_enable		= REG_FIELD_ID(0xC050, 30, 30, 7, 0x1000),
-+
-+	.rxtx_wrdma_enable		= REG_FIELD_ID(0x18000, 0, 0, 5, 0x1000),
-+	.rxtx_wrdma_fifowm		= REG_FIELD_ID(0x18000, 1, 11, 5, 0x1000),
-+	.rxtx_wrdma_intf		= REG_FIELD_ID(0x18000, 12, 16, 5, 0x1000),
-+	.rxtx_wrdma_wpscnt		= REG_FIELD_ID(0x18000, 17, 20, 5, 0x1000),
-+	.rxtx_wrdma_bursten		= REG_FIELD_ID(0x18000, 21, 21, 5, 0x1000),
-+	.rxtx_wrdma_dyncclk		= REG_FIELD_ID(0x18000, 22, 22, 5, 0x1000),
-+
-+	.rxtx_wrdma_codec_ch		= REG_FIELD_ID(0x18050, 0, 7, 5, 0x1000),
-+	.rxtx_wrdma_codec_intf		= REG_FIELD_ID(0x18050, 16, 19, 5, 0x1000),
-+	.rxtx_wrdma_codec_fs_delay	= REG_FIELD_ID(0x18050, 21, 24, 5, 0x1000),
-+	.rxtx_wrdma_codec_fs_sel	= REG_FIELD_ID(0x18050, 25, 27, 5, 0x1000),
-+	.rxtx_wrdma_codec_pack		= REG_FIELD_ID(0x18050, 29, 29, 5, 0x1000),
-+	.rxtx_wrdma_codec_enable	= REG_FIELD_ID(0x18050, 30, 30, 5, 0x1000),
-+
-+	.va_wrdma_enable		= REG_FIELD_ID(0x18000, 0, 0, 5, 0x1000),
-+	.va_wrdma_fifowm		= REG_FIELD_ID(0x18000, 1, 11, 5, 0x1000),
-+	.va_wrdma_intf			= REG_FIELD_ID(0x18000, 12, 16, 5, 0x1000),
-+	.va_wrdma_wpscnt		= REG_FIELD_ID(0x18000, 17, 20, 5, 0x1000),
-+	.va_wrdma_bursten		= REG_FIELD_ID(0x18000, 21, 21, 5, 0x1000),
-+	.va_wrdma_dyncclk		= REG_FIELD_ID(0x18000, 22, 22, 5, 0x1000),
-+
-+	.va_wrdma_codec_ch		= REG_FIELD_ID(0x18050, 0, 7, 5, 0x1000),
-+	.va_wrdma_codec_intf		= REG_FIELD_ID(0x18050, 16, 19, 5, 0x1000),
-+	.va_wrdma_codec_fs_delay	= REG_FIELD_ID(0x18050, 21, 24, 5, 0x1000),
-+	.va_wrdma_codec_fs_sel		= REG_FIELD_ID(0x18050, 25, 27, 5, 0x1000),
-+	.va_wrdma_codec_pack		= REG_FIELD_ID(0x18050, 29, 29, 5, 0x1000),
-+	.va_wrdma_codec_enable		= REG_FIELD_ID(0x18050, 30, 30, 5, 0x1000),
-+
-+	.hdmi_tx_ctl_addr		= 0x1000,
-+	.hdmi_legacy_addr		= 0x1008,
-+	.hdmi_vbit_addr			= 0x610c0,
-+	.hdmi_ch_lsb_addr		= 0x61048,
-+	.hdmi_ch_msb_addr		= 0x6104c,
-+	.ch_stride			= 0x8,
-+	.hdmi_parity_addr		= 0x61034,
-+	.hdmi_dmactl_addr		= 0x61038,
-+	.hdmi_dma_stride		= 0x4,
-+	.hdmi_DP_addr			= 0x610c8,
-+	.hdmi_sstream_addr		= 0x6101c,
-+	.hdmi_irq_reg_base		= 0x63000,
-+	.hdmi_irq_ports			= 1,
-+
-+	.hdmi_rdma_dyncclk		= REG_FIELD_ID(0x64000, 14, 14, 4, 0x1000),
-+	.hdmi_rdma_bursten		= REG_FIELD_ID(0x64000, 13, 13, 4, 0x1000),
-+	.hdmi_rdma_burst8		= REG_FIELD_ID(0x64000, 15, 15, 4, 0x1000),
-+	.hdmi_rdma_burst16		= REG_FIELD_ID(0x64000, 16, 16, 4, 0x1000),
-+	.hdmi_rdma_dynburst		= REG_FIELD_ID(0x64000, 18, 18, 4, 0x1000),
-+	.hdmi_rdma_wpscnt		= REG_FIELD_ID(0x64000, 10, 12, 4, 0x1000),
-+	.hdmi_rdma_fifowm		= REG_FIELD_ID(0x64000, 1, 5, 4, 0x1000),
-+	.hdmi_rdma_enable		= REG_FIELD_ID(0x64000, 0, 0, 4, 0x1000),
-+
-+	.sstream_en			= REG_FIELD(0x6101c, 0, 0),
-+	.dma_sel			= REG_FIELD(0x6101c, 1, 2),
-+	.auto_bbit_en			= REG_FIELD(0x6101c, 3, 3),
-+	.layout				= REG_FIELD(0x6101c, 4, 4),
-+	.layout_sp			= REG_FIELD(0x6101c, 5, 8),
-+	.set_sp_on_en			= REG_FIELD(0x6101c, 10, 10),
-+	.dp_audio			= REG_FIELD(0x6101c, 11, 11),
-+	.dp_staffing_en			= REG_FIELD(0x6101c, 12, 12),
-+	.dp_sp_b_hw_en			= REG_FIELD(0x6101c, 13, 13),
-+
-+	.mute				= REG_FIELD(0x610c8, 0, 0),
-+	.as_sdp_cc			= REG_FIELD(0x610c8, 1, 3),
-+	.as_sdp_ct			= REG_FIELD(0x610c8, 4, 7),
-+	.aif_db4			= REG_FIELD(0x610c8, 8, 15),
-+	.frequency			= REG_FIELD(0x610c8, 16, 21),
-+	.mst_index			= REG_FIELD(0x610c8, 28, 29),
-+	.dptx_index			= REG_FIELD(0x610c8, 30, 31),
-+
-+	.soft_reset			= REG_FIELD(0x1000, 31, 31),
-+	.force_reset			= REG_FIELD(0x1000, 30, 30),
-+
-+	.use_hw_chs			= REG_FIELD(0x61038, 0, 0),
-+	.use_hw_usr			= REG_FIELD(0x61038, 1, 1),
-+	.hw_chs_sel			= REG_FIELD(0x61038, 2, 4),
-+	.hw_usr_sel			= REG_FIELD(0x61038, 5, 6),
-+
-+	.replace_vbit			= REG_FIELD(0x610c0, 0, 0),
-+	.vbit_stream			= REG_FIELD(0x610c0, 1, 1),
-+
-+	.legacy_en			=  REG_FIELD(0x1008, 0, 0),
-+	.calc_en			=  REG_FIELD(0x61034, 0, 0),
-+	.lsb_bits			=  REG_FIELD(0x61048, 0, 31),
-+	.msb_bits			=  REG_FIELD(0x6104c, 0, 31),
-+
-+
-+	.clk_name			= (const char*[]) {
-+							"core_cc_sysnoc_mport_core"
-+						},
-+	.num_clks			= 1,
-+	.cdc_dma_clk_names		= (const char*[]) {
-+							"aon_cc_audio_hm_h",
-+							"audio_cc_codec_mem",
-+							"audio_cc_codec_mem0",
-+							"audio_cc_codec_mem1",
-+							"audio_cc_codec_mem2",
-+							"aon_cc_va_mem0"
-+							},
-+	.cdc_dma_num_clks		= 6,
-+	.dai_driver			= sc7280_lpass_cpu_dai_driver,
-+	.num_dai			= ARRAY_SIZE(sc7280_lpass_cpu_dai_driver),
-+	.dai_osr_clk_names		= (const char *[]) {
-+							"audio_cc_ext_mclk0",
-+							"null"
-+							},
-+	.dai_bit_clk_names		= (const char *[]) {
-+							"core_cc_ext_if0_ibit",
-+							"core_cc_ext_if1_ibit"
-+							},
-+	.init				= sc7280_lpass_init,
-+	.exit				= sc7280_lpass_exit,
-+	.alloc_dma_channel		= sc7280_lpass_alloc_dma_channel,
-+	.free_dma_channel		= sc7280_lpass_free_dma_channel,
-+};
-+
-+static const struct of_device_id sc7280_lpass_cpu_device_id[] = {
-+	{.compatible = "qcom,sc7280-lpass-cpu", .data = &sc7280_data},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, sc7280_lpass_cpu_device_id);
-+
-+static struct platform_driver sc7280_lpass_cpu_platform_driver = {
-+	.driver = {
-+		.name = "sc7280-lpass-cpu",
-+		.of_match_table = of_match_ptr(sc7280_lpass_cpu_device_id),
-+	},
-+	.probe = asoc_qcom_lpass_cpu_platform_probe,
-+	.remove = asoc_qcom_lpass_cpu_platform_remove,
-+	.shutdown = asoc_qcom_lpass_cpu_platform_shutdown,
-+};
-+
-+module_platform_driver(sc7280_lpass_cpu_platform_driver);
-+
-+MODULE_DESCRIPTION("SC7280 LPASS CPU DRIVER");
-+MODULE_LICENSE("GPL");
--- 
-2.7.4
+> 
+> Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
+> ---
+>   drivers/target/target_core_user.c | 64 ++++++++++++++++++++++++++++++++++++---
+>   1 file changed, 59 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
+> index 7b2a89a..826c1c0 100644
+> --- a/drivers/target/target_core_user.c
+> +++ b/drivers/target/target_core_user.c
+> @@ -64,7 +64,6 @@
+>   #define MB_CMDR_SIZE (8 * 1024 * 1024)
 
+I'd like to change this to MB_CMDR_SIZE_DEF, since it no longer is
+the fixed size of mailbox plus cmd ring, but the default only.
+
+>   /* Offset of cmd ring is size of mailbox */
+>   #define CMDR_OFF sizeof(struct tcmu_mailbox)
+> -#define CMDR_SIZE (MB_CMDR_SIZE - CMDR_OFF)
+
+Similarly this could become CMDR_SIZE_DEF
+
+>   
+>   /*
+>    * For data area, the default block size is PAGE_SIZE and
+> @@ -133,6 +132,7 @@ struct tcmu_dev {
+>   	struct tcmu_mailbox *mb_addr;
+>   	void *cmdr;
+>   	u32 cmdr_size;
+> +	u32 total_cmdr_size_byte;
+
+Do we really need a new field in tcmu_dev? I think we should avoid it
+since the field cmdr_size holds the same value, just lowered by CMDR_OFF.
+
+>   	u32 cmdr_last_cleaned;
+>   	/* Offset of data area from start of mb */
+>   	/* Must add data_off and mb_addr to get the address */
+> @@ -1617,6 +1617,7 @@ static struct se_device *tcmu_alloc_device(struct se_hba *hba, const char *name)
+>   
+>   	udev->data_pages_per_blk = DATA_PAGES_PER_BLK_DEF;
+>   	udev->max_blocks = DATA_AREA_PAGES_DEF / udev->data_pages_per_blk;
+> +	udev->total_cmdr_size_byte = MB_CMDR_SIZE;
+
+We could do
+         udev->cmdr_size = CMDR_SIZE_DEF;
+
+>   	udev->data_area_mb = TCMU_PAGES_TO_MBS(DATA_AREA_PAGES_DEF);
+>   
+>   	mutex_init(&udev->cmdr_lock);
+> @@ -2189,7 +2190,7 @@ static int tcmu_configure_device(struct se_device *dev)
+>   		goto err_bitmap_alloc;
+>   	}
+>   
+> -	mb = vzalloc(MB_CMDR_SIZE);
+> +	mb = vzalloc(udev->total_cmdr_size_byte);
+>   	if (!mb) {
+>   		ret = -ENOMEM;
+>   		goto err_vzalloc;
+> @@ -2198,8 +2199,8 @@ static int tcmu_configure_device(struct se_device *dev)
+>   	/* mailbox fits in first part of CMDR space */
+>   	udev->mb_addr = mb;
+>   	udev->cmdr = (void *)mb + CMDR_OFF;
+> -	udev->cmdr_size = CMDR_SIZE;
+> -	udev->data_off = MB_CMDR_SIZE;
+> +	udev->cmdr_size = udev->total_cmdr_size_byte - CMDR_OFF;
+> +	udev->data_off = udev->total_cmdr_size_byte;
+
+CMDR_SIZE would be already set here, so we only would need:
+         udev->data_off = udev->cmdr_size + CMDR_OFF;
+
+>   	data_size = TCMU_MBS_TO_PAGES(udev->data_area_mb) << PAGE_SHIFT;
+>   	udev->mmap_pages = (data_size + MB_CMDR_SIZE) >> PAGE_SHIFT;
+
+I think we have to replace MB_CMDR_SIZE with udev->cmdr_size + CMDR_OFF here.
+Just a few lines below your patch also does not change the line
+         info->mem[0].size = data_size + MB_CMDR_SIZE;
+where the same replacement is needed.
+
+>   	udev->data_blk_size = udev->data_pages_per_blk * PAGE_SIZE;
+> @@ -2401,7 +2402,7 @@ static void tcmu_reset_ring(struct tcmu_dev *udev, u8 err_level)
+>   enum {
+>   	Opt_dev_config, Opt_dev_size, Opt_hw_block_size, Opt_hw_max_sectors,
+>   	Opt_nl_reply_supported, Opt_max_data_area_mb, Opt_data_pages_per_blk,
+> -	Opt_err,
+> +	Opt_cmd_ring_size_mb, Opt_err,
+>   };
+>   
+>   static match_table_t tokens = {
+> @@ -2412,6 +2413,7 @@ enum {
+>   	{Opt_nl_reply_supported, "nl_reply_supported=%d"},
+>   	{Opt_max_data_area_mb, "max_data_area_mb=%d"},
+>   	{Opt_data_pages_per_blk, "data_pages_per_blk=%d"},
+> +	{Opt_cmd_ring_size_mb, "cmd_ring_size_mb=%d"},
+>   	{Opt_err, NULL}
+>   };
+>   
+> @@ -2509,6 +2511,41 @@ static int tcmu_set_data_pages_per_blk(struct tcmu_dev *udev, substring_t *arg)
+>   	return ret;
+>   }
+>   
+> +static int tcmu_set_cmd_ring_size_param(struct tcmu_dev *udev, substring_t *arg)
+
+Please remove the "_param" suffix from function name, as the
+other similar set functions don't have it also.
+
+> +{
+> +	int val, ret;
+> +
+> +	ret = match_int(arg, &val);
+> +	if (ret < 0) {
+> +		pr_err("match_int() failed for cmd_ring_size_mb=. Error %d.\n",
+> +		       ret);
+> +		return ret;
+> +	}
+> +
+> +	if (val <= 0) {
+> +		pr_err("Invalid cmd_ring_size_mb %d.\n", val);
+> +		return -EINVAL;
+> +	}
+> +
+> +	mutex_lock(&udev->cmdr_lock);
+> +	if (udev->data_bitmap) {
+> +		pr_err("Cannot set cmd_ring_size_mb after it has been enabled.\n");
+> +		ret = -EINVAL;
+> +		goto unlock;
+> +	}
+> +
+> +	udev->total_cmdr_size_byte = (val << 20);
+> +	if (udev->total_cmdr_size_byte > MB_CMDR_SIZE) {
+
+Would be
+         udev->cmdr_size = (val << 20) - CMDR_OFF;
+         if (val > (MB_CMDR_SIZE_DEF >> 20)) {
+
+Please note: the check you coded is definitely wrong.
+E.g. if someone entered the value 4096, which is 0x1000,
+we would have ended up with udev->total_cmdr_size_byte
+set to 0 ...
+
+> +		pr_err("%d is too large. Adjusting cmd_ring_size_mb to global limit of %u\n",
+> +		       val, (MB_CMDR_SIZE >> 20));
+> +		udev->total_cmdr_size_byte = MB_CMDR_SIZE;
+
+                 udev->cmdr_size = CMDR_SIZE_DEF;
+> +	}
+> +
+> +unlock:
+> +	mutex_unlock(&udev->cmdr_lock);
+> +	return ret;
+> +}
+> +
+>   static ssize_t tcmu_set_configfs_dev_params(struct se_device *dev,
+>   		const char *page, ssize_t count)
+>   {
+> @@ -2563,6 +2600,9 @@ static ssize_t tcmu_set_configfs_dev_params(struct se_device *dev,
+>   		case Opt_data_pages_per_blk:
+>   			ret = tcmu_set_data_pages_per_blk(udev, &args[0]);
+>   			break;
+> +		case Opt_cmd_ring_size_mb:
+> +			ret = tcmu_set_cmd_ring_size_param(udev, &args[0]);
+> +			break;
+>   		default:
+>   			break;
+>   		}
+> @@ -2585,6 +2625,8 @@ static ssize_t tcmu_show_configfs_dev_params(struct se_device *dev, char *b)
+>   	bl += sprintf(b + bl, "Size: %llu ", udev->dev_size);
+>   	bl += sprintf(b + bl, "MaxDataAreaMB: %u ", udev->data_area_mb);
+>   	bl += sprintf(b + bl, "DataPagesPerBlk: %u\n", udev->data_pages_per_blk);
+
+I think we should print all the config values on one line.
+So I'd like to remove the '\n' after DataPagesPerBlk.
+
+> +	bl += sprintf(b + bl, "CmdRingSizeMB: %u\n",
+> +		      (udev->total_cmdr_size_byte >> 20));
+>   
+>   	return bl;
+>   }
+> @@ -3059,6 +3101,17 @@ static ssize_t tcmu_free_kept_buf_store(struct config_item *item, const char *pa
+>   }
+>   CONFIGFS_ATTR_WO(tcmu_, free_kept_buf);
+>   
+> +static ssize_t tcmu_cmd_ring_size_mb_show(struct config_item *item, char *page)
+> +{
+> +	struct se_dev_attrib *da = container_of(to_config_group(item),
+> +						struct se_dev_attrib, da_group);
+> +	struct tcmu_dev *udev = TCMU_DEV(da->da_dev);
+> +
+> +	return snprintf(page, PAGE_SIZE, "%u\n",
+> +			(udev->total_cmdr_size_byte >> 20));
+
+			(udev->cmdr_size + CMDR_OFF) >> 20);
+> +}
+> +CONFIGFS_ATTR_RO(tcmu_, cmd_ring_size_mb);
+> +
+
+The attributes block_dev, reset_ring and free_kept_buf belong
+to the separate action attribute group.
+So shouldn't we shift this new attribute up in the code, e.q.
+behind the line "CONFIGFS_ATTR_RO(tcmu_, data_pages_per_blk);"?
+
+
+>   static struct configfs_attribute *tcmu_attrib_attrs[] = {
+>   	&tcmu_attr_cmd_time_out,
+>   	&tcmu_attr_qfull_time_out,
+> @@ -3069,6 +3122,7 @@ static ssize_t tcmu_free_kept_buf_store(struct config_item *item, const char *pa
+>   	&tcmu_attr_emulate_write_cache,
+>   	&tcmu_attr_tmr_notification,
+>   	&tcmu_attr_nl_reply_supported,
+> +	&tcmu_attr_cmd_ring_size_mb,
+>   	NULL,
+>   };
+>   

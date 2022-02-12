@@ -2,152 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4908E4B36DE
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 18:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5D24B36E0
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 18:55:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiBLRue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 12:50:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52664 "EHLO
+        id S230071AbiBLRzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 12:55:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiBLRud (ORCPT
+        with ESMTP id S229579AbiBLRzV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 12:50:33 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A602FFCC
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 09:50:29 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id v13-20020a17090ac90d00b001b87bc106bdso14918731pjt.4
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 09:50:29 -0800 (PST)
+        Sat, 12 Feb 2022 12:55:21 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2579A2FFD0;
+        Sat, 12 Feb 2022 09:55:18 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id u12so7192004plf.13;
+        Sat, 12 Feb 2022 09:55:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Svf95FOeL5J7/saoJgddlt8a+RbWE9cYMRDS2l9fhxQ=;
-        b=JljpsMSgafZOIqYfyKNYJptOXWZrX3r1UV77+BIJqkOW8szOYPMGG7CCQBHk2gsTGC
-         iCtw9Gr6s/rHaZgdOYFXL60wt+rS0E9oW1r5/7jdXPoqKzvbTO5sxLH90p/vUIHiBO6L
-         xEDGd1k3vT9dWpuzsxWlvx4o+Xz68lqFjeTno=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S36hks2RJ4Re0coMrXWBvTFTqYUMh3MT1Ki6NWqUkFY=;
+        b=PvpA1x3ux+lK5IBZl1QL+VxW/zkoOX6xnWr7c4Gli8K3cLpAZZ8g2vXxEbk1J9m47W
+         mfMpWE54ocKqEwTe/JCwjxVefs4kIeYN2xl7o627tAwRsVVjFywhACXahWPHGaMp6oTp
+         UqYFsYcfhjkt5iYKwwwbcNsBJM0OoH1pj9hOdnXcasg1kzdfRSu7zycLjG+ZOVwR5bWu
+         HeFSjm+7vt/Pu3q4HAd+vwkmjONOk6mA2YI+CV7Ae+iOl9c5g5UXTNsXyb6pawrooBVL
+         yir78UGoQxxorEVkbmG91W7IHDX3fthrfd2OartZjrL9EbNLRMyT17U/HbB+cZfnLZQq
+         6ZqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Svf95FOeL5J7/saoJgddlt8a+RbWE9cYMRDS2l9fhxQ=;
-        b=dK+Pd/Hgwru9jz4eIVSk/Eg3kag6vE2iCe4z1P7+eseh19XRrKDCBIOVZMKB3Gd7Kw
-         TMGjsCl40uHyMaB7una+GL+71ENM61RWg25MVXfVttd+QxVmi5FK+vVuEjoa6IcpzocL
-         g4kYqAQ4i6iBBNdKuj8/3eI4K1SrnIoWHnw/Z2AVuYtT8KXzRoEAZgV6LNZtLHfPysrR
-         jaZWxeTQGSzBR1+9LsUuFATZVRaGGO2Nu8s1s6SjyT7qEfppwUBGECrCg/o+6v0XBY3k
-         t1IEyyT5OlOrmgm3joY1y/62SvPa6NeNQmpwJzsj1UY5wWrRxWpH4tqGs7ohGWCZxsVK
-         us0w==
-X-Gm-Message-State: AOAM531ZszEInLct3B7QrsR1P7edEg+MRNbpTvtPcTYDQ8DxUeMTTGyN
-        NjwSfo+idYO3aoVmeWMnYmZ9XASCHEoAiA==
-X-Google-Smtp-Source: ABdhPJzxRSTNoySb5tCsxOJ3Lrh+mKwfxRwF0mclqLCiQvDl89uY1shiClJLdMC1/uEBERr5n5eKIA==
-X-Received: by 2002:a17:90b:3508:: with SMTP id ls8mr3647810pjb.224.1644688229050;
-        Sat, 12 Feb 2022 09:50:29 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id mu18sm9356244pjb.18.2022.02.12.09.50.28
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S36hks2RJ4Re0coMrXWBvTFTqYUMh3MT1Ki6NWqUkFY=;
+        b=IYfNfvMvcTc8n9XG8oe5KMnRIMzi5Q5jS5LL0tV5hJSxpKHMt9bD/aUU//slwNBBqA
+         U/jPaWimBtgQ81YJYVfHjZmzf0NdMzfbwJttM53EtEThAjozc1THJIDhovA6/oOpdJEb
+         3mSYqmZ/JTks9NHCPPNeEE2QIBFa/qB301nkJW86wpApUzNL/VzmOmTpb2yfETLzCu3y
+         qyN61/xb0A+DcY3QQ0MTsysw92dJl/L7N7EBRhL6vby9Y4VXA06U/ocgFprzloel1Xpd
+         yCJ9j4i9in2Qz8IbDM8LBNa/FTizCLtOigOu9X9N/ffE5j4tpXhsb0o5RtuqMsvxoFdw
+         nEww==
+X-Gm-Message-State: AOAM530bJFjZHbtuJQuL8ZspsT0zZCdO2brsumB04CyEBSGHe/N/2/2d
+        RhFFUgbU5pu3RJ+6QiaDujc=
+X-Google-Smtp-Source: ABdhPJxuPaLOxXK6GVwQIPfak/PrkZNEm0dxv1wuxY1USOojmqe+cg5X1Eo5R6sHWJSqKsbfHN4H+A==
+X-Received: by 2002:a17:902:6903:: with SMTP id j3mr6935252plk.137.1644688517517;
+        Sat, 12 Feb 2022 09:55:17 -0800 (PST)
+Received: from localhost.localdomain ([2402:4000:2380:2a17:a7f8:71f:713f:850b])
+        by smtp.gmail.com with ESMTPSA id o8sm31797155pfu.52.2022.02.12.09.55.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Feb 2022 09:50:28 -0800 (PST)
-Date:   Sat, 12 Feb 2022 09:50:28 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Justin Forbes <jmforbes@linuxtx.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Valdis =?utf-8?Q?Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next 20220125 - build failure in objtool with gcc 12
-Message-ID: <202202120949.A85C37491@keescook>
-References: <20494.1643237814@turing-police>
- <CAFxkdAoe8XO4ivDpvfP8PTPpuew7k5Ngar3Ua9KhwTq32zdEQg@mail.gmail.com>
+        Sat, 12 Feb 2022 09:55:17 -0800 (PST)
+From:   Husni Faiz <ahamedhusni73@gmail.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     Husni Faiz <ahamedhusni73@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: serial: Fix Coding Style Errors
+Date:   Sat, 12 Feb 2022 23:25:10 +0530
+Message-Id: <20220212175510.521072-1-ahamedhusni73@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFxkdAoe8XO4ivDpvfP8PTPpuew7k5Ngar3Ua9KhwTq32zdEQg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 09:34:34AM -0600, Justin Forbes wrote:
-> On Wed, Jan 26, 2022 at 4:57 PM Valdis Klētnieks
-> <valdis.kletnieks@vt.edu> wrote:
-> >
-> > Fedora Rawhide shipped gcc12, which apparently includes a new warning that
-> > causes a build failure.  Apparently, it's unable to figure out that 'ptr' remains
-> > valid on failed realloc(), and we only call realloc() again on failures...
-> 
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=104069 explains (toward
-> the end) why gcc is leaving it to be fixed in the kernel.
+Added a space before the ternary operator.
+Removed the space after the function argument.
 
-Yeah, I agree -- it can trigger a free(). I think the solution should
-be:
+Signed-off-by: Husni Faiz <ahamedhusni73@gmail.com>
+---
+ drivers/usb/serial/cp210x.c      | 2 +-
+ drivers/usb/serial/iuu_phoenix.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/lib/subcmd/subcmd-util.h b/tools/lib/subcmd/subcmd-util.h
-index 794a375dad36..de392fc5fd3a 100644
---- a/tools/lib/subcmd/subcmd-util.h
-+++ b/tools/lib/subcmd/subcmd-util.h
-@@ -49,15 +49,24 @@ static NORETURN inline void die(const char *err, ...)
+diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+index 8a60c0d56863..1fcdfb7d118c 100644
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -1403,7 +1403,7 @@ static int cp210x_tiocmget(struct tty_struct *tty)
+ 		|((control & CONTROL_RTS) ? TIOCM_RTS : 0)
+ 		|((control & CONTROL_CTS) ? TIOCM_CTS : 0)
+ 		|((control & CONTROL_DSR) ? TIOCM_DSR : 0)
+-		|((control & CONTROL_RING)? TIOCM_RI  : 0)
++		|((control & CONTROL_RING) ? TIOCM_RI  : 0)
+ 		|((control & CONTROL_DCD) ? TIOCM_CD  : 0);
  
- static inline void *xrealloc(void *ptr, size_t size)
- {
--	void *ret = realloc(ptr, size);
--	if (!ret && !size)
--		ret = realloc(ptr, 1);
-+	void *ret;
-+
-+	/*
-+	 * Convert a zero-sized allocation into 1 byte, since
-+	 * realloc(ptr, 0) means free(ptr), but we don't want
-+	 * to release the memory. For a new allocation (when
-+	 * ptr == NULL), avoid triggering NULL-checking error
-+	 * conditions for zero-sized allocations.
-+	 */
-+	if (!size)
-+		size = 1;
-+	ret = realloc(ptr, size);
- 	if (!ret) {
--		ret = realloc(ptr, size);
--		if (!ret && !size)
--			ret = realloc(ptr, 1);
--		if (!ret)
--			die("Out of memory, realloc failed");
-+		/*
-+		 * If realloc() fails, the original block is left untouched;
-+		 * it is not freed or moved.
-+		 */
-+		die("Out of memory, realloc failed");
- 	}
- 	return ret;
+ 	dev_dbg(&port->dev, "%s - control = 0x%02x\n", __func__, control);
+diff --git a/drivers/usb/serial/iuu_phoenix.c b/drivers/usb/serial/iuu_phoenix.c
+index 0be3b5e1eaf3..2f7784572c4d 100644
+--- a/drivers/usb/serial/iuu_phoenix.c
++++ b/drivers/usb/serial/iuu_phoenix.c
+@@ -360,7 +360,7 @@ static void iuu_led_activity_on(struct urb *urb)
+ 	usb_fill_bulk_urb(port->write_urb, port->serial->dev,
+ 			  usb_sndbulkpipe(port->serial->dev,
+ 					  port->bulk_out_endpointAddress),
+-			  port->write_urb->transfer_buffer, 8 ,
++			  port->write_urb->transfer_buffer, 8,
+ 			  iuu_rxcmd, port);
+ 	usb_submit_urb(port->write_urb, GFP_ATOMIC);
  }
-
-> 
-> 
-> >   CC      /usr/src/linux-next/tools/objtool/exec-cmd.o
-> >   CC      /usr/src/linux-next/tools/objtool/help.o
-> > In file included from help.c:12:
-> > In function 'xrealloc',
-> >     inlined from 'add_cmdname' at help.c:24:2:
-> > subcmd-util.h:56:23: error: pointer may be used after 'realloc' [-Werror=use-after-free]
-> >    56 |                 ret = realloc(ptr, size);
-> >       |                       ^~~~~~~~~~~~~~~~~~
-> > subcmd-util.h:52:21: note: call to 'realloc' here
-> >    52 |         void *ret = realloc(ptr, size);
-> >       |                     ^~~~~~~~~~~~~~~~~~
-> > subcmd-util.h:58:31: error: pointer may be used after 'realloc' [-Werror=use-after-free]
-> >    58 |                         ret = realloc(ptr, 1);
-> >       |                               ^~~~~~~~~~~~~~~
-> > subcmd-util.h:52:21: note: call to 'realloc' here
-> >    52 |         void *ret = realloc(ptr, size);
-> >       |                     ^~~~~~~~~~~~~~~~~~
-> > cc1: all warnings being treated as errors
-> > make[4]: *** [/usr/src/linux-next/tools/build/Makefile.build:97: /usr/src/linux-next/tools/objtool/help.o] Error 1
-> > make[3]: *** [Makefile:59: /usr/src/linux-next/tools/objtool/libsubcmd-in.o] Error 2
-> > make[2]: *** [Makefile:63: /usr/src/linux-next/tools/objtool/libsubcmd.a] Error 2
-> > make[1]: *** [Makefile:69: objtool] Error 2
-> > make: *** [Makefile:1405: tools/objtool] Error 2
-
+@@ -380,7 +380,7 @@ static void iuu_led_activity_off(struct urb *urb)
+ 	usb_fill_bulk_urb(port->write_urb, port->serial->dev,
+ 			  usb_sndbulkpipe(port->serial->dev,
+ 					  port->bulk_out_endpointAddress),
+-			  port->write_urb->transfer_buffer, 8 ,
++			  port->write_urb->transfer_buffer, 8,
+ 			  iuu_rxcmd, port);
+ 	usb_submit_urb(port->write_urb, GFP_ATOMIC);
+ }
 -- 
-Kees Cook
+2.25.1
+

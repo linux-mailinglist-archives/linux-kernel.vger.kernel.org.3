@@ -2,106 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E014B32C1
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 03:47:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 169524B32CA
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 04:01:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbiBLCre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 21:47:34 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:53356 "EHLO
+        id S230431AbiBLC7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 21:59:54 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:57282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiBLCrb (ORCPT
+        with ESMTP id S229541AbiBLC7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 21:47:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6953632065
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 18:47:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4AF3B82C89
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 02:47:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68C43C340E9;
-        Sat, 12 Feb 2022 02:47:24 +0000 (UTC)
-Date:   Fri, 11 Feb 2022 21:47:22 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Alexey Kardashevskiy <aik@ozlabs.ru>
-Cc:     llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: [RFC PATCH kernel] trace: Make FTRACE_MCOUNT_USE_RECORDMCOUNT
- configurable
-Message-ID: <20220211214722.4373ca83@rorschach.local.home>
-In-Reply-To: <20220211014313.1790140-1-aik@ozlabs.ru>
-References: <20220211014313.1790140-1-aik@ozlabs.ru>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 11 Feb 2022 21:59:48 -0500
+Received: from relay4.hostedemail.com (relay4.hostedemail.com [64.99.140.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671672E09C
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 18:59:45 -0800 (PST)
+Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay02.hostedemail.com (Postfix) with ESMTP id 4CF5123E3E;
+        Sat, 12 Feb 2022 02:59:44 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id 4CF092002A;
+        Sat, 12 Feb 2022 02:59:38 +0000 (UTC)
+Message-ID: <56b8e6cfc623d53ebba27ee8afbbec0ece58c816.camel@perches.com>
+Subject: Re: [PATCH] staging: pi433: add rf69_dbg_hex function
+From:   Joe Perches <joe@perches.com>
+To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     realwakka@gmail.com, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 11 Feb 2022 18:59:37 -0800
+In-Reply-To: <Yga7cDO00Hmk9+BL@mail.google.com>
+References: <YgYZRArwwF7Z1B4f@mail.google.com> <YgYa8Pt77v6AAyjb@kroah.com>
+         <Yga7cDO00Hmk9+BL@mail.google.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: 4CF092002A
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Stat-Signature: o5mck5eb9tynau44aprb7px6fyuutmbk
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+H1REJnNkX344apKmkyt7wVWo6oYFGan8=
+X-HE-Tag: 1644634778-705267
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Feb 2022 12:43:13 +1100
-Alexey Kardashevskiy <aik@ozlabs.ru> wrote:
+On Sat, 2022-02-12 at 08:39 +1300, Paulo Miguel Almeida wrote:
+> On Fri, Feb 11, 2022 at 09:14:40AM +0100, Greg KH wrote:
+> > 
+> > This is a lot of additional complexity for almost no real benefit.
+> > 
+> 
+> you're right. I will no longer pursue this approach. 
+> 
+> > > -	/* print content read from fifo for debugging purposes */
+> > > -	for (i = 0; i < size; i++)
+> > > -		dev_dbg(&spi->dev, "%d - 0x%x\n", i, local_buffer[i + 1]);
+> > 
+> > What is wrong with this simple line?
+> > 
+> 
+> to be honest, I think that 1 register per line isn't the easiest way to
+> read them. Given that print_hex_dump_debug existed and had this
+> horizontal-style priting format, I thought that it would be a better
+> way of visualizing the fifo data.
+> 
+> the only problems with print_hex_dump_debug was the absense of device
+> name and string format... so I saw a couple of drivers implementing
+> alternative hex_dump-like functions and thought that pi433 would benefit
+> from similar approach.
+> 
+> > > -	/* print content written from fifo for debugging purposes */
+> > > -	for (i = 0; i < size; i++)
+> > > -		dev_dbg(&spi->dev, "0x%x\n", buffer[i]);
+> 
+> if we are keeping this format, I may need to add the register idx to
+> dev_dbg: 
+> 		dev_dbg(&spi->dev, "%d - 0x%x\n", i, buffer[i]);
 
-> For whatever reason LLVM does not allow LTO (Link Time Optimization) if
-> FTRACE_MCOUNT_USE_RECORDMCOUNT is enabled.
-> 
-> This allows disabling just this option instead of disabling all FTRACE
-> options.
+You could use %*ph with a buffer length up to 64 bytes.
 
-What FTRACE options are you talking about?
+Multiple times if necessary. 
 
-> 
-> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
-> ---
-> 
-> Or disabling FTRACE is the right thing to do if HAS_LTO_CLANG=y?
-> 
-> Came from arch/Kconfig:
-> 
-> config HAS_LTO_CLANG
->         def_bool y
->         depends on CC_IS_CLANG && LD_IS_LLD && AS_IS_LLVM
->         depends on $(success,$(NM) --help | head -n 1 | grep -qi llvm)
->         depends on $(success,$(AR) --help | head -n 1 | grep -qi llvm)
->         depends on ARCH_SUPPORTS_LTO_CLANG
->         depends on !FTRACE_MCOUNT_USE_RECORDMCOUNT  <======
->         depends on !KASAN || KASAN_HW_TAGS
->         depends on !GCOV_KERNEL
-> 
-> 
-> ---
->  kernel/trace/Kconfig | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-> index a5eb5e7fd624..87d82d2b0b0b 100644
-> --- a/kernel/trace/Kconfig
-> +++ b/kernel/trace/Kconfig
-> @@ -704,7 +704,8 @@ config FTRACE_MCOUNT_USE_OBJTOOL
->  	depends on FTRACE_MCOUNT_RECORD
->  
->  config FTRACE_MCOUNT_USE_RECORDMCOUNT
-> -	def_bool y
-> +	bool "Enable FTRACE_MCOUNT_USE_RECORDMCOUNT"
-> +	default y
+Something like:
 
-I don't think this does what you think it does.
+	for (i = 0; i < size; i += 64)
+		dev_dbg(&spi->dev, "FIFO buffer: %d: %*ph\n",
+			i, min_t(int, 64, size - i), buffer + i);
 
-This is not something that should be user selectable. What exactly are
-you trying to accomplish here?
+Or for a more realistic length like 16
 
--- Steve
+	for (i = 0; i < size; i += 16)
+		dev_dbg(&spi->dev, "FIFO buffer: %d: %*ph\n",
+			i, min_t(int, 16, size - i), buffer + i);
 
 
->  	depends on !FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
->  	depends on !FTRACE_MCOUNT_USE_CC
->  	depends on !FTRACE_MCOUNT_USE_OBJTOOL
+
 

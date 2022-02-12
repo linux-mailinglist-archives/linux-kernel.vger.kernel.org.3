@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F124B3610
+	by mail.lfdr.de (Postfix) with ESMTP id 5B09C4B360E
 	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 16:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236665AbiBLPvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 10:51:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54798 "EHLO
+        id S236697AbiBLPvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 10:51:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236616AbiBLPvO (ORCPT
+        with ESMTP id S236633AbiBLPvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 12 Feb 2022 10:51:14 -0500
-Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D3424594;
+Received: from mo4-p04-ob.smtp.rzone.de (mo4-p04-ob.smtp.rzone.de [85.215.255.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D7324595;
         Sat, 12 Feb 2022 07:51:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1644681057;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1644681058;
     s=strato-dkim-0002; d=goldelico.com;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=i8pTmnLmwlb11chyD0dSM2jAOpH2BALjlZjdfMA39JQ=;
-    b=e1hos2O7gb5UTVjBLGrdw5Ia5WejeBaAs5mBJo3Yc4PhT7jo8RtDpTf8ELWCOjTwE+
-    xgwjJuL+6W4MtI0papmOwnHs3iTiGaRPfODF6FSflNzGcYiJI2H1Y7DsjZiMOo6TBpTg
-    5F5Zd5L6jxGvG80NWK4aUAXWik5sn8J4HZ3v1caiUKixFONXBM4dvomLMD8l+m4TNRe8
-    OyOTlpHbjRWy6mELa5Gc2/HqCd/BIf5BZEjcGMC2Fw27E2PWSU0RbNXbhkmxkX/rj4EV
-    nAQqf3bjFIbNSkZhie6tq2wWCPoRz7kHWe6BXyRYMJOILxN11hPwf/4r3viOJsSL3d3k
-    k1cA==
+    bh=76+TPRGf0MB6hHRwPaUxmX8Eixo5outKfV374UIYYws=;
+    b=LvEEe3IC5nz76IfJV1W88t/7Ocuh9kCtYx3c14vnXvIqBDw1b3N9u9eac8nJO5T2eK
+    WVeiSE0Rs4qBACVGAxqtZQdLgPTKVXI/yrZ++qB/GOwevgN9wHOPQJrI+PjnN30oN+RI
+    jV67BzU0HYNLY6pyYToaIcSPMMXTbpfQVX8XaaCnznPRDNi4wEbiKaTEAnPge8DBeoE8
+    bqXm0NSvTavqMRwy05iEVsJs+HKIVk9EoSjfDEOcv6H3H//oW7vcRLr4yxqtxxiJb75H
+    FuwOurb6X3lXTpJez67EGCcQoeBZvxPmKEudc4Fn0w3TA03iAOKv5bNjf66/FYW3u9M0
+    AMIA==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UMf2MwPVblcdY="
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
     by smtp.strato.de (RZmta 47.39.0 DYNA|AUTH)
-    with ESMTPSA id L29417y1CFovswq
+    with ESMTPSA id L29417y1CFovswr
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
     Sat, 12 Feb 2022 16:50:57 +0100 (CET)
@@ -53,83 +53,65 @@ To:     Andrzej Hajda <andrzej.hajda@intel.com>,
 Cc:     Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
         letux-kernel@openphoenux.org
-Subject: [PATCH v15 3/7] drm/bridge: display-connector: add ddc-en gpio support
-Date:   Sat, 12 Feb 2022 16:50:51 +0100
-Message-Id: <9d299c462111b662bd3bcb748370dd5c52a2a6b0.1644681054.git.hns@goldelico.com>
+Subject: [PATCH v15 4/7] drm/bridge: dw-hdmi: repair interworking with hdmi-connector for jz4780
+Date:   Sat, 12 Feb 2022 16:50:52 +0100
+Message-Id: <d4d08582c49ec089095dd0ede4cdf2752f9d1eb8.1644681054.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <cover.1644681054.git.hns@goldelico.com>
 References: <cover.1644681054.git.hns@goldelico.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"hdmi-connector.yaml" bindings defines an optional property
-"ddc-en-gpios" for a single gpio to enable DDC operation.
+Commit 7cd70656d1285b ("drm/bridge: display-connector: implement bus fmts callbacks")
 
-Usually this controls +5V power on the HDMI connector.
-This +5V may also be needed for HPD.
+introduced a new mechanism to negotiate bus formats between hdmi connector
+and the synopsys hdmi driver inside the jz4780.
 
-This was not reflected in code.
+By this, the dw-hdmi is no longer the only bridge and sets up a list
+of formats in dw_hdmi_bridge_atomic_get_output_bus_fmts().
 
-Now, the driver activates the ddc gpio after probe and
-deactivates after remove so it is "almost on".
+This includes MEDIA_BUS_FMT_UYVY8_1X16 which is chosen for the jz4780 but only
+produces a black screen.
 
-But only if this driver is loaded (and not e.g. blacklisted
-as module).
+This fix is based on the observation that max_bpc = 0 when running this
+function while info->bpc = 8. Since the formats checks before this always test
+for max_bpc >= info->pbc indirectly my assumption is that we must check it
+here as well.
 
+Adding the proposed patch makes the CI20/jz4780 panel work again in
+MEDIA_BUS_FMT_RGB888_1X24 mode.
+
+Fixes: 7cd70656d1285b ("drm/bridge: display-connector: implement bus fmts callbacks")
 Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
- drivers/gpu/drm/bridge/display-connector.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/display-connector.c b/drivers/gpu/drm/bridge/display-connector.c
-index d24f5b90feabf..e4d52a7e31b71 100644
---- a/drivers/gpu/drm/bridge/display-connector.c
-+++ b/drivers/gpu/drm/bridge/display-connector.c
-@@ -24,6 +24,7 @@ struct display_connector {
- 	int			hpd_irq;
- 
- 	struct regulator	*dp_pwr;
-+	struct gpio_desc	*ddc_en;
- };
- 
- static inline struct display_connector *
-@@ -345,6 +346,17 @@ static int display_connector_probe(struct platform_device *pdev)
- 		}
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+index b0d8110dd412c..826a055a7a273 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+@@ -2620,10 +2620,10 @@ static u32 *dw_hdmi_bridge_atomic_get_output_bus_fmts(struct drm_bridge *bridge,
+ 		output_fmts[i++] = MEDIA_BUS_FMT_RGB101010_1X30;
  	}
  
-+	/* enable DDC */
-+	if (type == DRM_MODE_CONNECTOR_HDMIA) {
-+		conn->ddc_en = devm_gpiod_get_optional(&pdev->dev, "ddc-en",
-+						       GPIOD_OUT_HIGH);
-+
-+		if (IS_ERR(conn->ddc_en)) {
-+			dev_err(&pdev->dev, "Couldn't get ddc-en gpio\n");
-+			return PTR_ERR(conn->ddc_en);
-+		}
-+	}
-+
- 	conn->bridge.funcs = &display_connector_bridge_funcs;
- 	conn->bridge.of_node = pdev->dev.of_node;
+-	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
++	if (max_bpc >= info->bpc && info->color_formats & DRM_COLOR_FORMAT_YCBCR422)
+ 		output_fmts[i++] = MEDIA_BUS_FMT_UYVY8_1X16;
  
-@@ -373,6 +385,9 @@ static int display_connector_remove(struct platform_device *pdev)
- {
- 	struct display_connector *conn = platform_get_drvdata(pdev);
+-	if (info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
++	if (max_bpc >= info->bpc && info->color_formats & DRM_COLOR_FORMAT_YCBCR444)
+ 		output_fmts[i++] = MEDIA_BUS_FMT_YUV8_1X24;
  
-+	if (conn->ddc_en)
-+		gpiod_set_value(conn->ddc_en, 0);
-+
- 	if (conn->dp_pwr)
- 		regulator_disable(conn->dp_pwr);
- 
+ 	/* Default 8bit RGB fallback */
 -- 
 2.33.0
 

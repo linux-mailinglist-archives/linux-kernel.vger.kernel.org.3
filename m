@@ -2,88 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65B14B36BD
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 18:03:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEBA4B36C2
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 18:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237307AbiBLRDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 12:03:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37410 "EHLO
+        id S235030AbiBLROc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 12:14:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbiBLRDe (ORCPT
+        with ESMTP id S229947AbiBLRO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 12:03:34 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958EB240A4;
-        Sat, 12 Feb 2022 09:03:30 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 9CBBE1C0B7A; Sat, 12 Feb 2022 18:03:27 +0100 (CET)
-Date:   Sat, 12 Feb 2022 18:03:27 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     =?iso-8859-1?Q?Andr=E9?= Apitzsch <git@apitzsch.eu>
-Cc:     Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-leds@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v2 2/3] dt-bindings: leds: sgm3140: Document ocp8110
- compatible
-Message-ID: <20220212170327.GA29488@duo.ucw.cz>
-References: <20211117091405.7412-1-git@apitzsch.eu>
- <20220207230638.56730-1-git@apitzsch.eu>
- <20220207230638.56730-3-git@apitzsch.eu>
- <YgaQAwfYnt6E9buG@robh.at.kernel.org>
- <9a89a99872ff2fd67f097224584121e50b8a2f07.camel@apitzsch.eu>
+        Sat, 12 Feb 2022 12:14:29 -0500
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD7B240A4;
+        Sat, 12 Feb 2022 09:14:25 -0800 (PST)
+Received: from fsav119.sakura.ne.jp (fsav119.sakura.ne.jp [27.133.134.246])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 21CHEDgr055636;
+        Sun, 13 Feb 2022 02:14:13 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav119.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp);
+ Sun, 13 Feb 2022 02:14:13 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 21CHEDvD055633
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sun, 13 Feb 2022 02:14:13 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <309c86b7-2a4c-1332-585f-7bcd59cfd762@I-love.SAKURA.ne.jp>
+Date:   Sun, 13 Feb 2022 02:14:09 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="WIyZ46R2i8wDzkSu"
-Content-Disposition: inline
-In-Reply-To: <9a89a99872ff2fd67f097224584121e50b8a2f07.camel@apitzsch.eu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [syzbot] possible deadlock in worker_thread
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>,
+        syzbot <syzbot+831661966588c802aae9@syzkaller.appspotmail.com>,
+        jgg@ziepe.ca, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+References: <0000000000005975a605d7aef05e@google.com>
+ <8ea57ddf-a09c-43f2-4285-4dfb908ad967@acm.org>
+ <ccd04d8a-154b-543e-e1c3-84bc655508d1@I-love.SAKURA.ne.jp>
+ <71d6f14e-46af-cc5a-bc70-af1cdc6de8d5@acm.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <71d6f14e-46af-cc5a-bc70-af1cdc6de8d5@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/02/13 1:37, Bart Van Assche wrote:
+> On 2/11/22 21:31, Tetsuo Handa wrote:
+>> But this report might be suggesting us that we should consider
+>> deprecating (and eventually getting rid of) system-wide workqueues
+>> (declared in include/linux/workqueue.h), for since flush_workqueue()
+>> synchronously waits for completion, sharing system-wide workqueues
+>> among multiple modules can generate unexpected locking dependency
+>> chain (like this report).
+> 
+> I do not agree with deprecating system-wide workqueues. I think that
+> all flush_workqueue(system_long_wq) calls should be reviewed since
+> these are deadlock-prone.
+> 
+> Thanks,
+> 
+> Bart.
 
---WIyZ46R2i8wDzkSu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The loop module is not using flush_workqueue(system_long_wq) call; it only
+scheduled a work via system_long_wq which will call flush_workqueue() (of
+a local workqueue) from drain_workqueue() from destroy_workqueue() from
+work function.
 
-On Sat 2022-02-12 14:13:32, Andr=E9 Apitzsch wrote:
-> Am Freitag, dem 11.02.2022 um 10:34 -0600 schrieb Rob Herring:
-> > On Tue, Feb 08, 2022 at 12:06:37AM +0100, Andr=E9 Apitzsch wrote:
-> > > Signed-off-by: Andr=E9 Apitzsch <git@apitzsch.eu>
-> >=20
-> > Commit msg? What's this h/w?
-> >=20
-> Thanks for the feedback.
->=20
-> Would the following message be sufficient?
->=20
-> """
-> dt-bindings: leds: sgm3140: Document ocp8110 compatible
->=20
-> Add devicetree binding for Orient Chip OCP8110 charge pump used for
-> camera flash LEDs.
-> """
+How can reviewing all flush_workqueue(system_long_wq) calls help?
 
-Sounds good to me.
-							Pavel
---=20
-http://www.livejournal.com/~pavelmachek
-
---WIyZ46R2i8wDzkSu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYgfoXwAKCRAw5/Bqldv6
-8syWAJ4puUHUxTAucCpUsUpqlPzm+5nhGACgva2c+OUSx6mDeGGx4ztyVbDsfi4=
-=E7z2
------END PGP SIGNATURE-----
-
---WIyZ46R2i8wDzkSu--

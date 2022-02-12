@@ -2,124 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01E64B33DD
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 09:39:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFFF4B33DF
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 09:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbiBLIjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 03:39:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52096 "EHLO
+        id S232773AbiBLIlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 03:41:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232712AbiBLIjX (ORCPT
+        with ESMTP id S231820AbiBLIlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 03:39:23 -0500
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213DE26137
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 00:39:20 -0800 (PST)
-Received: by mail-oo1-xc36.google.com with SMTP id o128-20020a4a4486000000b003181707ed40so13077991ooa.11
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 00:39:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=knbguSrX3xagYUpZD20aO/zcWDU1J9IHxC/2QTmVdh0=;
-        b=QTnl6TjaqYf1gXjMYo2qS5Xy0BQjvXfZTfbKa9AmzM0Amqr3YLk2VXin504ONCvS4c
-         D71CiHvHMQkMBc4NFA40dBjG6HaiGxlTqyD0jgv9VsVSErXQX2ezpCgwzAb1d/O+TQlR
-         tN0M7EElLBsyjeEJCaLZoqBQhJ/hthGxULgvKNce6noV8UYJe24ndI4FMdxlV/NLqxUM
-         yxgiPwY7bWqL2Jfinf0P4erYgY1JUON6gMKKtJYqcb22eoYuoHgtRWijmu0lwVTz5r4m
-         bQRNMj0TI4O2OWCtLkj1bAqtcLZaLDMaIThdAKUvgWYh9rdv/P5EehSVP9yJSC4wb/U/
-         3Lwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=knbguSrX3xagYUpZD20aO/zcWDU1J9IHxC/2QTmVdh0=;
-        b=pwCUaW5M7Pk78EBTO7fMpiMtl66XZYn2pAWPK8Ehd990Vr/vvPD8PewFyH3zS7/LDE
-         iFww+jTvzWqRm/GfTokMKO6vs7iIONm+ptViDUU2Vp5aWnbxmkrR4jhtvRZg6S9Xbfzn
-         1qBgI+SeYnWshONLP1X27c9oJDuthpLjNVdr3QT4njQlhsjXjMLsBj7IpyUsdVhmhzq1
-         u38kYckhYxy7s17MVnQfyLSQPfTes1fs8fCGtPWfstCN1/rg8RoiqxuwltoUta2ChcAe
-         DBus0V6PqDc5tZiKTrhhTOOxFMHmVbQNrBxsPKvNg/KROB0sUWcGBcnX8aPQW0xuxxqK
-         jj+A==
-X-Gm-Message-State: AOAM530XeD7T5lhbef+Lo+HI3edltIx02UtzyzCrk40WSf8gTKtr5M1L
-        5L07YcymDOhfZWj8wGf6OqSIh6vfjX5SRlslsBmZiA==
-X-Google-Smtp-Source: ABdhPJyns7ddLPUyPQCSMDyfKbEyJqJSYRTCQnSQAozx4Oxa7MiPTV/AB9Nyf62p7APdboNF7lqfYKu1g/ZHT3BaAeQ=
-X-Received: by 2002:a05:6870:f812:: with SMTP id fr18mr1245704oab.129.1644655159211;
- Sat, 12 Feb 2022 00:39:19 -0800 (PST)
+        Sat, 12 Feb 2022 03:41:00 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2542613A;
+        Sat, 12 Feb 2022 00:40:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1644655247;
+        bh=6yeoDgDJPy6Mv0rvAeCcJ+cV6rpBoVqlTD6BL6nGPBA=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=ECsMFeCK10kEQy3vbM9SlWqvEBXVpIb+kEL310FW9HTi3XaktD/N3qlGeNb11HQn1
+         dLcf++lYoAUcthwIAk0zz+LAN6GgpMU+xYbomhYFNvmTsdqaD+ilXbFHoyBv5Xzmm8
+         jXucMoJq9Sb5zEpy3Otb7VAJ3pWZix6JwAZat8hk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MLzBj-1na3rS2BsH-00Hyov; Sat, 12
+ Feb 2022 09:40:47 +0100
+Date:   Sat, 12 Feb 2022 09:40:45 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Joel Stanley <joel@jms.id.au>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>
+Subject: Re: [PATCH v5 0/9] Nuvoton WPCM450 pinctrl and GPIO driver
+Message-ID: <YgdyjUbb4lnrVHmJ@latitude>
+References: <20220129115228.2257310-1-j.neuschaefer@gmx.net>
+ <CACRpkdYEigGHkoGfBg15tFXadgpXUAjDOnw7ePXhmvHJqPEJXw@mail.gmail.com>
+ <YfZkis8M81Ejpagq@latitude>
+ <CACPK8XdFXRQf3MpPh3z=EMAKtnQSHL+iwwMCVYc5dP9DfQEN+Q@mail.gmail.com>
+ <YfpyjDBH83FE7r4o@latitude>
+ <CAHp75Vdg8zFSHaTP_8jQua5QfRYbvZ4_rLdCtt3ks8YEibseTg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20211118130320.95997-1-likexu@tencent.com>
-In-Reply-To: <20211118130320.95997-1-likexu@tencent.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Sat, 12 Feb 2022 00:39:08 -0800
-Message-ID: <CALMp9eTONaviuz-NnPUP2=MEOb8ZBkZ7u_ZQBWBUne-i6cRUkA@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86/pmu: Fix reserved bits for AMD PerfEvtSeln register
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zAZgCYGBplb8VEfC"
+Content-Disposition: inline
+In-Reply-To: <CAHp75Vdg8zFSHaTP_8jQua5QfRYbvZ4_rLdCtt3ks8YEibseTg@mail.gmail.com>
+X-Provags-ID: V03:K1:hJPvO5vHcOttZM1wfVcuMJQGsgrEjDcKwOkTeT64bNtzFABDEGK
+ WIamoNhFYPIJHSOMwXV0YQfcg3M4errYW7wm5rOzvzRkWqMDpmhLL04tZCTAsKolznmxDEH
+ phmVnU7DTvxszphcydPY+LPpRINwC5jVWzlk5OGTGRtEXG7YLZAd2GCetPFrbrQw1At0n4X
+ nqekm7hvvtg4RUJUdg8HQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:m2XNOyAVX7w=:s0wxwPeA9HvMlq2eNhUmBQ
+ YnTuICPMq5UsHNHC5Xa5U0FlgVBZIBn4D9GIa/bhgvvI1dP8Jg9zJOi64TOWmMFa3mTeW1cJR
+ oANWnW5BPC87zf5727tPIKYgQpEtk30o4RVJbbf/LKXzdD/jxdHrEZTRHX56YvNjv9H0yXK7k
+ RPvyYbRYCBA1isASYbQfU51gvgP4bq2q1JlUjocLr2GA3ZfrYyhGJ39VxrOniZFyrr6Ph3lPy
+ 0uGTB0YB9vEXollfRTCk3wtZqgGUO/YaQcS4X30SdX9N6YG8U8RQwQyJuniI0sWWP1zxUm5ZZ
+ vt344G6IR9U7mmrfmrZk9ePes8Ec6cR37hvpotm94pD1YH1FS4smHA//xhBpOmdgDdBWGBHJF
+ c+54oo1DKmcgFJY4BCzr4bk1W1CEJSg45jaVdC/Pgn8OGXwTesZVH/QCgWNfZQKEkgzhoxVF2
+ o4UZnAxQZ7t1hsZUMMFh0UBEplloQvZNwySlX4Xe6cXc6fChoYdGMyoTfQ0+g9Yfg/pXDbnvL
+ rLmvg/wg7peJ1aIKWczNnZ88QlV8xRwJ++rZM2aXkqdd62RJcupYTPoRyDuYAJ5MJ38mcc9o1
+ 53cQeMQD7RPXXYqhWL6hZpDGsmjWP258ovGjZNjO/25uVlsUcyBG79JkhuXsEWuxbOPjKikCd
+ rjtOZPAD38MFanB4kGS7127Nhz3yulktAB+aG7ZUusXUE5kV0JMpwS6rrSj+j71JK/JKjPM6Y
+ uBt+u3XfHRzkaV1zWYSCSd9dM75n6Duzj0WX/jWsW8pDFIq7z/59D0zn9GGKk5nc/nuIRfvQr
+ YjEVYxAsDit4uVyRAfut/wojaqtA8XbZe5WV2KkkpxZnnYTBdxY10x4F7jbxsgjlbp71yBY8A
+ 8Rp2K08sB5seh24kdJnoV9Xi4sdmwdbK44Mz1l7bQGBY5p8GHU1jLN7qCkjSpBd4Ay6jqwkuc
+ 6T12h008PmhZtSCE/9LeVR0OdIaWvZ3ItPAztVon95bjlfwWmCCeA4KFIYfn4NpNBsBKMy3li
+ TgYCLZrYfc3v+digCqTQbdQfkScxHa3dVT96D8riDMX7/eAXnwQAgnBQmp/wFJ21OxBL0tMzq
+ 1ksURp/xrWAjIM=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 18, 2021 at 5:03 AM Like Xu <like.xu.linux@gmail.com> wrote:
->
-> From: Like Xu <likexu@tencent.com>
->
-> If we run the following perf command in an AMD Milan guest:
->
->   perf stat \
->   -e cpu/event=0x1d0/ \
->   -e cpu/event=0x1c7/ \
->   -e cpu/umask=0x1f,event=0x18e/ \
->   -e cpu/umask=0x7,event=0x18e/ \
->   -e cpu/umask=0x18,event=0x18e/ \
->   ./workload
->
-> dmesg will report a #GP warning from an unchecked MSR access
-> error on MSR_F15H_PERF_CTLx.
->
-> This is because according to APM (Revision: 4.03) Figure 13-7,
-> the bits [35:32] of AMD PerfEvtSeln register is a part of the
-> event select encoding, which extends the EVENT_SELECT field
-> from 8 bits to 12 bits.
->
-> Opportunistically update pmu->reserved_bits for reserved bit 19.
->
-> Reported-by: Jim Mattson <jmattson@google.com>
-> Fixes: ca724305a2b0 ("KVM: x86/vPMU: Implement AMD vPMU code for KVM")
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->  arch/x86/kvm/svm/pmu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
-> index 871c426ec389..b4095dfeeee6 100644
-> --- a/arch/x86/kvm/svm/pmu.c
-> +++ b/arch/x86/kvm/svm/pmu.c
-> @@ -281,7 +281,7 @@ static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
->                 pmu->nr_arch_gp_counters = AMD64_NUM_COUNTERS;
->
->         pmu->counter_bitmask[KVM_PMC_GP] = ((u64)1 << 48) - 1;
-> -       pmu->reserved_bits = 0xffffffff00200000ull;
-> +       pmu->reserved_bits = 0xfffffff000280000ull;
 
-Bits 40 and 41 are guest mode and host mode. They cannot be reserved
-if the guest supports nested SVM.
+--zAZgCYGBplb8VEfC
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->         pmu->version = 1;
->         /* not applicable to AMD; but clean them to prevent any fall out */
->         pmu->counter_bitmask[KVM_PMC_FIXED] = 0;
-> --
-> 2.33.1
->
+On Wed, Feb 02, 2022 at 02:10:44PM +0200, Andy Shevchenko wrote:
+> On Wed, Feb 2, 2022 at 2:01 PM Jonathan Neusch=C3=A4fer
+> <j.neuschaefer@gmx.net> wrote:
+> > On Tue, Feb 01, 2022 at 11:42:11PM +0000, Joel Stanley wrote:
+> > > On Tue, 1 Feb 2022 at 13:05, Jonathan Neusch=C3=A4fer <j.neuschaefer@=
+gmx.net> wrote:
+>=20
+> ...
+>=20
+> > > I assume you're sending a v6 to fix some of the warnings?
+> >
+> > No, the warnings are fairly independent of this patchset, it's just that
+> > the adjacent pinctrl-npcm7xx driver started to be built by the bot, due
+> > to my Kconfig change. I'll fix them in a separate patchset.
+>=20
+> I guess you need to fix that first.
+>=20
+> Because now and then all CIs will complain to your patch and confuse peop=
+le.
+
+FWIW, Linus has applied the npcm7xx fixes to for-next in the pinctrl tree,
+which means that they are not blocking this patchset anymore, AFAICS.
+
+
+Jonathan
+
+--zAZgCYGBplb8VEfC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmIHcmkACgkQCDBEmo7z
+X9uckRAAoi/mjUjwvtfOFTsTH/PH/r6DDSOiFTU+ycxhILZmK9lMk3c33cNUu1ib
+9eJY87Mg8UpRJvvNST2usUdrxKV1eUi/lEI0idiu9+Q9HMFo84s0Wv37NhfwCGDR
+mgTW0IbUsLvRegIP6Rl75XSAn6+GTIIYyhMA0Ohw9T37JOa1YI2ysV+dkqPkSala
+WUe1CmWQ6yFSyLslMp6ZqZtg2rpTMCR0vat54Ykbfrity9fxd67OZE/561bvGKht
+qpCEXrfWk1N35pQH/2VUfVBerwLWfW+Dq6ddq5qGMyTXr4hnGyQiidGQb16aPugT
+ZGzq1S7TdnJ3r3k+HwMOpbARR4sn5i4LWkPkvAv2WvGScHfUwOfS4ttM0Q6H6/2T
+lLt7jnYuosmvFtArXbc/PllfNWRfQeMylBzRoh8GOHCNSHhgewMZYB+SBqGrMqb7
+lue4pyfWONnC85aWCYZyBbM1Bmh9E0LAs/8KxievUS/nWbDOe/Qz09m+XanUq1CF
+5QzMKcaJekmiVVxDquzj/17c9V7ZZrb9dT6mTSYSoG0I77rKsPNHMkIccRVHm9ez
+J10PVtMUNLYUdc5r62fn9HBo+x/aNtEHdnd/CTx3jZ2CFVPmAW2gGz9fQMwlWLyJ
+LAKCGXBxxFoEO/bcZevsri26S8yvt7Lw+mIpupglsw/luJwHNUQ=
+=Yhe6
+-----END PGP SIGNATURE-----
+
+--zAZgCYGBplb8VEfC--

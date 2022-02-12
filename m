@@ -2,50 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B944E4B3230
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 01:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4CB4B3233
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 01:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354481AbiBLAr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 19:47:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49866 "EHLO
+        id S1354489AbiBLAyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 19:54:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243505AbiBLAr2 (ORCPT
+        with ESMTP id S240377AbiBLAyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 19:47:28 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383D5D7E
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 16:47:26 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id x6-20020a056602160600b00637be03f7b8so7473607iow.17
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 16:47:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=jc30QT8f4scBqobRyundyPLPktYc4x+ym4PxvVJOVaQ=;
-        b=1wFkL65dlolsbpsD71WGxfPKurpSdkNHk37obldfRx+mMElG+WJ624eHMG3TtJUsaX
-         ivyoKKSaygxR29QtWkeuwTU5IcR21nFxymhPtqtVow1vPzFIPOuiBH4wOAa1ZJy5IbvG
-         Yk0TrxeWUf3as7A3JRJtRehQYAQxALIKyFbA5YKfN9oBKzKhe+/sH3UXLO7zChiWxbTQ
-         YmfOPwSSJweFID1bUXfDj2Gh7/98GuBYnvUbYUiWvkFc6OY2n33lHpaekoYjswSvJKX4
-         RcBISAC5BKedvmMvQIUF6XMo3A3Is3S8EuxsbGaCqFIzZWPvFfbY1dYiPxXcVV6z53zI
-         rQcA==
-X-Gm-Message-State: AOAM530rdxhefPyAWoAQtog6t/9h9GZ514mlHCMv/A3ZNjHxf0F7cdaX
-        7i2tVlselBcO8zJ/dMyHJM7Xq1XBXaIh403cb/NpOrX3S0x2
-X-Google-Smtp-Source: ABdhPJwzmLaA6z4T0Ml6/moeuB4bOqH/jbhfXiUsB/fuH7IvFqBI/RTZntQot8i+hPVsQaUTF/Yit1eeI8JlOf9xYw9HnZZkEGBR
+        Fri, 11 Feb 2022 19:54:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E25CD44;
+        Fri, 11 Feb 2022 16:53:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFA1961D6F;
+        Sat, 12 Feb 2022 00:53:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6A26C340E9;
+        Sat, 12 Feb 2022 00:53:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644627238;
+        bh=c5QTto3nIipjljAfBREqA9bPfy3ZjC7JQ20nTi6pERA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uZyH84KAwrqX3N5sIeyjEwwI37yTCbu3uaA2vkZ3BcoPYrMA3FQ0uwRyLqlaXj15u
+         9krCb4veUck5vgSVCiCqn+GbzSs3cXlgQJAF7nLNw5sXYnZt1OQz17V1/CIHMSyhOo
+         b5wsLKY7MhGCcEyvI2Iuwje5Zu2ve7yT/ZI82QxqaY3LFtBH9ZmagYtCx8vlHaXq17
+         7evFnt8DzalOmceAksbIw7oiXRICWfebwBHCfQCbb0w9bAumGXiy3AO357l7iwOFdj
+         5QGWZTR+Rjg121HVrj/PJ6UQvPHANu9gN/5NSxY4wkvlqoJLfOVQWiz6RQdDU7aqEQ
+         n1RrWIAcINHmA==
+Date:   Fri, 11 Feb 2022 16:53:56 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Simon Horman <simon.horman@corigine.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        John Hurley <john.hurley@netronome.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        oss-drivers@corigine.com, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] nfp: flower: Fix a potential leak in
+ nfp_tunnel_add_shared_mac()
+Message-ID: <20220211165356.1927a81b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <4acb805751f2cf5de8d69e9602a88ec39feff9fc.1644532467.git.christophe.jaillet@wanadoo.fr>
+References: <4acb805751f2cf5de8d69e9602a88ec39feff9fc.1644532467.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a0a:: with SMTP id s10mr2159849ild.297.1644626845549;
- Fri, 11 Feb 2022 16:47:25 -0800 (PST)
-Date:   Fri, 11 Feb 2022 16:47:25 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000eacb0205d7c7865e@google.com>
-Subject: [syzbot] WARNING in ext4_write_inode (2)
-From:   syzbot <syzbot+748cc361874fca7d33cc@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,93 +58,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, 10 Feb 2022 23:34:52 +0100 Christophe JAILLET wrote:
+> ida_simple_get() returns an id between min (0) and max (NFP_MAX_MAC_INDEX)
+> inclusive.
+> So NFP_MAX_MAC_INDEX (0xff) is a valid id.
+> 
+> In order for the error handling path to work correctly, the 'invalid'
+> value for 'ida_idx' should not be in the 0..NFP_MAX_MAC_INDEX range,
+> inclusive.
+> 
+> So set it to -1.
+> 
+> Fixes: 20cce8865098 ("nfp: flower: enable MAC address sharing for offloadable devs")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-syzbot found the following issue on:
-
-HEAD commit:    1d41d2e82623 Merge tag 'riscv-for-linus-5.17-rc4' of git:/..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15ca859a700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=266de9da75c71a45
-dashboard link: https://syzkaller.appspot.com/bug?extid=748cc361874fca7d33cc
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+748cc361874fca7d33cc@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3846 at fs/ext4/inode.c:5160 ext4_write_inode+0x333/0x5a0 fs/ext4/inode.c:5160
-Modules linked in:
-CPU: 0 PID: 3846 Comm: syz-executor.1 Not tainted 5.17.0-rc3-syzkaller-00188-g1d41d2e82623 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:ext4_write_inode+0x333/0x5a0 fs/ext4/inode.c:5160
-Code: b6 04 02 84 c0 74 08 3c 03 0f 8e 46 02 00 00 8b b5 b0 06 00 00 4c 89 f7 e8 fa 3a 12 00 41 89 c4 e9 ed fd ff ff e8 dd fa 63 ff <0f> 0b 45 31 e4 e9 de fd ff ff e8 ce fa 63 ff 48 89 ef 48 8d 74 24
-RSP: 0018:ffffc9000283f2d8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 1ffff92000507e5b RCX: 0000000000000000
-RDX: ffff888076c10000 RSI: ffffffff82147d63 RDI: 0000000000000003
-RBP: ffff88805722b478 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff82147ae1 R11: 0000000000000000 R12: 0000000000000800
-R13: ffffc9000283f438 R14: dffffc0000000000 R15: ffff88805722b4a0
-FS:  0000555556fd9400(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b33346000 CR3: 000000006020a000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- write_inode fs/fs-writeback.c:1471 [inline]
- __writeback_single_inode+0xb70/0x10d0 fs/fs-writeback.c:1683
- writeback_single_inode+0x2a5/0x460 fs/fs-writeback.c:1739
- write_inode_now+0x15c/0x1d0 fs/fs-writeback.c:2739
- iput_final fs/inode.c:1731 [inline]
- iput.part.0+0x460/0x820 fs/inode.c:1770
- iput+0x58/0x70 fs/inode.c:1760
- dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
- __dentry_kill+0x3c0/0x640 fs/dcache.c:607
- dentry_kill fs/dcache.c:745 [inline]
- dput+0x64d/0xbd0 fs/dcache.c:913
- ovl_destroy_inode+0x38/0x110 fs/overlayfs/super.c:207
- destroy_inode+0xc4/0x1b0 fs/inode.c:310
- iput_final fs/inode.c:1744 [inline]
- iput.part.0+0x562/0x820 fs/inode.c:1770
- iput+0x58/0x70 fs/inode.c:1760
- dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
- __dentry_kill+0x3c0/0x640 fs/dcache.c:607
- shrink_dentry_list+0x128/0x490 fs/dcache.c:1201
- prune_dcache_sb+0xe7/0x140 fs/dcache.c:1282
- super_cache_scan+0x336/0x590 fs/super.c:104
- do_shrink_slab+0x42d/0xbd0 mm/vmscan.c:773
- shrink_slab_memcg mm/vmscan.c:842 [inline]
- shrink_slab+0x3ee/0x6f0 mm/vmscan.c:921
- shrink_node_memcgs mm/vmscan.c:3172 [inline]
- shrink_node+0x8c1/0x1eb0 mm/vmscan.c:3293
- shrink_zones mm/vmscan.c:3530 [inline]
- do_try_to_free_pages+0x376/0x1700 mm/vmscan.c:3588
- try_to_free_mem_cgroup_pages+0x2cd/0x840 mm/vmscan.c:3902
- reclaim_high.constprop.0+0x190/0x250 mm/memcontrol.c:2300
- mem_cgroup_handle_over_high+0x18c/0x540 mm/memcontrol.c:2484
- tracehook_notify_resume include/linux/tracehook.h:197 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
- exit_to_user_mode_prepare+0x1ab/0x290 kernel/entry/common.c:207
- __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
- syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f1bc5ba24c7
-Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd48f9e3c8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-RAX: ffffffffffffffea RBX: 0000000000000000 RCX: 00007f1bc5ba24c7
-RDX: 00007ffd48f9e49d RSI: 000000000000000a RDI: 00007ffd48f9e490
-RBP: 00007ffd48f9e490 R08: 00000000ffffffff R09: 00007ffd48f9e260
-R10: 0000555556fda893 R11: 0000000000000246 R12: 00007f1bc5bfa1ea
-R13: 00007ffd48f9f550 R14: 0000555556fda810 R15: 00007ffd48f9f590
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+This patch is a fix and the other one is refactoring. They can't be
+in the same series because they need to go to different trees. Please
+repost the former with [PATCH net] and ~one week later the latter with
+[PATCH net-next].

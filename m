@@ -2,76 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B24A4B3212
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 01:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B944E4B3230
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 01:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354440AbiBLAhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 19:37:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39208 "EHLO
+        id S1354481AbiBLAr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 19:47:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354419AbiBLAhx (ORCPT
+        with ESMTP id S243505AbiBLAr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 19:37:53 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1D8D6
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 16:37:51 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id v4so9502835pjh.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 16:37:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7VKg0zjQwSALdbTIf5uSsnkD9DpXhrHD5gjop/xM2cY=;
-        b=fVgW/+njctwyhjA00T4OTwKIyHC+ekd/gR2K1kuA66oeEQXIkPL1FXYiyWdAp1d0xn
-         TbdfWzdca4NFtjxnNV2QMdmjjW4SM+aVVim50VDMFKC4dYF/vTsoAHkeValgFgcoC+S3
-         UO2HQ51kQVncYNuzO0ANIFL2p5kuevmP5FdQc=
+        Fri, 11 Feb 2022 19:47:28 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383D5D7E
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 16:47:26 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id x6-20020a056602160600b00637be03f7b8so7473607iow.17
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 16:47:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7VKg0zjQwSALdbTIf5uSsnkD9DpXhrHD5gjop/xM2cY=;
-        b=YqcNnh814BoDtfKbE5nmzjcvnYEpjOCWczlw50YejRtcUGVy3NefVB+cMX7YuijR4M
-         szavYRxLnwkp5GKRZyS2UA2myowg5ozHYlNvZ+KrijztIYmd9si8LR5nE4bRwGO1qTRP
-         2OkStEdvoGxRKj+op6/YMedCsl/fSh9uDi6ML0Ue+JUgpZI5bsltBL94OD6oab+deY8g
-         BW5uo1/f+/ZJi/zU+aopxieMGbZxkpC+MJUSuYfLavHjNmxiVFQEUdH/X7X8qXKDRB7a
-         B5tkTmJ0yv6lWWHVlvlEr0gRw717njnsI21KTA92yupCC9+h7FNJiV6EfPIbRtD1iBPh
-         HQ8Q==
-X-Gm-Message-State: AOAM531l9BEsDi4WjsTP9wsttvZ41Y5FztNIitmSAVIa/+TFmijw0a4s
-        f8Cp89Mz55m3VwCFxVkjM5SFGQ==
-X-Google-Smtp-Source: ABdhPJy8rQL9XeZ5gO2kkhHcKJasWBPGH4H6gAKxFR64fdrgNu/QVz2ARaO/PRaZzGTt8kr6AuxU0Q==
-X-Received: by 2002:a17:90a:1a53:: with SMTP id 19mr2970043pjl.19.1644626270083;
-        Fri, 11 Feb 2022 16:37:50 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h26sm20567050pgm.72.2022.02.11.16.37.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 16:37:49 -0800 (PST)
-Date:   Fri, 11 Feb 2022 16:37:48 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Victor Erminpour <victor.erminpour@oracle.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        trivial@kernel.org
-Subject: Re: [PATCH v2] ACPI/IORT: Fix GCC 12 warning
-Message-ID: <202202111623.A7881CC@keescook>
-References: <1644518851-16847-1-git-send-email-victor.erminpour@oracle.com>
- <CAMj1kXEbGWs74M2CZSm6TWpD11mReFsk8z-UUqJt6b6vDCvAEQ@mail.gmail.com>
- <202202101415.43750CEE@keescook>
- <3740c93e-9fde-f89f-9752-26ffff3ea274@arm.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=jc30QT8f4scBqobRyundyPLPktYc4x+ym4PxvVJOVaQ=;
+        b=1wFkL65dlolsbpsD71WGxfPKurpSdkNHk37obldfRx+mMElG+WJ624eHMG3TtJUsaX
+         ivyoKKSaygxR29QtWkeuwTU5IcR21nFxymhPtqtVow1vPzFIPOuiBH4wOAa1ZJy5IbvG
+         Yk0TrxeWUf3as7A3JRJtRehQYAQxALIKyFbA5YKfN9oBKzKhe+/sH3UXLO7zChiWxbTQ
+         YmfOPwSSJweFID1bUXfDj2Gh7/98GuBYnvUbYUiWvkFc6OY2n33lHpaekoYjswSvJKX4
+         RcBISAC5BKedvmMvQIUF6XMo3A3Is3S8EuxsbGaCqFIzZWPvFfbY1dYiPxXcVV6z53zI
+         rQcA==
+X-Gm-Message-State: AOAM530rdxhefPyAWoAQtog6t/9h9GZ514mlHCMv/A3ZNjHxf0F7cdaX
+        7i2tVlselBcO8zJ/dMyHJM7Xq1XBXaIh403cb/NpOrX3S0x2
+X-Google-Smtp-Source: ABdhPJwzmLaA6z4T0Ml6/moeuB4bOqH/jbhfXiUsB/fuH7IvFqBI/RTZntQot8i+hPVsQaUTF/Yit1eeI8JlOf9xYw9HnZZkEGBR
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3740c93e-9fde-f89f-9752-26ffff3ea274@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Received: by 2002:a05:6e02:1a0a:: with SMTP id s10mr2159849ild.297.1644626845549;
+ Fri, 11 Feb 2022 16:47:25 -0800 (PST)
+Date:   Fri, 11 Feb 2022 16:47:25 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000eacb0205d7c7865e@google.com>
+Subject: [syzbot] WARNING in ext4_write_inode (2)
+From:   syzbot <syzbot+748cc361874fca7d33cc@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,94 +53,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 10:34:09AM +0000, Robin Murphy wrote:
-> Hi Kees,
-> 
-> On 2022-02-10 23:47, Kees Cook wrote:
-> > On Thu, Feb 10, 2022 at 08:41:51PM +0100, Ard Biesheuvel wrote:
-> > > On Thu, 10 Feb 2022 at 19:48, Victor Erminpour
-> > > <victor.erminpour@oracle.com> wrote:
-> > > > 
-> > > > When building with automatic stack variable initialization, GCC 12
-> > > > complains about variables defined outside of switch case statements.
-> > > > Move the variable into the case that uses it, which silences the warning:
-> > > > 
-> > > > ./drivers/acpi/arm64/iort.c:1670:59: error: statement will never be executed [-Werror=switch-unreachable]
-> > > >    1670 |                         struct acpi_iort_named_component *ncomp;
-> > > >         |                                                           ^~~~~
-> > > > 
-> > > > Signed-off-by: Victor Erminpour <victor.erminpour@oracle.com>
-> > > 
-> > > Please cc people that commented on your v1 when you send a v2.
-> > > 
-> > > Still NAK, for the same reasons.
-> > 
-> > Let me see if I can talk you out of this. ;)
-> > 
-> > So, on the face of it, I agree with you: this is a compiler bug. However,
-> > it's still worth fixing. Just because it's valid C isn't a good enough
-> > reason to leave it as-is: we continue to minimize the subset of the
-> > C language the kernel uses if it helps us get the most out of existing
-> > compiler features. We've eliminated all kinds of other "valid C" from the
-> > kernel because it improves robustness, security, etc. This is certainly
-> > nothing like removing VLAs or implicit fallthrough, but given that this
-> > is, I think, the only remaining case of it (I removed all the others a
-> > while ago when I had the same issues with the GCC plugins), I'd like to
-> > get it fixed.
-> 
-> It concerns me if minimising the subset of the C language that the kernel
-> uses is achieved by converting more of the kernel to a not-quite-C language
-> that is not formally specified anywhere, by prematurely adopting
-> newly-invented compiler options that clearly don't work properly (the GCC
-> warning message quoted above may as well be "error: giraffes are not purple"
-> for all the sense it makes.)
+Hello,
 
-Yeah, you're right. While it's a corner case, it's still important to
-get it fixed because it risks eroding people's good will for future work.
-What you (and Ard) bring up is just as important a roadblock as any of
-the other (many *sob*) roadblocks that have been overcome for its
-adoption.
+syzbot found the following issue on:
 
-> From your security standpoint (and believe me, I really do have faith in
-> your expertise here), which of these sounds better:
-> 
-> 1: Being able to audit code based on well-defined language semantics
-> 
-> 2: Playing whack-a-mole as issues are discovered empirically.
-> 
-> 3: Neither of the above, but a warm fuzzy feeling because hey someone said
-> "security" in a commit message.
-> 
-> AFAICS you're effectively voting against #1, and the examples you've given
-> demonstrate that #2 is nowhere near reliable enough either, so where does
-> that leave us WRT actual secure and robust code in Linux?
+HEAD commit:    1d41d2e82623 Merge tag 'riscv-for-linus-5.17-rc4' of git:/..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15ca859a700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=266de9da75c71a45
+dashboard link: https://syzkaller.appspot.com/bug?extid=748cc361874fca7d33cc
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Well, I'm for #1, though perhaps with a more narrow view: some semantics
-are just weird/surprising. ;) Until I first encountered this warning a
-few years ago when working on GCC_PLUGIN_STRUCTLEAK_BYREF_ALL, I didn't
-even know putting declarations there was valid C. ;)
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Whack-a-mole is part of the work to make these kinds of treewide
-changes, but the hope is to find as much of it ahead of time as
-possible. And, no, I have no interest in security theater. (Not
-everything has equal levels of effectiveness, of course, but I don't
-think that's what you're saying.)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+748cc361874fca7d33cc@syzkaller.appspotmail.com
 
-> In fairness I'd have no objection to that patch if it came with a convincing
-> justification, but that is so far very much lacking. My aim here is not to
-> be a change-averse Luddite, but to try to find a compromise where I can
-> actually have some confidence in such changes being made. Let's not start
-> pretending that 3 100ml bottles of shampoo are somehow "safer" than a 300ml
-> bottle of shampoo...
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3846 at fs/ext4/inode.c:5160 ext4_write_inode+0x333/0x5a0 fs/ext4/inode.c:5160
+Modules linked in:
+CPU: 0 PID: 3846 Comm: syz-executor.1 Not tainted 5.17.0-rc3-syzkaller-00188-g1d41d2e82623 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:ext4_write_inode+0x333/0x5a0 fs/ext4/inode.c:5160
+Code: b6 04 02 84 c0 74 08 3c 03 0f 8e 46 02 00 00 8b b5 b0 06 00 00 4c 89 f7 e8 fa 3a 12 00 41 89 c4 e9 ed fd ff ff e8 dd fa 63 ff <0f> 0b 45 31 e4 e9 de fd ff ff e8 ce fa 63 ff 48 89 ef 48 8d 74 24
+RSP: 0018:ffffc9000283f2d8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 1ffff92000507e5b RCX: 0000000000000000
+RDX: ffff888076c10000 RSI: ffffffff82147d63 RDI: 0000000000000003
+RBP: ffff88805722b478 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff82147ae1 R11: 0000000000000000 R12: 0000000000000800
+R13: ffffc9000283f438 R14: dffffc0000000000 R15: ffff88805722b4a0
+FS:  0000555556fd9400(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b33346000 CR3: 000000006020a000 CR4: 0000000000350ee0
+Call Trace:
+ <TASK>
+ write_inode fs/fs-writeback.c:1471 [inline]
+ __writeback_single_inode+0xb70/0x10d0 fs/fs-writeback.c:1683
+ writeback_single_inode+0x2a5/0x460 fs/fs-writeback.c:1739
+ write_inode_now+0x15c/0x1d0 fs/fs-writeback.c:2739
+ iput_final fs/inode.c:1731 [inline]
+ iput.part.0+0x460/0x820 fs/inode.c:1770
+ iput+0x58/0x70 fs/inode.c:1760
+ dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
+ __dentry_kill+0x3c0/0x640 fs/dcache.c:607
+ dentry_kill fs/dcache.c:745 [inline]
+ dput+0x64d/0xbd0 fs/dcache.c:913
+ ovl_destroy_inode+0x38/0x110 fs/overlayfs/super.c:207
+ destroy_inode+0xc4/0x1b0 fs/inode.c:310
+ iput_final fs/inode.c:1744 [inline]
+ iput.part.0+0x562/0x820 fs/inode.c:1770
+ iput+0x58/0x70 fs/inode.c:1760
+ dentry_unlink_inode+0x2b1/0x460 fs/dcache.c:401
+ __dentry_kill+0x3c0/0x640 fs/dcache.c:607
+ shrink_dentry_list+0x128/0x490 fs/dcache.c:1201
+ prune_dcache_sb+0xe7/0x140 fs/dcache.c:1282
+ super_cache_scan+0x336/0x590 fs/super.c:104
+ do_shrink_slab+0x42d/0xbd0 mm/vmscan.c:773
+ shrink_slab_memcg mm/vmscan.c:842 [inline]
+ shrink_slab+0x3ee/0x6f0 mm/vmscan.c:921
+ shrink_node_memcgs mm/vmscan.c:3172 [inline]
+ shrink_node+0x8c1/0x1eb0 mm/vmscan.c:3293
+ shrink_zones mm/vmscan.c:3530 [inline]
+ do_try_to_free_pages+0x376/0x1700 mm/vmscan.c:3588
+ try_to_free_mem_cgroup_pages+0x2cd/0x840 mm/vmscan.c:3902
+ reclaim_high.constprop.0+0x190/0x250 mm/memcontrol.c:2300
+ mem_cgroup_handle_over_high+0x18c/0x540 mm/memcontrol.c:2484
+ tracehook_notify_resume include/linux/tracehook.h:197 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:175 [inline]
+ exit_to_user_mode_prepare+0x1ab/0x290 kernel/entry/common.c:207
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
+ do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f1bc5ba24c7
+Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd48f9e3c8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+RAX: ffffffffffffffea RBX: 0000000000000000 RCX: 00007f1bc5ba24c7
+RDX: 00007ffd48f9e49d RSI: 000000000000000a RDI: 00007ffd48f9e490
+RBP: 00007ffd48f9e490 R08: 00000000ffffffff R09: 00007ffd48f9e260
+R10: 0000555556fda893 R11: 0000000000000246 R12: 00007f1bc5bfa1ea
+R13: 00007ffd48f9f550 R14: 0000555556fda810 R15: 00007ffd48f9f590
+ </TASK>
 
-Sure. I think I am trying to take a pragmatic approach here, which is
-that gaining auto-var-init is a big deal (killing entire classes of
-vulnerabilities), but it comes with an annoying compiler bug (that we do
-get a warning about) for an uncommon code pattern that is easy to fix.
-So rather than delaying the defense until the sharp edge on the compiler
-gets fixed, I'd like to get the rest rolling while the edge is filed.
 
--Kees
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
--- 
-Kees Cook
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

@@ -2,275 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D9D4B32F9
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 05:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 021DA4B32FF
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 05:44:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbiBLE2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 23:28:53 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50946 "EHLO
+        id S230071AbiBLEor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 23:44:47 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbiBLE2v (ORCPT
+        with ESMTP id S229530AbiBLEop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 23:28:51 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D7228E29
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 20:28:49 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id x3so6221446pll.3
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 20:28:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KgktAnMyQV8XmOFvmPrbI1fjqTx70lJS+/GJGKFg5Dk=;
-        b=cycbFQ18OsaTXolp85tbhsU5ysSl6wQ2+XHBRXTFySF/48z/07XhkqnelcXE9J3iTr
-         nSD0IgV8vg5z5StKfyaetKO0yholM9dxtd/lbJwSThUzmQGuvQG3C+CYyW5IuXnGEM+I
-         GSn1DDd4JvFGxkjT0/P3GgwWEE24qhQ5kpGNU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=KgktAnMyQV8XmOFvmPrbI1fjqTx70lJS+/GJGKFg5Dk=;
-        b=z4gIjVxvhZpecnfrfoh/iTUYFsfcrvLGjOhtZzIzVpsQ/Fl4LfGdi2ScKl2WaauLbR
-         ZnyG0W7gTgpX0G5xJhzOrHgsPM4YPGpFNvnIIzehc++MSaatKdD1/QOgupsd8fvZAVyG
-         GvuuJRRsOoFVL5VK718bDV93ZtY1uYaYB85RH1RdqkRn3BIhhIM8DiN16lDmlcrRdzm7
-         FB/+8H66hfMcUiWmt1DJPVOmSpcJwD27Y97bUxeEerZZJoRNxn66Io3ze8LF4bnp2WVS
-         uc1GYNea7QKzG4ecFxjsNx8fHTuTyHmZcEyq/JYId1Fuaqg1vfHWRsJiyJykJmHkly4T
-         Npzw==
-X-Gm-Message-State: AOAM5301+iXZ/+mSkgsKArBhC/Nu6zi+o9zz6Yp3BF8004BjpjztmeOH
-        99AkCe8STuBNIfO7+s/cqR6GlQ==
-X-Google-Smtp-Source: ABdhPJwW4B9UBaWVq4xUpnOwGsaDM4DTG1uUli1Ye17djY99VVEyUtBB8Yh0xDEhdJc/idk9jwSQhQ==
-X-Received: by 2002:a17:90b:2248:: with SMTP id hk8mr3683027pjb.242.1644640128933;
-        Fri, 11 Feb 2022 20:28:48 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g12sm27226970pfm.119.2022.02.11.20.28.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 20:28:48 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        =?UTF-8?q?Robert=20=C5=9Awi=C4=99cki?= <robert@swiecki.net>,
-        Jann Horn <jannh@google.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [RFC] Get siginfo from unreaped task
-Date:   Fri, 11 Feb 2022 20:28:43 -0800
-Message-Id: <20220212042843.2993537-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        Fri, 11 Feb 2022 23:44:45 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C752428E20
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 20:44:41 -0800 (PST)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220212044438epoutp04b33a252530475541e55c313e89472d48~S8FjdDfPz1728517285epoutp04X
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 04:44:38 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220212044438epoutp04b33a252530475541e55c313e89472d48~S8FjdDfPz1728517285epoutp04X
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1644641078;
+        bh=dmeKw7sjrH1sYaJQ8rlULXmQM6GP+l0eHhvgAaKtwxc=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=CXSyOhb7mmBL1OHHOk4LZlEpiI0qfH3maqQo86aPqP6Zn/gjy1l6sfP/eFfNMhJOW
+         ioWZUl1RvQOXLPyojO9L+64OciH99iPlVTZBfdHkHsDLLtA+PauNLzwJc3v/6UN+Ro
+         bAYw83r35aN7jKUU0qMpmnMRwgsp5guTdgULJKMY=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20220212044437epcas2p1701d7d5aaf742f35af1fa19caaab2576~S8Fie8Pef1074010740epcas2p1s;
+        Sat, 12 Feb 2022 04:44:37 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.92]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4JwdDz5hKHz4x9Py; Sat, 12 Feb
+        2022 04:44:35 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        DA.65.51767.33B37026; Sat, 12 Feb 2022 13:44:35 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220212044434epcas2p169d006abc79a6cdcc8eb818231b577fc~S8FgHH7NG1074010740epcas2p1r;
+        Sat, 12 Feb 2022 04:44:34 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220212044434epsmtrp246eeb06fbededf509aa03c48436f9a7d~S8FgDacb72824128241epsmtrp2Z;
+        Sat, 12 Feb 2022 04:44:34 +0000 (GMT)
+X-AuditID: b6c32a45-447ff7000000ca37-62-62073b33d111
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        44.82.08738.23B37026; Sat, 12 Feb 2022 13:44:34 +0900 (KST)
+Received: from KORCO011456 (unknown [10.229.18.123]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220212044434epsmtip27396de9a97e31c2b074121975d52912a~S8Ff1m9oc1836618366epsmtip2i;
+        Sat, 12 Feb 2022 04:44:34 +0000 (GMT)
+From:   "Kiwoong Kim" <kwmad.kim@samsung.com>
+To:     "'Adrian Hunter'" <adrian.hunter@intel.com>,
+        "'Avri Altman'" <Avri.Altman@wdc.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <beanhuo@micron.com>,
+        <cang@codeaurora.org>, <sc.suh@samsung.com>,
+        <hy50.seo@samsung.com>, <sh425.lee@samsung.com>,
+        <bhoon95.kim@samsung.com>, <vkumar.1997@samsung.com>
+In-Reply-To: <3f2938f7-2a9e-60e8-5237-fe7ebc3b4296@intel.com>
+Subject: RE: [PATCH v1] scsi: ufs: remove clk_scaling_lock when clkscaling
+ isn't supported.
+Date:   Sat, 12 Feb 2022 13:44:34 +0900
+Message-ID: <000001d81fcb$3b962f30$b2c28d90$@samsung.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6322; h=from:subject; bh=y0/xaB0q0yddSF0EmbpT28oabYdHCkprnUmnhMq2bLQ=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiBzd61bZSzb0DFXL8Uftb29a+ETNBryjwSp8Cy3X5 R6Hoxz6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYgc3egAKCRCJcvTf3G3AJmlOD/ 491PzsFwJwaWa2D38uLWLRrnXt6ytUK0OLzEs9ue7cxany9QnaZ1O49cb/FxWQOGWc/t59Qwa5Spe4 pSQYvOK63IfqH5ARNORE9XEFN5dKlSCBalNNlz0IwPGVAAgSgcj6rkAihk8/sDp48BJzDHlQsjoZb8 MdiX9UsatQ47vlp+Ta6Ia2VKtkkrYLWah7oJQMpdpDDPi60jP8Mncd7spaPg4fj/Vksulx5u1gxVUS oesk3tFymYBOow5DD/EN9X+5d8h/h7AmZTSathYs1kHw1VUevtIuW9fq7LBNW1fwQe5qtd1xf21zUY MjwLAwfCJFjUFJRs26QxMK5fZf3hn16KYIM6qugi6vbEJ+QbM4Y8PofZ0+c12vzIIP6BlKuQVD/7Op Rq+ucgpOv1TBOAw9tT2pjgih3ugArdj6kd2thdYZe44vDdhlr99rxxyLu0ddQvQgzJj9vE4ZooDRnO TOB2HhibT7mAq/VibBamp20X6eSgBDtTsFNGBkDaSznMkTlKM5CdytkaSKTpAWN7AKf5lJvql3YM+y apNw8rKwj5XVtmeOxz7FBQkaJliQcaAN2A1GI74dSjGQ9q2QX7cy9QB4fU7CL7NypIWhYJxF2EBFm2 Epr4PCM2ZAMKF1nxL2dkZcLLiMaUhVxyy98FJzlR3pgVXIUNSVx4/kmQ1bhQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQI4IgZMS69T+T+3eQm0GbWo6Fi0ygFitYZoAa2Aj1kCJc0N+wFVhb0mq5rz/jA=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrBJsWRmVeSWpSXmKPExsWy7bCmma6xNXuSwcunahYnn6xhs3gwbxub
+        xcufV9ksDj7sZLH4uvQZq8Wn9ctYLVYvfsBisejGNiaLy7vmsFl0X9/BZrH8+D8mi667Nxgt
+        lv57y2Jx5/5HFgc+j8t9vUwei/e8ZPKYsOgAo8f39R1sHh+f3mLx6NuyitHj8yY5j/YD3UwB
+        HFHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2Si4+AbpumTlAhysp
+        lCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCswL9IoTc4tL89L18lJLrAwNDIxMgQoT
+        sjMWvFjIWjCVteLR5tMsDYz/mbsYOTkkBEwktvXOYgWxhQR2MEoc2c/fxcgFZH9ilNh99jgr
+        hPOZUeLKns3sMB1X+88yQiR2MUps65sDVfWSUWLZi7Ngs9gEtCWmPdwNlhARmMksMWHLIbAE
+        p4CtxNd3fUwgtrBArMSN7dfZQGwWAVWJmXvegx3FK2ApMXf7EihbUOLkzCcsIDYz0NBlC19D
+        Ha4g8fPpMrCZIgJ+Eh//tkPViEjM7mxjBlksIXCGQ+LP9rtQd7tIbN51hgXCFpZ4dXwLVFxK
+        4vO7vUBHcADZxRKb9slD9DYwSiz5tBmq3lhi1rN2RpAaZgFNifW79CHKlSWO3IJayyfRcfgv
+        O0SYV6KjTQiiUVni16TJjBC2pMTMm3egSjwkOhdlTWBUnIXkx1lIfpyF5JdZCGsXMLKsYhRL
+        LSjOTU8tNiowhMd1cn7uJkZwktZy3cE4+e0HvUOMTByMhxglOJiVRHhX3GBNEuJNSaysSi3K
+        jy8qzUktPsRoCgz1icxSosn5wDyRVxJvaGJpYGJmZmhuZGpgriTO65WyIVFIID2xJDU7NbUg
+        tQimj4mDU6qB6WRF3K1Y2zdGM+bMm3qTTdLXMjD/lPEZ/fWf7fnydyue1Fn56/Kdy6UzQ09V
+        HDoj89lvgcUpBznnUs+eWT8OLP7h0+3ylSv5j/rZNafZyjLst7g/mXLvRfD12a5VJ+qXlxqn
+        avIEKrzexdN01mB+ftrMFYeWVGpttV8T4e3gpnbx7C8T7e7VsSwHvjW8XijpwvZvpXNs8NPX
+        wSLNETF6PZEbrG317pnvn3ZonjDX6X5Hxn7Xi8Yn+mapTuvNqm+78CNb1IdDt+FtmRhrZA2n
+        CL/1l7Uv5So/5H4/5hIS7c9y7v+ulGvlMr42mor/Z/cXT6l65h5ycs0mwXXFK+4tq/C/yhX2
+        tV3tc/E03jVBSizFGYmGWsxFxYkAzGoKflsEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNIsWRmVeSWpSXmKPExsWy7bCSvK6RNXuSwZ8+KYuTT9awWTyYt43N
+        4uXPq2wWBx92slh8XfqM1eLT+mWsFqsXP2CxWHRjG5PF5V1z2Cy6r+9gs1h+/B+TRdfdG4wW
+        S/+9ZbG4c/8jiwOfx+W+XiaPxXteMnlMWHSA0eP7+g42j49Pb7F49G1ZxejxeZOcR/uBbqYA
+        jigum5TUnMyy1CJ9uwSujF8f9jAXzGCt+HnhPksDYwNLFyMnh4SAicTV/rOMXYxcHEICOxgl
+        nl+fyQ6RkJQ4sfM5I4QtLHG/5QgrRNFzRok1RxawgiTYBLQlpj3cDZYQEVjOLHFu1yMWiKrj
+        TBIXet+DtXMK2Ep8fdfHBGILC0RLbJ/wE8xmEVCVmLnnPTOIzStgKTF3+xIoW1Di5MwnYPcx
+        A214evMpnL1s4WtmiJMUJH4+XQZ2hYiAn8THv+1QNSISszvbmCcwCs1CMmoWklGzkIyahaRl
+        ASPLKkbJ1ILi3PTcYsMCo7zUcr3ixNzi0rx0veT83E2M4PjU0trBuGfVB71DjEwcjIcYJTiY
+        lUR4V9xgTRLiTUmsrEotyo8vKs1JLT7EKM3BoiTOe6HrZLyQQHpiSWp2ampBahFMlomDU6qB
+        qfVFmujPY8eq/j5T0Zx5/9KytMp3nPt+mF/4188jvtJnv1Vm67drpw64/Nd+8fPV4ZSS2+9F
+        P528/CNg6rSbXu9uvm08JPvHpo1TsdOXmedLZ8PCTt0FFzl0DlZv1mz16HjVeTVtXVbz8hf2
+        xeFpu951CKt+t9jPmcI3YZr2me5D0TfWWGlFm3gtaDn7smHb5YcXc1S+xgZbHPrg8VP+gXKz
+        e3jsZI633BN/bAvM7ntZJVz78oHNv3utq03u9QZxK/PXaNvu0dx60DNYwMxHKP2Lzt72+fZT
+        W1Kvxn3J7agw1br/+OYZA9O/c/kXdDyY8/lkuYJ47Wr39OYVZTv8bbYJKYnV176a8+zN3PdO
+        iUosxRmJhlrMRcWJAJWhqpY+AwAA
+X-CMS-MailID: 20220212044434epcas2p169d006abc79a6cdcc8eb818231b577fc
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220205074128epcas2p40901c37a7328e825d8697f8d3269edba
+References: <CGME20220205074128epcas2p40901c37a7328e825d8697f8d3269edba@epcas2p4.samsung.com>
+        <1644046760-83345-1-git-send-email-kwmad.kim@samsung.com>
+        <DM6PR04MB657519E60FAFA19434531CE2FC2B9@DM6PR04MB6575.namprd04.prod.outlook.com>
+        <007101d81eed$4d120a60$e7361f20$@samsung.com>
+        <3f2938f7-2a9e-60e8-5237-fe7ebc3b4296@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make siginfo available through PTRACE_GETSIGINFO after process death,
-without needing to have already used PTRACE_ATTACH. Uses 48 more bytes
-in task_struct, though I bet there might be somewhere else we could
-stash a copy of it?
+> The error handler really should have exclusive access.  One of the places
+> you change does explain that:
+>=20
+>  		 * Hold the scaling lock just in case dev cmds
+>  		 * are sent via bsg and/or sysfs.
+>  		 */
+> -		down_write(&hba->clk_scaling_lock);
+> +		if (ufshcd_is_clkscaling_supported(hba))
+> +			down_write(&hba->clk_scaling_lock);=20
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/linux/sched.h                         |   1 +
- kernel/ptrace.c                               |  12 +-
- kernel/signal.c                               |   4 +
- tools/testing/selftests/seccomp/seccomp_bpf.c | 119 ++++++++++++++++++
- 4 files changed, 134 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index f5b2be39a78c..e40789e801ef 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1178,6 +1178,7 @@ struct task_struct {
- #endif
- 	/* Ptrace state: */
- 	unsigned long			ptrace_message;
-+	kernel_siginfo_t		death_siginfo;
- 	kernel_siginfo_t		*last_siginfo;
- 
- 	struct task_io_accounting	ioac;
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index eea265082e97..990839c57842 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -1304,8 +1304,16 @@ SYSCALL_DEFINE4(ptrace, long, request, long, pid, unsigned long, addr,
- 
- 	ret = ptrace_check_attach(child, request == PTRACE_KILL ||
- 				  request == PTRACE_INTERRUPT);
--	if (ret < 0)
--		goto out_put_task_struct;
-+	if (ret < 0) {
-+		/*
-+		 * Allow PTRACE_GETSIGINFO if process is dead
-+		 * and we could otherwise ptrace it.
-+		 */
-+		if (request != PTRACE_GETSIGINFO ||
-+		    !child->exit_state ||
-+		    !ptrace_may_access(child, PTRACE_MODE_READ_REALCREDS))
-+			goto out_put_task_struct;
-+	}
- 
- 	ret = arch_ptrace(child, request, addr, data);
- 	if (ret || request != PTRACE_DETACH)
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 9b04631acde8..41f6ba6b7aa7 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -2825,6 +2825,10 @@ bool get_signal(struct ksignal *ksig)
- 		}
- 
- 	fatal:
-+		/* Allow siginfo to be queried until reaped. */
-+		copy_siginfo(&current->death_siginfo, &ksig->info);
-+		current->last_siginfo = &current->death_siginfo;
-+
- 		spin_unlock_irq(&sighand->siglock);
- 		if (unlikely(cgroup_task_frozen(current)))
- 			cgroup_leave_frozen(true);
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 9d126d7fabdb..d2bbf9e32f22 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -268,6 +268,10 @@ struct seccomp_notif_addfd_big {
- #define SECCOMP_FILTER_FLAG_TSYNC_ESRCH (1UL << 4)
- #endif
- 
-+#ifndef SYS_SECCOMP
-+#define SYS_SECCOMP	1
-+#endif
-+
- #ifndef seccomp
- int seccomp(unsigned int op, unsigned int flags, void *args)
- {
-@@ -765,6 +769,121 @@ TEST_SIGNAL(KILL_one_arg_six, SIGSYS)
- 	close(fd);
- }
- 
-+FIXTURE(SIGINFO) {
-+	pid_t child_pid;
-+};
-+
-+FIXTURE_SETUP(SIGINFO)
-+{
-+	self->child_pid = 0;
-+}
-+
-+FIXTURE_TEARDOWN(SIGINFO)
-+{
-+	if (self->child_pid > 0)
-+		waitpid(self->child_pid, NULL, WNOHANG);
-+}
-+
-+TEST_F(SIGINFO, child)
-+{
-+	int status;
-+	siginfo_t info = { };
-+	/* Kill only when calling __NR_prctl. */
-+	struct sock_filter filter[] = {
-+		BPF_STMT(BPF_LD|BPF_W|BPF_ABS,
-+			offsetof(struct seccomp_data, nr)),
-+		BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_prctl, 0, 1),
-+		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_KILL_PROCESS | 0xBA),
-+		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_ALLOW),
-+	};
-+	struct sock_fprog prog = {
-+		.len = (unsigned short)ARRAY_SIZE(filter),
-+		.filter = filter,
-+	};
-+
-+	self->child_pid = fork();
-+	ASSERT_LE(0, self->child_pid);
-+	if (self->child_pid == 0) {
-+		ASSERT_EQ(0, prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0)) {
-+			TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
-+		}
-+		ASSERT_EQ(0, seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog));
-+		prctl(PR_GET_SECCOMP, 0, 0, 0, 0);
-+		/* Should have died now. */
-+		_exit(37);
-+	}
-+
-+	/* Check siginfo_t contents. */
-+	EXPECT_EQ(waitid(P_PID, self->child_pid, &info, WEXITED | WNOWAIT), 0);
-+#if 0
-+	struct {
-+	        int si_signo;
-+	        int si_code;
-+	        int si_errno;
-+	        union __sifields _sifields;
-+	}
-+
-+	/* SIGCHLD */
-+	struct {
-+		__kernel_pid_t _pid;	/* which child */
-+		__kernel_uid32_t _uid;	/* sender's uid */
-+		int _status;		/* exit code */
-+		__ARCH_SI_CLOCK_T _utime;
-+		__ARCH_SI_CLOCK_T _stime;
-+	} _sigchld;
-+#endif
-+	ASSERT_EQ(info.si_signo, SIGCHLD);
-+	EXPECT_TRUE(info.si_code == CLD_KILLED || info.si_code == CLD_DUMPED);
-+	EXPECT_TRUE(info.si_errno == 0);
-+	EXPECT_EQ(info.si_pid, self->child_pid);
-+
-+	ASSERT_TRUE(WIFSIGNALED(info.si_status));
-+	/* TODO: why doesn't this WCOREDUMP() agree with below? */
-+	/* EXPECT_TRUE(WCOREDUMP(status)); */
-+	EXPECT_EQ(WTERMSIG(info.si_status), SIGSYS);
-+
-+	memset(&info, 0, sizeof(info));
-+	ASSERT_EQ(ptrace(PTRACE_GETSIGINFO, self->child_pid, NULL, &info), 0);
-+#if 0
-+	/* SIGSYS */
-+	struct {
-+		void __user *_call_addr;/* calling user insn */
-+		int _syscall;		/* triggering system call number */
-+		unsigned int _arch;	/* AUDIT_ARCH_* of syscall */
-+	} _sigsys;
-+
-+	info.si_signo = SIGSYS;
-+	info.si_code = SYS_SECCOMP;
-+	info.si_call_addr = (void __user *)KSTK_EIP(current);
-+	info.si_errno = reason;
-+	info.si_arch = syscall_get_arch(current);
-+	info.si_syscall = syscall;
-+
-+#endif
-+	ASSERT_EQ(info.si_signo, SIGSYS);
-+	EXPECT_EQ(info.si_code, SYS_SECCOMP);
-+	/*
-+	 * The syscall will have happened somewhere near the libc
-+	 * prctl implementation.
-+	 */
-+	EXPECT_TRUE(info.si_call_addr >= (void *)prctl &&
-+		    info.si_call_addr <= (void *)prctl + PAGE_SIZE) {
-+		TH_LOG("info.si_call_addr: %p", info.si_call_addr);
-+		TH_LOG("prctl            : %p", prctl);
-+	}
-+	EXPECT_EQ(info.si_errno, 0xBA);
-+	/* EXPECT_EQ(info.si_arch, ...native arch...); */
-+	EXPECT_EQ(info.si_syscall, __NR_prctl);
-+
-+	/* Check status contents. */
-+	ASSERT_EQ(waitpid(self->child_pid, &status, 0), self->child_pid);
-+	ASSERT_TRUE(WIFSIGNALED(status));
-+	/* TODO: why doesn't this WCOREDUMP() agree with above? */
-+	/* EXPECT_TRUE(WCOREDUMP(status)); */
-+	EXPECT_EQ(WTERMSIG(status), SIGSYS);
-+	self->child_pid = 0;
-+}
-+
- /* This is a thread task to die via seccomp filter violation. */
- void *kill_thread(void *data)
- {
--- 
-2.30.2
+Yeah.., I saw the comment but didn't get why.
+
+Is there anyone who knows why it's necessary for all SoCs?
+At lease, I know there is no reason to forbid concurrent executions of dev =
+cmd and power mode change.
+
+If there's nothing, how about adding a quick to ignore it?
+
+Thanks.
+Kiwoong Kim
 

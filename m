@@ -2,502 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C864B3564
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 14:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34BD04B3570
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 15:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235792AbiBLN5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 08:57:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55584 "EHLO
+        id S235813AbiBLORW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 09:17:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbiBLN5I (ORCPT
+        with ESMTP id S230193AbiBLORT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 08:57:08 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB583216
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 05:57:04 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id a19so10919157qvm.4
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 05:57:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S0HsRc/LAU9FTzthU/OUG2RspoxRJn7ENK/edQzsCdQ=;
-        b=Dri+ax4+o5rnqooXSlUYOF/40bGCl8x5Hrgeat+4k88WT9GQJsrXTb5fErz9xqoO5G
-         iXAm3UvWE086U3xdyd9uFiha8gYKbkAPaV3U6Qhxj6nK8Viz6ZDU7bwLluwcQE5I1NeU
-         NkjwcgL3cLKcYAEPKUM2s2ALpazfHzr4X3HiUQm2/iFWmoRr9WXYaWKx+oIEXe82ju2R
-         ubsV6Pv1O6WKQj6fwJjLaMCy4v2smEfoHEj+5AQHaq6li7kuNpqhHGACrKPI8ZAEEt5d
-         56z+FXhjrh3nbGa3BCIKLTIzwNqR1yZXCxVyPJYCwvqx4ia66qDmEwIJqebm40YvdmIS
-         s6mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S0HsRc/LAU9FTzthU/OUG2RspoxRJn7ENK/edQzsCdQ=;
-        b=RKP5IPo0hxkKXe2L3q2npPH1OL/63/swltnKgKsQ/9NlTQwgYRMl3sQDjCpCJatpmW
-         +hshQPj4vYheShgQ2Hd0glwVnfjKFNXwbKTAT3m1roPdWZFTa0MuKkeOBRT+YFWgxxhD
-         ATz0StZzhmIN39vr0gz1INcbF48KlnyFLllQVn6k3li9lFDXcA/8fp8UuIhtCoFv6Fun
-         dZeq2JP2EHYbCcdP6MYuWLbdvJfEM72ZRxOpvZjEs2gKJufze0o8QpqS3axMo11w0y2r
-         X2m1OPcypkQ5EGZxZsnyUg1CvlgimSossC2NYuu7ao2ArpL2igVHMMofHXi1IGD+ULME
-         icbQ==
-X-Gm-Message-State: AOAM5325HCVK90DCT0CWFkQVrdJkfqrTDetobzzJn2rHBFcS8VG84RBK
-        wyOXocp/yxgEYOqskH3co0n2DMKmgbRJHRtNidfWFlo2VH2rUA==
-X-Google-Smtp-Source: ABdhPJxPLXc3iApSVbv1+kj3KnGxCiSZQM4apS//EcX8Yn+y4I8b5utyNi+CzXCJG6c7fmoWLo7ErKVLisP/V5F8ZZ4=
-X-Received: by 2002:ad4:5bc1:: with SMTP id t1mr4290649qvt.115.1644674223755;
- Sat, 12 Feb 2022 05:57:03 -0800 (PST)
+        Sat, 12 Feb 2022 09:17:19 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCCB245AF;
+        Sat, 12 Feb 2022 06:17:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=7QnIJw6JxaPkGqXMTz2fgzVx+1VOgBcJilFzsMI0nk0=; b=D//rq9qQ1yPFmlYSJjfJ++UitW
+        R94LxHUfU/lsbdZfaToI/2ib1NTyBPeNKo1yFNy2Y1f7kcAqCrAQVaOGZb0nsKkGU9sqUA1+SfsBs
+        KyU/D3XEyfxKVQ7mapp2Oe/TT5cgDUaRPhWNav+Be8ZDacTeFQkP1XztQpdM9itfvkHhb5mEmPWO0
+        556GGN7mb9mocAJcfJgB8OKFKolIjqv3dMwdMuqanrr1V7ikWk3aYXNZ2jTIgHtC2KwTWoL3vd51B
+        TJrrw6fdLn1YJ+hl4nrIVIJ8Z5p/vaFek2FShZlHl1yeexKsqOYealYzAWVuHigBVTsLLwcOjBssJ
+        IRhawmdQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57216)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nItCy-0008Cj-25; Sat, 12 Feb 2022 14:17:04 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nItCk-0004bI-1s; Sat, 12 Feb 2022 14:16:50 +0000
+Date:   Sat, 12 Feb 2022 14:16:50 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Finn Behrens <me@kloenk.de>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Douglas Su <d0u9.su@outlook.com>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        Daniel Xu <dxu@dxuuu.xyz>, Miguel Cano <macanroj@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kbuild@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 16/20] Kbuild: add Rust support
+Message-ID: <YgfBUhYdLXA46kOX@shell.armlinux.org.uk>
+References: <20220212130410.6901-1-ojeda@kernel.org>
+ <20220212130410.6901-17-ojeda@kernel.org>
 MIME-Version: 1.0
-References: <1644670295-25068-1-git-send-email-quic_vpolimer@quicinc.com> <1644670295-25068-2-git-send-email-quic_vpolimer@quicinc.com>
-In-Reply-To: <1644670295-25068-2-git-send-email-quic_vpolimer@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 12 Feb 2022 16:56:52 +0300
-Message-ID: <CAA8EJpp3J1GDJOWDSUomS92rmm14_TQk7ra0PLoLXBFtrWWFUw@mail.gmail.com>
-Subject: Re: [v1 2/2] drm/msm/disp/dpu1: Add PSR support for eDP interface in
- dpu driver
-To:     Vinod Polimera <quic_vpolimer@quicinc.com>
-Cc:     y@qualcomm.com, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robdclark@gmail.com, dianders@chromium.org,
-        quic_sbillaka@quicinc.com, swboyd@chromium.org,
-        quic_kalyant@quicinc.com, quic_vproddut@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220212130410.6901-17-ojeda@kernel.org>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 12 Feb 2022 at 15:52, Vinod Polimera <quic_vpolimer@quicinc.com> wrote:
->
-> Enable PSR on eDP interface using drm self-refresh librabry.
-> This patch uses a trigger from self-refresh library to enter/exit
-> into PSR, when there are no updates from framework.
->
-> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
-> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+On Sat, Feb 12, 2022 at 02:03:42PM +0100, Miguel Ojeda wrote:
+> +config RUST
+> +	bool "Rust support"
+> +	depends on RUST_IS_AVAILABLE
+> +	depends on ARM64 || CPU_32v6 || CPU_32v6K || (PPC64 && CPU_LITTLE_ENDIAN) || X86_64 || RISCV
 
-The S-O-B of the sender should come last. Please change the order of
-the S-O-B tags.
+Please don't use CPU_32v6* here.
 
-> ---
->  drivers/gpu/drm/bridge/panel.c              | 64 +++++++++++++++++++++-----
+It probably makes more sense to add a symbol "HAVE_RUST" and have the
+appropriate architecture Kconfig files select HAVE_RUST.
 
-This chunk should come in a separate patch. Please do not mix drm/msm
-patches with the generic code.
+Does Rust support Thumb on ARMv6 and ARMv7 architectures?
 
->  drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    | 30 +++++++++---
->  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 71 ++++++++++++++++++++++++++---
->  drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |  2 +-
->  4 files changed, 142 insertions(+), 25 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/panel.c b/drivers/gpu/drm/bridge/panel.c
-> index b32295a..c440546 100644
-> --- a/drivers/gpu/drm/bridge/panel.c
-> +++ b/drivers/gpu/drm/bridge/panel.c
-> @@ -102,31 +102,71 @@ static void panel_bridge_detach(struct drm_bridge *bridge)
->                 drm_connector_cleanup(connector);
->  }
->
-> -static void panel_bridge_pre_enable(struct drm_bridge *bridge)
-> +static void panel_bridge_pre_enable(struct drm_bridge *bridge,
-> +               struct drm_bridge_state *old_bridge_state)
->  {
->         struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
-> -
-> +       struct drm_crtc *crtc;
-> +       struct drm_crtc_state *cstate;
-> +       int i;
+> +	depends on !MODVERSIONS
+> +	depends on !GCC_PLUGIN_RANDSTRUCT
+> +	select CONSTRUCTORS
+> +	default n
+
+Please remove every utterance of "default n" from your patch; n is the
+default default which default defaults to, so you don't need to specify
+default n to make the option default to n. It will default to n purely
+because n is the default when no default is specified.
+
+> +	help
+> +	  Enables Rust support in the kernel.
 > +
-> +       if (old_bridge_state->base.state) {
-> +               for_each_old_crtc_in_state(old_bridge_state->base.state, crtc, cstate, i) {
-> +                       if (cstate->self_refresh_active && cstate->active)
-> +                               return;
-> +               }
+> +	  This allows other Rust-related options, like drivers written in Rust,
+> +	  to be selected.
 
-Ugh. No. You will skip panel actions if _any_ of the crtc's has PSR
-enabled. There might be other CRTCs in play.
-Please see analogix_dp_core.c for a proper way to handle this.
-Consider moving common code (e.g. getting the crtc used by the
-encoder) pieces to the generic drm code.
+As Rust doesn't support all the architectures that the kernel supports,
+Rust must not be used for core infrastructure.
 
-> +       }
->         drm_panel_prepare(panel_bridge->panel);
->  }
->
-> -static void panel_bridge_enable(struct drm_bridge *bridge)
-> +static void panel_bridge_enable(struct drm_bridge *bridge,
-> +               struct drm_bridge_state *old_bridge_state)
->  {
->         struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
-> -
-> +       struct drm_crtc *crtc;
-> +       struct drm_crtc_state *cstate;
-> +       int i;
-> +
-> +       if (old_bridge_state->base.state) {
-> +               for_each_old_crtc_in_state(old_bridge_state->base.state, crtc, cstate, i) {
-> +                       if (cstate->self_refresh_active)
-> +                               return;
-> +               }
-> +       }
->         drm_panel_enable(panel_bridge->panel);
->  }
->
-> -static void panel_bridge_disable(struct drm_bridge *bridge)
-> +static void panel_bridge_disable(struct drm_bridge *bridge,
-> +               struct drm_bridge_state *old_bridge_state)
->  {
->         struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
-> -
-> +       struct drm_crtc *crtc;
-> +       struct drm_crtc_state *cstate;
-> +       int i;
-> +
-> +       if (old_bridge_state->base.state) {
-> +               for_each_new_crtc_in_state(old_bridge_state->base.state, crtc, cstate, i) {
-> +                       if (cstate->self_refresh_active)
-> +                               return;
-> +               }
-> +       }
->         drm_panel_disable(panel_bridge->panel);
->  }
->
-> -static void panel_bridge_post_disable(struct drm_bridge *bridge)
-> +static void panel_bridge_post_disable(struct drm_bridge *bridge,
-> +               struct drm_bridge_state *old_bridge_state)
->  {
->         struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
-> -
-> +       struct drm_crtc *crtc;
-> +       struct drm_crtc_state *cstate;
-> +       int i;
-> +
-> +       if (old_bridge_state->base.state) {
-> +               for_each_new_crtc_in_state(old_bridge_state->base.state, crtc, cstate, i) {
-> +                       if (cstate->self_refresh_active)
-> +                               return;
-> +               }
-> +       }
->         drm_panel_unprepare(panel_bridge->panel);
->  }
->
-> @@ -141,10 +181,10 @@ static int panel_bridge_get_modes(struct drm_bridge *bridge,
->  static const struct drm_bridge_funcs panel_bridge_bridge_funcs = {
->         .attach = panel_bridge_attach,
->         .detach = panel_bridge_detach,
-> -       .pre_enable = panel_bridge_pre_enable,
-> -       .enable = panel_bridge_enable,
-> -       .disable = panel_bridge_disable,
-> -       .post_disable = panel_bridge_post_disable,
-> +       .atomic_pre_enable = panel_bridge_pre_enable,
-> +       .atomic_enable = panel_bridge_enable,
-> +       .atomic_disable = panel_bridge_disable,
-> +       .atomic_post_disable = panel_bridge_post_disable,
->         .get_modes = panel_bridge_get_modes,
->         .atomic_reset = drm_atomic_helper_bridge_reset,
->         .atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> index e7c9fe1..90223b8 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> @@ -18,6 +18,7 @@
->  #include <drm/drm_probe_helper.h>
->  #include <drm/drm_rect.h>
->  #include <drm/drm_vblank.h>
-> +#include <drm/drm_self_refresh_helper.h>
->
->  #include "dpu_kms.h"
->  #include "dpu_hw_lm.h"
-> @@ -457,7 +458,6 @@ static void _dpu_crtc_blend_setup(struct drm_crtc *crtc)
->                         mixer[i].mixer_op_mode,
->                         ctl->idx - CTL_0,
->                         mixer[i].flush_mask);
-> -
-
-Unnecessary
-
->                 ctl->ops.setup_blendstage(ctl, mixer[i].hw_lm->idx,
->                         &stage_cfg);
->         }
-> @@ -951,6 +951,14 @@ static void dpu_crtc_disable(struct drm_crtc *crtc,
->
->         DRM_DEBUG_KMS("crtc%d\n", crtc->base.id);
->
-> +       if (old_crtc_state->self_refresh_active) {
-> +               drm_for_each_encoder_mask(encoder, crtc->dev,
-> +                                old_crtc_state->encoder_mask) {
-> +                       dpu_encoder_assign_crtc(encoder, NULL);
-> +               }
-> +               return;
-> +       }
-> +
->         /* Disable/save vblank irq handling */
->         drm_crtc_vblank_off(crtc);
->
-> @@ -962,7 +970,8 @@ static void dpu_crtc_disable(struct drm_crtc *crtc,
->                  */
->                 if (dpu_encoder_get_intf_mode(encoder) == INTF_MODE_VIDEO)
->                         release_bandwidth = true;
-> -               dpu_encoder_assign_crtc(encoder, NULL);
-> +               if (!crtc->state->self_refresh_active)
-> +                       dpu_encoder_assign_crtc(encoder, NULL);
-
-This deserves some comments in the code
-
->         }
->
->         /* wait for frame_event_done completion */
-> @@ -1010,6 +1019,8 @@ static void dpu_crtc_enable(struct drm_crtc *crtc,
->         struct dpu_crtc *dpu_crtc = to_dpu_crtc(crtc);
->         struct drm_encoder *encoder;
->         bool request_bandwidth = false;
-> +       struct drm_crtc_state *old_crtc_state =
-> +               drm_atomic_get_old_crtc_state(state, crtc);
->
->         pm_runtime_get_sync(crtc->dev->dev);
->
-> @@ -1032,8 +1043,10 @@ static void dpu_crtc_enable(struct drm_crtc *crtc,
->         trace_dpu_crtc_enable(DRMID(crtc), true, dpu_crtc);
->         dpu_crtc->enabled = true;
->
-> -       drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask)
-> -               dpu_encoder_assign_crtc(encoder, crtc);
-> +       if (!old_crtc_state->self_refresh_active) {
-> +               drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask)
-> +                       dpu_encoder_assign_crtc(encoder, crtc);
-> +       }
-
-This deserves some comments in the code
-
->
->         /* Enable/restore vblank irq handling */
->         drm_crtc_vblank_on(crtc);
-> @@ -1069,7 +1082,7 @@ static int dpu_crtc_atomic_check(struct drm_crtc *crtc,
->
->         pstates = kzalloc(sizeof(*pstates) * DPU_STAGE_MAX * 4, GFP_KERNEL);
->
-> -       if (!crtc_state->enable || !crtc_state->active) {
-> +       if (!crtc_state->enable || !crtc_state->active || crtc_state->self_refresh_active) {
-
-This does not seem correct to me. According to the docs: "When in self
-refresh mode, the crtc_state->active value will be false, since the
-CRTC is off."
-
->                 DRM_DEBUG_ATOMIC("crtc%d -> enable %d, active %d, skip atomic_check\n",
->                                 crtc->base.id, crtc_state->enable,
->                                 crtc_state->active);
-> @@ -1497,7 +1510,7 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
->  {
->         struct drm_crtc *crtc = NULL;
->         struct dpu_crtc *dpu_crtc = NULL;
-> -       int i;
-> +       int i, ret;
->
->         dpu_crtc = kzalloc(sizeof(*dpu_crtc), GFP_KERNEL);
->         if (!dpu_crtc)
-> @@ -1534,6 +1547,11 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
->         /* initialize event handling */
->         spin_lock_init(&dpu_crtc->event_lock);
->
-> +       ret = drm_self_refresh_helper_init(crtc);
-> +       if (ret)
-> +               DPU_ERROR("Failed to initialize %s with SR helpers %d\n",
-> +                       crtc->name, ret);
-> +
->         DRM_DEBUG_KMS("%s: successfully initialized crtc\n", dpu_crtc->name);
->         return crtc;
->  }
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> index 1e648db..461fdd1 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> @@ -217,6 +217,14 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
->         15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
->  };
->
-> +static inline bool is_self_refresh_active(struct drm_crtc_state *state)
-> +{
-> +       if (state && state->self_refresh_active)
-> +               return true;
-> +
-> +       return false;
-> +}
-> +
->  static void _dpu_encoder_setup_dither(struct dpu_hw_pingpong *hw_pp, unsigned bpc)
->  {
->         struct dpu_hw_dither_cfg dither_cfg = { 0 };
-> @@ -600,6 +608,9 @@ static int dpu_encoder_virt_atomic_check(
->
->         trace_dpu_enc_atomic_check(DRMID(drm_enc));
->
-> +       if (crtc_state->self_refresh_active)
-> +               return ret;
-> +
-
-Why?
-
-
->         /* perform atomic check on the first physical encoder (master) */
->         for (i = 0; i < dpu_enc->num_phys_encs; i++) {
->                 struct dpu_encoder_phys *phys = dpu_enc->phys_encs[i];
-> @@ -1138,15 +1149,19 @@ void dpu_encoder_virt_runtime_resume(struct drm_encoder *drm_enc)
->         mutex_unlock(&dpu_enc->enc_lock);
->  }
->
-> -static void dpu_encoder_virt_enable(struct drm_encoder *drm_enc)
-> +static void dpu_encoder_virt_enable(struct drm_encoder *drm_enc,
-> +       struct drm_atomic_state *state)
->  {
->         struct dpu_encoder_virt *dpu_enc = NULL;
->         int ret = 0;
->         struct msm_drm_private *priv;
->         struct drm_display_mode *cur_mode = NULL;
-> +       struct drm_crtc_state *old_crtc_state;
-> +       struct drm_crtc *crtc;
->
->         dpu_enc = to_dpu_encoder_virt(drm_enc);
->
-> +       crtc = dpu_enc->crtc;
->         mutex_lock(&dpu_enc->enc_lock);
->         cur_mode = &dpu_enc->base.crtc->state->adjusted_mode;
->         priv = drm_enc->dev->dev_private;
-> @@ -1170,21 +1185,59 @@ static void dpu_encoder_virt_enable(struct drm_encoder *drm_enc)
->
->         _dpu_encoder_virt_enable_helper(drm_enc);
->
-> -       dpu_enc->enabled = true;
-> +       /* Coming back from self refresh, exit PSR */
-> +       if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS &&
-> +                       is_self_refresh_active(old_crtc_state))
-> +               msm_dp_display_set_psr(dpu_enc->dp, false);
->
-> +       if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS &&
-> +                       !is_self_refresh_active(old_crtc_state)) {
-> +               ret = msm_dp_display_enable(dpu_enc->dp, drm_enc);
-
-You shouldn't call msm_dp_display_*() directly.
-
-I might be wrong, but I think that these function calls should be
-moved into dp_bridge code instead of taking place here.
-
-> +               if (ret) {
-> +                       DPU_ERROR_ENC(dpu_enc, "dp display enable failed: %d\n",
-> +                               ret);
-> +                       goto out;
-> +               }
-> +       }
-> +
-> +       dpu_enc->enabled = true;
->  out:
->         mutex_unlock(&dpu_enc->enc_lock);
->  }
->
-> -static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
-> +static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc,
-> +       struct drm_atomic_state *state)
->  {
->         struct dpu_encoder_virt *dpu_enc = NULL;
->         struct msm_drm_private *priv;
-> +       struct drm_crtc *crtc;
-> +       struct drm_crtc_state *old_state;
->         int i = 0;
->
->         dpu_enc = to_dpu_encoder_virt(drm_enc);
->         DPU_DEBUG_ENC(dpu_enc, "\n");
->
-> +       if (!drm_enc) {
-> +               DPU_ERROR("invalid encoder\n");
-> +               return;
-> +       }
-> +       dpu_enc = to_dpu_encoder_virt(drm_enc);
-> +
-> +       crtc = dpu_enc->crtc;
-> +
-> +       /* Enter PSR if encoder supports */
-> +       if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS  && is_self_refresh_active(crtc->state))
-> +               msm_dp_display_set_psr(dpu_enc->dp, true);
-> +
-> +       old_state = drm_atomic_get_old_crtc_state(state, crtc);
-> +
-> +       if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS && is_self_refresh_active(old_state)) {
-> +               msm_dp_display_set_psr(dpu_enc->dp, false);
-> +               if (msm_dp_display_disable(dpu_enc->dp, drm_enc))
-> +                       DPU_ERROR_ENC(dpu_enc, "dp display disable failed\n");
-> +               return;
-> +       }
-> +
->         mutex_lock(&dpu_enc->enc_lock);
->         dpu_enc->enabled = false;
->
-> @@ -1194,6 +1247,9 @@ static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
->
->         /* wait for idle */
->         dpu_encoder_wait_for_event(drm_enc, MSM_ENC_TX_COMPLETE);
-> +       if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS && !is_self_refresh_active(crtc->state))
-> +               if (msm_dp_display_pre_disable(dpu_enc->dp, drm_enc))
-> +                       DPU_ERROR_ENC(dpu_enc, "dp display push idle failed\n");
->
->         dpu_encoder_resource_control(drm_enc, DPU_ENC_RC_EVENT_PRE_STOP);
->
-> @@ -1204,7 +1260,6 @@ static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
->                         phys->ops.disable(phys);
->         }
->
-> -
->         /* after phys waits for frame-done, should be no more frames pending */
->         if (atomic_xchg(&dpu_enc->frame_done_timeout_ms, 0)) {
->                 DPU_ERROR("enc%d timeout pending\n", drm_enc->base.id);
-> @@ -1219,6 +1274,10 @@ static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
->
->         DPU_DEBUG_ENC(dpu_enc, "encoder disabled\n");
->
-> +       if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS && !is_self_refresh_active(crtc->state))
-> +               if (msm_dp_display_disable(dpu_enc->dp, drm_enc))
-> +                       DPU_ERROR_ENC(dpu_enc, "dp display disable failed\n");
-> +
->         mutex_unlock(&dpu_enc->enc_lock);
->  }
->
-> @@ -2094,8 +2153,8 @@ static void dpu_encoder_frame_done_timeout(struct timer_list *t)
->
->  static const struct drm_encoder_helper_funcs dpu_encoder_helper_funcs = {
->         .mode_set = dpu_encoder_virt_mode_set,
-> -       .disable = dpu_encoder_virt_disable,
-> -       .enable = dpu_encoder_virt_enable,
-> +       .atomic_disable = dpu_encoder_virt_disable,
-> +       .atomic_enable = dpu_encoder_virt_enable,
-
-Please split this into a separate commit. First you convert
-dpu_encoder to use atomic_enable/atomic_disable, then you add PSR
-support.
-
->         .atomic_check = dpu_encoder_virt_atomic_check,
->  };
->
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> index 47fe11a..aed8e09 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> @@ -495,7 +495,7 @@ static void dpu_kms_wait_for_commit_done(struct msm_kms *kms,
->                 return;
->         }
->
-> -       if (!crtc->state->active) {
-> +       if (!crtc->state->active && !crtc->state->self_refresh_active) {
-
-drm_atomic_crtc_effectively_active() ?
-
->                 DPU_DEBUG("[crtc:%d] not active\n", crtc->base.id);
->                 return;
->         }
-> --
-> 2.7.4
->
-
-
---
-With best wishes
-Dmitry
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

@@ -2,92 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB024B3790
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 20:11:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 544D14B379C
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 20:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbiBLTLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 14:11:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47050 "EHLO
+        id S231127AbiBLTSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 14:18:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiBLTLH (ORCPT
+        with ESMTP id S230072AbiBLTSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 14:11:07 -0500
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA1B606C0;
-        Sat, 12 Feb 2022 11:11:02 -0800 (PST)
-Received: by mail-oi1-x232.google.com with SMTP id s24so13304078oic.6;
-        Sat, 12 Feb 2022 11:11:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=w+wyT1oWuhI65Zad/t8RG6/bImnXZf7s8T2d26vS6GI=;
-        b=htWbLaH9jrdukXZQn3kET561OhRCR2atyzhsWS+EQz7DmIUXFR5c2TRWLs5kezww8O
-         6suXc9uduEyHyu849z2fgsDEfv09QbbtHzJ9DP6Sadf+pIHfmy11Dfs20xL1MBeKK5S+
-         okRPPWFwZC9oRAeTkh50w+MrYqSwd319c5yC9cbOmE5Ae/zqoP4DhyR7mgFVlIaBOPQL
-         gylHLzWKsobfuOuN8kVQnx/eSu4eOnfooCbgNMFNB1UE63D8nDs4dObARr13T+W+ADUz
-         +LU3CTW64BhXVlInM4OjMkHson8sw0ktyV2KxV7Sdg1Ui2/q143K5qeCKdl9d6Hvocyh
-         CS8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=w+wyT1oWuhI65Zad/t8RG6/bImnXZf7s8T2d26vS6GI=;
-        b=kxEZFa4neAERHaBky20DACYAkacQDQUZ47I3AmicCDRGwV8umtPCtLUg3qU1IlxuFU
-         YRfRZnFEoJ81+YLht3wZOLf/mvP735zAU1zvUrpx0dybJVL0PlwJpDXdNrycBVcvteNp
-         LpJWC6vqU92U9sFFWRgFbW9bOPJ9wxVybMXWr0tZmqB3HNoooIHA7/veNvFII5Ir42AC
-         AIQpOLQvRtNsLFfz4znhgL7VS8JAoFw7HSQHw9zNhX5RDF3szCGVAqCLO+jhebmaozEp
-         aPstbXSGeiLdRnVt8IN7TpbcUbgNHVZoAkzTTZUwv2vmE1UGWhkYK6QpyAqIydzZq2Hd
-         SF1g==
-X-Gm-Message-State: AOAM532aiHLWEOc8gUCfIROYw6NpWCCw7c0KfpkCn9HZj6H/fbnDcYaf
-        dJiElp4cbwIA9zHruZF8kBikH7x0YzQ=
-X-Google-Smtp-Source: ABdhPJzYJeMksw8FP1YFbv2yDzvSULuewk2mdvSFccVFVVLkl2cIh/v4dySfbTv+5u5ASh/ejRb5qw==
-X-Received: by 2002:a05:6808:1983:: with SMTP id bj3mr2618250oib.313.1644693061731;
-        Sat, 12 Feb 2022 11:11:01 -0800 (PST)
-Received: from localhost.localdomain ([2804:d51:4934:ba00:3201:7b94:7a78:8d5a])
-        by smtp.gmail.com with ESMTPSA id e89sm442798ote.54.2022.02.12.11.10.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Feb 2022 11:11:01 -0800 (PST)
-From:   Marcos Alano <marcoshalano@gmail.com>
-To:     dmitry.torokhov@gmail.com, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org
-Cc:     Marcos Alano <marcoshalano@gmail.com>
-Subject: [RESEND PATCH] Correct the name for Xbox Series S|X controller
-Date:   Sat, 12 Feb 2022 16:10:15 -0300
-Message-Id: <20220212191014.1754721-1-marcoshalano@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Sat, 12 Feb 2022 14:18:05 -0500
+X-Greylist: delayed 429 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 12 Feb 2022 11:18:01 PST
+Received: from box.fidei.email (box.fidei.email [IPv6:2605:2700:0:2:a800:ff:feba:dc44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783F7606C4;
+        Sat, 12 Feb 2022 11:18:01 -0800 (PST)
+Received: from authenticated-user (box.fidei.email [71.19.144.250])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by box.fidei.email (Postfix) with ESMTPSA id E8C5280382;
+        Sat, 12 Feb 2022 14:10:51 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dorminy.me; s=mail;
+        t=1644693052; bh=txZS8eXu8kt+0fauTv33PdZYC897WdlzL1mtCypvBWI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LtNiPXqy/7xFiJe4+PEeaVZL1S1V2Alsu9Q4eheH57UWChPSvxGqEmTr8EA3hhwe4
+         uAHOAKv9Iq0v7ZF9T/qYq4tBIJ6qKakL2yEZmGCuMgdKNgcsUwq328ZeY23NljbqO8
+         B2/ha+6sflm0AP5TKDS+cY0wi+/TDaDOdr9n2UKscQaNmz1jaXFj1zHgK4Ng/BasEz
+         ZBjgMJwZMlvORiT3qhN2ZcZLjUczKpIY/45cDqZS1uJBLl3iYQb7BXHx1gbpQrnAmG
+         qmEXe9a4fYKv6SUE/TGfOZwfy2hA7I9tdtraYdKMcBcIpTh31ohkvk6HIT5o/xHdjN
+         Lq6U7yEcKpsAg==
+From:   Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+Subject: [PATCH] btrfs: add fs state details to error messages.
+Date:   Sat, 12 Feb 2022 14:10:42 -0500
+Message-Id: <20220212191042.94954-1-sweettea-kernel@dorminy.me>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change the name of controller to a more meaningful one.
+When a filesystem goes read-only due to an error, multiple errors tend
+to be reported, some of which are knock-on failures. Logging some
+fs_states, if any, in btrfs_handle_fs_error() and btrfs_printk()
+helps distinguish the first error from subsequent messages which may
+only exist due to an error state.
 
-Signed-off-by: Marcos Alano <marcoshalano@gmail.com>
+Under the new format, most initial errors will look like:
+`BTRFS: error (device loop0) in ...`
+while subsequent errors will begin with:
+`error (device loop0: state E) in ...`
+
+An initial transaction abort error will look like
+`error (device loop0: state X) in ...`
+and subsequent messages will contain
+`(device loop0: state EX) in ...`
+
+Signed-off-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
 ---
- drivers/input/joystick/xpad.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/btrfs/super.c | 49 +++++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 40 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/input/joystick/xpad.c b/drivers/input/joystick/xpad.c
-index 4c914f75a902..18190b529bca 100644
---- a/drivers/input/joystick/xpad.c
-+++ b/drivers/input/joystick/xpad.c
-@@ -131,7 +131,7 @@ static const struct xpad_device {
- 	{ 0x045e, 0x02e3, "Microsoft X-Box One Elite pad", 0, XTYPE_XBOXONE },
- 	{ 0x045e, 0x02ea, "Microsoft X-Box One S pad", 0, XTYPE_XBOXONE },
- 	{ 0x045e, 0x0719, "Xbox 360 Wireless Receiver", MAP_DPAD_TO_BUTTONS, XTYPE_XBOX360W },
--	{ 0x045e, 0x0b12, "Microsoft Xbox One X pad", MAP_SELECT_BUTTON, XTYPE_XBOXONE },
-+	{ 0x045e, 0x0b12, "Microsoft Xbox Series S|X Controller", MAP_SELECT_BUTTON, XTYPE_XBOXONE },
- 	{ 0x046d, 0xc21d, "Logitech Gamepad F310", 0, XTYPE_XBOX360 },
- 	{ 0x046d, 0xc21e, "Logitech Gamepad F510", 0, XTYPE_XBOX360 },
- 	{ 0x046d, 0xc21f, "Logitech Gamepad F710", 0, XTYPE_XBOX360 },
+diff --git a/fs/btrfs/super.c b/fs/btrfs/super.c
+index 33cfc9e27451..d0e81eb48eac 100644
+--- a/fs/btrfs/super.c
++++ b/fs/btrfs/super.c
+@@ -66,6 +66,31 @@ static struct file_system_type btrfs_root_fs_type;
+ 
+ static int btrfs_remount(struct super_block *sb, int *flags, char *data);
+ 
++#define STATE_STRING_PREFACE ": state "
++#define MAX_STATE_CHARS 2
++
++static void btrfs_state_to_string(const struct btrfs_fs_info *info, char *buf)
++{
++	unsigned long state = info->fs_state;
++	char *curr = buf;
++
++	memcpy(curr, STATE_STRING_PREFACE, sizeof(STATE_STRING_PREFACE));
++	curr += sizeof(STATE_STRING_PREFACE) - 1;
++
++	/* If more states are reported, update MAX_STATE_CHARS also */
++	if (test_and_clear_bit(BTRFS_FS_STATE_ERROR, &state))
++		*curr++ = 'E';
++
++	if (test_and_clear_bit(BTRFS_FS_STATE_TRANS_ABORTED, &state))
++		*curr++ = 'X';
++
++	/* If no states were printed, reset the buffer */
++	if (state == info->fs_state)
++		curr = buf;
++
++	*curr++ = '\0';
++}
++
+ /*
+  * Generally the error codes correspond to their respective errors, but there
+  * are a few special cases.
+@@ -128,6 +153,7 @@ void __btrfs_handle_fs_error(struct btrfs_fs_info *fs_info, const char *function
+ {
+ 	struct super_block *sb = fs_info->sb;
+ #ifdef CONFIG_PRINTK
++	char statestr[sizeof(STATE_STRING_PREFACE) + MAX_STATE_CHARS];
+ 	const char *errstr;
+ #endif
+ 
+@@ -136,10 +162,11 @@ void __btrfs_handle_fs_error(struct btrfs_fs_info *fs_info, const char *function
+ 	 * under SB_RDONLY, then it is safe here.
+ 	 */
+ 	if (errno == -EROFS && sb_rdonly(sb))
+-  		return;
++		return;
+ 
+ #ifdef CONFIG_PRINTK
+ 	errstr = btrfs_decode_error(errno);
++	btrfs_state_to_string(fs_info, statestr);
+ 	if (fmt) {
+ 		struct va_format vaf;
+ 		va_list args;
+@@ -148,12 +175,12 @@ void __btrfs_handle_fs_error(struct btrfs_fs_info *fs_info, const char *function
+ 		vaf.fmt = fmt;
+ 		vaf.va = &args;
+ 
+-		pr_crit("BTRFS: error (device %s) in %s:%d: errno=%d %s (%pV)\n",
+-			sb->s_id, function, line, errno, errstr, &vaf);
++		pr_crit("BTRFS: error (device %s%s) in %s:%d: errno=%d %s (%pV)\n",
++			sb->s_id, statestr, function, line, errno, errstr, &vaf);
+ 		va_end(args);
+ 	} else {
+-		pr_crit("BTRFS: error (device %s) in %s:%d: errno=%d %s\n",
+-			sb->s_id, function, line, errno, errstr);
++		pr_crit("BTRFS: error (device %s%s) in %s:%d: errno=%d %s\n",
++			sb->s_id, statestr, function, line, errno, errstr);
+ 	}
+ #endif
+ 
+@@ -240,11 +267,15 @@ void __cold btrfs_printk(const struct btrfs_fs_info *fs_info, const char *fmt, .
+ 	vaf.va = &args;
+ 
+ 	if (__ratelimit(ratelimit)) {
+-		if (fs_info)
+-			printk("%sBTRFS %s (device %s): %pV\n", lvl, type,
+-				fs_info->sb->s_id, &vaf);
+-		else
++		if (fs_info) {
++			char statestr[sizeof(STATE_STRING_PREFACE) + MAX_STATE_CHARS];
++
++			btrfs_state_to_string(fs_info, statestr);
++			printk("%sBTRFS %s (device %s%s): %pV\n", lvl, type,
++				fs_info->sb->s_id, statestr, &vaf);
++		} else {
+ 			printk("%sBTRFS %s: %pV\n", lvl, type, &vaf);
++		}
+ 	}
+ 
+ 	va_end(args);
 -- 
-2.35.1
+2.30.2
 

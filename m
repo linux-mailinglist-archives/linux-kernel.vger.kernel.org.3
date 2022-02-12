@@ -2,40 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D534B34A4
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 12:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E794B34AA
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 12:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234269AbiBLL1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 06:27:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41832 "EHLO
+        id S234360AbiBLL2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 06:28:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbiBLL1x (ORCPT
+        with ESMTP id S234312AbiBLL2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 06:27:53 -0500
-Received: from smtp.smtpout.orange.fr (smtp10.smtpout.orange.fr [80.12.242.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A31826AEC
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 03:27:49 -0800 (PST)
-Received: from localhost.localdomain ([124.33.176.97])
-        by smtp.orange.fr with ESMTPA
-        id IqYqn14uLIz5VIqZ6nyZ5I; Sat, 12 Feb 2022 12:27:47 +0100
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
-X-ME-Date: Sat, 12 Feb 2022 12:27:47 +0100
-X-ME-IP: 124.33.176.97
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     netdev@vger.kernel.org, linux-can@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH] can: etas_es58x: change opened_channel_cnt's type from atomic_t to u8
-Date:   Sat, 12 Feb 2022 20:27:13 +0900
-Message-Id: <20220212112713.577957-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sat, 12 Feb 2022 06:28:20 -0500
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B17C26AEA;
+        Sat, 12 Feb 2022 03:28:15 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V4DXVLp_1644665291;
+Received: from 30.240.120.83(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V4DXVLp_1644665291)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 12 Feb 2022 19:28:13 +0800
+Message-ID: <d26e3f1f-86b0-3638-0e9d-66d893a980b9@linux.alibaba.com>
+Date:   Sat, 12 Feb 2022 19:28:10 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Subject: Re: [PATCH v5 2/2] EDAC/ghes: use cper functions to avoid code
+ duplication
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     rric@kernel.org, mchehab@kernel.org, tony.luck@intel.com,
+        james.morse@arm.com, ardb@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+        zhangliguang@linux.alibaba.com, zhuo.song@linux.alibaba.com
+References: <20211210134019.28536-1-xueshuai@linux.alibaba.com>
+ <20220126081702.55167-3-xueshuai@linux.alibaba.com>
+ <YfU8fW+lLiAgJ9D4@zn.tnic>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <YfU8fW+lLiAgJ9D4@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,136 +49,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver uses an atomic_t variable: es58x_device:opened_channel_cnt
-to keep track of the number of opened channels in order to only
-allocate memory for the URBs when this count changes from zero to one.
+Hi, Borislav,
 
-While the intent was to prevent race conditions, the choice of an
-atomic_t turns out to be a bad idea for several reasons:
+在 2022/1/29 PM9:09, Borislav Petkov 写道:
+> On Wed, Jan 26, 2022 at 04:17:02PM +0800, Shuai Xue wrote:
+>> The memory error location processing in ghes_edac_report_mem_error() have
+> 
+> I will look at this patch again after you have incorporated in all
+> review comments from last time:
+> 
+> https://lore.kernel.org/r/YctFli9oMBYTlf7h@zn.tnic
+> 
 
-  - implementation is incorrect and fails to decrement
-    opened_channel_cnt when the URB allocation fails as reported in
-    [1].
+Happy Chinese New Year. Sorry for getting back to you late. I was on holiday
+last weak.
 
-  - even if opened_channel_cnt were to be correctly decremented,
-    atomic_t is insufficient to cover edge cases: there can be a race
-    condition in which 1/ a first process fails to allocate URBs
-    memory 2/ a second process enters es58x_open() before the first
-    process does its cleanup and decrements opened_channed_cnt. In
-    which case, the second process would successfully return despite
-    the URBs memory not being allocated.
+I have try to address your comments in this version. If I missed your comments,
+please let me know, thank you.
 
-  - actually, any kind of locking mechanism was useless here because
-    it is redundant with the network stack big kernel lock
-    (a.k.a. rtnl_lock) which is being hold by all the callers of
-    net_device_ops:ndo_open() and net_device_ops:ndo_close(). c.f. the
-    ASSERST_RTNL() calls in __dev_open() [2] and __dev_close_many()
-    [3].
+Best Regards,
+Shuai
 
-The atmomic_t is thus replaced by a simple u8 type and the logic to
-increment and decrement es58x_device:opened_channel_cnt is simplified
-accordingly fixing the bug reported in [1]. We do not check again for
-ASSERST_RTNL() as this is already done by the callers.
 
-[1] https://lore.kernel.org/linux-can/20220201140351.GA2548@kili/T/#u
-[2] https://elixir.bootlin.com/linux/v5.16/source/net/core/dev.c#L1463
-[3] https://elixir.bootlin.com/linux/v5.16/source/net/core/dev.c#L1541
-
-Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X
-CAN USB interfaces")
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- drivers/net/can/usb/etas_es58x/es58x_core.c | 9 +++++----
- drivers/net/can/usb/etas_es58x/es58x_core.h | 8 +++++---
- 2 files changed, 10 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
-index 2ed2370a3166..2d73ebbf3836 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
-@@ -1787,7 +1787,7 @@ static int es58x_open(struct net_device *netdev)
- 	struct es58x_device *es58x_dev = es58x_priv(netdev)->es58x_dev;
- 	int ret;
- 
--	if (atomic_inc_return(&es58x_dev->opened_channel_cnt) == 1) {
-+	if (!es58x_dev->opened_channel_cnt) {
- 		ret = es58x_alloc_rx_urbs(es58x_dev);
- 		if (ret)
- 			return ret;
-@@ -1805,12 +1805,13 @@ static int es58x_open(struct net_device *netdev)
- 	if (ret)
- 		goto free_urbs;
- 
-+	es58x_dev->opened_channel_cnt++;
- 	netif_start_queue(netdev);
- 
- 	return ret;
- 
-  free_urbs:
--	if (atomic_dec_and_test(&es58x_dev->opened_channel_cnt))
-+	if (!es58x_dev->opened_channel_cnt)
- 		es58x_free_urbs(es58x_dev);
- 	netdev_err(netdev, "%s: Could not open the network device: %pe\n",
- 		   __func__, ERR_PTR(ret));
-@@ -1845,7 +1846,8 @@ static int es58x_stop(struct net_device *netdev)
- 
- 	es58x_flush_pending_tx_msg(netdev);
- 
--	if (atomic_dec_and_test(&es58x_dev->opened_channel_cnt))
-+	es58x_dev->opened_channel_cnt--;
-+	if (!es58x_dev->opened_channel_cnt)
- 		es58x_free_urbs(es58x_dev);
- 
- 	return 0;
-@@ -2215,7 +2217,6 @@ static struct es58x_device *es58x_init_es58x_dev(struct usb_interface *intf,
- 	init_usb_anchor(&es58x_dev->tx_urbs_idle);
- 	init_usb_anchor(&es58x_dev->tx_urbs_busy);
- 	atomic_set(&es58x_dev->tx_urbs_idle_cnt, 0);
--	atomic_set(&es58x_dev->opened_channel_cnt, 0);
- 	usb_set_intfdata(intf, es58x_dev);
- 
- 	es58x_dev->rx_pipe = usb_rcvbulkpipe(es58x_dev->udev,
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.h b/drivers/net/can/usb/etas_es58x/es58x_core.h
-index 826a15871573..e5033cb5e695 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.h
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.h
-@@ -373,8 +373,6 @@ struct es58x_operators {
-  *	queue wake/stop logic should prevent this URB from getting
-  *	empty. Please refer to es58x_get_tx_urb() for more details.
-  * @tx_urbs_idle_cnt: number of urbs in @tx_urbs_idle.
-- * @opened_channel_cnt: number of channels opened (c.f. es58x_open()
-- *	and es58x_stop()).
-  * @ktime_req_ns: kernel timestamp when es58x_set_realtime_diff_ns()
-  *	was called.
-  * @realtime_diff_ns: difference in nanoseconds between the clocks of
-@@ -384,6 +382,10 @@ struct es58x_operators {
-  *	in RX branches.
-  * @rx_max_packet_size: Maximum length of bulk-in URB.
-  * @num_can_ch: Number of CAN channel (i.e. number of elements of @netdev).
-+ * @opened_channel_cnt: number of channels opened. Free of race
-+ *	conditions because its two users (net_device_ops:ndo_open()
-+ *	and net_device_ops:ndo_close()) guarantee that the network
-+ *	stack big kernel lock (a.k.a. rtnl_mutex) is being hold.
-  * @rx_cmd_buf_len: Length of @rx_cmd_buf.
-  * @rx_cmd_buf: The device might split the URB commands in an
-  *	arbitrary amount of pieces. This buffer is used to concatenate
-@@ -406,7 +408,6 @@ struct es58x_device {
- 	struct usb_anchor tx_urbs_busy;
- 	struct usb_anchor tx_urbs_idle;
- 	atomic_t tx_urbs_idle_cnt;
--	atomic_t opened_channel_cnt;
- 
- 	u64 ktime_req_ns;
- 	s64 realtime_diff_ns;
-@@ -415,6 +416,7 @@ struct es58x_device {
- 
- 	u16 rx_max_packet_size;
- 	u8 num_can_ch;
-+	u8 opened_channel_cnt;
- 
- 	u16 rx_cmd_buf_len;
- 	union es58x_urb_cmd rx_cmd_buf;
--- 
-2.34.1
 

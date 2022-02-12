@@ -2,274 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E124B368A
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 17:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1204C4B368C
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 17:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237519AbiBLQiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 11:38:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46744 "EHLO
+        id S237538AbiBLQlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 11:41:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231560AbiBLQiQ (ORCPT
+        with ESMTP id S229693AbiBLQlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 11:38:16 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8F2240B3
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 08:38:12 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        Sat, 12 Feb 2022 11:41:39 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84652B0B;
+        Sat, 12 Feb 2022 08:41:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1644684094;
+        bh=R3T0cPN40hlhc+uEFOnFn93H8zi9jt0XNiexXM9tl8k=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=kSzK7wUjfXdRH/ZSD7l2P8jLnlOFOyKa73ZwyzIbQp6qffAjrCIdHSh3CQckHKrd+
+         ozTuEcpChR8uReRFUSBSA06Djl3/Br1hQKyk1i54KARJ/tHr0sWvyuILr4PVxnPbIo
+         uY3Z8MF8sV5Q/JBe19eh/QiKxCZYRJjeBdJQPxtM=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 20615128075D;
+        Sat, 12 Feb 2022 11:41:34 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 1VXmR3mxNcNu; Sat, 12 Feb 2022 11:41:34 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1644684093;
+        bh=R3T0cPN40hlhc+uEFOnFn93H8zi9jt0XNiexXM9tl8k=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=YGGYbus5beWNugGxToAWwihIyWe466KU302yAyjV2kWLGUmkgkGbiQ0ewsTxDGUmY
+         xxxWwgNwEuLfu2TF4LdrTDr5zERmIy2etvBgkdQgQT3Ujmbk1jqrLp7dHTo4MPoF04
+         l0V7+CAy/QnF9KFOE0lD+jiNfhRskzgAsuZ7f2KA=
+Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::c447])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B86DB3F4B4
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 16:38:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644683890;
-        bh=X3PaDMR8+PfNCu9HSVeF64I3rmiKpfgBp/WxGyhnalg=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=dbD9vKrp6jXKKVkVWjEoh9u8HCme+pctLZvGWid71wRH/ZDPwlhzQxXI3xQW3x2wf
-         Bs5/Fil2lYqhtJ1K77D9PfMydLAZurCMZrRp7lJ6/g4XNmWn2emJ8lmbPFYwXL52j+
-         +syBBN72kleqQbl9YbNJwD5wKo2jQ8TSRZQR1JqYkc14T92f18ZGmDYDZwYaS65soS
-         JmrwLbQbU7ZUhsQ+WIfbzN9gRPhBGcKL4SnRL7w0QLa0zgjFjkewvftyxD8oI/R8Zi
-         1Y0HcODV5G+QOkLHtbXdMx0TvXrV8OFi76GsBfXxP+uxE/WmqDTqzWQC/O6IGVJfNs
-         TwGT4NC/Hn45Q==
-Received: by mail-ed1-f71.google.com with SMTP id g5-20020a056402090500b0040f28e1da47so7358373edz.8
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 08:38:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=X3PaDMR8+PfNCu9HSVeF64I3rmiKpfgBp/WxGyhnalg=;
-        b=07mUcmoauBjj9BNVkaRpSDap2oOrlV+vwGDL1G0QRNs/UKQZ0r7tURrTvB8NnkFMlm
-         Z44r5COYW+HlecCrUZy2vHXY1NnNpeaJm6krrolB6HMhLLzoN5bAmxYIzorXGCOlfh+k
-         PvOG7fdOTXZAg4mnNt86mzdQwxTkPSmzk6Ay8cmQMlcKeCAXi3fDJI6H6Hhw8hvlpBab
-         ZvrrfrfWCDUnR8ejHQt46yfHZpPmbGkgpYbdrMC5uqC1bGrjYjiPrLvFivWAEaSReeD3
-         lDAU5qj5S37JdYCOXSTMQ4RtRyqds1tII3g/g5xQt8JY5JTQAWkW56rj75z3BX2dqU5T
-         vz4A==
-X-Gm-Message-State: AOAM532UZeYuLzwkWkl0kSGOB2odzRVVcCgEpzme7CSVNr2vVElnxBhF
-        r1cRaE3LhZ6s/dTafrZS1KqInv46jpP8xAq8fCyYj3ACfQVtY4I8TVQ/6zvP0HLtGSyfanQOOQL
-        NglMfSkv7TYH1ZMEstS8NpJZ+mZuAt01J0YOhZBOOEw==
-X-Received: by 2002:a05:6402:278c:: with SMTP id b12mr7210731ede.103.1644683890416;
-        Sat, 12 Feb 2022 08:38:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzi2LSEQvl7xb62/E1vnFojUOYRyBbFs5bpXETqx/QohvA7v+RAEx4arYWWSVBGLcFKJkv64w==
-X-Received: by 2002:a05:6402:278c:: with SMTP id b12mr7210710ede.103.1644683890187;
-        Sat, 12 Feb 2022 08:38:10 -0800 (PST)
-Received: from [192.168.0.101] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id fd21sm290486ejc.44.2022.02.12.08.38.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Feb 2022 08:38:09 -0800 (PST)
-Message-ID: <59c02065-7da9-4665-9038-82b3b6bda339@canonical.com>
-Date:   Sat, 12 Feb 2022 17:38:08 +0100
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 86D611280695;
+        Sat, 12 Feb 2022 11:41:33 -0500 (EST)
+Message-ID: <0da592e3664041ce007c287391cdb40fda2d535e.camel@HansenPartnership.com>
+Subject: [GIT PULL] SCSI fixes for 5.17-rc3
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Sat, 12 Feb 2022 11:41:32 -0500
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 1/1] arm64: dts: exynos: Add initial device tree
- support for Exynos7885 SoC
-Content-Language: en-US
-To:     David Virag <virag.david003@gmail.com>
-Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
-        phone-devel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220206231816.127650-1-virag.david003@gmail.com>
- <20220206231816.127650-2-virag.david003@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220206231816.127650-2-virag.david003@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/02/2022 00:18, David Virag wrote:
-> Add initial Exynos7885 device tree nodes with dts for the Samsung Galaxy
-> A8 (2018), a.k.a. "jackpotlte", with model number "SM-A530F".
-> Currently this includes some clock support, UART support, and I2C nodes.
-> 
-> Signed-off-by: David Virag <virag.david003@gmail.com>
-> ---
-> Changes in v2:
->   - Remove address-cells, and size-cells from dts, since they are
->     already in the dtsi.
->   - Lower case hex in memory node
->   - Fix node names with underscore instead of hyphen
->   - Fix line breaks
->   - Fix "-key" missing from gpio keys node names
->   - Use the form without "key" in gpio key labels on all keys
->   - Suffix pin configuration node names with "-pins"
->   - Remove "fimc_is_mclk" nodes from pinctrl dtsi for now
->   - Use macros for "samsung,pin-con-pdn", and "samsung,pin-con-pdn"
->   - Add comment about Arm PMU
->   - Rename "clock-oscclk" to "osc-clock"
->   - Include exynos-syscon-restart.dtsi instead of rewriting its contents
-> 
-> Changes in v3:
->   - Fix typo (seperate -> separate)
-> 
-> Changes in v4:
->   - Fixed leading 0x in clock-controller nodes
->   - Actually suffixed pin configuration node names with "-pins"
->   - Seperated Cortex-A53 and Cortex-A73 PMU
-> 
-> Changes in v5:
->   - Use "-gpio-bank" suffix in gpio bank nodes
->   - Remove interrupts from gpio-keys
->   - Move oscclk clock-frequency to board dts
->   - Seperate cmu_core clock names into 4 lines
->   - Use EXYNOS5420_PIN_DRV_LVx macros
->   - Add missing include from pinctrl dtsi
->   - Drop decon pinctrl nodes
->   - Order pinctrls by addresses
-> 
->  arch/arm64/boot/dts/exynos/Makefile           |   7 +-
->  .../boot/dts/exynos/exynos7885-jackpotlte.dts |  93 ++
->  .../boot/dts/exynos/exynos7885-pinctrl.dtsi   | 855 ++++++++++++++++++
->  arch/arm64/boot/dts/exynos/exynos7885.dtsi    | 440 +++++++++
->  4 files changed, 1392 insertions(+), 3 deletions(-)
->  create mode 100644 arch/arm64/boot/dts/exynos/exynos7885-jackpotlte.dts
->  create mode 100644 arch/arm64/boot/dts/exynos/exynos7885-pinctrl.dtsi
->  create mode 100644 arch/arm64/boot/dts/exynos/exynos7885.dtsi
-> 
+Two minor fixes in the lpfc driver.  One changing the classification of
+trace messages and the other fixing a build issue when NVME_FC is
+disabled.
 
-Tried to apply and there was a conflict in Makefile, so this looks like
-based on something wrong. Patches should be based on maintainer's tree,
-which can be easily achieved by basing just on linux-next.
+The patch is available here:
 
-Anyway, I fixed the conflicts but it fails new pinctrl schema (already
-in next) with few errors. This looks like the same error exynos850 had:
-https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git/commit/?h=next/dt64&id=daeb1c2b50fb98118d6318b5fdbd9ef9bdfaeaf5
-also maybe:
-https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git/commit/?h=next/dt64&id=f377d4d4beafca755d2b6e6368895b1f3fb383c6
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
-DTSI or schema might need adjustement.
+The short changelog is:
 
-> diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/dts/exynos/Makefile
-> index b41e86df0a84..c68c4ad577ac 100644
-> --- a/arch/arm64/boot/dts/exynos/Makefile
-> +++ b/arch/arm64/boot/dts/exynos/Makefile
-> @@ -1,6 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  dtb-$(CONFIG_ARCH_EXYNOS) += \
-> -	exynos5433-tm2.dtb	\
-> -	exynos5433-tm2e.dtb	\
-> -	exynos7-espresso.dtb	\
-> +	exynos5433-tm2.dtb		\
-> +	exynos5433-tm2e.dtb		\
-> +	exynos7-espresso.dtb		\
-> +	exynos7885-jackpotlte.dtb	\
+James Smart (2):
+      scsi: lpfc: Reduce log messages seen after firmware download
+      scsi: lpfc: Remove NVMe support if kernel has NVME_FC disabled
 
-Please rebase.
+And the diffstat:
 
->  	exynosautov9-sadk.dtb
-> diff --git a/arch/arm64/boot/dts/exynos/exynos7885-jackpotlte.dts b/arch/arm64/boot/dts/exynos/exynos7885-jackpotlte.dts
-> new file mode 100644
-> index 000000000000..d707dba906d1
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/exynos/exynos7885-jackpotlte.dts
-> @@ -0,0 +1,93 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Samsung Galaxy A8 2018 (jackpotlte/SM-A530F) device tree source
-> + *
-> + * Copyright (c) 2021 Samsung Electronics Co., Ltd.
-> + * Copyright (c) 2021 Dávid Virág
-> + *
+ drivers/scsi/lpfc/lpfc.h      | 13 ++++++++++---
+ drivers/scsi/lpfc/lpfc_attr.c |  4 ++--
+ drivers/scsi/lpfc/lpfc_init.c |  2 +-
+ drivers/scsi/lpfc/lpfc_sli.c  |  8 +++++++-
+ 4 files changed, 20 insertions(+), 7 deletions(-)
 
-No need for blank line.
+With full diff below.
 
-> + */
-> +
-> +/dts-v1/;
-> +#include "exynos7885.dtsi"
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +/ {
-> +	model = "Samsung Galaxy A8 (2018)";
-> +	compatible = "samsung,jackpotlte", "samsung,exynos7885";
-> +	chassis-type = "handset";
-> +
-> +	aliases {
-> +		serial0 = &serial_0;
-> +		serial1 = &serial_1;
-> +		serial2 = &serial_2;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = &serial_2;
-> +	};
-> +
-> +	memory@80000000 {
-> +		device_type = "memory";
-> +		reg = <0x0 0x80000000 0x3da00000>,
-> +		      <0x0 0xc0000000 0x40000000>,
-> +		      <0x8 0x80000000 0x40000000>;
-> +	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&key_volup &key_voldown &key_power>;
-> +
-> +		volup-key {
-> +			label = "Volume Up";
-> +			linux,code = <KEY_VOLUMEUP>;
-> +			gpios = <&gpa1 5 GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		voldown-key {
-> +			label = "Volume Down";
-> +			linux,code = <KEY_VOLUMEDOWN>;
-> +			gpios = <&gpa1 6 GPIO_ACTIVE_LOW>;
-> +		};
-> +
-> +		power-key {
-> +			label = "Power";
-> +			linux,code = <KEY_POWER>;
-> +			gpios = <&gpa1 7 GPIO_ACTIVE_LOW>;
-> +			wakeup-source;
-> +		};
-> +	};
-> +};
-> +
-> +&serial_2 {
-> +	status = "okay";
-> +};
-> +
-> +&pinctrl_alive {
-> +	key_volup: key-volup-pins {
-> +		samsung,pins = "gpa1-5";
-> +		samsung,pin-function = <EXYNOS_PIN_FUNC_F>;
-> +		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-> +		samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
-> +	};
-> +
-> +	key_voldown: key-voldown-pins {
-> +		samsung,pins = "gpa1-6";
-> +		samsung,pin-function = <EXYNOS_PIN_FUNC_F>;
-> +		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-> +		samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
-> +	};
-> +
-> +	key_power: key-power-pins {
-> +		samsung,pins = "gpa1-7";
-> +		samsung,pin-function = <EXYNOS_PIN_FUNC_F>;
-> +		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-> +		samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
-> +	};
-> +};
-> +
-> +&oscclk {
+James
 
-Order overriden nodes alphabeticall by label name, so (ossclk,
-pinctrl_alive, serial).
+---
 
-Best regards,
-Krzysztof
+diff --git a/drivers/scsi/lpfc/lpfc.h b/drivers/scsi/lpfc/lpfc.h
+index 4878c94761f9..a1e0a106c132 100644
+--- a/drivers/scsi/lpfc/lpfc.h
++++ b/drivers/scsi/lpfc/lpfc.h
+@@ -1161,6 +1161,16 @@ struct lpfc_hba {
+ 	uint32_t cfg_hostmem_hgp;
+ 	uint32_t cfg_log_verbose;
+ 	uint32_t cfg_enable_fc4_type;
++#define LPFC_ENABLE_FCP  1
++#define LPFC_ENABLE_NVME 2
++#define LPFC_ENABLE_BOTH 3
++#if (IS_ENABLED(CONFIG_NVME_FC))
++#define LPFC_MAX_ENBL_FC4_TYPE LPFC_ENABLE_BOTH
++#define LPFC_DEF_ENBL_FC4_TYPE LPFC_ENABLE_BOTH
++#else
++#define LPFC_MAX_ENBL_FC4_TYPE LPFC_ENABLE_FCP
++#define LPFC_DEF_ENBL_FC4_TYPE LPFC_ENABLE_FCP
++#endif
+ 	uint32_t cfg_aer_support;
+ 	uint32_t cfg_sriov_nr_virtfn;
+ 	uint32_t cfg_request_firmware_upgrade;
+@@ -1182,9 +1192,6 @@ struct lpfc_hba {
+ 	uint32_t cfg_ras_fwlog_func;
+ 	uint32_t cfg_enable_bbcr;	/* Enable BB Credit Recovery */
+ 	uint32_t cfg_enable_dpp;	/* Enable Direct Packet Push */
+-#define LPFC_ENABLE_FCP  1
+-#define LPFC_ENABLE_NVME 2
+-#define LPFC_ENABLE_BOTH 3
+ 	uint32_t cfg_enable_pbde;
+ 	uint32_t cfg_enable_mi;
+ 	struct nvmet_fc_target_port *targetport;
+diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
+index 7a7f17d71811..bac78fbce8d6 100644
+--- a/drivers/scsi/lpfc/lpfc_attr.c
++++ b/drivers/scsi/lpfc/lpfc_attr.c
+@@ -3978,8 +3978,8 @@ LPFC_ATTR_R(nvmet_mrq_post,
+  *                    3 - register both FCP and NVME
+  * Supported values are [1,3]. Default value is 3
+  */
+-LPFC_ATTR_R(enable_fc4_type, LPFC_ENABLE_BOTH,
+-	    LPFC_ENABLE_FCP, LPFC_ENABLE_BOTH,
++LPFC_ATTR_R(enable_fc4_type, LPFC_DEF_ENBL_FC4_TYPE,
++	    LPFC_ENABLE_FCP, LPFC_MAX_ENBL_FC4_TYPE,
+ 	    "Enable FC4 Protocol support - FCP / NVME");
+ 
+ /*
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index a56f01f659f8..558f7d2559c4 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -2104,7 +2104,7 @@ lpfc_handle_eratt_s4(struct lpfc_hba *phba)
+ 		}
+ 		if (reg_err1 == SLIPORT_ERR1_REG_ERR_CODE_2 &&
+ 		    reg_err2 == SLIPORT_ERR2_REG_FW_RESTART) {
+-			lpfc_printf_log(phba, KERN_ERR, LOG_TRACE_EVENT,
++			lpfc_printf_log(phba, KERN_ERR, LOG_SLI,
+ 					"3143 Port Down: Firmware Update "
+ 					"Detected\n");
+ 			en_rn_msg = false;
+diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+index 1bc0db572d9e..430abebf99f1 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -13363,6 +13363,7 @@ lpfc_sli4_eratt_read(struct lpfc_hba *phba)
+ 	uint32_t uerr_sta_hi, uerr_sta_lo;
+ 	uint32_t if_type, portsmphr;
+ 	struct lpfc_register portstat_reg;
++	u32 logmask;
+ 
+ 	/*
+ 	 * For now, use the SLI4 device internal unrecoverable error
+@@ -13413,7 +13414,12 @@ lpfc_sli4_eratt_read(struct lpfc_hba *phba)
+ 				readl(phba->sli4_hba.u.if_type2.ERR1regaddr);
+ 			phba->work_status[1] =
+ 				readl(phba->sli4_hba.u.if_type2.ERR2regaddr);
+-			lpfc_printf_log(phba, KERN_ERR, LOG_TRACE_EVENT,
++			logmask = LOG_TRACE_EVENT;
++			if (phba->work_status[0] ==
++				SLIPORT_ERR1_REG_ERR_CODE_2 &&
++			    phba->work_status[1] == SLIPORT_ERR2_REG_FW_RESTART)
++				logmask = LOG_SLI;
++			lpfc_printf_log(phba, KERN_ERR, logmask,
+ 					"2885 Port Status Event: "
+ 					"port status reg 0x%x, "
+ 					"port smphr reg 0x%x, "
+

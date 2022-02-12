@@ -2,132 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311764B3404
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 10:25:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 235034B3421
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 10:59:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiBLJZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 04:25:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37592 "EHLO
+        id S233285AbiBLJ6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 04:58:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232989AbiBLJZW (ORCPT
+        with ESMTP id S231477AbiBLJ6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 04:25:22 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C35326579
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 01:25:20 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id x6-20020a92d306000000b002bdff65a8e1so7490738ila.3
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 01:25:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=ZtL5i1t9klk+YLV1HnkewFTh9taQxRMyB5UUQJAQ2zM=;
-        b=kH3YXXwz0Rh2QliWzR3bhfWPMaBR9pYRjjDa5lbIwjJdKyZpY4ffBsBiVYj2PdY6w6
-         mfdtAkb7feag33XvpFjdhtKKua1iCzVPp78rIyYF+SAAUyNcdGG+REltPfTO67feG6Ty
-         MGGNUwir739Hv8e/W8MjgMouGFZLDX9i9Dar4Zn+mtZV1WTygDtyKX/ptKeEJ8FrSaD/
-         jxPMA0MlI03P1FJDGA+s24IwqEbyt/P3kZLdrnBNWbNrTkG8DFDqSVs/A87Accbhkkh0
-         2SEcdecQr7BpDzLn+RnPaKRG4MuwOYZyN/bgEXFE8NdoYCguKJub+OfoSm1/KDO2HvpL
-         8Mgg==
-X-Gm-Message-State: AOAM532nPotv4TbZ65qP06qrN6WwC9CnIBKdtR0QA6ZuuGYC9ePiONYT
-        Vr9uT3BPxpEnUdsgl+Rwad8oV8iDp7an3PyA+b06UnDL2pAJ
-X-Google-Smtp-Source: ABdhPJx8ow+/awsXjC1xOnCUNufZuulCq8reGoQuVmsW8S+jHNRrZXiNyWPyUuWPW8OEUsUcJ4vvBdL9aXl0aE6yVyAtlHnpvlBw
+        Sat, 12 Feb 2022 04:58:19 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BA124BE2;
+        Sat, 12 Feb 2022 01:58:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=igbgibAHPAWbmEsOdSj/NeCBqcGOcsUXmWWMdBzi9LE=; b=LbMp1Kw5SaT236NypKQ9v+1DkG
+        Frb0rgXN+qToHBpB9KqbBxagU+CBAqSEoPciqZSQ3BcH2tmyOivz7MLVbBv09BnrJQu/qn0eI1p7u
+        z3WQpfjhLLY9AWB71ZPc+M10CQSkXl7pL1JQEgcC6QDFJazhhQslVc5ukWUd3arqJV1sImfpyx96J
+        P2sn7Aj19coNN8a4kSP3UGG0NoXc4wVAkooy8bbWqhp9DDZzpSN4Mzv5EvTFIzTcN0niPuli4W6QU
+        jBRqrCkE5E3kAjmxKKCuQpqFl77SDFsjYvw55aYA2uvIaLN8+GkHYXSKmlGKxGYCGoDnIlJOOJnIu
+        5j6Ie1/g==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57210)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nIpAQ-00083F-9h; Sat, 12 Feb 2022 09:58:10 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nIpAO-0004Rn-8J; Sat, 12 Feb 2022 09:58:08 +0000
+Date:   Sat, 12 Feb 2022 09:58:08 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     netdev@vger.kernel.org, mw@semihalf.com, davem@davemloft.net,
+        kuba@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: mvpp2: Check for null pcs in mvpp2_acpi_start()
+Message-ID: <YgeEsF/cr8pfeUR4@shell.armlinux.org.uk>
+References: <20220211234235.3180025-1-jeremy.linton@arm.com>
+ <Ygb2E1DGYVBO+mNP@shell.armlinux.org.uk>
+ <0e5f1807-22f1-ec5b-0b18-8bc02ad99760@arm.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a46:: with SMTP id u6mr2938187ilv.245.1644657919465;
- Sat, 12 Feb 2022 01:25:19 -0800 (PST)
-Date:   Sat, 12 Feb 2022 01:25:19 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000111f7f05d7cec3bd@google.com>
-Subject: [syzbot] WARNING: ODEBUG bug in hci_dev_close_sync
-From:   syzbot <syzbot+45bff639f729e5f15653@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, johan.hedberg@gmail.com, kuba@kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        luiz.dentz@gmail.com, marcel@holtmann.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0e5f1807-22f1-ec5b-0b18-8bc02ad99760@arm.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Feb 11, 2022 at 06:18:22PM -0600, Jeremy Linton wrote:
+> Hi,
+> 
+> On 2/11/22 17:49, Russell King (Oracle) wrote:
+> > On Fri, Feb 11, 2022 at 05:42:35PM -0600, Jeremy Linton wrote:
+> > > Booting a MACCHIATObin with 5.17 the system OOPs with
+> > > a null pointer deref when the network is started. This
+> > > is caused by the pcs->ops structure being null on this
+> > > particular platform/firmware.
+> > 
+> > pcs->ops should never be NULL. I'm surprised this fix results in any
+> > kind of working networking.
+> > 
+> > Instead, the initialilsation of port->pcs_*.ops needs to be moved out
+> > of the if (!mvpp2_use_acpi_compat_mode(..)) block. Please try this:
+> 
+> That appears to fix it as well, shall I re-post this with your fix, or will
+> you?
 
-syzbot found the following issue on:
+I see you re-posted it anyway - that's fine. Thanks.
 
-HEAD commit:    555f3d7be91a Merge tag '5.17-rc3-ksmbd-server-fixes' of gi..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16e61b78700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5707221760c00a20
-dashboard link: https://syzkaller.appspot.com/bug?extid=45bff639f729e5f15653
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+45bff639f729e5f15653@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-ODEBUG: assert_init not available (active state 0) object type: timer_list hint: 0x0
-WARNING: CPU: 1 PID: 15929 at lib/debugobjects.c:505 debug_print_object+0x16e/0x250 lib/debugobjects.c:505
-Modules linked in:
-CPU: 1 PID: 15929 Comm: syz-executor.5 Not tainted 5.17.0-rc3-syzkaller-00020-g555f3d7be91a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:debug_print_object+0x16e/0x250 lib/debugobjects.c:505
-Code: ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 af 00 00 00 48 8b 14 dd 40 d4 05 8a 4c 89 ee 48 c7 c7 40 c8 05 8a e8 a4 34 24 05 <0f> 0b 83 05 35 4a b1 09 01 48 83 c4 18 5b 5d 41 5c 41 5d 41 5e c3
-RSP: 0018:ffffc90002c37938 EFLAGS: 00010086
-RAX: 0000000000000000 RBX: 0000000000000005 RCX: 0000000000000000
-RDX: ffff88805689c200 RSI: ffffffff815ee378 RDI: fffff52000586f19
-RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff815e80de R11: 0000000000000000 R12: ffffffff89ae3aa0
-R13: ffffffff8a05cec0 R14: ffffffff81660040 R15: 1ffff92000586f32
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000000 CR3: 000000005c7e8000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- debug_object_assert_init lib/debugobjects.c:895 [inline]
- debug_object_assert_init+0x1f4/0x2e0 lib/debugobjects.c:866
- debug_timer_assert_init kernel/time/timer.c:739 [inline]
- debug_assert_init kernel/time/timer.c:784 [inline]
- del_timer+0x6d/0x110 kernel/time/timer.c:1204
- try_to_grab_pending+0x6d/0xd0 kernel/workqueue.c:1285
- __cancel_work_timer+0xa6/0x570 kernel/workqueue.c:3139
- hci_dev_close_sync+0xb01/0x1120 net/bluetooth/hci_sync.c:4084
- hci_dev_do_close+0x32/0x70 net/bluetooth/hci_core.c:553
- hci_unregister_dev+0x1d0/0x550 net/bluetooth/hci_core.c:2686
- vhci_release+0x7c/0xf0 drivers/bluetooth/hci_vhci.c:568
- __fput+0x286/0x9f0 fs/file_table.c:311
- task_work_run+0xdd/0x1a0 kernel/task_work.c:164
- exit_task_work include/linux/task_work.h:32 [inline]
- do_exit+0xb29/0x2a30 kernel/exit.c:806
- do_group_exit+0xd2/0x2f0 kernel/exit.c:935
- __do_sys_exit_group kernel/exit.c:946 [inline]
- __se_sys_exit_group kernel/exit.c:944 [inline]
- __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:944
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fe461979059
-Code: Unable to access opcode bytes at RIP 0x7fe46197902f.
-RSP: 002b:00007ffe7d025b08 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 0000000000000064 RCX: 00007fe461979059
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: 00007fe4619d225c R08: 000000000000000c R09: 000055555596c3b8
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000016
-R13: 00007ffe7d026de0 R14: 000055555596c3b8 R15: 00007ffe7d027ee0
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

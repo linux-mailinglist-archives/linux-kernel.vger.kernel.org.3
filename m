@@ -2,126 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759824B3865
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 23:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4309C4B3866
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 23:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232147AbiBLWiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 17:38:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49936 "EHLO
+        id S232166AbiBLWjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 17:39:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiBLWiA (ORCPT
+        with ESMTP id S229532AbiBLWjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 17:38:00 -0500
-Received: from mother.openwall.net (mother.openwall.net [195.42.179.200])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 923326476
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 14:37:55 -0800 (PST)
-Received: (qmail 22387 invoked from network); 12 Feb 2022 22:37:54 -0000
-Received: from localhost (HELO pvt.openwall.com) (127.0.0.1)
-  by localhost with SMTP; 12 Feb 2022 22:37:54 -0000
-Received: by pvt.openwall.com (Postfix, from userid 503)
-        id 2BA26AB88C; Sat, 12 Feb 2022 23:36:39 +0100 (CET)
-Date:   Sat, 12 Feb 2022 23:36:39 +0100
-From:   Solar Designer <solar@openwall.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, Alexey Gladkov <legion@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        Michal Koutn?? <mkoutny@suse.com>, stable@vger.kernel.org
-Subject: Re: [PATCH 5/8] ucounts: Handle wrapping in is_ucounts_overlimit
-Message-ID: <20220212223638.GB29214@openwall.com>
-References: <87o83e2mbu.fsf@email.froward.int.ebiederm.org> <20220211021324.4116773-5-ebiederm@xmission.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220211021324.4116773-5-ebiederm@xmission.com>
-User-Agent: Mutt/1.4.2.3i
+        Sat, 12 Feb 2022 17:39:40 -0500
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF7923BC8
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 14:39:35 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.88,364,1635199200"; 
+   d="scan'208";a="21055354"
+Received: from 203.107.68.85.rev.sfr.net (HELO hadrien) ([85.68.107.203])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2022 23:39:33 +0100
+Date:   Sat, 12 Feb 2022 23:39:33 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>
+cc:     kbuild-all@lists.01.org, linux-arm-kernel@lists.infradead.org,
+        Michal Simek <monstr@monstr.eu>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>, git@xilinx.com,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iio: versal-sysmon: fix for_each_child.cocci warnings
+Message-ID: <alpine.DEB.2.22.394.2202122337090.3095@hadrien>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 08:13:21PM -0600, Eric W. Biederman wrote:
-> While examining is_ucounts_overlimit and reading the various messages
-> I realized that is_ucounts_overlimit fails to deal with counts that
-> may have wrapped.
-> 
-> Being wrapped should be a transitory state for counts and they should
-> never be wrapped for long, but it can happen so handle it.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts")
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> ---
->  kernel/ucount.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/ucount.c b/kernel/ucount.c
-> index 65b597431c86..06ea04d44685 100644
-> --- a/kernel/ucount.c
-> +++ b/kernel/ucount.c
-> @@ -350,7 +350,8 @@ bool is_ucounts_overlimit(struct ucounts *ucounts, enum ucount_type type, unsign
->  	if (rlimit > LONG_MAX)
->  		max = LONG_MAX;
->  	for (iter = ucounts; iter; iter = iter->ns->ucounts) {
-> -		if (get_ucounts_value(iter, type) > max)
-> +		long val = get_ucounts_value(iter, type);
-> +		if (val < 0 || val > max)
->  			return true;
->  		max = READ_ONCE(iter->ns->ucount_max[type]);
->  	}
+From: kernel test robot <lkp@intel.com>
 
-You probably deliberately assume "gcc -fwrapv", but otherwise:
+For_each_child_of_node" should have of_node_put() before return.
 
-As you're probably aware, a signed integer wrapping is undefined
-behavior in C.  In the function above, "val" having wrapped to negative
-assumes we had occurred UB elsewhere.  Further, there's an instance of
-UB in the function itself:
+Generated by: scripts/coccinelle/iterators/for_each_child.cocci
 
-bool is_ucounts_overlimit(struct ucounts *ucounts, enum ucount_type type, unsigned long rlimit)
-{
-	struct ucounts *iter;
-	long max = rlimit;
-	if (rlimit > LONG_MAX)
-		max = LONG_MAX;
+CC: Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
 
-The assignment on "long max = rlimit;" would have already been UB if
-"rlimit > LONG_MAX", which is only checked afterwards.  I think the
-above would be better written as:
+---
 
-	if (rlimit > LONG_MAX)
-		rlimit = LONG_MAX;
-	long max = rlimit;
+tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15
+head:   966124532656bc95d781abf57531e4cd4f962237
+commit: 1459646ab280aa68c3c4fa1d9552ea21f15d7a2d [543/923] iio: versal-sysmon: add driver for Versal Sysmon
+:::::: branch date: 3 days ago
+:::::: commit date: 12 days ago
 
-considering that "rlimit" is never used further in that function.
+Please take the patch only if it's a positive warning. Thanks!
 
-And to more likely avoid wraparound of "val", perhaps have the limit at
-a value significantly lower than LONG_MAX, like half that?  So:
+ versal-sysmon.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-	if (rlimit > LONG_MAX / 2)
-		rlimit = LONG_MAX / 2;
-	long max = rlimit;
+--- a/drivers/iio/adc/versal-sysmon.c
++++ b/drivers/iio/adc/versal-sysmon.c
+@@ -875,12 +875,16 @@ static int sysmon_parse_dt(struct iio_de
 
-And sure, also keep the "val < 0" check as defensive programming, or you
-can do:
+ 	for_each_child_of_node(np, child_node) {
+ 		ret = of_property_read_u32(child_node, "reg", &reg);
+-		if (ret < 0)
++		if (ret < 0) {
++			of_node_put(child_node);
+ 			return ret;
++		}
 
-	if (rlimit > LONG_MAX / 2)
-		rlimit = LONG_MAX / 2;
-[...]
-		if ((unsigned long)get_ucounts_value(iter, type) > rlimit)
-			return true;
+ 		ret = of_property_read_string(child_node, "xlnx,name", &name);
+-		if (ret < 0)
++		if (ret < 0) {
++			of_node_put(child_node);
+ 			return ret;
++		}
 
-and drop both "val" and "max".  However, this also assumes the return
-type of get_ucounts_value() doesn't become larger than "unsigned long".
-
-I assume that once is_ucounts_overlimit() returned true, it is expected
-the value would almost not grow further (except a little due to races).
-
-I also assume there's some reason a signed type is used there.
-
-Alexander
+ 		sysmon_channels[i].type = IIO_VOLTAGE;
+ 		sysmon_channels[i].indexed = 1;

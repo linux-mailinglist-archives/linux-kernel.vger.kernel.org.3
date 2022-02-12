@@ -2,140 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678D74B3335
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 06:26:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C0B4B3336
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 06:32:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbiBLFZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 00:25:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49460 "EHLO
+        id S230078AbiBLFcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 00:32:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiBLFZa (ORCPT
+        with ESMTP id S229593AbiBLFcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 00:25:30 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A93328E2A
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 21:25:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644643527; x=1676179527;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=h37GbzHXLOjLnumzY1OjP3t0xgSy/CHirznPlcX44Tk=;
-  b=RhrfvP9nTIC3izx1nFAQeu0I6YXJ+TO/I5wKHrIY27MhUuSkSkNnXz0W
-   /kOhB/tEwQ+DfT3Aq4WVS3rCfgt8rGJO/5Z1UglIlV9Pfs03TC6dNiQ3S
-   cPUrYi72n1kdRZWnBmT87XISTJKyVdIrddcVUVRuTkEL8D79PO8PxO9Uz
-   0yz0am538bAL8H74j2puFZp+8UpRlTq0qghoK/YMUIBuKuWpFRBXPgYIB
-   xo19MVh9nO+I0/Aw0A1EbGaQX1RNM8+eWXGgITQwxewv8uGpYOhxDSBuU
-   +4lVfHUWTYmFN/ahVyhZhaUFwnPt/nL12Y2QcXi/06tB+CyMK/V9pkW8l
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="237260572"
-X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="237260572"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 21:25:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
-   d="scan'208";a="527208526"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 11 Feb 2022 21:25:24 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nIkuS-0005fg-1N; Sat, 12 Feb 2022 05:25:24 +0000
-Date:   Sat, 12 Feb 2022 13:24:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [peterz-queue:locking/core 6/7] kernel/locking/lockdep.c:6017:57:
- error: 'offset' undeclared; did you mean 'off_t'?
-Message-ID: <202202121348.Uty03Al8-lkp@intel.com>
+        Sat, 12 Feb 2022 00:32:22 -0500
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38015289BF
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 21:32:19 -0800 (PST)
+Received: from fsav116.sakura.ne.jp (fsav116.sakura.ne.jp [27.133.134.243])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 21C5W0XN054639;
+        Sat, 12 Feb 2022 14:32:00 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav116.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav116.sakura.ne.jp);
+ Sat, 12 Feb 2022 14:32:00 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav116.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 21C5VxJ8054636
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 12 Feb 2022 14:31:59 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <ccd04d8a-154b-543e-e1c3-84bc655508d1@I-love.SAKURA.ne.jp>
+Date:   Sat, 12 Feb 2022 14:31:53 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [syzbot] possible deadlock in worker_thread
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>,
+        syzbot <syzbot+831661966588c802aae9@syzkaller.appspotmail.com>,
+        jgg@ziepe.ca, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+References: <0000000000005975a605d7aef05e@google.com>
+ <8ea57ddf-a09c-43f2-4285-4dfb908ad967@acm.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <8ea57ddf-a09c-43f2-4285-4dfb908ad967@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
-head:   2300c94a775d0f2a733ef11285cc0abe8126edf6
-commit: 065af96d73df2653a2d7da572cf8ba57218479ef [6/7] locking/lockdep: Cleanup reinit_class()
-config: i386-randconfig-m021 (https://download.01.org/0day-ci/archive/20220212/202202121348.Uty03Al8-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=065af96d73df2653a2d7da572cf8ba57218479ef
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue locking/core
-        git checkout 065af96d73df2653a2d7da572cf8ba57218479ef
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On 2022/02/12 3:59, Bart Van Assche wrote:
+> On 2/10/22 11:27, syzbot wrote:
+>> ======================================================
+>> WARNING: possible circular locking dependency detected
+>> 5.17.0-rc2-syzkaller-00398-gd8ad2ce873ab #0 Not tainted
+>> ------------------------------------------------------
+> 
+> Since the SRP initiator driver is involved, I will take a look.
+> However, I'm not sure yet when I will have the time to post a fix.
+> 
+> Thanks,
+> 
+> Bart.
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This problem was already handled by commit bf23747ee0532090 ("loop:
+revert "make autoclear operation asynchronous"").
 
-All errors (new ones prefixed by >>):
+But this report might be suggesting us that we should consider
+deprecating (and eventually getting rid of) system-wide workqueues
+(declared in include/linux/workqueue.h), for since flush_workqueue()
+synchronously waits for completion, sharing system-wide workqueues
+among multiple modules can generate unexpected locking dependency
+chain (like this report).
 
-   In file included from <command-line>:
-   kernel/locking/lockdep.c: In function 'reinit_class':
->> kernel/locking/lockdep.c:6017:57: error: 'offset' undeclared (first use in this function); did you mean 'off_t'?
-    6017 |  BUILD_BUG_ON(offsetof(struct lock_class, lock_entry) > offset);
-         |                                                         ^~~~~~
-   include/linux/compiler_types.h:326:9: note: in definition of macro '__compiletime_assert'
-     326 |   if (!(condition))     \
-         |         ^~~~~~~~~
-   include/linux/compiler_types.h:346:2: note: in expansion of macro '_compiletime_assert'
-     346 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |  ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:2: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |  BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |  ^~~~~~~~~~~~~~~~
-   kernel/locking/lockdep.c:6017:2: note: in expansion of macro 'BUILD_BUG_ON'
-    6017 |  BUILD_BUG_ON(offsetof(struct lock_class, lock_entry) > offset);
-         |  ^~~~~~~~~~~~
-   kernel/locking/lockdep.c:6017:57: note: each undeclared identifier is reported only once for each function it appears in
-    6017 |  BUILD_BUG_ON(offsetof(struct lock_class, lock_entry) > offset);
-         |                                                         ^~~~~~
-   include/linux/compiler_types.h:326:9: note: in definition of macro '__compiletime_assert'
-     326 |   if (!(condition))     \
-         |         ^~~~~~~~~
-   include/linux/compiler_types.h:346:2: note: in expansion of macro '_compiletime_assert'
-     346 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |  ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:2: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |  BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |  ^~~~~~~~~~~~~~~~
-   kernel/locking/lockdep.c:6017:2: note: in expansion of macro 'BUILD_BUG_ON'
-    6017 |  BUILD_BUG_ON(offsetof(struct lock_class, lock_entry) > offset);
-         |  ^~~~~~~~~~~~
+If some module needs flush_workqueue() or flush_*_work(), shouldn't
+such module create and use their own workqueues?
 
+Tejun, what do you think?
 
-vim +6017 kernel/locking/lockdep.c
-
-  6011	
-  6012	static void reinit_class(struct lock_class *class)
-  6013	{
-  6014		WARN_ON_ONCE(!class->lock_entry.next);
-  6015		WARN_ON_ONCE(!list_empty(&class->locks_after));
-  6016		WARN_ON_ONCE(!list_empty(&class->locks_before));
-> 6017		BUILD_BUG_ON(offsetof(struct lock_class, lock_entry) > offset);
-  6018		BUILD_BUG_ON(offsetof(struct lock_class, locks_after) > offset);
-  6019		BUILD_BUG_ON(offsetof(struct lock_class, locks_before) > offset);
-  6020		memset_startat(class, 0, key);
-  6021	}
-  6022	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,84 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9E44B355E
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 14:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE2A4B3560
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 14:56:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235744AbiBLNun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 08:50:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53692 "EHLO
+        id S235765AbiBLN4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 08:56:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235678AbiBLNum (ORCPT
+        with ESMTP id S230348AbiBLN4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 08:50:42 -0500
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5CCB0B;
-        Sat, 12 Feb 2022 05:50:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1644673813;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=kkf3f5UeVkL//K4QzMvabJJMd5RoVnu3V9J2z+HY2/M=;
-    b=bnMGBdCTw+mw9xmD8gwPKSS774LQfFj6EtUAvqIekLvHzNuoU5qMhaY8gJZXv2zpW4
-    lBLz1NWJaFTJz6thln58NfGQ6ohW5NuobIQk6C8OhA00vWHV460Kh9R1ILm39iYZSEH6
-    Vr4MKloC7JxSx4mbG73PU65gL1WN9/2D91rfAmAvhQdmEXgYGLPzLqcCAUy/T4njXoN0
-    SHjvStuF6BQl3T8wctsRWQhQM6vuIEOYnTk0Fd3+8nG61tPbK1961bphi+zKW82fhAap
-    fW+jlbAQi/wc1r7HVYVdztHTH+JElP8JaKh8grPrXrjR6fAYe8xSFG97X3JHqGlQ13CX
-    EOqw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NIGH/jrwDaqyA=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.39.0 DYNA|AUTH)
-    with ESMTPSA id L29417y1CDoCsoM
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Sat, 12 Feb 2022 14:50:12 +0100 (CET)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v13 0/9] MIPS: JZ4780 and CI20 HDMI
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <F0J17R.I8VTR1ZGV2Z2@crapouillou.net>
-Date:   Sat, 12 Feb 2022 14:50:11 +0100
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <5B3FD0D2-28B3-4D35-BD6D-9747A0E35C07@goldelico.com>
-References: <cover.1643819482.git.hns@goldelico.com>
- <9ZC17R.T1L0TBAW7MJA3@crapouillou.net>
- <4294A500-52EB-4319-9B89-F9DAC48EBF03@goldelico.com>
- <F0J17R.I8VTR1ZGV2Z2@crapouillou.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Sat, 12 Feb 2022 08:56:20 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC00216;
+        Sat, 12 Feb 2022 05:56:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644674177; x=1676210177;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=EFXycOyHfDpnIEEuHp1bsP2udHkXPnsibsZZiH/Di6o=;
+  b=RUSNUqs9hrHZC2GoLoUMWMCOMzsGolqb19hOPe8CI+ORZlx1OqKm5WBP
+   V86VYJSXgnZk2WMDV+aLQ3b8NRGJ+J1p1UbetNQua9lEu/pYX9XucjuQy
+   HDlWtRZaqPpKWNw4DCwsoyozclug80uMRv48Nmz4mcdAIYLaoL5fy8S57
+   I=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 12 Feb 2022 05:56:16 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2022 05:56:16 -0800
+Received: from [10.216.46.141] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Sat, 12 Feb
+ 2022 05:56:12 -0800
+Message-ID: <d0118f40-399b-5b50-f730-1ead42eff364@quicinc.com>
+Date:   Sat, 12 Feb 2022 19:26:08 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH rcu 3/3] rcu: Allow expedited RCU grace periods on
+ incoming CPUs
+Content-Language: en-US
+To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>, <paulmck@kernel.org>
+CC:     <rcu@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-team@fb.com>, <rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>
+References: <20220204225409.GA4193020@paulmck-ThinkPad-P17-Gen-1>
+ <20220204225507.4193113-3-paulmck@kernel.org>
+ <de3a9710-fbf4-8005-a781-adc95ae4a090@quicinc.com>
+ <20220209220601.GB4285@paulmck-ThinkPad-P17-Gen-1>
+ <ede5ef2e-a804-3b9e-dfd1-d050baf48828@quicinc.com>
+ <20220211221455.GM4285@paulmck-ThinkPad-P17-Gen-1>
+ <2a4870e9-41ae-60cf-fef3-aeb1de6f559c@quicinc.com>
+ <73bc88ae-a1a4-99e2-0e66-e2ce553b2f46@quicinc.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <73bc88ae-a1a4-99e2-0e66-e2ce553b2f46@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.47.97.222)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,44 +71,242 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-> Am 09.02.2022 um 15:02 schrieb Paul Cercueil <paul@crapouillou.net>:
->=20
-> Hi,
->=20
-> Le mer., f=C3=A9vr. 9 2022 at 14:51:12 +0100, H. Nikolaus Schaller =
-<hns@goldelico.com> a =C3=A9crit :
->> Paul,
->>> Am 09.02.2022 um 12:52 schrieb Paul Cercueil <paul@crapouillou.net>:
->>> Hi Nikolaus,
->>> I tried applying patches 1-2, but they don't apply cleanly on top of =
-drm-misc/drm-misc-next.
->> Ok I had rebased to linux-next some days ago and it appears that =
-patch 1/9 has now arrived in drm-misc/drm-misc-next.
->> So we can drop 1/9.
->=20
-> Yes, some weeks ago I did apply patch 1/9 from one of your previous =
-patchsets. Patch 2 was applied as well (commit b807fd2c43fe =
-("drm/ingenic: Add support for JZ4780 and HDMI output")), but you then =
-said that it didn't work and needed a fix.
->=20
-> For this patchset you should always base on top of =
-drm-misc/drm-misc-next, and not on linux-next; they have different =
-schedules. You can drop patch #1, and rework patch #2 so that it only =
-fixes the previously incorrect behaviour.
->=20
->>> Could you rebase on top of that tree?
->> Sure.
->> Unfortunatley my v14 breaks the display again. It is not much fun to =
-develop on top of such a moving target...
->=20
-> I can imagine...
+On 2/12/2022 4:58 PM, Neeraj Upadhyay wrote:
+> Hi Mukesh,
+>
+> On 2/12/2022 2:17 PM, Mukesh Ojha wrote:
+>>
+>> On 2/12/2022 3:44 AM, Paul E. McKenney wrote:
+>>> On Sat, Feb 12, 2022 at 12:14:20AM +0530, Mukesh Ojha wrote:
+>>>> On 2/10/2022 3:36 AM, Paul E. McKenney wrote:
+>>>>> On Wed, Feb 09, 2022 at 11:53:33PM +0530, Mukesh Ojha wrote:
+>>>>>> On 2/5/2022 4:25 AM, Paul E. McKenney wrote:
+>>>>>>> Although it is usually safe to invoke 
+>>>>>>> synchronize_rcu_expedited() from a
+>>>>>>> preemption-enabled CPU-hotplug notifier, if it is invoked from a 
+>>>>>>> notifier
+>>>>>>> between CPUHP_AP_RCUTREE_ONLINE and CPUHP_AP_ACTIVE, its 
+>>>>>>> attempts to
+>>>>>>> invoke a workqueue handler will hang due to RCU waiting on a CPU 
+>>>>>>> that
+>>>>>>> the scheduler is not paying attention to.  This commit therefore 
+>>>>>>> expands
+>>>>>>> use of the existing workqueue-independent 
+>>>>>>> synchronize_rcu_expedited()
+>>>>>>> from early boot to also include CPUs that are being hotplugged.
+>>>>>>>
+>>>>>>> Link: 
+>>>>>>> https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/ 
+>>>>>>>
+>>>>>>> Reported-by: Mukesh Ojha <quic_mojha@quicinc.com>
+>>>>>>> Cc: Tejun Heo <tj@kernel.org>
+>>>>>>> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+>>>>>>> ---
+>>>>>>>     kernel/rcu/tree_exp.h | 14 ++++++++++----
+>>>>>>>     1 file changed, 10 insertions(+), 4 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+>>>>>>> index 60197ea24ceb9..1a45667402260 100644
+>>>>>>> --- a/kernel/rcu/tree_exp.h
+>>>>>>> +++ b/kernel/rcu/tree_exp.h
+>>>>>>> @@ -816,7 +816,7 @@ static int rcu_print_task_exp_stall(struct 
+>>>>>>> rcu_node *rnp)
+>>>>>>>      */
+>>>>>>>     void synchronize_rcu_expedited(void)
+>>>>>>>     {
+>>>>>>> -    bool boottime = (rcu_scheduler_active == RCU_SCHEDULER_INIT);
+>>>>>>> +    bool no_wq;
+>>>>>>>         struct rcu_exp_work rew;
+>>>>>>>         struct rcu_node *rnp;
+>>>>>>>         unsigned long s;
+>>>>>>> @@ -841,9 +841,15 @@ void synchronize_rcu_expedited(void)
+>>>>>>>         if (exp_funnel_lock(s))
+>>>>>>>             return;  /* Someone else did our work for us. */
+>>>>>>> +    /* Don't use workqueue during boot or from an incoming CPU. */
+>>>>>>> +    preempt_disable();
+>>>>>>> +    no_wq = rcu_scheduler_active == RCU_SCHEDULER_INIT ||
+>>>>>>> +        !cpumask_test_cpu(smp_processor_id(), cpu_active_mask);
+>>>>>>> +    preempt_enable();
+>>>>>>> +
+>>>>>>>         /* Ensure that load happens before action based on it. */
+>>>>>>> -    if (unlikely(boottime)) {
+>>>>>>> -        /* Direct call during scheduler init and 
+>>>>>>> early_initcalls(). */
+>>>>>>> +    if (unlikely(no_wq)) {
+>>>>>>> +        /* Direct call for scheduler init, early_initcall()s, 
+>>>>>>> and incoming CPUs. */
+>>>>>>>             rcu_exp_sel_wait_wake(s);
+>>>>>>>         } else {
+>>>>>>>             /* Marshall arguments & schedule the expedited grace 
+>>>>>>> period. */
+>>>>>>> @@ -861,7 +867,7 @@ void synchronize_rcu_expedited(void)
+>>>>>>>         /* Let the next expedited grace period start. */
+>>>>>>>         mutex_unlock(&rcu_state.exp_mutex);
+>>>>>>> -    if (likely(!boottime))
+>>>>>>> +    if (likely(!no_wq))
+>>>>>>>             destroy_work_on_stack(&rew.rew_work);
+>>>>>>>     }
+>>>>>>>     EXPORT_SYMBOL_GPL(synchronize_rcu_expedited);
+>>>>>> Can we reach a condition after this change where no_wq = true and 
+>>>>>> during
+>>>>>> rcu_stall report where exp_task = 0 list and exp_mask contain 
+>>>>>> only this cpu
+>>>>>> ?
+>>>>> Hello, Mukesh, and thank you for looking this over!
+>>>>>
+>>>>> At first glance, I do not believe that this can happen because the
+>>>>> expedited grace-period machinery avoids waiting on the current CPU.
+>>>>> (See sync_rcu_exp_select_node_cpus(), both the raw_smp_processor_id()
+>>>>> early in the function and the get_cpu() later in the function.)
+>>>>>
+>>>>> But please let me know if I am missing something here.
+>>>>>
+>>>>> But suppose that we could in fact reach this condition. What bad 
+>>>>> thing
+>>>>> would happen?  Other than a resched_cpu() having been invoked several
+>>>>> times on a not-yet-online CPU, of course.  ;-)
+>>>>
+>>>> I thought more about this, what if synchronize_rcu_expedited thread 
+>>>> got
+>>>> schedule out and run on some other cpu
+>>>> and we clear out cpu on which it ran next from exp_mask.
+>>>>
+>>>> Queuing the work on same cpu ensures that it will always be right 
+>>>> cpu to
+>>>> clear out.
+>>>> Do you think this can happen ?
+>>> Indeed it might.
+>>>
+>>> But if it did, the scheduler would invoke RCU's hook, which is named
+>>> rcu_note_context_switch(), and do so on the pre-switch CPU. There are
+>>> two implementations for this function, one for CONFIG_PREEMPT=y
+>>> and another for CONFIG_PREEMPT=n.  Both look to me like they invoke
+>>> rcu_report_exp_rdp() when needed, one directly and the other via the
+>>> CONFIG_PREEMPT=n variant of rcu_qs().
+>>>
+>>> Am I missing something?
+>>>
+>>>
+>>
+>> There is a issue we are facing where exp_mask is not getting cleared 
+>> and rcu_stall report that
+>> the cpu we are waiting on sometime in idle and sometime executing 
+>> some other task but
+>> it is not clearing itself from exp_mask from a very long time and in 
+>> all the instances exp_task list is NULL.
+>
+> Can you please check whether [1] is present in your tree?
+>
+Thanks Neeraj.
+It is not there, will check the results with this patch.
 
-Have found it. Was a typo in a rebase conflict resolution...
+-Mukesh
 
-So, v14 can come now.
-
-BR and thanks,
-Nikolaus
-
+>
+>
+> Thanks
+> Neeraj
+>
+> [1] 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/kernel/rcu/tree_exp.h?h=v5.17-rc3&id=81f6d49cce2d2fe507e3fddcc4a6db021d9c2e7b
+>>
+>>     expmask = 8,     ==> cpu3
+>>
+>> [80235.522440][T12441] rcu: INFO: rcu_preempt detected expedited 
+>> stalls on CPUs/tasks: { 3-... } 9163622 jiffies s: 634705 root: 0x8/.
+>> [80235.534757][T12441] rcu: blocking rcu_node structures:
+>> [80235.540102][T12441] Task dump for CPU 3:
+>> [80235.540118][T12441] task:core_ctl        state:D stack:    0 pid: 
+>> 172 ppid:     2 flags:0x00000008
+>> [80235.540150][T12441] Call trace:
+>> [80235.540178][T12441]  __switch_to+0x2a8/0x3ac
+>> [80235.540207][T12441]  rcu_state+0x11b0/0x1480
+>>
+>>
+>> [80299.010105][T12441] rcu: INFO: rcu_preempt detected expedited 
+>> stalls on CPUs/tasks: { 3-... } 9179494 jiffies s: 634705 root: 0x8/.
+>> [80299.022623][T12441] rcu: blocking rcu_node structures:
+>> [80299.027924][T12441] Task dump for CPU 3:
+>> [80299.027942][T12441] task:swapper/3       state:R  running task 
+>> stack:    0 pid:    0 ppid:     1 flags:0x00000008
+>> [80299.027993][T12441] Call trace:
+>> [80299.028025][T12441]  __switch_to+0x2a8/0x3ac
+>> [80299.028051][T12441]  0xffffffc010113eb4
+>>
+>>
+>> As we were not seeing this earlier.
+>> Below is compile tested patch, can we do something like this  ?
+>>
+>> ==========================================><==================================================== 
+>>
+>>
+>> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+>> index 6453ac5..f0332e4 100644
+>> --- a/kernel/rcu/tree_exp.h
+>> +++ b/kernel/rcu/tree_exp.h
+>> @@ -812,10 +812,12 @@ static int rcu_print_task_exp_stall(struct 
+>> rcu_node *rnp)
+>>    */
+>>   void synchronize_rcu_expedited(void)
+>>   {
+>> -    bool no_wq;
+>> +    bool no_wq = (rcu_scheduler_active == RCU_SCHEDULER_INIT);
+>> +    bool is_active;
+>>       struct rcu_exp_work rew;
+>>       struct rcu_node *rnp;
+>>       unsigned long s;
+>> +    int next_cpu;
+>>
+>>       RCU_LOCKDEP_WARN(lock_is_held(&rcu_bh_lock_map) ||
+>>                lock_is_held(&rcu_lock_map) ||
+>> @@ -837,19 +839,28 @@ void synchronize_rcu_expedited(void)
+>>       if (exp_funnel_lock(s))
+>>           return;  /* Someone else did our work for us. */
+>>
+>> -    /* Don't use workqueue during boot or from an incoming CPU. */
+>> -    preempt_disable();
+>> -    no_wq = rcu_scheduler_active == RCU_SCHEDULER_INIT ||
+>> -        !cpumask_test_cpu(smp_processor_id(), cpu_active_mask);
+>> -    preempt_enable();
+>> -
+>>       /* Ensure that load happens before action based on it. */
+>>       if (unlikely(no_wq)) {
+>> -        /* Direct call during scheduler init, early_initcalls() and 
+>> incoming CPUs. */
+>> +        /* Direct call during scheduler init, early_initcalls(). */
+>>           rcu_exp_sel_wait_wake(s);
+>> +        mutex_unlock(&rcu_state.exp_mutex);
+>> +        return;
+>> +    }
+>> +
+>> +    preempt_disable();
+>> +    is_active = cpumask_test_cpu(smp_processor_id(), cpu_active_mask);
+>> +    preempt_enable();
+>> +
+>> +    rew.rew_s = s;
+>> +    if (!is_active) {
+>> +        INIT_WORK(&rew.rew_work, wait_rcu_exp_gp);
+>> +        next_cpu = cpumask_next(smp_processor_id(), cpu_active_mask);
+>> +        if (next_cpu >= nr_cpu_ids)
+>> +            next_cpu = cpumask_first(cpu_active_mask);
+>> +
+>> +        queue_work_on(next_cpu, rcu_gp_wq, &rew.rew_work);
+>>       } else {
+>>           /* Marshall arguments & schedule the expedited grace 
+>> period. */
+>> -        rew.rew_s = s;
+>>           INIT_WORK_ONSTACK(&rew.rew_work, wait_rcu_exp_gp);
+>>           queue_work(rcu_gp_wq, &rew.rew_work);
+>>       }
+>> @@ -863,7 +874,9 @@ void synchronize_rcu_expedited(void)
+>>       /* Let the next expedited grace period start. */
+>>       mutex_unlock(&rcu_state.exp_mutex);
+>>
+>> -    if (likely(!no_wq))
+>> +    if (likely(is_active))
+>>           destroy_work_on_stack(&rew.rew_work);
+>> +    else
+>> +        flush_work(&rew.rew_work);
+>>   }
+>>   EXPORT_SYMBOL_GPL(synchronize_rcu_expedited);

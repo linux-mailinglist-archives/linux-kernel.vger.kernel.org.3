@@ -2,77 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B064B3258
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 02:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 170384B3270
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 02:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354529AbiBLBM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 20:12:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57552 "EHLO
+        id S1354544AbiBLBc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 20:32:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234870AbiBLBMz (ORCPT
+        with ESMTP id S242868AbiBLBc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 20:12:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5E3D52;
-        Fri, 11 Feb 2022 17:12:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE79C61D49;
-        Sat, 12 Feb 2022 01:12:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E745C340E9;
-        Sat, 12 Feb 2022 01:12:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644628372;
-        bh=J+mPftWcitDa1G9pdx+wjO91eRL1CiMarVvrNyHVUVw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=itIXLyDbbdZoLxRo3JxAQKgmdp3qNL4XrapSrqR+NIL1SPZv1b6jCL7f0LlG9aq4H
-         nL2cRsDUy7UHRxjDsrHTYBDDqai+SAga+4HQ632kZ0TIuO524qoW7LF+h0D1LcZ4qP
-         feIF0qzP0Jcr/XJIlalg+Vk/V/uCtwXuM0yZ6sWZQtyr6M55YSzdUCmyFkE6KSYGjI
-         XB3JH+r88lZRmb5CqERF35wZykAsxcltyVEYjaW9JFBh9FPkt8Es0c3JNIckCXB/lO
-         5rRxmgZ7sx6qcHD35pFMlPYKVO7L+d6IqUBuqZCjXLL+L/KovkCthR0ug7SRFznjgF
-         aItQ/aO+mVvww==
-Date:   Fri, 11 Feb 2022 17:12:51 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Moshe Shemesh <moshe@nvidia.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Parav Pandit <parav@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next v2 0/4] net/mlx5: Introduce devlink param to
- disable SF aux dev probe
-Message-ID: <20220211171251.29c7c241@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <1644571221-237302-1-git-send-email-moshe@nvidia.com>
-References: <1644571221-237302-1-git-send-email-moshe@nvidia.com>
+        Fri, 11 Feb 2022 20:32:57 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E63AC56;
+        Fri, 11 Feb 2022 17:32:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644629574; x=1676165574;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wgt9cDpHFiIgyIo4vctyylP81ktaV/VnGl0eXCmjt9E=;
+  b=S7TXQRQC2Ly/96IwrthTXyFxE2GJPCExlNgurvUVKTmT7vWCnbAzNFoV
+   xBY5WYiUrfn3W0RIVkcgxqaO8swPylGw3CyQrlZpDQwkjQA8jrLdMtujf
+   5kA1fMKLAoUfCFvWPTP/YNmWlnt1OmJuLK6E8bI5Admv85KeDE8erL2it
+   7UM7/fjjwZ2HLc5Gf5KWGUx/f/rG6mEsE5hmzIzfp5gnGrshig6XYdgCr
+   F23d/SRtvhRiH9vbWlDvZhOrBSGjLIfEZMRhOnQp4RFrwYJyoC/CFZUwQ
+   UWGPblGxjcWXM/m6v+t5x0UUvmG5Cvq0W06hZZnStbj4Kbm5UPX0P/LuH
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="248672543"
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="248672543"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 17:32:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="483788681"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga003.jf.intel.com with ESMTP; 11 Feb 2022 17:32:54 -0800
+Received: from debox1-desk4.intel.com (unknown [10.212.133.77])
+        by linux.intel.com (Postfix) with ESMTP id E5EDC580C25;
+        Fri, 11 Feb 2022 17:32:53 -0800 (PST)
+From:   "David E. Box" <david.e.box@linux.intel.com>
+To:     hdegoede@redhat.com, david.e.box@linux.intel.com,
+        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        srinivas.pandruvada@intel.com, mgross@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Subject: [PATCH V7 0/3] Intel Software Defined Silicon
+Date:   Fri, 11 Feb 2022 17:32:49 -0800
+Message-Id: <20220212013252.1293396-1-david.e.box@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Feb 2022 11:20:17 +0200 Moshe Shemesh wrote:
-> v1->v2:
->  - updated example to make clear SF port and SF device creation PFs
->  - added example when SF port and device creation PFs are on different hosts
+This series adds support for Intel Software Defined Silicon. These
+patches are the same as patches 4-6 from this series [1]. Patches 1-3 
+of that series were pulled in during the 5.17 merge window.
 
-How does this address my comments?
+[1] https://lore.kernel.org/lkml/20211216023146.2361174-1-david.e.box@linux.intel.com/T/
 
-We will not define Linux APIs based on what your firmware can or 
-cannot do today. Can we somehow avoid having another frustrating
-and drawn out discussion that hinges on that point?
+David E. Box (3):
+  platform/x86: Add Intel Software Defined Silicon driver
+  tools arch x86: Add Intel SDSi provisiong tool
+  selftests: sdsi: test sysfs setup
 
-Otherwise, why the global policy and all the hoops to jump thru?
-User wants a device with a vnet, give them a device with a vnet.
+ .../ABI/testing/sysfs-driver-intel_sdsi       |  77 +++
+ MAINTAINERS                                   |   7 +
+ drivers/platform/x86/intel/Kconfig            |  12 +
+ drivers/platform/x86/intel/Makefile           |   2 +
+ drivers/platform/x86/intel/sdsi.c             | 574 ++++++++++++++++++
+ drivers/platform/x86/intel/vsec.c             |  12 +-
+ tools/arch/x86/intel_sdsi/Makefile            |   9 +
+ tools/arch/x86/intel_sdsi/sdsi.c              | 540 ++++++++++++++++
+ tools/testing/selftests/drivers/sdsi/sdsi.sh  |  18 +
+ .../selftests/drivers/sdsi/sdsi_test.py       | 226 +++++++
+ 10 files changed, 1476 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-intel_sdsi
+ create mode 100644 drivers/platform/x86/intel/sdsi.c
+ create mode 100644 tools/arch/x86/intel_sdsi/Makefile
+ create mode 100644 tools/arch/x86/intel_sdsi/sdsi.c
+ create mode 100755 tools/testing/selftests/drivers/sdsi/sdsi.sh
+ create mode 100644 tools/testing/selftests/drivers/sdsi/sdsi_test.py
 
-You left out from your steps how ESW learns that the device has 
-to be spawned. Given there's some form of communication between
-user intent and ESW the location of the two is completely irrelevant.
-You were right to treat the two cases as equivalent in the cover 
-letter for v1.
+-- 
+2.25.1
+

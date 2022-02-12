@@ -2,122 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE404B3871
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 23:47:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D99C4B3874
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 23:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232243AbiBLWr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 17:47:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58406 "EHLO
+        id S232170AbiBLW7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 17:59:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbiBLWr1 (ORCPT
+        with ESMTP id S231432AbiBLW7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 17:47:27 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7367F23BD6
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 14:47:23 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id g15-20020a92520f000000b002bec6a02012so3076842ilb.18
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 14:47:23 -0800 (PST)
+        Sat, 12 Feb 2022 17:59:23 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F645C35A
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 14:59:18 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id a42so1914741ljq.13
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 14:59:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=SEcNjOSXP8wGpHSIQOVacqlW5iquJAh9dHc2B4bb5SE=;
+        b=mp5FozxriUB5rEnGupdE+VP9Ju52rDZM2AIbr2BYR+zkHL1alcb9/aOwb9mpqXijIr
+         A2dmPS77YSJvkJrzKgpV4uU44cRgQs1Ru+Wg2Chf0tmRFSIPCGFJsdCGGMGKXdYs+YJk
+         j5kH0KQ6q1n6T43lPLmIm+0hyfIcIgCerNHZGX5VcqCgybPPmUUO3fVdHjyiHSnc9XJe
+         QTT0NPG2tcSJ3VLLeWO0OEB02ynoQjEjiXtpMzpeVlGMYyXpMz1mLrAOpM6hKNf9+z0U
+         sw3sH0xT2LL0DwkET9dxCFPET9crFVa1WlJhf5N0APXjtimaaSt/1s/PPZmx/fe7050T
+         Wh3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=P2jL7sQj/TjQng7PKMAkeDTbtim/XRQtA01kz0TN724=;
-        b=2Sd1P7/K3nyHtygLa9lmEoCMGIvBcAVBCuzlHjiU3uzdn9656afIXzjynzM+2lIc9U
-         Jp4UzXj5HZ1efFhmRPg452gWCtZ/NwSleSon/2Ph/GglnZv/zpnlNUbi6CELX/wWYXs4
-         +5R0yLmouiOJeWxF7L+m1J3lQmdXOEfj5PcPC/qWpbw2bD2SBrfkPtVSq1FoNwP9GiDS
-         ORe+926DKOVpR9O85X3tk+T2yDfzSwxmQyFFwAeLdV0p4mJcl+0YFxnR2kFiZUAV9362
-         EvRFyvrLDLRelT8hOjcmH+bJwuI3b/U87dGb0cvE+1DoyugmM/jlEJImT5151Ksbcgtl
-         Zn0g==
-X-Gm-Message-State: AOAM533a1mRbObbhX671FU7lc5Gbuz1ZakXK+6sJ7FdJOAyo9ack4q9h
-        AT/49a2fp5Ii3AtQ+SSWojEawCMrpUOe8bDjHyyH2YX1gmYQ
-X-Google-Smtp-Source: ABdhPJzYFI6mQUpc72tbVCAcFfNBWcmMCEo8fuxfc/6Lc9bJZ0i5JB6ueuzKE6M7SySVfHYDwJiwU1JMb7DLEwuxIqpE+Z3hbmYP
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=SEcNjOSXP8wGpHSIQOVacqlW5iquJAh9dHc2B4bb5SE=;
+        b=eDIdbMpFgI/wPil+AG2S48UMQiNCypDn6QCRYqL/fQTtXrXnEKqnmtUu6GEJCIBNyz
+         UTp3eqJ1DI9DkcIRoXR7VHcaSoMT8q57DmJSy8+crbn7T04E84oohmQK7oAsy/80kKFa
+         oyehdo/GuRn/H+NGdAM5a5D44fUWY2UKqg9wGgec3eVyrNV0vk3JA5zWKYbA7gtUlypC
+         SqFBWNpnJPykZcwLNc2TBsbLJipzSuOE/N76/LwpS3UyDrTjSCBoNJTm1HVq8BbtmHHo
+         6YZWnxJRLGXYPj7NaAGHVje8CdIwhrsKQe8EGwWGaAwlg1ZTpLVglMhkMWC9x/22IBQ+
+         fVdA==
+X-Gm-Message-State: AOAM532PWM5ZyHbeXLjbonB08SFsShHBqz0BcYOAtmqEmOJn2XlaA71t
+        ByyH+2EVZ4Tu2flBWGDsBaeHdhU0CMQoLcYT2l8=
+X-Google-Smtp-Source: ABdhPJwIH/BcWwAZgshczFZrwvk4RLtP2XYJLunHucMtr9vF3xtveEXvmpzqBnKsPpqmRmm1IwHAgfyAEgZpYFaPZiQ=
+X-Received: by 2002:a05:651c:1a2c:: with SMTP id by44mr4605610ljb.319.1644706757138;
+ Sat, 12 Feb 2022 14:59:17 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a92:bd08:: with SMTP id c8mr4213452ile.110.1644706042783;
- Sat, 12 Feb 2022 14:47:22 -0800 (PST)
-Date:   Sat, 12 Feb 2022 14:47:22 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000070ac6505d7d9f7a8@google.com>
-Subject: [syzbot] kernel BUG in vhost_get_vq_desc
-From:   syzbot <syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com>
-To:     jasowang@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org
+Sender: michealkevin122@gmail.com
+Received: by 2002:ac2:5df4:0:0:0:0:0 with HTTP; Sat, 12 Feb 2022 14:59:16
+ -0800 (PST)
+From:   Aisha Al-Qaddafi <aisha.gdaff21@gmail.com>
+Date:   Sat, 12 Feb 2022 14:59:16 -0800
+X-Google-Sender-Auth: Uc0nCAEtdT7LkONoiZZEoXuhjXY
+Message-ID: <CAKC2Uf6=ZYCeVRgVWJ6Pk7F0dqw4USNDB6r=dutLJ25KD4md1A@mail.gmail.com>
+Subject: Your Urgent Reply Will Be Appreciated
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,MONEY_FRAUD_5,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    83e396641110 Merge tag 'soc-fixes-5.17-1' of git://git.ker..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1282df74700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5707221760c00a20
-dashboard link: https://syzkaller.appspot.com/bug?extid=3140b17cb44a7b174008
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-kernel BUG at drivers/vhost/vhost.c:2335!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 9449 Comm: vhost-9447 Not tainted 5.17.0-rc3-syzkaller-00247-g83e396641110 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:vhost_get_vq_desc+0x1d43/0x22c0 drivers/vhost/vhost.c:2335
-Code: 00 00 00 48 c7 c6 00 ac 9c 8a 48 c7 c7 28 27 8e 8d 48 89 ca 48 c1 e1 04 48 01 d9 e8 77 23 29 fd e9 74 ff ff ff e8 bd 3f a3 fa <0f> 0b e8 b6 3f a3 fa 48 8b 54 24 18 48 b8 00 00 00 00 00 fc ff df
-RSP: 0018:ffffc9000f527b88 EFLAGS: 00010212
-
-RAX: 0000000000000133 RBX: 0000000000000001 RCX: ffffc9000ef65000
-RDX: 0000000000040000 RSI: ffffffff86d46e33 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff86d45f2c R11: 0000000000000000 R12: ffff88802bac4d68
-R13: 0000000000000000 R14: dffffc0000000000 R15: ffff88802bac4bb0
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f6c74f8a718 CR3: 000000002bb11000 CR4: 00000000003526e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- vhost_vsock_handle_tx_kick+0x277/0xa20 drivers/vhost/vsock.c:522
- vhost_worker+0x23d/0x3d0 drivers/vhost/vhost.c:372
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:vhost_get_vq_desc+0x1d43/0x22c0 drivers/vhost/vhost.c:2335
-Code: 00 00 00 48 c7 c6 00 ac 9c 8a 48 c7 c7 28 27 8e 8d 48 89 ca 48 c1 e1 04 48 01 d9 e8 77 23 29 fd e9 74 ff ff ff e8 bd 3f a3 fa <0f> 0b e8 b6 3f a3 fa 48 8b 54 24 18 48 b8 00 00 00 00 00 fc ff df
-RSP: 0018:ffffc9000f527b88 EFLAGS: 00010212
-
-RAX: 0000000000000133 RBX: 0000000000000001 RCX: ffffc9000ef65000
-RDX: 0000000000040000 RSI: ffffffff86d46e33 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff86d45f2c R11: 0000000000000000 R12: ffff88802bac4d68
-R13: 0000000000000000 R14: dffffc0000000000 R15: ffff88802bac4bb0
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f6c7679a1b8 CR3: 000000002bb11000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Assalamu Alaikum Wa Rahmatullahi Wa Barakatuh
+I came across your e-mail contact prior a private search while in need
+of your assistance. I am Aisha Al-Qaddafi, the only biological
+Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
+single Mother and a Widow with three Children.
+I have investment funds worth Twenty Seven Million Five Hundred
+Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
+investment Manager/Partner because of my current refugee status,
+however, I am interested in you for investment project assistance in
+your country, may be from there, we can build business relationship in
+the nearest future.
+I am willing to negotiate investment/business profit sharing ratio
+with you base on the future investment earning profits.
+If you are willing to handle this project on my behalf kindly reply
+urgent to enable me provide you more information about the investment
+funds.

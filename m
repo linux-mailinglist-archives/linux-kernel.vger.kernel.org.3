@@ -2,151 +2,362 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 021DA4B32FF
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 05:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3104B3307
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 06:08:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiBLEor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 23:44:47 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54840 "EHLO
+        id S230088AbiBLFDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 00:03:40 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiBLEop (ORCPT
+        with ESMTP id S229468AbiBLFDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 23:44:45 -0500
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C752428E20
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 20:44:41 -0800 (PST)
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220212044438epoutp04b33a252530475541e55c313e89472d48~S8FjdDfPz1728517285epoutp04X
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 04:44:38 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220212044438epoutp04b33a252530475541e55c313e89472d48~S8FjdDfPz1728517285epoutp04X
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1644641078;
-        bh=dmeKw7sjrH1sYaJQ8rlULXmQM6GP+l0eHhvgAaKtwxc=;
-        h=From:To:In-Reply-To:Subject:Date:References:From;
-        b=CXSyOhb7mmBL1OHHOk4LZlEpiI0qfH3maqQo86aPqP6Zn/gjy1l6sfP/eFfNMhJOW
-         ioWZUl1RvQOXLPyojO9L+64OciH99iPlVTZBfdHkHsDLLtA+PauNLzwJc3v/6UN+Ro
-         bAYw83r35aN7jKUU0qMpmnMRwgsp5guTdgULJKMY=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20220212044437epcas2p1701d7d5aaf742f35af1fa19caaab2576~S8Fie8Pef1074010740epcas2p1s;
-        Sat, 12 Feb 2022 04:44:37 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.92]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4JwdDz5hKHz4x9Py; Sat, 12 Feb
-        2022 04:44:35 +0000 (GMT)
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        DA.65.51767.33B37026; Sat, 12 Feb 2022 13:44:35 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220212044434epcas2p169d006abc79a6cdcc8eb818231b577fc~S8FgHH7NG1074010740epcas2p1r;
-        Sat, 12 Feb 2022 04:44:34 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220212044434epsmtrp246eeb06fbededf509aa03c48436f9a7d~S8FgDacb72824128241epsmtrp2Z;
-        Sat, 12 Feb 2022 04:44:34 +0000 (GMT)
-X-AuditID: b6c32a45-447ff7000000ca37-62-62073b33d111
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        44.82.08738.23B37026; Sat, 12 Feb 2022 13:44:34 +0900 (KST)
-Received: from KORCO011456 (unknown [10.229.18.123]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220212044434epsmtip27396de9a97e31c2b074121975d52912a~S8Ff1m9oc1836618366epsmtip2i;
-        Sat, 12 Feb 2022 04:44:34 +0000 (GMT)
-From:   "Kiwoong Kim" <kwmad.kim@samsung.com>
-To:     "'Adrian Hunter'" <adrian.hunter@intel.com>,
-        "'Avri Altman'" <Avri.Altman@wdc.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <beanhuo@micron.com>,
-        <cang@codeaurora.org>, <sc.suh@samsung.com>,
-        <hy50.seo@samsung.com>, <sh425.lee@samsung.com>,
-        <bhoon95.kim@samsung.com>, <vkumar.1997@samsung.com>
-In-Reply-To: <3f2938f7-2a9e-60e8-5237-fe7ebc3b4296@intel.com>
-Subject: RE: [PATCH v1] scsi: ufs: remove clk_scaling_lock when clkscaling
- isn't supported.
-Date:   Sat, 12 Feb 2022 13:44:34 +0900
-Message-ID: <000001d81fcb$3b962f30$b2c28d90$@samsung.com>
+        Sat, 12 Feb 2022 00:03:35 -0500
+Received: from relay.hostedemail.com (relay.hostedemail.com [64.99.140.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121B6216
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Feb 2022 21:03:31 -0800 (PST)
+Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay10.hostedemail.com (Postfix) with ESMTP id B59E31965;
+        Sat, 12 Feb 2022 05:01:45 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf15.hostedemail.com (Postfix) with ESMTPA id B903024;
+        Sat, 12 Feb 2022 05:01:23 +0000 (UTC)
+Message-ID: <200fe5cb203ad5cc00c5c60b7ded2cd85c9b85ea.camel@perches.com>
+Subject: Re: [PATCH v2] ACPI/IORT: Fix GCC 12 warning
+From:   Joe Perches <joe@perches.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Victor Erminpour <victor.erminpour@oracle.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        trivial@kernel.org
+In-Reply-To: <202202111623.A7881CC@keescook>
+References: <1644518851-16847-1-git-send-email-victor.erminpour@oracle.com>
+         <CAMj1kXEbGWs74M2CZSm6TWpD11mReFsk8z-UUqJt6b6vDCvAEQ@mail.gmail.com>
+         <202202101415.43750CEE@keescook>
+         <3740c93e-9fde-f89f-9752-26ffff3ea274@arm.com>
+         <202202111623.A7881CC@keescook>
+Content-Type: text/plain; charset="ISO-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQI4IgZMS69T+T+3eQm0GbWo6Fi0ygFitYZoAa2Aj1kCJc0N+wFVhb0mq5rz/jA=
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrBJsWRmVeSWpSXmKPExsWy7bCmma6xNXuSwcunahYnn6xhs3gwbxub
-        xcufV9ksDj7sZLH4uvQZq8Wn9ctYLVYvfsBisejGNiaLy7vmsFl0X9/BZrH8+D8mi667Nxgt
-        lv57y2Jx5/5HFgc+j8t9vUwei/e8ZPKYsOgAo8f39R1sHh+f3mLx6NuyitHj8yY5j/YD3UwB
-        HFHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2Si4+AbpumTlAhysp
-        lCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCswL9IoTc4tL89L18lJLrAwNDIxMgQoT
-        sjMWvFjIWjCVteLR5tMsDYz/mbsYOTkkBEwktvXOYgWxhQR2MEoc2c/fxcgFZH9ilNh99jgr
-        hPOZUeLKns3sMB1X+88yQiR2MUps65sDVfWSUWLZi7Ngs9gEtCWmPdwNlhARmMksMWHLIbAE
-        p4CtxNd3fUwgtrBArMSN7dfZQGwWAVWJmXvegx3FK2ApMXf7EihbUOLkzCcsIDYz0NBlC19D
-        Ha4g8fPpMrCZIgJ+Eh//tkPViEjM7mxjBlksIXCGQ+LP9rtQd7tIbN51hgXCFpZ4dXwLVFxK
-        4vO7vUBHcADZxRKb9slD9DYwSiz5tBmq3lhi1rN2RpAaZgFNifW79CHKlSWO3IJayyfRcfgv
-        O0SYV6KjTQiiUVni16TJjBC2pMTMm3egSjwkOhdlTWBUnIXkx1lIfpyF5JdZCGsXMLKsYhRL
-        LSjOTU8tNiowhMd1cn7uJkZwktZy3cE4+e0HvUOMTByMhxglOJiVRHhX3GBNEuJNSaysSi3K
-        jy8qzUktPsRoCgz1icxSosn5wDyRVxJvaGJpYGJmZmhuZGpgriTO65WyIVFIID2xJDU7NbUg
-        tQimj4mDU6qB6WRF3K1Y2zdGM+bMm3qTTdLXMjD/lPEZ/fWf7fnydyue1Fn56/Kdy6UzQ09V
-        HDoj89lvgcUpBznnUs+eWT8OLP7h0+3ylSv5j/rZNafZyjLst7g/mXLvRfD12a5VJ+qXlxqn
-        avIEKrzexdN01mB+ftrMFYeWVGpttV8T4e3gpnbx7C8T7e7VsSwHvjW8XijpwvZvpXNs8NPX
-        wSLNETF6PZEbrG317pnvn3ZonjDX6X5Hxn7Xi8Yn+mapTuvNqm+78CNb1IdDt+FtmRhrZA2n
-        CL/1l7Uv5So/5H4/5hIS7c9y7v+ulGvlMr42mor/Z/cXT6l65h5ycs0mwXXFK+4tq/C/yhX2
-        tV3tc/E03jVBSizFGYmGWsxFxYkAzGoKflsEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNIsWRmVeSWpSXmKPExsWy7bCSvK6RNXuSwZ8+KYuTT9awWTyYt43N
-        4uXPq2wWBx92slh8XfqM1eLT+mWsFqsXP2CxWHRjG5PF5V1z2Cy6r+9gs1h+/B+TRdfdG4wW
-        S/+9ZbG4c/8jiwOfx+W+XiaPxXteMnlMWHSA0eP7+g42j49Pb7F49G1ZxejxeZOcR/uBbqYA
-        jigum5TUnMyy1CJ9uwSujF8f9jAXzGCt+HnhPksDYwNLFyMnh4SAicTV/rOMXYxcHEICOxgl
-        nl+fyQ6RkJQ4sfM5I4QtLHG/5QgrRNFzRok1RxawgiTYBLQlpj3cDZYQEVjOLHFu1yMWiKrj
-        TBIXet+DtXMK2Ep8fdfHBGILC0RLbJ/wE8xmEVCVmLnnPTOIzStgKTF3+xIoW1Di5MwnYPcx
-        A214evMpnL1s4WtmiJMUJH4+XQZ2hYiAn8THv+1QNSISszvbmCcwCs1CMmoWklGzkIyahaRl
-        ASPLKkbJ1ILi3PTcYsMCo7zUcr3ixNzi0rx0veT83E2M4PjU0trBuGfVB71DjEwcjIcYJTiY
-        lUR4V9xgTRLiTUmsrEotyo8vKs1JLT7EKM3BoiTOe6HrZLyQQHpiSWp2ampBahFMlomDU6qB
-        qfVFmujPY8eq/j5T0Zx5/9KytMp3nPt+mF/4188jvtJnv1Vm67drpw64/Nd+8fPV4ZSS2+9F
-        P528/CNg6rSbXu9uvm08JPvHpo1TsdOXmedLZ8PCTt0FFzl0DlZv1mz16HjVeTVtXVbz8hf2
-        xeFpu951CKt+t9jPmcI3YZr2me5D0TfWWGlFm3gtaDn7smHb5YcXc1S+xgZbHPrg8VP+gXKz
-        e3jsZI633BN/bAvM7ntZJVz78oHNv3utq03u9QZxK/PXaNvu0dx60DNYwMxHKP2Lzt72+fZT
-        W1Kvxn3J7agw1br/+OYZA9O/c/kXdDyY8/lkuYJ47Wr39OYVZTv8bbYJKYnV176a8+zN3PdO
-        iUosxRmJhlrMRcWJAJWhqpY+AwAA
-X-CMS-MailID: 20220212044434epcas2p169d006abc79a6cdcc8eb818231b577fc
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220205074128epcas2p40901c37a7328e825d8697f8d3269edba
-References: <CGME20220205074128epcas2p40901c37a7328e825d8697f8d3269edba@epcas2p4.samsung.com>
-        <1644046760-83345-1-git-send-email-kwmad.kim@samsung.com>
-        <DM6PR04MB657519E60FAFA19434531CE2FC2B9@DM6PR04MB6575.namprd04.prod.outlook.com>
-        <007101d81eed$4d120a60$e7361f20$@samsung.com>
-        <3f2938f7-2a9e-60e8-5237-fe7ebc3b4296@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Fri, 11 Feb 2022 20:50:50 -0800
+User-Agent: Evolution 3.40.4-1ubuntu2 
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: 413wozmcznkzcybfhmyndqnq59394nsr
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: B903024
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/dkyNDhmaVSlCq1xV4VtNvOU1aeYRw6bs=
+X-HE-Tag: 1644642083-485617
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> The error handler really should have exclusive access.  One of the places
-> you change does explain that:
->=20
->  		 * Hold the scaling lock just in case dev cmds
->  		 * are sent via bsg and/or sysfs.
->  		 */
-> -		down_write(&hba->clk_scaling_lock);
-> +		if (ufshcd_is_clkscaling_supported(hba))
-> +			down_write(&hba->clk_scaling_lock);=20
+On Fri, 2022-02-11 at 16:37 -0800, Kees Cook wrote:
+[]
+> Well, I'm for #1, though perhaps with a more narrow view: some semantics
+> are just weird/surprising. ;) Until I first encountered this warning a
+> few years ago when working on GCC_PLUGIN_STRUCTLEAK_BYREF_ALL, I didn't
+> even know putting declarations there was valid C. ;)
+> 
+> Whack-a-mole is part of the work to make these kinds of treewide
+> changes, but the hope is to find as much of it ahead of time as
+> possible. And, no, I have no interest in security theater. (Not
+> everything has equal levels of effectiveness, of course, but I don't
+> think that's what you're saying.)
+> 
+> > In fairness I'd have no objection to that patch if it came with a convincing
+> > justification, but that is so far very much lacking. My aim here is not to
+> > be a change-averse Luddite, but to try to find a compromise where I can
+> > actually have some confidence in such changes being made. Let's not start
+> > pretending that 3 100ml bottles of shampoo are somehow "safer" than a 300ml
+> > bottle of shampoo...
+> 
+> Sure. I think I am trying to take a pragmatic approach here, which is
+> that gaining auto-var-init is a big deal (killing entire classes of
+> vulnerabilities), but it comes with an annoying compiler bug (that we do
+> get a warning about) for an uncommon code pattern that is easy to fix.
+> So rather than delaying the defense until the sharp edge on the compiler
+> gets fixed, I'd like to get the rest rolling while the edge is filed.
 
+coccinelle would probably find most all of them.
 
-Yeah.., I saw the comment but didn't get why.
+$ cat switch_define.cocci
+@@
+expression e;
+type t;
+identifier i;
+@@
 
-Is there anyone who knows why it's necessary for all SoCs?
-At lease, I know there is no reason to forbid concurrent executions of dev =
-cmd and power mode change.
-
-If there's nothing, how about adding a quick to ignore it?
-
-Thanks.
-Kiwoong Kim
+	switch (e) {
+*	t i;
+	}
+	
+$ spatch --very-quiet -sp-file switch_define.cocci .
+13831 files match
+diff -u -p ./arch/arc/kernel/unwind.c /tmp/nothing/arch/arc/kernel/unwind.c
+--- ./arch/arc/kernel/unwind.c
++++ /tmp/nothing/arch/arc/kernel/unwind.c
+@@ -718,7 +718,6 @@ static int processCFI(const u8 *start, c
+ 	}
+ 	for (ptr.p8 = start; result && ptr.p8 < end;) {
+ 		switch (*ptr.p8 >> 6) {
+-			uleb128_t value;
+ 
+ 		case 0:
+ 			opcode = *ptr.p8++;
+diff -u -p ./arch/arm/kernel/module-plts.c /tmp/nothing/arch/arm/kernel/module-plts.c
+--- ./arch/arm/kernel/module-plts.c
++++ /tmp/nothing/arch/arm/kernel/module-plts.c
+@@ -124,7 +124,6 @@ static bool is_zero_addend_relocation(El
+ 	 * PC bias into account, i.e., -8 for ARM and -4 for Thumb2.
+ 	 */
+ 	switch (ELF32_R_TYPE(rel->r_info)) {
+-		u16 upper, lower;
+ 
+ 	case R_ARM_THM_CALL:
+ 	case R_ARM_THM_JUMP24:
+diff -u -p ./arch/mips/mti-malta/malta-init.c /tmp/nothing/arch/mips/mti-malta/malta-init.c
+--- ./arch/mips/mti-malta/malta-init.c
++++ /tmp/nothing/arch/mips/mti-malta/malta-init.c
+@@ -168,7 +168,6 @@ void __init prom_init(void)
+ 	}
+ 
+ 	switch (mips_revision_sconid) {
+-		u32 start, map, mask, data;
+ 
+ 	case MIPS_REVISION_SCON_GT64120:
+ 		/*
+diff -u -p ./arch/parisc/kernel/inventory.c /tmp/nothing/arch/parisc/kernel/inventory.c
+--- ./arch/parisc/kernel/inventory.c
++++ /tmp/nothing/arch/parisc/kernel/inventory.c
+@@ -235,7 +235,6 @@ pat_query_module(ulong pcell_loc, ulong
+ #ifdef DEBUG_PAT
+ 	/* dump what we see so far... */
+ 	switch (PAT_GET_ENTITY(dev->mod_info)) {
+-		pdc_pat_cell_mod_maddr_block_t io_pdc_cell;
+ 		unsigned long i;
+ 
+ 	case PAT_ENTITY_PROC:
+diff -u -p ./arch/powerpc/xmon/xmon.c /tmp/nothing/arch/powerpc/xmon/xmon.c
+--- ./arch/powerpc/xmon/xmon.c
++++ /tmp/nothing/arch/powerpc/xmon/xmon.c
+@@ -1528,7 +1528,6 @@ bpt_cmds(void)
+ 	cmd = inchar();
+ 
+ 	switch (cmd) {
+-	static const char badaddr[] = "Only kernel addresses are permitted for breakpoints\n";
+ 	int mode;
+ 	case 'd':	/* bd - hardware data breakpoint */
+ 		if (xmon_is_ro) {
+diff -u -p ./arch/um/drivers/ubd_kern.c /tmp/nothing/arch/um/drivers/ubd_kern.c
+--- ./arch/um/drivers/ubd_kern.c
++++ /tmp/nothing/arch/um/drivers/ubd_kern.c
+@@ -1407,7 +1407,6 @@ static int ubd_ioctl(struct block_device
+ 	u16 ubd_id[ATA_ID_WORDS];
+ 
+ 	switch (cmd) {
+-		struct cdrom_volctrl volume;
+ 	case HDIO_GET_IDENTITY:
+ 		memset(&ubd_id, 0, ATA_ID_WORDS * 2);
+ 		ubd_id[ATA_ID_CYLS]	= ubd_dev->size / (128 * 32 * 512);
+diff -u -p ./arch/x86/kernel/cpu/cyrix.c /tmp/nothing/arch/x86/kernel/cpu/cyrix.c
+--- ./arch/x86/kernel/cpu/cyrix.c
++++ /tmp/nothing/arch/x86/kernel/cpu/cyrix.c
+@@ -224,7 +224,6 @@ static void init_cyrix(struct cpuinfo_x8
+ 	 */
+ 
+ 	switch (dir0_msn) {
+-		unsigned char tmp;
+ 
+ 	case 0: /* Cx486SLC/DLC/SRx/DRx */
+ 		p = Cx486_name[dir0_lsn & 7];
+diff -u -p ./arch/x86/pci/irq.c /tmp/nothing/arch/x86/pci/irq.c
+--- ./arch/x86/pci/irq.c
++++ /tmp/nothing/arch/x86/pci/irq.c
+@@ -959,7 +959,6 @@ static __init int intel_router_probe(str
+ 		return 0;
+ 
+ 	switch (device) {
+-		u8 rid;
+ 	case PCI_DEVICE_ID_INTEL_82375:
+ 		r->name = "PCEB/ESC";
+ 		r->get = pirq_esc_get;
+diff -u -p ./drivers/acpi/arm64/iort.c /tmp/nothing/drivers/acpi/arm64/iort.c
+--- ./drivers/acpi/arm64/iort.c
++++ /tmp/nothing/drivers/acpi/arm64/iort.c
+@@ -1667,7 +1667,6 @@ phys_addr_t __init acpi_iort_dma_get_max
+ 			break;
+ 
+ 		switch (node->type) {
+-			struct acpi_iort_named_component *ncomp;
+ 			struct acpi_iort_root_complex *rc;
+ 			phys_addr_t local_limit;
+ 
+diff -u -p ./drivers/infiniband/hw/irdma/hw.c /tmp/nothing/drivers/infiniband/hw/irdma/hw.c
+--- ./drivers/infiniband/hw/irdma/hw.c
++++ /tmp/nothing/drivers/infiniband/hw/irdma/hw.c
+@@ -267,7 +267,6 @@ static void irdma_process_aeq(struct ird
+ 		}
+ 
+ 		switch (info->ae_id) {
+-			struct irdma_cm_node *cm_node;
+ 		case IRDMA_AE_LLP_CONNECTION_ESTABLISHED:
+ 			cm_node = iwqp->cm_node;
+ 			if (cm_node->accept_pend) {
+diff -u -p ./drivers/infiniband/hw/irdma/utils.c /tmp/nothing/drivers/infiniband/hw/irdma/utils.c
+--- ./drivers/infiniband/hw/irdma/utils.c
++++ /tmp/nothing/drivers/infiniband/hw/irdma/utils.c
+@@ -1212,7 +1212,6 @@ enum irdma_status_code irdma_hw_modify_q
+ 			return status;
+ 
+ 		switch (m_info->next_iwarp_state) {
+-			struct irdma_gen_ae_info ae_info;
+ 
+ 		case IRDMA_QP_STATE_RTS:
+ 		case IRDMA_QP_STATE_IDLE:
+diff -u -p ./drivers/input/serio/hil_mlc.c /tmp/nothing/drivers/input/serio/hil_mlc.c
+--- ./drivers/input/serio/hil_mlc.c
++++ /tmp/nothing/drivers/input/serio/hil_mlc.c
+@@ -633,7 +633,6 @@ static int hilse_donode(hil_mlc *mlc)
+ 	node = hil_mlc_se + mlc->seidx;
+ 
+ 	switch (node->act) {
+-		int rc;
+ 		hil_packet pack;
+ 
+ 	case HILSE_FUNC:
+diff -u -p ./drivers/rtc/rtc-pcf8523.c /tmp/nothing/drivers/rtc/rtc-pcf8523.c
+--- ./drivers/rtc/rtc-pcf8523.c
++++ /tmp/nothing/drivers/rtc/rtc-pcf8523.c
+@@ -242,7 +242,6 @@ static int pcf8523_param_get(struct devi
+ 	int ret;
+ 
+ 	switch(param->param) {
+-		u32 value;
+ 
+ 	case RTC_PARAM_BACKUP_SWITCH_MODE:
+ 		ret = regmap_read(pcf8523->regmap, PCF8523_REG_CONTROL3, &value);
+@@ -281,7 +280,6 @@ static int pcf8523_param_set(struct devi
+ 	struct pcf8523 *pcf8523 = dev_get_drvdata(dev);
+ 
+ 	switch(param->param) {
+-		u8 mode;
+ 	case RTC_PARAM_BACKUP_SWITCH_MODE:
+ 		switch (param->uvalue) {
+ 		case RTC_BSM_DISABLED:
+diff -u -p ./drivers/rtc/rtc-rv3028.c /tmp/nothing/drivers/rtc/rtc-rv3028.c
+--- ./drivers/rtc/rtc-rv3028.c
++++ /tmp/nothing/drivers/rtc/rtc-rv3028.c
+@@ -523,7 +523,6 @@ static int rv3028_param_get(struct devic
+ 	int ret;
+ 
+ 	switch(param->param) {
+-		u32 value;
+ 
+ 	case RTC_PARAM_BACKUP_SWITCH_MODE:
+ 		ret = regmap_read(rv3028->regmap, RV3028_BACKUP, &value);
+@@ -556,7 +555,6 @@ static int rv3028_param_set(struct devic
+ 	struct rv3028_data *rv3028 = dev_get_drvdata(dev);
+ 
+ 	switch(param->param) {
+-		u8 mode;
+ 	case RTC_PARAM_BACKUP_SWITCH_MODE:
+ 		switch (param->uvalue) {
+ 		case RTC_BSM_DISABLED:
+diff -u -p ./drivers/rtc/rtc-rv3032.c /tmp/nothing/drivers/rtc/rtc-rv3032.c
+--- ./drivers/rtc/rtc-rv3032.c
++++ /tmp/nothing/drivers/rtc/rtc-rv3032.c
+@@ -401,7 +401,6 @@ static int rv3032_param_get(struct devic
+ 	int ret;
+ 
+ 	switch(param->param) {
+-		u32 value;
+ 
+ 	case RTC_PARAM_BACKUP_SWITCH_MODE:
+ 		ret = regmap_read(rv3032->regmap, RV3032_PMU, &value);
+@@ -435,7 +434,6 @@ static int rv3032_param_set(struct devic
+ 	struct rv3032_data *rv3032 = dev_get_drvdata(dev);
+ 
+ 	switch(param->param) {
+-		u8 mode;
+ 	case RTC_PARAM_BACKUP_SWITCH_MODE:
+ 		if (rv3032->trickle_charger_set)
+ 			return -EINVAL;
+diff -u -p ./drivers/s390/net/ctcm_fsms.c /tmp/nothing/drivers/s390/net/ctcm_fsms.c
+--- ./drivers/s390/net/ctcm_fsms.c
++++ /tmp/nothing/drivers/s390/net/ctcm_fsms.c
+@@ -1432,7 +1432,6 @@ static void ctcmpc_chx_rx(fsm_instance *
+ 
+ again:
+ 	switch (fsm_getstate(grp->fsm)) {
+-	int rc, dolock;
+ 	case MPCG_STATE_FLOWC:
+ 	case MPCG_STATE_READY:
+ 		if (ctcm_checkalloc_buffer(ch))
+diff -u -p ./lib/test_stackinit.c /tmp/nothing/lib/test_stackinit.c
+--- ./lib/test_stackinit.c
++++ /tmp/nothing/lib/test_stackinit.c
+@@ -398,7 +398,6 @@ static int noinline __leaf_switch_none(i
+ 		 * This is intentionally unreachable. To silence the
+ 		 * warning, build with -Wno-switch-unreachable
+ 		 */
+-		uint64_t var;
+ 
+ 	case 1:
+ 		target_start = &var;
+diff -u -p ./net/mpls/af_mpls.c /tmp/nothing/net/mpls/af_mpls.c
+--- ./net/mpls/af_mpls.c
++++ /tmp/nothing/net/mpls/af_mpls.c
+@@ -1621,7 +1621,6 @@ static int mpls_dev_notify(struct notifi
+ 		return NOTIFY_OK;
+ 
+ 	switch (event) {
+-		int err;
+ 
+ 	case NETDEV_DOWN:
+ 		err = mpls_ifdown(dev, event);
+diff -u -p ./scripts/recordmcount.c /tmp/nothing/scripts/recordmcount.c
+--- ./scripts/recordmcount.c
++++ /tmp/nothing/scripts/recordmcount.c
+@@ -488,7 +488,6 @@ static int do_file(char const *const fna
+ 	w2 = w2nat;
+ 	w8 = w8nat;
+ 	switch (ehdr->e_ident[EI_DATA]) {
+-		static unsigned int const endian = 1;
+ 	default:
+ 		fprintf(stderr, "unrecognized ELF data encoding %d: %s\n",
+ 			ehdr->e_ident[EI_DATA], fname);
+diff -u -p ./tools/testing/selftests/powerpc/nx-gzip/gunz_test.c /tmp/nothing/tools/testing/selftests/powerpc/nx-gzip/gunz_test.c
+--- ./tools/testing/selftests/powerpc/nx-gzip/gunz_test.c
++++ /tmp/nothing/tools/testing/selftests/powerpc/nx-gzip/gunz_test.c
+@@ -805,7 +805,6 @@ ok_cc3:
+ 	 */
+ 
+ 	switch (sfbt) {
+-		int dhtlen;
+ 
+ 	case 0x0: /* Deflate final EOB received */
+ 
+diff -u -p ./tools/testing/selftests/proc/read.c /tmp/nothing/tools/testing/selftests/proc/read.c
+--- ./tools/testing/selftests/proc/read.c
++++ /tmp/nothing/tools/testing/selftests/proc/read.c
+@@ -91,7 +91,6 @@ static void f(DIR *d, unsigned int level
+ 		assert(!streq(de->d_name, ".."));
+ 
+ 		switch (de->d_type) {
+-			DIR *dd;
+ 			int fd;
+ 
+ 		case DT_REG:
+$ 
 

@@ -2,144 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18E4F4B384A
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 22:59:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42AEE4B384D
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 23:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiBLV6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 16:58:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60782 "EHLO
+        id S230082AbiBLWFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 17:05:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiBLV6y (ORCPT
+        with ESMTP id S229981AbiBLWFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 16:58:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DD6A606FF
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 13:58:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644703127;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=A2Cw52X1+qOYmJurqYnkoU4CLJrh/MQPlo1UwPWCQTo=;
-        b=f1MAdAQq6PjZvggrU8IDNMa+HoHEV86HnYCWVlz4qJbW5j/QR9X+s4l4WLZmz/F180Wj7H
-        92qQVZRvwKsh8gZIe8PGpabIGB04C6l6ZgvikDBYzeiC3Q7q/QTONwZfUnLqNIFCXelLGm
-        GTZ3E9KPxrD1KB+3SpPnVJ7/1gIjPXE=
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
- [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-19-aY44fn5GMTmQHlrUuhb1Yw-1; Sat, 12 Feb 2022 16:58:46 -0500
-X-MC-Unique: aY44fn5GMTmQHlrUuhb1Yw-1
-Received: by mail-yb1-f198.google.com with SMTP id q11-20020a252a0b000000b0061e240c8fb3so22661219ybq.22
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 13:58:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=A2Cw52X1+qOYmJurqYnkoU4CLJrh/MQPlo1UwPWCQTo=;
-        b=3DnSAVSdHVH3NwlYDrbhEjVRxsmMjKeYsweBAU0xA5LfbOsOp++W8BMSRLl2M8kpVC
-         hVcYSpFfJX3eCbtEt+kCEA/xN31+g747wWlmMDr4TePC4xOE4uIsF3gQjPbzo1vPxTe3
-         ccID0vIHKHWSRJ6//fAVqrIpP1nWD7NtUiZBLU7mpn3qx8nIljqfIjyJV6Ny2pyNBG8g
-         JxjUBS/c0eT6X+P97C4i9ZXRjfZ2nUe/ufl2XO4ZJ+fG5Nae2IS1ro113dgCcw+aVNIm
-         jlj5P1ZHT5L4k82XybYR9nVBs08UHy6cQyUu8FJplUbBHAm1QjmpfErfTIlQ5EP30/ap
-         f9Ig==
-X-Gm-Message-State: AOAM531Lf6sjKh3SG048MOTiYp0+Hh9bbnkIFMf3YozXxun4aR/yPq2l
-        Hael5gcbx9e+BgwARUCio/WyYXtzXTWXew9BdQFyjzsV4nrFeSAyLIYrUfiBO7Vos4DnmaCorBC
-        nUtqyh8OpSvVFzKeNovpSx/pg/WYnrThgBG2VMdij
-X-Received: by 2002:a81:998c:: with SMTP id q134mr7867247ywg.29.1644703126225;
-        Sat, 12 Feb 2022 13:58:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz6xKJ8Vy5jYdaFIUhwSOxKWkmQhlN9SOfJe/I8QaKuzargWJNwN+xx//QgsOW0nGlZiW3kBq7cjVdtfMAHuco=
-X-Received: by 2002:a81:998c:: with SMTP id q134mr7867239ywg.29.1644703126022;
- Sat, 12 Feb 2022 13:58:46 -0800 (PST)
+        Sat, 12 Feb 2022 17:05:49 -0500
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6560A606FE
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 14:05:42 -0800 (PST)
+Received: (wp-smtpd smtp.tlen.pl 18600 invoked from network); 12 Feb 2022 23:05:38 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1644703539; bh=AnQN+FJyRGopKtB+HTr7nThFXwjuArnFpHKHUUQNYoY=;
+          h=From:To:Cc:Subject;
+          b=r1TDnwTmPuDEihAsAdSvWAbdrgAuAZ6lf4OSZ/Y3JhQJcTbr3KbTzQu+/IsYxqcwC
+           Y8zoZXDd1OmT5Qx1VJmD1j4gzeEgXhoIvYutCc4aNg5s+Sjut04B26/ay3xqtRr/xL
+           ueakEzF45e8lnB18Ho3IWp6NDSwUG09I64hMKuO0=
+Received: from aaem217.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.116.217])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with SMTP
+          for <linux-rtc@vger.kernel.org>; 12 Feb 2022 23:05:38 +0100
+From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH] rtc-mc146818-lib: wait longer for UIP to clear
+Date:   Sat, 12 Feb 2022 23:04:54 +0100
+Message-Id: <20220212220454.566548-1-mat.jonczyk@o2.pl>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220212175922.665442-1-omosnace@redhat.com>
-In-Reply-To: <20220212175922.665442-1-omosnace@redhat.com>
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-Date:   Sat, 12 Feb 2022 22:58:34 +0100
-Message-ID: <CAFqZXNtuZ8C5sSJDktTSWiPJbPxTK7ES21NJYVvFC9N4toehew@mail.gmail.com>
-Subject: Re: [PATCH net v3 0/2] security: fixups for the security hooks in sctp
-To:     network dev <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        SElinux list <selinux@vger.kernel.org>,
-        Paul Moore <paul@paul-moore.com>
-Cc:     Xin Long <lucien.xin@gmail.com>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "linux-sctp @ vger . kernel . org" <linux-sctp@vger.kernel.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: 803afe6153e8175b7ef9efb8cb1be6a5
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [gZP0]                               
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 12, 2022 at 6:59 PM Ondrej Mosnacek <omosnace@redhat.com> wrote:
-> This is a third round of patches to fix the SCTP-SELinux interaction
-> w.r.t. client-side peeloff. The patches are a modified version of Xin
-> Long's patches posted previously, of which only a part was merged (the
-> rest was merged for a while, but was later reverted):
-> https://lore.kernel.org/selinux/cover.1635854268.git.lucien.xin@gmail.com/T/
->
-> In gist, these patches replace the call to
-> security_inet_conn_established() in SCTP with a new hook
-> security_sctp_assoc_established() and implement the new hook in SELinux
-> so that the client-side association labels are set correctly (which
-> matters in case the association eventually gets peeled off into a
-> separate socket).
->
-> Note that other LSMs than SELinux don't implement the SCTP hooks nor
-> inet_conn_established, so they shouldn't be affected by any of these
-> changes.
->
-> These patches were tested by selinux-testsuite [1] with an additional
-> patch [2] and by lksctp-tools func_tests [3].
->
-> Changes since v2:
-> - patches 1 and 2 dropped as they are already in mainline (not reverted)
-> - in patch 3, the return value of security_sctp_assoc_established() is
->   changed to int, the call is moved earlier in the function, and if the
->   hook returns an error value, the packet will now be discarded,
->   aborting the association
-> - patch 4 has been changed a lot - please see the patch description for
->   details on how the hook is now implemented and why
->
-> [1] https://github.com/SELinuxProject/selinux-testsuite/
-> [2] https://patchwork.kernel.org/project/selinux/patch/20211021144543.740762-1-omosnace@redhat.com/
+Before reading date / time from the CMOS RTC, we wait for the UIP
+(Update in progress) bit to clear --- so that the values are correct and
+consistent. To avoid a hang, there is a time limit after which we give
+up waiting.
 
-Actually, that patch no longer applies to the current master. Please
-refer to this rebased version instead:
-https://patchwork.kernel.org/project/selinux/patch/20220212213454.689886-1-omosnace@redhat.com/
+Increase the time limit from 10 to 20ms in case there are RTCs out there
+that are much slower than expected.
 
-> [3] https://github.com/sctp/lksctp-tools/tree/master/src/func_tests
->
-> Ondrej Mosnacek (2):
->   security: add sctp_assoc_established hook
->   security: implement sctp_assoc_established hook in selinux
->
->  Documentation/security/SCTP.rst | 22 ++++----
->  include/linux/lsm_hook_defs.h   |  2 +
->  include/linux/lsm_hooks.h       |  5 ++
->  include/linux/security.h        |  8 +++
->  net/sctp/sm_statefuns.c         |  8 +--
->  security/security.c             |  7 +++
->  security/selinux/hooks.c        | 90 ++++++++++++++++++++++++---------
->  7 files changed, 103 insertions(+), 39 deletions(-)
->
-> --
-> 2.34.1
->
+Note: This may cause problems with hpet_rtc_interrupt() if the CMOS RTC
+breaks down while the system is running and RTC update interrupt / RTC
+alarm interrupt happens to be enabled (which should be rare).
+hpet_rtc_interrupt() is executed usually 64 times per second and after
+this patch it may take up to 20ms to complete (always hitting RTC read
+timeout) - which may constantly occupy one CPU. This looks very
+unlikely, though.
 
+Also fix "then" -> "than" in a comment.
+
+Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Fixes: ec5895c0f2d8 ("rtc: mc146818-lib: extract mc146818_avoid_UIP")
+---
+
+This comment from Mr Alexandre Belloni got me thinking and is why I am
+submitting this patch:
+> We'll probably get some breakage later on because many RTCs using this
+> driver are not adhering to the spec.
+(See: https://lore.kernel.org/linux-rtc/277177e7-46a0-522c-297c-ad3ee0c15793@o2.pl/T/ )
+
+Googling for dmesg messages that indicate problems with reading from RTC
+(such as "unable to read current time" - using quotation marks to force
+exact phrase search) produces no results apart from kernel code and
+patches. Any problems would happen rarely on affected systems, though.
+
+ drivers/rtc/rtc-mc146818-lib.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/rtc/rtc-mc146818-lib.c b/drivers/rtc/rtc-mc146818-lib.c
+index ae9f131b43c0..29ceec9875f4 100644
+--- a/drivers/rtc/rtc-mc146818-lib.c
++++ b/drivers/rtc/rtc-mc146818-lib.c
+@@ -21,7 +21,7 @@ bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
+ 	unsigned long flags;
+ 	unsigned char seconds;
+ 
+-	for (i = 0; i < 10; i++) {
++	for (i = 0; i < 20; i++) {
+ 		spin_lock_irqsave(&rtc_lock, flags);
+ 
+ 		/*
+@@ -79,8 +79,8 @@ bool mc146818_avoid_UIP(void (*callback)(unsigned char seconds, void *param),
+ EXPORT_SYMBOL_GPL(mc146818_avoid_UIP);
+ 
+ /*
+- * If the UIP (Update-in-progress) bit of the RTC is set for more then
+- * 10ms, the RTC is apparently broken or not present.
++ * If the UIP (Update-in-progress) bit of the RTC is set for more than
++ * 20ms, the RTC is apparently broken or not present.
+  */
+ bool mc146818_does_rtc_work(void)
+ {
+
+base-commit: dfd42facf1e4ada021b939b4e19c935dcdd55566
 -- 
-Ondrej Mosnacek
-Software Engineer, Linux Security - SELinux kernel
-Red Hat, Inc.
+2.25.1
 

@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF9B4B3405
+	by mail.lfdr.de (Postfix) with ESMTP id 311764B3404
 	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 10:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233054AbiBLJZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 04:25:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37612 "EHLO
+        id S229726AbiBLJZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 04:25:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233022AbiBLJZX (ORCPT
+        with ESMTP id S232989AbiBLJZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 04:25:23 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D002657B
+        Sat, 12 Feb 2022 04:25:22 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C35326579
         for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 01:25:20 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id f9-20020a92cb49000000b002be1f9405a3so7466137ilq.16
+Received: by mail-il1-f200.google.com with SMTP id x6-20020a92d306000000b002bdff65a8e1so7490738ila.3
         for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 01:25:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=n0c9B5mqiyvNX7hEORg3tf68mAVgwYUCwgEl/oUCva8=;
-        b=5kUPcTQrw1/s5OoaNgnAtbykfOmFZ7SuXvJBnoN5Tee0uPMAcs7zCDlPrPT06dqVN+
-         Bf08SUNl82t9FlX2rFRnKjJVDsORHK1xrFu3HWGJEuUiDKUPwAYX8lE8eJIl4mx6SaBY
-         MIrdjRTGAf3ejtAjst2FbAiKX3xC1mN46cSDLU0UO4Li/8aHpRsENE3/+WyBlmoZrrXX
-         vMDPQqU4eULAU+wlXgf1ViRxK/9BTSwWf5HSgQMEIEfWXIxh+wFFfigqq1EwDEvBVsUA
-         0woln4/xlp77pQcoFSWHgECTNN87MI9U/QubEszT5LWH4NPWh4ngTF7rrn8FQSN0Tnt4
-         tnuA==
-X-Gm-Message-State: AOAM530PxuWHH/XllWO5kwqrnDgFgu5eFDr1PJJv/DHN7mXndTeXa+CS
-        Ci0j+hfMUvA9yrXR7OUtiUWvV3P2KXRPAFncad/WDi7QOJwP
-X-Google-Smtp-Source: ABdhPJyZIjEXOU001SZ5BJieLiT3Zh/Hh5Z/5A39uD3yFqKKawf4c5rRAf9szlhfhvonxQ2emA2k2Q7r8ZDxbDSuwS3kKlbkNvTA
+        bh=ZtL5i1t9klk+YLV1HnkewFTh9taQxRMyB5UUQJAQ2zM=;
+        b=kH3YXXwz0Rh2QliWzR3bhfWPMaBR9pYRjjDa5lbIwjJdKyZpY4ffBsBiVYj2PdY6w6
+         mfdtAkb7feag33XvpFjdhtKKua1iCzVPp78rIyYF+SAAUyNcdGG+REltPfTO67feG6Ty
+         MGGNUwir739Hv8e/W8MjgMouGFZLDX9i9Dar4Zn+mtZV1WTygDtyKX/ptKeEJ8FrSaD/
+         jxPMA0MlI03P1FJDGA+s24IwqEbyt/P3kZLdrnBNWbNrTkG8DFDqSVs/A87Accbhkkh0
+         2SEcdecQr7BpDzLn+RnPaKRG4MuwOYZyN/bgEXFE8NdoYCguKJub+OfoSm1/KDO2HvpL
+         8Mgg==
+X-Gm-Message-State: AOAM532nPotv4TbZ65qP06qrN6WwC9CnIBKdtR0QA6ZuuGYC9ePiONYT
+        Vr9uT3BPxpEnUdsgl+Rwad8oV8iDp7an3PyA+b06UnDL2pAJ
+X-Google-Smtp-Source: ABdhPJx8ow+/awsXjC1xOnCUNufZuulCq8reGoQuVmsW8S+jHNRrZXiNyWPyUuWPW8OEUsUcJ4vvBdL9aXl0aE6yVyAtlHnpvlBw
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2b10:: with SMTP id p16mr2867919iov.44.1644657919677;
+X-Received: by 2002:a05:6e02:1a46:: with SMTP id u6mr2938187ilv.245.1644657919465;
  Sat, 12 Feb 2022 01:25:19 -0800 (PST)
 Date:   Sat, 12 Feb 2022 01:25:19 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000145b2805d7cec3d0@google.com>
-Subject: [syzbot] kernel BUG in ext4_split_extent_at
-From:   syzbot <syzbot+9df2b537192e605d3f78@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
+Message-ID: <000000000000111f7f05d7cec3bd@google.com>
+Subject: [syzbot] WARNING: ODEBUG bug in hci_dev_close_sync
+From:   syzbot <syzbot+45bff639f729e5f15653@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, johan.hedberg@gmail.com, kuba@kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luiz.dentz@gmail.com, marcel@holtmann.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,68 +60,68 @@ syzbot found the following issue on:
 
 HEAD commit:    555f3d7be91a Merge tag '5.17-rc3-ksmbd-server-fixes' of gi..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11320c2c700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=266de9da75c71a45
-dashboard link: https://syzkaller.appspot.com/bug?extid=9df2b537192e605d3f78
+console output: https://syzkaller.appspot.com/x/log.txt?x=16e61b78700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5707221760c00a20
+dashboard link: https://syzkaller.appspot.com/bug?extid=45bff639f729e5f15653
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9df2b537192e605d3f78@syzkaller.appspotmail.com
+Reported-by: syzbot+45bff639f729e5f15653@syzkaller.appspotmail.com
 
 ------------[ cut here ]------------
-kernel BUG at fs/ext4/extents.c:3199!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 14330 Comm: syz-executor.1 Not tainted 5.17.0-rc3-syzkaller-00020-g555f3d7be91a #0
+ODEBUG: assert_init not available (active state 0) object type: timer_list hint: 0x0
+WARNING: CPU: 1 PID: 15929 at lib/debugobjects.c:505 debug_print_object+0x16e/0x250 lib/debugobjects.c:505
+Modules linked in:
+CPU: 1 PID: 15929 Comm: syz-executor.5 Not tainted 5.17.0-rc3-syzkaller-00020-g555f3d7be91a #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:ext4_split_extent_at+0x910/0xe10 fs/ext4/extents.c:3199
-Code: de e8 74 52 6a ff 48 85 db 0f 84 37 04 00 00 e8 d6 4f 6a ff 66 41 81 ce 00 80 66 44 89 74 24 7c e9 0c fb ff ff e8 c0 4f 6a ff <0f> 0b e8 b9 4f 6a ff 4c 89 e8 31 ff 25 ff 7f 00 00 48 89 c6 48 89
-RSP: 0018:ffffc9000476f730 EFLAGS: 00010212
-RAX: 00000000000059b6 RBX: 0000000000008028 RCX: ffffc9000a282000
-RDX: 0000000000040000 RSI: ffffffff820e28d0 RDI: 0000000000000003
-RBP: ffff888072591c30 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff820e21c7 R11: 00000000ffff8000 R12: ffff88802603d054
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-FS:  00007f8a3dd98700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+RIP: 0010:debug_print_object+0x16e/0x250 lib/debugobjects.c:505
+Code: ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 af 00 00 00 48 8b 14 dd 40 d4 05 8a 4c 89 ee 48 c7 c7 40 c8 05 8a e8 a4 34 24 05 <0f> 0b 83 05 35 4a b1 09 01 48 83 c4 18 5b 5d 41 5c 41 5d 41 5e c3
+RSP: 0018:ffffc90002c37938 EFLAGS: 00010086
+RAX: 0000000000000000 RBX: 0000000000000005 RCX: 0000000000000000
+RDX: ffff88805689c200 RSI: ffffffff815ee378 RDI: fffff52000586f19
+RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff815e80de R11: 0000000000000000 R12: ffffffff89ae3aa0
+R13: ffffffff8a05cec0 R14: ffffffff81660040 R15: 1ffff92000586f32
+FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b2d743000 CR3: 000000007dc31000 CR4: 0000000000350ef0
+CR2: 0000000020000000 CR3: 000000005c7e8000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- ext4_force_split_extent_at fs/ext4/extents.c:319 [inline]
- ext4_swap_extents+0x8e3/0x14c0 fs/ext4/extents.c:5662
- move_extent_per_page fs/ext4/move_extent.c:360 [inline]
- ext4_move_extents+0x1c86/0x3ee0 fs/ext4/move_extent.c:672
- __ext4_ioctl+0x33e6/0x57e0 fs/ext4/ioctl.c:1285
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+ debug_object_assert_init lib/debugobjects.c:895 [inline]
+ debug_object_assert_init+0x1f4/0x2e0 lib/debugobjects.c:866
+ debug_timer_assert_init kernel/time/timer.c:739 [inline]
+ debug_assert_init kernel/time/timer.c:784 [inline]
+ del_timer+0x6d/0x110 kernel/time/timer.c:1204
+ try_to_grab_pending+0x6d/0xd0 kernel/workqueue.c:1285
+ __cancel_work_timer+0xa6/0x570 kernel/workqueue.c:3139
+ hci_dev_close_sync+0xb01/0x1120 net/bluetooth/hci_sync.c:4084
+ hci_dev_do_close+0x32/0x70 net/bluetooth/hci_core.c:553
+ hci_unregister_dev+0x1d0/0x550 net/bluetooth/hci_core.c:2686
+ vhci_release+0x7c/0xf0 drivers/bluetooth/hci_vhci.c:568
+ __fput+0x286/0x9f0 fs/file_table.c:311
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ exit_task_work include/linux/task_work.h:32 [inline]
+ do_exit+0xb29/0x2a30 kernel/exit.c:806
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:935
+ __do_sys_exit_group kernel/exit.c:946 [inline]
+ __se_sys_exit_group kernel/exit.c:944 [inline]
+ __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:944
  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
  entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f8a3f423059
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f8a3dd98168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f8a3f535f60 RCX: 00007f8a3f423059
-RDX: 0000000020000200 RSI: 00000000c028660f RDI: 0000000000000005
-RBP: 00007f8a3f47d08d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fffd2956f0f R14: 00007f8a3dd98300 R15: 0000000000022000
+RIP: 0033:0x7fe461979059
+Code: Unable to access opcode bytes at RIP 0x7fe46197902f.
+RSP: 002b:00007ffe7d025b08 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 0000000000000064 RCX: 00007fe461979059
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: 00007fe4619d225c R08: 000000000000000c R09: 000055555596c3b8
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000016
+R13: 00007ffe7d026de0 R14: 000055555596c3b8 R15: 00007ffe7d027ee0
  </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:ext4_split_extent_at+0x910/0xe10 fs/ext4/extents.c:3199
-Code: de e8 74 52 6a ff 48 85 db 0f 84 37 04 00 00 e8 d6 4f 6a ff 66 41 81 ce 00 80 66 44 89 74 24 7c e9 0c fb ff ff e8 c0 4f 6a ff <0f> 0b e8 b9 4f 6a ff 4c 89 e8 31 ff 25 ff 7f 00 00 48 89 c6 48 89
-RSP: 0018:ffffc9000476f730 EFLAGS: 00010212
-RAX: 00000000000059b6 RBX: 0000000000008028 RCX: ffffc9000a282000
-RDX: 0000000000040000 RSI: ffffffff820e28d0 RDI: 0000000000000003
-RBP: ffff888072591c30 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff820e21c7 R11: 00000000ffff8000 R12: ffff88802603d054
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-FS:  00007f8a3dd98700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f51c4218718 CR3: 000000007dc31000 CR4: 0000000000350ee0
 
 
 ---

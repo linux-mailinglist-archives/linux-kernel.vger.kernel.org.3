@@ -2,256 +2,513 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB264B3453
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 11:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDAD44B345A
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 11:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233907AbiBLKo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 05:44:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43282 "EHLO
+        id S233853AbiBLKwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 05:52:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233644AbiBLKoG (ORCPT
+        with ESMTP id S229692AbiBLKwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 05:44:06 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65CB62655A;
-        Sat, 12 Feb 2022 02:44:01 -0800 (PST)
-X-UUID: fd11c4b7ae1743a8acdedb2145122f3e-20220212
-X-UUID: fd11c4b7ae1743a8acdedb2145122f3e-20220212
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <lecopzer.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 492079112; Sat, 12 Feb 2022 18:43:56 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 12 Feb 2022 18:43:54 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 12 Feb 2022 18:43:54 +0800
-From:   Lecopzer Chen <lecopzer.chen@mediatek.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>, <davem@davemloft.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Julien Thierry <jthierry@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wang Qing <wangqing@vivo.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-perf-users@vger.kernel.org>, <sparclinux@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <sumit.garg@linaro.org>,
-        <kernelfans@gmail.com>, <lecopzer.chen@mediatek.com>,
-        <yj.chiang@mediatek.com>
-Subject: [PATCH 5/5] arm64: Enable perf events based hard lockup detector
-Date:   Sat, 12 Feb 2022 18:43:49 +0800
-Message-ID: <20220212104349.14266-6-lecopzer.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220212104349.14266-1-lecopzer.chen@mediatek.com>
-References: <20220212104349.14266-1-lecopzer.chen@mediatek.com>
+        Sat, 12 Feb 2022 05:52:47 -0500
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFA026543;
+        Sat, 12 Feb 2022 02:52:43 -0800 (PST)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21C9tIne020529;
+        Sat, 12 Feb 2022 05:52:35 -0500
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3e6ap9g3sv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 12 Feb 2022 05:52:34 -0500
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 21CAqX5w064712
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sat, 12 Feb 2022 05:52:33 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Sat, 12 Feb
+ 2022 05:52:32 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Sat, 12 Feb 2022 05:52:32 -0500
+Received: from amiclaus-VirtualBox.ad.analog.com ([10.65.37.22])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 21CAqONd001965;
+        Sat, 12 Feb 2022 05:52:26 -0500
+From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
+To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
+        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Antoniu Miclaus <antoniu.miclaus@analog.com>
+Subject: [PATCH v2 1/3] iio:amplifiers:ada4250: add support for ADA4250
+Date:   Sat, 12 Feb 2022 12:51:51 +0200
+Message-ID: <20220212105153.19748-1-antoniu.miclaus@analog.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: -nliTb7429ciKlUMZlo9WGqGQhw4N6j1
+X-Proofpoint-GUID: -nliTb7429ciKlUMZlo9WGqGQhw4N6j1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-12_03,2022-02-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ phishscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
+ priorityscore=1501 mlxlogscore=999 adultscore=0 clxscore=1015
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202120065
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sumit Garg <sumit.garg@linaro.org>
+The ADA4250 is an instrumentation amplifier with SPI/pin-strap
+progammable gains that is optimized for ultra-low power systems.
+With a minimum supply voltage of 1.7V, 26uA of quiescent current,
+a shutdown mode, a sleep mode, and a fast wake up settling time,
+ADA4250 can be power cycled on a battery powered system for even
+futher savings.
 
-from: Pingfan Liu <kernelfans@gmail.com>
-
-With the recent feature added to enable perf events to use pseudo NMIs
-as interrupts on platforms which support GICv3 or later, its now been
-possible to enable hard lockup detector (or NMI watchdog) on arm64
-platforms. So enable corresponding support.
-
-One thing to note here is that normally lockup detector is initialized
-just after the early initcalls but PMU on arm64 comes up much later as
-device_initcall(). To cope with that, overriding watchdog_nmi_probe() to
-let the watchdog framework know PMU not ready, and inform the framework
-to re-initialize lockup detection once PMU has been initialized.
-
-[1]: http://lore.kernel.org/linux-arm-kernel/1610712101-14929-1-git-send-email-sumit.garg@linaro.org
-
-Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-(Pingfan: adapt it to watchdog_hld async model based on [1])
-Co-developed-by: Pingfan Liu <kernelfans@gmail.com>
-Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
-Co-developed-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
-Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
+Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
 ---
- arch/arm64/Kconfig               |  2 ++
- arch/arm64/kernel/Makefile       |  1 +
- arch/arm64/kernel/perf_event.c   | 11 ++++++++--
- arch/arm64/kernel/watchdog_hld.c | 36 ++++++++++++++++++++++++++++++++
- drivers/perf/arm_pmu.c           |  5 +++++
- include/linux/nmi.h              |  9 ++++++++
- include/linux/perf/arm_pmu.h     |  2 ++
- 7 files changed, 64 insertions(+), 2 deletions(-)
- create mode 100644 arch/arm64/kernel/watchdog_hld.c
+changes in v2:
+ - move all IIO attributes under a single channel
+ - use DMA safe buffers + endian conversion
+ - fix odd spacing in Kconfig
+ drivers/iio/amplifiers/Kconfig   |  11 +
+ drivers/iio/amplifiers/Makefile  |   1 +
+ drivers/iio/amplifiers/ada4250.c | 384 +++++++++++++++++++++++++++++++
+ 3 files changed, 396 insertions(+)
+ create mode 100644 drivers/iio/amplifiers/ada4250.c
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 09b885cc4db5..df6fed8327ba 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -190,6 +190,8 @@ config ARM64
- 	select HAVE_NMI
- 	select HAVE_PATA_PLATFORM
- 	select HAVE_PERF_EVENTS
-+	select HAVE_PERF_EVENTS_NMI if ARM64_PSEUDO_NMI
-+	select HAVE_HARDLOCKUP_DETECTOR_PERF if PERF_EVENTS && HAVE_PERF_EVENTS_NMI
- 	select HAVE_PERF_REGS
- 	select HAVE_PERF_USER_STACK_DUMP
- 	select HAVE_REGS_AND_STACK_ACCESS_API
-diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
-index 88b3e2a21408..3e62a8877ed7 100644
---- a/arch/arm64/kernel/Makefile
-+++ b/arch/arm64/kernel/Makefile
-@@ -46,6 +46,7 @@ obj-$(CONFIG_MODULES)			+= module.o
- obj-$(CONFIG_ARM64_MODULE_PLTS)		+= module-plts.o
- obj-$(CONFIG_PERF_EVENTS)		+= perf_regs.o perf_callchain.o
- obj-$(CONFIG_HW_PERF_EVENTS)		+= perf_event.o
-+obj-$(CONFIG_HARDLOCKUP_DETECTOR_PERF)	+= watchdog_hld.o
- obj-$(CONFIG_HAVE_HW_BREAKPOINT)	+= hw_breakpoint.o
- obj-$(CONFIG_CPU_PM)			+= sleep.o suspend.o
- obj-$(CONFIG_CPU_IDLE)			+= cpuidle.o
-diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
-index cab678ed6618..73db9f2588d5 100644
---- a/arch/arm64/kernel/perf_event.c
-+++ b/arch/arm64/kernel/perf_event.c
-@@ -23,6 +23,7 @@
- #include <linux/platform_device.h>
- #include <linux/sched_clock.h>
- #include <linux/smp.h>
-+#include <linux/nmi.h>
+diff --git a/drivers/iio/amplifiers/Kconfig b/drivers/iio/amplifiers/Kconfig
+index 5eb1357a9c78..0099fd26fa89 100644
+--- a/drivers/iio/amplifiers/Kconfig
++++ b/drivers/iio/amplifiers/Kconfig
+@@ -23,6 +23,17 @@ config AD8366
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called ad8366.
  
- /* ARMv8 Cortex-A53 specific event types. */
- #define ARMV8_A53_PERFCTR_PREF_LINEFILL				0xC2
-@@ -1380,10 +1381,16 @@ static struct platform_driver armv8_pmu_driver = {
- 
- static int __init armv8_pmu_driver_init(void)
- {
-+	int ret;
++config ADA4250
++	tristate "Analog Devices ADA4250 Instrumentation Amplifier"
++	depends on SPI
++	help
++          Say yes here to build support for Analog Devices ADA4250
++          SPI Amplifier's support. The driver provides direct access via
++          sysfs.
 +
- 	if (acpi_disabled)
--		return platform_driver_register(&armv8_pmu_driver);
-+		ret = platform_driver_register(&armv8_pmu_driver);
- 	else
--		return arm_pmu_acpi_probe(armv8_pmuv3_pmu_init);
-+		ret = arm_pmu_acpi_probe(armv8_pmuv3_pmu_init);
++	  To compile this driver as a module, choose M here: the
++	  module will be called ada4250.
 +
-+	detector_delay_init_state = DELAY_INIT_READY;
-+	wake_up(&hld_detector_wait);
-+	return ret;
- }
- device_initcall(armv8_pmu_driver_init)
+ config HMC425
+ 	tristate "Analog Devices HMC425A and similar GPIO Gain Amplifiers"
+ 	depends on GPIOLIB
+diff --git a/drivers/iio/amplifiers/Makefile b/drivers/iio/amplifiers/Makefile
+index cb551d82f56b..2126331129cf 100644
+--- a/drivers/iio/amplifiers/Makefile
++++ b/drivers/iio/amplifiers/Makefile
+@@ -5,4 +5,5 @@
  
-diff --git a/arch/arm64/kernel/watchdog_hld.c b/arch/arm64/kernel/watchdog_hld.c
+ # When adding new entries keep the list in alphabetical order
+ obj-$(CONFIG_AD8366) += ad8366.o
++obj-$(CONFIG_ADA4250) += ada4250.o
+ obj-$(CONFIG_HMC425) += hmc425a.o
+diff --git a/drivers/iio/amplifiers/ada4250.c b/drivers/iio/amplifiers/ada4250.c
 new file mode 100644
-index 000000000000..85536906a186
+index 000000000000..c8b2c3382e33
 --- /dev/null
-+++ b/arch/arm64/kernel/watchdog_hld.c
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/nmi.h>
-+#include <linux/cpufreq.h>
-+#include <linux/perf/arm_pmu.h>
-+
++++ b/drivers/iio/amplifiers/ada4250.c
+@@ -0,0 +1,384 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * Safe maximum CPU frequency in case a particular platform doesn't implement
-+ * cpufreq driver. Although, architecture doesn't put any restrictions on
-+ * maximum frequency but 5 GHz seems to be safe maximum given the available
-+ * Arm CPUs in the market which are clocked much less than 5 GHz. On the other
-+ * hand, we can't make it much higher as it would lead to a large hard-lockup
-+ * detection timeout on parts which are running slower (eg. 1GHz on
-+ * Developerbox) and doesn't possess a cpufreq driver.
++ * ADA4250 driver
++ *
++ * Copyright 2022 Analog Devices Inc.
 + */
-+#define SAFE_MAX_CPU_FREQ	5000000000UL // 5 GHz
-+u64 hw_nmi_get_sample_period(int watchdog_thresh)
-+{
-+	unsigned int cpu = smp_processor_id();
-+	unsigned long max_cpu_freq;
 +
-+	max_cpu_freq = cpufreq_get_hw_max_freq(cpu) * 1000UL;
-+	if (!max_cpu_freq)
-+		max_cpu_freq = SAFE_MAX_CPU_FREQ;
++#include <linux/bitfield.h>
++#include <linux/bits.h>
++#include <linux/device.h>
++#include <linux/iio/iio.h>
++#include <linux/module.h>
++#include <linux/regmap.h>
++#include <linux/regulator/consumer.h>
++#include <linux/spi/spi.h>
 +
-+	return (u64)max_cpu_freq * watchdog_thresh;
-+}
++#include <asm/unaligned.h>
 +
-+int __init watchdog_nmi_probe(void)
-+{
-+	if (detector_delay_init_state != DELAY_INIT_READY)
-+		return -EBUSY;
-+	else if (!arm_pmu_irq_is_nmi())
-+		return -ENODEV;
++/* ADA4250 Register Map */
++#define ADA4250_REG_GAIN_MUX        0x00
++#define ADA4250_REG_REFBUF_EN       0x01
++#define ADA4250_REG_RESET           0x02
++#define ADA4250_REG_SNSR_CAL_VAL    0x04
++#define ADA4250_REG_SNSR_CAL_CNFG   0x05
++#define ADA4250_REG_DIE_REV         0x18
++#define ADA4250_REG_CHIP_ID         0x19
 +
-+	return hardlockup_detector_perf_init();
-+}
-diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-index 295cc7952d0e..e77f4897fca2 100644
---- a/drivers/perf/arm_pmu.c
-+++ b/drivers/perf/arm_pmu.c
-@@ -697,6 +697,11 @@ static int armpmu_get_cpu_irq(struct arm_pmu *pmu, int cpu)
- 	return per_cpu(hw_events->irq, cpu);
- }
- 
-+bool arm_pmu_irq_is_nmi(void)
-+{
-+	return has_nmi;
-+}
++/* ADA4250_REG_GAIN_MUX Map */
++#define ADA4250_GAIN_MUX_MSK        GENMASK(2, 0)
 +
- /*
-  * PMU hardware loses all context when a CPU goes offline.
-  * When a CPU is hotplugged back in, since some hardware registers are
-diff --git a/include/linux/nmi.h b/include/linux/nmi.h
-index b7bcd63c36b4..9def85c00bd8 100644
---- a/include/linux/nmi.h
-+++ b/include/linux/nmi.h
-@@ -118,6 +118,15 @@ static inline int hardlockup_detector_perf_init(void) { return 0; }
- 
- void watchdog_nmi_stop(void);
- void watchdog_nmi_start(void);
++/* ADA4250_REG_REFBUF Map */
++#define ADA4250_REFBUF_MSK          BIT(0)
 +
-+enum hld_detector_state {
-+	DELAY_INIT_NOP,
-+	DELAY_INIT_WAIT,
-+	DELAY_INIT_READY
++/* ADA4250_REG_RESET Map */
++#define ADA4250_RESET_MSK           BIT(0)
++
++/* ADA4250_REG_SNSR_CAL_VAL Map */
++#define ADA4250_SNSR_CAL_VAL_MSK    GENMASK(7, 0)
++
++/* ADA4250_REG_SNSR_CAL_CNFG Bit Definition */
++#define ADA4250_BIAS_SET_MSK        GENMASK(3, 2)
++#define ADA4250_RANGE_SET_MSK       GENMASK(1, 0)
++
++/* Miscellaneous definitions */
++#define ADA4250_CHIP_ID             0x4250
++#define ADA4250_RANGE1              0
++#define	ADA4250_RANGE4              3
++
++/* ADA4250 current bias set */
++enum ada4250_current_bias {
++	ADA4250_BIAS_DISABLED,
++	ADA4250_BIAS_BANDGAP,
++	ADA4250_BIAS_AVDD,
 +};
 +
-+extern enum hld_detector_state detector_delay_init_state;
-+extern struct wait_queue_head hld_detector_wait;
- int watchdog_nmi_probe(void);
- void watchdog_nmi_enable(unsigned int cpu);
- void watchdog_nmi_disable(unsigned int cpu);
-diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-index 2512e2f9cd4e..9325d01adc3e 100644
---- a/include/linux/perf/arm_pmu.h
-+++ b/include/linux/perf/arm_pmu.h
-@@ -169,6 +169,8 @@ void kvm_host_pmu_init(struct arm_pmu *pmu);
- #define kvm_host_pmu_init(x)	do { } while(0)
- #endif
- 
-+bool arm_pmu_irq_is_nmi(void);
++struct ada4250_state {
++	struct spi_device	*spi;
++	struct regmap		*regmap;
++	struct regulator	*reg;
++	/* Protect against concurrent accesses to the device and data content */
++	struct mutex		lock;
++	u8			bias;
++	u8			gain;
++	int			offset_uv;
++	bool			refbuf_en;
++};
 +
- /* Internal functions only for core arm_pmu code */
- struct arm_pmu *armpmu_alloc(void);
- struct arm_pmu *armpmu_alloc_atomic(void);
++/* ADA4250 Current Bias Source Settings: Disabled, Bandgap Reference, AVDD */
++static const int calibbias_table[] = {0, 1, 2};
++
++/* ADA4250 Gain (V/V) values: 1, 2, 4, 8, 16, 32, 64, 128 */
++static const int hwgain_table[] = {0, 1, 2, 3, 4, 5, 6, 7};
++
++static const struct regmap_config ada4250_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.read_flag_mask = BIT(7),
++	.max_register = 0x1A,
++};
++
++static int ada4250_set_offset_uv(struct iio_dev *indio_dev,
++				 const struct iio_chan_spec *chan,
++				 int offset_uv)
++{
++	struct ada4250_state *st = iio_priv(indio_dev);
++
++	int i, ret, x[8], max_vos, min_vos, voltage_v, vlsb = 0;
++	u8 offset_raw, range = ADA4250_RANGE1;
++	u32 lsb_coeff[6] = {1333, 2301, 4283, 8289, 16311, 31599};
++
++	if (st->bias == 0 || st->bias == 3)
++		return -EINVAL;
++
++	voltage_v = regulator_get_voltage(st->reg);
++	voltage_v = DIV_ROUND_CLOSEST(voltage_v, 1000000);
++
++	if (st->bias == ADA4250_BIAS_AVDD)
++		x[0] = voltage_v;
++	else
++		x[0] = 5;
++
++	x[1] = 126 * (x[0] - 1);
++
++	for (i = 0; i < 6; i++)
++		x[i + 2] = DIV_ROUND_CLOSEST(x[1] * 1000, lsb_coeff[i]);
++
++	if (st->gain == 0)
++		return -EINVAL;
++
++	/* Compute Range and VLSB for the Sensor Offset Calibration */
++	for (i = ADA4250_RANGE1; i <= ADA4250_RANGE4; i++) {
++		max_vos = x[st->gain] *  127 * ((1 << (i + 1)) - 1);
++		min_vos = -1 * max_vos;
++		if (offset_uv > min_vos && offset_uv < max_vos) {
++			range = i;
++			vlsb = x[st->gain] * ((1 << (i + 1)) - 1);
++			break;
++		}
++	}
++
++	if (vlsb <= 0)
++		return -EINVAL;
++
++	offset_raw = DIV_ROUND_CLOSEST(abs(offset_uv), vlsb);
++
++	mutex_lock(&st->lock);
++	ret = regmap_update_bits(st->regmap, ADA4250_REG_SNSR_CAL_CNFG,
++				 ADA4250_RANGE_SET_MSK,
++				 FIELD_PREP(ADA4250_RANGE_SET_MSK, range));
++	if (ret)
++		goto exit;
++
++	st->offset_uv = offset_raw * vlsb;
++
++	if (offset_uv < 0) {
++		offset_raw |= 1 << 8;
++		st->offset_uv *= (-1);
++	}
++
++	ret = regmap_write(st->regmap, ADA4250_REG_SNSR_CAL_VAL, offset_raw);
++
++exit:
++	mutex_unlock(&st->lock);
++
++	return ret;
++}
++
++static int ada4250_read_raw(struct iio_dev *indio_dev,
++			    struct iio_chan_spec const *chan,
++			    int *val, int *val2, long info)
++{
++	struct ada4250_state *st = iio_priv(indio_dev);
++	int ret;
++
++	switch (info) {
++	case IIO_CHAN_INFO_HARDWAREGAIN:
++		ret = regmap_read(st->regmap, ADA4250_REG_GAIN_MUX, val);
++		if (ret)
++			return ret;
++
++		return IIO_VAL_INT;
++	case IIO_CHAN_INFO_OFFSET:
++		*val = st->offset_uv;
++
++		return IIO_VAL_INT;
++	case IIO_CHAN_INFO_CALIBBIAS:
++		ret = regmap_read(st->regmap, ADA4250_REG_SNSR_CAL_CNFG, val);
++		if (ret)
++			return ret;
++
++		*val = FIELD_GET(ADA4250_BIAS_SET_MSK, *val);
++
++		return IIO_VAL_INT;
++	case IIO_CHAN_INFO_SCALE:
++		*val = 1;
++		*val2 = 1000000;
++
++		return IIO_VAL_FRACTIONAL;
++	default:
++		return -EINVAL;
++	}
++}
++
++static int ada4250_write_raw(struct iio_dev *indio_dev,
++			     struct iio_chan_spec const *chan,
++			     int val, int val2, long info)
++{
++	struct ada4250_state *st = iio_priv(indio_dev);
++	int ret;
++
++	switch (info) {
++	case IIO_CHAN_INFO_HARDWAREGAIN:
++		ret = regmap_write(st->regmap, ADA4250_REG_GAIN_MUX,
++				   FIELD_PREP(ADA4250_GAIN_MUX_MSK, val));
++		if (ret)
++			return ret;
++
++		st->gain = val;
++
++		return ret;
++	case IIO_CHAN_INFO_OFFSET:
++		return ada4250_set_offset_uv(indio_dev, chan, val);
++	case IIO_CHAN_INFO_CALIBBIAS:
++		ret = regmap_update_bits(st->regmap, ADA4250_REG_SNSR_CAL_CNFG,
++					 ADA4250_BIAS_SET_MSK,
++					 FIELD_PREP(ADA4250_BIAS_SET_MSK, val));
++		if (ret)
++			return ret;
++
++		st->bias = val;
++
++		return ret;
++	default:
++		return -EINVAL;
++	}
++}
++
++static int ada4250_read_avail(struct iio_dev *indio_dev,
++			      struct iio_chan_spec const *chan,
++			      const int **vals, int *type, int *length,
++			      long mask)
++{
++	switch (mask) {
++	case IIO_CHAN_INFO_CALIBBIAS:
++		*vals = calibbias_table;
++		*type = IIO_VAL_INT;
++		*length = ARRAY_SIZE(calibbias_table);
++
++		return IIO_AVAIL_LIST;
++	case IIO_CHAN_INFO_HARDWAREGAIN:
++		*vals = hwgain_table;
++		*type = IIO_VAL_INT;
++		*length = ARRAY_SIZE(hwgain_table);
++
++		return IIO_AVAIL_LIST;
++	default:
++		return -EINVAL;
++	}
++}
++
++static int ada4250_reg_access(struct iio_dev *indio_dev,
++			      unsigned int reg,
++			      unsigned int write_val,
++			      unsigned int *read_val)
++{
++	struct ada4250_state *st = iio_priv(indio_dev);
++
++	if (read_val)
++		return regmap_read(st->regmap, reg, read_val);
++	else
++		return regmap_write(st->regmap, reg, write_val);
++}
++
++static const struct iio_info ada4250_info = {
++	.read_raw = ada4250_read_raw,
++	.write_raw = ada4250_write_raw,
++	.read_avail = &ada4250_read_avail,
++	.debugfs_reg_access = &ada4250_reg_access,
++};
++
++static const struct iio_chan_spec ada4250_channels[] = {
++	{
++		.type = IIO_VOLTAGE,
++		.output = 1,
++		.indexed = 1,
++		.channel = 0,
++		.info_mask_separate = BIT(IIO_CHAN_INFO_HARDWAREGAIN) |
++				BIT(IIO_CHAN_INFO_OFFSET) |
++				BIT(IIO_CHAN_INFO_CALIBBIAS) |
++				BIT(IIO_CHAN_INFO_SCALE),
++		.info_mask_separate_available = BIT(IIO_CHAN_INFO_CALIBBIAS) |
++						BIT(IIO_CHAN_INFO_HARDWAREGAIN),
++	}
++};
++
++static void ada4250_reg_disable(void *data)
++{
++	regulator_disable(data);
++}
++
++static int ada4250_init(struct ada4250_state *st)
++{
++	int ret;
++	u16 chip_id;
++	u8 data[2] ____cacheline_aligned;
++	struct spi_device *spi = st->spi;
++
++	st->refbuf_en = device_property_read_bool(&spi->dev, "adi,refbuf-enable");
++
++	st->reg = devm_regulator_get(&spi->dev, "avdd");
++	if (IS_ERR(st->reg))
++		return dev_err_probe(&spi->dev, PTR_ERR(st->reg),
++				     "failed to get the AVDD voltage\n");
++
++	ret = regulator_enable(st->reg);
++	if (ret) {
++		dev_err(&spi->dev, "Failed to enable specified AVDD supply\n");
++		return ret;
++	}
++
++	ret = devm_add_action_or_reset(&spi->dev, ada4250_reg_disable, st->reg);
++	if (ret)
++		return ret;
++
++	ret = regmap_write(st->regmap, ADA4250_REG_RESET,
++			   FIELD_PREP(ADA4250_RESET_MSK, 1));
++	if (ret)
++		return ret;
++
++	ret = regmap_bulk_read(st->regmap, ADA4250_REG_CHIP_ID, data, 2);
++	if (ret)
++		return ret;
++
++	chip_id = get_unaligned_le16(data);
++
++	if (chip_id != ADA4250_CHIP_ID) {
++		dev_err(&spi->dev, "Invalid chip ID.\n");
++		return -EINVAL;
++	}
++
++	return regmap_write(st->regmap, ADA4250_REG_REFBUF_EN,
++			    FIELD_PREP(ADA4250_REFBUF_MSK, st->refbuf_en));
++}
++
++static int ada4250_probe(struct spi_device *spi)
++{
++	struct iio_dev *indio_dev;
++	struct regmap *regmap;
++	struct ada4250_state *st;
++	int ret;
++
++	indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*st));
++	if (!indio_dev)
++		return -ENOMEM;
++
++	regmap = devm_regmap_init_spi(spi, &ada4250_regmap_config);
++	if (IS_ERR(regmap))
++		return PTR_ERR(regmap);
++
++	st = iio_priv(indio_dev);
++	st->regmap = regmap;
++	st->spi = spi;
++
++	indio_dev->info = &ada4250_info;
++	indio_dev->name = "ada4250";
++	indio_dev->channels = ada4250_channels;
++	indio_dev->num_channels = ARRAY_SIZE(ada4250_channels);
++
++	mutex_init(&st->lock);
++
++	ret = ada4250_init(st);
++	if (ret) {
++		dev_err(&spi->dev, "ADA4250 init failed\n");
++		return ret;
++	}
++
++	return devm_iio_device_register(&spi->dev, indio_dev);
++}
++
++static const struct spi_device_id ada4250_id[] = {
++	{ "ada4250", 0 },
++	{}
++};
++MODULE_DEVICE_TABLE(spi, ada4250_id);
++
++static const struct of_device_id ada4250_of_match[] = {
++	{ .compatible = "adi,ada4250" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, ada4250_of_match);
++
++static struct spi_driver ada4250_driver = {
++	.driver = {
++			.name = "ada4250",
++			.of_match_table = ada4250_of_match,
++		},
++	.probe = ada4250_probe,
++	.id_table = ada4250_id,
++};
++module_spi_driver(ada4250_driver);
++
++MODULE_AUTHOR("Antoniu Miclaus <antoniu.miclaus@analog.com");
++MODULE_DESCRIPTION("Analog Devices ADA4250");
++MODULE_LICENSE("GPL v2");
 -- 
-2.25.1
+2.35.1
 

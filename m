@@ -2,70 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97ACB4B3238
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 01:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCD44B3244
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 02:03:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354498AbiBLA7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Feb 2022 19:59:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53296 "EHLO
+        id S236568AbiBLBDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Feb 2022 20:03:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240377AbiBLA7W (ORCPT
+        with ESMTP id S235313AbiBLBDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Feb 2022 19:59:22 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14AA338D;
-        Fri, 11 Feb 2022 16:59:19 -0800 (PST)
+        Fri, 11 Feb 2022 20:03:02 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2076.outbound.protection.outlook.com [40.107.223.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3746F3BB;
+        Fri, 11 Feb 2022 17:03:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NCeUb59LTCyK1ZNfpZZrLr2HDnr2umLXTQUQSwqih+SxIxYRkPeGK8l2ZHqT04sSO2YYr7+iOZuvlOKghxnHVisPUZs7oTwYIp6NxjAcBf3nNDVrpfStYX3S7HjQFCHBRZvTRmQmJpUu24+mqY6pv0hzVOpakNHoZj5MDz3n4mEQ4Ibq8IcifMDVPilg09TcyYEO0PZCou7HB4FWf4pfDR0Ps6hF3UZC//u6zwitYR0DauNBnegiZ/pltlCTBJxOWrbVztO7ADUwUG2jaaDimEAM/6slioCbWhSLFPY3IBOIZKjAA2kq/52CC3twFfik/1HDbakZifLpmfHL9gydpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8srxekw+44E60yM4IoM+8tC2CjNMDLgI13DdVLrrtuc=;
+ b=TdVu4tOIi/LJPvH728CoQtmMoGgxPuY/s7qabXt9+DWa36PQqhOdEPfhvlhGYC4X6fSbyRpSdf0lj1puANw+uwX118OZjAU6bk30uGsMkLNj1YRhMDJ0dA9k+zjUV77vogPyDT/sqPqYPw+Mzy0bQG8APCEPKp9k5meWA3+vV1brx6DDpuzjZoksfdad6qTPTVQjdE7sFGFpD4JnGVA5B2cTMc/cok114KuC2AlyGCJiCRrRT1hgVVQmyvLqBlVnXQcPyYtDmJ5fiRXl2XN2c7H87H04MMfVc46h3hT99eenGiMdFYBY7DIf2IHxAela6o5ZQEMJ7hTsJx0MtDt9xA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=infradead.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644627560; x=1676163560;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=lrdbTAyuNTktcI/9KK3WYqc1e2pwKG/qREA8mu+zOsU=;
-  b=WRnf8m4brne9kdD1tCkgMZRGIMdVP2wuE29zpXFemalQMsLvAxUyQV7c
-   AtJDo0cXBC3d+qVdsysIeA5dAkIoX37uilwYm1ZrABonbOg+gxavUB8Me
-   z9MpnS800yhGqDQkXJRAnOBi4+XDcCFEu4zX6sYgVMOy7zoKG6DR52WRr
-   I=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 11 Feb 2022 16:59:19 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 16:59:16 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Fri, 11 Feb 2022 16:59:15 -0800
-Received: from [10.38.246.233] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Fri, 11 Feb
- 2022 16:59:12 -0800
-Message-ID: <f86504ba-835a-6e30-6c30-8bb89b1359c4@quicinc.com>
-Date:   Fri, 11 Feb 2022 16:59:10 -0800
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8srxekw+44E60yM4IoM+8tC2CjNMDLgI13DdVLrrtuc=;
+ b=gMIeTTv3Pkg20Zs5/lOpcsIV7MDCVf4ut0fXqMek4dhYuishngPBaelWZwXBc1F/WCz2WovX13oy6YXCaCTmZGb9cBFw1SAWHzEE9PdqjSzZELBQRQIzJId06ZXSyM7n97+vl4iJbhlJveac8zncGgr/BgXsFZO49Tw4tqnL8Fc=
+Received: from DM5PR19CA0055.namprd19.prod.outlook.com (2603:10b6:3:116::17)
+ by SJ0PR02MB7743.namprd02.prod.outlook.com (2603:10b6:a03:321::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Sat, 12 Feb
+ 2022 01:02:57 +0000
+Received: from DM3NAM02FT054.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:3:116:cafe::1d) by DM5PR19CA0055.outlook.office365.com
+ (2603:10b6:3:116::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.14 via Frontend
+ Transport; Sat, 12 Feb 2022 01:02:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT054.mail.protection.outlook.com (10.13.5.135) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4975.11 via Frontend Transport; Sat, 12 Feb 2022 01:02:57 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Fri, 11 Feb 2022 17:02:56 -0800
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Fri, 11 Feb 2022 17:02:56 -0800
+Envelope-to: dwmw2@infradead.org,
+ mdf@kernel.org,
+ trix@redhat.com,
+ linux-kernel@vger.kernel.org,
+ robh@kernel.org,
+ devicetree@vger.kernel.org,
+ yilun.xu@intel.com
+Received: from [10.17.2.60] (port=60768)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <lizhi.hou@xilinx.com>)
+        id 1nIgoS-000Bc0-2S; Fri, 11 Feb 2022 17:02:56 -0800
+Subject: Re: [PATCH V1 Create empty OF root 1/1] of: create empty of root
+To:     Xu Yilun <yilun.xu@intel.com>, Lizhi Hou <lizhi.hou@xilinx.com>
+CC:     <devicetree@vger.kernel.org>, <robh@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <maxz@xilinx.com>,
+        <sonal.santan@xilinx.com>, <yliu@xilinx.com>,
+        <michal.simek@xilinx.com>, <stefanos@xilinx.com>,
+        <trix@redhat.com>, <mdf@kernel.org>, <dwmw2@infradead.org>,
+        Max Zhen <max.zhen@xilinx.com>
+References: <20220126054807.492651-1-lizhi.hou@xilinx.com>
+ <20220126054807.492651-2-lizhi.hou@xilinx.com>
+ <20220211153801.GA1273192@yilunxu-OptiPlex-7050>
+From:   Lizhi Hou <lizhi.hou@xilinx.com>
+Message-ID: <14bd131d-c978-e669-df55-45b58ff3bf6e@xilinx.com>
+Date:   Fri, 11 Feb 2022 17:02:56 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] drm/msm: populate intf_audio_select() base on hardware
- capability
+In-Reply-To: <20220211153801.GA1273192@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <vkoul@kernel.org>,
-        <daniel@ffwll.ch>, <airlied@linux.ie>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>
-CC:     <quic_aravindh@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1644621822-25407-1-git-send-email-quic_khsieh@quicinc.com>
- <d77140f5-73b3-b9a4-aa4b-b240105eb5d4@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <d77140f5-73b3-b9a4-aa4b-b240105eb5d4@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4fd3b50e-efba-432d-8c3d-08d9edc36867
+X-MS-TrafficTypeDiagnostic: SJ0PR02MB7743:EE_
+X-Microsoft-Antispam-PRVS: <SJ0PR02MB7743554EABB94B539B54E43AA1319@SJ0PR02MB7743.namprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: reQu9h9GvPz7UxYQmSYM41/MYK5RDDYRL2dtKNO1zhjuHEiEBa76PlTYHDG6fmIzy1hOkz2kuM/gwkLQXIUtmRDNJeGRJ08VwKOtQE3AOtCMf6aPrCHJ/nyR+EE43HdM8wNn7WIXitrzEUYxcgvS5mwYb21TXq0rVz8MvvEDh6Kapqaq1pQrcxgWpCV4vMdi0+ukVbA1iz4De02gzGJb3DFAeI9ez8skk11huBB1K6utQ20JumI6ag0uHkJOCOGRqEcGCzbOSKwcIkc7ba9Bi2mFqT3Z0But9voAmVbDDbGDMQbt1+7ohUSLJ4ttrIkmhMeFw0Q4XYR8ZAk8uRsxU8WiEAIkMq+0fkKfHhkCVEDx5UVdxCEKkOHZJtgnGX/lB4NX9BXMHMzCjoIVa6Hcq19a5oVxL3igqOoMOvh4gPz3Iizb+6o58ohwaLuUioqwkMY6RjESrkwnWrReiewyFXdkbVZG+PG2AJnXcGl3gWI6kwnY6Wa2nN8+61QBTc5gXbSfTblTRAt9/4JMXGc11XImjskmj5sGsPwKB6Xw+2OHMMiMFZ6vvlLnHrTuD4WzOUSIJZALh9bBQYVRd0EmmkqDmEWSm60p5+1/TN5YNQx5NHhDm+dBAdNGG7xOvAexLh/aOlXe5nr3ZUDd+pIVq5jgj295/9HILzaD/COBElg6jxDSSSq73OwzRnkgZVyOgrYqdwaOQ14Y1HmHRlpbMrQPryORLVGMqtmY9ToOzHkoPHTN3s475BLbAy34V/jitlYERG4fTjDzsLrLUfVEQhbv4UXPQaPNEr0dQ02ZhLKKJPQMf+y1/Wyxu0KV5wR1
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(8676002)(4326008)(53546011)(356005)(8936002)(966005)(44832011)(36860700001)(70586007)(2616005)(5660300002)(107886003)(47076005)(7636003)(186003)(26005)(70206006)(508600001)(36756003)(426003)(31686004)(31696002)(2906002)(316002)(9786002)(40460700003)(110136005)(82310400004)(54906003)(336012)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2022 01:02:57.4720
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4fd3b50e-efba-432d-8c3d-08d9edc36867
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT054.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7743
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,137 +121,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Yilun,
+
+Thanks a lot for your feedback. I will revise the comments and send 
+another patch.
+
+In the meanwhile, based on our previous discussion,
+
+https://lore.kernel.org/lkml/20220111070000.GC979169@yilunxu-OptiPlex-7050/
+
+I will propose another patch to add an of_pci interface which can be 
+called by pci driver probe routine to create device node for it.
 
 
-On 2/11/2022 4:08 PM, Dmitry Baryshkov wrote:
-> On 12/02/2022 02:23, Kuogee Hsieh wrote:
->> intf_audio_select() callback function use to configure
->> HDMI_DP_CORE_SELECT to decide audio output routes to HDMI or DP
->> interface. HDMI is obsoleted at newer chipset. To keep supporting
->> legacy hdmi application, intf_audio_select call back function have
->> to be populated base on hardware chip capability where legacy
->> chipsets have has_audio_select flag set to true.
-> 
-> So, after thinking more about the patch, I have a bunch of questions:
-> 
-> You are enabling this callback only for sdm845 and sm8150.
-> 
-> Does this register exist on other (newer) platforms (but just defaults 
-> to DP)?
+Thanks,
 
-The register itself exists but there is no logic associated with it. Its 
-a no-op.
+Lizhi
 
-> 
-> Neither sdm845 nor sm8150 support INTF_HDMI. What's the purpose of the 
-> register on these platforms?
-
-Yes we also had a similar thought earlier that this register has meaning 
-only on chipsets which have HDMI and DP but our hardware team suggested
-sm8250 and its derivatives should be the cut-off point to stop using 
-this register. So we are just following that.
-
-> 
-> Does that mean that we should program the register for HDMI (e.g. on 8998)?
-> 
-Yes, we should program this for HDMI 8998 ( although the default value 
-of the register is 0 for HDMI ).
-
-> And, as you are touching this piece of code, how do we control audio 
-> routing on newer platforms which have several hardware DP interfaces?
-> 
-Thats unrelated to this register because on newer chipsets which have 
-two DPs there is no HDMI and hence this register remains a no-op.
-
-But coming to the overall question on multi-DP audio.
-
-This is not a new question. I had first asked about this to Bjorn for 
-sc8180x. The current hdmi-codec interface which is used for single DP 
-audio will have to be extended to support this to support which stream
-to pass the audio on. This is an open item which was left to be done 
-later on because the only chipset which has multi-DP in upstream is 
-sc8180x. We dont have that hardware with us for development. When we 
-start working on that, we will have to implement what I just mentioned.
-
-Thanks
-
-Abhinav
-
-> 
->>
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+On 2/11/22 7:38 AM, Xu Yilun wrote:
+> On Tue, Jan 25, 2022 at 09:48:07PM -0800, Lizhi Hou wrote:
+>> Add OF_EMPTY_ROOT config. When it is selected and there is not a device
+>> tree, create an empty device tree root node.
+> Maybe add some description about why a empty device tree root node is
+> needed. Note that the Patch #0 will not be present in the repo when the
+> series will be merged, so add your description here please.
+>
+>> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
+>> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
+>> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
 >> ---
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 2 ++
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 1 +
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c     | 9 ++++++---
->>   3 files changed, 9 insertions(+), 3 deletions(-)
+>>   drivers/of/Kconfig         |  3 +++
+>>   drivers/of/Makefile        |  1 +
+>>   drivers/of/of_empty_root.c | 51 ++++++++++++++++++++++++++++++++++++++
+>>   3 files changed, 55 insertions(+)
+>>   create mode 100644 drivers/of/of_empty_root.c
 >>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> index 272b14b..23680e7 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> @@ -201,6 +201,7 @@ static const struct dpu_caps sdm845_dpu_caps = {
->>       .has_dim_layer = true,
->>       .has_idle_pc = true,
->>       .has_3d_merge = true,
->> +    .has_audio_select = true,
->>       .max_linewidth = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
->>       .pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
->>       .max_hdeci_exp = MAX_HORZ_DECIMATION,
->> @@ -229,6 +230,7 @@ static const struct dpu_caps sm8150_dpu_caps = {
->>       .has_dim_layer = true,
->>       .has_idle_pc = true,
->>       .has_3d_merge = true,
->> +    .has_audio_select = true,
->>       .max_linewidth = 4096,
->>       .pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
->>       .max_hdeci_exp = MAX_HORZ_DECIMATION,
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->> index e5a96d6..b33f91b 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->> @@ -357,6 +357,7 @@ struct dpu_caps {
->>       bool has_dim_layer;
->>       bool has_idle_pc;
->>       bool has_3d_merge;
->> +    bool has_audio_select;
->>       /* SSPP limits */
->>       u32 max_linewidth;
->>       u32 pixel_ram_size;
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
->> index 282e3c6..e608f4d 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c
->> @@ -261,14 +261,17 @@ static void dpu_hw_intf_audio_select(struct 
->> dpu_hw_mdp *mdp)
->>   }
->>   static void _setup_mdp_ops(struct dpu_hw_mdp_ops *ops,
->> -        unsigned long cap)
->> +        unsigned long cap,
->> +        const struct dpu_mdss_cfg *m)
->>   {
->>       ops->setup_split_pipe = dpu_hw_setup_split_pipe;
->>       ops->setup_clk_force_ctrl = dpu_hw_setup_clk_force_ctrl;
->>       ops->get_danger_status = dpu_hw_get_danger_status;
->>       ops->setup_vsync_source = dpu_hw_setup_vsync_source;
->>       ops->get_safe_status = dpu_hw_get_safe_status;
->> -    ops->intf_audio_select = dpu_hw_intf_audio_select;
+>> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
+>> index 80b5fd44ab1c..42afb126f91a 100644
+>> --- a/drivers/of/Kconfig
+>> +++ b/drivers/of/Kconfig
+>> @@ -94,4 +94,7 @@ config OF_DMA_DEFAULT_COHERENT
+>>   	# arches should select this if DMA is coherent by default for OF devices
+>>   	bool
+>>   
+>> +config OF_EMPTY_ROOT
+>> +	bool
+> Also some descriptions for better understanding?
+>
+> Thanks,
+> Yilun
+>
 >> +
->> +    if (m->caps->has_audio_select)
->> +        ops->intf_audio_select = dpu_hw_intf_audio_select;
->>   }
->>   static const struct dpu_mdp_cfg *_top_offset(enum dpu_mdp mdp,
->> @@ -320,7 +323,7 @@ struct dpu_hw_mdp *dpu_hw_mdptop_init(enum dpu_mdp 
->> idx,
->>        */
->>       mdp->idx = idx;
->>       mdp->caps = cfg;
->> -    _setup_mdp_ops(&mdp->ops, mdp->caps->features);
->> +    _setup_mdp_ops(&mdp->ops, mdp->caps->features, m);
->>       return mdp;
->>   }
-> 
-> 
+>>   endif # OF
+>> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+>> index e0360a44306e..c65364f32935 100644
+>> --- a/drivers/of/Makefile
+>> +++ b/drivers/of/Makefile
+>> @@ -12,6 +12,7 @@ obj-$(CONFIG_OF_RESERVED_MEM) += of_reserved_mem.o
+>>   obj-$(CONFIG_OF_RESOLVE)  += resolver.o
+>>   obj-$(CONFIG_OF_OVERLAY) += overlay.o
+>>   obj-$(CONFIG_OF_NUMA) += of_numa.o
+>> +obj-$(CONFIG_OF_EMPTY_ROOT) += of_empty_root.o
+>>   
+>>   ifdef CONFIG_KEXEC_FILE
+>>   ifdef CONFIG_OF_FLATTREE
+>> diff --git a/drivers/of/of_empty_root.c b/drivers/of/of_empty_root.c
+>> new file mode 100644
+>> index 000000000000..5c429c7a27bd
+>> --- /dev/null
+>> +++ b/drivers/of/of_empty_root.c
+>> @@ -0,0 +1,51 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (C) 2022 Xilinx, Inc.
+>> + */
+>> +
+>> +#include <linux/of.h>
+>> +#include <linux/slab.h>
+>> +
+>> +#include "of_private.h"
+>> +
+>> +static int __init of_root_init(void)
+>> +{
+>> +	struct property *prop = NULL;
+>> +	struct device_node *node;
+>> +	__be32 *val = NULL;
+>> +
+>> +	if (of_root)
+>> +		return 0;
+>> +
+>> +	pr_info("Create empty OF root node\n");
+>> +	node = kzalloc(sizeof(*node), GFP_KERNEL);
+>> +	if (!node)
+>> +		return -ENOMEM;
+>> +	of_node_init(node);
+>> +	node->full_name = "/";
+>> +
+>> +	prop = kcalloc(2, sizeof(*prop), GFP_KERNEL);
+>> +	if (!prop)
+>> +		return -ENOMEM;
+>> +
+>> +	val = kzalloc(sizeof(*val), GFP_KERNEL);
+>> +	if (!val)
+>> +		return -ENOMEM;
+>> +	*val = cpu_to_be32(sizeof(void *) / sizeof(u32));
+>> +
+>> +	prop->name = "#address-cells";
+>> +	prop->value = val;
+>> +	prop->length = sizeof(u32);
+>> +	of_add_property(node, prop);
+>> +	prop++;
+>> +	prop->name = "#size-cells";
+>> +	prop->value = val;
+>> +	prop->length = sizeof(u32);
+>> +	of_add_property(node, prop);
+>> +	of_root = node;
+>> +	for_each_of_allnodes(node)
+>> +		__of_attach_node_sysfs(node);
+>> +
+>> +	return 0;
+>> +}
+>> +pure_initcall(of_root_init);
+>> -- 
+>> 2.27.0
+>

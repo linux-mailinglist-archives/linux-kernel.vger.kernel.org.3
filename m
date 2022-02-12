@@ -2,109 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED07D4B3636
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 17:04:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9004B3638
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 17:08:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236889AbiBLQEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 11:04:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33072 "EHLO
+        id S236887AbiBLQIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 11:08:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236852AbiBLQEW (ORCPT
+        with ESMTP id S231533AbiBLQIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 11:04:22 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8083820E
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 08:04:18 -0800 (PST)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 23096402B4
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 16:04:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1644681857;
-        bh=QcIQqgroCqdej9OjV6C9iN3KDLQKItyx3mQCLCn7fTA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=oEkMjMwcttqEdonOK+Fwky1Q4vTR6ApjXdOpKQEXJjks2dAt82irOH79Dt9xihu5p
-         3CbUDG3YxrpcdKwcWlXl7dygFdpJMdvsEkATNoHs3vN271wfEkVXNbYHqXwDmP08NT
-         HsW2HOJn7rOrUYMlNNxne5RHK/5P4s4g+OJCk7ibhtVmZ1ofyjCRv4sw/4EgBr0NGV
-         +N2OxJ35fmcqtYPy6QRnrGoHoP07Fg9ZbVv33d+u3ApGGtL1kRKTXAmcWDd9QU8OfO
-         dgl0Fhpa4EMxnk8Z8jxQMrsxOJGvy1JRRV2atZikblMbHNBspwNxg/fmZhtPn31n5k
-         SGovyP/husumA==
-Received: by mail-ed1-f69.google.com with SMTP id cr7-20020a056402222700b0040f59dae606so7291471edb.11
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 08:04:17 -0800 (PST)
+        Sat, 12 Feb 2022 11:08:46 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59102B9
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 08:08:43 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id 10so7078759plj.1
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 08:08:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QSwK6RRjbzNVQwnKp+oBVZXI61a/08VcvKS7heKKV2g=;
+        b=h4s6bzXK6jbFajR4totZLL3pGpcCvcfAE6ZFjnDxX32rMVRNiTHHrN3NVPPDdkDO99
+         c8F5916Ew+HMqgaiykKrPCrkKHlS5OeDOet9tOcKJIGygAsXO+7TxhJ+V7aWGJBOpIpU
+         /eSBLJdJ4Iv8HuGliSUFqbxkBsB/G+GcKLZBpKDti6gZHS+29Pcb7ih9M2quzjySoRkr
+         m0bZyu3sedQ4MoeRtefZPOgKu4N2nsC6t+s/4kJqgBcJLC5RBZEbqZTRamoYVyqHWsrk
+         rkGmbqOK2zxvssv5twJjuUAa0uR0oX+KOORP3PkveepcrfDUlYSGhpCzeP6KMUl7b+I+
+         b3/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=QcIQqgroCqdej9OjV6C9iN3KDLQKItyx3mQCLCn7fTA=;
-        b=zr1rtC5baUY939s2988nOdAiUg5n4heuASDTht9BvbMVehnOgnTKveaJR8GBAIRjhW
-         5KTG+Va1EI9pllXyTMtT88kBI8W4OnQ4kKEA4ZJBuLNxVqa7DOTvN/FOCHE4t5bDkpUH
-         VbNVJx6R1/p2Wxgov9UzPZ/cJ7GprpakxvNi7DpjaaE38w/UeMYKZPIR5zhwVaKSZWMC
-         CVMEFTG54lV8kH1Mmqd43gQIpTXsGmJ2Kgt2GTTIdWcdvksi2ZDsNgQROqTD1NSRorUD
-         Ppnh+FkbEGIGTv2BOIv9LAC+ziLoguBCI7zkgO2Gbz/JadYD4Skzsd/Dr18yzxffq1C9
-         TWnw==
-X-Gm-Message-State: AOAM533SK2szm/rcifTKu2xLmN+/zAH+U8VcZc+g1yMAF3TAsvxJtgwq
-        bIif3mWduLbJ+yl3WCbdi2+/gvZsVWV1P9h96ei5ukWmv8ssNtlTX/LYb1yfjlcbW+yMsBrAMOm
-        757aj36peeTuuxBOmbbHZPWOBogvOke/KvPhG1lMO5w==
-X-Received: by 2002:a17:906:77db:: with SMTP id m27mr5235240ejn.763.1644681856548;
-        Sat, 12 Feb 2022 08:04:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzeuTVyT10Sr1VrEAjKE3ypRITjHr1PAzaH07C90ZIL4VM1XZvo6xyhFbHUKor4xH5tzshNlA==
-X-Received: by 2002:a17:906:77db:: with SMTP id m27mr5235230ejn.763.1644681856395;
-        Sat, 12 Feb 2022 08:04:16 -0800 (PST)
-Received: from [192.168.0.101] (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id f19sm8534417edr.96.2022.02.12.08.04.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Feb 2022 08:04:15 -0800 (PST)
-Message-ID: <fb5e8add-b77b-2553-031f-3201225e3a09@canonical.com>
-Date:   Sat, 12 Feb 2022 17:04:14 +0100
+        bh=QSwK6RRjbzNVQwnKp+oBVZXI61a/08VcvKS7heKKV2g=;
+        b=0LnuzyzLkJv9gUu8PqUEAskWcPdbTQebbEhRSbXfvjwmwQ1y2iaiIz/Lx06c0H4heR
+         xDV79deStmdzwBuHsVrYHpWPE935FXEYTJDW+REyWF+2cpqKipo3RQjGB13OA7AQcVKz
+         NYpitirVZnBb0le4RFI6MS0GrYVZexRzf8nqaJr4mC3ALa0bVOuzSdSHDnfI7gQtKrAf
+         mCUkzt/IZhNEhihBmX+MQSW4B+iwQDoE6005ptjrEsX42hO1Myx0u6SNfV6oD9N+qOza
+         g/T4uOTARhmFf91GPv95PHeBedFW6djVipfMlljpLT9ia7v0Qsqa4W5XkeECdRh0c75w
+         sVuw==
+X-Gm-Message-State: AOAM530euUUG9Sdzq9sfaMdSzbYbzoVKCtRNpn8VxO/GEN6qD8AT6KhK
+        +WbL6tPO+ZaMTYkDsFOyRVE=
+X-Google-Smtp-Source: ABdhPJxeUu1OamV4npdmAvvs1z4UWQFLFmo8u9WTAH2gEzB0pzwxk3PQzb64+K9XOfPAl42K1fMsgQ==
+X-Received: by 2002:a17:90a:ac0f:: with SMTP id o15mr5838778pjq.140.1644682122847;
+        Sat, 12 Feb 2022 08:08:42 -0800 (PST)
+Received: from localhost.localdomain ([212.107.28.166])
+        by smtp.gmail.com with ESMTPSA id x23sm31170280pfh.216.2022.02.12.08.08.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Feb 2022 08:08:42 -0800 (PST)
+From:   Yu Huang <diwang90@gmail.com>
+To:     perex@perex.cz
+Cc:     diwang90@gmail.com, Takashi Iwai <tiwai@suse.com>,
+        Jeremy Szu <jeremy.szu@canonical.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        Hui Wang <hui.wang@canonical.com>,
+        Cameron Berkenpas <cam@neo-zeon.de>,
+        Kailang Yang <kailang@realtek.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Sami Loone <sami@loone.fi>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ALSA: hda/realtek: Add quirk for Legion Y9000X 2019
+Date:   Sun, 13 Feb 2022 00:08:33 +0800
+Message-Id: <20220212160835.165065-1-diwang90@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 0/3] regulator/mfd: dt-bindings: maxim,max77802:
- convert to dtschema
-Content-Language: en-US
-To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-References: <20220111175430.224421-1-krzysztof.kozlowski@canonical.com>
- <f0a9e656-cf18-f212-b701-a1c9d10c4a59@canonical.com>
- <YgDoG8Xlhq5L3Bii@google.com> <20220212112536.GB20866@duo.ucw.cz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220212112536.GB20866@duo.ucw.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/02/2022 12:25, Pavel Machek wrote:
-> Hi!
-> 
->>> Dear Lee,
->>>
->>> This patchset was reviewed and there are no outstanding issues. Could
->>> you pick up entire set via MFD tree?
->>
->> Nothing from LED or Regulator?
-> 
-> I took 3/3 separately, as suggested.
-> 
+Legion Y9000X 2019 has the same speaker with Y9000X 2020,
+but with a different quirk address. Add one quirk entry
+to make the speaker work on Y9000X 2019 too.
 
-Thanks!
+Signed-off-by: Yu Huang <diwang90@gmail.com>
+---
+ sound/pci/hda/patch_realtek.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 8315bf7d4c38..9473fb76ff19 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9170,6 +9170,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x17aa, 0x3824, "Legion Y9000X 2020", ALC285_FIXUP_LEGION_Y9000X_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x3827, "Ideapad S740", ALC285_FIXUP_IDEAPAD_S740_COEF),
+ 	SND_PCI_QUIRK(0x17aa, 0x3834, "Lenovo IdeaPad Slim 9i 14ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
++	SND_PCI_QUIRK(0x17aa, 0x383d, "Legion Y9000X 2019", ALC285_FIXUP_LEGION_Y9000X_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x3843, "Yoga 9i", ALC287_FIXUP_IDEAPAD_BASS_SPK_AMP),
+ 	SND_PCI_QUIRK(0x17aa, 0x3847, "Legion 7 16ACHG6", ALC287_FIXUP_LEGION_16ACHG6),
+ 	SND_PCI_QUIRK(0x17aa, 0x384a, "Lenovo Yoga 7 15ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
+-- 
+2.34.1
 
-Best regards,
-Krzysztof

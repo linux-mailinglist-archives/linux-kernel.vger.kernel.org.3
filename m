@@ -2,173 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 676514B3659
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 17:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E572B4B3661
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 17:21:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237145AbiBLQTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 11:19:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39672 "EHLO
+        id S237191AbiBLQUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 11:20:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbiBLQTU (ORCPT
+        with ESMTP id S232502AbiBLQUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 11:19:20 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0E4197;
-        Sat, 12 Feb 2022 08:19:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=5ps4Dpti6anPMML5DYvmxj3DVlK84HL9lrfnW5s1I7I=; b=diiOuL6v4zmcZFLQ7gZZaN9BB3
-        oDxx5cZ30Fmaus1PFKW31N94BRa5pvI/DafyMb9VxVulw7aS/gMckVjYHQ7s7OAlMPCE4bju0hX9h
-        +0QSM40rREXJOCDBrR7c09iOuvhD8ZQuCjYGZVhY8cH6Ura2HLhIE6F8e5vYXv7gflZ0F13Fpzxzb
-        XVLT87dmvRb0/gKrvbW0sWa4oAK4TQwDrClnIfQFTSAWOlw5TzdIEduy8X+sHLA8uJ5gcpcID/FpB
-        Ic0xkLP47aZfK0t7aYD9o2WLBAsMaBfxnD1ZljA3Xj9iHMxzFRDbqcc/oEEuW0b8IVnn61sBFAZwD
-        fN6oGatg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57218)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nIv75-0008Hc-BQ; Sat, 12 Feb 2022 16:19:07 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nIv6x-0004fN-8O; Sat, 12 Feb 2022 16:18:59 +0000
-Date:   Sat, 12 Feb 2022 16:18:59 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Finn Behrens <me@kloenk.de>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Douglas Su <d0u9.su@outlook.com>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Daniel Xu <dxu@dxuuu.xyz>, Miguel Cano <macanroj@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v4 16/20] Kbuild: add Rust support
-Message-ID: <Ygfd82QN/wmSmlHa@shell.armlinux.org.uk>
-References: <20220212130410.6901-1-ojeda@kernel.org>
- <20220212130410.6901-17-ojeda@kernel.org>
- <YgfBUhYdLXA46kOX@shell.armlinux.org.uk>
- <CANiq72nMhUH1s0HMeLb+hfp5=u3h20ryC4uqAgB1Znuq52e=Pw@mail.gmail.com>
+        Sat, 12 Feb 2022 11:20:51 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA5C181;
+        Sat, 12 Feb 2022 08:20:47 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id o9so11612354ljq.4;
+        Sat, 12 Feb 2022 08:20:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:references:in-reply-to:content-transfer-encoding;
+        bh=ihArlHjS/Wfm+9ieK7AzTeyUT4KunV6n7Q59sXAdDMU=;
+        b=f+i8gncsi2xlxtI+VVw8FQCZvWruHA3H/AyGu3DtBn1eqR1FzczGri9XYXB8tItxaL
+         dAiq71kqKY/HOngidbGqfSAIKv6FOUq5hAJlh1XhG38X3fsnTHT/K4v0j7N0T7REnjEi
+         1QmDl+f2HHoSzNzCAY/dRFX+yPYRUae23F8NXWOhEcXK6Te+OA0auONMzM7/NfgtBgrG
+         LZy3jcRic3oy3FR+NCNPMjZQHHf72+NW3RB6VP/LmH1rCYN1AuRMehKIu5mf6KEcQFbG
+         IRBHmni+iuJzw/d/6W+aJOyYQ+zmMhc089Poj2xMpibKsVtX3Xnl0L2at75kGOfT4JKt
+         shHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:references:in-reply-to
+         :content-transfer-encoding;
+        bh=ihArlHjS/Wfm+9ieK7AzTeyUT4KunV6n7Q59sXAdDMU=;
+        b=CSOECOgnV5Yr/to0nPBrNTow/55zz0WADJArEuLRKvxYD8G8g5QJdbxFlisKV62tAx
+         LiqjiCTGs9x25uNP+P77oOrjqCWtylE1PWwWbV41PHFCG5IjqI0NpQztXWEX0pnvT1CN
+         TurMWrniMUCp/OarZhLDm3IMdTmpe3u8F0uwyE+/VzIOS9Ug2UI0zayeLGUbMls19O9L
+         hH2g+d+oa6JXsVZUIWVBumPY1Fhsa5sP5ZlU6/35MB7GQP0th1ADPztXuL7MSGIOJgVf
+         Uf2M5HKmp3vVYI1blYnWGwRTynmxelCBcKQxK9YyIeoYGNt3LITpbvP9Y+tk4fky5L9X
+         lRsQ==
+X-Gm-Message-State: AOAM532/VXaoM+MWW5JplQfvmLHimozGqI7q99y/rBdUsYLlYYGmHcfU
+        EaRrY6jzoZ6vOUxVm4R8VTg=
+X-Google-Smtp-Source: ABdhPJy5WVHJa4sRKXC+KEKVeXnaHpzuzeB36CGy4FcY6HfRuITMF5Rn4wreJeCxG+Ut/vdaY6tawA==
+X-Received: by 2002:a2e:530c:: with SMTP id h12mr4039182ljb.521.1644682845747;
+        Sat, 12 Feb 2022 08:20:45 -0800 (PST)
+Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
+        by smtp.googlemail.com with ESMTPSA id f9sm1474643lfk.265.2022.02.12.08.20.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Feb 2022 08:20:45 -0800 (PST)
+Message-ID: <ff83adba-7919-fa48-4637-a4cb9b94a8e1@gmail.com>
+Date:   Sat, 12 Feb 2022 19:20:44 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANiq72nMhUH1s0HMeLb+hfp5=u3h20ryC4uqAgB1Znuq52e=Pw@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH RESEND] i2c: tegra: Add SMBus block read function
+Content-Language: en-US
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Akhil R <akhilrajeev@nvidia.com>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+References: <20220210153603.61894-1-akhilrajeev@nvidia.com>
+ <ae6d300f-962d-9731-bb78-3594b4c31aea@gmail.com>
+ <DM5PR12MB18502CF86E602F7071A1EA58C0309@DM5PR12MB1850.namprd12.prod.outlook.com>
+ <94fc8b11-6149-56ca-a028-cf7f39930992@gmail.com>
+In-Reply-To: <94fc8b11-6149-56ca-a028-cf7f39930992@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 12, 2022 at 04:47:33PM +0100, Miguel Ojeda wrote:
-> Hi Russell,
+12.02.2022 19:15, Dmitry Osipenko пишет:
+> 11.02.2022 12:11, Akhil R пишет:
+>>> 10.02.2022 18:36, Akhil R пишет:
+>>>> Emulate SMBus block read using ContinueXfer to read the length byte
+>>>>
+>>>> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+>>>> ---
+>>>>  drivers/i2c/busses/i2c-tegra.c | 18 ++++++++++++++++--
+>>>>  1 file changed, 16 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+>>>> index 03cea102ab76..2941e42aa6a0 100644
+>>>> --- a/drivers/i2c/busses/i2c-tegra.c
+>>>> +++ b/drivers/i2c/busses/i2c-tegra.c
+>>>> @@ -1233,6 +1233,11 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev
+>>> *i2c_dev,
+>>>>               return err;
+>>>>
+>>>>       i2c_dev->msg_buf = msg->buf;
+>>>> +
+>>>> +     /* The condition true implies smbus block read and len is already read */
+>>>> +     if (msg->flags & I2C_M_RECV_LEN && end_state !=
+>>> MSG_END_CONTINUE)
+>>>> +             i2c_dev->msg_buf = msg->buf + 1;
+>>>> +
+>>>>       i2c_dev->msg_buf_remaining = msg->len;
+>>>>       i2c_dev->msg_err = I2C_ERR_NONE;
+>>>>       i2c_dev->msg_read = !!(msg->flags & I2C_M_RD);
+>>>> @@ -1389,6 +1394,15 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap,
+>>> struct i2c_msg msgs[],
+>>>>                       else
+>>>>                               end_type = MSG_END_REPEAT_START;
+>>>>               }
+>>>> +             /* If M_RECV_LEN use ContinueXfer to read the first byte */
+>>>> +             if (msgs[i].flags & I2C_M_RECV_LEN) {
+>>>> +                     ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i],
+>>> MSG_END_CONTINUE);
+>>>> +                     if (ret)
+>>>> +                             break;
+>>>> +                     /* Set the read byte as msg len */
+>>>> +                     msgs[i].len = msgs[i].buf[0];
+>>>> +                     dev_dbg(i2c_dev->dev, "reading %d bytes\n", msgs[i].len);
+>>>> +             }
+>>>>               ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], end_type);
+>>>>               if (ret)
+>>>>                       break;
+>>>> @@ -1416,10 +1430,10 @@ static u32 tegra_i2c_func(struct i2c_adapter
+>>> *adap)
+>>>>  {
+>>>>       struct tegra_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
+>>>>       u32 ret = I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL &
+>>> ~I2C_FUNC_SMBUS_QUICK) |
+>>>> -               I2C_FUNC_10BIT_ADDR | I2C_FUNC_PROTOCOL_MANGLING;
+>>>> +               I2C_FUNC_10BIT_ADDR | I2C_FUNC_PROTOCOL_MANGLING;
+>>>>
+>>>>       if (i2c_dev->hw->has_continue_xfer_support)
+>>>> -             ret |= I2C_FUNC_NOSTART;
+>>>> +             ret |= I2C_FUNC_NOSTART | I2C_FUNC_SMBUS_READ_BLOCK_DATA;
+>>>>
+>>>>       return ret;
+>>>>  }
+>>>
+>>> Please describe how this was tested.
+>> This is tested using an I2C EEPROM to emulate SMBus block read in which
+>> we read the first byte as the length of bytes to read. This is an expected
+>> feature for NVIDIA Grace chipset where there will be an actual SMBus device.
 > 
-> On Sat, Feb 12, 2022 at 3:17 PM Russell King (Oracle)
-> <linux@armlinux.org.uk> wrote:
-> >
-> > Please don't use CPU_32v6* here.
-> >
-> > It probably makes more sense to add a symbol "HAVE_RUST" and have the
-> > appropriate architecture Kconfig files select HAVE_RUST.
+> We have several Tegra30+ tablets that have EC on SMBus. Svyatoslav tried
+> your I2C patch + [1] on Asus TF201 and reported that it breaks EC. Any
+> idea why it doesn't work?
 > 
-> We can do it whatever way arch maintainers prefer, of course. Why
-> would you prefer one over the other?
+> [1]
+> https://github.com/grate-driver/linux/commit/aa8d71f5a960ef40503e5448c622d62d1c53a2c0
 
-It would be cleaner, rather than the "depends" line getting longer
-and longer over time - and if different architecture maintainers
-change it, it will lead to conflicts.
-
-> > Does Rust support Thumb on ARMv6 and ARMv7 architectures?
-> 
-> Yes, the main backend is LLVM. Some built-in targets and their support
-> level are listed here, if you want to take a look:
-
-Right, so why made it dependent on CPU_32v6 || CPU_32v6K if ARMv7 is
-supported? What about CPU_32v7? What about CPU_32v7M?
-
-I think it would be saner to use the CPU_V6, CPU_V6K, CPU_V7 and maybe
-CPU_V7M here - even bettern to select "HAVE_RUST" from these symbols,
-since I'm sure you'd start to see the issue behind my "HAVE_RUST"
-suggestion as it means having four symbols just for 32-bit ARM on your
-dependency line.
-
->     https://doc.rust-lang.org/nightly/rustc/platform-support.html
-
-Interestingly, it does not list arm-unknown-linux-gnueabihf, which
-is the "tuple" commonly used to build 32-bit ARM kernels. 
-
-> > Please remove every utterance of "default n" from your patch; n is the
-> > default default which default defaults to, so you don't need to specify
-> > default n to make the option default to n. It will default to n purely
-> > because n is the default when no default is specified.
-> 
-> Certainly. I am curious, though: is there a reason for most of the
-> other 500+ instances in the kernel tree?
-
-Probably because people incorrectly think it's required or some other
-minor reason. As I say:
-
-config FOO
-	bool/tristate ...
-
-always defaults to 'n' without needing "default n" to be specified.
-
-Let's do some proper research on this. There are 19148 "config"
-statements in the kernel tree, 521 "default n" and 4818 that
-specify any kind of "default". That means there are about 14330
-config statements that do not specify any kind of default.
-
-So, there are about 27 times more config statements that specify no
-default than those that specify "default n", so using the argument
-that there are "500+ instances" and therefore should be seen as
-correct is completely misguided.
-
-> > As Rust doesn't support all the architectures that the kernel supports,
-> > Rust must not be used for core infrastructure.
-> 
-> Yeah, although I am not sure I understand what you are getting at here.
-
-I mean, if we end up with, e.g. a filesystem coded in Rust, that
-filesystem will not be available on architectures that the kernel
-supports until either (a) Rust gains support for that architecture
-or (b) someone re-codes the filesystem in C - at which point, what
-is the point of having Rust in the kernel?
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Ah, I see now that I2C_FUNC_SMBUS_WRITE_BLOCK_DATA not supported, we
+should check again without the write then.

@@ -2,65 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7654B3443
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 11:40:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF934B344E
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 11:44:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233588AbiBLKkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 05:40:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40908 "EHLO
+        id S233774AbiBLKoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 05:44:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233577AbiBLKjr (ORCPT
+        with ESMTP id S233569AbiBLKoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 05:39:47 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D308026544;
-        Sat, 12 Feb 2022 02:39:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644662384; x=1676198384;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i2kFxobRZrFp47lN9RhnaWjJfWwlZNp7bRVEfKX/jtc=;
-  b=PS4K/jQwCHvEqVr5CpG0IF0yxBkIk9S6Y+cP4vClYcK/8dNpB58ZSvBB
-   K+HypB7nFCF7YLXTndJRCmR+Oyuz6lZNzGDUReQC3da0Ye4eiMbq8C7eq
-   0I/Jrm+umoXksFUbHG2ceueaMjKNVsDwaj1csP67vdq9hx+rRwH7WH8VD
-   9AYwcDzP6ibw+y1lFkL+SLG8/IOXje+irBquo4GnfpTW59C542zIQjrN3
-   jgr5d7IOGBH3c6e5hY+ucluDE240qu6rGSpmhxsGqxww/B76tjzrt0Geq
-   a3SiUK8qbNaRDPIDPI+OEkKEGQieLXscUtZkMNgXeZ94Nih7kqHlY0v8/
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="230511977"
-X-IronPort-AV: E=Sophos;i="5.88,363,1635231600"; 
-   d="scan'208";a="230511977"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2022 02:39:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,363,1635231600"; 
-   d="scan'208";a="623458386"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Feb 2022 02:39:41 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nIpob-00061O-1i; Sat, 12 Feb 2022 10:39:41 +0000
-Date:   Sat, 12 Feb 2022 18:39:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] serial: 8250: Report which option to enable for
- blacklisted PCI devices
-Message-ID: <202202121734.Zc1GlUwC-lkp@intel.com>
-References: <alpine.DEB.2.21.2202062133570.34636@angie.orcam.me.uk>
+        Sat, 12 Feb 2022 05:44:04 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2A52656E;
+        Sat, 12 Feb 2022 02:43:56 -0800 (PST)
+X-UUID: fb20e02e584d43b5b10b84467f310f71-20220212
+X-UUID: fb20e02e584d43b5b10b84467f310f71-20220212
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <lecopzer.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 690852364; Sat, 12 Feb 2022 18:43:52 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Sat, 12 Feb 2022 18:43:51 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Sat, 12 Feb
+ 2022 18:43:50 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 12 Feb 2022 18:43:50 +0800
+From:   Lecopzer Chen <lecopzer.chen@mediatek.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>, <davem@davemloft.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Marc Zyngier" <maz@kernel.org>,
+        Julien Thierry <jthierry@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wang Qing <wangqing@vivo.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-perf-users@vger.kernel.org>, <sparclinux@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <sumit.garg@linaro.org>,
+        <kernelfans@gmail.com>, <lecopzer.chen@mediatek.com>,
+        <yj.chiang@mediatek.com>
+Subject: [PATCH 0/5] Support hld based on Pseudo-NMI for arm64
+Date:   Sat, 12 Feb 2022 18:43:44 +0800
+Message-ID: <20220212104349.14266-1-lecopzer.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2202062133570.34636@angie.orcam.me.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,84 +73,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Maciej,
+As we already used hld internally for arm64 since 2020, there still
+doesn't have a proper commit on the upstream and we badly need it.
 
-I love your patch! Yet something to improve:
+This serise rebase on 5.17-rc3 from [1] and the origin author is
+Pingfan Liu <kernelfans@gmail.com>
+Sumit Garg <sumit.garg@linaro.org>
 
-[auto build test ERROR on tty/tty-testing]
-[also build test ERROR on usb/usb-testing v5.17-rc3 next-20220211]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Maciej-W-Rozycki/serial-8250-Correct-basic-issues-with-the-PCI-blacklist/20220212-164230
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20220212/202202121734.Zc1GlUwC-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/aa68e36c332457acb464b083c920d10f0e5a9865
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Maciej-W-Rozycki/serial-8250-Correct-basic-issues-with-the-PCI-blacklist/20220212-164230
-        git checkout aa68e36c332457acb464b083c920d10f0e5a9865
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash drivers/tty/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/tty/serial/8250/8250_pci.c:3522:9: error: initializer element is not computable at load time
-    3522 |         (IS_ENABLED(CONFIG_##option) ? 0 : (kernel_ulong_t)&#option)
-         |         ^
-   drivers/tty/serial/8250/8250_pci.c:3535:39: note: in expansion of macro 'REPORT_CONFIG'
-    3535 |         { PCI_DEVICE(0x4348, 0x7053), REPORT_CONFIG(PARPORT_SERIAL), },
-         |                                       ^~~~~~~~~~~~~
-   drivers/tty/serial/8250/8250_pci.c:3522:9: note: (near initialization for 'blacklist[3].class')
-    3522 |         (IS_ENABLED(CONFIG_##option) ? 0 : (kernel_ulong_t)&#option)
-         |         ^
-   drivers/tty/serial/8250/8250_pci.c:3535:39: note: in expansion of macro 'REPORT_CONFIG'
-    3535 |         { PCI_DEVICE(0x4348, 0x7053), REPORT_CONFIG(PARPORT_SERIAL), },
-         |                                       ^~~~~~~~~~~~~
->> drivers/tty/serial/8250/8250_pci.c:3522:9: error: initializer element is not computable at load time
-    3522 |         (IS_ENABLED(CONFIG_##option) ? 0 : (kernel_ulong_t)&#option)
-         |         ^
-   drivers/tty/serial/8250/8250_pci.c:3537:39: note: in expansion of macro 'REPORT_CONFIG'
-    3537 |         { PCI_DEVICE(0x4348, 0x5053), REPORT_CONFIG(PARPORT_SERIAL), },
-         |                                       ^~~~~~~~~~~~~
-   drivers/tty/serial/8250/8250_pci.c:3522:9: note: (near initialization for 'blacklist[4].class')
-    3522 |         (IS_ENABLED(CONFIG_##option) ? 0 : (kernel_ulong_t)&#option)
-         |         ^
-   drivers/tty/serial/8250/8250_pci.c:3537:39: note: in expansion of macro 'REPORT_CONFIG'
-    3537 |         { PCI_DEVICE(0x4348, 0x5053), REPORT_CONFIG(PARPORT_SERIAL), },
-         |                                       ^~~~~~~~~~~~~
->> drivers/tty/serial/8250/8250_pci.c:3522:9: error: initializer element is not computable at load time
-    3522 |         (IS_ENABLED(CONFIG_##option) ? 0 : (kernel_ulong_t)&#option)
-         |         ^
-   drivers/tty/serial/8250/8250_pci.c:3539:39: note: in expansion of macro 'REPORT_CONFIG'
-    3539 |         { PCI_DEVICE(0x1c00, 0x3250), REPORT_CONFIG(PARPORT_SERIAL), },
-         |                                       ^~~~~~~~~~~~~
-   drivers/tty/serial/8250/8250_pci.c:3522:9: note: (near initialization for 'blacklist[5].class')
-    3522 |         (IS_ENABLED(CONFIG_##option) ? 0 : (kernel_ulong_t)&#option)
-         |         ^
-   drivers/tty/serial/8250/8250_pci.c:3539:39: note: in expansion of macro 'REPORT_CONFIG'
-    3539 |         { PCI_DEVICE(0x1c00, 0x3250), REPORT_CONFIG(PARPORT_SERIAL), },
-         |                                       ^~~~~~~~~~~~~
+[1] wasn't reviewed for its patch v3, I'll take over the further development
+for this.
 
 
-vim +3522 drivers/tty/serial/8250/8250_pci.c
+Qoute from [1]:
 
-  3520	
-  3521	#define REPORT_CONFIG(option) \
-> 3522		(IS_ENABLED(CONFIG_##option) ? 0 : (kernel_ulong_t)&#option)
-  3523	#define REPORT_8250_CONFIG(option) \
-  3524		(IS_ENABLED(CONFIG_SERIAL_8250_##option) ? \
-  3525		 0 : (kernel_ulong_t)&"SERIAL_8250_"#option)
-  3526	
+Hard lockup detector is helpful to diagnose unpaired irq enable/disable.
+But the current watchdog framework can not cope with arm64 hw perf event
+easily.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On arm64, when lockup_detector_init()->watchdog_nmi_probe(), PMU is not
+ready until device_initcall(armv8_pmu_driver_init).  And it is deeply
+integrated with the driver model and cpuhp. Hence it is hard to push the
+initialization of armv8_pmu_driver_init() before smp_init().
+
+But it is easy to take an opposite approach by enabling watchdog_hld to
+get the capability of PMU async. 
+The async model is achieved by expanding watchdog_nmi_probe() with
+-EBUSY, and a re-initializing work_struct which waits on a
+wait_queue_head.
+
+[1] https://lore.kernel.org/lkml/20211014024155.15253-1-kernelfans@gmail.com/
+
+
+Lecopzer Chen (2):
+  kernel/watchdog: remove WATCHDOG_DEFAULT
+  kernel/watchdog: change watchdog_nmi_enable() to void
+
+Pingfan Liu (2):
+  kernel/watchdog_hld: Ensure CPU-bound context when creating hardlockup
+    detector event
+  kernel/watchdog: Adapt the watchdog_hld interface for async model
+
+Sumit Garg (1):
+  arm64: Enable perf events based hard lockup detector
+
+ arch/arm64/Kconfig               |  2 ++
+ arch/arm64/kernel/Makefile       |  1 +
+ arch/arm64/kernel/perf_event.c   | 11 ++++--
+ arch/arm64/kernel/watchdog_hld.c | 36 +++++++++++++++++++
+ arch/sparc/kernel/nmi.c          |  8 ++---
+ drivers/perf/arm_pmu.c           |  5 +++
+ include/linux/nmi.h              | 11 +++++-
+ include/linux/perf/arm_pmu.h     |  2 ++
+ kernel/watchdog.c                | 61 ++++++++++++++++++++++++++++----
+ kernel/watchdog_hld.c            |  8 ++++-
+ 10 files changed, 131 insertions(+), 14 deletions(-)
+ create mode 100644 arch/arm64/kernel/watchdog_hld.c
+
+-- 
+2.25.1
+

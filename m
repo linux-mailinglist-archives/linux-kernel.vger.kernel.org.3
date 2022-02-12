@@ -2,81 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6254B3885
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 00:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B01CE4B3887
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 00:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbiBLXNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 18:13:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39460 "EHLO
+        id S232398AbiBLXOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 18:14:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiBLXNj (ORCPT
+        with ESMTP id S230143AbiBLXOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 18:13:39 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 969255F8CE
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 15:13:34 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 5036892009C; Sun, 13 Feb 2022 00:13:33 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 4182F92009B;
-        Sat, 12 Feb 2022 23:13:33 +0000 (GMT)
-Date:   Sat, 12 Feb 2022 23:13:33 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Joshua Kinard <kumba@gentoo.org>
-cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Ralf Baechle <ralf@linux-mips.org>
-Subject: Re: [PATCH RFC v0] random: block in /dev/urandom
-In-Reply-To: <fcab986b-d0bd-c798-de17-266abcdc7da2@gentoo.org>
-Message-ID: <alpine.DEB.2.21.2202122309560.34636@angie.orcam.me.uk>
-References: <20220211210757.612595-1-Jason@zx2c4.com> <fcab986b-d0bd-c798-de17-266abcdc7da2@gentoo.org>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Sat, 12 Feb 2022 18:14:38 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7E85F8CE;
+        Sat, 12 Feb 2022 15:14:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644707673; x=1676243673;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gd+aFqfmOKSD6/n5omvf69+8KOB5SRxFpZkpzwn8bwU=;
+  b=MQ1JBM+sOkaQJCH7+Xc1Wf9YFDSpIrmQgSE68Ys2sZ26A6wca7ijXGv8
+   9DtDFACCwoTGXo4/0IVZyGeg6hGumZmtkQMOOBD3JjcJBqU3kVSSGejZC
+   GQznzPfGryg4swlOlQs11IIo9pOJBLqIZgmJjCRSepXh5WRYDXEM1UcBa
+   EDHKdHELJw1kaw+JcGtBlsIEOFkZgcNgyLompFjd9s+Ndwl+6JT80AohY
+   E2KTb/pZw4YE/aZkTe+zLLPkvmOk+KqX3ZalVBdkLzxezzlARFowWxpjk
+   A+Qsmv59F6GSPmflwKOakQxq/h/4zIzZzVo9dAAHPbkKzEEBS9K8PmL/q
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10256"; a="274471837"
+X-IronPort-AV: E=Sophos;i="5.88,364,1635231600"; 
+   d="scan'208";a="274471837"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2022 15:14:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,364,1635231600"; 
+   d="scan'208";a="774573109"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 12 Feb 2022 15:14:32 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJ1b5-0006jp-Gx; Sat, 12 Feb 2022 23:14:31 +0000
+Date:   Sun, 13 Feb 2022 07:13:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marcello Sylvester Bauer <sylv@sylv.io>,
+        linux-hwmon@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Marcello Sylvester Bauer <sylv@sylv.io>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 3/4] pmbus: Add support for pli1209bc
+Message-ID: <202202130705.3YDPfyow-lkp@intel.com>
+References: <e4d83b95cfb0cc0c6acb65bd1263cf0131b6ce51.1644597670.git.sylv@sylv.io>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e4d83b95cfb0cc0c6acb65bd1263cf0131b6ce51.1644597670.git.sylv@sylv.io>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 12 Feb 2022, Joshua Kinard wrote:
+Hi Marcello,
 
-> # grep -r "PRID_IMP_R6000" *
-> arch/mips/include/asm/cpu.h:70:#define PRID_IMP_R6000           0x0300
->     /* Same as R3000A  */
-> arch/mips/include/asm/cpu.h:72:#define PRID_IMP_R6000A          0x0600
-> arch/mips/include/asm/timex.h:94:       else if (likely(imp !=
-> PRID_IMP_R6000 && imp != PRID_IMP_R6000A))
-> 
-> I'd say it's better to remove the check and simplify the conditional to
-> eliminate this corner case.  Maybe keep the #defines around for
-> documentation, but even that may not be necessary for CPUs that likely don't
-> exist anymore.
+Thank you for the patch! Yet something to improve:
 
- IIRC Ralf used to have a working R6k machine, but I have no idea what has 
-happened to it.  No port of Linux has been made for that system though, 
-that's for sure.
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on robh/for-next v5.17-rc3 next-20220211]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-  Maciej
+url:    https://github.com/0day-ci/linux/commits/Marcello-Sylvester-Bauer/Support-pli1209bc-Digital-Supervisor/20220212-011956
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+config: hexagon-randconfig-r024-20220213 (https://download.01.org/0day-ci/archive/20220213/202202130705.3YDPfyow-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c7eb84634519e6497be42f5fe323f9a04ed67127)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/0b0d15e123c13b2eb898502661b18d81ed87e325
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Marcello-Sylvester-Bauer/Support-pli1209bc-Digital-Supervisor/20220212-011956
+        git checkout 0b0d15e123c13b2eb898502661b18d81ed87e325
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: module pli1209bc uses symbol pmbus_read_word_data from namespace PMBUS, but does not import it.
+>> ERROR: modpost: module pli1209bc uses symbol pmbus_do_probe from namespace PMBUS, but does not import it.
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

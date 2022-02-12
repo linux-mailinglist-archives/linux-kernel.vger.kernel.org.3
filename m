@@ -2,185 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F091B4B3596
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 15:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3B34B359D
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 15:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236221AbiBLOUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 09:20:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33344 "EHLO
+        id S236045AbiBLOUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 09:20:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235881AbiBLOTu (ORCPT
+        with ESMTP id S236323AbiBLOUp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 09:19:50 -0500
-Received: from mo4-p04-ob.smtp.rzone.de (mo4-p04-ob.smtp.rzone.de [81.169.146.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03051245AF;
-        Sat, 12 Feb 2022 06:19:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1644675575;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=zCXgJblTF+rQHVFbLwGtG0urpFfPwR+Q4AYo+sbdsy4=;
-    b=eOVtUGo2XPi/xKQ+TbTsqu7u3QWX1kgIzSR34+K/EWDhkes7pm1NAxx6CZ0FQiSlYN
-    BS7GxcjyQEQpfyrw90MHU5T/HHQavZCrbo3NF7JWTLLxFbtLq7uhNXNh1HyJXbCYYs5c
-    V9EvV8c3jT/wZVPsJw9aVwAwjQTgn6LcEidGTL1z9xFuvncUsr57DXLls+VxcOAo8gRJ
-    C2hR87Zm/auXe4DCP15DvNQArCvcY3DIw8f2pH0z9yLjLl3VOOVXsnCfHQWTHg92yM5B
-    i8FwlVB4ranmzt+/WJiPh9rPIdRdxhbbdufXxsz40FjsbUZLHuTnLDzGarxLFJ3lhilp
-    l9Wg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UMf2MwPVblcdY="
-X-RZG-CLASS-ID: mo00
-Received: from iMac.fritz.box
-    by smtp.strato.de (RZmta 47.39.0 DYNA|AUTH)
-    with ESMTPSA id L29417y1CEJYsqa
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sat, 12 Feb 2022 15:19:34 +0100 (CET)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH v14 9/9] [RFC] drm/ingenic: add some more features specific to jz4780
-Date:   Sat, 12 Feb 2022 15:19:27 +0100
-Message-Id: <8c204fa75a8e9aea5e7ed2428e7b4dead2b5110b.1644675567.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <cover.1644675566.git.hns@goldelico.com>
-References: <cover.1644675566.git.hns@goldelico.com>
+        Sat, 12 Feb 2022 09:20:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4CC2613A
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 06:20:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54279B8069D
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 14:20:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6952C340E7;
+        Sat, 12 Feb 2022 14:20:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644675629;
+        bh=TwVjv6DO9koJT4L7GHGE18JP/jnf2PVbKTb65YI4Hfc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mwVbT5Kao/Qa17cctx28ujIdQCuKm0o/P0yhq/GsWm4gm8Bwnd6POpr/36/W98o/L
+         A4qglr3kRgJ48UOLT7UqavPvsS/C/mJQJh/PLTwwA0oM/wzbs59nFQ3yN0nnpLUrN0
+         m4NtKAkyeiYIqf4+NZc6Okcqti8O8mqQKB00edjhTrhdxKEhz2Hf4wuTIqQiq+TJx3
+         h7vQk2LhEsAGpCcg9SmXpFF1DLT2YrjC8EGm0s8jMLOsuv8xuvX6BDBwmfxdK64kua
+         I4g855n4XdAnlKK2F7nEMwZTBHYEh7qAC3JVvlzlFvTZXTz5xMRNkj24mlmwmzgBKX
+         EoFfoYDBd5WqA==
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 1/2] f2fs: fix missing free nid in f2fs_handle_failed_inode
+Date:   Sat, 12 Feb 2022 06:20:22 -0800
+Message-Id: <20220212142023.2508247-1-jaegeuk@kernel.org>
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Boddie <paul@boddie.org.uk>
+This patch fixes xfstests/generic/475 failure.
 
-The jz4780 has some more features which should be initialized
-according to the vendor kernel.
+[  293.680694] F2FS-fs (dm-1): May loss orphan inode, run fsck to fix.
+[  293.685358] Buffer I/O error on dev dm-1, logical block 8388592, async page read
+[  293.691527] Buffer I/O error on dev dm-1, logical block 8388592, async page read
+[  293.691764] sh (7615): drop_caches: 3
+[  293.691819] sh (7616): drop_caches: 3
+[  293.694017] Buffer I/O error on dev dm-1, logical block 1, async page read
+[  293.695659] sh (7618): drop_caches: 3
+[  293.696979] sh (7617): drop_caches: 3
+[  293.700290] sh (7623): drop_caches: 3
+[  293.708621] sh (7626): drop_caches: 3
+[  293.711386] sh (7628): drop_caches: 3
+[  293.711825] sh (7627): drop_caches: 3
+[  293.716738] sh (7630): drop_caches: 3
+[  293.719613] sh (7632): drop_caches: 3
+[  293.720971] sh (7633): drop_caches: 3
+[  293.727741] sh (7634): drop_caches: 3
+[  293.730783] sh (7636): drop_caches: 3
+[  293.732681] sh (7635): drop_caches: 3
+[  293.732988] sh (7637): drop_caches: 3
+[  293.738836] sh (7639): drop_caches: 3
+[  293.740568] sh (7641): drop_caches: 3
+[  293.743053] sh (7640): drop_caches: 3
+[  293.821889] ------------[ cut here ]------------
+[  293.824654] kernel BUG at fs/f2fs/node.c:3334!
+[  293.826226] invalid opcode: 0000 [#1] PREEMPT SMP PTI
+[  293.828713] CPU: 0 PID: 7653 Comm: umount Tainted: G           OE     5.17.0-rc1-custom #1
+[  293.830946] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+[  293.832526] RIP: 0010:f2fs_destroy_node_manager+0x33f/0x350 [f2fs]
+[  293.833905] Code: e8 d6 3d f9 f9 48 8b 45 d0 65 48 2b 04 25 28 00 00 00 75 1a 48 81 c4 28 03 00 00 5b 41 5c 41 5d 41 5e 41 5f 5d c3 0f 0b
+[  293.837783] RSP: 0018:ffffb04ec31e7a20 EFLAGS: 00010202
+[  293.839062] RAX: 0000000000000001 RBX: ffff9df947db2eb8 RCX: 0000000080aa0072
+[  293.840666] RDX: 0000000000000000 RSI: ffffe86c0432a140 RDI: ffffffffc0b72a21
+[  293.842261] RBP: ffffb04ec31e7d70 R08: ffff9df94ca85780 R09: 0000000080aa0072
+[  293.843909] R10: ffff9df94ca85700 R11: ffff9df94e1ccf58 R12: ffff9df947db2e00
+[  293.845594] R13: ffff9df947db2ed0 R14: ffff9df947db2eb8 R15: ffff9df947db2eb8
+[  293.847855] FS:  00007f5a97379800(0000) GS:ffff9dfa77c00000(0000) knlGS:0000000000000000
+[  293.850647] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  293.852940] CR2: 00007f5a97528730 CR3: 000000010bc76005 CR4: 0000000000370ef0
+[  293.854680] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  293.856423] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[  293.858380] Call Trace:
+[  293.859302]  <TASK>
+[  293.860311]  ? ttwu_do_wakeup+0x1c/0x170
+[  293.861800]  ? ttwu_do_activate+0x6d/0xb0
+[  293.863057]  ? _raw_spin_unlock_irqrestore+0x29/0x40
+[  293.864411]  ? try_to_wake_up+0x9d/0x5e0
+[  293.865618]  ? debug_smp_processor_id+0x17/0x20
+[  293.866934]  ? debug_smp_processor_id+0x17/0x20
+[  293.868223]  ? free_unref_page+0xbf/0x120
+[  293.869470]  ? __free_slab+0xcb/0x1c0
+[  293.870614]  ? preempt_count_add+0x7a/0xc0
+[  293.871811]  ? __slab_free+0xa0/0x2d0
+[  293.872918]  ? __wake_up_common_lock+0x8a/0xc0
+[  293.874186]  ? __slab_free+0xa0/0x2d0
+[  293.875305]  ? free_inode_nonrcu+0x20/0x20
+[  293.876466]  ? free_inode_nonrcu+0x20/0x20
+[  293.877650]  ? debug_smp_processor_id+0x17/0x20
+[  293.878949]  ? call_rcu+0x11a/0x240
+[  293.880060]  ? f2fs_destroy_stats+0x59/0x60 [f2fs]
+[  293.881437]  ? kfree+0x1fe/0x230
+[  293.882674]  f2fs_put_super+0x160/0x390 [f2fs]
+[  293.883978]  generic_shutdown_super+0x7a/0x120
+[  293.885274]  kill_block_super+0x27/0x50
+[  293.886496]  kill_f2fs_super+0x7f/0x100 [f2fs]
+[  293.887806]  deactivate_locked_super+0x35/0xa0
+[  293.889271]  deactivate_super+0x40/0x50
+[  293.890513]  cleanup_mnt+0x139/0x190
+[  293.891689]  __cleanup_mnt+0x12/0x20
+[  293.892850]  task_work_run+0x64/0xa0
+[  293.894035]  exit_to_user_mode_prepare+0x1b7/0x1c0
+[  293.895409]  syscall_exit_to_user_mode+0x27/0x50
+[  293.896872]  do_syscall_64+0x48/0xc0
+[  293.898090]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  293.899517] RIP: 0033:0x7f5a975cd25b
 
-Signed-off-by: Paul Boddie <paul@boddie.org.uk>
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+Fixes: 7735730d39d7 ("f2fs: fix to propagate error from __get_meta_page()")
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 ---
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 34 +++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ fs/f2fs/inode.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-index dcf44cb00821f..fb2cdb188b993 100644
---- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-@@ -66,6 +66,9 @@ struct jz_soc_info {
- 	bool needs_dev_clk;
- 	bool has_osd;
- 	bool has_alpha;
-+	bool has_pcfg;
-+	bool has_recover;
-+	bool has_rgbc;
- 	bool map_noncoherent;
- 	bool use_extended_hwdesc;
- 	bool plane_f0_not_working;
-@@ -732,6 +735,9 @@ static void ingenic_drm_encoder_atomic_mode_set(struct drm_encoder *encoder,
- 		    | JZ_LCD_CFG_SPL_DISABLE | JZ_LCD_CFG_REV_DISABLE;
+diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+index 0ec8e32a00b4..ab8e0c06c78c 100644
+--- a/fs/f2fs/inode.c
++++ b/fs/f2fs/inode.c
+@@ -885,6 +885,7 @@ void f2fs_handle_failed_inode(struct inode *inode)
+ 	err = f2fs_get_node_info(sbi, inode->i_ino, &ni, false);
+ 	if (err) {
+ 		set_sbi_flag(sbi, SBI_NEED_FSCK);
++		set_inode_flag(inode, FI_FREE_NID);
+ 		f2fs_warn(sbi, "May loss orphan inode, run fsck to fix.");
+ 		goto out;
  	}
- 
-+	if (priv->soc_info->has_recover)
-+		cfg |= JZ_LCD_CFG_RECOVER_FIFO_UNDERRUN;
-+
- 	if (priv->soc_info->use_extended_hwdesc)
- 		cfg |= JZ_LCD_CFG_DESCRIPTOR_8;
- 
-@@ -1320,6 +1326,22 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
- 		osdc |= JZ_LCD_OSDC_ALPHAEN;
- 	regmap_write(priv->map, JZ_REG_LCD_OSDC, osdc);
- 
-+	/* Magic values from the vendor kernel for the priority thresholds. */
-+	if (soc_info->has_pcfg)
-+		regmap_write(priv->map, JZ_REG_LCD_PCFG,
-+			     JZ_LCD_PCFG_PRI_MODE |
-+			     JZ_LCD_PCFG_HP_BST_16 |
-+			     (511 << JZ_LCD_PCFG_THRESHOLD2_OFFSET) |
-+			     (400 << JZ_LCD_PCFG_THRESHOLD1_OFFSET) |
-+			     (256 << JZ_LCD_PCFG_THRESHOLD0_OFFSET));
-+
-+	/* RGB output control may be superfluous. */
-+	if (soc_info->has_rgbc)
-+		regmap_write(priv->map, JZ_REG_LCD_RGBC,
-+			     JZ_LCD_RGBC_RGB_FORMAT_ENABLE |
-+			     JZ_LCD_RGBC_ODD_RGB |
-+			     JZ_LCD_RGBC_EVEN_RGB);
-+
- 	mutex_init(&priv->clk_mutex);
- 	priv->clock_nb.notifier_call = ingenic_drm_update_pixclk;
- 
-@@ -1483,6 +1505,9 @@ static const struct jz_soc_info jz4740_soc_info = {
- 	.needs_dev_clk = true,
- 	.has_osd = false,
- 	.map_noncoherent = false,
-+	.has_pcfg = false,
-+	.has_recover = false,
-+	.has_rgbc = false,
- 	.max_width = 800,
- 	.max_height = 600,
- 	.formats_f1 = jz4740_formats,
-@@ -1494,6 +1519,9 @@ static const struct jz_soc_info jz4725b_soc_info = {
- 	.needs_dev_clk = false,
- 	.has_osd = true,
- 	.map_noncoherent = false,
-+	.has_pcfg = false,
-+	.has_recover = true,
-+	.has_rgbc = true,
- 	.max_width = 800,
- 	.max_height = 600,
- 	.formats_f1 = jz4725b_formats_f1,
-@@ -1506,6 +1534,9 @@ static const struct jz_soc_info jz4770_soc_info = {
- 	.needs_dev_clk = false,
- 	.has_osd = true,
- 	.map_noncoherent = true,
-+	.has_pcfg = false,
-+	.has_recover = true,
-+	.has_rgbc = true,
- 	.max_width = 1280,
- 	.max_height = 720,
- 	.formats_f1 = jz4770_formats_f1,
-@@ -1518,6 +1549,9 @@ static const struct jz_soc_info jz4780_soc_info = {
- 	.needs_dev_clk = true,
- 	.has_osd = true,
- 	.has_alpha = true,
-+	.has_pcfg = true,
-+	.has_recover = true,
-+	.has_rgbc = true,
- 	.use_extended_hwdesc = true,
- 	.plane_f0_not_working = true,	/* REVISIT */
- 	.max_width = 4096,
 -- 
-2.33.0
+2.35.1.265.g69c8d7142f-goog
 

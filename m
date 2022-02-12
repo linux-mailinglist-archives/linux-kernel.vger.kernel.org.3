@@ -2,117 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E01364B3856
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 23:14:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4679F4B3858
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 23:17:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbiBLWOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 17:14:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36950 "EHLO
+        id S230507AbiBLWRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 17:17:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbiBLWOb (ORCPT
+        with ESMTP id S230142AbiBLWRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 17:14:31 -0500
-Received: from mother.openwall.net (mother.openwall.net [195.42.179.200])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3A0FD60A81
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 14:14:24 -0800 (PST)
-Received: (qmail 11884 invoked from network); 12 Feb 2022 22:14:23 -0000
-Received: from localhost (HELO pvt.openwall.com) (127.0.0.1)
-  by localhost with SMTP; 12 Feb 2022 22:14:23 -0000
-Received: by pvt.openwall.com (Postfix, from userid 503)
-        id 44AA3AB88C; Sat, 12 Feb 2022 23:14:12 +0100 (CET)
-Date:   Sat, 12 Feb 2022 23:14:12 +0100
-From:   Solar Designer <solar@openwall.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Michal Koutn?? <mkoutny@suse.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 1/6] set_user: Perform RLIMIT_NPROC capability check against new user credentials
-Message-ID: <20220212221412.GA29214@openwall.com>
-References: <20220207121800.5079-1-mkoutny@suse.com> <20220207121800.5079-2-mkoutny@suse.com> <20220210011405.GA17076@openwall.com> <87h795xhxs.fsf@email.froward.int.ebiederm.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87h795xhxs.fsf@email.froward.int.ebiederm.org>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 12 Feb 2022 17:17:06 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D1D60A81
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 14:17:02 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id k13so23292109lfg.9
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 14:17:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lLLDXiwc1zAowqYr8P91bEBGG8/afaZrRX+wfAwZ1k8=;
+        b=p+YZp2LHLGfXp6o+BPTJl97qUJGAwHA/o97ZAm1qp25ZVbwllNR6pzPul5EtBGI3oq
+         boOv2B0e86b9q1LsjAelcPh+KiDmPUmXU2RfyYMq0vBon86JogNXrtnsPt3QLbDia18L
+         OCQOLpn4sSZOczP/GncLRIS7lrROmbma2gLMGgM8EjB1O5QKAHa8rAm0Cb/LLx6wHpQd
+         bIJRhc2M5dS1/FBfCxw0d7/0U9Q9Q+HvOYalOvMCwg2TsvMywMGTgeYOFGoDJBmUrfNe
+         Jth4ZaCx9Ibs0x8eInChZcWpqQuAYVqMZXzHQ8InVpBP9pcelNylMl2LUMLWoUZ9cMzW
+         9K1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lLLDXiwc1zAowqYr8P91bEBGG8/afaZrRX+wfAwZ1k8=;
+        b=lgeN7MoT+SHKYdEsYzmqRmBnluo52CsKywgZFISuoD0qprfyItHPtx6L+N4JeB2Tnm
+         2g4dcFnalooF8IIhtgO4mMswhLzeayWYtrfBPYt8ZEHzGg+Jjg9xvFTg/tGgcOlalBY5
+         1AP7UOkG/vVjNznHjhPuEdqAAIP/ky4L1EIEupMV5vzIQpeDZoi1ZnWMewexUzlc0s+G
+         hw8yBm/DTHQjaeYJMPbtssAUiV3mKF8zjZ2MI9qhw+G/YAGlzaolx95eGg52V7KJzfT9
+         PZp3bTm5jL6t7zFOFMSvvnxz+a2XE8MTOMp2Fkt4KtKOKkXxblr7LB7pL2F9sZj46W4Y
+         lkTA==
+X-Gm-Message-State: AOAM532skgmf3F3FU405lO/QIlFS+9RM6aMqf6O0qM/tVk+IcjBmzY58
+        Z01zei+tJOeUY6HenzFvl03h/ey3XdWM2HlGXyI=
+X-Google-Smtp-Source: ABdhPJwISFy1v4C6ClK7RbYkoj9MKlAxZvU4HprF3RfUlZOm2OsWiHMUcZyF3ApjfahKnNLbjY4LRPYtorxcldClY0s=
+X-Received: by 2002:ac2:4e12:: with SMTP id e18mr5610797lfr.282.1644704220387;
+ Sat, 12 Feb 2022 14:17:00 -0800 (PST)
+MIME-Version: 1.0
+References: <20220212200649.541061-1-matthewwaltzis@gmail.com>
+ <20220212204851.GA1660889@dhcp-10-100-145-180.wdc.com> <CABwBYcb0XhomznNOV62uH3Yo1J7XjHowuhF3H36owXtiVSp8JQ@mail.gmail.com>
+ <20220212210258.GA1660900@dhcp-10-100-145-180.wdc.com>
+In-Reply-To: <20220212210258.GA1660900@dhcp-10-100-145-180.wdc.com>
+From:   Matt Waltz <matthewwaltzis@gmail.com>
+Date:   Sat, 12 Feb 2022 15:16:24 -0700
+Message-ID: <CABwBYcazb-2E937U2HeNJXRAtLbyfGdMh3AJarmP9wasyS-qWw@mail.gmail.com>
+Subject: Re: [PATCH] nvme-pci: fix prp list allocation
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 02:32:47PM -0600, Eric W. Biederman wrote:
-> Solar Designer <solar@openwall.com> writes:
-> > https://lore.kernel.org/all/20210913100140.bxqlg47pushoqa3r@wittgenstein/
-> >
-> > Christian was going to revert 2863643fb8b9, but apparently that never
-> > happened.  Back then, I also suggested:
-> >
-> > "Alternatively, we could postpone the set_user() calls until we're
-> > running with the new user's capabilities, but that's an invasive change
-> > that's likely to create its own issues."
-> 
-> Back then you mentioned that apache suexec was broken.  Do you have
-> any more details?
-> 
-> I would like to make certain the apache suexec issue is fixed but
-> without a few details I can't do that.  I tried looking but I can't
-> find an public report about apache suexec being broken.
+On Sat, Feb 12, 2022 at 2:03 PM Keith Busch <kbusch@kernel.org> wrote:
+> That only applies to chaining list elements. It does not apply to the
+> "PRP list pointer in a command". The driver allocates from the 256B dma
+> pool only for the command's PRP list pointer, so we're fine.
 
-I'm not aware of anyone actually running into this issue and reporting
-it.  The systems that I personally know use suexec along with rlimits
-still run older/distro kernels, so would not yet be affected.
-
-So my mention was based on my understanding of how suexec works, and
-code review.  Specifically, Apache httpd has the setting RLimitNPROC,
-which makes it set RLIMIT_NPROC:
-
-https://httpd.apache.org/docs/2.4/mod/core.html#rlimitnproc
-
-The above documentation for it includes:
-
-"This applies to processes forked from Apache httpd children servicing
-requests, not the Apache httpd children themselves. This includes CGI
-scripts and SSI exec commands, but not any processes forked from the
-Apache httpd parent, such as piped logs."
-
-In code, there are:
-
-./modules/generators/mod_cgid.c:        ( (cgid_req.limits.limit_nproc_set) && ((rc = apr_procattr_limit_set(procattr, APR_LIMIT_NPROC,
-./modules/generators/mod_cgi.c:        ((rc = apr_procattr_limit_set(procattr, APR_LIMIT_NPROC,
-./modules/filters/mod_ext_filter.c:    rv = apr_procattr_limit_set(procattr, APR_LIMIT_NPROC, conf->limit_nproc);
-
-For example, in mod_cgi.c this is in run_cgi_child().
-
-I think this means an httpd child sets RLIMIT_NPROC shortly before it
-execs suexec, which is a SUID root program.  suexec then switches to the
-target user and execs the CGI script.
-
-Before 2863643fb8b9, the setuid() in suexec would set the flag, and the
-target user's process count would be checked against RLIMIT_NPROC on
-execve().  After 2863643fb8b9, the setuid() in suexec wouldn't set the
-flag because setuid() is (naturally) called when the process is still
-running as root (thus, has those limits bypass capabilities), and
-accordingly execve() would not check the target user's process count
-against RLIMIT_NPROC.
-
-> My goal is to come up with a very careful and conservative set of
-> patches that fix all of the known issues with RLIMIT_NPROC.
-
-The most conservative fix for this one would be to revert 2863643fb8b9
-(preserving other changes that were made on top of it).  I think this
-commit did not fix a real issue - it attempted to fix what someone
-thought was a discrepancy, but actually made it worse.
-
-However, your recent patch trying to fix that commit looks like it'd
-also repair the behavior for suexec.
-
-Thanks,
-
-Alexander
+Ah yes, I was confused by the PRP2 definition which says it can be a
+"PRP list pointer",
+now I feel extremely silly. Guess I'll need to look elsewhere for a
+fix for this bug I am
+encountering, thank you for the clarity!

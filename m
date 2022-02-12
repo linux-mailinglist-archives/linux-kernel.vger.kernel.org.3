@@ -2,66 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A363D4B37BF
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 21:07:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA724B37C2
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 21:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiBLUHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 15:07:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34304 "EHLO
+        id S231371AbiBLUJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 15:09:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231243AbiBLUHS (ORCPT
+        with ESMTP id S231243AbiBLUJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 15:07:18 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD970527F8
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 12:07:13 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id v13-20020a17090ac90d00b001b87bc106bdso15123899pjt.4
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 12:07:13 -0800 (PST)
+        Sat, 12 Feb 2022 15:09:03 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C235D64D;
+        Sat, 12 Feb 2022 12:08:58 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id c15so16915288ljf.11;
+        Sat, 12 Feb 2022 12:08:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VAjL5Qv92Pxy2zp/7vR4qSvR0kIaKLtx1kCE04PHKn8=;
-        b=nTX4IXliMiahAw9sSIQp/dfna+S5bVPuLeWZ4RbFisrTklsVlytUhJiYzrx81CCRP4
-         hLpWjnAnFD8aFhpWOoNofkUgUCcXbemeXAIPeQkD6qPd4LcAspoRoBAiWxfLaQ22UQL+
-         eB3fIO87JiIjra4Uda/zunIHi3EVD4n5fxVFy8KJ+ehNy0+jaR5FcTdOnXaZFOL3+UYu
-         VdIx8bl0PnSOneNNI3Op8uaQd5HmSzbSVZLFbagD2CwLqyGTm3SUrS/jj9GdQJ5/YXRr
-         37O/+GBIeJryzocxQDTBVyz44rxQnVOyO3/6Np+uqjr+Buer1AsrZvgtDDUsnZPAxn7M
-         QMFA==
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:references:in-reply-to:content-transfer-encoding;
+        bh=iDqtOt/nsLXFW/P9mlVQ5J44jLF7B4SNG/aEUEeVTQk=;
+        b=gkBUn3SFuVkRVSWRVkzAtpgzYTtKCAYVtuV61OVZNQXAOe3kqPOEQcc8Lso542ttgQ
+         jDHuv5Cz6JM9WLN3u/jTCoZzYWsGD6NjPG5IPgZ1CO1xiMxkLsTKBum+R4SVgr0w1uf0
+         O8Gwx7ELLa4CK6mhaz+sLqy3Ya0JwE0VqW4xL5XAJNaXeutKEvolrDnnfnaiE7V3Bwng
+         Mga9jPodJDGOWPOq83gALwnaPj5lGQPFBy3MTVsCBTlPkRRhoh3X519HzAxg91FmctfP
+         Ifb2VQc8ezdlLw2J+x+Ug8nqhf3H/IUVgtKOCvO/HuFuHLi/RcblCKMEafPPg8jnO5Pk
+         +VOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:references:in-reply-to
          :content-transfer-encoding;
-        bh=VAjL5Qv92Pxy2zp/7vR4qSvR0kIaKLtx1kCE04PHKn8=;
-        b=UaKWQJsnCCjxlpowUgSyftaa90ZjPWoxW7mROhFi4V3p2+anQXkbaijJjQ/1Max6d7
-         dfSsA2Rqlt6uPpsK65C13eo3NJAgCFWOV0Kb0I6zyCvkABDVCAAPRwvLSIk8Fjknuax3
-         c47h6vD4yXg1YJo4iKD5a18yB47RlEjceC1zFAgFs9gyhEhLlY6P2zormceWAu+vCvDO
-         hOzoGsB/qnogFf2WwW3rqzKWkxBhWh1BdfV0AbkzMCVLhTixo0EwezhP+jqEh8FEQmWi
-         QW+9vWO+aU7z+0rHReGV3Sq/A/FW2joPGlQGXvUrvm2GFgsO3hPzNcctDz2+TvvYiwo6
-         6wBw==
-X-Gm-Message-State: AOAM531vAWBRS3rJcBqQoLWwWIAO5cr8a/+aTUVksqF45VQOySJmh6++
-        xQnb55c9NOuXGt6s0CxQz7s=
-X-Google-Smtp-Source: ABdhPJxsYmAwLDSkoFML1ba8Ws7Gtqqzyx3B2ySQcnCrNCDEbdINIGkUaKeg6orYdntfwnyYGBS+GA==
-X-Received: by 2002:a17:90b:4f8f:: with SMTP id qe15mr6639155pjb.94.1644696433022;
-        Sat, 12 Feb 2022 12:07:13 -0800 (PST)
-Received: from localhost.localdomain (67-61-67-61-208-168.cpe.sparklight.net. [67.61.208.168])
-        by smtp.gmail.com with ESMTPSA id q12sm32958758pfk.199.2022.02.12.12.07.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Feb 2022 12:07:12 -0800 (PST)
-From:   Matthew Waltz <matthewwaltzis@gmail.com>
-To:     matthewwaltzis@gmail.com
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] nvme-pci: fix prp list allocation
-Date:   Sat, 12 Feb 2022 13:06:49 -0700
-Message-Id: <20220212200649.541061-1-matthewwaltzis@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=iDqtOt/nsLXFW/P9mlVQ5J44jLF7B4SNG/aEUEeVTQk=;
+        b=nQL6JLNtf1JiptvxrG2E+j2D4CZ4oohT/th/d1j0ybf0n+cKFzLwxlri4oG5BaOSsz
+         W2GFXOubUbx8lXEscmurr2ytC4xIn4jCB8NvcyhEuhvt7Wv8LRseT5B6gihMsGF8yu5T
+         Prf2J6LR3ckgz3U20QqBVwbGPBgaZCiajg64UBGBXByeybC2bxTZ7Z10zd0K41+oQvsh
+         l9TQV2gPZvCuO4TZC6scmxUoMxE+rHx/PWOeRV0ng/d7bXUjyRLtPpgMq08rhwZ24a7J
+         NbDJSOot+PhvasTucZi6qrcG4r9D/tvGBfjkWOg4zmUuszDZXlhnFHafLoBXNXOt6Tj/
+         gDCQ==
+X-Gm-Message-State: AOAM5300R9OBpT58AuugNLJwzkldTLapTOAtaqUsCdPobGSxKPbbp575
+        CNxgp51IESOlyQkl3u+AZM4=
+X-Google-Smtp-Source: ABdhPJwAQltC+YgEKXEFlwdqkX9QRERgt4D8ITsRpwWGHRQR11NMjnxXrSD+IyQg+uO+yGgU+ilsgQ==
+X-Received: by 2002:a2e:9091:: with SMTP id l17mr4546428ljg.474.1644696536629;
+        Sat, 12 Feb 2022 12:08:56 -0800 (PST)
+Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
+        by smtp.googlemail.com with ESMTPSA id k12sm3534514ljh.45.2022.02.12.12.08.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Feb 2022 12:08:56 -0800 (PST)
+Message-ID: <f3db5152-0e1f-4258-4cfd-521828a243c2@gmail.com>
+Date:   Sat, 12 Feb 2022 23:08:55 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH RESEND] i2c: tegra: Add SMBus block read function
+Content-Language: en-US
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Akhil R <akhilrajeev@nvidia.com>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+References: <20220210153603.61894-1-akhilrajeev@nvidia.com>
+ <ae6d300f-962d-9731-bb78-3594b4c31aea@gmail.com>
+ <DM5PR12MB18502CF86E602F7071A1EA58C0309@DM5PR12MB1850.namprd12.prod.outlook.com>
+ <94fc8b11-6149-56ca-a028-cf7f39930992@gmail.com>
+ <ff83adba-7919-fa48-4637-a4cb9b94a8e1@gmail.com>
+In-Reply-To: <ff83adba-7919-fa48-4637-a4cb9b94a8e1@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,165 +88,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes kernel block errors originating from the hard-coded 256-byte
-alignment of dma_pool_create(). The NVMe specification requires a PRP
-List PBAO offset field of 0h, i.e. a PRP List must be aligned to the
-configured 4096-byte memory page size.
+12.02.2022 19:20, Dmitry Osipenko пишет:
+> 12.02.2022 19:15, Dmitry Osipenko пишет:
+>> 11.02.2022 12:11, Akhil R пишет:
+>>>> 10.02.2022 18:36, Akhil R пишет:
+>>>>> Emulate SMBus block read using ContinueXfer to read the length byte
+>>>>>
+>>>>> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+>>>>> ---
+>>>>>  drivers/i2c/busses/i2c-tegra.c | 18 ++++++++++++++++--
+>>>>>  1 file changed, 16 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/i2c/busses/i2c-tegra.c b/drivers/i2c/busses/i2c-tegra.c
+>>>>> index 03cea102ab76..2941e42aa6a0 100644
+>>>>> --- a/drivers/i2c/busses/i2c-tegra.c
+>>>>> +++ b/drivers/i2c/busses/i2c-tegra.c
+>>>>> @@ -1233,6 +1233,11 @@ static int tegra_i2c_xfer_msg(struct tegra_i2c_dev
+>>>> *i2c_dev,
+>>>>>               return err;
+>>>>>
+>>>>>       i2c_dev->msg_buf = msg->buf;
+>>>>> +
+>>>>> +     /* The condition true implies smbus block read and len is already read */
+>>>>> +     if (msg->flags & I2C_M_RECV_LEN && end_state !=
+>>>> MSG_END_CONTINUE)
+>>>>> +             i2c_dev->msg_buf = msg->buf + 1;
+>>>>> +
+>>>>>       i2c_dev->msg_buf_remaining = msg->len;
+>>>>>       i2c_dev->msg_err = I2C_ERR_NONE;
+>>>>>       i2c_dev->msg_read = !!(msg->flags & I2C_M_RD);
+>>>>> @@ -1389,6 +1394,15 @@ static int tegra_i2c_xfer(struct i2c_adapter *adap,
+>>>> struct i2c_msg msgs[],
+>>>>>                       else
+>>>>>                               end_type = MSG_END_REPEAT_START;
+>>>>>               }
+>>>>> +             /* If M_RECV_LEN use ContinueXfer to read the first byte */
+>>>>> +             if (msgs[i].flags & I2C_M_RECV_LEN) {
+>>>>> +                     ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i],
+>>>> MSG_END_CONTINUE);
+>>>>> +                     if (ret)
+>>>>> +                             break;
+>>>>> +                     /* Set the read byte as msg len */
+>>>>> +                     msgs[i].len = msgs[i].buf[0];
+>>>>> +                     dev_dbg(i2c_dev->dev, "reading %d bytes\n", msgs[i].len);
+>>>>> +             }
+>>>>>               ret = tegra_i2c_xfer_msg(i2c_dev, &msgs[i], end_type);
+>>>>>               if (ret)
+>>>>>                       break;
+>>>>> @@ -1416,10 +1430,10 @@ static u32 tegra_i2c_func(struct i2c_adapter
+>>>> *adap)
+>>>>>  {
+>>>>>       struct tegra_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
+>>>>>       u32 ret = I2C_FUNC_I2C | (I2C_FUNC_SMBUS_EMUL &
+>>>> ~I2C_FUNC_SMBUS_QUICK) |
+>>>>> -               I2C_FUNC_10BIT_ADDR | I2C_FUNC_PROTOCOL_MANGLING;
+>>>>> +               I2C_FUNC_10BIT_ADDR | I2C_FUNC_PROTOCOL_MANGLING;
+>>>>>
+>>>>>       if (i2c_dev->hw->has_continue_xfer_support)
+>>>>> -             ret |= I2C_FUNC_NOSTART;
+>>>>> +             ret |= I2C_FUNC_NOSTART | I2C_FUNC_SMBUS_READ_BLOCK_DATA;
+>>>>>
+>>>>>       return ret;
+>>>>>  }
+>>>>
+>>>> Please describe how this was tested.
+>>> This is tested using an I2C EEPROM to emulate SMBus block read in which
+>>> we read the first byte as the length of bytes to read. This is an expected
+>>> feature for NVIDIA Grace chipset where there will be an actual SMBus device.
+>>
+>> We have several Tegra30+ tablets that have EC on SMBus. Svyatoslav tried
+>> your I2C patch + [1] on Asus TF201 and reported that it breaks EC. Any
+>> idea why it doesn't work?
+>>
+>> [1]
+>> https://github.com/grate-driver/linux/commit/aa8d71f5a960ef40503e5448c622d62d1c53a2c0
+> 
+> Ah, I see now that I2C_FUNC_SMBUS_WRITE_BLOCK_DATA not supported, we
+> should check again without the write then.
 
-Essentially reverts commit 99802a7aee2b ("NVMe: Optimise memory usage
-for I/Os between 4k and 128k")
+We also missed that i2c_smbus_read_i2c_block_data() populates the first
+byte of the read data with the transfer size. So
+i2c_smbus_read_block_data() actually works properly.
 
-Resolved by using default PRP pool which is properly aligned.
-
-Signed-off-by: Matthew Waltz <matthewwaltzis@gmail.com>
----
- drivers/nvme/host/pci.c | 51 +++++++++++------------------------------
- 1 file changed, 14 insertions(+), 37 deletions(-)
-
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index 6a99ed680915..4fcb159c7df3 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -119,7 +119,6 @@ struct nvme_dev {
- 	u32 __iomem *dbs;
- 	struct device *dev;
- 	struct dma_pool *prp_page_pool;
--	struct dma_pool *prp_small_pool;
- 	unsigned online_queues;
- 	unsigned max_qid;
- 	unsigned io_queues[HCTX_MAX_TYPES];
-@@ -228,7 +227,7 @@ struct nvme_iod {
- 	struct nvme_queue *nvmeq;
- 	bool use_sgl;
- 	int aborted;
--	int npages;		/* In the PRP list. 0 means small pool in use */
-+	int npages;		/* In the PRP list. */
- 	int nents;		/* Used in scatterlist */
- 	dma_addr_t first_dma;
- 	unsigned int dma_len;	/* length of single DMA segment mapping */
-@@ -598,10 +597,7 @@ static void nvme_unmap_data(struct nvme_dev *dev, struct request *req)
- 	WARN_ON_ONCE(!iod->nents);
- 
- 	nvme_unmap_sg(dev, req);
--	if (iod->npages == 0)
--		dma_pool_free(dev->prp_small_pool, nvme_pci_iod_list(req)[0],
--			      iod->first_dma);
--	else if (iod->use_sgl)
-+	if (iod->use_sgl)
- 		nvme_free_sgls(dev, req);
- 	else
- 		nvme_free_prps(dev, req);
-@@ -635,7 +631,7 @@ static blk_status_t nvme_pci_setup_prps(struct nvme_dev *dev,
- 	__le64 *prp_list;
- 	void **list = nvme_pci_iod_list(req);
- 	dma_addr_t prp_dma;
--	int nprps, i;
-+	int i;
- 
- 	length -= (NVME_CTRL_PAGE_SIZE - offset);
- 	if (length <= 0) {
-@@ -657,14 +653,8 @@ static blk_status_t nvme_pci_setup_prps(struct nvme_dev *dev,
- 		goto done;
- 	}
- 
--	nprps = DIV_ROUND_UP(length, NVME_CTRL_PAGE_SIZE);
--	if (nprps <= (256 / 8)) {
--		pool = dev->prp_small_pool;
--		iod->npages = 0;
--	} else {
--		pool = dev->prp_page_pool;
--		iod->npages = 1;
--	}
-+	pool = dev->prp_page_pool;
-+	iod->npages = 1;
- 
- 	prp_list = dma_pool_alloc(pool, GFP_ATOMIC, &prp_dma);
- 	if (!prp_list) {
-@@ -753,13 +743,8 @@ static blk_status_t nvme_pci_setup_sgls(struct nvme_dev *dev,
- 		return BLK_STS_OK;
- 	}
- 
--	if (entries <= (256 / sizeof(struct nvme_sgl_desc))) {
--		pool = dev->prp_small_pool;
--		iod->npages = 0;
--	} else {
--		pool = dev->prp_page_pool;
--		iod->npages = 1;
--	}
-+	pool = dev->prp_page_pool;
-+	iod->npages = 1;
- 
- 	sg_list = dma_pool_alloc(pool, GFP_ATOMIC, &sgl_dma);
- 	if (!sg_list) {
-@@ -2727,7 +2712,7 @@ static int nvme_disable_prepare_reset(struct nvme_dev *dev, bool shutdown)
- 	return 0;
- }
- 
--static int nvme_setup_prp_pools(struct nvme_dev *dev)
-+static int nvme_setup_prp_pool(struct nvme_dev *dev)
- {
- 	dev->prp_page_pool = dma_pool_create("prp list page", dev->dev,
- 						NVME_CTRL_PAGE_SIZE,
-@@ -2735,20 +2720,12 @@ static int nvme_setup_prp_pools(struct nvme_dev *dev)
- 	if (!dev->prp_page_pool)
- 		return -ENOMEM;
- 
--	/* Optimisation for I/Os between 4k and 128k */
--	dev->prp_small_pool = dma_pool_create("prp list 256", dev->dev,
--						256, 256, 0);
--	if (!dev->prp_small_pool) {
--		dma_pool_destroy(dev->prp_page_pool);
--		return -ENOMEM;
--	}
- 	return 0;
- }
- 
--static void nvme_release_prp_pools(struct nvme_dev *dev)
-+static void nvme_release_prp_pool(struct nvme_dev *dev)
- {
- 	dma_pool_destroy(dev->prp_page_pool);
--	dma_pool_destroy(dev->prp_small_pool);
- }
- 
- static void nvme_free_tagset(struct nvme_dev *dev)
-@@ -3080,7 +3057,7 @@ static int nvme_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	INIT_WORK(&dev->remove_work, nvme_remove_dead_ctrl_work);
- 	mutex_init(&dev->shutdown_lock);
- 
--	result = nvme_setup_prp_pools(dev);
-+	result = nvme_setup_prp_pool(dev);
- 	if (result)
- 		goto unmap;
- 
-@@ -3109,7 +3086,7 @@ static int nvme_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 						GFP_KERNEL, node);
- 	if (!dev->iod_mempool) {
- 		result = -ENOMEM;
--		goto release_pools;
-+		goto release_pool;
- 	}
- 
- 	result = nvme_init_ctrl(&dev->ctrl, &pdev->dev, &nvme_pci_ctrl_ops,
-@@ -3126,8 +3103,8 @@ static int nvme_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 
-  release_mempool:
- 	mempool_destroy(dev->iod_mempool);
-- release_pools:
--	nvme_release_prp_pools(dev);
-+ release_pool:
-+	nvme_release_prp_pool(dev);
-  unmap:
- 	nvme_dev_unmap(dev);
-  put_pci:
-@@ -3198,7 +3175,7 @@ static void nvme_remove(struct pci_dev *pdev)
- 	nvme_free_host_mem(dev);
- 	nvme_dev_remove_admin(dev);
- 	nvme_free_queues(dev, 0);
--	nvme_release_prp_pools(dev);
-+	nvme_release_prp_pool(dev);
- 	nvme_dev_unmap(dev);
- 	nvme_uninit_ctrl(&dev->ctrl);
- }
--- 
-2.25.1
-
+It's unclear to me what's the point of emulating
+I2C_FUNC_SMBUS_READ_BLOCK_DATA within the driver if you could use
+i2c_smbus_read_i2c_block_data().

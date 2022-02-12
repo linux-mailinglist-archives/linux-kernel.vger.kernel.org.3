@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE2A4B3560
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 14:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C864B3564
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 14:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235765AbiBLN4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 08:56:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55184 "EHLO
+        id S235792AbiBLN5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 08:57:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbiBLN4U (ORCPT
+        with ESMTP id S230348AbiBLN5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 08:56:20 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC00216;
-        Sat, 12 Feb 2022 05:56:16 -0800 (PST)
+        Sat, 12 Feb 2022 08:57:08 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB583216
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 05:57:04 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id a19so10919157qvm.4
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 05:57:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1644674177; x=1676210177;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=EFXycOyHfDpnIEEuHp1bsP2udHkXPnsibsZZiH/Di6o=;
-  b=RUSNUqs9hrHZC2GoLoUMWMCOMzsGolqb19hOPe8CI+ORZlx1OqKm5WBP
-   V86VYJSXgnZk2WMDV+aLQ3b8NRGJ+J1p1UbetNQua9lEu/pYX9XucjuQy
-   HDlWtRZaqPpKWNw4DCwsoyozclug80uMRv48Nmz4mcdAIYLaoL5fy8S57
-   I=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 12 Feb 2022 05:56:16 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2022 05:56:16 -0800
-Received: from [10.216.46.141] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.47.97.222) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Sat, 12 Feb
- 2022 05:56:12 -0800
-Message-ID: <d0118f40-399b-5b50-f730-1ead42eff364@quicinc.com>
-Date:   Sat, 12 Feb 2022 19:26:08 +0530
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=S0HsRc/LAU9FTzthU/OUG2RspoxRJn7ENK/edQzsCdQ=;
+        b=Dri+ax4+o5rnqooXSlUYOF/40bGCl8x5Hrgeat+4k88WT9GQJsrXTb5fErz9xqoO5G
+         iXAm3UvWE086U3xdyd9uFiha8gYKbkAPaV3U6Qhxj6nK8Viz6ZDU7bwLluwcQE5I1NeU
+         NkjwcgL3cLKcYAEPKUM2s2ALpazfHzr4X3HiUQm2/iFWmoRr9WXYaWKx+oIEXe82ju2R
+         ubsV6Pv1O6WKQj6fwJjLaMCy4v2smEfoHEj+5AQHaq6li7kuNpqhHGACrKPI8ZAEEt5d
+         56z+FXhjrh3nbGa3BCIKLTIzwNqR1yZXCxVyPJYCwvqx4ia66qDmEwIJqebm40YvdmIS
+         s6mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=S0HsRc/LAU9FTzthU/OUG2RspoxRJn7ENK/edQzsCdQ=;
+        b=RKP5IPo0hxkKXe2L3q2npPH1OL/63/swltnKgKsQ/9NlTQwgYRMl3sQDjCpCJatpmW
+         +hshQPj4vYheShgQ2Hd0glwVnfjKFNXwbKTAT3m1roPdWZFTa0MuKkeOBRT+YFWgxxhD
+         ATz0StZzhmIN39vr0gz1INcbF48KlnyFLllQVn6k3li9lFDXcA/8fp8UuIhtCoFv6Fun
+         dZeq2JP2EHYbCcdP6MYuWLbdvJfEM72ZRxOpvZjEs2gKJufze0o8QpqS3axMo11w0y2r
+         X2m1OPcypkQ5EGZxZsnyUg1CvlgimSossC2NYuu7ao2ArpL2igVHMMofHXi1IGD+ULME
+         icbQ==
+X-Gm-Message-State: AOAM5325HCVK90DCT0CWFkQVrdJkfqrTDetobzzJn2rHBFcS8VG84RBK
+        wyOXocp/yxgEYOqskH3co0n2DMKmgbRJHRtNidfWFlo2VH2rUA==
+X-Google-Smtp-Source: ABdhPJxPLXc3iApSVbv1+kj3KnGxCiSZQM4apS//EcX8Yn+y4I8b5utyNi+CzXCJG6c7fmoWLo7ErKVLisP/V5F8ZZ4=
+X-Received: by 2002:ad4:5bc1:: with SMTP id t1mr4290649qvt.115.1644674223755;
+ Sat, 12 Feb 2022 05:57:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH rcu 3/3] rcu: Allow expedited RCU grace periods on
- incoming CPUs
-Content-Language: en-US
-To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>, <paulmck@kernel.org>
-CC:     <rcu@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-team@fb.com>, <rostedt@goodmis.org>,
-        Tejun Heo <tj@kernel.org>
-References: <20220204225409.GA4193020@paulmck-ThinkPad-P17-Gen-1>
- <20220204225507.4193113-3-paulmck@kernel.org>
- <de3a9710-fbf4-8005-a781-adc95ae4a090@quicinc.com>
- <20220209220601.GB4285@paulmck-ThinkPad-P17-Gen-1>
- <ede5ef2e-a804-3b9e-dfd1-d050baf48828@quicinc.com>
- <20220211221455.GM4285@paulmck-ThinkPad-P17-Gen-1>
- <2a4870e9-41ae-60cf-fef3-aeb1de6f559c@quicinc.com>
- <73bc88ae-a1a4-99e2-0e66-e2ce553b2f46@quicinc.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <73bc88ae-a1a4-99e2-0e66-e2ce553b2f46@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.47.97.222)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+References: <1644670295-25068-1-git-send-email-quic_vpolimer@quicinc.com> <1644670295-25068-2-git-send-email-quic_vpolimer@quicinc.com>
+In-Reply-To: <1644670295-25068-2-git-send-email-quic_vpolimer@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 12 Feb 2022 16:56:52 +0300
+Message-ID: <CAA8EJpp3J1GDJOWDSUomS92rmm14_TQk7ra0PLoLXBFtrWWFUw@mail.gmail.com>
+Subject: Re: [v1 2/2] drm/msm/disp/dpu1: Add PSR support for eDP interface in
+ dpu driver
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>
+Cc:     y@qualcomm.com, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robdclark@gmail.com, dianders@chromium.org,
+        quic_sbillaka@quicinc.com, swboyd@chromium.org,
+        quic_kalyant@quicinc.com, quic_vproddut@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,242 +70,434 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 12 Feb 2022 at 15:52, Vinod Polimera <quic_vpolimer@quicinc.com> wrote:
+>
+> Enable PSR on eDP interface using drm self-refresh librabry.
+> This patch uses a trigger from self-refresh library to enter/exit
+> into PSR, when there are no updates from framework.
+>
+> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
 
-On 2/12/2022 4:58 PM, Neeraj Upadhyay wrote:
-> Hi Mukesh,
->
-> On 2/12/2022 2:17 PM, Mukesh Ojha wrote:
->>
->> On 2/12/2022 3:44 AM, Paul E. McKenney wrote:
->>> On Sat, Feb 12, 2022 at 12:14:20AM +0530, Mukesh Ojha wrote:
->>>> On 2/10/2022 3:36 AM, Paul E. McKenney wrote:
->>>>> On Wed, Feb 09, 2022 at 11:53:33PM +0530, Mukesh Ojha wrote:
->>>>>> On 2/5/2022 4:25 AM, Paul E. McKenney wrote:
->>>>>>> Although it is usually safe to invoke 
->>>>>>> synchronize_rcu_expedited() from a
->>>>>>> preemption-enabled CPU-hotplug notifier, if it is invoked from a 
->>>>>>> notifier
->>>>>>> between CPUHP_AP_RCUTREE_ONLINE and CPUHP_AP_ACTIVE, its 
->>>>>>> attempts to
->>>>>>> invoke a workqueue handler will hang due to RCU waiting on a CPU 
->>>>>>> that
->>>>>>> the scheduler is not paying attention to.  This commit therefore 
->>>>>>> expands
->>>>>>> use of the existing workqueue-independent 
->>>>>>> synchronize_rcu_expedited()
->>>>>>> from early boot to also include CPUs that are being hotplugged.
->>>>>>>
->>>>>>> Link: 
->>>>>>> https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/ 
->>>>>>>
->>>>>>> Reported-by: Mukesh Ojha <quic_mojha@quicinc.com>
->>>>>>> Cc: Tejun Heo <tj@kernel.org>
->>>>>>> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
->>>>>>> ---
->>>>>>>     kernel/rcu/tree_exp.h | 14 ++++++++++----
->>>>>>>     1 file changed, 10 insertions(+), 4 deletions(-)
->>>>>>>
->>>>>>> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
->>>>>>> index 60197ea24ceb9..1a45667402260 100644
->>>>>>> --- a/kernel/rcu/tree_exp.h
->>>>>>> +++ b/kernel/rcu/tree_exp.h
->>>>>>> @@ -816,7 +816,7 @@ static int rcu_print_task_exp_stall(struct 
->>>>>>> rcu_node *rnp)
->>>>>>>      */
->>>>>>>     void synchronize_rcu_expedited(void)
->>>>>>>     {
->>>>>>> -    bool boottime = (rcu_scheduler_active == RCU_SCHEDULER_INIT);
->>>>>>> +    bool no_wq;
->>>>>>>         struct rcu_exp_work rew;
->>>>>>>         struct rcu_node *rnp;
->>>>>>>         unsigned long s;
->>>>>>> @@ -841,9 +841,15 @@ void synchronize_rcu_expedited(void)
->>>>>>>         if (exp_funnel_lock(s))
->>>>>>>             return;  /* Someone else did our work for us. */
->>>>>>> +    /* Don't use workqueue during boot or from an incoming CPU. */
->>>>>>> +    preempt_disable();
->>>>>>> +    no_wq = rcu_scheduler_active == RCU_SCHEDULER_INIT ||
->>>>>>> +        !cpumask_test_cpu(smp_processor_id(), cpu_active_mask);
->>>>>>> +    preempt_enable();
->>>>>>> +
->>>>>>>         /* Ensure that load happens before action based on it. */
->>>>>>> -    if (unlikely(boottime)) {
->>>>>>> -        /* Direct call during scheduler init and 
->>>>>>> early_initcalls(). */
->>>>>>> +    if (unlikely(no_wq)) {
->>>>>>> +        /* Direct call for scheduler init, early_initcall()s, 
->>>>>>> and incoming CPUs. */
->>>>>>>             rcu_exp_sel_wait_wake(s);
->>>>>>>         } else {
->>>>>>>             /* Marshall arguments & schedule the expedited grace 
->>>>>>> period. */
->>>>>>> @@ -861,7 +867,7 @@ void synchronize_rcu_expedited(void)
->>>>>>>         /* Let the next expedited grace period start. */
->>>>>>>         mutex_unlock(&rcu_state.exp_mutex);
->>>>>>> -    if (likely(!boottime))
->>>>>>> +    if (likely(!no_wq))
->>>>>>>             destroy_work_on_stack(&rew.rew_work);
->>>>>>>     }
->>>>>>>     EXPORT_SYMBOL_GPL(synchronize_rcu_expedited);
->>>>>> Can we reach a condition after this change where no_wq = true and 
->>>>>> during
->>>>>> rcu_stall report where exp_task = 0 list and exp_mask contain 
->>>>>> only this cpu
->>>>>> ?
->>>>> Hello, Mukesh, and thank you for looking this over!
->>>>>
->>>>> At first glance, I do not believe that this can happen because the
->>>>> expedited grace-period machinery avoids waiting on the current CPU.
->>>>> (See sync_rcu_exp_select_node_cpus(), both the raw_smp_processor_id()
->>>>> early in the function and the get_cpu() later in the function.)
->>>>>
->>>>> But please let me know if I am missing something here.
->>>>>
->>>>> But suppose that we could in fact reach this condition. What bad 
->>>>> thing
->>>>> would happen?  Other than a resched_cpu() having been invoked several
->>>>> times on a not-yet-online CPU, of course.  ;-)
->>>>
->>>> I thought more about this, what if synchronize_rcu_expedited thread 
->>>> got
->>>> schedule out and run on some other cpu
->>>> and we clear out cpu on which it ran next from exp_mask.
->>>>
->>>> Queuing the work on same cpu ensures that it will always be right 
->>>> cpu to
->>>> clear out.
->>>> Do you think this can happen ?
->>> Indeed it might.
->>>
->>> But if it did, the scheduler would invoke RCU's hook, which is named
->>> rcu_note_context_switch(), and do so on the pre-switch CPU. There are
->>> two implementations for this function, one for CONFIG_PREEMPT=y
->>> and another for CONFIG_PREEMPT=n.  Both look to me like they invoke
->>> rcu_report_exp_rdp() when needed, one directly and the other via the
->>> CONFIG_PREEMPT=n variant of rcu_qs().
->>>
->>> Am I missing something?
->>>
->>>
->>
->> There is a issue we are facing where exp_mask is not getting cleared 
->> and rcu_stall report that
->> the cpu we are waiting on sometime in idle and sometime executing 
->> some other task but
->> it is not clearing itself from exp_mask from a very long time and in 
->> all the instances exp_task list is NULL.
->
-> Can you please check whether [1] is present in your tree?
->
-Thanks Neeraj.
-It is not there, will check the results with this patch.
+The S-O-B of the sender should come last. Please change the order of
+the S-O-B tags.
 
--Mukesh
+> ---
+>  drivers/gpu/drm/bridge/panel.c              | 64 +++++++++++++++++++++-----
+
+This chunk should come in a separate patch. Please do not mix drm/msm
+patches with the generic code.
+
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    | 30 +++++++++---
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 71 ++++++++++++++++++++++++++---
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |  2 +-
+>  4 files changed, 142 insertions(+), 25 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/panel.c b/drivers/gpu/drm/bridge/panel.c
+> index b32295a..c440546 100644
+> --- a/drivers/gpu/drm/bridge/panel.c
+> +++ b/drivers/gpu/drm/bridge/panel.c
+> @@ -102,31 +102,71 @@ static void panel_bridge_detach(struct drm_bridge *bridge)
+>                 drm_connector_cleanup(connector);
+>  }
+>
+> -static void panel_bridge_pre_enable(struct drm_bridge *bridge)
+> +static void panel_bridge_pre_enable(struct drm_bridge *bridge,
+> +               struct drm_bridge_state *old_bridge_state)
+>  {
+>         struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
+> -
+> +       struct drm_crtc *crtc;
+> +       struct drm_crtc_state *cstate;
+> +       int i;
+> +
+> +       if (old_bridge_state->base.state) {
+> +               for_each_old_crtc_in_state(old_bridge_state->base.state, crtc, cstate, i) {
+> +                       if (cstate->self_refresh_active && cstate->active)
+> +                               return;
+> +               }
+
+Ugh. No. You will skip panel actions if _any_ of the crtc's has PSR
+enabled. There might be other CRTCs in play.
+Please see analogix_dp_core.c for a proper way to handle this.
+Consider moving common code (e.g. getting the crtc used by the
+encoder) pieces to the generic drm code.
+
+> +       }
+>         drm_panel_prepare(panel_bridge->panel);
+>  }
+>
+> -static void panel_bridge_enable(struct drm_bridge *bridge)
+> +static void panel_bridge_enable(struct drm_bridge *bridge,
+> +               struct drm_bridge_state *old_bridge_state)
+>  {
+>         struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
+> -
+> +       struct drm_crtc *crtc;
+> +       struct drm_crtc_state *cstate;
+> +       int i;
+> +
+> +       if (old_bridge_state->base.state) {
+> +               for_each_old_crtc_in_state(old_bridge_state->base.state, crtc, cstate, i) {
+> +                       if (cstate->self_refresh_active)
+> +                               return;
+> +               }
+> +       }
+>         drm_panel_enable(panel_bridge->panel);
+>  }
+>
+> -static void panel_bridge_disable(struct drm_bridge *bridge)
+> +static void panel_bridge_disable(struct drm_bridge *bridge,
+> +               struct drm_bridge_state *old_bridge_state)
+>  {
+>         struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
+> -
+> +       struct drm_crtc *crtc;
+> +       struct drm_crtc_state *cstate;
+> +       int i;
+> +
+> +       if (old_bridge_state->base.state) {
+> +               for_each_new_crtc_in_state(old_bridge_state->base.state, crtc, cstate, i) {
+> +                       if (cstate->self_refresh_active)
+> +                               return;
+> +               }
+> +       }
+>         drm_panel_disable(panel_bridge->panel);
+>  }
+>
+> -static void panel_bridge_post_disable(struct drm_bridge *bridge)
+> +static void panel_bridge_post_disable(struct drm_bridge *bridge,
+> +               struct drm_bridge_state *old_bridge_state)
+>  {
+>         struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
+> -
+> +       struct drm_crtc *crtc;
+> +       struct drm_crtc_state *cstate;
+> +       int i;
+> +
+> +       if (old_bridge_state->base.state) {
+> +               for_each_new_crtc_in_state(old_bridge_state->base.state, crtc, cstate, i) {
+> +                       if (cstate->self_refresh_active)
+> +                               return;
+> +               }
+> +       }
+>         drm_panel_unprepare(panel_bridge->panel);
+>  }
+>
+> @@ -141,10 +181,10 @@ static int panel_bridge_get_modes(struct drm_bridge *bridge,
+>  static const struct drm_bridge_funcs panel_bridge_bridge_funcs = {
+>         .attach = panel_bridge_attach,
+>         .detach = panel_bridge_detach,
+> -       .pre_enable = panel_bridge_pre_enable,
+> -       .enable = panel_bridge_enable,
+> -       .disable = panel_bridge_disable,
+> -       .post_disable = panel_bridge_post_disable,
+> +       .atomic_pre_enable = panel_bridge_pre_enable,
+> +       .atomic_enable = panel_bridge_enable,
+> +       .atomic_disable = panel_bridge_disable,
+> +       .atomic_post_disable = panel_bridge_post_disable,
+>         .get_modes = panel_bridge_get_modes,
+>         .atomic_reset = drm_atomic_helper_bridge_reset,
+>         .atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> index e7c9fe1..90223b8 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> @@ -18,6 +18,7 @@
+>  #include <drm/drm_probe_helper.h>
+>  #include <drm/drm_rect.h>
+>  #include <drm/drm_vblank.h>
+> +#include <drm/drm_self_refresh_helper.h>
+>
+>  #include "dpu_kms.h"
+>  #include "dpu_hw_lm.h"
+> @@ -457,7 +458,6 @@ static void _dpu_crtc_blend_setup(struct drm_crtc *crtc)
+>                         mixer[i].mixer_op_mode,
+>                         ctl->idx - CTL_0,
+>                         mixer[i].flush_mask);
+> -
+
+Unnecessary
+
+>                 ctl->ops.setup_blendstage(ctl, mixer[i].hw_lm->idx,
+>                         &stage_cfg);
+>         }
+> @@ -951,6 +951,14 @@ static void dpu_crtc_disable(struct drm_crtc *crtc,
+>
+>         DRM_DEBUG_KMS("crtc%d\n", crtc->base.id);
+>
+> +       if (old_crtc_state->self_refresh_active) {
+> +               drm_for_each_encoder_mask(encoder, crtc->dev,
+> +                                old_crtc_state->encoder_mask) {
+> +                       dpu_encoder_assign_crtc(encoder, NULL);
+> +               }
+> +               return;
+> +       }
+> +
+>         /* Disable/save vblank irq handling */
+>         drm_crtc_vblank_off(crtc);
+>
+> @@ -962,7 +970,8 @@ static void dpu_crtc_disable(struct drm_crtc *crtc,
+>                  */
+>                 if (dpu_encoder_get_intf_mode(encoder) == INTF_MODE_VIDEO)
+>                         release_bandwidth = true;
+> -               dpu_encoder_assign_crtc(encoder, NULL);
+> +               if (!crtc->state->self_refresh_active)
+> +                       dpu_encoder_assign_crtc(encoder, NULL);
+
+This deserves some comments in the code
+
+>         }
+>
+>         /* wait for frame_event_done completion */
+> @@ -1010,6 +1019,8 @@ static void dpu_crtc_enable(struct drm_crtc *crtc,
+>         struct dpu_crtc *dpu_crtc = to_dpu_crtc(crtc);
+>         struct drm_encoder *encoder;
+>         bool request_bandwidth = false;
+> +       struct drm_crtc_state *old_crtc_state =
+> +               drm_atomic_get_old_crtc_state(state, crtc);
+>
+>         pm_runtime_get_sync(crtc->dev->dev);
+>
+> @@ -1032,8 +1043,10 @@ static void dpu_crtc_enable(struct drm_crtc *crtc,
+>         trace_dpu_crtc_enable(DRMID(crtc), true, dpu_crtc);
+>         dpu_crtc->enabled = true;
+>
+> -       drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask)
+> -               dpu_encoder_assign_crtc(encoder, crtc);
+> +       if (!old_crtc_state->self_refresh_active) {
+> +               drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask)
+> +                       dpu_encoder_assign_crtc(encoder, crtc);
+> +       }
+
+This deserves some comments in the code
 
 >
+>         /* Enable/restore vblank irq handling */
+>         drm_crtc_vblank_on(crtc);
+> @@ -1069,7 +1082,7 @@ static int dpu_crtc_atomic_check(struct drm_crtc *crtc,
 >
-> Thanks
-> Neeraj
+>         pstates = kzalloc(sizeof(*pstates) * DPU_STAGE_MAX * 4, GFP_KERNEL);
 >
-> [1] 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/kernel/rcu/tree_exp.h?h=v5.17-rc3&id=81f6d49cce2d2fe507e3fddcc4a6db021d9c2e7b
->>
->>     expmask = 8,     ==> cpu3
->>
->> [80235.522440][T12441] rcu: INFO: rcu_preempt detected expedited 
->> stalls on CPUs/tasks: { 3-... } 9163622 jiffies s: 634705 root: 0x8/.
->> [80235.534757][T12441] rcu: blocking rcu_node structures:
->> [80235.540102][T12441] Task dump for CPU 3:
->> [80235.540118][T12441] task:core_ctl        state:D stack:    0 pid: 
->> 172 ppid:     2 flags:0x00000008
->> [80235.540150][T12441] Call trace:
->> [80235.540178][T12441]  __switch_to+0x2a8/0x3ac
->> [80235.540207][T12441]  rcu_state+0x11b0/0x1480
->>
->>
->> [80299.010105][T12441] rcu: INFO: rcu_preempt detected expedited 
->> stalls on CPUs/tasks: { 3-... } 9179494 jiffies s: 634705 root: 0x8/.
->> [80299.022623][T12441] rcu: blocking rcu_node structures:
->> [80299.027924][T12441] Task dump for CPU 3:
->> [80299.027942][T12441] task:swapper/3       state:R  running task 
->> stack:    0 pid:    0 ppid:     1 flags:0x00000008
->> [80299.027993][T12441] Call trace:
->> [80299.028025][T12441]  __switch_to+0x2a8/0x3ac
->> [80299.028051][T12441]  0xffffffc010113eb4
->>
->>
->> As we were not seeing this earlier.
->> Below is compile tested patch, can we do something like this  ?
->>
->> ==========================================><==================================================== 
->>
->>
->> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
->> index 6453ac5..f0332e4 100644
->> --- a/kernel/rcu/tree_exp.h
->> +++ b/kernel/rcu/tree_exp.h
->> @@ -812,10 +812,12 @@ static int rcu_print_task_exp_stall(struct 
->> rcu_node *rnp)
->>    */
->>   void synchronize_rcu_expedited(void)
->>   {
->> -    bool no_wq;
->> +    bool no_wq = (rcu_scheduler_active == RCU_SCHEDULER_INIT);
->> +    bool is_active;
->>       struct rcu_exp_work rew;
->>       struct rcu_node *rnp;
->>       unsigned long s;
->> +    int next_cpu;
->>
->>       RCU_LOCKDEP_WARN(lock_is_held(&rcu_bh_lock_map) ||
->>                lock_is_held(&rcu_lock_map) ||
->> @@ -837,19 +839,28 @@ void synchronize_rcu_expedited(void)
->>       if (exp_funnel_lock(s))
->>           return;  /* Someone else did our work for us. */
->>
->> -    /* Don't use workqueue during boot or from an incoming CPU. */
->> -    preempt_disable();
->> -    no_wq = rcu_scheduler_active == RCU_SCHEDULER_INIT ||
->> -        !cpumask_test_cpu(smp_processor_id(), cpu_active_mask);
->> -    preempt_enable();
->> -
->>       /* Ensure that load happens before action based on it. */
->>       if (unlikely(no_wq)) {
->> -        /* Direct call during scheduler init, early_initcalls() and 
->> incoming CPUs. */
->> +        /* Direct call during scheduler init, early_initcalls(). */
->>           rcu_exp_sel_wait_wake(s);
->> +        mutex_unlock(&rcu_state.exp_mutex);
->> +        return;
->> +    }
->> +
->> +    preempt_disable();
->> +    is_active = cpumask_test_cpu(smp_processor_id(), cpu_active_mask);
->> +    preempt_enable();
->> +
->> +    rew.rew_s = s;
->> +    if (!is_active) {
->> +        INIT_WORK(&rew.rew_work, wait_rcu_exp_gp);
->> +        next_cpu = cpumask_next(smp_processor_id(), cpu_active_mask);
->> +        if (next_cpu >= nr_cpu_ids)
->> +            next_cpu = cpumask_first(cpu_active_mask);
->> +
->> +        queue_work_on(next_cpu, rcu_gp_wq, &rew.rew_work);
->>       } else {
->>           /* Marshall arguments & schedule the expedited grace 
->> period. */
->> -        rew.rew_s = s;
->>           INIT_WORK_ONSTACK(&rew.rew_work, wait_rcu_exp_gp);
->>           queue_work(rcu_gp_wq, &rew.rew_work);
->>       }
->> @@ -863,7 +874,9 @@ void synchronize_rcu_expedited(void)
->>       /* Let the next expedited grace period start. */
->>       mutex_unlock(&rcu_state.exp_mutex);
->>
->> -    if (likely(!no_wq))
->> +    if (likely(is_active))
->>           destroy_work_on_stack(&rew.rew_work);
->> +    else
->> +        flush_work(&rew.rew_work);
->>   }
->>   EXPORT_SYMBOL_GPL(synchronize_rcu_expedited);
+> -       if (!crtc_state->enable || !crtc_state->active) {
+> +       if (!crtc_state->enable || !crtc_state->active || crtc_state->self_refresh_active) {
+
+This does not seem correct to me. According to the docs: "When in self
+refresh mode, the crtc_state->active value will be false, since the
+CRTC is off."
+
+>                 DRM_DEBUG_ATOMIC("crtc%d -> enable %d, active %d, skip atomic_check\n",
+>                                 crtc->base.id, crtc_state->enable,
+>                                 crtc_state->active);
+> @@ -1497,7 +1510,7 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
+>  {
+>         struct drm_crtc *crtc = NULL;
+>         struct dpu_crtc *dpu_crtc = NULL;
+> -       int i;
+> +       int i, ret;
+>
+>         dpu_crtc = kzalloc(sizeof(*dpu_crtc), GFP_KERNEL);
+>         if (!dpu_crtc)
+> @@ -1534,6 +1547,11 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
+>         /* initialize event handling */
+>         spin_lock_init(&dpu_crtc->event_lock);
+>
+> +       ret = drm_self_refresh_helper_init(crtc);
+> +       if (ret)
+> +               DPU_ERROR("Failed to initialize %s with SR helpers %d\n",
+> +                       crtc->name, ret);
+> +
+>         DRM_DEBUG_KMS("%s: successfully initialized crtc\n", dpu_crtc->name);
+>         return crtc;
+>  }
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index 1e648db..461fdd1 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -217,6 +217,14 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
+>         15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
+>  };
+>
+> +static inline bool is_self_refresh_active(struct drm_crtc_state *state)
+> +{
+> +       if (state && state->self_refresh_active)
+> +               return true;
+> +
+> +       return false;
+> +}
+> +
+>  static void _dpu_encoder_setup_dither(struct dpu_hw_pingpong *hw_pp, unsigned bpc)
+>  {
+>         struct dpu_hw_dither_cfg dither_cfg = { 0 };
+> @@ -600,6 +608,9 @@ static int dpu_encoder_virt_atomic_check(
+>
+>         trace_dpu_enc_atomic_check(DRMID(drm_enc));
+>
+> +       if (crtc_state->self_refresh_active)
+> +               return ret;
+> +
+
+Why?
+
+
+>         /* perform atomic check on the first physical encoder (master) */
+>         for (i = 0; i < dpu_enc->num_phys_encs; i++) {
+>                 struct dpu_encoder_phys *phys = dpu_enc->phys_encs[i];
+> @@ -1138,15 +1149,19 @@ void dpu_encoder_virt_runtime_resume(struct drm_encoder *drm_enc)
+>         mutex_unlock(&dpu_enc->enc_lock);
+>  }
+>
+> -static void dpu_encoder_virt_enable(struct drm_encoder *drm_enc)
+> +static void dpu_encoder_virt_enable(struct drm_encoder *drm_enc,
+> +       struct drm_atomic_state *state)
+>  {
+>         struct dpu_encoder_virt *dpu_enc = NULL;
+>         int ret = 0;
+>         struct msm_drm_private *priv;
+>         struct drm_display_mode *cur_mode = NULL;
+> +       struct drm_crtc_state *old_crtc_state;
+> +       struct drm_crtc *crtc;
+>
+>         dpu_enc = to_dpu_encoder_virt(drm_enc);
+>
+> +       crtc = dpu_enc->crtc;
+>         mutex_lock(&dpu_enc->enc_lock);
+>         cur_mode = &dpu_enc->base.crtc->state->adjusted_mode;
+>         priv = drm_enc->dev->dev_private;
+> @@ -1170,21 +1185,59 @@ static void dpu_encoder_virt_enable(struct drm_encoder *drm_enc)
+>
+>         _dpu_encoder_virt_enable_helper(drm_enc);
+>
+> -       dpu_enc->enabled = true;
+> +       /* Coming back from self refresh, exit PSR */
+> +       if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS &&
+> +                       is_self_refresh_active(old_crtc_state))
+> +               msm_dp_display_set_psr(dpu_enc->dp, false);
+>
+> +       if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS &&
+> +                       !is_self_refresh_active(old_crtc_state)) {
+> +               ret = msm_dp_display_enable(dpu_enc->dp, drm_enc);
+
+You shouldn't call msm_dp_display_*() directly.
+
+I might be wrong, but I think that these function calls should be
+moved into dp_bridge code instead of taking place here.
+
+> +               if (ret) {
+> +                       DPU_ERROR_ENC(dpu_enc, "dp display enable failed: %d\n",
+> +                               ret);
+> +                       goto out;
+> +               }
+> +       }
+> +
+> +       dpu_enc->enabled = true;
+>  out:
+>         mutex_unlock(&dpu_enc->enc_lock);
+>  }
+>
+> -static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
+> +static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc,
+> +       struct drm_atomic_state *state)
+>  {
+>         struct dpu_encoder_virt *dpu_enc = NULL;
+>         struct msm_drm_private *priv;
+> +       struct drm_crtc *crtc;
+> +       struct drm_crtc_state *old_state;
+>         int i = 0;
+>
+>         dpu_enc = to_dpu_encoder_virt(drm_enc);
+>         DPU_DEBUG_ENC(dpu_enc, "\n");
+>
+> +       if (!drm_enc) {
+> +               DPU_ERROR("invalid encoder\n");
+> +               return;
+> +       }
+> +       dpu_enc = to_dpu_encoder_virt(drm_enc);
+> +
+> +       crtc = dpu_enc->crtc;
+> +
+> +       /* Enter PSR if encoder supports */
+> +       if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS  && is_self_refresh_active(crtc->state))
+> +               msm_dp_display_set_psr(dpu_enc->dp, true);
+> +
+> +       old_state = drm_atomic_get_old_crtc_state(state, crtc);
+> +
+> +       if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS && is_self_refresh_active(old_state)) {
+> +               msm_dp_display_set_psr(dpu_enc->dp, false);
+> +               if (msm_dp_display_disable(dpu_enc->dp, drm_enc))
+> +                       DPU_ERROR_ENC(dpu_enc, "dp display disable failed\n");
+> +               return;
+> +       }
+> +
+>         mutex_lock(&dpu_enc->enc_lock);
+>         dpu_enc->enabled = false;
+>
+> @@ -1194,6 +1247,9 @@ static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
+>
+>         /* wait for idle */
+>         dpu_encoder_wait_for_event(drm_enc, MSM_ENC_TX_COMPLETE);
+> +       if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS && !is_self_refresh_active(crtc->state))
+> +               if (msm_dp_display_pre_disable(dpu_enc->dp, drm_enc))
+> +                       DPU_ERROR_ENC(dpu_enc, "dp display push idle failed\n");
+>
+>         dpu_encoder_resource_control(drm_enc, DPU_ENC_RC_EVENT_PRE_STOP);
+>
+> @@ -1204,7 +1260,6 @@ static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
+>                         phys->ops.disable(phys);
+>         }
+>
+> -
+>         /* after phys waits for frame-done, should be no more frames pending */
+>         if (atomic_xchg(&dpu_enc->frame_done_timeout_ms, 0)) {
+>                 DPU_ERROR("enc%d timeout pending\n", drm_enc->base.id);
+> @@ -1219,6 +1274,10 @@ static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
+>
+>         DPU_DEBUG_ENC(dpu_enc, "encoder disabled\n");
+>
+> +       if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS && !is_self_refresh_active(crtc->state))
+> +               if (msm_dp_display_disable(dpu_enc->dp, drm_enc))
+> +                       DPU_ERROR_ENC(dpu_enc, "dp display disable failed\n");
+> +
+>         mutex_unlock(&dpu_enc->enc_lock);
+>  }
+>
+> @@ -2094,8 +2153,8 @@ static void dpu_encoder_frame_done_timeout(struct timer_list *t)
+>
+>  static const struct drm_encoder_helper_funcs dpu_encoder_helper_funcs = {
+>         .mode_set = dpu_encoder_virt_mode_set,
+> -       .disable = dpu_encoder_virt_disable,
+> -       .enable = dpu_encoder_virt_enable,
+> +       .atomic_disable = dpu_encoder_virt_disable,
+> +       .atomic_enable = dpu_encoder_virt_enable,
+
+Please split this into a separate commit. First you convert
+dpu_encoder to use atomic_enable/atomic_disable, then you add PSR
+support.
+
+>         .atomic_check = dpu_encoder_virt_atomic_check,
+>  };
+>
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index 47fe11a..aed8e09 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -495,7 +495,7 @@ static void dpu_kms_wait_for_commit_done(struct msm_kms *kms,
+>                 return;
+>         }
+>
+> -       if (!crtc->state->active) {
+> +       if (!crtc->state->active && !crtc->state->self_refresh_active) {
+
+drm_atomic_crtc_effectively_active() ?
+
+>                 DPU_DEBUG("[crtc:%d] not active\n", crtc->base.id);
+>                 return;
+>         }
+> --
+> 2.7.4
+>
+
+
+--
+With best wishes
+Dmitry

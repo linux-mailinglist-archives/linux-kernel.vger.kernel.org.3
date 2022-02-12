@@ -2,65 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D103B4B3463
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 12:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E106F4B3465
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 12:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233958AbiBLLAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 06:00:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60056 "EHLO
+        id S234002AbiBLLCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 06:02:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbiBLLAs (ORCPT
+        with ESMTP id S230370AbiBLLCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 06:00:48 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCF924BD6;
-        Sat, 12 Feb 2022 03:00:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644663645; x=1676199645;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qTc5GJOOUJ9y5m3YOgoyTQTdlQ6SLtEu1OqnYMW0m1U=;
-  b=jDsF33+LwweLvPyCxPC5MwUIrrkElIOv6o02FrYzSn0l1ieAtJQVoSC4
-   aLBhd+HWlRmFn/Hg4Y3SHxWKUzqpwQUKHlwHKzmWVGrCKWLHsZKjS5Rh1
-   YU/YrNC79zFND5JxtH0gJwpiHb4fUSw4Uuqz8KvCwibNK6cWJ37fjK/HS
-   vcD1eWn320/B6EDmU9+cv/ZQms+tdbZBxFUCH/e3+8wm0OigvhfO6D6Nb
-   Fg1c2V81tv2OOgJdk+aHm/y+wAra9GFmEAS6m4To2Z7fVY2q4od8Lna7U
-   V3xXHsIWUXHGxQaDffN2Soglf4XFU0l839KZq5sl832+ydGQDDVo3FtG9
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="230512834"
-X-IronPort-AV: E=Sophos;i="5.88,363,1635231600"; 
-   d="scan'208";a="230512834"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2022 03:00:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,363,1635231600"; 
-   d="scan'208";a="569304982"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 12 Feb 2022 03:00:42 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nIq8w-00063o-0N; Sat, 12 Feb 2022 11:00:42 +0000
-Date:   Sat, 12 Feb 2022 19:00:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] serial: 8250: Report which option to enable for
- blacklisted PCI devices
-Message-ID: <202202121838.P5rALKEy-lkp@intel.com>
-References: <alpine.DEB.2.21.2202062133570.34636@angie.orcam.me.uk>
+        Sat, 12 Feb 2022 06:02:22 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5080B26118;
+        Sat, 12 Feb 2022 03:02:19 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id fy20so27544415ejc.0;
+        Sat, 12 Feb 2022 03:02:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2nsLPIi0Jyp8WpMGSNCbbfOsCpxT0JtH7G04CMqZ8a0=;
+        b=U8oA1iWLZ4L8kY3IV6T0/sObqOhi0xEIZoN+nmBOwM9hpxuKSX/pTu31veSuaf6gE8
+         cA5CDvpsTOBzMyhlovODwlhzJK1AqcFRG5ypXp9cfMNAL9wF2Ansj8tkgJc1dxWXea9H
+         vuT7IbhxJGNyHHYV9MLjLtYyZch9OSD61C7evyfUkHnyYTj4FvXt0e8z+64v4/eSnhQN
+         1/lbDOV2XO9xR4+v1SJTQT+n2YENXxIF54ZgvGh59BJwcZ2qymV7UsdxS7WZzSLSElIE
+         1uAeG2Om+sT6UWTzyfOnucFkVv18MHxveMEHkTVuK+hUWdy6v5wgroMZoVl+UGRHdbXP
+         KaSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2nsLPIi0Jyp8WpMGSNCbbfOsCpxT0JtH7G04CMqZ8a0=;
+        b=a9yT5uidc2D5nV6fGva3jqwjMKBhuLz5VKyCxv//5lNLu8ZEoab8TUdc8UEZgQVeqf
+         J36vdprUjP9eQvD2Ictg2HaGjZOodr2OxrcRBzmzXQfOYqDwniOKYSt0MKrOchheUAWd
+         s06p9glDnVq7JC5Qa1QXAVXyg2wC6BxdxDrb2ywcvwRR27Ve2Ujs+pel4OKR8zpB+xV7
+         T4no25D+2wbv70EyamoSAR60EuJi3knw2bsh6jBm+IrZGR85E9gm/QSmCSVhp8/d4eY7
+         vnavzh/TMIrwxg0089wpUGU51q3jq7hY7TnZMGd73+TZbm2aDBYvhnGPWCpc1vuAKHfZ
+         6vKQ==
+X-Gm-Message-State: AOAM533Uv7yK7ZG53uS7GfZgExV8HTp8F8d3sps/ZXrl2fq/GJOPsDXJ
+        kT22+2Y96aOlvraHLLLpFjs=
+X-Google-Smtp-Source: ABdhPJyJWoqxl29NCGoJMhttcOBZrCG9/CVS2+VeXsEMK4oO1Sjbj2U8XkDPjIvgu6Oi0qJXEHAVug==
+X-Received: by 2002:a17:906:9742:: with SMTP id o2mr4508845ejy.254.1644663737698;
+        Sat, 12 Feb 2022 03:02:17 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id h6sm2159942edb.5.2022.02.12.03.02.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Feb 2022 03:02:17 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <5fd84e2f-8ebc-9a4c-64bf-8d6a2c146629@redhat.com>
+Date:   Sat, 12 Feb 2022 12:02:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2202062133570.34636@angie.orcam.me.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 1/1] x86/kvm/fpu: Mask guest fpstate->xfeatures with
+ guest_supported_xcr0
+Content-Language: en-US
+To:     Leonardo Bras <leobras@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Yang Zhong <yang.zhong@intel.com>,
+        Andy Lutomirski <luto@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220211060742.34083-1-leobras@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220211060742.34083-1-leobras@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,104 +89,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Maciej,
+On 2/11/22 07:07, Leonardo Bras wrote:
+> During host/guest switch (like in kvm_arch_vcpu_ioctl_run()), the kernel
+> swaps the fpu between host/guest contexts, by using fpu_swap_kvm_fpstate().
+> 
+> When xsave feature is available, the fpu swap is done by:
+> - xsave(s) instruction, with guest's fpstate->xfeatures as mask, is used
+>    to store the current state of the fpu registers to a buffer.
+> - xrstor(s) instruction, with (fpu_kernel_cfg.max_features &
+>    XFEATURE_MASK_FPSTATE) as mask, is used to put the buffer into fpu regs.
+> 
+> For xsave(s) the mask is used to limit what parts of the fpu regs will
+> be copied to the buffer. Likewise on xrstor(s), the mask is used to
+> limit what parts of the fpu regs will be changed.
+> 
+> The mask for xsave(s), the guest's fpstate->xfeatures, is defined on
+> kvm_arch_vcpu_create(), which (in summary) sets it to all features
+> supported by the cpu which are enabled on kernel config.
+> 
+> This means that xsave(s) will save to guest buffer all the fpu regs
+> contents the cpu has enabled when the guest is paused, even if they
+> are not used.
+> 
+> This would not be an issue, if xrstor(s) would also do that.
+> 
+> xrstor(s)'s mask for host/guest swap is basically every valid feature
+> contained in kernel config, except XFEATURE_MASK_PKRU.
+> Accordingto kernel src, it is instead switched in switch_to() and
+> flush_thread().
+> 
+> Then, the following happens with a host supporting PKRU starts a
+> guest that does not support it:
+> 1 - Host has XFEATURE_MASK_PKRU set. 1st switch to guest,
+> 2 - xsave(s) fpu regs to host fpustate (buffer has XFEATURE_MASK_PKRU)
+> 3 - xrstor(s) guest fpustate to fpu regs (fpu regs have XFEATURE_MASK_PKRU)
+> 4 - guest runs, then switch back to host,
+> 5 - xsave(s) fpu regs to guest fpstate (buffer now have XFEATURE_MASK_PKRU)
+> 6 - xrstor(s) host fpstate to fpu regs.
+> 7 - kvm_vcpu_ioctl_x86_get_xsave() copy guest fpstate to userspace (with
+>      XFEATURE_MASK_PKRU, which should not be supported by guest vcpu)
+> 
+> On 5, even though the guest does not support PKRU, it does have the flag
+> set on guest fpstate, which is transferred to userspace via vcpu ioctl
+> KVM_GET_XSAVE.
+> 
+> This becomes a problem when the user decides on migrating the above guest
+> to another machine that does not support PKRU:
+> The new host restores guest's fpu regs to as they were before (xrstor(s)),
+> but since the new host don't support PKRU, a general-protection exception
+> ocurs in xrstor(s) and that crashes the guest.
+> 
+> This can be solved by making the guest's fpstate->user_xfeatures only hold
+> values compatible to guest_supported_xcr0. This way, on 7 the only flags
+> copied to userspace will be the ones compatible to guest requirements,
+> and thus there will be no issue during migration.
+> 
+> As a bonus, will also fail if userspace tries to set fpu features
+> that are not compatible to the guest configuration. (KVM_SET_XSAVE ioctl)
+> 
+> Signed-off-by: Leonardo Bras <leobras@redhat.com>
+> ---
+>   arch/x86/kernel/fpu/core.c | 1 +
+>   arch/x86/kvm/cpuid.c       | 4 ++++
+>   2 files changed, 5 insertions(+)
+> 
+> diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+> index 8dea01ffc5c1..e83d8b1fbc83 100644
+> --- a/arch/x86/kernel/fpu/core.c
+> +++ b/arch/x86/kernel/fpu/core.c
+> @@ -34,6 +34,7 @@ DEFINE_PER_CPU(u64, xfd_state);
+>   /* The FPU state configuration data for kernel and user space */
+>   struct fpu_state_config	fpu_kernel_cfg __ro_after_init;
+>   struct fpu_state_config fpu_user_cfg __ro_after_init;
+> +EXPORT_SYMBOL(fpu_user_cfg);
+>   
+>   /*
+>    * Represents the initial FPU state. It's mostly (but not completely) zeroes,
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 494d4d351859..aecebd6bc490 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -296,6 +296,10 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+>   	vcpu->arch.guest_supported_xcr0 =
+>   		cpuid_get_supported_xcr0(vcpu->arch.cpuid_entries, vcpu->arch.cpuid_nent);
+>   
+> +	/* Mask out features unsupported by guest */
+> +	vcpu->arch.guest_fpu.fpstate->user_xfeatures =
+> +		fpu_user_cfg.default_features & vcpu->arch.guest_supported_xcr0;
 
-I love your patch! Yet something to improve:
+This is not correct, because default_features does not include the
+optional features (such as AMX) that were the original reason to
+go through all this mess.  What about:
 
-[auto build test ERROR on tty/tty-testing]
-[also build test ERROR on usb/usb-testing v5.17-rc3 next-20220211]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+	vcpu->arch.guest_fpu.fpstate->user_xfeatures =
+		vcpu->arch.guest_fpu.fpstate->xfeatures & vcpu->arch.guest_supported_xcr0;
 
-url:    https://github.com/0day-ci/linux/commits/Maciej-W-Rozycki/serial-8250-Correct-basic-issues-with-the-PCI-blacklist/20220212-164230
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220212/202202121838.P5rALKEy-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c7eb84634519e6497be42f5fe323f9a04ed67127)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/aa68e36c332457acb464b083c920d10f0e5a9865
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Maciej-W-Rozycki/serial-8250-Correct-basic-issues-with-the-PCI-blacklist/20220212-164230
-        git checkout aa68e36c332457acb464b083c920d10f0e5a9865
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/tty/serial/8250/
+?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Paolo
 
-All errors (new ones prefixed by >>):
+>   	kvm_update_pv_runtime(vcpu);
+>   
+>   	vcpu->arch.maxphyaddr = cpuid_query_maxphyaddr(vcpu);
 
->> drivers/tty/serial/8250/8250_pci.c:3535:32: error: initializer element is not a compile-time constant
-           { PCI_DEVICE(0x4348, 0x7053), REPORT_CONFIG(PARPORT_SERIAL), },
-                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/tty/serial/8250/8250_pci.c:3522:2: note: expanded from macro 'REPORT_CONFIG'
-           (IS_ENABLED(CONFIG_##option) ? 0 : (kernel_ulong_t)&#option)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +3535 drivers/tty/serial/8250/8250_pci.c
-
-  3520	
-  3521	#define REPORT_CONFIG(option) \
-  3522		(IS_ENABLED(CONFIG_##option) ? 0 : (kernel_ulong_t)&#option)
-  3523	#define REPORT_8250_CONFIG(option) \
-  3524		(IS_ENABLED(CONFIG_SERIAL_8250_##option) ? \
-  3525		 0 : (kernel_ulong_t)&"SERIAL_8250_"#option)
-  3526	
-  3527	static const struct pci_device_id blacklist[] = {
-  3528		/* softmodems */
-  3529		{ PCI_VDEVICE(AL, 0x5457), }, /* ALi Corporation M5457 AC'97 Modem */
-  3530		{ PCI_VDEVICE(MOTOROLA, 0x3052), }, /* Motorola Si3052-based modem */
-  3531		{ PCI_DEVICE(0x1543, 0x3052), }, /* Si3052-based modem, default IDs */
-  3532	
-  3533		/* multi-io cards handled by parport_serial */
-  3534		/* WCH CH353 2S1P */
-> 3535		{ PCI_DEVICE(0x4348, 0x7053), REPORT_CONFIG(PARPORT_SERIAL), },
-  3536		/* WCH CH353 1S1P */
-  3537		{ PCI_DEVICE(0x4348, 0x5053), REPORT_CONFIG(PARPORT_SERIAL), },
-  3538		/* WCH CH382 2S1P */
-  3539		{ PCI_DEVICE(0x1c00, 0x3250), REPORT_CONFIG(PARPORT_SERIAL), },
-  3540	
-  3541		/* Intel platforms with MID UART */
-  3542		{ PCI_VDEVICE(INTEL, 0x081b), REPORT_8250_CONFIG(MID), },
-  3543		{ PCI_VDEVICE(INTEL, 0x081c), REPORT_8250_CONFIG(MID), },
-  3544		{ PCI_VDEVICE(INTEL, 0x081d), REPORT_8250_CONFIG(MID), },
-  3545		{ PCI_VDEVICE(INTEL, 0x1191), REPORT_8250_CONFIG(MID), },
-  3546		{ PCI_VDEVICE(INTEL, 0x18d8), REPORT_8250_CONFIG(MID), },
-  3547		{ PCI_VDEVICE(INTEL, 0x19d8), REPORT_8250_CONFIG(MID), },
-  3548	
-  3549		/* Intel platforms with DesignWare UART */
-  3550		{ PCI_VDEVICE(INTEL, 0x0936), REPORT_8250_CONFIG(LPSS), },
-  3551		{ PCI_VDEVICE(INTEL, 0x0f0a), REPORT_8250_CONFIG(LPSS), },
-  3552		{ PCI_VDEVICE(INTEL, 0x0f0c), REPORT_8250_CONFIG(LPSS), },
-  3553		{ PCI_VDEVICE(INTEL, 0x228a), REPORT_8250_CONFIG(LPSS), },
-  3554		{ PCI_VDEVICE(INTEL, 0x228c), REPORT_8250_CONFIG(LPSS), },
-  3555		{ PCI_VDEVICE(INTEL, 0x4b96), REPORT_8250_CONFIG(LPSS), },
-  3556		{ PCI_VDEVICE(INTEL, 0x4b97), REPORT_8250_CONFIG(LPSS), },
-  3557		{ PCI_VDEVICE(INTEL, 0x4b98), REPORT_8250_CONFIG(LPSS), },
-  3558		{ PCI_VDEVICE(INTEL, 0x4b99), REPORT_8250_CONFIG(LPSS), },
-  3559		{ PCI_VDEVICE(INTEL, 0x4b9a), REPORT_8250_CONFIG(LPSS), },
-  3560		{ PCI_VDEVICE(INTEL, 0x4b9b), REPORT_8250_CONFIG(LPSS), },
-  3561		{ PCI_VDEVICE(INTEL, 0x9ce3), REPORT_8250_CONFIG(LPSS), },
-  3562		{ PCI_VDEVICE(INTEL, 0x9ce4), REPORT_8250_CONFIG(LPSS), },
-  3563	
-  3564		/* Exar devices */
-  3565		{ PCI_VDEVICE(EXAR, PCI_ANY_ID), REPORT_8250_CONFIG(EXAR), },
-  3566		{ PCI_VDEVICE(COMMTECH, PCI_ANY_ID), REPORT_8250_CONFIG(EXAR), },
-  3567	
-  3568		/* Pericom devices */
-  3569		{ PCI_VDEVICE(PERICOM, PCI_ANY_ID), REPORT_8250_CONFIG(PERICOM), },
-  3570		{ PCI_VDEVICE(ACCESSIO, PCI_ANY_ID), REPORT_8250_CONFIG(PERICOM), },
-  3571	
-  3572		/* End of the black list */
-  3573		{ }
-  3574	};
-  3575	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

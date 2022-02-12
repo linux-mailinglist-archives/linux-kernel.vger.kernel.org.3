@@ -2,103 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 228554B388D
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 00:17:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC40C4B3895
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 00:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232441AbiBLXRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 18:17:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41080 "EHLO
+        id S232459AbiBLXYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 18:24:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232416AbiBLXRN (ORCPT
+        with ESMTP id S230252AbiBLXYO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 18:17:13 -0500
-Received: from mother.openwall.net (mother.openwall.net [195.42.179.200])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3DEA65F8D5
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 15:17:07 -0800 (PST)
-Received: (qmail 6042 invoked from network); 12 Feb 2022 23:17:06 -0000
-Received: from localhost (HELO pvt.openwall.com) (127.0.0.1)
-  by localhost with SMTP; 12 Feb 2022 23:17:06 -0000
-Received: by pvt.openwall.com (Postfix, from userid 503)
-        id D1CBDAB88C; Sun, 13 Feb 2022 00:17:01 +0100 (CET)
-Date:   Sun, 13 Feb 2022 00:17:01 +0100
-From:   Solar Designer <solar@openwall.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, Alexey Gladkov <legion@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        Michal Koutn?? <mkoutny@suse.com>, stable@vger.kernel.org
-Subject: Re: [PATCH 3/8] ucounts: Fix and simplify RLIMIT_NPROC handling during setuid()+execve
-Message-ID: <20220212231701.GA29483@openwall.com>
-References: <87o83e2mbu.fsf@email.froward.int.ebiederm.org> <20220211021324.4116773-3-ebiederm@xmission.com>
-Mime-Version: 1.0
+        Sat, 12 Feb 2022 18:24:14 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6201A5FF06;
+        Sat, 12 Feb 2022 15:24:08 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id E819BC0007;
+        Sat, 12 Feb 2022 23:24:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1644708244;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oFSzZ5yOgdSQAwv0PITlc/tQFNbxlnrDufyb0qNF53Q=;
+        b=T3Nl6zUHyCCqkZ70eVXfYZPR33z37M7lQnQsY+qmZhmbBJnDZ0vkPcvrgeCaDUCrE7XYTG
+        ILeyfuqBi6bYKAeXp/+nAYT3K5KTIk8buMzeNFwPqKGKGGYbtb4y354lm3VK68YPcM9p13
+        GBXHxFZNceYRpbKJBptTKYI+quWgKOkYq3xEOs79KFibZlf/2IxCxTwvRhrawA52lYqw70
+        im16ziLbq8q0e2vjmRtKvYMY6aMLDbypJbYyeDS7ToLhecyaFV97jUE+rQL876R3RI52D9
+        QCqLVoxh7Gfr90O0YJ26z9EbwtX8EIF6afWEBxUKD5ur6J05GKkR6ln6a7XOOw==
+Date:   Sun, 13 Feb 2022 00:24:02 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        linux-sunxi@lists.linux.dev,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>
+Subject: Re: (subset) [PATCH v3 5/6] clk: sunxi-ng: Add support for the sun6i
+ RTC clocks
+Message-ID: <YghBkp/sUHdqSn4G@piout.net>
+References: <20220203021736.13434-1-samuel@sholland.org>
+ <20220203021736.13434-6-samuel@sholland.org>
+ <164422443570.21572.13511859513410998733.b4-ty@cerno.tech>
+ <bb05bc64-2a9e-fe21-5a69-0ea31134e978@sholland.org>
+ <20220211124312.kiw6t25nojvkp2rw@houat>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220211021324.4116773-3-ebiederm@xmission.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220211124312.kiw6t25nojvkp2rw@houat>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 08:13:19PM -0600, Eric W. Biederman wrote:
-> As of commit 2863643fb8b9 ("set_user: add capability check when
-> rlimit(RLIMIT_NPROC) exceeds") setting the flag to see if execve
-> should check RLIMIT_NPROC is buggy, as it tests the capabilites from
-> before the credential change and not aftwards.
+On 11/02/2022 13:43:12+0100, Maxime Ripard wrote:
+> Hi Samuel,
 > 
-> As of commit 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of
-> ucounts") examining the rlimit is buggy as cred->ucounts has not yet
-> been properly set in the new credential.
+> On Mon, Feb 07, 2022 at 05:54:02PM -0600, Samuel Holland wrote:
+> > On 2/7/22 3:00 AM, Maxime Ripard wrote:
+> > > On Wed, 2 Feb 2022 20:17:35 -0600, Samuel Holland wrote:
+> > >> The RTC power domain in sun6i and newer SoCs manages the 16 MHz RC
+> > >> oscillator (called "IOSC" or "osc16M") and the optional 32 kHz crystal
+> > >> oscillator (called "LOSC" or "osc32k"). Starting with the H6, this power
+> > >> domain also handles the 24 MHz DCXO (called variously "HOSC", "dcxo24M",
+> > >> or "osc24M") as well. The H6 also adds a calibration circuit for IOSC.
+> > >>
+> > >> Later SoCs introduce further variations on the design:
+> > >>  - H616 adds an additional mux for the 32 kHz fanout source.
+> > >>  - R329 adds an additional mux for the RTC timekeeping clock, a clock
+> > >>    for the SPI bus between power domains inside the RTC, and removes the
+> > >>    IOSC calibration functionality.
+> > >>
+> > >> [...]
+> > > 
+> > > Applied to local tree (sunxi/clk-for-5.18).
+> > 
+> > Part of the build failures were because this patch depends on patch 3. Is that
+> > okay, or should I update this patch to be independent?
 > 
-> Make the code correct and more robust moving the test to see if
-> execve() needs to test RLIMIT_NPROC into commit_creds, and defer all
-> of the rest of the logic into execve() itself.
+> We don't have anything queued up yet, so I think the easiest would be to
+> merge this through the RTC tree. So nothing to do on your side yet, we
+> just need Alex to answer :)
 > 
-> As the flag only indicateds that RLIMIT_NPROC should be checked
-> in execve rename it from PF_NPROC_EXCEEDED to PF_NPROC_CHECK.
-> 
-> Cc: stable@vger.kernel.org
-> Link: https://lkml.kernel.org/r/20220207121800.5079-2-mkoutny@suse.com
-> Link: https://lkml.kernel.org/r/20220207121800.5079-3-mkoutny@suse.com
-> Reported-by: Michal Koutn?? <mkoutny@suse.com>
-> Fixes: 2863643fb8b9 ("set_user: add capability check when rlimit(RLIMIT_NPROC) exceeds")
-> Fixes: 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts")
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
-On one hand, this looks good.
+I can take the whole series but I think I would need acks from Stephen
 
-On the other, you asked about the Apache httpd suexec scenario in the
-other thread, and here's what this means for it (per my code review):
 
-In that scenario, we have two execve(): first from httpd to suexec, then
-from suexec to the CGI script.  Previously, the limit check only
-occurred on the setuid() call by suexec, and its effect was deferred
-until execve() of the script.  Now wouldn't it occur on both execve()
-calls, because commit_creds() is also called on execve() (such as in
-case the program is SUID, which suexec actually is)?  Since the check is
-kind of against real uid (not the euid=0 that suexec gains), it'd apply
-the limit against httpd pseudo-user's process count.  While it could be
-a reasonable kernel policy to impose this limit in more places, this is
-a change of behavior for Apache httpd, and is not the intended behavior
-there.  However, I think the answer to my question earlier in this
-paragraph is actually a "no", the check wouldn't occur on the execve()
-of suexec, because "new->user != old->user" would be false.  Right?
-
-As an alternative, you could keep setting the (renamed and reused) flag
-in set_user().  That would avoid the (non-)issue I described above - but
-again, your patch is probably fine as-is.
-
-I do see it's logical to have these two lines next to each other:
-
->  		inc_rlimit_ucounts(new->ucounts, UCOUNT_RLIMIT_NPROC, 1);
-> +		task->flags |= PF_NPROC_CHECK;
-
-Of course, someone would need to actually test this.
-
-Alexander
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

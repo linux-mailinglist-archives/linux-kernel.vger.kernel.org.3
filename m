@@ -2,84 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DB64B37AB
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 20:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 608814B37B0
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 20:46:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbiBLTmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 14:42:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55556 "EHLO
+        id S231233AbiBLTqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 14:46:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiBLTmt (ORCPT
+        with ESMTP id S230072AbiBLTqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 14:42:49 -0500
-Received: from cavan.codon.org.uk (irc.codon.org.uk [IPv6:2a00:1098:84:22e::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53FA606CC;
-        Sat, 12 Feb 2022 11:42:42 -0800 (PST)
-Received: by cavan.codon.org.uk (Postfix, from userid 1000)
-        id 4E74840A64; Sat, 12 Feb 2022 19:42:40 +0000 (GMT)
-Date:   Sat, 12 Feb 2022 19:42:40 +0000
-From:   Matthew Garrett <mjg59@srcf.ucam.org>
-To:     Aditya Garg <gargaditya08@live.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Jeremy Kerr <jk@ozlabs.org>,
-        "joeyli.kernel@gmail.com" <joeyli.kernel@gmail.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "eric.snowberg@oracle.com" <eric.snowberg@oracle.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "jlee@suse.com" <jlee@suse.com>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "mic@digikod.net" <mic@digikod.net>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>
-Subject: Re: [PATCH] efi: Do not import certificates from UEFI Secure Boot
- for T2 Macs
-Message-ID: <20220212194240.GA4131@srcf.ucam.org>
-References: <9D0C961D-9999-4C41-A44B-22FEAF0DAB7F@live.com>
- <20220209164957.GB12763@srcf.ucam.org>
- <5A3C2EBF-13FF-4C37-B2A0-1533A818109F@live.com>
- <20220209183545.GA14552@srcf.ucam.org>
- <20220209193705.GA15463@srcf.ucam.org>
- <2F1CC5DE-5A03-46D2-95E7-DD07A4EF2766@live.com>
- <20220210180905.GB18445@srcf.ucam.org>
- <99BB011C-71DE-49FA-81CB-BE2AC9613030@live.com>
- <20220211162857.GB10606@srcf.ucam.org>
- <F078BEBE-3DED-4EE3-A2B8-2C5744B5454C@live.com>
+        Sat, 12 Feb 2022 14:46:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BEA606CD;
+        Sat, 12 Feb 2022 11:46:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F348B8068F;
+        Sat, 12 Feb 2022 19:46:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CED4C340E7;
+        Sat, 12 Feb 2022 19:45:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644695158;
+        bh=D5kuqxFtgNZgdrn3s7Yj+iwFmkMGtVe1YHCagXT5VzI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LvNcN6Dva4O9cO8rU20p8PbzRJM6PueXCImRI9u/USpsF6fK7UrLSz8Smnk7yymft
+         c6rIUB028FcRBjxfjtHbzv6LHMFrfBlc+MUUJ6BU1xDapb2lGTMoWKD6i4Kv0Pj9vA
+         3sZlx/vVTxDb7yiB4mpJEXA4+ch6av/RE0dmd9leE7i40mzq5HE7CgiNh1uxTrVwk5
+         9FpDRPwZ/+ewQxaob5iiIio7lgGQ9xpSkcHGqbVopzYGWe2IdiiR3abCR3g3G1qp84
+         BzxdOw8cHRmRry3FXwkw5hlZm2/YWd8yp62IOdeAHd6mJ2QKnBt8oLW3Y9ZZclT7+f
+         iFAuAAUdSMjKw==
+From:   Wolfram Sang <wsa@kernel.org>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: cadence: allow COMPILE_TEST
+Date:   Sat, 12 Feb 2022 20:45:48 +0100
+Message-Id: <20220212194549.11021-1-wsa@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <F078BEBE-3DED-4EE3-A2B8-2C5744B5454C@live.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,KHOP_HELO_FCRDNS,SPF_HELO_NEUTRAL,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 12, 2022 at 05:53:47AM +0000, Aditya Garg wrote:
+Driver builds fine with COMPILE_TEST. Enable it for wider test coverage
+and easier maintenance.
 
-> Feb 12 11:01:52 MacBook kernel: Reading EFI variable db-d719b2cb-3d3a-4596-a3bc-dad00e67656f
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+---
+ drivers/i2c/busses/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ok. With CONFIG_LOAD_UEFI_KEYS=n, can you run:
+diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+index 42da31c1ab70..bad2fadc94a3 100644
+--- a/drivers/i2c/busses/Kconfig
++++ b/drivers/i2c/busses/Kconfig
+@@ -488,7 +488,7 @@ config I2C_BRCMSTB
+ 
+ config I2C_CADENCE
+ 	tristate "Cadence I2C Controller"
+-	depends on ARCH_ZYNQ || ARM64 || XTENSA
++	depends on ARCH_ZYNQ || ARM64 || XTENSA || COMPILE_TEST
+ 	help
+ 	  Say yes here to select Cadence I2C Host Controller. This controller is
+ 	  e.g. used by Xilinx Zynq.
+-- 
+2.30.2
 
-cat /sys/firmware/efi/efivars/db-d719b2cb-3d3a-4596-a3bc-dad00e67656f
-
-and see whether it generates the same failure? If so then my (handwavy) 
-guess is that something's going wrong with a firmware codepath for the 
-d719b2cb-3d3a-4596-a3bc-dad00e67656f GUID. Someone could potentially 
-then figure out whether the same happens under Windows, but the easiest 
-thing is probably to just return a failure on Apple hardware when 
-someone tries to access anything with that GUID.

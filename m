@@ -2,106 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC7A4B37D8
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 21:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 234824B37F6
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 21:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231499AbiBLUUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 15:20:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49396 "EHLO
+        id S231674AbiBLUlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 15:41:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231475AbiBLUUq (ORCPT
+        with ESMTP id S231600AbiBLUlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 15:20:46 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9FF606E0;
-        Sat, 12 Feb 2022 12:20:42 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id i34so23057841lfv.2;
-        Sat, 12 Feb 2022 12:20:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=X5OVboysZPiDCOkAvhjp7fSRieyzfEo9vFNfx2vogFs=;
-        b=CTZbrezXOPYc4Vpts3lUK+DZ3LZDs+IEKNdG/zJNT1I6U8qlxCumo5ET7f1+hqFdY/
-         1umZ0Y/v+era6Cvldralas22Db3m4F0k5VHj9AFzF4VZJRVMdrWsZ+M6xndDyiUwLGOm
-         PgIkKZJAwFTe8wRVDKO+FkFW53gB9dT19mgXVUkytECdzjFniQYTxWj2qZBrpWImgd5W
-         s33IFM6G/qVCX82uf5CNAxmrpuSRMnUlHytgszUB1PHkQ2QL80LXVREgQq/qsKy38Qoz
-         Gimx6flufy2h9ge264d+qZCmYPddS2NVoIf0R8lODLr7Kh8ez9l6wLKKqmHVyE2tM91/
-         lrbw==
+        Sat, 12 Feb 2022 15:41:32 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92ABE4AE1F
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 12:41:27 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id c1-20020a928e01000000b002bec519e98fso2988457ild.5
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 12:41:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=X5OVboysZPiDCOkAvhjp7fSRieyzfEo9vFNfx2vogFs=;
-        b=6ZZpjyUg0KPgQ8ZIJKwqG65uXMkRAFwimvbV2WUIxCRd5QP+7jx1ECMrWMIQEx0xVT
-         0qe2Ax2xjU8LObRlqYnXEzRREmdP95iriKdYsUt2YDOG74uLuDr3UO0NrWPgTw4aADUl
-         NgKrEyWcWBnjzhjfIiL8v4WHe9jTYFI5gBGsV96SiUkxb0sRrSstvxDnCz/3NHwyRIIs
-         DEYe1U+uuJAoHqFGP64UupLz1hIyooZqLzqUoNXIdgOoU2l9pPM2b7lqQ0RQKZtNVFKO
-         i7DfyFon8hF38WImJgekmpv7xx/0iaP5kK6MVh1dObB4HtI3pUlKxEqvjBQ1/RmnsNmW
-         Fa9A==
-X-Gm-Message-State: AOAM533mDLSnLELjjLwsDXA+cnCmb6LOWOzyccVG2uXjpg6TEAPASYmS
-        e3TjeY69s5AGX1UGMqxyE6zVwn3oF8/Cn7pS7U2jpKeoYcw=
-X-Google-Smtp-Source: ABdhPJzJa2TZFLoyWjRVQBSAVcqGj5oftexOoIl2da5fV/wNaFVxujB2hpG1mJmnGqWKTGE4Ee5Ldv+GGB7LiilePy0=
-X-Received: by 2002:a05:6512:2248:: with SMTP id i8mr5383700lfu.595.1644697241127;
- Sat, 12 Feb 2022 12:20:41 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=0q5NHgNKF/DDJR309GaSKrvp8mmMs6IJLxYkxs2KXOQ=;
+        b=l7iDcNzHaskMVAl5b+nJjUbAVJwn7s3VZgFict91HdW0PO+UarDxYcFcmh5udZWtyU
+         ByIhqcGjZK62GrLlUDUpigjH/Cmk8nl5h4a5gmK5aWpDG8oGuBLLsTXVqFvIMtMgnjSz
+         vDiUm3ate8p9DFxBXnWEEun7ttL4tB8BER9r5Ny2JAIi/ycJaCSi5D48olE3GyBC4pq0
+         7Avj5raJBLvQtV6WtYp8e/FonXTeg1eV/ldJILv1681W8tNoFPyU+9AjxuGoCHdkdEPy
+         n8ZkiowQABRV1IisKtCSMCIYcmM31ZHxeLvEe7kR1pWypjnB8K1+jHdX+86zTDqjLacp
+         PaFw==
+X-Gm-Message-State: AOAM532B4ccAxaVipsA/lrfIcmgsMB6KFs59g3CGfS2l4sES4meMSClG
+        zmM1a8vKxGpr5C44pcWzroPoVv2lY/vhIC3eQGpOAS8SJ5YY
+X-Google-Smtp-Source: ABdhPJyKaC/VWVtJRdxpc3ez0Z4+1kLzmtBjDcEqf1peJbkyB/ayWMnCw49aWrQ+TVvuSgWLUi9Gs1WaXi9F/ROp1GQrml9E3+za
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Sat, 12 Feb 2022 14:20:30 -0600
-Message-ID: <CAH2r5mvoW2O5c6_SRTBaC5R0FQ1y70WZ-3hfs-k8jQ7UuqUMAw@mail.gmail.com>
-Subject: [GIT PULL] smb3 client fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+X-Received: by 2002:a05:6638:d0c:: with SMTP id q12mr4162402jaj.310.1644698486828;
+ Sat, 12 Feb 2022 12:41:26 -0800 (PST)
+Date:   Sat, 12 Feb 2022 12:41:26 -0800
+In-Reply-To: <000000000000f2075605d04f9964@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000011f55805d7d8352c@google.com>
+Subject: Re: [syzbot] WARNING in iomap_iter
+From:   syzbot <syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com>
+To:     djwong@kernel.org, fgheet255t@gmail.com, hch@infradead.org,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-dfd42facf1e4ada021b939b4e19c935dcdd55566:
+syzbot has found a reproducer for the following issue on:
 
-  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
+HEAD commit:    83e396641110 Merge tag 'soc-fixes-5.17-1' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11fe01a4700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=88e0a6a3dbf057cf
+dashboard link: https://syzkaller.appspot.com/bug?extid=a8e049cd3abd342936b6
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14f8cad2700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=132c16ba700000
 
-are available in the Git repository at:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a8e049cd3abd342936b6@syzkaller.appspotmail.com
 
-  git://git.samba.org/sfrench/cifs-2.6.git tags/5.17-rc4-smb3-fixes
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 10 at fs/iomap/iter.c:33 iomap_iter_done fs/iomap/iter.c:33 [inline]
+WARNING: CPU: 1 PID: 10 at fs/iomap/iter.c:33 iomap_iter+0x7ca/0x890 fs/iomap/iter.c:78
+Modules linked in:
+CPU: 1 PID: 10 Comm: kworker/u4:1 Not tainted 5.17.0-rc3-syzkaller-00247-g83e396641110 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: loop0 loop_rootcg_workfn
+RIP: 0010:iomap_iter_done fs/iomap/iter.c:33 [inline]
+RIP: 0010:iomap_iter+0x7ca/0x890 fs/iomap/iter.c:78
+Code: e8 3b 81 83 ff eb 0c e8 34 81 83 ff eb 05 e8 2d 81 83 ff 44 89 e8 48 83 c4 40 5b 41 5c 41 5d 41 5e 41 5f 5d c3 e8 16 81 83 ff <0f> 0b e9 9e fe ff ff e8 0a 81 83 ff 0f 0b e9 d0 fe ff ff e8 fe 80
+RSP: 0018:ffffc90000cf73c8 EFLAGS: 00010293
+RAX: ffffffff82022d4a RBX: ffffffff80000000 RCX: ffff888011fe9d00
+RDX: 0000000000000000 RSI: ffffffff80000000 RDI: 00000fff80000000
+RBP: 00000fff80000000 R08: ffffffff82022be1 R09: ffffed100fd4dc19
+R10: ffffed100fd4dc19 R11: 0000000000000000 R12: ffffc90000cf75c8
+R13: 1ffff9200019eebe R14: 1ffff9200019eeb9 R15: ffffc90000cf75f0
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fbf80df2b88 CR3: 000000007e8f6000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __iomap_dio_rw+0xa8e/0x1e00 fs/iomap/direct-io.c:589
+ iomap_dio_rw+0x38/0x80 fs/iomap/direct-io.c:680
+ ext4_dio_read_iter fs/ext4/file.c:77 [inline]
+ ext4_file_read_iter+0x52f/0x6c0 fs/ext4/file.c:128
+ lo_rw_aio+0xc75/0x1060
+ loop_handle_cmd drivers/block/loop.c:1846 [inline]
+ loop_process_work+0x6a4/0x22b0 drivers/block/loop.c:1886
+ process_one_work+0x850/0x1130 kernel/workqueue.c:2307
+ worker_thread+0xab1/0x1300 kernel/workqueue.c:2454
+ kthread+0x2a3/0x2d0 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30
+ </TASK>
 
-for you to fetch changes up to 2a05137a0575b7d1006bdf4c1beeee9e391e22a0:
-
-  cifs: mark sessions for reconnection in helper function (2022-02-08
-22:13:52 -0600)
-
-----------------------------------------------------------------
-3 small smb3 reconnect fixes and an error log clarification
-
-Regression test results:
-http://smb3-test-rhel-75.southcentralus.cloudapp.azure.com/#/builders/2/builds/897
-
-This pull request does not include the recent snapshot fix and 2
-ACL/SID fixes that are still being tested (I can send those next
-week).
-----------------------------------------------------------------
-Shyam Prasad N (3):
-      cifs: call cifs_reconnect when a connection is marked
-      cifs: call helper functions for marking channels for reconnect
-      cifs: mark sessions for reconnection in helper function
-
-Steve French (1):
-      [smb3] improve error message when mount options conflict with posix
-
- fs/cifs/cifs_swn.c  |  6 +++---
- fs/cifs/connect.c   | 31 +++++++++++++++++++++++++------
- fs/cifs/dfs_cache.c |  2 +-
- fs/cifs/smb1ops.c   |  4 +---
- fs/cifs/transport.c |  5 +----
- 5 files changed, 31 insertions(+), 17 deletions(-)
-
-
--- 
-Thanks,
-
-Steve

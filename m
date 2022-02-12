@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6724B35A3
+	by mail.lfdr.de (Postfix) with ESMTP id 884CA4B35A4
 	for <lists+linux-kernel@lfdr.de>; Sat, 12 Feb 2022 15:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236001AbiBLOcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 09:32:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49480 "EHLO
+        id S236080AbiBLOcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 09:32:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbiBLOcB (ORCPT
+        with ESMTP id S231486AbiBLOcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 09:32:01 -0500
+        Sat, 12 Feb 2022 09:32:46 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 339A1B0B
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 06:31:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61438B0B
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 06:32:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644676316;
+        s=mimecast20190719; t=1644676362;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=2RrLAaTIm55Ngk8UdioYWo7osufPENpoKGdvpn3KCgg=;
-        b=af0Fa0twZEqW/6pK2JCsIEBmvHp+3JmNmph/0Go2qrq4OpfMfojGHdCZTFVjcOjL16J5XA
-        n7+rIR5mjQjGsmnboSlmVHMuQCwyh2SZuqa6P8I2UFL2LSDpCu0ZpY3weK/FHjS2PrKTzs
-        t40KjWTpuN1KYh7vTRjDnZm38c8UNDY=
+        bh=dhkBUafRYMIN2ZNq66x6pdK7QQV3sobrHVPooiq4Ffs=;
+        b=f1StX3fxvdiODqEMqmhwZD5aqJBhxIXXLKwJn2bWnMKDrXiawx8BTTy7nS6hwP2/+x7v9m
+        lRgWyz03Eq2983qNYr1HaPwBVKNnkbLSkinVYdz2hiqPH22T+ZH0cId3CK4LFTKq7UuP1r
+        jG0aIxQ4NCFRI81gyO8rqNCHGwUEMXA=
 Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
  [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-201-QO9GoHqJPimjoVEl1wB0_Q-1; Sat, 12 Feb 2022 09:31:55 -0500
-X-MC-Unique: QO9GoHqJPimjoVEl1wB0_Q-1
-Received: by mail-oo1-f72.google.com with SMTP id k16-20020a4aa5d0000000b002eaa82bf180so7622894oom.0
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 06:31:55 -0800 (PST)
+ us-mta-321-tddvth_XNLaplUKb9E293Q-1; Sat, 12 Feb 2022 09:32:41 -0500
+X-MC-Unique: tddvth_XNLaplUKb9E293Q-1
+Received: by mail-oo1-f72.google.com with SMTP id t16-20020a4ae9b0000000b0031877e91c80so3976488ood.13
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 06:32:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=2RrLAaTIm55Ngk8UdioYWo7osufPENpoKGdvpn3KCgg=;
-        b=aSOwA0KiYmuIWz014ogKUuT1j/ga6NH6k/QyeuMiuerNNuvV2wmNPrI9jAOANvtg+j
-         Ed9m0rBJ8z2VBrqR9eHP43mPvtrbvtcEhBPwdybrXc8El/Ru0ZF6k07XqWTlyGoe3jhc
-         3kuUJMq3KI0LpEy8ysoWT3d5miXfEM7ev5DjqUBEvw5s4X/KWdu4qxha5DN6IuJORWqX
-         EzPGkExqfnexO9CVntbTZ2UubdLGmZFykY9SLz3STRohp9iButiUFKjnUCe1UAF5DOsr
-         7tKA39Wgr03cInh2I3/LK1g7NfaI+4yZeXQGVX96DyITSTvcHOZH/5tFJLyYupdSW/N6
-         Yt3w==
-X-Gm-Message-State: AOAM531sGGBcl81+y8DVobnZDzm5D85V/4s0ThPR6jlkvwU1qWJcyG0E
-        SmRARmIWYg2UYOllC0teFc8IKvqnU9/FEBn8xIDYuNpNB1E/jy9HXmFi4z8D49/Fdwx6hy+c6I7
-        QH9EBzee9eFYDlqtK6RPfQx+c
-X-Received: by 2002:a05:6870:c20e:: with SMTP id z14mr89784oae.226.1644676314641;
-        Sat, 12 Feb 2022 06:31:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyewSCG+Wjgi3m3HNFwwEl/PZn24w1xKwlIP0KYeT8iviwBv0C2E7QojZ59pqN553AnOO1WwQ==
-X-Received: by 2002:a05:6870:c20e:: with SMTP id z14mr89779oae.226.1644676314420;
-        Sat, 12 Feb 2022 06:31:54 -0800 (PST)
+        bh=dhkBUafRYMIN2ZNq66x6pdK7QQV3sobrHVPooiq4Ffs=;
+        b=1LnAmbWXXXZMJhj4yhudaH/+l3znstmIEHjph20QtOygxzGEfLjGLb+VZ+tex9SKk7
+         vNbiLi2CQzyCyvoWIUrw/AOmQxq+2XrHEYOH+HhqNtV5Eahc7n8GnJDoMrNAuNr9SRy4
+         Dy7/yLKKrTxfwxtRjvFkakXZZCovQBBBkfeCGOH+BNwFTXL9cMFJUxynb6EsvkyFzwbT
+         RI+ydg/nqFBy/CdCDk8KQhiQRH3BIwjfgEiK0LsIvSGYd7gSdZ45ZRnFCA1wY0+zLp5K
+         XyobK/Y2HEO2hERjv4ruxB/ocfagZeTuWBRER7VKVraNCGfqBs01rpz4FVZwCtZJUBo2
+         +1Ag==
+X-Gm-Message-State: AOAM533eaWJe5hlzTG7PHVDyxZll8z796YhrdJ/aqOgpginDdfeGjSs9
+        o3eCjwWgnmnpwjzPvV7E8N6uxjn+yHSL6gmpE0T02oG0ZfJSGwp5ZoRcJDJx70RruPR8qigdScN
+        Wct/I6cwcPEjb1rfEpGaFrbnA
+X-Received: by 2002:a9d:224e:: with SMTP id o72mr2236874ota.133.1644676360375;
+        Sat, 12 Feb 2022 06:32:40 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw+V1Og7y2w/PlYSwRJ/CwPj+KrlgFnukKod4c2HkpOJdG/P10h8FHDEV0CV8tP1+qCzWrRCA==
+X-Received: by 2002:a9d:224e:: with SMTP id o72mr2236863ota.133.1644676359825;
+        Sat, 12 Feb 2022 06:32:39 -0800 (PST)
 Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id q11sm10520833oti.3.2022.02.12.06.31.53
+        by smtp.gmail.com with ESMTPSA id t21sm10166108otq.81.2022.02.12.06.32.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Feb 2022 06:31:54 -0800 (PST)
+        Sat, 12 Feb 2022 06:32:39 -0800 (PST)
 From:   trix@redhat.com
-To:     broonie@kernel.org, gregkh@linuxfoundation.org, rafael@kernel.org
+To:     gregkh@linuxfoundation.org, rafael@kernel.org
 Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] regmap: irq: cleanup comments
-Date:   Sat, 12 Feb 2022 06:31:44 -0800
-Message-Id: <20220212143144.2648689-1-trix@redhat.com>
+Subject: [PATCH] driver core: cleanup double words comments
+Date:   Sat, 12 Feb 2022 06:32:33 -0800
+Message-Id: <20220212143233.2648872-1-trix@redhat.com>
 X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,36 +75,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Tom Rix <trix@redhat.com>
 
-Replace the second 'which' with 'the'.
-Change 'acknowleding' to 'acknowledging'.
+Remove the second 'are' and 'the'.
 
 Signed-off-by: Tom Rix <trix@redhat.com>
 ---
- drivers/base/regmap/regmap-irq.c | 4 ++--
+ drivers/base/dd.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
-index d5604f497296..81f6356f0589 100644
---- a/drivers/base/regmap/regmap-irq.c
-+++ b/drivers/base/regmap/regmap-irq.c
-@@ -537,7 +537,7 @@ static irqreturn_t regmap_irq_thread(int irq, void *d)
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index 9eaaff2f556c..1a4113b3b3b9 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -835,7 +835,7 @@ struct device_attach_data {
+ 	struct device *dev;
  
  	/*
- 	 * Ignore masked IRQs and ack if we need to; we ack early so
--	 * there is no race between handling and acknowleding the
-+	 * there is no race between handling and acknowledging the
- 	 * interrupt.  We assume that typically few of the interrupts
- 	 * will fire simultaneously so don't worry about overhead from
- 	 * doing a write per register.
-@@ -1082,7 +1082,7 @@ EXPORT_SYMBOL_GPL(devm_regmap_add_irq_chip);
- /**
-  * devm_regmap_del_irq_chip() - Resource managed regmap_del_irq_chip()
+-	 * Indicates whether we are are considering asynchronous probing or
++	 * Indicates whether we are considering asynchronous probing or
+ 	 * not. Only initial binding after device or driver registration
+ 	 * (including deferral processing) may be done asynchronously, the
+ 	 * rest is always synchronous, as we expect it is being done by
+@@ -1039,7 +1039,7 @@ static void __device_driver_lock(struct device *dev, struct device *parent)
+  * @parent: Parent device. Needed if the bus requires parent lock
   *
-- * @dev: Device for which which resource was allocated.
-+ * @dev: Device for which the resource was allocated.
-  * @irq: Primary IRQ for the device.
-  * @data: &regmap_irq_chip_data allocated by regmap_add_irq_chip().
-  *
+  * This function will release the required locks for manipulating dev->drv.
+- * Normally this will just be the the @dev lock, but when called for a
++ * Normally this will just be the @dev lock, but when called for a
+  * USB interface, @parent lock will be released as well.
+  */
+ static void __device_driver_unlock(struct device *dev, struct device *parent)
 -- 
 2.26.3
 

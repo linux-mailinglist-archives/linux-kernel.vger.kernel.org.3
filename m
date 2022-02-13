@@ -2,92 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B1A4B3B4F
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 13:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B364B3B52
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 13:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235984AbiBMMaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 07:30:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52428 "EHLO
+        id S235960AbiBMMaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 07:30:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235962AbiBMMaU (ORCPT
+        with ESMTP id S231621AbiBMMaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 07:30:20 -0500
-Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFB85AEF2
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 04:30:14 -0800 (PST)
-Received: from pop-os.home ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id JE16nPuMsHZHJJE16nOrpB; Sun, 13 Feb 2022 13:30:12 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 13 Feb 2022 13:30:12 +0100
-X-ME-IP: 90.126.236.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-iio@vger.kernel.org
-Subject: [PATCH] iio: as3935: Use devm_delayed_work_autocancel()
-Date:   Sun, 13 Feb 2022 13:30:11 +0100
-Message-Id: <8d5c50f191bd8f751849d72127f83b14a7636d64.1644755396.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Sun, 13 Feb 2022 07:30:16 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2C05AEEB
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 04:30:08 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AA6611F384;
+        Sun, 13 Feb 2022 12:30:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644755407; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fo8DZTzkjuoK9bwoLJdDkwJu7xediYMa1BLc0VWxyDk=;
+        b=RiipnAdPb0/DSkwy/2jAg/UCzMpu5qR0YVpKC+T3nu6ry0aIoY3XI0m0wgXliZQ32McyG3
+        W19UaUX/amYBPRdrRHT2EgojJp1z6ZWvJ2MfR39Hx7G6u9NZhkovqZbblu6sQG3PcK+qAn
+        bEaiDVO2ZitE6yIsWwJ+1T8ClUm09KQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644755407;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fo8DZTzkjuoK9bwoLJdDkwJu7xediYMa1BLc0VWxyDk=;
+        b=QeAw2cPV//kfuiY/AaZ0WxBYNxtuMbdyuPDpCiTmAx5W3cTLuYTQawaOwqNjsKRMwFlKVC
+        hontsn0DC3Hxd7CA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 948691331A;
+        Sun, 13 Feb 2022 12:30:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id S2G2Is/5CGIRPwAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 13 Feb 2022 12:30:07 +0000
+Date:   Sun, 13 Feb 2022 13:30:13 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] perf/urgent for 5.17-rc4
+Message-ID: <Ygj51dBiTt3KCCzK@zn.tnic>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use devm_delayed_work_autocancel() instead of hand writing it.
-It saves a few lines of code.
+Hi Linus,
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+please pull a single urgent perf fix for 5.17.
+
+Thx.
+
 ---
- drivers/iio/proximity/as3935.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/iio/proximity/as3935.c b/drivers/iio/proximity/as3935.c
-index bd7595db31d4..00e06491b188 100644
---- a/drivers/iio/proximity/as3935.c
-+++ b/drivers/iio/proximity/as3935.c
-@@ -12,6 +12,7 @@
- #include <linux/interrupt.h>
- #include <linux/delay.h>
- #include <linux/workqueue.h>
-+#include <linux/devm-helpers.h>
- #include <linux/mutex.h>
- #include <linux/err.h>
- #include <linux/irq.h>
-@@ -344,14 +345,6 @@ static SIMPLE_DEV_PM_OPS(as3935_pm_ops, as3935_suspend, as3935_resume);
- #define AS3935_PM_OPS NULL
- #endif
- 
--static void as3935_stop_work(void *data)
--{
--	struct iio_dev *indio_dev = data;
--	struct as3935_state *st = iio_priv(indio_dev);
--
--	cancel_delayed_work_sync(&st->work);
--}
--
- static int as3935_probe(struct spi_device *spi)
- {
- 	struct device *dev = &spi->dev;
-@@ -432,8 +425,7 @@ static int as3935_probe(struct spi_device *spi)
- 
- 	calibrate_as3935(st);
- 
--	INIT_DELAYED_WORK(&st->work, as3935_event_work);
--	ret = devm_add_action(dev, as3935_stop_work, indio_dev);
-+	ret = devm_delayed_work_autocancel(dev, &st->work, as3935_event_work);
- 	if (ret)
- 		return ret;
- 
+The following changes since commit 1d9093457b243061a9bba23543c38726e864a643:
+
+  perf/x86/intel/pt: Fix crash with stop filters in single-range mode (2022-02-02 13:11:40 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/perf_urgent_for_v5.17_rc4
+
+for you to fetch changes up to 5f4e5ce638e6a490b976ade4a40017b40abb2da0:
+
+  perf: Fix list corruption in perf_cgroup_switch() (2022-02-06 22:37:27 +0100)
+
+----------------------------------------------------------------
+- Prevent cgroup event list corruption when switching events
+
+----------------------------------------------------------------
+Song Liu (1):
+      perf: Fix list corruption in perf_cgroup_switch()
+
+ kernel/events/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
 -- 
-2.32.0
+Regards/Gruss,
+    Boris.
 
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

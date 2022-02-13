@@ -2,251 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95AC84B3B9D
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 14:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 229B74B3B9E
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 14:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236347AbiBMNw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 08:52:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59526 "EHLO
+        id S236370AbiBMNyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 08:54:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiBMNwZ (ORCPT
+        with ESMTP id S230011AbiBMNyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 08:52:25 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256C45F241;
-        Sun, 13 Feb 2022 05:52:17 -0800 (PST)
-Received: from [192.168.1.107] ([37.4.249.169]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1M9Frd-1nP2By1ilD-006LTK; Sun, 13 Feb 2022 14:52:01 +0100
-Subject: Re: [PATCH v5 06/11] ARM: dts: bcm2711: Add unicam CSI nodes
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-To:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
-        kernel-list@raspberrypi.com, laurent.pinchart@ideasonboard.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        lukasz@jany.st, mchehab@kernel.org, naush@raspberrypi.com,
-        robh@kernel.org, tomi.valkeinen@ideasonboard.com,
-        bcm-kernel-feedback-list@broadcom.com
-References: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
- <20220208155027.891055-7-jeanmichel.hautbois@ideasonboard.com>
- <9435c061-cb57-dd9b-9d06-e976a6a6c5be@i2se.com>
-Autocrypt: addr=stefan.wahren@i2se.com; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tClZlcnNpb246IEdudVBHIHYy
- CgptUUlOQkZ0NmdCTUJFQUN1Yi9wQmV2SHhidkplZnlaRzMySklObW4yYnNFUFgyNVY2ZmVq
- bXlZd21DR0tqRnRMCi9Eb1VNRVZIRHhDSjQ3Qk1YbzM0NGZIVjFDM0FudWRnTjFCZWhMb0J0
- TEh4bW5lQ3pnSDNLY1B0V1c3cHRqNEcKdEp2OUNRRFp5MjdTS29FUHh5YUk4Q0YweWdSeEpj
- NzJNOUk5d21zUFo1YlVIc0x1WVdNcVE3SmNSbVBzNkQ4ZwpCa2srOC95bmdFeU5FeHd4SnBS
- MXlsajVianhXREh5WVF2dUo1THpaS3VPOUxCM2xYVnNjNGJxWEVqYzZWRnVaCkZDQ2svc3lp
- by9ZaHNlOE4rUXN4N01RYWd6NHdLVWtRUWJmWGcxVnFrVG5BaXZYczQyVm5Ja211NWd6SXcv
- MHQKUkp2NTBGUmhIaHhweUtBSThCOG5oTjhRdng3TVZrUGM1dkRmZDN1R1lXNDdKUGhWUUJj
- VXdKd05rLzQ5RjllQQp2ZzJtdE1QRm5GT1JrV1VSdlArRzZGSmZtNitDdk92N1lmUDF1ZXdB
- aTRsbitKTzFnK2dqVklXbC9XSnB5MG5UCmlwZGZlSDlkSGtnU2lmUXVuWWN1Y2lzTXlvUmJG
- OTU1dENna0VZOUVNRWRZMXQ4aUdEaUNnWDZzNTBMSGJpM2sKNDUzdWFjcHhmUVhTYUF3UGtz
- bDhNa0NPc3YyZUVyNElOQ0hZUUR5WmljbEJ1dUNnOEVOYlI2QUdWdFpTUGNRYgplbnpTektS
- Wm9POUNhcUlEK2ZhdkxpQi9kaHptSEErOWJnSWhtWGZ2WFJMRFp6ZThwbzFkeXQzRTFzaFhp
- ZGRaClBBOE51SlZ6RUl0MmxtSTZWOHBaRHBuMjIxcmZLaml2UlFpYW9zNTRUZ1pqak1ZSTdu
- bko3ZTZ4endBUkFRQUIKdENCVGRHVm1ZVzRnVjJGb2NtVnVJRHgzWVdoeVpXNXpkRUJuYlhn
- dWJtVjBQb2tDTndRVEFRZ0FJUVVDWElkYwo0Z0liQXdVTENRZ0hBZ1lWQ0FrS0N3SUVGZ0lE
- QVFJZUFRSVhnQUFLQ1JDVWdld1BFWkR5MjFPVEQvOUdpWkxkCnRSWWNteVJKZ2x0aVFRekFp
- UWRjSUQ3OGxHb1dwL3grci92Y1U2YjZqdVl1ZVR3Z1Iwclc3djdsMklSQnlEN24KSEp4YSt0
- SVNvUVpCZ2hvbE1JZmI5TXRoR09KTENZNzdrL1FoQWhuMzJOR1prZWp3OXR6a3MvNDBtclpT
- VVQ4NApaeWJzUVhyTE0vSFI2VElJL0RlUEIwbktEM0ppcHBzMlVIUUQ5cUQySWpFd1NRUGxI
- akNPckVaaDQ1UFo3bTkrClo5M0x6aVRlc1dabFlRdUxpSndzNHJLcHRIVzFkL3dSZWxzaG1t
- NlFxY0wybDRDL2U0MGVEQjlncTRkU1poOVgKUEVZbGxpeU5RaDdhMkxTZHVtRTFyK2NTd0lq
- RS91ZHRSdmRPOWFLb0psT2JVSzVkTmpTUEg3d0tUYndkWGRZRApHUHdEaFhkNThOQXdyK1BY
- QmxQajB0STFMQ3ErTEJ4ZUt6aFdYK0dWcTlEb2pWanlVREV4Rk5Ga1h1b0M3ZzhtClY5VDB0
- ZUJpdVpSbm91WEt3VjJGcHRaT0hIN0JVRVd0a0t0aGgxZXRmT1dwaWdCemtVN2JQc2ZJWVQr
- cnk5dGIKMW9KK3Y0MVBOYXFaRW1QVXBKeHZmek5UN3Ayd01lRDdaajlmMHJ1YlJQdExBSjJR
- R2pyRkhzdVh3QU9xcHl6ZQoxOEVidHNZazBOMHp1SEVoY2orUEJJQmZoMFlJWWQ1MW9mNkdJ
- aU95UjlxMFhYdHBsVUo3VDIvSDF1UXFrWGxwCitnVzRWa2lmc2NJckl1eWZueFpXMTJlSXZq
- NnlicVdMN2FZS0dZbVQ2aUxDUGJIWXlZY2F5bDRFa0ZjckNGN0UKZTBXVC9zY1ZNaE8vNVgv
- SGFOQTVIQngvcjUycGdMY3Y0aTlNeExRbVUzUmxabUZ1SUZkaGFISmxiaUE4YzNSbApabUZ1
- TG5kaGFISmxia0JwTW5ObExtTnZiVDZKQWpnRUV3RUNBQ0lGQWx0NmdCTUNHd01HQ3drSUJ3
- TUNCaFVJCkFna0tDd1FXQWdNQkFoNEJBaGVBQUFvSkVKU0I3QThSa1BMYmpic1AvamdqYVNz
- NUh0bGtBSXZXUytGcm15N2MKaG5jT0F4TFRWL0Q2UkV3SU95R0poRkt3d29pck55UTJnOXZV
- YTNZQ1lDZjFmSjh3RWhhS09COWQwTHBNUm5MNApkRVQ4ZDgyMzhFL3BLK0hxTktpSXNKaHM2
- SnNLOFpnalZRR3JtbWZua0dyWisxdjBIQnV4ZGljZ0duUC9XdHVBClVsOGw2Mi9BTGJheXlq
- KzYxQ2xyc0V0UklhcU82N0xJWXdQaVBEUkkrWGlNek5pR3pIRi8xUTZHUjAyUkg2YTMKRjg5
- ejhhUHhjSGkxWnZDdDJ5a3o2VUVjaHpQMHI1Z3FGSisvTC9VcHU4ME1YaVk0djVlSWFCNTJn
- VlBnaXlNQQpsTDJkRHMxbUladm5yUkxSWTJ0YjNtQVlOa1Y1QjVJRFQzcGtXeTZrS281T0Nn
- SytZZFlPUjhGTloyb04ydDhPCnJLK1ZudGFLN01NU0tIbG1ZL3NPd3RSbEVoMU9CbXJjQ3dH
- d21wLzA1R2tSNDZmL0lzaFJWZUZPUmF3K0dBcXQKUDIrQ0ZhMkNOQS9JSG5aTm95aWtsRHpQ
- UUhVVUdzck5wcERyaFg5Sm1oQm1nMXYyeXdIMU5YdTFpRGZQMUJBdwpLZ29rdDVmNVVhUkY5
- c0FBNTN2V0V2YlVVTjllZXNGR0x6UFdkSkdRNWhwZC9WSDVJUXk5U0JyaC93SWNla3E1Cm4w
- a042cGJUSHhHRTUyU2kvTVZJa05UdURaM2FwbjJqbERaNHBPdHBCWEkydlAzYlBPK05pcUJa
- anNVM3R4TGkKV2R2MkZqeXp6NlhMUndlV1JZVkw1SGE2TER0eG9yMnZ1NlVQMDdwOXh6MXhS
- WmFPRFczb1lsSEZ6WXBhNFc1ZwpMSGIybEVrSXVVZlNjaWNHYmpqQXRDbFRkR1ZtWVc0Z1Yy
- Rm9jbVZ1SUR4emRHVm1ZVzR1ZDJGb2NtVnVRR2x1CkxYUmxZMmd1WTI5dFBva0NOd1FUQVFn
- QUlRVUNYSWRlaHdJYkF3VUxDUWdIQWdZVkNBa0tDd0lFRmdJREFRSWUKQVFJWGdBQUtDUkNV
- Z2V3UEVaRHkyeUhURC85VUY3UWxEa0d4elE3QWFDSTZOOTVpUWY4LzFvU1VhRE51Mlk2SQpL
- K0R6UXBiMVRiVE9yM1ZKd3dZOGEzT1d6NU5MU09MTVdlVnh0K29zTW1sUUlHdWJEM09EWko4
- aXpQbEcvSnJOCnQ1elNkbU41SUE1ZjNlc1dXUVZLdmdoWkFnVERxZHB2K1pIVzJFbXhuQUox
- dUxGWFhlUWQzVVpjQzVyMy9nL3YKU2FNbzl4ZWszSjVtTnVEbTcxbEVXc0FzL0JBY0ZjK3lu
- TGh4d0JXQld3c3Z3UjhiSHRKNURPTVd2YUt1RHNrcApJR0ZVZS9LYjJCK2pyYXZRM1RuNnMv
- SHFKTTBjZXhTSHo1cGUrMHNHdlArdDlKNzIzNEJGUXdlRkV4cmlleThVCkl4T3I0WEFiYWFi
- U3J5WW5VL3pWSDlVMWkyQUlRWk1XSkFldkN2VmdRL1UrTmVSaFh1ZGU5WVVtRE1EbzJzQjIK
- VkFGRUFxaUYyUVVIUEEybThhN0VPM3lmTDRyTWswaUh6TElLdmg2L3JIOFFDWThpM1h4VE5M
- OWlDTHpCV3UvTgpPbkNBYlMremx2TFphaVNNaDVFZnV4VHR2NFBsVmRFamY2MlArWkhJRDE2
- Z1VEd0VtYXpMQU1yeDY2NmpINWt1ClVDVFZ5bWJMMFR2Qis2TDZBUmw4QU55TTRBRG1rV2tw
- eU0yMmtDdUlTWUFFZlFSM3VXWFo5WWd4YVBNcWJWK3cKQnJoSmc0SGFONkM2eFRxR3YzcjRC
- MmFxYjc3L0NWb1JKMVo5Y3BIQ3dpT3pJYUFtdnl6UFU2TXhDRFhaOEZnWQpsVDR2MjNHNWlt
- SlAyemdYNXMrRjZBQ1VKOVVRUEQwdVRmK0o5RGEycitza2gvc1dPbloreWNvSE5CUXZvY1pF
- Ck5BSFFmN2tDRFFSYmVvQVRBUkFBMkhkMGZzRFZLNzJSTFNESGJ5ME9oZ0RjRGxWQk0yTSto
- WVlwTzNmWDFyKysKc2hpcVBLQ0hWQXNRNWJ4ZTdIbUppbUhhNEtLWXMya3YvbWx0L0NhdUNK
- Ly9wbWN5Y0JNN0d2d25Lem11WHp1QQpHbVZUWkM2V1I1TGtha0ZydEhPelZtc0VHcE52NVJj
- OWw2SFlGcExrYlNrVmk1U1BRWkp5K0VNZ01DRmdqclpmClZGNnlvdHdFMWFmN0hOdE1oTlBh
- TEROMW9VS0Y1aitSeVJnNWl3SnVDRGtuSGp3QlFWNHBndzIvNXZTOEE3WlEKdjJNYlcvVExF
- eXBLWGlmNzhJaGdBelh0RTJYck0xbi9vNlpINzFvUkZGS096NDJsRmR6ZHJTWDBZc3FYZ0hD
- WAo1Z0l0TGZxemoxcHNNYTlvMWVpTlRFbTFkVlFyVHFueXMwbDE4b2FsUk5zd1lsUW1uWUJ3
- cHdDa2FUSExNSHdLCmZHQmJvNWRMUEVzaHRWb3dJNm5zZ3FMVHlRSG1xSFlxVVpZSXBpZ21t
- QzNTd0JXWTFWNmZmVUVta3FwQUFDRW4KTDQvZ1Vnbjd5US81ZDBzZXFuQXEycFNCSE1VVW9D
- Y1R6RVFVV1ZraUR2M1JrN2hURm1oVHNNcTc4eHYyWFJzWApNUjZ5UWhTVFBGWkNZRFVFeEVs
- RXNTbzlGV0hXcjZ6SHlZY2M4cURMRnZHOUZQaG1RdVQyczlCbHg2Z0kzMjNHCm5FcTFsd1dQ
- SlZ6UDRqUWtKS0lBWHdGcHYrVzhDV0xxekRXT3ZkbHJEYVRhVk1zY0ZUZUg1VzZVcHJsNjVq
- cUYKUUdNcGNSR0NzOEdDVVcxM0gwSXlPdFF0d1dYQTRueStTTDgxcHZpQW1hU1hVOGxhS2FS
- dTkxVk9WYUY5ZjRzQQpFUUVBQVlrQ0h3UVlBUUlBQ1FVQ1czcUFFd0liREFBS0NSQ1VnZXdQ
- RVpEeTIrb1hELzljSEhSa0JaT2ZrbVNxCjE0U3Z4MDYyUHRVMEtWNDcwVFNucC9qV29ZSm5L
- SXczRzBtWElSZ3J0SDJkUHdwSWdWanNZeVJTVk1LbVNwdDUKWnJEZjlOdFRiTldnazhWb0xl
- WnpZRW8rSjNvUHFGclRNczNhWVl2N2U0K0pLNjk1WW5tUSttT0Q5bmlhOTE1dApyNUFaajk1
- VWZTVGx5VW15aWMxZDhvdnNmMWZQN1hDVVZSRmNSamZOZkRGMW9ML3BEZ01QNUdaMk93YVRl
- am15CkN1SGpNOElSMUNpYXZCcFlEbUJuVFlrN1B0aHk2YXRXdllsMGZ5L0NxYWpUS3N4Nytw
- OXh6aXU4WmZWWCtpS0IKQ2MrSGUrRURFZEdJRGh2TlovSVFIZk9CMlBVWFdHUytzOUZOVHhy
- L0E2bkxHWG5BOVk2dzkzaVBkWUl3eFM3SwpYTG9LSmVlMTBEamx6c1lzUmZsRk9XMFpPaVNp
- aElDWGlRVjF1cU02dHpGRzlndFJjaXVzNVVBdGhXYU8xT3dVClNDUW1mQ09tNGZ2TUlKSUE5
- cnh0b1M2T3FSUWNpRjNjcm1vMHJKQ3ROMmF3WmZnaThYRWlmN2Q2aGp2MEVLTTkKWFpvaUFa
- WVpEKy9pTG01VGFLV042b0dJdGkwVmpKdjhaWk9aT2ZDYjZ2cUZJa0pXK2FPdTRvclRMRk16
- MjhhbwpVM1F5V3BOQzhGRm1kWXNWdWE4czZnTjFOSWE2eTNxYS9aQjhiQS9pa3k1OUFFejRp
- RElScmdVek1FZzhBazdUCmZtMUtpWWVpVHRCRENvMjVCdlhqYnFzeXhrUUQxbmtSbTZGQVZ6
- RXVPUEllOEp1cVcyeEQ5aXhHWXZqVTVoa1IKZ0pwM2dQNWIrY25HM0xQcXF1UTJFNmdvS1VN
- TEFia0NEUVJiZmw5REFSQUFzRExjYStMbFAydm5mdEVHaHBjQQpCR1ZOUUVGbkdQckNhdVU2
- SGhOODA1V3RQVHRtc1JPdUp6cWdVVDBtcHFXSWZacTZzTXd5dkhLOVRzL0tIM0paClVWYlJD
- M3oyaDNLZmhIL0RhZjk1cGQ2bVBjL2g5dkYvT3kzK2VUV2hnR25QNmNBNWtsUitmTzFXaEc4
- VnJpWHYKck5lUkcyMHN6emplSG9jblNJY1Q1WHVaUjB1REhPaUd4T2l6MXNNUkZUR3h6R095
- MTlSOXJ2dTYzdGlJM2Q3dgpnYzc1T0NBZGtlQi9TZUNFbGFSdzBUZjdMWmJQampzRjI2M0JZ
- bk1mNGtrTkVLdnFXY1UyaWNNcCtxZXpqeW5CCnB2ZXVlMHJDVFFCWUFRbG9GQ1ZUR0hyV1dB
- NkQ0VzVPMkFmSWRJYzF1MUpDWnAyZjVMV1ZvVUZUVklyUW5RUVUKU0hDaWZyOU1aeExUdFBK
- ZFU1Mm9TUHczZGs0aExQOGlKSUx1dnYvYXZhakNzUVlIRXR3WXNiZUZaeGl1TGdscApBN1lj
- Sk5ObXBnQ3BNRDR3VWh2bEN0QUtOQlFXeXIyOTc2OThFUVRuNDZlQmVVNkttMkNpaFhrZ3dD
- eWY4ZXlLCkxFM3NYZXdhcTVrZ1pXdk5xNml1NXFZSVJCOXl3K2NYYzYwZE9aRE9scTkzWDVT
- QVJZemFvZXBrSHo0cmtMa1AKUG8rdENIeUhRUHNHblBYYzlXVDgwREM5Tm5KR2R2VWx5NXJk
- TUk0eHBaeWdlb2tqd293VlFsUFV1Y1M2TXluNwpmOHc4Y2dmQjdDMklBSWNEeDJwUC9IendY
- dmtDT1FOQTdtVjFsTTA4bitnVmtUcnpweGlwNURicTRDSW9ZeDJNCkpaVDhiR1JINlhqY1VE
- S2EwOVFoeVpzQUVRRUFBWWtFUkFRWUFRZ0FEd1VDVzM1ZlF3SWJBZ1VKQThKbkFBSXAKQ1JD
- VWdld1BFWkR5MjhGZElBUVpBUWdBQmdVQ1czNWZRd0FLQ1JCVnhETFBjVk1NamNkc0QvMFJo
- QXN1UVlPeQpyMTNCbDNOaFhrWUFaR3AyWkZER3VrZTdPU2tWOG9qT09UZFR5ei9jT1JHQ2J5
- ZEQrRGd2cUZ5VmRuT1hLZ08wCmxKbUd3ckdlTGRnZ0F2aDBpaHJwNU8wWVVKOWJCU1htR01t
- UVRZSC9BbUxUR2FkYnVqQ1dqNWZGVWtDeXd4aW0KSHV5MFBiMjRwelR2UzUwR1k1WStxSDBG
- SE5haWdka2tpV04zcnVnN0haRXUvQ3lsUFpqT1h6K0QxUVBNckV4dwo3ZC9NS2FiVis5YU5i
- UVlabGRJajk4UXd2VUYxS1N6YThqbFVJdnBoUnEyN0FUOGZER1lHUGZERU1nMmNCT2FlCkty
- N29uUXM0YjdhV082aWZEbHhRVHB6c3pvK0FuODA3Tk1TdFZFRmYrczNBaFZEM2U3bmY4SkJh
- dmJWckFlMGsKb20yNm96elBubnh6K2xxVlZ0dzZVazRYTUl6dGl4L0h3SFl3dUNuY1VYWndL
- MEkzeUFKd2pZd29vck9DaEozUwpFVWJKUVB0R3NneFJERXhWQkZlNk5MUC82MnhQOU82dGFj
- d09kYjBNbVAxYjM5cFJBVEM3YmdkMWxkVUxpNzVaCmxKckowL1NpVkVyb3FOWXk3OXRmbWdB
- WjJVeFptczlTckV5Nm85UVNmc24xYVh2K01QTDlKYUNHbWtQNnpiTFEKTm5kajBKY2FRbmtD
- MHZneWRPMUJtNk11OTZQOXVmbEtaY0FTNndtTE01SWRIT3lqTDg4d0h3anVjakFPQnRjdwpw
- MG9HVG5WT25Sc05ZU084VzhZWi9LZGJ1Nzg1ZGF6TXFKMmlOakFEdUJiZG02TjRqNUVkTW5r
- TG4wQklmUEpwCmRnbTR2bDJVcExqd1JHci9NM3dtbTVwdnMrNnVCN2hrL0ZKaUQvNGxsRU5Q
- NGVNMWg3U200aitWcTZOMSt6VEIKSVhKQWViSXFhc0RwNXlaUzdYcnk0STM2bjg1WEVZZkcw
- MWx0QXlob05WMkRPOFNJUlFwdWkydHErOVJQM1JLMQpKREJ4eEVKWTJFTzVKWjhNeGFQSFEw
- RFQwNWxSRmpLMkFsaGRFSXRqTGpwSjNmVW05c3FMeE1XeHpQNlV6M2lpCjJ1YTR1bnJ0Nk9D
- VHFRd2lqRi8zYlRXaXd2VkFBSG5NRlVpb1hzaEhhb2hWRGNWZm5lSU1mVjBiUUNYWWkzTnAK
- WTB2MFp3Y2lGSCtnU0M3cUQ2WE51aHBWR1NMNElpbGlGeS9TemNhSkV6QUhlTERTaFpQMkNX
- ZG5DNHZnbDM3dApocHg4aDU1WWhKbjZIU3VVelBnaGFLdFZCMmsrajdaZXlaK1NGeHA3SXVi
- SEN3TEhsUWhUNzVSd1EzaUF4S242CjBxajUxY1lUbnF4ZFpYVzZmSDNQa3VNellVNUdwcVIv
- MU9sNWMvd2ZJNmc2QW04eUtXLzBFVUx0K0tuNExGc1MKbTdZM201SDV2MTJVNkpCWXZWK3Ix
- M2paaW9zNEVFREU5M0Q1c05IMk1JeVJ6Q0RxMXpkZHQ0WHV5S0ZqUEtXMQo5aWJaRGZGVjdL
- dUNzdnVMMjNzQmMxc0NNb3ArRTFtVC9ReE9JQTZvRFQxTVFzdHdPVnVReURDdi9PdktTZ2Z6
- CjhGWEdMNkFQY2xqQ3FqOEFKaHhReXN4ZG9pUVA4bS92dStialdHR3Z4dzVzMWxncGlSRFRS
- VVBnY0pKTmFHWTIKVklEclpRaTROU2lOUTBOSWkrZGp1NGZOTW1DcFFxZzh0YkMzY0FhNnl3
- bTZvUUIxU0JobURYMmUxMWdSbGx1SQpPblRHUEUwSFRvM2w3MmxoYmc9PQo9cVpNVgotLS0t
- LUVORCBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCg==
-Message-ID: <f776477d-0e19-f31e-2984-3f0c750743d0@i2se.com>
-Date:   Sun, 13 Feb 2022 14:51:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Sun, 13 Feb 2022 08:54:12 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407455F243;
+        Sun, 13 Feb 2022 05:54:07 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644760445;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=qd99dJI4z2FPDQzZpLtXInhIqH/1/hgS8VYUQadvdzY=;
+        b=fCaSj7Fv7CZ4WSvrvYw1IB2eIWZZVtc0FHXujLK8T71vrCBslaMRG37dZwEG0K2Q2muIiR
+        bxfel4swp/Gk+pWrYYSKKPe4u4aHW3zatz0njhLcKrdlPDrCpaLRexexLc21w1TiZFlR7s
+        HfxaXjPtwf8/yj9UhFZlkhX0n/puNJJLFr3Uw+qVg8Nxd1ajvA9/1d9syfkdTj+ctOM8Ot
+        fV718xEhc/dgxX9EdSIfRYGDDgWzW/GHaDI+ezOJ74TvtIyIRyM6QNWueKG66MibEcNyOO
+        FegkpDyJuYNGm/QERGpIeO+zy66dNbN3jwQ1Tl59LK9dqdKzACXFIdUQKbXHrw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644760445;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=qd99dJI4z2FPDQzZpLtXInhIqH/1/hgS8VYUQadvdzY=;
+        b=5cSeQxY+quZ9cYtskKjp4IkCaP3uT15FS0wzIkehfFm4vUumYiMngxVMRyozXjLI1rlPEN
+        0dQwENicau8YsYAQ==
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     "Surendrakumar Upadhyay, TejaskumarX" 
+        <tejaskumarx.surendrakumar.upadhyay@intel.com>,
+        "Meena, Mahesh" <mahesh.meena@intel.com>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCH] PCI: vmd: Prevent recursive locking on interrupt allocation
+Date:   Sun, 13 Feb 2022 14:54:05 +0100
+Message-ID: <87a6euub2a.ffs@tglx>
 MIME-Version: 1.0
-In-Reply-To: <9435c061-cb57-dd9b-9d06-e976a6a6c5be@i2se.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Provags-ID: V03:K1:Tcxn8zSixJ8Ra7hTfO80F9WHaPv/fKfq65MekN60/74JZwg85iK
- 1zqHOhO+5KAbt5z405/DQcLVyl7YsxBbtWijeYodsOQQg07UavtxA0rlwzKsN47VJAWsVxX
- zIZAtYEz6AotljoP+c6x1dVHySONow0E2+TEgRDxc1y7GJpaKyNxNjOqPUDDOPszD8tQI8Y
- ImEKhjiXoYhKg0AEanmWQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:KaE1IM9elmc=:d8g0XdTG3fwM4di4yqxMjb
- CemLZ9O8ZSzCxTen46Wm2sY1cSUfEsHnbti5nngLi2ld6pozY6+GHUVTtFdYDFxrqQIRC+RPx
- 2XLLq1+jvzqJoQIT9tOdQiYdUenekjoK9uqiH1fTmY5PGjiRqciG+OcuDfdjOC4faf9kSeCXm
- u2L8YWW2Us/aAL7+JSj1kDmVjSkCLQVUPNePXpA2icDeWN4sxRk/gMG6x6Vvccj+nV/Rf2Fsr
- JSskO951rAgHo8aN1aQBK6LjcJiIlsXy98SRo0pF+p6CO25QQY+1kNXQELA0wS8fZL7VVl+y3
- ND3SFNf9E1AJ0P81uoEUulId0ZBsnRyZADB2wm9kzKyiVwi5D5pVSkOzLK85mA6RcCW6QtlLw
- vMRiuLv3jplfmXu3SsNFOLOH+XpoB0ZEp/ynxcefUhRRG6UjSkKzyYS2cbLzTOwOsnx9LlFzy
- kVkvY7ypEF8fWaZTIc8iCO1l4IR3BA8fXcHlls//U1aP8XHUEMNXWZDnfRk66tsP/P+UAaoMi
- fN0N8lOp7g5wUpaDh5anJNJwSZX0aqhQ/IJkfZ1Sb8AkA4uZ4yjBjuA0jYzEYbNKnkAS/B0xl
- iQDv+ZAq6jFKvfRlVk7RIF28wuPE+4wWn4J76R3VMQW+r1Y616wPVYDSfmrqBnONcNEJ3fvEh
- qWWIHpw+eC91uG+zRAJDb5ix9kniyqqO8ooBE0uWp7t+d3YySVWoGknkW03ekj38wr6OmGBto
- BfhS+PRlqwhTBfud
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 13.02.22 um 11:35 schrieb Stefan Wahren:
-> Hi Jean-Michel,
->
-> Am 08.02.22 um 16:50 schrieb Jean-Michel Hautbois:
->> +
->>  &firmware {
->>  	firmware_clocks: clocks {
->>  		compatible = "raspberrypi,firmware-clocks";
->> diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
->> index dff18fc9a906..21eb10122e50 100644
->> --- a/arch/arm/boot/dts/bcm2711.dtsi
->> +++ b/arch/arm/boot/dts/bcm2711.dtsi
->> @@ -293,6 +293,28 @@ hvs: hvs@7e400000 {
->>  			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
->>  		};
->>  
->> +		csi0: csi@7e800000 {
->> +			compatible = "brcm,bcm2835-unicam";
->> +			reg = <0x7e800000 0x800>,
->> +			      <0x7e802000 0x4>;
->> +			reg-names = "unicam", "cmi";
->> +			interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
->> +			status = "disabled";
->> +			port {
->> +			};
->> +		};
->> +
->> +		csi1: csi@7e801000 {
->> +			compatible = "brcm,bcm2835-unicam";
->> +			reg = <0x7e801000 0x800>,
->> +			      <0x7e802004 0x4>;
->> +			reg-names = "unicam", "cmi";
->> +			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
->> +			status = "disabled";
->> +			port {
->> +			};
->> +		};
->> +
-> i didn't noticed before that everything except of the interrupts are
-> identical to the bcm283x boards [1]. So please define both nodes in
-> bcm283x.dtsi (with bcm283x interrupts) and just override the interrupts
-> for bcm2711 in this dtsi file.
->
-> As a result the clocks and power domains from above can go to
-> bcm2835-rpi.dtsi.
+Tejas reported the following recursive locking issue:
 
-sorry, i forgot the downstream link:
+ swapper/0/1 is trying to acquire lock:
+ ffff8881074fd0a0 (&md->mutex){+.+.}-{3:3}, at: msi_get_virq+0x30/0xc0
+ 
+ but task is already holding lock:
+ ffff8881017cd6a0 (&md->mutex){+.+.}-{3:3}, at: __pci_enable_msi_range+0xf2/0x290
+ 
+ stack backtrace:
+  __mutex_lock+0x9d/0x920
+  msi_get_virq+0x30/0xc0
+  pci_irq_vector+0x26/0x30
+  vmd_msi_init+0xcc/0x210
+  msi_domain_alloc+0xbf/0x150
+  msi_domain_alloc_irqs_descs_locked+0x3e/0xb0
+  __pci_enable_msi_range+0x155/0x290
+  pci_alloc_irq_vectors_affinity+0xba/0x100
+  pcie_port_device_register+0x307/0x550
+  pcie_portdrv_probe+0x3c/0xd0
+  pci_device_probe+0x95/0x110
 
-[1] -
-https://github.com/raspberrypi/linux/blob/rpi-5.15.y/arch/arm/boot/dts/bcm270x.dtsi#L88
+This is caused by the VMD MSI code which does a lookup of the Linux
+interrupt number for an VMD managed MSI[X] vector. The lookup function
+tries to acquire the already held mutex.
 
->
->>  		pixelvalve3: pixelvalve@7ec12000 {
->>  			compatible = "brcm,bcm2711-pixelvalve3";
->>  			reg = <0x7ec12000 0x100>;
+Avoid that by caching the Linux interrupt number at initialization time
+instead of looking it up over and over.
+
+Fixes: 82ff8e6b78fc ("PCI/MSI: Use msi_get_virq() in pci_get_vector()")
+Reported-by: "Surendrakumar Upadhyay, TejaskumarX" <tejaskumarx.surendrakumar.upadhyay@intel.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+
+---
+ drivers/pci/controller/vmd.c |   14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+--- a/drivers/pci/controller/vmd.c
++++ b/drivers/pci/controller/vmd.c
+@@ -99,11 +99,13 @@ struct vmd_irq {
+  * @srcu:	SRCU struct for local synchronization.
+  * @count:	number of child IRQs assigned to this vector; used to track
+  *		sharing.
++ * @virq:	The underlying VMD Linux interrupt number
+  */
+ struct vmd_irq_list {
+ 	struct list_head	irq_list;
+ 	struct srcu_struct	srcu;
+ 	unsigned int		count;
++	unsigned int		virq;
+ };
+ 
+ struct vmd_dev {
+@@ -253,7 +255,6 @@ static int vmd_msi_init(struct irq_domai
+ 	struct msi_desc *desc = arg->desc;
+ 	struct vmd_dev *vmd = vmd_from_bus(msi_desc_to_pci_dev(desc)->bus);
+ 	struct vmd_irq *vmdirq = kzalloc(sizeof(*vmdirq), GFP_KERNEL);
+-	unsigned int index, vector;
+ 
+ 	if (!vmdirq)
+ 		return -ENOMEM;
+@@ -261,10 +262,8 @@ static int vmd_msi_init(struct irq_domai
+ 	INIT_LIST_HEAD(&vmdirq->node);
+ 	vmdirq->irq = vmd_next_irq(vmd, desc);
+ 	vmdirq->virq = virq;
+-	index = index_from_irqs(vmd, vmdirq->irq);
+-	vector = pci_irq_vector(vmd->dev, index);
+ 
+-	irq_domain_set_info(domain, virq, vector, info->chip, vmdirq,
++	irq_domain_set_info(domain, virq, vmdirq->irq->virq, info->chip, vmdirq,
+ 			    handle_untracked_irq, vmd, NULL);
+ 	return 0;
+ }
+@@ -685,7 +684,8 @@ static int vmd_alloc_irqs(struct vmd_dev
+ 			return err;
+ 
+ 		INIT_LIST_HEAD(&vmd->irqs[i].irq_list);
+-		err = devm_request_irq(&dev->dev, pci_irq_vector(dev, i),
++		vmd->irqs[i].virq = pci_irq_vector(dev, i);
++		err = devm_request_irq(&dev->dev, vmd->irqs[i].virq,
+ 				       vmd_irq, IRQF_NO_THREAD,
+ 				       vmd->name, &vmd->irqs[i]);
+ 		if (err)
+@@ -969,7 +969,7 @@ static int vmd_suspend(struct device *de
+ 	int i;
+ 
+ 	for (i = 0; i < vmd->msix_count; i++)
+-		devm_free_irq(dev, pci_irq_vector(pdev, i), &vmd->irqs[i]);
++		devm_free_irq(dev, vmd->irqs[i].virq, &vmd->irqs[i]);
+ 
+ 	return 0;
+ }
+@@ -981,7 +981,7 @@ static int vmd_resume(struct device *dev
+ 	int err, i;
+ 
+ 	for (i = 0; i < vmd->msix_count; i++) {
+-		err = devm_request_irq(dev, pci_irq_vector(pdev, i),
++		err = devm_request_irq(dev, vmd->irqs[i].virq,
+ 				       vmd_irq, IRQF_NO_THREAD,
+ 				       vmd->name, &vmd->irqs[i]);
+ 		if (err)

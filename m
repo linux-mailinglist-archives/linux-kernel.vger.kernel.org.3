@@ -2,144 +2,339 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 675E74B3AFA
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 12:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE21D4B3B00
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 12:03:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235245AbiBMK76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 05:59:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59026 "EHLO
+        id S235260AbiBMLAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 06:00:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235209AbiBMK74 (ORCPT
+        with ESMTP id S235209AbiBMLAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 05:59:56 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5825E74F;
-        Sun, 13 Feb 2022 02:59:51 -0800 (PST)
-Date:   Sun, 13 Feb 2022 10:59:47 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644749988;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CkyQjo0ugeftPsZyQjLZirnYBh2nhZlLJr53w+AvS3k=;
-        b=AM8xTou4Gmszu2WpoBrDFRpmA3tKx1SXU0XtJlmz3YiSmYjsNsEp6aA3lRgKpkIjw4LpwE
-        XQ7ukXenXWadTI3lM7uQH8mKl9Ldj1a5Nt4p/5susL+F29S5HMlKj/wIQsxeioBnki/tCl
-        8Y3zlESMClNgkYrm61AwyQb5jrOTyUjoxzCwcsqnFcmFyCvADjFrNU/99MNGOCWBEbYikP
-        21J4OoJVrnqi+PT3HkxhHiyX94H818FX7BP07YVVIQfrTNJthOGIDxgrimjYDF73N33ZYT
-        p0TTuoofEbTDAp03v3Y7+GWEXfAD7FTGyEy0l7DH1edftP7NEANNl3WwQ+Utfg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644749988;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CkyQjo0ugeftPsZyQjLZirnYBh2nhZlLJr53w+AvS3k=;
-        b=gJrjxMb++vuI3tvdaX7j9Yhj+fSOapDDh8Wa2FHar/AMKJvHZkeP3Zc9KjKM7KBughtSaS
-        LpETmv9Irm2hFoBQ==
-From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] cpumask: Add a x86-specific cpumask_clear_cpu() helper
-Cc:     Borislav Petkov <bp@suse.de>, Marco Elver <elver@google.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220204083015.17317-2-bp@alien8.de>
-References: <20220204083015.17317-2-bp@alien8.de>
+        Sun, 13 Feb 2022 06:00:38 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582EC5EDCD
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 03:00:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644750032; x=1676286032;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VxzNq+xA7f9JbLohUEAmTv/GxTbpgr9DWXQEHvDenMo=;
+  b=gEKXTDiTJitXY1Aq3acz/ImcwbHXZEtQIbLlrav+e1CK/uLkREVRCaEw
+   huoMZhCDlg9KPus/dAoZEQVryaL+7EPpqI6WVw/9Pad0rxkD0E94HgQhK
+   XqBfTREGuKubWYvIyznsBfbyXfBnpzVgKHozm5vaIryifZHCA5riu5Ba9
+   R2NnAyZzhSc7Q4OF0r5xZGznwfZfWP3RLTvPHtl5tyfT9MAHq4WP+1fdp
+   FjheveveGPUKGUi/0OoN6FBRR1qLoqJ9P+IyFKA79K2obvIYtjF/FtNLq
+   qSiqLrNN3QgNBon2rbupE+kHIQkJu/0wQ8T1vL0eRvPRk9nrj3UeRlTZ4
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10256"; a="336364687"
+X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
+   d="scan'208";a="336364687"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 03:00:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
+   d="scan'208";a="569495794"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 13 Feb 2022 03:00:29 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJCcH-0007Or-59; Sun, 13 Feb 2022 11:00:29 +0000
+Date:   Sun, 13 Feb 2022 19:00:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        William Kucharski <william.kucharski@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        David Howells <dhowells@redhat.com>
+Subject: include/linux/build_bug.h:78:41: error: static assertion failed:
+ "offsetof(struct page, compound_head) == offsetof(struct folio, lru)"
+Message-ID: <202202131828.VxAopBqR-lkp@intel.com>
 MIME-Version: 1.0
-Message-ID: <164474998765.16921.8420399786345053314.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/core branch of tip:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b81b1829e7e39f6cebdf6e4d5484eacbceda8554
+commit: 7b230db3b8d373219f88a3d25c8fbbf12cc7f233 mm: Introduce struct folio
+date:   5 months ago
+config: parisc-randconfig-r004-20220213 (https://download.01.org/0day-ci/archive/20220213/202202131828.VxAopBqR-lkp@intel.com/config)
+compiler: hppa64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7b230db3b8d373219f88a3d25c8fbbf12cc7f233
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7b230db3b8d373219f88a3d25c8fbbf12cc7f233
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc prepare
 
-Commit-ID:     f5c54f77b07b278cfde4a654e111c39996ac8b5b
-Gitweb:        https://git.kernel.org/tip/f5c54f77b07b278cfde4a654e111c39996ac8b5b
-Author:        Borislav Petkov <bp@suse.de>
-AuthorDate:    Fri, 04 Feb 2022 09:30:13 +01:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Sat, 12 Feb 2022 18:20:05 +01:00
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-cpumask: Add a x86-specific cpumask_clear_cpu() helper
+All errors (new ones prefixed by >>):
 
-Add a x86-specific cpumask_clear_cpu() helper which will be used in
-places where the explicit KASAN-instrumentation in the *_bit() helpers
-is unwanted.
+   In file included from arch/parisc/include/asm/bitops.h:203,
+                    from include/linux/bitops.h:33,
+                    from include/linux/kernel.h:12,
+                    from arch/parisc/include/asm/bug.h:5,
+                    from include/linux/bug.h:5,
+                    from include/linux/page-flags.h:10,
+                    from kernel/bounds.c:10:
+   include/asm-generic/bitops/__fls.h: In function '__fls':
+   include/asm-generic/bitops/__fls.h:18:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+      18 |         if (!(word & (~0ul << 32))) {
+         |                            ^~
+   include/asm-generic/bitops/__fls.h:20:22: warning: left shift count >= width of type [-Wshift-count-overflow]
+      20 |                 word <<= 32;
+         |                      ^~~
+   include/asm-generic/bitops/__fls.h:23:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+      23 |         if (!(word & (~0ul << (BITS_PER_LONG-16)))) {
+         |                            ^~
+   include/asm-generic/bitops/__fls.h:27:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+      27 |         if (!(word & (~0ul << (BITS_PER_LONG-8)))) {
+         |                            ^~
+   include/asm-generic/bitops/__fls.h:31:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+      31 |         if (!(word & (~0ul << (BITS_PER_LONG-4)))) {
+         |                            ^~
+   include/asm-generic/bitops/__fls.h:35:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+      35 |         if (!(word & (~0ul << (BITS_PER_LONG-2)))) {
+         |                            ^~
+   include/asm-generic/bitops/__fls.h:39:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+      39 |         if (!(word & (~0ul << (BITS_PER_LONG-1))))
+         |                            ^~
+   In file included from arch/parisc/include/asm/bitops.h:203,
+                    from include/linux/bitops.h:33,
+                    from include/linux/kernel.h:12,
+                    from arch/parisc/include/asm/bug.h:5,
+                    from include/linux/bug.h:5,
+                    from include/linux/thread_info.h:13,
+                    from include/asm-generic/current.h:5,
+                    from ./arch/parisc/include/generated/asm/current.h:1,
+                    from include/linux/sched.h:12,
+                    from arch/parisc/kernel/asm-offsets.c:18:
+   include/asm-generic/bitops/__fls.h: In function '__fls':
+   include/asm-generic/bitops/__fls.h:18:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+      18 |         if (!(word & (~0ul << 32))) {
+         |                            ^~
+   include/asm-generic/bitops/__fls.h:20:22: warning: left shift count >= width of type [-Wshift-count-overflow]
+      20 |                 word <<= 32;
+         |                      ^~~
+   include/asm-generic/bitops/__fls.h:23:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+      23 |         if (!(word & (~0ul << (BITS_PER_LONG-16)))) {
+         |                            ^~
+   include/asm-generic/bitops/__fls.h:27:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+      27 |         if (!(word & (~0ul << (BITS_PER_LONG-8)))) {
+         |                            ^~
+   include/asm-generic/bitops/__fls.h:31:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+      31 |         if (!(word & (~0ul << (BITS_PER_LONG-4)))) {
+         |                            ^~
+   include/asm-generic/bitops/__fls.h:35:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+      35 |         if (!(word & (~0ul << (BITS_PER_LONG-2)))) {
+         |                            ^~
+   include/asm-generic/bitops/__fls.h:39:28: warning: left shift count >= width of type [-Wshift-count-overflow]
+      39 |         if (!(word & (~0ul << (BITS_PER_LONG-1))))
+         |                            ^~
+   In file included from arch/parisc/include/asm/processor.h:17,
+                    from arch/parisc/include/asm/thread_info.h:8,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/current.h:5,
+                    from ./arch/parisc/include/generated/asm/current.h:1,
+                    from include/linux/sched.h:12,
+                    from arch/parisc/kernel/asm-offsets.c:18:
+   arch/parisc/include/asm/pdc.h: At top level:
+   arch/parisc/include/asm/pdc.h:75:24: warning: 'struct pdc_memory_table' declared inside parameter list will not be visible outside of this definition or declaration
+      75 |                 struct pdc_memory_table *tbl, unsigned long entries);
+         |                        ^~~~~~~~~~~~~~~~
+   arch/parisc/include/asm/pdc.h:74:30: warning: 'struct pdc_memory_table_raddr' declared inside parameter list will not be visible outside of this definition or declaration
+      74 | int pdc_mem_mem_table(struct pdc_memory_table_raddr *r_addr,
+         |                              ^~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/compiler_types.h:65,
+                    from <command-line>:
+   include/linux/smp.h:34:33: error: requested alignment '20' is not a positive power of 2
+      34 |         __aligned(sizeof(struct __call_single_data));
+         |                                 ^~~~~~~~~~~~~~~~~~
+   include/linux/compiler_attributes.h:33:68: note: in definition of macro '__aligned'
+      33 | #define __aligned(x)                    __attribute__((__aligned__(x)))
+         |                                                                    ^
+   In file included from include/linux/bits.h:22,
+                    from include/linux/bitops.h:6,
+                    from include/linux/kernel.h:12,
+                    from arch/parisc/include/asm/bug.h:5,
+                    from include/linux/bug.h:5,
+                    from include/linux/thread_info.h:13,
+                    from include/asm-generic/current.h:5,
+                    from ./arch/parisc/include/generated/asm/current.h:1,
+                    from include/linux/sched.h:12,
+                    from arch/parisc/kernel/asm-offsets.c:18:
+>> include/linux/build_bug.h:78:41: error: static assertion failed: "offsetof(struct page, lru) == offsetof(struct folio, lru)"
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                         ^~~~~~~~~~~~~~
+   include/linux/build_bug.h:77:34: note: in expansion of macro '__static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                  ^~~~~~~~~~~~~~~
+   include/linux/mm_types.h:289:9: note: in expansion of macro 'static_assert'
+     289 |         static_assert(offsetof(struct page, pg) == offsetof(struct folio, fl))
+         |         ^~~~~~~~~~~~~
+   include/linux/mm_types.h:291:1: note: in expansion of macro 'FOLIO_MATCH'
+     291 | FOLIO_MATCH(lru, lru);
+         | ^~~~~~~~~~~
+>> include/linux/build_bug.h:78:41: error: static assertion failed: "offsetof(struct page, compound_head) == offsetof(struct folio, lru)"
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                         ^~~~~~~~~~~~~~
+   include/linux/build_bug.h:77:34: note: in expansion of macro '__static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                  ^~~~~~~~~~~~~~~
+   include/linux/mm_types.h:289:9: note: in expansion of macro 'static_assert'
+     289 |         static_assert(offsetof(struct page, pg) == offsetof(struct folio, fl))
+         |         ^~~~~~~~~~~~~
+   include/linux/mm_types.h:292:1: note: in expansion of macro 'FOLIO_MATCH'
+     292 | FOLIO_MATCH(compound_head, lru);
+         | ^~~~~~~~~~~
+>> include/linux/build_bug.h:78:41: error: static assertion failed: "offsetof(struct page, index) == offsetof(struct folio, index)"
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                         ^~~~~~~~~~~~~~
+   include/linux/build_bug.h:77:34: note: in expansion of macro '__static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                  ^~~~~~~~~~~~~~~
+   include/linux/mm_types.h:289:9: note: in expansion of macro 'static_assert'
+     289 |         static_assert(offsetof(struct page, pg) == offsetof(struct folio, fl))
+         |         ^~~~~~~~~~~~~
+   include/linux/mm_types.h:293:1: note: in expansion of macro 'FOLIO_MATCH'
+     293 | FOLIO_MATCH(index, index);
+         | ^~~~~~~~~~~
+>> include/linux/build_bug.h:78:41: error: static assertion failed: "offsetof(struct page, private) == offsetof(struct folio, private)"
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                         ^~~~~~~~~~~~~~
+   include/linux/build_bug.h:77:34: note: in expansion of macro '__static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                  ^~~~~~~~~~~~~~~
+   include/linux/mm_types.h:289:9: note: in expansion of macro 'static_assert'
+     289 |         static_assert(offsetof(struct page, pg) == offsetof(struct folio, fl))
+         |         ^~~~~~~~~~~~~
+   include/linux/mm_types.h:294:1: note: in expansion of macro 'FOLIO_MATCH'
+     294 | FOLIO_MATCH(private, private);
+         | ^~~~~~~~~~~
+>> include/linux/build_bug.h:78:41: error: static assertion failed: "offsetof(struct page, _mapcount) == offsetof(struct folio, _mapcount)"
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                         ^~~~~~~~~~~~~~
+   include/linux/build_bug.h:77:34: note: in expansion of macro '__static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                  ^~~~~~~~~~~~~~~
+   include/linux/mm_types.h:289:9: note: in expansion of macro 'static_assert'
+     289 |         static_assert(offsetof(struct page, pg) == offsetof(struct folio, fl))
+         |         ^~~~~~~~~~~~~
+   include/linux/mm_types.h:295:1: note: in expansion of macro 'FOLIO_MATCH'
+     295 | FOLIO_MATCH(_mapcount, _mapcount);
+         | ^~~~~~~~~~~
+>> include/linux/build_bug.h:78:41: error: static assertion failed: "offsetof(struct page, _refcount) == offsetof(struct folio, _refcount)"
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                         ^~~~~~~~~~~~~~
+   include/linux/build_bug.h:77:34: note: in expansion of macro '__static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                  ^~~~~~~~~~~~~~~
+   include/linux/mm_types.h:289:9: note: in expansion of macro 'static_assert'
+     289 |         static_assert(offsetof(struct page, pg) == offsetof(struct folio, fl))
+         |         ^~~~~~~~~~~~~
+   include/linux/mm_types.h:296:1: note: in expansion of macro 'FOLIO_MATCH'
+     296 | FOLIO_MATCH(_refcount, _refcount);
+         | ^~~~~~~~~~~
+>> include/linux/build_bug.h:78:41: error: static assertion failed: "offsetof(struct page, memcg_data) == offsetof(struct folio, memcg_data)"
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                         ^~~~~~~~~~~~~~
+   include/linux/build_bug.h:77:34: note: in expansion of macro '__static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                  ^~~~~~~~~~~~~~~
+   include/linux/mm_types.h:289:9: note: in expansion of macro 'static_assert'
+     289 |         static_assert(offsetof(struct page, pg) == offsetof(struct folio, fl))
+         |         ^~~~~~~~~~~~~
+   include/linux/mm_types.h:298:1: note: in expansion of macro 'FOLIO_MATCH'
+     298 | FOLIO_MATCH(memcg_data, memcg_data);
+         | ^~~~~~~~~~~
+   In file included from include/linux/mm.h:33,
+                    from include/linux/pid_namespace.h:7,
+                    from include/linux/ptrace.h:10,
+                    from arch/parisc/kernel/asm-offsets.c:20:
+   include/linux/pgtable.h: In function 'pud_index':
+   include/linux/pgtable.h:77:25: warning: right shift count >= width of type [-Wshift-count-overflow]
+      77 |         return (address >> PUD_SHIFT) & (PTRS_PER_PUD - 1);
+         |                         ^~
+   include/linux/pgtable.h: In function 'pgd_offset_pgd':
+   include/linux/pgtable.h:84:29: warning: right shift count >= width of type [-Wshift-count-overflow]
+      84 | #define pgd_index(a)  (((a) >> PGDIR_SHIFT) & (PTRS_PER_PGD - 1))
+         |                             ^~
+   include/linux/pgtable.h:124:23: note: in expansion of macro 'pgd_index'
+     124 |         return (pgd + pgd_index(address));
+         |                       ^~~~~~~~~
+   In file included from include/linux/stringhash.h:7,
+                    from include/linux/dcache.h:15,
+                    from include/linux/fs.h:8,
+                    from include/linux/huge_mm.h:8,
+                    from include/linux/mm.h:727,
+                    from include/linux/pid_namespace.h:7,
+                    from include/linux/ptrace.h:10,
+                    from arch/parisc/kernel/asm-offsets.c:20:
+   include/linux/hash.h: In function 'hash32_ptr':
+   include/linux/hash.h:99:21: warning: right shift count >= width of type [-Wshift-count-overflow]
+      99 |         val ^= (val >> 32);
+         |                     ^~
+   In file included from arch/parisc/kernel/asm-offsets.c:22:
+   arch/parisc/kernel/asm-offsets.c: In function 'main':
+   arch/parisc/kernel/asm-offsets.c:270:43: warning: right shift count >= width of type [-Wshift-count-overflow]
+     270 |         DEFINE(ASM_PGD_ENTRY, PAGE_OFFSET >> PGDIR_SHIFT);
+         |                                           ^~
+   include/linux/kbuild.h:6:69: note: in definition of macro 'DEFINE'
+       6 |         asm volatile("\n.ascii \"->" #sym " %0 " #val "\"" : : "i" (val))
+         |                                                                     ^~~
+   make[2]: *** [scripts/Makefile.build:121: arch/parisc/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1219: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-Also, always inline two more cpumask generic helpers.
 
-allyesconfig:
+vim +78 include/linux/build_bug.h
 
-     text    data     bss     dec     hex filename
-  190553143       159425889       32076404        382055436       16c5b40c vmlinux.before
-  190551812       159424945       32076404        382053161       16c5ab29 vmlinux.after
+bc6245e5efd70c Ian Abbott       2017-07-10  60  
+6bab69c65013be Rasmus Villemoes 2019-03-07  61  /**
+6bab69c65013be Rasmus Villemoes 2019-03-07  62   * static_assert - check integer constant expression at build time
+6bab69c65013be Rasmus Villemoes 2019-03-07  63   *
+6bab69c65013be Rasmus Villemoes 2019-03-07  64   * static_assert() is a wrapper for the C11 _Static_assert, with a
+6bab69c65013be Rasmus Villemoes 2019-03-07  65   * little macro magic to make the message optional (defaulting to the
+6bab69c65013be Rasmus Villemoes 2019-03-07  66   * stringification of the tested expression).
+6bab69c65013be Rasmus Villemoes 2019-03-07  67   *
+6bab69c65013be Rasmus Villemoes 2019-03-07  68   * Contrary to BUILD_BUG_ON(), static_assert() can be used at global
+6bab69c65013be Rasmus Villemoes 2019-03-07  69   * scope, but requires the expression to be an integer constant
+6bab69c65013be Rasmus Villemoes 2019-03-07  70   * expression (i.e., it is not enough that __builtin_constant_p() is
+6bab69c65013be Rasmus Villemoes 2019-03-07  71   * true for expr).
+6bab69c65013be Rasmus Villemoes 2019-03-07  72   *
+6bab69c65013be Rasmus Villemoes 2019-03-07  73   * Also note that BUILD_BUG_ON() fails the build if the condition is
+6bab69c65013be Rasmus Villemoes 2019-03-07  74   * true, while static_assert() fails the build if the expression is
+6bab69c65013be Rasmus Villemoes 2019-03-07  75   * false.
+6bab69c65013be Rasmus Villemoes 2019-03-07  76   */
+6bab69c65013be Rasmus Villemoes 2019-03-07  77  #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+6bab69c65013be Rasmus Villemoes 2019-03-07 @78  #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+6bab69c65013be Rasmus Villemoes 2019-03-07  79  
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Marco Elver <elver@google.com>
-Link: https://lore.kernel.org/r/20220204083015.17317-2-bp@alien8.de
+:::::: The code at line 78 was first introduced by commit
+:::::: 6bab69c65013bed5fce9f101a64a84d0385b3946 build_bug.h: add wrapper for _Static_assert
+
+:::::: TO: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
 ---
- arch/x86/include/asm/cpumask.h | 10 ++++++++++
- include/linux/cpumask.h        |  4 ++--
- 2 files changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/include/asm/cpumask.h b/arch/x86/include/asm/cpumask.h
-index 3afa990..c5aed9e 100644
---- a/arch/x86/include/asm/cpumask.h
-+++ b/arch/x86/include/asm/cpumask.h
-@@ -20,11 +20,21 @@ static __always_inline bool arch_cpu_online(int cpu)
- {
- 	return arch_test_bit(cpu, cpumask_bits(cpu_online_mask));
- }
-+
-+static __always_inline void arch_cpumask_clear_cpu(int cpu, struct cpumask *dstp)
-+{
-+	arch_clear_bit(cpumask_check(cpu), cpumask_bits(dstp));
-+}
- #else
- static __always_inline bool arch_cpu_online(int cpu)
- {
- 	return cpu == 0;
- }
-+
-+static __always_inline void arch_cpumask_clear_cpu(int cpu, struct cpumask *dstp)
-+{
-+	return;
-+}
- #endif
- 
- #define arch_cpu_is_offline(cpu)	unlikely(!arch_cpu_online(cpu))
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index 6b06c69..fe29ac7 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -102,7 +102,7 @@ extern atomic_t __num_online_cpus;
- 
- extern cpumask_t cpus_booted_once_mask;
- 
--static inline void cpu_max_bits_warn(unsigned int cpu, unsigned int bits)
-+static __always_inline void cpu_max_bits_warn(unsigned int cpu, unsigned int bits)
- {
- #ifdef CONFIG_DEBUG_PER_CPU_MAPS
- 	WARN_ON_ONCE(cpu >= bits);
-@@ -110,7 +110,7 @@ static inline void cpu_max_bits_warn(unsigned int cpu, unsigned int bits)
- }
- 
- /* verify cpu argument to cpumask_* operators */
--static inline unsigned int cpumask_check(unsigned int cpu)
-+static __always_inline unsigned int cpumask_check(unsigned int cpu)
- {
- 	cpu_max_bits_warn(cpu, nr_cpumask_bits);
- 	return cpu;
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,145 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF744B3D17
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 20:15:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D280E4B3D19
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 20:21:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237941AbiBMTNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 14:13:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59988 "EHLO
+        id S237963AbiBMTVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 14:21:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237969AbiBMTNn (ORCPT
+        with ESMTP id S229840AbiBMTVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 14:13:43 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACEF5F8DA;
-        Sun, 13 Feb 2022 11:13:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=eUPuZhGrIC+7mQR6M8wT4w7vMWwnwvrJ/Ap6Tdqeifw=; b=WrOvp7aBK+9C7NfEzGSeNlAOyv
-        EtbqagYvn5vG40EmwdyXknjAo6UeyS/tHpcFDmBGAX1IzMGr/C89bZ0CGYhGOQD9ohbUqVqbQn8to
-        72EPupBvgj9rtS2UgkUkrUmAqlO+ugWfu5z+uoRcR/vnQ9FjbmgWKVC8H1JYjMX88mHdnzR6pm13V
-        qBXugwTLCCI15fcKAIUur3Lrb155D+XHW8YMdMMfMdZiLVwcV14QDicOfA3D7FZo/FsuRnKiYnKLG
-        lzbYvolWfjBh7GYnG+uQ6+fhuUe7mAVbk6XTpnA/zd7OHXqcL52NIwtv9xx5SYs3WJZ6G3V22TSrI
-        y4tk/dsA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJKJP-00CDc1-9e; Sun, 13 Feb 2022 19:13:31 +0000
-Message-ID: <41a2b113-116c-f181-29a4-32735d5809b0@infradead.org>
-Date:   Sun, 13 Feb 2022 11:13:27 -0800
+        Sun, 13 Feb 2022 14:21:46 -0500
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19DC310
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 11:21:39 -0800 (PST)
+Received: from imladris.surriel.com ([96.67.55.152])
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1nJKR4-0000LX-Ui; Sun, 13 Feb 2022 14:21:26 -0500
+Message-ID: <8aafa00865f564d58dfa39a1e2816a8ec0eab097.camel@surriel.com>
+Subject: Re: [PATCH] mm: clean up hwpoison page cache page in fault path
+From:   Rik van Riel <riel@surriel.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>
+Date:   Sun, 13 Feb 2022 14:21:26 -0500
+In-Reply-To: <10f4319c-45fe-2a7b-db6f-2d5fe8ae98a0@nvidia.com>
+References: <20220211170557.7964a301@imladris.surriel.com>
+         <10f4319c-45fe-2a7b-db6f-2d5fe8ae98a0@nvidia.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-8nhOn9cXF7OD7/XqPxdK"
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] bcma: cleanup comments
-Content-Language: en-US
-To:     trix@redhat.com, zajec5@gmail.com
-Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220213172023.2786642-1-trix@redhat.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220213172023.2786642-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: riel@shelob.surriel.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
 
-On 2/13/22 09:20, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> Remove the second 'info'.
-ack
+--=-8nhOn9cXF7OD7/XqPxdK
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> Replacements
-> 'adventages' with 'advantages'
-ack
+On Sun, 2022-02-13 at 00:56 -0800, John Hubbard wrote:
+> On Fri, 11 Feb 2022, Rik van Riel wrote:
+>=20
+> > =C2=A0=C2=A0=C2=A0=20
+> > This is particularly embarrassing when the page was offlined due to
+> > having too many corrected memory errors. Now we are killing tasks
+> > due to them trying to access memory that probably isn't even
+> > corrupted.
+>=20
+> I'd recommend deleting that paragraph entirely. It's a separate
+> question, and it is not necessarily an accurate assessment of that
+> question either: the engineers who set the thresholds for "too many
+> corrected errors" may not--in fact, probably *will not*--agree with
+> your
+> feeling that the memory is still working and reliable!
 
-> 'strenth' with 'strength'
-ack
+Fair enough. We try to offline pages before we get to
+a point where the error correction might no longer be
+able to correct the error correctly, but I am pretty
+sure I have seen a few odd kernel crashes following a
+stream of corrected errors that strongly suggested
+corruption had in fact happened.
 
-> 'atleast' with 'at least'
-ack
+I'll take that paragraph out if anybody else asks
+for further changes for v3 of the patch.
 
-> 'thr'u'' with 'through'
-ack, or even "thru" is acceptable.
+--=20
+All Rights Reversed.
 
-> 'capabilty' with 'capability'
-ack
+--=-8nhOn9cXF7OD7/XqPxdK
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-> 'controll' with 'control'
-ack
+-----BEGIN PGP SIGNATURE-----
 
-> 'ourself' with 'our self'
-I don't think so.
+iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmIJWjYACgkQznnekoTE
+3oNdogf+Ich/XnBrCMzlpA+55TM6I1e+YVX3wzvOc+1CPhoPe0GwAcxnPBKfDkOd
+Yh9T7IsM71FRlCHL7pl6P7fppcsrfgqcxm5dcsFwPY9Jcj74GCZs9Fi2jxfo8Exb
+NOHNFo4mj9X/izCQoKzF887bjoTXZpMhb0RylbNxrm1uxwbw8mSkfRyo7U5kYf24
+9gtSCw6Ag/ZKLU5omsYLcvTqeJ5619m3wNwKGXoIKYyYRy74nfTykyD/y+xWIF1z
+lb3nNMqUJx4B8J0d6J/x1EafCxHLThObqw2dy6/expQpwDT/rzgNipFCdhDOG0rr
+1PIkhOQi80oESJc0zmN/ocoz7I2r+A==
+=wbch
+-----END PGP SIGNATURE-----
 
-> 'noone' with 'no one'
-ack
-
-More below:
-
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/bcma/driver_chipcommon.c     | 2 +-
->  drivers/bcma/driver_chipcommon_pmu.c | 6 +++---
->  drivers/bcma/driver_pci_host.c       | 6 +++---
->  drivers/bcma/main.c                  | 4 ++--
->  drivers/bcma/sprom.c                 | 4 ++--
->  5 files changed, 11 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/bcma/driver_chipcommon.c b/drivers/bcma/driver_chipcommon.c
-> index 62f5bfa5065d..fd91a39f02c7 100644
-> --- a/drivers/bcma/driver_chipcommon.c
-> +++ b/drivers/bcma/driver_chipcommon.c
-
-
-
-> diff --git a/drivers/bcma/main.c b/drivers/bcma/main.c
-> index 8e7ca3e4c8c4..bf6efe3caf68 100644
-> --- a/drivers/bcma/main.c
-> +++ b/drivers/bcma/main.c
-> @@ -293,7 +293,7 @@ static int bcma_register_devices(struct bcma_bus *bus)
->  	int err;
->  
->  	list_for_each_entry(core, &bus->cores, list) {
-> -		/* We support that cores ourself */
-> +		/* We support that cores our self */
-
-I would s/cores/core/.
-
-From my $search_engine doodling, it looks like "ourself"
-or "ourselves" would be OK.
-
->  		switch (core->id.id) {
->  		case BCMA_CORE_4706_CHIPCOMMON:
->  		case BCMA_CORE_CHIPCOMMON:
-
-> diff --git a/drivers/bcma/sprom.c b/drivers/bcma/sprom.c
-> index bd2c923a6586..fb2789827e83 100644
-> --- a/drivers/bcma/sprom.c
-> +++ b/drivers/bcma/sprom.c
-
-> @@ -281,7 +281,7 @@ static void bcma_sprom_extract_r8(struct bcma_bus *bus, const u16 *sprom)
->  	SPEX(alpha2[0], SSB_SPROM8_CCODE, 0xff00, 8);
->  	SPEX(alpha2[1], SSB_SPROM8_CCODE, 0x00ff, 0);
->  
-> -	/* Extract cores power info info */
-> +	/* Extract cores power info */
-
-or	           each core's power info */
-
->  	for (i = 0; i < ARRAY_SIZE(pwr_info_offset); i++) {
->  		o = pwr_info_offset[i];
->  		SPEX(core_pwr_info[i].itssi_2g, o + SSB_SROM8_2G_MAXP_ITSSI,
-
--- 
-~Randy
+--=-8nhOn9cXF7OD7/XqPxdK--

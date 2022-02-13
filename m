@@ -2,104 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0D34B3B39
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 13:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C5A4B3B3A
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 13:04:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235845AbiBMMBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 07:01:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60540 "EHLO
+        id S235850AbiBMMEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 07:04:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbiBMMBf (ORCPT
+        with ESMTP id S229973AbiBMMD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 07:01:35 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA195B8BF
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 04:01:29 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id l19so18637937pfu.2
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 04:01:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2BY+eqDY7Gm6uLwRYPFjvZ4Cqy/jojZcPso7meEn/08=;
-        b=TznwSDRNzmeCTJ104miSU3X/kmPsq8ZfoaqydB4mRuo5lg/Aws7eONVvqtltRdaw51
-         l6geyWA0PnIKShxr3ajtzN0WpF8WuiokgG2Vmj2UgbTbDkx3Mp7R4iZX4JipMNfLyI+M
-         oQuQ355VWq+CTp+O9cIJBtt30UoFeY47y7/7njcSKdHe4SaiGJbHQXZ2PFHBMmUiGaA4
-         JDWi2zecgg71eFkdEUUInhOs7i3jUvehM+VAuNbA6QvF6S2YyVVzXeODCtHM69F/r0Hd
-         Oz1K4EkqnJjUFrMV9TByZ8g/y691NAh+gp3/QTzo90whDKGEPYX5FYIIDWlT7Xl1D6aE
-         abcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2BY+eqDY7Gm6uLwRYPFjvZ4Cqy/jojZcPso7meEn/08=;
-        b=fEL7ehPMncM+RtRF/nv4Y+XTerU2AOAuHr7AxgbU8Pl0MKS3yt8rzhcpgiXZzHdgSb
-         WmiMQr9NKG2X0Zq4S8XWrvbwDyZS/BxcZvPsGn0e4DaIFR1KYaJxHfcBiboIb4gVNHoZ
-         6H/xDOmDE/5j0ziEvyTXRADk2ujYC45CXEl+YHB6cMlIdQNz0Exvd2cEJze5i43VcUmx
-         WhmyiqfTJrDGyRK4Jpxqq5OM396deVL/ZCCIc91j8xfptEfbBqiHXoPh8pFkr8q4f1FG
-         z0nj60bTkfFgUpIX4Lr9BVZHalaFGsf06GRqMHUfaZsdqCn5bkYskGmoMmCr3G+EHhNN
-         rV3Q==
-X-Gm-Message-State: AOAM530pmymvEKZdSySrznujKO90G1ntUFgJwBUpguXTHPnMqscoN+po
-        5+ja3dM8Um41MDQIK+QNEZ+MsA==
-X-Google-Smtp-Source: ABdhPJwxLQf4l3CNqY3sAot07p3fPJAlTH7opCljZoOtVN1VlJZoia4axTMN08G8CIU8hNX87+DzdA==
-X-Received: by 2002:a05:6a00:170d:: with SMTP id h13mr9769295pfc.39.1644753689350;
-        Sun, 13 Feb 2022 04:01:29 -0800 (PST)
-Received: from localhost.localdomain ([2409:8a28:e62:a940:a829:bd2c:4db4:c6fa])
-        by smtp.gmail.com with ESMTPSA id j4sm33474965pfc.217.2022.02.13.04.01.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Feb 2022 04:01:29 -0800 (PST)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     tj@kernel.org, arbn@yandex-team.com, mingo@redhat.com,
-        peterz@infradead.org
-Cc:     linux-kernel@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        Minye Zhu <zhuminye@bytedance.com>
-Subject: [PATCH] sched/cpuacct: fix charge percpu cpuusage
-Date:   Sun, 13 Feb 2022 20:01:18 +0800
-Message-Id: <20220213120118.93471-1-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
+        Sun, 13 Feb 2022 07:03:59 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19BA5BD05
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 04:03:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644753834; x=1676289834;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0DoLI6P4LZ/kGKKztnMBubAEYiWKLSlhqzqDiNxGuQw=;
+  b=jpf1Qmk2CswAxhcgm7ID7qudaVbO0S8ToOthlMpuq8+zSjb2+rj0kUDs
+   VL0/K8LAyjfIpjRPxi/VCPIIe/ejDy9Ga5x1qm3CN1dXpvW/bna/2PRVH
+   f/AUzEURFxljDERAgmn4p7ExbCScqZdTngsd6josxlK62lnu7wwVMqIWg
+   /lqjH7kIhejCudk84/wjitK8JdzhsIrTn1Wgpdyxsu1PgLBCnKtOQr1gG
+   muDougcEHOVlfyc97Ephu+uQ2Tk8ReSvnkGKr2mq7bc4SkYICJzTmTX2K
+   MX7msVoGmAn95Mwncng+sLkX3xvFgGvGszzKPIXgb4xoJRweMU1FPFW9a
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10256"; a="248774626"
+X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
+   d="scan'208";a="248774626"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 04:03:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
+   d="scan'208";a="679925886"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 13 Feb 2022 04:03:53 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJDbc-0007Sx-BM; Sun, 13 Feb 2022 12:03:52 +0000
+Date:   Sun, 13 Feb 2022 20:03:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
+ 7a935b7ac61b20dd8b56edab2a4f978be64e1e82
+Message-ID: <6208f381.+5wEV0lm0mhER7ZY%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The cpuacct_account_field() is always called by the current task
-itself, so it's ok to use __this_cpu_add() to charge the tick time.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: 7a935b7ac61b20dd8b56edab2a4f978be64e1e82  tools/nolibc/stdlib: implement abort()
 
-But cpuacct_charge() maybe called by update_curr() in load_balance()
-on a random CPU, different from the CPU on which the task is running.
-So __this_cpu_add() will charge that cputime to a random incorrect CPU.
+elapsed time: 722m
 
-Reported-by: Minye Zhu <zhuminye@bytedance.com>
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+configs tested: 147
+configs skipped: 4
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                          randconfig-c001
+arm                            qcom_defconfig
+xtensa                  audio_kc705_defconfig
+m68k                            q40_defconfig
+sh                             sh03_defconfig
+sparc                       sparc64_defconfig
+sh                             espt_defconfig
+arm                           u8500_defconfig
+arm                      footbridge_defconfig
+sh                             shx3_defconfig
+sh                              ul2_defconfig
+arm                          lpd270_defconfig
+powerpc                      tqm8xx_defconfig
+h8300                       h8s-sim_defconfig
+powerpc                     redwood_defconfig
+riscv                               defconfig
+sparc                            allyesconfig
+arc                            hsdk_defconfig
+mips                 decstation_r4k_defconfig
+arc                     haps_hs_smp_defconfig
+m68k                         apollo_defconfig
+powerpc                  storcenter_defconfig
+arm                         assabet_defconfig
+sh                          polaris_defconfig
+arm                           h3600_defconfig
+m68k                        stmark2_defconfig
+m68k                          hp300_defconfig
+arm                       omap2plus_defconfig
+x86_64                           alldefconfig
+powerpc                     tqm8555_defconfig
+mips                       bmips_be_defconfig
+xtensa                          iss_defconfig
+ia64                             allyesconfig
+arm                            mps2_defconfig
+mips                        vocore2_defconfig
+powerpc                     tqm8541_defconfig
+alpha                            alldefconfig
+powerpc                    adder875_defconfig
+mips                      fuloong2e_defconfig
+xtensa                              defconfig
+arm                            zeus_defconfig
+sh                        edosk7760_defconfig
+powerpc                       holly_defconfig
+mips                           ci20_defconfig
+arm                  randconfig-c002-20220213
+ia64                             allmodconfig
+ia64                                defconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+alpha                               defconfig
+nds32                               defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a003
+i386                          randconfig-a001
+i386                          randconfig-a005
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220213
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+riscv                randconfig-c006-20220213
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220213
+i386                          randconfig-c001
+mips                 randconfig-c004-20220213
+arm                  randconfig-c002-20220213
+arm                         s5pv210_defconfig
+powerpc                     mpc512x_defconfig
+arm                         shannon_defconfig
+powerpc                     tqm5200_defconfig
+arm                         bcm2835_defconfig
+mips                        qi_lb60_defconfig
+arm                        neponset_defconfig
+riscv                            alldefconfig
+powerpc                      ppc64e_defconfig
+arm                     am200epdkit_defconfig
+powerpc                     ksi8560_defconfig
+powerpc                       ebony_defconfig
+powerpc                     kmeter1_defconfig
+arm                          pcm027_defconfig
+arm                           spitz_defconfig
+mips                           ip27_defconfig
+mips                          ath79_defconfig
+arm                              alldefconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a015
+i386                          randconfig-a011
+hexagon              randconfig-r045-20220213
+hexagon              randconfig-r041-20220213
+riscv                randconfig-r042-20220213
+s390                 randconfig-r044-20220213
+
 ---
- kernel/sched/cpuacct.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/sched/cpuacct.c b/kernel/sched/cpuacct.c
-index 3d06c5e4220d..75fbc212cb71 100644
---- a/kernel/sched/cpuacct.c
-+++ b/kernel/sched/cpuacct.c
-@@ -335,11 +335,12 @@ static struct cftype files[] = {
- void cpuacct_charge(struct task_struct *tsk, u64 cputime)
- {
- 	struct cpuacct *ca;
-+	unsigned int cpu = task_cpu(tsk);
- 
- 	rcu_read_lock();
- 
- 	for (ca = task_ca(tsk); ca; ca = parent_ca(ca))
--		__this_cpu_add(*ca->cpuusage, cputime);
-+		*per_cpu_ptr(ca->cpuusage, cpu) += cputime;
- 
- 	rcu_read_unlock();
- }
--- 
-2.20.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

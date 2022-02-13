@@ -2,162 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A1E64B3CFE
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 19:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C07D4B3D00
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 19:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237887AbiBMSyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 13:54:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54102 "EHLO
+        id S237896AbiBMSyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 13:54:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234170AbiBMSyI (ORCPT
+        with ESMTP id S237882AbiBMSyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 13:54:08 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCDE57B3C;
-        Sun, 13 Feb 2022 10:54:02 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21DERCRA022928;
-        Sun, 13 Feb 2022 18:53:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=qaAeCPOZUy2ppj9eQ9LciX548NVsceilaYGuwL+jin8=;
- b=TehU/bd6f+foQE4i0zJu2tuVe1smpIp+zKNOoIyCcZ5Y5cHLPkDG0ny3xQd4qApNcak/
- 37QNTv1LQCeL2qtf0su+i67T5c9TsuM0g+0u5tfo9wGnndGzNNPSrje8SVhysNA16unW
- 49Fvxy9GblokmK9NoU3PTrp11UPUZvUIaJuKXVg1uMfp4F9azP1aJq3vbRyN0haRe/4a
- g9B3Omb0bFRu611bvzjCkxS7OiAQFAWrXc2Eol1JoKcThFyPZblm8fUh1TrK9lBbEWIE
- vFQ3mOfNUWIp/Uqbl6mWdRKnziavEgru9a8Dt845KdDC4pBqzZBtCF58Ly37Hd8eIkWD zQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e6ycq6krj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 13 Feb 2022 18:53:25 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21DIrOlH024517;
-        Sun, 13 Feb 2022 18:53:24 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e6ycq6kr4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 13 Feb 2022 18:53:24 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21DIlQCA002034;
-        Sun, 13 Feb 2022 18:53:22 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03fra.de.ibm.com with ESMTP id 3e64h9f00g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 13 Feb 2022 18:53:22 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21DIrHH218874852
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 13 Feb 2022 18:53:17 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 262A211C04A;
-        Sun, 13 Feb 2022 18:53:17 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2E7D611C04C;
-        Sun, 13 Feb 2022 18:53:13 +0000 (GMT)
-Received: from sig-9-65-82-84.ibm.com (unknown [9.65.82.84])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun, 13 Feb 2022 18:53:13 +0000 (GMT)
-Message-ID: <0278ab6a2891effd9b1eb8c0221769e332ec6082.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 0/6] KEXEC_SIG with appended signature
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Michal Suchanek <msuchanek@suse.de>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org
-Cc:     kexec@lists.infradead.org, Philipp Rudo <prudo@redhat.com>,
-        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
-        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Frank van der Linden <fllinden@amazon.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Baoquan He <bhe@redhat.com>,
-        linux-security-module@vger.kernel.org
-Date:   Sun, 13 Feb 2022 13:53:12 -0500
-In-Reply-To: <cover.1641900831.git.msuchanek@suse.de>
-References: <cover.1641900831.git.msuchanek@suse.de>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: C6hLMjRWDkCM-Tl6EZHiGa_ffG0JsPsH
-X-Proofpoint-GUID: QRUpvJ3TBHI6yR0Yy9QvEHXIPHskisIP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-13_07,2022-02-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=983 bulkscore=0
- adultscore=0 spamscore=0 priorityscore=1501 mlxscore=0 suspectscore=0
- impostorscore=0 malwarescore=0 clxscore=1015 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202130126
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 13 Feb 2022 13:54:09 -0500
+Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD4F580D9
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 10:54:03 -0800 (PST)
+Received: from [192.168.1.18] ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id JK0Xndg0HuvBOJK0XnOPod; Sun, 13 Feb 2022 19:54:02 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 13 Feb 2022 19:54:02 +0100
+X-ME-IP: 90.126.236.122
+Message-ID: <29e74800-1c3f-e043-97e6-d83f7a53fafb@wanadoo.fr>
+Date:   Sun, 13 Feb 2022 19:54:01 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] iio: use div64_u64() instead of do_div()
+Content-Language: fr
+To:     Jonathan Cameron <jic23@kernel.org>, Qing Wang <wangqing@vivo.com>
+Cc:     Jyoti Bhayana <jbhayana@google.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1644395873-3937-1-git-send-email-wangqing@vivo.com>
+ <20220213175940.1066f5a8@jic23-huawei>
+ <9e5ed543-cd45-85db-50b5-52c2afd54c55@wanadoo.fr>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <9e5ed543-cd45-85db-50b5-52c2afd54c55@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal,
-
-On Tue, 2022-01-11 at 12:37 +0100, Michal Suchanek wrote:
-> Hello,
+Le 13/02/2022 à 19:50, Christophe JAILLET a écrit :
+> Le 13/02/2022 à 18:59, Jonathan Cameron a écrit :
+>> On Wed,  9 Feb 2022 00:37:53 -0800
+>> Qing Wang <wangqing-DGpbCiVdSXo@public.gmane.org> wrote:
+>>
+>>> From: Wang Qing <wangqing-DGpbCiVdSXo@public.gmane.org>
+>>>
+>>> do_div() does a 64-by-32 division.
+>>> When the divisor is u64, do_div() truncates it to 32 bits, this means it
+>>> can test non-zero and be truncated to zero for division.
+>>>
+>>> fix do_div.cocci warning:
+>>> do_div() does a 64-by-32 division, please consider using div64_u64 
+>>> instead.
+>>>
+>>> Signed-off-by: Wang Qing <wangqing-DGpbCiVdSXo@public.gmane.org>
+>> These look correct to me.  Jyoti, please could give these a sanity check?
+>>
 > 
-> This is a refresh of the KEXEC_SIG series.
-
-> This adds KEXEC_SIG support on powerpc and deduplicates the code dealing
-> with appended signatures in the kernel.
+> This is wrong.
 > 
-> powerpc supports IMA_KEXEC but that's an exception rather than the norm.
-> On the other hand, KEXEC_SIG is portable across platforms.
+> See [1].
+> 
+> CJ
+> 
+> [1]: 
+> https://lore.kernel.org/linux-kernel/20211117112559.jix3hmx7uwqmuryg-bIcnvbaLZ9MEGnE8C9+IrQ@public.gmane.org/ 
 
-This Kconfig carries the IMA measurement list across kexec.  This has
-nothing to do with appended signatures.
+Broken link, sorry:
 
-config IMA_KEXEC
-        bool "Enable carrying the IMA measurement list across a soft
-boot"
-        depends on IMA && TCG_TPM && HAVE_IMA_KEXEC
-
-In addition to powerpc, arm64 sets HAVE_IMA_KEXEC.
-
-Even prior to the kexec appended signature support, like all other
-files, the kexec kernel image signature could be stored in
-security.ima.
+[1] 
+https://lore.kernel.org/linux-kernel/20211117112559.jix3hmx7uwqmuryg@pengutronix.de/
 
 > 
-> For distributions to have uniform security features across platforms one
-> option should be used on all platforms.
-
-The kexec kernel image measurement will not be included in the BIOS
-event log.  Even if the measurement is included in the IMA measurement
-list, without the IMA_KEXEC Kconfig the measurement list will not be
-carried across kexec.  For those not interested in "trusted boot" or
-those who do not need it for compliance, the simplification should be
-fine.
-
--- 
-thanks,
-
-Mimi
+> 
+>> Thanks,
+>>
+>> Jonathan
+>>
+>>> ---
+>>>   drivers/iio/common/scmi_sensors/scmi_iio.c | 10 +++++-----
+>>>   1 file changed, 5 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/drivers/iio/common/scmi_sensors/scmi_iio.c 
+>>> b/drivers/iio/common/scmi_sensors/scmi_iio.c
+>>> index d538bf3..d6df5da
+>>> --- a/drivers/iio/common/scmi_sensors/scmi_iio.c
+>>> +++ b/drivers/iio/common/scmi_sensors/scmi_iio.c
+>>> @@ -160,7 +160,7 @@ static int scmi_iio_set_odr_val(struct iio_dev 
+>>> *iio_dev, int val, int val2)
+>>>       mult = scnprintf(buf, sizeof(buf), "%llu", sf) - 1;
+>>>       sec = int_pow(10, mult) * UHZ_PER_HZ;
+>>> -    do_div(sec, uHz);
+>>> +    div64_u64(sec, uHz);
+>>>       if (sec == 0) {
+>>>           dev_err(&iio_dev->dev,
+>>>               "Trying to set invalid sensor update value for sensor %s",
+>>> @@ -237,10 +237,10 @@ static void convert_ns_to_freq(u64 interval_ns, 
+>>> u64 *hz, u64 *uhz)
+>>>       u64 rem, freq;
+>>>       freq = NSEC_PER_SEC;
+>>> -    rem = do_div(freq, interval_ns);
+>>> +    rem = div64_u64(freq, interval_ns);
+>>>       *hz = freq;
+>>>       *uhz = rem * 1000000UL;
+>>> -    do_div(*uhz, interval_ns);
+>>> +    div64_u64(*uhz, interval_ns);
+>>>   }
+>>>   static int scmi_iio_get_odr_val(struct iio_dev *iio_dev, int *val, 
+>>> int *val2)
+>>> @@ -266,7 +266,7 @@ static int scmi_iio_get_odr_val(struct iio_dev 
+>>> *iio_dev, int *val, int *val2)
+>>>       mult = SCMI_SENS_CFG_GET_UPDATE_EXP(sensor_config);
+>>>       if (mult < 0) {
+>>>           sensor_interval_mult = int_pow(10, abs(mult));
+>>> -        do_div(sensor_update_interval, sensor_interval_mult);
+>>> +        div64_u64(sensor_update_interval, sensor_interval_mult);
+>>>       } else {
+>>>           sensor_interval_mult = int_pow(10, mult);
+>>>           sensor_update_interval =
+>>> @@ -500,7 +500,7 @@ static u64 scmi_iio_convert_interval_to_ns(u32 val)
+>>>       mult = SCMI_SENS_INTVL_GET_EXP(val);
+>>>       if (mult < 0) {
+>>>           sensor_interval_mult = int_pow(10, abs(mult));
+>>> -        do_div(sensor_update_interval, sensor_interval_mult);
+>>> +        div64_u64(sensor_update_interval, sensor_interval_mult);
+>>>       } else {
+>>>           sensor_interval_mult = int_pow(10, mult);
+>>>           sensor_update_interval =
+>>
+>>
+> 
+> 
 

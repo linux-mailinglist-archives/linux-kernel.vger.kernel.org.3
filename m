@@ -2,54 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D334B3956
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 05:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8B94B3957
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 05:44:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233433AbiBMEcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Feb 2022 23:32:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38924 "EHLO
+        id S233443AbiBMEoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Feb 2022 23:44:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232021AbiBMEcR (ORCPT
+        with ESMTP id S232021AbiBMEoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 23:32:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2561D5E175;
-        Sat, 12 Feb 2022 20:32:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A210560F5B;
-        Sun, 13 Feb 2022 04:32:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2AA5C004E1;
-        Sun, 13 Feb 2022 04:32:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644726732;
-        bh=LPol4nPqZtrOO+sfiPMZFln5Tubfn7yPMUx7KoowyX4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kgQIyMNJLW7nujCI266qdAbQmNHm5yGdxe7LVfzYZR6hqYl9LtN8h+XtneX6IC6ow
-         1uAfTU+ksvZsJFIcqHzslbT5D23F4flyAviYTYnleASQzcxFzowe5nvoHVWNpTDZrY
-         FddXiVKHa45cQQyI83I04uadHtjPa1vmZH/pHwz+UEkDcoch5w3Eg+MhRPlqckUQyP
-         P+MYAUAjYW1ZwxCPe5OQgsBa4ikg4nJG5OEDiwBbdew5AzWKFXpzMOLNapM/zCyyV2
-         ultzB2kIJ/EqvIFIfmpTJTY1BmrlpZOaEWiPxo8YFte19gpZu4vuoxfYqJnOsPDZZl
-         +eReWvsTvpj0g==
-Date:   Sun, 13 Feb 2022 12:32:00 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     l.stach@pengutronix.de, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com
-Subject: Re: [PATCH v2 1/2] ARM: dts: imx6qp-sabresd: Enable PCIe support
-Message-ID: <20220213043143.GN4909@dragon>
-References: <1644564779-8448-1-git-send-email-hongxing.zhu@nxp.com>
+        Sat, 12 Feb 2022 23:44:13 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6935E759
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 20:44:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644727447; x=1676263447;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=d3jQxq7PxoosC3S53epEUHJaVO6gqm1tY25u74t3mhQ=;
+  b=Yx/tACxrRxMMyjcWhiAe1xN35rJOCEM+LmWrhhD7W+gxvF81xqbRaUPs
+   Bg2TgPUwjgz42ILbGDenoNnw4W8qYrV5A6PGj5nDCAEuRqz2IQ/dy8jfK
+   Wlx0E+DaoC8BUWojgFu/ARdgEbt6yvQYTcq/NgmMou/y556JpLKL5d25T
+   YKRImMgCV6Sty6M0BVq8R4LXH0a5iA8KRsPe5pf+NNAgqWnE/4TmpSQVO
+   GkNENGyYPHlqrltQHvT5MNsSSl6prtUYD315fyql+fr2E4Tz4jaCxk+bq
+   oylIR5Wq/oyRZG3R99sGgbcxJjXDrEWNzD4SJt+AhMvVC10lcyZ54wPZj
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10256"; a="250128818"
+X-IronPort-AV: E=Sophos;i="5.88,364,1635231600"; 
+   d="scan'208";a="250128818"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2022 20:44:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,364,1635231600"; 
+   d="scan'208";a="702528946"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 12 Feb 2022 20:44:06 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJ6k1-00073x-Ib; Sun, 13 Feb 2022 04:44:05 +0000
+Date:   Sun, 13 Feb 2022 12:43:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [arnd-playground:set_fs 2/11] mm/maccess.c:37:17: sparse: sparse:
+ cast removes address space '__user' of expression
+Message-ID: <202202131259.S6ZP2d9J-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1644564779-8448-1-git-send-email-hongxing.zhu@nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,51 +61,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 03:32:58PM +0800, Richard Zhu wrote:
-> In the i.MX6QP sabresd board(sch-28857) design, one external oscillator
-> is used as the PCIe reference clock source by the endpoint device.
-> 
-> If RC uses this oscillator as reference clock too, PLL6(ENET PLL) would
-> has to be in bypass mode, and ENET clocks would be messed up.
-> 
-> To keep things simple, let RC use the internal PLL as reference clock
-> and always enable the external oscillator for endpoint device on
-> i.MX6QP sabresd board.
-> 
-> NOTE: This reference clock setup is used to pass the GEN2 TX compliance
-> tests, and isn't recommended as a setup in the end-user design.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git set_fs
+head:   0a081326831928b0d739bce68b8c0f9138b9c8ba
+commit: 872ec1b8b0c531c0367aa6f365149bf70d3bcd30 [2/11] sparc64: add __{get,put}_kernel_nocheck()
+config: sparc64-randconfig-s032-20220213 (https://download.01.org/0day-ci/archive/20220213/202202131259.S6ZP2d9J-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/commit/?id=872ec1b8b0c531c0367aa6f365149bf70d3bcd30
+        git remote add arnd-playground https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git
+        git fetch --no-tags arnd-playground set_fs
+        git checkout 872ec1b8b0c531c0367aa6f365149bf70d3bcd30
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc64 SHELL=/bin/bash
 
-I do not quite follow.  The commit log is all talking about external
-oscillator reference clock, while code is playing 'vgen3' regulator.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Shawn
 
-> 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> ---
->  arch/arm/boot/dts/imx6qp-sabresd.dts | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/imx6qp-sabresd.dts b/arch/arm/boot/dts/imx6qp-sabresd.dts
-> index 480e73183f6b..083cf90bcab5 100644
-> --- a/arch/arm/boot/dts/imx6qp-sabresd.dts
-> +++ b/arch/arm/boot/dts/imx6qp-sabresd.dts
-> @@ -50,8 +50,14 @@ MX6QDL_PAD_SD3_DAT7__SD3_DATA7		0x17059
->  	};
->  };
->  
-> +&vgen3_reg {
-> +	regulator-min-microvolt = <1800000>;
-> +	regulator-max-microvolt = <3300000>;
-> +	regulator-always-on;
-> +};
-> +
->  &pcie {
-> -	status = "disabled";
-> +	status = "okay";
->  };
->  
->  &sata {
-> -- 
-> 2.25.1
-> 
+sparse warnings: (new ones prefixed by >>)
+>> mm/maccess.c:37:17: sparse: sparse: cast removes address space '__user' of expression
+>> mm/maccess.c:37:17: sparse: sparse: cast removes address space '__user' of expression
+>> mm/maccess.c:37:17: sparse: sparse: cast removes address space '__user' of expression
+>> mm/maccess.c:37:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:39:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:39:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:39:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:39:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:41:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:41:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:41:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:41:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:42:9: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:42:9: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:42:9: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:42:9: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:68:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:68:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:68:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:68:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:70:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:70:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:70:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:70:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:72:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:72:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:72:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:72:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:73:9: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:73:9: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:73:9: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:73:9: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:92:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:92:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:92:17: sparse: sparse: cast removes address space '__user' of expression
+   mm/maccess.c:92:17: sparse: sparse: cast removes address space '__user' of expression
+
+vim +/__user +37 mm/maccess.c
+
+b58294ead14cde Christoph Hellwig 2020-06-08  16  
+fe557319aa06c2 Christoph Hellwig 2020-06-17  17  #define copy_from_kernel_nofault_loop(dst, src, len, type, err_label)	\
+b58294ead14cde Christoph Hellwig 2020-06-08  18  	while (len >= sizeof(type)) {					\
+b58294ead14cde Christoph Hellwig 2020-06-08  19  		__get_kernel_nofault(dst, src, type, err_label);		\
+b58294ead14cde Christoph Hellwig 2020-06-08  20  		dst += sizeof(type);					\
+b58294ead14cde Christoph Hellwig 2020-06-08  21  		src += sizeof(type);					\
+b58294ead14cde Christoph Hellwig 2020-06-08  22  		len -= sizeof(type);					\
+b58294ead14cde Christoph Hellwig 2020-06-08  23  	}
+b58294ead14cde Christoph Hellwig 2020-06-08  24  
+fe557319aa06c2 Christoph Hellwig 2020-06-17  25  long copy_from_kernel_nofault(void *dst, const void *src, size_t size)
+b58294ead14cde Christoph Hellwig 2020-06-08  26  {
+2423de2e6f4d86 Arnd Bergmann     2021-08-11  27  	unsigned long align = 0;
+2423de2e6f4d86 Arnd Bergmann     2021-08-11  28  
+2423de2e6f4d86 Arnd Bergmann     2021-08-11  29  	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS))
+2423de2e6f4d86 Arnd Bergmann     2021-08-11  30  		align = (unsigned long)dst | (unsigned long)src;
+2423de2e6f4d86 Arnd Bergmann     2021-08-11  31  
+fe557319aa06c2 Christoph Hellwig 2020-06-17  32  	if (!copy_from_kernel_nofault_allowed(src, size))
+2a71e81d321987 Christoph Hellwig 2020-06-08  33  		return -ERANGE;
+b58294ead14cde Christoph Hellwig 2020-06-08  34  
+b58294ead14cde Christoph Hellwig 2020-06-08  35  	pagefault_disable();
+2423de2e6f4d86 Arnd Bergmann     2021-08-11  36  	if (!(align & 7))
+fe557319aa06c2 Christoph Hellwig 2020-06-17 @37  		copy_from_kernel_nofault_loop(dst, src, size, u64, Efault);
+2423de2e6f4d86 Arnd Bergmann     2021-08-11  38  	if (!(align & 3))
+fe557319aa06c2 Christoph Hellwig 2020-06-17  39  		copy_from_kernel_nofault_loop(dst, src, size, u32, Efault);
+2423de2e6f4d86 Arnd Bergmann     2021-08-11  40  	if (!(align & 1))
+fe557319aa06c2 Christoph Hellwig 2020-06-17  41  		copy_from_kernel_nofault_loop(dst, src, size, u16, Efault);
+fe557319aa06c2 Christoph Hellwig 2020-06-17  42  	copy_from_kernel_nofault_loop(dst, src, size, u8, Efault);
+b58294ead14cde Christoph Hellwig 2020-06-08  43  	pagefault_enable();
+b58294ead14cde Christoph Hellwig 2020-06-08  44  	return 0;
+b58294ead14cde Christoph Hellwig 2020-06-08  45  Efault:
+b58294ead14cde Christoph Hellwig 2020-06-08  46  	pagefault_enable();
+b58294ead14cde Christoph Hellwig 2020-06-08  47  	return -EFAULT;
+b58294ead14cde Christoph Hellwig 2020-06-08  48  }
+fe557319aa06c2 Christoph Hellwig 2020-06-17  49  EXPORT_SYMBOL_GPL(copy_from_kernel_nofault);
+b58294ead14cde Christoph Hellwig 2020-06-08  50  
+
+:::::: The code at line 37 was first introduced by commit
+:::::: fe557319aa06c23cffc9346000f119547e0f289a maccess: rename probe_kernel_{read,write} to copy_{from,to}_kernel_nofault
+
+:::::: TO: Christoph Hellwig <hch@lst.de>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

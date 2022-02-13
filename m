@@ -2,99 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 553774B3CD5
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 19:25:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E12974B3CD2
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 19:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237793AbiBMSZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 13:25:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45726 "EHLO
+        id S237770AbiBMSVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 13:21:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiBMSZa (ORCPT
+        with ESMTP id S230009AbiBMSVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 13:25:30 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60AB575C5
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 10:25:24 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id v63so12808452ybv.10
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 10:25:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=KXZYDEEC2LO17f3/X0MoAyEpPa/p71NZIgTKJd4XqT3mcfW13rd1bEmWoTvu777urk
-         Do2Vv7/uOyY9WQe6t6MGGPgI8co8sWaDEgVa7pu7PF0rW1cxpkdwOwggLSIOkwQx/Gzh
-         rWB8TCrfKvY78BCOMogYoPLnQF2gUTqf2QAuq4iOJt8Ug+YQATBl4gVX3L87dRh1kvcf
-         Gqhh9gG/mhFS5ODzpJjwIo8bzJCCxLKfU3MUKERVRTfuqvEMQbHfbzuO93oFc5dq+wV8
-         vxTUrl4lWietN+xM/BYe6PAdT2Q3n/jKXm2koSI8QFR21U8vwms2CjmuiH3HljIe1Z1M
-         FYeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=bGJFBrUFHCXJpAOZkiLV7EF82M7n4Y7t/B7yxqRFW35aUAjPhueDq5jT8njF1kn4TE
-         LskDhn3t8tYTF0HdsVkvbQwthv5WZlXi55E3DMazb/YIbV4Uylty6Q+7FrRO5mZ3r+Lo
-         L7gnzVEC6j0aWttw3fU5QdXFACDSuELC+E+KrPyjaxxx9fOMwFk5jV3n0UrMsZOrqeZJ
-         coNSj98iyUinOx5DppetgNi0aykZoqO8E00IXYAajj1eRaPk8PlbSb/w3zx2rCQAsg5f
-         0UH+HqZY2szNkpgJpf6cgmI/U6blFdOYsgSTBT+6QFOlpnqiPhiE0NBb4zOllgDRyd1F
-         GX6g==
-X-Gm-Message-State: AOAM533FBMVAi1tMCknVn41UfXF2XzL4Dg5Vdh8SNY4O8YZy4OQHGjov
-        vN/MyIiTM2HULpn3I/D0+ZYtArgdhaPNBkSQ5DA=
-X-Google-Smtp-Source: ABdhPJwE4aAduq6ESisISvUQJXAz+p/Gw+S+z3+mx9YZWLu276c6sfZ0RhpUpZcL23fwNYExdRmoOm8lFvXOR7EZSCM=
-X-Received: by 2002:a25:9247:: with SMTP id e7mr5354117ybo.747.1644776723912;
- Sun, 13 Feb 2022 10:25:23 -0800 (PST)
+        Sun, 13 Feb 2022 13:21:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EA15717C;
+        Sun, 13 Feb 2022 10:21:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A80961221;
+        Sun, 13 Feb 2022 18:21:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29CCFC004E1;
+        Sun, 13 Feb 2022 18:21:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644776489;
+        bh=Z4JsTbMUMjpHsmFygjZDeXmvGBzAO2NqeJ89Qij/jFo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mEKVwT5APORAPkd9ErZ81Tp5FfsrFPahetC0GUNE7iM+BOYBuPzbotgxsf75+Ic55
+         rUpNbH8s5nk94W6HkMTDZ+OE6GNDPp5+Q1esJjqceeoTYuYJfpe/iLXC8NQurNL+Rp
+         GsVhYiiHM8zMDP5cio/s47V3uxPq6iZDBUsyXLLMvbaIDAB5sRnRjRAtYH/M+R16oq
+         w8t6E9nkVxhDNMIxaNrnBBdAYDvpdQfi9oLtMsr4waxWy0MqflX5Bf85oK9RDHnHIK
+         yqOm/oBCx+AxIAwm7GclVzMtAm0yeYMiEjH42tyl11XjRSiAAJehA/rl5JKBZIIBaP
+         o1xq2GiN+2DSg==
+Date:   Sun, 13 Feb 2022 18:28:10 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     "Miclaus, Antoniu" <Antoniu.Miclaus@analog.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 3/4] Documentation:ABI:testing:admv1014: add ABI docs
+Message-ID: <20220213182810.2246581b@jic23-huawei>
+In-Reply-To: <CY4PR03MB339929F700810DA7BB36D43D9B2C9@CY4PR03MB3399.namprd03.prod.outlook.com>
+References: <20220207130549.98415-1-antoniu.miclaus@analog.com>
+        <20220207130549.98415-3-antoniu.miclaus@analog.com>
+        <CY4PR03MB339929F700810DA7BB36D43D9B2C9@CY4PR03MB3399.namprd03.prod.outlook.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Received: by 2002:a05:7011:812:b0:1ff:f81d:242a with HTTP; Sun, 13 Feb 2022
- 10:25:23 -0800 (PST)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <gracebanneth@gmail.com>
-Date:   Sun, 13 Feb 2022 10:25:23 -0800
-Message-ID: <CABo=7A0075rYFH2UBBC0-bKXVjSQCMXig5gunAJ_BH+BvfUK1g@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b36 listed in]
-        [list.dnswl.org]
-        * -0.0 BAYES_20 BODY: Bayes spam probability is 5 to 20%
-        *      [score: 0.0818]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [gracebanneth[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dravasmith27[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+On Mon, 7 Feb 2022 14:55:36 +0000
+"Miclaus, Antoniu" <Antoniu.Miclaus@analog.com> wrote:
+
+> --
+> Antoniu Micl=C4=83u=C5=9F
+>=20
+> > -----Original Message-----
+> > From: Antoniu Miclaus <antoniu.miclaus@analog.com>
+> > Sent: Monday, February 7, 2022 3:06 PM
+> > To: jic23@kernel.org; robh+dt@kernel.org; linux-iio@vger.kernel.org;
+> > devicetree@vger.kernel.org; linux-kernel@vger.kernel.org
+> > Cc: Miclaus, Antoniu <Antoniu.Miclaus@analog.com>
+> > Subject: [PATCH v6 3/4] Documentation:ABI:testing:admv1014: add ABI docs
+> >=20
+> > Add documentation for the use of the Digital Attenuator gain.
+> >=20
+> > Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com> =20
+> Forgot to add in v6:
+> Reviewed-by: Rob Herring <robh@kernel.org>
+Ah. That will break b4 trying to pick this up (as it's in the wrong
+patch as you noted).
+
+Please resend as v7 with fixed up tags.
+
+I'm waiting to give Andy another chance to look at this if he wants
+anyway.
+
+Thanks,
+
+Jonathan
+
+> > ---
+> > no changes in v6.
+> >  Documentation/ABI/testing/sysfs-bus-iio       |  1 +
+> >  .../testing/sysfs-bus-iio-frequency-admv1014  | 23 +++++++++++++++++++
+> >  2 files changed, 24 insertions(+)
+> >  create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-frequency-
+> > admv1014
+> >=20
+> > diff --git a/Documentation/ABI/testing/sysfs-bus-iio
+> > b/Documentation/ABI/testing/sysfs-bus-iio
+> > index c551301b33f1..2b5770017a84 100644
+> > --- a/Documentation/ABI/testing/sysfs-bus-iio
+> > +++ b/Documentation/ABI/testing/sysfs-bus-iio
+> > @@ -476,6 +476,7 @@ What:
+> > 	/sys/bus/iio/devices/iio:deviceX/in_voltageY_i_calibscale
+> >  What:		/sys/bus/iio/devices/iio:deviceX/in_voltageY_q_calibscale
+> >  What:		/sys/bus/iio/devices/iio:deviceX/in_voltage_i_calibscale
+> >  What:		/sys/bus/iio/devices/iio:deviceX/in_voltage_q_calibscale
+> > +What:		/sys/bus/iio/devices/iio:deviceX/in_altvoltage_calibscale
+> >  What:		/sys/bus/iio/devices/iio:deviceX/in_voltage_calibscale
+> >  What:		/sys/bus/iio/devices/iio:deviceX/in_accel_x_calibscale
+> >  What:		/sys/bus/iio/devices/iio:deviceX/in_accel_y_calibscale
+> > diff --git a/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1014
+> > b/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1014
+> > new file mode 100644
+> > index 000000000000..395010a0ef8b
+> > --- /dev/null
+> > +++ b/Documentation/ABI/testing/sysfs-bus-iio-frequency-admv1014
+> > @@ -0,0 +1,23 @@
+> > +What:
+> > 	/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_i_calibscale_coarse
+> > +KernelVersion: 5.18
+> > +Contact:	linux-iio@vger.kernel.org
+> > +Description:
+> > +		Read/write value for the digital attenuator gain (IF_I) with
+> > coarse steps.
+> > +
+> > +What:
+> > 	/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_q_calibscale_coarse
+> > +KernelVersion: 5.18
+> > +Contact:	linux-iio@vger.kernel.org
+> > +Description:
+> > +		Read/write value for the digital attenuator gain (IF_Q) with
+> > coarse steps.
+> > +
+> > +What:
+> > 	/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_i_calibscale_fine
+> > +KernelVersion: 5.18
+> > +Contact:	linux-iio@vger.kernel.org
+> > +Description:
+> > +		Read/write value for the digital attenuator gain (IF_I) with
+> > fine steps.
+> > +
+> > +What:
+> > 	/sys/bus/iio/devices/iio:deviceX/in_altvoltage0_q_calibscale_fine
+> > +KernelVersion: 5.18
+> > +Contact:	linux-iio@vger.kernel.org
+> > +Description:
+> > +		Read/write value for the digital attenuator gain (IF_Q) with
+> > fine steps.
+> > --
+> > 2.35.1 =20
+>=20
+

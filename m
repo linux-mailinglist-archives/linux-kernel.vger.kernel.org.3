@@ -2,84 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E1484B3E56
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 00:19:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4D54B3E59
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 00:19:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238689AbiBMXGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 18:06:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34322 "EHLO
+        id S238741AbiBMXNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 18:13:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiBMXGs (ORCPT
+        with ESMTP id S229453AbiBMXNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 18:06:48 -0500
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F362254BE0;
-        Sun, 13 Feb 2022 15:06:41 -0800 (PST)
-Received: by mail-pl1-f180.google.com with SMTP id w20so9160587plq.12;
-        Sun, 13 Feb 2022 15:06:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qhMPRWNoyLemtcbWE/X7+rJB/VYvBTkzYdCumzI+F0g=;
-        b=qlOkEyJnkxRMgJsNIhzSpSkFw2dWDgIiZPhIT0BY1zYY3OPLj7KGI9g5pSKtERrfg+
-         sVLaAyqyPHMa3wrJ9T7LQXXE3UtnRASNXFj/ZLzBAvvxrSXC8vzyqASu7lX6KLkFKGYe
-         uv3RzKL8lV1+tjPkd2UknEGcyuvlCpp3swfG4WFONwary+PEUIP/zbg8EN9jCIDLiR7+
-         UzlTsTbblLMqIBIZQbPOnzXTy0CrkNA6vMWoJk+T1buEqelzPPneJVEiBiOvZ5Pxxi/y
-         2Lyj8rr5JKn45swV4r0Kszi0yuvYPFsBKwayleb/Q9UDYp6jFZnBUy4R+JwtmQKL8KR5
-         oAkQ==
-X-Gm-Message-State: AOAM532nG3k1fY2efrr4pj7sDqwHgQMQIiizehQjeoKQEWx+4IxcPnhO
-        ki33zzxrn88TAYGEAysZBko=
-X-Google-Smtp-Source: ABdhPJynANFxwSs8kCyrzlxuncqnPsAFbwcV+rBe/poFe3AWsvnWVRzINRrykxGM/Y/VwLm6tp648g==
-X-Received: by 2002:a17:902:d505:: with SMTP id b5mr11660635plg.113.1644793601272;
-        Sun, 13 Feb 2022 15:06:41 -0800 (PST)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id 10sm33350391pfm.56.2022.02.13.15.06.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Feb 2022 15:06:40 -0800 (PST)
-Message-ID: <aa2bf24e-981a-a811-c5d8-a75f0b8f693a@acm.org>
-Date:   Sun, 13 Feb 2022 15:06:39 -0800
+        Sun, 13 Feb 2022 18:13:06 -0500
+Received: from relay.hostedemail.com (relay.a.hostedemail.com [64.99.140.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2084554BE1
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 15:12:59 -0800 (PST)
+Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay06.hostedemail.com (Postfix) with ESMTP id 36BD822BF6;
+        Sun, 13 Feb 2022 23:12:56 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id CAC7320024;
+        Sun, 13 Feb 2022 23:12:49 +0000 (UTC)
+Message-ID: <3141331e10cdbc7a3859887d5e8038eff777e3ad.camel@perches.com>
+Subject: Re: [PATCH v7 7/7] MAINTAINERS: add maintainers for DRM LSDC driver
+From:   Joe Perches <joe@perches.com>
+To:     Sui Jingfeng <15330273260@189.cn>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>, Li Yi <liyi@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
+Date:   Sun, 13 Feb 2022 15:12:48 -0800
+In-Reply-To: <20220213141649.1115987-8-15330273260@189.cn>
+References: <20220213141649.1115987-1-15330273260@189.cn>
+         <20220213141649.1115987-8-15330273260@189.cn>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [syzbot] possible deadlock in worker_thread
-Content-Language: en-US
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        syzbot <syzbot+831661966588c802aae9@syzkaller.appspotmail.com>,
-        jgg@ziepe.ca, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-References: <0000000000005975a605d7aef05e@google.com>
- <8ea57ddf-a09c-43f2-4285-4dfb908ad967@acm.org>
- <ccd04d8a-154b-543e-e1c3-84bc655508d1@I-love.SAKURA.ne.jp>
- <71d6f14e-46af-cc5a-bc70-af1cdc6de8d5@acm.org>
- <309c86b7-2a4c-1332-585f-7bcd59cfd762@I-love.SAKURA.ne.jp>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <309c86b7-2a4c-1332-585f-7bcd59cfd762@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: CAC7320024
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-Stat-Signature: chsen43n4o61gbue1shux6emhu6imiza
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+3MfhZMV+dCCy7Z4SG+v/Vjs/O+3cQmPk=
+X-HE-Tag: 1644793969-740389
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/12/22 09:14, Tetsuo Handa wrote:
-> How can reviewing all flush_workqueue(system_long_wq) calls help?
+On Sun, 2022-02-13 at 22:16 +0800, Sui Jingfeng wrote:
+> From: suijingfeng <suijingfeng@loongson.cn>
+[]
+> diff --git a/MAINTAINERS b/MAINTAINERS
+[]
+> @@ -6453,6 +6453,15 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
+>  F:	drivers/gpu/drm/lima/
+>  F:	include/uapi/drm/lima_drm.h
+>  
+> +DRM DRIVERS FOR LOONGSON
+> +M:	Sui Jingfeng <suijingfeng@loongson.cn>
+> +L:	dri-devel@lists.freedesktop.org
+> +R:	Li Yi <liyi@loongson.cn>
+> +S:	Maintained
+> +W:	https://www.loongson.cn/
+> +T:	git git://anongit.freedesktop.org/drm/drm-misc
+> +F:	drivers/gpu/drm/lsdc/
+> +
 
-It is allowed to queue blocking actions on system_long_wq. 
-flush_workqueue(system_long_wq) can make a lower layer (e.g. ib_srp) 
-wait on a blocking action from a higher layer (e.g. the loop driver) and 
-thereby cause a deadlock. Hence my proposal to review all 
-flush_workqueue(system_long_wq) calls.
+M then R then L please
 
-Thanks,
+DRM DRIVERS FOR LOONGSON
+M:	Sui Jingfeng <suijingfeng@loongson.cn>
+R:	Li Yi <liyi@loongson.cn>
+L:	dri-devel@lists.freedesktop.org
 
-Bart.
+

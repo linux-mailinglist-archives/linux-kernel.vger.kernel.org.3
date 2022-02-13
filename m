@@ -2,54 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7B34B3C41
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 17:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3AEB4B3C47
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 17:22:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237038AbiBMQQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 11:16:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38440 "EHLO
+        id S237088AbiBMQW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 11:22:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236992AbiBMQQT (ORCPT
+        with ESMTP id S233353AbiBMQW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 11:16:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD4A5A0AF;
-        Sun, 13 Feb 2022 08:16:12 -0800 (PST)
+        Sun, 13 Feb 2022 11:22:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941585A584;
+        Sun, 13 Feb 2022 08:22:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A01EB80B32;
-        Sun, 13 Feb 2022 16:16:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D6FDC004E1;
-        Sun, 13 Feb 2022 16:16:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4228EB80B33;
+        Sun, 13 Feb 2022 16:22:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6FF7C340F0;
+        Sun, 13 Feb 2022 16:22:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644768969;
-        bh=SjGHF8jSyh7ZBRwmmpVF3guCVazx1Er4nKQs+Ocu9nQ=;
+        s=k20201202; t=1644769339;
+        bh=czxEEr/GBsTWRl7yYnSsYAZb/4+oUEgjhNhdXN4Iiio=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NFivLYLbG1XLP3hYWVsOS3yZzA2+BHrUTF3K8OSieq6/bk2EyoubQ99pa9prLEjvw
-         i5EtCs80TK7R/qoZatNkr4OVwCt2QXmtgbcwBPBho7KBX6KXXlChp1kyeYF3h8IUgT
-         jJS8ZsGrkpxz3NhID8phWmvHEBE0/WYaQCcv8HClbH8AmVDhU6eB4zt4bzFXAjiNhf
-         trRgYlAHj0zfYvILzv1tyHwTjd/pDEyA/IvlVLkWHP0DmMFWjtG1xBUre5x0hkP5/R
-         wzHez7OETHF0fqBjAArQkv83SP8b7yG27J0LlLf+ZG7M16PXQXpM1RImwEoHrf+7Yj
-         ZFGZEKCHWDUEQ==
-Date:   Sun, 13 Feb 2022 16:22:45 +0000
+        b=GfCp0kr4KenvGejya3Gs83lT4nlL53uGu0IiIJC88tM5xZzkGjxT3hZRZ7kjiE2Rd
+         NCdZz/L0DUrnSFhN6e2748W3yNhFOmCmc/eJUqk1Z/9jxfUa84AiaDW9urYdYRXzQb
+         dcTPMhJD8hFrQTqiceV+fj82UYRmveAlERcXu3Zc+tK8ij9tb04t8yuVQwtY5Tu9vs
+         HYhJQMDFLyK5jofVj1GlwGnYorbI4m3SfVie9XI6kUlQPS8tC+Jnaq96k6G1IPZE+l
+         CvfQ0KQ2NY3Q0ZTAc/r0wNsqyn8lI4kDO98aBx49OlbkhuZO3eFjCdabfUAe0V201k
+         0yibIHcWHWhrw==
+Date:   Sun, 13 Feb 2022 16:28:59 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Jishnu Prakash <quic_jprakash@quicinc.com>
-Cc:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <devicetree@vger.kernel.org>, <mka@chromium.org>,
-        <dmitry.baryshkov@linaro.org>, <robh+dt@kernel.org>,
-        <knaack.h@gmx.de>, <lars@metafoo.de>, <pmeerw@pmeerw.net>,
-        <manivannan.sadhasivam@linaro.org>, <linus.walleij@linaro.org>,
-        <quic_kgunda@quicinc.com>, <quic_aghayal@quicinc.com>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <quic_subbaram@quicinc.com>, <amitk@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm-owner@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH V5 0/4] thermal: qcom: Add support for PMIC5 Gen2 ADC_TM
-Message-ID: <20220213162245.009d4e41@jic23-huawei>
-In-Reply-To: <1644741191-12039-1-git-send-email-quic_jprakash@quicinc.com>
-References: <1644741191-12039-1-git-send-email-quic_jprakash@quicinc.com>
+To:     Julia Lawall <julia.lawall@inria.fr>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Cc:     Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        kbuild-all@lists.01.org, linux-arm-kernel@lists.infradead.org,
+        Michal Simek <monstr@monstr.eu>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>, git@xilinx.com,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iio: versal-sysmon: fix for_each_child.cocci warnings
+Message-ID: <20220213162859.3d968256@jic23-huawei>
+In-Reply-To: <alpine.DEB.2.22.394.2202122337090.3095@hadrien>
+References: <alpine.DEB.2.22.394.2202122337090.3095@hadrien>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -64,57 +59,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 13 Feb 2022 14:03:07 +0530
-Jishnu Prakash <quic_jprakash@quicinc.com> wrote:
+On Sat, 12 Feb 2022 23:39:33 +0100 (CET)
+Julia Lawall <julia.lawall@inria.fr> wrote:
 
-Hi Jishnu,
+> From: kernel test robot <lkp@intel.com>
+> 
+> For_each_child_of_node" should have of_node_put() before return.
+> 
+> Generated by: scripts/coccinelle/iterators/for_each_child.cocci
+> 
+> CC: Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
+> 
+> ---
+> 
+> tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v5.15
+> head:   966124532656bc95d781abf57531e4cd4f962237
+> commit: 1459646ab280aa68c3c4fa1d9552ea21f15d7a2d [543/923] iio: versal-sysmon: add driver for Versal Sysmon
+> :::::: branch date: 3 days ago
+> :::::: commit date: 12 days ago
+> 
+> Please take the patch only if it's a positive warning. Thanks!
 
-My assumption is this will go through the thermal tree, but if
-that turns out not to be the case and we need to do something
-different then let me know.  From IIO side of things I'm marking
-it handled elsewhere in patchwork.
+Patch is obviously correct, but this driver isn't upstream so from point of view
+of the IIO tree I'm ignoring this.
 
 Thanks,
 
 Jonathan
 
-
-> Changes in v5:
-> Fixed some compilation errors in patch 4.
 > 
-> Changes in v4:
-> Addressed comments given by Jonathan (for using put_unaligned_le16)
-> and by Dmitry (for using separate init function and correcting args_count)
-> for qcom-spmi-adc-tm5.c in patch 4.
-> Added init function in patch 3.
+>  versal-sysmon.c |    8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
 > 
-> Changes in v3:
-> Addressed comments given by Jonathan for qcom-spmi-adc-tm5.yaml.
-> Addressed comments given by Dmitry and Jonathan for qcom-spmi-adc-tm5.c.
-> Split patch for qcom-spmi-adc-tm5.c into two parts, one to refactor
-> code to support multiple device generations and the second to add
-> actual Gen2 ADC_TM changes.
+> --- a/drivers/iio/adc/versal-sysmon.c
+> +++ b/drivers/iio/adc/versal-sysmon.c
+> @@ -875,12 +875,16 @@ static int sysmon_parse_dt(struct iio_de
 > 
-> Changes in v2:
-> Split IIO file changes into separate patch.
-> Addressed comments given by Dmitry for qcom-spmi-adc-tm5.c.
+>  	for_each_child_of_node(np, child_node) {
+>  		ret = of_property_read_u32(child_node, "reg", &reg);
+> -		if (ret < 0)
+> +		if (ret < 0) {
+> +			of_node_put(child_node);
+>  			return ret;
+> +		}
 > 
-> Changes in v1:
-> PMIC5 Gen2 ADC_TM is supported on PMIC7 chips and is a close
-> counterpart of PMIC7 ADC. It has the same functionality as
-> PMIC5 ADC_TM, to support generating interrupts on ADC value
-> crossing upper or lower thresholds for monitored channels.
+>  		ret = of_property_read_string(child_node, "xlnx,name", &name);
+> -		if (ret < 0)
+> +		if (ret < 0) {
+> +			of_node_put(child_node);
+>  			return ret;
+> +		}
 > 
-> Jishnu Prakash (4):
->   dt-bindings: thermal: qcom: add PMIC5 Gen2 ADC_TM bindings
->   iio: adc: qcom-vadc-common: add reverse scaling for PMIC5 Gen2 ADC_TM
->   thermal: qcom: Add support for multiple generations of devices
->   thermal: qcom: add support for PMIC5 Gen2 ADCTM
-> 
->  .../bindings/thermal/qcom-spmi-adc-tm5.yaml        | 110 ++++-
->  drivers/iio/adc/qcom-vadc-common.c                 |  11 +
->  drivers/thermal/qcom/qcom-spmi-adc-tm5.c           | 486 +++++++++++++++++++--
->  include/linux/iio/adc/qcom-vadc-common.h           |   2 +
->  4 files changed, 569 insertions(+), 40 deletions(-)
-> 
+>  		sysmon_channels[i].type = IIO_VOLTAGE;
+>  		sysmon_channels[i].indexed = 1;
 

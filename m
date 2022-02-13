@@ -2,36 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2E04B39FA
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 08:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A881A4B3A0B
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 08:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234212AbiBMHlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 02:41:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54114 "EHLO
+        id S234309AbiBMHw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 02:52:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234062AbiBMHlv (ORCPT
+        with ESMTP id S234287AbiBMHw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 02:41:51 -0500
+        Sun, 13 Feb 2022 02:52:57 -0500
 Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6613033B
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 23:41:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE785E74F
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 23:52:52 -0800 (PST)
 Received: from pop-os.home ([90.126.236.122])
         by smtp.orange.fr with ESMTPA
-        id J9VsnUjWKSDrIJ9VtnIP2o; Sun, 13 Feb 2022 08:41:42 +0100
+        id J9ggnUnHkSDrIJ9ggnIPy2; Sun, 13 Feb 2022 08:52:51 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 13 Feb 2022 08:41:42 +0100
+X-ME-Date: Sun, 13 Feb 2022 08:52:51 +0100
 X-ME-IP: 90.126.236.122
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>
+To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
-Subject: [PATCH] backlight: backlight: Slighly simplify devm_of_find_backlight()
-Date:   Sun, 13 Feb 2022 08:41:39 +0100
-Message-Id: <f998a4291d865273afa0d1f85764a9ac7fbc1b64.1644738084.git.christophe.jaillet@wanadoo.fr>
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH] tda9950: Slightly simplify tda9950_devm_glue_init()
+Date:   Sun, 13 Feb 2022 08:52:49 +0100
+Message-Id: <8e8ce53c113547beb314d332cfdedbf05a2d7506.1644738725.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -44,48 +42,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use devm_add_action_or_reset() instead of devm_add_action()+hand writing
-what is done in the release function, should an error occur.
-
+Use devm_add_action_or_reset() instead of hand writing it.
 This is more straightforward and saves a few lines of code.
-
-While at it, remove a useless test in devm_backlight_release(). 'data' is
-known to be not NULL when this function is called.
 
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/video/backlight/backlight.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/i2c/tda9950.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/video/backlight/backlight.c b/drivers/video/backlight/backlight.c
-index 4ae6fae94ac2..b788ff3d0f45 100644
---- a/drivers/video/backlight/backlight.c
-+++ b/drivers/video/backlight/backlight.c
-@@ -710,8 +710,7 @@ static void devm_backlight_release(void *data)
- {
- 	struct backlight_device *bd = data;
+diff --git a/drivers/gpu/drm/i2c/tda9950.c b/drivers/gpu/drm/i2c/tda9950.c
+index 5b03fdd1eaa4..526774594510 100644
+--- a/drivers/gpu/drm/i2c/tda9950.c
++++ b/drivers/gpu/drm/i2c/tda9950.c
+@@ -361,9 +361,7 @@ static int tda9950_devm_glue_init(struct device *dev, struct tda9950_glue *glue)
+ 			return ret;
+ 	}
  
--	if (bd)
--		put_device(&bd->dev);
-+	put_device(&bd->dev);
- }
+-	ret = devm_add_action(dev, tda9950_devm_glue_exit, glue);
+-	if (ret)
+-		tda9950_devm_glue_exit(glue);
++	ret = devm_add_action_or_reset(dev, tda9950_devm_glue_exit, glue);
  
- /**
-@@ -737,11 +736,10 @@ struct backlight_device *devm_of_find_backlight(struct device *dev)
- 	bd = of_find_backlight(dev);
- 	if (IS_ERR_OR_NULL(bd))
- 		return bd;
--	ret = devm_add_action(dev, devm_backlight_release, bd);
--	if (ret) {
--		put_device(&bd->dev);
-+	ret = devm_add_action_or_reset(dev, devm_backlight_release, bd);
-+	if (ret)
- 		return ERR_PTR(ret);
--	}
-+
- 	return bd;
+ 	return ret;
  }
- EXPORT_SYMBOL(devm_of_find_backlight);
 -- 
 2.32.0
 

@@ -2,95 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 797694B3B33
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 12:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DEE64B3B35
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 12:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235822AbiBMLzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 06:55:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58428 "EHLO
+        id S235831AbiBML5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 06:57:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235745AbiBMLzF (ORCPT
+        with ESMTP id S235745AbiBML46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 06:55:05 -0500
-Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985E15B8A2
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 03:54:59 -0800 (PST)
-Received: from pop-os.home ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id JDSznPi4gHZHJJDSznOoWw; Sun, 13 Feb 2022 12:54:58 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 13 Feb 2022 12:54:58 +0100
-X-ME-IP: 90.126.236.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH] power: supply: max14656: Use devm_work_autocancel()
-Date:   Sun, 13 Feb 2022 12:54:56 +0100
-Message-Id: <e73d025d989444354d3e9a4c44feb806653424dd.1644753283.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Sun, 13 Feb 2022 06:56:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5C05B8AC;
+        Sun, 13 Feb 2022 03:56:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33E1EB80AE8;
+        Sun, 13 Feb 2022 11:56:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 050D6C004E1;
+        Sun, 13 Feb 2022 11:56:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644753410;
+        bh=uMBE7nklEtwOQeHfA15TM5pA68TW4OU2vBGHyA6pUu0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SmWWtNpkrLLRbe7yla5PPtHw9zKbtmS4IWI5sKgY6ECuFnr+MV+uEUyIJr9oBtnM1
+         fdeuwQ2U8r6anWKEyF3X/P00YjypfaRPn0+abN3i8tAo5fYE7+J2wzI8NmoGdq1A8+
+         DCagidpp6GYBOhf8G1PFEkZX7VMpM1mmT4G01xTrpwU7DnaMEjzlPCcDMzZ7RXmBE/
+         Fy44UnbavzBbgj3ZkQldpcvyHI/8LZyRt7PuFJerKN2sWNnfgT3+eRVsyw+gWq4sQm
+         ajPz+dAr+kiZZg6/cxrSFhPJQjsz5DIAsHlazTAlkcbUoEtOruJOnoMRb4W7eEYR+e
+         ryn7/G7gp0jgw==
+Date:   Sun, 13 Feb 2022 13:56:45 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     =?iso-8859-1?Q?H=E5kon?= Bugge <haakon.bugge@oracle.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH for-rc v2] IB/cma: Allow XRG INI QPs to set their local
+ ACK timeout
+Message-ID: <Ygjx/XokZw/ZMDuT@unreal>
+References: <1644421175-31943-1-git-send-email-haakon.bugge@oracle.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <1644421175-31943-1-git-send-email-haakon.bugge@oracle.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use devm_delayed_work_autocancel() instead of hand writing it.
-It saves a few lines of code.
+On Wed, Feb 09, 2022 at 04:39:35PM +0100, Håkon Bugge wrote:
+> XRC INI QPs should be able to adjust their local ACK timeout.
+> 
+> Fixes: 2c1619edef61 ("IB/cma: Define option to set ack timeout and pack tos_set")
+> Signed-off-by: Håkon Bugge <haakon.bugge@oracle.com>
+> Suggested-by: Avneesh Pant <avneesh.pant@oracle.com>
+> 
+> ---
+> 
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/power/supply/max14656_charger_detector.c | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/power/supply/max14656_charger_detector.c b/drivers/power/supply/max14656_charger_detector.c
-index 3f49b29f3c88..fc36828895bf 100644
---- a/drivers/power/supply/max14656_charger_detector.c
-+++ b/drivers/power/supply/max14656_charger_detector.c
-@@ -18,6 +18,7 @@
- #include <linux/of_device.h>
- #include <linux/workqueue.h>
- #include <linux/power_supply.h>
-+#include <linux/devm-helpers.h>
- 
- #define MAX14656_MANUFACTURER	"Maxim Integrated"
- #define MAX14656_NAME		"max14656"
-@@ -233,14 +234,6 @@ static enum power_supply_property max14656_battery_props[] = {
- 	POWER_SUPPLY_PROP_MANUFACTURER,
- };
- 
--static void stop_irq_work(void *data)
--{
--	struct max14656_chip *chip = data;
--
--	cancel_delayed_work_sync(&chip->irq_work);
--}
--
--
- static int max14656_probe(struct i2c_client *client,
- 			  const struct i2c_device_id *id)
- {
-@@ -286,10 +279,10 @@ static int max14656_probe(struct i2c_client *client,
- 		return -EINVAL;
- 	}
- 
--	INIT_DELAYED_WORK(&chip->irq_work, max14656_irq_worker);
--	ret = devm_add_action(dev, stop_irq_work, chip);
-+	ret = devm_delayed_work_autocancel(dev, &chip->irq_work,
-+					   max14656_irq_worker);
- 	if (ret) {
--		dev_err(dev, "devm_add_action %d failed\n", ret);
-+		dev_err(dev, "devm_delayed_work_autocancel %d failed\n", ret);
- 		return ret;
- 	}
- 
--- 
-2.32.0
-
+Thanks,
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>

@@ -2,87 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F77F4B3B90
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 14:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B1A4B3B93
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 14:32:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236283AbiBMNZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 08:25:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41300 "EHLO
+        id S236292AbiBMNc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 08:32:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbiBMNZS (ORCPT
+        with ESMTP id S230046AbiBMNc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 08:25:18 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657EA5EDDD;
-        Sun, 13 Feb 2022 05:25:13 -0800 (PST)
-Date:   Sun, 13 Feb 2022 13:25:08 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644758709;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=v7/pIjh0RL7n91EArZbPWWMW4/WSrDHP+MZcRXDIJgU=;
-        b=bPRxmL3S3Hl9FPOTw82dro4xvD1Z1v/mh6IVojdt/MENOV1g8V4Vul0Z5N3Q0uyTFt9+pz
-        Zri3ZHjKrb+V26OHQWxxT27u/ytZU6OD64uCieBqV8TaO9DYKFSkrQpYFXu2j/WM21PSPT
-        gkN101x/6U3UIa44rZiibCjPoxqub0kMlcN3f3v330j3kZtHGa0Qd17hEDmlAye9GSLj+B
-        lp3lrEcvD/FsHYLS/N3EeK20fKKGkvCYtghUYuEMK3anikbZW4DYqCYW1oPAiCQMeHl0HD
-        K0YuSdzzsODiosO6jGRwBefBGdhIZBUd3DEhQoKRQH7bsUmKYny1HHIpBoyF4g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644758709;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=v7/pIjh0RL7n91EArZbPWWMW4/WSrDHP+MZcRXDIJgU=;
-        b=2hKJTg8p6FWbo10OVCAMFl0iwfuwi776HGO66QBPMlq+phDEeI6N0nzssi9wVdRNrq53YT
-        +AbGWqDaoHGiCNBQ==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/urgent] Merge tag 'irqchip-fixes-5.17-2' of
- git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into
- irq/urgent
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <20220211110038.1179155-1-maz@kernel.org>
-References: <20220211110038.1179155-1-maz@kernel.org>
+        Sun, 13 Feb 2022 08:32:26 -0500
+Received: from forward100p.mail.yandex.net (forward100p.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0055EDED
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 05:32:19 -0800 (PST)
+Received: from forward101q.mail.yandex.net (forward101q.mail.yandex.net [IPv6:2a02:6b8:c0e:4b:0:640:4012:bb98])
+        by forward100p.mail.yandex.net (Yandex) with ESMTP id 480ED4F08177;
+        Sun, 13 Feb 2022 16:32:13 +0300 (MSK)
+Received: from vla1-25221a47e1d2.qloud-c.yandex.net (vla1-25221a47e1d2.qloud-c.yandex.net [IPv6:2a02:6b8:c0d:3c06:0:640:2522:1a47])
+        by forward101q.mail.yandex.net (Yandex) with ESMTP id 4305513E80002;
+        Sun, 13 Feb 2022 16:32:13 +0300 (MSK)
+Received: from vla5-047c0c0d12a6.qloud-c.yandex.net (vla5-047c0c0d12a6.qloud-c.yandex.net [2a02:6b8:c18:3484:0:640:47c:c0d])
+        by vla1-25221a47e1d2.qloud-c.yandex.net (mxback/Yandex) with ESMTP id iarXuVZ1oX-WCd0hlAt;
+        Sun, 13 Feb 2022 16:32:13 +0300
+X-Yandex-Fwd: 2
+Authentication-Results: vla1-25221a47e1d2.qloud-c.yandex.net; dkim=pass
+Received: by vla5-047c0c0d12a6.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id lKwSmfPfvd-WAIGJwTH;
+        Sun, 13 Feb 2022 16:32:11 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+From:   Yaroslav Bolyukin <iam@lach.pw>
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Yaroslav Bolyukin <iam@lach.pw>
+Subject: [PATCH 1/2] edid: parse DRM VESA dsc bpp target
+Date:   Sun, 13 Feb 2022 16:31:27 +0300
+Message-Id: <20220213133128.5833-1-iam@lach.pw>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Message-ID: <164475870802.16921.7505879140824625645.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/urgent branch of tip:
+As per DisplayID v2.0 Errata E9 spec
 
-Commit-ID:     1e34064b60552616b2767d22f2e6f440ced09acb
-Gitweb:        https://git.kernel.org/tip/1e34064b60552616b2767d22f2e6f440ced09acb
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Sun, 13 Feb 2022 14:16:23 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Sun, 13 Feb 2022 14:16:23 +01:00
-
-Merge tag 'irqchip-fixes-5.17-2' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/urgent
-
-Pull irqchip fixes from Marc Zyngier:
-
- - Don't register a hotplug notifier on GICv3 systems that advertise
-   LPI support, but have no ITS to make use of it
-
- - Add missing DT matching for the thead,c900-plic variant of the
-   SiFive PLIC
-
-Link: https://lore.kernel.org/r/20220211110038.1179155-1-maz@kernel.org
+Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
 ---
+ drivers/gpu/drm/drm_edid.c  | 31 ++++++++++++++++++++-----------
+ include/drm/drm_connector.h |  6 ++++++
+ include/drm/drm_displayid.h |  4 ++++
+ 3 files changed, 30 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+index a7663f9a1..83ee685c8 100644
+--- a/drivers/gpu/drm/drm_edid.c
++++ b/drivers/gpu/drm/drm_edid.c
+@@ -5270,7 +5270,7 @@ static void drm_parse_vesa_mso_data(struct drm_connector *connector,
+ 	if (oui(vesa->oui[0], vesa->oui[1], vesa->oui[2]) != VESA_IEEE_OUI)
+ 		return;
+ 
+-	if (sizeof(*vesa) != sizeof(*block) + block->num_bytes) {
++	if (block->num_bytes < 5) {
+ 		drm_dbg_kms(connector->dev, "Unexpected VESA vendor block size\n");
+ 		return;
+ 	}
+@@ -5290,20 +5290,29 @@ static void drm_parse_vesa_mso_data(struct drm_connector *connector,
+ 		break;
+ 	}
+ 
+-	if (!info->mso_stream_count) {
+-		info->mso_pixel_overlap = 0;
+-		return;
++	info->mso_pixel_overlap = 0;
++
++	if (info->mso_stream_count) {
++		info->mso_pixel_overlap = FIELD_GET(DISPLAYID_VESA_MSO_OVERLAP, vesa->mso);
++		if (info->mso_pixel_overlap > 8) {
++			drm_dbg_kms(connector->dev, "Reserved MSO pixel overlap value %u\n",
++				info->mso_pixel_overlap);
++			info->mso_pixel_overlap = 8;
++		}
++
++		drm_dbg_kms(connector->dev, "MSO stream count %u, pixel overlap %u\n",
++			info->mso_stream_count, info->mso_pixel_overlap);
+ 	}
+ 
+-	info->mso_pixel_overlap = FIELD_GET(DISPLAYID_VESA_MSO_OVERLAP, vesa->mso);
+-	if (info->mso_pixel_overlap > 8) {
+-		drm_dbg_kms(connector->dev, "Reserved MSO pixel overlap value %u\n",
+-			    info->mso_pixel_overlap);
+-		info->mso_pixel_overlap = 8;
++	if (block->num_bytes < 7) {
++		/* DSC bpp is optional */
++		return;
+ 	}
+ 
+-	drm_dbg_kms(connector->dev, "MSO stream count %u, pixel overlap %u\n",
+-		    info->mso_stream_count, info->mso_pixel_overlap);
++	info->dp_dsc_bpp = FIELD_GET(DISPLAYID_VESA_DSC_BPP_INT, vesa->dsc_bpp_int) * 16 +
++		FIELD_GET(DISPLAYID_VESA_DSC_BPP_FRACT, vesa->dsc_bpp_fract);
++
++	drm_dbg_kms(connector->dev, "DSC bits per pixel %u\n", info->dp_dsc_bpp);
+ }
+ 
+ static void drm_update_mso(struct drm_connector *connector, const struct edid *edid)
+diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+index 5e36eb3df..04ef0e995 100644
+--- a/include/drm/drm_connector.h
++++ b/include/drm/drm_connector.h
+@@ -634,6 +634,12 @@ struct drm_display_info {
+ 	 * @mso_pixel_overlap: eDP MSO segment pixel overlap, 0-8 pixels.
+ 	 */
+ 	u8 mso_pixel_overlap;
++
++	/**
++	 * @dp_dsc_bpp: DP Display-Stream-Compression (DSC) timing's target
++	 * DST bits per pixel in 6.4 fixed point format. 0 means undefined
++	 */
++	u16 dp_dsc_bpp;
+ };
+ 
+ int drm_display_info_set_bus_formats(struct drm_display_info *info,
+diff --git a/include/drm/drm_displayid.h b/include/drm/drm_displayid.h
+index 7ffbd9f7b..1be6deddc 100644
+--- a/include/drm/drm_displayid.h
++++ b/include/drm/drm_displayid.h
+@@ -131,12 +131,16 @@ struct displayid_detailed_timing_block {
+ 
+ #define DISPLAYID_VESA_MSO_OVERLAP	GENMASK(3, 0)
+ #define DISPLAYID_VESA_MSO_MODE		GENMASK(6, 5)
++#define DISPLAYID_VESA_DSC_BPP_INT	GENMASK(5, 0)
++#define DISPLAYID_VESA_DSC_BPP_FRACT GENMASK(3, 0)
+ 
+ struct displayid_vesa_vendor_specific_block {
+ 	struct displayid_block base;
+ 	u8 oui[3];
+ 	u8 data_structure_type;
+ 	u8 mso;
++	u8 dsc_bpp_int;
++	u8 dsc_bpp_fract;
+ } __packed;
+ 
+ /* DisplayID iteration */
+
+base-commit: 1528038385c0a706aac9ac165eeb24044fef6825
+-- 
+2.35.1
+

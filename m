@@ -2,163 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C104B3D62
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 21:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A564B3D6A
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 21:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238180AbiBMUZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 15:25:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48494 "EHLO
+        id S238212AbiBMU3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 15:29:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbiBMUZf (ORCPT
+        with ESMTP id S230399AbiBMU3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 15:25:35 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095F0532E0;
-        Sun, 13 Feb 2022 12:25:27 -0800 (PST)
-Received: from g550jk.localnet (mobiledyn-62-240-134-32.mrsn.at [62.240.134.32])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id CE19FC6663;
-        Sun, 13 Feb 2022 20:25:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1644783926; bh=NfYs+/rE0OPemkL440C+e9FYw7oebJ3inMJW9g2wXzk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=J9mv8OQ/Khh5a/u3yqnEhp6twENlt97jjepo71bS9QBWwkOAIlJRyPQjBaM0FwECT
-         zNoB9+SapnTwqK/h+yoK87IoqS9Y4ein1Up0skUFQ00KUb/U9tjW3J8w86lGBoLT2s
-         cPGj2KsPda86p4a/wqDlHeCHZ/kyI9sJ+YiWOt0Q=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 13/15] arm64: dts: qcom: Add MSM8953+PM8953 device tree
-Date:   Sun, 13 Feb 2022 21:25:24 +0100
-Message-ID: <2497719.tdWV9SEqCh@g550jk>
-In-Reply-To: <YfhlCkb3XUvU8ae1@builder.lan>
-References: <20220112194118.178026-1-luca@z3ntu.xyz> <20220112194118.178026-14-luca@z3ntu.xyz> <YfhlCkb3XUvU8ae1@builder.lan>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Sun, 13 Feb 2022 15:29:00 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E16532F5;
+        Sun, 13 Feb 2022 12:28:52 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21DGvpxc003989;
+        Sun, 13 Feb 2022 20:28:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=1MtMvhERKW/mR9bZC4UCu+4spnnvFWcYpq73GFrmb5w=;
+ b=dRFeD2md5I9OM0pxrHE4+MlIe8UzD1Cbgog+67ZTsta2DkSbdn+j1ow8jP0TwwfNWu0i
+ lfz/cyigVO0RWbbM74k4ZnJjfVZ+xHf/9xvQAymLGFh8n3gtX6CCk8/H+ZaK42I2kH5W
+ sjM883Bhqvlozf4yIvwmq+fNMgy6jjOSFYstlgAyDBvMrdSOoWW3xXy/kKA7C3QwAqgR
+ 2j2m5HtEbUO0CK+Bhe8SJu5le/MnaxAVj858dG4Ssq6e4kTlhY1G3edx/TN/ez/7iorO
+ WkGHhcL3udaHCIz8XVAIQ3cKG6OMY/6f7Hl8t7dxbEHgYut/Y23lo/kSNFpu39JpRLwE Pw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e75ygamtx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 13 Feb 2022 20:28:09 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21DKIEUO013580;
+        Sun, 13 Feb 2022 20:28:08 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e75ygamt1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 13 Feb 2022 20:28:08 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21DKDajt011006;
+        Sun, 13 Feb 2022 20:28:05 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3e645j7uy1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 13 Feb 2022 20:28:05 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21DKRxw546989822
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 13 Feb 2022 20:27:59 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BE016A4054;
+        Sun, 13 Feb 2022 20:27:59 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 80025A405C;
+        Sun, 13 Feb 2022 20:27:55 +0000 (GMT)
+Received: from sig-9-65-82-84.ibm.com (unknown [9.65.82.84])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 13 Feb 2022 20:27:55 +0000 (GMT)
+Message-ID: <c769b62e02e48e2eb2d50de9db90773f5f0acb5f.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 0/6] KEXEC_SIG with appended signature
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Michal Suchanek <msuchanek@suse.de>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc:     kexec@lists.infradead.org, Philipp Rudo <prudo@redhat.com>,
+        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
+        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Frank van der Linden <fllinden@amazon.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Baoquan He <bhe@redhat.com>,
+        linux-security-module@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Nageswara R Sastry <rnsastry@linux.ibm.com>
+Date:   Sun, 13 Feb 2022 15:27:54 -0500
+In-Reply-To: <cover.1641900831.git.msuchanek@suse.de>
+References: <cover.1641900831.git.msuchanek@suse.de>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: h81vCzl0B_meTK0rXxaElr6QGEtQZSml
+X-Proofpoint-ORIG-GUID: ksDJJzpLGmh8Tui6cxfUTt-rjqhEgdf4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-13_08,2022-02-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ mlxscore=0 spamscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0
+ malwarescore=0 clxscore=1015 priorityscore=1501 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202130137
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+[Cc'ing  Nageswara R Sastry]
 
-On Montag, 31. J=E4nner 2022 23:39:06 CET Bjorn Andersson wrote:
-> On Wed 12 Jan 13:41 CST 2022, Luca Weiss wrote:
-> > From: Vladimir Lypak <vladimir.lypak@gmail.com>
-> >=20
-> > The combination MSM8953 + PM8953 is commonly used, so add a
-> > device tree where common power supplies etc. can be configured.
-> >=20
-> > Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
-> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->=20
-> I would prefer if we stick with the current scheme and just push this
-> into the device dts (or possibly some vendor-common dtsi if that's
-> applicable).
->=20
-> Simply just to follow what we do on other platforms.
+Hi Michal,
 
-Sure, will do in v2.
+On Tue, 2022-01-11 at 12:37 +0100, Michal Suchanek wrote:
+> Hello,
+> 
+> This is a refresh of the KEXEC_SIG series.
+> 
+> This adds KEXEC_SIG support on powerpc and deduplicates the code dealing
+> with appended signatures in the kernel.
 
->=20
->=20
-> PS. I see some patches has been applied, but as you resubmit this
-> series please split it per maintainer to make it obvious to each
-> maintainer that they should pick their part(s).
+tools/testing/selftests/kexec/test_kexec_file_load.sh probably needs to
+be updated to reflect the new Kconfig support.
 
-What do you mean by this? Send one series per maintainer? Or something else=
-?=20
+FYI, commit 65e38e32a959 ("selftests/kexec: Enable secureboot tests for
+PowerPC") recently was upstreamed.
 
-Currently when making the patches I don't really "care" about who maintains=
-=20
-what, my git send-email setup picks the relevant people for CC.
+-- 
+thanks,
 
-Sometimes there's also multiple maintainers/trees listed for one file, not =
-sure=20
-what to do there...=20
-
-Regards
-Luca
-
->=20
-> Thanks,
-> Bjorn
->=20
-> > ---
-> >=20
-> >  arch/arm64/boot/dts/qcom/msm8953-pm8953.dtsi | 50 ++++++++++++++++++++
-> >  1 file changed, 50 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/qcom/msm8953-pm8953.dtsi
-> >=20
-> > diff --git a/arch/arm64/boot/dts/qcom/msm8953-pm8953.dtsi
-> > b/arch/arm64/boot/dts/qcom/msm8953-pm8953.dtsi new file mode 100644
-> > index 000000000000..b5f20fc9488e
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/qcom/msm8953-pm8953.dtsi
-> > @@ -0,0 +1,50 @@
-> > +// SPDX-License-Identifier: BSD-3-Clause
-> > +/* Copyright (c) 2022, The Linux Foundation. All rights reserved. */
-> > +
-> > +#include "msm8953.dtsi"
-> > +#include "pm8953.dtsi"
-> > +
-> > +&hsusb_phy {
-> > +	vdd-supply =3D <&pm8953_l3>;
-> > +	vdda-pll-supply =3D <&pm8953_l7>;
-> > +	vdda-phy-dpdm-supply =3D <&pm8953_l13>;
-> > +};
-> > +
-> > +&sdhc_1 {
-> > +	vmmc-supply =3D <&pm8953_l8>;
-> > +	vqmmc-supply =3D <&pm8953_l5>;
-> > +};
-> > +
-> > +&sdhc_2 {
-> > +	vmmc-supply =3D <&pm8953_l11>;
-> > +	vqmmc-supply =3D <&pm8953_l12>;
-> > +};
-> > +
-> > +&rpm_requests {
-> > +	smd_rpm_regulators: pm8953-regulators {
-> > +		compatible =3D "qcom,rpm-pm8953-regulators";
-> > +
-> > +		pm8953_s1: s1 {};
-> > +		pm8953_s3: s3 {};
-> > +		pm8953_s4: s4 {};
-> > +
-> > +		pm8953_l1: l1 {};
-> > +		pm8953_l2: l2 {};
-> > +		pm8953_l3: l3 {};
-> > +		pm8953_l5: l5 {};
-> > +		pm8953_l6: l6 {};
-> > +		pm8953_l7: l7 {};
-> > +		pm8953_l8: l8 {};
-> > +		pm8953_l9: l9 {};
-> > +		pm8953_l10: l10 {};
-> > +		pm8953_l11: l11 {};
-> > +		pm8953_l12: l12 {};
-> > +		pm8953_l13: l13 {};
-> > +		pm8953_l15: l15 {};
-> > +		pm8953_l16: l16 {};
-> > +		pm8953_l17: l17 {};
-> > +		pm8953_l19: l19 {};
-> > +		pm8953_l22: l22 {};
-> > +		pm8953_l23: l23 {};
-> > +	};
-> > +};
-
-
-
+Mimi
 

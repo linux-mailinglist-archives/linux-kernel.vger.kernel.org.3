@@ -2,141 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A16D4B3B84
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 14:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F1E4B3B85
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 14:08:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236193AbiBMNGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 08:06:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35436 "EHLO
+        id S236205AbiBMNIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 08:08:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiBMNGn (ORCPT
+        with ESMTP id S229674AbiBMNIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 08:06:43 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61735B88E;
-        Sun, 13 Feb 2022 05:06:37 -0800 (PST)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21DAPOGv007992;
-        Sun, 13 Feb 2022 13:06:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=cQPiw2dyD8PgwyjWmIk8sBpF1FR7uPpYLP5WigSzu+0=;
- b=oi/0aktaJZz9GBmenntUm1blxvOZlDwfwkiFmHKZdAGwBSRZiU4J0+iC51ml9JhBJa64
- GTS7HfFh6QjxmhBcyaYKDTLoGg0aJTk/AXN4GsfCwp6mtB7o5n3Svd1MifVsLbegVFng
- f3RIrQ02HBrLlXjvIkKNoSFgnn5xSOeIs4W/jFiZzAiFNV0c47cZDXGHw21j7BvPjKCd
- R7sgx5WSEZxY+xXZtk71XX2s5YK4+B3374zwhBmBb2DD6eLlJ3ZlopabtVncTEwzTlg+
- qoQaEk1fkOgT2vhSuypr4LsqvFkx6AA84dKyZEHoNkSZAIi2+T7R2d3urbI1zMfz4O7e wA== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e6ueedjc0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 13 Feb 2022 13:06:08 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21DD3Ht9003084;
-        Sun, 13 Feb 2022 13:06:05 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06fra.de.ibm.com with ESMTP id 3e645j63u0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 13 Feb 2022 13:06:05 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21DD63VF39715094
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 13 Feb 2022 13:06:03 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 32020AE053;
-        Sun, 13 Feb 2022 13:06:03 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ACE5CAE051;
-        Sun, 13 Feb 2022 13:06:01 +0000 (GMT)
-Received: from sig-9-65-82-84.ibm.com (unknown [9.65.82.84])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun, 13 Feb 2022 13:06:01 +0000 (GMT)
-Message-ID: <537635732d9cbcc42bcf7be5ed932d284b03d39f.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: Calculate digest in ima_inode_hash() if not
- available
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, shuah@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kpsingh@kernel.org, Florent Revest <revest@chromium.org>
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Sun, 13 Feb 2022 08:06:01 -0500
-In-Reply-To: <20220211104828.4061334-1-roberto.sassu@huawei.com>
-References: <20220211104828.4061334-1-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 9yEoyiBIJvR4y7HasDH_lt1HNEe7aV9K
-X-Proofpoint-GUID: 9yEoyiBIJvR4y7HasDH_lt1HNEe7aV9K
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-13_04,2022-02-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 bulkscore=0 malwarescore=0 suspectscore=0 spamscore=0
- priorityscore=1501 clxscore=1011 adultscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202130089
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 13 Feb 2022 08:08:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965915B88F
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 05:08:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CB2661175
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 13:08:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72BC9C340F0
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 13:08:09 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="k6SFkzer"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644757687;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YoXlrtp1L0W5/yTU1Jd3iz8yL8+rzRT8N1JuVJxuCFU=;
+        b=k6SFkzerCHo8Hjv/GY8ebjjO6T07jkhn+wB+uKT36Z6xnHHkNewin+2kNIqxJprxO0ZKx3
+        WVtfOk9a4ToXbmbr8w2ejiwkaLNIu5fBXiT+GXKQIpwYaSP5GsKrFUms6Y2tdIP15DkVeM
+        riaFGpsxEuZuPygYogArKjAqVZUcW8g=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d4aefb45 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Sun, 13 Feb 2022 13:08:06 +0000 (UTC)
+Received: by mail-yb1-f181.google.com with SMTP id y6so38573158ybc.5
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 05:08:06 -0800 (PST)
+X-Gm-Message-State: AOAM531xWfcPB52q2Zc8mULCUQ6pXy6yzdLBrDDXQF/js3GO2pUSk8Px
+        ynWyHNivS+V1XXa/1kjKI16S5xbEMtwh5dc8Nm8=
+X-Google-Smtp-Source: ABdhPJxFJyCVUlnTE5hJ8VmgliIH1hKdPybHaOMY90F1WUZdEsOKjEzeRK6COoTZVCsU/TQmkos/4whFSgS1juInUhY=
+X-Received: by 2002:a25:dc14:: with SMTP id y20mr5308263ybe.115.1644757686332;
+ Sun, 13 Feb 2022 05:08:06 -0800 (PST)
+MIME-Version: 1.0
+References: <20220212122318.623435-1-Jason@zx2c4.com> <YgirSXcAxKyO9BhD@owl.dominikbrodowski.net>
+In-Reply-To: <YgirSXcAxKyO9BhD@owl.dominikbrodowski.net>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Sun, 13 Feb 2022 14:07:55 +0100
+X-Gmail-Original-Message-ID: <CAHmME9os8G7bmvksE3bWkzRF4OAg-BMZUzi6TX0odug4oLUvsg@mail.gmail.com>
+Message-ID: <CAHmME9os8G7bmvksE3bWkzRF4OAg-BMZUzi6TX0odug4oLUvsg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/10] random: re-group and re-document functions
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roberto,
+On Sun, Feb 13, 2022 at 7:57 AM Dominik Brodowski
+<linux@dominikbrodowski.net> wrote:
+>
+> thanks for your massive patchset. While some of it was a bit tedious and
+> repetetive to review, feel free to add my
 
-On Fri, 2022-02-11 at 11:48 +0100, Roberto Sassu wrote:
-> __ima_inode_hash() checks if a digest has been already calculated by
-> looking for the integrity_iint_cache structure associated to the passed
-> inode.
-> 
-> Users of ima_file_hash() and ima_inode_hash() (e.g. eBPF) might be
-> interested in obtaining the information without having to setup an IMA
-> policy so that the digest is always available at the time they call one of
-> those functions.
-> 
-> Open a new file descriptor in __ima_inode_hash(), so that this function
-> could invoke ima_collect_measurement() to calculate the digest if it is not
-> available. Still return -EOPNOTSUPP if the calculation failed.
-> 
-> Instead of opening a new file descriptor, the one from ima_file_hash()
-> could have been used. However, since ima_inode_hash() was created to obtain
-> the digest when the file descriptor is not available, it could benefit from
-> this change too. Also, the opened file descriptor might be not suitable for
-> use (file descriptor opened not for reading).
-> 
-> This change does not cause memory usage increase, due to using a temporary
-> integrity_iint_cache structure for the digest calculation, and due to
-> freeing the ima_digest_data structure inside integrity_iint_cache before
-> exiting from __ima_inode_hash().
-> 
-> Finally, update the test by removing ima_setup.sh (it is not necessary
-> anymore to set an IMA policy) and by directly executing /bin/true.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-
-Although this patch doesn't directly modify either ima_file_hash() or
-ima_inode_hash(),  this change affects both functions.  ima_file_hash()
-was introduced to be used with eBPF.  Based on Florent's post, changing
-the ima_file_hash() behavor seems fine.  Since I have no idea whether
-anyone is still using ima_inode_hash(), perhaps it would be safer to
-limit this behavior change to just ima_file_hash().
-
-Please update the ima_file_hash() doc.  While touching this area, I'd
-appreciate your fixing the first doc line in both ima_file_hash() and
-ima_inode_hash() cases, which wraps spanning two lines.
-
-Please split the IMA from the eBPF changes.
-
--- 
-thanks,
-
-Mimi
-
+Thank you very much for slogging through it and reviewing it! Much appreciated.

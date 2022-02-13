@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04514B3D94
+	by mail.lfdr.de (Postfix) with ESMTP id A4EC54B3D93
 	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 21:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238337AbiBMUun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 15:50:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55672 "EHLO
+        id S238310AbiBMUud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 15:50:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238209AbiBMUuX (ORCPT
+        with ESMTP id S238251AbiBMUuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 13 Feb 2022 15:50:23 -0500
 Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1680353715;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC2453717;
         Sun, 13 Feb 2022 12:50:16 -0800 (PST)
 X-isilmar-external: YES
 X-isilmar-external: YES
 X-isilmar-external: YES
 X-isilmar-external: YES
 Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
-        by isilmar-4.linta.de (Postfix) with ESMTPSA id 58AB9201335;
+        by isilmar-4.linta.de (Postfix) with ESMTPSA id 53E292012E6;
         Sun, 13 Feb 2022 20:50:15 +0000 (UTC)
 Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
-        id E59A5809A1; Sun, 13 Feb 2022 21:48:33 +0100 (CET)
+        id 8B45C80A0E; Sun, 13 Feb 2022 21:48:34 +0100 (CET)
 From:   Dominik Brodowski <linux@dominikbrodowski.net>
 To:     Herbert Xu <herbert@gondor.apana.org.au>
 Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
         "Jason A . Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 3/4] hw_random: use per-rng quality value instead of global setting
-Date:   Sun, 13 Feb 2022 21:46:30 +0100
-Message-Id: <20220213204631.354247-4-linux@dominikbrodowski.net>
+Subject: [PATCH 4/4] hw_random: introduce rng_quality sysfs attribute
+Date:   Sun, 13 Feb 2022 21:46:31 +0100
+Message-Id: <20220213204631.354247-5-linux@dominikbrodowski.net>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220213204631.354247-1-linux@dominikbrodowski.net>
 References: <20220213204631.354247-1-linux@dominikbrodowski.net>
@@ -45,115 +45,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current_quality variable exposed as a module parameter is
-fundamentally broken: If it is set at boot time, it is overwritten once
-the first hw rng device is loaded; if it is set at runtime, it is
-without effect if the hw rng device had its quality value set to 0 (and
-no default_quality was set); and if a new rng is selected, it gets
-overwritten. Therefore, mark it as obsolete, and replace it by the
-per-rng quality setting.
+The rng_quality sysfs attribute returns the quality setting for the
+currently active hw_random device, in entropy bits per 1024 bits of
+input. Storing a value between 0 and 1024 to this file updates this
+estimate accordingly.
+
+Based on the updates to the quality setting, the rngd kernel thread
+may be stopped (if no hw_random device is trusted to return entropy),
+may be started (if the quality setting is increased from zero), or
+may use a different hw_random source (if that has higher quality
+output).
 
 Cc: Herbert Xu <herbert@gondor.apana.org.au>
 Cc: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
 ---
- drivers/char/hw_random/core.c | 33 ++++++++++++++++++++-------------
- 1 file changed, 20 insertions(+), 13 deletions(-)
+ drivers/char/hw_random/core.c | 64 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 63 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/char/hw_random/core.c b/drivers/char/hw_random/core.c
-index 29febf55b0d4..8df102b39b35 100644
+index 8df102b39b35..71eafcc451e1 100644
 --- a/drivers/char/hw_random/core.c
 +++ b/drivers/char/hw_random/core.c
-@@ -44,14 +44,14 @@ static unsigned short default_quality; /* = 0; default to "off" */
+@@ -44,7 +44,7 @@ static unsigned short default_quality; /* = 0; default to "off" */
  
  module_param(current_quality, ushort, 0644);
  MODULE_PARM_DESC(current_quality,
--		 "current hwrng entropy estimation per 1024 bits of input");
-+		 "current hwrng entropy estimation per 1024 bits of input -- obsolete");
+-		 "current hwrng entropy estimation per 1024 bits of input -- obsolete");
++		 "current hwrng entropy estimation per 1024 bits of input -- obsolete, use rng_quality instead");
  module_param(default_quality, ushort, 0644);
  MODULE_PARM_DESC(default_quality,
  		 "default entropy content of hwrng per 1024 bits of input");
- 
- static void drop_current_rng(void);
- static int hwrng_init(struct hwrng *rng);
--static void hwrng_manage_rngd(void);
-+static void hwrng_manage_rngd(struct hwrng *rng);
- 
- static inline int rng_get_data(struct hwrng *rng, u8 *buffer, size_t size,
- 			       int wait);
-@@ -160,11 +160,13 @@ static int hwrng_init(struct hwrng *rng)
- 	reinit_completion(&rng->cleanup_done);
- 
- skip_init:
--	current_quality = rng->quality ? : default_quality;
--	if (current_quality > 1024)
--		current_quality = 1024;
-+	if (!rng->quality)
-+		rng->quality = default_quality;
-+	if (rng->quality > 1024)
-+		rng->quality = 1024;
-+	current_quality = rng->quality; /* obsolete */
- 
--	hwrng_manage_rngd();
-+	hwrng_manage_rngd(rng);
- 
- 	return 0;
- }
-@@ -429,19 +431,24 @@ static int hwrng_fillfn(void *unused)
- 	long rc;
- 
- 	while (!kthread_should_stop()) {
-+		unsigned short quality;
- 		struct hwrng *rng;
- 
--		if (!current_quality)
--			break;
--
- 		rng = get_current_rng();
- 		if (IS_ERR(rng) || !rng)
- 			break;
- 		mutex_lock(&reading_mutex);
- 		rc = rng_get_data(rng, rng_fillbuf,
- 				  rng_buffer_size(), 1);
-+		if (current_quality != rng->quality)
-+			rng->quality = current_quality; /* obsolete */
-+		quality = rng->quality;
- 		mutex_unlock(&reading_mutex);
- 		put_rng(rng);
-+
-+		if (!quality)
-+			break;
-+
- 		if (rc <= 0) {
- 			pr_warn("hwrng: no data available\n");
- 			msleep_interruptible(10000);
-@@ -451,7 +458,7 @@ static int hwrng_fillfn(void *unused)
- 		/* If we cannot credit at least one bit of entropy,
- 		 * keep track of the remainder for the next iteration
- 		 */
--		entropy = rc * current_quality * 8 + entropy_credit;
-+		entropy = rc * quality * 8 + entropy_credit;
- 		if ((entropy >> 10) == 0)
- 			entropy_credit = entropy;
- 
-@@ -463,14 +470,14 @@ static int hwrng_fillfn(void *unused)
- 	return 0;
+@@ -402,14 +402,76 @@ static ssize_t rng_selected_show(struct device *dev,
+ 	return sysfs_emit(buf, "%d\n", cur_rng_set_by_user);
  }
  
--static void hwrng_manage_rngd(void)
-+static void hwrng_manage_rngd(struct hwrng *rng)
- {
- 	if (WARN_ON(!mutex_is_locked(&rng_mutex)))
- 		return;
++static ssize_t rng_quality_show(struct device *dev,
++				struct device_attribute *attr,
++				char *buf)
++{
++	ssize_t ret;
++	struct hwrng *rng;
++
++	rng = get_current_rng();
++	if (IS_ERR(rng))
++		return PTR_ERR(rng);
++
++	if (!rng) /* no need to put_rng */
++		return -ENODEV;
++
++	ret = sysfs_emit(buf, "%hu\n", rng->quality);
++	put_rng(rng);
++
++	return ret;
++}
++
++static ssize_t rng_quality_store(struct device *dev,
++				 struct device_attribute *attr,
++				 const char *buf, size_t len)
++{
++	u16 quality;
++	int ret = -EINVAL;
++
++	if (len < 2)
++		return -EINVAL;
++
++	ret = mutex_lock_interruptible(&rng_mutex);
++	if (ret)
++		return -ERESTARTSYS;
++
++	ret = kstrtou16(buf, 0, &quality);
++	if (ret || quality > 1024) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	if (!current_rng) {
++		ret = -ENODEV;
++		goto out;
++	}
++
++	current_rng->quality = quality;
++	current_quality = quality; /* obsolete */
++
++	/* the best available RNG may have changed */
++	ret = enable_best_rng();
++
++	/* start/stop rngd if necessary */
++	if (current_rng)
++		hwrng_manage_rngd(current_rng);
++
++out:
++	mutex_unlock(&rng_mutex);
++	return ret ? ret : len;
++}
++
+ static DEVICE_ATTR_RW(rng_current);
+ static DEVICE_ATTR_RO(rng_available);
+ static DEVICE_ATTR_RO(rng_selected);
++static DEVICE_ATTR_RW(rng_quality);
  
--	if (current_quality == 0 && hwrng_fill)
-+	if (rng->quality == 0 && hwrng_fill)
- 		kthread_stop(hwrng_fill);
--	if (current_quality > 0 && !hwrng_fill) {
-+	if (rng->quality > 0 && !hwrng_fill) {
- 		hwrng_fill = kthread_run(hwrng_fillfn, NULL, "hwrng");
- 		if (IS_ERR(hwrng_fill)) {
- 			pr_err("hwrng_fill thread creation failed\n");
+ static struct attribute *rng_dev_attrs[] = {
+ 	&dev_attr_rng_current.attr,
+ 	&dev_attr_rng_available.attr,
+ 	&dev_attr_rng_selected.attr,
++	&dev_attr_rng_quality.attr,
+ 	NULL
+ };
+ 
 -- 
 2.35.1
 

@@ -2,109 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079074B3C51
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 17:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 072314B3C53
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 17:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237142AbiBMQyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 11:54:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48412 "EHLO
+        id S237148AbiBMQ6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 11:58:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233353AbiBMQyF (ORCPT
+        with ESMTP id S233353AbiBMQ6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 11:54:05 -0500
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54B75B8A2;
-        Sun, 13 Feb 2022 08:53:59 -0800 (PST)
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 21DGrZBa021369;
-        Mon, 14 Feb 2022 01:53:35 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 21DGrZBa021369
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1644771215;
-        bh=+Gu+J7mpzu4zj8D3U0/ldielOugTejawUk0SIIRLLo8=;
-        h=From:Date:Subject:To:Cc:From;
-        b=xMnKIGbWLKeLUCUerR4+DlAwnoaMGoV3P0UzSF+4QUW5/L0fQIzyErwWErGbZpj5V
-         o00syuK9O2DGGCifAWV/O5pfFbuz1VI6z+34H7bMwm9e24cwWxaBti6qPN8t9FPXUn
-         jV/L2bts0quBsIKMYF0b+Exwf3vCuG1yT+syDYWx1EjROs0mbl95+rhIrMnMLmd+6b
-         ONAYRAb8pE5mn4gKevpVknqprXgA6VpAyWFsrQXlCeDWozWZ5kPijMcjI9yDMtYpkN
-         uoLWWX/oD2DUZRrRccsU61udrOJfROg6iEbRmBqg7N/2Oe1Dgsfo/RiuQjwn/VuGxV
-         mMSVVDmD01QdQ==
-X-Nifty-SrcIP: [209.85.210.180]
-Received: by mail-pf1-f180.google.com with SMTP id z16so3317004pfh.3;
-        Sun, 13 Feb 2022 08:53:35 -0800 (PST)
-X-Gm-Message-State: AOAM531iWAm3lgii+yBUSVLibqUx/izJ3Cv8y9th9EqAUtOViZExC1TF
-        vMJib+3FE2snvQgaFOC7yJ6wsDgUu0s8Al7Rkbw=
-X-Google-Smtp-Source: ABdhPJwdHRdwc0VNZSrKWfiIqsTQQzypsaoaXI1wC1/d2WtS04xaCXFwbH3M3Y3hDdEGTmLtsCMeA2cTWuDqjmqeZEs=
-X-Received: by 2002:a63:9307:: with SMTP id b7mr8826126pge.616.1644771214741;
- Sun, 13 Feb 2022 08:53:34 -0800 (PST)
+        Sun, 13 Feb 2022 11:58:08 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D1D5BD0D
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 08:58:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644771482; x=1676307482;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/GzIbD2kSlhRbVFLjRw6uGU8gbmHMTIvRwqnOuixLUw=;
+  b=k7KElKMuypvRkxwSQ1zS5hRimf2Cm3uxn3/iLnPxM9CmmZV6SQNqRShP
+   mCnTT0+uVKjhpedju//1RRjjtOo7YRJn8QFSDscopbN7feSduLriHYgrn
+   NVD02ZtpbijpECKzLJn8Jrr1Ctmr+XTZ5fVqnhwQjAH4iqohdvEm4rPcz
+   IOrUJ/GXMW2miJichufA6S4EbqOinvYQxklAv4YLepBZ1q8y6alqQ/7Bu
+   hnP6DFXf/wjMwSlQ+jR0xnUgyK4KEUd5oYMXmBlJgItvL28e46jXg8ear
+   mAHEPEX/o5cTD6LzHWgxRqT10wpG4ccsHqf9uhCH6bnRQyrW9vplx/TaF
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10256"; a="310698839"
+X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
+   d="scan'208";a="310698839"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 08:58:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
+   d="scan'208";a="501329345"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 13 Feb 2022 08:58:01 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJICG-0007eh-Ef; Sun, 13 Feb 2022 16:58:00 +0000
+Date:   Mon, 14 Feb 2022 00:57:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: kernel/module_decompress.c:264:36: error: 'module_kset' undeclared;
+ did you mean 'module_use'?
+Message-ID: <202202140027.K0xZn3T2-lkp@intel.com>
 MIME-Version: 1.0
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 14 Feb 2022 01:53:00 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARgx5NDHT0RdLpogXRQadn8cZYw=D_kQ1jpC0ftJH1eyw@mail.gmail.com>
-Message-ID: <CAK7LNARgx5NDHT0RdLpogXRQadn8cZYw=D_kQ1jpC0ftJH1eyw@mail.gmail.com>
-Subject: [GIT PULL] Kbuild fixes for v5.17-rc4
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b81b1829e7e39f6cebdf6e4d5484eacbceda8554
+commit: b1ae6dc41eaaa98bb75671e0f3665bfda248c3e7 module: add in-kernel support for decompressing
+date:   5 weeks ago
+config: sparc-randconfig-r005-20220213 (https://download.01.org/0day-ci/archive/20220214/202202140027.K0xZn3T2-lkp@intel.com/config)
+compiler: sparc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b1ae6dc41eaaa98bb75671e0f3665bfda248c3e7
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b1ae6dc41eaaa98bb75671e0f3665bfda248c3e7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash
 
-Please pull Kbuild fixes.
-Thanks.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   kernel/module_decompress.c: In function 'module_decompress_sysfs_init':
+>> kernel/module_decompress.c:264:36: error: 'module_kset' undeclared (first use in this function); did you mean 'module_use'?
+     264 |         error = sysfs_create_file(&module_kset->kobj,
+         |                                    ^~~~~~~~~~~
+         |                                    module_use
+   kernel/module_decompress.c:264:36: note: each undeclared identifier is reported only once for each function it appears in
 
 
+vim +264 kernel/module_decompress.c
 
-The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
+   259	
+   260	static int __init module_decompress_sysfs_init(void)
+   261	{
+   262		int error;
+   263	
+ > 264		error = sysfs_create_file(&module_kset->kobj,
 
-  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-tags/kbuild-fixes-v5.17-2
-
-for you to fetch changes up to 1b9e740a81f91ae338b29ed70455719804957b80:
-
-  kconfig: fix failing to generate auto.conf (2022-02-12 23:24:19 +0900)
-
-----------------------------------------------------------------
- - Fix the truncated path issue for HAVE_GCC_PLUGINS test in Kconfig
-
- - Move -Wunsligned-access to W=1 builds to avoid sprinkling warnings for
-   the latest Clang
-
- - Fix missing fclose() in Kconfig
-
- - Fix Kconfig to touch dep headers correctly when KCONFIG_AUTOCONFIG is
-   overridden.
-
-----------------------------------------------------------------
-Brenda Streiff (1):
-      kconfig: let 'shell' return enough output for deep path names
-
-Jing Leng (1):
-      kconfig: fix failing to generate auto.conf
-
-Masahiro Yamada (1):
-      kconfig: fix missing fclose() on error paths
-
-Nathan Chancellor (1):
-      Makefile.extrawarn: Move -Wunaligned-access to W=1
-
- scripts/Makefile.extrawarn   |  1 +
- scripts/kconfig/confdata.c   | 25 +++++++++++++++----------
- scripts/kconfig/preprocess.c |  2 +-
- 3 files changed, 17 insertions(+), 11 deletions(-)
-
--- 
-Best Regards
-Masahiro Yamada
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9404B3BBA
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 15:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E754B3BC1
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 15:17:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236499AbiBMORR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 09:17:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37922 "EHLO
+        id S236550AbiBMOR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 09:17:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236433AbiBMORG (ORCPT
+        with ESMTP id S236436AbiBMORH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 09:17:06 -0500
+        Sun, 13 Feb 2022 09:17:07 -0500
 Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0139B5F267;
-        Sun, 13 Feb 2022 06:16:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48CE15F273;
+        Sun, 13 Feb 2022 06:17:01 -0800 (PST)
 HMM_SOURCE_IP: 10.64.8.41:34274.536114013
 HMM_ATTACHE_NUM: 0000
 HMM_SOURCE_TYPE: SMTP
 Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 47B09100248;
-        Sun, 13 Feb 2022 22:16:57 +0800 (CST)
+        by 189.cn (HERMES) with SMTP id B794C1002A9;
+        Sun, 13 Feb 2022 22:16:59 +0800 (CST)
 Received: from  ([114.242.206.180])
-        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 84b9622b98e3492ca64a02f2f5fd1ef5 for mripard@kernel.org;
-        Sun, 13 Feb 2022 22:16:59 CST
-X-Transaction-ID: 84b9622b98e3492ca64a02f2f5fd1ef5
+        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 67c89f58c17742bd885dfd916ed98549 for mripard@kernel.org;
+        Sun, 13 Feb 2022 22:17:00 CST
+X-Transaction-ID: 67c89f58c17742bd885dfd916ed98549
 X-Real-From: 15330273260@189.cn
 X-Receive-IP: 114.242.206.180
 X-MEDUSA-Status: 0
@@ -52,9 +52,9 @@ To:     Maxime Ripard <mripard@kernel.org>,
         suijingfeng <suijingfeng@loongson.cn>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH v7 3/7] MIPS: Loongson: introduce dts for ls3A4000 evaluation board
-Date:   Sun, 13 Feb 2022 22:16:45 +0800
-Message-Id: <20220213141649.1115987-4-15330273260@189.cn>
+Subject: [PATCH v7 4/7] MIPS: Loongson: introduce dts for lemote A1901 3a4000 motherboard
+Date:   Sun, 13 Feb 2022 22:16:46 +0800
+Message-Id: <20220213141649.1115987-5-15330273260@189.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220213141649.1115987-1-15330273260@189.cn>
 References: <20220213141649.1115987-1-15330273260@189.cn>
@@ -72,9 +72,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: suijingfeng <suijingfeng@loongson.cn>
 
-This board has a VGA output and a DVI output, the VGA is connected to
-the DVO0 of the display controller and the DVI is connected to DVO1 of
-the display controller.
+This board has only one VGA output which is connected to DVO1 of
+the display controller. More details about this motherboard can be
+read from [1].
 
     +------+            +-----------------------------------+
     | DDR4 |            |  +-------------------+            |
@@ -86,23 +86,29 @@ the display controller.
   +----------+          | +--------+  +-+--+-+    +---------+   +------+
        || MC1           +---------------|--|----------------+
     +------+                            |  |
-    | DDR4 |          +-------+   DVO0  |  |  DVO1   +------+
-    +------+   VGA <--|ADV7125|<--------+  +-------->|TFP410|--> DVI/HDMI
-                      +-------+                      +------+
+    | DDR4 |       DVO0 is not get used |  |  DVO1   +-------+
+    +------+       <--------------------+  +-------->|ADV7125|---> VGA
+                                                     +-------+
+
+Note, LEMOTE corporation is one of the downstream board manufacturer of
+LOONGSON. The model property can be used to tell the kernel board specific
+information.
+
+[1] https://wiki.godson.ac.cn/device:lemote_a1901
 
 Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
 Signed-off-by: Sui Jingfeng <15330273260@189.cn>
 ---
- .../boot/dts/loongson/ls3a4000_7a1000_evb.dts | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 arch/mips/boot/dts/loongson/ls3a4000_7a1000_evb.dts
+ arch/mips/boot/dts/loongson/lemote_a1901.dts | 59 ++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+ create mode 100644 arch/mips/boot/dts/loongson/lemote_a1901.dts
 
-diff --git a/arch/mips/boot/dts/loongson/ls3a4000_7a1000_evb.dts b/arch/mips/boot/dts/loongson/ls3a4000_7a1000_evb.dts
+diff --git a/arch/mips/boot/dts/loongson/lemote_a1901.dts b/arch/mips/boot/dts/loongson/lemote_a1901.dts
 new file mode 100644
-index 000000000000..38abe8249e05
+index 000000000000..ca57c27ad845
 --- /dev/null
-+++ b/arch/mips/boot/dts/loongson/ls3a4000_7a1000_evb.dts
-@@ -0,0 +1,61 @@
++++ b/arch/mips/boot/dts/loongson/lemote_a1901.dts
+@@ -0,0 +1,59 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
 +/dts-v1/;
@@ -111,7 +117,7 @@ index 000000000000..38abe8249e05
 +#include "ls7a-pch.dtsi"
 +
 +/ {
-+	model = "LS3A4000_7A1000_EVB_BOARD_V1_4";
++	model = "LX-6901";
 +};
 +
 +&package0 {
@@ -153,14 +159,12 @@ index 000000000000..38abe8249e05
 +
 +	dvo0: dvo@0 {
 +		reg = <0>;
-+		connector = "vga-connector";
-+		status = "okay";
++		status = "disabled";
 +	};
 +
 +	dvo1: dvo@1 {
 +		reg = <1>;
-+		connector = "dvi-connector";
-+		digital;
++		connector = "vga-connector";
 +		status = "okay";
 +	};
 +};

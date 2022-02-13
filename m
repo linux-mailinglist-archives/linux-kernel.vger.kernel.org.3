@@ -2,104 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 478A94B3CB3
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 19:02:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFCE34B3CB8
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 19:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237636AbiBMSCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 13:02:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54298 "EHLO
+        id S237667AbiBMSD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 13:03:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234146AbiBMSCr (ORCPT
+        with ESMTP id S237654AbiBMSD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 13:02:47 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D5B180
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 10:02:41 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id i34so26388624lfv.2
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 10:02:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OQb5jjxot49LgjHmzyBNQHYR8MDQIKcC739RRM0sxGo=;
-        b=KcO5BamHYhDQz3M13BlgPvwIoCJe5swOLMwBli5+LeHH3/CwzONlqZGEUhJdQq/7bC
-         2s+zyJzA5gSp4H7n/wB2ixfooqW/3fbW53CfVMOO1A0/H2BIKLGTTyiaEHZXY0NE17ZF
-         zr69ZACjRis5ga0XY6pe7YzI+jBPXwFyliKOs=
+        Sun, 13 Feb 2022 13:03:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F3FA5C34D
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 10:03:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644775430;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MzMGv99OCi8+2Db1ZNZFSg9ybIYsKPglxX6rxpaRY6Y=;
+        b=XIncsxXzvZ2aQfZK9acvXzIcOfcnC7bSdazE/8dsYtoy3PuI07QrO2WURRMGmmBv5BjrN3
+        Txm5z05RCxqWYtouyDizwN8mpU8BcJ9P6QM0ilTbvleNOiKnKFl958w3eXgqql9j7SsDVN
+        ZE4uR5+Ipf/3EHGSPBKQMIn+eYGUIz8=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-362-ilgTA_fTPIGeYbW6kFz4_g-1; Sun, 13 Feb 2022 13:03:49 -0500
+X-MC-Unique: ilgTA_fTPIGeYbW6kFz4_g-1
+Received: by mail-lj1-f197.google.com with SMTP id m13-20020a2e97cd000000b0023e09d49ce4so4910896ljj.6
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 10:03:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OQb5jjxot49LgjHmzyBNQHYR8MDQIKcC739RRM0sxGo=;
-        b=bAlaPe50Evk1dxQDmf0mIhmc7gE6CLpNlGjQpk096LtJKap1f2xPK2DloyPfr0deQe
-         DgGNZwiS7LV7Fst9x3dDbVCjaXCzrHYXrfVI8ZtYuzkVk61H65bxeXCKT9GueK8tL6fy
-         M0PokWSoFgBlMyVOfa7LGcrty6mOF3Xq1a8UspaHuATRDMXrwy7XMJoQ1g66hFdXy3FN
-         RIgPa6DuJFBUwq7uXr4V/zntGKKnPKFgUMBAqsuZSXTcljZd89fdd0/srhuQ/zpMv7hY
-         VubmYjLUlqPHVu6IGklQMTTqoqm/elI1izotoaGWFAGr/j8LA5KMFtczHKRsqirPBQor
-         lUig==
-X-Gm-Message-State: AOAM531bd+ZgVGjj3kr/0yrW9+i11LPVrSJwTA5N4NMoRmzY7rxlNjcM
-        fJ6/JIoBL9Uf12jDGFgfyYV9cHqBJ/FDN/qP
-X-Google-Smtp-Source: ABdhPJye+e6LNwym+97li1TtZ4tOuaSd33zvW2Q7box3709Z9KFmbPaYNHBXmT2Ikx68eQ4eXaDEXA==
-X-Received: by 2002:a05:6512:3b91:: with SMTP id g17mr8482504lfv.79.1644775359926;
-        Sun, 13 Feb 2022 10:02:39 -0800 (PST)
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
-        by smtp.gmail.com with ESMTPSA id b9sm3818385lfb.222.2022.02.13.10.02.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Feb 2022 10:02:39 -0800 (PST)
-Received: by mail-lj1-f177.google.com with SMTP id be32so839438ljb.7
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 10:02:39 -0800 (PST)
-X-Received: by 2002:a2e:8081:: with SMTP id i1mr6885582ljg.506.1644775358861;
- Sun, 13 Feb 2022 10:02:38 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=MzMGv99OCi8+2Db1ZNZFSg9ybIYsKPglxX6rxpaRY6Y=;
+        b=J83vtPjZMGVJOBVTEjbrBv21Q9Fxb+Yq9mycpzrkLE8xHdmnRl6pyamEfifN9cPXk0
+         ZOk+pRUtQPskOhyznKpUUk+0qm+16N9KiUqRJfDGBvT/bixsCLOvMyl1U0VNdWNrAL/0
+         YXN5Hbc0F1Sh6JZF5glNYcl49jbXOtSiem1ZpmOWwMlCxw2M/QkERE/8pZZo7Dk9dcrl
+         Gubtnr59aJO9qaRLje2UVzI3hzCgskBj7NdPXtgSLN49+OiUZZhV2t6BSzRaKeCcSlmY
+         GcuHDtt0QFomQeHG1izt80Z0vC+BNcRcgK058Rh1GF2Dn6B+80uXzpMT2dsEEDmDd9p5
+         RKWQ==
+X-Gm-Message-State: AOAM533MXJrtJ/po9mv7TqCuJONHMkDIwyfv6ABlNSykBEurtqV7BOXm
+        0aD9bd3oCvF7WgVelntvNni4jw5GhGMDaJQxjTYn1aCOMvgmt1fC5+5qzUjDrkd/akGhYMOXOrM
+        6yVo+1AaUp2Uv++CYi9383xr8mr2cbUk2mSzfoY4=
+X-Received: by 2002:a05:6512:1032:: with SMTP id r18mr8185989lfr.678.1644775427511;
+        Sun, 13 Feb 2022 10:03:47 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwes2q5xf22MJdPcoboBes53363gO606y9zz8jO7gp+BzN+lD6OSPykVWJAaQM7JqN5TGO7fgvFg8JwEeveI28=
+X-Received: by 2002:a05:6512:1032:: with SMTP id r18mr8185979lfr.678.1644775427325;
+ Sun, 13 Feb 2022 10:03:47 -0800 (PST)
 MIME-Version: 1.0
-References: <Ygj7feK+vdtPw6zj@zn.tnic>
-In-Reply-To: <Ygj7feK+vdtPw6zj@zn.tnic>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 13 Feb 2022 10:02:22 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiHUWHHcPLCvyXQKf2wbL3L1SOQSGVuCdf-py6QZGnuqQ@mail.gmail.com>
-Message-ID: <CAHk-=wiHUWHHcPLCvyXQKf2wbL3L1SOQSGVuCdf-py6QZGnuqQ@mail.gmail.com>
-Subject: Re: [GIT PULL] sched/urgent for 5.17-rc4
-To:     Borislav Petkov <bp@suse.de>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+References: <20220209171118.3269581-1-atomlin@redhat.com> <20220209171118.3269581-3-atomlin@redhat.com>
+ <14a1678f-0c56-1237-c5c7-4ca1bac4b42a@csgroup.eu>
+In-Reply-To: <14a1678f-0c56-1237-c5c7-4ca1bac4b42a@csgroup.eu>
+From:   Aaron Tomlin <atomlin@redhat.com>
+Date:   Sun, 13 Feb 2022 18:03:36 +0000
+Message-ID: <CANfR36gVY+1k7YJy0fn1z+mGv-LqEmZJSvSHXn_BFR4WC+oJrQ@mail.gmail.com>
+Subject: Re: [PATCH v5 13/13] module: Move version support into a separate file
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "cl@linux.com" <cl@linux.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "atomlin@atomlin.com" <atomlin@atomlin.com>,
+        "ghalat@redhat.com" <ghalat@redhat.com>,
+        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
+        "void@manifault.com" <void@manifault.com>,
+        "joe@perches.com" <joe@perches.com>,
+        "msuchanek@suse.de" <msuchanek@suse.de>,
+        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 13, 2022 at 4:37 AM Borislav Petkov <bp@suse.de> wrote:
+On Thu 2022-02-10 14:28 +0000, Christophe Leroy wrote:
 >
-> Tadeusz Struk (1):
->       sched/fair: Fix fault in reweight_entity
+>
+> Le 09/02/2022 =C3=A0 18:11, Aaron Tomlin a =C3=A9crit :
+> > No functional change.
+> >
+> > This patch migrates module version support out of core code into
+> > kernel/module/version.c. In addition simple code refactoring to
+> > make this possible.
+> >
+> > Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+> > ---
+> >   kernel/module/Makefile   |   1 +
+> >   kernel/module/internal.h |  50 +++++++++++++
+> >   kernel/module/main.c     | 150 +-------------------------------------=
+-
+> >   kernel/module/version.c  | 110 ++++++++++++++++++++++++++++
+> >   4 files changed, 163 insertions(+), 148 deletions(-)
+> >   create mode 100644 kernel/module/version.c
+>
+> Sparse reports:
+>
+>    CHECK   kernel/module/version.c
+> kernel/module/version.c:103:6: warning: symbol 'module_layout' was not
+> declared. Should it be static?
 
-I've pulled this, but this really smells bad to me.
+The function module_layout() does not appear to be used. So, I've decided
+to remove it.
 
-If set_load_weight() can see a process that hasn't even had the
-runqueue pointer set yet, then what keeps *others* from the same
-thing?
+> Checkpatch:
+>
+>     total: 0 errors, 2 warnings, 3 checks, 337 lines checked
 
-Adding a test like this in set_load_weight() just makes me go "what
-makes this function so special"? IOW, why could only that function see
-this situation with a missing cfs_rq pointer?
+Ok.
 
-I really get the feeling that this is papering over a serious mistake
-in how commit 4ef0c5c6b5ba ("kernel/sched: Fix sched_fork() access an
-invalid sched_task_group") now causes fundamental process state to be
-initialized too late - when the process is already visible to others.
+> > +struct symsearch {
+> > +    const struct kernel_symbol *start, *stop;
+> > +    const s32 *crcs;
+> > +    enum mod_license {
+> > +        NOT_GPL_ONLY,
+> > +        GPL_ONLY,
+> > +    } license;
+> > +};
+>
+> Why don't leave this in main.c ?
 
-The setpriority() -> dequeue_load_avg() chain just seems to be one
-possible case.
+Yes, struct 'symsearch' is not used outside of kernel/module/main.c.
 
-*ANYBODY* that does find_task_by_vpid(who) would seem to be able to
-find a task that hasn't actually been fully set up yet, and
+> > +inline int check_modstruct_version(const struct load_info *info,
+> > +                      struct module *mod)
+>
+> inline is pointless for a non static function
 
-Somebody tell me why I'm wrong, and what makes that setpriority thing
-so magically special. Please.
+This was an unfortunate oversight.
 
-                    Linus
+> > +inline int same_magic(const char *amagic, const char *bmagic,
+> > +                 bool has_crcs)
+>
+> Same, not point for inline keyword here.
+
+Agreed.
+
+
+Kind regards,
+
+--=20
+Aaron Tomlin
+

@@ -2,56 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78D314B3C30
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 17:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B62674B3C32
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 17:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236918AbiBMQAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 11:00:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33640 "EHLO
+        id S236956AbiBMQAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 11:00:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236379AbiBMQAQ (ORCPT
+        with ESMTP id S236379AbiBMQAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 11:00:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127D15A090;
-        Sun, 13 Feb 2022 08:00:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 933A5611C4;
-        Sun, 13 Feb 2022 16:00:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E6F95C340F0;
-        Sun, 13 Feb 2022 16:00:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644768009;
-        bh=dJ+FtYYgz9ZF0xxniydz/MCoDEFWvBba2GQzSFqd3p0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ioANKADZqNFXYQoCfwuW+WwcDCcKE5lNKnCJJTigHv1yQgBQwKM5XXZxx4D+6sQmx
-         w9fCXTCJRuHG4SgCi7U1+patlripBC2LU5NbJ44B1c4Z8D2p3f5pG/i6t5sovgxO8Y
-         SetCf5JIto0PFcQVFX+ahX0Fda0r/Gc0vBCXvfV+fqko19Z/aTw3qOEJ1AKLNqKHdm
-         wf0y2tjbGLAwcftM6R4otiPk4g6Ux9j7NQaQNzHMGbGs0EQEvYkVXF+0pW/mRCj9Np
-         AWMWqM9CSU7RBDkGBa47+lxkfR87Rh8nYdvWorC/wk2iihAGucQDAk2eeRq+Vu8drR
-         stVJ7KFXynGNg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CF422E6D447;
-        Sun, 13 Feb 2022 16:00:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 13 Feb 2022 11:00:40 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E44F5A091;
+        Sun, 13 Feb 2022 08:00:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=SXQfB7kbT48CWKMa0ZX7Y7yooHLKNEo9Hwc9PGnJWAQ=; b=R5etCFnU6kJ8Q16aqktN5TbUrL
+        bzbzHIqQdpk0I+fjWy2aPaQHIVjbk27VHm12uyFxM7ehAKVkYZzlALmE8/ddBsQ9eG/zh/xG9Y5uD
+        azweoivO9Tjp6jnkoK79p9cVreuw+zuxUUhWcuhT2UiHIx1mX49xUWTu2CfIUcYQYSgjvok1KdB14
+        lQu8exn4z7sOg1baCsSL3qPJlUYP+xoPjxBzHuX6QUJ7O2n3lFk+oM5A+ujZEPg49XX0pdAmW0jQq
+        MLdxkhpF8iifbaI8m/UfNSABN8Hi/iMdi4naRqLwCjyqKFmjPB0+9CD5eNBxbsV4IevoYaF4FTdSr
+        fYMAOYJA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJHIT-009gP6-HY; Sun, 13 Feb 2022 16:00:21 +0000
+Message-ID: <98208fa3-4b28-cdeb-7699-dbd9d66bfa60@infradead.org>
+Date:   Sun, 13 Feb 2022 08:00:16 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: lan966x: Fix when CONFIG_PTP_1588_CLOCK is
- compiled as module
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164476800984.537.18049002093731089232.git-patchwork-notify@kernel.org>
-Date:   Sun, 13 Feb 2022 16:00:09 +0000
-References: <20220212204544.972787-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20220212204544.972787-1-horatiu.vultur@microchip.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, davem@davemloft.net, kuba@kernel.org,
-        richardcochran@gmail.com, lkp@intel.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 1/1] csky: Fixup compile warning
+Content-Language: en-US
+To:     wonder_rock@126.com, guoren@kernel.org
+Cc:     axboe@kernel.dk, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220213142850.31526-1-wonder_rock@126.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220213142850.31526-1-wonder_rock@126.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,29 +53,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi,
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
 
-On Sat, 12 Feb 2022 21:45:44 +0100 you wrote:
-> When CONFIG_PTP_1588_CLOCK is compiled as a module, then the linking of
-> the lan966x fails because it can't find references to the following
-> functions 'ptp_clock_index', 'ptp_clock_register' and
-> 'ptp_clock_unregister'
+On 2/13/22 06:28, wonder_rock@126.com wrote:
+> From: Deyan Wang <wonder_rock@126.com>
 > 
-> The fix consists in adding CONFIG_PTP_1588_CLOCK_OPTIONAL as a
-> dependency for the driver.
+> arch/csky/include/asm/io.h: 8 linux/version.h not needed.
+> arch/csky/kernel/process.c: 5 linux/version.h not needed.
+> arch/csky/mm/dma-mapping.c: 12 linux/version.h not needed.
 > 
-> [...]
+> Signed-off-by: Deyan Wang <wonder_rock@126.com>
 
-Here is the summary with links:
-  - [net-next] net: lan966x: Fix when CONFIG_PTP_1588_CLOCK is compiled as module
-    https://git.kernel.org/netdev/net-next/c/1da52b0e4724
+The patch makes sense but these are not compile warnings.
+They come from scripts/checkversion.pl, which can be called
+by 'make versioncheck', so I suppose that something in your
+build system is running 'make versioncheck'.
 
-You are awesome, thank you!
+You could just say "csky: fix versioncheck warnings"
+
+
+> ---
+>  arch/csky/include/asm/io.h | 1 -
+>  arch/csky/kernel/process.c | 1 -
+>  arch/csky/mm/dma-mapping.c | 1 -
+>  3 files changed, 3 deletions(-)
+> 
+> diff --git a/arch/csky/include/asm/io.h b/arch/csky/include/asm/io.h
+> index f82654053dc0..ed53f0b47388 100644
+> --- a/arch/csky/include/asm/io.h
+> +++ b/arch/csky/include/asm/io.h
+> @@ -5,7 +5,6 @@
+>  
+>  #include <linux/pgtable.h>
+>  #include <linux/types.h>
+> -#include <linux/version.h>
+>  
+>  /*
+>   * I/O memory access primitives. Reads are ordered relative to any
+> diff --git a/arch/csky/kernel/process.c b/arch/csky/kernel/process.c
+> index 3d0ca22cd0e2..5de04707aa07 100644
+> --- a/arch/csky/kernel/process.c
+> +++ b/arch/csky/kernel/process.c
+> @@ -2,7 +2,6 @@
+>  // Copyright (C) 2018 Hangzhou C-SKY Microsystems co.,ltd.
+>  
+>  #include <linux/module.h>
+> -#include <linux/version.h>
+>  #include <linux/sched.h>
+>  #include <linux/sched/task_stack.h>
+>  #include <linux/sched/debug.h>
+> diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
+> index c3a775a7e8f9..82447029feb4 100644
+> --- a/arch/csky/mm/dma-mapping.c
+> +++ b/arch/csky/mm/dma-mapping.c
+> @@ -9,7 +9,6 @@
+>  #include <linux/mm.h>
+>  #include <linux/scatterlist.h>
+>  #include <linux/types.h>
+> -#include <linux/version.h>
+>  #include <asm/cache.h>
+>  
+>  static inline void cache_op(phys_addr_t paddr, size_t size,
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+~Randy

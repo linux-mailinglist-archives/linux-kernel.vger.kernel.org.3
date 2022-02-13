@@ -2,87 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D53AF4B39EA
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 08:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D72524B39E4
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 08:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234042AbiBMG50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 01:57:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40700 "EHLO
+        id S233982AbiBMHDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 02:03:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234051AbiBMG5K (ORCPT
+        with ESMTP id S231410AbiBMHDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 01:57:10 -0500
-Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860105DE58
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 22:57:05 -0800 (PST)
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
-        by isilmar-4.linta.de (Postfix) with ESMTPSA id 22DCD20140B;
-        Sun, 13 Feb 2022 06:57:00 +0000 (UTC)
-Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
-        id E168B80ECF; Sun, 13 Feb 2022 07:55:37 +0100 (CET)
-Date:   Sun, 13 Feb 2022 07:55:37 +0100
-From:   Dominik Brodowski <linux@dominikbrodowski.net>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [PATCH 3/3] random: use trylock in irq handler rather than
- spinning
-Message-ID: <YgiraRIkuKK787YC@owl.dominikbrodowski.net>
-References: <20220212231022.679926-1-Jason@zx2c4.com>
- <20220212231022.679926-4-Jason@zx2c4.com>
+        Sun, 13 Feb 2022 02:03:12 -0500
+Received: from relay5.hostedemail.com (relay5.hostedemail.com [64.99.140.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74245DE65
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 23:03:05 -0800 (PST)
+Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay07.hostedemail.com (Postfix) with ESMTP id C0B9C20F14;
+        Sun, 13 Feb 2022 07:03:04 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id A063F6000D;
+        Sun, 13 Feb 2022 07:02:37 +0000 (UTC)
+Message-ID: <3bd6ada59f411a7685d7e64eeb670540d4bfdcde.camel@perches.com>
+Subject: [PATCH] checkpatch: add early_param exception to blank line after
+ struct/function test
+From:   Joe Perches <joe@perches.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-kernel@vger.kernel.org
+Date:   Sat, 12 Feb 2022 23:03:02 -0800
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220212231022.679926-4-Jason@zx2c4.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: A063F6000D
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Stat-Signature: x1ao4dhk6jmd4ibbpj3b5hbrz1nkjhcb
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+Iv5VSe0HrJpNOjUgwWIMqpX6LHBkUuPA=
+X-HE-Tag: 1644735757-263964
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sun, Feb 13, 2022 at 12:10:22AM +0100 schrieb Jason A. Donenfeld:
-> crng_pre_init_inject() (and prior crng_fast_load()) uses a trylock when
-> in fast mode, so that it never contends. We should be doing the same
-> when grabbing a spinlock for mixing into the entropy pool. So switch to
-> doing that before calling the underscored _mix_pool_bytes().
-> 
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: Theodore Ts'o <tytso@mit.edu>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  drivers/char/random.c | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/char/random.c b/drivers/char/random.c
-> index 9a8e1bb9845d..ca224c3f2561 100644
-> --- a/drivers/char/random.c
-> +++ b/drivers/char/random.c
-> @@ -1286,13 +1286,10 @@ void add_interrupt_randomness(int irq)
->  			atomic_set(&fast_pool->count, 0);
->  			fast_pool->last = now;
->  
-> -			/*
-> -			 * Technically this call means that we're using a spinlock_t
-> -			 * in the IRQ handler, which isn't terrific for PREEMPT_RT.
-> -			 * However, this only happens during boot, and then never
-> -			 * again, so we live with it.
-> -			 */
-> -			mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
-> +			if (spin_trylock(&input_pool.lock)) {
-> +				_mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
-> +				spin_unlock(&input_pool.lock);
-> +			}
+Add early_param as another exception to the blank line preferred after
+function/struct/union declaration or definition test.
 
-You're still using a spinlock_t here, so I don't see a need to remove the
-comment. Also, I'm not super happy that the count is re-set to 0 but the
-input remains unused. Maybe the better approach here is, as discussed in the
-other thread, to always use the workqueue mechanism, which would allow us to
-streamline the code further.
+Signed-off-by: Joe Perches <joe@perches.com>
+---
+ scripts/checkpatch.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-	Dominik
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 071b3304f5d7c..727d23b934da2 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -3930,7 +3930,7 @@ sub process {
+ 		if ($prevline =~ /^[\+ ]};?\s*$/ &&
+ 		    $line =~ /^\+/ &&
+ 		    !($line =~ /^\+\s*$/ ||
+-		      $line =~ /^\+\s*EXPORT_SYMBOL/ ||
++		      $line =~ /^\+\s*(?:EXPORT_SYMBOL|early_param)/ ||
+ 		      $line =~ /^\+\s*MODULE_/i ||
+ 		      $line =~ /^\+\s*\#\s*(?:end|elif|else)/ ||
+ 		      $line =~ /^\+[a-z_]*init/ ||
+
+

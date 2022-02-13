@@ -2,245 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 495C94B3C60
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 18:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D9D4B3C67
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 18:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237222AbiBMRIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 12:08:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59900 "EHLO
+        id S237253AbiBMRPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 12:15:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232033AbiBMRIk (ORCPT
+        with ESMTP id S237243AbiBMRPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 12:08:40 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5D54927C
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 09:08:33 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id s185so15137610oie.3
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 09:08:33 -0800 (PST)
+        Sun, 13 Feb 2022 12:15:54 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F1C58E72
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 09:15:47 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id j13so2626653ejk.1
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 09:15:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ddTopwiOGudbD9c0a1S+23MlMo36ot+qZJddmpaLkno=;
-        b=10QNQxhBItsEVnI9uWuTdUg1N8XxitvYvB6ISMdKdA6/icQ88LLUBFxcdcPqR+6zs2
-         xBfa9AWa1Sr7eef5v45RJnVrvCkVoSzxtqCXLx+N/rWMUOpMRjX/NNMdJXc3PQ5+uwEU
-         J4zuED6wDY5ShU6pzYHB/wrfHTXWpNNsJ64I8n4n5oImdktZTLA3OpZ+Lf/GZZiWDS4l
-         pxq7L0rYCQl6hK0OnvvEdfYwo7o6KYl/UUHc7R8XIudFXKwadJKgtJRhCbb6VL+qgqkH
-         j0WuFjrsfd0eSptRIbcptITiXIS+jxSkG3VzZzx0nFvQ70+lZoN6nqXTo/WXmCTN5+QQ
-         6/eQ==
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c9MPHlFrwB1AIaRrVksm22KgsTglVC3BMVPKSN6mOUY=;
+        b=ofyDYtpNgouEVX7gOtAFSj8cSZCLEz3TXD/HACNOFQcx8n+b91koIqr/LG0Ql3hmbJ
+         mJDqwzf8EjqIzQ70RdtYAk9Em5zmqln6NL4J9qHB4+a9O07QV+iirtWG2JRqPkpezi75
+         ZK8sAWcRuJ+5JaelIw0b5NfEPyjz8Mn+bDF0w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ddTopwiOGudbD9c0a1S+23MlMo36ot+qZJddmpaLkno=;
-        b=tEsFM0sBatcImqsYuvNfgmkWfQKY5bgE+JJwXQV04Ei6NOxZ/tG9sQJwvyw24/8fUw
-         REqQejdhqEdx5eFptaQ4I1JeWLEmDgcy19szG3Cl6/5obfMidJy5+w0IIiPZkKRoQt/6
-         k2ElVxfPhv6SFmyndnVCnaZmX2v6u7OXnqJoeYqo+5sEJHARiSyBya6GEKojRbhb7InB
-         ukDyCeq1vS90Al8Hf889FKiJ6kEnhnCjkNoVy2eni9JKYC/3ASh/JkGXmfj3YDgMgJ3u
-         5+yvzAgYV6II/TB/uuvvjj02xZ9yMlHAdEr4pZWMgsO9mW+YZqrY/7HLYHBFVchkA1j2
-         TgaQ==
-X-Gm-Message-State: AOAM530V1iv/aJ20gchYJhbixpQ0c8aWLdJ+xdVfmZ9E6Y24nHKNbPu3
-        rCW+/3IiLC2y0sHq35ngET6aRAjsDE983+kOvR8+2w==
-X-Google-Smtp-Source: ABdhPJx6F8OPpe1PPrZyszS/d8TyHzUHd9dKhENhV4//VQzt2tEHJaVAXRekVPgnJuRKyRH5j6Wzt0gKKGcEGFpF318=
-X-Received: by 2002:a05:6808:1206:: with SMTP id a6mr4162215oil.279.1644772112850;
- Sun, 13 Feb 2022 09:08:32 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c9MPHlFrwB1AIaRrVksm22KgsTglVC3BMVPKSN6mOUY=;
+        b=YTsCdLymK5zzRnfix7bh3UJXIeLqkdT56kJg3w/P2wUlULVz28xpaDX0f6+0M3PHom
+         SiBRnC9EGqnedsvtOoeoNOKF2msws6PdPQB0ZODbceJNGlpaCM/HI/4R554lVPB3nWf1
+         2WIx2+PHZZA/Z3m4DejCSW2fb9oOtjBjZhuuaF7NqVaFDSBzIJU0HUydREc+xOzjo586
+         ACZzKweCFobarTkWHj57gLr6r0Hbz3DctHOIRd5zVmfGTQMn5py19RPQg7GRyGb+vHz7
+         TUiTOZI0D0vHtJs4TT1+u8cYpvmCGoAFJPhzSGRiP29bnVqrrFzK63n2sT68xRp+5fgK
+         qGig==
+X-Gm-Message-State: AOAM533rG+XHiF6uipl08oNFWDle6283sXUnVVw2NjE66jzka/pAf3gJ
+        cVDD9aiC82bcjsC6YIMsooYNyFc+hTl3TA==
+X-Google-Smtp-Source: ABdhPJxzrYnp0KzwWb+SoSyHHC1bsVKGey8t110wlfenAXc4cu3PVtFf+zECOtq9bIZ7nETEOWUSwg==
+X-Received: by 2002:a17:907:3d94:: with SMTP id he20mr8574709ejc.637.1644772546240;
+        Sun, 13 Feb 2022 09:15:46 -0800 (PST)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-82-52-8-210.retail.telecomitalia.it. [82.52.8.210])
+        by smtp.gmail.com with ESMTPSA id o10sm6598878ejj.6.2022.02.13.09.15.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Feb 2022 09:15:45 -0800 (PST)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        devicetree@vger.kernel.org, linux-input@vger.kernel.org
+Subject: [PATCH 0/6] Input: edt-ft5x06 - Improve configuration
+Date:   Sun, 13 Feb 2022 18:15:26 +0100
+Message-Id: <20220213171532.346270-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220208181510.787069-1-andrew@daynix.com> <20220208181510.787069-4-andrew@daynix.com>
- <CA+FuTSdrHwNWh1Mz7KT8w+Z69LcNipeTcasny6ioqOUYBisNXg@mail.gmail.com>
-In-Reply-To: <CA+FuTSdrHwNWh1Mz7KT8w+Z69LcNipeTcasny6ioqOUYBisNXg@mail.gmail.com>
-From:   Andrew Melnichenko <andrew@daynix.com>
-Date:   Sun, 13 Feb 2022 19:08:21 +0200
-Message-ID: <CABcq3pFpP1OkbsmZpMuM53DNSRo94uS9DLQ_8JVmuO0rJuRN_w@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] drivers/net/virtio_net: Added RSS hash report.
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     Network Development <netdev@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Yan Vugenfirer <yan@daynix.com>,
-        Yuri Benditovich <yuri.benditovich@daynix.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+The series was born from the analysis and mitigation of a crc problem
+raised by an M06 type device. The added sysfs attributes were helpful
+in debugging the problem. Patches that change the report rate on driver
+probing, mitigated crc errors on kernel bootup. The patch to get/set
+report rate by sysfs for an M12 device, has been tested.
 
-On Tue, Feb 8, 2022 at 10:55 PM Willem de Bruijn
-<willemdebruijn.kernel@gmail.com> wrote:
->
-> On Tue, Feb 8, 2022 at 1:19 PM Andrew Melnychenko <andrew@daynix.com> wrote:
-> >
-> > Added features for RSS hash report.
-> > If hash is provided - it sets to skb.
-> > Added checks if rss and/or hash are enabled together.
-> >
-> > Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
-> > ---
-> >  drivers/net/virtio_net.c | 51 ++++++++++++++++++++++++++++++++++------
-> >  1 file changed, 44 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > index 495aed524e33..543da2fbdd2d 100644
-> > --- a/drivers/net/virtio_net.c
-> > +++ b/drivers/net/virtio_net.c
-> > @@ -227,6 +227,7 @@ struct virtnet_info {
-> >
-> >         /* Host supports rss and/or hash report */
-> >         bool has_rss;
-> > +       bool has_rss_hash_report;
-> >         u8 rss_key_size;
-> >         u16 rss_indir_table_size;
-> >         u32 rss_hash_types_supported;
-> > @@ -421,7 +422,7 @@ static struct sk_buff *page_to_skb(struct virtnet_info *vi,
-> >
-> >         hdr_len = vi->hdr_len;
-> >         if (vi->mergeable_rx_bufs)
-> > -               hdr_padded_len = sizeof(*hdr);
-> > +               hdr_padded_len = hdr_len;
->
-> Belongs in patch 1?
 
-Yeah, I'll move it.
+Dario Binacchi (6):
+  dt-bindings: input: touchscreen: edt-ft5x06: add report-rate
+  Input: edt-ft5x06 - get/set M12 report rate by sysfs
+  Input: edt-ft5x06 - set report rate by dts property
+  Input: edt-ft5x06 - show model name by sysfs
+  Input: edt-ft5x06 - show firmware version by sysfs
+  Input: edt-ft5x06 - show crc and header errors by sysfs
 
->
-> >         else
-> >                 hdr_padded_len = sizeof(struct padded_vnet_hdr);
-> >
-> > @@ -1156,6 +1157,8 @@ static void receive_buf(struct virtnet_info *vi, struct receive_queue *rq,
-> >         struct net_device *dev = vi->dev;
-> >         struct sk_buff *skb;
-> >         struct virtio_net_hdr_mrg_rxbuf *hdr;
-> > +       struct virtio_net_hdr_v1_hash *hdr_hash;
-> > +       enum pkt_hash_types rss_hash_type;
-> >
-> >         if (unlikely(len < vi->hdr_len + ETH_HLEN)) {
-> >                 pr_debug("%s: short packet %i\n", dev->name, len);
-> > @@ -1182,6 +1185,29 @@ static void receive_buf(struct virtnet_info *vi, struct receive_queue *rq,
-> >                 return;
-> >
-> >         hdr = skb_vnet_hdr(skb);
-> > +       if (dev->features & NETIF_F_RXHASH && vi->has_rss_hash_report) {
->
-> Can the first be true if the second is not?
+ .../input/touchscreen/edt-ft5x06.yaml         |  8 ++
+ drivers/input/touchscreen/edt-ft5x06.c        | 81 +++++++++++++++++--
+ 2 files changed, 81 insertions(+), 8 deletions(-)
 
-Yes, RSS may be enabled, but the hash report feature is disabled.
-For now, it's possible to enable/disable VirtioNet RSS by manipulating RXHASH.
+-- 
+2.32.0
 
->
-> > +               hdr_hash = (struct virtio_net_hdr_v1_hash *)(hdr);
-> > +
-> > +               switch (hdr_hash->hash_report) {
-> > +               case VIRTIO_NET_HASH_REPORT_TCPv4:
-> > +               case VIRTIO_NET_HASH_REPORT_UDPv4:
-> > +               case VIRTIO_NET_HASH_REPORT_TCPv6:
-> > +               case VIRTIO_NET_HASH_REPORT_UDPv6:
-> > +               case VIRTIO_NET_HASH_REPORT_TCPv6_EX:
-> > +               case VIRTIO_NET_HASH_REPORT_UDPv6_EX:
-> > +                       rss_hash_type = PKT_HASH_TYPE_L4;
-> > +                       break;
-> > +               case VIRTIO_NET_HASH_REPORT_IPv4:
-> > +               case VIRTIO_NET_HASH_REPORT_IPv6:
-> > +               case VIRTIO_NET_HASH_REPORT_IPv6_EX:
-> > +                       rss_hash_type = PKT_HASH_TYPE_L3;
-> > +                       break;
-> > +               case VIRTIO_NET_HASH_REPORT_NONE:
-> > +               default:
-> > +                       rss_hash_type = PKT_HASH_TYPE_NONE;
-> > +               }
-> > +               skb_set_hash(skb, hdr_hash->hash_value, rss_hash_type);
-> > +       }
->
-> so many lines, perhaps deserves a helper function
-
-Ok, I'll create the helper.
-
->
-> >
-> >         if (hdr->hdr.flags & VIRTIO_NET_HDR_F_DATA_VALID)
-> >                 skb->ip_summed = CHECKSUM_UNNECESSARY;
-> > @@ -2232,7 +2258,8 @@ static bool virtnet_commit_rss_command(struct virtnet_info *vi)
-> >         sg_set_buf(&sgs[3], vi->ctrl->rss.key, sg_buf_size);
-> >
-> >         if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_MQ,
-> > -                                 VIRTIO_NET_CTRL_MQ_RSS_CONFIG, sgs)) {
-> > +                                 vi->has_rss ? VIRTIO_NET_CTRL_MQ_RSS_CONFIG
-> > +                                 : VIRTIO_NET_CTRL_MQ_HASH_CONFIG, sgs)) {
-> >                 dev_warn(&dev->dev, "VIRTIONET issue with committing RSS sgs\n");
-> >                 return false;
-> >         }
-> > @@ -3230,6 +3257,8 @@ static bool virtnet_validate_features(struct virtio_device *vdev)
-> >              VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_CTRL_MAC_ADDR,
-> >                              "VIRTIO_NET_F_CTRL_VQ") ||
-> >              VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_RSS,
-> > +                            "VIRTIO_NET_F_CTRL_VQ") ||
-> > +            VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_HASH_REPORT,
-> >                              "VIRTIO_NET_F_CTRL_VQ"))) {
-> >                 return false;
-> >         }
-> > @@ -3365,8 +3394,13 @@ static int virtnet_probe(struct virtio_device *vdev)
-> >         if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF))
-> >                 vi->mergeable_rx_bufs = true;
-> >
-> > -       if (virtio_has_feature(vdev, VIRTIO_NET_F_RSS)) {
-> > +       if (virtio_has_feature(vdev, VIRTIO_NET_F_HASH_REPORT))
-> > +               vi->has_rss_hash_report = true;
-> > +
-> > +       if (virtio_has_feature(vdev, VIRTIO_NET_F_RSS))
-> >                 vi->has_rss = true;
-> > +
-> > +       if (vi->has_rss || vi->has_rss_hash_report) {
-> >                 vi->rss_indir_table_size =
-> >                         virtio_cread16(vdev, offsetof(struct virtio_net_config,
->
-> should indir table size be zero if only hash report is enabled?
-
-Not really - but of course, for hash only, the table is not necessary.
-(Qemu always provides the table with size 1, I'll add checks for zero sizes
-in case of hardware implementation.)
-
->
-> >                                 rss_max_indirection_table_length));
-> > @@ -3382,8 +3416,11 @@ static int virtnet_probe(struct virtio_device *vdev)
-> >
-> >                 dev->hw_features |= NETIF_F_RXHASH;
-> >         }
-> > -       if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF) ||
-> > -           virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
-> > +
-> > +       if (vi->has_rss_hash_report)
-> > +               vi->hdr_len = sizeof(struct virtio_net_hdr_v1_hash);
-> > +       else if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF) ||
-> > +                virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
-> >                 vi->hdr_len = sizeof(struct virtio_net_hdr_mrg_rxbuf);
-> >         else
-> >                 vi->hdr_len = sizeof(struct virtio_net_hdr);
-> > @@ -3450,7 +3487,7 @@ static int virtnet_probe(struct virtio_device *vdev)
-> >                 }
-> >         }
-> >
-> > -       if (vi->has_rss)
-> > +       if (vi->has_rss || vi->has_rss_hash_report)
-> >                 virtnet_init_default_rss(vi);
-> >
-> >         err = register_netdev(dev);
-> > @@ -3585,7 +3622,7 @@ static struct virtio_device_id id_table[] = {
-> >         VIRTIO_NET_F_CTRL_MAC_ADDR, \
-> >         VIRTIO_NET_F_MTU, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS, \
-> >         VIRTIO_NET_F_SPEED_DUPLEX, VIRTIO_NET_F_STANDBY, \
-> > -       VIRTIO_NET_F_RSS
-> > +       VIRTIO_NET_F_RSS, VIRTIO_NET_F_HASH_REPORT
-> >
-> >  static unsigned int features[] = {
-> >         VIRTNET_FEATURES,
-> > --
-> > 2.34.1
-> >

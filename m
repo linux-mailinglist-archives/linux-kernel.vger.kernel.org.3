@@ -2,119 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B62674B3C32
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 17:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B7B4B3C37
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 17:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236956AbiBMQAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 11:00:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34106 "EHLO
+        id S236981AbiBMQHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 11:07:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236379AbiBMQAk (ORCPT
+        with ESMTP id S236379AbiBMQHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 11:00:40 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E44F5A091;
-        Sun, 13 Feb 2022 08:00:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=SXQfB7kbT48CWKMa0ZX7Y7yooHLKNEo9Hwc9PGnJWAQ=; b=R5etCFnU6kJ8Q16aqktN5TbUrL
-        bzbzHIqQdpk0I+fjWy2aPaQHIVjbk27VHm12uyFxM7ehAKVkYZzlALmE8/ddBsQ9eG/zh/xG9Y5uD
-        azweoivO9Tjp6jnkoK79p9cVreuw+zuxUUhWcuhT2UiHIx1mX49xUWTu2CfIUcYQYSgjvok1KdB14
-        lQu8exn4z7sOg1baCsSL3qPJlUYP+xoPjxBzHuX6QUJ7O2n3lFk+oM5A+ujZEPg49XX0pdAmW0jQq
-        MLdxkhpF8iifbaI8m/UfNSABN8Hi/iMdi4naRqLwCjyqKFmjPB0+9CD5eNBxbsV4IevoYaF4FTdSr
-        fYMAOYJA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJHIT-009gP6-HY; Sun, 13 Feb 2022 16:00:21 +0000
-Message-ID: <98208fa3-4b28-cdeb-7699-dbd9d66bfa60@infradead.org>
-Date:   Sun, 13 Feb 2022 08:00:16 -0800
+        Sun, 13 Feb 2022 11:07:14 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626545A0A4
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 08:07:04 -0800 (PST)
+X-UUID: 7c26e1c48cb240c78db72cdf8cb77316-20220214
+X-UUID: 7c26e1c48cb240c78db72cdf8cb77316-20220214
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <lecopzer.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 757746491; Mon, 14 Feb 2022 00:06:57 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 14 Feb 2022 00:06:56 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 14 Feb
+ 2022 00:06:56 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 14 Feb 2022 00:06:56 +0800
+From:   Lecopzer Chen <lecopzer.chen@mediatek.com>
+To:     <linus.walleij@linaro.org>
+CC:     <andreyknvl@gmail.com>, <anshuman.khandual@arm.com>,
+        <ardb@kernel.org>, <arnd@arndb.de>, <dvyukov@google.com>,
+        <geert+renesas@glider.be>, <glider@google.com>,
+        <kasan-dev@googlegroups.com>, <lecopzer.chen@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux@armlinux.org.uk>,
+        <lukas.bulwahn@gmail.com>, <mark.rutland@arm.com>,
+        <masahiroy@kernel.org>, <matthias.bgg@gmail.com>,
+        <rmk+kernel@armlinux.org.uk>, <ryabinin.a.a@gmail.com>,
+        <yj.chiang@mediatek.com>
+Subject: Re: [PATCH v2 1/2] arm: kasan: support CONFIG_KASAN_VMALLOC
+Date:   Mon, 14 Feb 2022 00:06:56 +0800
+Message-ID: <20220213160656.17605-1-lecopzer.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <CACRpkdYDg3saLpfHg=R1kYpnC_BBNgBbe7un-B4e8bgDYPq1Fg@mail.gmail.com>
+References: <CACRpkdYDg3saLpfHg=R1kYpnC_BBNgBbe7un-B4e8bgDYPq1Fg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 1/1] csky: Fixup compile warning
-Content-Language: en-US
-To:     wonder_rock@126.com, guoren@kernel.org
-Cc:     axboe@kernel.dk, linux-csky@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220213142850.31526-1-wonder_rock@126.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220213142850.31526-1-wonder_rock@126.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-
-On 2/13/22 06:28, wonder_rock@126.com wrote:
-> From: Deyan Wang <wonder_rock@126.com>
+Hi Linus
+ 
+Thanks for your review.
+ 
+> > -       kasan_populate_early_shadow(kasan_mem_to_shadow((void *)VMALLOC_START),
+> > +       if (!IS_ENABLED(CONFIG_KASAN_VMALLOC))
+> > +               kasan_populate_early_shadow(kasan_mem_to_shadow((void *)VMALLOC_START),
+> > +                                           kasan_mem_to_shadow((void *)VMALLOC_END));
+> > +
+> > +       kasan_populate_early_shadow(kasan_mem_to_shadow((void *)VMALLOC_END),
+> >                                     kasan_mem_to_shadow((void *)-1UL) + 1);
 > 
-> arch/csky/include/asm/io.h: 8 linux/version.h not needed.
-> arch/csky/kernel/process.c: 5 linux/version.h not needed.
-> arch/csky/mm/dma-mapping.c: 12 linux/version.h not needed.
+> Where is this actually mapped?
 > 
-> Signed-off-by: Deyan Wang <wonder_rock@126.com>
-
-The patch makes sense but these are not compile warnings.
-They come from scripts/checkversion.pl, which can be called
-by 'make versioncheck', so I suppose that something in your
-build system is running 'make versioncheck'.
-
-You could just say "csky: fix versioncheck warnings"
-
-
-> ---
->  arch/csky/include/asm/io.h | 1 -
->  arch/csky/kernel/process.c | 1 -
->  arch/csky/mm/dma-mapping.c | 1 -
->  3 files changed, 3 deletions(-)
+> Can you print out where
+> kasan_mem_to_shadow((void *)VMALLOC_START)
+> kasan_mem_to_shadow((void *)VMALLOC_END)
+> as well as KASAN_SHADOW_START and KASAN_SHADOW_END
+> points?
 > 
-> diff --git a/arch/csky/include/asm/io.h b/arch/csky/include/asm/io.h
-> index f82654053dc0..ed53f0b47388 100644
-> --- a/arch/csky/include/asm/io.h
-> +++ b/arch/csky/include/asm/io.h
-> @@ -5,7 +5,6 @@
->  
->  #include <linux/pgtable.h>
->  #include <linux/types.h>
-> -#include <linux/version.h>
->  
->  /*
->   * I/O memory access primitives. Reads are ordered relative to any
-> diff --git a/arch/csky/kernel/process.c b/arch/csky/kernel/process.c
-> index 3d0ca22cd0e2..5de04707aa07 100644
-> --- a/arch/csky/kernel/process.c
-> +++ b/arch/csky/kernel/process.c
-> @@ -2,7 +2,6 @@
->  // Copyright (C) 2018 Hangzhou C-SKY Microsystems co.,ltd.
->  
->  #include <linux/module.h>
-> -#include <linux/version.h>
->  #include <linux/sched.h>
->  #include <linux/sched/task_stack.h>
->  #include <linux/sched/debug.h>
-> diff --git a/arch/csky/mm/dma-mapping.c b/arch/csky/mm/dma-mapping.c
-> index c3a775a7e8f9..82447029feb4 100644
-> --- a/arch/csky/mm/dma-mapping.c
-> +++ b/arch/csky/mm/dma-mapping.c
-> @@ -9,7 +9,6 @@
->  #include <linux/mm.h>
->  #include <linux/scatterlist.h>
->  #include <linux/types.h>
-> -#include <linux/version.h>
->  #include <asm/cache.h>
->  
->  static inline void cache_op(phys_addr_t paddr, size_t size,
+> When I looked into this getting the shadow memory between
+> KASAN_SHADOW_START and KASAN_SHADOW_END
+> seemed like the big problem since this is static, so how is Kasan
+> solving this now?
 
--- 
-~Randy
+For quick answer:
+As I knwon, the definition of KASAN_SHADOW_START and END
+
+(@arch/arm/include/asm/kasan_def.h)
+* 1) KASAN_SHADOW_START
+ *   This value begins with the MODULE_VADDR's shadow address. It is the
+ *   start of kernel virtual space....
+ *
+ * 2) KASAN_SHADOW_END
+ *   This value is the 0x100000000's shadow address: the mapping that would
+ *   be after the end of the kernel memory at 0xffffffff....
+
+and the virt address of vmalloc for ARM32 is also between MODULE_VADDR and
+0x100000000 (ZONE_HIGHMEM), so nothing needs to do.
+
+If there is any cases may break this assumption, please correct me, thanks.
+
+> 
+> Please patch the picture in
+> include/asm/kasan_def.h
+> and the info in
+> Documentation/arm/memory.rst
+> so it clearly reflects where VMALLOC is shadowed.
+
+Thanks for suggestion, Yes, we really do need to update doc for memory layout.
+I'll study how to add it and provide in v3.
+
+
+
+

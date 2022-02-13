@@ -2,113 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE414B3B2E
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 12:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B18484B3B30
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 12:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235748AbiBMLwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 06:52:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57046 "EHLO
+        id S235806AbiBMLxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 06:53:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbiBMLv7 (ORCPT
+        with ESMTP id S235745AbiBMLxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 06:51:59 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB95F5B895
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 03:51:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644753113; x=1676289113;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lpL0C+CK39D7RRq144RaugCt+85mNqxlvr2xQqxf8nE=;
-  b=H4BPQFPTNZkynyPf1/JinuVAWTIU68R63nb+lDoQN2MfU4SDChgmSWyZ
-   e8OR8pPE+h7G+hzosI6zXnFGtsOsfXWbKakdrxPV2D1dzE0dpfIsi+n1A
-   2wIscNY1NhJdqlWaRIf+JHG42q9KJRdT0P7ikm86lYmeRuCbpb0eHIign
-   uM3eHD0PGRn71QQVckGi6t2OHf+W6Eg7amsa10QPrCf1EJA/e9y8IR3FS
-   CCG/dFUMDvxDbsxDNX/oaSi+yGOWMORR6Eh531hzW3R9vz0ORJVfFTAFV
-   Ibo6xgTdzACe3SQ1n1sTsTw7ZMj0ScAJPJduQbYIrLqEkepDyMDA/GdPs
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10256"; a="237351406"
-X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
-   d="scan'208";a="237351406"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 03:51:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
-   d="scan'208";a="501241894"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 13 Feb 2022 03:51:52 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJDPz-0007Rm-Oa; Sun, 13 Feb 2022 11:51:51 +0000
-Date:   Sun, 13 Feb 2022 19:51:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nick Terrell <terrelln@fb.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: lib/zstd/common/entropy_common.c:257:1: warning: the frame size of
- 1056 bytes is larger than 1024 bytes
-Message-ID: <202202131904.0y0h7bnY-lkp@intel.com>
+        Sun, 13 Feb 2022 06:53:02 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E865B899;
+        Sun, 13 Feb 2022 03:52:57 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id d7so12640325qvk.2;
+        Sun, 13 Feb 2022 03:52:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ypYEF45YCKKIdDHjouvAAAG2lyLXjqrY5CQNbYfOknI=;
+        b=eCWqTkpsETaYEeYsA3m2vj0uiea0laWiSjLkPRnEacous6O7JrnYslxdn9MpoN8Obs
+         s+B3MBv63Dnx7s20W42vyg3UX4WzcYykSspy2ODntZgUagiy2HWLggZhF1pnJKYqvHze
+         XsVQJiMAAP3QLt8pX2HJdbfmcQYbamp1ivzc7aFa+Sr/OEtNV3LCdV7mUnMUwFrHIu7S
+         j3tn9BBwgQityJvJzcvcynEeQZNxh5rsHW3aZWTmzp1OsXQNUT60w8wYkKh38xNxDugA
+         rkMIPk1AWlSB9NYgACXKcA7s+opSaXWDHjfW5hO3Q3Nh8PEfpFULip27pT+ev306nASd
+         A0QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ypYEF45YCKKIdDHjouvAAAG2lyLXjqrY5CQNbYfOknI=;
+        b=34r/o31UXMcgSPSTzECXsZOutJ8/dXKBkieTFfXGHCm/wrBHJqdxKbYp+x3A1+Rb08
+         NckGn4jbnzho9Bq7cJJCAOiK6Wokwq81CTdNy8MwzCHu2ILAICfa/P8S6BQetMe2ezz6
+         fCIO05JWNOj0Q6Jqq7FmTBjohPTrwrE7kZlKWVdsSVqJDy024kY5hsctLVJBmQru7WiD
+         0BB+GFxkNNSPCGhtRPOrrjTpV4GM63CGnqBxrqP7qraW0ZlFXxYid7qzrT3/V3KMV8Er
+         ulqG4eKYridasg4aWfPNcXX5Tj9WaKfiZNtxKWObRRI4NMODfRC9f+9FfASRHGiObxod
+         BONg==
+X-Gm-Message-State: AOAM531GCdE4M34SCY8R22bg8TqTnK4Ea37WmLtRUcuvPm1VJYDcSDVk
+        XZAhacG3HhgFnNCQViMQDC7mCtYwXSo87S1GFc0=
+X-Google-Smtp-Source: ABdhPJz/8Ek/3x9uym5HDbnJD4Mt8KqQf2CayEK1/NYDyMkc9ARLump2dvB3zT7oIXSPcWrN47pcccgNs4v2KczTCIQ=
+X-Received: by 2002:ad4:576b:: with SMTP id r11mr6495521qvx.34.1644753176669;
+ Sun, 13 Feb 2022 03:52:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220213213935.2c5ef8c2@canb.auug.org.au>
+In-Reply-To: <20220213213935.2c5ef8c2@canb.auug.org.au>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Sun, 13 Feb 2022 12:52:45 +0100
+Message-ID: <CAOX2RU5NzOK+d-QEMsOiSPX85M2_B44SeJUteZepsyZny7fgnQ@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the qcom tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b81b1829e7e39f6cebdf6e4d5484eacbceda8554
-commit: e0c1b49f5b674cca7b10549c53b3791d0bbc90a8 lib: zstd: Upgrade to latest upstream zstd version 1.4.10
-date:   3 months ago
-config: powerpc-randconfig-r035-20220213 (https://download.01.org/0day-ci/archive/20220213/202202131904.0y0h7bnY-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e0c1b49f5b674cca7b10549c53b3791d0bbc90a8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e0c1b49f5b674cca7b10549c53b3791d0bbc90a8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/mtd/devices/ lib/zstd/
+On Sun, 13 Feb 2022 at 11:39, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> In commit
+>
+>   bf8f5182b8f5 ("clk: qcom: ipq8074: fix PCI-E clock oops")
+>
+> Fixes tag
+>
+>   Fixes: f0cfcf1a ("clk: qcom: ipq8074: Add missing clocks for pcie")
+>
+> has these problem(s):
+>
+>   - SHA1 should be at least 12 digits long
+>     Can be fixed for the future by setting core.abbrev to 12 (or more)
+>     or (for git v2.11 or later) just making sure it is not set (or set to
+>     "auto").
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi Stephen,
 
-All warnings (new ones prefixed by >>):
+Sorry for the short hash, don't know how this happened.
+Do you want me to send a v3 with the fixed hash?
 
-   lib/zstd/common/entropy_common.c: In function 'HUF_readStats':
->> lib/zstd/common/entropy_common.c:257:1: warning: the frame size of 1056 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-     257 | }
-         | ^
-
-
-vim +257 lib/zstd/common/entropy_common.c
-
-   242	
-   243	
-   244	/*! HUF_readStats() :
-   245	    Read compact Huffman tree, saved by HUF_writeCTable().
-   246	    `huffWeight` is destination buffer.
-   247	    `rankStats` is assumed to be a table of at least HUF_TABLELOG_MAX U32.
-   248	    @return : size read from `src` , or an error Code .
-   249	    Note : Needed by HUF_readCTable() and HUF_readDTableX?() .
-   250	*/
-   251	size_t HUF_readStats(BYTE* huffWeight, size_t hwSize, U32* rankStats,
-   252	                     U32* nbSymbolsPtr, U32* tableLogPtr,
-   253	                     const void* src, size_t srcSize)
-   254	{
-   255	    U32 wksp[HUF_READ_STATS_WORKSPACE_SIZE_U32];
-   256	    return HUF_readStats_wksp(huffWeight, hwSize, rankStats, nbSymbolsPtr, tableLogPtr, src, srcSize, wksp, sizeof(wksp), /* bmi2 */ 0);
- > 257	}
-   258	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Regards,
+Robert
+>
+> --
+> Cheers,
+> Stephen Rothwell

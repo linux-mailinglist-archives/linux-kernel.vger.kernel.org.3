@@ -2,139 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B60434B3CF5
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 19:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1E64B3CFE
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 19:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237875AbiBMSwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 13:52:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53366 "EHLO
+        id S237887AbiBMSyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 13:54:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234294AbiBMSwL (ORCPT
+        with ESMTP id S234170AbiBMSyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 13:52:11 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEC457B3C
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 10:52:05 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id h6so23543379wrb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 10:52:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version:organization
-         :content-transfer-encoding;
-        bh=5b6T59mtoBLg2aHTqbBo/r+mo6q1zaT8htW2r31opOo=;
-        b=jkcJuibzzNnKOpzhPiGpqn62fKaL16PjFsJa9ECq+C+9uKDFnGlijB7gW+8kO7w+HY
-         JTcmBFp3EXWo8QZxjaYvYNZmWqtKY53glpL8tsHmTXry7U0lPDGb0TWpinKA5mPeGL14
-         kDUW1Ri44IFGs5CQt4gY1kJHP3LLzsCHOzrL4MFDt2iS0ahGKDxBtEqHdiKsXO6wREoz
-         zgKTBZX068Vk/n8xLuTiT/ydSusfeWg8P2AgGIYZU0B2/wTqzDMOkjsHC4EWiT+Fnw3Y
-         BU9gqnjg5KAlnM2NRS4uDHlhXeU27TTzmSObP9PDmVxnVVIQYWMX27BEh5GwhM+snTIy
-         GYOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :organization:content-transfer-encoding;
-        bh=5b6T59mtoBLg2aHTqbBo/r+mo6q1zaT8htW2r31opOo=;
-        b=cNauonTJ1qmp+jXzuwBo5YNvvAZ2WiAOLTpwLzp62/S/EJuAvAoJfVR/lcBHO2R5Vj
-         e8b5YuWYBPaS/fLlTr7unnoDn0ytkhA0kJ923r9Y2BBlmTyUdyWlk85GkAH6/887GnT3
-         EA7ZYm2PdUXa57pyRp4TbBG7FGnRLeGmL18Z3CNF0Y7miESGCtjFwHDDwSOfh0iWig4b
-         LfdiZ++YSvI/M1hVHUg5gSHQ/+Q5YsV2rNzrM9A38W/3i02983g4hLOKPBh3cizpLBar
-         Vm1CkfhvVLFHylz5Rwc6Bcku/+lUqL/IgKVq+yMbqEu4sAA5RcONJJ23Yag2SzidQbpr
-         L15Q==
-X-Gm-Message-State: AOAM5321iWcMMoEVN0+iBy9uhksryeTi1NL79JGYpYWPuL8A67N1U2RA
-        rhdLde3NccEmDYIWGwtfW6uziw==
-X-Google-Smtp-Source: ABdhPJwjXJQ+chY2+2rwARmjalWZYGCDghqclK/Ut0wkfk6IbBp15ag9Ju/I1wD+LzfC15WFaL6/2A==
-X-Received: by 2002:a05:6000:81:: with SMTP id m1mr8479062wrx.94.1644778324070;
-        Sun, 13 Feb 2022 10:52:04 -0800 (PST)
-Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
-        by smtp.gmail.com with ESMTPSA id j5sm25659049wrq.31.2022.02.13.10.52.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Feb 2022 10:52:03 -0800 (PST)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 net-next] net: dsa: mv88e6xxx: Fix validation of built-in PHYs on 6095/6097
-Date:   Sun, 13 Feb 2022 19:51:54 +0100
-Message-Id: <20220213185154.3262207-1-tobias@waldekranz.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Organization: Westermo
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 13 Feb 2022 13:54:08 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCDE57B3C;
+        Sun, 13 Feb 2022 10:54:02 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21DERCRA022928;
+        Sun, 13 Feb 2022 18:53:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=qaAeCPOZUy2ppj9eQ9LciX548NVsceilaYGuwL+jin8=;
+ b=TehU/bd6f+foQE4i0zJu2tuVe1smpIp+zKNOoIyCcZ5Y5cHLPkDG0ny3xQd4qApNcak/
+ 37QNTv1LQCeL2qtf0su+i67T5c9TsuM0g+0u5tfo9wGnndGzNNPSrje8SVhysNA16unW
+ 49Fvxy9GblokmK9NoU3PTrp11UPUZvUIaJuKXVg1uMfp4F9azP1aJq3vbRyN0haRe/4a
+ g9B3Omb0bFRu611bvzjCkxS7OiAQFAWrXc2Eol1JoKcThFyPZblm8fUh1TrK9lBbEWIE
+ vFQ3mOfNUWIp/Uqbl6mWdRKnziavEgru9a8Dt845KdDC4pBqzZBtCF58Ly37Hd8eIkWD zQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e6ycq6krj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 13 Feb 2022 18:53:25 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21DIrOlH024517;
+        Sun, 13 Feb 2022 18:53:24 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e6ycq6kr4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 13 Feb 2022 18:53:24 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21DIlQCA002034;
+        Sun, 13 Feb 2022 18:53:22 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3e64h9f00g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 13 Feb 2022 18:53:22 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21DIrHH218874852
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 13 Feb 2022 18:53:17 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 262A211C04A;
+        Sun, 13 Feb 2022 18:53:17 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E7D611C04C;
+        Sun, 13 Feb 2022 18:53:13 +0000 (GMT)
+Received: from sig-9-65-82-84.ibm.com (unknown [9.65.82.84])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 13 Feb 2022 18:53:13 +0000 (GMT)
+Message-ID: <0278ab6a2891effd9b1eb8c0221769e332ec6082.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 0/6] KEXEC_SIG with appended signature
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Michal Suchanek <msuchanek@suse.de>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc:     kexec@lists.infradead.org, Philipp Rudo <prudo@redhat.com>,
+        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
+        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Frank van der Linden <fllinden@amazon.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Baoquan He <bhe@redhat.com>,
+        linux-security-module@vger.kernel.org
+Date:   Sun, 13 Feb 2022 13:53:12 -0500
+In-Reply-To: <cover.1641900831.git.msuchanek@suse.de>
+References: <cover.1641900831.git.msuchanek@suse.de>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: C6hLMjRWDkCM-Tl6EZHiGa_ffG0JsPsH
+X-Proofpoint-GUID: QRUpvJ3TBHI6yR0Yy9QvEHXIPHskisIP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-13_07,2022-02-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=983 bulkscore=0
+ adultscore=0 spamscore=0 priorityscore=1501 mlxscore=0 suspectscore=0
+ impostorscore=0 malwarescore=0 clxscore=1015 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202130126
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These chips have 8 built-in FE PHYs and 3 SERDES interfaces that can
-run at 1G. With the blamed commit, the built-in PHYs could no longer
-be connected to, using an MII PHY interface mode.
+Hi Michal,
 
-Create a separate .phylink_get_caps callback for these chips, which
-takes the FE/GE split into consideration.
+On Tue, 2022-01-11 at 12:37 +0100, Michal Suchanek wrote:
+> Hello,
+> 
+> This is a refresh of the KEXEC_SIG series.
 
-Fixes: 2ee84cfefb1e ("net: dsa: mv88e6xxx: convert to phylink_generic_validate()")
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
----
- drivers/net/dsa/mv88e6xxx/chip.c | 23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
+> This adds KEXEC_SIG support on powerpc and deduplicates the code dealing
+> with appended signatures in the kernel.
+> 
+> powerpc supports IMA_KEXEC but that's an exception rather than the norm.
+> On the other hand, KEXEC_SIG is portable across platforms.
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 85527fe4fcc8..34036c555977 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -580,6 +580,25 @@ static const u8 mv88e6185_phy_interface_modes[] = {
- 	[MV88E6185_PORT_STS_CMODE_PHY]		 = PHY_INTERFACE_MODE_SGMII,
- };
- 
-+static void mv88e6095_phylink_get_caps(struct mv88e6xxx_chip *chip, int port,
-+				       struct phylink_config *config)
-+{
-+	u8 cmode = chip->ports[port].cmode;
-+
-+	config->mac_capabilities = MAC_SYM_PAUSE | MAC_10 | MAC_100;
-+
-+	if (mv88e6xxx_phy_is_internal(chip->ds, port)) {
-+		__set_bit(PHY_INTERFACE_MODE_MII, config->supported_interfaces);
-+	} else {
-+		if (cmode < ARRAY_SIZE(mv88e6185_phy_interface_modes) &&
-+		    mv88e6185_phy_interface_modes[cmode])
-+			__set_bit(mv88e6185_phy_interface_modes[cmode],
-+				  config->supported_interfaces);
-+
-+		config->mac_capabilities |= MAC_1000FD;
-+	}
-+}
-+
- static void mv88e6185_phylink_get_caps(struct mv88e6xxx_chip *chip, int port,
- 				       struct phylink_config *config)
- {
-@@ -3803,7 +3822,7 @@ static const struct mv88e6xxx_ops mv88e6095_ops = {
- 	.reset = mv88e6185_g1_reset,
- 	.vtu_getnext = mv88e6185_g1_vtu_getnext,
- 	.vtu_loadpurge = mv88e6185_g1_vtu_loadpurge,
--	.phylink_get_caps = mv88e6185_phylink_get_caps,
-+	.phylink_get_caps = mv88e6095_phylink_get_caps,
- 	.set_max_frame_size = mv88e6185_g1_set_max_frame_size,
- };
- 
-@@ -3850,7 +3869,7 @@ static const struct mv88e6xxx_ops mv88e6097_ops = {
- 	.rmu_disable = mv88e6085_g1_rmu_disable,
- 	.vtu_getnext = mv88e6352_g1_vtu_getnext,
- 	.vtu_loadpurge = mv88e6352_g1_vtu_loadpurge,
--	.phylink_get_caps = mv88e6185_phylink_get_caps,
-+	.phylink_get_caps = mv88e6095_phylink_get_caps,
- 	.set_max_frame_size = mv88e6185_g1_set_max_frame_size,
- };
- 
+This Kconfig carries the IMA measurement list across kexec.  This has
+nothing to do with appended signatures.
+
+config IMA_KEXEC
+        bool "Enable carrying the IMA measurement list across a soft
+boot"
+        depends on IMA && TCG_TPM && HAVE_IMA_KEXEC
+
+In addition to powerpc, arm64 sets HAVE_IMA_KEXEC.
+
+Even prior to the kexec appended signature support, like all other
+files, the kexec kernel image signature could be stored in
+security.ima.
+
+> 
+> For distributions to have uniform security features across platforms one
+> option should be used on all platforms.
+
+The kexec kernel image measurement will not be included in the BIOS
+event log.  Even if the measurement is included in the IMA measurement
+list, without the IMA_KEXEC Kconfig the measurement list will not be
+carried across kexec.  For those not interested in "trusted boot" or
+those who do not need it for compliance, the simplification should be
+fine.
+
 -- 
-2.25.1
+thanks,
+
+Mimi
 

@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6224B3A12
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 09:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 937114B3A14
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 09:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234343AbiBMIIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 03:08:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43134 "EHLO
+        id S234346AbiBMITD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 03:19:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiBMIIO (ORCPT
+        with ESMTP id S229555AbiBMITB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 03:08:14 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7A95E763;
-        Sun, 13 Feb 2022 00:08:07 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id w10so4042054edd.11;
-        Sun, 13 Feb 2022 00:08:07 -0800 (PST)
+        Sun, 13 Feb 2022 03:19:01 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5611D5E76A
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 00:18:55 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id f19so1853596qvb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 00:18:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=iSzoE/dBtyasT2BnJpIwUu2rMSPkqh/hGHEQuNqLzdk=;
-        b=C+WZ+eH1c/+ZuI4bD3UmYtajl4ZhNZQkoGDJ2ebynTyte6r48567RNcKVOXLCLKJSF
-         bj64exCerPJDd0ksl1zgJU+3iNaYQ4Y7Qn+vuIiDWFkDIFRGDIXXvMHHhjG/bjp2g21G
-         okS825jPbfmVMoSR4nqId8nzfiSYLWa4cItItHI0jGpNG4ZWSNchk6lw+6OD/vA9pyay
-         g06o1Y7d1Bhqc/KlTC4OT/9Ts/13WeRNAE1yAVb7Ln00gWGxBGWHozj9jaPam0Sqk96N
-         dwaydeg87xKdS6QFjiF5hPtn3WCZ1I1pdwHdvKd11aVHk1MicLYJykTC3E3oRpVhuVMh
-         ZO/g==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ka+WtwOHO1gjnQgZ36IyjK2m+vjQDWK4Uo5ptmLDUIo=;
+        b=gkIGPTmvAh+/FUhldvfShikTtxhai3dcpLuguacWylN8rYNg5mh7gsA3FgRL76plh1
+         Legd7zoCe3iRmWGjefkHeNoOBuR/s/9YrTezjrC57hahJ9Vgz9ZVlG2FZvh3MvacMyhn
+         i6NzUFmGo1ewWDecsNGGuCx9w9oXWd8xHCCxWVlbqGGKxzj+7StBGUBYr+B6tDGAHeaw
+         puP3QLf6XCPtz3O/AmpMdSzjgSBG4X02AzpU6UzlQXvZJZpbFJFyRqNmcfUlJFRZwfa+
+         vbGxAf8xcV2AFOpMnCAn5BzMwHzRPreLjVcjFXSDZrYTXGw5TaBqKvuBzPMxcAzm6U/C
+         cUAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=iSzoE/dBtyasT2BnJpIwUu2rMSPkqh/hGHEQuNqLzdk=;
-        b=n23kJr545kbUWfE8czSsRfCmpq/g09dlfamH0at7utKwBLqY1BU67ikENdoLM1uVw3
-         o7uWoGFmSPQ2BX4vshF3vOexKupHz1ejV5A9rzHtoYa1iZBBzD7mdq0LwuKtufTyZa92
-         FRtozETOqvz7EfHFs1XfR5hNVyANiKcUoceks98JC4T8rIx8OBtGFjSJQ8jBllJ/ZiRQ
-         fNSOzSZVeiDrVHahbkX0aD0x55UdtsFnHUpU1Rae3hIDufqIyZwFlj1obsNOrOOX3qbH
-         2r1/2zwCRfPRws2ddJyqNc7GwlUv8QXHDRzIZ20kYc1jrVCviVTJHb+OgLllcwTd+V97
-         AgUA==
-X-Gm-Message-State: AOAM530gD/AnVteg9j3U/gh+8mdSfaJuACelItO3ez7OJ53TX3qXWuhg
-        LhzRaXAGzUI/TZ2bZ2Gf5b3GypaIsEHYoZeBqDU=
-X-Google-Smtp-Source: ABdhPJzLqPBFQal2aP5BT6oi145eP2/7IczCOA0LLdKUGL9EEmrD1ozn8DsEoMlfahZwIh9pCr721fC2WkWr4h6Bah8=
-X-Received: by 2002:a05:6402:1c8f:: with SMTP id cy15mr8632318edb.130.1644739686394;
- Sun, 13 Feb 2022 00:08:06 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ka+WtwOHO1gjnQgZ36IyjK2m+vjQDWK4Uo5ptmLDUIo=;
+        b=7jD71MEd+hBKs1DbUyrWZWOdH6t3DPWbkwgQQhMldZULp2AwlX0koYCF83kHNhi5aC
+         eGDJbrMkV2sY7FD4JNikRBVNNpjVVdXMGW9yVVxICgXPerO+MpO5g+m2OxsIBF2BuJX7
+         6148HGIiX5xzaGhtHtMDOUg4p8jpmO2wW3St86J/qJggLeJ3naOC8Qv/wFLYdZK0rPUY
+         DQSxc9cgiuoNRk97bd93lYpI8G0LjQB25C3vG6qZQpYw33QDlSRTU8eoGdbgYOdPexuv
+         3kpbNicCuRwklZcifxU0oMu8rgRfnEHPERvI98scBzuiMCk4IRxUmBmfVhDw1Ipzi/b1
+         v8Wg==
+X-Gm-Message-State: AOAM533cRVGFE5SD2eOKSYL/J4VHKvKRPPVYW/tdx+keF28qXHOlSPKb
+        VVEVN/9CZFZRaoUN+NWPgSg=
+X-Google-Smtp-Source: ABdhPJz/Nt7nOsBmZPl9TbVBzpoIrzCfEjIzg4GWaVxErPi2luwO8jQwxRsuiNIyIZodI3+vGv2Mxg==
+X-Received: by 2002:a05:6214:14b2:: with SMTP id bo18mr6019517qvb.13.1644740334489;
+        Sun, 13 Feb 2022 00:18:54 -0800 (PST)
+Received: from WRT-WX9.. ([207.246.89.135])
+        by smtp.gmail.com with ESMTPSA id d133sm2310560qkg.119.2022.02.13.00.18.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Feb 2022 00:18:54 -0800 (PST)
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Changbin Du <changbin.du@gmail.com>
+Subject: [PATCH v4] riscv: fix oops caused by irqsoff latency tracer
+Date:   Sun, 13 Feb 2022 16:18:45 +0800
+Message-Id: <20220213081845.9864-1-changbin.du@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <d3e6a461-5b37-ecfb-d63c-d35af27f2682@molgen.mpg.de>
-In-Reply-To: <d3e6a461-5b37-ecfb-d63c-d35af27f2682@molgen.mpg.de>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Sun, 13 Feb 2022 16:07:55 +0800
-Message-ID: <CAABZP2yOA2n-xux8uUC72vVYc14JfCawoOzp_pnTGDvY8cRSnw@mail.gmail.com>
-Subject: Re: Set environment variable `KVM` makes build fail
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-kbuild@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        rcu <rcu@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -71,53 +70,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Paul
+The trace_hardirqs_{on,off}() require the caller to setup frame pointer
+properly. This because these two functions use macro 'CALLER_ADDR1' (aka.
+__builtin_return_address(1)) to acquire caller info. If the $fp is used
+for other purpose, the code generated this macro (as below) could trigger
+memory access fault.
 
-Thank you for your trust in me.
+   0xffffffff8011510e <+80>:    ld      a1,-16(s0)
+   0xffffffff80115112 <+84>:    ld      s2,-8(a1)  # <-- paging fault here
 
-I think the following patch has a good explanation of what happened ;-)
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/=
-tools/testing/selftests/rcutorture/bin/torture.sh?id=3Da7d89cfb8e1269cb6d22=
-453adba56b8d0218589f
-"The torture-test scripting's long-standing use of KVM as the
-environment variable tracking the pathname of the rcutorture directory
-now conflicts with allmodconfig builds due to the
-virt/kvm/Makefile.kvm file's use of this as a makefile variable"
+The oops message during booting if compiled with 'irqoff' tracer enabled:
+[    0.039615][    T0] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000f8
+[    0.041925][    T0] Oops [#1]
+[    0.042063][    T0] Modules linked in:
+[    0.042864][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1-00233-g9a20c48d1ed2 #29
+[    0.043568][    T0] Hardware name: riscv-virtio,qemu (DT)
+[    0.044343][    T0] epc : trace_hardirqs_on+0x56/0xe2
+[    0.044601][    T0]  ra : restore_all+0x12/0x6e
+[    0.044721][    T0] epc : ffffffff80126a5c ra : ffffffff80003b94 sp : ffffffff81403db0
+[    0.044801][    T0]  gp : ffffffff8163acd8 tp : ffffffff81414880 t0 : 0000000000000020
+[    0.044882][    T0]  t1 : 0098968000000000 t2 : 0000000000000000 s0 : ffffffff81403de0
+[    0.044967][    T0]  s1 : 0000000000000000 a0 : 0000000000000001 a1 : 0000000000000100
+[    0.045046][    T0]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
+[    0.045124][    T0]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000054494d45
+[    0.045210][    T0]  s2 : ffffffff80003b94 s3 : ffffffff81a8f1b0 s4 : ffffffff80e27b50
+[    0.045289][    T0]  s5 : ffffffff81414880 s6 : ffffffff8160fa00 s7 : 00000000800120e8
+[    0.045389][    T0]  s8 : 0000000080013100 s9 : 000000000000007f s10: 0000000000000000
+[    0.045474][    T0]  s11: 0000000000000000 t3 : 7fffffffffffffff t4 : 0000000000000000
+[    0.045548][    T0]  t5 : 0000000000000000 t6 : ffffffff814aa368
+[    0.045620][    T0] status: 0000000200000100 badaddr: 00000000000000f8 cause: 000000000000000d
+[    0.046402][    T0] [<ffffffff80003b94>] restore_all+0x12/0x6e
 
-Thanks
-Zhouyi
+This because the $fp(aka. $s0) register is not used as frame pointer in the
+assembly entry code.
 
-On Sun, Feb 13, 2022 at 2:03 PM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
->
-> Dear Linux folks,
->
->
-> Playing with rcutorture
-> (`tools/testing/selftests/rcutorture/bin/torture.sh`), a Linux kernel
-> build failed, because the script sets and exports the environment
-> variable `KVM`. I was able to reproduce that manually (on x86_64):
->
->      $ make defconfig
->      $ scripts/config -m KVM
->      $ scripts/config -m KVM_INTEL
->      $ scripts/config -d KVM_AMD
->      $ scripts/config -d KVM_XEN
->      $ scripts/config -d KVM_MMU_AUDIT
->      $ export KVM=3DXXX
->      $ make arch/x86/kvm/kvm.o
->      [=E2=80=A6]
->        LINK    /dev/shm/linux-kvm/tools/objtool/objtool
->      make[2]: *** No rule to make target 'arch/x86/kvm/XXX/kvm_main.o',
-> needed by 'arch/x86/kvm/kvm.o'.  Stop.
->      make[1]: *** [scripts/Makefile.build:550: arch/x86/kvm] Error 2
->      make: *** [Makefile:1831: arch/x86] Error 2
->
-> The directory `arch/x86/kvm/XXX` is created somehow.
->
-> Is that expected? Do you know what is going on? I wasn=E2=80=99t able to
-> reproduce this with other variables like `SND_HDA` for example.
->
->
-> Kind regards,
->
-> Paul
+	resume_kernel:
+		REG_L s0, TASK_TI_PREEMPT_COUNT(tp)
+		bnez s0, restore_all
+		REG_L s0, TASK_TI_FLAGS(tp)
+                andi s0, s0, _TIF_NEED_RESCHED
+                beqz s0, restore_all
+                call preempt_schedule_irq
+                j restore_all
+
+To fix above issue, here we add one extra level wrapper for function
+trace_hardirqs_{on,off}() so they can be safely called by low level entry
+code.
+
+Signed-off-by: Changbin Du <changbin.du@gmail.com>
+
+---
+v4: update explanation.
+v3: fix warning reported by documentation system.
+v2: fix compile warning.
+---
+ arch/riscv/kernel/Makefile    |  2 ++
+ arch/riscv/kernel/entry.S     | 10 +++++-----
+ arch/riscv/kernel/trace_irq.c | 27 +++++++++++++++++++++++++++
+ arch/riscv/kernel/trace_irq.h | 11 +++++++++++
+ 4 files changed, 45 insertions(+), 5 deletions(-)
+ create mode 100644 arch/riscv/kernel/trace_irq.c
+ create mode 100644 arch/riscv/kernel/trace_irq.h
+
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index 612556faa527..ffc87e76b1dd 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -51,6 +51,8 @@ obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
+ obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
+ obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
+ 
++obj-$(CONFIG_TRACE_IRQFLAGS)	+= trace_irq.o
++
+ obj-$(CONFIG_RISCV_BASE_PMU)	+= perf_event.o
+ obj-$(CONFIG_PERF_EVENTS)	+= perf_callchain.o
+ obj-$(CONFIG_HAVE_PERF_REGS)	+= perf_regs.o
+diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+index ed29e9c8f660..d6a46ed0bf05 100644
+--- a/arch/riscv/kernel/entry.S
++++ b/arch/riscv/kernel/entry.S
+@@ -108,7 +108,7 @@ _save_context:
+ .option pop
+ 
+ #ifdef CONFIG_TRACE_IRQFLAGS
+-	call trace_hardirqs_off
++	call __trace_hardirqs_off
+ #endif
+ 
+ #ifdef CONFIG_CONTEXT_TRACKING
+@@ -143,7 +143,7 @@ skip_context_tracking:
+ 	li t0, EXC_BREAKPOINT
+ 	beq s4, t0, 1f
+ #ifdef CONFIG_TRACE_IRQFLAGS
+-	call trace_hardirqs_on
++	call __trace_hardirqs_on
+ #endif
+ 	csrs CSR_STATUS, SR_IE
+ 
+@@ -234,7 +234,7 @@ ret_from_exception:
+ 	REG_L s0, PT_STATUS(sp)
+ 	csrc CSR_STATUS, SR_IE
+ #ifdef CONFIG_TRACE_IRQFLAGS
+-	call trace_hardirqs_off
++	call __trace_hardirqs_off
+ #endif
+ #ifdef CONFIG_RISCV_M_MODE
+ 	/* the MPP value is too large to be used as an immediate arg for addi */
+@@ -270,10 +270,10 @@ restore_all:
+ 	REG_L s1, PT_STATUS(sp)
+ 	andi t0, s1, SR_PIE
+ 	beqz t0, 1f
+-	call trace_hardirqs_on
++	call __trace_hardirqs_on
+ 	j 2f
+ 1:
+-	call trace_hardirqs_off
++	call __trace_hardirqs_off
+ 2:
+ #endif
+ 	REG_L a0, PT_STATUS(sp)
+diff --git a/arch/riscv/kernel/trace_irq.c b/arch/riscv/kernel/trace_irq.c
+new file mode 100644
+index 000000000000..095ac976d7da
+--- /dev/null
++++ b/arch/riscv/kernel/trace_irq.c
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
++ */
++
++#include <linux/irqflags.h>
++#include <linux/kprobes.h>
++#include "trace_irq.h"
++
++/*
++ * trace_hardirqs_on/off require the caller to setup frame pointer properly.
++ * Otherwise, CALLER_ADDR1 might trigger an pagging exception in kernel.
++ * Here we add one extra level so they can be safely called by low
++ * level entry code which $fp is used for other purpose.
++ */
++
++void __trace_hardirqs_on(void)
++{
++	trace_hardirqs_on();
++}
++NOKPROBE_SYMBOL(__trace_hardirqs_on);
++
++void __trace_hardirqs_off(void)
++{
++	trace_hardirqs_off();
++}
++NOKPROBE_SYMBOL(__trace_hardirqs_off);
+diff --git a/arch/riscv/kernel/trace_irq.h b/arch/riscv/kernel/trace_irq.h
+new file mode 100644
+index 000000000000..99fe67377e5e
+--- /dev/null
++++ b/arch/riscv/kernel/trace_irq.h
+@@ -0,0 +1,11 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
++ */
++#ifndef __TRACE_IRQ_H
++#define __TRACE_IRQ_H
++
++void __trace_hardirqs_on(void);
++void __trace_hardirqs_off(void);
++
++#endif /* __TRACE_IRQ_H */
+-- 
+2.32.0
+

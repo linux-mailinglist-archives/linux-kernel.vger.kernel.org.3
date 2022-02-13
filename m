@@ -2,161 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599884B3C03
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 16:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8D04B3C07
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 16:26:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236736AbiBMPZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 10:25:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40260 "EHLO
+        id S236761AbiBMPZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 10:25:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233396AbiBMPZr (ORCPT
+        with ESMTP id S236739AbiBMPZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 10:25:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15285C84F;
+        Sun, 13 Feb 2022 10:25:50 -0500
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B555D1B9;
+        Sun, 13 Feb 2022 07:25:42 -0800 (PST)
+Received: by mail-oo1-xc2c.google.com with SMTP id p190-20020a4a2fc7000000b0031820de484aso16493306oop.9;
+        Sun, 13 Feb 2022 07:25:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=adMLYytTCKC3gqDM6D8p4KEVfO3ISmY1G9RhS8Y69iQ=;
+        b=daAL2ANc88CpmbW5sUgvtX5T2+7fvq59RDG4KnZySasi5YzGURtgORy6A0t/6af/VM
+         GIijk3tHQ9ZEnAvxcJ/NoRWCPpvOppb5grLJaoSvBkZO2Q4QglI4RcoNydq37g9GZjeL
+         6c4B25d3RNpuZmlnAkEHQjUIAwZYJJtnvJJR5ITnMrzkx9jtMC2NrcJ6JAHTUTLMvDvD
+         hCMmwHSRjfwYgJuu2l5l/8nYXmXffoiHyvzG8Ek4JFY6KlocyCROlzXv9mbn+3asIhYg
+         9vM0Xy8Eplg+2TadryBapqjAUR2G7VlQqYE3Ah5x6W+7W2vBOYoO8w50UcWfa1LOjBtW
+         885w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=adMLYytTCKC3gqDM6D8p4KEVfO3ISmY1G9RhS8Y69iQ=;
+        b=JhYh+0uZ5G1XoD/yON0ke0tO3oikXEO1zDqcrPH38LsmEeasLTIT75+2lNJZr3xa5q
+         ydYhn7lenjZXj988otoLAzMRyQsr7bLK0Ys4+tvVtPnE2ZwMvWnvBL955OdktDVsPMdN
+         BrpfjDaVf9Z2/F3uJJ3Gl4C+MJjGwsTgD29Xey1RYGfYRUkBdIJVwAAPv1j2do870qJS
+         oUGPgaVOT5+2w1nfuqq7D5YnA4PpLFeLFHiWkh71mnHzb4vXst6u8uRPRsMOXVRA8Ko7
+         mM2ZAdKickz7t1hRXe+A3TE5njCXa8YBq4lnz8eV03qrGcjfpU8V2Q5G255lGYpa1usB
+         nfRw==
+X-Gm-Message-State: AOAM530sp51xNsVCQUMxh7LH+VWhU/8BbMPyuvJOD/i1ib/q0deaa5e1
+        sRvowS3EhTrjhb5fMfpbUXLJfhf9MfQJQA==
+X-Google-Smtp-Source: ABdhPJweZfHH4NZqZqzYGaeCrsI+94F2UKdAxxdYiTf+tNgiOFZ24QAdV46zeWxdBi1mi+271cRu2g==
+X-Received: by 2002:a05:6870:479e:: with SMTP id c30mr505499oaq.113.1644765942204;
+        Sun, 13 Feb 2022 07:25:42 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d2sm11802326ook.33.2022.02.13.07.25.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 13 Feb 2022 07:25:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6282461198;
-        Sun, 13 Feb 2022 15:25:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECA38C004E1;
-        Sun, 13 Feb 2022 15:25:39 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="aoG+cYJv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644765938;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Qu7F7nASzCXbLX8xn2An7b4T3SKVpy9K/XBe+vap7ts=;
-        b=aoG+cYJvhTPi8I2pwTIp4uBzpNLLo/te0WVV/MLLQBqF9jOgP6XnjmrH3ehVV2wnlECGnA
-        0Kx5A0KXsxyKTde2iwRr77HhdY6/qS1s5gOALUDQVzjTPrScI47ftSoY/n/cWyGYxV7mHu
-        S0miTlypBntjD+/faY5VRwn7kiZr1wg=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 20bd1738 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sun, 13 Feb 2022 15:25:37 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux@dominikbrodowski.net,
-        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Matt Mackall <mpm@selenic.com>, Kalle Valo <kvalo@kernel.org>,
-        ath9k-devel@qca.qualcomm.com, Theodore Ts'o <tytso@mit.edu>
-Subject: [PATCH] random: pull add_hwgenerator_randomness() declaration into random.h
-Date:   Sun, 13 Feb 2022 16:25:22 +0100
-Message-Id: <20220213152522.816777-1-Jason@zx2c4.com>
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 13 Feb 2022 07:25:39 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, x86@kernel.org,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Mark Gross <markgross@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Borislav Petkov <bp@suse.de>
+Subject: Re: [PATCH 1/2] x86/Kconfig: move and modify CONFIG_I8K
+Message-ID: <20220213152539.GA4073589@roeck-us.net>
+References: <20220212125654.357408-1-mat.jonczyk@o2.pl>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220212125654.357408-1-mat.jonczyk@o2.pl>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-add_hwgenerator_randomness() is a function implemented and documented
-inside of random.c. It is the way that hardware RNGs push data into it.
-Therefore, it should be declared in random.h. Otherwise sparse complains
-with:
+On Sat, Feb 12, 2022 at 01:56:53PM +0100, Mateusz Jończyk wrote:
+> In Kconfig, inside the "Processor type and features" menu, there is
+> the CONFIG_I8K option: "Dell i8k legacy laptop support". This is
+> very confusing - enabling CONFIG_I8K is not required for the kernel to
+> support old Dell laptops. This option is specific to the dell-smm-hwmon
+> driver, which mostly exports some hardware monitoring information and
+> allows the user to change fan speed.
+> 
+> This option is misplaced, so move CONFIG_I8K to drivers/hwmon/Kconfig,
+> where it belongs.
+> 
+> Also, modify the dependency order - change
+>         select SENSORS_DELL_SMM
+> to
+>         depends on SENSORS_DELL_SMM
+> as it is just a configuration option of dell-smm-hwmon. This includes
+> changing the option type from tristate to bool. It was tristate because
+> it could select CONFIG_SENSORS_DELL_SMM=m .
+> 
+> When running "make oldconfig" on configurations with
+> CONFIG_SENSORS_DELL_SMM enabled , this change will result in an
+> additional question (which could be printed several times during
+> bisecting). I think that tidying up the configuration is worth it,
+> though.
+> 
+> Next patch tweaks the description of CONFIG_I8K.
+> 
+> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+> Cc: Pali Rohár <pali@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Mark Gross <markgross@kernel.org>
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+> Acked-by: Borislav Petkov <bp@suse.de>
 
-random.c:1137:6: warning: symbol 'add_hwgenerator_randomness' was not declared. Should it be static?
+Applied  to hwmon-next.
 
-The alternative would be to include hw_random.h into random.c, but that
-wouldn't really be good for anything except slowing down compile time.
+Thanks,
+Guenter
 
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: Matt Mackall <mpm@selenic.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: linux-crypto@vger.kernel.org
-Cc: Kalle Valo <kvalo@kernel.org>
-Cc: ath9k-devel@qca.qualcomm.com
-Cc: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/hw_random/core.c        | 1 +
- drivers/net/wireless/ath/ath9k/rng.c | 1 +
- include/linux/hw_random.h            | 2 --
- include/linux/random.h               | 2 ++
- 4 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/char/hw_random/core.c b/drivers/char/hw_random/core.c
-index a3db27916256..cfb085de876b 100644
---- a/drivers/char/hw_random/core.c
-+++ b/drivers/char/hw_random/core.c
-@@ -15,6 +15,7 @@
- #include <linux/err.h>
- #include <linux/fs.h>
- #include <linux/hw_random.h>
-+#include <linux/random.h>
- #include <linux/kernel.h>
- #include <linux/kthread.h>
- #include <linux/sched/signal.h>
-diff --git a/drivers/net/wireless/ath/ath9k/rng.c b/drivers/net/wireless/ath/ath9k/rng.c
-index f9d3d6eedd3c..aae2bd3cac69 100644
---- a/drivers/net/wireless/ath/ath9k/rng.c
-+++ b/drivers/net/wireless/ath/ath9k/rng.c
-@@ -15,6 +15,7 @@
-  */
- 
- #include <linux/hw_random.h>
-+#include <linux/random.h>
- #include <linux/kthread.h>
- 
- #include "ath9k.h"
-diff --git a/include/linux/hw_random.h b/include/linux/hw_random.h
-index 1a9fc38f8938..aa1d4da03538 100644
---- a/include/linux/hw_random.h
-+++ b/include/linux/hw_random.h
-@@ -60,7 +60,5 @@ extern int devm_hwrng_register(struct device *dev, struct hwrng *rng);
- /** Unregister a Hardware Random Number Generator driver. */
- extern void hwrng_unregister(struct hwrng *rng);
- extern void devm_hwrng_unregister(struct device *dve, struct hwrng *rng);
--/** Feed random bits into the pool. */
--extern void add_hwgenerator_randomness(const void *buffer, size_t count, size_t entropy);
- 
- #endif /* LINUX_HWRANDOM_H_ */
-diff --git a/include/linux/random.h b/include/linux/random.h
-index 37e1e8c43d7e..d7354de9351e 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -32,6 +32,8 @@ static inline void add_latent_entropy(void) {}
- extern void add_input_randomness(unsigned int type, unsigned int code,
- 				 unsigned int value) __latent_entropy;
- extern void add_interrupt_randomness(int irq) __latent_entropy;
-+extern void add_hwgenerator_randomness(const void *buffer, size_t count,
-+				       size_t entropy);
- 
- extern void get_random_bytes(void *buf, size_t nbytes);
- extern int wait_for_random_bytes(void);
-
-base-commit: 1b057ea07bdc88c5ab77cb9a9bc46f8690492c81
-prerequisite-patch-id: 722401baa02ea28022621588a48b701d116c0ad5
-prerequisite-patch-id: 8da951eeda7c2b69ccf9de465f6e33b6a32d1b8a
-prerequisite-patch-id: b252828d4fa0211224b7cac57b7a40a26847caf3
-prerequisite-patch-id: ac9dc6b642ecfd8d42394b06d7757e4076da3a35
-prerequisite-patch-id: aecaed912a18486ea6743ef94d86683d6ce35320
-prerequisite-patch-id: 74e4aea70835f508339e5223f1b01266698f1173
-prerequisite-patch-id: c315d7e54165666dae309e3ac6d5e666c6c97a33
-prerequisite-patch-id: 9b8f505cf7f6b605ba5143c801e3487149481cde
-prerequisite-patch-id: 7e48a52a3947c9d0d73a9867a7a3fb403e0e18ff
-prerequisite-patch-id: 6c5c60bf502f7691087241c32c3a898135783ea0
-prerequisite-patch-id: 80b04855c1ec5315d175cda682f528dab5db13ca
-prerequisite-patch-id: 00ec3b71c3fe248d55b00f1b210f029a221f295a
-prerequisite-patch-id: bac900c80e57d5fd5234b81a51359a76b378a9e9
-prerequisite-patch-id: d2c04ce2d5667557c6d863fb26ad046a16b86f7b
-prerequisite-patch-id: 4d98a7945c6dce30c3630f4668aa4b32ca53c971
-prerequisite-patch-id: bd93293024b6ad54ffaf1ae5bee3d805961e310d
-prerequisite-patch-id: e17118e66c1761f954fac49822231986f429e996
-prerequisite-patch-id: dca680875ff2a505bc35d8999fa18832d6cc378e
-prerequisite-patch-id: 798e5c78bbc4c0e1748a64496e4b139b6d5c85bf
-prerequisite-patch-id: d41dada11f57459add7e28d4a8714929b9ed07f8
-prerequisite-patch-id: a3159bc3b25f67ab0fb409dfc86373e3b6c3bc5e
-prerequisite-patch-id: 6d069efe964e32e90ac052183360f3b8e78fd6bd
-prerequisite-patch-id: 56253c1e4f608de542e26e5201f476a6e33c0166
-prerequisite-patch-id: 4cdc3b96e517592d6fdf493baaa49e032f0788c9
-prerequisite-patch-id: 4a7abc91a7dc1f6fdfb6a1bf310e0aeffee284ec
--- 
-2.35.0
-
+> ---
+> 
+> v2:
+>   - do not drop "depends on PROC_FS" from CONFIG_I8K
+> 
+> Thanks to all for reviewing.
+> Mr Randy Dunlap: The first patch just moves CONFIG_I8K, without modifying
+> the help text.
+> 
+>  arch/x86/Kconfig      | 17 -----------------
+>  drivers/hwmon/Kconfig | 16 ++++++++++++++++
+>  2 files changed, 16 insertions(+), 17 deletions(-)
+> 
+> 
+> base-commit: dfd42facf1e4ada021b939b4e19c935dcdd55566
+> 
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 9f5bd41bf660..71d4ddd48c02 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -1275,23 +1275,6 @@ config TOSHIBA
+>  	  Say Y if you intend to run this kernel on a Toshiba portable.
+>  	  Say N otherwise.
+>  
+> -config I8K
+> -	tristate "Dell i8k legacy laptop support"
+> -	depends on HWMON
+> -	depends on PROC_FS
+> -	select SENSORS_DELL_SMM
+> -	help
+> -	  This option enables legacy /proc/i8k userspace interface in hwmon
+> -	  dell-smm-hwmon driver. Character file /proc/i8k reports bios version,
+> -	  temperature and allows controlling fan speeds of Dell laptops via
+> -	  System Management Mode. For old Dell laptops (like Dell Inspiron 8000)
+> -	  it reports also power and hotkey status. For fan speed control is
+> -	  needed userspace package i8kutils.
+> -
+> -	  Say Y if you intend to run this kernel on old Dell laptops or want to
+> -	  use userspace package i8kutils.
+> -	  Say N otherwise.
+> -
+>  config X86_REBOOTFIXUPS
+>  	bool "Enable X86 board specific fixups for reboot"
+>  	depends on X86_32
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 8df25f1079ba..1ee4e5eff567 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -505,6 +505,22 @@ config SENSORS_DELL_SMM
+>  	  When option I8K is also enabled this driver provides legacy /proc/i8k
+>  	  userspace interface for i8kutils package.
+>  
+> +config I8K
+> +	bool "Dell i8k legacy laptop support"
+> +	depends on SENSORS_DELL_SMM
+> +	depends on PROC_FS
+> +	help
+> +	  This option enables legacy /proc/i8k userspace interface in hwmon
+> +	  dell-smm-hwmon driver. Character file /proc/i8k reports bios version,
+> +	  temperature and allows controlling fan speeds of Dell laptops via
+> +	  System Management Mode. For old Dell laptops (like Dell Inspiron 8000)
+> +	  it reports also power and hotkey status. For fan speed control is
+> +	  needed userspace package i8kutils.
+> +
+> +	  Say Y if you intend to run this kernel on old Dell laptops or want to
+> +	  use userspace package i8kutils.
+> +	  Say N otherwise.
+> +
+>  config SENSORS_DA9052_ADC
+>  	tristate "Dialog DA9052/DA9053 ADC"
+>  	depends on PMIC_DA9052

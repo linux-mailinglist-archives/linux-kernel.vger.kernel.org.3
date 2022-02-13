@@ -2,144 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C07D4B3D00
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 19:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B3A4B3CF2
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 19:51:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237896AbiBMSyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 13:54:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54114 "EHLO
+        id S237871AbiBMSvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 13:51:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237882AbiBMSyJ (ORCPT
+        with ESMTP id S233785AbiBMSvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 13:54:09 -0500
-Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD4F580D9
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 10:54:03 -0800 (PST)
-Received: from [192.168.1.18] ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id JK0Xndg0HuvBOJK0XnOPod; Sun, 13 Feb 2022 19:54:02 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 13 Feb 2022 19:54:02 +0100
-X-ME-IP: 90.126.236.122
-Message-ID: <29e74800-1c3f-e043-97e6-d83f7a53fafb@wanadoo.fr>
-Date:   Sun, 13 Feb 2022 19:54:01 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] iio: use div64_u64() instead of do_div()
-Content-Language: fr
-To:     Jonathan Cameron <jic23@kernel.org>, Qing Wang <wangqing@vivo.com>
-Cc:     Jyoti Bhayana <jbhayana@google.com>,
+        Sun, 13 Feb 2022 13:51:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C802157B36;
+        Sun, 13 Feb 2022 10:51:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79133B80B54;
+        Sun, 13 Feb 2022 18:51:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49B95C004E1;
+        Sun, 13 Feb 2022 18:50:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644778262;
+        bh=ajZGYvyhJa3wD0M5n+Jzb3hdgWrFy+cw5hwyaeUdVcg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Mo5Qq7v0KbYG7JASp6Ui4ZOYm01H43aZtdgy/gGmYOwP76CbNOGbVRD36yY5i8NOt
+         QbKyBBg0o9XSsC6foLRZHnM9LSn+99rqQqJg5GiQIT+Ynu+LkwtNTmNJt/emVj3YxK
+         6wo7hm0s+6N8m9up9Q/WrUoc8mHS93FTMuRELe5jzpifEalrZ7aHt416jWu0LCsmkD
+         A+6FwVo2l3GxbEXD1JmRpzJy1nNymNMx74DnXnDcbaJgZggVN8Wf6y8dK8e9iiysbU
+         nfG/YcNdFAxshgCK0BMSpgP54ju2d0Pvog9IcAgeANrsb2KEa1Rc3VdfnqXrhmkj3q
+         eAGba/MMB+s/g==
+Date:   Sun, 13 Feb 2022 18:57:40 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
         Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1644395873-3937-1-git-send-email-wangqing@vivo.com>
- <20220213175940.1066f5a8@jic23-huawei>
- <9e5ed543-cd45-85db-50b5-52c2afd54c55@wanadoo.fr>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <9e5ed543-cd45-85db-50b5-52c2afd54c55@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org
+Subject: Re: [PATCH v2 01/12] iio: buffer-dma: Get rid of outgoing queue
+Message-ID: <20220213185740.0322a83d@jic23-huawei>
+In-Reply-To: <20220207125933.81634-2-paul@crapouillou.net>
+References: <20220207125933.81634-1-paul@crapouillou.net>
+        <20220207125933.81634-2-paul@crapouillou.net>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 13/02/2022 à 19:50, Christophe JAILLET a écrit :
-> Le 13/02/2022 à 18:59, Jonathan Cameron a écrit :
->> On Wed,  9 Feb 2022 00:37:53 -0800
->> Qing Wang <wangqing-DGpbCiVdSXo@public.gmane.org> wrote:
->>
->>> From: Wang Qing <wangqing-DGpbCiVdSXo@public.gmane.org>
->>>
->>> do_div() does a 64-by-32 division.
->>> When the divisor is u64, do_div() truncates it to 32 bits, this means it
->>> can test non-zero and be truncated to zero for division.
->>>
->>> fix do_div.cocci warning:
->>> do_div() does a 64-by-32 division, please consider using div64_u64 
->>> instead.
->>>
->>> Signed-off-by: Wang Qing <wangqing-DGpbCiVdSXo@public.gmane.org>
->> These look correct to me.  Jyoti, please could give these a sanity check?
->>
-> 
-> This is wrong.
-> 
-> See [1].
-> 
-> CJ
-> 
-> [1]: 
-> https://lore.kernel.org/linux-kernel/20211117112559.jix3hmx7uwqmuryg-bIcnvbaLZ9MEGnE8C9+IrQ@public.gmane.org/ 
+On Mon,  7 Feb 2022 12:59:22 +0000
+Paul Cercueil <paul@crapouillou.net> wrote:
 
-Broken link, sorry:
+> The buffer-dma code was using two queues, incoming and outgoing, to
+> manage the state of the blocks in use.
+> 
+> While this totally works, it adds some complexity to the code,
+> especially since the code only manages 2 blocks. It is much easier to
+> just check each block's state manually, and keep a counter for the next
+> block to dequeue.
+> 
+> Since the new DMABUF based API wouldn't use the outgoing queue anyway,
+> getting rid of it now makes the upcoming changes simpler.
+> 
+> With this change, the IIO_BLOCK_STATE_DEQUEUED is now useless, and can
+> be removed.
+> 
+> v2: - Only remove the outgoing queue, and keep the incoming queue, as we
+>       want the buffer to start streaming data as soon as it is enabled.
+>     - Remove IIO_BLOCK_STATE_DEQUEUED, since it is now functionally the
+>       same as IIO_BLOCK_STATE_DONE.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
 
-[1] 
-https://lore.kernel.org/linux-kernel/20211117112559.jix3hmx7uwqmuryg@pengutronix.de/
+Trivial process thing but change log should be here, not above as we don't
+want it to end up in the main git log.
 
-> 
-> 
->> Thanks,
->>
->> Jonathan
->>
->>> ---
->>>   drivers/iio/common/scmi_sensors/scmi_iio.c | 10 +++++-----
->>>   1 file changed, 5 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/drivers/iio/common/scmi_sensors/scmi_iio.c 
->>> b/drivers/iio/common/scmi_sensors/scmi_iio.c
->>> index d538bf3..d6df5da
->>> --- a/drivers/iio/common/scmi_sensors/scmi_iio.c
->>> +++ b/drivers/iio/common/scmi_sensors/scmi_iio.c
->>> @@ -160,7 +160,7 @@ static int scmi_iio_set_odr_val(struct iio_dev 
->>> *iio_dev, int val, int val2)
->>>       mult = scnprintf(buf, sizeof(buf), "%llu", sf) - 1;
->>>       sec = int_pow(10, mult) * UHZ_PER_HZ;
->>> -    do_div(sec, uHz);
->>> +    div64_u64(sec, uHz);
->>>       if (sec == 0) {
->>>           dev_err(&iio_dev->dev,
->>>               "Trying to set invalid sensor update value for sensor %s",
->>> @@ -237,10 +237,10 @@ static void convert_ns_to_freq(u64 interval_ns, 
->>> u64 *hz, u64 *uhz)
->>>       u64 rem, freq;
->>>       freq = NSEC_PER_SEC;
->>> -    rem = do_div(freq, interval_ns);
->>> +    rem = div64_u64(freq, interval_ns);
->>>       *hz = freq;
->>>       *uhz = rem * 1000000UL;
->>> -    do_div(*uhz, interval_ns);
->>> +    div64_u64(*uhz, interval_ns);
->>>   }
->>>   static int scmi_iio_get_odr_val(struct iio_dev *iio_dev, int *val, 
->>> int *val2)
->>> @@ -266,7 +266,7 @@ static int scmi_iio_get_odr_val(struct iio_dev 
->>> *iio_dev, int *val, int *val2)
->>>       mult = SCMI_SENS_CFG_GET_UPDATE_EXP(sensor_config);
->>>       if (mult < 0) {
->>>           sensor_interval_mult = int_pow(10, abs(mult));
->>> -        do_div(sensor_update_interval, sensor_interval_mult);
->>> +        div64_u64(sensor_update_interval, sensor_interval_mult);
->>>       } else {
->>>           sensor_interval_mult = int_pow(10, mult);
->>>           sensor_update_interval =
->>> @@ -500,7 +500,7 @@ static u64 scmi_iio_convert_interval_to_ns(u32 val)
->>>       mult = SCMI_SENS_INTVL_GET_EXP(val);
->>>       if (mult < 0) {
->>>           sensor_interval_mult = int_pow(10, abs(mult));
->>> -        do_div(sensor_update_interval, sensor_interval_mult);
->>> +        div64_u64(sensor_update_interval, sensor_interval_mult);
->>>       } else {
->>>           sensor_interval_mult = int_pow(10, mult);
->>>           sensor_update_interval =
->>
->>
-> 
-> 
 
+>  drivers/iio/buffer/industrialio-buffer-dma.c | 44 ++++++++++----------
+>  include/linux/iio/buffer-dma.h               |  7 ++--
+>  2 files changed, 26 insertions(+), 25 deletions(-)
+> 

@@ -2,131 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDDA4B3D21
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 20:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD284B3D22
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 20:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237934AbiBMTaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 14:30:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48304 "EHLO
+        id S237994AbiBMTco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 14:32:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiBMTaN (ORCPT
+        with ESMTP id S229737AbiBMTcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 14:30:13 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7237B56C11
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 11:30:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644780606; x=1676316606;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Z+IPQbc3DoIThr1y05QJVgCJisA7QjZzfj+r0fgo/G8=;
-  b=Mgz9UvtJAjrzRZZ36064nW6jLT4hdq6BCkJBCsPHKzfwSuS1G6YHYypw
-   T5iQIDjRO0Drpu4YZKyYJPJmXylTkU1SOlX5UO9+p1lLV1CcPdhWXZvvD
-   LGLwRzfP7Ke0CwClK44IKV6nUPVgIlehrlsERje7G+MTOR8S5/bE5C2AE
-   x3dL6HH/tuf0UWCOfQ6TTyx7tMGTCrjAmzJJk74aeLv/d/KZU/UDDAnki
-   uCJDgoh+tMyV5WjH/vyk73rzSUupxC+etUwMj9h3A0RxkwJZA0oHJjLhQ
-   dzgsAFurux90RFPopDEgjvvkjOXG1Ue5jPRHdpRfrKPz0G22RUo3Y4/c3
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="249717716"
-X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="249717716"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 11:30:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="484955778"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 13 Feb 2022 11:30:04 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJKZP-0007mF-WD; Sun, 13 Feb 2022 19:30:04 +0000
-Date:   Mon, 14 Feb 2022 03:29:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mathias Krause <minipli@grsecurity.net>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: kernel/sched/rt.c:257:6: error: no previous prototype for function
- 'unregister_rt_sched_group'
-Message-ID: <202202140339.Uk9VGrvV-lkp@intel.com>
+        Sun, 13 Feb 2022 14:32:43 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0D056C1E
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 11:32:36 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4Jxcv65sPzz9sT4;
+        Sun, 13 Feb 2022 20:32:34 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id jB2OT5VCQv1o; Sun, 13 Feb 2022 20:32:34 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4Jxcv6545cz9sSV;
+        Sun, 13 Feb 2022 20:32:34 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9F57D8B76D;
+        Sun, 13 Feb 2022 20:32:34 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id GNJya3KYTDNX; Sun, 13 Feb 2022 20:32:34 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.6.142])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5C1748B763;
+        Sun, 13 Feb 2022 20:32:34 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21DJWOnx2004700
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Sun, 13 Feb 2022 20:32:24 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21DJWNYC2004699;
+        Sun, 13 Feb 2022 20:32:23 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v5] mm: Uninline copy_overflow()
+Date:   Sun, 13 Feb 2022 20:32:23 +0100
+Message-Id: <b4b538f8301922d696a49e3e98d83a08a8895d3b.1644780738.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1644780742; l=2816; s=20211009; h=from:subject:message-id; bh=S2wykIjhSOi1maIHh3hglOIyFa2WUUwjiHHUCAjkVEw=; b=2MGvuKyMqgh2uS7KHg3fHrFZPoG8+BUo5flYpV0PWJhmLqUew4YH8xQTJRv/PD5WWe9M1UFmTVLY zSTQqpUZB+whg6CpZxh0LlkAcSQyb1U6VvTKwqwvPdnnOMz/Ftab
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mathias,
+While building a small config with CONFIG_CC_OPTIMISE_FOR_SIZE,
+I ended up with more than 50 times the following function in vmlinux
+because GCC doesn't honor the 'inline' keyword:
 
-FYI, the error/warning still remains.
+	c00243bc <copy_overflow>:
+	c00243bc:	94 21 ff f0 	stwu    r1,-16(r1)
+	c00243c0:	7c 85 23 78 	mr      r5,r4
+	c00243c4:	7c 64 1b 78 	mr      r4,r3
+	c00243c8:	3c 60 c0 62 	lis     r3,-16286
+	c00243cc:	7c 08 02 a6 	mflr    r0
+	c00243d0:	38 63 5e e5 	addi    r3,r3,24293
+	c00243d4:	90 01 00 14 	stw     r0,20(r1)
+	c00243d8:	4b ff 82 45 	bl      c001c61c <__warn_printk>
+	c00243dc:	0f e0 00 00 	twui    r0,0
+	c00243e0:	80 01 00 14 	lwz     r0,20(r1)
+	c00243e4:	38 21 00 10 	addi    r1,r1,16
+	c00243e8:	7c 08 03 a6 	mtlr    r0
+	c00243ec:	4e 80 00 20 	blr
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b81b1829e7e39f6cebdf6e4d5484eacbceda8554
-commit: b027789e5e50494c2325cc70c8642e7fd6059479 sched/fair: Prevent dead task groups from regaining cfs_rq's
-date:   3 months ago
-config: riscv-randconfig-c006-20220213 (https://download.01.org/0day-ci/archive/20220214/202202140339.Uk9VGrvV-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 478c237e21b2c3a83e46f26fcbeb3876682f9b14)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b027789e5e50494c2325cc70c8642e7fd6059479
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b027789e5e50494c2325cc70c8642e7fd6059479
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/ drivers/clk/bcm/ drivers/gpu/drm/ kernel/sched/
+With -Winline, GCC tells:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+	/include/linux/thread_info.h:212:20: warning: inlining failed in call to 'copy_overflow': call is unlikely and code size would grow [-Winline]
 
-All errors (new ones prefixed by >>):
+copy_overflow() is a non conditional warning called by
+check_copy_size() on an error path.
 
->> kernel/sched/rt.c:257:6: error: no previous prototype for function 'unregister_rt_sched_group' [-Werror,-Wmissing-prototypes]
-   void unregister_rt_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/rt.c:257:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void unregister_rt_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/rt.c:259:6: error: no previous prototype for function 'free_rt_sched_group' [-Werror,-Wmissing-prototypes]
-   void free_rt_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/rt.c:259:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void free_rt_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/rt.c:261:5: error: no previous prototype for function 'alloc_rt_sched_group' [-Werror,-Wmissing-prototypes]
-   int alloc_rt_sched_group(struct task_group *tg, struct task_group *parent)
-       ^
-   kernel/sched/rt.c:261:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int alloc_rt_sched_group(struct task_group *tg, struct task_group *parent)
-   ^
-   static 
-   kernel/sched/rt.c:675:6: error: no previous prototype for function 'sched_rt_bandwidth_account' [-Werror,-Wmissing-prototypes]
-   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
-        ^
-   kernel/sched/rt.c:675:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool sched_rt_bandwidth_account(struct rt_rq *rt_rq)
-   ^
-   static 
-   4 errors generated.
+check_copy_size() have to remain inlined in order to benefit
+from constant folding, but copy_overflow() is not worth inlining.
 
+Uninline it when CONFIG_BUG is selected.
 
-vim +/unregister_rt_sched_group +257 kernel/sched/rt.c
+When CONFIG_BUG is not selected, WARN() does nothing so skip it.
 
-   256	
- > 257	void unregister_rt_sched_group(struct task_group *tg) { }
-   258	
+This reduces the size of vmlinux by almost 4kbytes.
 
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+v5: Change to EXPORT_SYMBOL() instead of EXPORT_SYMBOL_GPL()
+
+v4: Make copy_overflow() a no-op when CONFIG_BUG is not selected
+
+v3: Added missing ; after EXPORT_SYMBOL()
+
+v2: Added missing EXPORT_SYMBOL() and enhanced commit message
+---
+ include/linux/thread_info.h | 5 ++++-
+ mm/maccess.c                | 6 ++++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/thread_info.h b/include/linux/thread_info.h
+index 73a6f34b3847..9f392ec76f2b 100644
+--- a/include/linux/thread_info.h
++++ b/include/linux/thread_info.h
+@@ -209,9 +209,12 @@ __bad_copy_from(void);
+ extern void __compiletime_error("copy destination size is too small")
+ __bad_copy_to(void);
+ 
++void __copy_overflow(int size, unsigned long count);
++
+ static inline void copy_overflow(int size, unsigned long count)
+ {
+-	WARN(1, "Buffer overflow detected (%d < %lu)!\n", size, count);
++	if (IS_ENABLED(CONFIG_BUG))
++		__copy_overflow(size, count);
+ }
+ 
+ static __always_inline __must_check bool
+diff --git a/mm/maccess.c b/mm/maccess.c
+index d3f1a1f0b1c1..a1b2a3a4559e 100644
+--- a/mm/maccess.c
++++ b/mm/maccess.c
+@@ -335,3 +335,9 @@ long strnlen_user_nofault(const void __user *unsafe_addr, long count)
+ 
+ 	return ret;
+ }
++
++void __copy_overflow(int size, unsigned long count)
++{
++	WARN(1, "Buffer overflow detected (%d < %lu)!\n", size, count);
++}
++EXPORT_SYMBOL(copy_overflow);
+-- 
+2.34.1
+

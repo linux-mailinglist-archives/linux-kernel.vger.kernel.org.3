@@ -2,58 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C89A4B3DCE
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 22:36:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C66F54B3DDE
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 22:56:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238458AbiBMVgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 16:36:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52928 "EHLO
+        id S238518AbiBMV4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 16:56:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238448AbiBMVgm (ORCPT
+        with ESMTP id S238480AbiBMV4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 16:36:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66C954184;
-        Sun, 13 Feb 2022 13:36:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 13 Feb 2022 16:56:41 -0500
+Received: from zeus.flokli.de (mail.zeus.flokli.de [88.198.15.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877E35419B;
+        Sun, 13 Feb 2022 13:56:31 -0800 (PST)
+Received: from localhost (ip-178-200-100-055.um45.pools.vodafone-ip.de [178.200.100.55])
+        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CA5AB80B65;
-        Sun, 13 Feb 2022 21:36:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 204ABC004E1;
-        Sun, 13 Feb 2022 21:36:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644788193;
-        bh=4yCJVPEw7EYBsTJLYhlqqqMDIc4BXzAueVAE4/s+j5c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=R5kR0RE9JKHj2aZsTK1zore29M00MxcceafzYv0Xw01sSyygcrDfUXMMMJump3JP9
-         6k14Cdx9owJVoMTxXpou5iFX0cI8mzTAKGV+bUQC4mmrqOBlKa1H54GOSE0Jd5qSDN
-         hDqbam0G7pY49soCf40EcdQrqgXL27isIZQzM3ZCbp+uPZG8yyKTP3Vk0nFS0/bwIO
-         V6SwBBh5EyDgOaAjrkQPWClOseMyM0siOOzliqpl7y+F6mifJu00NFtKBNZP97Q08s
-         uuZl0Ojg1ZhfnVGAS9Tlnj0XM7ehU2MmwPTv5bEmAZPWNcSapMiMPLuG+CHoFUvWwo
-         Mlbl1QXcHcAAg==
-Date:   Sun, 13 Feb 2022 22:36:27 +0100
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gregory Clement <gregory.clement@bootlin.com>
-Cc:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 3/6] serial: mvebu-uart: implement UART clock driver
- for configuring UART base clock
-Message-ID: <20220213223627.72f6e797@thinkpad>
-In-Reply-To: <20220211191238.2142-4-kabel@kernel.org>
-References: <20220211191238.2142-1-kabel@kernel.org>
-        <20220211191238.2142-4-kabel@kernel.org>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        (Authenticated sender: flokli@flokli.de)
+        by zeus.flokli.de (Postfix) with ESMTPSA id A8E9F1299FB8;
+        Sun, 13 Feb 2022 21:49:48 +0000 (UTC)
+From:   Florian Klink <flokli@flokli.de>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/3] HID: lenovo: Add support for ThinkPad TrackPoint
+Date:   Sun, 13 Feb 2022 22:49:21 +0100
+Message-Id: <20220213214924.32407-1-flokli@flokli.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,19 +40,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Feb 2022 20:12:35 +0100
-Marek Beh=C3=BAn <kabel@kernel.org> wrote:
+This is a re-roll of v3, fixing the block comment alignment warning
+checkpatch.pl is complaining about.
 
-> For these reasons, this new UART clock driver does not use
-> ioremap_resource(), but only ioremap() to prevent resource conflicts
-> between UART clock driver and UART driver.
-> =3D=3D=3D
+It's still complaining about line length of the comment next to the
+magic numbers, but as those comments appear the same in hid-bigbenff.c,
+I assume that's fine.
 
-These three equal signs "=3D=3D=3D" shouldn't be there in the commit messag=
-e,
-it should be an empty line instead. I accidentaly forgot to remove it
-while I was rewriting the commit message :-(.
 
-Please let me know if I should resend this.
-
-Marek

@@ -2,264 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB614B3DE4
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 23:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 862CB4B3DEA
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 23:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238534AbiBMWCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 17:02:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59988 "EHLO
+        id S238541AbiBMWKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 17:10:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238435AbiBMWCS (ORCPT
+        with ESMTP id S233686AbiBMWKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 17:02:18 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857B7541AB
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 14:02:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644789732; x=1676325732;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GRRDRwAyuRUthgsnp7PMFzr7hutQ2aKWIrRPUmcF2J4=;
-  b=Lt/dI/+/GR9ID6MGGR+21Xf5ixpuwLOqhp88BMu+fMJP02sapsG2NUJV
-   Abej/C71QQaUyDAwxOhrkPyzOVHiEHBX1W2CRRQ6/IrqFBoyOxb+ZYpFF
-   BYQH5XTGnK26/m2kkZDzd1kOvb3hMN/8tDwiRdLUlPlmolVuM5yMhF3vi
-   sCApjIf/AxW94lU81ZURM9WPsFM6ahxFdTv+l1TBDAgwr5R2jeg1rNgj5
-   zHO8H7BNNMZ1a2Lj2zJ0UzGZcEBbdJn5PS8A0N4Pw4B+phlDShrLadE5v
-   XOnYOlhckM+TB/UOBqECLt4vpPSt9TOC27pwW8oRB1Cbkw/QbJgpwT+nK
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="230614861"
-X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="230614861"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 14:02:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="501415210"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 13 Feb 2022 14:02:10 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJMwb-0007tE-SG; Sun, 13 Feb 2022 22:02:09 +0000
-Date:   Mon, 14 Feb 2022 06:02:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [toke:xdp-queueing-02 5/11] ld.lld: error: duplicate symbol:
- pifo_map_dequeue
-Message-ID: <202202140559.L2j44zUI-lkp@intel.com>
+        Sun, 13 Feb 2022 17:10:00 -0500
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2548F54192
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 14:09:54 -0800 (PST)
+Received: by mail-vk1-xa2f.google.com with SMTP id a6so7817772vkc.3
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 14:09:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=655hBZv76V+mrSinPrNjP8l8aP2PjNxTSfwFsXq8kKw=;
+        b=EgsyC3C3wfNT+ZC4PsLdvJGD1LBMmBNknllDyLdwe8wxW8zD7WvXDvGw0HfEvaGVx6
+         hkAb3D4NTB9S36yWBvho1x9xYu/4/hFoZZUV76+pRybqJ4xJTuv2aAaLOh/1m71Sx+pU
+         GDt+figOp2KoDp26N4fHxIBisEKNSnXZ6AkdTuo6+SQPNRbqixnLxP1vdt2+uE57eumk
+         xZx0PfC8asPnragQw54IKS+1WPhNEMKgGQsE1m27+zP7LZm2T0CLCyMhoLWKFJrWmVaX
+         dK2kETWlDXQXyiWlRrQ6kBLR73U5zfhsZmaceF4ppBvN1zNYSqYkjQj4AdUh2Ccfkpfb
+         TU1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=655hBZv76V+mrSinPrNjP8l8aP2PjNxTSfwFsXq8kKw=;
+        b=1LuTqnDar4D30S9m+e50tD/iWWBFIJEVXV3d5GP7iTCJdjww1gcxyW/ZtVuGaGk8ck
+         bMT4Uqunc/t0iw5+72wKIaYayHLxcNwFQdoFwGXVnbRD27tyQRnlYO1jGWCYdkUn32AW
+         dzVcl//i3kQSrQCSnR6y8aUHkA5bf3vO/iMaNgYZQLSamk69yT5SXglfEJmAle8+NOLJ
+         BB1WjBTrRm2DmhR+jBt+6sIzu/cp1FBScDUJRNYq21z3bvw5H62eXTHTwlnFQoHK7S1P
+         w+T+JC+nMc0EIQhtaFW/qImXAT6aFtnn1swbvmWIWV+in1wRdrkBCv/caciNfERAKor+
+         TLYw==
+X-Gm-Message-State: AOAM531jSk7Kx6dH4SgkMC5ySkPxRpHdjukVuQHhuliMWaSVUOz8hAuJ
+        GVxPbxzrUrrAZcJyWQKAzqx6cU/Lj98=
+X-Google-Smtp-Source: ABdhPJxW9AX6ZsjTJM6SLPGASAUERpdGPjg/y6Vml/dZcR1u/4TQ0XcX5OUOlBcCklkLb8pVTT6nLg==
+X-Received: by 2002:a05:6122:50d:: with SMTP id x13mr3099289vko.40.1644790192915;
+        Sun, 13 Feb 2022 14:09:52 -0800 (PST)
+Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com. [209.85.217.46])
+        by smtp.gmail.com with ESMTPSA id e19sm1593856vsk.18.2022.02.13.14.09.52
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 13 Feb 2022 14:09:52 -0800 (PST)
+Received: by mail-vs1-f46.google.com with SMTP id v6so16722697vsp.11
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 14:09:52 -0800 (PST)
+X-Received: by 2002:a67:cc14:: with SMTP id q20mr487373vsl.74.1644790191828;
+ Sun, 13 Feb 2022 14:09:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220208181510.787069-1-andrew@daynix.com> <20220208181510.787069-3-andrew@daynix.com>
+ <CA+FuTSfPq-052=D3GzibMjUNXEcHTz=p87vW_3qU0OH9dDHSPQ@mail.gmail.com> <CABcq3pFLXUMi3ctr6WyJMaXbPjKregTzQ2fG1fwDU7tvk2uRFg@mail.gmail.com>
+In-Reply-To: <CABcq3pFLXUMi3ctr6WyJMaXbPjKregTzQ2fG1fwDU7tvk2uRFg@mail.gmail.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Sun, 13 Feb 2022 17:09:15 -0500
+X-Gmail-Original-Message-ID: <CA+FuTSfJS6b3ba7eW_u4TAHCq=ctpHDJUrb-Yc3iDwpJHHuBMw@mail.gmail.com>
+Message-ID: <CA+FuTSfJS6b3ba7eW_u4TAHCq=ctpHDJUrb-Yc3iDwpJHHuBMw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] drivers/net/virtio_net: Added basic RSS support.
+To:     Andrew Melnichenko <andrew@daynix.com>
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Network Development <netdev@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Yan Vugenfirer <yan@daynix.com>,
+        Yuri Benditovich <yuri.benditovich@daynix.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git xdp-queueing-02
-head:   26dde94b299bc277f7a99a99ba64b4363964e833
-commit: 34cc5abfbae0dfcb6967c54cb80f7595bc9c5c37 [5/11] Add a PIFO map type for queueing packets
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220214/202202140559.L2j44zUI-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/commit/?id=34cc5abfbae0dfcb6967c54cb80f7595bc9c5c37
-        git remote add toke https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git
-        git fetch --no-tags toke xdp-queueing-02
-        git checkout 34cc5abfbae0dfcb6967c54cb80f7595bc9c5c37
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/
+> > > @@ -3113,13 +3270,14 @@ static int virtnet_probe(struct virtio_device *vdev)
+> > >         u16 max_queue_pairs;
+> > >         int mtu;
+> > >
+> > > -       /* Find if host supports multiqueue virtio_net device */
+> > > -       err = virtio_cread_feature(vdev, VIRTIO_NET_F_MQ,
+> > > -                                  struct virtio_net_config,
+> > > -                                  max_virtqueue_pairs, &max_queue_pairs);
+> > > +       /* Find if host supports multiqueue/rss virtio_net device */
+> > > +       max_queue_pairs = 1;
+> > > +       if (virtio_has_feature(vdev, VIRTIO_NET_F_MQ) || virtio_has_feature(vdev, VIRTIO_NET_F_RSS))
+> > > +               max_queue_pairs =
+> > > +                    virtio_cread16(vdev, offsetof(struct virtio_net_config, max_virtqueue_pairs));
+> >
+> > Instead of testing either feature and treating them as somewhat equal,
+> > shouldn't RSS be dependent on MQ?
+>
+> No, RSS is dependent on CTRL_VQ. Technically RSS and MQ are similar features.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+RSS depends on having multiple queues.
 
-All error/warnings (new ones prefixed by >>):
+What would enabling VIRTIO_NET_F_RSS without VIRTIO_NET_F_MQ do?
 
-   In file included from net/socket.c:55:
-   In file included from include/linux/bpf-cgroup.h:5:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-                     ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   net/socket.c:2206:6: warning: variable 'max_optlen' set but not used [-Wunused-but-set-variable]
-           int max_optlen;
-               ^
-   2 warnings generated.
---
-   In file included from net/core/sock.c:133:
-   In file included from include/linux/filter.h:9:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-                     ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   1 warning generated.
---
-   In file included from net/core/dev.c:95:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-                     ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   net/core/dev.c:4971:1: warning: unused function 'sch_handle_ingress' [-Wunused-function]
-   sch_handle_ingress(struct sk_buff *skb, struct packet_type **pt_prev, int *ret,
-   ^
-   net/core/dev.c:5120:19: warning: unused function 'nf_ingress' [-Wunused-function]
-   static inline int nf_ingress(struct sk_buff *skb, struct packet_type **pt_prev,
-                     ^
-   3 warnings generated.
---
-   In file included from net/core/net-traces.c:35:
-   In file included from include/trace/events/tcp.h:12:
-   In file included from include/net/tcp.h:35:
-   In file included from include/net/sock_reuseport.h:5:
-   In file included from include/linux/filter.h:9:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-                     ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   In file included from net/core/net-traces.c:50:
-   In file included from include/trace/events/neigh.h:255:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:873:
-   include/trace/events/neigh.h:42:20: warning: variable 'pin6' set but not used [-Wunused-but-set-variable]
-                   struct in6_addr *pin6;
-                                    ^
-   In file included from net/core/net-traces.c:50:
-   In file included from include/trace/events/neigh.h:255:
-   In file included from include/trace/define_trace.h:103:
-   In file included from include/trace/perf.h:107:
-   include/trace/events/neigh.h:42:20: warning: variable 'pin6' set but not used [-Wunused-but-set-variable]
-                   struct in6_addr *pin6;
-                                    ^
-   3 warnings generated.
---
-   In file included from net/ipv4/route.c:95:
-   In file included from include/net/tcp.h:35:
-   In file included from include/net/sock_reuseport.h:5:
-   In file included from include/linux/filter.h:9:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-                     ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   net/ipv4/route.c:869:6: warning: variable 'log_martians' set but not used [-Wunused-but-set-variable]
-           int log_martians;
-               ^
-   2 warnings generated.
---
-   In file included from net/ipv4/tcp_output.c:40:
-   In file included from include/net/tcp.h:35:
-   In file included from include/net/sock_reuseport.h:5:
-   In file included from include/linux/filter.h:9:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-                     ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   net/ipv4/tcp_output.c:188:3: warning: result of comparison of constant -1 with expression of type 'u8' (aka 'unsigned char') is always false [-Wtautological-constant-out-of-range-compare]
-                   NET_ADD_STATS(sock_net(sk), LINUX_MIB_TCPACKCOMPRESSED,
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/ip.h:292:41: note: expanded from macro 'NET_ADD_STATS'
-   #define NET_ADD_STATS(net, field, adnd) SNMP_ADD_STATS((net)->mib.net_statistics, field, adnd)
-                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/snmp.h:143:4: note: expanded from macro 'SNMP_ADD_STATS'
-                           this_cpu_add(mib->mibs[field], addend)
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:509:33: note: expanded from macro 'this_cpu_add'
-   #define this_cpu_add(pcp, val)          __pcpu_size_call(this_cpu_add_, pcp, val)
-                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   <scratch space>:148:1: note: expanded from here
-   this_cpu_add_4
-   ^
-   arch/x86/include/asm/percpu.h:268:34: note: expanded from macro 'this_cpu_add_4'
-   #define this_cpu_add_4(pcp, val)        percpu_add_op(4, volatile, (pcp), val)
-                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/percpu.h:127:31: note: expanded from macro 'percpu_add_op'
-                                 ((val) == 1 || (val) == -1)) ?            \
-                                                ~~~~~ ^  ~~
-   2 warnings generated.
---
-   In file included from net/netfilter/ipvs/ip_vs_core.c:34:
-   In file included from include/net/tcp.h:35:
-   In file included from include/net/sock_reuseport.h:5:
-   In file included from include/linux/filter.h:9:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-                     ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   net/netfilter/ipvs/ip_vs_core.c:1596:8: warning: variable 'outer_proto' set but not used [-Wunused-but-set-variable]
-           char *outer_proto = "IPIP";
-                 ^
-   2 warnings generated.
---
-   In file included from net/netfilter/ipvs/ip_vs_xmit.c:33:
-   In file included from include/net/tcp.h:35:
-   In file included from include/net/sock_reuseport.h:5:
-   In file included from include/linux/filter.h:9:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-                     ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   net/netfilter/ipvs/ip_vs_xmit.c:107:1: warning: unused function '__mtu_check_toobig_v6' [-Wunused-function]
-   __mtu_check_toobig_v6(const struct sk_buff *skb, u32 mtu)
-   ^
-   2 warnings generated.
---
-   In file included from net/mptcp/options.c:11:
-   In file included from include/net/tcp.h:35:
-   In file included from include/net/sock_reuseport.h:5:
-   In file included from include/linux/filter.h:9:
->> include/linux/bpf.h:1966:19: warning: no previous prototype for function 'pifo_map_dequeue' [-Wmissing-prototypes]
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-                     ^
-   include/linux/bpf.h:1966:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct xdp_frame *pifo_map_dequeue(struct bpf_map *map, u64 flags)
-   ^
-   static 
-   net/mptcp/options.c:554:21: warning: parameter 'remaining' set but not used [-Wunused-but-set-parameter]
-                                             unsigned int remaining,
-                                                          ^
-   2 warnings generated.
---
->> ld.lld: error: duplicate symbol: pifo_map_dequeue
-   >>> defined in net/bluetooth/bluetooth.o(l2cap_core.o)
-   >>> defined in net/bluetooth/bluetooth.o(l2cap_sock.o)
---
->> ld.lld: error: duplicate symbol: pifo_map_dequeue
-   >>> defined in net/netfilter/ipset/ip_set.o(ip_set_getport.o)
-   >>> defined in net/netfilter/ipset/ip_set.o(pfxlen.o)
-..
+> >
+> > >
+> > >         /* We need at least 2 queue's */
+> > > -       if (err || max_queue_pairs < VIRTIO_NET_CTRL_MQ_VQ_PAIRS_MIN ||
+> > > +       if (max_queue_pairs < VIRTIO_NET_CTRL_MQ_VQ_PAIRS_MIN ||
+> > >             max_queue_pairs > VIRTIO_NET_CTRL_MQ_VQ_PAIRS_MAX ||
+> > >             !virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_VQ))
+> > >                 max_queue_pairs = 1;
+> > > @@ -3207,6 +3365,23 @@ static int virtnet_probe(struct virtio_device *vdev)
+> > >         if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF))
+> > >                 vi->mergeable_rx_bufs = true;
+> > >
+> > > +       if (virtio_has_feature(vdev, VIRTIO_NET_F_RSS)) {
+> > > +               vi->has_rss = true;
+> > > +               vi->rss_indir_table_size =
+> > > +                       virtio_cread16(vdev, offsetof(struct virtio_net_config,
+> > > +                               rss_max_indirection_table_length));
+> > > +               vi->rss_key_size =
+> > > +                       virtio_cread8(vdev, offsetof(struct virtio_net_config, rss_max_key_size));
+> > > +
+> > > +               vi->rss_hash_types_supported =
+> > > +                   virtio_cread32(vdev, offsetof(struct virtio_net_config, supported_hash_types));
+> > > +               vi->rss_hash_types_supported &=
+> > > +                               ~(VIRTIO_NET_RSS_HASH_TYPE_IP_EX |
+> > > +                                 VIRTIO_NET_RSS_HASH_TYPE_TCP_EX |
+> > > +                                 VIRTIO_NET_RSS_HASH_TYPE_UDP_EX);
+> > > +
+> > > +               dev->hw_features |= NETIF_F_RXHASH;
+> >
+> > Only make the feature visible when the hash is actually reported in
+> > the skb, patch 3.
+>
+> VirtioNET has two features: RSS(steering only) and hash(hash report in
+> vnet header)
+> Both features may be enabled/disabled separately:
+> 1. rss on and hash off - packets steered to the corresponding vqs
+> 2. rss off and hash on - packets steered by tap(like mq) but headers
+> have properly calculated hash.
+> 3. rss on and hash on - packets steered to corresponding vqs and hash
+> is present in the header.
+>
+> RXHASH feature allows the user to enable/disable the rss/hash(any combination).
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+I find that confusing, but.. I see that there is prior art where some
+drivers enable/disable entire RSS load balancing based on this flag.
+So ok.
+
+> I think it's a good idea to leave RXHASH in patch 2/4 to give the user
+> ability to manipulate the rss only feature.
+> But, if you think that it requires to move it to the 3/4, I'll do it.
+>
+> >
+> > Also, clearly separate the feature patches (2) rss, (3) rxhash, (4)
+> > rxhash config.
+>
+> Currently:
+> Patch 2/4 - adds VirtioNet rss feature.
+> Patch 3/4 - adds VirtioNet hash report feature.
+> Patch 4/4 - adds the ability to manipulate supported hash types.
+>
+> Can you provide more detailed suggestions on how to move hunks?
+
+I gave one in the follow-on patch, to which you responded. That's probably it.

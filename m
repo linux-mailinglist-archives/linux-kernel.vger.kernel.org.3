@@ -2,125 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4FD4B3C5D
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 18:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 495C94B3C60
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 18:10:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237211AbiBMRHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 12:07:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55586 "EHLO
+        id S237222AbiBMRIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 12:08:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234238AbiBMRHT (ORCPT
+        with ESMTP id S232033AbiBMRIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 12:07:19 -0500
-Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FA5DFE5
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 09:07:12 -0800 (PST)
-Received: from pop-os.home ([90.126.236.122])
-        by smtp.orange.fr with ESMTPA
-        id JIL8nd3atuvBOJIL8nOEXk; Sun, 13 Feb 2022 18:07:11 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sun, 13 Feb 2022 18:07:11 +0100
-X-ME-IP: 90.126.236.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Nicolas Saenz Julienne <nicolas.saenz@prodys.net>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH] power: supply: sbs-charger: Don't cancel work that is not initialized
-Date:   Sun, 13 Feb 2022 18:07:03 +0100
-Message-Id: <6a6b4c9ce80b0edb4c4c6a52d8b9a618a4325d42.1644772001.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.32.0
+        Sun, 13 Feb 2022 12:08:40 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5D54927C
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 09:08:33 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id s185so15137610oie.3
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 09:08:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ddTopwiOGudbD9c0a1S+23MlMo36ot+qZJddmpaLkno=;
+        b=10QNQxhBItsEVnI9uWuTdUg1N8XxitvYvB6ISMdKdA6/icQ88LLUBFxcdcPqR+6zs2
+         xBfa9AWa1Sr7eef5v45RJnVrvCkVoSzxtqCXLx+N/rWMUOpMRjX/NNMdJXc3PQ5+uwEU
+         J4zuED6wDY5ShU6pzYHB/wrfHTXWpNNsJ64I8n4n5oImdktZTLA3OpZ+Lf/GZZiWDS4l
+         pxq7L0rYCQl6hK0OnvvEdfYwo7o6KYl/UUHc7R8XIudFXKwadJKgtJRhCbb6VL+qgqkH
+         j0WuFjrsfd0eSptRIbcptITiXIS+jxSkG3VzZzx0nFvQ70+lZoN6nqXTo/WXmCTN5+QQ
+         6/eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ddTopwiOGudbD9c0a1S+23MlMo36ot+qZJddmpaLkno=;
+        b=tEsFM0sBatcImqsYuvNfgmkWfQKY5bgE+JJwXQV04Ei6NOxZ/tG9sQJwvyw24/8fUw
+         REqQejdhqEdx5eFptaQ4I1JeWLEmDgcy19szG3Cl6/5obfMidJy5+w0IIiPZkKRoQt/6
+         k2ElVxfPhv6SFmyndnVCnaZmX2v6u7OXnqJoeYqo+5sEJHARiSyBya6GEKojRbhb7InB
+         ukDyCeq1vS90Al8Hf889FKiJ6kEnhnCjkNoVy2eni9JKYC/3ASh/JkGXmfj3YDgMgJ3u
+         5+yvzAgYV6II/TB/uuvvjj02xZ9yMlHAdEr4pZWMgsO9mW+YZqrY/7HLYHBFVchkA1j2
+         TgaQ==
+X-Gm-Message-State: AOAM530V1iv/aJ20gchYJhbixpQ0c8aWLdJ+xdVfmZ9E6Y24nHKNbPu3
+        rCW+/3IiLC2y0sHq35ngET6aRAjsDE983+kOvR8+2w==
+X-Google-Smtp-Source: ABdhPJx6F8OPpe1PPrZyszS/d8TyHzUHd9dKhENhV4//VQzt2tEHJaVAXRekVPgnJuRKyRH5j6Wzt0gKKGcEGFpF318=
+X-Received: by 2002:a05:6808:1206:: with SMTP id a6mr4162215oil.279.1644772112850;
+ Sun, 13 Feb 2022 09:08:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220208181510.787069-1-andrew@daynix.com> <20220208181510.787069-4-andrew@daynix.com>
+ <CA+FuTSdrHwNWh1Mz7KT8w+Z69LcNipeTcasny6ioqOUYBisNXg@mail.gmail.com>
+In-Reply-To: <CA+FuTSdrHwNWh1Mz7KT8w+Z69LcNipeTcasny6ioqOUYBisNXg@mail.gmail.com>
+From:   Andrew Melnichenko <andrew@daynix.com>
+Date:   Sun, 13 Feb 2022 19:08:21 +0200
+Message-ID: <CABcq3pFpP1OkbsmZpMuM53DNSRo94uS9DLQ_8JVmuO0rJuRN_w@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] drivers/net/virtio_net: Added RSS hash report.
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Yan Vugenfirer <yan@daynix.com>,
+        Yuri Benditovich <yuri.benditovich@daynix.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver can use an interrupt or polling in order get the charger's
-status.
+Hi all,
 
-When using polling, a delayed work is used.
+On Tue, Feb 8, 2022 at 10:55 PM Willem de Bruijn
+<willemdebruijn.kernel@gmail.com> wrote:
+>
+> On Tue, Feb 8, 2022 at 1:19 PM Andrew Melnychenko <andrew@daynix.com> wrote:
+> >
+> > Added features for RSS hash report.
+> > If hash is provided - it sets to skb.
+> > Added checks if rss and/or hash are enabled together.
+> >
+> > Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
+> > ---
+> >  drivers/net/virtio_net.c | 51 ++++++++++++++++++++++++++++++++++------
+> >  1 file changed, 44 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > index 495aed524e33..543da2fbdd2d 100644
+> > --- a/drivers/net/virtio_net.c
+> > +++ b/drivers/net/virtio_net.c
+> > @@ -227,6 +227,7 @@ struct virtnet_info {
+> >
+> >         /* Host supports rss and/or hash report */
+> >         bool has_rss;
+> > +       bool has_rss_hash_report;
+> >         u8 rss_key_size;
+> >         u16 rss_indir_table_size;
+> >         u32 rss_hash_types_supported;
+> > @@ -421,7 +422,7 @@ static struct sk_buff *page_to_skb(struct virtnet_info *vi,
+> >
+> >         hdr_len = vi->hdr_len;
+> >         if (vi->mergeable_rx_bufs)
+> > -               hdr_padded_len = sizeof(*hdr);
+> > +               hdr_padded_len = hdr_len;
+>
+> Belongs in patch 1?
 
-However, the remove() function unconditionally call
-cancel_delayed_work_sync(), even if the delayed work is not used and is not
-initialized.
+Yeah, I'll move it.
 
-In order to fix it, use devm_delayed_work_autocancel() and remove the now
-useless remove() function.
+>
+> >         else
+> >                 hdr_padded_len = sizeof(struct padded_vnet_hdr);
+> >
+> > @@ -1156,6 +1157,8 @@ static void receive_buf(struct virtnet_info *vi, struct receive_queue *rq,
+> >         struct net_device *dev = vi->dev;
+> >         struct sk_buff *skb;
+> >         struct virtio_net_hdr_mrg_rxbuf *hdr;
+> > +       struct virtio_net_hdr_v1_hash *hdr_hash;
+> > +       enum pkt_hash_types rss_hash_type;
+> >
+> >         if (unlikely(len < vi->hdr_len + ETH_HLEN)) {
+> >                 pr_debug("%s: short packet %i\n", dev->name, len);
+> > @@ -1182,6 +1185,29 @@ static void receive_buf(struct virtnet_info *vi, struct receive_queue *rq,
+> >                 return;
+> >
+> >         hdr = skb_vnet_hdr(skb);
+> > +       if (dev->features & NETIF_F_RXHASH && vi->has_rss_hash_report) {
+>
+> Can the first be true if the second is not?
 
-Fixes: feb583e37f8a ("power: supply: add sbs-charger driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-2 more comments:
-   - i2c_set_clientdata() looks now useless and could be removed as well.
-     I've left it because removing such assigned already played me some
-     unexpected trick.
+Yes, RSS may be enabled, but the hash report feature is disabled.
+For now, it's possible to enable/disable VirtioNet RSS by manipulating RXHASH.
 
-   - Should this be backported, devm_delayed_work_autocancel() is not
-     really old and may not be available in older kernel.
-     In this case a "if (!client->irq)" in the remove function would also
-     fix the issue
----
- drivers/power/supply/sbs-charger.c | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+>
+> > +               hdr_hash = (struct virtio_net_hdr_v1_hash *)(hdr);
+> > +
+> > +               switch (hdr_hash->hash_report) {
+> > +               case VIRTIO_NET_HASH_REPORT_TCPv4:
+> > +               case VIRTIO_NET_HASH_REPORT_UDPv4:
+> > +               case VIRTIO_NET_HASH_REPORT_TCPv6:
+> > +               case VIRTIO_NET_HASH_REPORT_UDPv6:
+> > +               case VIRTIO_NET_HASH_REPORT_TCPv6_EX:
+> > +               case VIRTIO_NET_HASH_REPORT_UDPv6_EX:
+> > +                       rss_hash_type = PKT_HASH_TYPE_L4;
+> > +                       break;
+> > +               case VIRTIO_NET_HASH_REPORT_IPv4:
+> > +               case VIRTIO_NET_HASH_REPORT_IPv6:
+> > +               case VIRTIO_NET_HASH_REPORT_IPv6_EX:
+> > +                       rss_hash_type = PKT_HASH_TYPE_L3;
+> > +                       break;
+> > +               case VIRTIO_NET_HASH_REPORT_NONE:
+> > +               default:
+> > +                       rss_hash_type = PKT_HASH_TYPE_NONE;
+> > +               }
+> > +               skb_set_hash(skb, hdr_hash->hash_value, rss_hash_type);
+> > +       }
+>
+> so many lines, perhaps deserves a helper function
 
-diff --git a/drivers/power/supply/sbs-charger.c b/drivers/power/supply/sbs-charger.c
-index 6fa65d118ec1..b08f7d0c4181 100644
---- a/drivers/power/supply/sbs-charger.c
-+++ b/drivers/power/supply/sbs-charger.c
-@@ -18,6 +18,7 @@
- #include <linux/interrupt.h>
- #include <linux/regmap.h>
- #include <linux/bitops.h>
-+#include <linux/devm-helpers.h>
- 
- #define SBS_CHARGER_REG_SPEC_INFO		0x11
- #define SBS_CHARGER_REG_STATUS			0x13
-@@ -209,7 +210,12 @@ static int sbs_probe(struct i2c_client *client,
- 		if (ret)
- 			return dev_err_probe(&client->dev, ret, "Failed to request irq\n");
- 	} else {
--		INIT_DELAYED_WORK(&chip->work, sbs_delayed_work);
-+		ret = devm_delayed_work_autocancel(&client->dev, &chip->work,
-+						   sbs_delayed_work);
-+		if (ret)
-+			return dev_err_probe(&client->dev, ret,
-+					     "Failed to init work for polling\n");
-+
- 		schedule_delayed_work(&chip->work,
- 				      msecs_to_jiffies(SBS_CHARGER_POLL_TIME));
- 	}
-@@ -220,15 +226,6 @@ static int sbs_probe(struct i2c_client *client,
- 	return 0;
- }
- 
--static int sbs_remove(struct i2c_client *client)
--{
--	struct sbs_info *chip = i2c_get_clientdata(client);
--
--	cancel_delayed_work_sync(&chip->work);
--
--	return 0;
--}
--
- #ifdef CONFIG_OF
- static const struct of_device_id sbs_dt_ids[] = {
- 	{ .compatible = "sbs,sbs-charger" },
-@@ -245,7 +242,6 @@ MODULE_DEVICE_TABLE(i2c, sbs_id);
- 
- static struct i2c_driver sbs_driver = {
- 	.probe		= sbs_probe,
--	.remove		= sbs_remove,
- 	.id_table	= sbs_id,
- 	.driver = {
- 		.name	= "sbs-charger",
--- 
-2.32.0
+Ok, I'll create the helper.
 
+>
+> >
+> >         if (hdr->hdr.flags & VIRTIO_NET_HDR_F_DATA_VALID)
+> >                 skb->ip_summed = CHECKSUM_UNNECESSARY;
+> > @@ -2232,7 +2258,8 @@ static bool virtnet_commit_rss_command(struct virtnet_info *vi)
+> >         sg_set_buf(&sgs[3], vi->ctrl->rss.key, sg_buf_size);
+> >
+> >         if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_MQ,
+> > -                                 VIRTIO_NET_CTRL_MQ_RSS_CONFIG, sgs)) {
+> > +                                 vi->has_rss ? VIRTIO_NET_CTRL_MQ_RSS_CONFIG
+> > +                                 : VIRTIO_NET_CTRL_MQ_HASH_CONFIG, sgs)) {
+> >                 dev_warn(&dev->dev, "VIRTIONET issue with committing RSS sgs\n");
+> >                 return false;
+> >         }
+> > @@ -3230,6 +3257,8 @@ static bool virtnet_validate_features(struct virtio_device *vdev)
+> >              VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_CTRL_MAC_ADDR,
+> >                              "VIRTIO_NET_F_CTRL_VQ") ||
+> >              VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_RSS,
+> > +                            "VIRTIO_NET_F_CTRL_VQ") ||
+> > +            VIRTNET_FAIL_ON(vdev, VIRTIO_NET_F_HASH_REPORT,
+> >                              "VIRTIO_NET_F_CTRL_VQ"))) {
+> >                 return false;
+> >         }
+> > @@ -3365,8 +3394,13 @@ static int virtnet_probe(struct virtio_device *vdev)
+> >         if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF))
+> >                 vi->mergeable_rx_bufs = true;
+> >
+> > -       if (virtio_has_feature(vdev, VIRTIO_NET_F_RSS)) {
+> > +       if (virtio_has_feature(vdev, VIRTIO_NET_F_HASH_REPORT))
+> > +               vi->has_rss_hash_report = true;
+> > +
+> > +       if (virtio_has_feature(vdev, VIRTIO_NET_F_RSS))
+> >                 vi->has_rss = true;
+> > +
+> > +       if (vi->has_rss || vi->has_rss_hash_report) {
+> >                 vi->rss_indir_table_size =
+> >                         virtio_cread16(vdev, offsetof(struct virtio_net_config,
+>
+> should indir table size be zero if only hash report is enabled?
+
+Not really - but of course, for hash only, the table is not necessary.
+(Qemu always provides the table with size 1, I'll add checks for zero sizes
+in case of hardware implementation.)
+
+>
+> >                                 rss_max_indirection_table_length));
+> > @@ -3382,8 +3416,11 @@ static int virtnet_probe(struct virtio_device *vdev)
+> >
+> >                 dev->hw_features |= NETIF_F_RXHASH;
+> >         }
+> > -       if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF) ||
+> > -           virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
+> > +
+> > +       if (vi->has_rss_hash_report)
+> > +               vi->hdr_len = sizeof(struct virtio_net_hdr_v1_hash);
+> > +       else if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF) ||
+> > +                virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
+> >                 vi->hdr_len = sizeof(struct virtio_net_hdr_mrg_rxbuf);
+> >         else
+> >                 vi->hdr_len = sizeof(struct virtio_net_hdr);
+> > @@ -3450,7 +3487,7 @@ static int virtnet_probe(struct virtio_device *vdev)
+> >                 }
+> >         }
+> >
+> > -       if (vi->has_rss)
+> > +       if (vi->has_rss || vi->has_rss_hash_report)
+> >                 virtnet_init_default_rss(vi);
+> >
+> >         err = register_netdev(dev);
+> > @@ -3585,7 +3622,7 @@ static struct virtio_device_id id_table[] = {
+> >         VIRTIO_NET_F_CTRL_MAC_ADDR, \
+> >         VIRTIO_NET_F_MTU, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS, \
+> >         VIRTIO_NET_F_SPEED_DUPLEX, VIRTIO_NET_F_STANDBY, \
+> > -       VIRTIO_NET_F_RSS
+> > +       VIRTIO_NET_F_RSS, VIRTIO_NET_F_HASH_REPORT
+> >
+> >  static unsigned int features[] = {
+> >         VIRTNET_FEATURES,
+> > --
+> > 2.34.1
+> >

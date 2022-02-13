@@ -2,80 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7C74B3AAE
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 10:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DFA04B3AB3
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 10:57:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234853AbiBMJpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 04:45:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54116 "EHLO
+        id S234880AbiBMJ4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 04:56:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiBMJpW (ORCPT
+        with ESMTP id S229935AbiBMJ4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 04:45:22 -0500
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585575C37F;
-        Sun, 13 Feb 2022 01:45:15 -0800 (PST)
-Received: from [192.168.0.2] (ip5f5aebcd.dynamic.kabel-deutschland.de [95.90.235.205])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sun, 13 Feb 2022 04:56:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755A05C873
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 01:56:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id E29D361E64846;
-        Sun, 13 Feb 2022 10:45:11 +0100 (CET)
-Message-ID: <f63abe64-6d4f-1374-5fd3-874a34c1c22f@molgen.mpg.de>
-Date:   Sun, 13 Feb 2022 10:45:11 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 081AE60EFA
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 09:56:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9059C004E1;
+        Sun, 13 Feb 2022 09:56:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644746174;
+        bh=WznLcmlKCHSyOi66nBvfT5kFkbrjbndNydmARu+Zurc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g4v1O6aXyefnEnWVeEbJoJzqBy69isIH5QDeqfkQLVYI0JfaaX8lEo7pWFd7YdbzI
+         BeCWp+uazT+pLaMLowjDk3ItOB41thpPi2PPCG0ILeTvBsZEb4BDzm9MdD4GRXAoxg
+         urSGeSyg3vz1EFc9ss6c7KXSau5jkbahyuTdG4rM=
+Date:   Sun, 13 Feb 2022 10:56:11 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alexander Usyskin <alexander.usyskin@intel.com>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/5] Add driver for GSC controller
+Message-ID: <YgjVuyE1n5vl6uR1@kroah.com>
+References: <20220213091458.2364014-1-alexander.usyskin@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: Set environment variable `KVM` makes build fail
-Content-Language: en-US
-To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rcu <rcu@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-References: <d3e6a461-5b37-ecfb-d63c-d35af27f2682@molgen.mpg.de>
- <CAABZP2yOA2n-xux8uUC72vVYc14JfCawoOzp_pnTGDvY8cRSnw@mail.gmail.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <CAABZP2yOA2n-xux8uUC72vVYc14JfCawoOzp_pnTGDvY8cRSnw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220213091458.2364014-1-alexander.usyskin@intel.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Zhouyi,
+On Sun, Feb 13, 2022 at 11:14:53AM +0200, Alexander Usyskin wrote:
+> GSC is a graphics system controller, it provides
+> a chassis controller for graphics discrete cards.
+> 
+> There are two MEI interfaces in GSC: HECI1 and HECI2.
+> 
+> This series includes instantiation of the auxiliary devices for HECI2
+> and mei-gsc auxiliary device driver that binds to the auxiliary device.
+> 
+> In v2 the platform device was replaced by the auxiliary device.
+> v3 is the rebase over drm-tip to make public CI running.
+> In v4 the not needed debug prints and empty line were removed,
+>       'select' were replaced by 'depends on' in MEI Kconfig,
+>       the new include file now listed in the MAINTATINERS file. 
+> V5, rebase and add Greg KH Reviewed-by
+> V6, rebase and drop redundant assignments found by the kernel test robot.
+> 
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
+This line needs to be added to the individual patches if you want any
+tool or maintainer to pick that up.
 
-Am 13.02.22 um 09:07 schrieb Zhouyi Zhou:, and
+thanks,
 
-> Thank you for your trust in me.
-
-Thank you for your help.
-
-> I think the following patch has a good explanation of what happened ;-)
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/tools/testing/selftests/rcutorture/bin/torture.sh?id=a7d89cfb8e1269cb6d22453adba56b8d0218589f
-> "The torture-test scripting's long-standing use of KVM as the
-> environment variable tracking the pathname of the rcutorture directory
-> now conflicts with allmodconfig builds due to the
-> virt/kvm/Makefile.kvm file's use of this as a makefile variable"
-
-Indeed. In my script I had added the remote for the rcu git archive, but 
-forgot to actually fetch the objects and refs, and missed the error 
-message in the output.
-
-Sorry for the noise, though the variable name should probably 
-namespaced, as at least for the name `KVM` the chance are higher (still 
-very small) that it’s set in the environment.
-
-
-Kind regards,
-
-Paul
+greg k-h

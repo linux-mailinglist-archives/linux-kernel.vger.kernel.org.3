@@ -2,243 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 937114B3A14
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 09:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 209E44B3A1A
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 09:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234346AbiBMITD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 03:19:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45828 "EHLO
+        id S234366AbiBMIWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 03:22:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiBMITB (ORCPT
+        with ESMTP id S229555AbiBMIWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 03:19:01 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5611D5E76A
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 00:18:55 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id f19so1853596qvb.6
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 00:18:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ka+WtwOHO1gjnQgZ36IyjK2m+vjQDWK4Uo5ptmLDUIo=;
-        b=gkIGPTmvAh+/FUhldvfShikTtxhai3dcpLuguacWylN8rYNg5mh7gsA3FgRL76plh1
-         Legd7zoCe3iRmWGjefkHeNoOBuR/s/9YrTezjrC57hahJ9Vgz9ZVlG2FZvh3MvacMyhn
-         i6NzUFmGo1ewWDecsNGGuCx9w9oXWd8xHCCxWVlbqGGKxzj+7StBGUBYr+B6tDGAHeaw
-         puP3QLf6XCPtz3O/AmpMdSzjgSBG4X02AzpU6UzlQXvZJZpbFJFyRqNmcfUlJFRZwfa+
-         vbGxAf8xcV2AFOpMnCAn5BzMwHzRPreLjVcjFXSDZrYTXGw5TaBqKvuBzPMxcAzm6U/C
-         cUAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ka+WtwOHO1gjnQgZ36IyjK2m+vjQDWK4Uo5ptmLDUIo=;
-        b=7jD71MEd+hBKs1DbUyrWZWOdH6t3DPWbkwgQQhMldZULp2AwlX0koYCF83kHNhi5aC
-         eGDJbrMkV2sY7FD4JNikRBVNNpjVVdXMGW9yVVxICgXPerO+MpO5g+m2OxsIBF2BuJX7
-         6148HGIiX5xzaGhtHtMDOUg4p8jpmO2wW3St86J/qJggLeJ3naOC8Qv/wFLYdZK0rPUY
-         DQSxc9cgiuoNRk97bd93lYpI8G0LjQB25C3vG6qZQpYw33QDlSRTU8eoGdbgYOdPexuv
-         3kpbNicCuRwklZcifxU0oMu8rgRfnEHPERvI98scBzuiMCk4IRxUmBmfVhDw1Ipzi/b1
-         v8Wg==
-X-Gm-Message-State: AOAM533cRVGFE5SD2eOKSYL/J4VHKvKRPPVYW/tdx+keF28qXHOlSPKb
-        VVEVN/9CZFZRaoUN+NWPgSg=
-X-Google-Smtp-Source: ABdhPJz/Nt7nOsBmZPl9TbVBzpoIrzCfEjIzg4GWaVxErPi2luwO8jQwxRsuiNIyIZodI3+vGv2Mxg==
-X-Received: by 2002:a05:6214:14b2:: with SMTP id bo18mr6019517qvb.13.1644740334489;
-        Sun, 13 Feb 2022 00:18:54 -0800 (PST)
-Received: from WRT-WX9.. ([207.246.89.135])
-        by smtp.gmail.com with ESMTPSA id d133sm2310560qkg.119.2022.02.13.00.18.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Feb 2022 00:18:54 -0800 (PST)
-From:   Changbin Du <changbin.du@gmail.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Changbin Du <changbin.du@gmail.com>
-Subject: [PATCH v4] riscv: fix oops caused by irqsoff latency tracer
-Date:   Sun, 13 Feb 2022 16:18:45 +0800
-Message-Id: <20220213081845.9864-1-changbin.du@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        Sun, 13 Feb 2022 03:22:46 -0500
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2081.outbound.protection.outlook.com [40.92.103.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81FE5E773;
+        Sun, 13 Feb 2022 00:22:40 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g+1i1crfX3KxGnPMIYkggdvSVU5pVRJTXJtc83DfHpZdDBQXRL63vQm5e1DtT8f2BokILSjxo1qbDvFOiAiYyWlanA7yV2YuuI1HR8vKI8VGRGcU2r1KB75eJDNndQeGC6dccqzKuju8U8nU7OLQBufdaHnZPwgmHTAR3+5Yk9TV3gySiYMnJHSgQf+cg1IW9mku3MkXYfXPmelDR5fgmB1G8rd5JxDFuGK7kFZ6UcU97bxENlksfg0GHRJGQYxpXoW5+jDHNO1QpMVja494KzQMgpd/VHwP+mBw4zQncI3/c0eToFc4mGnV4D+ZEVlJfCWwJUt7CcelRcjIQLE69Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pHhzzRU8BekJSsgXLytNspQn0RMsx632b0sdKlHWCVA=;
+ b=Y+oJuJilVTlNajdiHYL11q1gEzh8c8rYlnLzkluaZigSWFZXvAFi+HbYQAgWmBTvB1GWP3bLb0r5+lomM3k2YMws8x+HTjKJSkKqlYHlaJWzqs1PDvtRcXFgMvvSuDZU3yIjKCybRz/ujTonZBDdPuYx55O9BZLzQYoHd7uh9X5+W7u91rjF9FB/RItbgzVg9+V8Bv2ZCW2bcfsi4b6MwQGfX3ARMC+9y9JpYKwVrd6ERteOTkRNrKGeoLlp3/UVZsMPJJtcGB1ujXGooitAS2hFnBY4c29VY+sMP7qNoBKFH3+h9gRo3jTPmzLTuZlcQ+3vhet3XxuFh0VM56a+cg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pHhzzRU8BekJSsgXLytNspQn0RMsx632b0sdKlHWCVA=;
+ b=rC2HOBlaxgF92aZyAvxMFlL9qaU8GQFq1ttIg8cwu015vBgrVnHBZHBnnlkr9vI2TKz+sjXUs8NH66ruIMVItFhi4b9+o8PVosqfZf+njeKNb7D3b/G8kZf9u404ocsvwcirQBUog6F6LS7kSvTV9PxPPgdKOnE5KeIPUtCdeHDMJm6NljKArqpYR/FIqoPWBv4wLAOHbEfYzJzFYuG042p7hiyc3CJIolAOqUcU+Xq+FBUgPfHOw6KQrr4O3ejg/KQJzp4KSRbTXtecpoODI1c0JC3hknoIMQMLF6P7/reJgSMsVBwGnhg1jnYQl4zrI+zeFS6t9+2vgd0rtezN/A==
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
+ by MAXPR01MB4031.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:69::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.12; Sun, 13 Feb
+ 2022 08:22:32 +0000
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::d19b:7cd1:3760:b055]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::d19b:7cd1:3760:b055%9]) with mapi id 15.20.4975.011; Sun, 13 Feb 2022
+ 08:22:32 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Matthew Garrett <mjg59@srcf.ucam.org>
+CC:     Ard Biesheuvel <ardb@kernel.org>, Jeremy Kerr <jk@ozlabs.org>,
+        "joeyli.kernel@gmail.com" <joeyli.kernel@gmail.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "eric.snowberg@oracle.com" <eric.snowberg@oracle.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "jlee@suse.com" <jlee@suse.com>,
+        "James.Bottomley@hansenpartnership.com" 
+        <James.Bottomley@HansenPartnership.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "mic@digikod.net" <mic@digikod.net>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Aun-Ali Zaidi <admin@kodeit.net>
+Subject: Re: [PATCH] efi: Do not import certificates from UEFI Secure Boot for
+ T2 Macs
+Thread-Topic: [PATCH] efi: Do not import certificates from UEFI Secure Boot
+ for T2 Macs
+Thread-Index: AQHYHcE4ht34Z1CESEaNjR8+yzmieayLbqGAgAAURwCAAAlIgIAAESOAgACrMQCAAM6NgIAAs3IAgADC6YCAAODbAIAA55oAgADUSoA=
+Date:   Sun, 13 Feb 2022 08:22:32 +0000
+Message-ID: <C737F740-9039-4730-9F08-9E9E9674B6C8@live.com>
+References: <9D0C961D-9999-4C41-A44B-22FEAF0DAB7F@live.com>
+ <20220209164957.GB12763@srcf.ucam.org>
+ <5A3C2EBF-13FF-4C37-B2A0-1533A818109F@live.com>
+ <20220209183545.GA14552@srcf.ucam.org> <20220209193705.GA15463@srcf.ucam.org>
+ <2F1CC5DE-5A03-46D2-95E7-DD07A4EF2766@live.com>
+ <20220210180905.GB18445@srcf.ucam.org>
+ <99BB011C-71DE-49FA-81CB-BE2AC9613030@live.com>
+ <20220211162857.GB10606@srcf.ucam.org>
+ <F078BEBE-3DED-4EE3-A2B8-2C5744B5454C@live.com>
+ <20220212194240.GA4131@srcf.ucam.org>
+In-Reply-To: <20220212194240.GA4131@srcf.ucam.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [6PrThstV6g+EaiiOe5IVrnB2uigDvoBlzFzittS4ofJ4zZybhl4AhCO8FRvYAW0q]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f5be4c9d-15ec-4de1-a269-08d9eec9fb45
+x-ms-traffictypediagnostic: MAXPR01MB4031:EE_
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: vsXWX1sPOYrGo6kbDjk4EdSu7Q61sCPHy1F76BhxIgkFKmcjL9HXNfuCMiKzHBMU81/g8QwoUnh/qLAvfH69piFJT5zwxPLonBDpbjCEJoS4VWz2JsD/c3oUtMth0P1oEqB/4Q2LmlQlD+05egs3Oi66kFBHC5dlZtKTFykrUhWQhLn4tsOOrbbb8CAUaxQr62PCMAUDgVlYZVTWAJBPZ2MxsLRE3EakCqiigTzDNqQ6T9t+KiBrkEjBZWqsUxzJfR2VcfJ4VxuFF5o7ezbczF27MDrY0s1vrRnuwrC7DHzHq9pIwdSkd2zyj8+hy1K0jV9YQEKgTjpWI61GEECKIhmiq1XVH90pckLlTLw2E22NY7QD5gZSFfFQ+uYCYYGrpS5t1mNLo8IpsuGRN75ngFIMjpYe1tSsE74rrSWt00WUwVdpwHvML5HkvFBeyVdXFZAnnMEKEKmoXHX6/JtZ7SRVLs/HETobe0PhL3M9Pn47VxsCd0TapxDEWM2ngoIfJ0m/AFmXtmTVqcKZdzVSLdOxmVJ0xztlKfsZNTVW72VCq0x90nSYgTIheZ+tVNg4mkSGsZ6WoIiz4eMKUgKkuagPGFFDX2U5QthrPEtk30uhpv+jE6mbsKh7L1sz/i1i
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TnkrTm1JMmlremRVSitzK0tjQXhOek5yQU1xU1pJQyt5RXBIUUduR3NQQUl0?=
+ =?utf-8?B?NHFPdjVnSDd2bDRxTWJ3cS82NHVVRlZTS3NVb1Vrbm5qRGVOdWpyYkZBV0hl?=
+ =?utf-8?B?enhtKzhnWTlCMndSMjVMKzB6VXY0c1hSMjNNYnFoWG9PcUQ3VXBLVUN3bkp1?=
+ =?utf-8?B?bFhEc2IyYUI2a0NHbkcwWTJUMzRyUXgwb21PVWtUVjFuS0ZjS05oOCszN1M3?=
+ =?utf-8?B?c1pNenlzcmtpMmRFS0FGdUxOMnI4SWpzQURhZ2czVnBYZGZpakhGVWJQUkZs?=
+ =?utf-8?B?YTNHcWNyUHBzZTZremk0SWdwRm00VEQvaFJHVFVXeGRQaXhOSVZQMC9EaDBC?=
+ =?utf-8?B?VmxFRkEwSzlJWi9manR3RlFibG9rSWYxcGhWdk50c0kxd2Nlb1ZOdCt2MjVQ?=
+ =?utf-8?B?UXFiSUQyVURSckVnWjNrYVJHUHNCT0Yyc0VuZ2pDS3UvWVhuWTFqc3k0SEZi?=
+ =?utf-8?B?MXRncTFoL2lrZ2F0T3ZETTVHZFY4RjIzbUNjL09VY2Qrd0Y0a2Q4Wm9Ic3VR?=
+ =?utf-8?B?VnpyNWNiTW9ySGhkZ3NqMEZTc1B5SzFKZUNYTTFCaUdGRnNLZHoxR2M5QkVK?=
+ =?utf-8?B?OEZuT2JhbmlWdXY2M1ZSK2ppMjhIQXAvSGZKNXRwRGU5bkMvVjFIQk9HWkZP?=
+ =?utf-8?B?U2x0aXcwVDIvSzJsZ2E0azFSR2FCcEJFV3dVbUEvUGtCcDRzNkg3SmdGcFp1?=
+ =?utf-8?B?d1NmOEZjOFV1VDJ6QTM2SG0veWQ5QkU0ck1uVHpJWFhrMlVUR3BvL3V1RFFV?=
+ =?utf-8?B?aWpzVGNVMFlQdnAycDJpdC9tWlRnUFYyNGx0VERsT1RRaHpjQ3lOZkErNjFr?=
+ =?utf-8?B?MDdsbjBZRnJ2M1p6QjZxbEtrbDUzWCtRcW9UYWdxeWpGU1hSWE95T0NSeHJW?=
+ =?utf-8?B?eWJkZU03SkNZeDhQa25PNkJoMzZydmU2aEZYc2VmRjlTeHhJMjhHT016djFT?=
+ =?utf-8?B?VnExZkpRbm4ya1V1YzVoL0RwMWp4azAxSFNaTVpNaWZkZ0h1bmVZZW4xTDFq?=
+ =?utf-8?B?dGxiQWN6WHMyMHQzallCL2E3Nm0rUWYyU2s5eEwySnF3YVJ2RGMvWjFlSVhG?=
+ =?utf-8?B?bjI0MFcvV1NSLzdqclI1dExKTldoSVNxUkswRUhBV3BwcnphQjUvU3hocUR1?=
+ =?utf-8?B?eG9BQ0dEc0ZtK01UcktmS1oxNVhMeWZsaC9YQUUvM1o3VFRJU3JXWFVQWmkr?=
+ =?utf-8?B?dHhYYkJWNHQ0Vk1GQXE4dVVJYUFQMWZPd3JwWWVpa0tsSXFydE5qV1AwOU44?=
+ =?utf-8?B?cW5ZUUNaRUZzd3B0b3Fpb2tkOFVJc1ZUU004eTMwSVVTMHh6b1RReU9aRUJN?=
+ =?utf-8?B?ejh5L1gvbkZnLzBTT25kMTRDczJ3di9Yb2QxSW9qV1NjYmw4ZFJ3NDV4Y0tm?=
+ =?utf-8?B?bjBOYkNIN25scHc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <05FF4373BEF2F4439D6DA672C66DB7B6@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: f5be4c9d-15ec-4de1-a269-08d9eec9fb45
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Feb 2022 08:22:32.0492
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MAXPR01MB4031
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The trace_hardirqs_{on,off}() require the caller to setup frame pointer
-properly. This because these two functions use macro 'CALLER_ADDR1' (aka.
-__builtin_return_address(1)) to acquire caller info. If the $fp is used
-for other purpose, the code generated this macro (as below) could trigger
-memory access fault.
-
-   0xffffffff8011510e <+80>:    ld      a1,-16(s0)
-   0xffffffff80115112 <+84>:    ld      s2,-8(a1)  # <-- paging fault here
-
-The oops message during booting if compiled with 'irqoff' tracer enabled:
-[    0.039615][    T0] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000f8
-[    0.041925][    T0] Oops [#1]
-[    0.042063][    T0] Modules linked in:
-[    0.042864][    T0] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc1-00233-g9a20c48d1ed2 #29
-[    0.043568][    T0] Hardware name: riscv-virtio,qemu (DT)
-[    0.044343][    T0] epc : trace_hardirqs_on+0x56/0xe2
-[    0.044601][    T0]  ra : restore_all+0x12/0x6e
-[    0.044721][    T0] epc : ffffffff80126a5c ra : ffffffff80003b94 sp : ffffffff81403db0
-[    0.044801][    T0]  gp : ffffffff8163acd8 tp : ffffffff81414880 t0 : 0000000000000020
-[    0.044882][    T0]  t1 : 0098968000000000 t2 : 0000000000000000 s0 : ffffffff81403de0
-[    0.044967][    T0]  s1 : 0000000000000000 a0 : 0000000000000001 a1 : 0000000000000100
-[    0.045046][    T0]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
-[    0.045124][    T0]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000054494d45
-[    0.045210][    T0]  s2 : ffffffff80003b94 s3 : ffffffff81a8f1b0 s4 : ffffffff80e27b50
-[    0.045289][    T0]  s5 : ffffffff81414880 s6 : ffffffff8160fa00 s7 : 00000000800120e8
-[    0.045389][    T0]  s8 : 0000000080013100 s9 : 000000000000007f s10: 0000000000000000
-[    0.045474][    T0]  s11: 0000000000000000 t3 : 7fffffffffffffff t4 : 0000000000000000
-[    0.045548][    T0]  t5 : 0000000000000000 t6 : ffffffff814aa368
-[    0.045620][    T0] status: 0000000200000100 badaddr: 00000000000000f8 cause: 000000000000000d
-[    0.046402][    T0] [<ffffffff80003b94>] restore_all+0x12/0x6e
-
-This because the $fp(aka. $s0) register is not used as frame pointer in the
-assembly entry code.
-
-	resume_kernel:
-		REG_L s0, TASK_TI_PREEMPT_COUNT(tp)
-		bnez s0, restore_all
-		REG_L s0, TASK_TI_FLAGS(tp)
-                andi s0, s0, _TIF_NEED_RESCHED
-                beqz s0, restore_all
-                call preempt_schedule_irq
-                j restore_all
-
-To fix above issue, here we add one extra level wrapper for function
-trace_hardirqs_{on,off}() so they can be safely called by low level entry
-code.
-
-Signed-off-by: Changbin Du <changbin.du@gmail.com>
-
----
-v4: update explanation.
-v3: fix warning reported by documentation system.
-v2: fix compile warning.
----
- arch/riscv/kernel/Makefile    |  2 ++
- arch/riscv/kernel/entry.S     | 10 +++++-----
- arch/riscv/kernel/trace_irq.c | 27 +++++++++++++++++++++++++++
- arch/riscv/kernel/trace_irq.h | 11 +++++++++++
- 4 files changed, 45 insertions(+), 5 deletions(-)
- create mode 100644 arch/riscv/kernel/trace_irq.c
- create mode 100644 arch/riscv/kernel/trace_irq.h
-
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 612556faa527..ffc87e76b1dd 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -51,6 +51,8 @@ obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
- obj-$(CONFIG_FUNCTION_TRACER)	+= mcount.o ftrace.o
- obj-$(CONFIG_DYNAMIC_FTRACE)	+= mcount-dyn.o
- 
-+obj-$(CONFIG_TRACE_IRQFLAGS)	+= trace_irq.o
-+
- obj-$(CONFIG_RISCV_BASE_PMU)	+= perf_event.o
- obj-$(CONFIG_PERF_EVENTS)	+= perf_callchain.o
- obj-$(CONFIG_HAVE_PERF_REGS)	+= perf_regs.o
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index ed29e9c8f660..d6a46ed0bf05 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -108,7 +108,7 @@ _save_context:
- .option pop
- 
- #ifdef CONFIG_TRACE_IRQFLAGS
--	call trace_hardirqs_off
-+	call __trace_hardirqs_off
- #endif
- 
- #ifdef CONFIG_CONTEXT_TRACKING
-@@ -143,7 +143,7 @@ skip_context_tracking:
- 	li t0, EXC_BREAKPOINT
- 	beq s4, t0, 1f
- #ifdef CONFIG_TRACE_IRQFLAGS
--	call trace_hardirqs_on
-+	call __trace_hardirqs_on
- #endif
- 	csrs CSR_STATUS, SR_IE
- 
-@@ -234,7 +234,7 @@ ret_from_exception:
- 	REG_L s0, PT_STATUS(sp)
- 	csrc CSR_STATUS, SR_IE
- #ifdef CONFIG_TRACE_IRQFLAGS
--	call trace_hardirqs_off
-+	call __trace_hardirqs_off
- #endif
- #ifdef CONFIG_RISCV_M_MODE
- 	/* the MPP value is too large to be used as an immediate arg for addi */
-@@ -270,10 +270,10 @@ restore_all:
- 	REG_L s1, PT_STATUS(sp)
- 	andi t0, s1, SR_PIE
- 	beqz t0, 1f
--	call trace_hardirqs_on
-+	call __trace_hardirqs_on
- 	j 2f
- 1:
--	call trace_hardirqs_off
-+	call __trace_hardirqs_off
- 2:
- #endif
- 	REG_L a0, PT_STATUS(sp)
-diff --git a/arch/riscv/kernel/trace_irq.c b/arch/riscv/kernel/trace_irq.c
-new file mode 100644
-index 000000000000..095ac976d7da
---- /dev/null
-+++ b/arch/riscv/kernel/trace_irq.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
-+ */
-+
-+#include <linux/irqflags.h>
-+#include <linux/kprobes.h>
-+#include "trace_irq.h"
-+
-+/*
-+ * trace_hardirqs_on/off require the caller to setup frame pointer properly.
-+ * Otherwise, CALLER_ADDR1 might trigger an pagging exception in kernel.
-+ * Here we add one extra level so they can be safely called by low
-+ * level entry code which $fp is used for other purpose.
-+ */
-+
-+void __trace_hardirqs_on(void)
-+{
-+	trace_hardirqs_on();
-+}
-+NOKPROBE_SYMBOL(__trace_hardirqs_on);
-+
-+void __trace_hardirqs_off(void)
-+{
-+	trace_hardirqs_off();
-+}
-+NOKPROBE_SYMBOL(__trace_hardirqs_off);
-diff --git a/arch/riscv/kernel/trace_irq.h b/arch/riscv/kernel/trace_irq.h
-new file mode 100644
-index 000000000000..99fe67377e5e
---- /dev/null
-+++ b/arch/riscv/kernel/trace_irq.h
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2022 Changbin Du <changbin.du@gmail.com>
-+ */
-+#ifndef __TRACE_IRQ_H
-+#define __TRACE_IRQ_H
-+
-+void __trace_hardirqs_on(void);
-+void __trace_hardirqs_off(void);
-+
-+#endif /* __TRACE_IRQ_H */
--- 
-2.32.0
-
+DQoNCj4gDQo+IE9rLiBXaXRoIENPTkZJR19MT0FEX1VFRklfS0VZUz1uLCBjYW4geW91IHJ1bjoN
+Cj4gDQo+IGNhdCAvc3lzL2Zpcm13YXJlL2VmaS9lZml2YXJzL2RiLWQ3MTliMmNiLTNkM2EtNDU5
+Ni1hM2JjLWRhZDAwZTY3NjU2Zg0KPiANCj4gYW5kIHNlZSB3aGV0aGVyIGl0IGdlbmVyYXRlcyB0
+aGUgc2FtZSBmYWlsdXJlPyBJZiBzbyB0aGVuIG15IChoYW5kd2F2eSkgDQo+IGd1ZXNzIGlzIHRo
+YXQgc29tZXRoaW5nJ3MgZ29pbmcgd3Jvbmcgd2l0aCBhIGZpcm13YXJlIGNvZGVwYXRoIGZvciB0
+aGUgDQo+IGQ3MTliMmNiLTNkM2EtNDU5Ni1hM2JjLWRhZDAwZTY3NjU2ZiBHVUlELiBTb21lb25l
+IGNvdWxkIHBvdGVudGlhbGx5IA0KPiB0aGVuIGZpZ3VyZSBvdXQgd2hldGhlciB0aGUgc2FtZSBo
+YXBwZW5zIHVuZGVyIFdpbmRvd3MsIGJ1dCB0aGUgZWFzaWVzdCANCj4gdGhpbmcgaXMgcHJvYmFi
+bHkgdG8ganVzdCByZXR1cm4gYSBmYWlsdXJlIG9uIEFwcGxlIGhhcmR3YXJlIHdoZW4gDQo+IHNv
+bWVvbmUgdHJpZXMgdG8gYWNjZXNzIGFueXRoaW5nIHdpdGggdGhhdCBHVUlELg0KDQpTdXJwcmlz
+aW5nbHkgaXQgZGlkbuKAmXQgY2F1c2UgYSBjcmFzaC4gVGhlIGxvZ3MgYXJlIGF0IGh0dHBzOi8v
+Z2lzdC5naXRodWJ1c2VyY29udGVudC5jb20vQWRpdHlhR2FyZzgvOGU4MjBjMjcyNGE2NWZiNGJi
+YjVkZWFlMmIzNThkYzgvcmF3LzJhMDAzZWY0M2FlMDZkYmUyYmNjMjJiMzRiYTdjY2JiMDM4OThh
+MjEvbG9nMi5sb2cNCg0KSSBhbHNvIHRyaWVkIGNhdCAvc3lzL2Zpcm13YXJlL2VmaS9lZml2YXJz
+L01va0lnbm9yZURCLTYwNWRhYjUwLWUwNDYtNDMwMC1hYmI2LTNkZDgxMGRkOGIyMywgYnV0IGl0
+IGRvZXNu4oCZdCBleGlzdA0KDQphZGl0eWFATWFjQm9vazp+JCBjYXQgL3N5cy9maXJtd2FyZS9l
+ZmkvZWZpdmFycy9Nb2tJZ25vcmVEQi02MDVkYWI1MC1lMDQ2LTQzMDAtYWJiNi0zZGQ4MTBkZDhi
+MjMNCmNhdDogL3N5cy9maXJtd2FyZS9lZmkvZWZpdmFycy9Nb2tJZ25vcmVEQi02MDVkYWI1MC1l
+MDQ2LTQzMDAtYWJiNi0zZGQ4MTBkZDhiMjM6IE5vIHN1Y2ggZmlsZSBvciBkaXJlY3RvcnkNCg0K

@@ -2,111 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38AB34B3B74
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 14:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A16D4B3B84
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 14:06:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236144AbiBMNEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 08:04:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34228 "EHLO
+        id S236193AbiBMNGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 08:06:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233737AbiBMNED (ORCPT
+        with ESMTP id S229674AbiBMNGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 08:04:03 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34815B88C
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 05:03:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644757438; x=1676293438;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4WJZJbknenGkTG+kkIeFvel9trpEu70jNlVS7CRk4ik=;
-  b=ZweB1FJTBrR8D0WsfWALCqY/vbJBh3wlUMnNbQaptf9JS1SZBYK8Lwhf
-   Wcm+SZpRNnl2QdJIXucIrUC8O1Mfk593SQPcpfFkwbrATgX69lx4Ob1ZG
-   Vq+u2BiUYkPCdk8ONB50IleOWgCRGZLaqpri8X9tqvxHV4SepnqZc4bVj
-   TJlUUtA6aJyL6mdXEEEZ/A+OObUKrObDKL5TCIqUICIE0rKhR5tYqXBI2
-   VXE2SNzsSDhSN31ahgslqUK9tUe61OfPGYsngaqfbq+PpMyavRs3JhBAz
-   6yG6nahu5pqQ4/KWKB5hJ2M521MsYcFAhy25B3rEh4c/6zO7yDDUR/AQy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10256"; a="247540791"
-X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
-   d="scan'208";a="247540791"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 05:03:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
-   d="scan'208";a="702627576"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 13 Feb 2022 05:03:55 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJEXj-0007WS-7t; Sun, 13 Feb 2022 13:03:55 +0000
-Date:   Sun, 13 Feb 2022 21:03:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     chongjiapeng <jiapeng.chong@linux.alibaba.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-Subject: kernel/trace/ftrace.c:7157:20: error: unused function
- 'ftrace_startup_enable'
-Message-ID: <202202132037.4aN017dU-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 13 Feb 2022 08:06:43 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61735B88E;
+        Sun, 13 Feb 2022 05:06:37 -0800 (PST)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21DAPOGv007992;
+        Sun, 13 Feb 2022 13:06:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=cQPiw2dyD8PgwyjWmIk8sBpF1FR7uPpYLP5WigSzu+0=;
+ b=oi/0aktaJZz9GBmenntUm1blxvOZlDwfwkiFmHKZdAGwBSRZiU4J0+iC51ml9JhBJa64
+ GTS7HfFh6QjxmhBcyaYKDTLoGg0aJTk/AXN4GsfCwp6mtB7o5n3Svd1MifVsLbegVFng
+ f3RIrQ02HBrLlXjvIkKNoSFgnn5xSOeIs4W/jFiZzAiFNV0c47cZDXGHw21j7BvPjKCd
+ R7sgx5WSEZxY+xXZtk71XX2s5YK4+B3374zwhBmBb2DD6eLlJ3ZlopabtVncTEwzTlg+
+ qoQaEk1fkOgT2vhSuypr4LsqvFkx6AA84dKyZEHoNkSZAIi2+T7R2d3urbI1zMfz4O7e wA== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e6ueedjc0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 13 Feb 2022 13:06:08 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21DD3Ht9003084;
+        Sun, 13 Feb 2022 13:06:05 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06fra.de.ibm.com with ESMTP id 3e645j63u0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 13 Feb 2022 13:06:05 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21DD63VF39715094
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 13 Feb 2022 13:06:03 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 32020AE053;
+        Sun, 13 Feb 2022 13:06:03 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ACE5CAE051;
+        Sun, 13 Feb 2022 13:06:01 +0000 (GMT)
+Received: from sig-9-65-82-84.ibm.com (unknown [9.65.82.84])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sun, 13 Feb 2022 13:06:01 +0000 (GMT)
+Message-ID: <537635732d9cbcc42bcf7be5ed932d284b03d39f.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: Calculate digest in ima_inode_hash() if not
+ available
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huawei.com>, shuah@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kpsingh@kernel.org, Florent Revest <revest@chromium.org>
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sun, 13 Feb 2022 08:06:01 -0500
+In-Reply-To: <20220211104828.4061334-1-roberto.sassu@huawei.com>
+References: <20220211104828.4061334-1-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 9yEoyiBIJvR4y7HasDH_lt1HNEe7aV9K
+X-Proofpoint-GUID: 9yEoyiBIJvR4y7HasDH_lt1HNEe7aV9K
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-13_04,2022-02-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 bulkscore=0 malwarescore=0 suspectscore=0 spamscore=0
+ priorityscore=1501 clxscore=1011 adultscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202130089
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b81b1829e7e39f6cebdf6e4d5484eacbceda8554
-commit: 172f7ba9772cae12f099fc563352e905dc9a1921 ftrace: Make ftrace_profile_pages_init static
-date:   4 months ago
-config: arm-randconfig-r001-20220213 (https://download.01.org/0day-ci/archive/20220213/202202132037.4aN017dU-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 478c237e21b2c3a83e46f26fcbeb3876682f9b14)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=172f7ba9772cae12f099fc563352e905dc9a1921
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 172f7ba9772cae12f099fc563352e905dc9a1921
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/ kernel/trace/
+Hi Roberto,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Fri, 2022-02-11 at 11:48 +0100, Roberto Sassu wrote:
+> __ima_inode_hash() checks if a digest has been already calculated by
+> looking for the integrity_iint_cache structure associated to the passed
+> inode.
+> 
+> Users of ima_file_hash() and ima_inode_hash() (e.g. eBPF) might be
+> interested in obtaining the information without having to setup an IMA
+> policy so that the digest is always available at the time they call one of
+> those functions.
+> 
+> Open a new file descriptor in __ima_inode_hash(), so that this function
+> could invoke ima_collect_measurement() to calculate the digest if it is not
+> available. Still return -EOPNOTSUPP if the calculation failed.
+> 
+> Instead of opening a new file descriptor, the one from ima_file_hash()
+> could have been used. However, since ima_inode_hash() was created to obtain
+> the digest when the file descriptor is not available, it could benefit from
+> this change too. Also, the opened file descriptor might be not suitable for
+> use (file descriptor opened not for reading).
+> 
+> This change does not cause memory usage increase, due to using a temporary
+> integrity_iint_cache structure for the digest calculation, and due to
+> freeing the ima_digest_data structure inside integrity_iint_cache before
+> exiting from __ima_inode_hash().
+> 
+> Finally, update the test by removing ima_setup.sh (it is not necessary
+> anymore to set an IMA policy) and by directly executing /bin/true.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-All errors (new ones prefixed by >>):
+Although this patch doesn't directly modify either ima_file_hash() or
+ima_inode_hash(),  this change affects both functions.  ima_file_hash()
+was introduced to be used with eBPF.  Based on Florent's post, changing
+the ima_file_hash() behavor seems fine.  Since I have no idea whether
+anyone is still using ima_inode_hash(), perhaps it would be safer to
+limit this behavior change to just ima_file_hash().
 
->> kernel/trace/ftrace.c:7157:20: error: unused function 'ftrace_startup_enable' [-Werror,-Wunused-function]
-   static inline void ftrace_startup_enable(int command) { }
-                      ^
-   1 error generated.
+Please update the ima_file_hash() doc.  While touching this area, I'd
+appreciate your fixing the first doc line in both ima_file_hash() and
+ima_inode_hash() cases, which wraps spanning two lines.
 
+Please split the IMA from the eBPF changes.
 
-vim +/ftrace_startup_enable +7157 kernel/trace/ftrace.c
+-- 
+thanks,
 
-0b6e4d56bf7186 Frederic Weisbecker      2008-10-28  7155  
-8434dc9340cd2e Steven Rostedt (Red Hat  2015-01-20  7156) static inline int ftrace_init_dyn_tracefs(struct dentry *d_tracer) { return 0; }
-df4fc31558dd2a Steven Rostedt           2008-11-26 @7157  static inline void ftrace_startup_enable(int command) { }
-e1effa0144a1dd Steven Rostedt (Red Hat  2014-08-05  7158) static inline void ftrace_startup_all(int command) { }
-8a56d7761d2d04 Steven Rostedt (Red Hat  2013-11-25  7159) 
+Mimi
 
-:::::: The code at line 7157 was first introduced by commit
-:::::: df4fc31558dd2a3a30292ddb3a64c2a5befcec73 ftrace: add function tracing to single thread
-
-:::::: TO: Steven Rostedt <srostedt@redhat.com>
-:::::: CC: Ingo Molnar <mingo@elte.hu>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

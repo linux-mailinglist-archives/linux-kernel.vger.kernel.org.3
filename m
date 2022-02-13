@@ -2,105 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015B74B3AEB
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 11:40:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C23674B3AF1
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 11:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235154AbiBMKkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 05:40:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53330 "EHLO
+        id S235165AbiBMKpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 05:45:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiBMKkd (ORCPT
+        with ESMTP id S229834AbiBMKpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 05:40:33 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C925D645
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 02:40:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644748828; x=1676284828;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RMpOgcZogn64CK/ZiQKHNBcoXLNVX6QbmGK0bFHjZQA=;
-  b=WzWajMsZMMZNQM1jPhz9npCXCia47i7IkClIFa7/EjhKJNFWToCKEWsD
-   YKSbzHMnC4OfxUOQCyCPTyXxnBvuADR3mW/AxhHd8SEbHoJKotHM5ST9D
-   nwdJEVY+qHorJTkhd1B5Qr0cHpuLajlbkMmltjtxvFApgpKmOJnd7SfWX
-   bZCs2AM9CAL0ayFUgTny/21zsyXuFYWRNYjZvPFuPNEyoUIKeh7hvDY6r
-   k49IrianPRYGFGfJbwNeXy+Zdp/b7MvvWjzpzxr3inVNl1at9iWTW5OHN
-   QqjYNGqnPvOXKhV+oaXWbdMyZBCj4faKJkdwxF1EPtev4j+Xdueq0GLfi
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10256"; a="248770658"
-X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
-   d="scan'208";a="248770658"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 02:40:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
-   d="scan'208";a="484689715"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 13 Feb 2022 02:40:26 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJCIr-0007Nh-KJ; Sun, 13 Feb 2022 10:40:25 +0000
-Date:   Sun, 13 Feb 2022 18:39:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Helge Deller <deller@gmx.de>
-Subject: gcc: error: unrecognized command-line option '-mno-space-regs'
-Message-ID: <202202131837.mZeWy9J4-lkp@intel.com>
+        Sun, 13 Feb 2022 05:45:11 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A87C5D67A;
+        Sun, 13 Feb 2022 02:45:04 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JxPBQ4zqVz4xPv;
+        Sun, 13 Feb 2022 21:45:02 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1644749102;
+        bh=rc04cqWIKdAAbQXu6l3QwXyrgGSEPlAdKLhxMCoARX8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=eXn45UNKV4dgnz2E3nNRrKQBLA1l/x48H5fGS/3XNi+iV3ElBqY97DO+PQpgtz3ox
+         N7jeeVaaEPI2wbZlvI5lQOtqJ7vMCrGLoKGNj+4ZTQSFPH5QjtdntNdUYoPHJjHFMV
+         0goWfsk8Z5Vp4iI5TZZHb8uqh1V9W94eIezeAYP+TXADGOABaBKf1ww+JyLpmrRzs/
+         PxmZPW07zFw0IdPDraRXIEeiE9TXRNvD+iMHj+5/srVPZWJcdWwuXw03UBfE67WCTG
+         8JZGVVwPKVQBZcZWqzPSPbaUYw9Yh+AIfoHBxT09w/j4qO8EpKv+v2Ju5LeP14ay59
+         WYfAhmDlNtvew==
+Date:   Sun, 13 Feb 2022 21:45:01 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christian Brauner <christian@brauner.io>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the pidfd tree
+Message-ID: <20220213214501.4e2961a0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/mSzW0hLnaiYIU0lG/wX32VE";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b81b1829e7e39f6cebdf6e4d5484eacbceda8554
-commit: 5f6e0fe01b6b33894cf6f61b359ab5a6d2b7674e parisc: Fix compile failure when building 64-bit kernel natively
-date:   6 months ago
-config: parisc64-randconfig-r035-20220213 (https://download.01.org/0day-ci/archive/20220213/202202131837.mZeWy9J4-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5f6e0fe01b6b33894cf6f61b359ab5a6d2b7674e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 5f6e0fe01b6b33894cf6f61b359ab5a6d2b7674e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc64 prepare
+--Sig_/mSzW0hLnaiYIU0lG/wX32VE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi all,
 
-All errors (new ones prefixed by >>):
+In commit
 
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
->> gcc: error: unrecognized command-line option '-mno-space-regs'
->> gcc: error: unrecognized command-line option '-mno-space-regs'
->> gcc: error: unrecognized command-line option '-mfast-indirect-calls'; did you mean '-mforce-indirect-call'?
->> gcc: error: unrecognized command-line option '-mfast-indirect-calls'; did you mean '-mforce-indirect-call'?
->> gcc: error: unrecognized command-line option '-mdisable-fpregs'
->> gcc: error: unrecognized command-line option '-mschedule=7200'
-   make[2]: *** [scripts/Makefile.build:117: scripts/mod/devicetable-offsets.s] Error 1
->> gcc: error: unrecognized command-line option '-mdisable-fpregs'
->> gcc: error: unrecognized command-line option '-mschedule=7200'
-   make[2]: *** [scripts/Makefile.build:271: scripts/mod/empty.o] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1216: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:220: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+  fdadcbad209c ("fs: add kernel doc for mnt_{hold,unhold}_writers()")
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Fixes tag
+
+  Fixes: commit fbdc2f6c40f6 ("fs: split out functions to hold writers")
+
+has these problem(s):
+
+  - leading word 'commit' unexpected
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/mSzW0hLnaiYIU0lG/wX32VE
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmII4S0ACgkQAVBC80lX
+0Gx0Ggf/TXumUWseGRBhi2TxzNUBcjsYw76X+2Q+Siaqk4OkTjIUJSu/sAsxe8LS
+RRd4gtAaBhIGzxYE2TQfIi2JI4DAHoyrpqSvONl+rOl5zQNfyksJr+mMjVdqu7DI
++AfKcxArxTgTsxDkmIT/R0487SCNPlew2SJOkl9AY1PrjnL9ccpe0eBGVq3ig7GK
+NCUUjUz81itSu61TaFjp0I772cb1UPTEsES9Uqq4Y5LIXjaW3pUyRzZa8krRed8Q
+wCMWQbyN6zfB8MDiJCtr1hXXe2vczxIkAI29h9/B5qe197dIRYWYOeV3XiGzYcI4
+MnKS7q4hsPUfxNElPK6weTQTJzOgDQ==
+=440v
+-----END PGP SIGNATURE-----
+
+--Sig_/mSzW0hLnaiYIU0lG/wX32VE--

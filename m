@@ -2,100 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7169D4B3DA5
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 22:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C67214B3DAB
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 22:07:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238353AbiBMVEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 16:04:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43168 "EHLO
+        id S238361AbiBMVHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 16:07:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbiBMVEk (ORCPT
+        with ESMTP id S231176AbiBMVHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 16:04:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0596653726;
-        Sun, 13 Feb 2022 13:04:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2743D612CF;
-        Sun, 13 Feb 2022 21:04:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57F76C340EF;
-        Sun, 13 Feb 2022 21:04:32 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="J5OBEqZn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1644786269;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=A9tdtfUCLfjmaoUMS4eWY1oxo6gPOsu05zgNWrIceOE=;
-        b=J5OBEqZnNlsAjnzrcslIJD/yqGExK2xPIXXMw+gHDmhhY16JghsNG+mhrhNdEq9qDc0MZ6
-        ErHWyt8PM75w+61EsDhRZSLgYZNKNeMYHgIyQKxvIcikNcjNgeqsrqpVJOlud6DAYmO0vX
-        dhzLAwiyqyJ3RlgVVVVBkvSGWJ2eKZ0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bf34a3ea (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sun, 13 Feb 2022 21:04:29 +0000 (UTC)
-Received: by mail-yb1-f174.google.com with SMTP id l125so7483250ybl.4;
-        Sun, 13 Feb 2022 13:04:28 -0800 (PST)
-X-Gm-Message-State: AOAM533vCCMSJWHfKZJdgwuQmHIH0/1SrRPQb0tbLWmVe6tLz/RWo7ew
-        IU2+qglVBJ+43lA0bvhlC1CQ+SenXlWsOmbPGg4=
-X-Google-Smtp-Source: ABdhPJxfaSBOjrWt50+mSLSx9Kpq26jILyJbDRt2LbvscNrZfb0aVkEnsc9DzuUEKABhO8iA4gNgOgdUc4VnK89CuXY=
-X-Received: by 2002:a25:dc14:: with SMTP id y20mr6542430ybe.115.1644786267702;
- Sun, 13 Feb 2022 13:04:27 -0800 (PST)
+        Sun, 13 Feb 2022 16:07:19 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524CD53726;
+        Sun, 13 Feb 2022 13:07:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=TpeZJruUWIHQrec6INjMOe3tJKkfB5AtMyx8DX9DlJQ=; b=dTCnjumE+jgwvROuWmmif1aESN
+        vamLKBGywF3n4msqcO1hqQlg3Utk9zzASDP2EubYBsL3TbKCYnmtcwYIGBHTJCfUKfHLP+75IgcO8
+        /KAyFEY3DjtaqJT2eD+6SanPhJHnXB+ZvYdy1Ja2yjg1Z3BMghBBQ6co8QaBpcWOWinNfZyn/553i
+        S/Ah2RB5DVgDhpRc/4+byLkmxMjAduxMaI517+NyE3GhAH1nOrZ7Ffa9QWqDazxK8pv1bQ8RykO5S
+        9o6LF/Itgzohg3df0FZr0Nf3N6yYfAIl9JZ2PMQI3DJgL8fUduCB6MYKKCwfP9O1bILBR+GnQvahT
+        C5PC0Uvg==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJM5M-00CHWi-Vl; Sun, 13 Feb 2022 21:07:09 +0000
+Message-ID: <55c73cb4-21ae-7307-7b14-a19cf270f4d6@infradead.org>
+Date:   Sun, 13 Feb 2022 13:07:04 -0800
 MIME-Version: 1.0
-References: <YgZ6IEbiDgz5X1ON@linutronix.de> <20220211162515.554867-1-Jason@zx2c4.com>
- <YgaSYlVEBOxfJbSD@linutronix.de> <CAHmME9rC_q4LGq2JaAAeGbtRA2cibTe9bnvhMLng+QnzAy2DVg@mail.gmail.com>
- <YgaV0UZO1KfmtLLh@linutronix.de> <CAHmME9qR02XCX48D+AoT1rOFyNo_GXubyHPzoX01BYkJDX7p1A@mail.gmail.com>
- <YgaZuShru2HQiFXg@linutronix.de> <CAHmME9oZMFN80M98Mt6JysPSMTJoXfKTjHuxG6BQSsC=+0z5fg@mail.gmail.com>
- <YgacTN2zHeBhWw5d@linutronix.de>
-In-Reply-To: <YgacTN2zHeBhWw5d@linutronix.de>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Sun, 13 Feb 2022 22:04:17 +0100
-X-Gmail-Original-Message-ID: <CAHmME9okFEVqTM9c9fQY02UiiNBkpaZMLSYMhzHs8FqtpV1F1g@mail.gmail.com>
-Message-ID: <CAHmME9okFEVqTM9c9fQY02UiiNBkpaZMLSYMhzHs8FqtpV1F1g@mail.gmail.com>
-Subject: Re: [PATCH v6] random: defer fast pool mixing to worker
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] serial: parisc: GSC: fix build when PCI_LBA is not set
+Content-Language: en-US
+To:     Helge Deller <deller@gmx.de>, linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        linux-parisc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>
+References: <20220213193903.8815-1-rdunlap@infradead.org>
+ <0baabcbc-196e-08fa-e2db-b7e925993cc1@gmx.de>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <0baabcbc-196e-08fa-e2db-b7e925993cc1@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Sebastian,
 
-On Fri, Feb 11, 2022 at 6:26 PM Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
-> Sure. I can do the CPU-HP notifier later one once we are done with
-> everything. I acked the v7, don't see a road block.
 
-I've been running this over the weekend and performance is generally okay.
+On 2/13/22 12:35, Helge Deller wrote:
+> Hi Randy,
+> 
+> On 2/13/22 20:39, Randy Dunlap wrote:
+>> There is a build error when using a kernel .config file from
+>> 'kernel test robot' for a different build problem:
+>>
+>> hppa64-linux-ld: drivers/tty/serial/8250/8250_gsc.o: in function `.LC3':
+>> (.data.rel.ro+0x18): undefined reference to `iosapic_serial_irq'
+>>
+>> when:
+>>   CONFIG_GSC=y
+>>   CONFIG_SERIO_GSCPS2=y
+>>   CONFIG_SERIAL_8250_GSC=y
+>>   CONFIG_PCI is not set
+>>     and hence PCI_LBA is not set.
+>>   IOSAPIC depends on PCI_LBA, so IOSAPIC is not set/enabled.
+>>
+>> Making SERIAL_8250_GSC depend on PCI_LBA prevents the build error.
+> 
+> It maybe makes the build error go away, but ...
+> 
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+>> Cc: Helge Deller <deller@gmx.de>
+>> Cc: linux-parisc@vger.kernel.org
+>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Cc: linux-serial@vger.kernel.org
+>> Cc: Jiri Slaby <jirislaby@kernel.org>
+>> Cc: Johan Hovold <johan@kernel.org>
+>> ---
+>>  drivers/tty/serial/8250/Kconfig |    2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> --- linux-next-20220211.orig/drivers/tty/serial/8250/Kconfig
+>> +++ linux-next-20220211/drivers/tty/serial/8250/Kconfig
+>> @@ -118,7 +118,7 @@ config SERIAL_8250_CONSOLE
+>>
+>>  config SERIAL_8250_GSC
+>>  	tristate
+>> -	depends on SERIAL_8250 && GSC
+>> +	depends on SERIAL_8250 && GSC && PCI_LBA
+>>  	default SERIAL_8250
+> 
+> The serial device is on the GSC bus, so if you make it
+> dependend on the PCI bus it will not be useable on machines
+> which only have a GSC bus...
+> 
+> We need another patch.
+> Do you have a link to the build error?
 
-# perf top --symbols $(objdump -t
-/usr/src/linux/drivers/char/random.o|fgrep 'F .text'|awk '{print
-$6}'|tr '\n' ,) -F max -g
 
-One thing I noticed though was that add_interrupt_randomness spends
-most of its time on:
+No, it's from the other build error that you just replied to,
+where the incorrect compiler was used.
 
-    lock   xadd   %eax,0x38(%rbp)
+I'll recheck it and reconsider what to do, if anything.
 
-So, as expected, those atomics really need to go. Indeed we might be
-best off with the CPU hotplug notifier for setting the count back to
-zero.
+thanks.
 
-Do you want to prepare a patch for this? Or should I take a stab at it?
-
-Jason
+-- 
+~Randy

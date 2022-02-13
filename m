@@ -2,83 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1AAE4B3B48
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 13:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66BE54B3B4D
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 13:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235936AbiBMMUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 07:20:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38416 "EHLO
+        id S235956AbiBMMY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 07:24:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbiBMMUP (ORCPT
+        with ESMTP id S231621AbiBMMYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 07:20:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B735D18A;
-        Sun, 13 Feb 2022 04:20:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 13 Feb 2022 07:24:55 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009975D65A
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 04:24:49 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 483DD61155;
-        Sun, 13 Feb 2022 12:20:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A4DBCC340EF;
-        Sun, 13 Feb 2022 12:20:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644754809;
-        bh=K571NG4X4Pc1O52F5naqG4zxvyzSqkmmp5kjlV11zQ0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Yu0eV/N6i2MbTFvekxllQgV3Rlyo2mfIFbChisRicC84AEl30miZB2SZVsdmcnbrq
-         QmbgYB4QjQazfcnUQpxZxAYFKi0oni2UUKEA+Aq7QjtzHRhHN3Qr/eT/qi4xwjDcUK
-         +7oRzZKtunKW/VSpHU+Y7XJfYD54DYVP/HVSjwkbRv5rLE8yUOvb5iu4IXvPpO2H6h
-         av9r5W/WJlB3E36NfOISs0QKF1WBdttvTRNh+mnaHo6dn2LU1iUg6OdRXXf09LvADB
-         89sy/BNQ1u2A+g2aWvO0I8Foc+KQvBCFx8EIAI1FC5iDc9XshmeDtgzbiWnHZeQEn0
-         OV+TlI59WoefQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8E031E6BBD2;
-        Sun, 13 Feb 2022 12:20:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by smtp-out1.suse.de (Postfix) with ESMTPS id AA707210EE;
+        Sun, 13 Feb 2022 12:24:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644755088; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7rVE6HildLEjfpZmMdS6CttJgsbl6vn8KlMfUd2rBgo=;
+        b=ZfL4SF2AxC9DifM5I/lOkbUWNJavN/5oma2xFugW0uVjujsfTerOyL8Hs78LPfpQsH+3cU
+        ckPgjwRtY0L7gEQVEJXuZpgVGTDAT13a2gGQfeM2ArsZIFv19kaf4RaKwdZFzYaiJZhpi9
+        o/oz+Di9h9fFsCAGxN0I5Ch/eQ020h4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644755088;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7rVE6HildLEjfpZmMdS6CttJgsbl6vn8KlMfUd2rBgo=;
+        b=ZPdvLeRPLe43RyvbgzQlgsfXvD3RGtskV7WRQqMso84u3anZ9rDsv09iHcnZ1jPG8LbIeZ
+        Pvc4mv8M0TYMnOAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9038D13521;
+        Sun, 13 Feb 2022 12:24:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id coqaIpD4CGLWPQAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 13 Feb 2022 12:24:48 +0000
+Date:   Sun, 13 Feb 2022 13:24:54 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/urgent for 5.17-rc4
+Message-ID: <Ygj4lhj6KwGZk5yI@zn.tnic>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] tipc: fix a bit overflow in tipc_crypto_key_rcv()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164475480957.14254.17768988352478949538.git-patchwork-notify@kernel.org>
-Date:   Sun, 13 Feb 2022 12:20:09 +0000
-References: <20220211045510.18870-1-hbh25y@gmail.com>
-In-Reply-To: <20220211045510.18870-1-hbh25y@gmail.com>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     jmaloy@redhat.com, ying.xue@windriver.com, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Linus,
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+please pull a single x86/urgent fix for 5.17.
 
-On Fri, 11 Feb 2022 12:55:10 +0800 you wrote:
-> msg_data_sz return a 32bit value, but size is 16bit. This may lead to a
-> bit overflow.
-> 
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> ---
->  net/tipc/crypto.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Thx.
 
-Here is the summary with links:
-  - [net] tipc: fix a bit overflow in tipc_crypto_key_rcv()
-    https://git.kernel.org/netdev/net/c/143de8d97d79
+---
 
-You are awesome, thank you!
+The following changes since commit dfd42facf1e4ada021b939b4e19c935dcdd55566:
+
+  Linux 5.17-rc3 (2022-02-06 12:20:50 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v5.17_rc4
+
+for you to fetch changes up to 8795359e35bc33bf86b6d0765aa7f37431db3b9c:
+
+  x86/sgx: Silence softlockup detection when releasing large enclaves (2022-02-10 15:58:14 -0800)
+
+----------------------------------------------------------------
+- Prevent softlockups when tearing down large SGX enclaves
+
+----------------------------------------------------------------
+Reinette Chatre (1):
+      x86/sgx: Silence softlockup detection when releasing large enclaves
+
+ arch/x86/kernel/cpu/sgx/encl.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Regards/Gruss,
+    Boris.
 
-
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

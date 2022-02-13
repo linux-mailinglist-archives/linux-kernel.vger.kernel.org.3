@@ -2,127 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B4C4B3CD3
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 19:24:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 553774B3CD5
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 19:25:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237779AbiBMSYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 13:24:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45374 "EHLO
+        id S237793AbiBMSZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 13:25:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiBMSYw (ORCPT
+        with ESMTP id S230009AbiBMSZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 13:24:52 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1065717C
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 10:24:46 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id z16so3551189pfh.3
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 10:24:46 -0800 (PST)
+        Sun, 13 Feb 2022 13:25:30 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60AB575C5
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 10:25:24 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id v63so12808452ybv.10
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 10:25:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qIMt0RmWAsQWauyJZDRkp+AWN8bvJQqBJlsPfpkOQXE=;
-        b=ceJfHs1cLBxsz5BKk+/jEK/pAPjb0m9drL+HpSH4kfb4H706RHjLsyJawdA/Yxb4lE
-         erlTmiX/pmE/EiKd2LQvYVMdyq5kZGyMEJEnpWsvN7kJQR7NAe9D06I++F4jVmWdLWgB
-         y1N/T3PCkSejTGnWCRvxEpIGCqN0Ns1w1WbWQ=
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=KXZYDEEC2LO17f3/X0MoAyEpPa/p71NZIgTKJd4XqT3mcfW13rd1bEmWoTvu777urk
+         Do2Vv7/uOyY9WQe6t6MGGPgI8co8sWaDEgVa7pu7PF0rW1cxpkdwOwggLSIOkwQx/Gzh
+         rWB8TCrfKvY78BCOMogYoPLnQF2gUTqf2QAuq4iOJt8Ug+YQATBl4gVX3L87dRh1kvcf
+         Gqhh9gG/mhFS5ODzpJjwIo8bzJCCxLKfU3MUKERVRTfuqvEMQbHfbzuO93oFc5dq+wV8
+         vxTUrl4lWietN+xM/BYe6PAdT2Q3n/jKXm2koSI8QFR21U8vwms2CjmuiH3HljIe1Z1M
+         FYeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qIMt0RmWAsQWauyJZDRkp+AWN8bvJQqBJlsPfpkOQXE=;
-        b=dnAPQwWhXgOXooRqQ5rUs39ru+RNfwzYEOOYl0ojwsLqKDVnYX3aaMiUdrM4dXfAOV
-         vHXhHSHrJ3C9T3c4Ol5KrUz9U/UdZW/6dvXyDGP4MUc4yjdGoj3jzwTILIPXBe83Y6uO
-         t8fUmNbYHSGrRJGjIMY3TAIiAsIZUqp190gjDptohtre/Qe8nbKfG/27UHI5zvWmCkWr
-         Cyx/f9PVFsHY4jq6gf9OZuymWiQ+PL4cb4+CYH0tV1RU6O0pnrNOiYFPesLSTttvyNiM
-         R3aJhWcS0kuvjTCUMkHQNClTjg+td2u3zz+1x/6LBfkQk2pTsQ+T+W1aHgM7mPAWwSLj
-         sPNA==
-X-Gm-Message-State: AOAM533afxMNggWQaQUDdLNKEVb40N0WbniAqbosukvig84YfECSGYhm
-        5NwhJfWvH0kGblYDl/HMDKxS7A==
-X-Google-Smtp-Source: ABdhPJwINsV0XJhP9HuH1sANDjByEYfXqHi97i/CHzledo+kTYPeqHWze6uGAfg2ugeAuBqpfriInQ==
-X-Received: by 2002:a05:6a00:9a9:: with SMTP id u41mr10793347pfg.75.1644776685873;
-        Sun, 13 Feb 2022 10:24:45 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c23sm2642759pfi.136.2022.02.13.10.24.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Feb 2022 10:24:45 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        =?UTF-8?q?Valdis=20Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        "Justin Forbes" <jmforbes@linuxtx.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v2] tools: Fix use-after-free for realloc(..., 0)
-Date:   Sun, 13 Feb 2022 10:24:43 -0800
-Message-Id: <20220213182443.4037039-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=bGJFBrUFHCXJpAOZkiLV7EF82M7n4Y7t/B7yxqRFW35aUAjPhueDq5jT8njF1kn4TE
+         LskDhn3t8tYTF0HdsVkvbQwthv5WZlXi55E3DMazb/YIbV4Uylty6Q+7FrRO5mZ3r+Lo
+         L7gnzVEC6j0aWttw3fU5QdXFACDSuELC+E+KrPyjaxxx9fOMwFk5jV3n0UrMsZOrqeZJ
+         coNSj98iyUinOx5DppetgNi0aykZoqO8E00IXYAajj1eRaPk8PlbSb/w3zx2rCQAsg5f
+         0UH+HqZY2szNkpgJpf6cgmI/U6blFdOYsgSTBT+6QFOlpnqiPhiE0NBb4zOllgDRyd1F
+         GX6g==
+X-Gm-Message-State: AOAM533FBMVAi1tMCknVn41UfXF2XzL4Dg5Vdh8SNY4O8YZy4OQHGjov
+        vN/MyIiTM2HULpn3I/D0+ZYtArgdhaPNBkSQ5DA=
+X-Google-Smtp-Source: ABdhPJwE4aAduq6ESisISvUQJXAz+p/Gw+S+z3+mx9YZWLu276c6sfZ0RhpUpZcL23fwNYExdRmoOm8lFvXOR7EZSCM=
+X-Received: by 2002:a25:9247:: with SMTP id e7mr5354117ybo.747.1644776723912;
+ Sun, 13 Feb 2022 10:25:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2060; h=from:subject; bh=UDNf8UBq2T0ezuPPJ2TeXHBzHIPtm6yrBQnmEtMJVKc=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiCUzqGx4ok+q1/PygEiy3RiPBLR7jygYB1WUQ+GCG Yn3uT6SJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYglM6gAKCRCJcvTf3G3AJpG0D/ 4ojQYj0flSG5P58fm/djxCldhf2qaFTgEzpsQVuu52jXjGVHIb6sMAiaTYQc/gVvKpnJ5TOjPz+5Fs yeOm0juNwOo2ZuovTZcoEJI17cR80rdwq96jN6TUMIycK4NrqRXc8DGrvp+A447Pi6UurGMdWZ9XWq YHYZ8yqAIYOENuM5UbHoig2xLrDMEbnCzaG5CM2iAWCXM77qq6X6Hsy/EJf6jPj3z3h9DyrH+U77JS F2Zf/25Ja5+RZSAasITedL7ikkIqNt81rZsSk5vVkEyO99MaeVN7HbYb4L+TN3CiX5GFsCPCUEIecg aF+YlHOXYX1n0SpfewDAC0yzd0KTjcpzqXyet+BYscaPXJ7aw2sxLC0dZ6K21UlkNn8gPu8hSEr1Gd IlL3P16TLFlWuydqlADn1hPgFuUmaN6sgfwPkeDEX03u/1sxDFm7JaR8zmMmYGzR4EE+Mri2Qcy6zE wLCbKtizssa2vh0pK3yF3AQFVm1bnaF+L1UGqsk15McE+LH07otlTV4R7J784U2pE6OjuYZZrQ1xm+ 8/6K8CLEzTZySrXi0pC+Aq1vbj1dthc5lqBXzra+CtACyPTeXH/fjEcZ6C4XqiEE4PBDvVtIvFElnQ rO9omxtUrKMZN5JE01S1BKPiZXsNQmE9wJctJ+R5iIEsOJGA/ZGbv+oIQC2Q==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a05:7011:812:b0:1ff:f81d:242a with HTTP; Sun, 13 Feb 2022
+ 10:25:23 -0800 (PST)
+Reply-To: dravasmith27@gmail.com
+From:   Dr Ava Smith <gracebanneth@gmail.com>
+Date:   Sun, 13 Feb 2022 10:25:23 -0800
+Message-ID: <CABo=7A0075rYFH2UBBC0-bKXVjSQCMXig5gunAJ_BH+BvfUK1g@mail.gmail.com>
+Subject: GREETINGS FROM DR AVA SMITH
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b36 listed in]
+        [list.dnswl.org]
+        * -0.0 BAYES_20 BODY: Bayes spam probability is 5 to 20%
+        *      [score: 0.0818]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [gracebanneth[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [dravasmith27[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GCC 12 was correctly reporting a potential use-after-free condition in
-the xrealloc helper. Fix the warning by avoiding an implicit "free(ptr)"
-when size == 0:
-
-In file included from help.c:12:
-In function 'xrealloc',
-    inlined from 'add_cmdname' at help.c:24:2: subcmd-util.h:56:23: error: pointer may be used after 'realloc' [-Werror=use-after-free]
-   56 |                 ret = realloc(ptr, size);
-      |                       ^~~~~~~~~~~~~~~~~~
-subcmd-util.h:52:21: note: call to 'realloc' here
-   52 |         void *ret = realloc(ptr, size);
-      |                     ^~~~~~~~~~~~~~~~~~
-subcmd-util.h:58:31: error: pointer may be used after 'realloc' [-Werror=use-after-free]
-   58 |                         ret = realloc(ptr, 1);
-      |                               ^~~~~~~~~~~~~~~
-subcmd-util.h:52:21: note: call to 'realloc' here
-   52 |         void *ret = realloc(ptr, size);
-      |                     ^~~~~~~~~~~~~~~~~~
-
-Reported-by: "Valdis Klētnieks" <valdis.kletnieks@vt.edu>
-Fixes: 2f4ce5ec1d44 ("perf tools: Finalize subcmd independence")
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-v1: https://lore.kernel.org/lkml/20220212181855.3460176-1-keescook@chromium.org/
-v2: simplify logic (josh)
----
- tools/lib/subcmd/subcmd-util.h | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
-
-diff --git a/tools/lib/subcmd/subcmd-util.h b/tools/lib/subcmd/subcmd-util.h
-index 794a375dad36..b2aec04fce8f 100644
---- a/tools/lib/subcmd/subcmd-util.h
-+++ b/tools/lib/subcmd/subcmd-util.h
-@@ -50,15 +50,8 @@ static NORETURN inline void die(const char *err, ...)
- static inline void *xrealloc(void *ptr, size_t size)
- {
- 	void *ret = realloc(ptr, size);
--	if (!ret && !size)
--		ret = realloc(ptr, 1);
--	if (!ret) {
--		ret = realloc(ptr, size);
--		if (!ret && !size)
--			ret = realloc(ptr, 1);
--		if (!ret)
--			die("Out of memory, realloc failed");
--	}
-+	if (!ret)
-+		die("Out of memory, realloc failed");
- 	return ret;
- }
- 
 -- 
-2.30.2
-
+Hello Dear,
+how are you today?hope you are fine
+My name is Dr Ava Smith ,Am an English and French nationalities.
+I will give you pictures and more details about me as soon as i hear from you
+Thanks
+Ava

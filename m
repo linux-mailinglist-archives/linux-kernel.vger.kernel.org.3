@@ -2,112 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1594B3D6E
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 21:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC694B3D76
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 21:35:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238231AbiBMUb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 15:31:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50578 "EHLO
+        id S238260AbiBMUfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 15:35:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232770AbiBMUb4 (ORCPT
+        with ESMTP id S238251AbiBMUfv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 15:31:56 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8191E532FB
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 12:31:50 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id n17so17692406iod.4
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 12:31:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3rdhrGsB6cka+Ef4Pbq9BbguW4PKC4/Ny/Dc/UgVg9I=;
-        b=MgetSyyfZYVU8EdQAtQ9EEk5/SnlzABkFcm79j3fvcLWmIlv4dELeia897T/vXhsuy
-         ccM8qTg8WfTtmB8XlH6L+d4cZyj3NBXABqGP2pPpY6EeyJ9pkE2lYGhydWx4R91HKbk9
-         83f2H+AsDDamhGiZ/LipYRXzSRHLOXxfq+T0I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3rdhrGsB6cka+Ef4Pbq9BbguW4PKC4/Ny/Dc/UgVg9I=;
-        b=PgLeNZOViyjRCCPw5ODPFV9p5hWOO2tb9iUrpCpJNRB4IzlmhZ7wTn5NmpKnMQZw0D
-         7xl8H/G0Es5GFVJ3te/BwNtqwoxQUMg9VnwHK886GJsf7mLp0RSCKTKOlJgIbe11cbwR
-         7G86ZkspdYnyJ8zYvzXvqmGLDtuL3OMh3THv1xnHKgFdsFnbqVp/Q/pkOSGgKy8s/n7P
-         MP5yF5VeMWoLuKAvakK12p3ENoIkVS3aHeq3/zALYbyka1GE+qS7/SdQzEz2mFtVMpsJ
-         B7feLaA3B5vuw8vDG3gCyDf0MjKElDQarqTtB56tUfkkjG8Qzjeb+H/fpK50S096RxXj
-         Icbg==
-X-Gm-Message-State: AOAM533/XM5rYuPIXapPpR2wiNnZF5XZadYyAql3+rBtlmkr3vLFr9Qu
-        R4wQDwcYEySiOIDOApi+NBQ3gJcbt4Zs6HH7T3Cjyw==
-X-Google-Smtp-Source: ABdhPJzMUZurqwHSvnaBe+vDkWCw9aovyzgqIxE11CVXZHJufQuj6eebPymwiXB10YP2WUGRyaazQqk/hjpog64xJTw=
-X-Received: by 2002:a02:824e:: with SMTP id q14mr6457263jag.0.1644784309865;
- Sun, 13 Feb 2022 12:31:49 -0800 (PST)
+        Sun, 13 Feb 2022 15:35:51 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B291653706;
+        Sun, 13 Feb 2022 12:35:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1644784523;
+        bh=Cpfn90elRMfLDzVx1L0uUsc/bngOYlVfTxhI1KBAubs=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=QXbayB3CLJvUIrtr2HCtBtBb/9Kg/W9P6C/x8te4PK/cgiwOmNIohBi39+8xjCwuQ
+         PSAzLp2K00mFT/7+Pjak2e5OV16l4E8xZCTfJiQPIPEDEgtAkWYxQFNJ+ya2YCMhkf
+         T8gyrjPOdoFGGL3zd18Wzbdtgmh+obv9Xx87LBDI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.190.238]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N0oG5-1oFSQQ1Wp3-00wnYQ; Sun, 13
+ Feb 2022 21:35:23 +0100
+Message-ID: <0baabcbc-196e-08fa-e2db-b7e925993cc1@gmx.de>
+Date:   Sun, 13 Feb 2022 21:35:16 +0100
 MIME-Version: 1.0
-References: <20220211173042.112852-1-ignat@cloudflare.com> <717c68c0-f139-b6e5-aff1-3a4264344eeb@gmail.com>
-In-Reply-To: <717c68c0-f139-b6e5-aff1-3a4264344eeb@gmail.com>
-From:   Ignat Korchagin <ignat@cloudflare.com>
-Date:   Sun, 13 Feb 2022 20:31:39 +0000
-Message-ID: <CALrw=nFLGyGsZ_DmaJ_Cwk0o2QqwokSD+WrEHY3o9TGfiC48MQ@mail.gmail.com>
-Subject: Re: [PATCH] ipv6: mcast: use rcu-safe version of ipv6_get_lladdr()
-To:     David Ahern <dsahern@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>,
-        David Pinilla Caparros <dpini@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] serial: parisc: GSC: fix build when PCI_LBA is not set
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        linux-parisc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>
+References: <20220213193903.8815-1-rdunlap@infradead.org>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20220213193903.8815-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:VtVfDMh6PpTirPXZK3QeaRFqqIwIHU/pf/eKlHf4xg8mCtFgPqM
+ 0un+1BVwxQPBWoD2z9yHZZlDQAqqUZKUXLQUM4+bWHqW493Xbq2ARTFm+YnIeZCWUeA9Npy
+ vhHQlWhtBg2ZidCPPkC/pOpMLmcLpy43PKBZyQZqXK/2sljyhd0yyX7zVv39db+Ye+dDYBS
+ wo1ZElku24Y2XB23QpP0g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:VluQsaZyw/Y=:5jh84tWLI+vZjJ7skyNgVj
+ UU1YMjeJbJmx5zdnLLl8VzaE97CN7qjXX2+j4sQIqJAn4d+G/XE+rpOrdQgTP9NMkPdLDiy22
+ ILBMayVofTwKbJMTcJ/XTRKSlUMyJ6CTuL6QarwvUk7XFHhZCpAxvNe/yfWy28Pi/WKqQl+oB
+ wVnrrNLiF+a/vcWMOY9TjMMkgp7rttocA98xnFBdjt84Gc9VydlU+JYFR2iuD0xNLt+IbgRv5
+ 4zhsPt9O0w0yyUSlQ9qOa/WOyhRH/jxJ5/A2ShPDFze9ea88vlPDmG7BHdpZR6Y5uQ2U9rxoR
+ BvpPUEltnRLVFJghijGBMWcTOZPCQ+Cgl6a/KpwPS5GdS2y2SvXYC+4QpFyJZ2UPnIxuy6xWo
+ +lJKvoOAgxIOTOrwB+/vd0680GWxnMJw5ihx9+jpXQXnC7I2RFc1/zoBWN/w/DN+Zd8gfWEMp
+ smz/lnVIzPKfmKmBk234+a34Vsu1KbTRu1aQ0B9IJIMJNZx777Qw0Md0cjb/X0fVsG+MM/W2+
+ iJy4fll8z/j8ustxQLYDECcWshriZUfOV3oCTBXXzPO9HSv9kZBqdo2sbn5mrLo7eDhQfp0iL
+ a1eO8NM4JEFUOfvRw+1k8wU2oWQnGLyGVGJf8GF0vUOi8A7vvjXVmYzF89qyK81R8/Rd4ALIR
+ ebYV/bSsedDe8hY9Um17iHvYg4lWICqrL1iNBWRoQZgdy7a/yJHMonF/w3atLNqkY/oRhlwrG
+ gbMSeAug8INydJkuMGuy/BekMiZJzs+cyf8EGvLQ2YrbQFZcEvhuuywzrI51mqo3fVqaLxx25
+ NzkA4Iy/JWNRDwqS4bqELQgwIBMuFI2QBQTgxMIbCXbL05NDAqaCjiQusPuUW77GPQLVR2Kok
+ cFj1QNZFLURv46UNo6gl4rrq6NfWP5D+JtkTdawGbFhZAskzpDkq2u5W4n2heMS2CxlPg5CYm
+ ZFQI+5b89PQWNiua7TM++LCvqNLCtdIRHTRCQ/Cakv1nFf+3Mbw+1/Frst2e2bHE60y5wa6iO
+ yhGT/XjDDbARyIvjh/UYbegGF47RnJ6zBfq16xn1FaWEOM9aPFE5kDVTb4CjGntg+0sodGpKA
+ hbX0P233+uB/Ic=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stupid me - forgot to reply to all and a discussion between me and
-David happend off list. Below, is the transcript for posterity:
+Hi Randy,
 
-On Sun, Feb 13, 2022 at 5:53 PM David Ahern <dsahern@gmail.com> wrote:
+On 2/13/22 20:39, Randy Dunlap wrote:
+> There is a build error when using a kernel .config file from
+> 'kernel test robot' for a different build problem:
 >
-> On 2/13/22 8:43 AM, Ignat Korchagin wrote:
-> > On Sun, Feb 13, 2022 at 4:17 PM David Ahern <dsahern@gmail.com> wrote:
-> >>
-> >> On 2/12/22 1:46 PM, Ignat Korchagin wrote:
-> >>> In 8965779d2c0e ("ipv6,mcast: always hold idev->lock before mca_lock")
-> >>> mld_newpack() was actually migrated from "dev" to "idev' just for this
-> >>> use case. It seems the most reasonable approach would be to revert
-> >>> mld_newpack() back to dev and use the original code.
-> >>
-> >>
-> >> pmc already has the reference on idev and idev->dev is the source of dev
-> >> passed to mld_newpack. There is no reason to go back to the idev -> dev
-> >> -> idev dance.
-> >
-> > I don't know. Three things which make it more reasonable in my opinion:
-> >   * we're already using idev->dev in mld_newpack() - that is we're not
-> > adding an extra variable here in mld_newpack() - we need it anyway, so
-> > can use in multiple places
-> >   * it makes the code more consistent with the same code for the same
-> > reason in igmp6_send() in the same file, which uses "dev" and
-> > ipv6_get_lladdr()
-> >   * we're making __ipv6_get_lladdr() static again and everything in
-> > the kernel is now using the public version of ipv6_get_lladdr() - I
-> > think the extra indirection of idev->dev-idev is a reasonable price to
-> > pay to avoid customized locking code in the caller, which may backfire
-> > later again in the same way it backfired this time
+> hppa64-linux-ld: drivers/tty/serial/8250/8250_gsc.o: in function `.LC3':
+> (.data.rel.ro+0x18): undefined reference to `iosapic_serial_irq'
 >
-> which is why I later said move the locking to __ipv6_get_lladdr.
-> ipv6_get_lladdr takes a net_dev, looks up the idev and calls
-> __ipv6_get_lladdr. __ipv6_get_lladdr handles the idev locking needs.
+> when:
+>   CONFIG_GSC=3Dy
+>   CONFIG_SERIO_GSCPS2=3Dy
+>   CONFIG_SERIAL_8250_GSC=3Dy
+>   CONFIG_PCI is not set
+>     and hence PCI_LBA is not set.
+>   IOSAPIC depends on PCI_LBA, so IOSAPIC is not set/enabled.
 >
-> Users of the get_lladdr API that already have the idev reference use
-> __ipv6_get_lladdr. That is a common paradigm in the stack.
+> Making SERIAL_8250_GSC depend on PCI_LBA prevents the build error.
 
-Ah. I see now. This does make sense as well to me.
+It maybe makes the build error go away, but ...
 
-> igmp6 code can use some modernization - but that is a net-next change.
-> This is a -net change.
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: linux-parisc@vger.kernel.org
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-serial@vger.kernel.org
+> Cc: Jiri Slaby <jirislaby@kernel.org>
+> Cc: Johan Hovold <johan@kernel.org>
+> ---
+>  drivers/tty/serial/8250/Kconfig |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> --- linux-next-20220211.orig/drivers/tty/serial/8250/Kconfig
+> +++ linux-next-20220211/drivers/tty/serial/8250/Kconfig
+> @@ -118,7 +118,7 @@ config SERIAL_8250_CONSOLE
+>
+>  config SERIAL_8250_GSC
+>  	tristate
+> -	depends on SERIAL_8250 && GSC
+> +	depends on SERIAL_8250 && GSC && PCI_LBA
+>  	default SERIAL_8250
+
+The serial device is on the GSC bus, so if you make it
+dependend on the PCI bus it will not be useable on machines
+which only have a GSC bus...
+
+We need another patch.
+Do you have a link to the build error?
+
+Helge

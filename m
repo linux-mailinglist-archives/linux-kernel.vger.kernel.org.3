@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 463154B38F7
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 03:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03CBF4B38FD
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 03:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232979AbiBMCjR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 12 Feb 2022 21:39:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41916 "EHLO
+        id S232993AbiBMCqa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 12 Feb 2022 21:46:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbiBMCjQ (ORCPT
+        with ESMTP id S230061AbiBMCq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Feb 2022 21:39:16 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0234060067
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 18:39:11 -0800 (PST)
+        Sat, 12 Feb 2022 21:46:27 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A394760072
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 18:46:22 -0800 (PST)
 Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-267-jz20NOQ6P6ya1sjHH6f2FQ-1; Sun, 13 Feb 2022 02:39:08 +0000
-X-MC-Unique: jz20NOQ6P6ya1sjHH6f2FQ-1
+ uk-mta-24-HG4q7pd-NqGU0GUpRUO8BQ-1; Sun, 13 Feb 2022 02:46:17 +0000
+X-MC-Unique: HG4q7pd-NqGU0GUpRUO8BQ-1
 Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
  AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Sun, 13 Feb 2022 02:39:06 +0000
+ Server (TLS) id 15.0.1497.28; Sun, 13 Feb 2022 02:46:16 +0000
 Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
  AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Sun, 13 Feb 2022 02:39:06 +0000
+ 15.00.1497.028; Sun, 13 Feb 2022 02:46:16 +0000
 From:   David Laight <David.Laight@ACULAB.COM>
 To:     'Christophe Leroy' <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
+        Andrew Morton <akpm@linux-foundation.org>
 CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: [PATCH] net: Remove branch in csum_shift()
-Thread-Topic: [PATCH] net: Remove branch in csum_shift()
-Thread-Index: AQHYHyQqmTo4K/pb5UWdDmTfE7rfRayQxWFw
-Date:   Sun, 13 Feb 2022 02:39:06 +0000
-Message-ID: <7f16910a8f63475dae012ef5135f41d1@AcuMS.aculab.com>
-References: <efeeb0b9979b0377cd313311ad29cf0ac060ae4b.1644569106.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <efeeb0b9979b0377cd313311ad29cf0ac060ae4b.1644569106.git.christophe.leroy@csgroup.eu>
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: RE: [PATCH v2] mm: Uninline copy_overflow()
+Thread-Topic: [PATCH v2] mm: Uninline copy_overflow()
+Thread-Index: AQHYHzBgIqINanSGXk+kH56ytNcFL6yQyJxg
+Date:   Sun, 13 Feb 2022 02:46:16 +0000
+Message-ID: <1301657af59b46858662c605edf795cf@AcuMS.aculab.com>
+References: <1b19e3168b6bed6b9488d35e50a592f5229a2d45.1644574519.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <1b19e3168b6bed6b9488d35e50a592f5229a2d45.1644574519.git.christophe.leroy@csgroup.eu>
 Accept-Language: en-GB, en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
@@ -53,7 +51,7 @@ X-Mimecast-Originator: aculab.com
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,71 +61,65 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Christophe Leroy
-> Sent: 11 February 2022 08:48
+> Sent: 11 February 2022 10:16
+...
+> copy_overflow() is a non conditional warning called by
+> check_copy_size() on an error path.
 > 
-> Today's implementation of csum_shift() leads to branching based on
-> parity of 'offset'
+> check_copy_size() have to remain inlined in order to benefit
+> from constant folding, but copy_overflow() is not worth inlining.
 > 
-> 	000002f8 <csum_block_add>:
-> 	     2f8:	70 a5 00 01 	andi.   r5,r5,1
-> 	     2fc:	41 a2 00 08 	beq     304 <csum_block_add+0xc>
-> 	     300:	54 84 c0 3e 	rotlwi  r4,r4,24
-> 	     304:	7c 63 20 14 	addc    r3,r3,r4
-> 	     308:	7c 63 01 94 	addze   r3,r3
-> 	     30c:	4e 80 00 20 	blr
+> Uninline it.
 > 
-> Use first bit of 'offset' directly as input of the rotation instead of
-> branching.
-> 
-> 	000002f8 <csum_block_add>:
-> 	     2f8:	54 a5 1f 38 	rlwinm  r5,r5,3,28,28
-> 	     2fc:	20 a5 00 20 	subfic  r5,r5,32
-> 	     300:	5c 84 28 3e 	rotlw   r4,r4,r5
-> 	     304:	7c 63 20 14 	addc    r3,r3,r4
-> 	     308:	7c 63 01 94 	addze   r3,r3
-> 	     30c:	4e 80 00 20 	blr
-> 
-> And change to left shift instead of right shift to skip one more
-> instruction. This has no impact on the final sum.
-> 
-> 	000002f8 <csum_block_add>:
-> 	     2f8:	54 a5 1f 38 	rlwinm  r5,r5,3,28,28
-> 	     2fc:	5c 84 28 3e 	rotlw   r4,r4,r5
-> 	     300:	7c 63 20 14 	addc    r3,r3,r4
-> 	     304:	7c 63 01 94 	addze   r3,r3
-> 	     308:	4e 80 00 20 	blr
-
-That is ppc64.
-What happens on x86-64?
-
-Trying to do the same in the x86 ipcsum code tended to make the code worse.
-(Although that test is for an odd length fragment and can just be removed.)
-
-	David
-
+> This reduces the size of vmlinux by almost 4kbytes.
 > 
 > Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 > ---
->  include/net/checksum.h | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+> v2: Added missing EXPORT_SYMBOL() and enhanced commit message
+> ---
+>  include/linux/thread_info.h | 5 +----
+>  mm/maccess.c                | 6 ++++++
+>  2 files changed, 7 insertions(+), 4 deletions(-)
 > 
-> diff --git a/include/net/checksum.h b/include/net/checksum.h
-> index 5218041e5c8f..9badcd5532ef 100644
-> --- a/include/net/checksum.h
-> +++ b/include/net/checksum.h
-> @@ -83,9 +83,7 @@ static inline __sum16 csum16_sub(__sum16 csum, __be16 addend)
->  static inline __wsum csum_shift(__wsum sum, int offset)
->  {
->  	/* rotate sum to align it with a 16b boundary */
-> -	if (offset & 1)
-> -		return (__force __wsum)ror32((__force u32)sum, 8);
-> -	return sum;
-> +	return (__force __wsum)rol32((__force u32)sum, (offset & 1) << 3);
+> diff --git a/include/linux/thread_info.h b/include/linux/thread_info.h
+> index 73a6f34b3847..1087d1e2be5c 100644
+> --- a/include/linux/thread_info.h
+> +++ b/include/linux/thread_info.h
+> @@ -209,10 +209,7 @@ __bad_copy_from(void);
+>  extern void __compiletime_error("copy destination size is too small")
+>  __bad_copy_to(void);
+> 
+> -static inline void copy_overflow(int size, unsigned long count)
+> -{
+> -	WARN(1, "Buffer overflow detected (%d < %lu)!\n", size, count);
+> -}
+> +void copy_overflow(int size, unsigned long count);
+> 
+>  static __always_inline __must_check bool
+>  check_copy_size(const void *addr, size_t bytes, bool is_source)
+> diff --git a/mm/maccess.c b/mm/maccess.c
+> index d3f1a1f0b1c1..6b11a22f4b01 100644
+> --- a/mm/maccess.c
+> +++ b/mm/maccess.c
+> @@ -335,3 +335,9 @@ long strnlen_user_nofault(const void __user *unsafe_addr, long count)
+> 
+>  	return ret;
 >  }
-> 
->  static inline __wsum
-> --
-> 2.34.1
+> +
+> +void copy_overflow(int size, unsigned long count)
+> +{
+> +	WARN(1, "Buffer overflow detected (%d < %lu)!\n", size, count);
+> +}
+> +EXPORT_SYMBOL_GPL(copy_overflow)
+
+Can you remove the _GPL ????
+
+I think that basically stops you compiling any non-gpl code if the
+copy_protection is enabled in the kernel build.
+I'm guessing that most of the inline wrappers calling this are non-FPL
+functions.
+
+	David
 
 -
 Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK

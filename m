@@ -2,247 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3324B3AF5
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 11:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C658B4B3AF8
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 11:54:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235036AbiBMKug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 05:50:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56070 "EHLO
+        id S235155AbiBMKvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 05:51:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiBMKuf (ORCPT
+        with ESMTP id S229834AbiBMKvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 05:50:35 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4BE5D67F
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 02:50:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644749429; x=1676285429;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8PNduZVtN0E5mS0Ch3uZYQQf8lbcF2J00huqEu+Ns9Q=;
-  b=hbeh4WDOakHTqTtlhGFb0ImjgVvU2bFtGO9iwd1M4XzLVRoyuYnXjRHB
-   Kv2viTwTxUOPrrwrU0og1bcWFh23cJPVRxav77DeL7KROSmnpsUzifUdg
-   Rr9U7wl6SjsBUA94RUrGEwtTGLzevZOqjMU4Mbl7l4B/1zQYEnCDOK5B2
-   2paAKuVcupVxqlPpf3le+ZcCxhMGotpUPhB/mNcR1bOFQhVOdCQVYOZbc
-   wLzW+xzqaMzJYNHOoaXKGGXNRI27SRWT0y1KEeD4vi+Q7noNHKJR3VUF7
-   qc4Tafa0lxveYDOBiQUJQi0lcLqnGgbXQlsMw3kS47Z/L8Ru+GFaGx3D3
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10256"; a="248771047"
-X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
-   d="scan'208";a="248771047"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 02:50:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
-   d="scan'208";a="493815479"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 13 Feb 2022 02:50:26 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJCSY-0007OV-2q; Sun, 13 Feb 2022 10:50:26 +0000
-Date:   Sun, 13 Feb 2022 18:49:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: drivers/md/dm-integrity.c:2567:1: warning: the frame size of 1040
- bytes is larger than 1024 bytes
-Message-ID: <202202131837.WoH0aQil-lkp@intel.com>
+        Sun, 13 Feb 2022 05:51:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005F25DE40
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 02:51:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6D87B8069A
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 10:51:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3779C340F0
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 10:51:34 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZTD8zDvz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644749493;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OKUD1T6eLiMSZXX3kUU5bCCpHvwXB1Q2wbEGzMaMNvg=;
+        b=ZTD8zDvzqnylhM+pI+eXJKQYp0JstEcZEaguPz5YJuPWE9M+vTsWHoGjl1n+SAJpKHa3GZ
+        W6wEwXyCnZwQaBPNXkWFyW/bHADUeBvYmBFhhXTFbwLPqa5n1nra6yL5pdaKqZa9D5osAK
+        qPCu78UVsag3+HvnwG8U+pzRPe+4zdg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c16de68b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Sun, 13 Feb 2022 10:51:32 +0000 (UTC)
+Received: by mail-yb1-f182.google.com with SMTP id 124so9842677ybn.11
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 02:51:32 -0800 (PST)
+X-Gm-Message-State: AOAM531sMiFiMyhStrRvMSyexcQsq0FSUgpTFMdroG6t7KUy7cs8zIf/
+        4HRdpq9brUiiWeWUFUirNW7fQnwPVK0+gt6kdOI=
+X-Google-Smtp-Source: ABdhPJzGY5CaT42I9qzy9h+53QV1keSdtMVsZwRUsZw2N0mlWxAJoxCurzjdCXFs+18Fl6xVy8/sDaGVYk771qTJrok=
+X-Received: by 2002:a81:f10b:: with SMTP id h11mr9625026ywm.396.1644749491835;
+ Sun, 13 Feb 2022 02:51:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7110:888:b0:14e:cd6d:454f with HTTP; Sun, 13 Feb 2022
+ 02:51:31 -0800 (PST)
+In-Reply-To: <YgiraRIkuKK787YC@owl.dominikbrodowski.net>
+References: <20220212231022.679926-1-Jason@zx2c4.com> <20220212231022.679926-4-Jason@zx2c4.com>
+ <YgiraRIkuKK787YC@owl.dominikbrodowski.net>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Sun, 13 Feb 2022 11:51:31 +0100
+X-Gmail-Original-Message-ID: <CAHmME9rtP=YUGk1UbTQQiONhssn8v+c_0ZXnt7tex3mQWY7g+Q@mail.gmail.com>
+Message-ID: <CAHmME9rtP=YUGk1UbTQQiONhssn8v+c_0ZXnt7tex3mQWY7g+Q@mail.gmail.com>
+Subject: Re: [PATCH 3/3] random: use trylock in irq handler rather than spinning
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     linux-kernel@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b81b1829e7e39f6cebdf6e4d5484eacbceda8554
-commit: db87a7199229b75c9996bf78117eceb81854fce2 powerpc/bug: Remove specific powerpc BUG_ON() and WARN_ON() on PPC32
-date:   6 months ago
-config: powerpc-randconfig-r035-20220213 (https://download.01.org/0day-ci/archive/20220213/202202131837.WoH0aQil-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=db87a7199229b75c9996bf78117eceb81854fce2
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout db87a7199229b75c9996bf78117eceb81854fce2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/md/ lib/zstd/
+Hi Dominik,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yes, the decision about RT and trylocks is still undecided, and I'm
+actually trying to get the existing design into as optimal shape as
+possible before considering deferring it, so we can really have a
+complete comparison. It was an error (my error) to introduce the full
+lock here in the original patch that added this. So I've actually made
+this patch into a fixup for that original one, so we don't need this
+one on top.
 
-All warnings (new ones prefixed by >>):
+I'll be looking at the deferred work next week, but I'd like the
+existing thing to be as solid as possible before. Otherwise it's too
+hard to evaluate pros and cons.
 
-   drivers/md/dm-integrity.c: In function 'do_journal_write':
->> drivers/md/dm-integrity.c:2567:1: warning: the frame size of 1040 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-    2567 | }
-         | ^
-
-
-vim +2567 drivers/md/dm-integrity.c
-
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2425  
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2426  static void do_journal_write(struct dm_integrity_c *ic, unsigned write_start,
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2427  			     unsigned write_sections, bool from_replay)
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2428  {
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2429  	unsigned i, j, n;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2430  	struct journal_completion comp;
-a7c3e62bdc71d3 Mikulas Patocka 2017-07-19  2431  	struct blk_plug plug;
-a7c3e62bdc71d3 Mikulas Patocka 2017-07-19  2432  
-a7c3e62bdc71d3 Mikulas Patocka 2017-07-19  2433  	blk_start_plug(&plug);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2434  
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2435  	comp.ic = ic;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2436  	comp.in_flight = (atomic_t)ATOMIC_INIT(1);
-b5e8ad92c3ac0b Arnd Bergmann   2017-08-15  2437  	init_completion(&comp.comp);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2438  
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2439  	i = write_start;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2440  	for (n = 0; n < write_sections; n++, i++, wraparound_section(ic, &i)) {
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2441  #ifndef INTERNAL_VERIFY
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2442  		if (unlikely(from_replay))
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2443  #endif
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2444  			rw_section_mac(ic, i, false);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2445  		for (j = 0; j < ic->journal_section_entries; j++) {
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2446  			struct journal_entry *je = access_journal_entry(ic, i, j);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2447  			sector_t sec, area, offset;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2448  			unsigned k, l, next_loop;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2449  			sector_t metadata_block;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2450  			unsigned metadata_offset;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2451  			struct journal_io *io;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2452  
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2453  			if (journal_entry_is_unused(je))
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2454  				continue;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2455  			BUG_ON(unlikely(journal_entry_is_inprogress(je)) && !from_replay);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2456  			sec = journal_entry_get_sector(je);
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2457  			if (unlikely(from_replay)) {
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2458  				if (unlikely(sec & (unsigned)(ic->sectors_per_block - 1))) {
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2459  					dm_integrity_io_error(ic, "invalid sector in journal", -EIO);
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2460  					sec &= ~(sector_t)(ic->sectors_per_block - 1);
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2461  				}
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2462  			}
-f6f72f32c22c0b Mikulas Patocka 2020-03-22  2463  			if (unlikely(sec >= ic->provided_data_sectors))
-f6f72f32c22c0b Mikulas Patocka 2020-03-22  2464  				continue;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2465  			get_area_and_offset(ic, sec, &area, &offset);
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2466  			restore_last_bytes(ic, access_journal_data(ic, i, j), je);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2467  			for (k = j + 1; k < ic->journal_section_entries; k++) {
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2468  				struct journal_entry *je2 = access_journal_entry(ic, i, k);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2469  				sector_t sec2, area2, offset2;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2470  				if (journal_entry_is_unused(je2))
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2471  					break;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2472  				BUG_ON(unlikely(journal_entry_is_inprogress(je2)) && !from_replay);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2473  				sec2 = journal_entry_get_sector(je2);
-f6f72f32c22c0b Mikulas Patocka 2020-03-22  2474  				if (unlikely(sec2 >= ic->provided_data_sectors))
-f6f72f32c22c0b Mikulas Patocka 2020-03-22  2475  					break;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2476  				get_area_and_offset(ic, sec2, &area2, &offset2);
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2477  				if (area2 != area || offset2 != offset + ((k - j) << ic->sb->log2_sectors_per_block))
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2478  					break;
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2479  				restore_last_bytes(ic, access_journal_data(ic, i, k), je2);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2480  			}
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2481  			next_loop = k - 1;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2482  
-6f1c819c219f78 Kent Overstreet 2018-05-20  2483  			io = mempool_alloc(&ic->journal_io_mempool, GFP_NOIO);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2484  			io->comp = &comp;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2485  			io->range.logical_sector = sec;
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2486  			io->range.n_sectors = (k - j) << ic->sb->log2_sectors_per_block;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2487  
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2488  			spin_lock_irq(&ic->endio_wait.lock);
-8b3bbd490d880d Mikulas Patocka 2019-04-29  2489  			add_new_range_and_wait(ic, &io->range);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2490  
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2491  			if (likely(!from_replay)) {
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2492  				struct journal_node *section_node = &ic->journal_tree[i * ic->journal_section_entries];
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2493  
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2494  				/* don't write if there is newer committed sector */
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2495  				while (j < k && find_newer_committed_node(ic, &section_node[j])) {
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2496  					struct journal_entry *je2 = access_journal_entry(ic, i, j);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2497  
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2498  					journal_entry_set_unused(je2);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2499  					remove_journal_node(ic, &section_node[j]);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2500  					j++;
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2501  					sec += ic->sectors_per_block;
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2502  					offset += ic->sectors_per_block;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2503  				}
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2504  				while (j < k && find_newer_committed_node(ic, &section_node[k - 1])) {
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2505  					struct journal_entry *je2 = access_journal_entry(ic, i, k - 1);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2506  
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2507  					journal_entry_set_unused(je2);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2508  					remove_journal_node(ic, &section_node[k - 1]);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2509  					k--;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2510  				}
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2511  				if (j == k) {
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2512  					remove_range_unlocked(ic, &io->range);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2513  					spin_unlock_irq(&ic->endio_wait.lock);
-6f1c819c219f78 Kent Overstreet 2018-05-20  2514  					mempool_free(io, &ic->journal_io_mempool);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2515  					goto skip_io;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2516  				}
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2517  				for (l = j; l < k; l++) {
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2518  					remove_journal_node(ic, &section_node[l]);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2519  				}
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2520  			}
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2521  			spin_unlock_irq(&ic->endio_wait.lock);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2522  
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2523  			metadata_block = get_metadata_sector_and_offset(ic, area, offset, &metadata_offset);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2524  			for (l = j; l < k; l++) {
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2525  				int r;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2526  				struct journal_entry *je2 = access_journal_entry(ic, i, l);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2527  
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2528  				if (
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2529  #ifndef INTERNAL_VERIFY
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2530  				    unlikely(from_replay) &&
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2531  #endif
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2532  				    ic->internal_hash) {
-6d39a1241ebc3b Kees Cook       2018-08-07  2533  					char test_tag[max_t(size_t, HASH_MAX_DIGESTSIZE, MAX_TAG_SIZE)];
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2534  
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2535  					integrity_sector_checksum(ic, sec + ((l - j) << ic->sb->log2_sectors_per_block),
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2536  								  (char *)access_journal_data(ic, i, l), test_tag);
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2537  					if (unlikely(memcmp(test_tag, journal_entry_tag(ic, je2), ic->tag_size)))
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2538  						dm_integrity_io_error(ic, "tag mismatch when replaying journal", -EILSEQ);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2539  				}
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2540  
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2541  				journal_entry_set_unused(je2);
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2542  				r = dm_integrity_rw_tag(ic, journal_entry_tag(ic, je2), &metadata_block, &metadata_offset,
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2543  							ic->tag_size, TAG_WRITE);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2544  				if (unlikely(r)) {
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2545  					dm_integrity_io_error(ic, "reading tags", r);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2546  				}
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2547  			}
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2548  
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2549  			atomic_inc(&comp.in_flight);
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2550  			copy_from_journal(ic, i, j << ic->sb->log2_sectors_per_block,
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2551  					  (k - j) << ic->sb->log2_sectors_per_block,
-9d609f85b7eb96 Mikulas Patocka 2017-04-18  2552  					  get_data_sector(ic, area, offset),
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2553  					  complete_copy_from_journal, io);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2554  skip_io:
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2555  			j = next_loop;
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2556  		}
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2557  	}
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2558  
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2559  	dm_bufio_write_dirty_buffers_async(ic->bufio);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2560  
-a7c3e62bdc71d3 Mikulas Patocka 2017-07-19  2561  	blk_finish_plug(&plug);
-a7c3e62bdc71d3 Mikulas Patocka 2017-07-19  2562  
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2563  	complete_journal_op(&comp);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2564  	wait_for_completion_io(&comp.comp);
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2565  
-9b5948267adc9e Mikulas Patocka 2021-01-08  2566  	dm_integrity_flush_buffers(ic, true);
-7eada909bfd7ac Mikulas Patocka 2017-01-04 @2567  }
-7eada909bfd7ac Mikulas Patocka 2017-01-04  2568  
-
-:::::: The code at line 2567 was first introduced by commit
-:::::: 7eada909bfd7ac90a4522e56aa3179d1fd68cd14 dm: add integrity target
-
-:::::: TO: Mikulas Patocka <mpatocka@redhat.com>
-:::::: CC: Mike Snitzer <snitzer@redhat.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Jason

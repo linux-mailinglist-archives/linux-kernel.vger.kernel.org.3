@@ -2,133 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 626C94B39F7
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 08:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2E04B39FA
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 08:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234197AbiBMHkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 02:40:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52898 "EHLO
+        id S234212AbiBMHlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 02:41:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230470AbiBMHkS (ORCPT
+        with ESMTP id S234062AbiBMHlv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 02:40:18 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7AB5E74F
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 23:40:13 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id c1-20020a928e01000000b002bec519e98fso3834267ild.5
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 23:40:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=oRfpPTSGOsdyO99LvTMXgGpDnyRQBC34+PfjrxCsCL8=;
-        b=dwis5Cn4OPxPXbqTanW8393cEI9E4kB3uYmrQItpXkG8QsG2iZ4mNajubro6AVJWoV
-         7+KeTr7jqPiY6rnvv6gSgeSr7ZHj6mYOseHO65Kd1omU1ehCiNnWTAqfDKgnvmwVn3zR
-         GQtxHFJQf7YaZBy3/7ywgSTSyKidPY8akA+4DMJmQPvQbxcXxc2I5TgYh8Rppg8dHAf4
-         SAI1bJDtlZd6zT9BaL2Wjf/GjRKmBC8Ay84aR/GepCkxQWPf51G2FbfDVATqazSAj9/8
-         9i/p52mV35lJXT6IUofNq/Rl1L/lfmOct4mprNEI/4ds6aXsENxBQwGi+D+b5KY/uu33
-         pOlA==
-X-Gm-Message-State: AOAM531+NMdqt2GcQMsnSEd6Fm463bXsoTVd1EKPMb09hxJjri2FQu76
-        LO+jwZGF+bE9woOcE9hMdvD6il21YrzLUo2Tkty6XE+6rUZH
-X-Google-Smtp-Source: ABdhPJz9HAJzXkTEwapHXTCFyMFvf2SBJ2EidvqzyEttUSeWpKTsupkH/5O/ZZSA5uV6DkS2MUYFxGWPI9jL1Wlgb7qhczf2DvEE
+        Sun, 13 Feb 2022 02:41:51 -0500
+Received: from smtp.smtpout.orange.fr (smtp07.smtpout.orange.fr [80.12.242.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6613033B
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 23:41:44 -0800 (PST)
+Received: from pop-os.home ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id J9VsnUjWKSDrIJ9VtnIP2o; Sun, 13 Feb 2022 08:41:42 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Sun, 13 Feb 2022 08:41:42 +0100
+X-ME-IP: 90.126.236.122
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Subject: [PATCH] backlight: backlight: Slighly simplify devm_of_find_backlight()
+Date:   Sun, 13 Feb 2022 08:41:39 +0100
+Message-Id: <f998a4291d865273afa0d1f85764a9ac7fbc1b64.1644738084.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:174b:: with SMTP id y11mr5025528ill.185.1644738013286;
- Sat, 12 Feb 2022 23:40:13 -0800 (PST)
-Date:   Sat, 12 Feb 2022 23:40:13 -0800
-In-Reply-To: <20220213073017.1092-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000007d82605d7e16949@google.com>
-Subject: Re: [syzbot] INFO: task hung in usb_get_descriptor
-From:   syzbot <syzbot+31ae6d17d115e980fd14@syzkaller.appspotmail.com>
-To:     brouer@redhat.com, gregkh@linuxfoundation.org, hdanton@sina.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        skhan@linuxfoundation.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Use devm_add_action_or_reset() instead of devm_add_action()+hand writing
+what is done in the release function, should an error occur.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KASAN: null-ptr-deref Write in vhci_shutdown_connection
+This is more straightforward and saves a few lines of code.
 
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_write include/linux/instrumented.h:71 [inline]
-BUG: KASAN: null-ptr-deref in atomic_fetch_add_relaxed include/asm-generic/atomic-instrumented.h:142 [inline]
-BUG: KASAN: null-ptr-deref in refcount_add include/linux/refcount.h:201 [inline]
-BUG: KASAN: null-ptr-deref in refcount_inc include/linux/refcount.h:241 [inline]
-BUG: KASAN: null-ptr-deref in get_task_struct include/linux/sched/task.h:104 [inline]
-BUG: KASAN: null-ptr-deref in kthread_stop+0x90/0x810 kernel/kthread.c:591
-Write of size 4 at addr 000000000000001c by task kworker/u4:4/186
+While at it, remove a useless test in devm_backlight_release(). 'data' is
+known to be not NULL when this function is called.
 
-CPU: 0 PID: 186 Comm: kworker/u4:4 Not tainted 5.9.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usbip_event event_handler
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x107/0x16e lib/dump_stack.c:118
- __kasan_report mm/kasan/report.c:517 [inline]
- kasan_report.cold+0x5/0x37 mm/kasan/report.c:530
- check_memory_region_inline mm/kasan/generic.c:186 [inline]
- check_memory_region+0x13d/0x180 mm/kasan/generic.c:192
- instrument_atomic_write include/linux/instrumented.h:71 [inline]
- atomic_fetch_add_relaxed include/asm-generic/atomic-instrumented.h:142 [inline]
- refcount_add include/linux/refcount.h:201 [inline]
- refcount_inc include/linux/refcount.h:241 [inline]
- get_task_struct include/linux/sched/task.h:104 [inline]
- kthread_stop+0x90/0x810 kernel/kthread.c:591
- vhci_shutdown_connection+0x17f/0x360 drivers/usb/usbip/vhci_hcd.c:1015
- event_handler+0x1f0/0x4f0 drivers/usb/usbip/usbip_event.c:78
- process_one_work+0x86c/0x16a0 kernel/workqueue.c:2269
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
- kthread+0x3b5/0x4a0 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-==================================================================
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 186 Comm: kworker/u4:4 Tainted: G    B             5.9.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usbip_event event_handler
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x107/0x16e lib/dump_stack.c:118
- panic+0x393/0x7d3 kernel/panic.c:231
- end_report+0x4d/0x53 mm/kasan/report.c:104
- __kasan_report mm/kasan/report.c:520 [inline]
- kasan_report.cold+0xd/0x37 mm/kasan/report.c:530
- check_memory_region_inline mm/kasan/generic.c:186 [inline]
- check_memory_region+0x13d/0x180 mm/kasan/generic.c:192
- instrument_atomic_write include/linux/instrumented.h:71 [inline]
- atomic_fetch_add_relaxed include/asm-generic/atomic-instrumented.h:142 [inline]
- refcount_add include/linux/refcount.h:201 [inline]
- refcount_inc include/linux/refcount.h:241 [inline]
- get_task_struct include/linux/sched/task.h:104 [inline]
- kthread_stop+0x90/0x810 kernel/kthread.c:591
- vhci_shutdown_connection+0x17f/0x360 drivers/usb/usbip/vhci_hcd.c:1015
- event_handler+0x1f0/0x4f0 drivers/usb/usbip/usbip_event.c:78
- process_one_work+0x86c/0x16a0 kernel/workqueue.c:2269
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
- kthread+0x3b5/0x4a0 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/video/backlight/backlight.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-
-Tested on:
-
-commit:         d3d45f82 Merge tag 'pinctrl-v5.9-2' of git://git.kerne..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=125b4faa700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c4f7c05cb42b5045
-dashboard link: https://syzkaller.appspot.com/bug?extid=31ae6d17d115e980fd14
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1359552c700000
+diff --git a/drivers/video/backlight/backlight.c b/drivers/video/backlight/backlight.c
+index 4ae6fae94ac2..b788ff3d0f45 100644
+--- a/drivers/video/backlight/backlight.c
++++ b/drivers/video/backlight/backlight.c
+@@ -710,8 +710,7 @@ static void devm_backlight_release(void *data)
+ {
+ 	struct backlight_device *bd = data;
+ 
+-	if (bd)
+-		put_device(&bd->dev);
++	put_device(&bd->dev);
+ }
+ 
+ /**
+@@ -737,11 +736,10 @@ struct backlight_device *devm_of_find_backlight(struct device *dev)
+ 	bd = of_find_backlight(dev);
+ 	if (IS_ERR_OR_NULL(bd))
+ 		return bd;
+-	ret = devm_add_action(dev, devm_backlight_release, bd);
+-	if (ret) {
+-		put_device(&bd->dev);
++	ret = devm_add_action_or_reset(dev, devm_backlight_release, bd);
++	if (ret)
+ 		return ERR_PTR(ret);
+-	}
++
+ 	return bd;
+ }
+ EXPORT_SYMBOL(devm_of_find_backlight);
+-- 
+2.32.0
 

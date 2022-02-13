@@ -2,81 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 862CB4B3DEA
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 23:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A824B3DED
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 23:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238541AbiBMWKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 17:10:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43888 "EHLO
+        id S238561AbiBMWKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 17:10:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233686AbiBMWKA (ORCPT
+        with ESMTP id S238553AbiBMWKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 17:10:00 -0500
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2548F54192
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 14:09:54 -0800 (PST)
-Received: by mail-vk1-xa2f.google.com with SMTP id a6so7817772vkc.3
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 14:09:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=655hBZv76V+mrSinPrNjP8l8aP2PjNxTSfwFsXq8kKw=;
-        b=EgsyC3C3wfNT+ZC4PsLdvJGD1LBMmBNknllDyLdwe8wxW8zD7WvXDvGw0HfEvaGVx6
-         hkAb3D4NTB9S36yWBvho1x9xYu/4/hFoZZUV76+pRybqJ4xJTuv2aAaLOh/1m71Sx+pU
-         GDt+figOp2KoDp26N4fHxIBisEKNSnXZ6AkdTuo6+SQPNRbqixnLxP1vdt2+uE57eumk
-         xZx0PfC8asPnragQw54IKS+1WPhNEMKgGQsE1m27+zP7LZm2T0CLCyMhoLWKFJrWmVaX
-         dK2kETWlDXQXyiWlRrQ6kBLR73U5zfhsZmaceF4ppBvN1zNYSqYkjQj4AdUh2Ccfkpfb
-         TU1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=655hBZv76V+mrSinPrNjP8l8aP2PjNxTSfwFsXq8kKw=;
-        b=1LuTqnDar4D30S9m+e50tD/iWWBFIJEVXV3d5GP7iTCJdjww1gcxyW/ZtVuGaGk8ck
-         bMT4Uqunc/t0iw5+72wKIaYayHLxcNwFQdoFwGXVnbRD27tyQRnlYO1jGWCYdkUn32AW
-         dzVcl//i3kQSrQCSnR6y8aUHkA5bf3vO/iMaNgYZQLSamk69yT5SXglfEJmAle8+NOLJ
-         BB1WjBTrRm2DmhR+jBt+6sIzu/cp1FBScDUJRNYq21z3bvw5H62eXTHTwlnFQoHK7S1P
-         w+T+JC+nMc0EIQhtaFW/qImXAT6aFtnn1swbvmWIWV+in1wRdrkBCv/caciNfERAKor+
-         TLYw==
-X-Gm-Message-State: AOAM531jSk7Kx6dH4SgkMC5ySkPxRpHdjukVuQHhuliMWaSVUOz8hAuJ
-        GVxPbxzrUrrAZcJyWQKAzqx6cU/Lj98=
-X-Google-Smtp-Source: ABdhPJxW9AX6ZsjTJM6SLPGASAUERpdGPjg/y6Vml/dZcR1u/4TQ0XcX5OUOlBcCklkLb8pVTT6nLg==
-X-Received: by 2002:a05:6122:50d:: with SMTP id x13mr3099289vko.40.1644790192915;
-        Sun, 13 Feb 2022 14:09:52 -0800 (PST)
-Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com. [209.85.217.46])
-        by smtp.gmail.com with ESMTPSA id e19sm1593856vsk.18.2022.02.13.14.09.52
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Feb 2022 14:09:52 -0800 (PST)
-Received: by mail-vs1-f46.google.com with SMTP id v6so16722697vsp.11
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 14:09:52 -0800 (PST)
-X-Received: by 2002:a67:cc14:: with SMTP id q20mr487373vsl.74.1644790191828;
- Sun, 13 Feb 2022 14:09:51 -0800 (PST)
+        Sun, 13 Feb 2022 17:10:44 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829FB54199;
+        Sun, 13 Feb 2022 14:10:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1644790230;
+        bh=4UNYbRzhi/YcdTi4VTb2dKrOemdjk4GOFtfpCuSIxMk=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=YLkCSHr/K7TjZj9IpVn3PpLsObd+hk98j9xxjYvJdjpiRLmYiPjHBobzwpmtkyyQx
+         J0OdxdSSs2RyrXE8Z4XdXdqVqRaUEscaj0hA9TA2KLNeHWVFDKxJEFFH21d54ARCgM
+         IKH+oXlCrDM+N8f4u92DKrTuC9aPuTnpt5dXXsSY=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from p100 ([92.116.190.238]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MOiDd-1nee0w3cBr-00QFz6; Sun, 13
+ Feb 2022 23:10:29 +0100
+Date:   Sun, 13 Feb 2022 23:10:27 +0100
+From:   Helge Deller <deller@gmx.de>
+To:     OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-parisc@vger.kernel.org
+Subject: [PATCH] fat: Use pointer to d_name[0] in put_user() for compat case
+Message-ID: <YgmB01p+p45Cihhg@p100>
 MIME-Version: 1.0
-References: <20220208181510.787069-1-andrew@daynix.com> <20220208181510.787069-3-andrew@daynix.com>
- <CA+FuTSfPq-052=D3GzibMjUNXEcHTz=p87vW_3qU0OH9dDHSPQ@mail.gmail.com> <CABcq3pFLXUMi3ctr6WyJMaXbPjKregTzQ2fG1fwDU7tvk2uRFg@mail.gmail.com>
-In-Reply-To: <CABcq3pFLXUMi3ctr6WyJMaXbPjKregTzQ2fG1fwDU7tvk2uRFg@mail.gmail.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Sun, 13 Feb 2022 17:09:15 -0500
-X-Gmail-Original-Message-ID: <CA+FuTSfJS6b3ba7eW_u4TAHCq=ctpHDJUrb-Yc3iDwpJHHuBMw@mail.gmail.com>
-Message-ID: <CA+FuTSfJS6b3ba7eW_u4TAHCq=ctpHDJUrb-Yc3iDwpJHHuBMw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] drivers/net/virtio_net: Added basic RSS support.
-To:     Andrew Melnichenko <andrew@daynix.com>
-Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Network Development <netdev@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Yan Vugenfirer <yan@daynix.com>,
-        Yuri Benditovich <yuri.benditovich@daynix.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:E12ICo73xWG4DDvZRiAxdDZIaode5BSNu8/1BOKsz2rk3PJunay
+ N3Lk2Dn4+r7IY461XkyLk61W+8gZS75sQwU+RtrVlLZP6FDjBHnjN6Ej4tQkuuU6EKhvRtP
+ +ol1SszrjwmoBA6Ge/8ut5fHMh87aqpsSWjD2BCpbv7f8/momn17EBV/ZLdI1YdjB1yJm0r
+ K9S6oPsmyf2QtdQdTMx1g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/60Iao04bx0=:yJrNxom32DP5LEYAsbIArt
+ Q84p2yEqqFgKkWnzZNIgE+LQQbirFK2ulzm37ix6ERbK9XuJz8hGYONt7VUpHHtXHSxmDF/OZ
+ C2FQ7O8elIm1WGjjKyGTDTz8QALLf3BrmMbBrT24AozcHuKD2rznzVxOOVFzgrNDAEBdC9jTl
+ mAxW3cYDoKves4r7dQuKGNXC5kIsou87znvMWQ/j0NkVELf4QjkFilHz9WJW3LbEVqxBqxOLz
+ koacfnnUoiHpzkYlqe9B9BXiccs4PfGqO9SkQ240L8/DJvzcKVlxf9Rg7ipONJsqMj9ZYusQK
+ Zx9ElqVhraVFHx/5lVnSsw5zTc0EYCtR4Zm8MzBXcoYOebrx5AYR2otA8t3CrlUNePrMm7MUD
+ wLy4rmGJt8sMaXAQD10ZNZnwNyJYYyqg/+kl5hbt4P8hi305nMFJbg/8ASXliJZQDCNvsVs5a
+ HW2eZk7cuTiaKOnTSo/SN7f/GhF3el0Ez3ItJuhIrfkpe03PrK+Tzh4RVBfQzUCMB3Z1a+qTf
+ tb9lvJRBYBrB5Dw859vEzM+yfDGIegdT2pBSiylcSE6GODIoHnIngBzKRH0igOa04cRw6Fx0V
+ 3Fj234j0g1RqZm7t3WQ9Los0PH7kPv2XS/TSCZFPDRiX7EjRpzIzjimpq+fqeXQ+L0fy6XNSh
+ WfgZhllIhfKCTjLAJAMI1X1TIR/ywbbOhliiwHoVmnJGl8NJ/ljRMQrYd0LI5NeXiBPtMf+1t
+ Baly0uj+Lidh5iLIgOFDt/C6LMooblVaCSOIvvb4ru7QJtwLcqRTZQAxzTCINO/s/bPmHXH0K
+ rNTPHkfIsgxoZLz5w9ERp9RIjGrwd1rYGCZt39wri7/9DzcrxbHI5qoM7Ig1AYnqxoI0HJhBA
+ g3/XG5itXKOZkWrUORrBe+D/98jhjeXP8EnqryklJdSJVDiFKVQm6ojpUGKrW4o9xkLu8Y5gd
+ hu7nOJTWm8v5H/L82DeVb0gE+I6wwsct4Jdq2qgoxXungpCwDwr1lzXB5D/ZZV6SJ0ceFSCaP
+ aFoqtAvDGeIwGrjbqCVKBz+/TjIKLvYRt+2ezjQXkHvfvcE4wvrVvmHLZwXYlqRG5hTmJm0C2
+ grVcQjp00zs1tw=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,89 +69,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > @@ -3113,13 +3270,14 @@ static int virtnet_probe(struct virtio_device *vdev)
-> > >         u16 max_queue_pairs;
-> > >         int mtu;
-> > >
-> > > -       /* Find if host supports multiqueue virtio_net device */
-> > > -       err = virtio_cread_feature(vdev, VIRTIO_NET_F_MQ,
-> > > -                                  struct virtio_net_config,
-> > > -                                  max_virtqueue_pairs, &max_queue_pairs);
-> > > +       /* Find if host supports multiqueue/rss virtio_net device */
-> > > +       max_queue_pairs = 1;
-> > > +       if (virtio_has_feature(vdev, VIRTIO_NET_F_MQ) || virtio_has_feature(vdev, VIRTIO_NET_F_RSS))
-> > > +               max_queue_pairs =
-> > > +                    virtio_cread16(vdev, offsetof(struct virtio_net_config, max_virtqueue_pairs));
-> >
-> > Instead of testing either feature and treating them as somewhat equal,
-> > shouldn't RSS be dependent on MQ?
->
-> No, RSS is dependent on CTRL_VQ. Technically RSS and MQ are similar features.
+The put_user(val,ptr) macro wants a pointer in the second parameter, but i=
+n
+fat_ioctl_filldir() the d_name field references a whole "array of chars".
+Usually the compiler automatically converts it and uses a pointer to that
+array, but it's more clean to explicitly give the real pointer to where so=
+meting
+is put, which is in this case the first character of the d_name[] array.
 
-RSS depends on having multiple queues.
+I noticed that issue while trying to optimize the parisc put_user() macro
+and used an intermediate variable to store the pointer. In that case I
+got this error:
 
-What would enabling VIRTIO_NET_F_RSS without VIRTIO_NET_F_MQ do?
+In file included from include/linux/uaccess.h:11,
+                 from include/linux/compat.h:17,
+                 from fs/fat/dir.c:18:
+fs/fat/dir.c: In function =E2=80=98fat_ioctl_filldir=E2=80=99:
+fs/fat/dir.c:725:33: error: invalid initializer
+  725 |                 if (put_user(0, d2->d_name)                     ||=
+         \
+      |                                 ^~
+include/asm/uaccess.h:152:33: note: in definition of macro =E2=80=98__put_=
+user=E2=80=99
+  152 |         __typeof__(ptr) __ptr =3D ptr;                            =
+\
+      |                                 ^~~
+fs/fat/dir.c:759:1: note: in expansion of macro =E2=80=98FAT_IOCTL_FILLDIR=
+_FUNC=E2=80=99
+  759 | FAT_IOCTL_FILLDIR_FUNC(fat_ioctl_filldir, __fat_dirent)
 
-> >
-> > >
-> > >         /* We need at least 2 queue's */
-> > > -       if (err || max_queue_pairs < VIRTIO_NET_CTRL_MQ_VQ_PAIRS_MIN ||
-> > > +       if (max_queue_pairs < VIRTIO_NET_CTRL_MQ_VQ_PAIRS_MIN ||
-> > >             max_queue_pairs > VIRTIO_NET_CTRL_MQ_VQ_PAIRS_MAX ||
-> > >             !virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_VQ))
-> > >                 max_queue_pairs = 1;
-> > > @@ -3207,6 +3365,23 @@ static int virtnet_probe(struct virtio_device *vdev)
-> > >         if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF))
-> > >                 vi->mergeable_rx_bufs = true;
-> > >
-> > > +       if (virtio_has_feature(vdev, VIRTIO_NET_F_RSS)) {
-> > > +               vi->has_rss = true;
-> > > +               vi->rss_indir_table_size =
-> > > +                       virtio_cread16(vdev, offsetof(struct virtio_net_config,
-> > > +                               rss_max_indirection_table_length));
-> > > +               vi->rss_key_size =
-> > > +                       virtio_cread8(vdev, offsetof(struct virtio_net_config, rss_max_key_size));
-> > > +
-> > > +               vi->rss_hash_types_supported =
-> > > +                   virtio_cread32(vdev, offsetof(struct virtio_net_config, supported_hash_types));
-> > > +               vi->rss_hash_types_supported &=
-> > > +                               ~(VIRTIO_NET_RSS_HASH_TYPE_IP_EX |
-> > > +                                 VIRTIO_NET_RSS_HASH_TYPE_TCP_EX |
-> > > +                                 VIRTIO_NET_RSS_HASH_TYPE_UDP_EX);
-> > > +
-> > > +               dev->hw_features |= NETIF_F_RXHASH;
-> >
-> > Only make the feature visible when the hash is actually reported in
-> > the skb, patch 3.
->
-> VirtioNET has two features: RSS(steering only) and hash(hash report in
-> vnet header)
-> Both features may be enabled/disabled separately:
-> 1. rss on and hash off - packets steered to the corresponding vqs
-> 2. rss off and hash on - packets steered by tap(like mq) but headers
-> have properly calculated hash.
-> 3. rss on and hash on - packets steered to corresponding vqs and hash
-> is present in the header.
->
-> RXHASH feature allows the user to enable/disable the rss/hash(any combination).
+The patch below cleans it up.
 
-I find that confusing, but.. I see that there is prior art where some
-drivers enable/disable entire RSS load balancing based on this flag.
-So ok.
+Signed-off-by: Helge Deller <deller@gmx.de>
 
-> I think it's a good idea to leave RXHASH in patch 2/4 to give the user
-> ability to manipulate the rss only feature.
-> But, if you think that it requires to move it to the 3/4, I'll do it.
->
-> >
-> > Also, clearly separate the feature patches (2) rss, (3) rxhash, (4)
-> > rxhash config.
->
-> Currently:
-> Patch 2/4 - adds VirtioNet rss feature.
-> Patch 3/4 - adds VirtioNet hash report feature.
-> Patch 4/4 - adds the ability to manipulate supported hash types.
->
-> Can you provide more detailed suggestions on how to move hunks?
-
-I gave one in the follow-on patch, to which you responded. That's probably it.
+diff --git a/fs/fat/dir.c b/fs/fat/dir.c
+index c4a274285858..249825017da7 100644
+=2D-- a/fs/fat/dir.c
++++ b/fs/fat/dir.c
+@@ -722,7 +722,7 @@ static int func(struct dir_context *ctx, const char *n=
+ame, int name_len,   \
+ 		if (name_len >=3D sizeof(d1->d_name))			   \
+ 			name_len =3D sizeof(d1->d_name) - 1;		   \
+ 									   \
+-		if (put_user(0, d2->d_name)			||	   \
++		if (put_user(0, &d2->d_name[0])			||	   \
+ 		    put_user(0, &d2->d_reclen)			||	   \
+ 		    copy_to_user(d1->d_name, name, name_len)	||	   \
+ 		    put_user(0, d1->d_name + name_len)		||	   \

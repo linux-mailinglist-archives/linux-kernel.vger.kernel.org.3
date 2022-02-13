@@ -2,98 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65494B3B40
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 13:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E504B3B41
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 13:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235905AbiBMMOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 07:14:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36294 "EHLO
+        id S235908AbiBMMPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 07:15:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232005AbiBMMOY (ORCPT
+        with ESMTP id S229980AbiBMMPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 07:14:24 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572C85BD2A;
-        Sun, 13 Feb 2022 04:14:19 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id i34so25391966lfv.2;
-        Sun, 13 Feb 2022 04:14:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CIQtoCVcRD0g7BLfpN+rf0B4Y2cMxyH7CXJXhpt1HFE=;
-        b=QIB2wMRjLkNRm9ii6WC9MIr2gRXkQUOTaSe7XOmw3Bicp8XEhXYkt61DhGGj/Y/uXO
-         tvJlqDhkjasoyMza1I/hlfDYw3/u3V8IZm756fUEo9xborVwgSyVt2MorvhQSCIJKVzD
-         DCFppnVDPvY0/nFLkQjxnzLsaJs31+dmv2rNknY/WvvzlCoC/OQ0mGW9jEH9JY9bIRyZ
-         XgZSYkka7RHB+a518BOwX1X9bPc1R6eTTU96e+ac3VwnH5BoFYVPEnKtNi4CkIgxW5Ep
-         BY3QMYyhoCzUdhX+1h5IW5wZRFrO/J82/cGS5mZfKllJ5oEqpM4ocnvr4OTZzIyRqnwO
-         DO/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CIQtoCVcRD0g7BLfpN+rf0B4Y2cMxyH7CXJXhpt1HFE=;
-        b=vGMxMxKSYkVcUhaKsLBGF1aaEss+gYKzZLd0pO44kj/Ye5dh3yM8hhpXXYjM4XGad8
-         b5gwA5IbQnCzXpj9lqf5I3/jvibke8SynBheuawzkO+y0bnykNmpsDWe8MGEdGu3GSNq
-         Fy40lPIaUd8Eon57r5UjKQRxVZTwnBd9moV6Sta42zuF3DBr+3r5+eIo+7eAKV/ho4+S
-         KePBykj0WJhe9/lipHMCipeVGMr0UTfjsSQnxZ2LDhz1P1peiZpn6l0rgPZSe3qyDMo6
-         9X6vbnjZv+m2bJNc3hGyF/db06d4+9P4o4ZLez3xxTbVO+oHh5yw+0lOD8K0BRObpVG+
-         ltgw==
-X-Gm-Message-State: AOAM531KzLO+t4UAAvqDfE55+CrSd9HzmddVtxEJIE9ivaDAdeZcUe/U
-        t5DTRkrNtEplaSymNTnmA54=
-X-Google-Smtp-Source: ABdhPJw/QCh5Oj/lkWkganevVGTUB7d6Bd2JWYH+NaneU4v4TyLNRTtz6m4VGW3kdM2wvBelVOM4sw==
-X-Received: by 2002:a05:6512:3e25:: with SMTP id i37mr7413778lfv.325.1644754456857;
-        Sun, 13 Feb 2022 04:14:16 -0800 (PST)
-Received: from [192.168.2.145] (109-252-138-165.dynamic.spd-mgts.ru. [109.252.138.165])
-        by smtp.googlemail.com with ESMTPSA id k17sm3698894ljo.70.2022.02.13.04.14.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Feb 2022 04:14:16 -0800 (PST)
-Message-ID: <2656099c-76bc-33a5-3b98-c46858025955@gmail.com>
-Date:   Sun, 13 Feb 2022 15:14:15 +0300
+        Sun, 13 Feb 2022 07:15:35 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651A55C37F;
+        Sun, 13 Feb 2022 04:15:28 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7703F1EC063A;
+        Sun, 13 Feb 2022 13:15:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1644754521;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=q6tD3Xsv4L3AVxoyHSluBEuFz9raJ3UAB6jSHO2SnV4=;
+        b=YZaHnBS6OIFdyl1RAQ15BetYbasA2SpQ/V80z/+R6aEZjdG+tOulyq4FUF0ow0zyOuOojl
+        LTNWn7Nz3PtghAolELPnETr6KmZk1XRq6/C3aU4SoABb3ZP+WSLeNz7lIlqTQe10T6Iwhr
+        q3L/K1+POZ/tne5qo0BVm2Vgp7/YV6s=
+Date:   Sun, 13 Feb 2022 13:15:23 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Brijesh Singh <brijesh.singh@amd.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v10 21/45] x86/mm: Add support to validate memory when
+ changing C-bit
+Message-ID: <Ygj2Wx6jtNEEmbh9@zn.tnic>
+References: <20220209181039.1262882-1-brijesh.singh@amd.com>
+ <20220209181039.1262882-22-brijesh.singh@amd.com>
+ <YgZ427v95xcdOKSC@zn.tnic>
+ <0242e383-5406-7504-ff3d-cf2e8dfaf8a3@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] PM: domains: Prevent power off for parent unless child is
- in deepest state
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Kevin Hilman <khilman@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        linux-kernel@vger.kernel.org
-References: <20220131113743.52265-1-ulf.hansson@linaro.org>
- <b33ceac4-506a-65c8-7c80-b1b0a67ce65e@gmail.com>
- <CAPDyKFqsvF=Pm-vMXSUwPMPnjCr7nSYuy5AH+8rwLYm_NUPKww@mail.gmail.com>
- <400e45da-837a-c8ad-84b3-285e35f8462c@gmail.com>
- <CAPDyKFpLX0Jpz-tzYx3-g0YBZZNh6Bw731gQEFQub1SviLGoYg@mail.gmail.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <CAPDyKFpLX0Jpz-tzYx3-g0YBZZNh6Bw731gQEFQub1SviLGoYg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0242e383-5406-7504-ff3d-cf2e8dfaf8a3@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-07.02.2022 11:43, Ulf Hansson пишет:
->> In general, such changes usually are deferred from being upstreamed
->> until there is a real user, otherwise there is a risk of cluttering the
->> code with unused features. Do you have a time estimation in regards to
->> when STMicro may start to benefit from this change?
-> The STMicro folkz are working on it right now, but I can't give you
-> any estimates for their work.
+On Fri, Feb 11, 2022 at 11:27:54AM -0600, Brijesh Singh wrote:
+> > Simply have them always present. They will have !0 values on the
+> > respective guest types and 0 otherwise. This should simplify a lot of
+> > code and another unconditionally present u64 won't be the end of the
+> > world.
+> >
+> > Any other aspect I'm missing?
 > 
-> Moreover, I think the important point in this regard, is that the
-> $subject patch doesn't really hurt anything else, so then what's the
-> point of holding this back?
+> I think that's mostly about it. IIUC, the recommendation is to define a
+> new callback in x86_platform_op. The callback will be invoked
+> unconditionally; The default implementation for this callback is NOP;
+> The TDX and SEV will override with the platform specific implementation.
+> I think we may able to handle everything in one callback hook but having
+> pre and post will be a more desirable. Here is why I am thinking so:
+> 
+> * On SNP, the page must be invalidated before clearing the _PAGE_ENC
+> from the page table attribute
+> 
+> * On SNP, the page must be validated after setting the _PAGE_ENC in the
+> page table attribute.
 
-If that work will never pan out, will you remove the unused code?
+Right, we could have a pre- and post- callback, if that would make
+things simpler/clearer.
+
+Also, in thinking further about the encryption mask, we could make it a
+*single*, *global* variable called cc_mask which each guest type sets it
+as it wants to.
+
+Then, it would use it in the vendor-specific encrypt/decrypt helpers
+accordingly and that would simplify a lot of code. And we can get rid of
+all the ifdeffery around it too.
+
+So I think the way to go should be we do the common functionality, I
+queue it on the common tip:x86/cc branch and then SNP and TDX will be
+both based ontop of it.
+
+Thoughts?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

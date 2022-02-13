@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF634B3C74
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 18:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3110D4B3C77
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 18:19:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237346AbiBMRQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 12:16:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38634 "EHLO
+        id S233079AbiBMRTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 12:19:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237360AbiBMRQZ (ORCPT
+        with ESMTP id S229581AbiBMRTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 12:16:25 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE50D58E6D
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 09:16:19 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id z21so2630971edb.13
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 09:16:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rQYl0dGLPQaYPKlZy5p+ObPQe0jk7S0A9el98YwShaU=;
-        b=cNDAwwYFmPeLVTViYQOxsGrwgPWtQ2157SqHTdz0SHEHEHMcFVv1Ifd29mytsT/x6w
-         zWF/eA4M3y7+O8TB/k74oNy6OZnWef///qSI93LQRfpP3x1KNN6AJeB/IMOjczivruAS
-         +G+2FPSob0cF73MOsaahsLbrgQE/lSun03Eb8=
+        Sun, 13 Feb 2022 12:19:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61440517F9
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 09:19:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644772763;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Cs2m1Vvu+oQk/NE0TT+2XutYU+ypiTepICSeJZfpASo=;
+        b=FGxqrDtfha2NZldPy8GIhdupZdcY5LHtgtJPmy/n2gEGzKe97lJVtshmrIikWstxqFCVvc
+        M1+9SOYTZUsYu1BTg2tNOZfkdlQC2OWRD7p4nOJBYV5w9Wa1xONK/AYc4l26D6H6URlPkG
+        vN0hBxa9Y/8TiyrOPeRw4CdB6wdPXdY=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-673-0KItqQ-EM2WF2-x1dl6ndw-1; Sun, 13 Feb 2022 12:19:22 -0500
+X-MC-Unique: 0KItqQ-EM2WF2-x1dl6ndw-1
+Received: by mail-oo1-f70.google.com with SMTP id y20-20020a4acb94000000b003185ebeeffdso6494469ooq.15
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 09:19:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rQYl0dGLPQaYPKlZy5p+ObPQe0jk7S0A9el98YwShaU=;
-        b=7OcoDF73fN0i4/o+wxeR93nfySziKgsS8k3J5/AS4oghui1SHaE5e6DCAcUz6VWezo
-         iY2gJm+XuTTRPF4zNhLf/syKeE6TEwT3496eHqLGzl/Cjn5DFSvhrapKsgBvQGlf/YuA
-         e2FhDCyihAda23tw0zGJS0TnACYojPHbVvxeYqNQZISW5PT0XGszE6f/KqiQSsfsaaAM
-         iRD/yZLbGB1muLSfZKzIFxY/FIxQ1DJ/6yFsC3tug+20r2HOKB+ZqyDtCaVXC6q9/G/l
-         A31iA81aMGdgSE7zMRrU77ZRE5D4YEdjgaftiW+SxLpB2E3S18vpJsKPK0UFWrnaTZLb
-         R+JA==
-X-Gm-Message-State: AOAM532STkPfnI3IfTRr9Y5akgloAUUJeyVdi9m5Z4e+q4OLjVJdXdyo
-        HhAoLHAqW38QmA0GH2EAO2piTEQKs2WCZQ==
-X-Google-Smtp-Source: ABdhPJz1+ElSDy0Xw2owhdJ3AK81iTPSd1fOsrCzNVNkcXAJBwdAWO7NHDNPISa8Vf5xGbuxS7c5cA==
-X-Received: by 2002:a05:6402:4313:: with SMTP id m19mr11792561edc.320.1644772578260;
-        Sun, 13 Feb 2022 09:16:18 -0800 (PST)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-82-52-8-210.retail.telecomitalia.it. [82.52.8.210])
-        by smtp.gmail.com with ESMTPSA id o10sm6598878ejj.6.2022.02.13.09.16.13
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Cs2m1Vvu+oQk/NE0TT+2XutYU+ypiTepICSeJZfpASo=;
+        b=qA6uY/VJif/8dxJUGNBy5nbC4f6DQCpB683qjZnD1kPpnuz7ld+5sMpb8qT+XVM/bD
+         TY1vEyFDJqBTmQXvhZ/BYXwoT3cPJQFtxcMRSLkbrEIIWeYhH6k8P4f0GsOeg46CtllM
+         fbYzmjsDFhpEM/AV9gKu0WMOONQpyhxyhSRzdklq3F51903JlJLRuqHjP5NMmvPVneEo
+         VgAnC7i3vHbLmgyJRf3AudzozrVyLRMIsbtwuESAAYJzO1AilJcDdxoGXz+ZgJBEnW+M
+         KB5wtFB++JATn1ynj61h0peZ++QS57QBcVf39BeK4lZ8zPKiycRjiKxQa77SJcY19mr0
+         mTcA==
+X-Gm-Message-State: AOAM531MLulltLDtsR+OakFdn5pmDWb8r6BqdrGw+yydxys++u4qgq+E
+        +XmzsKj6LPed+VX+pSDpScZr+OzRJk23wMa+q6rPGr1sW2wbuNUT1p+4PVS8sAg0o6mDqLtrgIw
+        mNs2bXVrvuYNcRVz8e7u0HkqU
+X-Received: by 2002:aca:eb55:: with SMTP id j82mr3993212oih.134.1644772761654;
+        Sun, 13 Feb 2022 09:19:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyoHXf1CDEAvFygYy5P7c6hfLThkDvIvyHvPi6MymSLfK+RMIM5MUrhuhvu44S69J3VKRQOsw==
+X-Received: by 2002:aca:eb55:: with SMTP id j82mr3993202oih.134.1644772761430;
+        Sun, 13 Feb 2022 09:19:21 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id w9sm11766781ool.31.2022.02.13.09.19.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Feb 2022 09:16:17 -0800 (PST)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        linux-input@vger.kernel.org
-Subject: [PATCH 6/6] Input: edt-ft5x06 - show crc and header errors by sysfs
-Date:   Sun, 13 Feb 2022 18:15:32 +0100
-Message-Id: <20220213171532.346270-7-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220213171532.346270-1-dario.binacchi@amarulasolutions.com>
-References: <20220213171532.346270-1-dario.binacchi@amarulasolutions.com>
+        Sun, 13 Feb 2022 09:19:21 -0800 (PST)
+From:   trix@redhat.com
+To:     arnd@arndb.de, gregkh@linuxfoundation.org,
+        kai.heng.feng@canonical.com, ricky_wu@realtek.com,
+        christophe.jaillet@wanadoo.fr
+Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] misc: rtsx: conditionally build rtsx_pm_power_saving()
+Date:   Sun, 13 Feb 2022 09:19:07 -0800
+Message-Id: <20220213171907.2786442-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,87 +75,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-M06 sends packets with header and crc for data verification. Now you can
-check at runtime how many packets have been dropped.
+From: Tom Rix <trix@redhat.com>
 
-Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+On s390 allyesconfig, there is this build error
+rtsx_pcr.c:1084:13: error: 'rtsx_pm_power_saving'
+  defined but not used
+ 1084 | static void rtsx_pm_power_saving(struct rtsx_pcr *pcr)
+      |             ^~~~~~~~~~~~~~~~~~~~
 
+rtsx_pm_power_saving() is only used by rtsx_pci_runtime_idle()
+which is conditional on CONFIG_PM.  So conditionally build
+rtsx_pm_power_saving() and the similar
+rtsx_comm_pm_power_saving() and rtsx_enable_aspm().
+
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
+ drivers/misc/cardreader/rtsx_pcr.c | 64 +++++++++++++++---------------
+ 1 file changed, 32 insertions(+), 32 deletions(-)
 
- drivers/input/touchscreen/edt-ft5x06.c | 30 ++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
-
-diff --git a/drivers/input/touchscreen/edt-ft5x06.c b/drivers/input/touchscreen/edt-ft5x06.c
-index 2c946c155108..376aa4405104 100644
---- a/drivers/input/touchscreen/edt-ft5x06.c
-+++ b/drivers/input/touchscreen/edt-ft5x06.c
-@@ -133,6 +133,8 @@ struct edt_ft5x06_ts_data {
+diff --git a/drivers/misc/cardreader/rtsx_pcr.c b/drivers/misc/cardreader/rtsx_pcr.c
+index 1cb6425e8369..2a2619e3c72c 100644
+--- a/drivers/misc/cardreader/rtsx_pcr.c
++++ b/drivers/misc/cardreader/rtsx_pcr.c
+@@ -1054,38 +1054,6 @@ static int rtsx_pci_acquire_irq(struct rtsx_pcr *pcr)
+ 	return 0;
+ }
  
- 	struct edt_reg_addr reg_addr;
- 	enum edt_ver version;
-+	unsigned int crc_errors;
-+	unsigned int header_errors;
- };
+-static void rtsx_enable_aspm(struct rtsx_pcr *pcr)
+-{
+-	if (pcr->ops->set_aspm)
+-		pcr->ops->set_aspm(pcr, true);
+-	else
+-		rtsx_comm_set_aspm(pcr, true);
+-}
+-
+-static void rtsx_comm_pm_power_saving(struct rtsx_pcr *pcr)
+-{
+-	struct rtsx_cr_option *option = &pcr->option;
+-
+-	if (option->ltr_enabled) {
+-		u32 latency = option->ltr_l1off_latency;
+-
+-		if (rtsx_check_dev_flag(pcr, L1_SNOOZE_TEST_EN))
+-			mdelay(option->l1_snooze_delay);
+-
+-		rtsx_set_ltr_latency(pcr, latency);
+-	}
+-
+-	if (rtsx_check_dev_flag(pcr, LTR_L1SS_PWR_GATE_EN))
+-		rtsx_set_l1off_sub_cfg_d0(pcr, 0);
+-
+-	rtsx_enable_aspm(pcr);
+-}
+-
+-static void rtsx_pm_power_saving(struct rtsx_pcr *pcr)
+-{
+-	rtsx_comm_pm_power_saving(pcr);
+-}
+-
+ static void rtsx_base_force_power_down(struct rtsx_pcr *pcr)
+ {
+ 	/* Set relink_time to 0 */
+@@ -1701,6 +1669,38 @@ static int __maybe_unused rtsx_pci_resume(struct device *dev_d)
  
- struct edt_i2c_chip_data {
-@@ -181,6 +183,7 @@ static bool edt_ft5x06_ts_check_crc(struct edt_ft5x06_ts_data *tsdata,
- 		crc ^= buf[i];
+ #ifdef CONFIG_PM
  
- 	if (crc != buf[buflen-1]) {
-+		tsdata->crc_errors++;
- 		dev_err_ratelimited(&tsdata->client->dev,
- 				    "crc error: 0x%02x expected, got 0x%02x\n",
- 				    crc, buf[buflen-1]);
-@@ -238,6 +241,7 @@ static irqreturn_t edt_ft5x06_ts_isr(int irq, void *dev_id)
- 	if (tsdata->version == EDT_M06) {
- 		if (rdbuf[0] != 0xaa || rdbuf[1] != 0xaa ||
- 			rdbuf[2] != datalen) {
-+			tsdata->header_errors++;
- 			dev_err_ratelimited(dev,
- 					"Unexpected header: %02x%02x%02x!\n",
- 					rdbuf[0], rdbuf[1], rdbuf[2]);
-@@ -552,6 +556,30 @@ static ssize_t fw_version_show(struct device *dev,
- 
- static DEVICE_ATTR_RO(fw_version);
- 
-+/* m06 only */
-+static ssize_t header_errors_show(struct device *dev,
-+				  struct device_attribute *attr, char *buf)
++static void rtsx_enable_aspm(struct rtsx_pcr *pcr)
 +{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct edt_ft5x06_ts_data *tsdata = i2c_get_clientdata(client);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%d\n", tsdata->header_errors);
++	if (pcr->ops->set_aspm)
++		pcr->ops->set_aspm(pcr, true);
++	else
++		rtsx_comm_set_aspm(pcr, true);
 +}
 +
-+static DEVICE_ATTR_RO(header_errors);
-+
-+/* m06 only */
-+static ssize_t crc_errors_show(struct device *dev,
-+			       struct device_attribute *attr, char *buf)
++static void rtsx_comm_pm_power_saving(struct rtsx_pcr *pcr)
 +{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct edt_ft5x06_ts_data *tsdata = i2c_get_clientdata(client);
++	struct rtsx_cr_option *option = &pcr->option;
 +
-+	return scnprintf(buf, PAGE_SIZE, "%d\n", tsdata->crc_errors);
++	if (option->ltr_enabled) {
++		u32 latency = option->ltr_l1off_latency;
++
++		if (rtsx_check_dev_flag(pcr, L1_SNOOZE_TEST_EN))
++			mdelay(option->l1_snooze_delay);
++
++		rtsx_set_ltr_latency(pcr, latency);
++	}
++
++	if (rtsx_check_dev_flag(pcr, LTR_L1SS_PWR_GATE_EN))
++		rtsx_set_l1off_sub_cfg_d0(pcr, 0);
++
++	rtsx_enable_aspm(pcr);
 +}
 +
-+static DEVICE_ATTR_RO(crc_errors);
++static void rtsx_pm_power_saving(struct rtsx_pcr *pcr)
++{
++	rtsx_comm_pm_power_saving(pcr);
++}
 +
- static struct attribute *edt_ft5x06_attrs[] = {
- 	&edt_ft5x06_attr_gain.dattr.attr,
- 	&edt_ft5x06_attr_offset.dattr.attr,
-@@ -561,6 +589,8 @@ static struct attribute *edt_ft5x06_attrs[] = {
- 	&edt_ft5x06_attr_report_rate.dattr.attr,
- 	&dev_attr_model.attr,
- 	&dev_attr_fw_version.attr,
-+	&dev_attr_header_errors.attr,
-+	&dev_attr_crc_errors.attr,
- 	NULL
- };
- 
+ static void rtsx_pci_shutdown(struct pci_dev *pcidev)
+ {
+ 	struct pcr_handle *handle = pci_get_drvdata(pcidev);
 -- 
-2.32.0
+2.26.3
 

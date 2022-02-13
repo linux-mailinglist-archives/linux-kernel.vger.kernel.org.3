@@ -2,52 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6562F4B39CC
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 07:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7324B39CE
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 07:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233901AbiBMGBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 01:01:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43556 "EHLO
+        id S233921AbiBMGDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 01:03:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233868AbiBMGBf (ORCPT
+        with ESMTP id S233868AbiBMGDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 01:01:35 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7CF522CD
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 22:01:30 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id o8-20020a056e0214c800b002bc2f9cffffso8970635ilk.8
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Feb 2022 22:01:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=gdJ+UkM0mS6Igr5cs53GndzuH98uTBFN5/z+YadgrUM=;
-        b=33WyAJfrRq/BWt0iV0HNZTZZ8ha4udSmkkM0E1Gp3u3x3n+FG8yF4xNp4OrO1zXU9J
-         aW55R64LG9Ggx9zc9BIWkEJKuD441AZn+WyOuopXQj8Hvkk33JXyJ6sRnfae3XIlyZ3e
-         iEowqNjzyOauLWhi7GgvKqiWkPG98LlpCbBjRtF/y8/KjVyi8OJ8E1qZ67NDQslEK2Vz
-         dldZsS5Kt1rB2HuHuaLfo5K3TrIxlnD/EtdYMYGUklGGQY1GZSfBuRAQTpbXRG36quDH
-         LLKaCW92k4At+7gdfsbgVasa04fVHzFY9GUR7XiAZVeZCnwrKzk/BNUvQnHNdGtvsINF
-         Owrw==
-X-Gm-Message-State: AOAM532aTpuyVpMqeun5MHt1lfR7hcLrYf1oxl8jg71Ve+sZ+ZVWgR60
-        1KZpOetQPqVNIwhB8msZ3QnlnVAEhlOrvmWuv3Wnxc6Iipxw
-X-Google-Smtp-Source: ABdhPJwxx6Lh05kLoeWh/aE/tMJgFoEYgOAwi283VF7pCizVdNvlAZCtUZ4bEOv2aBgWSDg7R7v5+OmooQdvVx0sVwjcAGomCJAx
+        Sun, 13 Feb 2022 01:03:20 -0500
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2587F5E778;
+        Sat, 12 Feb 2022 22:03:14 -0800 (PST)
+Received: from [192.168.0.2] (ip5f5aebcd.dynamic.kabel-deutschland.de [95.90.235.205])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 05C8D61E64846;
+        Sun, 13 Feb 2022 07:03:11 +0100 (CET)
+Message-ID: <d3e6a461-5b37-ecfb-d63c-d35af27f2682@molgen.mpg.de>
+Date:   Sun, 13 Feb 2022 07:03:10 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a92:c8c7:: with SMTP id c7mr4604282ilq.17.1644732089952;
- Sat, 12 Feb 2022 22:01:29 -0800 (PST)
-Date:   Sat, 12 Feb 2022 22:01:29 -0800
-In-Reply-To: <0000000000008e52e005c765798b@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f8eec505d7e007c4@google.com>
-Subject: Re: [syzbot] WARNING in scsi_alloc_sgtables
-From:   syzbot <syzbot+d44b35ecfb807e5af0b5@syzkaller.appspotmail.com>
-To:     jejb@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rcu@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: Set environment variable `KVM` makes build fail
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,70 +47,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Dear Linux folks,
 
-HEAD commit:    b81b1829e7e3 Merge tag 'scsi-fixes' of git://git.kernel.or..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=131edbb4700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5707221760c00a20
-dashboard link: https://syzkaller.appspot.com/bug?extid=d44b35ecfb807e5af0b5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=171d9ef8700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14c18344700000
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d44b35ecfb807e5af0b5@syzkaller.appspotmail.com
+Playing with rcutorture 
+(`tools/testing/selftests/rcutorture/bin/torture.sh`), a Linux kernel 
+build failed, because the script sets and exports the environment 
+variable `KVM`. I was able to reproduce that manually (on x86_64):
 
-WARNING: CPU: 2 PID: 3643 at drivers/scsi/scsi_lib.c:1032 scsi_alloc_sgtables+0xc7d/0xf70 drivers/scsi/scsi_lib.c:1032
-Modules linked in:
+     $ make defconfig
+     $ scripts/config -m KVM
+     $ scripts/config -m KVM_INTEL
+     $ scripts/config -d KVM_AMD
+     $ scripts/config -d KVM_XEN
+     $ scripts/config -d KVM_MMU_AUDIT
+     $ export KVM=XXX
+     $ make arch/x86/kvm/kvm.o
+     […]
+       LINK    /dev/shm/linux-kvm/tools/objtool/objtool
+     make[2]: *** No rule to make target 'arch/x86/kvm/XXX/kvm_main.o', 
+needed by 'arch/x86/kvm/kvm.o'.  Stop.
+     make[1]: *** [scripts/Makefile.build:550: arch/x86/kvm] Error 2
+     make: *** [Makefile:1831: arch/x86] Error 2
 
-CPU: 2 PID: 3643 Comm: syz-executor397 Not tainted 5.17.0-rc3-syzkaller-00316-gb81b1829e7e3 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:scsi_alloc_sgtables+0xc7d/0xf70 drivers/scsi/scsi_lib.c:1032
-Code: e7 fc 31 ff 44 89 f6 e8 c1 4e e7 fc 45 85 f6 0f 84 1a f5 ff ff e8 93 4c e7 fc 83 c5 01 0f b7 ed e9 0f f5 ff ff e8 83 4c e7 fc <0f> 0b 41 bc 0a 00 00 00 e9 2b fb ff ff 41 bc 09 00 00 00 e9 20 fb
-RSP: 0018:ffffc90000d07558 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff88801bfc96a0 RCX: 0000000000000000
-RDX: ffff88801c876000 RSI: ffffffff849060bd RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff849055b9 R11: 0000000000000000 R12: ffff888012b8c000
-R13: ffff88801bfc9580 R14: 0000000000000000 R15: ffff88801432c000
-FS:  00007effdec8e700(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007effdec6d718 CR3: 00000000206d6000 CR4: 0000000000150ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- scsi_setup_scsi_cmnd drivers/scsi/scsi_lib.c:1219 [inline]
- scsi_prepare_cmd drivers/scsi/scsi_lib.c:1614 [inline]
- scsi_queue_rq+0x283e/0x3630 drivers/scsi/scsi_lib.c:1730
- blk_mq_dispatch_rq_list+0x6ea/0x22e0 block/blk-mq.c:1851
- __blk_mq_sched_dispatch_requests+0x20b/0x410 block/blk-mq-sched.c:299
- blk_mq_sched_dispatch_requests+0xfb/0x180 block/blk-mq-sched.c:332
- __blk_mq_run_hw_queue+0xf9/0x350 block/blk-mq.c:1968
- __blk_mq_delay_run_hw_queue+0x5b6/0x6c0 block/blk-mq.c:2045
- blk_mq_run_hw_queue+0x30f/0x480 block/blk-mq.c:2096
- blk_mq_sched_insert_request+0x340/0x440 block/blk-mq-sched.c:451
- blk_execute_rq+0xcc/0x340 block/blk-mq.c:1231
- sg_io+0x67c/0x1210 drivers/scsi/scsi_ioctl.c:485
- scsi_ioctl_sg_io drivers/scsi/scsi_ioctl.c:866 [inline]
- scsi_ioctl+0xa66/0x1560 drivers/scsi/scsi_ioctl.c:921
- sd_ioctl+0x199/0x2a0 drivers/scsi/sd.c:1576
- blkdev_ioctl+0x37a/0x800 block/ioctl.c:588
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7effdecdc5d9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 81 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007effdec8e2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007effded664c0 RCX: 00007effdecdc5d9
-RDX: 0000000020002300 RSI: 0000000000002285 RDI: 0000000000000004
-RBP: 00007effded34034 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
-R13: 00007effded34054 R14: 2f30656c69662f2e R15: 00007effded664c8
- </TASK>
+The directory `arch/x86/kvm/XXX` is created somehow.
 
+Is that expected? Do you know what is going on? I wasn’t able to 
+reproduce this with other variables like `SND_HDA` for example.
+
+
+Kind regards,
+
+Paul

@@ -2,158 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 503BE4B3AD5
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 11:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A98BB4B3AE5
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 11:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235042AbiBMKdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 05:33:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49270 "EHLO
+        id S235051AbiBMKes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 05:34:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235040AbiBMKc6 (ORCPT
+        with ESMTP id S235030AbiBMKes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 05:32:58 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474C45D669
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 02:32:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644748373; x=1676284373;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dWtFQyJtLhloaNLECP6ny+40Hn5wg+HkV2E42wNJyQY=;
-  b=dmbsco6YobOzzgsPcPPovrNuMTWNCoa4zg/ohv/ENAWNsHTGD/uHhwK4
-   2PM7xZA8TdRpmXBhJ6+Xs1J9uQVmICukxKZTod0MmLt9g8vAoLzYwzxuY
-   hiVmLQoB734iQoLJL8MuXrYOhv/AK47YbOl4VgA6ndrK5SG514VZRsOpR
-   1ZFH2skENwSMNlkvg1FgD2ckcbEl4I8WIjqJ7HeEpGhK+jDBr/Nm/5pAe
-   Os+OtKjYSVxfZlsIDBpSpcxbTrKGDiu7BvZJ+o5aQN8++aNLr2icaytDx
-   26SW98GdRYx7IZ0mfnBCbCVBSfm3GXXRjhYfmU3PvUr6+LdEUgkmxugkV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10256"; a="247532550"
-X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
-   d="scan'208";a="247532550"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 02:32:53 -0800
-X-IronPort-AV: E=Sophos;i="5.88,365,1635231600"; 
-   d="scan'208";a="527474404"
-Received: from sannilnx.jer.intel.com ([10.12.231.79])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 02:32:50 -0800
-From:   Alexander Usyskin <alexander.usyskin@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Tomas Winkler <tomas.winkler@intel.com>,
-        Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Ashutosh Dixit <ashutosh.dixit@intel.com>
-Subject: [PATCH v7 5/5] mei: gsc: retrieve the firmware version
-Date:   Sun, 13 Feb 2022 12:32:15 +0200
-Message-Id: <20220213103215.2440248-6-alexander.usyskin@intel.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220213103215.2440248-1-alexander.usyskin@intel.com>
-References: <20220213103215.2440248-1-alexander.usyskin@intel.com>
+        Sun, 13 Feb 2022 05:34:48 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C685D673
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 02:34:43 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id m7so11948328pjk.0
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 02:34:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=t/hJYfcKldb+BryXl3uVpvv9WjCLYVWvsGgc4Bs5pbE=;
+        b=jKVkOfAuMk6waiV+V6SYdNdZrHvYTISZZUZjD0isg9cKQ1q5XPAjxyusb1doY6cl3e
+         9RFAPCmmq4I2C7Ehwsk969Cl2dfz3J9nS6Lphx7FVGcVOdq4BI5xIpBwMJd3Kza1Z61s
+         YZtcMRCmIMpMvOLzvIGEMP3LcdLlAxdprsNn0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=t/hJYfcKldb+BryXl3uVpvv9WjCLYVWvsGgc4Bs5pbE=;
+        b=1jJlhyeAw91o8ymSRSEvgNPOXvSREh7uaEQFfpibGv8VTJdw7eUMN/4io4umXqdUBd
+         rJtCrPr1gS3wA+SVv4LyBpYDyFqVqAofLkQneWnyAqBBo+As+JuVbGbaKbnutOFyoYZI
+         m74pmslsMBZ/0DoXcvXfTaLlqH1CqfTAzvQwJZAhuEXZcPJAkdsCJ9Hg8kwx7K1GbuER
+         LuOjZHudgcyvDpX8FRCp77npe3TJKap8xisXz22c/3GtBSPVhEy2Zv2rrU2I/C///Tss
+         h0Y7tsJlK415xzJWh/Faug5FIuqza/UAOQhRlU9sONYLrKVjWc6jSZWOTFvLeDtbRVqR
+         J8ig==
+X-Gm-Message-State: AOAM531UJKZ4ZuG7Die0Z9sipAn2kv/QTmkQdm/JBU0OGSnLlLPkOYko
+        F3tpOMUbkSMeKDzZozJXTfbgDQ==
+X-Google-Smtp-Source: ABdhPJwjQ+FRxQ8lDQ2PQXz09+nxCf+KNGQm9yKKam6j6dof3uJeaiKbx/K+CvK9gV2xldV3lz7ePg==
+X-Received: by 2002:a17:90b:1b0e:: with SMTP id nu14mr9017838pjb.44.1644748482473;
+        Sun, 13 Feb 2022 02:34:42 -0800 (PST)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:3653:bf18:8571:5f26])
+        by smtp.gmail.com with ESMTPSA id n85sm1589407pfd.142.2022.02.13.02.34.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Feb 2022 02:34:42 -0800 (PST)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Xin Ji <xji@analogixsemi.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: [PATCH v7 1/4] drm/bridge: anx7625: send DPCD command to downstream
+Date:   Sun, 13 Feb 2022 18:34:34 +0800
+Message-Id: <20220213103437.3363848-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.35.1.265.g69c8d7142f-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a hook to retrieve the firmware version of the
-GSC devices to bus-fixup.
-GSC has a different MKHI clients GUIDs but the same message structure
-to retrieve the firmware version as MEI so mei_fwver() can be reused.
+From: Xin Ji <xji@analogixsemi.com>
 
-CC: Ashutosh Dixit <ashutosh.dixit@intel.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
-Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
----
-V5: Rebase
-V6: Rebase
-V7: add Greg KH Reviewed-by
----
- drivers/misc/mei/bus-fixup.c | 25 +++++++++++++++++++++++++
- drivers/misc/mei/hw-me.c     |  2 ++
- 2 files changed, 27 insertions(+)
+Send DPCD command to downstream before anx7625 power down,
+let downstream monitor enter into standby mode.
 
-diff --git a/drivers/misc/mei/bus-fixup.c b/drivers/misc/mei/bus-fixup.c
-index 67844089db21..59506ba6fc48 100644
---- a/drivers/misc/mei/bus-fixup.c
-+++ b/drivers/misc/mei/bus-fixup.c
-@@ -30,6 +30,12 @@ static const uuid_le mei_nfc_info_guid = MEI_UUID_NFC_INFO;
- #define MEI_UUID_MKHIF_FIX UUID_LE(0x55213584, 0x9a29, 0x4916, \
- 			0xba, 0xdf, 0xf, 0xb7, 0xed, 0x68, 0x2a, 0xeb)
- 
-+#define MEI_UUID_IGSC_MKHI UUID_LE(0xE2C2AFA2, 0x3817, 0x4D19, \
-+			0x9D, 0x95, 0x06, 0xB1, 0x6B, 0x58, 0x8A, 0x5D)
-+
-+#define MEI_UUID_IGSC_MKHI_FIX UUID_LE(0x46E0C1FB, 0xA546, 0x414F, \
-+			0x91, 0x70, 0xB7, 0xF4, 0x6D, 0x57, 0xB4, 0xAD)
-+
- #define MEI_UUID_HDCP UUID_LE(0xB638AB7E, 0x94E2, 0x4EA2, \
- 			      0xA5, 0x52, 0xD1, 0xC5, 0x4B, 0x62, 0x7F, 0x04)
- 
-@@ -241,6 +247,23 @@ static void mei_mkhi_fix(struct mei_cl_device *cldev)
- 	mei_cldev_disable(cldev);
+Signed-off-by: Xin Ji <xji@analogixsemi.com>
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+Reviewed-by: Hsin-Yi Wang <hsinyi@chromium.org>
+---
+v3->v4:
+Use common DP_AUX_NATIVE_READ/WRITE
+
+Previously in:
+https://patchwork.kernel.org/project/dri-devel/patch/1f36f8bf0a48fb2bba17bacec23700e58c1d407d.1641891874.git.xji@analogixsemi.com/
+---
+ drivers/gpu/drm/bridge/analogix/anx7625.c | 42 +++++++++++++++++++----
+ drivers/gpu/drm/bridge/analogix/anx7625.h |  2 --
+ 2 files changed, 35 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+index 76662fce4ce61d..17b23940549a42 100644
+--- a/drivers/gpu/drm/bridge/analogix/anx7625.c
++++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+@@ -129,6 +129,23 @@ static int anx7625_reg_write(struct anx7625_data *ctx,
+ 	return ret;
  }
  
-+static void mei_gsc_mkhi_ver(struct mei_cl_device *cldev)
++static int anx7625_reg_block_write(struct anx7625_data *ctx,
++				   struct i2c_client *client,
++				   u8 reg_addr, u8 len, u8 *buf)
 +{
 +	int ret;
++	struct device *dev = &client->dev;
 +
-+	/* No need to enable the client if nothing is needed from it */
-+	if (!cldev->bus->fw_f_fw_ver_supported)
-+		return;
++	i2c_access_workaround(ctx, client);
 +
-+	ret = mei_cldev_enable(cldev);
-+	if (ret)
-+		return;
-+
-+	ret = mei_fwver(cldev);
++	ret = i2c_smbus_write_i2c_block_data(client, reg_addr, len, buf);
 +	if (ret < 0)
-+		dev_err(&cldev->dev, "FW version command failed %d\n", ret);
-+	mei_cldev_disable(cldev);
++		dev_err(dev, "write i2c block failed id=%x\n:%x",
++			client->addr, reg_addr);
++
++	return ret;
 +}
- /**
-  * mei_wd - wd client on the bus, change protocol version
-  *   as the API has changed.
-@@ -492,6 +515,8 @@ static struct mei_fixup {
- 	MEI_FIXUP(MEI_UUID_NFC_HCI, mei_nfc),
- 	MEI_FIXUP(MEI_UUID_WD, mei_wd),
- 	MEI_FIXUP(MEI_UUID_MKHIF_FIX, mei_mkhi_fix),
-+	MEI_FIXUP(MEI_UUID_IGSC_MKHI, mei_gsc_mkhi_ver),
-+	MEI_FIXUP(MEI_UUID_IGSC_MKHI_FIX, mei_gsc_mkhi_ver),
- 	MEI_FIXUP(MEI_UUID_HDCP, whitelist),
- 	MEI_FIXUP(MEI_UUID_ANY, vt_support),
- 	MEI_FIXUP(MEI_UUID_PAVP, whitelist),
-diff --git a/drivers/misc/mei/hw-me.c b/drivers/misc/mei/hw-me.c
-index 9748d14849a1..7e77328142ff 100644
---- a/drivers/misc/mei/hw-me.c
-+++ b/drivers/misc/mei/hw-me.c
-@@ -1577,12 +1577,14 @@ static const struct mei_cfg mei_me_pch15_sps_cfg = {
- static const struct mei_cfg mei_me_gsc_cfg = {
- 	MEI_CFG_TYPE_GSC,
- 	MEI_CFG_PCH8_HFS,
-+	MEI_CFG_FW_VER_SUPP,
- };
++
+ static int anx7625_write_or(struct anx7625_data *ctx,
+ 			    struct i2c_client *client,
+ 			    u8 offset, u8 mask)
+@@ -214,8 +231,8 @@ static int wait_aux_op_finish(struct anx7625_data *ctx)
+ 	return 0;
+ }
  
- /* Graphics System Controller Firmware Interface */
- static const struct mei_cfg mei_me_gscfi_cfg = {
- 	MEI_CFG_TYPE_GSCFI,
- 	MEI_CFG_PCH8_HFS,
-+	MEI_CFG_FW_VER_SUPP,
- };
+-static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
+-				 u32 address, u8 len, u8 *buf)
++static int anx7625_aux_dpcd_trans(struct anx7625_data *ctx, u8 op,
++				  u32 address, u8 len, u8 *buf)
+ {
+ 	struct device *dev = &ctx->client->dev;
+ 	int ret;
+@@ -231,8 +248,7 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
+ 	addrm = (address >> 8) & 0xFF;
+ 	addrh = (address >> 16) & 0xFF;
  
- /*
+-	cmd = DPCD_CMD(len, DPCD_READ);
+-	cmd = ((len - 1) << 4) | 0x09;
++	cmd = DPCD_CMD(len, op);
+ 
+ 	/* Set command and length */
+ 	ret = anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
+@@ -246,6 +262,9 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
+ 	ret |= anx7625_reg_write(ctx, ctx->i2c.rx_p0_client,
+ 				 AP_AUX_ADDR_19_16, addrh);
+ 
++	if (op == DP_AUX_NATIVE_WRITE)
++		ret |= anx7625_reg_block_write(ctx, ctx->i2c.rx_p0_client,
++					       AP_AUX_BUFF_START, len, buf);
+ 	/* Enable aux access */
+ 	ret |= anx7625_write_or(ctx, ctx->i2c.rx_p0_client,
+ 				AP_AUX_CTRL_STATUS, AP_AUX_CTRL_OP_EN);
+@@ -255,14 +274,17 @@ static int anx7625_aux_dpcd_read(struct anx7625_data *ctx,
+ 		return -EIO;
+ 	}
+ 
+-	usleep_range(2000, 2100);
+-
+ 	ret = wait_aux_op_finish(ctx);
+ 	if (ret) {
+ 		dev_err(dev, "aux IO error: wait aux op finish.\n");
+ 		return ret;
+ 	}
+ 
++	/* Write done */
++	if (op == DP_AUX_NATIVE_WRITE)
++		return 0;
++
++	/* Read done, read out dpcd data */
+ 	ret = anx7625_reg_block_read(ctx, ctx->i2c.rx_p0_client,
+ 				     AP_AUX_BUFF_START, len, buf);
+ 	if (ret < 0) {
+@@ -845,7 +867,7 @@ static int anx7625_hdcp_enable(struct anx7625_data *ctx)
+ 	}
+ 
+ 	/* Read downstream capability */
+-	anx7625_aux_dpcd_read(ctx, 0x68028, 1, &bcap);
++	anx7625_aux_dpcd_trans(ctx, DP_AUX_NATIVE_READ, 0x68028, 1, &bcap);
+ 	if (!(bcap & 0x01)) {
+ 		pr_warn("downstream not support HDCP 1.4, cap(%x).\n", bcap);
+ 		return 0;
+@@ -918,6 +940,7 @@ static void anx7625_dp_stop(struct anx7625_data *ctx)
+ {
+ 	struct device *dev = &ctx->client->dev;
+ 	int ret;
++	u8 data;
+ 
+ 	DRM_DEV_DEBUG_DRIVER(dev, "stop dp output\n");
+ 
+@@ -929,6 +952,11 @@ static void anx7625_dp_stop(struct anx7625_data *ctx)
+ 	ret |= anx7625_write_and(ctx, ctx->i2c.tx_p2_client, 0x08, 0x7f);
+ 
+ 	ret |= anx7625_video_mute_control(ctx, 1);
++
++	dev_dbg(dev, "notify downstream enter into standby\n");
++	/* Downstream monitor enter into standby mode */
++	data = 2;
++	ret |= anx7625_aux_dpcd_trans(ctx, DP_AUX_NATIVE_WRITE, 0x000600, 1, &data);
+ 	if (ret < 0)
+ 		DRM_DEV_ERROR(dev, "IO error : mute video fail\n");
+ 
+diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.h b/drivers/gpu/drm/bridge/analogix/anx7625.h
+index 56165f5b254c14..64a8ab56529404 100644
+--- a/drivers/gpu/drm/bridge/analogix/anx7625.h
++++ b/drivers/gpu/drm/bridge/analogix/anx7625.h
+@@ -242,8 +242,6 @@
+ 
+ #define AP_AUX_COMMAND	0x27  /* com+len */
+ #define LENGTH_SHIFT	4
+-#define DPCD_READ	0x09
+-#define DPCD_WRITE	0x08
+ #define DPCD_CMD(len, cmd)	((((len) - 1) << LENGTH_SHIFT) | (cmd))
+ 
+ /* Bit 0&1: 3D video structure */
 -- 
-2.32.0
+2.35.1.265.g69c8d7142f-goog
 

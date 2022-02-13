@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BD34B3BB9
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 15:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCD44B3BBF
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 15:17:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236537AbiBMORX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 09:17:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37948 "EHLO
+        id S236564AbiBMORa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 09:17:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236438AbiBMORI (ORCPT
+        with ESMTP id S236449AbiBMORK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 09:17:08 -0500
+        Sun, 13 Feb 2022 09:17:10 -0500
 Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83A735F27C;
-        Sun, 13 Feb 2022 06:17:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6514F5F8C4;
+        Sun, 13 Feb 2022 06:17:04 -0800 (PST)
 HMM_SOURCE_IP: 10.64.8.41:34274.536114013
 HMM_ATTACHE_NUM: 0000
 HMM_SOURCE_TYPE: SMTP
 Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 39F911002AB;
-        Sun, 13 Feb 2022 22:17:00 +0800 (CST)
+        by 189.cn (HERMES) with SMTP id B6FA21002B3;
+        Sun, 13 Feb 2022 22:17:02 +0800 (CST)
 Received: from  ([114.242.206.180])
-        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 6f84a8ec52264c43bd333cc252c4f422 for mripard@kernel.org;
-        Sun, 13 Feb 2022 22:17:02 CST
-X-Transaction-ID: 6f84a8ec52264c43bd333cc252c4f422
+        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id be66858997da4a03ade58a24083bc740 for mripard@kernel.org;
+        Sun, 13 Feb 2022 22:17:03 CST
+X-Transaction-ID: be66858997da4a03ade58a24083bc740
 X-Real-From: 15330273260@189.cn
 X-Receive-IP: 114.242.206.180
 X-MEDUSA-Status: 0
@@ -52,9 +52,9 @@ To:     Maxime Ripard <mripard@kernel.org>,
         suijingfeng <suijingfeng@loongson.cn>
 Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH v7 5/7] MIPS: Loongson: ls2k1000: add the display controller device node
-Date:   Sun, 13 Feb 2022 22:16:47 +0800
-Message-Id: <20220213141649.1115987-6-15330273260@189.cn>
+Subject: [PATCH v7 6/7] MIPS: Loongson: Add dts for ls2k1000 pai evaluation board
+Date:   Sun, 13 Feb 2022 22:16:48 +0800
+Message-Id: <20220213141649.1115987-7-15330273260@189.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220213141649.1115987-1-15330273260@189.cn>
 References: <20220213141649.1115987-1-15330273260@189.cn>
@@ -72,37 +72,111 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: suijingfeng <suijingfeng@loongson.cn>
 
-The display controller is a pci device, its PCI vendor id is 0x0014
-its PCI device id is 0x7a06.
+   ___________________                           ____________________
+  |            -------|                         |                    |
+  |  CRTC0 --> | DVO0 ------------------------> | 1024x600 DPI Panel |
+  |  _   _     -------|                         |____________________|
+  | | | | |           |  i2c0 is not get used
+  | |_| |_|           |     +------+
+  |                   <---->| i2c0 |
+  |          LSDC     |     +------+
+  |  _   _            |     +------+
+  | | | | |           <---->| i2c1 |-----------+
+  | |_| |_|           |     +------+           |
+  |                   |        |               |               _________
+  |            -------|    +---------+         |              |         |
+  |  CRTC1 --> | DVO1 ---> | sii9022 | --> hdmi connector --> | Monitor |
+  |            -------|    +---------+                        |_________|
+  |___________________|
+
+The sii9022 tranmnitter working in tramsparent mode, that is the edid
+is read from the monitor directly, not through sil9022's ddc channel.
+The PMON firmware is responsible for consigure the sii9022 at boot time.
+
+[1] https://wiki.debian.org/InstallingDebianOn/Lemote/Loongson2K1000
 
 Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
 Signed-off-by: Sui Jingfeng <15330273260@189.cn>
 ---
- arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ arch/mips/boot/dts/loongson/ls2k1000_pai.dts | 69 ++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
+ create mode 100644 arch/mips/boot/dts/loongson/ls2k1000_pai.dts
 
-diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-index 768cf2abcea3..41ae3c984969 100644
---- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-+++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-@@ -209,6 +209,17 @@ gpu@5,0 {
- 				interrupt-parent = <&liointc0>;
- 			};
- 
-+			lsdc: dc@6,0 {
-+				compatible = "pci0014,7a06.0",
-+						   "pci0014,7a06",
-+						   "pciclass030000",
-+						   "pciclass0300";
+diff --git a/arch/mips/boot/dts/loongson/ls2k1000_pai.dts b/arch/mips/boot/dts/loongson/ls2k1000_pai.dts
+new file mode 100644
+index 000000000000..6c18280d2129
+--- /dev/null
++++ b/arch/mips/boot/dts/loongson/ls2k1000_pai.dts
+@@ -0,0 +1,69 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+				reg = <0x3000 0x0 0x0 0x0 0x0>;
-+				interrupts = <28 IRQ_TYPE_LEVEL_LOW>;
-+				interrupt-parent = <&liointc0>;
++/dts-v1/;
++
++#include "loongson64-2k1000.dtsi"
++
++/ {
++	model = "LS2K1000_PAI_UDB_V1.5";
++
++	memory@200000 {
++		compatible = "memory";
++		device_type = "memory";
++		// 238 MB at 2 MB
++		// 2GB - 512 MB at 2GB + 512 MB
++		// total 2 GB
++		reg = <0x00000000 0x00200000 0x00000000 0x0EE00000
++		       0x00000000 0xA0000000 0x00000000 0x60000000
++		       0x00000001 0x10000000 0x00000000 0x10000000>;
++	};
++};
++
++&lsdc {
++	output-ports = <&dvo0 &dvo1>;
++
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	dvo0: dvo@0 {
++		/* 0 for connector 0 (DVO0) */
++		reg = <0>;
++		connector = "dpi-connector";
++		status = "ok";
++
++		display-timings {
++			native-mode = <&mode_0_1024x600_60>;
++
++			mode_0_1024x600_60: panel-timing@0 {
++				clock-frequency = <51200000>;
++				hactive = <1024>;
++				vactive = <600>;
++				hsync-len = <4>;
++				hfront-porch = <160>;
++				hback-porch = <156>;
++				vfront-porch = <11>;
++				vback-porch = <23>;
++				vsync-len = <1>;
 +			};
 +
- 			pci_bridge@9,0 {
- 				compatible = "pci0014,7a19.0",
- 						   "pci0014,7a19",
++			mode_1_800x480_60: panel-timing@1 {
++				clock-frequency = <30066000>;
++				hactive = <800>;
++				vactive = <480>;
++				hfront-porch = <50>;
++				hback-porch = <70>;
++				hsync-len = <50>;
++				vback-porch = <0>;
++				vfront-porch = <0>;
++				vsync-len = <50>;
++			};
++		};
++	};
++
++	dvo1: dvo@1 {
++		/* 1 for connector 1 (DVO1) */
++		reg = <1>;
++		connector = "virtual-connector";
++		status = "ok";
++	};
++};
 -- 
 2.25.1
 

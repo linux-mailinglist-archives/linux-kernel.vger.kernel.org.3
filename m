@@ -2,78 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622B74B3DC3
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 22:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C89A4B3DCE
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 22:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238441AbiBMVdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 16:33:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51940 "EHLO
+        id S238458AbiBMVgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 16:36:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231563AbiBMVdo (ORCPT
+        with ESMTP id S238448AbiBMVgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 16:33:44 -0500
-Received: from cavan.codon.org.uk (cavan.codon.org.uk [176.126.240.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F6554184;
-        Sun, 13 Feb 2022 13:33:34 -0800 (PST)
-Received: by cavan.codon.org.uk (Postfix, from userid 1000)
-        id 858A440A6A; Sun, 13 Feb 2022 21:33:32 +0000 (GMT)
-Date:   Sun, 13 Feb 2022 21:33:32 +0000
-From:   Matthew Garrett <mjg59@srcf.ucam.org>
-To:     Aditya Garg <gargaditya08@live.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Jeremy Kerr <jk@ozlabs.org>,
-        "joeyli.kernel@gmail.com" <joeyli.kernel@gmail.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "eric.snowberg@oracle.com" <eric.snowberg@oracle.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "jlee@suse.com" <jlee@suse.com>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "mic@digikod.net" <mic@digikod.net>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>
-Subject: Re: [PATCH] efi: Do not import certificates from UEFI Secure Boot
- for T2 Macs
-Message-ID: <20220213213332.GA30613@srcf.ucam.org>
-References: <5A3C2EBF-13FF-4C37-B2A0-1533A818109F@live.com>
- <20220209183545.GA14552@srcf.ucam.org>
- <20220209193705.GA15463@srcf.ucam.org>
- <2F1CC5DE-5A03-46D2-95E7-DD07A4EF2766@live.com>
- <20220210180905.GB18445@srcf.ucam.org>
- <99BB011C-71DE-49FA-81CB-BE2AC9613030@live.com>
- <20220211162857.GB10606@srcf.ucam.org>
- <F078BEBE-3DED-4EE3-A2B8-2C5744B5454C@live.com>
- <20220212194240.GA4131@srcf.ucam.org>
- <C737F740-9039-4730-9F08-9E9E9674B6C8@live.com>
+        Sun, 13 Feb 2022 16:36:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66C954184;
+        Sun, 13 Feb 2022 13:36:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CA5AB80B65;
+        Sun, 13 Feb 2022 21:36:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 204ABC004E1;
+        Sun, 13 Feb 2022 21:36:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644788193;
+        bh=4yCJVPEw7EYBsTJLYhlqqqMDIc4BXzAueVAE4/s+j5c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=R5kR0RE9JKHj2aZsTK1zore29M00MxcceafzYv0Xw01sSyygcrDfUXMMMJump3JP9
+         6k14Cdx9owJVoMTxXpou5iFX0cI8mzTAKGV+bUQC4mmrqOBlKa1H54GOSE0Jd5qSDN
+         hDqbam0G7pY49soCf40EcdQrqgXL27isIZQzM3ZCbp+uPZG8yyKTP3Vk0nFS0/bwIO
+         V6SwBBh5EyDgOaAjrkQPWClOseMyM0siOOzliqpl7y+F6mifJu00NFtKBNZP97Q08s
+         uuZl0Ojg1ZhfnVGAS9Tlnj0XM7ehU2MmwPTv5bEmAZPWNcSapMiMPLuG+CHoFUvWwo
+         Mlbl1QXcHcAAg==
+Date:   Sun, 13 Feb 2022 22:36:27 +0100
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gregory Clement <gregory.clement@bootlin.com>
+Cc:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 3/6] serial: mvebu-uart: implement UART clock driver
+ for configuring UART base clock
+Message-ID: <20220213223627.72f6e797@thinkpad>
+In-Reply-To: <20220211191238.2142-4-kabel@kernel.org>
+References: <20220211191238.2142-1-kabel@kernel.org>
+        <20220211191238.2142-4-kabel@kernel.org>
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <C737F740-9039-4730-9F08-9E9E9674B6C8@live.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 13, 2022 at 08:22:32AM +0000, Aditya Garg wrote:
+On Fri, 11 Feb 2022 20:12:35 +0100
+Marek Beh=C3=BAn <kabel@kernel.org> wrote:
 
-> Surprisingly it didn’t cause a crash. The logs are at https://gist.githubusercontent.com/AdityaGarg8/8e820c2724a65fb4bbb5deae2b358dc8/raw/2a003ef43ae06dbe2bcc22b34ba7ccbb03898a21/log2.log
+> For these reasons, this new UART clock driver does not use
+> ioremap_resource(), but only ioremap() to prevent resource conflicts
+> between UART clock driver and UART driver.
+> =3D=3D=3D
 
-Interesting. Ok, so there's something else going on here. I'll have 
-access to a T2 system next week, so I'll take a look then. Is this 
-something that started happening recently, or has it always happened if 
-this config option is set on these platforms?
+These three equal signs "=3D=3D=3D" shouldn't be there in the commit messag=
+e,
+it should be an empty line instead. I accidentaly forgot to remove it
+while I was rewriting the commit message :-(.
+
+Please let me know if I should resend this.
+
+Marek

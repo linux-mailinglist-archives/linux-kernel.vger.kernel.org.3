@@ -2,56 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A164B3E24
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 23:43:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1364B3E30
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Feb 2022 23:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237196AbiBMWnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 17:43:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56348 "EHLO
+        id S238484AbiBMWyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 17:54:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231864AbiBMWnU (ORCPT
+        with ESMTP id S231864AbiBMWyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 17:43:20 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D266F54BD7
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 14:43:13 -0800 (PST)
+        Sun, 13 Feb 2022 17:54:20 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D6E54BDF
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 14:54:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644792193; x=1676328193;
+  t=1644792853; x=1676328853;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5I70INCTAFm2jV9wb5OhS5UsuGVLoGoku5Gmskwh1Ug=;
-  b=W0ZzDKeKdJm5Uh1Yed6pgt6NwWHuTpGQG56pR/NIvFRodihByAe0xiqL
-   3g3Ad3IonXvjm7NkUqIORxIVd8/h4JEV7ateElvBFWJYmeegLx07Kulxi
-   4Rsr4iEPxBH2b4yyqDNqYDoRx77ImYy9pKCmt3yKRB21XTbybAJZeHOND
-   /y5JUbgxCc2YVzyLw9vMjWysbTUd5eqCsuBokTEI2/F02rpTGnETqxZk8
-   Kev91tALEcCqBzzL3+kz92JZTgEpc8VifuTmTA5lwcjngx7ztg57T6ft9
-   RavX46+U6Pa/t3L/l3NhtfePU7xoss6ClyRqRCRD3qLhaldYtJXAcZFaZ
+  bh=9FS4KGk3LBexEVGA1hxuAXf3bVaYurQsGHyT55cjkCY=;
+  b=BLNOKGK6jUbEu4LpUp4DKtM1sEc26Wi9Md6A2L7TSu72bGnqvVUtzOMI
+   gnx0Ckh3IhHNvMBvwxI5zciE+3VxxXJxOHsvXP089Uv3au09O2rvRBSo8
+   ID/U46U3n5LtY8MXBX5n3MiXjgwspGFo9AP5hkRUwzBe5O287KUQTX1aK
+   Mf1WHHX4ZgeKdfKO1S9LCW1asox/xZFkJ64YnHLxzqrJVyfhVAH8+KIeD
+   KcMk/fjZd+wUn0ETmV2WbY7TDraYVICfNe0UDtiFHZZRdmRP3QyRnifr+
+   X0Imk3MxsfUxmQ7aC1WTtkvgtui1m0L1cCm2qS2DidWWEaT3/vj1k57vh
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="336404706"
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="310716268"
 X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="336404706"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 14:43:13 -0800
+   d="scan'208";a="310716268"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 14:54:13 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
-   d="scan'208";a="485024147"
+   d="scan'208";a="634758269"
 Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 13 Feb 2022 14:43:11 -0800
+  by orsmga004.jf.intel.com with ESMTP; 13 Feb 2022 14:54:12 -0800
 Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nJNaJ-0007wH-1M; Sun, 13 Feb 2022 22:43:11 +0000
-Date:   Mon, 14 Feb 2022 06:42:59 +0800
+        id 1nJNkx-0007x2-CB; Sun, 13 Feb 2022 22:54:11 +0000
+Date:   Mon, 14 Feb 2022 06:53:16 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Tom Zanussi <zanussi@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [ammarfaizi2-block:rostedt/linux-trace/ftrace/core 12/13]
- include/linux/fortify-string.h:47:30: error: '__builtin_strncat' output
- truncated before terminating nul copying as many bytes from a string as its
- length
-Message-ID: <202202140628.fj6e4w4v-lkp@intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [jic23-iio:testing 87/92] drivers/iio/accel/mma8452.c:1515:34:
+ error: 'mma8452_dt_ids' defined but not used
+Message-ID: <202202140655.BClq5vSX-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -66,87 +62,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block rostedt/linux-trace/ftrace/core
-head:   f125ef075cd648a7794aa0cc61a188b1c40c8f94
-commit: a76d8704e28d6591e72ab79fd2807254bd79327e [12/13] tracing: Remove size restriction on hist trigger cmd error logging
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220214/202202140628.fj6e4w4v-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
+head:   a383b88d051c387eac8cd12b636e5c177e39cf0e
+commit: 90adc57bd55a64d5b24ac3afc1b7dd98508ead7b [87/92] iio: mma8452: Fix probe failing when an i2c_device_id is used
+config: arm-randconfig-r025-20220213 (https://download.01.org/0day-ci/archive/20220214/202202140655.BClq5vSX-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/a76d8704e28d6591e72ab79fd2807254bd79327e
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block rostedt/linux-trace/ftrace/core
-        git checkout a76d8704e28d6591e72ab79fd2807254bd79327e
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/commit/?id=90adc57bd55a64d5b24ac3afc1b7dd98508ead7b
+        git remote add jic23-iio https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
+        git fetch --no-tags jic23-iio testing
+        git checkout 90adc57bd55a64d5b24ac3afc1b7dd98508ead7b
         # save the config file to linux build tree
         mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/iio/accel/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from include/linux/string.h:253,
-                    from arch/x86/include/asm/page_32.h:22,
-                    from arch/x86/include/asm/page.h:14,
-                    from arch/x86/include/asm/processor.h:19,
-                    from arch/x86/include/asm/timex.h:5,
-                    from include/linux/timex.h:65,
-                    from include/linux/time32.h:13,
-                    from include/linux/time.h:60,
-                    from include/linux/stat.h:19,
-                    from include/linux/module.h:13,
-                    from kernel/trace/trace_events_hist.c:8:
-   In function 'strncat',
-       inlined from 'last_cmd_set' at kernel/trace/trace_events_hist.c:759:2:
->> include/linux/fortify-string.h:47:30: error: '__builtin_strncat' output truncated before terminating nul copying as many bytes from a string as its length [-Werror=stringop-truncation]
-      47 | #define __underlying_strncat __builtin_strncat
-         |                              ^
-   include/linux/fortify-string.h:191:10: note: in expansion of macro '__underlying_strncat'
-     191 |   return __underlying_strncat(p, q, count);
-         |          ^~~~~~~~~~~~~~~~~~~~
-   kernel/trace/trace_events_hist.c: In function 'last_cmd_set':
-   include/linux/fortify-string.h:46:29: note: length computed here
-      46 | #define __underlying_strlen __builtin_strlen
-         |                             ^
-   include/linux/fortify-string.h:102:10: note: in expansion of macro '__underlying_strlen'
-     102 |   return __underlying_strlen(p);
-         |          ^~~~~~~~~~~~~~~~~~~
+>> drivers/iio/accel/mma8452.c:1515:34: error: 'mma8452_dt_ids' defined but not used [-Werror=unused-const-variable=]
+    1515 | static const struct of_device_id mma8452_dt_ids[] = {
+         |                                  ^~~~~~~~~~~~~~
    cc1: all warnings being treated as errors
 
 
-vim +/__builtin_strncat +47 include/linux/fortify-string.h
+vim +/mma8452_dt_ids +1515 drivers/iio/accel/mma8452.c
 
-3009f891bb9f32 Kees Cook      2021-08-02  26  
-a28a6e860c6cf2 Francis Laniel 2021-02-25  27  #if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
-a28a6e860c6cf2 Francis Laniel 2021-02-25  28  extern void *__underlying_memchr(const void *p, int c, __kernel_size_t size) __RENAME(memchr);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  29  extern int __underlying_memcmp(const void *p, const void *q, __kernel_size_t size) __RENAME(memcmp);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  30  extern void *__underlying_memcpy(void *p, const void *q, __kernel_size_t size) __RENAME(memcpy);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  31  extern void *__underlying_memmove(void *p, const void *q, __kernel_size_t size) __RENAME(memmove);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  32  extern void *__underlying_memset(void *p, int c, __kernel_size_t size) __RENAME(memset);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  33  extern char *__underlying_strcat(char *p, const char *q) __RENAME(strcat);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  34  extern char *__underlying_strcpy(char *p, const char *q) __RENAME(strcpy);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  35  extern __kernel_size_t __underlying_strlen(const char *p) __RENAME(strlen);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  36  extern char *__underlying_strncat(char *p, const char *q, __kernel_size_t count) __RENAME(strncat);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  37  extern char *__underlying_strncpy(char *p, const char *q, __kernel_size_t size) __RENAME(strncpy);
-a28a6e860c6cf2 Francis Laniel 2021-02-25  38  #else
-a28a6e860c6cf2 Francis Laniel 2021-02-25  39  #define __underlying_memchr	__builtin_memchr
-a28a6e860c6cf2 Francis Laniel 2021-02-25  40  #define __underlying_memcmp	__builtin_memcmp
-a28a6e860c6cf2 Francis Laniel 2021-02-25  41  #define __underlying_memcpy	__builtin_memcpy
-a28a6e860c6cf2 Francis Laniel 2021-02-25  42  #define __underlying_memmove	__builtin_memmove
-a28a6e860c6cf2 Francis Laniel 2021-02-25  43  #define __underlying_memset	__builtin_memset
-a28a6e860c6cf2 Francis Laniel 2021-02-25  44  #define __underlying_strcat	__builtin_strcat
-a28a6e860c6cf2 Francis Laniel 2021-02-25  45  #define __underlying_strcpy	__builtin_strcpy
-a28a6e860c6cf2 Francis Laniel 2021-02-25  46  #define __underlying_strlen	__builtin_strlen
-a28a6e860c6cf2 Francis Laniel 2021-02-25 @47  #define __underlying_strncat	__builtin_strncat
-a28a6e860c6cf2 Francis Laniel 2021-02-25  48  #define __underlying_strncpy	__builtin_strncpy
-a28a6e860c6cf2 Francis Laniel 2021-02-25  49  #endif
-a28a6e860c6cf2 Francis Laniel 2021-02-25  50  
+ecabae71319695 Martin Fuzzey     2015-05-13  1514  
+c3cdd6e48e35b7 Martin Kepplinger 2015-09-01 @1515  static const struct of_device_id mma8452_dt_ids[] = {
+244a93f651937a Martin Kepplinger 2016-01-16  1516  	{ .compatible = "fsl,mma8451", .data = &mma_chip_info_table[mma8451] },
+c3cdd6e48e35b7 Martin Kepplinger 2015-09-01  1517  	{ .compatible = "fsl,mma8452", .data = &mma_chip_info_table[mma8452] },
+c5ea1b58e8f51d Martin Kepplinger 2015-09-01  1518  	{ .compatible = "fsl,mma8453", .data = &mma_chip_info_table[mma8453] },
+417e008ba9db7c Martin Kepplinger 2015-09-01  1519  	{ .compatible = "fsl,mma8652", .data = &mma_chip_info_table[mma8652] },
+417e008ba9db7c Martin Kepplinger 2015-09-01  1520  	{ .compatible = "fsl,mma8653", .data = &mma_chip_info_table[mma8653] },
+e8731180fbf6fd Martin Kepplinger 2016-03-09  1521  	{ .compatible = "fsl,fxls8471", .data = &mma_chip_info_table[fxls8471] },
+c3cdd6e48e35b7 Martin Kepplinger 2015-09-01  1522  	{ }
+c3cdd6e48e35b7 Martin Kepplinger 2015-09-01  1523  };
+c3cdd6e48e35b7 Martin Kepplinger 2015-09-01  1524  MODULE_DEVICE_TABLE(of, mma8452_dt_ids);
+c3cdd6e48e35b7 Martin Kepplinger 2015-09-01  1525  
 
-:::::: The code at line 47 was first introduced by commit
-:::::: a28a6e860c6cf231cf3c5171c75c342adcd00406 string.h: move fortified functions definitions in a dedicated header.
+:::::: The code at line 1515 was first introduced by commit
+:::::: c3cdd6e48e35b7a02f28e301ef30a87ff3cd6527 iio: mma8452: refactor for seperating chip specific data
 
-:::::: TO: Francis Laniel <laniel_francis@privacyrequired.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+:::::: TO: Martin Kepplinger <martink@posteo.de>
+:::::: CC: Jonathan Cameron <jic23@kernel.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

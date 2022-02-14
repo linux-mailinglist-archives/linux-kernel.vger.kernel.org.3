@@ -2,120 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA1DB4B5334
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC274B5333
 	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355081AbiBNOXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 09:23:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57016 "EHLO
+        id S1355093AbiBNOXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 09:23:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234799AbiBNOXK (ORCPT
+        with ESMTP id S242631AbiBNOXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 09:23:10 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E0AA18D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:23:03 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id l123-20020a1c2581000000b0037b9d960079so11786260wml.0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:23:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=vdZPhzMc8OOpbl2UuEs2+SUCoZTK13ldzN1cjH3Gy1w=;
-        b=RHdXdgJ2LBE2w7jY+8RfeUnahKmQDX0wrZL3zQcT8VazOJXtScZE9D+jdPlLAAwMcD
-         4c3Nu4EuzuFca3UyVr1fZNAIFrDRsnSiFX1QnpZO7SR3V15BPsdLbM95gm3NbENp+6o1
-         /lAO9MQBWVVZ/mtr/3x8bf5SCPORJjb5uh7GPT1Ou7jTpft2Vm6fT/+9HmuUB816xXh3
-         9n2te1iIrB8kZkuCOr7o9d3xCuZALY4r7B+p4cu/WdTJp/ONaWSQwyHAccxgW5Pe5Gso
-         N8wuzD4WFeL8kdGesEefaEMILjY56iSc0FB4K8B49YtyYlBZeQRmDq97O+C0ngyUKOQq
-         WM+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=vdZPhzMc8OOpbl2UuEs2+SUCoZTK13ldzN1cjH3Gy1w=;
-        b=SG3Qv85IQuhDcRCOcoNRT3+hweFBmegAvzVjwOnR0Yn1GgsJR2d5TIbizYy0DSH9Ue
-         B43J/KPnAHK9dbbzU6XyuS9dHhZEZeZzPDTh4MtIIU/tqTKUhyWDVOp9KP/ZiKVHf96a
-         +cJNImCHrk7J259aS021RF3VxMFURxRYJPlV5NHIbwY6/kIVPRF8o8Alfy63tI2RdiOi
-         u9y86PTS5FX1ha3bmfRNfG28MSpbZ1N0AOr5r54aS9d0rYfC8ixzLJblc53nWV2Y+eUR
-         5eN1fkqKNqYA0xVKOSdbwMJY5VAg1sa6uh09JIe81VFVv0wOSW1cWWMM4fHBfHUiBpig
-         bEtg==
-X-Gm-Message-State: AOAM53008Q3Ye8Al9l+7mvYlXfRHhCEZT7nbbQa8TpKxojO3A5M3BOjH
-        OGfsthBZvk9GAz85K+qost3vPw==
-X-Google-Smtp-Source: ABdhPJz1ZB2k7y7XczgS1kVpyE+TpVQk6pZ5jgDQ1a3FTos5TRkuSJzEvca4MVay0vYYHF1YKF60aw==
-X-Received: by 2002:a7b:cbd4:: with SMTP id n20mr11388048wmi.33.1644848581602;
-        Mon, 14 Feb 2022 06:23:01 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id u12sm27154831wrs.2.2022.02.14.06.23.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 06:23:01 -0800 (PST)
-Date:   Mon, 14 Feb 2022 14:22:59 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        linux-rockchip@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
+        Mon, 14 Feb 2022 09:23:18 -0500
+Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0502A49FB8;
+        Mon, 14 Feb 2022 06:23:10 -0800 (PST)
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id 1C490374; Mon, 14 Feb 2022 15:23:09 +0100 (CET)
+Date:   Mon, 14 Feb 2022 15:23:07 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Will Deacon <will@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
         Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] mfd: rk808: add reboot support to rk808.c
-Message-ID: <Ygplw6AbXptTLETT@google.com>
-References: <20220208194023.929720-1-pgwipeout@gmail.com>
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 5/8] iommu/amd: Use iommu_attach/detach_device()
+Message-ID: <YgplyyjofwlM+1tc@8bytes.org>
+References: <20220106022053.2406748-1-baolu.lu@linux.intel.com>
+ <20220106022053.2406748-6-baolu.lu@linux.intel.com>
+ <20220106143345.GC2328285@nvidia.com>
+ <Ygo8iek2CwtPp2hj@8bytes.org>
+ <20220214131544.GX4160@nvidia.com>
+ <Ygpb6CxmTdUHiN50@8bytes.org>
+ <20220214140236.GC929467@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220208194023.929720-1-pgwipeout@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220214140236.GC929467@nvidia.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 08 Feb 2022, Peter Geis wrote:
+On Mon, Feb 14, 2022 at 10:02:36AM -0400, Jason Gunthorpe wrote:
+> That works for VFIO, but it doesn't work for other in-kernel
+> drivers.. Is there something ensuring the group is only the GPU and
+> sound device? Is the GPU never an addin card?
 
-> This adds reboot support to the rk808 pmic driver and enables it for
-> the rk809 and rk817 devices.
-> This only enables if the rockchip,system-power-controller flag is set.
-> 
-> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
-> Acked-for-mfd-by: Lee Jones <lee.jones@linaro.org>
-> ---
-> Changelog:
-> V5:
-> - Fix length of error print.
-> 
-> V4:
-> - reorder rk808_restart_notify (Thanks Dmitry)
-> - drop of_property_read_bool before unregister (Good catch Frank)
-> 
-> V3: Thanks Dmitry!
-> - Adjust priority to be in line with other pmic drivers
-> - Move ret handling to case switch
-> - Make default registration debug
-> - Add unregister function on removal
-> 
-> V2:
-> - Squash the patch from Frank Wunderlich for rk809 support.
-> - Remove support for the rk805, rk808, and rk818 devices.
-> - Only register the reset handler for supported devices.
-> - Remove unnecessary dev_err and dev_warn statements.
-> - Register the reset handler directly
->  drivers/mfd/rk808.c       | 44 +++++++++++++++++++++++++++++++++++++++
->  include/linux/mfd/rk808.h |  1 +
->  2 files changed, 45 insertions(+)
+GPUs supporting this functionality are always iGPUs, AFAIK.
 
-Applied, thanks.
+> I'd say the right way to code this after Lu's series to have both the
+> GPU and sound driver call iommu_attach_device() during their probe()'s
+> and specify the identity domain as the attaching domain.
+> 
+> That would be quite similar to how the Tegra drivers got arranged.
+> 
+> And then maybe someone could better guess what the "sound driver" is
+> since it would be marked with an iommu_attach_device() call.
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Device drivers calling into iommu_attach_device() is seldom a good
+idea.  In this case the sound device has some generic hardware
+interface so that an existing sound driver can be re-used. Making this
+driver call iommu-specific functions for some devices is something hard
+to justify.
+
+With sub-groups on the other hand it would be a no-brainer, because the
+sound device would be in a separate sub-group. Basically any device in
+the same group as the GPU would be in a separate sub-group.
+
+Regards,
+
+	Joerg

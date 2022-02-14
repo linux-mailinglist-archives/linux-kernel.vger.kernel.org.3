@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0CF4B5E1B
+	by mail.lfdr.de (Postfix) with ESMTP id E66DB4B5E1C
 	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 00:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbiBNXOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 18:14:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiBNXOr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231738AbiBNXOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 14 Feb 2022 18:14:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229458AbiBNXOp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 14 Feb 2022 18:14:45 -0500
 Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3241B10FC;
-        Mon, 14 Feb 2022 15:14:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95277177E7B;
+        Mon, 14 Feb 2022 15:14:36 -0800 (PST)
 Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
         by finn.localdomain with esmtp (Exim 4.93)
         (envelope-from <tharvey@gateworks.com>)
-        id 1nJkYA-00AkNe-57; Mon, 14 Feb 2022 23:14:30 +0000
+        id 1nJkYA-00AkNe-Ta; Mon, 14 Feb 2022 23:14:31 +0000
 From:   Tim Harvey <tharvey@gateworks.com>
 To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
@@ -28,9 +28,9 @@ To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH 1/4] arm64: dts: imx8mm-venice-gw73xx-0x: add dt overlays for serial modes
-Date:   Mon, 14 Feb 2022 15:14:21 -0800
-Message-Id: <20220214231424.30927-2-tharvey@gateworks.com>
+Subject: [PATCH 2/4] arm64: dts: imx8mm-venice-gw72xx-0x: add dt overlays for serial modes
+Date:   Mon, 14 Feb 2022 15:14:22 -0800
+Message-Id: <20220214231424.30927-3-tharvey@gateworks.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220214231424.30927-1-tharvey@gateworks.com>
 References: <20220214231424.30927-1-tharvey@gateworks.com>
@@ -43,11 +43,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The imx8mm-venice-gw73xx-0x som+baseboard combination has a multi-protocol
+The imx8mm-venice-gw72xx-0x som+baseboard combination has a multi-protocol
 RS-232/RS-485/RS-422 transceiver to an off-board connector which
 can be configured in a number of ways via UART and GPIO configuration.
 
-The default configuration per the imx8mm-venice-gw73xx-0x dts is for
+The default configuration per the imx8mm-venice-gw72xx-0x dts is for
 UART2 TX/RX and UART4 TX/RX to be available as RS-232:
  J15.1 UART2 TX out
  J15.2 UART2 RX in
@@ -80,48 +80,49 @@ rs422 (UART2 RS-422 full duplex)
 
 Signed-off-by: Tim Harvey <tharvey@gateworks.com>
 ---
-v3: use overlay target for simplicity
-v2: fixed typo: s/uast/uart/
+v2: use overlay target for simplicity
 ---
- arch/arm64/boot/dts/freescale/Makefile        |  8 +++
- .../imx8mm-venice-gw73xx-0x-rs232-rts.dts     | 53 ++++++++++++++++
- .../imx8mm-venice-gw73xx-0x-rs422.dts         | 61 +++++++++++++++++++
- .../imx8mm-venice-gw73xx-0x-rs485.dts         | 61 +++++++++++++++++++
- 4 files changed, 183 insertions(+)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dts
+ arch/arm64/boot/dts/freescale/Makefile        |  6 ++
+ .../imx8mm-venice-gw72xx-0x-rs232-rts.dts     | 53 ++++++++++++++++
+ .../imx8mm-venice-gw72xx-0x-rs422.dts         | 61 +++++++++++++++++++
+ .../imx8mm-venice-gw72xx-0x-rs485.dts         | 61 +++++++++++++++++++
+ 4 files changed, 181 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dts
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 55b47cc11490..ea798b7bb286 100644
+index ea798b7bb286..1753f787a609 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -99,6 +99,14 @@ dtb-$(CONFIG_ARCH_MXC) += imx8qxp-colibri-eval-v3.dtb
+@@ -99,10 +99,16 @@ dtb-$(CONFIG_ARCH_MXC) += imx8qxp-colibri-eval-v3.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8qxp-mek.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8ulp-evk.dtb
  
-+imx8mm-venice-gw73xx-0x-rs232-rts-dtbs	:= imx8mm-venice-gw73xx-0x.dtb imx8mm-venice-gw73xx-0x-rs232-rts.dtbo
-+imx8mm-venice-gw73xx-0x-rs422-dtbs	:= imx8mm-venice-gw73xx-0x.dtb imx8mm-venice-gw73xx-0x-rs422.dtbo
-+imx8mm-venice-gw73xx-0x-rs485-dtbs	:= imx8mm-venice-gw73xx-0x.dtb imx8mm-venice-gw73xx-0x-rs485.dtbo
-+
-+dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs232-rts.dtb
-+dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs422.dtb
-+dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs485.dtb
-+
- dtb-$(CONFIG_ARCH_S32) += s32g274a-evb.dtb
- dtb-$(CONFIG_ARCH_S32) += s32g274a-rdb2.dtb
- dtb-$(CONFIG_ARCH_S32) += s32v234-evb.dtb
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dts
++imx8mm-venice-gw72xx-0x-rs232-rts-dtbs	:= imx8mm-venice-gw72xx-0x.dtb imx8mm-venice-gw72xx-0x-rs232-rts.dtbo
++imx8mm-venice-gw72xx-0x-rs422-dtbs	:= imx8mm-venice-gw72xx-0x.dtb imx8mm-venice-gw72xx-0x-rs422.dtbo
++imx8mm-venice-gw72xx-0x-rs485-dtbs	:= imx8mm-venice-gw72xx-0x.dtb imx8mm-venice-gw72xx-0x-rs485.dtbo
+ imx8mm-venice-gw73xx-0x-rs232-rts-dtbs	:= imx8mm-venice-gw73xx-0x.dtb imx8mm-venice-gw73xx-0x-rs232-rts.dtbo
+ imx8mm-venice-gw73xx-0x-rs422-dtbs	:= imx8mm-venice-gw73xx-0x.dtb imx8mm-venice-gw73xx-0x-rs422.dtbo
+ imx8mm-venice-gw73xx-0x-rs485-dtbs	:= imx8mm-venice-gw73xx-0x.dtb imx8mm-venice-gw73xx-0x-rs485.dtbo
+ 
++dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-rs232-rts.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-rs422.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-rs485.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs232-rts.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs422.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs485.dtb
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dts
 new file mode 100644
-index 000000000000..2fa635e1c1a8
+index 000000000000..3ea73a6886ff
 --- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dts
 @@ -0,0 +1,53 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright 2022 Gateworks Corporation
 + *
-+ * GW73xx RS232 with RTS/CTS hardware flow control:
++ * GW72xx RS232 with RTS/CTS hardware flow control:
 + *  - GPIO4_0 rs485_en needs to be driven low (in-active)
 + *  - UART4_TX becomes RTS
 + *  - UART4_RX becomes CTS
@@ -135,7 +136,7 @@ index 000000000000..2fa635e1c1a8
 +/plugin/;
 +
 +&{/} {
-+	compatible = "gw,imx8mm-gw73xx-0x";
++	compatible = "gw,imx8mm-gw72xx-0x";
 +};
 +
 +&gpio4 {
@@ -170,17 +171,17 @@ index 000000000000..2fa635e1c1a8
 +		>;
 +	};
 +};
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dts
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dts
 new file mode 100644
-index 000000000000..3e6404340d52
+index 000000000000..c3cd9f2b0db3
 --- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dts
 @@ -0,0 +1,61 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
-+ * Copyright 2021 Gateworks Corporation
++ * Copyright 2022 Gateworks Corporation
 + *
-+ * GW73xx RS422 (RS485 full duplex):
++ * GW72xx RS422 (RS485 full duplex):
 + *  - GPIO1_0 rs485_term selects on-chip termination
 + *  - GPIO4_0 rs485_en needs to be driven high (active)
 + *  - GPIO4_2 rs485_hd needs to be driven low (in-active)
@@ -197,7 +198,7 @@ index 000000000000..3e6404340d52
 +/plugin/;
 +
 +&{/} {
-+	compatible = "gw,imx8mm-gw73xx-0x";
++	compatible = "gw,imx8mm-gw72xx-0x";
 +};
 +
 +&gpio4 {
@@ -237,17 +238,17 @@ index 000000000000..3e6404340d52
 +		>;
 +	};
 +};
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dts
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dts
 new file mode 100644
-index 000000000000..2c71ab9854cb
+index 000000000000..cc0a287226ab
 --- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dts
 @@ -0,0 +1,61 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
-+ * Copyright 2021 Gateworks Corporation
++ * Copyright 2022 Gateworks Corporation
 + *
-+ * GW73xx RS485 HD:
++ * GW72xx RS485 HD:
 + *  - GPIO1_0 rs485_term selects on-chip termination
 + *  - GPIO4_0 rs485_en needs to be driven high (active)
 + *  - GPIO4_2 rs485_hd needs to be driven high (active)
@@ -264,7 +265,7 @@ index 000000000000..2c71ab9854cb
 +/plugin/;
 +
 +&{/} {
-+	compatible = "gw,imx8mm-gw73xx-0x";
++	compatible = "gw,imx8mm-gw72xx-0x";
 +};
 +
 +&gpio4 {

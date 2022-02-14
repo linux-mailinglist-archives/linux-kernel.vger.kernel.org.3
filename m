@@ -2,131 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89AB04B588F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F88F4B589C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:35:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353091AbiBNRe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 12:34:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57102 "EHLO
+        id S1357162AbiBNRfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 12:35:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233371AbiBNRey (ORCPT
+        with ESMTP id S1357134AbiBNRfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 12:34:54 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852B265406;
-        Mon, 14 Feb 2022 09:34:45 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id h7-20020a17090a648700b001b927560c2bso15334518pjj.1;
-        Mon, 14 Feb 2022 09:34:45 -0800 (PST)
+        Mon, 14 Feb 2022 12:35:17 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948BC6540F;
+        Mon, 14 Feb 2022 09:35:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=apnN0rYl+OR6PUK+71gKAmUuuy1MXm8SpHDSHheapQc=;
-        b=PkE0ZISIikKihgqyEmgleK5vFffN7Dkqf+BF3fP4eiTxUPbO/8pgH7SrrohSTNwDo6
-         9XL56ttmwbdIASNROorrTUwJvIi4KVku9jrN7MqG9zT5/1z9/l657DXYzmIkmlTpwOQW
-         vHlesGH7u7cvgrnz+ofvIkYcW2SlBfX+bUzfmtA0gvmWOu4x+xFo4dnom7tPC/cm5+42
-         KPVu9awJq9D0OX1PZAMXzcoBG0Gc3vy8g0zN8m4mOpMRKAd+6pYJsMFWDxTjV9+qjrMb
-         QFha5efL6bPmTlNgYYlBz4eKLGj+T3aPIMOhDEdPNVYsDmU8a0resxFefm6YNQT5audI
-         GWMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=apnN0rYl+OR6PUK+71gKAmUuuy1MXm8SpHDSHheapQc=;
-        b=6BzX3bzzHHy9lzuFsJSwUE/kVUcdO6lPFVX9ArABPMCj9AFYULkITtxV6Q3zkytOfB
-         NrvQnYzjoTcX/7T12zreTzM41W90y9hx3wkZRcd/+D0+ot8X5kH0m0RYb37Im67ErvB/
-         2kxEMSMZCUUN5EcoWae5ABKaEaNbGL+4QSX1sl2FY/yO/RLblYXZOZX3ZEIUTQ9paMNh
-         zSQwc5fFqwbQIe86Gofm5q+MxMXRTJlzNLqZfdteB5T6lTPpwuAKUP+IUWh6jPBuW5qT
-         fHJrMWq4ttIez7P9+59qPR/J1Is1GeXIsOBtfAbp8Uf+FO6nLudaqjitIwNn0zi7eF70
-         k3JA==
-X-Gm-Message-State: AOAM532sWL452tLQPc8wB1r7tzWs9cSujVUZ1k1UoiJZyRXqXLktq1m1
-        roj2HEWLCDSivgbpZ/4OodH0PKUgZi8=
-X-Google-Smtp-Source: ABdhPJxQmVTzKYH18qIy9otiYAlZ8hossATt3HpXdW1A0Xc0VYFl+e1UaTk5hbPT5gPJn+8sxJGFyw==
-X-Received: by 2002:a17:903:22d0:: with SMTP id y16mr790620plg.107.1644860084808;
-        Mon, 14 Feb 2022 09:34:44 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id a9sm184432pgb.56.2022.02.14.09.34.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 09:34:44 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 14 Feb 2022 07:34:42 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        syzbot <syzbot+831661966588c802aae9@syzkaller.appspotmail.com>,
-        jgg@ziepe.ca, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [syzbot] possible deadlock in worker_thread
-Message-ID: <YgqSsuSN5C7StvKx@slm.duckdns.org>
-References: <0000000000005975a605d7aef05e@google.com>
- <8ea57ddf-a09c-43f2-4285-4dfb908ad967@acm.org>
- <ccd04d8a-154b-543e-e1c3-84bc655508d1@I-love.SAKURA.ne.jp>
- <71d6f14e-46af-cc5a-bc70-af1cdc6de8d5@acm.org>
- <309c86b7-2a4c-1332-585f-7bcd59cfd762@I-love.SAKURA.ne.jp>
- <aa2bf24e-981a-a811-c5d8-a75f0b8f693a@acm.org>
- <2959649d-cfbc-bdf2-02ac-053b8e7af030@I-love.SAKURA.ne.jp>
- <YgnQGZWT/n3VAITX@slm.duckdns.org>
- <8ebd003c-f748-69b4-3a4f-fb80a3f39d36@I-love.SAKURA.ne.jp>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644860109; x=1676396109;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=5XlD8vp21eTKSkpNbt94DxzMkq8qEZEWW+TU+APGf4I=;
+  b=qyVG0PHTuWbB4FeptwwoG57i23sdo2wLxbD9+Tsl8fCkUYoQdM6DaqO1
+   qSGN9m9eQd7/adVm9MZZtfetF6zFKeet03fbDyy1nv4UAszvkd1dyVHus
+   gGwNjB7TS9egE4924hLZZFd7oTdt6IAGRdf/wJhZJ9Qk7YfK52vyeUdZG
+   o=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Feb 2022 09:35:09 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 09:35:08 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 14 Feb 2022 09:35:08 -0800
+Received: from [10.216.62.158] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Mon, 14 Feb
+ 2022 09:35:02 -0800
+Subject: Re: [PATCH v13 07/10] ASoC: qcom: Add support for codec dma driver
+To:     Mark Brown <broonie@kernel.org>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <lgirdwood@gmail.com>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@codeaurora.org>,
+        <perex@perex.cz>, <tiwai@suse.com>,
+        <srinivas.kandagatla@linaro.org>, <rohitkr@codeaurora.org>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+References: <1644832778-16064-1-git-send-email-quic_srivasam@quicinc.com>
+ <1644832778-16064-2-git-send-email-quic_srivasam@quicinc.com>
+ <YgppMcVjs0KuE5y8@sirena.org.uk>
+ <669f2d39-8c14-68b9-6d89-a26e0e2e8857@quicinc.com>
+ <YgqBmvAQvh9WRMj+@sirena.org.uk>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+Message-ID: <3a13a99d-6b8b-bab5-3adc-fdd2565fc93a@quicinc.com>
+Date:   Mon, 14 Feb 2022 23:04:58 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8ebd003c-f748-69b4-3a4f-fb80a3f39d36@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YgqBmvAQvh9WRMj+@sirena.org.uk>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-On Mon, Feb 14, 2022 at 10:36:57PM +0900, Tetsuo Handa wrote:
-> OK. Then, I propose below patch. If you are OK with this approach, I can
-> keep this via my tree as a linux-next only experimental patch for one or
-> two weeks, in order to see if someone complains.
-
-I don't mind you testing that way but this and would much prefer this and
-related changes in the wq tree.
-
-> +static void warn_if_flushing_global_workqueue(struct workqueue_struct *wq)
-> +{
-> +#ifdef CONFIG_PROVE_LOCKING
-> +	static DEFINE_RATELIMIT_STATE(flush_warn_rs, 600 * HZ, 1);
-> +	const char *name;
-> +
-> +	if (wq == system_wq)
-> +		name = "system_wq";
-> +	else if (wq == system_highpri_wq)
-> +		name = "system_highpri_wq";
-> +	else if (wq == system_long_wq)
-> +		name = "system_long_wq";
-> +	else if (wq == system_unbound_wq)
-> +		name = "system_unbound_wq";
-> +	else if (wq == system_freezable_wq)
-> +		name = "system_freezable_wq";
-> +	else if (wq == system_power_efficient_wq)
-> +		name = "system_power_efficient_wq";
-> +	else if (wq == system_freezable_power_efficient_wq)
-> +		name = "system_freezable_power_efficient_wq";
-> +	else
-> +		return;
-> +	ratelimit_set_flags(&flush_warn_rs, RATELIMIT_MSG_ON_RELEASE);
-> +	if (!__ratelimit(&flush_warn_rs))
-> +		return;
-> +	pr_warn("Since system-wide WQ is shared, flushing system-wide WQ can introduce unexpected locking dependency. Please replace %s usage in your code with your local WQ.\n",
-> +		name);
-> +	dump_stack();
-> +#endif
-
-Instead of doing the above, please add a wq flag to mark system wqs and
-trigger the warning that way and I'd leave it regardless of PROVE_LOCKING.
-
-Thanks.
-
--- 
-tejun
+On 2/14/2022 9:51 PM, Mark Brown wrote:
+Thanks Brown for your time!!!
+> On Mon, Feb 14, 2022 at 08:10:20PM +0530, Srinivasa Rao Mandadapu wrote:
+>> On 2/14/2022 8:07 PM, Mark Brown wrote:
+>>> I only have this patch from both v12 and v13, which were sent very close
+>>> together.  Please check what's going on here.
+>> As only one patch has update, so sent only one patch. will do resend all
+>> patches if needed.
+> You should always send all patches in a series, sending only some
+> patches at best makes it very difficult to follow what the current
+> version of the series is intended to look like.
+Okay. Sorry for inconvenience. Resent all patches again.

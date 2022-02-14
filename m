@@ -2,187 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E6B4B3FBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 03:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 414104B3FC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 03:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233483AbiBNCim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 21:38:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51638 "EHLO
+        id S234769AbiBNCse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 21:48:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231686AbiBNCil (ORCPT
+        with ESMTP id S231686AbiBNCsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 21:38:41 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9174219288
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 18:38:34 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id i62so18345056ioa.1
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 18:38:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fhTIyjQrks8YWYHGKpnJ4cPHVuWtXADAbz/+ltcbh1A=;
-        b=LA6BJe7r2AxyUTpA9+4vDIumOI8DEq/578pErvLSQ25QixnhCo64ib7ECk3zNNpCu/
-         CCc5d5l9rVlINhmb38kQ2+N58wJ1aCNLvWi8b7twh276IzxQ/FZkhSeN7c6WndeLm7bs
-         SLXT4tqkD8Y5i2KpqhbQxibHff22H/uAu3wbVqVIEVeWfws3T2lxnkLOXKUub7ZiH4sG
-         RKxvnvkeK8oxJ6dOyvVTG+A0Lvm007O1g33FBEyA9nJf64KatYVNaU6KdlN4fQ9VXZcA
-         cBGtYTKppalPV4Jdux/nTdUjKWrOk3dhQ88AkkK6OlxLjfr+VljT9g/nPdqL+ZGCY5Xd
-         2rQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fhTIyjQrks8YWYHGKpnJ4cPHVuWtXADAbz/+ltcbh1A=;
-        b=aLtDfOSkWNwkelT5Slr8tY/5f5CKF9JOn1VMXJn04gR7nJp59srNdDb7WkiQNhnZbz
-         fLyEEl5Q4yeqR8P1DKTEHaIQI6hUzzfHtjujkBsOiLjBG+wKx/6Kbt9hwDNiG3UyxJhW
-         C5vjV7vPJFZlxxDUWLCl0TYxduv5BGyNcnNdliGlHHgnoJ6q3Y7FrEec9qq5+W547E33
-         V2ZMVsxWqgX71vTE+0NsGkUYEOwWmsBuunYdhSvUgpiv8+RafJXSE63hzwISzIVQuzPq
-         XuLAYyXhKSZhZUPvpP2gM1+N2fxjBil3ZpbKKx1C5AuvIlJxX4ZInow4P4/TU3wGhOVu
-         kkUw==
-X-Gm-Message-State: AOAM533Bfa3IkytIB264lknzgyipIOlHnovMUD0iJUDcpuLgp18ewQWk
-        ms6ME08QBxqrd9aYyGzaa+qtQtPkWulvwFqSYGF0Th0=
-X-Google-Smtp-Source: ABdhPJyBbWmL8660Hetk2PGEYDWi2fCeOCo3RF0+NkL6Y4PDXeID9C2NZCchB5mBK7PntThAulqm9uZrpnqIoJoQSvE=
-X-Received: by 2002:a5e:d610:: with SMTP id w16mr6092572iom.87.1644806313873;
- Sun, 13 Feb 2022 18:38:33 -0800 (PST)
+        Sun, 13 Feb 2022 21:48:33 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27693F882
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 18:48:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644806905; x=1676342905;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QGWxKqDhs1yAt74sVIjYk8Q5hgilS7buJkuGWiuDDxU=;
+  b=NzovQL/eEF3SpS17Ylu6zDf20mzxB2bx2FG+TgLAejmfkxtbERxS/pg0
+   0/BNw4TfibLu2I+kMFTVL7ngIrXMuktA4uQ0vUwYHsLkonry0u6pmHv1s
+   PQ1ftjROdLiMXZX/tyu2TTQWwvIEoa9P42hR4nhXBac7T5z7Tj9FRo6Mo
+   HOQcBjiV9F1CBL7Swu6Z2gQZyQ3fvQV6oxwtBa2FI3wsf5PjbJqB2n0F0
+   7Su/WgRHEH7izZBwnL5jeb23c21mb/piE/6Elqi9JIlMdQJdvPS9v9yVE
+   OLb12yaM/ZeyfBZIQgLOambarWD1bA/9fv5JwfJN4EBA48kAaawbVQOUI
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="229961488"
+X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
+   d="scan'208";a="229961488"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 18:48:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
+   d="scan'208";a="527803825"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 13 Feb 2022 18:48:24 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJRPb-00086l-Kf; Mon, 14 Feb 2022 02:48:23 +0000
+Date:   Mon, 14 Feb 2022 10:47:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [peterz-queue:x86/wip.ibt 7/15] arch/x86/kernel/setup.c:66:1: error:
+ 'nocf_check' attribute ignored. Use '-fcf-protection' option to enable it
+Message-ID: <202202141030.qhNGDbYM-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220127090215.32000-1-kernelfans@gmail.com>
-In-Reply-To: <20220127090215.32000-1-kernelfans@gmail.com>
-From:   Pingfan Liu <kernelfans@gmail.com>
-Date:   Mon, 14 Feb 2022 10:38:22 +0800
-Message-ID: <CAFgQCTsVyH5mctKeYpBJY3GvmODDMq3xmqT+z0C0pOZNjjPXxw@mail.gmail.com>
-Subject: Re: [PATCHv2] kexec: disable cpu hotplug until the rebooting cpu is stable
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Vincent Donnefort <vincent.donnefort@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Kexec Mailing List <kexec@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gently ping, maintainers, could you share your opinions?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
+head:   ede73fa4e97e8f275401a989b8d9df192a2c3ec4
+commit: 9947fe456516712bd4df7139f2ff329cc14ba745 [7/15] x86: Don't generate ENDBR in .discard.text
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220214/202202141030.qhNGDbYM-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=9947fe456516712bd4df7139f2ff329cc14ba745
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue x86/wip.ibt
+        git checkout 9947fe456516712bd4df7139f2ff329cc14ba745
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/x86/kernel/setup.c:66:1: error: 'nocf_check' attribute ignored. Use '-fcf-protection' option to enable it [-Werror=attributes]
+      66 | RESERVE_BRK(dmi_alloc, 65536);
+         | ^~~~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+>> arch/x86/mm/init.c:178:1: error: 'nocf_check' attribute ignored. Use '-fcf-protection' option to enable it [-Werror=attributes]
+     178 | RESERVE_BRK(early_pgt_alloc, INIT_PGT_BUF_SIZE);
+         | ^~~~~~~~~~~
+   cc1: all warnings being treated as errors
 
 
-Thanks
+vim +66 arch/x86/kernel/setup.c
 
-On Thu, Jan 27, 2022 at 5:02 PM Pingfan Liu <kernelfans@gmail.com> wrote:
->
-> The following identical code piece appears in both
-> migrate_to_reboot_cpu() and smp_shutdown_nonboot_cpus():
->
->         if (!cpu_online(primary_cpu))
->                 primary_cpu = cpumask_first(cpu_online_mask);
->
-> This is due to a breakage like the following:
->    migrate_to_reboot_cpu();
->    cpu_hotplug_enable();
->                           --> comes a cpu_down(this_cpu) on other cpu
->    machine_shutdown();
->
-> Although the kexec-reboot task can get through a cpu_down() on its cpu,
-> this code looks a little confusing.
->
-> Make things straight forward by keeping cpu hotplug disabled until
-> smp_shutdown_nonboot_cpus() holds cpu_add_remove_lock. By this way, the
-> breakage is squashed out and the rebooting cpu can keep unchanged.
->
-> Note: this patch only affects the kexec-reboot on arches, which rely on
-> cpu hotplug mechanism.
->
-> Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
-> Cc: Eric Biederman <ebiederm@xmission.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Valentin Schneider <valentin.schneider@arm.com>
-> Cc: Vincent Donnefort <vincent.donnefort@arm.com>
-> Cc: Ingo Molnar <mingo@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: YueHaibing <yuehaibing@huawei.com>
-> Cc: Baokun Li <libaokun1@huawei.com>
-> Cc: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Valentin Schneider <valentin.schneider@arm.com>
-> Cc: kexec@lists.infradead.org
-> To: linux-kernel@vger.kernel.org
-> ---
-> v1 -> v2:
->  improve commit log
->
->  kernel/cpu.c        | 16 ++++++++++------
->  kernel/kexec_core.c | 10 ++++------
->  2 files changed, 14 insertions(+), 12 deletions(-)
->
-> diff --git a/kernel/cpu.c b/kernel/cpu.c
-> index 9c92147f0812..87bdf21de950 100644
-> --- a/kernel/cpu.c
-> +++ b/kernel/cpu.c
-> @@ -1240,20 +1240,24 @@ int remove_cpu(unsigned int cpu)
->  }
->  EXPORT_SYMBOL_GPL(remove_cpu);
->
-> +/* primary_cpu keeps unchanged after migrate_to_reboot_cpu() */
->  void smp_shutdown_nonboot_cpus(unsigned int primary_cpu)
->  {
->         unsigned int cpu;
->         int error;
->
-> +       /*
-> +        * Block other cpu hotplug event, so primary_cpu is always online if
-> +        * it is not touched by us
-> +        */
->         cpu_maps_update_begin();
-> -
->         /*
-> -        * Make certain the cpu I'm about to reboot on is online.
-> -        *
-> -        * This is inline to what migrate_to_reboot_cpu() already do.
-> +        * migrate_to_reboot_cpu() disables CPU hotplug assuming that
-> +        * no further code needs to use CPU hotplug (which is true in
-> +        * the reboot case). However, the kexec path depends on using
-> +        * CPU hotplug again; so re-enable it here.
->          */
-> -       if (!cpu_online(primary_cpu))
-> -               primary_cpu = cpumask_first(cpu_online_mask);
-> +       __cpu_hotplug_enable();
->
->         for_each_online_cpu(cpu) {
->                 if (cpu == primary_cpu)
-> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> index 68480f731192..db4fa6b174e3 100644
-> --- a/kernel/kexec_core.c
-> +++ b/kernel/kexec_core.c
-> @@ -1168,14 +1168,12 @@ int kernel_kexec(void)
->                 kexec_in_progress = true;
->                 kernel_restart_prepare("kexec reboot");
->                 migrate_to_reboot_cpu();
-> -
->                 /*
-> -                * migrate_to_reboot_cpu() disables CPU hotplug assuming that
-> -                * no further code needs to use CPU hotplug (which is true in
-> -                * the reboot case). However, the kexec path depends on using
-> -                * CPU hotplug again; so re-enable it here.
-> +                * migrate_to_reboot_cpu() disables CPU hotplug. If an arch
-> +                * relies on the cpu teardown to achieve reboot, it needs to
-> +                * re-enable CPU hotplug there.
->                  */
-> -               cpu_hotplug_enable();
-> +
->                 pr_notice("Starting new kernel\n");
->                 machine_shutdown();
->         }
-> --
-> 2.31.1
->
+2b72394e408964 Pekka Enberg                  2009-04-28  64  
+e808bae2407a08 Thadeu Lima de Souza Cascardo 2010-02-09  65  #ifdef CONFIG_DMI
+796216a57fe45c Jeremy Fitzhardinge           2009-03-12 @66  RESERVE_BRK(dmi_alloc, 65536);
+e808bae2407a08 Thadeu Lima de Souza Cascardo 2010-02-09  67  #endif
+796216a57fe45c Jeremy Fitzhardinge           2009-03-12  68  
+c0b5842a457d44 Ingo Molnar                   2009-01-27  69  
+
+:::::: The code at line 66 was first introduced by commit
+:::::: 796216a57fe45c04adc35bda1f0782efec78a713 x86: allow extend_brk users to reserve brk space
+
+:::::: TO: Jeremy Fitzhardinge <jeremy.fitzhardinge@citrix.com>
+:::::: CC: H. Peter Anvin <hpa@zytor.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

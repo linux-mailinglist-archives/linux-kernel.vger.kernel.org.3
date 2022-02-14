@@ -2,201 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 421EF4B5B41
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 21:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F24C54B5B8A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:01:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbiBNUqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 15:46:54 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38200 "EHLO
+        id S230101AbiBNU6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 15:58:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiBNUqB (ORCPT
+        with ESMTP id S229522AbiBNU6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 15:46:01 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B23816111C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:44:23 -0800 (PST)
-Date:   Mon, 14 Feb 2022 21:19:52 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644869993;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=bXNE4LooGlzlo0G4AK11ajol/4hEQRx4f/cldILJwL0=;
-        b=v0KAacvU4tc7OHjoU8wjrxzXaARWq/HrUCuqwNsw7GVHTfzv230/bAPYfFzSx7BnRHBfVM
-        Lc96Wl7OltGuTYlJ5np1ledp09qOIG1FvLrlISnVkMxN/G7cgDFvllvMGcrCEzqNExTBJP
-        Vgj3pqn/Vf3g/CnNmiZ8fB5Ep2MrGnAzuO1fsYU4VVeQqZOOUi17x4UG5Bhv0RRqER9x9f
-        T5UmUmPxqseVxS6fbZMvHJZol8pMjwq8f6yUwhY3VKaUwJihHEAKi1Yvasij7OmC/Y7Rci
-        veub4I+LoHiMruMRlSJDn3l/urpyE5I+4VenMtPWZ6QlzjdnjkwsA6dKLIrlHA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644869993;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=bXNE4LooGlzlo0G4AK11ajol/4hEQRx4f/cldILJwL0=;
-        b=dTTsfpEIS3NpPxxk2QywVZnf+5RnfK+txM24xXJIJHKOXc1Z3xPtlb4CKN1f8varbd6CPX
-        aZBIPUai5RQi64AQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Oleg Nesterov <oleg@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH] signal/x86: Delay calling signals in atomic
-Message-ID: <Ygq5aBB/qMQw6aP5@linutronix.de>
+        Mon, 14 Feb 2022 15:58:10 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6B5110EEF;
+        Mon, 14 Feb 2022 12:57:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644872260; x=1676408260;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+ZOSDcI2qdIWgBn8a33RycD675mh/DMLTMtB1BKSO68=;
+  b=Cu7J1A8t5paQM1GqwgCcVmlmdK0objzjfsNA+cBKoJszkbaPz8r31ggE
+   kGemuABrYYLJHfIaRZ6Bs3E3GaibUrER3gHScEdMNDuR/Mx+EN9sdDJA/
+   hMvP3stXA81IRXW0vF1dyj+b2mkH4AORXyKZChO0c97DGNidTAQy+KXvL
+   PVl/IYiwTNSUGRh0gqPdHGfs+OF4VXwbJDnB9T1SbCj692QnvS/3FHfwk
+   5QHRCUBbVKNVHjeqey2e4aeg+0PRuiJc+OHDB5rPcUr+/Vbw8TryzBo+w
+   3smuAEJtEsyaV1+nHlls8C1wztq+6Q2EJg1kHAlpO7Bh4CM7aTyoJxadJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="310916638"
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="310916638"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 12:35:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="635415061"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 14 Feb 2022 12:35:19 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJi46-0008vY-HT; Mon, 14 Feb 2022 20:35:18 +0000
+Date:   Tue, 15 Feb 2022 04:34:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     kbuild-all@lists.01.org, mdf@kernel.org, hao.wu@intel.com,
+        yilun.xu@intel.com, trix@redhat.com, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org, system@metrotek.ru,
+        Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Subject: Re: [PATCH] fpga: microsemi-spi: add Microsemi FPGA manager
+Message-ID: <202202150434.i0eTuy1u-lkp@intel.com>
+References: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleg Nesterov <oleg@redhat.com>
-Date: Tue, 14 Jul 2015 14:26:34 +0200
+Hi Ivan,
 
-On x86_64 we must disable preemption before we enable interrupts
-for stack faults, int3 and debugging, because the current task is using
-a per CPU debug stack defined by the IST. If we schedule out, another task
-can come in and use the same stack and cause the stack to be corrupted
-and crash the kernel on return.
+Thank you for the patch! Perhaps something to improve:
 
-When CONFIG_PREEMPT_RT is enabled, spinlock_t locks become sleeping, and
-one of these is the spin lock used in signal handling.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.17-rc4 next-20220214]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Some of the debug code (int3) causes do_trap() to send a signal.
-This function calls a spinlock_t lock that has been converted to a
-sleeping lock. If this happens, the above issues with the corrupted
-stack is possible.
+url:    https://github.com/0day-ci/linux/commits/Ivan-Bornyakov/fpga-microsemi-spi-add-Microsemi-FPGA-manager/20220214-222923
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 754e0b0e35608ed5206d6a67a791563c631cec07
+config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20220215/202202150434.i0eTuy1u-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/19d9c174f03a9b8387ba654d558351cac9d63d24
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Ivan-Bornyakov/fpga-microsemi-spi-add-Microsemi-FPGA-manager/20220214-222923
+        git checkout 19d9c174f03a9b8387ba654d558351cac9d63d24
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash drivers/fpga/
 
-Instead of calling the signal right away, for PREEMPT_RT and x86,
-the signal information is stored on the stacks task_struct and
-TIF_NOTIFY_RESUME is set. Then on exit of the trap, the signal resume
-code will send the signal when preemption is enabled.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-[ rostedt: Switched from #ifdef CONFIG_PREEMPT_RT to
-  ARCH_RT_DELAYS_SIGNAL_SEND and added comments to the code. ]
-[bigeasy: Add on 32bit as per Yang Shi, minor rewording. ]
+All warnings (new ones prefixed by >>):
 
-Signed-off-by: Oleg Nesterov <oleg@redhat.com>
-Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+   In file included from include/linux/device.h:15,
+                    from include/linux/spi/spi.h:10,
+                    from drivers/fpga/microsemi-spi.c:7:
+   drivers/fpga/microsemi-spi.c: In function 'microsemi_fpga_ops_write':
+>> drivers/fpga/microsemi-spi.c:244:30: warning: format '%d' expects argument of type 'int', but argument 3 has type 'ssize_t' {aka 'long int'} [-Wformat=]
+     244 |                 dev_err(dev, "Failed to find bitstream start %d\n",
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
+     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~~~~~
+   drivers/fpga/microsemi-spi.c:244:17: note: in expansion of macro 'dev_err'
+     244 |                 dev_err(dev, "Failed to find bitstream start %d\n",
+         |                 ^~~~~~~
+   drivers/fpga/microsemi-spi.c:244:63: note: format string is defined here
+     244 |                 dev_err(dev, "Failed to find bitstream start %d\n",
+         |                                                              ~^
+         |                                                               |
+         |                                                               int
+         |                                                              %ld
+   In file included from include/linux/device.h:15,
+                    from include/linux/spi/spi.h:10,
+                    from drivers/fpga/microsemi-spi.c:7:
+   drivers/fpga/microsemi-spi.c:252:30: warning: format '%d' expects argument of type 'int', but argument 3 has type 'ssize_t' {aka 'long int'} [-Wformat=]
+     252 |                 dev_err(dev, "Failed to parse bitstream size %d\n",
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
+     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~~~~~
+   drivers/fpga/microsemi-spi.c:252:17: note: in expansion of macro 'dev_err'
+     252 |                 dev_err(dev, "Failed to parse bitstream size %d\n",
+         |                 ^~~~~~~
+   drivers/fpga/microsemi-spi.c:252:63: note: format string is defined here
+     252 |                 dev_err(dev, "Failed to parse bitstream size %d\n",
+         |                                                              ~^
+         |                                                               |
+         |                                                               int
+         |                                                              %ld
+   In file included from include/linux/device.h:15,
+                    from include/linux/spi/spi.h:10,
+                    from drivers/fpga/microsemi-spi.c:7:
+   drivers/fpga/microsemi-spi.c:260:25: warning: format '%d' expects argument of type 'int', but argument 3 has type 'ssize_t' {aka 'long int'} [-Wformat=]
+     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
+     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~~~~~
+   drivers/fpga/microsemi-spi.c:259:17: note: in expansion of macro 'dev_err'
+     259 |                 dev_err(dev,
+         |                 ^~~~~~~
+   drivers/fpga/microsemi-spi.c:260:70: note: format string is defined here
+     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
+         |                                                                     ~^
+         |                                                                      |
+         |                                                                      int
+         |                                                                     %ld
+   In file included from include/linux/device.h:15,
+                    from include/linux/spi/spi.h:10,
+                    from drivers/fpga/microsemi-spi.c:7:
+   drivers/fpga/microsemi-spi.c:260:25: warning: format '%d' expects argument of type 'int', but argument 4 has type 'ssize_t' {aka 'long int'} [-Wformat=]
+     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
+     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~~~~~
+   drivers/fpga/microsemi-spi.c:259:17: note: in expansion of macro 'dev_err'
+     259 |                 dev_err(dev,
+         |                 ^~~~~~~
+   drivers/fpga/microsemi-spi.c:260:89: note: format string is defined here
+     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
+         |                                                                                        ~^
+         |                                                                                         |
+         |                                                                                         int
+         |                                                                                        %ld
+   In file included from include/linux/device.h:15,
+                    from include/linux/spi/spi.h:10,
+                    from drivers/fpga/microsemi-spi.c:7:
+>> drivers/fpga/microsemi-spi.c:260:25: warning: format '%d' expects argument of type 'int', but argument 5 has type 'size_t' {aka 'long unsigned int'} [-Wformat=]
+     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
+     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~~~~~
+   drivers/fpga/microsemi-spi.c:259:17: note: in expansion of macro 'dev_err'
+     259 |                 dev_err(dev,
+         |                 ^~~~~~~
+   drivers/fpga/microsemi-spi.c:260:107: note: format string is defined here
+     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
+         |                                                                                                          ~^
+         |                                                                                                           |
+         |                                                                                                           int
+         |                                                                                                          %ld
+   In file included from include/linux/device.h:15,
+                    from include/linux/spi/spi.h:10,
+                    from drivers/fpga/microsemi-spi.c:7:
+   drivers/fpga/microsemi-spi.c:274:33: warning: format '%d' expects argument of type 'int', but argument 4 has type 'ssize_t' {aka 'long int'} [-Wformat=]
+     274 |                                 "Failed to write bitstream frame number %d of %d\n",
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
+     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~~~~~
+   drivers/fpga/microsemi-spi.c:273:25: note: in expansion of macro 'dev_err'
+     273 |                         dev_err(dev,
+         |                         ^~~~~~~
+   drivers/fpga/microsemi-spi.c:274:80: note: format string is defined here
+     274 |                                 "Failed to write bitstream frame number %d of %d\n",
+         |                                                                               ~^
+         |                                                                                |
+         |                                                                                int
+         |                                                                               %ld
+
+
+vim +244 drivers/fpga/microsemi-spi.c
+
+   225	
+   226	static int microsemi_fpga_ops_write(struct fpga_manager *mgr, const char *buf,
+   227					    size_t count)
+   228	{
+   229		ssize_t bitstream_start = 0, bitstream_size;
+   230		struct microsemi_fpga_priv *priv = mgr->priv;
+   231		struct spi_device *spi = priv->spi;
+   232		struct device *dev = &mgr->dev;
+   233		u8 tmp_buf[SPI_FRAME_SIZE + 1];
+   234		int ret, i;
+   235	
+   236		if (crc_ccitt(0, buf, count)) {
+   237			dev_err(dev, "CRC error\n");
+   238	
+   239			return -EINVAL;
+   240		}
+   241	
+   242		bitstream_start = lookup_block_start(BITSTREAM_ID, buf, count);
+   243		if (bitstream_start < 0) {
+ > 244			dev_err(dev, "Failed to find bitstream start %d\n",
+   245				bitstream_start);
+   246	
+   247			return bitstream_start;
+   248		}
+   249	
+   250		bitstream_size = parse_bitstream_size(buf, count);
+   251		if (bitstream_size < 0) {
+   252			dev_err(dev, "Failed to parse bitstream size %d\n",
+   253				bitstream_size);
+   254	
+   255			return bitstream_size;
+   256		}
+   257	
+   258		if (bitstream_start + bitstream_size * SPI_FRAME_SIZE > count) {
+   259			dev_err(dev,
+ > 260				"Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
+   261				bitstream_start, bitstream_size * SPI_FRAME_SIZE, count);
+   262	
+   263			return -EFAULT;
+   264		}
+   265	
+   266		for (i = 0; i < bitstream_size; i++) {
+   267			tmp_buf[0] = SPI_FRAME;
+   268			memcpy(tmp_buf + 1, buf + bitstream_start + i * SPI_FRAME_SIZE,
+   269			       SPI_FRAME_SIZE);
+   270	
+   271			ret = microsemi_spi_write(spi, tmp_buf, sizeof(tmp_buf));
+   272			if (ret) {
+   273				dev_err(dev,
+   274					"Failed to write bitstream frame number %d of %d\n",
+   275					i, bitstream_size);
+   276	
+   277				return ret;
+   278			}
+   279		}
+   280	
+   281		return 0;
+   282	}
+   283	
+
 ---
- arch/x86/include/asm/signal.h | 13 +++++++++++++
- include/linux/sched.h         |  3 +++
- kernel/entry/common.c         |  9 +++++++++
- kernel/signal.c               | 28 ++++++++++++++++++++++++++++
- 4 files changed, 53 insertions(+)
-
-diff --git a/arch/x86/include/asm/signal.h b/arch/x86/include/asm/signal.h
-index 2dfb5fea13aff..fc03f4f7ed84c 100644
---- a/arch/x86/include/asm/signal.h
-+++ b/arch/x86/include/asm/signal.h
-@@ -28,6 +28,19 @@ typedef struct {
- #define SA_IA32_ABI	0x02000000u
- #define SA_X32_ABI	0x01000000u
- 
-+/*
-+ * Because some traps use the IST stack, we must keep preemption
-+ * disabled while calling do_trap(), but do_trap() may call
-+ * force_sig_info() which will grab the signal spin_locks for the
-+ * task, which in PREEMPT_RT are mutexes.  By defining
-+ * ARCH_RT_DELAYS_SIGNAL_SEND the force_sig_info() will set
-+ * TIF_NOTIFY_RESUME and set up the signal to be sent on exit of the
-+ * trap.
-+ */
-+#if defined(CONFIG_PREEMPT_RT)
-+#define ARCH_RT_DELAYS_SIGNAL_SEND
-+#endif
-+
- #ifndef CONFIG_COMPAT
- #define compat_sigset_t compat_sigset_t
- typedef sigset_t compat_sigset_t;
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 75ba8aa60248b..0514237cee3fc 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1087,6 +1087,9 @@ struct task_struct {
- 	/* Restored if set_restore_sigmask() was used: */
- 	sigset_t			saved_sigmask;
- 	struct sigpending		pending;
-+#ifdef CONFIG_PREEMPT_RT
-+	struct				kernel_siginfo forced_info;
-+#endif
- 	unsigned long			sas_ss_sp;
- 	size_t				sas_ss_size;
- 	unsigned int			sas_ss_flags;
-diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-index bad713684c2e3..216dbf46e05f5 100644
---- a/kernel/entry/common.c
-+++ b/kernel/entry/common.c
-@@ -162,6 +162,15 @@ static unsigned long exit_to_user_mode_loop(struct pt_regs *regs,
- 		if (ti_work & _TIF_NEED_RESCHED)
- 			schedule();
- 
-+#ifdef ARCH_RT_DELAYS_SIGNAL_SEND
-+		if (unlikely(current->forced_info.si_signo)) {
-+			struct task_struct *t = current;
-+
-+			force_sig_info(&t->forced_info);
-+			t->forced_info.si_signo = 0;
-+		}
-+#endif
-+
- 		if (ti_work & _TIF_UPROBE)
- 			uprobe_notify_resume(regs);
- 
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 9b04631acde8f..cb2b28c17c0a5 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -1327,6 +1327,34 @@ force_sig_info_to_task(struct kernel_siginfo *info, struct task_struct *t,
- 	struct k_sigaction *action;
- 	int sig = info->si_signo;
- 
-+	/*
-+	 * On some archs, PREEMPT_RT has to delay sending a signal from a trap
-+	 * since it can not enable preemption, and the signal code's spin_locks
-+	 * turn into mutexes. Instead, it must set TIF_NOTIFY_RESUME which will
-+	 * send the signal on exit of the trap.
-+	 */
-+#ifdef ARCH_RT_DELAYS_SIGNAL_SEND
-+	if (in_atomic()) {
-+		struct task_struct *t = current;
-+
-+		if (WARN_ON_ONCE(t->forced_info.si_signo))
-+			return 0;
-+
-+		if (is_si_special(info)) {
-+			WARN_ON_ONCE(info != SEND_SIG_PRIV);
-+			t->forced_info.si_signo = info->si_signo;
-+			t->forced_info.si_errno = 0;
-+			t->forced_info.si_code = SI_KERNEL;
-+			t->forced_info.si_pid = 0;
-+			t->forced_info.si_uid = 0;
-+		} else {
-+			t->forced_info = *info;
-+		}
-+
-+		set_tsk_thread_flag(t, TIF_NOTIFY_RESUME);
-+		return 0;
-+	}
-+#endif
- 	spin_lock_irqsave(&t->sighand->siglock, flags);
- 	action = &t->sighand->action[sig-1];
- 	ignored = action->sa.sa_handler == SIG_IGN;
--- 
-2.34.1
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

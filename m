@@ -2,329 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5E14B564F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C8C4B5671
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:36:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356414AbiBNQeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 11:34:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41672 "EHLO
+        id S1356547AbiBNQgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 11:36:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238571AbiBNQeR (ORCPT
+        with ESMTP id S1356447AbiBNQfv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 11:34:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D19DB0C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:34:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644856448;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bnJv2ShJTmuSWk3H5y3+1wz11d3NYIxxQwywrLGlhvI=;
-        b=NrYNl3mksT/ZY8hcvdcfc8DEB6nzJNQbgfNmYOqtYAd5HIZobUlJaA2Yx9BqZGBeiGjmmW
-        HyUW0mWJWHXZFXzwbSrqWT9Zknr3UP1KY2kWw+fe9Hcu2ZXx2E/NPXQOgLYqJu9gJWQB6o
-        znUx8Cun60A5IlhQXtht3t5XK84nWz0=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-661-aY3AtcbDNamqN8tQ36641Q-1; Mon, 14 Feb 2022 11:34:05 -0500
-X-MC-Unique: aY3AtcbDNamqN8tQ36641Q-1
-Received: by mail-ej1-f70.google.com with SMTP id k16-20020a17090632d000b006ae1cdb0f07so6078198ejk.16
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:34:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bnJv2ShJTmuSWk3H5y3+1wz11d3NYIxxQwywrLGlhvI=;
-        b=yppF5t4uLOt5qcBi31w5vvM/biXfFUtwUJCFtaTfJVdGXoxnOxx4dK51f+rYVjhQSH
-         4wH+4sQpAWo8wXV9okL5c8StOoNkTtYqrpEcSaVT52zZ3WTmOnillPYP6Rwo8THz/5I2
-         qgBAGgfjKWZYExz79ZT9q7gMMTWuHyltbI1KsU1z70bETMQ27I0Mzu2GpBVqgcVr9nOd
-         K/XwqFINUpw1CNH5rCh1I+uGwGIRrZyppJJWEHcGfNzFw+9ALiFgt4n4buCCxOYTYtx+
-         ozgJe60Pw2JRqdBjepEtsJJSbIwARlg9q6NEC+IcCLcryTH9/oAG8VEmZIKU9/F1hRFB
-         3/bw==
-X-Gm-Message-State: AOAM531dR1Q3moKPljtGuryQ9dIqodYaIUTl3e9Ra7dw3RYm6coVtFfm
-        pWYa9dB90nen5iER0ClE5XrLaGYj8u3M1XS15PeBDORKFoJZS71YyyOwWqbNMY7GYj6wtsZFgg/
-        jCR5JrN5APCD9LbWoEFnzrGxD
-X-Received: by 2002:a05:6402:50cf:: with SMTP id h15mr459260edb.102.1644856444496;
-        Mon, 14 Feb 2022 08:34:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwHDn0Qv6ErJnLxfiZUYl0VnR3xG3LEH29KUSclXdk6hXFCyl8l4gAulUVbddEil5pByefsPw==
-X-Received: by 2002:a05:6402:50cf:: with SMTP id h15mr459230edb.102.1644856444130;
-        Mon, 14 Feb 2022 08:34:04 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id u2sm10727962ejb.127.2022.02.14.08.34.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 08:34:03 -0800 (PST)
-Message-ID: <5f42d1ef-f6b7-c339-32b9-f4cf48c21841@redhat.com>
-Date:   Mon, 14 Feb 2022 17:34:02 +0100
+        Mon, 14 Feb 2022 11:35:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7460460D88;
+        Mon, 14 Feb 2022 08:35:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10E276145A;
+        Mon, 14 Feb 2022 16:35:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D20C340E9;
+        Mon, 14 Feb 2022 16:35:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644856542;
+        bh=NCPtyXY6GSVFAxA9xMH/uI0qVAvzui4f6HWShmHq7S4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AD+OGCC91QW3gC/dZKsZFSSWI0QKTWjyYSyPe3ESJoZsA18Yxd+6C2XmKbO+BufBV
+         pgOTeKAy/H78mpdds/cyxQ3VhN4bBP5a5vjc0WbkFTjxn+hvTh5aHadh4RocZ3TKWZ
+         eb6b0ouxjuiSDysMNzxh//PeMK4OQFXVj3bLmv5B1B7q8Uq/AO4RDRlThvSeYzr3Ly
+         Gc0VXxNLiJ5WO1pIX67udGR/GCDjJQpiIxvmjGV1mzioNZwxT26v6bU0vORAmaN8AJ
+         nAspwe5m/jH1WNhsqM0Qybjj0jz1yeUDm3LP9c3MsBrk2+9J1cYolEm51L9D0B9ZO/
+         R/tiDrFKWPKmA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org
+Cc:     linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
+        bcain@codeaurora.org, geert@linux-m68k.org, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, nickhu@andestech.com,
+        green.hu@gmail.com, dinguyen@kernel.org, shorne@gmail.com,
+        deller@gmx.de, mpe@ellerman.id.au, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com, hca@linux.ibm.com,
+        dalias@libc.org, davem@davemloft.net, richard@nod.at,
+        x86@kernel.org, jcmvbkbc@gmail.com, ebiederm@xmission.com,
+        akpm@linux-foundation.org, ardb@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org
+Subject: [PATCH 00/14] clean up asm/uaccess.h, kill set_fs for good
+Date:   Mon, 14 Feb 2022 17:34:38 +0100
+Message-Id: <20220214163452.1568807-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 12/12] KVM: x86: do not unload MMU roots on all role
- changes
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        vkuznets@redhat.com, mlevitsk@redhat.com, dmatlack@google.com
-References: <20220209170020.1775368-1-pbonzini@redhat.com>
- <20220209170020.1775368-13-pbonzini@redhat.com> <YgavcP/jb5njjKKn@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YgavcP/jb5njjKKn@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/11/22 19:48, Sean Christopherson wrote:
-> On Wed, Feb 09, 2022, Paolo Bonzini wrote:
->> kvm_mmu_reset_context is called on all role changes and right now it
->> calls kvm_mmu_unload.  With the legacy MMU this is a relatively cheap
->> operation; the previous PGDs remains in the hash table and is picked
->> up immediately on the next page fault.  With the TDP MMU, however, the
->> roots are thrown away for good and a full rebuild of the page tables is
->> necessary, which is many times more expensive.
->>
->> Fortunately, throwing away the roots is not necessary except when
->> the manual says a TLB flush is required:
->>
->> - changing CR0.PG from 1 to 0 (because it flushes the TLB according to
->>    the x86 architecture specification)
->>
->> - changing CPUID (which changes the interpretation of page tables in
->>    ways not reflected by the role).
->>
->> - changing CR4.SMEP from 0 to 1 (not doing so actually breaks access.c!)
->>
->> Except for these cases, once the MMU has updated the CPU/MMU roles
->> and metadata it is enough to force-reload the current value of CR3.
->> KVM will look up the cached roots for an entry with the right role and
->> PGD, and only if the cache misses a new root will be created.
->>
->> Measuring with vmexit.flat from kvm-unit-tests shows the following
->> improvement:
->>
->>               TDP         legacy       shadow
->>     before    46754       5096         5150
->>     after     4879        4875         5006
->>
->> which is for very small page tables.  The impact is however much larger
->> when running as an L1 hypervisor, because the new page tables cause
->> extra work for L0 to shadow them.
->>
->> Reported-by: Brad Spengler <spender@grsecurity.com>
->> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
->> ---
->>   arch/x86/kvm/mmu/mmu.c |  7 ++++---
->>   arch/x86/kvm/x86.c     | 27 ++++++++++++++++++---------
->>   2 files changed, 22 insertions(+), 12 deletions(-)
->>
->> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
->> index 38b40ddcaad7..dbd4e98ba426 100644
->> --- a/arch/x86/kvm/mmu/mmu.c
->> +++ b/arch/x86/kvm/mmu/mmu.c
->> @@ -5020,8 +5020,8 @@ EXPORT_SYMBOL_GPL(kvm_init_mmu);
->>   void kvm_mmu_after_set_cpuid(struct kvm_vcpu *vcpu)
->>   {
->>   	/*
->> -	 * Invalidate all MMU roles to force them to reinitialize as CPUID
->> -	 * information is factored into reserved bit calculations.
->> +	 * Invalidate all MMU roles and roots to force them to reinitialize,
->> +	 * as CPUID information is factored into reserved bit calculations.
->>   	 *
->>   	 * Correctly handling multiple vCPU models with respect to paging and
->>   	 * physical address properties) in a single VM would require tracking
->> @@ -5034,6 +5034,7 @@ void kvm_mmu_after_set_cpuid(struct kvm_vcpu *vcpu)
->>   	vcpu->arch.root_mmu.mmu_role.ext.valid = 0;
->>   	vcpu->arch.guest_mmu.mmu_role.ext.valid = 0;
->>   	vcpu->arch.nested_mmu.mmu_role.ext.valid = 0;
->> +	kvm_mmu_unload(vcpu);
->>   	kvm_mmu_reset_context(vcpu);
->>   
->>   	/*
->> @@ -5045,8 +5046,8 @@ void kvm_mmu_after_set_cpuid(struct kvm_vcpu *vcpu)
->>   
->>   void kvm_mmu_reset_context(struct kvm_vcpu *vcpu)
->>   {
->> -	kvm_mmu_unload(vcpu);
->>   	kvm_init_mmu(vcpu);
->> +	kvm_mmu_new_pgd(vcpu, vcpu->arch.cr3);
-> 
-> This is too risky IMO, there are far more flows than just MOV CR0/CR4 that are
-> affected, e.g. SMM transitions, KVM_SET_SREG, etc...
+From: Arnd Bergmann <arnd@arndb.de>
 
-SMM exit does flush the TLB because RSM clears CR0.PG (I did check this 
-:)).  SMM re-entry then does not need to flush.  But I don't think SMM 
-exit should flush the TLB *for non-SMM roles*.
+Christoph Hellwig and a few others spent a huge effort on removing
+set_fs() from most of the important architectures, but about half the
+other architectures were never completed even though most of them don't
+actually use set_fs() at all.
 
-For KVM_SET_SREGS I'm not sure if it should flush the TLB, but I agree 
-it is certainly safer to keep it that way.
+I did a patch for microblaze at some point, which turned out to be fairly
+generic, and now ported it to most other architectures, using new generic
+implementations of access_ok() and __{get,put}_kernel_nocheck().
 
-> Given that kvm_post_set_cr{0,4}() and kvm_vcpu_reset() explicitly handle CR0.PG
-> and CR4.SMEP toggling, I highly doubt the other flows are correct in all instances.
-> The call to kvm_mmu_new_pgd() is also
+Three architectures (sparc64, ia64, and sh) needed some extra work,
+which I also completed.
 
-*white noise*
+The final series contains extra cleanup changes that touch all
+architectures. Please review and test these, so we can merge them
+for v5.18.
 
-> To minimize risk, we should leave kvm_mmu_reset_context() as is (rename it if
-> necessary) and instead add a new helper to handle kvm_post_set_cr{0,4}().  In
-> the future we can/should work on avoiding unload in all paths, but again, future
-> problem.
+The series is available at
+https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/log/?h=set_fs
+for testing.
 
-I disagree on this.  There aren't many calls to kvm_mmu_reset_context.
+       Arnd
 
->>   
->> -	if ((cr0 ^ old_cr0) & KVM_MMU_CR0_ROLE_BITS)
->> +	if ((cr0 ^ old_cr0) & KVM_MMU_CR0_ROLE_BITS) {
->> +		/* Flush the TLB if CR0 is changed 1 -> 0.  */
->> +		if ((old_cr0 & X86_CR0_PG) && !(cr0 & X86_CR0_PG))
->> +			kvm_mmu_unload(vcpu);
-> 
-> Calling kvm_mmu_unload() instead of requesting a flush isn't coherent with respect
-> to the comment, or with SMEP handling.  And the SMEP handling isn't coherent with
-> respect to the changelog.  Please elaborate :-)
+Arnd Bergmann (14):
+  uaccess: fix integer overflow on access_ok()
+  sparc64: add __{get,put}_kernel_nocheck()
+  nds32: fix access_ok() checks in get/put_user
+  x86: use more conventional access_ok() definition
+  uaccess: add generic __{get,put}_kernel_nofault
+  mips: use simpler access_ok()
+  uaccess: generalize access_ok()
+  arm64: simplify access_ok()
+  m68k: drop custom __access_ok()
+  uaccess: remove most CONFIG_SET_FS users
+  sparc64: remove CONFIG_SET_FS support
+  sh: remove CONFIG_SET_FS support
+  ia64: remove CONFIG_SET_FS support
+  uaccess: drop set_fs leftovers
 
-Yep, will do (the CR0.PG=0 case is similar to the CR0.PCIDE=0 case 
-below).  Using kvm_mmu_unload() avoids loading a cached root just to 
-throw it away immediately after, but I can change this to a new 
-KVM_REQ_MMU_UPDATE_ROOT flag that does
+ arch/Kconfig                              |   3 -
+ arch/alpha/Kconfig                        |   1 -
+ arch/alpha/include/asm/processor.h        |   4 -
+ arch/alpha/include/asm/thread_info.h      |   2 -
+ arch/alpha/include/asm/uaccess.h          |  53 +--------
+ arch/arc/Kconfig                          |   1 -
+ arch/arc/include/asm/segment.h            |  20 ----
+ arch/arc/include/asm/thread_info.h        |   3 -
+ arch/arc/include/asm/uaccess.h            |  30 -----
+ arch/arm/include/asm/uaccess.h            |  22 +---
+ arch/arm/kernel/swp_emulate.c             |   2 +-
+ arch/arm/kernel/traps.c                   |   2 +-
+ arch/arm/lib/uaccess_with_memcpy.c        |  10 --
+ arch/arm64/include/asm/uaccess.h          |  29 +----
+ arch/csky/Kconfig                         |   1 -
+ arch/csky/include/asm/processor.h         |   2 -
+ arch/csky/include/asm/segment.h           |  10 --
+ arch/csky/include/asm/thread_info.h       |   2 -
+ arch/csky/include/asm/uaccess.h           |  12 --
+ arch/csky/kernel/asm-offsets.c            |   1 -
+ arch/csky/kernel/signal.c                 |   2 +-
+ arch/h8300/Kconfig                        |   1 -
+ arch/h8300/include/asm/processor.h        |   1 -
+ arch/h8300/include/asm/segment.h          |  40 -------
+ arch/h8300/include/asm/thread_info.h      |   3 -
+ arch/h8300/kernel/entry.S                 |   1 -
+ arch/h8300/kernel/head_ram.S              |   1 -
+ arch/h8300/mm/init.c                      |   6 -
+ arch/h8300/mm/memory.c                    |   1 -
+ arch/hexagon/Kconfig                      |   1 -
+ arch/hexagon/include/asm/thread_info.h    |   6 -
+ arch/hexagon/include/asm/uaccess.h        |  25 ----
+ arch/hexagon/kernel/process.c             |   1 -
+ arch/ia64/Kconfig                         |   1 -
+ arch/ia64/include/asm/processor.h         |   4 -
+ arch/ia64/include/asm/thread_info.h       |   2 -
+ arch/ia64/include/asm/uaccess.h           |  26 ++---
+ arch/ia64/kernel/unaligned.c              |  60 ++++++----
+ arch/m68k/include/asm/uaccess.h           |  14 +--
+ arch/microblaze/Kconfig                   |   1 -
+ arch/microblaze/include/asm/thread_info.h |   6 -
+ arch/microblaze/include/asm/uaccess.h     |  43 +------
+ arch/microblaze/kernel/asm-offsets.c      |   1 -
+ arch/microblaze/kernel/process.c          |   1 -
+ arch/mips/include/asm/uaccess.h           |  47 +-------
+ arch/nds32/Kconfig                        |   1 -
+ arch/nds32/include/asm/thread_info.h      |   4 -
+ arch/nds32/include/asm/uaccess.h          |  40 +++----
+ arch/nds32/kernel/process.c               |   5 +-
+ arch/nds32/mm/alignment.c                 |   3 -
+ arch/nios2/Kconfig                        |   1 -
+ arch/nios2/include/asm/thread_info.h      |   9 --
+ arch/nios2/include/asm/uaccess.h          |  23 +---
+ arch/nios2/kernel/signal.c                |  20 ++--
+ arch/openrisc/Kconfig                     |   1 -
+ arch/openrisc/include/asm/thread_info.h   |   7 --
+ arch/openrisc/include/asm/uaccess.h       |  42 +------
+ arch/parisc/include/asm/futex.h           |   2 +-
+ arch/parisc/include/asm/uaccess.h         |  11 +-
+ arch/parisc/lib/memcpy.c                  |   2 +-
+ arch/powerpc/include/asm/uaccess.h        |  13 +--
+ arch/powerpc/lib/sstep.c                  |   4 +-
+ arch/riscv/include/asm/uaccess.h          |  33 +-----
+ arch/riscv/kernel/perf_callchain.c        |   2 +-
+ arch/s390/include/asm/uaccess.h           |  13 +--
+ arch/sh/Kconfig                           |   1 -
+ arch/sh/include/asm/processor.h           |   1 -
+ arch/sh/include/asm/segment.h             |  33 ------
+ arch/sh/include/asm/thread_info.h         |   2 -
+ arch/sh/include/asm/uaccess.h             |  24 +---
+ arch/sh/kernel/io_trapped.c               |   9 +-
+ arch/sh/kernel/process_32.c               |   2 -
+ arch/sh/kernel/traps_32.c                 |  30 +++--
+ arch/sparc/Kconfig                        |   1 -
+ arch/sparc/include/asm/processor_32.h     |   6 -
+ arch/sparc/include/asm/processor_64.h     |   4 -
+ arch/sparc/include/asm/switch_to_64.h     |   4 +-
+ arch/sparc/include/asm/thread_info_64.h   |   4 +-
+ arch/sparc/include/asm/uaccess.h          |   3 -
+ arch/sparc/include/asm/uaccess_32.h       |  31 +----
+ arch/sparc/include/asm/uaccess_64.h       | 135 +++++++++++++---------
+ arch/sparc/kernel/process_32.c            |   2 -
+ arch/sparc/kernel/process_64.c            |  12 --
+ arch/sparc/kernel/signal_32.c             |   2 +-
+ arch/sparc/kernel/traps_64.c              |   2 -
+ arch/sparc/lib/NGmemcpy.S                 |   3 +-
+ arch/sparc/mm/init_64.c                   |   3 -
+ arch/um/include/asm/uaccess.h             |   7 +-
+ arch/x86/include/asm/uaccess.h            |  44 ++-----
+ arch/xtensa/Kconfig                       |   1 -
+ arch/xtensa/include/asm/asm-uaccess.h     |  71 ------------
+ arch/xtensa/include/asm/processor.h       |   7 --
+ arch/xtensa/include/asm/thread_info.h     |   3 -
+ arch/xtensa/include/asm/uaccess.h         |  26 +----
+ arch/xtensa/kernel/asm-offsets.c          |   3 -
+ drivers/hid/uhid.c                        |   2 +-
+ drivers/scsi/sg.c                         |   5 -
+ fs/exec.c                                 |   6 -
+ include/asm-generic/access_ok.h           |  51 ++++++++
+ include/asm-generic/uaccess.h             |  46 +-------
+ include/linux/syscalls.h                  |   4 -
+ include/linux/uaccess.h                   |  59 +++-------
+ include/rdma/ib.h                         |   2 +-
+ kernel/events/callchain.c                 |   4 -
+ kernel/events/core.c                      |   3 -
+ kernel/exit.c                             |  14 ---
+ kernel/kthread.c                          |   5 -
+ kernel/stacktrace.c                       |   3 -
+ kernel/trace/bpf_trace.c                  |   4 -
+ mm/maccess.c                              | 119 -------------------
+ mm/memory.c                               |   8 --
+ net/bpfilter/bpfilter_kern.c              |   2 +-
+ 112 files changed, 315 insertions(+), 1239 deletions(-)
+ delete mode 100644 arch/arc/include/asm/segment.h
+ delete mode 100644 arch/csky/include/asm/segment.h
+ delete mode 100644 arch/h8300/include/asm/segment.h
+ delete mode 100644 arch/sh/include/asm/segment.h
+ create mode 100644 include/asm-generic/access_ok.h
 
-	kvm_mmu_new_pgd(vcpu, vcpu->arch.cr3);
+-- 
+2.29.2
 
-By the way, I have a possibly stupid question.  In kvm_set_cr3 (called 
-e.g. from emulator_set_cr()) there is
-
-  	if (cr3 != kvm_read_cr3(vcpu))
-		kvm_mmu_new_pgd(vcpu, cr3);
-
-What makes this work if mmu_is_nested(vcpu)?  Should this also have an 
-"if (... & !tdp_enabled)"?
-
->> -	else if ((cr4 ^ old_cr4) & X86_CR4_PCIDE)
->> +		if ((cr4 & X86_CR4_SMEP) && !(old_cr4 & X86_CR4_SMEP))
->> +			kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
-> 
-> This mishandles CR4.PGE.  Per the comment above, the if-elif-elif sequence relies
-> on kvm_mmu_reset_context being a superset of KVM_REQ_TLB_FLUSH_GUEST.
-> 
-> For both CR0 and CR4, I think we should disassociate the TLB flush logic from the
-> MMU role logic, e.g. CR4.PGE _could_ be part of the role, but it's not because KVM
-> doesn't emulate global pages.
-
-Makes sense, yes.  It also needs to handle flushing the current PCID 
-when changing CR4.PAE (previously done for "free" by 
-kvm_mmu_reset_context), but I agree with the idea.
-
-Paolo
-
-> This is what I'm thinking, assuming CR0.PG 1=>0 really only needs a flush.
-> 
-> 
-> ---
->   arch/x86/kvm/mmu/mmu.c |  4 ++--
->   arch/x86/kvm/x86.c     | 42 +++++++++++++++++++++++++++++-------------
->   2 files changed, 31 insertions(+), 15 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index e41834748d52..c477c519c784 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -5041,8 +5041,8 @@ EXPORT_SYMBOL_GPL(kvm_init_mmu);
->   void kvm_mmu_after_set_cpuid(struct kvm_vcpu *vcpu)
->   {
->   	/*
-> -	 * Invalidate all MMU roles to force them to reinitialize as CPUID
-> -	 * information is factored into reserved bit calculations.
-> +	 * Invalidate all MMU roles and roots to force them to reinitialize,
-> +	 * as CPUID information is factored into reserved bit calculations.
->   	 *
->   	 * Correctly handling multiple vCPU models with respect to paging and
->   	 * physical address properties) in a single VM would require tracking
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 782dc9cd31d8..b8dad04301ee 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -863,15 +863,28 @@ int load_pdptrs(struct kvm_vcpu *vcpu, unsigned long cr3)
->   }
->   EXPORT_SYMBOL_GPL(load_pdptrs);
-> 
-> +static void kvm_post_set_cr_reinit_mmu(struct kvm_vcpu *vcpu)
-> +{
-> +	kvm_mmu_init(vcpu);
-> +	kvm_mmu_new_pgd(vcpu, vcpu->arch.cr3);
-> +}
-> +
->   void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned long cr0)
->   {
->   	if ((cr0 ^ old_cr0) & X86_CR0_PG) {
->   		kvm_clear_async_pf_completion_queue(vcpu);
->   		kvm_async_pf_hash_reset(vcpu);
-> +
-> +		/*
-> +		 * Clearing CR0.PG is architecturally defined as flushing the
-> +		 * TLB from the guest's perspective.
-> +		 */
-> +		if (!(cr0 & X86_CR0_PG))
-> +			kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
->   	}
-> 
->   	if ((cr0 ^ old_cr0) & KVM_MMU_CR0_ROLE_BITS)
-> -		kvm_mmu_reset_context(vcpu);
-> +		kvm_post_set_cr_reinit_mmu(vcpu);
-> 
->   	if (((cr0 ^ old_cr0) & X86_CR0_CD) &&
->   	    kvm_arch_has_noncoherent_dma(vcpu->kvm) &&
-> @@ -1055,26 +1068,29 @@ EXPORT_SYMBOL_GPL(kvm_is_valid_cr4);
->   void kvm_post_set_cr4(struct kvm_vcpu *vcpu, unsigned long old_cr4, unsigned long cr4)
->   {
->   	/*
-> -	 * If any role bit is changed, the MMU needs to be reset.
-> -	 *
->   	 * If CR4.PCIDE is changed 1 -> 0, the guest TLB must be flushed.
->   	 * If CR4.PCIDE is changed 0 -> 1, there is no need to flush the TLB
->   	 * according to the SDM; however, stale prev_roots could be reused
->   	 * incorrectly in the future after a MOV to CR3 with NOFLUSH=1, so we
->   	 * free them all.  KVM_REQ_MMU_RELOAD is fit for the both cases; it
->   	 * is slow, but changing CR4.PCIDE is a rare case.
-> -	 *
-> -	 * If CR4.PGE is changed, the guest TLB must be flushed.
-> -	 *
-> -	 * Note: resetting MMU is a superset of KVM_REQ_MMU_RELOAD and
-> -	 * KVM_REQ_MMU_RELOAD is a superset of KVM_REQ_TLB_FLUSH_GUEST, hence
-> -	 * the usage of "else if".
->   	 */
-> -	if ((cr4 ^ old_cr4) & KVM_MMU_CR4_ROLE_BITS)
-> -		kvm_mmu_reset_context(vcpu);
-> -	else if ((cr4 ^ old_cr4) & X86_CR4_PCIDE)
-> +	if ((cr4 ^ old_cr4) & X86_CR4_PCIDE) {
->   		kvm_make_request(KVM_REQ_MMU_RELOAD, vcpu);
-> -	else if ((cr4 ^ old_cr4) & X86_CR4_PGE)
-> +		return;
-> +	}
-> +
-> +	/* If any role bit is changed, the MMU needs to be reinitialized. */
-> +	if ((cr4 ^ old_cr4) & KVM_MMU_CR4_ROLE_BITS)
-> +		kvm_post_set_cr_reinit_mmu(vcpu);
-> +
-> +	/*
-> +	 * Setting SMEP or toggling PGE is architecturally defined as flushing
-> +	 * the TLB from the guest's perspective.  Note, because the shadow MMU
-> +	 * ignores global pages, CR4.PGE is not part of KVM_MMU_CR4_ROLE_BITS.
-> +	 */
-> +	if (((cr4 ^ old_cr4) & X86_CR4_PGE) ||
-> +	    ((cr4 & X86_CR4_SMEP) && !(old_cr4 & X86_CR4_SMEP)))
->   		kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
->   }
->   EXPORT_SYMBOL_GPL(kvm_post_set_cr4);
-> 
-> base-commit: a8c36d04d70d0b15e696561e1a2134fcbdd3a3bd
-> --
-> 
-
+Cc: linux@armlinux.org.uk
+Cc: will@kernel.org
+Cc: guoren@kernel.org
+Cc: bcain@codeaurora.org
+Cc: geert@linux-m68k.org
+Cc: monstr@monstr.eu
+Cc: tsbogend@alpha.franken.de
+Cc: nickhu@andestech.com
+Cc: green.hu@gmail.com
+Cc: dinguyen@kernel.org
+Cc: shorne@gmail.com
+Cc: deller@gmx.de
+Cc: mpe@ellerman.id.au
+Cc: peterz@infradead.org
+Cc: mingo@redhat.com
+Cc: mark.rutland@arm.com
+Cc: hca@linux.ibm.com
+Cc: dalias@libc.org
+Cc: davem@davemloft.net
+Cc: richard@nod.at
+Cc: x86@kernel.org
+Cc: jcmvbkbc@gmail.com
+Cc: ebiederm@xmission.com
+Cc: arnd@arndb.de
+Cc: akpm@linux-foundation.org
+Cc: ardb@kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-alpha@vger.kernel.org
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-csky@vger.kernel.org
+Cc: linux-hexagon@vger.kernel.org
+Cc: linux-ia64@vger.kernel.org
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-mips@vger.kernel.org
+Cc: openrisc@lists.librecores.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-sh@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-um@lists.infradead.org
+Cc: linux-xtensa@linux-xtensa.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-mm@kvack.org

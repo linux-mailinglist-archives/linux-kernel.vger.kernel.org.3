@@ -2,177 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F30E4B5BB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8BE4B5CEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbiBNU6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 15:58:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48978 "EHLO
+        id S231479AbiBNVfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 16:35:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiBNU6s (ORCPT
+        with ESMTP id S231482AbiBNVfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 15:58:48 -0500
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B8F10E077;
-        Mon, 14 Feb 2022 12:58:29 -0800 (PST)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 21EIZBUr020780;
-        Mon, 14 Feb 2022 11:26:52 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=T6V4LHXl7pWgVCb27a9AEG0pjFy0DCaQDbp6lhGgros=;
- b=baK1YHQWvYWgvZYRF7tQBz6PvcaVZSUqG1i+k+tcCyi7k15ZzZCpZ0vq7W0UoMkbZys7
- fBjd94lG92oW6yPijrkujtUuxKD3dzV/QMjrpKR9l/nxVMoVCbEnXEPXw8PkMt9pi3N2
- YtMS5aaRQvOi0+KMwvlnzqrGsky3fTI15VY= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3e7q2eb1tq-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 14 Feb 2022 11:26:52 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.173) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 14 Feb 2022 11:26:51 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L1aGt8oQmO2ZsXzJLyXQC2ars3dtJvgbW/N+9Bi0VhGlTHHatkvn2la/D/SZ9Obz9JcAhn0TbiE9YnAxOxVf99n3P+QpHgoIXHSWfge1XKFKibfNllf9Sn4D+VzEgimTIXqPVdpeZHaTiw8uclAYb5FT2oQV0fS1GPamOe5oTmv9jpqKhyBO9jnbuzag8xRSmxCApDFQQaOdUzq1QHjnS3d8+hN1yKkVJbDCMaqpJjagYj+dPakcUgtTwK8sv35+jrhdqhM15gnt6pzVasMQhYgi7g0/35iyCli8hM6wRXiX+piJhnzqJZbwvo3sB0CHDYIjpdYnGK5W+sQf1lt2DA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=T6V4LHXl7pWgVCb27a9AEG0pjFy0DCaQDbp6lhGgros=;
- b=dBjM28SmP3NM0DfNG8haN+NUaeLap6RGvUuovZGu5hbav8Km2QRuk89K/Va1gW3mUXBQ+TI1zjFV7K3CCLs8ag60Lj9kPsV5hjbionEHbLGsrXxwl875Uj+pJt76ZXp4Es/UrS6B/9s5h2uxBxPWxkb+SYWTnA5g2jWmUy7qzZquQLdrWWpSYwAeFMgEWh/nyoU6Yr9JT6AH7bZ2QCvMeupeTSedglNQmaLRzL7RGaTG585mIC2chI/06EdlYF27CMCi3AaIk7JmKmuBNMotDo0CspOqTMgVt5MqdHRsgvaO17dN9mXt87nFVu3trGNQv6hTCyfME41ovrvH9mg8BQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from MN2PR15MB4287.namprd15.prod.outlook.com (2603:10b6:208:1b6::13)
- by DM5PR15MB1867.namprd15.prod.outlook.com (2603:10b6:4:51::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.19; Mon, 14 Feb
- 2022 19:26:49 +0000
-Received: from MN2PR15MB4287.namprd15.prod.outlook.com
- ([fe80::3102:7e69:9b1:3d30]) by MN2PR15MB4287.namprd15.prod.outlook.com
- ([fe80::3102:7e69:9b1:3d30%7]) with mapi id 15.20.4975.011; Mon, 14 Feb 2022
- 19:26:49 +0000
-From:   Chris Mason <clm@fb.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Giuseppe Scrivano <gscrivan@redhat.com>
-CC:     "riel@surriel.com" <riel@surriel.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Kernel Team <Kernel-team@fb.com>
-Subject: Re: [PATCH RFC fs/namespace] Make kern_unmount() use
- synchronize_rcu_expedited()
-Thread-Topic: [PATCH RFC fs/namespace] Make kern_unmount() use
- synchronize_rcu_expedited()
-Thread-Index: AQHYIdXuUKIGLuECw02OdpDhd3P0HqyTbfIA
-Date:   Mon, 14 Feb 2022 19:26:49 +0000
-Message-ID: <C88FC9A7-D6AD-4382-B74A-175922F57852@fb.com>
-References: <20220214190549.GA2815154@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220214190549.GA2815154@paulmck-ThinkPad-P17-Gen-1>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3693.60.0.1.1)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b2ca3dbc-7606-450b-d184-08d9efeff282
-x-ms-traffictypediagnostic: DM5PR15MB1867:EE_
-x-microsoft-antispam-prvs: <DM5PR15MB18674F9C0EE4BE2D35BDD3EFD3339@DM5PR15MB1867.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-oob-tlc-oobclassifiers: OLM:2803;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iBxF2M0f7PWoxThUVrGlgwe+CJ+uZqPvKgDu2EkHVXAfc/bBLOcj3kvwzMxotq3Mw0bKD/KkwJ2UwgijC5F2d5BRad8oKaGSE65HCXFer6AZ5VCeFQt0U1wdSNhWaN/Z03hmR5XfWjl4nZrXBlByvveRoG3CYPydypFXBTQ/aOwNoYzWjkfP+VyvjwVftNVuLDCy9HQeSJBUt/V+Rr+5OsK1VhpH+jGI0+iO1I19nsAA/PFZ/r7OrdJNiZGxsJ41UHbtWujbVymad5lDLAaHnVKhLuJLZCJoFC92YjWGGWF5agy909UNKePCrucAPICRbgNL3mlkilimHlQAPNPBdHgpbrEmWPMTJS338WOqnZfC9WFc3Is/RGQnoUbSo+Ezc+tm1uQi9Qh29RL8rws0uHRaPk9dzuH29/h/7DsrOrkW4/pCvxQC7HMCXWUqM+4lR5hJkFph0iKB/G86C+8uVUXeTY7reA0fnu+nJFXMIJ8dpxlaFET/pZvtJFcrzIY5Swg8d/Z+iUeIhU8a4BUg8W/XpIQ42Asc2KLhgi+KEObaTFux8O57fHCOmVsTwjWXmg/CDgyhVzWP0AgY8W4h8TvEO2hFL5lKFJt2oKtOHkEoVDjSGi2l5vzCEqqL0/4njuJTJAFRNyehW/nZ1e9QZQ7qI4n98HiWIt57AhGv9T29m0jwg3fESqRWH8e7dgaIZEQ6nTf/jxn0lopyDLvjgeOkYEB/kllJ44ZFTs7FMRg=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR15MB4287.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(2616005)(6506007)(71200400001)(53546011)(6486002)(6512007)(8936002)(186003)(4326008)(8676002)(86362001)(4744005)(66556008)(76116006)(66476007)(66946007)(64756008)(66446008)(5660300002)(33656002)(2906002)(36756003)(316002)(110136005)(38100700002)(54906003)(38070700005)(122000001)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eXU2aUx6ekgxcUtBVUJRSmpOdTE5a2xZWVVEOUJPTWgxTHo5WkZUUEp3MEdS?=
- =?utf-8?B?MWo4c1RPYk9yZ01uMG8xSkt2MUVCcDI5Z2tidVFvUzVSa3V0Vmk5bVhyeVhw?=
- =?utf-8?B?S1BzTEtzNmlmYkdpdzA5OHJHMUQwWURWYzh1WVJYNFZlbFNNMVRFNENCUlhq?=
- =?utf-8?B?aS8vUU1YV0FEdGppc1JPTTd1OFVnT2JKVFlDY2VTL0o0VlJ1ZnJhRjVHOUs0?=
- =?utf-8?B?SVh5S0FKN2tRV3pacHNucVpiMGJSQVdRampRV3RyM3pVM0laYnFiaVZWY1Vs?=
- =?utf-8?B?VFgxcytERkpxK2lROEVCcjFrT0NMVkdESW9CcWY3bU5kdlRBQmdNcjQxWEJX?=
- =?utf-8?B?czNnSllpMEx4anJ5YUg4Z2RuNXlqZmI5U1VuNXNzNGF6RmphSGV1dGZrVTVV?=
- =?utf-8?B?bjBMS21hVXU3WEM2cnhTdmpzL3lpdDBHRDBuZFJUM0k4UE1KZm5PbnZLb21p?=
- =?utf-8?B?TFBNb29vKzRmajJkNW42eG1yMTJ0QXljM3RqMW5DS0ZJOVF6S2hISWhvdGZX?=
- =?utf-8?B?bCtneTFqdnRHSnJiQytzMktTejh0YlhMVnZDNXIralk1cUl6azlIdFdDUDRu?=
- =?utf-8?B?c2s0dVlXYUNUTy9qNnprLzBncm9VUGxrTFhSSDVqUE5SOUJiWk5tZEg0b05W?=
- =?utf-8?B?SkxyN050VkVFWW9QY05yQ1NLL3VSSmVuYkYzL0pGNk9vbkxpYytzNjhPYlBQ?=
- =?utf-8?B?RFM5S0xtN0ZiRWFONE80MVFaRi80RlZJdWR0V0t6YXFkMmFkSUxIZUJHRGFv?=
- =?utf-8?B?UFBoV3NOVW43UEFYZkxOUnNsNWlIamYvYUlnQmNLbU4xU2l5U2JZQkRuSEN4?=
- =?utf-8?B?eU5mY2htV1FRbURDbEE1ME5MN0xOVVRIbTFKaytUQnFSdGVNa0xVUFlhWUtM?=
- =?utf-8?B?cVU3cCt2cm5uQ3FzazhaUjQvUEs2WlJDQnRlUWZtRE5vQmF2K01tb0VINDZV?=
- =?utf-8?B?cmFtWVF0UmhPWnRPRlRMa29oT1dRd2NMRlE3WGhhaVByNzJmWklJaHNrdVhS?=
- =?utf-8?B?T0k4SmQ5TW9Wa1pqMVgxY1hNMWZQYnlETjkwVVY5S2FzRFdKcHBhaTdoYU5B?=
- =?utf-8?B?ZFhIVTZVdk53a3lqQlpzWVJtR3VXRFZXMi96Y2ZkMmpZbVlJK2tYNlN3dVJR?=
- =?utf-8?B?Nm41UUZOMGlLV3d5Mlp4OEhBZU5kK0cxRXJtekFaRC9vS2t5TTcwSGIyS2Zo?=
- =?utf-8?B?eWkvWHp5elliSnVwTnI5dGNLQmlPZklacm5oYTlPd2ZnSmpZOW9iZXdCeWds?=
- =?utf-8?B?UjZsV0h5TjE0UnJNUDR4RVNLdHVOamZUNVRjbkQ1N0NCamw5eDAxZ0VNbnhv?=
- =?utf-8?B?UnR1LzFSRythNzYvT3BZWXplaEgwamxub01kRXhwbzdlaWFPcE9ObGwxQm9w?=
- =?utf-8?B?d0hvejV1TUxjbGtkUjVCb2pSd3h1c3NaWnlSenFMZTlzbUpzVnVqR01yN3FK?=
- =?utf-8?B?ZExsNEthZGZCU1Q0K08wQktObDlqSyszNEdIMTBtTDFON3VHSno5cVlmZWI1?=
- =?utf-8?B?SHFJV0dWNjM0WDVUR0d6MnA2N3JDSWdWYitVSXEvMDdyVGp0NmNSNVVHSjlL?=
- =?utf-8?B?Q0NZT3RmbTFkZVlFVmZHMnJYa3VkZHREc2JtTW1rS1pSOU10bGczTFljOXBu?=
- =?utf-8?B?dmJJeDJVNHhMdS9rN1RhMFBsbGxwQi9GNkZzT2JzMHo0NGdxTU1QRmVuRVZC?=
- =?utf-8?B?KzluaUkzdTQza0ZOR0VScUJnZ0V1Kzc5YmVuczRWYzlqaTg4M1NHRVhTRmd5?=
- =?utf-8?B?WU9sVENBcTV6UW9qL0plVklhUnBuWkZlc0hXcDl1WVlGdGk3Z0tyV2tpMlYz?=
- =?utf-8?B?d2ZpMCtjMlBWUHBCZ3hGRkFtQkhlZ2pnNzdxODNRSjh2bnV3WFd2YUgzaFl0?=
- =?utf-8?B?dnhxVjBrbUpMRU9CT0JwV1AweUxZd3ZnRXQ2SXk1Y1hBRlFHVEkzbHpuL01L?=
- =?utf-8?B?d25oNmdVbXZEVHc2K2t0SVRweTBmMUJuY051ZjVwbVQ4TER1bWtSVjBVYmE1?=
- =?utf-8?B?QnhDY3MwSGwrZHR6d2IvS2hGRUowNlM1d1c4ZHJuQTRJdkc3Z3dJdENPTStM?=
- =?utf-8?B?QmZ0YjdpczJHZWRhek1EV1RPL01HV3oxLzJDQ0xMdnZjT2pRUTc3WHRmeld4?=
- =?utf-8?B?M040MFJrVjVnM3JDL0NSVmNkRytWMWpPaDJ1RWhkbWxFV3pabThFUGYxSTdX?=
- =?utf-8?B?dXc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4987A87D5718E745936F69498BD6F09D@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 14 Feb 2022 16:35:23 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40724160FF4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:33:43 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id v186so50260546ybg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 13:33:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9iLzCF2TaMCSxVJ++G7B9k6oyEfu4Hb24dWcp9NavGo=;
+        b=bvMGtJIya6i3kldlZ68PIkQqYQHrWh9etw576kRgvqubMe8pOdz7mPqNNyEWu0qYpu
+         K2+jd6xSBx5ppv4DQhtAnJ/C1/ar+hoh3j4AET1ped77vG9F4QpStWrR5C/ynxDK3vKN
+         F4ftSIe8zSlM/Ns0STbrln5QJiVtN8Mb1FflduG9ZT54+xcqp70wfp9WWIW2Zk6aDtuu
+         Djv4CpRkBWIv6K7ZeB7+p1MAM8FavXkccQBC2frvBkJ2JfvUDXYUQVZoWaiMCLK08wlH
+         BGwhSfln6q5TY9QJ0CXJOGeU35akaI0qKxsYbaroT2gei4kFJSaQtHAN9gq7j5k3cA9G
+         1Q1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9iLzCF2TaMCSxVJ++G7B9k6oyEfu4Hb24dWcp9NavGo=;
+        b=dvo/Wf88ROd2+cbAcqeZA5m5OtYQHC4fgBxyK3TB7+qsuwDnAIZE9cpPmA0OUXhy5j
+         hj7qmCR33V01wgbRPNC1yOtICJlxWHywag4NJJiVGj6Cg6+PqDwXsj98Q/naL863j76u
+         gwTCAH9Ak/PiwvnFV/MCwrWHngUh40A5eyt2mR+RvcFPueVgSRDGSPAH0VPfgL6T/Kfi
+         /hJdreFs1xMroQpfgVII0j0yehre3QMGHnIQ2eTO8Pwkm+Wfhzrb/c9mF0NYxtUh7WOk
+         VzDbD3/ZJbFEihF4q6AcpAemigFWKLMnXx4qOo7FGGQVBN8LfJyusTmENVroQXNxyORi
+         Lrmw==
+X-Gm-Message-State: AOAM531GpGUfE8XZQNdRICrM1RylwoaytVwHVvszhxHZ/RdUUpAUlBJp
+        FFEJRdOiKidPgwmKNUiuXhqIGSxia4ucaXuRReJ+Ernnvv1yLipx
+X-Google-Smtp-Source: ABdhPJyWwIYYnlk3ZSzKkARKSenDfxGIdF7NYMwdRVcMXb2jVKuNZSwS8LN5JTVoMgWsqXP9by8zlQbqgPKPiLNFFWE=
+X-Received: by 2002:a25:6a55:: with SMTP id f82mr574637ybc.1.1644866971626;
+ Mon, 14 Feb 2022 11:29:31 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR15MB4287.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2ca3dbc-7606-450b-d184-08d9efeff282
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2022 19:26:49.3736
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Qdk38fp+08GUGDZ8KKYnDBHA+FHnHeNFUYCH9td2oVEHbz2idU1BrC+s6ztf5ZH2
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR15MB1867
-X-OriginatorOrg: fb.com
-X-Proofpoint-GUID: 8Q7DPKQzkZCztscReXGfHJRGIrhMhYLE
-X-Proofpoint-ORIG-GUID: 8Q7DPKQzkZCztscReXGfHJRGIrhMhYLE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-14_07,2022-02-14_03,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=1 mlxscore=1
- suspectscore=0 impostorscore=0 clxscore=1011 malwarescore=0
- priorityscore=1501 bulkscore=0 mlxlogscore=229 phishscore=0
- lowpriorityscore=0 adultscore=0 spamscore=1 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202140113
-X-FB-Internal: deliver
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220211161831.3493782-1-tjmercier@google.com>
+ <20220211161831.3493782-7-tjmercier@google.com> <Ygdfe3XSvN8iFuUc@kroah.com> <CAHRSSEwoJ67Sr_=gtSaP91cbpjJjZdOo57cfAhv3r-ye0da7PA@mail.gmail.com>
+In-Reply-To: <CAHRSSEwoJ67Sr_=gtSaP91cbpjJjZdOo57cfAhv3r-ye0da7PA@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 14 Feb 2022 11:29:20 -0800
+Message-ID: <CAJuCfpHf=Ewm0e9kguY3MEGVHU_cyviVXByi0oQtq7kTtOOD=A@mail.gmail.com>
+Subject: Re: [RFC v2 6/6] android: binder: Add a buffer flag to relinquish
+ ownership of fds
+To:     Todd Kjos <tkjos@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "T.J. Mercier" <tjmercier@google.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        DRI mailing list <dri-devel@lists.freedesktop.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gT24gRmViIDE0LCAyMDIyLCBhdCAyOjA1IFBNLCBQYXVsIEUuIE1jS2VubmV5IDxwYXVs
-bWNrQGtlcm5lbC5vcmc+IHdyb3RlOg0KPiANCj4gRXhwZXJpbWVudGFsLiAgTm90IGZvciBpbmNs
-dXNpb24uICBZZXQsIGFueXdheS4NCj4gDQo+IEZyZWVpbmcgbGFyZ2UgbnVtYmVycyBvZiBuYW1l
-c3BhY2VzIGluIHF1aWNrIHN1Y2Nlc3Npb24gY2FuIHJlc3VsdCBpbg0KPiBhIGJvdHRsZW5lY2sg
-b24gdGhlIHN5bmNocm9uaXplX3JjdSgpIGludm9rZWQgZnJvbSBrZXJuX3VubW91bnQoKS4NCj4g
-VGhpcyBwYXRjaCBhcHBsaWVzIHRoZSBzeW5jaHJvbml6ZV9yY3VfZXhwZWRpdGVkKCkgaGFtbWVy
-IHRvIGFsbG93DQo+IGZ1cnRoZXIgdGVzdGluZyBhbmQgZmF1bHQgaXNvbGF0aW9uLg0KPiANCj4g
-SGV5LCBhdCBsZWFzdCB0aGVyZSB3YXMgbm8gbmVlZCB0byBjaGFuZ2UgdGhlIGNvbW1lbnQhICA7
-LSkNCj4gDQoNCkkgZG9u4oCZdCB0aGluayB0aGlzIHdpbGwgYmUgZmFzdCBlbm91Z2guICBJIHRo
-aW5rIHRoZSBwcm9ibGVtIGlzIHRoYXQgY29tbWl0IGUxZWIyNmZhNjJkMDRlYzA5NTU0MzJiZTFh
-YTg3MjJhOTdjYjUyZTcgaXMgcHV0dGluZyBhbGwgb2YgdGhlIGlwYyBuYW1lc3BhY2UgZnJlZXMg
-b250byBhIGxpc3QsIGFuZCBldmVyeSBmcmVlIGluY2x1ZGVzIG9uZSBjYWxsIHRvIHN5bmNocm9u
-aXplX3JjdSgpDQoNClRoZSBlbmQgcmVzdWx0IGlzIHRoYXQgd2UgY2FuIGNyZWF0ZSBuZXcgbmFt
-ZXNwYWNlcyBtdWNoIG11Y2ggZmFzdGVyIHRoYW4gd2UgY2FuIGZyZWUgdGhlbSwgYW5kIGV2ZW50
-dWFsbHkgd2UgcnVuIG91dC4gIEkgZm91bmQgdGhpcyB3aGlsZSBkZWJ1Z2dpbmcgY2xvbmUoKSBy
-ZXR1cm5pbmcgRU5PU1BDIGJlY2F1c2UgY3JlYXRlX2lwY19ucygpIHdhcyByZXR1cm5pbmcgRU5P
-U1BDLg0KDQotY2hyaXM=
+On Mon, Feb 14, 2022 at 10:33 AM Todd Kjos <tkjos@google.com> wrote:
+>
+> On Fri, Feb 11, 2022 at 11:19 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Fri, Feb 11, 2022 at 04:18:29PM +0000, T.J. Mercier wrote:
+>
+> Title: "android: binder: Add a buffer flag to relinquish ownership of fds=
+"
+>
+> Please drop the "android:" from the title.
+>
+> > > This patch introduces a buffer flag BINDER_BUFFER_FLAG_SENDER_NO_NEED
+> > > that a process sending an fd array to another process over binder IPC
+> > > can set to relinquish ownership of the fds being sent for memory
+> > > accounting purposes. If the flag is found to be set during the fd arr=
+ay
+> > > translation and the fd is for a DMA-BUF, the buffer is uncharged from
+> > > the sender's cgroup and charged to the receiving process's cgroup
+> > > instead.
+> > >
+> > > It is up to the sending process to ensure that it closes the fds
+> > > regardless of whether the transfer failed or succeeded.
+> > >
+> > > Most graphics shared memory allocations in Android are done by the
+> > > graphics allocator HAL process. On requests from clients, the HAL pro=
+cess
+> > > allocates memory and sends the fds to the clients over binder IPC.
+> > > The graphics allocator HAL will not retain any references to the
+> > > buffers. When the HAL sets the BINDER_BUFFER_FLAG_SENDER_NO_NEED for =
+fd
+> > > arrays holding DMA-BUF fds, the gpu cgroup controller will be able to
+> > > correctly charge the buffers to the client processes instead of the
+> > > graphics allocator HAL.
+> > >
+> > > From: Hridya Valsaraju <hridya@google.com>
+> > > Signed-off-by: Hridya Valsaraju <hridya@google.com>
+> > > Co-developed-by: T.J. Mercier <tjmercier@google.com>
+> > > Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> > > ---
+> > > changes in v2
+> > > - Move dma-buf cgroup charge transfer from a dma_buf_op defined by ev=
+ery
+> > > heap to a single dma-buf function for all heaps per Daniel Vetter and
+> > > Christian K=C3=B6nig.
+> > >
+> > >  drivers/android/binder.c            | 26 ++++++++++++++++++++++++++
+> > >  include/uapi/linux/android/binder.h |  1 +
+> > >  2 files changed, 27 insertions(+)
+> > >
+> > > diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> > > index 8351c5638880..f50d88ded188 100644
+> > > --- a/drivers/android/binder.c
+> > > +++ b/drivers/android/binder.c
+> > > @@ -42,6 +42,7 @@
+> > >
+> > >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> > >
+> > > +#include <linux/dma-buf.h>
+> > >  #include <linux/fdtable.h>
+> > >  #include <linux/file.h>
+> > >  #include <linux/freezer.h>
+> > > @@ -2482,8 +2483,10 @@ static int binder_translate_fd_array(struct li=
+st_head *pf_head,
+> > >  {
+> > >       binder_size_t fdi, fd_buf_size;
+> > >       binder_size_t fda_offset;
+> > > +     bool transfer_gpu_charge =3D false;
+> > >       const void __user *sender_ufda_base;
+> > >       struct binder_proc *proc =3D thread->proc;
+> > > +     struct binder_proc *target_proc =3D t->to_proc;
+> > >       int ret;
+> > >
+> > >       fd_buf_size =3D sizeof(u32) * fda->num_fds;
+> > > @@ -2521,8 +2524,15 @@ static int binder_translate_fd_array(struct li=
+st_head *pf_head,
+> > >       if (ret)
+> > >               return ret;
+> > >
+> > > +     if (IS_ENABLED(CONFIG_CGROUP_GPU) &&
+> > > +             parent->flags & BINDER_BUFFER_FLAG_SENDER_NO_NEED)
+> > > +             transfer_gpu_charge =3D true;
+> > > +
+> > >       for (fdi =3D 0; fdi < fda->num_fds; fdi++) {
+> > >               u32 fd;
+> > > +             struct dma_buf *dmabuf;
+> > > +             struct gpucg *gpucg;
+> > > +
+> > >               binder_size_t offset =3D fda_offset + fdi * sizeof(fd);
+> > >               binder_size_t sender_uoffset =3D fdi * sizeof(fd);
+> > >
+> > > @@ -2532,6 +2542,22 @@ static int binder_translate_fd_array(struct li=
+st_head *pf_head,
+> > >                                                 in_reply_to);
+> > >               if (ret)
+> > >                       return ret > 0 ? -EINVAL : ret;
+> > > +
+> > > +             if (!transfer_gpu_charge)
+> > > +                     continue;
+> > > +
+> > > +             dmabuf =3D dma_buf_get(fd);
+> > > +             if (IS_ERR(dmabuf))
+> > > +                     continue;
+> > > +
+> > > +             gpucg =3D gpucg_get(target_proc->tsk);
+> > > +             ret =3D dma_buf_charge_transfer(dmabuf, gpucg);
+> > > +             if (ret) {
+> > > +                     pr_warn("%d:%d Unable to transfer DMA-BUF fd ch=
+arge to %d",
+> > > +                             proc->pid, thread->pid, target_proc->pi=
+d);
+> > > +                     gpucg_put(gpucg);
+> > > +             }
+> > > +             dma_buf_put(dmabuf);
+>
+> Since we are creating a new gpu cgroup abstraction, couldn't this
+> "transfer" be done in userspace by the target instead of in the kernel
+> driver? Then this patch would reduce to just a flag on the buffer
+> object.
+
+Are you suggesting to have a userspace accessible cgroup interface for
+transferring buffer charges and the target process to use that
+interface for requesting the buffer to be charged to its cgroup?
+I'm worried about the case when the target process does not request
+the transfer after receiving the buffer with this flag set. The charge
+would stay with the wrong process and accounting will be invalid.
+
+Technically, since the proposed cgroup supports charge transfer from
+the very beginning, the userspace can check if the cgroup is mounted
+and if so then it knows this feature is supported.
+
+> This also solves the issue that Greg brought up about
+> userspace needing to know whether the kernel implements this feature
+> (older kernel running with newer userspace). I think we could just
+> reserve some flags for userspace to use (and since those flags are
+> "reserved" for older kernels, this would enable this feature even for
+> old kernels)
+>
+> > >       }
+> > >       return 0;
+> > >  }
+> > > diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux=
+/android/binder.h
+> > > index 3246f2c74696..169fd5069a1a 100644
+> > > --- a/include/uapi/linux/android/binder.h
+> > > +++ b/include/uapi/linux/android/binder.h
+> > > @@ -137,6 +137,7 @@ struct binder_buffer_object {
+> > >
+> > >  enum {
+> > >       BINDER_BUFFER_FLAG_HAS_PARENT =3D 0x01,
+> > > +     BINDER_BUFFER_FLAG_SENDER_NO_NEED =3D 0x02,
+> > >  };
+> > >
+> > >  /* struct binder_fd_array_object - object describing an array of fds=
+ in a buffer
+> > > --
+> > > 2.35.1.265.g69c8d7142f-goog
+> > >
+> >
+> > How does userspace know that binder supports this new flag?  And where
+> > is the userspace test for this new feature?  Isn't there a binder test
+> > framework somewhere?
+> >
+> > thanks,
+> >
+> > greg k-h

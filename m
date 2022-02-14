@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66AB4B49FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C63D4B4816
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:56:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345289AbiBNKJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:09:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36206 "EHLO
+        id S239958AbiBNJum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:50:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345807AbiBNKHC (ORCPT
+        with ESMTP id S245590AbiBNJqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:07:02 -0500
+        Mon, 14 Feb 2022 04:46:01 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086FF74DDA;
-        Mon, 14 Feb 2022 01:49:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5787179A;
+        Mon, 14 Feb 2022 01:39:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A6E761238;
-        Mon, 14 Feb 2022 09:49:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5AD6C340E9;
-        Mon, 14 Feb 2022 09:49:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C7FBE6102D;
+        Mon, 14 Feb 2022 09:39:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA932C340E9;
+        Mon, 14 Feb 2022 09:39:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832174;
-        bh=Y1O2CIN5EafAGmWxHeytfPsnxX2uH0gjcXAlhd6vK4E=;
+        s=korg; t=1644831551;
+        bh=l/brSncTN6vdt2U5TbNasSHodgL5NGbj4Cmm4cRhARM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=owcBfvfGBaHAsJSp8qFBRMCWJIUsVsaKzM6DmBeybiBbHkcomnpcd3X7/LumhaFBE
-         ZciFQQqMyaaDh34GetL4XEy1C1mIXB39E50gEc6JJNO+3ECnd4G/eaU09StHE5L4ni
-         gE0xq/JXM7edWBrU7VotBgFICXR9rVfapYYC53uA=
+        b=kV3aBEoNiFTuzgQn5wrJh3PzSFSc2QinnfGP2NoOBvyLOUeUmv9gbjQgOstydVuxN
+         DNyw+i9N6YJsAK6Kh2jBzRDApwF2kAJ8DUL4a2tTf4nWh+5H1c7kh/kSU5sbCkRx8C
+         J8Dmhpn+tDt9riA9Q4FyTQ1Za5ENG2dch4T9nWSM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Hou Wenlong <houwenlong93@linux.alibaba.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        stable@vger.kernel.org, Olga Kornievskaia <kolga@netapp.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 060/172] KVM: eventfd: Fix false positive RCU usage warning
+Subject: [PATCH 5.10 019/116] NFSv4 expose nfs_parse_server_name function
 Date:   Mon, 14 Feb 2022 10:25:18 +0100
-Message-Id: <20220214092508.463725507@linuxfoundation.org>
+Message-Id: <20220214092459.342264804@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,85 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hou Wenlong <houwenlong93@linux.alibaba.com>
+From: Olga Kornievskaia <kolga@netapp.com>
 
-[ Upstream commit 6a0c61703e3a5d67845a4b275e1d9d7bc1b5aad7 ]
+[ Upstream commit f5b27cc6761e27ee6387a24df1a99ca77b360fea ]
 
-Fix the following false positive warning:
- =============================
- WARNING: suspicious RCU usage
- 5.16.0-rc4+ #57 Not tainted
- -----------------------------
- arch/x86/kvm/../../../virt/kvm/eventfd.c:484 RCU-list traversed in non-reader section!!
+Make nfs_parse_server_name available outside of nfs4namespace.c.
 
- other info that might help us debug this:
-
- rcu_scheduler_active = 2, debug_locks = 1
- 3 locks held by fc_vcpu 0/330:
-  #0: ffff8884835fc0b0 (&vcpu->mutex){+.+.}-{3:3}, at: kvm_vcpu_ioctl+0x88/0x6f0 [kvm]
-  #1: ffffc90004c0bb68 (&kvm->srcu){....}-{0:0}, at: vcpu_enter_guest+0x600/0x1860 [kvm]
-  #2: ffffc90004c0c1d0 (&kvm->irq_srcu){....}-{0:0}, at: kvm_notify_acked_irq+0x36/0x180 [kvm]
-
- stack backtrace:
- CPU: 26 PID: 330 Comm: fc_vcpu 0 Not tainted 5.16.0-rc4+
- Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
- Call Trace:
-  <TASK>
-  dump_stack_lvl+0x44/0x57
-  kvm_notify_acked_gsi+0x6b/0x70 [kvm]
-  kvm_notify_acked_irq+0x8d/0x180 [kvm]
-  kvm_ioapic_update_eoi+0x92/0x240 [kvm]
-  kvm_apic_set_eoi_accelerated+0x2a/0xe0 [kvm]
-  handle_apic_eoi_induced+0x3d/0x60 [kvm_intel]
-  vmx_handle_exit+0x19c/0x6a0 [kvm_intel]
-  vcpu_enter_guest+0x66e/0x1860 [kvm]
-  kvm_arch_vcpu_ioctl_run+0x438/0x7f0 [kvm]
-  kvm_vcpu_ioctl+0x38a/0x6f0 [kvm]
-  __x64_sys_ioctl+0x89/0xc0
-  do_syscall_64+0x3a/0x90
-  entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Since kvm_unregister_irq_ack_notifier() does synchronize_srcu(&kvm->irq_srcu),
-kvm->irq_ack_notifier_list is protected by kvm->irq_srcu. In fact,
-kvm->irq_srcu SRCU read lock is held in kvm_notify_acked_irq(), making it
-a false positive warning. So use hlist_for_each_entry_srcu() instead of
-hlist_for_each_entry_rcu().
-
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Hou Wenlong <houwenlong93@linux.alibaba.com>
-Message-Id: <f98bac4f5052bad2c26df9ad50f7019e40434512.1643265976.git.houwenlong.hwl@antgroup.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- virt/kvm/eventfd.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ fs/nfs/nfs4_fs.h       | 3 ++-
+ fs/nfs/nfs4namespace.c | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
-index e996989cd580e..5b874e7ba36fd 100644
---- a/virt/kvm/eventfd.c
-+++ b/virt/kvm/eventfd.c
-@@ -456,8 +456,8 @@ bool kvm_irq_has_notifier(struct kvm *kvm, unsigned irqchip, unsigned pin)
- 	idx = srcu_read_lock(&kvm->irq_srcu);
- 	gsi = kvm_irq_map_chip_pin(kvm, irqchip, pin);
- 	if (gsi != -1)
--		hlist_for_each_entry_rcu(kian, &kvm->irq_ack_notifier_list,
--					 link)
-+		hlist_for_each_entry_srcu(kian, &kvm->irq_ack_notifier_list,
-+					  link, srcu_read_lock_held(&kvm->irq_srcu))
- 			if (kian->gsi == gsi) {
- 				srcu_read_unlock(&kvm->irq_srcu, idx);
- 				return true;
-@@ -473,8 +473,8 @@ void kvm_notify_acked_gsi(struct kvm *kvm, int gsi)
- {
- 	struct kvm_irq_ack_notifier *kian;
- 
--	hlist_for_each_entry_rcu(kian, &kvm->irq_ack_notifier_list,
--				 link)
-+	hlist_for_each_entry_srcu(kian, &kvm->irq_ack_notifier_list,
-+				  link, srcu_read_lock_held(&kvm->irq_srcu))
- 		if (kian->gsi == gsi)
- 			kian->irq_acked(kian);
+diff --git a/fs/nfs/nfs4_fs.h b/fs/nfs/nfs4_fs.h
+index 3e344bec3647b..de71cf89a24ee 100644
+--- a/fs/nfs/nfs4_fs.h
++++ b/fs/nfs/nfs4_fs.h
+@@ -281,7 +281,8 @@ struct rpc_clnt *nfs4_negotiate_security(struct rpc_clnt *, struct inode *,
+ int nfs4_submount(struct fs_context *, struct nfs_server *);
+ int nfs4_replace_transport(struct nfs_server *server,
+ 				const struct nfs4_fs_locations *locations);
+-
++size_t nfs_parse_server_name(char *string, size_t len, struct sockaddr *sa,
++			     size_t salen, struct net *net);
+ /* nfs4proc.c */
+ extern int nfs4_handle_exception(struct nfs_server *, int, struct nfs4_exception *);
+ extern int nfs4_async_handle_error(struct rpc_task *task,
+diff --git a/fs/nfs/nfs4namespace.c b/fs/nfs/nfs4namespace.c
+index 873342308dc0d..f1ed4f60a7f33 100644
+--- a/fs/nfs/nfs4namespace.c
++++ b/fs/nfs/nfs4namespace.c
+@@ -164,8 +164,8 @@ static int nfs4_validate_fspath(struct dentry *dentry,
+ 	return 0;
  }
+ 
+-static size_t nfs_parse_server_name(char *string, size_t len,
+-		struct sockaddr *sa, size_t salen, struct net *net)
++size_t nfs_parse_server_name(char *string, size_t len, struct sockaddr *sa,
++			     size_t salen, struct net *net)
+ {
+ 	ssize_t ret;
+ 
 -- 
 2.34.1
 

@@ -2,99 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B4F4B4077
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC2C4B4082
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240088AbiBNDof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 22:44:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34836 "EHLO
+        id S240122AbiBNDxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 22:53:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbiBNDoe (ORCPT
+        with ESMTP id S237909AbiBNDxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 22:44:34 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F3955BF7;
-        Sun, 13 Feb 2022 19:44:27 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id qe15so13276318pjb.3;
-        Sun, 13 Feb 2022 19:44:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=L1T88FidLuaZlcuhS+PMTDghYDEh2W0752ZJLiUhucA=;
-        b=oRxyDdDKJNDKc0H2K5Ch1WeXCfehy5G5ViIxcN4wos03w40Ja/IorqoHoAyXBeNe2z
-         /rB2IezmwC2dUoUvaAXGatt/3SIYh/dn3AK70vcB/wbisaGlBOPEYEvnHIRPE03MpNpo
-         9+wjVdTEH8b4SjisCIV/yI/TCFydTs731ZwyK4Rt3qhcZGIUcUdh1ADkoN6Hb1AS3I6t
-         BOYQjM8NAmird84LvaTV6DShFzMbhUrN6fEyPj+V7zGoptFPMqzYlxbfCkUxTAwtwQNC
-         25wauWx9mCDgORt2Dkq/CnB7UIzqqo4wutass3l9TfNAE4K5PxFs0RVMDMjHjA880T7q
-         V2cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=L1T88FidLuaZlcuhS+PMTDghYDEh2W0752ZJLiUhucA=;
-        b=NiV+YMxVB5NL5jVdVvs3n7Q0LI9FxBA6RMloxM9wNsFieASubdWhk2t5kVLKh0PSBo
-         tMULTHj9gzAwHeatjkRfF3NhIpLWAlh8cf22JeqBW5WNIx5ZEzCA8+iOlMhNd6IOZxM8
-         smhWdRo688Q81I1/c8A8S6wdnVffeWwKND95J3AYDvn+gaKzmU28v4xTMAxQFET4GKE+
-         neDQsKtim0P88VEmZKqZ9yjCXccm5t5kTX+5igMmMt5G6onDSfRP00jrkMs+diTQBL9t
-         i7zZYIL+jRdkFTrETi/4k3FlIIqBme+THUKF2VcCoR6JXLS4ovSazv2mA5pdx3Bjp9uo
-         XrTA==
-X-Gm-Message-State: AOAM530bpo00tY6h9xUqqT0c5D3i2QunDOCkZCxCOXMFsFefqGQmkCcP
-        yUXhycCcYUG7qCNQtAFtGB4=
-X-Google-Smtp-Source: ABdhPJwq8SXlhmABICvW3k9U/ONzzfjpJ2DUO6Q3MF+Ohgc5gPzZIIqdL/Jda1nZYZ3MJFKNgeIk8Q==
-X-Received: by 2002:a17:902:ce04:: with SMTP id k4mr12146212plg.62.1644810267263;
-        Sun, 13 Feb 2022 19:44:27 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id ot10sm8971515pjb.3.2022.02.13.19.44.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Feb 2022 19:44:26 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Sun, 13 Feb 2022 17:44:25 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        syzbot <syzbot+831661966588c802aae9@syzkaller.appspotmail.com>,
-        jgg@ziepe.ca, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [syzbot] possible deadlock in worker_thread
-Message-ID: <YgnQGZWT/n3VAITX@slm.duckdns.org>
-References: <0000000000005975a605d7aef05e@google.com>
- <8ea57ddf-a09c-43f2-4285-4dfb908ad967@acm.org>
- <ccd04d8a-154b-543e-e1c3-84bc655508d1@I-love.SAKURA.ne.jp>
- <71d6f14e-46af-cc5a-bc70-af1cdc6de8d5@acm.org>
- <309c86b7-2a4c-1332-585f-7bcd59cfd762@I-love.SAKURA.ne.jp>
- <aa2bf24e-981a-a811-c5d8-a75f0b8f693a@acm.org>
- <2959649d-cfbc-bdf2-02ac-053b8e7af030@I-love.SAKURA.ne.jp>
+        Sun, 13 Feb 2022 22:53:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51A495622D
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 19:52:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644810778;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k5gXQFIv5vbKifedeqqMIbptAWWOjXJO6QmZ5mrBFnQ=;
+        b=JWlL6/t+C8iop5Ex+ozPIf9neyJd0b4S/p4kJWr/2jZ+h0W7HUTeqMMrklFKVLjmfCsg1j
+        ue1Xr39kHDJeCyNBYK4eG0RYZMLIi6AyX1HxCyTvLojUX53cPG7EV9kaP63yiS6sYmqnOZ
+        XZ1Orm8Ob6wrLlTpZZdU6bXS/yzSHu4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-30-Bm3C-TOJP8Kv9GMyVUkbow-1; Sun, 13 Feb 2022 22:52:55 -0500
+X-MC-Unique: Bm3C-TOJP8Kv9GMyVUkbow-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 09E931006AA0;
+        Mon, 14 Feb 2022 03:52:52 +0000 (UTC)
+Received: from localhost (ovpn-12-173.pek2.redhat.com [10.72.12.173])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 808024CEC8;
+        Mon, 14 Feb 2022 03:52:46 +0000 (UTC)
+Date:   Mon, 14 Feb 2022 11:52:43 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH v20 3/5] arm64: kdump: reimplement crashkernel=X
+Message-ID: <YgnSCxlr1O2ZZ1sO@MiWiFi-R3L-srv>
+References: <20220124084708.683-1-thunder.leizhen@huawei.com>
+ <20220124084708.683-4-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2959649d-cfbc-bdf2-02ac-053b8e7af030@I-love.SAKURA.ne.jp>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220124084708.683-4-thunder.leizhen@huawei.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 01/24/22 at 04:47pm, Zhen Lei wrote:
+......
+> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> index 6c653a2c7cff052..a5d43feac0d7d96 100644
+> --- a/arch/arm64/mm/init.c
+> +++ b/arch/arm64/mm/init.c
+> @@ -71,6 +71,30 @@ phys_addr_t arm64_dma_phys_limit __ro_after_init;
+>  #define CRASH_ADDR_LOW_MAX	arm64_dma_phys_limit
+>  #define CRASH_ADDR_HIGH_MAX	MEMBLOCK_ALLOC_ACCESSIBLE
+>  
+> +static int __init reserve_crashkernel_low(unsigned long long low_size)
+> +{
+> +	unsigned long long low_base;
+> +
+> +	/* passed with crashkernel=0,low ? */
+> +	if (!low_size)
+> +		return 0;
+> +
+> +	low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, 0, CRASH_ADDR_LOW_MAX);
+> +	if (!low_base) {
+> +		pr_err("cannot allocate crashkernel low memory (size:0x%llx).\n", low_size);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	pr_info("crashkernel low memory reserved: 0x%llx - 0x%llx (%lld MB)\n",
+> +		low_base, low_base + low_size, low_size >> 20);
+> +
+> +	crashk_low_res.start = low_base;
+> +	crashk_low_res.end   = low_base + low_size - 1;
+> +	insert_resource(&iomem_resource, &crashk_low_res);
+> +
+> +	return 0;
+> +}
+> +
+>  /*
+>   * reserve_crashkernel() - reserves memory for crash kernel
 
-On Mon, Feb 14, 2022 at 10:08:00AM +0900, Tetsuo Handa wrote:
-> +	destroy_workqueue(srp_tl_err_wq);
+My another concern is the crashkernel=,low handling. In this patch, the
+code related to low memory is obscure. Wondering if we should make them
+explicit with a little redundant but very clear code flows. Saying this
+because the code must be very clear to you and reviewers, it may be
+harder for later code reader or anyone interested to understand.
+
+1) crashkernel=X,high
+2) crashkernel=X,high crashkernel=Y,low
+3) crashkernel=X,high crashkernel=0,low
+4) crashkernel=X,high crashkernel='messy code',low
+5) crashkernel=X //fall back to high memory, low memory is required then.
+
+It could be me thinking about it too much. I made changes to your patch
+with a tuning, not sure if it's OK to you. Otherwise, this patchset
+works very well for all above test cases, it's ripe to be merged for
+wider testing.
+
+diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+index a5d43feac0d7..671862c56d7d 100644
+--- a/arch/arm64/mm/init.c
++++ b/arch/arm64/mm/init.c
+@@ -94,7 +94,8 @@ static int __init reserve_crashkernel_low(unsigned long long low_size)
+ 
+ 	return 0;
+ }
+-
++/*Words explaining why it's 256M*/
++#define DEFAULT_CRASH_KERNEL_LOW_SIZE SZ_256M
+ /*
+  * reserve_crashkernel() - reserves memory for crash kernel
+  *
+@@ -105,10 +106,10 @@ static int __init reserve_crashkernel_low(unsigned long long low_size)
+ static void __init reserve_crashkernel(void)
+ {
+ 	unsigned long long crash_base, crash_size;
+-	unsigned long long crash_low_size = SZ_256M;
++	unsigned long long crash_low_size;
+ 	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
+ 	int ret;
+-	bool fixed_base;
++	bool fixed_base, high;
+ 	char *cmdline = boot_command_line;
+ 
+ 	/* crashkernel=X[@offset] */
+@@ -126,7 +127,10 @@ static void __init reserve_crashkernel(void)
+ 		ret = parse_crashkernel_low(cmdline, 0, &low_size, &crash_base);
+ 		if (!ret)
+ 			crash_low_size = low_size;
++		else
++			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
+ 
++		high = true;
+ 		crash_max = CRASH_ADDR_HIGH_MAX;
+ 	}
+ 
+@@ -134,7 +138,7 @@ static void __init reserve_crashkernel(void)
+ 	crash_size = PAGE_ALIGN(crash_size);
+ 
+ 	/* User specifies base address explicitly. */
+-	if (crash_base)
++	if (fixed_base)
+ 		crash_max = crash_base + crash_size;
+ 
+ retry:
+@@ -156,7 +160,10 @@ static void __init reserve_crashkernel(void)
+ 		return;
+ 	}
+ 
+-	if (crash_base >= SZ_4G && reserve_crashkernel_low(crash_low_size)) {
++	if (crash_base >= SZ_4G && !high) 
++		crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
++
++	if (reserve_crashkernel_low(crash_low_size)) {
+ 		memblock_phys_free(crash_base, crash_size);
+ 		return;
+ 	}
+
+>   *
+> @@ -81,29 +105,62 @@ phys_addr_t arm64_dma_phys_limit __ro_after_init;
+>  static void __init reserve_crashkernel(void)
+>  {
+>  	unsigned long long crash_base, crash_size;
+> +	unsigned long long crash_low_size = SZ_256M;
+>  	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
+>  	int ret;
+> +	bool fixed_base;
+> +	char *cmdline = boot_command_line;
+>  
+> -	ret = parse_crashkernel(boot_command_line, memblock_phys_mem_size(),
+> +	/* crashkernel=X[@offset] */
+> +	ret = parse_crashkernel(cmdline, memblock_phys_mem_size(),
+>  				&crash_size, &crash_base);
+> -	/* no crashkernel= or invalid value specified */
+> -	if (ret || !crash_size)
+> -		return;
+> +	if (ret || !crash_size) {
+> +		unsigned long long low_size;
+>  
+> +		/* crashkernel=X,high */
+> +		ret = parse_crashkernel_high(cmdline, 0, &crash_size, &crash_base);
+> +		if (ret || !crash_size)
+> +			return;
+> +
+> +		/* crashkernel=X,low */
+> +		ret = parse_crashkernel_low(cmdline, 0, &low_size, &crash_base);
+> +		if (!ret)
+> +			crash_low_size = low_size;
+> +
+> +		crash_max = CRASH_ADDR_HIGH_MAX;
+> +	}
+> +
+> +	fixed_base = !!crash_base;
+>  	crash_size = PAGE_ALIGN(crash_size);
+>  
+>  	/* User specifies base address explicitly. */
+>  	if (crash_base)
+>  		crash_max = crash_base + crash_size;
+>  
+> +retry:
+>  	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+>  					       crash_base, crash_max);
+>  	if (!crash_base) {
+> +		/*
+> +		 * Attempt to fully allocate low memory failed, fall back
+> +		 * to high memory, the minimum required low memory will be
+> +		 * reserved later.
+> +		 */
+> +		if (!fixed_base && (crash_max == CRASH_ADDR_LOW_MAX)) {
+> +			crash_max = CRASH_ADDR_HIGH_MAX;
+> +			goto retry;
+> +		}
+> +
+>  		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
+>  			crash_size);
+>  		return;
+>  	}
+>  
+> +	if (crash_base >= SZ_4G && reserve_crashkernel_low(crash_low_size)) {
+> +		memblock_phys_free(crash_base, crash_size);
+> +		return;
+> +	}
+> +
+>  	pr_info("crashkernel reserved: 0x%016llx - 0x%016llx (%lld MB)\n",
+>  		crash_base, crash_base + crash_size, crash_size >> 20);
+>  
+> @@ -112,6 +169,9 @@ static void __init reserve_crashkernel(void)
+>  	 * map. Inform kmemleak so that it won't try to access it.
+>  	 */
+>  	kmemleak_ignore_phys(crash_base);
+> +	if (crashk_low_res.end)
+> +		kmemleak_ignore_phys(crashk_low_res.start);
+> +
+>  	crashk_res.start = crash_base;
+>  	crashk_res.end = crash_base + crash_size - 1;
+>  	insert_resource(&iomem_resource, &crashk_res);
+> -- 
+> 2.25.1
 > 
-> Then, we can call WARN_ON() if e.g. flush_workqueue() is called on system-wide workqueues.
 
-Yeah, this is the right thing to do. It makes no sense at all to call
-flush_workqueue() on the shared workqueues as the caller has no idea what
-it's gonna end up waiting for. It was on my todo list a long while ago but
-slipped through the crack. If anyone wanna take a stab at it (including
-scrubbing the existing users, of course), please be my guest.
-
-Thanks.
-
--- 
-tejun

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0DF4B45BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:32:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBD94B4746
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243107AbiBNJ27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:28:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41930 "EHLO
+        id S244560AbiBNJmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:42:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243021AbiBNJ2o (ORCPT
+        with ESMTP id S244594AbiBNJkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:28:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B49B60D83;
-        Mon, 14 Feb 2022 01:28:35 -0800 (PST)
+        Mon, 14 Feb 2022 04:40:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2327AB861;
+        Mon, 14 Feb 2022 01:36:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 284EC60F88;
-        Mon, 14 Feb 2022 09:28:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0978CC340E9;
-        Mon, 14 Feb 2022 09:28:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D77D560FA2;
+        Mon, 14 Feb 2022 09:35:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE396C340F0;
+        Mon, 14 Feb 2022 09:35:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644830914;
-        bh=r4loICwC/Ra3vZUKUUxcneuvZ23lklqWBJUiGClVREg=;
+        s=korg; t=1644831358;
+        bh=t6eXjYA4rKPNICg4rTTpI2MzLeemt627oblOFcmf4C0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KDj/knm8TDrAM2IOPoLHG3/8h5PpDhTl586Otb+TUvgn1IJb2S/gqxuqyBtmtSNuM
-         /bVQP3lstFm1HKTIJpzrKepbr8JkcFDCAlgdlyAm1aDJsTqiDjnfR8Hu7PUtC021YE
-         YG1TD43OyUtTOgRvKdnUhFwFP/cHzGU0VJkZj/OQ=
+        b=xqRgVqTbrxiKNn+JbE7EutXLkoLcp3PSJd5Z/J+ks5+bj2+yJI1UId1t0kQ2n+noZ
+         LQImdmU5xxpLL40+7dAgJltiFXd8yYC3fcBFdDjZpayiSU+OK2KmWfq+jl0K5ZFMRz
+         s7V7i5FfLDBPczUky+ZeVSp/YUqj/3mPdDEPbu+w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Guillaume Bertholon <guillaume.bertholon@ens.fr>
-Subject: [PATCH 4.9 05/34] Input: i8042 - Fix misplaced backport of "add ASUS Zenbook Flip to noselftest list"
+        stable@vger.kernel.org, Guo Zihua <guozihua@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Subject: [PATCH 5.4 03/71] ima: Allow template selection with ima_template[_fmt]= after ima_hash=
 Date:   Mon, 14 Feb 2022 10:25:31 +0100
-Message-Id: <20220214092446.126910108@linuxfoundation.org>
+Message-Id: <20220214092452.136339118@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
-References: <20220214092445.946718557@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,53 +55,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume Bertholon <guillaume.bertholon@ens.fr>
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-The upstream commit b5d6e7ab7fe7 ("Input: i8042 - add ASUS Zenbook Flip to
-noselftest list") inserted a new entry in the `i8042_dmi_noselftest_table`
-table, further patched by commit daa58c8eec0a ("Input: i8042 - fix Pegatron
-C15B ID entry") to insert a missing separator.
+commit bb8e52e4906f148c2faf6656b5106cf7233e9301 upstream.
 
-However, their backported version in stable (commit e9e8b3769099
-("Input: i8042 - add ASUS Zenbook Flip to noselftest list") and
-commit c551d20d487a ("Input: i8042 - fix Pegatron C15B ID entry"))
-inserted this entry in `i8042_dmi_forcemux_table` instead.
+Commit c2426d2ad5027 ("ima: added support for new kernel cmdline parameter
+ima_template_fmt") introduced an additional check on the ima_template
+variable to avoid multiple template selection.
 
-This patch moves the entry back into `i8042_dmi_noselftest_table`.
+Unfortunately, ima_template could be also set by the setup function of the
+ima_hash= parameter, when it calls ima_template_desc_current(). This causes
+attempts to choose a new template with ima_template= or with
+ima_template_fmt=, after ima_hash=, to be ignored.
 
-Fixes: e9e8b3769099 ("Input: i8042 - add ASUS Zenbook Flip to noselftest list")
-Signed-off-by: Guillaume Bertholon <guillaume.bertholon@ens.fr>
+Achieve the goal of the commit mentioned with the new static variable
+template_setup_done, so that template selection requests after ima_hash=
+are not ignored.
+
+Finally, call ima_init_template_list(), if not already done, to initialize
+the list of templates before lookup_template_desc() is called.
+
+Reported-by: Guo Zihua <guozihua@huawei.com>
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Cc: stable@vger.kernel.org
+Fixes: c2426d2ad5027 ("ima: added support for new kernel cmdline parameter ima_template_fmt")
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/input/serio/i8042-x86ia64io.h |   11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ security/integrity/ima/ima_template.c |   10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
---- a/drivers/input/serio/i8042-x86ia64io.h
-+++ b/drivers/input/serio/i8042-x86ia64io.h
-@@ -586,11 +586,6 @@ static const struct dmi_system_id i8042_
- 			DMI_MATCH(DMI_SYS_VENDOR, "Sony Corporation"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "VGN-CS"),
- 		},
--	}, {
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
--			DMI_MATCH(DMI_CHASSIS_TYPE, "31"), /* Convertible Notebook */
--		},
- 	},
- 	{ }
- };
-@@ -677,6 +672,12 @@ static const struct dmi_system_id i8042_
- 			DMI_MATCH(DMI_PRODUCT_NAME, "Z450LA"),
- 		},
- 	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
-+			DMI_MATCH(DMI_CHASSIS_TYPE, "31"), /* Convertible Notebook */
-+		},
-+	},
- 	{ }
- };
- static const struct dmi_system_id __initconst i8042_dmi_reset_table[] = {
+--- a/security/integrity/ima/ima_template.c
++++ b/security/integrity/ima/ima_template.c
+@@ -29,6 +29,7 @@ static struct ima_template_desc builtin_
+ 
+ static LIST_HEAD(defined_templates);
+ static DEFINE_SPINLOCK(template_list);
++static int template_setup_done;
+ 
+ static const struct ima_template_field supported_fields[] = {
+ 	{.field_id = "d", .field_init = ima_eventdigest_init,
+@@ -82,10 +83,11 @@ static int __init ima_template_setup(cha
+ 	struct ima_template_desc *template_desc;
+ 	int template_len = strlen(str);
+ 
+-	if (ima_template)
++	if (template_setup_done)
+ 		return 1;
+ 
+-	ima_init_template_list();
++	if (!ima_template)
++		ima_init_template_list();
+ 
+ 	/*
+ 	 * Verify that a template with the supplied name exists.
+@@ -109,6 +111,7 @@ static int __init ima_template_setup(cha
+ 	}
+ 
+ 	ima_template = template_desc;
++	template_setup_done = 1;
+ 	return 1;
+ }
+ __setup("ima_template=", ima_template_setup);
+@@ -117,7 +120,7 @@ static int __init ima_template_fmt_setup
+ {
+ 	int num_templates = ARRAY_SIZE(builtin_templates);
+ 
+-	if (ima_template)
++	if (template_setup_done)
+ 		return 1;
+ 
+ 	if (template_desc_init_fields(str, NULL, NULL) < 0) {
+@@ -128,6 +131,7 @@ static int __init ima_template_fmt_setup
+ 
+ 	builtin_templates[num_templates - 1].fmt = str;
+ 	ima_template = builtin_templates + num_templates - 1;
++	template_setup_done = 1;
+ 
+ 	return 1;
+ }
 
 

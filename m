@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489484B4A26
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6267A4B45F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345680AbiBNKGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:06:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54578 "EHLO
+        id S243123AbiBNJ3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:29:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345741AbiBNKBx (ORCPT
+        with ESMTP id S243131AbiBNJ2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:01:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8824F2019D;
-        Mon, 14 Feb 2022 01:48:09 -0800 (PST)
+        Mon, 14 Feb 2022 04:28:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719AE60DB1;
+        Mon, 14 Feb 2022 01:28:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24CBA61296;
-        Mon, 14 Feb 2022 09:48:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ED9AC340E9;
-        Mon, 14 Feb 2022 09:48:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F117B80DC6;
+        Mon, 14 Feb 2022 09:28:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25763C340E9;
+        Mon, 14 Feb 2022 09:28:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832088;
-        bh=oS2lkPCp3aLbjy4x18EkIQmiDK4N9sOMmcJlDMqhD+0=;
+        s=korg; t=1644830923;
+        bh=L+64FosT+u6ZVeqOqEziHxpJpKytKI0e34ddCBC1uyc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hXwf9ty7D0l5Yh4l1w4m6h+1wTuZxwIBa/yFUyt3dqMCPdGh+nWKvPfpCULaG1Chh
-         Z5M9zk9VdpWSzA/YwgxkSuMsHUn/qTnNlBylc6Vh4sA2K8LbApW6+XKA5H4SfvFpgH
-         qaAHQC2IlH2WZ5GQg4SOJMXqOK5pyu3CsR+K+krk=
+        b=VxPh0ppSGAGzY6XoO70bZTVRmNwYJBKxXHVXPYd/9BpjAyDuEMjL9zFRCiP3o450I
+         LkuCAiPBhXu6K79JG/izlvekUgw68BJ4/NkCxHn/nyeMa9uyDGTeC/SXhGvl/Mr0G8
+         LIB4CnbC6IMq8IH8Ua8ne1lD+XnMeuVRG6OX1z+I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Harry Wentland <harry.wentland@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.15 076/172] drm/amdgpu/display: change pipe policy for DCN 2.0
+        stable@vger.kernel.org,
+        Guillaume Bertholon <guillaume.bertholon@ens.fr>
+Subject: [PATCH 4.9 08/34] Revert "net: axienet: Wait for PhyRstCmplt after core reset"
 Date:   Mon, 14 Feb 2022 10:25:34 +0100
-Message-Id: <20220214092509.031262694@linuxfoundation.org>
+Message-Id: <20220214092446.218435382@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
+References: <20220214092445.946718557@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Deucher <alexander.deucher@amd.com>
+From: Guillaume Bertholon <guillaume.bertholon@ens.fr>
 
-commit 6e7545ddb13416fd200e0b91c0acfd0404e2e27b upstream.
+This reverts commit 9f1a3c13342b4d96b9baa337ec5fb7d453828709.
 
-Fixes hangs on driver load with multiple displays on
-DCN 2.0 parts.
+The upstream commit b400c2f4f4c5 ("net: axienet: Wait for PhyRstCmplt
+after core reset") add new instructions in the `__axienet_device_reset`
+function to wait until PhyRstCmplt bit is set, and return a non zero-exit
+value if this exceeds a timeout.
 
-Bug: https://bugzilla.kernel.org/show_bug.cgi?id=215511
-Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1877
-Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1886
-Fixes: ee2698cf79cc ("drm/amd/display: Changed pipe split policy to allow for multi-display pipe split")
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+However, its backported version in 4.9 (commit 9f1a3c13342b ("net:
+axienet: Wait for PhyRstCmplt after core reset")) insert these
+instructions in `axienet_dma_bd_init` instead.
+
+Unlike upstream, the version of `__axienet_device_reset` currently present
+in branch stable/linux-4.9.y does not return an integer for error codes.
+Therefore fixing the backport cannot be as simple as moving the inserted
+instructions in the right place, and we simply revert it instead.
+
+Fixes: 9f1a3c13342b ("net: axienet: Wait for PhyRstCmplt after core reset")
+Signed-off-by: Guillaume Bertholon <guillaume.bertholon@ens.fr>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c |   10 ----------
+ 1 file changed, 10 deletions(-)
 
---- a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c
-@@ -1067,7 +1067,7 @@ static const struct dc_debug_options deb
- 		.timing_trace = false,
- 		.clock_trace = true,
- 		.disable_pplib_clock_request = true,
--		.pipe_split_policy = MPC_SPLIT_DYNAMIC,
-+		.pipe_split_policy = MPC_SPLIT_AVOID_MULT_DISP,
- 		.force_single_disp_pipe_split = false,
- 		.disable_dcc = DCC_ENABLE,
- 		.vsr_support = true,
+--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -278,16 +278,6 @@ static int axienet_dma_bd_init(struct ne
+ 	axienet_dma_out32(lp, XAXIDMA_TX_CR_OFFSET,
+ 			  cr | XAXIDMA_CR_RUNSTOP_MASK);
+ 
+-	/* Wait for PhyRstCmplt bit to be set, indicating the PHY reset has finished */
+-	ret = read_poll_timeout(axienet_ior, value,
+-				value & XAE_INT_PHYRSTCMPLT_MASK,
+-				DELAY_OF_ONE_MILLISEC, 50000, false, lp,
+-				XAE_IS_OFFSET);
+-	if (ret) {
+-		dev_err(lp->dev, "%s: timeout waiting for PhyRstCmplt\n", __func__);
+-		return ret;
+-	}
+-
+ 	return 0;
+ out:
+ 	axienet_dma_bd_release(ndev);
 
 

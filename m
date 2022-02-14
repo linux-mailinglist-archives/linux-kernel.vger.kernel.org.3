@@ -2,162 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E590E4B526B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D26C74B5280
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:58:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354725AbiBNN5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:57:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36830 "EHLO
+        id S1354755AbiBNN6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:58:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354747AbiBNN44 (ORCPT
+        with ESMTP id S1354747AbiBNN6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:56:56 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78F44EA0F;
-        Mon, 14 Feb 2022 05:56:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1644847006; x=1676383006;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CuM7K8ToBJ7RKoIFBCQywAvEKq4J6OlP+754BZRgkAU=;
-  b=saOkMCzi7dk+ohFWbPJTmQ5EeP0tmoKhpEeyVZUr74PcxJXsED9pBUpc
-   wOMu3ykI98sJ3kJcLNIPFKKd4TkAe3K0M6M+n3WKOKEsJ4zPkjn7Yqirz
-   uTIF+ddZqVYe7/Xst0FNZQ/1J8JeZwAwAMKp51i4F1p7Rz+IfPPoIDDWT
-   9cM/OPPgB4w4teeN5v2boYFyth0iMdn4wDPrOpGK8/tdH41uPymwBNVsv
-   KnxSV2lN7IA2urfIgQu079H93+a6fRkpI/XoJlrL4UsO8wyuGwW9pXXUu
-   t0OOclw6/FV/LETYwCn/gj3fJkfyY5LAEjmlqDwrq0JaysuwlciLtCYo+
-   Q==;
-IronPort-SDR: B4lG6+0O8Fx8pvTp7P8/ONZSveDcqE57ZBUKdWX9EA6vsq0sDSyTpZotJRZPZgLeVR6rLU5EHG
- o8HqLk8S45lD/NFgNfjuz+BeVBsFECw7i+3Kg4ItMCRvHlzpJ2/QQ6xW1pDTlUzcX9MNsh9m4I
- 5+eIJkisejTqeacF+YIbQgrreNXoCoP6RgaCU5dL3Fz4bS6P61zHjKUSsyfI0HZJHKffcBi69r
- TqyfGdulzKTVsIg7nT9RAUz87sn004wL/9Nn3hDxJws9nayDXJh4/hkQuGWXnoupuDBxGw5pzO
- Jijcg0wleA6s1poY97SoTQ+T
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="85633793"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Feb 2022 06:56:44 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 14 Feb 2022 06:56:44 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 14 Feb 2022 06:56:38 -0700
-From:   <conor.dooley@microchip.com>
-To:     <linus.walleij@linaro.org>, <brgl@bgdev.pl>, <robh+dt@kernel.org>,
-        <jassisinghbrar@gmail.com>, <thierry.reding@gmail.com>,
-        <u.kleine-koenig@pengutronix.de>, <lee.jones@linaro.org>,
-        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <geert@linux-m68k.org>,
-        <krzysztof.kozlowski@canonical.com>, <linux-gpio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-CC:     <lewis.hanly@microchip.com>, <conor.dooley@microchip.com>,
-        <daire.mcnamara@microchip.com>, <ivan.griffin@microchip.com>,
-        <atishp@rivosinc.com>, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH v7 07/11] riscv: dts: microchip: add fpga fabric section to icicle kit
-Date:   Mon, 14 Feb 2022 13:58:37 +0000
-Message-ID: <20220214135840.168236-8-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214135840.168236-1-conor.dooley@microchip.com>
-References: <20220214135840.168236-1-conor.dooley@microchip.com>
+        Mon, 14 Feb 2022 08:58:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBC79C4E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:58:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644847121;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+Ya79H6TqHuWzpLyZaRYnVCACWlD+bUT2wjyTYIXjjM=;
+        b=JQPh/NQjRmIkaTAev6YvgDRoS+spRWobofloLrUu2e0L35vgpuAn+rI0Ov1rM27FuQSnWH
+        CBTljNkW4+Ww5UtGwfllBHcfYs/Xt60jgGyVXa8U/3SIXy6PqMmv8xexpCmmutAgVxAUu0
+        kJEfYG7IDGX+SD8LaDWs11J5Q4Inelw=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-590-IeG5-1glO8qB8paQ5WBysA-1; Mon, 14 Feb 2022 08:58:40 -0500
+X-MC-Unique: IeG5-1glO8qB8paQ5WBysA-1
+Received: by mail-ed1-f72.google.com with SMTP id g5-20020a056402090500b0040f28e1da47so10322528edz.8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 05:58:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+Ya79H6TqHuWzpLyZaRYnVCACWlD+bUT2wjyTYIXjjM=;
+        b=SyUZl/OsQTajyvfHDy+7eHmoDPfuHQuZQU0wHCZIqRVrTaDfYbDNE32/naH7rjyXOS
+         sHXe6YcVIX9BnHmFGRcpgIC9+we6W1aYiEunqzVdatWrkEfeCUZRSDc9a3N+GEvx62kQ
+         n4gdaul73SEJITGVP48j03TcVWNIqajRFuOUKiE5v2Hn1RUD06n5lh3Ex9MuNyy8zbc4
+         Cu2ncB8yHARww4EFxoww80sXzTdt9WlJxd7aw+4vu8GLPxFxP6pLD2vVle3EliOQPvOW
+         yQx2dncc3IeXCcpb9cLAwlRfWnqnHncqAw0cz5WRuJv6RBIoll24ay3LXdJfwdK+sAQz
+         WjIQ==
+X-Gm-Message-State: AOAM530oNTR4cngXez9LRDRj84U9ytRqKvhqXPdUhUBErVuzgcGCdfF6
+        TUvrmYArCNtzMbvi7cgKm7XuSRA/vYN3SXyboufP7vzbEQfgGjxn5fT0HUfDx+/0X/Itztyxhd5
+        19MivSGWG65C2Ju/mUjeNziBn
+X-Received: by 2002:a17:907:96aa:: with SMTP id hd42mr2192651ejc.738.1644847119348;
+        Mon, 14 Feb 2022 05:58:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxURNMgbfRCKJBXSt75Jz56tbXNymf2Sd9gMKsH7sp+2ALu4ROL/BRxIWGui59ZQC9O1R251Q==
+X-Received: by 2002:a17:907:96aa:: with SMTP id hd42mr2192624ejc.738.1644847119058;
+        Mon, 14 Feb 2022 05:58:39 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id m7sm909736ejq.10.2022.02.14.05.58.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 05:58:38 -0800 (PST)
+Message-ID: <70afbdca-12ee-1106-c4b9-136c65aaa812@redhat.com>
+Date:   Mon, 14 Feb 2022 14:58:37 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [5.17 regression] "x86/PCI: Ignore E820 reservations for bridge
+ windows on newer systems" breaks suspend/resume
+Content-Language: en-US
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        linux-acpi <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>, x86@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>
+References: <a7ad05fe-c2ab-a6d9-b66e-68e8c5688420@redhat.com>
+ <697aaf96-ec60-4e11-b011-0e4151e714d7@redhat.com> <YgKcl9YX4HfjqZxS@lahna>
+ <02994528-aaad-5259-1774-19aeacdd18fc@redhat.com> <YgPlQ6UK3+4/yzLk@lahna>
+ <2f01e99d-e830-d03c-3a9d-30b95726cc2c@redhat.com> <YgSzNAlfgcrm8ykH@lahna>
+ <039f9e8d-6e29-0288-606a-1d298e026c97@redhat.com> <YgpcYHZ1fxnBiUjV@lahna>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <YgpcYHZ1fxnBiUjV@lahna>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+Hi,
 
-Split the device tree for the Microchip MPFS into two sections by adding
-microchip-mpfs-fabric.dtsi, which contains peripherals contained in the
-FPGA fabric.
+On 2/14/22 14:42, Mika Westerberg wrote:
+> Hi Hans,
+> 
+> On Mon, Feb 14, 2022 at 01:42:29PM +0100, Hans de Goede wrote:
+>> Hi,
+>>
+>> On 2/10/22 07:39, Mika Westerberg wrote:
+>>> Hi Hans,
+>>>
+>>> On Wed, Feb 09, 2022 at 05:08:13PM +0100, Hans de Goede wrote:
+>>>> As mentioned in my email from 10 seconds ago I think a better simpler
+>>>> fix would be to just do:
+>>>>
+>>>> diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
+>>>> index 9b9fb7882c20..18656f823764 100644
+>>>> --- a/arch/x86/kernel/resource.c
+>>>> +++ b/arch/x86/kernel/resource.c
+>>>> @@ -28,6 +28,10 @@ static void remove_e820_regions(struct resource *avail)
+>>>>  	int i;
+>>>>  	struct e820_entry *entry;
+>>>>  
+>>>> +	/* Only remove E820 reservations on classic BIOS boot */
+>>>> +	if (efi_enabled(EFI_MEMMAP))
+>>>> +		return;
+>>>> +
+>>>>  	for (i = 0; i < e820_table->nr_entries; i++) {
+>>>>  		entry = &e820_table->entries[i];
+>>>>  
+>>>>
+>>>> I'm curious what you think of that?
+>>>
+>>> I'm not an expert in this e820 stuff but this one looks really simple
+>>> and makes sense to me. So definitely should go with it assuming there
+>>> are no objections from the x86 maintainers.
+>>
+>> Unfortunately with this suspend/resume is still broken on the ThinkPad
+>> X1 carbon gen 2 of the reporter reporting the regression. The reporter
+>> has been kind enough to also test in EFI mode (at my request) and then
+>> the problem is back again with this patch. So just differentiating
+>> between EFI / non EFI mode is not an option.
+> 
+> Thanks for the update! Too bad that it did not solve the regression, though :(
+> 
+>> FYI, here is what I believe is the root-cause of the issue on the ThinkPad X1 carbon gen 2:
+>>
+>> The E820 reservations table has the following in both BIOS and EFI boot modes:
+>>
+>> [    0.000000] BIOS-e820: [mem 0x00000000dceff000-0x00000000dfa0ffff] reserved
+>>
+>> Which has a small overlap with:
+>>
+>> [    0.884684] pci_bus 0000:00: root bus resource [mem 0xdfa00000-0xfebfffff window]
+>>
+>> This leads to the following difference in assignments of PCI resources when honoring E820 reservations
+>>
+>> [    0.966573] pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfb00000-0xdfcfffff]
+>> [    0.966698] pci_bus 0000:02: resource 1 [mem 0xdfb00000-0xdfcfffff]
+>>
+>> vs the following when ignoring E820 reservations:
+>>
+>> [    0.966850] pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfa00000-0xdfbfffff]
+>> [    0.966973] pci_bus 0000:02: resource 1 [mem 0xdfa00000-0xdfbfffff]
+>>
+>> And the overlap of 0xdfa00000-0xdfa0ffff from the e820 reservations seems to be what is causing the suspend/resume issue.
+> 
+> Any idea what is using that range?
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
----
- .../dts/microchip/microchip-mpfs-fabric.dtsi  | 25 +++++++++++++++++++
- .../microchip/microchip-mpfs-icicle-kit.dts   |  8 ++++++
- .../boot/dts/microchip/microchip-mpfs.dtsi    |  1 +
- 3 files changed, 34 insertions(+)
- create mode 100644 arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
+No, no clue I'm afraid.
 
-diff --git a/arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi b/arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
-new file mode 100644
-index 000000000000..854320e17b28
---- /dev/null
-+++ b/arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/* Copyright (c) 2020-2021 Microchip Technology Inc */
-+
-+/ {
-+	core_pwm0: pwm@41000000 {
-+		compatible = "microchip,corepwm-rtl-v4";
-+		reg = <0x0 0x41000000 0x0 0xF0>;
-+		microchip,sync-update-mask = /bits/ 32 <0>;
-+		#pwm-cells = <2>;
-+		clocks = <&clkcfg CLK_FIC3>;
-+		status = "disabled";
-+	};
-+
-+	i2c2: i2c@44000000 {
-+		compatible = "microchip,corei2c-rtl-v7";
-+		reg = <0x0 0x44000000 0x0 0x1000>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		clocks = <&clkcfg CLK_FIC3>;
-+		interrupt-parent = <&plic>;
-+		interrupts = <122>;
-+		clock-frequency = <100000>;
-+		status = "disabled";
-+	};
-+};
-diff --git a/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts b/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
-index 6d19ba196f12..ab803f71626a 100644
---- a/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
-+++ b/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
-@@ -68,6 +68,10 @@ &mmc {
- 	sd-uhs-sdr104;
- };
- 
-+&i2c2 {
-+	status = "okay";
-+};
-+
- &emac0 {
- 	phy-mode = "sgmii";
- 	phy-handle = <&phy0>;
-@@ -86,3 +90,7 @@ phy1: ethernet-phy@9 {
- 		ti,fifo-depth = <0x01>;
- 	};
- };
-+
-+&core_pwm0 {
-+	status = "okay";
-+};
-diff --git a/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi b/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
-index 717e39b30a15..c7d73756c9b8 100644
---- a/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
-+++ b/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
-@@ -3,6 +3,7 @@
- 
- /dts-v1/;
- #include "dt-bindings/clock/microchip,mpfs-clock.h"
-+#include "microchip-mpfs-fabric.dtsi"
- 
- / {
- 	#address-cells = <2>;
--- 
-2.35.1
+>> ###
+>>
+>> As already somewhat discussed, I'll go and prepare this solution instead:
+>>
+>> 1. Add E820_TYPE_MMIO to enum e820_type and modify the 2 places which check for
+>>    type == reserved to treat this as reserved too, so as to not have any
+>>    functional changes there
+>>
+>> 2. Modify the code building e820 tables from the EFI memmap to use
+>>    E820_TYPE_MMIO for MMIO EFI memmap entries.
+>>
+>> 3. Modify arch/x86/kernel/resource.c: remove_e820_regions() to skip
+>>    e820 table entries with a type of E820_TYPE_MMIO,
+>>    this would actually be a functional change and should fix the
+>>    issues we are trying to fix.
+> 
+> Given the above regression, I can't think of a better way to solve this.
+
+Ack, note I'm still waiting for efi=debug output from the X1 carbon gen 2,
+so I hope that what seems to be the conflicting range is not also marked
+as EFI_MEMORY_MAPPED_IO. Otherwise things will get a bit more complicated (*)
+
+Regards,
+
+Hans
+
+*) On the systems where the EFI_MEMORY_MAPPED_IO memmap entries are causing
+issues they fully overlap the PCI bridge window, so we can use that as an
+extra check if necessary.
+
+
+
+
+> 
 

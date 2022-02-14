@@ -2,143 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E244B5B33
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 21:45:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE324B5B3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 21:51:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiBNUp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 15:45:29 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33576 "EHLO
+        id S229672AbiBNUs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 15:48:59 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:58390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiBNUpF (ORCPT
+        with ESMTP id S229379AbiBNUsw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 15:45:05 -0500
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4529F2409C8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:42:05 -0800 (PST)
-Received: by mail-ed1-f43.google.com with SMTP id b13so29009771edn.0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:42:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dgwPr3jWEXZiHeYJRBUfKrH3C5wLRAnP7Z6R5s1EJ5U=;
-        b=ZcumWtnhggjMFDUHhywZOsPSWocj5WFiFD4wxX4meGi3Jv+FEek8bAx8wm544tPFuD
-         FZMy/4sQc4BwvneObDdXEv1mNtlI8GPACMt1JW8whp1hkRcRU1/uCicaO7g7UXSaSO+q
-         JQ0jz81cHBjFl3QlKdIkLJ7hR07DlS4kmaNNI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dgwPr3jWEXZiHeYJRBUfKrH3C5wLRAnP7Z6R5s1EJ5U=;
-        b=jjTegN0uk6Pqpr1SEq67xRBOv+ADkfiHNSLJMDh9llM+Vg5NFELSTloXDc2zNiMyjh
-         yhxSrw1IKk7gp9q4I+is0z2AzLls0qGgrEIT6XSc7QuScRk1OIgt5RmR3o4kjqv6mEjt
-         g7BV3BqwVCeqMdPj1ZFlEiyCVVsKg6GBsdfcYk/LdTq5h0fteywA5CPgdL0uLwZ01LUv
-         AZ8sj5PwEcpxiMeVdlln4s/gIYkA3dlMZlZmYn+tfIqQlTaEa8k1rKDT4vBUprJtkSPN
-         TEgmax9Ez4KWH6dKX4eu7UXZMORoeWplFuNIvuKT9yEI8qh3frr0FSZ/wLUaHy/TZ+Ii
-         ZU/Q==
-X-Gm-Message-State: AOAM532wkNH+GXrPtCiSw6ypSrxH6Cv+LimUlzgnmWxgHVoyw/lKDBLz
-        I0qey8ubtvdQUuQuvCJ11d4XvGfFvUa6TLkcP+I=
-X-Google-Smtp-Source: ABdhPJz6SBK0fakQkr5yMM9BE37jF2mW081LbltnaHzyfMThvB8qfz8YnsM7aYc3mhfzxwBzdeiUFg==
-X-Received: by 2002:a05:6512:3b8b:: with SMTP id g11mr490683lfv.397.1644868893591;
-        Mon, 14 Feb 2022 12:01:33 -0800 (PST)
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
-        by smtp.gmail.com with ESMTPSA id i18sm4243700lfv.257.2022.02.14.12.01.21
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 12:01:32 -0800 (PST)
-Received: by mail-lj1-f171.google.com with SMTP id w6so3709518ljj.3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:01:21 -0800 (PST)
-X-Received: by 2002:a2e:a231:: with SMTP id i17mr205093ljm.443.1644868881602;
- Mon, 14 Feb 2022 12:01:21 -0800 (PST)
+        Mon, 14 Feb 2022 15:48:52 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBCA15FC87;
+        Mon, 14 Feb 2022 12:48:27 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21EI7w7w001562;
+        Mon, 14 Feb 2022 20:03:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=1pJI+ix99l7/rXF96NBURmzsCZLTmUmqrMwjJzasCG0=;
+ b=C1bDcPyd47Ps/ucOG0vzZZpw5wLQNfRu9sAxsPUbwxdePlL5ZkHNCxdbhF+EIrTTAyQJ
+ yvjHEpil9pDYbMXNK0cZRzdetM4rd0d0WqTJYQZYgYfGUgWIUNn4DitSdmVC5jcPuCt3
+ OxXom30rXLMQmCjz0njRmfHtQejZNzpgdq1VR0l5vI34uMtRlAq4oNu5M4qlOW1p6GUP
+ KFiAkN6grVpTsMIV9keh1B4OkGZhMe2HhuL3LncHVR1L5GjOTjUWJmCdYov0msVCFYvM
+ nekfS6NIvX964JtQaR/gbFr3xVhNZwPAJ2YfudrIkq2ydrO6LxSX9kOwJbVZwmGxiYKr dw== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e7cje8nr5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 20:03:39 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21EK1rxK027551;
+        Mon, 14 Feb 2022 20:03:38 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma03dal.us.ibm.com with ESMTP id 3e64hahga8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 20:03:38 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21EK3bML28377520
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Feb 2022 20:03:37 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1738528058;
+        Mon, 14 Feb 2022 20:03:37 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E579E28060;
+        Mon, 14 Feb 2022 20:03:36 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Mon, 14 Feb 2022 20:03:36 +0000 (GMT)
+Message-ID: <ea619561-fe29-6864-0a07-a49dee8549ab@linux.ibm.com>
+Date:   Mon, 14 Feb 2022 15:03:36 -0500
 MIME-Version: 1.0
-References: <20220214163452.1568807-1-arnd@kernel.org> <20220214163452.1568807-5-arnd@kernel.org>
- <YgqLFYqIqkIsNC92@infradead.org> <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
-In-Reply-To: <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 14 Feb 2022 12:01:05 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
-Message-ID: <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
-Subject: Re: [PATCH 04/14] x86: use more conventional access_ok() definition
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rich Felker <dalias@libc.org>, linux-ia64@vger.kernel.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Max Filippov <jcmvbkbc@gmail.com>, Guo Ren <guoren@kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Helge Deller <deller@gmx.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        linux-csky@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Richard Weinberger <richard@nod.at>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        David Miller <davem@davemloft.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 1/8] ima: rename IMA_ACTION_FLAGS to
+ IMA_NONACTION_FLAGS
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220211214310.119257-1-zohar@linux.ibm.com>
+ <20220211214310.119257-2-zohar@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20220211214310.119257-2-zohar@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: T4YCMHvcv5xJtau2XmjWltnHNOqfi_Jo
+X-Proofpoint-ORIG-GUID: T4YCMHvcv5xJtau2XmjWltnHNOqfi_Jo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-14_07,2022-02-14_03,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ suspectscore=0 mlxlogscore=999 mlxscore=0 priorityscore=1501 bulkscore=0
+ malwarescore=0 lowpriorityscore=0 adultscore=0 impostorscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202140116
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 11:46 AM Arnd Bergmann <arnd@kernel.org> wrote:
+
+On 2/11/22 16:43, Mimi Zohar wrote:
+> Simple policy rule options, such as fowner, uid, or euid, can be checked
+> immediately, while other policy rule options, such as requiring a file
+> signature, need to be deferred.
 >
-> As Al pointed out, they turned out to be necessary on sparc64, but the only
-> definitions are on sparc64 and x86, so it's possible that they serve a similar
-> purpose here, in which case changing the limit from TASK_SIZE to
-> TASK_SIZE_MAX is probably wrong as well.
+> The 'flags' field in the integrity_iint_cache struct contains the policy
+> action', 'subaction', and non action/subaction.
+>
+> action: measure/measured, appraise/appraised, (collect)/collected,
+>          audit/audited
+> subaction: appraise status for each hook (e.g. file, mmap, bprm, read,
+>          creds)
+> non action/subaction: deferred policy rule options and state
+>
+> Rename the IMA_ACTION_FLAGS to IMA_NONACTION_FLAGS.
+>
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 
-x86-64 has always(*) used TASK_SIZE_MAX for access_ok(), and the
-get_user() assembler implementation does the same.
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 
-I think any __range_not_ok() users that use TASK_SIZE are entirely
-historical, and should be just fixed.
 
-                 Linus
-
-(*) And by "always" I mean "as far back as I bothered to go". In the
-2.6.12 git import, we had
-
-    #define USER_DS          MAKE_MM_SEG(PAGE_OFFSET)
-
-so the user access limit was actually not really TASK_SIZE_MAX at all,
-but the beginning of the kernel mapping, which on x86-64 is much much
-higher.

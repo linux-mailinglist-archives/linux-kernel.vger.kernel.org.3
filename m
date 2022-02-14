@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D70F4B4BC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A761B4B4821
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346447AbiBNKPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:15:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42340 "EHLO
+        id S243809AbiBNJeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:34:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345883AbiBNKNH (ORCPT
+        with ESMTP id S243637AbiBNJdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:13:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F401788B10;
-        Mon, 14 Feb 2022 01:51:07 -0800 (PST)
+        Mon, 14 Feb 2022 04:33:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DFCAE51;
+        Mon, 14 Feb 2022 01:31:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CDE56126B;
-        Mon, 14 Feb 2022 09:51:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64756C340E9;
-        Mon, 14 Feb 2022 09:51:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29D56B80DCA;
+        Mon, 14 Feb 2022 09:31:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2960EC340E9;
+        Mon, 14 Feb 2022 09:31:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832267;
-        bh=wUT1mmXGo67XJdUTpxgcwIKvppAWwi5MpB+h0FS2/Wg=;
+        s=korg; t=1644831112;
+        bh=PlUT2RePeY30xtamiW/pQwZCCreOuj7JuuL7sC9vnh0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ppOla4qQu5fRitQPXZLb9glQ41Ihvcq5T6cz1QVbSZ9Sp+MGxB6md9UiC8Q71zP1M
-         Hlg7qcsrKsVMhyRBSxT4+94z/enwE787S/gfvM/nq4uF/v/PQ/JZlBfJARgUdD3McR
-         vfZt+lizul9gQEmi6J/C8kcNRMY8mdXcGjSG0aAQ=
+        b=L/hAMiRH4QbYtA4fw2j5JBigVi4sg7BrnXsgRMqCdPgM48XBPqA3bYyqRmiqyZeqT
+         nti1yi6XqNkoSQketnZblxe2FZCiJ4CMM2JJx16rsrhRJxzXta0BCisR/HYykjyDfU
+         I7vmuXHOHjyfycfO3ScqgqDA62AQuDWpSRlshUSk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dongjin Kim <tobetter@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 100/172] arm64: dts: meson-g12b-odroid-n2: fix typo dio2133
+        stable@vger.kernel.org,
+        Szymon Heidrich <szymon.heidrich@gmail.com>, stable@kernel.org
+Subject: [PATCH 4.14 35/44] USB: gadget: validate interface OS descriptor requests
 Date:   Mon, 14 Feb 2022 10:25:58 +0100
-Message-Id: <20220214092509.862020747@linuxfoundation.org>
+Message-Id: <20220214092449.044654543@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
+References: <20220214092447.897544753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongjin Kim <tobetter@gmail.com>
+From: Szymon Heidrich <szymon.heidrich@gmail.com>
 
-[ Upstream commit bc41099f060ea74ac8d02c51bd0f5f46d969bedf ]
+commit 75e5b4849b81e19e9efe1654b30d7f3151c33c2c upstream.
 
-Typo in audio amplifier node, dioo2133 -> dio2133
+Stall the control endpoint in case provided index exceeds array size of
+MAX_CONFIG_INTERFACES or when the retrieved function pointer is null.
 
-Signed-off-by: Dongjin Kim <tobetter@gmail.com>
-Fixes: ef599f5f3e10 ("arm64: dts: meson: convert ODROID-N2 to dtsi")
-Fixes: 67d141c1f8e6 ("arm64: dts: meson: odroid-n2: add jack audio output support")
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://lore.kernel.org/r/YfKQJejh0bfGYvof@anyang
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+Cc: stable@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/gadget/composite.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
-index a84ed3578425e..d33e54b5e1969 100644
---- a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
-@@ -17,7 +17,7 @@ aliases {
- 		rtc1 = &vrtc;
- 	};
- 
--	dioo2133: audio-amplifier-0 {
-+	dio2133: audio-amplifier-0 {
- 		compatible = "simple-audio-amplifier";
- 		enable-gpios = <&gpio_ao GPIOAO_2 GPIO_ACTIVE_HIGH>;
- 		VCC-supply = <&vcc_5v>;
-@@ -217,7 +217,7 @@ sound {
- 		audio-widgets = "Line", "Lineout";
- 		audio-aux-devs = <&tdmout_b>, <&tdmout_c>, <&tdmin_a>,
- 				 <&tdmin_b>, <&tdmin_c>, <&tdmin_lb>,
--				 <&dioo2133>;
-+				 <&dio2133>;
- 		audio-routing = "TDMOUT_B IN 0", "FRDDR_A OUT 1",
- 				"TDMOUT_B IN 1", "FRDDR_B OUT 1",
- 				"TDMOUT_B IN 2", "FRDDR_C OUT 1",
--- 
-2.34.1
-
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -1940,6 +1940,9 @@ unknown:
+ 				if (w_index != 0x5 || (w_value >> 8))
+ 					break;
+ 				interface = w_value & 0xFF;
++				if (interface >= MAX_CONFIG_INTERFACES ||
++				    !os_desc_cfg->interface[interface])
++					break;
+ 				buf[6] = w_index;
+ 				if (w_length == 0x0A) {
+ 					count = count_ext_prop(os_desc_cfg,
 
 

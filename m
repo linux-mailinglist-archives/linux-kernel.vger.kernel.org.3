@@ -2,54 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF564B52C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:08:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A72F44B52C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354921AbiBNOHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 09:07:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45304 "EHLO
+        id S1354903AbiBNOGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 09:06:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354900AbiBNOGy (ORCPT
+        with ESMTP id S231853AbiBNOGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 09:06:54 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF009A1AE
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:06:46 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJc04-0008CA-9v; Mon, 14 Feb 2022 15:06:44 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJc01-00GZ3m-7U; Mon, 14 Feb 2022 15:06:40 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJbzz-0038PK-5F; Mon, 14 Feb 2022 15:06:39 +0100
-Date:   Mon, 14 Feb 2022 15:06:39 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        kernel@pengutronix.de, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] mfd: stmfx: Improve error message triggered by regulator
- fault in .remove()
-Message-ID: <20220214140639.jmdldyne6ffq4dlq@pengutronix.de>
-References: <20220207081709.27288-1-u.kleine-koenig@pengutronix.de>
- <YgpdPTDurgsvR9mk@google.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="s563op37ko4b4dy6"
-Content-Disposition: inline
-In-Reply-To: <YgpdPTDurgsvR9mk@google.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Mon, 14 Feb 2022 09:06:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC74365A2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:06:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89A5E60F86
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 14:06:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3150C340EE;
+        Mon, 14 Feb 2022 14:06:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644847604;
+        bh=uUt6bE07NssIaYfZ1Wzc5VcSVVOyx1PQSGWXB+SwyNg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TTjhN2oQXHO/DPe8aypKoXxulEjAeg9gpvnVZ98AN1NH4isPapKOXXyyV6mDb7GhX
+         SbNHHxzhjn512Ou4zrxUTjx5KIbns+zuIDsKXiDTYayIv7JPf1DVZNHVyjBOnpwlxt
+         5us9f6eMs18RID38v6oueyITdTp4U/j1/FtOFkWkT7K5k/03ZqjDFwFyncMlnmhQ48
+         3rZDqhttac1LzYsBgP2rfA6efbI6zzBKVCNe794A4bmustR8jmoBpZglhSHOJcF9R1
+         ZLoRcBrINUI6hx91vkfpEKw7bKZvf5oQIv0ig6WeaKAmHtYPxoTyS4yKnsASNU6xO/
+         T9Km6girYxw3w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nJc02-007nP8-LH; Mon, 14 Feb 2022 14:06:42 +0000
+Date:   Mon, 14 Feb 2022 14:06:41 +0000
+Message-ID: <87leyd4k5q.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     will@kernel.org, qperret@google.com, tabba@google.com,
+        surenb@google.com, kernel-team@android.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Scull <ascull@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH 4/7] KVM: arm64: Allocate guard pages near hyp stacks
+In-Reply-To: <20220210224220.4076151-5-kaleshsingh@google.com>
+References: <20220210224220.4076151-1-kaleshsingh@google.com>
+        <20220210224220.4076151-5-kaleshsingh@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, kernel-team@android.com, catalin.marinas@arm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, ardb@kernel.org, mark.rutland@arm.com, pasha.tatashin@soleen.com, joey.gouly@arm.com, pcc@google.com, ascull@google.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,103 +78,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 10 Feb 2022 22:41:45 +0000,
+Kalesh Singh <kaleshsingh@google.com> wrote:
+> 
+> From: Quentin Perret <qperret@google.com>
+> 
+> Allocate unbacked VA space underneath each stack page to ensure stack
+> overflows get trapped and don't corrupt memory silently.
+> 
+> The stack is aligned to twice its size (PAGE_SIZE), meaning that any
+> valid stack address has PAGE_SHIFT bit as 0. This allows us to easily
+> check for overflow in the exception entry without corrupting any GPRs.
+> 
+> Signed-off-by: Quentin Perret <qperret@google.com>
+> [ Kalesh - Update commit text and comments,
+>            refactor, add overflow handling ]
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> ---
+>  arch/arm64/kvm/hyp/nvhe/host.S   | 16 ++++++++++++++++
+>  arch/arm64/kvm/hyp/nvhe/setup.c  | 19 ++++++++++++++++++-
+>  arch/arm64/kvm/hyp/nvhe/switch.c |  5 +++++
+>  3 files changed, 39 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/kvm/hyp/nvhe/host.S b/arch/arm64/kvm/hyp/nvhe/host.S
+> index 3d613e721a75..78e4b612ac06 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/host.S
+> +++ b/arch/arm64/kvm/hyp/nvhe/host.S
+> @@ -153,6 +153,10 @@ SYM_FUNC_END(__host_hvc)
+>  
+>  .macro invalid_host_el2_vect
+>  	.align 7
+> +
+> +	/* Test stack overflow without corrupting GPRs */
+> +	test_sp_overflow PAGE_SHIFT, .L__hyp_sp_overflow\@
+> +
 
---s563op37ko4b4dy6
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I am definitely concerned with this in a system not using pKVM (which
+is on average 100% of the upstream users so far! ;-). This is more or
+less guaranteed to do the wrong thing 50% of the times, depending on
+the alignment of the stack.
 
-On Mon, Feb 14, 2022 at 01:46:37PM +0000, Lee Jones wrote:
-> On Mon, 07 Feb 2022, Uwe Kleine-K=F6nig wrote:
->=20
-> > Returning a non-zero value in an i2c remove callback results in the i2c
-> > core emitting a very generic error message ("remove failed (-ESOMETHING=
-),
-> > will be ignored") and as the message indicates not further error handli=
-ng
-> > is done.
-> >=20
-> > Instead emit a more specific error message and then return zero in
-> > .remove().
-> >=20
-> > The long-term goal is to make the i2c remove prototype return void, mak=
-ing
-> > all implementations return 0 is preparatory work for this change.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
-> >  drivers/mfd/stmfx.c | 16 +++++++++++-----
-> >  1 file changed, 11 insertions(+), 5 deletions(-)
-> >=20
-> > diff --git a/drivers/mfd/stmfx.c b/drivers/mfd/stmfx.c
-> > index e095a3930142..16631c675f2f 100644
-> > --- a/drivers/mfd/stmfx.c
-> > +++ b/drivers/mfd/stmfx.c
-> > @@ -392,17 +392,21 @@ static int stmfx_chip_init(struct i2c_client *cli=
-ent)
-> >  	return ret;
-> >  }
-> > =20
-> > -static int stmfx_chip_exit(struct i2c_client *client)
-> > +static void stmfx_chip_exit(struct i2c_client *client)
-> >  {
-> >  	struct stmfx *stmfx =3D i2c_get_clientdata(client);
-> > =20
-> >  	regmap_write(stmfx->map, STMFX_REG_IRQ_SRC_EN, 0);
-> >  	regmap_write(stmfx->map, STMFX_REG_SYS_CTRL, 0);
-> > =20
-> > -	if (stmfx->vdd)
-> > -		return regulator_disable(stmfx->vdd);
-> > +	if (stmfx->vdd) {
-> > +		int ret =3D regulator_disable(stmfx->vdd);
-> > =20
-> > -	return 0;
-> > +		if (ret)
->=20
-> Nit: Premise of the patch is fine, but please can you use the standard
-> function call, check the return value format please.  Something about
-> this is triggering my OCD! :)
->=20
->      	int ret;
->=20
-> 	ret =3D regulator_disable(stmfx->vdd);
-> 	if (ret)
-> 		do_thing();
+>  	/* If a guest is loaded, panic out of it. */
+>  	stp	x0, x1, [sp, #-16]!
+>  	get_loaded_vcpu x0, x1
+> @@ -165,6 +169,18 @@ SYM_FUNC_END(__host_hvc)
+>  	 * been partially clobbered by __host_enter.
+>  	 */
+>  	b	hyp_panic
+> +
+> +.L__hyp_sp_overflow\@:
+> +	/*
+> +	 * Reset SP to the top of the stack, to allow handling the hyp_panic.
+> +	 * This corrupts the stack but is ok, since we won't be attempting
+> +	 * any unwinding here.
+> +	 */
+> +	ldr_this_cpu	x0, kvm_init_params + NVHE_INIT_STACK_HYP_VA, x1
+> +	mov	sp, x0
+> +
+> +	bl	hyp_panic_bad_stack
+> +	ASM_BUG()
+>  .endm
+>  
+>  .macro invalid_host_el1_vect
+> diff --git a/arch/arm64/kvm/hyp/nvhe/setup.c b/arch/arm64/kvm/hyp/nvhe/setup.c
+> index 99e178cf4249..114053dff228 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/setup.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/setup.c
+> @@ -105,7 +105,24 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
+>  		if (ret)
+>  			return ret;
+>  
+> -		/* Map stack pages in the 'private' VA range */
+> +		/*
+> +		 * Allocate 'private' VA range for stack guard pages.
+> +		 *
+> +		 * The 'private' VA range grows upward and stacks downwards, so
+> +		 * allocate the guard page first. But make sure to align the
+> +		 * stack itself with PAGE_SIZE * 2 granularity to ease overflow
+> +		 * detection in the entry assembly code.
+> +		 */
+> +		do {
+> +			start = (void *)hyp_alloc_private_va_range(PAGE_SIZE);
+> +			if (IS_ERR(start))
+> +				return PTR_ERR(start);
+> +		} while (IS_ALIGNED((u64) start, PAGE_SIZE * 2));
 
-Not sure I understand you correctly. Do you want just:
+This seems cumbersome. Can't we tweak hyp_alloc_private_va_range() to
+perform the required alignment? It could easily be convinced to return
+an address that is aligned on the size of the region, which would
+avoid this sort of loop.
 
- 	regmap_write(stmfx->map, STMFX_REG_SYS_CTRL, 0);
-=20
- 	if (stmfx->vdd) {
--		int ret =3D regulator_disable(stmfx->vdd);
-+		int ret;
-+
-+		ret =3D regulator_disable(stmfx->vdd);
- 		if (ret)
- ...
+Thanks,
 
-squashed into the patch?
+	M.
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---s563op37ko4b4dy6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIKYesACgkQwfwUeK3K
-7Am/agf+Ox1j1cOxSuGwS+XoEjW3j9S/sI2S+1HQq/TZ5DMu7yrdIcQm+m157Xeh
-SXiqNFcmVbXHvSU+r8gQtq1nInt6JFwjpFLdt+K/aUPPOZUsxug+3CgL+zTTnhm+
-qBVhvWTGQoZ3tkxz4Ja4oSACEiYOHiM2NhQe3GVAFXNas6jwvZGDf6wBcwLhvQhK
-am4yU8fWiiV/Wa5m1OGRB+ELOBaooi4hagB0WZVviHo1LFhQXu+o/q8gV1X7xdAN
-f/4+8al/jfZJp5dkJGbj0fWPncQ7T0dZYtYvdSDAc6sapNWYlF9l0saS+r8iZbfb
-AGWtHFSKo8ukP4MdGWnoZaIaDWlrEA==
-=RA9W
------END PGP SIGNATURE-----
-
---s563op37ko4b4dy6--
+-- 
+Without deviation from the norm, progress is not possible.

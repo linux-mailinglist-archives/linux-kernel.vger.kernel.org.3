@@ -2,61 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976744B5767
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10EEB4B576A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:52:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343536AbiBNQvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 11:51:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60638 "EHLO
+        id S1345193AbiBNQwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 11:52:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237171AbiBNQvi (ORCPT
+        with ESMTP id S237171AbiBNQwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 11:51:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCF4CD3;
-        Mon, 14 Feb 2022 08:51:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43C2DB811F2;
-        Mon, 14 Feb 2022 16:51:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 929B4C340E9;
-        Mon, 14 Feb 2022 16:51:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644857487;
-        bh=1N7hGnNYxDbCgnmxgrSOedPmpfF0d28FIzo1Mg2GxPg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ooBbGKMvE5TWtlEfYyKz2MAmgLTPOQn3mdeZgYu6wT88qD/hpd2960PvAtzcZwPcY
-         4WtkarZG2z8GU5Sxlwn9H8OvoNDj7KZwoSFZxvc6CGBx7kCshNUIqD0e3j2ooEhogk
-         zANx41JPAc/600O1/ZCJRdIbaPNkiOfuNCU7xJPts/exaaCDkAHZN9N2qRP91IYW16
-         Mu4lGHKqp1rV7JcJ+LVQaqsDbQEQQ4l7lfibSF7i/eVpJxH4XMl7IsFPnguED+oP9M
-         8gpwFxAgkJzNGRgkmfhwKejxqcA/2hWAQbHFVetzqhZ//LGcNq3yTysHVSd3FRCFSq
-         4FCn1ef4kS5WQ==
-Date:   Mon, 14 Feb 2022 16:51:22 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] regulator: dt-bindings: maxim,max77693: convert
- to dtschema
-Message-ID: <YgqIiv8fZeqFFUHX@sirena.org.uk>
-References: <20220111175017.223966-1-krzysztof.kozlowski@canonical.com>
- <20220111175017.223966-4-krzysztof.kozlowski@canonical.com>
- <YgqGT999nsjUGp9Z@sirena.org.uk>
- <12c66ced-c4a4-3a4e-f84b-83edb9e3fc58@canonical.com>
+        Mon, 14 Feb 2022 11:52:33 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8518365142
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:52:25 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E35213D5;
+        Mon, 14 Feb 2022 08:52:25 -0800 (PST)
+Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4C1C03F70D;
+        Mon, 14 Feb 2022 08:52:23 -0800 (PST)
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     ardb@kernel.org, bp@alien8.de, catalin.marinas@arm.com,
+        dave.hansen@linux.intel.com, frederic@kernel.org,
+        james.morse@arm.com, joey.gouly@arm.com, juri.lelli@redhat.com,
+        linux-kernel@vger.kernel.org, luto@kernel.org,
+        mark.rutland@arm.com, mingo@redhat.com, peterz@infradead.org,
+        tglx@linutronix.de, valentin.schneider@arm.com, will@kernel.org
+Subject: [PATCH v4 0/7] arm64 / sched/preempt: support PREEMPT_DYNAMIC with static keys
+Date:   Mon, 14 Feb 2022 16:52:09 +0000
+Message-Id: <20220214165216.2231574-1-mark.rutland@arm.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="htkRvpnxR2kejon2"
-Content-Disposition: inline
-In-Reply-To: <12c66ced-c4a4-3a4e-f84b-83edb9e3fc58@canonical.com>
-X-Cookie: Am I in GRADUATE SCHOOL yet?
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,44 +44,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series enables PREEMPT_DYNAMIC on arm64. To do so, it adds a new
+mechanism allowing the preemption functions to be enabled/disabled using
+static keys rather than static calls, with architectures selecting
+whether they use static calls or static keys.
 
---htkRvpnxR2kejon2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+With non-inline static calls, each function call results in a call to
+the (out-of-line) trampoline which either tail-calls its associated
+callee or performs an early return.
 
-On Mon, Feb 14, 2022 at 05:45:40PM +0100, Krzysztof Kozlowski wrote:
-> On 14/02/2022 17:41, Mark Brown wrote:
-> >> +    properties:
-> >> +      regulator-name: true
-> >> +      regulator-always-on: true
-> >> +      regulator-boot-on: true
+The key idea is that where we're only enabling/disabling a single
+callee, we can inline this trampoline into the start of the callee,
+using a static key to decide whether to return early, and leaving the
+remaining codegen to the compiler. The overhead should be similar to
+(and likely lower than) using a static call trampoline. Since most
+codegen is up to the compiler, we sidestep a number of implementation
+pain-points (e.g. things like CFI should "just work" as well as they do
+for any other functions).
 
-> > Why are these specific generic regulator properties enumerated? =20
+The bulk of the diffstat for kernel/sched/core.c is shuffling the
+PREEMPT_DYNAMIC code later in the file, and the actual additions are
+fairly trivial.
 
-> additionalProperties=3Dfalse is used, so all properties, also ones from
-> regulator.yaml, have to be mentioned.
+I've given this very light build+boot testing so far.
 
-> Why this approach was used? Because the hardware here is very limited,
-> so no other properties are expected. No other features are supported.
+Since v1 [1]:
+* Rework Kconfig text to be clearer
+* Rework arm64 entry code
+* Clarify commit messages.
 
-That's not going to scale well if we add any new features in the core,
-and doesn't include things like coupling which could be applied to any
-regulator.
+Since v2 [2]:
+* Add missing includes
+* Always provide prototype for preempt_schedule()
+* Always provide prototype for preempt_schedule_notrace()
+* Fix __cond_resched() to default to disabled
+* Fix might_resched() to default to disabled
+* Clarify example in commit message
 
---htkRvpnxR2kejon2
-Content-Type: application/pgp-signature; name="signature.asc"
+Since v3 [3]:
+* Add acks (including those missing from v3)
+* Fix Kconfig dependencies for jump labels
+* Don't default-enable PREEMPT_DYNAMIC when using static keys
+* Clarify generated assembly examples
 
------BEGIN PGP SIGNATURE-----
+[1] https://lore.kernel.org/r/20211109172408.49641-1-mark.rutland@arm.com/
+[2] https://lore.kernel.org/r/20220204150557.434610-1-mark.rutland@arm.com/
+[3] https://lore.kernel.org/r/20220209153535.818830-1-mark.rutland@arm.com/
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIKiIkACgkQJNaLcl1U
-h9BEBwf9FYrsr+67OYGeYSJYNBOIHamIvegwEvoFCMdube3nMDmIxYlsyXUZe5sT
-UVvOrbbCZDK0nR8SvbZsys5qflPNs3Ao4fYNF2s2CJmXPS661LB6IpkjFOI2MtCV
-kfRvsLIo3KT9IUBU/TZvBPyg4cEhrlKN4hCk4SFGVx0TydZQqAXNSCWYgbQWQE6v
-8uUFlI5Cx/rHiyemwl9gSVssQ2JViJ4bYyR3wMbutZ7/kZqz1BZc/m+k6EZYuT62
-rE9Mc8Ff/S8yCjikcW1Usixp/YnMP4m3dQ/p0/M6oG3dA08+uXVFzyK7SvoySehV
-fAyz5bsjcOq563rVT9h/sXGz9p1JRg==
-=v2zQ
------END PGP SIGNATURE-----
+Thanks,
+Mark.
 
---htkRvpnxR2kejon2--
+Mark Rutland (7):
+  sched/preempt: move PREEMPT_DYNAMIC logic later
+  sched/preempt: refactor sched_dynamic_update()
+  sched/preempt: simplify irqentry_exit_cond_resched() callers
+  sched/preempt: decouple HAVE_PREEMPT_DYNAMIC from GENERIC_ENTRY
+  sched/preempt: add PREEMPT_DYNAMIC using static keys
+  arm64: entry: centralize preemption decision
+  arm64: support PREEMPT_DYNAMIC
+
+ arch/Kconfig                     |  37 +++-
+ arch/arm64/Kconfig               |   1 +
+ arch/arm64/include/asm/preempt.h |  19 +-
+ arch/arm64/kernel/entry-common.c |  28 ++-
+ arch/x86/Kconfig                 |   2 +-
+ arch/x86/include/asm/preempt.h   |  10 +-
+ include/linux/entry-common.h     |  15 +-
+ include/linux/kernel.h           |   7 +-
+ include/linux/sched.h            |  10 +-
+ kernel/Kconfig.preempt           |   3 +-
+ kernel/entry/common.c            |  23 +-
+ kernel/sched/core.c              | 347 ++++++++++++++++++-------------
+ 12 files changed, 329 insertions(+), 173 deletions(-)
+
+-- 
+2.30.2
+

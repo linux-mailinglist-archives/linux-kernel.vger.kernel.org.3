@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 815694B4939
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1874B4963
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345747AbiBNKKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:10:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35410 "EHLO
+        id S1347978AbiBNKdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:33:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346069AbiBNKHZ (ORCPT
+        with ESMTP id S1347455AbiBNKb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:07:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B2F6C1EF;
-        Mon, 14 Feb 2022 01:50:02 -0800 (PST)
+        Mon, 14 Feb 2022 05:31:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FF19FAEF;
+        Mon, 14 Feb 2022 02:00:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B929DB80DC4;
-        Mon, 14 Feb 2022 09:50:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1852C340E9;
-        Mon, 14 Feb 2022 09:49:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F07A60A69;
+        Mon, 14 Feb 2022 09:59:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19A2FC340EF;
+        Mon, 14 Feb 2022 09:59:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832199;
-        bh=ZdjzBLXDuAK7vtC6/8Lwynr/u2kPl+3Y+vzwytsbOvg=;
+        s=korg; t=1644832794;
+        bh=LTboYfmH/a68TcCCBAK+TJjoXyW6Y/B18xEZL5Dz6d8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PevWyR7SDGhh7BZ/8JunoCIiaLMhLcxfIvPmrrwyltctR7Obfde+MG6N/RMl1303X
-         JmjkX9Xa45HVuqGIx8a4k/83peWjhbcJrRTmI15EvOC/bXQ9ZbM9jALk7m5mD2v32Z
-         qJ3cY8Wlu7Yoib1ZXyQ1PeiF0a2SrXrBbCb7Fjw8=
+        b=GKNkSu8q6Vc4cZOlgVGmMh2iI99XLrdeVQkP1s2fVTwyVQzb+5LgJ8Wzt9Alx6d1o
+         Ug++DRAyLuaj0NVHe58xkB6AtzpzHowqTEcpCyCkl3DAqAYamUcJznWX98I5zQg6Io
+         UMmmeOaG58WkPVhCoZ2DezmqNTHBSTrOuWcldCYk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rafael Richter <Rafael.Richter@gin.de>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Daniel Klauer <daniel.klauer@gin.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 111/172] net: dsa: mv88e6xxx: dont use devres for mdiobus
-Date:   Mon, 14 Feb 2022 10:26:09 +0100
-Message-Id: <20220214092510.265292325@linuxfoundation.org>
+Subject: [PATCH 5.16 126/203] s390/module: fix building test_modules_helpers.o with clang
+Date:   Mon, 14 Feb 2022 10:26:10 +0100
+Message-Id: <20220214092514.524819302@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,142 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Ilya Leoshkevich <iii@linux.ibm.com>
 
-[ Upstream commit f53a2ce893b2c7884ef94471f170839170a4eba0 ]
+[ Upstream commit e286f231eab410793f3e91c924e6dbd23edee05a ]
 
-As explained in commits:
-74b6d7d13307 ("net: dsa: realtek: register the MDIO bus under devres")
-5135e96a3dd2 ("net: dsa: don't allocate the slave_mii_bus using devres")
+Move test_modules_return_* prototypes into a header file in order to
+placate -Wmissing-prototypes.
 
-mdiobus_free() will panic when called from devm_mdiobus_free() <-
-devres_release_all() <- __device_release_driver(), and that mdiobus was
-not previously unregistered.
-
-The mv88e6xxx is an MDIO device, so the initial set of constraints that
-I thought would cause this (I2C or SPI buses which call ->remove on
-->shutdown) do not apply. But there is one more which applies here.
-
-If the DSA master itself is on a bus that calls ->remove from ->shutdown
-(like dpaa2-eth, which is on the fsl-mc bus), there is a device link
-between the switch and the DSA master, and device_links_unbind_consumers()
-will unbind the Marvell switch driver on shutdown.
-
-systemd-shutdown[1]: Powering off.
-mv88e6085 0x0000000008b96000:00 sw_gl0: Link is Down
-fsl-mc dpbp.9: Removing from iommu group 7
-fsl-mc dpbp.8: Removing from iommu group 7
-------------[ cut here ]------------
-kernel BUG at drivers/net/phy/mdio_bus.c:677!
-Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 1 Comm: systemd-shutdow Not tainted 5.16.5-00040-gdc05f73788e5 #15
-pc : mdiobus_free+0x44/0x50
-lr : devm_mdiobus_free+0x10/0x20
-Call trace:
- mdiobus_free+0x44/0x50
- devm_mdiobus_free+0x10/0x20
- devres_release_all+0xa0/0x100
- __device_release_driver+0x190/0x220
- device_release_driver_internal+0xac/0xb0
- device_links_unbind_consumers+0xd4/0x100
- __device_release_driver+0x4c/0x220
- device_release_driver_internal+0xac/0xb0
- device_links_unbind_consumers+0xd4/0x100
- __device_release_driver+0x94/0x220
- device_release_driver+0x28/0x40
- bus_remove_device+0x118/0x124
- device_del+0x174/0x420
- fsl_mc_device_remove+0x24/0x40
- __fsl_mc_device_remove+0xc/0x20
- device_for_each_child+0x58/0xa0
- dprc_remove+0x90/0xb0
- fsl_mc_driver_remove+0x20/0x5c
- __device_release_driver+0x21c/0x220
- device_release_driver+0x28/0x40
- bus_remove_device+0x118/0x124
- device_del+0x174/0x420
- fsl_mc_bus_remove+0x80/0x100
- fsl_mc_bus_shutdown+0xc/0x1c
- platform_shutdown+0x20/0x30
- device_shutdown+0x154/0x330
- kernel_power_off+0x34/0x6c
- __do_sys_reboot+0x15c/0x250
- __arm64_sys_reboot+0x20/0x30
- invoke_syscall.constprop.0+0x4c/0xe0
- do_el0_svc+0x4c/0x150
- el0_svc+0x24/0xb0
- el0t_64_sync_handler+0xa8/0xb0
- el0t_64_sync+0x178/0x17c
-
-So the same treatment must be applied to all DSA switch drivers, which
-is: either use devres for both the mdiobus allocation and registration,
-or don't use devres at all.
-
-The Marvell driver already has a good structure for mdiobus removal, so
-just plug in mdiobus_free and get rid of devres.
-
-Fixes: ac3a68d56651 ("net: phy: don't abuse devres in devm_mdiobus_register()")
-Reported-by: Rafael Richter <Rafael.Richter@gin.de>
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Tested-by: Daniel Klauer <daniel.klauer@gin.de>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 90c5318795ee ("s390/module: test loading modules with a lot of relocations")
+Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/mv88e6xxx/chip.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ arch/s390/lib/test_modules.c | 3 ---
+ arch/s390/lib/test_modules.h | 3 +++
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 43d126628610b..206b8a3001b95 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -3416,7 +3416,7 @@ static int mv88e6xxx_mdio_register(struct mv88e6xxx_chip *chip,
- 			return err;
- 	}
+diff --git a/arch/s390/lib/test_modules.c b/arch/s390/lib/test_modules.c
+index d056baa8fbb0c..9894009fc1f25 100644
+--- a/arch/s390/lib/test_modules.c
++++ b/arch/s390/lib/test_modules.c
+@@ -5,9 +5,6 @@
  
--	bus = devm_mdiobus_alloc_size(chip->dev, sizeof(*mdio_bus));
-+	bus = mdiobus_alloc_size(sizeof(*mdio_bus));
- 	if (!bus)
- 		return -ENOMEM;
+ #include "test_modules.h"
  
-@@ -3441,14 +3441,14 @@ static int mv88e6xxx_mdio_register(struct mv88e6xxx_chip *chip,
- 	if (!external) {
- 		err = mv88e6xxx_g2_irq_mdio_setup(chip, bus);
- 		if (err)
--			return err;
-+			goto out;
- 	}
+-#define DECLARE_RETURN(i) int test_modules_return_ ## i(void)
+-REPEAT_10000(DECLARE_RETURN);
+-
+ /*
+  * Test that modules with many relocations are loaded properly.
+  */
+diff --git a/arch/s390/lib/test_modules.h b/arch/s390/lib/test_modules.h
+index 43b5e4b4af3e4..6371fcf176845 100644
+--- a/arch/s390/lib/test_modules.h
++++ b/arch/s390/lib/test_modules.h
+@@ -47,4 +47,7 @@
+ 	__REPEAT_10000_1(f, 8); \
+ 	__REPEAT_10000_1(f, 9)
  
- 	err = of_mdiobus_register(bus, np);
- 	if (err) {
- 		dev_err(chip->dev, "Cannot register MDIO bus (%d)\n", err);
- 		mv88e6xxx_g2_irq_mdio_free(chip, bus);
--		return err;
-+		goto out;
- 	}
- 
- 	if (external)
-@@ -3457,6 +3457,10 @@ static int mv88e6xxx_mdio_register(struct mv88e6xxx_chip *chip,
- 		list_add(&mdio_bus->list, &chip->mdios);
- 
- 	return 0;
++#define DECLARE_RETURN(i) int test_modules_return_ ## i(void)
++REPEAT_10000(DECLARE_RETURN);
 +
-+out:
-+	mdiobus_free(bus);
-+	return err;
- }
- 
- static void mv88e6xxx_mdios_unregister(struct mv88e6xxx_chip *chip)
-@@ -3472,6 +3476,7 @@ static void mv88e6xxx_mdios_unregister(struct mv88e6xxx_chip *chip)
- 			mv88e6xxx_g2_irq_mdio_free(chip, bus);
- 
- 		mdiobus_unregister(bus);
-+		mdiobus_free(bus);
- 	}
- }
- 
+ #endif
 -- 
 2.34.1
 

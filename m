@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B21B4B4C07
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE0F4B4C12
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348186AbiBNKhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:37:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48396 "EHLO
+        id S236835AbiBNKhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:37:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348267AbiBNKel (ORCPT
+        with ESMTP id S1348284AbiBNKem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:34:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABDAD61;
-        Mon, 14 Feb 2022 02:01:22 -0800 (PST)
+        Mon, 14 Feb 2022 05:34:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A29DD63;
+        Mon, 14 Feb 2022 02:01:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 808E0B80DCD;
-        Mon, 14 Feb 2022 10:01:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F21EC340E9;
-        Mon, 14 Feb 2022 10:01:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A8B860C24;
+        Mon, 14 Feb 2022 10:01:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC959C340EF;
+        Mon, 14 Feb 2022 10:01:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832880;
-        bh=5oRXJ9iYbP6bvP3H+2211ccCJikkhXoMnaErPQRQCtw=;
+        s=korg; t=1644832883;
+        bh=KhUiQzWhj0GxiVPcv6HPZho3XJSPH5zYWYny4xePs4U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rNm7BAxBDKJVrF68571OKyZTsCFusJBn+XmZhrzTOlLcEaU1EAcQbXzjC/lNlkakN
-         7NbxcgF/Pr0WpYzSwiPMqdOMpwax12I7iYtUwPZdDl6k5SnfySQqeWhtF2dsdfcD+z
-         i/6y71vybYvYltWzp9MI/4GZMK9uT57fgpN+K67A=
+        b=KE36TMzHgJi2rwqpAKHVfAW0dgz4dy0UxzuXUp+/EegeH4HApCgR1qcwhDJNamSCp
+         BKyDrJ4A7+aXxGJTgmDMqPAb67bPr2FI8O767KbNG1bwCNI39TNK/OxfwD4aqxgd2o
+         p962z9i22EAYv+5VIPxNTd74fIOb8rtAtYxehntY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Robert-Ionut Alexa <robert-ionut.alexa@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Gurucharan G <gurucharanx.g@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 155/203] dpaa2-eth: unregister the netdev before disconnecting from the PHY
-Date:   Mon, 14 Feb 2022 10:26:39 +0100
-Message-Id: <20220214092515.514862032@linuxfoundation.org>
+Subject: [PATCH 5.16 156/203] ice: fix an error code in ice_cfg_phy_fec()
+Date:   Mon, 14 Feb 2022 10:26:40 +0100
+Message-Id: <20220214092515.546172227@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
 References: <20220214092510.221474733@linuxfoundation.org>
@@ -57,43 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert-Ionut Alexa <robert-ionut.alexa@nxp.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 9ccc6e0c8959a019bb40f6b18704b142c04b19a8 ]
+[ Upstream commit 21338d58736ef70eaae5fd75d567a358ff7902f9 ]
 
-The netdev should be unregistered before we are disconnecting from the
-MAC/PHY so that the dev_close callback is called and the PHY and the
-phylink workqueues are actually stopped before we are disconnecting and
-destroying the phylink instance.
+Propagate the error code from ice_get_link_default_override() instead
+of returning success.
 
-Fixes: 719479230893 ("dpaa2-eth: add MAC/PHY support through phylink")
-Signed-off-by: Robert-Ionut Alexa <robert-ionut.alexa@nxp.com>
-Signed-off-by: Ioana Ciornei <ioana.ciornei@nxp.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: ea78ce4dab05 ("ice: add link lenient and default override support")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Tested-by: Gurucharan G <gurucharanx.g@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_common.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-index 8e643567abce2..70c8dd6cf3508 100644
---- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-+++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-@@ -4523,12 +4523,12 @@ static int dpaa2_eth_remove(struct fsl_mc_device *ls_dev)
- #ifdef CONFIG_DEBUG_FS
- 	dpaa2_dbg_remove(priv);
- #endif
-+
-+	unregister_netdev(net_dev);
- 	rtnl_lock();
- 	dpaa2_eth_disconnect_mac(priv);
- 	rtnl_unlock();
+diff --git a/drivers/net/ethernet/intel/ice/ice_common.c b/drivers/net/ethernet/intel/ice/ice_common.c
+index b3066d0fea8ba..e9a0159cb8b92 100644
+--- a/drivers/net/ethernet/intel/ice/ice_common.c
++++ b/drivers/net/ethernet/intel/ice/ice_common.c
+@@ -3321,7 +3321,8 @@ ice_cfg_phy_fec(struct ice_port_info *pi, struct ice_aqc_set_phy_cfg_data *cfg,
+ 	    !ice_fw_supports_report_dflt_cfg(hw)) {
+ 		struct ice_link_default_override_tlv tlv;
  
--	unregister_netdev(net_dev);
--
- 	dpaa2_eth_dl_port_del(priv);
- 	dpaa2_eth_dl_traps_unregister(priv);
- 	dpaa2_eth_dl_free(priv);
+-		if (ice_get_link_default_override(&tlv, pi))
++		status = ice_get_link_default_override(&tlv, pi);
++		if (status)
+ 			goto out;
+ 
+ 		if (!(tlv.options & ICE_LINK_OVERRIDE_STRICT_MODE) &&
 -- 
 2.34.1
 

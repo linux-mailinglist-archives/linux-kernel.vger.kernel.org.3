@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 659DF4B46FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8149B4B470E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238616AbiBNJwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:52:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43336 "EHLO
+        id S244350AbiBNJhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:37:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236346AbiBNJtL (ORCPT
+        with ESMTP id S244626AbiBNJgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:49:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C5FBF78;
-        Mon, 14 Feb 2022 01:40:57 -0800 (PST)
+        Mon, 14 Feb 2022 04:36:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160C866F97;
+        Mon, 14 Feb 2022 01:33:59 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61452B80DA9;
-        Mon, 14 Feb 2022 09:40:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF16C340E9;
-        Mon, 14 Feb 2022 09:40:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36BEA60FFF;
+        Mon, 14 Feb 2022 09:33:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBAEDC340E9;
+        Mon, 14 Feb 2022 09:33:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831655;
-        bh=orlmaubXj4wded+lvdCi4RRUq/I3rcbYbHBcl1NE3Pk=;
+        s=korg; t=1644831219;
+        bh=l0212FSHtUxE+34kUIAZLJhq/HpoQd/R+RJu5Jxqgx0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SfpHevzLIxkVeDOuPhPbLRCBFPe2i52OOEY+HPZM+nWQZWY0SDmuosUSj50gE7y2L
-         sKG7Xx2/549d34ggHB9U7yfUOxRdRMIM7GVGbmMD9SOcUxXeJGkQrciQLBc1afEcQ4
-         GzQ+dUyesUkmJWeANtuEn/2eJmdeZ9XBrR265xvA=
+        b=0x0S0uyNlt6clmDWgp5erKFEmDzISvbDUG8P8CCIqBP1Bf1rez9FqEyBcujyCdOhj
+         2xvw3WmCz95qMyG+GAoA0x1Vy8dq85TCUUIegcSzRXjsPmiXwGM5RmVlKTxbEsXQNd
+         VLv49Fze/Ih7b5oxjGnVII3FTDuBJzh9XdRTFEIg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
+        stable@vger.kernel.org, Mahesh Bandewar <maheshb@google.com>,
+        Jay Vosburgh <jay.vosburgh@canonical.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 053/116] ARM: dts: meson8b: Fix the UART device-tree schema validation
-Date:   Mon, 14 Feb 2022 10:25:52 +0100
-Message-Id: <20220214092500.551912499@linuxfoundation.org>
+Subject: [PATCH 4.19 27/49] bonding: pair enable_port with slave_arr_updates
+Date:   Mon, 14 Feb 2022 10:25:53 +0100
+Message-Id: <20220214092449.187127135@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
+References: <20220214092448.285381753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,75 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+From: Mahesh Bandewar <maheshb@google.com>
 
-[ Upstream commit 3375aa77135f6aeb1107ed839a2050a4118444bc ]
+[ Upstream commit 23de0d7b6f0e3f9a6283a882594c479949da1120 ]
 
-The dt-bindings for the UART controller only allow the following values
-for Meson8 SoCs:
-- "amlogic,meson8b-uart", "amlogic,meson-ao-uart"
-- "amlogic,meson8b-uart"
+When 803.2ad mode enables a participating port, it should update
+the slave-array. I have observed that the member links are participating
+and are part of the active aggregator while the traffic is egressing via
+only one member link (in a case where two links are participating). Via
+kprobes I discovered that slave-arr has only one link added while
+the other participating link wasn't part of the slave-arr.
 
-Use the correct fallback compatible string "amlogic,meson-ao-uart" for
-AO UART. Drop the "amlogic,meson-uart" compatible string from the EE
-domain UART controllers.
+I couldn't see what caused that situation but the simple code-walk
+through provided me hints that the enable_port wasn't always associated
+with the slave-array update.
 
-Also update the order of the clocks to match the order defined in the
-yaml bindings.
-
-Fixes: b02d6e73f5fc96 ("ARM: dts: meson8b: use stable UART bindings with correct gate clock")
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://lore.kernel.org/r/20211227180026.4068352-4-martin.blumenstingl@googlemail.com
+Fixes: ee6377147409 ("bonding: Simplify the xmit function for modes that use xmit_hash")
+Signed-off-by: Mahesh Bandewar <maheshb@google.com>
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+Link: https://lore.kernel.org/r/20220207222901.1795287-1-maheshb@google.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/meson8b.dtsi | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ drivers/net/bonding/bond_3ad.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/meson8b.dtsi b/arch/arm/boot/dts/meson8b.dtsi
-index 2401cdf5f7511..f6eb7c803174e 100644
---- a/arch/arm/boot/dts/meson8b.dtsi
-+++ b/arch/arm/boot/dts/meson8b.dtsi
-@@ -586,27 +586,27 @@ &timer_abcde {
- };
+diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
+index 93dfcef8afc4b..035923876c617 100644
+--- a/drivers/net/bonding/bond_3ad.c
++++ b/drivers/net/bonding/bond_3ad.c
+@@ -1012,8 +1012,8 @@ static void ad_mux_machine(struct port *port, bool *update_slave_arr)
+ 				if (port->aggregator &&
+ 				    port->aggregator->is_active &&
+ 				    !__port_is_enabled(port)) {
+-
+ 					__enable_port(port);
++					*update_slave_arr = true;
+ 				}
+ 			}
+ 			break;
+@@ -1760,6 +1760,7 @@ static void ad_agg_selection_logic(struct aggregator *agg,
+ 			     port = port->next_port_in_aggregator) {
+ 				__enable_port(port);
+ 			}
++			*update_slave_arr = true;
+ 		}
+ 	}
  
- &uart_AO {
--	compatible = "amlogic,meson8b-uart", "amlogic,meson-uart";
--	clocks = <&clkc CLKID_CLK81>, <&xtal>, <&clkc CLKID_CLK81>;
--	clock-names = "baud", "xtal", "pclk";
-+	compatible = "amlogic,meson8b-uart", "amlogic,meson-ao-uart";
-+	clocks = <&xtal>, <&clkc CLKID_CLK81>, <&clkc CLKID_CLK81>;
-+	clock-names = "xtal", "pclk", "baud";
- };
- 
- &uart_A {
--	compatible = "amlogic,meson8b-uart", "amlogic,meson-uart";
--	clocks = <&clkc CLKID_CLK81>, <&xtal>, <&clkc CLKID_UART0>;
--	clock-names = "baud", "xtal", "pclk";
-+	compatible = "amlogic,meson8b-uart";
-+	clocks = <&xtal>, <&clkc CLKID_UART0>, <&clkc CLKID_CLK81>;
-+	clock-names = "xtal", "pclk", "baud";
- };
- 
- &uart_B {
--	compatible = "amlogic,meson8b-uart", "amlogic,meson-uart";
--	clocks = <&clkc CLKID_CLK81>, <&xtal>, <&clkc CLKID_UART1>;
--	clock-names = "baud", "xtal", "pclk";
-+	compatible = "amlogic,meson8b-uart";
-+	clocks = <&xtal>, <&clkc CLKID_UART0>, <&clkc CLKID_CLK81>;
-+	clock-names = "xtal", "pclk", "baud";
- };
- 
- &uart_C {
--	compatible = "amlogic,meson8b-uart", "amlogic,meson-uart";
--	clocks = <&clkc CLKID_CLK81>, <&xtal>, <&clkc CLKID_UART2>;
--	clock-names = "baud", "xtal", "pclk";
-+	compatible = "amlogic,meson8b-uart";
-+	clocks = <&xtal>, <&clkc CLKID_UART0>, <&clkc CLKID_CLK81>;
-+	clock-names = "xtal", "pclk", "baud";
- };
- 
- &usb0 {
 -- 
 2.34.1
 

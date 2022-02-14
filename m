@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79EF94B4A83
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA9F4B4B4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347355AbiBNKVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:21:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44744 "EHLO
+        id S1345568AbiBNKBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:01:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347983AbiBNKRC (ORCPT
+        with ESMTP id S1344537AbiBNJ4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:17:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266ED8CDA2;
-        Mon, 14 Feb 2022 01:54:28 -0800 (PST)
+        Mon, 14 Feb 2022 04:56:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C086D18B;
+        Mon, 14 Feb 2022 01:44:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9FD4DB80DC6;
-        Mon, 14 Feb 2022 09:54:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3D33C340E9;
-        Mon, 14 Feb 2022 09:54:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22DAEB80DC4;
+        Mon, 14 Feb 2022 09:44:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29905C340F0;
+        Mon, 14 Feb 2022 09:44:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832464;
-        bh=A7U1HkB2a885FrWTHJAWjetyqmCy4MwdfkCVXx5gPTU=;
+        s=korg; t=1644831881;
+        bh=l0PJjO+e5VJdWj/04DSb6gvQ/YyKbHI2YE4QxJza6hs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1PDtgjQQdQsqpEDRk2U5d2om3JaTv1Cn40Rbc/EZOaeMjfeF3Pm23iR3OKYQFA8xD
-         0WdGX4mQV4LeGm4i4HNV2lGtnL7Ay97wN28GsDNGvmkVz32/tdx5qDFWdWha4yfWKh
-         BVwHWlitsbmhPRVvagiSae7j34m8FKNM7fs7epBw=
+        b=RKSyhDWSdQbgxrv7ytLRVFRFzZV0GrDEIrtQ9gt7B77YjLvxp89G8WYfz+fF4s6PR
+         FH5TWLX9ewy1M5LN0+Qp5mDOBvc+bVmAQshEMlfTXCgFwozG+PHjyVCeZonwdT6gyc
+         TQf4WWO8CXeyxPRYi0w7sLo0T39TG2+lArWq00Hk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, rtm@csail.mit.edu,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 023/203] NFSv4.1: Fix uninitialised variable in devicenotify
-Date:   Mon, 14 Feb 2022 10:24:27 +0100
-Message-Id: <20220214092510.999203299@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 010/172] net: phy: marvell: Fix RGMII Tx/Rx delays setting in 88e1121-compatible PHYs
+Date:   Mon, 14 Feb 2022 10:24:28 +0100
+Message-Id: <20220214092506.712521082@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,106 +57,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
 
-[ Upstream commit b05bf5c63b326ce1da84ef42498d8e0e292e694c ]
+commit fe4f57bf7b585dca58f1496c4e2481ecbae18126 upstream.
 
-When decode_devicenotify_args() exits with no entries, we need to
-ensure that the struct cb_devicenotifyargs is initialised to
-{ 0, NULL } in order to avoid problems in
-nfs4_callback_devicenotify().
+It is mandatory for a software to issue a reset upon modifying RGMII
+Receive Timing Control and RGMII Transmit Timing Control bit fields of MAC
+Specific Control register 2 (page 2, register 21) otherwise the changes
+won't be perceived by the PHY (the same is applicable for a lot of other
+registers). Not setting the RGMII delays on the platforms that imply it'
+being done on the PHY side will consequently cause the traffic loss. We
+discovered that the denoted soft-reset is missing in the
+m88e1121_config_aneg() method for the case if the RGMII delays are
+modified but the MDIx polarity isn't changed or the auto-negotiation is
+left enabled, thus causing the traffic loss on our platform with Marvell
+Alaska 88E1510 installed. Let's fix that by issuing the soft-reset if the
+delays have been actually set in the m88e1121_config_aneg_rgmii_delays()
+method.
 
-Reported-by: <rtm@csail.mit.edu>
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: d6ab93364734 ("net: phy: marvell: Avoid unnecessary soft reset")
+Signed-off-by: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+Link: https://lore.kernel.org/r/20220205203932.26899-1-Pavel.Parkhomenko@baikalelectronics.ru
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/callback.h      |  2 +-
- fs/nfs/callback_proc.c |  2 +-
- fs/nfs/callback_xdr.c  | 18 +++++++++---------
- 3 files changed, 11 insertions(+), 11 deletions(-)
+ drivers/net/phy/marvell.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/fs/nfs/callback.h b/fs/nfs/callback.h
-index 6a2033131c068..ccd4f245cae24 100644
---- a/fs/nfs/callback.h
-+++ b/fs/nfs/callback.h
-@@ -170,7 +170,7 @@ struct cb_devicenotifyitem {
- };
+--- a/drivers/net/phy/marvell.c
++++ b/drivers/net/phy/marvell.c
+@@ -553,9 +553,9 @@ static int m88e1121_config_aneg_rgmii_de
+ 	else
+ 		mscr = 0;
  
- struct cb_devicenotifyargs {
--	int				 ndevs;
-+	uint32_t			 ndevs;
- 	struct cb_devicenotifyitem	 *devs;
- };
- 
-diff --git a/fs/nfs/callback_proc.c b/fs/nfs/callback_proc.c
-index 09c5b1cb3e075..c343666d9a428 100644
---- a/fs/nfs/callback_proc.c
-+++ b/fs/nfs/callback_proc.c
-@@ -358,7 +358,7 @@ __be32 nfs4_callback_devicenotify(void *argp, void *resp,
- 				  struct cb_process_state *cps)
- {
- 	struct cb_devicenotifyargs *args = argp;
--	int i;
-+	uint32_t i;
- 	__be32 res = 0;
- 	struct nfs_client *clp = cps->clp;
- 	struct nfs_server *server = NULL;
-diff --git a/fs/nfs/callback_xdr.c b/fs/nfs/callback_xdr.c
-index a67c41ec545fd..f90de8043b0f9 100644
---- a/fs/nfs/callback_xdr.c
-+++ b/fs/nfs/callback_xdr.c
-@@ -258,11 +258,9 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
- 				void *argp)
- {
- 	struct cb_devicenotifyargs *args = argp;
-+	uint32_t tmp, n, i;
- 	__be32 *p;
- 	__be32 status = 0;
--	u32 tmp;
--	int n, i;
--	args->ndevs = 0;
- 
- 	/* Num of device notifications */
- 	p = xdr_inline_decode(xdr, sizeof(uint32_t));
-@@ -271,7 +269,7 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
- 		goto out;
- 	}
- 	n = ntohl(*p++);
--	if (n <= 0)
-+	if (n == 0)
- 		goto out;
- 	if (n > ULONG_MAX / sizeof(*args->devs)) {
- 		status = htonl(NFS4ERR_BADXDR);
-@@ -330,19 +328,21 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
- 			dev->cbd_immediate = 0;
- 		}
- 
--		args->ndevs++;
--
- 		dprintk("%s: type %d layout 0x%x immediate %d\n",
- 			__func__, dev->cbd_notify_type, dev->cbd_layout_type,
- 			dev->cbd_immediate);
- 	}
-+	args->ndevs = n;
-+	dprintk("%s: ndevs %d\n", __func__, args->ndevs);
-+	return 0;
-+err:
-+	kfree(args->devs);
- out:
-+	args->devs = NULL;
-+	args->ndevs = 0;
- 	dprintk("%s: status %d ndevs %d\n",
- 		__func__, ntohl(status), args->ndevs);
- 	return status;
--err:
--	kfree(args->devs);
--	goto out;
+-	return phy_modify_paged(phydev, MII_MARVELL_MSCR_PAGE,
+-				MII_88E1121_PHY_MSCR_REG,
+-				MII_88E1121_PHY_MSCR_DELAY_MASK, mscr);
++	return phy_modify_paged_changed(phydev, MII_MARVELL_MSCR_PAGE,
++					MII_88E1121_PHY_MSCR_REG,
++					MII_88E1121_PHY_MSCR_DELAY_MASK, mscr);
  }
  
- static __be32 decode_sessionid(struct xdr_stream *xdr,
--- 
-2.34.1
-
+ static int m88e1121_config_aneg(struct phy_device *phydev)
+@@ -569,11 +569,13 @@ static int m88e1121_config_aneg(struct p
+ 			return err;
+ 	}
+ 
++	changed = err;
++
+ 	err = marvell_set_polarity(phydev, phydev->mdix_ctrl);
+ 	if (err < 0)
+ 		return err;
+ 
+-	changed = err;
++	changed |= err;
+ 
+ 	err = genphy_config_aneg(phydev);
+ 	if (err < 0)
 
 

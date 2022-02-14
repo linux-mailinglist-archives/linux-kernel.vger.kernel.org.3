@@ -2,108 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFBC4B5751
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:44:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B61D34B5753
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356442AbiBNQoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 11:44:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49652 "EHLO
+        id S1356490AbiBNQpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 11:45:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353459AbiBNQoo (ORCPT
+        with ESMTP id S1356445AbiBNQo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 11:44:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821F960D8F;
-        Mon, 14 Feb 2022 08:44:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EDD7614D0;
-        Mon, 14 Feb 2022 16:44:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 847A8C340E9;
-        Mon, 14 Feb 2022 16:44:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644857075;
-        bh=+Ul9ZI9HN2iowXmQeqpOx9t7aXHQnEWGLPnkZRHoU9w=;
-        h=Date:From:To:Subject:Reply-To:References:In-Reply-To:From;
-        b=o+X5xWqh+9cqj0N8XiHp7Bf2Bf2IhiKT+CVLnEAtRecTNBPDCk91/txutU2fhrM1e
-         2bqNDcrIr5YviKcca3mWiRFgPmbk/o5dT3bD0La1aSMT8Rv8hQK0Afkgo/Pvu13oi0
-         aCpipqIoHN5GYj06aF1tAFpqCkRA/eL68WNlaynsRqaAiddPdpr6Zb7ORCj2lmL0WR
-         DgymN7V9lT3YNIDRk7ydtMsZJGLWDgZKd4oUzkmkSsZUg2GaYec419MjwrH7GM31Zf
-         8sHGc9qhxQ7C+pE71Sir2xy4hKYQdzyMSl7FiQCirIQX3PaItxJYMnCbP+XMh27C/k
-         1phAgMGQLQMZQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 46C405C0388; Mon, 14 Feb 2022 08:44:35 -0800 (PST)
-Date:   Mon, 14 Feb 2022 08:44:35 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     kernel-team@fb.com, linux-kernel@vger.kernel.org,
-        quic_mojha@quicinc.com, rcu@vger.kernel.org, rostedt@goodmis.org,
-        tj@kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH rcu 3/3] rcu: Allow expedited RCU grace periods on
- incoming CPUs
-Message-ID: <20220214164435.GA2805255@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220209233811.GC557593@lothringen>
+        Mon, 14 Feb 2022 11:44:59 -0500
+Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00072.outbound.protection.outlook.com [40.107.0.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CC15FF0B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:44:49 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cJoqRhXm8RIaXNqn+2qfqDC3+TtrBcNKFzNfWotVJJ9vXQ0d7DnewUg69Ntu6Aql+dHHnHVpbUrm0bt2rezYyStTtmAcYSrRA3wahahy/Mi1yObvOJDV3/FfL3hdpXj3e626ashaxtRr7aLzgkQd+E5TNj5uGV57fqZkKkqv08UZTrVPZDnlL+l6uNASs06Vv+WyyUTvOh2CIdE2bFPm0gUUXaLfDZhku3P5GUStI32qVxSDwchAQnDwSlMKJ/zseK0A32TUn8CgHBDiU80bbbaEarAfVopgGTbsCtEUdnoTAHBaX/SrdaJ/3gAASr5tXH/wB3GQJf3mz27Wodn+Lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SNf9DETFwiLkEBnBdUOl8okKQ6rpnhdqGTSDecD6KCE=;
+ b=gl1hHbviRZqVNHzVtVpM+fzilGOuChXM7GunOz/oqLT4AqlEmVXWQTKyi1LHTlxkzKZ8ZXHfPesLTs69qVOofao6oQQRGt/tUOye8zsldzntJWAVzkQWvuGdGITew9EBIiCwOJhUuic3X1QSHRIVfyLfgCBWbG9IKmZihjZuufydeiOtLiIE64FS/VJgKYEJg/djr3Fk8VGfqNZ1Wh3RBK5RVK0RTy+tIaW3B6U3tKTpexIUySgnj/IZVYBzR79Vq5Hq7CU+MR0Ye8SaEsdkw9jpqIspEe3c85tHFbjY5vx9jA+b/ErFa/chMkEyXe5MCkz3X4Ruv8qs23Yr9yoGmA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=de.bosch.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SNf9DETFwiLkEBnBdUOl8okKQ6rpnhdqGTSDecD6KCE=;
+ b=kv72XWiTFK2+kLwN7vqI9kpb9vPONsA+7AUvGgjmudPnliPdw4KY5oBT/YG8PRRNVTKhHkZX5q+Ge7e6eEV/HBrQmCOp3G4WHVgY46BEdCyQMZGsH/Fht1MZJc8do8yZte90OcZjMj3Bwjb8uDaxWqKJUdEDGN10rhYtMplVtKo=
+Received: from PAXPR10MB5405.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:28b::9)
+ by VI1PR10MB2717.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:e6::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.17; Mon, 14 Feb
+ 2022 16:44:47 +0000
+Received: from PAXPR10MB5405.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::50e2:8a6f:71d9:e26f]) by PAXPR10MB5405.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::50e2:8a6f:71d9:e26f%4]) with mapi id 15.20.4951.019; Mon, 14 Feb 2022
+ 16:44:47 +0000
+From:   "Jonas Mark (BT-FIR/ENG1-Grb)" <Mark.Jonas@de.bosch.com>
+To:     "Jonas Mark (BT-FIR/ENG1-Grb)" <mark.jonas@de.bosch.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "RUAN Tingquan (BT-FIR/ENG1-Zhu)" <Tingquan.Ruan@cn.bosch.com>
+Subject: AW: [PATCH] gpu: ipu-v3: Fix dev_dbg frequency output
+Thread-Topic: [PATCH] gpu: ipu-v3: Fix dev_dbg frequency output
+Thread-Index: AQHYHDV1Q6HWKEJY1UC+dT9O++/HWqyTSuDw
+Date:   Mon, 14 Feb 2022 16:44:46 +0000
+Message-ID: <PAXPR10MB540528C7049118472B4F190EAD339@PAXPR10MB5405.EURPRD10.PROD.OUTLOOK.COM>
+References: <20220207151411.5009-1-mark.jonas@de.bosch.com>
+In-Reply-To: <20220207151411.5009-1-mark.jonas@de.bosch.com>
+Accept-Language: en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=de.bosch.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 98a5f109-b371-4d7e-27c7-08d9efd94f83
+x-ms-traffictypediagnostic: VI1PR10MB2717:EE_
+x-ld-processed: 0ae51e19-07c8-4e4b-bb6d-648ee58410f4,ExtAddr
+x-microsoft-antispam-prvs: <VI1PR10MB2717D728F857C49284C08F95AD339@VI1PR10MB2717.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:289;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: a362dPk3w5wLkHtugbcXfU/r749RE3KXQvA1VoNdqU+UMy5Iyeo5QpfX8ekFU+vEWUiGrxr2Nxv6RDXTw8amYwFN7u/XXw9bXPLl3+jNcN0s2qvuc+5QLvRF7GGxOiGntxWRkrO8qNRFDksKAr803dI7CX2HDr0EvEbQCEhBd/v1M43YSa0YW161vhQDcvBXbhoWnFXdEojGvWGgTDR6pV1pUhnNbh2eOV/j2NBfnoAaDYravcRiTlmA7ISXmbG+sQiArw+9jD6LJzNfOzpHnDzY9tgRhXH2sEahYv0F6zYYEvvuglSIkK/UXrlyKzlTGVXhK/yn+7QBzWtAXTODKIUUOh4lEWqYcjG8Kj9p5f7rNAkLyAU4fohFyEaoNnx0BD6qa1uyYYcNcGIqVlPIjOm0WLUpiRyq5ejtbpM671m5Hbs121DB1X4UMEyxRWTWZNFeTtzknxs21J+bUmNvRoYw8JjqjrK6eHsy8Dg5Wzy0QY4iCX6KnLGTlAqSwe1XnKv1BhQODvKOMqCQQnES0/Gtd7tQ57rlG2LeJpckFTX/jah/xMECIiZ3m5g0OOJCyTUAelQ3uLx3NrGQIyboG0qqYYd9P0sz8D0y/ppHhX6IPx3w96Eurux0ok9RbYKr1a65g4YhAdpl0FOvukYzUIYXBBokeoLA14LT2LbvBabahB6hl1cGWvVEOYD4VENOZdBiRQl8PFbsd1UzsXn9IwxMRwGf+7T8dAkcSaScn/GuTAfmzYqTQj8RLoUQCUh8HkRq5Hyx+wU64LQgDar+MgC0aiA1pdxMI+mIfuZ8zAw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR10MB5405.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(66476007)(55016003)(83380400001)(66946007)(76116006)(66556008)(66446008)(82960400001)(64756008)(508600001)(38100700002)(316002)(54906003)(122000001)(110136005)(4326008)(8676002)(2906002)(52536014)(9686003)(33656002)(26005)(186003)(107886003)(5660300002)(71200400001)(15974865002)(38070700005)(8936002)(7696005)(6506007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?axa/gkCo0f9Uha8yybK9Wvb/2E/Pi0OtKlNFNvbWMcmmUh3IQmX0r1SDJ8?=
+ =?iso-8859-1?Q?blpy3ws6gtVJMKTKxa8Il5dPoMxcZBazXdkA+5noFq1KhT/QyFVCod9exy?=
+ =?iso-8859-1?Q?e1OmU2V+eBZ+NrFDwyq6ul7psU8n4lgmMMaAlcc7qPZTN8m3g9pherib/v?=
+ =?iso-8859-1?Q?jPWWK+Nf2tYgFzbHQdhRjtsEQdOIbY8+UySsD/JuqVOPkpz7KUaBxPkmQl?=
+ =?iso-8859-1?Q?YaYcEuos0imHWL+v3sHkP7AAGRcMS28FcAFj0RM2BhoCiN3kheN1e/46QE?=
+ =?iso-8859-1?Q?oamebqJxyF/n1bEdAjehEDr41cxRpeBSjsGm2x4ifubQOuWSGGhYpHgKz1?=
+ =?iso-8859-1?Q?hpCiX2x4rLjjKDMWjnZX6nuxojKSwvH2KfLGD6KTTJin5UlGva9+o/w/TQ?=
+ =?iso-8859-1?Q?Nep93PZmmkb9YqPwZcClhzCsBHq1PZCQVAqdW4FltvRTng/jT5NaI8KwW5?=
+ =?iso-8859-1?Q?BCONHE1nwcAwn5BUVOH2fcxo+01CDpuspL7//oEOUEitfXESrVJB2TZHxL?=
+ =?iso-8859-1?Q?VnNoM/L4aPvrRQxBym457QMyX/gTt6Bs8M+a7dHj+Zdg0MptO4NhI64Mtf?=
+ =?iso-8859-1?Q?zOipX4CtHA1CQUWyMrKEmrkIZKcMIDpNMIqKxP9j1taV7/9lnHFgPNRm9A?=
+ =?iso-8859-1?Q?rjcZPvFSkKTvsz1ZX251tTawsv24qeLkWGAWzbDK3QyHOva9vIOr5rZP9s?=
+ =?iso-8859-1?Q?8lMbuPh1mMGu3druYhytZRnPAz4msDpNjB67tmn3yk6MYSGRZwH57ib+Jl?=
+ =?iso-8859-1?Q?G/M3zR3Lp7u4BKaLSTp2hRc8VTpA8viJ+prxaXvV5pbTdjg9/YwGpsKIlC?=
+ =?iso-8859-1?Q?5Ayh30LiRtPjbQx+VbkW2APDLF017cIaVOjCS+FbQZfI3M92xCHNVFST1M?=
+ =?iso-8859-1?Q?GZIgbtJMTmUxQxiEIsp06796xLl2LgEz4gCigkgdP7NNG33dFp9HRul6X+?=
+ =?iso-8859-1?Q?rjQXTmTZtns8x9EQ1N2Cwi5XGH65TQRZpg9E9VecAAHYhld4eHA0Yhwl9W?=
+ =?iso-8859-1?Q?r2/22WN2aOzA1a3GTEATK/A1kchAc09lExmzIFEMUKEAgzCUiUstZK+XZO?=
+ =?iso-8859-1?Q?OBUPCss1oZQHjKR6Tfjw6r/kU4XUqkzp1vJ8qc0AJHakqBndPLEVNVJsFi?=
+ =?iso-8859-1?Q?H9hClSagZ4KUmi8+AHfm45fBeF/1dYdf9Bsej4wMSAIAEkd9LXJhmuHspI?=
+ =?iso-8859-1?Q?jDZaleYs8OW/TBKa8bXcQz9hnojYXXFskD2Q2wno+vdBvs62ohRhjnE+tC?=
+ =?iso-8859-1?Q?hDBM6O+166f2APUaQ/pUaI4ok6u8DNF6qMhxO0xZdbFf2OqWnnh5m74I7j?=
+ =?iso-8859-1?Q?PJUablcws4cGbCjqkizuUWuKRptl/Y6r4Uv9fzTQXycD/At5Myg1zWfEIb?=
+ =?iso-8859-1?Q?X5rJj+nYLo5Fwu64Iso8nJGkeSz0FpETFBLs8wbxPIAUgRoixxIYpdD5uS?=
+ =?iso-8859-1?Q?x8f1roQ2/sRwIZjjAUUVqfOvBThnmJdOS8DK4tdOr17kNCjZ4aU64aYc5C?=
+ =?iso-8859-1?Q?9wVwuX4+dCMxWck/dfEdWbT2qSiQ8AXzQ5GTJAjQx0yBF4druT39ZRfRtU?=
+ =?iso-8859-1?Q?e+G02/GbkcKyrLazEBvoU1iExHS9mKcP6Xk11OWo24uvkk3fg4lMav+uQJ?=
+ =?iso-8859-1?Q?97bQGZ9/F8v6V8yoFmcxIVsbp7UFiwsdiGCrlhz8IA3HhjFx+nHnCGzw?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209233811.GC557593@lothringen>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: de.bosch.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR10MB5405.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 98a5f109-b371-4d7e-27c7-08d9efd94f83
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2022 16:44:46.9635
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 0ae51e19-07c8-4e4b-bb6d-648ee58410f4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0BqnocVPG+SSx1AULCTZqJVe/Ol9cW1QXVXmFd6gJxaFXxkaMl+VSoWSc702Fwnxk688HtJ95J6oqOw9sEM7Kg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB2717
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 12:38:11AM +0100, Frederic Weisbecker wrote:
-> On Fri, Feb 04, 2022 at 02:55:07PM -0800, Paul E. McKenney wrote:
-> > Although it is usually safe to invoke synchronize_rcu_expedited() from a
-> > preemption-enabled CPU-hotplug notifier, if it is invoked from a notifier
-> > between CPUHP_AP_RCUTREE_ONLINE and CPUHP_AP_ACTIVE, its attempts to
-> > invoke a workqueue handler will hang due to RCU waiting on a CPU that
-> > the scheduler is not paying attention to.  This commit therefore expands
-> > use of the existing workqueue-independent synchronize_rcu_expedited()
-> > from early boot to also include CPUs that are being hotplugged.
-> > 
-> > Link: https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
-> > Reported-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> > Cc: Tejun Heo <tj@kernel.org>
-> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> 
-> I'm surprised by this scheduler behaviour.
-> 
-> Since sched_cpu_activate() hasn't been called yet,
-> rq->balance_callback = balance_push_callback. As a result, balance_push() should
-> be called at the end of schedule() when the workqueue is picked as the next task.
-> Then eventually the workqueue should be immediately preempted by the stop task to
-> be migrated elsewhere.
-> 
-> So I must be missing something. For the fun, I booted the following and it
-> didn't produce any issue:
-> 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 80faf2273ce9..b1e74a508881 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -4234,6 +4234,8 @@ int rcutree_online_cpu(unsigned int cpu)
->  
->  	// Stop-machine done, so allow nohz_full to disable tick.
->  	tick_dep_clear(TICK_DEP_BIT_RCU);
-> +	if (cpu != 0)
-> +		synchronize_rcu_expedited();
->  	return 0;
->  }
+Hi,
 
-That does seem compelling.  And others have argued that the workqueue
-system's handling of offline CPUs should deal with this.
+> From: Leo Ruan <tingquan.ruan@cn.bosch.com>
+>=20
+> This commit corrects the printing of the IPU clock error percentage if it=
+ is
+> between -0.1% to -0.9%. For example, if the pixel clock requested is 27.2
+> MHz but only 27.0 MHz can be achieved the deviation is -0.8%.
+> But the fixed point math had a flaw and calculated error of 0.2%.
+>=20
+> Before:
+>   Clocks: IPU 270000000Hz DI 24716667Hz Needed 27200000Hz
+>   IPU clock can give 27000000 with divider 10, error 0.2%
+>   Want 27200000Hz IPU 270000000Hz DI 24716667Hz using IPU,
+> 27000000Hz
+>=20
+> After:
+>   Clocks: IPU 270000000Hz DI 24716667Hz Needed 27200000Hz
+>   IPU clock can give 27000000 with divider 10, error -0.8%
+>   Want 27200000Hz IPU 270000000Hz DI 24716667Hz using IPU,
+> 27000000Hz
+>=20
+> Signed-off-by: Leo Ruan <tingquan.ruan@cn.bosch.com>
+> Signed-off-by: Mark Jonas <mark.jonas@de.bosch.com>
+> ---
+>  drivers/gpu/ipu-v3/ipu-di.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/gpu/ipu-v3/ipu-di.c b/drivers/gpu/ipu-v3/ipu-di.c in=
+dex
+> b4a31d506fcc..74eca68891ad 100644
+> --- a/drivers/gpu/ipu-v3/ipu-di.c
+> +++ b/drivers/gpu/ipu-v3/ipu-di.c
+> @@ -451,8 +451,9 @@ static void ipu_di_config_clock(struct ipu_di *di,
+>=20
+>  		error =3D rate / (sig->mode.pixelclock / 1000);
+>=20
+> -		dev_dbg(di->ipu->dev, "  IPU clock can give %lu with divider
+> %u, error %d.%u%%\n",
+> -			rate, div, (signed)(error - 1000) / 10, error % 10);
+> +		dev_dbg(di->ipu->dev, "  IPU clock can give %lu with divider
+> %u, error %c%d.%d%%\n",
+> +			rate, div, error < 1000 ? '-' : '+',
+> +			abs(error - 1000) / 10, abs(error - 1000) % 10);
+>=20
+>  		/* Allow a 1% error */
+>  		if (error < 1010 && error >=3D 990) {
 
-Mukesh, was this a theoretical bug, or did you actually make it happen?
-If you made it happen, as seems to have been the case given your original
-email [1], could you please post your reproducer?
+Is there anything I can do to help getting this patch mainline?
 
-							Thanx, Paul
+Cheers,
+Mark
 
-[1] https://lore.kernel.org/lkml/7359f994-8aaf-3cea-f5cf-c0d3929689d6@quicinc.com/
+Mark Jonas=20
+
+Building Technologies, Panel Software Fire (BT-FIR/ENG1-Grb)
+Bosch Sicherheitssysteme GmbH | Postfach 11 11 | 85626 Grasbrunn | GERMANY =
+| www.boschsecurity.com
+
+Sitz: Stuttgart, Registergericht: Amtsgericht Stuttgart HRB 23118
+Aufsichtsratsvorsitzender: Christian Fischer; Gesch=E4ftsf=FChrung: Thomas =
+Quante, Peter L=F6ffler, Henrik Siegle

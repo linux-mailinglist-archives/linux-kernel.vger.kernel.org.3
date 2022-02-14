@@ -2,112 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D0C64B55FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E7A4B5573
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 16:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356324AbiBNQVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 11:21:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33306 "EHLO
+        id S1356050AbiBNP50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 10:57:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356296AbiBNQUo (ORCPT
+        with ESMTP id S231160AbiBNP5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 11:20:44 -0500
-X-Greylist: delayed 1390 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 08:20:36 PST
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D1942EE7
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:20:36 -0800 (PST)
-Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21EFuV8X020516;
-        Mon, 14 Feb 2022 15:57:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pps0720; bh=P++DMPCoLYeSHVVEkYGtT1XsH/0G6lrbTxQxRb5m1lM=;
- b=Mu5uAhGJsIb1XoS0DqT65OJI+V90s9tMan0lAcMloYeeDXEQ4vjGiReG/21ZTrQIhkhT
- n4PGWs5O790Ra/WvNnXjC1xbIdweIl4Y8+XcZnwdX36oeDlmh7iz/2p/EXd7uzMGyws+
- K2AUp+PhGQEGVUFSDwewINoyziyeoCYhlmYOQDsuu1UL4Jg8xm6X8VeCwa578xdmeNHp
- n/3K0VqSsgfGMNqA2k2x2izWcd03WREPn7u2TVixkyDfZ0V1AkQXJbsd178wTGnRxnyT
- v5WKlfqC+Hlr8aCG6H0lCOfcXG3n0Wjf1/+lXqXTIbH1SiCzDyykSS+xh2lqUzM77egx 0Q== 
-Received: from g2t2353.austin.hpe.com (g2t2353.austin.hpe.com [15.233.44.26])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3e7kkrup4q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 15:57:12 +0000
-Received: from g2t2360.austin.hpecorp.net (g2t2360.austin.hpecorp.net [16.196.225.135])
-        by g2t2353.austin.hpe.com (Postfix) with ESMTP id 95DCC82;
-        Mon, 14 Feb 2022 15:57:11 +0000 (UTC)
-Received: from hpe.com (unknown [10.207.195.135])
-        by g2t2360.austin.hpecorp.net (Postfix) with ESMTP id 029D93B;
-        Mon, 14 Feb 2022 15:57:09 +0000 (UTC)
-Date:   Mon, 14 Feb 2022 09:57:09 -0600
-From:   Dimitri Sivanich <sivanich@hpe.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Xiyu Yang <xiyuyang19@fudan.edu.cn>, linux-kernel@vger.kernel.org,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1 1/1] misc: sgi-gru: Don't cast parameter in bit
- operations
-Message-ID: <20220214155709.GA3858@hpe.com>
-References: <20220214153958.9721-1-andriy.shevchenko@linux.intel.com>
+        Mon, 14 Feb 2022 10:57:23 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4350488A4;
+        Mon, 14 Feb 2022 07:57:15 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id s6-20020a0568301e0600b0059ea5472c98so11851861otr.11;
+        Mon, 14 Feb 2022 07:57:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uZNWbRMtuksjwc81DX+Fw9WpJ0JU037g2Zhi2MTrlPs=;
+        b=Gx4zfhMnWxjxMuzz7x+8v7Yc8bYKfiWNfP8peCcAuULiijqukaLPDruLwU+6pe+Wd/
+         CsSvb2/VgB73mQqUTvwNL4wMj8MqHHo7bZhYV4w1vw4p9SdwUPcAkAu57QGU2tBoIX2V
+         v+LRmgsD+4vJNk6gLrvUG1OKtuIi42v3pBdz8fvBR4bDx8t6Cg9/Ccu+veLqookmUWut
+         fpvAOeAVsPcs3234WhzS1abWoqlc6jLjx3cw8zkE/tzR0iHSWdnn67Mg1rC0JNRzZ7I1
+         /+5T8Pe1TaWkKpc7R32ZY3X/aMvDT2ZBWUElBkncThc5dhT7GFyApxCaVplYzsioaBAy
+         HNbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=uZNWbRMtuksjwc81DX+Fw9WpJ0JU037g2Zhi2MTrlPs=;
+        b=D912eKzCmC87Wtl0+HoxUv/fo0/+CtEsJe2qY1pwBAgUTgiEloQO6ovAMIL+belF/V
+         1/Q8KnxQq/ddyoX3rr5mbrGku0TOGk89DO7h3QwghuRM4rqbWQjCiujorV2TlHXy+e6k
+         avBh1tSJ2pQEluDB23wXbxqhA/jzBaLeEvHKiw347QU9ynyr/XQA9xSOhb+Rfun4Uxpg
+         bfLhLh6g2XJJXYc6tAIpalGY2eTIusWzCuwTWmHr03kayO6H6DZ2tuVEq4YraFwiYboM
+         5GNnMB3aFgAEZd3IPLiie896GtZaSY3jbrHcufJYGt8PGx8fg58zJsfVsaxfXVudMPRZ
+         x8bA==
+X-Gm-Message-State: AOAM532AGCNLgmBkeDPcXwJCDeTNrEbmMj3B6xmfGo6rnYskeoeTqfRD
+        UKKelj7HiokMTmyK5O3WYDs=
+X-Google-Smtp-Source: ABdhPJwP1G7aCfnH8seOnIkYH+ZJDcWocmRx+VDleeZSoFJAfprDEzzxaLWD5+w/+0EpYf4DDjIu8g==
+X-Received: by 2002:a9d:6086:: with SMTP id m6mr160226otj.284.1644854235199;
+        Mon, 14 Feb 2022 07:57:15 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g10sm12515699otn.65.2022.02.14.07.57.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 07:57:14 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 14 Feb 2022 07:57:13 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     andrew@lunn.ch, gregory.clement@bootlin.com, robh+dt@kernel.org,
+        wim@linux-watchdog.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 2/2] watchdog: orion_wdt: support pretimeout on Armada-XP
+Message-ID: <20220214155713.GA275186@roeck-us.net>
+References: <20220211003257.2037332-1-chris.packham@alliedtelesis.co.nz>
+ <20220211003257.2037332-3-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220214153958.9721-1-andriy.shevchenko@linux.intel.com>
-X-Proofpoint-GUID: Kw-w50yEarRKtWNI7JFKQJIVTpsUiG3R
-X-Proofpoint-ORIG-GUID: Kw-w50yEarRKtWNI7JFKQJIVTpsUiG3R
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-14_07,2022-02-14_03,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 bulkscore=0 mlxlogscore=999 clxscore=1011
- lowpriorityscore=0 malwarescore=0 adultscore=0 priorityscore=1501
- mlxscore=0 spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2202140097
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220211003257.2037332-3-chris.packham@alliedtelesis.co.nz>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Acked-by: Dimitri Sivanich <sivanich@hpe.com>
+On Fri, Feb 11, 2022 at 01:32:57PM +1300, Chris Packham wrote:
+> Commit e07a4c79ca75 ("watchdog: orion_wdt: use timer1 as a pretimeout")
+> added support for a pretimeout on Armada-38x variants. Because the
+> Armada-XP variants use armada370_start/armada370_stop (due to missing an
+> explicit RSTOUT mask bit for the watchdog). Add the required pretimeout
+> support to armada370_start/armada370_stop for Armada-XP.
+> 
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Reviewed-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 
-On Mon, Feb 14, 2022 at 05:39:58PM +0200, Andy Shevchenko wrote:
-> While in this particular case (*) it would not be an issue,
-> the pattern itself is bad and error prone in case somebody
-> blindly copies to their code.
-> 
-> Don't cast parameter to unsigned long pointer in the bit
-> operations. Note, new compilers might warn on this line for
-> potential outbound access.
-> 
-> *) it seems a dead code, so remove it all for good
-> 
-> Fixes: 13d19498b044 ("GRU Driver: driver internal header files")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  drivers/misc/sgi-gru/grutables.h | 6 ------
->  1 file changed, 6 deletions(-)
+>  drivers/watchdog/orion_wdt.c | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
-> index e4c067c61251..5efc869fe59a 100644
-> --- a/drivers/misc/sgi-gru/grutables.h
-> +++ b/drivers/misc/sgi-gru/grutables.h
-> @@ -530,12 +530,6 @@ struct gru_blade_state {
->  		for ((i) = (k)*GRU_CBR_AU_SIZE;				\
->  				(i) < ((k) + 1) * GRU_CBR_AU_SIZE; (i)++)
+> diff --git a/drivers/watchdog/orion_wdt.c b/drivers/watchdog/orion_wdt.c
+> index 127eefc9161d..e25e6bf4647f 100644
+> --- a/drivers/watchdog/orion_wdt.c
+> +++ b/drivers/watchdog/orion_wdt.c
+> @@ -238,8 +238,10 @@ static int armada370_start(struct watchdog_device *wdt_dev)
+>  	atomic_io_modify(dev->reg + TIMER_A370_STATUS, WDT_A370_EXPIRED, 0);
 >  
-> -/* Scan each DSR in a DSR bitmap. Note: multiple DSRs in an allocation unit */
-> -#define for_each_dsr_in_allocation_map(i, map, k)			\
-> -	for_each_set_bit((k), (const unsigned long *)(map), GRU_DSR_AU)	\
-> -		for ((i) = (k) * GRU_DSR_AU_CL;				\
-> -				(i) < ((k) + 1) * GRU_DSR_AU_CL; (i)++)
-> -
->  #define gseg_physical_address(gru, ctxnum)				\
->  		((gru)->gs_gru_base_paddr + ctxnum * GRU_GSEG_STRIDE)
->  #define gseg_virtual_address(gru, ctxnum)				\
-> -- 
-> 2.34.1
+>  	/* Enable watchdog timer */
+> -	atomic_io_modify(dev->reg + TIMER_CTRL, dev->data->wdt_enable_bit,
+> -						dev->data->wdt_enable_bit);
+> +	reg = dev->data->wdt_enable_bit;
+> +	if (dev->wdt.info->options & WDIOF_PRETIMEOUT)
+> +		reg |= TIMER1_ENABLE_BIT;
+> +	atomic_io_modify(dev->reg + TIMER_CTRL, reg, reg);
+>  
+>  	/* Enable reset on watchdog */
+>  	reg = readl(dev->rstout);
+> @@ -312,7 +314,7 @@ static int armada375_stop(struct watchdog_device *wdt_dev)
+>  static int armada370_stop(struct watchdog_device *wdt_dev)
+>  {
+>  	struct orion_watchdog *dev = watchdog_get_drvdata(wdt_dev);
+> -	u32 reg;
+> +	u32 reg, mask;
+>  
+>  	/* Disable reset on watchdog */
+>  	reg = readl(dev->rstout);
+> @@ -320,7 +322,10 @@ static int armada370_stop(struct watchdog_device *wdt_dev)
+>  	writel(reg, dev->rstout);
+>  
+>  	/* Disable watchdog timer */
+> -	atomic_io_modify(dev->reg + TIMER_CTRL, dev->data->wdt_enable_bit, 0);
+> +	mask = dev->data->wdt_enable_bit;
+> +	if (wdt_dev->info->options & WDIOF_PRETIMEOUT)
+> +		mask |= TIMER1_ENABLE_BIT;
+> +	atomic_io_modify(dev->reg + TIMER_CTRL, mask, 0);
+>  
+>  	return 0;
+>  }

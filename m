@@ -2,50 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4DD4B5944
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 19:01:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FAA84B5946
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 19:01:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357323AbiBNSAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 13:00:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51834 "EHLO
+        id S1357336AbiBNSAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 13:00:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232358AbiBNSA3 (ORCPT
+        with ESMTP id S1357325AbiBNSAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 13:00:29 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE47C65171;
-        Mon, 14 Feb 2022 10:00:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=HygV3XynhCWrLpKM8VJKHu9+X1H4p6aYXQjio6QBpNQ=; b=deznadcEnTnsRwCjyeG/X5REA4
-        Sgx4C3jljYLtS61dg9r+fGYuXtq8p6i9+KXM0N6IL1bMS0FaoCAKHMQAWnwEqpjPiIpt9aeBVGeTL
-        KeXlfV3RyYlvf2DdAmP6PJ7LNttLivHoy975w2qUAJkj6mAhOg1RLpAQ4U5HWDadMON3d9/FunguZ
-        OaIYF3Uqfhf4/mM3kzPxVns5Jq7rzM6f8vPu4H7AfXlE4l8+JzUNVzIP2gkxvNYcD89uaBiiipsfv
-        svS/72ZEM+SqWlbjl3YhVYs7SlPa7CgGKpSR9IT2nBwL5L0kl+FWspdZUBnQOgS/Y5mpdiw9I6nK5
-        24A+t8sA==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJfe8-00GSyp-2F; Mon, 14 Feb 2022 18:00:20 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH v2] serial: parisc: GSC: fix build when IOSAPIC is not set
-Date:   Mon, 14 Feb 2022 10:00:19 -0800
-Message-Id: <20220214180019.20384-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 14 Feb 2022 13:00:38 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3762160DBF;
+        Mon, 14 Feb 2022 10:00:30 -0800 (PST)
+Date:   Mon, 14 Feb 2022 19:00:26 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644861628;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ak1sKXz8pqU5OXOTa42NjAvCBxTswiY6RDJ/LZK1LYo=;
+        b=IkWRLBdSRZj83mEOuD+098n0EuZsx/eavbjdr7gD7itzpWuyFy+ZXINbIFdLB6qJIgfvy8
+        p+/vLnXLLJtUSPYETWvWAhUDYRONrPwqwZiW0cWImcagv5IFo0JV1EXKB9VhPpuctsMWij
+        iwvRW4evO/jVY0Btm+rEsVsUOmPoFJ6ZAnrJBYn6t91baAJ+ujS+74kW5PN3PteLzuF0LJ
+        CgFcgnT5lHoRcq1oyKEwtmagIraZs6xrKZA+OEM/wXTGM0KuuDYp1y0cIXWaY3GJWCwCSX
+        xq+Y456QSgcwye2zxWHe2A8k0s3/NB+gSaOt4XQuMUdlQ8BWF+N/wfZ+n35EGA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644861628;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ak1sKXz8pqU5OXOTa42NjAvCBxTswiY6RDJ/LZK1LYo=;
+        b=YOlChkc5IdQ9d+u21n+PvI+cZ9v++88raxyykO07BA6aOs1XV7nkn6VHvDSCMtGKeq3HU6
+        rUvmFqmchHoa4GAw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org
+Cc:     Andy Lutomirski <luto@kernel.org>, Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [PATCH 3/8] kernel/fork, IA64: Provide a
+ alloc_thread_stack_node() for IA64.
+Message-ID: <YgqYun8tmIJQZmuN@linutronix.de>
+References: <20220125152652.1963111-1-bigeasy@linutronix.de>
+ <20220125152652.1963111-4-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220125152652.1963111-4-bigeasy@linutronix.de>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,47 +68,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a build error when using a kernel .config file from
-'kernel test robot' for a different build problem:
+On 2022-01-25 16:26:47 [+0100], To linux-kernel@vger.kernel.org wrote:
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index c47dcba5d66d2..a0d58ae6fac76 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -330,6 +330,22 @@ void thread_stack_cache_init(void)
+=E2=80=A6
+> =20
+> +static void free_thread_stack(struct task_struct *tsk, bool cache_only)
 
-hppa64-linux-ld: drivers/tty/serial/8250/8250_gsc.o: in function `.LC3':
-(.data.rel.ro+0x18): undefined reference to `iosapic_serial_irq'
+This cache_only parameter shouldn't be here=E2=80=A6
 
-when:
-  CONFIG_GSC=y
-  CONFIG_SERIO_GSCPS2=y
-  CONFIG_SERIAL_8250_GSC=y
-  CONFIG_PCI is not set
-    and hence PCI_LBA is not set.
-  IOSAPIC depends on PCI_LBA, so IOSAPIC is not set/enabled.
+> +{
+> +	arch_free_thread_stack(tsk);
+> +}
+> +
+>  #endif /* !CONFIG_ARCH_THREAD_STACK_ALLOCATOR */
+> =20
+>  /* SLAB cache for signal_struct structures (tsk->signal) */
 
-Make the use of iosapic_serial_irq() conditional to fix the build error.
-
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: linux-parisc@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-serial@vger.kernel.org
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Johan Hovold <johan@kernel.org>
-Suggested-by: Helge Deller <deller@gmx.de>
----
-v2: make the call to iosapic_serial_irq() conditional based on
-    CONFIG_ settings (thanks, Helge)
-
- drivers/tty/serial/8250/8250_gsc.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- linux-next-20220211.orig/drivers/tty/serial/8250/8250_gsc.c
-+++ linux-next-20220211/drivers/tty/serial/8250/8250_gsc.c
-@@ -26,7 +26,7 @@ static int __init serial_init_chip(struc
- 	unsigned long address;
- 	int err;
- 
--#ifdef CONFIG_64BIT
-+#if defined(CONFIG_64BIT) && defined(CONFIG_IOSAPIC)
- 	if (!dev->irq && (dev->id.sversion == 0xad))
- 		dev->irq = iosapic_serial_irq(dev);
- #endif
+Sebastian

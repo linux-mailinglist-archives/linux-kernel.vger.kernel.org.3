@@ -2,123 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A92384B59E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 19:29:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D11B44B59E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 19:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356715AbiBNS3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 13:29:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38002 "EHLO
+        id S1357447AbiBNS3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 13:29:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348672AbiBNS3M (ORCPT
+        with ESMTP id S1348672AbiBNS3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 13:29:12 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D60D56C0A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:29:04 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJg5V-0006ak-2B; Mon, 14 Feb 2022 19:28:37 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJg5N-00GbE8-Cu; Mon, 14 Feb 2022 19:28:28 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nJg5L-003BE4-Vq; Mon, 14 Feb 2022 19:28:27 +0100
-Date:   Mon, 14 Feb 2022 19:28:24 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Anson Huang <anson.huang@nxp.com>,
-        Vijayakannan Ayyathurai <vijayakannan.ayyathurai@intel.com>,
-        Rahul Tanwar <rtanwar@maxlinear.com>,
-        Jeff LaBundy <jeff@labundy.com>,
-        Yash Shah <yash.shah@sifive.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Vignesh R <vigneshr@ti.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 11/15] dt-bindings: pwm: intel, keembay: do not require
- pwm-cells
-Message-ID: <20220214182824.gevtqbtv4qrddjqb@pengutronix.de>
-References: <20220214081605.161394-1-krzysztof.kozlowski@canonical.com>
- <20220214081605.161394-11-krzysztof.kozlowski@canonical.com>
+        Mon, 14 Feb 2022 13:29:38 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42D25F8F3
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:29:29 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id de39so5602382qkb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 10:29:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LujYmaOiAVKwbl24zDMRkVK0oOkNk6En6jjb4+6/vg0=;
+        b=sC41pwYIZcsyHeM4riL2XhpIwlYfMGBje75Rj+HudxZHIhKM+E6rYHKZqe+/7fbMT+
+         IiJxF8OqiOEi5sA9qhyg3pIM97O+MxOOsl4X+5viD6G/qNFQvYYIaskxoepLqJ1F65ko
+         dxegh1kp4yymDcZpQn3XLrLdbzGyweXesCRZU6mjvoIZq5zEoaw8cpYWcRYH7NoRR4ir
+         Emijcxz+RJXdwIVnPYbDgHts6B6YXi7vruntHvYZM6ik2t7/SdoKUHYza+K4LGR2+Stk
+         PWxFR8Ibr0dNM1yr+BJO2lekEBlsvqeGP1PCxGKgLIyFAaDmgKaaRS7yWztnyfOyjUCX
+         lUbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LujYmaOiAVKwbl24zDMRkVK0oOkNk6En6jjb4+6/vg0=;
+        b=eZsuBOTy3a9aeZQxCpNKCtPxt5rjyR4S0FvN9biFXHzuT0kfsyyLrXDHHWme6yN7k0
+         aF8msRnAXFZLbc8mhiVEWQFLsJsg/cWhLlQ0oijwGZvggrDUR2IlMjgBdwn2aJTVIQJJ
+         l4mf1n+Up4CP557fb7t9XZgmD9QMZXYYFK3wzs4EMx8R256Aq7vhZmJDRZb5kKO8k3Dh
+         VgS44am9IEnuGdOILKZF5usA0q1D/IuFuxoF/oEomHG8mw/nr91jZ82sEeSqaAzoyZmF
+         KxK+oms9E0rGr97NxlI5430xg6TYTxPAIu7kObJvFinb5NTPCLMBF8ui5mUclGzkk67d
+         Eg5g==
+X-Gm-Message-State: AOAM5306p50tQ6+TOIGO8fBzuhXV0iM4+9K7+2DsszeHdnWTivyKJ47x
+        CjJ5ouu+d3p4hy2zjtmViDHgKob3qydkmnf8JIsCMQ==
+X-Google-Smtp-Source: ABdhPJy0e45Pw9dVPsMbq1vVzeaoeYU+q23A4Yig8yos82am8dbn6uM2XBQC9vV7XwtSdU+xYqb4NM0PlWiPwKQhB0Q=
+X-Received: by 2002:a05:620a:470a:: with SMTP id bs10mr77702qkb.583.1644863368736;
+ Mon, 14 Feb 2022 10:29:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lqbpgpqedfoirane"
-Content-Disposition: inline
-In-Reply-To: <20220214081605.161394-11-krzysztof.kozlowski@canonical.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220201205534.1962784-1-haoluo@google.com> <20220201205534.1962784-6-haoluo@google.com>
+ <20220203180414.blk6ou3ccmod2qck@ast-mbp.dhcp.thefacebook.com>
+ <CA+khW7jkJbvQrTx4oPJAoBZ0EOCtr3C2PKbrzhxj-7euBK8ojg@mail.gmail.com>
+ <CAADnVQLZZ3SM2CDxnzgOnDgRtGU7+6wT9u5v4oFas5MnZF6DsQ@mail.gmail.com>
+ <CA+khW7i+TScwPZ6-rcFKiXtxMm8hiZYJGH-wYb=7jBvDWg8pJQ@mail.gmail.com>
+ <CAADnVQ+-29CS7nSXghKMgZjKte84L0nRDegUE0ObFm3d7E=eWw@mail.gmail.com>
+ <CA+khW7iWd5MzZW_mCfgqHESi8okjNRiRMr0TM=CQzLkMsa_a5g@mail.gmail.com> <CAADnVQJcTAgcbwrOWO8EnbTdAcQ91HQmtpn7aKJGwHc=mEpJ1g@mail.gmail.com>
+In-Reply-To: <CAADnVQJcTAgcbwrOWO8EnbTdAcQ91HQmtpn7aKJGwHc=mEpJ1g@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Mon, 14 Feb 2022 10:29:17 -0800
+Message-ID: <CA+khW7i46Rg8q=8goXdmuJuZ+NOuZ5AP6fSbSVzyqcU3C5iX4A@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next v2 5/5] selftests/bpf: test for pinning for
+ cgroup_view link
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 8, 2022 at 1:20 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Tue, Feb 8, 2022 at 12:07 PM Hao Luo <haoluo@google.com> wrote:
+> >
+> > On Sat, Feb 5, 2022 at 8:29 PM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Fri, Feb 4, 2022 at 10:27 AM Hao Luo <haoluo@google.com> wrote:
+> > > > >
+> > > > > > In our use case, we can't ask the users who create cgroups to do the
+> > > > > > pinning. Pinning requires root privilege. In our use case, we have
+> > > > > > non-root users who can create cgroup directories and still want to
+> > > > > > read bpf stats. They can't do pinning by themselves. This is why
+> > > > > > inheritance is a requirement for us. With inheritance, they only need
+> > > > > > to mkdir in cgroupfs and bpffs (unprivileged operations), no pinning
+> > > > > > operation is required. Patch 1-4 are needed to implement inheritance.
+> > > > > >
+> > > > > > It's also not a good idea in our use case to add a userspace
+> > > > > > privileged process to monitor cgroupfs operations and perform the
+> > > > > > pinning. It's more complex and has a higher maintenance cost and
+> > > > > > runtime overhead, compared to the solution of asking whoever makes
+> > > > > > cgroups to mkdir in bpffs. The other problem is: if there are nodes in
+> > > > > > the data center that don't have the userspace process deployed, the
+> > > > > > stats will be unavailable, which is a no-no for some of our users.
+> > > > >
+> > > > > The commit log says that there will be a daemon that does that
+> > > > > monitoring of cgroupfs. And that daemon needs to mkdir
+> > > > > directories in bpffs when a new cgroup is created, no?
+> > > > > The kernel is only doing inheritance of bpf progs into
+> > > > > new dirs. I think that daemon can pin as well.
+> > > > >
+> > > > > The cgroup creation is typically managed by an agent like systemd.
+> > > > > Sounds like you have your own agent that creates cgroups?
+> > > > > If so it has to be privileged and it can mkdir in bpffs and pin too ?
+> > > >
+> > > > Ah, yes, we have our own daemon to manage cgroups. That daemon creates
+> > > > the top-level cgroup for each job to run inside. However, the job can
+> > > > create its own cgroups inside the top-level cgroup, for fine grained
+> > > > resource control. This doesn't go through the daemon. The job-created
+> > > > cgroups don't have the pinned objects and this is a no-no for our
+> > > > users.
+> > >
+> > > We can whitelist certain tracepoints to be sleepable and extend
+> > > tp_btf prog type to include everything from prog_type_syscall.
+> > > Such prog would attach to cgroup_mkdir and cgroup_release
+> > > and would call bpf_sys_bpf() helper to pin progs in new bpffs dirs.
+> > > We can allow prog_type_syscall to do mkdir in bpffs as well.
+> > >
+> > > This feature could be useful for similar monitoring/introspection tasks.
+> > > We can write a program that would monitor bpf prog load/unload
+> > > and would pin an iterator prog that would show debug info about a prog.
+> > > Like cat /sys/fs/bpf/progs.debug shows a list of loaded progs.
+> > > With this feature we can implement:
+> > > ls /sys/fs/bpf/all_progs.debug/
+> > > and each loaded prog would have a corresponding file.
+> > > The file name would be a program name, for example.
+> > > cat /sys/fs/bpf/all_progs.debug/my_prog
+> > > would pretty print info about 'my_prog' bpf program.
+> > >
+> > > This way the kernfs/cgroupfs specific logic from patches 1-4
+> > > will not be necessary.
+> > >
+> > > wdyt?
 
---lqbpgpqedfoirane
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Alexei,
 
-Hello Krzysztof,
+Actually, I found this almost worked, except that the tracepoints
+cgroup_mkdir and cgroup_rmdir are not sleepable. They are inside a
+spinlock's critical section with irq off. I guess one solution is to
+offload the sleepable part of the bpf prog into a thread context. We
+may create a dedicated kernel thread or use workqueue for this. Do you
+have any advice?
 
-when I read the subject line I thought the patch intention to be wrong.
-Maybe make that:
-
-	dt-bindings: intel,keembay-pwm: Don't require #pwm-cells twice
-
-?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---lqbpgpqedfoirane
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIKn0UACgkQwfwUeK3K
-7AmoPQgAnQ94Se1jdIRfuPxmJ8SI3oyoR5qYibmzoO6pwZLs9AEr0sb5Vgbt0bkU
-gQmoGNX0ivMunGQ1xXrSm0KXvUUM7nxRaxIHK/rmpYLvAiv1x1oZIKgV7QG7lBOx
-Ua+jxme5GKpJD8jNMWXOU/c2vvMb3D0f1FViJeMXitnnooA8RlMRwQeHO+Xz60Gs
-YokHBwlm1DtKPndRHVUcnoKpOIUnBvcDaFCVNPuqLfGRBsckM/5qqMH6duDEiZn7
-9EUVHIPADGIjR2kSt1jkf+sXnJ9qMguzKcxcouDXAkwqlqFS0xbk8s32UO+3BFM2
-rZo1vmmZ555NPDPiZmLPGN0ec+HiXQ==
-=7yzT
------END PGP SIGNATURE-----
-
---lqbpgpqedfoirane--
+> >
+> > Thanks Alexei. I gave it more thought in the last couple of days.
+> > Actually I think it's a good idea, more flexible. It gets rid of the
+> > need of a user space daemon for monitoring cgroup creation and
+> > destruction. We could monitor task creations and exits as well, so
+> > that we can export per-task information (e.g. task_vma_iter) more
+> > efficiently.
+>
+> Yep. Monitoring task creation and exposing via bpf_iter sounds
+> useful too.
+>
+> > A couple of thoughts when thinking about the details:
+> >
+> > - Regarding parameterized pinning, I don't think we can have one
+> > single bpf_iter_link object, but with different parameters. Because
+> > parameters are part of the bpf_iter_link (bpf_iter_aux_info). So every
+> > time we pin, we have to attach iter in order to get a new link object
+> > first. So we need to add attach and detach in bpf_sys_bpf().
+>
+> Makes sense.
+> I'm adding bpf_link_create to bpf_sys_bpf as part of
+> the "lskel for kernel" patch set.
+> The detach is sys_close. It's already available.
+>
+> > - We also need to add those syscalls for cleanup: (1) unlink for
+> > removing pinned obj and (2) rmdir for removing the directory in
+> > prog_type_syscall.
+>
+> Yes. These two would be needed.
+> And obj_pin too.
+>
+> > With these extensions, we can shift some of the bpf operations
+> > currently performed in system daemons into the kernel. IMHO it's a
+> > great thing, making system monitoring more flexible.
+>
+> Awesome. Sounds like we're converging :)

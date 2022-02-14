@@ -2,48 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F98B4B4B35
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 950384B46CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344903AbiBNKEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:04:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44920 "EHLO
+        id S245426AbiBNJr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:47:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344348AbiBNJ72 (ORCPT
+        with ESMTP id S245291AbiBNJpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:59:28 -0500
+        Mon, 14 Feb 2022 04:45:52 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F354C34;
-        Mon, 14 Feb 2022 01:47:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F431706EF;
+        Mon, 14 Feb 2022 01:38:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E7E6B80DBF;
-        Mon, 14 Feb 2022 09:46:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B12AC340E9;
-        Mon, 14 Feb 2022 09:46:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CDBAAB80DA9;
+        Mon, 14 Feb 2022 09:38:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1471C340E9;
+        Mon, 14 Feb 2022 09:38:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832017;
-        bh=L2abX2J6L4mBx7bs32Xn/5k1qnjftTG1FoPZV+6UUe4=;
+        s=korg; t=1644831529;
+        bh=4z0v3PPvCg4WiVwNoyKv8OfaYZmEcK4u21TEwyIWMEA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lUC2f7GRnf4l4xH1I3+X+8rqAgKaNkMbbOtl01RVIFkliCJgpkgRg5PijcAMTW5qL
-         KgBnU6Yol270DHDeqGw8X49gu1bTQm2C8NNwm5WD63NUCcTyKFRoSdVq7qGR7yKSqn
-         C7EBa1MbXc3zRV4b0d+xGwaeMbMhQ47BwxWL81gI=
+        b=bdLAQeOX1sdqILT0X5/CtXisOpxZvGT/wriVV8YNGel83EqJ6//UFIGqdeiCQxC3C
+         7qSuA7Aq0su1NS0Ze0TV5u4bZ+TqQRifMpAdAHWgnKTOUPaHh/WEuc94FC7Nm94474
+         CcB2V374fE+Sui3jiMOQFggtglWBelRbd7La+MhA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 053/172] PM: hibernate: Remove register_nosave_region_late()
+        stable@vger.kernel.org, Rui Wang <wangr@lemote.com>,
+        Huacai Chen <chenhc@lemote.com>,
+        Xi Ruoyao <xry111@mengyan1223.wang>,
+        =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Timothy Pearson <tpearson@raptorengineering.com>,
+        Salvatore Bonaccorso <carnil@debian.org>
+Subject: [PATCH 5.10 012/116] drm/amdgpu: Set a suitable dev_info.gart_page_size
 Date:   Mon, 14 Feb 2022 10:25:11 +0100
-Message-Id: <20220214092508.220560042@linuxfoundation.org>
+Message-Id: <20220214092459.108124663@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,93 +60,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+From: Huacai Chen <chenhc@lemote.com>
 
-[ Upstream commit 33569ef3c754a82010f266b7b938a66a3ccf90a4 ]
+commit f4d3da72a76a9ce5f57bba64788931686a9dc333 upstream.
 
-It is an unused wrapper forcing kmalloc allocation for registering
-nosave regions. Also, rename __register_nosave_region() to
-register_nosave_region() now that there is no need for disambiguation.
+In Mesa, dev_info.gart_page_size is used for alignment and it was
+set to AMDGPU_GPU_PAGE_SIZE(4KB). However, the page table of AMDGPU
+driver requires an alignment on CPU pages.  So, for non-4KB page system,
+gart_page_size should be max_t(u32, PAGE_SIZE, AMDGPU_GPU_PAGE_SIZE).
 
-Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
-Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Rui Wang <wangr@lemote.com>
+Signed-off-by: Huacai Chen <chenhc@lemote.com>
+Link: https://github.com/loongson-community/linux-stable/commit/caa9c0a1
+[Xi: rebased for drm-next, use max_t for checkpatch,
+     and reworded commit message.]
+Signed-off-by: Xi Ruoyao <xry111@mengyan1223.wang>
+BugLink: https://gitlab.freedesktop.org/drm/amd/-/issues/1549
+Tested-by: Dan Horák <dan@danny.cz>
+Reviewed-by: Christian König <christian.koenig@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+[Salvatore Bonaccorso: Backport to 5.10.y which does not contain
+a5a52a43eac0 ("drm/amd/amdgpu/amdgpu_kms: Remove 'struct
+drm_amdgpu_info_device dev_info' from the stack") which removes dev_info
+from the stack and places it on the heap.]
+Tested-by: Timothy Pearson <tpearson@raptorengineering.com>
+Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/suspend.h | 11 +----------
- kernel/power/snapshot.c | 21 +++++++--------------
- 2 files changed, 8 insertions(+), 24 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index 8af13ba60c7e4..c1310c571d805 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -430,15 +430,7 @@ struct platform_hibernation_ops {
- 
- #ifdef CONFIG_HIBERNATION
- /* kernel/power/snapshot.c */
--extern void __register_nosave_region(unsigned long b, unsigned long e, int km);
--static inline void __init register_nosave_region(unsigned long b, unsigned long e)
--{
--	__register_nosave_region(b, e, 0);
--}
--static inline void __init register_nosave_region_late(unsigned long b, unsigned long e)
--{
--	__register_nosave_region(b, e, 1);
--}
-+extern void register_nosave_region(unsigned long b, unsigned long e);
- extern int swsusp_page_is_forbidden(struct page *);
- extern void swsusp_set_page_free(struct page *);
- extern void swsusp_unset_page_free(struct page *);
-@@ -457,7 +449,6 @@ int pfn_is_nosave(unsigned long pfn);
- int hibernate_quiet_exec(int (*func)(void *data), void *data);
- #else /* CONFIG_HIBERNATION */
- static inline void register_nosave_region(unsigned long b, unsigned long e) {}
--static inline void register_nosave_region_late(unsigned long b, unsigned long e) {}
- static inline int swsusp_page_is_forbidden(struct page *p) { return 0; }
- static inline void swsusp_set_page_free(struct page *p) {}
- static inline void swsusp_unset_page_free(struct page *p) {}
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index f7a9860782135..330d499376924 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -978,8 +978,7 @@ static void memory_bm_recycle(struct memory_bitmap *bm)
-  * Register a range of page frames the contents of which should not be saved
-  * during hibernation (to be used in the early initialization code).
-  */
--void __init __register_nosave_region(unsigned long start_pfn,
--				     unsigned long end_pfn, int use_kmalloc)
-+void __init register_nosave_region(unsigned long start_pfn, unsigned long end_pfn)
- {
- 	struct nosave_region *region;
- 
-@@ -995,18 +994,12 @@ void __init __register_nosave_region(unsigned long start_pfn,
- 			goto Report;
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c
+@@ -766,9 +766,9 @@ static int amdgpu_info_ioctl(struct drm_
+ 			dev_info.high_va_offset = AMDGPU_GMC_HOLE_END;
+ 			dev_info.high_va_max = AMDGPU_GMC_HOLE_END | vm_size;
  		}
- 	}
--	if (use_kmalloc) {
--		/* During init, this shouldn't fail */
--		region = kmalloc(sizeof(struct nosave_region), GFP_KERNEL);
--		BUG_ON(!region);
--	} else {
--		/* This allocation cannot fail */
--		region = memblock_alloc(sizeof(struct nosave_region),
--					SMP_CACHE_BYTES);
--		if (!region)
--			panic("%s: Failed to allocate %zu bytes\n", __func__,
--			      sizeof(struct nosave_region));
--	}
-+	/* This allocation cannot fail */
-+	region = memblock_alloc(sizeof(struct nosave_region),
-+				SMP_CACHE_BYTES);
-+	if (!region)
-+		panic("%s: Failed to allocate %zu bytes\n", __func__,
-+		      sizeof(struct nosave_region));
- 	region->start_pfn = start_pfn;
- 	region->end_pfn = end_pfn;
- 	list_add_tail(&region->list, &nosave_regions);
--- 
-2.34.1
-
+-		dev_info.virtual_address_alignment = max((int)PAGE_SIZE, AMDGPU_GPU_PAGE_SIZE);
++		dev_info.virtual_address_alignment = max_t(u32, PAGE_SIZE, AMDGPU_GPU_PAGE_SIZE);
+ 		dev_info.pte_fragment_size = (1 << adev->vm_manager.fragment_size) * AMDGPU_GPU_PAGE_SIZE;
+-		dev_info.gart_page_size = AMDGPU_GPU_PAGE_SIZE;
++		dev_info.gart_page_size = max_t(u32, PAGE_SIZE, AMDGPU_GPU_PAGE_SIZE);
+ 		dev_info.cu_active_number = adev->gfx.cu_info.number;
+ 		dev_info.cu_ao_mask = adev->gfx.cu_info.ao_cu_mask;
+ 		dev_info.ce_ram_size = adev->gfx.ce_ram_size;
 
 

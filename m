@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388D94B49B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1484B49CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348034AbiBNKeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:34:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43734 "EHLO
+        id S1344588AbiBNKNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:13:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347736AbiBNKdW (ORCPT
+        with ESMTP id S1345407AbiBNKLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:33:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC4DA1BCB;
-        Mon, 14 Feb 2022 02:00:34 -0800 (PST)
+        Mon, 14 Feb 2022 05:11:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E767652CE;
+        Mon, 14 Feb 2022 01:50:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7BF56B80DBE;
-        Mon, 14 Feb 2022 10:00:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 668E0C340E9;
-        Mon, 14 Feb 2022 10:00:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D656B80DC4;
+        Mon, 14 Feb 2022 09:50:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 456C5C340E9;
+        Mon, 14 Feb 2022 09:50:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832831;
-        bh=RqmcDVCintIL4s3Ge1wQ9SsymjEA67HDOlmb4mXgUhY=;
+        s=korg; t=1644832238;
+        bh=htPT7ZJRwec3btt28+wtKwzLxrimdxWXFf2+yFhzDzo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GAl4lis0TIfKQnk2UZEccmV1c31JO0GIMEf7iPEt7AQcV/GBzmbIgD8SN4bOEuHJk
-         sMzjTYO+Z9eIKFOqu2/RLruRYT5W5pYRYY3l8HSxgUuRdvW4O+tCKisa1hQCTeqKY4
-         C1XROpI3p//vmbOzMxoKDDZZTkjpIcAI31X2rHD4=
+        b=NnFBzE+qtT83tbrfSueEK7rWttOV+AwCEL5UQgIByYLTCiBaN6Q+ByvfMhwdUiHeD
+         VHwr2tumBjvgLmi6Rrgi8Utmo3lab7BihcPrF2+b6qehmSfMKodRVimVf5zSfv5fqg
+         9rKI78Jur3TG2JdTTnuTqek+cKbwQrn1+W2N2TJk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Jon Maloy <jmaloy@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 137/203] net: dsa: felix: dont use devres for mdiobus
+Subject: [PATCH 5.15 123/172] tipc: rate limit warning for received illegal binding update
 Date:   Mon, 14 Feb 2022 10:26:21 +0100
-Message-Id: <20220214092514.888425741@linuxfoundation.org>
+Message-Id: <20220214092510.665360710@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,75 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Jon Maloy <jmaloy@redhat.com>
 
-[ Upstream commit 209bdb7ec6a28c7cdf580a0a98afbc9fc3b98932 ]
+[ Upstream commit c7223d687758462826a20e9735305d55bb874c70 ]
 
-As explained in commits:
-74b6d7d13307 ("net: dsa: realtek: register the MDIO bus under devres")
-5135e96a3dd2 ("net: dsa: don't allocate the slave_mii_bus using devres")
+It would be easy to craft a message containing an illegal binding table
+update operation. This is handled correctly by the code, but the
+corresponding warning printout is not rate limited as is should be.
+We fix this now.
 
-mdiobus_free() will panic when called from devm_mdiobus_free() <-
-devres_release_all() <- __device_release_driver(), and that mdiobus was
-not previously unregistered.
-
-The Felix VSC9959 switch is a PCI device, so the initial set of
-constraints that I thought would cause this (I2C or SPI buses which call
-->remove on ->shutdown) do not apply. But there is one more which
-applies here.
-
-If the DSA master itself is on a bus that calls ->remove from ->shutdown
-(like dpaa2-eth, which is on the fsl-mc bus), there is a device link
-between the switch and the DSA master, and device_links_unbind_consumers()
-will unbind the felix switch driver on shutdown.
-
-So the same treatment must be applied to all DSA switch drivers, which
-is: either use devres for both the mdiobus allocation and registration,
-or don't use devres at all.
-
-The felix driver has the code structure in place for orderly mdiobus
-removal, so just replace devm_mdiobus_alloc_size() with the non-devres
-variant, and add manual free where necessary, to ensure that we don't
-let devres free a still-registered bus.
-
-Fixes: ac3a68d56651 ("net: phy: don't abuse devres in devm_mdiobus_register()")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: b97bf3fd8f6a ("[TIPC] Initial merge")
+Signed-off-by: Jon Maloy <jmaloy@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/ocelot/felix_vsc9959.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/tipc/name_distr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/dsa/ocelot/felix_vsc9959.c b/drivers/net/dsa/ocelot/felix_vsc9959.c
-index 45c5ec7a83eaf..12c2acbc2427b 100644
---- a/drivers/net/dsa/ocelot/felix_vsc9959.c
-+++ b/drivers/net/dsa/ocelot/felix_vsc9959.c
-@@ -1064,7 +1064,7 @@ static int vsc9959_mdio_bus_alloc(struct ocelot *ocelot)
- 		return PTR_ERR(hw);
+diff --git a/net/tipc/name_distr.c b/net/tipc/name_distr.c
+index bda902caa8147..8267b751a526a 100644
+--- a/net/tipc/name_distr.c
++++ b/net/tipc/name_distr.c
+@@ -313,7 +313,7 @@ static bool tipc_update_nametbl(struct net *net, struct distr_item *i,
+ 		pr_warn_ratelimited("Failed to remove binding %u,%u from %u\n",
+ 				    ua.sr.type, ua.sr.lower, node);
+ 	} else {
+-		pr_warn("Unrecognized name table message received\n");
++		pr_warn_ratelimited("Unknown name table message received\n");
  	}
- 
--	bus = devm_mdiobus_alloc_size(dev, sizeof(*mdio_priv));
-+	bus = mdiobus_alloc_size(sizeof(*mdio_priv));
- 	if (!bus)
- 		return -ENOMEM;
- 
-@@ -1084,6 +1084,7 @@ static int vsc9959_mdio_bus_alloc(struct ocelot *ocelot)
- 	rc = mdiobus_register(bus);
- 	if (rc < 0) {
- 		dev_err(dev, "failed to register MDIO bus\n");
-+		mdiobus_free(bus);
- 		return rc;
- 	}
- 
-@@ -1133,6 +1134,7 @@ static void vsc9959_mdio_bus_free(struct ocelot *ocelot)
- 		lynx_pcs_destroy(pcs);
- 	}
- 	mdiobus_unregister(felix->imdio);
-+	mdiobus_free(felix->imdio);
+ 	return false;
  }
- 
- static void vsc9959_sched_speed_set(struct ocelot *ocelot, int port,
 -- 
 2.34.1
 

@@ -2,116 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14DD14B4318
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 08:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36EB84B431A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 08:51:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241516AbiBNHrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 02:47:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60256 "EHLO
+        id S241528AbiBNHuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 02:50:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbiBNHrt (ORCPT
+        with ESMTP id S231537AbiBNHuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 02:47:49 -0500
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332F55AED7;
-        Sun, 13 Feb 2022 23:47:42 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 4022E580307;
-        Mon, 14 Feb 2022 02:47:41 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 14 Feb 2022 02:47:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=hAXX3YSLYKv5f+3SJ
-        iOjChLyf8mfaVkznY08o7XQW04=; b=AEFHuuBiG5Rx7IwbFz2PZNrjBSV+zjWCk
-        INbNRR9KxljQlpP+7uStHn16q1SnXUgQf7tclU2wVvllgh5tuZZteV08hVSPAJqn
-        9Dic8MUa/tISNShO0PY2vQlE6RBggjfTqJALeJk0HkyFi7qFfQm8fWpkfKFy2Iw4
-        7awm3Y5s4ZdYB7d/0kAyKb3FzGmCRjb6eGaGimjxXR9AIa3uivhRSmaiugigOgeI
-        KvjnXEfI5H/hDwTDfiKQC3unegasIQdS/CjSXcf5PR8Ls3BL+rKYUWurXiMxGLYG
-        O7XdsbMSqUP4LJL/wHVQfxSqc0ou6NB5jo5ZSTvXYgzM1nCLOLKeA==
-X-ME-Sender: <xms:GAkKYo-6CdMYwzh8ssqo1lS500yoCiLZOGwg1o_rB9fbb_uecxnVtA>
-    <xme:GAkKYgsFi97jM0nScOUwioPd_y_TW45suu8GOYokal6312azFy6Mbjv-PhAQjj6zH
-    D211jMdhq3umC8>
-X-ME-Received: <xmr:GAkKYuBfPc-GAIVk99c2_Pwnu1OMfogOOt8ce0GqRiNJXcnoM-pMKzUqs4oGkDBRp7VIrgP2fAF9bQtDRwUgrQHIhG8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrjedugdduudduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
-    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
-    gvrhhnpefgvefgveeuudeuffeiffehieffgfejleevtdetueetueffkeevgffgtddugfek
-    veenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepihguohhstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:GAkKYod-qEiQCIdV_VZvmD-bunUy86Dfw0UqUWJRnHK4DV07pTOpkQ>
-    <xmx:GAkKYtPtIkRxnipq1gT07lMIbcVsFr7qGcWlHCa5oTTH-p3MX-0zWw>
-    <xmx:GAkKYilx9R30KFjPp136qCE2IlJnh8Xa8Oy3L58ihexHTPalDixoPA>
-    <xmx:HQkKYvGitqYU94RhMQeTbk4UKrJg1g2I0w1F2J0fsk-EUyVkzI_D8A>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 14 Feb 2022 02:47:35 -0500 (EST)
-Date:   Mon, 14 Feb 2022 09:47:32 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Tong Zhang <ztong0001@gmail.com>
-Cc:     Domenico Andreoli <domenico.andreoli@linux.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        David Airlie <airlied@linux.ie>,
-        Andrew Morton <akpm@linux-foundation.org>, amir73il@gmail.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, bcrl@kvack.org,
-        benh@kernel.crashing.org, clemens@ladisch.de, crope@iki.fi,
-        dgilbert@interlog.com, Greg KH <gregkh@linuxfoundation.org>,
-        jack@suse.cz, jani.nikula@intel.com,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>, jlbec@evilplan.org,
-        john.ogness@linutronix.de,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>, julia.lawall@inria.fr,
-        Kees Cook <keescook@chromium.org>, kernel@tuxforce.de,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Mark Fasheh <mark@fasheh.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        mm-commits@vger.kernel.org, nixiaoming@huawei.com,
-        penguin-kernel@i-love.sakura.ne.jp, peterz@infradead.org,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Paul Turner <pjt@google.com>, pmladek@suse.com,
-        rafael@kernel.org, Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        rostedt@goodmis.org, senozhatsky@chromium.org, sre@kernel.org,
-        steve@sk2.org, Suren Baghdasaryan <surenb@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>, tytso@mit.edu,
-        Al Viro <viro@zeniv.linux.org.uk>, wangqing@vivo.com,
-        Iurii Zaikin <yzaikin@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        regressions@lists.linux.dev
-Subject: Re: [PATCH v2] Fix regression due to "fs: move binfmt_misc sysctl to
- its own file"
-Message-ID: <YgoJFAltbyqTT6Kz@shredder>
-References: <20220121221021.60533b009c357d660791476e@linux-foundation.org>
- <20220122061228.nmuo75sDn%akpm@linux-foundation.org>
- <YgEeQNdgBuHRyEWl@dumbo>
- <YgGTSR628xhRvCjB@bombadil.infradead.org>
- <CAA5qM4BGmrkwatyO_h3F=ErDZ9t5swuttbt6NkQU-1KDGDiD4g@mail.gmail.com>
- <YgKmaggsipzzCGCg@bombadil.infradead.org>
- <YgNyAC8VMeuOD/uQ@dumbo>
- <YgklDvNecca1/8in@shredder>
- <CAA5qM4AP=pOi1dFFgELJ97nSwTBqrruseGmTF-qab=xj2==_Xg@mail.gmail.com>
+        Mon, 14 Feb 2022 02:50:32 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F545AEE3;
+        Sun, 13 Feb 2022 23:50:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:References;
+        bh=jciESuD7KkzOvrqFddq5ei3J58DoUHqc9C5Rydzc4hg=; b=ErVgdFGCyNNxww5f7hf/07MEwA
+        eO/VTA8rQ8dirRDJco/8BjyYJASyRoVeJc3JhpACcw2y9KulXRrMp4dG1qfeMn81z/J0ruwzdpfT9
+        X2LL1vtZ4q38flprm7P8gEtPpEISjO7UMA3BywnfI/G466qY3gk9WMTF9Ilys74Sye2ZOKvPkoNlO
+        1RtAHerqFSq5PFk+s78fw/rPdHBmahvBCzG+h36GLtTPENrZevdDgViDcnW3UVrn550LFwIf0FWgi
+        5dSK4a6ZXKB/SWWt55zkB5pw0VckR7OX6kVs4mNd21LvQ0cnBSqomwZzh+2+Cm4EdbmmlmqsXhBBA
+        lJrLrufg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJW7p-00DlZB-4w; Mon, 14 Feb 2022 07:50:21 +0000
+Date:   Sun, 13 Feb 2022 23:50:21 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Stafford Horne <shorne@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>
+Subject: Re: [PATCH] microblaze: remove CONFIG_SET_FS
+Message-ID: <YgoJvSFFTSb6apGl@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAA5qM4AP=pOi1dFFgELJ97nSwTBqrruseGmTF-qab=xj2==_Xg@mail.gmail.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAK8P3a0eAv168eepvdZQbYDstTQHc-Hb2_PMS3bseV3caB4oAA@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 13, 2022 at 01:10:42PM -0800, Tong Zhang wrote:
-> Hi Ido,
-> Thanks for the report. This is a known issue. The fix is proposed here.
-> https://lore.kernel.org/all/YgRbEG21AUrLSFKX@bombadil.infradead.org/
+I like the series a lot.
 
-Great, thanks for letting me know
+Superficial comments:
+
+for nds32 is there any good reason why __get_user / __set_user check
+the address limit directly?  Maybe we should unify this and make it work
+like the other architectures.
+
+With "uaccess: add generic __{get,put}_kernel_nofault" we should be able
+to remove HAVE_GET_KERNEL_NOFAULT entirely and just check if the helpers
+are already defined in linux/uaccess.h.
+
+The new generic __access_ok, and the 3 fixed up version early on
+have a whole lot of superflous braces.

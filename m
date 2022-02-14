@@ -2,95 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD2A4B52E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:14:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B571D4B52FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354981AbiBNOOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 09:14:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50244 "EHLO
+        id S1355018AbiBNOQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 09:16:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbiBNOOE (ORCPT
+        with ESMTP id S233575AbiBNOQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 09:14:04 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 40D72B7;
-        Mon, 14 Feb 2022 06:13:55 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 08D5F1042;
-        Mon, 14 Feb 2022 06:13:55 -0800 (PST)
-Received: from bogus (unknown [10.57.3.35])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EB4943F66F;
-        Mon, 14 Feb 2022 06:13:51 -0800 (PST)
-Date:   Mon, 14 Feb 2022 14:13:03 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Liviu Dudau <Liviu.Dudau@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-stable <stable@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        lkft-triage@lists.linaro.org,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH 2/2] arm64: dts: juno: Enable more SMMUs
-Message-ID: <20220214141303.3lmnassl4qibsp3y@bogus>
-References: <720d0a9a42e33148fcac45cd39a727093a32bf32.1614965598.git.robin.murphy@arm.com>
- <a730070d718cb119f77c8ca1782a0d4189bfb3e7.1614965598.git.robin.murphy@arm.com>
- <0a1d437d-9ea0-de83-3c19-e07f560ad37c@arm.com>
- <20210730143431.GB1517404@mutt>
- <8b358507-dbdf-b05b-c1da-2ec9903a2912@arm.com>
- <CADYN=9LE2JnE+vmv_UaeyJj_RpHcp+zZUv711VuQekLSiQ2bJA@mail.gmail.com>
- <CA+G9fYu7ctvOfdvBkDZ1nABz0TaYZ49FUKVTctn+mBTCmk9JCQ@mail.gmail.com>
+        Mon, 14 Feb 2022 09:16:32 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F4AC72
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:16:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=V57R5a2O0zZ5gdcp4vIHQbVgGyyROcq/YIatDbB3aUU=; b=Bodhw4C6EJx6HuM+psJGR5tvbD
+        2Z5aAwckyx0vclVEQnNQ9PK7h9WuPQGpAcdnDxpZa2g4/Se0JdrlxspAJF2HWaZLOTSqbzsdEDFaW
+        IVidNF9bHmtvWXCKjo5pXFdUjoRRaKolsPRWhZE8S2agSZfpehediA1XPrX0jfbr20Cub0IKW3lOF
+        fKN5XF9pnMkWMHxSoCMBUCl9DUT+Gh/UktxnK2fgYsmegLpV1YNNagi8RJ5pJCMDg7TIPbrMcm5L/
+        X/xSUgG/gTDuZSqkZLdHlNmIojs+6C01U+6Pt4zIwPZiln9jHA6Q4eYnkZuFM9eUNNAY2wphft9oa
+        4YNYBT7A==;
+Received: from 201-27-34-205.dsl.telesp.net.br ([201.27.34.205] helo=localhost)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1nJc9G-0003w2-2s; Mon, 14 Feb 2022 15:16:14 +0100
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+To:     linux-kernel@vger.kernel.org, bhe@redhat.com, pmladek@suse.com,
+        akpm@linux-foundation.org
+Cc:     gpiccoli@igalia.com, anton@enomsg.org, ccross@android.com,
+        dyoung@redhat.com, feng.tang@intel.com, john.ogness@linutronix.de,
+        keescook@chromium.org, kernel@gpiccoli.net,
+        kexec@lists.infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, tony.luck@intel.com, vgoyal@redhat.com
+Subject: [PATCH V6] panic: Move panic_print before kmsg dumpers
+Date:   Mon, 14 Feb 2022 11:13:09 -0300
+Message-Id: <20220214141308.841525-1-gpiccoli@igalia.com>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYu7ctvOfdvBkDZ1nABz0TaYZ49FUKVTctn+mBTCmk9JCQ@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 07:36:00PM +0530, Naresh Kamboju wrote:
-> Hi Robin,
-> 
-> Since we did not get a reply on this email thread.
-> and those intermittent failures are causing a lot of noise in reports summary.
-> We will wait one more week and stop running 64k page size testing on
-> Juno-r2 devices.
-> 
-> > > > diff --git a/arch/arm64/boot/dts/arm/juno-base.dtsi b/arch/arm64/boot/dts/arm/juno-base.dtsi
-> > > > index 8e7a66943b01..d3148730e951 100644
-> > > > --- a/arch/arm64/boot/dts/arm/juno-base.dtsi
-> > > > +++ b/arch/arm64/boot/dts/arm/juno-base.dtsi
-> > > > @@ -545,8 +545,7 @@ pcie_ctlr: pcie@40000000 {
-> > > >                           <0x02000000 0x00 0x50000000 0x00 0x50000000 0x0 0x08000000>,
-> > > >                           <0x42000000 0x40 0x00000000 0x40 0x00000000 0x1 0x00000000>;
-> > > >                  /* Standard AXI Translation entries as programmed by EDK2 */
-> > > > -               dma-ranges = <0x02000000 0x0 0x2c1c0000 0x0 0x2c1c0000 0x0 0x00040000>,
-> > > > -                            <0x02000000 0x0 0x80000000 0x0 0x80000000 0x0 0x80000000>,
-> > > > +               dma-ranges = <0x02000000 0x0 0x80000000 0x0 0x80000000 0x0 0x80000000>,
-> > > >                               <0x43000000 0x8 0x00000000 0x8 0x00000000 0x2 0x00000000>;
-> > > >                  #interrupt-cells = <1>;
-> > > >                  interrupt-map-mask = <0 0 0 7>;
-> > > >
-> 
-> Reference email thread,
-> https://lore.kernel.org/stable/0a1d437d-9ea0-de83-3c19-e07f560ad37c@arm.com/
-> 
+The panic_print setting allows users to collect more information in a
+panic event, like memory stats, tasks, CPUs backtraces, etc.
+This is an interesting debug mechanism, but currently the print event
+happens *after* kmsg_dump(), meaning that pstore, for example, cannot
+collect a dmesg with the panic_print extra information.
 
-I was about to tag the fix for this and was just reading this thread. I will
-send the pull request soon. Sorry for the delay, it is in next for some time
-now. Are you seeing the issue even in linux-next ?
+This patch changes that in 2 steps:
 
+(a) The panic_print setting allows to replay the existing kernel log
+buffer to the console (bit 5), besides the extra information dump.
+This functionality makes sense only at the end of the panic() function.
+So, we hereby allow to distinguish the two situations by a new boolean
+parameter in the function panic_print_sys_info().
+
+(b) With the above change, we can safely call panic_print_sys_info()
+before kmsg_dump(), allowing to dump the extra information when using
+pstore or other kmsg dumpers.
+
+The additional messages from panic_print could overwrite the oldest
+messages when the buffer is full. The only reasonable solution is to
+use a large enough log buffer, hence we added an advice into the kernel
+parameters documentation about that.
+
+Cc: Feng Tang <feng.tang@intel.com>
+Cc: Petr Mladek <pmladek@suse.com>
+Acked-by: Baoquan He <bhe@redhat.com>
+Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+---
+
+
+V6: Implemented a small suggestion from Baoquan in the commit
+message; with that, added his Acked-By. (Thanks Baoquan!)
+Notice that this is rebased against linux-next (next-20220211 branch).
+
+V5: https://lore.kernel.org/lkml/20220211215539.822466-1-gpiccoli@igalia.com/
+
+V4: https://lore.kernel.org/lkml/20220124203101.216051-1-gpiccoli@igalia.com/
+
+
+Andrew, can we get that merged in the mm-tree, after getting [0]
+removed from there? This one replaces [0]. Thanks!!
+
+[0] https://ozlabs.org/~akpm/mmots/broken-out/panic-allow-printing-extra-panic-information-on-kdump.patch
+
+
+ Documentation/admin-guide/kernel-parameters.txt |  4 ++++
+ kernel/panic.c                                  | 13 +++++++++----
+ 2 files changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 3c2b3e24e8f5..2cf7078eaa95 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3766,6 +3766,10 @@
+ 			bit 4: print ftrace buffer
+ 			bit 5: print all printk messages in buffer
+ 			bit 6: print all CPUs backtrace (if available in the arch)
++			*Be aware* that this option may print a _lot_ of lines,
++			so there are risks of losing older messages in the log.
++			Use this option carefully, maybe worth to setup a
++			bigger log buffer with "log_buf_len" along with this.
+ 
+ 	panic_on_taint=	Bitmask for conditionally calling panic() in add_taint()
+ 			Format: <hex>[,nousertaint]
+diff --git a/kernel/panic.c b/kernel/panic.c
+index 3c3fb36d8d41..eb4dfb932c85 100644
+--- a/kernel/panic.c
++++ b/kernel/panic.c
+@@ -148,10 +148,13 @@ void nmi_panic(struct pt_regs *regs, const char *msg)
+ }
+ EXPORT_SYMBOL(nmi_panic);
+ 
+-static void panic_print_sys_info(void)
++static void panic_print_sys_info(bool console_flush)
+ {
+-	if (panic_print & PANIC_PRINT_ALL_PRINTK_MSG)
+-		console_flush_on_panic(CONSOLE_REPLAY_ALL);
++	if (console_flush) {
++		if (panic_print & PANIC_PRINT_ALL_PRINTK_MSG)
++			console_flush_on_panic(CONSOLE_REPLAY_ALL);
++		return;
++	}
+ 
+ 	if (panic_print & PANIC_PRINT_ALL_CPU_BT)
+ 		trigger_all_cpu_backtrace();
+@@ -286,6 +289,8 @@ void panic(const char *fmt, ...)
+ 	 */
+ 	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
+ 
++	panic_print_sys_info(false);
++
+ 	kmsg_dump(KMSG_DUMP_PANIC);
+ 
+ 	/*
+@@ -316,7 +321,7 @@ void panic(const char *fmt, ...)
+ 	debug_locks_off();
+ 	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
+ 
+-	panic_print_sys_info();
++	panic_print_sys_info(true);
+ 
+ 	if (!panic_blink)
+ 		panic_blink = no_blink;
 -- 
-Regards,
-Sudeep
+2.35.0
+

@@ -2,265 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61F84B58BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:42:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B10F04B58C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357190AbiBNRmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 12:42:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33262 "EHLO
+        id S1345038AbiBNRmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 12:42:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238348AbiBNRmM (ORCPT
+        with ESMTP id S230214AbiBNRmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 12:42:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8B1B65438
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:42:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644860522;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HkzlRRdo6yqhnTQGH6gMkxF53RbjGfg491HfYhh8cbk=;
-        b=dbvdOVSgw+ACqctla/MhkG5Hsi6pwgIIBdRgQVJEOgoNWkll2XB7anRHy2YNOeLRm8+Epm
-        toE2UZhkbq1bc6JbyHWEuJ1HfqZVSol08i0xc5VOVzeJ5LRgikBnq6WY4q+KCZ8giOjuI2
-        NZd0JMhFCvUP1zfmmswkKOJwjE9kf3Q=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-498-WRmKjxQsNriFtkzQAXa43A-1; Mon, 14 Feb 2022 12:41:59 -0500
-X-MC-Unique: WRmKjxQsNriFtkzQAXa43A-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1CE881091DA0;
-        Mon, 14 Feb 2022 17:41:57 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.194.147])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5DB017DE56;
-        Mon, 14 Feb 2022 17:41:52 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Zi Yan <ziy@nvidia.com>, Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        iommu@lists.linux-foundation.org, linux-mm@kvack.org
-Subject: [PATCH v1 2/2] mm: enforce pageblock_order < MAX_ORDER
-Date:   Mon, 14 Feb 2022 18:41:32 +0100
-Message-Id: <20220214174132.219303-3-david@redhat.com>
-In-Reply-To: <20220214174132.219303-1-david@redhat.com>
-References: <20220214174132.219303-1-david@redhat.com>
+        Mon, 14 Feb 2022 12:42:53 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9479765411
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:42:45 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id l19so24657653pfu.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:42:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=W0jC+BI1XleZWb4xYM6y8STFaTPRsXHACPClwjtx+Ds=;
+        b=DAAiKeKy6fnmfv72KiGxiZKt4u2fNPLKP2MFLt/3RJ926upPT/BaGK6gUmWp+BGAwK
+         +uaRG1r2hvSEU5yJptA629iQmmZyT2i929+7BWp6g6IdkGYH9hhQx/R4z2MjjcO5N4qh
+         KXuFVRrOk8spFMUYk8TJJKW3/gJPd5m9Dr9HbbqSFf7zMoChbpe/6uECjqsYxitj8dQa
+         5GbIwEjGH8qFPQQIGm2oiP5N8vC/vCCBRx/vyFh81/L/fpy+fSk9IiV+sVUNxhMCCeXe
+         XkJmB85rXQQSzor4ivkwNC/4HQ5jVMX+gVeuIRWSBRBinJ0XGmLundj/BS512UkfEUeJ
+         cLhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=W0jC+BI1XleZWb4xYM6y8STFaTPRsXHACPClwjtx+Ds=;
+        b=vgEf81eu37o3I03HdvGTAaTQACBervGUz8K24n1YkfY/n/aLW3YvStjvH/uT2k0Qq7
+         yfvfBDi/I1MJU4Hruz2sQoytAcpkSApihFSdpmf6kvJJjJj9nyEXO2JWoF4po0rQx2u3
+         8/pWx1QzNOV2+Ta6bLlDX2FEv/JC68/j8rvE5eaLrTYT//1BLejFHzcnkwgkF56SnGv6
+         IovBsu9urYN1fWxdPtsY9yCVcg9hd340f/tqVVrjfkimOhGyoe6IQGpBwuzwEvVjOemF
+         FFkcRm1xKuCllrk0TtWe4vUv80pxLz3xOt5nBro5Uppu79M7WZY5z/IbgSLIvecyFEQE
+         Bkew==
+X-Gm-Message-State: AOAM5319dICyXHTcZfpctN9zAT3DJMXfjJ/hMaVwUMV2C4BbuypJ91BX
+        aBCl7tElIZUJQEd9VPqAtWfaWikudM1lxAdSyrCS1A==
+X-Google-Smtp-Source: ABdhPJwJiJpYzgpABDBFyLzMhQvo1iBEVDu6iPYEDxL43BvO/78jc0M4fPXPbozpzpwQudr9dC9Z9wsmnPvKbX3AgvQ=
+X-Received: by 2002:a05:6a00:804:: with SMTP id m4mr636142pfk.45.1644860564881;
+ Mon, 14 Feb 2022 09:42:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <1644395873-3937-1-git-send-email-wangqing@vivo.com>
+ <20220213175940.1066f5a8@jic23-huawei> <9e5ed543-cd45-85db-50b5-52c2afd54c55@wanadoo.fr>
+ <29e74800-1c3f-e043-97e6-d83f7a53fafb@wanadoo.fr> <20220214110119.00006347@Huawei.com>
+In-Reply-To: <20220214110119.00006347@Huawei.com>
+From:   Jyoti Bhayana <jbhayana@google.com>
+Date:   Mon, 14 Feb 2022 09:42:33 -0800
+Message-ID: <CA+=V6c31+BvssWX-eG=LdeC8o4mE7e1whnT74jbQWRY2w5Zbqg@mail.gmail.com>
+Subject: Re: [PATCH] iio: use div64_u64() instead of do_div()
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Qing Wang <wangqing@vivo.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some places in the kernel don't really expect pageblock_order >=
-MAX_ORDER, and it looks like this is only possible in corner cases:
+yes, this is wrong. Also, the logic would be broken as the two apis
+do_div() and div64_u64 return values are completely different.
+Thanks,
+Jyoti
 
-1) CONFIG_DEFERRED_STRUCT_PAGE_INIT we'll end up freeing pageblock_order
-   pages via __free_pages_core(), which cannot possibly work.
 
-2) find_zone_movable_pfns_for_nodes() will roundup the ZONE_MOVABLE
-   start PFN to MAX_ORDER_NR_PAGES. Consequently with a bigger
-   pageblock_order, we could have a single pageblock partially managed by
-   two zones.
-
-3) compaction code runs into __fragmentation_index() with order
-   >= MAX_ORDER, when checking WARN_ON_ONCE(order >= MAX_ORDER). [1]
-
-4) mm/page_reporting.c won't be reporting any pages with default
-   page_reporting_order == pageblock_order, as we'll be skipping the
-   reporting loop inside page_reporting_process_zone().
-
-5) __rmqueue_fallback() will never be able to steal with
-   ALLOC_NOFRAGMENT.
-
-pageblock_order >= MAX_ORDER is weird either way: it's a pure
-optimization for making alloc_contig_range(), as used for allcoation of
-gigantic pages, a little more reliable to succeed. However, if there is
-demand for somewhat reliable allocation of gigantic pages, affected setups
-should be using CMA or boottime allocations instead.
-
-So let's make sure that pageblock_order < MAX_ORDER and simplify.
-
-[1] https://lkml.kernel.org/r/87r189a2ks.fsf@linux.ibm.com
-
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- drivers/virtio/virtio_mem.c     |  9 +++------
- include/linux/cma.h             |  3 +--
- include/linux/pageblock-flags.h |  7 +++++--
- mm/Kconfig                      |  3 +++
- mm/page_alloc.c                 | 32 ++++++++------------------------
- 5 files changed, 20 insertions(+), 34 deletions(-)
-
-diff --git a/drivers/virtio/virtio_mem.c b/drivers/virtio/virtio_mem.c
-index 38becd8d578c..e7d6b679596d 100644
---- a/drivers/virtio/virtio_mem.c
-+++ b/drivers/virtio/virtio_mem.c
-@@ -2476,13 +2476,10 @@ static int virtio_mem_init_hotplug(struct virtio_mem *vm)
- 				      VIRTIO_MEM_DEFAULT_OFFLINE_THRESHOLD);
- 
- 	/*
--	 * We want subblocks to span at least MAX_ORDER_NR_PAGES and
--	 * pageblock_nr_pages pages. This:
--	 * - Is required for now for alloc_contig_range() to work reliably -
--	 *   it doesn't properly handle smaller granularity on ZONE_NORMAL.
-+	 * TODO: once alloc_contig_range() works reliably with pageblock
-+	 * granularity on ZONE_NORMAL, use pageblock_nr_pages instead.
- 	 */
--	sb_size = max_t(uint64_t, MAX_ORDER_NR_PAGES,
--			pageblock_nr_pages) * PAGE_SIZE;
-+	sb_size = PAGE_SIZE * MAX_ORDER_NR_PAGES;
- 	sb_size = max_t(uint64_t, vm->device_block_size, sb_size);
- 
- 	if (sb_size < memory_block_size_bytes() && !force_bbm) {
-diff --git a/include/linux/cma.h b/include/linux/cma.h
-index 75fe188ec4a1..b1ba94f1cc9c 100644
---- a/include/linux/cma.h
-+++ b/include/linux/cma.h
-@@ -25,8 +25,7 @@
-  * -- can deal with only some pageblocks of a higher-order page being
-  *  MIGRATE_CMA, we can use pageblock_nr_pages.
-  */
--#define CMA_MIN_ALIGNMENT_PAGES max_t(phys_addr_t, MAX_ORDER_NR_PAGES, \
--				      pageblock_nr_pages)
-+#define CMA_MIN_ALIGNMENT_PAGES MAX_ORDER_NR_PAGES
- #define CMA_MIN_ALIGNMENT_BYTES (PAGE_SIZE * CMA_MIN_ALIGNMENT_PAGES)
- 
- struct cma;
-diff --git a/include/linux/pageblock-flags.h b/include/linux/pageblock-flags.h
-index 973fd731a520..83c7248053a1 100644
---- a/include/linux/pageblock-flags.h
-+++ b/include/linux/pageblock-flags.h
-@@ -37,8 +37,11 @@ extern unsigned int pageblock_order;
- 
- #else /* CONFIG_HUGETLB_PAGE_SIZE_VARIABLE */
- 
--/* Huge pages are a constant size */
--#define pageblock_order		HUGETLB_PAGE_ORDER
-+/*
-+ * Huge pages are a constant size, but don't exceed the maximum allocation
-+ * granularity.
-+ */
-+#define pageblock_order		min_t(unsigned int, HUGETLB_PAGE_ORDER, MAX_ORDER - 1)
- 
- #endif /* CONFIG_HUGETLB_PAGE_SIZE_VARIABLE */
- 
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 3326ee3903f3..4c91b92e7537 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -262,6 +262,9 @@ config HUGETLB_PAGE_SIZE_VARIABLE
- 	  HUGETLB_PAGE_ORDER when there are multiple HugeTLB page sizes available
- 	  on a platform.
- 
-+	  Note that the pageblock_order cannot exceed MAX_ORDER - 1 and will be
-+	  clamped down to MAX_ORDER - 1.
-+
- config CONTIG_ALLOC
- 	def_bool (MEMORY_ISOLATION && COMPACTION) || CMA
- 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 3589febc6d31..04cf964b57b5 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1072,14 +1072,12 @@ static inline void __free_one_page(struct page *page,
- 		int migratetype, fpi_t fpi_flags)
- {
- 	struct capture_control *capc = task_capc(zone);
-+	unsigned int max_order = pageblock_order;
- 	unsigned long buddy_pfn;
- 	unsigned long combined_pfn;
--	unsigned int max_order;
- 	struct page *buddy;
- 	bool to_tail;
- 
--	max_order = min_t(unsigned int, MAX_ORDER - 1, pageblock_order);
--
- 	VM_BUG_ON(!zone_is_initialized(zone));
- 	VM_BUG_ON_PAGE(page->flags & PAGE_FLAGS_CHECK_AT_PREP, page);
- 
-@@ -2260,19 +2258,8 @@ void __init init_cma_reserved_pageblock(struct page *page)
- 	} while (++p, --i);
- 
- 	set_pageblock_migratetype(page, MIGRATE_CMA);
--
--	if (pageblock_order >= MAX_ORDER) {
--		i = pageblock_nr_pages;
--		p = page;
--		do {
--			set_page_refcounted(p);
--			__free_pages(p, MAX_ORDER - 1);
--			p += MAX_ORDER_NR_PAGES;
--		} while (i -= MAX_ORDER_NR_PAGES);
--	} else {
--		set_page_refcounted(page);
--		__free_pages(page, pageblock_order);
--	}
-+	set_page_refcounted(page);
-+	__free_pages(page, pageblock_order);
- 
- 	adjust_managed_page_count(page, pageblock_nr_pages);
- 	page_zone(page)->cma_pages += pageblock_nr_pages;
-@@ -7389,16 +7376,15 @@ static inline void setup_usemap(struct zone *zone) {}
- /* Initialise the number of pages represented by NR_PAGEBLOCK_BITS */
- void __init set_pageblock_order(void)
- {
--	unsigned int order;
-+	unsigned int order = MAX_ORDER - 1;
- 
- 	/* Check that pageblock_nr_pages has not already been setup */
- 	if (pageblock_order)
- 		return;
- 
--	if (HPAGE_SHIFT > PAGE_SHIFT)
-+	/* Don't let pageblocks exceed the maximum allocation granularity. */
-+	if (HPAGE_SHIFT > PAGE_SHIFT && HUGETLB_PAGE_ORDER < order)
- 		order = HUGETLB_PAGE_ORDER;
--	else
--		order = MAX_ORDER - 1;
- 
- 	/*
- 	 * Assume the largest contiguous order of interest is a huge page.
-@@ -8986,14 +8972,12 @@ struct page *has_unmovable_pages(struct zone *zone, struct page *page,
- #ifdef CONFIG_CONTIG_ALLOC
- static unsigned long pfn_max_align_down(unsigned long pfn)
- {
--	return pfn & ~(max_t(unsigned long, MAX_ORDER_NR_PAGES,
--			     pageblock_nr_pages) - 1);
-+	return ALIGN_DOWN(pfn, MAX_ORDER_NR_PAGES);
- }
- 
- static unsigned long pfn_max_align_up(unsigned long pfn)
- {
--	return ALIGN(pfn, max_t(unsigned long, MAX_ORDER_NR_PAGES,
--				pageblock_nr_pages));
-+	return ALIGN(pfn, MAX_ORDER_NR_PAGES);
- }
- 
- #if defined(CONFIG_DYNAMIC_DEBUG) || \
--- 
-2.34.1
-
+On Mon, Feb 14, 2022 at 3:01 AM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
+>
+> On Sun, 13 Feb 2022 19:54:01 +0100
+> Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
+>
+> > Le 13/02/2022 =C3=A0 19:50, Christophe JAILLET a =C3=A9crit :
+> > > Le 13/02/2022 =C3=A0 18:59, Jonathan Cameron a =C3=A9crit :
+> > >> On Wed,  9 Feb 2022 00:37:53 -0800
+> > >> Qing Wang <wangqing-DGpbCiVdSXo@public.gmane.org> wrote:
+> > >>
+> > >>> From: Wang Qing <wangqing-DGpbCiVdSXo@public.gmane.org>
+> > >>>
+> > >>> do_div() does a 64-by-32 division.
+> > >>> When the divisor is u64, do_div() truncates it to 32 bits, this mea=
+ns it
+> > >>> can test non-zero and be truncated to zero for division.
+> > >>>
+> > >>> fix do_div.cocci warning:
+> > >>> do_div() does a 64-by-32 division, please consider using div64_u64
+> > >>> instead.
+> > >>>
+> > >>> Signed-off-by: Wang Qing <wangqing-DGpbCiVdSXo@public.gmane.org>
+> > >> These look correct to me.  Jyoti, please could give these a sanity c=
+heck?
+> > >>
+> > >
+> > > This is wrong.
+> > >
+> > > See [1].
+> > >
+> > > CJ
+> > >
+> > > [1]:
+> > > https://lore.kernel.org/linux-kernel/20211117112559.jix3hmx7uwqmuryg-=
+bIcnvbaLZ9MEGnE8C9+IrQ@public.gmane.org/
+> >
+> > Broken link, sorry:
+> >
+> > [1]
+> > https://lore.kernel.org/linux-kernel/20211117112559.jix3hmx7uwqmuryg@pe=
+ngutronix.de/
+> >
+> oops.  Thanks for the heads up. I'd forgotten the slightly odd convention
+> around do_div
+>
+> Jonathan
+>
+>
+> > >
+> > >
+> > >> Thanks,
+> > >>
+> > >> Jonathan
+> > >>
+> > >>> ---
+> > >>>   drivers/iio/common/scmi_sensors/scmi_iio.c | 10 +++++-----
+> > >>>   1 file changed, 5 insertions(+), 5 deletions(-)
+> > >>>
+> > >>> diff --git a/drivers/iio/common/scmi_sensors/scmi_iio.c
+> > >>> b/drivers/iio/common/scmi_sensors/scmi_iio.c
+> > >>> index d538bf3..d6df5da
+> > >>> --- a/drivers/iio/common/scmi_sensors/scmi_iio.c
+> > >>> +++ b/drivers/iio/common/scmi_sensors/scmi_iio.c
+> > >>> @@ -160,7 +160,7 @@ static int scmi_iio_set_odr_val(struct iio_dev
+> > >>> *iio_dev, int val, int val2)
+> > >>>       mult =3D scnprintf(buf, sizeof(buf), "%llu", sf) - 1;
+> > >>>       sec =3D int_pow(10, mult) * UHZ_PER_HZ;
+> > >>> -    do_div(sec, uHz);
+> > >>> +    div64_u64(sec, uHz);
+> > >>>       if (sec =3D=3D 0) {
+> > >>>           dev_err(&iio_dev->dev,
+> > >>>               "Trying to set invalid sensor update value for sensor=
+ %s",
+> > >>> @@ -237,10 +237,10 @@ static void convert_ns_to_freq(u64 interval_n=
+s,
+> > >>> u64 *hz, u64 *uhz)
+> > >>>       u64 rem, freq;
+> > >>>       freq =3D NSEC_PER_SEC;
+> > >>> -    rem =3D do_div(freq, interval_ns);
+> > >>> +    rem =3D div64_u64(freq, interval_ns);
+> > >>>       *hz =3D freq;
+> > >>>       *uhz =3D rem * 1000000UL;
+> > >>> -    do_div(*uhz, interval_ns);
+> > >>> +    div64_u64(*uhz, interval_ns);
+> > >>>   }
+> > >>>   static int scmi_iio_get_odr_val(struct iio_dev *iio_dev, int *val=
+,
+> > >>> int *val2)
+> > >>> @@ -266,7 +266,7 @@ static int scmi_iio_get_odr_val(struct iio_dev
+> > >>> *iio_dev, int *val, int *val2)
+> > >>>       mult =3D SCMI_SENS_CFG_GET_UPDATE_EXP(sensor_config);
+> > >>>       if (mult < 0) {
+> > >>>           sensor_interval_mult =3D int_pow(10, abs(mult));
+> > >>> -        do_div(sensor_update_interval, sensor_interval_mult);
+> > >>> +        div64_u64(sensor_update_interval, sensor_interval_mult);
+> > >>>       } else {
+> > >>>           sensor_interval_mult =3D int_pow(10, mult);
+> > >>>           sensor_update_interval =3D
+> > >>> @@ -500,7 +500,7 @@ static u64 scmi_iio_convert_interval_to_ns(u32 =
+val)
+> > >>>       mult =3D SCMI_SENS_INTVL_GET_EXP(val);
+> > >>>       if (mult < 0) {
+> > >>>           sensor_interval_mult =3D int_pow(10, abs(mult));
+> > >>> -        do_div(sensor_update_interval, sensor_interval_mult);
+> > >>> +        div64_u64(sensor_update_interval, sensor_interval_mult);
+> > >>>       } else {
+> > >>>           sensor_interval_mult =3D int_pow(10, mult);
+> > >>>           sensor_update_interval =3D
+> > >>
+> > >>
+> > >
+> > >
+> >
+>

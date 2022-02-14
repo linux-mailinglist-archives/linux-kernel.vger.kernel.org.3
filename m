@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72BFA4B49B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 814384B4965
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344975AbiBNKDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:03:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43436 "EHLO
+        id S233602AbiBNKZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:25:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343956AbiBNJ7Y (ORCPT
+        with ESMTP id S1346845AbiBNKYT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:59:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E15C09;
-        Mon, 14 Feb 2022 01:46:44 -0800 (PST)
+        Mon, 14 Feb 2022 05:24:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171106D187;
+        Mon, 14 Feb 2022 01:56:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 868FFB80DC7;
-        Mon, 14 Feb 2022 09:46:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BDADC340E9;
-        Mon, 14 Feb 2022 09:46:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7D4161183;
+        Mon, 14 Feb 2022 09:56:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92192C340E9;
+        Mon, 14 Feb 2022 09:56:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832002;
-        bh=5NI6v6ENI4LJ8+7Sal+JkNeHTLytWYu+LXR+N9wM5j8=;
+        s=korg; t=1644832589;
+        bh=CvrnKzfGiFqdvtJF/lFdhAZT7jrKvco/zQIMZOZYKAM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JoBODGP+296b2chA7udIfvFWR0XEFyDJ4ivdedbJ+VReA5Q85hf4CHOC3Kzjqb68x
-         q978+ZyznpvAGMGolq6TUxbRbhBZ3LfR5FVgSjVH0tJmu0/5aUWYeijA5/jhITQRzI
-         KX3QHUPySx7EowtVrF6PQosQ5/NRSE/fSj/HVVSo=
+        b=EZVINwmIZeyCohM2Sq6M4yaKdrgmjeHhqZ2vSNertfKkz0Zn5Gal/AxJpbMTWueV+
+         8QxxN0bvlrqGL9phJzAbC0Z69FstZgUAQDsmk6My3qHJhkuMySBb3sSoUmZxrDcXjt
+         uk2uybGHECvq6vImrgi5QkNL9ha1VTqAdQObiZrs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        John Garry <john.garry@huawei.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 048/172] scsi: pm8001: Fix bogus FW crash for maxcpus=1
+Subject: [PATCH 5.16 062/203] arm64: errata: Add detection for TRBE ignored system register writes
 Date:   Mon, 14 Feb 2022 10:25:06 +0100
-Message-Id: <20220214092508.042902217@linuxfoundation.org>
+Message-Id: <20220214092512.363178801@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,82 +60,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Garry <john.garry@huawei.com>
+From: Anshuman Khandual <anshuman.khandual@arm.com>
 
-[ Upstream commit 62afb379a0fee7e9c2f9f68e1abeb85ceddf51b9 ]
+[ Upstream commit 607a9afaae09cde21ece458a8f10cb99d3f94f14 ]
 
-According to the comment in check_fw_ready() we should not check the
-IOP1_READY field in register SCRATCH_PAD_1 for 8008 or 8009 controllers.
+TRBE implementations affected by Arm erratum #2064142 might fail to write
+into certain system registers after the TRBE has been disabled. Under some
+conditions after TRBE has been disabled, writes into certain TRBE registers
+TRBLIMITR_EL1, TRBPTR_EL1, TRBBASER_EL1, TRBSR_EL1 and TRBTRG_EL1 will be
+ignored and not be effected. This adds a new errata ARM64_ERRATUM_2064142
+in arm64 errata framework.
 
-However we check this very field in process_oq() for processing the highest
-index interrupt vector. The highest interrupt vector is checked as the FW
-is programmed to signal fatal errors through this irq.
-
-Change that function to not check IOP1_READY for those mentioned
-controllers, but do check ILA_READY in both cases.
-
-The reason I assume that this was not hit earlier was because we always
-allocated 64 MSI(X), and just did not pass the vector index check in
-process_oq(), i.e.  the handler never ran for vector index 63.
-
-Link: https://lore.kernel.org/r/1642508105-95432-1-git-send-email-john.garry@huawei.com
-Tested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Suzuki Poulose <suzuki.poulose@arm.com>
+Cc: coresight@lists.linaro.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Link: https://lore.kernel.org/r/1643120437-14352-3-git-send-email-anshuman.khandual@arm.com
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 16 ++++++++++++++--
- drivers/scsi/pm8001/pm80xx_hwi.h |  6 +++++-
- 2 files changed, 19 insertions(+), 3 deletions(-)
+ Documentation/arm64/silicon-errata.rst |  2 ++
+ arch/arm64/Kconfig                     | 18 ++++++++++++++++++
+ arch/arm64/kernel/cpu_errata.c         |  9 +++++++++
+ arch/arm64/tools/cpucaps               |  1 +
+ 4 files changed, 30 insertions(+)
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index ed02e1aaf868c..ed13e0e044b74 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -4154,10 +4154,22 @@ static int process_oq(struct pm8001_hba_info *pm8001_ha, u8 vec)
- 	u32 ret = MPI_IO_STATUS_FAIL;
- 	u32 regval;
+diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+index 8789c79310bbd..401a6e86c5084 100644
+--- a/Documentation/arm64/silicon-errata.rst
++++ b/Documentation/arm64/silicon-errata.rst
+@@ -52,6 +52,8 @@ stable kernels.
+ | Allwinner      | A64/R18         | UNKNOWN1        | SUN50I_ERRATUM_UNKNOWN1     |
+ +----------------+-----------------+-----------------+-----------------------------+
+ +----------------+-----------------+-----------------+-----------------------------+
++| ARM            | Cortex-A510     | #2064142        | ARM64_ERRATUM_2064142       |
+++----------------+-----------------+-----------------+-----------------------------+
+ | ARM            | Cortex-A53      | #826319         | ARM64_ERRATUM_826319        |
+ +----------------+-----------------+-----------------+-----------------------------+
+ | ARM            | Cortex-A53      | #827319         | ARM64_ERRATUM_827319        |
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index d8046c832225c..30c07b0d6b5c9 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -778,6 +778,24 @@ config ARM64_ERRATUM_2224489
  
-+	/*
-+	 * Fatal errors are programmed to be signalled in irq vector
-+	 * pm8001_ha->max_q_num - 1 through pm8001_ha->main_cfg_tbl.pm80xx_tbl.
-+	 * fatal_err_interrupt
-+	 */
- 	if (vec == (pm8001_ha->max_q_num - 1)) {
-+		u32 mipsall_ready;
-+
-+		if (pm8001_ha->chip_id == chip_8008 ||
-+		    pm8001_ha->chip_id == chip_8009)
-+			mipsall_ready = SCRATCH_PAD_MIPSALL_READY_8PORT;
-+		else
-+			mipsall_ready = SCRATCH_PAD_MIPSALL_READY_16PORT;
-+
- 		regval = pm8001_cr32(pm8001_ha, 0, MSGU_SCRATCH_PAD_1);
--		if ((regval & SCRATCH_PAD_MIPSALL_READY) !=
--					SCRATCH_PAD_MIPSALL_READY) {
-+		if ((regval & mipsall_ready) != mipsall_ready) {
- 			pm8001_ha->controller_fatal_error = true;
- 			pm8001_dbg(pm8001_ha, FAIL,
- 				   "Firmware Fatal error! Regval:0x%x\n",
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.h b/drivers/scsi/pm8001/pm80xx_hwi.h
-index c7e5d93bea924..c41ed039c92ac 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.h
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.h
-@@ -1405,8 +1405,12 @@ typedef struct SASProtocolTimerConfig SASProtocolTimerConfig_t;
- #define SCRATCH_PAD_BOOT_LOAD_SUCCESS	0x0
- #define SCRATCH_PAD_IOP0_READY		0xC00
- #define SCRATCH_PAD_IOP1_READY		0x3000
--#define SCRATCH_PAD_MIPSALL_READY	(SCRATCH_PAD_IOP1_READY | \
-+#define SCRATCH_PAD_MIPSALL_READY_16PORT	(SCRATCH_PAD_IOP1_READY | \
- 					SCRATCH_PAD_IOP0_READY | \
-+					SCRATCH_PAD_ILA_READY | \
-+					SCRATCH_PAD_RAAE_READY)
-+#define SCRATCH_PAD_MIPSALL_READY_8PORT	(SCRATCH_PAD_IOP0_READY | \
-+					SCRATCH_PAD_ILA_READY | \
- 					SCRATCH_PAD_RAAE_READY)
+ 	  If unsure, say Y.
  
- /* boot loader state */
++config ARM64_ERRATUM_2064142
++	bool "Cortex-A510: 2064142: workaround TRBE register writes while disabled"
++	depends on COMPILE_TEST # Until the CoreSight TRBE driver changes are in
++	default y
++	help
++	  This option adds the workaround for ARM Cortex-A510 erratum 2064142.
++
++	  Affected Cortex-A510 core might fail to write into system registers after the
++	  TRBE has been disabled. Under some conditions after the TRBE has been disabled
++	  writes into TRBE registers TRBLIMITR_EL1, TRBPTR_EL1, TRBBASER_EL1, TRBSR_EL1,
++	  and TRBTRG_EL1 will be ignored and will not be effected.
++
++	  Work around this in the driver by executing TSB CSYNC and DSB after collection
++	  is stopped and before performing a system register write to one of the affected
++	  registers.
++
++	  If unsure, say Y.
++
+ config CAVIUM_ERRATUM_22375
+ 	bool "Cavium erratum 22375, 24313"
+ 	default y
+diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
+index 29cc062a4153c..a5456dd9a33f5 100644
+--- a/arch/arm64/kernel/cpu_errata.c
++++ b/arch/arm64/kernel/cpu_errata.c
+@@ -599,6 +599,15 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
+ 		.type = ARM64_CPUCAP_WEAK_LOCAL_CPU_FEATURE,
+ 		CAP_MIDR_RANGE_LIST(trbe_write_out_of_range_cpus),
+ 	},
++#endif
++#ifdef CONFIG_ARM64_ERRATUM_2064142
++	{
++		.desc = "ARM erratum 2064142",
++		.capability = ARM64_WORKAROUND_2064142,
++
++		/* Cortex-A510 r0p0 - r0p2 */
++		ERRATA_MIDR_REV_RANGE(MIDR_CORTEX_A510, 0, 0, 2)
++	},
+ #endif
+ 	{
+ 	}
+diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
+index 870c39537dd09..fca3cb329e1db 100644
+--- a/arch/arm64/tools/cpucaps
++++ b/arch/arm64/tools/cpucaps
+@@ -55,6 +55,7 @@ WORKAROUND_1418040
+ WORKAROUND_1463225
+ WORKAROUND_1508412
+ WORKAROUND_1542419
++WORKAROUND_2064142
+ WORKAROUND_TRBE_OVERWRITE_FILL_MODE
+ WORKAROUND_TSB_FLUSH_FAILURE
+ WORKAROUND_TRBE_WRITE_OUT_OF_RANGE
 -- 
 2.34.1
 

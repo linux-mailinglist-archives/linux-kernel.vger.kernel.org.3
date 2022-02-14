@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D7B4B497B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69AE54B4AEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:40:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346687AbiBNKYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:24:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50542 "EHLO
+        id S1344945AbiBNKDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:03:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346966AbiBNKXJ (ORCPT
+        with ESMTP id S1344303AbiBNJ7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:23:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F8860ABD;
-        Mon, 14 Feb 2022 01:56:17 -0800 (PST)
+        Mon, 14 Feb 2022 04:59:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FEB282;
+        Mon, 14 Feb 2022 01:46:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69CE060FA2;
-        Mon, 14 Feb 2022 09:56:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30708C340E9;
-        Mon, 14 Feb 2022 09:56:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15D2761200;
+        Mon, 14 Feb 2022 09:46:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4842C340E9;
+        Mon, 14 Feb 2022 09:46:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832576;
-        bh=rLhsafBCTYJ0kb1t3aQgksvKXgmCdBjj0TYBC5ydbvs=;
+        s=korg; t=1644831989;
+        bh=3lbCcWRRy4byNvfy+okmscmAljBCj+Cd3M6LhMWQbsY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qr5X/Ib7TtF7pxsQwsLicwDuC4/Pd8XHsynGdYDOi2hWz9T62BbD6rhCXDd7MOCRE
-         QC9vHv5zSTKOCuMleeof4JtobGf92jpAs4l3png3rvjozHG07J3fIqPaVXp7HfTfIh
-         RvKPAnXU6MmvyLPN1UCgqxh0ZsfFhfu5dMru69Zg=
+        b=DP7iEf8r7A/TaI6HoXfpvT5oCqWTHJ/jd4JYN3hczuWOSs3xrrtpNJNDK9KxlPxn0
+         s8JHTXg32ymG8xzj1B3+qOpj1zuypVN9n0lrJxB14sQRyzhH9Rx0UedWbZDDosisuA
+         6Sw2I22BkOktAvwfRBVMKvIDWYOJCUKZkwU2uk8g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        James Clark <james.clark@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        stable@vger.kernel.org, Saurav Kashyap <skashyap@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 058/203] perf: Always wake the parent event
-Date:   Mon, 14 Feb 2022 10:25:02 +0100
-Message-Id: <20220214092512.228339005@linuxfoundation.org>
+Subject: [PATCH 5.15 045/172] scsi: qedf: Add stag_work to all the vports
+Date:   Mon, 14 Feb 2022 10:25:03 +0100
+Message-Id: <20220214092507.949615382@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,94 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Clark <james.clark@arm.com>
+From: Saurav Kashyap <skashyap@marvell.com>
 
-[ Upstream commit 961c39121759ad09a89598ec4ccdd34ae0468a19 ]
+[ Upstream commit b70a99fd13282d7885f69bf1372e28b7506a1613 ]
 
-When using per-process mode and event inheritance is set to true,
-forked processes will create a new perf events via inherit_event() ->
-perf_event_alloc(). But these events will not have ring buffers
-assigned to them. Any call to wakeup will be dropped if it's called on
-an event with no ring buffer assigned because that's the object that
-holds the wakeup list.
+Call trace seen when creating NPIV ports, only 32 out of 64 show online.
+stag work was not initialized for vport, hence initialize the stag work.
 
-If the child event is disabled due to a call to
-perf_aux_output_begin() or perf_aux_output_end(), the wakeup is
-dropped leaving userspace hanging forever on the poll.
+WARNING: CPU: 8 PID: 645 at kernel/workqueue.c:1635 __queue_delayed_work+0x68/0x80
+CPU: 8 PID: 645 Comm: kworker/8:1 Kdump: loaded Tainted: G IOE    --------- --
+ 4.18.0-348.el8.x86_64 #1
+Hardware name: Dell Inc. PowerEdge MX740c/0177V9, BIOS 2.12.2 07/09/2021
+Workqueue: events fc_lport_timeout [libfc]
+RIP: 0010:__queue_delayed_work+0x68/0x80
+Code: 89 b2 88 00 00 00 44 89 82 90 00 00 00 48 01 c8 48 89 42 50 41 81
+f8 00 20 00 00 75 1d e9 60 24 07 00 44 89 c7 e9 98 f6 ff ff <0f> 0b eb
+c5 0f 0b eb a1 0f 0b eb a7 0f 0b eb ac 44 89 c6 e9 40 23
+RSP: 0018:ffffae514bc3be40 EFLAGS: 00010006
+RAX: ffff8d25d6143750 RBX: 0000000000000202 RCX: 0000000000000002
+RDX: ffff8d2e31383748 RSI: ffff8d25c000d600 RDI: ffff8d2e31383788
+RBP: ffff8d2e31380de0 R08: 0000000000002000 R09: ffff8d2e31383750
+R10: ffffffffc0c957e0 R11: ffff8d2624800000 R12: ffff8d2e31380a58
+R13: ffff8d2d915eb000 R14: ffff8d25c499b5c0 R15: ffff8d2e31380e18
+FS:  0000000000000000(0000) GS:ffff8d2d1fb00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055fd0484b8b8 CR3: 00000008ffc10006 CR4: 00000000007706e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+PKRU: 55555554
+Call Trace:
+  queue_delayed_work_on+0x36/0x40
+  qedf_elsct_send+0x57/0x60 [qedf]
+  fc_lport_enter_flogi+0x90/0xc0 [libfc]
+  fc_lport_timeout+0xb7/0x140 [libfc]
+  process_one_work+0x1a7/0x360
+  ? create_worker+0x1a0/0x1a0
+  worker_thread+0x30/0x390
+  ? create_worker+0x1a0/0x1a0
+  kthread+0x116/0x130
+  ? kthread_flush_work_fn+0x10/0x10
+  ret_from_fork+0x35/0x40
+ ---[ end trace 008f00f722f2c2ff ]--
 
-Normally the event is explicitly re-enabled by userspace after it
-wakes up to read the aux data, but in this case it does not get woken
-up so the event remains disabled.
+Initialize stag work for all the vports.
 
-This can be reproduced when using Arm SPE and 'stress' which forks once
-before running the workload. By looking at the list of aux buffers read,
-it's apparent that they stop after the fork:
-
-  perf record -e arm_spe// -vvv -- stress -c 1
-
-With this patch applied they continue to be printed. This behaviour
-doesn't happen when using systemwide or per-cpu mode.
-
-Reported-by: Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>
-Signed-off-by: James Clark <james.clark@arm.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20211206113840.130802-2-james.clark@arm.com
+Link: https://lore.kernel.org/r/20220117135311.6256-2-njavali@marvell.com
+Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/events/core.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/scsi/qedf/qedf_main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 04e6e2dae60e4..a0e21d0f36d7a 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -6004,6 +6004,8 @@ static void ring_buffer_attach(struct perf_event *event,
- 	struct perf_buffer *old_rb = NULL;
- 	unsigned long flags;
+diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
+index 94ee08fab46a5..9a256dbddaf55 100644
+--- a/drivers/scsi/qedf/qedf_main.c
++++ b/drivers/scsi/qedf/qedf_main.c
+@@ -1862,6 +1862,7 @@ static int qedf_vport_create(struct fc_vport *vport, bool disabled)
+ 	vport_qedf->cmd_mgr = base_qedf->cmd_mgr;
+ 	init_completion(&vport_qedf->flogi_compl);
+ 	INIT_LIST_HEAD(&vport_qedf->fcports);
++	INIT_DELAYED_WORK(&vport_qedf->stag_work, qedf_stag_change_work);
  
-+	WARN_ON_ONCE(event->parent);
-+
- 	if (event->rb) {
- 		/*
- 		 * Should be impossible, we set this when removing
-@@ -6061,6 +6063,9 @@ static void ring_buffer_wakeup(struct perf_event *event)
- {
- 	struct perf_buffer *rb;
- 
-+	if (event->parent)
-+		event = event->parent;
-+
- 	rcu_read_lock();
- 	rb = rcu_dereference(event->rb);
- 	if (rb) {
-@@ -6074,6 +6079,9 @@ struct perf_buffer *ring_buffer_get(struct perf_event *event)
- {
- 	struct perf_buffer *rb;
- 
-+	if (event->parent)
-+		event = event->parent;
-+
- 	rcu_read_lock();
- 	rb = rcu_dereference(event->rb);
- 	if (rb) {
-@@ -6772,7 +6780,7 @@ static unsigned long perf_prepare_sample_aux(struct perf_event *event,
- 	if (WARN_ON_ONCE(READ_ONCE(sampler->oncpu) != smp_processor_id()))
- 		goto out;
- 
--	rb = ring_buffer_get(sampler->parent ? sampler->parent : sampler);
-+	rb = ring_buffer_get(sampler);
- 	if (!rb)
- 		goto out;
- 
-@@ -6838,7 +6846,7 @@ static void perf_aux_sample_output(struct perf_event *event,
- 	if (WARN_ON_ONCE(!sampler || !data->aux_size))
- 		return;
- 
--	rb = ring_buffer_get(sampler->parent ? sampler->parent : sampler);
-+	rb = ring_buffer_get(sampler);
- 	if (!rb)
- 		return;
- 
+ 	rc = qedf_vport_libfc_config(vport, vn_port);
+ 	if (rc) {
 -- 
 2.34.1
 

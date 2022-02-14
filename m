@@ -2,34 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD894B4009
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D74F54B400B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239812AbiBNDEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 22:04:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45868 "EHLO
+        id S239825AbiBNDGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 22:06:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiBNDEg (ORCPT
+        with ESMTP id S235542AbiBNDGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 22:04:36 -0500
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E12A50E2F;
-        Sun, 13 Feb 2022 19:04:28 -0800 (PST)
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJRf9-001dBJ-DX; Mon, 14 Feb 2022 03:04:27 +0000
-Date:   Mon, 14 Feb 2022 03:04:27 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Hao Lee <haolee.swjtu@gmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs/namespace: eliminate unnecessary mount counting
-Message-ID: <YgnGuy0GJzlqCSRj@zeniv-ca.linux.org.uk>
-References: <20220123100448.GA1468@haolee.io>
+        Sun, 13 Feb 2022 22:06:14 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D1D50E20;
+        Sun, 13 Feb 2022 19:06:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=3Um984TSioo1FxOqxiPNeNkunSiMQ7UXyF8BW2l0yBg=; b=cF+Y0lRNV31LgjsVu6Cf2SVR1X
+        hCBQ5Gfv3q/TBlIFjjcUPiMRaIEby3XQp8XPOs63JSE1KUq0ui0YfsctWkPT/BGicdC9ve7NDLb4m
+        JNBLL207Loe3x4LRtoMz+WUJDWBOQNpug7uEvogCWks8JQJJ74rPnVUixMJmQALp9HgtsWoeydWK8
+        +YNbgrOuXITTcmdtMAd4tt8gEBPsL77gP2atjSBPt37Vxij6zXMJSMugBKxFsRYG9/xCfBIuaDTW2
+        H5WtFsD6xjUpzUE27dd469nOzJtfFG//GRKTbOclQmtG/P4v3J+SFGMd2eVmOF8eVuh6gwdnp8OGu
+        wxY5KPLg==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJRgV-00CUbz-P5; Mon, 14 Feb 2022 03:05:52 +0000
+Message-ID: <7390f20d-e679-6fc3-62cb-95850871561d@infradead.org>
+Date:   Sun, 13 Feb 2022 19:05:47 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220123100448.GA1468@haolee.io>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] ipv4: add description about martian source
+Content-Language: en-US
+To:     cgel.zte@gmail.com, davem@davemloft.net
+Cc:     yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhang Yunkai <zhang.yunkai@zte.com.cn>
+References: <20220214030123.1716223-1-zhang.yunkai@zte.com.cn>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220214030123.1716223-1-zhang.yunkai@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -38,116 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 23, 2022 at 10:04:48AM +0000, Hao Lee wrote:
-> propagate_one() counts the number of propagated mounts in each
-> propagation. We can count them in advance and use the number in
-> subsequent propagation.
+Hi--
 
-You are relying upon highly non-obvious assumptions.  Namely, that
-copies will have the same amount of mounts as source_mnt.  AFAICS,
-it's not true in case of mount --move - there source_mnt might very
-well contain the things that would be skipped in subsequent copies.
-E.g. anything marked unbindable.  Or mntns binds - anything that would
-be skipped by copy_tree() without special flags.
+On 2/13/22 19:01, cgel.zte@gmail.com wrote:
+> From: Zhang Yunkai <zhang.yunkai@zte.com.cn>
+> 
+> When multiple containers are running in the environment and multiple
+> macvlan network port are configured in each container, a lot of martian
+> source prints will appear after martian_log is enabled.
 
-Sure, we could make count_mounts() return just the number of those
-that will go into subsequent copies (with mount --move we don't add
-the original subtree - it's been in the namespace and thus is already
-counted), but
-	1) it creates an extra dependency in already convoluted code
-(copy_tree() and count_mounts() need to be kept in sync, in case we ever
-add new classes of mounts to be skipped)
-	2) I'm *NOT* certain that we won't ever run into the non-move
-cases where the original tree contains something that would be skipped
-from subsequent ones, and there we want to count the original.	Matter of
-fact, we do run into that.  Look:
+Does it need to use one of the printk_ratelimited() calls?
+or are they all unique?
 
-# arrange a private tree at /tmp/a
-mkdir /tmp/a
-mount --bind /tmp/a /tmp/a
-mount --make-rprivate /tmp/a
-# mountpoint at /tmp/a/x
-mkdir /tmp/a/x
-mount --bind /tmp/a/x /tmp/a/x
-# this will be a peer of /tmp/a/x
-mkdir /tmp/a/y
-# ... and this - a mountpoint in it
-mkdir /tmp/a/x/v
-# ... rbind fodder:
-mkdir /tmp/a/z
-touch /tmp/a/z/f
-# start a new mntns, so we won't run afoul of loop checks
-unshare -m &
-# ... and bind it on /tmp/a/z/f
-mount --bind /proc/$!/ns/mnt /tmp/a/z/f
-# now we can do the rest - it won't spread into child namespace
-# make /tmp/a/x a peer of /tmp/b/x
-mount --make-shared /tmp/a/x
-mount --bind /tmp/a/x /tmp/a/y
-# ... and rbind /tmp/a/z at /tmp/a/x/v
-# which will propagate a copy to /tmp/b/x/v
-# except that mntns bound on /tmp/a/x/v/f will *not* propagate.
-mount --rbind /tmp/a/z /tmp/a/x/v
-# verify that
-stat /tmp/a/x/v
-stat /tmp/a/y/v
-stat /tmp/a/x/v/f
-stat /tmp/a/y/v/f
+> Such as:
+> IPv4: martian source 173.254.95.16 from 173.254.100.109,
+> on dev eth0
+> ll header: 00000000: ff ff ff ff ff ff 40 00 ad fe 64 6d
+> 08 06        ......@...dm..
+> IPv4: martian source 173.254.95.16 from 173.254.100.109,
+> on dev eth1
+> ll header: 00000000: ff ff ff ff ff ff 40 00 ad fe 64 6d
+> 08 06        ......@...dm..
+> 
+> There is no description of this kind of source in the RFC1812.
+> 
+> Signed-off-by: Zhang Yunkai <zhang.yunkai@zte.com.cn>
+> ---
+>  net/ipv4/fib_frontend.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/net/ipv4/fib_frontend.c b/net/ipv4/fib_frontend.c
+> index 4d61ddd8a0ec..3564308e849a 100644
+> --- a/net/ipv4/fib_frontend.c
+> +++ b/net/ipv4/fib_frontend.c
+> @@ -436,6 +436,9 @@ int fib_validate_source(struct sk_buff *skb, __be32 src, __be32 dst,
+>  		if (net->ipv4.fib_has_custom_local_routes ||
+>  		    fib4_has_custom_rules(net))
+>  			goto full_check;
+> +		/* Within the same container,it is regarded as a martian source,
 
-Result:
-  File: /tmp/a/x/v/
-  Size: 4096            Blocks: 8          IO Block: 4096   directory
-Device: 808h/2056d      Inode: 270607      Links: 2
-Access: (0755/drwxr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
-Access: 2022-02-13 21:43:45.058485130 -0500
-Modify: 2022-02-13 21:42:37.142457622 -0500
-Change: 2022-02-13 21:42:37.142457622 -0500
- Birth: 2022-02-13 21:42:37.142457622 -0500
-  File: /tmp/a/y/v/
-  Size: 4096            Blocks: 8          IO Block: 4096   directory
-Device: 808h/2056d      Inode: 270607      Links: 2
-Access: (0755/drwxr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
-Access: 2022-02-13 21:43:45.058485130 -0500
-Modify: 2022-02-13 21:42:37.142457622 -0500
-Change: 2022-02-13 21:42:37.142457622 -0500
- Birth: 2022-02-13 21:42:37.142457622 -0500
-  File: /tmp/a/x/v/f
-  Size: 0               Blocks: 0          IO Block: 4096   regular empty file
-Device: 4h/4d   Inode: 4026532237  Links: 1
-Access: (0444/-r--r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
-Access: 2022-02-13 21:42:37.146457624 -0500
-Modify: 2022-02-13 21:42:37.146457624 -0500
-Change: 2022-02-13 21:42:37.146457624 -0500
- Birth: -
-  File: /tmp/a/y/v/f
-  Size: 0               Blocks: 0          IO Block: 4096   regular empty file
-Device: 808h/2056d      Inode: 270608      Links: 1
-Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
-Access: 2022-02-13 21:42:37.142457622 -0500
-Modify: 2022-02-13 21:42:37.142457622 -0500
-Change: 2022-02-13 21:42:37.142457622 -0500
- Birth: 2022-02-13 21:42:37.142457622 -0500
+Please add a space after the comma:         , it is
 
-	Note that /tmp/a/x/v and /tmp/a/y/v resolve to the same directory
-(otherwise seen at /tmp/a/z), but /tmp/a/x/v/f and /tmp/a/y/v/f do *not*
-resolve to the same thing - the latter is a regular file on /dev/sda8
-(nothing got propagated there), while the former is *not* - it's an
-mntns descriptor we'd bound on /tmp/a/z/f
+> +		 * and the same host but different containers are not.
+> +		 */
+>  		if (inet_lookup_ifaddr_rcu(net, src))
+>  			return -EINVAL;
+>  
 
-	IOW, the first copy has two mount nodes, the second - only one.
-Initial copy at rbind does get mntns binds copied into it - look at
-CL_COPY_MNT_NS_FILE in arguments of copy_tree() call in __do_loopback().
-However, we do *not* propagate that subsequent copies (propagate_one()
-never passes CL_COPY_MNT_NS_FILE).  So that's at least one case where we
-want different contributions from the first copy and every subsequent one.
-
-	So we'd need to run *two* counts, the one to be used from
-attach_recursive_mnt() and another for propagate_one().  With even more
-places where the things could go wrong...
-
-	I don't believe it's worth the trouble.  Sure, you run that loop
-only once, instead of once per copy.  And if that's more than noise,
-compared to allocating the same mounts we'd been counting, connecting
-them into tree, hashing, etc., I would be *very* surprised.
-
-NAKed-by: Al Viro <viro@zeniv.linux.org.uk>
+-- 
+~Randy

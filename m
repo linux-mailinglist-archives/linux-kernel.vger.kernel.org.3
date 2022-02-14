@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BEF44B47FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23DFF4B4BF0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244437AbiBNJjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:39:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52644 "EHLO
+        id S1344174AbiBNJ6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:58:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244989AbiBNJg2 (ORCPT
+        with ESMTP id S1343586AbiBNJxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:36:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199236D18F;
-        Mon, 14 Feb 2022 01:34:18 -0800 (PST)
+        Mon, 14 Feb 2022 04:53:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FF86D95E;
+        Mon, 14 Feb 2022 01:43:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DCBBBB80DC8;
-        Mon, 14 Feb 2022 09:33:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 161C3C340E9;
-        Mon, 14 Feb 2022 09:33:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1133061236;
+        Mon, 14 Feb 2022 09:43:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1040C340E9;
+        Mon, 14 Feb 2022 09:43:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831237;
-        bh=iVVprejHhTHrKXydZFMArGB8nKpVGa/J/tekSOuOWgU=;
+        s=korg; t=1644831827;
+        bh=wCbd00afu2GJSkMEEuQkkZmfg2byA3jBt0zqXmqLULM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wgLgY2gCY/ZZdmnAkB+0caJftTjv6oodG2c9hPKzXkfn1w2QHrTRQqMJ5RHKRPLyt
-         FgTDz8bJw0H8XsG9ptgwcZj9QtEwJr6u21gdxEm3NavNz7+6DJB/6hzZiIU1UC6z/U
-         KOwRQBWt+zNMkvb3btJUcqqHa9Nr15KKz1GEurDw=
+        b=UbpaOhMQxF9ywKWDJpd04lI57sFo9Ra5LD3WC/LFpJtzKM33sz/bX04JE6YGndkNZ
+         Bj+EUVnFmXh6KpY1nMGDcQV8r1v+iPgiboUs7u2sMvG0yMY2/fBrsAxKC4+J/qFn0B
+         uXOfjSfg0DZ5ex0WseqU4yXTUxPpHTCzrRd3sfVk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Szymon Heidrich <szymon.heidrich@gmail.com>, stable@kernel.org
-Subject: [PATCH 4.19 41/49] usb: gadget: rndis: check size of RNDIS_MSG_SET command
+        stable@vger.kernel.org, Mahesh Bandewar <maheshb@google.com>,
+        Jay Vosburgh <jay.vosburgh@canonical.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 068/116] bonding: pair enable_port with slave_arr_updates
 Date:   Mon, 14 Feb 2022 10:26:07 +0100
-Message-Id: <20220214092449.657409941@linuxfoundation.org>
+Message-Id: <20220214092501.094608414@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
-References: <20220214092448.285381753@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Mahesh Bandewar <maheshb@google.com>
 
-commit 38ea1eac7d88072bbffb630e2b3db83ca649b826 upstream.
+[ Upstream commit 23de0d7b6f0e3f9a6283a882594c479949da1120 ]
 
-Check the size of the RNDIS_MSG_SET command given to us before
-attempting to respond to an invalid message size.
+When 803.2ad mode enables a participating port, it should update
+the slave-array. I have observed that the member links are participating
+and are part of the active aggregator while the traffic is egressing via
+only one member link (in a case where two links are participating). Via
+kprobes I discovered that slave-arr has only one link added while
+the other participating link wasn't part of the slave-arr.
 
-Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-Cc: stable@kernel.org
-Tested-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+I couldn't see what caused that situation but the simple code-walk
+through provided me hints that the enable_port wasn't always associated
+with the slave-array update.
+
+Fixes: ee6377147409 ("bonding: Simplify the xmit function for modes that use xmit_hash")
+Signed-off-by: Mahesh Bandewar <maheshb@google.com>
+Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+Link: https://lore.kernel.org/r/20220207222901.1795287-1-maheshb@google.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/rndis.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/net/bonding/bond_3ad.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/gadget/function/rndis.c
-+++ b/drivers/usb/gadget/function/rndis.c
-@@ -637,14 +637,17 @@ static int rndis_set_response(struct rnd
- 	rndis_set_cmplt_type *resp;
- 	rndis_resp_t *r;
- 
-+	BufLength = le32_to_cpu(buf->InformationBufferLength);
-+	BufOffset = le32_to_cpu(buf->InformationBufferOffset);
-+	if ((BufLength > RNDIS_MAX_TOTAL_SIZE) ||
-+	    (BufOffset + 8 >= RNDIS_MAX_TOTAL_SIZE))
-+		    return -EINVAL;
-+
- 	r = rndis_add_response(params, sizeof(rndis_set_cmplt_type));
- 	if (!r)
- 		return -ENOMEM;
- 	resp = (rndis_set_cmplt_type *)r->buf;
- 
--	BufLength = le32_to_cpu(buf->InformationBufferLength);
--	BufOffset = le32_to_cpu(buf->InformationBufferOffset);
+diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
+index aa001b16765ae..ab8c833411654 100644
+--- a/drivers/net/bonding/bond_3ad.c
++++ b/drivers/net/bonding/bond_3ad.c
+@@ -1003,8 +1003,8 @@ static void ad_mux_machine(struct port *port, bool *update_slave_arr)
+ 				if (port->aggregator &&
+ 				    port->aggregator->is_active &&
+ 				    !__port_is_enabled(port)) {
 -
- #ifdef	VERBOSE_DEBUG
- 	pr_debug("%s: Length: %d\n", __func__, BufLength);
- 	pr_debug("%s: Offset: %d\n", __func__, BufOffset);
+ 					__enable_port(port);
++					*update_slave_arr = true;
+ 				}
+ 			}
+ 			break;
+@@ -1760,6 +1760,7 @@ static void ad_agg_selection_logic(struct aggregator *agg,
+ 			     port = port->next_port_in_aggregator) {
+ 				__enable_port(port);
+ 			}
++			*update_slave_arr = true;
+ 		}
+ 	}
+ 
+-- 
+2.34.1
+
 
 

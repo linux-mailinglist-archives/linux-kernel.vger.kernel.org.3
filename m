@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B89A84B4969
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F634B4A24
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347724AbiBNKdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:33:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41292 "EHLO
+        id S1344614AbiBNKLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:11:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347648AbiBNKbs (ORCPT
+        with ESMTP id S238856AbiBNKJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:31:48 -0500
+        Mon, 14 Feb 2022 05:09:30 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1592389;
-        Mon, 14 Feb 2022 02:00:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C341B6C926;
+        Mon, 14 Feb 2022 01:50:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A272F60921;
-        Mon, 14 Feb 2022 10:00:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06C70C340EF;
-        Mon, 14 Feb 2022 10:00:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57327612B4;
+        Mon, 14 Feb 2022 09:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B269C340E9;
+        Mon, 14 Feb 2022 09:50:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832807;
-        bh=TpPBO9LX7Ed0/HpASURHSpURkqAJAx0uV/TvLyhfA2g=;
+        s=korg; t=1644832217;
+        bh=s+8R13g9DCon7bntBSSvlIOdg8A0vS49928PgWZf15o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L8HZd6dBIu7+3PZzUmvKa/DHxp+7AmskcBJY3Rv1GVvFwLXdQCd17WFZZqPSFFssZ
-         sncjGmyXYcvny0TU+4WBC89NkQMgoS8DQWVB8RTBL5O385De/u2k3vIX49RYKO3428
-         ykbMevEiqFrQwkhBXrI9v1Ft5lVSC5ZYMOgbrXAE=
+        b=wcNtFpqqmfcAmgzNdrQ3cW7XjVBvtmomO95IEAplz35FujHDmuRC6st3mIiyHLYfr
+         BVKGFtWstyJTxjM674fY83ogGWeaZcbXQo7HzRPcv6iwhCX024ONWfia3yxAs4fiM0
+         Vc3zeAvDwYkEP2+zq5w6Oyz2IYCj2GMYn7wXQxF4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Helge Deller <deller@gmx.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 130/203] fbcon: Avoid cap set but not used warning
+Subject: [PATCH 5.15 116/172] net: dsa: lantiq_gswip: dont use devres for mdiobus
 Date:   Mon, 14 Feb 2022 10:26:14 +0100
-Message-Id: <20220214092514.651071842@linuxfoundation.org>
+Message-Id: <20220214092510.429882147@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,60 +56,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-[ Upstream commit 50b10528aad568c95f772039d4b3093b4aea7439 ]
+[ Upstream commit 0d120dfb5d67edc5bcd1804e167dba2b30809afd ]
 
-Fix this kernel test robot warning:
+As explained in commits:
+74b6d7d13307 ("net: dsa: realtek: register the MDIO bus under devres")
+5135e96a3dd2 ("net: dsa: don't allocate the slave_mii_bus using devres")
 
-  drivers/video/fbdev/core/fbcon.c: In function 'fbcon_init':
-  drivers/video/fbdev/core/fbcon.c:1028:6: warning: variable 'cap' set but not used [-Wunused-but-set-variable]
+mdiobus_free() will panic when called from devm_mdiobus_free() <-
+devres_release_all() <- __device_release_driver(), and that mdiobus was
+not previously unregistered.
 
-The cap variable is only used when CONFIG_FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION
-is enabled. Drop the temporary variable and use info->flags instead.
+The GSWIP switch is a platform device, so the initial set of constraints
+that I thought would cause this (I2C or SPI buses which call ->remove on
+->shutdown) do not apply. But there is one more which applies here.
 
-Fixes: 87ab9f6b7417 ("Revert "fbcon: Disable accelerated scrolling")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
-Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Link: https://patchwork.freedesktop.org/patch/msgid/YgFB4xqI+As196FR@p100
+If the DSA master itself is on a bus that calls ->remove from ->shutdown
+(like dpaa2-eth, which is on the fsl-mc bus), there is a device link
+between the switch and the DSA master, and device_links_unbind_consumers()
+will unbind the GSWIP switch driver on shutdown.
+
+So the same treatment must be applied to all DSA switch drivers, which
+is: either use devres for both the mdiobus allocation and registration,
+or don't use devres at all.
+
+The gswip driver has the code structure in place for orderly mdiobus
+removal, so just replace devm_mdiobus_alloc() with the non-devres
+variant, and add manual free where necessary, to ensure that we don't
+let devres free a still-registered bus.
+
+Fixes: ac3a68d56651 ("net: phy: don't abuse devres in devm_mdiobus_register()")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/core/fbcon.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/net/dsa/lantiq_gswip.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
-index f36829eeb5a93..2fc1b80a26ad9 100644
---- a/drivers/video/fbdev/core/fbcon.c
-+++ b/drivers/video/fbdev/core/fbcon.c
-@@ -1025,7 +1025,7 @@ static void fbcon_init(struct vc_data *vc, int init)
- 	struct vc_data *svc = *default_mode;
- 	struct fbcon_display *t, *p = &fb_display[vc->vc_num];
- 	int logo = 1, new_rows, new_cols, rows, cols;
--	int cap, ret;
-+	int ret;
+diff --git a/drivers/net/dsa/lantiq_gswip.c b/drivers/net/dsa/lantiq_gswip.c
+index dbd4486a173ff..503adf03d2fc6 100644
+--- a/drivers/net/dsa/lantiq_gswip.c
++++ b/drivers/net/dsa/lantiq_gswip.c
+@@ -497,8 +497,9 @@ static int gswip_mdio_rd(struct mii_bus *bus, int addr, int reg)
+ static int gswip_mdio(struct gswip_priv *priv, struct device_node *mdio_np)
+ {
+ 	struct dsa_switch *ds = priv->ds;
++	int err;
  
- 	if (WARN_ON(info_idx == -1))
- 	    return;
-@@ -1034,7 +1034,6 @@ static void fbcon_init(struct vc_data *vc, int init)
- 		con2fb_map[vc->vc_num] = info_idx;
+-	ds->slave_mii_bus = devm_mdiobus_alloc(priv->dev);
++	ds->slave_mii_bus = mdiobus_alloc();
+ 	if (!ds->slave_mii_bus)
+ 		return -ENOMEM;
  
- 	info = registered_fb[con2fb_map[vc->vc_num]];
--	cap = info->flags;
+@@ -511,7 +512,11 @@ static int gswip_mdio(struct gswip_priv *priv, struct device_node *mdio_np)
+ 	ds->slave_mii_bus->parent = priv->dev;
+ 	ds->slave_mii_bus->phy_mask = ~ds->phys_mii_mask;
  
- 	if (logo_shown < 0 && console_loglevel <= CONSOLE_LOGLEVEL_QUIET)
- 		logo_shown = FBCON_LOGO_DONTSHOW;
-@@ -1137,8 +1136,8 @@ static void fbcon_init(struct vc_data *vc, int init)
- 	ops->graphics = 0;
+-	return of_mdiobus_register(ds->slave_mii_bus, mdio_np);
++	err = of_mdiobus_register(ds->slave_mii_bus, mdio_np);
++	if (err)
++		mdiobus_free(ds->slave_mii_bus);
++
++	return err;
+ }
  
- #ifdef CONFIG_FRAMEBUFFER_CONSOLE_LEGACY_ACCELERATION
--	if ((cap & FBINFO_HWACCEL_COPYAREA) &&
--	    !(cap & FBINFO_HWACCEL_DISABLED))
-+	if ((info->flags & FBINFO_HWACCEL_COPYAREA) &&
-+	    !(info->flags & FBINFO_HWACCEL_DISABLED))
- 		p->scrollmode = SCROLL_MOVE;
- 	else /* default to something safe */
- 		p->scrollmode = SCROLL_REDRAW;
+ static int gswip_pce_table_entry_read(struct gswip_priv *priv,
+@@ -2170,8 +2175,10 @@ static int gswip_probe(struct platform_device *pdev)
+ 	gswip_mdio_mask(priv, GSWIP_MDIO_GLOB_ENABLE, 0, GSWIP_MDIO_GLOB);
+ 	dsa_unregister_switch(priv->ds);
+ mdio_bus:
+-	if (mdio_np)
++	if (mdio_np) {
+ 		mdiobus_unregister(priv->ds->slave_mii_bus);
++		mdiobus_free(priv->ds->slave_mii_bus);
++	}
+ put_mdio_node:
+ 	of_node_put(mdio_np);
+ 	for (i = 0; i < priv->num_gphy_fw; i++)
+@@ -2194,6 +2201,7 @@ static int gswip_remove(struct platform_device *pdev)
+ 
+ 	if (priv->ds->slave_mii_bus) {
+ 		mdiobus_unregister(priv->ds->slave_mii_bus);
++		mdiobus_free(priv->ds->slave_mii_bus);
+ 		of_node_put(priv->ds->slave_mii_bus->dev.of_node);
+ 	}
+ 
 -- 
 2.34.1
 

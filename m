@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8564B4A5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10BAF4B4AA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344567AbiBNKA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:00:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45034 "EHLO
+        id S1344558AbiBNKAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:00:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345248AbiBNJ4l (ORCPT
+        with ESMTP id S1345295AbiBNJ4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:56:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D24E6A061;
-        Mon, 14 Feb 2022 01:45:21 -0800 (PST)
+        Mon, 14 Feb 2022 04:56:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778CE6A077;
+        Mon, 14 Feb 2022 01:45:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A598AB80DBF;
-        Mon, 14 Feb 2022 09:45:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D500C340F1;
-        Mon, 14 Feb 2022 09:45:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 126C1611F3;
+        Mon, 14 Feb 2022 09:45:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ECB9C340E9;
+        Mon, 14 Feb 2022 09:45:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831918;
-        bh=xG9/wp4QhclzXUsRrWZ3fP0amrmmXCl5YVFu01iM94I=;
+        s=korg; t=1644831921;
+        bh=rxHSfvx8/+X1H7OJqyGgdilwSP/+ylo9Ed6VjQcaSqU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=osplkJNeRkL0ns2zm7ivpf/A/RuhapmNavRgewG0nlg2AuK5dTWnq9eo/wu/uIK5x
-         zZfn92x07YQIZ2ZRLmOKbXaqZ7Ezwxg2xenXuOm0EtQtxn8+t0s8hZ8MyBiflvHmNl
-         xCgVjSDZVsOWM/NmYrCyWDclsx82UWu2LPOhuvD0=
+        b=ue6y0fimgYF2WO55WDx1o/XEPleKzGZcySKOCXisfTNuH3mUXLsrvAn/Y+snU9ln+
+         /Y/ykqnykbaUZCPNFg2eJAR+speU45vxxTmbjRfBAyZ8s4nXGqYwW7Tvnvu+48ypl1
+         xS/CIUTAiapl1KGBE+ZxowkQJ1NY6oybuXzTDhpk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.15 021/172] thermal/drivers/int340x: Fix RFIM mailbox write commands
-Date:   Mon, 14 Feb 2022 10:24:39 +0100
-Message-Id: <20220214092507.127194687@linuxfoundation.org>
+        stable@vger.kernel.org, Yordan Karadzhov <ykaradzhov@vmware.com>,
+        Tom Zanussi <zanussi@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH 5.15 022/172] tracing: Propagate is_signed to expression
+Date:   Mon, 14 Feb 2022 10:24:40 +0100
+Message-Id: <20220214092507.159952507@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
 References: <20220214092506.354292783@linuxfoundation.org>
@@ -56,298 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+From: Tom Zanussi <zanussi@kernel.org>
 
-commit 2685c77b80a80c57e2a25a726b82fb31e6e212ab upstream.
+commit 097f1eefedeab528cecbd35586dfe293853ffb17 upstream.
 
-The existing mail mechanism only supports writing of workload types.
+During expression parsing, a new expression field is created which
+should inherit the properties of the operands, such as size and
+is_signed.
 
-However, mailbox command for RFIM (cmd = 0x08) also requires write
-operation which is ignored. This results in failing to store RFI
-restriction.
+is_signed propagation was missing, causing spurious errors with signed
+operands.  Add it in parse_expr() and parse_unary() to fix the problem.
 
-Fixint this requires enhancing mailbox writes for non workload
-commands too, so remove the check for MBOX_CMD_WORKLOAD_TYPE_WRITE
-in mailbox write to allow this other write commands to be supoorted.
+Link: https://lkml.kernel.org/r/f4dac08742fd7a0920bf80a73c6c44042f5eaa40.1643319703.git.zanussi@kernel.org
 
-At the same time, however, we have to make sure that there is no
-impact on read commands, by avoiding to write anything into the
-mailbox data register.
-
-To properly implement that, add two separate functions for mbox read
-and write commands for the processor thermal workload command type.
-This helps to distinguish the read and write workload command types
-from each other while sending mbox commands.
-
-Fixes: 5d6fbc96bd36 ("thermal/drivers/int340x: processor_thermal: Export additional attributes")
-Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-Cc: 5.14+ <stable@vger.kernel.org> # 5.14+
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-[ rjw: Changelog edits ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: stable@vger.kernel.org
+Fixes: 100719dcef447 ("tracing: Add simple expression support to hist triggers")
+Reported-by: Yordan Karadzhov <ykaradzhov@vmware.com>
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215513
+Signed-off-by: Tom Zanussi <zanussi@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+[sudip: adjust context]
+Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/thermal/intel/int340x_thermal/processor_thermal_device.h |    3 
- drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c   |  100 +++++-----
- drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c   |   23 +-
- 3 files changed, 73 insertions(+), 53 deletions(-)
+ kernel/trace/trace_events_hist.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-@@ -80,7 +80,8 @@ void proc_thermal_rfim_remove(struct pci
- int proc_thermal_mbox_add(struct pci_dev *pdev, struct proc_thermal_device *proc_priv);
- void proc_thermal_mbox_remove(struct pci_dev *pdev);
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -2220,6 +2220,8 @@ static struct hist_field *parse_unary(st
+ 		(HIST_FIELD_FL_TIMESTAMP | HIST_FIELD_FL_TIMESTAMP_USECS);
+ 	expr->fn = hist_field_unary_minus;
+ 	expr->operands[0] = operand1;
++	expr->size = operand1->size;
++	expr->is_signed = operand1->is_signed;
+ 	expr->operator = FIELD_OP_UNARY_MINUS;
+ 	expr->name = expr_str(expr, 0);
+ 	expr->type = kstrdup_const(operand1->type, GFP_KERNEL);
+@@ -2359,6 +2361,7 @@ static struct hist_field *parse_expr(str
  
--int processor_thermal_send_mbox_cmd(struct pci_dev *pdev, u16 cmd_id, u32 cmd_data, u64 *cmd_resp);
-+int processor_thermal_send_mbox_read_cmd(struct pci_dev *pdev, u16 id, u64 *resp);
-+int processor_thermal_send_mbox_write_cmd(struct pci_dev *pdev, u16 id, u32 data);
- int proc_thermal_add(struct device *dev, struct proc_thermal_device *priv);
- void proc_thermal_remove(struct proc_thermal_device *proc_priv);
- int proc_thermal_suspend(struct device *dev);
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c
-@@ -24,19 +24,15 @@
+ 	/* The operand sizes should be the same, so just pick one */
+ 	expr->size = operand1->size;
++	expr->is_signed = operand1->is_signed;
  
- static DEFINE_MUTEX(mbox_lock);
- 
--static int send_mbox_cmd(struct pci_dev *pdev, u16 cmd_id, u32 cmd_data, u64 *cmd_resp)
-+static int wait_for_mbox_ready(struct proc_thermal_device *proc_priv)
- {
--	struct proc_thermal_device *proc_priv;
- 	u32 retries, data;
- 	int ret;
- 
--	mutex_lock(&mbox_lock);
--	proc_priv = pci_get_drvdata(pdev);
--
- 	/* Poll for rb bit == 0 */
- 	retries = MBOX_RETRY_COUNT;
- 	do {
--		data = readl((void __iomem *) (proc_priv->mmio_base + MBOX_OFFSET_INTERFACE));
-+		data = readl(proc_priv->mmio_base + MBOX_OFFSET_INTERFACE);
- 		if (data & BIT_ULL(MBOX_BUSY_BIT)) {
- 			ret = -EBUSY;
- 			continue;
-@@ -45,53 +41,78 @@ static int send_mbox_cmd(struct pci_dev
- 		break;
- 	} while (--retries);
- 
-+	return ret;
-+}
-+
-+static int send_mbox_write_cmd(struct pci_dev *pdev, u16 id, u32 data)
-+{
-+	struct proc_thermal_device *proc_priv;
-+	u32 reg_data;
-+	int ret;
-+
-+	proc_priv = pci_get_drvdata(pdev);
-+
-+	mutex_lock(&mbox_lock);
-+
-+	ret = wait_for_mbox_ready(proc_priv);
- 	if (ret)
- 		goto unlock_mbox;
- 
--	if (cmd_id == MBOX_CMD_WORKLOAD_TYPE_WRITE)
--		writel(cmd_data, (void __iomem *) ((proc_priv->mmio_base + MBOX_OFFSET_DATA)));
--
-+	writel(data, (proc_priv->mmio_base + MBOX_OFFSET_DATA));
- 	/* Write command register */
--	data = BIT_ULL(MBOX_BUSY_BIT) | cmd_id;
--	writel(data, (void __iomem *) ((proc_priv->mmio_base + MBOX_OFFSET_INTERFACE)));
-+	reg_data = BIT_ULL(MBOX_BUSY_BIT) | id;
-+	writel(reg_data, (proc_priv->mmio_base + MBOX_OFFSET_INTERFACE));
- 
--	/* Poll for rb bit == 0 */
--	retries = MBOX_RETRY_COUNT;
--	do {
--		data = readl((void __iomem *) (proc_priv->mmio_base + MBOX_OFFSET_INTERFACE));
--		if (data & BIT_ULL(MBOX_BUSY_BIT)) {
--			ret = -EBUSY;
--			continue;
--		}
-+	ret = wait_for_mbox_ready(proc_priv);
- 
--		if (data) {
--			ret = -ENXIO;
--			goto unlock_mbox;
--		}
-+unlock_mbox:
-+	mutex_unlock(&mbox_lock);
-+	return ret;
-+}
- 
--		ret = 0;
-+static int send_mbox_read_cmd(struct pci_dev *pdev, u16 id, u64 *resp)
-+{
-+	struct proc_thermal_device *proc_priv;
-+	u32 reg_data;
-+	int ret;
- 
--		if (!cmd_resp)
--			break;
-+	proc_priv = pci_get_drvdata(pdev);
- 
--		if (cmd_id == MBOX_CMD_WORKLOAD_TYPE_READ)
--			*cmd_resp = readl((void __iomem *) (proc_priv->mmio_base + MBOX_OFFSET_DATA));
--		else
--			*cmd_resp = readq((void __iomem *) (proc_priv->mmio_base + MBOX_OFFSET_DATA));
-+	mutex_lock(&mbox_lock);
- 
--		break;
--	} while (--retries);
-+	ret = wait_for_mbox_ready(proc_priv);
-+	if (ret)
-+		goto unlock_mbox;
-+
-+	/* Write command register */
-+	reg_data = BIT_ULL(MBOX_BUSY_BIT) | id;
-+	writel(reg_data, (proc_priv->mmio_base + MBOX_OFFSET_INTERFACE));
-+
-+	ret = wait_for_mbox_ready(proc_priv);
-+	if (ret)
-+		goto unlock_mbox;
-+
-+	if (id == MBOX_CMD_WORKLOAD_TYPE_READ)
-+		*resp = readl(proc_priv->mmio_base + MBOX_OFFSET_DATA);
-+	else
-+		*resp = readq(proc_priv->mmio_base + MBOX_OFFSET_DATA);
- 
- unlock_mbox:
- 	mutex_unlock(&mbox_lock);
- 	return ret;
- }
- 
--int processor_thermal_send_mbox_cmd(struct pci_dev *pdev, u16 cmd_id, u32 cmd_data, u64 *cmd_resp)
-+int processor_thermal_send_mbox_read_cmd(struct pci_dev *pdev, u16 id, u64 *resp)
- {
--	return send_mbox_cmd(pdev, cmd_id, cmd_data, cmd_resp);
-+	return send_mbox_read_cmd(pdev, id, resp);
- }
--EXPORT_SYMBOL_GPL(processor_thermal_send_mbox_cmd);
-+EXPORT_SYMBOL_NS_GPL(processor_thermal_send_mbox_read_cmd, INT340X_THERMAL);
-+
-+int processor_thermal_send_mbox_write_cmd(struct pci_dev *pdev, u16 id, u32 data)
-+{
-+	return send_mbox_write_cmd(pdev, id, data);
-+}
-+EXPORT_SYMBOL_NS_GPL(processor_thermal_send_mbox_write_cmd, INT340X_THERMAL);
- 
- /* List of workload types */
- static const char * const workload_types[] = {
-@@ -104,7 +125,6 @@ static const char * const workload_types
- 	NULL
- };
- 
--
- static ssize_t workload_available_types_show(struct device *dev,
- 					       struct device_attribute *attr,
- 					       char *buf)
-@@ -146,7 +166,7 @@ static ssize_t workload_type_store(struc
- 
- 	data |= ret;
- 
--	ret = send_mbox_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_WRITE, data, NULL);
-+	ret = send_mbox_write_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_WRITE, data);
- 	if (ret)
- 		return false;
- 
-@@ -161,7 +181,7 @@ static ssize_t workload_type_show(struct
- 	u64 cmd_resp;
- 	int ret;
- 
--	ret = send_mbox_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_READ, 0, &cmd_resp);
-+	ret = send_mbox_read_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_READ, &cmd_resp);
- 	if (ret)
- 		return false;
- 
-@@ -186,8 +206,6 @@ static const struct attribute_group work
- 	.name = "workload_request"
- };
- 
--
--
- static bool workload_req_created;
- 
- int proc_thermal_mbox_add(struct pci_dev *pdev, struct proc_thermal_device *proc_priv)
-@@ -196,7 +214,7 @@ int proc_thermal_mbox_add(struct pci_dev
- 	int ret;
- 
- 	/* Check if there is a mailbox support, if fails return success */
--	ret = send_mbox_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_READ, 0, &cmd_resp);
-+	ret = send_mbox_read_cmd(pdev, MBOX_CMD_WORKLOAD_TYPE_READ, &cmd_resp);
- 	if (ret)
- 		return 0;
- 
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-@@ -9,6 +9,8 @@
- #include <linux/pci.h>
- #include "processor_thermal_device.h"
- 
-+MODULE_IMPORT_NS(INT340X_THERMAL);
-+
- struct mmio_reg {
- 	int read_only;
- 	u32 offset;
-@@ -194,8 +196,7 @@ static ssize_t rfi_restriction_store(str
- 				     struct device_attribute *attr,
- 				     const char *buf, size_t count)
- {
--	u16 cmd_id = 0x0008;
--	u64 cmd_resp;
-+	u16 id = 0x0008;
- 	u32 input;
- 	int ret;
- 
-@@ -203,7 +204,7 @@ static ssize_t rfi_restriction_store(str
- 	if (ret)
- 		return ret;
- 
--	ret = processor_thermal_send_mbox_cmd(to_pci_dev(dev), cmd_id, input, &cmd_resp);
-+	ret = processor_thermal_send_mbox_write_cmd(to_pci_dev(dev), id, input);
- 	if (ret)
- 		return ret;
- 
-@@ -214,30 +215,30 @@ static ssize_t rfi_restriction_show(stru
- 				    struct device_attribute *attr,
- 				    char *buf)
- {
--	u16 cmd_id = 0x0007;
--	u64 cmd_resp;
-+	u16 id = 0x0007;
-+	u64 resp;
- 	int ret;
- 
--	ret = processor_thermal_send_mbox_cmd(to_pci_dev(dev), cmd_id, 0, &cmd_resp);
-+	ret = processor_thermal_send_mbox_read_cmd(to_pci_dev(dev), id, &resp);
- 	if (ret)
- 		return ret;
- 
--	return sprintf(buf, "%llu\n", cmd_resp);
-+	return sprintf(buf, "%llu\n", resp);
- }
- 
- static ssize_t ddr_data_rate_show(struct device *dev,
- 				  struct device_attribute *attr,
- 				  char *buf)
- {
--	u16 cmd_id = 0x0107;
--	u64 cmd_resp;
-+	u16 id = 0x0107;
-+	u64 resp;
- 	int ret;
- 
--	ret = processor_thermal_send_mbox_cmd(to_pci_dev(dev), cmd_id, 0, &cmd_resp);
-+	ret = processor_thermal_send_mbox_read_cmd(to_pci_dev(dev), id, &resp);
- 	if (ret)
- 		return ret;
- 
--	return sprintf(buf, "%llu\n", cmd_resp);
-+	return sprintf(buf, "%llu\n", resp);
- }
- 
- static DEVICE_ATTR_RW(rfi_restriction);
+ 	expr->operator = field_op;
+ 	expr->name = expr_str(expr, 0);
 
 

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1EDB4B4AAD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B54974B4BBE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344412AbiBNJ7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:59:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43692 "EHLO
+        id S235760AbiBNKOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:14:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343830AbiBNJz0 (ORCPT
+        with ESMTP id S1345658AbiBNKNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:55:26 -0500
+        Mon, 14 Feb 2022 05:13:13 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E816E4CF;
-        Mon, 14 Feb 2022 01:44:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAAD60A97;
+        Mon, 14 Feb 2022 01:51:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0C666B80DBF;
-        Mon, 14 Feb 2022 09:44:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35326C340E9;
-        Mon, 14 Feb 2022 09:44:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD66BB80D83;
+        Mon, 14 Feb 2022 09:51:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6D92C340E9;
+        Mon, 14 Feb 2022 09:51:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831852;
-        bh=Qsnz9ccqqnSbqJScjUDjP3cDoHTZNco1Ln3r5juL2eU=;
+        s=korg; t=1644832308;
+        bh=iVVprejHhTHrKXydZFMArGB8nKpVGa/J/tekSOuOWgU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HXKig/Yeye2lHv9FVOBV4+G/y0XflgihUe1a5bkxBaBE2Mb9nJkSMxGK9aeDzcTR2
-         YGfOVfb/LscgHFvtU3XZ34unca4ka0H63SWG4kkYZaYnRWvBsDpYn+jyYKc36B3D/f
-         Ib4cqH8gqdVp5gzL/fma8vonhef2IaFEFkzSkJ2E=
+        b=a+OCCNb1Exxay6KVbySkhY90V0T/RbkxfUD0Ylk3AE+lK/lUX3TTZ3kyGv9nKIbBW
+         z4Us0y4oCQ+RA/lwKWTrCHAGhNdrIrXKnvJd5jSEllBgaO5BgnT6OUClIOdyxKZzOK
+         OADy8ZiIM6GnRsPDD3+EgQ01CtmQzE4z4smz63Ec=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Scott Russell <Scott.Russell2@ncr.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.10 105/116] USB: serial: cp210x: add NCR Retail IO box id
+        stable@vger.kernel.org,
+        Szymon Heidrich <szymon.heidrich@gmail.com>, stable@kernel.org
+Subject: [PATCH 5.15 146/172] usb: gadget: rndis: check size of RNDIS_MSG_SET command
 Date:   Mon, 14 Feb 2022 10:26:44 +0100
-Message-Id: <20220214092502.411332034@linuxfoundation.org>
+Message-Id: <20220214092511.431680103@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-commit b50f8f09c622297d3cf46e332e17ba8adedec9af upstream.
+commit 38ea1eac7d88072bbffb630e2b3db83ca649b826 upstream.
 
-Add the device id for NCR's Retail IO box (CP2105) used in NCR FastLane
-SelfServ Checkout - R6C:
+Check the size of the RNDIS_MSG_SET command given to us before
+attempting to respond to an invalid message size.
 
-	https://www.ncr.com/product-catalog/ncr-fastlane-selfserv-checkout-r6c
-
-Reported-by: Scott Russell <Scott.Russell2@ncr.com>
-Cc: stable@vger.kernel.org
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Reported-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+Cc: stable@kernel.org
+Tested-by: Szymon Heidrich <szymon.heidrich@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/cp210x.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/gadget/function/rndis.c |    9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -55,6 +55,7 @@ static void cp210x_enable_event_mode(str
- static void cp210x_disable_event_mode(struct usb_serial_port *port);
+--- a/drivers/usb/gadget/function/rndis.c
++++ b/drivers/usb/gadget/function/rndis.c
+@@ -637,14 +637,17 @@ static int rndis_set_response(struct rnd
+ 	rndis_set_cmplt_type *resp;
+ 	rndis_resp_t *r;
  
- static const struct usb_device_id id_table[] = {
-+	{ USB_DEVICE(0x0404, 0x034C) },	/* NCR Retail IO Box */
- 	{ USB_DEVICE(0x045B, 0x0053) }, /* Renesas RX610 RX-Stick */
- 	{ USB_DEVICE(0x0471, 0x066A) }, /* AKTAKOM ACE-1001 cable */
- 	{ USB_DEVICE(0x0489, 0xE000) }, /* Pirelli Broadband S.p.A, DP-L10 SIP/GSM Mobile */
++	BufLength = le32_to_cpu(buf->InformationBufferLength);
++	BufOffset = le32_to_cpu(buf->InformationBufferOffset);
++	if ((BufLength > RNDIS_MAX_TOTAL_SIZE) ||
++	    (BufOffset + 8 >= RNDIS_MAX_TOTAL_SIZE))
++		    return -EINVAL;
++
+ 	r = rndis_add_response(params, sizeof(rndis_set_cmplt_type));
+ 	if (!r)
+ 		return -ENOMEM;
+ 	resp = (rndis_set_cmplt_type *)r->buf;
+ 
+-	BufLength = le32_to_cpu(buf->InformationBufferLength);
+-	BufOffset = le32_to_cpu(buf->InformationBufferOffset);
+-
+ #ifdef	VERBOSE_DEBUG
+ 	pr_debug("%s: Length: %d\n", __func__, BufLength);
+ 	pr_debug("%s: Offset: %d\n", __func__, BufOffset);
 
 

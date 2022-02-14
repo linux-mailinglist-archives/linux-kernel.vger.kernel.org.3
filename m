@@ -2,75 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC2C4B4082
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:53:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF16F4B4088
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240122AbiBNDxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 22:53:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37282 "EHLO
+        id S240145AbiBND6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 22:58:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237909AbiBNDxH (ORCPT
+        with ESMTP id S231478AbiBND6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 22:53:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51A495622D
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 19:52:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644810778;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=k5gXQFIv5vbKifedeqqMIbptAWWOjXJO6QmZ5mrBFnQ=;
-        b=JWlL6/t+C8iop5Ex+ozPIf9neyJd0b4S/p4kJWr/2jZ+h0W7HUTeqMMrklFKVLjmfCsg1j
-        ue1Xr39kHDJeCyNBYK4eG0RYZMLIi6AyX1HxCyTvLojUX53cPG7EV9kaP63yiS6sYmqnOZ
-        XZ1Orm8Ob6wrLlTpZZdU6bXS/yzSHu4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-30-Bm3C-TOJP8Kv9GMyVUkbow-1; Sun, 13 Feb 2022 22:52:55 -0500
-X-MC-Unique: Bm3C-TOJP8Kv9GMyVUkbow-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 09E931006AA0;
-        Mon, 14 Feb 2022 03:52:52 +0000 (UTC)
-Received: from localhost (ovpn-12-173.pek2.redhat.com [10.72.12.173])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 808024CEC8;
-        Mon, 14 Feb 2022 03:52:46 +0000 (UTC)
-Date:   Mon, 14 Feb 2022 11:52:43 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: Re: [PATCH v20 3/5] arm64: kdump: reimplement crashkernel=X
-Message-ID: <YgnSCxlr1O2ZZ1sO@MiWiFi-R3L-srv>
-References: <20220124084708.683-1-thunder.leizhen@huawei.com>
- <20220124084708.683-4-thunder.leizhen@huawei.com>
+        Sun, 13 Feb 2022 22:58:05 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C43F14020;
+        Sun, 13 Feb 2022 19:57:58 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21E0ccxG008181;
+        Mon, 14 Feb 2022 03:57:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=twLVE2Fk9B5juGrxNVKOW/qLNpNrHFmm/d9KPEdCeAU=;
+ b=IjbDXG0EBk7xMObbBw+Yrf/J1SQb/3iCSmxwA/L6YmnLR3xRsXtP4ewcnGMEBNaBXJgf
+ BGV6a8Jr6Pktz7JnHYRedropySy2i7SKZwa6KKkxJoK30QH8erR6Wzm7TrwWNdyQh/Bq
+ k90QQL20Sf9q3QkbmjRnrc0GGO1KH/ta0nwMS7z8vXummtOiNSJXIBjJCErzGtssSrm1
+ fKjUath6hS5q+69j85ho+JwTZIVQDf8p1wDoMu58V4HpBOTW8fFZw97aRkRQRRpNGcpF
+ LLlX6+NjZhhzECNZee0VV21dTW3f7DMvZ2+kt01acQNlI61qB3PAgsC/UDFiBMHqmh7a Lg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e78m06f34-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 03:57:51 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21E3u7MQ020957;
+        Mon, 14 Feb 2022 03:57:51 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e78m06f24-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 03:57:51 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21E3rajO005249;
+        Mon, 14 Feb 2022 03:57:48 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04fra.de.ibm.com with ESMTP id 3e64h9geqh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 03:57:48 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21E3vkta45744480
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Feb 2022 03:57:46 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 348AB11C04A;
+        Mon, 14 Feb 2022 03:57:46 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BBAA811C052;
+        Mon, 14 Feb 2022 03:57:45 +0000 (GMT)
+Received: from localhost (unknown [9.43.31.212])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 14 Feb 2022 03:57:45 +0000 (GMT)
+From:   Ritesh Harjani <riteshh@linux.ibm.com>
+To:     linux-ext4@vger.kernel.org
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, Jan Kara <jack@suse.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ritesh Harjani <riteshh@linux.ibm.com>
+Subject: [RFC 0/1] ext4: Performance scalability improvement with fast_commit
+Date:   Mon, 14 Feb 2022 09:27:42 +0530
+Message-Id: <cover.1644809996.git.riteshh@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220124084708.683-4-thunder.leizhen@huawei.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: E8EXA7jb3TLAMEeikgSRs7b_W5PQ4Wpq
+X-Proofpoint-ORIG-GUID: QIcrBTBFMPlZ8yqcjPwv2SOP6IZkV43V
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-14_01,2022-02-11_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ mlxscore=0 phishscore=0 impostorscore=0 malwarescore=0 adultscore=0
+ lowpriorityscore=0 mlxlogscore=457 bulkscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202140022
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,199 +91,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/24/22 at 04:47pm, Zhen Lei wrote:
-......
-> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-> index 6c653a2c7cff052..a5d43feac0d7d96 100644
-> --- a/arch/arm64/mm/init.c
-> +++ b/arch/arm64/mm/init.c
-> @@ -71,6 +71,30 @@ phys_addr_t arm64_dma_phys_limit __ro_after_init;
->  #define CRASH_ADDR_LOW_MAX	arm64_dma_phys_limit
->  #define CRASH_ADDR_HIGH_MAX	MEMBLOCK_ALLOC_ACCESSIBLE
->  
-> +static int __init reserve_crashkernel_low(unsigned long long low_size)
-> +{
-> +	unsigned long long low_base;
-> +
-> +	/* passed with crashkernel=0,low ? */
-> +	if (!low_size)
-> +		return 0;
-> +
-> +	low_base = memblock_phys_alloc_range(low_size, CRASH_ALIGN, 0, CRASH_ADDR_LOW_MAX);
-> +	if (!low_base) {
-> +		pr_err("cannot allocate crashkernel low memory (size:0x%llx).\n", low_size);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	pr_info("crashkernel low memory reserved: 0x%llx - 0x%llx (%lld MB)\n",
-> +		low_base, low_base + low_size, low_size >> 20);
-> +
-> +	crashk_low_res.start = low_base;
-> +	crashk_low_res.end   = low_base + low_size - 1;
-> +	insert_resource(&iomem_resource, &crashk_low_res);
-> +
-> +	return 0;
-> +}
-> +
->  /*
->   * reserve_crashkernel() - reserves memory for crash kernel
+Hello,
 
-My another concern is the crashkernel=,low handling. In this patch, the
-code related to low memory is obscure. Wondering if we should make them
-explicit with a little redundant but very clear code flows. Saying this
-because the code must be very clear to you and reviewers, it may be
-harder for later code reader or anyone interested to understand.
+I have recently started playing with some filesystem performance scalability testing,
+mainly ext4 for now and in this patch it is with fast_commit feature.
 
-1) crashkernel=X,high
-2) crashkernel=X,high crashkernel=Y,low
-3) crashkernel=X,high crashkernel=0,low
-4) crashkernel=X,high crashkernel='messy code',low
-5) crashkernel=X //fall back to high memory, low memory is required then.
+While running fs_mark (with -s0 -S5) for scalability runs with fast_commit enabled,
+I noticed some heavy contention in ext4_fc_commit() -> ext4_fc_commit_dentry_updates().
 
-It could be me thinking about it too much. I made changes to your patch
-with a tuning, not sure if it's OK to you. Otherwise, this patchset
-works very well for all above test cases, it's ripe to be merged for
-wider testing.
+Analysis
+===========
+This is because -
+1. To commit all the dentry updates using FC, we first loop in for_each dentry
+   entry in sbi->s_fc_dentry_q.
+2. Then within that loop, for each of the above fc_dentry nodes, we again loop in
+   for_each inode in sbi->s_fc_q. This is to get the corresponding inode entry
+   belonging to fc_dentry->fcd_ino.
+Second loop above, is mainly done to get corresponding inode so that before
+committing dentry updates into FC area, we first write inode data, inode and
+then dentry. This turns the whole ext4_fc_commit() path into quadratic time complexity.
 
-diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-index a5d43feac0d7..671862c56d7d 100644
---- a/arch/arm64/mm/init.c
-+++ b/arch/arm64/mm/init.c
-@@ -94,7 +94,8 @@ static int __init reserve_crashkernel_low(unsigned long long low_size)
- 
- 	return 0;
- }
--
-+/*Words explaining why it's 256M*/
-+#define DEFAULT_CRASH_KERNEL_LOW_SIZE SZ_256M
- /*
-  * reserve_crashkernel() - reserves memory for crash kernel
-  *
-@@ -105,10 +106,10 @@ static int __init reserve_crashkernel_low(unsigned long long low_size)
- static void __init reserve_crashkernel(void)
- {
- 	unsigned long long crash_base, crash_size;
--	unsigned long long crash_low_size = SZ_256M;
-+	unsigned long long crash_low_size;
- 	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
- 	int ret;
--	bool fixed_base;
-+	bool fixed_base, high;
- 	char *cmdline = boot_command_line;
- 
- 	/* crashkernel=X[@offset] */
-@@ -126,7 +127,10 @@ static void __init reserve_crashkernel(void)
- 		ret = parse_crashkernel_low(cmdline, 0, &low_size, &crash_base);
- 		if (!ret)
- 			crash_low_size = low_size;
-+		else
-+			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
- 
-+		high = true;
- 		crash_max = CRASH_ADDR_HIGH_MAX;
- 	}
- 
-@@ -134,7 +138,7 @@ static void __init reserve_crashkernel(void)
- 	crash_size = PAGE_ALIGN(crash_size);
- 
- 	/* User specifies base address explicitly. */
--	if (crash_base)
-+	if (fixed_base)
- 		crash_max = crash_base + crash_size;
- 
- retry:
-@@ -156,7 +160,10 @@ static void __init reserve_crashkernel(void)
- 		return;
- 	}
- 
--	if (crash_base >= SZ_4G && reserve_crashkernel_low(crash_low_size)) {
-+	if (crash_base >= SZ_4G && !high) 
-+		crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
-+
-+	if (reserve_crashkernel_low(crash_low_size)) {
- 		memblock_phys_free(crash_base, crash_size);
- 		return;
- 	}
+This is fine until a multi-threaded application is making the updates to limited no.
+of open files and then issuing fsync for each/any of the files.
+But as no. of open files (tracked in FC list) increases, we see significant
+performance impact with higher no. of open files (see below table for more details).
 
->   *
-> @@ -81,29 +105,62 @@ phys_addr_t arm64_dma_phys_limit __ro_after_init;
->  static void __init reserve_crashkernel(void)
->  {
->  	unsigned long long crash_base, crash_size;
-> +	unsigned long long crash_low_size = SZ_256M;
->  	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
->  	int ret;
-> +	bool fixed_base;
-> +	char *cmdline = boot_command_line;
->  
-> -	ret = parse_crashkernel(boot_command_line, memblock_phys_mem_size(),
-> +	/* crashkernel=X[@offset] */
-> +	ret = parse_crashkernel(cmdline, memblock_phys_mem_size(),
->  				&crash_size, &crash_base);
-> -	/* no crashkernel= or invalid value specified */
-> -	if (ret || !crash_size)
-> -		return;
-> +	if (ret || !crash_size) {
-> +		unsigned long long low_size;
->  
-> +		/* crashkernel=X,high */
-> +		ret = parse_crashkernel_high(cmdline, 0, &crash_size, &crash_base);
-> +		if (ret || !crash_size)
-> +			return;
-> +
-> +		/* crashkernel=X,low */
-> +		ret = parse_crashkernel_low(cmdline, 0, &low_size, &crash_base);
-> +		if (!ret)
-> +			crash_low_size = low_size;
-> +
-> +		crash_max = CRASH_ADDR_HIGH_MAX;
-> +	}
-> +
-> +	fixed_base = !!crash_base;
->  	crash_size = PAGE_ALIGN(crash_size);
->  
->  	/* User specifies base address explicitly. */
->  	if (crash_base)
->  		crash_max = crash_base + crash_size;
->  
-> +retry:
->  	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
->  					       crash_base, crash_max);
->  	if (!crash_base) {
-> +		/*
-> +		 * Attempt to fully allocate low memory failed, fall back
-> +		 * to high memory, the minimum required low memory will be
-> +		 * reserved later.
-> +		 */
-> +		if (!fixed_base && (crash_max == CRASH_ADDR_LOW_MAX)) {
-> +			crash_max = CRASH_ADDR_HIGH_MAX;
-> +			goto retry;
-> +		}
-> +
->  		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
->  			crash_size);
->  		return;
->  	}
->  
-> +	if (crash_base >= SZ_4G && reserve_crashkernel_low(crash_low_size)) {
-> +		memblock_phys_free(crash_base, crash_size);
-> +		return;
-> +	}
-> +
->  	pr_info("crashkernel reserved: 0x%016llx - 0x%016llx (%lld MB)\n",
->  		crash_base, crash_base + crash_size, crash_size >> 20);
->  
-> @@ -112,6 +169,9 @@ static void __init reserve_crashkernel(void)
->  	 * map. Inform kmemleak so that it won't try to access it.
->  	 */
->  	kmemleak_ignore_phys(crash_base);
-> +	if (crashk_low_res.end)
-> +		kmemleak_ignore_phys(crashk_low_res.start);
-> +
->  	crashk_res.start = crash_base;
->  	crashk_res.end = crash_base + crash_size - 1;
->  	insert_resource(&iomem_resource, &crashk_res);
-> -- 
-> 2.25.1
-> 
+This RFC patch thus improves the performance of ext4_fc_commit() path by making
+it linear time for doing dentry updates (ext4_fc_commit_dentry_updates()).
+
+
+Observations on perf table results
+===================================
+If we look at the table below, we start seeing performance problems from row 6th
+onwards, where the numbers actually decrease as compared to previous row (row 5).
+And then from row 7th onwards the numbers are significantly low. In fact, I was
+observing the fs_mark getting completely stuck for quite some time and
+progressing very slowly (with params of row 7th onwards).
+
+
+Observations on perf profile
+===============================
+Similar observations can be seen in below perf profile which is taken with params of
+row-8th. Almost 87% of the time is being wasted in that O(N^2) loop to just find
+the right corresponding inode for fc_dentry->fcd_ino.
+
+[Table]: Perf absolute numbers in avg file creates per sec (from fs_mark in 1K order)
+=======================================================================
+#no. 	Order 		without-patch(K) 	with-patch(K) 		Diff(%)
+1	1 		16.90 			17.51 			+3.60
+2	2,2 		32.08 			31.80 			-0.87
+3	3,3 		53.97 			55.01 			+1.92
+4	4,4 		78.94 			76.90 			-2.58
+5	5,5 		95.82 			95.37 			-0.46
+6	6,6 		87.92 			103.38 			+17.58
+7	6,10 		 0.73 			126.13 			+17178.08
+8	6,14 		 2.33 			143.19 			+6045.49
+
+Scalability run plots with different directory ways (/ threads) and no. of dirs/file
+(w/o patches)
+================================================================================
+
+(Avg files/sec x1000) 				'fc_perf.txt' using 3:xtic(2)
+  100 +--------------------------------------------------------------------+
+      |       +      +       +       +      *       +       +      +       |
+   90 |-+                            	    *       *   	         +-|
+      |                                     *       *                      |
+   80 |-+                            *      *       *                    +-|
+      |                              *      *       *                      |
+   70 |-+                            *      *       *                    +-|
+      |                              *      *       *                      |
+   60 |-+                            *      *       *                    +-|
+      |                      *       *      *       *                      |
+   50 |-+                    *       *      *       *                    +-|
+      |                      *       *      *       *                      |
+   40 |-+                    *       *      *       *                    +-|
+      |                      *       *      *       *                      |
+   30 |-+            *       *       *      *       *                    +-|
+      |              *       *       *      *       *                      |
+   20 |-+            *       *       *      *       *                    +-|
+      |       *      *       *       *      *       *                      |
+   10 |-+     *      *       *       *      *       *                    +-|
+      |       *      *       *       *      *       *       +      +       |
+    0 +--------------------------------------------------------------------+
+             1,1     2,2     3,3     4,4    5,5     6,6    6,10   6,14 (order,dir & files)
+
+	^^^^ extremely poor numbers at higher X values (w/o patch)
+
+X-axis: 2^order dir ways, 2^dir & 2^files.
+	For e.g. with x coordinate of 6,10 (2^6 == 64 && 2^10 == 1024)
+	echo /run/riteshh/mnt/{1..64} |sed -E 's/[[:space:]]+/ -d /g' | xargs -I {} bash -c "sudo fs_mark -L 100 -D 1024 -n 1024 -s0 -S5 -d {}"
+
+Y-axis: Avg files per sec (x1000).
+	For e.g. a y coordinate of 100 represent 100K avg file creates per sec. with fs_mark
+
+
+Perf profile
+(w/o patches)
+=============================
+87.15%  [kernel]  [k] ext4_fc_commit 			--> Heavy contention/bottleneck
+ 1.98%  [kernel]  [k] perf_event_interrupt
+ 0.96%  [kernel]  [k] power_pmu_enable
+ 0.91%  [kernel]  [k] update_sd_lb_stats.constprop.0
+ 0.67%  [kernel]  [k] ktime_get
+
+
+Scalability run plots with different directory ways (/ threads) and no. of dirs/file
+(with patch)
+================================================================================
+(Avg files/sec x1000)
+  160 +--------------------------------------------------------------------+
+      |       +      +       +       +      +       +       +      +       |
+  140 |-+                            'fc_perf.txt' using 4:xtic(2) *     +-|
+      |                                                            *       |
+      |                                                     *      *       |
+  120 |-+                                                   *      *     +-|
+      |                                                     *      *       |
+  100 |-+                                           *       *      *     +-|
+      |                                     *       *       *      *       |
+      |                                     *       *       *      *       |
+   80 |-+                            *      *       *       *      *     +-|
+      |                              *      *       *       *      *       |
+   60 |-+                            *      *       *       *      *     +-|
+      |                      *       *      *       *       *      *       |
+      |                      *       *      *       *       *      *       |
+   40 |-+                    *       *      *       *       *      *     +-|
+      |              *       *       *      *       *       *      *       |
+   20 |-+            *       *       *      *       *       *      *     +-|
+      |       *      *       *       *      *       *       *      *       |
+      |       *      *       *       *      *       *       *      *       |
+    0 +--------------------------------------------------------------------+
+            1,1     2,2     3,3     4,4    5,5     6,6    6,10   6,14 (order, dir & files)
+
+	^^^^ Shows linear scaling with this patch ;)
+
+Perf profile
+(with patch)
+===========================
+21.41%  [kernel]     [k] snooze_loop
+18.67%  [kernel]     [k] _raw_spin_lock
+12.34%  [kernel]     [k] _raw_spin_lock_irq
+ 5.02%  [kernel]     [k] update_sd_lb_stats.constprop.0
+ 1.91%  libc-2.31.so [.] __random
+ 1.85%  [kernel]     [k] _find_next_bit
+
+
+xfstests results
+==================
+This has survived my fstests testing with -g log,metadata,auto group.
+(CONFIG_KASAN disabled). I haven't found any regression due to this patch in my testing.
+
+But to avoid me missing any corner slippery edges of fast_commit feature, a careful
+review would really help as always :)
+
+
+Ritesh Harjani (1):
+  ext4: Improve fast_commit performance and scalability
+
+ fs/ext4/ext4.h        |  2 ++
+ fs/ext4/fast_commit.c | 64 +++++++++++++++++++++++++++++++------------
+ fs/ext4/fast_commit.h |  1 +
+ 3 files changed, 50 insertions(+), 17 deletions(-)
+
+--
+2.31.1
 

@@ -2,96 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7464B51EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4914B51F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:42:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354492AbiBNNkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:40:23 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53168 "EHLO
+        id S1354517AbiBNNlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:41:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354462AbiBNNkT (ORCPT
+        with ESMTP id S243108AbiBNNlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:40:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7D94A3CB;
-        Mon, 14 Feb 2022 05:40:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE5EC6150B;
-        Mon, 14 Feb 2022 13:40:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3F0D4C36AE2;
-        Mon, 14 Feb 2022 13:40:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644846011;
-        bh=4T1Tqdk5SogHHJiSp6CWK0qg1zInEsqzVOwmJuDHDwU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TGbjXWKTwfJ3/W8m6tW+nqSevJjeyMBRPJALiLWEC7PLz4Ldmjq+71b+Y9s5TW5YI
-         bGKE+wIWPX9J+W/3ovdcGyXCL+q3Kpe+meiK2T7b1fPHUK3/ap13SEhfGnKkhjQIe7
-         Ly7G4LH7BAZaJuN8ijaU0iQ9RyjiVzNIJ8RIcCistMcDcc4uARjtPXlSvpzwJrX1Lj
-         jDpr+AgDBiuCzYnzkH1BEq4vWw09Nh0dIa1DW+0X6iX33C0o3gflWEXfGxMf1+wRcx
-         TpMJ9evr8+jFJCvOg4Bp5X3uLZiTNO5JGMvYJPTMeWZyWCONBOCoc0OWwt2fK/4brm
-         Pzv6/Q8luuOnA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2D3F4E6D458;
-        Mon, 14 Feb 2022 13:40:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 14 Feb 2022 08:41:08 -0500
+Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502F9575F4;
+        Mon, 14 Feb 2022 05:41:00 -0800 (PST)
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id 029F02FB; Mon, 14 Feb 2022 14:40:57 +0100 (CET)
+Date:   Mon, 14 Feb 2022 14:40:56 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Will Deacon <will@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 5/8] iommu/amd: Use iommu_attach/detach_device()
+Message-ID: <Ygpb6CxmTdUHiN50@8bytes.org>
+References: <20220106022053.2406748-1-baolu.lu@linux.intel.com>
+ <20220106022053.2406748-6-baolu.lu@linux.intel.com>
+ <20220106143345.GC2328285@nvidia.com>
+ <Ygo8iek2CwtPp2hj@8bytes.org>
+ <20220214131544.GX4160@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v7 net-next 0/4] use bulk reads for ocelot statistics
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164484601117.23487.5745096307974974865.git-patchwork-notify@kernel.org>
-Date:   Mon, 14 Feb 2022 13:40:11 +0000
-References: <20220213191254.1480765-1-colin.foster@in-advantage.com>
-In-Reply-To: <20220213191254.1480765-1-colin.foster@in-advantage.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        kuba@kernel.org, davem@davemloft.net, UNGLinuxDriver@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.manoil@nxp.com,
-        vladimir.oltean@nxp.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220214131544.GX4160@nvidia.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Sun, 13 Feb 2022 11:12:50 -0800 you wrote:
-> Ocelot loops over memory regions to gather stats on different ports.
-> These regions are mostly continuous, and are ordered. This patch set
-> uses that information to break the stats reads into regions that can get
-> read in bulk.
+On Mon, Feb 14, 2022 at 09:15:44AM -0400, Jason Gunthorpe wrote:
+> But how does the sound device know that this has been done to it?
 > 
-> The motiviation is for general cleanup, but also for SPI. Performing two
-> back-to-back reads on a SPI bus require toggling the CS line, holding,
-> re-toggling the CS line, sending 3 address bytes, sending N padding
-> bytes, then actually performing the read. Bulk reads could reduce almost
-> all of that overhead, but require that the reads are performed via
-> regmap_bulk_read.
-> 
-> [...]
+> eg how do we know the sound device hasn't been bound to VFIO or
+> something at this point?
 
-Here is the summary with links:
-  - [v7,net-next,1/4] net: mscc: ocelot: remove unnecessary stat reading from ethtool
-    https://git.kernel.org/netdev/net-next/c/e27d785e60b6
-  - [v7,net-next,2/4] net: ocelot: align macros for consistency
-    https://git.kernel.org/netdev/net-next/c/65c53595bc2a
-  - [v7,net-next,3/4] net: mscc: ocelot: add ability to perform bulk reads
-    https://git.kernel.org/netdev/net-next/c/40f3a5c81555
-  - [v7,net-next,4/4] net: mscc: ocelot: use bulk reads for stats
-    https://git.kernel.org/netdev/net-next/c/d87b1c08f38a
+The iommu_attach_group() call will fail when the group (which includes
+GPU and sound device) it not in its default-domain. So if VFIO attached
+the group to its own domain, there is a failure in this init function.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Note that this function is intended to be called by the driver currently
+controling this device, so there should also be no race with VFIO trying
+to grab the device in parallel.
 
+Regards,
+
+	Joerg
 

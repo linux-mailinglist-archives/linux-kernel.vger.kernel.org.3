@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D3A4B4873
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8554B4605
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343631AbiBNJyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:54:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33274 "EHLO
+        id S243568AbiBNJbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:31:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343632AbiBNJuz (ORCPT
+        with ESMTP id S243316AbiBNJbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:50:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C97657AC;
-        Mon, 14 Feb 2022 01:41:50 -0800 (PST)
+        Mon, 14 Feb 2022 04:31:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1C5BF44;
+        Mon, 14 Feb 2022 01:30:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E85360FA2;
-        Mon, 14 Feb 2022 09:41:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13FC9C340F0;
-        Mon, 14 Feb 2022 09:41:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26489B80DC4;
+        Mon, 14 Feb 2022 09:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32611C340E9;
+        Mon, 14 Feb 2022 09:30:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831709;
-        bh=o/sKIMrGLrAkYp8Q+KzdWoLa4OteYk6nG3L46DZRWxs=;
+        s=korg; t=1644831009;
+        bh=NWXtWuPcTk1NqFEhAom7jp65/IRafTnTScGEgINFwbY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OC6cmrrjfHaEj+Msf5ZX4cLINaJ7XhHNRtQiTgg6Hb0tmJQfJaMbJM9T0OGveh2ub
-         RoO19GxSE5jibbs0R1a7KgDVWqXeWP1INamRqisyb/XKdo4ICbZBJXpMA8lL8Djblf
-         OSH27SLy5S1R/we7sFapbN2bcfLZrE6JBNlHE87Y=
+        b=MN5Uv+AU33f7sO+dIsLGVpF77G50aCQsgmJmb6zwSUEvslg7a2GYAaEmX+eK7WcZT
+         7I85EGaMnE76OJHS1ehZbXIiJ4tVpekEya2mhP5ed0cEIZ5P++cuDxkC2zCtu4HF9Z
+         Yn/C7u/12su/s46LxP7kWWSwkCDXVjWhvFoPX+AU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        stable@vger.kernel.org, Jisheng Zhang <jszhang@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 039/116] KVM: nVMX: Also filter MSR_IA32_VMX_TRUE_PINBASED_CTLS when eVMCS
+Subject: [PATCH 4.14 15/44] net: stmmac: dwmac-sun8i: use return val of readl_poll_timeout()
 Date:   Mon, 14 Feb 2022 10:25:38 +0100
-Message-Id: <20220214092500.030688432@linuxfoundation.org>
+Message-Id: <20220214092448.403456250@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
+References: <20220214092447.897544753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Jisheng Zhang <jszhang@kernel.org>
 
-[ Upstream commit f80ae0ef089a09e8c18da43a382c3caac9a424a7 ]
+[ Upstream commit 9e0db41e7a0b6f1271cbcfb16dbf5b8641b4e440 ]
 
-Similar to MSR_IA32_VMX_EXIT_CTLS/MSR_IA32_VMX_TRUE_EXIT_CTLS,
-MSR_IA32_VMX_ENTRY_CTLS/MSR_IA32_VMX_TRUE_ENTRY_CTLS pair,
-MSR_IA32_VMX_TRUE_PINBASED_CTLS needs to be filtered the same way
-MSR_IA32_VMX_PINBASED_CTLS is currently filtered as guests may solely rely
-on 'true' MSR data.
+When readl_poll_timeout() timeout, we'd better directly use its return
+value.
 
-Note, none of the currently existing Windows/Hyper-V versions are known
-to stumble upon the unfiltered MSR_IA32_VMX_TRUE_PINBASED_CTLS, the change
-is aimed at making the filtering future proof.
+Before this patch:
+[    2.145528] dwmac-sun8i: probe of 4500000.ethernet failed with error -14
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20220112170134.1904308-2-vkuznets@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+After this patch:
+[    2.138520] dwmac-sun8i: probe of 4500000.ethernet failed with error -110
+
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/vmx/evmcs.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
-index c0d6fee9225fe..5b68034ec5f9c 100644
---- a/arch/x86/kvm/vmx/evmcs.c
-+++ b/arch/x86/kvm/vmx/evmcs.c
-@@ -361,6 +361,7 @@ void nested_evmcs_filter_control_msr(u32 msr_index, u64 *pdata)
- 	case MSR_IA32_VMX_PROCBASED_CTLS2:
- 		ctl_high &= ~EVMCS1_UNSUPPORTED_2NDEXEC;
- 		break;
-+	case MSR_IA32_VMX_TRUE_PINBASED_CTLS:
- 	case MSR_IA32_VMX_PINBASED_CTLS:
- 		ctl_high &= ~EVMCS1_UNSUPPORTED_PINCTRL;
- 		break;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
+index 8e60315a087c9..1027831e5d814 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c
+@@ -630,7 +630,7 @@ static int sun8i_dwmac_reset(struct stmmac_priv *priv)
+ 
+ 	if (err) {
+ 		dev_err(priv->device, "EMAC reset timeout\n");
+-		return -EFAULT;
++		return err;
+ 	}
+ 	return 0;
+ }
 -- 
 2.34.1
 

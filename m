@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E4C4B482F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFA54B46C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245693AbiBNJwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:52:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43904 "EHLO
+        id S244469AbiBNJlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:41:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245173AbiBNJtZ (ORCPT
+        with ESMTP id S244512AbiBNJke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:49:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729D61AD9C;
-        Mon, 14 Feb 2022 01:41:01 -0800 (PST)
+        Mon, 14 Feb 2022 04:40:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B0AB84E;
+        Mon, 14 Feb 2022 01:35:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB71561190;
-        Mon, 14 Feb 2022 09:40:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B60D0C340EF;
-        Mon, 14 Feb 2022 09:40:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BC92B80DC4;
+        Mon, 14 Feb 2022 09:35:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 484DFC340E9;
+        Mon, 14 Feb 2022 09:35:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831649;
-        bh=BtgkscZXqRPc3BXcz3yxUSPS33ZTFII5DyIX+CY1PU4=;
+        s=korg; t=1644831339;
+        bh=nBbcmC2clBtFUE4+r3jUl7e4KKEhA/7ys6t+U2NjNkU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uoDyfQtkxjP9gzy/OnOYhtw4OxD0+fT16s2I693IeqNUlZCo0DC805HJSS+uJzAmk
-         WR1TKq+j1IjVeu3nlqMqL+SFs7qdNpjDBywSmNh684H4i5mT/FP9ly4fYMZlbhrcwm
-         tGguJkbJz+0zl4Wje6ipZTL9bC79fqr09g6167K4=
+        b=h3p/UZhwvllCpW6/vcsFWwHMWWutb0MIAyND+y8rMsYg77PI7y2uq22K8kcxEuWBR
+         Qb9hftZ+Ak/iXHrgW2fDce84P3AjDG1OpnliVRvT37eujxtqDmWdTckuUzOiaMQLLP
+         Z5Qr+ngF4DY2J7AY1SEuzll+F5dm59yxNOl782ag=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
+        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 051/116] ARM: dts: meson: Fix the UART compatible strings
+Subject: [PATCH 5.4 22/71] PM: hibernate: Remove register_nosave_region_late()
 Date:   Mon, 14 Feb 2022 10:25:50 +0100
-Message-Id: <20220214092500.477036025@linuxfoundation.org>
+Message-Id: <20220214092452.761290303@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,67 +58,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+From: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
 
-[ Upstream commit 5225e1b87432dcf0d0fc3440824b91d04c1d6cc1 ]
+[ Upstream commit 33569ef3c754a82010f266b7b938a66a3ccf90a4 ]
 
-The dt-bindings for the UART controller only allow the following values
-for Meson6 SoCs:
-- "amlogic,meson6-uart", "amlogic,meson-ao-uart"
-- "amlogic,meson6-uart"
+It is an unused wrapper forcing kmalloc allocation for registering
+nosave regions. Also, rename __register_nosave_region() to
+register_nosave_region() now that there is no need for disambiguation.
 
-Use the correct fallback compatible string "amlogic,meson-ao-uart" for
-AO UART. Drop the "amlogic,meson-uart" compatible string from the EE
-domain UART controllers.
-
-Fixes: ec9b59162fd831 ("ARM: dts: meson6: use stable UART bindings")
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://lore.kernel.org/r/20211227180026.4068352-2-martin.blumenstingl@googlemail.com
+Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/meson.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ include/linux/suspend.h | 11 +----------
+ kernel/power/snapshot.c | 21 +++++++--------------
+ 2 files changed, 8 insertions(+), 24 deletions(-)
 
-diff --git a/arch/arm/boot/dts/meson.dtsi b/arch/arm/boot/dts/meson.dtsi
-index 7649dd1e0b9ee..c928ae312e19c 100644
---- a/arch/arm/boot/dts/meson.dtsi
-+++ b/arch/arm/boot/dts/meson.dtsi
-@@ -42,14 +42,14 @@ hwrng: rng@8100 {
- 			};
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index cd97d2c8840cc..44dd49cb2ea05 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -428,15 +428,7 @@ struct platform_hibernation_ops {
  
- 			uart_A: serial@84c0 {
--				compatible = "amlogic,meson6-uart", "amlogic,meson-uart";
-+				compatible = "amlogic,meson6-uart";
- 				reg = <0x84c0 0x18>;
- 				interrupts = <GIC_SPI 26 IRQ_TYPE_EDGE_RISING>;
- 				status = "disabled";
- 			};
+ #ifdef CONFIG_HIBERNATION
+ /* kernel/power/snapshot.c */
+-extern void __register_nosave_region(unsigned long b, unsigned long e, int km);
+-static inline void __init register_nosave_region(unsigned long b, unsigned long e)
+-{
+-	__register_nosave_region(b, e, 0);
+-}
+-static inline void __init register_nosave_region_late(unsigned long b, unsigned long e)
+-{
+-	__register_nosave_region(b, e, 1);
+-}
++extern void register_nosave_region(unsigned long b, unsigned long e);
+ extern int swsusp_page_is_forbidden(struct page *);
+ extern void swsusp_set_page_free(struct page *);
+ extern void swsusp_unset_page_free(struct page *);
+@@ -453,7 +445,6 @@ extern struct pbe *restore_pblist;
+ int pfn_is_nosave(unsigned long pfn);
+ #else /* CONFIG_HIBERNATION */
+ static inline void register_nosave_region(unsigned long b, unsigned long e) {}
+-static inline void register_nosave_region_late(unsigned long b, unsigned long e) {}
+ static inline int swsusp_page_is_forbidden(struct page *p) { return 0; }
+ static inline void swsusp_set_page_free(struct page *p) {}
+ static inline void swsusp_unset_page_free(struct page *p) {}
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index d65f2d5ab6942..46455aa7951ec 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -945,8 +945,7 @@ static void memory_bm_recycle(struct memory_bitmap *bm)
+  * Register a range of page frames the contents of which should not be saved
+  * during hibernation (to be used in the early initialization code).
+  */
+-void __init __register_nosave_region(unsigned long start_pfn,
+-				     unsigned long end_pfn, int use_kmalloc)
++void __init register_nosave_region(unsigned long start_pfn, unsigned long end_pfn)
+ {
+ 	struct nosave_region *region;
  
- 			uart_B: serial@84dc {
--				compatible = "amlogic,meson6-uart", "amlogic,meson-uart";
-+				compatible = "amlogic,meson6-uart";
- 				reg = <0x84dc 0x18>;
- 				interrupts = <GIC_SPI 75 IRQ_TYPE_EDGE_RISING>;
- 				status = "disabled";
-@@ -87,7 +87,7 @@ saradc: adc@8680 {
- 			};
- 
- 			uart_C: serial@8700 {
--				compatible = "amlogic,meson6-uart", "amlogic,meson-uart";
-+				compatible = "amlogic,meson6-uart";
- 				reg = <0x8700 0x18>;
- 				interrupts = <GIC_SPI 93 IRQ_TYPE_EDGE_RISING>;
- 				status = "disabled";
-@@ -203,7 +203,7 @@ ir_receiver: ir-receiver@480 {
- 			};
- 
- 			uart_AO: serial@4c0 {
--				compatible = "amlogic,meson6-uart", "amlogic,meson-ao-uart", "amlogic,meson-uart";
-+				compatible = "amlogic,meson6-uart", "amlogic,meson-ao-uart";
- 				reg = <0x4c0 0x18>;
- 				interrupts = <GIC_SPI 90 IRQ_TYPE_EDGE_RISING>;
- 				status = "disabled";
+@@ -962,18 +961,12 @@ void __init __register_nosave_region(unsigned long start_pfn,
+ 			goto Report;
+ 		}
+ 	}
+-	if (use_kmalloc) {
+-		/* During init, this shouldn't fail */
+-		region = kmalloc(sizeof(struct nosave_region), GFP_KERNEL);
+-		BUG_ON(!region);
+-	} else {
+-		/* This allocation cannot fail */
+-		region = memblock_alloc(sizeof(struct nosave_region),
+-					SMP_CACHE_BYTES);
+-		if (!region)
+-			panic("%s: Failed to allocate %zu bytes\n", __func__,
+-			      sizeof(struct nosave_region));
+-	}
++	/* This allocation cannot fail */
++	region = memblock_alloc(sizeof(struct nosave_region),
++				SMP_CACHE_BYTES);
++	if (!region)
++		panic("%s: Failed to allocate %zu bytes\n", __func__,
++		      sizeof(struct nosave_region));
+ 	region->start_pfn = start_pfn;
+ 	region->end_pfn = end_pfn;
+ 	list_add_tail(&region->list, &nosave_regions);
 -- 
 2.34.1
 

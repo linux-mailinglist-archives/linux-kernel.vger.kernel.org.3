@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BBF4B47D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7F54B464F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbiBNJjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:39:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51544 "EHLO
+        id S243907AbiBNJds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:33:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244593AbiBNJgE (ORCPT
+        with ESMTP id S243867AbiBNJdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:36:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4AB1ADB1;
-        Mon, 14 Feb 2022 01:33:57 -0800 (PST)
+        Mon, 14 Feb 2022 04:33:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3591B65785;
+        Mon, 14 Feb 2022 01:31:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DDAA6B80DCE;
-        Mon, 14 Feb 2022 09:33:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0967C340EF;
-        Mon, 14 Feb 2022 09:33:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B71E460DFD;
+        Mon, 14 Feb 2022 09:31:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DB93C340E9;
+        Mon, 14 Feb 2022 09:31:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831234;
-        bh=Jn7SyqQMTieEnO8xObfW/Ak4+IPgh1fcbZ4OR9XFWTE=;
+        s=korg; t=1644831099;
+        bh=vKR3XLW8cjvpm8Z/9x3036EkCMG759mpw8h0+7mcmx4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZnFMgtQRFw34PM0MnywjkIbGuyoscJXSarXcMPi41BXH0TfO4Wga8g0nan8kbEa45
-         7ShDmapfzyiBZ8TRyH+6bXrFtgOSH0kZkj38RgmWm6tbGsxnJ5biJoodV4g3bCGlky
-         U0unXWtLb0vR352PpYOqST1hTCafOr79Wq5HbHdg=
+        b=r5EjL4brRV/zi0JmcLekfEke2QQ+RWWwnW0WwU4+cboEc2AlHbdXZ68wadTnt1acV
+         NDRudmu22TxA8d8u0WHaZfqzPF5vpWWIcegVsN2HrRwQ/Yg30XnsApI8dUglgKRqDW
+         1lUN0Ytp+CbM8Xbfp+64wmfIBb519RIyn8WICeU8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Szymon Heidrich <szymon.heidrich@gmail.com>, stable@kernel.org
-Subject: [PATCH 4.19 40/49] USB: gadget: validate interface OS descriptor requests
+        stable@vger.kernel.org, Armin Wolf <W_Armin@gmx.de>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 4.14 43/44] hwmon: (dell-smm) Speed up setting of fan speed
 Date:   Mon, 14 Feb 2022 10:26:06 +0100
-Message-Id: <20220214092449.627098545@linuxfoundation.org>
+Message-Id: <20220214092449.293304202@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
-References: <20220214092448.285381753@linuxfoundation.org>
+In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
+References: <20220214092447.897544753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,31 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Szymon Heidrich <szymon.heidrich@gmail.com>
+From: Armin Wolf <W_Armin@gmx.de>
 
-commit 75e5b4849b81e19e9efe1654b30d7f3151c33c2c upstream.
+commit c0d79987a0d82671bff374c07f2201f9bdf4aaa2 upstream.
 
-Stall the control endpoint in case provided index exceeds array size of
-MAX_CONFIG_INTERFACES or when the retrieved function pointer is null.
+When setting the fan speed, i8k_set_fan() calls i8k_get_fan_status(),
+causing an unnecessary SMM call since from the two users of this
+function, only i8k_ioctl_unlocked() needs to know the new fan status
+while dell_smm_write() ignores the new fan status.
+Since SMM calls can be very slow while also making error reporting
+difficult for dell_smm_write(), remove the function call from
+i8k_set_fan() and call it separately in i8k_ioctl_unlocked().
 
-Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-Cc: stable@kernel.org
+Tested on a Dell Inspiron 3505.
+
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+Reviewed-by: Pali Rohár <pali@kernel.org>
+Link: https://lore.kernel.org/r/20211021190531.17379-6-W_Armin@gmx.de
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/composite.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/hwmon/dell-smm-hwmon.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -1930,6 +1930,9 @@ unknown:
- 				if (w_index != 0x5 || (w_value >> 8))
- 					break;
- 				interface = w_value & 0xFF;
-+				if (interface >= MAX_CONFIG_INTERFACES ||
-+				    !os_desc_cfg->interface[interface])
-+					break;
- 				buf[6] = w_index;
- 				count = count_ext_prop(os_desc_cfg,
- 					interface);
+--- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -294,7 +294,7 @@ static int i8k_get_fan_nominal_speed(int
+ }
+ 
+ /*
+- * Set the fan speed (off, low, high). Returns the new fan status.
++ * Set the fan speed (off, low, high, ...).
+  */
+ static int i8k_set_fan(int fan, int speed)
+ {
+@@ -303,7 +303,7 @@ static int i8k_set_fan(int fan, int spee
+ 	speed = (speed < 0) ? 0 : ((speed > i8k_fan_max) ? i8k_fan_max : speed);
+ 	regs.ebx = (fan & 0xff) | (speed << 8);
+ 
+-	return i8k_smm(&regs) ? : i8k_get_fan_status(fan);
++	return i8k_smm(&regs);
+ }
+ 
+ static int i8k_get_temp_type(int sensor)
+@@ -417,7 +417,7 @@ static int
+ i8k_ioctl_unlocked(struct file *fp, unsigned int cmd, unsigned long arg)
+ {
+ 	int val = 0;
+-	int speed;
++	int speed, err;
+ 	unsigned char buff[16];
+ 	int __user *argp = (int __user *)arg;
+ 
+@@ -478,7 +478,11 @@ i8k_ioctl_unlocked(struct file *fp, unsi
+ 		if (copy_from_user(&speed, argp + 1, sizeof(int)))
+ 			return -EFAULT;
+ 
+-		val = i8k_set_fan(val, speed);
++		err = i8k_set_fan(val, speed);
++		if (err < 0)
++			return err;
++
++		val = i8k_get_fan_status(val);
+ 		break;
+ 
+ 	default:
 
 

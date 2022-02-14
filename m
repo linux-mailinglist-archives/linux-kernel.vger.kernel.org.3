@@ -2,153 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC9A4B4BA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C974B48B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243546AbiBNJ60 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 14 Feb 2022 04:58:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60850 "EHLO
+        id S1344523AbiBNJ4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:56:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344982AbiBNJwJ (ORCPT
+        with ESMTP id S1344840AbiBNJwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:52:09 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BD66735D;
-        Mon, 14 Feb 2022 01:43:34 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21E9eP2H019510;
-        Mon, 14 Feb 2022 09:42:57 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e779vdmbn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 09:42:57 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21E9bfsY004418;
-        Mon, 14 Feb 2022 09:42:55 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06fra.de.ibm.com with ESMTP id 3e645jat6m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 09:42:55 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21E9WYme38797792
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Feb 2022 09:32:34 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 051CE52052;
-        Mon, 14 Feb 2022 09:42:53 +0000 (GMT)
-Received: from smtp.tlslab.ibm.com (unknown [9.101.4.1])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with SMTP id 6085952050;
-        Mon, 14 Feb 2022 09:42:52 +0000 (GMT)
-Received: from yukon.ibmuc.com (unknown [9.171.60.190])
-        by smtp.tlslab.ibm.com (Postfix) with ESMTP id 076D32201DE;
-        Mon, 14 Feb 2022 10:42:50 +0100 (CET)
-From:   =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
-To:     linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-aspeed@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
-Subject: [PATCH 10/10] spi: aspeed: Activate new spi-mem driver
-Date:   Mon, 14 Feb 2022 10:42:31 +0100
-Message-Id: <20220214094231.3753686-11-clg@kaod.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220214094231.3753686-1-clg@kaod.org>
-References: <20220214094231.3753686-1-clg@kaod.org>
+        Mon, 14 Feb 2022 04:52:04 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1552C67356
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 01:43:18 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id E5BAB1F43573
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1644831796;
+        bh=kuDQtUAXWzNyzTKHh3iQp9tj06g3aQJ3Vh8+/PtLxTk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=F/ChMnCt2ZvyLUCCDaKYxsNQ/HNeiyvut9l5Fd3guB+z90ls52jie0pFavRlj6EM5
+         NdRuf7sSAFZyA7RJQrIJoeXQBNFIlqkjDo+yNYU4rQg2TcGHgZ5islmi2tdUc8aj4H
+         uBvSw2GoxxjFIvo3nXdPbWlr2GPEHUs0f9ZmfetxG6wB6tyI9EOWk/E7htOIoi8Vm1
+         39wM4YYpf6Mjq20Avo2GT+n/4g0y8mUlCBA3wNyIEHIXjShL5i1mdNVCa7OYDSwXdq
+         y/Ofm8F1jV5RVpZ18Khi77Ph4klSaNwj72GAbJMupguC+eJbeGOg+4jKvAyK41CJaJ
+         az59wNOPGjIAg==
+Message-ID: <0a331caa-7578-60f5-cbd8-f6c8c29a629f@collabora.com>
+Date:   Mon, 14 Feb 2022 10:43:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: hi9H4j9w4wgHr4Kw5X0RWQekIHI7ip-1
-X-Proofpoint-ORIG-GUID: hi9H4j9w4wgHr4Kw5X0RWQekIHI7ip-1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-14_01,2022-02-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- malwarescore=0 adultscore=0 lowpriorityscore=0 mlxscore=0 clxscore=1034
- impostorscore=0 spamscore=0 suspectscore=0 priorityscore=1501
- mlxlogscore=588 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202140058
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v4] drm/mediatek: allow commands to be sent during video
+ mode
+Content-Language: en-US
+To:     Julien STEPHAN <jstephan@baylibre.com>
+Cc:     Mattijs Korpershoek <mkorpershoek@baylibre.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:DRM DRIVERS FOR MEDIATEK" 
+        <dri-devel@lists.freedesktop.org>,
+        "moderated list:DRM DRIVERS FOR MEDIATEK" 
+        <linux-mediatek@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220214092742.3461587-1-jstephan@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220214092742.3461587-1-jstephan@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The previous driver using the MTD SPI NOR interface is kept in case we
-find some issues but we should remove it quickly once the new driver
-using the spi-mem interface has been sufficiently exposed.
+Il 14/02/22 10:27, Julien STEPHAN ha scritto:
+> Mipi dsi panel drivers can use mipi_dsi_dcs_{set,get}_display_brightness()
+> to request backlight changes.
+> 
+> This can be done during panel initialization (dsi is in command mode)
+> or afterwards (dsi is in Video Mode).
+> 
+> When the DSI is in Video Mode, all commands are rejected.
+> 
+> Detect current DSI mode in mtk_dsi_host_transfer() and switch modes
+> temporarily to allow commands to be sent.
+> 
+> Signed-off-by: Julien STEPHAN <jstephan@baylibre.com>
+> Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
 
-Signed-off-by: Cédric Le Goater <clg@kaod.org>
----
- arch/arm/configs/aspeed_g4_defconfig | 2 +-
- arch/arm/configs/aspeed_g5_defconfig | 2 +-
- arch/arm/configs/multi_v5_defconfig  | 2 +-
- arch/arm/configs/multi_v7_defconfig  | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+Please, next time, don't drop the tags that reviewers are giving to you, unless
+the patch changes radically.
 
-diff --git a/arch/arm/configs/aspeed_g4_defconfig b/arch/arm/configs/aspeed_g4_defconfig
-index 964536444cd7..b4a1b2ed1a17 100644
---- a/arch/arm/configs/aspeed_g4_defconfig
-+++ b/arch/arm/configs/aspeed_g4_defconfig
-@@ -64,7 +64,7 @@ CONFIG_MTD_BLOCK=y
- CONFIG_MTD_PARTITIONED_MASTER=y
- CONFIG_MTD_SPI_NOR=y
- # CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
--CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=y
-+CONFIG_SPI_ASPEED_SMC=y
- CONFIG_MTD_UBI=y
- CONFIG_MTD_UBI_FASTMAP=y
- CONFIG_MTD_UBI_BLOCK=y
-diff --git a/arch/arm/configs/aspeed_g5_defconfig b/arch/arm/configs/aspeed_g5_defconfig
-index e809236ca88b..ccc4240ee4b5 100644
---- a/arch/arm/configs/aspeed_g5_defconfig
-+++ b/arch/arm/configs/aspeed_g5_defconfig
-@@ -103,7 +103,7 @@ CONFIG_MTD_BLOCK=y
- CONFIG_MTD_PARTITIONED_MASTER=y
- CONFIG_MTD_SPI_NOR=y
- # CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
--CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=y
-+CONFIG_SPI_ASPEED_SMC=y
- CONFIG_MTD_UBI=y
- CONFIG_MTD_UBI_FASTMAP=y
- CONFIG_MTD_UBI_BLOCK=y
-diff --git a/arch/arm/configs/multi_v5_defconfig b/arch/arm/configs/multi_v5_defconfig
-index 49083ef05fb0..80a3ae02d759 100644
---- a/arch/arm/configs/multi_v5_defconfig
-+++ b/arch/arm/configs/multi_v5_defconfig
-@@ -103,7 +103,7 @@ CONFIG_MTD_RAW_NAND=y
- CONFIG_MTD_NAND_ATMEL=y
- CONFIG_MTD_NAND_ORION=y
- CONFIG_MTD_SPI_NOR=y
--CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=y
-+CONFIG_SPI_ASPEED_SMC=y
- CONFIG_MTD_UBI=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_ATMEL_SSC=m
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index fc1b69256b64..33572998dbbe 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -217,7 +217,7 @@ CONFIG_MTD_NAND_DAVINCI=y
- CONFIG_MTD_NAND_STM32_FMC2=y
- CONFIG_MTD_NAND_PL35X=y
- CONFIG_MTD_SPI_NOR=y
--CONFIG_SPI_ASPEED_SMC_MTD_SPI_NOR=m
-+CONFIG_SPI_ASPEED_SMC=m
- CONFIG_MTD_UBI=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_BLK_DEV_RAM=y
--- 
-2.34.1
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+> ---
+> Changes in v4:
+>      - fix missing space:  "ret : recv_cnt;"
+> Changes in v3:
+>      - increase readability of code and use correct return variable (see
+>        comment
+> https://lore.kernel.org/linux-mediatek/4907bdc1-b4a6-e9ad-5cfa-266fc20c0bec@collabora.com/)
+> 
+> Changes in v2:
+>      - update commit message to be more descriptive
+> 
+>   drivers/gpu/drm/mediatek/mtk_dsi.c | 33 ++++++++++++++++++++++--------
+>   1 file changed, 24 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> index 5d90d2eb0019..abdd9cdebd86 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> @@ -891,24 +891,33 @@ static ssize_t mtk_dsi_host_transfer(struct mipi_dsi_host *host,
+>   	u8 read_data[16];
+>   	void *src_addr;
+>   	u8 irq_flag = CMD_DONE_INT_FLAG;
+> +	u32 dsi_mode;
+> +	int ret;
+> 
+> -	if (readl(dsi->regs + DSI_MODE_CTRL) & MODE) {
+> -		DRM_ERROR("dsi engine is not command mode\n");
+> -		return -EINVAL;
+> +	dsi_mode = readl(dsi->regs + DSI_MODE_CTRL);
+> +	if (dsi_mode & MODE) {
+> +		mtk_dsi_stop(dsi);
+> +		ret = mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
+> +		if (ret)
+> +			goto restore_dsi_mode;
+>   	}
+> 
+>   	if (MTK_DSI_HOST_IS_READ(msg->type))
+>   		irq_flag |= LPRX_RD_RDY_INT_FLAG;
+> 
+> -	if (mtk_dsi_host_send_cmd(dsi, msg, irq_flag) < 0)
+> -		return -ETIME;
+> +	ret = mtk_dsi_host_send_cmd(dsi, msg, irq_flag);
+> +	if (ret)
+> +		goto restore_dsi_mode;
+> 
+> -	if (!MTK_DSI_HOST_IS_READ(msg->type))
+> -		return 0;
+> +	if (!MTK_DSI_HOST_IS_READ(msg->type)) {
+> +		recv_cnt = 0;
+> +		goto restore_dsi_mode;
+> +	}
+> 
+>   	if (!msg->rx_buf) {
+>   		DRM_ERROR("dsi receive buffer size may be NULL\n");
+> -		return -EINVAL;
+> +		ret = -EINVAL;
+> +		goto restore_dsi_mode;
+>   	}
+> 
+>   	for (i = 0; i < 16; i++)
+> @@ -933,7 +942,13 @@ static ssize_t mtk_dsi_host_transfer(struct mipi_dsi_host *host,
+>   	DRM_INFO("dsi get %d byte data from the panel address(0x%x)\n",
+>   		 recv_cnt, *((u8 *)(msg->tx_buf)));
+> 
+> -	return recv_cnt;
+> +restore_dsi_mode:
+> +	if (dsi_mode & MODE) {
+> +		mtk_dsi_set_mode(dsi);
+> +		mtk_dsi_start(dsi);
+> +	}
+> +
+> +	return ret < 0 ? ret : recv_cnt;
+>   }
+> 
+>   static const struct mipi_dsi_host_ops mtk_dsi_ops = {
+> --
+> 2.35.1
+> 
+
+
 

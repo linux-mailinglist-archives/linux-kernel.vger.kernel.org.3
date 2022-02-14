@@ -2,51 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D74F54B400B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F9B4B400F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239825AbiBNDGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 22:06:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46746 "EHLO
+        id S239841AbiBNDGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 22:06:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235542AbiBNDGO (ORCPT
+        with ESMTP id S237049AbiBNDGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 22:06:14 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D1D50E20;
-        Sun, 13 Feb 2022 19:06:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=3Um984TSioo1FxOqxiPNeNkunSiMQ7UXyF8BW2l0yBg=; b=cF+Y0lRNV31LgjsVu6Cf2SVR1X
-        hCBQ5Gfv3q/TBlIFjjcUPiMRaIEby3XQp8XPOs63JSE1KUq0ui0YfsctWkPT/BGicdC9ve7NDLb4m
-        JNBLL207Loe3x4LRtoMz+WUJDWBOQNpug7uEvogCWks8JQJJ74rPnVUixMJmQALp9HgtsWoeydWK8
-        +YNbgrOuXITTcmdtMAd4tt8gEBPsL77gP2atjSBPt37Vxij6zXMJSMugBKxFsRYG9/xCfBIuaDTW2
-        H5WtFsD6xjUpzUE27dd469nOzJtfFG//GRKTbOclQmtG/P4v3J+SFGMd2eVmOF8eVuh6gwdnp8OGu
-        wxY5KPLg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nJRgV-00CUbz-P5; Mon, 14 Feb 2022 03:05:52 +0000
-Message-ID: <7390f20d-e679-6fc3-62cb-95850871561d@infradead.org>
-Date:   Sun, 13 Feb 2022 19:05:47 -0800
+        Sun, 13 Feb 2022 22:06:48 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74274C07;
+        Sun, 13 Feb 2022 19:06:41 -0800 (PST)
+X-UUID: 17ba665b0a964b4ab283a997014f1a21-20220214
+X-UUID: 17ba665b0a964b4ab283a997014f1a21-20220214
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <guodong.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1458350915; Mon, 14 Feb 2022 11:06:37 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 14 Feb 2022 11:06:36 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 14 Feb
+ 2022 11:06:36 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 14 Feb 2022 11:06:35 +0800
+From:   Guodong Liu <guodong.liu@mediatek.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>
+CC:     Sean Wang <sean.wang@mediatek.com>, <linux-gpio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Guodong Liu <guodong.liu@mediatek.com>
+Subject: [PATCH v4 0/3] pinctrl: mediatek: Support pinctrl driver on mt8186
+Date:   Mon, 14 Feb 2022 11:06:28 +0800
+Message-ID: <20220214030631.4969-1-guodong.liu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] ipv4: add description about martian source
-Content-Language: en-US
-To:     cgel.zte@gmail.com, davem@davemloft.net
-Cc:     yoshfuji@linux-ipv6.org, dsahern@kernel.org, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhang Yunkai <zhang.yunkai@zte.com.cn>
-References: <20220214030123.1716223-1-zhang.yunkai@zte.com.cn>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220214030123.1716223-1-zhang.yunkai@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,52 +59,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+changes since v3:
+- remove generic descriptions for common properties
+- remove quotes
+- drop "."
+- drop "-" on description
+- move partial "bias-pull-up" description info to the example
+- don't break the code into two lines, maximux 84 columns is fine
+- add the required fixes tag
 
-On 2/13/22 19:01, cgel.zte@gmail.com wrote:
-> From: Zhang Yunkai <zhang.yunkai@zte.com.cn>
-> 
-> When multiple containers are running in the environment and multiple
-> macvlan network port are configured in each container, a lot of martian
-> source prints will appear after martian_log is enabled.
+changes since v2:
+- update reg property
+- update reg-names property
+- sync rsel resistance selection property same as patch 3
+- repair constraints is not indented correctly for bias-pull-{up,down}
+- add "type: boolean" to the list of valid values. This corresponds to having bias-pull-{up,down} without any arguments.
+- add dual file license for file "mt8186-pinfunc.h"
+- add patch 3 to change "mediatek,rsel_resistance_in_si_unit" to "mediatek,rsel-resistance-in-si-unit"
 
-Does it need to use one of the printk_ratelimited() calls?
-or are they all unique?
+changes since v1:
+- add default pinctrl config to consistent with other MTK pinctrl drivers
 
-> Such as:
-> IPv4: martian source 173.254.95.16 from 173.254.100.109,
-> on dev eth0
-> ll header: 00000000: ff ff ff ff ff ff 40 00 ad fe 64 6d
-> 08 06        ......@...dm..
-> IPv4: martian source 173.254.95.16 from 173.254.100.109,
-> on dev eth1
-> ll header: 00000000: ff ff ff ff ff ff 40 00 ad fe 64 6d
-> 08 06        ......@...dm..
-> 
-> There is no description of this kind of source in the RFC1812.
-> 
-> Signed-off-by: Zhang Yunkai <zhang.yunkai@zte.com.cn>
-> ---
->  net/ipv4/fib_frontend.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/net/ipv4/fib_frontend.c b/net/ipv4/fib_frontend.c
-> index 4d61ddd8a0ec..3564308e849a 100644
-> --- a/net/ipv4/fib_frontend.c
-> +++ b/net/ipv4/fib_frontend.c
-> @@ -436,6 +436,9 @@ int fib_validate_source(struct sk_buff *skb, __be32 src, __be32 dst,
->  		if (net->ipv4.fib_has_custom_local_routes ||
->  		    fib4_has_custom_rules(net))
->  			goto full_check;
-> +		/* Within the same container,it is regarded as a martian source,
+Patch 1 add pinctrl file and binding document.
 
-Please add a space after the comma:         , it is
+Patch 2 add pinctrl chip driver on mt8186.
 
-> +		 * and the same host but different containers are not.
-> +		 */
->  		if (inet_lookup_ifaddr_rcu(net, src))
->  			return -EINVAL;
->  
+Patch 3 canonical rsel resistance selection property.
+
+Guodong Liu (3):
+  dt-bindings: pinctrl: mt8186: add pinctrl file and binding document
+  pinctrl: add pinctrl driver on mt8186
+  pinctrl: canonical rsel resistance selection property
+
+ .../bindings/pinctrl/pinctrl-mt8186.yaml      |  302 +++
+ drivers/pinctrl/mediatek/Kconfig              |    7 +
+ drivers/pinctrl/mediatek/Makefile             |    1 +
+ drivers/pinctrl/mediatek/pinctrl-mt8186.c     | 1311 ++++++++++
+ drivers/pinctrl/mediatek/pinctrl-mtk-mt8186.h | 2186 +++++++++++++++++
+ drivers/pinctrl/mediatek/pinctrl-paris.c      |    2 +-
+ include/dt-bindings/pinctrl/mt8186-pinfunc.h  | 1174 +++++++++
+ 7 files changed, 4982 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/pinctrl-mt8186.yaml
+ create mode 100644 drivers/pinctrl/mediatek/pinctrl-mt8186.c
+ create mode 100644 drivers/pinctrl/mediatek/pinctrl-mtk-mt8186.h
+ create mode 100644 include/dt-bindings/pinctrl/mt8186-pinfunc.h
 
 -- 
-~Randy
+2.25.1
+

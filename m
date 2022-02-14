@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FB94B47F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E92204B4B2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:41:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343800AbiBNJvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:51:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42982 "EHLO
+        id S1345111AbiBNKE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:04:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344336AbiBNJqx (ORCPT
+        with ESMTP id S1344342AbiBNJ72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:46:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6AEBF66;
-        Mon, 14 Feb 2022 01:40:30 -0800 (PST)
+        Mon, 14 Feb 2022 04:59:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2455CC18;
+        Mon, 14 Feb 2022 01:46:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6BF6B80DC6;
-        Mon, 14 Feb 2022 09:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD391C340E9;
-        Mon, 14 Feb 2022 09:40:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B671861200;
+        Mon, 14 Feb 2022 09:46:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91D5DC340EF;
+        Mon, 14 Feb 2022 09:46:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831615;
-        bh=AfJo0oaudbGhuFYqs9I47rvRQD9hhCLhsIx+mmkRoHc=;
+        s=korg; t=1644832005;
+        bh=guK3INTiect6vAz3XA7kTRmCWn7LkN7OxWWdegn2POE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rY2SnVdvcu5L8oqBIB+10v2v5zAYhg4osRcTnd/eIq6Q4U3qXnNX4r8RfCr9ajSRc
-         xjxnv5oAjtUHjnbBctiKyyMJI8d8na/yAvDQdPO9PvrO7O5dRd3JQhRqCk1d1ZqORD
-         PoW1JPbl+1cqAK1RMhs3hpr5Bjc/DB4/UHHyPi4Y=
+        b=Z2O+zUdjj5ODvR7a285HsUA0Ja4UIxhrxwpj415bcmYsKZtdUGy6qOEu4LoRJ53ju
+         fUj4/MEDpYu2x4nPxrCugaVev2oVSkYtZOidc6AFnSsDgzspfyxSzfChIHHjCTeXkq
+         MAhSi5dyToxMmfhEyfpo6qG9uR8VUPXD+FhjZ3I0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.10 008/116] net: phy: marvell: Fix MDI-x polarity setting in 88e1118-compatible PHYs
+        stable@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 049/172] scsi: ufs: Use generic error code in ufshcd_set_dev_pwr_mode()
 Date:   Mon, 14 Feb 2022 10:25:07 +0100
-Message-Id: <20220214092458.962983882@linuxfoundation.org>
+Message-Id: <20220214092508.077186309@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,51 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+From: Kiwoong Kim <kwmad.kim@samsung.com>
 
-commit aec12836e7196e4d360b2cbf20cf7aa5139ad2ec upstream.
+[ Upstream commit ad6c8a426446873febc98140d81d5353f8c0825b ]
 
-When setting up autonegotiation for 88E1118R and compatible PHYs,
-a software reset of PHY is issued before setting up polarity.
-This is incorrect as changes of MDI Crossover Mode bits are
-disruptive to the normal operation and must be followed by a
-software reset to take effect. Let's patch m88e1118_config_aneg()
-to fix the issue mentioned before by invoking software reset
-of the PHY just after setting up MDI-x polarity.
+The return value of ufshcd_set_dev_pwr_mode() is passed to device PM
+core. However, the function currently returns a SCSI result which the PM
+core doesn't understand.  This might lead to unexpected behaviors in
+userland; a platform reset was observed in Android.
 
-Fixes: 605f196efbf8 ("phy: Add support for Marvell 88E1118 PHY")
-Signed-off-by: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
-Suggested-by: Andrew Lunn <andrew@lunn.ch>
-Cc: stable@vger.kernel.org
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Use a generic error code for SSU failures.
+
+Link: https://lore.kernel.org/r/1642743182-54098-1-git-send-email-kwmad.kim@samsung.com
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/marvell.c |    7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/scsi/ufs/ufshcd.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/drivers/net/phy/marvell.c
-+++ b/drivers/net/phy/marvell.c
-@@ -1061,16 +1061,15 @@ static int m88e1118_config_aneg(struct p
- {
- 	int err;
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index ae7bdd8703198..f489954e46321 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -8473,7 +8473,7 @@ static void ufshcd_hba_exit(struct ufs_hba *hba)
+  * @pwr_mode: device power mode to set
+  *
+  * Returns 0 if requested power mode is set successfully
+- * Returns non-zero if failed to set the requested power mode
++ * Returns < 0 if failed to set the requested power mode
+  */
+ static int ufshcd_set_dev_pwr_mode(struct ufs_hba *hba,
+ 				     enum ufs_dev_pwr_mode pwr_mode)
+@@ -8527,8 +8527,11 @@ static int ufshcd_set_dev_pwr_mode(struct ufs_hba *hba,
+ 		sdev_printk(KERN_WARNING, sdp,
+ 			    "START_STOP failed for power mode: %d, result %x\n",
+ 			    pwr_mode, ret);
+-		if (ret > 0 && scsi_sense_valid(&sshdr))
+-			scsi_print_sense_hdr(sdp, NULL, &sshdr);
++		if (ret > 0) {
++			if (scsi_sense_valid(&sshdr))
++				scsi_print_sense_hdr(sdp, NULL, &sshdr);
++			ret = -EIO;
++		}
+ 	}
  
--	err = genphy_soft_reset(phydev);
-+	err = marvell_set_polarity(phydev, phydev->mdix_ctrl);
- 	if (err < 0)
- 		return err;
- 
--	err = marvell_set_polarity(phydev, phydev->mdix_ctrl);
-+	err = genphy_config_aneg(phydev);
- 	if (err < 0)
- 		return err;
- 
--	err = genphy_config_aneg(phydev);
--	return 0;
-+	return genphy_soft_reset(phydev);
- }
- 
- static int m88e1118_config_init(struct phy_device *phydev)
+ 	if (!ret)
+-- 
+2.34.1
+
 
 

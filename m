@@ -2,102 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81F04B5584
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 859F74B556A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 16:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345651AbiBNQDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 11:03:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49012 "EHLO
+        id S1356048AbiBNPzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 10:55:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbiBNQDX (ORCPT
+        with ESMTP id S242711AbiBNPzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 11:03:23 -0500
-X-Greylist: delayed 449 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Feb 2022 08:03:14 PST
-Received: from relay-us1.mymailcheap.com (relay-us1.mymailcheap.com [51.81.35.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733FE19C3E
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:03:14 -0800 (PST)
-Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.248.207])
-        by relay-us1.mymailcheap.com (Postfix) with ESMTPS id A51962001E
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 15:55:44 +0000 (UTC)
-Received: from relay2.mymailcheap.com (relay2.mymailcheap.com [217.182.113.132])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id CCC0F267CE
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 15:55:41 +0000 (UTC)
-Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
-        by relay2.mymailcheap.com (Postfix) with ESMTPS id DAE5D3EDEC;
-        Mon, 14 Feb 2022 16:55:39 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by filter1.mymailcheap.com (Postfix) with ESMTP id 3D7CD2A35B;
-        Mon, 14 Feb 2022 15:55:39 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
-Received: from filter1.mymailcheap.com ([127.0.0.1])
-        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id eU2a3EGzd8VZ; Mon, 14 Feb 2022 15:55:38 +0000 (UTC)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 14 Feb 2022 10:55:40 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5824F4968F;
+        Mon, 14 Feb 2022 07:55:31 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A75051F38B;
+        Mon, 14 Feb 2022 15:55:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644854129; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k9MmC9qkXYRWrTYfRcCJEivsJms60nX4tIrMOUzEtWM=;
+        b=u2FyfK++GVdTzQOjqWcqZGLBUUzrDhYKtU57FNklJOt/e4NK7Ftz0UbOcIPXvf2tiz8yjC
+        lOg4m1lH1HgqVUk5WhL9P0848EpI0TeXdVvzmIRoxnDQUtvmgcKuSfY1LwMOO9hOAfDpie
+        JLjWKG8CZYhVYy8OF3M7nq+jfqPZ6Gw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644854129;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k9MmC9qkXYRWrTYfRcCJEivsJms60nX4tIrMOUzEtWM=;
+        b=DZL+qoheqv/LmFulfWwBj6ooEqSB1jfA3QUYZzmGmg+dkmwxT83ob8JmlxLvtLwJu6Pvpa
+        ANP+ga/h5qpfxHCg==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by filter1.mymailcheap.com (Postfix) with ESMTPS;
-        Mon, 14 Feb 2022 15:55:38 +0000 (UTC)
-Received: from ice-e5v2.lan (unknown [59.41.163.244])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 25D67424E6;
-        Mon, 14 Feb 2022 15:55:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
-        t=1644854137; bh=1GTF2NsHj3ZBXPclibNh2/lJMbhULqnyJD2XKSlxgps=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MEnyUJ7Nm3KnigPQI7oVCwI98sdJmq0MHRKMeTZ8mVcFZzeQWQ6e0CCzXAvhEtmt+
-         uqKSIXH1zqBWApUv9R6O+wtSdXfdxHm8QaGL3cXh7xqNtMe19pTAuLoaa+Hz1qKgJi
-         Ma11SBIxtadPwNA8athuskRw8rP4x96XO3TrroKI=
-From:   Icenowy Zheng <icenowy@aosc.io>
-To:     Ben Skeggs <bskeggs@redhat.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Icenowy Zheng <icenowy@aosc.io>
-Subject: [PATCH] drm/nouveau/bios: Use HWSQ entry 1 for PowerBook6,1
-Date:   Mon, 14 Feb 2022 23:55:18 +0800
-Message-Id: <20220214155518.2980270-1-icenowy@aosc.io>
-X-Mailer: git-send-email 2.30.2
+        by relay2.suse.de (Postfix) with ESMTPS id E4E27A3B89;
+        Mon, 14 Feb 2022 15:55:25 +0000 (UTC)
+Date:   Mon, 14 Feb 2022 16:55:24 +0100
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+        Philipp Rudo <prudo@redhat.com>,
+        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
+        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Frank van der Linden <fllinden@amazon.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Baoquan He <bhe@redhat.com>,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v5 2/6] powerpc/kexec_file: Add KEXEC_SIG support.
+Message-ID: <20220214155524.GN3113@kunlun.suse.cz>
+References: <cover.1641900831.git.msuchanek@suse.de>
+ <d95f7c6865bcad5ee37dcbec240e79aa742f5e1d.1641900831.git.msuchanek@suse.de>
+ <cff97dbe262919ff709a5ad2c4af6a702cc72a95.camel@linux.ibm.com>
+ <a8d717a44e5e919676e9b1e197cac781db46da87.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a8d717a44e5e919676e9b1e197cac781db46da87.camel@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On PowerBook6,1 (PowerBook G4 867 12") HWSQ entry 0 (which is currently
-always used by nouveau) fails, but the BIOS declares 2 HWSQ entries and
-entry 1 works.
+Hello,
 
-Add a quirk to use HWSQ entry 1.
+On Mon, Feb 14, 2022 at 10:14:16AM -0500, Mimi Zohar wrote:
+> Hi Michal,
+> 
+> On Sun, 2022-02-13 at 21:59 -0500, Mimi Zohar wrote:
+> 
+> > 
+> > On Tue, 2022-01-11 at 12:37 +0100, Michal Suchanek wrote:
+> > > diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> > > index dea74d7717c0..1cde9b6c5987 100644
+> > > --- a/arch/powerpc/Kconfig
+> > > +++ b/arch/powerpc/Kconfig
+> > > @@ -560,6 +560,22 @@ config KEXEC_FILE
+> > >  config ARCH_HAS_KEXEC_PURGATORY
+> > >         def_bool KEXEC_FILE
+> > >  
+> > > +config KEXEC_SIG
+> > > +       bool "Verify kernel signature during kexec_file_load() syscall"
+> > > +       depends on KEXEC_FILE && MODULE_SIG_FORMAT
+> > > +       help
+> > > +         This option makes kernel signature verification mandatory for
 
-Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
----
- drivers/gpu/drm/nouveau/nouveau_bios.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+This is actually wrong. KEXEC_SIG makes it mandatory that any signature
+that is appended is valid and made by a key that is part of the platform
+keyiring (which is also wrong, built-in keys should be also accepted).
+KEXEC_SIG_FORCE or an IMA policy makes it mandatory that the signature
+is present.
 
-diff --git a/drivers/gpu/drm/nouveau/nouveau_bios.c b/drivers/gpu/drm/nouveau/nouveau_bios.c
-index e8c445eb11004..2691d0e0cf9f1 100644
---- a/drivers/gpu/drm/nouveau/nouveau_bios.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_bios.c
-@@ -1977,6 +1977,13 @@ static int load_nv17_hw_sequencer_ucode(struct drm_device *dev,
- 	if (!hwsq_offset)
- 		return 0;
- 
-+#ifdef __powerpc__
-+	/* HWSQ entry 0 fails on PowerBook G4 867 12" (Al) */
-+	if (of_machine_is_compatible("PowerBook6,1"))
-+		return load_nv17_hwsq_ucode_entry(dev, bios,
-+						  hwsq_offset + sz, 1);
-+#endif
-+
- 	/* always use entry 0? */
- 	return load_nv17_hwsq_ucode_entry(dev, bios, hwsq_offset + sz, 0);
- }
--- 
-2.30.2
+> > > +         the kexec_file_load() syscall.
+> > 
+> > When KEXEC_SIG is enabled on other architectures, IMA does not define a
+> > kexec 'appraise' policy rule.  Refer to the policy rules in
+> > security/ima/ima_efi.c.  Similarly the kexec 'appraise' policy rule in
 
+I suppose you mean security/integrity/ima/ima_efi.c
+
+I also think it's misguided because KEXEC_SIG in itself does not enforce
+the signature. KEXEC_SIG_FORCE does.
+
+> > arch/powerpc/kernel/ima_policy.c should not be defined.
+
+I suppose you mean arch/powerpc/kernel/ima_arch.c - see above.
+
+
+Thanks for taking the time to reseach and summarize the differences.
+
+> The discussion shouldn't only be about IMA vs. KEXEC_SIG kernel image
+> signature verification.  Let's try and reframe the problem a bit.
+> 
+> 1. Unify and simply the existing kexec signature verification so
+> verifying the KEXEC kernel image signature works irrespective of
+> signature type - PE, appended signature.
+> 
+> solution: enable KEXEC_SIG  (This patch set, with the above powerpc IMA
+> policy changes.)
+> 
+> 2. Measure and include the kexec kernel image in a log for attestation,
+> if desired.
+> 
+> solution: enable IMA_ARCH_POLICY 
+> - Powerpc: requires trusted boot to be enabled.
+> - EFI:   requires  secure boot to be enabled.  The IMA efi policy
+> doesn't differentiate between secure and trusted boot.
+> 
+> 3. Carry the kexec kernel image measurement across kexec, if desired
+> and supported on the architecture.
+> 
+> solution: enable IMA_KEXEC
+> 
+> Comparison: 
+> - Are there any differences between IMA vs. KEXEC_SIG measuring the
+> kexec kernel image?
+> 
+> One of the main differences is "what" is included in the measurement
+> list differs.  In both cases, the 'd-ng' field of the IMA measurement
+> list template (e.g. ima-ng, ima-sig, ima-modsig) is the full file hash
+> including the appended signature.  With IMA and the 'ima-modsig'
+> template, an additional hash without the appended signature is defined,
+> as well as including the appended signature in the 'sig' field.
+> 
+> Including the file hash and appended signature in the measurement list
+> allows an attestation server, for example, to verify the appended
+> signature without having to know the file hash without the signature.
+
+I don't understand this part. Isn't the hash *with* signature always
+included, and the distinguishing part about IMA is the hash *without*
+signature which is the same irrespective of signature type (PE, appended
+xattr) and irrespective of the keyt used for signoing?
+
+> Other differences are already included in the Kconfig KEXEC_SIG "Notes"
+> section.
+
+Which besides what is already described above would be blacklisting
+specific binaries, which is much more effective if you have hashes of
+binaries without signature.
+
+Thanks
+
+Michal

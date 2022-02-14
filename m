@@ -2,107 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D6D4B4ECE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A864B4ED8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352024AbiBNLg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:36:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38088 "EHLO
+        id S1351997AbiBNLgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:36:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351888AbiBNLfl (ORCPT
+        with ESMTP id S1352245AbiBNLgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:35:41 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC95113E95;
-        Mon, 14 Feb 2022 03:24:02 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id jg20so11762032ejc.3;
-        Mon, 14 Feb 2022 03:24:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Iy1Cz+zs1JEAXLXhqhcX9TK2+/+UIJdUp67WG5w40hs=;
-        b=gYkOBtZZABcgpF/thuvjIupfs7FIan0Ynvg/bIMX1ajqZCmkFQuY/dHAojvsYq9nBD
-         kcblzBoO208ukgToDuQJYqNBMmEAoqxYVriDkSOCehOQzQSfzHQUvM3EQE5+qJqxejVl
-         ROCuhGs4qwhpAOVcNMiJLItVJnqd3haEFiwe9aqEYaCWn7JeXpLLMCYJaGbWXOFhGxzb
-         6gu5CuISR4GldSuwp5HvZB/r8WxzOpTBxVcKud6eRsp/Tg1ps+Bu2HdCmjWY7IHcBGd5
-         gbC1IptsQyGLEQQRYFCA9rEX1mKgBJRDlv4ncNTaj7lI2Rk/b9CBz466LBg1S07jSSdQ
-         yI2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Iy1Cz+zs1JEAXLXhqhcX9TK2+/+UIJdUp67WG5w40hs=;
-        b=0caEPc2oz7xhKty/rJXGyBEWrqCQyix8aHItYkCekRGQoxtGFif5FKcmELRzC0r0dm
-         gZeM0ByyXyQQAv7uVF+C6abw9HMLjK1e8IQZdvi0npOfWTE/mniaAkluYZeAtOGMAb63
-         bb1WkRhsM/BQMHfK/iid5azJI6zzi//c+a+sLBfjfqepca+Qdi50U/rxp9ZvQRKyzGMy
-         OtexeQYTiYfo/bu2pHbRum0Hf1CtTRP7QxWnpHyTnJLm+CfZ4adqgiAc1hUjX76Nae0K
-         Mpr9z1AEvmWIy2Gi4IBCTas9MBpuSOQXKxN7YOwruJKcbvnjLeqhhPR8xo/7xYipEau0
-         yuKg==
-X-Gm-Message-State: AOAM532+EsKtGWx3BFhXjWJEF1yrPERgjdLh3mAgfXEK+w0/OWD8hw9q
-        mmRkXblyKPcQmBR2649EZQF6SdzDTcOJdyx2sepY9DQMDZ9e0Q==
-X-Google-Smtp-Source: ABdhPJztH97hs/hzxJ06YxLEpyVt5dSU/fl8YH8A+MrGtW16j8ov1p2lxpUGCpvLJHjKJ1qy+/RfSZbiF/DzUGCDFsQ=
-X-Received: by 2002:a17:907:2d92:: with SMTP id gt18mr10690121ejc.579.1644837841277;
- Mon, 14 Feb 2022 03:24:01 -0800 (PST)
+        Mon, 14 Feb 2022 06:36:02 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B3039B96
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:25:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=g5akv3nbPgs/7/FgbFvp4oXy0T6K5tdSHxdmHcgTDTo=; b=PXroaKnTAUSaaEQXALHpNWhIoJ
+        cm6I9a1g3giSTpLznstu9vPQA5d/yIkoFwgAd5658vBxEdtJ0zpNPBmP289NZ8+3gyyGWyWGkFgoD
+        f2l54ujuEXVCfMkTiRnCgR0XYzf0yafn7F4IF81JgNeZ++8z+euV+1QESIeuDkgeksU3hOBO/sODg
+        0nnyDjZ4OZhcUU76ZxM7tFNQ9v1/Pzdlw716TVB/6jOoEdDOfH6OMBk5St+3eVKtdanGxiLRtbKMA
+        SxG/pve5UwUntvDNSQNgpGgf6TMcpmlaV6nHt+BR9Ogpw0FouwCKSLlmggy4r60OYJaVrdJYzKdXf
+        PNc8w9yg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJZTq-00CqWA-9s; Mon, 14 Feb 2022 11:25:18 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AB0F83002C5;
+        Mon, 14 Feb 2022 12:25:16 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5D37F2025FC40; Mon, 14 Feb 2022 12:25:16 +0100 (CET)
+Date:   Mon, 14 Feb 2022 12:25:16 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will.deacon@arm.com>,
+        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] locking/lockdep: Cleanup reinit_class()
+Message-ID: <Ygo8HNXGNq6X4Jov@hirez.programming.kicks-ass.net>
+References: <20220211035526.1329503-1-longman@redhat.com>
 MIME-Version: 1.0
-References: <20220214033620.4059-1-jagathjog1996@gmail.com> <20220214033620.4059-3-jagathjog1996@gmail.com>
-In-Reply-To: <20220214033620.4059-3-jagathjog1996@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 14 Feb 2022 13:22:32 +0200
-Message-ID: <CAHp75VdUkVQJOebA3V+F734e5hXO3XWFAT0HVQqKdCQgPbqdNA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] iio: potentiometer: Add available functionality
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Slawomir Stepien <sst@poczta.fm>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220211035526.1329503-1-longman@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 5:36 AM Jagath Jog J <jagathjog1996@gmail.com> wrote:
->
-> Adding available functionality for ds1803 driver which
-> will show the minimum, step and maximum values
-> it can accepts through sysfs entry.
+On Thu, Feb 10, 2022 at 10:55:25PM -0500, Waiman Long wrote:
+> Replace the duplicated WARN_ON_ONCE() tests in reinit_class() with
+> BUILD_BUG_ON().
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  include/linux/lockdep_types.h | 4 ++++
+>  kernel/locking/lockdep.c      | 6 +++---
+>  2 files changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/lockdep_types.h b/include/linux/lockdep_types.h
+> index d22430840b53..446d981ae3a2 100644
+> --- a/include/linux/lockdep_types.h
+> +++ b/include/linux/lockdep_types.h
+> @@ -108,6 +108,10 @@ struct lock_class {
+>  	 */
+>  	struct list_head		locks_after, locks_before;
+>  
+> +	/*
+> +	 * All the fields that require re-initialization after being zapped
+> +	 * must be put after "key".
+> +	 */
+>  	const struct lockdep_subclass_key *key;
+>  	unsigned int			subclass;
+>  	unsigned int			dep_gen_id;
+> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+> index d4252b5c9863..77bbe557d48b 100644
+> --- a/kernel/locking/lockdep.c
+> +++ b/kernel/locking/lockdep.c
+> @@ -6015,10 +6015,10 @@ static void reinit_class(struct lock_class *class)
+>  	WARN_ON_ONCE(!class->lock_entry.next);
+>  	WARN_ON_ONCE(!list_empty(&class->locks_after));
+>  	WARN_ON_ONCE(!list_empty(&class->locks_before));
+> +	BUILD_BUG_ON(offsetof(struct lock_class, lock_entry) > offset);
+> +	BUILD_BUG_ON(offsetof(struct lock_class, locks_after) > offset);
+> +	BUILD_BUG_ON(offsetof(struct lock_class, locks_before) > offset);
+>  	memset(p + offset, 0, sizeof(*class) - offset);
+> -	WARN_ON_ONCE(!class->lock_entry.next);
+> -	WARN_ON_ONCE(!list_empty(&class->locks_after));
+> -	WARN_ON_ONCE(!list_empty(&class->locks_before));
+>  }
+>  
+>  static inline int within(const void *addr, void *start, unsigned long size)
+> -- 
+> 2.27.0
+> 
 
-accept
+Yeah, except that this doesn't build because it conflicts with a
+previous patch you actually Acked:
 
-...
-
->  struct ds1803_cfg {
->         int kohms;
-> +       int avail[3];
->  };
->
->  static const struct ds1803_cfg ds1803_cfg[] = {
-> -       [DS1803_010] = { .kohms =  10, },
-> -       [DS1803_050] = { .kohms =  50, },
-> -       [DS1803_100] = { .kohms = 100, },
-> +       [DS1803_010] = { .avail = { 0, 1, 255 }, .kohms =  10, },
-> +       [DS1803_050] = { .avail = { 0, 1, 255 }, .kohms =  50, },
-> +       [DS1803_100] = { .avail = { 0, 1, 255 }, .kohms = 100, },
->  };
-
-Please, do it rather with additional data:
-
-static const int ds1803_range[] = { ... };
-
-   .avail = ..._range,
-
-Also, looking into the next patch, can you move the structure to the
-place where it's more appropriate?
-
--- 
-With Best Regards,
-Andy Shevchenko
+ https://lore.kernel.org/all/20211213132618.105737-1-xiujianfeng@huawei.com/T/#m0e9474a9204ec29fb2135135ce3134640a3f27b5

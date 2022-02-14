@@ -2,52 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997294B3EAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 01:39:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 472284B3EB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 01:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238912AbiBNAig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 19:38:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53842 "EHLO
+        id S238917AbiBNAwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 19:52:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233732AbiBNAie (ORCPT
+        with ESMTP id S233732AbiBNAwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 19:38:34 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3F551E7E
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 16:38:27 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id q15-20020a92ca4f000000b002be3e7707ffso10314449ilo.4
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 16:38:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=oslBjvfH2dPDHnmex6Hu2I3g0wLhDfD57KNo/JS3XGQ=;
-        b=vsBPUahfDzraF0StWfLN9eCWv13PoFf8cK5FGqDEZLgtvmnMOR/I8SvUumPG+ySlXr
-         UFKKsI6BoON0VKBmzgNgncxQ4TVa6JY6qaOExvFSI1a2Hody9l5gWh4sdH2lvObs6/ch
-         84l3RwZakfaoiK+iyaMEYp+WcQMhx4uDRFIsskdUeAkhHyWAIPdiQKRO8j1grO019KGr
-         2+nEDQ6KLE6IZ/ohGC7lMwQnkm0X/qb0iSWWf05A6aFSbB/xinbXuzTTCvoykvMYkg2m
-         hhbZZLebs6xlcvOGsW6Y+z2ezNM8WachyiHeGzZfrWocOyr+bAJn6diz4I0XTa3jpMcM
-         ANFw==
-X-Gm-Message-State: AOAM531v3+P4fhnjcogES2ngOKZxm4oCxVlh4Mfo2SXDEr/nfpJz2b+C
-        0/Uj+VsQaH6iO/YXR2AKU2LZoYj8ofkf/AVw18PZa4aqzzFm
-X-Google-Smtp-Source: ABdhPJzjdQvUvobFgUW3drl7ldbJ0Fw3nmdtrdl/J4RIA1hcAUg/sm1K+kTLBraohU58Kb2MnYqEOc12wBzI1veDCbHBKR41OFIZ
+        Sun, 13 Feb 2022 19:52:16 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B10522DD
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 16:52:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644799930; x=1676335930;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=A7I9zLwsVImPNRQZmWXcl3s9YjInQxRy4fAobdgLVV8=;
+  b=IDDEoL1iQli1tJn1QHgU6p0TUIuqc2XlP+Ocl/TplM2DgX1otGltAC4b
+   GQTz2nreJivlmYG8aOQ4VfifOjo0CAl1TDhtkLC3HLSH3FwL1/iI534fh
+   B/n/HxkM75HRZ5I/y/9phC+hodEhoK8IyoomMo0J1HAmMdhShzXak1Km4
+   Zror9s4FvJbGlqsug8jOssRZq9CMnNLxtDzmWkeW2u1MHUSRQB+kHmf9f
+   t81JcoC1JlD94bz4TBnhHIj9B7eJ6HRrYzkhEcpwFXm80E+rqLhzTsXQy
+   lRGViyI/NRnY2Y/m6J5t3ZeDb7E60Pc4tK98ExzWjTyGIf1DLoLOdYGqZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="250192930"
+X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
+   d="scan'208";a="250192930"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2022 16:52:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,366,1635231600"; 
+   d="scan'208";a="680109475"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by fmsmga001.fm.intel.com with ESMTP; 13 Feb 2022 16:52:05 -0800
+Message-ID: <73989fc7-b01e-fbfc-3fbd-cef0ec326334@linux.intel.com>
+Date:   Mon, 14 Feb 2022 08:50:48 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:20ca:: with SMTP id 10mr6199542ilq.225.1644799107135;
- Sun, 13 Feb 2022 16:38:27 -0800 (PST)
-Date:   Sun, 13 Feb 2022 16:38:27 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000081fe7505d7efa29f@google.com>
-Subject: [syzbot] WARNING in service_outstanding_interrupt/usb_submit_urb
-From:   syzbot <syzbot+1aba18b1f1bae26e79d8@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, loic.poulain@linaro.org,
-        oneukum@suse.com, rikard.falkeborn@gmail.com,
-        syzkaller-bugs@googlegroups.com, weiyongjun1@huawei.com,
-        yangjunlin@yulong.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     baolu.lu@linux.intel.com,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 08/10] iommu: Remove unused argument in
+ is_attach_deferred
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>
+References: <20220208012559.1121729-1-baolu.lu@linux.intel.com>
+ <20220208012559.1121729-9-baolu.lu@linux.intel.com>
+ <290a89f0-8318-6130-468c-6412add62cfb@arm.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <290a89f0-8318-6130-468c-6412add62cfb@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,67 +80,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Robin,
 
-syzbot found the following issue on:
+On 2/9/22 9:52 PM, Robin Murphy wrote:
+> On 2022-02-08 01:25, Lu Baolu wrote:
+>> The is_attach_deferred iommu_ops callback is a device op. The domain
+>> argument is unnecessary and never used. Remove it to make code clean.
+>>
+>> Suggested-by: Robin Murphy <robin.murphy@arm.com>
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>> ---
+>>   include/linux/iommu.h         |  2 +-
+>>   drivers/iommu/amd/amd_iommu.h |  3 +--
+>>   drivers/iommu/amd/iommu.c     |  3 +--
+>>   drivers/iommu/amd/iommu_v2.c  |  2 +-
+>>   drivers/iommu/intel/iommu.c   |  3 +--
+>>   drivers/iommu/iommu.c         | 15 ++++++---------
+>>   6 files changed, 11 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+>> index eb2684f95018..47ca7eca5d7b 100644
+>> --- a/include/linux/iommu.h
+>> +++ b/include/linux/iommu.h
+>> @@ -269,7 +269,7 @@ struct iommu_ops {
+>>       void (*put_resv_regions)(struct device *dev, struct list_head 
+>> *list);
+>>       int (*of_xlate)(struct device *dev, struct of_phandle_args *args);
+>> -    bool (*is_attach_deferred)(struct iommu_domain *domain, struct 
+>> device *dev);
+>> +    bool (*is_attach_deferred)(struct device *dev);
+>>       /* Per device IOMMU features */
+>>       bool (*dev_has_feat)(struct device *dev, enum iommu_dev_features 
+>> f);
+>> diff --git a/drivers/iommu/amd/amd_iommu.h 
+>> b/drivers/iommu/amd/amd_iommu.h
+>> index 416815a525d6..3b2f06b7aca6 100644
+>> --- a/drivers/iommu/amd/amd_iommu.h
+>> +++ b/drivers/iommu/amd/amd_iommu.h
+>> @@ -116,8 +116,7 @@ void amd_iommu_domain_clr_pt_root(struct 
+>> protection_domain *domain)
+>>   extern bool translation_pre_enabled(struct amd_iommu *iommu);
+>> -extern bool amd_iommu_is_attach_deferred(struct iommu_domain *domain,
+>> -                     struct device *dev);
+>> +extern bool amd_iommu_is_attach_deferred(struct device *dev);
+>>   extern int __init add_special_device(u8 type, u8 id, u16 *devid,
+>>                        bool cmd_line);
+>> diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+>> index 461f1844ed1f..37f2fbb4b129 100644
+>> --- a/drivers/iommu/amd/iommu.c
+>> +++ b/drivers/iommu/amd/iommu.c
+>> @@ -2215,8 +2215,7 @@ static void amd_iommu_get_resv_regions(struct 
+>> device *dev,
+>>       list_add_tail(&region->list, head);
+>>   }
+>> -bool amd_iommu_is_attach_deferred(struct iommu_domain *domain,
+>> -                  struct device *dev)
+>> +bool amd_iommu_is_attach_deferred(struct device *dev)
+>>   {
+>>       struct iommu_dev_data *dev_data = dev_iommu_priv_get(dev);
+>> diff --git a/drivers/iommu/amd/iommu_v2.c b/drivers/iommu/amd/iommu_v2.c
+>> index 58da08cc3d01..7c94ec05d289 100644
+>> --- a/drivers/iommu/amd/iommu_v2.c
+>> +++ b/drivers/iommu/amd/iommu_v2.c
+>> @@ -537,7 +537,7 @@ static int ppr_notifier(struct notifier_block *nb, 
+>> unsigned long e, void *data)
+>>       ret = NOTIFY_DONE;
+>>       /* In kdump kernel pci dev is not initialized yet -> send 
+>> INVALID */
+>> -    if (amd_iommu_is_attach_deferred(NULL, &pdev->dev)) {
+>> +    if (amd_iommu_is_attach_deferred(&pdev->dev)) {
+>>           amd_iommu_complete_ppr(pdev, iommu_fault->pasid,
+>>                          PPR_INVALID, tag);
+>>           goto out;
+>> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+>> index 2b5f4e57a8bb..80f1294be634 100644
+>> --- a/drivers/iommu/intel/iommu.c
+>> +++ b/drivers/iommu/intel/iommu.c
+>> @@ -5052,8 +5052,7 @@ intel_iommu_dev_disable_feat(struct device *dev, 
+>> enum iommu_dev_features feat)
+>>       }
+>>   }
+>> -static bool intel_iommu_is_attach_deferred(struct iommu_domain *domain,
+>> -                       struct device *dev)
+>> +static bool intel_iommu_is_attach_deferred(struct device *dev)
+>>   {
+>>       return attach_deferred(dev);
+> 
+> Seems like there's no need to wrap this now?
 
-HEAD commit:    c3c9cee59282 usb: ehci: add pci device support for Aspeed ..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=131676d8700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e3639fddee516775
-dashboard link: https://syzkaller.appspot.com/bug?extid=1aba18b1f1bae26e79d8
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+I just realized that I have cleaned this up in this patch.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+https://lore.kernel.org/linux-iommu/20220207064142.1092846-7-baolu.lu@linux.intel.com/
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1aba18b1f1bae26e79d8@syzkaller.appspotmail.com
-
-misc raw-gadget: fail, usb_gadget_probe_driver returned -16
-------------[ cut here ]------------
-URB 00000000b04f647a submitted while active
-WARNING: CPU: 0 PID: 17678 at drivers/usb/core/urb.c:378 usb_submit_urb+0x14e2/0x18a0 drivers/usb/core/urb.c:378
-Modules linked in:
-CPU: 0 PID: 17678 Comm: syz-executor.4 Not tainted 5.17.0-rc2-syzkaller-00044-gc3c9cee59282 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:usb_submit_urb+0x14e2/0x18a0 drivers/usb/core/urb.c:378
-Code: 89 de e8 61 a2 a3 fd 84 db 0f 85 a9 f3 ff ff e8 74 9e a3 fd 4c 89 fe 48 c7 c7 20 d6 86 86 c6 05 e1 be 0c 05 01 e8 63 ef 05 02 <0f> 0b e9 87 f3 ff ff 41 be ed ff ff ff e9 7c f3 ff ff e8 47 9e a3
-RSP: 0018:ffffc90009b4fc88 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000040000 RSI: ffffffff812bbc08 RDI: fffff52001369f83
-RBP: ffff88810bf5f050 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff812b596e R11: 0000000000000000 R12: ffff88810bf5f090
-R13: ffff88810bf5f050 R14: 00000000fffffff0 R15: ffff88813b7fb700
-FS:  00007f5c74578700(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000200014c0 CR3: 00000001144d1000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- service_outstanding_interrupt.part.0+0xfd/0x220 drivers/usb/class/cdc-wdm.c:504
- service_outstanding_interrupt drivers/usb/class/cdc-wdm.c:490 [inline]
- wdm_read+0x4f3/0xbd0 drivers/usb/class/cdc-wdm.c:591
- vfs_read+0x1b5/0x600 fs/read_write.c:479
- ksys_read+0x12d/0x250 fs/read_write.c:619
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f5c75402059
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f5c74578168 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-RAX: ffffffffffffffda RBX: 00007f5c75514f60 RCX: 00007f5c75402059
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000006
-RBP: 00007f5c7545c08d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff3ee3bc7f R14: 00007f5c74578300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Best regards,
+baolu

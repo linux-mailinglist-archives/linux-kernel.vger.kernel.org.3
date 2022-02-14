@@ -2,56 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C962B4B4F3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:48:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D204B4F29
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352317AbiBNLq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:46:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46742 "EHLO
+        id S1352705AbiBNLqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:46:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352564AbiBNLpV (ORCPT
+        with ESMTP id S1352730AbiBNLpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:45:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547FFBC07;
-        Mon, 14 Feb 2022 03:42:29 -0800 (PST)
+        Mon, 14 Feb 2022 06:45:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9779FD5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:41:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5D0C61239;
-        Mon, 14 Feb 2022 11:42:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36DB9C340F0;
-        Mon, 14 Feb 2022 11:42:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F54661230
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 11:41:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD4C3C340E9;
+        Mon, 14 Feb 2022 11:41:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644838948;
-        bh=N7rh+XBt1OX/shzAlcZiOlTmzf+JEyhpGWcp2MiIStk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OEhdptYx8JASrx2hZQVjdkyeBJgNEQGTvl5Ly9W8hGH8ryFzfz3UOD65bjMe4AOl4
-         eHaUJLhWceDn0Tb1NZhuR1SP9+xnLGtDrFh6Z59psqU5xbrgC2VAHoh4968qs7skNx
-         5hrk1AhMUhghsSpxG6OvbfraRoBpq3UTD7Njo+zr1BDNK/LbmIhkzPavdNhQ/X/+wi
-         +MUued9GxBVl5JsdD9XDlVNOmbGZddaKlxs54ilB2931MZRmBpEDWHhRUTMztyPchE
-         ESEJ/13GNsac93biwiUr8rCTyrNioPAlm1gKkD4x/5PKEtrP0js3cn5EazzFkAFF8v
-         vlh2Hvwe99fOQ==
-Received: by pali.im (Postfix)
-        id 0CCE7153C; Mon, 14 Feb 2022 12:42:26 +0100 (CET)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Cc:     bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH v2 2/2] PCI: iproc: Set all 24 bits of PCI class code
-Date:   Mon, 14 Feb 2022 12:41:09 +0100
-Message-Id: <20220214114109.26809-2-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220214114109.26809-1-pali@kernel.org>
-References: <20220214114109.26809-1-pali@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1644838877;
+        bh=3BY0+oBaGeuz3GbarqpFktWz85tdWsJYhePtRlV0rWY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nqbpe/MwLiK0hjcHwjC4tZ3oLrBfkYvzpNDqStYjFR0Q7IQfDUy2t4hCB2UiMj10t
+         /dvm2YnhufyVgqGEOLrb21tdRZrkik3idw/fw3wGTl6RYoXvuk04T/WQrmVuhldrBy
+         A82KnXGws7miSkRqw8ReUHeEXIFgzbyVD0n9PLLr9RvI37oz/k2JmBeGlARlA41g8A
+         NC+38QGNalX4LCz6HaASSQlCBL6gwJtLeCz/ICG6MFaPbeUbpAZPbABYrbWFgfD0lO
+         TNquDn9PmmhGQ0tpnhF8d0Bi4sUzc8DMbax8hepXrHpUOw4ZDvo/DQPMMuMm/meM6G
+         tENKayKzRNkFg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nJZjH-007l6H-Bh; Mon, 14 Feb 2022 11:41:15 +0000
+Date:   Mon, 14 Feb 2022 11:41:14 +0000
+Message-ID: <87mtit4qw5.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     will@kernel.org, qperret@google.com, tabba@google.com,
+        surenb@google.com, kernel-team@android.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Walbran <qwandor@google.com>,
+        Andrew Scull <ascull@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH 0/7] KVM: arm64: Hypervisor stack enhancements
+In-Reply-To: <20220210224220.4076151-1-kaleshsingh@google.com>
+References: <20220210224220.4076151-1-kaleshsingh@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, kernel-team@android.com, catalin.marinas@arm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, ardb@kernel.org, mark.rutland@arm.com, pasha.tatashin@soleen.com, joey.gouly@arm.com, pcc@google.com, qwandor@google.com, ascull@google.com, pbonzini@redhat.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.cs.columbia.edu
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,49 +79,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Register 0x43c in its low 24 bits contains PCI class code.
+On Thu, 10 Feb 2022 22:41:41 +0000,
+Kalesh Singh <kaleshsingh@google.com> wrote:
+> 
+> This series is based on v5.17-rc3 and adds the following stack features to
+> the KVM nVHE hypervisor:
+> 
+> == Hyp Stack Guard Pages ==
+> 
+> Based on the technique used by arm64 VMAP_STACK to detect overflow.
+> i.e. the stack is aligned to twice its size which ensure that the 
+> 'stack shift' bit of any valid SP is 0. The 'stack shift' bit can be
+> tested in the exception entry to detect overflow without corrupting GPRs.
 
-Update code to set all 24 bits of PCI class code and not only upper 16 bits
-of PCI class code.
+Having quickly parsed the code, this seems to only be effective for
+pKVM and the EL2-allocated stack. Is there any technical reason not to
+implement this for the much more common case of 'classic' KVM in nVHE
+mode?
 
-Use a new macro PCI_CLASS_BRIDGE_PCI_NORMAL which represents whole 24 bits
-of normal PCI bridge class.
+Thanks,
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Acked-by: Roman Bacik <roman.bacik@broadcom.com>
-Acked-by: Ray Jui <ray.jui@broadcom.com>
+	M.
 
----
-Roman helped me with this change and confirmed that class code is stored
-really in bits [23:0] of custom register 0x43c (normally class code is
-stored in bits [31:8] of pci register 0x08).
----
- drivers/pci/controller/pcie-iproc.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/pci/controller/pcie-iproc.c b/drivers/pci/controller/pcie-iproc.c
-index 3df4ab209253..2519201b0e51 100644
---- a/drivers/pci/controller/pcie-iproc.c
-+++ b/drivers/pci/controller/pcie-iproc.c
-@@ -789,14 +789,13 @@ static int iproc_pcie_check_link(struct iproc_pcie *pcie)
- 		return -EFAULT;
- 	}
- 
--	/* force class to PCI_CLASS_BRIDGE_PCI (0x0604) */
-+	/* force class to PCI_CLASS_BRIDGE_PCI_NORMAL (0x060400) */
- #define PCI_BRIDGE_CTRL_REG_OFFSET	0x43c
--#define PCI_CLASS_BRIDGE_MASK		0xffff00
--#define PCI_CLASS_BRIDGE_SHIFT		8
-+#define PCI_BRIDGE_CTRL_REG_CLASS_MASK	0xffffff
- 	iproc_pci_raw_config_read32(pcie, 0, PCI_BRIDGE_CTRL_REG_OFFSET,
- 				    4, &class);
--	class &= ~PCI_CLASS_BRIDGE_MASK;
--	class |= (PCI_CLASS_BRIDGE_PCI << PCI_CLASS_BRIDGE_SHIFT);
-+	class &= ~PCI_BRIDGE_CTRL_REG_CLASS_MASK;
-+	class |= PCI_CLASS_BRIDGE_PCI_NORMAL;
- 	iproc_pci_raw_config_write32(pcie, 0, PCI_BRIDGE_CTRL_REG_OFFSET,
- 				     4, class);
- 
 -- 
-2.20.1
-
+Without deviation from the norm, progress is not possible.

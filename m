@@ -2,105 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD824B5648
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:31:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD7444B560C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:23:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354818AbiBNQa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 11:30:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39038 "EHLO
+        id S1356319AbiBNQXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 11:23:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356418AbiBNQal (ORCPT
+        with ESMTP id S237864AbiBNQXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 11:30:41 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087AE60D92
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:30:33 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id f19so4680818qvb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:30:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JskXaZJX9EqtyU9nDYwhDYopK1GYBeF5QAk0Zlst3K8=;
-        b=WFoQIvGxJEbg8UOaiV70tS6PGdyf3qjcG0fNJQKbyHSfj48VnWpT1uPRsHkSjKp4oI
-         VyXEAHc0fq+QePjMo/XUxaUdqQMw6JpndQdJRAM+wSSoz81Cj3PoON8L3Dmir1bNHNxO
-         JLMBAFjfwqf69spTV2mC/gqt6Gw5T35QWKhp0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JskXaZJX9EqtyU9nDYwhDYopK1GYBeF5QAk0Zlst3K8=;
-        b=ZPC7wGrbG2+p+O9jiM0DNVxXXkP4UARcQlO7AEd8UnkuYYoPVHM5e0mvLtsywkE0+2
-         S6/6KIOQifB2h0tvWDYNhtbOnsU+AMNZiPovRfuEiwEwtsfyEOp+EGqQjQQKe/ShxHWa
-         VNKlYyotzQimkjcQVp7lFU30e/JSxxLz9kdBc/aXVkkjTlYBuyGr08r0I4sM1tDjJ4AS
-         92thoBrDBlv5rXtDg+G3amIjbwQL86ohkYGDF8MqMTffNb/8H9TmuGH5msqA2CFPs49U
-         7Ji4I5axL6NxJcXo+/bO1biMNsXOxaEPz4y3eVXEj03cSG6uW3nL8suWiyArBEFlAUuy
-         XK1w==
-X-Gm-Message-State: AOAM532ww2h7MAemVoMKkHFLGsdS5tUjpPxhcNSQVxADIYRFqYJqd0UF
-        DJGk02Um54/RkrC3QyF2j1g6XNpBBvHYlg==
-X-Google-Smtp-Source: ABdhPJxxBqY9/7Gi8/6HyuHGxXZowoEIg5v7/Yucc9haz25H27ve1NZxd3krv+h7JF1cvkCUhxoQYw==
-X-Received: by 2002:a05:6214:daf:: with SMTP id h15mr335331qvh.46.1644856232955;
-        Mon, 14 Feb 2022 08:30:32 -0800 (PST)
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com. [209.85.160.178])
-        by smtp.gmail.com with ESMTPSA id g21sm18237059qtb.70.2022.02.14.08.30.32
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 08:30:32 -0800 (PST)
-Received: by mail-qt1-f178.google.com with SMTP id s1so15862109qtw.9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:30:32 -0800 (PST)
-X-Received: by 2002:a02:3b67:: with SMTP id i39mr299652jaf.50.1644855749283;
- Mon, 14 Feb 2022 08:22:29 -0800 (PST)
+        Mon, 14 Feb 2022 11:23:17 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CE850B23
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:23:08 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nJe7f-0008Lp-1r; Mon, 14 Feb 2022 17:22:43 +0100
+Message-ID: <579eab10-594c-d6b2-0ddb-ea6ab8e02856@pengutronix.de>
+Date:   Mon, 14 Feb 2022 17:22:34 +0100
 MIME-Version: 1.0
-References: <20220214081916.162014-1-krzysztof.kozlowski@canonical.com> <20220214081916.162014-5-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220214081916.162014-5-krzysztof.kozlowski@canonical.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 14 Feb 2022 08:22:18 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=Wzr=ra=_mt63Uj2p6PSNoEF1F=zN0-0yg5rcWkBFYkZw@mail.gmail.com>
-Message-ID: <CAD=FV=Wzr=ra=_mt63Uj2p6PSNoEF1F=zN0-0yg5rcWkBFYkZw@mail.gmail.com>
-Subject: Re: [PATCH 4/4] arm64: dts: rk3399: align Google CROS EC PWM node
- name with dtschema
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, chrome-platform@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-pwm <linux-pwm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [BUG] mtd: cfi_cmdset_0002: write regression since v4.17-rc1
+Content-Language: en-US
+To:     Tokunori Ikegami <ikegami.t@gmail.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        linux-mtd@lists.infradead.org, Joakim.Tjernlund@infinera.com,
+        miquel.raynal@bootlin.com, vigneshr@ti.com, richard@nod.at,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Brian Norris <computersforpeace@gmail.com>,
+        David Woodhouse <dwmw2@infradead.org>, marek.vasut@gmail.com,
+        cyrille.pitchen@wedev4u.fr,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linuxppc-dev@lists.ozlabs.org
+References: <b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de>
+ <dff2abcc-5813-2f2c-35ba-f03cd1f35ac3@leemhuis.info>
+ <e11b76dc-5539-fb7e-da1c-a5005713d6b0@gmail.com>
+ <3dbbcee5-81fc-cdf5-9f8b-b6ccb95beddc@pengutronix.de>
+ <0f2cfcac-83ca-51a9-f92c-ff6495dca1d7@gmail.com>
+ <b231b498-c8d2-28af-ce66-db8c168047f7@pengutronix.de>
+ <66ee55d9-4f20-6722-6097-e53c2108ea07@gmail.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <66ee55d9-4f20-6722-6097-e53c2108ea07@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello Tokunori-san,
 
-On Mon, Feb 14, 2022 at 12:20 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> dtschema expects PWM node name to be a generic "pwm".  This also matches
-> Devicetree specification requirements about generic node names.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On 13.02.22 17:47, Tokunori Ikegami wrote:
+> Hi Ahmad-san,
+> 
+> Thanks for your confirmations. Sorry for late to reply.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+No worries. I appreciate you taking the time.
+
+> Could you please try the patch attached to disable the chip_good() change as before?
+> I think this should work for S29GL964N since the chip_ready() is used and works as mentioned.
+
+yes, this resolves my issue:
+Tested-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+
+>>>> Doesn't seem to be a buffered write issue here though as the writes
+>>>> did work fine before dfeae1073583. Any other ideas?
+>>> At first I thought the issue is possible to be resolved by using the word write instead of the buffered writes.
+>>> Now I am thinking to disable the changes dfeae1073583 partially with any condition if possible.
+>> What seems to work for me is checking if chip_good or chip_ready
+>> and map_word is equal to 0xFF. I can't justify why this is ok though.
+>> (Worst case bus is floating at this point of time and Hi-Z is read
+>> as 0xff on CPU data lines...)
+> 
+> Sorry I am not sure about this.
+> I thought the chip_ready() itself is correct as implemented as the data sheet in the past.
+> But it did not work correctly so changed to use chip_good() instead as it is also correct.
+
+What exactly in the datasheet makes you believe chip_good is not appropriate?
+
+Cheers,
+Ahmad
+
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9E24B47AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0FA4B46E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234294AbiBNJjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:39:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52466 "EHLO
+        id S244782AbiBNJmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:42:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245519AbiBNJgt (ORCPT
+        with ESMTP id S244971AbiBNJlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:36:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A758D6DAB4;
-        Mon, 14 Feb 2022 01:34:44 -0800 (PST)
+        Mon, 14 Feb 2022 04:41:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC5A65797;
+        Mon, 14 Feb 2022 01:36:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 052B6B80DC6;
-        Mon, 14 Feb 2022 09:34:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E23FC340E9;
-        Mon, 14 Feb 2022 09:34:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7C16B80DA9;
+        Mon, 14 Feb 2022 09:36:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 025F1C340E9;
+        Mon, 14 Feb 2022 09:36:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831280;
-        bh=81aYpI91jq53HB2t3OGicrrculO2wPexrRicI87XbMQ=;
+        s=korg; t=1644831386;
+        bh=3QIS+JduvWa+345oQLZSG4xFS4uZ8ucq3Rru6CK+hIU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qMnTnK9ar2fmhqXGj8Yx9mWTafUitwWLl1BBEGc8+Z5Ts4PyFmSp96DZFgoO+n0ww
-         D9TBMDd9FoMAeTMcUv3ZptV2iV6IHr0s8Su1lDTRF4R6qHYWEMLFqSgv8hPdQQDbXi
-         7Z7uQr4wr+XYaUIc/z3Ke1oBjOGD7MqWgcp5CvuU=
+        b=Eh/jsido6PGfTh3c0XpeqwIEC+8V7qsi0pHtVVYOoH3Ixe798U3/pWVzcdAKKS0dM
+         D089fsSQo7IzlInSNd0SzDdzLar1+IVIGCxJ3/5oq3M7hnXwfw2FMi22xdDQ1nwttr
+         z7Fk+pOceF6PGOcICrdAZdU9Bt+j36ca9GMzwAx0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jon Maloy <jmaloy@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 32/49] tipc: rate limit warning for received illegal binding update
+        stable@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>,
+        Hannes Reinecke <hare@suse.de>, Christoph Hellwig <hch@lst.de>
+Subject: [PATCH 5.4 30/71] nvme-tcp: fix bogus request completion when failing to send AER
 Date:   Mon, 14 Feb 2022 10:25:58 +0100
-Message-Id: <20220214092449.355989042@linuxfoundation.org>
+Message-Id: <20220214092453.029832946@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
-References: <20220214092448.285381753@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jon Maloy <jmaloy@redhat.com>
+From: Sagi Grimberg <sagi@grimberg.me>
 
-[ Upstream commit c7223d687758462826a20e9735305d55bb874c70 ]
+commit 63573807b27e0faf8065a28b1bbe1cbfb23c0130 upstream.
 
-It would be easy to craft a message containing an illegal binding table
-update operation. This is handled correctly by the code, but the
-corresponding warning printout is not rate limited as is should be.
-We fix this now.
+AER is not backed by a real request, hence we should not incorrectly
+assume that when failing to send a nvme command, it is a normal request
+but rather check if this is an aer and if so complete the aer (similar
+to the normal completion path).
 
-Fixes: b97bf3fd8f6a ("[TIPC] Initial merge")
-Signed-off-by: Jon Maloy <jmaloy@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Sagi Grimberg <sagi@grimberg.me>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/tipc/name_distr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/nvme/host/tcp.c |   10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/net/tipc/name_distr.c b/net/tipc/name_distr.c
-index 836e629e8f4ab..661bc2551a0a2 100644
---- a/net/tipc/name_distr.c
-+++ b/net/tipc/name_distr.c
-@@ -290,7 +290,7 @@ static bool tipc_update_nametbl(struct net *net, struct distr_item *i,
- 		pr_warn_ratelimited("Failed to remove binding %u,%u from %x\n",
- 				    type, lower, node);
- 	} else {
--		pr_warn("Unrecognized name table message received\n");
-+		pr_warn_ratelimited("Unknown name table message received\n");
- 	}
- 	return false;
+--- a/drivers/nvme/host/tcp.c
++++ b/drivers/nvme/host/tcp.c
+@@ -840,7 +840,15 @@ static inline void nvme_tcp_done_send_re
+ 
+ static void nvme_tcp_fail_request(struct nvme_tcp_request *req)
+ {
+-	nvme_tcp_end_request(blk_mq_rq_from_pdu(req), NVME_SC_HOST_PATH_ERROR);
++	if (nvme_tcp_async_req(req)) {
++		union nvme_result res = {};
++
++		nvme_complete_async_event(&req->queue->ctrl->ctrl,
++				cpu_to_le16(NVME_SC_HOST_PATH_ERROR), &res);
++	} else {
++		nvme_tcp_end_request(blk_mq_rq_from_pdu(req),
++				NVME_SC_HOST_PATH_ERROR);
++	}
  }
--- 
-2.34.1
-
+ 
+ static int nvme_tcp_try_send_data(struct nvme_tcp_request *req)
 
 

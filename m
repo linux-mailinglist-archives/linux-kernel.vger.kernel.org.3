@@ -2,103 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ECCB4B5BF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 677FF4B5BEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbiBNVBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 16:01:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36806 "EHLO
+        id S229933AbiBNU6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 15:58:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiBNVBl (ORCPT
+        with ESMTP id S229882AbiBNU6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 16:01:41 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 775148020D;
-        Mon, 14 Feb 2022 13:01:20 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id e17so11824355pfv.5;
-        Mon, 14 Feb 2022 13:01:20 -0800 (PST)
+        Mon, 14 Feb 2022 15:58:04 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E1911EF08;
+        Mon, 14 Feb 2022 12:57:27 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id g1so11521631pfv.1;
+        Mon, 14 Feb 2022 12:57:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=xpGjdBuWBo0/fCuqaW8D1rC/RmyP4zpkCXt7KDYZNcI=;
-        b=S6T6B9c9HHpJeqSEGjxZrl5m6odevc5RDaveFKwfcS8QSNpDHuWH3tiQL81twy8PNp
-         Vzx8WcPNo3ASreDrKFpNjbcOsxoR6+wPusG+cPMiTVpwKXD1QNn68t405yIZeNn+uill
-         ynTOk5zTMFUp5mVXzrbfAJaf0dfKgvlJaweMQdPqYL5661VTOApUMYPP6sPrhjcddVfl
-         DBTHf74Y2caZoAZtQ0xzEtskz8b1Kuv8q8eaJzR4CQdRtfwyM/GUwQoW3K8CNDNyQQdO
-         rohBsXelKIDKuWTJdH1jqZDWjQZXEqk6wdfpgOsaCEdM/WJ8QCTkk8/kIYUh/KDUu3Mp
-         vHPQ==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8eI79aPTVtqYQhM0bTcpnqJ4UdG4+AWyiT8hNcdyv7Q=;
+        b=ZSV4ZqXKji33uFcHmgvE05zjLOm9kEVHG6oWJ7eZKZPZ4kZ2nggGrMqLqKlPL34Ek1
+         /u/NM4futt7QdWUDzgYKzfBFqB3ZZBZkwOMzOMhGC7cko+Qztmw8XHcfcb0gNwQq8MkU
+         7507ocXVBAmsp48WPhA5XpPf/bn2aWqzt0WtH8bdY9cWxbZexhWBaUs3sZd0U5bp1e3T
+         ruHrM+VNwVpvBmLdyRZvIgDd/7i3XcHwZsLkaOtpINL3arjnaQdH3B8XpxaFk+Fyctd1
+         shUZRC0TnpWCQftQMjh+GxGmupgih3F576KJYbNUbrq4yUWvlv3OvixikVZXYjiUMish
+         slvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=xpGjdBuWBo0/fCuqaW8D1rC/RmyP4zpkCXt7KDYZNcI=;
-        b=x6otNLslWrmCUCzrbNshl9LCdY4AUcRUNw3zKPLioEgEQt4vXmpZG10SQ7AxzheTRO
-         CbXSHTRW3fU8iSUZ9+j1rVjesORYP1QS9Ep5Rwfey7D5L9auFJ5aAU8xiOPgwyEbSgmP
-         L6xXGCxsO2QM3QV8yJ+v4216Xq7xK2LqK/ed1weeGnroontaZ1BxwgRhSk4Z8l9UUpPB
-         n1Y9v24tfzXj45yfrKgq+EvT3Q+H7VpkHuyGHZ1Iq0n3QK2tCOw3r8+6VLOpqThGkw30
-         Ldw6BY/9xbQtcbfoUlTeovLlJkD7M5d2P8Fpx1zgm3pKzII+bN97qkg4Q7zcA11wTPWi
-         N36A==
-X-Gm-Message-State: AOAM531mwKSg+CSyfbkuoN/Z+5t1e9gPeh1suLMuE/XyM9+3w2i4p+8F
-        CiiWZx/aSAsOZN0NFDX2LyDVQwvfQxQ=
-X-Google-Smtp-Source: ABdhPJxFknBPsF7sk0Olrl28gZDsrNjHc8MMToR9WCcpozGObjFSybxsKZoAFw5wYCShLb3cGEmc2A==
-X-Received: by 2002:a17:902:9895:: with SMTP id s21mr464803plp.53.1644868220878;
-        Mon, 14 Feb 2022 11:50:20 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id m13sm35090007pfh.197.2022.02.14.11.50.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 11:50:20 -0800 (PST)
-Subject: Re: [PATCH 4.9 00/34] 4.9.302-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220214092445.946718557@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <c58dc18f-aed2-1d60-406c-863da94d609a@gmail.com>
-Date:   Mon, 14 Feb 2022 11:50:14 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=8eI79aPTVtqYQhM0bTcpnqJ4UdG4+AWyiT8hNcdyv7Q=;
+        b=o3eE+CYEMxE67VxanFZkAPqsQZg+QwdShIlzmrMsDPTDscgsb+V1JTgAu2XeRlGiQo
+         FyH4zrAW9ChQ5sJDpeVuTw+km3LV3olOdpHgBVnDIu1n2O0nIId7XDCtW61bJpQdaLLG
+         P02SmNdoee0lNRVmA6IjkiCjTZFSpV7yS9x5sdcDwkLcyYk8C577LFWcbsnIsnjs4eE3
+         FMLEYCdvq7VmLFJ6sfYidkyC6c1b7ooNl3UqE4WcFTPoviC9o/Cer5so+I7k4QyEZYMD
+         LP1hTjDWH1Tv3KiHEP2RPu9D8Pq/yC+lQtm/9UOlKR1laqkwBpSISYtI+PxJIuFIoldT
+         Iw/w==
+X-Gm-Message-State: AOAM533ABcdnkONUWee9QGL7nG2NFhRkd61eYyqQGxOuRso8THXsMiYb
+        1Rp7oBCuFiaZK4v0qnvNWbRLUMxMr0s=
+X-Google-Smtp-Source: ABdhPJyUfTPTFZc8hUeHI+dD4bfFcL0x2ysfp78YkPhpEXIAqKojYn5U65C+/pWyd/cczefXz/Cd4w==
+X-Received: by 2002:a63:68c1:: with SMTP id d184mr494872pgc.405.1644868241417;
+        Mon, 14 Feb 2022 11:50:41 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id q94sm3968073pja.27.2022.02.14.11.50.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 11:50:41 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 14 Feb 2022 09:50:39 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Zhang Qiao <zhangqiao22@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org, matthltc@us.ibm.com,
+        bblum@google.com, menage@google.com, akpm@linux-foundation.org,
+        longman@redhat.com, mkoutny@suse.com, zhaogongyi@huawei.com
+Subject: Re: [PATCH] cgroup/cpuset: Fix a race between cpuset_attach() and
+ cpu hotplug
+Message-ID: <Ygqyj7nns+mxH81t@slm.duckdns.org>
+References: <20220121101210.84926-1-zhangqiao22@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220121101210.84926-1-zhangqiao22@huawei.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/14/22 1:25 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.302 release.
-> There are 34 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Fri, Jan 21, 2022 at 06:12:10PM +0800, Zhang Qiao wrote:
+> As previously discussed(https://lkml.org/lkml/2022/1/20/51),
+> cpuset_attach() is affected with similar cpu hotplug race,
+> as follow scenario:
 > 
-> Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-> Anything received after that time might be too late.
+>      cpuset_attach()				cpu hotplug
+>     ---------------------------            ----------------------
+>     down_write(cpuset_rwsem)
+>     guarantee_online_cpus() // (load cpus_attach)
+> 					sched_cpu_deactivate
+> 					  set_cpu_active()
+> 					  // will change cpu_active_mask
+>     set_cpus_allowed_ptr(cpus_attach)
+>       __set_cpus_allowed_ptr_locked()
+>        // (if the intersection of cpus_attach and
+>          cpu_active_mask is empty, will return -EINVAL)
+>     up_write(cpuset_rwsem)
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.302-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
+> To avoid races such as described above, protect cpuset_attach() call
+> with cpu_hotplug_lock.
 > 
-> thanks,
-> 
-> greg k-h
+> Fixes: be367d099270 ("cgroups: let ss->can_attach and ss->attach do whole threadgroups at a time")
+> Reported-by: Zhao Gongyi <zhaogongyi@huawei.com>
+> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Applied to cgroup/for-5.17-fixes w/ stable cc'd.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Thanks and sorry about the delay.
+
 -- 
-Florian
+tejun

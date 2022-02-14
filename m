@@ -2,144 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE824B495F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3B94B4AD7
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241857AbiBNKPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:15:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42060 "EHLO
+        id S1346533AbiBNKTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:19:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345779AbiBNKNO (ORCPT
+        with ESMTP id S1347634AbiBNKQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:13:14 -0500
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-eopbgr130055.outbound.protection.outlook.com [40.107.13.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A909E657A7;
-        Mon, 14 Feb 2022 01:51:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jw6X5MYEb5vqJw1VTPOYyiKLTGczPlCBPimZruUeQTJ6Aj/vghkB3DKfAWiKHnJvdpreconYu3ZC8n6t1oe1fXjfp6Bn0PyJJSSaDoloSo2F81woSm4/C1B61+AUoJ5HdmbwUwHWVJVwp1lAm+eTm5E80LPmzzkuqqWhzgQh9CZcC7QX/h4sFkD16A8G7TglTUzh+OxHahskJ+1a3O7J2nnXlmtdSqC5x3wkgdEFbQmr8Fgyg2jLAww1Rw8yH6SFOMgqriDXDvDkcHs+MNdY54kJDIHgig8URXruubXoaYTgZM2Ffh4HmHa1VpPUj29Sk1qMEH44k8krLBNjtQgsVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7s5qj6ZbAYYJo2HZeMMBwMaIySq+Z6lG7jSlAFeUt0k=;
- b=cQKUVg9/Vk/lTMIfUoNM4Sl2Q4ji/R5CTYXGWeYeKs3DNToLbuV+hcbzvLrWvkAxjqA8Do6MZyaBRKPKzAZ7XGOHph/S7yLxjUQTr2qZoAEXpnsJugbp12kjDvIWJO3E4XOGQz3g5Mx2tKoYNfyWDWnpuEe+Aj8QMv8e2knt8OdHgTwmF5dJ03e6Nxif219G3kuzLTLmOE7oRWmBYw4eYTnNhq05DbBZ0oL0b9MY/P3tL0oBcM8g1tS//K11DAFC90At+zeO1GfA2uqLf5hU+lXXHtPvwWEDLiMUiT0Ej+i/7T2Y1VuOwSR6X5MHcgZHUDJwS/yQ2aaGEsIoX1R6Nw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7s5qj6ZbAYYJo2HZeMMBwMaIySq+Z6lG7jSlAFeUt0k=;
- b=Ok1QPf7Y5A0ipfxLzsluY6jcmKysIUlvZ42Qv1gvxpM921Mm1woQonYT0TGi1ag0ehyxQcG+Xf1VcnlTT6aOz9ZZUaq9sBEJlsctFCVlZm4ko8YIraYqX0j8qhkMWiYkllubNpEWmFN+kc3azk87hvnFGAIIh9Jen8Gg5q8mNXU=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by AM9PR04MB8382.eurprd04.prod.outlook.com (2603:10a6:20b:3ea::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.18; Mon, 14 Feb
- 2022 09:51:41 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::95cf:8c40:b887:a7b9]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::95cf:8c40:b887:a7b9%4]) with mapi id 15.20.4951.019; Mon, 14 Feb 2022
- 09:51:40 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>
-Subject: Re: [PATCH v7 net-next 4/4] net: mscc: ocelot: use bulk reads for
- stats
-Thread-Topic: [PATCH v7 net-next 4/4] net: mscc: ocelot: use bulk reads for
- stats
-Thread-Index: AQHYIQ3AYXOdYKMSCUmkRckqwTRmUaySztIA
-Date:   Mon, 14 Feb 2022 09:51:40 +0000
-Message-ID: <20220214095140.gkltte6lbr7uzoze@skbuf>
-References: <20220213191254.1480765-1-colin.foster@in-advantage.com>
- <20220213191254.1480765-5-colin.foster@in-advantage.com>
-In-Reply-To: <20220213191254.1480765-5-colin.foster@in-advantage.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f0648487-c5a1-4e41-6872-08d9ef9f99de
-x-ms-traffictypediagnostic: AM9PR04MB8382:EE_
-x-microsoft-antispam-prvs: <AM9PR04MB83822110B955F2E1F0FE2AF9E0339@AM9PR04MB8382.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2043;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: m7WmOTpHqC/qYnhjh/1klJCgUMpEuShS9z4X5wUdx7al2xHgbg6kCO9fWkO61QByxakKn8VaePHkY4Ddvhu0YoVcssQ24F1GS+9ag7LJrHw/Y02bWmLIoHq2t1sVmbOpDVmescu2wBl+34PcQ/Rh05S8mOcXXRXelCzTG9gHqTxoCS6EWk7DcUQgtjVjwb+8YgpUTfGDA6HmQxOI41y/GMqvb8Vp8QNv24WuIyH1iiZC4YyMqSqaQdGn15ySDalsdvkHq76BLQuWNlX8f87IByErMnbdVF5+y7gGJvA40VjWD4iGZa0Ximt+LLcO/d1K74779k1v+vneY/XMS65eIEmIok0wAIAicXriXo9lL3KSdYAaSj80plcn6qY2Op9N9Jm6MrMDqtNW5GB7eGqNUbbCD9Y87cY6fi5gWXr57MoDzMBpLsEfW/pxkWR1kfr/+r7A6EMiAVTLfTSiXoOawbNx0dADKdD/pfo2Xob7/6NZYV/Uc6+CKFlx++MVrKkOuS25QV4V2ULb1PB91cyicbjUmrl/GSPM6ADLWvV9S/xpaJ8YvHHg5rrUy9CQb1NbwSYGTLDgFPNiTV3+JCCiS0bxEIQPIm3T6SoA2M1VAwVk+y1cKflp3TRCVLH7aQOYoyIyEDwBFV4FJXkGUkzu6lTSTpXtTzB7bKRff4BM5Bt+pU/1c09xAGeUHbgKOHto2U25vGVReY1L8BD59aXbPA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(38100700002)(8936002)(26005)(186003)(86362001)(6506007)(122000001)(38070700005)(71200400001)(2906002)(83380400001)(1076003)(4326008)(91956017)(5660300002)(9686003)(6512007)(44832011)(4744005)(33716001)(508600001)(6486002)(54906003)(6916009)(316002)(76116006)(66476007)(8676002)(66446008)(66946007)(66556008)(64756008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?SoFwHl+8hHlSJrhmc2bzQf363t1LRlvaMrJvcEoOsVTnv1PtKmgS5HlruP8i?=
- =?us-ascii?Q?9WRnmq2H8OLBIt193vJo1eGmydEzkk5A8TuegGXLSC/JjuTNo/WJ4MjaB4ow?=
- =?us-ascii?Q?VTCoDV3SuQnZmmcq1IDQYSU3pirvFNA1yWlJSmTUjU5ATtk4Bs44xIxCHwy3?=
- =?us-ascii?Q?Egk3N4ncLpAq5XJ68+VFDbGQ+k+IoVtZDschtYuFtEDDyYO+YGuPOtsZIAjT?=
- =?us-ascii?Q?d1AEW1RSeLWFoY2UUJ0VBOI9LmvfOPDSnqMj7tiAwWtRpx/A4vToPiBVzL1J?=
- =?us-ascii?Q?Pgl6z4+J2yDcjiw3d3ZOUPex9apkErVLiUMVYfnCBF046qCYrY+V+OLs8At7?=
- =?us-ascii?Q?Cu39Zr0NIfo9jq9IdUFsVKyUDmBGuhz+7F+kwU90ZmF1J861x2JnKv+1gx/6?=
- =?us-ascii?Q?BSGoPTdQbbWU9HBlqvsQGxHvgmt67WyEfjOolsqFmuRxb2XfalpTX7MdbB7V?=
- =?us-ascii?Q?IPbD4OMfXVj9jlJp5s5t7qzTjr1qdWX90/3tf79pnzXANUqVL1kRSPAojJj2?=
- =?us-ascii?Q?zoozHXbXc4xE3zyHNw3uQ999JCyRzDfROm34E1WAJYotRbdT+d3+S3posvdv?=
- =?us-ascii?Q?Ipy/rK50cwKGLaFfdzy1LpVOjosvQpis7JqXGI+4oJfNjoa7yxRKCjfyOR2z?=
- =?us-ascii?Q?mO8FkJVzNi4ujltwsDoHLUOF3BKGk8OLS80PSlm/IeSxTiP9j/ZGT4YpdXJe?=
- =?us-ascii?Q?T1q26WMcJwOMrpUPsdqKvRbK2Kvm1aZURWA5brAKGgaG1Neo17VRg6tZANTl?=
- =?us-ascii?Q?gydPoKiHdlDKfVvv11tVRWsEiDji9B66Ide/0dx42gH6FNUGmeyPXfKYphUB?=
- =?us-ascii?Q?FT7uxUTAlduaeWdX7fCK473Q7cTmYH9QcChu/R4QC2iAQOwqBdMkL0AhATcx?=
- =?us-ascii?Q?9/sOuB0+BTZPGLcGpdCx5h9jkVHoJCU+e+wMoaj+WweU8p//eGJNCjZV7Tbk?=
- =?us-ascii?Q?DQGUcD5gCLVoWm2/Fm6LzgSPCbxakuzu8Adqk74FEEVx5oOyDDPeeBkLMiaQ?=
- =?us-ascii?Q?ukDShyoMPPN5CHTkLKEnviGjszt+o1quxmz2bTR5tn9EMEB02WSG3h+cjuCF?=
- =?us-ascii?Q?NFOJUBYqTTGsXkSN9oIjzraoXqfXbmWZRFIjXssw8vtbIjVYbaxL8eIk51kJ?=
- =?us-ascii?Q?HbHy72YuZsY4L42kI9xx355SKkZ/nW6rPp6D34vU6J1FCY5jwv3/+1ETNqY7?=
- =?us-ascii?Q?uqPUlfFgcIkFq1rpqN7M8Zihe3sRG+X4H4VEpZPvsgXzSofiiiwffPS527bY?=
- =?us-ascii?Q?QKfNaQw4dgsUlj0RFhQfb3bi58TunGg+ZCqaOvZ/CDM1je1BdTT0csD1Yk8c?=
- =?us-ascii?Q?xidj/VsK4XomXWsFIiNtqCdidIejlJtNPyQnhwyXZumX8q8FTiGwB+XKlt+8?=
- =?us-ascii?Q?gr0psdnP9VUEIIUPmJHf/ahVRU1fmVgzgjWZFUSrdDgQRLN06kTXEHh17dYQ?=
- =?us-ascii?Q?7lm+jGODyfVJyDRSNrcV88Kd/aAYrmOqcJYM226sCICYgQ+UGubnZxEPLxn/?=
- =?us-ascii?Q?KNLHt0EhnK+b7VXGMU2mCKY4IPCjJMvI7OQU7b1u9Qqo3OEo0GgvGqJPzhG9?=
- =?us-ascii?Q?OcuTPtbWdetcdsVwG2IYA/6rqLsTxHIH4IdttI8+CtuFIDT+t+q7uR+6iDNw?=
- =?us-ascii?Q?JXguyze9TpHU1nCJnAIt0Dk=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <7F3DADFB82496F47AB8941F075547397@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f0648487-c5a1-4e41-6872-08d9ef9f99de
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2022 09:51:40.8870
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 69iiEutXixPtTId9+GhsYPTNl7+uZQXWu8Nd/3bZcWXTX8AYAEJ5TSJT7fuaCiiadMuoeOT/FoOxvmr+d1z60Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8382
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Feb 2022 05:16:40 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EBC8C7C8;
+        Mon, 14 Feb 2022 01:54:13 -0800 (PST)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21E803Wp016262;
+        Mon, 14 Feb 2022 09:53:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=DsNmjSHticmC1pAG1ErE4wFkPS88YyqO6VEKTMmKaQ0=;
+ b=Uk65lxTnlWAxj3+A169KNOum6WcLbN7pI8oTmxisQHgzRUwSI4Fq7+WbsaYjLXEf+qx6
+ 1cWJVvvr5EkAlH4LQDMjcGHPAhLr2Im0MeBpQHA4VnOtGwv+mpx6Lt1mLZ9qr/5IdMo5
+ 6xNVeEE0VDNTowWNMTBKU90TmegLKGy9Di3eOg1q6xG1pnGepAY5/0anFR+xoWWjL2vv
+ khVPzWphA/bJNrN0DPqhnE7dHzktwY/J4UlTCVPsrMn01PTmM5Bd/LlyQFM4aRJb7lBN
+ GQRm7XFhG+HnxdekDmsHbGadUS4uYwE1ZDvsJ6TR7qqMggz3oLaceQVUDrm+gpx85cav ZA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e6thxf5vd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 09:53:22 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21E9p8fX007354;
+        Mon, 14 Feb 2022 09:53:21 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e6thxf5us-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 09:53:21 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21E9halr029231;
+        Mon, 14 Feb 2022 09:53:19 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3e645jbnes-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Feb 2022 09:53:19 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21E9gvqf38994182
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Feb 2022 09:42:58 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2693D5204F;
+        Mon, 14 Feb 2022 09:53:16 +0000 (GMT)
+Received: from sig-9-145-84-135.uk.ibm.com (unknown [9.145.84.135])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 5EFB85206B;
+        Mon, 14 Feb 2022 09:53:14 +0000 (GMT)
+Message-ID: <6caad65b6229e8e01ce4e125a40f8c1ad2007d39.camel@linux.ibm.com>
+Subject: Re: [PATCH] parport_pc: Also enable driver for PCI systems
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 14 Feb 2022 10:53:13 +0100
+In-Reply-To: <alpine.DEB.2.21.2202140917540.34636@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2202122313460.34636@angie.orcam.me.uk>
+         <CAMuHMdW-utcFzCZTgqONjxs=U662nF0=aBQu7Zi7FBQouwiA3g@mail.gmail.com>
+         <e5ec2e3be2e70e690bd9112bd23297d05a2993e6.camel@linux.ibm.com>
+         <alpine.DEB.2.21.2202140917540.34636@angie.orcam.me.uk>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: sa9z-6Pqwjl221V-INKoEOYV98uYRQhM
+X-Proofpoint-ORIG-GUID: YQquexsItY657nTmxfIzzQy8ETd2_kD7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-14_02,2022-02-14_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ lowpriorityscore=0 clxscore=1015 mlxlogscore=874 priorityscore=1501
+ malwarescore=0 phishscore=0 suspectscore=0 spamscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202140058
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 13, 2022 at 11:12:54AM -0800, Colin Foster wrote:
-> Create and utilize bulk regmap reads instead of single access for gatheri=
-ng
-> stats. The background reading of statistics happens frequently, and over
-> a few contiguous memory regions.
->=20
-> High speed PCIe buses and MMIO access will probably see negligible
-> performance increase. Lower speed buses like SPI and I2C could see
-> significant performance increase, since the bus configuration and registe=
-r
-> access times account for a large percentage of data transfer time.
->=20
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> ---
+On Mon, 2022-02-14 at 09:21 +0000, Maciej W. Rozycki wrote:
+> On Mon, 14 Feb 2022, Niklas Schnelle wrote:
+> 
+> > > > --- linux-macro.orig/drivers/parport/Kconfig
+> > > > +++ linux-macro/drivers/parport/Kconfig
+> > > > @@ -42,7 +42,7 @@ if PARPORT
+> > > > 
+> > > >  config PARPORT_PC
+> > > >         tristate "PC-style hardware"
+> > > > -       depends on ARCH_MIGHT_HAVE_PC_PARPORT
+> > > > +       depends on ARCH_MIGHT_HAVE_PC_PARPORT || PCI
+> > 
+> > This would allow selecting PARPORT_PC on s390 e.g. for allyesconfig and
+> > randconfig and like POWER9 we definitely do not support I/O port
+> > access.
+> 
+>  I guess we'll have to stop it with !S390 then short-term.  I don't think 
+> an issue with s390 should be blocking all the other platforms that can use 
+> these drivers just fine.  I'll post v2 with that installed if you agree.
+> 
+>   Maciej
 
-Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Tested-by: Vladimir Oltean <vladimir.oltean@nxp.com>=
+Though a bit ugly that sounds fine by me. Thanks.
+
+

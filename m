@@ -2,75 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BB44B5522
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 16:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C864B555E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 16:53:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346660AbiBNPr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 10:47:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42078 "EHLO
+        id S1355982AbiBNPxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 10:53:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237899AbiBNPr6 (ORCPT
+        with ESMTP id S1346354AbiBNPxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 10:47:58 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F4B5F8EE
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 07:47:50 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id n19-20020a17090ade9300b001b9892a7bf9so6834773pjv.5
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 07:47:50 -0800 (PST)
+        Mon, 14 Feb 2022 10:53:09 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D3C49261
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 07:53:00 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id t14so22837174ljh.8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 07:53:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=d93RGIuIkTl9ONDR/IGy8CrV/ag/6z//zpqIUQQL/y0=;
-        b=L1otDNWJe0kOmrRtRas2iUCpda9gs/Id5nbMu8W9m58q7UGz1kiDnKTGjqE+ejzhXe
-         n9RQ8ip6Dc+MWohqYDVtwTcr1CHSyPVtzDH1AejuqiBG22ilRzGHPxfhhoKpNYftQut9
-         7YLZgR1wg6njB2/OJLp2nHVgR7FfZ9WvQIOs/rVsCyL1mLLpVjaWj2iu1IfNVvpAKf/i
-         z60ZZvJ+gOrNDhE/bTRj21SbFcdbECo8qpMITWJMOrCjhKvzHyeAUDZK41LmLOQ8KvQK
-         umMDxV7pbLkcpoNv1i8/smO/aHwPQ1HFDRsFww5zvUmxqeztosN8uBFgbDYoBIx+7fqb
-         PPwA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=czp4xRlQVF7a5IlvGOuvoLMfTt//hnBWgTmDM9cpFDc=;
+        b=AzJ9fmokf+2gLxVJnBn0KnZz4Kysr8PhrYnAtk3X5q9ScQEFzzH9yroALSS2jsMRdk
+         53jpz37ips6e/0xkO7qz6x6jAIBrc/r+JjOVx+BNrhp234NCkalie5FpoBCAUpvpdA49
+         QeJYWJKQ/BEBQ7UuEgjwM5ZIgmZzhh/ZQnkw+xuFD5JGOEOwDigmBoKzNaZTWT0Ne5zi
+         8t7ZfkQAu5OWr7AK8KkaL5SskBaKjucHAz26IJ6s0ScfGe2Q/h2peMSd+37lpg3invsc
+         hwRu3WcptmK6AOxHz11yPHE10o3JDIi/GYFKMM4dLbUHaWb5cua+WH+MMYe47CpzW2Cx
+         bAAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=d93RGIuIkTl9ONDR/IGy8CrV/ag/6z//zpqIUQQL/y0=;
-        b=XB9UfYuBRYbhi5W6Ime3fGiMUaUS7KLkUmApLVGr0zdEgL9wqjBv6IyjnwcndoIzVI
-         gWdOn3ngOHWtID+f7k1xlInsY+/Lids45aGLfrf/09/p6SgnApxJ9zEk7xZ2vkGNHTAy
-         iWWJi8RgOHIX2bGb6Ne81DcIoYDRId31u5lj5FHZ4nwQU/ktNmytPoRrB+Lp/WUv7rDN
-         TfCyH/A3kAhwXApYX+LA3F0N4cAZfYp+jyaBXeJieDfY5imc+karqBBEsTliOM0bqmgf
-         8rhzD9r5ZyGKF2nnGwLNjyPUY5YFLg8OTHj797CaN3nyMAb3T+yldHR4lvPNyAp4G5GV
-         1Xdw==
-X-Gm-Message-State: AOAM531NiCWVyRCroJLTqImWxPRonwWaHjBUPcXi2+AWBrIBZxd596Xq
-        zFgAJmPn0QOZa0odLy0OH9M=
-X-Google-Smtp-Source: ABdhPJxEUsPtmOXfTSXRhxJdt0HrEWuiFoK5z3XdrkLZyWIsjjdbYZ0PYJtdJMnq5CIBED4i+6mb0w==
-X-Received: by 2002:a17:90a:e38f:: with SMTP id b15mr1668583pjz.44.1644853669815;
-        Mon, 14 Feb 2022 07:47:49 -0800 (PST)
-Received: from mi-HP-ProDesk-600-G5-PCI-MT.xiaomi.com ([43.224.245.244])
-        by smtp.gmail.com with ESMTPSA id mn7sm14626806pjb.8.2022.02.14.07.47.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 07:47:49 -0800 (PST)
-From:   chenguanyou <chenguanyou9338@gmail.com>
-X-Google-Original-From: chenguanyou <chenguanyou@xiaomi.com>
-To:     longman@redhat.com, gregkh@linuxfoundation.org
-Cc:     dave@stgolabs.net, hdanton@sina.com, linux-kernel@vger.kernel.org,
-        mazhenhua@xiaomi.com, mingo@redhat.com, peterz@infradead.org,
-        quic_aiquny@quicinc.com, will@kernel.org
-Subject: Re:[PATCH v5] locking/rwsem: Make handoff bit handling more consistent
-Date:   Mon, 14 Feb 2022 23:47:41 +0800
-Message-Id: <20220214154741.12399-1-chenguanyou@xiaomi.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211116012912.723980-1-longman@redhat.com>
-References: <20211116012912.723980-1-longman@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=czp4xRlQVF7a5IlvGOuvoLMfTt//hnBWgTmDM9cpFDc=;
+        b=du5ahPnaEl5CttIBPjPGeFCIaE/eN+qUC8VVbvgWC3h5hIu5IXOem4DhLf9hVyxpOL
+         FGPPfrnrjP5FwjQCBKdV7VqxVX4QgwyYD7A66Rnij+F45QOf6pWEuv4hFssnWsLseK+l
+         YdbA+NIjpKXLgh0kEVvJyu5ieCzzh4c0BRnTQzUdzvAJyDiwDiqoScSX1I4uUwmS6wam
+         dNM4jxsQpq5TeawEQRgVT3qdkQFgDwUw93jRAAmCfn/b28EuqzQhYDmOoqt+S7P9Nnbh
+         8GCU+sp9jHYPu4PsFJUjiPYuN4J3penRCoQUAqf5dcdIxoGvzQaNFhseByRa+GmWAvBA
+         RC/w==
+X-Gm-Message-State: AOAM531qVpWkzXjJFV5/uS04X3h3u/ZLF87NwKBNjMEkmDKZrY6b0FJc
+        +A2CeK3h4rnGlzWCqUcU5VM8FbvYKjihVFIBisQMXA==
+X-Google-Smtp-Source: ABdhPJzIj3u21dLNdlborMcqisQowJNwjXFbZYy6Y+00WhBq07QB7avDEBJtbaFeRYsHxJkB0+WiyZ/ltnllx4UxCZc=
+X-Received: by 2002:a2e:a781:: with SMTP id c1mr226346ljf.527.1644853978857;
+ Mon, 14 Feb 2022 07:52:58 -0800 (PST)
+MIME-Version: 1.0
+References: <20220211193634.3183388-1-pgonda@google.com> <a3008754-86a8-88d6-df7f-a2770b0a2c93@redhat.com>
+In-Reply-To: <a3008754-86a8-88d6-df7f-a2770b0a2c93@redhat.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Mon, 14 Feb 2022 08:52:47 -0700
+Message-ID: <CAMkAt6rLafSikpQEKkbbT8DW4OG_pDL63jPLtCFiO1NNtTRe+A@mail.gmail.com>
+Subject: Re: [PATCH v2] KVM: SEV: Allow SEV intra-host migration of VM with mirrors
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm list <kvm@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Marc Orr <marcorr@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Waiman, Greg,
-This patch has been merged in branch linux-5.16.y.
-Can we take it to the linux-5.10.y LTS version?
+On Mon, Feb 14, 2022 at 5:57 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 2/11/22 20:36, Peter Gonda wrote:
+> > +     list_cut_before(&dst->mirror_vms, &src->mirror_vms, &src->mirror_vms);
+> > +     list_for_each_entry_safe(mirror, tmp, &dst->mirror_vms,
+> > +                              mirror_entry) {
+>
+> Is list_for_each_entry_safe actually necessary here?  (It would be if
+> you used list_add/list_del instead of list_cut_before).
 
-thanks,
+ I don't think so, I think we could use list_for_each_entry here. Do
+you want me to send another revision?
+
+>
+> > +             kvm_get_kvm(dst_kvm);
+> > +             kvm_put_kvm(src_kvm);
+> > +             mirror->enc_context_owner = dst_kvm;
+> > +     }
+>
+> Thanks,
+>
+> Paolo
+>

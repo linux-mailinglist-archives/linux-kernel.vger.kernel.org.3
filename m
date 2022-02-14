@@ -2,194 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10F04B58C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F674B5904
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 18:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345038AbiBNRmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 12:42:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33864 "EHLO
+        id S1357340AbiBNRpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 12:45:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiBNRmx (ORCPT
+        with ESMTP id S1357242AbiBNRor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 12:42:53 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9479765411
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:42:45 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id l19so24657653pfu.2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 09:42:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=W0jC+BI1XleZWb4xYM6y8STFaTPRsXHACPClwjtx+Ds=;
-        b=DAAiKeKy6fnmfv72KiGxiZKt4u2fNPLKP2MFLt/3RJ926upPT/BaGK6gUmWp+BGAwK
-         +uaRG1r2hvSEU5yJptA629iQmmZyT2i929+7BWp6g6IdkGYH9hhQx/R4z2MjjcO5N4qh
-         KXuFVRrOk8spFMUYk8TJJKW3/gJPd5m9Dr9HbbqSFf7zMoChbpe/6uECjqsYxitj8dQa
-         5GbIwEjGH8qFPQQIGm2oiP5N8vC/vCCBRx/vyFh81/L/fpy+fSk9IiV+sVUNxhMCCeXe
-         XkJmB85rXQQSzor4ivkwNC/4HQ5jVMX+gVeuIRWSBRBinJ0XGmLundj/BS512UkfEUeJ
-         cLhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=W0jC+BI1XleZWb4xYM6y8STFaTPRsXHACPClwjtx+Ds=;
-        b=vgEf81eu37o3I03HdvGTAaTQACBervGUz8K24n1YkfY/n/aLW3YvStjvH/uT2k0Qq7
-         yfvfBDi/I1MJU4Hruz2sQoytAcpkSApihFSdpmf6kvJJjJj9nyEXO2JWoF4po0rQx2u3
-         8/pWx1QzNOV2+Ta6bLlDX2FEv/JC68/j8rvE5eaLrTYT//1BLejFHzcnkwgkF56SnGv6
-         IovBsu9urYN1fWxdPtsY9yCVcg9hd340f/tqVVrjfkimOhGyoe6IQGpBwuzwEvVjOemF
-         FFkcRm1xKuCllrk0TtWe4vUv80pxLz3xOt5nBro5Uppu79M7WZY5z/IbgSLIvecyFEQE
-         Bkew==
-X-Gm-Message-State: AOAM5319dICyXHTcZfpctN9zAT3DJMXfjJ/hMaVwUMV2C4BbuypJ91BX
-        aBCl7tElIZUJQEd9VPqAtWfaWikudM1lxAdSyrCS1A==
-X-Google-Smtp-Source: ABdhPJwJiJpYzgpABDBFyLzMhQvo1iBEVDu6iPYEDxL43BvO/78jc0M4fPXPbozpzpwQudr9dC9Z9wsmnPvKbX3AgvQ=
-X-Received: by 2002:a05:6a00:804:: with SMTP id m4mr636142pfk.45.1644860564881;
- Mon, 14 Feb 2022 09:42:44 -0800 (PST)
+        Mon, 14 Feb 2022 12:44:47 -0500
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 385C165491;
+        Mon, 14 Feb 2022 09:44:36 -0800 (PST)
+Received: from in01.mta.xmission.com ([166.70.13.51]:60360)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nJfOq-009lqi-4z; Mon, 14 Feb 2022 10:44:32 -0700
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:34362 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nJfOo-00Avjs-Vz; Mon, 14 Feb 2022 10:44:31 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Solar Designer <solar@openwall.com>
+Cc:     linux-kernel@vger.kernel.org, Alexey Gladkov <legion@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        Michal Koutn?? <mkoutny@suse.com>, stable@vger.kernel.org
+References: <87o83e2mbu.fsf@email.froward.int.ebiederm.org>
+        <20220211021324.4116773-3-ebiederm@xmission.com>
+        <20220212231701.GA29483@openwall.com>
+        <87ee45wkjq.fsf@email.froward.int.ebiederm.org>
+Date:   Mon, 14 Feb 2022 11:43:54 -0600
+In-Reply-To: <87ee45wkjq.fsf@email.froward.int.ebiederm.org> (Eric
+        W. Biederman's message of "Mon, 14 Feb 2022 09:10:49 -0600")
+Message-ID: <87tud1s5r9.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <1644395873-3937-1-git-send-email-wangqing@vivo.com>
- <20220213175940.1066f5a8@jic23-huawei> <9e5ed543-cd45-85db-50b5-52c2afd54c55@wanadoo.fr>
- <29e74800-1c3f-e043-97e6-d83f7a53fafb@wanadoo.fr> <20220214110119.00006347@Huawei.com>
-In-Reply-To: <20220214110119.00006347@Huawei.com>
-From:   Jyoti Bhayana <jbhayana@google.com>
-Date:   Mon, 14 Feb 2022 09:42:33 -0800
-Message-ID: <CA+=V6c31+BvssWX-eG=LdeC8o4mE7e1whnT74jbQWRY2w5Zbqg@mail.gmail.com>
-Subject: Re: [PATCH] iio: use div64_u64() instead of do_div()
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Qing Wang <wangqing@vivo.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nJfOo-00Avjs-Vz;;;mid=<87tud1s5r9.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX184wPQlcnyVPLeSw1arOps4vEB2edMeeyw=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Solar Designer <solar@openwall.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 551 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 11 (2.0%), b_tie_ro: 10 (1.7%), parse: 0.90
+        (0.2%), extract_message_metadata: 22 (3.9%), get_uri_detail_list: 3.0
+        (0.5%), tests_pri_-1000: 25 (4.6%), tests_pri_-950: 1.25 (0.2%),
+        tests_pri_-900: 1.01 (0.2%), tests_pri_-90: 108 (19.6%), check_bayes:
+        103 (18.7%), b_tokenize: 11 (2.0%), b_tok_get_all: 11 (2.0%),
+        b_comp_prob: 3.1 (0.6%), b_tok_touch_all: 73 (13.3%), b_finish: 0.99
+        (0.2%), tests_pri_0: 367 (66.6%), check_dkim_signature: 0.51 (0.1%),
+        check_dkim_adsp: 9 (1.6%), poll_dns_idle: 0.65 (0.1%), tests_pri_10:
+        2.5 (0.4%), tests_pri_500: 9 (1.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 3/8] ucounts: Fix and simplify RLIMIT_NPROC handling
+ during setuid()+execve
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-yes, this is wrong. Also, the logic would be broken as the two apis
-do_div() and div64_u64 return values are completely different.
-Thanks,
-Jyoti
+"Eric W. Biederman" <ebiederm@xmission.com> writes:
 
+> Solar Designer <solar@openwall.com> writes:
+>
+>> On Thu, Feb 10, 2022 at 08:13:19PM -0600, Eric W. Biederman wrote:
+>>> As of commit 2863643fb8b9 ("set_user: add capability check when
+>>> rlimit(RLIMIT_NPROC) exceeds") setting the flag to see if execve
+>>> should check RLIMIT_NPROC is buggy, as it tests the capabilites from
+>>> before the credential change and not aftwards.
+>>> 
+>>> As of commit 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of
+>>> ucounts") examining the rlimit is buggy as cred->ucounts has not yet
+>>> been properly set in the new credential.
+>>> 
+>>> Make the code correct and more robust moving the test to see if
+>>> execve() needs to test RLIMIT_NPROC into commit_creds, and defer all
+>>> of the rest of the logic into execve() itself.
+>>> 
+>>> As the flag only indicateds that RLIMIT_NPROC should be checked
+>>> in execve rename it from PF_NPROC_EXCEEDED to PF_NPROC_CHECK.
+>>> 
+>>> Cc: stable@vger.kernel.org
+>>> Link: https://lkml.kernel.org/r/20220207121800.5079-2-mkoutny@suse.com
+>>> Link: https://lkml.kernel.org/r/20220207121800.5079-3-mkoutny@suse.com
+>>> Reported-by: Michal Koutn?? <mkoutny@suse.com>
+>>> Fixes: 2863643fb8b9 ("set_user: add capability check when rlimit(RLIMIT_NPROC) exceeds")
+>>> Fixes: 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts")
+>>> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+>>
+>> On one hand, this looks good.
+>>
+>> On the other, you asked about the Apache httpd suexec scenario in the
+>> other thread, and here's what this means for it (per my code review):
+>>
+>> In that scenario, we have two execve(): first from httpd to suexec, then
+>> from suexec to the CGI script.  Previously, the limit check only
+>> occurred on the setuid() call by suexec, and its effect was deferred
+>> until execve() of the script.  Now wouldn't it occur on both execve()
+>> calls, because commit_creds() is also called on execve() (such as in
+>> case the program is SUID, which suexec actually is)?
+>
+> Yes.  Moving the check into commit_creds means that the exec after a
+> suid exec will perform an RLIMIT_NPROC check and could possibly fail.  I
+> would call that a bug.  Anything happening in execve should be checked
+> and handled in execve as execve can fail.
+>
+> It also points out that our permission checks for increasing
+> RLIMIT_NPROC are highly inconsistent.
+>
+> One set of permissions in fork().
+> Another set of permissions in set*id() and delayed until execve.
+> No permission checks for the uid change in execve.
+>
+> Every time I look into the previous behavior of RLIMIT_NPROC I seem
+> to find issues.  Currently I am planning a posting to linux-api
+> so sorting out what when RLIMIT_NPROC should be enforced and how
+> RLIMIT_NPROC gets accounted receives review.  I am also planning a
+> feature branch to deal with the historical goofiness.
+>
+> I really like how cleanly this patch seems to be.  Unfortunately it is
+> wrong.
 
-On Mon, Feb 14, 2022 at 3:01 AM Jonathan Cameron
-<Jonathan.Cameron@huawei.com> wrote:
->
-> On Sun, 13 Feb 2022 19:54:01 +0100
-> Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
->
-> > Le 13/02/2022 =C3=A0 19:50, Christophe JAILLET a =C3=A9crit :
-> > > Le 13/02/2022 =C3=A0 18:59, Jonathan Cameron a =C3=A9crit :
-> > >> On Wed,  9 Feb 2022 00:37:53 -0800
-> > >> Qing Wang <wangqing-DGpbCiVdSXo@public.gmane.org> wrote:
-> > >>
-> > >>> From: Wang Qing <wangqing-DGpbCiVdSXo@public.gmane.org>
-> > >>>
-> > >>> do_div() does a 64-by-32 division.
-> > >>> When the divisor is u64, do_div() truncates it to 32 bits, this mea=
-ns it
-> > >>> can test non-zero and be truncated to zero for division.
-> > >>>
-> > >>> fix do_div.cocci warning:
-> > >>> do_div() does a 64-by-32 division, please consider using div64_u64
-> > >>> instead.
-> > >>>
-> > >>> Signed-off-by: Wang Qing <wangqing-DGpbCiVdSXo@public.gmane.org>
-> > >> These look correct to me.  Jyoti, please could give these a sanity c=
-heck?
-> > >>
-> > >
-> > > This is wrong.
-> > >
-> > > See [1].
-> > >
-> > > CJ
-> > >
-> > > [1]:
-> > > https://lore.kernel.org/linux-kernel/20211117112559.jix3hmx7uwqmuryg-=
-bIcnvbaLZ9MEGnE8C9+IrQ@public.gmane.org/
-> >
-> > Broken link, sorry:
-> >
-> > [1]
-> > https://lore.kernel.org/linux-kernel/20211117112559.jix3hmx7uwqmuryg@pe=
-ngutronix.de/
-> >
-> oops.  Thanks for the heads up. I'd forgotten the slightly odd convention
-> around do_div
->
-> Jonathan
->
->
-> > >
-> > >
-> > >> Thanks,
-> > >>
-> > >> Jonathan
-> > >>
-> > >>> ---
-> > >>>   drivers/iio/common/scmi_sensors/scmi_iio.c | 10 +++++-----
-> > >>>   1 file changed, 5 insertions(+), 5 deletions(-)
-> > >>>
-> > >>> diff --git a/drivers/iio/common/scmi_sensors/scmi_iio.c
-> > >>> b/drivers/iio/common/scmi_sensors/scmi_iio.c
-> > >>> index d538bf3..d6df5da
-> > >>> --- a/drivers/iio/common/scmi_sensors/scmi_iio.c
-> > >>> +++ b/drivers/iio/common/scmi_sensors/scmi_iio.c
-> > >>> @@ -160,7 +160,7 @@ static int scmi_iio_set_odr_val(struct iio_dev
-> > >>> *iio_dev, int val, int val2)
-> > >>>       mult =3D scnprintf(buf, sizeof(buf), "%llu", sf) - 1;
-> > >>>       sec =3D int_pow(10, mult) * UHZ_PER_HZ;
-> > >>> -    do_div(sec, uHz);
-> > >>> +    div64_u64(sec, uHz);
-> > >>>       if (sec =3D=3D 0) {
-> > >>>           dev_err(&iio_dev->dev,
-> > >>>               "Trying to set invalid sensor update value for sensor=
- %s",
-> > >>> @@ -237,10 +237,10 @@ static void convert_ns_to_freq(u64 interval_n=
-s,
-> > >>> u64 *hz, u64 *uhz)
-> > >>>       u64 rem, freq;
-> > >>>       freq =3D NSEC_PER_SEC;
-> > >>> -    rem =3D do_div(freq, interval_ns);
-> > >>> +    rem =3D div64_u64(freq, interval_ns);
-> > >>>       *hz =3D freq;
-> > >>>       *uhz =3D rem * 1000000UL;
-> > >>> -    do_div(*uhz, interval_ns);
-> > >>> +    div64_u64(*uhz, interval_ns);
-> > >>>   }
-> > >>>   static int scmi_iio_get_odr_val(struct iio_dev *iio_dev, int *val=
-,
-> > >>> int *val2)
-> > >>> @@ -266,7 +266,7 @@ static int scmi_iio_get_odr_val(struct iio_dev
-> > >>> *iio_dev, int *val, int *val2)
-> > >>>       mult =3D SCMI_SENS_CFG_GET_UPDATE_EXP(sensor_config);
-> > >>>       if (mult < 0) {
-> > >>>           sensor_interval_mult =3D int_pow(10, abs(mult));
-> > >>> -        do_div(sensor_update_interval, sensor_interval_mult);
-> > >>> +        div64_u64(sensor_update_interval, sensor_interval_mult);
-> > >>>       } else {
-> > >>>           sensor_interval_mult =3D int_pow(10, mult);
-> > >>>           sensor_update_interval =3D
-> > >>> @@ -500,7 +500,7 @@ static u64 scmi_iio_convert_interval_to_ns(u32 =
-val)
-> > >>>       mult =3D SCMI_SENS_INTVL_GET_EXP(val);
-> > >>>       if (mult < 0) {
-> > >>>           sensor_interval_mult =3D int_pow(10, abs(mult));
-> > >>> -        do_div(sensor_update_interval, sensor_interval_mult);
-> > >>> +        div64_u64(sensor_update_interval, sensor_interval_mult);
-> > >>>       } else {
-> > >>>           sensor_interval_mult =3D int_pow(10, mult);
-> > >>>           sensor_update_interval =3D
-> > >>
-> > >>
-> > >
-> > >
-> >
->
+Hmm.  Maybe not as wrong as I thought.  An suid execve does not change
+the real user.
+
+Still a bit wrong from a conservative change point of view because the
+user namespace can change in setns and CLONE_NEWUSER which will change
+the accounting now.  Which with the ucount rlimit stuff changes where
+things should be accounted.
+
+I am playing with the idea of changing accounting aka (cred->ucounts &
+cred->user) to only change in fork (aka clone without CLONE_THREAD) and
+exec.  I think that would make maintenance and  cleaning all of this up
+easier.
+
+That would also remove serious complications from RLIMIT_SIGPENDING as
+well.
+
+I thought SIGPENDING was only a multi-threaded process issue but from
+one signal to the next the set*id() family functions can be called.
+
+Eric

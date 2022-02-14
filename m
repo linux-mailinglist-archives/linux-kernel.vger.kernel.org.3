@@ -2,63 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24C54B5B8A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 22:01:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E5D4B5B71
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 21:52:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbiBNU6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 15:58:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50198 "EHLO
+        id S229759AbiBNUtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 15:49:09 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiBNU6K (ORCPT
+        with ESMTP id S229743AbiBNUtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 15:58:10 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6B5110EEF;
-        Mon, 14 Feb 2022 12:57:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644872260; x=1676408260;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+ZOSDcI2qdIWgBn8a33RycD675mh/DMLTMtB1BKSO68=;
-  b=Cu7J1A8t5paQM1GqwgCcVmlmdK0objzjfsNA+cBKoJszkbaPz8r31ggE
-   kGemuABrYYLJHfIaRZ6Bs3E3GaibUrER3gHScEdMNDuR/Mx+EN9sdDJA/
-   hMvP3stXA81IRXW0vF1dyj+b2mkH4AORXyKZChO0c97DGNidTAQy+KXvL
-   PVl/IYiwTNSUGRh0gqPdHGfs+OF4VXwbJDnB9T1SbCj692QnvS/3FHfwk
-   5QHRCUBbVKNVHjeqey2e4aeg+0PRuiJc+OHDB5rPcUr+/Vbw8TryzBo+w
-   3smuAEJtEsyaV1+nHlls8C1wztq+6Q2EJg1kHAlpO7Bh4CM7aTyoJxadJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10258"; a="310916638"
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="310916638"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 12:35:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
-   d="scan'208";a="635415061"
-Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 14 Feb 2022 12:35:19 -0800
-Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nJi46-0008vY-HT; Mon, 14 Feb 2022 20:35:18 +0000
-Date:   Tue, 15 Feb 2022 04:34:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     kbuild-all@lists.01.org, mdf@kernel.org, hao.wu@intel.com,
-        yilun.xu@intel.com, trix@redhat.com, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org, system@metrotek.ru,
-        Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Subject: Re: [PATCH] fpga: microsemi-spi: add Microsemi FPGA manager
-Message-ID: <202202150434.i0eTuy1u-lkp@intel.com>
-References: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
+        Mon, 14 Feb 2022 15:49:05 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4390F1275FF
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:48:45 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id f37so6711918lfv.8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 12:48:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wAGH315FsgjXdEGosIxU9yIWVg26bgKxObDK7qxcQ9o=;
+        b=EU778RaLDa/8FhJux3O09PvW3/LCZKPXp2DEFIoy3E0/73tubhMvN6FLWVL/0bcIJW
+         kmCnl5Rc6b20E+xTOO/KCGrPDECOpDCo/nXmeIOuENhZ10zOy0IF3Ph387b1C8fJzq5D
+         +WjvseaeLKZ8mgXil65+h1q2t7pc8gvHirSGUwM9w31eIQ4CFgJL4tlDfb98dwjLGGaI
+         oKjbNkxktCSCXTv4prlhEbo9s9sT7DZTHxj6OpsP3QwYf4mqyLx0SJJnVML5/95sQgyb
+         lYEW9dTjF6nZxRSHVkN/BN9o2g2BHt5B8QNM0gL8UjDYHW8ypcP+fBvoFUxYojQxDjSt
+         GgWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wAGH315FsgjXdEGosIxU9yIWVg26bgKxObDK7qxcQ9o=;
+        b=FgbtObHAM6Ru9BIw3Oy2X71RUgUbMfo3/vZuXURhlJIxFVnWNKWGx4okPOGvZ7inlQ
+         zhJNrV2Xr9QTXzWqd98B42R5pZOkNv9t7et0CNcYbqDmB2KIUgJWgU8grumtZIZP0xKl
+         oAYnV8tQACSztHTAJ/1ZxSYU716j6KlZH0XJiaG5Ob1aZ8PF7siIpTNcWILzMSVZGDz9
+         WYTmfsMEU6Y5UFte2V/08byjVCECh8pUJr09XOqlUSNzcu6RBZumyNHDTqIp9R08A84y
+         0OcLDzqrMCx3kXtOVEH1spGONLAOlYu7aS8OFyKLEzScQgP6M//vaxCPqbJpDLhrR/Se
+         fMuA==
+X-Gm-Message-State: AOAM531JgUJU5DR7ArvVJo08cATX32mcBP17Wj07mw3AFyNIi8MSpdCJ
+        glWxtP07eSVEsXKOR5ATFPNbRo8G0NEfaT2xLcKGYUZQvm2TYQ==
+X-Google-Smtp-Source: ABdhPJybrY+AtUQHWjp3j2rvRJhBPEQOOF5VWwSAKp+0WfViYgyz3tPMp/imOig+wlvQ20J5Rfsw3M7JV5CsRYOdaJU=
+X-Received: by 2002:a05:6512:4012:: with SMTP id br18mr536955lfb.533.1644871042491;
+ Mon, 14 Feb 2022 12:37:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220214133835.25097-1-i.bornyakov@metrotek.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220211161831.3493782-1-tjmercier@google.com>
+ <20220211161831.3493782-7-tjmercier@google.com> <Ygdfe3XSvN8iFuUc@kroah.com>
+ <CAHRSSEwoJ67Sr_=gtSaP91cbpjJjZdOo57cfAhv3r-ye0da7PA@mail.gmail.com>
+ <CAJuCfpHf=Ewm0e9kguY3MEGVHU_cyviVXByi0oQtq7kTtOOD=A@mail.gmail.com> <CAHRSSEzsn-EVKXTRfmpbPR9u0wNpdvdZoX64Tm_mB1DQMRSUPQ@mail.gmail.com>
+In-Reply-To: <CAHRSSEzsn-EVKXTRfmpbPR9u0wNpdvdZoX64Tm_mB1DQMRSUPQ@mail.gmail.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Mon, 14 Feb 2022 12:37:11 -0800
+Message-ID: <CALAqxLVeLsv9ESCL2EoZQ8-tRgp0V+tmdYbkyakFetf=ewTH+A@mail.gmail.com>
+Subject: Re: [RFC v2 6/6] android: binder: Add a buffer flag to relinquish
+ ownership of fds
+To:     Todd Kjos <tkjos@google.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "T.J. Mercier" <tjmercier@google.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Liam Mark <lmark@codeaurora.org>,
+        Laura Abbott <labbott@redhat.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Kalesh Singh <kaleshsingh@google.com>, Kenny.Ho@amd.com,
+        DRI mailing list <dri-devel@lists.freedesktop.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,227 +98,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ivan,
+On Mon, Feb 14, 2022 at 12:19 PM Todd Kjos <tkjos@google.com> wrote:
+> On Mon, Feb 14, 2022 at 11:29 AM Suren Baghdasaryan <surenb@google.com> wrote:
+> > On Mon, Feb 14, 2022 at 10:33 AM Todd Kjos <tkjos@google.com> wrote:
+> > >
+> > > Since we are creating a new gpu cgroup abstraction, couldn't this
+> > > "transfer" be done in userspace by the target instead of in the kernel
+> > > driver? Then this patch would reduce to just a flag on the buffer
+> > > object.
+> >
+> > Are you suggesting to have a userspace accessible cgroup interface for
+> > transferring buffer charges and the target process to use that
+> > interface for requesting the buffer to be charged to its cgroup?
+>
+> Well, I'm asking why we need to do these cgroup-ish actions in the
+> kernel when it seems more natural to do it in userspace.
+>
 
-Thank you for the patch! Perhaps something to improve:
+In case its useful, some additional context from some of the Linux
+Plumber's discussions last fall:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.17-rc4 next-20220214]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Daniel Stone outlines some concerns with the cgroup userland handling
+for accounting:
+  https://youtu.be/3OqllZONTiQ?t=3430
 
-url:    https://github.com/0day-ci/linux/commits/Ivan-Bornyakov/fpga-microsemi-spi-add-Microsemi-FPGA-manager/20220214-222923
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 754e0b0e35608ed5206d6a67a791563c631cec07
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20220215/202202150434.i0eTuy1u-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/19d9c174f03a9b8387ba654d558351cac9d63d24
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Ivan-Bornyakov/fpga-microsemi-spi-add-Microsemi-FPGA-manager/20220214-222923
-        git checkout 19d9c174f03a9b8387ba654d558351cac9d63d24
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash drivers/fpga/
+And the binder ownership transfer bit was suggested here by Daniel Vetter:
+  https://youtu.be/3OqllZONTiQ?t=3730
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/device.h:15,
-                    from include/linux/spi/spi.h:10,
-                    from drivers/fpga/microsemi-spi.c:7:
-   drivers/fpga/microsemi-spi.c: In function 'microsemi_fpga_ops_write':
->> drivers/fpga/microsemi-spi.c:244:30: warning: format '%d' expects argument of type 'int', but argument 3 has type 'ssize_t' {aka 'long int'} [-Wformat=]
-     244 |                 dev_err(dev, "Failed to find bitstream start %d\n",
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/fpga/microsemi-spi.c:244:17: note: in expansion of macro 'dev_err'
-     244 |                 dev_err(dev, "Failed to find bitstream start %d\n",
-         |                 ^~~~~~~
-   drivers/fpga/microsemi-spi.c:244:63: note: format string is defined here
-     244 |                 dev_err(dev, "Failed to find bitstream start %d\n",
-         |                                                              ~^
-         |                                                               |
-         |                                                               int
-         |                                                              %ld
-   In file included from include/linux/device.h:15,
-                    from include/linux/spi/spi.h:10,
-                    from drivers/fpga/microsemi-spi.c:7:
-   drivers/fpga/microsemi-spi.c:252:30: warning: format '%d' expects argument of type 'int', but argument 3 has type 'ssize_t' {aka 'long int'} [-Wformat=]
-     252 |                 dev_err(dev, "Failed to parse bitstream size %d\n",
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/fpga/microsemi-spi.c:252:17: note: in expansion of macro 'dev_err'
-     252 |                 dev_err(dev, "Failed to parse bitstream size %d\n",
-         |                 ^~~~~~~
-   drivers/fpga/microsemi-spi.c:252:63: note: format string is defined here
-     252 |                 dev_err(dev, "Failed to parse bitstream size %d\n",
-         |                                                              ~^
-         |                                                               |
-         |                                                               int
-         |                                                              %ld
-   In file included from include/linux/device.h:15,
-                    from include/linux/spi/spi.h:10,
-                    from drivers/fpga/microsemi-spi.c:7:
-   drivers/fpga/microsemi-spi.c:260:25: warning: format '%d' expects argument of type 'int', but argument 3 has type 'ssize_t' {aka 'long int'} [-Wformat=]
-     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/fpga/microsemi-spi.c:259:17: note: in expansion of macro 'dev_err'
-     259 |                 dev_err(dev,
-         |                 ^~~~~~~
-   drivers/fpga/microsemi-spi.c:260:70: note: format string is defined here
-     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
-         |                                                                     ~^
-         |                                                                      |
-         |                                                                      int
-         |                                                                     %ld
-   In file included from include/linux/device.h:15,
-                    from include/linux/spi/spi.h:10,
-                    from drivers/fpga/microsemi-spi.c:7:
-   drivers/fpga/microsemi-spi.c:260:25: warning: format '%d' expects argument of type 'int', but argument 4 has type 'ssize_t' {aka 'long int'} [-Wformat=]
-     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/fpga/microsemi-spi.c:259:17: note: in expansion of macro 'dev_err'
-     259 |                 dev_err(dev,
-         |                 ^~~~~~~
-   drivers/fpga/microsemi-spi.c:260:89: note: format string is defined here
-     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
-         |                                                                                        ~^
-         |                                                                                         |
-         |                                                                                         int
-         |                                                                                        %ld
-   In file included from include/linux/device.h:15,
-                    from include/linux/spi/spi.h:10,
-                    from drivers/fpga/microsemi-spi.c:7:
->> drivers/fpga/microsemi-spi.c:260:25: warning: format '%d' expects argument of type 'int', but argument 5 has type 'size_t' {aka 'long unsigned int'} [-Wformat=]
-     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/fpga/microsemi-spi.c:259:17: note: in expansion of macro 'dev_err'
-     259 |                 dev_err(dev,
-         |                 ^~~~~~~
-   drivers/fpga/microsemi-spi.c:260:107: note: format string is defined here
-     260 |                         "Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
-         |                                                                                                          ~^
-         |                                                                                                           |
-         |                                                                                                           int
-         |                                                                                                          %ld
-   In file included from include/linux/device.h:15,
-                    from include/linux/spi/spi.h:10,
-                    from drivers/fpga/microsemi-spi.c:7:
-   drivers/fpga/microsemi-spi.c:274:33: warning: format '%d' expects argument of type 'int', but argument 4 has type 'ssize_t' {aka 'long int'} [-Wformat=]
-     274 |                                 "Failed to write bitstream frame number %d of %d\n",
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/fpga/microsemi-spi.c:273:25: note: in expansion of macro 'dev_err'
-     273 |                         dev_err(dev,
-         |                         ^~~~~~~
-   drivers/fpga/microsemi-spi.c:274:80: note: format string is defined here
-     274 |                                 "Failed to write bitstream frame number %d of %d\n",
-         |                                                                               ~^
-         |                                                                                |
-         |                                                                                int
-         |                                                                               %ld
-
-
-vim +244 drivers/fpga/microsemi-spi.c
-
-   225	
-   226	static int microsemi_fpga_ops_write(struct fpga_manager *mgr, const char *buf,
-   227					    size_t count)
-   228	{
-   229		ssize_t bitstream_start = 0, bitstream_size;
-   230		struct microsemi_fpga_priv *priv = mgr->priv;
-   231		struct spi_device *spi = priv->spi;
-   232		struct device *dev = &mgr->dev;
-   233		u8 tmp_buf[SPI_FRAME_SIZE + 1];
-   234		int ret, i;
-   235	
-   236		if (crc_ccitt(0, buf, count)) {
-   237			dev_err(dev, "CRC error\n");
-   238	
-   239			return -EINVAL;
-   240		}
-   241	
-   242		bitstream_start = lookup_block_start(BITSTREAM_ID, buf, count);
-   243		if (bitstream_start < 0) {
- > 244			dev_err(dev, "Failed to find bitstream start %d\n",
-   245				bitstream_start);
-   246	
-   247			return bitstream_start;
-   248		}
-   249	
-   250		bitstream_size = parse_bitstream_size(buf, count);
-   251		if (bitstream_size < 0) {
-   252			dev_err(dev, "Failed to parse bitstream size %d\n",
-   253				bitstream_size);
-   254	
-   255			return bitstream_size;
-   256		}
-   257	
-   258		if (bitstream_start + bitstream_size * SPI_FRAME_SIZE > count) {
-   259			dev_err(dev,
- > 260				"Bitstram outruns firmware. Bitstream start %d, bitstream size %d, firmware size %d\n",
-   261				bitstream_start, bitstream_size * SPI_FRAME_SIZE, count);
-   262	
-   263			return -EFAULT;
-   264		}
-   265	
-   266		for (i = 0; i < bitstream_size; i++) {
-   267			tmp_buf[0] = SPI_FRAME;
-   268			memcpy(tmp_buf + 1, buf + bitstream_start + i * SPI_FRAME_SIZE,
-   269			       SPI_FRAME_SIZE);
-   270	
-   271			ret = microsemi_spi_write(spi, tmp_buf, sizeof(tmp_buf));
-   272			if (ret) {
-   273				dev_err(dev,
-   274					"Failed to write bitstream frame number %d of %d\n",
-   275					i, bitstream_size);
-   276	
-   277				return ret;
-   278			}
-   279		}
-   280	
-   281		return 0;
-   282	}
-   283	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+thanks
+-john

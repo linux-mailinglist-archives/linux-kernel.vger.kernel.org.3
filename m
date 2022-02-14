@@ -2,94 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 136B74B50F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 978994B50F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 14:04:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353827AbiBNNDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 08:03:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51388 "EHLO
+        id S1353864AbiBNNE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 08:04:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353815AbiBNNDq (ORCPT
+        with ESMTP id S1353128AbiBNNE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 08:03:46 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0146C4E398;
-        Mon, 14 Feb 2022 05:03:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644843816; x=1676379816;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=uYL3xhBbVCpZum9f3FYlZNyjCU4f4j5OTyoAWlPvpNY=;
-  b=DfUjxrZWdZDFb1nb1nvpJkkTausQcs/+JV76OIQUL13LF75UtZrDzzuH
-   laOX2483R+wvEOKEb7xZv7KrvUNkGceD7lwAnvkpgl+3teNPfe1lTFDU/
-   uVlMWGvqdT8zbA8f8MdnITwKCFZ6UXfmoiY7AP21bYOQlfUHiR5AXdq2E
-   gViaA0do2JB8v+4cCWlnjI3LTLDXEi06AbuiXa2gaoP6HYUaTxRmfubLB
-   gDSnWAYVXkZrpodJ29tfqSxJIzonI4Xf/S9bpeByedXC/evhfpchx0UhR
-   dQLq6GN+KBJXlx/cEoYI8Bvh5DyqdUyVgIaT7wn+4PRYowxHsnIzC7h7Z
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="274654534"
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="274654534"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 05:03:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,367,1635231600"; 
-   d="scan'208";a="495569219"
-Received: from mylly.fi.intel.com (HELO [10.237.72.51]) ([10.237.72.51])
-  by orsmga006.jf.intel.com with ESMTP; 14 Feb 2022 05:03:34 -0800
-Message-ID: <307ca790-e9ca-c8f3-e0f7-28ad594db2aa@linux.intel.com>
-Date:   Mon, 14 Feb 2022 15:03:33 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.5.1
-Subject: Re: [PATCH -next v2 RESEND] i2c: designware: remove unneeded
- semicolon
-Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, jsd@semihalf.com
-Cc:     andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20220214124701.105814-1-yang.lee@linux.alibaba.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20220214124701.105814-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Feb 2022 08:04:26 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17F84D609;
+        Mon, 14 Feb 2022 05:04:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1644843859; x=1676379859;
+  h=from:to:cc:subject:date:message-id;
+  bh=qx6pEXqoFPXIkh9XX2jchiqtkp6Y1daXAlw0FUECkxg=;
+  b=nurytHB2UNqNRPCqO/5IcEDK51n3gN6+eQwvdFRyRASYN5wMS5IOIoMM
+   vKir/v+Fy/fnMPLo7uRwfcyQUGCJpn/L8yGeDA7Yh/UHlEePzXYvJ/Zek
+   ty16EtVkVlLKAbtT6c8hM1uUm5mtxR5PH6K/KjFSyhcjOF6dqDuqfuyY5
+   4=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 14 Feb 2022 05:04:19 -0800
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 14 Feb 2022 05:04:16 -0800
+X-QCInternal: smtphost
+Received: from hu-vnivarth-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.111.166])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 14 Feb 2022 18:34:06 +0530
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
+        id 682783C9F; Mon, 14 Feb 2022 18:34:05 +0530 (+0530)
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, msavaliy@qti.qualcomm.com,
+        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Subject: [PATCH] arm64: dts: qcom: sc7280: Configure cts sleep pinctrl to bias-disable for sc7280-idp
+Date:   Mon, 14 Feb 2022 18:33:48 +0530
+Message-Id: <1644843828-20464-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+WLAN rail was leaking power during RBSC/sleep even after turning BT off.
+Change sleep pinctrl configuration to handle same.
 
-On 2/14/22 14:47, Yang Li wrote:
-> Eliminate the following coccicheck warnings:
-> ./drivers/i2c/busses/i2c-designware-amdpsp.c:172:2-3: Unneeded semicolon
-> ./drivers/i2c/busses/i2c-designware-amdpsp.c:245:2-3: Unneeded semicolon
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
-> 
-> --Changes in v2:
->    According to Jan's suggestion
->    Fix the same problem in check_i2c_req_sts() function.
-> 
->   drivers/i2c/busses/i2c-designware-amdpsp.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-For future contributions: Technically this would be v3 rather than v2 
-RESEND since you fixed the typo in commit log noted by Jan for v2.
+Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+---
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Please use RESEND only if you'll send exactly the same version for 
-instance if you didn't receive any comments for several weeks or some 
-recipient was missing from Cc field.
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+index d623d71..de18319 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+@@ -516,10 +516,10 @@
+ 		pins = "gpio28";
+ 		function = "gpio";
+ 		/*
+-		 * Configure a pull-down on CTS to match the pull of
+-		 * the Bluetooth module.
++		 * Configure a disable on CTS to lower power usage
++		 * when BT is turned off.
+ 		 */
+-		bias-pull-down;
++		bias-disable;
+ 	};
+ 
+ 	qup_uart7_sleep_rts: qup-uart7-sleep-rts {
+-- 
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
 
-I believe Jan will give Reviewed-by tag to this version too.
-
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>

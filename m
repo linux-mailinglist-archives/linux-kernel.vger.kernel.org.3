@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE094B4AC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B3A4B4C51
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346108AbiBNKRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:17:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44100 "EHLO
+        id S1348662AbiBNKjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:39:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346467AbiBNKPt (ORCPT
+        with ESMTP id S1350003AbiBNKgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:15:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9697078058;
-        Mon, 14 Feb 2022 01:52:55 -0800 (PST)
+        Mon, 14 Feb 2022 05:36:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263EC9FFC;
+        Mon, 14 Feb 2022 02:03:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7506B80D83;
-        Mon, 14 Feb 2022 09:52:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA989C340F1;
-        Mon, 14 Feb 2022 09:52:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C802B60DDD;
+        Mon, 14 Feb 2022 10:02:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAF06C340E9;
+        Mon, 14 Feb 2022 10:02:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832361;
-        bh=p11gsTIR0/f7UkZ4V4WyUxCY6A2mvza/KzjBcE5aFc0=;
+        s=korg; t=1644832973;
+        bh=7dywxaiY+M967eUBC6Mz+LePl1QSR7NFa4x8qm8PoNw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1Tf8akzs5ZFggHLKEcP6682H9HtJ7bcAenSgryAFlocUfFYirrXRKCWg3mikB5zJO
-         BPVGoQI4RiwaYeivAJZQcDde1rCXPI5nwgcjMgYOWlKsjlmqFULa2JXBbB2eQLAJrX
-         cex9QqQcQjueE3JWiYL6XJ3AD1xMsPVOEsrdGuRk=
+        b=fipJ4b1c+A6Ls1RP1F5vKTF0g1YsvMZphClVOoEFuCkKTBhWSg88zKBsvDivCzoSa
+         TysQJNayLNdhpKrWFRwBwUtIXCK4oxObmJjvubVIrT1Gy/l6hclr4wLOH2gmCFI0iF
+         ZAzlB6xF1OUP+/yYAzvmQghWn5981Cehi6wZG1sM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Manivannan Sadhasivam <mani@kernel.org>,
-        Slark Xiao <slark_xiao@163.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 5.15 161/172] bus: mhi: pci_generic: Add mru_default for Foxconn SDX55
-Date:   Mon, 14 Feb 2022 10:26:59 +0100
-Message-Id: <20220214092511.949732180@linuxfoundation.org>
+        stable@vger.kernel.org, Andrey Konovalov <andreyknvl@gmail.com>,
+        Jann Horn <jannh@google.com>
+Subject: [PATCH 5.16 176/203] usb: raw-gadget: fix handling of dual-direction-capable endpoints
+Date:   Mon, 14 Feb 2022 10:27:00 +0100
+Message-Id: <20220214092516.223030292@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Slark Xiao <slark_xiao@163.com>
+From: Jann Horn <jannh@google.com>
 
-commit a0572cea8866230ac13da6358c88075f89e99b20 upstream.
+commit 292d2c82b105d92082c2120a44a58de9767e44f1 upstream.
 
-For default mechanism, product would use default MRU 3500 if
-they didn't define it. But for Foxconn SDX55, there is a known
-issue which MRU 3500 would lead to data connection lost.
-So we align it with Qualcomm default MRU settings.
+Under dummy_hcd, every available endpoint is *either* IN or OUT capable.
+But with some real hardware, there are endpoints that support both IN and
+OUT. In particular, the PLX 2380 has four available endpoints that each
+support both IN and OUT.
 
-Link: https://lore.kernel.org/r/20220119101213.5008-1-slark_xiao@163.com
-[mani: Added pci_generic prefix to subject and CCed stable]
-Fixes: aac426562f56 ("bus: mhi: pci_generic: Introduce Foxconn T99W175 support")
-Cc: stable@vger.kernel.org # v5.12+
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Link: https://lore.kernel.org/r/20220205135731.157871-2-manivannan.sadhasivam@linaro.org
+raw-gadget currently gets confused and thinks that any endpoint that is
+usable as an IN endpoint can never be used as an OUT endpoint.
+
+Fix it by looking at the direction in the configured endpoint descriptor
+instead of looking at the hardware capabilities.
+
+With this change, I can use the PLX 2380 with raw-gadget.
+
+Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface")
+Cc: stable <stable@vger.kernel.org>
+Tested-by: Andrey Konovalov <andreyknvl@gmail.com>
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+Signed-off-by: Jann Horn <jannh@google.com>
+Link: https://lore.kernel.org/r/20220126205214.2149936-1-jannh@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/bus/mhi/pci_generic.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/gadget/legacy/raw_gadget.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/bus/mhi/pci_generic.c
-+++ b/drivers/bus/mhi/pci_generic.c
-@@ -366,6 +366,7 @@ static const struct mhi_pci_dev_info mhi
- 	.config = &modem_foxconn_sdx55_config,
- 	.bar_num = MHI_PCI_DEFAULT_BAR_NUM,
- 	.dma_data_width = 32,
-+	.mru_default = 32768,
- 	.sideband_wake = false,
- };
- 
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -1004,7 +1004,7 @@ static int raw_process_ep_io(struct raw_
+ 		ret = -EBUSY;
+ 		goto out_unlock;
+ 	}
+-	if ((in && !ep->ep->caps.dir_in) || (!in && ep->ep->caps.dir_in)) {
++	if (in != usb_endpoint_dir_in(ep->ep->desc)) {
+ 		dev_dbg(&dev->gadget->dev, "fail, wrong direction\n");
+ 		ret = -EINVAL;
+ 		goto out_unlock;
 
 

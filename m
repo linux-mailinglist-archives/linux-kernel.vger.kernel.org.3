@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF8A4B45E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2AEF4B4B9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:42:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243382AbiBNJcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:32:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43134 "EHLO
+        id S1347378AbiBNKaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:30:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243533AbiBNJcA (ORCPT
+        with ESMTP id S1347688AbiBNK3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:32:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA941AD9F;
-        Mon, 14 Feb 2022 01:30:39 -0800 (PST)
+        Mon, 14 Feb 2022 05:29:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870847091C;
+        Mon, 14 Feb 2022 01:58:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7D2160F8D;
-        Mon, 14 Feb 2022 09:30:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98830C340F2;
-        Mon, 14 Feb 2022 09:30:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C33B6B80DCF;
+        Mon, 14 Feb 2022 09:58:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0237DC340E9;
+        Mon, 14 Feb 2022 09:58:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831038;
-        bh=l0212FSHtUxE+34kUIAZLJhq/HpoQd/R+RJu5Jxqgx0=;
+        s=korg; t=1644832721;
+        bh=Ps3oBb9b+xFWRMsLAGzbqJCxUR2gJJ6YgKqya6yTpKA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CM786ksiRBjsaKxlLQvQ9A9ukZRnc6OJRTgK2DM9WZE+sy3caz813ozoXpGSYeRX0
-         x/XNqgbDVBw4wyEW3m2s3L42angpeo55sW1kTt5YfeAyY+GQncyizdEMz/I7m25uoH
-         uFOTsrBnWb/Mmsi3YQyhpzeMrOelOiduKqZdQ8cM=
+        b=RWHwhEOpv+T0IJcDx85mulKfXnFVrimojxrsu/WbQx5TQj6C1R/5xyLUrSMWIhH2b
+         +AvZ01EIC3oHUBWDpnnjMGERUEBr41nEcrGXL7AAvNkWzD2ktbM4mrEaxymjbmoNJm
+         DP59TWC3Vh3Rt6vtF4B2QU77tH03RY3WYMXrBb74=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mahesh Bandewar <maheshb@google.com>,
-        Jay Vosburgh <jay.vosburgh@canonical.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 23/44] bonding: pair enable_port with slave_arr_updates
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 102/203] phy: xilinx: zynqmp: Fix bus width setting for SGMII
 Date:   Mon, 14 Feb 2022 10:25:46 +0100
-Message-Id: <20220214092448.662740295@linuxfoundation.org>
+Message-Id: <20220214092513.716954518@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
-References: <20220214092447.897544753@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,53 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mahesh Bandewar <maheshb@google.com>
+From: Robert Hancock <robert.hancock@calian.com>
 
-[ Upstream commit 23de0d7b6f0e3f9a6283a882594c479949da1120 ]
+[ Upstream commit 37291f60d0822f191748c2a54ce63b0bc669020f ]
 
-When 803.2ad mode enables a participating port, it should update
-the slave-array. I have observed that the member links are participating
-and are part of the active aggregator while the traffic is egressing via
-only one member link (in a case where two links are participating). Via
-kprobes I discovered that slave-arr has only one link added while
-the other participating link wasn't part of the slave-arr.
+TX_PROT_BUS_WIDTH and RX_PROT_BUS_WIDTH are single registers with
+separate bit fields for each lane. The code in xpsgtr_phy_init_sgmii was
+not preserving the existing register value for other lanes, so enabling
+the PHY in SGMII mode on one lane zeroed out the settings for all other
+lanes, causing other PS-GTR peripherals such as USB3 to malfunction.
 
-I couldn't see what caused that situation but the simple code-walk
-through provided me hints that the enable_port wasn't always associated
-with the slave-array update.
+Use xpsgtr_clr_set to only manipulate the desired bits in the register.
 
-Fixes: ee6377147409 ("bonding: Simplify the xmit function for modes that use xmit_hash")
-Signed-off-by: Mahesh Bandewar <maheshb@google.com>
-Acked-by: Jay Vosburgh <jay.vosburgh@canonical.com>
-Link: https://lore.kernel.org/r/20220207222901.1795287-1-maheshb@google.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 4a33bea00314 ("phy: zynqmp: Add PHY driver for the Xilinx ZynqMP Gigabit Transceiver")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Acked-by: Michal Simek <michal.simek@xilinx.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Link: https://lore.kernel.org/r/20220126001600.1592218-1-robert.hancock@calian.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/bonding/bond_3ad.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/phy/xilinx/phy-zynqmp.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
-index 93dfcef8afc4b..035923876c617 100644
---- a/drivers/net/bonding/bond_3ad.c
-+++ b/drivers/net/bonding/bond_3ad.c
-@@ -1012,8 +1012,8 @@ static void ad_mux_machine(struct port *port, bool *update_slave_arr)
- 				if (port->aggregator &&
- 				    port->aggregator->is_active &&
- 				    !__port_is_enabled(port)) {
--
- 					__enable_port(port);
-+					*update_slave_arr = true;
- 				}
- 			}
- 			break;
-@@ -1760,6 +1760,7 @@ static void ad_agg_selection_logic(struct aggregator *agg,
- 			     port = port->next_port_in_aggregator) {
- 				__enable_port(port);
- 			}
-+			*update_slave_arr = true;
- 		}
- 	}
+diff --git a/drivers/phy/xilinx/phy-zynqmp.c b/drivers/phy/xilinx/phy-zynqmp.c
+index f478d8a17115b..9be9535ad7ab7 100644
+--- a/drivers/phy/xilinx/phy-zynqmp.c
++++ b/drivers/phy/xilinx/phy-zynqmp.c
+@@ -134,7 +134,8 @@
+ #define PROT_BUS_WIDTH_10		0x0
+ #define PROT_BUS_WIDTH_20		0x1
+ #define PROT_BUS_WIDTH_40		0x2
+-#define PROT_BUS_WIDTH_SHIFT		2
++#define PROT_BUS_WIDTH_SHIFT(n)		((n) * 2)
++#define PROT_BUS_WIDTH_MASK(n)		GENMASK((n) * 2 + 1, (n) * 2)
  
+ /* Number of GT lanes */
+ #define NUM_LANES			4
+@@ -445,12 +446,12 @@ static void xpsgtr_phy_init_sata(struct xpsgtr_phy *gtr_phy)
+ static void xpsgtr_phy_init_sgmii(struct xpsgtr_phy *gtr_phy)
+ {
+ 	struct xpsgtr_dev *gtr_dev = gtr_phy->dev;
++	u32 mask = PROT_BUS_WIDTH_MASK(gtr_phy->lane);
++	u32 val = PROT_BUS_WIDTH_10 << PROT_BUS_WIDTH_SHIFT(gtr_phy->lane);
+ 
+ 	/* Set SGMII protocol TX and RX bus width to 10 bits. */
+-	xpsgtr_write(gtr_dev, TX_PROT_BUS_WIDTH,
+-		     PROT_BUS_WIDTH_10 << (gtr_phy->lane * PROT_BUS_WIDTH_SHIFT));
+-	xpsgtr_write(gtr_dev, RX_PROT_BUS_WIDTH,
+-		     PROT_BUS_WIDTH_10 << (gtr_phy->lane * PROT_BUS_WIDTH_SHIFT));
++	xpsgtr_clr_set(gtr_dev, TX_PROT_BUS_WIDTH, mask, val);
++	xpsgtr_clr_set(gtr_dev, RX_PROT_BUS_WIDTH, mask, val);
+ 
+ 	xpsgtr_bypass_scrambler_8b10b(gtr_phy);
+ }
 -- 
 2.34.1
 

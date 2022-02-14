@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A7E4B4889
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:57:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D11CD4B45C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344053AbiBNJzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:55:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33134 "EHLO
+        id S243417AbiBNJbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:31:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343774AbiBNJvV (ORCPT
+        with ESMTP id S243481AbiBNJau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:51:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E025A65804;
-        Mon, 14 Feb 2022 01:42:06 -0800 (PST)
+        Mon, 14 Feb 2022 04:30:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2724260ABC;
+        Mon, 14 Feb 2022 01:29:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A788B80DA9;
-        Mon, 14 Feb 2022 09:42:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9ED2C36AE9;
-        Mon, 14 Feb 2022 09:42:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD59F60FE9;
+        Mon, 14 Feb 2022 09:29:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C9F1C340E9;
+        Mon, 14 Feb 2022 09:29:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831724;
-        bh=J9Y5rRl0Pzf7jFgIcm4gXc+PZJ+r8Jvu6dK1Jr0qtr8=;
+        s=korg; t=1644830993;
+        bh=GyoKvYHjJdZEdczGMaOTHA3l7hEsSGN7FAAdvH/xJRg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZzupAv4Q7ciG/CIhe0TDmPDz9oHx/nTMFPGxqlqxElW0pO/hbR5z2lyV39rqWko05
-         sG5Pla/0uRKPnuXelFWbFa+lv9A1v1KcOH57IpGG1yaD7TKBhzN0WG2860KKR/hvq0
-         WUOH9LLYCrMS3vHoXmZSKd6yOrdF8J54CVpQdLZg=
+        b=r9/RqCEoXb2n5WtaN+ad7aRF5IrhD5zXCAaWdgwmNFA2PcuxfymUGtX3A2eA+Xq6E
+         pRj4yBM/eYBB7Gn2RanBqKJ6cAjWQVSFw/lId1Sj1/eVHqGlpClFTZw1BXwZvJlusX
+         UBgVCyeVeQ19qHGAD0gdknAZDDW0OCy9G1Fda1Ig=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        James Clark <james.clark@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        stable@vger.kernel.org, rtm@csail.mit.edu,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 034/116] perf: Always wake the parent event
+Subject: [PATCH 4.14 10/44] NFSv4.1: Fix uninitialised variable in devicenotify
 Date:   Mon, 14 Feb 2022 10:25:33 +0100
-Message-Id: <20220214092459.867720153@linuxfoundation.org>
+Message-Id: <20220214092448.248364402@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
-References: <20220214092458.668376521@linuxfoundation.org>
+In-Reply-To: <20220214092447.897544753@linuxfoundation.org>
+References: <20220214092447.897544753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,94 +56,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Clark <james.clark@arm.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit 961c39121759ad09a89598ec4ccdd34ae0468a19 ]
+[ Upstream commit b05bf5c63b326ce1da84ef42498d8e0e292e694c ]
 
-When using per-process mode and event inheritance is set to true,
-forked processes will create a new perf events via inherit_event() ->
-perf_event_alloc(). But these events will not have ring buffers
-assigned to them. Any call to wakeup will be dropped if it's called on
-an event with no ring buffer assigned because that's the object that
-holds the wakeup list.
+When decode_devicenotify_args() exits with no entries, we need to
+ensure that the struct cb_devicenotifyargs is initialised to
+{ 0, NULL } in order to avoid problems in
+nfs4_callback_devicenotify().
 
-If the child event is disabled due to a call to
-perf_aux_output_begin() or perf_aux_output_end(), the wakeup is
-dropped leaving userspace hanging forever on the poll.
-
-Normally the event is explicitly re-enabled by userspace after it
-wakes up to read the aux data, but in this case it does not get woken
-up so the event remains disabled.
-
-This can be reproduced when using Arm SPE and 'stress' which forks once
-before running the workload. By looking at the list of aux buffers read,
-it's apparent that they stop after the fork:
-
-  perf record -e arm_spe// -vvv -- stress -c 1
-
-With this patch applied they continue to be printed. This behaviour
-doesn't happen when using systemwide or per-cpu mode.
-
-Reported-by: Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>
-Signed-off-by: James Clark <james.clark@arm.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20211206113840.130802-2-james.clark@arm.com
+Reported-by: <rtm@csail.mit.edu>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/events/core.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ fs/nfs/callback.h      |  2 +-
+ fs/nfs/callback_proc.c |  2 +-
+ fs/nfs/callback_xdr.c  | 18 +++++++++---------
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index c6493f7e02359..6d3a67bef3951 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -5877,6 +5877,8 @@ static void ring_buffer_attach(struct perf_event *event,
- 	struct perf_buffer *old_rb = NULL;
- 	unsigned long flags;
+diff --git a/fs/nfs/callback.h b/fs/nfs/callback.h
+index a20a0bce40a48..80ad04abcf309 100644
+--- a/fs/nfs/callback.h
++++ b/fs/nfs/callback.h
+@@ -168,7 +168,7 @@ struct cb_devicenotifyitem {
+ };
  
-+	WARN_ON_ONCE(event->parent);
-+
- 	if (event->rb) {
- 		/*
- 		 * Should be impossible, we set this when removing
-@@ -5934,6 +5936,9 @@ static void ring_buffer_wakeup(struct perf_event *event)
+ struct cb_devicenotifyargs {
+-	int				 ndevs;
++	uint32_t			 ndevs;
+ 	struct cb_devicenotifyitem	 *devs;
+ };
+ 
+diff --git a/fs/nfs/callback_proc.c b/fs/nfs/callback_proc.c
+index 440ff8e7082b6..3998b432e1b98 100644
+--- a/fs/nfs/callback_proc.c
++++ b/fs/nfs/callback_proc.c
+@@ -355,7 +355,7 @@ __be32 nfs4_callback_devicenotify(void *argp, void *resp,
+ 				  struct cb_process_state *cps)
  {
- 	struct perf_buffer *rb;
- 
-+	if (event->parent)
-+		event = event->parent;
-+
- 	rcu_read_lock();
- 	rb = rcu_dereference(event->rb);
- 	if (rb) {
-@@ -5947,6 +5952,9 @@ struct perf_buffer *ring_buffer_get(struct perf_event *event)
+ 	struct cb_devicenotifyargs *args = argp;
+-	int i;
++	uint32_t i;
+ 	__be32 res = 0;
+ 	struct nfs_client *clp = cps->clp;
+ 	struct nfs_server *server = NULL;
+diff --git a/fs/nfs/callback_xdr.c b/fs/nfs/callback_xdr.c
+index 57de914630bc9..36c34be839d09 100644
+--- a/fs/nfs/callback_xdr.c
++++ b/fs/nfs/callback_xdr.c
+@@ -265,11 +265,9 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
+ 				void *argp)
  {
- 	struct perf_buffer *rb;
+ 	struct cb_devicenotifyargs *args = argp;
++	uint32_t tmp, n, i;
+ 	__be32 *p;
+ 	__be32 status = 0;
+-	u32 tmp;
+-	int n, i;
+-	args->ndevs = 0;
  
-+	if (event->parent)
-+		event = event->parent;
-+
- 	rcu_read_lock();
- 	rb = rcu_dereference(event->rb);
- 	if (rb) {
-@@ -6618,7 +6626,7 @@ static unsigned long perf_prepare_sample_aux(struct perf_event *event,
- 	if (WARN_ON_ONCE(READ_ONCE(sampler->oncpu) != smp_processor_id()))
+ 	/* Num of device notifications */
+ 	p = read_buf(xdr, sizeof(uint32_t));
+@@ -278,7 +276,7 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
  		goto out;
- 
--	rb = ring_buffer_get(sampler->parent ? sampler->parent : sampler);
-+	rb = ring_buffer_get(sampler);
- 	if (!rb)
+ 	}
+ 	n = ntohl(*p++);
+-	if (n <= 0)
++	if (n == 0)
  		goto out;
+ 	if (n > ULONG_MAX / sizeof(*args->devs)) {
+ 		status = htonl(NFS4ERR_BADXDR);
+@@ -336,19 +334,21 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
+ 			dev->cbd_immediate = 0;
+ 		}
  
-@@ -6684,7 +6692,7 @@ static void perf_aux_sample_output(struct perf_event *event,
- 	if (WARN_ON_ONCE(!sampler || !data->aux_size))
- 		return;
+-		args->ndevs++;
+-
+ 		dprintk("%s: type %d layout 0x%x immediate %d\n",
+ 			__func__, dev->cbd_notify_type, dev->cbd_layout_type,
+ 			dev->cbd_immediate);
+ 	}
++	args->ndevs = n;
++	dprintk("%s: ndevs %d\n", __func__, args->ndevs);
++	return 0;
++err:
++	kfree(args->devs);
+ out:
++	args->devs = NULL;
++	args->ndevs = 0;
+ 	dprintk("%s: status %d ndevs %d\n",
+ 		__func__, ntohl(status), args->ndevs);
+ 	return status;
+-err:
+-	kfree(args->devs);
+-	goto out;
+ }
  
--	rb = ring_buffer_get(sampler->parent ? sampler->parent : sampler);
-+	rb = ring_buffer_get(sampler);
- 	if (!rb)
- 		return;
- 
+ static __be32 decode_sessionid(struct xdr_stream *xdr,
 -- 
 2.34.1
 

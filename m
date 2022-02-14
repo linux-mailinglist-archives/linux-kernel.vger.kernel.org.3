@@ -2,187 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A654B4E85
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A0F4B4EB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 12:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346262AbiBNLeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 06:34:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33912 "EHLO
+        id S243083AbiBNLeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 06:34:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351885AbiBNLdo (ORCPT
+        with ESMTP id S1351815AbiBNLdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Feb 2022 06:33:44 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAB366F8B;
-        Mon, 14 Feb 2022 03:19:11 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id B45B01F43669
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644837550;
-        bh=/yHhoGENnp5DfoA0yF/nUh7Mr9NPuMCSmEyusu4kgtU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=K2W0/12Y8kOeoV2TERja1cvvfaN0KlIkfleL8X5BjzFguAx6YDhkDwqELmUFhjtLI
-         MZJDiACq4O7v2rhXDmMIiVGdvThbpe1k2nuYz5DqbFeqUBOuLGCdDW5R9+nq60FA+K
-         cUvKWgJAzlV9YUvGTOjGB//MB4v4LFrlKz0t/cV0BkRVhiYEhetMW3W3lo/zo664uI
-         WM0IvxY+JQKPO1V932VQ6LwHqocInM6EiIO2QhQeoAuB0lJa3momVeIaE9yQgPIfcs
-         BBAU7O74zn9E46R7UXhUOS71px58s2Hdxn7rPpmLrpVeg7G1KDTAh9WXXM1RK2hnga
-         IIKcFl8/1SSSA==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     chunfeng.yun@mediatek.com
-Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        matthias.bgg@gmail.com, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2] usb: host: xhci-mtk: Simplify supplies handling with regulator_bulk
-Date:   Mon, 14 Feb 2022 12:19:05 +0100
-Message-Id: <20220214111905.77903-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.33.1
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E8E66FA2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:19:32 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id bn33so6660964ljb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 03:19:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=+bcLMvCU05dUNAf4f7RZu+pLnqyD2ng62j2iLKkEC8A=;
+        b=L9TfSlO1SA+K4gj77IOyRR7D7AoN4YqBoFK+S7dALzBn9vLDemGgslquHJZSfKT3Io
+         GEbStGWcxLuzuRj07gSLicA4Eg5wo3KEi8e6VGo9qmNRK2TNKLKwhoozJPbPaivAZV2w
+         OPL0Zgi4fefEZ4Q30F4iXCXBAvSGZ0CABlA/F5fuX4Z3tm3Lzu9j9QLoW2RUeOTZkJK8
+         MQLdK3w7KhXq79odeiT6HdbrFstCrJn2ZYWv8a/MxewnRZjMFSg8RW6f/MYWGyJFQiop
+         f5fiZ+b1d764aaEZOnG9wYWGQDeZcrwQWXnxURsZ99WrdgmhTnYcSHV2xSAxh0tgWKO+
+         zdIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=+bcLMvCU05dUNAf4f7RZu+pLnqyD2ng62j2iLKkEC8A=;
+        b=mT9cPAYy7GCOGB86+7qFnHcxMP0tyyidbNfbqV6P7wx4UaPsvMEhrqqWXmqao92Zmn
+         z8OnrfARR7ZlKA/phVsRBRoitk/zJ42OUZVI5ZgFO14j2Brk4LTJmxBXgNU7jwiDYBw5
+         0tVtHB/WaoAWWwiBvpXSrdYklyAoWoChFY54N+GMRSb2Ofgf4wSwt34TqD16PKnYZXKs
+         5R/c+psKz7G7NOjctLXVTQnIecOKNELM4ztpdAK7XenQg9TcKTwSLsWm2qur0wVWVh2c
+         jCb7Xjrcdxo91etU68ACesQHuDCPE0BUbEcWqtPAy8rdN9GtahxLdGhc8BYrQvcF9GSN
+         6O8g==
+X-Gm-Message-State: AOAM533FIk0jVav9qlImR42OmL9VtGJqBRj7fxBZALvO0w/9WFRbGdeK
+        HWKRj7J0YWsLoK2h99+g2ClKnj1GxmN2U5JgHfQ=
+X-Google-Smtp-Source: ABdhPJxcBySB2xEVG8EufTOiDyu1mHZiieArq6CMXEqkbpAPMWgi78uOeDAVm+qKi5O7qfcK7qoDSUhVS7Xiqu70dnM=
+X-Received: by 2002:a2e:a49b:: with SMTP id h27mr2879809lji.421.1644837571210;
+ Mon, 14 Feb 2022 03:19:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6520:28cd:b0:198:630:3407 with HTTP; Mon, 14 Feb 2022
+ 03:19:30 -0800 (PST)
+Reply-To: attorneyjoel4ever2021@gmail.com
+From:   Felix Joel <davidovaa15@gmail.com>
+Date:   Mon, 14 Feb 2022 11:19:30 +0000
+Message-ID: <CABVEX-oBefWD-UaY+d-1UdEMX2XfVdS3Y8SYS7o5Stx_tvt4dA@mail.gmail.com>
+Subject: =?UTF-8?B?dsOhcm9tIHbDoWxhc3rDoXQ=?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the custom functions xhci_mtk_ldos_{enable,disable}() by
-switching to using regulator_bulk to perform the very same thing,
-as the regulators are always either both enabled or both disabled.
-
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
-
-v2: Change dynamic vregs array to static definition with new xhci_mtk_vregs_get()
-    helper as requested by Chunfeng
-
- drivers/usb/host/xhci-mtk.c | 44 ++++++++++---------------------------
- drivers/usb/host/xhci-mtk.h |  5 +++--
- 2 files changed, 14 insertions(+), 35 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-index e25bad0894cf..b89b4f159a4d 100644
---- a/drivers/usb/host/xhci-mtk.c
-+++ b/drivers/usb/host/xhci-mtk.c
-@@ -401,29 +401,14 @@ static int xhci_mtk_clks_get(struct xhci_hcd_mtk *mtk)
- 	return devm_clk_bulk_get_optional(mtk->dev, BULK_CLKS_NUM, clks);
- }
- 
--static int xhci_mtk_ldos_enable(struct xhci_hcd_mtk *mtk)
-+static int xhci_mtk_vregs_get(struct xhci_hcd_mtk *mtk)
- {
--	int ret;
-+	struct regulator_bulk_data *supplies = mtk->supplies;
- 
--	ret = regulator_enable(mtk->vbus);
--	if (ret) {
--		dev_err(mtk->dev, "failed to enable vbus\n");
--		return ret;
--	}
--
--	ret = regulator_enable(mtk->vusb33);
--	if (ret) {
--		dev_err(mtk->dev, "failed to enable vusb33\n");
--		regulator_disable(mtk->vbus);
--		return ret;
--	}
--	return 0;
--}
-+	supplies[0].supply = "vbus";
-+	supplies[1].supply = "vusb33";
- 
--static void xhci_mtk_ldos_disable(struct xhci_hcd_mtk *mtk)
--{
--	regulator_disable(mtk->vbus);
--	regulator_disable(mtk->vusb33);
-+	return devm_regulator_bulk_get(mtk->dev, BULK_VREGS_NUM, supplies);
- }
- 
- static void xhci_mtk_quirks(struct device *dev, struct xhci_hcd *xhci)
-@@ -513,17 +498,10 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	mtk->dev = dev;
--	mtk->vbus = devm_regulator_get(dev, "vbus");
--	if (IS_ERR(mtk->vbus)) {
--		dev_err(dev, "fail to get vbus\n");
--		return PTR_ERR(mtk->vbus);
--	}
- 
--	mtk->vusb33 = devm_regulator_get(dev, "vusb33");
--	if (IS_ERR(mtk->vusb33)) {
--		dev_err(dev, "fail to get vusb33\n");
--		return PTR_ERR(mtk->vusb33);
--	}
-+	ret = xhci_mtk_vregs_get(mtk);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to get regulators\n");
- 
- 	ret = xhci_mtk_clks_get(mtk);
- 	if (ret)
-@@ -564,7 +542,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 	pm_runtime_enable(dev);
- 	pm_runtime_get_sync(dev);
- 
--	ret = xhci_mtk_ldos_enable(mtk);
-+	ret = regulator_bulk_enable(BULK_VREGS_NUM, mtk->supplies);
- 	if (ret)
- 		goto disable_pm;
- 
-@@ -673,7 +651,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
- 
- disable_ldos:
--	xhci_mtk_ldos_disable(mtk);
-+	regulator_bulk_disable(BULK_VREGS_NUM, mtk->supplies);
- 
- disable_pm:
- 	pm_runtime_put_noidle(dev);
-@@ -701,7 +679,7 @@ static int xhci_mtk_remove(struct platform_device *pdev)
- 	usb_put_hcd(hcd);
- 	xhci_mtk_sch_exit(mtk);
- 	clk_bulk_disable_unprepare(BULK_CLKS_NUM, mtk->clks);
--	xhci_mtk_ldos_disable(mtk);
-+	regulator_bulk_disable(BULK_VREGS_NUM, mtk->supplies);
- 
- 	pm_runtime_disable(dev);
- 	pm_runtime_put_noidle(dev);
-diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
-index 4b1ea89f959a..ffd4b493b4ba 100644
---- a/drivers/usb/host/xhci-mtk.h
-+++ b/drivers/usb/host/xhci-mtk.h
-@@ -11,10 +11,12 @@
- 
- #include <linux/clk.h>
- #include <linux/hashtable.h>
-+#include <linux/regulator/consumer.h>
- 
- #include "xhci.h"
- 
- #define BULK_CLKS_NUM	5
-+#define BULK_VREGS_NUM	2
- 
- /* support at most 64 ep, use 32 size hash table */
- #define SCH_EP_HASH_BITS	5
-@@ -150,9 +152,8 @@ struct xhci_hcd_mtk {
- 	int num_u3_ports;
- 	int u2p_dis_msk;
- 	int u3p_dis_msk;
--	struct regulator *vusb33;
--	struct regulator *vbus;
- 	struct clk_bulk_data clks[BULK_CLKS_NUM];
-+	struct regulator_bulk_data supplies[BULK_VREGS_NUM];
- 	unsigned int has_ippc:1;
- 	unsigned int lpm_support:1;
- 	unsigned int u2_lpm_disable:1;
--- 
-2.33.1
-
+--=20
+Hell=C3=B3,
+K=C3=A9rem, fogadja el bocs=C3=A1natk=C3=A9r=C3=A9semet. Nem akarok megs=C3=
+=A9rteni a
+mag=C3=A1n=C3=A9let=C3=A9t, Felix Joel vagyok, szakm=C3=A1mb=C3=B3l =C3=BCg=
+yv=C3=A9d. Kor=C3=A1bban =C3=ADrtam
+=C3=96nnek egy levelet, de v=C3=A1lasz n=C3=A9lk=C3=BCl, =C3=A9s az els=C5=
+=91 levelemben
+megeml=C3=ADtettem =C3=96nnek n=C3=A9hai =C3=BCgyfelemet, aki ugyanazt a ve=
+zet=C3=A9knevet
+viseli, mint =C3=96n. Hal=C3=A1la =C3=B3ta t=C3=B6bb levelet kaptam a Bankj=
+=C3=A1t=C3=B3l, ahol
+hal=C3=A1la el=C5=91tt bet=C3=A9tet helyezett el, a bank megk=C3=A9rt, hogy=
+ adjam meg
+k=C3=B6zeli hozz=C3=A1tartoz=C3=B3j=C3=A1t vagy b=C3=A1rmely hozz=C3=A1tart=
+oz=C3=B3j=C3=A1t, aki ig=C3=A9nyt
+tarthat a p=C3=A9nzeszk=C3=B6z=C3=A9re, k=C3=BCl=C3=B6nben elkobozz=C3=A1k.=
+ Nem tal=C3=A1ltam egyetlen
+rokon=C3=A1t sem, ez=C3=A9rt =C3=BAgy d=C3=B6nt=C3=B6ttem, hogy felkeresem =
+=C3=96nt ezzel a
+keresettel, ez=C3=A9rt ugyanaz a vezet=C3=A9kneve, mint =C5=91. tov=C3=A1bb=
+i r=C3=A9szletek=C3=A9rt
+s=C3=BCrg=C5=91sen forduljon hozz=C3=A1m.
+Tisztelettel,
+Felix Joel =C3=BCgyv=C3=A9d.

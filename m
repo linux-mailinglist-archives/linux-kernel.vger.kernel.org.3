@@ -2,102 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD7444B560C
+	by mail.lfdr.de (Postfix) with ESMTP id 71EFB4B560B
 	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 17:23:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356319AbiBNQXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 11:23:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35040 "EHLO
+        id S1356303AbiBNQXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 11:23:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237864AbiBNQXR (ORCPT
+        with ESMTP id S237864AbiBNQXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 11:23:17 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CE850B23
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:23:08 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nJe7f-0008Lp-1r; Mon, 14 Feb 2022 17:22:43 +0100
-Message-ID: <579eab10-594c-d6b2-0ddb-ea6ab8e02856@pengutronix.de>
-Date:   Mon, 14 Feb 2022 17:22:34 +0100
+        Mon, 14 Feb 2022 11:23:14 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6638C60A9B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:23:05 -0800 (PST)
+Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MJV5K-1nZ7eB3Pb6-00Jr7m for <linux-kernel@vger.kernel.org>; Mon, 14 Feb
+ 2022 17:23:03 +0100
+Received: by mail-wr1-f41.google.com with SMTP id j26so16901372wrb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:23:03 -0800 (PST)
+X-Gm-Message-State: AOAM530MzYqMCZBshDWyR0r/WpufWbb0Cb9yLQ9cx1kOmeHtKp4pI6HI
+        hv/eiP2WLUu2/AZb034plDdgQnZ5C+CdPAjydmc=
+X-Google-Smtp-Source: ABdhPJyG+jgpVi3VfDfCUUdvqz8L8f7kQFYsusxm0coFeTiylsS6SErvSFrlMbDk8neM8L62+ULjFBu3y9eBOV0ciJc=
+X-Received: by 2002:adf:e5ce:: with SMTP id a14mr303823wrn.317.1644855783467;
+ Mon, 14 Feb 2022 08:23:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [BUG] mtd: cfi_cmdset_0002: write regression since v4.17-rc1
-Content-Language: en-US
-To:     Tokunori Ikegami <ikegami.t@gmail.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-mtd@lists.infradead.org, Joakim.Tjernlund@infinera.com,
-        miquel.raynal@bootlin.com, vigneshr@ti.com, richard@nod.at,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Brian Norris <computersforpeace@gmail.com>,
-        David Woodhouse <dwmw2@infradead.org>, marek.vasut@gmail.com,
-        cyrille.pitchen@wedev4u.fr,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linuxppc-dev@lists.ozlabs.org
-References: <b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de>
- <dff2abcc-5813-2f2c-35ba-f03cd1f35ac3@leemhuis.info>
- <e11b76dc-5539-fb7e-da1c-a5005713d6b0@gmail.com>
- <3dbbcee5-81fc-cdf5-9f8b-b6ccb95beddc@pengutronix.de>
- <0f2cfcac-83ca-51a9-f92c-ff6495dca1d7@gmail.com>
- <b231b498-c8d2-28af-ce66-db8c168047f7@pengutronix.de>
- <66ee55d9-4f20-6722-6097-e53c2108ea07@gmail.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <66ee55d9-4f20-6722-6097-e53c2108ea07@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220207184652.1218447-1-michael@walle.cc> <YgpkCyoSMg5RYfkO@google.com>
+ <YgpkQMbhWAJG6oCh@google.com>
+In-Reply-To: <YgpkQMbhWAJG6oCh@google.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 14 Feb 2022 17:22:47 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0UWO=h6K4NpzCVC2vbOvThJH28GM5ddm9U1crr1Su7vQ@mail.gmail.com>
+Message-ID: <CAK8P3a0UWO=h6K4NpzCVC2vbOvThJH28GM5ddm9U1crr1Su7vQ@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: add myself as a maintainer for the sl28cpld
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Michael Walle <michael@walle.cc>, SoC Team <soc@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:O+YnL10ezeU7myro1RjijajOTfmvAEDE5xmIbCJNcUuhk+2z9T+
+ d7K1rZIoVFDaMQb0QfSPZbWLjCn9D1ex3nbP4sJ8BGBbnZ7GVWcYSKNHCl9ndBh09aJB1zk
+ /Xvj2mQVzTxkV/+b9BtXhij63l/6jy9vXf/Tp6iId8WXKleO+m4rz3bDVNtmnmOIe8qGDqj
+ 16z95wXKPZVyhWXG9AEEQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:kTns834XWFs=:+o71QcMnOtIwg4WAquKVdR
+ KzSK1tnOriW66iZgjKnjSz0escEE3t9ZQhSwZLQsQdqgDufsIeUhaslkSw2Kk8kXnioGgn656
+ IWPWYGYhm7gUAOLZU3pKR5j6040kdoEKgdnpUUmzxVFlNZ8KvUB71QkEzHFb+ijtyZPQsHSRM
+ s8dlaSe0zMOiy9IphIWjLb0tRU2cHzxw0wLkYOqQtpo4zH7MryA7Cr29wxMemy9chXDxWtL9k
+ hL3oUyxlmaENMYzDNOmhKkNCjRRtlcSNLTLGHAw+9r0wMaa3OB2M4sqqTBUSQy/IR5qKNcupj
+ U075+9dtl2k0F5PJgxX+70ITqiuw3pdNMg6RnAzsVwuHAHYWXx0JiHlFfrQTh2iuxZjB6F15e
+ osOZg0u74Sv7L7RW+72E3Mm1McONbOmoc8uD3t9lTAoVdJSOAIwfoe/8BLszNuykydxf1TmT+
+ CoDnnjUV7CbaMfTTsRnQn1RMRG2rpH/rHD5SKb9ZKAaa/m/818JlE2ledGg6WrJYZ7CfQo5lq
+ f1Qwzywdzlgwbj7m7VZSzTNTNZvPwrz5zY2aoKT61mAZF87iQEtPe5+2/5OcNIpRs0iFFRF8C
+ ZUnIz/URLYytKqwOfiUKwG4AcgUFn9sTbYgbCxWaz/AlnmTWVtlGD45/0YMTB2Uu4QlUXN7m8
+ 5Nq5rfntDSazkmEYknVQF9kYad8GX05Gp3YbXgt3YogNsh0i7uSXtT0z20f/D7fmMbGifHdiB
+ bcshVNGqZ7DZqqdFCkOP3G3t+dPSIuIirSBoypPhuabtlPJYVNaw64XzorYfWR//ruHARhQRH
+ 8iyzFfEXEK7WTf0ADi5oLQMfy8FX5kBghgxbzkdzzU4vFQVGG0=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Tokunori-san,
+On Mon, Feb 14, 2022 at 3:16 PM Lee Jones <lee.jones@linaro.org> wrote:
+>
+> On Mon, 14 Feb 2022, Lee Jones wrote:
+>
+> > On Mon, 07 Feb 2022, Michael Walle wrote:
+> >
+> > > The sl28cpld is a management controller found on the Kontron SMARC-sAL28
+> > > board for now. Support for it was added by me quite a while ago, but I
+> > > didn't add a MAINTAINERS entry. Add it now.
+> > >
+> > > Signed-off-by: Michael Walle <michael@walle.cc>
+> > > ---
+> > > Hi,
+> > >
+> > > since this affects so many subsystems, I'm not sure through which tree this
+> > > should go. I'm sending this to the arm soc maintainers because it's an
+> > > aarch64 board where this driver is used as well as Lee as the MFD
+> > > maintainer.
+> >
+> > I'm happy to take this, if it pleases everyone.
+>
+> Hold on, you're not going to get many Acks if you don't send it to the
+> other subsystem maintainers. :)
 
-On 13.02.22 17:47, Tokunori Ikegami wrote:
-> Hi Ahmad-san,
-> 
-> Thanks for your confirmations. Sorry for late to reply.
+I've already applied this one through the soc tree.
 
-No worries. I appreciate you taking the time.
-
-> Could you please try the patch attached to disable the chip_good() change as before?
-> I think this should work for S29GL964N since the chip_ready() is used and works as mentioned.
-
-yes, this resolves my issue:
-Tested-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-
->>>> Doesn't seem to be a buffered write issue here though as the writes
->>>> did work fine before dfeae1073583. Any other ideas?
->>> At first I thought the issue is possible to be resolved by using the word write instead of the buffered writes.
->>> Now I am thinking to disable the changes dfeae1073583 partially with any condition if possible.
->> What seems to work for me is checking if chip_good or chip_ready
->> and map_word is equal to 0xFF. I can't justify why this is ok though.
->> (Worst case bus is floating at this point of time and Hi-Z is read
->> as 0xff on CPU data lines...)
-> 
-> Sorry I am not sure about this.
-> I thought the chip_ready() itself is correct as implemented as the data sheet in the past.
-> But it did not work correctly so changed to use chip_good() instead as it is also correct.
-
-What exactly in the datasheet makes you believe chip_good is not appropriate?
-
-Cheers,
-Ahmad
-
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+         Arnd

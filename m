@@ -2,82 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B454B44A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 09:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF4A94B4408
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 09:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242297AbiBNIpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 03:45:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45070 "EHLO
+        id S239374AbiBNIYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 03:24:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbiBNIpG (ORCPT
+        with ESMTP id S234054AbiBNIYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 03:45:06 -0500
-Received: from imap3.hz.codethink.co.uk (imap3.hz.codethink.co.uk [176.9.8.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9EC4DF55
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:44:59 -0800 (PST)
-Received: from [167.98.27.226] (helo=rainbowdash)
-        by imap3.hz.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
-        id 1nJWcG-0007ZZ-Cs; Mon, 14 Feb 2022 08:21:48 +0000
-Received: from ben by rainbowdash with local (Exim 4.95)
-        (envelope-from <ben@rainbowdash>)
-        id 1nJWcG-004vz3-2K;
-        Mon, 14 Feb 2022 08:21:48 +0000
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-To:     linux-kernel@vger.kernel.org, bhelgaas@google.comv,
-        linux-pci@vger.kernel.org
-Cc:     paul.walmsley@sifive.com, greentime.hu@sifive.com,
-        david.abdurachmanov@gmail.com,
-        Ben Dooks <ben.dooks@codethink.co.uk>
-Subject: [PATCH 1/2] PCI: fu740: fix finding GPIOs
-Date:   Mon, 14 Feb 2022 08:21:43 +0000
-Message-Id: <20220214082144.1176084-2-ben.dooks@codethink.co.uk>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220214082144.1176084-1-ben.dooks@codethink.co.uk>
-References: <20220214082144.1176084-1-ben.dooks@codethink.co.uk>
+        Mon, 14 Feb 2022 03:24:36 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E01225C4A
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:24:29 -0800 (PST)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E416D40333
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 08:24:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644827067;
+        bh=Y1pkt7sh1u4nhMjpCSj85kjYF7GKoQX1FycUfW16GNg=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=fkEPZPIqdT3xXDMbO6RyIJ/efuBDDpCqGW0Qt1NJ3rdBZLPTBfHODEymc8BuyYi4/
+         jB2end4RuBgDEInZynzp1Y9vp/3AlrjBBm0JSM0JJFyx1T6FwCkw/rWBm5gESdynLN
+         6BxpMlIlV2vbgfGdlV0DdInUgt4QXZ4dbfb8aBnZ/TV4gCOGninddK4zobLlmjPyUJ
+         aYywAhbnCkYP++z4zTTT0Y8q1HGvO7Dk/anox08GgNZNVvi+B2F8lRsehJYYYdgo9O
+         oHCS2en/cWErJ0yqJwCLgOow5Mz6p+gb2A+A4LwXIvyzbRYO4IW+y+NPWIKj48jxih
+         4Phb9clk0lUCg==
+Received: by mail-ej1-f69.google.com with SMTP id ho37-20020a1709070ea500b006cd51be5cd8so5496681ejc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 00:24:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y1pkt7sh1u4nhMjpCSj85kjYF7GKoQX1FycUfW16GNg=;
+        b=tp7/dJKv3WHcsrzLHlj57vQnHN/vzKJosILtleab/eAmDIms0vU6aAFHV30kFa9FWn
+         jk8otljeYsKWNZBiPm2p6hWSlHd6pT9bE0nHLX9Si7kN0LwDdGV3Dl+dKW7kHyB/Iyga
+         WeCfxyvq4cdNv5MfZO7ukRABM98hZQ2wU3Isw5yPUDynQLtMJodzUUWcjPx5wOhoPwLI
+         405ZJGIMkUSPNRK8zUpvhuVpBmsKuFONtU1uC9ixxcYMa3ffPC1Af/DuF4jhn/W9AuqF
+         Da1dq8ygL+BpEUJIDxD9oLNPjOLs3wz2LG7abs6fwvzbm/hYh1XoKJ9oKjDGT+teule5
+         jgBQ==
+X-Gm-Message-State: AOAM530cTUvM9qkR6mRw7cy455/HnM5IUH/dYnDmRcdqggcBR1X4RVIl
+        RUP2xiopqOCN/aOSVx1kkHA+YIug4RKd18oKfyDeUM/Bel2kkmRANG1maCigY36tQ2QxS49imeP
+        x+3gAmmM/gPpdSBdsnjzp/ZBldoIVZek4A8WvJJETwQ==
+X-Received: by 2002:aa7:c3d8:: with SMTP id l24mr9023388edr.63.1644827065918;
+        Mon, 14 Feb 2022 00:24:25 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy3sWIkomqniJbHGA9USzgWbkd0+vKt73BSCiBXKwRHhK2HxngI2g+YQq0rzs3pSOItOjbAow==
+X-Received: by 2002:aa7:c3d8:: with SMTP id l24mr9023363edr.63.1644827065698;
+        Mon, 14 Feb 2022 00:24:25 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id fn5sm1363850ejc.179.2022.02.14.00.24.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 00:24:25 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: sifive: drop Yash Shah
+Date:   Mon, 14 Feb 2022 09:23:49 +0100
+Message-Id: <20220214082349.162973-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The calls to devm_gpiod_get_optional() have the -gpios at the end of
-the name. This means the pcie driver is not finding the necessary
-reset or power GPOOs to allow the PCIe devices on the SiFive Unmatched
-boards.
+Emails to Yash Shah bounce with "The email account that you tried to
+reach does not exist.", so drop him from all maintainer entries.
 
-This has not been a noted bug as the PCIe probe from u-boot has been
-required to get the PCIe working due to other issues with the system
-setup. It could have been broken since the driver inclusion, and not
-been noticed as it is not necessary for the driver to funciton.
-
-Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- drivers/pci/controller/dwc/pcie-fu740.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/gpio/sifive,gpio.yaml     | 1 -
+ Documentation/devicetree/bindings/pwm/pwm-sifive.yaml       | 1 -
+ .../devicetree/bindings/riscv/sifive-l2-cache.yaml          | 1 -
+ MAINTAINERS                                                 | 6 ------
+ 4 files changed, 9 deletions(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-fu740.c b/drivers/pci/controller/dwc/pcie-fu740.c
-index 00cde9a248b5..842b7202b96e 100644
---- a/drivers/pci/controller/dwc/pcie-fu740.c
-+++ b/drivers/pci/controller/dwc/pcie-fu740.c
-@@ -259,11 +259,11 @@ static int fu740_pcie_probe(struct platform_device *pdev)
- 		return PTR_ERR(afp->mgmt_base);
+diff --git a/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml b/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
+index e04349567eeb..427c5873f96a 100644
+--- a/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
++++ b/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
+@@ -7,7 +7,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: SiFive GPIO controller
  
- 	/* Fetch GPIOs */
--	afp->reset = devm_gpiod_get_optional(dev, "reset-gpios", GPIOD_OUT_LOW);
-+	afp->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
- 	if (IS_ERR(afp->reset))
- 		return dev_err_probe(dev, PTR_ERR(afp->reset), "unable to get reset-gpios\n");
+ maintainers:
+-  - Yash Shah <yash.shah@sifive.com>
+   - Paul Walmsley <paul.walmsley@sifive.com>
  
--	afp->pwren = devm_gpiod_get_optional(dev, "pwren-gpios", GPIOD_OUT_LOW);
-+	afp->pwren = devm_gpiod_get_optional(dev, "pwren", GPIOD_OUT_LOW);
- 	if (IS_ERR(afp->pwren))
- 		return dev_err_probe(dev, PTR_ERR(afp->pwren), "unable to get pwren-gpios\n");
+ properties:
+diff --git a/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml b/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
+index 676b2160bada..605c1766dba8 100644
+--- a/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
++++ b/Documentation/devicetree/bindings/pwm/pwm-sifive.yaml
+@@ -8,7 +8,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: SiFive PWM controller
  
+ maintainers:
+-  - Yash Shah <yash.shah@sifive.com>
+   - Sagar Kadam <sagar.kadam@sifive.com>
+   - Paul Walmsley <paul.walmsley@sifive.com>
+ 
+diff --git a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+index 2b1f91603897..e2d330bd4608 100644
+--- a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
++++ b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+@@ -9,7 +9,6 @@ title: SiFive L2 Cache Controller
+ 
+ maintainers:
+   - Sagar Kadam <sagar.kadam@sifive.com>
+-  - Yash Shah <yash.shah@sifive.com>
+   - Paul Walmsley  <paul.walmsley@sifive.com>
+ 
+ description:
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ebf7a75a6bec..87eeac970ca2 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7090,12 +7090,6 @@ L:	linux-edac@vger.kernel.org
+ S:	Maintained
+ F:	drivers/edac/sb_edac.c
+ 
+-EDAC-SIFIVE
+-M:	Yash Shah <yash.shah@sifive.com>
+-L:	linux-edac@vger.kernel.org
+-S:	Supported
+-F:	drivers/edac/sifive_edac.c
+-
+ EDAC-SKYLAKE
+ M:	Tony Luck <tony.luck@intel.com>
+ L:	linux-edac@vger.kernel.org
 -- 
-2.34.1
+2.32.0
 

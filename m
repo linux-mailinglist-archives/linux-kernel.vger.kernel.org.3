@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EAB24B45C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:32:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290044B4953
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239011AbiBNJaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:30:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42396 "EHLO
+        id S1347608AbiBNKaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:30:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243014AbiBNJ34 (ORCPT
+        with ESMTP id S1347269AbiBNKaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:29:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45153BF57;
-        Mon, 14 Feb 2022 01:29:25 -0800 (PST)
+        Mon, 14 Feb 2022 05:30:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B8E60DAC;
+        Mon, 14 Feb 2022 01:58:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7952B80DC8;
-        Mon, 14 Feb 2022 09:29:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 914E7C340E9;
-        Mon, 14 Feb 2022 09:29:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E91A6B80DCD;
+        Mon, 14 Feb 2022 09:58:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B2DDC340E9;
+        Mon, 14 Feb 2022 09:58:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644830962;
-        bh=LJ1sXuZ/bCb8N5WhK7UxNrm625DKnrhrSRqj0JPsg+E=;
+        s=korg; t=1644832724;
+        bh=AyZf0eQelAtzwuOhkkU/LFwNm/bYKXJ0mqWK38zXre4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hnVgB5k+n+LUuWA5RQKNm1OmRSYE5/zdP9QC68J76Zd/9VxXtVo0rUh6d6L04HLAm
-         wljwSuv6kYMYU7YetcNCb0S+waT4Rf09f0muAjMmQE+TuCv5c6GC26gaPgkakHpASJ
-         f+QeVDUz9yxZgDxVSCAtSJUxZoY0ZSPSJX/Wmbpw=
+        b=i9bZ/CVI+gApC9YfV4cTGlXSP51K5vt6mOcRyBBeRyszwIVOiN8WRHfIlrsqBZLxh
+         qPZwwwV1RVgdjQmcTN/PZ6M6+JES287tbYFLTaw4sGcSSoVg3oWrD76IHLBGyABrVT
+         DbgvoOHM/lR+l0Kz/qJS/VdHkrLZyWn5JyrcQ1Zk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jon Maloy <jmaloy@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 21/34] tipc: rate limit warning for received illegal binding update
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 103/203] phy: stm32: fix a refcount leak in stm32_usbphyc_pll_enable()
 Date:   Mon, 14 Feb 2022 10:25:47 +0100
-Message-Id: <20220214092446.632050524@linuxfoundation.org>
+Message-Id: <20220214092513.750298164@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
-References: <20220214092445.946718557@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jon Maloy <jmaloy@redhat.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit c7223d687758462826a20e9735305d55bb874c70 ]
+[ Upstream commit cfc826c88a79e22ba5d8001556eb2c7efd8a01b6 ]
 
-It would be easy to craft a message containing an illegal binding table
-update operation. This is handled correctly by the code, but the
-corresponding warning printout is not rate limited as is should be.
-We fix this now.
+This error path needs to decrement "usbphyc->n_pll_cons.counter" before
+returning.
 
-Fixes: b97bf3fd8f6a ("[TIPC] Initial merge")
-Signed-off-by: Jon Maloy <jmaloy@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 5b1af71280ab ("phy: stm32: rework PLL Lock detection")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/20220112111724.GB3019@kili
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/tipc/name_distr.c | 2 +-
+ drivers/phy/st/phy-stm32-usbphyc.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/tipc/name_distr.c b/net/tipc/name_distr.c
-index 7ebcaff8c1c4f..963f607b34999 100644
---- a/net/tipc/name_distr.c
-+++ b/net/tipc/name_distr.c
-@@ -288,7 +288,7 @@ static bool tipc_update_nametbl(struct net *net, struct distr_item *i,
- 			return true;
- 		}
- 	} else {
--		pr_warn("Unrecognized name table message received\n");
-+		pr_warn_ratelimited("Unknown name table message received\n");
+diff --git a/drivers/phy/st/phy-stm32-usbphyc.c b/drivers/phy/st/phy-stm32-usbphyc.c
+index e4f4a9be51320..1ecdc26689ce8 100644
+--- a/drivers/phy/st/phy-stm32-usbphyc.c
++++ b/drivers/phy/st/phy-stm32-usbphyc.c
+@@ -304,7 +304,7 @@ static int stm32_usbphyc_pll_enable(struct stm32_usbphyc *usbphyc)
+ 
+ 		ret = __stm32_usbphyc_pll_disable(usbphyc);
+ 		if (ret)
+-			return ret;
++			goto dec_n_pll_cons;
  	}
- 	return false;
- }
+ 
+ 	ret = stm32_usbphyc_regulators_enable(usbphyc);
 -- 
 2.34.1
 

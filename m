@@ -2,137 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D5C4B4BE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7514B493C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233666AbiBNKVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:21:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48488 "EHLO
+        id S1347547AbiBNKVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:21:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346250AbiBNKRz (ORCPT
+        with ESMTP id S1347953AbiBNKRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:17:55 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F16187C79A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 01:54:50 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 52E131396;
-        Mon, 14 Feb 2022 01:54:05 -0800 (PST)
-Received: from [10.163.47.15] (unknown [10.163.47.15])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1074B3F718;
-        Mon, 14 Feb 2022 01:54:03 -0800 (PST)
-Subject: Re: [PATCH v6] mm: Uninline copy_overflow()
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <e1723b9cfa924bcefcd41f69d0025b38e4c9364e.1644819985.git.christophe.leroy@csgroup.eu>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <50eed483-9f0a-7aee-1bfd-e89106a80424@arm.com>
-Date:   Mon, 14 Feb 2022 15:24:03 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 14 Feb 2022 05:17:00 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA188CD97;
+        Mon, 14 Feb 2022 01:54:26 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 79C3A47F;
+        Mon, 14 Feb 2022 10:54:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1644832463;
+        bh=aUVnJ4wIPvMcFSf1znk2gPQHK2Wcph2lWqBu4+e+lV4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J9Y5iGHHtcuiXm1vvqsm7FI1Bmbq+pu61xCQMZDMvj7rRyF3kszrjZ+y6DsCM0TnZ
+         qKBISSaCdg1yUWMGiMjhs6uz203wbs8LFhQs4u+vwuty7NMCwH0YM7jro1IAKdjmQ3
+         acjj1kcM7G9+RL15zhtS2JSj1ZTs1Lem1JJSnkAg=
+Date:   Mon, 14 Feb 2022 11:54:17 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
+        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
+        dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
+        kernel-list@raspberrypi.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org, lukasz@jany.st,
+        mchehab@kernel.org, naush@raspberrypi.com, robh@kernel.org,
+        tomi.valkeinen@ideasonboard.com,
+        bcm-kernel-feedback-list@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH v5 03/11] dt-bindings: media: Add bindings for
+ bcm2835-unicam
+Message-ID: <YgomyazKaV2QnfYQ@pendragon.ideasonboard.com>
+References: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
+ <20220208155027.891055-4-jeanmichel.hautbois@ideasonboard.com>
+ <f58bf6a9-c63f-19ab-36c8-a9a7b9182859@i2se.com>
+ <20220214093954.5y4jbqcddmwhgxr5@houat>
 MIME-Version: 1.0
-In-Reply-To: <e1723b9cfa924bcefcd41f69d0025b38e4c9364e.1644819985.git.christophe.leroy@csgroup.eu>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20220214093954.5y4jbqcddmwhgxr5@houat>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 14, 2022 at 10:39:54AM +0100, Maxime Ripard wrote:
+> Hi,
+> 
+> On Sun, Feb 13, 2022 at 04:48:45PM +0100, Stefan Wahren wrote:
+> > as someone with a little more insight to the clocks, i like to know your
+> > opinion about the bcm2835-unicam binding.
+> > 
+> > Am 08.02.22 um 16:50 schrieb Jean-Michel Hautbois:
+> > > Introduce the dt-bindings documentation for bcm2835 CCP2/CSI2 Unicam
+> > > camera interface.
+> > >
+> > > Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> > > Signed-off-by: Naushir Patuck <naush@raspberrypi.com>
+> > > Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
+> > > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > >
+> > > ---
+> > > v4:
+> > > - make MAINTAINERS its own patch
+> > > - describe the reg and clocks correctly
+> > > - use a vendor entry for the number of data lanes
+> > > ---
+> > >  .../bindings/media/brcm,bcm2835-unicam.yaml   | 117 ++++++++++++++++++
+> > >  1 file changed, 117 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> > > new file mode 100644
+> > > index 000000000000..1938ace23b3d
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/media/brcm,bcm2835-unicam.yaml
+> > > @@ -0,0 +1,117 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/media/brcm,bcm2835-unicam.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Broadcom BCM283x Camera Interface (Unicam)
+> > > +
+> > > +maintainers:
+> > > +  - Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
+> > > +
+> > > +description: |-
+> > > +  The Unicam block on BCM283x SoCs is the receiver for either
+> > > +  CSI-2 or CCP2 data from image sensors or similar devices.
+> > > +
+> > > +  The main platform using this SoC is the Raspberry Pi family of boards.  On
+> > > +  the Pi the VideoCore firmware can also control this hardware block, and
+> > > +  driving it from two different processors will cause issues.  To avoid this,
+> > > +  the firmware checks the device tree configuration during boot. If it finds
+> > > +  device tree nodes whose name starts with 'csi' then it will stop the firmware
+> > > +  accessing the block, and it can then safely be used via the device tree
+> > > +  binding.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: brcm,bcm2835-unicam
+> > > +
+> > > +  reg:
+> > > +    items:
+> > > +      - description: Unicam block.
+> > > +      - description: Clock Manager Image (CMI) block.
+> > > +
+> > > +  reg-names:
+> > > +    items:
+> > > +      - const: unicam
+> > > +      - const: cmi
+> > > +
+> > > +  interrupts:
+> > > +    maxItems: 1
+> > > +
+> > > +  clocks:
+> > > +    items:
+> > > +      - description: Clock to drive the LP state machine of Unicam.
+> > > +      - description: Clock for the VPU (core clock).
+> > > +
+> > > +  clock-names:
+> > > +    items:
+> > > +      - const: lp
+> > > +      - const: vpu
+> > > +
+> > 
+> > according to this patch [1], the unicam driver only needs the VPU clock
+> > reference just to enforce a minimum of 250 MHz. The firmware clock
+> > binding and its driver is specific to the bcm2711, but the Unicam IP
+> > exists since bcm2835.
+> > 
+> > So do you think the clock part is correct or should be the VPU clock
+> > optional?
+> 
+> I think we should keep it mandatory. Indeed, that clock is shared with
+> the HVS that will change its rate on a regular basis, so even just
+> enforcing that 250MHz while it's on without a clock handle will be
+> fairly hard.
+> 
+> Also, those are the constraints we have now, but having the clock handle
+> all the time will allow us to add any constraint we might need in the
+> future.
+> 
+> And BCM2711 or not, the clock has probably always been there.
 
+Furthermore, regardless of what the driver needs, Unicam operates with
+the VPU clock, so I think it makes sense to reference it in the device
+tree.
 
-On 2/14/22 11:56 AM, Christophe Leroy wrote:
-> While building a small config with CONFIG_CC_OPTIMISE_FOR_SIZE,
-> I ended up with more than 50 times the following function in vmlinux
-> because GCC doesn't honor the 'inline' keyword:
-> 
-> 	c00243bc <copy_overflow>:
-> 	c00243bc:	94 21 ff f0 	stwu    r1,-16(r1)
-> 	c00243c0:	7c 85 23 78 	mr      r5,r4
-> 	c00243c4:	7c 64 1b 78 	mr      r4,r3
-> 	c00243c8:	3c 60 c0 62 	lis     r3,-16286
-> 	c00243cc:	7c 08 02 a6 	mflr    r0
-> 	c00243d0:	38 63 5e e5 	addi    r3,r3,24293
-> 	c00243d4:	90 01 00 14 	stw     r0,20(r1)
-> 	c00243d8:	4b ff 82 45 	bl      c001c61c <__warn_printk>
-> 	c00243dc:	0f e0 00 00 	twui    r0,0
-> 	c00243e0:	80 01 00 14 	lwz     r0,20(r1)
-> 	c00243e4:	38 21 00 10 	addi    r1,r1,16
-> 	c00243e8:	7c 08 03 a6 	mtlr    r0
-> 	c00243ec:	4e 80 00 20 	blr
-> 
-> With -Winline, GCC tells:
-> 
-> 	/include/linux/thread_info.h:212:20: warning: inlining failed in call to 'copy_overflow': call is unlikely and code size would grow [-Winline]
-> 
-> copy_overflow() is a non conditional warning called by
-> check_copy_size() on an error path.
-> 
-> check_copy_size() have to remain inlined in order to benefit
-> from constant folding, but copy_overflow() is not worth inlining.
-> 
-> Uninline the warning when CONFIG_BUG is selected.
-> 
-> When CONFIG_BUG is not selected, WARN() does nothing so skip it.
-> 
-> This reduces the size of vmlinux by almost 4kbytes.
+-- 
+Regards,
 
-Just wondering, is this the only such scenario which results in
-an avoidable bloated vmlinux image ?
-
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
-> v6: I should have gone sleeping yesterday night instead of sending v5 out. Sorry for the noise. Fix EXPORT_SYMBOL()
-> 
-> v5: Change to EXPORT_SYMBOL() instead of EXPORT_SYMBOL_GPL()
-> 
-> v4: Make copy_overflow() a no-op when CONFIG_BUG is not selected
-> 
-> v3: Added missing ; after EXPORT_SYMBOL()
-> 
-> v2: Added missing EXPORT_SYMBOL() and enhanced commit message
-> ---
->  include/linux/thread_info.h | 5 ++++-
->  mm/maccess.c                | 6 ++++++
->  2 files changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/thread_info.h b/include/linux/thread_info.h
-> index 73a6f34b3847..9f392ec76f2b 100644
-> --- a/include/linux/thread_info.h
-> +++ b/include/linux/thread_info.h
-> @@ -209,9 +209,12 @@ __bad_copy_from(void);
->  extern void __compiletime_error("copy destination size is too small")
->  __bad_copy_to(void);
->  
-> +void __copy_overflow(int size, unsigned long count);
-> +
->  static inline void copy_overflow(int size, unsigned long count)
->  {
-> -	WARN(1, "Buffer overflow detected (%d < %lu)!\n", size, count);
-> +	if (IS_ENABLED(CONFIG_BUG))
-> +		__copy_overflow(size, count);
->  }
->  
->  static __always_inline __must_check bool
-> diff --git a/mm/maccess.c b/mm/maccess.c
-> index d3f1a1f0b1c1..3fed2b876539 100644
-> --- a/mm/maccess.c
-> +++ b/mm/maccess.c
-> @@ -335,3 +335,9 @@ long strnlen_user_nofault(const void __user *unsafe_addr, long count)
->  
->  	return ret;
->  }
-> +
-> +void __copy_overflow(int size, unsigned long count)
-> +{
-> +	WARN(1, "Buffer overflow detected (%d < %lu)!\n", size, count);
-> +}
-> +EXPORT_SYMBOL(__copy_overflow);
-> 
+Laurent Pinchart

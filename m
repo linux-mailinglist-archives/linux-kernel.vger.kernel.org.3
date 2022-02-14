@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5217B4B4303
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 08:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D85B24B4308
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 08:41:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241393AbiBNHi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 02:38:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55652 "EHLO
+        id S241442AbiBNHig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 02:38:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiBNHi1 (ORCPT
+        with ESMTP id S229529AbiBNHia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 02:38:27 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B384F9C3;
-        Sun, 13 Feb 2022 23:38:20 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id m17so762261edc.13;
-        Sun, 13 Feb 2022 23:38:19 -0800 (PST)
+        Mon, 14 Feb 2022 02:38:30 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239264F47F;
+        Sun, 13 Feb 2022 23:38:23 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id a8so35538447ejc.8;
+        Sun, 13 Feb 2022 23:38:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EdaUECiSD7pVSM2fISl5Rxs94dyG5TC8L23UXY/6iuk=;
-        b=FW1QEdoI2l08fSqbzMfyYrTOD5P7Zn40j6mFjrN3mDrhL/tweuyDDnUzFOS5bAplGl
-         WkA8zC/rIowjWX7m9TMhu28zcAMLhVI1wtf175DJM6XSDyHe6F6bNFGK+PCXy3H0Go89
-         h8RxWVJuvUgNZv4PCR/As3boSRLUnm0KpswCG7zhE7ArR+TRbUA362y1gtgxCWPTwIo2
-         ioURwCFn/Yo+JLGfak2tVgTJu3IpJiuHRTs7xtYPcVMffM0/VkO3TkauoLrKpWx8q6Hp
-         wIgJxX4VU0NbXRI5048MDkKGKlxu4eULPcvIzAV24MeOk0iIHU8ut9Tzcup8T9gvC/xB
-         0gIQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=AVMu6NN3biChFR5UuxImcxGSWWGJG/KG7InEx8tN/zM=;
+        b=IPJ5L/Gd4eaUTATgSsFFcNgdogHy+3PeWddDTcM6RMYnTojO8nmAYe7DljsIrAzQi7
+         i6Xq60F/Pxt9k7ZOk+UNVayYR5d+XRZEWfTHX4xqxF3NJeSWi2Ba3sXXw1T2vMJ7P/k2
+         0q2yOtYrF0KsL7CqQ1tilLcKdjZIOlRwwrbAdhBQlaBN67Jsh/4AXatn4i/PS4Q8JaFZ
+         Xk3o5MhHB45kSupMfzS4bbVM4XeZWBRsDr4HHvKhy1mvgFGUlCXpGbj9MqsOOg7mNmyh
+         HqHuq3rMqOhyQH6KQejnupSrrDv7sThFB11ck/fYmCvMTihbse0366OMsDRigwHyLm1L
+         hK4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EdaUECiSD7pVSM2fISl5Rxs94dyG5TC8L23UXY/6iuk=;
-        b=zWWvbfjJaBDhcgbNOrPpjvofPCtXJtY0ljOUCcHyjfWLfRC3gVl9Seg3T/0unJunuw
-         bSp3RbMMHA7CAfyQbMAnOG1RY7nfl35sbAPGPFs6AYosuEeXXb9yqvoDnlB0xnfzdkYg
-         KMsj1aK0SH0ebX5QI6VqbZfJHQsaufUFxmrOUE7gsrXAL4it9ELw+QUKxrP6lJ06xbn4
-         ABCcLdBh1y9tW6furJ9iPBNn9B6ZpCpWPhueaItw1ksR3WPT5PAksJ0BsNwFEXuk1Jfu
-         wZtzmUi7cf9c8zYIAC6ESFFN4kWpWNZPXk5DO45rVDOSsEbE06nLTFxfQ4fvL+k9mRle
-         fhgA==
-X-Gm-Message-State: AOAM5339bFJJzrJ4uBbw0CW49Rsh3LUZcOKjmQcJmz4HMZI160JxVjI0
-        Ay/WzEHhUBbxRZLGTEztX9I=
-X-Google-Smtp-Source: ABdhPJzRzdeYdjn7aOOaEw2NAcaw56khJMr0cTT7yUEM5aaiaFQntV83Pz5+01WCXSfq06IBT+MKIg==
-X-Received: by 2002:aa7:c892:: with SMTP id p18mr5922206eds.454.1644824298539;
-        Sun, 13 Feb 2022 23:38:18 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=AVMu6NN3biChFR5UuxImcxGSWWGJG/KG7InEx8tN/zM=;
+        b=NrhgAzS/DQ9i9Op8MsYy93b2x4qVyGVfvI4wlpRtl35B9dirrCUJjbOiVZ525TfPS2
+         4n8zVAXU5ufgkC0a3TWgX1K29fNFSEcW8+nlzxrz56OCW5V+4RT+5ZhInVcxpEMXzX34
+         RjstpmJhYH8NgPWiqfwFE1R+4tXMjHINKK0+9HgadoGry82xKYmBgmT9CdUfsRge8o6s
+         GMndHts+ODkHV+S1oAtI0FXO5XBmdMsFciDAsus1+O84pxKKRR/47ZtjFmwHeZ5siq2y
+         NmDkny7ZpWgk3sPOBV6XRbXEjoGHyYo5bIG+mgj6N+mO72suMcxjkSNxQ4hxvq+BSxeJ
+         JV9A==
+X-Gm-Message-State: AOAM533HfKq3ustlt7jyAABbc9XzrbQSHLpwG3WHoZfi53Q0vFqJ0dsA
+        GOg97vPZY2jbq2/l2l6Dcdg=
+X-Google-Smtp-Source: ABdhPJyLQdlZaKqPwB9HMGZNonoU8F290JfXnTh8DZkkz1YHIEXvNVVeuSBR8STeaI9T4YvrnHaKgw==
+X-Received: by 2002:a17:907:970f:: with SMTP id jg15mr10393921ejc.705.1644824301740;
+        Sun, 13 Feb 2022 23:38:21 -0800 (PST)
 Received: from demon-pc.localdomain ([188.24.58.131])
-        by smtp.gmail.com with ESMTPSA id 9sm2480065ejd.184.2022.02.13.23.38.17
+        by smtp.gmail.com with ESMTPSA id 9sm2480065ejd.184.2022.02.13.23.38.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Feb 2022 23:38:18 -0800 (PST)
+        Sun, 13 Feb 2022 23:38:21 -0800 (PST)
 From:   Cosmin Tanislav <demonsingur@gmail.com>
 X-Google-Original-From: Cosmin Tanislav <cosmin.tanislav@analog.com>
 Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
@@ -55,10 +55,12 @@ Cc:     cosmin.tanislav@analog.com, demonsingur@gmail.com,
         Michael Hennerich <Michael.Hennerich@analog.com>,
         Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 0/5] Add ADXL367 driver
-Date:   Mon, 14 Feb 2022 09:38:05 +0200
-Message-Id: <20220214073810.781016-1-cosmin.tanislav@analog.com>
+Subject: [PATCH v5 1/5] iio: introduce mag_referenced
+Date:   Mon, 14 Feb 2022 09:38:06 +0200
+Message-Id: <20220214073810.781016-2-cosmin.tanislav@analog.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220214073810.781016-1-cosmin.tanislav@analog.com>
+References: <20220214073810.781016-1-cosmin.tanislav@analog.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,117 +74,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Some accelerometers that support activity and inactivity
+events also support a referenced mode, in which the
+gravitational acceleration is taken as a point of
+reference before comparing the acceleration to the
+specified activity and inactivity magnitude.
 
-The ADXL367 is an ultralow power, 3-axis MEMS accelerometer.
+For example, in the case of the ADXL367, for activity
+detection, the formula is:
 
-The ADXL367 does not alias input signals to achieve ultralow power
-consumption, it samples the full bandwidth of the sensor at all
-data rates. Measurement ranges of +-2g, +-4g, and +-8g are available,
-with a resolution of 0.25mg/LSB on the +-2 g range.
+abs(acceleration - reference) > magnitude
 
-In addition to its ultralow power consumption, the ADXL367
-has many features to enable true system level power reduction.
-It includes a deep multimode output FIFO, a built-in micropower
-temperature sensor, and an internal ADC for synchronous conversion
-of an additional analog input.
+Add a new event type that makes this behavior clear.
 
-V1 -> V2
- * add support for vdd and vddio supplies
- * lock fifo_watermark retrieval
- * fix indentation of sysfs_emit for fifo_mode
- * dt-bindings: add spi-max-frequency: true
- * dt-bindings: remove cs-gpios property
- * dt-bindings: remove status property
- * dt-bindings: add support for vdd
+Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+---
+ drivers/iio/industrialio-event.c | 1 +
+ include/uapi/linux/iio/types.h   | 1 +
+ tools/iio/iio_event_monitor.c    | 1 +
+ 3 files changed, 3 insertions(+)
 
-V2 -> V3
- * MAINTAINERS: use wildcard for adxl367
- * dt-bindings: adxl367@addr -> accelerometer@addr
- * put asm include after linux includes
- * drop registers accessed implicitly
- * fifo_full -> fifo_watermark
- * print expected device id
- * remove INDIO_BUFFER_HARDWARE
- * inline ADXL367_EVENT macro
- * inline ADXL367_14BIT_SCAN_INFO
- * inline regulator enum
- * remove of.h in spi driver
- * cast const void * to const u8 * in spi read
- * switch to trigger-less buffer
- * increase reset time as advised by hardware team
- * let iio framework validate available channel masks
- * enable adc or temp channel automatically on single read
- * wait for 100ms after enabling adc or temp for output
-   to settle on single read (waiting on hardware team input)
- * enable adc or temp channel automatically on buffered read
- * claim direct mode when setting range
- * claim direct mode when setting odr
- * claim direct mode when setting event config
- * sort status masks in descending bit order
- * hardcode indio_dev name
- * add some comments regarding spi message layout
- * use bulk_write for activity and inactivity threshold
- * use bulk_write for inactivity time
- * use bool as return type of fifo format finding function
- * remove shift from channels scan type
-
-V3 -> V4
- * add a patch that introduces mag_referenced event type
- * add a patch that documents mag_referenced event type
- * add a patch that adds a note to the buffer/enable documentation
-   regarding configuration of other attributes during buffer capture
- * remove unused adxl367_time_scale_tbl
- * add static attribute to adxl367_write_raw_get_fmt
- * return IRQ_HANDLED when FIFO read fails and print error message
- * scale temperature value by 1000 to reach milli degrees C
- * merge dev_to_iio_dev into useplace when indio_dev is not needed
- * merge preenable into postenable and postdisable into predisable
- * fix default inactivity threshold
- * export probe symbol to namespace
- * IIO_EV_TYPE_THRESH -> IIO_EV_TYPE_MAG_REFERENCED
- * reset device and then verify dev id for 10ms
- * share events by type so that they show up with iio_accel prefix in the
-   events subdirectory
- * use a separate mask for extracting data
-   I previously removed the shift fron scan_type since the FIFO data does
-   not contain a shift but that broke single channel reads. Add it back
-   just for single channel reads.
-
-V4 -> V5
- * linux/module.h -> linux/mod_devicetable.h
- * extract fifo_formats into separate array to allow arbitrary scan mask
-   order
- * reorder channel_masks and fifo_formats
- * prepend IIO_ to ADXL367 namespace
- * use adxl367_fifo_formats array size to iterate over channel_masks table
-
-Cosmin Tanislav (5):
-  iio: introduce mag_referenced
-  iio: ABI: document mag_referenced
-  iio: ABI: add note about configuring other attributes during buffer
-    capture
-  dt-bindings: iio: accel: add ADXL367
-  iio: accel: add ADXL367 driver
-
- Documentation/ABI/testing/sysfs-bus-iio       |   30 +
- .../bindings/iio/accel/adi,adxl367.yaml       |   79 +
- MAINTAINERS                                   |    8 +
- drivers/iio/accel/Kconfig                     |   27 +
- drivers/iio/accel/Makefile                    |    3 +
- drivers/iio/accel/adxl367.c                   | 1588 +++++++++++++++++
- drivers/iio/accel/adxl367.h                   |   23 +
- drivers/iio/accel/adxl367_i2c.c               |   90 +
- drivers/iio/accel/adxl367_spi.c               |  164 ++
- drivers/iio/industrialio-event.c              |    1 +
- include/uapi/linux/iio/types.h                |    1 +
- tools/iio/iio_event_monitor.c                 |    1 +
- 12 files changed, 2015 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/accel/adi,adxl367.yaml
- create mode 100644 drivers/iio/accel/adxl367.c
- create mode 100644 drivers/iio/accel/adxl367.h
- create mode 100644 drivers/iio/accel/adxl367_i2c.c
- create mode 100644 drivers/iio/accel/adxl367_spi.c
-
+diff --git a/drivers/iio/industrialio-event.c b/drivers/iio/industrialio-event.c
+index d0732eac0f0a..ce8b102ce52f 100644
+--- a/drivers/iio/industrialio-event.c
++++ b/drivers/iio/industrialio-event.c
+@@ -230,6 +230,7 @@ static const char * const iio_ev_type_text[] = {
+ 	[IIO_EV_TYPE_THRESH_ADAPTIVE] = "thresh_adaptive",
+ 	[IIO_EV_TYPE_MAG_ADAPTIVE] = "mag_adaptive",
+ 	[IIO_EV_TYPE_CHANGE] = "change",
++	[IIO_EV_TYPE_MAG_REFERENCED] = "mag_referenced",
+ };
+ 
+ static const char * const iio_ev_dir_text[] = {
+diff --git a/include/uapi/linux/iio/types.h b/include/uapi/linux/iio/types.h
+index 48c13147c0a8..472cead10d8d 100644
+--- a/include/uapi/linux/iio/types.h
++++ b/include/uapi/linux/iio/types.h
+@@ -104,6 +104,7 @@ enum iio_event_type {
+ 	IIO_EV_TYPE_THRESH_ADAPTIVE,
+ 	IIO_EV_TYPE_MAG_ADAPTIVE,
+ 	IIO_EV_TYPE_CHANGE,
++	IIO_EV_TYPE_MAG_REFERENCED,
+ };
+ 
+ enum iio_event_direction {
+diff --git a/tools/iio/iio_event_monitor.c b/tools/iio/iio_event_monitor.c
+index b94a16ba5c6c..2f4581658859 100644
+--- a/tools/iio/iio_event_monitor.c
++++ b/tools/iio/iio_event_monitor.c
+@@ -68,6 +68,7 @@ static const char * const iio_ev_type_text[] = {
+ 	[IIO_EV_TYPE_THRESH_ADAPTIVE] = "thresh_adaptive",
+ 	[IIO_EV_TYPE_MAG_ADAPTIVE] = "mag_adaptive",
+ 	[IIO_EV_TYPE_CHANGE] = "change",
++	[IIO_EV_TYPE_MAG_REFERENCED] = "mag_referenced",
+ };
+ 
+ static const char * const iio_ev_dir_text[] = {
 -- 
 2.35.1
 

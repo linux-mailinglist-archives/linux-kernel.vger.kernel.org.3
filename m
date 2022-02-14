@@ -2,90 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0884B45A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 223EB4B492B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242897AbiBNJ0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:26:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39908 "EHLO
+        id S1345650AbiBNKM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:12:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238884AbiBNJ0b (ORCPT
+        with ESMTP id S1345862AbiBNKLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:26:31 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 150C260A8B
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 01:26:23 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-313-sjXgZp0fOm66Vo-KMrSp4w-1; Mon, 14 Feb 2022 09:26:21 +0000
-X-MC-Unique: sjXgZp0fOm66Vo-KMrSp4w-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Mon, 14 Feb 2022 09:26:20 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Mon, 14 Feb 2022 09:26:20 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Helge Deller' <deller@gmx.de>,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>
-Subject: RE: [PATCH] fat: Use pointer to d_name[0] in put_user() for compat
- case
-Thread-Topic: [PATCH] fat: Use pointer to d_name[0] in put_user() for compat
- case
-Thread-Index: AQHYISaVap2r7qAO+E+IsFLjJVJIxKySvtowgAAIGvA=
-Date:   Mon, 14 Feb 2022 09:26:20 +0000
-Message-ID: <0ecb87dcc4cf42328f1f5a7d6abd08ed@AcuMS.aculab.com>
-References: <YgmB01p+p45Cihhg@p100>
- <49a26b7a30254d9fb9653c2f815eaa28@AcuMS.aculab.com>
-In-Reply-To: <49a26b7a30254d9fb9653c2f815eaa28@AcuMS.aculab.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 14 Feb 2022 05:11:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762AB65412;
+        Mon, 14 Feb 2022 01:50:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1132D60F65;
+        Mon, 14 Feb 2022 09:50:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDCB1C340E9;
+        Mon, 14 Feb 2022 09:50:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1644832235;
+        bh=lUg6UgIUo1yE4iHE1a1K4H9EBvuK+VqmJ7QfNaWBFas=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=leHm6UwdViOr4upyB2+wiV3j1i6JOE4IJ3dpIzunDVpbSy5WCEpWnQvUxh242MMHY
+         v19I0uzBm66kyJj9qn/weQNtGwQ3nXnnV9w7fpoLRNxor1O1jLbkx640YuWC3DJCIr
+         D4PiAsCcWngnNwZPmYjnbIikAD3y+n0VwRv1Lm6I=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
+        Andrew Lunn <andrew@lunn.ch>, Andrew Jeffery <andrew@aj.id.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 122/172] net: mdio: aspeed: Add missing MODULE_DEVICE_TABLE
+Date:   Mon, 14 Feb 2022 10:26:20 +0100
+Message-Id: <20220214092510.635104407@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogRGF2aWQgTGFpZ2h0DQo+IFNlbnQ6IDE0IEZlYnJ1YXJ5IDIwMjIgMDk6MTINCj4gDQo+
-IEZyb206IEhlbGdlIERlbGxlcg0KPiA+IFNlbnQ6IDEzIEZlYnJ1YXJ5IDIwMjIgMjI6MTANCj4g
-Pg0KPiA+IFRoZSBwdXRfdXNlcih2YWwscHRyKSBtYWNybyB3YW50cyBhIHBvaW50ZXIgaW4gdGhl
-IHNlY29uZCBwYXJhbWV0ZXIsIGJ1dCBpbg0KPiA+IGZhdF9pb2N0bF9maWxsZGlyKCkgdGhlIGRf
-bmFtZSBmaWVsZCByZWZlcmVuY2VzIGEgd2hvbGUgImFycmF5IG9mIGNoYXJzIi4NCj4gPiBVc3Vh
-bGx5IHRoZSBjb21waWxlciBhdXRvbWF0aWNhbGx5IGNvbnZlcnRzIGl0IGFuZCB1c2VzIGEgcG9p
-bnRlciB0byB0aGF0DQo+ID4gYXJyYXksIGJ1dCBpdCdzIG1vcmUgY2xlYW4gdG8gZXhwbGljaXRs
-eSBnaXZlIHRoZSByZWFsIHBvaW50ZXIgdG8gd2hlcmUgc29tZXRpbmcNCj4gPiBpcyBwdXQsIHdo
-aWNoIGlzIGluIHRoaXMgY2FzZSB0aGUgZmlyc3QgY2hhcmFjdGVyIG9mIHRoZSBkX25hbWVbXSBh
-cnJheS4NCj4gDQo+IFRoYXQganVzdCBpc24ndCB0cnVlLg0KPiANCj4gSW4gQyBib3RoIHgtPmNo
-YXJfYXJyYXkgYW5kICZ4LT5jaGFyX2FycmF5WzBdIGhhdmUgdGhlIHNhbWUgdHlwZQ0KPiAnY2hh
-ciAqJy4NCj4gDQo+IFRoZSAnYnVnJyBpcyBjYXVzZWQgYnkgcHV0X3VzZXIoKSB0cnlpbmcgdG8g
-ZG86DQo+IAlfX3R5cGVvZl9fKHB0cikgX19wdHIgPSBwdHI7DQo+IHdoZXJlIF9fdHlwZW9mX18g
-aXMgcmV0dXJuaW5nIGNoYXJbbl0gbm90IGNoYXIgKi4NCj4gDQo+IEkndmUgdHJpZWQgYSBmZXcg
-dGhpbmdzIGJ1dCBjYW4ndCBnZXQgX190eXBlb2ZfXyB0bw0KPiBnZW5lcmF0ZSBhIHN1aXRhYmxl
-IHR5cGUgZm9yIGJvdGggYSBzaW1wbGUgdHlwZSBhbmQgYXJyYXkuDQoNCkFjdHVhbGx5IHRoZSBp
-c3N1ZSBpcyB0aGF0IHB1dF91c2VyKCkgd3JpdGVzIGEgc2luZ2xlIHZhcmlhYmxlDQphbmQgbmVl
-ZHMgYSBwb2ludGVyIHRvIG9uZS4NClNvIGNoYW5naW5nIHRvOg0KCXB1dF91c2VyKDAsICZhcnJh
-eVswXSk7DQppcyBwcm9iYWJseSBmaW5lLg0KQnV0IHRoZSBkZXNjcmlwdGlvbiBpcyBhbGwgd3Jv
-bmcuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkg
-Um9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlv
-biBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+From: Joel Stanley <joel@jms.id.au>
+
+[ Upstream commit bc1c3c3b10db4f37c41e6107751a8d450d9c431c ]
+
+Fix loading of the driver when built as a module.
+
+Fixes: f160e99462c6 ("net: phy: Add mdio-aspeed")
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Acked-by: Andrew Jeffery <andrew@aj.id.au>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/mdio/mdio-aspeed.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/net/mdio/mdio-aspeed.c b/drivers/net/mdio/mdio-aspeed.c
+index 966c3b4ad59d1..e2273588c75b6 100644
+--- a/drivers/net/mdio/mdio-aspeed.c
++++ b/drivers/net/mdio/mdio-aspeed.c
+@@ -148,6 +148,7 @@ static const struct of_device_id aspeed_mdio_of_match[] = {
+ 	{ .compatible = "aspeed,ast2600-mdio", },
+ 	{ },
+ };
++MODULE_DEVICE_TABLE(of, aspeed_mdio_of_match);
+ 
+ static struct platform_driver aspeed_mdio_driver = {
+ 	.driver = {
+-- 
+2.34.1
+
+
 

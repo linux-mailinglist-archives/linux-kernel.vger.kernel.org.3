@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2964B4640
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 963504B49EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243892AbiBNJd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:33:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43074 "EHLO
+        id S1345200AbiBNKJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:09:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243813AbiBNJc6 (ORCPT
+        with ESMTP id S1345057AbiBNKFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:32:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06E0654B2;
-        Mon, 14 Feb 2022 01:31:28 -0800 (PST)
+        Mon, 14 Feb 2022 05:05:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDC674847;
+        Mon, 14 Feb 2022 01:49:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A29C0B80DC9;
-        Mon, 14 Feb 2022 09:31:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2942C340E9;
-        Mon, 14 Feb 2022 09:31:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E21CC61291;
+        Mon, 14 Feb 2022 09:49:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5C55C340E9;
+        Mon, 14 Feb 2022 09:49:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831086;
-        bh=vpoPkv9rf1mOfOsdvV0gDp/04qklVNza3cqP+Z3ZcCg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YkTSjIcHWfKzMsQBt75HAKnFuEarOutoMWhwW8pIgzn5/Ml726ymk45HN4RtCmvT6
-         w3zE0nzXk/JFiavRBjFGQ2Ra0C+KZI3MQvnJHNwZqip0LMtgsn4C16efec+kprTiZw
-         U4MoYx+etdv5+6OYkxJqAXGpMP+GzjntpL8pY7UE=
+        s=korg; t=1644832158;
+        bh=TyD2aMjxLMkZUzR4ycHZFT9SUVAGZ7tCb5EfJ04mpnE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=TiszzbAt7YtNHHKy2/k+zgy8sJ+wrMff0KD4b9DVHY5spCyVeFq8z5UN+p3RXVQZv
+         AbBkg0e6TPzKItbfn+Vtn6lQ2fmN+nZ7VJtE1X7a/kKNjdAoHVgwce3phOCqNOHmJI
+         b4CHJTtWrieTzhBGdSd+gC/n9dD6aXx0OMiw1I6c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 4.14 00/44] 4.14.267-rc1 review
+        stable@vger.kernel.org, Aaron Lewis <aaronlewis@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 065/172] KVM: x86: Report deprecated x87 features in supported CPUID
 Date:   Mon, 14 Feb 2022 10:25:23 +0100
-Message-Id: <20220214092447.897544753@linuxfoundation.org>
+Message-Id: <20220214092508.648091407@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.267-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.14.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.14.267-rc1
-X-KernelTest-Deadline: 2022-02-16T09:24+00:00
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -63,217 +56,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.14.267 release.
-There are 44 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+From: Jim Mattson <jmattson@google.com>
 
-Responses should be made by Wed, 16 Feb 2022 09:24:36 +0000.
-Anything received after that time might be too late.
+[ Upstream commit e3bcfda012edd3564e12551b212afbd2521a1f68 ]
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.267-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
-and the diffstat can be found below.
+CPUID.(EAX=7,ECX=0):EBX.FDP_EXCPTN_ONLY[bit 6] and
+CPUID.(EAX=7,ECX=0):EBX.ZERO_FCS_FDS[bit 13] are "defeature"
+bits. Unlike most of the other CPUID feature bits, these bits are
+clear if the features are present and set if the features are not
+present. These bits should be reported in KVM_GET_SUPPORTED_CPUID,
+because if these bits are set on hardware, they cannot be cleared in
+the guest CPUID. Doing so would claim guest support for a feature that
+the hardware doesn't support and that can't be efficiently emulated.
 
-thanks,
+Of course, any software (e.g WIN87EM.DLL) expecting these features to
+be present likely predates these CPUID feature bits and therefore
+doesn't know to check for them anyway.
 
-greg k-h
+Aaron Lewis added the corresponding X86_FEATURE macros in
+commit cbb99c0f5887 ("x86/cpufeatures: Add FDP_EXCPTN_ONLY and
+ZERO_FCS_FDS"), with the intention of reporting these bits in
+KVM_GET_SUPPORTED_CPUID, but I was unable to find a proposed patch on
+the kvm list.
 
--------------
-Pseudo-Shortlog of commits:
+Opportunistically reordered the CPUID_7_0_EBX capability bits from
+least to most significant.
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.14.267-rc1
+Cc: Aaron Lewis <aaronlewis@google.com>
+Signed-off-by: Jim Mattson <jmattson@google.com>
+Message-Id: <20220204001348.2844660-1-jmattson@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/x86/kvm/cpuid.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-Song Liu <song@kernel.org>
-    perf: Fix list corruption in perf_cgroup_switch()
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index f666fd79d8ad6..5f1d4a5aa8716 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -421,12 +421,13 @@ void kvm_set_cpu_caps(void)
+ 	);
+ 
+ 	kvm_cpu_cap_mask(CPUID_7_0_EBX,
+-		F(FSGSBASE) | F(SGX) | F(BMI1) | F(HLE) | F(AVX2) | F(SMEP) |
+-		F(BMI2) | F(ERMS) | F(INVPCID) | F(RTM) | 0 /*MPX*/ | F(RDSEED) |
+-		F(ADX) | F(SMAP) | F(AVX512IFMA) | F(AVX512F) | F(AVX512PF) |
+-		F(AVX512ER) | F(AVX512CD) | F(CLFLUSHOPT) | F(CLWB) | F(AVX512DQ) |
+-		F(SHA_NI) | F(AVX512BW) | F(AVX512VL) | 0 /*INTEL_PT*/
+-	);
++		F(FSGSBASE) | F(SGX) | F(BMI1) | F(HLE) | F(AVX2) |
++		F(FDP_EXCPTN_ONLY) | F(SMEP) | F(BMI2) | F(ERMS) | F(INVPCID) |
++		F(RTM) | F(ZERO_FCS_FDS) | 0 /*MPX*/ | F(AVX512F) |
++		F(AVX512DQ) | F(RDSEED) | F(ADX) | F(SMAP) | F(AVX512IFMA) |
++		F(CLFLUSHOPT) | F(CLWB) | 0 /*INTEL_PT*/ | F(AVX512PF) |
++		F(AVX512ER) | F(AVX512CD) | F(SHA_NI) | F(AVX512BW) |
++		F(AVX512VL));
+ 
+ 	kvm_cpu_cap_mask(CPUID_7_ECX,
+ 		F(AVX512VBMI) | F(LA57) | F(PKU) | 0 /*OSPKE*/ | F(RDPID) |
+-- 
+2.34.1
 
-Armin Wolf <W_Armin@gmx.de>
-    hwmon: (dell-smm) Speed up setting of fan speed
-
-Kees Cook <keescook@chromium.org>
-    seccomp: Invalidate seccomp mode to catch death failures
-
-Johan Hovold <johan@kernel.org>
-    USB: serial: cp210x: add CPI Bulk Coin Recycler id
-
-Johan Hovold <johan@kernel.org>
-    USB: serial: cp210x: add NCR Retail IO box id
-
-Stephan Brunner <s.brunner@stephan-brunner.net>
-    USB: serial: ch341: add support for GW Instek USB2.0-Serial devices
-
-Pawel Dembicki <paweldembicki@gmail.com>
-    USB: serial: option: add ZTE MF286D modem
-
-Cameron Williams <cang1@live.co.uk>
-    USB: serial: ftdi_sio: add support for Brainboxes US-159/235/320
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    usb: gadget: rndis: check size of RNDIS_MSG_SET command
-
-Szymon Heidrich <szymon.heidrich@gmail.com>
-    USB: gadget: validate interface OS descriptor requests
-
-Udipto Goswami <quic_ugoswami@quicinc.com>
-    usb: dwc3: gadget: Prevent core from processing stale TRBs
-
-Sean Anderson <sean.anderson@seco.com>
-    usb: ulpi: Call of_node_put correctly
-
-Sean Anderson <sean.anderson@seco.com>
-    usb: ulpi: Move of_node_put to ulpi_dev_release
-
-TATSUKAWA KOSUKE (立川 江介) <tatsu-ab1@nec.com>
-    n_tty: wake up poll(POLLRDNORM) on receiving data
-
-Jakob Koschel <jakobkoschel@gmail.com>
-    vt_ioctl: add array_index_nospec to VT_ACTIVATE
-
-Jakob Koschel <jakobkoschel@gmail.com>
-    vt_ioctl: fix array_index_nospec in vt_setactivate
-
-Raju Rangoju <Raju.Rangoju@amd.com>
-    net: amd-xgbe: disable interrupts during pci removal
-
-Jon Maloy <jmaloy@redhat.com>
-    tipc: rate limit warning for received illegal binding update
-
-Antoine Tenart <atenart@kernel.org>
-    net: fix a memleak when uncloning an skb dst and its metadata
-
-Antoine Tenart <atenart@kernel.org>
-    net: do not keep the dst cache when uncloning an skb dst and its metadata
-
-Eric Dumazet <edumazet@google.com>
-    ipmr,ip6mr: acquire RTNL before calling ip[6]mr_free_table() on failure path
-
-Mahesh Bandewar <maheshb@google.com>
-    bonding: pair enable_port with slave_arr_updates
-
-Udipto Goswami <quic_ugoswami@quicinc.com>
-    usb: f_fs: Fix use-after-free for epfile
-
-Fabio Estevam <festevam@gmail.com>
-    ARM: dts: imx6qdl-udoo: Properly describe the SD card detect
-
-Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-    staging: fbtft: Fix error path in fbtft_driver_module_init()
-
-Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-    ARM: dts: meson: Fix the UART compatible strings
-
-Fabio Estevam <festevam@gmail.com>
-    ARM: dts: imx23-evk: Remove MX23_PAD_SSP1_DETECT from hog group
-
-Daniel Borkmann <daniel@iogearbox.net>
-    bpf: Add kconfig knob for disabling unpriv bpf by default
-
-Sasha Levin <sashal@kernel.org>
-    Revert "net: axienet: Wait for PhyRstCmplt after core reset"
-
-Jisheng Zhang <jszhang@kernel.org>
-    net: stmmac: dwmac-sun8i: use return val of readl_poll_timeout()
-
-Amelie Delaunay <amelie.delaunay@foss.st.com>
-    usb: dwc2: gadget: don't try to disable ep0 in dwc2_hsotg_suspend
-
-ZouMingzhe <mingzhe.zou@easystack.cn>
-    scsi: target: iscsi: Make sure the np under each tpg is unique
-
-Olga Kornievskaia <kolga@netapp.com>
-    NFSv4 expose nfs_parse_server_name function
-
-Olga Kornievskaia <kolga@netapp.com>
-    NFSv4 remove zero number of fs_locations entries error check
-
-Trond Myklebust <trond.myklebust@hammerspace.com>
-    NFSv4.1: Fix uninitialised variable in devicenotify
-
-Xiaoke Wang <xkernel.wang@foxmail.com>
-    nfs: nfs4clinet: check the return value of kstrdup()
-
-Olga Kornievskaia <kolga@netapp.com>
-    NFSv4 only print the label when its queried
-
-Chuck Lever <chuck.lever@oracle.com>
-    NFSD: Clamp WRITE offsets
-
-Trond Myklebust <trond.myklebust@hammerspace.com>
-    NFS: Fix initialisation of nfs_client cl_flags field
-
-Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-    net: phy: marvell: Fix MDI-x polarity setting in 88e1118-compatible PHYs
-
-Jiasheng Jiang <jiasheng@iscas.ac.cn>
-    mmc: sdhci-of-esdhc: Check for error num after setting mask
-
-Roberto Sassu <roberto.sassu@huawei.com>
-    ima: Allow template selection with ima_template[_fmt]= after ima_hash=
-
-Stefan Berger <stefanb@linux.ibm.com>
-    ima: Remove ima_policy file before directory
-
-Xiaoke Wang <xkernel.wang@foxmail.com>
-    integrity: check the return value of audit_log_start()
-
-
--------------
-
-Diffstat:
-
- Documentation/sysctl/kernel.txt                   | 21 +++++++++
- Makefile                                          |  4 +-
- arch/arm/boot/dts/imx23-evk.dts                   |  1 -
- arch/arm/boot/dts/imx6qdl-udoo.dtsi               |  5 +-
- arch/arm/boot/dts/meson.dtsi                      |  8 ++--
- drivers/hwmon/dell-smm-hwmon.c                    | 12 +++--
- drivers/mmc/host/sdhci-of-esdhc.c                 |  8 +++-
- drivers/net/bonding/bond_3ad.c                    |  3 +-
- drivers/net/ethernet/amd/xgbe/xgbe-pci.c          |  3 ++
- drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c |  2 +-
- drivers/net/ethernet/xilinx/xilinx_axienet_main.c | 10 ----
- drivers/net/phy/marvell.c                         |  7 ++-
- drivers/staging/fbtft/fbtft.h                     |  5 +-
- drivers/target/iscsi/iscsi_target_tpg.c           |  3 ++
- drivers/tty/n_tty.c                               |  4 +-
- drivers/tty/vt/vt_ioctl.c                         |  5 +-
- drivers/usb/common/ulpi.c                         | 10 ++--
- drivers/usb/dwc2/gadget.c                         |  2 +-
- drivers/usb/dwc3/gadget.c                         | 13 ++++++
- drivers/usb/gadget/composite.c                    |  3 ++
- drivers/usb/gadget/function/f_fs.c                | 56 +++++++++++++++++------
- drivers/usb/gadget/function/rndis.c               |  9 ++--
- drivers/usb/serial/ch341.c                        |  1 +
- drivers/usb/serial/cp210x.c                       |  2 +
- drivers/usb/serial/ftdi_sio.c                     |  3 ++
- drivers/usb/serial/ftdi_sio_ids.h                 |  3 ++
- drivers/usb/serial/option.c                       |  2 +
- fs/nfs/callback.h                                 |  2 +-
- fs/nfs/callback_proc.c                            |  2 +-
- fs/nfs/callback_xdr.c                             | 18 ++++----
- fs/nfs/client.c                                   |  2 +-
- fs/nfs/nfs4_fs.h                                  |  3 +-
- fs/nfs/nfs4client.c                               |  5 +-
- fs/nfs/nfs4namespace.c                            |  4 +-
- fs/nfs/nfs4state.c                                |  3 ++
- fs/nfs/nfs4xdr.c                                  |  9 ++--
- fs/nfsd/nfs3proc.c                                |  5 ++
- fs/nfsd/nfs4proc.c                                |  5 +-
- include/net/dst_metadata.h                        | 14 +++++-
- init/Kconfig                                      | 10 ++++
- kernel/bpf/syscall.c                              |  3 +-
- kernel/events/core.c                              |  4 +-
- kernel/seccomp.c                                  | 10 ++++
- kernel/sysctl.c                                   | 29 ++++++++++--
- net/ipv4/ipmr.c                                   |  2 +
- net/ipv6/ip6mr.c                                  |  2 +
- net/tipc/name_distr.c                             |  2 +-
- security/integrity/ima/ima_fs.c                   |  2 +-
- security/integrity/ima/ima_template.c             | 10 ++--
- security/integrity/integrity_audit.c              |  2 +
- 50 files changed, 261 insertions(+), 92 deletions(-)
 
 

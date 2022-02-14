@@ -2,126 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4BF4B406C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A4634B407B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 04:50:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240041AbiBNDkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 22:40:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33108 "EHLO
+        id S240106AbiBNDuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 22:50:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbiBNDkq (ORCPT
+        with ESMTP id S229928AbiBNDuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 22:40:46 -0500
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248C655BCF;
-        Sun, 13 Feb 2022 19:40:38 -0800 (PST)
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 21E3ePq2011948;
-        Mon, 14 Feb 2022 12:40:26 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 21E3ePq2011948
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1644810026;
-        bh=likkbI32KUP4QKr0r0C6lCvDJ2nx7Oe2xwup8Xv5o/o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rslNdmgMye/1tg5az57WQ5ctlKiiDkzELPIEnO/+M12ZPeyjevucmbhyFEDduRJ1H
-         Ktk8f6JsofqoKmKIsXLok7zNssA/QIh8bx5Wgrx2Pd2KzCuL9l7C7zOtJ9SQBoVDWE
-         jjfysx9d1QR+iW4bOIu33nPgLglqXKnyl20teDV/j0wYjqfpw3VQF8pNHK2kQjp8zm
-         6kqsVXGFF4Hf6+sDPwV7g7oDNuqCPgMTIJI3+HaAb7xrIbJtm/HnlO4PHG3Wq9Etm6
-         tXUg+SXw5SE5Isj8fhWwU2u62QHRSt9D5WU8Az2xxYmWVUB0PbYtgnQRGeqSoxLJ0/
-         PLyW6LPafE+KA==
-X-Nifty-SrcIP: [209.85.214.182]
-Received: by mail-pl1-f182.google.com with SMTP id i10so1891632plr.2;
-        Sun, 13 Feb 2022 19:40:25 -0800 (PST)
-X-Gm-Message-State: AOAM533hygyib1EzaS2G+B6SnTC+UT+pBFEl0jdIguN3f6hrrqZkfRAr
-        dQPHsYMOp7rw8kiQlbr9ZxuSxZPocqCk5BJcndg=
-X-Google-Smtp-Source: ABdhPJx53Gi2fLt9NRW0vkQD6LRMmwtESbaXgM2HiW93fwdUJpN6sF6HmoA3wFEbp0di11KLeuLbUa117M8PO47a7TM=
-X-Received: by 2002:a17:90b:4f87:: with SMTP id qe7mr6208754pjb.77.1644810025067;
- Sun, 13 Feb 2022 19:40:25 -0800 (PST)
+        Sun, 13 Feb 2022 22:50:10 -0500
+X-Greylist: delayed 572 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 13 Feb 2022 19:50:03 PST
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A6956212;
+        Sun, 13 Feb 2022 19:50:03 -0800 (PST)
+Received: from [192.168.192.153] (unknown [50.126.114.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 6C8E13FCCC;
+        Mon, 14 Feb 2022 03:40:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1644810027;
+        bh=6JLxTZevHMlYVeby6Lh6UMpeElkbmngwOfI8fZ79xvs=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=vbNM+WcB0HwKMysA+G3Flz3Xwz9BisL3jgsF+SgUnRpMhPqpcy1L6cQEjdSIKiXb2
+         bpmU7iCYAzm+H5DaTXTgbi4K2ql2nKoWeX8YcCEsctpwtW0COIvPdEPvkqFWxBMupb
+         8j2VSnMdN4leF6TM/dpkGSmq8LlBUth3R9YPRdmd+pSlbR7zLQzwsut/+wgAdTz77j
+         +TM9bK7Xs8Tb8m41ljhuihvpucpKV6U9gEg3ADBgWX/AhVww6UK2bn4VMwVQJ3t771
+         HkQQk+PnG1e4HLzoOgf6TWrXi1zjsu7tzbU+qlqrluaj5P8BIELViE2RN4YIqO+zZe
+         WeHJHsAjq9f0Q==
+Message-ID: <f42b0010-3a7b-e781-5b7e-ac975c36c102@canonical.com>
+Date:   Sun, 13 Feb 2022 19:40:18 -0800
 MIME-Version: 1.0
-References: <20220214033724.2409951-1-masahiroy@kernel.org>
-In-Reply-To: <20220214033724.2409951-1-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 14 Feb 2022 12:39:49 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQsgoBCmCOZ0ynjZc35XN4qr=NBhutC9RZbmD5srcvcAw@mail.gmail.com>
-Message-ID: <CAK7LNAQsgoBCmCOZ0ynjZc35XN4qr=NBhutC9RZbmD5srcvcAw@mail.gmail.com>
-Subject: Re: [PATCH] nds32: move core-y in arch/nds32/Makefile to arch/nds32/Kbuild
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] apparmor: fix aa_label_asxprint return check
+Content-Language: en-US
+To:     trix@redhat.com, jmorris@namei.org, serge@hallyn.com,
+        nathan@kernel.org, ndesaulniers@google.com
+Cc:     apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20220213213228.2806682-1-trix@redhat.com>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <20220213213228.2806682-1-trix@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I will apply this to linux-kbuild to avoid
-the pain of Stephen Rothwell:
+On 2/13/22 13:32, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> Clang static analysis reports this issue
+> label.c:1802:3: warning: 2nd function call argument
+>   is an uninitialized value
+>   pr_info("%s", str);
+>   ^~~~~~~~~~~~~~~~~~
+> 
+> str is set from a successful call to aa_label_asxprint(&str, ...)
+> On failure a negative value is returned, not a -1.  So change
+> the check.
+> 
+> Fixes: f1bd904175e8 ("apparmor: add the base fns() for domain labels")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-https://lore.kernel.org/lkml/20211025093813.2ebe9212@canb.auug.org.au/t/
+Acked-by: John Johansen <john.johansen@canonical.com>
 
-The nds32 tree seems unmaintained.
+thanks I have pulled this into my tree
 
-
-
-
-
-
-On Mon, Feb 14, 2022 at 12:38 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Use obj-y to clean up Makefile.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
->
->  arch/nds32/Kbuild   | 3 +++
->  arch/nds32/Makefile | 3 ---
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/nds32/Kbuild b/arch/nds32/Kbuild
-> index 4e39f7abdeb6..ac127371afa4 100644
-> --- a/arch/nds32/Kbuild
-> +++ b/arch/nds32/Kbuild
-> @@ -1,4 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0-only
-> +obj-y                  += kernel/ mm/
-> +obj-$(CONFIG_FPU)      += math-emu/
-> +obj-y                  += boot/dts/
->
->  # for cleaning
->  subdir- += boot
-> diff --git a/arch/nds32/Makefile b/arch/nds32/Makefile
-> index b33d5d81b6ae..7be31e3d7f2d 100644
-> --- a/arch/nds32/Makefile
-> +++ b/arch/nds32/Makefile
-> @@ -27,8 +27,6 @@ export        TEXTADDR
->
->
->  # If we have a machine-specific directory, then include it in the build.
-> -core-y                         += arch/nds32/kernel/ arch/nds32/mm/
-> -core-$(CONFIG_FPU)              += arch/nds32/math-emu/
->  libs-y                         += arch/nds32/lib/
->
->  ifdef CONFIG_CPU_LITTLE_ENDIAN
-> @@ -44,7 +42,6 @@ CHECKFLAGS      += -D__NDS32_EB__
->  endif
->
->  boot := arch/nds32/boot
-> -core-y += $(boot)/dts/
->
->  Image: vmlinux
->         $(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
-> --
-> 2.32.0
->
+>  security/apparmor/label.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/security/apparmor/label.c b/security/apparmor/label.c
+> index 9eb9a9237926..a658b67c784c 100644
+> --- a/security/apparmor/label.c
+> +++ b/security/apparmor/label.c
+> @@ -1744,7 +1744,7 @@ void aa_label_xaudit(struct audit_buffer *ab, struct aa_ns *ns,
+>  	if (!use_label_hname(ns, label, flags) ||
+>  	    display_mode(ns, label, flags)) {
+>  		len  = aa_label_asxprint(&name, ns, label, flags, gfp);
+> -		if (len == -1) {
+> +		if (len < 0) {
+>  			AA_DEBUG("label print error");
+>  			return;
+>  		}
+> @@ -1772,7 +1772,7 @@ void aa_label_seq_xprint(struct seq_file *f, struct aa_ns *ns,
+>  		int len;
+>  
+>  		len = aa_label_asxprint(&str, ns, label, flags, gfp);
+> -		if (len == -1) {
+> +		if (len < 0) {
+>  			AA_DEBUG("label print error");
+>  			return;
+>  		}
+> @@ -1795,7 +1795,7 @@ void aa_label_xprintk(struct aa_ns *ns, struct aa_label *label, int flags,
+>  		int len;
+>  
+>  		len = aa_label_asxprint(&str, ns, label, flags, gfp);
+> -		if (len == -1) {
+> +		if (len < 0) {
+>  			AA_DEBUG("label print error");
+>  			return;
+>  		}
 
-
--- 
-Best Regards
-Masahiro Yamada

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE154B4A96
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD5F4B46F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347147AbiBNK1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:27:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54654 "EHLO
+        id S241146AbiBNJud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:50:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346954AbiBNKZb (ORCPT
+        with ESMTP id S245522AbiBNJp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:25:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8566E549;
-        Mon, 14 Feb 2022 01:57:02 -0800 (PST)
+        Mon, 14 Feb 2022 04:45:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE576A3BC;
+        Mon, 14 Feb 2022 01:39:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C15B9B80DFE;
-        Mon, 14 Feb 2022 09:57:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01FFCC340E9;
-        Mon, 14 Feb 2022 09:56:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA9476117D;
+        Mon, 14 Feb 2022 09:39:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C10E5C340EF;
+        Mon, 14 Feb 2022 09:39:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832619;
-        bh=CVQhcvGz3gaWyOeNO8xbOV8873Pig3FfX9SC9zBkiNY=;
+        s=korg; t=1644831545;
+        bh=mYXwYZjv48YdTVJBj6NFznd2NYDFoaanaF1gYz+8OA8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZTe16K0/LVRFtUM0P2j/AAG9VIUxciAgzx/GxkhqJgH3rqekcVG+Bh0Y+Z7FohKLA
-         Ijp/wBPSsP9+QLslSLMx/qZqDim7AwB6LWHsQVzMXyzUNRMe9diAjWRNQmaflD6b1k
-         fIX5R7tJb3JR9B4Oiw6FZEsbpsdPcFnNYHsZO2QQ=
+        b=RmnpgHh2coJI+m5itBYIzk/Yr0iEgLgNwcKo211iGsWhRao2KHkZ4hs4JfD9PtEG9
+         MiuQ0YHgBJsIVzm6xZ6L8YxPNrwguKBcKR+EWOx0Wv+oQs5sFDXSU/nyxSgFFkh96O
+         Yi11AgZhTOiWLt5d69QnBN5sxxxAqnjO4zbnUCZA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Woodhouse <dwmw2@infradead.org>,
-        Alexander Graf <graf@amazon.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        stable@vger.kernel.org, rtm@csail.mit.edu,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 071/203] KVM: VMX: Set vmcs.PENDING_DBG.BS on #DB in STI/MOVSS blocking shadow
-Date:   Mon, 14 Feb 2022 10:25:15 +0100
-Message-Id: <20220214092512.687019550@linuxfoundation.org>
+Subject: [PATCH 5.10 017/116] NFSv4.1: Fix uninitialised variable in devicenotify
+Date:   Mon, 14 Feb 2022 10:25:16 +0100
+Message-Id: <20220214092459.276752253@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
-References: <20220214092510.221474733@linuxfoundation.org>
+In-Reply-To: <20220214092458.668376521@linuxfoundation.org>
+References: <20220214092458.668376521@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,99 +56,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit b9bed78e2fa9571b7c983b20666efa0009030c71 ]
+[ Upstream commit b05bf5c63b326ce1da84ef42498d8e0e292e694c ]
 
-Set vmcs.GUEST_PENDING_DBG_EXCEPTIONS.BS, a.k.a. the pending single-step
-breakpoint flag, when re-injecting a #DB with RFLAGS.TF=1, and STI or
-MOVSS blocking is active.  Setting the flag is necessary to make VM-Entry
-consistency checks happy, as VMX has an invariant that if RFLAGS.TF is
-set and STI/MOVSS blocking is true, then the previous instruction must
-have been STI or MOV/POP, and therefore a single-step #DB must be pending
-since the RFLAGS.TF cannot have been set by the previous instruction,
-i.e. the one instruction delay after setting RFLAGS.TF must have already
-expired.
+When decode_devicenotify_args() exits with no entries, we need to
+ensure that the struct cb_devicenotifyargs is initialised to
+{ 0, NULL } in order to avoid problems in
+nfs4_callback_devicenotify().
 
-Normally, the CPU sets vmcs.GUEST_PENDING_DBG_EXCEPTIONS.BS appropriately
-when recording guest state as part of a VM-Exit, but #DB VM-Exits
-intentionally do not treat the #DB as "guest state" as interception of
-the #DB effectively makes the #DB host-owned, thus KVM needs to manually
-set PENDING_DBG.BS when forwarding/re-injecting the #DB to the guest.
-
-Note, although this bug can be triggered by guest userspace, doing so
-requires IOPL=3, and guest userspace running with IOPL=3 has full access
-to all I/O ports (from the guest's perspective) and can crash/reboot the
-guest any number of ways.  IOPL=3 is required because STI blocking kicks
-in if and only if RFLAGS.IF is toggled 0=>1, and if CPL>IOPL, STI either
-takes a #GP or modifies RFLAGS.VIF, not RFLAGS.IF.
-
-MOVSS blocking can be initiated by userspace, but can be coincident with
-a #DB if and only if DR7.GD=1 (General Detect enabled) and a MOV DR is
-executed in the MOVSS shadow.  MOV DR #GPs at CPL>0, thus MOVSS blocking
-is problematic only for CPL0 (and only if the guest is crazy enough to
-access a DR in a MOVSS shadow).  All other sources of #DBs are either
-suppressed by MOVSS blocking (single-step, code fetch, data, and I/O),
-are mutually exclusive with MOVSS blocking (T-bit task switch), or are
-already handled by KVM (ICEBP, a.k.a. INT1).
-
-This bug was originally found by running tests[1] created for XSA-308[2].
-Note that Xen's userspace test emits ICEBP in the MOVSS shadow, which is
-presumably why the Xen bug was deemed to be an exploitable DOS from guest
-userspace.  KVM already handles ICEBP by skipping the ICEBP instruction
-and thus clears MOVSS blocking as a side effect of its "emulation".
-
-[1] http://xenbits.xenproject.org/docs/xtf/xsa-308_2main_8c_source.html
-[2] https://xenbits.xen.org/xsa/advisory-308.html
-
-Reported-by: David Woodhouse <dwmw2@infradead.org>
-Reported-by: Alexander Graf <graf@amazon.de>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20220120000624.655815-1-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Reported-by: <rtm@csail.mit.edu>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/vmx/vmx.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ fs/nfs/callback.h      |  2 +-
+ fs/nfs/callback_proc.c |  2 +-
+ fs/nfs/callback_xdr.c  | 18 +++++++++---------
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 7f4e6f625abcf..fe4a36c984460 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -4811,8 +4811,33 @@ static int handle_exception_nmi(struct kvm_vcpu *vcpu)
- 		dr6 = vmx_get_exit_qual(vcpu);
- 		if (!(vcpu->guest_debug &
- 		      (KVM_GUESTDBG_SINGLESTEP | KVM_GUESTDBG_USE_HW_BP))) {
-+			/*
-+			 * If the #DB was due to ICEBP, a.k.a. INT1, skip the
-+			 * instruction.  ICEBP generates a trap-like #DB, but
-+			 * despite its interception control being tied to #DB,
-+			 * is an instruction intercept, i.e. the VM-Exit occurs
-+			 * on the ICEBP itself.  Note, skipping ICEBP also
-+			 * clears STI and MOVSS blocking.
-+			 *
-+			 * For all other #DBs, set vmcs.PENDING_DBG_EXCEPTIONS.BS
-+			 * if single-step is enabled in RFLAGS and STI or MOVSS
-+			 * blocking is active, as the CPU doesn't set the bit
-+			 * on VM-Exit due to #DB interception.  VM-Entry has a
-+			 * consistency check that a single-step #DB is pending
-+			 * in this scenario as the previous instruction cannot
-+			 * have toggled RFLAGS.TF 0=>1 (because STI and POP/MOV
-+			 * don't modify RFLAGS), therefore the one instruction
-+			 * delay when activating single-step breakpoints must
-+			 * have already expired.  Note, the CPU sets/clears BS
-+			 * as appropriate for all other VM-Exits types.
-+			 */
- 			if (is_icebp(intr_info))
- 				WARN_ON(!skip_emulated_instruction(vcpu));
-+			else if ((vmx_get_rflags(vcpu) & X86_EFLAGS_TF) &&
-+				 (vmcs_read32(GUEST_INTERRUPTIBILITY_INFO) &
-+				  (GUEST_INTR_STATE_STI | GUEST_INTR_STATE_MOV_SS)))
-+				vmcs_writel(GUEST_PENDING_DBG_EXCEPTIONS,
-+					    vmcs_readl(GUEST_PENDING_DBG_EXCEPTIONS) | DR6_BS);
+diff --git a/fs/nfs/callback.h b/fs/nfs/callback.h
+index 6a2033131c068..ccd4f245cae24 100644
+--- a/fs/nfs/callback.h
++++ b/fs/nfs/callback.h
+@@ -170,7 +170,7 @@ struct cb_devicenotifyitem {
+ };
  
- 			kvm_queue_exception_p(vcpu, DB_VECTOR, dr6);
- 			return 1;
+ struct cb_devicenotifyargs {
+-	int				 ndevs;
++	uint32_t			 ndevs;
+ 	struct cb_devicenotifyitem	 *devs;
+ };
+ 
+diff --git a/fs/nfs/callback_proc.c b/fs/nfs/callback_proc.c
+index be546ece383f5..b44219ce60b86 100644
+--- a/fs/nfs/callback_proc.c
++++ b/fs/nfs/callback_proc.c
+@@ -353,7 +353,7 @@ __be32 nfs4_callback_devicenotify(void *argp, void *resp,
+ 				  struct cb_process_state *cps)
+ {
+ 	struct cb_devicenotifyargs *args = argp;
+-	int i;
++	uint32_t i;
+ 	__be32 res = 0;
+ 	struct nfs_client *clp = cps->clp;
+ 	struct nfs_server *server = NULL;
+diff --git a/fs/nfs/callback_xdr.c b/fs/nfs/callback_xdr.c
+index 79ff172eb1c81..1725079a05276 100644
+--- a/fs/nfs/callback_xdr.c
++++ b/fs/nfs/callback_xdr.c
+@@ -259,11 +259,9 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
+ 				void *argp)
+ {
+ 	struct cb_devicenotifyargs *args = argp;
++	uint32_t tmp, n, i;
+ 	__be32 *p;
+ 	__be32 status = 0;
+-	u32 tmp;
+-	int n, i;
+-	args->ndevs = 0;
+ 
+ 	/* Num of device notifications */
+ 	p = xdr_inline_decode(xdr, sizeof(uint32_t));
+@@ -272,7 +270,7 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
+ 		goto out;
+ 	}
+ 	n = ntohl(*p++);
+-	if (n <= 0)
++	if (n == 0)
+ 		goto out;
+ 	if (n > ULONG_MAX / sizeof(*args->devs)) {
+ 		status = htonl(NFS4ERR_BADXDR);
+@@ -331,19 +329,21 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
+ 			dev->cbd_immediate = 0;
+ 		}
+ 
+-		args->ndevs++;
+-
+ 		dprintk("%s: type %d layout 0x%x immediate %d\n",
+ 			__func__, dev->cbd_notify_type, dev->cbd_layout_type,
+ 			dev->cbd_immediate);
+ 	}
++	args->ndevs = n;
++	dprintk("%s: ndevs %d\n", __func__, args->ndevs);
++	return 0;
++err:
++	kfree(args->devs);
+ out:
++	args->devs = NULL;
++	args->ndevs = 0;
+ 	dprintk("%s: status %d ndevs %d\n",
+ 		__func__, ntohl(status), args->ndevs);
+ 	return status;
+-err:
+-	kfree(args->devs);
+-	goto out;
+ }
+ 
+ static __be32 decode_sessionid(struct xdr_stream *xdr,
 -- 
 2.34.1
 

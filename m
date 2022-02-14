@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E72F4B4766
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7EF14B4A30
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:38:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245075AbiBNJrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:47:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43864 "EHLO
+        id S1346033AbiBNKOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:14:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245205AbiBNJo6 (ORCPT
+        with ESMTP id S1345665AbiBNKNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:44:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D986A02E;
-        Mon, 14 Feb 2022 01:38:25 -0800 (PST)
+        Mon, 14 Feb 2022 05:13:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659AF657A1;
+        Mon, 14 Feb 2022 01:51:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AAB056102D;
-        Mon, 14 Feb 2022 09:38:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EF2FC340E9;
-        Mon, 14 Feb 2022 09:38:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 133C6B80D83;
+        Mon, 14 Feb 2022 09:51:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B5E5C340EF;
+        Mon, 14 Feb 2022 09:51:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644831504;
-        bh=FrmbRpw4yMtPFrZtcLJTy2zpIJYaSZTPwnuhF0NyZ0c=;
+        s=korg; t=1644832285;
+        bh=jmtLH70526Pq68knXVfvOXg1Gl7On89jjk6ZMsDJkSU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iWlH3xDZB2PJTP+Awlw+6sR/7YBRiWaCVXOGscd6K67SPN+4F6yZlt5g7vdqzzi7+
-         xDkfuuuOpmONhRnFuyG4CGjnL3F2I/1uqqXuWZNsKsBic2nrTrdfNKDl3QOsO9bdn+
-         jAsvJKTNJqZfbOWmaTjwdx5Qi4HPxW7sLGExxUI4=
+        b=pYOQ82vSyCY2SQpunfG1HRKLAgxmzR0W3ZzI492uDrANkUu26tOQ9oC4srGrwowqY
+         no11VSaOgrIpBe6W6nRmRRoaNbSjKw3irY6mTCn8GomOykc1+YhGfsVLCQYXY7P1sT
+         xz9t8gsAIxmbghQsX2uN/OTtctmDcfcNZT1bcY1c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Hofman <pavel.hofman@ivitera.com>
-Subject: [PATCH 5.4 61/71] usb: gadget: f_uac2: Define specific wTerminalType
+        stable@vger.kernel.org, Dave Ertman <david.m.ertman@intel.com>,
+        Jonathan Toppins <jtoppins@redhat.com>,
+        Gurucharan G <gurucharanx.g@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 131/172] ice: Avoid RTNL lock when re-creating auxiliary device
 Date:   Mon, 14 Feb 2022 10:26:29 +0100
-Message-Id: <20220214092454.090637841@linuxfoundation.org>
+Message-Id: <20220214092510.938778154@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
-References: <20220214092452.020713240@linuxfoundation.org>
+In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
+References: <20220214092506.354292783@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,49 +57,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Hofman <pavel.hofman@ivitera.com>
+From: Dave Ertman <david.m.ertman@intel.com>
 
-commit 5432184107cd0013761bdfa6cb6079527ef87b95 upstream.
+[ Upstream commit 5dbbbd01cbba831233c6ea9a3e6bfa133606d3c0 ]
 
-Several users have reported that their Win10 does not enumerate UAC2
-gadget with the existing wTerminalType set to
-UAC_INPUT_TERMINAL_UNDEFINED/UAC_INPUT_TERMINAL_UNDEFINED, e.g.
-https://github.com/raspberrypi/linux/issues/4587#issuecomment-926567213.
-While the constant is officially defined by the USB terminal types
-document, e.g. XMOS firmware for UAC2 (commonly used for Win10) defines
-no undefined output terminal type in its usbaudio20.h header.
+If a call to re-create the auxiliary device happens in a context that has
+already taken the RTNL lock, then the call flow that recreates auxiliary
+device can hang if there is another attempt to claim the RTNL lock by the
+auxiliary driver.
 
-Therefore wTerminalType of EP-IN is set to
-UAC_INPUT_TERMINAL_MICROPHONE and wTerminalType of EP-OUT to
-UAC_OUTPUT_TERMINAL_SPEAKER for the UAC2 gadget.
+To avoid this, any call to re-create auxiliary devices that comes from
+an source that is holding the RTNL lock (e.g. netdev notifier when
+interface exits a bond) should execute in a separate thread.  To
+accomplish this, add a flag to the PF that will be evaluated in the
+service task and dealt with there.
 
-Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
-Cc: stable <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220131071813.7433-1-pavel.hofman@ivitera.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: f9f5301e7e2d ("ice: Register auxiliary device to provide RDMA")
+Signed-off-by: Dave Ertman <david.m.ertman@intel.com>
+Reviewed-by: Jonathan Toppins <jtoppins@redhat.com>
+Tested-by: Gurucharan G <gurucharanx.g@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/f_uac2.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/ice/ice.h      | 3 ++-
+ drivers/net/ethernet/intel/ice/ice_main.c | 3 +++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -176,7 +176,7 @@ static struct uac2_input_terminal_descri
+diff --git a/drivers/net/ethernet/intel/ice/ice.h b/drivers/net/ethernet/intel/ice/ice.h
+index fba8f021c397d..d119812755b7a 100644
+--- a/drivers/net/ethernet/intel/ice/ice.h
++++ b/drivers/net/ethernet/intel/ice/ice.h
+@@ -398,6 +398,7 @@ enum ice_pf_flags {
+ 	ICE_FLAG_VF_TRUE_PROMISC_ENA,
+ 	ICE_FLAG_MDD_AUTO_RESET_VF,
+ 	ICE_FLAG_LINK_LENIENT_MODE_ENA,
++	ICE_FLAG_PLUG_AUX_DEV,
+ 	ICE_PF_FLAGS_NBITS		/* must be last */
+ };
  
- 	.bDescriptorSubtype = UAC_INPUT_TERMINAL,
- 	/* .bTerminalID = DYNAMIC */
--	.wTerminalType = cpu_to_le16(UAC_INPUT_TERMINAL_UNDEFINED),
-+	.wTerminalType = cpu_to_le16(UAC_INPUT_TERMINAL_MICROPHONE),
- 	.bAssocTerminal = 0,
- 	/* .bCSourceID = DYNAMIC */
- 	.iChannelNames = 0,
-@@ -204,7 +204,7 @@ static struct uac2_output_terminal_descr
+@@ -692,7 +693,7 @@ static inline void ice_set_rdma_cap(struct ice_pf *pf)
+ 	if (pf->hw.func_caps.common_cap.rdma && pf->num_rdma_msix) {
+ 		set_bit(ICE_FLAG_RDMA_ENA, pf->flags);
+ 		set_bit(ICE_FLAG_AUX_ENA, pf->flags);
+-		ice_plug_aux_dev(pf);
++		set_bit(ICE_FLAG_PLUG_AUX_DEV, pf->flags);
+ 	}
+ }
  
- 	.bDescriptorSubtype = UAC_OUTPUT_TERMINAL,
- 	/* .bTerminalID = DYNAMIC */
--	.wTerminalType = cpu_to_le16(UAC_OUTPUT_TERMINAL_UNDEFINED),
-+	.wTerminalType = cpu_to_le16(UAC_OUTPUT_TERMINAL_SPEAKER),
- 	.bAssocTerminal = 0,
- 	/* .bSourceID = DYNAMIC */
- 	/* .bCSourceID = DYNAMIC */
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index cfddec96c91c1..ab2dea0d2c1ae 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -2141,6 +2141,9 @@ static void ice_service_task(struct work_struct *work)
+ 		return;
+ 	}
+ 
++	if (test_and_clear_bit(ICE_FLAG_PLUG_AUX_DEV, pf->flags))
++		ice_plug_aux_dev(pf);
++
+ 	ice_clean_adminq_subtask(pf);
+ 	ice_check_media_subtask(pf);
+ 	ice_check_for_hang_subtask(pf);
+-- 
+2.34.1
+
 
 

@@ -2,127 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F674B52F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCD84B52FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:18:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355001AbiBNOPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 09:15:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51794 "EHLO
+        id S1355024AbiBNORU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 09:17:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355049AbiBNOPv (ORCPT
+        with ESMTP id S233309AbiBNORS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 09:15:51 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167E4278
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:15:43 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id bg19-20020a05600c3c9300b0034565e837b6so5695064wmb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:15:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=GhrHfphJQbfLHZGHShzFVwpGb33fGRasst5lc4cJXI8=;
-        b=PsfK8rqlQGcBPZ30LK11uF8gIkxB+HziLMQ9JOtWJ60VHQf+svJmcf1rpbXaYT60AN
-         a7ImAv4AqKCdiEh2sUPydWiXFZ8uKuP9LR+zYq7dfXg3aJf/FbWwqux+ji72qLBCun5M
-         /7rAKKaGtpCiHswu4nZq2gaGKgT+ZXGUk1rfkyS4r5oPPx8wu909ChwgnPnr5RxS/7wR
-         zTJNfLJa50ohgKYhiKaGMdf0feeCtv1+WfHkwWFyQSaw8a0gBwyB+vVNsh63tRIpQq8A
-         5Xh+ENH4GFwfiw0WRnhw8ZZ9NCMeIyPT4/QP9wjCrlhIf0IacNgA8agyxfofF0gTMQSy
-         sCCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=GhrHfphJQbfLHZGHShzFVwpGb33fGRasst5lc4cJXI8=;
-        b=MZDZsM+GWYWikMfpDMirb3hZWtyNHrvgHwpN+kXAzA5z1wMI+Xxo2iL+2EyV6i31NL
-         ms9uWddSXy9bfMkWj3fa3AJ7GmzqJO5L07aHNw2J5zNhGj2jZQ/frAHHvCIp8187/uXW
-         KIEiXjLjGEF/iMky0Kvy0qyMZEqTAGY4j/r30w33mEhfhcCMP42LbUkGvojtkQONcE9Z
-         cOLB7LCLKRF19OZ0LhYuClNZ6crS+dw5XmBCP5XvaTlwhsYgqZn7AU6GnKQCdNBgC061
-         yEKArGTS5oFslQtgR3diB+6zQLFbiVwaOr21lDgrmwQn5zb5PcaPnzSOO5WTiHBuF8uF
-         4onw==
-X-Gm-Message-State: AOAM532kvadObwwcVWVzB4pdnOvHhaRNWn5aOAi64iN2b9wbdsF9+NmZ
-        gRq9VduiFSpOru8DcwMTzWlMYw==
-X-Google-Smtp-Source: ABdhPJzQBfXvD8Ft/MTVQ27yEibtBNwH0Q5/uOHXNNsdEeZym1fH3VPkUg8qpnSr+4e3JNsGVmHI6A==
-X-Received: by 2002:a05:600c:2291:: with SMTP id 17mr11065679wmf.163.1644848141661;
-        Mon, 14 Feb 2022 06:15:41 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id n35sm8402141wms.8.2022.02.14.06.15.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Feb 2022 06:15:41 -0800 (PST)
-Date:   Mon, 14 Feb 2022 14:15:39 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-Subject: Re: [PATCH] MAINTAINERS: add myself as a maintainer for the sl28cpld
-Message-ID: <YgpkCyoSMg5RYfkO@google.com>
-References: <20220207184652.1218447-1-michael@walle.cc>
+        Mon, 14 Feb 2022 09:17:18 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDECFA187
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:17:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644848230; x=1676384230;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3sFlm92IDjvtUnk1YcNHebLidnZh8FzoTXE56MfSJNo=;
+  b=lGcs2R3DYr5f4SnAaXIO7eF8qhaDUSbSVMfuuI4e/NDtnnBsALfhwaia
+   VYURt59DLWonnwxjLPwnOaDxBPS7GyzBEiOQCbz6LhGgdJeoC6kkbEg9R
+   FBiFFTyFJld+BWkKi2E3f1PXs+Rf0yDlE+CRUS0NnbBqwUkHt3JSxtqGt
+   FYk/+Kmv4eq9/00IOQ9X+DY6BIq6G0nHUWKrp0FkxMAhmNxWuoUEka/y2
+   Pbz0w3FeTRZOlWEUhSC0PJ/mEDltVWQNeLt7TWBNnPi7M9KYrtO33V7zt
+   TgP7FnpIkwb+zw/nnNL+K4/xVLkUyZDfsXDmVTDe/B2CiXV/l3VlAsh6D
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10257"; a="249846128"
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="249846128"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2022 06:17:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,368,1635231600"; 
+   d="scan'208";a="773064971"
+Received: from lkp-server01.sh.intel.com (HELO d95dc2dabeb1) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 14 Feb 2022 06:17:08 -0800
+Received: from kbuild by d95dc2dabeb1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nJcA8-0008dn-2Z; Mon, 14 Feb 2022 14:17:08 +0000
+Date:   Mon, 14 Feb 2022 22:16:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jgunthorpe:iommufd 23/31]
+ drivers/iommu/iommufd/io_pagetable.c:488:6: error: comparison of distinct
+ pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length
+ - 1) *' (aka 'unsigned int *'))
+Message-ID: <202202142244.2jylcKcV-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220207184652.1218447-1-michael@walle.cc>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 07 Feb 2022, Michael Walle wrote:
+tree:   https://github.com/jgunthorpe/linux iommufd
+head:   6b5b3f20ed6b64824c2d447b4f4555fcb390bf3b
+commit: 01c5309803286f2c29a6f40bca7f489fce968c42 [23/31] iommufd: Data structure to provide IOVA to PFN mapping
+config: i386-randconfig-a004-20220214 (https://download.01.org/0day-ci/archive/20220214/202202142244.2jylcKcV-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project ea071884b0cc7210b3cc5fe858f0e892a779a23b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jgunthorpe/linux/commit/01c5309803286f2c29a6f40bca7f489fce968c42
+        git remote add jgunthorpe https://github.com/jgunthorpe/linux
+        git fetch --no-tags jgunthorpe iommufd
+        git checkout 01c5309803286f2c29a6f40bca7f489fce968c42
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/iommu/iommufd/
 
-> The sl28cpld is a management controller found on the Kontron SMARC-sAL28
-> board for now. Support for it was added by me quite a while ago, but I
-> didn't add a MAINTAINERS entry. Add it now.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
-> Hi,
-> 
-> since this affects so many subsystems, I'm not sure through which tree this
-> should go. I'm sending this to the arm soc maintainers because it's an
-> aarch64 board where this driver is used as well as Lee as the MFD
-> maintainer.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I'm happy to take this, if it pleases everyone.
+All errors (new ones prefixed by >>):
 
->  MAINTAINERS | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ddcee331dc09..c14209168ce6 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17762,6 +17762,21 @@ S:	Maintained
->  W:	http://www.winischhofer.at/linuxsisusbvga.shtml
->  F:	drivers/usb/misc/sisusbvga/
->  
-> +SL28 CPLD MFD DRIVER
-> +M:	Michael Walle <michael@walle.cc>
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/gpio/kontron,sl28cpld-gpio.yaml
-> +F:	Documentation/devicetree/bindings/hwmon/kontron,sl28cpld-hwmon.yaml
-> +F:	Documentation/devicetree/bindings/interrupt-controller/kontron,sl28cpld-intc.yaml
-> +F:	Documentation/devicetree/bindings/mfd/kontron,sl28cpld.yaml
-> +F:	Documentation/devicetree/bindings/pwm/kontron,sl28cpld-pwm.yaml
-> +F:	Documentation/devicetree/bindings/watchdog/kontron,sl28cpld-wdt.yaml
-> +F:	drivers/gpio/gpio-sl28cpld.c
-> +F:	drivers/hwmon/sl28cpld-hwmon.c
-> +F:	drivers/irqchip/irq-sl28cpld.c
-> +F:	drivers/pwm/pwm-sl28cpld.c
-> +F:	drivers/watchdog/sl28cpld_wdt.c
-> +
->  SLAB ALLOCATOR
->  M:	Christoph Lameter <cl@linux.com>
->  M:	Pekka Enberg <penberg@kernel.org>
+>> drivers/iommu/iommufd/io_pagetable.c:488:6: error: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Werror,-Wcompare-distinct-pointer-types]
+           if (check_add_overflow(iova, length - 1, &last_iova))
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
+           (void) (&__a == &__b);                  \
+                   ~~~~ ^  ~~~~
+   drivers/iommu/iommufd/io_pagetable.c:548:14: error: comparison of distinct pointer types ('typeof (iova) *' (aka 'unsigned long *') and 'typeof (length - 1) *' (aka 'unsigned int *')) [-Werror,-Wcompare-distinct-pointer-types]
+               WARN_ON(check_add_overflow(iova, length - 1, &last_iova)))
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/overflow.h:66:15: note: expanded from macro 'check_add_overflow'
+           (void) (&__a == &__b);                  \
+                   ~~~~ ^  ~~~~
+   include/asm-generic/bug.h:121:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   2 errors generated.
 
-Acked-by: Lee Jones <lee.jones@linaro.org>
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+vim +488 drivers/iommu/iommufd/io_pagetable.c
+
+   462	
+   463	/**
+   464	* iopt_access_pages - Return a list of pages under the iova
+   465	*
+   466	* Reads @npages starting at iova and returns the struct page * pointers. These
+   467	* can be kmap'd by the caller for CPU access.
+   468	*
+   469	* The caller must perform iopt_unaccess_pages() when done to balance this.
+   470	*
+   471	* iova can be unaligned from PAGE_SIZE. The first returned byte starts at
+   472	* page_to_phys(out_pages[0]) + (iova % PAGE_SIZE). The caller promises not
+   473	* to touch memory outside the requested iova slice.
+   474	*
+   475	* FIXME: callers that need a DMA mapping via a sgl should create another
+   476	* interface to build the SGL efficiently
+   477	*/
+   478	int iopt_access_pages(struct io_pagetable *iopt, unsigned long iova,
+   479			      size_t length, struct page **out_pages, bool write)
+   480	{
+   481		unsigned long cur_iova = iova;
+   482		unsigned long last_iova;
+   483		struct iopt_area *area;
+   484		int rc;
+   485	
+   486		if (!length)
+   487			return -EINVAL;
+ > 488		if (check_add_overflow(iova, length - 1, &last_iova))
+   489			return -EOVERFLOW;
+   490	
+   491		down_read(&iopt->rwsem);
+   492		for (area = iopt_area_iter_first(iopt, iova, last_iova); area;
+   493		     area = iopt_area_iter_next(area, iova, last_iova)) {
+   494			unsigned long last = min(last_iova, iopt_area_last_iova(area));
+   495			unsigned long last_index;
+   496			unsigned long index;
+   497	
+   498			/* Need contiguous areas in the access */
+   499			if (iopt_area_iova(area) < cur_iova) {
+   500				rc = -EINVAL;
+   501				goto out_remove;
+   502			}
+   503	
+   504			index = iopt_iova_to_index(area, cur_iova);
+   505			last_index = iopt_iova_to_index(area, last);
+   506			rc = iopt_pages_add_user(area->pages, index, last_index,
+   507						 out_pages, write);
+   508			if (rc)
+   509				goto out_remove;
+   510			if (last == last_iova)
+   511				break;
+   512			/*
+   513			 * Can't cross areas that are not aligned to the system page
+   514			 * size with this API.
+   515			 */
+   516			if (cur_iova % PAGE_SIZE) {
+   517				rc = -EINVAL;
+   518				goto out_remove;
+   519			}
+   520			cur_iova = last + 1;
+   521			out_pages += last_index - index;
+   522			atomic_inc(&area->num_users);
+   523		}
+   524	
+   525		up_read(&iopt->rwsem);
+   526		return 0;
+   527	
+   528	out_remove:
+   529		if (cur_iova != iova)
+   530			iopt_unaccess_pages(iopt, iova, cur_iova - iova);
+   531		return rc;
+   532	}
+   533	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

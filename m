@@ -2,161 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B571D4B52FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 665784B52F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 15:16:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355018AbiBNOQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 09:16:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52364 "EHLO
+        id S1355008AbiBNOP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 09:15:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233575AbiBNOQc (ORCPT
+        with ESMTP id S1355051AbiBNOPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 09:16:32 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F4AC72
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 06:16:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=V57R5a2O0zZ5gdcp4vIHQbVgGyyROcq/YIatDbB3aUU=; b=Bodhw4C6EJx6HuM+psJGR5tvbD
-        2Z5aAwckyx0vclVEQnNQ9PK7h9WuPQGpAcdnDxpZa2g4/Se0JdrlxspAJF2HWaZLOTSqbzsdEDFaW
-        IVidNF9bHmtvWXCKjo5pXFdUjoRRaKolsPRWhZE8S2agSZfpehediA1XPrX0jfbr20Cub0IKW3lOF
-        fKN5XF9pnMkWMHxSoCMBUCl9DUT+Gh/UktxnK2fgYsmegLpV1YNNagi8RJ5pJCMDg7TIPbrMcm5L/
-        X/xSUgG/gTDuZSqkZLdHlNmIojs+6C01U+6Pt4zIwPZiln9jHA6Q4eYnkZuFM9eUNNAY2wphft9oa
-        4YNYBT7A==;
-Received: from 201-27-34-205.dsl.telesp.net.br ([201.27.34.205] helo=localhost)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1nJc9G-0003w2-2s; Mon, 14 Feb 2022 15:16:14 +0100
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To:     linux-kernel@vger.kernel.org, bhe@redhat.com, pmladek@suse.com,
-        akpm@linux-foundation.org
-Cc:     gpiccoli@igalia.com, anton@enomsg.org, ccross@android.com,
-        dyoung@redhat.com, feng.tang@intel.com, john.ogness@linutronix.de,
-        keescook@chromium.org, kernel@gpiccoli.net,
-        kexec@lists.infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, tony.luck@intel.com, vgoyal@redhat.com
-Subject: [PATCH V6] panic: Move panic_print before kmsg dumpers
-Date:   Mon, 14 Feb 2022 11:13:09 -0300
-Message-Id: <20220214141308.841525-1-gpiccoli@igalia.com>
-X-Mailer: git-send-email 2.35.0
+        Mon, 14 Feb 2022 09:15:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5DFCF2;
+        Mon, 14 Feb 2022 06:15:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA18AB80FEA;
+        Mon, 14 Feb 2022 14:15:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96287C340E9;
+        Mon, 14 Feb 2022 14:15:39 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="JYW49XlR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1644848138;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gNy906fCfgtg3rrlPPwGuVAeoK9jD6AuJHW2V5mt6m4=;
+        b=JYW49XlRspfC2c1nAI7Rfr4oIINd+RuhXGm5Ttly1yB27rz1bFbcu6Ct+BN4DV13mAqwVF
+        LL00LWvDILFvpHMGSA4EYXjEwmcKHXE3Wnw83XR5+D9JYLG27u54YwGQrtwl2xy+/xab4B
+        TxuVSVkwFNxpCkhoN78MHWULosvWt9g=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d91a5074 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 14 Feb 2022 14:15:37 +0000 (UTC)
+Date:   Mon, 14 Feb 2022 15:13:18 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Lennart Poettering <mzxreary@0pointer.de>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH RFC v0] random: block in /dev/urandom
+Message-ID: <YgpjfncV+C9FEZDc@zx2c4.com>
+References: <20220211210757.612595-1-Jason@zx2c4.com>
+ <YgoYnX97imub7KEB@gardel-login>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YgoYnX97imub7KEB@gardel-login>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The panic_print setting allows users to collect more information in a
-panic event, like memory stats, tasks, CPUs backtraces, etc.
-This is an interesting debug mechanism, but currently the print event
-happens *after* kmsg_dump(), meaning that pstore, for example, cannot
-collect a dmesg with the panic_print extra information.
+Hi Lennart,
 
-This patch changes that in 2 steps:
+On Mon, Feb 14, 2022 at 9:53 AM Lennart Poettering <mzxreary@0pointer.de> wrote:
+> So, systemd uses (potentially half-initialized) /dev/urandom for
+> seeding its hash tables. For that its kinda OK if the random values
+> have low entropy initially, as we'll automatically reseed when too
+> many hash collisions happen, and then use a newer (and thus hopefully
+> better) seed, again acquired through /dev/urandom. i.e. if the seeds
+> are initially not good enough to thwart hash collision attacks, once
+> the hash table are actually attacked we'll replace the seeds with
+> someting better. For that all we need is that the random pool
+> eventually gets better, that's all.
+>
+> So for that usecase /dev/urandom behaving the way it so far does is
+> kinda nice.
 
-(a) The panic_print setting allows to replay the existing kernel log
-buffer to the console (bit 5), besides the extra information dump.
-This functionality makes sense only at the end of the panic() function.
-So, we hereby allow to distinguish the two situations by a new boolean
-parameter in the function panic_print_sys_info().
+Oh that's an interesting point. But that sounds to me like the problem
+with this patch is not that it makes /dev/urandom block (its primary
+purpose) but that it also removes GRND_INSECURE (a distraction). So
+perhaps an improved patch would be something like the below, which
+changes /dev/urandom for new kernels but doesn't remove GRND_INSECURE.
+Then your hash tables could continue to use GRND_INSECURE and all would
+be well.  (And for kernels without getrandom(), they'd just fall back to
+/dev/urandom like normal which would have old semantics, so works.)
 
-(b) With the above change, we can safely call panic_print_sys_info()
-before kmsg_dump(), allowing to dump the extra information when using
-pstore or other kmsg dumpers.
-
-The additional messages from panic_print could overwrite the oldest
-messages when the buffer is full. The only reasonable solution is to
-use a large enough log buffer, hence we added an advice into the kernel
-parameters documentation about that.
-
-Cc: Feng Tang <feng.tang@intel.com>
-Cc: Petr Mladek <pmladek@suse.com>
-Acked-by: Baoquan He <bhe@redhat.com>
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
----
+Jason
 
 
-V6: Implemented a small suggestion from Baoquan in the commit
-message; with that, added his Acked-By. (Thanks Baoquan!)
-Notice that this is rebased against linux-next (next-20220211 branch).
 
-V5: https://lore.kernel.org/lkml/20220211215539.822466-1-gpiccoli@igalia.com/
+---------8<-----------------8<-------------------------------
 
-V4: https://lore.kernel.org/lkml/20220124203101.216051-1-gpiccoli@igalia.com/
-
-
-Andrew, can we get that merged in the mm-tree, after getting [0]
-removed from there? This one replaces [0]. Thanks!!
-
-[0] https://ozlabs.org/~akpm/mmots/broken-out/panic-allow-printing-extra-panic-information-on-kdump.patch
-
-
- Documentation/admin-guide/kernel-parameters.txt |  4 ++++
- kernel/panic.c                                  | 13 +++++++++----
- 2 files changed, 13 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 3c2b3e24e8f5..2cf7078eaa95 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3766,6 +3766,10 @@
- 			bit 4: print ftrace buffer
- 			bit 5: print all printk messages in buffer
- 			bit 6: print all CPUs backtrace (if available in the arch)
-+			*Be aware* that this option may print a _lot_ of lines,
-+			so there are risks of losing older messages in the log.
-+			Use this option carefully, maybe worth to setup a
-+			bigger log buffer with "log_buf_len" along with this.
- 
- 	panic_on_taint=	Bitmask for conditionally calling panic() in add_taint()
- 			Format: <hex>[,nousertaint]
-diff --git a/kernel/panic.c b/kernel/panic.c
-index 3c3fb36d8d41..eb4dfb932c85 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -148,10 +148,13 @@ void nmi_panic(struct pt_regs *regs, const char *msg)
+diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+index cc296f0823bd..9f586025dbe6 100644
+--- a/drivers/char/mem.c
++++ b/drivers/char/mem.c
+@@ -707,7 +707,7 @@ static const struct memdev {
+ 	 [5] = { "zero", 0666, &zero_fops, FMODE_NOWAIT },
+ 	 [7] = { "full", 0666, &full_fops, 0 },
+ 	 [8] = { "random", 0666, &random_fops, 0 },
+-	 [9] = { "urandom", 0666, &urandom_fops, 0 },
++	 [9] = { "urandom", 0666, &random_fops, 0 },
+ #ifdef CONFIG_PRINTK
+ 	[11] = { "kmsg", 0644, &kmsg_fops, 0 },
+ #endif
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index ce199af9bc56..ae4400c48b2f 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -89,8 +89,6 @@ static LIST_HEAD(random_ready_list);
+ /* Control how we warn userspace. */
+ static struct ratelimit_state unseeded_warning =
+ 	RATELIMIT_STATE_INIT("warn_unseeded_randomness", HZ, 3);
+-static struct ratelimit_state urandom_warning =
+-	RATELIMIT_STATE_INIT("warn_urandom_randomness", HZ, 3);
+ static int ratelimit_disable __read_mostly;
+ module_param_named(ratelimit_disable, ratelimit_disable, int, 0644);
+ MODULE_PARM_DESC(ratelimit_disable, "Disable random ratelimit suppression");
+@@ -336,11 +334,6 @@ static void crng_reseed(void)
+ 				  unseeded_warning.missed);
+ 			unseeded_warning.missed = 0;
+ 		}
+-		if (urandom_warning.missed) {
+-			pr_notice("%d urandom warning(s) missed due to ratelimiting\n",
+-				  urandom_warning.missed);
+-			urandom_warning.missed = 0;
+-		}
+ 	}
  }
- EXPORT_SYMBOL(nmi_panic);
- 
--static void panic_print_sys_info(void)
-+static void panic_print_sys_info(bool console_flush)
+
+@@ -993,10 +986,8 @@ int __init rand_initialize(void)
+ 		pr_notice("crng init done (trusting CPU's manufacturer)\n");
+ 	}
+
+-	if (ratelimit_disable) {
+-		urandom_warning.interval = 0;
++	if (ratelimit_disable)
+ 		unseeded_warning.interval = 0;
+-	}
+ 	return 0;
+ }
+
+@@ -1387,20 +1378,17 @@ static void try_to_generate_entropy(void)
+  * getrandom(2) is the primary modern interface into the RNG and should
+  * be used in preference to anything else.
+  *
+- * Reading from /dev/random has the same functionality as calling
+- * getrandom(2) with flags=0. In earlier versions, however, it had
+- * vastly different semantics and should therefore be avoided, to
+- * prevent backwards compatibility issues.
+- *
+- * Reading from /dev/urandom has the same functionality as calling
+- * getrandom(2) with flags=GRND_INSECURE. Because it does not block
+- * waiting for the RNG to be ready, it should not be used.
++ * Reading from /dev/random and /dev/urandom both the same effect as
++ * calling getrandom(2) with flags=0. In earlier versions, however,
++ * they each had vastly different semantics and should therefore be
++ * avoided to prevent backwards compatibility issues.
+  *
+  * Writing to either /dev/random or /dev/urandom adds entropy to
+  * the input pool but does not credit it.
+  *
+- * Polling on /dev/random indicates when the RNG is initialized, on
+- * the read side, and when it wants new entropy, on the write side.
++ * Polling on /dev/random or /dev/urandom indicates when the RNG
++ * is initialized, on the read side, and when it wants new entropy,
++ * on the write side.
+  *
+  * Both /dev/random and /dev/urandom have the same set of ioctls for
+  * adding entropy, getting the entropy count, zeroing the count, and
+@@ -1485,21 +1473,6 @@ static ssize_t random_write(struct file *file, const char __user *buffer,
+ 	return (ssize_t)count;
+ }
+
+-static ssize_t urandom_read(struct file *file, char __user *buf, size_t nbytes,
+-			    loff_t *ppos)
+-{
+-	static int maxwarn = 10;
+-
+-	if (!crng_ready() && maxwarn > 0) {
+-		maxwarn--;
+-		if (__ratelimit(&urandom_warning))
+-			pr_notice("%s: uninitialized urandom read (%zd bytes read)\n",
+-				  current->comm, nbytes);
+-	}
+-
+-	return get_random_bytes_user(buf, nbytes);
+-}
+-
+ static ssize_t random_read(struct file *file, char __user *buf, size_t nbytes,
+ 			   loff_t *ppos)
  {
--	if (panic_print & PANIC_PRINT_ALL_PRINTK_MSG)
--		console_flush_on_panic(CONSOLE_REPLAY_ALL);
-+	if (console_flush) {
-+		if (panic_print & PANIC_PRINT_ALL_PRINTK_MSG)
-+			console_flush_on_panic(CONSOLE_REPLAY_ALL);
-+		return;
-+	}
- 
- 	if (panic_print & PANIC_PRINT_ALL_CPU_BT)
- 		trigger_all_cpu_backtrace();
-@@ -286,6 +289,8 @@ void panic(const char *fmt, ...)
- 	 */
- 	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
- 
-+	panic_print_sys_info(false);
-+
- 	kmsg_dump(KMSG_DUMP_PANIC);
- 
- 	/*
-@@ -316,7 +321,7 @@ void panic(const char *fmt, ...)
- 	debug_locks_off();
- 	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
- 
--	panic_print_sys_info();
-+	panic_print_sys_info(true);
- 
- 	if (!panic_blink)
- 		panic_blink = no_blink;
--- 
-2.35.0
+@@ -1586,15 +1559,6 @@ const struct file_operations random_fops = {
+ 	.llseek = noop_llseek,
+ };
+
+-const struct file_operations urandom_fops = {
+-	.read = urandom_read,
+-	.write = random_write,
+-	.unlocked_ioctl = random_ioctl,
+-	.compat_ioctl = compat_ptr_ioctl,
+-	.fasync = random_fasync,
+-	.llseek = noop_llseek,
+-};
+-
+
+ /********************************************************************
+  *
 

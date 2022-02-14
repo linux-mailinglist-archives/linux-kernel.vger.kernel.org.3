@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05394B496F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B9D4B4707
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236070AbiBNKKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:10:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35398 "EHLO
+        id S244196AbiBNJib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:38:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345883AbiBNKHH (ORCPT
+        with ESMTP id S244532AbiBNJgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:07:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB2674DE6;
-        Mon, 14 Feb 2022 01:49:48 -0800 (PST)
+        Mon, 14 Feb 2022 04:36:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2191AD88;
+        Mon, 14 Feb 2022 01:33:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4C6D61238;
-        Mon, 14 Feb 2022 09:49:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A2F0C340F4;
-        Mon, 14 Feb 2022 09:49:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 057A461146;
+        Mon, 14 Feb 2022 09:33:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5B1C340E9;
+        Mon, 14 Feb 2022 09:33:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832187;
-        bh=ConjnUoJ0g0xGyfJNWwrU/GygfPMqHV4ZaFCx5Ndfkk=;
+        s=korg; t=1644831231;
+        bh=dKBFCfRpfLKNMl+pvojyy7jAfmFm/01aTMmYI6c5qEQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ti+shNCmqz46nE+1cGIDGK3ApVtKlLW28rmelY5xnYszYtUzBaavjDcf4MhiJ8cn6
-         HWaYaQCDDRWWAWlRt3aBxNVT5OCAqaR6F9V4e3GPLd6astK4lWc88HRB6MzSHl9E0T
-         s41by2JvXbKKDDkBwIWASByWQJg9DaNC0Hfv+LvU=
+        b=JFiO2fEaOUHZYsxCpM0jugGT/iJVjiC0NALk/s8PwpnV2Szb7JUarumwFhwmX+2xF
+         Osw0jhQSyk8snPdTfNxP1HUZEc8bQbPQDh7hgJbdRhshLcLppAJmrSESnUTXZE7jmu
+         8pWye5cbwsrTAzZ9jngrK8srL5KMDgRkcZD3ySOU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Suresh Balakrishnan <suresh.balakrishnan@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 107/172] gpiolib: Never return internal error codes to user space
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>
+Subject: [PATCH 4.19 39/49] usb: dwc3: gadget: Prevent core from processing stale TRBs
 Date:   Mon, 14 Feb 2022 10:26:05 +0100
-Message-Id: <20220214092510.113389427@linuxfoundation.org>
+Message-Id: <20220214092449.593492537@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092448.285381753@linuxfoundation.org>
+References: <20220214092448.285381753@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,104 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Udipto Goswami <quic_ugoswami@quicinc.com>
 
-[ Upstream commit 95a4eed7dd5b7c1c3664a626174290686ddbee9f ]
+commit 117b4e96c7f362eb6459543883fc07f77662472c upstream.
 
-Currently it's possible that character device interface may return
-the error codes which are not supposed to be seen by user space.
-In this case it's EPROBE_DEFER.
+With CPU re-ordering on write instructions, there might
+be a chance that the HWO is set before the TRB is updated
+with the new mapped buffer address.
+And in the case where core is processing a list of TRBs
+it is possible that it fetched the TRBs when the HWO is set
+but before the buffer address is updated.
+Prevent this by adding a memory barrier before the HWO
+is updated to ensure that the core always process the
+updated TRBs.
 
-Wrap it to return -ENODEV instead as sysfs does.
-
-Fixes: d7c51b47ac11 ("gpio: userspace ABI for reading/writing GPIO lines")
-Fixes: 61f922db7221 ("gpio: userspace ABI for reading GPIO line events")
-Fixes: 3c0d9c635ae2 ("gpiolib: cdev: support GPIO_V2_GET_LINE_IOCTL and GPIO_V2_LINE_GET_VALUES_IOCTL")
-Reported-by: Suresh Balakrishnan <suresh.balakrishnan@intel.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: f6bafc6a1c9d ("usb: dwc3: convert TRBs into bitshifts")
+Cc: stable <stable@vger.kernel.org>
+Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+Link: https://lore.kernel.org/r/1644207958-18287-1-git-send-email-quic_ugoswami@quicinc.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpio/gpiolib-cdev.c  |  6 +++---
- drivers/gpio/gpiolib-sysfs.c |  7 ++-----
- drivers/gpio/gpiolib.h       | 12 ++++++++++++
- 3 files changed, 17 insertions(+), 8 deletions(-)
+ drivers/usb/dwc3/gadget.c |   13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-index c7b5446d01fd2..ffa0256cad5a0 100644
---- a/drivers/gpio/gpiolib-cdev.c
-+++ b/drivers/gpio/gpiolib-cdev.c
-@@ -330,7 +330,7 @@ static int linehandle_create(struct gpio_device *gdev, void __user *ip)
- 			goto out_free_lh;
- 		}
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1020,6 +1020,19 @@ static void __dwc3_prepare_one_trb(struc
+ 	if (usb_endpoint_xfer_bulk(dep->endpoint.desc) && dep->stream_capable)
+ 		trb->ctrl |= DWC3_TRB_CTRL_SID_SOFN(stream_id);
  
--		ret = gpiod_request(desc, lh->label);
-+		ret = gpiod_request_user(desc, lh->label);
- 		if (ret)
- 			goto out_free_lh;
- 		lh->descs[i] = desc;
-@@ -1378,7 +1378,7 @@ static int linereq_create(struct gpio_device *gdev, void __user *ip)
- 			goto out_free_linereq;
- 		}
++	/*
++	 * As per data book 4.2.3.2TRB Control Bit Rules section
++	 *
++	 * The controller autonomously checks the HWO field of a TRB to determine if the
++	 * entire TRB is valid. Therefore, software must ensure that the rest of the TRB
++	 * is valid before setting the HWO field to '1'. In most systems, this means that
++	 * software must update the fourth DWORD of a TRB last.
++	 *
++	 * However there is a possibility of CPU re-ordering here which can cause
++	 * controller to observe the HWO bit set prematurely.
++	 * Add a write memory barrier to prevent CPU re-ordering.
++	 */
++	wmb();
+ 	trb->ctrl |= DWC3_TRB_CTRL_HWO;
  
--		ret = gpiod_request(desc, lr->label);
-+		ret = gpiod_request_user(desc, lr->label);
- 		if (ret)
- 			goto out_free_linereq;
- 
-@@ -1764,7 +1764,7 @@ static int lineevent_create(struct gpio_device *gdev, void __user *ip)
- 		}
- 	}
- 
--	ret = gpiod_request(desc, le->label);
-+	ret = gpiod_request_user(desc, le->label);
- 	if (ret)
- 		goto out_free_le;
- 	le->desc = desc;
-diff --git a/drivers/gpio/gpiolib-sysfs.c b/drivers/gpio/gpiolib-sysfs.c
-index 4098bc7f88b7e..44c1ad51b3fe9 100644
---- a/drivers/gpio/gpiolib-sysfs.c
-+++ b/drivers/gpio/gpiolib-sysfs.c
-@@ -475,12 +475,9 @@ static ssize_t export_store(struct class *class,
- 	 * they may be undone on its behalf too.
- 	 */
- 
--	status = gpiod_request(desc, "sysfs");
--	if (status) {
--		if (status == -EPROBE_DEFER)
--			status = -ENODEV;
-+	status = gpiod_request_user(desc, "sysfs");
-+	if (status)
- 		goto done;
--	}
- 
- 	status = gpiod_set_transitory(desc, false);
- 	if (!status) {
-diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
-index 30bc3f80f83e6..c31f4626915de 100644
---- a/drivers/gpio/gpiolib.h
-+++ b/drivers/gpio/gpiolib.h
-@@ -135,6 +135,18 @@ struct gpio_desc {
- 
- int gpiod_request(struct gpio_desc *desc, const char *label);
- void gpiod_free(struct gpio_desc *desc);
-+
-+static inline int gpiod_request_user(struct gpio_desc *desc, const char *label)
-+{
-+	int ret;
-+
-+	ret = gpiod_request(desc, label);
-+	if (ret == -EPROBE_DEFER)
-+		ret = -ENODEV;
-+
-+	return ret;
-+}
-+
- int gpiod_configure_flags(struct gpio_desc *desc, const char *con_id,
- 		unsigned long lflags, enum gpiod_flags dflags);
- int gpio_set_debounce_timeout(struct gpio_desc *desc, unsigned int debounce);
--- 
-2.34.1
-
+ 	dwc3_ep_inc_enq(dep);
 
 

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099CE4B4B80
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:42:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E71724B49E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 11:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345560AbiBNKGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 05:06:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54308 "EHLO
+        id S1347171AbiBNK2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 05:28:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345455AbiBNKBj (ORCPT
+        with ESMTP id S1347938AbiBNK0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 05:01:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3633F193E3;
-        Mon, 14 Feb 2022 01:47:52 -0800 (PST)
+        Mon, 14 Feb 2022 05:26:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51AC8091B;
+        Mon, 14 Feb 2022 01:57:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A85BEB80D83;
-        Mon, 14 Feb 2022 09:47:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD059C340E9;
-        Mon, 14 Feb 2022 09:47:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EBF4360FA2;
+        Mon, 14 Feb 2022 09:57:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2E05C340E9;
+        Mon, 14 Feb 2022 09:57:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644832069;
-        bh=hG9jkos58WAdkn3Ip/Te7FXuqEYEgOqyyoE7Oxk6cmw=;
+        s=korg; t=1644832654;
+        bh=saiZqjZcHJGpeZpPA0bHrcwnllIhia1FLnu2M+Iq5Lw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wx+/zjM4tkk+5etze377zscVjUbSgyQiy3Nmg+STxsKgtpzhNTe+Wy7/idgbwG+3e
-         HgnMEVdDBA3mKJCRp34mRcRtQMxi1AX3tg39My7tAt36JlVwRYUSCjxRVfMX1pr2pM
-         kuXZUz2jpDltlgZm4qhnjHb5S27pUzyr67zfnJPQ=
+        b=mzo1APez4K60Qqh3xCmjD5cpfmd9StcEo08AmuoQbbdyzH4WY7kqi0bA2l2/pbiGX
+         Opk/Cl9Zo32lk4ByX0MyC7RcDpPDMBjFnmkUQbphKfinOMZqHxvZHnlYF26cv9+Hg4
+         IxzxbLoJrWypNGM7x5H5XpBfRYaTf12SsAb1nMFM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: [PATCH 5.15 070/172] ARM: dts: imx23-evk: Remove MX23_PAD_SSP1_DETECT from hog group
+        stable@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>,
+        Hannes Reinecke <hare@suse.de>, Christoph Hellwig <hch@lst.de>
+Subject: [PATCH 5.16 084/203] nvme-tcp: fix bogus request completion when failing to send AER
 Date:   Mon, 14 Feb 2022 10:25:28 +0100
-Message-Id: <20220214092508.815036399@linuxfoundation.org>
+Message-Id: <20220214092513.128502574@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092506.354292783@linuxfoundation.org>
-References: <20220214092506.354292783@linuxfoundation.org>
+In-Reply-To: <20220214092510.221474733@linuxfoundation.org>
+References: <20220214092510.221474733@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabio Estevam <festevam@gmail.com>
+From: Sagi Grimberg <sagi@grimberg.me>
 
-commit 42c9b28e6862d16db82a56f5667cf4d1f6658cf6 upstream.
+commit 63573807b27e0faf8065a28b1bbe1cbfb23c0130 upstream.
 
-Currently, SD card fails to mount due to the following pinctrl error:
+AER is not backed by a real request, hence we should not incorrectly
+assume that when failing to send a nvme command, it is a normal request
+but rather check if this is an aer and if so complete the aer (similar
+to the normal completion path).
 
-[   11.170000] imx23-pinctrl 80018000.pinctrl: pin SSP1_DETECT already requested by 80018000.pinctrl; cannot claim for 80010000.spi
-[   11.180000] imx23-pinctrl 80018000.pinctrl: pin-65 (80010000.spi) status -22
-[   11.190000] imx23-pinctrl 80018000.pinctrl: could not request pin 65 (SSP1_DETECT) from group mmc0-pins-fixup.0  on device 80018000.pinctrl
-[   11.200000] mxs-mmc 80010000.spi: Error applying setting, reverse things back
-
-Fix it by removing the MX23_PAD_SSP1_DETECT pin from the hog group as it
-is already been used by the mmc0-pins-fixup pinctrl group.
-
-With this change the rootfs can be mounted and the imx23-evk board can
-boot successfully.
-
-Cc: <stable@vger.kernel.org>
-Fixes: bc3875f1a61e ("ARM: dts: mxs: modify mx23/mx28 dts files to use pinctrl headers")
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Sagi Grimberg <sagi@grimberg.me>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/imx23-evk.dts |    1 -
- 1 file changed, 1 deletion(-)
+ drivers/nvme/host/tcp.c |   10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
---- a/arch/arm/boot/dts/imx23-evk.dts
-+++ b/arch/arm/boot/dts/imx23-evk.dts
-@@ -79,7 +79,6 @@
- 						MX23_PAD_LCD_RESET__GPIO_1_18
- 						MX23_PAD_PWM3__GPIO_1_29
- 						MX23_PAD_PWM4__GPIO_1_30
--						MX23_PAD_SSP1_DETECT__SSP1_DETECT
- 					>;
- 					fsl,drive-strength = <MXS_DRIVE_4mA>;
- 					fsl,voltage = <MXS_VOLTAGE_HIGH>;
+--- a/drivers/nvme/host/tcp.c
++++ b/drivers/nvme/host/tcp.c
+@@ -913,7 +913,15 @@ static inline void nvme_tcp_done_send_re
+ 
+ static void nvme_tcp_fail_request(struct nvme_tcp_request *req)
+ {
+-	nvme_tcp_end_request(blk_mq_rq_from_pdu(req), NVME_SC_HOST_PATH_ERROR);
++	if (nvme_tcp_async_req(req)) {
++		union nvme_result res = {};
++
++		nvme_complete_async_event(&req->queue->ctrl->ctrl,
++				cpu_to_le16(NVME_SC_HOST_PATH_ERROR), &res);
++	} else {
++		nvme_tcp_end_request(blk_mq_rq_from_pdu(req),
++				NVME_SC_HOST_PATH_ERROR);
++	}
+ }
+ 
+ static int nvme_tcp_try_send_data(struct nvme_tcp_request *req)
 
 

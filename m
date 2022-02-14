@@ -2,117 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC894B5E6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 00:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F364B5E6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Feb 2022 00:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232217AbiBNXsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 18:48:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37022 "EHLO
+        id S232225AbiBNXti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 18:49:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiBNXsu (ORCPT
+        with ESMTP id S229665AbiBNXth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 18:48:50 -0500
-Received: from smtp.smtpout.orange.fr (smtp05.smtpout.orange.fr [80.12.242.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918F71402E
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 15:48:40 -0800 (PST)
-Received: from localhost.localdomain ([124.33.176.97])
-        by smtp.orange.fr with ESMTPA
-        id Jl4ynKYlVPEU7Jl59na5Tp; Tue, 15 Feb 2022 00:48:37 +0100
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: MDU0YmViZGZmMDIzYiBlMiM2NTczNTRjNWZkZTMwOGRiOGQ4ODf3NWI1ZTMyMzdiODlhOQ==
-X-ME-Date: Tue, 15 Feb 2022 00:48:37 +0100
-X-ME-IP: 124.33.176.97
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     netdev@vger.kernel.org, linux-can@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Maximilian Schneider <max@schneidersoft.net>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [RFC PATCH v1] can: gs_usb: change active_channels's type from atomic_t to u8
-Date:   Tue, 15 Feb 2022 08:48:14 +0900
-Message-Id: <20220214234814.1321599-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
+        Mon, 14 Feb 2022 18:49:37 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C176D14031
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 15:49:28 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id t4-20020a17090a510400b001b8c4a6cd5dso595854pjh.5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Feb 2022 15:49:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GyZGTEHBo5D8EwjhOvRtD6BQCez2VkVTZwNRgtd0HSU=;
+        b=UcNIqbaZcuM1KdO7qywwCle4/8NkbBx5t2AanIGbHhjHDZ4WxbVVpgVg08PbhrIw0V
+         PkOwB5yKDjJexBEajf6reo1lb2Im/CvZFMLHMxqL/kFmMi1iCCHKxOXuwThQ7zESPvRL
+         x0LYJGtpL3q9TKFJPLVjugGSIh8DSTRZJOfx4Etv3jpoQ2yFhw5s9xJKItJu1ktlTbbq
+         KfeuK/wM0xNqeHq8fwtfL+J+dB1lHqKuzJWziUbmgIESW5aA8ebYcGBlsDlWVWXCdhev
+         swdBxfHBWE01KGP+heyDM/SpPmX7bi+m4h5iiCO/Zf53sqbBqeMxU7htZcCKvMmXJtC8
+         Ki8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=GyZGTEHBo5D8EwjhOvRtD6BQCez2VkVTZwNRgtd0HSU=;
+        b=4SUDiTqwiux1Jnwm+ol/k4dbJOfM7vVX6qAua8jAOOx8DubQC9/AfLPH5eG+o0JEcr
+         5IRb0i7o4oPszQKEmjUnMdA5EDVSXgINxvxvDSHH7vnd1TtVesV4G9XnJNldt3ufEZX0
+         OUARZtp5Hc56BpSyG0IBm1eOXvFxDvO8KQCLa9QH6R26TL/hg3xeytAQjzZ+iK7Twr+F
+         HmJLpn6U7006Ub+Olrb0dKV1DmIT3s7nV1XV5V2xqacn+QpBBrmrJ4Nffb3qJy1xfKvl
+         O5+kmKdo0/wxCi3eR4RbNeReK6/ElWu2aYIsvfsmyrHrSaeQ+0g0EFpOovaEERr3PjFf
+         NDGQ==
+X-Gm-Message-State: AOAM533Elg1/femQmKRA4gA9YSdlVzUv2lHewPnaBOfGPfJnjwGoJmxQ
+        izFqOczF0YeIwqXxkqhONRTijA==
+X-Google-Smtp-Source: ABdhPJygPmJsBkq1gCtMbrwH0RAghVDJYLeuiOyFXUMDyKnMeZaO9UltK2YmW94SrCJ+nJTsXF2gYg==
+X-Received: by 2002:a17:902:d3c6:: with SMTP id w6mr1405267plb.4.1644882568233;
+        Mon, 14 Feb 2022 15:49:28 -0800 (PST)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id l22sm39388785pfc.191.2022.02.14.15.49.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 15:49:27 -0800 (PST)
+Date:   Mon, 14 Feb 2022 15:49:27 -0800 (PST)
+X-Google-Original-Date: Mon, 14 Feb 2022 15:49:02 PST (-0800)
+Subject:     Re: [PATCH] riscv: mm: init: mark satp_mode __ro_after_init
+In-Reply-To: <20220125160012.3884-1-jszhang@kernel.org>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     jszhang@kernel.org
+Message-ID: <mhng-dc214a08-e4be-4459-a9e4-347ec084d02b@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver uses an atomic_t variable: gs_usb:active_channels to keep
-track of the number of opened channels in order to only allocate
-memory for the URBs when this count changes from zero to one.
+On Tue, 25 Jan 2022 08:00:12 PST (-0800), jszhang@kernel.org wrote:
+> satp_mode is never modified after init, so it can be marked as
+> __ro_after_init.
+>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  arch/riscv/mm/init.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 8347d0fda8cd..35586688a1b6 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -38,9 +38,9 @@ EXPORT_SYMBOL(kernel_map);
+>  #endif
+>
+>  #ifdef CONFIG_64BIT
+> -u64 satp_mode = !IS_ENABLED(CONFIG_XIP_KERNEL) ? SATP_MODE_48 : SATP_MODE_39;
+> +u64 satp_mode __ro_after_init = !IS_ENABLED(CONFIG_XIP_KERNEL) ? SATP_MODE_48 : SATP_MODE_39;
+>  #else
+> -u64 satp_mode = SATP_MODE_32;
+> +u64 satp_mode __ro_after_init = SATP_MODE_32;
+>  #endif
+>  EXPORT_SYMBOL(satp_mode);
 
-However, the driver does not decrement the counter when an error
-occurs in gs_can_open(). This issue is fixed by changing the type from
-atomic_t to u8 and by simplifying the logic accordingly.
-
-It is safe to use an u8 here because the network stack big kernel lock
-(a.k.a. rtnl_mutex) is being hold. For details, please refer to [1].
-
-[1] https://lore.kernel.org/linux-can/CAMZ6Rq+sHpiw34ijPsmp7vbUpDtJwvVtdV7CvRZJsLixjAFfrg@mail.gmail.com/T/#t
-
-Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN
-devices")
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- drivers/net/can/usb/gs_usb.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index b487e3fe770a..d35749fad1ef 100644
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -191,8 +191,8 @@ struct gs_can {
- struct gs_usb {
- 	struct gs_can *canch[GS_MAX_INTF];
- 	struct usb_anchor rx_submitted;
--	atomic_t active_channels;
- 	struct usb_device *udev;
-+	u8 active_channels;
- };
- 
- /* 'allocate' a tx context.
-@@ -589,7 +589,7 @@ static int gs_can_open(struct net_device *netdev)
- 	if (rc)
- 		return rc;
- 
--	if (atomic_add_return(1, &parent->active_channels) == 1) {
-+	if (!parent->active_channels) {
- 		for (i = 0; i < GS_MAX_RX_URBS; i++) {
- 			struct urb *urb;
- 			u8 *buf;
-@@ -690,6 +690,7 @@ static int gs_can_open(struct net_device *netdev)
- 
- 	dev->can.state = CAN_STATE_ERROR_ACTIVE;
- 
-+	parent->active_channels++;
- 	if (!(dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY))
- 		netif_start_queue(netdev);
- 
-@@ -705,7 +706,8 @@ static int gs_can_close(struct net_device *netdev)
- 	netif_stop_queue(netdev);
- 
- 	/* Stop polling */
--	if (atomic_dec_and_test(&parent->active_channels))
-+	parent->active_channels--;
-+	if (!parent->active_channels)
- 		usb_kill_anchored_urbs(&parent->rx_submitted);
- 
- 	/* Stop sending URBs */
-@@ -984,8 +986,6 @@ static int gs_usb_probe(struct usb_interface *intf,
- 
- 	init_usb_anchor(&dev->rx_submitted);
- 
--	atomic_set(&dev->active_channels, 0);
--
- 	usb_set_intfdata(intf, dev);
- 	dev->udev = interface_to_usbdev(intf);
- 
--- 
-2.34.1
-
+Thanks, this is on for-next.

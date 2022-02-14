@@ -2,135 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6A74B3F23
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 02:58:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2374B3F26
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 02:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239165AbiBNB6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Feb 2022 20:58:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60374 "EHLO
+        id S239215AbiBNB6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Feb 2022 20:58:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239285AbiBNB6b (ORCPT
+        with ESMTP id S239173AbiBNB6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Feb 2022 20:58:31 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8509F575D1
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 17:58:19 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id b15-20020a056602330f00b006109348c3daso9631337ioz.3
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Feb 2022 17:58:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=JjFWsPUuzBb1VJ9NTYslCq1ep8IWkPz4XiBKHNpnLHM=;
-        b=46dG6g0KnqPG2Gu8864yawucP4bED/PnAwbhdjmm/hE067Zr90tYlCIeNXcx6UuVGg
-         LC3YWYPu4rdGajobYBaTiltrDo88PZrORMTNAPCQ7l32X0PYf7AjHFjydwH0FBVuwT0l
-         1+huI5pD0vhaZ/KYcnpC2rSTlE2r1iO30dv3xdnS+nwkieV7cgysZ27AYi7cn3WAV6U1
-         r85vo561iXzUp9c4vuFx23nPf79P7zPSxtO7W5/DNF7GAgqcrzlVb74HydUb5GxqGY+0
-         LpreG2AFavbO/Chb6/Ikfc8KNIkOFMb9MULfhLyWrWKSCsZz8nme1ge5654W7gzU3s6K
-         FbFw==
-X-Gm-Message-State: AOAM53306WGFKXJboRTk0GUY5F0zOeRaaLF65PtdInFLA72/7z85A309
-        CmZulL761DfDS2sVSmUO9t7AjQLNtRjP17bCH9j9hfWfwIW7
-X-Google-Smtp-Source: ABdhPJwrLMeSAOHqeDGc66F+5x2mSKsIRJDitWM/u2eEqVvm4GHcETUppCHmxPO3BdbsrQlAAbAAIgHBwlspYxrFnws/wk2nEXp0
+        Sun, 13 Feb 2022 20:58:36 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B33154F9C;
+        Sun, 13 Feb 2022 17:58:28 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0V4JWI8D_1644803902;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V4JWI8D_1644803902)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 14 Feb 2022 09:58:23 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     nbd@nbd.name
+Cc:     lorenzo.bianconi83@gmail.com, ryder.lee@mediatek.com,
+        shayne.chen@mediatek.com, sean.wang@mediatek.com, kvalo@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, matthias.bgg@gmail.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] mt76: mt7615: Fix assigning negative values to unsigned variable
+Date:   Mon, 14 Feb 2022 09:58:21 +0800
+Message-Id: <20220214015821.60674-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1409:: with SMTP id k9mr7138106jad.54.1644803898488;
- Sun, 13 Feb 2022 17:58:18 -0800 (PST)
-Date:   Sun, 13 Feb 2022 17:58:18 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000183d9e05d7f0c0ee@google.com>
-Subject: [syzbot] kernel BUG in ext4_ind_remove_space
-From:   syzbot <syzbot+fcc629d1a1ae8d3fe8a5@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Smatch reports the following:
+drivers/net/wireless/mediatek/mt76/mt7615/mac.c:1865
+mt7615_mac_adjust_sensitivity() warn: assigning (-110) to unsigned
+variable 'def_th'
+drivers/net/wireless/mediatek/mt76/mt7615/mac.c:1865
+mt7615_mac_adjust_sensitivity() warn: assigning (-98) to unsigned
+variable 'def_th'
 
-syzbot found the following issue on:
-
-HEAD commit:    ef6b35306dd8 Add linux-next specific files for 20220204
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1602d71c700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e0431e0b00810b4f
-dashboard link: https://syzkaller.appspot.com/bug?extid=fcc629d1a1ae8d3fe8a5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11d31674700000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fcc629d1a1ae8d3fe8a5@syzkaller.appspotmail.com
-
-EXT4-fs warning (device sda1): ext4_block_to_path:105: block 1074791436 > max in inode 1187
-------------[ cut here ]------------
-kernel BUG at fs/ext4/indirect.c:1244!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 3853 Comm: syz-executor.0 Not tainted 5.17.0-rc2-next-20220204-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:ext4_ind_remove_space+0xfde/0x1400 fs/ext4/indirect.c:1244
-Code: 00 0f 85 36 03 00 00 48 8b 0b 4c 89 fe 44 8b 4c 24 20 48 8b 7c 24 10 48 83 c1 04 e8 6c bb ff ff e9 02 f6 ff ff e8 12 c3 5f ff <0f> 0b 4c 8b 7c 24 50 e9 8e f9 ff ff e8 01 c3 5f ff 48 8b 7c 24 10
-RSP: 0018:ffffc90003647ab8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff88807acdba80 RSI: ffffffff8218e5de RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: ffffffff8218d85a R11: 0000000000000000 R12: 0000000000001000
-R13: ffffc90003647b68 R14: ffffc90003647b88 R15: ffff88806ccc2a80
-FS:  00007f2b2de3d700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f2961b6f090 CR3: 000000006d02e000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ext4_punch_hole+0xf3e/0x1110 fs/ext4/inode.c:4044
- ext4_fallocate+0x1194/0x3ed0 fs/ext4/extents.c:4694
- vfs_fallocate+0x48d/0xe10 fs/open.c:310
- ksys_fallocate fs/open.c:333 [inline]
- __do_sys_fallocate fs/open.c:341 [inline]
- __se_sys_fallocate fs/open.c:339 [inline]
- __x64_sys_fallocate+0xcf/0x140 fs/open.c:339
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f2b2e6c8059
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f2b2de3d168 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
-RAX: ffffffffffffffda RBX: 00007f2b2e7daf60 RCX: 00007f2b2e6c8059
-RDX: 0000000000000000 RSI: 0000000000000003 RDI: 0000000000000005
-RBP: 00007f2b2e72208d R08: 0000000000000000 R09: 0000000000000000
-R10: 00000ffeffeff000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffcd330bbaf R14: 00007f2b2de3d300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:ext4_ind_remove_space+0xfde/0x1400 fs/ext4/indirect.c:1244
-Code: 00 0f 85 36 03 00 00 48 8b 0b 4c 89 fe 44 8b 4c 24 20 48 8b 7c 24 10 48 83 c1 04 e8 6c bb ff ff e9 02 f6 ff ff e8 12 c3 5f ff <0f> 0b 4c 8b 7c 24 50 e9 8e f9 ff ff e8 01 c3 5f ff 48 8b 7c 24 10
-RSP: 0018:ffffc90003647ab8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff88807acdba80 RSI: ffffffff8218e5de RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: ffffffff8218d85a R11: 0000000000000000 R12: 0000000000001000
-R13: ffffc90003647b68 R14: ffffc90003647b88 R15: ffff88806ccc2a80
-FS:  00007f2b2de3d700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020200000 CR3: 000000006d02e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/net/wireless/mediatek/mt76/mt7615/mac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c b/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
+index f035cd880696..283a86052b4f 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
+@@ -1862,7 +1862,7 @@ mt7615_mac_adjust_sensitivity(struct mt7615_phy *phy,
+ 	struct mt7615_dev *dev = phy->dev;
+ 	int false_cca = ofdm ? phy->false_cca_ofdm : phy->false_cca_cck;
+ 	bool ext_phy = phy != &dev->phy;
+-	u16 def_th = ofdm ? -98 : -110;
++	s16 def_th = ofdm ? -98 : -110;
+ 	bool update = false;
+ 	s8 *sensitivity;
+ 	int signal;
+-- 
+2.20.1.7.g153144c
+

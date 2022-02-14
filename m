@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5FF94B45C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:32:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 754A44B46B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Feb 2022 10:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243201AbiBNJ3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Feb 2022 04:29:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41928 "EHLO
+        id S244666AbiBNJmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Feb 2022 04:42:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243061AbiBNJ2z (ORCPT
+        with ESMTP id S244846AbiBNJkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Feb 2022 04:28:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1738D60AB3;
-        Mon, 14 Feb 2022 01:28:48 -0800 (PST)
+        Mon, 14 Feb 2022 04:40:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DB366216;
+        Mon, 14 Feb 2022 01:36:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A765160F6F;
-        Mon, 14 Feb 2022 09:28:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C0C0C340EF;
-        Mon, 14 Feb 2022 09:28:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87DD8B80DA9;
+        Mon, 14 Feb 2022 09:36:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CA57C340E9;
+        Mon, 14 Feb 2022 09:36:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1644830927;
-        bh=czRuVdm4hdL5Ea907Q1CqurNlQHpEw3Smw/F2cDltok=;
+        s=korg; t=1644831371;
+        bh=k1TaVi0HcrrBQ6hj3lL7I115ytxDZhrtCbcpgAT0ME0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cImMgQ4xrxn5h0xQn8Vz3WjHpFOIjUkiO16m+OArF7ipTpYGSSIABrLY9KyU6ghgQ
-         Ks2DljDd58VyG0gLc5PkjKmFqO76hAtZWpqwnuPpo57Krx3ltF1KBvtnqiQ5yKcTL0
-         qB/MBxT+qXXL6EuJDE3jjkUhJwb6ljtZs0krg5NU=
+        b=sOPDz7VotOnkwiM6GOPr91azONuoBDnT0DIW0u71wDYvfJXAhgh7prldbNIrCnXsr
+         NmHUsNhP2u0mOG+LfbIquXdqXHD3hoNeSuNSrDvnG1tUOlrVZUUQ7r39MDRW9yhLhK
+         r328SgxBhUCBbppFieQcufZedSKSKKORZd6YRKj8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Olga Kornievskaia <kolga@netapp.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 09/34] NFSv4 only print the label when its queried
+        stable@vger.kernel.org,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.4 07/71] net: phy: marvell: Fix MDI-x polarity setting in 88e1118-compatible PHYs
 Date:   Mon, 14 Feb 2022 10:25:35 +0100
-Message-Id: <20220214092446.250441240@linuxfoundation.org>
+Message-Id: <20220214092452.281016686@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220214092445.946718557@linuxfoundation.org>
-References: <20220214092445.946718557@linuxfoundation.org>
+In-Reply-To: <20220214092452.020713240@linuxfoundation.org>
+References: <20220214092452.020713240@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +57,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Olga Kornievskaia <kolga@netapp.com>
+From: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
 
-[ Upstream commit 2c52c8376db7160a1dd8a681c61c9258405ef143 ]
+commit aec12836e7196e4d360b2cbf20cf7aa5139ad2ec upstream.
 
-When the bitmask of the attributes doesn't include the security label,
-don't bother printing it. Since the label might not be null terminated,
-adjust the printing format accordingly.
+When setting up autonegotiation for 88E1118R and compatible PHYs,
+a software reset of PHY is issued before setting up polarity.
+This is incorrect as changes of MDI Crossover Mode bits are
+disruptive to the normal operation and must be followed by a
+software reset to take effect. Let's patch m88e1118_config_aneg()
+to fix the issue mentioned before by invoking software reset
+of the PHY just after setting up MDI-x polarity.
 
-Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 605f196efbf8 ("phy: Add support for Marvell 88E1118 PHY")
+Signed-off-by: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+Suggested-by: Andrew Lunn <andrew@lunn.ch>
+Cc: stable@vger.kernel.org
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nfs/nfs4xdr.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/net/phy/marvell.c |    7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/fs/nfs/nfs4xdr.c b/fs/nfs/nfs4xdr.c
-index 0a7c4e30a385e..29dbb14b6fd11 100644
---- a/fs/nfs/nfs4xdr.c
-+++ b/fs/nfs/nfs4xdr.c
-@@ -4177,10 +4177,11 @@ static int decode_attr_security_label(struct xdr_stream *xdr, uint32_t *bitmap,
- 		} else
- 			printk(KERN_WARNING "%s: label too long (%u)!\n",
- 					__func__, len);
-+		if (label && label->label)
-+			dprintk("%s: label=%.*s, len=%d, PI=%d, LFS=%d\n",
-+				__func__, label->len, (char *)label->label,
-+				label->len, label->pi, label->lfs);
- 	}
--	if (label && label->label)
--		dprintk("%s: label=%s, len=%d, PI=%d, LFS=%d\n", __func__,
--			(char *)label->label, label->len, label->pi, label->lfs);
- 	return status;
+--- a/drivers/net/phy/marvell.c
++++ b/drivers/net/phy/marvell.c
+@@ -888,16 +888,15 @@ static int m88e1118_config_aneg(struct p
+ {
+ 	int err;
  
- out_overflow:
--- 
-2.34.1
-
+-	err = genphy_soft_reset(phydev);
++	err = marvell_set_polarity(phydev, phydev->mdix_ctrl);
+ 	if (err < 0)
+ 		return err;
+ 
+-	err = marvell_set_polarity(phydev, phydev->mdix_ctrl);
++	err = genphy_config_aneg(phydev);
+ 	if (err < 0)
+ 		return err;
+ 
+-	err = genphy_config_aneg(phydev);
+-	return 0;
++	return genphy_soft_reset(phydev);
+ }
+ 
+ static int m88e1118_config_init(struct phy_device *phydev)
 
 
